@@ -7,6 +7,8 @@ If you're interested in being involved, head over to Discord: https://discord.gg
 
 You can also reach out to [@Shpigford](https://twitter.com/Shpigford) on Twitter.
 
+![CleanShot 2024-01-01 at 16 10 05@2x](https://github.com/maybe-finance/maybe/assets/35243/056309d5-1890-4865-9936-481908dd7d5b)
+
 ## Stack
 
 The tech stack will likely involve some combination of...
