@@ -1,0 +1,17 @@
+<div class="flex w-full">
+    <% if notice.present? %>
+      <p class="inline-block px-3 py-2 mb-5 font-medium text-green-500 rounded-lg bg-green-50" id="notice"><%= notice %></p>
+    <% end %>
+
+    <div class="flex items-center justify-between">
+      <h2 class="text-4xl font-bold"><%= @portfolio.name %></h2>
+      
+      <div class="inline-block ml-2">
+        <%= link_to "Edit this portfolio", edit_portfolio_path(@portfolio), class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+        <div class="inline-block ml-2">
+          <%= button_to "Destroy this portfolio", portfolio_path(@portfolio), method: :delete, class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
+        </div>
+        <%= link_to "Back to portfolios", portfolios_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+      </div>
+    </div>
+</div>
