@@ -1,0 +1,27 @@
+<div class="-mx-2 space-y-3">
+  <div class="flex items-center justify-between p-3 text-sm bg-gray-700 rounded-md">
+    <span class="text-gray-50">Total portfolio</span>
+    <span class="text-2xl font-bold">
+      $X
+    </span>
+  </div>
+  <div class="space-y-1">
+    <% current_user.portfolios.each do |portfolio| %>
+    <div class="flex items-center justify-between p-3 text-sm -md">
+      <span><%= portfolio.name %></span>
+      <span class="font-medium tracking-tight">
+        $X
+      </span>
+    </div>
+    <% end %>
+
+    <%= link_to new_portfolio_path, class: "text-sm flex items-center space-x-3 text-gray-100 hover:text-gray-50 py-3" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+
+      <span>New portfolio</span>
+    <% end %>
+  </div>
+</div>
+
