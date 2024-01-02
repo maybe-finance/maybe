@@ -61,6 +61,9 @@ group :development do
 
   # Hotwire-based live reloading
   gem "hotwire-livereload"
+
+  # letter_opener for catching and displaying emails sent during development
+  gem "letter_opener"
 end
 
 group :test do
