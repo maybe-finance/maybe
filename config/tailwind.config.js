@@ -23,25 +23,25 @@ module.exports = {
         700: '#232428',
         800: '#1c1c20',
       },
-      primary: {
+      cyan: {
         50: '#d7f6fa',
         300: '#d7f6fa',
         400: '#66d9e8',
         500: '#69c6d9',
       },
-      error: {
+      red: {
         50: '#ffe8e8',
         300: '#ffc9c9',
         400: '#ffa8a8',
         500: '#ff8787',
       },
-      success: {
+      teal: {
         50: '#d6faee',
         300: '#96f2d7',
         400: '#63e6be',
         500: '#38d9a9',
       },
-      warning: {
+      yellow: {
         50: '#fff2cb',
         300: '#ffe082',
         400: '#ffd54f',
