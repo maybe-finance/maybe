@@ -1,4 +1,4 @@
-<div class="flex w-full">
+<div class="w-full">
     <% if notice.present? %>
       <p class="inline-block px-3 py-2 mb-5 font-medium text-green-500 rounded-lg bg-green-50" id="notice"><%= notice %></p>
     <% end %>
@@ -13,5 +13,37 @@
         </div>
         <%= link_to "Back to portfolios", portfolios_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
       </div>
+    </div>
+
+    <div>
+      <h3 class="text-2xl font-bold">Holdings</h3>
+      <div class="inline-block ml-2">
+        <%= link_to "New holding", new_portfolio_holding_path(@portfolio), class: "rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium" %>
+      </div>
+
+      <table class="w-full mt-4 table-auto">
+        <thead>
+          <tr>
+            <th class="px-4 py-2">Security</th>
+            <th class="px-4 py-2">Quantity</th>
+            <th class="px-4 py-2">Current Price</th>
+            <th class="px-4 py-2">Current Value</th>
+            <th class="px-4 py-2">Cost Basis</th>
+            <th class="px-4 py-2">Gain/Loss</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @portfolio.holdings.each do |holding| %>
+            <tr>
+              <td class="px-4 py-2 border"><%= holding.security.symbol %></td>
+              <td class="px-4 py-2 border"><%= holding.quantity %></td>
+              <td class="px-4 py-2 border"><%= number_to_currency(holding.security.security_prices.order(date: :desc).first&.close) %></td>
+              <td class="px-4 py-2 border"><%= number_to_currency(holding.quantity * (holding.security.security_prices.order(date: :desc).first&.close || 0)) %></td>
+              <td class="px-4 py-2 border"><%= number_to_currency(holding.cost_basis) %></td>
+              <td class="px-4 py-2 border"><%= number_to_currency((holding.quantity * (holding.security.security_prices.order(date: :desc).first&.close || 0)) - holding.cost_basis) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
 </div>

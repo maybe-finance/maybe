@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  security: one
+  date: 2024-01-02
+  open: 9.99
+  high: 9.99
+  low: 9.99
+  close: 9.99
+
+two:
+  security: two
+  date: 2024-01-02
+  open: 9.99
+  high: 9.99
+  low: 9.99
+  close: 9.99

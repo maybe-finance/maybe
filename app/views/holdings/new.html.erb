@@ -1,0 +1,7 @@
+<div class="w-full mx-auto md:w-2/3">
+  <h1 class="text-4xl font-bold">New holding</h1>
+
+  <%= render "form", portfolio: @portfolio, holding: @holding %>
+
+  <%= link_to "Back to holdings", portfolio_path(@portfolio), class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+</div>

@@ -4,4 +4,5 @@ class User < ApplicationRecord
          :confirmable, :lockable, :timeoutable, :trackable
 
   has_many :portfolios, dependent: :destroy
+  has_many :holdings, through: :portfolios
 end

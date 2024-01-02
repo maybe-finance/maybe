@@ -1,0 +1,32 @@
+<div id="<%= dom_id holding %>">
+  <p class="my-5">
+    <strong class="block font-medium mb-1">User:</strong>
+    <%= holding.user_id %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Security:</strong>
+    <%= holding.security_id %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Value:</strong>
+    <%= holding.value %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Quantity:</strong>
+    <%= holding.quantity %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Cost basis:</strong>
+    <%= holding.cost_basis %>
+  </p>
+
+  <% if action_name != "show" %>
+    <%= link_to "Show this holding", holding, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+    <%= link_to "Edit this holding", edit_holding_path(holding), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
+    <hr class="mt-6">
+  <% end %>
+</div>

@@ -1,0 +1,37 @@
+<%= form_with(model: [portfolio, holding], class: "contents") do |form| %>
+  <% if holding.errors.any? %>
+    <div id="error_explanation" class="px-3 py-2 mt-3 font-medium text-red-500 rounded-lg bg-red-50">
+      <h2><%= pluralize(holding.errors.count, "error") %> prohibited this holding from being saved:</h2>
+
+      <ul>
+        <% holding.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-5">
+    <%= form.label :symbol, "Security (AAPL, MSFT, TSLA, etc.)" %>
+    <%= form.text_field :symbol, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :value, "Total holding value (in USD)" %>
+    <%= form.number_field :value, step: :any, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :quantity, "Number of shares" %>
+    <%= form.number_field :quantity, step: :any, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :cost_basis, "Cost basis (in USD)" %>
+    <%= form.number_field :cost_basis, step: :any, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="inline">
+    <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>

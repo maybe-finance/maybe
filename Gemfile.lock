@@ -141,9 +141,26 @@ GEM
       ruby2_keywords
     error_highlight (0.6.0)
     erubi (1.12.0)
+    et-orbi (1.2.7)
+      tzinfo
+    faraday (2.8.1)
+      base64
+      faraday-net_http (>= 2.0, < 3.1)
+      ruby2_keywords (>= 0.0.4)
+    faraday-net_http (3.0.2)
     ffi (1.16.3)
+    fugit (1.9.0)
+      et-orbi (~> 1, >= 1.2.7)
+      raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    good_job (3.21.5)
+      activejob (>= 6.0.0)
+      activerecord (>= 6.0.0)
+      concurrent-ruby (>= 1.0.2)
+      fugit (>= 1.1)
+      railties (>= 6.0.0)
+      thor (>= 0.14.1)
     hotwire-livereload (1.3.0)
       actioncable (>= 6.0.0)
       listen (>= 3.0.0)
@@ -210,6 +227,7 @@ GEM
     public_suffix (5.0.4)
     puma (6.4.0)
       nio4r (~> 2.0)
+    raabro (1.4.0)
     racc (1.7.3)
     rack (3.0.8)
     rack-session (2.0.0)
@@ -334,6 +352,8 @@ DEPENDENCIES
   debug
   devise
   error_highlight (>= 0.4.0)
+  faraday
+  good_job
   hotwire-livereload
   importmap-rails
   jbuilder

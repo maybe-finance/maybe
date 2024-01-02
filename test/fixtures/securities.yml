@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  symbol: MyString
+  currency_code: MyString
+  real_time_price: 9.99
+  real_time_price_updated_at: 2024-01-02 10:27:07
+
+two:
+  name: MyString
+  symbol: MyString
+  currency_code: MyString
+  real_time_price: 9.99
+  real_time_price_updated_at: 2024-01-02 10:27:07

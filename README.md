@@ -20,6 +20,7 @@ You'll need:
 
 - ruby >3 (specific version is in `Gemfile`)
 - postgresql (if using stock `config/database.yml`)
+- TwelveData API key (free) - https://twelvedata.com
 
 ```shell
 cd maybe
