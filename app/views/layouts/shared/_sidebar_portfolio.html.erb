@@ -1,0 +1,37 @@
+<div class="space-y-3 -mx-2">
+  <div class="p-3 rounded-md bg-gray-700 text-sm flex justify-between items-center">
+    <span class="text-gray-50">Total portfolio</span>
+    <span class="font-bold text-2xl text-white">
+      $596,275
+    </span>
+  </div>
+  <div class="space-y-1">
+    <div class="p-3 -md text-sm flex justify-between items-center">
+      <span class="text-white">Schwab</span>
+      <span class="text-white font-medium tracking-tight">
+        $36,418
+      </span>
+    </div>
+    <div class="p-3 -md text-sm flex justify-between items-center">
+      <span class="text-white">Robinhood</span>
+      <span class="text-white font-medium tracking-tight">
+        $36,418
+      </span>
+    </div>
+    <div class="p-3 -md text-sm flex justify-between items-center">
+      <span class="text-white">Crypto</span>
+      <span class="text-white font-medium tracking-tight">
+        $36,418
+      </span>
+    </div>
+
+    <%= link_to new_portfolio_path, class: "text-sm flex items-center space-x-3 text-gray-100 hover:text-gray-50 py-3" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+
+      <span>New portfolio</span>
+    <% end %>
+  </div>
+</div>
+
