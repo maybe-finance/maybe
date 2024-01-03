@@ -43,11 +43,17 @@
                   </li>
                 </ul>
               </li>
-              <li class="mt-auto -mx-6">
-                <a href="#" class="flex items-center px-6 py-3 text-sm font-semibold leading-6 text-gray-900 gap-x-4 hover:bg-gray-50">
-                  <span class="sr-only">Your profile</span>
-                  <span aria-hidden="true"><%= current_user.email %></span>
-                </a>
+                <div data-toggle-target="menu" class="hidden">
+                  <%= link_to "#", class:"flex p-2 text-sm font-semibold leading-6 text-gray-600 rounded-md group gap-x-3 px-4" do %>
+                    <%= image_tag 'settings.svg', size: "24" %> Settings
+                  <% end %>
+                  <%= link_to destroy_user_session_path, class:"text-red-500 flex p-2 text-sm font-semibold leading-6 text-gray-600 rounded-md group gap-x-3 px-4" do %>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                    </svg>
+                    Logout
+                  <% end %>
+                </div>
               </li>
             </ul>
           </nav>
