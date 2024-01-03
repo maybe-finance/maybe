@@ -56,6 +56,11 @@
                     Logout
                   <% end %>
                 </div>
+                <div class="flex justify-between">
+                  <a href="#" class="flex items-center px-6 py-3 text-sm font-semibold leading-6 text-gray-900 gap-x-4 hover:bg-gray-50">
+                    <span class="sr-only">Your profile</span>
+                    <span aria-hidden="true"><%= current_user.email %></span>
+                  </a>
                   <button data-action="click->toggle#menu" type="button" class="block p-2 text-sm font-semibold leading-6 text-gray-600 rounded-md group gap-x-3"><%= image_tag 'ellipsis.svg', size: "24" %></button>
                 </div>
               </li>
