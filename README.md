@@ -31,6 +31,32 @@ bin/dev
 
 And visit [http://localhost:5000](http://localhost:5000)
 
+### Read-only user setup
+
+After you've set up the initial database, you need to create a read-only user for the AI to use.
+
+Eventually we should build a setup script to help with this, but for now you need to manually run the following SQL in your `maybe_ai_development` database:
+
+```sql
+CREATE ROLE ai_user WITH LOGIN PASSWORD 'YOUR_UNIQUE_PASSWORD';
+
+GRANT SELECT ON balances TO ai_user;
+GRANT SELECT ON accounts TO ai_user;
+GRANT SELECT ON connections TO ai_user;
+GRANT SELECT ON conversations TO ai_user;
+GRANT SELECT ON holdings TO ai_user;
+GRANT SELECT ON investment_transactions TO ai_user;
+GRANT SELECT ON messages TO ai_user;
+GRANT SELECT ON metrics TO ai_user;
+GRANT SELECT ON transactions TO ai_user;
+```
+
+Then, in your `.env` file you need to set the `READONLY_DATABASE_URL` to:
+
+```
+postgres://ai_user:YOUR_UNIQUE_PASSWORD@localhost/maybe_ai_development
+```
+
 ## External Services
 
 Currently the app relies on a few external services:
