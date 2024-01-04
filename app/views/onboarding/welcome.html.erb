@@ -1,0 +1,36 @@
+<h1 class="text-2xl font-semibold font-display">Welcome to Maybe, <%= current_user.first_name %>! How'd you like to get started?</h1>
+
+
+<div class="grid grid-cols-1 mt-3 space-y-3 text-sm">
+  <div class="relative flex-col items-center p-4 text-center bg-white border border-gray-100 shadow-sm rounded-xl hover:border-gray-200">
+
+    <%= link_to new_account_path, class: "flex items-start justify-center w-full text-center focus:outline-none" do %>
+      <span class="absolute inset-0" aria-hidden="true"></span>
+      
+      <span class="flex items-center justify-center w-10 h-10 mr-3 bg-gray-100 shrink-0 grow-0 rounded-xl">
+        <i class="text-base text-black fa-kit fa-stack"></i>
+      </span>
+
+      <div class="flex-1 text-left">
+        <b class="font-medium">Add your first account</b>
+        <p class="text-gray-500">Track your accounts manually or automatically in one place.</p>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="relative flex-col items-center p-4 text-center bg-white border border-gray-100 shadow-sm rounded-xl hover:border-gray-200">
+
+    <%= link_to root_path, class: "flex items-start justify-center w-full text-center focus:outline-none" do %>
+      <span class="absolute inset-0" aria-hidden="true"></span>
+      
+      <span class="flex items-center justify-center w-10 h-10 mr-3 bg-gray-100 shrink-0 grow-0 rounded-xl">
+        <i class="text-base text-black fa-kit fa-sparkle"></i>
+      </span>
+
+      <div class="flex-1 text-left">
+        <b class="font-medium">Talk with the AI</b>
+        <p class="text-gray-500">Ask a question or have a conversation with Maybe’s AI around your finances.</p>
+      </div>
+    <% end %>
+  </div>
+</div>

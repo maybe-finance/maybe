@@ -1,0 +1,63 @@
+<div class="flex items-center mb-6 space-x-4">
+  <%= link_to previous_wizard_path do %>
+    <i class="text-lg text-gray-500 fa-solid fa-arrow-left top-0.5 relative"></i>
+  <% end %>
+
+  <div class="flex-1 h-2.5 bg-gray-200 rounded">
+    <div class="h-2.5 bg-black rounded" style="width: 70%;"></div>
+  </div>
+</div>
+
+
+<h1 class="text-2xl font-semibold font-display">What would you say your risk tolerance is?</h1>
+<p class="text-sm text-gray-400">This relates to decision making around your finances such as investing. We’ll learn more about your risk profile the more you use with Maybe.</p>
+<%= form_for @user, method: :put, url: wizard_path, html: {class: 'space-y-4'}, data: {controller: 'radio-button'} do |f| %>
+  
+  <%= f.fields_for :family do |family_fields| %>
+
+    <label class="relative flex items-center p-4 bg-gray-100 border-transparent rounded-lg shadow-none cursor-pointer focus:outline-none" data-action="click->radio-button#toggle" data-radio-button-target="label">
+      <%= family_fields.radio_button :risk, 'conservative', class: 'sr-only' %>
+      <span class="flex items-center flex-1 space-x-3 text-lg">
+        <i class="fa-kit fa-chart-conservative"></i>
+        
+        <span class="block text-sm font-medium text-gray-900">Conservative</span>
+      </span>
+
+      <i class="invisible text-black fa-solid fa-circle-check checkmark"></i>
+
+      <span class="absolute border-transparent rounded-lg pointer-events-none border-1 -inset-px" aria-hidden="true"></span>
+    </label>
+
+    <label class="relative flex items-center p-4 bg-gray-100 border-transparent rounded-lg shadow-none cursor-pointer focus:outline-none" data-action="click->radio-button#toggle" data-radio-button-target="label">
+      <%= family_fields.radio_button :risk, 'moderate', class: 'sr-only' %>
+      <span class="flex items-center flex-1 space-x-3 text-lg">
+        <i class="fa-kit fa-chart-moderate"></i>
+        
+        <span class="block text-sm font-medium text-gray-900">Moderate</span>
+      </span>
+
+      <i class="invisible text-black fa-solid fa-circle-check checkmark"></i>
+
+      <span class="absolute border-transparent rounded-lg pointer-events-none border-1 -inset-px" aria-hidden="true"></span>
+    </label>
+
+    <label class="relative flex items-center p-4 bg-gray-100 border-transparent rounded-lg shadow-none cursor-pointer focus:outline-none" data-action="click->radio-button#toggle" data-radio-button-target="label">
+      <%= family_fields.radio_button :risk, 'aggressive', class: 'sr-only' %>
+      <span class="flex items-center flex-1 space-x-3 text-lg">
+        <i class="fa-kit fa-chart-aggressive"></i>
+        
+        <span class="block text-sm font-medium text-gray-900">Aggressive</span>
+      </span>
+
+      <i class="invisible text-black fa-solid fa-circle-check checkmark"></i>
+
+      <span class="absolute border-transparent rounded-lg pointer-events-none border-1 -inset-px" aria-hidden="true"></span>
+    </label>
+  <% end %>
+
+  <div class="absolute right-5 bottom-5">
+    <button type="submit" class="btn-icon">
+      <i class="text-xl text-white fa-solid fa-arrow-right max-w"></i>
+    </button>
+  </div>
+<% end %>

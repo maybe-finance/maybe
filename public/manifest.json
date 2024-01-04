@@ -1,0 +1,11 @@
+{
+  "name": "Maybe",
+  "short_name": "maybe",
+  "description": "Your personal financial assistant.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "orientation": "portrait",
+  "prefer_related_applications": false
+}

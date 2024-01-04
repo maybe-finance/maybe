@@ -1,0 +1,49 @@
+<h1 class="text-2xl font-semibold font-display">Prompts</h1>
+
+<ul class="flex h-auto pt-3 pb-5 space-x-2 overflow-x-scroll item-center">
+    <li>
+      <%= link_to 'All', prompts_path, class: 'text-gray-800 hover:text-gray-700 px-4 py-2 rounded-full bg-gray-200/70 font-medium text-sm' %>
+    </li>
+  <% Prompt.unique_categories.each do |category| %>
+    <li>
+      <%= link_to category, prompts_path(category: category), class: 'text-gray-800 hover:text-gray-700 px-4 py-2 rounded-full bg-gray-200/70 font-medium text-sm' %>
+    </li>
+  <% end %>
+</ul>
+
+<ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+  <% @prompts.each do |prompt| %>
+  <li class="col-span-1 bg-white divide-y divide-gray-100 rounded-lg shadow-sm">
+    <div class="flex items-center justify-between w-full p-6 space-x-6">
+      <div class="flex-1">
+        <div class="flex items-center space-x-3">
+          <h3 class="text-sm text-gray-900"><%= prompt.content %></h3>
+        </div>
+        <p class="mt-1 text-sm text-gray-500">
+          <% prompt.categories.each do |category| %>
+          <span class="inline-block flex-shrink-0 rounded-full bg-green-100 px-2 py-0.5 text-sm font-medium text-green-800"><%= category %></span>
+          <% end %>
+        </p>
+      </div>
+    </div>
+    <div>
+      <div class="flex -mt-px divide-x divide-gray-100">
+        <div class="flex flex-1 w-0" data-controller="clipboard" data-clipboard-success-content="Copied!">
+            <input type="hidden" class="hidden" value="<%= prompt.content %>" data-clipboard-target="source" />
+            <a href="#" class="relative inline-flex items-center justify-center flex-1 w-0 py-3 -mr-px text-sm font-normal text-gray-600 border border-transparent rounded-bl-lg gap-x-3" data-action="clipboard#copy" data-clipboard-target="button">
+              <i class="text-gray-400 fa-light fa-copy"></i>
+              Copy
+            </a>
+
+        </div>
+        <div class="flex flex-1 w-0 -ml-px">
+          <a href="#" class="relative inline-flex items-center justify-center flex-1 w-0 py-3 text-sm font-normal text-gray-600 border border-transparent rounded-br-lg gap-x-3">
+            <i class="text-gray-400 fa-kit fa-ask"></i>
+            Ask
+          </a>
+        </div>
+      </div>
+    </div>
+  </li>
+  <% end %>
+</ul>

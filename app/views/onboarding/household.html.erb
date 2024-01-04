@@ -1,0 +1,89 @@
+<div class="flex items-center mb-6 space-x-4">
+  <%= link_to previous_wizard_path do %>
+    <i class="text-lg text-gray-500 fa-solid fa-arrow-left top-0.5 relative"></i>
+  <% end %>
+
+  <div class="flex-1 h-2.5 bg-gray-200 rounded">
+    <div class="h-2.5 bg-black rounded" style="width: 60%;"></div>
+  </div>
+</div>
+
+
+<h1 class="text-2xl font-semibold font-display">Which best describes your household?</h1>
+<%= form_for @user, method: :put, url: wizard_path, html: {class: 'space-y-4'}, data: {controller: 'radio-button'} do |f| %>
+  
+  <%= f.fields_for :family do |family_fields| %>
+
+    <label class="relative flex items-center p-4 bg-gray-100 border-transparent rounded-lg shadow-none cursor-pointer focus:outline-none" data-action="click->radio-button#toggle" data-radio-button-target="label">
+      <%= family_fields.radio_button :household, 'single income, no dependents', class: 'sr-only' %>
+      <span class="flex items-center flex-1 space-x-3 text-lg">
+        <i class="fa-regular fa-user"></i>
+        
+        <span class="block text-sm font-medium text-gray-900">Single income, no dependents</span>
+      </span>
+
+      <i class="invisible text-black fa-solid fa-circle-check checkmark"></i>
+
+      <span class="absolute border-transparent rounded-lg pointer-events-none border-1 -inset-px" aria-hidden="true"></span>
+    </label>
+
+    <label class="relative flex items-center p-4 bg-gray-100 border-transparent rounded-lg shadow-none cursor-pointer focus:outline-none" data-action="click->radio-button#toggle" data-radio-button-target="label">
+      <%= family_fields.radio_button :household, 'single income, at least one dependent', class: 'sr-only' %>
+      <span class="flex items-center flex-1 space-x-3 text-lg">
+        <i class="fa-regular fa-user-group"></i>
+        
+        <span class="block text-sm font-medium text-gray-900">Single income, at least one dependent</span>
+      </span>
+
+      <i class="invisible text-black fa-solid fa-circle-check checkmark"></i>
+
+      <span class="absolute border-transparent rounded-lg pointer-events-none border-1 -inset-px" aria-hidden="true"></span>
+    </label>
+
+    <label class="relative flex items-center p-4 bg-gray-100 border-transparent rounded-lg shadow-none cursor-pointer focus:outline-none" data-action="click->radio-button#toggle" data-radio-button-target="label">
+      <%= family_fields.radio_button :household, 'dual income, no dependents', class: 'sr-only' %>
+      <span class="flex items-center flex-1 space-x-3 text-lg">
+        <i class="fa-duotone fa-user-group"></i>
+        
+        <span class="block text-sm font-medium text-gray-900">Dual income, no dependents</span>
+      </span>
+
+      <i class="invisible text-black fa-solid fa-circle-check checkmark"></i>
+
+      <span class="absolute border-transparent rounded-lg pointer-events-none border-1 -inset-px" aria-hidden="true"></span>
+    </label>
+
+    <label class="relative flex items-center p-4 bg-gray-100 border-transparent rounded-lg shadow-none cursor-pointer focus:outline-none" data-action="click->radio-button#toggle" data-radio-button-target="label">
+      <%= family_fields.radio_button :household, 'dual income, at least one dependent', class: 'sr-only' %>
+      <span class="flex items-center flex-1 space-x-3 text-lg">
+        <i class="fa-light fa-users"></i>
+        
+        <span class="block text-sm font-medium text-gray-900">Dual income, at least one dependent</span>
+      </span>
+
+      <i class="invisible text-black fa-solid fa-circle-check checkmark"></i>
+
+      <span class="absolute border-transparent rounded-lg pointer-events-none border-1 -inset-px" aria-hidden="true"></span>
+    </label>
+
+    <label class="relative flex items-center p-4 bg-gray-100 border-transparent rounded-lg shadow-none cursor-pointer focus:outline-none" data-action="click->radio-button#toggle" data-radio-button-target="label">
+      <%= family_fields.radio_button :household, 'retired or financially independent', class: 'sr-only' %>
+      <span class="flex items-center flex-1 space-x-3 text-lg">
+        <i class="fa-regular fa-sparkles"></i>
+        
+        <span class="block text-sm font-medium text-gray-900">Retired or financially independent</span>
+      </span>
+
+      <i class="invisible text-black fa-solid fa-circle-check checkmark"></i>
+
+      <span class="absolute border-transparent rounded-lg pointer-events-none border-1 -inset-px" aria-hidden="true"></span>
+    </label>
+    
+  <% end %>
+
+  <div class="absolute right-5 bottom-5">
+    <button type="submit" class="btn-icon">
+      <i class="text-xl text-white fa-solid fa-arrow-right max-w"></i>
+    </button>
+  </div>
+<% end %>

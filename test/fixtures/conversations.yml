@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  summary: MyText
+  user: one
+  status: MyString
+  role: MyString
+  kind: MyString
+  subkind: MyString
+
+two:
+  title: MyString
+  summary: MyText
+  user: two
+  status: MyString
+  role: MyString
+  kind: MyString
+  subkind: MyString

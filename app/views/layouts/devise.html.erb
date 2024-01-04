@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html class="h-full bg-white">
+  <head>
+    <title>Maybe</title>
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Maybe">
+    
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+
+    <%= hotwire_livereload_tags if Rails.env.development? %>
+  </head>
+
+  <body class="h-full">
+    <div class="flex flex-col justify-center min-h-full px-6 py-12">
+
+      <div class="sm:mx-auto sm:w-full sm:max-w-md">
+        <%= render "shared/logo" %>
+        
+        <h2 class="mt-6 text-3xl font-semibold tracking-tight text-center font-display">
+          <%= content_for?(:header_title) ? yield(:header_title).html_safe : "Your account" %>
+        </h2>
+        
+        <% if params[:controller] == "devise/sessions" && params[:action] == "new" %>
+        <p class="mt-2 text-sm text-center text-gray-600">
+          or <%= link_to "create an account", new_user_registration_path, class: 'font-medium text-candlelight-600 hover:text-candlelight-500' %>
+        </p>
+        <% elsif params[:controller] == "devise/registrations" && params[:action] == "new" %>
+        <p class="mt-2 text-sm text-center text-gray-600">
+          or <%= link_to "sign in to your account", new_user_session_path, class: 'font-medium text-candlelight-600 hover:text-candlelight-500' %>
+        </p>
+        <% end %>
+
+      </div>
+
+      <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-lg">
+        <% if resource.errors.any? %>
+          <div class="p-4 rounded-md bg-red-50">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <svg class="w-5 h-5 text-red-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div class="ml-3">
+                <h3 class="text-sm font-medium text-red-800">
+                There <%= resource.errors.count == 1 ? "was an error" : "were #{pluralize(resource.errors.count, 'error')}" %>
+                </h3>
+                <div class="mt-2 text-sm text-red-700">
+                  <ul role="list" class="pl-5 space-y-1 list-disc">
+                    <% resource.errors.full_messages.each do |message| %>
+                      <li><%= message %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <%= yield %>
+      </div>
+
+      <div class="p-8 mt-2 text-center">
+        <p class="mt-6 text-sm text-black"><a href="/privacy" class="text-black opacity-90">Privacy Policy</a> &bull; <a href="/terms" class="text-black opacity-90">Terms of Service</a></p>
+      </div>
+
+    </div>
+
+  </body>
+</html>

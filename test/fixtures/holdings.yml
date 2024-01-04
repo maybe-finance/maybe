@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  account: one
+  security: one
+  value: 9.99
+  quantity: 9.99
+  cost_basis_source: 9.99
+  currency_code: MyString
+  source_id: MyString
+  excluded: false
+  source: MyString
+
+two:
+  account: two
+  security: two
+  value: 9.99
+  quantity: 9.99
+  cost_basis_source: 9.99
+  currency_code: MyString
+  source_id: MyString
+  excluded: false
+  source: MyString

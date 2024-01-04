@@ -1,0 +1,17 @@
+<div class="text-left">
+  <h1 class="text-2xl font-semibold font-display"><%= @conversation.title %></h1>
+
+  <div class="mt-8 top-10">
+    <ul>
+        <%= turbo_stream_from "conversation_area" %>
+
+        <%= turbo_frame_tag "conversation_area_#{@conversation.id}" do %>
+          <% if @conversation.messages.present? %>
+            <% @conversation.messages.visible.order('created_at ASC').each do |message| %>
+              <%= render partial: "conversations/message", locals: { message: message } %>
+            <% end %>
+          <% end %>
+        <% end %>
+    </ul>
+  </div>
+</div>

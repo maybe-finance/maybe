@@ -1,0 +1,41 @@
+<%
+  header_title "Change your password"
+%>
+
+
+<%= form_for(resource,
+                 as: resource_name,
+                 url: password_path(resource_name),
+                 html: {
+                         method: :put,
+                         class: "space-y-6"
+                 }) do |f| %>
+  <%= f.hidden_field :reset_password_token %> 
+
+  <div>
+    <%= f.label :password, "New password", class: 'block text-sm font-medium text-gray-700' %>
+    <div class="mt-1">
+      <%= f.password_field :password,
+                                 autofocus: true,
+                                 autocomplete: "new-password",
+                                 class: "block w-full px-4 py-3 placeholder-gray-400 border-none rounded-full bg-gray-200 focus:ring-2 appearance-none focus:outline-none focus:ring-gray-300 text-sm"
+            %>
+    </div>
+  </div>
+  <div>
+    <%= f.label :password_confirmation, "Confirm new password", class: 'block text-sm font-medium text-gray-700' %>
+    <div class="mt-1">
+      <%= f.password_field :password_confirmation,
+                                 autofocus: true,
+                                 autocomplete: "off",
+                                 class: "block w-full px-4 py-3 placeholder-gray-400 border-none rounded-full bg-gray-200 focus:ring-2 appearance-none focus:outline-none focus:ring-gray-300 text-sm"
+            %>
+    </div>
+  </div>
+
+
+    <div>
+        <%= f.submit "Change my password", class: 'flex justify-center w-full px-4 py-3 text-sm font-medium text-white bg-black rounded-full hover:bg-black focus:outline-none focus:ring-2 focus:ring-gray-200' %>
+    </div>
+
+<% end %>

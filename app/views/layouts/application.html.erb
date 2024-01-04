@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html class="bg-offwhite">
+  <head>
+    <title>Maybe</title>
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Maybe">
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+
+    <script src="https://kit.fontawesome.com/6a11aada4a.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <%= hotwire_livereload_tags if Rails.env.development? %>
+  </head>
+
+  <body class="overflow-hidden h-screen <% if request.path == root_path %>bg-<%= current_user.local_time_of_day %> bg-no-repeat bg-right-top bg-cover<% end %>">
+    <main class="mx-auto">
+      <% if request.path == root_path or request.path == advisor_path %>
+      <nav class="fixed top-10 pt-2 inset-x-0 w-full<% if request.path != root_path %> bg-offwhite<% end %>" aria-label="Tabs">
+        <div class="flex items-center justify-between px-4 py-3 mx-auto">
+
+          <div class="flex w-auto h-10 shrink-0 grow-0 items-center justify-center rounded-full bg-white shadow-sm py-2 px-1.5">
+
+            <%= link_to root_path, class: "#{request.path == root_path ? 'text-black bg-gray-200' : 'text-gray-500'} hover:text-gray-700 px-3 py-1 text-base font-medium text-center rounded-full" do %>
+              <i class="fa-kit fa-sparkle"></i>
+            <% end %>
+
+            <%= link_to advisor_path, class: "#{request.path == advisor_path ? 'text-black bg-gray-200' : 'text-gray-500'} hover:text-gray-700 px-3 py-1 text-base font-medium text-center rounded-full" do %>
+              <i class="fa-kit fa-briefcase"></i>
+            <% end %>
+
+          </div>
+        </div>
+      </nav>
+      <% end %>
+
+      <div class="absolute right-0 pr-5 overflow-x-scroll left-5 <% if request.path != root_path and request.path != advisor_path %>top-12<% else %>top-24<% end %> <% if action_name != 'new' %> masked-overflow <% end %> <% if request.path == root_path %>bottom-36<% else %>bottom-24<% end %>"<% if request.path == root_path %> data-controller="conversation-stream"<% end %>>
+        <%= yield %>
+      </div>
+      
+      <% if request.path == root_path or request.path == settings_path or request.path == accounts_path or request.path == advisor_path or request.path == conversations_path %>
+      <nav class="fixed inset-x-0 bottom-0 w-full pb-2 " aria-label="Tabs">
+        <% if request.path == root_path or (controller_name == 'conversations' and action_name == 'show') %>
+        <div class="flex items-baseline gap-3 px-6 py-2">
+          <%#= link_to prompts_path, class: "text-xs font-normal text-center text-gray-500 rounded-md hover:text-gray-700" do %>
+            <%# <span class="flex items-center justify-center w-10 h-10 mx-auto text-black bg-white rounded-full shadow-sm shrink-0 grow-0">
+              <i class="text-sm fa-kit fa-new"></i>
+            </span> %>
+          <%# end %>
+          <%= form_with model: @conversation, data: { turbo_action: 'replace', turbo_target: "conversation_area_#{@conversation.id}", controller: "conversation-form", target: "conversation-form.form" }, id: 'new_conversation_form', html: {class: 'mt-6 flex-grow'} do |form| %>
+            <%= form.text_field :content, class: "w-full h-10 px-4 rounded-full border-none bg-white text-gray-500 shadow-sm focus:ring-0", required: 'required', placeholder: "Ask your AI anything!", data: { "conversation-form-target": "content", action: "keydown->conversation-form#handleKeydown" } %>
+          <% end %>
+        </div>
+        <% end %>
+
+        <div class="flex items-center justify-between px-6 py-2 bg-offwhite">
+          <%= link_to root_path, class: "px-3 py-2 text-xs font-normal text-center text-gray-500 rounded-md hover:text-black" do %>
+            <i class="text-2xl fa-kit fa-ask"></i>
+            <span class="block mt-2">Ask</span>
+          <% end %>
+
+          <%= link_to accounts_path, class: "px-3 py-2 text-xs font-normal text-center text-gray-500 rounded-md hover:text-black" do %>
+            <i class="text-2xl fa-regular fa-layer-group"></i>
+            <span class="block mt-2">Accounts</span>
+          <% end %>
+
+          <%= link_to settings_path, class: "px-3 py-2 text-xs font-normal text-center text-gray-500 rounded-md hover:text-black" do %>
+            <i class="text-2xl fa-kit fa-profile"></i>
+            <span class="block mt-2">Profile</span>
+          <% end %>
+        </div> 
+      </nav>
+      <% end %>
+    </main>
+  </body>
+</html>

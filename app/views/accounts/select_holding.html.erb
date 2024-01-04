@@ -1,0 +1,21 @@
+<div class="relative mb-5">
+    <%= link_to new_investment_position_path, class: "absolute left-0" do %>
+      <i class="text-xl text-gray-500 fa-solid fa-arrow-left"></i>
+    <% end %>
+  <h2 class="w-full text-sm text-center">Select holding</h2>
+</div>
+
+<ul role="list" class="divide-y divide-gray-100">
+  <% Security.all.order(name: :asc).each do |security| %>
+  <li class="relative flex py-4">
+    <%= link_to '', new_investment_position_path(security_id: security.id), class: "absolute inset-0 w-full" %>
+    <%= holding_logo(security) %>
+
+    <div class="ml-3">
+      <p class="text-sm font-medium text-gray-900"><%= security.name %></p>
+      <p class="text-sm text-gray-500"><%= security.symbol %> &bull; <%= security.source_type.upcase %></p>
+    </div>
+  </li>
+  <% end %>
+
+</ul>

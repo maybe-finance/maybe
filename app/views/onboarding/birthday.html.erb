@@ -1,0 +1,26 @@
+<div class="flex items-center mb-6 space-x-4">
+  <%= link_to previous_wizard_path do %>
+    <i class="text-lg text-gray-500 fa-solid fa-arrow-left top-0.5 relative"></i>
+  <% end %>
+
+  <div class="flex-1 h-2.5 bg-gray-200 rounded">
+    <div class="h-2.5 bg-black rounded" style="width: 20%;"></div>
+  </div>
+</div>
+
+
+<h1 class="text-2xl font-semibold font-display">When were you born?</h1>
+<p class="text-sm text-gray-400">We only ask your age so that we can personalize your experience.</p>
+<%= form_for @user, method: :put, url: wizard_path, html: {class: 'space-y-6'} do |f| %>
+
+  <div class="input-wrapper">
+    <%= f.label :birthday, "Birthday", class: 'input-label' %>
+    <%= f.date_field :birthday, autocomplete: "birthday", required: 'required', placeholder: 'Birthday', class: 'input-field' %>
+  </div>
+
+  <div class="absolute right-5 bottom-5">
+    <button type="submit" class="btn-icon">
+      <i class="text-xl text-white fa-solid fa-arrow-right"></i>
+    </button>
+  </div>
+<% end %>

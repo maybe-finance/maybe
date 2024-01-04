@@ -1,0 +1,36 @@
+<%
+  header_title "Sign in to your account"
+%>
+
+<%= form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: 'space-y-6'}) do |f| %>
+
+  <div>
+    <%= f.label :email, "Email address", class: 'block text-sm font-medium text-gray-700' %>
+    <div class="mt-1">
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", required: 'required', class: 'block w-full px-4 py-3 placeholder-gray-400 border-none rounded-full bg-gray-200 focus:ring-2 appearance-none focus:outline-none focus:ring-gray-300 text-sm' %>
+    </div>
+  </div>
+
+    <div>
+        <%= f.label :password, class: 'block text-sm font-medium text-gray-700' %>
+        <div class="mt-1">
+        <%= f.password_field :password, autocomplete: "current-password", required: 'required', class: 'block w-full px-4 py-3 placeholder-gray-400 border-none rounded-full bg-gray-200 focus:ring-2 appearance-none focus:outline-none focus:ring-gray-300 text-sm' %>
+        </div>
+    </div>
+
+    <div class="flex items-center justify-between">
+        <div class="flex items-center">
+        <%= f.check_box :remember_me, class: 'w-4 h-4 text-gray-600 border-gray-300 rounded focus:ring-gray-500' %>
+        <%= f.label :remember_me, class: 'block ml-2 text-sm text-gray-900' %>
+        </div>
+
+        <div class="text-sm">
+        <%= link_to "Forgot your password?", new_password_path(resource_name), class: 'font-medium text-gray-600 hover:text-gray-500' %>
+        </div>
+    </div>
+
+    <div>
+        <%= f.submit "Log in", class: 'flex justify-center w-full px-4 py-3 text-sm font-medium text-white bg-black rounded-full hover:bg-black focus:outline-none focus:ring-2 focus:ring-gray-200' %>
+    </div>
+
+<% end %>

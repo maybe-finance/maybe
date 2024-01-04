@@ -1,0 +1,16 @@
+<div class="p-5">
+  <div class="flex justify-between">
+    <h1 class="text-2xl font-semibold font-display">Subscribe to get started</h1>
+  </div>
+  <div class="mt-5 prose">
+    <p>Hi there! Thanks for joining Maybe, where we're eager to help you manage your finances and grow your wealth! As we're in the early stages, we're looking for feedback primarily from paying customers.</p>
+    <p>So, to get started, <b class="font-semibold">you'll need to subscribe for $9/month</b>.</p>
+    <p>Don't worry, if Maybe isn't the right fit, we'll refund 100%, no questions asked. Ready to start? Subscribe now!</p>
+    <p>
+      <%= link_to @session.url, class: "w-full text-center px-4 py-2 font-normal text-white border border-transparent rounded-full shadow-sm text-md bg-black hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 no-underline" do %>
+        <i class="mr-2 text-teal-400 fa-solid fa-circle-check"></i> Subscribe for $9/month
+      <% end %>
+    </p>
+    <p>Thanks again!<br>Josh, Travis & Justin</p>
+  </div>
+</div>

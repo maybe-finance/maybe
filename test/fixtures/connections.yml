@@ -1,0 +1,31 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  source: 1
+  user: one
+  status: 1
+  sync_status: 1
+  error: 
+  new_accounts_available: false
+  consent_expiration: 2023-04-03 13:35:41
+  aggregator_id: MyString
+  item_id: MyString
+  access_token: MyString
+  cursor: MyString
+  investments_last_synced_at: 2023-04-03 13:35:41
+
+two:
+  name: MyString
+  source: 1
+  user: two
+  status: 1
+  sync_status: 1
+  error: 
+  new_accounts_available: false
+  consent_expiration: 2023-04-03 13:35:41
+  aggregator_id: MyString
+  item_id: MyString
+  access_token: MyString
+  cursor: MyString
+  investments_last_synced_at: 2023-04-03 13:35:41

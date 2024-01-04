@@ -1,0 +1,40 @@
+<li class="flex mb-8" id="message_<%= message.id %>">
+  <div class="flex-1 space-y-1.5">
+    <div class="flex gap-1.5 text-xs item-center">
+    <% if message.role == 'user' %>
+      <%= image_tag gravatar(message.user), class: 'w-4 h-4 rounded-full inline' %>
+      <span class="font-semibold text-gray-900">You</span>
+    <% elsif message.role == 'assistant' %>
+      <i class="text-base fa-kit fa-sparkle"></i>
+      <span class="font-semibold text-gray-900">Maybe</span> <span class="px-1.5 py-0.5 font-normal text-gray-900 bg-gray-200 rounded-md -mt-0.5">AI</span>
+    <% end %>
+    <span class="text-[6px]">&bull;</span> <span class="text-gray-400"><%= timeago message.created_at %> ago</span>
+    </div>
+    <div class="text-sm prose text-gray-500" id="message_content_<%= message.id %>">
+
+    <% if message.content == '...' %>
+      <div class="flex items-center px-2 py-2 mt-2 bg-gray-400 rounded-lg bg-opacity-10" id="message_content_loader_<%= message.id %>">
+        <div class="loading-ellipsis">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+        <div class="inline ml-2 text-xs text-gray-400">
+          <% if message.status == 'pending' %>
+            Determing the best route to answer your question.
+          <% elsif message.status == 'data' %>
+            Grabbing the necessary information to answer your question.
+          <% elsif message.status == 'processing' %>
+            Writing the answer to your question.
+          <% else %>
+            Depending on the question, it may take a few minutes to respond.
+          <% end %>
+        </div>
+      </div>
+    <% else %>
+      <%= markdown message.content %>
+    <% end %>
+
+    </div>
+  </div>
+</li>

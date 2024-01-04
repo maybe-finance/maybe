@@ -1,0 +1,37 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  amount: 9.99
+  is_pending: false
+  date: 2023-04-03
+  account: one
+  currency_code: MyString
+  source_transaction_id: MyString
+  source_category_id: MyString
+  source_type: MyString
+  categories: 
+  merchant_name: MyString
+  flow: 1
+  excluded: false
+  payment_channel: MyString
+  enrichment: 
+  enriched_at: 2023-04-03 14:02:42
+
+two:
+  name: MyString
+  amount: 9.99
+  is_pending: false
+  date: 2023-04-03
+  account: two
+  currency_code: MyString
+  source_transaction_id: MyString
+  source_category_id: MyString
+  source_type: MyString
+  categories: 
+  merchant_name: MyString
+  flow: 1
+  excluded: false
+  payment_channel: MyString
+  enrichment: 
+  enriched_at: 2023-04-03 14:02:42

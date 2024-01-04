@@ -1,0 +1,28 @@
+<div class="text-left">
+  <h1 class="text-2xl font-semibold font-display">Good <%= current_user.local_time_of_day %>!
+    <% 
+      case current_user.local_time_of_day 
+      when "morning" %>
+      <span class="top-1 relative w-6 h-6 rounded-full bg-gradient-to-b from-[#FDB214] to-[#FD8413] inline-block"></span></h1>
+    <% when "afternoon" %>
+      <span class="top-1 relative w-6 h-6 rounded-full bg-gradient-to-b from-[#F9B4DF] to-[#FD6719] inline-block"></span></h1>
+    <% when "evening" %>
+      <span class="top-1 relative w-6 h-6 rounded-full bg-gradient-to-b from-[#8DA1D4] to-[#3944A0] inline-block"></span></h1>
+    <% end %>
+  </h1>   
+  <p class="text-sm text-gray-600">It's <%= Date.today.strftime("%A, %B %-d") %></p>
+
+  <div class="mt-8 top-10">
+    <ul>
+        <%= turbo_stream_from "conversation_area" %>
+
+        <%= turbo_frame_tag "conversation_area_#{@conversation.id}" do %>
+          <% if @conversation.messages.present? %>
+            <% @conversation.messages.visible.order('created_at ASC').each do |message| %>
+              <%= render partial: "conversations/message", locals: { message: message } %>
+            <% end %>
+          <% end %>
+        <% end %>
+    </ul>
+  </div>
+</div>

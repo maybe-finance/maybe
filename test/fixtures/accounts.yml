@@ -1,0 +1,29 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  source_id: MyString
+  is_active: false
+  type: 
+  subtype: MyString
+  connection: one
+  balance: 9.99
+  currency_code: MyString
+  sync_status: 1
+  mask: MyString
+  source: 1
+  current_balance_date: 2023-04-03
+
+two:
+  name: MyString
+  source_id: MyString
+  is_active: false
+  type: 
+  subtype: MyString
+  connection: two
+  balance: 9.99
+  currency_code: MyString
+  sync_status: 1
+  mask: MyString
+  source: 1
+  current_balance_date: 2023-04-03

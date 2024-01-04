@@ -1,0 +1,27 @@
+<%
+  header_title "Create an account"
+%>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: {class: 'space-y-6'}) do |f| %>
+
+  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+    <%= f.label :email, "Email address", class: 'block text-sm font-medium text-gray-700' %>
+    <%= f.email_field :email, autofocus: false, autocomplete: "email", required: 'required', placeholder: 'you@example.com', class: 'p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100' %>
+  </div>
+
+
+  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+    <%= f.label :password, "Password", class: 'block text-sm font-medium text-gray-700' %>
+    <%= f.password_field :password, autocomplete: "new-password", required: 'required', class: 'p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100' %>
+  </div>
+
+  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+    <%= f.label :password_confirmation, "Password confirmation", class: 'block text-sm font-medium text-gray-700' %>
+    <%= f.password_field :password_confirmation, autocomplete: "new-password", required: 'required', class: 'p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100' %>
+  </div>
+
+  <div>
+    <%= f.submit "Continue", class: 'flex justify-center w-full px-4 py-3 text-sm font-medium text-white bg-black rounded-xl hover:bg-black focus:outline-none focus:ring-2 focus:ring-gray-200 shadow' %>
+  </div>
+
+<% end %>

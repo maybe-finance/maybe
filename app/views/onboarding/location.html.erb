@@ -1,0 +1,33 @@
+<div class="flex items-center mb-6 space-x-4">
+  <%= link_to previous_wizard_path do %>
+    <i class="text-lg text-gray-500 fa-solid fa-arrow-left top-0.5 relative"></i>
+  <% end %>
+
+  <div class="flex-1 h-2.5 bg-gray-200 rounded">
+    <div class="h-2.5 bg-black rounded" style="width: 30%;"></div>
+  </div>
+</div>
+
+
+<h1 class="text-2xl font-semibold font-display">Where are you from?</h1>
+<p class="text-sm text-gray-400">We only ask for this to tailor any advice or financial services we offer to your region.</p>
+<%= form_for @user, method: :put, url: wizard_path, html: {class: 'space-y-6'}, data: {controller: 'country'} do |f| %>
+  
+  <%= f.fields_for :family do |family_fields| %>
+    <div class="input-wrapper">
+      <%= family_fields.label :country, "Country", class: 'input-label' %>
+      <%= family_fields.country_select :country,  {priority_countries: ["CA", "GB", "US"]}, required: 'required', class: 'input-field w-11/12', data: { country_target: "country", action: "change->country#onCountryChange" } %>
+    </div>
+
+    <div class="hidden input-wrapper" data-country-target="regionWrapper">
+      <%= family_fields.label :region, "State", class: 'input-label', data: { country_target: "regionLabel" }  %>
+      <%= family_fields.text_field :region, required: 'required', class: 'input-field' %>
+    </div>
+  <% end %>
+
+  <div class="absolute right-5 bottom-5">
+    <button type="submit" class="btn-icon">
+      <i class="text-xl text-white fa-solid fa-arrow-right max-w"></i>
+    </button>
+  </div>
+<% end %>

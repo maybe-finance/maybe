@@ -1,0 +1,34 @@
+<div class="flex items-center mb-6 space-x-4">
+  <%= link_to new_user_registration_path do %>
+    <i class="text-lg text-gray-500 fa-solid fa-arrow-left top-0.5 relative"></i>
+  <% end %>
+
+  <div class="flex-1 h-2.5 bg-gray-200 rounded">
+    <div class="h-2.5 bg-black rounded" style="width: 10%;"></div>
+  </div>
+
+  <%= link_to new_user_registration_path do %>
+    <i class="text-lg text-gray-500 fa-solid fa-xmark"></i>
+  <% end %>
+</div>
+
+
+<h1 class="text-2xl font-semibold font-display">What's your name?</h1>
+<%= form_for @user, method: :put, url: wizard_path, html: {class: 'space-y-6'} do |f| %>
+
+  <div class="input-wrapper">
+    <%= f.label :first_name, "First name", class: 'input-label' %>
+    <%= f.text_field :first_name, autocomplete: "given-name", required: 'required', placeholder: 'First name', class: 'input-field' %>
+  </div>
+
+  <div class="input-wrapper">
+    <%= f.label :last_name, "Last name", class: 'input-label' %>
+    <%= f.text_field :last_name, autocomplete: "family-name", required: 'required', placeholder: 'Last name', class: 'input-field' %>
+  </div>
+
+  <div class="absolute right-5 bottom-5">
+    <button type="submit" class="btn-icon">
+      <i class="text-xl text-white fa-solid fa-arrow-right"></i>
+    </button>
+  </div>
+<% end %>

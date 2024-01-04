@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  security: one
+  date: 2023-04-04
+  open: 9.99
+  high: 9.99
+  low: 9.99
+  close: 9.99
+  currency: MyString
+  exchange: MyString
+  kind: MyString
+
+two:
+  security: two
+  date: 2023-04-04
+  open: 9.99
+  high: 9.99
+  low: 9.99
+  close: 9.99
+  currency: MyString
+  exchange: MyString
+  kind: MyString

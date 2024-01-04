@@ -1,0 +1,183 @@
+<div class="flex items-center justify-between mt-2 mb-2">
+  <h1 class="text-3xl font-semibold font-display">Accounts</h1>
+  <%= link_to "<i class='fa-solid fa-building-columns'></i> Your connections".html_safe, connections_path, class: 'bg-gray-200 hover:bg-gray-300 px-4 py-1 rounded-full text-sm m-0' %>
+</div>
+
+<div class="fixed z-50 bottom-24 right-6">
+  <%= link_to new_account_path, class: "px-3 py-2 text-xs font-normal text-center text-gray-500 rounded-md hover:text-gray-700" do %>
+    <span class="flex items-center justify-center w-12 h-12 mx-auto text-white bg-black rounded-full shrink-0 grow-0">
+      <i class="text-sm fa-kit fa-new"></i>
+    </span>
+  <% end %>
+</div>
+
+<% if current_family.accounts.blank? or current_family.metrics.blank? %>
+  <div>Before we can give you a full picture of your finances, you'll need to connect your bank accounts!</div>
+
+  <div class="mt-8">
+    <%= link_to 'Connect a bank account', new_account_path, class: 'bg-black rounded-full text-white px-4 py-2' %>
+  </div>
+<% else %>
+  <div class="pt-5 mt-2 mb-8 text-center bg-white shadow-sm rounded-xl">
+    <h3 class="mb-2 text-gray-500">Net worth</h3>
+    <p class="text-lg font-semibold"><%= number_to_currency current_family.net_worth %></p>
+    <canvas
+      style="height:12vh; width:100%"
+      class="mt-2"
+      id="net_worth"
+    ></canvas>
+    <script>
+      const ctx = document.getElementById('net_worth').getContext('2d'), gradient = ctx.createLinearGradient(0, 0, 0, 120);
+      
+      gradient.addColorStop(0, 'rgba(52, 211, 153, 0.2)');
+      gradient.addColorStop(1, 'rgba(52, 211, 153, 0)');
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: <%= raw @net_worths.map { |net_worth| net_worth.date.strftime('%Y-%m-%d') } %>,
+          datasets: [{
+            label: '',
+            data: <%= raw @net_worths.map { |net_worth| net_worth.amount.to_f } %>,
+            backgroundColor: 'transparent',
+            borderColor: '#34D399',
+            pointStyle: false,
+            borderWidth: 2,
+            borderJoinStyle: 'round',
+            borderCapStyle: 'round',
+            backgroundColor: gradient,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          layout: {
+            autoPadding: false,
+          },
+          scales: {
+            y: {
+              beginAtZero: false,
+              display: false,
+              grid: {
+                display: false
+              }
+            },
+            x: {
+              display: false,
+              grid: {
+                display: false
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            },
+            filler: {
+                propagate: true
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+
+  <% if current_family.connections.error.present? %>
+    <div class="relative px-5 py-4 mb-4 text-red-700 bg-red-100 rounded-lg" role="alert">
+      <p class="font-bold">These account connections have errors and need to be reconnected:</p>
+      <ul class="mt-3 space-y-2 text-sm">
+        <% current_family.connections.error.each do |connection| %>
+          <li>
+            <a href="#" class="flex items-center px-4 py-2 text-white bg-red-500 rounded-lg link-button-<%= connection.id %> hover:bg-red-600">
+              <%= institution_avatar(connection) %> <%= connection.name %>
+            </a>
+          </li>
+
+          <script type="text/javascript">
+            (async function($) {
+              var handler = Plaid.create({
+                token: '<%= @link_tokens.select { |link_token| link_token[:connection_id] == connection.id }.first[:link_token] %>',
+                onLoad: function() {},
+                onSuccess: function(public_token, metadata) {
+                  $.post('/api/plaid/exchange_public_token', {
+                    public_token: public_token,
+                  });
+                  // Refresh the page
+                  window.location.reload();
+                },
+                onExit: function(err, metadata) {},
+                onEvent: function(eventName, metadata) {}
+              });
+
+              $('.link-button-<%= connection.id %>').on('click', function(e) {
+                e.preventDefault();
+                handler.open();
+              });
+            })(jQuery);
+          </script>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <h2 class="text-2xl font-semibold font-display">Cash</h2>
+  <h3 class="mt-1 mb-4 text-sm text-gray-500"><%= number_to_currency current_family.cash_balance %></h3>
+
+  <% current_family.accounts.depository.each do |account| %>
+    <div class="flex items-center justify-between px-3 py-3 mb-2 bg-white shadow-sm rounded-xl">
+      <div class="flex items-center text-sm">
+        <%= institution_avatar(account.connection) %>
+        <%= account.name %> <% if account.mask.present? %> <span class="mx-1 text-xs">&bull;</span> <span class="text-gray-500"><%= account.mask %></span><% end %>
+      </div>
+      <p class="text-sm text-right">
+        <span class="block mb-1"><%= number_to_currency account.current_balance %></span>
+        
+      </p>
+    </div>
+  <% end %>
+
+  <h2 class="mt-8 text-2xl font-semibold font-display">Investments</h2>
+  <h3 class="mt-1 mb-4 text-sm text-gray-500"><%= number_to_currency current_family.investment_balance %></h3>
+
+  <% current_family.accounts.investment.each do |account| %>
+    <div class="flex items-center justify-between px-3 py-3 mb-2 bg-white shadow-sm rounded-xl">
+      <div class="flex items-center text-sm">
+        <%= institution_avatar(account.connection) %>
+        <%= account.name %><% if account.mask.present? %> <span class="mx-1 text-xs">&bull;</span> <span class="text-gray-500"><%= account.mask %></span><% end %>
+      </div>
+      <p class="text-sm text-right">
+        <span class="block mb-1"><%= number_to_currency account.current_balance %></span>
+      </p>
+    </div>
+  <% end %>
+
+  <h2 class="mt-8 text-2xl font-semibold font-display">Credit Cards</h2>
+  <h3 class="mt-1 mb-4 text-sm text-gray-500"><%= number_to_currency current_family.credit_balance %></h3>
+
+  <% current_family.accounts.credit.each do |account| %>
+    <div class="flex items-center justify-between px-3 py-3 mb-2 bg-white shadow-sm rounded-xl">
+      <div class="flex items-center text-sm">
+        <%= institution_avatar(account.connection) %>
+        <%= account.name %> <% if account.mask.present? %> <span class="mx-1 text-xs">&bull;</span> <span class="text-gray-500"><%= account.mask %></span><% end %>
+      </div>
+      <p class="text-sm text-right">
+        <span class="block mb-1"><%= number_to_currency account.current_balance %></span>
+      </p>
+    </div>
+  <% end %>
+
+  <h2 class="mt-8 text-2xl font-semibold font-display">Property</h2>
+  <h3 class="mt-1 mb-4 text-sm text-gray-500"><%= number_to_currency current_family.property_balance %></h3>
+
+  <% current_family.accounts.property.each do |account| %>
+    <div class="flex items-center justify-between px-3 py-3 mb-2 bg-white shadow-sm rounded-xl">
+      <div class="flex items-center text-sm">
+        <%= institution_avatar(account.connection) %>
+        <%= account.name %> <% if account.mask.present? %> <span class="mx-1 text-xs">&bull;</span> <span class="text-gray-500"><%= account.mask %></span><% end %>
+      </div>
+      <p class="text-sm text-right">
+        <span class="block mb-1"><%= number_to_currency account.current_balance %></span>
+      </p>
+    </div>
+  <% end %>
+<% end %>

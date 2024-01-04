@@ -1,0 +1,31 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  account: one
+  security: one
+  date: 2023-04-03
+  name: MyString
+  amount: 9.99
+  quantity: 9.99
+  price: 9.99
+  currency_code: MyString
+  source_transaction_id: MyString
+  source_type: MyString
+  source_subtype: MyString
+  fees: 9.99
+  category: MyString
+
+two:
+  account: two
+  security: two
+  date: 2023-04-03
+  name: MyString
+  amount: 9.99
+  quantity: 9.99
+  price: 9.99
+  currency_code: MyString
+  source_transaction_id: MyString
+  source_type: MyString
+  source_subtype: MyString
+  fees: 9.99
+  category: MyString

@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  symbol: MyString
+  cusip: MyString
+  isin: MyString
+  currency_code: MyString
+  source: MyString
+  source_id: MyString
+  source_type: MyString
+  shares_per_contract: 9.99
+  is_cash_equivalent: false
+
+two:
+  name: MyString
+  symbol: MyString
+  cusip: MyString
+  isin: MyString
+  currency_code: MyString
+  source: MyString
+  source_id: MyString
+  source_type: MyString
+  shares_per_contract: 9.99
+  is_cash_equivalent: false

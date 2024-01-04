@@ -1,0 +1,47 @@
+<div class="relative mb-5">
+    <%= link_to new_investment_path, class: "absolute left-0" do %>
+      <i class="text-xl text-gray-500 fa-solid fa-arrow-left"></i>
+    <% end %>
+  <h2 class="w-full text-sm text-center">Enter indivudal position</h2>
+</div>
+
+<%= form_with model: @holding, html: { class: "space-y-4" } do |f| %>
+  <%= f.hidden_field :kind, value: "investment" %>
+  <%= f.hidden_field :account_id, value: @account.id %>
+  
+  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+    <%= link_to select_holding_path, class: "absolute inset-0 z-50 w-full" do %>
+      <i class="absolute text-sm text-gray-500 top-8 right-5 fa-solid fa-chevron-right"></i>
+    <% end %>
+    <label class="block text-sm font-medium opacity-50 focus-within:opacity-100">Holding</label>
+    <%= f.text_field :name, placeholder: "Select a holding", required: 'required', class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
+  </div>
+
+   <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+    <%= link_to select_holding_path, class: "absolute inset-0 z-50 w-full" do %>
+      <i class="absolute text-sm text-gray-500 top-8 right-5 fa-solid fa-chevron-right"></i>
+    <% end %>
+    <label class="block text-sm font-medium opacity-50 focus-within:opacity-100">Portfolio</label>
+    <%= f.text_field :name, placeholder: "Select a portfolio", required: 'required', class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
+  </div>
+
+  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+    <label for="account_name" class="block text-sm font-medium opacity-50 focus-within:opacity-100">Quantity</label>
+    <div class="flex">
+      <%= f.number_field :quantity, placeholder: "0", in: 0.00..100000000.00, required: 'required', class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
+    </div>
+  </div>
+
+  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+    <label for="account_name" class="block text-sm font-medium opacity-50 focus-within:opacity-100">Total purchase price (cost basis)</label>
+    <div class="flex">
+      <%= f.number_field :cost_basis_source, placeholder: "$0.00", in: 0.00..100000000.00, required: 'required', class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
+    </div>
+  </div>
+
+  <div class="absolute right-5 bottom-5">
+    <button type="submit" class="flex items-center justify-center w-12 h-12 mb-2 bg-black rounded-full shrink-0 grow-0 hover:bg-gray-600">
+        <i class="text-xl text-white fa-regular fa-check"></i>
+    </button>
+  </div>
+<% end %>

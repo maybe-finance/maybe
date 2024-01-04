@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.prose table {
+  @apply divide-y divide-gray-300;
+}
+
+.prose tr {
+  @apply divide-x divide-gray-100;
+}
+
+.prose th {
+   @apply whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900;
+}
+
+.prose tbody {
+   @apply divide-y divide-gray-200;
+}
+
+.prose td {
+  @apply px-2 py-2 text-sm text-gray-500 whitespace-nowrap;
+}
+
+.input-wrapper {
+  @apply relative p-4 bg-gray-100 border border-gray-200 rounded-2xl focus-within:bg-white focus-within:drop-shadow-form focus-within:opacity-100;
+}
+
+.input-label {
+  @apply block text-sm font-medium text-gray-500;
+}
+
+.input-field {
+  @apply p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100;
+}
+
+.btn-black {
+  background: linear-gradient(180deg, #242629 0%, #0E0F10 100%);
+  box-shadow: 0px 4px 8px -2px rgba(52, 54, 60, 0.1),
+    0px 0px 0px 0.5px #484C51,
+    0px 1px 0px rgba(36, 38, 41, 0.1),
+    0px 1px 2px rgba(36, 38, 41, 0.05),
+    0px 2px 4px rgba(36, 38, 41, 0.04),
+    0px 4px 8px rgba(36, 38, 41, 0.03),
+    0px 2px 12px rgba(36, 38, 41, 0.02),
+    inset 0px 0px 2px 1px #242629;
+}
+
+.btn-icon {
+  @apply flex items-center justify-center w-12 h-12 mb-2 bg-black rounded-full hover:bg-gray-600 shrink-0 grow-0 ;
+  box-shadow: 0px 1px 2px rgba(52, 54, 60, 0.05), inset 0px -4px 4px rgba(173, 181, 189, 0.05);
+}
+
+@layer base {
+  @font-face {
+    font-family: 'GeneralSans';
+    font-style: normal;
+    font-weight: 200 700;
+    font-display: swap;
+    src: url('generalsans/GeneralSans-Variable.woff2') format("woff2")
+  }
+}
+
+.loading-ellipsis {
+  display: inline-flex;
+}
+
+.dot {
+  @apply w-1.5 h-1.5 mx-1 bg-gray-400 rounded-full;
+  animation: ellipsis 1.5s infinite;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+@keyframes ellipsis {
+
+  0%,
+  100% {
+    transform: scale(0.8);
+  }
+
+  50% {
+    transform: scale(1.3);
+  }
+}
+
+.masked-overflow {
+  /* scroll bar width, for use in mask calculations */
+  --scrollbar-width: 8px;
+
+  /* mask fade distance, for use in mask calculations */
+  --mask-height: 32px;
+
+  /* Need to make sure container has bottom space,
+  otherwise content at the bottom is always faded out */
+  padding-top: 15px;
+  padding-bottom: var(--mask-height);
+
+  /* The CSS mask */
+
+  /* The content mask is a linear gradient from top to bottom */
+  --mask-image-content: linear-gradient(to bottom,
+      transparent,
+      black var(--mask-height),
+      black calc(100% - var(--mask-height)),
+      transparent);
+
+  /* Here we scale the content gradient to the width of the container 
+  minus the scrollbar width. The height is the full container height */
+  --mask-size-content: calc(100% - var(--scrollbar-width)) 100%;
+
+  /* The scrollbar mask is a black pixel */
+  --mask-image-scrollbar: linear-gradient(black, black);
+
+  /* The width of our black pixel is the width of the scrollbar.
+  The height is the full container height */
+  --mask-size-scrollbar: var(--scrollbar-width) 100%;
+
+  /* Apply the mask image and mask size variables */
+  mask-image: var(--mask-image-content), var(--mask-image-scrollbar);
+  mask-size: var(--mask-size-content), var(--mask-size-scrollbar);
+
+  /* Position the content gradient in the top left, and the 
+  scroll gradient in the top right */
+  mask-position: 0 0, 100% 0;
+
+  /* We don't repeat our mask images */
+  mask-repeat: no-repeat, no-repeat;
+}

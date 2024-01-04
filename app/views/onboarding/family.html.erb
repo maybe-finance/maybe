@@ -1,0 +1,28 @@
+<div class="flex items-center mb-6 space-x-4">
+  <%= link_to previous_wizard_path do %>
+    <i class="text-lg text-gray-500 fa-solid fa-arrow-left top-0.5 relative"></i>
+  <% end %>
+
+  <div class="flex-1 h-2.5 bg-gray-200 rounded">
+    <div class="h-2.5 bg-black rounded" style="width: 50%;"></div>
+  </div>
+</div>
+
+
+<h1 class="text-2xl font-semibold font-display">What should we call your family?</h1>
+
+<%= form_for @user, method: :put, url: wizard_path, html: {class: 'space-y-6'} do |f| %>
+  
+  <%= f.fields_for :family do |family_fields| %>
+    <div class="input-wrapper">
+      <%= family_fields.label :currency, "Family Name", class: 'input-label' %>
+      <%= family_fields.text_field :name, value: "The #{@user.last_name}s", required: 'required', class: 'input-field' %>
+    </div>
+  <% end %>
+
+  <div class="absolute right-5 bottom-5">
+    <button type="submit" class="btn-icon">
+      <i class="text-xl text-white fa-solid fa-arrow-right max-w"></i>
+    </button>
+  </div>
+<% end %>

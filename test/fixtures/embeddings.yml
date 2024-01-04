@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  reference_id: MyString
+  metadata: 
+  vector: 
+
+two:
+  reference_id: MyString
+  metadata: 
+  vector: 

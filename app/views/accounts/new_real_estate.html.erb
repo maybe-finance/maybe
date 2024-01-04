@@ -1,0 +1,42 @@
+<div class="relative mb-5">
+    <%= link_to new_account_path, class: "absolute left-0" do %>
+      <i class="text-xl text-gray-500 fa-solid fa-arrow-left"></i>
+    <% end %>
+  <h2 class="w-full text-sm text-center">Enter address</h2>
+</div>
+
+<%= form_with model: @account, html: { class: "space-y-4" } do |f| %>
+  <%= f.hidden_field :kind, value: "property" %>
+  <%= f.hidden_field :subkind, value: "real_estate" %>
+  <%= f.hidden_field :property_details, id: 'dataset' %>
+  <%= f.hidden_field :connection_id, value: @connection.id %>
+  <%= f.hidden_field :name, id: 'name' %>
+  
+  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+    <%# <span class="absolute px-2 py-1 text-xs font-medium text-gray-400 uppercase bg-gray-200 rounded-full opacity-50 right-3">Optional</span> %>
+    <label for="name" class="block text-sm font-medium opacity-50 focus-within:opacity-100">Address</label>
+    <%= f.text_field :official_name, placeholder: "Street Address", required: 'required', class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full", id: 'full_address', autocomplete: "off" %>
+  </div>
+
+  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+    <label for="account_name" class="block text-sm font-medium opacity-50 focus-within:opacity-100">Valuation</label>
+    <div class="flex">
+      <%= f.number_field :current_balance, placeholder: "$0.00", in: 0.00..100000000.00, required: 'required', class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
+    </div>
+  </div>
+
+  <div class="flex items-center justify-between">
+    <div class="flex items-center">
+    <%= f.check_box :auto_valuation, class: 'w-4 h-4 text-gray-600 border-gray-300 rounded focus:ring-gray-500' %>
+    <%= f.label :auto_valuation, 'Update valuations using 3rd-party sources?', class: 'block ml-2 text-sm text-gray-900' %>
+    </div>
+  </div>
+
+
+
+  <div class="absolute right-5 bottom-5">
+    <button type="submit" class="flex items-center justify-center w-12 h-12 mb-2 bg-black rounded-full shrink-0 grow-0 hover:bg-gray-600">
+        <i class="text-xl text-white fa-regular fa-check"></i>
+    </button>
+  </div>
+<% end %>

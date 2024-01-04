@@ -1,0 +1,109 @@
+<div class="flex justify-between mb-4">
+  <h1 class="text-2xl font-semibold font-display">What will you add?</h1>
+  <a href="<%= accounts_path %>" class="text-3xl text-gray-400 hover:text-gray-600"><i class="fa-duotone fa-circle-xmark"></i></a>
+</div>
+
+<div class="grid grid-cols-2 gap-4 text-sm sm:grid-cols-3 md:grid-cols-4">
+  <div class="relative flex-col items-center px-5 py-4 space-x-3 text-center bg-white border border-gray-100 shadow-sm rounded-xl hover:border-gray-200">
+    <%= link_to new_bank_path, class: "flex flex-col items-center justify-center w-full text-center focus:outline-none" do %>
+      <span class="absolute inset-0" aria-hidden="true"></span>
+      <span class="flex w-10 h-10 shrink-0 grow-0 items-center justify-center rounded-xl bg-[#EAF4FF] mb-2">
+        <i class="fa-regular fa-money-bills-simple text-[#3492FB] text-base"></i>
+      </span>
+      Bank accounts
+    <% end %>
+  </div>
+
+  <div class="relative flex-col items-center px-5 py-4 space-x-3 text-center bg-white border border-gray-100 shadow-sm rounded-xl hover:border-gray-200">
+    <%= link_to new_investment_path, class: "flex flex-col items-center justify-center w-full text-center focus:outline-none" do %>
+      <span class="absolute inset-0" aria-hidden="true"></span>
+      <span class="flex w-10 h-10 shrink-0 grow-0 items-center justify-center rounded-xl bg-[#EDF7F4] mb-2">
+        <i class="fa-regular fa-chart-line text-[#1BD5A1] text-base"></i>
+      </span>
+      Investments
+    <% end %>
+  </div>
+
+  <div class="relative flex-col items-center px-5 py-4 space-x-3 text-center bg-white border border-gray-100 shadow-sm rounded-xl hover:border-gray-200">
+    <%= link_to new_credit_path, class: "flex flex-col items-center justify-center w-full text-center focus:outline-none" do %>
+      <span class="absolute inset-0" aria-hidden="true"></span>
+      <span class="flex w-10 h-10 shrink-0 grow-0 items-center justify-center rounded-xl bg-[#E6F6FA] mb-2">
+        <i class="fa-regular fa-credit-card text-[#189FC7] text-sm"></i>
+      </span>
+      Credit cards
+    <% end %>
+  </div>
+
+  <div class="relative flex-col items-center px-5 py-4 space-x-3 text-center bg-white border border-gray-100 shadow-sm rounded-xl hover:border-gray-200">
+    <%= link_to new_real_estate_path, class: "flex flex-col items-center justify-center w-full text-center focus:outline-none" do %>
+      <span class="absolute inset-0" aria-hidden="true"></span>
+      <span class="flex w-10 h-10 shrink-0 grow-0 items-center justify-center rounded-xl bg-[#FEF0F7] mb-2">
+        <i class="fa-regular fa-house text-[#F03695] text-sm"></i>
+      </span>
+      Real estate
+    <% end %>
+  </div>
+</div>
+<%#   
+<ul class="mt-5 space-y-4">
+  <li>
+    <a href="#" class="flex items-center text-sm link-button">
+      <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-xl bg-[#EAF4FF] mr-3"><i class="fa-regular fa-money-bills-simple text-[#3492FB] text-sm"></i></span> Bank accounts
+    </a>
+  </li>
+  <li>
+    <a href="#" class="flex items-center text-sm link-button">
+      <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-xl bg-[#EDF7F4] mr-3"><i class="fa-regular fa-chart-line text-[#1BD5A1] text-sm"></i></span> Investments
+    </a>
+  </li>
+  <li>
+    <a href="#" class="flex items-center text-sm link-button">
+      <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-xl bg-[#E6F6FA] mr-3"><i class="fa-regular fa-credit-card text-[#189FC7] text-sm"></i></span> Credit cards
+    </a>
+  </li>
+  <li>
+    <a href="#" class="flex items-center text-sm">
+      <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-xl bg-[#FFF4EB] mr-3"><i class="fa-brands fa-bitcoin text-[#FD933A] text-sm"></i></span> Crypto
+    </a>
+  </li>
+  <li>
+    <a href="#" class="flex items-center text-sm">
+      <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-xl bg-[#FEF0F7] mr-3"><i class="fa-regular fa-house text-[#F03695] text-sm"></i></span> Real estate
+    </a>
+  </li>
+  <li>
+    <a href="#" class="flex items-center text-sm">
+      <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-xl bg-[#EFF2FF] mr-3"><i class="fa-regular fa-chart-pie-simple text-[#4965DB] text-sm"></i></span> Equity
+    </a>
+  </li>
+  <li>
+    <a href="#" class="flex items-center text-sm">
+      <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-xl bg-[#FFF9E8] mr-3"><i class="fa-regular fa-car-side text-[#E6A815] text-sm"></i></span> Vehicle
+    </a>
+  </li>
+  <li>
+    <a href="#" class="flex items-center text-sm">
+      <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-xl bg-[#FBEFFE] mr-3"><i class="fa-regular fa-chart-simple text-[#D156F5] text-sm"></i></span> Private investment
+    </a>
+  </li>
+  <li>
+    <a href="#" class="flex items-center text-sm">
+      <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-xl bg-[#EBF6EC] mr-3"><i class="fa-regular fa-file-invoice text-[#3CA243] text-sm"></i></span> Payroll
+    </a>
+  </li>
+  <li>
+    <a href="#" class="flex items-center text-sm">
+      <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-xl bg-[#EDF7F4] mr-3"><i class="fa-solid fa-plus text-[#1BD5A1] text-sm"></i></span> Other assets
+    </a>
+  </li>
+  <li>
+    <a href="#" class="flex items-center text-sm">
+      <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-xl bg-[#FEF2F2] mr-3"><i class="fa-solid fa-minus text-[#EE1531] text-sm"></i></span> Other debts
+    </a>
+  </li>
+  <li>
+    <a href="#" class="flex items-center text-sm">
+      <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-xl bg-[#FFF9E8] mr-3"><i class="fa-regular fa-upload text-[#E6A815] text-sm"></i></span> Import CSV
+    </a>
+  </li>
+</ul> %>

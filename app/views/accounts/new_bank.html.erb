@@ -1,0 +1,55 @@
+<div class="relative mb-5">
+    <%= link_to new_account_path, class: "absolute left-0" do %>
+      <i class="text-xl text-gray-500 fa-solid fa-arrow-left"></i>
+    <% end %>
+  <h2 class="w-full text-sm text-center">Add a bank account</h2>
+</div>
+
+<div class="grid grid-cols-1 gap-4 text-sm md:grid-cols-2">
+  <div class="relative flex-col items-center px-5 py-4 space-x-3 bg-white border border-gray-100 shadow-sm rounded-xl focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-200">
+  
+    <%= link_to '#', class: "link-button flex flex-col w-full focus:outline-none" do %>
+      <span class="absolute inset-0" aria-hidden="true"></span>
+      <span class="flex items-center justify-center w-10 h-10 mb-2 bg-gray-100 shrink-0 grow-0 rounded-xl">
+        <i class="text-base text-gray-800 fa-regular fa-link"></i>
+      </span>
+      <h3 class="mt-1 mb-1 font-semibold">Link account</h3>
+      <p class="font-light">Link your bank account and import balances and transactions securely.</p>
+    <% end %>
+
+  </div>
+
+  <div class="relative flex-col items-center px-5 py-4 space-x-3 bg-white border border-gray-100 shadow-sm rounded-xl focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-200">
+  
+    <%= link_to new_bank_manual_path, class: "flex flex-col w-full focus:outline-none" do %>
+      <span class="absolute inset-0" aria-hidden="true"></span>
+      <span class="flex items-center justify-center w-10 h-10 mb-2 bg-gray-100 shrink-0 grow-0 rounded-xl">
+        <i class="text-base text-gray-800 fa-regular fa-keyboard"></i>
+      </span>
+      <h3 class="mt-1 mb-1 font-semibold">Enter manually</h3>
+      <p class="font-light">Add your checking, savings or money market accounts manually.</p>
+    <% end %>
+
+  </div>
+</div>
+
+<script type="text/javascript">
+  (async function($) {
+    var handler = Plaid.create({
+      token: '<%= current_user.plaid_link_token %>',
+      onLoad: function() {},
+      onSuccess: function(public_token, metadata) {
+        $.post('/api/plaid/exchange_public_token', {
+          public_token: public_token,
+        });
+      },
+      onExit: function(err, metadata) {},
+      onEvent: function(eventName, metadata) {}
+    });
+
+    $('.link-button').on('click', function(e) {
+      e.preventDefault();
+      handler.open();
+    });
+  })(jQuery);
+</script>

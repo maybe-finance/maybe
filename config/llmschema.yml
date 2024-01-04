@@ -1,0 +1,230 @@
+tables:
+  - name: accounts
+    description: Accounts references the accounts within a given connection. For example, you may have both a checking account and savings account within the same connection.
+    columns:
+      - name: id
+        description: The unique identifier for the account.
+        type: uuid
+        primary_key: true
+      - name: family_id
+        description: The unique identifier for the family.
+        type: uuid
+        foreign_key:
+          table: families
+          column: id
+      - name: connection_id
+        description: The unique identifier for the connection.
+        type: uuid
+        foreign_key:
+          table: connections
+          column: id
+      - name: name
+        description: The nickname of the account, provided by either the user or the institution.
+        type: string
+      - name: kind
+        description: The high-level type of account such as "investment", "depository", "credit", "property" etc.
+        type: string
+      - name: subkind
+        description: The sub-type of account such as "brokerage", "checking", "savings", "ira", "roth", "real_estate", etc. It's a more specific version of the kind.
+        type: string
+      - name: mask
+        description: The 4-digit account number mask.
+        type: string
+      - name: official_name
+        description: The official name of the account as provided by the institution.
+        type: string
+      - name: current_balance
+        description: The most recent/current balance of the account.
+        type: decimal
+      - name: current_balance_date
+        description: The date of the most recent/current balance of the account.
+        type: date
+      - name: credit_limit
+        description: The credit limit of the account. Only used for credit cards.
+        type: decimal
+      - name: property_details
+        description: The address details of the account. Only used for real estate/property accounts.
+        type: jsonb
+  - name: balances
+    description: Balances tracks the historical balances of both accounts and holdings. This is a good table to get cost basis information.
+    columns:
+      - name: id
+        description: The unique identifier for the balance.
+        type: uuid
+        primary_key: true
+      - name: account_id
+        description: The unique identifier for the account.
+        type: uuid
+        foreign_key:
+          table: accounts
+          column: id
+      - name: family_id
+        description: The unique identifier for the family.
+        type: uuid
+        foreign_key:
+          table: families
+          column: id
+      - name: security_id
+        description: The unique identifier for the security.
+        type: uuid
+        foreign_key:
+          table: securities
+          column: id
+      - name: balance
+        description: The balance of the account. This is the "value" of the account/holding for that date. Should NOT be SUM'd.
+        type: decimal
+      - name: quantity
+        description: Only used for holdings. The quantity of the security held.
+        type: decimal
+      - name: cost_basis
+        description: Only used for holdings. The cost basis of the security held. It's in comparison to the balance. It is not the cost basis of a single share.
+        type: decimal
+      - name: date
+        description: The date of the balance.
+        type: date
+      - name: change
+        description: The change in balance from the previous day. Good for calculating daily gains/losses.
+        type: decimal
+      - name: kind
+        description: The kind of balance. Possible values are "account", "security". "Security" is for holdings/stocks.
+        type: string
+  - name: connections
+    description: Connections references the connections between a user and an institution.
+    columns:
+      - name: id
+        description: The unique identifier for the connection.
+        type: uuid
+        primary_key: true
+      - name: name
+        description: The name of the institution.
+        type: string
+      - name: family_id
+        description: The unique identifier for the family.
+        type: uuid
+        foreign_key:
+          table: families
+          column: id
+  - name: metrics
+    description: Metrics track the calculated or aggregated metrics for an account.
+    columns:
+      - name: id
+        description: The unique identifier for the metric.
+        type: uuid
+        primary_key: true
+      - name: kind
+        description: The kind of metric. Possible values are net_worth, depository_balance, investment_balance, total_assets, total_debts, property_balance (value of all real estate/property, categorical_spending, categorical_spending_monthly).
+        type: string
+      - name: amount
+        description: The amount of the metric.
+        type: decimal
+      - name: date
+        description: The date of the metric.
+        type: date
+      - name: subkind
+        description: The sub-kind of metric. Used to give context to the kind. For example, if the kind is "categorical_spending", the subkind may be "food".
+        type: string
+      - name: family_id
+        description: The unique identifier for the family/user.
+        type: uuid
+        foreign_key:
+          table: families
+          column: id
+  - name: securities
+    description: Securities are the root of any holding and may be referenced by multiple accounts. It's where all information about a security is stored.
+    columns:
+      - name: id
+        description: The unique identifier for the security.
+        type: uuid
+        primary_key: true
+      - name: symbol
+        description: The symbol of the security.
+        type: string
+      - name: source_type
+        description: The kind of security such as "stock", "mutual_fund", "bond", "etf", "equity", etc.
+        type: string
+  - name: security_prices
+    description: SecurityPrices track the historical prices of securities.
+    columns:
+      - name: id
+        description: The unique identifier for the security price.
+        type: uuid
+        primary_key: true
+      - name: security_id
+        description: The unique identifier for the security.
+        type: uuid
+        foreign_key:
+          table: securities
+          column: id
+      - name: open
+        description: The opening price of the security.
+        type: decimal
+      - name: high
+        description: The high price of the security.
+        type: decimal
+      - name: low
+        description: The low price of the security.
+        type: decimal
+      - name: close
+        description: The closing price of the security.
+        type: decimal
+      - name: exchange
+        description: The exchange the security is traded on.
+        type: string
+      - name: date
+        description: The date of the security price.
+        type: date
+  - name: transactions
+    description: Transactions track the credits and debits of a depository account, such as checkings and savings.
+    columns:
+      - name: id
+        description: The unique identifier for the transaction.
+        type: uuid
+        primary_key: true
+      - name: family_id
+        description: The unique identifier for the family.
+        type: uuid
+        foreign_key:
+          table: families
+          column: id
+      - name: account_id
+        description: The unique identifier for the account.
+        type: uuid
+        foreign_key:
+          table: accounts
+          column: id
+      - name: amount
+        description: The amount of the transaction. Positive values are debits and negative values are credits.
+        type: decimal
+      - name: date
+        description: The date the transactions occurred.
+        type: date
+      - name: name
+        description: Bank provided name of the transaction.
+        type: string
+      - name: currency_code
+        description: The ISO 4217 currency code of the transaction.
+        type: string
+      - name: is_pending
+        description: Whether the transaction is pending or not.
+        type: boolean
+      - name: enrichment_label_group
+        description: Higher level category that groups together related labels. "Earned Income", "Essential Expenses", "Non-Essential Expenses", "Other Incoming Transactions", "Other Outgoing Transactions", "Passive Income"
+        type: string
+      - name: enrichment_label
+        description: The label of the transaction. This is the customer-facing category.
+        type: string
+      - name: enrichment_location
+        description: The physical location of the transaction.
+        type: string
+      - name: enrichment_merchant_name
+        description: The name of the merchant or store.
+        type: string
+      - name: enrichment_merchant_website
+        description: The website of the merchant or store.
+        type: string
+      - name: enrichment_person
+        description: The name of the person associated with the transaction.
+        type: string
+      - name: enrichment_recurrence
+        description: Indicates whether a transaction is a one-time transfer, e.g. purchasing a mattress (one-off), regularly repeats with personalized pricing, e.g. utilities, mortgage (recurring), regularly repeats with fixed pricing (subscription). if someone asks about recurring or subscription transactions, they are asking about transactions that are not one-off and should include both in the sql.
+        type: string

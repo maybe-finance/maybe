@@ -1,0 +1,20 @@
+<div class="flex items-center justify-between mt-2 mb-2">
+  <h1 class="text-3xl font-semibold font-display">Conversations</h1>
+  <%= link_to new_conversation_path, class: "px-3 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700" do %>
+    New Conversation
+  <% end %>
+</div>
+
+<% @conversations.each do |conversation| %>
+  <%= link_to conversation_path(conversation), class: 'relative' do %>
+  <span class="absolute inset-0" aria-hidden="true"></span>
+  <div class="flex items-center justify-between px-3 py-3 mb-2 bg-white shadow-sm rounded-xl">
+    <div class="flex items-center text-sm">
+      <%= conversation.title %>
+    </div>
+    <p class="text-sm text-right">
+      <span class="block mb-1"></span>
+    </p>
+  </div>
+  <% end %>
+<% end %>

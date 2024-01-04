@@ -1,0 +1,2 @@
+module ConversationsHelper
+end

@@ -1,0 +1,59 @@
+<div class="flex items-center mb-6 space-x-4">
+  <%= link_to previous_wizard_path do %>
+    <i class="text-lg text-gray-500 fa-solid fa-arrow-left top-0.5 relative"></i>
+  <% end %>
+
+  <div class="flex-1 h-2.5 bg-gray-200 rounded">
+    <div class="h-2.5 bg-black rounded" style="width: 90%;"></div>
+  </div>
+</div>
+
+<h1 class="text-2xl font-semibold font-display">Almost there, just a few agreements</h1>
+<p class="text-sm text-gray-400">By agreeing below, you acknowledge the documents shown and consent to electronic delivery of communications.</p>
+
+<%= form_for @user, method: :put, url: wizard_path, html: {class: 'space-y-2'}, data: {controller: 'radio-button'} do |f| %>
+  
+  <a href="#" target="_blank" class="flex items-center p-4 space-x-3 bg-gray-100 rounded-xl">
+    <i class="fa-regular fa-file-lines"></i>
+        
+    <span class="flex-1 block text-sm font-normal text-gray-900">Terms and conditions</span>
+
+    <i class="fa-solid fa-chevron-right"></i>
+  </a>
+
+  <a href="#" target="_blank" class="flex items-center p-4 space-x-3 bg-gray-100 rounded-xl">
+    <i class="fa-regular fa-file-lines"></i>
+        
+    <span class="flex-1 block text-sm font-normal text-gray-900">Privacy policy</span>
+
+    <i class="fa-solid fa-chevron-right"></i>
+  </a>
+
+  <a href="#" target="_blank" class="flex items-center p-4 space-x-3 bg-gray-100 rounded-xl">
+    <i class="fa-regular fa-file-lines"></i>
+        
+    <span class="flex-1 block text-sm font-normal text-gray-900">Limited Scope Advisory Agreement</span>
+
+    <i class="fa-solid fa-chevron-right"></i>
+  </a>
+
+  <a href="#" target="_blank" class="flex items-center p-4 space-x-3 bg-gray-100 rounded-xl">
+    <i class="fa-regular fa-file-lines"></i>
+        
+    <span class="flex-1 block text-sm font-normal text-gray-900">Form CRS relationship summary</span>
+
+    <i class="fa-solid fa-chevron-right"></i>
+  </a>
+
+  <a href="#" target="_blank" class="flex items-center p-4 space-x-3 bg-gray-100 rounded-xl">
+    <i class="fa-regular fa-file-lines"></i>
+        
+    <span class="flex-1 block text-sm font-normal text-gray-900">Form ADV brochure</span>
+
+    <i class="fa-solid fa-chevron-right"></i>
+  </a>
+
+  <div>
+    <%= f.submit "I agree", class: 'flex justify-center w-full px-4 py-3 text-sm font-medium text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-200 btn-black' %>
+  </div>
+<% end %>
