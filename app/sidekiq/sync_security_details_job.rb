@@ -74,7 +74,7 @@ class SyncSecurityDetailsJob
     openai = OpenAI::Client.new(access_token: ENV['OPENAI_ACCESS_TOKEN'])
     gpt_response = openai.chat(
       parameters: {
-        model: "gpt-4",
+        model: "gpt-4-1106-preview",
         messages: [
           { role: "system", content: "You are tasked with finding the domain for a company. You are given the company name and the ticker symbol. You are given the following information:\n\nSecurity Name: #{security_name}\nSecurity Symbol: #{symbol}\n\nYou exclusively respond with only the domain and absolutely nothing else." },
           { role: "user", content: "What is the domain for this company?" },
