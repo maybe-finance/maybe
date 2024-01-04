@@ -21,6 +21,7 @@ You'll need:
 cd maybe
 bundle install
 rails db:setup
+rake maintenance:institution_sync
 ```
 
 You can then run the rails web server:
