@@ -65,7 +65,6 @@ Currently the app relies on a few external services:
 - [Ntropy](https://www.ntropy.com) for transaction enrichment
 - [OpenAI](https://openai.com) for natural language processing
 - [TwelveData](https://twelvedata.com) for stock market data
-- [Polygon](https://polygon.io) for stock market data
 - [ScrapingBee](https://www.scrapingbee.com) for web scraping
 
 The goal is to eventually move away from these services and bring everything in-house as much as possible, but for the app to fully function, you'll need API keys from those services.

@@ -40,20 +40,11 @@ class SyncSecurityDetailsJob
   end
 
   def fetch_logo(symbol, website, name)
-    logo_url, logo_source = fetch_polygon_logo(symbol)
     logo_url, logo_source = fetch_twelvedata_logo(symbol) unless logo_url
     logo_url, logo_source = fetch_clearbit_logo(website) unless logo_url
     logo_url, logo_source = fetch_gpt_clearbit_logo(symbol, name) unless logo_url
 
     [logo_url, logo_source]
-  end
-
-  def fetch_polygon_logo(symbol)
-    response = Faraday.get("https://api.polygon.io/v3/reference/tickers/#{symbol}?apiKey=#{ENV['POLYGON_KEY']}")
-    results = JSON.parse(response.body)['results']
-    return unless results.present? && results['branding'].present?
-
-    [results['branding']['logo_url'], 'polygon']
   end
 
   def fetch_twelvedata_logo(symbol)
