@@ -1,3 +1,3 @@
 web: bin/rails server -p 5000
 css: bin/rails tailwindcss:watch
-worker: bundle exec sidekiq -C config/sidekiq.yml
+worker: bundle exec good_job start
