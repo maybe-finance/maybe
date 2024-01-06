@@ -8,7 +8,7 @@ This codebase is currently in a very early stage of development, and is not prod
 
 ## Codebase
 
-The codebase is vanilla [Rails](https://rubyonrails.org/), [Sidekiq](https://sidekiq.org/) w/ [Redis](https://redis.io/), [Puma](http://puma.io/), and [Postgres](https://www.postgresql.org/). Quite a simple setup.
+The codebase is vanilla [Rails](https://rubyonrails.org/), [GoodJob](https://github.com/bensheldon/good_job/), [Puma](http://puma.io/), and [Postgres](https://www.postgresql.org/). Quite a simple setup.
 
 ## Setup
 
