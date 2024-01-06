@@ -1,7 +1,8 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-  mount Sidekiq::Web => "/sidekiq"
+  mount GoodJob::Engine => "/good_job"
+  # end
 
   # Routes for accounts
   resources :accounts do
