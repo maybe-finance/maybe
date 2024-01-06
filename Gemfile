@@ -30,9 +30,6 @@ gem "tailwindcss-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
-# Use Redis adapter to run Action Cable in production
-gem "redis", ">= 4.0.1"
-
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 
@@ -40,7 +37,7 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "bootsnap", require: false
 
 # Authentication
-gem 'devise' 
+gem 'devise'
 gem 'omniauth'
 gem 'omniauth-rails_csrf_protection'
 gem 'wicked'
@@ -50,7 +47,7 @@ gem 'plaid'
 gem 'money'
 
 # Background jobs
-gem 'sidekiq'
+gem 'good_job'
 
 # External API
 gem 'faraday'
@@ -68,7 +65,6 @@ gem 'postmark-rails'
 # Error reporting
 gem "sentry-ruby"
 gem "sentry-rails"
-gem "sentry-sidekiq"
 
 # Billing
 gem "pay", "~> 6.0"
