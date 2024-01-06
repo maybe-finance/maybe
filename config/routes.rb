@@ -1,8 +1,9 @@
-require 'sidekiq/web'
 
 Rails.application.routes.draw do
-  mount GoodJob::Engine => "/good_job"
-  # end
+  # authenticate user before showing GoodJob dashboard
+  authenticate :user, ->(user) { user.admin? } do
+    mount GoodJob::Engine => "/good_job"
+  end
 
   # Routes for accounts
   resources :accounts do
@@ -50,7 +51,7 @@ Rails.application.routes.draw do
   get 'settings', to: 'pages#settings', as: 'settings'
   get 'upgrade', to: 'pages#upgrade', as: 'upgrade'
   get 'advisor', to: 'pages#advisor', as: 'advisor'
-  
+
   devise_for :users, controllers: { registrations: 'users/registrations' }
 
   # Routes for api
