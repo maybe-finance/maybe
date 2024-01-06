@@ -23,6 +23,7 @@ development: &development
   <<: *default
   database: maybe_ai_development
   adapter: postgresql
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5).to_i + 1 + 2 + ENV.fetch("GOOD_JOB_MAX_THREADS", 5).to_i %>
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
