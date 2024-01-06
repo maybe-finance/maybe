@@ -10,7 +10,7 @@ class ConnectionsController < ApplicationController
     @connection = current_family.connections.find(params[:id])
     @connection.destroy
 
-    GenerateMetricsJob.perform_async(current_family.id)
+    GenerateMetricsJob.perform(current_family.id)
 
     redirect_to connections_path
   end

@@ -103,11 +103,11 @@ class AccountsController < ApplicationController
 
     # Save the account
     if @account.save
-      GenerateBalanceJob.perform_async(@account.id)
+      GenerateBalanceJob.perform(@account.id)
       GenerateMetricsJob.perform_in(15.seconds, current_family.id)
 
       if @account.kind == 'property' and @account.subkind == 'real_estate'
-        SyncPropertyValuesJob.perform_async(@account.id)
+        SyncPropertyValuesJob.perform(@account.id)
       end
 
       # If the account saved, redirect to the accounts page
@@ -130,7 +130,7 @@ class AccountsController < ApplicationController
     # Find or create a new "Manual Bank" connection
     @connection = Connection.find_or_create_by(user: current_user, family: current_family, name: "Manual", source: "manual")
     @account = Account.new
-    
+
     render layout: 'simple'
   end
 
@@ -160,7 +160,7 @@ class AccountsController < ApplicationController
     # Find or create a new "Manual Bank" connection
     @connection = Connection.find_or_create_by(user: current_user, family: current_family, name: "Manual", source: "manual")
     @account = Account.new
-    
+
     render layout: 'simple'
   end
 

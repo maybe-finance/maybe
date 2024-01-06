@@ -37,8 +37,8 @@ class ConversationsController < ApplicationController
       reply.user = nil
       reply.role = "assistant"
       reply.save
-      
-      AskQuestionJob.perform_async(@conversation.id, reply.id)
+
+      AskQuestionJob.perform(@conversation.id, reply.id)
 
       #conversation.broadcast_append_to "conversation_area", partial: "conversations/message", locals: { message: reply }, target: "conversation_area_#{conversation.id}"
 

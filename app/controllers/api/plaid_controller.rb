@@ -16,7 +16,7 @@ class Api::PlaidController < ApplicationController
     item_id = exchange_token_response.item_id
 
     item_get_request = Plaid::ItemGetRequest.new({ access_token: access_token})
-    item_response = $plaid_api_client.item_get(item_get_request) 
+    item_response = $plaid_api_client.item_get(item_get_request)
     aggregator_id = item_response.item.institution_id
     consent_expiration = item_response.item.consent_expiration_time
 
@@ -41,11 +41,11 @@ class Api::PlaidController < ApplicationController
     )
     user.save!
 
-    SyncPlaidItemAccountsJob.perform_async(item_id)
+    SyncPlaidItemAccountsJob.perform(item_id)
 
-    # SyncPlaidHoldingsJob.perform_async(item_id)
-    # SyncPlaidInvestmentTransactionsJob.perform_async(item_id)
-    
+    # SyncPlaidHoldingsJob.perform(item_id)
+    # SyncPlaidInvestmentTransactionsJob.perform(item_id)
+
     GenerateMetricsJob.perform_in(1.minute, user.family.id)
 
     render json: {

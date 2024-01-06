@@ -7,6 +7,6 @@ class Security < ApplicationRecord
   after_create :sync_price_history
 
   def sync_price_history
-    SyncSecurityHistoryJob.perform_async(self.id)
+    SyncSecurityHistoryJob.perform(self.id)
   end
 end

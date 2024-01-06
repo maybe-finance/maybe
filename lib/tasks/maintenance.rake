@@ -2,48 +2,48 @@ namespace :maintenance do
   desc "Quick Update"
   task :quick_update => :environment do
     Connection.all.each do |connection|
-      SyncPlaidItemAccountsJob.perform_async(connection.item_id)
-      SyncPlaidHoldingsJob.perform_async(connection.item_id)
-      SyncPlaidInvestmentTransactionsJob.perform_async(connection.item_id)
+      SyncPlaidItemAccountsJob.perform(connection.item_id)
+      SyncPlaidHoldingsJob.perform(connection.item_id)
+      SyncPlaidInvestmentTransactionsJob.perform(connection.item_id)
 
       GenerateMetricsJob.perform_in(1.minute, connection.family_id)
     end
 
-    EnrichTransactionsJob.perform_async
+    EnrichTransactionsJob.perform
 
     # Sync security prices that haven't been synced in the last 24 hours or are nil
     Security.where("last_synced_at IS NULL OR last_synced_at < ?", 24.hours.ago).each do |security|
-      SyncSecurityHistoryJob.perform_async(security.id)
+      SyncSecurityHistoryJob.perform(security.id)
     end
 
     # Sync security real time prices that haven't been synced in the last 30 minutes or are nil
     Security.where("real_time_price_updated_at IS NULL OR real_time_price_updated_at < ?", 30.minutes.ago).each do |security|
-      RealTimeSyncJob.perform_async(security.id)
+      RealTimeSyncJob.perform(security.id)
     end
 
     Account.all.each do |account|
-      GenerateBalanceJob.perform_async(account.id)
+      GenerateBalanceJob.perform(account.id)
     end
 
     Account.property.each do |account|
-      SyncPropertyValuesJob.perform_async(account.id)
+      SyncPropertyValuesJob.perform(account.id)
     end
 
     Family.all.each do |family|
-      GenerateCategoricalMetricsJob.perform_async(family.id)
+      GenerateCategoricalMetricsJob.perform(family.id)
     end
   end
 
   desc "Institution Sync"
   task :institution_sync => :environment do
-    SyncPlaidInstitutionsJob.perform_async
+    SyncPlaidInstitutionsJob.perform_now
   end
 
   desc "Security Details Sync"
   task :security_details_sync => :environment do
     # Get Security where logo is nil
     Security.where(logo: nil).each do |security|
-      SyncSecurityDetailsJob.perform_async(security.id)
+      SyncSecurityDetailsJob.perform(security.id)
     end
   end
 
