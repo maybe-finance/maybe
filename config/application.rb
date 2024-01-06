@@ -25,6 +25,9 @@ module Maybe
       api_token: ENV['POSTMARK_API_TOKEN']
     }
 
+    config.active_job.queue_adapter = :good_job
+    config.good_job.execution_mode = :async
+
     config.active_record.writing_role = :primary
     config.active_record.reading_role = :primary_replica
   end
