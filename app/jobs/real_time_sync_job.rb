@@ -1,5 +1,4 @@
 class RealTimeSyncJob
-  include Sidekiq::Job
 
   def perform(security_id)
     security = Security.find(security_id)

@@ -1,5 +1,4 @@
 class EnrichTransactionsJob
-  include Sidekiq::Job
 
   def perform
     enrichment = Faraday.new(

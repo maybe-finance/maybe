@@ -1,5 +1,4 @@
 class SyncPlaidHoldingsJob
-  include Sidekiq::Job
 
   def perform(item_id)
     connection = Connection.find_by(source: 'plaid', item_id: item_id)
@@ -31,7 +30,7 @@ class SyncPlaidHoldingsJob
 
     # Process all securities first
     securities = holdings_response.securities
-    
+
     # upsert_all securities
     all_securities = []
 
@@ -59,7 +58,7 @@ class SyncPlaidHoldingsJob
     holdings.each do |holding|
       next if account_ids[holding.account_id].nil?
       next if holding.quantity <= 0
-      
+
       all_holdings << {
         account_id: account_ids[holding.account_id],
         security_id: Security.find_by(source_id: holding.security_id).id,
@@ -74,6 +73,6 @@ class SyncPlaidHoldingsJob
 
     Holding.upsert_all(all_holdings, unique_by: :index_holdings_on_account_id_and_security_id)
 
-    SyncPlaidInvestmentTransactionsJob.perform_async(item_id)
+    SyncPlaidInvestmentTransactionsJob.perform(item_id)
   end
 end

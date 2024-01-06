@@ -1,5 +1,4 @@
 class GenerateMetricsJob
-  include Sidekiq::Job
 
   def perform(family_id)
     family = Family.find(family_id)
@@ -15,7 +14,7 @@ class GenerateMetricsJob
     property_accounts_balance = accounts.property.sum { |account| account.current_balance }
 
     total_assets = depository_accounts_balance + investment_accounts_balance + property_accounts_balance
-    
+
     total_debts = credit_accounts_balance
 
     net_worth = total_assets - total_debts

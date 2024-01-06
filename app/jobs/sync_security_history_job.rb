@@ -1,5 +1,4 @@
 class SyncSecurityHistoryJob
-  include Sidekiq::Job
 
   def perform(security_id)
     security = Security.find(security_id)
@@ -38,7 +37,7 @@ class SyncSecurityHistoryJob
     end
 
     # remove duplicate dates
-    all_prices.uniq! { |price| price[:date] }    
+    all_prices.uniq! { |price| price[:date] }
 
     SecurityPrice.upsert_all(all_prices, unique_by: :index_security_prices_on_security_id_and_date)
 

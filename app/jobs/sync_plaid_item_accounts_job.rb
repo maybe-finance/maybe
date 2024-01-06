@@ -1,5 +1,4 @@
 class SyncPlaidItemAccountsJob
-  include Sidekiq::Job
 
   def perform(item_id)
     connection = Connection.find_by(source: 'plaid', item_id: item_id)
@@ -38,12 +37,12 @@ class SyncPlaidItemAccountsJob
       )
       connection_account.save
 
-      #GenerateBalanceJob.perform_async(connection_account.id)
+      #GenerateBalanceJob.perform(connection_account.id)
     end
 
     connection.update(sync_status: 'idle')
 
-    SyncPlaidTransactionsJob.perform_async(item_id)
-    SyncPlaidHoldingsJob.perform_async(item_id)
+    SyncPlaidTransactionsJob.perform(item_id)
+    SyncPlaidHoldingsJob.perform(item_id)
   end
 end

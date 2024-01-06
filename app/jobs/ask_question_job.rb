@@ -1,5 +1,4 @@
 class AskQuestionJob
-  include Sidekiq::Job
 
   def perform(conversation_id, reply_id)
     conversation = Conversation.find(conversation_id)
@@ -163,7 +162,7 @@ class AskQuestionJob
             5. investing: the user has a specific question about investing and needs real-time data
             6. accounts: the user has a specific question about their accounts
             7. system: the user wants to know how to do something within the product
-            
+
             Second, remember to keep these things in mind regarding how to resolve:
             - We have access to both historical and real-time data we can query, so we can answer questions about the user's accounts. But if we need to get that data, then content_contains_answer should be false.
             - If the user is asking for metrics, then resolution should be to query the metrics table.
@@ -188,7 +187,7 @@ class AskQuestionJob
     )
 
     raw_response = response.dig("choices", 0, "message", "content")
-    
+
     justification_reply = conversation.messages.new
     justification_reply.log = raw_response
     justification_reply.user = nil
@@ -226,7 +225,7 @@ class AskQuestionJob
     resolve_value = last_log_json["resolve"]
 
     text_string = ''
-    
+
     response = openai.chat(
       parameters: {
         model: "gpt-4-1106-preview",

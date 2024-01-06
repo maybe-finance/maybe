@@ -1,5 +1,4 @@
 class GenerateBalanceJob
-  include Sidekiq::Job
 
   def perform(account_id)
     account = Account.find(account_id)
@@ -11,7 +10,7 @@ class GenerateBalanceJob
 
     # Get current balance and save it to Balance model. Update based on account and date. Don't add last_balance if it's nil.
     Balance.find_or_initialize_by(account_id: account_id, security_id: nil, date: Date.today, kind: 'account', family_id: account.family.id).update(balance: account.current_balance, change: last_balance.nil? ? 0 : account.current_balance - last_balance)
-    
+
     # Check if there holdings
     if account.holdings.any?
       # Get current holdings value and save it to Balance model. Update based on account, security and date.

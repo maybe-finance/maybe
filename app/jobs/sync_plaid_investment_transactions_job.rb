@@ -1,5 +1,4 @@
 class SyncPlaidInvestmentTransactionsJob
-  include Sidekiq::Job
 
   def perform(item_id)
     connection = Connection.find_by(source: 'plaid', item_id: item_id)
@@ -37,11 +36,11 @@ class SyncPlaidInvestmentTransactionsJob
         return
       end
     end
-    
+
 
     # Process all securities first
     securities = response.securities
-    
+
     # upsert_all securities
     all_securities = []
 
@@ -70,7 +69,7 @@ class SyncPlaidInvestmentTransactionsJob
           access_token: access_token,
           start_date: start_date,
           end_date: Date.today,
-          options: { 
+          options: {
             count: 500,
             offset: investmentTransactions.length()
           }
@@ -83,7 +82,7 @@ class SyncPlaidInvestmentTransactionsJob
     if investmentTransactions.any?
       investmentTransactions_hash = investmentTransactions.map do |transaction|
         security = Security.find_by(source_id: transaction.security_id)
-        
+
         next if security.blank?
         {
           account_id: account_ids[transaction.account_id],
@@ -118,9 +117,9 @@ class SyncPlaidInvestmentTransactionsJob
       # Update investments_last_synced_at to the current time
       connection.update(investments_last_synced_at: DateTime.now)
     end
-          
+
     accounts.each do |account|
-      GenerateBalanceJob.perform_async(account.id)
+      GenerateBalanceJob.perform(account.id)
     end
   end
 end

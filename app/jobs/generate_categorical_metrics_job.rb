@@ -1,5 +1,4 @@
 class GenerateCategoricalMetricsJob
-  include Sidekiq::Job
 
   def perform(family_id)
     family = Family.find(family_id)

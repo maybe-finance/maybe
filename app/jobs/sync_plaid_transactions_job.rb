@@ -1,5 +1,4 @@
 class SyncPlaidTransactionsJob
-  include Sidekiq::Job
 
   def perform(item_id)
     connection = Connection.find_by(source: 'plaid', item_id: item_id)
@@ -27,7 +26,7 @@ class SyncPlaidTransactionsJob
           include_personal_finance_category: true
         }
       })
-      
+
       transactions_response = $plaid_api_client.transactions_sync(transactions_request)
 
       added_transactions += transactions_response.added
@@ -92,10 +91,10 @@ class SyncPlaidTransactionsJob
       Transaction.where(source_transaction_id: removed_transactions).destroy_all
     end
 
-    EnrichTransactionsJob.perform_async
+    EnrichTransactionsJob.perform
 
     accounts.each do |account|
-      GenerateBalanceJob.perform_async(account.id)
+      GenerateBalanceJob.perform(account.id)
     end
   end
 end

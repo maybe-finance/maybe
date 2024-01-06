@@ -1,5 +1,4 @@
 class SyncSecurityDetailsJob
-  include Sidekiq::Job
 
   def perform(security_id)
     security = Security.find_by(id: security_id)

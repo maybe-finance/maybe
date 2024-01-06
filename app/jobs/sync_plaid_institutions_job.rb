@@ -1,12 +1,11 @@
-class SyncPlaidInstitutionsJob
-  include Sidekiq::Job
+class SyncPlaidInstitutionsJob < ApplicationJob
 
-  def perform
+  def perform_now
     # Get all institutions from Plaid, which includes paginating through all pages
     offset = 0
     while true
       institutions = []
-      
+
       institutions_get_request = Plaid::InstitutionsGetRequest.new({
         offset: offset,
         count: 500,
