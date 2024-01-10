@@ -6,9 +6,22 @@
 
 🚨 NOTE: This is the original React/Next.js app of the now-defunct personal finance app, Maybe. This original version used many external services (Plaid, Finicity, Auth0, etc) and getting it to fully function will be a decent amount of work.
 
-The README below was what we used internally, so many of the links won't work and the instructions won't necessarily be applicable.
-
 There's a LOT of work to do to get this functioning, but it should be feasible.
+
+## Features
+
+As a personal finance + wealth management app, Maybe has a lot of features. Here's a quick overview of some of the main ones...
+
+-   Net worth tracking
+-   Financial account syncing
+-   Investment benchmarking
+-   Investment portfolio allocation
+-   Debt insights
+-   Retirement forecasting + planning
+-   Investment return simulation
+-   Manual account/investment tracking
+
+And dozens upon dozens of smaller features.
 
 ## Building the app
 
