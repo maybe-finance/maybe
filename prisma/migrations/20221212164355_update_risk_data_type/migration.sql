@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "user" ALTER COLUMN "risk_tolerance" SET DATA TYPE DOUBLE PRECISION;

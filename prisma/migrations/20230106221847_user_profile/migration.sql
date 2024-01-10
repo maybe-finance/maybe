@@ -1,0 +1,10 @@
+CREATE EXTENSION IF NOT EXISTS citext;
+
+ALTER TABLE "user"
+ADD COLUMN "agreements_revision" TEXT,
+ADD COLUMN "dob" DATE,
+ADD COLUMN "email" CITEXT,
+ADD COLUMN "first_name" TEXT,
+ADD COLUMN "last_name" TEXT,
+ADD COLUMN "onboarded" TIMESTAMPTZ(6),
+ADD COLUMN "picture" TEXT;

@@ -1,0 +1,7 @@
+# Ignores everything except dist/ prisma/ apps/ and yarn.lock
+# apps/ is needed so that CDK (in /aws/maybe-app) has access to the per-app Dockerfile
+*
+!apps/
+!dist/
+!prisma/
+!yarn.lock

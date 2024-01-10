@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../partials/head'); %>
+    <body>
+        <div class="container">
+            <% if (error) { %>
+            <div class="unauthorized">
+                <p>Unauthorized</p>
+                <p>If you are a Maybe Employee, please request admin access</p>
+            </div>
+            <% } %>
+            <img src="maybe.svg" alt="Maybe Logo" width="50px" height="50px" />
+            <h3>Maybe Finance</h3>
+            <button class="btn" onclick="login()">Admin Login</button>
+            <% if(error){ %>
+            <button class="btn" onclick="logout()" style="margin-top: 20px">Logout</button>
+            <% } %>
+        </div>
+    </body>
+</html>

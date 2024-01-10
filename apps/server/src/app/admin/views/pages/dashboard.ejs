@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../partials/head'); %>
+    <body>
+        <div class="container">
+            <img src="maybe.svg" alt="Maybe Logo" width="50px" height="50px" />
+            <h3>Maybe Finance Admin Dashboard</h3>
+            <p style="margin-bottom: 30px">Welcome, <%= user %> (<%= role %>)</p>
+            <div class="links">
+                <a class="btn" href="/admin/bullmq">BullMQ Dashboard</a>
+                <a class="btn" href="/admin/logout">Logout</a>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,157 @@
+import type { PrismaClient, Security } from '@prisma/client'
+import type { IMarketDataService } from '@maybe-finance/server/shared'
+import type { Logger } from 'winston'
+import { Prisma } from '@prisma/client'
+import { DateTime } from 'luxon'
+import { SharedUtil } from '@maybe-finance/shared'
+
+export interface ISecurityPricingService {
+    sync(security: Pick<Security, 'id' | 'symbol' | 'plaidType'>, syncStart?: string): Promise<void>
+    syncAll(): Promise<void>
+}
+
+export class SecurityPricingService implements ISecurityPricingService {
+    constructor(
+        private readonly logger: Logger,
+        private readonly prisma: PrismaClient,
+        private readonly marketDataService: IMarketDataService
+    ) {}
+
+    async sync(
+        security: Pick<Security, 'id' | 'symbol' | 'plaidType' | 'currencyCode'>,
+        syncStart?: string
+    ) {
+        const dailyPricing = await this.marketDataService.getDailyPricing(
+            security,
+            syncStart
+                ? DateTime.fromISO(syncStart, { zone: 'utc' })
+                : DateTime.utc().minus({ years: 2 }),
+            DateTime.now()
+        )
+
+        if (!dailyPricing.length) return
+
+        this.logger.debug(
+            `fetched ${dailyPricing.length} daily prices for Security{id=${security.id} symbol=${security.symbol})`
+        )
+
+        await this.prisma.$transaction([
+            this.prisma.$executeRaw`
+              INSERT INTO security_pricing (security_id, date, price_close, price_as_of, source)
+              VALUES
+                ${Prisma.join(
+                    dailyPricing.map(
+                        ({ date, priceClose }) =>
+                            Prisma.sql`(
+                              ${security.id},
+                              ${date.toISODate()}::date,
+                              ${priceClose},
+                              NOW(),
+                              ${this.marketDataService.source}
+                            )`
+                    )
+                )}
+              ON CONFLICT (security_id, date) DO UPDATE
+              SET
+                price_close = EXCLUDED.price_close,
+                price_as_of = EXCLUDED.price_as_of,
+                source = EXCLUDED.source;
+            `,
+            this.prisma.security.update({
+                where: { id: security.id },
+                data: {
+                    pricingLastSyncedAt: new Date(),
+                },
+            }),
+        ])
+    }
+
+    async syncAll() {
+        const profiler = this.logger.startTimer()
+
+        for await (const securities of SharedUtil.paginateIt({
+            pageSize: 100,
+            fetchData: (offset, count) =>
+                this.prisma.security.findMany({
+                    select: {
+                        id: true,
+                        symbol: true,
+                        plaidType: true,
+                        currencyCode: true,
+                    },
+                    skip: offset,
+                    take: count,
+                }),
+        })) {
+            const livePricing = await this.marketDataService
+                .getLivePricing(securities)
+                .then((lp) => lp.filter((p) => !!p.pricing))
+
+            this.logger.debug(
+                `Fetched live pricing for ${livePricing.length} / ${securities.length} securities`
+            )
+
+            if (livePricing.length === 0) break
+
+            await this.prisma.$transaction([
+                this.prisma.$executeRaw`
+                  INSERT INTO security_pricing (security_id, date, price_close, price_as_of, source)
+                  VALUES
+                    ${Prisma.join(
+                        livePricing.map(
+                            ({ security, pricing }) =>
+                                Prisma.sql`(
+                                  ${security.id},
+                                  ${pricing!.updatedAt.toISODate()}::date,
+                                  ${pricing!.price},
+                                  ${pricing!.updatedAt.toJSDate()},
+                                  ${this.marketDataService.source}
+                                )`
+                        )
+                    )}
+                  ON CONFLICT (security_id, date) DO UPDATE
+                  SET
+                    price_close = EXCLUDED.price_close,
+                    price_as_of = EXCLUDED.price_as_of,
+                    source = EXCLUDED.source;
+                `,
+                // Update today's balance record for any accounts with holdings containing synced securities
+                this.prisma.$executeRaw`
+                  INSERT INTO account_balance (account_id, date, balance)
+                  SELECT
+                    h.account_id,
+                    NOW() AS date,
+                    SUM(COALESCE(h.quantity * sp.price_close * COALESCE(s.shares_per_contract, 1), h.value)) AS balance
+                  FROM
+                    holding h
+                    INNER JOIN security s ON s.id = h.security_id
+                    LEFT JOIN (
+                      SELECT DISTINCT ON (security_id)
+                        *
+                      FROM
+                        security_pricing
+                      ORDER BY
+                        security_id, date DESC
+                    ) sp ON sp.security_id = s.id
+                  WHERE
+                    h.account_id IN (
+                      SELECT
+                        a.id
+                      FROM
+                        account a
+                        INNER JOIN holding h ON h.account_id = a.id
+                      WHERE
+                        h.security_id IN (${Prisma.join(livePricing.map((p) => p.security.id))})
+                    )
+                  GROUP BY
+                    h.account_id
+                  ON CONFLICT (account_id, date) DO UPDATE
+                  SET
+                    balance = EXCLUDED.balance;
+                `,
+            ])
+        }
+
+        profiler.done({ message: 'Synced all securities' })
+    }
+}

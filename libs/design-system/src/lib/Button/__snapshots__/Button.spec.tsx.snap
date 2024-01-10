@@ -1,0 +1,230 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Button when passed an \`as\` prop should render as the specified element 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        class="px-4 py-2 rounded text-base bg-cyan text-gray-700 shadow hover:bg-cyan-400 focus:bg-cyan-400 focus:ring-cyan inline-flex items-center justify-center text-center font-medium leading-6 whitespace-nowrap select-none cursor-pointer focus:outline-none focus:ring focus:ring-opacity-60 disabled:opacity-50 disabled:pointer-events-none transition-colors duration-200"
+        role="button"
+      >
+        Hello, World!
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="px-4 py-2 rounded text-base bg-cyan text-gray-700 shadow hover:bg-cyan-400 focus:bg-cyan-400 focus:ring-cyan inline-flex items-center justify-center text-center font-medium leading-6 whitespace-nowrap select-none cursor-pointer focus:outline-none focus:ring focus:ring-opacity-60 disabled:opacity-50 disabled:pointer-events-none transition-colors duration-200"
+      role="button"
+    >
+      Hello, World!
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;
+
+exports[`Button when passed an \`href\` value should render as an <a> element 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <a
+        class="px-4 py-2 rounded text-base bg-cyan text-gray-700 shadow hover:bg-cyan-400 focus:bg-cyan-400 focus:ring-cyan inline-flex items-center justify-center text-center font-medium leading-6 whitespace-nowrap select-none cursor-pointer focus:outline-none focus:ring focus:ring-opacity-60 disabled:opacity-50 disabled:pointer-events-none transition-colors duration-200"
+        href="https://example.com"
+        role="button"
+      >
+        Hello, World!
+      </a>
+    </div>
+  </body>,
+  "container": <div>
+    <a
+      class="px-4 py-2 rounded text-base bg-cyan text-gray-700 shadow hover:bg-cyan-400 focus:bg-cyan-400 focus:ring-cyan inline-flex items-center justify-center text-center font-medium leading-6 whitespace-nowrap select-none cursor-pointer focus:outline-none focus:ring focus:ring-opacity-60 disabled:opacity-50 disabled:pointer-events-none transition-colors duration-200"
+      href="https://example.com"
+      role="button"
+    >
+      Hello, World!
+    </a>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;
+
+exports[`Button when rendered with text should display the text 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <button
+        class="px-4 py-2 rounded text-base bg-cyan text-gray-700 shadow hover:bg-cyan-400 focus:bg-cyan-400 focus:ring-cyan inline-flex items-center justify-center text-center font-medium leading-6 whitespace-nowrap select-none cursor-pointer focus:outline-none focus:ring focus:ring-opacity-60 disabled:opacity-50 disabled:pointer-events-none transition-colors duration-200"
+        role="button"
+        type="button"
+      >
+        Hello, World!
+      </button>
+    </div>
+  </body>,
+  "container": <div>
+    <button
+      class="px-4 py-2 rounded text-base bg-cyan text-gray-700 shadow hover:bg-cyan-400 focus:bg-cyan-400 focus:ring-cyan inline-flex items-center justify-center text-center font-medium leading-6 whitespace-nowrap select-none cursor-pointer focus:outline-none focus:ring focus:ring-opacity-60 disabled:opacity-50 disabled:pointer-events-none transition-colors duration-200"
+      role="button"
+      type="button"
+    >
+      Hello, World!
+    </button>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

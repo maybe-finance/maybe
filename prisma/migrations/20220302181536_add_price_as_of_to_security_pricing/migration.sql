@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "security_pricing" ADD COLUMN     "price_as_of" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP;

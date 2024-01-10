@@ -1,0 +1,51 @@
+---
+version: '3.9'
+
+services:
+    postgres:
+        container_name: postgres
+        profiles: [services]
+        image: timescale/timescaledb:latest-pg14
+        ports:
+            - 5432:5432
+        environment:
+            POSTGRES_USER: maybe
+            POSTGRES_PASSWORD: maybe
+            POSTGRES_DB: maybe_local
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+
+    redis:
+        container_name: redis
+        profiles: [services]
+        image: redis:6.2-alpine
+        ports:
+            - 6379:6379
+        command: 'redis-server --bind 0.0.0.0'
+
+    ngrok:
+        env_file: .env
+        image: shkoliar/ngrok:latest
+        profiles: [ngrok]
+        container_name: ngrok
+        ports:
+            - 4551:4551
+        environment:
+            - DOMAIN=host.docker.internal
+            - PORT=3333
+            - AUTH_TOKEN=${NGROK_AUTH_TOKEN}
+            - DEBUG=true
+
+    stripe:
+        container_name: stripe
+        image: stripe/stripe-cli:latest
+        profiles: [stripe]
+        command: listen --forward-to host.docker.internal:3333/v1/stripe/webhook --log-level warn
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
+        environment:
+            - STRIPE_API_KEY=${STRIPE_SECRET_KEY}
+        tty: true
+
+volumes:
+    postgres_data:

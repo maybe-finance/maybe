@@ -1,0 +1,19 @@
+import { Canvas, Meta } from '@storybook/addon-docs'
+import Swatch from '../util/Swatch'
+const headingClasses = 'text-white font-display font-extrabold mb-5'
+const paragraphClasses = 'text-white font-sans font-regular mb-3'
+
+<Meta title="Getting Started/Typography" />
+
+# Typography
+
+<Canvas>
+    <div>
+        <h1 className={`text-5xl ${headingClasses}`}>Heading 1</h1>
+        <h2 className={`text-4xl ${headingClasses}`}>Heading 2</h2>
+        <h3 className={`text-3xl ${headingClasses}`}>Heading 3</h3>
+        <p className={`text-lg ${paragraphClasses}`}>Large text</p>
+        <p className={`text-base ${paragraphClasses}`}>Medium text</p>
+        <p className={`text-sm ${paragraphClasses}`}>Small text</p>
+    </div>
+</Canvas>

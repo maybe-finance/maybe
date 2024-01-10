@@ -1,0 +1,58 @@
+# This workflow serves two purposes:
+#   1. Allows us to deploy a specific PR to staging for testing
+#   2. Allows us to re-deploy production off the `main` branch
+name: MANUAL | Deploy services
+on:
+    workflow_dispatch:
+        inputs:
+            deploy_env:
+                description: The environment to deploy to
+                type: choice
+                options:
+                    - staging
+                    - production
+                default: staging
+                required: true
+            deploy_shared_stack:
+                description: Deploy shared AWS resources?
+                type: boolean
+                required: false
+                default: true
+            deploy_server_stack:
+                description: Deploy server to ECS Fargate?
+                type: boolean
+                required: false
+                default: false
+            deploy_workers_stack:
+                description: Deploy Bull workers to ECS Fargate?
+                type: boolean
+                required: false
+                default: false
+            deploy_tools_stack:
+                description: Deploy tools stack? (CI/CD resources)
+                type: boolean
+                required: false
+                default: false
+            deploy_vercel_client:
+                description: Deploy Vercel client?
+                type: boolean
+                required: false
+                default: false
+
+concurrency:
+    group: deployments
+    cancel-in-progress: false
+
+jobs:
+    deploy:
+        uses: ./.github/workflows/template.deploy-services.yml
+        # Production can only be deployed from `main` manually, while staging can be deployed from any branch
+        if: ${{ (github.event.inputs.deploy_env == 'production' && github.ref == 'refs/heads/main') || github.event.inputs.deploy_env == 'staging' }}
+        with:
+            deploy_env: ${{ github.event.inputs.deploy_env }}
+            deploy_shared_stack: ${{ github.event.inputs.deploy_shared_stack == 'true' }}
+            deploy_server_stack: ${{ github.event.inputs.deploy_server_stack == 'true' }}
+            deploy_workers_stack: ${{ github.event.inputs.deploy_workers_stack == 'true' }}
+            deploy_tools_stack: ${{ github.event.inputs.deploy_tools_stack == 'true' }}
+            deploy_vercel_client: ${{ github.event.inputs.deploy_vercel_client == 'true' }}
+        secrets: inherit

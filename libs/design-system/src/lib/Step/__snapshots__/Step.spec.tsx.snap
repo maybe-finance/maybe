@@ -1,0 +1,379 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Steps when linear should render correctly 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        aria-orientation="horizontal"
+        class="inline-flex items-center space-x-4"
+        role="tablist"
+      >
+        <div
+          aria-controls="headlessui-tabs-panel-:r2:"
+          aria-selected="true"
+          class="flex items-center rounded-md font-medium text-base focus:outline-none text-cyan"
+          data-headlessui-state="selected"
+          id="headlessui-tabs-tab-:r0:"
+          role="tab"
+          tabindex="0"
+        >
+          <span
+            class="flex items-center justify-center w-6 h-6 mr-3 text-sm rounded-md text-cyan bg-cyan bg-opacity-10"
+          >
+            1
+          </span>
+          Step 1
+        </div>
+        <div
+          aria-controls="headlessui-tabs-panel-:r3:"
+          aria-selected="false"
+          class="flex items-center rounded-md font-medium text-base focus:outline-none text-white"
+          data-headlessui-state=""
+          id="headlessui-tabs-tab-:r1:"
+          role="tab"
+          tabindex="-1"
+        >
+          <div
+            class="mr-4 h-px w-6 bg-gray-500"
+          />
+          <span
+            class="flex items-center justify-center w-6 h-6 mr-3 text-sm rounded-md text-gray-100 bg-gray-700"
+          >
+            2
+          </span>
+          Step 2
+        </div>
+      </div>
+      <div
+        class=""
+      >
+        <div
+          aria-labelledby="headlessui-tabs-tab-:r0:"
+          class="focus:outline-none"
+          data-headlessui-state="selected"
+          id="headlessui-tabs-panel-:r2:"
+          role="tabpanel"
+          tabindex="0"
+        >
+          Content 1
+        </div>
+        <span
+          aria-labelledby="headlessui-tabs-tab-:r1:"
+          id="headlessui-tabs-panel-:r3:"
+          role="tabpanel"
+          style="position: fixed; top: 1px; left: 1px; width: 1px; height: 0px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border-width: 0px;"
+          tabindex="-1"
+        />
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      aria-orientation="horizontal"
+      class="inline-flex items-center space-x-4"
+      role="tablist"
+    >
+      <div
+        aria-controls="headlessui-tabs-panel-:r2:"
+        aria-selected="true"
+        class="flex items-center rounded-md font-medium text-base focus:outline-none text-cyan"
+        data-headlessui-state="selected"
+        id="headlessui-tabs-tab-:r0:"
+        role="tab"
+        tabindex="0"
+      >
+        <span
+          class="flex items-center justify-center w-6 h-6 mr-3 text-sm rounded-md text-cyan bg-cyan bg-opacity-10"
+        >
+          1
+        </span>
+        Step 1
+      </div>
+      <div
+        aria-controls="headlessui-tabs-panel-:r3:"
+        aria-selected="false"
+        class="flex items-center rounded-md font-medium text-base focus:outline-none text-white"
+        data-headlessui-state=""
+        id="headlessui-tabs-tab-:r1:"
+        role="tab"
+        tabindex="-1"
+      >
+        <div
+          class="mr-4 h-px w-6 bg-gray-500"
+        />
+        <span
+          class="flex items-center justify-center w-6 h-6 mr-3 text-sm rounded-md text-gray-100 bg-gray-700"
+        >
+          2
+        </span>
+        Step 2
+      </div>
+    </div>
+    <div
+      class=""
+    >
+      <div
+        aria-labelledby="headlessui-tabs-tab-:r0:"
+        class="focus:outline-none"
+        data-headlessui-state="selected"
+        id="headlessui-tabs-panel-:r2:"
+        role="tabpanel"
+        tabindex="0"
+      >
+        Content 1
+      </div>
+      <span
+        aria-labelledby="headlessui-tabs-tab-:r1:"
+        id="headlessui-tabs-panel-:r3:"
+        role="tabpanel"
+        style="position: fixed; top: 1px; left: 1px; width: 1px; height: 0px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border-width: 0px;"
+        tabindex="-1"
+      />
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;
+
+exports[`Steps when non-linear should render correctly when non-linear 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        aria-orientation="horizontal"
+        class="inline-flex items-center space-x-4"
+        role="tablist"
+      >
+        <button
+          aria-controls="headlessui-tabs-panel-:ra:"
+          aria-selected="true"
+          class="flex items-center rounded-md font-medium text-base focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-60 text-cyan"
+          data-headlessui-state="selected"
+          id="headlessui-tabs-tab-:r8:"
+          role="tab"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="flex items-center justify-center w-6 h-6 mr-3 text-sm rounded-md text-cyan bg-cyan bg-opacity-10"
+          >
+            1
+          </span>
+          Step 1
+        </button>
+        <button
+          aria-controls="headlessui-tabs-panel-:rb:"
+          aria-selected="false"
+          class="flex items-center rounded-md font-medium text-base focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-60 text-white"
+          data-headlessui-state=""
+          id="headlessui-tabs-tab-:r9:"
+          role="tab"
+          tabindex="-1"
+          type="button"
+        >
+          <div
+            class="mr-4 h-px w-6 bg-gray-500"
+          />
+          <span
+            class="flex items-center justify-center w-6 h-6 mr-3 text-sm rounded-md text-gray-100 bg-gray-700"
+          >
+            2
+          </span>
+          Step 2
+        </button>
+      </div>
+      <div
+        class=""
+      >
+        <div
+          aria-labelledby="headlessui-tabs-tab-:r8:"
+          class="focus:outline-none"
+          data-headlessui-state="selected"
+          id="headlessui-tabs-panel-:ra:"
+          role="tabpanel"
+          tabindex="0"
+        >
+          Content 1
+        </div>
+        <span
+          aria-labelledby="headlessui-tabs-tab-:r9:"
+          id="headlessui-tabs-panel-:rb:"
+          role="tabpanel"
+          style="position: fixed; top: 1px; left: 1px; width: 1px; height: 0px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border-width: 0px;"
+          tabindex="-1"
+        />
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      aria-orientation="horizontal"
+      class="inline-flex items-center space-x-4"
+      role="tablist"
+    >
+      <button
+        aria-controls="headlessui-tabs-panel-:ra:"
+        aria-selected="true"
+        class="flex items-center rounded-md font-medium text-base focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-60 text-cyan"
+        data-headlessui-state="selected"
+        id="headlessui-tabs-tab-:r8:"
+        role="tab"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="flex items-center justify-center w-6 h-6 mr-3 text-sm rounded-md text-cyan bg-cyan bg-opacity-10"
+        >
+          1
+        </span>
+        Step 1
+      </button>
+      <button
+        aria-controls="headlessui-tabs-panel-:rb:"
+        aria-selected="false"
+        class="flex items-center rounded-md font-medium text-base focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-60 text-white"
+        data-headlessui-state=""
+        id="headlessui-tabs-tab-:r9:"
+        role="tab"
+        tabindex="-1"
+        type="button"
+      >
+        <div
+          class="mr-4 h-px w-6 bg-gray-500"
+        />
+        <span
+          class="flex items-center justify-center w-6 h-6 mr-3 text-sm rounded-md text-gray-100 bg-gray-700"
+        >
+          2
+        </span>
+        Step 2
+      </button>
+    </div>
+    <div
+      class=""
+    >
+      <div
+        aria-labelledby="headlessui-tabs-tab-:r8:"
+        class="focus:outline-none"
+        data-headlessui-state="selected"
+        id="headlessui-tabs-panel-:ra:"
+        role="tabpanel"
+        tabindex="0"
+      >
+        Content 1
+      </div>
+      <span
+        aria-labelledby="headlessui-tabs-tab-:r9:"
+        id="headlessui-tabs-panel-:rb:"
+        role="tabpanel"
+        style="position: fixed; top: 1px; left: 1px; width: 1px; height: 0px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border-width: 0px;"
+        tabindex="-1"
+      />
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

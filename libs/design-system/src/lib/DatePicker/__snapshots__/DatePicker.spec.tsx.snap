@@ -1,0 +1,181 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DatePicker /> When datepicker is closed should have placeholder when empty 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        class="relative"
+        data-headlessui-state=""
+      >
+        <div>
+          <label
+            class="flex w-full flex-col"
+          >
+            <div
+              class="flex h-10 text-white rounded border overflow-hidden relative border-gray-700 focus-within:ring focus-within:ring-opacity-10 focus-within:border-cyan focus-within:ring-cyan"
+            >
+              <input
+                class="min-w-0 py-0 w-full text-base font-light leading-none border-0 focus:outline-none focus:ring-0 placeholder-gray-100 disabled:placeholder-gray-200 disabled:text-gray-100 bg-gray-500 pl-3 pr-8"
+                inputmode="numeric"
+                name="picker"
+                placeholder="MM / DD / YYYY"
+                type="text"
+                value=""
+              />
+              <span
+                class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-gray-50 text-base select-none bg-gray-500"
+              >
+                <button
+                  aria-expanded="false"
+                  data-headlessui-state=""
+                  data-testid="datepicker-toggle-icon"
+                  id="headlessui-popover-button-:r0:"
+                  type="button"
+                >
+                  <svg
+                    class="text-lg"
+                    fill="currentColor"
+                    height="1em"
+                    stroke="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g>
+                      <path
+                        d="M0 0h24v24H0z"
+                        fill="none"
+                      />
+                      <path
+                        d="M17 3h4a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4V1h2v2h6V1h2v2zM4 9v10h16V9H4zm2 4h5v4H6v-4z"
+                      />
+                    </g>
+                  </svg>
+                </button>
+              </span>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div
+      id="headlessui-portal-root"
+    >
+      <div
+        data-headlessui-portal=""
+      />
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="relative"
+      data-headlessui-state=""
+    >
+      <div>
+        <label
+          class="flex w-full flex-col"
+        >
+          <div
+            class="flex h-10 text-white rounded border overflow-hidden relative border-gray-700 focus-within:ring focus-within:ring-opacity-10 focus-within:border-cyan focus-within:ring-cyan"
+          >
+            <input
+              class="min-w-0 py-0 w-full text-base font-light leading-none border-0 focus:outline-none focus:ring-0 placeholder-gray-100 disabled:placeholder-gray-200 disabled:text-gray-100 bg-gray-500 pl-3 pr-8"
+              inputmode="numeric"
+              name="picker"
+              placeholder="MM / DD / YYYY"
+              type="text"
+              value=""
+            />
+            <span
+              class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-gray-50 text-base select-none bg-gray-500"
+            >
+              <button
+                aria-expanded="false"
+                data-headlessui-state=""
+                data-testid="datepicker-toggle-icon"
+                id="headlessui-popover-button-:r0:"
+                type="button"
+              >
+                <svg
+                  class="text-lg"
+                  fill="currentColor"
+                  height="1em"
+                  stroke="currentColor"
+                  stroke-width="0"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g>
+                    <path
+                      d="M0 0h24v24H0z"
+                      fill="none"
+                    />
+                    <path
+                      d="M17 3h4a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4V1h2v2h6V1h2v2zM4 9v10h16V9H4zm2 4h5v4H6v-4z"
+                    />
+                  </g>
+                </svg>
+              </button>
+            </span>
+          </div>
+        </label>
+      </div>
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

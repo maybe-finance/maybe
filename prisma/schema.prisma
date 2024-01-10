@@ -1,0 +1,735 @@
+// Schema follows Prisma naming conventions
+// https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#naming-conventions
+
+generator client {
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "linux-musl", "debian-openssl-1.1.x"]
+  previewFeatures = ["fullTextSearch", "tracing"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("NX_DATABASE_URL")
+}
+
+// hypertable
+model AccountBalance {
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  account   Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId Int      @map("account_id")
+  date      DateTime @db.Date
+  balance   Decimal  @db.Decimal(19, 4)
+  inflows   Decimal? @default(0) @db.Decimal(19, 4)
+  outflows  Decimal? @default(0) @db.Decimal(19, 4)
+
+  @@id([accountId, date])
+  @@index([date], map: "account_balance_date_idx")
+  @@map("account_balance")
+}
+
+enum AccountConnectionStatus {
+  OK
+  ERROR
+  DISCONNECTED
+}
+
+enum AccountSyncStatus {
+  IDLE
+  PENDING
+  SYNCING
+}
+
+enum AccountConnectionType {
+  plaid
+  finicity
+}
+
+model AccountConnection {
+  id         Int                     @id @default(autoincrement())
+  createdAt  DateTime                @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime                @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  user       User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int                     @map("user_id")
+  name       String
+  type       AccountConnectionType
+  status     AccountConnectionStatus @default(OK)
+  syncStatus AccountSyncStatus       @default(IDLE) @map("sync_status")
+
+  // plaid data
+  plaidItemId               String?   @unique @map("plaid_item_id")
+  plaidInstitutionId        String?   @map("plaid_institution_id")
+  plaidAccessToken          String?   @map("plaid_access_token")
+  plaidConsentExpiration    DateTime? @map("plaid_consent_expiration")
+  plaidError                Json?     @map("plaid_error")
+  plaidNewAccountsAvailable Boolean   @default(false) @map("plaid_new_accounts_available")
+
+  // finicity data
+  finicityInstitutionLoginId String? @map("finicity_institution_login_id")
+  finicityInstitutionId      String? @map("finicity_institution_id")
+  finicityError              Json?   @map("finicity_error")
+
+  accounts Account[]
+
+  @@index([userId])
+  @@map("account_connection")
+}
+
+enum AccountType {
+  INVESTMENT
+  DEPOSITORY
+  CREDIT
+  LOAN
+  PROPERTY
+  VEHICLE
+  OTHER_ASSET
+  OTHER_LIABILITY
+}
+
+enum AccountCategory {
+  cash
+  investment
+  crypto
+  property
+  vehicle
+  valuable
+  loan
+  credit
+  other
+}
+
+enum AccountProvider {
+  user
+  plaid
+  finicity
+}
+
+enum AccountBalanceStrategy {
+  current
+  available
+  sum
+  difference
+}
+
+model Account {
+  id                       Int                    @id @default(autoincrement())
+  createdAt                DateTime               @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                DateTime               @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  startDate                DateTime?              @map("start_date") @db.Date
+  type                     AccountType
+  provider                 AccountProvider
+  classification           AccountClassification  @default(dbgenerated())
+  category                 AccountCategory        @default(dbgenerated())
+  categoryProvider         AccountCategory?       @map("category_provider")
+  categoryUser             AccountCategory?       @map("category_user")
+  subcategory              String                 @default(dbgenerated())
+  subcategoryProvider      String?                @map("subcategory_provider")
+  subcategoryUser          String?                @map("subcategory_user")
+  accountConnection        AccountConnection?     @relation(fields: [accountConnectionId], references: [id], onDelete: Cascade)
+  accountConnectionId      Int?                   @map("account_connection_id")
+  user                     User?                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                   Int?                   @map("user_id")
+  name                     String
+  mask                     String?
+  isActive                 Boolean                @default(true) @map("is_active")
+  syncStatus               AccountSyncStatus      @default(IDLE) @map("sync_status")
+  currencyCode             String                 @default("USD") @map("currency_code")
+  currentBalance           Decimal?               @default(dbgenerated()) @map("current_balance") @db.Decimal(19, 4)
+  currentBalanceProvider   Decimal?               @map("current_balance_provider") @db.Decimal(19, 4)
+  currentBalanceStrategy   AccountBalanceStrategy @default(current) @map("current_balance_strategy")
+  availableBalance         Decimal?               @default(dbgenerated()) @map("available_balance") @db.Decimal(19, 4)
+  availableBalanceProvider Decimal?               @map("available_balance_provider") @db.Decimal(19, 4)
+  availableBalanceStrategy AccountBalanceStrategy @default(available) @map("available_balance_strategy")
+
+  // plaid data
+  plaidAccountId String? @map("plaid_account_id")
+  plaidType      String? @map("plaid_type")
+  plaidSubtype   String? @map("plaid_subtype")
+  plaidLiability Json?   @map("plaid_liability") @db.JsonB
+
+  // finicity data
+  finicityAccountId String? @map("finicity_account_id")
+  finicityType      String? @map("finicity_type")
+  finicityDetail    Json?   @map("finicity_detail") @db.JsonB
+
+  // manual account data
+  vehicleMeta  Json? @map("vehicle_meta") @db.JsonB
+  propertyMeta Json? @map("property_meta") @db.JsonB
+
+  loan         Json? @default(dbgenerated()) @db.JsonB
+  loanUser     Json? @map("loan_user") @db.JsonB
+  loanProvider Json? @map("loan_provider") @db.JsonB
+
+  credit         Json? @default(dbgenerated()) @db.JsonB
+  creditUser     Json? @map("credit_user") @db.JsonB
+  creditProvider Json? @map("credit_provider") @db.JsonB
+
+  balances               AccountBalance[]
+  transactions           Transaction[]
+  valuations             Valuation[]
+  holdings               Holding[]
+  investmentTransactions InvestmentTransaction[]
+
+  conversations Conversation[]
+
+  @@unique([accountConnectionId, plaidAccountId])
+  @@unique([accountConnectionId, finicityAccountId])
+  @@index([accountConnectionId])
+  @@index([userId])
+  @@map("account")
+}
+
+enum AccountClassification {
+  asset
+  liability
+}
+
+model Holding {
+  id                Int      @id @default(autoincrement())
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  account           Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId         Int      @map("account_id")
+  security          Security @relation(fields: [securityId], references: [id], onDelete: Cascade)
+  securityId        Int      @map("security_id")
+  value             Decimal  @db.Decimal(19, 4)
+  quantity          Decimal  @db.Decimal(36, 18)
+  costBasis         Decimal? @default(dbgenerated()) @map("cost_basis") @db.Decimal(23, 8)
+  costBasisProvider Decimal? @map("cost_basis_provider") @db.Decimal(23, 8)
+  costBasisUser     Decimal? @map("cost_basis_user") @db.Decimal(23, 8)
+  currencyCode      String   @default("USD") @map("currency_code")
+  excluded          Boolean  @default(false)
+
+  // plaid data
+  plaidHoldingId String? @unique @map("plaid_holding_id") // this is an artificial ID `account[<account_id>].security[<security_id>]`
+
+  // finicity data
+  finicityPositionId String? @unique @map("finicity_position_id")
+
+  @@map("holding")
+}
+
+enum InvestmentTransactionCategory {
+  buy
+  sell
+  dividend
+  transfer
+  tax
+  fee
+  cancel
+  other
+}
+
+model InvestmentTransaction {
+  id           Int             @id @default(autoincrement())
+  createdAt    DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  account      Account         @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId    Int             @map("account_id")
+  security     Security?       @relation(fields: [securityId], references: [id], onDelete: Cascade)
+  securityId   Int?            @map("security_id")
+  date         DateTime        @db.Date
+  name         String
+  amount       Decimal         @db.Decimal(19, 4)
+  fees         Decimal?        @db.Decimal(19, 4)
+  flow         TransactionFlow @default(dbgenerated())
+  quantity     Decimal         @db.Decimal(36, 18)
+  price        Decimal         @db.Decimal(23, 8)
+  currencyCode String          @default("USD") @map("currency_code")
+
+  // Derived from provider types
+  category InvestmentTransactionCategory @default(dbgenerated())
+
+  // plaid data
+  plaidInvestmentTransactionId String? @unique @map("plaid_investment_transaction_id")
+  plaidType                    String? @map("plaid_type")
+  plaidSubtype                 String? @map("plaid_subtype")
+
+  // finicity data
+  finicityTransactionId             String? @unique @map("finicity_transaction_id")
+  finicityInvestmentTransactionType String? @map("finicity_investment_transaction_type")
+
+  @@index([accountId, date])
+  @@map("investment_transaction")
+}
+
+model Security {
+  id                  Int       @id @default(autoincrement())
+  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  name                String?
+  symbol              String?
+  cusip               String?
+  isin                String?
+  sharesPerContract   Decimal?  @map("shares_per_contract") @db.Decimal(36, 18)
+  currencyCode        String    @default("USD") @map("currency_code")
+  pricingLastSyncedAt DateTime? @map("pricing_last_synced_at") @db.Timestamptz(6)
+  isBrokerageCash     Boolean   @default(false) @map("is_brokerage_cash")
+
+  // plaid data
+  plaidSecurityId       String?  @unique @map("plaid_security_id")
+  plaidType             String?  @map("plaid_type")
+  plaidIsCashEquivalent Boolean? @map("plaid_is_cash_equivalent")
+
+  // finicity data
+  finicitySecurityId     String? @map("finicity_security_id")
+  finicitySecurityIdType String? @map("finicity_security_id_type")
+  finicityType           String? @map("finicity_type")
+  finicityAssetClass     String? @map("finicity_asset_class")
+  finicityFIAssetClass   String? @map("finicity_fi_asset_class")
+
+  holdings               Holding[]
+  investmentTransactions InvestmentTransaction[]
+  pricing                SecurityPricing[]
+
+  @@unique([finicitySecurityId, finicitySecurityIdType])
+  @@map("security")
+}
+
+// hypertable
+model SecurityPricing {
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  security   Security @relation(fields: [securityId], references: [id], onDelete: Cascade)
+  securityId Int      @map("security_id")
+  date       DateTime @db.Date
+  priceClose Decimal  @map("price_close") @db.Decimal(23, 8)
+  priceAsOf  DateTime @default(now()) @map("price_as_of") @db.Timestamptz(6)
+  source     String?
+
+  @@id([securityId, date])
+  @@index([date], map: "security_pricing_date_idx")
+  @@map("security_pricing")
+}
+
+enum TransactionFlow {
+  INFLOW
+  OUTFLOW
+}
+
+enum TransactionType {
+  INCOME // inflow to asset
+  EXPENSE // outflow from asset OR outflow from liability
+  PAYMENT // outflow from asset OR inflow/outflow from liability
+  TRANSFER // inflow/outflow from asset OR inflow/outflow from liability
+}
+
+model Transaction {
+  id           Int              @id @default(autoincrement())
+  createdAt    DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  account      Account          @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId    Int              @map("account_id")
+  date         DateTime         @db.Date
+  flow         TransactionFlow  @default(dbgenerated())
+  typeUser     TransactionType? @map("type_user")
+  name         String
+  amount       Decimal          @db.Decimal(19, 4)
+  currencyCode String           @default("USD") @map("currency_code")
+  pending      Boolean          @default(false)
+  merchantName String?          @map("merchant_name")
+  category     String           @default(dbgenerated())
+  categoryUser String?          @map("category_user")
+  excluded     Boolean          @default(false)
+
+  // transfer matching
+  matchId Int?          @map("match_id")
+  match   Transaction?  @relation("MatchedTransaction", fields: [matchId], references: [id])
+  matches Transaction[] @relation("MatchedTransaction")
+
+  // plaid data
+  plaidTransactionId           String?  @unique @map("plaid_transaction_id")
+  plaidCategory                String[] @map("plaid_category")
+  plaidCategoryId              String?  @map("plaid_category_id")
+  plaidPersonalFinanceCategory Json?    @map("plaid_personal_finance_category")
+
+  // finicity data
+  finicityTransactionId  String? @unique @map("finicity_transaction_id")
+  finicityType           String? @map("finicity_type")
+  finicityCategorization Json?   @map("finicity_categorization") @db.JsonB
+
+  @@index([accountId, date])
+  @@index([amount])
+  @@map("transaction")
+}
+
+model Valuation {
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  account      Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId    Int      @map("account_id")
+  source       String
+  amount       Decimal  @db.Decimal(19, 4)
+  date         DateTime @db.Date
+  currencyCode String   @default("USD") @map("currency_code")
+
+  @@unique([accountId, source, date])
+  @@index([accountId, date])
+  @@map("valuation")
+}
+
+// User's current household
+enum Household {
+  single
+  singleWithDependents
+  dual
+  dualWithDependents
+  retired
+}
+
+// User's goals for using Maybe
+enum MaybeGoal {
+  aggregate
+  advice
+  plan
+}
+
+enum TaxStatus {
+  single
+  married_joint
+  married_separate
+  head_of_household
+  qualifying_widow
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  auth0Id   String   @unique @map("auth0_id")
+
+  // profile
+  email                  String    @db.Citext
+  firstName              String?   @map("first_name")
+  lastName               String?   @map("last_name")
+  name                   String?   @default(dbgenerated())
+  dob                    DateTime? @db.Date
+  picture                String?
+  onboarding             Json?     @map("onboarding")
+  linkAccountDismissedAt DateTime? @map("link_account_dismissed_at") @db.Timestamptz(6)
+
+  isoCurrencyCode String @default("USD") @map("iso_currency_code")
+
+  // Notification preferences
+  convertKitId Int?    @map("convert_kit_id")
+  ataAll       Boolean @default(true) @map("ata_all")
+  ataSubmitted Boolean @default(true) @map("ata_submitted")
+  ataReview    Boolean @default(true) @map("ata_review")
+  ataUpdate    Boolean @default(true) @map("ata_update")
+  ataClosed    Boolean @default(true) @map("ata_closed")
+  ataExpire    Boolean @default(true) @map("ata_expire")
+
+  // Financial preferences and info
+  monthlyIncomeUser   Decimal? @map("monthly_income_user") @db.Decimal(19, 4)
+  monthlyExpensesUser Decimal? @map("monthly_expenses_user") @db.Decimal(19, 4)
+  monthlyDebtUser     Decimal? @map("monthly_debt_user") @db.Decimal(19, 4)
+
+  // Billing
+  trialEnd               DateTime? @default(dbgenerated("NOW() + interval '14 days'")) @map("trial_end") @db.Timestamptz(6)
+  trialReminderSent      DateTime? @map("trial_reminder_sent") @db.Timestamptz(6)
+  stripeCustomerId       String?   @unique @map("stripe_customer_id")
+  stripeSubscriptionId   String?   @unique @map("stripe_subscription_id")
+  stripePriceId          String?   @map("stripe_price_id")
+  stripeCurrentPeriodEnd DateTime? @map("stripe_current_period_end") @db.Timestamptz(6)
+  stripeCancelAt         DateTime? @map("stripe_cancel_at") @db.Timestamptz(6)
+
+  // finicity data
+  finicityUsername   String? @unique @map("finicity_username")
+  finicityCustomerId String? @unique @map("finicity_customer_id")
+
+  // plaid data
+  plaidLinkToken String? @map("plaid_link_token") // temporary token stored to maintain state across browsers
+
+  // Ask My Advisor
+  advisorNotes String?  @map("advisor_notes")
+  userNotes    String?  @map("user_notes")
+  goals        String[]
+  riskAnswers  Json     @default("[]") @map("risk_answers") @db.JsonB
+
+  // Onboarding / usage goals
+  household             Household?
+  state                 String?
+  country               String?
+  maybeGoals            MaybeGoal[] @map("maybe_goals")
+  maybeGoalsDescription String?     @map("maybe_goals_description")
+  maybe                 String?
+  title                 String?
+  dependents            Int?
+  grossIncome           Int?        @map("gross_income")
+  incomeType            String?     @map("income_type")
+  taxStatus             TaxStatus?  @map("tax_status")
+  memberNumber          Int         @unique() @default(autoincrement()) @map("member_number")
+  memberId              String      @unique() @default(dbgenerated("gen_random_uuid()")) @map("member_id")
+
+  accountConnections AccountConnection[]
+  accounts           Account[]
+  plans              Plan[]
+  messages           Message[]
+  conversations      Conversation[]
+  advisor            Advisor?
+  signedAgreements   SignedAgreement[]
+  conversationNotes  ConversationNote[]
+
+  @@map("user")
+}
+
+model Institution {
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  name         String
+  url          String?
+  logo         String?
+  logoUrl      String?  @map("logo_url")
+  primaryColor String?  @map("primary_color")
+
+  providers ProviderInstitution[]
+
+  @@unique([name, url])
+  @@map("institution")
+}
+
+enum Provider {
+  PLAID
+  FINICITY
+}
+
+model ProviderInstitution {
+  id            Int          @id @default(autoincrement())
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  provider      Provider
+  providerId    String       @map("provider_id")
+  institution   Institution? @relation(fields: [institutionId], references: [id], onDelete: SetNull)
+  institutionId Int?         @map("institution_id")
+  rank          Int          @default(0)
+  oauth         Boolean      @default(false)
+  name          String
+  url           String?
+  logo          String?
+  logoUrl       String?      @map("logo_url")
+  primaryColor  String?      @map("primary_color")
+  data          Json?        @db.JsonB
+
+  @@unique([provider, providerId])
+  @@map("provider_institution")
+}
+
+model Plan {
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         Int      @map("user_id")
+  name           String
+  lifeExpectancy Int      @default(85) @map("life_expectancy")
+
+  events     PlanEvent[]
+  milestones PlanMilestone[]
+
+  conversations Conversation[]
+
+  @@map("plan")
+}
+
+enum PlanEventFrequency {
+  monthly
+  yearly
+}
+
+model PlanEvent {
+  id               Int                @id @default(autoincrement())
+  createdAt        DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime           @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  plan             Plan               @relation(fields: [planId], references: [id], onDelete: Cascade)
+  planId           Int                @map("plan_id")
+  name             String
+  category         String?
+  startYear        Int?               @map("start_year")
+  startMilestone   PlanMilestone?     @relation("StartEvents", fields: [startMilestoneId], references: [id], onDelete: Cascade)
+  startMilestoneId Int?               @map("start_milestone_id")
+  endYear          Int?               @map("end_year")
+  endMilestone     PlanMilestone?     @relation("EndEvents", fields: [endMilestoneId], references: [id], onDelete: Cascade)
+  endMilestoneId   Int?               @map("end_milestone_id")
+  frequency        PlanEventFrequency @default(yearly)
+  initialValue     Decimal?           @map("initial_value") @db.Decimal(19, 4)
+  initialValueRef  String?            @map("initial_value_ref")
+  rate             Decimal            @default(0) @db.Decimal(6, 4)
+
+  @@map("plan_event")
+}
+
+enum PlanMilestoneType {
+  year
+  net_worth
+}
+
+model PlanMilestone {
+  id              Int               @id @default(autoincrement())
+  createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime          @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  plan            Plan              @relation(fields: [planId], references: [id], onDelete: Cascade)
+  planId          Int               @map("plan_id")
+  name            String
+  category        String            @default("retirement")
+  type            PlanMilestoneType
+  year            Int?
+  expenseMultiple Float?            @map("expense_multiple")
+  expenseYears    Int?              @map("expense_years")
+
+  startEvents PlanEvent[] @relation("StartEvents")
+  endEvents   PlanEvent[] @relation("EndEvents")
+
+  @@map("plan_milestone")
+}
+
+enum ApprovalStatus {
+  pending
+  approved
+  rejected
+}
+
+model Advisor {
+  id             Int            @id @default(autoincrement())
+  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime       @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         Int            @unique @map("user_id")
+  approvalStatus ApprovalStatus @default(pending) @map("approval_status")
+  fullName       String         @map("full_name")
+  title          String
+  bio            String
+  avatarSrc      String         @map("avatar_src")
+
+  conversations ConversationAdvisor[]
+
+  @@map("advisor")
+}
+
+enum ConversationStatus {
+  open
+  closed
+}
+
+model Conversation {
+  id              Int                @id @default(autoincrement())
+  createdAt       DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime           @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  status          ConversationStatus @default(open)
+  title           String
+  user            User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          Int                @map("user_id")
+  expiryEmailSent DateTime?          @map("expiry_email_sent") @db.Timestamptz(6)
+
+  account   Account? @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  accountId Int?     @map("account_id")
+  plan      Plan?    @relation(fields: [planId], references: [id], onDelete: SetNull)
+  planId    Int?     @map("plan_id")
+
+  messages Message[]
+  advisors ConversationAdvisor[]
+  notes    ConversationNote[]
+
+  @@map("conversation")
+}
+
+model ConversationAdvisor {
+  id             Int          @id @default(autoincrement())
+  createdAt      DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId Int          @map("conversation_id")
+  advisor        Advisor      @relation(fields: [advisorId], references: [id], onDelete: Cascade)
+  advisorId      Int          @map("advisor_id")
+
+  @@unique([conversationId, advisorId])
+  @@map("conversation_advisor")
+}
+
+model ConversationNote {
+  id             Int          @id @default(autoincrement())
+  createdAt      DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         Int          @map("user_id")
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId Int          @map("conversation_id")
+  body           String
+
+  @@unique([userId, conversationId]) // one note per user, per conversation
+  @@map("conversation_note")
+}
+
+enum MessageType {
+  text
+  audio
+  video
+}
+
+model Message {
+  id             Int          @id @default(autoincrement())
+  createdAt      DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId Int          @map("conversation_id")
+  // this message will cascade delete if the user who created the conversation is deleted (via conversationId FK cascade)
+  // otherwise we preserve the message (using SetNull) so it doesn't disappear from the conversation
+  user           User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId         Int?         @map("user_id")
+  type           MessageType
+  body           String?
+  mediaSrc       String?      @map("media_src")
+
+  @@map("message")
+}
+
+enum AuditEventType {
+  insert
+  update
+  delete
+}
+
+model AuditEvent {
+  id        Int            @id @default(autoincrement())
+  createdAt DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  type      AuditEventType
+  modelType String         @map("model_type") // e.g. "Message"
+  modelId   Int            @map("model_id")
+  data      Json
+  userId    Int?           @map("user_id") // who made the change - if NULL, was an automated system change
+
+  @@map("audit_event")
+}
+
+enum AgreementType {
+  fee
+  form_adv_2a
+  form_adv_2b
+  form_crs
+  privacy_policy
+}
+
+model Agreement {
+  id       Int               @id @default(autoincrement())
+  type     AgreementType
+  revision DateTime          @db.Date
+  src      String            @unique
+  active   Boolean           @default(false) // if true and is latest version, Client will serve to users
+  signers  SignedAgreement[]
+
+  @@unique([type, revision, active])
+  @@map("agreement")
+}
+
+model SignedAgreement {
+  signedAt    DateTime  @default(now()) @map("signed_at") @db.Timestamptz(6)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int       @map("user_id")
+  agreement   Agreement @relation(fields: [agreementId], references: [id], onDelete: Cascade)
+  agreementId Int       @map("agreement_id")
+  src         String? // Not all agreements require S3 audit record
+
+  @@id([userId, agreementId])
+  @@map("signed_agreement")
+}

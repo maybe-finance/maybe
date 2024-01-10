@@ -1,0 +1,15 @@
+{
+    "trailingComma": "es5",
+    "printWidth": 100,
+    "tabWidth": 4,
+    "semi": false,
+    "singleQuote": true,
+    "overrides": [
+        {
+            "files": "auth0/rules/**",
+            "options": {
+                "semi": true
+            }
+        }
+    ]
+}

@@ -1,0 +1,199 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Toggle when rendered with a screenreader label should display the label to screenreaders 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <button
+        aria-checked="false"
+        class="bg-gray-600 focus:ring-gray relative inline-flex shrink-0 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:ring-2 focus:outline-none focus:ring-opacity-60 p-0.5 h-8 w-14"
+        data-headlessui-state=""
+        id="headlessui-switch-:r0:"
+        role="switch"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="sr-only"
+        >
+          SRLabel
+        </span>
+        <span
+          class="translate-x-0 bg-gray-200 pointer-events-none inline-block rounded-full shadow transform ring-0 transition ease-in-out duration-200 h-6 w-6"
+        />
+      </button>
+    </div>
+  </body>,
+  "container": <div>
+    <button
+      aria-checked="false"
+      class="bg-gray-600 focus:ring-gray relative inline-flex shrink-0 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:ring-2 focus:outline-none focus:ring-opacity-60 p-0.5 h-8 w-14"
+      data-headlessui-state=""
+      id="headlessui-switch-:r0:"
+      role="switch"
+      tabindex="0"
+      type="button"
+    >
+      <span
+        class="sr-only"
+      >
+        SRLabel
+      </span>
+      <span
+        class="translate-x-0 bg-gray-200 pointer-events-none inline-block rounded-full shadow transform ring-0 transition ease-in-out duration-200 h-6 w-6"
+      />
+    </button>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;
+
+exports[`Toggle when toggle is checked should have the toggle disc moved to the right 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <button
+        aria-checked="true"
+        class="bg-cyan focus:ring-cyan relative inline-flex shrink-0 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:ring-2 focus:outline-none focus:ring-opacity-60 p-0.5 h-8 w-14"
+        data-headlessui-state="checked"
+        id="headlessui-switch-:r2:"
+        role="switch"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="sr-only"
+        >
+          SRLabel
+        </span>
+        <span
+          class="translate-x-6 bg-white pointer-events-none inline-block rounded-full shadow transform ring-0 transition ease-in-out duration-200 h-6 w-6"
+        />
+      </button>
+    </div>
+  </body>,
+  "container": <div>
+    <button
+      aria-checked="true"
+      class="bg-cyan focus:ring-cyan relative inline-flex shrink-0 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:ring-2 focus:outline-none focus:ring-opacity-60 p-0.5 h-8 w-14"
+      data-headlessui-state="checked"
+      id="headlessui-switch-:r2:"
+      role="switch"
+      tabindex="0"
+      type="button"
+    >
+      <span
+        class="sr-only"
+      >
+        SRLabel
+      </span>
+      <span
+        class="translate-x-6 bg-white pointer-events-none inline-block rounded-full shadow transform ring-0 transition ease-in-out duration-200 h-6 w-6"
+      />
+    </button>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

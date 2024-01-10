@@ -1,0 +1,47 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "pwa-node",
+            "request": "launch",
+            "name": "Jest run current file",
+            "program": "${workspaceFolder}/node_modules/.bin/nx",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "test",
+                "--testPathPattern=${fileBasenameNoExtension}",
+                "--runInBand",
+                "--skip-nx-cache"
+            ],
+            "skipFiles": ["<node_internals>/**", "${workspaceFolder/node_modules/**/*}"],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "env": {
+                "IS_VSCODE_DEBUG": "true",
+                "NX_DATABASE_URL": "postgresql://maybe:maybe@localhost:5432/maybe_local"
+            }
+        },
+        {
+            "name": "server debug",
+            "type": "node",
+            "request": "attach",
+            "restart": false,
+            "port": 9228,
+            "address": "localhost",
+            "localRoot": "${workspaceFolder}",
+            "skipFiles": ["<node_internals>/**"],
+            "remoteRoot": "/app"
+        },
+        {
+            "name": "workers debug",
+            "type": "node",
+            "request": "attach",
+            "restart": false,
+            "port": 9227,
+            "address": "localhost",
+            "localRoot": "${workspaceFolder}",
+            "skipFiles": ["<node_internals>/**"],
+            "remoteRoot": "/app"
+        }
+    ]
+}

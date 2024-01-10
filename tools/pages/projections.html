@@ -1,0 +1,178 @@
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+        <script>
+            window.API_URL = 'http://localhost:3333'
+        </script>
+    </head>
+    <body>
+        <div style="padding: 16px 12px">
+            <canvas id="simulationsChart"></canvas>
+            <canvas id="successRateChart"></canvas>
+        </div>
+
+        <script>
+            const GRAYS = ['#e2e8f0', '#cbd5e1', '#e5e7eb', '#d1d5db', '#e4e4e7', '#d4d4d8']
+            const TILES = ['#ef4444', '#fb923c', '#155e75', '#06b6d4', '#10b981'] // 10, 25, 50, 75, 90
+
+            function getColor(idx, palette = COLORS) {
+                return palette[idx % palette.length]
+            }
+
+            function getOptions(title, overrides = {}) {
+                return {
+                    ...overrides,
+                    responsive: true,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        legend: false,
+                        title: {
+                            display: true,
+                            text: title,
+                        },
+                        tooltip: {
+                            filter: (item) => !item.dataset.disableTooltip,
+                        },
+                    },
+                }
+            }
+
+            fetch(`${window.API_URL}/tools/projections`, {
+                method: 'POST',
+                headers: {
+                    accept: 'application/json',
+                    'content-type': 'application/json',
+                },
+                body: JSON.stringify({}),
+            })
+                .then((res) => res.json())
+                .then(({ theo, simulations, simulationsWithStats, simulationsByPercentile }) => {
+                    const theoDataset = {
+                        label: `Theo`,
+                        data: theo.map(({ year, netWorth }) => ({
+                            x: `${year}`,
+                            y: +netWorth,
+                        })),
+                        backgroundColor: '#333333',
+                        borderColor: '#333333',
+                        pointRadius: 0,
+                        order: 0,
+                    }
+
+                    const simulationsFiltered = _.sortBy(
+                        simulations,
+                        (s) => +s.at(-1).netWorth
+                    ).slice(simulations.length * 0.1, simulations.length * 0.9)
+
+                    const simulationsDataset = simulationsFiltered.map((simulation, idx) => {
+                        const color = getColor(idx, GRAYS)
+                        return {
+                            label: `Simulation ${idx}`,
+                            data: simulation.map(({ year, netWorth }) => ({
+                                x: `${year}`,
+                                y: +netWorth,
+                            })),
+                            backgroundColor: color,
+                            borderColor: color,
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            order: 1,
+                            disableTooltip: true,
+                        }
+                    })
+
+                    const simulationsChart = new Chart(
+                        document.getElementById('simulationsChart'),
+                        {
+                            type: 'line',
+                            data: {
+                                datasets: [
+                                    theoDataset,
+                                    ...simulationsDataset,
+                                    ...simulationsByPercentile.map(
+                                        ({ percentile, simulation }, idx) => {
+                                            const color = getColor(idx, TILES)
+
+                                            return {
+                                                label: `${+percentile * 100}%`,
+                                                data: simulation.map(({ year, netWorth }) => ({
+                                                    x: `${year}`,
+                                                    y: +netWorth,
+                                                })),
+                                                backgroundColor: color,
+                                                borderColor: color,
+                                                pointRadius: 0,
+                                            }
+                                        }
+                                    ),
+                                    // {
+                                    //     label: `CI (95%) - Lower`,
+                                    //     data: simulationsWithStats.map(({ year, ci95 }) => ({
+                                    //         x: `${year}`,
+                                    //         y: +ci95[0],
+                                    //     })),
+                                    //     backgroundColor: '#FA9E9E',
+                                    //     borderColor: '#FA9E9E',
+                                    //     pointRadius: 0,
+                                    // },
+                                    // {
+                                    //     label: `CI (95%) - Upper`,
+                                    //     data: simulationsWithStats.map(({ year, ci95 }) => ({
+                                    //         x: `${year}`,
+                                    //         y: +ci95[1],
+                                    //     })),
+                                    //     backgroundColor: '#3AE478',
+                                    //     borderColor: '#3AE478',
+                                    //     pointRadius: 0,
+                                    // },
+                                    {
+                                        label: `Avg Net Worth`,
+                                        data: simulationsWithStats.map(({ year, avg }, idx) => ({
+                                            x: `${year}`,
+                                            y: +avg,
+                                        })),
+                                        backgroundColor: '#777',
+                                        borderColor: '#777',
+                                        pointRadius: 0,
+                                    },
+                                ],
+                            },
+                            options: getOptions('Simulations w/ Percentiles'),
+                        }
+                    )
+
+                    const successRateChart = new Chart(
+                        document.getElementById('successRateChart'),
+                        {
+                            type: 'line',
+                            data: {
+                                datasets: [
+                                    {
+                                        label: `Success Rate`,
+                                        data: simulationsWithStats.map(
+                                            ({ year, successRate }, idx) => ({
+                                                x: `${year}`,
+                                                y: successRate * 100,
+                                            })
+                                        ),
+                                        backgroundColor: '#333',
+                                        borderColor: '#333',
+                                        pointRadius: 0,
+                                    },
+                                ],
+                            },
+                            options: getOptions('Success Rate', {
+                                scales: {
+                                    y: { min: 0, max: 101 },
+                                },
+                            }),
+                        }
+                    )
+                })
+        </script>
+    </body>
+</html>

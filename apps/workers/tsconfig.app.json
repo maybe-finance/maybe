@@ -1,0 +1,10 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "outDir": "../../dist/out-tsc",
+        "module": "commonjs",
+        "types": ["node"]
+    },
+    "exclude": ["**/*.spec.ts", "**/*.test.ts", "**/*.test-helper.ts", "jest.config.ts"],
+    "include": ["**/*.ts", "../../custom-express.d.ts"]
+}

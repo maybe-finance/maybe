@@ -1,0 +1,104 @@
+{
+    "name": "@maybe-finance/design-system",
+    "version": "0.0.1",
+    "nx": {
+        "targets": {
+            "build": {
+                "executor": "@nrwl/web:rollup",
+                "outputs": [
+                    "{options.outputPath}"
+                ],
+                "options": {
+                    "outputPath": "dist/libs/design-system",
+                    "tsConfig": "libs/design-system/tsconfig.lib.json",
+                    "project": "libs/design-system/package.json",
+                    "entryFile": "libs/design-system/src/index.ts",
+                    "external": [
+                        "react/jsx-runtime"
+                    ],
+                    "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+                    "assets": [
+                        {
+                            "glob": "libs/design-system/README.md",
+                            "input": ".",
+                            "output": "."
+                        }
+                    ]
+                },
+                "configurations": {
+                    "production": {
+                        "optimization": true,
+                        "extractLicenses": true,
+                        "inspect": false
+                    }
+                }
+            },
+            "lint": {
+                "executor": "@nrwl/linter:eslint",
+                "outputs": [
+                    "{options.outputFile}"
+                ],
+                "options": {
+                    "lintFilePatterns": [
+                        "libs/design-system/**/*.{ts,tsx,js,jsx}"
+                    ]
+                }
+            },
+            "test": {
+                "executor": "@nrwl/jest:jest",
+                "outputs": [
+                    "{workspaceRoot}/coverage/libs/design-system"
+                ],
+                "options": {
+                    "jestConfig": "libs/design-system/jest.config.ts",
+                    "passWithNoTests": true
+                }
+            },
+            "storybook": {
+                "executor": "@nrwl/storybook:storybook",
+                "options": {
+                    "uiFramework": "@storybook/react",
+                    "port": 4400,
+                    "staticDir": [
+                        "libs/design-system/.storybook/public"
+                    ],
+                    "config": {
+                        "configFolder": "libs/design-system/.storybook"
+                    }
+                },
+                "configurations": {
+                    "ci": {
+                        "quiet": true
+                    }
+                }
+            },
+            "build-storybook": {
+                "executor": "@nrwl/storybook:build",
+                "outputs": [
+                    "{options.outputPath}"
+                ],
+                "options": {
+                    "uiFramework": "@storybook/react",
+                    "outputPath": "dist/storybook/design-system",
+                    "staticDir": [
+                        "libs/design-system/.storybook/public"
+                    ],
+                    "config": {
+                        "configFolder": "libs/design-system/.storybook"
+                    }
+                },
+                "configurations": {
+                    "ci": {
+                        "quiet": true
+                    }
+                }
+            },
+            "deploy": {
+                "executor": "@nrwl/workspace:run-commands",
+                "options": {
+                    "command": "node tools/scripts/triggerDesignSystemDeploy.js"
+                }
+            }
+        }
+    }
+}

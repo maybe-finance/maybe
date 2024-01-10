@@ -1,0 +1,214 @@
+{
+    "app": "npx ts-node --prefer-ts-exts bin/maybe-app.ts",
+    "watch": {
+        "include": ["**"],
+        "exclude": [
+            "README.md",
+            "cdk*.json",
+            "**/*.d.ts",
+            "**/*.js",
+            "tsconfig.json",
+            "package*.json",
+            "yarn.lock",
+            "node_modules",
+            "test"
+        ]
+    },
+    "context": {
+        "@aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId": true,
+        "@aws-cdk/core:stackRelativeExports": true,
+        "@aws-cdk/aws-rds:lowercaseDbIdentifier": true,
+        "@aws-cdk/aws-lambda:recognizeVersionProps": true,
+        "@aws-cdk/aws-cloudfront:defaultSecurityPolicyTLSv1.2_2021": true,
+        "@aws-cdk-containers/ecs-service-extensions:enableDefaultLogDriver": true,
+        "@aws-cdk/aws-ec2:uniqueImdsv2TemplateName": true,
+        "@aws-cdk/core:checkSecretUsage": true,
+        "@aws-cdk/aws-iam:minimizePolicies": true,
+        "@aws-cdk/core:target-partitions": ["aws", "aws-cn"],
+        "environments": {
+            "tools": {
+                "ENV_NAME": "tools",
+                "AWS_ACCOUNT": "REPLACE_THIS",
+                "DEFAULT_AWS_REGION": "us-west-2",
+                "sharedEnv": {},
+                "stackContexts": {
+                    "Tools": {
+                        "VPC": {
+                            "IPAllowList": [
+                                ""
+                            ]
+                        },
+                        "GithubRunner": {
+                            "SSMKeyArn": "REPLACE_THIS",
+                            "GithubTokenArn": "REPLACE_THIS"
+                        }
+                    }
+                }
+            },
+            "staging": {
+                "ENV_NAME": "staging",
+                "AWS_ACCOUNT": "REPLACE_THIS",
+                "DEFAULT_AWS_REGION": "us-west-2",
+                "sharedEnv": {
+                    "NX_API_URL": "https://staging-api.maybe.co",
+                    "NX_CDN_URL": "https://staging-cdn.maybe.co",
+                    "NODE_ENV": "production",
+                    "NX_AUTH0_AUDIENCE": "https://maybe-finance-api/v1",
+                    "NX_PLAID_CLIENT_ID": "REPLACE_THIS",
+                    "NX_PLAID_ENV": "sandbox",
+                    "NX_FINICITY_PARTNER_ID": "REPLACE_THIS",
+                    "NX_FINICITY_ENV": "sandbox",
+                    "NX_CLIENT_URL": "https://staging-app.maybe.co",
+                    "NX_CLIENT_URL_CUSTOM": "https://staging-app.maybe.co",
+                    "NX_ADVISOR_URL": "https://staging-advisor.maybe.co",
+                    "NX_AUTH0_DOMAIN": "REPLACE_THIS",
+                    "NX_AUTH0_CUSTOM_DOMAIN": "REPLACE_THIS",
+                    "NX_AUTH0_CLIENT_ID": "REPLACE_THIS",
+                    "NX_AUTH0_MGMT_CLIENT_ID": "REPLACE_THIS",
+                    "NX_SENTRY_ENV": "staging",
+                    "NX_POSTMARK_FROM_ADDRESS": "account@maybe.co"
+                },
+                "stackContexts": {
+                    "Shared": {
+                        "PeeringCnxId": "REPLACE_THIS",
+                        "PeeringCnxCidr": "10.1.0.0/16",
+                        "VPC": {
+                            "NATCount": 1,
+                            "IPAllowList": [
+                                ""
+                            ]
+                        },
+                        "Redis": {
+                            "size": "cache.t4g.small",
+                            "count": 1
+                        },
+                        "Cloudfront": {
+                            "CertificateArn": "REPLACE_THIS",
+                            "CNAMES": ["staging-cdn.maybe.co"]
+                        },
+                        "UploadOrigins": [
+                            "http://localhost:4200",
+                            "http://localhost:4201",
+                            "https://staging-app.maybe.co"
+                        ]
+                    },
+                    "Server": {
+                        "Container": {
+                            "Env": {
+                                "NX_PORT": 3333,
+                                "NX_CORS_ORIGINS": "maybe.co,vercel.app",
+                                "NX_MORGAN_LOG_LEVEL": "combined",
+                                "NX_SENTRY_DSN": "REPLACE_THIS"
+                            }
+                        },
+                        "CertificateArn": "REPLACE_THIS",
+                        "DesiredTaskCount": 1,
+                        "WAFArn": "REPLACE_THIS",
+                        "ComputeCapacity": {
+                            "cpu": 512,
+                            "memory": "1024"
+                        },
+                        "Cloudfront": {
+                            "CNAMES": ["staging-api.maybe.co"],
+                            "CertificateArn": "REPLACE_THIS"
+                        }
+                    },
+                    "Workers": {
+                        "Container": {
+                            "Env": {
+                                "NX_PORT": 3334,
+                                "NX_SENTRY_DSN": "REPLACE_THIS"
+                            }
+                        },
+                        "DesiredTaskCount": 1,
+                        "ComputeCapacity": {
+                            "cpu": 512,
+                            "memory": "1024"
+                        }
+                    }
+                }
+            },
+            "production": {
+                "ENV_NAME": "production",
+                "AWS_ACCOUNT": "REPLACE_THIS",
+                "DEFAULT_AWS_REGION": "us-west-2",
+                "sharedEnv": {
+                    "NODE_ENV": "production",
+                    "NX_AUTH0_AUDIENCE": "https://maybe-finance-api/v1",
+                    "NX_PLAID_CLIENT_ID": "REPLACE_THIS",
+                    "NX_PLAID_ENV": "production",
+                    "NX_FINICITY_PARTNER_ID": "REPLACE_THIS",
+                    "NX_FINICITY_ENV": "production",
+                    "NX_API_URL": "https://api.maybe.co",
+                    "NX_CDN_URL": "https://cdn.maybe.co",
+                    "NX_CLIENT_URL": "https://app.maybe.co",
+                    "NX_CLIENT_URL_CUSTOM": "https://app.maybe.co",
+                    "NX_ADVISOR_URL": "https://advisor.maybe.co",
+                    "NX_AUTH0_DOMAIN": "REPLACE_THIS",
+                    "NX_AUTH0_CUSTOM_DOMAIN": "login.maybe.co",
+                    "NX_AUTH0_CLIENT_ID": "REPLACE_THIS",
+                    "NX_AUTH0_MGMT_CLIENT_ID": "REPLACE_THIS",
+                    "NX_SENTRY_ENV": "production",
+                    "NX_POSTMARK_FROM_ADDRESS": "account@maybe.co",
+                    "NX_STRIPE_PREMIUM_MONTHLY_PRICE_ID": "REPLACE_THIS",
+                    "NX_STRIPE_PREMIUM_YEARLY_PRICE_ID": "REPLACE_THIS"
+                },
+                "stackContexts": {
+                    "Shared": {
+                        "PeeringCnxId": "REPLACE_THIS",
+                        "PeeringCnxCidr": "10.2.0.0/16",
+                        "VPC": {
+                            "NATCount": 2,
+                            "IPAllowList": [
+                                ""
+                            ]
+                        },
+                        "Redis": {
+                            "size": "cache.m6g.2xlarge",
+                            "count": 1
+                        },
+                        "Cloudfront": {
+                            "CertificateArn": "REPLACE_THIS",
+                            "CNAMES": ["cdn.maybe.co"]
+                        },
+                        "UploadOrigins": ["https://advisor.maybe.co", "https://app.maybe.co"]
+                    },
+                    "Server": {
+                        "Container": {
+                            "Env": {
+                                "NX_PORT": 3333,
+                                "NX_CORS_ORIGINS": "maybe.co",
+                                "NX_MORGAN_LOG_LEVEL": "combined",
+                                "NX_SENTRY_DSN": "REPLACE_THIS"
+                            }
+                        },
+                        "CertificateArn": "REPLACE_THIS",
+                        "DesiredTaskCount": 1,
+                        "WAFArn": "REPLACE_THIS",
+                        "ComputeCapacity": {
+                            "cpu": 4096,
+                            "memory": "8192"
+                        },
+                        "Cloudfront": {
+                            "CNAMES": ["api.maybe.co"],
+                            "CertificateArn": "REPLACE_THIS"
+                        }
+                    },
+                    "Workers": {
+                        "Container": {
+                            "Env": {
+                                "NX_PORT": 3334,
+                                "NX_SENTRY_DSN": "REPLACE_THIS"
+                            }
+                        },
+                        "DesiredTaskCount": 1,
+                        "ComputeCapacity": {
+                            "cpu": 4096,
+                            "memory": "8192"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

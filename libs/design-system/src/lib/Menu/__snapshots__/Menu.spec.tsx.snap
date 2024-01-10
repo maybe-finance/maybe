@@ -1,0 +1,311 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Menu when closed should render the button 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        class="relative"
+        data-headlessui-state=""
+      >
+        <button
+          aria-controls="headlessui-menu-items-:r1:"
+          aria-expanded="false"
+          aria-haspopup="true"
+          class="px-4 py-2 rounded text-base bg-cyan text-gray-700 shadow hover:bg-cyan-400 focus:bg-cyan-400 focus:ring-cyan inline-flex items-center justify-center text-center font-medium leading-6 whitespace-nowrap select-none cursor-pointer focus:outline-none focus:ring focus:ring-opacity-60 disabled:opacity-50 disabled:pointer-events-none transition-colors duration-200"
+          data-headlessui-state=""
+          id="headlessui-menu-button-:r0:"
+          role="button"
+          type="button"
+        >
+          Click Me
+        </button>
+        <div
+          class="z-10 absolute min-w-full"
+          style="position: absolute; left: 0px; top: 0px;"
+        >
+          <div
+            aria-labelledby="headlessui-menu-button-:r0:"
+            class="py-2 rounded bg-gray-700 shadow-md"
+            data-headlessui-state=""
+            hidden=""
+            id="headlessui-menu-items-:r1:"
+            role="menu"
+            style="display: none;"
+            tabindex="0"
+          >
+            <button
+              class="flex items-center pl-3 pr-5 w-full text-base leading-8 whitespace-nowrap text-gray-25 hover:bg-gray-600"
+              data-headlessui-state=""
+              id="headlessui-menu-item-:r2:"
+              role="menuitem"
+              tabindex="-1"
+            >
+              Option 1
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="relative"
+      data-headlessui-state=""
+    >
+      <button
+        aria-controls="headlessui-menu-items-:r1:"
+        aria-expanded="false"
+        aria-haspopup="true"
+        class="px-4 py-2 rounded text-base bg-cyan text-gray-700 shadow hover:bg-cyan-400 focus:bg-cyan-400 focus:ring-cyan inline-flex items-center justify-center text-center font-medium leading-6 whitespace-nowrap select-none cursor-pointer focus:outline-none focus:ring focus:ring-opacity-60 disabled:opacity-50 disabled:pointer-events-none transition-colors duration-200"
+        data-headlessui-state=""
+        id="headlessui-menu-button-:r0:"
+        role="button"
+        type="button"
+      >
+        Click Me
+      </button>
+      <div
+        class="z-10 absolute min-w-full"
+        style="position: absolute; left: 0px; top: 0px;"
+      >
+        <div
+          aria-labelledby="headlessui-menu-button-:r0:"
+          class="py-2 rounded bg-gray-700 shadow-md"
+          data-headlessui-state=""
+          hidden=""
+          id="headlessui-menu-items-:r1:"
+          role="menu"
+          style="display: none;"
+          tabindex="0"
+        >
+          <button
+            class="flex items-center pl-3 pr-5 w-full text-base leading-8 whitespace-nowrap text-gray-25 hover:bg-gray-600"
+            data-headlessui-state=""
+            id="headlessui-menu-item-:r2:"
+            role="menuitem"
+            tabindex="-1"
+          >
+            Option 1
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;
+
+exports[`Menu when opened should render the button and the items 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        class="relative"
+        data-headlessui-state="open"
+      >
+        <button
+          aria-controls="headlessui-menu-items-:r4:"
+          aria-expanded="true"
+          aria-haspopup="true"
+          class="px-4 py-2 rounded text-base bg-cyan text-gray-700 shadow hover:bg-cyan-400 focus:bg-cyan-400 focus:ring-cyan inline-flex items-center justify-center text-center font-medium leading-6 whitespace-nowrap select-none cursor-pointer focus:outline-none focus:ring focus:ring-opacity-60 disabled:opacity-50 disabled:pointer-events-none transition-colors duration-200"
+          data-headlessui-state="open"
+          id="headlessui-menu-button-:r3:"
+          role="button"
+          type="button"
+        >
+          Click Me
+        </button>
+        <div
+          class="z-10 absolute min-w-full"
+          style="position: absolute; left: 0px; top: 0px;"
+        >
+          <div
+            aria-labelledby="headlessui-menu-button-:r3:"
+            class="py-2 rounded bg-gray-700 shadow-md"
+            data-headlessui-state="open"
+            id="headlessui-menu-items-:r4:"
+            role="menu"
+            style=""
+            tabindex="0"
+          >
+            <button
+              class="flex items-center pl-3 pr-5 w-full text-base leading-8 whitespace-nowrap text-gray-25 hover:bg-gray-600"
+              data-headlessui-state=""
+              id="headlessui-menu-item-:r5:"
+              role="menuitem"
+              tabindex="-1"
+            >
+              Option 1
+            </button>
+            <button
+              aria-disabled="true"
+              class="flex items-center pl-3 pr-5 w-full text-base leading-8 whitespace-nowrap text-gray-25 opacity-50"
+              data-headlessui-state="disabled"
+              id="headlessui-menu-item-:r6:"
+              role="menuitem"
+            >
+              Option 2
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="relative"
+      data-headlessui-state="open"
+    >
+      <button
+        aria-controls="headlessui-menu-items-:r4:"
+        aria-expanded="true"
+        aria-haspopup="true"
+        class="px-4 py-2 rounded text-base bg-cyan text-gray-700 shadow hover:bg-cyan-400 focus:bg-cyan-400 focus:ring-cyan inline-flex items-center justify-center text-center font-medium leading-6 whitespace-nowrap select-none cursor-pointer focus:outline-none focus:ring focus:ring-opacity-60 disabled:opacity-50 disabled:pointer-events-none transition-colors duration-200"
+        data-headlessui-state="open"
+        id="headlessui-menu-button-:r3:"
+        role="button"
+        type="button"
+      >
+        Click Me
+      </button>
+      <div
+        class="z-10 absolute min-w-full"
+        style="position: absolute; left: 0px; top: 0px;"
+      >
+        <div
+          aria-labelledby="headlessui-menu-button-:r3:"
+          class="py-2 rounded bg-gray-700 shadow-md"
+          data-headlessui-state="open"
+          id="headlessui-menu-items-:r4:"
+          role="menu"
+          style=""
+          tabindex="0"
+        >
+          <button
+            class="flex items-center pl-3 pr-5 w-full text-base leading-8 whitespace-nowrap text-gray-25 hover:bg-gray-600"
+            data-headlessui-state=""
+            id="headlessui-menu-item-:r5:"
+            role="menuitem"
+            tabindex="-1"
+          >
+            Option 1
+          </button>
+          <button
+            aria-disabled="true"
+            class="flex items-center pl-3 pr-5 w-full text-base leading-8 whitespace-nowrap text-gray-25 opacity-50"
+            data-headlessui-state="disabled"
+            id="headlessui-menu-item-:r6:"
+            role="menuitem"
+          >
+            Option 2
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

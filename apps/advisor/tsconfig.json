@@ -1,0 +1,33 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "jsx": "preserve",
+        "allowJs": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "types": ["node", "jest"],
+        "strict": true,
+        "strictNullChecks": true,
+        "noImplicitAny": false,
+        "forceConsistentCasingInFileNames": true,
+        "noEmit": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "incremental": true,
+        "plugins": [
+            {
+                "name": "next"
+            }
+        ]
+    },
+    "include": [
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.js",
+        "**/*.jsx",
+        "next-env.d.ts",
+        ".next/types/**/*.ts",
+        "../../custom-express.d.ts"
+    ],
+    "exclude": ["node_modules", "jest.config.ts"]
+}

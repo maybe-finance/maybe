@@ -1,0 +1,95 @@
+{
+    "root": true,
+    "ignorePatterns": ["**/*", "**/*.png"],
+    "plugins": ["@nrwl/nx", "eslint-plugin-json"],
+    "overrides": [
+        {
+            "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+            "rules": {
+                "@nrwl/nx/enforce-module-boundaries": [
+                    "error",
+                    {
+                        "enforceBuildableLibDependency": true,
+                        "allow": [],
+                        "depConstraints": [
+                            {
+                                "sourceTag": "scope:shared",
+                                "onlyDependOnLibsWithTags": ["scope:shared"]
+                            },
+                            {
+                                "sourceTag": "scope:app",
+                                "onlyDependOnLibsWithTags": ["*"]
+                            },
+                            {
+                                "sourceTag": "scope:client-shared",
+                                "onlyDependOnLibsWithTags": ["scope:client-shared", "scope:shared"]
+                            },
+                            {
+                                "sourceTag": "scope:server-shared",
+                                "onlyDependOnLibsWithTags": ["scope:server-shared", "scope:shared"]
+                            },
+                            {
+                                "sourceTag": "scope:server",
+                                "onlyDependOnLibsWithTags": [
+                                    "scope:server",
+                                    "scope:server-shared",
+                                    "scope:shared"
+                                ]
+                            },
+                            {
+                                "sourceTag": "scope:client",
+                                "onlyDependOnLibsWithTags": [
+                                    "scope:client",
+                                    "scope:client-shared",
+                                    "scope:shared"
+                                ]
+                            },
+                            {
+                                "sourceTag": "scope:advisor",
+                                "onlyDependOnLibsWithTags": [
+                                    "scope:advisor",
+                                    "scope:client-shared",
+                                    "scope:shared"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "files": ["*.ts", "*.tsx"],
+            "extends": ["plugin:@nrwl/nx/typescript"],
+            "rules": {
+                "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+                "@typescript-eslint/no-non-null-assertion": "off",
+                "@typescript-eslint/no-explicit-any": "off",
+                "@typescript-eslint/ban-types": "off",
+                "@typescript-eslint/ban-ts-comment": "off",
+                "@typescript-eslint/consistent-type-assertions": "error",
+                "@typescript-eslint/consistent-type-imports": [
+                    "error",
+                    { "fixStyle": "inline-type-imports" }
+                ]
+            }
+        },
+        {
+            "files": ["*.js", "*.jsx"],
+            "extends": ["plugin:@nrwl/nx/javascript"],
+            "rules": {}
+        },
+        {
+            "files": ["*.tsx", "*.jsx"],
+            "rules": {
+                "jsx-a11y/anchor-is-valid": [
+                    "error",
+                    {
+                        "components": ["Link"],
+                        "specialLink": ["hrefLeft", "hrefRight"],
+                        "aspects": ["invalidHref", "preferButton"]
+                    }
+                ]
+            }
+        }
+    ]
+}

@@ -1,0 +1,30 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "rootDir": ".",
+        "sourceMap": true,
+        "declaration": false,
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "target": "ES6",
+        "module": "ESNext",
+        "lib": ["es2017", "dom", "ESNext"],
+        "skipLibCheck": true,
+        "skipDefaultLibCheck": true,
+        "importsNotUsedAsValues": "error",
+        "baseUrl": ".",
+        "paths": {
+            "@maybe-finance/client/features": ["libs/client/features/src/index.ts"],
+            "@maybe-finance/client/shared": ["libs/client/shared/src/index.ts"],
+            "@maybe-finance/design-system": ["libs/design-system/src/index.ts"],
+            "@maybe-finance/finicity-api": ["libs/finicity-api/src/index.ts"],
+            "@maybe-finance/server/features": ["libs/server/features/src/index.ts"],
+            "@maybe-finance/server/shared": ["libs/server/shared/src/index.ts"],
+            "@maybe-finance/shared": ["libs/shared/src/index.ts"],
+            "@maybe-finance/trpc": ["apps/server/src/app/trpc.ts"]
+        }
+    },
+    "exclude": ["node_modules", "tmp"]
+}

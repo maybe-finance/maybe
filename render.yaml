@@ -1,0 +1,19 @@
+# https://render.com/docs/blueprint-spec
+
+previewsEnabled: false
+
+services:
+    - type: web
+      name: design-system
+      env: static
+      buildCommand: yarn && NODE_ENV=production yarn nx run design-system:build-storybook # NODE_ENV=production is required to fix this issue: https://github.com/nrwl/nx/issues/8403
+      staticPublishPath: dist/storybook/design-system
+      autoDeploy: true
+      domains:
+          - design.maybe.co
+
+envVarGroups:
+    - name: global-env
+      envVars:
+          - key: NODE_VERSION # https://render.com/docs/node-version
+            value: 16.14.0 # LTS

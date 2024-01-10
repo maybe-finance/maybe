@@ -1,0 +1,57 @@
+@font-face {
+    font-family: 'Monument Extended';
+    font-weight: 100;
+    src: url('fonts/monument/MonumentExtended-Thin.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Monument Extended';
+    font-weight: 200;
+    src: url('fonts/monument/MonumentExtended-Light.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Monument Extended';
+    font-weight: 300;
+    src: url('fonts/monument/MonumentExtended-Book.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Monument Extended';
+    font-weight: 400;
+    src: url('fonts/monument/MonumentExtended-Regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Monument Extended';
+    font-weight: 500;
+    src: url('fonts/monument/MonumentExtended-Medium.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Monument Extended';
+    font-weight: 700;
+    src: url('fonts/monument/MonumentExtended-Bold.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Monument Extended';
+    font-weight: 800;
+    src: url('fonts/monument/MonumentExtended-Black.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Monument Extended';
+    font-weight: 900;
+    src: url('fonts/monument/MonumentExtended-Heavy.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('fonts/inter/Inter-Variable.woff2') format('woff2-variations');
+    font-weight: 100 900;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
