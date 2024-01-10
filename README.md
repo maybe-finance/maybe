@@ -1,3 +1,15 @@
+# Maybe: An open-source personal finance app
+
+🚨 NOTE: This is the original React/Next.js app of the now-defunct personal finance app, Maybe. This original version used many external services (Plaid, Finicity, Auth0, etc) and getting it to fully function will be a decent amount of work.
+
+The README below was what we used internally, so many of the links won't work and the instructions won't necessarily be applicable.
+
+There's a LOT of work to do to get this functioning, but it should be feasible.
+
+The best way to get involved is on [Discord](https://discord.gg/xfysSaSsfN) and in the [Issues](https://github.com/maybe-finance/maybe/issues).
+
+----
+
 # Quick Start
 
 For an overview of this repository, please [see the wiki](https://github.com/maybe-finance/maybe-app/wiki)
