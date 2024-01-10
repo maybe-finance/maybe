@@ -10,6 +10,18 @@ The README below was what we used internally, so many of the links won't work an
 
 There's a LOT of work to do to get this functioning, but it should be feasible.
 
+## Building the app
+
+This is the current state of building the app. You'll hit errors, which we're working to resolve (and certainly welcome PRs to help with that).
+
+```
+cp .env.example .env
+yarn install
+yarn prisma:migrate:dev
+yarn prisma:seed
+yarn dev
+```
+
 ## Relevant reading...
 
 -   [Learn about how the app is organized as a monorepo](https://github.com/maybe-finance/maybe/wiki/Monorepo-File-Structure-Overview)
