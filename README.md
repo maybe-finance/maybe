@@ -14,6 +14,10 @@ There's a LOT of work to do to get this functioning, but it should be feasible.
 
 * [Learn about how the app is organized as a monorepo](https://github.com/maybe-finance/maybe/wiki/Monorepo-File-Structure-Overview)
 
+## Credit
+
+The original app was built by [Zach Gollwitzer](https://twitter.com/zg_dev) and [Tim Wilson](https://twitter.com/actualTimWilson), with design work by [Justin Farrugia](https://twitter.com/justinmfarrugia). The app is currently maintained by [Josh Pigford](https://twitter.com/Shpigford).
+
 ----
 
 ## ⚠️ Everything below is archived from the original repo and we're slowly working to replace/update it. 
