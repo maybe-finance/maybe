@@ -12,15 +12,15 @@ There's a LOT of work to do to get this functioning, but it should be feasible.
 
 ## Relevant reading...
 
-* [Learn about how the app is organized as a monorepo](https://github.com/maybe-finance/maybe/wiki/Monorepo-File-Structure-Overview)
+-   [Learn about how the app is organized as a monorepo](https://github.com/maybe-finance/maybe/wiki/Monorepo-File-Structure-Overview)
 
 ## Credit
 
 The original app was built by [Zach Gollwitzer](https://twitter.com/zg_dev) and [Tim Wilson](https://twitter.com/actualTimWilson), with design work by [Justin Farrugia](https://twitter.com/justinmfarrugia). The app is currently maintained by [Josh Pigford](https://twitter.com/Shpigford).
 
-----
+---
 
-## ⚠️ Everything below is archived from the original repo and we're slowly working to replace/update it. 
+## ⚠️ Everything below is archived from the original repo and we're slowly working to replace/update it.
 
 # Quick Start
 
@@ -44,7 +44,7 @@ A working local development `.env` file can be found in 1Password under the "Eng
 #### Start server and client apps
 
 ```
-yarn install
+yarn install # re-run if it hangs
 yarn dev
 ```
 
@@ -53,7 +53,7 @@ yarn dev
 In a separate terminal, run the following command. This will connect to the Postgres DB running inside Docker and run all the migrations in `/prisma/migrations`.
 
 ```
-yarn prisma:migrate
+yarn prisma:migrate:dev
 ```
 
 You will also want to seed the database (includes account types and subtypes for categorization).
