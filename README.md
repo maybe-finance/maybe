@@ -14,6 +14,8 @@ There's a LOT of work to do to get this functioning, but it should be feasible.
 
 This is the current state of building the app. You'll hit errors, which we're working to resolve (and certainly welcome PRs to help with that).
 
+You'll need Docker installed to run the app locally.
+
 ```
 cp .env.example .env
 yarn install
