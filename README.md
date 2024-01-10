@@ -116,28 +116,6 @@ yarn prisma:migrate && yarn prisma:seed # Terminal 3 - after apps are running
 
 # Reference
 
-## Deployments and CI/CD
-
-[See this wiki page](https://github.com/maybe-finance/maybe-app/wiki/Render-Deployments) for an overview of how deployments work.
-
 ## Authentication
 
-[See this wiki page](https://github.com/maybe-finance/maybe-app/wiki/Auth0) for an explanation of how authentication/authorization works in this codebase.
-
-## BullMQ Message Queue
-
-[See this wiki page](https://github.com/maybe-finance/maybe-app/wiki/Background-Workers) for an overview of BullMQ and how it is used within the repo.
-
-## Feature Flags
-
-[See this wiki page](https://github.com/maybe-finance/maybe-app/wiki/Feature-Flags) for an overview of how we use feature flags.
-
-## Testing Intercom Locally
-
-```
-yarn dev:services:all
-yarn dev
-ngrok http --region=us --hostname=localhost.maybe.co 4200
-```
-
-Visit `https://localhost.maybe.co`
+[See this wiki page](https://github.com/maybe-finance/maybe/wiki/Auth0) for an explanation of how authentication/authorization works in this codebase.
