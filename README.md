@@ -1,12 +1,14 @@
-# Maybe: An open-source personal finance app
+![](https://github.com/maybe-finance/maybe/assets/35243/79d97b31-7fad-4031-9e83-5005bc1d7fd0)
+
+# Maybe: Open-source personal finance app
+
+<b>Get involved: [Discord](https://discord.gg/xfysSaSsfN) • [Website](https://maybe.co) • [Issues](https://github.com/maybe-finance/maybe/issues)</b>
 
 🚨 NOTE: This is the original React/Next.js app of the now-defunct personal finance app, Maybe. This original version used many external services (Plaid, Finicity, Auth0, etc) and getting it to fully function will be a decent amount of work.
 
 The README below was what we used internally, so many of the links won't work and the instructions won't necessarily be applicable.
 
 There's a LOT of work to do to get this functioning, but it should be feasible.
-
-The best way to get involved is on [Discord](https://discord.gg/xfysSaSsfN) and in the [Issues](https://github.com/maybe-finance/maybe/issues).
 
 ## Monorepo File Structure Overview
 
