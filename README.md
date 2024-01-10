@@ -65,8 +65,6 @@ libs/
 
 # Quick Start
 
-For an overview of this repository, please [see the wiki](https://github.com/maybe-finance/maybe-app/wiki)
-
 ## System Prerequisites
 
 -   Docker (if not using Docker, you will need Node LTS 14.7.x and Postgres 13.x)
