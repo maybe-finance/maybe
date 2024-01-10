@@ -22,7 +22,13 @@ yarn prisma:seed
 yarn dev
 ```
 
-## Relevant reading...
+## High-priority issues
+
+The biggest focus at the moment is on getting the app functional without some previously key external services (namely Auth0, Plaid and Finicity).
+
+You can view the current [high-priority issues here](https://github.com/maybe-finance/maybe/issues?q=is:issue+is:open+label:%22high+priority%22). Those are the most impactful issues to tackle first.
+
+## Relevant reading
 
 -   [Learn about how the app is organized as a monorepo](https://github.com/maybe-finance/maybe/wiki/Monorepo-File-Structure-Overview)
 
