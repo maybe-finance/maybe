@@ -8,8 +8,6 @@ import stripe from '../lib/stripe'
 import { PgService } from '@maybe-finance/server/shared'
 import { DateTime } from 'luxon'
 
-jest.mock('launchdarkly-node-server-sdk')
-
 const prisma = new PrismaClient()
 const logger = createLogger({ transports: new transports.Console() })
 

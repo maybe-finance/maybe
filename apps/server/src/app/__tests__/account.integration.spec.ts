@@ -18,7 +18,6 @@ import { resetUser } from './utils/user'
 import { createTestInvestmentAccount } from './utils/account'
 import { default as _plaid } from '../lib/plaid'
 
-jest.mock('launchdarkly-node-server-sdk')
 jest.mock('../middleware/validate-plaid-jwt.ts')
 jest.mock('bull')
 jest.mock('plaid')

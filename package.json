@@ -121,8 +121,6 @@
         "jwk-to-pem": "^2.0.5",
         "jwks-rsa": "^3.0.0",
         "jwt-decode": "^3.1.2",
-        "launchdarkly-node-server-sdk": "^6.4.3",
-        "launchdarkly-react-client-sdk": "^2.25.1",
         "lodash": "^4.17.21",
         "luxon": "^3.1.0",
         "mime-types": "^2.1.35",

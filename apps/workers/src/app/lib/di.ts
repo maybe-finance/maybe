@@ -40,13 +40,12 @@ import {
     EmailProcessor,
     TransactionService,
 } from '@maybe-finance/server/features'
-import type { IFeatureFlagService, IMarketDataService } from '@maybe-finance/server/shared'
+import type { IMarketDataService } from '@maybe-finance/server/shared'
 import {
     BullQueueFactory,
     CacheService,
     CryptoService,
     InMemoryQueueFactory,
-    LaunchDarklyFeatureFlagService,
     PgService,
     PolygonMarketDataService,
     QueueService,
@@ -58,7 +57,6 @@ import logger from './logger'
 import prisma from './prisma'
 import plaid from './plaid'
 import finicity from './finicity'
-import ldClient from './ldClient'
 import postmark from './postmark'
 import { managementClient } from './auth0'
 import stripe from './stripe'
@@ -71,7 +69,6 @@ const redis = new Redis(env.NX_REDIS_URL, {
     retryStrategy: ServerUtil.redisRetryStrategy({ maxAttempts: 5 }),
 })
 
-export const featureFlagService: IFeatureFlagService = new LaunchDarklyFeatureFlagService(ldClient)
 export const cryptoService = new CryptoService(env.NX_DATABASE_SECRET)
 export const pgService = new PgService(logger.child({ service: 'PgService' }), env.NX_DATABASE_URL)
 

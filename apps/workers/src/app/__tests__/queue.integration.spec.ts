@@ -18,7 +18,6 @@ import '../../main'
 import { queueService, securityPricingService } from '../lib/di'
 
 jest.mock('plaid')
-jest.mock('launchdarkly-node-server-sdk')
 
 // For TypeScript support
 const plaid = jest.mocked(_plaid)

@@ -124,15 +124,6 @@ export class WorkersStack extends Stack {
                         }
                     )
                 ),
-                NX_LD_SDK_KEY: ECSSecret.fromSsmParameter(
-                    StringParameter.fromSecureStringParameterAttributes(
-                        this,
-                        'LaunchDarklySDKKeyParam',
-                        {
-                            parameterName: '/providers/NX_LD_SDK_KEY',
-                        }
-                    )
-                ),
                 NX_POLYGON_API_KEY: ECSSecret.fromSsmParameter(
                     StringParameter.fromSecureStringParameterAttributes(
                         this,

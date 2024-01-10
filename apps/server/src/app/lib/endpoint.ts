@@ -1,4 +1,4 @@
-import type { IFeatureFlagService, IMarketDataService } from '@maybe-finance/server/shared'
+import type { IMarketDataService } from '@maybe-finance/server/shared'
 import type {
     IAccountQueryService,
     IInstitutionService,
@@ -13,7 +13,6 @@ import {
     EndpointFactory,
     QueueService,
     PgService,
-    LaunchDarklyFeatureFlagService,
     PolygonMarketDataService,
     CacheService,
     ServerUtil,
@@ -55,7 +54,6 @@ import {
 } from '@maybe-finance/server/features'
 import { SharedType } from '@maybe-finance/shared'
 import prisma from './prisma'
-import ldClient from './ldClient'
 import plaid, { getPlaidWebhookUrl } from './plaid'
 import finicity, { getFinicityTxPushUrl, getFinicityWebhookUrl } from './finicity'
 import stripe from './stripe'
@@ -73,8 +71,6 @@ import logger from '../lib/logger'
 const redis = new Redis(env.NX_REDIS_URL, {
     retryStrategy: ServerUtil.redisRetryStrategy({ maxAttempts: 5 }),
 })
-
-const featureFlagService: IFeatureFlagService = new LaunchDarklyFeatureFlagService(ldClient)
 
 export const queueService = new QueueService(
     logger.child({ service: 'QueueService' }),
@@ -352,7 +348,6 @@ export async function createContext(req: Request) {
         valuationService,
         institutionService,
         cryptoService,
-        featureFlagService,
         queueService,
         plaidService,
         plaidWebhooks,

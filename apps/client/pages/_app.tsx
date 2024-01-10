@@ -10,17 +10,14 @@ import {
     UserAccountContextProvider,
     AuthProvider,
 } from '@maybe-finance/client/shared'
-import type { ClientType } from '@maybe-finance/client/shared'
 import { AccountsManager } from '@maybe-finance/client/features'
 import { AccountContextProvider } from '@maybe-finance/client/shared'
 import * as Sentry from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
-import { useFlags, withLDProvider } from 'launchdarkly-react-client-sdk'
 import env from '../env'
 import '../styles.css'
 import { withAuthenticationRequired } from '@auth0/auth0-react'
 import ModalManager from '../components/ModalManager'
-import Maintenance from '../components/Maintenance'
 import Meta from '../components/Meta'
 import APM from '../components/APM'
 
@@ -51,7 +48,7 @@ const WithAuth = withAuthenticationRequired(function ({ children }: PropsWithChi
     )
 })
 
-function App({
+export default function App({
     Component: Page,
     pageProps,
 }: AppProps & {
@@ -60,14 +57,7 @@ function App({
         isPublic?: boolean
     }
 }) {
-    const flags = useFlags() as ClientType.ClientSideFeatureFlag
-
     const getLayout = Page.getLayout ?? ((page) => page)
-
-    // Maintenance Guard
-    if (flags.maintenance) {
-        return <Maintenance />
-    }
 
     return (
         <LogProvider logger={console}>
@@ -98,9 +88,3 @@ function App({
         </LogProvider>
     )
 }
-
-export default withLDProvider<{ Component; pageProps }>({
-    clientSideID: env.NEXT_PUBLIC_LD_CLIENT_SIDE_ID,
-    // Prevent a new LD user being registered on each page load by always initializing with the same key
-    user: { key: 'anonymous-client', anonymous: true },
-})(App)
