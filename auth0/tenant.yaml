@@ -18,12 +18,12 @@ rules:
     script: ./rules/updateUserMetadata.js
     stage: login_success
     enabled: true
-    order: 4 
+    order: 4
   - name: enhanceIdToken
     script: ./rules/enhanceIdToken.js
     stage: login_success
     enabled: true
-    order: 5 
+    order: 5
 
 
 rulesConfigs:
@@ -133,45 +133,6 @@ clients:
     sso_disabled: false
     token_endpoint_auth_method: client_secret_post
 
-  - name: Maybe Advisor
-    allowed_clients: []
-    app_type: regular_web
-    callbacks: @@ADVISOR_CALLBACK_URLS@@
-    allowed_logout_urls: @@ADVISOR_BASE_URLS@@
-    allowed_origins: @@ADVISOR_BASE_URLS@@
-    web_origins: @@ADVISOR_BASE_URLS@@
-    client_aliases: []
-    cross_origin_auth: false
-    custom_login_page_on: true
-    grant_types:
-      - authorization_code
-      - implicit
-      - refresh_token
-      - client_credentials
-      - password
-    is_first_party: true
-    is_token_endpoint_ip_header_trusted: false
-    jwt_configuration:
-      alg: RS256
-      lifetime_in_seconds: 36000
-      secret_encoded: false
-    native_social_login:
-      apple:
-        enabled: false
-      facebook:
-        enabled: false
-    oidc_conformant: true
-    refresh_token:
-      expiration_type: non-expiring
-      leeway: 0
-      infinite_token_lifetime: true
-      infinite_idle_token_lifetime: true
-      token_lifetime: 31557600
-      idle_token_lifetime: 2592000
-      rotation_type: non-rotating
-    sso_disabled: false
-    token_endpoint_auth_method: client_secret_post
-
   - name: auth0-deploy-cli-extension
     app_type: non_interactive
     cross_origin_auth: false
@@ -236,7 +197,6 @@ databases:
       - auth0-deploy-cli-extension
       - Maybe
       - Maybe Admin
-      - Maybe Advisor
     is_domain_connection: false
     options:
       mfa:
@@ -255,7 +215,6 @@ connections:
       - auth0-deploy-cli-extension
       - Maybe
       - Maybe Admin
-      - Maybe Advisor
       - server-m2m-cli
     is_domain_connection: false
     options:
@@ -270,7 +229,6 @@ connections:
       - auth0-deploy-cli-extension
       - Maybe
       - Maybe Admin
-      - Maybe Advisor
       - server-m2m-cli
     is_domain_connection: false
     options:
@@ -380,9 +338,6 @@ roles:
     permissions: []
   - name: CIUser
     description: Identifies our CI users for e2e testing
-    permissions: []
-  - name: Advisor
-    description: Verified financial advisors that can login to ATA dashboard and respond to user questions
     permissions: []
 
 branding:

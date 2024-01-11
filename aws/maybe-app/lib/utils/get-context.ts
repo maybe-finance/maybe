@@ -47,7 +47,6 @@ const maybeAppSharedEnv = z
         NX_FINICITY_ENV: z.enum(['sandbox', 'production']),
         NX_CLIENT_URL: z.string(),
         NX_CLIENT_URL_CUSTOM: z.string(),
-        NX_ADVISOR_URL: z.string(),
         NX_AUTH0_DOMAIN: z.string(),
         NX_AUTH0_CUSTOM_DOMAIN: z.string(),
         NX_AUTH0_CLIENT_ID: z.string(),

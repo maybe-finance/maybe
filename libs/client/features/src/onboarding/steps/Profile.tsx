@@ -16,7 +16,6 @@ import {
     RiArrowDownSLine,
     RiArrowUpSLine,
     RiCakeLine,
-    RiChatPollLine,
     RiCheckLine,
     RiFlagLine,
     RiFocus2Line,
@@ -304,7 +303,6 @@ function ProfileForm({ title, onSubmit, defaultValues }: ProfileViewProps) {
                             <div className="flex flex-col space-y-2">
                                 {Object.entries({
                                     aggregate: [RiFolder2Line, 'See all my accounts in one place'],
-                                    advice: [RiChatPollLine, 'Get advice from a financial advisor'],
                                     plan: [
                                         RiFlagLine,
                                         'Build plans for retirement and other milestones',

@@ -3,8 +3,8 @@
 
 generator client {
   provider        = "prisma-client-js"
-  binaryTargets   = ["native", "linux-musl", "debian-openssl-1.1.x"]
   previewFeatures = ["fullTextSearch", "tracing"]
+  binaryTargets   = ["native", "linux-musl", "debian-openssl-1.1.x"]
 }
 
 datasource db {
@@ -24,7 +24,7 @@ model AccountBalance {
   outflows  Decimal? @default(0) @db.Decimal(19, 4)
 
   @@id([accountId, date])
-  @@index([date], map: "account_balance_date_idx")
+  @@index([date])
   @@map("account_balance")
 }
 
@@ -118,8 +118,8 @@ model Account {
   startDate                DateTime?              @map("start_date") @db.Date
   type                     AccountType
   provider                 AccountProvider
-  classification           AccountClassification  @default(dbgenerated())
-  category                 AccountCategory        @default(dbgenerated())
+  classification           AccountClassification  @default(dbgenerated("\nCASE\n    WHEN (type = ANY (ARRAY['INVESTMENT'::\"AccountType\", 'DEPOSITORY'::\"AccountType\", 'PROPERTY'::\"AccountType\", 'VEHICLE'::\"AccountType\", 'OTHER_ASSET'::\"AccountType\"])) THEN 'asset'::\"AccountClassification\"\n    WHEN (type = ANY (ARRAY['CREDIT'::\"AccountType\", 'LOAN'::\"AccountType\", 'OTHER_LIABILITY'::\"AccountType\"])) THEN 'liability'::\"AccountClassification\"\n    ELSE NULL::\"AccountClassification\"\nEND"))
+  category                 AccountCategory        @default(dbgenerated("COALESCE(category_user, category_provider, 'other'::\"AccountCategory\")"))
   categoryProvider         AccountCategory?       @map("category_provider")
   categoryUser             AccountCategory?       @map("category_user")
   subcategory              String                 @default(dbgenerated())
@@ -169,8 +169,6 @@ model Account {
   valuations             Valuation[]
   holdings               Holding[]
   investmentTransactions InvestmentTransaction[]
-
-  conversations Conversation[]
 
   @@unique([accountConnectionId, plaidAccountId])
   @@unique([accountConnectionId, finicityAccountId])
@@ -232,13 +230,13 @@ model InvestmentTransaction {
   name         String
   amount       Decimal         @db.Decimal(19, 4)
   fees         Decimal?        @db.Decimal(19, 4)
-  flow         TransactionFlow @default(dbgenerated())
+  flow         TransactionFlow @default(dbgenerated("\nCASE\n    WHEN (amount < (0)::numeric) THEN 'INFLOW'::\"TransactionFlow\"\n    ELSE 'OUTFLOW'::\"TransactionFlow\"\nEND"))
   quantity     Decimal         @db.Decimal(36, 18)
   price        Decimal         @db.Decimal(23, 8)
   currencyCode String          @default("USD") @map("currency_code")
 
   // Derived from provider types
-  category InvestmentTransactionCategory @default(dbgenerated())
+  category InvestmentTransactionCategory @default(dbgenerated("\nCASE\n    WHEN (plaid_type = 'buy'::text) THEN 'buy'::\"InvestmentTransactionCategory\"\n    WHEN (plaid_type = 'sell'::text) THEN 'sell'::\"InvestmentTransactionCategory\"\n    WHEN (plaid_subtype = ANY (ARRAY['dividend'::text, 'qualified dividend'::text, 'non-qualified dividend'::text])) THEN 'dividend'::\"InvestmentTransactionCategory\"\n    WHEN (plaid_subtype = ANY (ARRAY['non-resident tax'::text, 'tax'::text, 'tax withheld'::text])) THEN 'tax'::\"InvestmentTransactionCategory\"\n    WHEN ((plaid_type = 'fee'::text) OR (plaid_subtype = ANY (ARRAY['account fee'::text, 'legal fee'::text, 'management fee'::text, 'margin expense'::text, 'transfer fee'::text, 'trust fee'::text]))) THEN 'fee'::\"InvestmentTransactionCategory\"\n    WHEN (plaid_type = 'cash'::text) THEN 'transfer'::\"InvestmentTransactionCategory\"\n    WHEN (plaid_type = 'cancel'::text) THEN 'cancel'::\"InvestmentTransactionCategory\"\n    WHEN (finicity_investment_transaction_type = ANY (ARRAY['purchased'::text, 'purchaseToClose'::text, 'purchaseToCover'::text, 'dividendReinvest'::text, 'reinvestOfIncome'::text])) THEN 'buy'::\"InvestmentTransactionCategory\"\n    WHEN (finicity_investment_transaction_type = ANY (ARRAY['sold'::text, 'soldToClose'::text, 'soldToOpen'::text])) THEN 'sell'::\"InvestmentTransactionCategory\"\n    WHEN (finicity_investment_transaction_type = 'dividend'::text) THEN 'dividend'::\"InvestmentTransactionCategory\"\n    WHEN (finicity_investment_transaction_type = 'tax'::text) THEN 'tax'::\"InvestmentTransactionCategory\"\n    WHEN (finicity_investment_transaction_type = 'fee'::text) THEN 'fee'::\"InvestmentTransactionCategory\"\n    WHEN (finicity_investment_transaction_type = ANY (ARRAY['transfer'::text, 'contribution'::text, 'deposit'::text, 'income'::text, 'interest'::text])) THEN 'transfer'::\"InvestmentTransactionCategory\"\n    WHEN (finicity_investment_transaction_type = 'cancel'::text) THEN 'cancel'::\"InvestmentTransactionCategory\"\n    ELSE 'other'::\"InvestmentTransactionCategory\"\nEND"))
 
   // plaid data
   plaidInvestmentTransactionId String? @unique @map("plaid_investment_transaction_id")
@@ -298,7 +296,7 @@ model SecurityPricing {
   source     String?
 
   @@id([securityId, date])
-  @@index([date], map: "security_pricing_date_idx")
+  @@index([date])
   @@map("security_pricing")
 }
 
@@ -321,14 +319,14 @@ model Transaction {
   account      Account          @relation(fields: [accountId], references: [id], onDelete: Cascade)
   accountId    Int              @map("account_id")
   date         DateTime         @db.Date
-  flow         TransactionFlow  @default(dbgenerated())
+  flow         TransactionFlow  @default(dbgenerated("\nCASE\n    WHEN (amount < (0)::numeric) THEN 'INFLOW'::\"TransactionFlow\"\n    ELSE 'OUTFLOW'::\"TransactionFlow\"\nEND"))
   typeUser     TransactionType? @map("type_user")
   name         String
   amount       Decimal          @db.Decimal(19, 4)
   currencyCode String           @default("USD") @map("currency_code")
   pending      Boolean          @default(false)
   merchantName String?          @map("merchant_name")
-  category     String           @default(dbgenerated())
+  category     String           @default(dbgenerated("COALESCE(category_user,\nCASE\n    WHEN ((plaid_personal_finance_category ->> 'primary'::text) = 'INCOME'::text) THEN 'Income'::text\n    WHEN ((plaid_personal_finance_category ->> 'detailed'::text) = ANY (ARRAY['LOAN_PAYMENTS_MORTGAGE_PAYMENT'::text, 'RENT_AND_UTILITIES_RENT'::text])) THEN 'Housing Payments'::text\n    WHEN ((plaid_personal_finance_category ->> 'detailed'::text) = 'LOAN_PAYMENTS_CAR_PAYMENT'::text) THEN 'Vehicle Payments'::text\n    WHEN ((plaid_personal_finance_category ->> 'primary'::text) = 'LOAN_PAYMENTS'::text) THEN 'Other Payments'::text\n    WHEN ((plaid_personal_finance_category ->> 'primary'::text) = 'HOME_IMPROVEMENT'::text) THEN 'Home Improvement'::text\n    WHEN ((plaid_personal_finance_category ->> 'primary'::text) = 'GENERAL_MERCHANDISE'::text) THEN 'Shopping'::text\n    WHEN (((plaid_personal_finance_category ->> 'primary'::text) = 'RENT_AND_UTILITIES'::text) AND ((plaid_personal_finance_category ->> 'detailed'::text) <> 'RENT_AND_UTILITIES_RENT'::text)) THEN 'Utilities'::text\n    WHEN ((plaid_personal_finance_category ->> 'primary'::text) = 'FOOD_AND_DRINK'::text) THEN 'Food and Drink'::text\n    WHEN ((plaid_personal_finance_category ->> 'primary'::text) = 'TRANSPORTATION'::text) THEN 'Transportation'::text\n    WHEN ((plaid_personal_finance_category ->> 'primary'::text) = 'TRAVEL'::text) THEN 'Travel'::text\n    WHEN (((plaid_personal_finance_category ->> 'primary'::text) = ANY (ARRAY['PERSONAL_CARE'::text, 'MEDICAL'::text])) AND ((plaid_personal_finance_category ->> 'detailed'::text) <> 'MEDICAL_VETERINARY_SERVICES'::text)) THEN 'Health'::text\n    WHEN ((finicity_categorization ->> 'category'::text) = ANY (ARRAY['Income'::text, 'Paycheck'::text])) THEN 'Income'::text\n    WHEN ((finicity_categorization ->> 'category'::text) = 'Mortgage & Rent'::text) THEN 'Housing Payments'::text\n    WHEN ((finicity_categorization ->> 'category'::text) = ANY (ARRAY['Furnishings'::text, 'Home Services'::text, 'Home Improvement'::text, 'Lawn and Garden'::text])) THEN 'Home Improvement'::text\n    WHEN ((finicity_categorization ->> 'category'::text) = ANY (ARRAY['Streaming Services'::text, 'Home Phone'::text, 'Television'::text, 'Bills & Utilities'::text, 'Utilities'::text, 'Internet / Broadband Charges'::text, 'Mobile Phone'::text])) THEN 'Utilities'::text\n    WHEN ((finicity_categorization ->> 'category'::text) = ANY (ARRAY['Fast Food'::text, 'Food & Dining'::text, 'Restaurants'::text, 'Coffee Shops'::text, 'Alcohol & Bars'::text, 'Groceries'::text])) THEN 'Food and Drink'::text\n    WHEN ((finicity_categorization ->> 'category'::text) = ANY (ARRAY['Auto & Transport'::text, 'Gas & Fuel'::text, 'Auto Insurance'::text])) THEN 'Transportation'::text\n    WHEN ((finicity_categorization ->> 'category'::text) = ANY (ARRAY['Hotel'::text, 'Travel'::text, 'Rental Car & Taxi'::text])) THEN 'Travel'::text\n    WHEN ((finicity_categorization ->> 'category'::text) = ANY (ARRAY['Health Insurance'::text, 'Doctor'::text, 'Pharmacy'::text, 'Eyecare'::text, 'Health & Fitness'::text, 'Personal Care'::text])) THEN 'Health'::text\n    ELSE 'Other'::text\nEND)"))
   categoryUser String?          @map("category_user")
   excluded     Boolean          @default(false)
 
@@ -412,13 +410,7 @@ model User {
   isoCurrencyCode String @default("USD") @map("iso_currency_code")
 
   // Notification preferences
-  convertKitId Int?    @map("convert_kit_id")
-  ataAll       Boolean @default(true) @map("ata_all")
-  ataSubmitted Boolean @default(true) @map("ata_submitted")
-  ataReview    Boolean @default(true) @map("ata_review")
-  ataUpdate    Boolean @default(true) @map("ata_update")
-  ataClosed    Boolean @default(true) @map("ata_closed")
-  ataExpire    Boolean @default(true) @map("ata_expire")
+  convertKitId Int? @map("convert_kit_id")
 
   // Financial preferences and info
   monthlyIncomeUser   Decimal? @map("monthly_income_user") @db.Decimal(19, 4)
@@ -426,7 +418,7 @@ model User {
   monthlyDebtUser     Decimal? @map("monthly_debt_user") @db.Decimal(19, 4)
 
   // Billing
-  trialEnd               DateTime? @default(dbgenerated("NOW() + interval '14 days'")) @map("trial_end") @db.Timestamptz(6)
+  trialEnd               DateTime? @default(dbgenerated("(now() + '14 days'::interval)")) @map("trial_end") @db.Timestamptz(6)
   trialReminderSent      DateTime? @map("trial_reminder_sent") @db.Timestamptz(6)
   stripeCustomerId       String?   @unique @map("stripe_customer_id")
   stripeSubscriptionId   String?   @unique @map("stripe_subscription_id")
@@ -441,12 +433,6 @@ model User {
   // plaid data
   plaidLinkToken String? @map("plaid_link_token") // temporary token stored to maintain state across browsers
 
-  // Ask My Advisor
-  advisorNotes String?  @map("advisor_notes")
-  userNotes    String?  @map("user_notes")
-  goals        String[]
-  riskAnswers  Json     @default("[]") @map("risk_answers") @db.JsonB
-
   // Onboarding / usage goals
   household             Household?
   state                 String?
@@ -459,17 +445,13 @@ model User {
   grossIncome           Int?        @map("gross_income")
   incomeType            String?     @map("income_type")
   taxStatus             TaxStatus?  @map("tax_status")
-  memberNumber          Int         @unique() @default(autoincrement()) @map("member_number")
-  memberId              String      @unique() @default(dbgenerated("gen_random_uuid()")) @map("member_id")
+  memberNumber          Int         @unique @default(autoincrement()) @map("member_number")
+  memberId              String      @unique @default(dbgenerated("gen_random_uuid()")) @map("member_id")
 
   accountConnections AccountConnection[]
   accounts           Account[]
   plans              Plan[]
-  messages           Message[]
-  conversations      Conversation[]
-  advisor            Advisor?
   signedAgreements   SignedAgreement[]
-  conversationNotes  ConversationNote[]
 
   @@map("user")
 }
@@ -527,8 +509,6 @@ model Plan {
 
   events     PlanEvent[]
   milestones PlanMilestone[]
-
-  conversations Conversation[]
 
   @@map("plan")
 }
@@ -588,100 +568,6 @@ enum ApprovalStatus {
   pending
   approved
   rejected
-}
-
-model Advisor {
-  id             Int            @id @default(autoincrement())
-  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime       @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId         Int            @unique @map("user_id")
-  approvalStatus ApprovalStatus @default(pending) @map("approval_status")
-  fullName       String         @map("full_name")
-  title          String
-  bio            String
-  avatarSrc      String         @map("avatar_src")
-
-  conversations ConversationAdvisor[]
-
-  @@map("advisor")
-}
-
-enum ConversationStatus {
-  open
-  closed
-}
-
-model Conversation {
-  id              Int                @id @default(autoincrement())
-  createdAt       DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt       DateTime           @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  status          ConversationStatus @default(open)
-  title           String
-  user            User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId          Int                @map("user_id")
-  expiryEmailSent DateTime?          @map("expiry_email_sent") @db.Timestamptz(6)
-
-  account   Account? @relation(fields: [accountId], references: [id], onDelete: SetNull)
-  accountId Int?     @map("account_id")
-  plan      Plan?    @relation(fields: [planId], references: [id], onDelete: SetNull)
-  planId    Int?     @map("plan_id")
-
-  messages Message[]
-  advisors ConversationAdvisor[]
-  notes    ConversationNote[]
-
-  @@map("conversation")
-}
-
-model ConversationAdvisor {
-  id             Int          @id @default(autoincrement())
-  createdAt      DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  conversationId Int          @map("conversation_id")
-  advisor        Advisor      @relation(fields: [advisorId], references: [id], onDelete: Cascade)
-  advisorId      Int          @map("advisor_id")
-
-  @@unique([conversationId, advisorId])
-  @@map("conversation_advisor")
-}
-
-model ConversationNote {
-  id             Int          @id @default(autoincrement())
-  createdAt      DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId         Int          @map("user_id")
-  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  conversationId Int          @map("conversation_id")
-  body           String
-
-  @@unique([userId, conversationId]) // one note per user, per conversation
-  @@map("conversation_note")
-}
-
-enum MessageType {
-  text
-  audio
-  video
-}
-
-model Message {
-  id             Int          @id @default(autoincrement())
-  createdAt      DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  conversationId Int          @map("conversation_id")
-  // this message will cascade delete if the user who created the conversation is deleted (via conversationId FK cascade)
-  // otherwise we preserve the message (using SetNull) so it doesn't disappear from the conversation
-  user           User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
-  userId         Int?         @map("user_id")
-  type           MessageType
-  body           String?
-  mediaSrc       String?      @map("media_src")
-
-  @@map("message")
 }
 
 enum AuditEventType {

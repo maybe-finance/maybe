@@ -17,10 +17,6 @@ import type {
     Institution,
     ProviderInstitution,
     Plan,
-    Conversation,
-    Advisor,
-    Message,
-    ConversationAdvisor,
 } from '@prisma/client'
 
 type CRUDActions = 'create' | 'read' | 'update' | 'delete'
@@ -40,17 +36,13 @@ type PrismaSubjects = Subjects<{
     Institution: Institution
     ProviderInstitution: ProviderInstitution
     Plan: Omit<Plan, 'events'>
-    Conversation: Conversation
-    ConversationAdvisor: ConversationAdvisor
-    Message: Message
-    AdvisorNotes: { userId: User['id'] }
 }>
 type AppSubjects = PrismaSubjects | 'all'
 
 type AppAbility = PrismaAbility<[AppActions, AppSubjects]>
 
 export default function defineAbilityFor(
-    user: (Pick<User, 'id'> & { roles: SharedType.UserRole[]; advisor: Advisor | null }) | null
+    user: (Pick<User, 'id'> & { roles: SharedType.UserRole[] }) | null
 ) {
     const { can, build } = new AbilityBuilder(PrismaAbility as AbilityClass<AppAbility>)
 
@@ -63,25 +55,6 @@ export default function defineAbilityFor(
             can('manage', 'Institution')
             can('manage', 'Plan')
             can('manage', 'Holding')
-            can('manage', 'Conversation')
-            can('manage', 'ConversationAdvisor')
-            can('manage', 'Message')
-            can('manage', 'AdvisorNotes')
-        }
-
-        if (user.advisor?.approvalStatus === 'approved') {
-            // Conversation
-            // ToDo: add filter once we lock down advisor conversation permissions eg. { advisors: { some: { advisorId: user.advisor.id } } }
-            can('read', 'Conversation')
-            can('update', 'Conversation')
-
-            // ConversationAdvisor
-            can('create', 'ConversationAdvisor')
-            can('delete', 'ConversationAdvisor')
-
-            // User.AdvisorNotes
-            // ToDo: add filter once we lock down advisor conversation permissions eg. { userId: { in: user.advisor.conversations.map((c) => c.userId) } }
-            can('manage', 'AdvisorNotes')
         }
 
         // Account
@@ -141,16 +114,6 @@ export default function defineAbilityFor(
         can('read', 'Plan', { userId: user.id })
         can('update', 'Plan', { userId: user.id })
         can('delete', 'Plan', { userId: user.id })
-
-        // Conversation
-        can('create', 'Conversation')
-        can('read', 'Conversation', { userId: user.id })
-        can('update', 'Conversation', { userId: user.id })
-        can('delete', 'Conversation', { userId: user.id })
-
-        // Message
-        can('update', 'Message', { userId: user.id })
-        can('delete', 'Message', { userId: user.id })
     }
 
     const ability = build()

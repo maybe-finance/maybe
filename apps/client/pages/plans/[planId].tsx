@@ -10,7 +10,6 @@ import {
     PlanMilestones,
     AddPlanScenario,
     RetirementMilestoneForm,
-    InlineQuestionCardGroup,
 } from '@maybe-finance/client/features'
 import { useRouter } from 'next/router'
 import { useState, useMemo } from 'react'
@@ -25,15 +24,7 @@ import {
     useUserApi,
 } from '@maybe-finance/client/shared'
 import { Breadcrumb, Button, DialogV2, LoadingSpinner } from '@maybe-finance/design-system'
-import {
-    RiAddLine,
-    RiAlertLine,
-    RiExchangeDollarLine,
-    RiFileList2Line,
-    RiFolderShieldLine,
-    RiLineChartLine,
-    RiPercentLine,
-} from 'react-icons/ri'
+import { RiAddLine, RiAlertLine, RiLineChartLine } from 'react-icons/ri'
 import { DateTime } from 'luxon'
 import classNames from 'classnames'
 import { DateUtil, NumberUtil, PlanUtil } from '@maybe-finance/shared'
@@ -267,32 +258,6 @@ export default function PlanDetailPage() {
                     }}
                     milestones={milestones}
                     events={plan.data?.events ?? []}
-                />
-
-                <InlineQuestionCardGroup
-                    className="mt-8"
-                    id={`plan_${planId}`}
-                    heading="Ask My Advisor"
-                    subheading="Get an advisor to review your plan and make adjustments for your goals and risk profile."
-                    planId={planData.id}
-                    questions={[
-                        {
-                            icon: RiPercentLine,
-                            title: 'What are the tax implications of my retirement savings and investments?',
-                        },
-                        {
-                            icon: RiFolderShieldLine,
-                            title: 'What are some ways I can future proof my current plan? ',
-                        },
-                        {
-                            icon: RiExchangeDollarLine,
-                            title: 'How can I create a retirement income plan that will last throughout my lifetime?',
-                        },
-                        {
-                            icon: RiFileList2Line,
-                            title: 'What are the risks and benefits of different types of retirement accounts?',
-                        },
-                    ]}
                 />
 
                 {/* TODO - this will eventually need to be a switch statement to determine which form to open based on the milestone type  */}

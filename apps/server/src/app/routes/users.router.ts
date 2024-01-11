@@ -171,7 +171,6 @@ router.put(
                     .object({ questionKey: z.string(), choiceKey: z.string() })
                     .array()
                     .min(1),
-                userNotes: z.string(),
                 household: z.enum([
                     'single',
                     'singleWithDependents',

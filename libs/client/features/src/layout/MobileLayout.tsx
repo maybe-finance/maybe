@@ -167,12 +167,6 @@ export function MobileLayout({ children, sidebar }: MobileLayoutProps) {
                                 icon={RiFlagLine}
                                 active={(path) => path.startsWith('/plans')}
                             />
-                            <NavItem
-                                label="Advisor"
-                                href="/ask-the-advisor"
-                                icon={RiChatPollLine}
-                                active={(path) => path.startsWith('/ask-the-advisor')}
-                            />
                         </ul>
                     </nav>
                     <div className="flex flex-col h-[calc(100vh-80px)] px-4 pt-6 pb-24">

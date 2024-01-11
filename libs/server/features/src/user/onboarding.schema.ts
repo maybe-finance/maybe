@@ -34,7 +34,6 @@ export const UpdateOnboardingSchema = z.discriminatedUnion('flow', [
                     'add-other',
                     'upgrade-account',
                     'create-plan',
-                    'ask-advisor',
                 ]),
                 markedComplete: z.boolean(),
             })

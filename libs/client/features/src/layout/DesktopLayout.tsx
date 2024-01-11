@@ -164,12 +164,6 @@ export function DesktopLayout({ children, sidebar }: DesktopLayoutProps) {
                             icon={RiFlagLine}
                             active={(path) => path.startsWith('/plans')}
                         />
-                        <NavItem
-                            label="Advisor"
-                            href="/ask-the-advisor"
-                            icon={RiChatPollLine}
-                            active={(path) => path.startsWith('/ask-the-advisor')}
-                        />
                     </motion.ul>
                 </div>
 

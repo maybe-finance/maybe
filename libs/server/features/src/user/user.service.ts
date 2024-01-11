@@ -52,7 +52,6 @@ export type SidebarOnboardingUser = {
     }[]
     _count: {
         plans: number
-        conversations: number
     }
 }
 
@@ -576,7 +575,7 @@ export class UserService implements IUserService {
                 accountConnections: {
                     select: { accounts: { select: { type: true, category: true } } },
                 },
-                _count: { select: { plans: true, conversations: true } },
+                _count: { select: { plans: true } },
             },
         })
 
@@ -659,13 +658,6 @@ export class UserService implements IUserService {
             .setTitle((_) => 'Setup a financial plan')
             .completeIf((user) => user._count.plans > 0)
             .setCTAPath('/plans')
-
-        onboarding
-            .addStep('ask-advisor')
-            .addToGroup('bonus')
-            .setTitle((_) => 'Ask an advisor a question')
-            .completeIf((user) => user._count.conversations > 0)
-            .setCTAPath('/ask-the-advisor')
 
         return onboarding
     }

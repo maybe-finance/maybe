@@ -10,7 +10,6 @@ import classNames from 'classnames'
 import { DateTime } from 'luxon'
 import {
     RiArrowLeftLine,
-    RiChatPollLine,
     RiCheckLine,
     RiFlagLine,
     RiFolderOpenLine,
@@ -51,7 +50,6 @@ export function ExampleApp({ checklist }: { checklist?: string[] }) {
                                 'Net worth': RiPieChart2Line,
                                 Accounts: RiFolderOpenLine,
                                 Planning: RiFlagLine,
-                                Advisor: RiChatPollLine,
                             }).map(([label, Icon], idx) => (
                                 <div
                                     key={idx}

@@ -34,9 +34,7 @@
                 "stackContexts": {
                     "Tools": {
                         "VPC": {
-                            "IPAllowList": [
-                                ""
-                            ]
+                            "IPAllowList": [""]
                         },
                         "GithubRunner": {
                             "SSMKeyArn": "REPLACE_THIS",
@@ -60,7 +58,6 @@
                     "NX_FINICITY_ENV": "sandbox",
                     "NX_CLIENT_URL": "https://staging-app.maybe.co",
                     "NX_CLIENT_URL_CUSTOM": "https://staging-app.maybe.co",
-                    "NX_ADVISOR_URL": "https://staging-advisor.maybe.co",
                     "NX_AUTH0_DOMAIN": "REPLACE_THIS",
                     "NX_AUTH0_CUSTOM_DOMAIN": "REPLACE_THIS",
                     "NX_AUTH0_CLIENT_ID": "REPLACE_THIS",
@@ -74,9 +71,7 @@
                         "PeeringCnxCidr": "10.1.0.0/16",
                         "VPC": {
                             "NATCount": 1,
-                            "IPAllowList": [
-                                ""
-                            ]
+                            "IPAllowList": [""]
                         },
                         "Redis": {
                             "size": "cache.t4g.small",
@@ -143,7 +138,6 @@
                     "NX_CDN_URL": "https://cdn.maybe.co",
                     "NX_CLIENT_URL": "https://app.maybe.co",
                     "NX_CLIENT_URL_CUSTOM": "https://app.maybe.co",
-                    "NX_ADVISOR_URL": "https://advisor.maybe.co",
                     "NX_AUTH0_DOMAIN": "REPLACE_THIS",
                     "NX_AUTH0_CUSTOM_DOMAIN": "login.maybe.co",
                     "NX_AUTH0_CLIENT_ID": "REPLACE_THIS",
@@ -159,9 +153,7 @@
                         "PeeringCnxCidr": "10.2.0.0/16",
                         "VPC": {
                             "NATCount": 2,
-                            "IPAllowList": [
-                                ""
-                            ]
+                            "IPAllowList": [""]
                         },
                         "Redis": {
                             "size": "cache.m6g.2xlarge",
@@ -171,7 +163,7 @@
                             "CertificateArn": "REPLACE_THIS",
                             "CNAMES": ["cdn.maybe.co"]
                         },
-                        "UploadOrigins": ["https://advisor.maybe.co", "https://app.maybe.co"]
+                        "UploadOrigins": "https://app.maybe.co"
                     },
                     "Server": {
                         "Container": {

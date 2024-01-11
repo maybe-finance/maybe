@@ -13,7 +13,6 @@ let AUTH0_CUSTOM_DOMAIN
 let AUTH0_CLIENT_ID
 let CLIENT_BASE_URLS
 let SERVER_BASE_URLS
-let ADVISOR_BASE_URLS
 let ADMIN_ROLE_ID
 let BETA_TESTER_ROLE_ID
 
@@ -33,7 +32,6 @@ switch (env.AUTH0_ENV) {
         ]
         CLIENT_LOGOUT_URLS = [...logoutOrigins, 'http://localhost:4200']
         SERVER_BASE_URLS = ['http://localhost:3333']
-        ADVISOR_BASE_URLS = ['http://localhost:4201']
         ADMIN_ROLE_ID = 'REPLACE_THIS'
         BETA_TESTER_ROLE_ID = 'REPLACE_THIS'
         break
@@ -44,7 +42,6 @@ switch (env.AUTH0_ENV) {
         CLIENT_BASE_URLS = ['https://staging-app.maybe.co', ...trustedOrigins]
         CLIENT_LOGOUT_URLS = logoutOrigins
         SERVER_BASE_URLS = ['https://staging-api.maybe.co']
-        ADVISOR_BASE_URLS = ['https://staging-advisor.maybe.co', ...trustedOrigins]
         ADMIN_ROLE_ID = 'REPLACE_THIS'
         BETA_TESTER_ROLE_ID = 'REPLACE_THIS'
         break
@@ -55,7 +52,6 @@ switch (env.AUTH0_ENV) {
         CLIENT_BASE_URLS = ['https://app.maybe.co', ...trustedOrigins]
         CLIENT_LOGOUT_URLS = logoutOrigins
         SERVER_BASE_URLS = ['https://api.maybe.co']
-        ADVISOR_BASE_URLS = ['https://advisor.maybe.co', ...trustedOrigins]
         ADMIN_ROLE_ID = 'REPLACE_THIS'
         BETA_TESTER_ROLE_ID = 'REPLACE_THIS'
         break
@@ -82,8 +78,6 @@ module.exports = {
             CLIENT_LOGOUT_URLS,
             SERVER_BASE_URLS,
             SERVER_CALLBACK_URLS: SERVER_BASE_URLS.map((url) => `${url}/admin/callback`),
-            ADVISOR_BASE_URLS,
-            ADVISOR_CALLBACK_URLS: ADVISOR_BASE_URLS.map((url) => `${url}/api/auth/callback`),
             POSTMARK_SMTP_PASS: env.POSTMARK_SMTP_PASS,
             ADMIN_ROLE_ID: ADMIN_ROLE_ID,
             BETA_TESTER_ROLE_ID: BETA_TESTER_ROLE_ID,

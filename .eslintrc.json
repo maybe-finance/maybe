@@ -43,14 +43,6 @@
                                     "scope:client-shared",
                                     "scope:shared"
                                 ]
-                            },
-                            {
-                                "sourceTag": "scope:advisor",
-                                "onlyDependOnLibsWithTags": [
-                                    "scope:advisor",
-                                    "scope:client-shared",
-                                    "scope:shared"
-                                ]
                             }
                         ]
                     }

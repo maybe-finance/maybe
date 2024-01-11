@@ -12,9 +12,6 @@ import { NetWorthBreakdownTable } from './breakdown-table'
 import { NetWorthInsightCard } from './NetWorthInsightCard'
 import { DateTime } from 'luxon'
 import { Explainers } from '../insights'
-import { InlineQuestionCardGroup } from '../ask-the-advisor'
-import { RiBubbleChartLine, RiPercentLine, RiPieChartLine, RiScales3Line } from 'react-icons/ri'
-import classNames from 'classnames'
 
 type NetWorthInsightDetailProps = {
     query: UseQueryResult<SharedType.UserInsights, unknown>
@@ -113,33 +110,6 @@ export function NetWorthInsightDetail({ query }: NetWorthInsightDetailProps) {
                     }
                 />
             </BreakdownTabPanel>
-
-            {(hasAssets || hasDebts) && (
-                <InlineQuestionCardGroup
-                    className={classNames('mt-12', !hasAssets && 'order-last')}
-                    id="assets_debts"
-                    heading="Ask My Advisor"
-                    subheading="Get an advisor to review your asset allocation or debt situation."
-                    questions={[
-                        {
-                            icon: RiPieChartLine,
-                            title: 'Can you review my current allocation and suggest ways to rebalance?',
-                        },
-                        {
-                            icon: RiScales3Line,
-                            title: 'How can I go about consolidating or reducing my current debts?',
-                        },
-                        {
-                            icon: RiPercentLine,
-                            title: 'Can you explain how tax implications can impact my asset allocation strategy?',
-                        },
-                        {
-                            icon: RiBubbleChartLine,
-                            title: 'In my current state, do you recommend taking on more debt to finance new assets?',
-                        },
-                    ]}
-                />
-            )}
 
             <h5 className="mt-9 uppercase">Debts</h5>
             <BreakdownTabPanel

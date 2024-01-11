@@ -142,12 +142,6 @@ sendEmailQueue.add(
     { repeat: { cron: '0 */12 * * *' } } // Run every 12 hours
 )
 
-sendEmailQueue.add(
-    'send-email',
-    { type: 'conversation-expirations' },
-    { repeat: { cron: '0 */12 * * *' } } // Run every 12 hours
-)
-
 // Fallback - usually triggered by errors not handled (or thrown) within the Bull event handlers (see above)
 process.on(
     'uncaughtException',

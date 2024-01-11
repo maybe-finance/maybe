@@ -1,30 +1,7 @@
 import { Router } from 'express'
-import { z } from 'zod'
 import endpoint from '../lib/endpoint'
 
 const router = Router()
-
-router.put(
-    '/ask-the-advisor',
-    endpoint.create({
-        input: z
-            .object({
-                ataAll: z.boolean(),
-                ataSubmitted: z.boolean(),
-                ataReview: z.boolean(),
-                ataUpdate: z.boolean(),
-                ataClosed: z.boolean(),
-                ataExpire: z.boolean(),
-            })
-            .partial(),
-        resolve: async ({ ctx, input }) => {
-            return ctx.prisma.user.update({
-                where: { id: ctx.user!.id },
-                data: input,
-            })
-        },
-    })
-)
 
 router.get(
     '/convertkit/subscription',
