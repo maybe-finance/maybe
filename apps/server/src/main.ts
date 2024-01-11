@@ -2,7 +2,6 @@ import type { AddressInfo } from 'net'
 import env from './env'
 import app from './app/app'
 import logger from './app/lib/logger'
-import ldClient from './app/lib/ldClient'
 import * as Sentry from '@sentry/node'
 
 process.on('uncaughtException', function (error) {
@@ -22,5 +21,4 @@ const server = app.listen(env.NX_PORT, () => {
 // Handle SIGTERM coming from ECS Fargate
 process.on('SIGTERM', () => server.close())
 
-server.on('close', () => ldClient.close())
 server.on('error', (err) => logger.error('Server failed to start from main.ts', err))

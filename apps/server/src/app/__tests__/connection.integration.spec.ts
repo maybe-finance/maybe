@@ -12,7 +12,6 @@ import { default as _plaid } from '../lib/plaid'
 import nock from 'nock'
 import { resetUser } from './utils/user'
 
-jest.mock('launchdarkly-node-server-sdk')
 jest.mock('../middleware/validate-plaid-jwt.ts')
 jest.mock('plaid')
 
