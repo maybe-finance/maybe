@@ -6,7 +6,6 @@ import { Transition } from '@headlessui/react'
 import {
     RiArrowUpLine,
     RiBankLine,
-    RiChatPollLine,
     RiCloseFill,
     RiFlagLine,
     RiLineChartLine,
@@ -123,7 +122,6 @@ export function UpgradeTakeover({ open, onClose }: UpgradeTakeoverProps) {
                         <div className="grid grid-cols-2 mt-6 sm:grid-cols-3 gap-y-6 gap-x-2">
                             {(
                                 [
-                                    [RiChatPollLine, '24/7 access to an advisor'],
                                     [RiLinksLine, 'Net worth tracking'],
                                     [RiBankLine, 'Personal finance insights'],
                                     [RiLineChartLine, 'Investment planning & insights'],
@@ -191,16 +189,14 @@ export function UpgradeTakeover({ open, onClose }: UpgradeTakeoverProps) {
                                     Josh, Travis
                                 </p>
                                 <div className="flex mt-5 -space-x-2 shrink-0">
-                                    {['josh', 'travis'].map(
-                                        (name) => (
-                                            <img
-                                                key={name}
-                                                alt={upperFirst(name)}
-                                                className="w-12 h-12 border-2 border-black rounded-full"
-                                                src={`/assets/images/team/${name}.jpg`}
-                                            />
-                                        )
-                                    )}
+                                    {['josh', 'travis'].map((name) => (
+                                        <img
+                                            key={name}
+                                            alt={upperFirst(name)}
+                                            className="w-12 h-12 border-2 border-black rounded-full"
+                                            src={`/assets/images/team/${name}.jpg`}
+                                        />
+                                    ))}
                                 </div>
                             </div>
                         </div>

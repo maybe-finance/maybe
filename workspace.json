@@ -1,69 +1,6 @@
 {
     "version": 2,
     "projects": {
-        "advisor": {
-            "root": "apps/advisor",
-            "sourceRoot": "apps/advisor",
-            "projectType": "application",
-            "targets": {
-                "build": {
-                    "executor": "@nrwl/next:build",
-                    "outputs": ["{options.outputPath}"],
-                    "defaultConfiguration": "production",
-                    "options": {
-                        "root": "apps/advisor",
-                        "outputPath": "dist/apps/advisor"
-                    },
-                    "configurations": {
-                        "development": {
-                            "outputPath": "apps/advisor"
-                        },
-                        "production": {}
-                    }
-                },
-                "serve": {
-                    "executor": "@nrwl/next:server",
-                    "defaultConfiguration": "development",
-                    "options": {
-                        "buildTarget": "advisor:build",
-                        "dev": true,
-                        "port": 4201
-                    },
-                    "configurations": {
-                        "development": {
-                            "buildTarget": "advisor:build:development",
-                            "dev": true
-                        },
-                        "production": {
-                            "buildTarget": "advisor:build:production",
-                            "dev": false
-                        }
-                    }
-                },
-                "export": {
-                    "executor": "@nrwl/next:export",
-                    "options": {
-                        "buildTarget": "advisor:build:production"
-                    }
-                },
-                "test": {
-                    "executor": "@nrwl/jest:jest",
-                    "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
-                    "options": {
-                        "jestConfig": "apps/advisor/jest.config.ts",
-                        "passWithNoTests": true
-                    }
-                },
-                "lint": {
-                    "executor": "@nrwl/linter:eslint",
-                    "outputs": ["{options.outputFile}"],
-                    "options": {
-                        "lintFilePatterns": ["apps/advisor/**/*.{ts,tsx,js,jsx}"]
-                    }
-                }
-            },
-            "tags": ["scope:app"]
-        },
         "client": {
             "$schema": "../../node_modules/nx/schemas/project-schema.json",
             "root": "apps/client",

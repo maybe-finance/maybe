@@ -65,7 +65,6 @@ export class InMemoryQueueFactory implements IQueueFactory {
             'sync-plaid-institutions',
             'sync-finicity-institutions',
             'trial-reminders',
-            'conversation-expirations',
             'send-email',
         ]
     ) {}

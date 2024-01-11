@@ -10,7 +10,6 @@ import {
     AccountMenu,
     Explainers,
     HoldingList,
-    InlineQuestionCardGroup,
     InvestmentTransactionList,
     PageTitle,
 } from '@maybe-finance/client/features'
@@ -27,11 +26,8 @@ import {
     RiAddLine,
     RiArrowUpDownLine,
     RiCoinLine,
-    RiFileChartLine,
-    RiFileSearchLine,
     RiLineChartLine,
     RiPercentLine,
-    RiScales3Line,
     RiScalesFill,
     RiStackLine,
     RiSubtractLine,
@@ -610,32 +606,6 @@ export default function InvestmentView({
                             </span>
                         </InsightGroup.Card>
                     </InsightGroup>
-
-                    <InlineQuestionCardGroup
-                        className="mb-8"
-                        id={`investment_account_${account.id}`}
-                        heading="Ask My Advisor"
-                        subheading="Get an advisor to review this account and make adjustments for your goals and risk profile."
-                        accountId={account.id}
-                        questions={[
-                            {
-                                icon: RiFileSearchLine,
-                                title: 'Can you review and give me feedback on my overall strategy?',
-                            },
-                            {
-                                icon: RiScales3Line,
-                                title: 'What do you make of my current allocation? Am I over/under weighted somewhere?',
-                            },
-                            {
-                                icon: RiFileChartLine,
-                                title: 'Where do you think my portfolio is currently underperforming or could do better?',
-                            },
-                            {
-                                icon: RiLineChartLine,
-                                title: 'Are there any benefits to having a mix of cyclical and defensive stocks in my portfolio?',
-                            },
-                        ]}
-                    />
 
                     <h5 className="uppercase mb-5">Holdings</h5>
                     <HoldingList accountId={account.id} />

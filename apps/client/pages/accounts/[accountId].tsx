@@ -7,7 +7,6 @@ import {
     ValuationList,
     TransactionList,
     AccountSidebar,
-    InlineQuestionCardGroup,
 } from '@maybe-finance/client/features'
 import { useRouter } from 'next/router'
 import { DateTime } from 'luxon'
@@ -20,7 +19,6 @@ import {
 import { DefaultView, LoanView } from '../../components/account-views'
 
 import InvestmentView from '../../components/account-views/InvestmentView'
-import { RiArrowUpLine, RiFolder4Line, RiMoneyDollarBoxLine, RiPieChartLine } from 'react-icons/ri'
 
 const initialRange = {
     start: DateTime.now().minus({ days: 30 }).toISODate(),
@@ -100,31 +98,6 @@ export default function AccountDetailPage() {
                     getContent={(accountId) => {
                         return (
                             <>
-                                <InlineQuestionCardGroup
-                                    className="mb-10"
-                                    id={`account_${accountId}`}
-                                    heading="Ask My Advisor"
-                                    subheading="Get an advisor to review this account and make adjustments for your goals and risk profile."
-                                    accountId={accountId}
-                                    questions={[
-                                        {
-                                            icon: RiPieChartLine,
-                                            title: 'How can I ensure that my account is diversified with other assets to minimize risk?',
-                                        },
-                                        {
-                                            icon: RiArrowUpLine,
-                                            title: 'Is there anything I could be doing to maximize the earning potential of this account?',
-                                        },
-                                        {
-                                            icon: RiFolder4Line,
-                                            title: 'Are there any other financial products that could complement this account?',
-                                        },
-                                        {
-                                            icon: RiMoneyDollarBoxLine,
-                                            title: 'Are there any expense categories that stand out from the rest which I should look out for?',
-                                        },
-                                    ]}
-                                />
                                 <h5 className="uppercase mb-6">Transactions</h5>
                                 <TransactionList accountId={accountId} />
                             </>

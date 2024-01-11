@@ -1,7 +1,3 @@
-import type { Message } from '@prisma/client'
-import { getSignedUrl } from '@aws-sdk/cloudfront-signer'
-import { DateTime } from 'luxon'
-
 /**
  * @returns redis retry strategy
  */
@@ -77,23 +73,4 @@ export type SignerConfig = {
     cdnUrl: string
     pubKeyId: string
     privKey: string
-}
-
-// Returns signed url if mediaSrc is present, otherwise returns message as-is
-export function mapMessage<T extends Message>(msg: T, config?: SignerConfig): T {
-    let mediaSrc = msg.mediaSrc
-
-    if (mediaSrc && config != null) {
-        mediaSrc = getSignedUrl({
-            url: `${config.cdnUrl}/${msg.mediaSrc}`,
-            keyPairId: config.pubKeyId,
-            privateKey: config.privKey,
-            dateLessThan: DateTime.now().plus({ days: 30 }).toString(),
-        })
-    }
-
-    return {
-        ...msg,
-        mediaSrc,
-    }
 }

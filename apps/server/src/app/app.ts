@@ -42,8 +42,6 @@ import {
     securitiesRouter,
     plansRouter,
     toolsRouter,
-    conversationsRouter,
-    messagesRouter,
     notificationsRouter,
     publicRouter,
     e2eRouter,
@@ -89,7 +87,7 @@ app.get('/', (req, res) => {
 // Only Auth0 users with a role of "admin" can view these pages (i.e. Maybe Employees)
 app.use(express.static(__dirname + '/assets'))
 
-const origin = [env.NX_CLIENT_URL, env.NX_ADVISOR_URL, ...env.NX_CORS_ORIGINS]
+const origin = [env.NX_CLIENT_URL, ...env.NX_CORS_ORIGINS]
 logger.info(`CORS origins: ${origin}`)
 app.use(cors({ origin }))
 app.options('*', cors() as RequestHandler)
@@ -169,8 +167,6 @@ app.use('/v1/transactions', transactionsRouter)
 app.use('/v1/holdings', holdingsRouter)
 app.use('/v1/securities', securitiesRouter)
 app.use('/v1/plans', plansRouter)
-app.use('/v1/conversations', conversationsRouter)
-app.use('/v1/messages', messagesRouter)
 app.use('/v1/notifications', notificationsRouter)
 
 // Sentry must be the *first* handler

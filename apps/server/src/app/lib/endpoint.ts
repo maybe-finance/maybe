@@ -7,7 +7,6 @@ import type {
     IPlanService,
     IEmailService,
 } from '@maybe-finance/server/features'
-import { MessageService } from '@maybe-finance/server/features'
 import {
     CryptoService,
     EndpointFactory,
@@ -49,7 +48,6 @@ import {
     LoanBalanceSyncStrategy,
     PlanService,
     ProjectionCalculator,
-    ConversationService,
     StripeWebhookHandler,
 } from '@maybe-finance/server/features'
 import { SharedType } from '@maybe-finance/shared'
@@ -256,20 +254,6 @@ const transactionService = new TransactionService(
 
 const holdingService = new HoldingService(logger.child({ service: 'HoldingService' }), prisma)
 
-// conversation
-
-const conversationService = new ConversationService(
-    logger.child({ service: 'ConversationService' }),
-    prisma,
-    queueService
-)
-
-const messageService = new MessageService(
-    logger.child({ service: 'MessageService' }),
-    prisma,
-    queueService
-)
-
 // webhooks
 
 const plaidWebhooks = new PlaidWebhookHandler(
@@ -302,7 +286,6 @@ async function getCurrentUser(jwt: NonNullable<Request['user']>) {
     const user =
         (await prisma.user.findUnique({
             where: { auth0Id: jwt.sub },
-            include: { advisor: true },
         })) ??
         (await prisma.user.upsert({
             where: { auth0Id: jwt.sub },
@@ -314,7 +297,6 @@ async function getCurrentUser(jwt: NonNullable<Request['user']>) {
                 lastName: jwt[SharedType.Auth0CustomNamespace.UserMetadata]?.['lastName'],
             },
             update: {},
-            include: { advisor: true },
         }))
 
     return {
@@ -357,8 +339,6 @@ export async function createContext(req: Request) {
         insightService,
         marketDataService,
         planService,
-        conversationService,
-        messageService,
         emailService,
     }
 }

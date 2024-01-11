@@ -165,7 +165,7 @@ export type MaybeUserMetadata = Partial<{
 export type MaybeAppMetadata = {}
 
 // The custom roles we have defined in Auth0
-export type UserRole = 'Admin' | 'CIUser' | 'Advisor'
+export type UserRole = 'Admin' | 'CIUser'
 
 export type PrimaryAuth0Identity = Partial<{
     connection: string

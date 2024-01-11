@@ -61,13 +61,6 @@ export type SendEmailQueueJobData =
           type: 'template'
           messages: SharedType.TemplateEmailMessage | SharedType.TemplateEmailMessage[]
       }
-    | {
-          type: 'conversation-notification'
-          notification: SharedType.ConversationNotification
-      }
-    | {
-          type: 'conversation-expirations'
-      }
 
 export type SyncUserQueue = IQueue<SyncUserQueueJobData, 'sync-user'>
 export type SyncAccountQueue = IQueue<SyncAccountQueueJobData, 'sync-account'>

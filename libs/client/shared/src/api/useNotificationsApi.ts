@@ -22,11 +22,6 @@ const NotificationsApi = (axios: AxiosInstance) => ({
         )
         return data
     },
-
-    async updateATANotifications(input: Record<string, any>) {
-        const { data } = await axios.put<SharedType.User>(`/notifications/ask-the-advisor`, input)
-        return data
-    },
 })
 
 type SubscriptionState = {
@@ -86,36 +81,8 @@ export function useNotificationsApi() {
             },
         })
 
-    const useUpdateATANotifications = () =>
-        useMutation(api.updateATANotifications, {
-            onMutate: async (updates) => {
-                await queryClient.cancelQueries({ queryKey: ['users'] })
-
-                const previousUser = queryClient.getQueryData<SharedType.User>(['users'])
-
-                // Optimistic update to new state
-                queryClient.setQueryData(['users'], () => ({
-                    ...previousUser,
-                    ...updates,
-                }))
-
-                return { previousUser }
-            },
-            onSuccess: () => {
-                toast.success('Ask the Advisor notifications updated!')
-            },
-            onError: (err, updates, ctx) => {
-                queryClient.setQueryData(['users'], ctx?.previousUser)
-                toast.error('Error updating ask the advisor preferences')
-            },
-            onSettled: () => {
-                queryClient.invalidateQueries(['users'])
-            },
-        })
-
     return {
         useConvertKitSubscriber,
         useConvertKit,
-        useUpdateATANotifications,
     }
 }
