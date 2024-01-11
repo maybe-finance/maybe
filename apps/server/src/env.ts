@@ -65,8 +65,6 @@ const envSchema = z.object({
         .string()
         .default(process.env.NODE_ENV === 'development' ? 'dev' : 'combined'),
 
-    NX_INTERCOM_SECRET: z.string().optional(),
-
     NX_STRIPE_SECRET_KEY: z.string().default('REPLACE_THIS'),
     NX_STRIPE_WEBHOOK_SECRET: z.string().default('whsec_REPLACE_THIS'),
     NX_STRIPE_PREMIUM_MONTHLY_PRICE_ID: z.string().default('price_REPLACE_THIS'),

@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import { BoxIcon, BrowserUtil, linkAuth0AccountCtx, useUserApi } from '@maybe-finance/client/shared'
+import { BoxIcon, linkAuth0AccountCtx, useUserApi } from '@maybe-finance/client/shared'
 import { Button, DialogV2 } from '@maybe-finance/design-system'
 import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
@@ -253,12 +253,9 @@ function LinkError({ onClose, error }: { onClose(): void; error: string }) {
 
             <p className="mb-2 text-gray-50 text-base">{error}</p>
 
-            <button
-                className="underline text-cyan text-base mb-6"
-                onClick={BrowserUtil.showIntercom}
-            >
+            <a className="underline text-cyan text-base mb-6" href="mailto:hello@maybe.co">
                 Please contact us.
-            </button>
+            </a>
 
             <div className="flex w-full gap-4">
                 <Button fullWidth onClick={onClose}>

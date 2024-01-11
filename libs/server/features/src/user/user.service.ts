@@ -20,7 +20,6 @@ import type { IAccountQueryService } from '../account'
 import type { SharedType } from '@maybe-finance/shared'
 import { CopyObjectCommand, MetadataDirective } from '@aws-sdk/client-s3'
 import { DateTime } from 'luxon'
-import crypto from 'crypto'
 import { DbUtil } from '@maybe-finance/server/shared'
 import { DateUtil } from '@maybe-finance/shared'
 import { flatten } from 'lodash'
@@ -276,22 +275,6 @@ export class UserService implements IUserService {
                 : null,
             trialEnd,
             cancelAt,
-        }
-    }
-
-    async getIntercomMetadata(
-        userId: User['id'],
-        secret?: string
-    ): Promise<SharedType.UserIntercomMetadata> {
-        const { auth0Id } = await this.prisma.user.findUniqueOrThrow({
-            select: { auth0Id: true },
-            where: { id: userId },
-        })
-
-        return {
-            hash: secret
-                ? crypto.createHmac('sha256', secret).update(auth0Id).digest('hex')
-                : undefined,
         }
     }
 
