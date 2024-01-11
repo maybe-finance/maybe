@@ -32,6 +32,7 @@ You'll need Docker installed to run the app locally.
 ```
 cp .env.example .env
 yarn install
+yarn run dev:services
 yarn prisma:migrate:dev
 yarn prisma:seed
 yarn dev
@@ -79,6 +80,12 @@ A working local development `.env` file can be found in 1Password under the "Eng
 ```
 yarn install # re-run if it hangs
 yarn dev
+```
+
+#### Start Postgres & Redis Services
+
+```
+yarn run dev:services
 ```
 
 #### Migrate DB
