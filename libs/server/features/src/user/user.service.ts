@@ -280,22 +280,6 @@ export class UserService implements IUserService {
         }
     }
 
-    async getIntercomMetadata(
-        userId: User['id'],
-        secret?: string
-    ): Promise<SharedType.UserIntercomMetadata> {
-        const { auth0Id } = await this.prisma.user.findUniqueOrThrow({
-            select: { auth0Id: true },
-            where: { id: userId },
-        })
-
-        return {
-            hash: secret
-                ? crypto.createHmac('sha256', secret).update(auth0Id).digest('hex')
-                : undefined,
-        }
-    }
-
     async getSignedAgreements(userId: User['id']) {
         return this.prisma.agreement.findMany({
             distinct: 'type',

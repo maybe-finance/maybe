@@ -67,25 +67,13 @@ const envSchema = z.object({
         .string()
         .default(process.env.NODE_ENV === 'development' ? 'dev' : 'combined'),
 
-    NX_INTERCOM_SECRET: z.string().optional(),
-
-    NX_STRIPE_SECRET_KEY: z
-        .string()
-        .default(
-            'REPLACE_THIS'
-        ),
-    NX_STRIPE_WEBHOOK_SECRET: z
-        .string()
-        .default('whsec_REPLACE_THIS'),
+    NX_STRIPE_SECRET_KEY: z.string().default('REPLACE_THIS'),
+    NX_STRIPE_WEBHOOK_SECRET: z.string().default('whsec_REPLACE_THIS'),
     NX_STRIPE_PREMIUM_MONTHLY_PRICE_ID: z.string().default('price_REPLACE_THIS'),
     NX_STRIPE_PREMIUM_YEARLY_PRICE_ID: z.string().default('price_REPLACE_THIS'),
 
-    NX_CDN_PRIVATE_BUCKET: z
-        .string()
-        .default('REPLACE_THIS'),
-    NX_CDN_PUBLIC_BUCKET: z
-        .string()
-        .default('REPLACE_THIS'),
+    NX_CDN_PRIVATE_BUCKET: z.string().default('REPLACE_THIS'),
+    NX_CDN_PUBLIC_BUCKET: z.string().default('REPLACE_THIS'),
 
     // Key to secrets manager value
     NX_CDN_SIGNER_SECRET_ID: z.string().default('/apps/maybe-app/CLOUDFRONT_SIGNER1_PRIV'),

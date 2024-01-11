@@ -11,7 +11,7 @@ import { useMemo } from 'react'
 import sumBy from 'lodash/sumBy'
 import toast from 'react-hot-toast'
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useAxiosWithAuth, useIntercom } from '..'
+import { useAxiosWithAuth } from '..'
 import { invalidateAccountQueries } from '../utils'
 
 const AccountApi = (axios: AxiosInstance) => ({
@@ -135,33 +135,6 @@ export function useAccountApi() {
     const queryClient = useQueryClient()
     const { axios } = useAxiosWithAuth()
     const api = useMemo(() => AccountApi(axios), [axios])
-    const { update: updateIntercom } = useIntercom()
-
-    const useAccounts = (
-        options?: Omit<
-            UseQueryOptions<
-                SharedType.AccountsResponse,
-                unknown,
-                SharedType.AccountsResponse,
-                string[]
-            >,
-            'queryKey' | 'queryFn' | 'staleTime'
-        >
-    ) =>
-        useQuery(['accounts'], api.getAccounts, {
-            staleTime: staleTimes.accounts,
-            onSuccess: (...args) => {
-                if (options?.onSuccess) options.onSuccess(...args)
-
-                const [{ accounts, connections }] = args
-                updateIntercom({
-                    'Manual Accounts': accounts.length,
-                    'Connected Accounts': sumBy(connections, (c) => c.accounts.length),
-                    Connections: connections.length,
-                })
-            },
-            ...options,
-        })
 
     const useAccount = (
         id: Account['id'],

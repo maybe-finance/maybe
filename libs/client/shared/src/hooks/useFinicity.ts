@@ -35,9 +35,6 @@ export function useFinicity() {
             FinicityConnect.launch(link, {
                 onDone(evt: ConnectDoneEvent) {
                     logger.debug(`Finicity Connect onDone event`, evt)
-                    BrowserUtil.trackIntercomEvent('FINICITY_CONNECT_DONE', {
-                        ...evt,
-                    })
                     setExpectingAccounts(true)
                 },
                 onError(evt: ConnectErrorEvent) {
@@ -50,25 +47,15 @@ export function useFinicity() {
                             'finicity.error.reason': evt.reason,
                         },
                     })
-                    BrowserUtil.trackIntercomEvent('FINICITY_CONNECT_ERROR', {
-                        ...evt,
-                    })
                 },
                 onCancel(evt: ConnectCancelEvent) {
                     logger.debug(`Finicity Connect onCancel event`, evt)
-                    BrowserUtil.trackIntercomEvent('FINICITY_CONNECT_CANCEL', {
-                        ...evt,
-                    })
                 },
                 onUser(evt: any) {
-                    BrowserUtil.trackIntercomEvent('FINICITY_CONNECT_USER_ACTION', {
-                        ...evt,
-                    })
+                    //Nothing
                 },
                 onRoute(evt: ConnectRouteEvent) {
-                    BrowserUtil.trackIntercomEvent('FINICITY_CONNECT_ROUTE_EVENT', {
-                        ...evt,
-                    })
+                    //Nothing
                 },
             })
         },

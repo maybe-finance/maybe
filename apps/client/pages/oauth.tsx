@@ -11,16 +11,16 @@ export default function OAuth() {
     // If our backend doesn't return a token to re-initialize with, show user troubleshooting message
     if (fetchTokenError) {
         return (
-            <div className="fixed h-full w-full flex flex-col items-center gap-4 mt-48">
+            <div className="fixed flex flex-col items-center w-full h-full gap-4 mt-48">
                 <LoadingSpinner />
                 {fetchTokenError && (
                     <>
                         <h4>Stuck on this page?</h4>
-                        <div className="mx-auto w-full max-w-md rounded-2xl bg-gray-800 p-2">
+                        <div className="w-full max-w-md p-2 mx-auto bg-gray-800 rounded-2xl">
                             <Disclosure defaultOpen>
                                 {({ open }) => (
                                     <>
-                                        <Disclosure.Button className="flex w-full items-center justify-between rounded-lg bg-gray-700 px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+                                        <Disclosure.Button className="flex items-center justify-between w-full px-4 py-2 text-sm font-medium text-left text-purple-900 bg-gray-700 rounded-lg hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
                                             <span>Why did this happen?</span>
                                             <RiArrowUpSFill
                                                 className={`${
@@ -47,24 +47,14 @@ export default function OAuth() {
                                                     stuck.
                                                 </p>
 
-                                                <ul className="mt-4 list-disc ml-4">
+                                                <ul className="mt-4 ml-4 list-disc">
                                                     <li>
                                                         Try connecting this account on a desktop
                                                         device. We have a mobile app on our roadmap,
                                                         but for the time being, desktop browsers
                                                         will be your most reliable experience.
                                                     </li>
-                                                    <li>
-                                                        Still not working?{' '}
-                                                        <button
-                                                            onClick={() =>
-                                                                BrowserUtil.showIntercom()
-                                                            }
-                                                            className="underline text-cyan"
-                                                        >
-                                                            Let us know!
-                                                        </button>
-                                                    </li>
+                                                    <li>Still not working? Let us know!</li>
                                                 </ul>
                                             </Disclosure.Panel>
                                         </Transition>

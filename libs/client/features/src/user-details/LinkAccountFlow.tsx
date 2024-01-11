@@ -126,9 +126,9 @@ function PromptStep({
         <>
             <BoxIcon icon={RiLink} />
 
-            <h4 className="text-white mt-6 mb-2">Link accounts?</h4>
+            <h4 className="mt-6 mb-2 text-white">Link accounts?</h4>
 
-            <p className="mb-6 text-gray-50 text-base">
+            <p className="mb-6 text-base text-gray-50">
                 We found an {secondaryProvider === 'apple' ? 'Apple ' : ' '} account using the same
                 email address as this one in our system. Do you want to link it?
             </p>
@@ -140,7 +140,7 @@ function PromptStep({
                 {secondaryProvider === 'apple' ? (
                     <button
                         onClick={onNext}
-                        className="w-2/4 flex items-center px-4 py-2 rounded text-base bg-white text-black shadow hover:bg-gray-25 focus:bg-gray-25 focus:ring-gray-600 font-medium"
+                        className="flex items-center w-2/4 px-4 py-2 text-base font-medium text-black bg-white rounded shadow hover:bg-gray-25 focus:bg-gray-25 focus:ring-gray-600"
                     >
                         <RiAppleFill className="w-4 h-4 mx-2" /> Link with Apple
                     </button>
@@ -165,7 +165,7 @@ function ConfirmStep({
             <>
                 <BoxIcon icon={RiLink} />
 
-                <h4 className="text-white my-6 animate-pulse">Authentication in progress...</h4>
+                <h4 className="my-6 text-white animate-pulse">Authentication in progress...</h4>
 
                 <Button fullWidth variant="secondary" onClick={onCancel}>
                     Cancel
@@ -178,7 +178,7 @@ function ConfirmStep({
         <>
             <BoxIcon icon={isLoading ? RiLinkUnlink : RiLink} />
 
-            <h4 className="text-white mt-6 mb-2">
+            <h4 className="mt-6 mb-2 text-white">
                 {isLoading ? 'Linking accounts ...' : 'Continue linking accounts?'}
             </h4>
 
@@ -198,7 +198,7 @@ function ConfirmStep({
                             process by unlinking the account in your settings.{' '}
                         </p>
 
-                        <p className="text-white mt-4">No data will be deleted.</p>
+                        <p className="mt-4 text-white">No data will be deleted.</p>
                     </>
                 )}
             </div>
@@ -229,9 +229,9 @@ function LinkComplete({ onClose }: { onClose(): void }) {
         <>
             <BoxIcon icon={RiCheckLine} variant="teal" />
 
-            <h4 className="text-white mt-6 mb-2">Accounts linked successfully!</h4>
+            <h4 className="mt-6 mb-2 text-white">Accounts linked successfully!</h4>
 
-            <p className="mb-6 text-gray-50 text-base">
+            <p className="mb-6 text-base text-gray-50">
                 Your accounts have been linked and the data has been merged successfully.
             </p>
 
@@ -249,16 +249,11 @@ function LinkError({ onClose, error }: { onClose(): void; error: string }) {
         <>
             <BoxIcon icon={RiLink} variant="red" />
 
-            <h4 className="text-white mt-6 mb-2">Account linking failed</h4>
+            <h4 className="mt-6 mb-2 text-white">Account linking failed</h4>
 
-            <p className="mb-2 text-gray-50 text-base">{error}</p>
+            <p className="mb-2 text-base text-gray-50">{error}</p>
 
-            <button
-                className="underline text-cyan text-base mb-6"
-                onClick={BrowserUtil.showIntercom}
-            >
-                Please contact us.
-            </button>
+            <button className="mb-6 text-base underline text-cyan">Please contact us.</button>
 
             <div className="flex w-full gap-4">
                 <Button fullWidth onClick={onClose}>

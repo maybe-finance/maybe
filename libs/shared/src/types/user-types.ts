@@ -227,10 +227,6 @@ export type UserSubscription = {
     currentPeriodEnd: DateTime | null
 }
 
-export type UserIntercomMetadata = {
-    hash?: string
-}
-
 export type UserMemberCardDetails = {
     memberNumber: number
     name: string

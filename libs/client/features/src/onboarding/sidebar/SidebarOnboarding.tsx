@@ -24,11 +24,11 @@ type DescriptionProps = {
 
 function Description({ summary, examples }: DescriptionProps) {
     return (
-        <div className="text-gray-50 text-base mt-2">
+        <div className="mt-2 text-base text-gray-50">
             <p className="mb-4">{summary}</p>
             <ul>
                 {examples.map((example) => (
-                    <li key={example} className="list-disc ml-6">
+                    <li key={example} className="ml-6 list-disc">
                         {example}
                     </li>
                 ))}
@@ -123,7 +123,7 @@ export function SidebarOnboarding({ onClose, onHide }: Props) {
 
     if (onboarding.isLoading) {
         return (
-            <div className="w-full flex justify-center items-center h-full">
+            <div className="flex items-center justify-center w-full h-full">
                 <LoadingSpinner />
             </div>
         )
@@ -196,7 +196,7 @@ export function SidebarOnboarding({ onClose, onHide }: Props) {
                                         initial={{ width: 0 }}
                                         animate={{ width: `${syncProgress.progress * 100}%` }}
                                         transition={{ ease: 'easeOut', duration: 0.5 }}
-                                        className="h-full rounded-full bg-gray-100"
+                                        className="h-full bg-gray-100 rounded-full"
                                     ></motion.div>
                                 ) : (
                                     <motion.div
@@ -225,7 +225,7 @@ export function SidebarOnboarding({ onClose, onHide }: Props) {
                 </div>
                 <div className="relative h-2 bg-gray-600 rounded-sm">
                     <div
-                        className="absolute inset-0 bg-cyan h-2 rounded-sm"
+                        className="absolute inset-0 h-2 rounded-sm bg-cyan"
                         style={{
                             width: `${percent * 100}%`,
                         }}
@@ -233,7 +233,7 @@ export function SidebarOnboarding({ onClose, onHide }: Props) {
                 </div>
             </div>
 
-            <div className="flex flex-col items-start gap-2 text-base pr-4 -mr-4 custom-gray-scroll">
+            <div className="flex flex-col items-start gap-2 pr-4 -mr-4 text-base custom-gray-scroll">
                 {accountSteps.map((step, idx) => {
                     const description = getDescriptionComponent(step.key)
 
@@ -252,7 +252,7 @@ export function SidebarOnboarding({ onClose, onHide }: Props) {
                                             open ? 'text-white' : 'text-gray-100'
                                         )}
                                     >
-                                        <div className="flex items-center text-left leading-5 gap-3 mr-auto">
+                                        <div className="flex items-center gap-3 mr-auto leading-5 text-left">
                                             <div
                                                 className={classNames(
                                                     'rounded-full w-[28px] h-[28px] flex items-center justify-center shrink-0',
@@ -264,7 +264,7 @@ export function SidebarOnboarding({ onClose, onHide }: Props) {
                                                 {step.isComplete || step.isMarkedComplete ? (
                                                     <RiCheckFill size={20} className="text-cyan" />
                                                 ) : (
-                                                    <span className="font-medium text-sm">
+                                                    <span className="text-sm font-medium">
                                                         {idx + 1}
                                                     </span>
                                                 )}
@@ -306,7 +306,7 @@ export function SidebarOnboarding({ onClose, onHide }: Props) {
                                             <div className="bg-gray-600 my-4 h-[1px]"></div>
 
                                             {step.isComplete ? (
-                                                <p className="text-gray-50 text-sm">
+                                                <p className="text-sm text-gray-50">
                                                     This step has been automatically marked complete
                                                     since you've added at least 1 of these account
                                                     types.
@@ -354,7 +354,7 @@ export function SidebarOnboarding({ onClose, onHide }: Props) {
             <Disclosure defaultOpen>
                 {({ open }) => (
                     <div className={classNames('p-3 rounded-lg bg-grape bg-opacity-10 text-base')}>
-                        <Disclosure.Button className="flex items-center gap-2 text-grape w-full font-medium">
+                        <Disclosure.Button className="flex items-center w-full gap-2 font-medium text-grape">
                             <HiOutlineSparkles size={24} />
                             <span className="mr-auto">Bonus</span>
                             {open ? <RiArrowUpSFill size={18} /> : <RiArrowDownSFill size={18} />}
@@ -399,13 +399,7 @@ export function SidebarOnboarding({ onClose, onHide }: Props) {
             </Disclosure>
 
             <p className="text-sm text-gray-100">
-                If you have any issues with connecting accounts, please let us know{' '}
-                <button
-                    onClick={() => BrowserUtil.showIntercom()}
-                    className="text-cyan cursor-pointer hover:underline"
-                >
-                    via live chat
-                </button>
+                If you have any issues with connecting accounts, please let us know.
             </p>
         </>
     )

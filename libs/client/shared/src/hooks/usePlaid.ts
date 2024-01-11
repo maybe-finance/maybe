@@ -69,21 +69,7 @@ export function usePlaid(mode: 'default' | 'oauth' = 'default') {
         },
         // https://plaid.com/docs/link/web/#onexit
         onExit: (error, metadata) => {
-            if (error) {
-                const { error_code, error_type, error_message, display_message } = error
-                BrowserUtil.trackIntercomEvent(`PLAID_LINK_EXIT_ERROR`, {
-                    error_type,
-                    error_code,
-                    error_message,
-                    display_message,
-                    reference: 'https://plaid.com/docs/errors/',
-                })
-            }
-
-            BrowserUtil.trackIntercomEvent('PLAID_EXIT_EVENT', {
-                ...error,
-                ...metadata,
-            })
+            //Nothing
         },
         // https://plaid.com/docs/link/web/#onevent
         onEvent: (event, metadata) => {
@@ -96,9 +82,6 @@ export function usePlaid(mode: 'default' | 'oauth' = 'default') {
                     ...metadata,
                 },
             })
-
-            // Capture all events to Intercom
-            BrowserUtil.trackIntercomEvent(event, metadata)
 
             logger.debug(
                 `Plaid link event: ${event} for session ID ${metadata.link_session_id}`,
