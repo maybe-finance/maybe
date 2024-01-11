@@ -7,7 +7,6 @@ import type {
     User as PrismaUser,
     AuthUser,
 } from '@prisma/client'
-import type { Institution } from 'plaid'
 import type { TimeSeries, TimeSeriesResponseWithDetail, Trend } from './general-types'
 import type { DateTime } from 'luxon'
 
@@ -211,18 +210,6 @@ export type UserMemberCardDetails = {
     imageUrl: string
 }
 
-export type RiskQuestionChoice = {
-    key: string
-    text: string
-    riskScore: number
-}
-
-export type RiskQuestion = {
-    key: string
-    text: string
-    choices: RiskQuestionChoice[]
-}
-
 export type RiskAnswer = {
     questionKey: string
     choiceKey: string
@@ -265,8 +252,4 @@ export type PlaidLinkUpdateMode = 'reconnect' | 'new-accounts'
 // Used for /create/link/token when user is connecting a bank account
 export interface LinkConfig {
     token: string
-}
-
-export type PublicTokenExchange = LinkConfig & {
-    institution: Institution
 }
