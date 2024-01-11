@@ -33,7 +33,7 @@ Sentry.init({
 })
 
 // Providers and components only relevant to a logged-in user
-const WithAuth = function ({ children }: PropsWithChildren) {
+const WithAuth = withAuthenticationRequired(function ({ children }: PropsWithChildren) {
     return (
         <ModalManager>
             <UserAccountContextProvider>
@@ -46,7 +46,7 @@ const WithAuth = function ({ children }: PropsWithChildren) {
             </UserAccountContextProvider>
         </ModalManager>
     )
-}
+})
 
 export default function App({
     Component: Page,
