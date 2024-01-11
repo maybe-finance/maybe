@@ -409,9 +409,6 @@ model User {
 
   isoCurrencyCode String @default("USD") @map("iso_currency_code")
 
-  // Notification preferences
-  convertKitId Int? @map("convert_kit_id")
-
   // Financial preferences and info
   monthlyIncomeUser   Decimal? @map("monthly_income_user") @db.Decimal(19, 4)
   monthlyExpensesUser Decimal? @map("monthly_expenses_user") @db.Decimal(19, 4)

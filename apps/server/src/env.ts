@@ -79,7 +79,6 @@ const envSchema = z.object({
     // Key to Cloudfront pub key
     NX_CDN_SIGNER_PUBKEY_ID: z.string().default('REPLACE_THIS'),
 
-    NX_CONVERTKIT_SECRET: z.string(),
     NX_POSTMARK_FROM_ADDRESS: z.string().default('account@maybe.co'),
     NX_POSTMARK_REPLY_TO_ADDRESS: z.string().default('support@maybe.co'),
     NX_POSTMARK_API_TOKEN: z.string().default('REPLACE_THIS'),

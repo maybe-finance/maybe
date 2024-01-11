@@ -55,7 +55,6 @@ import prisma from './prisma'
 import plaid, { getPlaidWebhookUrl } from './plaid'
 import finicity, { getFinicityTxPushUrl, getFinicityWebhookUrl } from './finicity'
 import stripe from './stripe'
-import convertKit from './convertKit'
 import postmark from './postmark'
 import { managementClient } from './auth0'
 import s3 from './s3'
@@ -315,7 +314,6 @@ export async function createContext(req: Request) {
         prisma,
         plaid,
         stripe,
-        convertKit,
         s3,
         secretsClient,
         managementClient,

@@ -197,24 +197,6 @@ export class ServerStack extends Stack {
                         }
                     )
                 ),
-                NX_CONVERTKIT_KEY: ECSSecret.fromSsmParameter(
-                    StringParameter.fromSecureStringParameterAttributes(
-                        this,
-                        'ConvertKitKeyParam',
-                        {
-                            parameterName: '/providers/NX_CONVERTKIT_KEY',
-                        }
-                    )
-                ),
-                NX_CONVERTKIT_SECRET: ECSSecret.fromSsmParameter(
-                    StringParameter.fromSecureStringParameterAttributes(
-                        this,
-                        'ConvertKitSecretParam',
-                        {
-                            parameterName: '/providers/NX_CONVERTKIT_SECRET',
-                        }
-                    )
-                ),
                 NX_POSTMARK_API_TOKEN: ECSSecret.fromSsmParameter(
                     StringParameter.fromSecureStringParameterAttributes(
                         this,
