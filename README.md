@@ -44,6 +44,14 @@ The biggest focus at the moment is on getting the app functional without some pr
 
 You can view the current [high-priority issues here](https://github.com/maybe-finance/maybe/issues?q=is:issue+is:open+label:%22high+priority%22). Those are the most impactful issues to tackle first.
 
+## Tech stack
+
+-   Next.js
+-   Tailwind
+-   Node.js
+-   Express
+-   Postgres (w/ Timescale)
+
 ## Relevant reading
 
 -   [Learn about how the app is organized as a monorepo](https://github.com/maybe-finance/maybe/wiki/Monorepo-File-Structure-Overview)
