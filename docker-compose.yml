@@ -7,7 +7,7 @@ services:
         profiles: [services]
         image: timescale/timescaledb:latest-pg14
         ports:
-            - 5432:5432
+            - 5433:5432
         environment:
             POSTGRES_USER: maybe
             POSTGRES_PASSWORD: maybe
