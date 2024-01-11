@@ -3,7 +3,6 @@ import type { SharedType } from '@maybe-finance/shared'
 import type { Auth0ContextInterface } from '@auth0/auth0-react'
 import type { AxiosInstance } from 'axios'
 import Axios from 'axios'
-import type { Agreement } from '@prisma/client'
 import * as Sentry from '@sentry/react'
 import { useMemo } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -181,22 +180,6 @@ const UserApi = (
             plan,
         })
 
-        return data
-    },
-
-    async getNewestAgreements(type: 'public' | 'user') {
-        const { data } = await axios.get('/users/agreements/newest', { params: { type } })
-        return data
-    },
-
-    async signAgreements(input: Agreement['id'][]) {
-        const { data } = await axios.post('/users/agreements/sign', { agreementIds: input })
-        return data
-    },
-
-    // Dev, Admin only (see AMA dev menu)
-    async sendAgreementUpdateEmails() {
-        const { data } = await axios.post('/users/agreements/notify-email')
         return data
     },
 
@@ -401,38 +384,6 @@ export function useUserApi() {
             ...options,
         })
 
-    const useSignAgreements = (options?: UseMutationOptions<Agreement['id'][], unknown, any>) =>
-        useMutation(api.signAgreements, {
-            onSuccess: () => {
-                queryClient.invalidateQueries(['users'])
-            },
-            onError: (err) => {
-                Sentry.captureException(err)
-                toast.error(
-                    'Something went wrong while acknowledging agreements.  Please try again.'
-                )
-            },
-            ...options,
-        })
-
-    const useSendAgreementsEmail = (options?: UseMutationOptions<any, unknown, any>) =>
-        useMutation(api.sendAgreementUpdateEmails, {
-            onSuccess: (data) => {
-                toast.success(`Sent ${data.updatedAgreementCount} emails`)
-                queryClient.invalidateQueries(['users'])
-            },
-            onError: (err) => {
-                Sentry.captureException(err)
-                toast.error('Something went wrong while sending agreement update emails.')
-            },
-            ...options,
-        })
-
-    const useNewestAgreements = (
-        type: 'public' | 'user',
-        options?: Omit<UseQueryOptions<SharedType.AgreementWithUrl[]>, 'queryKey' | 'queryFn'>
-    ) => useQuery(['users', 'agreements', 'newest'], () => api.getNewestAgreements(type), options)
-
     const useMemberCardDetails = (
         memberId?: string,
         options?: Omit<UseQueryOptions<SharedType.UserMemberCardDetails>, 'queryKey' | 'queryFn'>
@@ -461,9 +412,6 @@ export function useUserApi() {
         useResendEmailVerification,
         useCreateCheckoutSession,
         useCreateCustomerPortalSession,
-        useSignAgreements,
-        useSendAgreementsEmail,
-        useNewestAgreements,
         useMemberCardDetails,
         useOnboarding,
         useUpdateOnboarding,

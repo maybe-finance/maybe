@@ -8,7 +8,6 @@ import {
     OtherAccounts,
     Profile,
     OnboardingNavbar,
-    Terms,
     Welcome,
     YourMaybe,
     OnboardingBackground,
@@ -29,8 +28,6 @@ function getStepComponent(stepKey?: string): (props: StepProps) => JSX.Element {
             return AddFirstAccount
         case 'accountSelection':
             return OtherAccounts
-        case 'terms':
-            return Terms
         case 'maybe':
             return YourMaybe
         case 'welcome':
