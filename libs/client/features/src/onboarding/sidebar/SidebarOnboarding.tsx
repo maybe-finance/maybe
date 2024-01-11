@@ -399,7 +399,11 @@ export function SidebarOnboarding({ onClose, onHide }: Props) {
             </Disclosure>
 
             <p className="text-sm text-gray-100">
-                If you have any issues with connecting accounts, please let us know.
+                If you have any issues with connecting accounts,{' '}
+                <a href="mailto:hello@maybe.co" className="underline text-cyan">
+                    please let us know
+                </a>
+                .
             </p>
         </>
     )
