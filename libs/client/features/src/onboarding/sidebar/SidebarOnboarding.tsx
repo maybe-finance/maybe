@@ -13,7 +13,6 @@ import {
     RiMore2Fill,
 } from 'react-icons/ri'
 import { HiOutlineSparkles } from 'react-icons/hi'
-import { BrowserUtil } from '@maybe-finance/client/shared'
 import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
 
@@ -399,13 +398,11 @@ export function SidebarOnboarding({ onClose, onHide }: Props) {
             </Disclosure>
 
             <p className="text-sm text-gray-100">
-                If you have any issues with connecting accounts, please let us know{' '}
-                <button
-                    onClick={() => BrowserUtil.showIntercom()}
-                    className="text-cyan cursor-pointer hover:underline"
-                >
-                    via live chat
-                </button>
+                If you have any issues with connecting accounts,{' '}
+                <a className="text-cyan underline" href="mailto:hello@maybe.co">
+                    please let us know
+                </a>
+                .
             </p>
         </>
     )

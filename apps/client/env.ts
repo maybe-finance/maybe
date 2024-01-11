@@ -10,7 +10,6 @@ const env = {
         process.env.NEXT_PUBLIC_LD_CLIENT_SIDE_ID || 'REPLACE_THIS',
     NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
     NEXT_PUBLIC_SENTRY_ENV: process.env.NEXT_PUBLIC_SENTRY_ENV,
-    NEXT_PUBLIC_INTERCOM_APP_ID: process.env.NEXT_PUBLIC_INTERCOM_APP_ID || 'REPLACE_THIS',
 }
 
 export default env

@@ -1,4 +1,4 @@
-import { BrowserUtil, usePlaid } from '@maybe-finance/client/shared'
+import { usePlaid } from '@maybe-finance/client/shared'
 import { Disclosure, Transition } from '@headlessui/react'
 import { RiArrowUpSFill } from 'react-icons/ri'
 import { Button, LoadingSpinner } from '@maybe-finance/design-system'
@@ -56,14 +56,9 @@ export default function OAuth() {
                                                     </li>
                                                     <li>
                                                         Still not working?{' '}
-                                                        <button
-                                                            onClick={() =>
-                                                                BrowserUtil.showIntercom()
-                                                            }
-                                                            className="underline text-cyan"
-                                                        >
+                                                        <a className="underline text-cyan" href="mailto:hello@maybe.co">
                                                             Let us know!
-                                                        </button>
+                                                        </a>
                                                     </li>
                                                 </ul>
                                             </Disclosure.Panel>

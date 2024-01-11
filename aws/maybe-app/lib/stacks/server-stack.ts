@@ -179,15 +179,6 @@ export class ServerStack extends Stack {
                         }
                     )
                 ),
-                NX_INTERCOM_SECRET: ECSSecret.fromSsmParameter(
-                    StringParameter.fromSecureStringParameterAttributes(
-                        this,
-                        'IntercomSecretParam',
-                        {
-                            parameterName: '/providers/NX_INTERCOM_SECRET',
-                        }
-                    )
-                ),
                 NX_STRIPE_SECRET_KEY: ECSSecret.fromSsmParameter(
                     StringParameter.fromSecureStringParameterAttributes(
                         this,

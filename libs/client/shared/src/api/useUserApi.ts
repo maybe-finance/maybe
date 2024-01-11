@@ -38,11 +38,6 @@ const UserApi = (
         return data
     },
 
-    async getIntercomMetadata() {
-        const { data } = await axios.get<SharedType.UserIntercomMetadata>('/users/intercom')
-        return data
-    },
-
     async update(userData: SharedType.UpdateUser) {
         const { data } = await axios.put<SharedType.User>('/users', userData)
         return data
@@ -254,22 +249,6 @@ export function useUserApi() {
             staleTime: staleTimes.insights,
         })
 
-    const useIntercomMetadata = (
-        options?: Omit<
-            UseQueryOptions<
-                SharedType.UserIntercomMetadata,
-                unknown,
-                SharedType.UserIntercomMetadata,
-                any[]
-            >,
-            'queryKey' | 'queryFn'
-        >
-    ) =>
-        useQuery(['users', 'intercom-metadata'], api.getIntercomMetadata, {
-            refetchOnWindowFocus: false,
-            ...options,
-        })
-
     const useProfile = (
         options?: Omit<
             UseQueryOptions<SharedType.User, unknown, SharedType.User, any[]>,
@@ -471,7 +450,6 @@ export function useUserApi() {
         useNetWorthSeries,
         useInsights,
         useCurrentNetWorth,
-        useIntercomMetadata,
         useProfile,
         useUpdateProfile,
         useAuth0Profile,

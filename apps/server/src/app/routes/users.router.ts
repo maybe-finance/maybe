@@ -145,19 +145,6 @@ router.get(
     })
 )
 
-router.get(
-    '/intercom',
-    endpoint.create({
-        resolve: async ({ ctx }) => {
-            if (!ctx.user || !ctx.user.id) {
-                throw new Error('User not found')
-            }
-
-            return ctx.userService.getIntercomMetadata(ctx.user.id, env.NX_INTERCOM_SECRET)
-        },
-    })
-)
-
 router.put(
     '/',
     endpoint.create({
