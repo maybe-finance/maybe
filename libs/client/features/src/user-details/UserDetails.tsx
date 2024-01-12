@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { useAuth0 } from '@auth0/auth0-react'
+import { signOut } from 'next-auth/react'
 import classNames from 'classnames'
 import { AiOutlineLoading3Quarters as LoadingIcon } from 'react-icons/ai'
 import {
@@ -30,7 +30,6 @@ import { DeleteUserButton } from './DeleteUserButton'
 import { DateTime } from 'luxon'
 
 export function UserDetails() {
-    const { logout } = useAuth0()
     const { useProfile, useAuth0Profile, useUpdateProfile } = useUserApi()
 
     const auth0ProfileQuery = useAuth0Profile()
@@ -101,9 +100,7 @@ export function UserDetails() {
                     Deleting your account is a permanent action. If you delete your account, you
                     will no longer be able to sign and all data will be deleted.
                 </p>
-                <DeleteUserButton
-                    onDelete={() => logout({ logoutParams: { returnTo: window.location.origin } })}
-                />
+                <DeleteUserButton onDelete={() => signOut()} />
             </section>
         </div>
     )

@@ -2,16 +2,15 @@ import Link from 'next/link'
 import { useUserApi } from '@maybe-finance/client/shared'
 import { Button } from '@maybe-finance/design-system'
 import toast from 'react-hot-toast'
-import { useAuth0 } from '@auth0/auth0-react'
+import { signOut } from 'next-auth/react'
 
 export function CountryWaitlist({ country }: { country?: string }) {
-    const { logout } = useAuth0()
     const { useDelete } = useUserApi()
 
     const deleteUser = useDelete({
         onSuccess() {
             toast.success(`Account deleted`)
-            setTimeout(() => logout({ logoutParams: { returnTo: window.location.origin } }), 500)
+            setTimeout(() => signOut(), 500)
         },
         onError() {
             toast.error(`Error deleting account`)

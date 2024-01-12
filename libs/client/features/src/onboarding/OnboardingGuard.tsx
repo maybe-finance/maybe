@@ -3,7 +3,7 @@ import { MainContentOverlay, useUserApi } from '@maybe-finance/client/shared'
 import { LoadingSpinner } from '@maybe-finance/design-system'
 import { useRouter } from 'next/router'
 import type { SharedType } from '@maybe-finance/shared'
-import { useAuth0 } from '@auth0/auth0-react'
+import { signOut } from 'next-auth/react'
 
 function shouldRedirect(pathname: string, data?: SharedType.OnboardingResponse) {
     if (!data) return false
@@ -14,7 +14,6 @@ function shouldRedirect(pathname: string, data?: SharedType.OnboardingResponse) 
 
 export function OnboardingGuard({ children }: PropsWithChildren) {
     const router = useRouter()
-    const { logout } = useAuth0()
     const { useOnboarding } = useUserApi()
     const onboarding = useOnboarding('main', {
         onSuccess(data) {
@@ -29,7 +28,7 @@ export function OnboardingGuard({ children }: PropsWithChildren) {
             <MainContentOverlay
                 title="Unable to load onboarding"
                 actionText="Logout"
-                onAction={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+                onAction={() => signOut()}
             >
                 <p>Contact us if this issue persists.</p>
             </MainContentOverlay>

@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth'
+import NextAuth, { type SessionStrategy } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { z } from 'zod'
 import type { SharedType } from '@maybe-finance/shared'
@@ -22,6 +22,10 @@ export const authOptions = {
     secret: process.env.AUTH_SECRET || 'CHANGE_ME',
     pages: {
         signIn: '/login',
+    },
+    session: {
+        strategy: 'jwt' as SessionStrategy,
+        maxAge: 14 * 24 * 60 * 60, // 30 Days
     },
     providers: [
         CredentialsProvider({
