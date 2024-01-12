@@ -295,23 +295,3 @@ export interface LinkConfig {
 export type PublicTokenExchange = LinkConfig & {
     institution: Institution
 }
-
-/**
- * ================================================================
- * ======                 ConvertKitApi                      ======
- * ================================================================
- */
-
-export type ConvertKitSubscriber = {
-    id: number
-    first_name: string
-    email_address: string
-    state: 'cancelled' | 'active'
-    created_at: string
-}
-
-export type ConvertKitSubscription = {
-    id: number
-    state: 'cancelled' | 'active'
-    subscriber: Pick<ConvertKitSubscriber, 'id'>
-}

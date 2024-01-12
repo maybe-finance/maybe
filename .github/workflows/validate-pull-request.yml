@@ -75,7 +75,6 @@ jobs:
                   NX_STRIPE_SECRET_KEY=${{ secrets.NX_STRIPE_SECRET_KEY }}
                   NX_STRIPE_WEBHOOK_SECRET=${{ secrets.NX_STRIPE_WEBHOOK_SECRET }}
                   NX_PLAID_WEBHOOK_URL=none
-                  NX_CONVERTKIT_SECRET=none
                   NX_DATABASE_URL=postgresql://maybe:maybe@localhost:5432/maybe_local?connection_limit=32&pool_timeout=20
                   NX_REDIS_URL=redis://localhost:6379
                   EOF
