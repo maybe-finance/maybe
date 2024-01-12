@@ -43,7 +43,6 @@ import {
     securitiesRouter,
     plansRouter,
     toolsRouter,
-    notificationsRouter,
     publicRouter,
     e2eRouter,
 } from './routes'
@@ -169,7 +168,6 @@ app.use('/v1/transactions', transactionsRouter)
 app.use('/v1/holdings', holdingsRouter)
 app.use('/v1/securities', securitiesRouter)
 app.use('/v1/plans', plansRouter)
-app.use('/v1/notifications', notificationsRouter)
 
 // Sentry must be the *first* handler
 app.use(identifySentryUser)

@@ -410,9 +410,6 @@ model User {
 
   isoCurrencyCode String @default("USD") @map("iso_currency_code")
 
-  // Notification preferences
-  convertKitId Int? @map("convert_kit_id")
-
   // Financial preferences and info
   monthlyIncomeUser   Decimal? @map("monthly_income_user") @db.Decimal(19, 4)
   monthlyExpensesUser Decimal? @map("monthly_expenses_user") @db.Decimal(19, 4)
@@ -452,7 +449,6 @@ model User {
   accountConnections AccountConnection[]
   accounts           Account[]
   plans              Plan[]
-  signedAgreements   SignedAgreement[]
 
   @@map("user")
 }
@@ -640,36 +636,4 @@ model AuditEvent {
   userId    Int?           @map("user_id") // who made the change - if NULL, was an automated system change
 
   @@map("audit_event")
-}
-
-enum AgreementType {
-  fee
-  form_adv_2a
-  form_adv_2b
-  form_crs
-  privacy_policy
-}
-
-model Agreement {
-  id       Int               @id @default(autoincrement())
-  type     AgreementType
-  revision DateTime          @db.Date
-  src      String            @unique
-  active   Boolean           @default(false) // if true and is latest version, Client will serve to users
-  signers  SignedAgreement[]
-
-  @@unique([type, revision, active])
-  @@map("agreement")
-}
-
-model SignedAgreement {
-  signedAt    DateTime  @default(now()) @map("signed_at") @db.Timestamptz(6)
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      Int       @map("user_id")
-  agreement   Agreement @relation(fields: [agreementId], references: [id], onDelete: Cascade)
-  agreementId Int       @map("agreement_id")
-  src         String? // Not all agreements require S3 audit record
-
-  @@id([userId, agreementId])
-  @@map("signed_agreement")
 }

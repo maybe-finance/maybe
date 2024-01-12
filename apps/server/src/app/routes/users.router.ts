@@ -1,14 +1,11 @@
 import { Router } from 'express'
 import axios from 'axios'
 import type { UnlinkAccountsParamsProvider } from 'auth0'
-import { keyBy, mapValues, uniqBy } from 'lodash'
 import { subject } from '@casl/ability'
 import { z } from 'zod'
 import { DateUtil, type SharedType } from '@maybe-finance/shared'
 import endpoint from '../lib/endpoint'
 import env from '../../env'
-import crypto from 'crypto'
-import { DateTime } from 'luxon'
 import {
     type OnboardingState,
     type RegisteredStep,
@@ -458,152 +455,6 @@ router.post(
             if (!session.url) throw new Error('Failed to create customer portal session with URL.')
 
             return { url: session.url }
-        },
-    })
-)
-
-/**
- * Fetches the latest public version of each agreement
- */
-router.get(
-    '/agreements/newest',
-    endpoint.create({
-        input: z.object({ type: z.enum(['public', 'user']) }),
-        resolve: async ({ ctx, input }) => {
-            const agreements = await (input.type === 'user'
-                ? ctx.userService.getSignedAgreements(ctx.user!.id)
-                : ctx.userService.getNewestAgreements())
-
-            return agreements.map((agreement) => ({
-                ...agreement,
-                url: `${env.NX_CDN_URL}/${agreement.src}`,
-            }))
-        },
-    })
-)
-
-router.post(
-    '/agreements/sign',
-    endpoint.create({
-        input: z.object({ agreementIds: z.number().array().length(5) }),
-        resolve: async ({ ctx, input }) => {
-            return ctx.userService.signAgreements(ctx.user!.id, input.agreementIds, ctx.s3)
-        },
-    })
-)
-
-/**
- * Idempotent, admin-only route that should be run each time we update a legal agreement
- *
- * - Sends email notifications to users when agreements are updated
- * - Records acknowledgement in S3
- * - Bumps all successful users to latest agreement set in DB
- */
-router.post(
-    '/agreements/notify-email',
-    endpoint.create({
-        resolve: async ({ ctx }) => {
-            ctx.ability.throwUnlessCan('manage', 'User')
-
-            const outdatedAgreements = await ctx.prisma.$queryRaw<
-                {
-                    email: string
-                    first_name: string
-                    user_id: number
-                    current_agreement_id: number
-                    newest_agreement_id: number
-                }[]
-            >`
-                WITH signed_agreements AS (
-                    SELECT DISTINCT ON (sa.user_id, a.type)
-                        u.email,
-                        u.first_name,
-                        sa.user_id,
-                        sa.agreement_id AS current_agreement_id,
-                        na.id AS newest_agreement_id
-                    FROM signed_agreement sa
-                        LEFT JOIN "user" u ON u.id = sa.user_id
-                        LEFT JOIN agreement a ON a.id = sa.agreement_id
-                        LEFT JOIN LATERAL (
-                            SELECT DISTINCT ON (a.type)
-                                a.id, a.type
-                            FROM agreement a
-                            WHERE a.active
-                            ORDER BY a.type, a.revision DESC
-                        ) na ON na.type = a.type
-                    ORDER BY sa.user_id, a.type, a.revision DESC
-                )
-                SELECT *
-                FROM signed_agreements
-                WHERE current_agreement_id <> newest_agreement_id;
-            `
-
-            if (!outdatedAgreements.length) {
-                ctx.logger.info('All users have signed latest agreements, skipping email')
-                return {
-                    updatedAgreementCount: 0,
-                }
-            }
-
-            ctx.logger.info(`Updating ${outdatedAgreements.length} outdated agreements`)
-
-            const newestAgreements = (await ctx.userService.getNewestAgreements()).map((a) => ({
-                ...a,
-                url: `${env.NX_CDN_URL}/${a.src}`,
-            }))
-
-            // Only send 1 email per user that will cover all 4 agreements
-            const uniqueAgreements = uniqBy(outdatedAgreements, 'user_id')
-
-            // Send users a templated update email notifying them of document change
-            const batchResponse = await ctx.emailService.sendTemplate(
-                uniqueAgreements.map((agreement) => ({
-                    to: agreement.email,
-                    template: {
-                        alias: 'agreements-update',
-                        model: {
-                            name: agreement.first_name ?? '',
-                            urls: mapValues(keyBy(newestAgreements, 'type'), (a) => a.url),
-                        },
-                    },
-                }))
-            )
-
-            // Save audit records of email sends
-            ctx.logger.info(`Agreement update emails sent`, batchResponse)
-
-            const Body = Buffer.from(JSON.stringify(batchResponse))
-            const Key = `private/agreements/email-receipts/${DateTime.now().toISO()}-agreements-update-email-receipt.txt`
-            await ctx.s3.upload({
-                bucketKey: 'private',
-                Key,
-                Body,
-                ContentMD5: crypto.createHash('md5').update(Body).digest('base64'),
-            })
-
-            ctx.logger.info(`Agreement email receipt uploaded to S3 key=${Key}`)
-
-            // Find all successful emails and create new agreement signatures for each
-            const successfulUpdateEmails = batchResponse
-                .filter((result) => result.ErrorCode === 0 && result.To)
-                .map((v) => v.To!)
-
-            const agreementsToAcknowledge = outdatedAgreements.filter(
-                (oa) => successfulUpdateEmails.find((email) => email === oa.email) != null
-            )
-
-            // Our signature record pointer in DB
-            await ctx.prisma.signedAgreement.createMany({
-                data: agreementsToAcknowledge.map((oa) => ({
-                    userId: oa.user_id,
-                    agreementId: oa.newest_agreement_id,
-                    src: Key,
-                })),
-            })
-
-            return {
-                updatedAgreementCount: successfulUpdateEmails.length,
-            }
         },
     })
 )

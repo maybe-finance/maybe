@@ -44,6 +44,10 @@ The biggest focus at the moment is on getting the app functional without some pr
 
 You can view the current [high-priority issues here](https://github.com/maybe-finance/maybe/issues?q=is:issue+is:open+label:%22high+priority%22). Those are the most impactful issues to tackle first.
 
+## External data
+
+To pull market data in (for investments), you'll need a Polygon.io API key. You can get one for free [here](https://polygon.io/) and then add it to your `.env` file (`NX_POLYGON_API_KEY`).
+
 ## Tech stack
 
 -   Next.js
@@ -55,7 +59,7 @@ You can view the current [high-priority issues here](https://github.com/maybe-fi
 ## Relevant reading
 
 -   [Learn about how the app is organized as a monorepo](https://github.com/maybe-finance/maybe/wiki/Monorepo-File-Structure-Overview)
--   [Reference past Auto0 implementation as we work to replace it](https://github.com/maybe-finance/maybe/wiki/Auth0)
+-   [Reference past Auth0 implementation as we work to replace it](https://github.com/maybe-finance/maybe/wiki/Auth0)
 -   [Data model assumptions and calculations](https://github.com/maybe-finance/maybe/wiki/Data-model-assumptions-and-calculations)
 -   [Handling money](https://github.com/maybe-finance/maybe/wiki/Handling-Money)
 -   [REST API](https://github.com/maybe-finance/maybe/wiki/REST-API)

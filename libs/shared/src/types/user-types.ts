@@ -3,7 +3,6 @@ import type { Identity, User as Auth0UserServer } from 'auth0'
 import type {
     AccountCategory,
     AccountClassification,
-    Agreement,
     Holding,
     Prisma,
     Security,
@@ -263,8 +262,6 @@ export type RiskAnswer = {
     choiceKey: string
 }
 
-export type AgreementWithUrl = Agreement & { url: string }
-
 /**
  * main - the fullscreen "takeover" every user must go through
  * sidebar - the post-onboarding sidebar for connecting accounts
@@ -306,24 +303,4 @@ export interface LinkConfig {
 
 export type PublicTokenExchange = LinkConfig & {
     institution: Institution
-}
-
-/**
- * ================================================================
- * ======                 ConvertKitApi                      ======
- * ================================================================
- */
-
-export type ConvertKitSubscriber = {
-    id: number
-    first_name: string
-    email_address: string
-    state: 'cancelled' | 'active'
-    created_at: string
-}
-
-export type ConvertKitSubscription = {
-    id: number
-    state: 'cancelled' | 'active'
-    subscriber: Pick<ConvertKitSubscriber, 'id'>
 }
