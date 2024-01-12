@@ -44,6 +44,10 @@ The biggest focus at the moment is on getting the app functional without some pr
 
 You can view the current [high-priority issues here](https://github.com/maybe-finance/maybe/issues?q=is:issue+is:open+label:%22high+priority%22). Those are the most impactful issues to tackle first.
 
+## External data
+
+To pull market data in (for investments), you'll need a Polygon.io API key. You can get one for free [here](https://polygon.io/) and then add it to your `.env` file (`NX_POLYGON_API_KEY`).
+
 ## Tech stack
 
 -   Next.js
