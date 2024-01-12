@@ -565,7 +565,7 @@ model PlanMilestone {
   @@map("plan_milestone")
 }
 
-// Next Auth Models
+// NextAuth Models
 model AuthAccount {
   id                String  @id @default(cuid())
   userId            String  @map("user_id")

@@ -1,7 +1,6 @@
 import NextAuth, { type SessionStrategy } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { z } from 'zod'
-import type { SharedType } from '@maybe-finance/shared'
 import { PrismaClient } from '@prisma/client'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import axios from 'axios'
@@ -36,19 +35,20 @@ export const authOptions = {
                 password: { label: 'Password', type: 'password' },
             },
             async authorize(credentials) {
-                console.log('inside the authorize method')
                 const parsedCredentials = z
                     .object({
+                        name: z.string().optional(),
                         email: z.string().email(),
                         password: z.string().min(6),
-                        provider: z.string().optional(),
                     })
                     .safeParse(credentials)
 
+                console.log("here's the credentials", parsedCredentials)
+
                 if (parsedCredentials.success) {
-                    console.log("Credentials are valid, let's authorize")
-                    const { email, password } = parsedCredentials.data
-                    console.log('Here are the params', email, password)
+                    const { name, email, password } = parsedCredentials.data
+
+                    console.log('Hitting endpoint to get user', email)
                     const { data } = await axios.get(`/auth-users`, {
                         params: { email: email },
                         headers: { 'Content-Type': 'application/json' },
@@ -56,19 +56,18 @@ export const authOptions = {
 
                     const user = data.data['json']
 
-                    console.log('This is User', user)
+                    console.log('here is the user', user)
 
-                    if (!user.id) {
-                        console.log('User does not exist, creating new user')
+                    if (!user) {
+                        console.log('User does not exist, creating user')
                         const hashedPassword = await bcrypt.hash(password, 10)
-                        const { data: newUser } = await axios.post<SharedType.AuthUser>(
-                            '/auth-users',
-                            {
-                                email,
-                                password: hashedPassword,
-                            }
-                        )
-                        console.log('Created new user', newUser)
+                        console.log('Hitting endpoint to create user', name, email, hashedPassword)
+                        const { data } = await axios.post('/auth-users', {
+                            name,
+                            email,
+                            password: hashedPassword,
+                        })
+                        const newUser = data.data['json']
                         if (newUser) return newUser
                         throw new Error('Could not create user')
                     }
@@ -77,7 +76,6 @@ export const authOptions = {
                     if (passwordsMatch) return user
                 }
 
-                console.log('Invalid credentials')
                 return null
             },
         }),

@@ -22,7 +22,7 @@ export class AuthUserService implements IAuthUserService {
         })
     }
 
-    async create(data: Prisma.AuthUserCreateInput): Promise<AuthUser> {
+    async create(data: Prisma.AuthUserCreateInput) {
         const user = await this.prisma.authUser.create({ data: { ...data } })
         return user
     }

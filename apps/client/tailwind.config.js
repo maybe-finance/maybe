@@ -32,6 +32,10 @@ module.exports = merge(designSystemConfig, {
                 wave: '3 wave 0.6s ease-in-out',
                 float: 'float 4s infinite linear',
             },
+            backgroundImage: {
+                'login-background':
+                    'radial-gradient(100% 100% at clamp(20%, calc(30% + var(--mx) * 0.05), 40%) clamp(50%, calc(50% + var(--my) * 0.05), 60%), #4361EE33 0%, #16161Af4 120%)',
+            },
             typography: () => {
                 const { white, gray, cyan } = designSystemConfig.theme.colors
                 return {

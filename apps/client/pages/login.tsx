@@ -1,12 +1,11 @@
-import type { ReactElement } from 'react'
-import { useState } from 'react'
+import { useState, type ReactElement } from 'react'
 import { FullPageLayout } from '@maybe-finance/client/features'
 import { Input, InputPassword, Button } from '@maybe-finance/design-system'
-import { AiOutlineLoading3Quarters as LoadingIcon } from 'react-icons/ai'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import Script from 'next/script'
+import Link from 'next/link'
 
 export default function LoginPage() {
     const [email, setEmail] = useState('')
@@ -39,43 +38,59 @@ export default function LoginPage() {
                 strategy="lazyOnload"
             />
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <img
-                    className="mb-8"
-                    src="/assets/maybe.svg"
-                    alt="Maybe Finance Logo"
-                    height={140}
-                    width={140}
-                />
-                <form className="space-y-4" onSubmit={onSubmit}>
-                    <Input
-                        type="text"
-                        label="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.currentTarget.value)}
-                    />
+                <div className="p-px w-96 bg-white bg-opacity-10 card-light rounded-3xl radial-gradient-background">
+                    <div className="bg-black bg-opacity-75 p-8 rounded-3xl w-full h-full items-center flex flex-col radial-gradient-background-dark">
+                        <img
+                            className="mb-8"
+                            src="/assets/maybe.svg"
+                            alt="Maybe Finance Logo"
+                            height={140}
+                            width={140}
+                        />
+                        <form className="space-y-4 w-full px-4" onSubmit={onSubmit}>
+                            <Input
+                                type="text"
+                                label="Email"
+                                value={email}
+                                onChange={(e) => setEmail(e.currentTarget.value)}
+                            />
 
-                    <InputPassword
-                        autoComplete="password"
-                        label="Password"
-                        value={password}
-                        showPasswordRequirements={!isValid}
-                        onValidityChange={(checks) => {
-                            const passwordValid = checks.filter((c) => !c.isValid).length === 0
-                            setIsValid(passwordValid)
-                        }}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            setPassword(e.target.value)
-                        }
-                    />
+                            <InputPassword
+                                autoComplete="password"
+                                label="Password"
+                                value={password}
+                                showPasswordRequirements={!isValid}
+                                onValidityChange={(checks) => {
+                                    const passwordValid =
+                                        checks.filter((c) => !c.isValid).length === 0
+                                    setIsValid(passwordValid)
+                                }}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                    setPassword(e.target.value)
+                                }
+                            />
 
-                    <Button
-                        type="submit"
-                        disabled={!isValid}
-                        variant={isValid ? 'primary' : 'secondary'}
-                    >
-                        Log in
-                    </Button>
-                </form>
+                            <Button
+                                type="submit"
+                                disabled={!isValid}
+                                variant={isValid ? 'primary' : 'secondary'}
+                            >
+                                Log in
+                            </Button>
+                            <div className="text-sm text-gray-50 pt-2">
+                                <div>
+                                    Don&apos;t have an account?{' '}
+                                    <Link
+                                        className="hover:text-cyan-400 underline font-medium"
+                                        href="/register"
+                                    >
+                                        Sign up
+                                    </Link>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </>
     )
