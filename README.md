@@ -8,9 +8,19 @@
 
 There's a LOT of work to do to get this functioning, but it should be feasible.
 
+## Backstory
+
+We spent the better part of 2021/2022 building a personal finance + wealth management app called Maybe. Very full-featured, including an "Ask an Advisor" feature which connected users with an actual CFP/CFA to help them with their finances (all included in your subscription).
+
+The business end of things didn't work out and so we shut things down mid-2023.
+
+We spend the better part of $1,000,000 building the app (employees + contractors, data providers/services, infrastructure, etc).
+
+We're now reviving the product as a fully open-source project. The goal is to let you run the app yourself, for free, and use it to manage your own finances and eventually offer a hosted version of the app for a small monthly fee.
+
 ## Features
 
-As a personal finance + wealth management app, Maybe has a lot of features. Here's a quick overview of some of the main ones...
+As a personal finance + wealth management app, Maybe has a lot of features. Here's a brief overview of some of the main ones...
 
 -   Net worth tracking
 -   Financial account syncing
