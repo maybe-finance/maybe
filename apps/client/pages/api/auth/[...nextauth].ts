@@ -24,7 +24,7 @@ export const authOptions = {
     },
     session: {
         strategy: 'jwt' as SessionStrategy,
-        maxAge: 14 * 24 * 60 * 60, // 30 Days
+        maxAge: 7 * 24 * 60 * 60, // 7 Days
     },
     providers: [
         CredentialsProvider({
@@ -43,25 +43,19 @@ export const authOptions = {
                     })
                     .safeParse(credentials)
 
-                console.log("here's the credentials", parsedCredentials)
-
                 if (parsedCredentials.success) {
                     const { name, email, password } = parsedCredentials.data
 
-                    console.log('Hitting endpoint to get user', email)
                     const { data } = await axios.get(`/auth-users`, {
                         params: { email: email },
                         headers: { 'Content-Type': 'application/json' },
                     })
 
+                    // TODO: use superjson to parse this more cleanly
                     const user = data.data['json']
 
-                    console.log('here is the user', user)
-
                     if (!user) {
-                        console.log('User does not exist, creating user')
                         const hashedPassword = await bcrypt.hash(password, 10)
-                        console.log('Hitting endpoint to create user', name, email, hashedPassword)
                         const { data } = await axios.post('/auth-users', {
                             name,
                             email,
