@@ -59,7 +59,7 @@ To pull market data in (for investments), you'll need a Polygon.io API key. You 
 ## Relevant reading
 
 -   [Learn about how the app is organized as a monorepo](https://github.com/maybe-finance/maybe/wiki/Monorepo-File-Structure-Overview)
--   [Reference past Auto0 implementation as we work to replace it](https://github.com/maybe-finance/maybe/wiki/Auth0)
+-   [Reference past Auth0 implementation as we work to replace it](https://github.com/maybe-finance/maybe/wiki/Auth0)
 -   [Data model assumptions and calculations](https://github.com/maybe-finance/maybe/wiki/Data-model-assumptions-and-calculations)
 -   [Handling money](https://github.com/maybe-finance/maybe/wiki/Handling-Money)
 -   [REST API](https://github.com/maybe-finance/maybe/wiki/REST-API)
