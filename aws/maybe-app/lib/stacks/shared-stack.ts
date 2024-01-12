@@ -113,7 +113,7 @@ export class SharedStack extends Stack {
             removalPolicy: RemovalPolicy.RETAIN,
         })
 
-        // WORM compliant bucket to store CDN assets such as client agreements, AMA uploads
+        // WORM compliant bucket to store CDN assets such as AMA uploads
         const privateBucket = new Bucket(this, 'Assets', {
             versioned: true,
             removalPolicy: RemovalPolicy.RETAIN,

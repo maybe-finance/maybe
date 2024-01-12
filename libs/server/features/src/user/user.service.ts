@@ -1,16 +1,13 @@
 import type {
     AccountCategory,
     AccountType,
-    Agreement,
     PrismaClient,
-    SignedAgreement,
     User,
 } from '@prisma/client'
 import type { Logger } from 'winston'
 import {
     AuthUtil,
     type PurgeUserQueue,
-    type S3Service,
     type SyncUserQueue,
 } from '@maybe-finance/server/shared'
 import type { ManagementClient, UnlinkAccountsParamsProvider } from 'auth0'
@@ -18,7 +15,6 @@ import type Stripe from 'stripe'
 import type { IBalanceSyncStrategyFactory } from '../account-balance'
 import type { IAccountQueryService } from '../account'
 import type { SharedType } from '@maybe-finance/shared'
-import { CopyObjectCommand, MetadataDirective } from '@aws-sdk/client-s3'
 import { DateTime } from 'luxon'
 import { DbUtil } from '@maybe-finance/server/shared'
 import { DateUtil } from '@maybe-finance/shared'
@@ -34,7 +30,6 @@ export type MainOnboardingUser = Pick<
     onboarding: OnboardingState['main']
     accountConnections: { accounts: { id: number }[] }[]
     accounts: { id: number }[]
-    signedAgreements: (SignedAgreement & { agreement: Agreement })[]
 }
 
 export type SidebarOnboardingUser = {
@@ -278,83 +273,6 @@ export class UserService implements IUserService {
         }
     }
 
-    async getSignedAgreements(userId: User['id']) {
-        return this.prisma.agreement.findMany({
-            distinct: 'type',
-            where: { signers: { some: { userId } } },
-            orderBy: { revision: 'desc' },
-        })
-    }
-
-    async getNewestAgreements() {
-        const agreements = await this.prisma.agreement.findMany({
-            distinct: 'type',
-            where: { active: true },
-            orderBy: { revision: 'desc' },
-        })
-
-        if (agreements.length < 5) throw new Error('Failed to fetch all required agreements')
-
-        return agreements
-    }
-
-    // Should run serially to ensure audit record is saved prior to updating DB
-    async signAgreements(userId: User['id'], agreementIds: Agreement['id'][], s3: S3Service) {
-        // Agreement versions are stored over public CDN and copied (for audit) to an object-locked private bucket
-        const fromBucket = s3.buckets['public']
-        const toBucket = s3.buckets['private']
-
-        const agreements = await this.prisma.agreement.findMany({
-            where: { id: { in: agreementIds } },
-        })
-
-        const feeAgreement = agreements.find((a) => a.type === 'fee')
-        if (!feeAgreement) throw new Error('Fee agreement must be present for signing')
-
-        const Key = `private/agreements/signed/uid-${userId}/${feeAgreement.src.split('/').at(-1)}`
-
-        // Store the fee agreement in S3 for audit
-        await s3.cli.send(
-            new CopyObjectCommand({
-                Bucket: toBucket,
-                Key,
-                CopySource: `/${fromBucket}/${feeAgreement.src}`,
-                Metadata: {
-                    // Correlated database record id
-                    'agreement-id': feeAgreement.id.toString(),
-                    'agreement-revision': DateUtil.dateToStr(feeAgreement.revision),
-                    'user-id': userId.toString(),
-                },
-                MetadataDirective: MetadataDirective.REPLACE,
-            })
-        )
-
-        this.logger.info(
-            `Successfully uploaded S3 audit record for fee agreement user=${userId} revision=${DateUtil.dateToStr(
-                feeAgreement.revision
-            )}`
-        )
-
-        // Make idempotent for easier testing
-        const signatures = await Promise.all(
-            Object.entries(agreements).map(([agreementType, agreement]) =>
-                this.prisma.signedAgreement.upsert({
-                    where: { userId_agreementId: { userId, agreementId: agreement.id } },
-                    create: {
-                        src: agreementType === 'fee' ? Key : undefined,
-                        userId,
-                        agreementId: agreement.id,
-                    },
-                    update: {},
-                })
-            )
-        )
-
-        this.logger.info(`Successfully signed agreements user=${userId}`)
-
-        return signatures
-    }
-
     async getMemberCard(memberId: string, clientUrl: string) {
         const {
             name,
@@ -415,7 +333,6 @@ export class UserService implements IUserService {
                 accountConnections: {
                     select: { accounts: { select: { id: true } } },
                 },
-                signedAgreements: { include: { agreement: true } },
             },
         })
 
@@ -478,16 +395,6 @@ export class UserService implements IUserService {
             .setTitle((_) => 'What other accounts do you have?')
             .addToGroup('setup')
             .completeIf(markedComplete)
-
-        onboarding
-            .addStep('terms')
-            .setTitle((_) => 'Finally, some agreements')
-            .addToGroup('setup')
-            .completeIf((user) => {
-                // All 5 agreements should be signed and Fee agreement should have S3 audit record
-                const feeAgreement = user.signedAgreements.find((sa) => sa.agreement.type === 'fee')
-                return user.signedAgreements.length >= 5 && feeAgreement?.agreement?.src != null
-            })
 
         onboarding
             .addStep('maybe')
