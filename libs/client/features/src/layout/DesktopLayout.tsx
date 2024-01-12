@@ -19,13 +19,11 @@ import {
     RiMore2Fill,
     RiPieChart2Line,
     RiFlagLine,
-    RiChatPollLine,
     RiArrowRightSLine,
 } from 'react-icons/ri'
 import { Button, Tooltip } from '@maybe-finance/design-system'
 import { useAuth0 } from '@auth0/auth0-react'
 import { MenuPopover } from './MenuPopover'
-import { UpgradePrompt } from '../user-billing'
 import { SidebarOnboarding } from '../onboarding'
 
 export interface DesktopLayoutProps {

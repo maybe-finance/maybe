@@ -1,4 +1,4 @@
-import type { PropsWithChildren, ReactElement } from 'react'
+import { useEffect, type PropsWithChildren, type ReactElement } from 'react'
 import type { AppProps } from 'next/app'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Analytics } from '@vercel/analytics/react'
@@ -16,10 +16,11 @@ import * as Sentry from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
 import env from '../env'
 import '../styles.css'
-import { withAuthenticationRequired } from '@auth0/auth0-react'
+import { SessionProvider, useSession } from 'next-auth/react'
 import ModalManager from '../components/ModalManager'
 import Meta from '../components/Meta'
 import APM from '../components/APM'
+import { useRouter } from 'next/router'
 
 Sentry.init({
     dsn: env.NEXT_PUBLIC_SENTRY_DSN,
@@ -33,20 +34,32 @@ Sentry.init({
 })
 
 // Providers and components only relevant to a logged-in user
-const WithAuth = withAuthenticationRequired(function ({ children }: PropsWithChildren) {
-    return (
-        <ModalManager>
-            <UserAccountContextProvider>
-                <AccountContextProvider>
-                    {children}
+const WithAuth = function ({ children }: PropsWithChildren) {
+    const { data: session } = useSession()
+    const router = useRouter()
 
-                    {/* Add, edit, delete connections and manual accounts */}
-                    <AccountsManager />
-                </AccountContextProvider>
-            </UserAccountContextProvider>
-        </ModalManager>
-    )
-})
+    useEffect(() => {
+        if (!session) {
+            router.push('/login')
+        }
+    }, [session, router])
+
+    if (session) {
+        return (
+            <ModalManager>
+                <UserAccountContextProvider>
+                    <AccountContextProvider>
+                        {children}
+
+                        {/* Add, edit, delete connections and manual accounts */}
+                        <AccountsManager />
+                    </AccountContextProvider>
+                </UserAccountContextProvider>
+            </ModalManager>
+        )
+    }
+    return null
+}
 
 export default function App({
     Component: Page,
@@ -72,16 +85,18 @@ export default function App({
                 <Analytics />
                 <QueryProvider>
                     <AuthProvider>
-                        <AxiosProvider>
-                            <>
-                                <APM />
-                                {Page.isPublic === true ? (
-                                    getLayout(<Page {...pageProps} />)
-                                ) : (
-                                    <WithAuth>{getLayout(<Page {...pageProps} />)}</WithAuth>
-                                )}
-                            </>
-                        </AxiosProvider>
+                        <SessionProvider>
+                            <AxiosProvider>
+                                <>
+                                    <APM />
+                                    {Page.isPublic === true ? (
+                                        getLayout(<Page {...pageProps} />)
+                                    ) : (
+                                        <WithAuth>{getLayout(<Page {...pageProps} />)}</WithAuth>
+                                    )}
+                                </>
+                            </AxiosProvider>
+                        </SessionProvider>
                     </AuthProvider>
                 </QueryProvider>
             </ErrorBoundary>

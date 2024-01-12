@@ -28,6 +28,7 @@ import {
 } from './middleware'
 import {
     usersRouter,
+    authUserRouter,
     accountsRouter,
     connectionsRouter,
     adminRouter,
@@ -149,6 +150,7 @@ app.use('/tools', devOnly, toolsRouter)
 app.use('/v1', webhooksRouter)
 
 app.use('/v1', publicRouter)
+app.use('/v1/auth-users', authUserRouter)
 
 // All routes AFTER this line are protected via OAuth
 app.use('/v1', validateAuth0Jwt)

@@ -24,6 +24,7 @@ import Redis from 'ioredis'
 import {
     AccountService,
     AccountConnectionService,
+    AuthUserService,
     UserService,
     EmailService,
     AccountQueryService,
@@ -208,6 +209,10 @@ const accountService = new AccountService(
     balanceSyncStrategyFactory
 )
 
+// auth-user
+
+const authUserService = new AuthUserService(logger.child({ service: 'AuthUserService' }), prisma)
+
 // user
 
 const userService = new UserService(
@@ -291,6 +296,7 @@ async function getCurrentUser(jwt: NonNullable<Request['user']>) {
             where: { auth0Id: jwt.sub },
             create: {
                 auth0Id: jwt.sub,
+                authId: jwt.sub,
                 email: jwt['https://maybe.co/email'],
                 picture: jwt[SharedType.Auth0CustomNamespace.Picture],
                 firstName: jwt[SharedType.Auth0CustomNamespace.UserMetadata]?.['firstName'],
@@ -326,6 +332,7 @@ export async function createContext(req: Request) {
         transactionService,
         holdingService,
         accountConnectionService,
+        authUserService,
         userService,
         valuationService,
         institutionService,

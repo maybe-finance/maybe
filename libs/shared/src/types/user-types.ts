@@ -8,6 +8,7 @@ import type {
     Prisma,
     Security,
     User as PrismaUser,
+    AuthUser,
 } from '@prisma/client'
 import type { Institution } from 'plaid'
 import type { TimeSeries, TimeSeriesResponseWithDetail, Trend } from './general-types'
@@ -27,6 +28,14 @@ export type UpdateUser = Partial<
         monthlyExpensesUser: number | null
     }
 >
+
+/**
+ * ================================================================
+ * ======                 Auth User                          ======
+ * ================================================================
+ */
+
+export type { AuthUser }
 
 /**
  * ================================================================

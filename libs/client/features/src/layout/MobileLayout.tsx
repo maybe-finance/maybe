@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import {
-    RiChatPollLine,
     RiCloseLine,
     RiFlagLine,
     RiFolderOpenLine,
@@ -15,7 +14,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { ProfileCircle } from '@maybe-finance/client/shared'
 import { usePopoutContext, LayoutContextProvider } from '@maybe-finance/client/shared'
-import { UpgradePrompt } from '../user-billing'
 import classNames from 'classnames'
 import type { IconType } from 'react-icons'
 
