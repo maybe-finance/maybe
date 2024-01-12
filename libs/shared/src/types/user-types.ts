@@ -3,7 +3,6 @@ import type { Identity, User as Auth0UserServer } from 'auth0'
 import type {
     AccountCategory,
     AccountClassification,
-    Agreement,
     Holding,
     Prisma,
     Security,
@@ -253,8 +252,6 @@ export type RiskAnswer = {
     questionKey: string
     choiceKey: string
 }
-
-export type AgreementWithUrl = Agreement & { url: string }
 
 /**
  * main - the fullscreen "takeover" every user must go through
