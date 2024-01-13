@@ -59,6 +59,8 @@ export function AddFirstAccount({ title, onNext }: StepProps) {
                                             loader={BrowserUtil.enhancerizerLoader}
                                             src={`financial-institutions/white/${src}.svg`}
                                             alt={name}
+                                            height={96}
+                                            width={96}
                                         />
                                     </div>
                                 ))}
