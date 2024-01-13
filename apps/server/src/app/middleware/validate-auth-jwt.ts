@@ -1,7 +1,7 @@
 import cookieParser from 'cookie-parser'
-import { getToken } from 'next-auth/jwt'
+import { decode } from 'next-auth/jwt'
 
-const SECRET = process.env.NEXTAUTH_SECRET
+const SECRET = process.env.NEXTAUTH_SECRET ?? 'REPLACE_THIS'
 
 export const validateAuthJwt = async (req, res, next) => {
     cookieParser(SECRET)(req, res, async (err) => {
@@ -11,7 +11,10 @@ export const validateAuthJwt = async (req, res, next) => {
 
         if (req.cookies && 'next-auth.session-token' in req.cookies) {
             try {
-                const token = await getToken({ req, secret: SECRET })
+                const token = await decode({
+                    token: req.cookies['next-auth.session-token'],
+                    secret: SECRET,
+                })
 
                 if (token) {
                     req.user = token
