@@ -6,6 +6,7 @@ import { Button } from '@maybe-finance/design-system'
 import { BrowserUtil, useAccountContext, useUserAccountContext } from '@maybe-finance/client/shared'
 import { ExampleApp } from '../../ExampleApp'
 import { AiOutlineLoading3Quarters as LoadingIcon } from 'react-icons/ai'
+import Image from 'next/legacy/image'
 import type { StepProps } from '../StepProps'
 
 export function AddFirstAccount({ title, onNext }: StepProps) {
@@ -54,10 +55,9 @@ export function AddFirstAccount({ title, onNext }: StepProps) {
                                     ['Citibank', 'citi'],
                                 ].map(([name, src]) => (
                                     <div key={name} className="h-6">
-                                        <img
-                                            src={BrowserUtil.s3Loader({
-                                                src: `financial-institutions/white/${src}.svg`,
-                                            })}
+                                        <Image
+                                            loader={BrowserUtil.enhancerizerLoader}
+                                            src={`financial-institutions/white/${src}.svg`}
                                             alt={name}
                                         />
                                     </div>

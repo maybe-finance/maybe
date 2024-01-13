@@ -57,8 +57,6 @@ import finicity, { getFinicityTxPushUrl, getFinicityWebhookUrl } from './finicit
 import stripe from './stripe'
 import postmark from './postmark'
 import { managementClient } from './auth0'
-import s3 from './s3'
-import secretsClient from './secretsClient'
 import defineAbilityFor from './ability'
 import env from '../../env'
 import logger from '../lib/logger'
@@ -314,8 +312,6 @@ export async function createContext(req: Request) {
         prisma,
         plaid,
         stripe,
-        s3,
-        secretsClient,
         managementClient,
         logger,
         user,
