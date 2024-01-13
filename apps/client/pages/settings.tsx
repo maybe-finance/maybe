@@ -35,18 +35,12 @@ export default function SettingsPage() {
                 >
                     <Tab.List>
                         <Tab>Details</Tab>
-                        <Tab>Notifications</Tab>
                         <Tab>Security</Tab>
                         <Tab>Billing</Tab>
                     </Tab.List>
                     <Tab.Panels>
                         <Tab.Panel>
                             <UserDetails />
-                        </Tab.Panel>
-                        <Tab.Panel>
-                            <div className="mt-6 max-w-lg text-base">
-                                <GeneralPreferences />
-                            </div>
                         </Tab.Panel>
                         <Tab.Panel>
                             <div className="mt-6 max-w-lg">

@@ -48,10 +48,10 @@ export default function LoginPage() {
                     <div className="bg-black bg-opacity-75 p-8 rounded-3xl w-full h-full items-center flex flex-col radial-gradient-background-dark">
                         <img
                             className="mb-8"
-                            src="/assets/maybe.svg"
+                            src="/assets/maybe-box.svg"
                             alt="Maybe Finance Logo"
-                            height={140}
-                            width={140}
+                            height={120}
+                            width={120}
                         />
                         <form className="space-y-4 w-full px-4" onSubmit={onSubmit}>
                             <Input
