@@ -47,13 +47,12 @@ router.post(
             trialLapsed: z.boolean().default(false),
         }),
         resolve: async ({ ctx, input }) => {
-            ctx.logger.debug(`Resetting CI user ${ctx.user!.auth0Id}`)
+            ctx.logger.debug(`Resetting CI user ${ctx.user!.authId}`)
 
             await ctx.prisma.$transaction([
-                ctx.prisma.$executeRaw`DELETE FROM "user" WHERE auth0_id=${ctx.user!.auth0Id};`,
+                ctx.prisma.$executeRaw`DELETE FROM "user" WHERE auth_id=${ctx.user!.authId};`,
                 ctx.prisma.user.create({
                     data: {
-                        auth0Id: ctx.user!.auth0Id,
                         authId: ctx.user!.authId,
                         email: 'REPLACE_THIS',
                         dob: new Date('1990-01-01'),

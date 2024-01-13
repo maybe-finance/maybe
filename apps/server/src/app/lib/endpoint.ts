@@ -283,23 +283,23 @@ const stripeWebhooks = new StripeWebhookHandler(
 )
 
 // helper function for parsing JWT and loading User record
+// TODO: update this with roles, identity, and metadata
 async function getCurrentUser(jwt: NonNullable<Request['user']>) {
     if (!jwt.sub) throw new Error(`jwt missing sub`)
     if (!jwt['https://maybe.co/email']) throw new Error(`jwt missing email`)
 
     const user =
         (await prisma.user.findUnique({
-            where: { auth0Id: jwt.sub },
+            where: { authId: jwt.sub },
         })) ??
         (await prisma.user.upsert({
-            where: { auth0Id: jwt.sub },
+            where: { authId: jwt.sub },
             create: {
-                auth0Id: jwt.sub,
                 authId: jwt.sub,
                 email: jwt['https://maybe.co/email'],
-                picture: jwt[SharedType.Auth0CustomNamespace.Picture],
-                firstName: jwt[SharedType.Auth0CustomNamespace.UserMetadata]?.['firstName'],
-                lastName: jwt[SharedType.Auth0CustomNamespace.UserMetadata]?.['lastName'],
+                picture: jwt['picture'],
+                firstName: jwt['firstName'],
+                lastName: jwt['lastName'],
             },
             update: {},
         }))

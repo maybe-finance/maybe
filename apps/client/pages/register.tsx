@@ -8,7 +8,8 @@ import Script from 'next/script'
 import Link from 'next/link'
 
 export default function RegisterPage() {
-    const [name, setName] = useState('')
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [isValid, setIsValid] = useState(false)
@@ -23,14 +24,16 @@ export default function RegisterPage() {
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        setName('')
+        setFirstName('')
+        setLastName('')
         setEmail('')
         setPassword('')
 
         await signIn('credentials', {
             email,
             password,
-            name,
+            firstName,
+            lastName,
             redirect: false,
         })
     }
@@ -55,9 +58,15 @@ export default function RegisterPage() {
                         <form className="space-y-4 w-full px-4" onSubmit={onSubmit}>
                             <Input
                                 type="text"
-                                label="Name"
-                                value={name}
-                                onChange={(e) => setName(e.currentTarget.value)}
+                                label="First name"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.currentTarget.value)}
+                            />
+                            <Input
+                                type="text"
+                                label="Last name"
+                                value={lastName}
+                                onChange={(e) => setLastName(e.currentTarget.value)}
                             />
                             <Input
                                 type="text"

@@ -27,7 +27,7 @@ export class StripeWebhookHandler implements IStripeWebhookHandler {
 
                 await this.prisma.user.updateMany({
                     where: {
-                        auth0Id: session.client_reference_id,
+                        authId: session.client_reference_id,
                     },
                     data: {
                         trialEnd: null,

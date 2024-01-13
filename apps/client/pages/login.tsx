@@ -38,7 +38,7 @@ export default function LoginPage() {
                 strategy="lazyOnload"
             />
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <div className="p-px w-96 bg-white bg-opacity-10 card-light rounded-3xl radial-gradient-background">
+                <div className="p-px w-80 md:w-96 bg-white bg-opacity-10 card-light rounded-3xl radial-gradient-background">
                     <div className="bg-black bg-opacity-75 p-8 rounded-3xl w-full h-full items-center flex flex-col radial-gradient-background-dark">
                         <img
                             className="mb-8"

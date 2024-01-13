@@ -105,6 +105,7 @@ router.put(
     })
 )
 
+// TODO: Remove this endpoint
 router.get(
     '/auth0-profile',
     endpoint.create({
@@ -122,7 +123,7 @@ router.put(
         }),
         resolve: ({ input, ctx }) => {
             return ctx.managementClient.updateUser(
-                { id: ctx.user!.auth0Id },
+                { id: ctx.user!.authId }, // TODO: Remove this endpoint
                 { user_metadata: { enrolled_mfa: input.enrolled_mfa } }
             )
         },
@@ -276,6 +277,7 @@ router.get(
     })
 )
 
+// TODO: Remove this endpoint or refactor to work with new Auth
 router.post(
     '/link-accounts',
     endpoint.create({
@@ -284,7 +286,7 @@ router.post(
             secondaryProvider: z.string(),
         }),
         resolve: async ({ input, ctx }) => {
-            return ctx.userService.linkAccounts(ctx.user!.auth0Id, input.secondaryProvider, {
+            return ctx.userService.linkAccounts(ctx.user!.authId, input.secondaryProvider, {
                 token: input.secondaryJWT,
                 domain: env.NX_AUTH0_CUSTOM_DOMAIN,
                 audience: env.NX_AUTH0_AUDIENCE,
@@ -293,6 +295,7 @@ router.post(
     })
 )
 
+// TODO: Remove this endpoint or refactor to work with new Auth
 router.post(
     '/unlink-account',
     endpoint.create({
@@ -302,7 +305,7 @@ router.post(
         }),
         resolve: async ({ input, ctx }) => {
             return ctx.userService.unlinkAccounts(
-                ctx.user!.auth0Id,
+                ctx.user!.authId,
                 input.secondaryAuth0Id,
                 input.secondaryProvider as UnlinkAccountsParamsProvider
             )
@@ -310,19 +313,20 @@ router.post(
     })
 )
 
+// TODO: Refactor this to use the Auth Id instead of Auth0
 router.post(
     '/resend-verification-email',
     endpoint.create({
         input: z.object({
-            auth0Id: z.string().optional(),
+            authId: z.string().optional(),
         }),
         resolve: async ({ input, ctx }) => {
-            const auth0Id = input.auth0Id ?? ctx.user?.auth0Id
-            if (!auth0Id) throw new Error('User not found')
+            const authId = input.authId ?? ctx.user?.authId
+            if (!authId) throw new Error('User not found')
 
-            await ctx.managementClient.sendEmailVerification({ user_id: auth0Id })
+            await ctx.managementClient.sendEmailVerification({ user_id: authId })
 
-            ctx.logger.info(`Sent verification email to ${auth0Id}`)
+            ctx.logger.info(`Sent verification email to ${authId}`)
 
             return { success: true }
         },

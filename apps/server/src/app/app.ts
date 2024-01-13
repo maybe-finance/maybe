@@ -19,7 +19,7 @@ import logger from './lib/logger'
 import prisma from './lib/prisma'
 import {
     defaultErrorHandler,
-    validateAuth0Jwt,
+    validateAuthJwt,
     superjson,
     authErrorHandler,
     maintenance,
@@ -28,7 +28,6 @@ import {
 } from './middleware'
 import {
     usersRouter,
-    authUserRouter,
     accountsRouter,
     connectionsRouter,
     adminRouter,
@@ -89,7 +88,7 @@ app.use(express.static(__dirname + '/assets'))
 
 const origin = [env.NX_CLIENT_URL, ...env.NX_CORS_ORIGINS]
 logger.info(`CORS origins: ${origin}`)
-app.use(cors({ origin }))
+app.use(cors({ origin, credentials: true }))
 app.options('*', cors() as RequestHandler)
 
 app.set('view engine', 'ejs').set('views', __dirname + '/app/admin/views')
@@ -117,7 +116,7 @@ app.use(express.json({ limit: '50mb' })) // Finicity sends large response bodies
 
 app.use(
     '/trpc',
-    validateAuth0Jwt,
+    validateAuthJwt,
     trpcExpress.createExpressMiddleware({
         router: appRouter,
         createContext: createTRPCContext,
@@ -149,10 +148,9 @@ app.use('/tools', devOnly, toolsRouter)
 app.use('/v1', webhooksRouter)
 
 app.use('/v1', publicRouter)
-app.use('/v1/auth-users', authUserRouter)
 
 // All routes AFTER this line are protected via OAuth
-app.use('/v1', validateAuth0Jwt)
+app.use('/v1', validateAuthJwt)
 
 // Private routes
 app.use('/v1/users', usersRouter)

@@ -65,12 +65,14 @@ export class UserService implements IUserService {
         })
     }
 
+    // TODO: Update this to use new Auth
     async getAuth0Profile(user: User): Promise<SharedType.Auth0Profile> {
         if (!user.email) throw new Error('No email found for user')
 
         const usersWithMatchingEmail = await this.auth0.getUsersByEmail(user.email)
         const autoPromptEnabled = user.linkAccountDismissedAt == null
-        const currentUser = usersWithMatchingEmail.find((u) => u.user_id === user.auth0Id)
+        // TODO: Update this to use new Auth
+        const currentUser = usersWithMatchingEmail.find((u) => u.user_id === user.authId)
         const primaryIdentity = currentUser?.identities?.find(
             (identity) => !('profileData' in identity)
         )
@@ -85,7 +87,7 @@ export class UserService implements IUserService {
             .filter(
                 (match) =>
                     match.email_verified &&
-                    match.user_id !== user.auth0Id &&
+                    match.user_id !== user.authId &&
                     match.identities?.at(0) != null
             )
             .map((user) => user.identities!.at(0)!)
@@ -157,9 +159,10 @@ export class UserService implements IUserService {
         // Delete Stripe customer, ending any active subscriptions
         if (user.stripeCustomerId) await this.stripe.customers.del(user.stripeCustomerId)
 
-        // Delete user from Auth0 so that it cannot be accessed in a partially-purged state
-        this.logger.info(`Removing user ${user.id} from Auth0 (${user.auth0Id})`)
-        await this.auth0.deleteUser({ id: user.auth0Id })
+        // Delete user from Auth so that it cannot be accessed in a partially-purged state
+        // TODO: Update this to use new Auth
+        this.logger.info(`Removing user ${user.id} from Auth (${user.authId})`)
+        await this.prisma.authUser.delete({ where: { id: user.authId } })
 
         await this.purgeQueue.add('purge-user', { userId: user.id })
 
@@ -312,7 +315,7 @@ export class UserService implements IUserService {
         const user = await this.prisma.user.findUniqueOrThrow({
             where: { id: userId },
             select: {
-                auth0Id: true,
+                authId: true,
                 onboarding: true,
                 dob: true,
                 household: true,
@@ -327,10 +330,12 @@ export class UserService implements IUserService {
             },
         })
 
-        const auth0User = await this.auth0.getUser({ id: user.auth0Id })
+        const authUser = await this.prisma.authUser.findUniqueOrThrow({
+            where: { id: user.authId },
+        })
 
-        // Auth0 has this mis-typed and it comes in as a 'true' string
-        const email_verified = auth0User.email_verified as unknown as string | boolean
+        // NextAuth used DateTime for this field
+        const email_verified = authUser.emailVerified === null ? false : true
 
         const typedOnboarding = user.onboarding as OnboardingState | null
         const onboardingState = typedOnboarding
@@ -341,8 +346,8 @@ export class UserService implements IUserService {
             {
                 ...user,
                 onboarding: onboardingState,
-                emailVerified: email_verified === true || email_verified === 'true',
-                isAppleIdentity: auth0User.identities?.[0].provider === 'apple',
+                emailVerified: email_verified,
+                isAppleIdentity: false,
             },
             onboardingState.markedComplete
         )
@@ -543,8 +548,9 @@ export class UserService implements IUserService {
         return onboarding
     }
 
+    // TODO: Update to work with new Auth
     async linkAccounts(
-        primaryAuth0Id: User['auth0Id'],
+        primaryAuth0Id: User['authId'],
         provider: string,
         secondaryJWT: { token: string; domain: string; audience: string }
     ) {
@@ -554,7 +560,7 @@ export class UserService implements IUserService {
             secondaryJWT.audience
         )
 
-        const user = await this.prisma.user.findFirst({ where: { auth0Id: validatedJWT.auth0Id } })
+        const user = await this.prisma.user.findFirst({ where: { authId: validatedJWT.authId } })
 
         if (user?.stripePriceId) {
             throw new Error(
@@ -563,14 +569,14 @@ export class UserService implements IUserService {
         }
 
         return this.auth0.linkUsers(primaryAuth0Id, {
-            user_id: validatedJWT.auth0Id,
+            user_id: validatedJWT.authId,
             provider,
         })
     }
 
     async unlinkAccounts(
-        primaryAuth0Id: User['auth0Id'],
-        secondaryAuth0Id: User['auth0Id'],
+        primaryAuth0Id: User['authId'],
+        secondaryAuth0Id: User['authId'],
         secondaryProvider: UnlinkAccountsParamsProvider
     ) {
         const response = await this.auth0.unlinkUsers({

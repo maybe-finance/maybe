@@ -395,7 +395,6 @@ model User {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  auth0Id   String   @unique @map("auth0_id")
   authId    String   @unique @map("auth_id") // NextAuth user id
 
   // profile
@@ -585,6 +584,8 @@ model AuthAccount {
 model AuthUser {
   id            String        @id @default(cuid())
   name          String?
+  firstName     String?       @map("first_name")
+  lastName      String?       @map("last_name")
   email         String?       @unique
   emailVerified DateTime?     @map("email_verified")
   password      String?

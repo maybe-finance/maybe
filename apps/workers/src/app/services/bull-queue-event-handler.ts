@@ -82,7 +82,7 @@ export class BullQueueEventHandler implements IBullQueueEventHandler {
     }
 
     private async getUserFromJob(job: Job) {
-        let user: Pick<User, 'id' | 'auth0Id'> | undefined
+        let user: Pick<User, 'id' | 'authId'> | undefined
 
         try {
             if (job.queue.name === 'sync-account' && 'accountId' in job.data) {

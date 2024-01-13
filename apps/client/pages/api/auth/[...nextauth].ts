@@ -1,13 +1,35 @@
-import NextAuth, { type SessionStrategy } from 'next-auth'
+import NextAuth from 'next-auth'
+import type { SessionStrategy, NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { z } from 'zod'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, type Prisma } from '@prisma/client'
 import { PrismaAdapter } from '@auth/prisma-adapter'
-import axios from 'axios'
 import bcrypt from 'bcrypt'
 
-const prisma = new PrismaClient()
-axios.defaults.baseURL = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333'}/v1`
+let prismaInstance: PrismaClient | null = null
+
+function getPrismaInstance() {
+    if (!prismaInstance) {
+        prismaInstance = new PrismaClient()
+    }
+    return prismaInstance
+}
+
+const prisma = getPrismaInstance()
+
+async function createAuthUser(
+    data: Prisma.AuthUserCreateInput & { firstName: string; lastName: string }
+) {
+    const authUser = await prisma.authUser.create({ data: { ...data } })
+    return authUser
+}
+
+async function getAuthUserByEmail(email: string) {
+    if (!email) throw new Error('No email provided')
+    return await prisma.authUser.findUnique({
+        where: { email },
+    })
+}
 
 const authPrisma = {
     account: prisma.authAccount,
@@ -18,62 +40,82 @@ const authPrisma = {
 
 export const authOptions = {
     adapter: PrismaAdapter(authPrisma),
-    secret: process.env.AUTH_SECRET || 'CHANGE_ME',
+    secret: process.env.NEXTAUTH_SECRET || 'CHANGE_ME',
     pages: {
         signIn: '/login',
     },
     session: {
         strategy: 'jwt' as SessionStrategy,
-        maxAge: 7 * 24 * 60 * 60, // 7 Days
+        maxAge: 1 * 24 * 60 * 60, // 1 Day
     },
+
     providers: [
         CredentialsProvider({
             name: 'Credentials',
             type: 'credentials',
             credentials: {
+                firstName: { label: 'First name', type: 'text', placeholder: 'First name' },
+                lastName: { label: 'Last name', type: 'text', placeholder: 'Last name' },
                 email: { label: 'Email', type: 'email', placeholder: 'hello@maybe.co' },
                 password: { label: 'Password', type: 'password' },
             },
             async authorize(credentials) {
                 const parsedCredentials = z
                     .object({
-                        name: z.string().optional(),
+                        firstName: z.string().optional(),
+                        lastName: z.string().optional(),
                         email: z.string().email(),
                         password: z.string().min(6),
                     })
                     .safeParse(credentials)
 
                 if (parsedCredentials.success) {
-                    const { name, email, password } = parsedCredentials.data
+                    const { firstName, lastName, email, password } = parsedCredentials.data
 
-                    const { data } = await axios.get(`/auth-users`, {
-                        params: { email: email },
-                        headers: { 'Content-Type': 'application/json' },
-                    })
+                    const authUser = await getAuthUserByEmail(email)
 
-                    // TODO: use superjson to parse this more cleanly
-                    const user = data.data['json']
-
-                    if (!user) {
+                    if (!authUser) {
+                        if (!firstName || !lastName) throw new Error('First and last name required')
                         const hashedPassword = await bcrypt.hash(password, 10)
-                        const { data } = await axios.post('/auth-users', {
-                            name,
+                        const newAuthUser = await createAuthUser({
+                            firstName,
+                            lastName,
+                            name: `${firstName} ${lastName}`,
                             email,
                             password: hashedPassword,
                         })
-                        const newUser = data.data['json']
-                        if (newUser) return newUser
+
+                        if (newAuthUser) return newAuthUser
                         throw new Error('Could not create user')
                     }
 
-                    const passwordsMatch = await bcrypt.compare(password, user.password)
-                    if (passwordsMatch) return user
+                    const passwordsMatch = await bcrypt.compare(password, authUser.password!)
+                    if (passwordsMatch) return authUser
                 }
 
                 return null
             },
         }),
     ],
-}
+    callbacks: {
+        async jwt({ token, user: authUser, account }: { token: any; user: any; account: any }) {
+            if (authUser && account) {
+                token.sub = authUser.id
+                token['https://maybe.co/email'] = authUser.email
+                token.firstName = authUser.firstName
+                token.lastName = authUser.lastName
+            }
+            return token
+        },
+        async session({ session, token }: { session: any; token: any }) {
+            session.user = token.sub
+            session.sub = token.sub
+            session['https://maybe.co/email'] = token['https://maybe.co/email']
+            session.firstName = token.firstName
+            session.lastName = token.lastName
+            return session
+        },
+    },
+} as NextAuthOptions
 
 export default NextAuth(authOptions)
