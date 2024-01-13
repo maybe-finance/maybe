@@ -1,4 +1,4 @@
-import { useAuth0 } from '@auth0/auth0-react'
+import { useSession } from 'next-auth/react'
 import { Button, Dialog } from '@maybe-finance/design-system'
 import { useState } from 'react'
 import axios from 'axios'
@@ -12,7 +12,7 @@ export interface FeedbackDialogProps {
 
 export function FeedbackDialog({ isOpen, onClose, notImplementedNotice }: FeedbackDialogProps) {
     const [feedback, setFeedback] = useState('')
-    const { user } = useAuth0()
+    const { data: session } = useSession()
 
     return (
         <Dialog isOpen={isOpen} onClose={onClose}>
@@ -42,7 +42,7 @@ export function FeedbackDialog({ isOpen, onClose, notImplementedNotice }: Feedba
                             await axios
                                 .create({ transformRequest: [(data) => JSON.stringify(data)] })
                                 .post('https://hooks.zapier.com/hooks/catch/10143005/buyo6na/', {
-                                    comment: `**From user:** ${user?.sub}\n\n${feedback}`,
+                                    comment: `**From user:** ${session?.user?.email}\n\n${feedback}`,
                                     page: `**Main app feedback**: ${window.location.href}`,
                                 })
 

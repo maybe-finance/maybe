@@ -17,7 +17,9 @@ export default function LoginPage() {
     const router = useRouter()
 
     useEffect(() => {
-        if (session) router.push('/')
+        if (session) {
+            router.push('/')
+        }
     }, [session, router])
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -36,7 +38,6 @@ export default function LoginPage() {
         }
     }
 
-    // _app.tsx will automatically redirect if not authenticated
     return (
         <>
             <Script

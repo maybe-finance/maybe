@@ -50,8 +50,6 @@ const WithAuth = function ({ children }: PropsWithChildren) {
                     <UserAccountContextProvider>
                         <AccountContextProvider>
                             {children}
-
-                            {/* Add, edit, delete connections and manual accounts */}
                             <AccountsManager />
                         </AccountContextProvider>
                     </UserAccountContextProvider>

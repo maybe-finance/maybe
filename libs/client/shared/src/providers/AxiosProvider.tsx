@@ -67,13 +67,7 @@ function createInstance(options?: CreateInstanceOptions) {
     return instance
 }
 
-/**
- * Injects the Auth0 access token into every axios request
- *
- * @see https://github.com/auth0/auth0-react/issues/266#issuecomment-919222402
- */
 export function AxiosProvider({ children }: PropsWithChildren) {
-    // Rather than storing access token in localStorage (insecure), we use this method to retrieve it prior to making API calls
     const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333'
 
     // Expose a default instance with auth, superjson, headers

@@ -104,7 +104,9 @@ export const authOptions = {
                 const existingUser = await getAuthUserByEmail(email)
                 if (existingUser) {
                     const isPasswordMatch = await bcrypt.compare(password, existingUser.password!)
-                    if (!isPasswordMatch) throw new Error('Email or password is invalid.')
+                    if (!isPasswordMatch) {
+                        throw new Error('Email or password is invalid.')
+                    }
 
                     return existingUser
                 }
