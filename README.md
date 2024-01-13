@@ -14,7 +14,7 @@ We spent the better part of 2021/2022 building a personal finance + wealth manag
 
 The business end of things didn't work out and so we shut things down mid-2023.
 
-We spend the better part of $1,000,000 building the app (employees + contractors, data providers/services, infrastructure, etc).
+We spent the better part of $1,000,000 building the app (employees + contractors, data providers/services, infrastructure, etc).
 
 We're now reviving the product as a fully open-source project. The goal is to let you run the app yourself, for free, and use it to manage your own finances and eventually offer a hosted version of the app for a small monthly fee.
 
