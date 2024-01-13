@@ -11,7 +11,3 @@ export function enhancerizerLoader({ src, width }: ImageLoaderProps): string {
 
     return `https://enhancerizer.maybe.co/images?${queryString}`
 }
-
-export function s3Loader({ src }: Pick<ImageLoaderProps, 'src'>): string {
-    return `https://assets.maybe.co/images/${src}`
-}

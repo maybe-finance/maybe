@@ -15,10 +15,6 @@ console.log(`CI_PROJECT_NAME: ${CI_PROJECT_NAME}`)
  * from a deploy hook, and therefore, all manual builds would be cancelled without this logic here.
  * @see https://github.com/vercel/community/discussions/285#discussioncomment-1696833
  *
- * We skip automatic deploys to main because our AWS resources (server, workers)
- * take longer to deploy.  Instead, we programmatically deploy after these AWS
- * services have successfully deployed to minimize any mismatches in app versions.
- *
  * We deploy the staging-client project on merge to main to avoid conflicting deploys
  * with our main app's PR preview deploys.
  */
