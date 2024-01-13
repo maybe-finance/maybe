@@ -4,6 +4,7 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { z } from 'zod'
 import { PrismaClient, type Prisma } from '@prisma/client'
 import { PrismaAdapter } from '@auth/prisma-adapter'
+import type { SharedType } from '@maybe-finance/shared'
 import bcrypt from 'bcrypt'
 
 let prismaInstance: PrismaClient | null = null
@@ -17,17 +18,53 @@ function getPrismaInstance() {
 
 const prisma = getPrismaInstance()
 
-async function createAuthUser(
-    data: Prisma.AuthUserCreateInput & { firstName: string; lastName: string }
-) {
+async function createAuthUser(data: Prisma.AuthUserCreateInput) {
     const authUser = await prisma.authUser.create({ data: { ...data } })
     return authUser
 }
 
 async function getAuthUserByEmail(email: string) {
-    if (!email) throw new Error('No email provided')
+    if (!email) throw new Error('No email provided.')
     return await prisma.authUser.findUnique({
         where: { email },
+    })
+}
+
+async function validateCredentials(credentials: any): Promise<z.infer<typeof authSchema>> {
+    const authSchema = z.object({
+        firstName: z.string().optional(),
+        lastName: z.string().optional(),
+        email: z.string().email({ message: 'Invalid email address.' }),
+        password: z.string().min(6),
+    })
+
+    const parsed = authSchema.safeParse(credentials)
+    if (!parsed.success) {
+        throw new Error(parsed.error.issues.map((issue) => issue.message).join(', '))
+    }
+
+    return parsed.data
+}
+
+async function createNewAuthUser(credentials: {
+    firstName: string
+    lastName: string
+    email: string
+    password: string
+}): Promise<SharedType.AuthUser> {
+    const { firstName, lastName, email, password } = credentials
+
+    if (!firstName || !lastName) {
+        throw new Error('Both first name and last name are required.')
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10)
+    return createAuthUser({
+        firstName,
+        lastName,
+        name: `${firstName} ${lastName}`,
+        email,
+        password: hashedPassword,
     })
 }
 
@@ -60,51 +97,29 @@ export const authOptions = {
                 password: { label: 'Password', type: 'password' },
             },
             async authorize(credentials) {
-                const parsedCredentials = z
-                    .object({
-                        firstName: z.string().optional(),
-                        lastName: z.string().optional(),
-                        email: z.string().email({ message: 'Invalid email address' }),
-                        password: z.string().min(6),
-                    })
-                    .safeParse(credentials)
+                const { firstName, lastName, email, password } = await validateCredentials(
+                    credentials
+                )
 
-                if (parsedCredentials.success) {
-                    const { firstName, lastName, email, password } = parsedCredentials.data
+                const existingUser = await getAuthUserByEmail(email)
+                if (existingUser) {
+                    const isPasswordMatch = await bcrypt.compare(password, existingUser.password!)
+                    if (!isPasswordMatch) throw new Error('Email or password is invalid.')
 
-                    const authUser = await getAuthUserByEmail(email)
-
-                    if (!authUser) {
-                        if (!firstName || !lastName)
-                            throw new Error(`Could not find an account with that email`)
-                        const hashedPassword = await bcrypt.hash(password, 10)
-                        const newAuthUser = await createAuthUser({
-                            firstName,
-                            lastName,
-                            name: `${firstName} ${lastName}`,
-                            email,
-                            password: hashedPassword,
-                        })
-
-                        if (newAuthUser) return newAuthUser
-                        throw new Error('Could not create user')
-                    }
-
-                    const passwordsMatch = await bcrypt.compare(password, authUser.password!)
-                    if (passwordsMatch) return authUser
-                    throw new Error('Email or password is invalid')
-                } else {
-                    const errorMessages = parsedCredentials.error.issues.map(
-                        (issue) => issue.message
-                    )
-                    throw new Error(errorMessages.join(', '))
+                    return existingUser
                 }
+
+                if (!firstName || !lastName) {
+                    throw new Error('Invalid credentials provided.')
+                }
+
+                return createNewAuthUser({ firstName, lastName, email, password })
             },
         }),
     ],
     callbacks: {
-        async jwt({ token, user: authUser, account }: { token: any; user: any; account: any }) {
-            if (authUser && account) {
+        async jwt({ token, user: authUser }: { token: any; user: any }) {
+            if (authUser) {
                 token.sub = authUser.id
                 token['https://maybe.co/email'] = authUser.email
                 token.firstName = authUser.firstName
