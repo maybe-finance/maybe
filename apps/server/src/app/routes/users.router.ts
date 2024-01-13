@@ -105,6 +105,15 @@ router.put(
     })
 )
 
+router.get(
+    '/auth-profile',
+    endpoint.create({
+        resolve: async ({ ctx }) => {
+            return ctx.userService.getAuthProfile(ctx.user!.id)
+        },
+    })
+)
+
 // TODO: Remove this endpoint
 router.get(
     '/auth0-profile',

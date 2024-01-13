@@ -65,6 +65,13 @@ export class UserService implements IUserService {
         })
     }
 
+    async getAuthProfile(id: User['id']): Promise<SharedType.AuthUser> {
+        const user = await this.get(id)
+        return this.prisma.authUser.findUniqueOrThrow({
+            where: { id: user.authId },
+        })
+    }
+
     // TODO: Update this to use new Auth
     async getAuth0Profile(user: User): Promise<SharedType.Auth0Profile> {
         if (!user.email) throw new Error('No email found for user')
@@ -371,7 +378,7 @@ export class UserService implements IUserService {
             .setTitle((_) => "Before we start, let's verify your email")
             .addToGroup('setup')
             .completeIf((user) => user.emailVerified)
-            .excludeIf((user) => user.isAppleIdentity) // Auth0 auto-verifies Apple identities.
+            .excludeIf((user) => user.isAppleIdentity || true) // TODO: Needs email service to send, skip for now
 
         onboarding
             .addStep('firstAccount')

@@ -237,7 +237,7 @@ export function SidebarOnboarding({ onClose, onHide }: Props) {
                     const description = getDescriptionComponent(step.key)
 
                     return (
-                        <Disclosure>
+                        <Disclosure key={idx}>
                             {({ open }) => (
                                 <div
                                     className={classNames(

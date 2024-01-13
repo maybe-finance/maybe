@@ -8,9 +8,8 @@ import {
     ErrorFallback,
     LogProvider,
     UserAccountContextProvider,
-    AuthProvider,
 } from '@maybe-finance/client/shared'
-import { AccountsManager } from '@maybe-finance/client/features'
+import { AccountsManager, OnboardingGuard } from '@maybe-finance/client/features'
 import { AccountContextProvider } from '@maybe-finance/client/shared'
 import * as Sentry from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
@@ -46,16 +45,18 @@ const WithAuth = function ({ children }: PropsWithChildren) {
 
     if (session) {
         return (
-            <ModalManager>
-                <UserAccountContextProvider>
-                    <AccountContextProvider>
-                        {children}
+            <OnboardingGuard>
+                <ModalManager>
+                    <UserAccountContextProvider>
+                        <AccountContextProvider>
+                            {children}
 
-                        {/* Add, edit, delete connections and manual accounts */}
-                        <AccountsManager />
-                    </AccountContextProvider>
-                </UserAccountContextProvider>
-            </ModalManager>
+                            {/* Add, edit, delete connections and manual accounts */}
+                            <AccountsManager />
+                        </AccountContextProvider>
+                    </UserAccountContextProvider>
+                </ModalManager>
+            </OnboardingGuard>
         )
     }
     return null
@@ -84,20 +85,18 @@ export default function App({
                 <Meta />
                 <Analytics />
                 <QueryProvider>
-                    <AuthProvider>
-                        <SessionProvider>
-                            <AxiosProvider>
-                                <>
-                                    <APM />
-                                    {Page.isPublic === true ? (
-                                        getLayout(<Page {...pageProps} />)
-                                    ) : (
-                                        <WithAuth>{getLayout(<Page {...pageProps} />)}</WithAuth>
-                                    )}
-                                </>
-                            </AxiosProvider>
-                        </SessionProvider>
-                    </AuthProvider>
+                    <SessionProvider>
+                        <AxiosProvider>
+                            <>
+                                <APM />
+                                {Page.isPublic === true ? (
+                                    getLayout(<Page {...pageProps} />)
+                                ) : (
+                                    <WithAuth>{getLayout(<Page {...pageProps} />)}</WithAuth>
+                                )}
+                            </>
+                        </AxiosProvider>
+                    </SessionProvider>
                 </QueryProvider>
             </ErrorBoundary>
         </LogProvider>

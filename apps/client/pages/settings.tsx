@@ -3,7 +3,6 @@ import { useQueryParam } from '@maybe-finance/client/shared'
 import {
     AccountSidebar,
     BillingPreferences,
-    GeneralPreferences,
     SecurityPreferences,
     UserDetails,
     WithSidebarLayout,

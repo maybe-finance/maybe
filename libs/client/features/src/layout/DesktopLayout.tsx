@@ -22,9 +22,9 @@ import {
     RiArrowRightSLine,
 } from 'react-icons/ri'
 import { Button, Tooltip } from '@maybe-finance/design-system'
-import { useAuth0 } from '@auth0/auth0-react'
 import { MenuPopover } from './MenuPopover'
 import { SidebarOnboarding } from '../onboarding'
+import { useSession } from 'next-auth/react'
 
 export interface DesktopLayoutProps {
     sidebar: React.ReactNode
@@ -93,7 +93,8 @@ export function DesktopLayout({ children, sidebar }: DesktopLayoutProps) {
     const [onboardingExpanded, setOnboardingExpanded] = useState(false)
 
     const { popoutContents, close: closePopout } = usePopoutContext()
-    const { user } = useAuth0()
+    const { data: session } = useSession()
+    const user = session!.user
     const { useOnboarding, useUpdateOnboarding } = useUserApi()
     const onboarding = useOnboarding('sidebar')
     const updateOnboarding = useUpdateOnboarding()
@@ -268,8 +269,8 @@ export function DesktopLayout({ children, sidebar }: DesktopLayoutProps) {
                                     )}
                                 </AnimatePresence>
                             }
-                            name={user?.name}
-                            email={user?.email}
+                            name={user?.name ?? ''}
+                            email={user?.email ?? ''}
                         >
                             {sidebar}
                         </DefaultContent>

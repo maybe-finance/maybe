@@ -1,16 +1,21 @@
 import type { SharedType } from '@maybe-finance/shared'
-import { BrowserUtil, useAccountApi, useAccountContext } from '@maybe-finance/client/shared'
+import {
+    BrowserUtil,
+    useAccountApi,
+    useAccountContext,
+    useUserApi,
+} from '@maybe-finance/client/shared'
 import { Menu } from '@maybe-finance/design-system'
 import { RiDeleteBin5Line, RiPencilLine, RiRefreshLine } from 'react-icons/ri'
 import { useRouter } from 'next/router'
-import { useAuth0 } from '@auth0/auth0-react'
 
 type Props = {
     account?: SharedType.AccountDetail
 }
 
 export function AccountMenu({ account }: Props) {
-    const { user } = useAuth0()
+    const { useProfile } = useUserApi()
+    const user = useProfile()
     const { editAccount, deleteAccount } = useAccountContext()
     const { useSyncAccount } = useAccountApi()
 

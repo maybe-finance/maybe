@@ -65,6 +65,11 @@ const UserApi = (
         return data
     },
 
+    async getAuthProfile() {
+        const { data } = await axios.get<SharedType.AuthUser>('/users/auth-profile')
+        return data
+    },
+
     async getAuth0Profile() {
         const { data } = await axios.get<SharedType.Auth0Profile>('/users/auth0-profile')
         return data
@@ -160,10 +165,10 @@ const UserApi = (
         return data
     },
 
-    async resendEmailVerification(auth0Id?: string) {
+    async resendEmailVerification(authId?: string) {
         const { data } = await axios.post<{ success: boolean }>(
             '/users/resend-verification-email',
-            { auth0Id }
+            { authId }
         )
 
         return data
@@ -288,6 +293,17 @@ export function useUserApi() {
             ...options,
         })
 
+    const useAuthProfile = (
+        options?: Omit<
+            UseQueryOptions<SharedType.AuthUser, unknown, SharedType.AuthUser, any[]>,
+            'queryKey' | 'queryFn'
+        >
+    ) =>
+        useQuery(['auth-profile'], api.getAuthProfile, {
+            staleTime: staleTimes.user,
+            ...options,
+        })
+
     const useAuth0Profile = (
         options?: Omit<UseQueryOptions<SharedType.Auth0Profile>, 'queryKey' | 'queryFn'>
     ) => useQuery(['users', 'auth0-profile'], api.getAuth0Profile, options)
@@ -403,6 +419,7 @@ export function useUserApi() {
         useCurrentNetWorth,
         useProfile,
         useUpdateProfile,
+        useAuthProfile,
         useAuth0Profile,
         useUpdateAuth0Profile,
         useSubscription,

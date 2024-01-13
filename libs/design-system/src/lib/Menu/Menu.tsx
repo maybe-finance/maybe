@@ -46,6 +46,8 @@ function Items({
     const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null)
     const [isOpen, setIsOpen] = useState(false)
 
+    const isOpenRef = useRef(false)
+
     const { styles, attributes, update } = usePopper(referenceElement?.current, popperElement, {
         placement,
         modifiers: [
@@ -60,6 +62,7 @@ function Items({
 
     useEffect(() => {
         if (isOpen && update) update()
+        if (isOpenRef.current !== isOpen) setIsOpen(isOpenRef.current)
     }, [isOpen, update])
 
     return (
@@ -75,7 +78,7 @@ function Items({
                 {...rest}
             >
                 {(renderProps) => {
-                    setIsOpen(renderProps.open)
+                    isOpenRef.current = renderProps.open
                     return typeof children === 'function' ? children(renderProps) : children
                 }}
             </HeadlessMenu.Items>
