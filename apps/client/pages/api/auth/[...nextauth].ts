@@ -64,7 +64,7 @@ export const authOptions = {
                     .object({
                         firstName: z.string().optional(),
                         lastName: z.string().optional(),
-                        email: z.string().email(),
+                        email: z.string().email({ message: 'Invalid email address' }),
                         password: z.string().min(6),
                     })
                     .safeParse(credentials)
@@ -75,7 +75,8 @@ export const authOptions = {
                     const authUser = await getAuthUserByEmail(email)
 
                     if (!authUser) {
-                        if (!firstName || !lastName) throw new Error('First and last name required')
+                        if (!firstName || !lastName)
+                            throw new Error(`Could not find an account with that email`)
                         const hashedPassword = await bcrypt.hash(password, 10)
                         const newAuthUser = await createAuthUser({
                             firstName,
@@ -91,9 +92,13 @@ export const authOptions = {
 
                     const passwordsMatch = await bcrypt.compare(password, authUser.password!)
                     if (passwordsMatch) return authUser
+                    throw new Error('Email or password is invalid')
+                } else {
+                    const errorMessages = parsedCredentials.error.issues.map(
+                        (issue) => issue.message
+                    )
+                    throw new Error(errorMessages.join(', '))
                 }
-
-                return null
             },
         }),
     ],
@@ -104,6 +109,7 @@ export const authOptions = {
                 token['https://maybe.co/email'] = authUser.email
                 token.firstName = authUser.firstName
                 token.lastName = authUser.lastName
+                token.name = authUser.name
             }
             return token
         },
@@ -113,6 +119,7 @@ export const authOptions = {
             session['https://maybe.co/email'] = token['https://maybe.co/email']
             session.firstName = token.firstName
             session.lastName = token.lastName
+            session.name = token.name
             return session
         },
     },

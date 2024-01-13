@@ -13,6 +13,7 @@ export default function RegisterPage() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [isValid, setIsValid] = useState(false)
+    const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
     const { data: session } = useSession()
     const router = useRouter()
@@ -24,18 +25,23 @@ export default function RegisterPage() {
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
+        setErrorMessage(null)
         setFirstName('')
         setLastName('')
         setEmail('')
         setPassword('')
 
-        await signIn('credentials', {
+        const response = await signIn('credentials', {
             email,
             password,
             firstName,
             lastName,
             redirect: false,
         })
+
+        if (response && response.error) {
+            setErrorMessage(response.error)
+        }
     }
 
     // _app.tsx will automatically redirect if not authenticated
@@ -89,6 +95,12 @@ export default function RegisterPage() {
                                     setPassword(e.target.value)
                                 }
                             />
+
+                            {errorMessage && password.length === 0 ? (
+                                <div className="py-1 text-center text-red text-sm">
+                                    {errorMessage}
+                                </div>
+                            ) : null}
 
                             <Button
                                 type="submit"

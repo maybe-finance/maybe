@@ -11,6 +11,7 @@ export default function LoginPage() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [isValid, setIsValid] = useState(false)
+    const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
     const { data: session } = useSession()
     const router = useRouter()
@@ -21,13 +22,18 @@ export default function LoginPage() {
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        setEmail('')
+        setErrorMessage(null)
         setPassword('')
-        await signIn('credentials', {
+
+        const response = await signIn('credentials', {
             email,
             password,
             redirect: false,
         })
+
+        if (response && response.error) {
+            setErrorMessage(response.error)
+        }
     }
 
     // _app.tsx will automatically redirect if not authenticated
@@ -69,6 +75,12 @@ export default function LoginPage() {
                                     setPassword(e.target.value)
                                 }
                             />
+
+                            {errorMessage && password.length === 0 ? (
+                                <div className="py-1 text-center text-red text-sm">
+                                    {errorMessage}
+                                </div>
+                            ) : null}
 
                             <Button
                                 type="submit"
