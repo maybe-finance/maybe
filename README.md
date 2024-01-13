@@ -18,6 +18,10 @@ We spend the better part of $1,000,000 building the app (employees + contractors
 
 We're now reviving the product as a fully open-source project. The goal is to let you run the app yourself, for free, and use it to manage your own finances and eventually offer a hosted version of the app for a small monthly fee.
 
+## End goal
+
+Ultimately we want to rebuild this so that you can self-host, but we also have plans to offer a hosted version for a fee. That means some decisions will be made that don't explicitly make sense for self-hosted but _do_ support the goal of us offering a for-pay hosted version.
+
 ## Features
 
 As a personal finance + wealth management app, Maybe has a lot of features. Here's a brief overview of some of the main ones...
