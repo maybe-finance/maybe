@@ -147,7 +147,7 @@ export default function InstitutionGrid({
                 <Image
                     className="cursor-pointer hover:opacity-90"
                     key={img.alt}
-                    loader={BrowserUtil.s3Loader}
+                    loader={BrowserUtil.enhancerizerLoader}
                     src={`financial-institutions/${img.src}`}
                     alt={img.alt}
                     layout="responsive"

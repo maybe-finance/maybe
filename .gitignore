@@ -46,8 +46,6 @@ Thumbs.db
 **/.env
 **/.env.local
 
-aws/maybe-app/cdk.out
-
 # Next.js
 .next
 

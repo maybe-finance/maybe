@@ -40,10 +40,6 @@
     "dependencies": {
         "@auth0/auth0-react": "^2.0.0",
         "@auth0/nextjs-auth0": "^2.0.0",
-        "@aws-sdk/client-s3": "^3.231.0",
-        "@aws-sdk/client-secrets-manager": "^3.235.0",
-        "@aws-sdk/cloudfront-signer": "^3.229.0",
-        "@aws-sdk/s3-presigned-post": "^3.234.0",
         "@bull-board/express": "^4.6.4",
         "@casl/ability": "^6.3.2",
         "@casl/prisma": "^1.4.1",
@@ -71,7 +67,6 @@
         "@trpc/react-query": "^10.4.3",
         "@trpc/server": "^10.4.3",
         "@types/sanitize-html": "^2.8.0",
-        "@uppy/aws-s3": "^3.0.4",
         "@uppy/core": "^3.0.4",
         "@uppy/dashboard": "^3.2.0",
         "@uppy/drag-drop": "^3.0.1",
