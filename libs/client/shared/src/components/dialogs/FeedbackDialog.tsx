@@ -41,10 +41,14 @@ export function FeedbackDialog({ isOpen, onClose, notImplementedNotice }: Feedba
                         try {
                             await axios
                                 .create({ transformRequest: [(data) => JSON.stringify(data)] })
-                                .post('https://hooks.zapier.com/hooks/catch/10143005/buyo6na/', {
-                                    comment: `**From user:** ${session?.user?.email}\n\n${feedback}`,
-                                    page: `**Main app feedback**: ${window.location.href}`,
-                                })
+                                .post(
+                                    process.env.NEXT_PUBLIC_ZAPIER_FEEDBACK_HOOK_URL ||
+                                        'REPLACE_THIS',
+                                    {
+                                        comment: `**From user:** ${session?.user?.email}\n\n${feedback}`,
+                                        page: `**Main app feedback**: ${window.location.href}`,
+                                    }
+                                )
 
                             toast.success('Your feedback was submitted!')
                         } catch (e) {
