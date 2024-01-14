@@ -49,6 +49,7 @@ export function Chart<TDatum extends Datum>({
         // Prevent chart errors from crashing entire UI
         <ParentSize>
             {({ width, height }) => {
+                if (!width || !height || width <= 0 || height <= 0) return null
                 return (
                     // Set to relative for error boundary overlay
                     <div className="relative w-full h-full">
