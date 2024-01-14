@@ -19,3 +19,5 @@ RUN apt-get update && apt-get install curl -y
 WORKDIR /app
 USER node 
 COPY --from=builder /app  .
+
+CMD ["node", "--es-module-specifier-resolution=node", "./main.js"]
