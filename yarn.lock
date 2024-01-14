@@ -29,33 +29,6 @@
   dependencies:
     "@auth/core" "0.20.0"
 
-"@auth0/auth0-react@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@auth0/auth0-react/-/auth0-react-2.0.0.tgz#74e4d3662896e71dd95cca70b395715825da3b4e"
-  integrity sha512-3pf41wU6ksm/6uPYAwjX5bZ7ma/K4LethibagTrKkMPuS8UatBvxLDtl3Aq52ZlJi1I+I42ckEfzWqloNxssIg==
-  dependencies:
-    "@auth0/auth0-spa-js" "^2.0.2"
-
-"@auth0/auth0-spa-js@^2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@auth0/auth0-spa-js/-/auth0-spa-js-2.0.2.tgz#fe0d5eeb6f0da48c24913a07b3565d48792de6d5"
-  integrity sha512-sxK9Lb6gXGImqjmWBfndA/OSNY4YLPTPwJEVuitXIOZ1p3EoqHM4zjIHvcdiYIaVo+cUfEf3l0bf8UA7Xi4tjg==
-
-"@auth0/nextjs-auth0@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@auth0/nextjs-auth0/-/nextjs-auth0-2.0.0.tgz#6695c6eb0d657f4ee6e4234891d3cb50ba0893d1"
-  integrity sha512-LwV3AqJh0CXzzM1vUgSVKvYcZQsp3NzV4xboBCwvfzz7DIWVu1Ge1v0uQBGnzl3XDtFFQNYqVGjcPw5Wu1/L6A==
-  dependencies:
-    "@panva/hkdf" "^1.0.2"
-    cookie "^0.5.0"
-    debug "^4.3.4"
-    http-errors "^1.8.1"
-    joi "^17.6.0"
-    jose "^4.9.2"
-    openid-client "^5.2.1"
-    tslib "^2.4.0"
-    url-join "^4.0.1"
-
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.16.7", "@babel/code-frame@^7.18.6", "@babel/code-frame@^7.5.5", "@babel/code-frame@^7.8.3":
   version "7.18.6"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.18.6.tgz#3b25d38c89600baa2dcc219edfa88a74eb2c427a"
@@ -13164,11 +13137,6 @@ jose@^2.0.6:
   dependencies:
     "@panva/asn1.js" "^1.0.0"
 
-jose@^4.10.0, jose@^4.9.2:
-  version "4.11.1"
-  resolved "https://registry.yarnpkg.com/jose/-/jose-4.11.1.tgz#8f7443549befe5bddcf4bae664a9cbc1a62da4fa"
-  integrity sha512-YRv4Tk/Wlug8qicwqFNFVEZSdbROCHRAC6qu/i0dyNKr5JQdoa2pIGoS04lLO/jXQX7Z9omoNewYIVIxqZBd9Q==
-
 jose@^4.10.3:
   version "4.11.0"
   resolved "https://registry.yarnpkg.com/jose/-/jose-4.11.0.tgz#1c7f5c7806383d3e836434e8f49da531cb046a9d"
@@ -15207,16 +15175,6 @@ openid-client@^4.9.1:
     jose "^2.0.5"
     lru-cache "^6.0.0"
     make-error "^1.3.6"
-    object-hash "^2.0.1"
-    oidc-token-hash "^5.0.1"
-
-openid-client@^5.2.1:
-  version "5.3.1"
-  resolved "https://registry.yarnpkg.com/openid-client/-/openid-client-5.3.1.tgz#69a5fa7d2b5ad479032f576852d40b4d4435488a"
-  integrity sha512-RLfehQiHch9N6tRWNx68cicf3b1WR0x74bJWHRc25uYIbSRwjxYcTFaRnzbbpls5jroLAaB/bFIodTgA5LJMvw==
-  dependencies:
-    jose "^4.10.0"
-    lru-cache "^6.0.0"
     object-hash "^2.0.1"
     oidc-token-hash "^5.0.1"
 
