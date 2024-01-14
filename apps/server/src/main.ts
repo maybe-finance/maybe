@@ -4,7 +4,7 @@ import app from './app/app'
 import logger from './app/lib/logger'
 import * as Sentry from '@sentry/node'
 
-process.on('uncaughtException', function (error) {
+process.on('uncaughtException', (error) => {
     Sentry.captureException(error)
     logger.error('server: uncaught exception', error)
 })
