@@ -1,12 +1,7 @@
 import type { SharedType } from '@maybe-finance/shared'
-import {
-    BrowserUtil,
-    useAccountApi,
-    useAccountContext,
-    useUserApi,
-} from '@maybe-finance/client/shared'
+import { useAccountContext } from '@maybe-finance/client/shared'
 import { Menu } from '@maybe-finance/design-system'
-import { RiDeleteBin5Line, RiPencilLine, RiRefreshLine } from 'react-icons/ri'
+import { RiDeleteBin5Line, RiPencilLine } from 'react-icons/ri'
 import { useRouter } from 'next/router'
 
 type Props = {
@@ -14,13 +9,8 @@ type Props = {
 }
 
 export function AccountMenu({ account }: Props) {
-    const { useProfile } = useUserApi()
-    const user = useProfile()
     const { editAccount, deleteAccount } = useAccountContext()
-    const { useSyncAccount } = useAccountApi()
-
     const router = useRouter()
-    const syncAccount = useSyncAccount()
 
     if (!account) return null
 
@@ -33,15 +23,6 @@ export function AccountMenu({ account }: Props) {
                 <Menu.Item icon={<RiPencilLine />} onClick={() => editAccount(account)}>
                     Edit
                 </Menu.Item>
-                {BrowserUtil.hasRole(user, 'Admin') && (
-                    <Menu.Item
-                        icon={<RiRefreshLine />}
-                        destructive
-                        onClick={() => syncAccount.mutate(account.id)}
-                    >
-                        Sync
-                    </Menu.Item>
-                )}
                 {!account.accountConnectionId && (
                     <Menu.Item
                         icon={<RiDeleteBin5Line />}

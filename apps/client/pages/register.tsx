@@ -44,7 +44,6 @@ export default function RegisterPage() {
         }
     }
 
-    // _app.tsx will automatically redirect if not authenticated
     return (
         <>
             <Script

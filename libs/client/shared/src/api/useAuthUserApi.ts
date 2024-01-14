@@ -13,8 +13,6 @@ const AuthUserApi = (axios: AxiosInstance) => ({
 
 const staleTimes = {
     user: 30_000,
-    netWorth: 30_000,
-    insights: 30_000,
 }
 
 export function useAuthUserApi() {

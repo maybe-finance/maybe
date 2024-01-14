@@ -45,7 +45,6 @@ export class AuthUserService implements IAuthUserService {
     async delete(id: AuthUser['id']) {
         const authUser = await this.get(id)
 
-        // Delete user from prisma
         this.logger.info(`Removing user ${authUser.id} from Prisma`)
         const user = await this.prisma.authUser.delete({ where: { id } })
         return user
