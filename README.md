@@ -47,9 +47,9 @@ You'll need Docker installed to run the app locally.
 cp .env.example .env
 ```
 
-Create a new secret for NEXTAUTH_SECRET in .env using
+Create a new secret for using
 `openssl rand -base64 32`
-Then run
+and populate `NEXTAUTH_SECRET` in your `.env` file. Then run:
 
 ```
 yarn install
