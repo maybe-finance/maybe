@@ -82,7 +82,6 @@ To pull market data in (for investments), you'll need a Polygon.io API key. You 
 ## Relevant reading
 
 -   [Learn about how the app is organized as a monorepo](https://github.com/maybe-finance/maybe/wiki/Monorepo-File-Structure-Overview)
--   [Reference past Auth0 implementation as we work to replace it](https://github.com/maybe-finance/maybe/wiki/Auth0)
 -   [Data model assumptions and calculations](https://github.com/maybe-finance/maybe/wiki/Data-model-assumptions-and-calculations)
 -   [Handling money](https://github.com/maybe-finance/maybe/wiki/Handling-Money)
 -   [REST API](https://github.com/maybe-finance/maybe/wiki/REST-API)
@@ -90,3 +89,7 @@ To pull market data in (for investments), you'll need a Polygon.io API key. You 
 ## Credits
 
 The original app was built by [Zach Gollwitzer](https://twitter.com/zg_dev), [Nick Arciero](https://www.narciero.com/) and [Tim Wilson](https://twitter.com/actualTimWilson), with design work by [Justin Farrugia](https://twitter.com/justinmfarrugia). The app is currently maintained by [Josh Pigford](https://twitter.com/Shpigford).
+
+## Copyright & license
+
+Maybe is distributed under an [AGPLv3 license](https://github.com/maybe-finance/maybe/blob/main/LICENSE). "Maybe" is a trademark of Maybe Finance, Inc.
