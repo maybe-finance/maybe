@@ -17,7 +17,7 @@ export function AccountDevTools() {
     const deduplicateInstitutions = useDeduplicateInstitutions()
 
     return process.env.NODE_ENV === 'development' ? (
-        <div className="relative mb-12 mx-2 sm:mx-0 p-4 bg-gray-700 rounded-md z-50">
+        <div className="relative mb-12 mx-2 sm:mx-0 p-4 bg-gray-700 rounded-md">
             <h6 className="flex text-red">
                 Dev Tools <i className="ri-tools-fill ml-1.5" />
             </h6>
