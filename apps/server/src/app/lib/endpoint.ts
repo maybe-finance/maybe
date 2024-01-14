@@ -78,8 +78,8 @@ export const emailService: IEmailService = new EmailService(
     logger.child({ service: 'EmailService' }),
     postmark,
     {
-        from: env.NX_POSTMARK_FROM_ADDRESS,
-        replyTo: env.NX_POSTMARK_REPLY_TO_ADDRESS,
+        from: process.env.NX_POSTMARK_FROM_ADDRESS || 'account@maybe.co',
+        replyTo: process.env.NX_POSTMARK_REPLY_TO_ADDRESS,
     }
 )
 
