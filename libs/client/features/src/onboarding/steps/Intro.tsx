@@ -1,19 +1,8 @@
 import { RiArrowRightLine } from 'react-icons/ri'
-import { Button, Tooltip } from '@maybe-finance/design-system'
+import { Button } from '@maybe-finance/design-system'
 import type { StepProps } from './StepProps'
 import { useState } from 'react'
 import { AiOutlineLoading3Quarters as LoadingIcon } from 'react-icons/ai'
-
-const team = {
-    josh: {
-        name: 'Josh Pigford',
-        title: 'Co-Founder & CEO',
-    },
-    travis: {
-        name: 'Travis Woods',
-        title: 'Co-Founder & CFO',
-    },
-}
 
 export function Intro({ onNext, title }: StepProps) {
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -44,32 +33,6 @@ export function Intro({ onNext, title }: StepProps) {
                         <RiArrowRightLine className="w-5 h-5 ml-2" />
                     )}
                 </Button>
-            </div>
-            <div className="flex flex-col items-center justify-center justify-self-end">
-                <div className="flex -space-x-2 group shrink-0">
-                    {Object.entries(team).map(([id, { name, title }]) => (
-                        <Tooltip
-                            key={id}
-                            content={
-                                <div className="text-base text-center">
-                                    <div className="font-medium text-white">{name}</div>
-                                    <div className="text-gray-100">{title}</div>
-                                </div>
-                            }
-                        >
-                            <img
-                                alt={name}
-                                className="w-12 h-12 rounded-full border-2 border-black group-hover:brightness-75 hover:!brightness-100 transition-all"
-                                src={`/assets/images/team/${id}.jpg`}
-                            />
-                        </Tooltip>
-                    ))}
-                </div>
-                <p className="mt-4 mb-10 text-sm text-center text-gray-50">
-                    Here&rsquo;s the team behind Maybe.
-                    <br />
-                    We&rsquo;re here to help if you need anything.
-                </p>
             </div>
         </div>
     )
