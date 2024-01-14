@@ -45,6 +45,13 @@ You'll need Docker installed to run the app locally.
 
 ```
 cp .env.example .env
+```
+
+Create a new secret for NEXTAUTH_SECRET in .env using
+`openssl rand -base64 32`
+Then run
+
+```
 yarn install
 yarn run dev:services
 yarn prisma:migrate:dev
