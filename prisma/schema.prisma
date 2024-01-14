@@ -395,7 +395,7 @@ model User {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  auth0Id   String   @unique @map("auth0_id")
+  authId    String   @unique @map("auth_id") // NextAuth user id
 
   // profile
   email                  String    @db.Citext
@@ -558,6 +558,61 @@ model PlanMilestone {
   endEvents   PlanEvent[] @relation("EndEvents")
 
   @@map("plan_milestone")
+}
+
+// NextAuth Models
+model AuthAccount {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user AuthUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("auth_account")
+}
+
+model AuthUser {
+  id            String        @id @default(cuid())
+  name          String?
+  firstName     String?       @map("first_name")
+  lastName      String?       @map("last_name")
+  email         String?       @unique
+  emailVerified DateTime?     @map("email_verified")
+  password      String?
+  image         String?
+  accounts      AuthAccount[]
+  sessions      AuthSession[]
+
+  @@map("auth_user")
+}
+
+model AuthSession {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         AuthUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("auth_session")
+}
+
+model AuthVerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("auth_verification_token")
 }
 
 enum ApprovalStatus {

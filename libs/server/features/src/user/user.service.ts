@@ -1,16 +1,6 @@
-import type {
-    AccountCategory,
-    AccountType,
-    PrismaClient,
-    User,
-} from '@prisma/client'
+import type { AccountCategory, AccountType, PrismaClient, User } from '@prisma/client'
 import type { Logger } from 'winston'
-import {
-    AuthUtil,
-    type PurgeUserQueue,
-    type SyncUserQueue,
-} from '@maybe-finance/server/shared'
-import type { ManagementClient, UnlinkAccountsParamsProvider } from 'auth0'
+import type { PurgeUserQueue, SyncUserQueue } from '@maybe-finance/server/shared'
 import type Stripe from 'stripe'
 import type { IBalanceSyncStrategyFactory } from '../account-balance'
 import type { IAccountQueryService } from '../account'
@@ -64,7 +54,6 @@ export class UserService implements IUserService {
         private readonly balanceSyncStrategyFactory: IBalanceSyncStrategyFactory,
         private readonly syncQueue: SyncUserQueue,
         private readonly purgeQueue: PurgeUserQueue,
-        private readonly auth0: ManagementClient,
         private readonly stripe: Stripe
     ) {}
 
@@ -74,46 +63,11 @@ export class UserService implements IUserService {
         })
     }
 
-    async getAuth0Profile(user: User): Promise<SharedType.Auth0Profile> {
-        if (!user.email) throw new Error('No email found for user')
-
-        const usersWithMatchingEmail = await this.auth0.getUsersByEmail(user.email)
-        const autoPromptEnabled = user.linkAccountDismissedAt == null
-        const currentUser = usersWithMatchingEmail.find((u) => u.user_id === user.auth0Id)
-        const primaryIdentity = currentUser?.identities?.find(
-            (identity) => !('profileData' in identity)
-        )
-        const secondaryIdentities =
-            currentUser?.identities?.filter((identity) => 'profileData' in identity) ?? []
-        if (!currentUser || !primaryIdentity) throw new Error('Failed to get Auth0 user')
-
-        const socialOnlyUser =
-            primaryIdentity.isSocial && secondaryIdentities.every((i) => i.isSocial)
-
-        const suggestedIdentities = usersWithMatchingEmail
-            .filter(
-                (match) =>
-                    match.email_verified &&
-                    match.user_id !== user.auth0Id &&
-                    match.identities?.at(0) != null
-            )
-            .map((user) => user.identities!.at(0)!)
-
-        // Auth0 returns 'true' (mis-typing) or true, so normalize the type here
-        const email_verified =
-            (currentUser.email_verified as unknown as string) === 'true' ||
-            currentUser.email_verified === true
-
-        return {
-            ...currentUser,
-            email_verified,
-            primaryIdentity,
-            secondaryIdentities,
-            suggestedIdentities,
-            socialOnlyUser,
-            autoPromptEnabled,
-            mfaEnabled: currentUser.user_metadata?.enrolled_mfa === true,
-        }
+    async getAuthProfile(id: User['id']): Promise<SharedType.AuthUser> {
+        const user = await this.get(id)
+        return this.prisma.authUser.findUniqueOrThrow({
+            where: { id: user.authId },
+        })
     }
 
     async sync(id: User['id']) {
@@ -166,9 +120,10 @@ export class UserService implements IUserService {
         // Delete Stripe customer, ending any active subscriptions
         if (user.stripeCustomerId) await this.stripe.customers.del(user.stripeCustomerId)
 
-        // Delete user from Auth0 so that it cannot be accessed in a partially-purged state
-        this.logger.info(`Removing user ${user.id} from Auth0 (${user.auth0Id})`)
-        await this.auth0.deleteUser({ id: user.auth0Id })
+        // Delete user from Auth so that it cannot be accessed in a partially-purged state
+        // TODO: Update this to use new Auth
+        this.logger.info(`Removing user ${user.id} from Auth (${user.authId})`)
+        await this.prisma.authUser.delete({ where: { id: user.authId } })
 
         await this.purgeQueue.add('purge-user', { userId: user.id })
 
@@ -321,7 +276,7 @@ export class UserService implements IUserService {
         const user = await this.prisma.user.findUniqueOrThrow({
             where: { id: userId },
             select: {
-                auth0Id: true,
+                authId: true,
                 onboarding: true,
                 dob: true,
                 household: true,
@@ -336,10 +291,12 @@ export class UserService implements IUserService {
             },
         })
 
-        const auth0User = await this.auth0.getUser({ id: user.auth0Id })
+        const authUser = await this.prisma.authUser.findUniqueOrThrow({
+            where: { id: user.authId },
+        })
 
-        // Auth0 has this mis-typed and it comes in as a 'true' string
-        const email_verified = auth0User.email_verified as unknown as string | boolean
+        // NextAuth used DateTime for this field
+        const email_verified = authUser.emailVerified === null ? false : true
 
         const typedOnboarding = user.onboarding as OnboardingState | null
         const onboardingState = typedOnboarding
@@ -350,8 +307,8 @@ export class UserService implements IUserService {
             {
                 ...user,
                 onboarding: onboardingState,
-                emailVerified: email_verified === true || email_verified === 'true',
-                isAppleIdentity: auth0User.identities?.[0].provider === 'apple',
+                emailVerified: email_verified,
+                isAppleIdentity: false,
             },
             onboardingState.markedComplete
         )
@@ -375,7 +332,7 @@ export class UserService implements IUserService {
             .setTitle((_) => "Before we start, let's verify your email")
             .addToGroup('setup')
             .completeIf((user) => user.emailVerified)
-            .excludeIf((user) => user.isAppleIdentity) // Auth0 auto-verifies Apple identities.
+            .excludeIf((user) => user.isAppleIdentity || true) // TODO: Needs email service to send, skip for now
 
         onboarding
             .addStep('firstAccount')
@@ -550,46 +507,5 @@ export class UserService implements IUserService {
             .setCTAPath('/plans')
 
         return onboarding
-    }
-
-    async linkAccounts(
-        primaryAuth0Id: User['auth0Id'],
-        provider: string,
-        secondaryJWT: { token: string; domain: string; audience: string }
-    ) {
-        const validatedJWT = await AuthUtil.validateRS256JWT(
-            `Bearer ${secondaryJWT.token}`,
-            secondaryJWT.domain,
-            secondaryJWT.audience
-        )
-
-        const user = await this.prisma.user.findFirst({ where: { auth0Id: validatedJWT.auth0Id } })
-
-        if (user?.stripePriceId) {
-            throw new Error(
-                'The account you are trying to link has an active Stripe trial or subscription.  We cannot link this identity at this time.'
-            )
-        }
-
-        return this.auth0.linkUsers(primaryAuth0Id, {
-            user_id: validatedJWT.auth0Id,
-            provider,
-        })
-    }
-
-    async unlinkAccounts(
-        primaryAuth0Id: User['auth0Id'],
-        secondaryAuth0Id: User['auth0Id'],
-        secondaryProvider: UnlinkAccountsParamsProvider
-    ) {
-        const response = await this.auth0.unlinkUsers({
-            id: primaryAuth0Id,
-            provider: secondaryProvider,
-            user_id: secondaryAuth0Id,
-        })
-
-        this.logger.info(`Unlinked ${secondaryAuth0Id} from ${primaryAuth0Id}`)
-
-        return response
     }
 }

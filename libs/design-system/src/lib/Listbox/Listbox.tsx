@@ -1,7 +1,7 @@
 import type { Dispatch, MouseEventHandler, PropsWithChildren, SetStateAction } from 'react'
 import type { IconType } from 'react-icons'
 import type { PopperProps } from 'react-popper'
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react'
 import { Listbox as HeadlessListbox } from '@headlessui/react'
 import classNames from 'classnames'
 import { RiArrowDownSFill, RiCheckFill } from 'react-icons/ri'
@@ -166,6 +166,8 @@ function Options({
     const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null)
     const [isOpen, setIsOpen] = useState(false)
 
+    const isOpenRef = useRef(false)
+
     const { styles, attributes, update } = usePopper(referenceElement, popperElement, {
         placement,
         modifiers: [
@@ -180,6 +182,7 @@ function Options({
 
     useEffect(() => {
         if (isOpen && update) update()
+        if (isOpenRef.current !== isOpen) setIsOpen(isOpenRef.current)
     }, [isOpen, update])
 
     return (
@@ -198,7 +201,7 @@ function Options({
                 {...rest}
             >
                 {({ open }) => {
-                    setIsOpen(open)
+                    isOpenRef.current = open
                     return children
                 }}
             </HeadlessListbox.Options>

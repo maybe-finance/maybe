@@ -8,14 +8,14 @@ import { useUserApi } from '@maybe-finance/client/shared'
 import type { StepProps } from '../StepProps'
 
 export function EmailVerification({ title, onNext }: StepProps) {
-    const { useAuth0Profile, useResendEmailVerification } = useUserApi()
+    const { useAuthProfile, useResendEmailVerification } = useUserApi()
 
     const emailVerified = useRef(false)
 
-    const profile = useAuth0Profile({
+    const profile = useAuthProfile({
         refetchInterval: emailVerified.current ? false : 5_000,
         onSuccess: (data) => {
-            if (data.email_verified) {
+            if (data.emailVerified) {
                 emailVerified.current = true
             }
         },
@@ -70,7 +70,7 @@ export function EmailVerification({ title, onNext }: StepProps) {
                             'linear-gradient(180deg, rgba(35, 36, 40, 0.2) 0%, rgba(68, 71, 76, 0.2) 100%)',
                     }}
                 >
-                    {profile.data?.email_verified ? (
+                    {profile.data?.emailVerified ? (
                         <RiMailCheckLine className="w-6 h-6" />
                     ) : (
                         <RiMailSendLine className="w-6 h-6" />
@@ -78,10 +78,10 @@ export function EmailVerification({ title, onNext }: StepProps) {
                 </div>
             </div>
             <h3 className="mt-12 text-center">
-                {profile.data?.email_verified ? 'Email verified' : title}
+                {profile.data?.emailVerified ? 'Email verified' : title}
             </h3>
             <div className="text-base text-center">
-                {profile.data?.email_verified ? (
+                {profile.data?.emailVerified ? (
                     <p className="mt-4 text-gray-50">
                         You have successfully verified{' '}
                         <span className="text-gray-25">{profile.data?.email ?? 'your email'}</span>
@@ -130,7 +130,7 @@ export function EmailVerification({ title, onNext }: StepProps) {
                     </>
                 )}
             </div>
-            {profile.data?.email_verified && (
+            {profile.data?.emailVerified && (
                 <Button className="mt-5" fullWidth onClick={onNext}>
                     Continue setup <RiArrowRightLine className="ml-2 w-5 h-5" />
                 </Button>

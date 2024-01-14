@@ -1,4 +1,4 @@
-import { useAuth0 } from '@auth0/auth0-react'
+import { signOut } from 'next-auth/react'
 import { ProfileCircle } from '@maybe-finance/client/shared'
 import { Button, Menu } from '@maybe-finance/design-system'
 import type { SharedType } from '@maybe-finance/shared'
@@ -15,8 +15,6 @@ type Props = {
 }
 
 export function OnboardingNavbar({ steps, currentStep, onBack }: Props) {
-    const { logout } = useAuth0()
-
     const groups = uniqBy(steps, 'group')
         .map((s) => s.group)
         .filter((g): g is string => g != null)
@@ -85,9 +83,7 @@ export function OnboardingNavbar({ steps, currentStep, onBack }: Props) {
                             <Menu.Item
                                 icon={<RiShutDownLine />}
                                 destructive={true}
-                                onClick={() =>
-                                    logout({ logoutParams: { returnTo: window.location.origin } })
-                                }
+                                onClick={() => signOut()}
                             >
                                 Log out
                             </Menu.Item>

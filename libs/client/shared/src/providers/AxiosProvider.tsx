@@ -1,11 +1,8 @@
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import type { SharedType } from '@maybe-finance/shared'
 import { superjson } from '@maybe-finance/shared'
-import { createContext, type PropsWithChildren, useCallback, useMemo } from 'react'
-import { useAuth0 } from '@auth0/auth0-react'
+import { createContext, type PropsWithChildren, useMemo } from 'react'
 import Axios from 'axios'
-import * as Sentry from '@sentry/react'
-import { useRouter } from 'next/router'
 
 type CreateInstanceOptions = {
     getToken?: () => Promise<string | null>
@@ -15,7 +12,6 @@ type CreateInstanceOptions = {
 }
 
 export type AxiosContextValue = {
-    getToken: () => Promise<string | null>
     defaultBaseUrl: string
     axios: AxiosInstance
     createInstance: (options?: CreateInstanceOptions) => AxiosInstance
@@ -71,63 +67,29 @@ function createInstance(options?: CreateInstanceOptions) {
     return instance
 }
 
-/**
- * Injects the Auth0 access token into every axios request
- *
- * @see https://github.com/auth0/auth0-react/issues/266#issuecomment-919222402
- */
 export function AxiosProvider({ children }: PropsWithChildren) {
-    // Rather than storing access token in localStorage (insecure), we use this method to retrieve it prior to making API calls
-    const { getAccessTokenSilently, isAuthenticated, loginWithRedirect } = useAuth0()
-    const router = useRouter()
-
     const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333'
-
-    const getToken = useCallback(async () => {
-        if (!isAuthenticated) return null
-
-        try {
-            const token = await getAccessTokenSilently()
-            return token
-        } catch (err) {
-            const authErr =
-                err && typeof err === 'object' && 'error' in err && typeof err['error'] === 'string'
-                    ? err['error']
-                    : null
-            const isRecoverable = authErr
-                ? [
-                      'mfa_required',
-                      'consent_required',
-                      'interaction_required',
-                      'login_required',
-                  ].includes(authErr)
-                : false
-
-            if (isRecoverable) {
-                await loginWithRedirect({ appState: { returnTo: router.asPath } })
-            } else {
-                Sentry.captureException(err)
-            }
-
-            return null
-        }
-    }, [isAuthenticated, getAccessTokenSilently, loginWithRedirect, router])
 
     // Expose a default instance with auth, superjson, headers
     const defaultInstance = useMemo(() => {
-        const defaultHeaders = { 'Content-Type': 'application/json' }
+        const defaultHeaders = {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Credentials': true,
+        }
         return createInstance({
-            getToken,
-            axiosOptions: { baseURL: `${API_URL}/v1`, headers: defaultHeaders },
+            axiosOptions: {
+                baseURL: `${API_URL}/v1`,
+                headers: defaultHeaders,
+                withCredentials: true,
+            },
             serialize: true,
             deserialize: true,
         })
-    }, [getToken, API_URL])
+    }, [API_URL])
 
     return (
         <AxiosContext.Provider
             value={{
-                getToken,
                 defaultBaseUrl: `${API_URL}/v1`,
                 axios: defaultInstance,
                 createInstance,

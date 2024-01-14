@@ -13,7 +13,7 @@ export async function validateRS256JWT(
     domain: string,
     audience: string
 ): Promise<{
-    auth0Id: string
+    authId: string
     userMetadata: SharedType.MaybeUserMetadata
     appMetadata: SharedType.MaybeAppMetadata
 }> {
@@ -50,7 +50,7 @@ export async function validateRS256JWT(
                 if (typeof payload !== 'object') return reject('payload not an object')
 
                 resolve({
-                    auth0Id: payload.sub!,
+                    authId: payload.sub!,
                     appMetadata: payload[SharedType.Auth0CustomNamespace.AppMetadata] ?? {},
                     userMetadata: payload[SharedType.Auth0CustomNamespace.UserMetadata] ?? {},
                 })

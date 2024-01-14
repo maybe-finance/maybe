@@ -1,4 +1,4 @@
-import { useAuth0 } from '@auth0/auth0-react'
+import { signOut } from 'next-auth/react'
 import { MainContentOverlay, useUserApi } from '@maybe-finance/client/shared'
 import { LoadingSpinner } from '@maybe-finance/design-system'
 import type { SharedType } from '@maybe-finance/shared'
@@ -22,7 +22,6 @@ function shouldRedirect(path: string, data?: SharedType.UserSubscription) {
 
 export function SubscriberGuard({ children }: PropsWithChildren) {
     const router = useRouter()
-    const { logout } = useAuth0()
     const { useSubscription } = useUserApi()
     const subscription = useSubscription()
 
@@ -31,7 +30,7 @@ export function SubscriberGuard({ children }: PropsWithChildren) {
             <MainContentOverlay
                 title="Unable to load subscription"
                 actionText="Log out"
-                onAction={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+                onAction={() => signOut()}
             >
                 <p>Contact us if this issue persists.</p>
             </MainContentOverlay>

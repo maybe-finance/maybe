@@ -3,7 +3,6 @@ import { PrismaClient } from '@prisma/client'
 import { createLogger, transports } from 'winston'
 import { AccountQueryService, UserService } from '@maybe-finance/server/features'
 import { resetUser } from './utils/user'
-import { managementClient } from '../lib/auth0'
 import stripe from '../lib/stripe'
 import { PgService } from '@maybe-finance/server/shared'
 import { DateTime } from 'luxon'
@@ -18,7 +17,6 @@ const userService = new UserService(
     {} as any,
     {} as any,
     {} as any,
-    managementClient,
     stripe
 )
 

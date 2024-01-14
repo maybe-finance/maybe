@@ -1,16 +1,14 @@
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { useAuth0 } from '@auth0/auth0-react'
+import { signOut } from 'next-auth/react'
 import classNames from 'classnames'
 import { AiOutlineLoading3Quarters as LoadingIcon } from 'react-icons/ai'
 import {
     RiAnticlockwise2Line,
-    RiAppleFill,
     RiArrowGoBackFill,
     RiDownloadLine,
     RiShareForwardLine,
 } from 'react-icons/ri'
-import { UserIdentityList } from '../user-details/UserIdentityList'
 import {
     Button,
     DatePicker,
@@ -30,10 +28,8 @@ import { DeleteUserButton } from './DeleteUserButton'
 import { DateTime } from 'luxon'
 
 export function UserDetails() {
-    const { logout } = useAuth0()
-    const { useProfile, useAuth0Profile, useUpdateProfile } = useUserApi()
+    const { useProfile, useUpdateProfile } = useUserApi()
 
-    const auth0ProfileQuery = useAuth0Profile()
     const updateProfileQuery = useUpdateProfile()
 
     const profileQuery = useProfile()
@@ -77,17 +73,7 @@ export function UserDetails() {
                                 type="text"
                             />
                         </form>
-                        {auth0ProfileQuery.data?.primaryIdentity.provider === 'apple' && (
-                            <div className="flex items-center gap-x-1 mt-2 text-gray-100">
-                                <span className="text-sm">Apple identity</span>
-                                <RiAppleFill className="w-3 h-3" />
-                            </div>
-                        )}
                     </div>
-
-                    {auth0ProfileQuery.data && (
-                        <UserIdentityList profile={auth0ProfileQuery.data} />
-                    )}
                 </LoadingPlaceholder>
             </section>
 
@@ -101,9 +87,7 @@ export function UserDetails() {
                     Deleting your account is a permanent action. If you delete your account, you
                     will no longer be able to sign and all data will be deleted.
                 </p>
-                <DeleteUserButton
-                    onDelete={() => logout({ logoutParams: { returnTo: window.location.origin } })}
-                />
+                <DeleteUserButton onDelete={() => signOut()} />
             </section>
         </div>
     )

@@ -145,3 +145,20 @@
     height: 0;
     pointer-events: none;
 }
+
+.radial-gradient-background {
+    background-image: radial-gradient(
+        60% 200% at 50% 50%,
+        rgba(67, 97, 238, 0.5) 0%,
+        transparent 100%
+    );
+}
+
+.radial-gradient-background-dark {
+    background-image: radial-gradient(
+        100% 100% at clamp(20%, calc(30% + var(--mx) * 0.05), 40%)
+            clamp(50%, calc(50% + var(--my) * 0.05), 60%),
+        #4361ee33 0%,
+        #16161af4 120%
+    );
+}

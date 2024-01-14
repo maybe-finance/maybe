@@ -1,5 +1,3 @@
-import type { User as Auth0UserClient } from '@auth0/auth0-react'
-import type { Identity, User as Auth0UserServer } from 'auth0'
 import type {
     AccountCategory,
     AccountClassification,
@@ -7,6 +5,7 @@ import type {
     Prisma,
     Security,
     User as PrismaUser,
+    AuthUser,
 } from '@prisma/client'
 import type { Institution } from 'plaid'
 import type { TimeSeries, TimeSeriesResponseWithDetail, Trend } from './general-types'
@@ -26,6 +25,14 @@ export type UpdateUser = Partial<
         monthlyExpensesUser: number | null
     }
 >
+
+/**
+ * ================================================================
+ * ======                 Auth User                          ======
+ * ================================================================
+ */
+
+export type { AuthUser }
 
 /**
  * ================================================================
@@ -182,37 +189,9 @@ export type MaybeCustomClaims = {
     [Auth0CustomNamespace.PrimaryIdentity]?: PrimaryAuth0Identity
 }
 
-export type Auth0ReactUser = Auth0UserClient & MaybeCustomClaims
-export type Auth0User = Auth0UserServer<MaybeAppMetadata, MaybeUserMetadata>
-export type Auth0Profile = Auth0User & {
-    primaryIdentity: Identity // actual
-    secondaryIdentities: Identity[] // linked
-    suggestedIdentities: Identity[] // potential links
-    autoPromptEnabled: boolean
-    socialOnlyUser: boolean
-    mfaEnabled: boolean
-}
-
-export type UpdateAuth0User = { enrolled_mfa: boolean }
-
 export interface PasswordReset {
     currentPassword: string
     newPassword: string
-}
-
-export type LinkAccountStatus = {
-    autoPromptEnabled: boolean
-    suggestedUsers: Auth0User[]
-}
-
-export interface LinkAccounts {
-    secondaryJWT: string
-    secondaryProvider: string
-}
-
-export interface UnlinkAccount {
-    secondaryAuth0Id: string
-    secondaryProvider: string
 }
 
 export type UserSubscription = {

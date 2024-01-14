@@ -43,8 +43,17 @@ This is the current state of building the app. You'll hit errors, which we're wo
 
 You'll need Docker installed to run the app locally.
 
+First, copy the `.env.example` file to `.env`:
+
 ```
 cp .env.example .env
+```
+
+Then, create a new secret using `openssl rand -base64 32` and populate `NEXTAUTH_SECRET` in your `.env` file with it.
+
+Then run the following yarn commands:
+
+```
 yarn install
 yarn run dev:services
 yarn prisma:migrate:dev
