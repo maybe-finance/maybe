@@ -4,7 +4,7 @@
     "license": "MIT",
     "scripts": {
         "dev": "nx run-many --target serve --projects=client,advisor,server,workers --parallel --host 0.0.0.0 --nx-bail=true --maxParallel=100",
-        "dev:services": "COMPOSE_PROFILES=services docker-compose up -d",
+        "dev:services": "COMPOSE_PROFILES=services docker compose up -d",
         "dev:services:all": "COMPOSE_PROFILES=services,ngrok,stripe docker-compose up",
         "dev:workers:test": "nx test workers --skip-nx-cache --runInBand",
         "dev:server:test": "nx test server --skip-nx-cache --runInBand",
