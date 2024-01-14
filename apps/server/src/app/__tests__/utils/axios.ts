@@ -23,10 +23,7 @@ export async function getAxiosClient() {
             password: 'REPLACE_THIS',
             audience: 'https://maybe-finance-api/v1',
             scope: '',
-            client_id: isCI
-                ? 'REPLACE_THIS'
-                : 'REPLACE_THIS',
-            client_secret: env.NX_AUTH0_CLIENT_SECRET,
+            client_id: isCI ? 'REPLACE_THIS' : 'REPLACE_THIS',
         },
     })
 

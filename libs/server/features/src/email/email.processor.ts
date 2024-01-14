@@ -2,7 +2,6 @@ import type { Logger } from 'winston'
 import type { PrismaClient } from '@prisma/client'
 import type { SendEmailQueueJobData } from '@maybe-finance/server/shared'
 import type { IEmailService } from './email.service'
-import type { ManagementClient } from 'auth0'
 import { DateTime } from 'luxon'
 
 export interface IEmailProcessor {
@@ -14,7 +13,6 @@ export class EmailProcessor implements IEmailProcessor {
     constructor(
         private readonly logger: Logger,
         private readonly prisma: PrismaClient,
-        private readonly auth0: ManagementClient,
         private readonly emailService: IEmailService
     ) {}
 

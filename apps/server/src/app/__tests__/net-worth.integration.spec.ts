@@ -4,7 +4,6 @@ import { createLogger, transports } from 'winston'
 import { DateTime } from 'luxon'
 import { PgService } from '@maybe-finance/server/shared'
 import { AccountQueryService, UserService } from '@maybe-finance/server/features'
-import { managementClient } from '../lib/auth0'
 import { resetUser } from './utils/user'
 jest.mock('plaid')
 jest.mock('auth0')
@@ -38,7 +37,6 @@ describe('user net worth', () => {
             },
             {} as any,
             {} as any,
-            managementClient,
             {} as any
         )
 

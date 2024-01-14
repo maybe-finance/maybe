@@ -57,7 +57,6 @@ import plaid, { getPlaidWebhookUrl } from './plaid'
 import finicity, { getFinicityTxPushUrl, getFinicityWebhookUrl } from './finicity'
 import stripe from './stripe'
 import postmark from './postmark'
-import { managementClient } from './auth0'
 import defineAbilityFor from './ability'
 import env from '../../env'
 import logger from '../lib/logger'
@@ -219,7 +218,6 @@ const userService = new UserService(
     balanceSyncStrategyFactory,
     queueService.getQueue('sync-user'),
     queueService.getQueue('purge-user'),
-    managementClient,
     stripe
 )
 
@@ -318,7 +316,6 @@ export async function createContext(req: Request) {
         prisma,
         plaid,
         stripe,
-        managementClient,
         logger,
         user,
         ability: defineAbilityFor(user),

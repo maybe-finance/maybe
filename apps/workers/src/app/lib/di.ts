@@ -28,14 +28,12 @@ import {
     LoanBalanceSyncStrategy,
     PlaidETL,
     PlaidService,
-    PropertyService,
     SecurityPricingProcessor,
     SecurityPricingService,
     TransactionBalanceSyncStrategy,
     UserProcessor,
     UserService,
     ValuationBalanceSyncStrategy,
-    VehicleService,
     EmailService,
     EmailProcessor,
     TransactionService,
@@ -58,7 +56,6 @@ import prisma from './prisma'
 import plaid from './plaid'
 import finicity from './finicity'
 import postmark from './postmark'
-import { managementClient } from './auth0'
 import stripe from './stripe'
 import env from '../../env'
 import { BullQueueEventHandler, WorkerErrorHandlerService } from '../services'
@@ -126,10 +123,6 @@ const finicityService = new FinicityService(
     '',
     env.NX_FINICITY_ENV === 'sandbox'
 )
-
-const propertyService = new PropertyService(logger.child({ service: 'PropertyService' }))
-
-const vehicleService = new VehicleService(logger.child({ service: 'VehicleService' }))
 
 // account-connection
 
@@ -228,7 +221,6 @@ export const userService: IUserService = new UserService(
     balanceSyncStrategyFactory,
     queueService.getQueue('sync-user'),
     queueService.getQueue('purge-user'),
-    managementClient,
     stripe
 )
 
@@ -282,6 +274,5 @@ export const emailService: IEmailService = new EmailService(
 export const emailProcessor: IEmailProcessor = new EmailProcessor(
     logger.child({ service: 'EmailProcessor' }),
     prisma,
-    managementClient,
     emailService
 )

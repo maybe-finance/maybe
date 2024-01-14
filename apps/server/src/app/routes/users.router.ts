@@ -1,6 +1,4 @@
 import { Router } from 'express'
-import axios from 'axios'
-import type { UnlinkAccountsParamsProvider } from 'auth0'
 import { subject } from '@casl/ability'
 import { z } from 'zod'
 import { DateUtil, type SharedType } from '@maybe-finance/shared'
@@ -110,31 +108,6 @@ router.get(
     endpoint.create({
         resolve: async ({ ctx }) => {
             return ctx.userService.getAuthProfile(ctx.user!.id)
-        },
-    })
-)
-
-// TODO: Remove this endpoint
-router.get(
-    '/auth0-profile',
-    endpoint.create({
-        resolve: async ({ ctx }) => {
-            return ctx.userService.getAuth0Profile(ctx.user!)
-        },
-    })
-)
-
-router.put(
-    '/auth0-profile',
-    endpoint.create({
-        input: z.object({
-            enrolled_mfa: z.boolean(),
-        }),
-        resolve: ({ input, ctx }) => {
-            return ctx.managementClient.updateUser(
-                { id: ctx.user!.authId }, // TODO: Remove this endpoint
-                { user_metadata: { enrolled_mfa: input.enrolled_mfa } }
-            )
         },
     })
 )
@@ -286,43 +259,7 @@ router.get(
     })
 )
 
-// TODO: Remove this endpoint or refactor to work with new Auth
-router.post(
-    '/link-accounts',
-    endpoint.create({
-        input: z.object({
-            secondaryJWT: z.string(),
-            secondaryProvider: z.string(),
-        }),
-        resolve: async ({ input, ctx }) => {
-            return ctx.userService.linkAccounts(ctx.user!.authId, input.secondaryProvider, {
-                token: input.secondaryJWT,
-                domain: env.NX_AUTH0_CUSTOM_DOMAIN,
-                audience: env.NX_AUTH0_AUDIENCE,
-            })
-        },
-    })
-)
-
-// TODO: Remove this endpoint or refactor to work with new Auth
-router.post(
-    '/unlink-account',
-    endpoint.create({
-        input: z.object({
-            secondaryAuth0Id: z.string(),
-            secondaryProvider: z.string(),
-        }),
-        resolve: async ({ input, ctx }) => {
-            return ctx.userService.unlinkAccounts(
-                ctx.user!.authId,
-                input.secondaryAuth0Id,
-                input.secondaryProvider as UnlinkAccountsParamsProvider
-            )
-        },
-    })
-)
-
-// TODO: Refactor this to use the Auth Id instead of Auth0
+// TODO: Implement verification email using Postmark instead of Auth0
 router.post(
     '/resend-verification-email',
     endpoint.create({
@@ -333,7 +270,7 @@ router.post(
             const authId = input.authId ?? ctx.user?.authId
             if (!authId) throw new Error('User not found')
 
-            await ctx.managementClient.sendEmailVerification({ user_id: authId })
+            //await ctx.managementClient.sendEmailVerification({ user_id: authId })
 
             ctx.logger.info(`Sent verification email to ${authId}`)
 
@@ -354,51 +291,17 @@ router.put(
                 throw new Error('Unable to update password.  No user found.')
             }
 
-            const user = await ctx.managementClient.getUser({ id: req.user.sub })
-
             const { newPassword, currentPassword } = input
 
-            /**
-             * Auth0 doesn't have a verify password endpoint on the Management API, so this is a secure way to
-             * verify that the old password was valid before changing it.  Why they don't have this feature still? ¯\_(ツ)_/¯
-             *
-             * @see https://community.auth0.com/t/change-password-validation/8158/10
-             */
             try {
-                // If this succeeds, we know the old password was correct
-                await axios.post(
-                    `https://${env.NX_AUTH0_DOMAIN}/oauth/token`,
-                    {
-                        grant_type: 'password',
-                        username: user.email,
-                        password: currentPassword,
-                        audience: env.NX_AUTH0_AUDIENCE,
-                        client_id: env.NX_AUTH0_CLIENT_ID,
-                        client_secret: env.NX_AUTH0_CLIENT_SECRET,
-                    },
-                    { headers: { 'content-type': 'application/json' } }
-                )
+                await ctx.authUserService.updatePassword(req.user.sub, currentPassword, newPassword)
             } catch (err) {
-                let errMessage = 'Could not reset password'
-
-                if (axios.isAxiosError(err)) {
-                    errMessage =
-                        err.response?.status === 401
-                            ? 'Invalid password, please try again'
-                            : errMessage
-                }
-
+                const errMessage = 'Could not reset password'
                 // Do not log the full error here, the user's password could be in it!
                 ctx.logger.error('Could not reset password')
 
                 return { success: false, error: errMessage }
             }
-
-            // https://auth0.com/docs/connections/database/password-change#use-the-management-api
-            await ctx.managementClient.updateUser(
-                { id: req.user?.sub },
-                { password: newPassword, connection: 'Username-Password-Authentication' }
-            )
 
             return { success: true }
         },
@@ -439,9 +342,8 @@ router.post(
                           customer: ctx.user.stripeCustomerId,
                       }
                     : {
-                          customer_email: (
-                              await ctx.managementClient.getUser({ id: req.user.sub })
-                          ).email,
+                          customer_email:
+                              (await ctx.authUserService.get(req.user.sub)).email ?? undefined,
                       }),
             })
 

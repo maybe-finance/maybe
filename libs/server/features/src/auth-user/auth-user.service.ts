@@ -1,5 +1,6 @@
 import type { AuthUser, PrismaClient, Prisma } from '@prisma/client'
 import type { Logger } from 'winston'
+import bcrypt from 'bcrypt'
 
 export interface IAuthUserService {
     get(id: AuthUser['id']): Promise<AuthUser>
@@ -20,6 +21,20 @@ export class AuthUserService implements IAuthUserService {
         return await this.prisma.authUser.findUnique({
             where: { email },
         })
+    }
+
+    async updatePassword(id: AuthUser['id'], oldPassword: string, newPassword: string) {
+        const authUser = await this.get(id)
+        const isMatch = await bcrypt.compare(oldPassword, authUser.password!)
+        if (!isMatch) {
+            throw new Error('Could not reset password')
+        } else {
+            const hashedPassword = await bcrypt.hash(newPassword, 10)
+            return await this.prisma.authUser.update({
+                where: { id },
+                data: { password: hashedPassword },
+            })
+        }
     }
 
     async create(data: Prisma.AuthUserCreateInput & { firstName: string; lastName: string }) {

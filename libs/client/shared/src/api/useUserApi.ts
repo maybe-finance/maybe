@@ -1,20 +1,14 @@
 import type { UseMutationOptions, UseQueryOptions } from '@tanstack/react-query'
 import type { SharedType } from '@maybe-finance/shared'
-import type { Auth0ContextInterface } from '@auth0/auth0-react'
 import type { AxiosInstance } from 'axios'
-import Axios from 'axios'
 import * as Sentry from '@sentry/react'
 import { useMemo } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-hot-toast'
 import { DateTime } from 'luxon'
 import { useAxiosWithAuth } from '../hooks/useAxiosWithAuth'
-import { useAuth0 } from '@auth0/auth0-react'
 
-const UserApi = (
-    axios: AxiosInstance,
-    auth0: Auth0ContextInterface<SharedType.Auth0ReactUser>
-) => ({
+const UserApi = (axios: AxiosInstance) => ({
     async getNetWorthSeries(start: string, end: string) {
         const { data } = await axios.get<SharedType.NetWorthTimeSeriesResponse>(
             `/users/net-worth`,
@@ -70,65 +64,9 @@ const UserApi = (
         return data
     },
 
-    async getAuth0Profile() {
-        const { data } = await axios.get<SharedType.Auth0Profile>('/users/auth0-profile')
-        return data
-    },
-
-    async updateAuth0Profile(newProfile: SharedType.UpdateAuth0User) {
-        const { data } = await axios.put<
-            SharedType.Auth0User,
-            SharedType.ApiResponse<SharedType.Auth0User>
-        >('/users/auth0-profile', newProfile)
-        return data
-    },
-
     async getSubscription() {
         const { data } = await axios.get<SharedType.UserSubscription>('/users/subscription')
         return data
-    },
-
-    async toggleMFA(desiredMFAState: 'enabled' | 'disabled'): Promise<{
-        actualMFAState: 'enabled' | 'disabled'
-        desiredMFAState: 'enabled' | 'disabled'
-        mfaRegistrationComplete: boolean
-    }> {
-        const audience = process.env.NEXT_PUBLIC_AUTH0_AUDIENCE || 'https://maybe-finance-api/v1'
-
-        await axios.put<SharedType.Auth0User, SharedType.ApiResponse<SharedType.Auth0User>>(
-            '/users/auth0-profile',
-            {
-                user_metadata: { enrolled_mfa: desiredMFAState === 'enabled' ? true : false },
-            }
-        )
-
-        // If the user is enabling MFA, prompt them to set it up immediately
-        if (desiredMFAState === 'enabled') {
-            await auth0.loginWithPopup(
-                {
-                    authorizationParams: {
-                        connection: 'Username-Password-Authentication',
-                        screen_hint: 'show-form-only',
-                        display: 'page',
-                        audience,
-                    },
-                },
-                { timeoutInSeconds: 360 }
-            )
-        }
-
-        const currentIdTokenMFAState = auth0.user?.['https://maybe.co/user-metadata']?.enrolled_mfa
-            ? 'enabled'
-            : 'disabled'
-
-        // If the ID token is the same as the user's intended MFA state, that means they successfully
-        // completed the flow.  If not, they closed the popup early.
-        return {
-            actualMFAState: currentIdTokenMFAState,
-            desiredMFAState,
-            mfaRegistrationComplete:
-                currentIdTokenMFAState === desiredMFAState || desiredMFAState === 'disabled',
-        }
     },
 
     async changePassword(newPassword: SharedType.PasswordReset) {
@@ -136,32 +74,6 @@ const UserApi = (
             SharedType.PasswordReset,
             SharedType.ApiResponse<{ success: boolean; error?: string }>
         >('/users/change-password', newPassword)
-        return data
-    },
-
-    async linkAccounts({ secondaryJWT, secondaryProvider }: SharedType.LinkAccounts) {
-        try {
-            const { data } = await axios.post<
-                SharedType.LinkAccounts,
-                SharedType.ApiResponse<SharedType.Auth0User>
-            >('/users/link-accounts', { secondaryJWT, secondaryProvider })
-            return data
-        } catch (err) {
-            if (Axios.isAxiosError(err)) {
-                const message = err.response?.data?.errors?.[0]?.title
-                throw new Error(message ?? 'Something went wrong')
-            }
-
-            throw err
-        }
-    },
-
-    async unlinkAccount(unlinkData: SharedType.UnlinkAccount) {
-        const { data } = await axios.post<
-            SharedType.UnlinkAccount,
-            SharedType.ApiResponse<SharedType.Auth0User>
-        >('/users/unlink-account', unlinkData)
-
         return data
     },
 
@@ -206,8 +118,7 @@ const staleTimes = {
 export function useUserApi() {
     const queryClient = useQueryClient()
     const { axios } = useAxiosWithAuth()
-    const auth0 = useAuth0()
-    const api = useMemo(() => UserApi(axios, auth0), [axios, auth0])
+    const api = useMemo(() => UserApi(axios), [axios])
 
     const useNetWorthSeries = (
         { start, end }: { start: string; end: string },
@@ -304,24 +215,6 @@ export function useUserApi() {
             ...options,
         })
 
-    const useAuth0Profile = (
-        options?: Omit<UseQueryOptions<SharedType.Auth0Profile>, 'queryKey' | 'queryFn'>
-    ) => useQuery(['users', 'auth0-profile'], api.getAuth0Profile, options)
-
-    const useUpdateAuth0Profile = (
-        options?: UseMutationOptions<
-            SharedType.Auth0User | undefined,
-            unknown,
-            SharedType.UpdateAuth0User
-        >
-    ) =>
-        useMutation(api.updateAuth0Profile, {
-            onSettled() {
-                queryClient.invalidateQueries(['users', 'auth0-profile'])
-            },
-            ...options,
-        })
-
     const useSubscription = (
         options?: Omit<UseQueryOptions<SharedType.UserSubscription>, 'queryKey' | 'queryFn'>
     ) => useQuery(['users', 'subscription'], api.getSubscription, options)
@@ -337,33 +230,6 @@ export function useUserApi() {
             onSettled: () => {
                 queryClient.invalidateQueries(['users'])
             },
-        })
-
-    const useLinkAccounts = (
-        options?: UseMutationOptions<
-            SharedType.Auth0User | undefined,
-            unknown,
-            SharedType.LinkAccounts
-        >
-    ) => useMutation(api.linkAccounts, options)
-
-    const useUnlinkAccount = (
-        options?: UseMutationOptions<
-            SharedType.Auth0User | undefined,
-            unknown,
-            SharedType.UnlinkAccount
-        >
-    ) =>
-        useMutation(api.unlinkAccount, {
-            onSuccess: () => {
-                toast.success('Account unlinked!')
-                queryClient.invalidateQueries(['users'])
-            },
-            onError: (err) => {
-                Sentry.captureException(err)
-                toast.error('Error unlinking user account')
-            },
-            ...options,
         })
 
     const useResendEmailVerification = (
@@ -420,12 +286,8 @@ export function useUserApi() {
         useProfile,
         useUpdateProfile,
         useAuthProfile,
-        useAuth0Profile,
-        useUpdateAuth0Profile,
         useSubscription,
         useChangePassword,
-        useLinkAccounts,
-        useUnlinkAccount,
         useResendEmailVerification,
         useCreateCheckoutSession,
         useCreateCustomerPortalSession,

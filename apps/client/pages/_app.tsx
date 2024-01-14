@@ -16,7 +16,6 @@ import { BrowserTracing } from '@sentry/tracing'
 import env from '../env'
 import '../styles.css'
 import { SessionProvider, useSession } from 'next-auth/react'
-import ModalManager from '../components/ModalManager'
 import Meta from '../components/Meta'
 import APM from '../components/APM'
 import { useRouter } from 'next/router'
@@ -46,14 +45,12 @@ const WithAuth = function ({ children }: PropsWithChildren) {
     if (session) {
         return (
             <OnboardingGuard>
-                <ModalManager>
-                    <UserAccountContextProvider>
-                        <AccountContextProvider>
-                            {children}
-                            <AccountsManager />
-                        </AccountContextProvider>
-                    </UserAccountContextProvider>
-                </ModalManager>
+                <UserAccountContextProvider>
+                    <AccountContextProvider>
+                        {children}
+                        <AccountsManager />
+                    </AccountContextProvider>
+                </UserAccountContextProvider>
             </OnboardingGuard>
         )
     }

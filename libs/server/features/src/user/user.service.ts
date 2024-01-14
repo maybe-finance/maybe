@@ -1,7 +1,6 @@
 import type { AccountCategory, AccountType, PrismaClient, User } from '@prisma/client'
 import type { Logger } from 'winston'
-import { AuthUtil, type PurgeUserQueue, type SyncUserQueue } from '@maybe-finance/server/shared'
-import type { ManagementClient, UnlinkAccountsParamsProvider } from 'auth0'
+import type { PurgeUserQueue, SyncUserQueue } from '@maybe-finance/server/shared'
 import type Stripe from 'stripe'
 import type { IBalanceSyncStrategyFactory } from '../account-balance'
 import type { IAccountQueryService } from '../account'
@@ -55,7 +54,6 @@ export class UserService implements IUserService {
         private readonly balanceSyncStrategyFactory: IBalanceSyncStrategyFactory,
         private readonly syncQueue: SyncUserQueue,
         private readonly purgeQueue: PurgeUserQueue,
-        private readonly auth0: ManagementClient,
         private readonly stripe: Stripe
     ) {}
 
@@ -70,50 +68,6 @@ export class UserService implements IUserService {
         return this.prisma.authUser.findUniqueOrThrow({
             where: { id: user.authId },
         })
-    }
-
-    // TODO: Update this to use new Auth
-    async getAuth0Profile(user: User): Promise<SharedType.Auth0Profile> {
-        if (!user.email) throw new Error('No email found for user')
-
-        const usersWithMatchingEmail = await this.auth0.getUsersByEmail(user.email)
-        const autoPromptEnabled = user.linkAccountDismissedAt == null
-        // TODO: Update this to use new Auth
-        const currentUser = usersWithMatchingEmail.find((u) => u.user_id === user.authId)
-        const primaryIdentity = currentUser?.identities?.find(
-            (identity) => !('profileData' in identity)
-        )
-        const secondaryIdentities =
-            currentUser?.identities?.filter((identity) => 'profileData' in identity) ?? []
-        if (!currentUser || !primaryIdentity) throw new Error('Failed to get Auth0 user')
-
-        const socialOnlyUser =
-            primaryIdentity.isSocial && secondaryIdentities.every((i) => i.isSocial)
-
-        const suggestedIdentities = usersWithMatchingEmail
-            .filter(
-                (match) =>
-                    match.email_verified &&
-                    match.user_id !== user.authId &&
-                    match.identities?.at(0) != null
-            )
-            .map((user) => user.identities!.at(0)!)
-
-        // Auth0 returns 'true' (mis-typing) or true, so normalize the type here
-        const email_verified =
-            (currentUser.email_verified as unknown as string) === 'true' ||
-            currentUser.email_verified === true
-
-        return {
-            ...currentUser,
-            email_verified,
-            primaryIdentity,
-            secondaryIdentities,
-            suggestedIdentities,
-            socialOnlyUser,
-            autoPromptEnabled,
-            mfaEnabled: currentUser.user_metadata?.enrolled_mfa === true,
-        }
     }
 
     async sync(id: User['id']) {
@@ -553,47 +507,5 @@ export class UserService implements IUserService {
             .setCTAPath('/plans')
 
         return onboarding
-    }
-
-    // TODO: Update to work with new Auth
-    async linkAccounts(
-        primaryAuth0Id: User['authId'],
-        provider: string,
-        secondaryJWT: { token: string; domain: string; audience: string }
-    ) {
-        const validatedJWT = await AuthUtil.validateRS256JWT(
-            `Bearer ${secondaryJWT.token}`,
-            secondaryJWT.domain,
-            secondaryJWT.audience
-        )
-
-        const user = await this.prisma.user.findFirst({ where: { authId: validatedJWT.authId } })
-
-        if (user?.stripePriceId) {
-            throw new Error(
-                'The account you are trying to link has an active Stripe trial or subscription.  We cannot link this identity at this time.'
-            )
-        }
-
-        return this.auth0.linkUsers(primaryAuth0Id, {
-            user_id: validatedJWT.authId,
-            provider,
-        })
-    }
-
-    async unlinkAccounts(
-        primaryAuth0Id: User['authId'],
-        secondaryAuth0Id: User['authId'],
-        secondaryProvider: UnlinkAccountsParamsProvider
-    ) {
-        const response = await this.auth0.unlinkUsers({
-            id: primaryAuth0Id,
-            provider: secondaryProvider,
-            user_id: secondaryAuth0Id,
-        })
-
-        this.logger.info(`Unlinked ${secondaryAuth0Id} from ${primaryAuth0Id}`)
-
-        return response
     }
 }
