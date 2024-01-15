@@ -72,7 +72,7 @@ export function Profile({ title, onNext }: StepProps) {
                     dob: data.dob,
                     household: data.household,
                     country: data.country,
-                    state: data.country === 'US' ? data.state : null, // should be NULL if country is not US
+                    state: null, // should always be null for now
                     maybeGoals: data.maybeGoals,
                     maybeGoalsDescription: data.maybeGoalsDescription,
                 })
@@ -207,7 +207,7 @@ function ProfileForm({ title, onSubmit, defaultValues }: ProfileViewProps) {
 
                 <Question
                     open={currentQuestion === 'residence'}
-                    valid={!errors.country && (!errors.state || country !== 'US')}
+                    valid={!errors.country}
                     icon={RiMapPin2Line}
                     label="Where are you based?"
                     onClick={() => setCurrentQuestion('residence')}
@@ -236,29 +236,6 @@ function ProfileForm({ title, onSubmit, defaultValues }: ProfileViewProps) {
                                 </Listbox>
                             )}
                         />
-
-                        {country === 'US' && (
-                            <Controller
-                                name="state"
-                                control={control}
-                                rules={{ required: true }}
-                                render={({ field }) => (
-                                    <Listbox {...field}>
-                                        <Listbox.Button label="State">
-                                            {Geo.states.find((s) => s.code === field.value)?.name ||
-                                                'Select'}
-                                        </Listbox.Button>
-                                        <Listbox.Options className="max-h-[300px] custom-gray-scroll">
-                                            {Geo.states.map((state) => (
-                                                <Listbox.Option key={state.code} value={state.code}>
-                                                    {state.name}
-                                                </Listbox.Option>
-                                            ))}
-                                        </Listbox.Options>
-                                    </Listbox>
-                                )}
-                            />
-                        )}
                     </div>
                     <Tooltip
                         placement="bottom-start"
