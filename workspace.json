@@ -390,6 +390,30 @@
             },
             "tags": ["scope:shared"]
         },
+        "teller-api": {
+            "$schema": "../../node_modules/nx/schemas/project-schema.json",
+            "root": "libs/teller-api",
+            "sourceRoot": "libs/teller-api/src",
+            "projectType": "library",
+            "targets": {
+                "lint": {
+                    "executor": "@nrwl/linter:eslint",
+                    "outputs": ["{options.outputFile}"],
+                    "options": {
+                        "lintFilePatterns": ["libs/teller-api/**/*.ts"]
+                    }
+                },
+                "test": {
+                    "executor": "@nrwl/jest:jest",
+                    "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+                    "options": {
+                        "jestConfig": "libs/teller-api/jest.config.ts",
+                        "passWithNoTests": true
+                    }
+                }
+            },
+            "tags": ["scope:shared"]
+        },
         "workers": {
             "$schema": "../../node_modules/nx/schemas/project-schema.json",
             "root": "apps/workers",

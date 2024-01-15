@@ -42,6 +42,8 @@ import {
     InstitutionProviderFactory,
     FinicityWebhookHandler,
     PlaidWebhookHandler,
+    TellerService,
+    TellerWebhookHandler,
     InsightService,
     SecurityPricingService,
     TransactionService,
@@ -55,6 +57,7 @@ import { SharedType } from '@maybe-finance/shared'
 import prisma from './prisma'
 import plaid, { getPlaidWebhookUrl } from './plaid'
 import finicity, { getFinicityTxPushUrl, getFinicityWebhookUrl } from './finicity'
+import teller, { getTellerWebhookUrl } from './teller'
 import stripe from './stripe'
 import postmark from './postmark'
 import defineAbilityFor from './ability'
@@ -140,6 +143,14 @@ const finicityService = new FinicityService(
     new FinicityETL(logger.child({ service: 'FinicityETL' }), prisma, finicity),
     getFinicityWebhookUrl(),
     env.NX_FINICITY_ENV === 'sandbox'
+)
+
+const tellerService = new TellerService(
+    logger.child({ service: 'TellerService' }),
+    prisma,
+    teller,
+    getTellerWebhookUrl(),
+    true
 )
 
 // account-connection
@@ -278,6 +289,13 @@ const stripeWebhooks = new StripeWebhookHandler(
     stripe
 )
 
+const tellerWebhooks = new TellerWebhookHandler(
+    logger.child({ service: 'TellerWebhookHandler' }),
+    prisma,
+    teller,
+    accountConnectionService
+)
+
 // helper function for parsing JWT and loading User record
 // TODO: update this with roles, identity, and metadata
 async function getCurrentUser(jwt: NonNullable<Request['user']>) {
@@ -339,6 +357,8 @@ export async function createContext(req: Request) {
         finicityService,
         finicityWebhooks,
         stripeWebhooks,
+        tellerService,
+        tellerWebhooks,
         insightService,
         marketDataService,
         planService,
