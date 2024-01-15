@@ -43,6 +43,7 @@ enum AccountSyncStatus {
 enum AccountConnectionType {
   plaid
   finicity
+  teller
 }
 
 model AccountConnection {
