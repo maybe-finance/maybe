@@ -258,5 +258,6 @@
             "yarn nx format:write --uncommitted",
             "yarn eslint --fix"
         ]
-    }
+    },
+    "packageManager": "yarn@1.22.21"
 }

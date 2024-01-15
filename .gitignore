@@ -37,6 +37,7 @@ exceptions.log
 error.log
 combined.log
 /tools/output
+.yarn
 
 # System Files
 .DS_Store
