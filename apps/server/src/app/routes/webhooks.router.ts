@@ -161,8 +161,8 @@ router.post(
                 console.log('handling webhook')
                 await ctx.tellerWebhooks.handleWebhook(input as TellerTypes.WebhookData)
             } catch (err) {
-                // record error but don't throw, otherwise Finicity Connect behaves weird
-                ctx.logger.error(`[finicity_webhook] error handling webhook`, err)
+                // record error but don't throw
+                ctx.logger.error(`[teller_webhook] error handling webhook`, err)
             }
 
             return { status: 'ok' }
