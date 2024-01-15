@@ -29,7 +29,6 @@ const envSchema = z.object({
 
     NX_DATABASE_URL: z.string(),
     NX_DATABASE_SECRET: z.string(),
-    NX_SESSION_SECRET: z.string(),
 
     NX_NGROK_URL: z.string().default('http://localhost:4551'),
 
