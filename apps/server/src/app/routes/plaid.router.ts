@@ -6,6 +6,26 @@ import { devOnly } from '../middleware'
 
 const router = Router()
 
+/**
+ * @swagger
+ * tags:
+ *   name: Plaid
+ *   description: Plaid
+ */
+
+/**
+ * @swagger
+ * /status:
+ *   get:
+ *     description: Returns status
+ *     tags:
+ *      - Plaid
+ *     produces:
+ *      - application/json
+ *     responses:
+ *       200:
+ *         description: users
+ */
 router.get(
     '/status',
     endpoint.create({

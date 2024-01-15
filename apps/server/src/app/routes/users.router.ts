@@ -10,6 +10,13 @@ import {
     UpdateOnboardingSchema,
 } from '@maybe-finance/server/features'
 
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: User management and login
+ */
+
 const router = Router()
 
 router.get(
@@ -21,6 +28,19 @@ router.get(
     })
 )
 
+/**
+ * @swagger
+ * /onboarding/:flow:
+ *   get:
+ *     description: Returns users
+ *     tags:
+ *      - Users
+ *     produces:
+ *      - application/json
+ *     responses:
+ *       200:
+ *         description: users
+ */
 router.get(
     '/onboarding/:flow',
     endpoint.create({

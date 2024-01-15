@@ -8,6 +8,26 @@ import env from '../../env'
 
 const router = Router()
 
+/**
+ * @swagger
+ * tags:
+ *   name: Webhooks
+ *   description: Webhooks
+ */
+
+/**
+ * @swagger
+ * /plaid/webhook:
+ *   get:
+ *     description: Webhook for plaid
+ *     tags:
+ *      - Webhooks
+ *     produces:
+ *      - application/json
+ *     responses:
+ *       200:
+ *         description: users
+ */
 router.post(
     '/plaid/webhook',
     process.env.NODE_ENV !== 'development' ? validatePlaidJwt : (_req, _res, next) => next(),

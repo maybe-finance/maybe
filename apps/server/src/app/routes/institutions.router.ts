@@ -4,6 +4,26 @@ import endpoint from '../lib/endpoint'
 
 const router = Router()
 
+/**
+ * @swagger
+ * tags:
+ *   name: Institutions
+ *   description: Institutions
+ */
+
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     description: Returns instriutions
+ *     tags:
+ *      - Institutions
+ *     produces:
+ *      - application/json
+ *     responses:
+ *       200:
+ *         description: users
+ */
 router.get(
     '/',
     endpoint.create({

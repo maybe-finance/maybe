@@ -8,6 +8,26 @@ import { devOnly } from '../middleware'
 
 const router = Router()
 
+/**
+ * @swagger
+ * tags:
+ *   name: Account Connections
+ *   description: Account Connections
+ */
+
+/**
+ * @swagger
+ * /:id:
+ *   get:
+ *     description: Returns connections
+ *     tags:
+ *      - Account Connections
+ *     produces:
+ *      - application/json
+ *     responses:
+ *       200:
+ *         description: users
+ */
 router.get(
     '/:id',
     endpoint.create({

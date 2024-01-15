@@ -6,6 +6,26 @@ import { DateUtil } from '@maybe-finance/shared'
 
 const router = Router()
 
+/**
+ * @swagger
+ * tags:
+ *   name: Valuations
+ *   description: Valuations
+ */
+
+/**
+ * @swagger
+ * /:id:
+ *   get:
+ *     description: Returns valuations
+ *     tags:
+ *      - Valuations
+ *     produces:
+ *      - application/json
+ *     responses:
+ *       200:
+ *         description: users
+ */
 router.get(
     '/:id',
     endpoint.create({

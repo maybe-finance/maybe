@@ -13,6 +13,13 @@ import endpoint from '../lib/endpoint'
 import keyBy from 'lodash/keyBy'
 import merge from 'lodash/merge'
 
+/**
+ * @swagger
+ * tags:
+ *   name: Accounts
+ *   description: Accounts
+ */
+
 const router = Router()
 
 router.get(

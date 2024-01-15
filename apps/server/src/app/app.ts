@@ -6,6 +6,9 @@ import * as Sentry from '@sentry/node'
 import * as SentryTracing from '@sentry/tracing'
 import * as trpcExpress from '@trpc/server/adapters/express'
 import { appRouter, createTRPCContext } from './trpc'
+import { apiReference } from '@scalar/express-api-reference'
+import swaggerJsdoc from 'swagger-jsdoc'
+
 /**
  * In Express 4.x, asynchronous errors are NOT automatically passed to next().  This middleware is a small
  * wrapper around Express that enables automatic async error handling
@@ -45,6 +48,7 @@ import {
     e2eRouter,
 } from './routes'
 import env from '../env'
+import maybeScalarTheme from './maybe-scalar-theme'
 
 const app = express()
 
@@ -164,6 +168,32 @@ app.use('/v1/transactions', transactionsRouter)
 app.use('/v1/holdings', holdingsRouter)
 app.use('/v1/securities', securitiesRouter)
 app.use('/v1/plans', plansRouter)
+
+// api docs
+const options = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'Maybe API References',
+            description:
+                'This page may not represent the current state of the API and is primarily here as a quick reference to see everything in one spot.',
+            version: '1.0.0',
+        },
+    },
+    apis: ['**/routes/**.router.ts'],
+}
+
+const openapiSpecification = swaggerJsdoc(options)
+
+app.use(
+    '/reference',
+    apiReference({
+        customCss: maybeScalarTheme,
+        spec: {
+            content: openapiSpecification,
+        },
+    })
+)
 
 // Sentry must be the *first* handler
 app.use(identifySentryUser)
