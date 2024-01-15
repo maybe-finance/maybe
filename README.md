@@ -4,7 +4,7 @@
 
 <b>Get involved: [Discord](https://link.maybe.co/discord) • [Website](https://maybe.co) • [Issues](https://github.com/maybe-finance/maybe/issues)</b>
 
-🚨 NOTE: This is the original React app of the previously-defunct personal finance app, Maybe. This original version used many external services (Plaid, Finicity, Auth0, etc) and getting it to fully function will be a decent amount of work.
+🚨 NOTE: This is the original React app of the previously-defunct personal finance app, Maybe. This original version used many external services (Plaid, Finicity, etc) and getting it to fully function will be a decent amount of work.
 
 There's a LOT of work to do to get this functioning, but it should be feasible.
 
@@ -65,7 +65,7 @@ yarn dev
 
 ## High-priority issues
 
-The biggest focus at the moment is on getting the app functional without some previously key external services (namely Auth0, Plaid and Finicity).
+The biggest focus at the moment is on getting the app functional without some previously key external services (namely Plaid and Finicity).
 
 You can view the current [high-priority issues here](https://github.com/maybe-finance/maybe/issues?q=is:issue+is:open+label:%22high+priority%22). Those are the most impactful issues to tackle first.
 

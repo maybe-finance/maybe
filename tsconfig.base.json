@@ -23,6 +23,7 @@
             "@maybe-finance/server/features": ["libs/server/features/src/index.ts"],
             "@maybe-finance/server/shared": ["libs/server/shared/src/index.ts"],
             "@maybe-finance/shared": ["libs/shared/src/index.ts"],
+            "@maybe-finance/teller-api": ["libs/teller-api/src/index.ts"],
             "@maybe-finance/trpc": ["apps/server/src/app/trpc.ts"]
         }
     },

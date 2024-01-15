@@ -14,6 +14,10 @@ const now = DateTime.now()
 
 export default async function handler(req: NextRequest) {
     const fontData = await font
+    const { headers } = req
+    const protocol = headers.get('x-forwarded-proto') || 'http'
+    const host = headers.get('host')
+    const baseUrl = `${protocol}://${host}`
 
     try {
         const { searchParams } = new URL(req.url)
@@ -49,7 +53,7 @@ export default async function handler(req: NextRequest) {
                     >
                         <img
                             alt=""
-                            src="https://assets.maybe.co/images/maybe-card.png"
+                            src={`${baseUrl}/assets/maybe-card.png`}
                             style={{ position: 'absolute', width: '100%' }}
                         />
                         <div

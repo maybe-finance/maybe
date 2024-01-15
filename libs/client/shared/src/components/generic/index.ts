@@ -1,4 +1,3 @@
-export * from './FeedbackButton'
 export * from './TrendBadge'
 export * from './Toaster'
 export * from './BoxIcon'
