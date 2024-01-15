@@ -82,6 +82,7 @@ app.get('/', (req, res) => {
     res.render('pages/index', { error: req.query.error })
 })
 
+// TODO: Replace "admin" concept from Auth0 with next-auth
 // Only Auth0 users with a role of "admin" can view these pages (i.e. Maybe Employees)
 app.use(express.static(__dirname + '/assets'))
 

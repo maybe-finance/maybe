@@ -302,10 +302,15 @@ async function getCurrentUser(jwt: NonNullable<Request['user']>) {
 
     return {
         ...user,
-        roles: jwt[SharedType.Auth0CustomNamespace.Roles] ?? [],
-        primaryIdentity: jwt[SharedType.Auth0CustomNamespace.PrimaryIdentity] ?? {},
-        userMetadata: jwt[SharedType.Auth0CustomNamespace.UserMetadata] ?? {},
-        appMetadata: jwt[SharedType.Auth0CustomNamespace.AppMetadata] ?? {},
+        // TODO: Replace Auth0 concepts with next-auth
+        roles: [],
+        primaryIdentity: {},
+        userMetadata: {},
+        appMetadata: {},
+        // roles: jwt[SharedType.Auth0CustomNamespace.Roles] ?? [],
+        // primaryIdentity: jwt[SharedType.Auth0CustomNamespace.PrimaryIdentity] ?? {},
+        // userMetadata: jwt[SharedType.Auth0CustomNamespace.UserMetadata] ?? {},
+        // appMetadata: jwt[SharedType.Auth0CustomNamespace.AppMetadata] ?? {},
     }
 }
 
