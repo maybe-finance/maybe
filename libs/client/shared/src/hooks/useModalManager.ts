@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react'
 
-export type ModalKey = 'linkAuth0Accounts'
+export type ModalKey = 'linkAccounts'
 export type ModalManagerAction =
     | { type: 'open'; key: ModalKey; props: any }
     | { type: 'close'; key: ModalKey }
