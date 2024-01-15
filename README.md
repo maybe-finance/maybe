@@ -63,11 +63,26 @@ yarn dev
 
 ### Common Issues
 
+#### error: server: unhandled promise rejection: [object Promise]: Error: connect ECONNREFUSED ::1:4551
+
+```bash
+info: 🚀 API listening at http://localhost:3333
+error: server: unhandled promise rejection: [object Promise]: Error: connect ECONNREFUSED ::1:4551
+error: server: unhandled promise rejection: [object Promise]: Error: connect ECONNREFUSED ::1:4551
+error: server: unhandled promise rejection: [object Promise]: Error: connect ECONNREFUSED ::1:4551
+```
+
+This error will show on startup after running `yarn dev`.
+
+What this means is the local **ngrok** service is not running.
+
+To start up **ngrok** locally, you need to run `COMPOSE_PROFILES=ngrok docker-compose up -d`.
+
 #### 'COMPOSE_PROFILES' is not recognized as an internal or external command
 
 **_TODO: Come up with a cross-platform working command for these scripts._**
 
-```
+```bash
 $ yarn dev:services
 yarn run v1.22.21
 $ COMPOSE_PROFILES=services docker-compose up -d
