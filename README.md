@@ -4,7 +4,7 @@
 
 <b>Get involved: [Discord](https://link.maybe.co/discord) • [Website](https://maybe.co) • [Issues](https://github.com/maybe-finance/maybe/issues)</b>
 
-🚨 NOTE: This is the original React app of the previously-defunct personal finance app, Maybe. This original version used many external services (Plaid, Finicity, Auth0, etc) and getting it to fully function will be a decent amount of work.
+🚨 NOTE: This is the original React app of the previously-defunct personal finance app, Maybe. This original version used many external services (Plaid, Finicity, etc) and getting it to fully function will be a decent amount of work.
 
 There's a LOT of work to do to get this functioning, but it should be feasible.
 
@@ -50,6 +50,8 @@ cp .env.example .env
 ```
 
 Then, create a new secret using `openssl rand -base64 32` and populate `NEXTAUTH_SECRET` in your `.env` file with it.
+
+To enable transactional emails, you'll need to create a [Postmark](https://postmarkapp.com/) account and add your API key to your `.env` file (`NX_POSTMARK_API_TOKEN`). You can also set the from and reply-to email addresses (`NX_POSTMARK_FROM_ADDRESS` and `NX_POSTMARK_REPLY_TO_ADDRESS`). If you want to run the app without email, you can set `NX_POSTMARK_API_TOKEN` to a dummy value.
 
 Then run the following yarn commands:
 
@@ -100,9 +102,13 @@ To workaround this issue, simply run the command/script directly instead of usin
 
 For the above error example, I should run `COMPOSE_PROFILES=services docker-compose up -d` directly in my CLI instead of `yarn dev:services`.
 
+## Contributing
+
+To contribute, please see our [contribution guide](https://github.com/maybe-finance/maybe/blob/main/CONTRIBUTING.md).
+
 ## High-priority issues
 
-The biggest focus at the moment is on getting the app functional without some previously key external services (namely Auth0, Plaid and Finicity).
+The biggest focus at the moment is on getting the app functional without some previously key external services (namely Plaid and Finicity).
 
 You can view the current [high-priority issues here](https://github.com/maybe-finance/maybe/issues?q=is:issue+is:open+label:%22high+priority%22). Those are the most impactful issues to tackle first.
 
@@ -124,6 +130,10 @@ To pull market data in (for investments), you'll need a Polygon.io API key. You 
 -   [Data model assumptions and calculations](https://github.com/maybe-finance/maybe/wiki/Data-model-assumptions-and-calculations)
 -   [Handling money](https://github.com/maybe-finance/maybe/wiki/Handling-Money)
 -   [REST API](https://github.com/maybe-finance/maybe/wiki/REST-API)
+
+## Repo Activity
+
+![Repo Activity](https://repobeats.axiom.co/api/embed/7866c9790deba0baf63ca1688b209130b306ea4e.svg 'Repobeats analytics image')
 
 ## Credits
 

@@ -40,7 +40,7 @@ export function UserDetails() {
     }
 
     return (
-        <div className="mt-6 space-y-10 max-w-lg">
+        <div className="max-w-lg mt-6 space-y-10">
             <section>
                 <h4 className="text-lg uppercase">Profile</h4>
                 <LoadingPlaceholder isLoading={profileQuery.isLoading}>
@@ -64,7 +64,7 @@ export function UserDetails() {
                 <h4 className="text-lg uppercase">Account</h4>
                 <LoadingPlaceholder isLoading={profileQuery.isLoading}>
                     <div className="text-base">
-                        <p className="text-gray-50 mb-2">Email address</p>
+                        <p className="mb-2 text-gray-50">Email address</p>
                         <form>
                             <Input
                                 readOnly
@@ -83,7 +83,7 @@ export function UserDetails() {
 
             <section>
                 <h4 className="text-lg uppercase">Danger Zone</h4>
-                <p className="text-base text-gray-100 mb-4">
+                <p className="mb-4 text-base text-gray-100">
                     Deleting your account is a permanent action. If you delete your account, you
                     will no longer be able to sign and all data will be deleted.
                 </p>
@@ -189,8 +189,8 @@ function MaybeCardSection() {
             className="mt-5 text-base"
             onSubmit={handleSubmit((data) => updateProfile.mutate(data))}
         >
-            <p className="text-gray-50 mb-2">Maybe Card</p>
-            <div className="rounded-lg overflow-hidden">
+            <p className="mb-2 text-gray-50">Maybe Card</p>
+            <div className="overflow-hidden rounded-lg">
                 <MaybeCard variant="settings" flipped={isCardFlipped} details={data} />
                 <MaybeCardShareModal
                     isOpen={isShareModalOpen}
@@ -199,7 +199,7 @@ function MaybeCardSection() {
                     card={{ details: data }}
                 />
             </div>
-            <div className="mt-6 w-full flex justify-center gap-3">
+            <div className="flex justify-center w-full gap-3 mt-6">
                 <Tooltip content="Share" placement="bottom">
                     <div className="w-full">
                         <Button
@@ -226,7 +226,7 @@ function MaybeCardSection() {
                             variant="secondary"
                             className={classNames(!data && 'opacity-50 pointer-events-none')}
                             href={data?.imageUrl}
-                            download="maybe-card.png"
+                            download="/assets/maybe-card.png"
                         >
                             <RiDownloadLine className="w-5 h-5 text-gray-50" />
                         </Button>
@@ -264,12 +264,12 @@ function MaybeCardSection() {
 
             <div className="relative mt-6">
                 <label>
-                    <span className="block mb-1 text-base text-gray-50 font-light leading-6">
+                    <span className="block mb-1 text-base font-light leading-6 text-gray-50">
                         Your Maybe
                     </span>
                     <textarea
                         rows={5}
-                        className="block w-full bg-gray-500 text-base placeholder:text-gray-100 rounded border-0 focus:ring-0 resize-none"
+                        className="block w-full text-base bg-gray-500 border-0 rounded resize-none placeholder:text-gray-100 focus:ring-0"
                         placeholder="What's your Maybe?"
                         {...register('maybe', { required: true })}
                         onKeyDown={(e) => e.key === 'Enter' && e.stopPropagation()}

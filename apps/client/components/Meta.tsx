@@ -18,7 +18,6 @@ export default function Meta() {
                 property="og:description"
                 content="Maybe is modern financial & investment planning"
             />
-            <meta property="og:image" content="https://assets.maybe.co/images/maybe-meta.png" />
 
             {/* <!-- Twitter --> */}
             <meta property="twitter:card" content="summary_large_image" />
@@ -27,10 +26,6 @@ export default function Meta() {
             <meta
                 property="twitter:description"
                 content="Maybe is modern financial & investment planning"
-            />
-            <meta
-                property="twitter:image"
-                content="https://assets.maybe.co/images/maybe-meta.png"
             />
 
             {/* <!-- Favicons - https://realfavicongenerator.net/favicon_checker#.YUNEifxKhhE --> */}
