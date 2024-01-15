@@ -88,6 +88,10 @@ To pull market data in (for investments), you'll need a Polygon.io API key. You 
 -   [Handling money](https://github.com/maybe-finance/maybe/wiki/Handling-Money)
 -   [REST API](https://github.com/maybe-finance/maybe/wiki/REST-API)
 
+
+## Repo Activity
+![Repo Activity](https://repobeats.axiom.co/api/embed/7866c9790deba0baf63ca1688b209130b306ea4e.svg "Repobeats analytics image")
+
 ## Credits
 
 The original app was built by [Zach Gollwitzer](https://twitter.com/zg_dev), [Nick Arciero](https://www.narciero.com/) and [Tim Wilson](https://twitter.com/actualTimWilson), with design work by [Justin Farrugia](https://twitter.com/justinmfarrugia). The app is currently maintained by [Josh Pigford](https://twitter.com/Shpigford).
