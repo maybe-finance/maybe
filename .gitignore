@@ -37,6 +37,7 @@ exceptions.log
 error.log
 combined.log
 /tools/output
+tsconfig.tsbuildinfo
 
 # System Files
 .DS_Store
@@ -54,3 +55,6 @@ migrations.json
 
 # Shouldn't happen, but backup since we have a script that generates these locally
 *.pem
+
+# Turborepo
+.turbo

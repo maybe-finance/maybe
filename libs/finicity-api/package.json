@@ -1,0 +1,8 @@
+{
+    "name": "@maybe-finance/finicity-api",
+    "version": "0.0.1",
+    "scripts": {
+        "lint": "eslint .",
+        "check-types": "tsc --noEmit --pretty"
+    }
+}

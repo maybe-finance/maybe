@@ -1,6 +1,10 @@
 {
     "name": "@maybe-finance/design-system",
     "version": "0.0.1",
+    "scripts": {
+        "lint": "eslint .",
+        "check-types": "tsc --noEmit --pretty"
+    },
     "nx": {
         "targets": {
             "build": {
