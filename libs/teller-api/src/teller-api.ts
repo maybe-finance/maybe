@@ -8,6 +8,7 @@ import type {
     GetTransactionsResponse,
     DeleteAccountResponse,
     GetAccountDetailsResponse,
+    GetInstitutionsResponse,
 } from './types'
 import axios from 'axios'
 import * as fs from 'fs'
@@ -102,6 +103,16 @@ export class TellerApi {
 
     async getIdentity(): Promise<GetIdentityResponse> {
         return this.get<GetIdentityResponse>(`/identity`)
+    }
+
+    /**
+     * Get list of supported institutions
+     *
+     * https://teller.io/docs/api/identity
+     */
+
+    async getInstitutions(): Promise<GetInstitutionsResponse> {
+        return this.get<GetInstitutionsResponse>(`/institutions`)
     }
 
     private async getApi(): Promise<AxiosInstance> {
