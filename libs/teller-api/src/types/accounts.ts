@@ -1,6 +1,12 @@
 // https://teller.io/docs/api/accounts
+import type { AuthenticatedRequest } from './authentication'
 
 export type AccountTypes = 'depository' | 'credit'
+
+export enum AccountType {
+    'depository',
+    'credit',
+}
 
 export type DepositorySubtypes =
     | 'checking'
@@ -45,3 +51,9 @@ export type Account = DepositoryAccount | CreditAccount
 export type GetAccountsResponse = { accounts: Account[] }
 export type GetAccountResponse = Account
 export type DeleteAccountResponse = void
+
+export interface GetAccountRequest extends AuthenticatedRequest {
+    accountId: string
+}
+
+export type DeleteAccountRequest = GetAccountRequest

@@ -41,6 +41,7 @@ export type SyncConnectionOptions =
           products?: Array<'transactions' | 'investment-transactions' | 'holdings' | 'liabilities'>
       }
     | { type: 'finicity'; initialSync?: boolean }
+    | { type: 'teller'; initialSync?: boolean }
 
 export type SyncConnectionQueueJobData = {
     accountConnectionId: AccountConnection['id']

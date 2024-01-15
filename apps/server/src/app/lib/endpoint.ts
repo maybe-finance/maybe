@@ -43,6 +43,7 @@ import {
     FinicityWebhookHandler,
     PlaidWebhookHandler,
     TellerService,
+    TellerETL,
     TellerWebhookHandler,
     InsightService,
     SecurityPricingService,
@@ -149,8 +150,10 @@ const tellerService = new TellerService(
     logger.child({ service: 'TellerService' }),
     prisma,
     teller,
+    new TellerETL(logger.child({ service: 'TellerETL' }), prisma, teller),
+    cryptoService,
     getTellerWebhookUrl(),
-    true
+    env.NX_TELLER_ENV === 'sandbox'
 )
 
 // account-connection
@@ -158,6 +161,7 @@ const tellerService = new TellerService(
 const accountConnectionProviderFactory = new AccountConnectionProviderFactory({
     plaid: plaidService,
     finicity: finicityService,
+    teller: tellerService,
 })
 
 const transactionStrategy = new TransactionBalanceSyncStrategy(

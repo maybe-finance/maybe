@@ -43,6 +43,7 @@ enum AccountSyncStatus {
 enum AccountConnectionType {
   plaid
   finicity
+  teller
 }
 
 model AccountConnection {
@@ -68,6 +69,12 @@ model AccountConnection {
   finicityInstitutionLoginId String? @map("finicity_institution_login_id")
   finicityInstitutionId      String? @map("finicity_institution_id")
   finicityError              Json?   @map("finicity_error")
+
+  // teller data
+  tellerAccountId     String? @map("teller_account_id")
+  tellerAccessToken   String? @map("teller_access_token")
+  tellerInstitutionId String? @map("teller_institution_id")
+  tellerError         Json?   @map("teller_error")
 
   accounts Account[]
 
@@ -152,6 +159,10 @@ model Account {
   finicityType      String? @map("finicity_type")
   finicityDetail    Json?   @map("finicity_detail") @db.JsonB
 
+  // teller data
+  tellerAccountId String? @map("teller_account_id")
+  tellerType      String? @map("teller_type")
+
   // manual account data
   vehicleMeta  Json? @map("vehicle_meta") @db.JsonB
   propertyMeta Json? @map("property_meta") @db.JsonB
@@ -172,6 +183,7 @@ model Account {
 
   @@unique([accountConnectionId, plaidAccountId])
   @@unique([accountConnectionId, finicityAccountId])
+  @@unique([accountConnectionId, tellerAccountId])
   @@index([accountConnectionId])
   @@index([userId])
   @@map("account")
@@ -346,6 +358,11 @@ model Transaction {
   finicityType           String? @map("finicity_type")
   finicityCategorization Json?   @map("finicity_categorization") @db.JsonB
 
+  // teller data
+  tellerTransactionId String? @unique @map("teller_transaction_id")
+  tellerType          String? @map("teller_type")
+  tellerCategory      String? @map("teller_category")
+
   @@index([accountId, date])
   @@index([amount])
   @@map("transaction")
@@ -429,6 +446,9 @@ model User {
 
   // plaid data
   plaidLinkToken String? @map("plaid_link_token") // temporary token stored to maintain state across browsers
+
+  // teller data
+  tellerUserId String? @unique @map("teller_user_id")
 
   // Onboarding / usage goals
   household             Household?

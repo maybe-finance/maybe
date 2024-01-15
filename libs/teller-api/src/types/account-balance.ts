@@ -1,4 +1,5 @@
 // https://teller.io/docs/api/account/balances
+import type { AuthenticatedRequest } from './authentication'
 
 export type AccountBalance = {
     account_id: string
@@ -11,3 +12,6 @@ export type AccountBalance = {
 }
 
 export type GetAccountBalancesResponse = AccountBalance
+export interface GetAccountBalancesRequest extends AuthenticatedRequest {
+    accountId: string
+}
