@@ -29,7 +29,6 @@ import type { StepProps } from './StepProps'
 import { Switch } from '@headlessui/react'
 import { BrowserUtil, useUserApi } from '@maybe-finance/client/shared'
 import type { Household, MaybeGoal } from '@prisma/client'
-import { CountryWaitlist } from './CountryWaitlist'
 import { DateUtil, Geo } from '@maybe-finance/shared'
 
 type FormValues = {
@@ -73,7 +72,7 @@ export function Profile({ title, onNext }: StepProps) {
                     dob: data.dob,
                     household: data.household,
                     country: data.country,
-                    state: data.country === 'US' ? data.state : null, // should be NULL if country is not US
+                    state: data.state,
                     maybeGoals: data.maybeGoals,
                     maybeGoalsDescription: data.maybeGoalsDescription,
                 })
@@ -108,7 +107,6 @@ function ProfileForm({ title, onSubmit, defaultValues }: ProfileViewProps) {
     })
 
     const country = watch('country')
-    const [showCountryWaitlist, setShowCountryWaitlist] = useState(false)
 
     useEffect(() => {
         trigger()
@@ -116,9 +114,7 @@ function ProfileForm({ title, onSubmit, defaultValues }: ProfileViewProps) {
 
     const { errors } = useFormState({ control })
 
-    return showCountryWaitlist ? (
-        <CountryWaitlist country={Geo.countries.find((c) => c.code === country)?.name} />
-    ) : (
+    return (
         <div className="w-full max-w-md mx-auto">
             <h3 className="text-center">{title}</h3>
             <p className="mt-4 text-base text-gray-50">
@@ -211,18 +207,12 @@ function ProfileForm({ title, onSubmit, defaultValues }: ProfileViewProps) {
 
                 <Question
                     open={currentQuestion === 'residence'}
-                    valid={!errors.country && (!errors.state || country !== 'US')}
+                    valid={!errors.country && !errors.state}
                     icon={RiMapPin2Line}
                     label="Where are you based?"
                     onClick={() => setCurrentQuestion('residence')}
                     back={() => setCurrentQuestion('household')}
-                    next={() => {
-                        if (country === 'US') {
-                            setCurrentQuestion('goals')
-                        } else {
-                            setShowCountryWaitlist(true)
-                        }
-                    }}
+                    next={() => setCurrentQuestion('goals')}
                 >
                     <div className="space-y-2">
                         <Controller
@@ -246,29 +236,27 @@ function ProfileForm({ title, onSubmit, defaultValues }: ProfileViewProps) {
                                 </Listbox>
                             )}
                         />
-
-                        {country === 'US' && (
-                            <Controller
-                                name="state"
-                                control={control}
-                                rules={{ required: true }}
-                                render={({ field }) => (
-                                    <Listbox {...field}>
-                                        <Listbox.Button label="State">
-                                            {Geo.states.find((s) => s.code === field.value)?.name ||
-                                                'Select'}
-                                        </Listbox.Button>
-                                        <Listbox.Options className="max-h-[300px] custom-gray-scroll">
-                                            {Geo.states.map((state) => (
-                                                <Listbox.Option key={state.code} value={state.code}>
-                                                    {state.name}
-                                                </Listbox.Option>
-                                            ))}
-                                        </Listbox.Options>
-                                    </Listbox>
-                                )}
-                            />
-                        )}
+                        <Controller
+                            name="state"
+                            control={control}
+                            rules={{ required: true }}
+                            render={({ field }) => (
+                                <Listbox {...field}>
+                                    <Listbox.Button label="State">
+                                        {Geo[country as keyof typeof Geo].find(
+                                            (s) => s.code === field.value
+                                        )?.name || 'Select'}
+                                    </Listbox.Button>
+                                    <Listbox.Options className="max-h-[300px] custom-gray-scroll">
+                                        {Geo[country as keyof typeof Geo].map((state) => (
+                                            <Listbox.Option key={state.code} value={state.code}>
+                                                {state.name}
+                                            </Listbox.Option>
+                                        ))}
+                                    </Listbox.Options>
+                                </Listbox>
+                            )}
+                        />
                     </div>
                     <Tooltip
                         placement="bottom-start"
