@@ -29,7 +29,6 @@ import type { StepProps } from './StepProps'
 import { Switch } from '@headlessui/react'
 import { BrowserUtil, useUserApi } from '@maybe-finance/client/shared'
 import type { Household, MaybeGoal } from '@prisma/client'
-import { CountryWaitlist } from './CountryWaitlist'
 import { DateUtil, Geo } from '@maybe-finance/shared'
 
 type FormValues = {
@@ -108,7 +107,6 @@ function ProfileForm({ title, onSubmit, defaultValues }: ProfileViewProps) {
     })
 
     const country = watch('country')
-    const [showCountryWaitlist, setShowCountryWaitlist] = useState(false)
 
     useEffect(() => {
         trigger()
@@ -116,9 +114,7 @@ function ProfileForm({ title, onSubmit, defaultValues }: ProfileViewProps) {
 
     const { errors } = useFormState({ control })
 
-    return showCountryWaitlist ? (
-        <CountryWaitlist country={Geo.countries.find((c) => c.code === country)?.name} />
-    ) : (
+    return (
         <div className="w-full max-w-md mx-auto">
             <h3 className="text-center">{title}</h3>
             <p className="mt-4 text-base text-gray-50">
@@ -216,13 +212,7 @@ function ProfileForm({ title, onSubmit, defaultValues }: ProfileViewProps) {
                     label="Where are you based?"
                     onClick={() => setCurrentQuestion('residence')}
                     back={() => setCurrentQuestion('household')}
-                    next={() => {
-                        if (country === 'US') {
-                            setCurrentQuestion('goals')
-                        } else {
-                            setShowCountryWaitlist(true)
-                        }
-                    }}
+                    next={() => setCurrentQuestion('goals')}
                 >
                     <div className="space-y-2">
                         <Controller
