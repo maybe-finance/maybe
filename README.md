@@ -61,6 +61,30 @@ yarn prisma:seed
 yarn dev
 ```
 
+### Common Issues
+
+#### 'COMPOSE_PROFILES' is not recognized as an internal or external command
+
+**_TODO: Come up with a cross-platform working command for these scripts._**
+
+```
+$ yarn dev:services
+yarn run v1.22.21
+$ COMPOSE_PROFILES=services docker-compose up -d
+'COMPOSE_PROFILES' is not recognized as an internal or external command,
+operable program or batch file.
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+```
+
+This is an issue on Windows machines and seems to happen when running a command with an environment variable at the beginning (ie: `yarn dev:services`).
+
+##### Workaround
+
+To workaround this issue, simply run the command/script directly instead of using `yarn <script>`.
+
+For the above error example, I should run `COMPOSE_PROFILES=services docker-compose up -d` directly in my CLI instead of `yarn dev:services`.
+
 ## High-priority issues
 
 The biggest focus at the moment is on getting the app functional without some previously key external services (namely Auth0, Plaid and Finicity).
