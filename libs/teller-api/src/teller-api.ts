@@ -1,10 +1,5 @@
 import type { AxiosInstance, AxiosRequestConfig } from 'axios'
 import type {
-    Account,
-    AccountBalance,
-    AccountDetails,
-    Identity,
-    Transaction,
     GetAccountResponse,
     GetAccountsResponse,
     GetAccountBalancesResponse,
@@ -13,20 +8,101 @@ import type {
     GetTransactionsResponse,
     DeleteAccountResponse,
     GetAccountDetailsResponse,
-    WebhookData,
 } from './types'
-import { DateTime } from 'luxon'
 import axios from 'axios'
 import * as fs from 'fs'
 import * as https from 'https'
-
-const is2xx = (status: number): boolean => status >= 200 && status < 300
 
 /**
  * Basic typed mapping for Teller API
  */
 export class TellerApi {
     private api: AxiosInstance | null = null
+
+    /**
+     * List accounts a user granted access to in Teller Connect
+     *
+     * https://teller.io/docs/api/accounts
+     */
+
+    async getAccounts(): Promise<GetAccountsResponse> {
+        return this.get<GetAccountsResponse>(`/accounts`)
+    }
+
+    /**
+     * Get a single account by id
+     *
+     * https://teller.io/docs/api/accounts
+     */
+
+    async getAccount(accountId: string): Promise<GetAccountResponse> {
+        return this.get<GetAccountResponse>(`/accounts/${accountId}`)
+    }
+
+    /**
+     * Delete the application's access to an account. Does not delete the account itself.
+     *
+     * https://teller.io/docs/api/accounts
+     */
+
+    async deleteAccount(accountId: string): Promise<DeleteAccountResponse> {
+        return this.delete<DeleteAccountResponse>(`/accounts/${accountId}`)
+    }
+
+    /**
+     * Get account details for a single account
+     *
+     * https://teller.io/docs/api/account/details
+     */
+
+    async getAccountDetails(accountId: string): Promise<GetAccountDetailsResponse> {
+        return this.get<GetAccountDetailsResponse>(`/accounts/${accountId}/details`)
+    }
+
+    /**
+     * Get account balances for a single account
+     *
+     * https://teller.io/docs/api/account/balances
+     */
+
+    async getAccountBalances(accountId: string): Promise<GetAccountBalancesResponse> {
+        return this.get<GetAccountBalancesResponse>(`/accounts/${accountId}/balances`)
+    }
+
+    /**
+     * Get transactions for a single account
+     *
+     * https://teller.io/docs/api/transactions
+     */
+
+    async getTransactions(accountId: string): Promise<GetTransactionsResponse> {
+        return this.get<GetTransactionsResponse>(`/accounts/${accountId}/transactions`)
+    }
+
+    /**
+     * Get a single transaction by id
+     *
+     * https://teller.io/docs/api/transactions
+     */
+
+    async getTransaction(
+        accountId: string,
+        transactionId: string
+    ): Promise<GetTransactionResponse> {
+        return this.get<GetTransactionResponse>(
+            `/accounts/${accountId}/transactions/${transactionId}`
+        )
+    }
+
+    /**
+     * Get identity for a single account
+     *
+     * https://teller.io/docs/api/identity
+     */
+
+    async getIdentity(): Promise<GetIdentityResponse> {
+        return this.get<GetIdentityResponse>(`/identity`)
+    }
 
     private async getApi(): Promise<AxiosInstance> {
         const cert = fs.readFileSync('../../../certs/teller-certificate.pem', 'utf8')
