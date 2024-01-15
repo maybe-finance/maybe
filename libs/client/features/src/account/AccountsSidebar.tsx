@@ -187,7 +187,9 @@ export default function AccountsSidebar() {
                                 label={title}
                                 balances={balances.data}
                                 inverted={classification === 'liability'}
-                                onToggle={(isExpanded) => updateToggleState(title, isExpanded)}
+                                onToggle={(isExpanded) =>
+                                    updateToggleState(`${title}-${classification}`, isExpanded)
+                                }
                                 expanded={toggleState[title] !== false}
                                 level={1}
                                 syncing={items.some((a) => a.syncing)}
