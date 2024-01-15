@@ -53,7 +53,7 @@ export function Welcome({ title: stepTitle, onNext }: StepProps) {
                     await onNext()
                 })}
             >
-                <div className="grow max-w-md">
+                <div className="max-w-md grow">
                     <img src="/assets/maybe.svg" className="h-8" alt="Maybe" />
                     <h3 className="mt-14">{stepTitle}</h3>
                     <p className="mt-2 text-base text-gray-50">
@@ -63,15 +63,15 @@ export function Welcome({ title: stepTitle, onNext }: StepProps) {
                     <Button type="submit" className="mt-14" disabled={!isValid}>
                         Start exploring
                         {isSubmitting ? (
-                            <LoadingIcon className="ml-2 w-5 h-5 animate-spin" />
+                            <LoadingIcon className="w-5 h-5 ml-2 animate-spin" />
                         ) : (
-                            <RiArrowRightLine className="ml-2 w-5 h-5" />
+                            <RiArrowRightLine className="w-5 h-5 ml-2" />
                         )}
                     </Button>
                 </div>
                 <div className="relative shrink-0">
-                    <fieldset className="flex items-center justify-center rounded-3xl border border-dashed border-gray-400">
-                        <legend className="mx-auto px-7 text-sm text-gray-100">
+                    <fieldset className="flex items-center justify-center border border-gray-400 border-dashed rounded-3xl">
+                        <legend className="mx-auto text-sm text-gray-100 px-7">
                             Your Maybe card
                         </legend>
                         <MaybeCard
@@ -86,7 +86,7 @@ export function Welcome({ title: stepTitle, onNext }: StepProps) {
                             card={{ details: data }}
                         />
                     </fieldset>
-                    <div className="mt-6 w-full flex justify-center gap-3">
+                    <div className="flex justify-center w-full gap-3 mt-6">
                         <Tooltip content="Share" placement="bottom">
                             <div className="w-full">
                                 <Button
@@ -115,7 +115,7 @@ export function Welcome({ title: stepTitle, onNext }: StepProps) {
                                         !data && 'opacity-50 pointer-events-none'
                                     )}
                                     href={data?.imageUrl}
-                                    download="maybe-card.png"
+                                    download="/assets/maybe-card.png"
                                 >
                                     <RiDownloadLine className="w-5 h-5 text-gray-50" />
                                 </Button>
