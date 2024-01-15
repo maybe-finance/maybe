@@ -63,6 +63,9 @@ yarn prisma:seed
 yarn dev
 ```
 
+## Contributing
+To contribute, please see our [contribution guide](https://github.com/maybe-finance/maybe/blob/main/CONTRIBUTING.md).
+
 ## High-priority issues
 
 The biggest focus at the moment is on getting the app functional without some previously key external services (namely Plaid and Finicity).
