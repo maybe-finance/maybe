@@ -1,7 +1,6 @@
-import { BrowserUtil } from '@maybe-finance/client/shared'
 import { useMemo } from 'react'
-import Image from 'next/legacy/image'
 import type { SharedType } from '@maybe-finance/shared'
+import Image from 'next/image'
 
 type GridImage = {
     src: string
@@ -147,8 +146,8 @@ export default function InstitutionGrid({
                 <Image
                     className="cursor-pointer hover:opacity-90"
                     key={img.alt}
-                    loader={BrowserUtil.enhancerizerLoader}
-                    src={`financial-institutions/${img.src}`}
+                    // loader={BrowserUtil.enhancerizerLoader}
+                    src={`/assets/financial-institutions/${img.src}`}
                     alt={img.alt}
                     layout="responsive"
                     width={193}
