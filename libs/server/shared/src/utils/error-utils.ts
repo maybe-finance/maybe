@@ -32,6 +32,15 @@ export function isPlaidError(err: unknown): err is SharedType.AxiosPlaidError {
     return 'error_type' in data && 'error_code' in data && 'error_message' in data
 }
 
+export function isTellerError(err: unknown): err is SharedType.AxiosTellerError {
+    if (!err) return false
+    if (!axios.isAxiosError(err)) return false
+    if (typeof err.response?.data !== 'object') return false
+
+    const { data } = err.response
+    return 'code' in data.error && 'message' in data.error
+}
+
 export function parseError(error: unknown): SharedType.ParsedError {
     if (isPlaidError(error)) {
         return parsePlaidError(error)
