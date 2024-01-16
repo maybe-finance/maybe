@@ -23,6 +23,7 @@ import {
 } from 'react-icons/ri'
 import { Button, Tooltip } from '@maybe-finance/design-system'
 import { MenuPopover } from './MenuPopover'
+import { UpgradePrompt } from '../user-billing'
 import { SidebarOnboarding } from '../onboarding'
 import { useSession } from 'next-auth/react'
 
@@ -227,7 +228,7 @@ export function DesktopLayout({ children, sidebar }: DesktopLayoutProps) {
                                             className="p-3 text-base bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-600"
                                             onClick={() => setOnboardingExpanded(true)}
                                         >
-                                            <div className="flex items-center justify-between text-sm mb-1">
+                                            <div className="flex items-center justify-between mb-1 text-sm">
                                                 <p className="text-gray-50">Getting started</p>
                                                 {onboarding.data.isComplete && (
                                                     <button
@@ -235,7 +236,7 @@ export function DesktopLayout({ children, sidebar }: DesktopLayoutProps) {
                                                             e.stopPropagation()
                                                             hideOnboardingWidgetForever()
                                                         }}
-                                                        className="bg-gray-600 hover:bg-gray-500 rounded p-1"
+                                                        className="p-1 bg-gray-600 rounded hover:bg-gray-500"
                                                     >
                                                         Hide
                                                     </button>
@@ -336,6 +337,8 @@ function DefaultContent({
             </div>
 
             {onboarding && onboarding}
+
+            <UpgradePrompt />
 
             <div className="flex items-center justify-between">
                 <div className="text-base">
