@@ -57,13 +57,14 @@ Then run the following yarn commands:
 
 ```
 yarn install
-yarn run dev:services
+yarn run dev:services:all
 yarn prisma:migrate:dev
 yarn prisma:seed
 yarn dev
 ```
 
 ## Contributing
+
 To contribute, please see our [contribution guide](https://github.com/maybe-finance/maybe/blob/main/CONTRIBUTING.md).
 
 ## High-priority issues
@@ -91,9 +92,9 @@ To pull market data in (for investments), you'll need a Polygon.io API key. You 
 -   [Handling money](https://github.com/maybe-finance/maybe/wiki/Handling-Money)
 -   [REST API](https://github.com/maybe-finance/maybe/wiki/REST-API)
 
-
 ## Repo Activity
-![Repo Activity](https://repobeats.axiom.co/api/embed/7866c9790deba0baf63ca1688b209130b306ea4e.svg "Repobeats analytics image")
+
+![Repo Activity](https://repobeats.axiom.co/api/embed/7866c9790deba0baf63ca1688b209130b306ea4e.svg 'Repobeats analytics image')
 
 ## Credits
 
