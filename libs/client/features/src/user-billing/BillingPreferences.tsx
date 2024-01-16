@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { RiExternalLinkLine } from 'react-icons/ri'
 import { AiOutlineLoading3Quarters as LoadingIcon } from 'react-icons/ai'
 import { UpgradeTakeover } from '.'
-import Link from 'next/link'
 
 export function BillingPreferences() {
     const { useSubscription, useCreateCustomerPortalSession } = useUserApi()
@@ -20,16 +19,16 @@ export function BillingPreferences() {
 
     return (
         <>
-            <div className="mt-6 max-w-lg text-base">
+            <div className="max-w-lg mt-6 text-base">
                 <h4 className="mb-2 text-lg uppercase">Billing</h4>
                 {isLoading || !data ? (
-                    <div className="flex items-center justify-center w-lg max-w-full py-8">
+                    <div className="flex items-center justify-center max-w-full py-8 w-lg">
                         <LoadingSpinner />
                     </div>
                 ) : (
-                    <div className="bg-gray-800 rounded-lg overflow-hidden">
+                    <div className="overflow-hidden bg-gray-800 rounded-lg">
                         <div className="flex items-center p-4">
-                            <div className="grow text-gray-50 pr-4">
+                            <div className="pr-4 grow text-gray-50">
                                 {data.trialing ? (
                                     <p>
                                         Your free trial will end on{' '}
@@ -63,37 +62,21 @@ export function BillingPreferences() {
                                         createCustomerPortalSession.isSuccess ? (
                                             <LoadingIcon className="text-gray-100 ml-2.5 mr-1 w-3.5 h-3.5 animate-spin" />
                                         ) : (
-                                            <RiExternalLinkLine className="ml-2 w-5 h-5" />
+                                            <RiExternalLinkLine className="w-5 h-5 ml-2" />
                                         )}
                                     </Button>
                                 ) : (
-                                    <Button
-                                        variant="primary"
-                                        disabled
-                                        onClick={() => setTakeoverOpen(true)}
-                                    >
-                                        Subscriptions disabled
+                                    <Button variant="primary" onClick={() => setTakeoverOpen(true)}>
+                                        Subscribe
                                     </Button>
                                 )}
                             </div>
                         </div>
-                        <div className="p-3 text-sm bg-gray-700 text-gray-100">
+                        <div className="p-3 text-sm text-gray-100 bg-gray-700">
                             You&rsquo;ll be redirected to Stripe to manage billing.
                         </div>
                     </div>
                 )}
-
-                <div className="mt-8 bg-cyan text-white p-3 rounded">
-                    <p className="">
-                        Maybe will be shutting down on July 31.{' '}
-                        <Link
-                            className="text-white font-bold underline"
-                            href="https://maybefinance.notion.site/To-Investors-Customers-The-Future-of-Maybe-6758bfc0e46f4ec68bf4a7a8f619199f"
-                        >
-                            Details and FAQ
-                        </Link>
-                    </p>
-                </div>
             </div>
             <UpgradeTakeover open={takeoverOpen} onClose={() => setTakeoverOpen(false)} />
         </>

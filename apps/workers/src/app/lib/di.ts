@@ -28,6 +28,8 @@ import {
     LoanBalanceSyncStrategy,
     PlaidETL,
     PlaidService,
+    TellerETL,
+    TellerService,
     SecurityPricingProcessor,
     SecurityPricingService,
     TransactionBalanceSyncStrategy,
@@ -55,6 +57,7 @@ import logger from './logger'
 import prisma from './prisma'
 import plaid from './plaid'
 import finicity from './finicity'
+import teller from './teller'
 import postmark from './postmark'
 import stripe from './stripe'
 import env from '../../env'
@@ -124,11 +127,22 @@ const finicityService = new FinicityService(
     env.NX_FINICITY_ENV === 'sandbox'
 )
 
+const tellerService = new TellerService(
+    logger.child({ service: 'TellerService' }),
+    prisma,
+    teller,
+    new TellerETL(logger.child({ service: 'TellerETL' }), prisma, teller, cryptoService),
+    cryptoService,
+    '',
+    env.NX_TELLER_ENV === 'sandbox'
+)
+
 // account-connection
 
 const accountConnectionProviderFactory = new AccountConnectionProviderFactory({
     plaid: plaidService,
     finicity: finicityService,
+    teller: tellerService,
 })
 
 const transactionStrategy = new TransactionBalanceSyncStrategy(

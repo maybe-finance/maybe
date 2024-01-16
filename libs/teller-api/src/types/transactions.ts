@@ -1,5 +1,7 @@
 // https://teller.io/docs/api/account/transactions
 
+import type { AuthenticatedRequest } from './authentication'
+
 type DetailCategory =
     | 'accommodation'
     | 'advertising'
@@ -57,3 +59,10 @@ export type Transaction = {
 
 export type GetTransactionsResponse = Transaction[]
 export type GetTransactionResponse = Transaction
+export interface GetTransactionsRequest extends AuthenticatedRequest {
+    accountId: string
+}
+export interface GetTransactionRequest extends AuthenticatedRequest {
+    accountId: string
+    transactionId: string
+}

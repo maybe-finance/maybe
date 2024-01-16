@@ -3,3 +3,7 @@
 export type AuthenticationResponse = {
     token: string
 }
+
+export type AuthenticatedRequest = {
+    accessToken: string
+}

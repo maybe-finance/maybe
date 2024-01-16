@@ -22,7 +22,7 @@ export interface IEmailService {
 export class EmailService implements IEmailService {
     constructor(
         private readonly logger: Logger,
-        private readonly postmark: PostmarkServerClient,
+        private readonly postmark: PostmarkServerClient | undefined,
         private readonly defaultAddresses: { from: string; replyTo?: string }
     ) {}
 
@@ -85,6 +85,11 @@ export class EmailService implements IEmailService {
             message.TemplateModel
         )
 
+        if (!this.postmark) {
+            this.logger.info('Postmark API key not provided, skipping email send')
+            return undefined as unknown as MessageSendingResponse
+        }
+
         return await this.postmark.sendEmailWithTemplate(message)
     }
 
@@ -93,6 +98,11 @@ export class EmailService implements IEmailService {
             `Sending plain email subject=${message.Subject} from=${message.From} to=${message.To}`,
             { text: message.TextBody, html: message.HtmlBody }
         )
+
+        if (!this.postmark) {
+            this.logger.info('Postmark API key not provided, skipping email send')
+            return undefined as unknown as MessageSendingResponse
+        }
 
         return await this.postmark.sendEmail(message)
     }
@@ -108,9 +118,13 @@ export class EmailService implements IEmailService {
 
         return (
             await Promise.all(
-                chunk(messages, 500).map((chunk) =>
-                    this.postmark.sendEmailBatchWithTemplates(chunk)
-                )
+                chunk(messages, 500).map((chunk) => {
+                    if (!this.postmark) {
+                        this.logger.info('Postmark API key not provided, skipping email send')
+                        return [] as MessageSendingResponse[]
+                    }
+                    return this.postmark.sendEmailBatchWithTemplates(chunk)
+                })
             )
         ).flat()
     }
@@ -124,7 +138,13 @@ export class EmailService implements IEmailService {
 
         return (
             await Promise.all(
-                chunk(messages, 500).map((chunk) => this.postmark.sendEmailBatch(chunk))
+                chunk(messages, 500).map((chunk) => {
+                    if (!this.postmark) {
+                        this.logger.info('Postmark API key not provided, skipping email send')
+                        return [] as MessageSendingResponse[]
+                    }
+                    return this.postmark.sendEmailBatch(chunk)
+                })
             )
         ).flat()
     }

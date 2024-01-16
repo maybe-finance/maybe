@@ -43,6 +43,7 @@ import {
     FinicityWebhookHandler,
     PlaidWebhookHandler,
     TellerService,
+    TellerETL,
     TellerWebhookHandler,
     InsightService,
     SecurityPricingService,
@@ -53,7 +54,6 @@ import {
     ProjectionCalculator,
     StripeWebhookHandler,
 } from '@maybe-finance/server/features'
-import { SharedType } from '@maybe-finance/shared'
 import prisma from './prisma'
 import plaid, { getPlaidWebhookUrl } from './plaid'
 import finicity, { getFinicityTxPushUrl, getFinicityWebhookUrl } from './finicity'
@@ -149,8 +149,10 @@ const tellerService = new TellerService(
     logger.child({ service: 'TellerService' }),
     prisma,
     teller,
+    new TellerETL(logger.child({ service: 'TellerETL' }), prisma, teller, cryptoService),
+    cryptoService,
     getTellerWebhookUrl(),
-    true
+    env.NX_TELLER_ENV === 'sandbox'
 )
 
 // account-connection
@@ -158,6 +160,7 @@ const tellerService = new TellerService(
 const accountConnectionProviderFactory = new AccountConnectionProviderFactory({
     plaid: plaidService,
     finicity: finicityService,
+    teller: tellerService,
 })
 
 const transactionStrategy = new TransactionBalanceSyncStrategy(

@@ -12,6 +12,7 @@ import { Button } from '@maybe-finance/design-system'
 import { MenuPopover } from './MenuPopover'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { UpgradePrompt } from '../user-billing'
 import { ProfileCircle } from '@maybe-finance/client/shared'
 import { usePopoutContext, LayoutContextProvider } from '@maybe-finance/client/shared'
 import classNames from 'classnames'
@@ -90,10 +91,10 @@ function NavItem({
                             className="absolute inset-0"
                             transition={{ duration: 0.3 }}
                         >
-                            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-1 bg-white rounded-t-lg"></div>
+                            <div className="absolute bottom-0 w-5 h-1 -translate-x-1/2 bg-white rounded-t-lg left-1/2"></div>
                         </motion.div>
                     )}
-                    <Icon className="shrink-0 w-6 h-6" />
+                    <Icon className="w-6 h-6 shrink-0" />
                     <span className="shrink-0 mt-1.5 text-sm font-medium text-center">{label}</span>
                 </Link>
             </div>
@@ -138,7 +139,7 @@ export function MobileLayout({ children, sidebar }: MobileLayoutProps) {
             >
                 <div>
                     <nav>
-                        <div className="flex items-center justify-between px-4 h-20">
+                        <div className="flex items-center justify-between h-20 px-4">
                             <div className="w-10">
                                 <Button variant="icon" onClick={() => setCollapsed(true)}>
                                     <RiCloseLine className="w-6 h-6" />
@@ -156,7 +157,7 @@ export function MobileLayout({ children, sidebar }: MobileLayoutProps) {
                                 <ProfileCircle className="!w-10 !h-10" />
                             </Link>
                         </div>
-                        <ul className="flex items-end justify-center xs:gap-2 border-b border-gray-700">
+                        <ul className="flex items-end justify-center border-b border-gray-700 xs:gap-2">
                             <NavItem label="Net worth" href="/" icon={RiPieChart2Line} />
                             <NavItem label="Accounts" href="/accounts" icon={RiFolderOpenLine} />
                             <NavItem
@@ -172,7 +173,9 @@ export function MobileLayout({ children, sidebar }: MobileLayoutProps) {
                             {sidebar}
                         </section>
 
-                        <div className="shrink-0 pt-6"></div>
+                        <div className="pt-6 shrink-0">
+                            <UpgradePrompt />
+                        </div>
                     </div>
                 </div>
             </motion.aside>

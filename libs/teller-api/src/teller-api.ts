@@ -9,6 +9,13 @@ import type {
     DeleteAccountResponse,
     GetAccountDetailsResponse,
     GetInstitutionsResponse,
+    AuthenticatedRequest,
+    GetAccountRequest,
+    DeleteAccountRequest,
+    GetAccountDetailsRequest,
+    GetAccountBalancesRequest,
+    GetTransactionsRequest,
+    GetTransactionRequest,
 } from './types'
 import axios from 'axios'
 import * as fs from 'fs'
@@ -26,8 +33,8 @@ export class TellerApi {
      * https://teller.io/docs/api/accounts
      */
 
-    async getAccounts(): Promise<GetAccountsResponse> {
-        return this.get<GetAccountsResponse>(`/accounts`)
+    async getAccounts({ accessToken }: AuthenticatedRequest): Promise<GetAccountsResponse> {
+        return this.get<GetAccountsResponse>(`/accounts`, accessToken)
     }
 
     /**
@@ -36,8 +43,8 @@ export class TellerApi {
      * https://teller.io/docs/api/accounts
      */
 
-    async getAccount(accountId: string): Promise<GetAccountResponse> {
-        return this.get<GetAccountResponse>(`/accounts/${accountId}`)
+    async getAccount({ accountId, accessToken }: GetAccountRequest): Promise<GetAccountResponse> {
+        return this.get<GetAccountResponse>(`/accounts/${accountId}`, accessToken)
     }
 
     /**
@@ -46,8 +53,11 @@ export class TellerApi {
      * https://teller.io/docs/api/accounts
      */
 
-    async deleteAccount(accountId: string): Promise<DeleteAccountResponse> {
-        return this.delete<DeleteAccountResponse>(`/accounts/${accountId}`)
+    async deleteAccount({
+        accountId,
+        accessToken,
+    }: DeleteAccountRequest): Promise<DeleteAccountResponse> {
+        return this.delete<DeleteAccountResponse>(`/accounts/${accountId}`, accessToken)
     }
 
     /**
@@ -56,8 +66,11 @@ export class TellerApi {
      * https://teller.io/docs/api/account/details
      */
 
-    async getAccountDetails(accountId: string): Promise<GetAccountDetailsResponse> {
-        return this.get<GetAccountDetailsResponse>(`/accounts/${accountId}/details`)
+    async getAccountDetails({
+        accountId,
+        accessToken,
+    }: GetAccountDetailsRequest): Promise<GetAccountDetailsResponse> {
+        return this.get<GetAccountDetailsResponse>(`/accounts/${accountId}/details`, accessToken)
     }
 
     /**
@@ -66,8 +79,11 @@ export class TellerApi {
      * https://teller.io/docs/api/account/balances
      */
 
-    async getAccountBalances(accountId: string): Promise<GetAccountBalancesResponse> {
-        return this.get<GetAccountBalancesResponse>(`/accounts/${accountId}/balances`)
+    async getAccountBalances({
+        accountId,
+        accessToken,
+    }: GetAccountBalancesRequest): Promise<GetAccountBalancesResponse> {
+        return this.get<GetAccountBalancesResponse>(`/accounts/${accountId}/balances`, accessToken)
     }
 
     /**
@@ -76,8 +92,11 @@ export class TellerApi {
      * https://teller.io/docs/api/transactions
      */
 
-    async getTransactions(accountId: string): Promise<GetTransactionsResponse> {
-        return this.get<GetTransactionsResponse>(`/accounts/${accountId}/transactions`)
+    async getTransactions({
+        accountId,
+        accessToken,
+    }: GetTransactionsRequest): Promise<GetTransactionsResponse> {
+        return this.get<GetTransactionsResponse>(`/accounts/${accountId}/transactions`, accessToken)
     }
 
     /**
@@ -86,12 +105,14 @@ export class TellerApi {
      * https://teller.io/docs/api/transactions
      */
 
-    async getTransaction(
-        accountId: string,
-        transactionId: string
-    ): Promise<GetTransactionResponse> {
+    async getTransaction({
+        accountId,
+        transactionId,
+        accessToken,
+    }: GetTransactionRequest): Promise<GetTransactionResponse> {
         return this.get<GetTransactionResponse>(
-            `/accounts/${accountId}/transactions/${transactionId}`
+            `/accounts/${accountId}/transactions/${transactionId}`,
+            accessToken
         )
     }
 
@@ -101,21 +122,21 @@ export class TellerApi {
      * https://teller.io/docs/api/identity
      */
 
-    async getIdentity(): Promise<GetIdentityResponse> {
-        return this.get<GetIdentityResponse>(`/identity`)
+    async getIdentity({ accessToken }: AuthenticatedRequest): Promise<GetIdentityResponse> {
+        return this.get<GetIdentityResponse>(`/identity`, accessToken)
     }
 
     /**
-     * Get list of supported institutions
+     * Get list of supported institutions, access token not needed
      *
      * https://teller.io/docs/api/identity
      */
 
     async getInstitutions(): Promise<GetInstitutionsResponse> {
-        return this.get<GetInstitutionsResponse>(`/institutions`)
+        return this.get<GetInstitutionsResponse>(`/institutions`, '')
     }
 
-    private async getApi(): Promise<AxiosInstance> {
+    private async getApi(accessToken: string): Promise<AxiosInstance> {
         const cert = fs.readFileSync('../../../certs/teller-certificate.pem', 'utf8')
         const key = fs.readFileSync('../../../certs/teller-private-key.pem', 'utf8')
 
@@ -133,6 +154,15 @@ export class TellerApi {
                     Accept: 'application/json',
                 },
             })
+
+            this.api.interceptors.request.use((config) => {
+                // Add the access_token to the auth object
+                config.auth = {
+                    username: 'ACCESS_TOKEN',
+                    password: accessToken,
+                }
+                return config
+            })
         }
 
         return this.api
@@ -141,30 +171,33 @@ export class TellerApi {
     /** Generic API GET request method */
     private async get<TResponse>(
         path: string,
+        accessToken: string,
         params?: any,
         config?: AxiosRequestConfig
     ): Promise<TResponse> {
-        const api = await this.getApi()
+        const api = await this.getApi(accessToken)
         return api.get<TResponse>(path, { params, ...config }).then(({ data }) => data)
     }
 
     /** Generic API POST request method */
     private async post<TResponse>(
         path: string,
+        accessToken: string,
         body?: any,
         config?: AxiosRequestConfig
     ): Promise<TResponse> {
-        const api = await this.getApi()
+        const api = await this.getApi(accessToken)
         return api.post<TResponse>(path, body, config).then(({ data }) => data)
     }
 
     /** Generic API DELETE request method */
     private async delete<TResponse>(
         path: string,
+        accessToken: string,
         params?: any,
         config?: AxiosRequestConfig
     ): Promise<TResponse> {
-        const api = await this.getApi()
+        const api = await this.getApi(accessToken)
         return api.delete<TResponse>(path, { params, ...config }).then(({ data }) => data)
     }
 }
