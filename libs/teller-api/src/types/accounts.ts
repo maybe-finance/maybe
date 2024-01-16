@@ -1,4 +1,5 @@
 // https://teller.io/docs/api/accounts
+import type { AccountBalance } from './account-balance'
 import type { AuthenticatedRequest } from './authentication'
 
 export type AccountTypes = 'depository' | 'credit'
@@ -47,6 +48,10 @@ interface CreditAccount extends BaseAccount {
 }
 
 export type Account = DepositoryAccount | CreditAccount
+
+export type AccountWithBalances = Account & {
+    balances: AccountBalance
+}
 
 export type GetAccountsResponse = Account[]
 export type GetAccountResponse = Account

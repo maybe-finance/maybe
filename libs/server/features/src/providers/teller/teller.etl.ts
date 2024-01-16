@@ -14,7 +14,7 @@ export type TellerRawData = {
 }
 
 export type TellerData = {
-    accounts: TellerTypes.Account[]
+    accounts: TellerTypes.AccountWithBalances[]
     transactions: TellerTypes.Transaction[]
     transactionsDateRange: SharedType.DateRange<DateTime>
 }
@@ -28,7 +28,10 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
     public constructor(
         private readonly logger: Logger,
         private readonly prisma: PrismaClient,
-        private readonly teller: Pick<TellerApi, 'getAccounts' | 'getTransactions'>,
+        private readonly teller: Pick<
+            TellerApi,
+            'getAccounts' | 'getTransactions' | 'getAccountBalances'
+        >,
         private readonly crypto: ICryptoService
     ) {}
 
@@ -97,13 +100,25 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
     }
 
     private async _extractAccounts(accessToken: string) {
-        return await this.teller.getAccounts({ accessToken })
+        const accounts = await this.teller.getAccounts({ accessToken })
+        const accountsWithBalances = await Promise.all(
+            accounts.map(async (a) => {
+                const balance = await this.teller.getAccountBalances({
+                    accountId: a.id,
+                    accessToken,
+                })
+                return { ...a, balance }
+            })
+        )
+        return accountsWithBalances
     }
 
     private _loadAccounts(connection: Connection, { accounts }: Pick<TellerData, 'accounts'>) {
         return [
             // upsert accounts
             ...accounts.map((tellerAccount) => {
+                const type = TellerUtil.getType(tellerAccount.type)
+                const classification = AccountUtil.getClassification(type)
                 return this.prisma.account.upsert({
                     where: {
                         accountConnectionId_tellerAccountId: {
@@ -122,7 +137,7 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                         tellerType: tellerAccount.type,
                         tellerSubtype: tellerAccount.subtype,
                         mask: tellerAccount.last_four,
-                        ...TellerUtil.getAccountBalanceData(tellerAccount, tellerAccount.type),
+                        ...TellerUtil.getAccountBalanceData(tellerAccount, classification),
                     },
                     update: {
                         type: TellerUtil.getType(tellerAccount.type),
@@ -130,10 +145,10 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                         subcategoryProvider: tellerAccount.subtype ?? 'other',
                         tellerType: tellerAccount.type,
                         tellerSubtype: tellerAccount.subtype,
-                        ..._.omit(
-                            TellerUtil.getAccountBalanceData(tellerAccount, tellerAccount.type),
-                            ['currentBalanceStrategy', 'availableBalanceStrategy']
-                        ),
+                        ..._.omit(TellerUtil.getAccountBalanceData(tellerAccount, classification), [
+                            'currentBalanceStrategy',
+                            'availableBalanceStrategy',
+                        ]),
                     },
                 })
             }),
@@ -158,7 +173,7 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
             accountIds.map((accountId) =>
                 SharedUtil.paginate({
                     pageSize: 1000, // TODO: Check with Teller on max page size
-                    fetchData: async (offset, count) => {
+                    fetchData: async () => {
                         const transactions = await SharedUtil.withRetry(
                             () =>
                                 this.teller.getTransactions({
