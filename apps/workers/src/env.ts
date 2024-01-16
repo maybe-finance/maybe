@@ -17,6 +17,7 @@ const envSchema = z.object({
 
     NX_TELLER_SIGNING_SECRET: z.string().default('REPLACE_THIS'),
     NX_TELLER_APP_ID: z.string().default('REPLACE_THIS'),
+    NX_TELLER_ENV: z.string().default('sandbox'),
 
     NX_SENTRY_DSN: z.string().optional(),
     NX_SENTRY_ENV: z.string().optional(),
