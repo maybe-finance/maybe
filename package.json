@@ -55,6 +55,7 @@
         "@tanstack/react-table": "^8.3.0",
         "@tippyjs/react": "^4.2.6",
         "@tiptap/extension-placeholder": "^2.0.0-beta.209",
+        "@tiptap/pm": "^2.1.16",
         "@tiptap/react": "^2.0.0-beta.209",
         "@tiptap/starter-kit": "^2.0.0-beta.209",
         "@trpc/client": "^10.4.3",
@@ -157,6 +158,7 @@
         "uuid": "^9.0.0",
         "winston": "^3.8.2",
         "winston-transport": "^4.5.0",
+        "yarn": "^1.22.21",
         "zod": "^3.19.1"
     },
     "devDependencies": {
