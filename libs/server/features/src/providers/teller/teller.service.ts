@@ -100,11 +100,11 @@ export class TellerService implements IAccountConnectionProvider, IInstitutionPr
                         maxRetries: 3,
                         onError: (error, attempt) => {
                             this.logger.error(
-                                `Plaid fetch institutions request failed attempt=${attempt} offset=${offset} count=${count}`,
+                                `Teller fetch institutions request failed attempt=${attempt} offset=${offset} count=${count}`,
                                 { error: ErrorUtil.parseError(error) }
                             )
 
-                            return !ErrorUtil.isPlaidError(error) || error.response.status >= 500
+                            return !ErrorUtil.isTellerError(error) || error.response.status >= 500
                         },
                     }
                 ),
