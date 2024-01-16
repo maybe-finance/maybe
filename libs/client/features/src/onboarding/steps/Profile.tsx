@@ -144,6 +144,7 @@ function ProfileForm({ title, onSubmit, defaultValues }: ProfileViewProps) {
                             <DatePicker
                                 popperPlacement="bottom"
                                 className="mt-2"
+                                minCalendarDate={DateTime.now().minus({ years: 100 }).toISODate()}
                                 error={error?.message}
                                 {...field}
                             />
