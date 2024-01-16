@@ -63,6 +63,9 @@ yarn prisma:seed
 yarn dev
 ```
 
+## Contributing
+To contribute, please see our [contribution guide](https://github.com/maybe-finance/maybe/blob/main/CONTRIBUTING.md).
+
 ## High-priority issues
 
 The biggest focus at the moment is on getting the app functional without some previously key external services (namely Plaid and Finicity).
@@ -87,6 +90,10 @@ To pull market data in (for investments), you'll need a Polygon.io API key. You 
 -   [Data model assumptions and calculations](https://github.com/maybe-finance/maybe/wiki/Data-model-assumptions-and-calculations)
 -   [Handling money](https://github.com/maybe-finance/maybe/wiki/Handling-Money)
 -   [REST API](https://github.com/maybe-finance/maybe/wiki/REST-API)
+
+
+## Repo Activity
+![Repo Activity](https://repobeats.axiom.co/api/embed/7866c9790deba0baf63ca1688b209130b306ea4e.svg "Repobeats analytics image")
 
 ## Credits
 
