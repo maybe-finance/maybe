@@ -48,7 +48,7 @@ interface CreditAccount extends BaseAccount {
 
 export type Account = DepositoryAccount | CreditAccount
 
-export type GetAccountsResponse = { accounts: Account[] }
+export type GetAccountsResponse = Account[]
 export type GetAccountResponse = Account
 export type DeleteAccountResponse = void
 

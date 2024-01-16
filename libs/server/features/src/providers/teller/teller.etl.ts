@@ -1,9 +1,8 @@
 import type { AccountConnection, PrismaClient } from '@prisma/client'
 import type { Logger } from 'winston'
 import { SharedUtil, AccountUtil, type SharedType } from '@maybe-finance/shared'
-import type { FinicityApi, FinicityTypes } from '@maybe-finance/finicity-api'
 import type { TellerApi, TellerTypes } from '@maybe-finance/teller-api'
-import { DbUtil, TellerUtil, type IETL } from '@maybe-finance/server/shared'
+import { DbUtil, TellerUtil, type IETL, type ICryptoService } from '@maybe-finance/server/shared'
 import { Prisma } from '@prisma/client'
 import _ from 'lodash'
 import { DateTime } from 'luxon'
@@ -20,19 +19,28 @@ export type TellerData = {
     transactionsDateRange: SharedType.DateRange<DateTime>
 }
 
-type Connection = Pick<AccountConnection, 'id' | 'userId' | 'tellerInstitutionId'>
+type Connection = Pick<
+    AccountConnection,
+    'id' | 'userId' | 'tellerInstitutionId' | 'tellerAccessToken'
+>
 
 export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
     public constructor(
         private readonly logger: Logger,
         private readonly prisma: PrismaClient,
-        private readonly teller: Pick<TellerApi, 'getAccounts' | 'getTransactions'>
+        private readonly teller: Pick<TellerApi, 'getAccounts' | 'getTransactions'>,
+        private readonly crypto: ICryptoService
     ) {}
 
     async extract(connection: Connection): Promise<TellerRawData> {
         if (!connection.tellerInstitutionId) {
             throw new Error(`connection ${connection.id} is missing tellerInstitutionId`)
         }
+        if (!connection.tellerAccessToken) {
+            throw new Error(`connection ${connection.id} is missing tellerAccessToken`)
+        }
+
+        const accessToken = this.crypto.decrypt(connection.tellerAccessToken)
 
         const user = await this.prisma.user.findUniqueOrThrow({
             where: { id: connection.userId },
@@ -52,12 +60,11 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
             end: DateTime.now(),
         }
 
-        const accounts = await this._extractAccounts(user.tellerUserId)
+        const accounts = await this._extractAccounts(accessToken)
 
         const transactions = await this._extractTransactions(
-            user.tellerUserId,
-            accounts.map((a) => a.id),
-            transactionsDateRange
+            accessToken,
+            accounts.map((a) => a.id)
         )
 
         this.logger.info(
@@ -89,12 +96,8 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
         })
     }
 
-    private async _extractAccounts(tellerUserId: string) {
-        const { accounts } = await this.teller.getAccounts({ accessToken: undefined })
-
-        return accounts.filter(
-            (a) => a.institutionLoginId.toString() === institutionLoginId && a.currency === 'USD'
-        )
+    private async _extractAccounts(accessToken: string) {
+        return await this.teller.getAccounts({ accessToken })
     }
 
     private _loadAccounts(connection: Connection, { accounts }: Pick<TellerData, 'accounts'>) {
@@ -111,36 +114,30 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                     create: {
                         type: TellerUtil.getType(tellerAccount.type),
                         provider: 'teller',
-                        categoryProvider: PlaidUtil.plaidTypesToCategory(plaidAccount.type),
-                        subcategoryProvider: plaidAccount.subtype ?? 'other',
+                        categoryProvider: TellerUtil.tellerTypesToCategory(tellerAccount.type),
+                        subcategoryProvider: tellerAccount.subtype ?? 'other',
                         accountConnectionId: connection.id,
-                        plaidAccountId: plaidAccount.account_id,
+                        tellerAccountId: tellerAccount.id,
                         name: tellerAccount.name,
-                        plaidType: tellerAccount.type,
-                        plaidSubtype: tellerAccount.subtype,
-                        mask: plaidAccount.mask,
-                        ...PlaidUtil.getAccountBalanceData(
-                            plaidAccount.balances,
-                            plaidAccount.type
-                        ),
+                        tellerType: tellerAccount.type,
+                        tellerSubtype: tellerAccount.subtype,
+                        mask: tellerAccount.last_four,
+                        ...TellerUtil.getAccountBalanceData(tellerAccount, tellerAccount.type),
                     },
                     update: {
                         type: TellerUtil.getType(tellerAccount.type),
-                        categoryProvider: PlaidUtil.plaidTypesToCategory(tellerAccount.type),
+                        categoryProvider: TellerUtil.tellerTypesToCategory(tellerAccount.type),
                         subcategoryProvider: tellerAccount.subtype ?? 'other',
-                        plaidType: tellerAccount.type,
-                        plaidSubtype: tellerAccount.subtype,
+                        tellerType: tellerAccount.type,
+                        tellerSubtype: tellerAccount.subtype,
                         ..._.omit(
-                            PlaidUtil.getAccountBalanceData(
-                                plaidAccount.balances,
-                                plaidAccount.type
-                            ),
+                            TellerUtil.getAccountBalanceData(tellerAccount, tellerAccount.type),
                             ['currentBalanceStrategy', 'availableBalanceStrategy']
                         ),
                     },
                 })
             }),
-            // any accounts that are no longer in Plaid should be marked inactive
+            // any accounts that are no longer in Teller should be marked inactive
             this.prisma.account.updateMany({
                 where: {
                     accountConnectionId: connection.id,
@@ -156,25 +153,17 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
         ]
     }
 
-    private async _extractTransactions(
-        customerId: string,
-        accountIds: string[],
-        dateRange: SharedType.DateRange<DateTime>
-    ) {
+    private async _extractTransactions(accessToken: string, accountIds: string[]) {
         const accountTransactions = await Promise.all(
             accountIds.map((accountId) =>
                 SharedUtil.paginate({
-                    pageSize: 1000, // https://api-reference.finicity.com/#/rest/api-endpoints/transactions/get-customer-account-transactions
+                    pageSize: 1000, // TODO: Check with Teller on max page size
                     fetchData: async (offset, count) => {
                         const transactions = await SharedUtil.withRetry(
                             () =>
                                 this.teller.getTransactions({
                                     accountId,
-                                    accessToken: undefined,
-                                    fromDate: dateRange.start.toUnixInteger(),
-                                    toDate: dateRange.end.toUnixInteger(),
-                                    start: offset + 1,
-                                    limit: count,
+                                    accessToken: accessToken,
                                 }),
                             {
                                 maxRetries: 3,
