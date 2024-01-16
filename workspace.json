@@ -261,16 +261,10 @@
             "projectType": "application",
             "targets": {
                 "build": {
-                    "executor": "@nrwl/webpack:webpack",
+                    "executor": "@nrwl/vite:build",
                     "outputs": ["{options.outputPath}"],
                     "options": {
-                        "outputPath": "dist/apps/server",
-                        "main": "apps/server/src/main.ts",
-                        "tsConfig": "apps/server/tsconfig.app.json",
-                        "assets": ["apps/server/src/assets", "apps/server/src/app/admin/views"],
-                        "target": "node",
-                        "compiler": "tsc",
-                        "generatePackageJson": true
+                        "outputPath": "dist/apps/server"
                     },
                     "configurations": {
                         "production": {
@@ -287,11 +281,9 @@
                     }
                 },
                 "serve": {
-                    "executor": "@nrwl/node:node",
+                    "executor": "@nrwl/vite:dev-server",
                     "options": {
-                        "buildTarget": "server:build",
-                        "inspect": true,
-                        "port": 9228
+                        "buildTarget": "server:build"
                     }
                 },
                 "lint": {
@@ -421,16 +413,10 @@
             "projectType": "application",
             "targets": {
                 "build": {
-                    "executor": "@nrwl/webpack:webpack",
+                    "executor": "@nrwl/vite:build",
                     "outputs": ["{options.outputPath}"],
                     "options": {
-                        "outputPath": "dist/apps/workers",
-                        "main": "apps/workers/src/main.ts",
-                        "tsConfig": "apps/workers/tsconfig.app.json",
-                        "assets": ["apps/workers/src/assets"],
-                        "target": "node",
-                        "compiler": "tsc",
-                        "generatePackageJson": true
+                        "outputPath": "dist/apps/workers"
                     },
                     "configurations": {
                         "production": {
@@ -447,11 +433,9 @@
                     }
                 },
                 "serve": {
-                    "executor": "@nrwl/node:node",
+                    "executor": "@nrwl/vite:dev-server",
                     "options": {
-                        "buildTarget": "workers:build",
-                        "inspect": true,
-                        "port": 9227
+                        "buildTarget": "workers:build"
                     }
                 },
                 "lint": {
