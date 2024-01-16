@@ -1,6 +1,6 @@
 import { useState, type ReactElement } from 'react'
 import { FullPageLayout } from '@maybe-finance/client/features'
-import { Input, InputPassword, Button } from '@maybe-finance/design-system'
+import { Input, InputPassword, Button, Dialog, Toast } from '@maybe-finance/design-system'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
@@ -11,6 +11,13 @@ export default function LoginPage() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [isValid, setIsValid] = useState(false)
+
+    // FIXME - move this to a separate component/hook?
+    const [forgotPasswordEmail, setForgotPasswordEmail] = useState('')
+    const [showForgotPasswordDialog, setShowForgotPasswordDialog] = useState(false)
+    const [sendResetPasswordEmailLoading, setSendResetPasswordEmailLoading] = useState(false)
+    const [showResetPasswordSuccess, setShowResetPasswordSuccess] = useState(false)
+
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(false)
 
@@ -46,6 +53,24 @@ export default function LoginPage() {
         setErrorMessage(null)
         setPassword(e.target.value)
         setIsValid(e.target.value.length > 0)
+    }
+
+    const sendResetPasswordEmail = async () => {
+        setSendResetPasswordEmailLoading(true)
+
+        const response = await fetch('/api/auth/reset-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email: forgotPasswordEmail,
+            }),
+        })
+
+        if (response.ok) {
+            setShowResetPasswordSuccess(true)
+            setSendResetPasswordEmailLoading(false)
+            setForgotPasswordEmail('')
+        }
     }
 
     return (
@@ -106,6 +131,54 @@ export default function LoginPage() {
                                         Sign up
                                     </Link>
                                 </div>
+                            </div>
+
+                            <Dialog
+                                onClose={() => {
+                                    setShowForgotPasswordDialog(false)
+                                    setShowResetPasswordSuccess(false)
+                                    setForgotPasswordEmail('')
+                                }}
+                                isOpen={showForgotPasswordDialog}
+                            >
+                                <Dialog.Title>Forgot password?</Dialog.Title>
+                                <Dialog.Content>
+                                    {showResetPasswordSuccess && (
+                                        <Toast variant="success" className="my-2">
+                                            If the email you provided exists, we&apos;ve sent you a
+                                            password reset email.
+                                        </Toast>
+                                    )}
+
+                                    <Input
+                                        type="text"
+                                        label="Email"
+                                        value={forgotPasswordEmail}
+                                        onChange={(e) =>
+                                            setForgotPasswordEmail(e.currentTarget.value)
+                                        }
+                                    />
+                                </Dialog.Content>
+                                <Dialog.Actions>
+                                    <Button
+                                        type="button"
+                                        disabled={sendResetPasswordEmailLoading}
+                                        onClick={() => sendResetPasswordEmail()}
+                                        fullWidth
+                                    >
+                                        Send Password Reset Email
+                                    </Button>
+                                </Dialog.Actions>
+                            </Dialog>
+
+                            <div className="text-sm text-gray-50 mt-2">
+                                <button
+                                    className="hover:text-cyan-400 underline font-medium"
+                                    type="button"
+                                    onClick={() => setShowForgotPasswordDialog(true)}
+                                >
+                                    Forgot password?
+                                </button>
                             </div>
                         </form>
                     </div>
