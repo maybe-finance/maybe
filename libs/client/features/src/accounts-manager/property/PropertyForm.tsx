@@ -1,7 +1,7 @@
 import type { CreatePropertyFields, UpdatePropertyFields } from '@maybe-finance/client/shared'
-import { Button, Input } from '@maybe-finance/design-system'
-import { DateUtil } from '@maybe-finance/shared'
-import { useForm } from 'react-hook-form'
+import { Button, Input, Listbox } from '@maybe-finance/design-system'
+import { DateUtil, Geo } from '@maybe-finance/shared'
+import { Controller, useForm } from 'react-hook-form'
 import { AccountValuationFormFields } from '../AccountValuationFormFields'
 
 type Props =
@@ -36,7 +36,27 @@ export default function PropertyForm({ mode, defaultValues, onSubmit }: Props) {
             <section className="space-y-4 mb-8">
                 <h6 className="text-white uppercase">Location</h6>
                 <div className="space-y-4">
-                    <Input type="text" label="Country" value="United States" readOnly disabled />
+                    <Controller
+                        name="country"
+                        rules={{ required: true }}
+                        defaultValue="US"
+                        control={control}
+                        render={({ field }) => (
+                            <Listbox {...field}>
+                                <Listbox.Button label="Country">
+                                    {Geo.countries.find((c) => c.code === field.value)?.name ||
+                                        'Select'}
+                                </Listbox.Button>
+                                <Listbox.Options className="max-h-[300px] custom-gray-scroll">
+                                    {Geo.countries.map((country) => (
+                                        <Listbox.Option key={country.code} value={country.code}>
+                                            {country.name}
+                                        </Listbox.Option>
+                                    ))}
+                                </Listbox.Options>
+                            </Listbox>
+                        )}
+                    />
 
                     <Input
                         type="text"

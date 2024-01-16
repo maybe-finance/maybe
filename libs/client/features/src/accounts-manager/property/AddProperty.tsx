@@ -20,6 +20,7 @@ export function AddProperty({ defaultValues }: { defaultValues: Partial<CreatePr
                     city: defaultValues.city ?? '',
                     state: defaultValues.state ?? '',
                     zip: defaultValues.zip ?? '',
+                    country: defaultValues.country ?? '',
                     startDate: defaultValues.startDate ?? null,
                     originalBalance: defaultValues.originalBalance ?? null,
                     currentBalance: defaultValues.currentBalance ?? null,
@@ -29,6 +30,7 @@ export function AddProperty({ defaultValues }: { defaultValues: Partial<CreatePr
                     city,
                     state,
                     zip,
+                    country,
                     originalBalance,
                     currentBalance,
                     startDate,
@@ -49,6 +51,7 @@ export function AddProperty({ defaultValues }: { defaultValues: Partial<CreatePr
                                 city,
                                 state,
                                 zip,
+                                country,
                             },
                         },
                     })
