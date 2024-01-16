@@ -137,8 +137,8 @@ export class TellerApi {
     }
 
     private async getApi(accessToken: string): Promise<AxiosInstance> {
-        const cert = fs.readFileSync('../../../certs/teller-certificate.pem', 'utf8')
-        const key = fs.readFileSync('../../../certs/teller-private-key.pem', 'utf8')
+        const cert = fs.readFileSync('./certs/certificate.pem', 'utf8')
+        const key = fs.readFileSync('./certs/private_key.pem', 'utf8')
 
         const agent = new https.Agent({
             cert,

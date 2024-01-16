@@ -9,6 +9,4 @@ export type Institution = {
 
 type Capability = 'detail' | 'balance' | 'transaction' | 'identity'
 
-export type GetInstitutionsResponse = {
-    institutions: Institution[]
-}
+export type GetInstitutionsResponse = Institution[]

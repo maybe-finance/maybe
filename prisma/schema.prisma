@@ -493,6 +493,7 @@ model Institution {
 enum Provider {
   PLAID
   FINICITY
+  TELLER
 }
 
 model ProviderInstitution {

@@ -79,7 +79,7 @@ export class TellerService implements IAccountConnectionProvider, IInstitutionPr
 
     async getInstitutions() {
         const tellerInstitutions = await SharedUtil.paginate({
-            pageSize: 500,
+            pageSize: 10000,
             delay:
                 process.env.NODE_ENV !== 'production'
                     ? {
@@ -87,20 +87,20 @@ export class TellerService implements IAccountConnectionProvider, IInstitutionPr
                           milliseconds: 7_000, // Sandbox rate limited at 10 calls / minute
                       }
                     : undefined,
-            fetchData: (offset, count) =>
+            fetchData: () =>
                 SharedUtil.withRetry(
                     () =>
                         this.teller.getInstitutions().then((data) => {
                             this.logger.debug(
-                                `paginated teller fetch inst=${data.institutions.length} (total=${data.institutions.length} offset=${offset} count=${count})`
+                                `teller fetch inst=${data.length} (total=${data.length})`
                             )
-                            return data.institutions
+                            return data
                         }),
                     {
                         maxRetries: 3,
                         onError: (error, attempt) => {
                             this.logger.error(
-                                `Teller fetch institutions request failed attempt=${attempt} offset=${offset} count=${count}`,
+                                `Teller fetch institutions request failed attempt=${attempt}`,
                                 { error: ErrorUtil.parseError(error) }
                             )
 
@@ -115,10 +115,11 @@ export class TellerService implements IAccountConnectionProvider, IInstitutionPr
             return {
                 providerId: id,
                 name,
-                url: undefined,
-                logo: `https://teller.io/images/banks/${id}.jpg}`,
-                primaryColor: undefined,
-                oauth: undefined,
+                url: null,
+                logo: null,
+                logoUrl: `https://teller.io/images/banks/${id}.jpg`,
+                primaryColor: null,
+                oauth: false,
                 data: tellerInstitution,
             }
         })
