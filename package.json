@@ -153,6 +153,7 @@
         "stripe": "^10.17.0",
         "superjson": "^1.11.0",
         "tailwindcss": "3.2.4",
+        "teller-connect-react": "^0.1.0",
         "tslib": "^2.3.0",
         "uuid": "^9.0.0",
         "winston": "^3.8.2",

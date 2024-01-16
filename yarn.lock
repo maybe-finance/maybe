@@ -16600,6 +16600,11 @@ react-script-hook@^1.6.0:
   resolved "https://registry.yarnpkg.com/react-script-hook/-/react-script-hook-1.6.0.tgz#6a44ff5e65113cb29252eadad1b8306f5fe0c626"
   integrity sha512-aJm72XGWV+wJTKiqHmAaTNC/JQZV/Drv6A1kd1VQlzhzAXLqtBRBeTt3iTESImGe5TaBDHUOUeaGNw4v+7bqDw==
 
+react-script-hook@^1.7.2:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/react-script-hook/-/react-script-hook-1.7.2.tgz#ec130d67f9a25fcde57fbfd1faa87e5b97521948"
+  integrity sha512-fhyCEfXb94fag34UPRF0zry1XGwmVY+79iibWwTqAoOiCzYJQOYTiWJ7CnqglA9tMSV8g45cQpHCMcBwr7dwhA==
+
 react-shallow-renderer@^16.15.0:
   version "16.15.0"
   resolved "https://registry.yarnpkg.com/react-shallow-renderer/-/react-shallow-renderer-16.15.0.tgz#48fb2cf9b23d23cde96708fe5273a7d3446f4457"
@@ -18531,6 +18536,13 @@ telejson@^6.0.8:
     isobject "^4.0.0"
     lodash "^4.17.21"
     memoizerific "^1.11.3"
+
+teller-connect-react@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/teller-connect-react/-/teller-connect-react-0.1.0.tgz#b3bae24f4410d622eb8c88c7668adb003eb7bfd7"
+  integrity sha512-ZI+OULCsuo/v1qetpjepOgM7TyIzwnMVE/54IruOPguQtJ/Ui3C1ax3wUb65AKZDyVQ7ZyjA+8ypT/yMYD9bIQ==
+  dependencies:
+    react-script-hook "^1.7.2"
 
 terminal-link@^2.0.0:
   version "2.1.1"
