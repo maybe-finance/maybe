@@ -16,6 +16,7 @@ export function AddProperty({ defaultValues }: { defaultValues: Partial<CreatePr
             <PropertyForm
                 mode="create"
                 defaultValues={{
+                    country: defaultValues.country ?? '',
                     line1: defaultValues.line1 ?? '',
                     city: defaultValues.city ?? '',
                     state: defaultValues.state ?? '',
@@ -25,6 +26,7 @@ export function AddProperty({ defaultValues }: { defaultValues: Partial<CreatePr
                     currentBalance: defaultValues.currentBalance ?? null,
                 }}
                 onSubmit={async ({
+                    country,
                     line1,
                     city,
                     state,
@@ -45,6 +47,7 @@ export function AddProperty({ defaultValues }: { defaultValues: Partial<CreatePr
                         },
                         propertyMeta: {
                             address: {
+                                country,
                                 line1,
                                 city,
                                 state,

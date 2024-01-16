@@ -36,7 +36,12 @@ export default function PropertyForm({ mode, defaultValues, onSubmit }: Props) {
             <section className="space-y-4 mb-8">
                 <h6 className="text-white uppercase">Location</h6>
                 <div className="space-y-4">
-                    <Input type="text" label="Country" value="United States" readOnly disabled />
+                    <Input
+                        type="text"
+                        label="Country"
+                        placeholder="Enter country"
+                        {...register('country', { required: true })}
+                    />
 
                     <Input
                         type="text"

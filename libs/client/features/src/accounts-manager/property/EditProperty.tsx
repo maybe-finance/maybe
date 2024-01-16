@@ -16,7 +16,7 @@ export function EditProperty({ account }: { account: SharedType.AccountDetail })
         <PropertyForm
             mode="update"
             defaultValues={(account.propertyMeta as any)?.address as UpdatePropertyFields}
-            onSubmit={async ({ line1, city, state, zip, ...rest }) => {
+            onSubmit={async ({ country, line1, city, state, zip, ...rest }) => {
                 await updateAccount.mutateAsync({
                     id: account.id,
                     data: {
@@ -27,6 +27,7 @@ export function EditProperty({ account }: { account: SharedType.AccountDetail })
                             name: line1,
                             propertyMeta: {
                                 address: {
+                                    country,
                                     line1,
                                     city,
                                     state,
