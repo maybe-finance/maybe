@@ -107,7 +107,7 @@
         "http-errors": "^2.0.0",
         "ioredis": "^5.2.4",
         "is-ci": "^3.0.1",
-        "jsonwebtoken": "^8.5.1",
+        "jsonwebtoken": "^9.0.0",
         "jwk-to-pem": "^2.0.5",
         "jwks-rsa": "^3.0.0",
         "jwt-decode": "^3.1.2",
