@@ -7,8 +7,9 @@ FROM node:16.18.1 as builder
 
 WORKDIR /app
 COPY ./dist/apps/client ./yarn.lock ./prisma ./
+COPY ./package.json ./
 # Install dependencies
-RUN yarn install --production=false && yarn add @next/bundle-analyzer
+RUN yarn install --production=false
 
 # ------------------------------------------
 #                PROD STAGE               
@@ -21,4 +22,4 @@ WORKDIR /app
 USER node 
 COPY --from=builder /app  .
 
-CMD ["yarn", "run", "start"]
+CMD ["npx", "next start"]
