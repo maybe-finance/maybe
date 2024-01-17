@@ -7,7 +7,8 @@ FROM node:16.18.1 as builder
 
 WORKDIR /app
 COPY ./dist/apps/client ./yarn.lock ./prisma ./
-RUN yarn install --production=false
+# Install dependencies
+RUN yarn install --production=false && yarn add @next/bundle-analyzer
 
 # ------------------------------------------
 #                PROD STAGE               
