@@ -6,7 +6,8 @@
 FROM node:16.18.1 as builder
 
 WORKDIR /app
-COPY ./dist/apps/client ./yarn.lock ./prisma ./package.json ./
+COPY ./dist/apps/client ./yarn.lock ./prisma ./package.json ./apps/client/env.sh ./
+RUN chmod +x ./env.sh
 # Install dependencies
 RUN yarn install --production=false
 
@@ -15,10 +16,10 @@ RUN yarn install --production=false
 # ------------------------------------------ 
 FROM node:16.18.1-slim as prod
 
-# Used for container health checks
-RUN apt-get update && apt-get install curl -y
+# Used for container health checks and env handling
+RUN apt-get update && apt-get install curl gawk -y
 WORKDIR /app
 USER node 
 COPY --from=builder /app  .
 
-CMD ["npx", "next", "start"]
+CMD ["./env.sh", "npx", "next", "start"]
