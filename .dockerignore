@@ -4,3 +4,4 @@
 !prisma/
 !yarn.lock
 !package.json
+!apps/client/env.sh
