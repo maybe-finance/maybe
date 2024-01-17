@@ -158,6 +158,11 @@ export class TellerApi {
                     password: '',
                 },
             })
+        } else if (this.api.defaults.auth?.username !== accessToken) {
+            this.api.defaults.auth = {
+                username: accessToken,
+                password: '',
+            }
         }
 
         return this.api
