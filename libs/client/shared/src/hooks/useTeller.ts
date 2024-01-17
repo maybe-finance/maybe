@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import * as Sentry from '@sentry/react'
 import type { Logger } from '../providers/LogProvider'
 import toast from 'react-hot-toast'
+import { useAccountContext } from '../providers'
 import { useTellerApi } from '../api'
 import type {
     TellerConnectEnrollment,
@@ -45,6 +46,7 @@ export const useTellerConfig = (logger: Logger) => {
 export const useTellerConnect = (options: TellerConnectOptions, logger: Logger) => {
     const { useHandleEnrollment } = useTellerApi()
     const handleEnrollment = useHandleEnrollment()
+    const { setAccountManager } = useAccountContext()
     const [loading, error] = useScript({
         src: TC_JS,
         checkForExisting: true,
@@ -124,7 +126,7 @@ export const useTellerConnect = (options: TellerConnectOptions, logger: Logger) 
             logIt()
             const tellerInstance = createTellerInstance(institutionId)
             tellerInstance.open()
-            setTeller(tellerInstance)
+            setAccountManager({ view: 'idle' })
         },
     }
 }
