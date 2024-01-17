@@ -168,16 +168,6 @@ export class TellerService implements IAccountConnectionProvider, IInstitutionPr
             },
         })
 
-        await this.sync(accountConnection, { type: 'teller', initialSync: true })
-
-        await this.prisma.accountConnection.update({
-            where: { id: accountConnection.id },
-            data: {
-                status: 'OK',
-                syncStatus: 'IDLE',
-            },
-        })
-
         return accountConnection
     }
 }

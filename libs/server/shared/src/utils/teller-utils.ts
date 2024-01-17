@@ -1,4 +1,10 @@
-import { Prisma, AccountCategory, AccountType, type Account } from '@prisma/client'
+import {
+    Prisma,
+    AccountCategory,
+    AccountType,
+    type Account,
+    type AccountClassification,
+} from '@prisma/client'
 import type { TellerTypes } from '@maybe-finance/teller-api'
 import { Duration } from 'luxon'
 
@@ -7,10 +13,10 @@ import { Duration } from 'luxon'
  */
 export const TELLER_WINDOW_MAX = Duration.fromObject({ years: 1 })
 
-export function getAccountBalanceData({
-    balance,
-    currency,
-}: Pick<TellerTypes.AccountWithBalances, 'balance' | 'currency'>): Pick<
+export function getAccountBalanceData(
+    { balance, currency }: Pick<TellerTypes.AccountWithBalances, 'balance' | 'currency'>,
+    classification: AccountClassification
+): Pick<
     Account,
     | 'currentBalanceProvider'
     | 'currentBalanceStrategy'
@@ -18,11 +24,14 @@ export function getAccountBalanceData({
     | 'availableBalanceStrategy'
     | 'currencyCode'
 > {
+    const sign = classification === 'liability' ? -1 : 1
     return {
-        currentBalanceProvider: new Prisma.Decimal(balance.ledger ? Number(balance.ledger) : 0),
+        currentBalanceProvider: new Prisma.Decimal(
+            balance.ledger ? sign * Number(balance.ledger) : 0
+        ),
         currentBalanceStrategy: 'current',
         availableBalanceProvider: new Prisma.Decimal(
-            balance.available ? Number(balance.available) : 0
+            balance.available ? sign * Number(balance.available) : 0
         ),
         availableBalanceStrategy: 'available',
         currencyCode: currency,

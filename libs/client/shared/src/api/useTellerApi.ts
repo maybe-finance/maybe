@@ -3,7 +3,6 @@ import toast from 'react-hot-toast'
 import { useAxiosWithAuth } from '../hooks/useAxiosWithAuth'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type { SharedType } from '@maybe-finance/shared'
-import { invalidateAccountQueries } from '../utils'
 import type { AxiosInstance } from 'axios'
 import type { TellerTypes } from '@maybe-finance/teller-api'
 import { useAccountConnectionApi } from './useAccountConnectionApi'
@@ -56,9 +55,6 @@ export function useTellerApi() {
                 addConnectionToState(_connection)
                 syncConnection.mutate(_connection.id)
                 toast.success(`Account connection added!`)
-            },
-            onSettled: () => {
-                invalidateAccountQueries(queryClient, false)
             },
         })
 

@@ -1,6 +1,6 @@
 import type { AccountConnection, PrismaClient } from '@prisma/client'
 import type { Logger } from 'winston'
-import { SharedUtil, type SharedType } from '@maybe-finance/shared'
+import { AccountUtil, SharedUtil, type SharedType } from '@maybe-finance/shared'
 import type { TellerApi, TellerTypes } from '@maybe-finance/teller-api'
 import { DbUtil, TellerUtil, type IETL, type ICryptoService } from '@maybe-finance/server/shared'
 import { Prisma } from '@prisma/client'
@@ -117,6 +117,9 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
         return [
             // upsert accounts
             ...accounts.map((tellerAccount) => {
+                const type = TellerUtil.getType(tellerAccount.type)
+                const classification = AccountUtil.getClassification(type)
+
                 return this.prisma.account.upsert({
                     where: {
                         accountConnectionId_tellerAccountId: {
@@ -136,7 +139,7 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                         tellerType: tellerAccount.type,
                         tellerSubtype: tellerAccount.subtype,
                         mask: tellerAccount.last_four,
-                        ...TellerUtil.getAccountBalanceData(tellerAccount),
+                        ...TellerUtil.getAccountBalanceData(tellerAccount, classification),
                     },
                     update: {
                         type: TellerUtil.getType(tellerAccount.type),
@@ -144,7 +147,7 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                         subcategoryProvider: tellerAccount.subtype ?? 'other',
                         tellerType: tellerAccount.type,
                         tellerSubtype: tellerAccount.subtype,
-                        ..._.omit(TellerUtil.getAccountBalanceData(tellerAccount), [
+                        ..._.omit(TellerUtil.getAccountBalanceData(tellerAccount, classification), [
                             'currentBalanceStrategy',
                             'availableBalanceStrategy',
                         ]),
