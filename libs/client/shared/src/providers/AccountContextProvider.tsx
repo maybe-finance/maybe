@@ -16,6 +16,7 @@ type PropertyMetadataValues = {
     line1: string
     city: string
     state: string
+    country: string
     zip: string
 }
 export type CreatePropertyFields = PropertyMetadataValues & AccountValuationFields
