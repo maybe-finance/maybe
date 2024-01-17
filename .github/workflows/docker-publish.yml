@@ -29,7 +29,7 @@ jobs:
             dockerfile: "./apps/workers/Dockerfile"
             nx: "workers:build"
           - image: "ghcr.io/${{ github.repository }}-client"
-            dockerfile: "./apps/workers/Dockerfile"
+            dockerfile: "./apps/client/Dockerfile"
             nx: "client:build"
     steps:
       - name: Checkout repository
