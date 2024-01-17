@@ -7,7 +7,7 @@ FROM node:16.18.1 as builder
 
 WORKDIR /app
 COPY ./dist/apps/client ./yarn.lock ./prisma ./
-RUN yarn install --production
+RUN yarn install --production=false
 
 # ------------------------------------------
 #                PROD STAGE               
