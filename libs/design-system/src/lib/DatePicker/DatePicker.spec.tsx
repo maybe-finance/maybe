@@ -3,9 +3,6 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { DatePicker } from './'
 import { DateTime } from 'luxon'
 
-// Set date to Oct 29, 2021 to keep snapshots consistent
-beforeAll(() => jest.useFakeTimers().setSystemTime(new Date('2021-10-29 12:00:00')))
-
 // DatePicker configuration
 const minDate = DateTime.now().minus({ years: 2 })
 const maxDate = DateTime.now()
@@ -73,6 +70,8 @@ describe('<DatePicker />', () => {
 
             const currentMonth = DateTime.now()
             const priorMonth = DateTime.now().minus({ months: 1 })
+
+            console.log(DateTime.now(), 'date')
 
             // Open the modal
             fireEvent.click(screen.getByTestId('datepicker-toggle-icon'))
