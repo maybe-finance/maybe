@@ -149,6 +149,7 @@ describe('Accounts', () => {
         cy.contains('h4', 'Add real estate')
 
         // Details
+        cy.get('input[name="country"]').select('GB')
         cy.get('input[name="line1"]').focus().type('123 Example St')
         cy.get('input[name="city"]').type('New York')
         cy.get('input[name="state"]').type('NY')
@@ -187,6 +188,7 @@ describe('Accounts', () => {
         openEditAccountModal()
 
         cy.getByTestId('property-form').within(() => {
+            cy.get('input[name="country]').should('have.value', 'GB').clear().select('FR')
             cy.get('input[name="line1"]')
                 .should('have.value', '123 Example St')
                 .clear()
