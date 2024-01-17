@@ -1,5 +1,11 @@
+declare global {
+    interface Window {
+        __appenv: any;
+    }
+}
+
 function isBrowser() {
-    return Boolean(typeof window !== "undefined" && (window.__env || window.__appenv));
+    return Boolean(typeof window !== "undefined" && window.__appenv);
 }
 
 function env(key: string) {
@@ -8,10 +14,7 @@ function env(key: string) {
     }
   
     if (isBrowser()) {
-      if (key in window.__appenv)
         return window.__appenv[key];
-  
-      return window.__env[key];
     }
   
     return process.env[key];
