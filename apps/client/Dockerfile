@@ -21,4 +21,4 @@ WORKDIR /app
 USER node 
 COPY --from=builder /app  .
 
-CMD ["npx", "next start"]
+CMD ["npx", "next", "start"]
