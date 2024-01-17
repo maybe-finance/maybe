@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { RiFolderLine, RiHandCoinLine, RiLockLine, RiSearchLine } from 'react-icons/ri'
 import maxBy from 'lodash/maxBy'
 import {
@@ -7,14 +7,14 @@ import {
     useDebounce,
     usePlaid,
     useFinicity,
+    useTellerConfig,
+    useTellerConnect,
 } from '@maybe-finance/client/shared'
 import { Input } from '@maybe-finance/design-system'
 import InstitutionGrid from './InstitutionGrid'
 import { AccountTypeGrid } from './AccountTypeGrid'
 import InstitutionList, { MIN_QUERY_LENGTH } from './InstitutionList'
 import { useLogger } from '@maybe-finance/client/shared'
-import { BrowserUtil } from '@maybe-finance/client/shared'
-import { useTellerConnect, type TellerConnectOptions } from 'teller-connect-react'
 
 const SEARCH_DEBOUNCE_MS = 300
 
@@ -31,21 +31,16 @@ export default function AccountTypeSelector({
     const [searchQuery, setSearchQuery] = useState<string>('')
     const debouncedSearchQuery = useDebounce(searchQuery, SEARCH_DEBOUNCE_MS)
 
-    const [institutionId, setInstitutionId] = useState<string | undefined>(undefined)
-
     const showInstitutionList =
         searchQuery.length >= MIN_QUERY_LENGTH &&
         debouncedSearchQuery.length >= MIN_QUERY_LENGTH &&
         view !== 'manual'
 
-    const config = useMemo(
-        () => BrowserUtil.getTellerConfig(logger, institutionId),
-        [logger, institutionId]
-    ) as TellerConnectOptions
+    const config = useTellerConfig(logger)
 
     const { openPlaid } = usePlaid()
     const { openFinicity } = useFinicity()
-    const { open: openTeller } = useTellerConnect(config)
+    const { open: openTeller } = useTellerConnect(config, logger)
 
     const inputRef = useRef<HTMLInputElement>(null)
 
@@ -54,15 +49,6 @@ export default function AccountTypeSelector({
             inputRef.current.focus()
         }
     }, [])
-
-    const configRef = useRef<TellerConnectOptions | null>(null)
-
-    useEffect(() => {
-        if (institutionId) {
-            configRef.current = BrowserUtil.getTellerConfig(logger, institutionId)
-            openTeller()
-        }
-    }, [institutionId, logger, openTeller])
 
     return (
         <div>
@@ -88,8 +74,6 @@ export default function AccountTypeSelector({
                         if (!providerInstitution) {
                             alert('No provider found for institution')
                             return
-                        } else {
-                            setInstitutionId(providerInstitution.providerId)
                         }
 
                         switch (providerInstitution.provider) {
@@ -100,7 +84,7 @@ export default function AccountTypeSelector({
                                 openFinicity(providerInstitution.providerId)
                                 break
                             case 'TELLER':
-                                openTeller()
+                                openTeller(providerInstitution.providerId)
                                 break
                             default:
                                 break
@@ -163,14 +147,11 @@ export default function AccountTypeSelector({
                                             categoryUser: 'crypto',
                                         },
                                     })
-
                                     return
                                 }
 
                                 if (!data) {
                                     return
-                                } else {
-                                    setInstitutionId(data.providerId)
                                 }
 
                                 switch (data.provider) {
@@ -181,7 +162,7 @@ export default function AccountTypeSelector({
                                         openFinicity(data.providerId)
                                         break
                                     case 'TELLER':
-                                        openTeller()
+                                        openTeller(data.providerId)
                                         break
                                     default:
                                         break

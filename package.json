@@ -147,6 +147,7 @@
         "react-popper": "^2.3.0",
         "react-ranger": "^2.1.0",
         "react-responsive": "^9.0.0-beta.10",
+        "react-script-hook": "^1.7.2",
         "regenerator-runtime": "0.13.7",
         "sanitize-html": "^2.8.1",
         "smooth-scroll-into-view-if-needed": "^1.1.33",

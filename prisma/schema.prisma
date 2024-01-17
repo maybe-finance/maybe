@@ -71,8 +71,8 @@ model AccountConnection {
   finicityError              Json?   @map("finicity_error")
 
   // teller data
-  tellerAccountId     String? @map("teller_account_id")
   tellerAccessToken   String? @map("teller_access_token")
+  tellerEnrollmentId  String? @map("teller_enrollment_id")
   tellerInstitutionId String? @map("teller_institution_id")
   tellerError         Json?   @map("teller_error")
 

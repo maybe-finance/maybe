@@ -137,12 +137,12 @@ export class TellerApi {
     }
 
     private async getApi(accessToken: string): Promise<AxiosInstance> {
-        const cert = fs.readFileSync('./certs/certificate.pem', 'utf8')
-        const key = fs.readFileSync('./certs/private_key.pem', 'utf8')
+        const cert = fs.readFileSync('./certs/certificate.pem')
+        const key = fs.readFileSync('./certs/private_key.pem')
 
         const agent = new https.Agent({
-            cert,
-            key,
+            cert: cert,
+            key: key,
         })
 
         if (!this.api) {
@@ -153,15 +153,10 @@ export class TellerApi {
                 headers: {
                     Accept: 'application/json',
                 },
-            })
-
-            this.api.interceptors.request.use((config) => {
-                // Add the access_token to the auth object
-                config.auth = {
-                    username: 'ACCESS_TOKEN',
-                    password: accessToken,
-                }
-                return config
+                auth: {
+                    username: accessToken,
+                    password: '',
+                },
             })
         }
 

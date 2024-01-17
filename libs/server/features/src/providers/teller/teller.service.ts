@@ -6,10 +6,11 @@ import type {
     IAccountConnectionProvider,
 } from '../../account-connection'
 import { SharedUtil } from '@maybe-finance/shared'
+import type { SharedType } from '@maybe-finance/shared'
 import type { SyncConnectionOptions, CryptoService, IETL } from '@maybe-finance/server/shared'
 import _ from 'lodash'
 import { ErrorUtil, etl } from '@maybe-finance/server/shared'
-import type { TellerApi } from '@maybe-finance/teller-api'
+import type { TellerApi, TellerTypes } from '@maybe-finance/teller-api'
 
 export interface ITellerConnect {
     generateConnectUrl(userId: User['id'], institutionId: string): Promise<{ link: string }>
@@ -67,13 +68,22 @@ export class TellerService implements IAccountConnectionProvider, IInstitutionPr
 
     async delete(connection: AccountConnection) {
         // purge teller data
-        if (connection.tellerAccessToken && connection.tellerAccountId) {
-            await this.teller.deleteAccount({
-                accessToken: this.crypto.decrypt(connection.tellerAccessToken),
-                accountId: connection.tellerAccountId,
+        if (connection.tellerAccessToken && connection.tellerEnrollmentId) {
+            const accounts = await this.prisma.account.findMany({
+                where: { accountConnectionId: connection.id },
             })
 
-            this.logger.info(`Item ${connection.tellerAccountId} removed`)
+            for (const account of accounts) {
+                if (!account.tellerAccountId) continue
+                await this.teller.deleteAccount({
+                    accessToken: this.crypto.decrypt(connection.tellerAccessToken),
+                    accountId: account.tellerAccountId,
+                })
+
+                this.logger.info(`Teller account ${account.id} removed`)
+            }
+
+            this.logger.info(`Teller enrollment ${connection.tellerEnrollmentId} removed`)
         }
     }
 
@@ -123,5 +133,52 @@ export class TellerService implements IAccountConnectionProvider, IInstitutionPr
                 data: tellerInstitution,
             }
         })
+    }
+
+    async handleEnrollment(
+        userId: User['id'],
+        institution: Pick<TellerTypes.Institution, 'name' | 'id'>,
+        enrollment: TellerTypes.Enrollment
+    ) {
+        const connections = await this.prisma.accountConnection.findMany({
+            where: { userId },
+        })
+
+        if (connections.length > 40) {
+            throw new Error('MAX_ACCOUNT_CONNECTIONS')
+        }
+
+        const accounts = await this.teller.getAccounts({ accessToken: enrollment.accessToken })
+
+        this.logger.info(`Teller accounts retrieved for enrollment ${enrollment.enrollment.id}`)
+
+        // If all the accounts are Non-USD, throw an error
+        if (accounts.every((a) => a.currency !== 'USD')) {
+            throw new Error('USD_ONLY')
+        }
+
+        // Create account connection on exchange; accounts + txns will sync later with webhook
+        const [accountConnection] = await this.prisma.$transaction([
+            this.prisma.accountConnection.create({
+                data: {
+                    name: enrollment.enrollment.institution.name,
+                    type: 'teller' as SharedType.AccountConnectionType,
+                    tellerEnrollmentId: enrollment.enrollment.id,
+                    tellerInstitutionId: institution.id,
+                    tellerAccessToken: this.crypto.encrypt(enrollment.accessToken),
+                    userId,
+                    syncStatus: 'PENDING',
+                },
+            }),
+        ])
+
+        await this.prisma.user.update({
+            where: { id: userId },
+            data: {
+                tellerUserId: enrollment.user.id,
+            },
+        })
+
+        return accountConnection
     }
 }
