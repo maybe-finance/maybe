@@ -40,6 +40,15 @@ type FormValues = {
     maybeGoalsDescription?: string
 }
 
+function getDateFormatByCountryCode(countryCode: string): string {
+    const country = Geo.countries.filter((country) => country.code === countryCode)
+    if (country.length > 0) {
+        return country[0].dateFormat
+    }
+
+    return 'dd / MM / yyyy'
+}
+
 export function Profile({ title, onNext }: StepProps) {
     const { useUpdateProfile, useProfile } = useUserApi()
     const updateProfile = useUpdateProfile({ onSuccess: undefined })
@@ -193,10 +202,8 @@ function ProfileForm({ title, onSubmit, defaultValues }: ProfileViewProps) {
                                 className="mt-2"
                                 minCalendarDate={DateTime.now().minus({ years: 100 }).toISODate()}
                                 error={error?.message}
-                                placeholder={BrowserUtil.getDateFormatByCountryCode(
-                                    country
-                                ).toUpperCase()}
-                                dateFormat={BrowserUtil.getDateFormatByCountryCode(country)}
+                                placeholder={getDateFormatByCountryCode(country).toUpperCase()}
+                                dateFormat={getDateFormatByCountryCode(country)}
                                 {...field}
                             />
                         )}
