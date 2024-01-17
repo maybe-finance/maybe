@@ -20,7 +20,7 @@ jobs:
       id-token: write
     strategy:
       matrix:
-        image: ["ghcr.io/${{ github.repository }}", "ghcr.io/${{ github.repository }}-worker"]
+        image: ["ghcr.io/${{ github.repository }}", "ghcr.io/${{ github.repository }}-worker", "ghcr.io/${{ github.repository }}-client"]
         include:
           - image: "ghcr.io/${{ github.repository }}"
             dockerfile: "./apps/server/Dockerfile"
@@ -28,6 +28,9 @@ jobs:
           - image: "ghcr.io/${{ github.repository }}-worker"
             dockerfile: "./apps/workers/Dockerfile"
             nx: "workers:build"
+          - image: "ghcr.io/${{ github.repository }}-client"
+            dockerfile: "./apps/workers/Dockerfile"
+            nx: "client:build"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
