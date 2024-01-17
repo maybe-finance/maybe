@@ -165,6 +165,7 @@
         "@babel/core": "7.17.5",
         "@babel/preset-react": "^7.14.5",
         "@babel/preset-typescript": "7.16.7",
+        "@faker-js/faker": "^8.3.1",
         "@fast-csv/parse": "^4.3.6",
         "@next/bundle-analyzer": "^13.1.1",
         "@nrwl/cli": "15.5.2",

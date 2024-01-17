@@ -405,7 +405,7 @@
                 },
                 "test": {
                     "executor": "@nrwl/jest:jest",
-                    "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+                    "outputs": ["/coverage/libs/teller-api"],
                     "options": {
                         "jestConfig": "libs/teller-api/jest.config.ts",
                         "passWithNoTests": true
