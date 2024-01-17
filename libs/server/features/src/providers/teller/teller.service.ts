@@ -12,15 +12,6 @@ import _ from 'lodash'
 import { ErrorUtil, etl } from '@maybe-finance/server/shared'
 import type { TellerApi, TellerTypes } from '@maybe-finance/teller-api'
 
-export interface ITellerConnect {
-    generateConnectUrl(userId: User['id'], institutionId: string): Promise<{ link: string }>
-
-    generateFixConnectUrl(
-        userId: User['id'],
-        accountConnectionId: AccountConnection['id']
-    ): Promise<{ link: string }>
-}
-
 export class TellerService implements IAccountConnectionProvider, IInstitutionProvider {
     constructor(
         private readonly logger: Logger,
