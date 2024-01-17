@@ -11,7 +11,7 @@ import { usePopper } from 'react-popper'
 import { DatePickerCalendar } from './DatePickerCalendar'
 import { MAX_SUPPORTED_DATE, MIN_SUPPORTED_DATE } from './utils'
 
-const INPUT_DATE_FORMAT = 'MM / dd / yyyy'
+const DEFAULT_INPUT_DATE_FORMAT = 'MM / dd / yyyy'
 
 export interface DatePickerProps {
     name: string
@@ -25,11 +25,41 @@ export interface DatePickerProps {
     maxCalendarDate?: string
     popperPlacement?: PopperJs.Placement
     popperStrategy?: PopperJs.PositioningStrategy
+    dateFormat?: string
 }
 
-function toFormattedStr(date: string | null) {
+function toFormattedStr(date: string | null, dateFormat: string): string {
     if (!date) return ''
-    return DateTime.fromISO(date).toFormat(INPUT_DATE_FORMAT)
+    return DateTime.fromISO(date).toFormat(dateFormat)
+}
+
+// function to get mask from the given format
+function getMaskArray(dateFormat: String): string[] {
+    return dateFormat
+        .split('/')
+        .map((keyword) => keyword.trim())
+        .join('')
+        .split('')
+        .map((keyword) => keyword.toUpperCase())
+}
+
+function getDateFormatPattern(dateFormat: string): string {
+    const dateComponents = dateFormat.split('/')
+    const pattern = dateComponents
+        .map((component) => {
+            if (component.includes('d')) {
+                return ' ## ' // Placeholder for day
+            } else if (component.includes('m') || component.includes('M')) {
+                return ' ## ' // Placeholder for month
+            } else if (component.includes('y')) {
+                return ' #### ' // Placeholder for year
+            }
+            return component // Keep non-date components unchanged
+        })
+        .join('/')
+        .trim()
+
+    return pattern
 }
 
 function DatePicker(
@@ -45,6 +75,7 @@ function DatePicker(
         maxCalendarDate = MAX_SUPPORTED_DATE.toISODate(),
         popperPlacement = 'auto',
         popperStrategy = 'fixed',
+        dateFormat = DEFAULT_INPUT_DATE_FORMAT,
     }: DatePickerProps,
     ref: Ref<HTMLInputElement>
 ): JSX.Element {
@@ -79,15 +110,14 @@ function DatePicker(
                 setCalendarValue('')
                 onChange(null)
             } else {
-                const inputDate = DateTime.fromFormat(date.formattedValue, INPUT_DATE_FORMAT)
-
+                const inputDate = DateTime.fromFormat(date.formattedValue, dateFormat)
                 if (inputDate.isValid) {
                     setCalendarValue(inputDate.toISODate())
                     onChange(inputDate.toISODate())
                 }
             }
         },
-        [onChange]
+        [onChange, dateFormat]
     )
 
     return (
@@ -97,10 +127,10 @@ function DatePicker(
                     name={name}
                     customInput={Input} // passes all props below to <Input /> - https://github.com/s-yadav/react-number-format#custom-inputs
                     getInputRef={ref}
-                    format="## / ## / ####"
+                    format={getDateFormatPattern(dateFormat)}
                     placeholder={placeholder}
-                    mask={['M', 'M', 'D', 'D', 'Y', 'Y', 'Y', 'Y']}
-                    value={toFormattedStr(value)}
+                    mask={getMaskArray(dateFormat)}
+                    value={toFormattedStr(value, dateFormat)}
                     error={error}
                     label={label}
                     onValueChange={handleInputValueChange}

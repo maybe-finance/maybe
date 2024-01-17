@@ -92,7 +92,7 @@ type ProfileViewProps = {
 function ProfileForm({ title, onSubmit, defaultValues }: ProfileViewProps) {
     const [currentQuestion, setCurrentQuestion] = useState<
         'birthday' | 'household' | 'residence' | 'goals'
-    >('birthday')
+    >('residence')
 
     const {
         control,
@@ -123,97 +123,12 @@ function ProfileForm({ title, onSubmit, defaultValues }: ProfileViewProps) {
             </p>
             <div className="mt-5 space-y-3">
                 <Question
-                    open={currentQuestion === 'birthday'}
-                    valid={!errors.dob}
-                    icon={RiCakeLine}
-                    label={<>When&rsquo;s your birthday?</>}
-                    onClick={() => setCurrentQuestion('birthday')}
-                    next={() => setCurrentQuestion('household')}
-                >
-                    <Controller
-                        control={control}
-                        name="dob"
-                        rules={{
-                            validate: (d) =>
-                                BrowserUtil.validateFormDate(d, {
-                                    minDate: DateTime.now().minus({ years: 100 }).toISODate(),
-                                    required: true,
-                                }),
-                        }}
-                        render={({ field, fieldState: { error } }) => (
-                            <DatePicker
-                                popperPlacement="bottom"
-                                className="mt-2"
-                                minCalendarDate={DateTime.now().minus({ years: 100 }).toISODate()}
-                                error={error?.message}
-                                {...field}
-                            />
-                        )}
-                    />
-                    <Tooltip
-                        placement="bottom-start"
-                        content={
-                            <>
-                                We use your age to personalize plans to your context instead of
-                                showing years when referring to future events. &ldquo;Retire at
-                                45&rdquo; sounds better than &ldquo;Retire in 2043&rdquo;.
-                            </>
-                        }
-                    >
-                        <div className="flex items-center mt-4 text-base text-gray-50 cursor-default">
-                            <RiQuestionLine className="w-5 h-5 mr-2 text-gray-100" />
-                            Why do we need your age?
-                        </div>
-                    </Tooltip>
-                </Question>
-
-                <Question
-                    open={currentQuestion === 'household'}
-                    valid={!errors.household}
-                    icon={RiHome5Line}
-                    label="Which best describes your household?"
-                    onClick={() => setCurrentQuestion('household')}
-                    back={() => setCurrentQuestion('birthday')}
-                    next={() => setCurrentQuestion('residence')}
-                >
-                    <div className="space-y-2">
-                        <Controller
-                            control={control}
-                            name="household"
-                            rules={{ required: true }}
-                            render={({ field }) => (
-                                <>
-                                    {Object.entries({
-                                        single: 'Single income, no dependents',
-                                        singleWithDependents:
-                                            'Single income, at least one dependent',
-                                        dual: 'Dual income, no dependents',
-                                        dualWithDependents: 'Dual income, at least one dependent',
-                                        retired: 'Retired or financially independent',
-                                    }).map(([value, label]) => (
-                                        <Checkbox
-                                            key={value}
-                                            label={label}
-                                            checked={field.value === value}
-                                            onChange={(checked) => {
-                                                if (checked) field.onChange(value)
-                                            }}
-                                        />
-                                    ))}
-                                </>
-                            )}
-                        />
-                    </div>
-                </Question>
-
-                <Question
                     open={currentQuestion === 'residence'}
                     valid={!errors.country}
                     icon={RiMapPin2Line}
                     label="Where are you based?"
                     onClick={() => setCurrentQuestion('residence')}
-                    back={() => setCurrentQuestion('household')}
-                    next={() => setCurrentQuestion('goals')}
+                    next={() => setCurrentQuestion('birthday')}
                 >
                     <div className="space-y-2">
                         <Controller
@@ -252,6 +167,94 @@ function ProfileForm({ title, onSubmit, defaultValues }: ProfileViewProps) {
                             Why do we need your location?
                         </div>
                     </Tooltip>
+                </Question>
+                <Question
+                    open={currentQuestion === 'birthday'}
+                    valid={!errors.dob}
+                    icon={RiCakeLine}
+                    label={<>When&rsquo;s your birthday?</>}
+                    onClick={() => setCurrentQuestion('birthday')}
+                    next={() => setCurrentQuestion('household')}
+                    back={() => setCurrentQuestion('residence')}
+                >
+                    <Controller
+                        control={control}
+                        name="dob"
+                        rules={{
+                            validate: (d) =>
+                                BrowserUtil.validateFormDate(d, {
+                                    minDate: DateTime.now().minus({ years: 100 }).toISODate(),
+                                    required: true,
+                                }),
+                        }}
+                        render={({ field, fieldState: { error } }) => (
+                            <DatePicker
+                                popperPlacement="bottom"
+                                className="mt-2"
+                                minCalendarDate={DateTime.now().minus({ years: 100 }).toISODate()}
+                                error={error?.message}
+                                placeholder={BrowserUtil.getDateFormatByCountryCode(
+                                    country
+                                ).toUpperCase()}
+                                dateFormat={BrowserUtil.getDateFormatByCountryCode(country)}
+                                {...field}
+                            />
+                        )}
+                    />
+                    <Tooltip
+                        placement="bottom-start"
+                        content={
+                            <>
+                                We use your age to personalize plans to your context instead of
+                                showing years when referring to future events. &ldquo;Retire at
+                                45&rdquo; sounds better than &ldquo;Retire in 2043&rdquo;.
+                            </>
+                        }
+                    >
+                        <div className="flex items-center mt-4 text-base text-gray-50 cursor-default">
+                            <RiQuestionLine className="w-5 h-5 mr-2 text-gray-100" />
+                            Why do we need your age?
+                        </div>
+                    </Tooltip>
+                </Question>
+
+                <Question
+                    open={currentQuestion === 'household'}
+                    valid={!errors.household}
+                    icon={RiHome5Line}
+                    label="Which best describes your household?"
+                    onClick={() => setCurrentQuestion('household')}
+                    back={() => setCurrentQuestion('birthday')}
+                    next={() => setCurrentQuestion('goals')}
+                >
+                    <div className="space-y-2">
+                        <Controller
+                            control={control}
+                            name="household"
+                            rules={{ required: true }}
+                            render={({ field }) => (
+                                <>
+                                    {Object.entries({
+                                        single: 'Single income, no dependents',
+                                        singleWithDependents:
+                                            'Single income, at least one dependent',
+                                        dual: 'Dual income, no dependents',
+                                        dualWithDependents: 'Dual income, at least one dependent',
+                                        retired: 'Retired or financially independent',
+                                    }).map(([value, label]) => (
+                                        <Checkbox
+                                            key={value}
+                                            label={label}
+                                            checked={field.value === value}
+                                            onChange={(checked) => {
+                                                if (checked) field.onChange(value)
+                                            }}
+                                        />
+                                    ))}
+                                </>
+                            )}
+                        />
+                    </div>
                 </Question>
 
                 <Question
