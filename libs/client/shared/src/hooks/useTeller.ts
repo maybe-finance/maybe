@@ -58,7 +58,7 @@ export const useTellerConnect = (options: TellerConnectOptions, logger: Logger) 
             {
                 ...options,
                 onSuccess: async (enrollment: TellerConnectEnrollment) => {
-                    logger.debug(`User enrolled successfully`, enrollment)
+                    logger.debug('User enrolled successfully')
                     try {
                         await handleEnrollment.mutateAsync({
                             institution: {

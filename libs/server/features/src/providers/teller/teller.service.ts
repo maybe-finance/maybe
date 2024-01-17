@@ -45,6 +45,7 @@ export class TellerService implements IAccountConnectionProvider, IInstitutionPr
                     where: { id: connection.id },
                     data: {
                         status: 'OK',
+                        syncStatus: 'IDLE',
                     },
                 })
                 break
@@ -157,25 +158,32 @@ export class TellerService implements IAccountConnectionProvider, IInstitutionPr
             throw new Error('USD_ONLY')
         }
 
-        // Create account connection on exchange; accounts + txns will sync later with webhook
-        const [accountConnection] = await this.prisma.$transaction([
-            this.prisma.accountConnection.create({
-                data: {
-                    name: enrollment.enrollment.institution.name,
-                    type: 'teller' as SharedType.AccountConnectionType,
-                    tellerEnrollmentId: enrollment.enrollment.id,
-                    tellerInstitutionId: institution.id,
-                    tellerAccessToken: this.crypto.encrypt(enrollment.accessToken),
-                    userId,
-                    syncStatus: 'PENDING',
-                },
-            }),
-        ])
-
         await this.prisma.user.update({
             where: { id: userId },
             data: {
                 tellerUserId: enrollment.user.id,
+            },
+        })
+
+        const accountConnection = await this.prisma.accountConnection.create({
+            data: {
+                name: enrollment.enrollment.institution.name,
+                type: 'teller' as SharedType.AccountConnectionType,
+                tellerEnrollmentId: enrollment.enrollment.id,
+                tellerInstitutionId: institution.id,
+                tellerAccessToken: this.crypto.encrypt(enrollment.accessToken),
+                userId,
+                syncStatus: 'PENDING',
+            },
+        })
+
+        await this.sync(accountConnection, { type: 'teller', initialSync: true })
+
+        await this.prisma.accountConnection.update({
+            where: { id: accountConnection.id },
+            data: {
+                status: 'OK',
+                syncStatus: 'IDLE',
             },
         })
 

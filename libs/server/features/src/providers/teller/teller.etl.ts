@@ -1,6 +1,6 @@
 import type { AccountConnection, PrismaClient } from '@prisma/client'
 import type { Logger } from 'winston'
-import { SharedUtil, AccountUtil, type SharedType } from '@maybe-finance/shared'
+import { SharedUtil, type SharedType } from '@maybe-finance/shared'
 import type { TellerApi, TellerTypes } from '@maybe-finance/teller-api'
 import { DbUtil, TellerUtil, type IETL, type ICryptoService } from '@maybe-finance/server/shared'
 import { Prisma } from '@prisma/client'
@@ -117,8 +117,6 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
         return [
             // upsert accounts
             ...accounts.map((tellerAccount) => {
-                const type = TellerUtil.getType(tellerAccount.type)
-                const classification = AccountUtil.getClassification(type)
                 return this.prisma.account.upsert({
                     where: {
                         accountConnectionId_tellerAccountId: {
@@ -132,12 +130,13 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                         categoryProvider: TellerUtil.tellerTypesToCategory(tellerAccount.type),
                         subcategoryProvider: tellerAccount.subtype ?? 'other',
                         accountConnectionId: connection.id,
+                        userId: connection.userId,
                         tellerAccountId: tellerAccount.id,
                         name: tellerAccount.name,
                         tellerType: tellerAccount.type,
                         tellerSubtype: tellerAccount.subtype,
                         mask: tellerAccount.last_four,
-                        ...TellerUtil.getAccountBalanceData(tellerAccount, classification),
+                        ...TellerUtil.getAccountBalanceData(tellerAccount),
                     },
                     update: {
                         type: TellerUtil.getType(tellerAccount.type),
@@ -145,7 +144,7 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                         subcategoryProvider: tellerAccount.subtype ?? 'other',
                         tellerType: tellerAccount.type,
                         tellerSubtype: tellerAccount.subtype,
-                        ..._.omit(TellerUtil.getAccountBalanceData(tellerAccount, classification), [
+                        ..._.omit(TellerUtil.getAccountBalanceData(tellerAccount), [
                             'currentBalanceStrategy',
                             'availableBalanceStrategy',
                         ]),
@@ -226,13 +225,13 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                                 } AND teller_account_id = ${account_id.toString()}),
                                 ${id},
                                 ${date}::date,
-                                ${[description].filter(Boolean).join(' ')},
+                                ${description},
                                 ${DbUtil.toDecimal(-amount)},
                                 ${status === 'pending'},
                                 ${'USD'},
                                 ${details.counterparty.name ?? ''},
                                 ${type},
-                                ${details.category ?? ''},
+                                ${details.category ?? ''}
                             )`
                         })
                     )}

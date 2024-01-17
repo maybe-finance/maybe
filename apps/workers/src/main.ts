@@ -140,7 +140,7 @@ syncInstitutionQueue.add(
     'sync-teller-institutions',
     {},
     {
-        repeat: { cron: '* */24 * * *' }, // Run every 24 hours
+        repeat: { cron: '0 0 */1 * *' }, // Run every 24 hours
     }
 )
 

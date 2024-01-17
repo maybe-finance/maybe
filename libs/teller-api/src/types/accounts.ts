@@ -50,7 +50,7 @@ interface CreditAccount extends BaseAccount {
 export type Account = DepositoryAccount | CreditAccount
 
 export type AccountWithBalances = Account & {
-    balances: AccountBalance
+    balance: AccountBalance
 }
 
 export type GetAccountsResponse = Account[]

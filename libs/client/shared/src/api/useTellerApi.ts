@@ -6,6 +6,7 @@ import type { SharedType } from '@maybe-finance/shared'
 import { invalidateAccountQueries } from '../utils'
 import type { AxiosInstance } from 'axios'
 import type { TellerTypes } from '@maybe-finance/teller-api'
+import { useAccountConnectionApi } from './useAccountConnectionApi'
 
 type TellerInstitution = {
     name: string
@@ -30,6 +31,9 @@ export function useTellerApi() {
     const { axios } = useAxiosWithAuth()
     const api = useMemo(() => TellerApi(axios), [axios])
 
+    const { useSyncConnection } = useAccountConnectionApi()
+    const syncConnection = useSyncConnection()
+
     const addConnectionToState = (connection: SharedType.AccountConnection) => {
         const accountsData = queryClient.getQueryData<SharedType.AccountsResponse>(['accounts'])
         if (!accountsData)
@@ -50,6 +54,7 @@ export function useTellerApi() {
         useMutation(api.handleEnrollment, {
             onSuccess: (_connection) => {
                 addConnectionToState(_connection)
+                syncConnection.mutate(_connection.id)
                 toast.success(`Account connection added!`)
             },
             onSettled: () => {
