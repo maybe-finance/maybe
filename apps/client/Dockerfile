@@ -7,9 +7,8 @@ FROM node:16.18.1 as builder
 
 WORKDIR /app
 COPY ./dist/apps/client ./yarn.lock ./prisma ./
-COPY ./package.json ./
 # Install dependencies
-RUN yarn install --production=false
+RUN yarn install --production=false && yarn add prosemirror-keymap @next/bundle-analyzer
 
 # ------------------------------------------
 #                PROD STAGE               
