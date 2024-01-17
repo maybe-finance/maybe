@@ -600,6 +600,15 @@ model AuthVerificationToken {
   @@map("auth_verification_token")
 }
 
+model AuthPasswordResets {
+  id      String   @id @default(cuid())
+  email   String
+  expires DateTime
+  token   String   @unique
+
+  @@map("auth_password_resets")
+}
+
 enum ApprovalStatus {
   pending
   approved
