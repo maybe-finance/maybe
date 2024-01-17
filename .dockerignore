@@ -3,3 +3,4 @@
 !dist/
 !prisma/
 !yarn.lock
+!package.json

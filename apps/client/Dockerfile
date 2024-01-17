@@ -6,19 +6,9 @@
 FROM node:16.18.1 as builder
 
 WORKDIR /app
-COPY ./dist/apps/client ./yarn.lock ./prisma ./
+COPY ./dist/apps/client ./yarn.lock ./prisma ./package.json ./
 # Install dependencies
-RUN yarn install --production=false && yarn add @next/bundle-analyzer \
-    prosemirror-commands \
-    prosemirror-dropcursor \
-    prosemirror-gapcursor \
-    prosemirror-history \
-    prosemirror-keymap \
-    prosemirror-model \
-    prosemirror-schema-list \
-    prosemirror-state \
-    prosemirror-transform \
-    prosemirror-view 
+RUN yarn install --production=false
 
 # ------------------------------------------
 #                PROD STAGE               
