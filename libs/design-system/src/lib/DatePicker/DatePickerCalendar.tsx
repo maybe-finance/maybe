@@ -73,7 +73,7 @@ export function DatePickerCalendar({
                         </button>
                         <button
                             className="text-white hover:bg-gray-500 flex grow justify-center items-center rounded"
-                            data-testid="datepicker-range-month-button"
+                            data-testid="datepicker-range-year-button"
                             onClick={() => setView('year')}
                         >
                             {calendars[0].year}
