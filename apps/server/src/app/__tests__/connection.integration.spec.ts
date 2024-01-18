@@ -2,7 +2,6 @@ import type { AxiosInstance } from 'axios'
 import type { SharedType } from '@maybe-finance/shared'
 import type { Prisma, AccountConnection, AccountSyncStatus, User } from '@prisma/client'
 import type { ItemRemoveResponse } from 'plaid'
-import isCI from 'is-ci'
 import { startServer, stopServer } from './utils/server'
 import { getAxiosClient } from './utils/axios'
 import prisma from '../lib/prisma'
@@ -18,7 +17,7 @@ jest.mock('plaid')
 // For TypeScript support
 const plaid = jest.mocked(_plaid)
 
-const auth0Id = isCI ? 'auth0|61afd38f678a0c006895f046' : 'auth0|61afd340678a0c006895f000'
+const authId = '__TEST_USER_ID__'
 let axios: AxiosInstance
 let user: User | null
 let connection: AccountConnection
@@ -45,7 +44,7 @@ afterAll(async () => {
 })
 
 beforeEach(async () => {
-    user = await resetUser(auth0Id)
+    user = await resetUser(authId)
 
     connectionData = {
         data: {
