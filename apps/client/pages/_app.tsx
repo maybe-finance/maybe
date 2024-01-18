@@ -83,7 +83,7 @@ export default function App({
                 <Analytics />
                 <QueryProvider>
                     <SessionProvider>
-                        <AxiosProvider>
+                        <AxiosProvider baseUrl={env.NEXT_PUBLIC_API_URL}>
                             <>
                                 <APM />
                                 {Page.isPublic === true ? (

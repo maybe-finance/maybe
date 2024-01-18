@@ -67,8 +67,8 @@ function createInstance(options?: CreateInstanceOptions) {
     return instance
 }
 
-export function AxiosProvider({ children }: PropsWithChildren) {
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333'
+export function AxiosProvider({ children, baseUrl }: PropsWithChildren<{baseUrl: string?}>) {
+    const API_URL = baseUrl || 'http://localhost:3333'
 
     // Expose a default instance with auth, superjson, headers
     const defaultInstance = useMemo(() => {
