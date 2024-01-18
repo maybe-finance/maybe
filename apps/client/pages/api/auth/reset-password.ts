@@ -1,19 +1,49 @@
+import { PrismaClient } from '@prisma/client'
+import crypto from 'crypto'
 import type { NextApiRequest, NextApiResponse } from 'next'
+
+let prismaInstance: PrismaClient | null = null
+
+function getPrismaInstance() {
+    if (!prismaInstance) {
+        prismaInstance = new PrismaClient()
+    }
+    return prismaInstance
+}
+
+const prisma = getPrismaInstance()
 
 type ResponseData = {
     message: string
 }
 
-export default function handler(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
-    // TODO: implement password reset functionality
+export default async function handler(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
+    if (!req.body.email) {
+        res.status(400).json({ message: 'No email provided.' })
+        return
+    }
 
-    // 1. Generate a password reset token
+    const user = await prisma.authUser.findUnique({
+        where: {
+            email: req.body.email,
+        },
+    })
+
+    if (!user) {
+        // No user found, we don't want to expose this information
+        return res.status(200).json({ message: 'OK' })
+    }
+
+    const token = crypto.randomBytes(32).toString('hex')
+    await prisma.authPasswordResets.create({
+        data: {
+            token,
+            email: req.body.email,
+            expires: new Date(Date.now() + 1000 * 60 * 10), // 10 minutes
+        },
+    })
+
     // 2. Send a password reset email
-    // 3. Redirect to a password reset page
-    // 4. Verify the password reset token
-    // 5. Reset the password
-    // 6. Redirect to the login page
-    // 7. Login with the new password
 
     res.status(200).json({ message: 'Hello from Next.js!' })
 }
