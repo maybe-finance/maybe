@@ -4,7 +4,7 @@
 # Config
 ENVSH_ENV="${ENVSH_ENV:-"./.env"}"
 ENVSH_PREFIX="${ENVSH_PREFIX:-"NEXT_PUBLIC_"}"
-ENVSH_PREFIX_STRIP="${ENVSH_PREFIX_STRIP:-true}"
+ENVSH_PREFIX_STRIP="${ENVSH_PREFIX_STRIP:-false}"
 
 # Can be `window.__appenv = {` or `const APPENV = {` or whatever you want
 ENVSH_PREPEND="${ENVSH_PREPEND:-"window.__appenv = {"}"
