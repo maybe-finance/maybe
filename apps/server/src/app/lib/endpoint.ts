@@ -70,10 +70,6 @@ const redis = new Redis(env.NX_REDIS_URL, {
     retryStrategy: ServerUtil.redisRetryStrategy({ maxAttempts: 5 }),
 })
 
-export function closeRedis() {
-    redis.disconnect()
-}
-
 export const queueService = new QueueService(
     logger.child({ service: 'QueueService' }),
     process.env.NODE_ENV === 'test'
