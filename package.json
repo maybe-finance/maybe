@@ -113,7 +113,7 @@
         "jwks-rsa": "^3.0.0",
         "jwt-decode": "^3.1.2",
         "lodash": "^4.17.21",
-        "luxon": "^3.4.3",
+        "luxon": "^3.4.4",
         "mime-types": "^2.1.35",
         "morgan": "^1.10.0",
         "multer": "^1.4.5-lts.1",
