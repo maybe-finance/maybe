@@ -20,6 +20,6 @@ FROM node:16.18.1-slim as prod
 RUN apt-get update && apt-get install curl gawk -y
 WORKDIR /app
 USER node 
-COPY --from=builder /app  .
+COPY --from=builder --chown=node:node /app  .
 
 CMD ["./env.sh", "npx", "next", "start"]
