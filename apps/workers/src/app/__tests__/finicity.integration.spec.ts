@@ -68,8 +68,8 @@ describe('Finicity', () => {
                 userId: user.id,
                 name: 'TEST_FINICITY',
                 type: 'finicity',
-                finicityInstitutionId: 'REPLACE_THIS',
-                finicityInstitutionLoginId: 'REPLACE_THIS',
+                finicityInstitutionId: '101732',
+                finicityInstitutionLoginId: '6000483842',
             },
         })
 

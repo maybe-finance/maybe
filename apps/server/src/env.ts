@@ -48,8 +48,6 @@ const envSchema = z.object({
     NX_SENTRY_DSN: z.string().optional(),
     NX_SENTRY_ENV: z.string().optional(),
 
-    NX_LD_SDK_KEY: z.string().default('REPLACE_THIS'),
-
     NX_POLYGON_API_KEY: z.string().default(''),
 
     NX_PORT: z.string().default('3333'),

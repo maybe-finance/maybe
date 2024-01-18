@@ -36,6 +36,7 @@ import {
     valuationsRouter,
     institutionsRouter,
     finicityRouter,
+    tellerRouter,
     transactionsRouter,
     holdingsRouter,
     securitiesRouter,
@@ -156,6 +157,7 @@ app.use('/v1/users', usersRouter)
 app.use('/v1/e2e', e2eRouter)
 app.use('/v1/plaid', plaidRouter)
 app.use('/v1/finicity', finicityRouter)
+app.use('/v1/teller', tellerRouter)
 app.use('/v1/accounts', accountsRouter)
 app.use('/v1/account-rollup', accountRollupRouter)
 app.use('/v1/connections', connectionsRouter)

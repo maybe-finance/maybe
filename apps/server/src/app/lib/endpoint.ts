@@ -240,6 +240,7 @@ const userService = new UserService(
 const institutionProviderFactory = new InstitutionProviderFactory({
     PLAID: plaidService,
     FINICITY: finicityService,
+    TELLER: tellerService,
 })
 
 const institutionService: IInstitutionService = new InstitutionService(

@@ -259,6 +259,7 @@ export const securityPricingProcessor: ISecurityPricingProcessor = new SecurityP
 const institutionProviderFactory = new InstitutionProviderFactory({
     PLAID: plaidService,
     FINICITY: finicityService,
+    TELLER: tellerService,
 })
 
 export const institutionService: IInstitutionService = new InstitutionService(

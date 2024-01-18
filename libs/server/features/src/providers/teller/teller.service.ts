@@ -6,19 +6,11 @@ import type {
     IAccountConnectionProvider,
 } from '../../account-connection'
 import { SharedUtil } from '@maybe-finance/shared'
+import type { SharedType } from '@maybe-finance/shared'
 import type { SyncConnectionOptions, CryptoService, IETL } from '@maybe-finance/server/shared'
 import _ from 'lodash'
 import { ErrorUtil, etl } from '@maybe-finance/server/shared'
-import type { TellerApi } from '@maybe-finance/teller-api'
-
-export interface ITellerConnect {
-    generateConnectUrl(userId: User['id'], institutionId: string): Promise<{ link: string }>
-
-    generateFixConnectUrl(
-        userId: User['id'],
-        accountConnectionId: AccountConnection['id']
-    ): Promise<{ link: string }>
-}
+import type { TellerApi, TellerTypes } from '@maybe-finance/teller-api'
 
 export class TellerService implements IAccountConnectionProvider, IInstitutionProvider {
     constructor(
@@ -44,6 +36,7 @@ export class TellerService implements IAccountConnectionProvider, IInstitutionPr
                     where: { id: connection.id },
                     data: {
                         status: 'OK',
+                        syncStatus: 'IDLE',
                     },
                 })
                 break
@@ -67,19 +60,28 @@ export class TellerService implements IAccountConnectionProvider, IInstitutionPr
 
     async delete(connection: AccountConnection) {
         // purge teller data
-        if (connection.tellerAccessToken && connection.tellerAccountId) {
-            await this.teller.deleteAccount({
-                accessToken: this.crypto.decrypt(connection.tellerAccessToken),
-                accountId: connection.tellerAccountId,
+        if (connection.tellerAccessToken && connection.tellerEnrollmentId) {
+            const accounts = await this.prisma.account.findMany({
+                where: { accountConnectionId: connection.id },
             })
 
-            this.logger.info(`Item ${connection.tellerAccountId} removed`)
+            for (const account of accounts) {
+                if (!account.tellerAccountId) continue
+                await this.teller.deleteAccount({
+                    accessToken: this.crypto.decrypt(connection.tellerAccessToken),
+                    accountId: account.tellerAccountId,
+                })
+
+                this.logger.info(`Teller account ${account.id} removed`)
+            }
+
+            this.logger.info(`Teller enrollment ${connection.tellerEnrollmentId} removed`)
         }
     }
 
     async getInstitutions() {
         const tellerInstitutions = await SharedUtil.paginate({
-            pageSize: 500,
+            pageSize: 10000,
             delay:
                 process.env.NODE_ENV !== 'production'
                     ? {
@@ -87,20 +89,20 @@ export class TellerService implements IAccountConnectionProvider, IInstitutionPr
                           milliseconds: 7_000, // Sandbox rate limited at 10 calls / minute
                       }
                     : undefined,
-            fetchData: (offset, count) =>
+            fetchData: () =>
                 SharedUtil.withRetry(
                     () =>
                         this.teller.getInstitutions().then((data) => {
                             this.logger.debug(
-                                `paginated teller fetch inst=${data.institutions.length} (total=${data.institutions.length} offset=${offset} count=${count})`
+                                `teller fetch inst=${data.length} (total=${data.length})`
                             )
-                            return data.institutions
+                            return data
                         }),
                     {
                         maxRetries: 3,
                         onError: (error, attempt) => {
                             this.logger.error(
-                                `Teller fetch institutions request failed attempt=${attempt} offset=${offset} count=${count}`,
+                                `Teller fetch institutions request failed attempt=${attempt}`,
                                 { error: ErrorUtil.parseError(error) }
                             )
 
@@ -115,12 +117,57 @@ export class TellerService implements IAccountConnectionProvider, IInstitutionPr
             return {
                 providerId: id,
                 name,
-                url: undefined,
-                logo: `https://teller.io/images/banks/${id}.jpg}`,
-                primaryColor: undefined,
-                oauth: undefined,
+                url: null,
+                logo: null,
+                logoUrl: `https://teller.io/images/banks/${id}.jpg`,
+                primaryColor: null,
+                oauth: false,
                 data: tellerInstitution,
             }
         })
+    }
+
+    async handleEnrollment(
+        userId: User['id'],
+        institution: Pick<TellerTypes.Institution, 'name' | 'id'>,
+        enrollment: TellerTypes.Enrollment
+    ) {
+        const connections = await this.prisma.accountConnection.findMany({
+            where: { userId },
+        })
+
+        if (connections.length > 40) {
+            throw new Error('MAX_ACCOUNT_CONNECTIONS')
+        }
+
+        const accounts = await this.teller.getAccounts({ accessToken: enrollment.accessToken })
+
+        this.logger.info(`Teller accounts retrieved for enrollment ${enrollment.enrollment.id}`)
+
+        // If all the accounts are Non-USD, throw an error
+        if (accounts.every((a) => a.currency !== 'USD')) {
+            throw new Error('USD_ONLY')
+        }
+
+        await this.prisma.user.update({
+            where: { id: userId },
+            data: {
+                tellerUserId: enrollment.user.id,
+            },
+        })
+
+        const accountConnection = await this.prisma.accountConnection.create({
+            data: {
+                name: enrollment.enrollment.institution.name,
+                type: 'teller' as SharedType.AccountConnectionType,
+                tellerEnrollmentId: enrollment.enrollment.id,
+                tellerInstitutionId: institution.id,
+                tellerAccessToken: this.crypto.encrypt(enrollment.accessToken),
+                userId,
+                syncStatus: 'PENDING',
+            },
+        })
+
+        return accountConnection
     }
 }

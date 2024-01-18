@@ -34,7 +34,20 @@ export class TellerApi {
      */
 
     async getAccounts({ accessToken }: AuthenticatedRequest): Promise<GetAccountsResponse> {
-        return this.get<GetAccountsResponse>(`/accounts`, accessToken)
+        const accounts = await this.get<GetAccountsResponse>(`/accounts`, accessToken)
+        const accountsWithBalances = await Promise.all(
+            accounts.map(async (account) => {
+                const balance = await this.getAccountBalances({
+                    accountId: account.id,
+                    accessToken,
+                })
+                return {
+                    ...account,
+                    balance,
+                }
+            })
+        )
+        return accountsWithBalances
     }
 
     /**
@@ -137,12 +150,12 @@ export class TellerApi {
     }
 
     private async getApi(accessToken: string): Promise<AxiosInstance> {
-        const cert = fs.readFileSync('../../../certs/teller-certificate.pem', 'utf8')
-        const key = fs.readFileSync('../../../certs/teller-private-key.pem', 'utf8')
+        const cert = fs.readFileSync('./certs/certificate.pem')
+        const key = fs.readFileSync('./certs/private_key.pem')
 
         const agent = new https.Agent({
-            cert,
-            key,
+            cert: cert,
+            key: key,
         })
 
         if (!this.api) {
@@ -153,16 +166,16 @@ export class TellerApi {
                 headers: {
                     Accept: 'application/json',
                 },
+                auth: {
+                    username: accessToken,
+                    password: '',
+                },
             })
-
-            this.api.interceptors.request.use((config) => {
-                // Add the access_token to the auth object
-                config.auth = {
-                    username: 'ACCESS_TOKEN',
-                    password: accessToken,
-                }
-                return config
-            })
+        } else if (this.api.defaults.auth?.username !== accessToken) {
+            this.api.defaults.auth = {
+                username: accessToken,
+                password: '',
+            }
         }
 
         return this.api

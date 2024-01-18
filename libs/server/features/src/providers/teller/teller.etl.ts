@@ -1,6 +1,6 @@
 import type { AccountConnection, PrismaClient } from '@prisma/client'
 import type { Logger } from 'winston'
-import { SharedUtil, AccountUtil, type SharedType } from '@maybe-finance/shared'
+import { AccountUtil, SharedUtil, type SharedType } from '@maybe-finance/shared'
 import type { TellerApi, TellerTypes } from '@maybe-finance/teller-api'
 import { DbUtil, TellerUtil, type IETL, type ICryptoService } from '@maybe-finance/server/shared'
 import { Prisma } from '@prisma/client'
@@ -101,16 +101,7 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
 
     private async _extractAccounts(accessToken: string) {
         const accounts = await this.teller.getAccounts({ accessToken })
-        const accountsWithBalances = await Promise.all(
-            accounts.map(async (a) => {
-                const balance = await this.teller.getAccountBalances({
-                    accountId: a.id,
-                    accessToken,
-                })
-                return { ...a, balance }
-            })
-        )
-        return accountsWithBalances
+        return accounts
     }
 
     private _loadAccounts(connection: Connection, { accounts }: Pick<TellerData, 'accounts'>) {
@@ -119,6 +110,7 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
             ...accounts.map((tellerAccount) => {
                 const type = TellerUtil.getType(tellerAccount.type)
                 const classification = AccountUtil.getClassification(type)
+
                 return this.prisma.account.upsert({
                     where: {
                         accountConnectionId_tellerAccountId: {
@@ -132,6 +124,7 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                         categoryProvider: TellerUtil.tellerTypesToCategory(tellerAccount.type),
                         subcategoryProvider: tellerAccount.subtype ?? 'other',
                         accountConnectionId: connection.id,
+                        userId: connection.userId,
                         tellerAccountId: tellerAccount.id,
                         name: tellerAccount.name,
                         tellerType: tellerAccount.type,
@@ -170,27 +163,21 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
 
     private async _extractTransactions(accessToken: string, accountIds: string[]) {
         const accountTransactions = await Promise.all(
-            accountIds.map((accountId) =>
-                SharedUtil.paginate({
-                    pageSize: 1000, // TODO: Check with Teller on max page size
-                    fetchData: async () => {
-                        const transactions = await SharedUtil.withRetry(
-                            () =>
-                                this.teller.getTransactions({
-                                    accountId,
-                                    accessToken: accessToken,
-                                }),
-                            {
-                                maxRetries: 3,
-                            }
-                        )
+            accountIds.map(async (accountId) => {
+                const transactions = await SharedUtil.withRetry(
+                    () =>
+                        this.teller.getTransactions({
+                            accountId,
+                            accessToken,
+                        }),
+                    {
+                        maxRetries: 3,
+                    }
+                )
 
-                        return transactions
-                    },
-                })
-            )
+                return transactions
+            })
         )
-
         return accountTransactions.flat()
     }
 
@@ -210,7 +197,7 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                     ${Prisma.join(
                         chunk.map((tellerTransaction) => {
                             const {
-                                id,
+                                id: transactionId,
                                 account_id,
                                 description,
                                 amount,
@@ -224,15 +211,15 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                                 (SELECT id FROM account WHERE account_connection_id = ${
                                     connection.id
                                 } AND teller_account_id = ${account_id.toString()}),
-                                ${id},
+                                ${transactionId},
                                 ${date}::date,
-                                ${[description].filter(Boolean).join(' ')},
-                                ${DbUtil.toDecimal(-amount)},
+                                ${description},
+                                ${DbUtil.toDecimal(Number(amount))},
                                 ${status === 'pending'},
                                 ${'USD'},
-                                ${details.counterparty.name ?? ''},
+                                ${details.counterparty?.name ?? ''},
                                 ${type},
-                                ${details.category ?? ''},
+                                ${details.category ?? ''}
                             )`
                         })
                     )}
