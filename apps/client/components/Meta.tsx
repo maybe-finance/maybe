@@ -45,7 +45,7 @@ export default function Meta() {
             />
 
             {/* <!-- NEXT_PUBLIC_ env variables --> */}
-            <script src="/__env.js" />
+            <script src="/__appenv.js" />
         </Head>
     )
 }
