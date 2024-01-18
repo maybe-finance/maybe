@@ -163,27 +163,21 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
 
     private async _extractTransactions(accessToken: string, accountIds: string[]) {
         const accountTransactions = await Promise.all(
-            accountIds.map((accountId) =>
-                SharedUtil.paginate({
-                    pageSize: 1000, // TODO: Check with Teller on max page size
-                    fetchData: async () => {
-                        const transactions = await SharedUtil.withRetry(
-                            () =>
-                                this.teller.getTransactions({
-                                    accountId,
-                                    accessToken: accessToken,
-                                }),
-                            {
-                                maxRetries: 3,
-                            }
-                        )
+            accountIds.map(async (accountId) => {
+                const transactions = await SharedUtil.withRetry(
+                    () =>
+                        this.teller.getTransactions({
+                            accountId,
+                            accessToken,
+                        }),
+                    {
+                        maxRetries: 3,
+                    }
+                )
 
-                        return transactions
-                    },
-                })
-            )
+                return transactions
+            })
         )
-
         return accountTransactions.flat()
     }
 
@@ -220,10 +214,10 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                                 ${transactionId},
                                 ${date}::date,
                                 ${description},
-                                ${DbUtil.toDecimal(-amount)},
+                                ${DbUtil.toDecimal(Number(amount))},
                                 ${status === 'pending'},
                                 ${'USD'},
-                                ${details.counterparty.name ?? ''},
+                                ${details.counterparty?.name ?? ''},
                                 ${type},
                                 ${details.category ?? ''}
                             )`
