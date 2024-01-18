@@ -16,6 +16,7 @@ import {
     workerErrorHandlerService,
 } from './app/lib/di'
 import env from './env'
+import { cleanUpOutdatedJobs } from './utils'
 
 // Defaults from quickstart - https://docs.sentry.io/platforms/node/
 Sentry.init({
@@ -99,6 +100,7 @@ syncSecurityQueue.add(
     {},
     {
         repeat: { cron: '*/5 * * * *' }, // Run every 5 minutes
+        jobId: Date.now().toString(),
     }
 )
 
@@ -125,6 +127,7 @@ syncInstitutionQueue.add(
     {},
     {
         repeat: { cron: '0 */24 * * *' }, // Run every 24 hours
+        jobId: Date.now().toString(),
     }
 )
 
@@ -133,6 +136,7 @@ syncInstitutionQueue.add(
     {},
     {
         repeat: { cron: '0 */24 * * *' }, // Run every 24 hours
+        jobId: Date.now().toString(),
     }
 )
 
@@ -141,6 +145,7 @@ syncInstitutionQueue.add(
     {},
     {
         repeat: { cron: '0 */24 * * *' }, // Run every 24 hours
+        jobId: Date.now().toString(),
     }
 )
 
@@ -169,6 +174,11 @@ process.on(
         await workerErrorHandlerService.handleWorkersError({ variant: 'unhandled', error })
 )
 
+// Replace any jobs that have changed cron schedules and ensures only
+// one repeatable jobs for each type is running
+const queues = [syncSecurityQueue, syncInstitutionQueue]
+cleanUpOutdatedJobs(queues)
+
 const app = express()
 
 app.use(cors())
@@ -194,20 +204,24 @@ const server = app.listen(env.NX_PORT, () => {
     logger.info(`Worker health server started on port ${env.NX_PORT}`)
 })
 
-function onShutdown() {
+async function onShutdown() {
     logger.info('[shutdown.start]')
 
-    server.close()
+    await new Promise((resolve) => server.close(resolve))
 
     // shutdown queues
-    Promise.allSettled(
-        queueService.allQueues
-            .filter((q): q is BullQueue => q instanceof BullQueue)
-            .map((q) => q.queue.close())
-    ).finally(() => {
+    try {
+        await Promise.allSettled(
+            queueService.allQueues
+                .filter((q): q is BullQueue => q instanceof BullQueue)
+                .map((q) => q.queue.close())
+        )
+    } catch (error) {
+        logger.error('[shutdown.error]', error)
+    } finally {
         logger.info('[shutdown.complete]')
-        process.exit()
-    })
+        process.exitCode = 0
+    }
 }
 
 process.on('SIGINT', onShutdown)

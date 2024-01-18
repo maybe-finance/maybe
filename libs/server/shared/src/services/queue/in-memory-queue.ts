@@ -53,6 +53,14 @@ export class InMemoryQueue<
         return []
     }
 
+    async getRepeatableJobs() {
+        return []
+    }
+
+    async removeRepeatableByKey(_key: string) {
+        // no-op
+    }
+
     async cancelJobs() {
         // no-op
     }
