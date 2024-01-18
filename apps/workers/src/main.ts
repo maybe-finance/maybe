@@ -16,6 +16,7 @@ import {
     workerErrorHandlerService,
 } from './app/lib/di'
 import env from './env'
+import { cleanUpOutdatedJobs } from './utils'
 
 // Defaults from quickstart - https://docs.sentry.io/platforms/node/
 Sentry.init({

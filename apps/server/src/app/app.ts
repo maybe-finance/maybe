@@ -43,6 +43,7 @@ import {
     toolsRouter,
     publicRouter,
     e2eRouter,
+    adminRouter,
 } from './routes'
 import env from '../env'
 
