@@ -6561,10 +6561,10 @@ axios@^0.25.0:
   dependencies:
     follow-redirects "^1.14.7"
 
-axios@^1.0.0, axios@^1.6.2:
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.2.tgz#de67d42c755b571d3e698df1b6504cde9b0ee9f2"
-  integrity sha512-7i24Ri4pmDRfJTR7LDBhsOTtcm+9kjX5WiY1X3wIisx6G9So3pfMkEiU7emUBe46oceVImccTEM3k6C5dbVW8A==
+axios@^1.0.0, axios@^1.6.3:
+  version "1.6.3"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.3.tgz#7f50f23b3aa246eff43c54834272346c396613f4"
+  integrity sha512-fWyNdeawGam70jXSVlKl+SUNVcL6j6W79CuSIPfi6HnDUmSCH6gyUys/HrqHeA/wU0Az41rRgean494d0Jb+ww==
   dependencies:
     follow-redirects "^1.15.0"
     form-data "^4.0.0"
@@ -13626,10 +13626,10 @@ luxon@^1.28.0:
   resolved "https://registry.yarnpkg.com/luxon/-/luxon-1.28.0.tgz#e7f96daad3938c06a62de0fb027115d251251fbf"
   integrity sha512-TfTiyvZhwBYM/7QdAVDh+7dBTBA29v4ik0Ce9zda3Mnf8on1S5KJI8P2jKFZ8+5C0jhmr0KwJEO/Wdpm0VeWJQ==
 
-luxon@^3.4.0:
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/luxon/-/luxon-3.4.0.tgz#17cb754efecbf76994f05b2a3f1f91fad7ddfde7"
-  integrity sha512-7eDo4Pt7aGhoCheGFIuq4Xa2fJm4ZpmldpGhjTYBNUYNCN6TIEP6v7chwwwt3KRp7YR+rghbfvjyo3V5y9hgBw==
+luxon@^3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/luxon/-/luxon-3.4.1.tgz#9147374b2c539e7893f906c420e9b080b59c5457"
+  integrity sha512-2USspxOCXWGIKHwuQ9XElxPPYrDOJHDQ5DQ870CoD+CxJbBnRDIBCfhioUJJjct7BKOy80Ia8cVstIcIMb/0+Q==
 
 lz-string@^1.4.4:
   version "1.4.4"
