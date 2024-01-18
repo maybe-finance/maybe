@@ -67,6 +67,27 @@ yarn prisma:seed
 yarn dev
 ```
 
+## Set Up Ngrok
+
+External data providers require HTTPS/SSL webhook URLs for sending data.
+
+To test this locally/during development, you will need to setup `ngrok`.
+
+1. Visit [ngrok.com](https://ngrok.com/)
+2. Create a free account
+3. Visit [this page](https://dashboard.ngrok.com/get-started/your-authtoken) to access your auth token
+4. Paste it into your `.env` file: `NGROK_AUTH_TOKEN=your_auth_token`
+
+You should claim your free static domain to avoid needing to change the URL each time you start/stop the server.
+
+To do so:
+
+1. Visit the [domains](https://dashboard.ngrok.com/cloud-edge/domains) page
+2. Click on Create Domain
+3. Copy the domain and paste it into your `.env` file: `NGROK_DOMAIN=your_domain`
+
+That's it! As long as you run the project locally using `docker` with `yarn dev:services:all` you'll be good to go.
+
 ## Contributing
 
 To contribute, please see our [contribution guide](https://github.com/maybe-finance/maybe/blob/main/CONTRIBUTING.md).
