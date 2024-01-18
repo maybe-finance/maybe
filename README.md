@@ -4,10 +4,6 @@
 
 <b>Get involved: [Discord](https://link.maybe.co/discord) • [Website](https://maybe.co) • [Issues](https://github.com/maybe-finance/maybe/issues)</b>
 
-🚨 NOTE: This is the original React app of the previously-defunct personal finance app, Maybe. This original version used many external services (Plaid, Finicity, etc) and getting it to fully function will be a decent amount of work.
-
-There's a LOT of work to do to get this functioning, but it should be feasible.
-
 ## Backstory
 
 We spent the better part of 2021/2022 building a personal finance + wealth management app called Maybe. Very full-featured, including an "Ask an Advisor" feature which connected users with an actual CFP/CFA to help them with their finances (all included in your subscription).
@@ -37,9 +33,9 @@ As a personal finance + wealth management app, Maybe has a lot of features. Here
 
 And dozens upon dozens of smaller features.
 
-## Building the app
+## Getting started
 
-This is the current state of building the app. You'll hit errors, which we're working to resolve (and certainly welcome PRs to help with that).
+This is the current state of building the app. We're actively working to make this process much more streamlined!
 
 You'll need Docker installed to run the app locally.
 
