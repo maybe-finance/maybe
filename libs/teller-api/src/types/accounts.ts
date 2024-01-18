@@ -12,12 +12,14 @@ export enum AccountType {
 export type DepositorySubtypes =
     | 'checking'
     | 'savings'
-    | 'money market'
-    | 'certificate of deposit'
+    | 'money_market'
+    | 'certificate_of_deposit'
     | 'treasury'
     | 'sweep'
 
 export type CreditSubtype = 'credit_card'
+
+export type AccountStatus = 'open' | 'closed'
 
 interface BaseAccount {
     enrollment_id: string
@@ -34,7 +36,7 @@ interface BaseAccount {
     currency: string
     id: string
     last_four: string
-    status: 'open' | 'closed'
+    status: AccountStatus
 }
 
 interface DepositoryAccount extends BaseAccount {
@@ -50,10 +52,10 @@ interface CreditAccount extends BaseAccount {
 export type Account = DepositoryAccount | CreditAccount
 
 export type AccountWithBalances = Account & {
-    balances: AccountBalance
+    balance: AccountBalance
 }
 
-export type GetAccountsResponse = Account[]
+export type GetAccountsResponse = AccountWithBalances[]
 export type GetAccountResponse = Account
 export type DeleteAccountResponse = void
 

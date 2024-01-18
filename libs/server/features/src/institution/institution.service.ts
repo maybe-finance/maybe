@@ -271,7 +271,7 @@ export class InstitutionService implements IInstitutionService {
             provider_institution pi
           SET
             institution_id = i.id,
-            rank = (CASE WHEN pi.provider = 'PLAID' THEN 1 ELSE 0 END)
+            rank = (CASE WHEN pi.provider = 'TELLER' THEN 1 ELSE 0 END)
           FROM
             duplicates d
             INNER JOIN institutions i ON i.name = d.name AND i.url = d.url

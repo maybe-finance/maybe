@@ -115,6 +115,11 @@ syncInstitutionQueue.process(
     async () => await institutionService.sync('FINICITY')
 )
 
+syncInstitutionQueue.process(
+    'sync-teller-institutions',
+    async () => await institutionService.sync('TELLER')
+)
+
 syncInstitutionQueue.add(
     'sync-plaid-institutions',
     {},
@@ -125,6 +130,14 @@ syncInstitutionQueue.add(
 
 syncInstitutionQueue.add(
     'sync-finicity-institutions',
+    {},
+    {
+        repeat: { cron: '0 */24 * * *' }, // Run every 24 hours
+    }
+)
+
+syncInstitutionQueue.add(
+    'sync-teller-institutions',
     {},
     {
         repeat: { cron: '0 */24 * * *' }, // Run every 24 hours

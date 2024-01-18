@@ -4,10 +4,6 @@
 
 <b>Get involved: [Discord](https://link.maybe.co/discord) • [Website](https://maybe.co) • [Issues](https://github.com/maybe-finance/maybe/issues)</b>
 
-🚨 NOTE: This is the original React app of the previously-defunct personal finance app, Maybe. This original version used many external services (Plaid, Finicity, etc) and getting it to fully function will be a decent amount of work.
-
-There's a LOT of work to do to get this functioning, but it should be feasible.
-
 ## Backstory
 
 We spent the better part of 2021/2022 building a personal finance + wealth management app called Maybe. Very full-featured, including an "Ask an Advisor" feature which connected users with an actual CFP/CFA to help them with their finances (all included in your subscription).
@@ -37,9 +33,9 @@ As a personal finance + wealth management app, Maybe has a lot of features. Here
 
 And dozens upon dozens of smaller features.
 
-## Building the app
+## Getting started
 
-This is the current state of building the app. You'll hit errors, which we're working to resolve (and certainly welcome PRs to help with that).
+This is the current state of building the app. We're actively working to make this process much more streamlined!
 
 You'll need Docker installed to run the app locally.
 
@@ -52,6 +48,14 @@ cp .env.example .env
 Then, create a new secret using `openssl rand -base64 32` and populate `NEXTAUTH_SECRET` in your `.env` file with it.
 
 To enable transactional emails, you'll need to create a [Postmark](https://postmarkapp.com/) account and add your API key to your `.env` file (`NX_POSTMARK_API_TOKEN`). You can also set the from and reply-to email addresses (`NX_POSTMARK_FROM_ADDRESS` and `NX_POSTMARK_REPLY_TO_ADDRESS`). If you want to run the app without email, you can set `NX_POSTMARK_API_TOKEN` to a dummy value.
+
+Maybe uses [Teller](https://teller.io/) for connecting financial accounts. To get started with Teller, you'll need to create an account. Once you've created an account:
+
+-   Add your Teller application id to your `.env` file (`NEXT_PUBLIC_TELLER_APP_ID`).
+-   Download your authentication certificates from Teller, create a `certs` folder in the root of the project, and place your certs in that directory. You should have both a `certificate.pem` and `private_key.pem`. **NEVER** check these files into source control, the `.gitignore` file will prevent the `certs/` directory from being added, but please double check.
+-   Set your `NEXT_PUBLIC_TELLER_ENV` and `NX_TELLER_ENV` to your desired environment. The default is `sandbox` which allows for testing with mock data. The login credentials for the sandbox environment are `username` and `password`. To connect to real financial accounts, you'll need to use the `development` environment.
+-   Webhooks are not implemented yet, but you can populate the `NX_TELLER_SIGNING_SECRET` with the value from your Teller account.
+-   We highly recommend checking out the [Teller docs](https://teller.io/docs) for more info.
 
 Then run the following yarn commands:
 

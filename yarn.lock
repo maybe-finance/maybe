@@ -1730,6 +1730,11 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
+"@faker-js/faker@^8.3.1":
+  version "8.3.1"
+  resolved "https://registry.yarnpkg.com/@faker-js/faker/-/faker-8.3.1.tgz#7753df0cb88d7649becf984a96dd1bd0a26f43e3"
+  integrity sha512-FdgpFxY6V6rLZE9mmIBb9hM0xpfvQOSNOLnzolzKwsE1DH+gC7lEKV1p1IbR0lAYyvYd5a4u3qWJzowUkw1bIw==
+
 "@fast-csv/format@^4.3.5":
   version "4.3.5"
   resolved "https://registry.yarnpkg.com/@fast-csv/format/-/format-4.3.5.tgz#90d83d1b47b6aaf67be70d6118f84f3e12ee1ff3"
@@ -7983,7 +7988,7 @@ cookie@0.5.0, cookie@^0.5.0:
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.5.0.tgz#d1f5d71adec6558c58f389987c366aa47e994f8b"
   integrity sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==
 
-cookie@0.6.0:
+cookie@0.6.0, cookie@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.6.0.tgz#2798b04b071b0ecbff0dbb62a505a8efa4e19051"
   integrity sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==
@@ -16601,6 +16606,11 @@ react-script-hook@^1.6.0:
   resolved "https://registry.yarnpkg.com/react-script-hook/-/react-script-hook-1.6.0.tgz#6a44ff5e65113cb29252eadad1b8306f5fe0c626"
   integrity sha512-aJm72XGWV+wJTKiqHmAaTNC/JQZV/Drv6A1kd1VQlzhzAXLqtBRBeTt3iTESImGe5TaBDHUOUeaGNw4v+7bqDw==
 
+react-script-hook@^1.7.2:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/react-script-hook/-/react-script-hook-1.7.2.tgz#ec130d67f9a25fcde57fbfd1faa87e5b97521948"
+  integrity sha512-fhyCEfXb94fag34UPRF0zry1XGwmVY+79iibWwTqAoOiCzYJQOYTiWJ7CnqglA9tMSV8g45cQpHCMcBwr7dwhA==
+
 react-shallow-renderer@^16.15.0:
   version "16.15.0"
   resolved "https://registry.yarnpkg.com/react-shallow-renderer/-/react-shallow-renderer-16.15.0.tgz#48fb2cf9b23d23cde96708fe5273a7d3446f4457"
@@ -18525,6 +18535,13 @@ telejson@^6.0.8:
     isobject "^4.0.0"
     lodash "^4.17.21"
     memoizerific "^1.11.3"
+
+teller-connect-react@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/teller-connect-react/-/teller-connect-react-0.1.0.tgz#b3bae24f4410d622eb8c88c7668adb003eb7bfd7"
+  integrity sha512-ZI+OULCsuo/v1qetpjepOgM7TyIzwnMVE/54IruOPguQtJ/Ui3C1ax3wUb65AKZDyVQ7ZyjA+8ypT/yMYD9bIQ==
+  dependencies:
+    react-script-hook "^1.7.2"
 
 terminal-link@^2.0.0:
   version "2.1.1"
