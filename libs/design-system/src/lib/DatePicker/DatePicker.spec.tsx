@@ -71,8 +71,6 @@ describe('<DatePicker />', () => {
             const currentMonth = DateTime.now()
             const priorMonth = DateTime.now().minus({ months: 1 })
 
-            console.log(DateTime.now(), 'date')
-
             // Open the modal
             fireEvent.click(screen.getByTestId('datepicker-toggle-icon'))
 
