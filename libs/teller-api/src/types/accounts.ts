@@ -55,7 +55,7 @@ export type AccountWithBalances = Account & {
     balance: AccountBalance
 }
 
-export type GetAccountsResponse = Account[]
+export type GetAccountsResponse = AccountWithBalances[]
 export type GetAccountResponse = Account
 export type DeleteAccountResponse = void
 

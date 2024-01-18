@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { TellerTypes } from '../../libs/teller-api/src'
+import type { TellerTypes } from '../../libs/teller-api/src'
 
 function generateSubType(
     type: TellerTypes.AccountTypes
@@ -204,29 +204,45 @@ export function generateEnrollment(): TellerTypes.Enrollment & { institutionId: 
     }
 }
 
-export function generateConnections(count: number) {
-    const enrollments: (TellerTypes.Enrollment & { institutionId: string })[] = []
+type GenerateConnectionsResponse = {
+    enrollment: TellerTypes.Enrollment & { institutionId: string }
+    accounts: TellerTypes.Account[]
+    accountsWithBalances: TellerTypes.AccountWithBalances[]
+    transactions: TellerTypes.Transaction[]
+}
+
+export function generateConnection(): GenerateConnectionsResponse {
     const accountsWithBalances: TellerTypes.AccountWithBalances[] = []
+    const accounts: TellerTypes.Account[] = []
     const transactions: TellerTypes.Transaction[] = []
-    for (let i = 0; i < count; i++) {
-        enrollments.push(generateEnrollment())
-    }
-    enrollments.forEach((enrollment) => {
-        const accountCount: number = faker.number.int({ min: 1, max: 5 })
-        const transactionsCount: number = faker.number.int({ min: 1, max: 50 })
-        const enrollmentId = enrollment.enrollment.id
-        const institutionName = enrollment.enrollment.institution.name
-        const institutionId = enrollment.institutionId
-        accountsWithBalances.push(
-            ...generateAccountsWithBalances({
-                count: accountCount,
-                enrollmentId,
-                institutionName,
-                institutionId,
-            })
-        )
-        accountsWithBalances.forEach((account) => {
-            transactions.push(...generateTransactions(transactionsCount, account.id))
+
+    const enrollment = generateEnrollment()
+
+    const accountCount: number = faker.number.int({ min: 1, max: 3 })
+
+    const enrollmentId = enrollment.enrollment.id
+    const institutionName = enrollment.enrollment.institution.name
+    const institutionId = enrollment.institutionId
+    accountsWithBalances.push(
+        ...generateAccountsWithBalances({
+            count: accountCount,
+            enrollmentId,
+            institutionName,
+            institutionId,
         })
-    })
+    )
+    for (const account of accountsWithBalances) {
+        const { balance, ...accountWithoutBalance } = account
+        accounts.push(accountWithoutBalance)
+        const transactionsCount: number = faker.number.int({ min: 1, max: 5 })
+        const generatedTransactions = generateTransactions(transactionsCount, account.id)
+        transactions.push(...generatedTransactions)
+    }
+
+    return {
+        enrollment,
+        accounts,
+        accountsWithBalances,
+        transactions,
+    }
 }

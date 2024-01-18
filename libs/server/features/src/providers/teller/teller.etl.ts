@@ -101,16 +101,7 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
 
     private async _extractAccounts(accessToken: string) {
         const accounts = await this.teller.getAccounts({ accessToken })
-        const accountsWithBalances = await Promise.all(
-            accounts.map(async (a) => {
-                const balance = await this.teller.getAccountBalances({
-                    accountId: a.id,
-                    accessToken,
-                })
-                return { ...a, balance }
-            })
-        )
-        return accountsWithBalances
+        return accounts
     }
 
     private _loadAccounts(connection: Connection, { accounts }: Pick<TellerData, 'accounts'>) {
@@ -212,7 +203,7 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                     ${Prisma.join(
                         chunk.map((tellerTransaction) => {
                             const {
-                                id,
+                                id: transactionId,
                                 account_id,
                                 description,
                                 amount,
@@ -226,7 +217,7 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                                 (SELECT id FROM account WHERE account_connection_id = ${
                                     connection.id
                                 } AND teller_account_id = ${account_id.toString()}),
-                                ${id},
+                                ${transactionId},
                                 ${date}::date,
                                 ${description},
                                 ${DbUtil.toDecimal(-amount)},

@@ -34,7 +34,20 @@ export class TellerApi {
      */
 
     async getAccounts({ accessToken }: AuthenticatedRequest): Promise<GetAccountsResponse> {
-        return this.get<GetAccountsResponse>(`/accounts`, accessToken)
+        const accounts = await this.get<GetAccountsResponse>(`/accounts`, accessToken)
+        const accountsWithBalances = await Promise.all(
+            accounts.map(async (account) => {
+                const balance = await this.getAccountBalances({
+                    accountId: account.id,
+                    accessToken,
+                })
+                return {
+                    ...account,
+                    balance,
+                }
+            })
+        )
+        return accountsWithBalances
     }
 
     /**
