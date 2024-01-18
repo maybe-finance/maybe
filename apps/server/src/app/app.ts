@@ -93,6 +93,7 @@ app.use(cors({ origin, credentials: true }))
 app.options('*', cors() as RequestHandler)
 
 app.set('view engine', 'ejs').set('views', __dirname + '/app/admin/views')
+app.use('/admin', adminRouter)
 
 app.use(
     morgan(env.NX_MORGAN_LOG_LEVEL, {
