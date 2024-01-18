@@ -14,7 +14,6 @@ async function main() {
             name: 'Capital One',
             providers: [
                 { provider: 'PLAID', providerId: 'ins_9', rank: 1 },
-                { provider: 'FINICITY', providerId: '170778' },
             ],
         },
         {
@@ -22,7 +21,6 @@ async function main() {
             name: 'Discover Bank',
             providers: [
                 { provider: 'PLAID', providerId: 'ins_33' },
-                { provider: 'FINICITY', providerId: '13796', rank: 1 },
             ],
         },
     ]

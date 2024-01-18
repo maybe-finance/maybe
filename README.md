@@ -94,7 +94,7 @@ To contribute, please see our [contribution guide](https://github.com/maybe-fina
 
 ## High-priority issues
 
-The biggest focus at the moment is on getting the app functional without some previously key external services (namely Plaid and Finicity).
+The biggest focus at the moment is on getting the app functional without some previously key external services (Plaid).
 
 You can view the current [high-priority issues here](https://github.com/maybe-finance/maybe/issues?q=is:issue+is:open+label:%22high+priority%22). Those are the most impactful issues to tackle first.
 

@@ -156,9 +156,7 @@ export class AccountConnectionService implements IAccountConnectionService {
             `Disconnected connection id=${connection.id} type=${
                 connection.type
             } provider_connection_id=${
-                connection.type === 'plaid'
-                    ? connection.plaidItemId
-                    : connection.finicityInstitutionId
+                connection.plaidItemId
             }`
         )
 
@@ -185,9 +183,7 @@ export class AccountConnectionService implements IAccountConnectionService {
             `Reconnected connection id=${connection.id} type=${
                 connection.type
             } provider_connection_id=${
-                connection.type === 'plaid'
-                    ? connection.plaidItemId
-                    : connection.finicityInstitutionId
+                connection.plaidItemId
             }`
         )
 
@@ -216,9 +212,7 @@ export class AccountConnectionService implements IAccountConnectionService {
             `Deleted connection id=${deletedConnection.id} type=${
                 connection.type
             } provider_connection_id=${
-                connection.type === 'plaid'
-                    ? connection.plaidItemId
-                    : connection.finicityInstitutionId
+                connection.plaidItemId
             }`
         )
 

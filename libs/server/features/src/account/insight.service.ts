@@ -312,9 +312,6 @@ export class InsightService implements IInsightService {
                         {
                             plaidSubtype: 'dividend',
                         },
-                        {
-                            finicityInvestmentTransactionType: 'dividend',
-                        },
                     ],
                 },
             }),
@@ -649,10 +646,6 @@ export class InsightService implements IInsightService {
                   WHEN plaid_type IN ('fixed income') THEN 'fixed_income'
                   WHEN plaid_type IN ('cash', 'loan') THEN 'cash'
                   WHEN plaid_type IN ('cryptocurrency') THEN 'crypto'
-                  -- finicity
-                  WHEN finicity_type IN ('EQUITY', 'ETF', 'MUTUALFUND', 'STOCKINFO', 'MFINFO') THEN 'stocks'
-                  WHEN finicity_type IN ('BOND') THEN 'fixed_income'
-                  ELSE 'other'
                 END AS "asset_class"
               FROM
                 "security"
@@ -705,10 +698,6 @@ export class InsightService implements IInsightService {
                     WHEN s.plaid_type IN ('fixed income') THEN 'fixed_income'
                     WHEN s.plaid_type IN ('cash', 'loan') THEN 'cash'
                     WHEN s.plaid_type IN ('cryptocurrency') THEN 'crypto'
-                    -- finicity
-                    WHEN s.finicity_type IN ('EQUITY', 'ETF', 'MUTUALFUND', 'STOCKINFO', 'MFINFO') THEN 'stocks'
-                    WHEN s.finicity_type IN ('BOND') THEN 'fixed_income'
-                    ELSE 'other'
                   END AS "category"
               ) x ON TRUE
             WHERE
@@ -750,7 +739,6 @@ export class InsightService implements IInsightService {
                 (it.plaid_type = 'cash' AND it.plaid_subtype IN ('contribution', 'deposit', 'withdrawal'))
                 OR (it.plaid_type = 'transfer' AND it.plaid_subtype IN ('transfer', 'send', 'request'))
                 OR (it.plaid_type = 'buy' AND it.plaid_subtype IN ('contribution'))
-                OR (it.finicity_transaction_id IS NOT NULL AND it.finicity_investment_transaction_type IN ('contribution', 'deposit', 'transfer'))
               )
               -- Exclude any contributions made prior to the start date since balances will be 0
               AND (a.start_date is NULL OR it.date >= a.start_date)
@@ -854,10 +842,6 @@ export class InsightService implements IInsightService {
                     WHEN plaid_type IN ('fixed income') THEN 'bonds'
                     WHEN plaid_type IN ('cash', 'loan') THEN 'cash'
                     WHEN plaid_type IN ('cryptocurrency') THEN 'crypto'
-                    -- finicity
-                    WHEN finicity_type IN ('EQUITY', 'ETF', 'MUTUALFUND', 'STOCKINFO', 'MFINFO') THEN 'stocks'
-                    WHEN finicity_type IN ('BOND') THEN 'bonds'
-                    ELSE 'other'
                   END AS "asset_type"
                 FROM
                   "security"

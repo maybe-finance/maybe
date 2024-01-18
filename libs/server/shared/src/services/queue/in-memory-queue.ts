@@ -53,14 +53,6 @@ export class InMemoryQueue<
         return []
     }
 
-    async getRepeatableJobs() {
-        return []
-    }
-
-    async removeRepeatableByKey(_key: string) {
-        // no-op
-    }
-
     async cancelJobs() {
         // no-op
     }
@@ -71,7 +63,6 @@ export class InMemoryQueueFactory implements IQueueFactory {
         private readonly ignoreJobNames: string[] = [
             'sync-all-securities',
             'sync-plaid-institutions',
-            'sync-finicity-institutions',
             'trial-reminders',
             'send-email',
         ]

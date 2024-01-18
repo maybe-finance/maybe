@@ -16,7 +16,6 @@ import {
     workerErrorHandlerService,
 } from './app/lib/di'
 import env from './env'
-import { cleanUpOutdatedJobs } from './utils'
 
 // Defaults from quickstart - https://docs.sentry.io/platforms/node/
 Sentry.init({
@@ -100,7 +99,6 @@ syncSecurityQueue.add(
     {},
     {
         repeat: { cron: '*/5 * * * *' }, // Run every 5 minutes
-        jobId: Date.now().toString(),
     }
 )
 
@@ -113,11 +111,6 @@ syncInstitutionQueue.process(
 )
 
 syncInstitutionQueue.process(
-    'sync-finicity-institutions',
-    async () => await institutionService.sync('FINICITY')
-)
-
-syncInstitutionQueue.process(
     'sync-teller-institutions',
     async () => await institutionService.sync('TELLER')
 )
@@ -127,16 +120,6 @@ syncInstitutionQueue.add(
     {},
     {
         repeat: { cron: '0 */24 * * *' }, // Run every 24 hours
-        jobId: Date.now().toString(),
-    }
-)
-
-syncInstitutionQueue.add(
-    'sync-finicity-institutions',
-    {},
-    {
-        repeat: { cron: '0 */24 * * *' }, // Run every 24 hours
-        jobId: Date.now().toString(),
     }
 )
 
@@ -145,7 +128,6 @@ syncInstitutionQueue.add(
     {},
     {
         repeat: { cron: '0 */24 * * *' }, // Run every 24 hours
-        jobId: Date.now().toString(),
     }
 )
 
@@ -174,11 +156,6 @@ process.on(
         await workerErrorHandlerService.handleWorkersError({ variant: 'unhandled', error })
 )
 
-// Replace any jobs that have changed cron schedules and ensures only
-// one repeatable jobs for each type is running
-const queues = [syncSecurityQueue, syncInstitutionQueue]
-cleanUpOutdatedJobs(queues)
-
 const app = express()
 
 app.use(cors())
@@ -204,24 +181,20 @@ const server = app.listen(env.NX_PORT, () => {
     logger.info(`Worker health server started on port ${env.NX_PORT}`)
 })
 
-async function onShutdown() {
+function onShutdown() {
     logger.info('[shutdown.start]')
 
-    await new Promise((resolve) => server.close(resolve))
+    server.close()
 
     // shutdown queues
-    try {
-        await Promise.allSettled(
-            queueService.allQueues
-                .filter((q): q is BullQueue => q instanceof BullQueue)
-                .map((q) => q.queue.close())
-        )
-    } catch (error) {
-        logger.error('[shutdown.error]', error)
-    } finally {
+    Promise.allSettled(
+        queueService.allQueues
+            .filter((q): q is BullQueue => q instanceof BullQueue)
+            .map((q) => q.queue.close())
+    ).finally(() => {
         logger.info('[shutdown.complete]')
-        process.exitCode = 0
-    }
+        process.exit()
+    })
 }
 
 process.on('SIGINT', onShutdown)

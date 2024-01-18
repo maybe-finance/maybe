@@ -482,7 +482,7 @@ export function getPolygonTicker({
         }
     }
 
-    // Finicity's `type` field isn't really helpful here, so we'll just use isOptionTicker
+    // Finicity was removed, so we'll just use isOptionTicker
     if (MarketUtil.isOptionTicker(symbol)) {
         return new PolygonTicker('options', `O:${symbol}`)
     }
