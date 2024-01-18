@@ -31,7 +31,7 @@ services:
         ports:
             - 4551:4551
         environment:
-            - DOMAIN=host.docker.internal
+            - DOMAIN=${NGROK_DOMAIN:-host.docker.internal}
             - PORT=3333
             - AUTH_TOKEN=${NGROK_AUTH_TOKEN}
             - DEBUG=true
