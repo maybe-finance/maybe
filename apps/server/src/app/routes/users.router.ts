@@ -388,6 +388,39 @@ router.delete(
     })
 )
 
+router.post(
+    '/request-new-password',
+    endpoint.create({
+        input: z.object({
+            email: z.string().email(),
+        }),
+        resolve: async ({ ctx, input }) => {
+            if (ctx.user) return
+            await ctx.authPasswordResetService.create(input.email)
+        },
+    })
+)
+
+router.post(
+    '/reset-password/:token/:email',
+    endpoint.create({
+        input: z.object({
+            // TODO: bring en par with required password schema
+            // (1 lowercase, 1 uppercase, 1 special char)
+            newPassword: z.string().min(8).max(64),
+            confirmPassword: z.string().min(8).max(64),
+        }),
+        resolve: async ({ ctx, input, req }) => {
+            if (ctx.user) return
+            await ctx.authPasswordResetService.resetPassword({
+                token: req.params.token,
+                newPassword: input.newPassword,
+                email: req.params.email,
+            })
+        },
+    })
+)
+
 router.delete(
     '/:id',
     endpoint.create({

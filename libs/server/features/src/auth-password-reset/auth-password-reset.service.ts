@@ -1,6 +1,6 @@
 import type { PrismaClient } from '@prisma/client'
 import type { Logger } from 'winston'
-import type { EmailService } from '../email'
+import type { IEmailService } from '../email'
 import bcrypt from 'bcrypt'
 
 type ResetPasswordData = {
@@ -13,11 +13,11 @@ export interface IAuthPasswordResetService {
     resetPassword(data: ResetPasswordData): Promise<null>
 }
 
-export class AuthPasswordResetsService implements IAuthPasswordResetService {
+export class AuthPasswordResetService implements IAuthPasswordResetService {
     constructor(
         private readonly logger: Logger,
-        private readonly emailService: EmailService,
-        private readonly prisma: PrismaClient
+        private readonly prisma: PrismaClient,
+        private readonly emailService: IEmailService
     ) {}
 
     async create(email: string): Promise<null> {
@@ -50,7 +50,8 @@ export class AuthPasswordResetsService implements IAuthPasswordResetService {
             subject: 'Reset your password',
             to: email,
             // TODO: Use a template
-            textBody: `Click here to reset your password: ${process.env.NEXTAUTH_URL}/auth/reset-password?token=${token}&email=${email}`,
+            textBody: `Click here to reset your password:
+            ${process.env.NEXTAUTH_URL}/auth/reset-password/${token}/${email}`,
         })
 
         return null

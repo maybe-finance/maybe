@@ -25,6 +25,7 @@ import {
     AccountService,
     AccountConnectionService,
     AuthUserService,
+    AuthPasswordResetService,
     UserService,
     EmailService,
     AccountQueryService,
@@ -209,6 +210,14 @@ const accountService = new AccountService(
 
 const authUserService = new AuthUserService(logger.child({ service: 'AuthUserService' }), prisma)
 
+// auth-password-reset
+
+const authPasswordResetService = new AuthPasswordResetService(
+    logger.child({ service: 'AuthPasswordResetService' }),
+    prisma,
+    emailService
+)
+
 // user
 
 const userService = new UserService(
@@ -328,6 +337,7 @@ export async function createContext(req: Request) {
         holdingService,
         accountConnectionService,
         authUserService,
+        authPasswordResetService,
         userService,
         valuationService,
         institutionService,
