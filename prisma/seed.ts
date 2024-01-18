@@ -12,18 +12,12 @@ async function main() {
         {
             id: 1,
             name: 'Capital One',
-            providers: [
-                { provider: 'PLAID', providerId: 'ins_9', rank: 1 },
-                { provider: 'FINICITY', providerId: '170778' },
-            ],
+            providers: [{ provider: 'PLAID', providerId: 'ins_9', rank: 1 }],
         },
         {
             id: 2,
             name: 'Discover Bank',
-            providers: [
-                { provider: 'PLAID', providerId: 'ins_33' },
-                { provider: 'FINICITY', providerId: '13796', rank: 1 },
-            ],
+            providers: [{ provider: 'PLAID', providerId: 'ins_33' }],
         },
     ]
 

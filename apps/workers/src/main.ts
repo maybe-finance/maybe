@@ -113,26 +113,12 @@ syncInstitutionQueue.process(
 )
 
 syncInstitutionQueue.process(
-    'sync-finicity-institutions',
-    async () => await institutionService.sync('FINICITY')
-)
-
-syncInstitutionQueue.process(
     'sync-teller-institutions',
     async () => await institutionService.sync('TELLER')
 )
 
 syncInstitutionQueue.add(
     'sync-plaid-institutions',
-    {},
-    {
-        repeat: { cron: '0 */24 * * *' }, // Run every 24 hours
-        jobId: Date.now().toString(),
-    }
-)
-
-syncInstitutionQueue.add(
-    'sync-finicity-institutions',
     {},
     {
         repeat: { cron: '0 */24 * * *' }, // Run every 24 hours

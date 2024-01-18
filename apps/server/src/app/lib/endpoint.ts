@@ -37,10 +37,7 @@ import {
     TransactionBalanceSyncStrategy,
     InvestmentTransactionBalanceSyncStrategy,
     PlaidETL,
-    FinicityService,
-    FinicityETL,
     InstitutionProviderFactory,
-    FinicityWebhookHandler,
     PlaidWebhookHandler,
     TellerService,
     TellerETL,
@@ -56,7 +53,6 @@ import {
 } from '@maybe-finance/server/features'
 import prisma from './prisma'
 import plaid, { getPlaidWebhookUrl } from './plaid'
-import finicity, { getFinicityTxPushUrl, getFinicityWebhookUrl } from './finicity'
 import teller, { getTellerWebhookUrl } from './teller'
 import stripe from './stripe'
 import postmark from './postmark'
@@ -136,15 +132,6 @@ const plaidService = new PlaidService(
     env.NX_CLIENT_URL_CUSTOM || env.NX_CLIENT_URL
 )
 
-const finicityService = new FinicityService(
-    logger.child({ service: 'FinicityService' }),
-    prisma,
-    finicity,
-    new FinicityETL(logger.child({ service: 'FinicityETL' }), prisma, finicity),
-    getFinicityWebhookUrl(),
-    env.NX_FINICITY_ENV === 'sandbox'
-)
-
 const tellerService = new TellerService(
     logger.child({ service: 'TellerService' }),
     prisma,
@@ -159,7 +146,6 @@ const tellerService = new TellerService(
 
 const accountConnectionProviderFactory = new AccountConnectionProviderFactory({
     plaid: plaidService,
-    finicity: finicityService,
     teller: tellerService,
 })
 
@@ -239,7 +225,6 @@ const userService = new UserService(
 
 const institutionProviderFactory = new InstitutionProviderFactory({
     PLAID: plaidService,
-    FINICITY: finicityService,
     TELLER: tellerService,
 })
 
@@ -277,14 +262,6 @@ const plaidWebhooks = new PlaidWebhookHandler(
     plaid,
     accountConnectionService,
     queueService
-)
-
-const finicityWebhooks = new FinicityWebhookHandler(
-    logger.child({ service: 'FinicityWebhookHandler' }),
-    prisma,
-    finicity,
-    accountConnectionService,
-    getFinicityTxPushUrl()
 )
 
 const stripeWebhooks = new StripeWebhookHandler(
@@ -358,8 +335,6 @@ export async function createContext(req: Request) {
         queueService,
         plaidService,
         plaidWebhooks,
-        finicityService,
-        finicityWebhooks,
         stripeWebhooks,
         tellerService,
         tellerWebhooks,

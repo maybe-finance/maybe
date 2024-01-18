@@ -35,7 +35,6 @@ import {
     accountRollupRouter,
     valuationsRouter,
     institutionsRouter,
-    finicityRouter,
     tellerRouter,
     transactionsRouter,
     holdingsRouter,
@@ -110,7 +109,6 @@ app.use(
 app.use('/v1/stripe', express.raw({ type: 'application/json' }))
 
 app.use(express.urlencoded({ extended: true }))
-app.use(express.json({ limit: '50mb' })) // Finicity sends large response bodies for webhooks
 
 // =========================================
 //                 API ⬇️
@@ -158,7 +156,6 @@ app.use('/v1', validateAuthJwt)
 app.use('/v1/users', usersRouter)
 app.use('/v1/e2e', e2eRouter)
 app.use('/v1/plaid', plaidRouter)
-app.use('/v1/finicity', finicityRouter)
 app.use('/v1/teller', tellerRouter)
 app.use('/v1/accounts', accountsRouter)
 app.use('/v1/account-rollup', accountRollupRouter)

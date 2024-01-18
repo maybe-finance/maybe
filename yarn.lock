@@ -1760,11 +1760,6 @@
     lodash.isundefined "^3.0.1"
     lodash.uniq "^4.5.0"
 
-"@finicity/connect-web-sdk@^1.0.0-rc.4":
-  version "1.0.0-rc.4"
-  resolved "https://registry.yarnpkg.com/@finicity/connect-web-sdk/-/connect-web-sdk-1.0.0-rc.4.tgz#e8ec00b150a82fcc6e4adf7567e7b0d7b592f808"
-  integrity sha512-rt69OxN1KygXSPVlJyZrEFMpe614uEuNBXTg96wZ5kOWmCRVUOy4X3E7244iGV/Llgi3czSmz9TtMxwIMKibNA==
-
 "@gar/promisify@^1.0.1":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
