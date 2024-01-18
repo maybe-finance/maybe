@@ -7,12 +7,14 @@ import {
     useDebounce,
     usePlaid,
     useFinicity,
+    useTellerConfig,
+    useTellerConnect,
 } from '@maybe-finance/client/shared'
-
 import { Input } from '@maybe-finance/design-system'
 import InstitutionGrid from './InstitutionGrid'
 import { AccountTypeGrid } from './AccountTypeGrid'
 import InstitutionList, { MIN_QUERY_LENGTH } from './InstitutionList'
+import { useLogger } from '@maybe-finance/client/shared'
 
 const SEARCH_DEBOUNCE_MS = 300
 
@@ -23,6 +25,7 @@ export default function AccountTypeSelector({
     view: string
     onViewChange: (view: string) => void
 }) {
+    const logger = useLogger()
     const { setAccountManager } = useAccountContext()
 
     const [searchQuery, setSearchQuery] = useState<string>('')
@@ -33,8 +36,11 @@ export default function AccountTypeSelector({
         debouncedSearchQuery.length >= MIN_QUERY_LENGTH &&
         view !== 'manual'
 
+    const config = useTellerConfig(logger)
+
     const { openPlaid } = usePlaid()
     const { openFinicity } = useFinicity()
+    const { open: openTeller } = useTellerConnect(config, logger)
 
     const inputRef = useRef<HTMLInputElement>(null)
 
@@ -76,6 +82,9 @@ export default function AccountTypeSelector({
                                 break
                             case 'FINICITY':
                                 openFinicity(providerInstitution.providerId)
+                                break
+                            case 'TELLER':
+                                openTeller(providerInstitution.providerId)
                                 break
                             default:
                                 break
@@ -138,11 +147,12 @@ export default function AccountTypeSelector({
                                             categoryUser: 'crypto',
                                         },
                                     })
-
                                     return
                                 }
 
-                                if (!data) return
+                                if (!data) {
+                                    return
+                                }
 
                                 switch (data.provider) {
                                     case 'PLAID':
@@ -150,6 +160,9 @@ export default function AccountTypeSelector({
                                         break
                                     case 'FINICITY':
                                         openFinicity(data.providerId)
+                                        break
+                                    case 'TELLER':
+                                        openTeller(data.providerId)
                                         break
                                     default:
                                         break
