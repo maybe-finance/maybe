@@ -1,38 +1,37 @@
 import type { AxiosResponse } from 'axios'
 import type { SharedType } from '@maybe-finance/shared'
 import { superjson } from '@maybe-finance/shared'
-import env from '../../../env'
-import isCI from 'is-ci'
 import Axios from 'axios'
+import { encode } from 'next-auth/jwt'
 
-// Fetches Auth0 access token (JWT) and prepares Axios client to use it on each request
 export async function getAxiosClient() {
-    const tenantUrl = isCI
-        ? 'REPLACE_THIS-staging.us.auth0.com'
-        : 'REPLACE_THIS-development.us.auth0.com'
-
-    const {
-        data: { access_token: token },
-    } = await Axios.request({
-        method: 'POST',
-        url: `https://${tenantUrl}/oauth/token`,
-        headers: { 'content-type': 'application/json' },
-        data: {
-            grant_type: 'password',
-            username: 'REPLACE_THIS',
-            password: 'REPLACE_THIS',
-            audience: 'https://maybe-finance-api/v1',
-            scope: '',
-            client_id: isCI ? 'REPLACE_THIS' : 'REPLACE_THIS',
+    const baseUrl = 'http://127.0.0.1:53333/v1'
+    const jwt = await encode({
+        maxAge: 1 * 24 * 60 * 60,
+        secret: process.env.NEXTAUTH_SECRET || 'CHANGE_ME',
+        token: {
+            sub: '__TEST_USER_ID__',
+            user: '__TEST_USER_ID__',
+            'https://maybe.co/email': 'REPLACE_THIS',
+            firstName: 'REPLACE_THIS',
+            lastName: 'REPLACE_THIS',
+            name: 'REPLACE_THIS',
         },
     })
 
+    const defaultHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Credentials': true,
+        Authorization: `Bearer ${jwt}`,
+    }
+    const axiosOptions = {
+        baseURL: baseUrl,
+        headers: defaultHeaders,
+    }
+
     const axios = Axios.create({
-        baseURL: 'http://127.0.0.1:53333/v1',
+        ...axiosOptions,
         validateStatus: () => true, // Tests should determine whether status is correct, not Axios
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
     })
 
     axios.interceptors.response.use((response: AxiosResponse<SharedType.BaseResponse>) => {
