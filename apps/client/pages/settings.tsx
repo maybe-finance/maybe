@@ -35,7 +35,7 @@ export default function SettingsPage() {
                     <Tab.List>
                         <Tab>Details</Tab>
                         <Tab>Security</Tab>
-                        <Tab>Billing</Tab>
+                        {process.env.STRIPE_API_KEY && <Tab>Billing</Tab>}
                     </Tab.List>
                     <Tab.Panels>
                         <Tab.Panel>
@@ -46,9 +46,11 @@ export default function SettingsPage() {
                                 <SecurityPreferences />
                             </div>
                         </Tab.Panel>
-                        <Tab.Panel>
-                            <BillingPreferences />
-                        </Tab.Panel>
+                        {process.env.STRIPE_API_KEY && (
+                            <Tab.Panel>
+                                <BillingPreferences />
+                            </Tab.Panel>
+                        )}
                     </Tab.Panels>
                 </Tab.Group>
             </section>
