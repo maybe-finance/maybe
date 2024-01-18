@@ -53,6 +53,14 @@ Then, create a new secret using `openssl rand -base64 32` and populate `NEXTAUTH
 
 To enable transactional emails, you'll need to create a [Postmark](https://postmarkapp.com/) account and add your API key to your `.env` file (`NX_POSTMARK_API_TOKEN`). You can also set the from and reply-to email addresses (`NX_POSTMARK_FROM_ADDRESS` and `NX_POSTMARK_REPLY_TO_ADDRESS`). If you want to run the app without email, you can set `NX_POSTMARK_API_TOKEN` to a dummy value.
 
+Maybe uses [Teller](https://teller.io/) for connecting financial accounts. To get started with Teller, you'll need to create an account. Once you've created an account:
+
+-   Add your Teller application id to your `.env` file (`NEXT_PUBLIC_TELLER_APP_ID`).
+-   Download your authentication certificates from Teller, create a `certs` folder in the root of the project, and place your certs in that directory. You should have both a `certificate.pem` and `private_key.pem`. **NEVER** check these files into source control, the `.gitignore` file will prevent the `certs/` directory from being added, but please double check.
+-   Set your `NEXT_PUBLIC_TELLER_ENV` and `NX_TELLER_ENV` to your desired environment. The default is `sandbox` which allows for testing with mock data. The login credentials for the sandbox environment are `username` and `password`. To connect to real financial accounts, you'll need to use the `development` environment.
+-   Webhooks are not implemented yet, but you can populate the `NX_TELLER_SIGNING_SECRET` with the value from your Teller account.
+-   We highly recommend checking out the [Teller docs](https://teller.io/docs) for more info.
+
 Then run the following yarn commands:
 
 ```
