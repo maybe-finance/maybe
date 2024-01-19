@@ -116,7 +116,7 @@ function ProfileForm({ title, onSubmit, defaultValues }: ProfileViewProps) {
 
     return (
         <div className="w-full max-w-md mx-auto">
-            <h3 className="text-center">{title}</h3>
+            <h3 className="text-center text-pretty">{title}</h3>
             <p className="mt-4 text-base text-gray-50">
                 We&rsquo;ll need a few things from you to offer a personal experience when it comes
                 to building plans or receiving advice from our advisors.
