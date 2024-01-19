@@ -55,7 +55,7 @@ export function Welcome({ title: stepTitle, onNext }: StepProps) {
             >
                 <div className="max-w-md grow">
                     <img src="/assets/maybe.svg" className="h-8" alt="Maybe" />
-                    <h3 className="mt-14">{stepTitle}</h3>
+                    <h3 className="mt-14 text-pretty">{stepTitle}</h3>
                     <p className="mt-2 text-base text-gray-50">
                         We made you a little something to celebrate you taking your first steps in
                         Maybe. Feel free to share and don&rsquo;t forget to flip the card!
