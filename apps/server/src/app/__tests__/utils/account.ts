@@ -35,7 +35,7 @@ export async function createTestInvestmentAccount(
         join(__dirname, `../test-data/${portfolio}/holdings.csv`)
     )
 
-    const [_deleted, ...securities] = await prisma.$transaction([
+    const [, ...securities] = await prisma.$transaction([
         prisma.security.deleteMany({
             where: {
                 symbol: {
@@ -99,7 +99,21 @@ export async function createTestInvestmentAccount(
                             (s) => s.date === it.date && s.ticker === it.ticker
                         )?.price
 
-                        const isCashFlow = it.type === 'DEPOSIT' || it.type === 'WITHDRAW'
+                        function getTransactionCategory(type: string) {
+                            switch (type) {
+                                case 'BUY':
+                                    return 'buy'
+                                case 'SELL':
+                                    return 'sell'
+                                case 'DIVIDEND':
+                                    return 'dividend'
+                                case 'DEPOSIT':
+                                case 'WITHDRAW':
+                                    return 'transfer'
+                                default:
+                                    return undefined
+                            }
+                        }
 
                         return {
                             securityId: securities.find((s) => it.ticker === s.symbol)?.id,
@@ -108,26 +122,7 @@ export async function createTestInvestmentAccount(
                             amount: price ? new Prisma.Decimal(price).times(it.qty) : it.qty,
                             quantity: price ? it.qty : 0,
                             price: price ?? 0,
-                            plaidType:
-                                isCashFlow || it.type === 'DIVIDEND'
-                                    ? 'cash'
-                                    : it.type === 'BUY'
-                                    ? 'buy'
-                                    : it.type === 'SELL'
-                                    ? 'sell'
-                                    : undefined,
-                            plaidSubtype:
-                                it.type === 'DEPOSIT'
-                                    ? 'deposit'
-                                    : it.type === 'WITHDRAW'
-                                    ? 'withdrawal'
-                                    : it.type === 'DIVIDEND'
-                                    ? 'dividend'
-                                    : it.type === 'BUY'
-                                    ? 'buy'
-                                    : it.type === 'SELL'
-                                    ? 'sell'
-                                    : undefined,
+                            category: getTransactionCategory(it.type),
                         }
                     }),
                 },

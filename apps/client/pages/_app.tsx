@@ -33,16 +33,16 @@ Sentry.init({
 
 // Providers and components only relevant to a logged-in user
 const WithAuth = function ({ children }: PropsWithChildren) {
-    const { data: session } = useSession()
+    const { data: session, status } = useSession()
     const router = useRouter()
 
     useEffect(() => {
-        if (!session) {
+        if (!session && status === 'unauthenticated') {
             router.push('/login')
         }
-    }, [session, router])
+    }, [session, status, router])
 
-    if (session) {
+    if (session && status === 'authenticated') {
         return (
             <OnboardingGuard>
                 <UserAccountContextProvider>
