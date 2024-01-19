@@ -132,7 +132,7 @@ export function dobToAge(dob: string | Date | DateTime | null | undefined, now =
             ? DateTime.fromJSDate(dob, { zone: 'utc' })
             : dob
 
-    return Math.floor(now.diff(normalizedDate, 'years').years)
+    return Math.max(Math.floor(now.diff(normalizedDate, 'years').years), 0)
 }
 
 // We allow a maximum of 30 years of history for performance reasons (hypertable chunking)
