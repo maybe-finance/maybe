@@ -63,18 +63,21 @@ export default function RegisterPage() {
                         <form className="space-y-4 w-full px-4" onSubmit={onSubmit}>
                             <Input
                                 type="text"
+                                name="firstName"
                                 label="First name"
                                 value={firstName}
                                 onChange={(e) => setFirstName(e.currentTarget.value)}
                             />
                             <Input
                                 type="text"
+                                name="lastName"
                                 label="Last name"
                                 value={lastName}
                                 onChange={(e) => setLastName(e.currentTarget.value)}
                             />
                             <Input
                                 type="text"
+                                name="email"
                                 label="Email"
                                 value={email}
                                 onChange={(e) => setEmail(e.currentTarget.value)}
@@ -82,6 +85,7 @@ export default function RegisterPage() {
 
                             <InputPassword
                                 autoComplete="password"
+                                name="password"
                                 label="Password"
                                 value={password}
                                 showPasswordRequirements={!isValid}
