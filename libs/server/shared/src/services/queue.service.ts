@@ -37,12 +37,7 @@ export type SyncAccountQueueJobData = {
     options?: SyncAccountOptions
 }
 
-export type SyncConnectionOptions =
-    | {
-          type: 'plaid'
-          products?: Array<'transactions' | 'investment-transactions' | 'holdings' | 'liabilities'>
-      }
-    | { type: 'teller'; initialSync?: boolean }
+export type SyncConnectionOptions = { type: 'teller'; initialSync?: boolean }
 
 export type SyncConnectionQueueJobData = {
     accountConnectionId: AccountConnection['id']
@@ -72,10 +67,7 @@ export type SyncSecurityQueue = IQueue<
     'sync-all-securities' | 'sync-us-stock-tickers'
 >
 export type PurgeUserQueue = IQueue<{ userId: User['id'] }, 'purge-user'>
-export type SyncInstitutionQueue = IQueue<
-    {},
-    'sync-plaid-institutions' | 'sync-teller-institutions'
->
+export type SyncInstitutionQueue = IQueue<{}, 'sync-teller-institutions'>
 export type SendEmailQueue = IQueue<SendEmailQueueJobData, 'send-email'>
 
 export type QueueName =

@@ -7,7 +7,6 @@ import type {
     User as PrismaUser,
     AuthUser,
 } from '@prisma/client'
-import type { Institution } from 'plaid'
 import type { TimeSeries, TimeSeriesResponseWithDetail, Trend } from './general-types'
 import type { DateTime } from 'luxon'
 
@@ -253,20 +252,4 @@ export type OnboardingResponse = {
     }
     isComplete: boolean
     isMarkedComplete: boolean
-}
-
-/**
- * ================================================================
- * ======                 Plaid Connections                  ======
- * ================================================================
- */
-export type PlaidLinkUpdateMode = 'reconnect' | 'new-accounts'
-
-// Used for /create/link/token when user is connecting a bank account
-export interface LinkConfig {
-    token: string
-}
-
-export type PublicTokenExchange = LinkConfig & {
-    institution: Institution
 }
