@@ -1,4 +1,4 @@
-import { useEffect, type PropsWithChildren, type ReactElement } from 'react'
+import { useEffect, useState, type PropsWithChildren, type ReactElement } from 'react'
 import type { AppProps } from 'next/app'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Analytics } from '@vercel/analytics/react'
@@ -33,14 +33,18 @@ Sentry.init({
 
 // Providers and components only relevant to a logged-in user
 const WithAuth = function ({ children }: PropsWithChildren) {
-    const { data: session } = useSession()
+    const { data: session, status } = useSession()
+    const [isLoading, setLoading] = useState(true)
     const router = useRouter()
 
     useEffect(() => {
+        if (status === 'loading') return // Wait until the session status is not 'loading'
+        setLoading(false)
+
         if (!session) {
             router.push('/login')
         }
-    }, [session, router])
+    }, [session, status, router])
 
     if (session) {
         return (
