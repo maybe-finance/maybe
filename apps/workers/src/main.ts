@@ -154,11 +154,13 @@ syncInstitutionQueue.add(
  */
 sendEmailQueue.process('send-email', async (job) => await emailProcessor.send(job.data))
 
-sendEmailQueue.add(
-    'send-email',
-    { type: 'trial-reminders' },
-    { repeat: { cron: '0 */12 * * *' } } // Run every 12 hours
-)
+if (env.STRIPE_API_KEY) {
+    sendEmailQueue.add(
+        'send-email',
+        { type: 'trial-reminders' },
+        { repeat: { cron: '0 */12 * * *' } } // Run every 12 hours
+    )
+}
 
 // Fallback - usually triggered by errors not handled (or thrown) within the Bull event handlers (see above)
 process.on(
