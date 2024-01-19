@@ -77,7 +77,7 @@ export function EmailVerification({ title, onNext }: StepProps) {
                     )}
                 </div>
             </div>
-            <h3 className="mt-12 text-center">
+            <h3 className="mt-12 text-center text-pretty">
                 {profile.data?.emailVerified ? 'Email verified' : title}
             </h3>
             <div className="text-base text-center">
