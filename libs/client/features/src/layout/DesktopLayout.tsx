@@ -313,7 +313,6 @@ function DefaultContent({
     email,
 }: PropsWithChildren<{ onboarding?: ReactNode; name?: string; email?: string }>) {
     const { addAccount } = useAccountContext()
-
     return (
         <>
             <div className="flex items-center justify-between mb-4">
@@ -338,7 +337,7 @@ function DefaultContent({
 
             {onboarding && onboarding}
 
-            <UpgradePrompt />
+            {process.env.STRIPE_API_KEY && <UpgradePrompt />}
 
             <div className="flex items-center justify-between">
                 <div className="text-base">
