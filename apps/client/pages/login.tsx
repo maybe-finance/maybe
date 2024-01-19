@@ -1,6 +1,6 @@
 import { useState, type ReactElement } from 'react'
 import { FullPageLayout } from '@maybe-finance/client/features'
-import { Input, InputPassword, Button, LoadingSpinner } from '@maybe-finance/design-system'
+import { Input, InputPassword, Button } from '@maybe-finance/design-system'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
@@ -10,7 +10,7 @@ import Link from 'next/link'
 export default function LoginPage() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [isValid, setIsValid] = useState(true)
+    const [isValid, setIsValid] = useState(false)
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(false)
 
@@ -28,7 +28,6 @@ export default function LoginPage() {
         setErrorMessage(null)
         setPassword('')
         setIsLoading(true)
-        setIsValid(false)
 
         const response = await signIn('credentials', {
             email,
@@ -39,7 +38,7 @@ export default function LoginPage() {
         if (response && response.error) {
             setErrorMessage(response.error)
             setIsLoading(false)
-            setIsValid(true)
+            setIsValid(false)
         }
     }
 
@@ -91,7 +90,7 @@ export default function LoginPage() {
 
                             <Button
                                 type="submit"
-                                disabled={!isValid}
+                                disabled={!isValid || isLoading}
                                 variant={isValid ? 'primary' : 'secondary'}
                                 isLoading={isLoading}
                             >
