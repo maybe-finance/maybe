@@ -56,6 +56,11 @@ export const CATEGORIES: Record<AccountCategory, SharedType.NormalizedCategory> 
         singular: 'Vehicle',
         plural: 'Vehicles',
     },
+    stock: {
+        value: 'stock',
+        singular: 'Stock',
+        plural: 'Stocks',
+    },
     other: {
         value: 'other',
         singular: 'Other',
@@ -81,7 +86,7 @@ export const CATEGORY_MAP_SIMPLE: Record<AccountType, AccountCategory[]> = {
     LOAN: ['loan'],
     PROPERTY: ['property'],
     VEHICLE: ['vehicle'],
-    OTHER_ASSET: ['cash', 'investment', 'crypto', 'valuable', 'other'],
+    OTHER_ASSET: ['stock', 'cash', 'investment', 'crypto', 'valuable', 'other'],
     OTHER_LIABILITY: ['other'],
 }
 

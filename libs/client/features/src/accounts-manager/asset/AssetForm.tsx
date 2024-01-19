@@ -31,11 +31,12 @@ export default function AssetForm({ mode, defaultValues, onSubmit, accountType }
     const { errors, isSubmitting, isValid } = formState
     const [startDate] = watch(['startDate'])
     const currentBalanceEditable = !startDate || !DateUtil.isToday(startDate)
+    const [categoryValue] = watch(['categoryUser'])
     const categoryList = useMemo(() => {
-        const { cash, investment, crypto, valuable, other } = AccountUtil.CATEGORIES
+        const { stock, cash, investment, crypto, valuable, other } = AccountUtil.CATEGORIES
 
         if (mode === 'create') {
-            return [cash, investment, crypto, valuable, other]
+            return [stock, cash, investment, crypto, valuable, other]
         } else {
             return AccountUtil.CATEGORY_MAP[accountType!]
         }
@@ -89,6 +90,7 @@ export default function AssetForm({ mode, defaultValues, onSubmit, accountType }
                     <div>
                         <AccountValuationFormFields
                             control={control}
+                            category={categoryValue}
                             currentBalanceEditable={currentBalanceEditable}
                         />
                     </div>

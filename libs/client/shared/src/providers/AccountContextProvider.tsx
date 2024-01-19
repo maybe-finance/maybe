@@ -6,9 +6,11 @@ import { DateTime } from 'luxon'
 import type { AccountCategory } from '@prisma/client'
 
 export type AccountValuationFields = {
+    stockSymbol: string | null
     startDate: string | null
     originalBalance: number | null
     currentBalance: number | null
+    numberShares: number | null
 }
 
 // Property

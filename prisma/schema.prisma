@@ -94,6 +94,7 @@ enum AccountType {
 }
 
 enum AccountCategory {
+  stock
   cash
   investment
   crypto
