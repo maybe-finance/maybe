@@ -1,6 +1,6 @@
 import { useState, type ReactElement } from 'react'
 import { FullPageLayout } from '@maybe-finance/client/features'
-import { Input, InputPassword, Button } from '@maybe-finance/design-system'
+import { Input, InputPassword, Button, LoadingSpinner } from '@maybe-finance/design-system'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
@@ -10,8 +10,9 @@ import Link from 'next/link'
 export default function LoginPage() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [isValid, setIsValid] = useState(false)
+    const [isValid, setIsValid] = useState(true)
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
+    const [isLoading, setIsLoading] = useState(false)
 
     const { data: session } = useSession()
     const router = useRouter()
@@ -26,6 +27,7 @@ export default function LoginPage() {
         e.preventDefault()
         setErrorMessage(null)
         setPassword('')
+        setIsLoading(true)
 
         const response = await signIn('credentials', {
             email,
@@ -35,7 +37,14 @@ export default function LoginPage() {
 
         if (response && response.error) {
             setErrorMessage(response.error)
+            setIsLoading(false)
         }
+    }
+
+    const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setErrorMessage(null)
+        setPassword(e.target.value)
+        setIsValid(e.target.value.length > 0)
     }
 
     return (
@@ -68,15 +77,8 @@ export default function LoginPage() {
                                 name="password"
                                 label="Password"
                                 value={password}
-                                showPasswordRequirements={!isValid}
-                                onValidityChange={(checks) => {
-                                    const passwordValid =
-                                        checks.filter((c) => !c.isValid).length === 0
-                                    setIsValid(passwordValid)
-                                }}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setPassword(e.target.value)
-                                }
+                                onChange={onPasswordChange}
+                                showComplexityBar={false}
                             />
 
                             {errorMessage && password.length === 0 ? (
@@ -89,6 +91,7 @@ export default function LoginPage() {
                                 type="submit"
                                 disabled={!isValid}
                                 variant={isValid ? 'primary' : 'secondary'}
+                                isLoading={isLoading}
                             >
                                 Log in
                             </Button>

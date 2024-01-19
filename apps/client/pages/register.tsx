@@ -14,6 +14,7 @@ export default function RegisterPage() {
     const [password, setPassword] = useState('')
     const [isValid, setIsValid] = useState(false)
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
+    const [isLoading, setIsLoading] = useState(false)
 
     const { data: session } = useSession()
     const router = useRouter()
@@ -30,6 +31,7 @@ export default function RegisterPage() {
         setLastName('')
         setEmail('')
         setPassword('')
+        setIsLoading(true)
 
         const response = await signIn('credentials', {
             email,
@@ -41,6 +43,7 @@ export default function RegisterPage() {
 
         if (response && response.error) {
             setErrorMessage(response.error)
+            setIsLoading(false)
         }
     }
 
@@ -109,6 +112,7 @@ export default function RegisterPage() {
                                 type="submit"
                                 disabled={!isValid}
                                 variant={isValid ? 'primary' : 'secondary'}
+                                isLoading={isLoading}
                             >
                                 Register
                             </Button>
