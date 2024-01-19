@@ -66,6 +66,33 @@
                     "options": {
                         "command": "node tools/scripts/triggerClientDeploy.js"
                     }
+                },
+                "storybook": {
+                    "executor": "@nrwl/storybook:storybook",
+                    "options": {
+                        "uiFramework": "@storybook/react",
+                        "port": 4400,
+                        "configDir": "apps/client/.storybook"
+                    },
+                    "configurations": {
+                        "ci": {
+                            "quiet": true
+                        }
+                    }
+                },
+                "build-storybook": {
+                    "executor": "@nrwl/storybook:build",
+                    "outputs": ["{options.outputDir}"],
+                    "options": {
+                        "uiFramework": "@storybook/react",
+                        "outputDir": "dist/storybook/client",
+                        "configDir": "apps/client/.storybook"
+                    },
+                    "configurations": {
+                        "ci": {
+                            "quiet": true
+                        }
+                    }
                 }
             },
             "tags": ["scope:app"]
