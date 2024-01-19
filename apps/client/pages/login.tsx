@@ -28,6 +28,7 @@ export default function LoginPage() {
         setErrorMessage(null)
         setPassword('')
         setIsLoading(true)
+        setIsValid(false)
 
         const response = await signIn('credentials', {
             email,
@@ -38,6 +39,7 @@ export default function LoginPage() {
         if (response && response.error) {
             setErrorMessage(response.error)
             setIsLoading(false)
+            setIsValid(true)
         }
     }
 
