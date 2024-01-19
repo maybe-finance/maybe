@@ -191,9 +191,7 @@ export function DesktopLayout({ children, sidebar }: DesktopLayoutProps) {
                         </div>
                     </Tooltip>
 
-                    <Link href="/settings">
-                        <ProfileCircle />
-                    </Link>
+                    <ProfileCircle />
                 </div>
             </nav>
 
