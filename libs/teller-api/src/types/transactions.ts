@@ -38,7 +38,7 @@ export type Transaction = {
     details: {
         category?: DetailCategory
         processing_status: DetailProcessingStatus
-        counterparty: {
+        counterparty?: {
             name?: string
             type?: 'organization' | 'person'
         }

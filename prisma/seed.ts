@@ -1,4 +1,5 @@
 import { Institution, PrismaClient, Provider } from '@prisma/client'
+import bcrypt from 'bcrypt'
 
 const prisma = new PrismaClient()
 
@@ -27,7 +28,23 @@ async function main() {
         },
     ]
 
+    const hashedPassword = await bcrypt.hash('TestPassword123', 10)
+
     await prisma.$transaction([
+        // create testing auth user
+        prisma.authUser.upsert({
+            where: {
+                id: 'test_ec3ee8a4-fa01-4f11-8ac5-9c49dd7fbae4',
+            },
+            create: {
+                id: 'test_ec3ee8a4-fa01-4f11-8ac5-9c49dd7fbae4',
+                firstName: 'James',
+                lastName: 'Bond',
+                email: 'bond@007.com',
+                password: hashedPassword,
+            },
+            update: {},
+        }),
         // create institution linked to provider institutions
         ...institutions.map(({ id, name, providers }) =>
             prisma.institution.upsert({

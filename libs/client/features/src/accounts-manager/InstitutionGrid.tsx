@@ -14,48 +14,48 @@ const banks: GridImage[] = [
         src: 'chase-bank.png',
         alt: 'Chase Bank',
         institution: {
-            provider: 'PLAID',
-            providerId: 'ins_56',
+            provider: 'TELLER',
+            providerId: 'chase',
         },
     },
     {
         src: 'capital-one.png',
         alt: 'Capital One Bank',
         institution: {
-            provider: 'PLAID',
-            providerId: 'ins_128026',
+            provider: 'TELLER',
+            providerId: 'capital_one',
         },
     },
     {
         src: 'wells-fargo.png',
         alt: 'Wells Fargo Bank',
         institution: {
-            provider: 'PLAID',
-            providerId: 'ins_127991',
+            provider: 'TELLER',
+            providerId: 'wells_fargo',
         },
     },
     {
         src: 'american-express.png',
         alt: 'American Express Bank',
         institution: {
-            provider: 'PLAID',
-            providerId: 'ins_10',
+            provider: 'TELLER',
+            providerId: 'amex',
         },
     },
     {
         src: 'bofa.png',
         alt: 'Bank of America',
         institution: {
-            provider: 'PLAID',
-            providerId: 'ins_127989',
+            provider: 'TELLER',
+            providerId: 'bank_of_america',
         },
     },
     {
         src: 'usaa-bank.png',
         alt: 'USAA Bank',
         institution: {
-            provider: 'PLAID',
-            providerId: 'ins_7',
+            provider: 'TELLER',
+            providerId: 'usaa',
         },
     },
 ]

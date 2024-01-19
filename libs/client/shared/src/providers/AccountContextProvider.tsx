@@ -18,6 +18,7 @@ type PropertyMetadataValues = {
     line1: string
     city: string
     state: string
+    country: string
     zip: string
 }
 export type CreatePropertyFields = PropertyMetadataValues & AccountValuationFields
@@ -50,6 +51,7 @@ type AccountManager =
     | { view: 'idle' }
     | { view: 'add-plaid'; linkToken: string }
     | { view: 'add-finicity' }
+    | { view: 'add-teller' }
     | { view: 'add-account' }
     | { view: 'add-property'; defaultValues: Partial<CreatePropertyFields> }
     | { view: 'add-vehicle'; defaultValues: Partial<CreateVehicleFields> }

@@ -16,6 +16,7 @@ import {
     workerErrorHandlerService,
 } from './app/lib/di'
 import env from './env'
+import { cleanUpOutdatedJobs } from './utils'
 
 // Defaults from quickstart - https://docs.sentry.io/platforms/node/
 Sentry.init({
@@ -99,6 +100,7 @@ syncSecurityQueue.add(
     {},
     {
         repeat: { cron: '*/5 * * * *' }, // Run every 5 minutes
+        jobId: Date.now().toString(),
     }
 )
 
@@ -115,11 +117,17 @@ syncInstitutionQueue.process(
     async () => await institutionService.sync('FINICITY')
 )
 
+syncInstitutionQueue.process(
+    'sync-teller-institutions',
+    async () => await institutionService.sync('TELLER')
+)
+
 syncInstitutionQueue.add(
     'sync-plaid-institutions',
     {},
     {
         repeat: { cron: '0 */24 * * *' }, // Run every 24 hours
+        jobId: Date.now().toString(),
     }
 )
 
@@ -128,6 +136,16 @@ syncInstitutionQueue.add(
     {},
     {
         repeat: { cron: '0 */24 * * *' }, // Run every 24 hours
+        jobId: Date.now().toString(),
+    }
+)
+
+syncInstitutionQueue.add(
+    'sync-teller-institutions',
+    {},
+    {
+        repeat: { cron: '0 */24 * * *' }, // Run every 24 hours
+        jobId: Date.now().toString(),
     }
 )
 
@@ -136,11 +154,13 @@ syncInstitutionQueue.add(
  */
 sendEmailQueue.process('send-email', async (job) => await emailProcessor.send(job.data))
 
-sendEmailQueue.add(
-    'send-email',
-    { type: 'trial-reminders' },
-    { repeat: { cron: '0 */12 * * *' } } // Run every 12 hours
-)
+if (env.STRIPE_API_KEY) {
+    sendEmailQueue.add(
+        'send-email',
+        { type: 'trial-reminders' },
+        { repeat: { cron: '0 */12 * * *' } } // Run every 12 hours
+    )
+}
 
 // Fallback - usually triggered by errors not handled (or thrown) within the Bull event handlers (see above)
 process.on(
@@ -155,6 +175,11 @@ process.on(
     async (error) =>
         await workerErrorHandlerService.handleWorkersError({ variant: 'unhandled', error })
 )
+
+// Replace any jobs that have changed cron schedules and ensures only
+// one repeatable jobs for each type is running
+const queues = [syncSecurityQueue, syncInstitutionQueue]
+cleanUpOutdatedJobs(queues)
 
 const app = express()
 
@@ -181,20 +206,24 @@ const server = app.listen(env.NX_PORT, () => {
     logger.info(`Worker health server started on port ${env.NX_PORT}`)
 })
 
-function onShutdown() {
+async function onShutdown() {
     logger.info('[shutdown.start]')
 
-    server.close()
+    await new Promise((resolve) => server.close(resolve))
 
     // shutdown queues
-    Promise.allSettled(
-        queueService.allQueues
-            .filter((q): q is BullQueue => q instanceof BullQueue)
-            .map((q) => q.queue.close())
-    ).finally(() => {
+    try {
+        await Promise.allSettled(
+            queueService.allQueues
+                .filter((q): q is BullQueue => q instanceof BullQueue)
+                .map((q) => q.queue.close())
+        )
+    } catch (error) {
+        logger.error('[shutdown.error]', error)
+    } finally {
         logger.info('[shutdown.complete]')
-        process.exit()
-    })
+        process.exitCode = 0
+    }
 }
 
 process.on('SIGINT', onShutdown)

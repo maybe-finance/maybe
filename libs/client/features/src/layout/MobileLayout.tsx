@@ -174,7 +174,7 @@ export function MobileLayout({ children, sidebar }: MobileLayoutProps) {
                         </section>
 
                         <div className="pt-6 shrink-0">
-                            <UpgradePrompt />
+                            {process.env.STRIPE_API_KEY && <UpgradePrompt />}
                         </div>
                     </div>
                 </div>

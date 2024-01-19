@@ -22,8 +22,6 @@ const envSchema = z.object({
     NX_SENTRY_DSN: z.string().optional(),
     NX_SENTRY_ENV: z.string().optional(),
 
-    NX_LD_SDK_KEY: z.string().default('REPLACE_THIS'),
-
     NX_REDIS_URL: z.string().default('redis://localhost:6379'),
 
     NX_POLYGON_API_KEY: z.string().default(''),
@@ -35,6 +33,8 @@ const envSchema = z.object({
 
     NX_CDN_PRIVATE_BUCKET: z.string().default('REPLACE_THIS'),
     NX_CDN_PUBLIC_BUCKET: z.string().default('REPLACE_THIS'),
+
+    STRIPE_API_KEY: z.string().optional(),
 })
 
 const env = envSchema.parse(process.env)

@@ -9,7 +9,6 @@ import {
 } from '@maybe-finance/server/features'
 import { InMemoryQueueFactory, PgService, type IQueueFactory } from '@maybe-finance/server/shared'
 import { createLogger, transports } from 'winston'
-import isCI from 'is-ci'
 import nock from 'nock'
 import Decimal from 'decimal.js'
 import { startServer, stopServer } from './utils/server'
@@ -27,7 +26,7 @@ const prisma = new PrismaClient()
 // For TypeScript support
 const plaid = jest.mocked(_plaid) // eslint-disable-line
 
-const auth0Id = isCI ? 'auth0|61afd38f678a0c006895f046' : 'auth0|61afd340678a0c006895f000'
+const authId = '__TEST_USER_ID__'
 let axios: AxiosInstance
 let user: User
 
@@ -38,7 +37,7 @@ if (process.env.IS_VSCODE_DEBUG === 'true') {
 
 beforeEach(async () => {
     // Clears old user and data, creates new user
-    user = await resetUser(auth0Id)
+    user = await resetUser(authId)
 })
 
 describe('/v1/accounts API', () => {

@@ -1,6 +1,6 @@
 import type { AccountConnection, User, Account } from '@prisma/client'
 import type { Logger } from 'winston'
-import type { Job, JobOptions } from 'bull'
+import type { Job, JobOptions, JobInformation } from 'bull'
 import type { SharedType } from '@maybe-finance/shared'
 
 export type IJob<T> = Pick<Job<T>, 'id' | 'name' | 'data' | 'progress'>
@@ -20,6 +20,8 @@ export type IQueue<TData extends Record<string, any> = {}, TJobName extends stri
         options?: { concurrency: number }
     ): Promise<void>
     getActiveJobs(): Promise<IJob<TData>[]>
+    getRepeatableJobs(): Promise<JobInformation[]>
+    removeRepeatableByKey(key: string): Promise<void>
     cancelJobs(): Promise<void>
 }
 
@@ -70,7 +72,7 @@ export type SyncSecurityQueue = IQueue<SyncSecurityQueueJobData, 'sync-all-secur
 export type PurgeUserQueue = IQueue<{ userId: User['id'] }, 'purge-user'>
 export type SyncInstitutionQueue = IQueue<
     {},
-    'sync-finicity-institutions' | 'sync-plaid-institutions'
+    'sync-finicity-institutions' | 'sync-plaid-institutions' | 'sync-teller-institutions'
 >
 export type SendEmailQueue = IQueue<SendEmailQueueJobData, 'send-email'>
 

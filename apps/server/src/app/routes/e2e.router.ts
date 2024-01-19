@@ -6,13 +6,13 @@ import endpoint from '../lib/endpoint'
 
 const router = Router()
 
-router.use((req, res, next) => {
-    const roles = req.user?.['https://maybe.co/roles']
+const testUserId = 'test_ec3ee8a4-fa01-4f11-8ac5-9c49dd7fbae4'
 
-    if (roles?.includes('CIUser') || roles?.includes('Admin')) {
+router.use((req, res, next) => {
+    if (req.user?.sub === testUserId) {
         next()
     } else {
-        res.status(401).send('Route only available to CIUser and Admin roles')
+        res.status(401).send('Route only available to test users')
     }
 })
 
@@ -47,14 +47,14 @@ router.post(
             trialLapsed: z.boolean().default(false),
         }),
         resolve: async ({ ctx, input }) => {
-            ctx.logger.debug(`Resetting CI user ${ctx.user!.authId}`)
-
             await ctx.prisma.$transaction([
-                ctx.prisma.$executeRaw`DELETE FROM "user" WHERE auth_id=${ctx.user!.authId};`,
+                ctx.prisma.$executeRaw`DELETE FROM "user" WHERE auth_id=${testUserId};`,
                 ctx.prisma.user.create({
                     data: {
-                        authId: ctx.user!.authId,
-                        email: 'REPLACE_THIS',
+                        authId: testUserId,
+                        email: 'bond@007.com',
+                        firstName: 'James',
+                        lastName: 'Bond',
                         dob: new Date('1990-01-01'),
                         linkAccountDismissedAt: new Date(), // ensures our auto-account link doesn't trigger
 

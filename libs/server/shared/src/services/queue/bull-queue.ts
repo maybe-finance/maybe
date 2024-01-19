@@ -120,6 +120,14 @@ export class BullQueue<TData extends Record<string, any> = any, TJobName extends
         return this.queue.getActive()
     }
 
+    async getRepeatableJobs(): Promise<Queue.JobInformation[]> {
+        return this.queue.getRepeatableJobs()
+    }
+
+    async removeRepeatableByKey(key: string) {
+        return this.queue.removeRepeatableByKey(key)
+    }
+
     async cancelJobs() {
         await this.queue.pause(true, true)
         await this.queue.removeJobs('*')
