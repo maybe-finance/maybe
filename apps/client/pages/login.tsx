@@ -57,6 +57,7 @@ export default function LoginPage() {
                         <form className="space-y-4 w-full px-4" onSubmit={onSubmit}>
                             <Input
                                 type="text"
+                                name="email"
                                 label="Email"
                                 value={email}
                                 onChange={(e) => setEmail(e.currentTarget.value)}
@@ -64,6 +65,7 @@ export default function LoginPage() {
 
                             <InputPassword
                                 autoComplete="password"
+                                name="password"
                                 label="Password"
                                 value={password}
                                 showPasswordRequirements={!isValid}

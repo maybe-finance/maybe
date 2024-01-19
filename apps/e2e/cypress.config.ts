@@ -11,14 +11,10 @@ export default defineConfig({
         baseUrl: 'http://localhost:4200',
         env: {
             API_URL: 'http://localhost:3333/v1',
-            AUTH0_ID: 'REPLACE_THIS',
-            AUTH0_CLIENT_ID: 'REPLACE_THIS',
-            AUTH0_NAME: 'Engineering CI',
-            AUTH0_EMAIL: 'REPLACE_THIS',
-            AUTH0_PASSWORD: 'REPLACE_THIS',
-            AUTH0_DOMAIN: 'REPLACE_THIS',
-            STRIPE_WEBHOOK_SECRET:
-                'REPLACE_THIS',
+            NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+            NEXT_PUBLIC_NEXTAUTH_URL: 'http://localhost:4200',
+            NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+            STRIPE_WEBHOOK_SECRET: 'REPLACE_THIS',
             STRIPE_CUSTOMER_ID: 'REPLACE_THIS',
             STRIPE_SUBSCRIPTION_ID: 'REPLACE_THIS',
         },
