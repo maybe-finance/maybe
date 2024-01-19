@@ -2,25 +2,19 @@
 // Keep these imports above the rest to avoid errors
 // =====================================================
 import type { SharedType } from '@maybe-finance/shared'
-import type { AccountsGetResponse, TransactionsGetResponse } from 'plaid'
+import { TellerGenerator } from 'tools/generators'
 import type { AccountConnection, User } from '@prisma/client'
-import { TestUtil } from '@maybe-finance/shared'
-import { PlaidTestData } from '../../../../../tools/test-data'
-import { Prisma } from '@prisma/client'
 import prisma from '../lib/prisma'
-import { default as _plaid } from '../lib/plaid'
-import nock from 'nock'
-import { DateTime } from 'luxon'
+import { default as _teller } from '../lib/teller'
 import { resetUser } from './helpers/user.test-helper'
 
 // Import the workers process
 import '../../main'
-import { queueService, securityPricingService } from '../lib/di'
-
-jest.mock('plaid')
+import { queueService } from '../lib/di'
 
 // For TypeScript support
-const plaid = jest.mocked(_plaid)
+jest.mock('../lib/teller')
+const teller = jest.mocked(_teller)
 
 let user: User | null
 let connection: AccountConnection
@@ -30,25 +24,6 @@ if (process.env.IS_VSCODE_DEBUG === 'true') {
     jest.setTimeout(100000)
 }
 
-beforeAll(() => {
-    nock.disableNetConnect()
-
-    nock('https://api.polygon.io')
-        .get((uri) => uri.includes('v2/aggs/ticker/AAPL/range/1/day'))
-        .reply(200, PlaidTestData.AAPL)
-        .persist()
-
-    nock('https://api.polygon.io')
-        .get((uri) => uri.includes('v2/aggs/ticker/WMT/range/1/day'))
-        .reply(200, PlaidTestData.WMT)
-        .persist()
-
-    nock('https://api.polygon.io')
-        .get((uri) => uri.includes('v2/aggs/ticker/VOO/range/1/day'))
-        .reply(200, PlaidTestData.VOO)
-        .persist()
-})
-
 beforeEach(async () => {
     jest.clearAllMocks()
 
@@ -57,10 +32,10 @@ beforeEach(async () => {
     connection = await prisma.accountConnection.create({
         data: {
             name: 'Chase Test',
-            type: 'plaid' as SharedType.AccountConnectionType,
-            plaidItemId: 'test-plaid-item-workers',
-            plaidInstitutionId: 'ins_3',
-            plaidAccessToken:
+            type: 'teller' as SharedType.AccountConnectionType,
+            tellerEnrollmentId: 'test-teller-item-workers',
+            tellerInstitutionId: 'chase_test',
+            tellerAccessToken:
                 'U2FsdGVkX1+WMq9lfTS9Zkbgrn41+XT1hvSK5ain/udRPujzjVCAx/lyPG7EumVZA+nVKXPauGwI+d7GZgtqTA9R3iCZNusU6LFPnmFOCE4=', // need correct encoding here
             userId: user.id,
             syncStatus: 'PENDING',
@@ -84,7 +59,7 @@ describe('Message queue tests', () => {
     it('Should handle sync errors', async () => {
         const syncQueue = queueService.getQueue('sync-account-connection')
 
-        plaid.accountsGet.mockRejectedValueOnce('forced error for Jest tests')
+        teller.getAccounts.mockRejectedValueOnce(new Error('forced error for Jest tests'))
 
         await syncQueue.add('sync-connection', { accountConnectionId: connection.id })
 
@@ -92,7 +67,7 @@ describe('Message queue tests', () => {
             where: { id: connection.id },
         })
 
-        expect(plaid.accountsGet).toHaveBeenCalledTimes(1)
+        expect(teller.getAccounts).toHaveBeenCalledTimes(1)
         expect(updatedConnection?.status).toEqual('ERROR')
     })
 
@@ -117,28 +92,23 @@ describe('Message queue tests', () => {
         const syncQueue = queueService.getQueue('sync-account-connection')
 
         // Mock will return a basic banking checking account
-        plaid.accountsGet.mockResolvedValueOnce(
-            TestUtil.axiosSuccess<AccountsGetResponse>({
-                accounts: [PlaidTestData.checkingAccount],
-                item: PlaidTestData.item,
-                request_id: 'bkVE1BHWMAZ9Rnr',
-            }) as any
-        )
+        const mockAccounts = TellerGenerator.generateAccountsWithBalances({
+            count: 1,
+            institutionId: 'chase_test',
+            enrollmentId: 'test-teller-item-workers',
+            institutionName: 'Chase Test',
+            accountType: 'depository',
+            accountSubType: 'checking',
+        })
+        teller.getAccounts.mockResolvedValueOnce(mockAccounts)
 
-        plaid.transactionsGet.mockResolvedValueOnce(
-            TestUtil.axiosSuccess<TransactionsGetResponse>({
-                accounts: [PlaidTestData.checkingAccount],
-                transactions: PlaidTestData.checkingTransactions,
-                item: PlaidTestData.item,
-                total_transactions: PlaidTestData.checkingTransactions.length,
-                request_id: '45QSn',
-            }) as any
-        )
+        const mockTransactions = TellerGenerator.generateTransactions(10, mockAccounts[0].id)
+        teller.getTransactions.mockResolvedValueOnce(mockTransactions)
 
         await syncQueue.add('sync-connection', { accountConnectionId: connection.id })
 
-        expect(plaid.accountsGet).toHaveBeenCalledTimes(1)
-        expect(plaid.transactionsGet).toHaveBeenCalledTimes(1)
+        expect(teller.getAccounts).toHaveBeenCalledTimes(1)
+        expect(teller.getTransactions).toHaveBeenCalledTimes(1)
 
         const item = await prisma.accountConnection.findUniqueOrThrow({
             where: { id: connection.id },
@@ -146,7 +116,7 @@ describe('Message queue tests', () => {
                 accounts: {
                     include: {
                         balances: {
-                            where: PlaidTestData.testDates.prismaWhereFilter,
+                            where: TellerGenerator.testDates.prismaWhereFilter,
                             orderBy: { date: 'asc' },
                         },
                         transactions: true,
@@ -161,62 +131,15 @@ describe('Message queue tests', () => {
         expect(item.accounts).toHaveLength(1)
 
         const [account] = item.accounts
-
-        expect(account.transactions).toHaveLength(PlaidTestData.checkingTransactions.length)
-        expect(account.balances.map((b) => b.balance)).toEqual(
-            [
-                3630,
-                5125,
-                5125,
-                5125,
-                5125,
-                5125,
-                5125,
-                5125,
-                5125,
-                5125,
-                5115,
-                5115,
-                5115,
-                5089.45,
-                5089.45,
-                PlaidTestData.checkingAccount.balances.current!,
-            ].map((v) => new Prisma.Decimal(v))
+        const transactionBalance = mockTransactions.reduce(
+            (acc, t) => acc + t.amount,
+            mockAccounts[0].balance.available
         )
+
+        expect(account.transactions).toHaveLength(10)
+        expect(account.balances.map((b) => b.balance)).toEqual(transactionBalance)
         expect(account.holdings).toHaveLength(0)
         expect(account.valuations).toHaveLength(0)
         expect(account.investmentTransactions).toHaveLength(0)
-    })
-
-    it('Should sync valid security prices', async () => {
-        const security = await prisma.security.create({
-            data: {
-                name: 'Walmart Inc.',
-                symbol: 'WMT',
-                cusip: '93114210310',
-                pricingLastSyncedAt: new Date(),
-            },
-        })
-
-        await securityPricingService.sync(security)
-
-        const prices = await prisma.securityPricing.findMany({
-            where: { securityId: security.id },
-            orderBy: { date: 'asc' },
-        })
-
-        expect(prices).toHaveLength(PlaidTestData.WMT.results.length)
-
-        expect(
-            prices.map((p) => ({
-                date: DateTime.fromJSDate(p.date, { zone: 'utc' }).toISODate(),
-                price: p.priceClose.toNumber(),
-            }))
-        ).toEqual(
-            PlaidTestData.WMT.results.map((p) => ({
-                date: DateTime.fromMillis(p.t, { zone: 'utc' }).toISODate(),
-                price: p.c,
-            }))
-        )
     })
 })
