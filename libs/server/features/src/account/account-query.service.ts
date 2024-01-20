@@ -143,7 +143,7 @@ export class AccountQueryService implements IAccountQueryService {
                 he.value DESC
               OFFSET ${page * pageSize}
               LIMIT ${pageSize};
-          `
+            `
         )
 
         return rows
@@ -204,7 +204,7 @@ export class AccountQueryService implements IAccountQueryService {
               ) v
               ORDER BY
                 v.date ASC
-          `
+            `
         )
 
         return rows
@@ -293,7 +293,7 @@ export class AccountQueryService implements IAccountQueryService {
                   ORDER BY
                     account_id, date ASC
                 ) b0 ON b0.account_id = b.account_id
-          `
+            `
         )
 
         return rows
@@ -324,7 +324,7 @@ export class AccountQueryService implements IAccountQueryService {
                   ${pInterval},
                   ${pAccountIds}
                 ) abg
-            `
+              `
         )
 
         return rows
@@ -352,7 +352,7 @@ export class AccountQueryService implements IAccountQueryService {
                     WHERE
                       (a.user_id = ${id.userId} OR ac.user_id = ${id.userId})
                       AND a.is_active
-                )`
+                  )`
 
         const pStart = raw(`'${start}'`)
         const pEnd = raw(`'${end}'`)
@@ -399,7 +399,7 @@ export class AccountQueryService implements IAccountQueryService {
                   (abg.date)
                 )
               ORDER BY date ASC;
-          `
+            `
         )
 
         // Group independent rows into NetWorthSeries objects
@@ -461,7 +461,7 @@ export class AccountQueryService implements IAccountQueryService {
                     WHERE
                       (a.user_id = ${id.userId} OR ac.user_id = ${id.userId})
                       AND a.is_active
-                )`
+                  )`
 
         const pStart = raw(`'${start}'`)
         const pEnd = raw(`'${end}'`)
@@ -521,7 +521,7 @@ export class AccountQueryService implements IAccountQueryService {
                 LEFT JOIN account_connection ac ON ac.id = a.account_connection_id
               ORDER BY
                 ar.classification, ar.category, ar.id, ar.date;
-          `
+            `
         )
 
         return rows
