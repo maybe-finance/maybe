@@ -37,7 +37,9 @@ const WithAuth = function ({ children }: PropsWithChildren) {
     const router = useRouter()
 
     useEffect(() => {
-        if (!session && status === 'unauthenticated') {
+        if (status === 'loading') return
+
+        if (!session) {
             router.push('/login')
         }
     }, [session, status, router])

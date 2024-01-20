@@ -10,6 +10,7 @@ const ButtonVariants = Object.freeze({
     input: 'px-4 py-2 rounded text-base bg-transparent text-gray-25 border border-gray-200 shadow focus:bg-gray-500 focus:ring-gray-400',
     link: 'px-4 py-2 rounded text-base text-cyan hover:text-cyan-400 focus:text-cyan-300 focus:ring-cyan',
     icon: 'p-0 w-8 h-8 rounded text-2xl text-gray-25 hover:bg-gray-300 focus:bg-gray-200 focus:ring-gray-400',
+    profileIcon: 'p-0 w-12 h-12 rounded text-2xl text-gray-25',
     danger: 'px-4 py-2 rounded text-base bg-red text-gray-700 shadow hover:bg-red-400 focus:bg-red-400 focus:ring-red',
     warn: 'px-4 py-2 rounded text-base bg-gray-500 text-red-500 shadow hover:bg-gray-400 focus:bg-gray-400 focus:ring-red',
 })
