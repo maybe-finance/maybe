@@ -1,18 +1,22 @@
 import type { AxiosInstance } from 'axios'
-import type { SharedType } from '@maybe-finance/shared'
-import type { Prisma, AccountConnection, User } from '@prisma/client'
+import {
+    type Prisma,
+    type AccountConnection,
+    type User,
+    AccountConnectionType,
+    AccountSyncStatus,
+} from '@prisma/client'
 import { startServer, stopServer } from './utils/server'
 import { getAxiosClient } from './utils/axios'
 import prisma from '../lib/prisma'
 import { InMemoryQueue } from '@maybe-finance/server/shared'
-import { default as _teller } from '../lib/teller'
 import nock from 'nock'
 import { resetUser } from './utils/user'
 
 jest.mock('../lib/teller.ts')
 
 // For TypeScript support
-const teller = jest.mocked(_teller)
+//const teller = jest.mocked(_teller)
 
 const authId = '__TEST_USER_ID__'
 let axios: AxiosInstance
@@ -46,13 +50,13 @@ beforeEach(async () => {
     connectionData = {
         data: {
             name: 'Chase Test',
-            type: 'teller' as SharedType.AccountConnectionType,
+            type: AccountConnectionType.teller,
             tellerEnrollmentId: 'test-teller-item-workers',
             tellerInstitutionId: 'chase_test',
             tellerAccessToken:
                 'U2FsdGVkX1+WMq9lfTS9Zkbgrn41+XT1hvSK5ain/udRPujzjVCAx/lyPG7EumVZA+nVKXPauGwI+d7GZgtqTA9R3iCZNusU6LFPnmFOCE4=', // need correct encoding here
             userId: user.id,
-            syncStatus: 'PENDING',
+            syncStatus: AccountSyncStatus.PENDING,
         },
     }
 

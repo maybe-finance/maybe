@@ -263,9 +263,9 @@ export function generateConnection(): GenerateConnectionsResponse {
     }
 }
 
-const now = DateTime.fromISO('2022-01-03', { zone: 'utc' })
+export const now = DateTime.fromISO('2022-01-03', { zone: 'utc' })
 
-const lowerBound = DateTime.fromISO('2021-12-01', { zone: 'utc' })
+export const lowerBound = DateTime.fromISO('2021-12-01', { zone: 'utc' })
 
 export const testDates = {
     now,
@@ -277,4 +277,20 @@ export const testDates = {
             lte: now.toJSDate(),
         },
     } as Prisma.AccountBalanceWhereInput,
+}
+
+export function calculateDailyBalances(startingBalance, transactions, dateInterval) {
+    transactions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+
+    const balanceChanges = {}
+
+    transactions.forEach((transaction) => {
+        const date = new Date(transaction.date).toISOString().split('T')[0]
+        balanceChanges[date] = (balanceChanges[date] || 0) + Number(transaction.amount)
+    })
+    return dateInterval.map((date) => {
+        return Object.keys(balanceChanges)
+            .filter((d) => d <= date)
+            .reduce((acc, d) => acc + balanceChanges[d], startingBalance)
+    })
 }

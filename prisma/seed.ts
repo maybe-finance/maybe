@@ -15,7 +15,7 @@ async function main() {
             name: 'Capital One',
             providers: [
                 {
-                    provider: 'TELLER',
+                    provider: Provider.TELLER,
                     providerId: 'capital_one',
                     logoUrl: 'https://teller.io/images/banks/capital_one.jpg',
                     rank: 1,
@@ -27,7 +27,7 @@ async function main() {
             name: 'Wells Fargo',
             providers: [
                 {
-                    provider: 'TELLER',
+                    provider: Provider.TELLER,
                     providerId: 'wells_fargo',
                     logoUrl: 'https://teller.io/images/banks/wells_fargo.jpg',
                 },

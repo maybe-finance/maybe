@@ -7,6 +7,7 @@ import type { AccountConnection, User } from '@prisma/client'
 import prisma from '../lib/prisma'
 import { default as _teller } from '../lib/teller'
 import { resetUser } from './helpers/user.test-helper'
+import { Interval } from 'luxon'
 
 // Import the workers process
 import '../../main'
@@ -131,13 +132,24 @@ describe('Message queue tests', () => {
         expect(item.accounts).toHaveLength(1)
 
         const [account] = item.accounts
-        const transactionBalance = mockTransactions.reduce(
-            (acc, t) => acc + t.amount,
-            mockAccounts[0].balance.available
+
+        const intervalDates = Interval.fromDateTimes(
+            TellerGenerator.lowerBound,
+            TellerGenerator.now
+        )
+            .splitBy({ day: 1 })
+            .map((date: Interval) => date.start.toISODate())
+
+        const startingBalance = Number(mockAccounts[0].balance.available)
+
+        const balances = TellerGenerator.calculateDailyBalances(
+            startingBalance,
+            mockTransactions,
+            intervalDates
         )
 
         expect(account.transactions).toHaveLength(10)
-        expect(account.balances.map((b) => b.balance)).toEqual(transactionBalance)
+        expect(account.balances.map((b) => b.balance)).toEqual(balances)
         expect(account.holdings).toHaveLength(0)
         expect(account.valuations).toHaveLength(0)
         expect(account.investmentTransactions).toHaveLength(0)

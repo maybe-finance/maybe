@@ -1,5 +1,5 @@
-import { InvestmentTransactionCategory, type User } from '@prisma/client'
-import { Prisma, PrismaClient } from '@prisma/client'
+import type { User } from '@prisma/client'
+import { Prisma, PrismaClient, InvestmentTransactionCategory } from '@prisma/client'
 import { createLogger, transports } from 'winston'
 import { DateTime } from 'luxon'
 import type {
