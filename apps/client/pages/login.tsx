@@ -58,15 +58,15 @@ export default function LoginPage() {
     const sendResetPasswordEmail = async () => {
         setSendResetPasswordEmailLoading(true)
 
-        const response = await fetch('/api/auth/reset-password', {
+        const response = await fetch('/api/auth/request-password-reset', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                email: forgotPasswordEmail,
-            }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email: forgotPasswordEmail }),
         })
 
-        if (response.ok) {
+        if (response.status === 200) {
             setShowResetPasswordSuccess(true)
             setSendResetPasswordEmailLoading(false)
             setForgotPasswordEmail('')
