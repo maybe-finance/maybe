@@ -6,7 +6,6 @@ import {
     useAccountContext,
     useDebounce,
     usePlaid,
-    useFinicity,
     useTellerConfig,
     useTellerConnect,
 } from '@maybe-finance/client/shared'
@@ -39,7 +38,6 @@ export default function AccountTypeSelector({
     const config = useTellerConfig(logger)
 
     const { openPlaid } = usePlaid()
-    const { openFinicity } = useFinicity()
     const { open: openTeller } = useTellerConnect(config, logger)
 
     const inputRef = useRef<HTMLInputElement>(null)
@@ -79,9 +77,6 @@ export default function AccountTypeSelector({
                         switch (providerInstitution.provider) {
                             case 'PLAID':
                                 openPlaid(providerInstitution.providerId)
-                                break
-                            case 'FINICITY':
-                                openFinicity(providerInstitution.providerId)
                                 break
                             case 'TELLER':
                                 openTeller(providerInstitution.providerId)
@@ -157,9 +152,6 @@ export default function AccountTypeSelector({
                                 switch (data.provider) {
                                     case 'PLAID':
                                         openPlaid(data.providerId)
-                                        break
-                                    case 'FINICITY':
-                                        openFinicity(data.providerId)
                                         break
                                     case 'TELLER':
                                         openTeller(data.providerId)

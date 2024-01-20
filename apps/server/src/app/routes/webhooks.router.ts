@@ -1,7 +1,6 @@
 import { Router } from 'express'
 import { z } from 'zod'
-import type { FinicityTypes } from '@maybe-finance/finicity-api'
-import { validatePlaidJwt, validateFinicitySignature, validateTellerSignature } from '../middleware'
+import { validatePlaidJwt, validateTellerSignature } from '../middleware'
 import endpoint from '../lib/endpoint'
 import stripe from '../lib/stripe'
 import env from '../../env'
@@ -29,74 +28,6 @@ router.post(
             )
 
             await ctx.plaidWebhooks.handleWebhook(input)
-
-            return { status: 'ok' }
-        },
-    })
-)
-
-router.post(
-    '/finicity/webhook',
-    process.env.NODE_ENV !== 'development'
-        ? validateFinicitySignature
-        : (_req, _res, next) => next(),
-    endpoint.create({
-        input: z
-            .object({
-                eventType: z.string(),
-                eventId: z.string().optional(),
-                customerId: z.string().optional(),
-                payload: z.record(z.any()).optional(),
-            })
-            .passthrough(),
-        async resolve({ input, ctx }) {
-            const { eventType, eventId, customerId } = input
-
-            ctx.logger.info(
-                `rx[finicity_webhook] event eventType=${eventType} eventId=${eventId} customerId=${customerId}`
-            )
-
-            // May contain sensitive info, only print at the debug level
-            ctx.logger.debug(`rx[finicity_webhook] event payload`, input)
-
-            try {
-                await ctx.finicityWebhooks.handleWebhook(input as FinicityTypes.WebhookData)
-            } catch (err) {
-                // record error but don't throw, otherwise Finicity Connect behaves weird
-                ctx.logger.error(`[finicity_webhook] error handling webhook`, err)
-            }
-
-            return { status: 'ok' }
-        },
-    })
-)
-
-router.get('/finicity/txpush', (req, res) => {
-    const { txpush_verification_code } = req.query
-    if (!txpush_verification_code) {
-        return res.status(400).send('request missing txpush_verification_code')
-    }
-
-    return res.status(200).contentType('text/plain').send(txpush_verification_code)
-})
-
-router.post(
-    '/finicity/txpush',
-    endpoint.create({
-        input: z
-            .object({
-                event: z.record(z.any()), // for now we'll just cast this to the appropriate type
-            })
-            .passthrough(),
-        async resolve({ input: { event }, ctx }) {
-            const ev = event as FinicityTypes.TxPushEvent
-
-            ctx.logger.info(`rx[finicity_txpush] event class=${ev.class} type=${ev.type}`)
-
-            // May contain sensitive info, only print at the debug level
-            ctx.logger.debug(`rx[finicity_txpush] event payload`, event)
-
-            await ctx.finicityWebhooks.handleTxPushEvent(ev)
 
             return { status: 'ok' }
         },

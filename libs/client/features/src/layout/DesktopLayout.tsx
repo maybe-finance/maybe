@@ -16,7 +16,6 @@ import {
     RiFolderOpenLine,
     RiMenuFoldLine,
     RiMenuUnfoldLine,
-    RiMore2Fill,
     RiPieChart2Line,
     RiFlagLine,
     RiArrowRightSLine,
@@ -191,9 +190,11 @@ export function DesktopLayout({ children, sidebar }: DesktopLayoutProps) {
                         </div>
                     </Tooltip>
 
-                    <Link href="/settings">
-                        <ProfileCircle />
-                    </Link>
+                    <MenuPopover
+                        isHeader={false}
+                        icon={<ProfileCircle />}
+                        buttonClassName="w-12 h-12 rounded-full"
+                    />
                 </div>
             </nav>
 
@@ -313,7 +314,6 @@ function DefaultContent({
     email,
 }: PropsWithChildren<{ onboarding?: ReactNode; name?: string; email?: string }>) {
     const { addAccount } = useAccountContext()
-
     return (
         <>
             <div className="flex items-center justify-between mb-4">
@@ -338,14 +338,13 @@ function DefaultContent({
 
             {onboarding && onboarding}
 
-            <UpgradePrompt />
+            {process.env.STRIPE_API_KEY && <UpgradePrompt />}
 
             <div className="flex items-center justify-between">
                 <div className="text-base">
                     <p data-testid="user-name">{name ?? ''}</p>
                     <p className="text-gray-100">{email ?? ''}</p>
                 </div>
-                <MenuPopover isHeader={false} icon={<RiMore2Fill />} />
             </div>
         </>
     )

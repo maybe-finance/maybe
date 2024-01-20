@@ -14,6 +14,7 @@ export default function RegisterPage() {
     const [password, setPassword] = useState('')
     const [isValid, setIsValid] = useState(false)
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
+    const [isLoading, setIsLoading] = useState(false)
 
     const { data: session } = useSession()
     const router = useRouter()
@@ -30,6 +31,7 @@ export default function RegisterPage() {
         setLastName('')
         setEmail('')
         setPassword('')
+        setIsLoading(true)
 
         const response = await signIn('credentials', {
             email,
@@ -41,6 +43,7 @@ export default function RegisterPage() {
 
         if (response && response.error) {
             setErrorMessage(response.error)
+            setIsLoading(false)
         }
     }
 
@@ -63,18 +66,21 @@ export default function RegisterPage() {
                         <form className="space-y-4 w-full px-4" onSubmit={onSubmit}>
                             <Input
                                 type="text"
+                                name="firstName"
                                 label="First name"
                                 value={firstName}
                                 onChange={(e) => setFirstName(e.currentTarget.value)}
                             />
                             <Input
                                 type="text"
+                                name="lastName"
                                 label="Last name"
                                 value={lastName}
                                 onChange={(e) => setLastName(e.currentTarget.value)}
                             />
                             <Input
                                 type="text"
+                                name="email"
                                 label="Email"
                                 value={email}
                                 onChange={(e) => setEmail(e.currentTarget.value)}
@@ -82,6 +88,7 @@ export default function RegisterPage() {
 
                             <InputPassword
                                 autoComplete="password"
+                                name="password"
                                 label="Password"
                                 value={password}
                                 showPasswordRequirements={!isValid}
@@ -105,6 +112,7 @@ export default function RegisterPage() {
                                 type="submit"
                                 disabled={!isValid}
                                 variant={isValid ? 'primary' : 'secondary'}
+                                isLoading={isLoading}
                             >
                                 Register
                             </Button>

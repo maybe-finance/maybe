@@ -100,20 +100,6 @@ router.post(
 )
 
 router.post(
-    '/:id/finicity/fix-connect',
-    endpoint.create({
-        resolve: async ({ ctx, req }) => {
-            const { link } = await ctx.finicityService.generateFixConnectUrl(
-                ctx.user!.id,
-                +req.params.id
-            )
-
-            return { link }
-        },
-    })
-)
-
-router.post(
     '/:id/sync',
     endpoint.create({
         resolve: async ({ ctx, req }) => {

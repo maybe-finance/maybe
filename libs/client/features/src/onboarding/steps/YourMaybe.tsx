@@ -130,7 +130,7 @@ export function YourMaybe({ title, onNext }: StepProps) {
                 <div className="flex justify-center">
                     <Fire />
                 </div>
-                <h2 className="mt-6 text-center">{title}</h2>
+                <h2 className="mt-6 text-center text-pretty">{title}</h2>
                 <p className="mt-2 text-center text-base text-gray-50">
                     A maybe is a goal or dream you&rsquo;re considering, but have not yet fully
                     committed to because you&rsquo;re not yet sure if it&rsquo;s financially

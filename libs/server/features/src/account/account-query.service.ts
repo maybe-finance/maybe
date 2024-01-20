@@ -246,7 +246,6 @@ export class AccountQueryService implements IAccountQueryService {
                     (it.plaid_type = 'cash' AND it.plaid_subtype IN ('contribution', 'deposit', 'withdrawal'))
                     OR (it.plaid_type = 'transfer' AND it.plaid_subtype IN ('transfer'))
                     OR (it.plaid_type = 'buy' AND it.plaid_subtype IN ('contribution'))
-                    OR (it.finicity_transaction_id IS NOT NULL AND it.finicity_investment_transaction_type IN ('contribution', 'deposit', 'transfer'))
                   )
                 GROUP BY
                   1, 2
