@@ -242,11 +242,7 @@ export class AccountQueryService implements IAccountQueryService {
                   it.account_id = ANY(${pAccountIds})
                   AND it.date BETWEEN sd.start_date AND ${pEnd}
                   -- filter for investment_transactions that represent external flows
-                  AND (
-                    (it.plaid_type = 'cash' AND it.plaid_subtype IN ('contribution', 'deposit', 'withdrawal'))
-                    OR (it.plaid_type = 'transfer' AND it.plaid_subtype IN ('transfer'))
-                    OR (it.plaid_type = 'buy' AND it.plaid_subtype IN ('contribution'))
-                  )
+                  AND it.category = 'transfer'
                 GROUP BY
                   1, 2
               ), external_flow_totals AS (

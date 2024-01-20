@@ -14,7 +14,8 @@ import type {
     LiabilitiesObject as PlaidLiabilities,
     PlaidApi,
 } from 'plaid'
-import { Prisma } from '@prisma/client'
+import { InvestmentTransactionSubtype, InvestmentTransactionType } from 'plaid'
+import { Prisma, InvestmentTransactionCategory } from '@prisma/client'
 import { DateTime } from 'luxon'
 import _, { chunk } from 'lodash'
 import { ErrorUtil, PlaidUtil } from '@maybe-finance/server/shared'
@@ -548,7 +549,7 @@ export class PlaidETL implements IETL<Connection, PlaidRawData, PlaidData> {
             ...chunk(investmentTransactions, 1_000).map(
                 (chunk) =>
                     this.prisma.$executeRaw`
-                      INSERT INTO investment_transaction (account_id, security_id, plaid_investment_transaction_id, date, name, amount, fees, quantity, price, currency_code, plaid_type, plaid_subtype)
+                      INSERT INTO investment_transaction (account_id, security_id, plaid_investment_transaction_id, date, name, amount, fees, quantity, price, currency_code, plaid_type, plaid_subtype, category)
                       VALUES
                           ${Prisma.join(
                               chunk.map(
@@ -584,7 +585,11 @@ export class PlaidETL implements IETL<Connection, PlaidRawData, PlaidData> {
                                         ${DbUtil.toDecimal(price)},
                                         ${currencyCode},
                                         ${type},
-                                        ${subtype}
+                                        ${subtype},
+                                        ${this.getInvestmentTransactionCategoryByPlaidType(
+                                            type,
+                                            subtype
+                                        )}
                                       )`
                                   }
                               )
@@ -602,6 +607,7 @@ export class PlaidETL implements IETL<Connection, PlaidRawData, PlaidData> {
                         currency_code = EXCLUDED.currency_code,
                         plaid_type = EXCLUDED.plaid_type,
                         plaid_subtype = EXCLUDED.plaid_subtype;
+                        category = EXCLUDED.category;
                     `
             ),
 
@@ -667,6 +673,63 @@ export class PlaidETL implements IETL<Connection, PlaidRawData, PlaidData> {
                   ]
                 : []),
         ]
+    }
+
+    private getInvestmentTransactionCategoryByPlaidType = (
+        type: InvestmentTransactionType,
+        subType: InvestmentTransactionSubtype
+    ): InvestmentTransactionCategory => {
+        if (type === InvestmentTransactionType.Buy) {
+            return InvestmentTransactionCategory.buy
+        }
+
+        if (type === InvestmentTransactionType.Sell) {
+            return InvestmentTransactionCategory.sell
+        }
+
+        if (
+            [
+                InvestmentTransactionSubtype.Dividend,
+                InvestmentTransactionSubtype.QualifiedDividend,
+                InvestmentTransactionSubtype.NonQualifiedDividend,
+            ].includes(subType)
+        ) {
+            return InvestmentTransactionCategory.dividend
+        }
+
+        if (
+            [
+                InvestmentTransactionSubtype.NonResidentTax,
+                InvestmentTransactionSubtype.Tax,
+                InvestmentTransactionSubtype.TaxWithheld,
+            ].includes(subType)
+        ) {
+            return InvestmentTransactionCategory.tax
+        }
+
+        if (
+            type === InvestmentTransactionType.Fee ||
+            [
+                InvestmentTransactionSubtype.AccountFee,
+                InvestmentTransactionSubtype.LegalFee,
+                InvestmentTransactionSubtype.ManagementFee,
+                InvestmentTransactionSubtype.MarginExpense,
+                InvestmentTransactionSubtype.TransferFee,
+                InvestmentTransactionSubtype.TrustFee,
+            ].includes(subType)
+        ) {
+            return InvestmentTransactionCategory.fee
+        }
+
+        if (type === InvestmentTransactionType.Cash) {
+            return InvestmentTransactionCategory.transfer
+        }
+
+        if (type === InvestmentTransactionType.Cancel) {
+            return InvestmentTransactionCategory.cancel
+        }
+
+        return InvestmentTransactionCategory.other
     }
 
     private async _extractHoldings(accessToken: string) {

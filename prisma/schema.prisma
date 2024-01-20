@@ -217,24 +217,22 @@ enum InvestmentTransactionCategory {
 }
 
 model InvestmentTransaction {
-  id           Int             @id @default(autoincrement())
-  createdAt    DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt    DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  account      Account         @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  accountId    Int             @map("account_id")
-  security     Security?       @relation(fields: [securityId], references: [id], onDelete: Cascade)
-  securityId   Int?            @map("security_id")
-  date         DateTime        @db.Date
+  id           Int                           @id @default(autoincrement())
+  createdAt    DateTime                      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime                      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  account      Account                       @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId    Int                           @map("account_id")
+  security     Security?                     @relation(fields: [securityId], references: [id], onDelete: Cascade)
+  securityId   Int?                          @map("security_id")
+  date         DateTime                      @db.Date
   name         String
-  amount       Decimal         @db.Decimal(19, 4)
-  fees         Decimal?        @db.Decimal(19, 4)
-  flow         TransactionFlow @default(dbgenerated("\nCASE\n    WHEN (amount < (0)::numeric) THEN 'INFLOW'::\"TransactionFlow\"\n    ELSE 'OUTFLOW'::\"TransactionFlow\"\nEND"))
-  quantity     Decimal         @db.Decimal(36, 18)
-  price        Decimal         @db.Decimal(23, 8)
-  currencyCode String          @default("USD") @map("currency_code")
-
-  // Derived from provider types
-  category InvestmentTransactionCategory @default(dbgenerated("\nCASE\n    WHEN (plaid_type = 'buy'::text) THEN 'buy'::\"InvestmentTransactionCategory\"\n    WHEN (plaid_type = 'sell'::text) THEN 'sell'::\"InvestmentTransactionCategory\"\n    WHEN (plaid_subtype = ANY (ARRAY['dividend'::text, 'qualified dividend'::text, 'non-qualified dividend'::text])) THEN 'dividend'::\"InvestmentTransactionCategory\"\n    WHEN (plaid_subtype = ANY (ARRAY['non-resident tax'::text, 'tax'::text, 'tax withheld'::text])) THEN 'tax'::\"InvestmentTransactionCategory\"\n    WHEN ((plaid_type = 'fee'::text) OR (plaid_subtype = ANY (ARRAY['account fee'::text, 'legal fee'::text, 'management fee'::text, 'margin expense'::text, 'transfer fee'::text, 'trust fee'::text]))) THEN 'fee'::\"InvestmentTransactionCategory\"\n    WHEN (plaid_type = 'cash'::text) THEN 'transfer'::\"InvestmentTransactionCategory\"\n    WHEN (plaid_type = 'cancel'::text) THEN 'cancel'::\"InvestmentTransactionCategory\"\n    ELSE 'other'::\"InvestmentTransactionCategory\"\nEND"))
+  amount       Decimal                       @db.Decimal(19, 4)
+  fees         Decimal?                      @db.Decimal(19, 4)
+  flow         TransactionFlow               @default(dbgenerated("\nCASE\n    WHEN (amount < (0)::numeric) THEN 'INFLOW'::\"TransactionFlow\"\n    ELSE 'OUTFLOW'::\"TransactionFlow\"\nEND"))
+  quantity     Decimal                       @db.Decimal(36, 18)
+  price        Decimal                       @db.Decimal(23, 8)
+  currencyCode String                        @default("USD") @map("currency_code")
+  category     InvestmentTransactionCategory @default(other)
 
   // plaid data
   plaidInvestmentTransactionId String? @unique @map("plaid_investment_transaction_id")
