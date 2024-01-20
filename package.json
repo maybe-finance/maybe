@@ -39,7 +39,6 @@
         "@casl/ability": "^6.3.2",
         "@casl/prisma": "^1.4.1",
         "@fast-csv/format": "^4.3.5",
-        "@finicity/connect-web-sdk": "^1.0.0-rc.4",
         "@headlessui/react": "^1.7.2",
         "@hookform/resolvers": "^2.9.6",
         "@polygon.io/client-js": "^6.0.6",

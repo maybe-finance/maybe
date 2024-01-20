@@ -72,18 +72,10 @@ const brokerages: GridImage[] = [
     {
         src: 'fidelity.png',
         alt: 'Fidelity',
-        institution: {
-            provider: 'FINICITY',
-            providerId: '9913',
-        },
     },
     {
         src: 'vanguard.png',
         alt: 'Vanguard',
-        institution: {
-            provider: 'FINICITY',
-            providerId: '3078',
-        },
     },
     {
         src: 'wealthfront.png',

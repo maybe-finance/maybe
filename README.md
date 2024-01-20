@@ -6,11 +6,11 @@
 
 ## Backstory
 
-We spent the better part of 2021/2022 building a personal finance + wealth management app called Maybe. Very full-featured, including an "Ask an Advisor" feature which connected users with an actual CFP/CFA to help them with their finances (all included in your subscription).
+We spent the better part of 2021/2022 building a personal finance + wealth management app called, Maybe. Very full-featured, including an "Ask an Advisor" feature which connected users with an actual CFP/CFA to help them with their finances (all included in your subscription).
 
-The business end of things didn't work out and so we shut things down mid-2023.
+The business end of things didn't work out, and so we shut things down mid-2023.
 
-We spent the better part of $1,000,000 building the app (employees + contractors, data providers/services, infrastructure, etc).
+We spent the better part of $1,000,000 building the app (employees + contractors, data providers/services, infrastructure, etc.).
 
 We're now reviving the product as a fully open-source project. The goal is to let you run the app yourself, for free, and use it to manage your own finances and eventually offer a hosted version of the app for a small monthly fee.
 
@@ -37,7 +37,7 @@ And dozens upon dozens of smaller features.
 
 This is the current state of building the app. We're actively working to make this process much more streamlined!
 
-*You'll need Docker installed to run the app locally.*
+_You'll need Docker installed to run the app locally._
 [Docker Desktop](https://www.docker.com/products/docker-desktop/) is an easy way to get started.
 
 First, copy the `.env.example` file to `.env`:
@@ -53,14 +53,14 @@ To enable transactional emails, you'll need to create a [Postmark](https://postm
 Maybe uses [Teller](https://teller.io/) for connecting financial accounts. To get started with Teller, you'll need to create an account. Once you've created an account:
 
 -   Add your Teller application id to your `.env` file (`NEXT_PUBLIC_TELLER_APP_ID`).
--   Download your authentication certificates from Teller, create a `certs` folder in the root of the project, and place your certs in that directory. You should have both a `certificate.pem` and `private_key.pem`. **NEVER** check these files into source control, the `.gitignore` file will prevent the `certs/` directory from being added, but please double check.
+-   Download your authentication certificates from Teller, create a `certs` folder in the root of the project, and place your certs in that directory. You should have both a `certificate.pem` and `private_key.pem`. **NEVER** check these files into source control, the `.gitignore` file will prevent the `certs/` directory from being added, but please double-check.
 -   Set your `NEXT_PUBLIC_TELLER_ENV` and `NX_TELLER_ENV` to your desired environment. The default is `sandbox` which allows for testing with mock data. The login credentials for the sandbox environment are `username` and `password`. To connect to real financial accounts, you'll need to use the `development` environment.
 -   Webhooks are not implemented yet, but you can populate the `NX_TELLER_SIGNING_SECRET` with the value from your Teller account.
 -   We highly recommend checking out the [Teller docs](https://teller.io/docs) for more info.
 
 Then run the following yarn commands:
 
-```
+```shell
 yarn install
 yarn run dev:services:all
 yarn prisma:migrate:dev
@@ -95,7 +95,7 @@ To contribute, please see our [contribution guide](https://github.com/maybe-fina
 
 ## High-priority issues
 
-The biggest focus at the moment is on getting the app functional without some previously key external services (namely Plaid and Finicity).
+The biggest focus at the moment is on getting the app functional without some previously key external services (namely Plaid).
 
 You can view the current [high-priority issues here](https://github.com/maybe-finance/maybe/issues?q=is:issue+is:open+label:%22high+priority%22). Those are the most impactful issues to tackle first.
 
