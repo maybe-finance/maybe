@@ -1,4 +1,5 @@
 import type { AccountConnection, PrismaClient } from '@prisma/client'
+import { AccountClassification } from '@prisma/client'
 import type { Logger } from 'winston'
 import { AccountUtil, SharedUtil, type SharedType } from '@maybe-finance/shared'
 import type { TellerApi, TellerTypes } from '@maybe-finance/teller-api'
@@ -164,6 +165,12 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
     private async _extractTransactions(accessToken: string, accountIds: string[]) {
         const accountTransactions = await Promise.all(
             accountIds.map(async (accountId) => {
+                const account = await this.prisma.account.findFirst({
+                    where: {
+                        tellerAccountId: accountId,
+                    },
+                })
+
                 const transactions = await SharedUtil.withRetry(
                     () =>
                         this.teller.getTransactions({
@@ -174,6 +181,11 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                         maxRetries: 3,
                     }
                 )
+                if (account!.classification === AccountClassification.liability) {
+                    transactions.forEach((t) => {
+                        t.amount = String(Number(t.amount) * -1)
+                    })
+                }
 
                 return transactions
             })
@@ -214,7 +226,7 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                                 ${transactionId},
                                 ${date}::date,
                                 ${description},
-                                ${DbUtil.toDecimal(Number(amount))},
+                                ${DbUtil.toDecimal(Number(-amount))},
                                 ${status === 'pending'},
                                 ${'USD'},
                                 ${details.counterparty?.name ?? ''},

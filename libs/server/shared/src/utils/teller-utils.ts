@@ -1,10 +1,6 @@
-import {
-    Prisma,
-    AccountCategory,
-    AccountType,
-    type Account,
-    type AccountClassification,
-} from '@prisma/client'
+import { Prisma, AccountCategory, AccountType } from '@prisma/client'
+import type { AccountClassification } from '@prisma/client'
+import type { Account } from '@prisma/client'
 import type { TellerTypes } from '@maybe-finance/teller-api'
 import { Duration } from 'luxon'
 
