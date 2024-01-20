@@ -68,6 +68,7 @@ const envSchema = z.object({
 
     NX_EMAIL_FROM_ADDRESS: z.string().default('account@maybe.co'),
     NX_EMAIL_REPLY_TO_ADDRESS: z.string().default('support@maybe.co'),
+    NX_EMAIL_PROVIDER: z.string().optional(),
     NX_EMAIL_PROVIDER_API_TOKEN: z.string().optional(),
 })
 
