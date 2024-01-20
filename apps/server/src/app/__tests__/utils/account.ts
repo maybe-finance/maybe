@@ -99,21 +99,7 @@ export async function createTestInvestmentAccount(
                             (s) => s.date === it.date && s.ticker === it.ticker
                         )?.price
 
-                        function getTransactionCategory(type: string) {
-                            switch (type) {
-                                case 'BUY':
-                                    return 'buy'
-                                case 'SELL':
-                                    return 'sell'
-                                case 'DIVIDEND':
-                                    return 'dividend'
-                                case 'DEPOSIT':
-                                case 'WITHDRAW':
-                                    return 'transfer'
-                                default:
-                                    return undefined
-                            }
-                        }
+                        const isCashFlow = it.type === 'DEPOSIT' || it.type === 'WITHDRAW'
 
                         return {
                             securityId: securities.find((s) => it.ticker === s.symbol)?.id,
@@ -122,7 +108,26 @@ export async function createTestInvestmentAccount(
                             amount: price ? new Prisma.Decimal(price).times(it.qty) : it.qty,
                             quantity: price ? it.qty : 0,
                             price: price ?? 0,
-                            category: getTransactionCategory(it.type),
+                            plaidType:
+                                isCashFlow || it.type === 'DIVIDEND'
+                                    ? 'cash'
+                                    : it.type === 'BUY'
+                                    ? 'buy'
+                                    : it.type === 'SELL'
+                                    ? 'sell'
+                                    : undefined,
+                            plaidSubtype:
+                                it.type === 'DEPOSIT'
+                                    ? 'deposit'
+                                    : it.type === 'WITHDRAW'
+                                    ? 'withdrawal'
+                                    : it.type === 'DIVIDEND'
+                                    ? 'dividend'
+                                    : it.type === 'BUY'
+                                    ? 'buy'
+                                    : it.type === 'SELL'
+                                    ? 'sell'
+                                    : undefined,
                         }
                     }),
                 },

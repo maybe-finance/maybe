@@ -315,9 +315,6 @@ export class InsightService implements IInsightService {
                         {
                             finicityInvestmentTransactionType: 'dividend',
                         },
-                        {
-                            category: 'dividend',
-                        },
                     ],
                 },
             }),
@@ -750,7 +747,10 @@ export class InsightService implements IInsightService {
             WHERE
               it.account_id = ${accountId}
               AND (
-                it.category = 'transfer'
+                (it.plaid_type = 'cash' AND it.plaid_subtype IN ('contribution', 'deposit', 'withdrawal'))
+                OR (it.plaid_type = 'transfer' AND it.plaid_subtype IN ('transfer', 'send', 'request'))
+                OR (it.plaid_type = 'buy' AND it.plaid_subtype IN ('contribution'))
+                OR (it.finicity_transaction_id IS NOT NULL AND it.finicity_investment_transaction_type IN ('contribution', 'deposit', 'transfer'))
               )
               -- Exclude any contributions made prior to the start date since balances will be 0
               AND (a.start_date is NULL OR it.date >= a.start_date)
