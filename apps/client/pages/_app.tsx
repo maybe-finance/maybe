@@ -44,7 +44,7 @@ const WithAuth = function ({ children }: PropsWithChildren) {
         }
     }, [session, status, router])
 
-    if (session) {
+    if (session && status === 'authenticated') {
         return (
             <OnboardingGuard>
                 <UserAccountContextProvider>
