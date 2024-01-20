@@ -181,7 +181,7 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                         maxRetries: 3,
                     }
                 )
-                if (account!.classification === AccountClassification.liability) {
+                if (account!.classification === AccountClassification.asset) {
                     transactions.forEach((t) => {
                         t.amount = String(Number(t.amount) * -1)
                     })
@@ -226,7 +226,7 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                                 ${transactionId},
                                 ${date}::date,
                                 ${description},
-                                ${DbUtil.toDecimal(Number(-amount))},
+                                ${DbUtil.toDecimal(Number(amount))},
                                 ${status === 'pending'},
                                 ${'USD'},
                                 ${details.counterparty?.name ?? ''},
