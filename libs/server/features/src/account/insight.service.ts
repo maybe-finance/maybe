@@ -315,6 +315,9 @@ export class InsightService implements IInsightService {
                         {
                             finicityInvestmentTransactionType: 'dividend',
                         },
+                        {
+                            category: 'dividend',
+                        },
                     ],
                 },
             }),
