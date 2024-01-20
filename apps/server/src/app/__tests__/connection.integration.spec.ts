@@ -1,11 +1,6 @@
 import type { AxiosInstance } from 'axios'
-import {
-    type Prisma,
-    type AccountConnection,
-    type User,
-    AccountConnectionType,
-    AccountSyncStatus,
-} from '@prisma/client'
+import type { Prisma, AccountConnection, User } from '@prisma/client'
+import { AccountConnectionType, AccountSyncStatus } from '@prisma/client'
 import { startServer, stopServer } from './utils/server'
 import { getAxiosClient } from './utils/axios'
 import prisma from '../lib/prisma'

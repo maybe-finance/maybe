@@ -35,7 +35,7 @@ export async function createTestInvestmentAccount(
         join(__dirname, `../test-data/${portfolio}/holdings.csv`)
     )
 
-    const [, ...securities] = await prisma.$transaction([
+    const [_deleted, ...securities] = await prisma.$transaction([
         prisma.security.deleteMany({
             where: {
                 symbol: {

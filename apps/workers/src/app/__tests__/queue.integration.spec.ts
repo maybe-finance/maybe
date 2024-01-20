@@ -2,7 +2,8 @@
 // Keep these imports above the rest to avoid errors
 // =====================================================
 import { TellerGenerator } from 'tools/generators'
-import { AccountConnectionType, type User, type AccountConnection } from '@prisma/client'
+import type { User, AccountConnection } from '@prisma/client'
+import { AccountConnectionType } from '@prisma/client'
 import prisma from '../lib/prisma'
 import { default as _teller } from '../lib/teller'
 import { resetUser } from './helpers/user.test-helper'
