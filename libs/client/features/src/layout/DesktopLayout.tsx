@@ -193,7 +193,7 @@ export function DesktopLayout({ children, sidebar }: DesktopLayoutProps) {
                     <MenuPopover
                         isHeader={false}
                         icon={<ProfileCircle />}
-                        buttonClassName="w-12 h-12 rounded-full"
+                        placement={'right-end'}
                     />
                 </div>
             </nav>
