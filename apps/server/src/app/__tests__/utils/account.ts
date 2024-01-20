@@ -1,5 +1,5 @@
 import type { PrismaClient, User } from '@prisma/client'
-import { Prisma } from '@prisma/client'
+import { InvestmentTransactionCategory, Prisma } from '@prisma/client'
 import _ from 'lodash'
 import { DateTime } from 'luxon'
 import { parseCsv } from './csv'
@@ -20,6 +20,14 @@ const portfolios: Record<string, Partial<Prisma.AccountUncheckedCreateInput>> = 
     },
 }
 
+const investmentTransactionCategoryByType: Record<string, InvestmentTransactionCategory> = {
+    BUY: InvestmentTransactionCategory.buy,
+    SELL: InvestmentTransactionCategory.sell,
+    DIVIDEND: InvestmentTransactionCategory.dividend,
+    DEPOSIT: InvestmentTransactionCategory.transfer,
+    WITHDRAW: InvestmentTransactionCategory.transfer,
+}
+
 export async function createTestInvestmentAccount(
     prisma: PrismaClient,
     user: User,
@@ -35,7 +43,7 @@ export async function createTestInvestmentAccount(
         join(__dirname, `../test-data/${portfolio}/holdings.csv`)
     )
 
-    const [_deleted, ...securities] = await prisma.$transaction([
+    const [, ...securities] = await prisma.$transaction([
         prisma.security.deleteMany({
             where: {
                 symbol: {
@@ -72,7 +80,7 @@ export async function createTestInvestmentAccount(
             .value(),
     ])
 
-    const account = await prisma.account.create({
+    return prisma.account.create({
         data: {
             ...portfolios[portfolio],
             userId: user.id,
@@ -128,12 +136,13 @@ export async function createTestInvestmentAccount(
                                     : it.type === 'SELL'
                                     ? 'sell'
                                     : undefined,
+                            category:
+                                investmentTransactionCategoryByType[it.type] ??
+                                InvestmentTransactionCategory.other,
                         }
                     }),
                 },
             },
         },
     })
-
-    return account
 }

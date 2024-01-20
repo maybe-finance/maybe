@@ -312,6 +312,7 @@ export class InsightService implements IInsightService {
                         {
                             plaidSubtype: 'dividend',
                         },
+                        { category: 'dividend' },
                     ],
                 },
             }),
@@ -737,11 +738,7 @@ export class InsightService implements IInsightService {
               LEFT JOIN account a ON a.id = it.account_id
             WHERE
               it.account_id = ${accountId}
-              AND (
-                (it.plaid_type = 'cash' AND it.plaid_subtype IN ('contribution', 'deposit', 'withdrawal'))
-                OR (it.plaid_type = 'transfer' AND it.plaid_subtype IN ('transfer', 'send', 'request'))
-                OR (it.plaid_type = 'buy' AND it.plaid_subtype IN ('contribution'))
-              )
+              AND it.category = 'transfer'
               -- Exclude any contributions made prior to the start date since balances will be 0
               AND (a.start_date is NULL OR it.date >= a.start_date)
             GROUP BY 1
