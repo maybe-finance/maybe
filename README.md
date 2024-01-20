@@ -48,7 +48,7 @@ cp .env.example .env
 
 Then, create a new secret using `openssl rand -base64 32` and populate `NEXTAUTH_SECRET` in your `.env` file with it.
 
-To enable transactional emails, you'll need to create a [Postmark](https://postmarkapp.com/) account and add your API key to your `.env` file (`NX_EMAIL_PROVIDER_API_TOKEN`) and set `NX_EMAIL_PROVIDER` to `postmark`. You can also set the from and reply-to email addresses (`NX_EMAIL_FROM_ADDRESS` and `NX_EMAIL_REPLY_TO_ADDRESS`). If you want to run the app without email, you can set `NX_EMAIL_PROVIDER_API_TOKEN` to a dummy value.
+To enable transactional emails, you'll need to create a [Postmark](https://postmarkapp.com/) account and add your API key to your `.env` file (`NX_EMAIL_PROVIDER_API_TOKEN`) and set `NX_EMAIL_PROVIDER` to `postmark`. You can also set the from and reply-to email addresses (`NX_EMAIL_FROM_ADDRESS` and `NX_EMAIL_REPLY_TO_ADDRESS`). If you want to run the app without email, you can set `NX_EMAIL_PROVIDER_API_TOKEN` to a dummy value or leave `NX_EMAIL_PROVIDER` blank.
 
 Maybe uses [Teller](https://teller.io/) for connecting financial accounts. To get started with Teller, you'll need to create an account. Once you've created an account:
 
