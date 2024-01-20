@@ -1,6 +1,5 @@
 export * from './useAxiosWithAuth'
 export * from './useDebounce'
-export * from './useFinicity'
 export * from './useInterval'
 export * from './useLastUpdated'
 export * from './useLocalStorage'

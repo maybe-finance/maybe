@@ -12,13 +12,7 @@ export type { Transaction }
 
 export type TransactionEnriched = Omit<
     Transaction,
-    | 'plaidTransactionId'
-    | 'plaidCategory'
-    | 'plaidCategoryId'
-    | 'plaidPersonalFinanceCategory'
-    | 'finicityTransactionId'
-    | 'finicityType'
-    | 'finicityCategorization'
+    'plaidTransactionId' | 'plaidCategory' | 'plaidCategoryId' | 'plaidPersonalFinanceCategory'
 > & {
     type: TransactionType
     userId: User['id']

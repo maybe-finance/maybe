@@ -15,7 +15,6 @@ export async function resetUser(prisma: PrismaClient, authId = '__TEST_USER_ID__
                 data: {
                     authId,
                     email: faker.internet.email(),
-                    finicityCustomerId: faker.string.uuid(),
                     tellerUserId: faker.string.uuid(),
                 },
             }),

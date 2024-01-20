@@ -105,7 +105,7 @@ export function OtherAccounts({ title, onNext }: StepProps) {
         <div className="min-h-[700px] overflow-x-hidden">
             <div className="flex max-w-5xl mx-auto gap-32 justify-center sm:justify-start">
                 <div className="grow max-w-md sm:mt-12 text-center sm:text-start">
-                    <h3>{title}</h3>
+                    <h3 className="text-pretty">{title}</h3>
                     <p className="mt-2 text-base text-gray-50">
                         You can select bank accounts if there are any other accounts you&rsquo;d
                         like to add. Feel free to select more than one. We&rsquo;ll add these to
