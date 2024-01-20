@@ -1,5 +1,5 @@
 import type { User } from '@prisma/client'
-import { PrismaClient, InvestmentTransactionCategory } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import { createLogger, transports } from 'winston'
 import { DateTime } from 'luxon'
 import {
@@ -130,7 +130,7 @@ describe('balance sync strategies', () => {
                                     amount: 100,
                                     quantity: 10,
                                     price: 10,
-                                    category: InvestmentTransactionCategory.buy,
+                                    plaidType: 'buy',
                                 },
                                 {
                                     date: DateTime.fromISO('2023-02-04').toJSDate(),
@@ -139,7 +139,7 @@ describe('balance sync strategies', () => {
                                     amount: -50,
                                     quantity: 5,
                                     price: 10,
-                                    category: InvestmentTransactionCategory.sell,
+                                    plaidType: 'sell',
                                 },
                                 {
                                     date: DateTime.fromISO('2023-02-04').toJSDate(),
@@ -147,7 +147,6 @@ describe('balance sync strategies', () => {
                                     amount: 50,
                                     quantity: 50,
                                     price: 1,
-                                    category: InvestmentTransactionCategory.other,
                                 },
                             ],
                         },

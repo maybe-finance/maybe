@@ -1,5 +1,5 @@
 import type { User } from '@prisma/client'
-import { Prisma, PrismaClient, InvestmentTransactionCategory } from '@prisma/client'
+import { Prisma, PrismaClient } from '@prisma/client'
 import { createLogger, transports } from 'winston'
 import { DateTime } from 'luxon'
 import type {
@@ -305,7 +305,8 @@ describe('insight service', () => {
                         amount: 50 * 100,
                         quantity: 50,
                         price: 100,
-                        category: InvestmentTransactionCategory.buy,
+                        plaidType: 'buy',
+                        plaidSubtype: 'buy',
                     },
                     {
                         accountId: account.id,
@@ -315,7 +316,8 @@ describe('insight service', () => {
                         amount: 10 * 200,
                         quantity: 10,
                         price: 200,
-                        category: InvestmentTransactionCategory.buy,
+                        plaidType: 'buy',
+                        plaidSubtype: 'buy',
                     },
                     {
                         accountId: account.id,
@@ -325,7 +327,8 @@ describe('insight service', () => {
                         amount: -20.22,
                         quantity: 0,
                         price: 0,
-                        category: InvestmentTransactionCategory.dividend,
+                        plaidType: 'cash',
+                        plaidSubtype: 'dividend',
                     },
                     {
                         accountId: account.id,
@@ -335,7 +338,8 @@ describe('insight service', () => {
                         amount: -22.85,
                         quantity: 0,
                         price: 0,
-                        category: InvestmentTransactionCategory.dividend,
+                        plaidType: 'cash',
+                        plaidSubtype: 'dividend',
                     },
                 ],
             })

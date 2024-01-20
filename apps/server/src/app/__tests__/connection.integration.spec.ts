@@ -15,9 +15,6 @@ import { resetUser } from './utils/user'
 
 jest.mock('../lib/teller.ts')
 
-// For TypeScript support
-//const teller = jest.mocked(_teller)
-
 const authId = '__TEST_USER_ID__'
 let axios: AxiosInstance
 let user: User | null
