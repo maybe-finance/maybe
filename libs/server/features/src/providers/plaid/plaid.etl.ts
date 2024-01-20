@@ -13,6 +13,7 @@ import type {
     Item as PlaidItem,
     LiabilitiesObject as PlaidLiabilities,
     PlaidApi,
+    PersonalFinanceCategory,
 } from 'plaid'
 import { Prisma } from '@prisma/client'
 import { DateTime } from 'luxon'
@@ -366,7 +367,7 @@ export class PlaidETL implements IETL<Connection, PlaidRawData, PlaidData> {
 
         const txnUpsertQueries = chunk(transactions, 1_000).map((chunk) => {
             return this.prisma.$executeRaw`
-                INSERT INTO transaction (account_id, plaid_transaction_id, date, name, amount, pending, currency_code, merchant_name, plaid_category, plaid_category_id, plaid_personal_finance_category)
+                INSERT INTO transaction (account_id, plaid_transaction_id, date, name, amount, pending, currency_code, merchant_name, plaid_category, plaid_category_id, plaid_personal_finance_category, category)
                 VALUES
                     ${Prisma.join(
                         chunk.map((plaidTransaction) => {
@@ -401,7 +402,8 @@ export class PlaidETL implements IETL<Connection, PlaidRawData, PlaidData> {
                                 ${merchant_name},
                                 ${category ?? []},
                                 ${category_id},
-                                ${personal_finance_category}
+                                ${personal_finance_category},
+                                ${this.getMaybeTransactionCategory(personal_finance_category)}
                             )`
                         })
                     )}
@@ -414,6 +416,7 @@ export class PlaidETL implements IETL<Connection, PlaidRawData, PlaidData> {
                     plaid_category = EXCLUDED.plaid_category,
                     plaid_category_id = EXCLUDED.plaid_category_id,
                     plaid_personal_finance_category = EXCLUDED.plaid_personal_finance_category;
+                    category = EXCLUDED.category;
             `
         })
 
@@ -442,6 +445,68 @@ export class PlaidETL implements IETL<Connection, PlaidRawData, PlaidData> {
                 },
             }),
         ]
+    }
+
+    private getMaybeTransactionCategory = (category?: PersonalFinanceCategory | null) => {
+        if (!category) {
+            return 'Other'
+        }
+
+        if (category.primary === 'INCOME') {
+            return 'Income'
+        }
+
+        if (
+            ['LOAN_PAYMENTS_MORTGAGE_PAYMENT', 'RENT_AND_UTILITIES_RENT'].includes(
+                category.detailed
+            )
+        ) {
+            return 'Housing Payments'
+        }
+
+        if (category.detailed === 'LOAN_PAYMENTS_CAR_PAYMENT') {
+            return 'Vehicle Payments'
+        }
+
+        if (category.primary === 'LOAN_PAYMENTS') {
+            return 'Other Payments'
+        }
+
+        if (category.primary === 'HOME_IMPROVEMENT') {
+            return 'Home Improvement'
+        }
+
+        if (category.primary === 'GENERAL_MERCHANDISE') {
+            return 'Shopping'
+        }
+
+        if (
+            category.primary === 'RENT_AND_UTILITIES' &&
+            category.detailed !== 'RENT_AND_UTILITIES_RENT'
+        ) {
+            return 'Utilities'
+        }
+
+        if (category.primary === 'FOOD_AND_DRINK') {
+            return 'Food and Drink'
+        }
+
+        if (category.primary === 'TRANSPORTATION') {
+            return 'Transportation'
+        }
+
+        if (category.primary === 'TRAVEL') {
+            return 'Travel'
+        }
+
+        if (
+            ['PERSONAL_CARE', 'MEDICAL'].includes(category.primary) &&
+            category.detailed !== 'MEDICAL_VETERINARY_SERVICES'
+        ) {
+            return 'Health'
+        }
+
+        return 'Other'
     }
 
     private _extractInvestmentTransactions(accessToken: string, dateRange: SharedType.DateRange) {
