@@ -1,9 +1,8 @@
 // =====================================================
 // Keep these imports above the rest to avoid errors
 // =====================================================
-import type { SharedType } from '@maybe-finance/shared'
 import { TellerGenerator } from 'tools/generators'
-import type { AccountConnection, User } from '@prisma/client'
+import { AccountConnectionType, type User, type AccountConnection } from '@prisma/client'
 import prisma from '../lib/prisma'
 import { default as _teller } from '../lib/teller'
 import { resetUser } from './helpers/user.test-helper'
@@ -33,7 +32,7 @@ beforeEach(async () => {
     connection = await prisma.accountConnection.create({
         data: {
             name: 'Chase Test',
-            type: 'teller' as SharedType.AccountConnectionType,
+            type: AccountConnectionType.teller,
             tellerEnrollmentId: 'test-teller-item-workers',
             tellerInstitutionId: 'chase_test',
             tellerAccessToken:
