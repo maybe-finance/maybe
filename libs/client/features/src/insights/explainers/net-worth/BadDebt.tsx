@@ -1,12 +1,7 @@
 import { IndexTabs } from '@maybe-finance/design-system'
 import type { ReactNode } from 'react'
 import { useRef } from 'react'
-import { RiArticleLine, RiMicLine } from 'react-icons/ri'
-import {
-    ExplainerExternalLink,
-    ExplainerInfoBlock,
-    ExplainerSection,
-} from '@maybe-finance/client/shared'
+import { ExplainerInfoBlock, ExplainerSection } from '@maybe-finance/client/shared'
 
 const Em = ({ children }: { children: ReactNode }) => (
     <em className="not-italic text-gray-25">{children}</em>
@@ -17,7 +12,6 @@ export function BadDebt(): JSX.Element {
 
     const definition = useRef<HTMLDivElement>(null)
     const howAreWeGettingThisValue = useRef<HTMLDivElement>(null)
-    const resources = useRef<HTMLDivElement>(null)
 
     return (
         <div className="flex flex-col w-full h-full">
@@ -30,10 +24,6 @@ export function BadDebt(): JSX.Element {
                         {
                             name: 'How are we getting this value?',
                             elementRef: howAreWeGettingThisValue,
-                        },
-                        {
-                            name: 'Resources',
-                            elementRef: resources,
                         },
                     ]}
                 />
@@ -58,27 +48,6 @@ export function BadDebt(): JSX.Element {
                             All liabilities - [Liability type = investment or property]
                         </span>
                     </ExplainerInfoBlock>
-                </ExplainerSection>
-
-                <ExplainerSection title="Resources" ref={resources}>
-                    <ExplainerExternalLink
-                        icon={RiMicLine}
-                        href="https://maybe.co/podcast/6-should-you-invest-more-or-pay-off-debt"
-                    >
-                        Podcast episode on investing vs. paying debt
-                    </ExplainerExternalLink>
-                    <ExplainerExternalLink
-                        icon={RiArticleLine}
-                        href="https://maybe.co/articles/ask-the-advisor-invest-more-or-pay-off-debt"
-                    >
-                        Article from the Maybe blog on investing vs. paying debt
-                    </ExplainerExternalLink>
-                    <ExplainerExternalLink
-                        icon={RiArticleLine}
-                        href="https://maybe.co/articles/asset-allocation-and-how-to-use-it-to-reach-your-financial-goals"
-                    >
-                        Article from the Maybe blog on asset allocation
-                    </ExplainerExternalLink>
                 </ExplainerSection>
             </div>
         </div>

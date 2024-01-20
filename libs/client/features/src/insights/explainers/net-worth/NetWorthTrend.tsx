@@ -3,9 +3,8 @@ import classNames from 'classnames'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { useRef } from 'react'
-import { RiArrowRightDownLine, RiArrowRightUpLine, RiArticleLine } from 'react-icons/ri'
+import { RiArrowRightDownLine, RiArrowRightUpLine } from 'react-icons/ri'
 import {
-    ExplainerExternalLink,
     ExplainerInfoBlock,
     ExplainerSection,
     ExplainerPerformanceBlock,
@@ -22,7 +21,6 @@ export function NetWorthTrend(): JSX.Element {
     const howAreWeGettingThisValue = useRef<HTMLDivElement>(null)
     const whyYouShouldCare = useRef<HTMLDivElement>(null)
     const incorrectData = useRef<HTMLDivElement>(null)
-    const learnMore = useRef<HTMLDivElement>(null)
 
     return (
         <div className="flex flex-col w-full h-full">
@@ -44,10 +42,10 @@ export function NetWorthTrend(): JSX.Element {
                             name: 'Incorrect data?',
                             elementRef: incorrectData,
                         },
-                        {
-                            name: 'Learn more',
-                            elementRef: learnMore,
-                        },
+                        // {
+                        //     name: 'Learn more',
+                        //     elementRef: learnMore,
+                        // },
                     ]}
                 />
             </div>
@@ -152,15 +150,6 @@ export function NetWorthTrend(): JSX.Element {
                             incorrect value, make sure to add all your accounts
                         </li>
                     </ul>
-                </ExplainerSection>
-
-                <ExplainerSection title="Learn more" ref={learnMore}>
-                    <ExplainerExternalLink
-                        icon={RiArticleLine}
-                        href="https://maybe.co/articles/the-complete-guide-to-managing-and-optimizing-your-expenses"
-                    >
-                        Article from the Maybe blog on expenses
-                    </ExplainerExternalLink>
                 </ExplainerSection>
             </div>
         </div>

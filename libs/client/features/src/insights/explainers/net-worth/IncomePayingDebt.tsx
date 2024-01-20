@@ -3,11 +3,9 @@ import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { useState } from 'react'
 import { useRef } from 'react'
-import { RiArticleLine, RiMicLine } from 'react-icons/ri'
 import type { InsightState } from '../../'
 import { InsightStateNames, InsightStateColors } from '../../'
 import {
-    ExplainerExternalLink,
     ExplainerInfoBlock,
     ExplainerSection,
     ExplainerPerformanceBlock,
@@ -24,7 +22,6 @@ export function IncomePayingDebt({ defaultState }: { defaultState: InsightState 
     const howAreWeGettingThisValue = useRef<HTMLDivElement>(null)
     const whyYouShouldCare = useRef<HTMLDivElement>(null)
     const incorrectData = useRef<HTMLDivElement>(null)
-    const learnMore = useRef<HTMLDivElement>(null)
 
     const [performance, setPerformance] = useState<InsightState>(defaultState)
 
@@ -47,10 +44,6 @@ export function IncomePayingDebt({ defaultState }: { defaultState: InsightState 
                         {
                             name: 'Incorrect data?',
                             elementRef: incorrectData,
-                        },
-                        {
-                            name: 'Learn more',
-                            elementRef: learnMore,
                         },
                     ]}
                 />
@@ -166,21 +159,6 @@ export function IncomePayingDebt({ defaultState }: { defaultState: InsightState 
                             incorrect value, make sure to add all your accounts
                         </li>
                     </ul>
-                </ExplainerSection>
-
-                <ExplainerSection title="Learn more" ref={learnMore}>
-                    <ExplainerExternalLink
-                        icon={RiMicLine}
-                        href="https://maybe.co/podcast/6-should-you-invest-more-or-pay-off-debt"
-                    >
-                        Podcast episode on investing vs. paying debt
-                    </ExplainerExternalLink>
-                    <ExplainerExternalLink
-                        icon={RiArticleLine}
-                        href="https://maybe.co/articles/ask-the-advisor-invest-more-or-pay-off-debt"
-                    >
-                        Article from the Maybe blog on investing vs. paying debt
-                    </ExplainerExternalLink>
                 </ExplainerSection>
             </div>
         </div>

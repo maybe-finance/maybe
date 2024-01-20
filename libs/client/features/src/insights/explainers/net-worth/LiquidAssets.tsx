@@ -1,12 +1,7 @@
 import { IndexTabs } from '@maybe-finance/design-system'
 import type { ReactNode } from 'react'
 import { useRef } from 'react'
-import { RiArticleLine } from 'react-icons/ri'
-import {
-    ExplainerExternalLink,
-    ExplainerInfoBlock,
-    ExplainerSection,
-} from '@maybe-finance/client/shared'
+import { ExplainerInfoBlock, ExplainerSection } from '@maybe-finance/client/shared'
 
 const Em = ({ children }: { children: ReactNode }) => (
     <em className="not-italic text-gray-25">{children}</em>
@@ -17,7 +12,6 @@ export function LiquidAssets(): JSX.Element {
 
     const definition = useRef<HTMLDivElement>(null)
     const howAreWeGettingThisValue = useRef<HTMLDivElement>(null)
-    const resources = useRef<HTMLDivElement>(null)
 
     return (
         <div className="flex flex-col w-full h-full">
@@ -30,10 +24,6 @@ export function LiquidAssets(): JSX.Element {
                         {
                             name: 'How are we getting this value?',
                             elementRef: howAreWeGettingThisValue,
-                        },
-                        {
-                            name: 'Resources',
-                            elementRef: resources,
                         },
                     ]}
                 />
@@ -56,15 +46,6 @@ export function LiquidAssets(): JSX.Element {
                     <ExplainerInfoBlock title="Formula">
                         <span className="font-mono italic">Asset type = cash</span>
                     </ExplainerInfoBlock>
-                </ExplainerSection>
-
-                <ExplainerSection title="Resources" ref={resources}>
-                    <ExplainerExternalLink
-                        icon={RiArticleLine}
-                        href="https://maybe.co/articles/asset-allocation-and-how-to-use-it-to-reach-your-financial-goals"
-                    >
-                        Article from the Maybe blog on asset allocation
-                    </ExplainerExternalLink>
                 </ExplainerSection>
             </div>
         </div>

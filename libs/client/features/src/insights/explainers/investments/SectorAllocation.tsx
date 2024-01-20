@@ -1,18 +1,12 @@
 import { IndexTabs } from '@maybe-finance/design-system'
 import { useRef } from 'react'
-import { RiArticleLine, RiMicLine } from 'react-icons/ri'
-import {
-    ExplainerExternalLink,
-    ExplainerInfoBlock,
-    ExplainerSection,
-} from '@maybe-finance/client/shared'
+import { ExplainerInfoBlock, ExplainerSection } from '@maybe-finance/client/shared'
 
 export function SectorAllocation(): JSX.Element {
     const scrollContainer = useRef<HTMLDivElement>(null)
 
     const definition = useRef<HTMLDivElement>(null)
     const howAreWeGettingThisValue = useRef<HTMLDivElement>(null)
-    const learnMore = useRef<HTMLDivElement>(null)
 
     return (
         <div className="flex flex-col w-full h-full">
@@ -25,10 +19,6 @@ export function SectorAllocation(): JSX.Element {
                         {
                             name: 'How are we getting this value?',
                             elementRef: howAreWeGettingThisValue,
-                        },
-                        {
-                            name: 'Learn more',
-                            elementRef: learnMore,
                         },
                     ]}
                 />
@@ -56,22 +46,6 @@ export function SectorAllocation(): JSX.Element {
                             portfolio value
                         </span>
                     </ExplainerInfoBlock>
-                </ExplainerSection>
-
-                <ExplainerSection title="Learn more" ref={learnMore}>
-                    <ExplainerExternalLink
-                        icon={RiArticleLine}
-                        href="https://maybe.co/articles/equities-as-an-asset-class"
-                    >
-                        Article from the Maybe blog on making equity investing part of your
-                        portfolio
-                    </ExplainerExternalLink>
-                    <ExplainerExternalLink
-                        icon={RiMicLine}
-                        href="https://maybe.co/podcast/11-how-can-i-match-my-investment-retirement-portfolio-with-my-risk-tolerance"
-                    >
-                        Podcast episode on matching your portfolio with your risk tolerance
-                    </ExplainerExternalLink>
                 </ExplainerSection>
             </div>
         </div>
