@@ -158,53 +158,53 @@ export class AccountQueryService implements IAccountQueryService {
 
         const { rows } = await this.pg.pool.query<ValuationTrend>(
             sql`
-            WITH valuation_trends AS (
+              WITH valuation_trends AS (
+                SELECT
+                  date,
+                  COALESCE(interpolated::numeric, filled) AS amount
+                FROM (
+                  SELECT
+                    time_bucket_gapfill('1d', v.date) AS date,
+                    interpolate(avg(v.amount)) AS interpolated,
+                    locf(avg(v.amount)) AS filled
+                  FROM
+                    valuation v
+                  WHERE
+                    v.account_id = ${accountId}
+                    AND v.date BETWEEN ${pStart} AND ${pEnd}
+                  GROUP BY
+                    1
+                ) valuations_gapfilled
+                WHERE
+                  to_char(date, 'MM-DD') = '01-01'
+              ), valuations_combined AS (
+                SELECT
+                  COALESCE(v.date, vt.date) AS date,
+                  COALESCE(v.amount, vt.amount) AS amount,
+                  v.id AS valuation_id
+                FROM
+                  (SELECT * FROM valuation WHERE account_id = ${accountId}) v
+                  FULL OUTER JOIN valuation_trends vt ON vt.date = v.date
+              )
               SELECT
-                date,
-                COALESCE(interpolated::numeric, filled) AS amount
+                v.date,
+                v.amount,
+                v.valuation_id,
+                v.amount - v.prev_amount AS period_change,
+                ROUND((v.amount - v.prev_amount)::numeric / NULLIF(v.prev_amount, 0), 4) AS period_change_pct,
+                v.amount - v.first_amount AS total_change,
+                ROUND((v.amount - v.first_amount)::numeric / NULLIF(v.first_amount, 0), 4) AS total_change_pct
               FROM (
                 SELECT
-                  time_bucket_gapfill('1d', v.date) AS date,
-                  interpolate(avg(v.amount)) AS interpolated,
-                  locf(avg(v.amount)) AS filled
+                  *,
+                  LAG(amount, 1) OVER (ORDER BY date ASC) AS prev_amount,
+                  (SELECT amount FROM valuations_combined ORDER BY date ASC LIMIT 1) AS first_amount
                 FROM
-                  valuation v
-                WHERE
-                  v.account_id = ${accountId}
-                  AND v.date BETWEEN ${pStart} AND ${pEnd}
-                GROUP BY
-                  1
-              ) valuations_gapfilled
-              WHERE
-                to_char(date, 'MM-DD') = '01-01'
-            ), valuations_combined AS (
-              SELECT
-                COALESCE(v.date, vt.date) AS date,
-                COALESCE(v.amount, vt.amount) AS amount,
-                v.id AS valuation_id
-              FROM
-                (SELECT * FROM valuation WHERE account_id = ${accountId}) v
-                FULL OUTER JOIN valuation_trends vt ON vt.date = v.date
-            )
-            SELECT
-              v.date,
-              v.amount,
-              v.valuation_id,
-              v.amount - v.prev_amount AS period_change,
-              ROUND((v.amount - v.prev_amount)::numeric / NULLIF(v.prev_amount, 0), 4) AS period_change_pct,
-              v.amount - v.first_amount AS total_change,
-              ROUND((v.amount - v.first_amount)::numeric / NULLIF(v.first_amount, 0), 4) AS total_change_pct
-            FROM (
-              SELECT
-                *,
-                LAG(amount, 1) OVER (ORDER BY date ASC) AS prev_amount,
-                (SELECT amount FROM valuations_combined ORDER BY date ASC LIMIT 1) AS first_amount
-              FROM
-                valuations_combined
-            ) v
-            ORDER BY
-              v.date ASC
-          `
+                  valuations_combined
+              ) v
+              ORDER BY
+                v.date ASC
+            `
         )
 
         return rows
