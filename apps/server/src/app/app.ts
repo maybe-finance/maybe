@@ -109,6 +109,7 @@ app.use(
 app.use('/v1/stripe', express.raw({ type: 'application/json' }))
 
 app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
 
 // =========================================
 //                 API ⬇️
