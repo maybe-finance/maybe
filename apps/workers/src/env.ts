@@ -10,11 +10,6 @@ const envSchema = z.object({
     NX_PLAID_CLIENT_ID: z.string().default('REPLACE_THIS'),
     NX_PLAID_SECRET: z.string(),
 
-    NX_FINICITY_APP_KEY: z.string(),
-    NX_FINICITY_PARTNER_ID: z.string().default('REPLACE_THIS'),
-    NX_FINICITY_PARTNER_SECRET: z.string(),
-    NX_FINICITY_ENV: z.string().default('sandbox'),
-
     NX_TELLER_SIGNING_SECRET: z.string().default('REPLACE_THIS'),
     NX_TELLER_APP_ID: z.string().default('REPLACE_THIS'),
     NX_TELLER_ENV: z.string().default('sandbox'),

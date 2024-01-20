@@ -71,7 +71,6 @@ export class InvestmentTransactionBalanceSyncStrategy extends BalanceSyncStrateg
                   AND it.date BETWEEN ${pStart} AND now()
                   AND ( -- filter for transactions that modify a position
                     it.plaid_type IN ('buy', 'sell', 'transfer')
-                    OR it.finicity_transaction_id IS NOT NULL
                   )
                 GROUP BY
                   1, 2

@@ -20,8 +20,6 @@ import {
     AccountQueryService,
     AccountService,
     BalanceSyncStrategyFactory,
-    FinicityETL,
-    FinicityService,
     InstitutionProviderFactory,
     InstitutionService,
     InvestmentTransactionBalanceSyncStrategy,
@@ -56,7 +54,6 @@ import Redis from 'ioredis'
 import logger from './logger'
 import prisma from './prisma'
 import plaid from './plaid'
-import finicity from './finicity'
 import teller from './teller'
 import postmark from './postmark'
 import stripe from './stripe'
@@ -118,15 +115,6 @@ const plaidService = new PlaidService(
     ''
 )
 
-const finicityService = new FinicityService(
-    logger.child({ service: 'FinicityService' }),
-    prisma,
-    finicity,
-    new FinicityETL(logger.child({ service: 'FinicityETL' }), prisma, finicity),
-    '',
-    env.NX_FINICITY_ENV === 'sandbox'
-)
-
 const tellerService = new TellerService(
     logger.child({ service: 'TellerService' }),
     prisma,
@@ -141,7 +129,6 @@ const tellerService = new TellerService(
 
 const accountConnectionProviderFactory = new AccountConnectionProviderFactory({
     plaid: plaidService,
-    finicity: finicityService,
     teller: tellerService,
 })
 
@@ -258,7 +245,6 @@ export const securityPricingProcessor: ISecurityPricingProcessor = new SecurityP
 
 const institutionProviderFactory = new InstitutionProviderFactory({
     PLAID: plaidService,
-    FINICITY: finicityService,
     TELLER: tellerService,
 })
 

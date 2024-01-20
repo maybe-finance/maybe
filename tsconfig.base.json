@@ -19,7 +19,6 @@
             "@maybe-finance/client/features": ["libs/client/features/src/index.ts"],
             "@maybe-finance/client/shared": ["libs/client/shared/src/index.ts"],
             "@maybe-finance/design-system": ["libs/design-system/src/index.ts"],
-            "@maybe-finance/finicity-api": ["libs/finicity-api/src/index.ts"],
             "@maybe-finance/server/features": ["libs/server/features/src/index.ts"],
             "@maybe-finance/server/shared": ["libs/server/shared/src/index.ts"],
             "@maybe-finance/shared": ["libs/shared/src/index.ts"],
