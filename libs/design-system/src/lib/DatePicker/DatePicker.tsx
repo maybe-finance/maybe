@@ -33,25 +33,29 @@ function toFormattedStr(date: string | null, dateFormat: string): string {
     return DateTime.fromISO(date).toFormat(dateFormat)
 }
 
-// function to get mask from the given format
-function getMaskArray(dateFormat: String): string[] {
-    return dateFormat
-        .split('/')
-        .map((keyword) => keyword.trim())
-        .join('')
-        .split('')
-        .map((keyword) => keyword.toUpperCase())
+function getMaskArray(dateFormat: string): string[] {
+    if (dateFormat === null) {
+        return []
+    }
+
+    const matchResult = dateFormat.match(/[a-z]/gi)
+
+    if (matchResult === null) {
+        return []
+    }
+
+    return matchResult.map((char: string) => char.toUpperCase())
 }
 
 function getDateFormatPattern(dateFormat: string): string {
     const dateComponents = dateFormat.split('/')
     const pattern = dateComponents
         .map((component) => {
-            if (component.includes('d')) {
+            if (component.toLowerCase().includes('d')) {
                 return ' ## ' // Placeholder for day
-            } else if (component.includes('m') || component.includes('M')) {
+            } else if (component.toLowerCase().includes('m')) {
                 return ' ## ' // Placeholder for month
-            } else if (component.includes('y')) {
+            } else if (component.toLowerCase().includes('y')) {
                 return ' #### ' // Placeholder for year
             }
             return component // Keep non-date components unchanged
