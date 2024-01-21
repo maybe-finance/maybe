@@ -36,6 +36,54 @@ async function main() {
     ]
 
     const hashedPassword = await bcrypt.hash('TestPassword123', 10)
+    const onboarding = {
+        main: {
+            steps: [
+                {
+                    key: 'intro',
+                    markedComplete: true,
+                },
+                {
+                    key: 'profile',
+                    markedComplete: true,
+                },
+                {
+                    key: 'firstAccount',
+                    markedComplete: true,
+                },
+                {
+                    key: 'accountSelection',
+                    markedComplete: true,
+                },
+                {
+                    key: 'maybe',
+                    markedComplete: true,
+                },
+                {
+                    key: 'welcome',
+                    markedComplete: true,
+                },
+            ],
+            markedComplete: false,
+        },
+        sidebar: {
+            steps: [
+                {
+                    key: 'connect-depository',
+                    markedComplete: true,
+                },
+                {
+                    key: 'add-vehicle',
+                    markedComplete: true,
+                },
+                {
+                    key: 'add-other',
+                    markedComplete: false,
+                },
+            ],
+            markedComplete: true,
+        },
+    }
 
     await prisma.$transaction([
         // create testing auth user
@@ -74,9 +122,7 @@ async function main() {
                 firstName: 'Karan',
                 lastName: 'Handa',
                 authId: 'test_f5ec79b4-8c49-4015-bc37-f2758923ef38',
-                onboarding: JSON.parse(
-                    '{"main":{"steps":[{"key":"intro","markedComplete":true},{"key":"profile","markedComplete":true},{"key":"firstAccount","markedComplete":true},{"key":"accountSelection","markedComplete":true},{"key":"maybe","markedComplete":true},{"key":"welcome","markedComplete":true}],"markedComplete":false},"sidebar":{"steps":[{"key":"connect-depository","markedComplete":true},{"key":"add-vehicle","markedComplete":true},{"key":"add-other","markedComplete":false}],"markedComplete":true}}'
-                ),
+                onboarding: JSON.stringify(onboarding),
                 household: 'single',
                 country: 'US',
                 maybe: 'Test',
