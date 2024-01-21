@@ -68,7 +68,7 @@ yarn prisma:seed
 yarn dev
 ```
 
-You can use the following demo account to login if you wish to avoid the onboarding screen.
+To avoid onboarding, you can use the following test account to login.
 Email - `test@maybe.com`
 Password - `TestPassword123`
 
