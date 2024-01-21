@@ -1,8 +1,6 @@
 # ------------------------------------------
 #                BUILD STAGE              
 # ------------------------------------------ 
-# Full Node image must be used for node_modules install 
-# TODO - Upgrade to v18.x (LTS) when this issue is resolved - https://github.com/prisma/prisma/issues/10649#issuecomment-1249209025
 FROM node:18-alpine3.18 as builder
 
 WORKDIR /app
