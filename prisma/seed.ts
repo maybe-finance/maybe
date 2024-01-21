@@ -65,6 +65,18 @@ async function main() {
             },
             update: {},
         }),
+        prisma.user.upsert({
+            where: {
+                authId: 'test_f5ec79b4-8c49-4015-bc37-f2758923ef38',
+            },
+            create: {
+                email: 'test@maybe.com',
+                firstName: 'Karan',
+                lastName: 'Handa',
+                authId: 'test_f5ec79b4-8c49-4015-bc37-f2758923ef38',
+            },
+            update: {},
+        }),
         // create institution linked to provider institutions
         ...institutions.map(({ id, name, providers }) =>
             prisma.institution.upsert({
