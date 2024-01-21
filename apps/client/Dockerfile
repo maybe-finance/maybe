@@ -4,8 +4,9 @@
 FROM node:18-alpine3.18 as builder
 
 WORKDIR /app
-COPY ./dist/apps/client ./yarn.lock ./prisma ./package.json ./apps/client/env.sh ./
-RUN chmod +x ./env.sh
+COPY ./dist/apps/client ./yarn.lock ./prisma ./package.json ./
+COPY ./apps/client/env.sh /env.sh
+RUN chmod +x /env.sh
 # Install dependencies
 RUN yarn install --production=false
 
@@ -20,4 +21,4 @@ WORKDIR /app
 USER node 
 COPY --from=builder --chown=node:node /app  .
 
-CMD ["./env.sh", "npx", "next", "start"]
+CMD ["/env.sh", "npx", "next", "start"]
