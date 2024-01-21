@@ -312,6 +312,7 @@ export class InsightService implements IInsightService {
                         {
                             plaidSubtype: 'dividend',
                         },
+                        { category: 'dividend' },
                     ],
                 },
             }),
@@ -640,14 +641,7 @@ export class InsightService implements IInsightService {
             INNER JOIN (
               SELECT
                 id,
-                CASE
-                  -- plaid
-                  WHEN plaid_type IN ('equity', 'etf', 'mutual fund', 'derivative') THEN 'stocks'
-                  WHEN plaid_type IN ('fixed income') THEN 'fixed_income'
-                  WHEN plaid_type IN ('cash', 'loan') THEN 'cash'
-                  WHEN plaid_type IN ('cryptocurrency') THEN 'crypto'
-                  ELSE 'other'
-                END AS "asset_class"
+                asset_class
               FROM
                 "security"
             ) s ON s.id = h.security_id
@@ -693,14 +687,7 @@ export class InsightService implements IInsightService {
               INNER JOIN security s ON s.id = h.security_id
               LEFT JOIN LATERAL (
                 SELECT
-                  CASE
-                    -- plaid
-                    WHEN s.plaid_type IN ('equity', 'etf', 'mutual fund', 'derivative') THEN 'stocks'
-                    WHEN s.plaid_type IN ('fixed income') THEN 'fixed_income'
-                    WHEN s.plaid_type IN ('cash', 'loan') THEN 'cash'
-                    WHEN s.plaid_type IN ('cryptocurrency') THEN 'crypto'
-                    ELSE 'other'
-                  END AS "category"
+                  asset_class AS "category"
               ) x ON TRUE
             WHERE
               h.account_id IN ${accountIds}
@@ -737,11 +724,7 @@ export class InsightService implements IInsightService {
               LEFT JOIN account a ON a.id = it.account_id
             WHERE
               it.account_id = ${accountId}
-              AND (
-                (it.plaid_type = 'cash' AND it.plaid_subtype IN ('contribution', 'deposit', 'withdrawal'))
-                OR (it.plaid_type = 'transfer' AND it.plaid_subtype IN ('transfer', 'send', 'request'))
-                OR (it.plaid_type = 'buy' AND it.plaid_subtype IN ('contribution'))
-              )
+              AND it.category = 'transfer'
               -- Exclude any contributions made prior to the start date since balances will be 0
               AND (a.start_date is NULL OR it.date >= a.start_date)
             GROUP BY 1
@@ -831,28 +814,21 @@ export class InsightService implements IInsightService {
             UNION ALL
             -- investment accounts
             SELECT
-              s.asset_type,
+              s.asset_class AS "asset_type",
               SUM(h.value) AS "amount"
             FROM
               holdings_enriched h
               INNER JOIN (
                 SELECT
                   id,
-                  CASE
-                    -- plaid
-                    WHEN plaid_type IN ('equity', 'etf', 'mutual fund', 'derivative') THEN 'stocks'
-                    WHEN plaid_type IN ('fixed income') THEN 'bonds'
-                    WHEN plaid_type IN ('cash', 'loan') THEN 'cash'
-                    WHEN plaid_type IN ('cryptocurrency') THEN 'crypto'
-                    ELSE 'other'
-                  END AS "asset_type"
+                  asset_class
                 FROM
                   "security"
               ) s ON s.id = h.security_id
             WHERE
               h.account_id IN ${pAccountIds}
             GROUP BY
-              s.asset_type
+              s.asset_class
           ) x
           GROUP BY
             1

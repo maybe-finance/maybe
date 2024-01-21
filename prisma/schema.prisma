@@ -217,24 +217,22 @@ enum InvestmentTransactionCategory {
 }
 
 model InvestmentTransaction {
-  id           Int             @id @default(autoincrement())
-  createdAt    DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt    DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  account      Account         @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  accountId    Int             @map("account_id")
-  security     Security?       @relation(fields: [securityId], references: [id], onDelete: Cascade)
-  securityId   Int?            @map("security_id")
-  date         DateTime        @db.Date
+  id           Int                           @id @default(autoincrement())
+  createdAt    DateTime                      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime                      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  account      Account                       @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId    Int                           @map("account_id")
+  security     Security?                     @relation(fields: [securityId], references: [id], onDelete: Cascade)
+  securityId   Int?                          @map("security_id")
+  date         DateTime                      @db.Date
   name         String
-  amount       Decimal         @db.Decimal(19, 4)
-  fees         Decimal?        @db.Decimal(19, 4)
-  flow         TransactionFlow @default(dbgenerated("\nCASE\n    WHEN (amount < (0)::numeric) THEN 'INFLOW'::\"TransactionFlow\"\n    ELSE 'OUTFLOW'::\"TransactionFlow\"\nEND"))
-  quantity     Decimal         @db.Decimal(36, 18)
-  price        Decimal         @db.Decimal(23, 8)
-  currencyCode String          @default("USD") @map("currency_code")
-
-  // Derived from provider types
-  category InvestmentTransactionCategory @default(dbgenerated("\nCASE\n    WHEN (plaid_type = 'buy'::text) THEN 'buy'::\"InvestmentTransactionCategory\"\n    WHEN (plaid_type = 'sell'::text) THEN 'sell'::\"InvestmentTransactionCategory\"\n    WHEN (plaid_subtype = ANY (ARRAY['dividend'::text, 'qualified dividend'::text, 'non-qualified dividend'::text])) THEN 'dividend'::\"InvestmentTransactionCategory\"\n    WHEN (plaid_subtype = ANY (ARRAY['non-resident tax'::text, 'tax'::text, 'tax withheld'::text])) THEN 'tax'::\"InvestmentTransactionCategory\"\n    WHEN ((plaid_type = 'fee'::text) OR (plaid_subtype = ANY (ARRAY['account fee'::text, 'legal fee'::text, 'management fee'::text, 'margin expense'::text, 'transfer fee'::text, 'trust fee'::text]))) THEN 'fee'::\"InvestmentTransactionCategory\"\n    WHEN (plaid_type = 'cash'::text) THEN 'transfer'::\"InvestmentTransactionCategory\"\n    WHEN (plaid_type = 'cancel'::text) THEN 'cancel'::\"InvestmentTransactionCategory\"\n    ELSE 'other'::\"InvestmentTransactionCategory\"\nEND"))
+  amount       Decimal                       @db.Decimal(19, 4)
+  fees         Decimal?                      @db.Decimal(19, 4)
+  flow         TransactionFlow               @default(dbgenerated("\nCASE\n    WHEN (amount < (0)::numeric) THEN 'INFLOW'::\"TransactionFlow\"\n    ELSE 'OUTFLOW'::\"TransactionFlow\"\nEND"))
+  quantity     Decimal                       @db.Decimal(36, 18)
+  price        Decimal                       @db.Decimal(23, 8)
+  currencyCode String                        @default("USD") @map("currency_code")
+  category     InvestmentTransactionCategory @default(other)
 
   // plaid data
   plaidInvestmentTransactionId String? @unique @map("plaid_investment_transaction_id")
@@ -245,18 +243,27 @@ model InvestmentTransaction {
   @@map("investment_transaction")
 }
 
+enum AssetClass {
+  cash
+  crypto
+  fixed_income
+  stocks
+  other
+}
+
 model Security {
-  id                  Int       @id @default(autoincrement())
-  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt           DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                  Int        @id @default(autoincrement())
+  createdAt           DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
   name                String?
   symbol              String?
   cusip               String?
   isin                String?
-  sharesPerContract   Decimal?  @map("shares_per_contract") @db.Decimal(36, 18)
-  currencyCode        String    @default("USD") @map("currency_code")
-  pricingLastSyncedAt DateTime? @map("pricing_last_synced_at") @db.Timestamptz(6)
-  isBrokerageCash     Boolean   @default(false) @map("is_brokerage_cash")
+  sharesPerContract   Decimal?   @map("shares_per_contract") @db.Decimal(36, 18)
+  currencyCode        String     @default("USD") @map("currency_code")
+  pricingLastSyncedAt DateTime?  @map("pricing_last_synced_at") @db.Timestamptz(6)
+  isBrokerageCash     Boolean    @default(false) @map("is_brokerage_cash")
+  assetClass          AssetClass @default(other) @map("asset_class")
 
   // plaid data
   plaidSecurityId       String?  @unique @map("plaid_security_id")
@@ -312,7 +319,7 @@ model Transaction {
   currencyCode String           @default("USD") @map("currency_code")
   pending      Boolean          @default(false)
   merchantName String?          @map("merchant_name")
-  category     String           @default(dbgenerated("COALESCE(category_user,\nCASE\n    WHEN ((plaid_personal_finance_category ->> 'primary'::text) = 'INCOME'::text) THEN 'Income'::text\n    WHEN ((plaid_personal_finance_category ->> 'detailed'::text) = ANY (ARRAY['LOAN_PAYMENTS_MORTGAGE_PAYMENT'::text, 'RENT_AND_UTILITIES_RENT'::text])) THEN 'Housing Payments'::text\n    WHEN ((plaid_personal_finance_category ->> 'detailed'::text) = 'LOAN_PAYMENTS_CAR_PAYMENT'::text) THEN 'Vehicle Payments'::text\n    WHEN ((plaid_personal_finance_category ->> 'primary'::text) = 'LOAN_PAYMENTS'::text) THEN 'Other Payments'::text\n    WHEN ((plaid_personal_finance_category ->> 'primary'::text) = 'HOME_IMPROVEMENT'::text) THEN 'Home Improvement'::text\n    WHEN ((plaid_personal_finance_category ->> 'primary'::text) = 'GENERAL_MERCHANDISE'::text) THEN 'Shopping'::text\n    WHEN (((plaid_personal_finance_category ->> 'primary'::text) = 'RENT_AND_UTILITIES'::text) AND ((plaid_personal_finance_category ->> 'detailed'::text) <> 'RENT_AND_UTILITIES_RENT'::text)) THEN 'Utilities'::text\n    WHEN ((plaid_personal_finance_category ->> 'primary'::text) = 'FOOD_AND_DRINK'::text) THEN 'Food and Drink'::text\n    WHEN ((plaid_personal_finance_category ->> 'primary'::text) = 'TRANSPORTATION'::text) THEN 'Transportation'::text\n    WHEN ((plaid_personal_finance_category ->> 'primary'::text) = 'TRAVEL'::text) THEN 'Travel'::text\n    WHEN (((plaid_personal_finance_category ->> 'primary'::text) = ANY (ARRAY['PERSONAL_CARE'::text, 'MEDICAL'::text])) AND ((plaid_personal_finance_category ->> 'detailed'::text) <> 'MEDICAL_VETERINARY_SERVICES'::text)) THEN 'Health'::text\n    WHEN (teller_category = 'income'::text) THEN 'Income'::text\n    WHEN (teller_category = 'home'::text) THEN 'Home Improvement'::text\n    WHEN (teller_category = ANY (ARRAY['phone'::text, 'utilities'::text])) THEN 'Utilities'::text\n    WHEN (teller_category = ANY (ARRAY['dining'::text, 'bar'::text, 'groceries'::text])) THEN 'Food and Drink'::text\n    WHEN (teller_category = ANY (ARRAY['clothing'::text, 'entertainment'::text, 'shopping'::text, 'electronics'::text, 'software'::text, 'sport'::text])) THEN 'Shopping'::text\n    WHEN (teller_category = ANY (ARRAY['transportation'::text, 'fuel'::text])) THEN 'Transportation'::text\n    WHEN (teller_category = ANY (ARRAY['accommodation'::text, 'transport'::text])) THEN 'Travel'::text\n    WHEN (teller_category = 'health'::text) THEN 'Health'::text\n    WHEN (teller_category = ANY (ARRAY['loan'::text, 'tax'::text, 'insurance'::text, 'office'::text])) THEN 'Other Payments'::text\n    ELSE 'Other'::text\nEND)"))
+  category     String           @default("Other")
   categoryUser String?          @map("category_user")
   excluded     Boolean          @default(false)
 

@@ -37,7 +37,7 @@ And dozens upon dozens of smaller features.
 
 This is the current state of building the app. We're actively working to make this process much more streamlined!
 
-*You'll need Docker installed to run the app locally.*
+_You'll need Docker installed to run the app locally._
 [Docker Desktop](https://www.docker.com/products/docker-desktop/) is an easy way to get started.
 
 First, copy the `.env.example` file to `.env`:

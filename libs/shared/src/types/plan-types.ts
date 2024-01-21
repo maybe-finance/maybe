@@ -56,7 +56,13 @@ export type PlanProjectionResponse = {
     }[]
 }
 
-export type ProjectionAssetType = 'stocks' | 'bonds' | 'cash' | 'crypto' | 'property' | 'other'
+export type ProjectionAssetType =
+    | 'stocks'
+    | 'fixed_income'
+    | 'cash'
+    | 'crypto'
+    | 'property'
+    | 'other'
 export type ProjectionLiabilityType = 'credit' | 'loan' | 'other'
 
 export type PlanInsights = {
