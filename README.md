@@ -68,6 +68,10 @@ yarn prisma:seed
 yarn dev
 ```
 
+You can use the following demo account to login if you wish to avoid the onboarding screen.
+Email - `test@maybe.com`
+Password - `TestPassword123`
+
 ## Set Up Ngrok
 
 External data providers require HTTPS/SSL webhook URLs for sending data.
