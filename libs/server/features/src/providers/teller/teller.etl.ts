@@ -141,7 +141,6 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
             // upsert accounts
             ...accounts.map((tellerAccount) => {
                 const type = TellerUtil.getType(tellerAccount.type)
-                const categoryProvider = TellerUtil.tellerTypesToCategory(tellerAccount.type)
                 const classification = AccountUtil.getClassification(type)
 
                 return this.prisma.account.upsert({
@@ -152,9 +151,9 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                         },
                     },
                     create: {
-                        type,
+                        type: TellerUtil.getType(tellerAccount.type),
                         provider: 'teller',
-                        categoryProvider,
+                        categoryProvider: TellerUtil.tellerTypesToCategory(tellerAccount.type),
                         subcategoryProvider: tellerAccount.subtype ?? 'other',
                         accountConnectionId: connection.id,
                         userId: connection.userId,
@@ -264,11 +263,7 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                                 ${details.counterparty?.name ?? ''},
                                 ${type},
                                 ${details.category ?? ''},
-                                ${
-                                    details.category
-                                        ? maybeCategoryByTellerCategory[details.category]
-                                        : 'Other'
-                                }
+                                ${maybeCategoryByTellerCategory[details.category ?? ''] ?? 'Other'}
                             )`
                         })
                     )}
