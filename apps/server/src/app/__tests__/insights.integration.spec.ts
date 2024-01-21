@@ -1,5 +1,5 @@
 import type { User } from '@prisma/client'
-import { InvestmentTransactionCategory, Prisma, PrismaClient } from '@prisma/client'
+import { AssetClass, InvestmentTransactionCategory, Prisma, PrismaClient } from '@prisma/client'
 import { createLogger, transports } from 'winston'
 import { DateTime } from 'luxon'
 import type {
@@ -202,19 +202,25 @@ describe('insight service', () => {
                     holdings: {
                         create: [
                             {
-                                security: { create: { symbol: 'AAPL', plaidType: 'equity' } },
+                                security: {
+                                    create: { symbol: 'AAPL', assetClass: AssetClass.stocks },
+                                },
                                 quantity: 1,
                                 costBasisUser: 100,
                                 value: 200,
                             },
                             {
-                                security: { create: { symbol: 'NFLX', plaidType: 'equity' } },
+                                security: {
+                                    create: { symbol: 'NFLX', assetClass: AssetClass.stocks },
+                                },
                                 quantity: 10,
                                 costBasisUser: 200,
                                 value: 300,
                             },
                             {
-                                security: { create: { symbol: 'SHOP', plaidType: 'equity' } },
+                                security: {
+                                    create: { symbol: 'SHOP', assetClass: AssetClass.stocks },
+                                },
                                 quantity: 2,
                                 costBasisUser: 100,
                                 value: 50,
