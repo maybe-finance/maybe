@@ -71,7 +71,6 @@ export async function paginateWithNextUrl<TData>({
     const result: TData[] = []
 
     while (hasNextPage) {
-        // Fetch one page of data
         const response: { data: TData[]; nextUrl: string | undefined } = await fetchData(
             pageSize,
             nextCursor
@@ -80,13 +79,10 @@ export async function paginateWithNextUrl<TData>({
         const nextUrl: string | undefined = response.nextUrl ?? undefined
         nextCursor = nextUrl ? new URL(nextUrl).searchParams.get('cursor') ?? undefined : undefined
 
-        // Add fetched data to the result
         result.push(...data)
 
-        // Determine if there is a next page
         hasNextPage = !!nextCursor
 
-        // Delay the next request if needed
         if (delay) {
             delay.onDelay(`Waiting ${delay.milliseconds / 1000} seconds`)
             await new Promise((resolve) => setTimeout(resolve, delay.milliseconds))
