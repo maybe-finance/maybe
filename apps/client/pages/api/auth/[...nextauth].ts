@@ -102,7 +102,6 @@ export const authOptions = {
                 isAdmin: { label: 'Admin', type: 'checkbox' },
             },
             async authorize(credentials) {
-                // Take credentials and convert the isAdmin string to a boolean
                 const { firstName, lastName, email, password, isAdmin } = await validateCredentials(
                     {
                         ...credentials,
