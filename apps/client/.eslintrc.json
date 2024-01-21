@@ -5,7 +5,15 @@
         "next",
         "next/core-web-vitals"
     ],
-    "ignorePatterns": ["!**/*", "styles.css", "**/*.csv", "**/public/*", "**/.next/*", "**/*.sh"],
+    "ignorePatterns": [
+        "!**/*",
+        "styles.css",
+        "**/*.csv",
+        "**/public/*",
+        "**/.next/*",
+        "**/*.sh",
+        "Dockerfile"
+    ],
     "overrides": [
         {
             "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
