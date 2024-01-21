@@ -122,7 +122,7 @@ async function main() {
                 firstName: 'Karan',
                 lastName: 'Handa',
                 authId: 'test_f5ec79b4-8c49-4015-bc37-f2758923ef38',
-                onboarding: JSON.stringify(onboarding),
+                onboarding: onboarding,
                 household: 'single',
                 country: 'US',
                 maybe: 'Test',
