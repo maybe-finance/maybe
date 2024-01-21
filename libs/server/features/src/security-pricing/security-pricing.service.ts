@@ -169,34 +169,34 @@ export class SecurityPricingService implements ISecurityPricingService {
         _.chunk(usStockTickers, 1_000).map((chunk) => {
             return this.prisma.$transaction([
                 this.prisma.$executeRaw`
-            INSERT INTO security (name, symbol, currency_code, exchange_acronym, exchange_mic, exchange_name, provider_name)
-            VALUES
-              ${Prisma.join(
-                  chunk.map(
-                      ({
-                          name,
-                          ticker,
-                          currency_name,
-                          exchangeAcronym,
-                          exchangeMic,
-                          exchangeName,
-                      }) =>
-                          Prisma.sql`(
-                            ${name},
-                            ${ticker},
-                            ${currency_name?.toUpperCase()},
-                            ${exchangeAcronym},
-                            ${exchangeMic},
-                            ${exchangeName},
-                            ${SecurityProvider.polygon},
-                          )`
-                  )
-              )}
-            ON CONFLICT (symbol) DO UPDATE
-            SET
-              name = EXCLUDED.name,
-              currency_code = EXCLUDED.currency_code;
-          `,
+                    INSERT INTO security (name, symbol, currency_code, exchange_acronym, exchange_mic, exchange_name, provider_name)
+                    VALUES
+                      ${Prisma.join(
+                          chunk.map(
+                              ({
+                                  name,
+                                  ticker,
+                                  currency_name,
+                                  exchangeAcronym,
+                                  exchangeMic,
+                                  exchangeName,
+                              }) =>
+                                  Prisma.sql`(
+                                    ${name},
+                                    ${ticker},
+                                    ${currency_name?.toUpperCase()},
+                                    ${exchangeAcronym},
+                                    ${exchangeMic},
+                                    ${exchangeName},
+                                    ${SecurityProvider.polygon}::"SecurityProvider"
+                                  )`
+                          )
+                      )}
+                    ON CONFLICT (symbol, exchange_mic) DO UPDATE
+                    SET
+                      name = EXCLUDED.name,
+                      currency_code = EXCLUDED.currency_code;
+                  `,
             ])
         })
 

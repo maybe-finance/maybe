@@ -16,8 +16,7 @@ import {
     workerErrorHandlerService,
 } from './app/lib/di'
 import env from './env'
-import { cleanUpOutdatedJobs, stopJobsWithName } from './utils'
-import { SecurityProvider } from '@prisma/client'
+import { cleanUpOutdatedJobs } from './utils'
 
 // Defaults from quickstart - https://docs.sentry.io/platforms/node/
 Sentry.init({
@@ -39,11 +38,6 @@ const syncSecurityQueue = queueService.getQueue('sync-security')
 const purgeUserQueue = queueService.getQueue('purge-user')
 const syncInstitutionQueue = queueService.getQueue('sync-institution')
 const sendEmailQueue = queueService.getQueue('send-email')
-
-// Replace any jobs that have changed cron schedules and ensures only
-// one repeatable jobs for each type is running
-stopJobsWithName(syncSecurityQueue, 'sync-all-securities')
-stopJobsWithName(syncSecurityQueue, 'sync-us-stock-tickers')
 
 syncUserQueue.process(
     'sync-user',
@@ -125,33 +119,34 @@ if (env.NX_POLYGON_TIER !== 'basic') {
 // If no securities exist, sync them immediately
 // Otherwise, schedule the job to run every 24 hours
 // Use same jobID to prevent duplicates and rate limiting
-async function setupJobs() {
-    const count = await prisma.security.count({
-        where: {
-            providerName: SecurityProvider.polygon,
-        },
-    })
-    if (count === 0) {
-        await syncSecurityQueue.add(
-            'sync-us-stock-tickers',
-            {},
-            { jobId: 'sync-us-stock-tickers', removeOnComplete: true }
-        )
-    }
-    // Then schedule it to run every 24 hours
-    await syncSecurityQueue.add(
-        'sync-us-stock-tickers',
-        {},
-        {
-            jobId: 'sync-us-stock-tickers',
-            repeat: {
-                cron: '0 0 * * *', // At 00:00 (midnight) every day
+syncSecurityQueue.cancelJobs().then(() => {
+    prisma.security
+        .count({
+            where: {
+                providerName: 'polygon',
             },
-        }
-    )
-}
+        })
+        .then((count) => {
+            if (count === 0) {
+                syncSecurityQueue.add(
+                    'sync-us-stock-tickers',
+                    {},
+                    { jobId: Date.now().toString(), removeOnComplete: false, delay: 5000 }
+                )
+            } else {
+                syncSecurityQueue.add(
+                    'sync-us-stock-tickers',
+                    {},
+                    {
+                        repeat: { cron: '0 */24 * * *' }, // Run every 24 hours
+                        jobId: Date.now().toString(),
+                    }
+                )
+            }
+        })
+})
 
-setupJobs()
+// Then schedule it to run every 24 hours
 
 /**
  * sync-institution queue

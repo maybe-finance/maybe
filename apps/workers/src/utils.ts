@@ -42,23 +42,3 @@ function filterOutdatedJobs(jobs: JobInformation[]) {
         return job.id === null || job.id !== mostRecentId
     })
 }
-
-export async function stopJobsWithName(queue, jobName) {
-    // Get all jobs that might be in a state that allows them to be stopped
-    const jobs = await queue.getJobs(['active', 'waiting', 'delayed', 'paused'])
-
-    // Filter jobs by name
-    const jobsToStop = jobs.filter((job) => job.name === jobName)
-
-    // Process each job to stop it
-    for (const job of jobsToStop) {
-        if (job.isActive()) {
-            job.moveToFailed(new Error('Job stopped'), true)
-            // For active jobs, you might need to implement a soft stop mechanism
-            // This could involve setting a flag in your job processing logic to stop the job safely
-        } else {
-            // For non-active jobs, you can directly remove or fail them
-            await job.remove() // or job.discard() or job.moveToFailed(new Error('Job stopped'), true)
-        }
-    }
-}

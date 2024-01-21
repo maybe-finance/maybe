@@ -303,7 +303,11 @@ export class PolygonMarketDataService implements IMarketDataService {
             exchangeName: string
         })[]
     > {
-        const exchanges = await this.api.reference.exchanges({ locale: 'us' })
+        const shouldRateLimit = process.env.NX_POLYGON_TIER === 'basic'
+        const exchanges = await this.api.reference.exchanges({
+            locale: 'us',
+            asset_class: 'stocks',
+        })
 
         const tickers: (ITickersResults & {
             exchangeAcronym: string
@@ -317,13 +321,12 @@ export class PolygonMarketDataService implements IMarketDataService {
                 exchangeName: string
             })[] = await SharedUtil.paginateWithNextUrl({
                 pageSize: 1000,
-                delay:
-                    process.env.NX_POLYGON_TIER === 'basic'
-                        ? {
-                              onDelay: (message: string) => this.logger.debug(message),
-                              milliseconds: 25_000, // Basic accounts rate limited at 5 calls / minute
-                          }
-                        : undefined,
+                delay: shouldRateLimit
+                    ? {
+                          onDelay: (message: string) => this.logger.debug(message),
+                          milliseconds: 15_000, // Basic accounts rate limited at 5 calls / minute
+                      }
+                    : undefined,
                 fetchData: async (limit, nextCursor) => {
                     try {
                         const { results, next_url } = await SharedUtil.withRetry(
@@ -334,7 +337,7 @@ export class PolygonMarketDataService implements IMarketDataService {
                                     cursor: nextCursor,
                                     limit: limit,
                                 }),
-                            { maxRetries: 1, delay: 25_000 }
+                            { maxRetries: 1, delay: shouldRateLimit ? 15_000 : 0 }
                         )
                         const tickersWithExchange = results.map((ticker) => {
                             return {

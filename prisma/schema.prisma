@@ -283,6 +283,7 @@ model Security {
   investmentTransactions InvestmentTransaction[]
   pricing                SecurityPricing[]
 
+  @@unique([symbol, exchangeMic])
   @@map("security")
 }
 
