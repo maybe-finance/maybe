@@ -77,6 +77,7 @@ async function main() {
                 onboarding: JSON.parse(
                     '{"main":{"steps":[{"key":"intro","markedComplete":true},{"key":"profile","markedComplete":true},{"key":"firstAccount","markedComplete":true},{"key":"accountSelection","markedComplete":true},{"key":"maybe","markedComplete":true},{"key":"welcome","markedComplete":true}],"markedComplete":false},"sidebar":{"steps":[{"key":"connect-depository","markedComplete":true},{"key":"add-vehicle","markedComplete":true},{"key":"add-other","markedComplete":false}],"markedComplete":true}}'
                 ),
+                household: 'single',
             },
             update: {},
         }),
