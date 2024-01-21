@@ -248,6 +248,14 @@ enum SecurityProvider {
   other
 }
 
+enum AssetClass {
+  cash
+  crypto
+  fixed_income
+  stocks
+  other
+}
+
 model Security {
   id                  Int               @id @default(autoincrement())
   createdAt           DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -264,6 +272,7 @@ model Security {
   exchangeMic         String?           @map("exchange_mic")
   exchangeName        String?           @map("exchange_name")
   providerName        SecurityProvider? @default(other) @map("provider_name")
+  assetClass          AssetClass        @default(other) @map("asset_class")
 
   // plaid data
   plaidSecurityId       String?  @unique @map("plaid_security_id")
