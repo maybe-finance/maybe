@@ -1,0 +1,14 @@
+{
+    "presets": [
+        "@babel/preset-typescript",
+        "@babel/preset-env",
+        [
+            "@nrwl/react/babel",
+            {
+                "runtime": "automatic",
+                "useBuiltIns": "usage"
+            }
+        ]
+    ],
+    "plugins": []
+}
