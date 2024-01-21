@@ -18,7 +18,7 @@ export function MenuPopover({
 }) {
     return (
         <Menu>
-            <Menu.Button variant="icon">{icon}</Menu.Button>
+            <Menu.Button variant="profileIcon">{icon}</Menu.Button>
             <Menu.Items
                 placement={placement}
                 className={isHeader ? 'bg-gray-600' : 'min-w-[200px]'}

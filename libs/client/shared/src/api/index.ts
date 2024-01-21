@@ -1,7 +1,6 @@
 export * from './useAccountApi'
 export * from './useAccountConnectionApi'
 export * from './useAuthUserApi'
-export * from './useFinicityApi'
 export * from './useInstitutionApi'
 export * from './useUserApi'
 export * from './usePlaidApi'

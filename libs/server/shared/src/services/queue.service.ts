@@ -42,7 +42,6 @@ export type SyncConnectionOptions =
           type: 'plaid'
           products?: Array<'transactions' | 'investment-transactions' | 'holdings' | 'liabilities'>
       }
-    | { type: 'finicity'; initialSync?: boolean }
     | { type: 'teller'; initialSync?: boolean }
 
 export type SyncConnectionQueueJobData = {
@@ -72,7 +71,7 @@ export type SyncSecurityQueue = IQueue<SyncSecurityQueueJobData, 'sync-all-secur
 export type PurgeUserQueue = IQueue<{ userId: User['id'] }, 'purge-user'>
 export type SyncInstitutionQueue = IQueue<
     {},
-    'sync-finicity-institutions' | 'sync-plaid-institutions' | 'sync-teller-institutions'
+    'sync-plaid-institutions' | 'sync-teller-institutions'
 >
 export type SendEmailQueue = IQueue<SendEmailQueueJobData, 'send-email'>
 

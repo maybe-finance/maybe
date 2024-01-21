@@ -31,7 +31,7 @@ export function AddFirstAccount({ title, onNext }: StepProps) {
                         unmount={false}
                     >
                         <div className="relative">
-                            <h3>{title}</h3>
+                            <h3 className="text-pretty">{title}</h3>
                             <div className="text-base text-gray-50">
                                 <p className="mt-2">
                                     To get the most out of Maybe you need to add your financial

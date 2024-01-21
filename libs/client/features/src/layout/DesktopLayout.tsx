@@ -16,7 +16,6 @@ import {
     RiFolderOpenLine,
     RiMenuFoldLine,
     RiMenuUnfoldLine,
-    RiMore2Fill,
     RiPieChart2Line,
     RiFlagLine,
     RiArrowRightSLine,
@@ -191,9 +190,11 @@ export function DesktopLayout({ children, sidebar }: DesktopLayoutProps) {
                         </div>
                     </Tooltip>
 
-                    <Link href="/settings">
-                        <ProfileCircle />
-                    </Link>
+                    <MenuPopover
+                        isHeader={false}
+                        icon={<ProfileCircle />}
+                        placement={'right-end'}
+                    />
                 </div>
             </nav>
 
@@ -344,7 +345,6 @@ function DefaultContent({
                     <p data-testid="user-name">{name ?? ''}</p>
                     <p className="text-gray-100">{email ?? ''}</p>
                 </div>
-                <MenuPopover isHeader={false} icon={<RiMore2Fill />} />
             </div>
         </>
     )

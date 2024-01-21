@@ -1,4 +1,5 @@
 import type { AccountConnection, PrismaClient } from '@prisma/client'
+import { AccountClassification } from '@prisma/client'
 import type { Logger } from 'winston'
 import { AccountUtil, SharedUtil, type SharedType } from '@maybe-finance/shared'
 import type { TellerApi, TellerTypes } from '@maybe-finance/teller-api'
@@ -23,6 +24,40 @@ type Connection = Pick<
     AccountConnection,
     'id' | 'userId' | 'tellerInstitutionId' | 'tellerAccessToken'
 >
+
+const maybeCategoryByTellerCategory: Record<
+    Required<TellerTypes.Transaction['details']>['category'],
+    string
+> = {
+    accommodation: 'Travel',
+    advertising: 'Other',
+    bar: 'Food and Drink',
+    charity: 'Other',
+    clothing: 'Shopping',
+    dining: 'Food and Drink',
+    education: 'Other',
+    electronics: 'Shopping',
+    entertainment: 'Shopping',
+    fuel: 'Transportation',
+    general: 'Other',
+    groceries: 'Food and Drink',
+    health: 'Health',
+    home: 'Home Improvement',
+    income: 'Income',
+    insurance: 'Other',
+    investment: 'Other',
+    loan: 'Other',
+    office: 'Other',
+    phone: 'Utilities',
+    service: 'Other',
+    shopping: 'Shopping',
+    software: 'Shopping',
+    sport: 'Shopping',
+    tax: 'Other',
+    transport: 'Transportation',
+    transportation: 'Transportation',
+    utilities: 'Utilities',
+}
 
 export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
     public constructor(
@@ -164,6 +199,12 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
     private async _extractTransactions(accessToken: string, accountIds: string[]) {
         const accountTransactions = await Promise.all(
             accountIds.map(async (accountId) => {
+                const account = await this.prisma.account.findFirst({
+                    where: {
+                        tellerAccountId: accountId,
+                    },
+                })
+
                 const transactions = await SharedUtil.withRetry(
                     () =>
                         this.teller.getTransactions({
@@ -174,6 +215,11 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                         maxRetries: 3,
                     }
                 )
+                if (account!.classification === AccountClassification.asset) {
+                    transactions.forEach((t) => {
+                        t.amount = String(Number(t.amount) * -1)
+                    })
+                }
 
                 return transactions
             })
@@ -192,7 +238,7 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
 
         const txnUpsertQueries = _.chunk(transactions, 1_000).map((chunk) => {
             return this.prisma.$executeRaw`
-                INSERT INTO transaction (account_id, teller_transaction_id, date, name, amount, pending, currency_code, merchant_name, teller_type, teller_category)
+                INSERT INTO transaction (account_id, teller_transaction_id, date, name, amount, pending, currency_code, merchant_name, teller_type, teller_category, category)
                 VALUES
                     ${Prisma.join(
                         chunk.map((tellerTransaction) => {
@@ -219,7 +265,8 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                                 ${'USD'},
                                 ${details.counterparty?.name ?? ''},
                                 ${type},
-                                ${details.category ?? ''}
+                                ${details.category ?? ''},
+                                ${maybeCategoryByTellerCategory[details.category ?? ''] ?? 'Other'}
                             )`
                         })
                     )}
@@ -231,6 +278,7 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                     merchant_name = EXCLUDED.merchant_name,
                     teller_type = EXCLUDED.teller_type,
                     teller_category = EXCLUDED.teller_category;
+                    category = EXCLUDED.category;
             `
         })
 
