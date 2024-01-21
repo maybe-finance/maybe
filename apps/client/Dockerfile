@@ -17,7 +17,7 @@ COPY ./apps/client/env.sh /env.sh
 RUN chmod +x /env.sh
 
 # Used for container health checks and env handling
-RUN apk add --no-cache curl gawk
+RUN apk add --no-cache curl gawk bash
 WORKDIR /app
 USER node 
 COPY --from=builder --chown=node:node /app  .
