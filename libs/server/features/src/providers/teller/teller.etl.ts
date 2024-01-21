@@ -196,10 +196,13 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
 
     private async _extractTransactions(
         accessToken: string,
-        accounts: TellerTypes.AccountWithBalances[]
+        tellerAccounts: TellerTypes.GetAccountsResponse
     ) {
         const accountTransactions = await Promise.all(
-            accounts.map(async (tellerAccount) => {
+            tellerAccounts.map(async (tellerAccount) => {
+                const type = TellerUtil.getType(tellerAccount.type)
+                const classification = AccountUtil.getClassification(type)
+
                 const transactions = await SharedUtil.withRetry(
                     () =>
                         this.teller.getTransactions({
@@ -210,9 +213,6 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                         maxRetries: 3,
                     }
                 )
-                const type = TellerUtil.getType(tellerAccount.type)
-                const classification = AccountUtil.getClassification(type)
-
                 if (classification === AccountClassification.asset) {
                     transactions.forEach((t) => {
                         t.amount = String(Number(t.amount) * -1)
