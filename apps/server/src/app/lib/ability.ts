@@ -2,7 +2,6 @@ import type { Subjects } from '@casl/prisma'
 import { PrismaAbility, accessibleBy } from '@casl/prisma'
 import type { AbilityClass } from '@casl/ability'
 import { AbilityBuilder, ForbiddenError } from '@casl/ability'
-import type { SharedType } from '@maybe-finance/shared'
 import type {
     User,
     Account,
@@ -18,6 +17,7 @@ import type {
     ProviderInstitution,
     Plan,
 } from '@prisma/client'
+import { AuthUserRole } from '@prisma/client'
 
 type CRUDActions = 'create' | 'read' | 'update' | 'delete'
 type AppActions = CRUDActions | 'manage'
@@ -41,13 +41,11 @@ type AppSubjects = PrismaSubjects | 'all'
 
 type AppAbility = PrismaAbility<[AppActions, AppSubjects]>
 
-export default function defineAbilityFor(
-    user: (Pick<User, 'id'> & { roles: SharedType.UserRole[] }) | null
-) {
+export default function defineAbilityFor(user: (Pick<User, 'id'> & { role: AuthUserRole }) | null) {
     const { can, build } = new AbilityBuilder(PrismaAbility as AbilityClass<AppAbility>)
 
     if (user) {
-        if (user.roles.includes('Admin')) {
+        if (user.role === AuthUserRole.admin) {
             can('manage', 'Account')
             can('manage', 'AccountConnection')
             can('manage', 'Valuation')

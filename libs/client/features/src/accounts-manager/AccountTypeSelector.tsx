@@ -57,7 +57,7 @@ export default function AccountTypeSelector({
                     type="text"
                     placeholder="Search for an institution"
                     fixedLeftOverride={<RiSearchLine className="w-5 h-5" />}
-                    inputClassName="pl-10"
+                    inputClassName="pl-11"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     ref={inputRef}
