@@ -16,7 +16,8 @@ import {
     workerErrorHandlerService,
 } from './app/lib/di'
 import env from './env'
-import { cleanUpOutdatedJobs } from './utils'
+import { cleanUpOutdatedJobs, stopJobsWithName } from './utils'
+import { SecurityProvider } from '@prisma/client'
 
 // Defaults from quickstart - https://docs.sentry.io/platforms/node/
 Sentry.init({
@@ -38,6 +39,11 @@ const syncSecurityQueue = queueService.getQueue('sync-security')
 const purgeUserQueue = queueService.getQueue('purge-user')
 const syncInstitutionQueue = queueService.getQueue('sync-institution')
 const sendEmailQueue = queueService.getQueue('send-email')
+
+// Replace any jobs that have changed cron schedules and ensures only
+// one repeatable jobs for each type is running
+stopJobsWithName(syncSecurityQueue, 'sync-all-securities')
+stopJobsWithName(syncSecurityQueue, 'sync-us-stock-tickers')
 
 syncUserQueue.process(
     'sync-user',
@@ -81,6 +87,14 @@ syncSecurityQueue.process(
 )
 
 /**
+ * sync-us-stock-ticker queue
+ */
+syncSecurityQueue.process(
+    'sync-us-stock-tickers',
+    async () => await securityPricingProcessor.syncUSStockTickers()
+)
+
+/**
  * purge-user queue
  */
 purgeUserQueue.process(
@@ -94,15 +108,50 @@ purgeUserQueue.process(
 /**
  * sync-all-securities queue
  */
-// Start repeated job for syncing securities (Bull won't duplicate it as long as the repeat options are the same)
-syncSecurityQueue.add(
-    'sync-all-securities',
-    {},
-    {
-        repeat: { cron: '*/5 * * * *' }, // Run every 5 minutes
-        jobId: Date.now().toString(),
+// Start repeated job for syncing securities
+// (Bull won't duplicate it as long as the repeat options are the same)
+// Do not run if on the free tier (rate limits)
+if (env.NX_POLYGON_TIER !== 'basic') {
+    syncSecurityQueue.add(
+        'sync-all-securities',
+        {},
+        {
+            repeat: { cron: '*/5 * * * *' }, // Run every 5 minutes
+            jobId: Date.now().toString(),
+        }
+    )
+}
+
+// If no securities exist, sync them immediately
+// Otherwise, schedule the job to run every 24 hours
+// Use same jobID to prevent duplicates and rate limiting
+async function setupJobs() {
+    const count = await prisma.security.count({
+        where: {
+            providerName: SecurityProvider.polygon,
+        },
+    })
+    if (count === 0) {
+        await syncSecurityQueue.add(
+            'sync-us-stock-tickers',
+            {},
+            { jobId: 'sync-us-stock-tickers', removeOnComplete: true }
+        )
     }
-)
+    // Then schedule it to run every 24 hours
+    await syncSecurityQueue.add(
+        'sync-us-stock-tickers',
+        {},
+        {
+            jobId: 'sync-us-stock-tickers',
+            repeat: {
+                cron: '0 0 * * *', // At 00:00 (midnight) every day
+            },
+        }
+    )
+}
+
+setupJobs()
 
 /**
  * sync-institution queue

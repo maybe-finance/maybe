@@ -9,6 +9,7 @@ import type { SharedType } from '@maybe-finance/shared'
 import { MarketUtil, SharedUtil } from '@maybe-finance/shared'
 import type { CacheService } from '.'
 import { toDecimal } from '../utils/db-utils'
+import type { ITickersResults } from '@polygon.io/client-js/lib/rest/reference/tickers'
 
 type DailyPricing = {
     date: DateTime
@@ -62,6 +63,17 @@ export interface IMarketDataService {
     getSecurityDetails(
         security: Pick<Security, 'symbol' | 'plaidType' | 'currencyCode'>
     ): Promise<SharedType.SecurityDetails>
+
+    /**
+     * fetches all US stock tickers
+     */
+    getUSStockTickers(): Promise<
+        (ITickersResults & {
+            exchangeAcronym: string
+            exchangeMic: string
+            exchangeName: string
+        })[]
+    >
 }
 
 export class PolygonMarketDataService implements IMarketDataService {
@@ -282,6 +294,66 @@ export class PolygonMarketDataService implements IMarketDataService {
         }
 
         return {}
+    }
+
+    async getUSStockTickers(): Promise<
+        (ITickersResults & {
+            exchangeAcronym: string
+            exchangeMic: string
+            exchangeName: string
+        })[]
+    > {
+        const exchanges = await this.api.reference.exchanges({ locale: 'us' })
+
+        const tickers: (ITickersResults & {
+            exchangeAcronym: string
+            exchangeMic: string
+            exchangeName: string
+        })[] = []
+        for (const exchange of exchanges.results) {
+            const exchangeTickers: (ITickersResults & {
+                exchangeAcronym: string
+                exchangeMic: string
+                exchangeName: string
+            })[] = await SharedUtil.paginateWithNextUrl({
+                pageSize: 1000,
+                delay:
+                    process.env.NX_POLYGON_TIER === 'basic'
+                        ? {
+                              onDelay: (message: string) => this.logger.debug(message),
+                              milliseconds: 25_000, // Basic accounts rate limited at 5 calls / minute
+                          }
+                        : undefined,
+                fetchData: async (limit, nextCursor) => {
+                    try {
+                        const { results, next_url } = await SharedUtil.withRetry(
+                            () =>
+                                this.api.reference.tickers({
+                                    market: 'stocks',
+                                    exchange: exchange.mic,
+                                    cursor: nextCursor,
+                                    limit: limit,
+                                }),
+                            { maxRetries: 1, delay: 25_000 }
+                        )
+                        const tickersWithExchange = results.map((ticker) => {
+                            return {
+                                ...ticker,
+                                exchangeAcronym: exchange.acronymstring ?? '',
+                                exchangeMic: exchange.mic ?? '',
+                                exchangeName: exchange.name,
+                            }
+                        })
+                        return { data: tickersWithExchange, nextUrl: next_url }
+                    } catch (err) {
+                        this.logger.error('Error while fetching tickers', err)
+                        return { data: [], nextUrl: undefined }
+                    }
+                },
+            })
+            tickers.push(...exchangeTickers)
+        }
+        return tickers
     }
 
     private async _snapshotStocks(tickers: string[]) {
