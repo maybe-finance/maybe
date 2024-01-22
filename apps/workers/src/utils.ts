@@ -42,5 +42,3 @@ function filterOutdatedJobs(jobs: JobInformation[]) {
         return job.id === null || job.id !== mostRecentId
     })
 }
-
-export default cleanUpOutdatedJobs

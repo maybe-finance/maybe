@@ -243,6 +243,11 @@ model InvestmentTransaction {
   @@map("investment_transaction")
 }
 
+enum SecurityProvider {
+  polygon
+  other
+}
+
 enum AssetClass {
   cash
   crypto
@@ -252,18 +257,22 @@ enum AssetClass {
 }
 
 model Security {
-  id                  Int        @id @default(autoincrement())
-  createdAt           DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt           DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                  Int               @id @default(autoincrement())
+  createdAt           DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime          @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
   name                String?
   symbol              String?
   cusip               String?
   isin                String?
-  sharesPerContract   Decimal?   @map("shares_per_contract") @db.Decimal(36, 18)
-  currencyCode        String     @default("USD") @map("currency_code")
-  pricingLastSyncedAt DateTime?  @map("pricing_last_synced_at") @db.Timestamptz(6)
-  isBrokerageCash     Boolean    @default(false) @map("is_brokerage_cash")
-  assetClass          AssetClass @default(other) @map("asset_class")
+  sharesPerContract   Decimal?          @map("shares_per_contract") @db.Decimal(36, 18)
+  currencyCode        String            @default("USD") @map("currency_code")
+  pricingLastSyncedAt DateTime?         @map("pricing_last_synced_at") @db.Timestamptz(6)
+  isBrokerageCash     Boolean           @default(false) @map("is_brokerage_cash")
+  exchangeAcroynm     String?           @map("exchange_acronym")
+  exchangeMic         String?           @map("exchange_mic")
+  exchangeName        String?           @map("exchange_name")
+  providerName        SecurityProvider? @default(other) @map("provider_name")
+  assetClass          AssetClass        @default(other) @map("asset_class")
 
   // plaid data
   plaidSecurityId       String?  @unique @map("plaid_security_id")
@@ -274,6 +283,7 @@ model Security {
   investmentTransactions InvestmentTransaction[]
   pricing                SecurityPricing[]
 
+  @@unique([symbol, exchangeMic])
   @@map("security")
 }
 
