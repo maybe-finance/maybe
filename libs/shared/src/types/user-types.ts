@@ -170,9 +170,6 @@ export type MaybeUserMetadata = Partial<{
 // Maybe's "normalized" Auth0 `user.app_metadata` object
 export type MaybeAppMetadata = {}
 
-// The custom roles we have defined in Auth0
-export type UserRole = 'Admin' | 'CIUser'
-
 export type PrimaryAuth0Identity = Partial<{
     connection: string
     provider: string
@@ -183,7 +180,6 @@ export type PrimaryAuth0Identity = Partial<{
 export type MaybeCustomClaims = {
     [Auth0CustomNamespace.Email]?: string | null
     [Auth0CustomNamespace.Picture]?: string | null
-    [Auth0CustomNamespace.Roles]?: UserRole[]
     [Auth0CustomNamespace.UserMetadata]?: MaybeUserMetadata
     [Auth0CustomNamespace.AppMetadata]?: MaybeAppMetadata
     [Auth0CustomNamespace.PrimaryIdentity]?: PrimaryAuth0Identity
