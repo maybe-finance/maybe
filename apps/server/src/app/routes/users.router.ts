@@ -259,7 +259,7 @@ router.get(
     })
 )
 
-// TODO: Implement verification email using Postmark instead of Auth0
+// TODO: Implement verification email using internal email service instead of Auth0
 router.post(
     '/resend-verification-email',
     endpoint.create({

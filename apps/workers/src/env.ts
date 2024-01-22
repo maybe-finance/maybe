@@ -22,9 +22,11 @@ const envSchema = z.object({
     NX_POLYGON_API_KEY: z.string().default(''),
     NX_POLYGON_TIER: z.string().default('basic'),
 
-    NX_POSTMARK_FROM_ADDRESS: z.string().default('account@maybe.co'),
-    NX_POSTMARK_REPLY_TO_ADDRESS: z.string().default('support@maybe.co'),
-    NX_POSTMARK_API_TOKEN: z.string().optional(),
+    NX_EMAIL_FROM_ADDRESS: z.string().default('account@maybe.co'),
+    NX_EMAIL_REPLY_TO_ADDRESS: z.string().default('support@maybe.co'),
+    NX_EMAIL_PROVIDER: z.string().optional(),
+    NX_EMAIL_PROVIDER_API_TOKEN: z.string().optional(),
+
     NX_STRIPE_SECRET_KEY: z.string().default('sk_test_REPLACE_THIS'),
 
     NX_CDN_PRIVATE_BUCKET: z.string().default('REPLACE_THIS'),

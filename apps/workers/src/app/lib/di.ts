@@ -8,7 +8,6 @@ import type {
     IUserProcessor,
     ISecurityPricingService,
     IUserService,
-    IEmailService,
     IEmailProcessor,
 } from '@maybe-finance/server/features'
 import {
@@ -55,7 +54,7 @@ import logger from './logger'
 import prisma from './prisma'
 import plaid from './plaid'
 import teller from './teller'
-import postmark from './postmark'
+import { initializeEmailClient } from './email'
 import stripe from './stripe'
 import env from '../../env'
 import { BullQueueEventHandler, WorkerErrorHandlerService } from '../services'
@@ -263,12 +262,12 @@ export const workerErrorHandlerService = new WorkerErrorHandlerService(
 
 // send-email
 
-export const emailService: IEmailService = new EmailService(
+export const emailService: EmailService = new EmailService(
     logger.child({ service: 'EmailService' }),
-    postmark,
+    initializeEmailClient(),
     {
-        from: env.NX_POSTMARK_FROM_ADDRESS,
-        replyTo: env.NX_POSTMARK_REPLY_TO_ADDRESS,
+        from: env.NX_EMAIL_FROM_ADDRESS,
+        replyTo: env.NX_EMAIL_REPLY_TO_ADDRESS,
     }
 )
 
