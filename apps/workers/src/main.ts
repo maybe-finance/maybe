@@ -102,19 +102,6 @@ purgeUserQueue.process(
 /**
  * sync-all-securities queue
  */
-// Start repeated job for syncing securities
-// (Bull won't duplicate it as long as the repeat options are the same)
-// Do not run if on the free tier (rate limits)
-if (env.NX_POLYGON_TIER !== 'basic') {
-    syncSecurityQueue.add(
-        'sync-all-securities',
-        {},
-        {
-            repeat: { cron: '*/5 * * * *' }, // Run every 5 minutes
-            jobId: Date.now().toString(),
-        }
-    )
-}
 
 // If no securities exist, sync them immediately
 // Otherwise, schedule the job to run every 24 hours
@@ -139,10 +126,19 @@ syncSecurityQueue.cancelJobs().then(() => {
                     }
                 )
             }
+            // Do not run if on the free tier (rate limits)
+            if (env.NX_POLYGON_TIER !== 'basic') {
+                syncSecurityQueue.add(
+                    'sync-all-securities',
+                    {},
+                    {
+                        repeat: { cron: '*/5 * * * *' }, // Run every 5 minutes
+                        jobId: Date.now().toString(),
+                    }
+                )
+            }
         })
 })
-
-// Then schedule it to run every 24 hours
 
 /**
  * sync-institution queue
