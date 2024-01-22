@@ -814,7 +814,7 @@ export class InsightService implements IInsightService {
             UNION ALL
             -- investment accounts
             SELECT
-              s.asset_class AS "asset_type",
+              s.asset_class::text AS "asset_type",
               SUM(h.value) AS "amount"
             FROM
               holdings_enriched h
