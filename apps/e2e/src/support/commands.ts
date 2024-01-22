@@ -29,19 +29,6 @@ Cypress.Commands.add('apiRequest', ({ url, headers = {}, ...options }, ...rest) 
     )
 })
 
-Cypress.Commands.add('nextApiRequest', ({ url, headers = {}, ...options }, ...rest) => {
-    return cy.request(
-        {
-            url: `${Cypress.env('NEXTAUTH_URL')}/${url}`,
-            headers: {
-                ...headers,
-            },
-            ...options,
-        },
-        ...rest
-    )
-})
-
 Cypress.Commands.add('login', () => {
     cy.visit('/login')
     cy.get('input[name="email"]').type('test@test.com')
