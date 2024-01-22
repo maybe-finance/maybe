@@ -89,7 +89,6 @@ export default function LoginPage() {
                             ) : null}
 
                             <Button
-                                className="w-full"
                                 type="submit"
                                 disabled={!isValid || isLoading}
                                 variant={isValid ? 'primary' : 'secondary'}
@@ -97,7 +96,7 @@ export default function LoginPage() {
                             >
                                 Log in
                             </Button>
-                            <div className="text-sm text-gray-50 text-center">
+                            <div className="text-sm text-gray-50 pt-2">
                                 <div>
                                     Don&apos;t have an account?{' '}
                                     <Link
