@@ -1,17 +1,30 @@
 import cookieParser from 'cookie-parser'
 import { decode } from 'next-auth/jwt'
+import type { Request } from 'express'
 
 const SECRET = process.env.NEXTAUTH_SECRET ?? 'REPLACE_THIS'
+
+const getNextAuthCookie = (req: Request) => {
+    if (req.cookies) {
+        if ('__Secure-next-auth.session-token' in req.cookies) {
+            return req.cookies['__Secure-next-auth.session-token']
+        } else if ('next-auth.session-token' in req.cookies) {
+            return req.cookies['next-auth.session-token']
+        }
+    }
+    return undefined
+}
+
 export const validateAuthJwt = async (req, res, next) => {
     cookieParser(SECRET)(req, res, async (err) => {
         if (err) {
             return res.status(500).json({ message: 'Internal Server Error' })
         }
 
-        if (req.cookies && '__Secure-next-auth.session-token' in req.cookies) {
+        if (req.cookies && getNextAuthCookie(req)) {
             try {
                 const token = await decode({
-                    token: req.cookies['__Secure-next-auth.session-token'],
+                    token: getNextAuthCookie(req),
                     secret: SECRET,
                 })
 
