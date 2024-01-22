@@ -40,3 +40,13 @@ beforeEach(() => {
     })
     cy.visit('/')
 })
+
+after(() => {
+    cy.apiRequest({
+        method: 'POST',
+        url: 'e2e/clean',
+        body: {},
+    }).then((response) => {
+        expect(response.status).to.equal(200)
+    })
+})

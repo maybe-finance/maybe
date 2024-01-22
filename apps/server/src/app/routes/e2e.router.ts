@@ -78,4 +78,19 @@ router.post(
     })
 )
 
+router.post(
+    '/clean',
+    endpoint.create({
+        resolve: async ({ ctx }) => {
+            const user = ctx.user!
+            await ctx.prisma.$transaction([
+                ctx.prisma.$executeRaw`DELETE FROM "user" WHERE auth_id=${user.authId};`,
+                ctx.prisma.$executeRaw`DELETE FROM "auth_user" WHERE id=${user.authId};`,
+            ])
+
+            return { success: true }
+        },
+    })
+)
+
 export default router
