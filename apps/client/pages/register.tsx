@@ -110,8 +110,9 @@ export default function RegisterPage() {
                                 </div>
                             ) : null}
 
+                            <AuthDevTools isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
+
                             <Button
-                                className="w-full"
                                 type="submit"
                                 disabled={!isValid}
                                 variant={isValid ? 'primary' : 'secondary'}
@@ -119,7 +120,7 @@ export default function RegisterPage() {
                             >
                                 Register
                             </Button>
-                            <div className="text-sm text-gray-50 text-center">
+                            <div className="text-sm text-gray-50 pt-2">
                                 <div>
                                     Already have an account?{' '}
                                     <Link
