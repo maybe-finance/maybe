@@ -583,6 +583,12 @@ model AuthAccount {
   @@map("auth_account")
 }
 
+enum AuthUserRole {
+  user
+  admin
+  ci
+}
+
 model AuthUser {
   id            String        @id @default(cuid())
   name          String?
@@ -592,6 +598,7 @@ model AuthUser {
   emailVerified DateTime?     @map("email_verified")
   password      String?
   image         String?
+  role          AuthUserRole  @default(user)
   accounts      AuthAccount[]
   sessions      AuthSession[]
 

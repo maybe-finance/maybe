@@ -70,6 +70,7 @@ export class InMemoryQueueFactory implements IQueueFactory {
     constructor(
         private readonly ignoreJobNames: string[] = [
             'sync-all-securities',
+            'sync-teller-institutions',
             'sync-plaid-institutions',
             'trial-reminders',
             'send-email',

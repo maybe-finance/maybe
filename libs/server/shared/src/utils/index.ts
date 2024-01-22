@@ -1,4 +1,3 @@
-export * as AuthUtil from './auth-utils'
 export * as DbUtil from './db-utils'
 export * as PlaidUtil from './plaid-utils'
 export * as TellerUtil from './teller-utils'
