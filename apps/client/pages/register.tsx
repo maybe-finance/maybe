@@ -57,9 +57,6 @@ export default function RegisterPage() {
                 src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"
                 strategy="lazyOnload"
             />
-
-            <RegisterDevTools />
-
             <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <div className="p-px w-96 bg-white bg-opacity-10 card-light rounded-3xl radial-gradient-background">
                     <div className="bg-black bg-opacity-75 p-8 rounded-3xl w-full h-full items-center flex flex-col radial-gradient-background-dark">
@@ -154,31 +151,6 @@ type AuthDevToolsProps = {
     setIsAdmin: (isAdmin: boolean) => void
     isOnboarded: boolean
     setIsOnboarded: (isOnboarded: boolean) => void
-}
-
-function RegisterDevTools() {
-    return process.env.NODE_ENV === 'development' ? (
-        <div className="my-2 p-2 border border-red-300 rounded-md">
-            <h6 className="flex text-red">
-                Dev Tools <i className="ri-tools-fill ml-1.5" />
-            </h6>
-            <p className="text-sm my-2">
-                This section will NOT show in production and is solely for making testing easier.
-            </p>
-
-            <div className="flex items-center text-sm mt-4">
-                <p className="font-bold">Actions:</p>
-                <button className="underline text-red ml-4" onClick={() => null}>
-                    Create an onboarded user
-                </button>
-                {onboardedUserExists ? (
-                    <button className="underline text-red ml-4" onClick={() => null}>
-                        Remove the onboarded user
-                    </button>
-                ) : null}
-            </div>
-        </div>
-    ) : null
 }
 
 function AuthDevTools({ isAdmin, setIsAdmin, isOnboarded, setIsOnboarded }: AuthDevToolsProps) {
