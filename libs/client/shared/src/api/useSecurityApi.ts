@@ -3,8 +3,9 @@ import type { AxiosInstance } from 'axios'
 import type { UseQueryOptions } from '@tanstack/react-query'
 import type { SharedType } from '@maybe-finance/shared'
 import { useMemo } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useAxiosWithAuth } from '..'
+import toast from 'react-hot-toast'
 
 const SecurityApi = (axios: AxiosInstance) => ({
     async getSecurity(id: Security['id']) {
@@ -16,6 +17,11 @@ const SecurityApi = (axios: AxiosInstance) => ({
         const { data } = await axios.get<SharedType.SecurityDetails>(`/securities/${id}/details`)
         return data
     },
+
+    async syncUSStockTickers() {
+        const { data } = await axios.post(`/securities/sync/us-stock-tickers`)
+        return data
+    },
 })
 
 const staleTimes = {
@@ -24,6 +30,7 @@ const staleTimes = {
 }
 
 export function useSecurityApi() {
+    const queryClient = useQueryClient()
     const { axios } = useAxiosWithAuth()
     const api = useMemo(() => SecurityApi(axios), [axios])
 
@@ -58,8 +65,22 @@ export function useSecurityApi() {
         })
     }
 
+    const useSyncUSStockTickers = () =>
+        useMutation(api.syncUSStockTickers, {
+            onSuccess: () => {
+                toast.success(`Syncing institutions`)
+            },
+            onError: () => {
+                toast.error('Failed to sync institutions')
+            },
+            onSettled: () => {
+                queryClient.invalidateQueries(['institutions'])
+            },
+        })
+
     return {
         useSecurity,
         useSecurityDetails,
+        useSyncUSStockTickers,
     }
 }

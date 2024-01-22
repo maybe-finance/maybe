@@ -41,6 +41,12 @@ export function AccountDevTools() {
                 >
                     Deduplicate institutions
                 </button>
+                <button
+                    className="underline text-red ml-4"
+                    onClick={() => syncInstitutions.mutate()}
+                >
+                    Sync stock tickers
+                </button>
             </div>
         </div>
     ) : null

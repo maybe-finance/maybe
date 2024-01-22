@@ -128,11 +128,7 @@ syncSecurityQueue.cancelJobs().then(() => {
         })
         .then((count) => {
             if (count === 0) {
-                syncSecurityQueue.add(
-                    'sync-us-stock-tickers',
-                    {},
-                    { jobId: Date.now().toString(), removeOnComplete: false, delay: 5000 }
-                )
+                syncSecurityQueue.add('sync-us-stock-tickers', {}, {})
             } else {
                 syncSecurityQueue.add(
                     'sync-us-stock-tickers',
