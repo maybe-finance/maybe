@@ -1,6 +1,29 @@
 import './commands'
 
 beforeEach(() => {
+    authenticateCIUser()
+    cy.apiRequest({
+        method: 'POST',
+        url: 'e2e/reset',
+        body: {},
+    }).then((response) => {
+        expect(response.status).to.equal(200)
+    })
+    cy.visit('/')
+})
+
+after(() => {
+    authenticateCIUser()
+    cy.apiRequest({
+        method: 'POST',
+        url: 'e2e/clean',
+        body: {},
+    }).then((response) => {
+        expect(response.status).to.equal(200)
+    })
+})
+
+function authenticateCIUser() {
     cy.request({
         method: 'GET',
         url: 'api/auth/csrf',
@@ -31,22 +54,4 @@ beforeEach(() => {
             expect(response.status).to.equal(200)
         })
     })
-    cy.apiRequest({
-        method: 'POST',
-        url: 'e2e/reset',
-        body: {},
-    }).then((response) => {
-        expect(response.status).to.equal(200)
-    })
-    cy.visit('/')
-})
-
-after(() => {
-    cy.apiRequest({
-        method: 'POST',
-        url: 'e2e/clean',
-        body: {},
-    }).then((response) => {
-        expect(response.status).to.equal(200)
-    })
-})
+}
