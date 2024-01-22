@@ -27,10 +27,5 @@
         "next-env.d.ts",
         ".next/types/**/*.ts"
     ],
-    "exclude": ["node_modules", "jest.config.ts"],
-    "references": [
-        {
-            "path": "./.storybook/tsconfig.json"
-        }
-    ]
+    "exclude": ["node_modules", "jest.config.ts"]
 }
