@@ -1,4 +1,4 @@
-import { Badge, BadgeVariant } from '@maybe-finance/design-system'
+import { Badge, type BadgeVariant as BadgeVariantType } from '@maybe-finance/design-system'
 import type { SharedType } from '@maybe-finance/shared'
 import { NumberUtil } from '@maybe-finance/shared'
 import cn from 'classnames'
@@ -12,7 +12,9 @@ type TrendBadgeProps = {
     displayAmount?: boolean
 }
 
-const BadgeVariant = (negative: boolean): Record<SharedType.Trend['direction'], BadgeVariant> => ({
+const BadgeVariant = (
+    negative: boolean
+): Record<SharedType.Trend['direction'], BadgeVariantType> => ({
     down: negative ? 'teal' : 'red',
     up: negative ? 'red' : 'teal',
     flat: 'gray',
