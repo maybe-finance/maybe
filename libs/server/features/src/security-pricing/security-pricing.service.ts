@@ -1,5 +1,5 @@
 import type { PrismaClient, Security } from '@prisma/client'
-import { SecurityProvider } from '@prisma/client'
+import { SecurityProvider, AssetClass } from '@prisma/client'
 import type { IMarketDataService } from '@maybe-finance/server/shared'
 import type { Logger } from 'winston'
 import { Prisma } from '@prisma/client'
@@ -169,7 +169,7 @@ export class SecurityPricingService implements ISecurityPricingService {
         _.chunk(usStockTickers, 1_000).map((chunk) => {
             return this.prisma.$transaction([
                 this.prisma.$executeRaw`
-                    INSERT INTO security (name, symbol, currency_code, exchange_acronym, exchange_mic, exchange_name, provider_name)
+                    INSERT INTO security (name, symbol, currency_code, exchange_acronym, exchange_mic, exchange_name, provider_name, asset_class)
                     VALUES
                       ${Prisma.join(
                           chunk.map(
@@ -188,7 +188,8 @@ export class SecurityPricingService implements ISecurityPricingService {
                                     ${exchangeAcronym},
                                     ${exchangeMic},
                                     ${exchangeName},
-                                    ${SecurityProvider.polygon}::"SecurityProvider"
+                                    ${SecurityProvider.polygon}::"SecurityProvider",
+                                    ${AssetClass.stocks}::"AssetClass"
                                   )`
                           )
                       )}
