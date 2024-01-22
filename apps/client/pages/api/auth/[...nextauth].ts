@@ -37,7 +37,7 @@ async function validateCredentials(credentials: any): Promise<z.infer<typeof aut
         lastName: z.string().optional(),
         email: z.string().email({ message: 'Invalid email address.' }),
         password: z.string().min(6),
-        isAdmin: z.boolean().default(false),
+        role: z.string().default('user'),
     })
 
     const parsed = authSchema.safeParse(credentials)
@@ -53,15 +53,26 @@ async function createNewAuthUser(credentials: {
     lastName: string
     email: string
     password: string
-    isAdmin: boolean
+    role: string
 }): Promise<SharedType.AuthUser> {
-    const { firstName, lastName, email, password, isAdmin } = credentials
+    const { firstName, lastName, email, password, role } = credentials
 
     if (!firstName || !lastName) {
         throw new Error('Both first name and last name are required.')
     }
 
     const isDevelopment = process.env.NODE_ENV === 'development'
+
+    let userRole: AuthUserRole
+
+    if (role === AuthUserRole.admin && isDevelopment) {
+        userRole = AuthUserRole.admin
+    } else if (role === AuthUserRole.ci) {
+        userRole = AuthUserRole.ci
+    } else {
+        userRole = AuthUserRole.user
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10)
     return createAuthUser({
         firstName,
@@ -69,7 +80,7 @@ async function createNewAuthUser(credentials: {
         name: `${firstName} ${lastName}`,
         email,
         password: hashedPassword,
-        role: isAdmin && isDevelopment ? AuthUserRole.admin : AuthUserRole.user,
+        role: userRole,
     })
 }
 
@@ -99,14 +110,11 @@ export const authOptions = {
                 lastName: { label: 'Last name', type: 'text', placeholder: 'Last name' },
                 email: { label: 'Email', type: 'email', placeholder: 'hello@maybe.co' },
                 password: { label: 'Password', type: 'password' },
-                isAdmin: { label: 'Admin', type: 'checkbox' },
+                role: { label: 'Admin', type: 'text' },
             },
             async authorize(credentials) {
-                const { firstName, lastName, email, password, isAdmin } = await validateCredentials(
-                    {
-                        ...credentials,
-                        isAdmin: Boolean(credentials?.isAdmin),
-                    }
+                const { firstName, lastName, email, password, role } = await validateCredentials(
+                    credentials
                 )
 
                 const existingUser = await getAuthUserByEmail(email)
@@ -123,7 +131,7 @@ export const authOptions = {
                     throw new Error('Invalid credentials provided.')
                 }
 
-                return createNewAuthUser({ firstName, lastName, email, password, isAdmin })
+                return createNewAuthUser({ firstName, lastName, email, password, role })
             },
         }),
     ],

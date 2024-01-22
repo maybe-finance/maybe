@@ -687,7 +687,7 @@ export class InsightService implements IInsightService {
               INNER JOIN security s ON s.id = h.security_id
               LEFT JOIN LATERAL (
                 SELECT
-                  asset_class AS "category"
+                  s.asset_class AS "category"
               ) x ON TRUE
             WHERE
               h.account_id IN ${accountIds}

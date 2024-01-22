@@ -4,6 +4,7 @@ declare namespace Cypress {
     interface Chainable<Subject> {
         login(): Chainable<any>
         apiRequest(...params: Parameters<typeof cy.request>): Chainable<any>
+        nextApiRequest(...params: Parameters<typeof cy.request>): Chainable<any>
         getByTestId(...parameters: Parameters<typeof cy.get>): Chainable<any>
         selectDate(date: Date): Chainable<any>
         preserveAccessToken(): Chainable<any>
@@ -28,9 +29,22 @@ Cypress.Commands.add('apiRequest', ({ url, headers = {}, ...options }, ...rest) 
     )
 })
 
+Cypress.Commands.add('nextApiRequest', ({ url, headers = {}, ...options }, ...rest) => {
+    return cy.request(
+        {
+            url: `${Cypress.env('NEXTAUTH_URL')}/${url}`,
+            headers: {
+                ...headers,
+            },
+            ...options,
+        },
+        ...rest
+    )
+})
+
 Cypress.Commands.add('login', () => {
     cy.visit('/login')
-    cy.get('input[name="email"]').type('bond@007.com')
+    cy.get('input[name="email"]').type('test@test.com')
     cy.get('input[name="password"]').type('TestPassword123')
     cy.get('button[type="submit"]').click()
     //eslint-disable-next-line cypress/no-unnecessary-waiting

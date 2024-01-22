@@ -1,4 +1,5 @@
 import type { OnboardingState } from '@maybe-finance/server/features'
+import { AuthUserRole } from '@prisma/client'
 import { Router } from 'express'
 import { DateTime } from 'luxon'
 import { z } from 'zod'
@@ -6,13 +7,13 @@ import endpoint from '../lib/endpoint'
 
 const router = Router()
 
-const testUserId = 'test_ec3ee8a4-fa01-4f11-8ac5-9c49dd7fbae4'
-
 router.use((req, res, next) => {
-    if (req.user?.sub === testUserId) {
+    const role = req.user?.role
+
+    if (role === AuthUserRole.admin || role === AuthUserRole.ci) {
         next()
     } else {
-        res.status(401).send('Route only available to test users')
+        res.status(401).send('Route only available to CIUser and Admin roles')
     }
 })
 
@@ -47,14 +48,15 @@ router.post(
             trialLapsed: z.boolean().default(false),
         }),
         resolve: async ({ ctx, input }) => {
+            const user = ctx.user!
             await ctx.prisma.$transaction([
-                ctx.prisma.$executeRaw`DELETE FROM "user" WHERE auth_id=${testUserId};`,
+                ctx.prisma.$executeRaw`DELETE FROM "user" WHERE auth_id=${user.authId};`,
                 ctx.prisma.user.create({
                     data: {
-                        authId: testUserId,
-                        email: 'bond@007.com',
-                        firstName: 'James',
-                        lastName: 'Bond',
+                        authId: user.authId,
+                        email: user.email,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
                         dob: new Date('1990-01-01'),
                         linkAccountDismissedAt: new Date(), // ensures our auto-account link doesn't trigger
 
