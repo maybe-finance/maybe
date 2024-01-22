@@ -2,7 +2,8 @@ import NextAuth from 'next-auth'
 import type { SessionStrategy, NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { z } from 'zod'
-import { PrismaClient, type Prisma } from '@prisma/client'
+import { PrismaClient, AuthUserRole } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import type { SharedType } from '@maybe-finance/shared'
 import bcrypt from 'bcrypt'
@@ -36,6 +37,7 @@ async function validateCredentials(credentials: any): Promise<z.infer<typeof aut
         lastName: z.string().optional(),
         email: z.string().email({ message: 'Invalid email address.' }),
         password: z.string().min(6),
+        isAdmin: z.boolean().default(false),
     })
 
     const parsed = authSchema.safeParse(credentials)
@@ -51,13 +53,15 @@ async function createNewAuthUser(credentials: {
     lastName: string
     email: string
     password: string
+    isAdmin: boolean
 }): Promise<SharedType.AuthUser> {
-    const { firstName, lastName, email, password } = credentials
+    const { firstName, lastName, email, password, isAdmin } = credentials
 
     if (!firstName || !lastName) {
         throw new Error('Both first name and last name are required.')
     }
 
+    const isDevelopment = process.env.NODE_ENV === 'development'
     const hashedPassword = await bcrypt.hash(password, 10)
     return createAuthUser({
         firstName,
@@ -65,6 +69,7 @@ async function createNewAuthUser(credentials: {
         name: `${firstName} ${lastName}`,
         email,
         password: hashedPassword,
+        role: isAdmin && isDevelopment ? AuthUserRole.admin : AuthUserRole.user,
     })
 }
 
@@ -94,10 +99,14 @@ export const authOptions = {
                 lastName: { label: 'Last name', type: 'text', placeholder: 'Last name' },
                 email: { label: 'Email', type: 'email', placeholder: 'hello@maybe.co' },
                 password: { label: 'Password', type: 'password' },
+                isAdmin: { label: 'Admin', type: 'checkbox' },
             },
             async authorize(credentials) {
-                const { firstName, lastName, email, password } = await validateCredentials(
-                    credentials
+                const { firstName, lastName, email, password, isAdmin } = await validateCredentials(
+                    {
+                        ...credentials,
+                        isAdmin: Boolean(credentials?.isAdmin),
+                    }
                 )
 
                 const existingUser = await getAuthUserByEmail(email)
@@ -114,7 +123,7 @@ export const authOptions = {
                     throw new Error('Invalid credentials provided.')
                 }
 
-                return createNewAuthUser({ firstName, lastName, email, password })
+                return createNewAuthUser({ firstName, lastName, email, password, isAdmin })
             },
         }),
     ],
@@ -126,6 +135,7 @@ export const authOptions = {
                 token.firstName = authUser.firstName
                 token.lastName = authUser.lastName
                 token.name = authUser.name
+                token.role = authUser.role
             }
             return token
         },
@@ -136,6 +146,7 @@ export const authOptions = {
             session.firstName = token.firstName
             session.lastName = token.lastName
             session.name = token.name
+            session.role = token.role
             return session
         },
     },
