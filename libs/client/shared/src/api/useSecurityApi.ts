@@ -68,13 +68,13 @@ export function useSecurityApi() {
     const useSyncUSStockTickers = () =>
         useMutation(api.syncUSStockTickers, {
             onSuccess: () => {
-                toast.success(`Syncing institutions`)
+                toast.success(`Syncing stock tickers`)
             },
             onError: () => {
-                toast.error('Failed to sync institutions')
+                toast.error('Failed to sync stock tickers')
             },
             onSettled: () => {
-                queryClient.invalidateQueries(['institutions'])
+                queryClient.invalidateQueries(['securities'])
             },
         })
 

@@ -49,7 +49,7 @@ router.post(
     '/sync/us-stock-tickers',
     endpoint.create({
         resolve: async ({ ctx }) => {
-            ctx.ability.throwUnlessCan('update', 'Security')
+            ctx.ability.throwUnlessCan('manage', 'Security')
 
             await ctx.queueService
                 .getQueue('sync-security')

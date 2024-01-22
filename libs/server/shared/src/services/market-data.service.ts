@@ -309,8 +309,6 @@ export class PolygonMarketDataService implements IMarketDataService {
             asset_class: 'stocks',
         })
 
-        console.log('exchanges: ', exchanges)
-
         const tickers: (ITickersResults & {
             exchangeAcronym: string
             exchangeMic: string
