@@ -1,3 +1,5 @@
+import type { MessageSendingResponse } from 'postmark/dist/client/models'
+
 type EmailCommon = {
     from?: string
     to: string
@@ -10,3 +12,4 @@ type PlainMessageContent = { subject: string; textBody?: string; htmlBody?: stri
 
 export type PlainEmailMessage = EmailCommon & PlainMessageContent
 export type TemplateEmailMessage = EmailCommon & { template: EmailTemplate }
+export type EmailSendingResponse = MessageSendingResponse
