@@ -85,6 +85,7 @@ export const authOptions = {
         strategy: 'jwt' as SessionStrategy,
         maxAge: 1 * 24 * 60 * 60, // 1 Day
     },
+    useSecureCookies: true,
     providers: [
         CredentialsProvider({
             name: 'Credentials',

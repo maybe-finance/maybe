@@ -8,14 +8,10 @@ export const validateAuthJwt = async (req, res, next) => {
             return res.status(500).json({ message: 'Internal Server Error' })
         }
 
-        const cookieName = req.secure
-            ? '__Secure-next-auth.session-token'
-            : 'next-auth.session-token'
-
-        if (req.cookies && cookieName in req.cookies) {
+        if (req.cookies && '__Secure-next-auth.session-token' in req.cookies) {
             try {
                 const token = await decode({
-                    token: req.cookies[cookieName],
+                    token: req.cookies['__Secure-next-auth.session-token'],
                     secret: SECRET,
                 })
 
