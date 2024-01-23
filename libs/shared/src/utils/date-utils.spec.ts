@@ -35,17 +35,17 @@ describe('calculateTimeSeriesInterval', () => {
 
 describe('converts between years and ages', () => {
     it.each`
-        dateOfBirth                       | currentAge
-        ${'1995-02-20'}                   | ${27}
-        ${new Date('Feb 20 1995')}        | ${27}
-        ${DateTime.fromISO('1995-02-20')} | ${27}
-        ${null}                           | ${null}
-        ${undefined}                      | ${null}
-        ${'2022-10-15'}                   | ${0}
-        ${'2021-10-12'}                   | ${1}
-        ${'2021-10-18'}                   | ${0}
+        dateOfBirth                                        | currentAge
+        ${'1995-02-20'}                                    | ${27}
+        ${new Date('Feb 20 1995')}                         | ${27}
+        ${DateTime.fromISO('1995-02-20', { zone: 'utc' })} | ${27}
+        ${null}                                            | ${null}
+        ${undefined}                                       | ${null}
+        ${'2022-10-15'}                                    | ${0}
+        ${'2021-10-12'}                                    | ${1}
+        ${'2021-10-18'}                                    | ${0}
     `(`dob $dateOfBirth is $currentAge years old today`, ({ dateOfBirth, currentAge }) => {
-        const now = DateTime.fromISO('2022-10-15')
+        const now = DateTime.fromISO('2022-10-15', { zone: 'utc' })
 
         expect(dobToAge(dateOfBirth, now)).toBe(currentAge)
     })
