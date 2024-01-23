@@ -1,14 +1,17 @@
 import { useState, type ReactElement } from 'react'
 import { Input, InputPassword, Button, Checkbox } from '@maybe-finance/design-system'
-import { FullPageLayout } from '@maybe-finance/client/features'
+import {
+    FullPageLayout,
+    UserDevTools,
+    completedOnboarding,
+    onboardedProfile,
+} from '@maybe-finance/client/features'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import Script from 'next/script'
 import Link from 'next/link'
 import { useUserApi } from '@maybe-finance/client/shared'
-import { DateUtil } from '@maybe-finance/shared'
-import type { SharedType } from '@maybe-finance/shared'
 
 export default function RegisterPage() {
     const [firstName, setFirstName] = useState('')
@@ -52,8 +55,8 @@ export default function RegisterPage() {
         })
 
         if (isOnboarded) {
-            await updateProfile.mutateAsync(profile)
-            await updateOnboarding.mutateAsync(onboarding)
+            await updateProfile.mutateAsync(onboardedProfile)
+            await updateOnboarding.mutateAsync(completedOnboarding)
         }
 
         if (response && response.error) {
@@ -156,76 +159,6 @@ export default function RegisterPage() {
             </div>
         </>
     )
-}
-
-interface OnboardingType {
-    flow: SharedType.OnboardingFlow
-    updates: {
-        key: string
-        markedComplete: boolean
-    }[]
-}
-
-const onboarding: OnboardingType = {
-    flow: 'main',
-    updates: [
-        {
-            key: 'intro',
-            markedComplete: true,
-        },
-        {
-            key: 'profile',
-            markedComplete: true,
-        },
-        {
-            key: 'firstAccount',
-            markedComplete: true,
-        },
-        {
-            key: 'accountSelection',
-            markedComplete: true,
-        },
-        {
-            key: 'maybe',
-            markedComplete: true,
-        },
-        {
-            key: 'welcome',
-            markedComplete: true,
-        },
-    ],
-}
-
-const profile: SharedType.UpdateUser = {
-    dob: DateUtil.dateTransform(new Date('2000-01-01')),
-    household: 'single',
-    country: 'US',
-    state: null, // should always be null for now
-}
-
-type UserDevToolsProps = {
-    isAdmin: boolean
-    setIsAdmin: (isAdmin: boolean) => void
-    isOnboarded: boolean
-    setIsOnboarded: (isOnboarded: boolean) => void
-}
-
-function UserDevTools({ isAdmin, setIsAdmin, isOnboarded, setIsOnboarded }: UserDevToolsProps) {
-    return process.env.NODE_ENV === 'development' ? (
-        <div className="my-2 p-2 border border-red-300 rounded-md">
-            <h6 className="flex text-red">
-                Dev Tools <i className="ri-tools-fill ml-1.5" />
-            </h6>
-            <p className="text-sm my-2">
-                This section will NOT show in production and is solely for making testing easier.
-            </p>
-
-            <div className="flex flex-col">
-                <Checkbox checked={isAdmin} onChange={setIsAdmin} label="Admin user" />
-                <Checkbox checked={isOnboarded} onChange={setIsOnboarded} label="Onboarded user" />
-            </div>
-        </div>
-    ) : null
 }
 
 RegisterPage.getLayout = function getLayout(page: ReactElement) {
