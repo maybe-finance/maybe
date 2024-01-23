@@ -203,14 +203,14 @@ const profile: SharedType.UpdateUser = {
     state: null, // should always be null for now
 }
 
-type AuthDevToolsProps = {
+type UserDevToolsProps = {
     isAdmin: boolean
     setIsAdmin: (isAdmin: boolean) => void
     isOnboarded: boolean
     setIsOnboarded: (isOnboarded: boolean) => void
 }
 
-function UserDevTools({ isAdmin, setIsAdmin, isOnboarded, setIsOnboarded }: AuthDevToolsProps) {
+function UserDevTools({ isAdmin, setIsAdmin, isOnboarded, setIsOnboarded }: UserDevToolsProps) {
     return process.env.NODE_ENV === 'development' ? (
         <div className="my-2 p-2 border border-red-300 rounded-md">
             <h6 className="flex text-red">
