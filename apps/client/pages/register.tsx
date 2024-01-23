@@ -15,7 +15,7 @@ export default function RegisterPage() {
     const [isValid, setIsValid] = useState(false)
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(false)
-    const [isAdmin, setIsAdmin] = useState(false)
+    const [isAdmin, setIsAdmin] = useState<boolean>(false)
 
     const { data: session } = useSession()
     const router = useRouter()
@@ -39,7 +39,7 @@ export default function RegisterPage() {
             password,
             firstName,
             lastName,
-            isAdmin,
+            role: isAdmin ? 'admin' : 'user',
             redirect: false,
         })
 
@@ -114,13 +114,14 @@ export default function RegisterPage() {
 
                             <Button
                                 type="submit"
+                                fullWidth
                                 disabled={!isValid}
                                 variant={isValid ? 'primary' : 'secondary'}
                                 isLoading={isLoading}
                             >
                                 Register
                             </Button>
-                            <div className="text-sm text-gray-50 pt-2">
+                            <div className="text-sm text-gray-50 text-center">
                                 <div>
                                     Already have an account?{' '}
                                     <Link

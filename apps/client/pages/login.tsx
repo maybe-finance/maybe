@@ -90,13 +90,14 @@ export default function LoginPage() {
 
                             <Button
                                 type="submit"
+                                fullWidth
                                 disabled={!isValid || isLoading}
                                 variant={isValid ? 'primary' : 'secondary'}
                                 isLoading={isLoading}
                             >
                                 Log in
                             </Button>
-                            <div className="text-sm text-gray-50 pt-2">
+                            <div className="text-sm text-gray-50 text-center">
                                 <div>
                                     Don&apos;t have an account?{' '}
                                     <Link

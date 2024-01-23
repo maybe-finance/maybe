@@ -19,9 +19,9 @@ function sendWebhook(payload: Record<string, any>) {
     })
 
     return cy
-        .request({
+        .apiRequest({
             method: 'POST',
-            url: `${Cypress.env('API_URL')}/stripe/webhook`,
+            url: '/stripe/webhook',
             headers: {
                 ['stripe-signature']: signature,
             },

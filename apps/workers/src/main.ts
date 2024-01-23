@@ -81,6 +81,14 @@ syncSecurityQueue.process(
 )
 
 /**
+ * sync-us-stock-ticker queue
+ */
+syncSecurityQueue.process(
+    'sync-us-stock-tickers',
+    async () => await securityPricingProcessor.syncUSStockTickers()
+)
+
+/**
  * purge-user queue
  */
 purgeUserQueue.process(
@@ -94,15 +102,43 @@ purgeUserQueue.process(
 /**
  * sync-all-securities queue
  */
-// Start repeated job for syncing securities (Bull won't duplicate it as long as the repeat options are the same)
-syncSecurityQueue.add(
-    'sync-all-securities',
-    {},
-    {
-        repeat: { cron: '*/5 * * * *' }, // Run every 5 minutes
-        jobId: Date.now().toString(),
-    }
-)
+
+// If no securities exist, sync them immediately
+// Otherwise, schedule the job to run every 24 hours
+// Use same jobID to prevent duplicates and rate limiting
+syncSecurityQueue.cancelJobs().then(() => {
+    prisma.security
+        .count({
+            where: {
+                providerName: 'polygon',
+            },
+        })
+        .then((count) => {
+            if (count === 0) {
+                syncSecurityQueue.add('sync-us-stock-tickers', {}, {})
+            } else {
+                syncSecurityQueue.add(
+                    'sync-us-stock-tickers',
+                    {},
+                    {
+                        repeat: { cron: '0 */24 * * *' }, // Run every 24 hours
+                        jobId: Date.now().toString(),
+                    }
+                )
+            }
+            // Do not run if on the free tier (rate limits)
+            if (env.NX_POLYGON_TIER !== 'basic') {
+                syncSecurityQueue.add(
+                    'sync-all-securities',
+                    {},
+                    {
+                        repeat: { cron: '*/5 * * * *' }, // Run every 5 minutes
+                        jobId: Date.now().toString(),
+                    }
+                )
+            }
+        })
+})
 
 /**
  * sync-institution queue

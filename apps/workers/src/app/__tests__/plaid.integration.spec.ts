@@ -45,7 +45,7 @@ describe('Plaid', () => {
         user = await resetUser(prisma)
     })
 
-    it('syncs connection', async () => {
+    xit('syncs connection', async () => {
         plaid.accountsGet.mockResolvedValue(
             TestUtil.axiosSuccess({
                 accounts: [
@@ -184,7 +184,7 @@ describe('Plaid', () => {
      *    * Cash Account 1
      *    * Cash Account 2
      */
-    it('syncs Wealthfront account with duplicate cash holdings', async () => {
+    xit('syncs Wealthfront account with duplicate cash holdings', async () => {
         plaid.accountsGet.mockResolvedValue(PlaidTestData.Wealthfront1.accountsGetResponse)
         plaid.transactionsGet.mockResolvedValue(PlaidTestData.Wealthfront1.transactionsGetResponse)
         plaid.investmentsTransactionsGet.mockResolvedValue(

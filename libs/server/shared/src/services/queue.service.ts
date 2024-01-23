@@ -67,7 +67,10 @@ export type SendEmailQueueJobData =
 export type SyncUserQueue = IQueue<SyncUserQueueJobData, 'sync-user'>
 export type SyncAccountQueue = IQueue<SyncAccountQueueJobData, 'sync-account'>
 export type SyncConnectionQueue = IQueue<SyncConnectionQueueJobData, 'sync-connection'>
-export type SyncSecurityQueue = IQueue<SyncSecurityQueueJobData, 'sync-all-securities'>
+export type SyncSecurityQueue = IQueue<
+    SyncSecurityQueueJobData,
+    'sync-all-securities' | 'sync-us-stock-tickers'
+>
 export type PurgeUserQueue = IQueue<{ userId: User['id'] }, 'purge-user'>
 export type SyncInstitutionQueue = IQueue<
     {},

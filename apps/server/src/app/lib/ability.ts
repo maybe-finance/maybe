@@ -53,6 +53,7 @@ export default function defineAbilityFor(user: (Pick<User, 'id'> & { role: AuthU
             can('manage', 'Institution')
             can('manage', 'Plan')
             can('manage', 'Holding')
+            can('manage', 'Security')
         }
 
         // Account
