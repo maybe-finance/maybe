@@ -91,24 +91,24 @@ export class SecurityPricingService implements ISecurityPricingService {
                     take: count,
                 }),
         })) {
-            const pricing =
+            const pricingData =
                 process.env.NX_POLYGON_TIER === 'basic'
                     ? await this.marketDataService.getEndOfDayPricing(securities, allPrices)
                     : await this.marketDataService.getLivePricing(securities)
-            const filteredPricing = pricing.filter((p) => !!p.pricing)
+            const prices = pricingData.filter((p) => !!p.pricing)
 
             this.logger.debug(
-                `Fetched live pricing for ${filteredPricing.length} / ${securities.length} securities`
+                `Fetched live pricing for ${prices.length} / ${securities.length} securities`
             )
 
-            if (filteredPricing.length === 0) break
+            if (prices.length === 0) break
 
             await this.prisma.$transaction([
                 this.prisma.$executeRaw`
                   INSERT INTO security_pricing (security_id, date, price_close, price_as_of, source)
                   VALUES
                     ${Prisma.join(
-                        filteredPricing.map(
+                        prices.map(
                             ({ security, pricing }) =>
                                 Prisma.sql`(
                                   ${security.id},
@@ -151,7 +151,7 @@ export class SecurityPricingService implements ISecurityPricingService {
                         account a
                         INNER JOIN holding h ON h.account_id = a.id
                       WHERE
-                        h.security_id IN (${Prisma.join(filteredPricing.map((p) => p.security.id))})
+                        h.security_id IN (${Prisma.join(prices.map((p) => p.security.id))})
                     )
                   GROUP BY
                     h.account_id
