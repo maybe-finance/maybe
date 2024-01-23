@@ -71,5 +71,4 @@ export const onboardedProfile: SharedType.UpdateUser = {
     dob: DateUtil.dateTransform(new Date('2000-01-01')),
     household: 'single',
     country: 'US',
-    state: null, // should always be null for now
 }
