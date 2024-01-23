@@ -8,7 +8,10 @@ import { SharedUtil } from '@maybe-finance/shared'
 import _ from 'lodash'
 
 export interface ISecurityPricingService {
-    sync(security: Pick<Security, 'id' | 'symbol' | 'plaidType'>, syncStart?: string): Promise<void>
+    sync(
+        security: Pick<Security, 'id' | 'symbol' | 'assetClass'>,
+        syncStart?: string
+    ): Promise<void>
     syncAll(): Promise<void>
     syncUSStockTickers(): Promise<void>
 }
@@ -21,7 +24,7 @@ export class SecurityPricingService implements ISecurityPricingService {
     ) {}
 
     async sync(
-        security: Pick<Security, 'id' | 'symbol' | 'plaidType' | 'currencyCode'>,
+        security: Pick<Security, 'id' | 'symbol' | 'assetClass' | 'currencyCode'>,
         syncStart?: string
     ) {
         const dailyPricing = await this.marketDataService.getDailyPricing(
@@ -72,36 +75,40 @@ export class SecurityPricingService implements ISecurityPricingService {
     async syncAll() {
         const profiler = this.logger.startTimer()
 
+        const allPrices = await this.marketDataService.getAllDailyPricing()
+
         for await (const securities of SharedUtil.paginateIt({
-            pageSize: 100,
+            pageSize: 1000,
             fetchData: (offset, count) =>
                 this.prisma.security.findMany({
                     select: {
                         id: true,
                         symbol: true,
-                        plaidType: true,
+                        assetClass: true,
                         currencyCode: true,
                     },
                     skip: offset,
                     take: count,
                 }),
         })) {
-            const livePricing = await this.marketDataService
-                .getLivePricing(securities)
-                .then((lp) => lp.filter((p) => !!p.pricing))
+            const pricing =
+                process.env.NX_POLYGON_TIER === 'basic'
+                    ? await this.marketDataService.getEndOfDayPricing(securities, allPrices)
+                    : await this.marketDataService.getLivePricing(securities)
+            const filteredPricing = pricing.filter((p) => !!p.pricing)
 
             this.logger.debug(
-                `Fetched live pricing for ${livePricing.length} / ${securities.length} securities`
+                `Fetched live pricing for ${filteredPricing.length} / ${securities.length} securities`
             )
 
-            if (livePricing.length === 0) break
+            if (filteredPricing.length === 0) break
 
             await this.prisma.$transaction([
                 this.prisma.$executeRaw`
                   INSERT INTO security_pricing (security_id, date, price_close, price_as_of, source)
                   VALUES
                     ${Prisma.join(
-                        livePricing.map(
+                        filteredPricing.map(
                             ({ security, pricing }) =>
                                 Prisma.sql`(
                                   ${security.id},
@@ -144,7 +151,7 @@ export class SecurityPricingService implements ISecurityPricingService {
                         account a
                         INNER JOIN holding h ON h.account_id = a.id
                       WHERE
-                        h.security_id IN (${Prisma.join(livePricing.map((p) => p.security.id))})
+                        h.security_id IN (${Prisma.join(filteredPricing.map((p) => p.security.id))})
                     )
                   GROUP BY
                     h.account_id

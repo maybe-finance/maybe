@@ -22,6 +22,11 @@ const SecurityApi = (axios: AxiosInstance) => ({
         const { data } = await axios.post(`/securities/sync/us-stock-tickers`)
         return data
     },
+
+    async syncSecurityPricing() {
+        const { data } = await axios.post(`/securities/sync/stock-pricing`)
+        return data
+    },
 })
 
 const staleTimes = {
@@ -78,9 +83,23 @@ export function useSecurityApi() {
             },
         })
 
+    const useSyncSecurityPricing = () =>
+        useMutation(api.syncSecurityPricing, {
+            onSuccess: () => {
+                toast.success(`Syncing securities pricing`)
+            },
+            onError: () => {
+                toast.error('Failed to sync securities pricing')
+            },
+            onSettled: () => {
+                queryClient.invalidateQueries(['securities'])
+            },
+        })
+
     return {
         useSecurity,
         useSecurityDetails,
         useSyncUSStockTickers,
+        useSyncSecurityPricing,
     }
 }

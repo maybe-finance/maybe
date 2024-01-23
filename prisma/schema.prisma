@@ -253,6 +253,7 @@ enum AssetClass {
   crypto
   fixed_income
   stocks
+  options
   other
 }
 

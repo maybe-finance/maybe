@@ -36,6 +36,10 @@ if (process.env.IS_VSCODE_DEBUG === 'true') {
     jest.setTimeout(100000)
 }
 
+afterAll(async () => {
+    await prisma.$disconnect()
+})
+
 describe('Plaid', () => {
     let user: User
 

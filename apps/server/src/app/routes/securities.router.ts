@@ -60,4 +60,19 @@ router.post(
     })
 )
 
+router.post(
+    '/sync/stock-pricing',
+    endpoint.create({
+        resolve: async ({ ctx }) => {
+            ctx.ability.throwUnlessCan('manage', 'Security')
+
+            await ctx.queueService
+                .getQueue('sync-security')
+                .addBulk([{ name: 'sync-all-securities', data: {} }])
+
+            return { success: true }
+        },
+    })
+)
+
 export default router

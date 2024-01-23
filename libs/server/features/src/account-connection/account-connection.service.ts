@@ -123,7 +123,7 @@ export class AccountConnectionService implements IAccountConnectionService {
             select: {
                 id: true,
                 symbol: true,
-                plaidType: true,
+                assetClass: true,
             },
         })
 

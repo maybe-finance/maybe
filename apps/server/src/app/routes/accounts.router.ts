@@ -1,4 +1,5 @@
 import type { Account } from '@prisma/client'
+import { AssetClass } from '@prisma/client'
 import type { SharedType } from '@maybe-finance/shared'
 import { Router } from 'express'
 import { subject } from '@casl/ability'
@@ -197,7 +198,7 @@ router.get(
                     return {
                         ticker,
                         pricing: await ctx.marketDataService.getDailyPricing(
-                            { symbol: ticker, plaidType: null, currencyCode: 'USD' },
+                            { symbol: ticker, assetClass: AssetClass.other, currencyCode: 'USD' },
                             input.start,
                             input.end
                         ),

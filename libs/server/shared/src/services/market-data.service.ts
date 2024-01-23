@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client'
+import { AssetClass, Prisma } from '@prisma/client'
 import type { Security } from '@prisma/client'
 import _ from 'lodash'
 import { DateTime, Duration } from 'luxon'
@@ -10,13 +10,14 @@ import { MarketUtil, SharedUtil } from '@maybe-finance/shared'
 import type { CacheService } from '.'
 import { toDecimal } from '../utils/db-utils'
 import type { ITickersResults } from '@polygon.io/client-js/lib/rest/reference/tickers'
+import type { IAggs } from '@polygon.io/client-js/lib/rest/stocks/aggregates'
 
 type DailyPricing = {
     date: DateTime
     priceClose: Prisma.Decimal
 }
 
-type LivePricing<TSecurity> = {
+export type LivePricing<TSecurity> = {
     security: TSecurity
     pricing: {
         ticker: string
@@ -25,6 +26,17 @@ type LivePricing<TSecurity> = {
         changePct: Prisma.Decimal
         updatedAt: DateTime
     } | null
+}
+
+export type EndOfDayPricing<TSecurity> = {
+    security: TSecurity
+    pricing: {
+        ticker: string
+        price: Prisma.Decimal
+        change: Prisma.Decimal
+        changePct: Prisma.Decimal
+        updatedAt: DateTime
+    }
 }
 
 type OptionDetails = {
@@ -40,17 +52,33 @@ export interface IMarketDataService {
     /**
      * fetches pricing info for inclusive date range
      */
-    getDailyPricing<TSecurity extends Pick<Security, 'symbol' | 'plaidType' | 'currencyCode'>>(
+    getDailyPricing<TSecurity extends Pick<Security, 'symbol' | 'assetClass' | 'currencyCode'>>(
         security: TSecurity,
         start: DateTime,
         end: DateTime
     ): Promise<DailyPricing[]>
 
     /**
+     * fetches end of day pricing info for a batch of securities
+     */
+    getEndOfDayPricing<
+        TSecurity extends Pick<Security, 'id' | 'symbol' | 'assetClass' | 'currencyCode'>
+    >(
+        securities: TSecurity[],
+        allPricing: IAggs
+    ): Promise<EndOfDayPricing<TSecurity>[]>
+
+    /**
+     * fetches all end of day pricing
+     */
+
+    getAllDailyPricing(): Promise<IAggs>
+
+    /**
      * fetches up-to-date pricing info for a batch of securities
      */
     getLivePricing<
-        TSecurity extends Pick<Security, 'id' | 'symbol' | 'plaidType' | 'currencyCode'>
+        TSecurity extends Pick<Security, 'id' | 'symbol' | 'assetClass' | 'currencyCode'>
     >(
         securities: TSecurity[]
     ): Promise<LivePricing<TSecurity>[]>
@@ -61,7 +89,7 @@ export interface IMarketDataService {
     getOptionDetails(symbol: Security['symbol']): Promise<OptionDetails>
 
     getSecurityDetails(
-        security: Pick<Security, 'symbol' | 'plaidType' | 'currencyCode'>
+        security: Pick<Security, 'symbol' | 'assetClass' | 'currencyCode'>
     ): Promise<SharedType.SecurityDetails>
 
     /**
@@ -78,6 +106,7 @@ export interface IMarketDataService {
 
 export class PolygonMarketDataService implements IMarketDataService {
     private readonly api: IRestClient
+    private shouldRateLimit = process.env.NX_POLYGON_TIER === 'basic' && !process.env.CI
 
     readonly source = 'polygon'
 
@@ -90,7 +119,7 @@ export class PolygonMarketDataService implements IMarketDataService {
     }
 
     async getDailyPricing<
-        TSecurity extends Pick<Security, 'symbol' | 'plaidType' | 'currencyCode'>
+        TSecurity extends Pick<Security, 'symbol' | 'assetClass' | 'currencyCode'>
     >(security: TSecurity, start: DateTime, end: DateTime): Promise<DailyPricing[]> {
         const ticker = getPolygonTicker(security)
         if (!ticker) return []
@@ -116,8 +145,62 @@ export class PolygonMarketDataService implements IMarketDataService {
         )
     }
 
+    async getEndOfDayPricing<
+        TSecurity extends Pick<Security, 'id' | 'symbol' | 'assetClass' | 'currencyCode'>
+    >(securities: TSecurity[], allPricing: IAggs): Promise<EndOfDayPricing<TSecurity>[]> {
+        const securitiesWithTicker = securities.map((security) => ({
+            security,
+            ticker: getPolygonTicker(security),
+        }))
+        const tickers = _(securitiesWithTicker)
+            .map((s) => s.ticker)
+            .filter(SharedUtil.nonNull)
+            .uniqBy((t) => t.ticker)
+            .sortBy((t) => [t.market, t.ticker])
+            .value()
+
+        const stockTickers = tickers.filter((t) => t.market === 'stocks').map((s) => s.ticker)
+
+        if (stockTickers.length > 0) {
+            return allPricing
+                .results!.filter(({ t, c }) => t != null && c != null)
+                .map((pricing) => {
+                    const foundSecurity = securitiesWithTicker.find(
+                        ({ ticker }) => ticker?.ticker === pricing.T
+                    )
+                    if (!foundSecurity) return null
+                    return {
+                        security: foundSecurity.security,
+                        pricing: {
+                            ticker: pricing.T!,
+                            price: new Prisma.Decimal(pricing.c!),
+                            change: new Prisma.Decimal(pricing.c! - pricing.o!),
+                            changePct: new Prisma.Decimal(
+                                ((pricing.c! - pricing.o!) / pricing.o!) * 100
+                            ),
+                            updatedAt: DateTime.fromMillis(pricing.t!, {
+                                zone: 'America/New_York',
+                            }),
+                        },
+                    }
+                })
+                .filter(SharedUtil.nonNull)
+        } else {
+            return []
+        }
+    }
+
+    async getAllDailyPricing(): Promise<IAggs> {
+        return await this.api.stocks.aggregatesGroupedDaily(
+            DateTime.now().minus({ days: 1 }).toISODate(),
+            {
+                adjusted: 'true',
+            }
+        )
+    }
+
     async getLivePricing<
-        TSecurity extends Pick<Security, 'id' | 'symbol' | 'plaidType' | 'currencyCode'>
+        TSecurity extends Pick<Security, 'id' | 'symbol' | 'assetClass' | 'currencyCode'>
     >(securities: TSecurity[]): Promise<LivePricing<TSecurity>[]> {
         const securitiesWithTicker = securities.map((security) => ({
             security,
@@ -196,7 +279,7 @@ export class PolygonMarketDataService implements IMarketDataService {
     async getOptionDetails(symbol: Security['symbol']): Promise<OptionDetails> {
         const ticker = getPolygonTicker({
             symbol,
-            plaidType: 'derivative',
+            assetClass: AssetClass.options,
             currencyCode: 'USD',
         })
 
@@ -212,7 +295,7 @@ export class PolygonMarketDataService implements IMarketDataService {
         }
     }
 
-    async getSecurityDetails(security: Pick<Security, 'symbol' | 'plaidType' | 'currencyCode'>) {
+    async getSecurityDetails(security: Pick<Security, 'symbol' | 'assetClass' | 'currencyCode'>) {
         const ticker = getPolygonTicker(security)
         if (!ticker || ticker.market === 'options') {
             return {}
@@ -303,7 +386,6 @@ export class PolygonMarketDataService implements IMarketDataService {
             exchangeName: string
         })[]
     > {
-        const shouldRateLimit = process.env.NX_POLYGON_TIER === 'basic'
         const exchanges = await this.api.reference.exchanges({
             locale: 'us',
             asset_class: 'stocks',
@@ -321,7 +403,7 @@ export class PolygonMarketDataService implements IMarketDataService {
                 exchangeName: string
             })[] = await SharedUtil.paginateWithNextUrl({
                 pageSize: 1000,
-                delay: shouldRateLimit
+                delay: this.shouldRateLimit
                     ? {
                           onDelay: (message: string) => this.logger.debug(message),
                           milliseconds: 15_000, // Basic accounts rate limited at 5 calls / minute
@@ -337,7 +419,7 @@ export class PolygonMarketDataService implements IMarketDataService {
                                     cursor: nextCursor,
                                     limit: limit,
                                 }),
-                            { maxRetries: 1, delay: shouldRateLimit ? 15_000 : 0 }
+                            { maxRetries: 1, delay: this.shouldRateLimit ? 15_000 : 0 }
                         )
                         const tickersWithExchange = results.map((ticker) => {
                             return {
@@ -530,27 +612,21 @@ class PolygonTicker {
 
 export function getPolygonTicker({
     symbol,
-    plaidType,
+    assetClass,
     currencyCode,
-}: Pick<Security, 'symbol' | 'plaidType' | 'currencyCode'>): PolygonTicker | null {
+}: Pick<Security, 'symbol' | 'assetClass' | 'currencyCode'>): PolygonTicker | null {
     if (!symbol) return null
 
     // https://plaid.com/docs/api/products/investments/#investments-holdings-get-response-securities-type
-    switch (plaidType) {
-        case 'derivative': {
+    switch (assetClass) {
+        case AssetClass.options: {
             return new PolygonTicker('options', `O:${symbol}`)
         }
-        case 'cryptocurrency': {
+        case AssetClass.crypto: {
             return new PolygonTicker('crypto', `X:${symbol}${currencyCode}`)
         }
-        case 'cash': {
+        case AssetClass.cash: {
             // Plaid used to prefix `ticker_symbol` with "CUR:" for crypto securities so this check is for handling that legacy scenario
-            if (symbol.startsWith('CUR:')) {
-                return symbol.slice(4) === currencyCode
-                    ? null // if the symbol matches the currencyCode then we're just dealing with a basic cash holding
-                    : new PolygonTicker('crypto', `X:${symbol.slice(4)}${currencyCode}`)
-            }
-
             return symbol === currencyCode
                 ? null // if the symbol matches the currencyCode then we're just dealing with a basic cash holding
                 : new PolygonTicker('fx', `C:${symbol}${currencyCode}`)

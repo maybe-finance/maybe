@@ -136,6 +136,15 @@ syncSecurityQueue.cancelJobs().then(() => {
                         jobId: Date.now().toString(),
                     }
                 )
+            } else if (env.NX_POLYGON_TIER === 'basic') {
+                syncSecurityQueue.add(
+                    'sync-all-securities',
+                    {},
+                    {
+                        repeat: { cron: '* 3 * * *' }, // Run at 3am to avoid rate limits
+                        jobId: Date.now().toString(),
+                    }
+                )
             }
         })
 })
