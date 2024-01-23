@@ -1,4 +1,4 @@
-import '../assets/styles.css'
+import '..//styles.css'
 
 import theme from './theme'
 
