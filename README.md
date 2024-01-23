@@ -93,11 +93,7 @@ That's it! As long as you run the project locally using `docker` with `yarn dev:
 
 To contribute, please see our [contribution guide](https://github.com/maybe-finance/maybe/blob/main/CONTRIBUTING.md).
 
-## High-priority issues
-
-The biggest focus at the moment is on getting the app functional without some previously key external services (namely Plaid).
-
-You can view the current [high-priority issues here](https://github.com/maybe-finance/maybe/issues?q=is:issue+is:open+label:%22high+priority%22). Those are the most impactful issues to tackle first.
+You can view organized issues on [our public Roadmap](https://github.com/maybe-finance/maybe/projects?query=is:open?type%3Dnew&query=is:open%20sort:title-asc). This is a great way to narrow down the most impactful ways to contribute.
 
 ## External data
 
