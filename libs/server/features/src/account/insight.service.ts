@@ -641,14 +641,7 @@ export class InsightService implements IInsightService {
             INNER JOIN (
               SELECT
                 id,
-                CASE
-                  -- plaid
-                  WHEN plaid_type IN ('equity', 'etf', 'mutual fund', 'derivative') THEN 'stocks'
-                  WHEN plaid_type IN ('fixed income') THEN 'fixed_income'
-                  WHEN plaid_type IN ('cash', 'loan') THEN 'cash'
-                  WHEN plaid_type IN ('cryptocurrency') THEN 'crypto'
-                  ELSE 'other'
-                END AS "asset_class"
+                asset_class
               FROM
                 "security"
             ) s ON s.id = h.security_id
@@ -694,14 +687,7 @@ export class InsightService implements IInsightService {
               INNER JOIN security s ON s.id = h.security_id
               LEFT JOIN LATERAL (
                 SELECT
-                  CASE
-                    -- plaid
-                    WHEN s.plaid_type IN ('equity', 'etf', 'mutual fund', 'derivative') THEN 'stocks'
-                    WHEN s.plaid_type IN ('fixed income') THEN 'fixed_income'
-                    WHEN s.plaid_type IN ('cash', 'loan') THEN 'cash'
-                    WHEN s.plaid_type IN ('cryptocurrency') THEN 'crypto'
-                    ELSE 'other'
-                  END AS "category"
+                  s.asset_class AS "category"
               ) x ON TRUE
             WHERE
               h.account_id IN ${accountIds}
@@ -828,28 +814,21 @@ export class InsightService implements IInsightService {
             UNION ALL
             -- investment accounts
             SELECT
-              s.asset_type,
+              s.asset_class::text AS "asset_type",
               SUM(h.value) AS "amount"
             FROM
               holdings_enriched h
               INNER JOIN (
                 SELECT
                   id,
-                  CASE
-                    -- plaid
-                    WHEN plaid_type IN ('equity', 'etf', 'mutual fund', 'derivative') THEN 'stocks'
-                    WHEN plaid_type IN ('fixed income') THEN 'bonds'
-                    WHEN plaid_type IN ('cash', 'loan') THEN 'cash'
-                    WHEN plaid_type IN ('cryptocurrency') THEN 'crypto'
-                    ELSE 'other'
-                  END AS "asset_type"
+                  asset_class
                 FROM
                   "security"
               ) s ON s.id = h.security_id
             WHERE
               h.account_id IN ${pAccountIds}
             GROUP BY
-              s.asset_type
+              s.asset_class
           ) x
           GROUP BY
             1

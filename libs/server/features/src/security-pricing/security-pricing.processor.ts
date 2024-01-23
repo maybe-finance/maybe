@@ -4,6 +4,7 @@ import type { ISecurityPricingService } from './security-pricing.service'
 
 export interface ISecurityPricingProcessor {
     syncAll(jobData?: SyncSecurityQueueJobData): Promise<void>
+    syncUSStockTickers(jobData?: SyncSecurityQueueJobData): Promise<void>
 }
 
 export class SecurityPricingProcessor implements ISecurityPricingProcessor {
@@ -14,5 +15,9 @@ export class SecurityPricingProcessor implements ISecurityPricingProcessor {
 
     async syncAll(_jobData?: SyncSecurityQueueJobData) {
         await this.securityPricingService.syncAll()
+    }
+
+    async syncUSStockTickers(_jobData?: SyncSecurityQueueJobData) {
+        await this.securityPricingService.syncUSStockTickers()
     }
 }

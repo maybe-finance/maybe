@@ -100,10 +100,7 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
 
         const accounts = await this._extractAccounts(accessToken)
 
-        const transactions = await this._extractTransactions(
-            accessToken,
-            accounts.map((a) => a.id)
-        )
+        const transactions = await this._extractTransactions(accessToken, accounts)
 
         this.logger.info(
             `Extracted Teller data for customer ${user.tellerUserId} accounts=${accounts.length} transactions=${transactions.length}`,
@@ -196,26 +193,26 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
         ]
     }
 
-    private async _extractTransactions(accessToken: string, accountIds: string[]) {
+    private async _extractTransactions(
+        accessToken: string,
+        tellerAccounts: TellerTypes.GetAccountsResponse
+    ) {
         const accountTransactions = await Promise.all(
-            accountIds.map(async (accountId) => {
-                const account = await this.prisma.account.findFirst({
-                    where: {
-                        tellerAccountId: accountId,
-                    },
-                })
+            tellerAccounts.map(async (tellerAccount) => {
+                const type = TellerUtil.getType(tellerAccount.type)
+                const classification = AccountUtil.getClassification(type)
 
                 const transactions = await SharedUtil.withRetry(
                     () =>
                         this.teller.getTransactions({
-                            accountId,
+                            accountId: tellerAccount.id,
                             accessToken,
                         }),
                     {
                         maxRetries: 3,
                     }
                 )
-                if (account!.classification === AccountClassification.asset) {
+                if (classification === AccountClassification.asset) {
                     transactions.forEach((t) => {
                         t.amount = String(Number(t.amount) * -1)
                     })
@@ -277,7 +274,7 @@ export class TellerETL implements IETL<Connection, TellerRawData, TellerData> {
                     pending = EXCLUDED.pending,
                     merchant_name = EXCLUDED.merchant_name,
                     teller_type = EXCLUDED.teller_type,
-                    teller_category = EXCLUDED.teller_category;
+                    teller_category = EXCLUDED.teller_category,
                     category = EXCLUDED.category;
             `
         })

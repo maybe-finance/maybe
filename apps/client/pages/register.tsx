@@ -1,5 +1,5 @@
 import { useState, type ReactElement } from 'react'
-import { Input, InputPassword, Button } from '@maybe-finance/design-system'
+import { Input, InputPassword, Button, Checkbox } from '@maybe-finance/design-system'
 import { FullPageLayout } from '@maybe-finance/client/features'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
@@ -15,6 +15,7 @@ export default function RegisterPage() {
     const [isValid, setIsValid] = useState(false)
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(false)
+    const [isAdmin, setIsAdmin] = useState<boolean>(false)
 
     const { data: session } = useSession()
     const router = useRouter()
@@ -38,6 +39,7 @@ export default function RegisterPage() {
             password,
             firstName,
             lastName,
+            role: isAdmin ? 'admin' : 'user',
             redirect: false,
         })
 
@@ -108,15 +110,18 @@ export default function RegisterPage() {
                                 </div>
                             ) : null}
 
+                            <AuthDevTools isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
+
                             <Button
                                 type="submit"
+                                fullWidth
                                 disabled={!isValid}
                                 variant={isValid ? 'primary' : 'secondary'}
                                 isLoading={isLoading}
                             >
                                 Register
                             </Button>
-                            <div className="text-sm text-gray-50 pt-2">
+                            <div className="text-sm text-gray-50 text-center">
                                 <div>
                                     Already have an account?{' '}
                                     <Link
@@ -133,6 +138,28 @@ export default function RegisterPage() {
             </div>
         </>
     )
+}
+
+type AuthDevToolsProps = {
+    isAdmin: boolean
+    setIsAdmin: (isAdmin: boolean) => void
+}
+
+function AuthDevTools({ isAdmin, setIsAdmin }: AuthDevToolsProps) {
+    return process.env.NODE_ENV === 'development' ? (
+        <div className="my-2 p-2 border border-red-300 rounded-md">
+            <h6 className="flex text-red">
+                Dev Tools <i className="ri-tools-fill ml-1.5" />
+            </h6>
+            <p className="text-sm my-2">
+                This section will NOT show in production and is solely for making testing easier.
+            </p>
+
+            <div>
+                <Checkbox checked={isAdmin} onChange={setIsAdmin} label="Create Admin user?" />
+            </div>
+        </div>
+    ) : null
 }
 
 RegisterPage.getLayout = function getLayout(page: ReactElement) {

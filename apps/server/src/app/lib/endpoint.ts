@@ -5,7 +5,6 @@ import type {
     IInsightService,
     ISecurityPricingService,
     IPlanService,
-    IEmailService,
 } from '@maybe-finance/server/features'
 import {
     CryptoService,
@@ -55,10 +54,10 @@ import prisma from './prisma'
 import plaid, { getPlaidWebhookUrl } from './plaid'
 import teller, { getTellerWebhookUrl } from './teller'
 import stripe from './stripe'
-import postmark from './postmark'
 import defineAbilityFor from './ability'
 import env from '../../env'
 import logger from '../lib/logger'
+import { initializeEmailClient } from './email'
 
 // shared services
 
@@ -73,12 +72,12 @@ export const queueService = new QueueService(
         : new BullQueueFactory(logger.child({ service: 'BullQueueFactory' }), env.NX_REDIS_URL)
 )
 
-export const emailService: IEmailService = new EmailService(
+export const emailService: EmailService = new EmailService(
     logger.child({ service: 'EmailService' }),
-    postmark,
+    initializeEmailClient(),
     {
-        from: env.NX_POSTMARK_FROM_ADDRESS,
-        replyTo: env.NX_POSTMARK_REPLY_TO_ADDRESS,
+        from: env.NX_EMAIL_FROM_ADDRESS,
+        replyTo: env.NX_EMAIL_REPLY_TO_ADDRESS,
     }
 )
 
@@ -301,15 +300,11 @@ async function getCurrentUser(jwt: NonNullable<Request['user']>) {
 
     return {
         ...user,
+        role: jwt.role,
         // TODO: Replace Auth0 concepts with next-auth
-        roles: [],
         primaryIdentity: {},
         userMetadata: {},
         appMetadata: {},
-        // roles: jwt[SharedType.Auth0CustomNamespace.Roles] ?? [],
-        // primaryIdentity: jwt[SharedType.Auth0CustomNamespace.PrimaryIdentity] ?? {},
-        // userMetadata: jwt[SharedType.Auth0CustomNamespace.UserMetadata] ?? {},
-        // appMetadata: jwt[SharedType.Auth0CustomNamespace.AppMetadata] ?? {},
     }
 }
 

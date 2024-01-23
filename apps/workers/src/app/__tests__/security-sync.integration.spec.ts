@@ -26,6 +26,31 @@ beforeAll(() => {
         .get((uri) => uri.includes('/v2/snapshot/locale/us/markets/stocks/tickers'))
         .reply(200, PolygonTestData.snapshotAllTickers)
         .persist()
+
+    nock('https://api.polygon.io')
+        .get((uri) => uri.includes('/v3/reference/exchanges'))
+        .reply(200, PolygonTestData.getExchanges)
+        .persist()
+
+    nock('https://api.polygon.io')
+        .get(
+            (uri) =>
+                uri.includes('/v3/reference/tickers') &&
+                uri.includes('market=stocks') &&
+                uri.includes('exchange=XNAS')
+        )
+        .reply(200, PolygonTestData.getNASDAQTickers)
+        .persist()
+
+    nock('https://api.polygon.io')
+        .get(
+            (uri) =>
+                uri.includes('/v3/reference/tickers') &&
+                uri.includes('market=stocks') &&
+                uri.includes('exchange=XNYS')
+        )
+        .reply(200, PolygonTestData.getNYSETickers)
+        .persist()
 })
 
 afterAll(async () => {
@@ -69,5 +94,43 @@ describe('security pricing sync', () => {
         // sync 2x to catch any possible caching I/O issues
         await securityPricingService.syncAll()
         await securityPricingService.syncAll()
+    })
+})
+
+describe('us stock ticker sync', () => {
+    let securityPricingService: ISecurityPricingService
+
+    beforeEach(async () => {
+        const logger = winston.createLogger({
+            level: 'debug',
+            transports: new winston.transports.Console({ format: winston.format.simple() }),
+        })
+
+        const cacheService = new CacheService(
+            logger.child({ service: 'CacheService' }),
+            new RedisCacheBackend(redis)
+        )
+
+        const marketDataService: IMarketDataService = new PolygonMarketDataService(
+            logger.child({ service: 'PolygonMarketDataService' }),
+            'TEST',
+            cacheService
+        )
+
+        securityPricingService = new SecurityPricingService(
+            logger.child({ service: 'SecurityPricingService' }),
+            prisma,
+            marketDataService
+        )
+
+        // reset db records
+        await prisma.security.deleteMany()
+    })
+
+    it('syncs', async () => {
+        // sync 2x to catch any possible caching I/O issues
+        await securityPricingService.syncUSStockTickers()
+        await securityPricingService.syncUSStockTickers()
+        expect(await prisma.security.count()).toEqual(20)
     })
 })
