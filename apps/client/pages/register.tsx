@@ -6,6 +6,9 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import Script from 'next/script'
 import Link from 'next/link'
+import { useUserApi } from '@maybe-finance/client/shared'
+import { DateUtil } from '@maybe-finance/shared'
+import type { SharedType } from '@maybe-finance/shared'
 
 export default function RegisterPage() {
     const [firstName, setFirstName] = useState('')
@@ -18,8 +21,12 @@ export default function RegisterPage() {
     const [isAdmin, setIsAdmin] = useState<boolean>(false)
     const [isOnboarded, setIsOnboarded] = useState<boolean>(false)
 
+    const { useUpdateOnboarding, useUpdateProfile } = useUserApi()
     const { data: session } = useSession()
     const router = useRouter()
+
+    const updateOnboarding = useUpdateOnboarding()
+    const updateProfile = useUpdateProfile()
 
     useEffect(() => {
         if (session) router.push('/')
@@ -42,8 +49,12 @@ export default function RegisterPage() {
             lastName,
             role: isAdmin ? 'admin' : 'user',
             redirect: false,
-            onboarded: isOnboarded ? true : false,
         })
+
+        if (isOnboarded) {
+            await updateProfile.mutateAsync(profile)
+            await updateOnboarding.mutateAsync(onboarding)
+        }
 
         if (response && response.error) {
             setErrorMessage(response.error)
@@ -146,6 +157,51 @@ export default function RegisterPage() {
     )
 }
 
+interface OnboardingType {
+    flow: SharedType.OnboardingFlow
+    updates: {
+        key: string
+        markedComplete: boolean
+    }[]
+}
+
+const onboarding: OnboardingType = {
+    flow: 'main',
+    updates: [
+        {
+            key: 'intro',
+            markedComplete: true,
+        },
+        {
+            key: 'profile',
+            markedComplete: true,
+        },
+        {
+            key: 'firstAccount',
+            markedComplete: true,
+        },
+        {
+            key: 'accountSelection',
+            markedComplete: true,
+        },
+        {
+            key: 'maybe',
+            markedComplete: true,
+        },
+        {
+            key: 'welcome',
+            markedComplete: true,
+        },
+    ],
+}
+
+const profile: SharedType.UpdateUser = {
+    dob: DateUtil.dateTransform(new Date('2000-01-01')),
+    household: 'single',
+    country: 'US',
+    state: null, // should always be null for now
+}
+
 type AuthDevToolsProps = {
     isAdmin: boolean
     setIsAdmin: (isAdmin: boolean) => void
@@ -163,9 +219,9 @@ function AuthDevTools({ isAdmin, setIsAdmin, isOnboarded, setIsOnboarded }: Auth
                 This section will NOT show in production and is solely for making testing easier.
             </p>
 
-            <div className="flex items-center text-sm mt-4">
-                <Checkbox checked={isAdmin} onChange={setIsAdmin} label="Create Admin user?" />
-                <Checkbox checked={isAdmin} onChange={setIsAdmin} label="Create Admin user?" />
+            <div className="flex flex-col">
+                <Checkbox checked={isAdmin} onChange={setIsAdmin} label="Admin user" />
+                <Checkbox checked={isOnboarded} onChange={setIsOnboarded} label="Onboarded user" />
             </div>
         </div>
     ) : null
