@@ -42,7 +42,6 @@ enum AccountSyncStatus {
 
 enum AccountConnectionType {
   plaid
-  finicity
   teller
 }
 
@@ -64,11 +63,6 @@ model AccountConnection {
   plaidConsentExpiration    DateTime? @map("plaid_consent_expiration")
   plaidError                Json?     @map("plaid_error")
   plaidNewAccountsAvailable Boolean   @default(false) @map("plaid_new_accounts_available")
-
-  // finicity data
-  finicityInstitutionLoginId String? @map("finicity_institution_login_id")
-  finicityInstitutionId      String? @map("finicity_institution_id")
-  finicityError              Json?   @map("finicity_error")
 
   // teller data
   tellerAccessToken   String? @map("teller_access_token")
@@ -108,7 +102,6 @@ enum AccountCategory {
 enum AccountProvider {
   user
   plaid
-  finicity
   teller
 }
 
@@ -155,11 +148,6 @@ model Account {
   plaidSubtype   String? @map("plaid_subtype")
   plaidLiability Json?   @map("plaid_liability") @db.JsonB
 
-  // finicity data
-  finicityAccountId String? @map("finicity_account_id")
-  finicityType      String? @map("finicity_type")
-  finicityDetail    Json?   @map("finicity_detail") @db.JsonB
-
   // teller data
   tellerAccountId String? @map("teller_account_id")
   tellerType      String? @map("teller_type")
@@ -184,7 +172,6 @@ model Account {
   investmentTransactions InvestmentTransaction[]
 
   @@unique([accountConnectionId, plaidAccountId])
-  @@unique([accountConnectionId, finicityAccountId])
   @@unique([accountConnectionId, tellerAccountId])
   @@index([accountConnectionId])
   @@index([userId])
@@ -215,9 +202,6 @@ model Holding {
   // plaid data
   plaidHoldingId String? @unique @map("plaid_holding_id") // this is an artificial ID `account[<account_id>].security[<security_id>]`
 
-  // finicity data
-  finicityPositionId String? @unique @map("finicity_position_id")
-
   @@map("holding")
 }
 
@@ -233,68 +217,73 @@ enum InvestmentTransactionCategory {
 }
 
 model InvestmentTransaction {
-  id           Int             @id @default(autoincrement())
-  createdAt    DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt    DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  account      Account         @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  accountId    Int             @map("account_id")
-  security     Security?       @relation(fields: [securityId], references: [id], onDelete: Cascade)
-  securityId   Int?            @map("security_id")
-  date         DateTime        @db.Date
+  id           Int                           @id @default(autoincrement())
+  createdAt    DateTime                      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime                      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  account      Account                       @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId    Int                           @map("account_id")
+  security     Security?                     @relation(fields: [securityId], references: [id], onDelete: Cascade)
+  securityId   Int?                          @map("security_id")
+  date         DateTime                      @db.Date
   name         String
-  amount       Decimal         @db.Decimal(19, 4)
-  fees         Decimal?        @db.Decimal(19, 4)
-  flow         TransactionFlow @default(dbgenerated("\nCASE\n    WHEN (amount < (0)::numeric) THEN 'INFLOW'::\"TransactionFlow\"\n    ELSE 'OUTFLOW'::\"TransactionFlow\"\nEND"))
-  quantity     Decimal         @db.Decimal(36, 18)
-  price        Decimal         @db.Decimal(23, 8)
-  currencyCode String          @default("USD") @map("currency_code")
-
-  // Derived from provider types
-  category InvestmentTransactionCategory @default(dbgenerated("\nCASE\n    WHEN (plaid_type = 'buy'::text) THEN 'buy'::\"InvestmentTransactionCategory\"\n    WHEN (plaid_type = 'sell'::text) THEN 'sell'::\"InvestmentTransactionCategory\"\n    WHEN (plaid_subtype = ANY (ARRAY['dividend'::text, 'qualified dividend'::text, 'non-qualified dividend'::text])) THEN 'dividend'::\"InvestmentTransactionCategory\"\n    WHEN (plaid_subtype = ANY (ARRAY['non-resident tax'::text, 'tax'::text, 'tax withheld'::text])) THEN 'tax'::\"InvestmentTransactionCategory\"\n    WHEN ((plaid_type = 'fee'::text) OR (plaid_subtype = ANY (ARRAY['account fee'::text, 'legal fee'::text, 'management fee'::text, 'margin expense'::text, 'transfer fee'::text, 'trust fee'::text]))) THEN 'fee'::\"InvestmentTransactionCategory\"\n    WHEN (plaid_type = 'cash'::text) THEN 'transfer'::\"InvestmentTransactionCategory\"\n    WHEN (plaid_type = 'cancel'::text) THEN 'cancel'::\"InvestmentTransactionCategory\"\n    WHEN (finicity_investment_transaction_type = ANY (ARRAY['purchased'::text, 'purchaseToClose'::text, 'purchaseToCover'::text, 'dividendReinvest'::text, 'reinvestOfIncome'::text])) THEN 'buy'::\"InvestmentTransactionCategory\"\n    WHEN (finicity_investment_transaction_type = ANY (ARRAY['sold'::text, 'soldToClose'::text, 'soldToOpen'::text])) THEN 'sell'::\"InvestmentTransactionCategory\"\n    WHEN (finicity_investment_transaction_type = 'dividend'::text) THEN 'dividend'::\"InvestmentTransactionCategory\"\n    WHEN (finicity_investment_transaction_type = 'tax'::text) THEN 'tax'::\"InvestmentTransactionCategory\"\n    WHEN (finicity_investment_transaction_type = 'fee'::text) THEN 'fee'::\"InvestmentTransactionCategory\"\n    WHEN (finicity_investment_transaction_type = ANY (ARRAY['transfer'::text, 'contribution'::text, 'deposit'::text, 'income'::text, 'interest'::text])) THEN 'transfer'::\"InvestmentTransactionCategory\"\n    WHEN (finicity_investment_transaction_type = 'cancel'::text) THEN 'cancel'::\"InvestmentTransactionCategory\"\n    ELSE 'other'::\"InvestmentTransactionCategory\"\nEND"))
+  amount       Decimal                       @db.Decimal(19, 4)
+  fees         Decimal?                      @db.Decimal(19, 4)
+  flow         TransactionFlow               @default(dbgenerated("\nCASE\n    WHEN (amount < (0)::numeric) THEN 'INFLOW'::\"TransactionFlow\"\n    ELSE 'OUTFLOW'::\"TransactionFlow\"\nEND"))
+  quantity     Decimal                       @db.Decimal(36, 18)
+  price        Decimal                       @db.Decimal(23, 8)
+  currencyCode String                        @default("USD") @map("currency_code")
+  category     InvestmentTransactionCategory @default(other)
 
   // plaid data
   plaidInvestmentTransactionId String? @unique @map("plaid_investment_transaction_id")
   plaidType                    String? @map("plaid_type")
   plaidSubtype                 String? @map("plaid_subtype")
 
-  // finicity data
-  finicityTransactionId             String? @unique @map("finicity_transaction_id")
-  finicityInvestmentTransactionType String? @map("finicity_investment_transaction_type")
-
   @@index([accountId, date])
   @@map("investment_transaction")
 }
 
+enum SecurityProvider {
+  polygon
+  other
+}
+
+enum AssetClass {
+  cash
+  crypto
+  fixed_income
+  stocks
+  other
+}
+
 model Security {
-  id                  Int       @id @default(autoincrement())
-  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt           DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                  Int               @id @default(autoincrement())
+  createdAt           DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime          @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
   name                String?
   symbol              String?
   cusip               String?
   isin                String?
-  sharesPerContract   Decimal?  @map("shares_per_contract") @db.Decimal(36, 18)
-  currencyCode        String    @default("USD") @map("currency_code")
-  pricingLastSyncedAt DateTime? @map("pricing_last_synced_at") @db.Timestamptz(6)
-  isBrokerageCash     Boolean   @default(false) @map("is_brokerage_cash")
+  sharesPerContract   Decimal?          @map("shares_per_contract") @db.Decimal(36, 18)
+  currencyCode        String            @default("USD") @map("currency_code")
+  pricingLastSyncedAt DateTime?         @map("pricing_last_synced_at") @db.Timestamptz(6)
+  isBrokerageCash     Boolean           @default(false) @map("is_brokerage_cash")
+  exchangeAcroynm     String?           @map("exchange_acronym")
+  exchangeMic         String?           @map("exchange_mic")
+  exchangeName        String?           @map("exchange_name")
+  providerName        SecurityProvider? @default(other) @map("provider_name")
+  assetClass          AssetClass        @default(other) @map("asset_class")
 
   // plaid data
   plaidSecurityId       String?  @unique @map("plaid_security_id")
   plaidType             String?  @map("plaid_type")
   plaidIsCashEquivalent Boolean? @map("plaid_is_cash_equivalent")
 
-  // finicity data
-  finicitySecurityId     String? @map("finicity_security_id")
-  finicitySecurityIdType String? @map("finicity_security_id_type")
-  finicityType           String? @map("finicity_type")
-  finicityAssetClass     String? @map("finicity_asset_class")
-  finicityFIAssetClass   String? @map("finicity_fi_asset_class")
-
   holdings               Holding[]
   investmentTransactions InvestmentTransaction[]
   pricing                SecurityPricing[]
 
-  @@unique([finicitySecurityId, finicitySecurityIdType])
+  @@unique([symbol, exchangeMic])
   @@map("security")
 }
 
@@ -340,7 +329,7 @@ model Transaction {
   currencyCode String           @default("USD") @map("currency_code")
   pending      Boolean          @default(false)
   merchantName String?          @map("merchant_name")
-  category     String           @default(dbgenerated("COALESCE(category_user,\nCASE\n    WHEN ((plaid_personal_finance_category ->> 'primary'::text) = 'INCOME'::text) THEN 'Income'::text\n    WHEN ((plaid_personal_finance_category ->> 'detailed'::text) = ANY (ARRAY['LOAN_PAYMENTS_MORTGAGE_PAYMENT'::text, 'RENT_AND_UTILITIES_RENT'::text])) THEN 'Housing Payments'::text\n    WHEN ((plaid_personal_finance_category ->> 'detailed'::text) = 'LOAN_PAYMENTS_CAR_PAYMENT'::text) THEN 'Vehicle Payments'::text\n    WHEN ((plaid_personal_finance_category ->> 'primary'::text) = 'LOAN_PAYMENTS'::text) THEN 'Other Payments'::text\n    WHEN ((plaid_personal_finance_category ->> 'primary'::text) = 'HOME_IMPROVEMENT'::text) THEN 'Home Improvement'::text\n    WHEN ((plaid_personal_finance_category ->> 'primary'::text) = 'GENERAL_MERCHANDISE'::text) THEN 'Shopping'::text\n    WHEN (((plaid_personal_finance_category ->> 'primary'::text) = 'RENT_AND_UTILITIES'::text) AND ((plaid_personal_finance_category ->> 'detailed'::text) <> 'RENT_AND_UTILITIES_RENT'::text)) THEN 'Utilities'::text\n    WHEN ((plaid_personal_finance_category ->> 'primary'::text) = 'FOOD_AND_DRINK'::text) THEN 'Food and Drink'::text\n    WHEN ((plaid_personal_finance_category ->> 'primary'::text) = 'TRANSPORTATION'::text) THEN 'Transportation'::text\n    WHEN ((plaid_personal_finance_category ->> 'primary'::text) = 'TRAVEL'::text) THEN 'Travel'::text\n    WHEN (((plaid_personal_finance_category ->> 'primary'::text) = ANY (ARRAY['PERSONAL_CARE'::text, 'MEDICAL'::text])) AND ((plaid_personal_finance_category ->> 'detailed'::text) <> 'MEDICAL_VETERINARY_SERVICES'::text)) THEN 'Health'::text\n    WHEN ((finicity_categorization ->> 'category'::text) = ANY (ARRAY['Income'::text, 'Paycheck'::text])) THEN 'Income'::text\n    WHEN ((finicity_categorization ->> 'category'::text) = 'Mortgage & Rent'::text) THEN 'Housing Payments'::text\n    WHEN ((finicity_categorization ->> 'category'::text) = ANY (ARRAY['Furnishings'::text, 'Home Services'::text, 'Home Improvement'::text, 'Lawn and Garden'::text])) THEN 'Home Improvement'::text\n    WHEN ((finicity_categorization ->> 'category'::text) = ANY (ARRAY['Streaming Services'::text, 'Home Phone'::text, 'Television'::text, 'Bills & Utilities'::text, 'Utilities'::text, 'Internet / Broadband Charges'::text, 'Mobile Phone'::text])) THEN 'Utilities'::text\n    WHEN ((finicity_categorization ->> 'category'::text) = ANY (ARRAY['Fast Food'::text, 'Food & Dining'::text, 'Restaurants'::text, 'Coffee Shops'::text, 'Alcohol & Bars'::text, 'Groceries'::text])) THEN 'Food and Drink'::text\n    WHEN ((finicity_categorization ->> 'category'::text) = ANY (ARRAY['Auto & Transport'::text, 'Gas & Fuel'::text, 'Auto Insurance'::text])) THEN 'Transportation'::text\n    WHEN ((finicity_categorization ->> 'category'::text) = ANY (ARRAY['Hotel'::text, 'Travel'::text, 'Rental Car & Taxi'::text])) THEN 'Travel'::text\n    WHEN ((finicity_categorization ->> 'category'::text) = ANY (ARRAY['Health Insurance'::text, 'Doctor'::text, 'Pharmacy'::text, 'Eyecare'::text, 'Health & Fitness'::text, 'Personal Care'::text])) THEN 'Health'::text\n    WHEN (teller_category = 'income'::text) THEN 'Income'::text\n    WHEN (teller_category = 'home'::text) THEN 'Home Improvement'::text\n    WHEN (teller_category = ANY (ARRAY['phone'::text, 'utilities'::text])) THEN 'Utilities'::text\n    WHEN (teller_category = ANY (ARRAY['dining'::text, 'bar'::text, 'groceries'::text])) THEN 'Food and Drink'::text\n    WHEN (teller_category = ANY (ARRAY['clothing'::text, 'entertainment'::text, 'shopping'::text, 'electronics'::text, 'software'::text, 'sport'::text])) THEN 'Shopping'::text\n    WHEN (teller_category = ANY (ARRAY['transportation'::text, 'fuel'::text])) THEN 'Transportation'::text\n    WHEN (teller_category = ANY (ARRAY['accommodation'::text, 'transport'::text])) THEN 'Travel'::text\n    WHEN (teller_category = 'health'::text) THEN 'Health'::text\n    WHEN (teller_category = ANY (ARRAY['loan'::text, 'tax'::text, 'insurance'::text, 'office'::text])) THEN 'Other Payments'::text\n    ELSE 'Other'::text\nEND)"))
+  category     String           @default("Other")
   categoryUser String?          @map("category_user")
   excluded     Boolean          @default(false)
 
@@ -354,11 +343,6 @@ model Transaction {
   plaidCategory                String[] @map("plaid_category")
   plaidCategoryId              String?  @map("plaid_category_id")
   plaidPersonalFinanceCategory Json?    @map("plaid_personal_finance_category")
-
-  // finicity data
-  finicityTransactionId  String? @unique @map("finicity_transaction_id")
-  finicityType           String? @map("finicity_type")
-  finicityCategorization Json?   @map("finicity_categorization") @db.JsonB
 
   // teller data
   tellerTransactionId String? @unique @map("teller_transaction_id")
@@ -442,10 +426,6 @@ model User {
   stripeCurrentPeriodEnd DateTime? @map("stripe_current_period_end") @db.Timestamptz(6)
   stripeCancelAt         DateTime? @map("stripe_cancel_at") @db.Timestamptz(6)
 
-  // finicity data
-  finicityUsername   String? @unique @map("finicity_username")
-  finicityCustomerId String? @unique @map("finicity_customer_id")
-
   // plaid data
   plaidLinkToken String? @map("plaid_link_token") // temporary token stored to maintain state across browsers
 
@@ -492,7 +472,6 @@ model Institution {
 
 enum Provider {
   PLAID
-  FINICITY
   TELLER
 }
 
@@ -604,6 +583,12 @@ model AuthAccount {
   @@map("auth_account")
 }
 
+enum AuthUserRole {
+  user
+  admin
+  ci
+}
+
 model AuthUser {
   id            String        @id @default(cuid())
   name          String?
@@ -613,6 +598,7 @@ model AuthUser {
   emailVerified DateTime?     @map("email_verified")
   password      String?
   image         String?
+  role          AuthUserRole  @default(user)
   accounts      AuthAccount[]
   sessions      AuthSession[]
 

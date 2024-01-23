@@ -78,7 +78,9 @@ export function BillingPreferences() {
                     </div>
                 )}
             </div>
-            <UpgradeTakeover open={takeoverOpen} onClose={() => setTakeoverOpen(false)} />
+            {process.env.STRIPE_API_KEY && (
+                <UpgradeTakeover open={takeoverOpen} onClose={() => setTakeoverOpen(false)} />
+            )}
         </>
     )
 }

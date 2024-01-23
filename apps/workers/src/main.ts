@@ -81,6 +81,14 @@ syncSecurityQueue.process(
 )
 
 /**
+ * sync-us-stock-ticker queue
+ */
+syncSecurityQueue.process(
+    'sync-us-stock-tickers',
+    async () => await securityPricingProcessor.syncUSStockTickers()
+)
+
+/**
  * purge-user queue
  */
 purgeUserQueue.process(
@@ -94,15 +102,43 @@ purgeUserQueue.process(
 /**
  * sync-all-securities queue
  */
-// Start repeated job for syncing securities (Bull won't duplicate it as long as the repeat options are the same)
-syncSecurityQueue.add(
-    'sync-all-securities',
-    {},
-    {
-        repeat: { cron: '*/5 * * * *' }, // Run every 5 minutes
-        jobId: Date.now().toString(),
-    }
-)
+
+// If no securities exist, sync them immediately
+// Otherwise, schedule the job to run every 24 hours
+// Use same jobID to prevent duplicates and rate limiting
+syncSecurityQueue.cancelJobs().then(() => {
+    prisma.security
+        .count({
+            where: {
+                providerName: 'polygon',
+            },
+        })
+        .then((count) => {
+            if (count === 0) {
+                syncSecurityQueue.add('sync-us-stock-tickers', {}, {})
+            } else {
+                syncSecurityQueue.add(
+                    'sync-us-stock-tickers',
+                    {},
+                    {
+                        repeat: { cron: '0 */24 * * *' }, // Run every 24 hours
+                        jobId: Date.now().toString(),
+                    }
+                )
+            }
+            // Do not run if on the free tier (rate limits)
+            if (env.NX_POLYGON_TIER !== 'basic') {
+                syncSecurityQueue.add(
+                    'sync-all-securities',
+                    {},
+                    {
+                        repeat: { cron: '*/5 * * * *' }, // Run every 5 minutes
+                        jobId: Date.now().toString(),
+                    }
+                )
+            }
+        })
+})
 
 /**
  * sync-institution queue
@@ -113,26 +149,12 @@ syncInstitutionQueue.process(
 )
 
 syncInstitutionQueue.process(
-    'sync-finicity-institutions',
-    async () => await institutionService.sync('FINICITY')
-)
-
-syncInstitutionQueue.process(
     'sync-teller-institutions',
     async () => await institutionService.sync('TELLER')
 )
 
 syncInstitutionQueue.add(
     'sync-plaid-institutions',
-    {},
-    {
-        repeat: { cron: '0 */24 * * *' }, // Run every 24 hours
-        jobId: Date.now().toString(),
-    }
-)
-
-syncInstitutionQueue.add(
-    'sync-finicity-institutions',
     {},
     {
         repeat: { cron: '0 */24 * * *' }, // Run every 24 hours
@@ -154,11 +176,13 @@ syncInstitutionQueue.add(
  */
 sendEmailQueue.process('send-email', async (job) => await emailProcessor.send(job.data))
 
-sendEmailQueue.add(
-    'send-email',
-    { type: 'trial-reminders' },
-    { repeat: { cron: '0 */12 * * *' } } // Run every 12 hours
-)
+if (env.STRIPE_API_KEY) {
+    sendEmailQueue.add(
+        'send-email',
+        { type: 'trial-reminders' },
+        { repeat: { cron: '0 */12 * * *' } } // Run every 12 hours
+    )
+}
 
 // Fallback - usually triggered by errors not handled (or thrown) within the Bull event handlers (see above)
 process.on(

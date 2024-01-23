@@ -1,5 +1,7 @@
 import { faker } from '@faker-js/faker'
 import type { TellerTypes } from '../../libs/teller-api/src'
+import type { Prisma } from '@prisma/client'
+import { DateTime } from 'luxon'
 
 function generateSubType(
     type: TellerTypes.AccountTypes
@@ -23,6 +25,8 @@ type GenerateAccountsParams = {
     enrollmentId: string
     institutionName: string
     institutionId: string
+    accountType?: TellerTypes.AccountTypes
+    accountSubType?: TellerTypes.DepositorySubtypes | TellerTypes.CreditSubtype
 }
 
 export function generateAccounts({
@@ -30,12 +34,15 @@ export function generateAccounts({
     enrollmentId,
     institutionName,
     institutionId,
+    accountType,
+    accountSubType,
 }: GenerateAccountsParams) {
     const accounts: TellerTypes.Account[] = []
     for (let i = 0; i < count; i++) {
         const accountId = faker.string.uuid()
         const lastFour = faker.finance.creditCardNumber().slice(-4)
-        const type: TellerTypes.AccountTypes = faker.helpers.arrayElement(['depository', 'credit'])
+        const type: TellerTypes.AccountTypes =
+            accountType ?? faker.helpers.arrayElement(['depository', 'credit'])
         let subType: TellerTypes.DepositorySubtypes | TellerTypes.CreditSubtype
         subType = generateSubType(type)
 
@@ -99,6 +106,8 @@ type GenerateAccountsWithBalancesParams = {
     enrollmentId: string
     institutionName: string
     institutionId: string
+    accountType?: TellerTypes.AccountTypes
+    accountSubType?: TellerTypes.DepositorySubtypes | TellerTypes.CreditSubtype
 }
 
 export function generateAccountsWithBalances({
@@ -106,7 +115,9 @@ export function generateAccountsWithBalances({
     enrollmentId,
     institutionName,
     institutionId,
-}: GenerateAccountsWithBalancesParams): TellerTypes.AccountWithBalances[] {
+    accountType,
+    accountSubType,
+}: GenerateAccountsWithBalancesParams): TellerTypes.GetAccountsResponse {
     const accountsWithBalances: TellerTypes.AccountWithBalances[] = []
     for (let i = 0; i < count; i++) {
         const account = generateAccounts({
@@ -114,6 +125,8 @@ export function generateAccountsWithBalances({
             enrollmentId,
             institutionName,
             institutionId,
+            accountType,
+            accountSubType,
         })[0]
         const balance = generateBalance(account.id)
         accountsWithBalances.push({
@@ -170,7 +183,10 @@ export function generateTransactions(count: number, accountId: string): TellerTy
             running_balance: null,
             description: faker.word.words({ count: { min: 3, max: 10 } }),
             id: transactionId,
-            date: faker.date.recent({ days: 30 }).toISOString().split('T')[0], // recent date in 'YYYY-MM-DD' format
+            date: faker.date
+                .between({ from: lowerBound.toJSDate(), to: now.toJSDate() })
+                .toISOString()
+                .split('T')[0], // recent date in 'YYYY-MM-DD' format
             account_id: accountId,
             links: {
                 account: `https://api.teller.io/accounts/${accountId}`,
@@ -245,4 +261,36 @@ export function generateConnection(): GenerateConnectionsResponse {
         accountsWithBalances,
         transactions,
     }
+}
+
+export const now = DateTime.fromISO('2022-01-03', { zone: 'utc' })
+
+export const lowerBound = DateTime.fromISO('2021-12-01', { zone: 'utc' })
+
+export const testDates = {
+    now,
+    lowerBound,
+    totalDays: now.diff(lowerBound, 'days').days,
+    prismaWhereFilter: {
+        date: {
+            gte: lowerBound.toJSDate(),
+            lte: now.toJSDate(),
+        },
+    } as Prisma.AccountBalanceWhereInput,
+}
+
+export function calculateDailyBalances(startingBalance, transactions, dateInterval) {
+    transactions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+
+    const balanceChanges = {}
+
+    transactions.forEach((transaction) => {
+        const date = new Date(transaction.date).toISOString().split('T')[0]
+        balanceChanges[date] = (balanceChanges[date] || 0) + Number(transaction.amount)
+    })
+    return dateInterval.map((date) => {
+        return Object.keys(balanceChanges)
+            .filter((d) => d <= date)
+            .reduce((acc, d) => acc + balanceChanges[d], startingBalance)
+    })
 }

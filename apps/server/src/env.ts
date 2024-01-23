@@ -36,11 +36,6 @@ const envSchema = z.object({
     NX_PLAID_SECRET: z.string(),
     NX_PLAID_ENV: z.string().default('sandbox'),
 
-    NX_FINICITY_APP_KEY: z.string(),
-    NX_FINICITY_PARTNER_ID: z.string().default('REPLACE_THIS'),
-    NX_FINICITY_PARTNER_SECRET: z.string(),
-    NX_FINICITY_ENV: z.string().default('sandbox'),
-
     NX_TELLER_SIGNING_SECRET: z.string().default('REPLACE_THIS'),
     NX_TELLER_APP_ID: z.string().default('REPLACE_THIS'),
     NX_TELLER_ENV: z.string().default('sandbox'),
@@ -49,6 +44,7 @@ const envSchema = z.object({
     NX_SENTRY_ENV: z.string().optional(),
 
     NX_POLYGON_API_KEY: z.string().default(''),
+    NX_POLYGON_TIER: z.string().default('basic'),
 
     NX_PORT: z.string().default('3333'),
     NX_CORS_ORIGINS: z.string().default('https://localhost.maybe.co').transform(toOriginArray),
@@ -71,9 +67,10 @@ const envSchema = z.object({
     // Key to Cloudfront pub key
     NX_CDN_SIGNER_PUBKEY_ID: z.string().default('REPLACE_THIS'),
 
-    NX_POSTMARK_FROM_ADDRESS: z.string().default('account@maybe.co'),
-    NX_POSTMARK_REPLY_TO_ADDRESS: z.string().default('support@maybe.co'),
-    NX_POSTMARK_API_TOKEN: z.string().optional(),
+    NX_EMAIL_FROM_ADDRESS: z.string().default('account@maybe.co'),
+    NX_EMAIL_REPLY_TO_ADDRESS: z.string().default('support@maybe.co'),
+    NX_EMAIL_PROVIDER: z.string().optional(),
+    NX_EMAIL_PROVIDER_API_TOKEN: z.string().optional(),
 })
 
 const env = envSchema.parse(process.env)

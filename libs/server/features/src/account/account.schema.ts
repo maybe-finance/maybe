@@ -195,10 +195,6 @@ export const AccountUpdateSchema = z.discriminatedUnion('provider', [
         data: ProviderAccountUpdateSchema,
     }),
     z.object({
-        provider: z.literal('finicity'),
-        data: ProviderAccountUpdateSchema,
-    }),
-    z.object({
         provider: z.literal('user'),
         data: UserAccountUpdateSchema,
     }),

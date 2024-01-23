@@ -1,4 +1,5 @@
 import { Institution, PrismaClient, Provider } from '@prisma/client'
+import bcrypt from 'bcrypt'
 
 const prisma = new PrismaClient()
 
@@ -7,22 +8,29 @@ const prisma = new PrismaClient()
  */
 async function main() {
     const institutions: (Pick<Institution, 'id' | 'name'> & {
-        providers: { provider: Provider; providerId: string; rank?: number }[]
+        providers: { provider: Provider; providerId: string; logoUrl: string; rank?: number }[]
     })[] = [
         {
             id: 1,
             name: 'Capital One',
             providers: [
-                { provider: 'PLAID', providerId: 'ins_9', rank: 1 },
-                { provider: 'FINICITY', providerId: '170778' },
+                {
+                    provider: Provider.TELLER,
+                    providerId: 'capital_one',
+                    logoUrl: 'https://teller.io/images/banks/capital_one.jpg',
+                    rank: 1,
+                },
             ],
         },
         {
             id: 2,
-            name: 'Discover Bank',
+            name: 'Wells Fargo',
             providers: [
-                { provider: 'PLAID', providerId: 'ins_33' },
-                { provider: 'FINICITY', providerId: '13796', rank: 1 },
+                {
+                    provider: Provider.TELLER,
+                    providerId: 'wells_fargo',
+                    logoUrl: 'https://teller.io/images/banks/wells_fargo.jpg',
+                },
             ],
         },
     ]

@@ -33,13 +33,6 @@ const AccountConnectionApi = (axios: AxiosInstance) => ({
         return data
     },
 
-    async createFinicityFixConnectUrl(id: SharedType.AccountConnection['id']) {
-        const { data } = await axios.post<{ link: string }>(
-            `/connections/${id}/finicity/fix-connect`
-        )
-        return data
-    },
-
     async disconnect(id: SharedType.AccountConnection['id']) {
         const { data } = await axios.post<SharedType.AccountConnection>(
             `/connections/${id}/disconnect`
@@ -119,10 +112,6 @@ export function useAccountConnectionApi() {
     const useCreatePlaidLinkToken = (mode: SharedType.PlaidLinkUpdateMode) =>
         useMutation((id: SharedType.AccountConnection['id']) => api.createPlaidLinkToken(id, mode))
 
-    const useCreateFinicityFixConnectUrl = (
-        options?: UseMutationOptions<{ link: string }, unknown, number, unknown>
-    ) => useMutation(api.createFinicityFixConnectUrl, options)
-
     const useDisconnectConnection = () =>
         useMutation(api.disconnect, {
             onSuccess: (data) => {
@@ -188,7 +177,6 @@ export function useAccountConnectionApi() {
         useDeleteConnection,
         useDeleteAllConnections,
         useCreatePlaidLinkToken,
-        useCreateFinicityFixConnectUrl,
         useReconnectConnection,
         useDisconnectConnection,
         useSyncConnection,

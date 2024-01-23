@@ -66,6 +66,33 @@
                     "options": {
                         "command": "node tools/scripts/triggerClientDeploy.js"
                     }
+                },
+                "storybook": {
+                    "executor": "@nrwl/storybook:storybook",
+                    "options": {
+                        "uiFramework": "@storybook/react",
+                        "port": 4400,
+                        "configDir": "apps/client/.storybook"
+                    },
+                    "configurations": {
+                        "ci": {
+                            "quiet": true
+                        }
+                    }
+                },
+                "build-storybook": {
+                    "executor": "@nrwl/storybook:build",
+                    "outputs": ["{options.outputDir}"],
+                    "options": {
+                        "uiFramework": "@storybook/react",
+                        "outputDir": "dist/storybook/client",
+                        "configDir": "apps/client/.storybook"
+                    },
+                    "configurations": {
+                        "ci": {
+                            "quiet": true
+                        }
+                    }
                 }
             },
             "tags": ["scope:app"]
@@ -229,30 +256,6 @@
             },
             "tags": ["scope:app"],
             "implicitDependencies": ["client", "server", "workers"]
-        },
-        "finicity-api": {
-            "$schema": "../../node_modules/nx/schemas/project-schema.json",
-            "root": "libs/finicity-api",
-            "sourceRoot": "libs/finicity-api/src",
-            "projectType": "library",
-            "targets": {
-                "lint": {
-                    "executor": "@nrwl/linter:eslint",
-                    "outputs": ["{options.outputFile}"],
-                    "options": {
-                        "lintFilePatterns": ["libs/finicity-api/**/*.ts"]
-                    }
-                },
-                "test": {
-                    "executor": "@nrwl/jest:jest",
-                    "outputs": ["coverage/libs/finicity-api"],
-                    "options": {
-                        "jestConfig": "libs/finicity-api/jest.config.ts",
-                        "passWithNoTests": true
-                    }
-                }
-            },
-            "tags": ["scope:shared"]
         },
         "server": {
             "$schema": "../../node_modules/nx/schemas/project-schema.json",

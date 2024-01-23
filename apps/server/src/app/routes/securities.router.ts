@@ -45,4 +45,19 @@ router.get(
     })
 )
 
+router.post(
+    '/sync/us-stock-tickers',
+    endpoint.create({
+        resolve: async ({ ctx }) => {
+            ctx.ability.throwUnlessCan('manage', 'Security')
+
+            await ctx.queueService
+                .getQueue('sync-security')
+                .addBulk([{ name: 'sync-us-stock-tickers', data: {} }])
+
+            return { success: true }
+        },
+    })
+)
+
 export default router

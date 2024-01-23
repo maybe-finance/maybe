@@ -1,4 +1,5 @@
 import type { OnboardingState } from '@maybe-finance/server/features'
+import { AuthUserRole } from '@prisma/client'
 import { Router } from 'express'
 import { DateTime } from 'luxon'
 import { z } from 'zod'
@@ -7,9 +8,9 @@ import endpoint from '../lib/endpoint'
 const router = Router()
 
 router.use((req, res, next) => {
-    const roles = req.user?.['https://maybe.co/roles']
+    const role = req.user?.role
 
-    if (roles?.includes('CIUser') || roles?.includes('Admin')) {
+    if (role === AuthUserRole.admin || role === AuthUserRole.ci) {
         next()
     } else {
         res.status(401).send('Route only available to CIUser and Admin roles')
@@ -47,14 +48,15 @@ router.post(
             trialLapsed: z.boolean().default(false),
         }),
         resolve: async ({ ctx, input }) => {
-            ctx.logger.debug(`Resetting CI user ${ctx.user!.authId}`)
-
+            const user = ctx.user!
             await ctx.prisma.$transaction([
-                ctx.prisma.$executeRaw`DELETE FROM "user" WHERE auth_id=${ctx.user!.authId};`,
+                ctx.prisma.$executeRaw`DELETE FROM "user" WHERE auth_id=${user.authId};`,
                 ctx.prisma.user.create({
                     data: {
-                        authId: ctx.user!.authId,
-                        email: 'REPLACE_THIS',
+                        authId: user.authId,
+                        email: user.email,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
                         dob: new Date('1990-01-01'),
                         linkAccountDismissedAt: new Date(), // ensures our auto-account link doesn't trigger
 
@@ -69,6 +71,21 @@ router.post(
                             : undefined,
                     },
                 }),
+            ])
+
+            return { success: true }
+        },
+    })
+)
+
+router.post(
+    '/clean',
+    endpoint.create({
+        resolve: async ({ ctx }) => {
+            const user = ctx.user!
+            await ctx.prisma.$transaction([
+                ctx.prisma.$executeRaw`DELETE FROM "user" WHERE auth_id=${user.authId};`,
+                ctx.prisma.$executeRaw`DELETE FROM "auth_user" WHERE id=${user.authId};`,
             ])
 
             return { success: true }
