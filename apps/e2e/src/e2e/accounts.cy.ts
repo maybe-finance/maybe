@@ -4,10 +4,10 @@ const assertSidebarAccounts = (expectedRows: [string, string][]) => {
     cy.getByTestId('account-accordion-row', { timeout: 60000 }).each((row, index) => {
         cy.wrap(row)
             .find('[data-testid="account-accordion-row-name"]', { timeout: 60000 })
-            .should('contain.text', expectedRows[index][0])
+            .should('include.text', expectedRows[index][0])
         cy.wrap(row)
             .find('[data-testid="account-accordion-row-balance"]', { timeout: 60000 })
-            .should('contain.text', expectedRows[index][1])
+            .should('include.text', expectedRows[index][1])
     })
 }
 

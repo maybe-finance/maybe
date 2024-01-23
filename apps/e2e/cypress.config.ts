@@ -6,8 +6,8 @@ export default defineConfig({
         ...nxE2EPreset(__dirname),
         video: false,
         screenshotsFolder: '../../dist/cypress/apps/e2e/screenshots',
-        viewportWidth: 1280,
-        viewportHeight: 720,
+        viewportWidth: 1440,
+        viewportHeight: 900,
         baseUrl: 'http://localhost:4200',
         env: {
             API_URL: 'http://localhost:3333/v1',

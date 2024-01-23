@@ -244,6 +244,12 @@
                         "cypressConfig": "apps/e2e/cypress.config.ts",
                         "tsConfig": "apps/e2e/tsconfig.json",
                         "testingType": "e2e"
+                    },
+                    "configurations": {
+                        "ci": {
+                            "headed": true,
+                            "browser": "chrome"
+                        }
                     }
                 },
                 "lint": {
