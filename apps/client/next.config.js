@@ -16,7 +16,6 @@ const nextConfig = {
     images: {
         loader: 'custom',
     },
-    swcMinify: false,
 }
 
 module.exports = withBundleAnalyzer(withNx(nextConfig))

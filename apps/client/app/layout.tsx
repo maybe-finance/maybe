@@ -59,7 +59,7 @@ const WithAuth = function ({ children }: PropsWithChildren) {
     return null
 }
 
-export default function App({
+const RootLayout = ({
     Component: Page,
     pageProps,
 }: AppProps & {
@@ -67,7 +67,7 @@ export default function App({
         getLayout?: (component: ReactElement) => JSX.Element
         isPublic?: boolean
     }
-}) {
+}) => {
     const getLayout = Page.getLayout ?? ((page) => page)
 
     return (
@@ -84,14 +84,8 @@ export default function App({
                 <QueryProvider>
                     <SessionProvider>
                         <AxiosProvider>
-                            <>
-                                <APM />
-                                {Page.isPublic === true ? (
-                                    getLayout(<Page {...pageProps} />)
-                                ) : (
-                                    <WithAuth>{getLayout(<Page {...pageProps} />)}</WithAuth>
-                                )}
-                            </>
+                            <APM />
+                            <WithAuth>{getLayout(<Page {...pageProps} />)}</WithAuth>
                         </AxiosProvider>
                     </SessionProvider>
                 </QueryProvider>
@@ -99,3 +93,5 @@ export default function App({
         </LogProvider>
     )
 }
+
+export default RootLayout

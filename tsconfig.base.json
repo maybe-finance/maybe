@@ -13,7 +13,6 @@
         "lib": ["es2017", "dom", "ESNext"],
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
-        "importsNotUsedAsValues": "error",
         "baseUrl": ".",
         "paths": {
             "@maybe-finance/client/features": ["libs/client/features/src/index.ts"],
