@@ -123,7 +123,7 @@ export default function RegisterPage() {
                                 </div>
                             ) : null}
 
-                            <AuthDevTools
+                            <UserDevTools
                                 isAdmin={isAdmin}
                                 setIsAdmin={setIsAdmin}
                                 isOnboarded={isOnboarded}
@@ -210,7 +210,7 @@ type AuthDevToolsProps = {
     setIsOnboarded: (isOnboarded: boolean) => void
 }
 
-function AuthDevTools({ isAdmin, setIsAdmin, isOnboarded, setIsOnboarded }: AuthDevToolsProps) {
+function UserDevTools({ isAdmin, setIsAdmin, isOnboarded, setIsOnboarded }: AuthDevToolsProps) {
     return process.env.NODE_ENV === 'development' ? (
         <div className="my-2 p-2 border border-red-300 rounded-md">
             <h6 className="flex text-red">
