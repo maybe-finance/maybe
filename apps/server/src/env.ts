@@ -44,6 +44,7 @@ const envSchema = z.object({
     NX_SENTRY_ENV: z.string().optional(),
 
     NX_POLYGON_API_KEY: z.string().default(''),
+    NX_POLYGON_TIER: z.string().default('basic'),
 
     NX_PORT: z.string().default('3333'),
     NX_CORS_ORIGINS: z.string().default('https://localhost.maybe.co').transform(toOriginArray),

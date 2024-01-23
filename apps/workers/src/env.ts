@@ -20,6 +20,7 @@ const envSchema = z.object({
     NX_REDIS_URL: z.string().default('redis://localhost:6379'),
 
     NX_POLYGON_API_KEY: z.string().default(''),
+    NX_POLYGON_TIER: z.string().default('basic'),
 
     NX_EMAIL_FROM_ADDRESS: z.string().default('account@maybe.co'),
     NX_EMAIL_REPLY_TO_ADDRESS: z.string().default('support@maybe.co'),
