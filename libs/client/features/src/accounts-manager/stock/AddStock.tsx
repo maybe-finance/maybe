@@ -6,6 +6,7 @@ import {
 import { DateTime } from 'luxon'
 import StockForm from './StockForm'
 
+// STOCKTODO - Change CreateVehicleFields
 export function AddStock({ defaultValues }: { defaultValues: Partial<CreateVehicleFields> }) {
     const { setAccountManager } = useAccountContext()
     const { useCreateAccount } = useAccountApi()
