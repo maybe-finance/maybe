@@ -115,7 +115,14 @@ syncSecurityQueue.cancelJobs().then(() => {
         })
         .then((count) => {
             if (count === 0) {
-                syncSecurityQueue.add('sync-us-stock-tickers', {}, {})
+                syncSecurityQueue.add(
+                    'sync-us-stock-tickers',
+                    {},
+                    {
+                        delay: 15_000,
+                        removeOnFail: true,
+                    }
+                )
             } else {
                 syncSecurityQueue.add(
                     'sync-us-stock-tickers',
