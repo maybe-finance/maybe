@@ -8,7 +8,10 @@ import { SharedUtil } from '@maybe-finance/shared'
 import _ from 'lodash'
 
 export interface ISecurityPricingService {
-    sync(security: Pick<Security, 'id' | 'symbol' | 'plaidType'>, syncStart?: string): Promise<void>
+    sync(
+        security: Pick<Security, 'assetClass' | 'currencyCode' | 'id' | 'symbol'>,
+        syncStart?: string
+    ): Promise<void>
     syncAll(): Promise<void>
     syncUSStockTickers(): Promise<void>
 }
@@ -21,7 +24,7 @@ export class SecurityPricingService implements ISecurityPricingService {
     ) {}
 
     async sync(
-        security: Pick<Security, 'id' | 'symbol' | 'plaidType' | 'currencyCode'>,
+        security: Pick<Security, 'assetClass' | 'currencyCode' | 'id' | 'symbol'>,
         syncStart?: string
     ) {
         const dailyPricing = await this.marketDataService.getDailyPricing(
@@ -77,10 +80,10 @@ export class SecurityPricingService implements ISecurityPricingService {
             fetchData: (offset, count) =>
                 this.prisma.security.findMany({
                     select: {
+                        assetClass: true,
+                        currencyCode: true,
                         id: true,
                         symbol: true,
-                        plaidType: true,
-                        currencyCode: true,
                     },
                     skip: offset,
                     take: count,
