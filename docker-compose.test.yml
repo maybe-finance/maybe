@@ -1,0 +1,52 @@
+---
+version: '3.9'
+
+services:
+    server:
+        env_file: .env
+        container_name: maybe-server
+        profiles: [maybe]
+        image: ghcr.io/maybe/maybe:main
+        ports:
+            - 3333
+        environment:
+            NEXTAUTH_URL: &canonical https://maybe.example.com
+            NX_NEXTAUTH_URL: *canonical
+            NX_CLIENT_URL: *canonical
+            NX_CLIENT_URL_CUSTOM: *canonical
+            NEXT_PUBLIC_API_URL: &next_public_api_url https://maybe-server.example.com
+            NX_API_URL: &nx_api_url https://maybe-server.example.com
+            NX_REDIS_URL: &nx_redis_url redis://redis:6379
+            NODE_ENV: production
+    client:
+        env_file: .env
+        container_name: maybe-client
+        profiles: [maybe]
+        image: ghcr.io/maybe/maybe-client:main
+        ports:
+            - 4200
+        environment:
+            NEXTAUTH_URL: *canonical
+            NX_NEXTAUTH_URL: *canonical
+            NX_CLIENT_URL: *canonical
+            NX_CLIENT_URL_CUSTOM: *canonical
+            NEXT_PUBLIC_API_URL: *next_public_api_url
+            NX_API_URL: *nx_api_url
+            NX_REDIS_URL: *nx_redis_url
+            NODE_ENV: production
+    worker:
+        env_file: .env
+        container_name: maybe-worker
+        profiles: [maybe]
+        image: ghcr.io/maybe/maybe-worker:main
+        ports:
+            - 3334
+        environment:
+            NEXTAUTH_URL: *canonical
+            NX_NEXTAUTH_URL: *canonical
+            NX_CLIENT_URL: *canonical
+            NX_CLIENT_URL_CUSTOM: *canonical
+            NEXT_PUBLIC_API_URL: *next_public_api_url
+            NX_API_URL: *nx_api_url
+            NX_REDIS_URL: *nx_redis_url
+            NODE_ENV: production
