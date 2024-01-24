@@ -50,6 +50,7 @@ type AccountManager =
     | { view: 'add-teller' }
     | { view: 'add-account' }
     | { view: 'add-property'; defaultValues: Partial<CreatePropertyFields> }
+    | { view: 'add-stock'; defaultValues: Partial<CreateStockFields> }
     | { view: 'add-vehicle'; defaultValues: Partial<CreateVehicleFields> }
     | { view: 'add-asset'; defaultValues: Partial<CreateAssetFields> }
     | { view: 'add-liability'; defaultValues: Partial<CreateLiabilityFields> }

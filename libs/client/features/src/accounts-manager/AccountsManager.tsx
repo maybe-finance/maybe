@@ -78,6 +78,11 @@ export function AccountsManager() {
                     title: 'Add vehicle',
                     component: <AddVehicle defaultValues={am.defaultValues} />,
                 }
+            case 'add-stock':
+                return {
+                    title: 'Add investment',
+                    component: <></>,
+                }
             case 'custom':
                 return { title: 'Custom account', component: am.component }
             default:
