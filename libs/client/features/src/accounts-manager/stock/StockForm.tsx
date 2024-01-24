@@ -1,10 +1,15 @@
-import type { CreateStockFields, UpdateVehicleFields } from '@maybe-finance/client/shared'
-import { Button, Input, Listbox } from '@maybe-finance/design-system'
+import {
+    useAccountApi,
+    type CreateStockFields,
+    type UpdateVehicleFields,
+} from '@maybe-finance/client/shared'
+import { Button, Listbox } from '@maybe-finance/design-system'
 import { DateUtil } from '@maybe-finance/shared'
 import { useForm } from 'react-hook-form'
 import { AccountValuationFormFields } from '../AccountValuationFormFields'
+import { useState } from 'react'
 
-// STOCKTODO - Change CreateVehicleFields and UpdateVehicleFields
+// STOCKTODO - Change UpdateVehicleFields
 type Props = {
     mode: 'create'
     defaultValues: CreateStockFields
@@ -32,6 +37,16 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
     const startDate = watch('startDate')
     const currentBalanceEditable = !startDate || !DateUtil.isToday(startDate)
 
+    const [stockSymbol, setStockSymbol] = useState<string | null>(null)
+    const [account, setAccount] = useState<string | null>(null)
+
+    const { useAccounts } = useAccountApi()
+    const { data: accountsData } = useAccounts()
+    // STOCKTODO - Think about whether you want to create a new account type 'STOCKS'
+    const stockAccountsList = accountsData?.accounts.filter(
+        (account) => account.type === 'INVESTMENT'
+    )
+
     return (
         <form onSubmit={handleSubmit(onSubmit)} data-testid="stock-form">
             <section className="space-y-4 mb-8">
@@ -50,17 +65,20 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
                         {...register('make', { required: true })}
                     /> */}
                     {/* STOCKTODO - Create currently selected stock state */}
-                    <Listbox value={account} onChange={setAccount}>
-                        <Listbox.Button label="Investment account"></Listbox.Button>
-                        <Listbox.Options>
-                            {stockAccountsList.map((account) => (
-                                // STOCKTODO - Figure out the correct account value - probably will be the symbol
-                                <Listbox.Option key={account.account_id} value={account.name}>
-                                    {account.name}
-                                </Listbox.Option>
-                            ))}
-                        </Listbox.Options>
-                    </Listbox>
+                    {stockAccountsList && (
+                        <Listbox value={account} onChange={setAccount}>
+                            <Listbox.Button label="Investment account"></Listbox.Button>
+                            <Listbox.Options>
+                                {stockAccountsList?.map((account) => (
+                                    // STOCKTODO - Figure out the correct account value - probably will be the symbol
+                                    <Listbox.Option key={account.id} value={account.name}>
+                                        {account.name}
+                                    </Listbox.Option>
+                                ))}
+                            </Listbox.Options>
+                        </Listbox>
+                    )}
+                    {/* <CreateAccount/> */}
 
                     {/* STOCKTODO - Change to to a drop down where all the stocks will be listed and can be chosen by their ticker names */}
                     {/* <Input
