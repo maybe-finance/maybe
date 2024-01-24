@@ -50,7 +50,7 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
                         {...register('make', { required: true })}
                     /> */}
                     {/* STOCKTODO - Create currently selected stock state */}
-                    <Listbox value={stock} onChange={setStock}>
+                    <Listbox value={account} onChange={setAccount}>
                         <Listbox.Button label="Investment account"></Listbox.Button>
                         <Listbox.Options>
                             {stockAccountsList.map((account) => (
@@ -63,13 +63,24 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
                     </Listbox>
 
                     {/* STOCKTODO - Change to to a drop down where all the stocks will be listed and can be chosen by their ticker names */}
-                    <Input
+                    {/* <Input
                         type="text"
                         label="Model"
                         placeholder="Enter model"
                         error={errors.model && 'Model is required'}
                         {...register('model', { required: true })}
-                    />
+                    /> */}
+                    <Listbox value={stockSymbol} onChange={setStockSymbol}>
+                        <Listbox.Button label="Investment account"></Listbox.Button>
+                        <Listbox.Options>
+                            {stocksList.map((stock) => (
+                                // STOCKTODO - Figure out the correct stock value - probably will be the symbol
+                                <Listbox.Option key={stock.key} value={stock.symbol}>
+                                    {stock.name}
+                                </Listbox.Option>
+                            ))}
+                        </Listbox.Options>
+                    </Listbox>
                 </div>
             </section>
 
