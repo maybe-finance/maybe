@@ -110,8 +110,11 @@ describe('security pricing sync for non basic tier', () => {
 
 describe('security pricing sync for basic tier', () => {
     let securityPricingService: ISecurityPricingService
+    let initialPolygonTier: string | undefined
 
     beforeEach(async () => {
+        initialPolygonTier = process.env.NX_POLYGON_TIER
+        process.env.NX_POLYGON_TIER = 'basic' // Force basic tier to test code path
         const logger = winston.createLogger({
             level: 'debug',
             transports: new winston.transports.Console({ format: winston.format.simple() }),
@@ -144,6 +147,11 @@ describe('security pricing sync for basic tier', () => {
             data: [{ symbol: 'AAPL' }, { symbol: 'VOO' }],
         })
     })
+
+    afterEach(() => {
+        process.env.NX_POLYGON_TIER = initialPolygonTier
+    })
+
     it('syncs', async () => {
         // sync 2x to catch any possible caching I/O issues
         await securityPricingService.syncAll()

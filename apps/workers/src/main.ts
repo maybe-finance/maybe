@@ -114,7 +114,9 @@ syncSecurityQueue.cancelJobs().then(() => {
             },
         })
         .then((count) => {
-            if (count === 0) {
+            // If no securities exist, sync them immediately except in development
+            // In development, sync manually to avoid hot reloads causing rate issues
+            if (count === 0 && process.env.NODE_ENV !== 'development') {
                 syncSecurityQueue.add(
                     'sync-us-stock-tickers',
                     {},

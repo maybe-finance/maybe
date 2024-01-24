@@ -1,6 +1,11 @@
 import type { PrismaClient, Security } from '@prisma/client'
 import { SecurityProvider, AssetClass } from '@prisma/client'
-import type { IMarketDataService } from '@maybe-finance/server/shared'
+import type {
+    IMarketDataService,
+    LivePricing,
+    EndOfDayPricing,
+    TSecurity,
+} from '@maybe-finance/server/shared'
 import type { Logger } from 'winston'
 import { Prisma } from '@prisma/client'
 import { DateTime } from 'luxon'
@@ -75,8 +80,6 @@ export class SecurityPricingService implements ISecurityPricingService {
     async syncAll() {
         const profiler = this.logger.startTimer()
 
-        const allPrices = await this.marketDataService.getAllDailyPricing()
-
         for await (const securities of SharedUtil.paginateIt({
             pageSize: 1000,
             fetchData: (offset, count) =>
@@ -91,10 +94,27 @@ export class SecurityPricingService implements ISecurityPricingService {
                     take: count,
                 }),
         })) {
-            const pricingData =
-                process.env.NX_POLYGON_TIER === 'basic'
-                    ? await this.marketDataService.getEndOfDayPricing(securities, allPrices)
-                    : await this.marketDataService.getLivePricing(securities)
+            let pricingData: LivePricing<TSecurity>[] | EndOfDayPricing<TSecurity>[]
+            if (process.env.NX_POLYGON_TIER === 'basic') {
+                try {
+                    const allPrices = await this.marketDataService.getAllDailyPricing()
+                    pricingData = await this.marketDataService.getEndOfDayPricing(
+                        securities,
+                        allPrices
+                    )
+                } catch (err) {
+                    this.logger.warn('Polygon fetch for EOD pricing failed', err)
+                    pricingData = []
+                }
+            } else {
+                try {
+                    pricingData = await this.marketDataService.getLivePricing(securities)
+                } catch (err) {
+                    this.logger.warn('Polygon fetch for live pricing failed', err)
+                    pricingData = []
+                }
+            }
+
             const prices = pricingData.filter((p) => !!p.pricing)
 
             this.logger.debug(

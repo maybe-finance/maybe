@@ -51,9 +51,7 @@ router.post(
         resolve: async ({ ctx }) => {
             ctx.ability.throwUnlessCan('manage', 'Security')
 
-            await ctx.queueService
-                .getQueue('sync-security')
-                .addBulk([{ name: 'sync-us-stock-tickers', data: {} }])
+            await ctx.queueService.getQueue('sync-security').add('sync-us-stock-tickers', {})
 
             return { success: true }
         },

@@ -17,7 +17,9 @@ type DailyPricing = {
     priceClose: Prisma.Decimal
 }
 
-type LivePricing<TSecurity> = {
+export type TSecurity = Pick<Security, 'assetClass' | 'currencyCode' | 'id' | 'symbol'>
+
+export type LivePricing<TSecurity> = {
     security: TSecurity
     pricing: {
         ticker: string
@@ -28,7 +30,7 @@ type LivePricing<TSecurity> = {
     } | null
 }
 
-type EndOfDayPricing<TSecurity> = {
+export type EndOfDayPricing<TSecurity> = {
     security: TSecurity
     pricing: {
         ticker: string
