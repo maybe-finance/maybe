@@ -1,3 +1,5 @@
+'use client'
+
 import type { ReactElement } from 'react'
 import { useRouter } from 'next/router'
 import { WithSidebarLayout, AccountSidebar, NewPlanForm } from '@maybe-finance/client/features'

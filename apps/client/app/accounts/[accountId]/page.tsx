@@ -1,3 +1,4 @@
+'use client'
 import type { ReactElement } from 'react'
 import type { SharedType } from '@maybe-finance/shared'
 
@@ -16,9 +17,9 @@ import {
     useQueryParam,
     useUserAccountContext,
 } from '@maybe-finance/client/shared'
-import { DefaultView, LoanView } from '../../components/account-views'
+import { DefaultView, LoanView } from '../../../components/account-views'
 
-import InvestmentView from '../../components/account-views/InvestmentView'
+import InvestmentView from '../../../components/account-views/InvestmentView'
 
 const initialRange = {
     start: DateTime.now().minus({ days: 30 }).toISODate(),

@@ -1,3 +1,5 @@
+'use client'
+
 import { ImageResponse } from '@vercel/og'
 import { DateTime } from 'luxon'
 import type { NextRequest } from 'next/server'

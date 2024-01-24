@@ -1,3 +1,5 @@
+'use client'
+
 import { usePlaid } from '@maybe-finance/client/shared'
 import { Disclosure, Transition } from '@headlessui/react'
 import { RiArrowUpSFill } from 'react-icons/ri'
@@ -56,7 +58,10 @@ export default function OAuth() {
                                                     </li>
                                                     <li>
                                                         Still not working?{' '}
-                                                        <a className="underline text-cyan" href="mailto:hello@maybe.co">
+                                                        <a
+                                                            className="underline text-cyan"
+                                                            href="mailto:hello@maybe.co"
+                                                        >
                                                             Let us know!
                                                         </a>
                                                     </li>

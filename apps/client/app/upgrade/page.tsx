@@ -1,3 +1,5 @@
+'use client'
+
 import { UpgradeTakeover } from '@maybe-finance/client/features'
 import { useUserApi } from '@maybe-finance/client/shared'
 import { useRouter } from 'next/router'

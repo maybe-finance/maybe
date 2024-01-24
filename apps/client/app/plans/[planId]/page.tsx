@@ -1,3 +1,5 @@
+'use client'
+
 import type { ReactElement } from 'react'
 import {
     WithSidebarLayout,
@@ -29,8 +31,7 @@ import { DateTime } from 'luxon'
 import classNames from 'classnames'
 import { DateUtil, NumberUtil, PlanUtil } from '@maybe-finance/shared'
 
-export default function PlanDetailPage() {
-    const planId = useQueryParam('planId', 'string')!
+export default function PlanDetailPage({ params: { planId } }: { params: { planId: string } }) {
     const router = useRouter()
     const { isReady, noAccounts, allAccountsDisabled } = useUserAccountContext()
     const { addAccount } = useAccountContext()

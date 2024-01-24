@@ -1,8 +1,28 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const withNx = require('@nrwl/next/plugins/with-nx')
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
+import withNx from '@nrwl/next/plugins/with-nx'
+import nextBundleAnalyzer from '@next/bundle-analyzer'
+
+import { withSentryConfig } from '@sentry/nextjs'
+
+const withBundleAnalyzer = nextBundleAnalyzer({
     enabled: process.env.ANALYZE === 'true',
 })
+
+const sentryConfig = {
+    options: {
+        automaticVercelMonitors: true,
+        disableLogger: true,
+        hideSourceMaps: true,
+        transpileClientSDK: false,
+        tunnelRoute: '/monitoring',
+        widenClientFileUpload: true,
+    },
+    webpack: {
+        // TODO: Add actual org and project
+        org: 'maybe-finance',
+        project: 'maybe',
+        silent: true,
+    },
+}
 
 /**
  * @type {import('@nrwl/next/plugins/with-nx').WithNxOptions}
@@ -18,4 +38,6 @@ const nextConfig = {
     },
 }
 
-module.exports = withBundleAnalyzer(withNx(nextConfig))
+module.exports = withBundleAnalyzer(
+    withNx(withSentryConfig(nextConfig, sentryConfig, sentryConfig.webpack, sentryConfig.options))
+)

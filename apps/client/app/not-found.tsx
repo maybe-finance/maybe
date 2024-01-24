@@ -1,3 +1,5 @@
+'use client'
+
 import { NotFoundPage } from '@maybe-finance/client/features'
 
 export function Page404() {

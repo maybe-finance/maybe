@@ -1,3 +1,5 @@
+'use client'
+
 import type { ReactElement } from 'react'
 import { useQueryParam } from '@maybe-finance/client/shared'
 import {
