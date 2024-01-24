@@ -61,7 +61,12 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
                 <section className="space-y-4">
                     <h6 className="text-white uppercase">Valuation</h6>
                     <div>
-                        {/* STOCKTODO - Figure out a way to get the necessary properties here */}
+                        {/* 
+                            STOCKTODO - Figure out a way to get the necessary properties here
+                            1. Purchase Date
+                            2. Total Purchase Value
+                            3. Number of Shares 
+                        */}
                         <AccountValuationFormFields
                             control={control}
                             currentBalanceEditable={currentBalanceEditable}
@@ -74,9 +79,9 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
                 type="submit"
                 fullWidth
                 disabled={isSubmitting || !isValid}
-                data-testid="vehicle-form-submit"
+                data-testid="stock-form-submit"
             >
-                {mode === 'create' ? 'Add vehicle' : 'Update'}
+                {mode === 'create' ? 'Add stock' : 'Update'}
             </Button>
         </form>
     )
