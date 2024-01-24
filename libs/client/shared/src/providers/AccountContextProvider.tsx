@@ -25,7 +25,7 @@ type StockMetadataValues = {
 
 export type CreateStockFields = StockMetadataValues & StockValuationFields
 // STOCKTODO - Make sure that the UpdateStockFields is correct.
-export type UpdateStockFields = StockMetadataValues
+// export type UpdateStockFields = StockMetadataValues
 
 // Property
 type PropertyMetadataValues = {
