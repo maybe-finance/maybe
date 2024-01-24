@@ -64,9 +64,7 @@ router.post(
         resolve: async ({ ctx }) => {
             ctx.ability.throwUnlessCan('manage', 'Security')
 
-            await ctx.queueService
-                .getQueue('sync-security')
-                .addBulk([{ name: 'sync-all-securities', data: {} }])
+            await ctx.queueService.getQueue('sync-security').add('sync-all-securities', {})
 
             return { success: true }
         },
