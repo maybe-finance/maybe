@@ -168,44 +168,62 @@ export default function AccountTypeSelector({
                 view === 'brokerages' ||
                 view === 'crypto' ||
                 showInstitutionList) && (
-                <p className="mt-4 text-base text-center">
-                    Can't find your institution?{' '}
-                    <span
-                        className="underline cursor-pointer text-cyan hover:opacity-80"
-                        onClick={() => {
-                            switch (view) {
-                                case 'banks':
+                <>
+                    <p className="mt-4 text-base text-center">
+                        Can't find your institution?{' '}
+                        <span
+                            className="underline cursor-pointer text-cyan hover:opacity-80"
+                            onClick={() => {
+                                switch (view) {
+                                    case 'banks':
+                                        setAccountManager({
+                                            view: 'add-asset',
+                                            defaultValues: { categoryUser: 'cash', name: 'Cash' },
+                                        })
+                                        break
+                                    case 'brokerages':
+                                        setAccountManager({
+                                            view: 'add-asset',
+                                            defaultValues: {
+                                                categoryUser: 'investment',
+                                                name: 'Investment',
+                                            },
+                                        })
+                                        break
+                                    case 'crypto':
+                                        setAccountManager({
+                                            view: 'add-asset',
+                                            defaultValues: {
+                                                categoryUser: 'crypto',
+                                                name: 'Cryptocurrency',
+                                            },
+                                        })
+                                        break
+                                    default:
+                                        onViewChange('manual')
+                                }
+                            }}
+                        >
+                            Add it manually
+                        </span>
+                    </p>
+                    {view === 'brokerages' && (
+                        <p className="mt-2 text-base text-center">
+                            Want to manually add stocks?{' '}
+                            <span
+                                className="underline cursor-pointer text-cyan hover:opacity-80"
+                                onClick={() => {
                                     setAccountManager({
-                                        view: 'add-asset',
-                                        defaultValues: { categoryUser: 'cash', name: 'Cash' },
+                                        view: 'add-stock',
+                                        defaultValues: { categoryUser: 'stock', name: 'Stock' },
                                     })
-                                    break
-                                case 'brokerages':
-                                    setAccountManager({
-                                        view: 'add-asset',
-                                        defaultValues: {
-                                            categoryUser: 'investment',
-                                            name: 'Investment',
-                                        },
-                                    })
-                                    break
-                                case 'crypto':
-                                    setAccountManager({
-                                        view: 'add-asset',
-                                        defaultValues: {
-                                            categoryUser: 'crypto',
-                                            name: 'Cryptocurrency',
-                                        },
-                                    })
-                                    break
-                                default:
-                                    onViewChange('manual')
-                            }
-                        }}
-                    >
-                        Add it manually
-                    </span>
-                </p>
+                                }}
+                            >
+                                Add it manually
+                            </span>
+                        </p>
+                    )}
+                </>
             )}
 
             {view === 'manual' && (
