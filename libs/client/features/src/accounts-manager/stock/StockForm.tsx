@@ -53,10 +53,10 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
                     <Listbox value={stock} onChange={setStock}>
                         <Listbox.Button label="Investment account"></Listbox.Button>
                         <Listbox.Options>
-                            {stockList.map((stock) => (
-                                // STOCKTODO - Figure out the correct stock value - probably will be the symbol
-                                <Listbox.Option key={stock.key} value={stock.value}>
-                                    {stock.name}
+                            {stockAccountsList.map((account) => (
+                                // STOCKTODO - Figure out the correct account value - probably will be the symbol
+                                <Listbox.Option key={account.account_id} value={account.name}>
+                                    {account.name}
                                 </Listbox.Option>
                             ))}
                         </Listbox.Options>
