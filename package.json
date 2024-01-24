@@ -3,6 +3,7 @@
     "version": "0.0.0",
     "license": "MIT",
     "scripts": {
+        "preinstall": "npx only-allow pnpm",
         "dev": "nx run-many --target serve --projects=client,server,workers --parallel --host 0.0.0.0 --nx-bail=true --maxParallel=100",
         "dev:services": "docker compose --profile services up -d",
         "dev:services:all": "docker compose --profile services --profile ngrok up -d",

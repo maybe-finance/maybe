@@ -7,7 +7,7 @@ FROM node:16.18.1 as builder
 
 WORKDIR /app
 COPY ./dist/apps/workers ./pnpm-lock.yaml ./prisma ./
-RUN pnpm install --production
+RUN pnpm install --prod --frozen-lockfile
 
 # ------------------------------------------
 #                PROD STAGE               

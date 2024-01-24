@@ -1,4 +1,5 @@
-# Ignores everything except dist/ prisma/ and apps/
+# Ignores everything except dist/ prisma/ apps/ and pnpm-lock.yaml
 *
 !dist/
 !prisma/
+!pnpm-lock.yaml
