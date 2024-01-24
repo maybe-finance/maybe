@@ -1,21 +1,20 @@
-import type { CreateVehicleFields, UpdateVehicleFields } from '@maybe-finance/client/shared'
+import type { CreateStockFields, UpdateVehicleFields } from '@maybe-finance/client/shared'
 import { Button, Input } from '@maybe-finance/design-system'
 import { DateUtil } from '@maybe-finance/shared'
 import { useForm } from 'react-hook-form'
 import { AccountValuationFormFields } from '../AccountValuationFormFields'
 
 // STOCKTODO - Change CreateVehicleFields and UpdateVehicleFields
-type Props =
-    | {
-          mode: 'create'
-          defaultValues: CreateVehicleFields
-          onSubmit(data: CreateVehicleFields): void
-      }
-    | {
-          mode: 'update'
-          defaultValues: UpdateVehicleFields
-          onSubmit(data: UpdateVehicleFields): void
-      }
+type Props = {
+    mode: 'create'
+    defaultValues: CreateStockFields
+    onSubmit(data: CreateStockFields): void
+}
+// | {
+//       mode: 'update'
+//       defaultValues: UpdateVehicleFields
+//       onSubmit(data: UpdateVehicleFields): void
+//   }
 
 export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
     const {
@@ -24,7 +23,8 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
         handleSubmit,
         watch,
         formState: { errors, isSubmitting, isValid },
-    } = useForm<CreateVehicleFields & UpdateVehicleFields>({
+        // STOCKTODO - Fix UpdateVehicleFields
+    } = useForm<CreateStockFields & UpdateVehicleFields>({
         mode: 'onChange',
         defaultValues,
     })
