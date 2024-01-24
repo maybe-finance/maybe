@@ -198,7 +198,7 @@ router.get(
                     return {
                         ticker,
                         pricing: await ctx.marketDataService.getDailyPricing(
-                            { symbol: ticker, assetClass: AssetClass.other, currencyCode: 'USD' },
+                            { assetClass: AssetClass.other, currencyCode: 'USD', symbol: ticker },
                             input.start,
                             input.end
                         ),

@@ -52,7 +52,7 @@ export interface IMarketDataService {
     /**
      * fetches pricing info for inclusive date range
      */
-    getDailyPricing<TSecurity extends Pick<Security, 'symbol' | 'assetClass' | 'currencyCode'>>(
+    getDailyPricing<TSecurity extends Pick<Security, 'assetClass' | 'currencyCode' | 'symbol'>>(
         security: TSecurity,
         start: DateTime,
         end: DateTime
@@ -62,7 +62,7 @@ export interface IMarketDataService {
      * fetches end of day pricing info for a batch of securities
      */
     getEndOfDayPricing<
-        TSecurity extends Pick<Security, 'id' | 'symbol' | 'assetClass' | 'currencyCode'>
+        TSecurity extends Pick<Security, 'assetClass' | 'currencyCode' | 'id' | 'symbol'>
     >(
         securities: TSecurity[],
         allPricing: IAggs
@@ -78,7 +78,7 @@ export interface IMarketDataService {
      * fetches up-to-date pricing info for a batch of securities
      */
     getLivePricing<
-        TSecurity extends Pick<Security, 'id' | 'symbol' | 'assetClass' | 'currencyCode'>
+        TSecurity extends Pick<Security, 'assetClass' | 'currencyCode' | 'id' | 'symbol'>
     >(
         securities: TSecurity[]
     ): Promise<LivePricing<TSecurity>[]>
@@ -89,7 +89,7 @@ export interface IMarketDataService {
     getOptionDetails(symbol: Security['symbol']): Promise<OptionDetails>
 
     getSecurityDetails(
-        security: Pick<Security, 'symbol' | 'assetClass' | 'currencyCode'>
+        security: Pick<Security, 'assetClass' | 'currencyCode' | 'symbol'>
     ): Promise<SharedType.SecurityDetails>
 
     /**
@@ -119,7 +119,7 @@ export class PolygonMarketDataService implements IMarketDataService {
     }
 
     async getDailyPricing<
-        TSecurity extends Pick<Security, 'symbol' | 'assetClass' | 'currencyCode'>
+        TSecurity extends Pick<Security, 'assetClass' | 'currencyCode' | 'symbol'>
     >(security: TSecurity, start: DateTime, end: DateTime): Promise<DailyPricing[]> {
         const ticker = getPolygonTicker(security)
         if (!ticker) return []
@@ -200,7 +200,7 @@ export class PolygonMarketDataService implements IMarketDataService {
     }
 
     async getLivePricing<
-        TSecurity extends Pick<Security, 'id' | 'symbol' | 'assetClass' | 'currencyCode'>
+        TSecurity extends Pick<Security, 'assetClass' | 'currencyCode' | 'id' | 'symbol'>
     >(securities: TSecurity[]): Promise<LivePricing<TSecurity>[]> {
         const securitiesWithTicker = securities.map((security) => ({
             security,
@@ -278,9 +278,9 @@ export class PolygonMarketDataService implements IMarketDataService {
 
     async getOptionDetails(symbol: Security['symbol']): Promise<OptionDetails> {
         const ticker = getPolygonTicker({
-            symbol,
             assetClass: AssetClass.options,
             currencyCode: 'USD',
+            symbol,
         })
 
         if (!ticker) {
@@ -295,7 +295,7 @@ export class PolygonMarketDataService implements IMarketDataService {
         }
     }
 
-    async getSecurityDetails(security: Pick<Security, 'symbol' | 'assetClass' | 'currencyCode'>) {
+    async getSecurityDetails(security: Pick<Security, 'assetClass' | 'currencyCode' | 'symbol'>) {
         const ticker = getPolygonTicker(security)
         if (!ticker || ticker.market === 'options') {
             return {}
@@ -611,13 +611,12 @@ class PolygonTicker {
 }
 
 export function getPolygonTicker({
-    symbol,
     assetClass,
     currencyCode,
-}: Pick<Security, 'symbol' | 'assetClass' | 'currencyCode'>): PolygonTicker | null {
+    symbol,
+}: Pick<Security, 'assetClass' | 'currencyCode' | 'symbol'>): PolygonTicker | null {
     if (!symbol) return null
 
-    // https://plaid.com/docs/api/products/investments/#investments-holdings-get-response-securities-type
     switch (assetClass) {
         case AssetClass.options: {
             return new PolygonTicker('options', `O:${symbol}`)
@@ -626,7 +625,6 @@ export function getPolygonTicker({
             return new PolygonTicker('crypto', `X:${symbol}${currencyCode}`)
         }
         case AssetClass.cash: {
-            // Plaid used to prefix `ticker_symbol` with "CUR:" for crypto securities so this check is for handling that legacy scenario
             return symbol === currencyCode
                 ? null // if the symbol matches the currencyCode then we're just dealing with a basic cash holding
                 : new PolygonTicker('fx', `C:${symbol}${currencyCode}`)

@@ -121,9 +121,10 @@ export class AccountConnectionService implements IAccountConnectionService {
                 ],
             },
             select: {
+                assetClass: true,
+                currencyCode: true,
                 id: true,
                 symbol: true,
-                assetClass: true,
             },
         })
 

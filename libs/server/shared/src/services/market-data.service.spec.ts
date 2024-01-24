@@ -1,21 +1,20 @@
 import { getPolygonTicker } from './market-data.service'
+import { AssetClass } from '@prisma/client'
 
 describe('PolygonMarketDataService', () => {
     it.each`
-        symbol                   | plaidType           | ticker
-        ${'AAPL'}                | ${'equity'}         | ${{ market: 'stocks', ticker: 'AAPL' }}
-        ${'AAPL'}                | ${null}             | ${{ market: 'stocks', ticker: 'AAPL' }}
-        ${'AAPL220909C00070000'} | ${'derivative'}     | ${{ market: 'options', ticker: 'O:AAPL220909C00070000' }}
-        ${'AAPL220909C00070000'} | ${null}             | ${{ market: 'options', ticker: 'O:AAPL220909C00070000' }}
-        ${'BTC'}                 | ${'cryptocurrency'} | ${{ market: 'crypto', ticker: 'X:BTCUSD' }}
-        ${'CUR:BTC'}             | ${'cash'}           | ${{ market: 'crypto', ticker: 'X:BTCUSD' }}
-        ${'CUR:USD'}             | ${'cash'}           | ${null}
-        ${'USD'}                 | ${'cash'}           | ${null}
-        ${'EUR'}                 | ${'cash'}           | ${{ market: 'fx', ticker: 'C:EURUSD' }}
+        assetClass            | symbol                   | ticker
+        ${AssetClass.stocks}  | ${'AAPL'}                | ${{ market: 'stocks', ticker: 'AAPL' }}
+        ${AssetClass.other}   | ${'AAPL'}                | ${{ market: 'stocks', ticker: 'AAPL' }}
+        ${AssetClass.options} | ${'AAPL220909C00070000'} | ${{ market: 'options', ticker: 'O:AAPL220909C00070000' }}
+        ${AssetClass.other}   | ${'AAPL220909C00070000'} | ${{ market: 'options', ticker: 'O:AAPL220909C00070000' }}
+        ${AssetClass.crypto}  | ${'BTC'}                 | ${{ market: 'crypto', ticker: 'X:BTCUSD' }}
+        ${AssetClass.cash}    | ${'USD'}                 | ${null}
+        ${AssetClass.cash}    | ${'EUR'}                 | ${{ market: 'fx', ticker: 'C:EURUSD' }}
     `(
-        'properly parses security symbol: $symbol plaidType: $plaidType',
-        ({ symbol, plaidType, ticker }) => {
-            expect(getPolygonTicker({ symbol, plaidType, currencyCode: 'USD' })).toEqual(ticker)
+        'properly parses security symbol: $symbol assetClass: $assetClass',
+        ({ assetClass, symbol, ticker }) => {
+            expect(getPolygonTicker({ assetClass, currencyCode: 'USD', symbol })).toEqual(ticker)
         }
     )
 })

@@ -252,8 +252,8 @@ enum AssetClass {
   cash
   crypto
   fixed_income
-  stocks
   options
+  stocks
   other
 }
 
