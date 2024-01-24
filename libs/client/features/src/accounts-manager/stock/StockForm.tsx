@@ -51,20 +51,6 @@ export default function VehicleForm({ mode, defaultValues, onSubmit }: Props) {
                         error={errors.model && 'Model is required'}
                         {...register('model', { required: true })}
                     />
-
-                    <Input
-                        type="text"
-                        label="Year"
-                        placeholder="Enter year"
-                        error={errors.year && 'A valid year is required'}
-                        {...register('year', {
-                            required: true,
-                            validate: (v) =>
-                                v != null &&
-                                parseInt(v) > 1800 &&
-                                parseInt(v) < new Date().getFullYear() + 2,
-                        })}
-                    />
                 </div>
             </section>
 
