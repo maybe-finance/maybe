@@ -38,32 +38,18 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
                 <div className="space-y-4">
                     <Input
                         type="text"
-                        label="Make"
-                        placeholder="Enter make"
-                        error={errors.make && 'Make is required'}
+                        label="Investment account"
+                        placeholder="Account Name"
+                        error={errors.make && 'Account is required'}
                         {...register('make', { required: true })}
                     />
 
                     <Input
                         type="text"
-                        label="Model"
-                        placeholder="Enter model"
-                        error={errors.model && 'Model is required'}
+                        label="Stock"
+                        placeholder="Enter stock"
+                        error={errors.model && 'Stock is required'}
                         {...register('model', { required: true })}
-                    />
-
-                    <Input
-                        type="text"
-                        label="Year"
-                        placeholder="Enter year"
-                        error={errors.year && 'A valid year is required'}
-                        {...register('year', {
-                            required: true,
-                            validate: (v) =>
-                                v != null &&
-                                parseInt(v) > 1800 &&
-                                parseInt(v) < new Date().getFullYear() + 2,
-                        })}
                     />
                 </div>
             </section>
@@ -84,9 +70,9 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
                 type="submit"
                 fullWidth
                 disabled={isSubmitting || !isValid}
-                data-testid="vehicle-form-submit"
+                data-testid="stock-form-submit"
             >
-                {mode === 'create' ? 'Add vehicle' : 'Update'}
+                {mode === 'create' ? 'Add stock' : 'Update'}
             </Button>
         </form>
     )
