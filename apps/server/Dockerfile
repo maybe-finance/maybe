@@ -6,8 +6,8 @@
 FROM node:16.18.1 as builder
 
 WORKDIR /app
-COPY ./dist/apps/server ./yarn.lock ./prisma ./
-RUN yarn install --production
+COPY ./dist/apps/server ./pnpm-lock.yaml ./prisma ./
+RUN pnpm install --production
 
 # ------------------------------------------
 #                PROD STAGE               

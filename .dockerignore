@@ -1,5 +1,4 @@
-# Ignores everything except dist/ prisma/ apps/ and yarn.lock
+# Ignores everything except dist/ prisma/ and apps/
 *
 !dist/
 !prisma/
-!yarn.lock

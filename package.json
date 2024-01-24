@@ -8,11 +8,11 @@
         "dev:services:all": "docker compose --profile services --profile ngrok up -d",
         "dev:workers:test": "nx test workers --skip-nx-cache --runInBand",
         "dev:server:test": "nx test server --skip-nx-cache --runInBand",
-        "dev:test:unit": "yarn dev:ci:test --testPathPattern='^(?!.*integration).*$' --verbose --skip-nx-cache",
-        "dev:test:integration": "NX_PORT=3335 yarn dev:ci:test --testPathPattern='^.*.integration.spec.ts$' --verbose --skip-nx-cache",
+        "dev:test:unit": "pnpm dev:ci:test --testPathPattern='^(?!.*integration).*$' --verbose --skip-nx-cache",
+        "dev:test:integration": "NX_PORT=3335 pnpm dev:ci:test --testPathPattern='^.*.integration.spec.ts$' --verbose --skip-nx-cache",
         "dev:lint": "nx affected --target=lint",
         "dev:ci:e2e": "nx run e2e:e2e",
-        "dev:ci": "yarn dev:ci:lint:all && yarn dev:ci:test:all && yarn dev:ci:format:all && nx run-many --target build --all",
+        "dev:ci": "pnpm dev:ci:lint:all && pnpm dev:ci:test:all && pnpm dev:ci:format:all && nx run-many --target build --all",
         "dev:ci:test": "nx run-many --target=test --all --runInBand",
         "dev:ci:dependency-graph": "nx dep-graph",
         "prisma:gen": "prisma generate",
@@ -24,7 +24,7 @@
         "prisma:seed": "prisma db seed",
         "prisma:studio": "prisma studio",
         "dev:docker:reset": "docker compose down -v --rmi all --remove-orphans && docker system prune --all --volumes && docker compose build",
-        "dev:circular": "npx madge --circular --extensions ts libs",
+        "dev:circular": "pnpx madge --circular --extensions ts libs",
         "analyze:client": "ANALYZE=true nx build client --skip-nx-cache",
         "tools:pages": "live-server tools/pages",
         "prepare": "husky install"
@@ -254,8 +254,8 @@
     },
     "lint-staged": {
         "*": [
-            "yarn nx format:write --uncommitted",
-            "yarn eslint --fix"
+            "pnpm nx format:write --uncommitted",
+            "pnpm eslint --fix"
         ]
     }
 }
