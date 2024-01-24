@@ -1,5 +1,5 @@
 import type { CreateStockFields, UpdateVehicleFields } from '@maybe-finance/client/shared'
-import { Button, Input } from '@maybe-finance/design-system'
+import { Button, Input, Listbox } from '@maybe-finance/design-system'
 import { DateUtil } from '@maybe-finance/shared'
 import { useForm } from 'react-hook-form'
 import { AccountValuationFormFields } from '../AccountValuationFormFields'
@@ -37,14 +37,30 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
             <section className="space-y-4 mb-8">
                 <h6 className="text-white uppercase">Details</h6>
                 <div className="space-y-4">
-                    {/* STOCKTODO - Change this to a drop down where a pre-existing stock-account can be selected or a new stock account can be created*/}
-                    <Input
+                    {/* 
+                        STOCKTODO - Change this to a drop down where a pre-existing stock-account can be selected or a new stock account can be created
+
+                        Also make sure this this is submitted to the form. There was a ...register('make', { required: true }) here
+                    */}
+                    {/* <Input
                         type="text"
                         label="Make"
                         placeholder="Enter make"
                         error={errors.make && 'Make is required'}
                         {...register('make', { required: true })}
-                    />
+                    /> */}
+                    {/* STOCKTODO - Create currently selected stock state */}
+                    <Listbox value={stock} onChange={setStock}>
+                        <Listbox.Button label="Investment account"></Listbox.Button>
+                        <Listbox.Options>
+                            {stockList.map((stock) => (
+                                // STOCKTODO - Figure out the correct stock value - probably will be the symbol
+                                <Listbox.Option key={stock.key} value={stock.value}>
+                                    {stock.name}
+                                </Listbox.Option>
+                            ))}
+                        </Listbox.Options>
+                    </Listbox>
 
                     {/* STOCKTODO - Change to to a drop down where all the stocks will be listed and can be chosen by their ticker names */}
                     <Input
