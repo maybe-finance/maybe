@@ -1,5 +1,5 @@
 import { useState, type ReactElement } from 'react'
-import { Input, InputPassword, Button, Checkbox } from '@maybe-finance/design-system'
+import { Input, InputPassword, Button } from '@maybe-finance/design-system'
 import {
     FullPageLayout,
     UserDevTools,
@@ -54,7 +54,7 @@ export default function RegisterPage() {
             redirect: false,
         })
 
-        if (isOnboarded) {
+        if (isOnboarded && response?.ok) {
             await updateProfile.mutateAsync(onboardedProfile)
             await updateOnboarding.mutateAsync(completedOnboarding)
         }
