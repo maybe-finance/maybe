@@ -11,6 +11,22 @@ export type AccountValuationFields = {
     currentBalance: number | null
 }
 
+// Stock
+export type StockValuationFields = {
+    startDate: string | null
+    originalBalance: number | null
+    shares: number | null
+}
+
+type StockMetadataValues = {
+    account_id: number | null
+    stock: string | null
+}
+
+export type CreateStockFields = StockMetadataValues & StockValuationFields
+// STOCKTODO - Make sure that the UpdateStockFields is correct.
+export type UpdateStockFields = StockMetadataValues
+
 // Property
 type PropertyMetadataValues = {
     line1: string
@@ -50,6 +66,7 @@ type AccountManager =
     | { view: 'add-teller' }
     | { view: 'add-account' }
     | { view: 'add-property'; defaultValues: Partial<CreatePropertyFields> }
+    // STOCKTODO - Create the necessary stock types here
     | { view: 'add-stock'; defaultValues: Partial<CreateStockFields> }
     | { view: 'add-vehicle'; defaultValues: Partial<CreateVehicleFields> }
     | { view: 'add-asset'; defaultValues: Partial<CreateAssetFields> }
