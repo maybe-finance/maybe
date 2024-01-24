@@ -16,7 +16,7 @@ type Props =
           onSubmit(data: UpdateVehicleFields): void
       }
 
-export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
+export default function VehicleForm({ mode, defaultValues, onSubmit }: Props) {
     const {
         register,
         control,
@@ -38,18 +38,32 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
                 <div className="space-y-4">
                     <Input
                         type="text"
-                        label="Investment account"
-                        placeholder="Account Name"
-                        error={errors.make && 'Account is required'}
+                        label="Make"
+                        placeholder="Enter make"
+                        error={errors.make && 'Make is required'}
                         {...register('make', { required: true })}
                     />
 
                     <Input
                         type="text"
-                        label="Stock"
-                        placeholder="Enter stock"
-                        error={errors.model && 'Stock is required'}
+                        label="Model"
+                        placeholder="Enter model"
+                        error={errors.model && 'Model is required'}
                         {...register('model', { required: true })}
+                    />
+
+                    <Input
+                        type="text"
+                        label="Year"
+                        placeholder="Enter year"
+                        error={errors.year && 'A valid year is required'}
+                        {...register('year', {
+                            required: true,
+                            validate: (v) =>
+                                v != null &&
+                                parseInt(v) > 1800 &&
+                                parseInt(v) < new Date().getFullYear() + 2,
+                        })}
                     />
                 </div>
             </section>
@@ -70,9 +84,9 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
                 type="submit"
                 fullWidth
                 disabled={isSubmitting || !isValid}
-                data-testid="stock-form-submit"
+                data-testid="vehicle-form-submit"
             >
-                {mode === 'create' ? 'Add stock' : 'Update'}
+                {mode === 'create' ? 'Add vehicle' : 'Update'}
             </Button>
         </form>
     )
