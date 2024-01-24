@@ -1,13 +1,19 @@
 import type { PrismaClient, Security } from '@prisma/client'
+import { SecurityProvider, AssetClass } from '@prisma/client'
 import type { IMarketDataService } from '@maybe-finance/server/shared'
 import type { Logger } from 'winston'
 import { Prisma } from '@prisma/client'
 import { DateTime } from 'luxon'
 import { SharedUtil } from '@maybe-finance/shared'
+import _ from 'lodash'
 
 export interface ISecurityPricingService {
-    sync(security: Pick<Security, 'id' | 'symbol' | 'plaidType'>, syncStart?: string): Promise<void>
+    sync(
+        security: Pick<Security, 'assetClass' | 'currencyCode' | 'id' | 'symbol'>,
+        syncStart?: string
+    ): Promise<void>
     syncAll(): Promise<void>
+    syncUSStockTickers(): Promise<void>
 }
 
 export class SecurityPricingService implements ISecurityPricingService {
@@ -18,7 +24,7 @@ export class SecurityPricingService implements ISecurityPricingService {
     ) {}
 
     async sync(
-        security: Pick<Security, 'id' | 'symbol' | 'plaidType' | 'currencyCode'>,
+        security: Pick<Security, 'assetClass' | 'currencyCode' | 'id' | 'symbol'>,
         syncStart?: string
     ) {
         const dailyPricing = await this.marketDataService.getDailyPricing(
@@ -74,10 +80,10 @@ export class SecurityPricingService implements ISecurityPricingService {
             fetchData: (offset, count) =>
                 this.prisma.security.findMany({
                     select: {
+                        assetClass: true,
+                        currencyCode: true,
                         id: true,
                         symbol: true,
-                        plaidType: true,
-                        currencyCode: true,
                     },
                     skip: offset,
                     take: count,
@@ -153,5 +159,51 @@ export class SecurityPricingService implements ISecurityPricingService {
         }
 
         profiler.done({ message: 'Synced all securities' })
+    }
+
+    async syncUSStockTickers() {
+        const profiler = this.logger.startTimer()
+        const usStockTickers = await this.marketDataService.getUSStockTickers()
+
+        if (!usStockTickers.length) return
+
+        this.logger.debug(`fetched ${usStockTickers.length} stock tickers`)
+
+        _.chunk(usStockTickers, 1_000).map((chunk) => {
+            return this.prisma.$transaction([
+                this.prisma.$executeRaw`
+                    INSERT INTO security (name, symbol, currency_code, exchange_acronym, exchange_mic, exchange_name, provider_name, asset_class)
+                    VALUES
+                      ${Prisma.join(
+                          chunk.map(
+                              ({
+                                  name,
+                                  ticker,
+                                  currency_name,
+                                  exchangeAcronym,
+                                  exchangeMic,
+                                  exchangeName,
+                              }) =>
+                                  Prisma.sql`(
+                                    ${name},
+                                    ${ticker},
+                                    ${currency_name?.toUpperCase()},
+                                    ${exchangeAcronym},
+                                    ${exchangeMic},
+                                    ${exchangeName},
+                                    ${SecurityProvider.polygon}::"SecurityProvider",
+                                    ${AssetClass.stocks}::"AssetClass"
+                                  )`
+                          )
+                      )}
+                    ON CONFLICT (symbol, exchange_mic) DO UPDATE
+                    SET
+                      name = EXCLUDED.name,
+                      currency_code = EXCLUDED.currency_code;
+                  `,
+            ])
+        })
+
+        profiler.done({ message: 'Synced US stock tickers' })
     }
 }

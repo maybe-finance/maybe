@@ -27,11 +27,10 @@ router.post(
         resolve: async ({ ctx }) => {
             ctx.ability.throwUnlessCan('update', 'Institution')
 
-            // Sync all Plaid + Finicity institutions
-            await ctx.queueService.getQueue('sync-institution').addBulk([
-                { name: 'sync-plaid-institutions', data: {} },
-                { name: 'sync-finicity-institutions', data: {} },
-            ])
+            // Sync all Teller institutions
+            await ctx.queueService
+                .getQueue('sync-institution')
+                .addBulk([{ name: 'sync-teller-institutions', data: {} }])
 
             return { success: true }
         },

@@ -13,7 +13,7 @@ export function Intro({ onNext, title }: StepProps) {
                 <div className="flex justify-center">
                     <Wave />
                 </div>
-                <h2 className="mt-6">{title}</h2>
+                <h2 className="mt-6 text-pretty">{title}</h2>
                 <p className="mt-2 text-base text-gray-50">
                     We&rsquo;re super excited you&rsquo;re here. In the next step we&rsquo;ll ask
                     you a few questions to complete your profile and get you all set up.

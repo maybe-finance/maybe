@@ -1,11 +1,17 @@
 import { useState, type ReactElement } from 'react'
 import { Input, InputPassword, Button } from '@maybe-finance/design-system'
-import { FullPageLayout } from '@maybe-finance/client/features'
+import {
+    FullPageLayout,
+    UserDevTools,
+    completedOnboarding,
+    onboardedProfile,
+} from '@maybe-finance/client/features'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import Script from 'next/script'
 import Link from 'next/link'
+import { useUserApi } from '@maybe-finance/client/shared'
 
 export default function RegisterPage() {
     const [firstName, setFirstName] = useState('')
@@ -14,9 +20,16 @@ export default function RegisterPage() {
     const [password, setPassword] = useState('')
     const [isValid, setIsValid] = useState(false)
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
+    const [isLoading, setIsLoading] = useState(false)
+    const [isAdmin, setIsAdmin] = useState<boolean>(false)
+    const [isOnboarded, setIsOnboarded] = useState<boolean>(false)
 
+    const { useUpdateOnboarding, useUpdateProfile } = useUserApi()
     const { data: session } = useSession()
     const router = useRouter()
+
+    const updateOnboarding = useUpdateOnboarding()
+    const updateProfile = useUpdateProfile()
 
     useEffect(() => {
         if (session) router.push('/')
@@ -30,17 +43,25 @@ export default function RegisterPage() {
         setLastName('')
         setEmail('')
         setPassword('')
+        setIsLoading(true)
 
         const response = await signIn('credentials', {
             email,
             password,
             firstName,
             lastName,
+            role: isAdmin ? 'admin' : 'user',
             redirect: false,
         })
 
+        if (isOnboarded && response?.ok) {
+            await updateProfile.mutateAsync(onboardedProfile)
+            await updateOnboarding.mutateAsync(completedOnboarding)
+        }
+
         if (response && response.error) {
             setErrorMessage(response.error)
+            setIsLoading(false)
         }
     }
 
@@ -63,18 +84,21 @@ export default function RegisterPage() {
                         <form className="space-y-4 w-full px-4" onSubmit={onSubmit}>
                             <Input
                                 type="text"
+                                name="firstName"
                                 label="First name"
                                 value={firstName}
                                 onChange={(e) => setFirstName(e.currentTarget.value)}
                             />
                             <Input
                                 type="text"
+                                name="lastName"
                                 label="Last name"
                                 value={lastName}
                                 onChange={(e) => setLastName(e.currentTarget.value)}
                             />
                             <Input
                                 type="text"
+                                name="email"
                                 label="Email"
                                 value={email}
                                 onChange={(e) => setEmail(e.currentTarget.value)}
@@ -82,6 +106,7 @@ export default function RegisterPage() {
 
                             <InputPassword
                                 autoComplete="password"
+                                name="password"
                                 label="Password"
                                 value={password}
                                 showPasswordRequirements={!isValid}
@@ -101,14 +126,23 @@ export default function RegisterPage() {
                                 </div>
                             ) : null}
 
+                            <UserDevTools
+                                isAdmin={isAdmin}
+                                setIsAdmin={setIsAdmin}
+                                isOnboarded={isOnboarded}
+                                setIsOnboarded={setIsOnboarded}
+                            />
+
                             <Button
                                 type="submit"
+                                fullWidth
                                 disabled={!isValid}
                                 variant={isValid ? 'primary' : 'secondary'}
+                                isLoading={isLoading}
                             >
                                 Register
                             </Button>
-                            <div className="text-sm text-gray-50 pt-2">
+                            <div className="text-sm text-gray-50 text-center">
                                 <div>
                                     Already have an account?{' '}
                                     <Link

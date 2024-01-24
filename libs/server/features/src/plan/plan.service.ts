@@ -33,7 +33,7 @@ const PROJECTION_ASSET_PARAMS: {
     [type in SharedType.ProjectionAssetType]: [mean: Decimal.Value, stddev: Decimal.Value]
 } = {
     stocks: ['0.05', '0.186'],
-    bonds: ['0.02', '0.052'],
+    fixed_income: ['0.02', '0.052'],
     cash: ['-0.02', '0.05'],
     crypto: ['1.0', '1.0'],
     property: ['0.1', '0.2'],

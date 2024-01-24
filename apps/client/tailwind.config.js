@@ -75,9 +75,5 @@ module.exports = merge(designSystemConfig, {
             },
         },
     },
-    plugins: [
-        require('@tailwindcss/line-clamp'),
-        require('@tailwindcss/forms'),
-        require('@tailwindcss/typography'),
-    ],
+    plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
 })

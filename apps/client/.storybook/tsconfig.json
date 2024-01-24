@@ -1,0 +1,7 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "allowImportingTsExtensions": true
+    },
+    "include": ["**/*.ts", "**/*.tsx", "**/**/*.ts", "**/**/*.tsx"]
+}

@@ -12,6 +12,7 @@ export default function LoginPage() {
     const [password, setPassword] = useState('')
     const [isValid, setIsValid] = useState(false)
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
+    const [isLoading, setIsLoading] = useState(false)
 
     const { data: session } = useSession()
     const router = useRouter()
@@ -26,6 +27,7 @@ export default function LoginPage() {
         e.preventDefault()
         setErrorMessage(null)
         setPassword('')
+        setIsLoading(true)
 
         const response = await signIn('credentials', {
             email,
@@ -35,7 +37,15 @@ export default function LoginPage() {
 
         if (response && response.error) {
             setErrorMessage(response.error)
+            setIsLoading(false)
+            setIsValid(false)
         }
+    }
+
+    const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setErrorMessage(null)
+        setPassword(e.target.value)
+        setIsValid(e.target.value.length > 0)
     }
 
     return (
@@ -57,6 +67,7 @@ export default function LoginPage() {
                         <form className="space-y-4 w-full px-4" onSubmit={onSubmit}>
                             <Input
                                 type="text"
+                                name="email"
                                 label="Email"
                                 value={email}
                                 onChange={(e) => setEmail(e.currentTarget.value)}
@@ -64,17 +75,11 @@ export default function LoginPage() {
 
                             <InputPassword
                                 autoComplete="password"
+                                name="password"
                                 label="Password"
                                 value={password}
-                                showPasswordRequirements={!isValid}
-                                onValidityChange={(checks) => {
-                                    const passwordValid =
-                                        checks.filter((c) => !c.isValid).length === 0
-                                    setIsValid(passwordValid)
-                                }}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setPassword(e.target.value)
-                                }
+                                onChange={onPasswordChange}
+                                showComplexityBar={false}
                             />
 
                             {errorMessage && password.length === 0 ? (
@@ -85,12 +90,14 @@ export default function LoginPage() {
 
                             <Button
                                 type="submit"
-                                disabled={!isValid}
+                                fullWidth
+                                disabled={!isValid || isLoading}
                                 variant={isValid ? 'primary' : 'secondary'}
+                                isLoading={isLoading}
                             >
                                 Log in
                             </Button>
-                            <div className="text-sm text-gray-50 pt-2">
+                            <div className="text-sm text-gray-50 text-center">
                                 <div>
                                     Don&apos;t have an account?{' '}
                                     <Link

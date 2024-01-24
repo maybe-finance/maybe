@@ -1,7 +1,7 @@
 import type { Logger } from 'winston'
 import type { PrismaClient } from '@prisma/client'
 import type { SendEmailQueueJobData } from '@maybe-finance/server/shared'
-import type { IEmailService } from './email.service'
+import type { EmailService } from './email.service'
 import { DateTime } from 'luxon'
 
 export interface IEmailProcessor {
@@ -13,17 +13,25 @@ export class EmailProcessor implements IEmailProcessor {
     constructor(
         private readonly logger: Logger,
         private readonly prisma: PrismaClient,
-        private readonly emailService: IEmailService
+        private readonly emailService: EmailService
     ) {}
 
     async send(jobData: SendEmailQueueJobData) {
         if ('type' in jobData) {
             switch (jobData.type) {
                 case 'plain':
-                    this.emailService.send(jobData.messages)
+                    if (Array.isArray(jobData.messages)) {
+                        this.emailService.send(jobData.messages)
+                    } else {
+                        this.emailService.send([jobData.messages])
+                    }
                     break
                 case 'template':
-                    this.emailService.sendTemplate(jobData.messages)
+                    if (Array.isArray(jobData.messages)) {
+                        this.emailService.sendTemplate(jobData.messages)
+                    } else {
+                        this.emailService.sendTemplate([jobData.messages])
+                    }
                     break
                 case 'trial-reminders':
                     this.sendTrialEndReminders()

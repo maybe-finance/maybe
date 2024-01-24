@@ -121,9 +121,10 @@ export class AccountConnectionService implements IAccountConnectionService {
                 ],
             },
             select: {
+                assetClass: true,
+                currencyCode: true,
                 id: true,
                 symbol: true,
-                plaidType: true,
             },
         })
 
@@ -153,13 +154,7 @@ export class AccountConnectionService implements IAccountConnectionService {
         ])
 
         this.logger.info(
-            `Disconnected connection id=${connection.id} type=${
-                connection.type
-            } provider_connection_id=${
-                connection.type === 'plaid'
-                    ? connection.plaidItemId
-                    : connection.finicityInstitutionId
-            }`
+            `Disconnected connection id=${connection.id} type=${connection.type} provider_connection_id=${connection.plaidItemId}`
         )
 
         return connection
@@ -182,13 +177,7 @@ export class AccountConnectionService implements IAccountConnectionService {
         ])
 
         this.logger.info(
-            `Reconnected connection id=${connection.id} type=${
-                connection.type
-            } provider_connection_id=${
-                connection.type === 'plaid'
-                    ? connection.plaidItemId
-                    : connection.finicityInstitutionId
-            }`
+            `Reconnected connection id=${connection.id} type=${connection.type} provider_connection_id=${connection.plaidItemId}`
         )
 
         return connection
@@ -213,13 +202,7 @@ export class AccountConnectionService implements IAccountConnectionService {
         })
 
         this.logger.info(
-            `Deleted connection id=${deletedConnection.id} type=${
-                connection.type
-            } provider_connection_id=${
-                connection.type === 'plaid'
-                    ? connection.plaidItemId
-                    : connection.finicityInstitutionId
-            }`
+            `Deleted connection id=${deletedConnection.id} type=${connection.type} provider_connection_id=${connection.plaidItemId}`
         )
 
         return deletedConnection

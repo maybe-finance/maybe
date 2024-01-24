@@ -16,6 +16,7 @@ import {
     workerErrorHandlerService,
 } from './app/lib/di'
 import env from './env'
+import { cleanUpOutdatedJobs } from './utils'
 
 // Defaults from quickstart - https://docs.sentry.io/platforms/node/
 Sentry.init({
@@ -80,6 +81,14 @@ syncSecurityQueue.process(
 )
 
 /**
+ * sync-us-stock-ticker queue
+ */
+syncSecurityQueue.process(
+    'sync-us-stock-tickers',
+    async () => await securityPricingProcessor.syncUSStockTickers()
+)
+
+/**
  * purge-user queue
  */
 purgeUserQueue.process(
@@ -93,14 +102,43 @@ purgeUserQueue.process(
 /**
  * sync-all-securities queue
  */
-// Start repeated job for syncing securities (Bull won't duplicate it as long as the repeat options are the same)
-syncSecurityQueue.add(
-    'sync-all-securities',
-    {},
-    {
-        repeat: { cron: '*/5 * * * *' }, // Run every 5 minutes
-    }
-)
+
+// If no securities exist, sync them immediately
+// Otherwise, schedule the job to run every 24 hours
+// Use same jobID to prevent duplicates and rate limiting
+syncSecurityQueue.cancelJobs().then(() => {
+    prisma.security
+        .count({
+            where: {
+                providerName: 'polygon',
+            },
+        })
+        .then((count) => {
+            if (count === 0) {
+                syncSecurityQueue.add('sync-us-stock-tickers', {}, {})
+            } else {
+                syncSecurityQueue.add(
+                    'sync-us-stock-tickers',
+                    {},
+                    {
+                        repeat: { cron: '0 */24 * * *' }, // Run every 24 hours
+                        jobId: Date.now().toString(),
+                    }
+                )
+            }
+            // Do not run if on the free tier (rate limits)
+            if (env.NX_POLYGON_TIER !== 'basic') {
+                syncSecurityQueue.add(
+                    'sync-all-securities',
+                    {},
+                    {
+                        repeat: { cron: '*/5 * * * *' }, // Run every 5 minutes
+                        jobId: Date.now().toString(),
+                    }
+                )
+            }
+        })
+})
 
 /**
  * sync-institution queue
@@ -111,8 +149,8 @@ syncInstitutionQueue.process(
 )
 
 syncInstitutionQueue.process(
-    'sync-finicity-institutions',
-    async () => await institutionService.sync('FINICITY')
+    'sync-teller-institutions',
+    async () => await institutionService.sync('TELLER')
 )
 
 syncInstitutionQueue.add(
@@ -120,14 +158,16 @@ syncInstitutionQueue.add(
     {},
     {
         repeat: { cron: '0 */24 * * *' }, // Run every 24 hours
+        jobId: Date.now().toString(),
     }
 )
 
 syncInstitutionQueue.add(
-    'sync-finicity-institutions',
+    'sync-teller-institutions',
     {},
     {
         repeat: { cron: '0 */24 * * *' }, // Run every 24 hours
+        jobId: Date.now().toString(),
     }
 )
 
@@ -136,11 +176,13 @@ syncInstitutionQueue.add(
  */
 sendEmailQueue.process('send-email', async (job) => await emailProcessor.send(job.data))
 
-sendEmailQueue.add(
-    'send-email',
-    { type: 'trial-reminders' },
-    { repeat: { cron: '0 */12 * * *' } } // Run every 12 hours
-)
+if (env.STRIPE_API_KEY) {
+    sendEmailQueue.add(
+        'send-email',
+        { type: 'trial-reminders' },
+        { repeat: { cron: '0 */12 * * *' } } // Run every 12 hours
+    )
+}
 
 // Fallback - usually triggered by errors not handled (or thrown) within the Bull event handlers (see above)
 process.on(
@@ -155,6 +197,11 @@ process.on(
     async (error) =>
         await workerErrorHandlerService.handleWorkersError({ variant: 'unhandled', error })
 )
+
+// Replace any jobs that have changed cron schedules and ensures only
+// one repeatable jobs for each type is running
+const queues = [syncSecurityQueue, syncInstitutionQueue]
+cleanUpOutdatedJobs(queues)
 
 const app = express()
 
@@ -181,20 +228,24 @@ const server = app.listen(env.NX_PORT, () => {
     logger.info(`Worker health server started on port ${env.NX_PORT}`)
 })
 
-function onShutdown() {
+async function onShutdown() {
     logger.info('[shutdown.start]')
 
-    server.close()
+    await new Promise((resolve) => server.close(resolve))
 
     // shutdown queues
-    Promise.allSettled(
-        queueService.allQueues
-            .filter((q): q is BullQueue => q instanceof BullQueue)
-            .map((q) => q.queue.close())
-    ).finally(() => {
+    try {
+        await Promise.allSettled(
+            queueService.allQueues
+                .filter((q): q is BullQueue => q instanceof BullQueue)
+                .map((q) => q.queue.close())
+        )
+    } catch (error) {
+        logger.error('[shutdown.error]', error)
+    } finally {
         logger.info('[shutdown.complete]')
-        process.exit()
-    })
+        process.exitCode = 0
+    }
 }
 
 process.on('SIGINT', onShutdown)
