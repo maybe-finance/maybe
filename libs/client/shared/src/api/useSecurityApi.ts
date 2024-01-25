@@ -53,6 +53,7 @@ export function useSecurityApi() {
     ) =>
         useQuery(['securities'], () => api.getAllSecurities(), {
             staleTime: staleTimes.security,
+            ...options,
         })
 
     const useSecurity = (
