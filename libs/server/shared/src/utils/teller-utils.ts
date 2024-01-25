@@ -1,5 +1,5 @@
 import { Prisma, AccountCategory, AccountType } from '@prisma/client'
-import { AccountClassification } from '@prisma/client'
+import type { AccountClassification } from '@prisma/client'
 import type { Account } from '@prisma/client'
 import type { TellerTypes } from '@maybe-finance/teller-api'
 import { Duration } from 'luxon'
@@ -20,11 +20,8 @@ export function getAccountBalanceData(
     | 'availableBalanceStrategy'
     | 'currencyCode'
 > {
-    const currentBalance = classification === AccountClassification.asset ? 'ledger' : 'available'
     return {
-        currentBalanceProvider: new Prisma.Decimal(
-            balance[currentBalance] ? Number(balance[currentBalance]) : 0
-        ),
+        currentBalanceProvider: new Prisma.Decimal(balance.ledger ? Number(balance.ledger) : 0),
         currentBalanceStrategy: 'current',
         availableBalanceProvider: new Prisma.Decimal(
             balance.available ? Number(balance.available) : 0
