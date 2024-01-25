@@ -78,6 +78,11 @@ export class SecurityPricingService implements ISecurityPricingService {
     }
 
     async syncAll() {
+        if (!process.env.NX_POLYGON_API_KEY) {
+            this.logger.warn('No polygon API key found, skipping sync')
+            return
+        }
+
         const profiler = this.logger.startTimer()
 
         for await (const securities of SharedUtil.paginateIt({
@@ -95,7 +100,7 @@ export class SecurityPricingService implements ISecurityPricingService {
                 }),
         })) {
             let pricingData: LivePricing<TSecurity>[] | EndOfDayPricing<TSecurity>[]
-            if (process.env.NX_POLYGON_TIER === 'basic') {
+            if (!process.env.NX_POLYGON_TIER || process.env.NX_POLYGON_TIER === 'basic') {
                 try {
                     const allPrices = await this.marketDataService.getAllDailyPricing()
                     pricingData = await this.marketDataService.getEndOfDayPricing(
@@ -186,7 +191,13 @@ export class SecurityPricingService implements ISecurityPricingService {
     }
 
     async syncUSStockTickers() {
+        if (!process.env.NX_POLYGON_API_KEY) {
+            this.logger.warn('No polygon API key found, skipping sync')
+            return
+        }
+
         const profiler = this.logger.startTimer()
+
         const usStockTickers = await this.marketDataService.getUSStockTickers()
 
         if (!usStockTickers.length) return

@@ -107,6 +107,10 @@ purgeUserQueue.process(
 // Otherwise, schedule the job to run every 24 hours
 // Use same jobID to prevent duplicates and rate limiting
 syncSecurityQueue.cancelJobs().then(() => {
+    if (!env.NX_POLYGON_API_KEY) {
+        logger.warn('No Polygon API key found, skipping adding jobs to queue')
+        return
+    }
     prisma.security
         .count({
             where: {

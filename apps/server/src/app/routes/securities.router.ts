@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { DateTime } from 'luxon'
+import env from '../../env'
 import endpoint from '../lib/endpoint'
 
 const router = Router()
@@ -51,9 +52,12 @@ router.post(
         resolve: async ({ ctx }) => {
             ctx.ability.throwUnlessCan('manage', 'Security')
 
-            await ctx.queueService.getQueue('sync-security').add('sync-us-stock-tickers', {})
-
-            return { success: true }
+            if (env.NX_POLYGON_API_KEY) {
+                await ctx.queueService.getQueue('sync-security').add('sync-us-stock-tickers', {})
+                return { success: true }
+            } else {
+                return { success: false, message: 'No Polygon API key found' }
+            }
         },
     })
 )
@@ -64,9 +68,12 @@ router.post(
         resolve: async ({ ctx }) => {
             ctx.ability.throwUnlessCan('manage', 'Security')
 
-            await ctx.queueService.getQueue('sync-security').add('sync-all-securities', {})
-
-            return { success: true }
+            if (env.NX_POLYGON_API_KEY) {
+                await ctx.queueService.getQueue('sync-security').add('sync-all-securities', {})
+                return { success: true }
+            } else {
+                return { success: false, message: 'No Polygon API key found' }
+            }
         },
     })
 )
