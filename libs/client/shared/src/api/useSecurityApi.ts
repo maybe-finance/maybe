@@ -8,6 +8,11 @@ import { useAxiosWithAuth } from '..'
 import toast from 'react-hot-toast'
 
 const SecurityApi = (axios: AxiosInstance) => ({
+    async getAllSecurities() {
+        const { data } = await axios.get<SharedType.SecuritySymbolExchange>(`/securities`)
+        return data
+    },
+
     async getSecurity(id: Security['id']) {
         const { data } = await axios.get<SharedType.SecurityWithPricing>(`/securities/${id}`)
         return data
@@ -35,10 +40,20 @@ export function useSecurityApi() {
     const api = useMemo(() => SecurityApi(axios), [axios])
 
     // Add another API call that gets all the securities from the database
-    // const useAllSecurities = () =>
-    //     useQuery([DECIDE WHAT NEEDS TO BE HERE], () => api.getAllSecurities(), {
-    //         DECIDE WHAT OPTIONS NEED TO BE HERE
-    //     })
+    const useAllSecurities = (
+        options?: Omit<
+            UseQueryOptions<
+                SharedType.SecuritySymbolExchange,
+                unknown,
+                SharedType.SecuritySymbolExchange,
+                any[]
+            >,
+            'queryKey' | 'queryFn' | 'staleTime'
+        >
+    ) =>
+        useQuery(['securities'], () => api.getAllSecurities(), {
+            staleTime: staleTimes.security,
+        })
 
     const useSecurity = (
         id: Security['id'],
@@ -85,7 +100,7 @@ export function useSecurityApi() {
         })
 
     return {
-        // useAllSecurities,
+        useAllSecurities,
         useSecurity,
         useSecurityDetails,
         useSyncUSStockTickers,
