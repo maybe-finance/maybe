@@ -5,6 +5,22 @@ import endpoint from '../lib/endpoint'
 const router = Router()
 
 router.get(
+    '/',
+    endpoint.create({
+        resolve: async ({ ctx }) => {
+            ctx.ability.throwUnlessCan('read', 'Security')
+
+            return await prisma.security.findMany({
+                select: {
+                    symbol: true,
+                    exchangeName: true,
+                },
+            })
+        },
+    })
+)
+
+router.get(
     '/:id',
     endpoint.create({
         resolve: async ({ ctx, req }) => {
