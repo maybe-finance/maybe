@@ -14,7 +14,7 @@ export class SecurityPricingProcessor implements ISecurityPricingProcessor {
     ) {}
 
     async syncAll(_jobData?: SyncSecurityQueueJobData) {
-        await this.securityPricingService.syncAll()
+        await this.securityPricingService.syncSecuritiesPricing()
     }
 
     async syncUSStockTickers(_jobData?: SyncSecurityQueueJobData) {

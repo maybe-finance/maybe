@@ -103,8 +103,8 @@ describe('security pricing sync for non basic tier', () => {
 
     it('syncs', async () => {
         // sync 2x to catch any possible caching I/O issues
-        await securityPricingService.syncAll()
-        await securityPricingService.syncAll()
+        await securityPricingService.syncSecuritiesPricing()
+        await securityPricingService.syncSecuritiesPricing()
     })
 })
 
@@ -154,15 +154,19 @@ describe('security pricing sync for basic tier', () => {
 
     it('syncs', async () => {
         // sync 2x to catch any possible caching I/O issues
-        await securityPricingService.syncAll()
-        await securityPricingService.syncAll()
+        await securityPricingService.syncSecuritiesPricing()
+        await securityPricingService.syncSecuritiesPricing()
     })
 })
 
 describe('us stock ticker sync', () => {
+    const apiKey = process.env.NX_POLYGON_API_KEY
     let securityPricingService: ISecurityPricingService
 
     beforeEach(async () => {
+        if (!apiKey) {
+            process.env.NX_POLYGON_API_KEY = 'TEST_KEY'
+        }
         const logger = winston.createLogger({
             level: 'debug',
             transports: new winston.transports.Console({ format: winston.format.simple() }),
@@ -187,6 +191,10 @@ describe('us stock ticker sync', () => {
 
         // reset db records
         await prisma.security.deleteMany()
+    })
+
+    afterEach(() => {
+        process.env.NX_POLYGON_API_KEY = apiKey // Restore original key
     })
 
     it('syncs', async () => {

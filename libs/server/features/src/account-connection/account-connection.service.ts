@@ -131,7 +131,7 @@ export class AccountConnectionService implements IAccountConnectionService {
         const profiler = this.logger.startTimer()
 
         await Promise.allSettled(
-            securities.map((security) => this.securityPricingService.sync(security))
+            securities.map((security) => this.securityPricingService.syncSecurity(security))
         )
 
         profiler.done({ message: `synced connection ${id} securities (${securities.length})` })

@@ -53,10 +53,16 @@ router.post(
             ctx.ability.throwUnlessCan('manage', 'Security')
 
             if (env.NX_POLYGON_API_KEY) {
-                await ctx.queueService.getQueue('sync-security').add('sync-us-stock-tickers', {})
-                return { success: true }
+                try {
+                    await ctx.queueService
+                        .getQueue('sync-security')
+                        .add('sync-us-stock-tickers', {})
+                    return { success: true }
+                } catch (err) {
+                    throw new Error('Failed to sync stock tickers')
+                }
             } else {
-                return { success: false, message: 'No Polygon API key found' }
+                throw new Error('No Polygon API key found')
             }
         },
     })
@@ -69,10 +75,14 @@ router.post(
             ctx.ability.throwUnlessCan('manage', 'Security')
 
             if (env.NX_POLYGON_API_KEY) {
-                await ctx.queueService.getQueue('sync-security').add('sync-all-securities', {})
-                return { success: true }
+                try {
+                    await ctx.queueService.getQueue('sync-security').add('sync-all-securities', {})
+                    return { success: true }
+                } catch (err) {
+                    throw new Error('Failed to sync securities pricing')
+                }
             } else {
-                return { success: false, message: 'No Polygon API key found' }
+                throw new Error('No Polygon API key found')
             }
         },
     })

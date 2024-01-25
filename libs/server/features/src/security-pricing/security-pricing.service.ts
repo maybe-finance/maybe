@@ -13,11 +13,11 @@ import { SharedUtil } from '@maybe-finance/shared'
 import _ from 'lodash'
 
 export interface ISecurityPricingService {
-    sync(
+    syncSecurity(
         security: Pick<Security, 'assetClass' | 'currencyCode' | 'id' | 'symbol'>,
         syncStart?: string
     ): Promise<void>
-    syncAll(): Promise<void>
+    syncSecuritiesPricing(): Promise<void>
     syncUSStockTickers(): Promise<void>
 }
 
@@ -28,7 +28,7 @@ export class SecurityPricingService implements ISecurityPricingService {
         private readonly marketDataService: IMarketDataService
     ) {}
 
-    async sync(
+    async syncSecurity(
         security: Pick<Security, 'assetClass' | 'currencyCode' | 'id' | 'symbol'>,
         syncStart?: string
     ) {
@@ -77,7 +77,7 @@ export class SecurityPricingService implements ISecurityPricingService {
         ])
     }
 
-    async syncAll() {
+    async syncSecuritiesPricing() {
         if (!process.env.NX_POLYGON_API_KEY) {
             this.logger.warn('No polygon API key found, skipping sync')
             return
@@ -123,7 +123,7 @@ export class SecurityPricingService implements ISecurityPricingService {
             const prices = pricingData.filter((p) => !!p.pricing)
 
             this.logger.debug(
-                `Fetched live pricing for ${prices.length} / ${securities.length} securities`
+                `Fetched pricing for ${prices.length} / ${securities.length} securities`
             )
 
             if (prices.length === 0) break
@@ -187,7 +187,7 @@ export class SecurityPricingService implements ISecurityPricingService {
             ])
         }
 
-        profiler.done({ message: 'Synced all securities' })
+        profiler.done({ message: 'Synced securities pricing' })
     }
 
     async syncUSStockTickers() {
