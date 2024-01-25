@@ -9,7 +9,7 @@ export type SecurityWithPricing = Security & {
 
 export type SecuritySymbolExchange = {
     symbol: string
-    exchange: string
+    exchangeName: string
 }
 
 export type SecurityDetails = {
