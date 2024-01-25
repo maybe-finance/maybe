@@ -7,6 +7,11 @@ export type SecurityWithPricing = Security & {
     pricing: SecurityPricing[]
 }
 
+export type SecuritySymbolExchange = {
+    symbol: string
+    exchange: string
+}
+
 export type SecurityDetails = {
     day?: {
         open?: Prisma.Decimal
