@@ -34,6 +34,12 @@ export function useSecurityApi() {
     const { axios } = useAxiosWithAuth()
     const api = useMemo(() => SecurityApi(axios), [axios])
 
+    // Add another API call that gets all the securities from the database
+    // const useAllSecurities = () =>
+    //     useQuery([DECIDE WHAT NEEDS TO BE HERE], () => api.getAllSecurities(), {
+    //         DECIDE WHAT OPTIONS NEED TO BE HERE
+    //     })
+
     const useSecurity = (
         id: Security['id'],
         options?: Omit<
@@ -79,6 +85,7 @@ export function useSecurityApi() {
         })
 
     return {
+        // useAllSecurities,
         useSecurity,
         useSecurityDetails,
         useSyncUSStockTickers,
