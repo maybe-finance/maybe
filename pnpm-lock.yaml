@@ -8,9 +8,12 @@ dependencies:
     '@auth/prisma-adapter':
         specifier: ^1.0.14
         version: 1.0.14(@prisma/client@5.8.0)
+    '@bull-board/api':
+        specifier: ^5.14.0
+        version: 5.14.0(@bull-board/ui@5.14.0)
     '@bull-board/express':
-        specifier: ^4.6.4
-        version: 4.6.4
+        specifier: ^5.14.0
+        version: 5.14.0
     '@casl/ability':
         specifier: ^6.3.2
         version: 6.3.2
@@ -36,14 +39,14 @@ dependencies:
         specifier: ^5.8.0
         version: 5.8.0(prisma@5.8.0)
     '@sentry/node':
-        specifier: ^7.22.0
-        version: 7.22.0
+        specifier: ^7.98.0
+        version: 7.98.0
     '@sentry/react':
         specifier: ^7.22.0
         version: 7.22.0(react@18.2.0)
     '@sentry/tracing':
-        specifier: ^7.22.0
-        version: 7.22.0
+        specifier: ^7.98.0
+        version: 7.98.0
     '@storybook/core-server':
         specifier: 6.5.15
         version: 6.5.15(@storybook/builder-webpack5@6.5.15)(@storybook/manager-webpack5@6.5.15)(eslint@8.15.0)(react-dom@18.2.0)(react@18.2.0)(typescript@4.8.4)
@@ -442,6 +445,9 @@ devDependencies:
     '@pmmmwh/react-refresh-webpack-plugin':
         specifier: ^0.5.7
         version: 0.5.10(react-refresh@0.10.0)(webpack@5.75.0)
+    '@sentry/types':
+        specifier: ^7.98.0
+        version: 7.98.0
     '@storybook/addon-essentials':
         specifier: 6.5.15
         version: 6.5.15(@babel/core@7.17.5)(@storybook/builder-webpack5@6.5.15)(eslint@8.15.0)(react-dom@18.2.0)(react@18.2.0)(typescript@4.8.4)(webpack@5.75.0)
@@ -3807,36 +3813,39 @@ packages:
             }
         dev: true
 
-    /@bull-board/api@4.6.4:
+    /@bull-board/api@5.14.0(@bull-board/ui@5.14.0):
         resolution:
             {
-                integrity: sha512-bXUYUwxKwJB2HhHkBPwNU2k3xsBUS1rG2rG4iw9NWj7C94Wu3tWXC/kbIFz7EYB37XT38rDzx3OXa8OkgWA/cQ==,
+                integrity: sha512-ppN9GeCH8QmCzs47CpDFwVb4Q5W2nK2QvcnbxKpjktCTonZ+5PnoWyXQvLStbcKU9SbMKAM0/OXhj4xOcSRllQ==,
             }
+        peerDependencies:
+            '@bull-board/ui': 5.14.0
         dependencies:
+            '@bull-board/ui': 5.14.0
             redis-info: 3.1.0
         dev: false
 
-    /@bull-board/express@4.6.4:
+    /@bull-board/express@5.14.0:
         resolution:
             {
-                integrity: sha512-BTbxhth7Eom8bqPxourVUMw9F9XD075zz2lOSQJHGHHmpQcXRacA9fSeTHoFtH9gqPRKbb2pXSfOo8zkHSUlRw==,
+                integrity: sha512-lrCPvRmhNtAYDWGAW9v5P/r9mhkX+RVUkyAC5wjrhekOMGXtWk9Hyq7itE2DhAM8XwYM4mNQoSIprpFRGM9JRw==,
             }
         dependencies:
-            '@bull-board/api': 4.6.4
-            '@bull-board/ui': 4.6.4
-            ejs: 3.1.7
-            express: 4.17.3
+            '@bull-board/api': 5.14.0(@bull-board/ui@5.14.0)
+            '@bull-board/ui': 5.14.0
+            ejs: 3.1.8
+            express: 4.18.2
         transitivePeerDependencies:
             - supports-color
         dev: false
 
-    /@bull-board/ui@4.6.4:
+    /@bull-board/ui@5.14.0:
         resolution:
             {
-                integrity: sha512-9d12C2M0I6/t00p7xZdvdvQ5DcWD8Wx1pCroJXIBF1IWOhjGQt93MjaPzkYZlMW/VHu6Vt9LSZ1w4HKgTWbKKw==,
+                integrity: sha512-quustWmLsLbqdbCQd4Mud9Eo/2BQzfJSNSiyJt9OrtYT4AXHMgGtbFUy2Ycyda7iQjC4ScKl8f+WdFs4y+KUJA==,
             }
         dependencies:
-            '@bull-board/api': 4.6.4
+            '@bull-board/api': 5.14.0(@bull-board/ui@5.14.0)
         dev: false
 
     /@casl/ability@6.3.2:
@@ -5849,6 +5858,18 @@ packages:
             }
         dev: true
 
+    /@sentry-internal/tracing@7.98.0:
+        resolution:
+            {
+                integrity: sha512-FnhD2uMLIAJvv4XsYPv3qsTTtxrImyLxiZacudJyaWFhxoeVQ8bKKbWJ/Ar68FAwqTtjXMeY5evnEBbRMcQlaA==,
+            }
+        engines: { node: '>=8' }
+        dependencies:
+            '@sentry/core': 7.98.0
+            '@sentry/types': 7.98.0
+            '@sentry/utils': 7.98.0
+        dev: false
+
     /@sentry/browser@7.22.0:
         resolution:
             {
@@ -5874,22 +5895,28 @@ packages:
             tslib: 1.14.1
         dev: false
 
-    /@sentry/node@7.22.0:
+    /@sentry/core@7.98.0:
         resolution:
             {
-                integrity: sha512-jKhxqKsbEEaY/g3FTzpj1fwukN0IkNv4V+0Fl+t/EmSNUL/7q5FMmDBa+fFQuQzwps8UEpzqPOzMSRapVsoP0w==,
+                integrity: sha512-baRUcpCNGyk7cApQHMfqEZJkXdvAKK+z/dVWiMqWc5T5uhzMnPE8/gjP1JZsMtJSQ8g5nHimBdI5TwOyZtxPaA==,
             }
         engines: { node: '>=8' }
         dependencies:
-            '@sentry/core': 7.22.0
-            '@sentry/types': 7.22.0
-            '@sentry/utils': 7.22.0
-            cookie: 0.4.2
-            https-proxy-agent: 5.0.0
-            lru_map: 0.3.3
-            tslib: 1.14.1
-        transitivePeerDependencies:
-            - supports-color
+            '@sentry/types': 7.98.0
+            '@sentry/utils': 7.98.0
+        dev: false
+
+    /@sentry/node@7.98.0:
+        resolution:
+            {
+                integrity: sha512-9cHW217DnU9wC4iR+QxmY3q59N1Touh23hPMDtpMRmbRHSgrmLMoHTVPhK9zHsXRs0mUeidmMqY1ubAWauQByw==,
+            }
+        engines: { node: '>=8' }
+        dependencies:
+            '@sentry-internal/tracing': 7.98.0
+            '@sentry/core': 7.98.0
+            '@sentry/types': 7.98.0
+            '@sentry/utils': 7.98.0
         dev: false
 
     /@sentry/react@7.22.0(react@18.2.0):
@@ -5909,17 +5936,14 @@ packages:
             tslib: 1.14.1
         dev: false
 
-    /@sentry/tracing@7.22.0:
+    /@sentry/tracing@7.98.0:
         resolution:
             {
-                integrity: sha512-s68aSnrRaWQ+Z5oG9ozIegUkofZy9PwicuXYEPA8K/R30F1CVpHvDZ/3KlFnByl+aXTbAyLBQzN2sAObB5g4pQ==,
+                integrity: sha512-O5lKcxkeNxoChJI0b/sX3N1TA5TjQuFwH9fMS00xWUFY0ei9HewBZbbx9c9aye2aRIWF2EHMsASZ+GCWGOZTlQ==,
             }
         engines: { node: '>=8' }
         dependencies:
-            '@sentry/core': 7.22.0
-            '@sentry/types': 7.22.0
-            '@sentry/utils': 7.22.0
-            tslib: 1.14.1
+            '@sentry-internal/tracing': 7.98.0
         dev: false
 
     /@sentry/types@7.22.0:
@@ -5930,6 +5954,13 @@ packages:
         engines: { node: '>=8' }
         dev: false
 
+    /@sentry/types@7.98.0:
+        resolution:
+            {
+                integrity: sha512-pc034ziM0VTETue4bfBcBqTWGy4w0okidtoZJjGVrYAfE95ObZnUGVj/XYIQ3FeCYWIa7NFN2MvdsCS0buwivQ==,
+            }
+        engines: { node: '>=8' }
+
     /@sentry/utils@7.22.0:
         resolution:
             {
@@ -5939,6 +5970,16 @@ packages:
         dependencies:
             '@sentry/types': 7.22.0
             tslib: 1.14.1
+        dev: false
+
+    /@sentry/utils@7.98.0:
+        resolution:
+            {
+                integrity: sha512-0/LY+kpHxItVRY0xPDXPXVsKRb95cXsGSQf8sVMtfSjz++0bLL1U4k7PFz1c5s2/Vk0B8hS6duRrgMv6dMIZDw==,
+            }
+        engines: { node: '>=8' }
+        dependencies:
+            '@sentry/types': 7.98.0
         dev: false
 
     /@shuding/opentype.js@1.4.0-beta.0:
@@ -11655,27 +11696,6 @@ packages:
                 integrity: sha512-eXRvHzWyYPBuB4NBy0cmYQjGitUrtqwbvlzP3G6VFnNRbsZQIxQ10PbKKHt8gZ/HW/D/747aDl+QkDqg3KQLMQ==,
             }
 
-    /body-parser@1.19.2:
-        resolution:
-            {
-                integrity: sha512-SAAwOxgoCKMGs9uUAUFHygfLAyaniaoun6I8mFY9pRAJL9+Kec34aU+oIjDhTycub1jozEfEwx1W1IuOYxVSFw==,
-            }
-        engines: { node: '>= 0.8' }
-        dependencies:
-            bytes: 3.1.2
-            content-type: 1.0.4
-            debug: 2.6.9
-            depd: 1.1.2
-            http-errors: 1.8.1
-            iconv-lite: 0.4.24
-            on-finished: 2.3.0
-            qs: 6.9.7
-            raw-body: 2.4.3
-            type-is: 1.6.18
-        transitivePeerDependencies:
-            - supports-color
-        dev: false
-
     /body-parser@1.20.1:
         resolution:
             {
@@ -12975,14 +12995,6 @@ packages:
         engines: { node: '>= 0.6' }
         dev: false
 
-    /cookie@0.4.2:
-        resolution:
-            {
-                integrity: sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA==,
-            }
-        engines: { node: '>= 0.6' }
-        dev: false
-
     /cookie@0.5.0:
         resolution:
             {
@@ -14111,13 +14123,6 @@ packages:
             inherits: 2.0.4
             minimalistic-assert: 1.0.1
 
-    /destroy@1.0.4:
-        resolution:
-            {
-                integrity: sha512-3NdhDuEXnfun/z7x9GOElY49LoqVHoGScmOKwmxhsS8N5Y+Z8KyPPDnaSzqWgYt/ji4mqwfTS34Htrk0zPIXVg==,
-            }
-        dev: false
-
     /destroy@1.2.0:
         resolution:
             {
@@ -14469,17 +14474,6 @@ packages:
             {
                 integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==,
             }
-
-    /ejs@3.1.7:
-        resolution:
-            {
-                integrity: sha512-BIar7R6abbUxDA3bfXrO4DSgwo8I+fB5/1zgujl3HLLjwd6+9iOnrT+t3grn2qbk9vOgBubXOFwX2m9axoFaGw==,
-            }
-        engines: { node: '>=0.10.0' }
-        hasBin: true
-        dependencies:
-            jake: 10.8.5
-        dev: false
 
     /ejs@3.1.8:
         resolution:
@@ -15512,47 +15506,6 @@ packages:
             }
         dev: false
 
-    /express@4.17.3:
-        resolution:
-            {
-                integrity: sha512-yuSQpz5I+Ch7gFrPCk4/c+dIBKlQUxtgwqzph132bsT6qhuzss6I8cLJQz7B3rFblzd6wtcI0ZbGltH/C4LjUg==,
-            }
-        engines: { node: '>= 0.10.0' }
-        dependencies:
-            accepts: 1.3.8
-            array-flatten: 1.1.1
-            body-parser: 1.19.2
-            content-disposition: 0.5.4
-            content-type: 1.0.4
-            cookie: 0.4.2
-            cookie-signature: 1.0.6
-            debug: 2.6.9
-            depd: 1.1.2
-            encodeurl: 1.0.2
-            escape-html: 1.0.3
-            etag: 1.8.1
-            finalhandler: 1.1.2
-            fresh: 0.5.2
-            merge-descriptors: 1.0.1
-            methods: 1.1.2
-            on-finished: 2.3.0
-            parseurl: 1.3.3
-            path-to-regexp: 0.1.7
-            proxy-addr: 2.0.7
-            qs: 6.9.7
-            range-parser: 1.2.1
-            safe-buffer: 5.2.1
-            send: 0.17.2
-            serve-static: 1.14.2
-            setprototypeof: 1.2.0
-            statuses: 1.5.0
-            type-is: 1.6.18
-            utils-merge: 1.0.1
-            vary: 1.1.2
-        transitivePeerDependencies:
-            - supports-color
-        dev: false
-
     /express@4.18.2:
         resolution:
             {
@@ -15926,6 +15879,7 @@ packages:
             unpipe: 1.0.0
         transitivePeerDependencies:
             - supports-color
+        dev: true
 
     /finalhandler@1.2.0:
         resolution:
@@ -20421,13 +20375,6 @@ packages:
             lru-cache: 4.0.2
         dev: false
 
-    /lru_map@0.3.3:
-        resolution:
-            {
-                integrity: sha512-Pn9cox5CsMYngeDbmChANltQl+5pi6XmTrraMSzhPmMBbmgcxmqWry0U3PGapCU1yB4/LqCcom7qhHZiF/jGfQ==,
-            }
-        dev: false
-
     /luxon@1.28.0:
         resolution:
             {
@@ -23947,14 +23894,6 @@ packages:
         engines: { node: '>=0.6' }
         dev: true
 
-    /qs@6.9.7:
-        resolution:
-            {
-                integrity: sha512-IhMFgUmuNpyRfxA90umL7ByLlgRXu6tIfKPpF5TmcfRLlLCckfP/g3IQmju6jjpu+Hh8rA+2p6A27ZSPOOHdKw==,
-            }
-        engines: { node: '>=0.6' }
-        dev: false
-
     /query-string@7.1.1:
         resolution:
             {
@@ -24041,19 +23980,6 @@ packages:
                 integrity: sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==,
             }
         engines: { node: '>= 0.6' }
-
-    /raw-body@2.4.3:
-        resolution:
-            {
-                integrity: sha512-UlTNLIcu0uzb4D2f4WltY6cVjLi+/jEN4lgEUj3E04tpMDpUlkBo/eSn6zou9hum2VMNpCCUone0O0WeJim07g==,
-            }
-        engines: { node: '>= 0.8' }
-        dependencies:
-            bytes: 3.1.2
-            http-errors: 1.8.1
-            iconv-lite: 0.4.24
-            unpipe: 1.0.0
-        dev: false
 
     /raw-body@2.5.1:
         resolution:
@@ -25471,30 +25397,6 @@ packages:
         dependencies:
             lru-cache: 6.0.0
 
-    /send@0.17.2:
-        resolution:
-            {
-                integrity: sha512-UJYB6wFSJE3G00nEivR5rgWp8c2xXvJ3OPWPhmuteU0IKj8nKbG3DrjiOmLwpnHGYWAVwA69zmTm++YG0Hmwww==,
-            }
-        engines: { node: '>= 0.8.0' }
-        dependencies:
-            debug: 2.6.9
-            depd: 1.1.2
-            destroy: 1.0.4
-            encodeurl: 1.0.2
-            escape-html: 1.0.3
-            etag: 1.8.1
-            fresh: 0.5.2
-            http-errors: 1.8.1
-            mime: 1.6.0
-            ms: 2.1.3
-            on-finished: 2.3.0
-            range-parser: 1.2.1
-            statuses: 1.5.0
-        transitivePeerDependencies:
-            - supports-color
-        dev: false
-
     /send@0.18.0:
         resolution:
             {
@@ -25572,21 +25474,6 @@ packages:
         transitivePeerDependencies:
             - supports-color
         dev: true
-
-    /serve-static@1.14.2:
-        resolution:
-            {
-                integrity: sha512-+TMNA9AFxUEGuC0z2mevogSnn9MXKb4fa7ngeRMJaaGv8vTwnIEkKi+QGvPt33HSnf8pRS+WGM0EbMtCJLKMBQ==,
-            }
-        engines: { node: '>= 0.8.0' }
-        dependencies:
-            encodeurl: 1.0.2
-            escape-html: 1.0.3
-            parseurl: 1.3.3
-            send: 0.17.2
-        transitivePeerDependencies:
-            - supports-color
-        dev: false
 
     /serve-static@1.15.0:
         resolution:
