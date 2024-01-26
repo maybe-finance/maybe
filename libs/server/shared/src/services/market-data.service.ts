@@ -388,17 +388,20 @@ export class PolygonMarketDataService implements IMarketDataService {
             exchangeName: string
         })[]
     > {
-        const exchanges = await this.api.reference.exchanges({
+        const allExchanges = await this.api.reference.exchanges({
             locale: 'us',
             asset_class: 'stocks',
         })
+
+        // Only get tickers for exchanges, not TRF or SIP
+        const exchanges = allExchanges.results.filter((exchange) => exchange.type === 'exchange')
 
         const tickers: (ITickersResults & {
             exchangeAcronym: string
             exchangeMic: string
             exchangeName: string
         })[] = []
-        for (const exchange of exchanges.results) {
+        for (const exchange of exchanges) {
             const exchangeTickers: (ITickersResults & {
                 exchangeAcronym: string
                 exchangeMic: string

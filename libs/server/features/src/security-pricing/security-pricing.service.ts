@@ -85,6 +85,8 @@ export class SecurityPricingService implements ISecurityPricingService {
 
         const profiler = this.logger.startTimer()
 
+        const dailyPrices = await this.marketDataService.getAllDailyPricing()
+
         for await (const securities of SharedUtil.paginateIt({
             pageSize: 1000,
             fetchData: (offset, count) =>
@@ -102,10 +104,9 @@ export class SecurityPricingService implements ISecurityPricingService {
             let pricingData: LivePricing<TSecurity>[] | EndOfDayPricing<TSecurity>[]
             if (!process.env.NX_POLYGON_TIER || process.env.NX_POLYGON_TIER === 'basic') {
                 try {
-                    const allPrices = await this.marketDataService.getAllDailyPricing()
                     pricingData = await this.marketDataService.getEndOfDayPricing(
                         securities,
-                        allPrices
+                        dailyPrices
                     )
                 } catch (err) {
                     this.logger.warn('Polygon fetch for EOD pricing failed', err)
