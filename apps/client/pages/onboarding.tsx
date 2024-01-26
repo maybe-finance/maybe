@@ -38,7 +38,7 @@ function getStepComponent(stepKey?: string): (props: StepProps) => JSX.Element {
     }
 }
 
-export default function OnboardingPage() {
+function OnboardingPage() {
     const router = useRouter()
     const { useOnboarding, useUpdateOnboarding } = useUserApi()
 
@@ -138,3 +138,5 @@ export default function OnboardingPage() {
 OnboardingPage.getLayout = function getLayout(page: ReactElement) {
     return <FullPageLayout>{page}</FullPageLayout>
 }
+
+export default OnboardingPage
