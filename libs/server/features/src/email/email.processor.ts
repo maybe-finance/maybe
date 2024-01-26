@@ -27,6 +27,12 @@ export class EmailProcessor implements IEmailProcessor {
                     }
                     break
                 case 'template':
+                    if (this.emailService.sendTemplate === undefined) {
+                        this.logger.error(
+                            'Attempted to send template email but email service does not support templates'
+                        )
+                        return
+                    }
                     if (Array.isArray(jobData.messages)) {
                         this.emailService.sendTemplate(jobData.messages)
                     } else {
@@ -62,7 +68,7 @@ export class EmailProcessor implements IEmailProcessor {
             },
         })
 
-        if (!users.length) return
+        if (!users.length || !this.emailService.sendTemplate) return
 
         const results = await this.emailService.sendTemplate(
             users.map((user) => ({

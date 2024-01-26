@@ -1,4 +1,5 @@
 import type { MessageSendingResponse } from 'postmark/dist/client/models'
+import type { SentMessageInfo } from 'nodemailer'
 
 type EmailCommon = {
     from?: string
@@ -12,4 +13,4 @@ type PlainMessageContent = { subject: string; textBody?: string; htmlBody?: stri
 
 export type PlainEmailMessage = EmailCommon & PlainMessageContent
 export type TemplateEmailMessage = EmailCommon & { template: EmailTemplate }
-export type EmailSendingResponse = MessageSendingResponse
+export type EmailSendingResponse = MessageSendingResponse | SentMessageInfo
