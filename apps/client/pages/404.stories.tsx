@@ -7,6 +7,4 @@ export default {
     component: Page404,
 } as Meta
 
-const Template: Story = () => <Page404 />
-
-export const Default = Template.bind({})
+export const Default: Story = () => <Page404 />;
