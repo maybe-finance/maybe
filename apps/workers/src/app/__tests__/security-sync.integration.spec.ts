@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, SecurityProvider } from '@prisma/client'
 import winston from 'winston'
 import Redis from 'ioredis'
 import nock from 'nock'
@@ -20,11 +20,17 @@ const redis = new Redis(process.env.NX_REDIS_URL as string, {
 })
 
 beforeAll(() => {
+    process.env.CI = 'true'
     nock.disableNetConnect()
 
     nock('https://api.polygon.io')
         .get((uri) => uri.includes('/v2/snapshot/locale/us/markets/stocks/tickers'))
         .reply(200, PolygonTestData.snapshotAllTickers)
+        .persist()
+
+    nock('https://api.polygon.io')
+        .get((uri) => uri.includes('/v2/aggs/grouped/locale/us/market/stocks'))
+        .reply(200, PolygonTestData.dailyPricing)
         .persist()
 
     nock('https://api.polygon.io')
@@ -54,10 +60,11 @@ beforeAll(() => {
 })
 
 afterAll(async () => {
+    process.env.CI = ''
     await Promise.allSettled([prisma.$disconnect(), redis.disconnect()])
 })
 
-describe('security pricing sync', () => {
+describe('security pricing sync for non basic tier', () => {
     let securityPricingService: ISecurityPricingService
 
     beforeEach(async () => {
@@ -84,7 +91,11 @@ describe('security pricing sync', () => {
         )
 
         // reset db records
-        await prisma.security.deleteMany()
+        await prisma.security.deleteMany({
+            where: {
+                providerName: SecurityProvider.other,
+            },
+        })
         await prisma.security.createMany({
             data: [{ symbol: 'AAPL' }, { symbol: 'VOO' }],
         })
@@ -92,15 +103,70 @@ describe('security pricing sync', () => {
 
     it('syncs', async () => {
         // sync 2x to catch any possible caching I/O issues
-        await securityPricingService.syncAll()
-        await securityPricingService.syncAll()
+        await securityPricingService.syncSecuritiesPricing()
+        await securityPricingService.syncSecuritiesPricing()
+    })
+})
+
+describe('security pricing sync for basic tier', () => {
+    let securityPricingService: ISecurityPricingService
+    let initialPolygonTier: string | undefined
+
+    beforeEach(async () => {
+        initialPolygonTier = process.env.NX_POLYGON_TIER
+        process.env.NX_POLYGON_TIER = 'basic' // Force basic tier to test code path
+        const logger = winston.createLogger({
+            level: 'debug',
+            transports: new winston.transports.Console({ format: winston.format.simple() }),
+        })
+
+        const cacheService = new CacheService(
+            logger.child({ service: 'CacheService' }),
+            new RedisCacheBackend(redis)
+        )
+
+        const marketDataService: IMarketDataService = new PolygonMarketDataService(
+            logger.child({ service: 'PolygonMarketDataService' }),
+            'TEST',
+            cacheService
+        )
+
+        securityPricingService = new SecurityPricingService(
+            logger.child({ service: 'SecurityPricingService' }),
+            prisma,
+            marketDataService
+        )
+
+        // reset db records
+        await prisma.security.deleteMany({
+            where: {
+                providerName: SecurityProvider.other,
+            },
+        })
+        await prisma.security.createMany({
+            data: [{ symbol: 'AAPL' }, { symbol: 'VOO' }],
+        })
+    })
+
+    afterEach(() => {
+        process.env.NX_POLYGON_TIER = initialPolygonTier
+    })
+
+    it('syncs', async () => {
+        // sync 2x to catch any possible caching I/O issues
+        await securityPricingService.syncSecuritiesPricing()
+        await securityPricingService.syncSecuritiesPricing()
     })
 })
 
 describe('us stock ticker sync', () => {
+    const apiKey = process.env.NX_POLYGON_API_KEY
     let securityPricingService: ISecurityPricingService
 
     beforeEach(async () => {
+        if (!apiKey) {
+            process.env.NX_POLYGON_API_KEY = 'TEST_KEY'
+        }
         const logger = winston.createLogger({
             level: 'debug',
             transports: new winston.transports.Console({ format: winston.format.simple() }),
@@ -125,6 +191,10 @@ describe('us stock ticker sync', () => {
 
         // reset db records
         await prisma.security.deleteMany()
+    })
+
+    afterEach(() => {
+        process.env.NX_POLYGON_API_KEY = apiKey // Restore original key
     })
 
     it('syncs', async () => {

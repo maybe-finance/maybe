@@ -8,12 +8,13 @@ import {
 export function AccountDevTools() {
     const { useDeleteAllConnections } = useAccountConnectionApi()
     const { useSyncInstitutions, useDeduplicateInstitutions } = useInstitutionApi()
-    const { useSyncUSStockTickers } = useSecurityApi()
+    const { useSyncUSStockTickers, useSyncSecurityPricing } = useSecurityApi()
 
     const deleteAllConnections = useDeleteAllConnections()
     const syncInstitutions = useSyncInstitutions()
     const deduplicateInstitutions = useDeduplicateInstitutions()
     const syncUSStockTickers = useSyncUSStockTickers()
+    const syncSecurityPricing = useSyncSecurityPricing()
 
     return process.env.NODE_ENV === 'development' ? (
         <div className="relative mb-12 mx-2 sm:mx-0 p-4 bg-gray-700 rounded-md z-10">
@@ -52,6 +53,12 @@ export function AccountDevTools() {
                     onClick={() => syncUSStockTickers.mutate()}
                 >
                     Sync stock tickers
+                </button>
+                <button
+                    className="underline text-red ml-4"
+                    onClick={() => syncSecurityPricing.mutate()}
+                >
+                    Sync stock pricing
                 </button>
             </div>
         </div>

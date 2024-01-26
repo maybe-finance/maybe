@@ -97,7 +97,7 @@ You can view organized issues on [our public Roadmap](https://github.com/maybe-f
 
 ## External data
 
-To pull market data in (for investments), you'll need a Polygon.io API key. You can get one for free [here](https://polygon.io/) and then add it to your `.env` file (`NX_POLYGON_API_KEY`).
+To pull market data in (for investments), you'll need a Polygon.io API key. You can get one for free [here](https://polygon.io/) and then add it to your `.env` file (`NX_POLYGON_API_KEY`). **Note:** If you're using the free "basic" plan, you'll need to manually sync stock tickers using the dev tools in the app the first time you run it. It will then be re-synced automatically every 24 hours. If you're using a paid tier, be sure to update your `.env` file with the correct tier (`NX_POLYGON_API_TIER`) and tickers and pricing will be synced automatically.
 
 ## Tech stack
 

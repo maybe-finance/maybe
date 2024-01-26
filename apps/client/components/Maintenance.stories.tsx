@@ -1,5 +1,5 @@
 import type { Story, Meta } from '@storybook/react'
-import Maintenance from './Maintenance.tsx'
+import Maintenance from './Maintenance'
 import React from 'react'
 
 export default {
