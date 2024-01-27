@@ -151,6 +151,7 @@
         "regenerator-runtime": "0.13.7",
         "sanitize-html": "^2.8.1",
         "smooth-scroll-into-view-if-needed": "^1.1.33",
+        "storybook-addon-next-router": "^4.0.2",
         "stripe": "^10.17.0",
         "superjson": "^1.11.0",
         "tailwindcss": "^3.4.1",
