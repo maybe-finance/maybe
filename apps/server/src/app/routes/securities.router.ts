@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { DateTime } from 'luxon'
+import env from '../../env'
 import endpoint from '../lib/endpoint'
 
 const router = Router()
@@ -51,11 +52,38 @@ router.post(
         resolve: async ({ ctx }) => {
             ctx.ability.throwUnlessCan('manage', 'Security')
 
-            await ctx.queueService
-                .getQueue('sync-security')
-                .addBulk([{ name: 'sync-us-stock-tickers', data: {} }])
+            if (env.NX_POLYGON_API_KEY) {
+                try {
+                    await ctx.queueService
+                        .getQueue('sync-security')
+                        .add('sync-us-stock-tickers', {})
+                    return { success: true }
+                } catch (err) {
+                    throw new Error('Failed to sync stock tickers')
+                }
+            } else {
+                throw new Error('No Polygon API key found')
+            }
+        },
+    })
+)
 
-            return { success: true }
+router.post(
+    '/sync/stock-pricing',
+    endpoint.create({
+        resolve: async ({ ctx }) => {
+            ctx.ability.throwUnlessCan('manage', 'Security')
+
+            if (env.NX_POLYGON_API_KEY) {
+                try {
+                    await ctx.queueService.getQueue('sync-security').add('sync-all-securities', {})
+                    return { success: true }
+                } catch (err) {
+                    throw new Error('Failed to sync securities pricing')
+                }
+            } else {
+                throw new Error('No Polygon API key found')
+            }
         },
     })
 )

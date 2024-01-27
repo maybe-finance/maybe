@@ -1,11 +1,17 @@
 import { useState, type ReactElement } from 'react'
-import { Input, InputPassword, Button, Checkbox } from '@maybe-finance/design-system'
-import { FullPageLayout } from '@maybe-finance/client/features'
+import { Input, InputPassword, Button } from '@maybe-finance/design-system'
+import {
+    FullPageLayout,
+    UserDevTools,
+    completedOnboarding,
+    onboardedProfile,
+} from '@maybe-finance/client/features'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import Script from 'next/script'
 import Link from 'next/link'
+import { useUserApi } from '@maybe-finance/client/shared'
 
 export default function RegisterPage() {
     const [firstName, setFirstName] = useState('')
@@ -16,9 +22,14 @@ export default function RegisterPage() {
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const [isAdmin, setIsAdmin] = useState<boolean>(false)
+    const [isOnboarded, setIsOnboarded] = useState<boolean>(false)
 
+    const { useUpdateOnboarding, useUpdateProfile } = useUserApi()
     const { data: session } = useSession()
     const router = useRouter()
+
+    const updateOnboarding = useUpdateOnboarding()
+    const updateProfile = useUpdateProfile()
 
     useEffect(() => {
         if (session) router.push('/')
@@ -42,6 +53,11 @@ export default function RegisterPage() {
             role: isAdmin ? 'admin' : 'user',
             redirect: false,
         })
+
+        if (isOnboarded && response?.ok) {
+            await updateProfile.mutateAsync(onboardedProfile)
+            await updateOnboarding.mutateAsync(completedOnboarding)
+        }
 
         if (response && response.error) {
             setErrorMessage(response.error)
@@ -110,7 +126,12 @@ export default function RegisterPage() {
                                 </div>
                             ) : null}
 
-                            <AuthDevTools isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
+                            <UserDevTools
+                                isAdmin={isAdmin}
+                                setIsAdmin={setIsAdmin}
+                                isOnboarded={isOnboarded}
+                                setIsOnboarded={setIsOnboarded}
+                            />
 
                             <Button
                                 type="submit"
@@ -138,28 +159,6 @@ export default function RegisterPage() {
             </div>
         </>
     )
-}
-
-type AuthDevToolsProps = {
-    isAdmin: boolean
-    setIsAdmin: (isAdmin: boolean) => void
-}
-
-function AuthDevTools({ isAdmin, setIsAdmin }: AuthDevToolsProps) {
-    return process.env.NODE_ENV === 'development' ? (
-        <div className="my-2 p-2 border border-red-300 rounded-md">
-            <h6 className="flex text-red">
-                Dev Tools <i className="ri-tools-fill ml-1.5" />
-            </h6>
-            <p className="text-sm my-2">
-                This section will NOT show in production and is solely for making testing easier.
-            </p>
-
-            <div>
-                <Checkbox checked={isAdmin} onChange={setIsAdmin} label="Create Admin user?" />
-            </div>
-        </div>
-    ) : null
 }
 
 RegisterPage.getLayout = function getLayout(page: ReactElement) {
