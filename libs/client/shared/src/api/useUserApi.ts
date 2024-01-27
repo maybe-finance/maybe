@@ -107,6 +107,15 @@ const UserApi = (axios: AxiosInstance) => ({
 
         return data
     },
+
+    async sendTestEmail(input: SharedType.SendTestEmail) {
+        console.log('input', input)
+        const { data } = await axios.post<SharedType.EmailSendingResponse>(
+            '/users/send-test-email',
+            input
+        )
+        return data
+    },
 })
 
 const staleTimes = {
@@ -276,6 +285,16 @@ export function useUserApi() {
             options
         )
 
+    const useSendTestEmail = () =>
+        useMutation(api.sendTestEmail, {
+            onSuccess: () => {
+                toast.success('Test email sent successfully')
+            },
+            onError: () => {
+                toast.error('Error sending test email')
+            },
+        })
+
     const useDelete = (options?: UseMutationOptions<{}, unknown, any>) =>
         useMutation(api.delete, options)
 
@@ -292,6 +311,7 @@ export function useUserApi() {
         useCreateCheckoutSession,
         useCreateCustomerPortalSession,
         useMemberCardDetails,
+        useSendTestEmail,
         useOnboarding,
         useUpdateOnboarding,
         useDelete,

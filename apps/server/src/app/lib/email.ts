@@ -16,8 +16,8 @@ export function initializeEmailClient() {
             if (
                 !process.env.NX_EMAIL_SMTP_HOST ||
                 !process.env.NX_EMAIL_SMTP_PORT ||
-                !process.env.NX_EMAIL_SMTP_USER ||
-                !process.env.NX_EMAIL_SMTP_PASS
+                !process.env.NX_EMAIL_SMTP_USERNAME ||
+                !process.env.NX_EMAIL_SMTP_PASSWORD
             ) {
                 return undefined
             } else {
@@ -26,8 +26,8 @@ export function initializeEmailClient() {
                     port: Number(process.env.NX_EMAIL_SMTP_PORT),
                     secure: process.env.NX_EMAIL_SMTP_SECURE === 'true',
                     auth: {
-                        user: process.env.NX_EMAIL_SMTP_USER,
-                        pass: process.env.NX_EMAIL_SMTP_PASS,
+                        user: process.env.NX_EMAIL_SMTP_USERNAME,
+                        pass: process.env.NX_EMAIL_SMTP_PASSWORD,
                     },
                 }
                 return nodemailer.createTransport(transportOptions)

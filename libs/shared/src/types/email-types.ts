@@ -14,3 +14,9 @@ type PlainMessageContent = { subject: string; textBody?: string; htmlBody?: stri
 export type PlainEmailMessage = EmailCommon & PlainMessageContent
 export type TemplateEmailMessage = EmailCommon & { template: EmailTemplate }
 export type EmailSendingResponse = MessageSendingResponse | SentMessageInfo
+
+export type SendTestEmail = {
+    recipient: string
+    subject: string
+    textBody?: string
+}
