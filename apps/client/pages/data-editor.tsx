@@ -11,7 +11,7 @@ import { Tab } from '@maybe-finance/design-system'
 import { useQueryParam } from '@maybe-finance/client/shared'
 import { useRouter } from 'next/router'
 
-export default function DataEditor() {
+function DataEditor() {
     const currentTab = useQueryParam('tab', 'string')
 
     const router = useRouter()
@@ -63,3 +63,5 @@ export default function DataEditor() {
 DataEditor.getLayout = function getLayout(page: ReactElement) {
     return <WithSidebarLayout sidebar={<AccountSidebar />}>{page}</WithSidebarLayout>
 }
+
+export default DataEditor
