@@ -240,6 +240,7 @@
         "prettier": "2.7.1",
         "react-refresh": "^0.10.0",
         "react-test-renderer": "18.2.0",
+        "storybook-addon-next-router": "^4.0.2",
         "style-loader": "^3.3.0",
         "stylus": "^0.55.0",
         "stylus-loader": "^7.1.0",
