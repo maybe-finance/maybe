@@ -23,16 +23,6 @@ const AccountConnectionApi = (axios: AxiosInstance) => ({
         return data
     },
 
-    async createPlaidLinkToken(
-        id: SharedType.AccountConnection['id'],
-        mode: SharedType.PlaidLinkUpdateMode
-    ) {
-        const { data } = await axios.post<{ token: string }>(
-            `/connections/${id}/plaid/link-token?mode=${mode}`
-        )
-        return data
-    },
-
     async disconnect(id: SharedType.AccountConnection['id']) {
         const { data } = await axios.post<SharedType.AccountConnection>(
             `/connections/${id}/disconnect`
@@ -49,17 +39,6 @@ const AccountConnectionApi = (axios: AxiosInstance) => ({
 
     async sync(id: SharedType.AccountConnection['id']) {
         const { data } = await axios.post<SharedType.AccountConnection>(`/connections/${id}/sync`)
-        return data
-    },
-
-    async plaidLinkUpdateCompleted(
-        id: SharedType.AccountConnection['id'],
-        status: 'success' | 'exit'
-    ) {
-        const { data } = await axios.post<SharedType.AccountConnection>(
-            `/connections/${id}/plaid/link-update-completed`,
-            { status }
-        )
         return data
     },
 })
@@ -108,9 +87,6 @@ export function useAccountConnectionApi() {
                 invalidateAccountQueries(queryClient)
             },
         })
-
-    const useCreatePlaidLinkToken = (mode: SharedType.PlaidLinkUpdateMode) =>
-        useMutation((id: SharedType.AccountConnection['id']) => api.createPlaidLinkToken(id, mode))
 
     const useDisconnectConnection = () =>
         useMutation(api.disconnect, {
@@ -165,21 +141,12 @@ export function useAccountConnectionApi() {
             },
         })
 
-    const usePlaidLinkUpdateCompleted = (id: SharedType.AccountConnection['id']) =>
-        useMutation((status: 'success' | 'exit') => api.plaidLinkUpdateCompleted(id, status), {
-            onSettled: () => {
-                invalidateAccountQueries(queryClient, false)
-            },
-        })
-
     return {
         useUpdateConnection,
         useDeleteConnection,
         useDeleteAllConnections,
-        useCreatePlaidLinkToken,
         useReconnectConnection,
         useDisconnectConnection,
         useSyncConnection,
-        usePlaidLinkUpdateCompleted,
     }
 }

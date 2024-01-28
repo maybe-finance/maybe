@@ -23,8 +23,6 @@ import {
     InstitutionService,
     InvestmentTransactionBalanceSyncStrategy,
     LoanBalanceSyncStrategy,
-    PlaidETL,
-    PlaidService,
     TellerETL,
     TellerService,
     SecurityPricingProcessor,
@@ -52,7 +50,6 @@ import {
 import Redis from 'ioredis'
 import logger from './logger'
 import prisma from './prisma'
-import plaid from './plaid'
 import teller from './teller'
 import { initializeEmailClient } from './email'
 import stripe from './stripe'
@@ -98,22 +95,6 @@ export const securityPricingService: ISecurityPricingService = new SecurityPrici
 
 // providers
 
-const plaidService = new PlaidService(
-    logger.child({ service: 'PlaidService' }),
-    prisma,
-    plaid,
-    new PlaidETL(
-        logger.child({ service: 'PlaidETL' }),
-        prisma,
-        plaid,
-        cryptoService,
-        marketDataService
-    ),
-    cryptoService,
-    '',
-    ''
-)
-
 const tellerService = new TellerService(
     logger.child({ service: 'TellerService' }),
     prisma,
@@ -127,7 +108,6 @@ const tellerService = new TellerService(
 // account-connection
 
 const accountConnectionProviderFactory = new AccountConnectionProviderFactory({
-    plaid: plaidService,
     teller: tellerService,
 })
 
@@ -243,7 +223,6 @@ export const securityPricingProcessor: ISecurityPricingProcessor = new SecurityP
 // institution
 
 const institutionProviderFactory = new InstitutionProviderFactory({
-    PLAID: plaidService,
     TELLER: tellerService,
 })
 

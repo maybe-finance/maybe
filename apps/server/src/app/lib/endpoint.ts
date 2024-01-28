@@ -29,15 +29,12 @@ import {
     AccountQueryService,
     ValuationService,
     InstitutionService,
-    PlaidService,
     AccountConnectionProviderFactory,
     BalanceSyncStrategyFactory,
     ValuationBalanceSyncStrategy,
     TransactionBalanceSyncStrategy,
     InvestmentTransactionBalanceSyncStrategy,
-    PlaidETL,
     InstitutionProviderFactory,
-    PlaidWebhookHandler,
     TellerService,
     TellerETL,
     TellerWebhookHandler,
@@ -51,7 +48,6 @@ import {
     StripeWebhookHandler,
 } from '@maybe-finance/server/features'
 import prisma from './prisma'
-import plaid, { getPlaidWebhookUrl } from './plaid'
 import teller, { getTellerWebhookUrl } from './teller'
 import stripe from './stripe'
 import defineAbilityFor from './ability'
@@ -115,22 +111,6 @@ const planService: IPlanService = new PlanService(
 
 // providers
 
-const plaidService = new PlaidService(
-    logger.child({ service: 'PlaidService' }),
-    prisma,
-    plaid,
-    new PlaidETL(
-        logger.child({ service: 'PlaidETL' }),
-        prisma,
-        plaid,
-        cryptoService,
-        marketDataService
-    ),
-    cryptoService,
-    getPlaidWebhookUrl(),
-    env.NX_CLIENT_URL_CUSTOM || env.NX_CLIENT_URL
-)
-
 const tellerService = new TellerService(
     logger.child({ service: 'TellerService' }),
     prisma,
@@ -144,7 +124,6 @@ const tellerService = new TellerService(
 // account-connection
 
 const accountConnectionProviderFactory = new AccountConnectionProviderFactory({
-    plaid: plaidService,
     teller: tellerService,
 })
 
@@ -223,7 +202,6 @@ const userService = new UserService(
 // institution
 
 const institutionProviderFactory = new InstitutionProviderFactory({
-    PLAID: plaidService,
     TELLER: tellerService,
 })
 
@@ -254,14 +232,6 @@ const transactionService = new TransactionService(
 const holdingService = new HoldingService(logger.child({ service: 'HoldingService' }), prisma)
 
 // webhooks
-
-const plaidWebhooks = new PlaidWebhookHandler(
-    logger.child({ service: 'PlaidWebhookHandler' }),
-    prisma,
-    plaid,
-    accountConnectionService,
-    queueService
-)
 
 const stripeWebhooks = new StripeWebhookHandler(
     logger.child({ service: 'StripeWebhookHandler' }),
@@ -313,7 +283,6 @@ export async function createContext(req: Request) {
 
     return {
         prisma,
-        plaid,
         stripe,
         logger,
         user,
@@ -328,8 +297,6 @@ export async function createContext(req: Request) {
         institutionService,
         cryptoService,
         queueService,
-        plaidService,
-        plaidWebhooks,
         stripeWebhooks,
         tellerService,
         tellerWebhooks,

@@ -1,5 +1,4 @@
 export * as DbUtil from './db-utils'
-export * as PlaidUtil from './plaid-utils'
 export * as TellerUtil from './teller-utils'
 export * as ErrorUtil from './error-utils'
 

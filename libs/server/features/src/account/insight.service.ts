@@ -308,12 +308,7 @@ export class InsightService implements IInsightService {
                 where: {
                     security: { id: holding.securityId },
                     accountId: holding.accountId,
-                    OR: [
-                        {
-                            plaidSubtype: 'dividend',
-                        },
-                        { category: 'dividend' },
-                    ],
+                    category: 'dividend'
                 },
             }),
             this.prisma.$queryRaw<[{ allocation: Prisma.Decimal | null }]>`

@@ -15,16 +15,10 @@ import { startServer, stopServer } from './utils/server'
 import { getAxiosClient } from './utils/axios'
 import { resetUser } from './utils/user'
 import { createTestInvestmentAccount } from './utils/account'
-import { default as _plaid } from '../lib/plaid'
 
-jest.mock('../middleware/validate-plaid-jwt.ts')
 jest.mock('bull')
-jest.mock('plaid')
 
 const prisma = new PrismaClient()
-
-// For TypeScript support
-const plaid = jest.mocked(_plaid) // eslint-disable-line
 
 const authId = '__TEST_USER_ID__'
 let axios: AxiosInstance
@@ -107,10 +101,6 @@ describe('/v1/accounts API', () => {
             mask: null,
             isActive: true,
             syncStatus: 'IDLE',
-            plaidType: null,
-            plaidSubtype: null,
-            plaidAccountId: null,
-            plaidLiability: null,
             currencyCode: 'USD',
             currentBalance: new Decimal(21_000),
             availableBalance: null,

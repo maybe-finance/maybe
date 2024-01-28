@@ -1,5 +1,0 @@
-export * from './plaidApiResponses'
-export * from './plaidTestData'
-export * from './stockPrices'
-export * from './testDates'
-export * from './connection-samples'
