@@ -6,10 +6,6 @@ const envSchema = z.object({
     NX_DATABASE_URL: z.string(),
     NX_DATABASE_SECRET: z.string(),
 
-    NX_PLAID_ENV: z.string().default('sandbox'),
-    NX_PLAID_CLIENT_ID: z.string().default('REPLACE_THIS'),
-    NX_PLAID_SECRET: z.string(),
-
     NX_TELLER_SIGNING_SECRET: z.string().default('REPLACE_THIS'),
     NX_TELLER_APP_ID: z.string().default('REPLACE_THIS'),
     NX_TELLER_ENV: z.string().default('sandbox'),

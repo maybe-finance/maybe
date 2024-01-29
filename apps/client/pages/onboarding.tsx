@@ -109,7 +109,7 @@ export default function OnboardingPage() {
 
     return (
         <>
-            <div className="fixed inset-0 z-auto overflow-hidden">
+            <div className="fixed inset-0 z-1 overflow-hidden">
                 <OnboardingBackground className="absolute -bottom-3 left-1/2 -translate-x-1/2" />
             </div>
 
@@ -119,7 +119,7 @@ export default function OnboardingPage() {
 
             <Transition
                 key={currentStep.key}
-                className={classNames('px-6 mb-20 grow')}
+                className={classNames('px-6 mb-20 grow z-10')}
                 appear
                 show
                 enter="ease-in duration-100"

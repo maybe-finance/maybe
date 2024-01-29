@@ -32,10 +32,6 @@ const envSchema = z.object({
 
     NX_NGROK_URL: z.string().default('http://localhost:4551'),
 
-    NX_PLAID_CLIENT_ID: z.string().default('REPLACE_THIS'),
-    NX_PLAID_SECRET: z.string(),
-    NX_PLAID_ENV: z.string().default('sandbox'),
-
     NX_TELLER_SIGNING_SECRET: z.string().default('REPLACE_THIS'),
     NX_TELLER_APP_ID: z.string().default('REPLACE_THIS'),
     NX_TELLER_ENV: z.string().default('sandbox'),

@@ -119,7 +119,7 @@ export default function IndexTabs({
         <nav
             className={classNames(
                 className,
-                'relative flex gap-2 w-full overflow-x-scroll scrollbar-none text-base'
+                'relative flex gap-2 w-full overflow-x-scroll show-on-hover-custom-gray-scroll text-base'
             )}
             {...rest}
         >
