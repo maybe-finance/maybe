@@ -28,18 +28,6 @@ router.get(
 )
 
 router.post(
-    '/plaid/connect',
-    endpoint.create({
-        input: z.object({
-            username: z.enum(['custom_ci_pos_nw']).default('custom_ci_pos_nw'),
-        }),
-        resolve: async ({ ctx, input: { username } }) => {
-            return ctx.plaidService.createSandboxAccount(ctx.user!.id, username)
-        },
-    })
-)
-
-router.post(
     '/reset',
     endpoint.create({
         input: z.object({

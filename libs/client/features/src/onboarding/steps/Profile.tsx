@@ -366,6 +366,7 @@ function Question({
 
             switch (e.key) {
                 case 'Enter':
+                    if (!valid) break
                     if (next) next()
                     else if (submit) submit()
                     break
@@ -374,7 +375,7 @@ function Question({
                     break
             }
         },
-        [open, back, next, submit]
+        [open, back, next, submit, valid]
     )
 
     useEffect(() => {

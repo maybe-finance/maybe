@@ -44,6 +44,10 @@ beforeEach(async () => {
     })
 })
 
+afterAll(async () => {
+    await prisma.$disconnect()
+})
+
 describe('Message queue tests', () => {
     it('Creates the correct number of queues', () => {
         expect(queueService.allQueues.map((q) => q.name)).toEqual([

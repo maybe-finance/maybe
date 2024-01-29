@@ -132,6 +132,31 @@
             overflow: auto !important;
         }
     }
+
+    .show-on-hover-custom-gray-scroll::-webkit-scrollbar {
+        height: 14px;
+        width: 14px;
+    }
+
+    .show-on-hover-custom-gray-scroll::-webkit-scrollbar-thumb {
+        border: 4px solid rgba(0, 0, 0, 0);
+        background-clip: content-box;
+        @apply bg-transparent rounded-full;
+    }
+
+    .show-on-hover-custom-gray-scroll {
+        overflow: overlay !important;
+    }
+
+    .show-on-hover-custom-gray-scroll:hover::-webkit-scrollbar-thumb {
+        @apply bg-gray-200;
+    }
+
+    @-moz-document url-prefix() {
+        .show-on-hover-custom-gray-scroll {
+            overflow: auto !important;
+        }
+    }
 }
 
 /* tiptap / prosemirror customization */
