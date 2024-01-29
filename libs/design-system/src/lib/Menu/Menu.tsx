@@ -5,7 +5,7 @@ import type { PopperProps } from 'react-popper'
 import { usePopper } from 'react-popper'
 import classNames from 'classnames'
 import Link from 'next/link'
-import { Button as BaseButton } from '../../'
+import { Button as BaseButton, RenderValidChildren } from '../../'
 
 type ExtractProps<T> = T extends React.ComponentType<infer P> ? P : T
 
@@ -74,12 +74,16 @@ function Items({
         >
             <HeadlessMenu.Items
                 className={classNames(className, 'py-2 rounded bg-gray-700 shadow-md')}
-                unmount={false}
+                unmount={undefined}
                 {...rest}
             >
                 {(renderProps) => {
                     isOpenRef.current = renderProps.open
-                    return typeof children === 'function' ? children(renderProps) : children
+                    return (
+                        <RenderValidChildren renderProps={renderProps}>
+                            {children}
+                        </RenderValidChildren>
+                    )
                 }}
             </HeadlessMenu.Items>
         </div>

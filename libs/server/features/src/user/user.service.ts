@@ -189,7 +189,7 @@ export class UserService implements IUserService {
             ...(min_start_date ? [DateTime.fromJSDate(min_start_date, { zone: 'utc' })] : [])
         )
 
-        return minDate.toISODate()
+        return minDate.toISODate() || ''
     }
 
     async getSubscription(userId: User['id']): Promise<SharedType.UserSubscription> {

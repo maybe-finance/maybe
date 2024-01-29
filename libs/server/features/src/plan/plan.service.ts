@@ -420,12 +420,12 @@ export class PlanService implements IPlanService {
     ): SharedType.TimeSeries<SharedType.PlanProjectionData> {
         return {
             interval: 'years',
-            start: yearToDate(theo[0].year),
-            end: yearToDate(theo[theo.length - 1].year),
+            start: yearToDate(theo[0].year) || '',
+            end: yearToDate(theo[theo.length - 1].year) || '',
             data: theo.map((data, idx) => {
                 const { successRate } = simulationStats.find((x) => x.year === data.year)!
                 return {
-                    date: yearToDate(data.year),
+                    date: yearToDate(data.year) || '',
                     values: {
                         age: currentAge + idx,
                         year: data.year,
@@ -452,10 +452,10 @@ export class PlanService implements IPlanService {
     ): SharedType.TimeSeries<SharedType.PlanSimulationData> {
         return {
             interval: 'years',
-            start: yearToDate(simulation[0].year),
-            end: yearToDate(simulation[simulation.length - 1].year),
+            start: yearToDate(simulation[0].year) || '',
+            end: yearToDate(simulation[simulation.length - 1].year) || '',
             data: simulation.map((data, idx) => ({
-                date: yearToDate(data.year),
+                date: yearToDate(data.year) || '',
                 values: {
                     age: currentAge + idx,
                     year: data.year,

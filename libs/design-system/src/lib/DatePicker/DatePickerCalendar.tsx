@@ -39,7 +39,7 @@ export function DatePickerCalendar({
         selected: currentCalendarSelection,
         onDateSelected: (dateObj: DateObj) => {
             setOffset(0)
-            onChange(DateTime.fromJSDate(dateObj.date).toISODate())
+            onChange(DateTime.fromJSDate(dateObj.date).toISODate() || '')
         },
         minDate: DateTime.fromISO(minDate).toJSDate(),
         maxDate: DateTime.fromISO(maxDate).toJSDate(),

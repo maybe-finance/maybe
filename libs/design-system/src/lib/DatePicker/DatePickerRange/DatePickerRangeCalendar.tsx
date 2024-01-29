@@ -64,12 +64,12 @@ export function DatePickerRangeCalendar({
 
             // Start the range process over
             if ((start && end) || !start || (start && date < start)) {
-                onChange({ start: date.toISODate(), end: undefined })
+                onChange({ start: date.toISODate() || '', end: undefined })
 
                 return
             }
 
-            onChange({ start: range!.start, end: date.toISODate() })
+            onChange({ start: range!.start, end: date.toISODate() || '' })
         },
         minDate: DateTime.fromISO(minDate).toJSDate(),
         maxDate: DateTime.fromISO(maxDate).toJSDate(),

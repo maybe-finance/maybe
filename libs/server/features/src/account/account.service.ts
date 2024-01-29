@@ -427,7 +427,7 @@ export class AccountService implements IAccountService {
         })
 
         if (account?.startDate) {
-            return DateTime.fromJSDate(account.startDate, { zone: 'utc' }).toISODate()
+            return DateTime.fromJSDate(account.startDate, { zone: 'utc' }).toISODate() || ''
         }
 
         const {
@@ -438,7 +438,7 @@ export class AccountService implements IAccountService {
         })
 
         return minDate
-            ? DateTime.fromJSDate(minDate, { zone: 'utc' }).toISODate()
+            ? DateTime.fromJSDate(minDate, { zone: 'utc' }).toISODate() || ''
             : DateTime.utc().minus({ years: 2 }).toISODate()
     }
 }

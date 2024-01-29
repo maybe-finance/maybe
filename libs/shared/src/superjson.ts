@@ -15,7 +15,7 @@ superjson.registerCustom<Decimal | Prisma.Decimal, string>(
 superjson.registerCustom<DateTime, string>(
     {
         isApplicable: (v): v is DateTime => DateTime.isDateTime(v),
-        serialize: (dt) => dt.toISO(),
+        serialize: (dt) => dt.toISO() || '',
         deserialize: (s) => DateTime.fromISO(s),
     },
     'DateTime'

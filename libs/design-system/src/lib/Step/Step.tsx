@@ -119,7 +119,7 @@ function Group({
         <HeadlessTab.Group
             selectedIndex={currentStep}
             onChange={(...args) => {
-                if (!linear) onChange(...args)
+                if (!linear) onChange?.(...args)
             }}
             {...rest}
         >

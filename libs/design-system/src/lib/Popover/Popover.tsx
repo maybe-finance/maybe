@@ -4,7 +4,7 @@ import type { PopperProps } from 'react-popper'
 import { Popover as HeadlessPopover } from '@headlessui/react'
 import { usePopper } from 'react-popper'
 import classNames from 'classnames'
-import { Button as BaseButton } from '../../'
+import { Button as BaseButton, RenderValidChildren } from '../../'
 import { RiArrowDownSFill } from 'react-icons/ri'
 
 type ExtractProps<T> = T extends React.ComponentType<infer P> ? P : T
@@ -37,7 +37,7 @@ function Button({
     const { referenceElement } = useContext(PopoverContext)
 
     return (
-        <HeadlessPopover.Button as={BaseButton} ref={referenceElement} variant={variant} {...rest}>
+        <HeadlessPopover.Button as={BaseButton} ref={referenceElement} {...rest}>
             <span className="grow">{children}</span>
             {!hideRightIcon && (
                 <RiArrowDownSFill
@@ -99,12 +99,16 @@ function Panel({
                     'p-2 shadow-md rounded bg-gray-700 border border-gray-500 text-white',
                     className
                 )}
-                unmount={false}
+                unmount={undefined}
                 {...rest}
             >
                 {(renderProps) => {
                     setIsOpen(renderProps.open)
-                    return typeof children === 'function' ? children(renderProps) : children
+                    return (
+                        <RenderValidChildren renderProps={renderProps}>
+                            {children}
+                        </RenderValidChildren>
+                    )
                 }}
             </HeadlessPopover.Panel>
         </div>

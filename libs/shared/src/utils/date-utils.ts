@@ -57,7 +57,7 @@ export function strToDate(val: string, zone = 'utc'): Date {
 }
 
 export function dateToStr(val: Date, zone = 'utc'): string {
-    return DateTime.fromJSDate(val, { zone }).toISODate()
+    return DateTime.fromJSDate(val, { zone }).toISODate() || ''
 }
 
 export function calculateTimeSeriesInterval(

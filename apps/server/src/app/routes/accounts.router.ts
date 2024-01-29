@@ -177,14 +177,14 @@ router.get(
             const returnSeries: SharedType.AccountReturnTimeSeriesData[] =
                 await ctx.accountService.getReturns(
                     account.id,
-                    input.start.toISODate(),
-                    input.end.toISODate()
+                    input.start.toISODate() || '',
+                    input.end.toISODate() || ''
                 )
 
             const baseSeries = {
                 interval: 'days' as SharedType.TimeSeriesInterval,
-                start: input.start.toISODate(),
-                end: input.end.toISODate(),
+                start: input.start.toISODate() || '',
+                end: input.end.toISODate() || '',
             }
 
             if (!input.compare || input.compare.length < 1)

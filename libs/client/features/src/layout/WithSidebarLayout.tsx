@@ -35,5 +35,3 @@ export function WithSidebarLayout({ sidebar, children }: WithSidebarLayoutProps)
         </PopoutProvider>
     )
 }
-
-export default WithSidebarLayout

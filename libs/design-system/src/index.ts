@@ -73,3 +73,5 @@ export type { FractionalCircleProps } from './lib/FractionalCircle'
 export * from './lib/RadioGroup'
 
 export * from './lib/RTEditor'
+
+export * from './lib/Utils'

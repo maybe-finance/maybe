@@ -133,8 +133,8 @@ export class PolygonMarketDataService implements IMarketDataService {
             ticker.ticker,
             1,
             'day',
-            start.toISODate(),
-            end.toISODate()
+            start.toISODate() || '',
+            end.toISODate() || ''
         )
 
         return (

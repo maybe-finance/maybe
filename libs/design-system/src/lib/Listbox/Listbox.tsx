@@ -7,6 +7,7 @@ import classNames from 'classnames'
 import { RiArrowDownSFill, RiCheckFill } from 'react-icons/ri'
 import { usePopper } from 'react-popper'
 import { Checkbox } from '../Checkbox'
+import { RenderValidChildren } from '../Utils'
 
 type ExtractProps<T> = T extends React.ComponentType<infer P> ? P : T
 
@@ -197,12 +198,16 @@ function Options({
         >
             <HeadlessListbox.Options
                 className={classNames(multiple ? 'py-3 px-2' : 'py-2', className)}
-                unmount={false}
+                unmount={undefined}
                 {...rest}
             >
-                {({ open }) => {
-                    isOpenRef.current = open
-                    return children
+                {(renderProps) => {
+                    isOpenRef.current = renderProps.open
+                    return (
+                        <RenderValidChildren renderProps={renderProps}>
+                            {children}
+                        </RenderValidChildren>
+                    )
                 }}
             </HeadlessListbox.Options>
         </div>

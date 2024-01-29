@@ -18,5 +18,3 @@ export function FullPageLayout({ children }: PropsWithChildren) {
         </>
     )
 }
-
-export default FullPageLayout
