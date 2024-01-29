@@ -3,16 +3,17 @@
     "version": "0.0.0",
     "license": "MIT",
     "scripts": {
+        "preinstall": "npx only-allow pnpm",
         "dev": "nx run-many --target serve --projects=client,server,workers --parallel --host 0.0.0.0 --nx-bail=true --maxParallel=100",
         "dev:services": "docker compose --profile services up -d",
         "dev:services:all": "docker compose --profile services --profile ngrok up -d",
         "dev:workers:test": "nx test workers --skip-nx-cache --runInBand",
         "dev:server:test": "nx test server --skip-nx-cache --runInBand",
-        "dev:test:unit": "yarn dev:ci:test --testPathPattern='^(?!.*integration).*$' --verbose --skip-nx-cache",
-        "dev:test:integration": "NX_PORT=3335 yarn dev:ci:test --testPathPattern='^.*.integration.spec.ts$' --verbose --skip-nx-cache",
+        "dev:test:unit": "pnpm dev:ci:test --testPathPattern='^(?!.*integration).*$' --verbose --skip-nx-cache",
+        "dev:test:integration": "NX_PORT=3335 pnpm dev:ci:test --testPathPattern='^.*.integration.spec.ts$' --verbose --skip-nx-cache",
         "dev:lint": "nx affected --target=lint",
         "dev:ci:e2e": "nx run e2e:e2e",
-        "dev:ci": "yarn dev:ci:lint:all && yarn dev:ci:test:all && yarn dev:ci:format:all && nx run-many --target build --all",
+        "dev:ci": "pnpm dev:ci:lint:all && pnpm dev:ci:test:all && pnpm dev:ci:format:all && nx run-many --target build --all",
         "dev:ci:test": "nx run-many --target=test --all --runInBand",
         "dev:ci:dependency-graph": "nx dep-graph",
         "prisma:gen": "prisma generate",
@@ -24,7 +25,7 @@
         "prisma:seed": "prisma db seed",
         "prisma:studio": "prisma studio",
         "dev:docker:reset": "docker compose down -v --rmi all --remove-orphans && docker system prune --all --volumes && docker compose build",
-        "dev:circular": "npx madge --circular --extensions ts libs",
+        "dev:circular": "pnpx madge --circular --extensions ts libs",
         "analyze:client": "ANALYZE=true nx build client --skip-nx-cache",
         "tools:pages": "live-server tools/pages",
         "prepare": "husky install"
@@ -35,7 +36,8 @@
     "private": true,
     "dependencies": {
         "@auth/prisma-adapter": "^1.0.14",
-        "@bull-board/express": "^4.6.4",
+        "@bull-board/api": "^5.14.0",
+        "@bull-board/express": "^5.14.0",
         "@casl/ability": "^6.3.2",
         "@casl/prisma": "^1.4.1",
         "@fast-csv/format": "^4.3.5",
@@ -44,9 +46,9 @@
         "@polygon.io/client-js": "^6.0.6",
         "@popperjs/core": "^2.11.5",
         "@prisma/client": "^5.8.0",
-        "@sentry/node": "^7.22.0",
+        "@sentry/node": "^7.98.0",
         "@sentry/react": "^7.22.0",
-        "@sentry/tracing": "^7.22.0",
+        "@sentry/tracing": "^7.98.0",
         "@storybook/core-server": "6.5.15",
         "@stripe/stripe-js": "^1.44.1",
         "@tanstack/react-query": "^4.19.1",
@@ -120,7 +122,6 @@
         "next-auth": "^4.24.5",
         "nodemailer": "^6.9.8",
         "pg": "^8.8.0",
-        "plaid": "^12.1.0",
         "postcss": "8.4.19",
         "postmark": "^3.0.14",
         "prisma": "^5.8.0",
@@ -144,7 +145,6 @@
         "react-infinite-scroller": "^1.2.6",
         "react-media-recorder": "1.6.5",
         "react-number-format": "^5.1.3",
-        "react-plaid-link": "^3.3.2",
         "react-popper": "^2.3.0",
         "react-ranger": "^2.1.0",
         "react-responsive": "^9.0.0-beta.10",
@@ -182,6 +182,7 @@
         "@nrwl/web": "15.5.2",
         "@nrwl/workspace": "15.5.2",
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
+        "@sentry/types": "^7.98.0",
         "@storybook/addon-essentials": "6.5.15",
         "@storybook/addon-postcss": "3.0.0-alpha.1",
         "@storybook/builder-webpack5": "6.5.15",
@@ -256,8 +257,8 @@
     },
     "lint-staged": {
         "*": [
-            "yarn nx format:write --uncommitted",
-            "yarn eslint --fix"
+            "pnpm nx format:write --uncommitted",
+            "pnpm eslint --fix"
         ]
     }
 }

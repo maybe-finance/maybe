@@ -8,13 +8,7 @@ export function useAccountNotifications() {
     const accountsNotification = useMemo(() => {
         if (!accountsQuery.data) return null
 
-        if (
-            accountsQuery.data.connections.some(
-                (connection) =>
-                    connection.status === 'ERROR' &&
-                    (connection.plaidConsentExpiration || connection.plaidError)
-            )
-        ) {
+        if (accountsQuery.data.connections.some((connection) => connection.status === 'ERROR')) {
             return 'error'
         }
 

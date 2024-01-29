@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import type { SharedType } from '@maybe-finance/shared'
+import { Provider } from '@prisma/client'
 
 type GridImage = {
     src: string
@@ -14,7 +15,7 @@ const banks: GridImage[] = [
         src: 'chase-bank.png',
         alt: 'Chase Bank',
         institution: {
-            provider: 'TELLER',
+            provider: Provider.TELLER,
             providerId: 'chase',
         },
     },
@@ -22,7 +23,7 @@ const banks: GridImage[] = [
         src: 'capital-one.png',
         alt: 'Capital One Bank',
         institution: {
-            provider: 'TELLER',
+            provider: Provider.TELLER,
             providerId: 'capital_one',
         },
     },
@@ -30,7 +31,7 @@ const banks: GridImage[] = [
         src: 'wells-fargo.png',
         alt: 'Wells Fargo Bank',
         institution: {
-            provider: 'TELLER',
+            provider: Provider.TELLER,
             providerId: 'wells_fargo',
         },
     },
@@ -38,7 +39,7 @@ const banks: GridImage[] = [
         src: 'american-express.png',
         alt: 'American Express Bank',
         institution: {
-            provider: 'TELLER',
+            provider: Provider.TELLER,
             providerId: 'amex',
         },
     },
@@ -46,7 +47,7 @@ const banks: GridImage[] = [
         src: 'bofa.png',
         alt: 'Bank of America',
         institution: {
-            provider: 'TELLER',
+            provider: Provider.TELLER,
             providerId: 'bank_of_america',
         },
     },
@@ -54,53 +55,19 @@ const banks: GridImage[] = [
         src: 'usaa-bank.png',
         alt: 'USAA Bank',
         institution: {
-            provider: 'TELLER',
+            provider: Provider.TELLER,
             providerId: 'usaa',
         },
     },
 ]
 
 const brokerages: GridImage[] = [
-    {
-        src: 'robinhood.png',
-        alt: 'Robinhood',
-        institution: {
-            provider: 'PLAID',
-            providerId: 'ins_54',
-        },
-    },
-    {
-        src: 'fidelity.png',
-        alt: 'Fidelity',
-    },
-    {
-        src: 'vanguard.png',
-        alt: 'Vanguard',
-    },
-    {
-        src: 'wealthfront.png',
-        alt: 'Wealthfront',
-        institution: {
-            provider: 'PLAID',
-            providerId: 'ins_115617',
-        },
-    },
-    {
-        src: 'betterment.png',
-        alt: 'Betterment',
-        institution: {
-            provider: 'PLAID',
-            providerId: 'ins_115605',
-        },
-    },
-    {
-        src: 'interactive-brokers.png',
-        alt: 'Interactive Brokers',
-        institution: {
-            provider: 'PLAID',
-            providerId: 'ins_116530',
-        },
-    },
+    { src: 'robinhood.png', alt: 'Robinhood' },
+    { src: 'fidelity.png', alt: 'Fidelity' },
+    { src: 'vanguard.png', alt: 'Vanguard' },
+    { src: 'wealthfront.png', alt: 'Wealthfront' },
+    { src: 'betterment.png', alt: 'Betterment' },
+    { src: 'interactive-brokers.png', alt: 'Interactive Brokers' },
 ]
 
 const cryptoExchanges: GridImage[] = [
@@ -143,10 +110,10 @@ export default function InstitutionGrid({
                     alt={img.alt}
                     onClick={() => {
                         switch (type) {
+                            case 'brokerages':
                             case 'crypto':
                                 onClick(undefined, img.alt)
                                 break
-                            case 'brokerages':
                             case 'banks':
                                 onClick(img.institution)
                                 break

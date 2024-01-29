@@ -6,7 +6,7 @@ services:
     - type: web
       name: design-system
       env: static
-      buildCommand: yarn && NODE_ENV=production yarn nx run design-system:build-storybook # NODE_ENV=production is required to fix this issue: https://github.com/nrwl/nx/issues/8403
+      buildCommand: pnpm && NODE_ENV=production pnpm nx run design-system:build-storybook # NODE_ENV=production is required to fix this issue: https://github.com/nrwl/nx/issues/8403
       staticPublishPath: dist/storybook/design-system
       autoDeploy: true
       domains:

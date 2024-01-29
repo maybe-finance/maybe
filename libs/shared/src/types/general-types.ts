@@ -1,5 +1,4 @@
 import type { Prisma } from '@prisma/client'
-import type { PlaidError } from 'plaid'
 import type { AxiosError } from 'axios'
 import type { TellerTypes } from '@maybe-finance/teller-api'
 import type { Contexts, Primitive } from '@sentry/types'
@@ -77,8 +76,6 @@ export type ParsedError = {
     sentryContexts?: Contexts
     sentryTags?: { [key: string]: Primitive }
 }
-
-export type AxiosPlaidError = O.Required<AxiosError<PlaidError>, 'response' | 'config'>
 
 export type AxiosTellerError = O.Required<
     AxiosError<TellerTypes.TellerError>,

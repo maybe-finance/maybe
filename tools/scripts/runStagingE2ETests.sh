@@ -1,6 +1,6 @@
 #!/bin/bash
 
-yarn nx run e2e:e2e \
+pnpm nx run e2e:e2e \
     --baseUrl https://staging-app.maybe.co \
     --headed \
     --skip-nx-cache \
