@@ -89,6 +89,45 @@ To do so:
 
 That's it! As long as you run the project locally using `docker` with `pnpm dev:services:all` you'll be good to go.
 
+### Common Issues
+
+#### error: server: unhandled promise rejection: [object Promise]: Error: connect ECONNREFUSED ::1:4551
+
+```bash
+info: 🚀 API listening at http://localhost:3333
+error: server: unhandled promise rejection: [object Promise]: Error: connect ECONNREFUSED ::1:4551
+error: server: unhandled promise rejection: [object Promise]: Error: connect ECONNREFUSED ::1:4551
+error: server: unhandled promise rejection: [object Promise]: Error: connect ECONNREFUSED ::1:4551
+```
+
+This error will show on startup after running `yarn dev`.
+
+What this means is the local **ngrok** service is not running.
+
+To start up **ngrok** locally, you need to run `COMPOSE_PROFILES=ngrok docker-compose up -d`.
+
+#### 'COMPOSE_PROFILES' is not recognized as an internal or external command
+
+**_TODO: Come up with a cross-platform working command for these scripts._**
+
+```bash
+$ yarn dev:services
+yarn run v1.22.21
+$ COMPOSE_PROFILES=services docker-compose up -d
+'COMPOSE_PROFILES' is not recognized as an internal or external command,
+operable program or batch file.
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+```
+
+This is an issue on Windows machines and seems to happen when running a command with an environment variable at the beginning (ie: `yarn dev:services`).
+
+##### Workaround
+
+To workaround this issue, simply run the command/script directly instead of using `yarn <script>`.
+
+For the above error example, I should run `COMPOSE_PROFILES=services docker-compose up -d` directly in my CLI instead of `yarn dev:services`.
+
 ## Contributing
 
 To contribute, please see our [contribution guide](https://github.com/maybe-finance/maybe/blob/main/CONTRIBUTING.md).
