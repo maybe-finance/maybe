@@ -82,7 +82,7 @@ export function AccountsManager() {
             case 'add-stock':
                 return {
                     title: 'Add investment',
-                    component: <AddStock defaultValue={am.defaultValues} />,
+                    component: <AddStock defaultValues={am.defaultValues} />,
                 }
             case 'custom':
                 return { title: 'Custom account', component: am.component }
