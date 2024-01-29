@@ -42,7 +42,7 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
 
     const { useAccounts } = useAccountApi()
     const { data: accountsData } = useAccounts()
-    // STOCKTODO - Think about whether you want to create a new account type 'STOCKS'
+    // STOCKTODO - Think about whether you want to create a new account type 'STOCKS' as opposed to 'INVESTMENT'
     const stockAccountsList = accountsData?.accounts.filter(
         (account) => account.type === 'INVESTMENT'
     )
