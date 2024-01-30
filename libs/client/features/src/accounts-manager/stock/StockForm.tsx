@@ -8,6 +8,7 @@ import { DateUtil } from '@maybe-finance/shared'
 import { useForm } from 'react-hook-form'
 import { AccountValuationFormFields } from '../AccountValuationFormFields'
 import { useState } from 'react'
+import { RiAddLine } from 'react-icons/ri'
 
 // STOCKTODO - Change UpdateVehicleFields
 type Props = {
@@ -42,6 +43,7 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
 
     const { useAccounts } = useAccountApi()
     const { data: accountsData } = useAccounts()
+
     // STOCKTODO - Think about whether you want to create a new account type 'STOCKS' as opposed to 'INVESTMENT'
     const stockAccountsList = accountsData?.accounts.filter(
         (account) => account.type === 'INVESTMENT'
@@ -65,20 +67,24 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
                         {...register('make', { required: true })}
                     /> */}
                     {/* STOCKTODO - Create currently selected stock state */}
-                    {stockAccountsList && (
-                        <Listbox value={account} onChange={setAccount}>
-                            <Listbox.Button label="Investment account"></Listbox.Button>
-                            <Listbox.Options>
-                                {stockAccountsList?.map((account) => (
-                                    // STOCKTODO - Figure out the correct account value - probably will be the symbol
-                                    <Listbox.Option key={account.id} value={account.name}>
-                                        {account.name}
-                                    </Listbox.Option>
-                                ))}
-                            </Listbox.Options>
-                        </Listbox>
-                    )}
-                    {/* <CreateAccount/> */}
+                    <div className="flex flex-row gap-2 items-end">
+                        {stockAccountsList && (
+                            <Listbox value={account} onChange={setAccount} className="flex-1">
+                                <Listbox.Button label="Investment account"></Listbox.Button>
+                                <Listbox.Options>
+                                    {stockAccountsList?.map((account) => (
+                                        // STOCKTODO - Figure out the correct account value - probably will be the symbol
+                                        <Listbox.Option key={account.id} value={account.name}>
+                                            {account.name}
+                                        </Listbox.Option>
+                                    ))}
+                                </Listbox.Options>
+                            </Listbox>
+                        )}
+                        <Button className="h-10" onClick={() => null}>
+                            <RiAddLine size={20} />
+                        </Button>
+                    </div>
 
                     {/* STOCKTODO - Change to to a drop down where all the stocks will be listed and can be chosen by their ticker names */}
                     {/* <Input
@@ -88,7 +94,7 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
                         error={errors.model && 'Model is required'}
                         {...register('model', { required: true })}
                     /> */}
-                    <Listbox value={stockSymbol} onChange={setStockSymbol}>
+                    {/* <Listbox value={stockSymbol} onChange={setStockSymbol}>
                         <Listbox.Button label="Investment account"></Listbox.Button>
                         <Listbox.Options>
                             {stocksList.map((stock) => (
@@ -98,7 +104,7 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
                                 </Listbox.Option>
                             ))}
                         </Listbox.Options>
-                    </Listbox>
+                    </Listbox> */}
                 </div>
             </section>
 
