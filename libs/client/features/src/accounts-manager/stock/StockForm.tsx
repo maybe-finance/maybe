@@ -4,12 +4,13 @@ import {
     type UpdateStockFields,
     type UpdateVehicleFields,
 } from '@maybe-finance/client/shared'
-import { Button, Listbox } from '@maybe-finance/design-system'
+import { Button, Dialog, Input, Listbox } from '@maybe-finance/design-system'
 import { DateUtil } from '@maybe-finance/shared'
 import { useForm } from 'react-hook-form'
 import { AccountValuationFormFields } from '../AccountValuationFormFields'
 import { useState } from 'react'
 import { RiAddLine } from 'react-icons/ri'
+import CreateStockAccount from './CreateStockAccount'
 
 // STOCKTODO - Change UpdateVehicleFields
 type Props = {
@@ -79,9 +80,7 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
                             </Listbox>
                         )}
                         {/* STOCKTODO - When this button is clicked, go to the modal to create a new account */}
-                        <Button className="h-10" onClick={() => null}>
-                            <RiAddLine size={20} />
-                        </Button>
+                        <CreateStockAccount />
                     </div>
 
                     {/* STOCKTODO - Change to to a drop down where all the stocks will be listed and can be chosen by their ticker names */}
@@ -106,7 +105,7 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
                 </div>
             </section>
 
-            {mode === 'create' && (
+            {mode === 'update' && (
                 <section className="space-y-4">
                     <h6 className="text-white uppercase">Valuation</h6>
                     <div>
@@ -130,7 +129,7 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
                 disabled={isSubmitting || !isValid}
                 data-testid="stock-form-submit"
             >
-                {mode === 'create' ? 'Add stock' : 'Update'}
+                {mode === 'update' ? 'Add stock' : 'Update'}
             </Button>
         </form>
     )
