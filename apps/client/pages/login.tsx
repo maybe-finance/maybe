@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import Script from 'next/script'
 import Link from 'next/link'
+import { DeveloperFastLogin } from '../components/login/DeveloperLogin'
 
 export default function LoginPage() {
     const [email, setEmail] = useState('')
@@ -111,6 +112,13 @@ export default function LoginPage() {
                         </form>
                     </div>
                 </div>
+                {process.env.NODE_ENV === 'development' && (
+                    <DeveloperFastLogin
+                        setEmail={setEmail}
+                        setPassword={setPassword}
+                        setIsValid={setIsValid}
+                    />
+                )}
             </div>
         </>
     )

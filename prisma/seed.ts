@@ -1,4 +1,5 @@
-import { Institution, PrismaClient, Provider } from '@prisma/client'
+import { AuthUser, AuthUserRole, Institution, PrismaClient, Provider } from '@prisma/client'
+import { encodePassword } from '../apps/server/src/app/lib/bcrypt'
 
 const prisma = new PrismaClient()
 
@@ -34,6 +35,42 @@ async function main() {
         },
     ]
 
+    const users: AuthUser[] = [
+        {
+            id: '1',
+            name: 'Test',
+            firstName: 'Tester',
+            lastName: 'Testing',
+            email: 'test@test.com',
+            emailVerified: new Date(),
+            password: encodePassword('Password1'),
+            image: 'assets/images/advisor-avatar.png',
+            role: AuthUserRole.admin,
+        },
+        {
+            id: '2',
+            name: 'John Doe',
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john@john.com',
+            emailVerified: new Date(),
+            password: encodePassword('Password2'),
+            image: 'assets/images/advisor-avatar.png',
+            role: AuthUserRole.user,
+        },
+        {
+            id: '3',
+            name: 'Jane Doe',
+            firstName: 'Jane',
+            lastName: 'Doe',
+            email: 'jane@jane.com',
+            emailVerified: new Date(),
+            password: encodePassword('Password3'),
+            image: 'assets/images/advisor-avatar.png',
+            role: AuthUserRole.user,
+        },
+    ]
+
     await prisma.$transaction([
         // create institution linked to provider institutions
         ...institutions.map(({ id, name, providers }) =>
@@ -55,6 +92,13 @@ async function main() {
                         })),
                     },
                 },
+                update: {},
+            })
+        ),
+        ...users.map((user) =>
+            prisma.authUser.upsert({
+                where: { id: user.id },
+                create: user,
                 update: {},
             })
         ),
