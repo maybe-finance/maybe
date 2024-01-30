@@ -109,7 +109,6 @@ const UserApi = (axios: AxiosInstance) => ({
     },
 
     async sendTestEmail(input: SharedType.SendTestEmail) {
-        console.log('input', input)
         const { data } = await axios.post<SharedType.EmailSendingResponse>(
             '/users/send-test-email',
             input
