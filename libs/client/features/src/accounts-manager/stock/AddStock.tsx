@@ -1,5 +1,5 @@
 import {
-    type CreateStockFields,
+    type UpdateStockFields,
     useAccountApi,
     useAccountContext,
 } from '@maybe-finance/client/shared'
@@ -7,7 +7,7 @@ import { DateTime } from 'luxon'
 import StockForm from './StockForm'
 
 // STOCKTODO - Change CreateStockFields
-export function AddStock({ defaultValues }: { defaultValues: Partial<CreateStockFields> }) {
+export function AddStock({ defaultValues }: { defaultValues: Partial<UpdateStockFields> }) {
     const { setAccountManager } = useAccountContext()
     const { useCreateAccount } = useAccountApi()
     const createAccount = useCreateAccount()
@@ -15,6 +15,7 @@ export function AddStock({ defaultValues }: { defaultValues: Partial<CreateStock
     return (
         <div>
             <StockForm
+                // STOCKTODO - This doesn't create a new account but adds a stock a pre-existing account
                 mode="create"
                 defaultValues={{
                     account_id: defaultValues.account_id ?? null,
@@ -29,20 +30,14 @@ export function AddStock({ defaultValues }: { defaultValues: Partial<CreateStock
                         // STOCKTODO : Change type based on whether you choose to go with the 'STOCK' type
                         type: 'INVESTMENT',
                         // STOCKTODO : Figure out what the categoryUser is
-                        categoryUser: 'vehicle',
-                        // STOCKTODO : Figure out what the valuations are
+                        categoryUser: 'investment',
+                        // STOCKTODO : Valuations should be based on the stocks
                         valuations: {
                             originalBalance,
                             currentBalance,
                             currentDate: DateTime.now().toISODate(),
                         },
-                        // STOCKTODO : Figure out what the vehicle meta is
-                        vehicleMeta: {
-                            make,
-                            model,
-                            year: parseInt(year),
-                        },
-                        // STOCKTODO : Change this according this to stock
+                        // STOCKTODO : Change this according this to stock. this should be
                         name: `${make} ${model}`,
                         startDate,
                     })

@@ -23,9 +23,7 @@ type StockMetadataValues = {
     stock: string | null
 }
 
-export type CreateStockFields = StockMetadataValues & StockValuationFields
-// STOCKTODO - Make sure that the UpdateStockFields is correct.
-// export type UpdateStockFields = StockMetadataValues
+export type UpdateStockFields = StockMetadataValues & StockValuationFields
 
 // Property
 type PropertyMetadataValues = {
@@ -67,7 +65,7 @@ type AccountManager =
     | { view: 'add-account' }
     | { view: 'add-property'; defaultValues: Partial<CreatePropertyFields> }
     // STOCKTODO - Create the necessary stock types here
-    | { view: 'add-stock'; defaultValues: Partial<CreateStockFields> }
+    | { view: 'add-stock'; defaultValues: Partial<UpdateStockFields> }
     | { view: 'add-vehicle'; defaultValues: Partial<CreateVehicleFields> }
     | { view: 'add-asset'; defaultValues: Partial<CreateAssetFields> }
     | { view: 'add-liability'; defaultValues: Partial<CreateLiabilityFields> }

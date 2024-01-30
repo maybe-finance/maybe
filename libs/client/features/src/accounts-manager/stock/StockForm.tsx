@@ -1,6 +1,6 @@
 import {
     useAccountApi,
-    type CreateStockFields,
+    type UpdateStockFields,
     type UpdateVehicleFields,
 } from '@maybe-finance/client/shared'
 import { Button, Listbox } from '@maybe-finance/design-system'
@@ -12,15 +12,10 @@ import { RiAddLine } from 'react-icons/ri'
 
 // STOCKTODO - Change UpdateVehicleFields
 type Props = {
-    mode: 'create'
-    defaultValues: CreateStockFields
-    onSubmit(data: CreateStockFields): void
+    mode: 'update'
+    defaultValues: UpdateStockFields
+    onSubmit(data: UpdateStockFields): void
 }
-// | {
-//       mode: 'update'
-//       defaultValues: UpdateVehicleFields
-//       onSubmit(data: UpdateVehicleFields): void
-//   }
 
 export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
     const {
@@ -30,7 +25,7 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
         watch,
         formState: { errors, isSubmitting, isValid },
         // STOCKTODO - Fix UpdateVehicleFields
-    } = useForm<CreateStockFields & UpdateVehicleFields>({
+    } = useForm<UpdateStockFields & UpdateVehicleFields>({
         mode: 'onChange',
         defaultValues,
     })
@@ -81,6 +76,7 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
                                 </Listbox.Options>
                             </Listbox>
                         )}
+                        {/* STOCKTODO - When this button is clicked, go to the modal to create a new account */}
                         <Button className="h-10" onClick={() => null}>
                             <RiAddLine size={20} />
                         </Button>
