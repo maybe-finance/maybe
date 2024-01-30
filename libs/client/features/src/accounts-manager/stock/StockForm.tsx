@@ -1,5 +1,6 @@
 import {
     useAccountApi,
+    useAccountContext,
     type UpdateStockFields,
     type UpdateVehicleFields,
 } from '@maybe-finance/client/shared'
@@ -36,6 +37,7 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
     const [stockSymbol, setStockSymbol] = useState<string | null>(null)
     const [account, setAccount] = useState<string | null>(null)
 
+    const { setAccountManager } = useAccountContext()
     const { useAccounts } = useAccountApi()
     const { data: accountsData } = useAccounts()
 

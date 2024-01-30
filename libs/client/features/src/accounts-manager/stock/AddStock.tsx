@@ -10,13 +10,14 @@ import StockForm from './StockForm'
 export function AddStock({ defaultValues }: { defaultValues: Partial<UpdateStockFields> }) {
     const { setAccountManager } = useAccountContext()
     const { useCreateAccount } = useAccountApi()
+    // STOCKTODO - The account needs to be updated here, not created.
     const createAccount = useCreateAccount()
 
     return (
         <div>
             <StockForm
                 // STOCKTODO - This doesn't create a new account but adds a stock a pre-existing account
-                mode="create"
+                mode="update"
                 defaultValues={{
                     account_id: defaultValues.account_id ?? null,
                     stock: defaultValues.stock ?? '',
