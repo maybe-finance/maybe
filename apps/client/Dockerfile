@@ -6,6 +6,7 @@ FROM node:18-alpine3.18 as builder
 WORKDIR /app
 COPY ./dist/apps/client ./pnpm-lock.yaml ./prisma ./package.json ./
 # Install dependencies
+RUN npm install -g pnpm
 RUN pnpm install --frozen-lockfile --production=false
 
 # ------------------------------------------
