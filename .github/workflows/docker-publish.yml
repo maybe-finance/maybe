@@ -20,6 +20,7 @@ jobs:
       packages: write
       id-token: write
     strategy:
+      fail-fast: false
       matrix:
         image: ["ghcr.io/${{ github.repository }}", "ghcr.io/${{ github.repository }}-worker", "ghcr.io/${{ github.repository }}-client"]
         include:
