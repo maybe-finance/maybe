@@ -7,6 +7,7 @@ WORKDIR /app
 COPY ./dist/apps/workers ./prisma ./
 RUN npm install -g pnpm
 # nrwl/nx#20079, generated lockfile is completely broken
+RUN rm -f pnpm-lock.yaml
 RUN pnpm install --prod --no-frozen-lockfile
 
 # ------------------------------------------
