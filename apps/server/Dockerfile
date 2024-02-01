@@ -6,7 +6,8 @@ FROM node:18-alpine3.18 as builder
 WORKDIR /app
 COPY ./dist/apps/server ./prisma ./
 RUN npm install -g pnpm
-RUN pnpm install --prod --frozen-lockfile && pnpm add ejs
+# nrwl/nx#20079, generated lockfile is completely broken
+RUN pnpm install --prod --no-frozen-lockfile && pnpm add ejs
 
 # ------------------------------------------
 #                PROD STAGE               

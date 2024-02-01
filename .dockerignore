@@ -1,7 +1,6 @@
-# Ignores everything except dist/ prisma/ apps/ and pnpm-lock.yaml
+# Ignores everything except dist/ prisma/ apps/
 *
 !dist/
 !prisma/
-!pnpm-lock.yaml
 !package.json
 !apps/client/env.sh

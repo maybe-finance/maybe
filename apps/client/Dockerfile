@@ -4,10 +4,10 @@
 FROM node:18-alpine3.18 as builder
 
 WORKDIR /app
-COPY ./dist/apps/client ./pnpm-lock.yaml ./prisma ./package.json ./
+COPY ./dist/apps/client ./prisma ./package.json ./
 # Install dependencies
 RUN npm install -g pnpm
-# Lockfile is unfrozen because of some nx dep issues
+# nrwl/nx#20079, generated lockfile is completely broken
 RUN pnpm install --no-frozen-lockfile --production=false
 
 # ------------------------------------------

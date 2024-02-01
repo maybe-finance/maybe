@@ -273,8 +273,7 @@
                         "assets": ["apps/server/src/assets", "apps/server/src/app/admin/views"],
                         "target": "node",
                         "compiler": "tsc",
-                        "generatePackageJson": true,
-                        "pruneLockFile": true
+                        "generatePackageJson": true
                     },
                     "configurations": {
                         "production": {
@@ -434,8 +433,7 @@
                         "assets": ["apps/workers/src/assets"],
                         "target": "node",
                         "compiler": "tsc",
-                        "generatePackageJson": true,
-                        "pruneLockFile": true
+                        "generatePackageJson": true
                     },
                     "configurations": {
                         "production": {
