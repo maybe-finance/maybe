@@ -63,10 +63,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '16'
-          cache: 'yarn'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --production=false
+        run: pnpm install --frozen-lockfile --production=false
 
       - name: Run nx target
         run: npx nx run ${{ matrix.nx }}
