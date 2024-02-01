@@ -7,7 +7,8 @@ WORKDIR /app
 COPY ./dist/apps/client ./pnpm-lock.yaml ./prisma ./package.json ./
 # Install dependencies
 RUN npm install -g pnpm
-RUN pnpm install --frozen-lockfile --production=false
+# Lockfile is unfrozen because of some nx dep issues
+RUN pnpm install --no-frozen-lockfile --production=false
 
 # ------------------------------------------
 #                PROD STAGE               
