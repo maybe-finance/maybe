@@ -19,7 +19,7 @@ export interface DatePickerProps {
     onChange: (date: string | null) => void
     error?: string
     label?: string
-    className?: String
+    className?: string
     placeholder?: string
     minCalendarDate?: string
     maxCalendarDate?: string
