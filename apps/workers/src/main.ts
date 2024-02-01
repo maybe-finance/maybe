@@ -166,22 +166,8 @@ syncSecurityQueue.cancelJobs().then(() => {
  * sync-institution queue
  */
 syncInstitutionQueue.process(
-    'sync-plaid-institutions',
-    async () => await institutionService.sync('PLAID')
-)
-
-syncInstitutionQueue.process(
     'sync-teller-institutions',
     async () => await institutionService.sync('TELLER')
-)
-
-syncInstitutionQueue.add(
-    'sync-plaid-institutions',
-    {},
-    {
-        repeat: { cron: '0 */24 * * *' }, // Run every 24 hours
-        jobId: Date.now().toString(),
-    }
 )
 
 syncInstitutionQueue.add(

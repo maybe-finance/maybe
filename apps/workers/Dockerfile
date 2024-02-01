@@ -4,8 +4,8 @@
 FROM node:18-alpine3.18 as builder
 
 WORKDIR /app
-COPY ./dist/apps/workers ./yarn.lock ./prisma ./
-RUN yarn install --production
+COPY ./dist/apps/workers ./pnpm-lock.yaml ./prisma ./
+RUN pnpm install --prod --frozen-lockfile
 
 # ------------------------------------------
 #                PROD STAGE               

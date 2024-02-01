@@ -107,8 +107,6 @@ export async function createTestInvestmentAccount(
                             (s) => s.date === it.date && s.ticker === it.ticker
                         )?.price
 
-                        const isCashFlow = it.type === 'DEPOSIT' || it.type === 'WITHDRAW'
-
                         return {
                             securityId: securities.find((s) => it.ticker === s.symbol)?.id,
                             date: date(it.date),
@@ -116,26 +114,6 @@ export async function createTestInvestmentAccount(
                             amount: price ? new Prisma.Decimal(price).times(it.qty) : it.qty,
                             quantity: price ? it.qty : 0,
                             price: price ?? 0,
-                            plaidType:
-                                isCashFlow || it.type === 'DIVIDEND'
-                                    ? 'cash'
-                                    : it.type === 'BUY'
-                                    ? 'buy'
-                                    : it.type === 'SELL'
-                                    ? 'sell'
-                                    : undefined,
-                            plaidSubtype:
-                                it.type === 'DEPOSIT'
-                                    ? 'deposit'
-                                    : it.type === 'WITHDRAW'
-                                    ? 'withdrawal'
-                                    : it.type === 'DIVIDEND'
-                                    ? 'dividend'
-                                    : it.type === 'BUY'
-                                    ? 'buy'
-                                    : it.type === 'SELL'
-                                    ? 'sell'
-                                    : undefined,
                             category:
                                 investmentTransactionCategoryByType[it.type] ??
                                 InvestmentTransactionCategory.other,

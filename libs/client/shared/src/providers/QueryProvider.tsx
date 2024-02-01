@@ -39,7 +39,7 @@ export function QueryProvider({ children }: QueryClientProviderProps) {
     return (
         <QueryClientProvider client={queryClient}>
             {children}
-            <ReactQueryDevtools position="bottom-left" />
+            <ReactQueryDevtools position="bottom-right" />
         </QueryClientProvider>
     )
 }

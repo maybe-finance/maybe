@@ -414,4 +414,33 @@ router.get(
     })
 )
 
+router.post(
+    '/send-test-email',
+    endpoint.create({
+        input: z.object({
+            recipient: z.string(),
+            subject: z.string(),
+            body: z.string(),
+        }),
+        resolve: async ({ input, ctx, req }) => {
+            if (!req.user || req.user.role !== 'admin') throw new Error('Unauthorized')
+
+            try {
+                await ctx.emailService.send({
+                    to: input.recipient,
+                    subject: input.subject,
+                    textBody: input.body,
+                    htmlBody: input.body,
+                })
+            } catch (err) {
+                console.log('Error sending email', err)
+            }
+
+            ctx.logger.info(`Sent test email to ${input.recipient}`)
+
+            return { success: true }
+        },
+    })
+)
+
 export default router

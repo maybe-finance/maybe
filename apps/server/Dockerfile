@@ -4,8 +4,8 @@
 FROM node:18-alpine3.18 as builder
 
 WORKDIR /app
-COPY ./dist/apps/server ./yarn.lock ./prisma ./
-RUN yarn install --production && yarn add ejs
+COPY ./dist/apps/server ./pnpm-lock.yaml ./prisma ./
+RUN pnpm install --prod --frozen-lockfile && pnpm add ejs
 
 # ------------------------------------------
 #                PROD STAGE               
