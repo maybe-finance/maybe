@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "3.3.0"
+ruby File.read(".ruby-version").strip
 
 # Use main development branch of Rails
 gem "rails", github: "rails/rails", branch: "main"
@@ -66,6 +66,7 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
   gem "hotwire-livereload"
+  gem "ruby-lsp-rails"
 end
 
 group :test do
