@@ -9,7 +9,7 @@ class AccountsController < ApplicationController
   end
 
   def new_bank
-    @account = DepositoryAccount.new
+    @account = Depository.new
   end
 
   def show
