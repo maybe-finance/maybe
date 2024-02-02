@@ -48,7 +48,7 @@ cp .env.example .env
 
 Then, create a new secret using `openssl rand -base64 32` and populate `NEXTAUTH_SECRET` in your `.env` file with it.
 
-To enable transactional emails, you'll need to create a [Postmark](https://postmarkapp.com/) account and add your API key to your `.env` file (`NX_EMAIL_PROVIDER_API_TOKEN`) and set `NX_EMAIL_PROVIDER` to `postmark`. You can also set the from and reply-to email addresses (`NX_EMAIL_FROM_ADDRESS` and `NX_EMAIL_REPLY_TO_ADDRESS`). If you want to run the app without email, you can set `NX_EMAIL_PROVIDER_API_TOKEN` to a dummy value or leave `NX_EMAIL_PROVIDER` blank.
+To enable transactional emails, you'll need to create a [Postmark](https://postmarkapp.com/) account and add your API key to your `.env` file (`NX_EMAIL_PROVIDER_API_TOKEN`) and set `NX_EMAIL_PROVIDER` to `postmark`. You can also set the from and reply-to email addresses (`NX_EMAIL_FROM_ADDRESS` and `NX_EMAIL_REPLY_TO_ADDRESS`). If you want to run the app without email, you can set `NX_EMAIL_PROVIDER_API_TOKEN` to a dummy value or leave `NX_EMAIL_PROVIDER` blank. We also support SMTP for sending emails, see information about configuring environment variables in the `.env.example` file.
 
 Maybe uses [Teller](https://teller.io/) for connecting financial accounts. To get started with Teller, you'll need to create an account. Once you've created an account:
 
@@ -58,14 +58,14 @@ Maybe uses [Teller](https://teller.io/) for connecting financial accounts. To ge
 -   Webhooks are not implemented yet, but you can populate the `NX_TELLER_SIGNING_SECRET` with the value from your Teller account.
 -   We highly recommend checking out the [Teller docs](https://teller.io/docs) for more info.
 
-Then run the following yarn commands:
+Then run the following pnpm commands:
 
 ```shell
-yarn install
-yarn run dev:services:all
-yarn prisma:migrate:dev
-yarn prisma:seed
-yarn dev
+pnpm install
+pnpm run dev:services:all
+pnpm prisma:migrate:dev
+pnpm prisma:seed
+pnpm dev
 ```
 
 ## Set Up Ngrok
@@ -87,7 +87,7 @@ To do so:
 2. Click on Create Domain
 3. Copy the domain and paste it into your `.env` file: `NGROK_DOMAIN=your_domain`
 
-That's it! As long as you run the project locally using `docker` with `yarn dev:services:all` you'll be good to go.
+That's it! As long as you run the project locally using `docker` with `pnpm dev:services:all` you'll be good to go.
 
 ## Contributing
 
@@ -97,7 +97,7 @@ You can view organized issues on [our public Roadmap](https://github.com/maybe-f
 
 ## External data
 
-To pull market data in (for investments), you'll need a Polygon.io API key. You can get one for free [here](https://polygon.io/) and then add it to your `.env` file (`NX_POLYGON_API_KEY`).
+To pull market data in (for investments), you'll need a Polygon.io API key. You can get one for free [here](https://polygon.io/) and then add it to your `.env` file (`NX_POLYGON_API_KEY`). **Note:** If you're using the free "basic" plan, you'll need to manually sync stock tickers using the dev tools in the app the first time you run it. It will then be re-synced automatically every 24 hours. If you're using a paid tier, be sure to update your `.env` file with the correct tier (`NX_POLYGON_API_TIER`) and tickers and pricing will be synced automatically.
 
 ## Tech stack
 
@@ -120,7 +120,7 @@ To pull market data in (for investments), you'll need a Polygon.io API key. You 
 
 ## Credits
 
-The original app was built by [Zach Gollwitzer](https://twitter.com/zg_dev), [Nick Arciero](https://www.narciero.com/) and [Tim Wilson](https://twitter.com/actualTimWilson), with design work by [Justin Farrugia](https://twitter.com/justinmfarrugia). The app is currently maintained by [Josh Pigford](https://twitter.com/Shpigford).
+The original app was built by [Zach Gollwitzer](https://twitter.com/zg_dev), [Nick Arciero](https://www.narciero.com/) and [Tim Wilson](https://twitter.com/actualTimWilson), with design work by [Justin Farrugia](https://twitter.com/justinmfarrugia).
 
 ## Copyright & license
 

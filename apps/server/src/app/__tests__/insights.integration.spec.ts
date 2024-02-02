@@ -311,8 +311,6 @@ describe('insight service', () => {
                         amount: 50 * 100,
                         quantity: 50,
                         price: 100,
-                        plaidType: 'buy',
-                        plaidSubtype: 'buy',
                         category: InvestmentTransactionCategory.buy,
                     },
                     {
@@ -323,8 +321,6 @@ describe('insight service', () => {
                         amount: 10 * 200,
                         quantity: 10,
                         price: 200,
-                        plaidType: 'buy',
-                        plaidSubtype: 'buy',
                         category: InvestmentTransactionCategory.buy,
                     },
                     {
@@ -335,8 +331,6 @@ describe('insight service', () => {
                         amount: -20.22,
                         quantity: 0,
                         price: 0,
-                        plaidType: 'cash',
-                        plaidSubtype: 'dividend',
                         category: InvestmentTransactionCategory.dividend,
                     },
                     {
@@ -347,8 +341,6 @@ describe('insight service', () => {
                         amount: -22.85,
                         quantity: 0,
                         price: 0,
-                        plaidType: 'cash',
-                        plaidSubtype: 'dividend',
                         category: InvestmentTransactionCategory.dividend,
                     },
                 ],

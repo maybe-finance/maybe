@@ -41,7 +41,6 @@ enum AccountSyncStatus {
 }
 
 enum AccountConnectionType {
-  plaid
   teller
 }
 
@@ -55,14 +54,6 @@ model AccountConnection {
   type       AccountConnectionType
   status     AccountConnectionStatus @default(OK)
   syncStatus AccountSyncStatus       @default(IDLE) @map("sync_status")
-
-  // plaid data
-  plaidItemId               String?   @unique @map("plaid_item_id")
-  plaidInstitutionId        String?   @map("plaid_institution_id")
-  plaidAccessToken          String?   @map("plaid_access_token")
-  plaidConsentExpiration    DateTime? @map("plaid_consent_expiration")
-  plaidError                Json?     @map("plaid_error")
-  plaidNewAccountsAvailable Boolean   @default(false) @map("plaid_new_accounts_available")
 
   // teller data
   tellerAccessToken   String? @map("teller_access_token")
@@ -101,7 +92,6 @@ enum AccountCategory {
 
 enum AccountProvider {
   user
-  plaid
   teller
 }
 
@@ -142,12 +132,6 @@ model Account {
   availableBalanceProvider Decimal?               @map("available_balance_provider") @db.Decimal(19, 4)
   availableBalanceStrategy AccountBalanceStrategy @default(available) @map("available_balance_strategy")
 
-  // plaid data
-  plaidAccountId String? @map("plaid_account_id")
-  plaidType      String? @map("plaid_type")
-  plaidSubtype   String? @map("plaid_subtype")
-  plaidLiability Json?   @map("plaid_liability") @db.JsonB
-
   // teller data
   tellerAccountId String? @map("teller_account_id")
   tellerType      String? @map("teller_type")
@@ -171,7 +155,6 @@ model Account {
   holdings               Holding[]
   investmentTransactions InvestmentTransaction[]
 
-  @@unique([accountConnectionId, plaidAccountId])
   @@unique([accountConnectionId, tellerAccountId])
   @@index([accountConnectionId])
   @@index([userId])
@@ -198,9 +181,6 @@ model Holding {
   costBasisUser     Decimal? @map("cost_basis_user") @db.Decimal(23, 8)
   currencyCode      String   @default("USD") @map("currency_code")
   excluded          Boolean  @default(false)
-
-  // plaid data
-  plaidHoldingId String? @unique @map("plaid_holding_id") // this is an artificial ID `account[<account_id>].security[<security_id>]`
 
   @@map("holding")
 }
@@ -233,11 +213,6 @@ model InvestmentTransaction {
   price        Decimal                       @db.Decimal(23, 8)
   currencyCode String                        @default("USD") @map("currency_code")
   category     InvestmentTransactionCategory @default(other)
-
-  // plaid data
-  plaidInvestmentTransactionId String? @unique @map("plaid_investment_transaction_id")
-  plaidType                    String? @map("plaid_type")
-  plaidSubtype                 String? @map("plaid_subtype")
 
   @@index([accountId, date])
   @@map("investment_transaction")
@@ -274,11 +249,6 @@ model Security {
   exchangeName        String?           @map("exchange_name")
   providerName        SecurityProvider? @default(other) @map("provider_name")
   assetClass          AssetClass        @default(other) @map("asset_class")
-
-  // plaid data
-  plaidSecurityId       String?  @unique @map("plaid_security_id")
-  plaidType             String?  @map("plaid_type")
-  plaidIsCashEquivalent Boolean? @map("plaid_is_cash_equivalent")
 
   holdings               Holding[]
   investmentTransactions InvestmentTransaction[]
@@ -338,12 +308,6 @@ model Transaction {
   matchId Int?          @map("match_id")
   match   Transaction?  @relation("MatchedTransaction", fields: [matchId], references: [id])
   matches Transaction[] @relation("MatchedTransaction")
-
-  // plaid data
-  plaidTransactionId           String?  @unique @map("plaid_transaction_id")
-  plaidCategory                String[] @map("plaid_category")
-  plaidCategoryId              String?  @map("plaid_category_id")
-  plaidPersonalFinanceCategory Json?    @map("plaid_personal_finance_category")
 
   // teller data
   tellerTransactionId String? @unique @map("teller_transaction_id")
@@ -427,9 +391,6 @@ model User {
   stripeCurrentPeriodEnd DateTime? @map("stripe_current_period_end") @db.Timestamptz(6)
   stripeCancelAt         DateTime? @map("stripe_cancel_at") @db.Timestamptz(6)
 
-  // plaid data
-  plaidLinkToken String? @map("plaid_link_token") // temporary token stored to maintain state across browsers
-
   // teller data
   tellerUserId String? @unique @map("teller_user_id")
 
@@ -472,7 +433,6 @@ model Institution {
 }
 
 enum Provider {
-  PLAID
   TELLER
 }
 

@@ -131,7 +131,6 @@ describe('balance sync strategies', () => {
                                     amount: 100,
                                     quantity: 10,
                                     price: 10,
-                                    plaidType: 'buy',
                                     category: InvestmentTransactionCategory.buy,
                                 },
                                 {
@@ -141,7 +140,6 @@ describe('balance sync strategies', () => {
                                     amount: -50,
                                     quantity: 5,
                                     price: 10,
-                                    plaidType: 'sell',
                                     category: InvestmentTransactionCategory.sell,
                                 },
                                 {

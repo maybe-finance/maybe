@@ -191,10 +191,6 @@ const UserAccountUpdateSchema = z.discriminatedUnion('type', [
 
 export const AccountUpdateSchema = z.discriminatedUnion('provider', [
     z.object({
-        provider: z.literal('plaid'),
-        data: ProviderAccountUpdateSchema,
-    }),
-    z.object({
         provider: z.literal('user'),
         data: UserAccountUpdateSchema,
     }),

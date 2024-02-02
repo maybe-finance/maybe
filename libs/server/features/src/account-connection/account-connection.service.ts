@@ -131,7 +131,7 @@ export class AccountConnectionService implements IAccountConnectionService {
         const profiler = this.logger.startTimer()
 
         await Promise.allSettled(
-            securities.map((security) => this.securityPricingService.sync(security))
+            securities.map((security) => this.securityPricingService.syncSecurity(security))
         )
 
         profiler.done({ message: `synced connection ${id} securities (${securities.length})` })
@@ -154,7 +154,7 @@ export class AccountConnectionService implements IAccountConnectionService {
         ])
 
         this.logger.info(
-            `Disconnected connection id=${connection.id} type=${connection.type} provider_connection_id=${connection.plaidItemId}`
+            `Disconnected connection id=${connection.id} type=${connection.type} provider_connection_id=${connection.tellerEnrollmentId}`
         )
 
         return connection
@@ -177,7 +177,7 @@ export class AccountConnectionService implements IAccountConnectionService {
         ])
 
         this.logger.info(
-            `Reconnected connection id=${connection.id} type=${connection.type} provider_connection_id=${connection.plaidItemId}`
+            `Reconnected connection id=${connection.id} type=${connection.type} provider_connection_id=${connection.tellerEnrollmentId}`
         )
 
         return connection
@@ -202,7 +202,7 @@ export class AccountConnectionService implements IAccountConnectionService {
         })
 
         this.logger.info(
-            `Deleted connection id=${deletedConnection.id} type=${connection.type} provider_connection_id=${connection.plaidItemId}`
+            `Deleted connection id=${deletedConnection.id} type=${connection.type} provider_connection_id=${connection.tellerEnrollmentId}`
         )
 
         return deletedConnection

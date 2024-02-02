@@ -10,10 +10,7 @@ import type {
 
 export type { Transaction }
 
-export type TransactionEnriched = Omit<
-    Transaction,
-    'plaidTransactionId' | 'plaidCategory' | 'plaidCategoryId' | 'plaidPersonalFinanceCategory'
-> & {
+export type TransactionEnriched = Transaction & {
     type: TransactionType
     userId: User['id']
     accountClassification: AccountClassification

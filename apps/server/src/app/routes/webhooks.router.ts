@@ -1,38 +1,12 @@
 import { Router } from 'express'
 import { z } from 'zod'
-import { validatePlaidJwt, validateTellerSignature } from '../middleware'
+import { validateTellerSignature } from '../middleware'
 import endpoint from '../lib/endpoint'
 import stripe from '../lib/stripe'
 import env from '../../env'
 import type { TellerTypes } from '@maybe-finance/teller-api'
 
 const router = Router()
-
-router.post(
-    '/plaid/webhook',
-    process.env.NODE_ENV !== 'development' ? validatePlaidJwt : (_req, _res, next) => next(),
-    endpoint.create({
-        input: z
-            .object({
-                webhook_type: z.string(),
-                webhook_code: z.string(),
-                item_id: z.string(),
-            })
-            .passthrough(),
-        async resolve({ input, ctx }) {
-            const { webhook_type, webhook_code, item_id, ...data } = input
-
-            ctx.logger.info(
-                `rx[plaid_webhook] type=${webhook_type} code=${webhook_code} item=${item_id}`,
-                data
-            )
-
-            await ctx.plaidWebhooks.handleWebhook(input)
-
-            return { status: 'ok' }
-        },
-    })
-)
 
 router.post(
     '/stripe/webhook',

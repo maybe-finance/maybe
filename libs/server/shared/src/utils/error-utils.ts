@@ -21,17 +21,6 @@ function isPrismaError(error: unknown): error is PrismaError {
     )
 }
 
-// https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates
-// Checks for all the *required* attributes of a plaid error
-export function isPlaidError(err: unknown): err is SharedType.AxiosPlaidError {
-    if (!err) return false
-    if (!axios.isAxiosError(err)) return false
-    if (typeof err.response?.data !== 'object') return false
-
-    const { data } = err.response
-    return 'error_type' in data && 'error_code' in data && 'error_message' in data
-}
-
 export function isTellerError(err: unknown): err is SharedType.AxiosTellerError {
     if (!err) return false
     if (!axios.isAxiosError(err)) return false
@@ -42,10 +31,6 @@ export function isTellerError(err: unknown): err is SharedType.AxiosTellerError 
 }
 
 export function parseError(error: unknown): SharedType.ParsedError {
-    if (isPlaidError(error)) {
-        return parsePlaidError(error)
-    }
-
     if (axios.isAxiosError(error)) {
         return parseAxiosError(error)
     }
@@ -84,30 +69,6 @@ function parseAxiosError(error: AxiosError): SharedType.ParsedError {
         stackTrace: error.stack,
         sentryContexts: {
             'axios error': error.response?.data,
-        },
-    }
-}
-
-function parsePlaidError(error: SharedType.AxiosPlaidError): SharedType.ParsedError {
-    const { error_code, error_type, error_message, display_message, documentation_url } =
-        error.response.data
-
-    return {
-        message: `[plaid-error] code=${error_code} type=${error_type} message=${error_message} display_message=${display_message}`,
-        statusCode: error.response.status.toString(),
-        metadata: error.response.data,
-        sentryTags: {
-            error_type,
-            error_code,
-        },
-        sentryContexts: {
-            'plaid error': {
-                error_type,
-                error_code,
-                error_message,
-                display_message,
-                documentation_url,
-            },
         },
     }
 }

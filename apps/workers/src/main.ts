@@ -107,6 +107,10 @@ purgeUserQueue.process(
 // Otherwise, schedule the job to run every 24 hours
 // Use same jobID to prevent duplicates and rate limiting
 syncSecurityQueue.cancelJobs().then(() => {
+    if (!env.NX_POLYGON_API_KEY) {
+        logger.warn('No Polygon API key found, skipping adding jobs to queue')
+        return
+    }
     prisma.security
         .count({
             where: {
@@ -114,8 +118,17 @@ syncSecurityQueue.cancelJobs().then(() => {
             },
         })
         .then((count) => {
-            if (count === 0) {
-                syncSecurityQueue.add('sync-us-stock-tickers', {}, {})
+            // If no securities exist, sync them immediately except in development
+            // In development, sync manually to avoid hot reloads causing rate issues
+            if (count === 0 && process.env.NODE_ENV !== 'development') {
+                syncSecurityQueue.add(
+                    'sync-us-stock-tickers',
+                    {},
+                    {
+                        delay: 15_000,
+                        removeOnFail: true,
+                    }
+                )
             } else {
                 syncSecurityQueue.add(
                     'sync-us-stock-tickers',
@@ -136,6 +149,15 @@ syncSecurityQueue.cancelJobs().then(() => {
                         jobId: Date.now().toString(),
                     }
                 )
+            } else if (env.NX_POLYGON_TIER === 'basic') {
+                syncSecurityQueue.add(
+                    'sync-all-securities',
+                    {},
+                    {
+                        repeat: { cron: '* 3 * * *' }, // Run at 3am to avoid rate limits
+                        jobId: Date.now().toString(),
+                    }
+                )
             }
         })
 })
@@ -144,22 +166,8 @@ syncSecurityQueue.cancelJobs().then(() => {
  * sync-institution queue
  */
 syncInstitutionQueue.process(
-    'sync-plaid-institutions',
-    async () => await institutionService.sync('PLAID')
-)
-
-syncInstitutionQueue.process(
     'sync-teller-institutions',
     async () => await institutionService.sync('TELLER')
-)
-
-syncInstitutionQueue.add(
-    'sync-plaid-institutions',
-    {},
-    {
-        repeat: { cron: '0 */24 * * *' }, // Run every 24 hours
-        jobId: Date.now().toString(),
-    }
 )
 
 syncInstitutionQueue.add(

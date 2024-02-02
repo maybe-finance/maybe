@@ -97,3 +97,36 @@ export const snapshotAllTickers = {
         },
     ],
 }
+
+export const dailyPricing = {
+    resultsCount: 2,
+    queryCount: 2,
+    adjusted: true,
+    results: [
+        {
+            T: 'AAPL',
+            v: 70790813,
+            vw: 131.6292,
+            o: 130.465,
+            c: 130.15,
+            h: 133.41,
+            l: 129.89,
+            t: 1673298000000,
+            n: 645365,
+        },
+        {
+            T: 'VO0',
+            v: 10002985,
+            vw: 10.7843,
+            o: 10.83,
+            c: 10.74,
+            h: 10.89,
+            l: 10.715,
+            t: 1673298000000,
+            n: 22513,
+        },
+    ],
+    status: 'OK',
+    request_id: '5548dd4c60d6c3cdb644cc62fe9db7c8',
+    count: 2,
+}

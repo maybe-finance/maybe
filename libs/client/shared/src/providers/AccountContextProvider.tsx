@@ -47,7 +47,6 @@ export type UpdateLiabilityFields = CreateLiabilityFields
 
 type AccountManager =
     | { view: 'idle' }
-    | { view: 'add-plaid'; linkToken: string }
     | { view: 'add-teller' }
     | { view: 'add-account' }
     | { view: 'add-property'; defaultValues: Partial<CreatePropertyFields> }
