@@ -3,7 +3,7 @@ class Account < ApplicationRecord
 
   belongs_to :family
 
-  delegated_type :accountable, types: %w[ Credit Depository Investment Loan OtherAsset OtherLiability Property Vehicle], dependant: :destroy
+  delegated_type :accountable, types: %w[ Credit Depository Investment Loan OtherAsset OtherLiability Property Vehicle], dependent: :destroy
 
   scope :depository, -> { where(type: "Depository") }
 end
