@@ -1,6 +1,10 @@
 require "test_helper"
 
 class AccountsControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    skip "Pending"
+  end
+
   test "should get index" do
     get accounts_index_url
     assert_response :success

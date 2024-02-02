@@ -1,0 +1,14 @@
+{
+  "name": "Maybe",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "containerEnv": {
+    "GITHUB_TOKEN": "${localEnv:GITHUB_TOKEN}",
+    "GITHUB_USER": "${localEnv:GITHUB_USER}"
+  },
+  "remoteEnv": {
+    "PATH": "/workspace/bin:${containerEnv:PATH}"
+  },
+  "postCreateCommand": "bundle install"
+}

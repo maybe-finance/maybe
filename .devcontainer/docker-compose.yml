@@ -1,0 +1,45 @@
+version: "3"
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+
+    volumes:
+      - ..:/workspace:cached
+      - bundle_cache:/bundle
+
+    ports:
+      - "3000:3000"
+
+    command: sleep infinity
+
+    environment:
+      DB_HOST: db
+      HOST: "0.0.0.0"
+
+    depends_on:
+      - db
+      - redis
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+  db:
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres-data:
+  bundle_cache:
