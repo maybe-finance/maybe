@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
 
   def authenticate_user_from_session
     User.find_by(id: session[:user_id])
-  end  
+  end
 
   def user_signed_in?
     current_user.present?
