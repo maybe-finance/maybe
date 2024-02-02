@@ -21,8 +21,9 @@
 
   <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
     <%= form.label :password_confirmation, "Password confirmation", class: 'block text-sm font-medium text-gray-700' %>
-    <%= for
-    
+    <%= form.password_field :password_confirmation, autocomplete: "new-password", required: 'required', class: 'p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full' %>
+  </div>
+
   <% if ENV["MAYBE_HOSTED"] %>
     <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
       <%= form.label :invite_code, class: 'block text-sm font-medium text-gray-700' %>

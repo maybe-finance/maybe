@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_02_02_015428) do
+ActiveRecord::Schema[7.2].define(version: 2024_02_02_231313) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -34,6 +34,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_02_02_015428) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "invite_codes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "code"
+    t.uuid "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_invite_codes_on_code", unique: true
+    t.index ["user_id"], name: "index_invite_codes_on_user_id"
+  end
+
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "family_id", null: false
     t.string "first_name"
@@ -46,5 +55,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_02_02_015428) do
   end
 
   add_foreign_key "accounts", "families"
+  add_foreign_key "invite_codes", "users"
   add_foreign_key "users", "families"
 end
