@@ -6,9 +6,9 @@ Rails.application.routes.draw do
 
   resources :accounts
 
-  scope 'accounts/new' do
-    scope 'bank' do
-      get '', to: 'accounts#new_bank', as: 'new_bank'
+  scope "accounts/new" do
+    scope "bank" do
+      get "", to: "accounts#new_bank", as: "new_bank"
     end
   end
 

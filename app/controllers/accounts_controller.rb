@@ -33,8 +33,10 @@ class AccountsController < ApplicationController
   end
 
   def account_type_class
-    params[:type].constantize
-  rescue
-    Account # Default to Account if type is not provided or invalid
+    if params[:type].present? && Account::VALID_ACCOUNT_TYPES.include?(params[:type])
+      params[:type].constantizes
+    else
+      Account # Default to Account if type is not provided or invalid
+    end
   end
 end
