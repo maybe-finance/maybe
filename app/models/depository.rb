@@ -1,0 +1,2 @@
+class Depository < Account
+end

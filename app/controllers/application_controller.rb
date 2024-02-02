@@ -13,6 +13,11 @@ class ApplicationController < ActionController::Base
   end
   helper_method :current_user
 
+  def current_family
+    current_user.family
+  end
+  helper_method :current_family
+
   def authenticate_user_from_session
     User.find_by(id: session[:user_id])
   end  
