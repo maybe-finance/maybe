@@ -1,6 +1,7 @@
 import type { Logger } from 'winston'
 import type { ServerClient as PostmarkServerClient } from 'postmark'
-import { PostmarkEmailProvider } from './providers'
+import type { Transporter } from 'nodemailer'
+import { PostmarkEmailProvider, SmtpProvider } from './providers'
 import type { SharedType } from '@maybe-finance/shared'
 
 export interface IEmailProvider {
@@ -9,13 +10,13 @@ export interface IEmailProvider {
     send(
         messages: SharedType.PlainEmailMessage | SharedType.PlainEmailMessage[]
     ): Promise<any | any[]>
-    sendTemplate(
+    sendTemplate?(
         messages: SharedType.TemplateEmailMessage
     ): Promise<SharedType.EmailSendingResponse>
-    sendTemplate(
+    sendTemplate?(
         messages: SharedType.TemplateEmailMessage[]
     ): Promise<SharedType.EmailSendingResponse[]>
-    sendTemplate(
+    sendTemplate?(
         messages: SharedType.TemplateEmailMessage | SharedType.TemplateEmailMessage[]
     ): Promise<SharedType.EmailSendingResponse | SharedType.EmailSendingResponse[]>
 }
@@ -24,7 +25,7 @@ export class EmailService implements IEmailProvider {
     private emailProvider: IEmailProvider | undefined
     constructor(
         private readonly logger: Logger,
-        private readonly client: PostmarkServerClient | undefined,
+        private readonly client: PostmarkServerClient | Transporter | undefined,
         private readonly defaultAddresses: { from: string; replyTo?: string }
     ) {
         const provider = process.env.NX_EMAIL_PROVIDER
@@ -33,7 +34,14 @@ export class EmailService implements IEmailProvider {
             case 'postmark':
                 this.emailProvider = new PostmarkEmailProvider(
                     this.logger.child({ service: 'PostmarkEmailProvider' }),
-                    this.client,
+                    this.client as PostmarkServerClient,
+                    this.defaultAddresses
+                )
+                break
+            case 'smtp':
+                this.emailProvider = new SmtpProvider(
+                    this.logger.child({ service: 'SmtpProvider' }),
+                    this.client as Transporter,
                     this.defaultAddresses
                 )
                 break
@@ -71,7 +79,7 @@ export class EmailService implements IEmailProvider {
     async sendTemplate(
         messages: SharedType.TemplateEmailMessage | SharedType.TemplateEmailMessage[]
     ): Promise<SharedType.EmailSendingResponse | SharedType.EmailSendingResponse[]> {
-        if (!this.emailProvider || !this.client) {
+        if (!this.emailProvider || !this.client || !this.emailProvider.sendTemplate) {
             //no-op
             return undefined as unknown as SharedType.EmailSendingResponse
         }
