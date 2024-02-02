@@ -33,9 +33,7 @@ class AccountsController < ApplicationController
   end
 
   def account_type_class
-    valid_account_types = %w[Checking CreditCard]
-
-    if params[:type].present? && valid_account_types.include?(params[:type])
+    if params[:type].present? && Account::VALID_ACCOUNT_TYPES.include?(params[:type])
       params[:type].constantizes
     else
       Account # Default to Account if type is not provided or invalid
