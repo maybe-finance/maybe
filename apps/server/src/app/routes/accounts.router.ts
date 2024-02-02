@@ -47,6 +47,20 @@ router.post(
 
                     break
                 }
+                case 'INVESTMENT': {
+                    const { name, ...rest } = input
+
+                    account = await ctx.accountService.create({
+                        ...rest,
+                        userId: ctx.user!.id,
+                        currentBalanceProvider: 0,
+                        currentBalanceStrategy: 'current',
+                        provider: 'user',
+                        name: name,
+                    })
+
+                    break
+                }
                 default: {
                     const {
                         valuations: { originalBalance, currentBalance, currentDate },

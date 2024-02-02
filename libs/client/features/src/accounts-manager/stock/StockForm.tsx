@@ -12,7 +12,6 @@ import { useState } from 'react'
 import { RiAddLine } from 'react-icons/ri'
 import CreateStockAccount from './CreateStockAccount'
 
-// STOCKTODO - Change UpdateVehicleFields
 type Props = {
     mode: 'update'
     defaultValues: UpdateStockFields
@@ -26,8 +25,7 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
         handleSubmit,
         watch,
         formState: { errors, isSubmitting, isValid },
-        // STOCKTODO - Fix UpdateVehicleFields
-    } = useForm<UpdateStockFields & UpdateVehicleFields>({
+    } = useForm<UpdateStockFields>({
         mode: 'onChange',
         defaultValues,
     })
@@ -38,11 +36,9 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
     const [stockSymbol, setStockSymbol] = useState<string | null>(null)
     const [account, setAccount] = useState<string | null>(null)
 
-    const { setAccountManager } = useAccountContext()
     const { useAccounts } = useAccountApi()
     const { data: accountsData } = useAccounts()
 
-    // STOCKTODO - Think about whether you want to create a new account type 'STOCKS' as opposed to 'INVESTMENT'
     const stockAccountsList = accountsData?.accounts.filter(
         (account) => account.type === 'INVESTMENT'
     )
@@ -57,13 +53,6 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
 
                         Also make sure this this is submitted to the form. There was a ...register('make', { required: true }) here
                     */}
-                    {/* <Input
-                        type="text"
-                        label="Make"
-                        placeholder="Enter make"
-                        error={errors.make && 'Make is required'}
-                        {...register('make', { required: true })}
-                    /> */}
                     {/* STOCKTODO - Create currently selected stock state */}
                     <div className="flex flex-row gap-2 items-end">
                         {stockAccountsList && (
@@ -84,13 +73,6 @@ export default function StockForm({ mode, defaultValues, onSubmit }: Props) {
                     </div>
 
                     {/* STOCKTODO - Change to to a drop down where all the stocks will be listed and can be chosen by their ticker names */}
-                    {/* <Input
-                        type="text"
-                        label="Model"
-                        placeholder="Enter model"
-                        error={errors.model && 'Model is required'}
-                        {...register('model', { required: true })}
-                    /> */}
                     {/* <Listbox value={stockSymbol} onChange={setStockSymbol}>
                         <Listbox.Button label="Investment account"></Listbox.Button>
                         <Listbox.Options>

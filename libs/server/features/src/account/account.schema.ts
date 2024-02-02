@@ -66,6 +66,15 @@ const VehicleCreateSchema =
 
 const VehicleUpdateSchema = VehicleBaseSchema.merge(CommonAccountFields.partial())
 
+// Investment
+
+const InvestmentBaseSchema = z.object({
+    type: z.literal('INVESTMENT'),
+    categoryUser: z.enum(['investment']),
+})
+
+const InvestmentCreateSchema = InvestmentBaseSchema.merge(CommonAccountFields)
+
 // Loan
 const LoanBaseSchema = z.object({
     type: z.literal('LOAN'),
@@ -157,6 +166,7 @@ export const AccountCreateSchema = z.discriminatedUnion('type', [
     CreditCreateSchema,
     OtherAssetCreateSchema,
     OtherLiabilityCreateSchema,
+    InvestmentCreateSchema,
 ])
 
 const ProviderAccountUpdateSchema = z.discriminatedUnion('type', [
