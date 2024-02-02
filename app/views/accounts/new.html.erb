@@ -1,0 +1,43 @@
+<h1 class="text-3xl font-semibold font-display">Add an account</h1>
+
+<div class="grid grid-cols-2 gap-4 mt-8 text-sm sm:grid-cols-3 md:grid-cols-4">
+  <div class="relative flex-col items-center px-5 py-4 space-x-3 text-center bg-white border border-gray-100 shadow-sm rounded-xl hover:border-gray-200">
+    <%= link_to "new_bank_path", class: "flex flex-col items-center justify-center w-full text-center focus:outline-none" do %>
+      <span class="absolute inset-0" aria-hidden="true"></span>
+      <span class="flex w-10 h-10 shrink-0 grow-0 items-center justify-center rounded-xl bg-[#EAF4FF] mb-2">
+        <%= inline_svg_tag('icon-bank-accounts.svg', class: 'text-[#3492FB] stroke-current') %>
+      </span>
+      Bank accounts
+    <% end %>
+  </div>
+
+  <div class="relative flex-col items-center px-5 py-4 space-x-3 text-center bg-white border border-gray-100 shadow-sm rounded-xl hover:border-gray-200">
+    <%= link_to "new_investment_path", class: "flex flex-col items-center justify-center w-full text-center focus:outline-none" do %>
+      <span class="absolute inset-0" aria-hidden="true"></span>
+      <span class="flex w-10 h-10 shrink-0 grow-0 items-center justify-center rounded-xl bg-[#EDF7F4] mb-2">
+        <%= inline_svg_tag('icon-investments.svg', class: 'text-[#1BD5A1] stroke-current') %>
+      </span>
+      Investments
+    <% end %>
+  </div>
+
+  <div class="relative flex-col items-center px-5 py-4 space-x-3 text-center bg-white border border-gray-100 shadow-sm rounded-xl hover:border-gray-200">
+    <%= link_to "new_credit_path", class: "flex flex-col items-center justify-center w-full text-center focus:outline-none" do %>
+      <span class="absolute inset-0" aria-hidden="true"></span>
+      <span class="flex w-10 h-10 shrink-0 grow-0 items-center justify-center rounded-xl bg-[#E6F6FA] mb-2">
+        <%= inline_svg_tag('icon-credit-card.svg', class: 'text-[#189FC7] stroke-current') %>
+      </span>
+      Credit cards
+    <% end %>
+  </div>
+
+  <div class="relative flex-col items-center px-5 py-4 space-x-3 text-center bg-white border border-gray-100 shadow-sm rounded-xl hover:border-gray-200">
+    <%= link_to "new_real_estate_path", class: "flex flex-col items-center justify-center w-full text-center focus:outline-none" do %>
+      <span class="absolute inset-0" aria-hidden="true"></span>
+      <span class="flex w-10 h-10 shrink-0 grow-0 items-center justify-center rounded-xl bg-[#FEF0F7] mb-2">
+        <%= inline_svg_tag('icon-real-estate.svg', class: 'text-[#F03695] stroke-current') %>
+      </span>
+      Real estate
+    <% end %>
+  </div>
+</div>

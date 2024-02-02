@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html class="bg-offwhite">
+  <head>
+    <title><%= content_for(:title) || "Maybe" %></title>
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Maybe">
+    
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    <%= hotwire_livereload_tags if Rails.env.development? %>
+  </head>
+
+  <body class="h-full">
+    <div class="flex">
+      <div class="flex-col p-5 min-w-80">
+        <div class="flex items-center justify-between">
+          <%= link_to root_path do %>
+            <%= image_tag 'logo.svg', alt: 'Maybe' %>
+          <% end %>
+          <div class="relative" data-controller="dropdown">
+            <div class="flex" data-action="click->dropdown#toggleMenu">
+              <div class="mr-1.5 text-white w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= current_user.email.first %></div>
+            </div>
+
+            <div class="absolute z-10 hidden w-screen px-2 mt-2 -translate-x-1/2 left-1/2 max-w-min" data-dropdown-target="menu">
+              <div class="w-48 px-3 text-sm font-semibold leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+                <%= button_to "Log Out", session_path, method: :delete, class: 'block p-2 hover:text-gray-600' %>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <nav>
+          <ul class="mt-6 space-y-2">
+            <li>
+              <%= link_to root_path, class: 'block hover:bg-gray-100 -ml-2 p-2 text-sm font-semibold text-gray-900 flex items-center rounded' do %>
+                <%= inline_svg_tag('icon-dashboard.svg', class: 'text-black stroke-current mr-2') %>
+                Dashboard
+              <% end %>
+            </li>
+          </ul>
+        </nav>
+        <div class="mt-6">
+          <div class="flex items-center justify-between">
+            <span class="text-xs">Accounts</span>
+            <%= link_to new_account_path, class: 'block hover:bg-gray-100 p-2 text-sm font-semibold text-gray-900 flex items-center rounded' do %>
+              <%= inline_svg_tag('icon-add.svg', class: 'text-gray-500 fill-current') %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <main class="flex-grow py-5 pr-5">
+        <%= yield %>
+      </main>
+    </div>
+  </body>
+</html>
