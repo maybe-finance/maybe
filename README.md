@@ -1,6 +1,10 @@
+<img width="1440" alt="dashboard" src="https://github.com/maybe-finance/maybe/assets/35243/4910781f-4bea-4a3b-8fb6-21f314548c9d">
+
 # Maybe: The OS for your personal finances
 
 <b>Get involved: [Discord](https://link.maybe.co/discord) • [Website](https://maybe.co) • [Issues](https://github.com/maybe-finance/maybe/issues)</b>
+
+_If you're looking for the previous React codebase, you can find it at [maybe-finance/maybe-archive](https://github.com/maybe-finance/maybe-archive)._
 
 ## Backstory
 
