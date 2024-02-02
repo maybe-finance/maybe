@@ -55,6 +55,8 @@ And visit [http://localhost:3000](http://localhost:3000)
 
 ## Contributing
 
+Before contributing, you'll likely find it helpful to [understand context and general vision/direction](https://github.com/maybe-finance/maybe/wiki).
+
 It's still very early days for this so your mileage will vary here and lots of things will break.
 
 But almost any contribution will be beneficial at this point. Check the [current Issues](https://github.com/maybe-finance/maybe/issues) to see where you can jump in!
