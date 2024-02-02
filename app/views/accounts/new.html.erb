@@ -21,6 +21,8 @@
       <%= f.text_field :name, placeholder: "Account name", required: 'required', class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
     </div>
 
+    <%= render "accounts/#{permitted_accountable_partial(@account.accountable_type)}", f: f %>
+
     <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
       <label for="account_name" class="block text-sm font-medium opacity-50 focus-within:opacity-100">Balance</label>
       <div class="flex">
