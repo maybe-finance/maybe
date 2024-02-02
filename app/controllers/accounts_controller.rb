@@ -1,15 +1,15 @@
 class AccountsController < ApplicationController
   before_action :authenticate_user!
 
-  def index
-    @accounts = current_family.accounts
-  end
-
   def new
   end
 
   def new_bank
     @account = Depository.new
+  end
+
+  def new_credit
+    @account = Credit.new
   end
 
   def show
@@ -20,7 +20,7 @@ class AccountsController < ApplicationController
     @account.family = current_family
 
     if @account.save
-      redirect_to accounts_path
+      redirect_to root_path
     else
       render :new
     end

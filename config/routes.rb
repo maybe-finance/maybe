@@ -10,6 +10,10 @@ Rails.application.routes.draw do
     scope "bank" do
       get "", to: "accounts#new_bank", as: "new_bank"
     end
+
+    scope "credit" do
+      get "", to: "accounts#new_credit", as: "new_credit"
+    end
   end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
