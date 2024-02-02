@@ -67,6 +67,10 @@ If you've got an improvement, just send in a pull request!
 
 If you've got feature ideas, simply [open a new issues](https://github.com/maybe-finance/maybe/issues/new)!
 
+## Repo Activity
+
+![Repo Activity](https://repobeats.axiom.co/api/embed/7866c9790deba0baf63ca1688b209130b306ea4e.svg 'Repobeats analytics image')
+
 ## Copyright & license
 
 Maybe is distributed under an [AGPLv3 license](https://github.com/maybe-finance/maybe/blob/main/LICENSE). "Maybe" is a trademark of Maybe Finance, Inc.
