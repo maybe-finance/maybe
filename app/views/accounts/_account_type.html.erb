@@ -1,0 +1,9 @@
+<div class="relative flex-col items-center px-5 py-4 space-x-3 text-center bg-white border border-gray-100 shadow-sm rounded-xl hover:border-gray-200">
+  <%= link_to new_account_path(type: account_type.class.name.demodulize), class: "flex flex-col items-center justify-center w-full text-center focus:outline-none" do %>
+    <span class="absolute inset-0" aria-hidden="true"></span>
+    <span class="flex w-10 h-10 shrink-0 grow-0 items-center justify-center rounded-xl <%= account_type.color[:background] %> mb-2">
+      <%= inline_svg_tag(account_type.icon, class: "#{account_type.color[:text]} stroke-current") %>
+    </span>
+    <%= account_type.type_name %>
+  <% end %>
+</div>

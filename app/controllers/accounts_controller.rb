@@ -2,34 +2,35 @@ class AccountsController < ApplicationController
   before_action :authenticate_user!
 
   def new
-  end
-
-  def new_bank
-    @account = Depository.new
-  end
-
-  def new_credit
-    @account = Credit.new
+    if params[:type].blank? || Account.accountable_types.include?("Account::#{params[:type]}")
+      @account = if params[:type].blank?
+        Account.new
+      else
+        Account.new(accountable_type: "Account::#{params[:type]}")
+      end
+    else
+      head :not_found
+    end
   end
 
   def show
   end
 
   def create
-    @account = account_type_class.new(account_params)
-    @account.family = current_family
+    @account = Account.new(account_params.merge(family: current_family))
+    @account.accountable = account_params[:accountable_type].constantize.new
 
     if @account.save
-      redirect_to root_path
+      redirect_to accounts_path, notice: "New account created successfully"
     else
-      render :new
+      render "new", status: :unprocessable_entity
     end
   end
 
   private
 
   def account_params
-    params.require(:account).permit(:name, :balance, :type, :subtype)
+    params.require(:account).permit(:name, :accountable_type, :balance, :subtype)
   end
 
   def account_type_class

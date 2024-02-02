@@ -1,9 +1,14 @@
 class Account < ApplicationRecord
-  # VALID_ACCOUNT_TYPES = %w[Investment Depository Credit Loan Property Vehicle OtherAsset OtherLiability].freeze
-
   belongs_to :family
 
-  delegated_type :accountable, types: %w[ Credit Depository Investment Loan OtherAsset OtherLiability Property Vehicle], dependent: :destroy
+  delegated_type :accountable, types: %w[ Account::Credit Account::Depository Account::Investment Account::Loan Account::OtherAsset Account::OtherLiability Account::Property Account::Vehicle], dependent: :destroy
 
-  scope :depository, -> { where(type: "Depository") }
+  delegate :icon, :type_name, :color, to: :accountable
+
+  # Class method to get a representative instance of each accountable type
+  def self.accountable_type_instances
+    accountable_types.map do |type|
+      type.constantize.new
+    end
+  end
 end

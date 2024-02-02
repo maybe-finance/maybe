@@ -1,0 +1,17 @@
+
+<h2 class="text-2xl font-semibold font-display">Cash</h2>
+<h3 class="mt-1 mb-4 text-sm text-gray-500"><%#= number_to_currency current_family.cash_balance %></h3>
+
+<% current_family.accounts.each do |account| %>
+    <div class="flex items-center justify-between px-3 py-3 mb-2 bg-white shadow-sm rounded-xl">
+      <div class="flex items-center text-sm">
+        <%= account.name %>
+      </div>
+      <div class="flex items-center text-sm">
+        <%= account.accountable %>
+      </div>
+      <p class="text-sm text-right">
+        <span class="block mb-1"><%= number_to_currency account.balance %></span>
+      </p>
+    </div>
+<% end %>
