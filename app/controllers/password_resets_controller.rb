@@ -1,6 +1,6 @@
 class PasswordResetsController < ApplicationController
   layout "auth"
-  
+
   def new
   end
 
@@ -37,4 +37,3 @@ class PasswordResetsController < ApplicationController
     params.require(:user).permit(:password, :password_confirmation)
   end
 end
-

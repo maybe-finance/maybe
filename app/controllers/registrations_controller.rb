@@ -1,6 +1,6 @@
 class RegistrationsController < ApplicationController
   layout "auth"
-  
+
   def new
     @user = User.new
   end
@@ -27,4 +27,3 @@ class RegistrationsController < ApplicationController
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
 end
-
