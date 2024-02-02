@@ -37,6 +37,8 @@ You'll need:
 - ruby >3 (specific version is in `Gemfile`)
 - postgresql (if using stock `config/database.yml`)
 
+For convenience, the project contains configuration for a devcontainer. Open up the project in your editor that supports devcontainers and run the commands mentioned below.
+
 ```shell
 cd maybe
 bundle install
@@ -69,7 +71,7 @@ If you've got feature ideas, simply [open a new issues](https://github.com/maybe
 
 ## Repo Activity
 
-![Repo Activity](https://repobeats.axiom.co/api/embed/7866c9790deba0baf63ca1688b209130b306ea4e.svg 'Repobeats analytics image')
+![Repo Activity](https://repobeats.axiom.co/api/embed/7866c9790deba0baf63ca1688b209130b306ea4e.svg "Repobeats analytics image")
 
 ## Copyright & license
 
