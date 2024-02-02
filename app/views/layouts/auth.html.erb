@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Maybe">
-    
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
@@ -18,15 +18,21 @@
   </head>
 
   <body class="h-full">
+    <% flash.each do |type, msg| %>
+      <div>
+        <%= msg %>
+      </div>
+    <% end %>
+
     <div class="flex flex-col justify-center min-h-full px-6 py-12">
 
       <div class="sm:mx-auto sm:w-full sm:max-w-md">
         <%= render "shared/logo" %>
-        
+
         <h2 class="mt-6 text-3xl font-semibold tracking-tight text-center font-display">
           <%= content_for?(:header_title) ? yield(:header_title).html_safe : "Your account" %>
         </h2>
-        
+
         <% if params[:controller] == "devise/sessions" && params[:action] == "new" %>
         <p class="mt-2 text-sm text-center text-gray-600">
           or <%= link_to "create an account", new_user_registration_path, class: 'font-medium text-candlelight-600 hover:text-candlelight-500' %>
