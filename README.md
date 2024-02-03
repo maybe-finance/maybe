@@ -37,17 +37,15 @@ You'll need:
 - ruby >3 (specific version is in `Gemfile`)
 - postgresql (if using stock `config/database.yml`)
 
-For convenience, the project contains configuration for a devcontainer. Open up the project in your editor that supports devcontainers and run the commands mentioned below.
+If you prefer devcontainer, this project supports it (entirely optional).
+
+Run the following commands after cloning the repo:
 
 ```shell
 cd maybe
+cp .env.example .env
 bundle install
 rails db:setup
-```
-
-You can then run the rails web server:
-
-```shell
 bin/dev
 ```
 
