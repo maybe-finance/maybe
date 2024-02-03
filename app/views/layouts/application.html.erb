@@ -37,9 +37,7 @@
 
             <div class="absolute z-10 hidden w-screen px-2 mt-2 -translate-x-1/2 left-1/2 max-w-min" data-dropdown-target="menu">
               <div class="w-48 px-3 text-sm font-semibold leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-                <%= link_to edit_settings_path, class: 'block p-2 hover:text-gray-600' do %>
-                  Settings
-                <% end %>
+                <%= link_to "Settings", edit_settings_path, class: 'block p-2 hover:text-gray-600' %>
                 <%= button_to "Log Out", session_path, method: :delete, class: 'block p-2 hover:text-gray-600' %>
               </div>
             </div>
