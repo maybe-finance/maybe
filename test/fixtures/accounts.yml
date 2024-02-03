@@ -3,9 +3,9 @@
 one:
   family: one
   name: MyString
-  balance:
+  balance: 1000
 
 two:
   family: two
   name: MyString
-  balance:
+  balance: 2000
