@@ -1,0 +1,13 @@
+en:
+  layouts:
+    application:
+      dashboard: Dashboard
+      accounts: Accounts
+      cache: Cache
+    auth:
+      yout_account: Your account
+      sign_up: create an account
+      or: or
+      sign_in: sign in to your account
+      privacy_policy: Privacy Policy
+      terms_of_service: Terms of Service

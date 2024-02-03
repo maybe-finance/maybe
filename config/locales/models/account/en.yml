@@ -1,0 +1,12 @@
+en:
+  activerecord:
+    models:
+      account: Account
+    attributes:
+      account:
+        subtype: Subtype
+        family_id: Family
+        family: Family
+        name: Name
+        balance: Balance
+        currency: Currency

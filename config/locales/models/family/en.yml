@@ -1,0 +1,9 @@
+en:
+  activerecord:
+    models:
+      family:
+        one: Family
+        other: Families
+    attributes:
+      family:
+        name: Name
