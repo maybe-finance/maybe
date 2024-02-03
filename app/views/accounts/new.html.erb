@@ -2,7 +2,14 @@
 
 <% if params[:type].blank? || Account.accountable_types.include?("Account::#{params[:type]}") == false %>
   <div class="grid grid-cols-2 gap-4 mt-8 text-sm sm:grid-cols-3 md:grid-cols-4">
-    <%= render partial: "account_type", collection: Account.accountable_type_instances %>
+    <%= render "account_type", type: Account::Credit.new, bg_color: "bg-[#E6F6FA]", text_color: "text-[#189FC7]", icon: "icon-credit-card.svg" %>
+    <%= render "account_type", type: Account::Depository.new, bg_color: "bg-[#EAF4FF]", text_color: "text-[#3492FB]", icon: "icon-bank-accounts.svg" %>
+    <%= render "account_type", type: Account::Investment.new, bg_color: "bg-[#EDF7F4]", text_color: "text-[#1BD5A1]", icon: "icon-bank-accounts.svg" %>
+    <%= render "account_type", type: Account::Loan.new, bg_color: "bg-[#EDF7F4]", text_color: "text-[#1BD5A1]", icon: "icon-bank-accounts.svg" %>
+    <%= render "account_type", type: Account::OtherAsset.new, bg_color: "bg-[#EDF7F4]", text_color: "text-[#1BD5A1]", icon: "icon-bank-accounts.svg" %>
+    <%= render "account_type", type: Account::OtherLiability.new, bg_color: "bg-[#EDF7F4]", text_color: "text-[#1BD5A1]", icon: "icon-bank-accounts.svg" %>
+    <%= render "account_type", type: Account::Property.new, bg_color: "bg-[#FEF0F7]", text_color: "text-[#F03695]", icon: "icon-real-estate.svg" %>
+    <%= render "account_type", type: Account::Vehicle.new, bg_color: "bg-[#EDF7F4]", text_color: "text-[#1BD5A1]", icon: "icon-bank-accounts.svg" %>
   </div>
 <% else %>
   <div class="relative flex items-center mb-5 space-x-2">
