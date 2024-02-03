@@ -1,0 +1,4 @@
+<div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+    <label for="account_name" class="block text-sm font-medium opacity-50 focus-within:opacity-100">Type</label>
+    <%= f.select :subtype, options_for_select([["Checking", "checking"], ["Savings", "savings"]], selected: ""), {}, class: "block w-full p-0 mt-1 bg-transparent border-none focus:outline-none focus:ring-0" %>
+  </div>

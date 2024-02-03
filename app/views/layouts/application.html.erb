@@ -63,7 +63,7 @@
           <div>
             <h2 class="text-sm font-semibold font-display">Cash</h2>
 
-            <% current_family.accounts.depository.each do |account| %>
+            <% current_family.accounts.each do |account| %>
               <div class="flex items-center justify-between py-2">
                 <div class="flex items-center text-sm">
                   <%= account.name %>
