@@ -1,11 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  family: one
-  name: MyString
-  balance:
+dylan_checking:
+  family: dylan_family
+  name: Bob's Checking
+  balance: 1200
 
-two:
-  family: two
-  name: MyString
-  balance:
+richards_savings:
+  family: richards_family
+  name: Keef's HYSA
+  balance: 1500
