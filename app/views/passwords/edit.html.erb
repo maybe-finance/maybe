@@ -1,11 +1,7 @@
 <h1>Update Password</h1>
 
 <%= form_with model: current_user, url: password_path do |form| %>
-  <% if form.object.errors.any? %>
-    <% form.object.errors.full_messages.each do |message| %>
-      <div><%= message %></div>
-    <% end %>
-  <% end %>
+  <%= auth_messages form %>
 
   <div>
     <%= form.label :password_challenge, "Current Password" %>

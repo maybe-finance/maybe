@@ -6,7 +6,7 @@ class PasswordsController < ApplicationController
 
   def update
     if current_user.update(password_params)
-      redirect_to root_path, notice: "Your password has been updated successfully."
+      redirect_to root_path, notice: t(".success")
     else
       render :edit, status: :unprocessable_entity
     end

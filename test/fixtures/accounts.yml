@@ -1,11 +1,14 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+dylan_checking:
+  family: dylan_family
+  name: Bob's Checking
+  balance: 1200
 
-one:
-  family: one
-  name: MyString
-  balance: 1000
+dylan_roth:
+  family: dylan_family
+  name: Bob's Roth IRA
+  balance: 1200
 
-two:
-  family: two
-  name: MyString
-  balance: 2000
+richards_savings:
+  family: richards_family
+  name: Keef's HYSA
+  balance: 1500

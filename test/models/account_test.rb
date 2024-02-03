@@ -2,8 +2,15 @@ require "test_helper"
 
 class AccountTest < ActiveSupport::TestCase
   def setup
-    @account = accounts(:one)  # Assuming you have fixture data set up
-    @account ||= Account.new(name: "Sample Account", balance: Money.new(0, "USD"))
+    Money.locale_backend = :i18n
+    depository = Account::Depository.create!
+    @account = Account.create!(family: families(:dylan_family), name: "Explicit Checking", balance: 1200, accountable: depository)
+  end
+
+  test "new account should be valid" do
+    assert @account.valid?
+    assert_not_nil @account.accountable_id
+    assert_not_nil @account.accountable
   end
 
   test "balance_cents returns Money object" do
