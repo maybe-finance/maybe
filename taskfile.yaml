@@ -9,6 +9,13 @@ tasks:
       - task: label
       - task --list-all
 
+  assets:
+    desc: Precompile assets
+    cmds:
+      - task: label
+      - bundle exec rails assets:precompile
+      - bundle exec rails assets:clean
+
   build:
     desc: Builds the project
     cmds:
@@ -55,6 +62,12 @@ tasks:
     desc: Task label
     cmds:
       - echo "maybe.dev"
+
+  lint:
+    desc: Lints using rubocop gem with autocorrect
+    cmds:
+      - task: label
+      - bundle exec rubocop -A
 
   server:
     desc: Runs the server
