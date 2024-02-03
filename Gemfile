@@ -50,8 +50,8 @@ gem "bootsnap", require: false
 # Render SVG's inline so we can add Tailwind classes
 gem "inline_svg"
 
-# To facilitate the handling of monetary values 
-gem 'money-rails', '~> 1.12'
+# To facilitate the handling of monetary values
+gem "money-rails", "~> 1.12"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
