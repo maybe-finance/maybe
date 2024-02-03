@@ -112,6 +112,13 @@ GEM
     ast (2.4.2)
     base64 (0.2.0)
     bcrypt (3.1.20)
+    better_html (2.0.2)
+      actionview (>= 6.0)
+      activesupport (>= 6.0)
+      ast (~> 2.0)
+      erubi (~> 1.4)
+      parser (>= 2.4)
+      smart_properties
     bigdecimal (3.1.6)
     bindex (0.8.1)
     bootsnap (1.18.3)
@@ -142,12 +149,24 @@ GEM
     ffi (1.16.3)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    highline (3.0.1)
     hotwire-livereload (1.3.1)
       actioncable (>= 6.0.0)
       listen (>= 3.0.0)
       railties (>= 6.0.0)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
+    i18n-tasks (1.0.13)
+      activesupport (>= 4.0.2)
+      ast (>= 2.1.0)
+      better_html (>= 1.0, < 3.0)
+      erubi
+      highline (>= 2.0.0)
+      i18n
+      parser (>= 3.2.2.1)
+      rails-i18n
+      rainbow (>= 2.2.2, < 4.0)
+      terminal-table (>= 1.5.1)
     importmap-rails (2.0.1)
       actionpack (>= 6.0.0)
       activesupport (>= 6.0.0)
@@ -238,6 +257,9 @@ GEM
     rails-html-sanitizer (1.6.0)
       loofah (~> 2.21)
       nokogiri (~> 1.14)
+    rails-i18n (7.0.8)
+      i18n (>= 0.7, < 2)
+      railties (>= 6.0.0, < 8)
     rainbow (3.1.1)
     rake (13.1.0)
     rb-fsevent (0.11.2)
@@ -300,6 +322,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    smart_properties (1.17.0)
     sorbet-runtime (0.5.11226)
     stimulus-rails (1.3.3)
       railties (>= 6.0.0)
@@ -316,6 +339,8 @@ GEM
       railties (>= 6.0.0)
     tailwindcss-rails (2.3.0-x86_64-linux)
       railties (>= 6.0.0)
+    terminal-table (3.0.2)
+      unicode-display_width (>= 1.1.1, < 3)
     thor (1.3.0)
     timeout (0.4.1)
     tzinfo (2.0.6)
@@ -352,6 +377,7 @@ DEPENDENCIES
   debug
   dotenv
   hotwire-livereload
+  i18n-tasks
   importmap-rails
   inline_svg
   jbuilder
