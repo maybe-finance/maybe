@@ -3,6 +3,7 @@
 %>
 
 <%= form_with url: password_reset_path(token: params[:token]), html: {class: 'space-y-6'} do |form| %>
+  <%= auth_messages form %>
 
   <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
     <%= form.label :password, class: 'block text-sm font-medium text-gray-700' %>
