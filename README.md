@@ -32,6 +32,8 @@ The codebase is vanilla [Rails](https://rubyonrails.org/) and [Postgres](https:/
 
 ## Setup
 
+### Default route
+
 You'll need:
 
 - ruby >3 (specific version is in `Gemfile`)
@@ -49,6 +51,31 @@ You can then run the rails web server:
 
 ```shell
 bin/dev
+```
+
+And visit [http://localhost:3000](http://localhost:3000)
+
+### Nix Route
+
+You'll need to install:
+
+- Nix. To install visit [https://zero-to-nix.com/start/install](https://zero-to-nix.com/start/install)
+- Taskfile. To install visit [https://taskfile.dev/installation/](https://taskfile.dev/installation/)
+- Direnv. To install visit [https://direnv.net/docs/installation.html](https://direnv.net/docs/installation.html)
+- Zellij. To install visit [https://zellij.dev/documentation/installation](https://zellij.dev/documentation/installation)
+- Postgresql. Choose your flavor, recommend to visit and install the DBngin GUI [https://dbngin.com/](https://dbngin.com/)
+
+Ensure Postgresql is running. Open up the project directory. To build the environment and setup dependencies, run:
+
+```shell
+task build
+task setup
+```
+
+You can then run the rails web server and css watcher with:
+
+```shell
+devspace
 ```
 
 And visit [http://localhost:3000](http://localhost:3000)

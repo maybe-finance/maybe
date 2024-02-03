@@ -1,0 +1,14 @@
+# https://numtide.github.io/devshell
+[devshell]
+name = "maybe.dev"
+packages = []
+
+[[commands]]
+name = "devspace"
+category = "devshell"
+help = "Opens dev workspace"
+command = "zellij -l layout.kdl"
+
+[[env]]
+name = "NIXPKGS_ALLOW_INSECURE"
+value = "1"

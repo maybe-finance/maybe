@@ -9,7 +9,10 @@
 
 # Ignore all environment files (except templates).
 /.env*
+!/.envrc
 !/.env*.erb
+!/.env.test
+!/.env.example
 
 # Ignore all logfiles and tempfiles.
 /log/*
@@ -36,3 +39,10 @@
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# Ignore nix direnv
+.direnv/*
+
+# Ignore vendor bundle
+vendor/bundle/*
+!vendor/bundle/.keep

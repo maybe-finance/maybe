@@ -1,0 +1,36 @@
+layout {
+    pane size=1 borderless=true {
+        plugin location="zellij:tab-bar"
+    }
+    pane name="maybe.dev" size=4 command="pwd"
+    pane split_direction="vertical" {
+        pane name="server" size="60%" command="task" {
+            args "server"
+            focus true
+        }
+        pane name="css" size="40%" command="task" {
+            args "css"
+        }
+    }
+    pane size=2 borderless=true {
+        plugin location="zellij:status-bar"
+    }
+}
+
+themes {
+    onedark {
+        fg 188      // Text color (foreground) (#D8DEE9 -> 188)
+        bg 237      // Background color (#2E3440 -> 237)
+        black 235   // Black color (#3B4252 -> 235)
+        red 131     // Red color (#BF616A -> 131)
+        green 108   // Green color (#A3BE8C -> 108)
+        yellow 179  // Yellow color (#EBCB8B -> 179)
+        blue 67     // Blue color (#81A1C1 -> 67)
+        magenta 139 // Magenta color (#B48EAD -> 139)
+        cyan 109    // Cyan color (#88C0D0 -> 109)
+        white 253   // White color (#E5E9F0 -> 253)
+        orange 173  // Orange color (#D08770 -> 173)
+    }
+}
+
+theme "onedark"

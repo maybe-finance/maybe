@@ -1,0 +1,100 @@
+version: '3'
+
+silent: true
+
+tasks:
+  all:
+    desc: Lists all tasks
+    cmds:
+      - task: label
+      - task --list-all
+
+  build:
+    desc: Builds the project
+    cmds:
+      - task: label
+      - export NIXPKGS_ALLOW_INSECURE=1 && direnv allow
+
+  console:
+    desc: Opens the console
+    cmds:
+      - task: label
+      - bundle exec rails console
+
+  css:
+    desc: Watch for css changes
+    cmds:
+      - task: label
+      - bundle exec rails tailwindcss:watch
+
+  db:create:
+    desc: Creates the db
+    cmds:
+      - task: label
+      - bundle exec rails db:create
+
+  db:drop:
+    desc: Drops the db
+    cmds:
+      - task: label
+      - bundle exec rails db:drop
+
+  db:migrate:
+    desc: Migrates the db
+    cmds:
+      - task: label
+      - bundle exec rails db:migrate
+
+  db:seed:
+    desc: Seeds the db
+    cmds:
+      - task: label
+      - bundle exec rails db:seed
+
+  label:
+    desc: Task label
+    cmds:
+      - echo "maybe.dev"
+
+  server:
+    desc: Runs the server
+    cmds:
+      - task: label
+      - bundle exec rails server -p 3000
+
+  setup:
+    desc: Sets up everything
+    cmds:
+      - task: label
+      - task: setup-env
+      - task: db:drop
+      - task: db:create
+      - task: db:migrate
+      - task: db:seed
+
+  setup-env:
+    desc: Sets up env
+    cmds:
+      - gem install bundler:2.5.5 && bundle install
+      - if [ -e .env ]; then rm -rf .env; else true; fi
+      - test -f .env || cp .env.example .env
+
+  spec:
+    desc: Runs the specs
+    cmds:
+      - task: label
+      - bundle exec rspec spec
+
+  update:
+    desc: Updates everything
+    cmds:
+      - task: label
+      - git checkout main
+      - git pull
+      - task: setup
+
+  worker:
+    desc: Runs the worker
+    cmds:
+      - task: label
+      - echo 'No worker here'
