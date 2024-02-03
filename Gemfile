@@ -34,6 +34,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
   gem "dotenv"
   gem "letter_opener"
+  gem "i18n-tasks"
 end
 
 group :development do
