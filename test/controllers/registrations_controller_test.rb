@@ -39,6 +39,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
         password: "password",
         password_confirmation: "password",
         invite_code: InviteCode.generate! } }
+      assert_redirected_to root_url
     end
   ensure
     ENV["HOSTED"] = nil
