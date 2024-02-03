@@ -16,31 +16,38 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "create when hosted requires an invite code" do
+    in_hosted_app do
+      assert_no_difference "User.count" do
+        post registration_url, params: { user: {
+          email: "john@example.com",
+          password: "password",
+          password_confirmation: "password" } }
+        assert_redirected_to new_registration_url
+
+        post registration_url, params: { user: {
+          email: "john@example.com",
+          password: "password",
+          password_confirmation: "password",
+          invite_code: "foo" } }
+        assert_redirected_to new_registration_url
+      end
+
+      assert_difference "User.count", +1 do
+        post registration_url, params: { user: {
+          email: "john@example.com",
+          password: "password",
+          password_confirmation: "password",
+          invite_code: InviteCode.generate! } }
+        assert_redirected_to root_url
+      end
+    end
+  end
+
+  private
+
+  def in_hosted_app
     ENV["HOSTED"] = "true"
-
-    assert_no_difference "User.count" do
-      post registration_url, params: { user: {
-        email: "john@example.com",
-        password: "password",
-        password_confirmation: "password" } }
-      assert_redirected_to new_registration_url
-
-      post registration_url, params: { user: {
-        email: "john@example.com",
-        password: "password",
-        password_confirmation: "password",
-        invite_code: "foo" } }
-      assert_redirected_to new_registration_url
-    end
-
-    assert_difference "User.count", +1 do
-      post registration_url, params: { user: {
-        email: "john@example.com",
-        password: "password",
-        password_confirmation: "password",
-        invite_code: InviteCode.generate! } }
-      assert_redirected_to root_url
-    end
+    yield
   ensure
     ENV["HOSTED"] = nil
   end
