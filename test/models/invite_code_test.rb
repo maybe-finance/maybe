@@ -19,7 +19,7 @@ class InviteCodeTest < ActiveSupport::TestCase
 
   test "generate! creates a new invitation and returns its token" do
     assert_difference "InviteCode.count", +1 do
-      assert_instance_of String, InviteCode.generate!
+      assert_equal InviteCode.generate!, InviteCode.last.token
     end
   end
 end
