@@ -33,14 +33,14 @@
           <%= content_for?(:header_title) ? yield(:header_title).html_safe : "Your account" %>
         </h2>
 
-        <% if params[:controller] == "devise/sessions" && params[:action] == "new" %>
-        <p class="mt-2 text-sm text-center text-gray-600">
-          or <%= link_to "create an account", new_user_registration_path, class: 'font-medium text-candlelight-600 hover:text-candlelight-500' %>
-        </p>
-        <% elsif params[:controller] == "devise/registrations" && params[:action] == "new" %>
-        <p class="mt-2 text-sm text-center text-gray-600">
-          or <%= link_to "sign in to your account", new_user_session_path, class: 'font-medium text-candlelight-600 hover:text-candlelight-500' %>
-        </p>
+        <% if controller_name == "sessions" %>
+          <p class="mt-2 text-sm text-center text-gray-600">
+            or <%= link_to "create an account", new_registration_path, class: 'text-link' %>
+          </p>
+        <% elsif controller_name == "registrations" %>
+          <p class="mt-2 text-sm text-center text-gray-600">
+            or <%= link_to "sign in to your account", new_session_path, class: 'text-link' %>
+          </p>
         <% end %>
 
       </div>
@@ -50,7 +50,7 @@
       </div>
 
       <div class="p-8 mt-2 text-center">
-        <p class="mt-6 text-sm text-black"><a href="/privacy" class="text-black opacity-90">Privacy Policy</a> &bull; <a href="/terms" class="text-black opacity-90">Terms of Service</a></p>
+        <p class="mt-6 text-sm text-black"><a href="/privacy" class="text-link">Privacy Policy</a> &bull; <a href="/terms" class="text-link">Terms of Service</a></p>
       </div>
 
     </div>
