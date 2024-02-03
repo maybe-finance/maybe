@@ -24,6 +24,13 @@
     <%= form.password_field :password_confirmation, autocomplete: "new-password", required: 'required', class: 'p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full' %>
   </div>
 
+  <% if hosted_app? %>
+    <div class="bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100 relative p-4 border border-gray-100">
+      <%= form.label :invite_code, "Invite code", class: 'block text-sm font-medium text-gray-700' %>
+      <%= form.password_field :invite_code, required: 'required', class: 'p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full' %>
+    </div>
+  <% end %>
+
   <div>
     <%= form.submit "Continue", class: 'flex justify-center w-full px-4 py-3 text-sm font-medium text-white bg-black rounded-xl hover:bg-black focus:outline-none focus:ring-2 focus:ring-gray-200 shadow' %>
   </div>

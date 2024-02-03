@@ -37,4 +37,9 @@ class ApplicationController < ActionController::Base
     Current.user = nil
     reset_session
   end
+
+  def hosted_app?
+    ENV["HOSTED"] == "true"
+  end
+  helper_method :hosted_app?
 end
