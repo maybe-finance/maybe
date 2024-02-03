@@ -60,6 +60,8 @@ group :development, :test do
   gem "dotenv"
 
   gem "letter_opener"
+
+  gem "i18n-tasks"
 end
 
 group :development do
