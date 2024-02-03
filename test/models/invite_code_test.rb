@@ -1,7 +1,7 @@
 require "test_helper"
 
 class InviteCodeTest < ActiveSupport::TestCase
-  test "claim! destroys the invitation token" do
+  test "claim! destroys the invite token" do
     code = InviteCode.generate!
 
     assert_difference "InviteCode.count", -1 do
@@ -17,7 +17,7 @@ class InviteCodeTest < ActiveSupport::TestCase
     assert_not InviteCode.claim!("invalid")
   end
 
-  test "generate! creates a new invitation and returns its token" do
+  test "generate! creates a new invite and returns its token" do
     assert_difference "InviteCode.count", +1 do
       assert_equal InviteCode.generate!, InviteCode.last.token
     end

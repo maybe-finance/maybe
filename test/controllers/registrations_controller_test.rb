@@ -15,7 +15,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_url
   end
 
-  test "create when hosted requires an invitation code" do
+  test "create when hosted requires an invite code" do
     ENV["HOSTED"] = "true"
 
     assert_no_difference "User.count" do
