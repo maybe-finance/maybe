@@ -5,25 +5,25 @@
 <%= form_with model: @user, url: registration_path, html: {class: 'space-y-6'} do |form| %>
   <%= auth_messages form %>
 
-  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-    <%= form.label :email, class: 'block text-sm font-medium text-gray-700' %>
-    <%= form.email_field :email, autofocus: false, autocomplete: "email", required: 'required', placeholder: 'you@example.com', class: 'p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full' %>
+  <div class="relative border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+    <%= form.label :email, class: 'p-4 pb-0 block text-sm font-medium text-gray-700' %>
+    <%= form.email_field :email, autofocus: false, autocomplete: "email", required: 'required', placeholder: 'you@example.com', class: 'p-4 pt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full' %>
   </div>
 
-  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-    <%= form.label :password, "Password", class: 'block text-sm font-medium text-gray-700' %>
-    <%= form.password_field :password, autocomplete: "new-password", required: 'required', class: 'p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full' %>
+  <div class="relative border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+    <%= form.label :password, "Password", class: 'p-4 pb-0 block text-sm font-medium text-gray-700' %>
+    <%= form.password_field :password, autocomplete: "new-password", required: 'required', class: 'p-4 pt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full' %>
   </div>
 
-  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-    <%= form.label :password_confirmation, "Password confirmation", class: 'block text-sm font-medium text-gray-700' %>
-    <%= form.password_field :password_confirmation, autocomplete: "new-password", required: 'required', class: 'p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full' %>
+  <div class="relative border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+    <%= form.label :password_confirmation, "Password confirmation", class: 'p-4 pb-0 block text-sm font-medium text-gray-700' %>
+    <%= form.password_field :password_confirmation, autocomplete: "new-password", required: 'required', class: 'p-4 pt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full' %>
   </div>
 
   <% if hosted_app? %>
-    <div class="bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100 relative p-4 border border-gray-100">
-      <%= form.label :invite_code, "Invite code", class: 'block text-sm font-medium text-gray-700' %>
-      <%= form.password_field :invite_code, required: 'required', class: 'p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full' %>
+    <div class="bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100 relative border border-gray-100">
+      <%= form.label :invite_code, "Invite code", class: 'p-4 pb-0 block text-sm font-medium text-gray-700' %>
+      <%= form.password_field :invite_code, required: 'required', class: 'p-4 pt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full' %>
     </div>
   <% end %>
 

@@ -5,14 +5,14 @@
 <%= form_with url: password_reset_path(token: params[:token]), html: {class: 'space-y-6'} do |form| %>
   <%= auth_messages form %>
 
-  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-    <%= form.label :password, class: 'block text-sm font-medium text-gray-700' %>
-    <%= form.password_field :password, required: 'required', class: 'p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full' %>
+  <div class="relative border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+    <%= form.label :password, class: 'p-4 pb-0 block text-sm font-medium text-gray-700' %>
+    <%= form.password_field :password, required: 'required', class: 'p-4 pt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full' %>
   </div>
 
-  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-    <%= form.label :password_confirmation, class: 'block text-sm font-medium text-gray-700' %>
-    <%= form.password_field :password_confirmation, required: 'required', class: 'p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full' %>
+  <div class="relative border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+    <%= form.label :password_confirmation, class: 'p-4 pb-0 block text-sm font-medium text-gray-700' %>
+    <%= form.password_field :password_confirmation, required: 'required', class: 'p-4 pt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full' %>
   </div>
 
   <div>
