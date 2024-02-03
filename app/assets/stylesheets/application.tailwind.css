@@ -34,10 +34,6 @@
   @apply p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100;
 }
 
-.text-link {
-  @apply font-medium text-gray-600 hover:text-gray-400 transition;
-}
-
 @layer base {
   @font-face {
     font-family: "GeneralSans";
