@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby file: ".ruby-version"
+ruby "3.3.0"
 
 # Rails
 gem "rails", github: "rails/rails", branch: "main"
