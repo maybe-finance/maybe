@@ -1,0 +1,20 @@
+.prose table {
+  @apply divide-y divide-gray-300;
+}
+
+.prose tr {
+  @apply divide-x divide-gray-100;
+}
+
+.prose th {
+  @apply whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900;
+}
+
+.prose tbody {
+  @apply divide-y divide-gray-200;
+}
+
+.prose td {
+  @apply px-2 py-2 text-sm text-gray-500 whitespace-nowrap;
+}
+

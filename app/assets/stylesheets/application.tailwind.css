@@ -1,45 +1,7 @@
+@import "base" layer(base);
+@import "components" layer(components);
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-.prose table {
-  @apply divide-y divide-gray-300;
-}
-
-.prose tr {
-  @apply divide-x divide-gray-100;
-}
-
-.prose th {
-  @apply whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900;
-}
-
-.prose tbody {
-  @apply divide-y divide-gray-200;
-}
-
-.prose td {
-  @apply px-2 py-2 text-sm text-gray-500 whitespace-nowrap;
-}
-
-.input-wrapper {
-  @apply relative p-4 bg-gray-100 border border-gray-200 rounded-2xl focus-within:bg-white focus-within:drop-shadow-form focus-within:opacity-100;
-}
-
-.input-label {
-  @apply block text-sm font-medium text-gray-500;
-}
-
-.input-field {
-  @apply p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100;
-}
-
-@layer base {
-  @font-face {
-    font-family: "GeneralSans";
-    font-style: normal;
-    font-weight: 200 700;
-    font-display: swap;
-    src: url("generalsans/GeneralSans-Variable.woff2") format("woff2");
-  }
-}
