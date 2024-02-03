@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resource :session
   resource :password_reset
   resource :password
+  resource :settings
 
   resources :accounts
 

@@ -1,0 +1,34 @@
+<h1 class="text-3xl font-semibold font-display">Update settings</h1>
+
+<%= form_with model: current_user, url: settings_path, html: { class: "space-y-4" } do |form| %>
+  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+    <label for="first_name" class="block text-sm font-medium opacity-50 focus-within:opacity-100">First name</label>
+    <%= form.text_field :first_name, placeholder: "First name", value: current_user.first_name, class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
+  </div>
+
+  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+    <label for="last_name" class="block text-sm font-medium opacity-50 focus-within:opacity-100">Last name</label>
+    <%= form.text_field :last_name, placeholder: "Last name", value: current_user.last_name, class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
+  </div>
+
+  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+    <label for="email" class="block text-sm font-medium opacity-50 focus-within:opacity-100">Email</label>
+    <%= form.email_field :email, placeholder: "Email", value: current_user.email, class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
+  </div>
+
+  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+    <label for="password" class="block text-sm font-medium opacity-50 focus-within:opacity-100">Password</label>
+    <%= form.password_field :password, class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
+  </div>
+
+  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+    <label for="password" class="block text-sm font-medium opacity-50 focus-within:opacity-100">Password confirmation</label>
+    <%= form.password_field :password_confirmation, class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
+  </div>
+
+  <div class="absolute right-5 bottom-5">
+    <button type="submit" class="flex items-center justify-center w-12 h-12 mb-2 bg-black rounded-full shrink-0 grow-0 hover:bg-gray-600">
+      <i class="text-xl text-white fa-regular fa-check"></i>
+    </button>
+  </div>
+<% end %>
