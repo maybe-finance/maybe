@@ -13,7 +13,7 @@ class UserTest < ActiveSupport::TestCase
   test "email must be present" do
     potential_user = User.new(
       email: "david@davidbowie.com",
-      password_digest: BCrypt::Password.create('password'),
+      password_digest: BCrypt::Password.create("password"),
       first_name: "David",
       last_name: "Bowie"
     )
@@ -43,5 +43,4 @@ class UserTest < ActiveSupport::TestCase
     @user.save
     assert_equal mixed_case_email.downcase, @user.reload.email
   end
-
 end

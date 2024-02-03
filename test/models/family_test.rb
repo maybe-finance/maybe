@@ -15,13 +15,13 @@ class FamilyTest < ActiveSupport::TestCase
   end
 
   test "should destroy dependent users" do
-    assert_difference('User.count', -@dylan_family.users.count) do
+    assert_difference("User.count", -@dylan_family.users.count) do
       @dylan_family.destroy
     end
   end
 
   test "should destroy dependent accounts" do
-    assert_difference('Account.count', -@dylan_family.accounts.count) do
+    assert_difference("Account.count", -@dylan_family.accounts.count) do
       @dylan_family.destroy
     end
   end
