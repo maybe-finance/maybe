@@ -17,7 +17,7 @@ class AccountsController < ApplicationController
   end
 
   def create
-    @account = Account.new(account_params.merge(family: current_family))
+    @account = Account.new(account_params.merge(family: Current.family))
     @account.accountable = account_params[:accountable_type].constantize.new
 
     if @account.save
