@@ -3,6 +3,7 @@ require "test_helper"
 class AccountsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:bob)
+    @account = accounts(:dylan_checking)
   end
 
   test "new" do
@@ -11,7 +12,7 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "show" do
-    get account_path(@user.family.accounts.first)
+    get account_path(@account)
     assert_response :ok
   end
 
