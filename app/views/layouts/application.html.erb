@@ -49,7 +49,7 @@
             <li>
               <%= link_to root_path, class: 'block hover:bg-gray-100 -ml-2 p-2 text-sm font-semibold text-gray-900 flex items-center rounded' do %>
                 <%= inline_svg_tag('icon-dashboard.svg', class: 'text-black stroke-current mr-2') %>
-                <% t('.dashboard') %>
+                <%= t('.dashboard') %>
               <% end %>
             </li>
           </ul>
@@ -62,7 +62,7 @@
             <% end %>
           </div>
           <div>
-            <h2 class="text-sm font-semibold font-display"><% t('.cache') %></h2>
+            <h2 class="text-sm font-semibold font-display"><%= t('.cache') %></h2>
 
             <% Current.family.accounts.each do |account| %>
               <div class="flex items-center justify-between py-2">

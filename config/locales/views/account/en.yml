@@ -1,0 +1,11 @@
+en:
+  accounts:
+    index:
+      title: Cash
+    new:
+      title: Add an account
+      enter_type_account: Enter %{type} account
+      account_name_placeholder: Account name
+      submit: Create Account
+    create:
+      success: New account created successfully

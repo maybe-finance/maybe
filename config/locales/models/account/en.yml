@@ -2,6 +2,14 @@ en:
   activerecord:
     models:
       account: Account
+      account/credit: Credit Card
+      account/depository: Bank Accounts
+      account/investiment: Investments
+      account/loan: Loan
+      account/other_asset: Other Asset
+      account/other_liability: Other Liability
+      account/property: Real Estate
+      account/vehicle: Vehicle
     attributes:
       account:
         subtype: Subtype
