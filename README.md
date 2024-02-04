@@ -55,7 +55,7 @@ And visit [http://localhost:3000](http://localhost:3000)
 
 In development, we use `letter_opener` to automatically open emails in your browser. However, if you self-host, you'll likely want some basic email sending abilities.
 
-You can use any SMTP-based mail service and then simply drop in your SMPT credentials in the `.env` file.
+You can use any SMTP-based mail service and then simply drop in your SMTP credentials in the `.env` file.
 
 [Resend](https://resend.com) is a great option for personal use as they have a very generous free plan.
 
