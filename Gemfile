@@ -27,8 +27,6 @@ gem "bcrypt", "~> 3.1.7"
 gem "inline_svg"
 gem "jbuilder"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
-
-# To facilitate the handling of monetary values
 gem "money-rails", "~> 1.12"
 
 group :development, :test do
