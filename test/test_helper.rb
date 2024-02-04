@@ -12,7 +12,7 @@ module ActiveSupport
 
     # Add more helper methods to be used by all tests here...
     def sign_in(user)
-      post session_path, params: {email: user.email, password: "password"}
+      post session_path, params: { email: user.email, password: "password" }
     end
   end
 end
