@@ -2,7 +2,7 @@ require "test_helper"
 
 class PagesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @user = sign_in users(:bob)
+    sign_in users(:bob)
   end
 
   test "dashboard" do
