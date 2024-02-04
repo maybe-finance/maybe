@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby file: ".ruby-version"
+ruby "3.3.0"
 
 # Rails
 gem "rails", github: "rails/rails", branch: "main"
@@ -34,6 +34,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
   gem "dotenv"
   gem "letter_opener"
+  gem "i18n-tasks"
 end
 
 group :development do

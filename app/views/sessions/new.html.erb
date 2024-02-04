@@ -2,12 +2,9 @@
   header_title "Sign in to your account"
 %>
 
-<div class="mt-0 text-center">
-  <p class="text-sm text-gray-600">Don't have an account? <%= link_to "Create one", new_registration_path, class: 'font-medium text-candlelight-600 hover:text-candlelight-500' %></p>
-</div>
-
-
 <%= form_with url: session_path, html: {class: 'space-y-6'} do |form| %>
+  <%= auth_messages form %>
+
   <div class="relative border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
     <%= form.label :email, "Email address", class: 'p-4 pb-0 block text-sm font-medium text-gray-700' %>
     <%= form.email_field :email, autofocus: false, autocomplete: "email", required: 'required', placeholder: 'you@example.com', class: 'p-4 pt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full' %>
@@ -24,5 +21,5 @@
 <% end %>
 
 <div class="mt-6 text-center">
-  <p class="text-sm text-gray-600">Forgot your password? <%= link_to "Reset it", new_password_reset_path, class: 'font-medium text-candlelight-600 hover:text-candlelight-500' %></p>
+  <p class="text-sm text-gray-600">Forgot your password? <%= link_to "Reset it", new_password_reset_path, class: 'font-medium text-gray-600 hover:text-gray-400 transition' %></p>
 </div>

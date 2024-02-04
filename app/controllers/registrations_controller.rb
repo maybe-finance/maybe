@@ -14,10 +14,10 @@ class RegistrationsController < ApplicationController
 
     if @user.save
       login @user
-      flash[:notice] = "You have signed up successfully."
+      flash[:notice] = t(".success")
       redirect_to root_path
     else
-      flash[:alert] = "Invalid input, please try again."
+      flash[:alert] = t(".failure")
       render :new
     end
   end
@@ -34,7 +34,7 @@ class RegistrationsController < ApplicationController
 
   def claim_invite_code
     unless InviteCode.claim! params[:user][:invite_code]
-      redirect_to new_registration_path, alert: "Invalid invite code, please try again."
+      redirect_to new_registration_path, alert: t("registrations.create.invalid_invite_code")
     end
   end
 end

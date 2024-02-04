@@ -37,21 +37,27 @@ You'll need:
 - ruby >3 (specific version is in `Gemfile`)
 - postgresql (if using stock `config/database.yml`)
 
-For convenience, the project contains configuration for a devcontainer. Open up the project in your editor that supports devcontainers and run the commands mentioned below.
+If you prefer devcontainer, this project supports it (entirely optional).
+
+Run the following commands after cloning the repo:
 
 ```shell
 cd maybe
+cp .env.example .env
 bundle install
 rails db:setup
-```
-
-You can then run the rails web server:
-
-```shell
 bin/dev
 ```
 
 And visit [http://localhost:3000](http://localhost:3000)
+
+### Email
+
+In development, we use `letter_opener` to automatically open emails in your browser. However, if you self-host, you'll likely want some basic email sending abilities.
+
+You can use any SMTP-based mail service and then simply drop in your SMPT credentials in the `.env` file.
+
+[Resend](https://resend.com) is a great option for personal use as they have a very generous free plan.
 
 ## Contributing
 
