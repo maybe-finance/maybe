@@ -5,7 +5,6 @@ module Authentication
     helper_method :current_user
     helper_method :current_family
     helper_method :user_signed_in?
-
   end
 
   private
