@@ -1,0 +1,11 @@
+en:
+  password_resets:
+    new:
+      title: Reset password
+      submit: Reset password
+    edit:
+      password_challenge: Current Password
+      password: New Password
+      submit: Update Password
+    update:
+      success: Your password has been updated successfully.

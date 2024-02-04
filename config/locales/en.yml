@@ -1,17 +1,5 @@
 ---
 en:
-  password_resets:
-    create:
-      requested: If an account with that email exists, we have sent a link to reset
-        your password.
-    update:
-      invalid_token: Invalid token.
-      success: Your password has been reset.
-  passwords:
-    update:
-      success: Your password has been updated successfully.
-
-
   date:
     abbr_day_names:
     - Sun
