@@ -10,6 +10,7 @@
 # Ignore all environment files (except templates).
 /.env*
 !/.env*.erb
+!.env.example
 
 # Ignore all logfiles and tempfiles.
 /log/*
@@ -36,3 +37,6 @@
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# Ignore Jetbrains IDEs
+.idea

@@ -9,13 +9,13 @@ class SessionsController < ApplicationController
       login user
       redirect_to root_path
     else
-      flash.now[:alert] = "Invalid email or password."
+      flash.now[:alert] = t(".invalid_credentials")
       render :new, status: :unprocessable_entity
     end
   end
 
   def destroy
     logout
-    redirect_to root_path, notice: "You have signed out successfully."
+    redirect_to root_path, notice: t(".logout_successful")
   end
 end

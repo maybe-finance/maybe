@@ -30,7 +30,7 @@ class AccountsController < ApplicationController
   end
 
   def build_and_associate_account
-    current_family&.accounts.build(account_params).tap do |account|
+    Current.family.accounts.build(account_params).tap do |account|
       account.accountable = build_accountable
     end
   end
