@@ -89,6 +89,7 @@ jobs:
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
+          WITH_COVERAGE: true
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:setup test test:system
 
@@ -98,4 +99,11 @@ jobs:
         with:
           name: screenshots
           path: ${{ github.workspace }}/tmp/screenshots
+          if-no-files-found: ignore
+
+      - name: Upload coverage results
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage
           if-no-files-found: ignore
