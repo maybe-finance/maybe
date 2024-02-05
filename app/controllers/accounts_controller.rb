@@ -2,27 +2,18 @@ class AccountsController < ApplicationController
   before_action :authenticate_user!
 
   def new
-    type = params[:type].presence
-
-    if type.blank? || Account.accountable_types.include?("Account::#{type}")
-      @account = Account.new(accountable_type: "Account::#{type}")
-    else
-      head :not_found
-    end
+    @account = build_account
+    head :not_found unless @account
   end
 
-  def show
-  end
+  def show; end
 
   def create
-    @account = Account.new(account_params.merge(family: current_family))
-    @account.accountable = account_params[:accountable_type].constantize.new
+    @account = build_and_associate_account
 
-    if @account.save
-      redirect_to accounts_path, notice: "New account created successfully"
-    else
-      render "new", status: :unprocessable_entity
-    end
+    render "new", status: :unprocessable_entity unless @account.save
+
+    redirect_to accounts_path, notice: "New account created successfully"
   end
 
   private
@@ -31,11 +22,26 @@ class AccountsController < ApplicationController
     params.require(:account).permit(:name, :accountable_type, :balance, :subtype)
   end
 
-  def account_type_class
-    if params[:type].present? && Account.accountable_types.include?(params[:type])
-      params[:type].constantizes
-    else
-      Account # Default to Account if type is not provided or invalid
+  def build_account
+    type = params[:type].presence
+    return Account.new if type.blank? || !Account.accountable_types.include?("Account::#{type}")
+
+    Account.new(accountable_type: "Account::#{type}")
+  end
+
+  def build_and_associate_account
+    current_family&.accounts.build(account_params).tap do |account|
+      account.accountable = build_accountable
     end
+  end
+
+  def build_accountable
+    account_type_class(account_params[:accountable_type]).new if account_params[:accountable_type].present?
+  end
+
+  def account_type_class(type)
+    return Account unless type.present? && ("#{type}").in?(Account.accountable_types)
+
+    type.constantize
   end
 end
