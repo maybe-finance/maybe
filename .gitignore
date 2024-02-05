@@ -37,3 +37,11 @@
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+
+# Ignore .idea files for folks using JetBrains products
+.idea
+
+
+# Ignore pgdata for for folks using Docker version of PostgreSQL
+pgdata

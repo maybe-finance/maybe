@@ -225,6 +225,8 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.0-x86_64-linux)
       racc (~> 1.4)
+    nokogiri (1.16.0-x64-mingw-ucrt)
+      racc (~> 1.4)
     parallel (1.24.0)
     parser (3.3.0.5)
       ast (~> 2.4.1)
@@ -339,12 +341,16 @@ GEM
       railties (>= 6.0.0)
     tailwindcss-rails (2.3.0-x86_64-linux)
       railties (>= 6.0.0)
+    tailwindcss-rails (2.3.0-x64-mingw-ucrt)
+      railties (>= 6.0.0)
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
     thor (1.3.0)
     timeout (0.4.1)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    tzinfo-data (1.2024.1)
+      tzinfo (>= 1.0.0)
     unicode-display_width (2.5.0)
     useragent (0.16.10)
     web-console (4.2.1)
@@ -368,6 +374,7 @@ PLATFORMS
   x86-linux
   x86_64-darwin
   x86_64-linux
+  x64-mingw-ucrt
 
 DEPENDENCIES
   bcrypt (~> 3.1.7)
