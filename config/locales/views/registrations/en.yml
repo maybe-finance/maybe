@@ -1,17 +1,17 @@
+---
 en:
+  helpers:
+    label:
+      user:
+        invite_code: Invite Code
+    submit:
+      user:
+        create: Continue
   registrations:
-    new:
-      title: Create an account
-      sign_in: Sign in
     create:
       failure: Invalid input, please try again.
       invalid_invite_code: Invalid invite code, please try again.
       success: You have signed up successfully.
-
-  helpers:
-    submit:
-      user:
-        create: Continue
-    label:
-      user:
-        invite_code: Invite Code
+    new:
+      sign_in: Sign in
+      title: Create an account

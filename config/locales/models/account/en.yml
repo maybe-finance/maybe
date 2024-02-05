@@ -1,5 +1,14 @@
+---
 en:
   activerecord:
+    attributes:
+      account:
+        balance: Balance
+        currency: Currency
+        family: Family
+        family_id: Family
+        name: Name
+        subtype: Subtype
     models:
       account: Account
       account/credit: Credit Card
@@ -10,11 +19,3 @@ en:
       account/other_liability: Other Liability
       account/property: Real Estate
       account/vehicle: Vehicle
-    attributes:
-      account:
-        subtype: Subtype
-        family_id: Family
-        family: Family
-        name: Name
-        balance: Balance
-        currency: Currency

@@ -1,13 +1,14 @@
+---
 en:
   activerecord:
-    models:
-      user: User
     attributes:
       user:
+        email: Email
         family: Family
         family_id: Family
         first_name: First Name
         last_name: Last Name
-        email: Email
         password: Password
         password_confirmation: Password Confirmation
+    models:
+      user: User

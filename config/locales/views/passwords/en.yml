@@ -1,11 +1,10 @@
+---
 en:
-  password_resets:
+  passwords:
     edit:
-      title: Reset password
+      password: New Password
+      password_challenge: Current Password
       submit: Reset Password
-    create:
-      requested: If an account with that email exists, we have sent a link to reset
-        your password.
+      title: Reset password
     update:
-      invalid_token: Invalid token.
       success: Your password has been reset.

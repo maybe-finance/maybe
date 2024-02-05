@@ -1,7 +1,8 @@
+---
 en:
   activerecord:
-    models:
-      invite_code: Invite Code
     attributes:
       invite_code:
         token: token
+    models:
+      invite_code: Invite Code
