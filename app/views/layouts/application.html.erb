@@ -30,7 +30,7 @@
           <%= link_to root_path do %>
             <%= image_tag 'logo.svg', alt: 'Maybe' %>
           <% end %>
-          <div class="relative" data-controller="dropdown">
+          <div class="relative cursor-pointer" data-controller="dropdown">
             <div class="flex" data-action="click->dropdown#toggleMenu">
               <div class="mr-1.5 text-white w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= Current.user.email.first %></div>
             </div>
