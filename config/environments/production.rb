@@ -42,8 +42,11 @@ Rails.application.configure do
   # Can be used together with config.force_ssl for Strict-Transport-Security and secure cookies.
   # config.assume_ssl = true
 
-  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
+# Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies. 
+#If the variable is set to 'true', SSL enforcement will be enabled; otherwise, it will be disabled.
+config.force_ssl = ENV.fetch("FORCE_SSL", "true") == "true"
+
+
 
   # Log to STDOUT by default
   config.logger = ActiveSupport::Logger.new(STDOUT)
