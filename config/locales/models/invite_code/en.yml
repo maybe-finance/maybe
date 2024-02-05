@@ -1,8 +1,0 @@
----
-en:
-  activerecord:
-    attributes:
-      invite_code:
-        token: token
-    models:
-      invite_code: Invite Code

@@ -14,7 +14,7 @@ search:
     - app/mailers
     - app/presenters
     - app/views
-  strict: true
+  strict: false
   ## Files or `File.fnmatch` patterns to exclude from search. Some files are always excluded regardless of this setting:
   ##   *.jpg *.jpeg *.png *.gif *.svg *.ico *.eot *.otf *.ttf *.woff *.woff2 *.pdf *.css *.sass *.scss *.less
   ##   *.yml *.json *.zip *.tar.gz *.swf *.flv *.mp3 *.wav *.flac *.webm *.mp4 *.ogg *.opus *.webp *.map *.xlsx
@@ -23,3 +23,8 @@ search:
     - app/assets/fonts
     - app/assets/videos
     - app/assets/builds
+ignore_unused:
+  - 'activerecord.attributes.*' # i18n-tasks does not detect these on forms, forms validations (https://github.com/glebm/i18n-tasks/blob/0b4b483c82664f26c5696fb0f6aa1297356e4683/templates/config/i18n-tasks.yml#L146)
+  - 'activerecord.models.account*' # i18n-tasks does not detect use in dynamic model names (e.g. object.model_name.human)
+  - 'helpers.submit.*' # i18n-tasks does not detect used at forms
+  - 'helpers.label.*' # i18n-tasks does not detect used at forms

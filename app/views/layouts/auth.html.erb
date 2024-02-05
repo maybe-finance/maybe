@@ -24,7 +24,7 @@
         <%= render "shared/logo" %>
 
         <h2 class="mt-6 text-3xl font-semibold tracking-tight text-center font-display">
-          <%= content_for?(:header_title) ? yield(:header_title).html_safe : t('.yout_account') %>
+          <%= content_for?(:header_title) ? yield(:header_title).html_safe : t('.your_account') %>
         </h2>
 
         <% if controller_name == "sessions" %>

@@ -10,5 +10,3 @@ en:
         last_name: Last Name
         password: Password
         password_confirmation: Password Confirmation
-    models:
-      user: User
