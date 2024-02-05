@@ -32,7 +32,7 @@
           <% end %>
           <div class="relative" data-controller="dropdown">
             <div class="flex" data-action="click->dropdown#toggleMenu">
-              <div class="mr-1.5 text-white w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= current_user.email.first %></div>
+              <div class="mr-1.5 text-white w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= Current.user.email.first %></div>
             </div>
 
             <div class="absolute z-10 hidden w-screen px-2 mt-2 -translate-x-1/2 left-1/2 max-w-min" data-dropdown-target="menu">
@@ -64,7 +64,7 @@
           <div>
             <h2 class="text-sm font-semibold font-display">Cash</h2>
 
-            <% current_family.accounts.each do |account| %>
+            <% Current.family.accounts.each do |account| %>
               <div class="flex items-center justify-between py-2">
                 <div class="flex items-center text-sm">
                   <%= account.name %>

@@ -55,7 +55,7 @@ And visit [http://localhost:3000](http://localhost:3000)
 
 In development, we use `letter_opener` to automatically open emails in your browser. However, if you self-host, you'll likely want some basic email sending abilities.
 
-You can use any SMTP-based mail service and then simply drop in your SMPT credentials in the `.env` file.
+You can use any SMTP-based mail service and then simply drop in your SMTP credentials in the `.env` file.
 
 [Resend](https://resend.com) is a great option for personal use as they have a very generous free plan.
 
@@ -75,7 +75,7 @@ If you've got an improvement, just send in a pull request!
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-If you've got feature ideas, simply [open a new issues](https://github.com/maybe-finance/maybe/issues/new)!
+If you've got feature ideas, simply [open a new issue](https://github.com/maybe-finance/maybe/issues/new)!
 
 ## Repo Activity
 
