@@ -31,14 +31,14 @@
     <%= render "accounts/#{permitted_accountable_partial(@account.accountable_type)}", f: f %>
 
     <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-      <label for="account_name" class="block text-sm font-medium opacity-50 focus-within:opacity-100">Balance</label>
+      <label for="account_balance" class="block text-sm font-medium opacity-50 focus-within:opacity-100">Balance</label>
       <div class="flex">
         <%= f.number_field :balance, placeholder: "$0.00", in: 0.00..100000000.00, required: 'required', class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
       </div>
     </div>
 
     <div class="absolute right-5 bottom-5">
-      <button type="submit" class="flex items-center justify-center w-12 h-12 mb-2 bg-black rounded-full shrink-0 grow-0 hover:bg-gray-600">
+      <button type="submit" class="flex items-center justify-center w-12 h-12 mb-2 bg-black rounded-full shrink-0 grow-0 hover:bg-gray-600" title="Submit">
           <i class="text-xl text-white fa-regular fa-check"></i>
       </button>
     </div>
