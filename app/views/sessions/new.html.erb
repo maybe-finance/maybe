@@ -1,25 +1,25 @@
 <%
-  header_title "Sign in to your account"
+  header_title t('.title')
 %>
 
 <%= form_with url: session_path, html: {class: 'space-y-6'} do |form| %>
   <%= auth_messages form %>
 
   <div class="relative border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-    <%= form.label :email, "Email address", class: 'p-4 pb-0 block text-sm font-medium text-gray-700' %>
-    <%= form.email_field :email, autofocus: false, autocomplete: "email", required: 'required', placeholder: 'you@example.com', class: 'p-4 pt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full' %>
+    <%= form.label :email, t('.email'), class: 'p-4 pb-0 block text-sm font-medium text-gray-700' %>
+    <%= form.email_field :email, autofocus: false, autocomplete: "email", required: 'required', placeholder:  t('.email_placeholder'), class: 'p-4 pt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full' %>
   </div>
 
   <div class="relative border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-    <%= form.label :password, "Password", class: 'p-4 pb-0 block text-sm font-medium text-gray-700' %>
+    <%= form.label :password, class: 'p-4 pb-0 block text-sm font-medium text-gray-700' %>
     <%= form.password_field :password, required: 'required', class: 'p-4 pt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full' %>
   </div>
 
   <div>
-    <%= form.submit "Log in", class: 'cursor-pointer flex justify-center w-full px-4 py-3 text-sm font-medium text-white bg-black rounded-xl hover:bg-black focus:outline-none focus:ring-2 focus:ring-gray-200 shadow' %>
+    <%= form.submit t('.submit'), class: 'cursor-pointer flex justify-center w-full px-4 py-3 text-sm font-medium text-white bg-black rounded-xl hover:bg-black focus:outline-none focus:ring-2 focus:ring-gray-200 shadow' %>
   </div>
 <% end %>
 
 <div class="mt-6 text-center">
-  <p class="text-sm text-gray-600">Forgot your password? <%= link_to "Reset it", new_password_reset_path, class: 'font-medium text-gray-600 hover:text-gray-400 transition' %></p>
+  <p class="text-sm text-gray-600"><%= t('.forgot_password') %> <%= link_to t('.reset_password'), new_password_reset_path, class: 'font-medium text-gray-600 hover:text-gray-400 transition' %></p>
 </div>

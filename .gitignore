@@ -40,3 +40,10 @@
 
 # Ignore Jetbrains IDEs
 .idea
+
+# Ignore macOS specific files
+*/.DS_Store
+.DS_Store
+
+# Ignore .devcontainer files
+compose-dev.yaml
