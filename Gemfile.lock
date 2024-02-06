@@ -143,6 +143,9 @@ GEM
       irb (~> 1.10)
       reline (>= 0.3.8)
     dotenv (2.8.1)
+    dotenv-rails (2.8.1)
+      dotenv (= 2.8.1)
+      railties (>= 3.2)
     drb (2.2.0)
       ruby2_keywords
     erubi (1.12.0)
@@ -385,6 +388,7 @@ DEPENDENCIES
   capybara
   debug
   dotenv
+  dotenv-rails
   hotwire-livereload
   i18n-tasks
   importmap-rails
