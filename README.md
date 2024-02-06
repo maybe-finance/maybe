@@ -49,7 +49,11 @@ rails db:setup
 bin/dev
 ```
 
-And visit [http://localhost:3000](http://localhost:3000)
+And visit [http://localhost:3000](http://localhost:3000) to see the app.
+You can use the following credentials to log in:
+
+- Email: `user@maybe.local`
+- Password: `password`
 
 ### Email
 
