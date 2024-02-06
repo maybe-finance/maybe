@@ -31,3 +31,14 @@
     <%= form.submit class: 'cursor-pointer flex justify-center w-full px-4 py-3 text-sm font-medium text-white bg-black rounded-xl hover:bg-black focus:outline-none focus:ring-2 focus:ring-gray-200 shadow' %>
   </div>
 <% end %>
+
+<div class="mt-6 text-center">
+  <p class="text-sm text-gray-600">
+    <%= t('.forgot_password') %>
+    <%= link_to t('.reset_password'), new_password_reset_path, class: 'font-medium text-gray-600 hover:text-gray-400 transition' %>
+  </p>
+  <p class="text-sm text-gray-600">
+    <%= t('.do_you_have_account') %>
+    <%= link_to t('.sign_in'), new_session_path, class: 'font-medium text-gray-600 hover:text-gray-400 transition' %>
+  </p>
+</div>

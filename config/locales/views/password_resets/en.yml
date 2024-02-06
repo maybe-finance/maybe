@@ -10,6 +10,10 @@ en:
     new:
       submit: Reset password
       title: Reset password
+      do_you_have_account: Do you have an account?
+      sign_in: Sign In
+      dont_you_have_account: Don't you have an account?
+      create_account: Create Account
     update:
       invalid_token: Invalid token.
       success: Your password has been reset.
