@@ -33,7 +33,7 @@
     <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
       <label for="account_balance" class="block text-sm font-medium opacity-50 focus-within:opacity-100">Balance</label>
       <div class="flex">
-        <%= f.number_field :balance, placeholder: "$0.00", in: 0.00..100000000.00, required: 'required', class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
+        <%= f.number_field :balance, placeholder: "$0.00", in: 0.00..100000000.00, step: :any, required: 'required', class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
       </div>
     </div>
 
