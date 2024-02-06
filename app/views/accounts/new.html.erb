@@ -16,7 +16,7 @@
       <%= link_to new_account_path, class: "" do %>
         <%= inline_svg_tag('icon-arrow-left.svg', class: 'text-gray-500 fill-current') %>
       <% end %>
-    <h2 class="text-2xl font-semibold font-display">Enter <%= @account.accountable_type.constantize.type_name %> account</h2>
+    <h2 class="text-2xl font-semibold font-display">Enter <%= "Account::#{params[:type]}".constantize.type_name %> account</h2>
   </div>
 
   <%= form_with model: @account, url: accounts_path, scope: :account, html: { class: "space-y-4" } do |f| %>
