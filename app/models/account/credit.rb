@@ -1,7 +1,7 @@
 class Account::Credit < ApplicationRecord
   include Accountable
 
-  def type_name
+  def self.type_name
     "Credit Card"
   end
 end
