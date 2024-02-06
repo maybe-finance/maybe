@@ -18,9 +18,15 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
   private
 
   def label_args(options)
-    return options[:label] if options[:label].is_a?(Array)
-    return [ options[:label], { class: "form-field__label" } ] if options[:label].is_a?(String)
-    return [ nil, options[:label] ] if options[:label].is_a?(Hash)
-    [ nil, { class: "form-field__label" } ]
+    case options[:label]
+    when Array
+      options[:label]
+    when String
+      [ options[:label], { class: "form-field__label" } ]
+    when Hash
+      [ nil, options[:label] ]
+    else
+      [ nil, { class: "form-field__label" } ]
+    end
   end
 end
