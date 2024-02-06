@@ -4,6 +4,7 @@ class Account < ApplicationRecord
   delegated_type :accountable, types: %w[ Account::Credit Account::Depository Account::Investment Account::Loan Account::OtherAsset Account::OtherLiability Account::Property Account::Vehicle], dependent: :destroy
 
   delegate :type_name, to: :accountable
+  accepts_nested_attributes_for :accountable
 
   monetize :balance_cents
 end

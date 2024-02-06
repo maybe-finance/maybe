@@ -1,0 +1,11 @@
+<div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+    <label for="type" class="block text-sm font-medium opacity-50 focus-within:opacity-100">Type</label>
+    <%= ff.select :card_type, options_for_select([["Mastercard", "mastercard"], ["Visa", "visa"],["American Express","american_express"],["Discover","discover"]], selected: ""), {}, class: "block w-full p-0 mt-1 bg-transparent border-none focus:outline-none focus:ring-0" %>
+  </div>
+  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+    <span class="absolute px-2 py-1 text-xs font-medium text-gray-400 uppercase bg-gray-200 rounded-full opacity-50 right-3">Optional</span>
+    <label for="credit_limit" class="block text-sm font-medium opacity-50 focus-within:opacity-100">Limit</label>
+    <div class="flex">
+      <%= ff.number_field :limit, placeholder: "$0.00", in: 0.00..100000000.00, class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
+    </div>
+  </div>

@@ -19,7 +19,7 @@ class AccountsController < ApplicationController
   def create
     @account = Current.family.accounts.build(account_params)
     @account.accountable = account_params[:accountable_type].constantize.new
-
+    @account.accountable_attributes = account_params["accountable_attributes"]
     if @account.save
       redirect_to accounts_path, notice: t(".success")
     else
@@ -30,7 +30,7 @@ class AccountsController < ApplicationController
   private
 
   def account_params
-    params.require(:account).permit(:name, :accountable_type, :balance, :balance_cents, :subtype)
+    params.require(:account).permit(:name, :accountable_type, :balance, :balance_cents, :subtype, :type, :limit, accountable_attributes: %i[limit card_type])
   end
 
   def account_type_class
