@@ -1,7 +1,52 @@
-@import "base" layer(base);
-@import "components" layer(components);
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: "GeneralSans";
+    font-style: normal;
+    font-weight: 200 700;
+    font-display: swap;
+    src: url("generalsans/GeneralSans-Variable.woff2") format("woff2");
+  }
+}
+
+@layer components {
+  .prose {
+    table {
+      @apply divide-y divide-gray-300;
+    }
+
+    tr {
+      @apply divide-x divide-gray-100;
+    }
+
+    th {
+      @apply whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900;
+    }
+
+    tbody {
+      @apply divide-y divide-gray-200;
+    }
+
+    td {
+      @apply px-2 py-2 text-sm text-gray-500 whitespace-nowrap;
+    }
+  }
+
+  .form-field {
+    @apply relative border border-gray-100 bg-offwhite rounded-xl;
+    @apply focus-within:bg-white focus-within:shadow focus-within:opacity-100;
+
+    label {
+      @apply block text-sm font-medium text-gray-700 p-4 pb-0;
+    }
+
+    input {
+      @apply bg-transparent border-none opacity-50 outline-none w-full p-4 pt-1;
+      @apply focus:ring-0 focus:opacity-100;
+    }
+  }
+}
 
