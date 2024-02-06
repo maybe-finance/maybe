@@ -18,7 +18,7 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
 
   test "create" do
     assert_difference -> { Account.count }, +1 do
-      post accounts_path, params: { account: { accountable_type: "Account::Credit" } }
+      post accounts_path, params: { account: { accountable_type: "Account::Credit", accountable_attributes: { "card_type"=>"mastercard", "limit"=>"2" } } }
       assert_redirected_to accounts_url
     end
   end

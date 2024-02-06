@@ -19,7 +19,7 @@ class AccountsController < ApplicationController
   def create
     @account = Current.family.accounts.build(account_params)
     @account.accountable = account_params[:accountable_type].constantize.new
-    @account.accountable_attributes = account_params["accountable_attributes"]
+    @account.accountable_attributes = account_params["accountable_attributes"] || {}
     if @account.save
       redirect_to accounts_path, notice: t(".success")
     else
