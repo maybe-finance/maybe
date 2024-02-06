@@ -6,7 +6,7 @@ class AccountsController < ApplicationController
       @account = if params[:type].blank?
         Account.new
       else
-        Account.new(accountable_type: "Account::#{params[:type]}")
+        Account.new(accountable_type: "Account::#{params[:type]}", balance: nil)
       end
     else
       head :not_found
@@ -21,7 +21,7 @@ class AccountsController < ApplicationController
     @account.accountable = account_params[:accountable_type].constantize.new
 
     if @account.save
-      redirect_to accounts_path, notice: "New account created successfully"
+      redirect_to accounts_path, notice: t(".success")
     else
       render "new", status: :unprocessable_entity
     end
@@ -30,7 +30,7 @@ class AccountsController < ApplicationController
   private
 
   def account_params
-    params.require(:account).permit(:name, :accountable_type, :balance, :subtype)
+    params.require(:account).permit(:name, :accountable_type, :balance, :balance_cents, :subtype)
   end
 
   def account_type_class

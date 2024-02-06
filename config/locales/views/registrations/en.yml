@@ -1,0 +1,16 @@
+---
+en:
+  helpers:
+    label:
+      user:
+        invite_code: Invite Code
+    submit:
+      user:
+        create: Continue
+  registrations:
+    create:
+      failure: Invalid input, please try again.
+      invalid_invite_code: Invalid invite code, please try again.
+      success: You have signed up successfully.
+    new:
+      title: Create an account
