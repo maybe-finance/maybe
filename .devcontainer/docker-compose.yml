@@ -18,6 +18,8 @@ services:
     environment:
       DB_HOST: db
       HOST: "0.0.0.0"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
 
     depends_on:
       - db
