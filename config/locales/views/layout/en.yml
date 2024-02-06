@@ -3,7 +3,7 @@ en:
   layouts:
     application:
       accounts: Accounts
-      cache: Cache
+      cash: Cash
       dashboard: Dashboard
       new_accoount: New Account
     auth:
