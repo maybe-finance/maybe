@@ -5,5 +5,5 @@ class Account < ApplicationRecord
 
   delegate :type_name, to: :accountable
 
-  monetize :balance, as: :balance_cents
+  monetize :balance_cents
 end

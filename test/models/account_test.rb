@@ -2,9 +2,8 @@ require "test_helper"
 
 class AccountTest < ActiveSupport::TestCase
   def setup
-    Money.locale_backend = :i18n
     depository = Account::Depository.create!
-    @account = Account.create!(family: families(:dylan_family), name: "Explicit Checking", balance: 1200, accountable: depository)
+    @account = Account.create!(family: families(:dylan_family), name: "Explicit Checking", balance_cents: 1200, accountable: depository)
   end
 
   test "new account should be valid" do
@@ -13,14 +12,20 @@ class AccountTest < ActiveSupport::TestCase
     assert_not_nil @account.accountable
   end
 
-  test "balance_cents returns Money object" do
-    @account.balance = 750
-    assert_instance_of Money, @account.balance_cents
-    assert_equal :usd, @account.balance_cents.currency.id
+  test "balance returns Money object" do
+    @account.balance = 10
+    assert_instance_of Money, @account.balance
+    assert_equal :usd, @account.balance.currency.id
   end
 
   test "correctly assigns Money objects to the attribute" do
-    @account.balance_cents = Money.new(2500, :usd)
-    assert_equal 2500, @account.balance
+    @account.balance = Money.new(2500, "USD")
+    assert_equal 2500, @account.balance_cents
+  end
+
+  test "balance_cents can be updated" do
+    new_balance = Money.new(10000, "USD")
+    @account.balance = new_balance
+    assert_equal new_balance, @account.balance
   end
 end
