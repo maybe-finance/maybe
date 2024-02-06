@@ -6,11 +6,11 @@ en:
     destroy:
       logout_successful: You have signed out successfully.
     new:
+      create_account: Create Account
+      dont_you_have_account: Don't you have an account?
       email: Email address
       email_placeholder: you@example.com
       forgot_password: Forgot your password?
       reset_password: Reset it
       submit: Log in
       title: Sign in to your account
-      dont_you_have_account: Don't you have an account?
-      create_account: Create Account

@@ -13,8 +13,8 @@ en:
       invalid_invite_code: Invalid invite code, please try again.
       success: You have signed up successfully.
     new:
-      title: Create an account
+      do_you_have_account: Do you have an account?
       forgot_password: Forgot your password?
       reset_password: Reset it
-      do_you_have_account: Do you have an account?
       sign_in: Sign In
+      title: Create an account
