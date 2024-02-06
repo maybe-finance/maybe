@@ -8,7 +8,7 @@
         <%= account.name %>
       </div>
       <div class="flex items-center text-sm">
-        <%= account.accountable %>
+        <%= to_accountable_title(account.accountable) %>
       </div>
       <p class="text-sm text-right">
         <span class="block mb-1"><%= number_to_currency account.balance %></span>
