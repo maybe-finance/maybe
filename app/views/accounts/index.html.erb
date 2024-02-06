@@ -1,5 +1,5 @@
 
-<h2 class="text-2xl font-semibold font-display">Cash</h2>
+<h2 class="text-2xl font-semibold font-display"><%= t('.title')%></h2>
 <h3 class="mt-1 mb-4 text-sm text-gray-500"><%#= number_to_currency Current.family.cash_balance %></h3>
 
 <% Current.family.accounts.each do |account| %>
@@ -8,10 +8,10 @@
         <%= account.name %>
       </div>
       <div class="flex items-center text-sm">
-        <%= account.accountable %>
+        <%= account.accountable.model_name.human %>
       </div>
       <p class="text-sm text-right">
-        <span class="block mb-1"><%= number_to_currency account.balance %></span>
+        <span class="block mb-1"><%= humanized_money_with_symbol account.balance %></span>
       </p>
     </div>
 <% end %>
