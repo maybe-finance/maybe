@@ -49,20 +49,20 @@
             <li>
               <%= link_to root_path, class: 'block hover:bg-gray-100 -ml-2 p-2 text-sm font-semibold text-gray-900 flex items-center rounded' do %>
                 <%= inline_svg_tag('icon-dashboard.svg', class: 'text-black stroke-current mr-2') %>
-                Dashboard
+                <%= t('.dashboard') %>
               <% end %>
             </li>
           </ul>
         </nav>
         <div class="flex flex-col mt-6">
           <div class="flex items-center justify-between">
-            <span class="text-xs">Accounts</span>
-            <%= link_to new_account_path, class: 'block hover:bg-gray-100 p-2 text-sm font-semibold text-gray-900 flex items-center rounded', title: "New account" do %>
+            <span class="text-xs"><%= t('.accounts') %></span>
+            <%= link_to new_account_path, class: 'block hover:bg-gray-100 p-2 text-sm font-semibold text-gray-900 flex items-center rounded', title: t('.new_accoount') do %>
               <%= inline_svg_tag('icon-add.svg', class: 'text-gray-500 fill-current') %>
             <% end %>
           </div>
           <div>
-            <h2 class="text-sm font-semibold font-display">Cash</h2>
+            <h2 class="text-sm font-semibold font-display"><%= t('.cache') %></h2>
 
             <% Current.family.accounts.each do |account| %>
               <div class="flex items-center justify-between py-2">

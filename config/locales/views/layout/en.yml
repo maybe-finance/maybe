@@ -1,0 +1,15 @@
+---
+en:
+  layouts:
+    application:
+      accounts: Accounts
+      cache: Cache
+      dashboard: Dashboard
+      new_accoount: New Account
+    auth:
+      or: or
+      privacy_policy: Privacy Policy
+      sign_in: sign in to your account
+      sign_up: create an account
+      terms_of_service: Terms of Service
+      your_account: Your account
