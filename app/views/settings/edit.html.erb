@@ -3,34 +3,34 @@
 <%= form_with model: Current.user, url: settings_path, html: { class: "space-y-4" } do |form| %>
   <%= form.fields_for :family_attributes do |family_fields| %>
     <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-      <%= family_fields.label :name, "Family name", class: "block text-sm font-medium opacity-50 focus-within:opacity-100" %>
+      <%= family_fields.label :name, "Family name", class: "block text-sm font-medium opacity-75 focus-within:opacity-100" %>
       <%= family_fields.text_field :name, placeholder: "Family name", value: Current.family.name, class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
     </div>
   <% end %>
 
 
   <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-    <%= form.label :first_name, class: "block text-sm font-medium opacity-50 focus-within:opacity-100" %>
+    <%= form.label :first_name, class: "block text-sm font-medium opacity-75 focus-within:opacity-100" %>
     <%= form.text_field :first_name, placeholder: "First name", value: Current.user.first_name, class: "w-full p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
   </div>
 
   <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-    <%= form.label :last_name, class: "block text-sm font-medium opacity-50 focus-within:opacity-100" %>
+    <%= form.label :last_name, class: "block text-sm font-medium opacity-75 focus-within:opacity-100" %>
     <%= form.text_field :last_name, placeholder: "Last name", value: Current.user.last_name, class: "w-full p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
   </div>
 
   <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-    <%= form.label :email, class: "block text-sm font-medium opacity-50 focus-within:opacity-100" %>
+    <%= form.label :email, class: "block text-sm font-medium opacity-75 focus-within:opacity-100" %>
     <%= form.email_field :email, placeholder: "Email", value: Current.user.email, class: "w-full p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
   </div>
 
   <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-    <%= form.label :password, class: "block text-sm font-medium opacity-50 focus-within:opacity-100" %>
+    <%= form.label :password, class: "block text-sm font-medium opacity-75 focus-within:opacity-100" %>
     <%= form.password_field :password, class: "w-full p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
   </div>
 
   <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-    <%= form.label :password_confirmation, class: "block text-sm font-medium opacity-50 focus-within:opacity-100" %>
+    <%= form.label :password_confirmation, class: "block text-sm font-medium opacity-75 focus-within:opacity-100" %>
     <%= form.password_field :password_confirmation, class: "w-full p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
   </div>
 
