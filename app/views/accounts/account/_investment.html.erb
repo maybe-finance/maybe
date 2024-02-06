@@ -1,0 +1,4 @@
+<div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+  <label for="account_name" class="block text-sm font-medium opacity-50 focus-within:opacity-100">Type</label>
+  <%= f.select :subtype, options_for_select([["Brokerage", "brokerage"], ["Pension", "pension"], ["Retirement", "retirement"], ["401(k)", "401k"], ["529 plan", "529_plan"], ["Health Savings Account", "hsa"], ["Mutual Fund", "mutual_fund"], ["Roth IRA", "roth_ira"], ["Roth 401k", "roth_401k"]], selected: ""), {}, class: "block w-full p-0 mt-1 bg-transparent border-none focus:outline-none focus:ring-0" %>
+</div>
