@@ -35,7 +35,7 @@ From the start our focus with this is to make it as easy as possible for you to 
 
 After cloning the repo, the basic setup commands are:
 
-```
+```sh
 cd maybe
 cp .env.example .env
 bundle install
