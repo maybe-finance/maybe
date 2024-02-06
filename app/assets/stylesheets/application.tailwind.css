@@ -38,15 +38,15 @@
   .form-field {
     @apply relative border border-gray-100 bg-offwhite rounded-xl;
     @apply focus-within:bg-white focus-within:shadow focus-within:opacity-100;
+  }
 
-    label {
-      @apply block text-sm font-medium text-gray-700 p-4 pb-0;
-    }
+  .form-field__label {
+    @apply block text-sm font-medium text-gray-700 p-4 pb-0;
+  }
 
-    input {
-      @apply bg-transparent border-none opacity-50 outline-none w-full p-4 pt-1;
-      @apply focus:ring-0 focus:opacity-100;
-    }
+  .form-field__input {
+    @apply bg-transparent border-none opacity-50 outline-none w-full p-4 pt-1;
+    @apply focus:ring-0 focus:opacity-100;
   }
 }
 
