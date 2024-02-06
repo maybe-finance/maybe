@@ -9,8 +9,9 @@
 #   end
 
 # Create the default user
-family = Family.create_or_find_by!(name: "The Smiths")
+family = Family.create_or_find_by!(name: "The Maybe Family")
 puts "Family created: #{family.name}"
-user = User.create_or_find_by!(first_name: "John", last_name: "Smith", email: "john@smith.com",
-                   password: "password", password_confirmation: "password", family_id: family.id)
+user = User.create_or_find_by!(
+  first_name: "Josh", last_name: "Maybe", email: "user@maybe.local",
+  password: "password", password_confirmation: "password", family_id: family.id)
 puts "User created: #{user.email} for family: #{family.name}"
