@@ -24,12 +24,12 @@ services:
       - redis
 
   redis:
-    image: redis:latest
+    image: redis:${REDIS_VERSION:-latest}
     ports:
       - "6379:6379"
 
   db:
-    image: postgres:latest
+    image: postgres:${POSTGRES_VERSION:-latest}
     restart: unless-stopped
     volumes:
       - postgres-data:/var/lib/postgresql/data
