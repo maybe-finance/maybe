@@ -1,0 +1,14 @@
+---
+en:
+  sessions:
+    create:
+      invalid_credentials: Invalid email or password.
+    destroy:
+      logout_successful: You have signed out successfully.
+    new:
+      email: Email address
+      email_placeholder: you@example.com
+      forgot_password: Forgot your password?
+      reset_password: Reset it
+      submit: Log in
+      title: Sign in to your account

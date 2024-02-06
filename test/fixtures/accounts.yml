@@ -1,14 +1,14 @@
 dylan_checking:
   family: dylan_family
   name: Bob's Checking
-  balance: 1200
+  balance_cents: 1200
 
 dylan_roth:
   family: dylan_family
   name: Bob's Roth IRA
-  balance: 1200
+  balance_cents: 1200
 
 richards_savings:
   family: richards_family
   name: Keef's HYSA
-  balance: 1500
+  balance_cents: 1500
