@@ -4,6 +4,6 @@
     <span class="flex w-10 h-10 shrink-0 grow-0 items-center justify-center rounded-xl <%= bg_color %> mb-2">
       <%= inline_svg_tag(icon, class: "#{text_color} stroke-current") %>
     </span>
-    <%= type.type_name %>
+    <%= type.model_name.human %>
   <% end %>
 </div>
