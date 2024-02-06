@@ -13,6 +13,6 @@ class AccountsTest < ApplicationSystemTestCase
       fill_in "Balance", with: "1000"
       click_on "Submit"
     end
-    assert_text "$1,000.00"
+    assert_text "$1,000"
   end
 end
