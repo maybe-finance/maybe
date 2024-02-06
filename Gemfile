@@ -29,6 +29,11 @@ gem "jbuilder"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "money-rails", "~> 1.12"
 
+# Feature Flags
+gem "flipper"
+gem "flipper-active_record"
+gem "flipper-ui"
+
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
   gem "brakeman", require: false
