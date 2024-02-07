@@ -1,0 +1,7 @@
+<%= turbo_frame_tag "modal" do %>
+  <dialog class="bg-white border border-[#141414]/25 rounded-2xl max-h-[556px] h-full max-w-[580px] w-full shadow-xs" data-controller="modal" data-action="click->modal#click_outside">
+    <div class="flex flex-col p-2 h-full">
+      <%= yield %>
+    </div>
+  </dialog>
+<% end %>

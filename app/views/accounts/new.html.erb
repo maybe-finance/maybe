@@ -1,47 +1,49 @@
 <h1 class="text-3xl font-semibold font-display"><%= t('.title')%></h1>
 
-<% if params[:type].blank? || Account.accountable_types.include?("Account::#{params[:type]}") == false %>
-  <div class="grid grid-cols-2 gap-4 mt-8 text-sm sm:grid-cols-3 md:grid-cols-4">
-    <%= render "account_type", type: Account::Credit.new, bg_color: "bg-[#E6F6FA]", text_color: "text-[#189FC7]", icon: "icon-credit-card.svg" %>
-    <%= render "account_type", type: Account::Depository.new, bg_color: "bg-[#EAF4FF]", text_color: "text-[#3492FB]", icon: "icon-bank-accounts.svg" %>
-    <%= render "account_type", type: Account::Investment.new, bg_color: "bg-[#EDF7F4]", text_color: "text-[#1BD5A1]", icon: "icon-bank-accounts.svg" %>
-    <%= render "account_type", type: Account::Loan.new, bg_color: "bg-[#EDF7F4]", text_color: "text-[#1BD5A1]", icon: "icon-bank-accounts.svg" %>
-    <%= render "account_type", type: Account::OtherAsset.new, bg_color: "bg-[#EDF7F4]", text_color: "text-[#1BD5A1]", icon: "icon-bank-accounts.svg" %>
-    <%= render "account_type", type: Account::OtherLiability.new, bg_color: "bg-[#EDF7F4]", text_color: "text-[#1BD5A1]", icon: "icon-bank-accounts.svg" %>
-    <%= render "account_type", type: Account::Property.new, bg_color: "bg-[#FEF0F7]", text_color: "text-[#F03695]", icon: "icon-real-estate.svg" %>
-    <%= render "account_type", type: Account::Vehicle.new, bg_color: "bg-[#EDF7F4]", text_color: "text-[#1BD5A1]", icon: "icon-bank-accounts.svg" %>
-  </div>
-<% else %>
-  <div class="relative flex items-center mb-5 space-x-2">
-      <%= link_to new_account_path, class: "" do %>
-        <%= inline_svg_tag('icon-arrow-left.svg', class: 'text-gray-500 fill-current') %>
-      <% end %>
-    <h2 class="text-2xl font-semibold font-display"><%= t('.enter_type_account', type: @account.accountable_class.model_name.human.downcase ) %></h2>
-  </div>
-
-  <%= form_with model: @account, url: accounts_path, scope: :account, html: { class: "space-y-4" } do |f| %>
-    <%= f.hidden_field :accountable_type %>
-
-    <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-      <%# <span class="absolute px-2 py-1 text-xs font-medium text-gray-400 uppercase bg-gray-200 rounded-full opacity-50 right-3">Optional</span> %>
-      <%= f.label :name, class: 'block text-sm font-medium opacity-50 focus-within:opacity-100'  %>
-      <%= f.text_field :name, placeholder: t('.account_name_placeholder'), required: 'required', class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
+<%= modal do %>
+  <% if params[:type].blank? || Account.accountable_types.include?("Account::#{params[:type]}") == false %>
+    <div class="flex flex-col text-sm">
+      <%= render "account_type", type: Account::Credit.new, bg_color: "bg-[#E6F6FA]", text_color: "text-[#189FC7]", icon: "icon-credit-card.svg" %>
+      <%= render "account_type", type: Account::Depository.new, bg_color: "bg-[#EAF4FF]", text_color: "text-[#3492FB]", icon: "icon-bank-accounts.svg" %>
+      <%= render "account_type", type: Account::Investment.new, bg_color: "bg-[#EDF7F4]", text_color: "text-[#1BD5A1]", icon: "icon-bank-accounts.svg" %>
+      <%= render "account_type", type: Account::Loan.new, bg_color: "bg-[#EDF7F4]", text_color: "text-[#1BD5A1]", icon: "icon-bank-accounts.svg" %>
+      <%= render "account_type", type: Account::OtherAsset.new, bg_color: "bg-[#EDF7F4]", text_color: "text-[#1BD5A1]", icon: "icon-bank-accounts.svg" %>
+      <%= render "account_type", type: Account::OtherLiability.new, bg_color: "bg-[#EDF7F4]", text_color: "text-[#1BD5A1]", icon: "icon-bank-accounts.svg" %>
+      <%= render "account_type", type: Account::Property.new, bg_color: "bg-[#FEF0F7]", text_color: "text-[#F03695]", icon: "icon-real-estate.svg" %>
+      <%= render "account_type", type: Account::Vehicle.new, bg_color: "bg-[#EDF7F4]", text_color: "text-[#1BD5A1]", icon: "icon-bank-accounts.svg" %>
+    </div>
+  <% else %>
+    <div class="relative flex items-center mb-5 space-x-2">
+        <%= link_to new_account_path, class: "" do %>
+          <%= inline_svg_tag('icon-arrow-left.svg', class: 'text-gray-500 fill-current') %>
+        <% end %>
+      <h2 class="text-2xl font-semibold font-display"><%= t('.enter_type_account', type: @account.accountable_class.model_name.human.downcase ) %></h2>
     </div>
 
-    <%= render "accounts/#{permitted_accountable_partial(@account.accountable_type)}", f: f %>
+    <%= form_with model: @account, url: accounts_path, scope: :account, html: { class: "space-y-4" } do |f| %>
+      <%= f.hidden_field :accountable_type %>
 
-    <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-
-      <%= f.label :balance, class: 'block text-sm font-medium opacity-50 focus-within:opacity-100' %>
-      <div class="flex">
-        <%= f.number_field :balance, placeholder: number_to_currency(0), in: 0.00..100000000.00, required: 'required', class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
+      <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+        <%# <span class="absolute px-2 py-1 text-xs font-medium text-gray-400 uppercase bg-gray-200 rounded-full opacity-50 right-3">Optional</span> %>
+        <%= f.label :name, class: 'block text-sm font-medium opacity-50 focus-within:opacity-100'  %>
+        <%= f.text_field :name, placeholder: t('.account_name_placeholder'), required: 'required', class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
       </div>
-    </div>
 
-    <div class="absolute right-5 bottom-5">
-      <button type="submit" class="flex items-center justify-center w-12 h-12 mb-2 bg-black rounded-full shrink-0 grow-0 hover:bg-gray-600" title="Submit">
-          <%= inline_svg_tag('icn-check.svg', class: 'text-white fill-current') %>
-      </button>
-    </div>
+      <%= render "accounts/#{permitted_accountable_partial(@account.accountable_type)}", f: f %>
+
+      <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+
+        <%= f.label :balance, class: 'block text-sm font-medium opacity-50 focus-within:opacity-100' %>
+        <div class="flex">
+          <%= f.number_field :balance, placeholder: number_to_currency(0), in: 0.00..100000000.00, required: 'required', class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
+        </div>
+      </div>
+
+      <div class="absolute right-5 bottom-5">
+        <button type="submit" class="flex items-center justify-center w-12 h-12 mb-2 bg-black rounded-full shrink-0 grow-0 hover:bg-gray-600" title="Submit">
+            <%= inline_svg_tag('icn-check.svg', class: 'text-white fill-current') %>
+        </button>
+      </div>
+    <% end %>
   <% end %>
 <% end %>
