@@ -6,7 +6,7 @@ class AccountsTest < ApplicationSystemTestCase
   end
 
   test "should create account" do
-    skip("Disabling this block for now, UI is changing to quickly to do systems testing")
+    skip("Disabling this test for now, UI is changing to quickly to do systems testing")
 
     click_on "New account"
     click_on "Credit Card"
