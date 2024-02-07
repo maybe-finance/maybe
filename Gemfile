@@ -20,7 +20,7 @@ gem "tailwindcss-rails"
 
 # Hotwire
 gem "stimulus-rails"
-gem "turbo-rails", github: "hotwired/turbo-rails", branch: "main"
+gem "turbo-rails"
 
 # Other
 gem "bcrypt", "~> 3.1.7"
@@ -33,7 +33,6 @@ group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
   gem "brakeman", require: false
   gem "rubocop-rails-omakase", require: false
-  gem "dotenv"
   gem "dotenv-rails"
   gem "letter_opener"
   gem "i18n-tasks"
