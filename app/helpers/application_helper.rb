@@ -10,4 +10,8 @@ module ApplicationHelper
   def permitted_accountable_partial(name)
     name.underscore
   end
+
+  def modal(&block)
+    render "shared/modal", &block
+  end
 end

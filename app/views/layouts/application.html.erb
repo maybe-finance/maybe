@@ -63,6 +63,16 @@
               <%= inline_svg_tag('icon-add.svg', class: 'text-gray-500 fill-current') %>
             <% end %>
           </div>
+
+          <div class="flex items-center justify-between">
+            <%= link_to accounts_path, class: 'text-xs' do%>
+              Accounts (with modal)
+            <% end %>
+            <%= link_to new_account_path, class: 'block hover:bg-gray-100 p-2 text-sm font-semibold text-gray-900 flex items-center rounded', title: "Modal Demo", data: { turbo_frame: "modal" } do %>
+              <%= inline_svg_tag('icon-add.svg', class: 'text-gray-500 fill-current') %>
+            <% end %>
+          </div>
+
           <div>
             <h2 class="text-sm font-semibold font-display"><%= t('.cash') %></h2>
 
@@ -83,5 +93,6 @@
         <%= yield %>
       </main>
     </div>
+    <%= turbo_frame_tag "modal" %>
   </body>
 </html>
