@@ -22,6 +22,9 @@ module.exports = {
       },
       dropShadow: {
         'form': '0px 4px 10px rgba(52, 54, 60, 0.08)',
+      },
+      boxShadow: {
+        'xs': '0px 1px 2px 0px #1018280D'
       }
     },
   },
