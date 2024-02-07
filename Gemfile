@@ -17,6 +17,7 @@ gem "bootsnap", require: false
 gem "importmap-rails"
 gem "propshaft"
 gem "tailwindcss-rails"
+gem "lucide-rails"
 
 # Hotwire
 gem "stimulus-rails"

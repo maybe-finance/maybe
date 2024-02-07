@@ -196,6 +196,8 @@ GEM
     loofah (2.22.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
+    lucide-rails (0.2.0)
+      railties (>= 4.1.0)
     mail (2.8.1)
       mini_mime (>= 0.1.1)
       net-imap
@@ -395,6 +397,7 @@ DEPENDENCIES
   inline_svg
   jbuilder
   letter_opener
+  lucide-rails
   money-rails (~> 1.12)
   pg (~> 1.1)
   propshaft
