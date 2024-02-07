@@ -30,7 +30,7 @@ class AccountsController < ApplicationController
   private
 
   def account_params
-    params.require(:account).permit(:name, :accountable_type, :balance, :balance_cents, :subtype)
+    params.require(:account).permit(:name, :accountable_type, :balance, :balance_cents, :subtype, :limit)
   end
 
   def account_type_class

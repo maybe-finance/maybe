@@ -1,6 +1,10 @@
 ---
 en:
   accounts:
+    account:
+      credit:
+        limit: Limit
+        type: Type
     create:
       success: New account created successfully
     index:

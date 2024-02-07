@@ -1,0 +1,8 @@
+<div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+  <%= f.label :subtype, t('.type') ,class: 'block text-sm font-medium opacity-50 focus-within:opacity-100'  %>
+  <%= f.select :subtype, options_for_select(Account::Credit::SUBTYPES, selected: ""), {}, class: "block w-full p-0 mt-1 bg-transparent border-none focus:outline-none focus:ring-0" %>
+</div>
+<div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+  <%= f.label :limit, t('.limit') ,class: 'block text-sm font-medium opacity-50 focus-within:opacity-100'  %>
+  <%= f.number_field :limit, placeholder: number_to_currency(0), in: 0.00..100000000.00, required: 'required', class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
+</div>

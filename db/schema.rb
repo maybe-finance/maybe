@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_02_06_031739) do
+ActiveRecord::Schema[7.2].define(version: 2024_02_07_021033) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -66,6 +66,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_02_06_031739) do
     t.uuid "accountable_id"
     t.bigint "balance_cents", default: 0, null: false
     t.string "balance_currency", default: "USD", null: false
+    t.bigint "limit", default: 0
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id"], name: "index_accounts_on_family_id"
   end
