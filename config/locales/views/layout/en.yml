@@ -5,7 +5,7 @@ en:
       accounts: Accounts
       cash: Cash
       dashboard: Dashboard
-      new_accoount: New Account
+      new_account: New Account
     auth:
       or: or
       privacy_policy: Privacy Policy

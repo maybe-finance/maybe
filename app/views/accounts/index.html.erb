@@ -3,14 +3,14 @@
 <h3 class="mt-1 mb-4 text-sm text-gray-500"><%#= number_to_currency Current.family.cash_balance %></h3>
 
 <% Current.family.accounts.each do |account| %>
-    <div class="flex items-center justify-between px-3 py-3 mb-2 bg-white shadow-sm rounded-xl">
-      <div class="flex items-center text-sm">
+    <div class="flex flex-row items-center justify-between px-3 py-3 mb-2 bg-white shadow-sm rounded-xl">
+      <div class="flex w-1/3 items-center text-sm">
         <%= account.name %>
       </div>
-      <div class="flex items-center text-sm">
-        <%= account.accountable.model_name.human %>
+      <div class="flex w-1/3 items-center text-sm">
+        <%= to_accountable_title(account.accountable) %>
       </div>
-      <p class="text-sm text-right">
+      <p class="flex w-1/3 text-sm text-right">
         <span class="block mb-1"><%= humanized_money_with_symbol account.balance %></span>
       </p>
     </div>
