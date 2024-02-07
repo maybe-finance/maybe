@@ -6,7 +6,8 @@ export default class extends Controller {
     this.element.showModal();
   }
 
-  click(e) {
+  // Hide the dialog when the user clicks outside of it
+  click_outside(e) {
     if (e.target === this.element) {
       this.element.close();
     }
