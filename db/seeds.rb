@@ -7,3 +7,11 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+# Create the default user
+family = Family.create_or_find_by!(name: "The Maybe Family")
+puts "Family created: #{family.name}"
+user = User.create_or_find_by!(
+  first_name: "Josh", last_name: "Maybe", email: "user@maybe.local",
+  password: "password", password_confirmation: "password", family_id: family.id)
+puts "User created: #{user.email} for family: #{family.name}"
