@@ -20,7 +20,7 @@ gem "tailwindcss-rails"
 
 # Hotwire
 gem "stimulus-rails"
-gem "turbo-rails", github: "hotwired/turbo-rails", branch: "main"
+gem "turbo-rails"
 
 # Other
 gem "bcrypt", "~> 3.1.7"
