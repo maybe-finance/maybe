@@ -381,7 +381,6 @@ DEPENDENCIES
   brakeman
   capybara
   debug
-  dotenv
   dotenv-rails
   hotwire-livereload
   i18n-tasks
