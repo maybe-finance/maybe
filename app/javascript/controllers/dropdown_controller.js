@@ -14,10 +14,10 @@ export default class extends Controller {
   }
 
   connect() {
-    document.addEventListener("click", this.hideMenu;
+    document.addEventListener("click", this.hideMenu);
   }
 
   disconnect() {
-    document.removeEventListener("click", this.hideMenu;
+    document.removeEventListener("click", this.hideMenu);
   }
 }
