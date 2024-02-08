@@ -1,6 +1,15 @@
-<%= link_to (local_assigns[:disabled] && disabled ? "#" : new_account_path(type: type.class.name.demodulize)), class: "flex items-center gap-4 w-full text-center focus:outline-none focus:bg-gray-50 border border-transparent focus:border focus:border-gray-200 block px-2 hover:bg-gray-50 rounded-lg p-2 #{'cursor-not-allowed' if local_assigns[:disabled] && disabled}" do %>
-  <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-[#141414]/5 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.02)]">
-    <%= lucide_icon(icon, class: "text-gray-500 w-5 h-5") %>
+<% if local_assigns[:disabled] && disabled %>
+  <span class="flex items-center w-full gap-4 p-2 px-2 text-center border border-transparent rounded-lg cursor-not-allowed focus:outline-none focus:bg-gray-50 focus:border focus:border-gray-200 hover:bg-gray-50">
+    <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-[#141414]/5 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.02)]">
+      <%= lucide_icon(icon, class: "text-gray-500 w-5 h-5") %>
+    </span>
+    <%= text %>
   </span>
-  <%= text %>
+<% else %>
+  <%= link_to new_account_path(type: type.class.name.demodulize), class: "flex items-center gap-4 w-full text-center focus:outline-none focus:bg-gray-50 border border-transparent focus:border focus:border-gray-200 px-2 hover:bg-gray-50 rounded-lg p-2" do %>
+    <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-[#141414]/5 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.02)]">
+      <%= lucide_icon(icon, class: "text-gray-500 w-5 h-5") %>
+    </span>
+    <%= text %>
+  <% end %>
 <% end %>
