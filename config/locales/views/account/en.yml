@@ -7,3 +7,13 @@ en:
       title: Cash
     new:
       title: Add an account
+  shared:
+    modal:
+      Depository: Bank Account
+      Credit: Credit Card
+      Investment: Investment
+      Property: Property
+      Vehicle: Vehicle
+      Loan: Loan
+      OtherAsset: Asset
+      OtherLiability: Liability

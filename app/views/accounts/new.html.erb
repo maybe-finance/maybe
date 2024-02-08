@@ -64,7 +64,9 @@
       <%= link_to new_account_path(step: 'method', type: params[:type]), class: "flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-[#141414]/5" do %>
         <%= lucide_icon('arrow-left', class: 'text-gray-500 w-5 h-5') %>
       <% end %>
-      <span>Add account</span>
+      <% if params[:type].present? && Account.accountable_types.include?("Account::#{params[:type]}") %>
+        <span>Add <%= t('.'+params[:type]) %></span>
+      <% end %>
     </div>
 
     <%= form_with model: @account, url: accounts_path, scope: :account, html: { class: "space-y-4 m-5 mt-1", data: { turbo: false } } do |f| %>
