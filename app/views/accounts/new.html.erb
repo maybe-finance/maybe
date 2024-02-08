@@ -65,11 +65,19 @@
         <%= lucide_icon('arrow-left', class: 'text-gray-500 w-5 h-5') %>
       <% end %>
       <span>
-          <% model_class = "Account::#{params[:type]}".constantize %>
-          Add <%= model_class.model_name.human(count: 2) %>
+        <% if params[:type].present? %>
+          <% allowable_types = ["Depository", "Investment", "Property", "Vehicle", "Credit", "Loan", "OtherAsset", "OtherLiability"] %>
+          <% if allowable_types.include?(params[:type]) %>
+            <% model_class = "Account::#{params[:type]}".constantize %>
+            Add <%= model_class.model_name.human(count: 2) %>
+          <% else %>
+            Add Account
+          <% end %>
+        <% else %>
+          Add Account
+        <% end %>
       </span>
     </div>
-
     <%= form_with model: @account, url: accounts_path, scope: :account, html: { class: "space-y-4 m-5 mt-1", data: { turbo: false } } do |f| %>
       <%= f.hidden_field :accountable_type %>
 
