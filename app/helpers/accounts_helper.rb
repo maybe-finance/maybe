@@ -10,7 +10,7 @@ module AccountsHelper
   def account_type
     type = params[:type]
 
-    Account unless type.present? && Account.accountable_types.include?(params[:type])
+    Account unless type.present? && Account.accountable_types.include?(type)
 
     "Account::#{type}".constantize
   end
