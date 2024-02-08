@@ -56,11 +56,14 @@
         </nav>
         <div class="flex flex-col mt-6">
           <div class="flex items-center justify-between">
-            <span class="text-xs"><%= t('.accounts') %></span>
-            <%= link_to new_account_path, class: 'block hover:bg-gray-100 p-2 text-sm font-semibold text-gray-900 flex items-center rounded', title: t('.new_accoount') do %>
+            <%= link_to accounts_path, class: 'text-xs' do%>
+              <%= t('.accounts') %>
+            <% end %>
+            <%= link_to new_account_path, class: 'block hover:bg-gray-100 p-2 text-sm font-semibold text-gray-900 flex items-center rounded', title: t('.new_account'), data: { turbo_frame: "modal" } do %>
               <%= inline_svg_tag('icon-add.svg', class: 'text-gray-500 fill-current') %>
             <% end %>
           </div>
+
           <div>
             <h2 class="text-sm font-semibold font-display"><%= t('.cash') %></h2>
 
@@ -81,5 +84,6 @@
         <%= yield %>
       </main>
     </div>
+    <%= turbo_frame_tag "modal" %>
   </body>
 </html>
