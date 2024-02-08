@@ -2,7 +2,10 @@
 
 <%= modal do %>
   <% if params[:type].blank? || Account.accountable_types.include?("Account::#{params[:type]}") == false %>
-    <div class="flex flex-col text-sm">
+    <div class="flex flex-col text-sm" data-controller="list-keyboard-navigation">
+      <button hidden data-controller="hotkey" data-hotkey="k,K,ArrowUp,ArrowLeft" data-action="list-keyboard-navigation#focusPrevious">Previous</button>
+      <button hidden data-controller="hotkey" data-hotkey="j,J,ArrowDown,ArrowRight" data-action="list-keyboard-navigation#focusNext">Next</button>
+
       <%= render "account_type", type: Account::Credit.new, bg_color: "bg-[#E6F6FA]", text_color: "text-[#189FC7]", icon: "icon-credit-card.svg" %>
       <%= render "account_type", type: Account::Depository.new, bg_color: "bg-[#EAF4FF]", text_color: "text-[#3492FB]", icon: "icon-bank-accounts.svg" %>
       <%= render "account_type", type: Account::Investment.new, bg_color: "bg-[#EDF7F4]", text_color: "text-[#1BD5A1]", icon: "icon-bank-accounts.svg" %>
