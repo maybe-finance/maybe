@@ -10,5 +10,4 @@ class Account < ApplicationRecord
   def self.allowable_account_types
     accountable_types.map { |type| type.demodulize }
   end
-
 end
