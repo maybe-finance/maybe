@@ -42,10 +42,12 @@
       <button hidden data-controller="hotkey" data-hotkey="k,K,ArrowUp,ArrowLeft" data-action="list-keyboard-navigation#focusPrevious">Previous</button>
       <button hidden data-controller="hotkey" data-hotkey="j,J,ArrowDown,ArrowRight" data-action="list-keyboard-navigation#focusNext">Next</button>
 
-      <% if Account.accountable_types.include?("Account::#{params[:type]}") %>
-        <%= render "entry_method", type: "Account::#{params[:type]}".constantize.new, text: 'Enter account balance manually', icon: "keyboard" %>
-        <%= render "entry_method", type: "Account::#{params[:type]}".constantize.new, text: 'Securely link bank account with data provider (coming soon)', icon: "link-2", disabled: true %>
-        <%= render "entry_method", type: "Account::#{params[:type]}".constantize.new, text: 'Upload spreadsheet (coming soon)', icon: "sheet", disabled: true %>
+      <% if params[:type].present? && Account.accountable_types.include?("Account::#{params[:type]}") %>
+        <% constant_name = "Account::#{params[:type]}" %>
+        <% account_type = constant_name.constantize.new %>
+        <%= render "entry_method", type: account_type, text: 'Enter account balance manually', icon: "keyboard" %>
+        <%= render "entry_method", type: account_type, text: 'Securely link bank account with data provider (coming soon)', icon: "link-2", disabled: true %>
+        <%= render "entry_method", type: account_type, text: 'Upload spreadsheet (coming soon)', icon: "sheet", disabled: true %>
       <% end %>  
     </div>
     <div class="border-t border-[#141414]/2 p-4 text-gray-500 text-sm flex justify-between">
