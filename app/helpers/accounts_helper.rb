@@ -8,10 +8,25 @@ module AccountsHelper
   end
 
   def account_type
-    type = params[:type]
-
-    Account unless type.present? && Account.accountable_types.include?(type)
-
-    "Account::#{type}".constantize
+    case params[:type]
+    when "Credit"
+      Account::Credit
+    when "Depository"
+      Account::Depository
+    when "Investment"
+      Account::Investment
+    when "Loan"
+      Account::Loan
+    when "OtherAsset"
+      Account::OtherAsset
+    when "OtherLiability"
+      Account::OtherLiability
+    when "Property"
+      Account::Property
+    when "Vehicle"
+      Account::Vehicle
+    else
+      Account
+    end
   end
 end
