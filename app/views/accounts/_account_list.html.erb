@@ -2,7 +2,8 @@
 
 <% accounts = Current.family.accounts.where(accountable_type: type.name) %>
 
-<details class="text-sm mb-1 group">
+<% if accounts.sum(&:balance) > 0 %>
+<details class="mb-1 text-sm group">
   <summary class="flex gap-4 px-2 py-3 items-center w-full rounded-[10px] font-medium hover:bg-[#f2f2f2]">
     <%= lucide_icon("chevron-down", class: "hidden group-open:block text-[#737373] w-5 h-5") %>
     <%= lucide_icon("chevron-right", class: "group-open:hidden text-[#737373] w-5 h-5") %>
@@ -11,7 +12,7 @@
   </summary>
   
   <% accounts.each do |account| %>
-    <div class="flex gap-3 px-2 py-3 items-center w-full mb-1">
+    <div class="flex items-center w-full gap-3 px-2 py-3 mb-1">
       <div>
         <p class="font-medium"><%= account.name %></p>
         <% if account.subtype %>
@@ -27,4 +28,4 @@
     <p>New <%= type.model_name.human.downcase %></p>
   <% end %>
 </details>
-
+<% end %>
