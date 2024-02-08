@@ -42,7 +42,7 @@
       <button hidden data-controller="hotkey" data-hotkey="k,K,ArrowUp,ArrowLeft" data-action="list-keyboard-navigation#focusPrevious">Previous</button>
       <button hidden data-controller="hotkey" data-hotkey="j,J,ArrowDown,ArrowRight" data-action="list-keyboard-navigation#focusNext">Next</button>
 
-      <%= render "entry_method", type: Account::Depository.new, text: 'Enter account balance manually', icon: "keyboard" %>
+      <%= render "entry_method", type: @account.accountable, text: 'Enter account balance manually', icon: "keyboard" %>
       <%= render "entry_method", type: Account::Depository.new, text: 'Securely link bank account with data provider (coming soon)', icon: "link-2", disabled: true %>
       <%= render "entry_method", type: Account::Depository.new, text: 'Upload spreadsheet (coming soon)', icon: "sheet", disabled: true %>
     </div>
@@ -86,7 +86,7 @@
 
       <div class="">
         <button type="submit" class="w-full p-3 text-center text-white bg-black rounded-lg hover:bg-gray-700" title="Submit">
-          Add account
+          Add <%= @account.accountable.model_name.human.downcase %> 
         </button>
       </div>
     <% end %>

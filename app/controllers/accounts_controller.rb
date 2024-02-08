@@ -7,6 +7,7 @@ class AccountsController < ApplicationController
         Account.new
       else
         Account.new(accountable_type: "Account::#{params[:type]}", balance: nil)
+          .tap(&:build_accountable)
       end
     else
       head :not_found
