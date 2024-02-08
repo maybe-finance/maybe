@@ -11,7 +11,6 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
-        display: ['GeneralSans, sans-serif'],
       },
       fontSize: {
         '2xs': '.625rem',
