@@ -2,18 +2,34 @@
 
 <%= modal do %>
   <% if params[:type].blank? || Account.accountable_types.include?("Account::#{params[:type]}") == false %>
-    <div class="flex flex-col text-sm" data-controller="list-keyboard-navigation">
+    <div class="border-b border-[#141414]/2 p-4 text-gray-400">
+      What would you like to add?
+    </div>
+    <div class="flex flex-col p-2 text-sm" data-controller="list-keyboard-navigation">
       <button hidden data-controller="hotkey" data-hotkey="k,K,ArrowUp,ArrowLeft" data-action="list-keyboard-navigation#focusPrevious">Previous</button>
       <button hidden data-controller="hotkey" data-hotkey="j,J,ArrowDown,ArrowRight" data-action="list-keyboard-navigation#focusNext">Next</button>
 
-      <%= render "account_type", type: Account::Credit.new, bg_color: "bg-[#E6F6FA]", text_color: "text-[#189FC7]", icon: "icon-credit-card.svg" %>
-      <%= render "account_type", type: Account::Depository.new, bg_color: "bg-[#EAF4FF]", text_color: "text-[#3492FB]", icon: "icon-bank-accounts.svg" %>
-      <%= render "account_type", type: Account::Investment.new, bg_color: "bg-[#EDF7F4]", text_color: "text-[#1BD5A1]", icon: "icon-bank-accounts.svg" %>
-      <%= render "account_type", type: Account::Loan.new, bg_color: "bg-[#EDF7F4]", text_color: "text-[#1BD5A1]", icon: "icon-bank-accounts.svg" %>
-      <%= render "account_type", type: Account::OtherAsset.new, bg_color: "bg-[#EDF7F4]", text_color: "text-[#1BD5A1]", icon: "icon-bank-accounts.svg" %>
-      <%= render "account_type", type: Account::OtherLiability.new, bg_color: "bg-[#EDF7F4]", text_color: "text-[#1BD5A1]", icon: "icon-bank-accounts.svg" %>
-      <%= render "account_type", type: Account::Property.new, bg_color: "bg-[#FEF0F7]", text_color: "text-[#F03695]", icon: "icon-real-estate.svg" %>
-      <%= render "account_type", type: Account::Vehicle.new, bg_color: "bg-[#EDF7F4]", text_color: "text-[#1BD5A1]", icon: "icon-bank-accounts.svg" %>
+      <%= render "account_type", type: Account::Depository.new, bg_color: "bg-[#EFF8FF]", text_color: "text-[#2E90FA]", icon: "landmark" %>
+      <%= render "account_type", type: Account::Investment.new, bg_color: "bg-[#ECFDF3]", text_color: "text-[#32D583]", icon: "line-chart" %>
+      <%= render "account_type", type: Account::Property.new, bg_color: "bg-[#FCF5F9]", text_color: "text-[#F23E94]", icon: "home" %>
+      <%= render "account_type", type: Account::Vehicle.new, bg_color: "bg-[#EEF4FF]", text_color: "text-[#6172F3]", icon: "car-front" %>
+      <%= render "account_type", type: Account::Credit.new, bg_color: "bg-[#F0F9FF]", text_color: "text-[#36BFFA]", icon: "credit-card" %>
+      <%= render "account_type", type: Account::Loan.new, bg_color: "bg-[#FEF6EE]", text_color: "text-[#F38744]", icon: "hand-coins" %>
+      <%= render "account_type", type: Account::OtherAsset.new, bg_color: "bg-[#ECFDF3]", text_color: "text-[#12B76A]", icon: "plus" %>
+      <%= render "account_type", type: Account::OtherLiability.new, bg_color: "bg-[#FEF3F2]", text_color: "text-[#F04438]", icon: "minus" %>
+    </div>
+    <div class="border-t border-[#141414]/2 p-4 text-gray-500 text-sm flex justify-between">
+      <div class="flex space-x-5">
+        <div class="flex items-center space-x-2">
+          <span>Select</span> <kbd class="bg-[#141414]/5 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('corner-down-left', class: 'inline w-3 h-3')%></kbd>
+        </div>
+        <div class="flex items-center space-x-2">
+          <span>Navigate</span> <kbd class="bg-[#141414]/5 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('arrow-up', class: 'inline w-3 h-3')%></kbd> <kbd class="bg-[#141414]/5 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('arrow-down', class: 'inline w-3 h-3')%></kbd>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <span>Close</span> <kbd class="bg-[#141414]/5 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-8 h-5 shrink-0 grow-0 items-center justify-center text-xs">ESC</kbd>
+      </div>
     </div>
   <% else %>
     <div class="relative flex items-center mb-5 space-x-2">
