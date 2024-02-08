@@ -15,6 +15,25 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     RUBY_EVAL
   end
 
+  def select(method, choices, options = {}, html_options = {})
+    default_options = { class: "form-field__input" }
+    merged_options = default_options.merge(html_options)
+
+    return super(method, choices, options, merged_options) unless options[:label]
+
+    @template.form_field_tag do
+      label(method, *label_args(options)) +
+      super(method, choices, options, merged_options.except(:label))
+    end
+  end
+
+  def submit(value = nil, options = {})
+    value, options = nil, value if value.is_a?(Hash)
+    default_options = { class: "form-field__submit" }
+    merged_options = default_options.merge(options)
+    super(value, merged_options)
+  end
+
   private
 
   def label_args(options)

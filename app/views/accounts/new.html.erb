@@ -70,19 +70,11 @@
     <%= form_with model: @account, url: accounts_path, scope: :account, html: { class: "space-y-4 m-5 mt-1", data: { turbo: false } } do |f| %>
       <%= f.hidden_field :accountable_type %>
 
-      <div class="relative p-3 border border-[#141414]/8 bg-white rounded-xl focus-within:bg-white focus-within:shadow-none focus-within:border-gray-900 focus-within:ring-4 focus-within:ring-gray-100 focus-within:opacity-100 shadow-sm">
-        <%= f.label :name, 'Account name', class: 'block text-sm font-medium opacity-50 focus-within:opacity-100'  %>
-        <%= f.text_field :name, placeholder: 'Example account name', required: 'required', class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
-      </div>
+      <%= f.text_field :name, placeholder: 'Example account name', required: 'required', label: 'Account name' %>
 
       <%= render "accounts/#{permitted_accountable_partial(@account.accountable_type)}", f: f %>
 
-      <div class="relative p-3 border border-[#141414]/8 bg-white rounded-xl focus-within:bg-white focus-within:shadow-none focus-within:border-gray-900 focus-within:ring-4 focus-within:ring-gray-100 focus-within:opacity-100 shadow-sm">
-        <%= f.label :balance, class: 'block text-sm font-medium opacity-50 focus-within:opacity-100' %>
-        <div class="flex">
-          <%= f.number_field :balance, placeholder: number_to_currency(0), in: 0.00..100000000.00, required: 'required', class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full" %>
-        </div>
-      </div>
+      <%= f.number_field :balance, placeholder: number_to_currency(0), in: 0.00..100000000.00, required: 'required', label: true %>
 
       <div class="">
         <button type="submit" class="w-full p-3 text-center text-white bg-black rounded-lg hover:bg-gray-700" title="Submit">

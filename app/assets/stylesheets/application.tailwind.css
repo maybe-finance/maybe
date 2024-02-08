@@ -48,5 +48,9 @@
     @apply p-3 pt-1 w-full bg-transparent border-none opacity-50;
     @apply focus:outline-none focus:ring-0 focus-within:opacity-100;
   }
+
+  .form-field__submit {
+    @apply w-full p-3 text-center text-white bg-black rounded-lg hover:bg-gray-700;
+  }
 }
 
