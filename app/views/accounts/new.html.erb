@@ -80,7 +80,8 @@
       <div class="relative p-3 border border-[#141414]/8 bg-white rounded-xl focus-within:bg-white focus-within:shadow-none focus-within:border-gray-900 focus-within:ring-4 focus-within:ring-gray-100 focus-within:opacity-100 shadow-sm">
         <%= f.label :balance, class: 'block text-sm font-medium opacity-50 focus-within:opacity-100' %>
         <div class="flex">
-          <%= f.number_field :balance, placeholder: number_to_currency(0), in: 0.00..100000000.00, required: 'required', class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full" %>
+          <%= f.number_field :balance, placeholder: number_to_currency(0), in: 0.00..100000000.00, required: 'required', class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-3/4" %>
+          <%= f.select :currency, options_for_select(['USD', 'EUR', 'JPY', 'GBP', 'AUD', 'CAD', 'CNY', 'BTC', 'ETH'], @account.currency), { prompt: 'Currency' }, class: "p-0 mt-1 ml-2 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-1/4" %>
         </div>
       </div>
 
