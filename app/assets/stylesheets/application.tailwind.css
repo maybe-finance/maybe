@@ -33,13 +33,3 @@
 .input-field {
   @apply p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100;
 }
-
-@layer base {
-  @font-face {
-    font-family: "GeneralSans";
-    font-style: normal;
-    font-weight: 200 700;
-    font-display: swap;
-    src: url("generalsans/GeneralSans-Variable.woff2") format("woff2");
-  }
-}
