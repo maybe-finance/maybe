@@ -2,7 +2,7 @@
   header_title t('.title')
 %>
 
-<%= form_with model: @user, url: registration_path, html: {class: 'space-y-6'} do |form| %>
+<%= form_with model: @user, url: registration_path do |form| %>
   <%= auth_messages form %>
 
   <%= form.email_field :email, autofocus: false, autocomplete: "email", required: 'required', placeholder: 'you@example.com', label: true %>

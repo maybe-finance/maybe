@@ -1,4 +1,11 @@
 class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
+  def initialize(object_name, object, template, options)
+    options[:html] ||= {}
+    options[:html][:class] ||= "space-y-4"
+
+    super(object_name, object, template, options)
+  end
+
   (field_helpers - [ :label, :check_box, :radio_button, :fields_for, :fields, :hidden_field, :file_field ]).each do |selector|
     class_eval <<-RUBY_EVAL, __FILE__, __LINE__ + 1
       def #{selector}(method, options)
