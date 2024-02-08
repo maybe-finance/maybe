@@ -6,8 +6,4 @@ class Account < ApplicationRecord
   delegate :type_name, to: :accountable
 
   monetize :balance_cents
-
-  def self.allowable_account_types
-    accountable_types.map { |type| type.demodulize }
-  end
 end

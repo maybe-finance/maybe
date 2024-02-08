@@ -65,11 +65,11 @@
         <%= lucide_icon('arrow-left', class: 'text-gray-500 w-5 h-5') %>
       <% end %>
       <span>
-        <% if params[:type].in? Account.allowable_account_types %>
-          <% model_class = "Account::#{params[:type]}".constantize %>
-          Add <%= model_class.model_name.human(count: 2).downcase %>
+        <% model_class = find_model_class(params[:type]) %>
+        <% if model_class %>
+          Add <%= model_class.model_name.human(count: 2) %>
         <% else %>
-          Add account
+          Add Account
         <% end %>
       </span>
     </div>
