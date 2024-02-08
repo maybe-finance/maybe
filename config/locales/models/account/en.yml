@@ -13,7 +13,7 @@ en:
       account: Account
       account/credit: Credit Card
       account/depository: Bank Accounts
-      account/investiment: Investments
+      account/investment: Investments
       account/loan: Loan
       account/other_asset: Other Asset
       account/other_liability: Other Liability

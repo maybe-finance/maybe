@@ -1,4 +1,4 @@
-<div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+<div class="relative p-3 border border-[#141414]/8 bg-white rounded-xl focus-within:bg-white focus-within:shadow-none focus-within:border-gray-900 focus-within:ring-4 focus-within:ring-gray-100 focus-within:opacity-100 shadow-sm">
   <label for="account_name" class="block text-sm font-medium opacity-50 focus-within:opacity-100">Type</label>
   <%= f.select :subtype, options_for_select(Account::Investment::SUBTYPES, selected: ""), {}, class: "block w-full p-0 mt-1 bg-transparent border-none focus:outline-none focus:ring-0" %>
 </div>
