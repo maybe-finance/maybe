@@ -37,16 +37,16 @@
 
   .form-field {
     @apply relative border bg-white rounded-xl shadow-sm;
-    @apply focus-within:bg-white focus-within:shadow-none focus-within:border-gray-900 focus-within:ring-4 focus-within:ring-gray-100 focus-within:opacity-100;
+    @apply focus-within:shadow-none focus-within:border-gray-900 focus-within:ring-4 focus-within:ring-gray-100;
   }
 
   .form-field__label {
-    @apply p-3 pb-0 block text-sm font-medium opacity-50 focus-within:opacity-100;
+    @apply p-3 pb-0 block text-sm font-medium opacity-50;
   }
 
   .form-field__input {
     @apply p-3 pt-1 w-full bg-transparent border-none opacity-50;
-    @apply focus:outline-none focus:ring-0 focus-within:opacity-100;
+    @apply focus:outline-none focus:ring-0;
   }
 
   .form-field__submit {
