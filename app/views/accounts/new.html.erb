@@ -42,7 +42,7 @@
       <button hidden data-controller="hotkey" data-hotkey="k,K,ArrowUp,ArrowLeft" data-action="list-keyboard-navigation#focusPrevious">Previous</button>
       <button hidden data-controller="hotkey" data-hotkey="j,J,ArrowDown,ArrowRight" data-action="list-keyboard-navigation#focusNext">Next</button>
 
-      <% if params[:type].present? &&  params[:type].in? Account.accountable_types.map { |type| type.split('::').last } %>
+      <% if (params[:type].present? &&  (params[:type].in? (Account.accountable_types.map { |type| type.split('::').last }))) %>
         <% constant_name = "Account::#{params[:type]}" %>
         <% account_type = constant_name.constantize.new %>
         <%= render "entry_method", type: account_type, text: 'Enter account balance manually', icon: "keyboard" %>
