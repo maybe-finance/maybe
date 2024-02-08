@@ -67,19 +67,18 @@
       <% end %>
     </div>
 
-    <%= form_with model: @account, url: accounts_path, scope: :account, html: { class: "space-y-4" } do |f| %>
+    <%= form_with model: @account, url: accounts_path, scope: :account, html: { class: "space-y-2 flex flex-col p-4 text-sm" } do |f| %>
       <%= f.hidden_field :accountable_type %>
 
-      <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
+      <div class="relative p-3 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
         <%# <span class="absolute px-2 py-1 text-xs font-medium text-gray-400 uppercase bg-gray-200 rounded-full opacity-50 right-3">Optional</span> %>
-        <%= f.label :name, class: 'block text-sm font-medium opacity-50 focus-within:opacity-100'  %>
+        <%= f.label :name, class: 'block text-sm font-medium opacity-50 focus-within:opacity-100' %>
         <%= f.text_field :name, placeholder: "Account Name", required: 'required', class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
       </div>
 
       <%= render "accounts/#{permitted_accountable_partial(@account.accountable_type)}", f: f %>
 
-      <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-
+      <div class="relative p-3 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
         <%= f.label :balance, class: 'block text-sm font-medium opacity-50 focus-within:opacity-100' %>
         <div class="flex">
           <%= f.number_field :balance, placeholder: number_to_currency(0), in: 0.00..100000000.00, required: 'required', class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
