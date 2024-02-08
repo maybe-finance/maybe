@@ -67,7 +67,7 @@
 
           <%= link_to new_account_path, class: "flex items-center gap-4 px-2 py-3 mb-1 text-[#737373] text-sm font-medium rounded-[10px] hover:bg-[#f2f2f2]", data: { turbo_frame: "modal" } do %>
             <%= lucide_icon("plus", class: "w-5 h-5") %>
-            <p><%= t('.new_account').capitalize %></p>
+            <p><%= t('.new_account') %></p>
           <% end %>
 
           <% Account.accountable_types.each do |type| %>
