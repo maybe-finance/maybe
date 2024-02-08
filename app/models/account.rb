@@ -7,8 +7,8 @@ class Account < ApplicationRecord
 
   monetize :balance_cents
 
-  def self.allowable_accountable_types
+  def self.allowable_account_types
     accountable_types.map { |type| type.demodulize }
   end
-  
+
 end

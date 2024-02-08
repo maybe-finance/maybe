@@ -66,12 +66,12 @@
       <% end %>
       <span>
         <% if params[:type].in? Account.allowable_account_types %>
-          Account::#{params[:type]}".constantize
-          end %>
-          Add <%= model_class ? model_class.model_name.human(count: 2).downcase : "account" %>
+          <% model_class = "Account::#{params[:type]}".constantize %>
+          Add <%= model_class.model_name.human(count: 2).downcase %>
         <% else %>
-          Add Account
-        ß<% end %>
+          Add account
+        <% end %>
+      </span>
     </div>
     <%= form_with model: @account, url: accounts_path, scope: :account, html: { class: "space-y-4 m-5 mt-1", data: { turbo: false } } do |f| %>
       <%= f.hidden_field :accountable_type %>
