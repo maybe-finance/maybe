@@ -3,7 +3,7 @@
 <%= modal do %>
   <% if params[:type].blank? || Account.accountable_types.include?("Account::#{params[:type]}") == false %>
     <div class="border-b border-[#141414]/2 p-4 text-gray-400">
-      What would you like to add?
+      What would you like to add? 
     </div>
     <div class="flex flex-col p-2 text-sm">
       <%= render "account_type", type: Account::Depository.new, bg_color: "bg-[#EFF8FF]", text_color: "text-[#2E90FA]", icon: "landmark" %>
