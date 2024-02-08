@@ -9,15 +9,15 @@ export default class extends Controller {
     this.menuTarget.classList.toggle("hidden");
   }
 
-  hideMenu() {
+  hideMenu = () => {
     this.menuTarget.classList.add("hidden");
   }
 
   connect() {
-    document.addEventListener("click", () => this.hideMenu());
+    document.addEventListener("click", this.hideMenu;
   }
 
   disconnect() {
-    document.removeEventListener("click", () => this.hideMenu());
+    document.removeEventListener("click", this.hideMenu;
   }
 }
