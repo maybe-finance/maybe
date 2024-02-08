@@ -60,9 +60,9 @@
       </div>
     </div>
   <% else %>
-    <div class="relative flex items-center mb-5 space-x-2">
-        <%= link_to new_account_path, class: "" do %>
-          <%= inline_svg_tag('icon-arrow-left.svg', class: 'text-gray-500 fill-current') %>
+    <div class="relative flex justify-between p-4 pb-0 space-x-2">
+      <h2 class="text-2xl font-semibold font-display"><%= t('.add_bank_account', type: @account.accountable_class.model_name.human.downcase ) %></h2>
+      <%= link_to new_account_path, class: "" do %>
         <%= inline_svg_tag('icon-close.svg', class: 'text-gray-500 fill-current') %>
       <% end %>
     </div>
