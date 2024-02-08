@@ -5,7 +5,10 @@
     <div class="border-b border-[#141414]/2 p-4 text-gray-400">
       What would you like to add?
     </div>
-    <div class="flex flex-col p-2 text-sm">
+    <div class="flex flex-col p-2 text-sm" data-controller="list-keyboard-navigation">
+      <button hidden data-controller="hotkey" data-hotkey="k,K,ArrowUp,ArrowLeft" data-action="list-keyboard-navigation#focusPrevious">Previous</button>
+      <button hidden data-controller="hotkey" data-hotkey="j,J,ArrowDown,ArrowRight" data-action="list-keyboard-navigation#focusNext">Next</button>
+
       <%= render "account_type", type: Account::Depository.new, bg_color: "bg-[#EFF8FF]", text_color: "text-[#2E90FA]", icon: "landmark" %>
       <%= render "account_type", type: Account::Investment.new, bg_color: "bg-[#ECFDF3]", text_color: "text-[#32D583]", icon: "line-chart" %>
       <%= render "account_type", type: Account::Property.new, bg_color: "bg-[#FCF5F9]", text_color: "text-[#F23E94]", icon: "home" %>
