@@ -1,0 +1,30 @@
+<%# locals: (type:) -%>
+
+<% accounts = Current.family.accounts.where(accountable_type: type.name) %>
+
+<details class="text-sm mb-1 group">
+  <summary class="flex gap-4 px-2 py-3 items-center w-full rounded-[10px] font-medium hover:bg-[#f2f2f2]">
+    <%= lucide_icon("chevron-down", class: "hidden group-open:block text-[#737373] w-5 h-5") %>
+    <%= lucide_icon("chevron-right", class: "group-open:hidden text-[#737373] w-5 h-5") %>
+    <div class="text-left"><%= type.model_name.human %></div>
+    <div class="ml-auto"><%= humanized_money_with_symbol accounts.sum(&:balance) %></div>
+  </summary>
+  
+  <% accounts.each do |account| %>
+    <div class="flex gap-3 px-2 py-3 items-center w-full mb-1">
+      <div>
+        <p class="font-medium"><%= account.name %></p>
+        <% if account.subtype %>
+          <p class="text-xs text-[#737373]"><%= account.subtype&.humanize %></p>
+        <% end %>
+      </div>
+      <p class="ml-auto font-medium"><%= humanized_money_with_symbol account.balance %></p>
+    </div>
+  <% end %>
+
+  <%= link_to new_account_path(step: 'method', type: type.name.demodulize), class: "flex items-center gap-4 px-2 py-3 mb-1 text-[#737373] text-sm font-medium rounded-[10px] hover:bg-[#f2f2f2]", data: { turbo_frame: "modal" } do %>
+    <%= lucide_icon("plus", class: "w-5 h-5") %>
+    <p>New <%= type.model_name.human.downcase %></p>
+  <% end %>
+</details>
+
