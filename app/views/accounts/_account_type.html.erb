@@ -1,4 +1,4 @@
-<%= link_to new_account_path(type: type.class.name.demodulize), class: "flex items-center gap-4 w-full text-center focus:outline-none block px-2 hover:bg-gray-50 rounded-lg" do %>
+<%= link_to new_account_path(type: type.class.name.demodulize), class: "flex items-center gap-4 w-full text-center focus:outline-none block px-2 hover:bg-gray-50 focus:bg-gray-50 rounded-lg" do %>
   <span class="flex w-10 h-10 shrink-0 grow-0 items-center justify-center rounded-xl <%= bg_color %> mb-2">
     <%= inline_svg_tag(icon, class: "#{text_color} stroke-current") %>
   </span>
