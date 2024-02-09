@@ -1,12 +1,12 @@
-<div data-controller="dropdown currency-dropdown" class="relative flex items-end">
-  <button type="button" class="flex justify-between items-center hover:bg-gray-100 focus:bg-gray-100 w-20 text-sm rounded-lg w-20 py-1 px-2" data-action="click->dropdown#toggleMenu">
+<div data-controller="dropdown currency-dropdown" class="absolute right-1 bottom-1 flex items-end">
+  <button type="button" class="flex justify-between items-center hover:bg-gray-100 focus:bg-gray-100 w-20 text-sm rounded-lg py-1 px-2" data-action="click->dropdown#toggleMenu">
     <div data-currency-dropdown-target="label"><%= f.object.currency %></div>
     <%= f.hidden_field :currency, data: {currency_dropdown_target: "input"} %>
     <%= lucide_icon("chevron-down", class: "text-[#737373] w-5 h-5" ) %>
   </button>
   <ul data-dropdown-target="menu" class="hidden absolute top-full left-0 p-1 z-10 bg-white rounded-[10px] shadow min-w-[112px] z-50 translate-y-2 border border-[#141414]/8 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)]">
     <% options.each do |option| %>
-      <li data-action="click->currency-dropdown#selectOption" data-currency-dropdown-target="option" data-value="<%= option %>" class="flex justify-between items-center p-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer rounded-lg p-2 <%= "bg-gray-100" if option === f.object.currency %>"><%= option %>
+      <li data-action="click->currency-dropdown#selectOption" data-currency-dropdown-target="option" data-value="<%= option %>" class="flex justify-between items-center p-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer rounded-lg <%= "bg-gray-100" if option === f.object.currency %>"><%= option %>
         <%= inline_svg_tag('icn-check.svg', class: "text-gray-500 fill-current #{'hidden'if option != f.object.currency}") %>
       </li>
     <% end %>
