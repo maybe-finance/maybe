@@ -4,8 +4,8 @@ module Accountable
   TYPES = %w[ Account::Credit Account::Depository Account::Investment Account::Loan Account::OtherAsset Account::OtherLiability Account::Property Account::Vehicle ]
 
   def self.from_type(type)
-    return nil unless types.include?(type)
-    "Account::#{type}".constantize
+    return nil unless types.include?(type) || TYPES.include?(type)
+    "Account::#{type.demodulize}".constantize
   end
 
   def self.types
