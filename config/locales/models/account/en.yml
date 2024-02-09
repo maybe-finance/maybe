@@ -3,8 +3,8 @@ en:
   activerecord:
     attributes:
       account:
-        balance: Balance
-        currency: Currency
+        original_balance: Balance
+        original_currency: Currency
         family: Family
         family_id: Family
         name: Name

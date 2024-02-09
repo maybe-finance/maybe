@@ -17,4 +17,22 @@ module ApplicationHelper
     content = capture &block
     render partial: "shared/modal", locals: { content: content }
   end
+
+  def format_currency(number, options={})
+    user_currency_preference = Current.family.try(:currency) || 'USD'
+    
+    case user_currency_preference
+    when 'USD'
+      options.reverse_merge!(unit: '$', precision: 2, delimiter: ',', separator: '.')
+    when 'EUR'
+      options.reverse_merge!(unit: '€', precision: 2, delimiter: '.', separator: ',')
+    when 'GBP'
+      options.reverse_merge!(unit: '£', precision: 2, delimiter: ',', separator: '.')
+      # Add more currencies and their formatting options as needed
+    else
+      # Can also set to a default or retrieve a default from somewhere else
+    end
+
+    number_to_currency(number, options)
+  end
 end

@@ -28,7 +28,6 @@ gem "bcrypt", "~> 3.1.7"
 gem "inline_svg"
 gem "jbuilder"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
-gem "money-rails", "~> 1.12"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
