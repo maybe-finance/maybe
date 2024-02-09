@@ -73,7 +73,6 @@ Please visit our [Windows dev setup guide](https://github.com/maybe-finance/mayb
 #### Docker Container
 
 ```
-docker build -t maybe-finance/maybe .
 docker-compose up -d
 ```
 Application will be running on [http://localhost:3000](http://localhost:3000)

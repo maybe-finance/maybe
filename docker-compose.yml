@@ -19,7 +19,7 @@ services:
     ports: ["5432:5432"]
 
   maybe:
-    image: maybe-finance/maybe
+    image: ghcr.io/maybe-finance/maybe:latest
     container_name: maybe
     networks: ["maybe"]
     ports: ["3000:3000"]

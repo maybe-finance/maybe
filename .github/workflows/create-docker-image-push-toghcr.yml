@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Image to GHCR
 
 on:
   push:
@@ -21,8 +21,8 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build Docker image
-      run: docker build -t ghcr.io/jinnabalu/maybe:latest .
+      run: docker build -t ghcr.io/maybe-finance/maybe:latest .
 
     - name: Push Docker image to GHCR
       run: |
-        docker push ghcr.io/jinnabalu/maybe:latest
+        docker push ghcr.io/maybe-finance/maybe:latest
