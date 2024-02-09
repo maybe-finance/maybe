@@ -3,7 +3,7 @@
 <%= modal do %>
   <% if params[:type].blank? || Account.accountable_types.include?("Account::#{params[:type]}") == false %>
     <div class="border-b border-[#141414]/2 p-4 text-gray-400">
-      What would you like to add?
+      <%= t '.select_accountable_type' %>
     </div>
     <div class="flex flex-col p-2 text-sm" data-controller="list-keyboard-navigation">
       <button hidden data-controller="hotkey" data-hotkey="k,K,ArrowUp,ArrowLeft" data-action="list-keyboard-navigation#focusPrevious">Previous</button>
