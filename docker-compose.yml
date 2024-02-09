@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16.1
+    container_name: postgres_db
+    networks: ["maybe"]
+    volumes:
+      - maybe_postgresql:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_USER: maybe
+      POSTGRES_PASSWORD: maybepass
+      POSTGRES_DB: maybedb
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    ports: ["5432:5432"]
+
+  maybe:
+    image: maybe
+    container_name: maybe
+    networks: ["maybe"]
+    ports: ["3000:3000"]
+    environment:
+      SECRET_KEY_BASE: maybemaybehash
+      MAYBE_DATABASE_PASSWORD: maybepass
+      SSL_ENABLE: false 
+      RAILS_MAX_THREADS: 5 #optional
+      DB_HOST: postgres
+      POSTGRES_USER: maybe 
+      POSTGRES_DB: maybedb
+    depends_on:
+      - postgres
+volumes:
+  maybe_postgresql:
+networks:
+  maybe:

@@ -70,6 +70,17 @@ Please visit our [Linux dev setup guide](https://github.com/maybe-finance/maybe/
 
 Please visit our [Windows dev setup guide](https://github.com/maybe-finance/maybe/wiki/Windows-Dev-Setup-Guide).
 
+#### Docker Container
+
+```
+docker build -t maybe-finance/maybe .
+docker-compose up -d
+```
+Application will be running on [http://localhost:3000](http://localhost:3000)
+
+>NOTE: SSL_ENABLE default value is `true`, when you run as container without SSL certs it fails to serve on http, so set it to `false` running as container. 
+
+
 ### Testing Emails
 
 In development, we use `letter_opener` to automatically open emails in your browser. When an email sends locally, a new browser tab will open with a preview.
