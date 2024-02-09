@@ -352,7 +352,7 @@ GEM
       unicode-display_width (>= 1.1.1, < 3)
     thor (1.3.0)
     timeout (0.4.1)
-    turbo-rails (2.0.0)
+    turbo-rails (2.0.1)
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
       railties (>= 6.0.0)
