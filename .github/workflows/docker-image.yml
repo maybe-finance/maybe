@@ -21,8 +21,8 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build Docker image
-      run: docker build -t ghcr.io/${{ github.repository }}/maybe:latest .
+      run: docker build -t ghcr.io/jinnabalu/maybe:latest .
 
     - name: Push Docker image to GHCR
       run: |
-        docker push ghcr.io/${{ github.repository }}/maybe:latest
+        docker push ghcr.io/jinnabalu/maybe:latest
