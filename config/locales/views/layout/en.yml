@@ -3,9 +3,8 @@ en:
   layouts:
     application:
       accounts: Accounts
-      cash: Cash
       dashboard: Dashboard
-      new_account: New Account
+      new_account: New account
     auth:
       or: or
       privacy_policy: Privacy Policy

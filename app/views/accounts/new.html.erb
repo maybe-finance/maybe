@@ -1,9 +1,9 @@
 <h1 class="text-3xl font-semibold font-display"><%= t('.title')%></h1>
 
 <%= modal do %>
-  <% if params[:type].blank? || Account.accountable_types.include?("Account::#{params[:type]}") == false %>
+  <% if @account.accountable.blank? %>
     <div class="border-b border-[#141414]/2 p-4 text-gray-400">
-      What would you like to add?
+      <%= t '.select_accountable_type' %>
     </div>
     <div class="flex flex-col p-2 text-sm" data-controller="list-keyboard-navigation">
       <button hidden data-controller="hotkey" data-hotkey="k,K,ArrowUp,ArrowLeft" data-action="list-keyboard-navigation#focusPrevious">Previous</button>
@@ -31,7 +31,7 @@
         <span>Close</span> <kbd class="bg-[#141414]/5 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-8 h-5 shrink-0 grow-0 items-center justify-center text-xs">ESC</kbd>
       </div>
     </div>
-  <% elsif params[:step] == 'method' && params[:type].present? %>
+  <% elsif params[:step] == 'method' && @account.accountable.present? %>
     <div class="border-b border-[#141414]/2 p-4 text-gray-400 flex items-center space-x-3">
       <%= link_to new_account_path, class: "flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-[#141414]/5" do %>
         <%= lucide_icon('arrow-left', class: 'text-gray-500 w-5 h-5') %>
@@ -42,9 +42,9 @@
       <button hidden data-controller="hotkey" data-hotkey="k,K,ArrowUp,ArrowLeft" data-action="list-keyboard-navigation#focusPrevious">Previous</button>
       <button hidden data-controller="hotkey" data-hotkey="j,J,ArrowDown,ArrowRight" data-action="list-keyboard-navigation#focusNext">Next</button>
 
-      <%= render "entry_method", type: Account::Depository.new, text: 'Enter account balance manually', icon: "keyboard" %>
-      <%= render "entry_method", type: Account::Depository.new, text: 'Securely link bank account with data provider (coming soon)', icon: "link-2", disabled: true %>
-      <%= render "entry_method", type: Account::Depository.new, text: 'Upload spreadsheet (coming soon)', icon: "sheet", disabled: true %>
+      <%= render "entry_method", type: @account.accountable, text: 'Enter account balance manually', icon: "keyboard" %>
+      <%= render "entry_method", type: @account.accountable, text: 'Securely link bank account with data provider (coming soon)', icon: "link-2", disabled: true %>
+      <%= render "entry_method", type: @account.accountable, text: 'Upload spreadsheet (coming soon)', icon: "sheet", disabled: true %>
     </div>
     <div class="border-t border-[#141414]/2 p-4 text-gray-500 text-sm flex justify-between">
       <div class="flex space-x-5">
@@ -64,7 +64,7 @@
       <%= link_to new_account_path(step: 'method', type: params[:type]), class: "flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-[#141414]/5" do %>
         <%= lucide_icon('arrow-left', class: 'text-gray-500 w-5 h-5') %>
       <% end %>
-      <span>Add account</span>
+      <span>Add <%= @account.accountable.model_name.human.downcase %></span>
     </div>
 
     <%= form_with model: @account, url: accounts_path, scope: :account, html: { class: "space-y-4 m-5 mt-1", data: { turbo: false } } do |f| %>
@@ -76,7 +76,7 @@
 
       <%= f.number_field :balance, placeholder: number_to_currency(0), in: 0.00..100000000.00, required: 'required', label: true %>
 
-      <%= f.submit "Add account" %>
+      <%= f.submit "Add #{@account.accountable.model_name.human.downcase}" %>
     <% end %>
   <% end %>
 <% end %>

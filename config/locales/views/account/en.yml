@@ -6,4 +6,5 @@ en:
     index:
       title: Cash
     new:
+      select_accountable_type: What would you like to add?
       title: Add an account

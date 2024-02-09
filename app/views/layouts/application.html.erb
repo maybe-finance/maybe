@@ -56,7 +56,7 @@
         </nav>
         <div class="flex flex-col mt-6">
           <div class="flex items-center justify-between">
-            <%= link_to accounts_path, class: 'text-xs' do%>
+            <%= link_to accounts_path, class: 'text-xs uppercase text-[#737373] font-bold tracking-wide' do%>
               <%= t('.accounts') %>
             <% end %>
             <%= link_to new_account_path, class: 'block hover:bg-gray-100 p-2 text-sm font-semibold text-gray-900 flex items-center rounded', title: t('.new_account'), data: { turbo_frame: "modal" } do %>
@@ -64,20 +64,15 @@
             <% end %>
           </div>
 
-          <div>
-            <h2 class="text-sm font-semibold font-display"><%= t('.cash') %></h2>
 
-            <% Current.family.accounts.each do |account| %>
-              <div class="flex items-center justify-between py-2">
-                <div class="flex items-center text-sm">
-                  <%= account.name %>
-                </div>
-                <p class="text-sm text-right">
-                  <span class="block mb-1"><%= humanized_money_with_symbol account.balance  %></span>
-                </p>
-              </div>
-            <% end %>
-          </div>
+          <%= link_to new_account_path, class: "flex items-center gap-4 px-2 py-3 mb-1 text-[#737373] text-sm font-medium rounded-[10px] hover:bg-[#f2f2f2]", data: { turbo_frame: "modal" } do %>
+            <%= lucide_icon("plus", class: "w-5 h-5") %>
+            <p><%= t('.new_account') %></p>
+          <% end %>
+
+          <% Accountable.types.each do |type| %>
+            <%= render 'accounts/account_list', type: Accountable.from_type(type) %>
+          <% end %>
         </div>
       </div>
       <main class="flex-grow py-5 pr-5">
