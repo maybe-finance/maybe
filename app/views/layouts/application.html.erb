@@ -70,8 +70,8 @@
             <p><%= t('.new_account') %></p>
           <% end %>
 
-          <% Account.accountable_types.each do |type| %>
-            <%= render 'accounts/account_list', type: type.constantize %>
+          <% Accountable.types.each do |type| %>
+            <%= render 'accounts/account_list', type: Accountable.from_type(type) %>
           <% end %>
         </div>
       </div>
