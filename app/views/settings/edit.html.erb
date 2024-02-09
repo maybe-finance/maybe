@@ -2,39 +2,20 @@
 
 <%= form_with model: Current.user, url: settings_path, html: { class: "space-y-4" } do |form| %>
   <%= form.fields_for :family_attributes do |family_fields| %>
-    <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-      <%= family_fields.label :name, "Family name", class: "block text-sm font-medium opacity-75 focus-within:opacity-100" %>
-      <%= family_fields.text_field :name, placeholder: "Family name", value: Current.family.name, class: "p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
-    </div>
+    <%= family_fields.text_field :name, placeholder: "Family name", value: Current.family.name, label: "Family name" %>
   <% end %>
 
+  <%= form.text_field :first_name, placeholder: "First name", value: Current.user.first_name, label: true %>
 
-  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-    <%= form.label :first_name, class: "block text-sm font-medium opacity-75 focus-within:opacity-100" %>
-    <%= form.text_field :first_name, placeholder: "First name", value: Current.user.first_name, class: "w-full p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
-  </div>
+  <%= form.text_field :last_name, placeholder: "Last name", value: Current.user.last_name, label: true %>
+  
+  <%= form.email_field :email, placeholder: "Email", value: Current.user.email, label: true %>
 
-  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-    <%= form.label :last_name, class: "block text-sm font-medium opacity-75 focus-within:opacity-100" %>
-    <%= form.text_field :last_name, placeholder: "Last name", value: Current.user.last_name, class: "w-full p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
-  </div>
+  <%= form.password_field :password, label: true %>
 
-  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-    <%= form.label :email, class: "block text-sm font-medium opacity-75 focus-within:opacity-100" %>
-    <%= form.email_field :email, placeholder: "Email", value: Current.user.email, class: "w-full p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
-  </div>
+  <%= form.password_field :password_confirmation, label: true %>
 
-  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-    <%= form.label :password, class: "block text-sm font-medium opacity-75 focus-within:opacity-100" %>
-    <%= form.password_field :password, class: "w-full p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
-  </div>
-
-  <div class="relative p-4 border border-gray-100 bg-offwhite rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-    <%= form.label :password_confirmation, class: "block text-sm font-medium opacity-75 focus-within:opacity-100" %>
-    <%= form.password_field :password_confirmation, class: "w-full p-0 mt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100" %>
-  </div>
-
-  <div class="absolute right-5 bottom-5">
+  <div class="fixed right-5 bottom-5">
     <button type="submit" class="flex items-center justify-center w-12 h-12 mb-2 bg-black rounded-full shrink-0 grow-0 hover:bg-gray-600">
       <%= inline_svg_tag('icn-check.svg', class: 'text-white fill-current') %>
     </button>
