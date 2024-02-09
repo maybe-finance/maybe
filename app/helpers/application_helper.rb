@@ -28,9 +28,10 @@ module ApplicationHelper
       options.reverse_merge!(unit: '€', precision: 2, delimiter: '.', separator: ',')
     when 'GBP'
       options.reverse_merge!(unit: '£', precision: 2, delimiter: ',', separator: '.')
-      # Add more currencies and their formatting options as needed
+    when 'CAD'
+      options.reverse_merge!(unit: 'CA$', precision: 2, delimiter: ',', separator: '.')
     else
-      # Can also set to a default or retrieve a default from somewhere else
+      options.reverse_merge!(unit: '$', precision: 2, delimiter: ',', separator: '.')
     end
 
     number_to_currency(number, options)

@@ -4,7 +4,7 @@
   <%= form.fields_for :family_attributes do |family_fields| %>
     <%= family_fields.text_field :name, placeholder: "Family name", value: Current.family.name, label: "Family name" %>
 
-    <%= family_fields.select :currency, options_for_select([['USD (United States Dollar)', 'USD'], ['EUR (Euro)', 'EUR'], ['GBP (British Pound)', 'GBP']], selected: Current.family.currency), { label: "Currency" } %>
+    <%= family_fields.select :currency, options_for_select([['USD (United States Dollar)', 'USD'], ['EUR (Euro)', 'EUR'], ['GBP (British Pound)', 'GBP'], ['CAD (Canadian Dollar)', 'CAD'], ], selected: Current.family.currency), { label: "Currency" } %>
   <% end %>
 
   <%= form.text_field :first_name, placeholder: "First name", value: Current.user.first_name, label: true %>
