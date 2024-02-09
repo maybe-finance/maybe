@@ -76,6 +76,8 @@
 
       <%= f.number_field :balance, placeholder: number_to_currency(0), in: 0.00..100000000.00, required: 'required', label: true %>
 
+      <%= currency_dropdown(f: f, options: ['USD', 'EUR', 'JPY', 'GBP', 'AUD', 'CAD', 'CNY', 'BTC', 'ETH']) %>
+
       <%= f.submit "Add #{@account.accountable.model_name.human.downcase}" %>
     <% end %>
   <% end %>

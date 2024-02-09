@@ -17,4 +17,8 @@ module ApplicationHelper
     content = capture &block
     render partial: "shared/modal", locals: { content: content }
   end
+
+  def currency_dropdown(f: nil, options: [])
+    render partial: "shared/currency_dropdown", locals: { f: f, options: options }
+  end
 end
