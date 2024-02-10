@@ -19,26 +19,3 @@ user = User.create_or_find_by(email: "user@maybe.local") do |u|
   u.family_id = family.id
 end
 puts "User created: #{user.email} for family: #{family.name}"
-
-# Seed Currencies
-currencies = [
-  { name: 'United States Dollar', iso_code: 'USD' },
-  { name: 'Euro', iso_code: 'EUR' },
-  { name: 'British Pound', iso_code: 'GBP' },
-  { name: 'Canadian Dollar', iso_code: 'CAD' },
-  { name: 'Australian Dollar', iso_code: 'AUD' },
-  { name: 'Swiss Franc', iso_code: 'CHF' },
-  { name: 'New Zealand Dollar', iso_code: 'NZD' },
-  { name: 'Mexican Peso', iso_code: 'MXN' },
-  { name: 'Singapore Dollar', iso_code: 'SGD' },
-  { name: 'Hong Kong Dollar', iso_code: 'HKD' },
-  { name: 'South Korean Won', iso_code: 'KRW' },
-]
-
-currencies.each do |currency|
-  Currency.find_or_create_by(iso_code: currency[:iso_code]) do |c|
-    c.name = currency[:name]
-  end
-end
-
-puts "Currencies created: #{Currency.count}"

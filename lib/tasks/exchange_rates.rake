@@ -4,7 +4,7 @@ namespace :exchange_rates do
     # Use Faraday to make a request openexchangerates.org time series endpoint
     # Use the response to create or update exchange rates in the database
     url = 'https://openexchangerates.org/api/time-series.json'
-    app_id = ENV['OPEN_EXCHANGE_APP_ID'] # Replace YOUR_APP_ID with your actual App ID from openexchangerates.org
+    app_id = ENV['OPEN_EXCHANGE_APP_ID']
     start_date = (Date.today - 120.days).to_s
     end_date = Date.today.to_s
 
