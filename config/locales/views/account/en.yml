@@ -6,6 +6,5 @@ en:
     index:
       title: Cash
     new:
-      account_name_placeholder: Account name
-      enter_type_account: Enter %{type} account
+      select_accountable_type: What would you like to add?
       title: Add an account

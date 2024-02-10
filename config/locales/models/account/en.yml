@@ -12,8 +12,8 @@ en:
     models:
       account: Account
       account/credit: Credit Card
-      account/depository: Bank Accounts
-      account/investiment: Investments
+      account/depository: Bank Account
+      account/investment: Investment
       account/loan: Loan
       account/other_asset: Other Asset
       account/other_liability: Other Liability

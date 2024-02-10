@@ -1,7 +1,7 @@
 class Account < ApplicationRecord
   belongs_to :family
 
-  delegated_type :accountable, types: %w[ Account::Credit Account::Depository Account::Investment Account::Loan Account::OtherAsset Account::OtherLiability Account::Property Account::Vehicle], dependent: :destroy
+  delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
 
   delegate :type_name, to: :accountable
 
