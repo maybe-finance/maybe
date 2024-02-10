@@ -29,7 +29,21 @@ module ApplicationHelper
     when 'GBP'
       options.reverse_merge!(unit: '£', precision: 2, delimiter: ',', separator: '.')
     when 'CAD'
-      options.reverse_merge!(unit: 'CA$', precision: 2, delimiter: ',', separator: '.')
+      options.reverse_merge!(unit: 'C$', precision: 2, delimiter: ',', separator: '.')
+    when 'MXN'
+      options.reverse_merge!(unit: 'MX$', precision: 2, delimiter: ',', separator: '.')
+    when 'HKD'
+      options.reverse_merge!(unit: 'HK$', precision: 2, delimiter: ',', separator: '.')
+    when 'CHF'
+      options.reverse_merge!(unit: 'CHF', precision: 2, delimiter: '.', separator: ',')
+    when 'SGD'
+      options.reverse_merge!(unit: 'S$', precision: 2, delimiter: ',', separator: '.')
+    when 'NZD'
+      options.reverse_merge!(unit: 'NZ$', precision: 2, delimiter: ',', separator: '.')
+    when 'AUD'
+      options.reverse_merge!(unit: 'A$', precision: 2, delimiter: ',', separator: '.')
+    when 'KRW'
+      options.reverse_merge!(unit: '₩', precision: 0, delimiter: ',', separator: '.')
     else
       options.reverse_merge!(unit: '$', precision: 2, delimiter: ',', separator: '.')
     end

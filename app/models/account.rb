@@ -12,7 +12,8 @@ class Account < ApplicationRecord
       self.converted_balance = self.original_balance
       self.converted_currency = self.original_currency
     else
-      # TODO: Run a background job to convert the balance
+      self.converted_balance = ExchangeRate.convert(self.original_currency, self.family.currency, self.original_balance)
+      self.converted_currency = self.family.currency
     end
   end
 end

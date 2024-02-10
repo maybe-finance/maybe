@@ -146,6 +146,10 @@ GEM
     drb (2.2.0)
       ruby2_keywords
     erubi (1.12.0)
+    faraday (2.9.0)
+      faraday-net_http (>= 2.0, < 3.2)
+    faraday-net_http (3.1.0)
+      net-http
     ffi (1.16.3)
     globalid (1.2.1)
       activesupport (>= 6.1)
@@ -203,6 +207,8 @@ GEM
     mini_mime (1.1.5)
     minitest (5.21.2)
     msgpack (1.7.2)
+    net-http (0.4.1)
+      uri
     net-imap (0.4.10)
       date
       net-protocol
@@ -350,6 +356,7 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.5.0)
+    uri (0.13.0)
     useragent (0.16.10)
     web-console (4.2.1)
       actionview (>= 6.0.0)
@@ -380,6 +387,7 @@ DEPENDENCIES
   capybara
   debug
   dotenv-rails
+  faraday
   hotwire-livereload
   i18n-tasks
   importmap-rails
