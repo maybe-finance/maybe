@@ -1,12 +1,16 @@
 dylan_checking:
   family: dylan_family
-  name: Bob's Checking
+  name: Dylan's Checking
   balance_cents: 1200
+  accountable_id: e70fead4-fb77-423b-8dc2-83bbefaf67fa
+  accountable_type: Account::Depository
 
 dylan_roth:
   family: dylan_family
   name: Bob's Roth IRA
   balance_cents: 1200
+  accountable_id: 5cc8921b-0d15-4423-bd39-32947307f512
+  accountable_type: Account::Depository
 
 richards_savings:
   family: richards_family

@@ -5,3 +5,4 @@ en:
       title: Dashboard
     dashboard_assets_overview:
       title: Total assets
+      no_assets: You current do not have any assets.

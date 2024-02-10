@@ -17,7 +17,7 @@ class AssetGroup
 
   def initialize(type, accounts, percentage_held: nil)
     @type = type
-    @param = type.model_name.param_key.gsub('_', '-')
+    @param = type.model_name.param_key.gsub("_", "-")
     @total_asset_value = accounts.sum(&:balance)
     @percentage_held = percentage_held
   end
