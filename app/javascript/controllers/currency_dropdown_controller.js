@@ -2,7 +2,35 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="dropdown"
 export default class extends Controller {
-  static targets = ["input", "label", "option"]
+  static targets = ["menu", "input", "label", "option"]
+
+  toggleMenu(event) {
+    event.stopPropagation(); // Prevent event from closing the menu immediately
+    this.repositionDropdown();
+    this.menuTarget.classList.toggle("hidden");
+  }
+
+  hideMenu = () => {
+    this.menuTarget.classList.add("hidden");
+  }
+
+  connect() {
+    document.addEventListener("click", this.hideMenu);
+  }
+
+  disconnect() {
+    document.removeEventListener("click", this.hideMenu);
+  }
+
+  repositionDropdown () {
+    const button = this.menuTarget.previousElementSibling;
+    const menu = this.menuTarget;
+
+    // Calculate position
+    const buttonRect = button.getBoundingClientRect();
+    menu.style.top = `${buttonRect.bottom + window.scrollY}px`;
+    menu.style.left = `${buttonRect.left + window.scrollX}px`;
+  }
 
   selectOption (e) {
     const value = e.target.getAttribute('data-value');
