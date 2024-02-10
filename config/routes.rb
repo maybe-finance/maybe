@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  mount MissionControl::Jobs::Engine, at: "/jobs"
+  mount GoodJob::Engine => 'jobs'
 
   resource :registration
   resource :session

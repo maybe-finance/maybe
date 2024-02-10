@@ -65,7 +65,7 @@ Rails.application.configure do
   config.active_job.verbose_enqueue_logs = true
 
   # Set Active Job queue adapter
-  config.active_job.queue_adapter = :solid_queue
+  config.active_job.queue_adapter = :good_job
 
 
   # Raises error for missing translations.

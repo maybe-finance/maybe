@@ -24,8 +24,7 @@ gem "stimulus-rails"
 gem "turbo-rails"
 
 # Background Jobs
-gem "solid_queue"
-gem "mission_control-jobs"
+gem "good_job"
 
 # Other
 gem "bcrypt", "~> 3.1.7"
