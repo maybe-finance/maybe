@@ -75,7 +75,7 @@
 
         <%= render "accounts/#{permitted_accountable_partial(@account.accountable_type)}", f: f %>
 
-      <%= f.number_field :original_balance, placeholder: 0.00, in: 0.00..100000000.00, required: 'required', label: true %>
+      <%= f.number_field :original_balance, step: :any, placeholder: 0.00, in: 0.00..100000000.00, required: 'required', label: true %>
 
       <%= f.collection_select :original_currency, Currency.all, :iso_code, :iso_code, { prompt: "Choose a currency", selected: Current.family.currency }, { required: 'required', label: "Base Currency" } %>
       
