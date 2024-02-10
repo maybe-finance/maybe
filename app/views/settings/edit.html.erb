@@ -3,6 +3,8 @@
 <%= form_with model: Current.user, url: settings_path, html: { class: "space-y-4" } do |form| %>
   <%= form.fields_for :family_attributes do |family_fields| %>
     <%= family_fields.text_field :name, placeholder: "Family name", value: Current.family.name, label: "Family name" %>
+
+    <%= family_fields.select :currency, options_for_select(Currency.all.order(iso_code: :asc).map { |currency| ["#{currency.iso_code} (#{currency.name})", currency.iso_code] }, selected: Current.family.currency), { label: "Currency" } %>
   <% end %>
 
   <%= form.text_field :first_name, placeholder: "First name", value: Current.user.first_name, label: true %>

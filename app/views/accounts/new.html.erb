@@ -69,16 +69,17 @@
     </div>
 
     <%= form_with model: @account, url: accounts_path, scope: :account, html: { class: "m-5 mt-1 flex flex-col justify-between grow", data: { turbo: false } } do |f| %>
-      <div class="space-y-4 grow">
-        <%= f.hidden_field :accountable_type %>
+        <div class="space-y-4 grow">
+          <%= f.hidden_field :accountable_type %>
 
-        <%= f.text_field :name, placeholder: 'Example account name', required: 'required', label: 'Account name' %>
+          <%= f.text_field :name, placeholder: 'Example account name', required: 'required', label: 'Account name' %>
 
-        <%= render "accounts/#{permitted_accountable_partial(@account.accountable_type)}", f: f %>
+          <%= render "accounts/#{permitted_accountable_partial(@account.accountable_type)}", f: f %>
 
-        <%= f.number_field :balance, placeholder: number_to_currency(0), in: 0.00..100000000.00, required: 'required', label: true %>
+        <%= f.number_field :original_balance, step: :any, placeholder: 0.00, in: 0.00..100000000.00, required: 'required', label: true %>
+
+        <%= f.collection_select :original_currency, Currency.all, :iso_code, :iso_code, { prompt: "Choose a currency", selected: Current.family.currency }, { required: 'required', label: "Base Currency" } %>
       </div>
-
       <%= f.submit "Add #{@account.accountable.model_name.human.downcase}" %>
     <% end %>
   <% end %>
