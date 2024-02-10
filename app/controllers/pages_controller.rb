@@ -2,6 +2,6 @@ class PagesController < ApplicationController
   before_action :authenticate_user!
 
   def dashboard
-    @asset_groups = AssetGroup.from_accounts(Current.family.accounts)
+    @account_groups = Current.user.family.accounts.by_type
   end
 end

@@ -6,4 +6,19 @@ class Account < ApplicationRecord
   delegate :type_name, to: :accountable
 
   monetize :balance_cents
+
+  def self.by_type
+    grouped = all.group_by { |account| account.accountable_type }
+    total_account_value = all.sum(&:balance)
+
+    grouped.map do |accountable_type, accounts|
+      total_value = accounts.sum(&:balance)
+
+      AccountGroup.new(
+        type: accountable_type.constantize,
+        total_value:,
+        percentage_held: (total_value / total_account_value) * 100
+      )
+    end
+  end
 end

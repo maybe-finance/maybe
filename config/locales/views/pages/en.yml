@@ -4,5 +4,5 @@ en:
     dashboard:
       title: Dashboard
     dashboard_assets_overview:
-      no_assets: You current do not have any assets.
+      no_account_groups: You current do not have any assets.
       title: Total assets
