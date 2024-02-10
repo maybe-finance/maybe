@@ -43,8 +43,12 @@ export default class extends Controller {
       });
 
       // Set currency value and label
-      this.inputTarget.value = value
-      this.labelTarget.innerHTML = value
+      if (this.hasInputTarget) {
+        this.inputTarget.value = value;
+      }
+      if (this.hasLabelTarget) {
+        this.labelTarget.innerHTML = value;
+      }
 
       // Reassign active option background and tick 
       e.currentTarget.classList.add('bg-gray-100')
