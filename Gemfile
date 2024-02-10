@@ -23,6 +23,10 @@ gem "lucide-rails", github: "maybe-finance/lucide-rails"
 gem "stimulus-rails"
 gem "turbo-rails"
 
+# Background Jobs
+gem "solid_queue"
+gem "mission_control-jobs"
+
 # Other
 gem "bcrypt", "~> 3.1.7"
 gem "inline_svg"

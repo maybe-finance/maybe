@@ -12,6 +12,11 @@ class SettingsController < ApplicationController
       user_params_with_family[:family_attributes] = family_attributes
     end
 
+    # If the family attribute for currency is changed, we need to convert all account balances to the new currency with the ConvertCurrencyJob job
+    if user_params_with_family[:family_attributes][:currency] != Current.family.currency
+      ConvertCurrencyJob.perform_later(Current.family)
+    end
+
     if Current.user.update(user_params_with_family)
       redirect_to root_path, notice: "Profile updated successfully."
     else
