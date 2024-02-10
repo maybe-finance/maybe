@@ -31,6 +31,11 @@ export default class extends Controller {
   }
 
   get focusableLinks() {
-    return Array.from(this.element.querySelectorAll("a[href]"))
+    const backLink = this.element.parentElement.querySelector("a[href].back")
+    const links = Array.from(this.element.querySelectorAll("a[href]"))
+    if (backLink) {
+      links.unshift(backLink)
+    }
+    return links
   }
 }

@@ -34,7 +34,7 @@
     </div>
   <% elsif params[:step] == 'method' && @account.accountable.present? %>
     <div class="border-b border-[#141414]/2 p-4 text-gray-400 flex items-center space-x-3">
-      <%= link_to new_account_path, class: "flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-[#141414]/5" do %>
+      <%= link_to new_account_path, class: "flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-[#141414]/5 back focus:outline-gray-300 focus:outline" do %>
         <%= lucide_icon('arrow-left', class: 'text-gray-500 w-5 h-5') %>
       <% end %>
       <span>How would you like to add it?</span>
@@ -62,7 +62,7 @@
     </div>
   <% else %>
     <div class="border-b border-[#141414]/2 p-4 text-gray-800 flex items-center space-x-3">
-      <%= link_to new_account_path(step: 'method', type: params[:type]), class: "flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-[#141414]/5" do %>
+      <%= link_to new_account_path(step: 'method', type: params[:type]), class: "flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-[#141414]/5 focus:outline-gray-300 focus:outline" do %>
         <%= lucide_icon('arrow-left', class: 'text-gray-500 w-5 h-5') %>
       <% end %>
       <span>Add <%= @account.accountable.model_name.human.downcase %></span>
@@ -72,7 +72,7 @@
         <div class="space-y-4 grow">
           <%= f.hidden_field :accountable_type %>
 
-          <%= f.text_field :name, placeholder: 'Example account name', required: 'required', label: 'Account name' %>
+          <%= f.text_field :name, placeholder: 'Example account name', required: 'required', label: 'Account name', autofocus: true %>
 
           <%= render "accounts/#{permitted_accountable_partial(@account.accountable_type)}", f: f %>
 
