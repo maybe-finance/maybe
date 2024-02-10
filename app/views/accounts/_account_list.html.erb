@@ -10,7 +10,7 @@
     <div class="text-left"><%= type.model_name.human %></div>
     <div class="ml-auto"><%= humanized_money_with_symbol accounts.sum(&:balance) %></div>
   </summary>
-  
+
   <% accounts.each do |account| %>
     <div class="flex items-center w-full gap-3 px-2 py-3 mb-1">
       <div>

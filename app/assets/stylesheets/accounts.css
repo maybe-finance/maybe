@@ -1,0 +1,74 @@
+:root {
+  --account-depository: #2E90FA;
+  --account-investment: #32D583;
+  --account-property: #F23E94;
+  --account-vehicle: #6172F3;
+  --account-credit: #36BFFA;
+  --account-loan: #F38744;
+  --account-other-asset: #12B76A;
+  --account-other-liability: #F04438;
+}
+
+.bg-account-depository {
+  background-color: var(--account-depository);
+}
+
+.bg-account-investment {
+  background-color: var(--account-investment);
+}
+
+.bg-account-property {
+  background-color: var(--account-property);
+}
+
+.bg-account-vehicle {
+  background-color: var(--account-vehicle);
+}
+
+.bg-account-credit {
+  background-color: var(--account-credit);
+}
+
+.bg-account-loan {
+  background-color: var(--account-loan);
+}
+
+.bg-account-other-asset {
+  background-color: var(--account-other-asset);
+}
+
+.bg-account-other-liability {
+  background-color: var(--account-other-liability);
+}
+
+.text-account-depository {
+  color: var(--account-depository);
+}
+
+.text-account-investment {
+  color: var(--account-investment);
+}
+
+.text-account-property {
+  color: var(--account-property);
+}
+
+.text-account-vehicle {
+  color: var(--account-vehicle);
+}
+
+.text-account-credit {
+  color: var(--account-credit);
+}
+
+.text-account-loan {
+  color: var(--account-loan);
+}
+
+.text-account-other-asset {
+  color: var(--account-other-asset);
+}
+
+.text-account-other-liability {
+  color: var(--account-other-liability);
+}

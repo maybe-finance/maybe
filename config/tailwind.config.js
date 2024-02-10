@@ -24,7 +24,7 @@ module.exports = {
       },
       boxShadow: {
         'xs': '0px 1px 2px 0px #1018280D'
-      }
+      },
     },
   },
   plugins: [

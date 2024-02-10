@@ -9,14 +9,14 @@
       <button hidden data-controller="hotkey" data-hotkey="k,K,ArrowUp,ArrowLeft" data-action="list-keyboard-navigation#focusPrevious">Previous</button>
       <button hidden data-controller="hotkey" data-hotkey="j,J,ArrowDown,ArrowRight" data-action="list-keyboard-navigation#focusNext">Next</button>
 
-      <%= render "account_type", type: Account::Depository.new, bg_color: "bg-[#EFF8FF]", text_color: "text-[#2E90FA]", icon: "landmark" %>
-      <%= render "account_type", type: Account::Investment.new, bg_color: "bg-[#ECFDF3]", text_color: "text-[#32D583]", icon: "line-chart" %>
-      <%= render "account_type", type: Account::Property.new, bg_color: "bg-[#FCF5F9]", text_color: "text-[#F23E94]", icon: "home" %>
-      <%= render "account_type", type: Account::Vehicle.new, bg_color: "bg-[#EEF4FF]", text_color: "text-[#6172F3]", icon: "car-front" %>
-      <%= render "account_type", type: Account::Credit.new, bg_color: "bg-[#F0F9FF]", text_color: "text-[#36BFFA]", icon: "credit-card" %>
-      <%= render "account_type", type: Account::Loan.new, bg_color: "bg-[#FEF6EE]", text_color: "text-[#F38744]", icon: "hand-coins" %>
-      <%= render "account_type", type: Account::OtherAsset.new, bg_color: "bg-[#ECFDF3]", text_color: "text-[#12B76A]", icon: "plus" %>
-      <%= render "account_type", type: Account::OtherLiability.new, bg_color: "bg-[#FEF3F2]", text_color: "text-[#F04438]", icon: "minus" %>
+      <%= render "account_type", type: Account::Depository.new, bg_color: "bg-[#EFF8FF]", text_color: "text-account-depository", icon: "landmark" %>
+      <%= render "account_type", type: Account::Investment.new, bg_color: "bg-[#ECFDF3]", text_color: "text-account-investment", icon: "line-chart" %>
+      <%= render "account_type", type: Account::Property.new, bg_color: "bg-[#FCF5F9]", text_color: "text-account-property", icon: "home" %>
+      <%= render "account_type", type: Account::Vehicle.new, bg_color: "bg-[#EEF4FF]", text_color: "text-account-vehicle", icon: "car-front" %>
+      <%= render "account_type", type: Account::Credit.new, bg_color: "bg-[#F0F9FF]", text_color: "text-account-credit", icon: "credit-card" %>
+      <%= render "account_type", type: Account::Loan.new, bg_color: "bg-[#FEF6EE]", text_color: "text-account-loan", icon: "hand-coins" %>
+      <%= render "account_type", type: Account::OtherAsset.new, bg_color: "bg-[#ECFDF3]", text_color: "text-account-other-asset", icon: "plus" %>
+      <%= render "account_type", type: Account::OtherLiability.new, bg_color: "bg-[#FEF3F2]", text_color: "text-account-liability", icon: "minus" %>
     </div>
     <div class="border-t border-[#141414]/2 p-4 text-gray-500 text-sm flex justify-between">
       <div class="flex space-x-5">

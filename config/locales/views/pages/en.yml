@@ -3,3 +3,5 @@ en:
   pages:
     dashboard:
       title: Dashboard
+    dashboard_assets_overview:
+      title: Total assets
