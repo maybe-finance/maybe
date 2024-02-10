@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  mount GoodJob::Engine => 'jobs'
+  mount GoodJob::Engine => "jobs"
 
   resource :registration
   resource :session

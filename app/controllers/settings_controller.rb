@@ -8,7 +8,7 @@ class SettingsController < ApplicationController
     user_params_with_family = user_params
     # Ensure we're only updating the family associated with the current user
     if Current.family
-      family_attributes = user_params_with_family[:family_attributes].merge({id: Current.family.id})
+      family_attributes = user_params_with_family[:family_attributes].merge({ id: Current.family.id })
       user_params_with_family[:family_attributes] = family_attributes
     end
 
