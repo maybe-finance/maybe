@@ -45,11 +45,23 @@
           </div>
         </div>
         <nav>
-          <ul class="mt-6 space-y-2">
+          <ul class="mt-6 space-y">
             <li>
-              <%= link_to root_path, class: 'block hover:bg-gray-100 -ml-2 p-2 text-sm font-semibold text-gray-900 flex items-center rounded' do %>
-                <%= inline_svg_tag('icon-dashboard.svg', class: 'text-black stroke-current mr-2') %>
+              <%= link_to root_path, class: 'block hover:bg-white border border-transparent hover:border-[#141414]/[0.07] rounded-xl hover:shadow-xs -ml-2 p-2 text-sm font-medium text-gray-500 flex items-center' do %>
+                <%= lucide_icon('layout-grid', class: 'w-5 h-5 mr-2') %>
                 <%= t('.dashboard') %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to accounts_path, class: 'block hover:bg-white border border-transparent hover:border-[#141414]/[0.07] rounded-xl hover:shadow-xs -ml-2 p-2 text-sm font-medium text-gray-500 flex items-center' do %>
+                <%= lucide_icon('layers', class: 'w-5 h-5 mr-2') %>
+                <%= t('.accounts') %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to "#", class: 'block hover:bg-white border border-transparent hover:border-[#141414]/[0.07] rounded-xl hover:shadow-xs -ml-2 p-2 text-sm font-medium text-gray-500 flex items-center' do %>
+                <%= lucide_icon('credit-card', class: 'w-5 h-5 mr-2') %>
+                <%= t('.transactions') %>
               <% end %>
             </li>
           </ul>
