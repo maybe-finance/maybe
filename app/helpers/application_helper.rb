@@ -29,7 +29,9 @@ module ApplicationHelper
       current_page_class_names => current_page?(path)
     )
 
-    link_to path, class: link_class_names do
+    merged_options = options.reverse_merge(class: link_class_names).except(:icon)
+
+    link_to path, merged_options do
       lucide_icon(options[:icon], class: "w-5 h-5 mr-2") + name
     end
   end
