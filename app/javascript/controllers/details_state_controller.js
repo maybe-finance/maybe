@@ -2,6 +2,8 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="details-state"
 export default class extends Controller {
+  static values = { storageKey: String }
+
   initialize()  {
     this.localStorageSupported = this.isLocalStorageSupported()
     this.id = this.element.id
@@ -43,20 +45,20 @@ export default class extends Controller {
   handleToggle() {
     if(!this.localStorageSupported) return
 
-    let config = this.getItem('accountList')
+    let config = this.getItem(this.storageKeyValue)
 
     config[this.id] = this.element.open
-    this.setItem('accountList', config)
+    this.setItem(this.storageKeyValue, config)
   }
 
   connect() {
     if(!this.localStorageSupported) return
 
-    let config = this.getItem('accountList')
+    let config = this.getItem(this.storageKeyValue)
     
     if (!config.hasOwnProperty(this.id)) {
       config[this.id] = this.element.open
-      this.setItem('accountList', config)
+      this.setItem(this.storageKeyValue, config)
     } 
     
     this.element.open = config[this.id]
