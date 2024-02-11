@@ -9,6 +9,7 @@ class AccountsController < ApplicationController
   end
 
   def show
+    @account = Current.family.accounts.find(params[:id])
   end
 
   def create

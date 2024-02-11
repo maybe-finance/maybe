@@ -12,7 +12,7 @@
   </summary>
   
   <% accounts.each do |account| %>
-    <div class="flex items-center w-full gap-3 px-2 py-3 mb-1">
+    <%= link_to account_path(account), class: "flex items-center w-full gap-3 px-2 py-3 mb-1 hover:bg-[#f2f2f2] rounded-[10px]" do %>
       <div>
         <p class="font-medium"><%= account.name %></p>
         <% if account.subtype %>
@@ -20,7 +20,7 @@
         <% end %>
       </div>
       <p class="ml-auto font-medium"><%= format_currency account.converted_balance %></p>
-    </div>
+    <% end %>
   <% end %>
 
   <%= link_to new_account_path(step: 'method', type: type.name.demodulize), class: "flex items-center gap-4 px-2 py-3 mb-1 text-[#737373] text-sm font-medium rounded-[10px] hover:bg-[#f2f2f2]", data: { turbo_frame: "modal" } do %>
