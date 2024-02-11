@@ -72,7 +72,7 @@
         <div class="space-y-4 grow">
           <%= f.hidden_field :accountable_type %>
 
-          <%= f.text_field :name, placeholder: 'Example account name', required: 'required', label: 'Account name', autofocus: true %>
+          <%= f.text_field :name, placeholder: t('accounts.new.name.placeholder'), required: 'required', label: t('accounts.new.name.label'), autofocus: true %>
 
           <%= render "accounts/#{permitted_accountable_partial(@account.accountable_type)}", f: f %>
 

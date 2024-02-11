@@ -8,3 +8,6 @@ en:
     new:
       select_accountable_type: What would you like to add?
       title: Add an account
+      name:
+        label: Account name
+        placeholder: Example account name
