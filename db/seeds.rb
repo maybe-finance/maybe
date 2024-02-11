@@ -19,3 +19,6 @@ user = User.create_or_find_by(email: "user@maybe.local") do |u|
   u.family_id = family.id
 end
 puts "User created: #{user.email} for family: #{family.name}"
+
+# Create default currency
+Currency.find_or_create_by(iso_code: "USD", name: "United States Dollar")
