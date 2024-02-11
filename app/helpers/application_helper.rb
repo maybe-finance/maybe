@@ -53,10 +53,10 @@ module ApplicationHelper
 
   def nav_link(text, path, icon, current_page)
     classes = 'block border border-transparent rounded-xl p-2 text-sm font-medium text-gray-500 flex items-center'
-    classes += ' hover:bg-white hover:border-[#141414]/[0.07] hover:text-gray-900 hover:shadow-xs' unless current_page?(path)
+    hover_classes = 'hover:bg-white hover:border-[#141414]/[0.07] hover:text-gray-900 hover:shadow-xs'
   
     content_tag(:li) do
-      link_to(path, class: classes) do
+      link_to(path, class: class_list(classes, hover_classes: !current_page) do
         concat lucide_icon(icon, class: 'w-5 h-5 mr-2')
         concat text
       end
