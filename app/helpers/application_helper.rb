@@ -18,6 +18,10 @@ module ApplicationHelper
     render partial: "shared/modal", locals: { content: content }
   end
 
+  def currency_dropdown(f: nil, options: [])
+    render partial: "shared/currency_dropdown", locals: { f: f, options: options }
+  end
+  
   def sidebar_link_to(name, path, options = {})
     base_class_names = [ "block", "border", "border-transparent", "rounded-xl", "-ml-2", "p-2", "text-sm", "font-medium", "text-gray-500", "flex", "items-center" ]
     hover_class_names = [ "hover:bg-white", "hover:border-[#141414]/[0.07]", "hover:text-gray-900", "hover:shadow-xs" ]

@@ -76,10 +76,16 @@
 
           <%= render "accounts/#{permitted_accountable_partial(@account.accountable_type)}", f: f %>
 
-        <%= f.number_field :original_balance, step: :any, placeholder: 0.00, in: 0.00..100000000.00, required: 'required', label: true %>
-
-        <%= f.collection_select :original_currency, Currency.all, :iso_code, :iso_code, { prompt: "Choose a currency", selected: Current.family.currency }, { required: 'required', label: "Base Currency" } %>
+        <%= form_field_tag do %>
+          <%= f.label :original_balance, class: "form-field__label" %>
+          <%= f.number_field :original_balance, step: :any, placeholder: number_to_currency(0), in: 0.00..100000000.00, required: 'required', class: 'form-field__input max-w-[80%]' %>
+          <%= currency_dropdown(f: f, options: ['USD', 'EUR', 'JPY', 'GBP', 'AUD', 'CAD', 'CNY', 'BTC', 'ETH']) %>
+        <% end %>
       </div>
+
+
+        <%#= f.collection_select :original_currency, Currency.all, :iso_code, :iso_code, { prompt: "Choose a currency", selected: Current.family.currency }, { required: 'required', label: "Base Currency" } %>
+
       <%= f.submit "Add #{@account.accountable.model_name.human.downcase}" %>
     <% end %>
   <% end %>
