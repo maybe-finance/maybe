@@ -30,7 +30,7 @@ After cloning the repo, the basic setup commands are:
 cd maybe
 cp .env.example .env
 bundle install
-rails db:setup
+bin/setup
 bin/dev
 ```
 
