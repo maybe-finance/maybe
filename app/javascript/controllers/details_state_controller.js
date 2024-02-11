@@ -2,8 +2,6 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="account-list"
 export default class extends Controller {
-  static values = { category: String }
-
   initialize()  {
     this.localStorageSupported = this.isLocalStorageSupported()
     this.id = this.element.id
