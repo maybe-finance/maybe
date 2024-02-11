@@ -4,11 +4,31 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static values = { category: String }
 
+  initialize()  {
+    this.localStorageSupported = this.isLocalStorageSupported()
+  }
+
+  // Verify that localstorage is enabled in browser
+  isLocalStorageSupported(){
+    try {
+      const storage = window.localStorage
+      const test = 'localstorage'
+
+      storage.setItem(test, test)
+      storage.removeItem(test)
+
+      return true
+    } catch(err) {
+        console.error('Error connecting to localstorage', err)
+        return false
+    }
+  }
+
   getItem(key) {
     try {
       return JSON.parse(localStorage.getItem(key)) ?? {}
     } catch(err) {
-      console.err('Error retrieving from localstorage', err)
+      console.error('Error retrieving from localstorage', err)
       return null
     }
   }
@@ -17,11 +37,13 @@ export default class extends Controller {
     try {
       localStorage.setItem(key, JSON.stringify(value))
     } catch(err) {
-      console.err('Error writing to localstorage', err)
+      console.error('Error writing to localstorage', err)
     }
   }
   
   handleToggle() {
+    if(!this.localStorageSupported) return
+
     let config = this.getItem('accountList')
 
     config[this.categoryValue] = this.element.open
@@ -29,6 +51,8 @@ export default class extends Controller {
   }
 
   connect() {
+    if(!this.localStorageSupported) return
+
     let config = this.getItem('accountList')
     
     if (!config.hasOwnProperty(this.categoryValue)) {
