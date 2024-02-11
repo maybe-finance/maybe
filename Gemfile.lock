@@ -146,9 +146,25 @@ GEM
     drb (2.2.0)
       ruby2_keywords
     erubi (1.12.0)
+    et-orbi (1.2.7)
+      tzinfo
+    faraday (2.9.0)
+      faraday-net_http (>= 2.0, < 3.2)
+    faraday-net_http (3.1.0)
+      net-http
     ffi (1.16.3)
+    fugit (1.9.0)
+      et-orbi (~> 1, >= 1.2.7)
+      raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    good_job (3.23.0)
+      activejob (>= 6.0.0)
+      activerecord (>= 6.0.0)
+      concurrent-ruby (>= 1.0.2)
+      fugit (>= 1.1)
+      railties (>= 6.0.0)
+      thor (>= 0.14.1)
     highline (3.0.1)
     hotwire-livereload (1.3.1)
       actioncable (>= 6.0.0)
@@ -202,16 +218,9 @@ GEM
     matrix (0.4.2)
     mini_mime (1.1.5)
     minitest (5.21.2)
-    monetize (1.13.0)
-      money (~> 6.12)
-    money (6.16.0)
-      i18n (>= 0.6.4, <= 2)
-    money-rails (1.15.0)
-      activesupport (>= 3.0)
-      monetize (~> 1.9)
-      money (~> 6.13)
-      railties (>= 3.0)
     msgpack (1.7.2)
+    net-http (0.4.1)
+      uri
     net-imap (0.4.10)
       date
       net-protocol
@@ -250,6 +259,7 @@ GEM
     public_suffix (5.0.4)
     puma (6.4.2)
       nio4r (~> 2.0)
+    raabro (1.4.0)
     racc (1.7.3)
     rack (3.0.9)
     rack-session (2.0.0)
@@ -359,6 +369,7 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.5.0)
+    uri (0.13.0)
     useragent (0.16.10)
     web-console (4.2.1)
       actionview (>= 6.0.0)
@@ -389,6 +400,8 @@ DEPENDENCIES
   capybara
   debug
   dotenv-rails
+  faraday
+  good_job
   hotwire-livereload
   i18n-tasks
   importmap-rails
@@ -396,7 +409,6 @@ DEPENDENCIES
   jbuilder
   letter_opener
   lucide-rails!
-  money-rails (~> 1.12)
   pg (~> 1.1)
   propshaft
   puma (>= 5.0)

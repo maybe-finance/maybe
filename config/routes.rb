@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount GoodJob::Engine => "jobs"
+
   resource :registration
   resource :session
   resource :password_reset

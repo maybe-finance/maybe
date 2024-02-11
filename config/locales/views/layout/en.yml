@@ -5,6 +5,7 @@ en:
       accounts: Accounts
       dashboard: Dashboard
       new_account: New account
+      transactions: Transactions
     auth:
       or: or
       privacy_policy: Privacy Policy

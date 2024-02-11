@@ -23,12 +23,15 @@ gem "lucide-rails", github: "maybe-finance/lucide-rails"
 gem "stimulus-rails"
 gem "turbo-rails"
 
+# Background Jobs
+gem "good_job"
+
 # Other
 gem "bcrypt", "~> 3.1.7"
 gem "inline_svg"
 gem "jbuilder"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
-gem "money-rails", "~> 1.12"
+gem "faraday"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
