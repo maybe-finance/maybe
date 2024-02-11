@@ -46,9 +46,9 @@
         </div>
         <nav>
           <ul class="mt-6 space-y">
-            <%= nav_link(t('.dashboard'), root_path, 'layout-grid', current_page?(root_path)) %>
-            <%= nav_link(t('.accounts'), accounts_path, 'layers', current_page?(accounts_path)) %>
-            <%= nav_link(t('.transactions'), '#', 'credit-card', current_page?('#')) %>
+            <%= main_nav_link(t('.dashboard'), root_path, 'layout-grid', current_page?(root_path)) %>
+            <%= main_nav_link(t('.accounts'), accounts_path, 'layers', current_page?(accounts_path)) %>
+            <%= main_nav_link(t('.transactions'), '#', 'credit-card', current_page?('#')) %>
           </ul>
         </nav>
         <div class="flex flex-col mt-6">

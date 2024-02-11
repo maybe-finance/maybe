@@ -56,7 +56,7 @@ module ApplicationHelper
     hover_classes = 'hover:bg-white hover:border-[#141414]/[0.07] hover:text-gray-900 hover:shadow-xs'
   
     content_tag(:li) do
-      link_to(path, class: class_list(classes, hover_classes: !current_page) do
+      link_to(path, class: class_list(classes, hover_classes: !current_page)) do
         concat lucide_icon(icon, class: 'w-5 h-5 mr-2')
         concat text
       end
