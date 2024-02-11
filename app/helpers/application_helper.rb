@@ -51,7 +51,7 @@ module ApplicationHelper
     number_to_currency(number, options)
   end
 
-  def nav_link(text, path, icon, current_page)
+  def main_nav_link(text, path, icon, current_page)
     classes = 'block border border-transparent rounded-xl p-2 text-sm font-medium text-gray-500 flex items-center'
     hover_classes = 'hover:bg-white hover:border-[#141414]/[0.07] hover:text-gray-900 hover:shadow-xs'
   
