@@ -3,7 +3,7 @@
 <% accounts = Current.family.accounts.where(accountable_type: type.name) %>
 
 <% if accounts.sum(&:converted_balance) > 0 %>
-  <details class="mb-1 text-sm group" data-controller="account-list" data-account-type="<%= type.name.demodulize%>" data-action="click->account-list#updateDetailState"> 
+  <details class="mb-1 text-sm group" data-controller="account-list" data-account-type="<%= type.name.demodulize %>" data-action="toggle->account-list#handleToggle"> 
     <summary class="flex gap-4 px-2 py-3 items-center w-full rounded-[10px] font-medium hover:bg-[#f2f2f2]">
       <%= lucide_icon("chevron-down", class: "hidden group-open:block text-[#737373] w-5 h-5") %>
       <%= lucide_icon("chevron-right", class: "group-open:hidden text-[#737373] w-5 h-5") %>

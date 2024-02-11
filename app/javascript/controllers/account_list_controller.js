@@ -2,30 +2,42 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="account-list"
 export default class extends Controller {
+  getItem(key) {
+    try {
+      return JSON.parse(localStorage.getItem(key))
+    } catch(err) {
+      console.err('Error retrieving from localstorage', err)
+      return null
+    }
+  }
+  
+  setItem(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value))
+    } catch(err) {
+      console.err('Error writing to localstorage', err)
+    }
+  }
+  
+  handleToggle() {
+    const { accountType } = this.element.dataset
+    let config = this.getItem('accountList')
 
-  updateDetailState() {
-    const accountType = this.element.dataset.accountType
-    const config = JSON.parse(localStorage.getItem('accountList'))
+    if (!config) config = {}
 
-    config[accountType] = !config[accountType]
-    localStorage.setItem('accountList', JSON.stringify(config))
+    config[accountType] = this.element.open
+    this.setItem('accountList', config)
   }
 
   connect() {
-    const detailsElement = this.element
-    const accountType = this.element.dataset.accountType
-    let config = JSON.parse(localStorage.getItem('accountList'))
-
-    if(!config) {
-      config = {}
-      localStorage.setItem('accountList', JSON.stringify(config))
-    } 
+    const { accountType } = this.element.dataset
+    let config = this.getItem('accountList') || {}
     
     if (!config[accountType]) {
-      config[accountType] = detailsElement.open
-      localStorage.setItem('accountList', JSON.stringify(config))
+      config[accountType] = this.element.open
+      this.setItem('accountList', config)
     } 
     
-    detailsElement.open = config[accountType]
+    this.element.open = config[accountType]
   }
-} 
+}
