@@ -11,7 +11,7 @@ export default class extends Controller {
   // Verify that localstorage is enabled in browser
   isLocalStorageSupported(){
     try {
-      const storage = window.localStorage
+      const storage = window['localStorage']
       const test = 'localstorage'
 
       storage.setItem(test, test)
