@@ -24,7 +24,7 @@ class AccountsList < ApplicationSystemTestCase
   test 'persists sidebar collapsed state' do
     assert_no_text 'Credit Card Account Name'
 
-    find("[data-account-list-category-value='Account::Credit']").click
+    find("#Credit").click
 
     visit current_url
 
