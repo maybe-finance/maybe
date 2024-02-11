@@ -18,6 +18,22 @@ module ApplicationHelper
     render partial: "shared/modal", locals: { content: content }
   end
 
+  def sidebar_link_to(name, path, options = {})
+    base_class_names = "block border border-transparent rounded-xl -ml-2 p-2 text-sm font-medium text-gray-500 flex items-center"
+    hover_class_names = "hover:bg-white hover:border-[#141414]/[0.07] hover:text-gray-900 hover:shadow-xs"
+    current_page_class_names = "bg-white border-[#141414]/[0.07] text-gray-900 shadow-xs"
+
+    link_class_names = class_names(
+      base_class_names,
+      hover_class_names,
+      current_page_class_names => current_page?(path)
+    )
+
+    link_to path, class: link_class_names do
+      lucide_icon(options[:icon], class: "w-5 h-5 mr-2") + name
+    end
+  end
+
   def format_currency(number, options = {})
     user_currency_preference = Current.family.try(:currency) || "USD"
 
