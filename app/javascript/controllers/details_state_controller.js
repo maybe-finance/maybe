@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Connects to data-controller="account-list"
+// Connects to data-controller="details-state"
 export default class extends Controller {
   initialize()  {
     this.localStorageSupported = this.isLocalStorageSupported()
