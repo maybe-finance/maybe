@@ -17,7 +17,10 @@ export default class extends Controller {
 
   getLinkTargetInDirection(direction) {
     const indexOfLastFocus = this.indexOfLastFocus()
-    return this.focusableLinks[indexOfLastFocus + direction]
+    let nextIndex = (indexOfLastFocus + direction) % this.focusableLinks.length
+    if (nextIndex < 0) nextIndex = this.focusableLinks.length - 1
+      
+    return this.focusableLinks[nextIndex]
   }
 
   indexOfLastFocus(targets = this.focusableLinks) {
@@ -31,11 +34,6 @@ export default class extends Controller {
   }
 
   get focusableLinks() {
-    const backLink = this.element.parentElement.querySelector("a[href].back")
-    const links = Array.from(this.element.querySelectorAll("a[href]"))
-    if (backLink) {
-      links.unshift(backLink)
-    }
-    return links
+    return Array.from(this.element.querySelectorAll("a[href]"))
   }
 }
