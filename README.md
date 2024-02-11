@@ -29,8 +29,7 @@ After cloning the repo, the basic setup commands are:
 ```sh
 cd maybe
 cp .env.example .env
-bundle install
-rails db:setup
+bin/setup
 bin/dev
 ```
 
