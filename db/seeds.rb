@@ -20,5 +20,10 @@ user = User.create_or_find_by(email: "user@maybe.local") do |u|
 end
 puts "User created: #{user.email} for family: #{family.name}"
 
-# Create default currency
-Currency.find_or_create_by(iso_code: "USD", name: "United States Dollar")
+puts "seeding currencies"
+
+currencies = YAML.load_file(Rails.root.join("test", "fixtures", "currencies.yml"))
+currencies.each do |key, currency|
+  Currency.create_or_find_by(currency)
+  puts "Currency created: #{currency["name"]}"
+end

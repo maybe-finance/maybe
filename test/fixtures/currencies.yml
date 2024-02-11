@@ -1,9 +1,21 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-# one:
-#   name: MyString
-#   iso_code: MyString
+usd:
+  name: United States Dollar
+  iso_code: USD
 
-# two:
-#   name: MyString
-#   iso_code: MyString
+cad:
+  name: Canadian Dollar
+  iso_code: CAD
+
+eur:
+  name: Euro
+  iso_code: EUR
+
+gbp:
+  name: British Pound
+  iso_code: GBP
+
+jpy:
+  name: Japanese Yen
+  iso_code: JPY
