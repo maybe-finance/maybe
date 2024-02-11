@@ -1,0 +1,5 @@
+<li>
+  <%= link_to link_path, class: "block hover:bg-white border  hover:border-[#141414]/[0.07] rounded-xl hover:text-gray-900 hover:shadow-xs -ml-2 p-2 text-sm font-medium text-gray-500 flex items-center #{menu_link_active_class(link_path)}" do %>
+    <% yield %>
+  <% end %>
+</li>
