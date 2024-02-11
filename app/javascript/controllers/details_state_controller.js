@@ -6,6 +6,7 @@ export default class extends Controller {
 
   initialize()  {
     this.localStorageSupported = this.isLocalStorageSupported()
+    this.id = this.element.id
   }
 
   // Verify that localstorage is enabled in browser
@@ -46,7 +47,7 @@ export default class extends Controller {
 
     let config = this.getItem('accountList')
 
-    config[this.categoryValue] = this.element.open
+    config[this.id] = this.element.open
     this.setItem('accountList', config)
   }
 
@@ -55,11 +56,11 @@ export default class extends Controller {
 
     let config = this.getItem('accountList')
     
-    if (!config.hasOwnProperty(this.categoryValue)) {
-      config[this.categoryValue] = this.element.open
+    if (!config.hasOwnProperty(this.id)) {
+      config[this.id] = this.element.open
       this.setItem('accountList', config)
     } 
     
-    this.element.open = config[this.categoryValue]
+    this.element.open = config[this.id]
   }
 }
