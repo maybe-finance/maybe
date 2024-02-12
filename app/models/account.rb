@@ -4,7 +4,7 @@ class Account < ApplicationRecord
   delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
 
   delegate :type_name, to: :accountable
-  
+
   before_create :check_currency
 
   def check_currency
@@ -16,17 +16,15 @@ class Account < ApplicationRecord
       self.converted_currency = self.family.currency
     end
   end
-  
+
   def self.by_type
-    grouped = all.group_by { |account| account.accountable_type }
-    total_account_value = all.sum(&:balance)
+    grouped = group(:accountable_type).sum(:converted_balance)
+    total_account_value = sum(&:converted_balance)
 
-    grouped.map do |accountable_type, accounts|
-      total_value = accounts.sum(&:balance)
-
+    grouped.map do |accountable_type, total_value|
       Account::Group.new(
         type: accountable_type.constantize,
-        total_value:,
+        total_value: total_value,
         percentage_held: (total_value / total_account_value) * 100
       )
     end

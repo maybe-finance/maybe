@@ -4,7 +4,7 @@ class AccountGroupTest < ActiveSupport::TestCase
   def setup
     @account_group = Account::Group.new(
       type: Account::Depository,
-      total_value: Money.new(300_00),
+      total_value: 300_00,
       percentage_held: 50.0
     )
   end
