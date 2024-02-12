@@ -25,18 +25,19 @@ module ApplicationHelper
   def sidebar_link_to(name, path, options = {})
     base_class_names = [ "block", "border", "border-transparent", "rounded-xl", "-ml-2", "p-2", "text-sm", "font-medium", "text-gray-500", "flex", "items-center" ]
     hover_class_names = [ "hover:bg-white", "hover:border-[#141414]/[0.07]", "hover:text-gray-900", "hover:shadow-xs" ]
+    active_class_names = [ "active:bg-gray-200", "active:shadow-xs"]
     current_page_class_names = [ "bg-white", "border-[#141414]/[0.07]", "text-gray-900", "shadow-xs" ]
 
     link_class_names = if current_page?(path)
                          base_class_names.delete("border-transparent")
-                         base_class_names + hover_class_names + current_page_class_names
+                         base_class_names + hover_class_names + current_page_class_names + active_class_names
     else
-                         base_class_names + hover_class_names
+                         base_class_names + hover_class_names + active_class_names
     end
 
     merged_options = options.reverse_merge(class: link_class_names.join(" ")).except(:icon)
 
-    link_to path, merged_options do
+    link_to path, merged_options d
       lucide_icon(options[:icon], class: "w-5 h-5 mr-2") + name
     end
   end
