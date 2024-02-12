@@ -19,8 +19,11 @@ namespace :currencies do
       end
 
       puts "Currencies created: #{Currency.count}"
-    elsif currencies.count == 1
-      Currency.find_or_create_by(iso_code: currencies.first)
+    elsif currencies.size.positive?
+      currencies.each do |iso_code|
+        currency_code = iso_code.upcase
+        Currency.find_or_create_by(iso_code: currency_code, name: currency_code)
+      end
     else
       puts "No currencies found in ENV['CURRENCIES']"
     end
