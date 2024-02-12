@@ -1,16 +1,16 @@
 <%# locals: (type: "success", content:) -%>
 
 <div
-  class="fixed top-6 right-6 max-w-80 bg-white shadow-xs border border-[#141414/0.05] border-solid py-3 px-4 rounded-[10px] text-sm font-medium flex gap-3 animate-[appear-then-fade_6s_300ms_both]"
+  class="fixed top-6 right-6 max-w-80 bg-white shadow-xs border border-alpha-black-50 border-solid py-3 px-4 rounded-[10px] text-sm font-medium flex gap-3 animate-[appear-then-fade_6s_300ms_both]"
   data-controller="element-removal"
   data-action="click->element-removal#remove animationend->element-removal#remove"
 >
   <% if type == "success" %>
-    <div class="w-[20px] h-[20px] text-white bg-[#10A861] flex shrink-0 items-center justify-center rounded-full">
+    <div class="w-5 h-5 text-white bg-success flex shrink-0 items-center justify-center rounded-full">
       <%= lucide_icon("check", class: "w-3 h-3") %>
     </div>
   <% elsif type == "error" %>
-    <div class="w-[20px] h-[20px] text-white bg-[#EC2222] flex shrink-0 items-center justify-center rounded-full">
+    <div class="w-5 h-5 text-white bg-error flex shrink-0 items-center justify-center rounded-full">
       <%= lucide_icon("x", class: "w-3 h-3") %>
     </div>
   <% end %>
