@@ -4,8 +4,8 @@
 # model remove the "{}" from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-dylan_checking_account:
+bob_checking:
   id: e70fead4-fb77-423b-8dc2-83bbefaf67fa
 
-dylan_roth_account:
+bob_roth_ira:
   id: 5cc8921b-0d15-4423-bd39-32947307f512
