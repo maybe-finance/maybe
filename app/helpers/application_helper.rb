@@ -37,7 +37,7 @@ module ApplicationHelper
 
     merged_options = options.reverse_merge(class: link_class_names.join(" ")).except(:icon)
 
-    link_to path, merged_options d
+    link_to path, merged_options do
       lucide_icon(options[:icon], class: "w-5 h-5 mr-2") + name
     end
   end
