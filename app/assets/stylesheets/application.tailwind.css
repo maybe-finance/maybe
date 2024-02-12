@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Reset rules, default styles applied to plain HTML */
+@layer base {
+}
+
 @layer components {
   .prose {
     table {
@@ -42,4 +46,8 @@
   .form-field__submit {
     @apply w-full p-3 text-center text-white bg-black rounded-lg hover:bg-gray-700;
   }
+}
+
+/* Small, single purpose classes that should take precedence over other styles */
+@layer utilities {
 }
