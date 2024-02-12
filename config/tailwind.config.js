@@ -204,6 +204,19 @@ module.exports = {
       fontSize: {
         "2xs": ".625rem",
       },
+      animation: {
+        'appear-then-fade': 'appear-then-fade 6s 300ms both',
+        'stroke-fill': 'stroke-fill 5s linear forwards',
+      },
+      keyframes: {
+        'appear-then-fade': {
+          '0%,100%': { opacity: 0 },
+          '5%,60%': { opacity: 1 },
+        },
+        'stroke-fill': {
+          to: { 'stroke-dashoffset': 0 },
+        }
+      }
     },
   },
   plugins: [

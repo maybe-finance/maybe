@@ -11,6 +11,13 @@ module ApplicationHelper
     name.underscore
   end
 
+  def notification(text, **options, &block)
+    content = tag.p(text)
+    content = capture &block if block_given?
+
+    render partial: "shared/notification", locals: { type: options[:type], content: content }
+  end
+
   # Wrap view with <%= modal do %> ... <% end %> to have it open in a modal
   # Make sure to add data-turbo-frame="modal" to the link/button that opens the modal
   def modal(&block)

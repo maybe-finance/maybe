@@ -24,6 +24,10 @@
   </head>
 
   <body class="h-full">
+    <% if notice = flash[:notice] || flash[:alert] %>
+      <%= notification notice %>
+    <% end %>
+
     <div class="flex">
       <div class="flex-col p-5 min-w-80">
         <div class="flex items-center justify-between">
