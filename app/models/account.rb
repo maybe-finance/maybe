@@ -1,5 +1,6 @@
 class Account < ApplicationRecord
   belongs_to :family
+  has_many :account_balances
 
   delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
 

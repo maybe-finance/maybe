@@ -10,10 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_02_10_155058) do
+ActiveRecord::Schema[7.2].define(version: 2024_02_12_150110) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "account_balances", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "account_id", null: false
+    t.date "date", null: false
+    t.decimal "balance", precision: 19, scale: 4, null: false
+    t.string "currency", default: "USD", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "date"], name: "index_account_balances_on_account_id_and_date", unique: true
+    t.index ["account_id"], name: "index_account_balances_on_account_id"
+  end
 
   create_table "account_credits", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -195,6 +206,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_02_10_155058) do
     t.index ["family_id"], name: "index_users_on_family_id"
   end
 
+  add_foreign_key "account_balances", "accounts", on_delete: :cascade
   add_foreign_key "accounts", "families"
   add_foreign_key "users", "families"
 end
