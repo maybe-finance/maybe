@@ -1,4 +1,4 @@
-class AccountGroup
+class Account::Group
   attr_reader :name, :type, :total_value, :percentage_held, :param
 
   def initialize(type:, total_value:, percentage_held:)

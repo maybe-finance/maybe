@@ -33,6 +33,6 @@ class AccountTest < ActiveSupport::TestCase
     account = families(:dylan_family).accounts
 
     assert_equal 1, account.by_type.count
-    assert_instance_of AccountGroup, account.by_type.first
+    assert_instance_of Account::Group, account.by_type.first
   end
 end

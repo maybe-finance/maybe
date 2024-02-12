@@ -7,6 +7,11 @@ module.exports = {
     './app/javascript/**/*.js',
     './app/views/**/*.{erb,haml,html,slim}'
   ],
+  safelist: [
+    {
+      pattern: /^bg-account-/,
+    }
+  ],
   theme: {
     extend: {
       fontFamily: {
@@ -18,6 +23,14 @@ module.exports = {
       colors: {
         black: '#242629',
         offwhite: '#F9FAFB',
+        'account-depository': '#2E90FA',
+        'account-investment': '#32D583',
+        'account-property': '#F23E94',
+        'account-vehicle': '#6172F3',
+        'account-credit': '#36BFFA',
+        'account-loan': '#F38744',
+        'account-other-asset': '#12B76A',
+        'account-other-liability': '#F04438',
       },
       dropShadow: {
         'form': '0px 4px 10px rgba(52, 54, 60, 0.08)',

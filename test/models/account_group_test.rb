@@ -2,7 +2,7 @@ require "test_helper"
 
 class AccountGroupTest < ActiveSupport::TestCase
   def setup
-    @account_group = AccountGroup.new(
+    @account_group = Account::Group.new(
       type: Account::Depository,
       total_value: Money.new(300_00),
       percentage_held: 50.0

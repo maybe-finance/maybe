@@ -14,7 +14,7 @@ class Account < ApplicationRecord
     grouped.map do |accountable_type, accounts|
       total_value = accounts.sum(&:balance)
 
-      AccountGroup.new(
+      Account::Group.new(
         type: accountable_type.constantize,
         total_value:,
         percentage_held: (total_value / total_account_value) * 100
