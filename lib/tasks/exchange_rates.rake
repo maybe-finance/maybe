@@ -91,7 +91,11 @@ namespace :exchange_rates do
     DEFAULT_HOUR = "23" # Reference hour of the day to take exchange rates from
     PRECISION = 6 # 6 decimal places
     NDIGITS = 9 + PRECISION # ndigits for millions and enough decimal places
-    Date.parse(FIRST_DATE).upto(Date.today) do |date|
+
+    start_at_date = ExchangeRate.maximum(:date) || Date.parse(FIRST_DATE)
+    puts "Fetching exchange rates from #{start_at_date} to #{Date.today}..."
+
+    start_at_date.upto(Date.today) do |date|
       response = Faraday.get("https://raw.githubusercontent.com/ismartcoding/currency-api/main/#{date.iso8601}/#{DEFAULT_HOUR}.json")
       if response.success?
         rates = JSON.parse(response.body)
@@ -102,7 +106,7 @@ namespace :exchange_rates do
         based_rates = { "USD" => rates_in_usd }
         rates_in_usd.each do |currency_iso_code, value_in_usd|
           based_rates[currency_iso_code] = rates_in_usd.transform_values do |other_currency_value|
-            (BigDecimal(other_currency_value, NDIGITS) / BigDecimal(value_in_usd, NDIGITS)).round(PRECISION).to_f
+            (BigDecimal(other_currency_value, NDIGITS) / BigDecimal(value_in_usd, NDIGITS)).round(PRECISION)
           end
         end
 
