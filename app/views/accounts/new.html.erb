@@ -3,38 +3,38 @@
 <%= modal do %>
   <div class="flex flex-col min-h-[530px]" data-controller="list-keyboard-navigation">
   <% if @account.accountable.blank? %>
-    <div class="border-b border-[#141414]/2 p-4 text-gray-400">
+    <div class="border-b border-alpha-black-25 p-4 text-gray-400">
       <%= t '.select_accountable_type' %>
     </div>
     <div class="flex flex-col p-2 text-sm grow">
       <button hidden data-controller="hotkey" data-hotkey="k,K,ArrowUp,ArrowLeft" data-action="list-keyboard-navigation#focusPrevious">Previous</button>
       <button hidden data-controller="hotkey" data-hotkey="j,J,ArrowDown,ArrowRight" data-action="list-keyboard-navigation#focusNext">Next</button>
 
-      <%= render "account_type", type: Account::Depository.new, bg_color: "bg-[#EFF8FF]", text_color: "text-[#2E90FA]", icon: "landmark" %>
-      <%= render "account_type", type: Account::Investment.new, bg_color: "bg-[#ECFDF3]", text_color: "text-[#32D583]", icon: "line-chart" %>
-      <%= render "account_type", type: Account::Property.new, bg_color: "bg-[#FCF5F9]", text_color: "text-[#F23E94]", icon: "home" %>
-      <%= render "account_type", type: Account::Vehicle.new, bg_color: "bg-[#EEF4FF]", text_color: "text-[#6172F3]", icon: "car-front" %>
-      <%= render "account_type", type: Account::Credit.new, bg_color: "bg-[#F0F9FF]", text_color: "text-[#36BFFA]", icon: "credit-card" %>
-      <%= render "account_type", type: Account::Loan.new, bg_color: "bg-[#FEF6EE]", text_color: "text-[#F38744]", icon: "hand-coins" %>
-      <%= render "account_type", type: Account::OtherAsset.new, bg_color: "bg-[#ECFDF3]", text_color: "text-[#12B76A]", icon: "plus" %>
-      <%= render "account_type", type: Account::OtherLiability.new, bg_color: "bg-[#FEF3F2]", text_color: "text-[#F04438]", icon: "minus" %>
+      <%= render "account_type", type: Account::Depository.new, bg_color: "bg-blue-50", text_color: "text-blue-500", icon: "landmark" %>
+      <%= render "account_type", type: Account::Investment.new, bg_color: "bg-green-50", text_color: "text-green-500", icon: "line-chart" %>
+      <%= render "account_type", type: Account::Property.new, bg_color: "bg-pink-50", text_color: "text-pink-500", icon: "home" %>
+      <%= render "account_type", type: Account::Vehicle.new, bg_color: "bg-indigo-50", text_color: "text-indigo-500", icon: "car-front" %>
+      <%= render "account_type", type: Account::Credit.new, bg_color: "bg-violet-50", text_color: "text-violet-500", icon: "credit-card" %>
+      <%= render "account_type", type: Account::Loan.new, bg_color: "bg-yellow-50", text_color: "text-yellow-500", icon: "hand-coins" %>
+      <%= render "account_type", type: Account::OtherAsset.new, bg_color: "bg-green-50", text_color: "text-green-500", icon: "plus" %>
+      <%= render "account_type", type: Account::OtherLiability.new, bg_color: "bg-red-50", text_color: "text-red-500", icon: "minus" %>
     </div>
-    <div class="border-t border-[#141414]/2 p-4 text-gray-500 text-sm flex justify-between">
+    <div class="border-t border-alpha-black-25 p-4 text-gray-500 text-sm flex justify-between">
       <div class="flex space-x-5">
         <div class="flex items-center space-x-2">
-          <span>Select</span> <kbd class="bg-[#141414]/5 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('corner-down-left', class: 'inline w-3 h-3')%></kbd>
+          <span>Select</span> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('corner-down-left', class: 'inline w-3 h-3')%></kbd>
         </div>
         <div class="flex items-center space-x-2">
-          <span>Navigate</span> <kbd class="bg-[#141414]/5 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('arrow-up', class: 'inline w-3 h-3')%></kbd> <kbd class="bg-[#141414]/5 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('arrow-down', class: 'inline w-3 h-3')%></kbd>
+          <span>Navigate</span> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('arrow-up', class: 'inline w-3 h-3')%></kbd> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('arrow-down', class: 'inline w-3 h-3')%></kbd>
         </div>
       </div>
       <div class="flex items-center space-x-2">
-        <span>Close</span> <kbd class="bg-[#141414]/5 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-8 h-5 shrink-0 grow-0 items-center justify-center text-xs">ESC</kbd>
+        <span>Close</span> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-8 h-5 shrink-0 grow-0 items-center justify-center text-xs">ESC</kbd>
       </div>
     </div>
   <% elsif params[:step] == 'method' && @account.accountable.present? %>
-    <div class="border-b border-[#141414]/2 p-4 text-gray-400 flex items-center space-x-3">
-      <%= link_to new_account_path, class: "flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-[#141414]/5 back focus:outline-gray-300 focus:outline" do %>
+    <div class="border-b border-alpha-black-25 p-4 text-gray-400 flex items-center space-x-3">
+      <%= link_to new_account_path, class: "flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-alpha-black-50 back focus:outline-gray-300 focus:outline" do %>
         <%= lucide_icon('arrow-left', class: 'text-gray-500 w-5 h-5') %>
       <% end %>
       <span>How would you like to add it?</span>
@@ -47,22 +47,22 @@
       <%= render "entry_method", type: @account.accountable, text: 'Securely link bank account with data provider (coming soon)', icon: "link-2", disabled: true %>
       <%= render "entry_method", type: @account.accountable, text: 'Upload spreadsheet (coming soon)', icon: "sheet", disabled: true %>
     </div>
-    <div class="border-t border-[#141414]/2 p-4 text-gray-500 text-sm flex justify-between">
+    <div class="border-t border-alpha-black-25 p-4 text-gray-500 text-sm flex justify-between">
       <div class="flex space-x-5">
         <div class="flex items-center space-x-2">
-          <span>Select</span> <kbd class="bg-[#141414]/5 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('corner-down-left', class: 'inline w-3 h-3')%></kbd>
+          <span>Select</span> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('corner-down-left', class: 'inline w-3 h-3')%></kbd>
         </div>
         <div class="flex items-center space-x-2">
-          <span>Navigate</span> <kbd class="bg-[#141414]/5 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('arrow-up', class: 'inline w-3 h-3')%></kbd> <kbd class="bg-[#141414]/5 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('arrow-down', class: 'inline w-3 h-3')%></kbd>
+          <span>Navigate</span> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('arrow-up', class: 'inline w-3 h-3')%></kbd> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('arrow-down', class: 'inline w-3 h-3')%></kbd>
         </div>
       </div>
       <div class="flex items-center space-x-2">
-        <span>Close</span> <kbd class="bg-[#141414]/5 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-8 h-5 shrink-0 grow-0 items-center justify-center text-xs">ESC</kbd>
+        <span>Close</span> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-8 h-5 shrink-0 grow-0 items-center justify-center text-xs">ESC</kbd>
       </div>
     </div>
   <% else %>
-    <div class="border-b border-[#141414]/2 p-4 text-gray-800 flex items-center space-x-3">
-      <%= link_to new_account_path(step: 'method', type: params[:type]), class: "flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-[#141414]/5 focus:outline-gray-300 focus:outline" do %>
+    <div class="border-b border-alpha-black-25 p-4 text-gray-800 flex items-center space-x-3">
+      <%= link_to new_account_path(step: 'method', type: params[:type]), class: "flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-alpha-black-50 focus:outline-gray-300 focus:outline" do %>
         <%= lucide_icon('arrow-left', class: 'text-gray-500 w-5 h-5') %>
       <% end %>
       <span>Add <%= @account.accountable.model_name.human.downcase %></span>
