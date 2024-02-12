@@ -2,25 +2,25 @@
 
 <% accounts = Current.family.accounts.where(accountable_type: type.name) %>
 
-<% if accounts.sum(&:balance) > 0 %>
-<details class="mb-1 text-sm group">
+<% if accounts.sum(&:converted_balance) > 0 %>
+<details class="mb-1 text-sm group" data-controller="account-collapse" data-account-collapse-type-value="<%= type %>">
   <summary class="flex gap-4 px-2 py-3 items-center w-full rounded-[10px] font-medium hover:bg-[#f2f2f2]">
     <%= lucide_icon("chevron-down", class: "hidden group-open:block text-[#737373] w-5 h-5") %>
     <%= lucide_icon("chevron-right", class: "group-open:hidden text-[#737373] w-5 h-5") %>
     <div class="text-left"><%= type.model_name.human %></div>
-    <div class="ml-auto"><%= humanized_money_with_symbol accounts.sum(&:balance) %></div>
+    <div class="ml-auto"><%= format_currency accounts.sum(&:converted_balance) %></div>
   </summary>
 
   <% accounts.each do |account| %>
-    <div class="flex items-center w-full gap-3 px-2 py-3 mb-1">
+    <%= link_to account_path(account), class: "flex items-center w-full gap-3 px-2 py-3 mb-1 hover:bg-[#f2f2f2] rounded-[10px]" do %>
       <div>
         <p class="font-medium"><%= account.name %></p>
         <% if account.subtype %>
           <p class="text-xs text-[#737373]"><%= account.subtype&.humanize %></p>
         <% end %>
       </div>
-      <p class="ml-auto font-medium"><%= humanized_money_with_symbol account.balance %></p>
-    </div>
+      <p class="ml-auto font-medium"><%= format_currency account.converted_balance %></p>
+    <% end %>
   <% end %>
 
   <%= link_to new_account_path(step: 'method', type: type.name.demodulize), class: "flex items-center gap-4 px-2 py-3 mb-1 text-[#737373] text-sm font-medium rounded-[10px] hover:bg-[#f2f2f2]", data: { turbo_frame: "modal" } do %>

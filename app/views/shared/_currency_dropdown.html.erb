@@ -1,0 +1,15 @@
+<div data-controller="currency-dropdown" class="absolute right-1 bottom-[10px] flex items-end">
+  <button type="button" class="flex items-center justify-between w-20 px-2 py-1 text-sm rounded-lg hover:bg-gray-100 focus:bg-gray-100" data-action="click->currency-dropdown#toggleMenu">
+    <div data-currency-dropdown-target="label"><%= f.object.original_currency %></div>
+    <%# Example of how account currency value is updated %>
+    <%#= f.hidden_field :currency, data: {currency_dropdown_target: "input"} %>
+    <%= lucide_icon("chevron-down", class: "text-[#737373] w-5 h-5" ) %>
+  </button>
+  <ul data-currency-dropdown-target="menu" class="hidden fixed p-1 bg-white rounded-[10px] min-w-[112px] z-50 translate-y-2 border border-[#141414]/8 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)]">
+    <% options.each do |option| %>
+      <li data-action="click->currency-dropdown#selectOption" data-currency-dropdown-target="option" data-value="<%= option %>" class="flex justify-between items-center p-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer rounded-lg <%= "bg-gray-100" if option === f.object.original_currency %>"><%= option %>
+        <%= inline_svg_tag('icn-check.svg', class: "text-gray-500 fill-current #{'hidden'if option != f.object.original_currency}") %>
+      </li>
+    <% end %>
+  </ul>
+</div>
