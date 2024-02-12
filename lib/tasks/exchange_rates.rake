@@ -1,3 +1,5 @@
+require "bigdecimal"
+
 namespace :exchange_rates do
   desc "Fetch exchange rates from openexchangerates.org"
   task sync: :environment do
@@ -77,6 +79,44 @@ namespace :exchange_rates do
 
           start_period = current_end_date + 1.day
         end
+      end
+    end
+  end
+
+  desc "Fetch exchange rates from https://github.com/ismartcoding/currency-api"
+  task sync_from_ismartcoding: :environment do
+    # Exchange rate data is simply stored as JSON files in a repository:
+    # https://raw.githubusercontent.com/ismartcoding/currency-api/main/{yyyy-mm-dd}/{24h hour}.json
+    FIRST_DATE = "2023-10-10" # First date that has completed data
+    DEFAULT_HOUR = "23" # Reference hour of the day to take exchange rates from
+    PRECISION = 6 # 6 decimal places
+    NDIGITS = 9 + PRECISION # ndigits for millions and enough decimal places
+    Date.parse(FIRST_DATE).upto(Date.today) do |date|
+      response = Faraday.get("https://raw.githubusercontent.com/ismartcoding/currency-api/main/#{date.iso8601}/#{DEFAULT_HOUR}.json")
+      if response.success?
+        rates = JSON.parse(response.body)
+        # Given base currency, compute other currencies rates in relation to the base (USD).
+        # Rate values have 6 decimal places.
+        rates_in_usd = rates["quotes"]
+        rates_in_usd["USD"] = 1.0 # Add itself so we can compute other rates
+        based_rates = { "USD" => rates_in_usd }
+        rates_in_usd.each do |currency_iso_code, value_in_usd|
+          based_rates[currency_iso_code] = rates_in_usd.transform_values do |other_currency_value|
+            (BigDecimal(other_currency_value, NDIGITS) / BigDecimal(value_in_usd, NDIGITS)).round(PRECISION).to_f
+          end
+        end
+
+        # Now store the exchange rates in the database
+        Currency.all.each do |currency|
+          based_rates[currency.iso_code].each do |currency_iso_code, value|
+            ExchangeRate.find_or_create_by(date: date, base_currency: currency.iso_code, converted_currency: currency_iso_code) do |exchange_rate|
+              exchange_rate.rate = value
+            end
+            puts "#{currency.iso_code} to #{currency_iso_code} on #{date}: #{value}"
+          end
+        end
+      else
+        puts "Failed to fetch exchange rates for #{currency.iso_code} on #{date}: #{response.status}"
       end
     end
   end
