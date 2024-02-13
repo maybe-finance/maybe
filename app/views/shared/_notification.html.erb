@@ -8,8 +8,7 @@
       data-controller="element-removal"
       data-action="click->element-removal#remove animationend->element-removal#remove">
       <% base_class = "w-5 h-5 p-1 text-white flex shrink-0 items-center justify-center rounded-full" %>
-      <%= lucide_icon("check", class: "#{base_class} bg-success") if type == "success" %>
-      <%= lucide_icon("x", class: "#{base_class} bg-error") if type == "error" %>
+      <%= type.in?(["error", "alert"]) ? lucide_icon("x", class: "#{base_class} bg-error") : lucide_icon("check", class: "#{base_class} bg-success") %>
 
       <%= content %>
 
