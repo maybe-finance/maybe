@@ -207,7 +207,7 @@ module.exports = {
       keyframes: {
         'appear-then-fade': {
           '0%,100%': { opacity: 0 },
-          '5%,60%': { opacity: 1 },
+          '5%,90%': { opacity: 1 },
         },
         'stroke-fill': {
           to: { 'stroke-dashoffset': 0 },
