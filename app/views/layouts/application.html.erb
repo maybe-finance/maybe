@@ -24,6 +24,10 @@
   </head>
 
   <body class="h-full">
+    <% if notice %>
+      <%= render "shared/flash", success: true, content: "Emergency cash has been successfully created" if notice == flash[:notice] %>
+      <%= render "shared/flash", success: false, content: "Account addition failed" if notice == flash[:alert] %>
+    <% end %>
     <div class="flex">
       <div class="flex-col p-5 min-w-80">
         <div class="flex items-center justify-between">
