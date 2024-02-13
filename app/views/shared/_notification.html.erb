@@ -5,15 +5,9 @@
   data-controller="element-removal"
   data-action="click->element-removal#remove animationend->element-removal#remove"
 >
-  <% if type == "success" %>
-    <div class="w-5 h-5 text-white bg-success flex shrink-0 items-center justify-center rounded-full">
-      <%= lucide_icon("check", class: "w-3 h-3") %>
-    </div>
-  <% elsif type == "error" %>
-    <div class="w-5 h-5 text-white bg-error flex shrink-0 items-center justify-center rounded-full">
-      <%= lucide_icon("x", class: "w-3 h-3") %>
-    </div>
-  <% end %>
+  <% base_class = "w-5 h-5 p-1 text-white flex shrink-0 items-center justify-center rounded-full" %>
+  <%= lucide_icon("check", class: "#{base_class} bg-success") if type == "success" %>
+  <%= lucide_icon("x", class: "#{base_class} bg-error") if type == "error" %>
 
   <%= content %>
 
