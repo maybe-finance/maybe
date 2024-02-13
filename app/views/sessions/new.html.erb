@@ -3,8 +3,6 @@
 %>
 
 <%= form_with url: session_path do |form| %>
-  <%= auth_messages form %>
-
   <%= form.email_field :email, label: t('.email'), autofocus: false, autocomplete: "email", required: 'required', placeholder: t('.email_placeholder') %>
 
   <%= form.password_field :password, label: true, required: 'required' %>

@@ -1,8 +1,6 @@
 <h1><% t('.title')%></h1>
 
 <%= form_with model: Current.user, url: password_path do |form| %>
-  <%= auth_messages form %>
-
   <div>
     <%= form.label :password_challenge, t('.password_challenge') %>
     <%= form.password_field :password_challenge %>

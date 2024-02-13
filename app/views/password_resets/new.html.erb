@@ -3,8 +3,6 @@
 %>
 
 <%= form_with url: password_reset_path do |form| %>
-  <%= auth_messages form %>
-
   <%= form.email_field :email, label: true, autofocus: false, autocomplete: "email", required: 'required', placeholder: 'you@example.com' %>
 
   <%= form.submit t('.submit') %>

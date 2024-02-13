@@ -1,7 +1,0 @@
-<% flash.each do |type, msg| %>
-  <div class="p-4 <%= type == 'notice' ? 'bg-blue-200' : 'bg-red-200' %> rounded-lg"><%= msg %></div>
-<% end %>
-
-<% errors.each do |message| %>
-  <div class="p-4 bg-red-200 rounded-lg"><%= message %></div>
-<% end %>

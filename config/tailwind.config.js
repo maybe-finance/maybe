@@ -204,6 +204,11 @@ module.exports = {
       fontSize: {
         "2xs": ".625rem",
       },
+      keyframes: {
+        'stroke-fill': {
+          to: { 'stroke-dashoffset': 0 },
+        },
+      },
     },
   },
   plugins: [
