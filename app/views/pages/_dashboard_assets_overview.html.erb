@@ -8,14 +8,14 @@
 
     <div class="flex -mx-0.5 my-6">
       <% @account_groups.each do |account_group| %>
-        <div class="block mx-0.5 h-2.5 rounded bg-<%= account_group.param %>" style="flex-basis: <%= account_group.percentage_held %>%"></div>
+        <div class="block mx-0.5 h-2.5 rounded bg-<%= account_group.type::COLOR %>" style="flex-basis: <%= account_group.percentage_held %>%"></div>
       <% end %>
     </div>
 
     <div class="flex justify-center mt-8">
       <% @account_groups.each do |account_group| %>
         <div class="flex items-center mx-4">
-          <span class="inline-block rounded-full w-3 h-3 bg-<%= account_group.param %>"></span>
+          <span class="inline-block rounded-full w-3 h-3 bg-<%= account_group.type::COLOR %>"></span>
           <span class="inlinb-block text-sm ml-1 mr-2 text-gray-400"><%= account_group.name %></span>
           <strong class="text-center text-xs"><%= number_to_percentage(account_group.percentage_held, precision: 2) %></strong>
         </div>

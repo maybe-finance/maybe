@@ -1,6 +1,8 @@
 class Account::Investment < ApplicationRecord
   include Accountable
 
+  COLOR = "green-50"
+
   SUBTYPES = [
     [ "Brokerage", "brokerage" ],
     [ "Pension", "pension" ],
