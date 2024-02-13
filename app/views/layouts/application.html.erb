@@ -24,6 +24,9 @@
   </head>
 
   <body class="h-full">
+    <div id="notification-tray" class="fixed top-6 right-6 space-y-1 z-50"></div>
+    <%= safe_join(flash.map { |type, message| notification(message, type: type) }) %>
+
     <div class="flex">
       <div class="flex-col p-5 min-w-80">
         <div class="flex items-center justify-between">

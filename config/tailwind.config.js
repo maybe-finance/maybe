@@ -204,6 +204,15 @@ module.exports = {
       fontSize: {
         "2xs": ".625rem",
       },
+      keyframes: {
+        'appear-then-fade': {
+          '0%,100%': { opacity: 0 },
+          '5%,90%': { opacity: 1 },
+        },
+        'stroke-fill': {
+          to: { 'stroke-dashoffset': 0 },
+        }
+      }
     },
   },
   plugins: [
