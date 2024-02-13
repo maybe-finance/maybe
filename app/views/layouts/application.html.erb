@@ -24,9 +24,8 @@
   </head>
 
   <body class="h-full">
-    <% if notice = flash[:notice] || flash[:alert] %>
-      <%= notification notice %>
-    <% end %>
+    <div id="notification-tray" class="fixed top-6 right-6 space-y-1 z-50"></div>
+    <%= notification(notice) if notice = flash[:notice] || flash[:alert] %>
 
     <div class="flex">
       <div class="flex-col p-5 min-w-80">
