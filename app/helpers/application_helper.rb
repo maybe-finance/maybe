@@ -27,7 +27,7 @@ module ApplicationHelper
     hover_class_names = [ "hover:bg-white", "hover:border-[#141414]/[0.07]", "hover:text-gray-900", "hover:shadow-xs" ]
     current_page_class_names = [ "bg-white", "border-[#141414]/[0.07]", "text-gray-900", "shadow-xs" ]
 
-    link_class_names = if current_page?(path)
+    link_class_names = if current_page?(path) || (request.path.start_with?(path) && path != "/")
                          base_class_names.delete("border-transparent")
                          base_class_names + hover_class_names + current_page_class_names
     else
