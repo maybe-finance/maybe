@@ -197,12 +197,33 @@ module.exports = {
       "2xl": "0px 24px 48px -12px rgba(11, 11, 11, 0.12)",
       "3xl": "0px 32px 64px -12px rgba(11, 11, 11, 0.14)",
     },
+    borderRadius: {
+      none: "0",
+      full: "9999px",
+      xs: "2px",
+      sm: "4px",
+      md: "8px",
+      DEFAULT: "8px",
+      lg: "10px",
+      xl: "12px",
+      "2xl": "16px",
+      "3xl": "24px",
+    },
     extend: {
       fontFamily: {
         display: ["Inter var", ...defaultTheme.fontFamily.sans],
       },
       fontSize: {
         "2xs": ".625rem",
+      },
+      keyframes: {
+        "appear-then-fade": {
+          "0%,100%": { opacity: 0 },
+          "5%,90%": { opacity: 1 },
+        },
+        "stroke-fill": {
+          to: { "stroke-dashoffset": 0 },
+        },
       },
     },
   },
