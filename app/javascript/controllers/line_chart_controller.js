@@ -180,7 +180,6 @@ export default class extends Controller {
       .attr("pointer-events", "all")
       // When user hovers over the chart, show the tooltip and a circle at the closest data point
       .on("mousemove", (event) => {
-        console.log("mouse showing");
         tooltip.style("opacity", 1);
 
         const [xPos] = d3.pointer(event);
