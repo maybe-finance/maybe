@@ -1,2 +1,114 @@
-<h2 class="text-2xl font-semibold font-display"><%= @account.name %></h2>
-
+<div class="space-y-4">
+  <div class="flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <div class="bg-green-600/10 rounded-full h-8 w-8 flex items-center justify-center">
+        <span class="text-green-600"><%= @account.name[0].upcase %></span>
+      </div>
+      <h2 class="font-medium text-xl"><%= @account.name %></h2>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="relative cursor-not-allowed">
+        <div class="flex items-center gap-2 px-3 py-2">
+          <span class="text-gray-900">USD $</span>
+          <%= lucide_icon("chevron-down", class: "w-5 h-5 text-gray-500") %>
+        </div>
+      </div>
+      <div class="cursor-not-allowed">
+        <%= lucide_icon("more-horizontal", class: "w-5 h-5 text-gray-500") %>
+      </div>
+    </div>
+  </div>
+  <div class="bg-white shadow-xs rounded-xl border border-alpha-black-25 rounded-lg">
+    <div class="p-4 flex justify-between">
+      <div class="space-y-2">
+        <p class="text-sm text-gray-500">Total Value</p>
+        <%# TODO: Will need a normalized way to split a formatted monetary value into these 3 parts %>
+        <p class="text-gray-900">
+          <span class="text-gray-500"><%= number_to_currency(@account.converted_balance)[0] %></span>
+          <span class="text-xl font-medium"><%= number_with_delimiter(@account.converted_balance.round) %></span>
+          <span class="text-gray-500">.<%= number_to_currency(@account.converted_balance, precision: 2)[-2, 2] %></span>
+        </p>
+        <% if @account.dollar_change == 0 %>
+          <p class="text-sm text-gray-500">
+            <span class="text-gray-500">No change vs last month</span>
+          </p>
+        <% else %>
+          <p class="text-sm <%= @account.dollar_change > 0 ? 'text-green-600' : 'text-red-600' %>">
+            <span><%= @account.dollar_change > 0 ? '+' : '-' %><%= number_to_currency(@account.dollar_change.abs, precision: 2) %></span>
+            <span>
+              (<%= lucide_icon(@account.dollar_change > 0 ? 'arrow-up' : 'arrow-down', class: "w-4 h-4 align-text-bottom inline") %>
+              <span><%= @account.percent_change %>%</span>)
+            </span>
+            <span class="text-gray-500">vs last month</span>
+          </p>
+        <% end %>
+      </div>
+      <div class="relative">
+        <div class="flex items-center text-sm gap-2 p-2 border border-alpha-black-100 shadow-xs rounded-lg cursor-not-allowed">
+          <span class="text-gray-900 pl-1">1M</span>
+          <%= lucide_icon("chevron-down", class: "w-5 h-5 text-gray-500") %>
+        </div>
+      </div>
+    </div>
+    <div class="h-96 flex items-center justify-center text-2xl font-bold">
+      <div data-controller="line-chart" id="lineChart" class="w-full h-full"></div>
+    </div>
+  </div>
+  <div class="bg-white space-y-4 p-5 border border-alpha-black-25 rounded-xl shadow-xs">
+    <div class="flex justify-between items-center">
+      <h3 class="font-medium text-xl">History</h3>
+      <button class="cursor-not-allowed flex gap-1 font-medium items-center bg-gray-50 text-gray-900 p-2 rounded-lg">
+        <%= lucide_icon("plus", class: "w-5 h-5 text-gray-900") %>
+        <span>New entry</span>
+      </button>
+    </div>
+    <div class="rounded-xl bg-gray-25 p-1">
+      <div class="flex flex-col rounded-lg space-y-1">
+        <div class="flex justify-between gap-10 text-xs font-medium text-gray-500 uppercase py-2">
+          <div class="ml-4 flex-1">
+            DATE
+          </div>
+          <div class="flex-1 text-right">VALUE</div>
+          <div class="flex-1 text-right">CHANGE</div>
+          <div class="w-12"></div>
+        </div>
+        <div class="rounded-lg py-2 bg-white border-alpha-black-25 shadow-xs">
+          <% @account.balances.each_with_index do |balance, index| %>
+            <div>
+              <div class="p-4 flex items-center justify-between gap-10 w-full">
+                <div class="flex-1 flex items-center gap-4">
+                  <div class="w-8 h-8 rounded-full bg-gray-500/5 p-1.5 flex items-center justify-center">
+                    <%= lucide_icon(balance.icon, class: "w-4 h-4 #{balance.change > 0 ? 'text-green-500' : balance.change < 0 ? 'text-red-500' : 'text-gray-500'}") %>
+                  </div>
+                  <div class="text-sm">
+                    <p class=""><%= balance.date %></p>
+                    <p class="text-gray-500"><%= balance.description %></p>
+                  </div>
+                </div>
+                <div class="flex-1 text-sm font-medium text-right"><%= number_to_currency(balance.amount, precision: 2) %></div>
+                <div class="flex-1 text-right text-sm font-medium">
+                  <% if balance.change == 0 %>
+                    <span class="text-gray-500">No change</span>
+                  <% else %>
+                    <span class="<%= balance.change > 0 ? 'text-green-500' : 'text-red-500' %>"><%= balance.change > 0 ? '+' : '' %>$<%= balance.change.abs %></span>
+                    <span class="<%= balance.change > 0 ? 'text-green-500' : 'text-red-500' %>">
+                      (<%= lucide_icon(balance.icon, class: "w-4 h-4 align-text-bottom inline") %> <%= balance.percentage_change %>%)</span>
+                  <% end %>
+                </div>
+                <div class="w-8 cursor-not-allowed">
+                  <%= lucide_icon("more-horizontal", class: "w-5 h-5 text-gray-500") %>
+                </div>
+              </div>
+              <% if index < @account.balances.size - 1 %>
+                <div class="h-px bg-alpha-black-50 mr-6 ml-16"></div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+        <button class="cursor-not-allowed hover:bg-white w-full flex items-center justify-center gap-2 text-gray-500 px-4 py-2 rounded-md">
+          <%= lucide_icon("plus", class: "w-4 h-4") %> New entry
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
