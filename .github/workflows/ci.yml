@@ -96,7 +96,7 @@ jobs:
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
-        run: bin/rails db:reset
+        run: bin/rails db:drop db:create db:migrate db:seed
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
