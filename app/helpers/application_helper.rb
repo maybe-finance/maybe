@@ -27,7 +27,7 @@ module ApplicationHelper
     hover_class_names = [ "hover:bg-white", "hover:border-[#141414]/[0.07]", "hover:text-gray-900", "hover:shadow-xs" ]
     current_page_class_names = [ "bg-white", "border-[#141414]/[0.07]", "text-gray-900", "shadow-xs" ]
 
-    link_class_names = if is_current_path?(path)
+    link_class_names = if current_page?(path)
                          base_class_names.delete("border-transparent")
                          base_class_names + hover_class_names + current_page_class_names
     else
@@ -38,22 +38,6 @@ module ApplicationHelper
 
     link_to path, merged_options do
       lucide_icon(options[:icon], class: "w-5 h-5 mr-2") + name
-    end
-  end
-
-  def is_current_path?(path)
-    # Return false immediately if the path is a placeholder
-    return false if path == "#"
-
-    begin
-      # Extract the controller and action from the given path.
-      recognize_path = Rails.application.routes.recognize_path(path)
-      # Compare the recognized path's controller to the current controller.
-      # If they match, it means the given path is for the current page.
-      recognize_path[:controller] == controller_name
-    rescue ActionController::RoutingError
-      # If the path is not recognized catch the exception and return false.
-      false
     end
   end
 
