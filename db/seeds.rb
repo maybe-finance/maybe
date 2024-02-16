@@ -9,9 +9,16 @@
 #   end
 
 # Create the default user
-family = Family.create_or_find_by!(name: "The Maybe Family")
+family = Family.create_or_find_by(name: "The Maybe Family")
 puts "Family created: #{family.name}"
-user = User.create_or_find_by!(
-  first_name: "Josh", last_name: "Maybe", email: "user@maybe.local",
-  password: "password", password_confirmation: "password", family_id: family.id)
+user = User.create_or_find_by(email: "user@maybe.local") do |u|
+  u.first_name = "Josh"
+  u.last_name = "Maybe"
+  u.password = "password"
+  u.password_confirmation = "password"
+  u.family_id = family.id
+end
 puts "User created: #{user.email} for family: #{family.name}"
+
+# Create default currency
+Currency.find_or_create_by(iso_code: "USD", name: "United States Dollar")

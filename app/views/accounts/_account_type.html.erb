@@ -1,5 +1,5 @@
-<%= link_to new_account_path(step: 'method', type: type.class.name.demodulize), class: "flex items-center gap-4 w-full text-center focus:outline-none focus:bg-gray-50 border border-transparent focus:border focus:border-gray-200 block px-2 hover:bg-gray-50 rounded-lg p-2" do %>
-  <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg <%= bg_color %> shadow-[inset_0_0_0_1px_rgba(0,0,0,0.02)]">
+<%= link_to new_account_path(step: 'method', type: type.class.name.demodulize), class: "flex items-center gap-4 w-full text-center focus:outline-none focus:bg-gray-25 border border-transparent focus:border focus:border-gray-200 block px-2 hover:bg-gray-25 rounded-lg p-2" do %>
+  <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg <%= bg_color %> border border-alpha-black-25">
     <%= lucide_icon(icon, class: "#{text_color} w-5 h-5") %>
   </span>
   <%= type.model_name.human %>

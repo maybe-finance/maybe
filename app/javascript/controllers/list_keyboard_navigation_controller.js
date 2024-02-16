@@ -17,7 +17,10 @@ export default class extends Controller {
 
   getLinkTargetInDirection(direction) {
     const indexOfLastFocus = this.indexOfLastFocus()
-    return this.focusableLinks[indexOfLastFocus + direction]
+    let nextIndex = (indexOfLastFocus + direction) % this.focusableLinks.length
+    if (nextIndex < 0) nextIndex = this.focusableLinks.length - 1
+      
+    return this.focusableLinks[nextIndex]
   }
 
   indexOfLastFocus(targets = this.focusableLinks) {

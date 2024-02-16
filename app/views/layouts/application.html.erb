@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="bg-offwhite">
+<html class="bg-gray-25 h-full">
   <head>
     <title><%= content_for(:title) || "Maybe" %></title>
     <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -24,6 +24,9 @@
   </head>
 
   <body class="h-full">
+    <div id="notification-tray" class="fixed top-6 right-6 space-y-1 z-50"></div>
+    <%= safe_join(flash.map { |type, message| notification(message, type: type) }) %>
+
     <div class="flex">
       <div class="flex-col p-5 min-w-80">
         <div class="flex items-center justify-between">
@@ -45,27 +48,30 @@
           </div>
         </div>
         <nav>
-          <ul class="mt-6 space-y-2">
+          <ul class="mt-6 space-y-1">
             <li>
-              <%= link_to root_path, class: 'block hover:bg-gray-100 -ml-2 p-2 text-sm font-semibold text-gray-900 flex items-center rounded' do %>
-                <%= inline_svg_tag('icon-dashboard.svg', class: 'text-black stroke-current mr-2') %>
-                <%= t('.dashboard') %>
-              <% end %>
+              <%= sidebar_link_to t('.dashboard'), root_path, icon: 'layout-grid' %>
+            </li>
+            <li>
+              <%= sidebar_link_to t('.accounts'), accounts_path, icon: 'layers' %>
+            </li>
+            <li>
+              <%= sidebar_link_to t('.transactions'), "#", icon: 'credit-card' %>
             </li>
           </ul>
         </nav>
         <div class="flex flex-col mt-6">
           <div class="flex items-center justify-between">
-            <%= link_to accounts_path, class: 'text-xs uppercase text-[#737373] font-bold tracking-wide' do%>
+            <%= link_to accounts_path, class: 'text-xs uppercase text-gray-500 font-bold tracking-wide' do%>
               <%= t('.accounts') %>
             <% end %>
             <%= link_to new_account_path, class: 'block hover:bg-gray-100 p-2 text-sm font-semibold text-gray-900 flex items-center rounded', title: t('.new_account'), data: { turbo_frame: "modal" } do %>
-              <%= inline_svg_tag('icon-add.svg', class: 'text-gray-500 fill-current') %>
+              <%= lucide_icon("plus", class: "w-5 h-5 text-gray-500") %>
             <% end %>
           </div>
 
 
-          <%= link_to new_account_path, class: "flex items-center gap-4 px-2 py-3 mb-1 text-[#737373] text-sm font-medium rounded-[10px] hover:bg-[#f2f2f2]", data: { turbo_frame: "modal" } do %>
+          <%= link_to new_account_path, class: "flex items-center gap-4 px-2 py-3 mb-1 text-gray-500 text-sm font-medium rounded-[10px] hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
             <%= lucide_icon("plus", class: "w-5 h-5") %>
             <p><%= t('.new_account') %></p>
           <% end %>
@@ -75,7 +81,7 @@
           <% end %>
         </div>
       </div>
-      <main class="flex-grow py-5 pr-5">
+      <main class="flex-grow py-6 px-20">
         <%= yield %>
       </main>
     </div>
