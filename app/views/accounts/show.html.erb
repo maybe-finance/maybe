@@ -48,15 +48,15 @@
       </div>
     </div>
     <div class="h-96 flex items-center justify-center text-2xl font-bold">
-      <div data-controller="line-chart" id="lineChart" class="w-full h-full" data-balances="<%= { series: balances[:series].map { |b| b.merge(trend: { amount: b[:trend].amount, direction: b[:trend].direction, percent: b[:trend].percent }) } }.to_json %>"></div>
+      <div data-controller="line-chart" id="lineChart" class="w-full h-full" data-line-chart-series-value="<%= balances[:series].map { |b| b.merge(trend: { amount: b[:trend].amount, direction: b[:trend].direction, percent: b[:trend].percent }) }.to_json %>"></div>
     </div>
   </div>
   <div class="bg-white space-y-4 p-5 border border-alpha-black-25 rounded-xl shadow-xs">
     <div class="flex justify-between items-center">
-      <h3 class="font-medium text-xl">History</h3>
+      <h3 class="font-medium text-lg">History</h3>
       <%= link_to new_account_valuation_path(@account), class: "flex gap-1 font-medium items-center bg-gray-50 text-gray-900 p-2 rounded-lg" do %>
         <%= lucide_icon("plus", class: "w-5 h-5 text-gray-900") %>
-        <span>New entry</span>
+        <span class="text-sm">New entry</span>
       <% end %>
     </div>
     <div class="rounded-xl bg-gray-25 p-1">
@@ -92,8 +92,20 @@
                     <span class="<%= valuation_styles[:text_class] %>">(<%= lucide_icon(valuation_styles[:icon], class: "w-4 h-4 align-text-bottom inline") %> <%= valuation[:trend].percent %>%)</span>
                   <% end %>
                 </div>
-                <div class="w-8 cursor-not-allowed">
-                  <%= lucide_icon("more-horizontal", class: "w-5 h-5 text-gray-500") %>
+                <div class="relative w-8" data-controller="dropdown">
+                  <button data-action="click->dropdown#toggleMenu" class="flex items-center justify-center hover:bg-gray-50 w-8 h-8 rounded-lg">
+                    <%= lucide_icon("more-horizontal", class: "w-5 h-5 text-gray-500" ) %>
+                  </button>
+                  <div class="hidden absolute min-w-[200px] z-10 top-10 right-0 bg-white p-1 rounded-sm shadow-xs border border-alpha-black-25 w-fit" data-dropdown-target="menu">
+                    <%= link_to edit_valuation_path(valuation[:current]), class: "flex gap-1 items-center hover:bg-gray-50 rounded-md p-2" do %>
+                      <%= lucide_icon("pencil-line", class: "w-5 h-5 text-gray-500 shrink-0") %>
+                      <span class="text-gray-900 text-sm">Edit entry</span>
+                    <% end %>
+                    <%= link_to valuation_path(valuation[:current]),  data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "text-red-600 flex gap-1 items-center hover:bg-gray-50 rounded-md p-2" do %>
+                      <%= lucide_icon("trash-2", class: "w-5 h-5 shrink-0") %>
+                      <span class="text-sm">Delete entry</span>
+                    <% end %>
+                  </div>
                 </div>
               </div>
               <% if index < series.size - 1 %>

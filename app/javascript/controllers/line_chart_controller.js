@@ -4,9 +4,19 @@ import * as d3 from "d3";
 
 // Connects to data-controller="line-chart"
 export default class extends Controller {
+  static values = { series: Array };
+
   connect() {
-    const balances = JSON.parse(this.element.dataset.balances).series;
-    this.drawChart(balances);
+    this.renderChart(this.seriesValue);
+    document.addEventListener("turbo:load", this.renderChart.bind(this));
+  }
+
+  disconnect() {
+    document.removeEventListener("turbo:load", this.renderChart.bind(this));
+  }
+
+  renderChart() {
+    this.drawChart(this.seriesValue);
   }
 
   trendStyles(trendDirection) {

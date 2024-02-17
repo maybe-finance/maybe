@@ -41,6 +41,7 @@ class Account < ApplicationRecord
 
       collection_with_trends = [ nil, *collection ].each_cons(2).map do |previous, current|
         {
+          current: current,
           previous: previous,
           date: current.date,
           currency: current.currency,
