@@ -175,7 +175,7 @@ export default class extends Controller {
 
         const [xPos] = d3.pointer(event);
 
-        const x0 = bisectDate(data, x.invert(xPos));
+        const x0 = bisectDate(data, x.invert(xPos), 1);
         const d0 = data[x0 - 1];
         const d1 = data[x0];
         const d = xPos - x(d0.date) > x(d1.date) - xPos ? d1 : d0;
@@ -191,14 +191,16 @@ export default class extends Controller {
           .attr("cy", y(d.value))
           .attr("r", 8)
           .attr("fill", tailwindColors.green[500])
-          .attr("fill-opacity", "0.1");
+          .attr("fill-opacity", "0.1")
+          .attr("pointer-events", "none");
 
         g.append("circle")
           .attr("class", "data-point-circle")
           .attr("cx", x(d.date))
           .attr("cy", y(d.value))
           .attr("r", 3)
-          .attr("fill", tailwindColors.green[500]);
+          .attr("fill", tailwindColors.green[500])
+          .attr("pointer-events", "none");
 
         tooltip
           .html(
