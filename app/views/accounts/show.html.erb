@@ -1,4 +1,5 @@
 <% balances = @account.balances_with_trend %>
+<% balance_styles = trend_styles(balances[:trend].direction) %>
 <div class="space-y-4">
   <div class="flex justify-between items-center">
     <div class="flex items-center gap-3">
@@ -32,8 +33,8 @@
         <% if balances[:trend].amount == 0 %>
           <p class="text-sm text-gray-500">No change vs. prior period</p>
         <% else %>
-          <p class="text-sm <%= balances[:trend].amount > 0 ? 'text-green-600' : 'text-red-600' %>">
-            <span><%= balances[:trend].amount > 0 ? '+' : '-' %><%= number_to_currency(balances[:trend].amount.abs, precision: 2) %></span>
+          <p class="text-sm <%= balance_styles[:text_class] %>">
+            <span><%= balance_styles[:symbol] %><%= number_to_currency(balances[:trend].amount.abs, precision: 2) %></span>
             <span>(<%= lucide_icon(balances[:trend].amount > 0 ? 'arrow-up' : 'arrow-down', class: "w-4 h-4 align-text-bottom inline") %> <%= balances[:trend].percent %>%)</span>
             <span class="text-gray-500"><%= trend_label(balances[:date_range]) %></span>
           </p>
@@ -87,7 +88,7 @@
                   <% if valuation[:trend].amount == 0 %>
                     <span class="text-gray-500">No change</span>
                   <% else %>
-                    <span class="<%= valuation_styles[:text_class] %>"><%= valuation[:trend].amount > 0 ? '+' : '-' %><%= format_currency(valuation[:trend].amount.abs) %></span>
+                    <span class="<%= valuation_styles[:text_class] %>"><%= valuation_styles[:symbol] %><%= format_currency(valuation[:trend].amount.abs) %></span>
                     <span class="<%= valuation_styles[:text_class] %>">(<%= lucide_icon(valuation_styles[:icon], class: "w-4 h-4 align-text-bottom inline") %> <%= valuation[:trend].percent %>%)</span>
                   <% end %>
                 </div>
