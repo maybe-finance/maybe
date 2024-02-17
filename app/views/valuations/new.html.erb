@@ -1,0 +1,8 @@
+<div>
+  <h1 class="font-bold text-4xl">Add Valuation: <%= @account.name %></h1>
+  <%= form_with model: [@account, @valuation] do |f| %>
+    <%= f.date_field :date, label: "Valuation Date" %>
+    <%= f.number_field :value, step: :any, placeholder: number_to_currency(0), in: 0.00..100000000.00, required: 'required', label: "Value" %>
+    <%= f.submit %>
+  <% end %>
+</div>

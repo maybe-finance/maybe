@@ -8,7 +8,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
 
   (field_helpers - [ :label, :check_box, :radio_button, :fields_for, :fields, :hidden_field, :file_field ]).each do |selector|
     class_eval <<-RUBY_EVAL, __FILE__, __LINE__ + 1
-      def #{selector}(method, options)
+      def #{selector}(method, options = {})
         default_options = { class: "form-field__input" }
         merged_options = default_options.merge(options)
 

@@ -10,8 +10,8 @@ class AccountsController < ApplicationController
 
   def show
     # Temporary while dummy data is being used
-    # @account = Current.family.accounts.find(params[:id])
-    @account = sample_account
+    @account = Current.family.accounts.find(params[:id])
+    @test_account = sample_account
   end
 
   def create
@@ -24,8 +24,6 @@ class AccountsController < ApplicationController
       render "new", status: :unprocessable_entity
     end
   end
-
-
 
   private
 
