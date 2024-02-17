@@ -1,0 +1,15 @@
+<%# 
+  Locals:
+  - f: form object for valuation
+  - form_icon: string representing the icon to be displayed
+  - submit_button_text: string representing the text on the submit button
+%>
+<div class="p-4 flex items-center justify-between w-full">
+  <div class="shrink-0 w-8 h-8 rounded-full p-1.5 flex items-center justify-center bg-gray-500/5">
+    <%= lucide_icon(form_icon, class: "w-4 h-4 text-gray-500") %>
+  </div>
+  <%= f.date_field :date, class: "border border-alpha-black-200 bg-white rounded-lg shadow-xs min-w-[200px] px-3 py-1.5" %>
+  <%= f.number_field :value, step: :any, placeholder: number_to_currency(0), in: 0.00..100000000.00, required: 'required', class: "bg-white border border-alpha-black-200 rounded-lg shadow-xs px-3 py-1.5" %>
+  <%= link_to "Cancel", account_path(@valuation.account), class: "text-sm text-gray-900 hover:text-gray-800 font-medium px-3 py-1.5" %>
+  <%= f.submit submit_button_text, class: "bg-gray-50 rounded-lg font-medium px-3 py-1.5 cursor-pointer hover:bg-gray-100 text-sm" %>
+</div>

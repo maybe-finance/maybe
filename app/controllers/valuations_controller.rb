@@ -7,7 +7,10 @@ class ValuationsController < ApplicationController
     # TODO: handle STI once we allow for different types of valuations
     @valuation = @account.valuations.new(valuation_params.merge(type: "Appraisal", currency: Current.family.currency))
     if @valuation.save
-      redirect_to account_path(@account), notice: "Valuation created"
+      respond_to do |format|
+        format.html { redirect_to account_path(@account), notice: "Valuation created" }
+        format.turbo_stream
+      end
     else
       render :new, status: :unprocessable_entity
     end
@@ -40,7 +43,11 @@ class ValuationsController < ApplicationController
     @valuation = Valuation.find(params[:id])
     account = @valuation.account
     @valuation.destroy
-    redirect_to account_path(account), notice: "Valuation deleted"
+
+    respond_to do |format|
+      format.html { redirect_to account_path(account), notice: "Valuation deleted" }
+      format.turbo_stream
+    end
   end
 
   def new

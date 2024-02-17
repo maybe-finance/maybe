@@ -54,7 +54,7 @@
   <div class="bg-white space-y-4 p-5 border border-alpha-black-25 rounded-xl shadow-xs">
     <div class="flex justify-between items-center">
       <h3 class="font-medium text-lg">History</h3>
-      <%= link_to new_account_valuation_path(@account), class: "flex gap-1 font-medium items-center bg-gray-50 text-gray-900 p-2 rounded-lg" do %>
+      <%= link_to new_account_valuation_path(@account), data: { turbo_frame: dom_id(Valuation.new) }, class: "flex gap-1 font-medium items-center bg-gray-50 text-gray-900 p-2 rounded-lg" do %>
         <%= lucide_icon("plus", class: "w-5 h-5 text-gray-900") %>
         <span class="text-sm">New entry</span>
       <% end %>
@@ -71,7 +71,7 @@
           <% series = @account.valuations_with_trend[:series].reverse_each %>
           <% series.with_index do |valuation, index| %>
             <% valuation_styles = trend_styles(valuation[:trend].direction) %>
-            <div>
+            <%= turbo_frame_tag dom_id(valuation[:current]) do %>
               <div class="p-4 flex items-center justify-between gap-10 w-full">
                 <div class="flex-1 flex items-center gap-4">
                   <div class="w-8 h-8 rounded-full p-1.5 flex items-center justify-center <%= valuation_styles[:bg_class] %>">
@@ -108,14 +108,18 @@
                   </div>
                 </div>
               </div>
-              <% if index < series.size - 1 %>
-                <div class="h-px bg-alpha-black-50 mr-6 ml-16"></div>
-              <% end %>
-            </div>
+              <div>
+                <% if index < series.size - 1 %>
+                  <div class="h-px bg-alpha-black-50 mr-6 ml-16"></div>
+                <% end %>
+              </div>
+            <% end %>
+          <% end %>
+          <%= turbo_frame_tag dom_id(Valuation.new) do %>
           <% end %>
         </div>
       </div>
-      <%= link_to new_account_valuation_path(@account), class: "hover:bg-white w-full text-sm flex items-center justify-center gap-2 text-gray-500 px-4 py-2 rounded-md" do %>
+      <%= link_to new_account_valuation_path(@account), data: { turbo_frame: "new_valuation" }, class: "hover:bg-white w-full text-sm flex items-center justify-center gap-2 text-gray-500 px-4 py-2 rounded-md" do %>
         <%= lucide_icon("plus", class: "w-4 h-4") %> New entry
       <% end %>
     </div>

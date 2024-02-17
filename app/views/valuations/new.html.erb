@@ -1,8 +1,8 @@
 <div>
   <h1 class="font-bold text-4xl">Add Valuation: <%= @account.name %></h1>
-  <%= form_with model: [@account, @valuation], url: account_valuations_path(@account), scope: :valuation do |f| %>
-    <%= f.date_field :date, label: "Valuation Date" %>
-    <%= f.number_field :value, step: :any, placeholder: number_to_currency(0), in: 0.00..100000000.00, required: 'required', label: "Value" %>
-    <%= f.submit %>
+  <%= turbo_frame_tag dom_id(Valuation.new) do %>
+    <%= form_with model: [@account, @valuation], url: account_valuations_path(@account), scope: :valuation do |f| %>
+      <%= render 'form_row', f: f, form_icon: "plus", submit_button_text: "Add" %>
+    <% end %>
   <% end %>
 </div>
