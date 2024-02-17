@@ -1,33 +1,19 @@
 require "test_helper"
 
 class ValuationsControllerTest < ActionDispatch::IntegrationTest
-  test "should get create" do
-    get valuations_create_url
+  setup do
+    sign_in @user = users(:bob)
+    @account = accounts(:dylan_checking)
+  end
+
+  test "new" do
+    get new_account_valuation_url(@account)
     assert_response :success
   end
 
-  test "should get show" do
-    get valuations_show_url
-    assert_response :success
-  end
-
-  test "should get update" do
-    get valuations_update_url
-    assert_response :success
-  end
-
-  test "should get destroy" do
-    get valuations_destroy_url
-    assert_response :success
-  end
-
-  test "should get edit" do
-    get valuations_edit_url
-    assert_response :success
-  end
-
-  test "should get new" do
-    get valuations_new_url
-    assert_response :success
+  test "create" do
+    assert_difference("Valuation.count") do
+      post account_valuations_url(@account), params: { valuation: { value: 1, date: Date.current, type: "Appraisal" } }
+    end
   end
 end
