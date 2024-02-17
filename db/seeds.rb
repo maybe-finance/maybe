@@ -8,6 +8,9 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
+# https://github.com/rails/rails/issues/29112#issuecomment-320653056
+ApplicationRecord.reset_column_information
+
 # Create the default user
 family = Family.create_or_find_by(name: "The Maybe Family")
 puts "Family created: #{family.name}"
