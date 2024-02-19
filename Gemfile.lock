@@ -247,7 +247,7 @@ GEM
     parser (3.3.0.5)
       ast (~> 2.4.1)
       racc
-    pg (1.5.4)
+    pg (1.5.5)
     prism (0.19.0)
     propshaft (0.8.0)
       actionpack (>= 7.0.0)
@@ -409,7 +409,7 @@ DEPENDENCIES
   jbuilder
   letter_opener
   lucide-rails!
-  pg (~> 1.1)
+  pg (~> 1.5)
   propshaft
   puma (>= 5.0)
   rails!
