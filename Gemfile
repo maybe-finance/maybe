@@ -6,7 +6,7 @@ ruby "3.3.0"
 gem "rails", github: "rails/rails", branch: "main"
 
 # Drivers
-gem "pg", "~> 1.1"
+gem "pg", "~> 1.5"
 gem "redis", ">= 4.0.1"
 
 # Deployment
