@@ -4,82 +4,78 @@ import * as d3 from "d3";
 
 // Connects to data-controller="line-chart"
 export default class extends Controller {
+  static values = { series: Array };
+
   connect() {
-    this.drawChart();
+    this.renderChart(this.seriesValue);
+    document.addEventListener("turbo:load", this.renderChart.bind(this));
   }
 
-  drawChart() {
-    // TODO: Replace with live data through controller targets
-    const data = [
-      {
-        date: new Date(2021, 0, 1),
-        value: 985000,
-        formatted: "$985,000",
-        change: { value: "$0", direction: "none", percentage: "0%" },
+  disconnect() {
+    document.removeEventListener("turbo:load", this.renderChart.bind(this));
+  }
+
+  renderChart() {
+    this.drawChart(this.seriesValue);
+  }
+
+  trendStyles(trendDirection) {
+    return {
+      up: {
+        icon: "↑",
+        color: tailwindColors.success,
       },
-      {
-        date: new Date(2021, 1, 1),
-        value: 990000,
-        formatted: "$990,000",
-        change: { value: "$5,000", direction: "up", percentage: "0.51%" },
+      down: {
+        icon: "↓",
+        color: tailwindColors.error,
       },
-      {
-        date: new Date(2021, 2, 1),
-        value: 995000,
-        formatted: "$995,000",
-        change: { value: "$5,000", direction: "up", percentage: "0.51%" },
+      flat: {
+        icon: "→",
+        color: tailwindColors.gray[500],
       },
-      {
-        date: new Date(2021, 3, 1),
-        value: 1000000,
-        formatted: "$1,000,000",
-        change: { value: "$5,000", direction: "up", percentage: "0.50%" },
+    }[trendDirection];
+  }
+
+  /**
+   * @param {Array} balances - An array of objects where each object represents a balance entry. Each object should have the following properties:
+   *   - date: {Date} The date of the balance entry.
+   *   - value: {number} The numerical value of the balance.
+   *   - formatted: {string} The formatted string representation of the balance value.
+   *   - trend: {Object} An object containing information about the trend compared to the previous balance entry. It should have:
+   *     - amount: {number} The numerical difference in value from the previous entry.
+   *     - direction: {string} A string indicating the direction of the trend ("up", "down", or "flat").
+   *     - percent: {number} The percentage change from the previous entry.
+   */
+  drawChart(balances) {
+    const data = balances.map((b) => ({
+      ...b,
+      value: +b.value,
+      date: new Date(b.date),
+      styles: this.trendStyles(b.trend.direction),
+      formatted: {
+        value: Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: b.currency || "USD",
+        }).format(b.value),
+        change: Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: b.currency || "USD",
+          signDisplay: "always",
+        }).format(b.trend.amount),
       },
-      {
-        date: new Date(2021, 4, 1),
-        value: 1005000,
-        formatted: "$997,000",
-        change: { value: "$3,000", direction: "down", percentage: "-0.30%" },
-      },
-      {
-        date: new Date(2021, 5, 1),
-        value: 1010000,
-        formatted: "$1,010,000",
-        change: { value: "$5,000", direction: "up", percentage: "0.50%" },
-      },
-      {
-        date: new Date(2021, 6, 1),
-        value: 1050000,
-        formatted: "$1,050,000",
-        change: { value: "$40,000", direction: "up", percentage: "3.96%" },
-      },
-      {
-        date: new Date(2021, 7, 1),
-        value: 1080000,
-        formatted: "$1,080,000",
-        change: { value: "$30,000", direction: "up", percentage: "2.86%" },
-      },
-      {
-        date: new Date(2021, 8, 1),
-        value: 1100000,
-        formatted: "$1,100,000",
-        change: { value: "$20,000", direction: "up", percentage: "1.85%" },
-      },
-      {
-        date: new Date(2021, 9, 1),
-        value: 1115181,
-        formatted: "$1,115,181",
-        change: { value: "$15,181", direction: "up", percentage: "1.38%" },
-      },
-    ];
+    }));
+
+    const chartContainer = d3.select("#lineChart");
+
+    // Clear any existing chart
+    chartContainer.selectAll("svg").remove();
 
     const initialDimensions = {
-      width: document.querySelector("#lineChart").clientWidth,
-      height: document.querySelector("#lineChart").clientHeight,
+      width: chartContainer.node().clientWidth,
+      height: chartContainer.node().clientHeight,
     };
 
-    const svg = d3
-      .select("#lineChart")
+    const svg = chartContainer
       .append("svg")
       .attr("width", initialDimensions.width)
       .attr("height", initialDimensions.height)
@@ -182,12 +178,21 @@ export default class extends Controller {
       .on("mousemove", (event) => {
         tooltip.style("opacity", 1);
 
+        const tooltipWidth = 250; // Estimate or dynamically calculate the tooltip width
+        const pageWidth = document.body.clientWidth;
+        const tooltipX = event.pageX + 10;
+        const overflowX = tooltipX + tooltipWidth - pageWidth;
+
         const [xPos] = d3.pointer(event);
 
-        const x0 = bisectDate(data, x.invert(xPos));
+        const x0 = bisectDate(data, x.invert(xPos), 1);
         const d0 = data[x0 - 1];
         const d1 = data[x0];
         const d = xPos - x(d0.date) > x(d1.date) - xPos ? d1 : d0;
+
+        // Adjust tooltip position based on overflow
+        const adjustedX =
+          overflowX > 0 ? event.pageX - overflowX - 20 : tooltipX;
 
         g.selectAll(".data-point-circle").remove(); // Remove existing circles to ensure only one is shown at a time
         g.append("circle")
@@ -196,14 +201,16 @@ export default class extends Controller {
           .attr("cy", y(d.value))
           .attr("r", 8)
           .attr("fill", tailwindColors.green[500])
-          .attr("fill-opacity", "0.1");
+          .attr("fill-opacity", "0.1")
+          .attr("pointer-events", "none");
 
         g.append("circle")
           .attr("class", "data-point-circle")
           .attr("cx", x(d.date))
           .attr("cy", y(d.value))
           .attr("r", 3)
-          .attr("fill", tailwindColors.green[500]);
+          .attr("fill", tailwindColors.green[500])
+          .attr("pointer-events", "none");
 
         tooltip
           .html(
@@ -213,30 +220,15 @@ export default class extends Controller {
                  <div style="display: flex; align-items: center; gap: 8px;">
                    <svg width="10" height="10">
                      <circle cx="5" cy="5" r="4" stroke="${
-                       d.change.direction === "up"
-                         ? tailwindColors.success
-                         : d.change.direction === "down"
-                         ? tailwindColors.error
-                         : tailwindColors.gray[500]
+                       d.styles.color
                      }" fill="transparent" stroke-width="1"></circle>
                    </svg>
-                   ${d.formatted} <span style="color: ${
-              d.change.direction === "up"
-                ? tailwindColors.success
-                : d.change.direction === "down"
-                ? tailwindColors.error
-                : tailwindColors.gray[500]
-            };"><span>${
-              d.change.direction === "up"
-                ? "+"
-                : d.change.direction === "down"
-                ? "-"
-                : ""
-            }</span>${d.change.value} (${d.change.percentage})</span>
-                 
-                 </div>`
+                   ${d.formatted.value} <span style="color: ${
+              d.styles.color
+            };">${d.formatted.change} (${d.trend.percent}%)</span>
+            </div>`
           )
-          .style("left", event.pageX + 10 + "px")
+          .style("left", adjustedX + "px")
           .style("top", event.pageY - 10 + "px");
 
         g.selectAll(".guideline").remove(); // Remove existing line to ensure only one is shown at a time

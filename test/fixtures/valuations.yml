@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  type: "Appraisal"
+  value: 9.99
+  date: 2024-02-15
+  account: dylan_checking
+
+two:
+  type: "Appraisal"
+  value: 9.99
+  date: 2024-02-15
+  account: richards_savings

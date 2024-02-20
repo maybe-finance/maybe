@@ -1,0 +1,8 @@
+<div>
+  <h1 class="font-bold text-4xl">Add Valuation: <%= @account.name %></h1>
+  <%= turbo_frame_tag dom_id(Valuation.new) do %>
+    <%= form_with model: [@account, @valuation], url: account_valuations_path(@account), scope: :valuation do |f| %>
+      <%= render 'form_row', f: f, form_icon: "plus", submit_button_text: "Add" %>
+    <% end %>
+  <% end %>
+</div>

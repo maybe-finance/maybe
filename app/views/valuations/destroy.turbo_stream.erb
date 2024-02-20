@@ -1,0 +1,2 @@
+<%= turbo_stream.remove @valuation %>
+<%= turbo_stream.append "notification-tray", partial: "shared/notification", locals: { type: "success", content: "Valuation deleted" } %>

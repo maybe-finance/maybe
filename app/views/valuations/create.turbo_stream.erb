@@ -1,0 +1,3 @@
+<%# TODO: We need a way to determine the order the new valuation needs to be in the array, calculate the trend, and append it to the right spot %>
+<%= turbo_stream.update Valuation.new, "" %>
+<%= turbo_stream.append "notification-tray", partial: "shared/notification", locals: { type: "success", content: "Valuation created" } %>

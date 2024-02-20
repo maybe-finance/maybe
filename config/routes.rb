@@ -7,7 +7,9 @@ Rails.application.routes.draw do
   resource :password
   resource :settings, only: %i[edit update]
 
-  resources :accounts
+  resources :accounts, shallow: true do
+    resources :valuations
+  end
 
   scope "accounts/new" do
     scope "bank" do
