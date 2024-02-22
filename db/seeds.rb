@@ -32,16 +32,15 @@ account = Account.create_or_find_by(name: "Seed Property Account", accountable: 
 puts "Account created: #{account.name}"
 
 # Represent user-defined "Valuations" at various dates
-appraisals = [
-  { date: Date.today - 30, balance: 300000 },
-  { date: Date.today - 22, balance: 300700 },
-  { date: Date.today - 17, balance: 301400 },
-  { date: Date.today - 10, balance: 300000 },
-  { date: Date.today - 3, balance: 301900 }
+valuations = [
+  { date: Date.today - 30, value: 300000 },
+  { date: Date.today - 22, value: 300700 },
+  { date: Date.today - 17, value: 301400 },
+  { date: Date.today - 10, value: 300000 },
+  { date: Date.today - 3, value: 301900 }
 ]
 
-# In prod, this would be calculated from the current balance and the appraisals with a background job
-# Hardcoded for readability
+# Represent system-generated "Balances" at various dates, based on valuations
 balances = [
   { date: Date.today - 30, balance: 300000 },
   { date: Date.today - 29, balance: 300000 },
@@ -73,17 +72,16 @@ balances = [
   { date: Date.today - 3, balance: 301900 },
   { date: Date.today - 2, balance: 301900 },
   { date: Date.today - 1, balance: 301900 },
-  { date: Date.today, balance: 302000 }
+  { date: Date.today, balance: current_balance }
 ]
 
-
-appraisals.each do |appraisal|
-  Appraisal.find_or_create_by(
+valuations.each do |valuation|
+  Valuation.find_or_create_by(
     account_id: account.id,
-    date: appraisal[:date]
-  ) do |appraisal_record|
-    appraisal_record.value = appraisal[:balance]
-    appraisal_record.currency = "USD"
+    date: valuation[:date]
+  ) do |valuation_record|
+    valuation_record.value = valuation[:value]
+    valuation_record.currency = "USD"
   end
 end
 
@@ -93,6 +91,5 @@ balances.each do |balance|
     date: balance[:date]
   ) do |balance_record|
     balance_record.balance = balance[:balance]
-    balance_record.currency = "USD"
   end
 end

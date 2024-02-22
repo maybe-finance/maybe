@@ -18,7 +18,8 @@ class AccountsController < ApplicationController
       if start_date.is_a?(Date) && end_date.is_a?(Date) && start_date <= end_date
         @period = Period.new(name: "custom", date_range: start_date..end_date)
       else
-        @period = Period.find_by_name("last_30_days")
+        params[:period] = "last_30_days"
+        @period = Period.find_by_name(params[:period])
       end
     end
 

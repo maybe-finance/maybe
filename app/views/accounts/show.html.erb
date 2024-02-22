@@ -19,6 +19,9 @@
       </div>
     </div>
   </div>
+  <%= turbo_frame_tag "sync_message" do %>
+    <%= render partial: "accounts/sync_message", locals: { is_syncing: @account.status == "SYNCING" } %>
+  <% end %>
   <div class="bg-white shadow-xs rounded-xl border border-alpha-black-25 rounded-lg">
     <div class="p-4 flex justify-between">
       <div class="space-y-2">

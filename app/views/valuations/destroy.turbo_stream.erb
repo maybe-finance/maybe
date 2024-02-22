@@ -1,3 +1,4 @@
 <%= turbo_stream.remove @valuation %>
 <%= turbo_stream.append "notification-tray", partial: "shared/notification", locals: { type: "success", content: "Valuation deleted" } %>
 <%= turbo_stream.replace "valuations_list", partial: "accounts/account_valuation_list", locals: { valuation_series: @account.valuation_series } %>
+<%= turbo_stream.replace "sync_message", partial: "accounts/sync_message", locals: { is_syncing: true } %>
