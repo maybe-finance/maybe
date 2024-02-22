@@ -1,5 +1,4 @@
-<% balances = @account.balances_with_trend %>
-<% balance_styles = trend_styles(balances[:trend].direction) %>
+<% balance_trend_styles = @balance_series.nil? ? {} : trend_styles(@balance_series[:trend]) %>
 <div class="space-y-4">
   <div class="flex justify-between items-center">
     <div class="flex items-center gap-3">
@@ -26,29 +25,34 @@
         <p class="text-sm text-gray-500">Total Value</p>
         <%# TODO: Will need a better way to split a formatted monetary value into these 3 parts %>
         <p class="text-gray-900">
-          <span class="text-gray-500"><%= number_to_currency(@account.converted_balance)[0] %></span>
-          <span class="text-xl font-medium"><%= number_with_delimiter(@account.converted_balance.round) %></span>
-          <span class="text-gray-500">.<%= number_to_currency(@account.converted_balance, precision: 2)[-2, 2] %></span>
+          <span class="text-gray-500"><%= number_to_currency(@account.original_balance)[0] %></span>
+          <span class="text-xl font-medium"><%= number_with_delimiter(@account.original_balance.round) %></span>
+          <span class="text-gray-500">.<%= number_to_currency(@account.original_balance, precision: 2)[-2, 2] %></span>
         </p>
-        <% if balances[:trend].amount == 0 %>
+        <% if @balance_series.nil? %>
+          <p class="text-sm text-gray-500">Data not available for the selected period</p>
+        <% elsif @balance_series[:trend].amount == 0 %>
           <p class="text-sm text-gray-500">No change vs. prior period</p>
         <% else %>
-          <p class="text-sm <%= balance_styles[:text_class] %>">
-            <span><%= balance_styles[:symbol] %><%= number_to_currency(balances[:trend].amount.abs, precision: 2) %></span>
-            <span>(<%= lucide_icon(balances[:trend].amount > 0 ? 'arrow-up' : 'arrow-down', class: "w-4 h-4 align-text-bottom inline") %> <%= balances[:trend].percent %>%)</span>
-            <span class="text-gray-500"><%= trend_label(balances[:date_range]) %></span>
+          <p class="text-sm <%= balance_trend_styles[:text_class] %>">
+            <span><%= balance_trend_styles[:symbol] %><%= number_to_currency(@balance_series[:trend].amount.abs, precision: 2) %></span>
+            <span>(<%= lucide_icon(@balance_series[:trend].amount > 0 ? 'arrow-up' : 'arrow-down', class: "w-4 h-4 align-text-bottom inline") %> <%= @balance_series[:trend].percent %>%)</span>
+            <span class="text-gray-500"><%= trend_label(@period) %></span>
           </p>
         <% end %>
       </div>
-      <div class="relative">
-        <div class="flex items-center text-sm gap-2 p-2 border border-alpha-black-100 shadow-xs rounded-lg cursor-not-allowed">
-          <span class="text-gray-900 pl-1">1M</span>
-          <%= lucide_icon("chevron-down", class: "w-5 h-5 text-gray-500") %>
-        </div>
-      </div>
+      <%= form_with url: account_path(@account), method: :get, class: "flex items-center gap-4", html: { class: "" } do |f| %>
+        <%= f.select :period, options_for_select([['7D', 'last_7_days'], ['1M', 'last_30_days'], ["1Y", "last_365_days"], ['All', 'all']], selected: params[:period]), {}, { class: "block w-full border border-alpha-black-100 shadow-xs rounded-lg text-sm py-2 pr-8 pl-2 cursor-pointer", onchange: "this.form.submit();" } %>
+      <% end %>
     </div>
     <div class="h-96 flex items-center justify-center text-2xl font-bold">
-      <div data-controller="line-chart" id="lineChart" class="w-full h-full" data-line-chart-series-value="<%= balances[:series].map { |b| b.merge(trend: { amount: b[:trend].amount, direction: b[:trend].direction, percent: b[:trend].percent }) }.to_json %>"></div>
+      <% if @balance_series %>
+        <div data-controller="line-chart" id="lineChart" class="w-full h-full" data-line-chart-series-value="<%= @balance_series[:series_data].to_json %>"></div>
+      <% else %>
+        <div class="w-full h-full flex items-center justify-center">
+          <p class="text-gray-500">No data available for the selected period.</p>
+        </div>
+      <% end %>
     </div>
   </div>
   <div class="bg-white space-y-4 p-5 border border-alpha-black-25 rounded-xl shadow-xs">
@@ -61,67 +65,22 @@
     </div>
     <div class="rounded-xl bg-gray-25 p-1">
       <div class="flex flex-col rounded-lg space-y-1">
-        <div class="flex justify-between gap-10 text-xs font-medium text-gray-500 uppercase py-2">
-          <div class="ml-4 flex-1">DATE</div>
-          <div class="flex-1 text-right">VALUE</div>
-          <div class="flex-1 text-right">CHANGE</div>
-          <div class="w-12"></div>
+        <div class="text-xs font-medium text-gray-500 uppercase flex items-center px-4 py-2">
+          <div class="w-16">date</div>
+          <div class="flex items-center justify-between grow">
+            <div></div>
+            <div>value</div>
+          </div>
+          <div class="w-56 text-right">change</div>
+          <div class="w-[72px]"></div>
         </div>
-        <div class="rounded-lg py-2 bg-white border-alpha-black-25 shadow-xs">
-          <% series = @account.valuations_with_trend[:series].reverse_each %>
-          <% series.with_index do |valuation, index| %>
-            <% valuation_styles = trend_styles(valuation[:trend].direction) %>
-            <%= turbo_frame_tag dom_id(valuation[:current]) do %>
-              <div class="p-4 flex items-center justify-between gap-10 w-full">
-                <div class="flex-1 flex items-center gap-4">
-                  <div class="w-8 h-8 rounded-full p-1.5 flex items-center justify-center <%= valuation_styles[:bg_class] %>">
-                    <%= lucide_icon(valuation_styles[:icon], class: "w-4 h-4 #{valuation_styles[:text_class]}") %>
-                  </div>
-                  <div class="text-sm">
-                    <p><%= valuation[:date] %></p>
-                    <%# TODO: Add descriptive name of valuation %>
-                    <p class="text-gray-500">Manually entered</p>
-                  </div>
-                </div>
-                <div class="flex-1 text-sm font-medium text-right"><%= format_currency(valuation[:value]) %></div>
-                <div class="flex-1 text-right text-sm font-medium">
-                  <% if valuation[:trend].amount == 0 %>
-                    <span class="text-gray-500">No change</span>
-                  <% else %>
-                    <span class="<%= valuation_styles[:text_class] %>"><%= valuation_styles[:symbol] %><%= format_currency(valuation[:trend].amount.abs) %></span>
-                    <span class="<%= valuation_styles[:text_class] %>">(<%= lucide_icon(valuation_styles[:icon], class: "w-4 h-4 align-text-bottom inline") %> <%= valuation[:trend].percent %>%)</span>
-                  <% end %>
-                </div>
-                <div class="relative w-8" data-controller="dropdown">
-                  <button data-action="click->dropdown#toggleMenu" class="flex items-center justify-center hover:bg-gray-50 w-8 h-8 rounded-lg">
-                    <%= lucide_icon("more-horizontal", class: "w-5 h-5 text-gray-500" ) %>
-                  </button>
-                  <div class="hidden absolute min-w-[200px] z-10 top-10 right-0 bg-white p-1 rounded-sm shadow-xs border border-alpha-black-25 w-fit" data-dropdown-target="menu">
-                    <%= link_to edit_valuation_path(valuation[:current]), class: "flex gap-1 items-center hover:bg-gray-50 rounded-md p-2" do %>
-                      <%= lucide_icon("pencil-line", class: "w-5 h-5 text-gray-500 shrink-0") %>
-                      <span class="text-gray-900 text-sm">Edit entry</span>
-                    <% end %>
-                    <%= link_to valuation_path(valuation[:current]),  data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "text-red-600 flex gap-1 items-center hover:bg-gray-50 rounded-md p-2" do %>
-                      <%= lucide_icon("trash-2", class: "w-5 h-5 shrink-0") %>
-                      <span class="text-sm">Delete entry</span>
-                    <% end %>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <% if index < series.size - 1 %>
-                  <div class="h-px bg-alpha-black-50 mr-6 ml-16"></div>
-                <% end %>
-              </div>
-            <% end %>
-          <% end %>
-          <%= turbo_frame_tag dom_id(Valuation.new) do %>
+        <div class="rounded-lg bg-white border-alpha-black-25 shadow-xs">
+          <%= turbo_frame_tag dom_id(Valuation.new) %>
+          <%= turbo_frame_tag "valuations_list" do %>
+            <%= render partial: "accounts/account_valuation_list", locals: { valuation_series: @valuation_series } %>
           <% end %>
         </div>
       </div>
-      <%= link_to new_account_valuation_path(@account), data: { turbo_frame: "new_valuation" }, class: "hover:bg-white w-full text-sm flex items-center justify-center gap-2 text-gray-500 px-4 py-2 rounded-md" do %>
-        <%= lucide_icon("plus", class: "w-4 h-4") %> New entry
-      <% end %>
     </div>
   </div>
 </div>

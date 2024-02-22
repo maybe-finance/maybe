@@ -4,8 +4,8 @@ class ValuationsController < ApplicationController
   def create
     @account = Current.family.accounts.find(params[:account_id])
 
-    # TODO: handle STI once we allow for different types of valuations
-    @valuation = @account.valuations.new(valuation_params.merge(type: "Appraisal", currency: Current.family.currency))
+    # TODO: placeholder logic until we have a better abstraction for trends
+    @valuation = @account.valuations.new(valuation_params.merge(currency: Current.family.currency))
     if @valuation.save
       respond_to do |format|
         format.html { redirect_to account_path(@account), notice: "Valuation created" }
@@ -41,11 +41,11 @@ class ValuationsController < ApplicationController
 
   def destroy
     @valuation = Valuation.find(params[:id])
-    account = @valuation.account
+    @account = @valuation.account
     @valuation.destroy
 
     respond_to do |format|
-      format.html { redirect_to account_path(account), notice: "Valuation deleted" }
+      format.html { redirect_to account_path(@account), notice: "Valuation deleted" }
       format.turbo_stream
     end
   end
