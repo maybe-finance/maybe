@@ -49,8 +49,8 @@ module ApplicationHelper
   end
 
   # Styles to use when displaying a change in value
-  def trend_styles(trend_direction)
-    bg_class, text_class, symbol, icon = case trend_direction
+  def trend_styles(trend)
+    bg_class, text_class, symbol, icon = case trend.direction
     when "up"
       [ "bg-green-500/5", "text-green-500", "+", "arrow-up" ]
     when "down"
@@ -58,14 +58,19 @@ module ApplicationHelper
     when "flat"
       [ "bg-gray-500/5", "text-gray-500", "", "minus" ]
     else
-      raise ArgumentError, "Invalid trend direction: #{trend_direction}"
+      raise ArgumentError, "Invalid trend direction: #{trend.direction}"
     end
 
     { bg_class: bg_class, text_class: text_class, symbol: symbol, icon: icon }
   end
 
-  def trend_label(date_range)
-    start_date, end_date = date_range.values_at(:start, :end)
+  def trend_label(period)
+    return "since account creation" if period.date_range.nil?
+    start_date, end_date = period.date_range.first, period.date_range.last
+
+    return "Starting from #{start_date.strftime('%b %d, %Y')}" if end_date.nil?
+    return "Ending at #{end_date.strftime('%b %d, %Y')}" if start_date.nil?
+
     days_apart = (end_date - start_date).to_i
 
     case days_apart
