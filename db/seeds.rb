@@ -40,6 +40,15 @@ valuations = [
   { date: Date.today - 3, value: 301900 }
 ]
 
+transactions = [
+  { date: Date.today - 27, amount: 7.56, currency: "USD", name: "Starbucks" },
+  { date: Date.today - 18, amount: -2000, currency: "USD", name: "Paycheck" },
+  { date: Date.today - 18, amount: 18.20, currency: "USD", name: "Walgreens" },
+  { date: Date.today - 13, amount: 34.20, currency: "USD", name: "Chipotle" },
+  { date: Date.today - 9, amount: -200, currency: "USD", name: "Birthday check" },
+  { date: Date.today - 5, amount: 85.00, currency: "USD", name: "Amazon stuff" }
+]
+
 # Represent system-generated "Balances" at various dates, based on valuations
 balances = [
   { date: Date.today - 30, balance: 300000 },
@@ -75,6 +84,8 @@ balances = [
   { date: Date.today, balance: current_balance }
 ]
 
+
+
 valuations.each do |valuation|
   Valuation.find_or_create_by(
     account_id: account.id,
@@ -91,5 +102,16 @@ balances.each do |balance|
     date: balance[:date]
   ) do |balance_record|
     balance_record.balance = balance[:balance]
+  end
+end
+
+transactions.each do |transaction|
+  Transaction.find_or_create_by(
+    account_id: account.id,
+    date: transaction[:date],
+    amount: transaction[:amount]
+  ) do |transaction_record|
+    transaction_record.currency = transaction[:currency]
+    transaction_record.name = transaction[:name]
   end
 end

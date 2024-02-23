@@ -1,32 +1,12 @@
-<div id="<%= dom_id transaction %>">
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Name:</strong>
-    <%= transaction.name %>
-  </p>
-
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Date:</strong>
-    <%= transaction.date %>
-  </p>
-
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Amount:</strong>
-    <%= transaction.amount %>
-  </p>
-
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Currency:</strong>
-    <%= transaction.currency %>
-  </p>
-
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Account:</strong>
-    <%= transaction.account_id %>
-  </p>
-
-  <% if action_name != "show" %>
-    <%= link_to "Show this transaction", transaction, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-    <%= link_to "Edit this transaction", edit_transaction_path(transaction), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
-    <hr class="mt-6">
-  <% end %>
+<div id="<%= dom_id transaction %>" class="flex items-center gap-6 py-4 text-sm font-medium">
+  <div class="w-96 flex items-center gap-2">
+    <div class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-600/5 text-gray-600"><%= transaction.name[0].upcase %></div>
+    <p class="text-gray-900"><%= transaction.name %></p>
+  </div>
+  <div>
+    <p><%= transaction.account.name %></p>
+  </div>
+  <div class="ml-auto">
+    <p class="<%= transaction.amount < 0 ? "text-green-600" : "" %>"><%= number_to_currency(-transaction.amount, { precision: 2 }) %></p>
+  </div>
 </div>
