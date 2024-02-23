@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_02_22_144849) do
+ActiveRecord::Schema[7.2].define(version: 2024_02_23_162105) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -196,6 +196,17 @@ ActiveRecord::Schema[7.2].define(version: 2024_02_22_144849) do
     t.index ["token"], name: "index_invite_codes_on_token", unique: true
   end
 
+  create_table "transactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.date "date", null: false
+    t.decimal "amount", precision: 19, scale: 4, null: false
+    t.string "currency", default: "USD", null: false
+    t.uuid "account_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_transactions_on_account_id"
+  end
+
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "family_id", null: false
     t.string "first_name"
@@ -220,6 +231,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_02_22_144849) do
 
   add_foreign_key "account_balances", "accounts", on_delete: :cascade
   add_foreign_key "accounts", "families"
+  add_foreign_key "transactions", "accounts", on_delete: :cascade
   add_foreign_key "users", "families"
   add_foreign_key "valuations", "accounts", on_delete: :cascade
 end

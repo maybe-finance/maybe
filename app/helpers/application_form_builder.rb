@@ -34,6 +34,18 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+  def collection_select(method, collection, value_method, text_method, options = {}, html_options = {})
+    default_options = { class: "form-field__input" }
+    merged_options = default_options.merge(html_options)
+
+    return super(method, collection, value_method, text_method, options, merged_options) unless options[:label]
+
+    @template.form_field_tag do
+      label(method, *label_args(options)) +
+      super(method, collection, value_method, text_method, options, merged_options.except(:label))
+    end
+  end
+
   def submit(value = nil, options = {})
     value, options = nil, value if value.is_a?(Hash)
     default_options = { class: "form-field__submit" }

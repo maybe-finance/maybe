@@ -6,10 +6,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Maybe">
-
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
@@ -18,15 +16,12 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
     <%= hotwire_livereload_tags if Rails.env.development? %>
-
     <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
     <%= yield :head %>
   </head>
-
   <body class="h-full">
     <div id="notification-tray" class="fixed top-6 right-6 space-y-1 z-50"></div>
     <%= safe_join(flash.map { |type, message| notification(message, type: type) }) %>
-
     <div class="flex">
       <div class="flex-col p-5 min-w-80">
         <div class="flex items-center justify-between">
@@ -37,14 +32,12 @@
             <div class="flex" data-action="click->dropdown#toggleMenu">
               <div class="mr-1.5 text-white w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= Current.user.email.first %></div>
             </div>
-
             <div class="absolute z-10 hidden w-screen px-2 mt-2 -translate-x-1/2 left-1/2 max-w-min" data-dropdown-target="menu">
               <div class="w-48 px-3 text-sm font-semibold leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
                 <%= link_to "Settings", edit_settings_path, class: 'block p-2 hover:text-gray-600' %>
                 <%= button_to "Log Out", session_path, method: :delete, class: 'block p-2 hover:text-gray-600' %>
               </div>
             </div>
-
           </div>
         </div>
         <nav>
@@ -56,7 +49,7 @@
               <%= sidebar_link_to t('.accounts'), accounts_path, icon: 'layers' %>
             </li>
             <li>
-              <%= sidebar_link_to t('.transactions'), "#", icon: 'credit-card' %>
+              <%= sidebar_link_to t('.transactions'), transactions_path, icon: 'credit-card' %>
             </li>
           </ul>
         </nav>
@@ -69,13 +62,10 @@
               <%= lucide_icon("plus", class: "w-5 h-5 text-gray-500") %>
             <% end %>
           </div>
-
-
           <%= link_to new_account_path, class: "flex items-center gap-4 px-2 py-3 mb-1 text-gray-500 text-sm font-medium rounded-[10px] hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
             <%= lucide_icon("plus", class: "w-5 h-5") %>
             <p><%= t('.new_account') %></p>
           <% end %>
-
           <% Accountable.types.each do |type| %>
             <%= render 'accounts/account_list', type: Accountable.from_type(type) %>
           <% end %>
