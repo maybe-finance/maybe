@@ -1,3 +1,4 @@
+<%= turbo_stream_from @account %>
 <% balance_trend_styles = @balance_series.nil? ? {} : trend_styles(@balance_series[:trend]) %>
 <div class="space-y-4">
   <div class="flex justify-between items-center">

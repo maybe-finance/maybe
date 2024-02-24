@@ -1,4 +1,5 @@
 class Account < ApplicationRecord
+  broadcasts_refreshes
   belongs_to :family
   has_many :balances, class_name: "AccountBalance"
   has_many :valuations

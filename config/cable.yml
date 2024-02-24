@@ -1,6 +1,5 @@
 development:
-  adapter: redis
-  url: redis://localhost:6379/1
+  adapter: postgresql
 
 test:
   adapter: test
