@@ -59,31 +59,17 @@
       <% end %>
     </div>
   </div>
-  <div class="bg-white space-y-4 p-5 border border-alpha-black-25 rounded-xl shadow-xs">
-    <div class="flex justify-between items-center">
-      <h3 class="font-medium text-lg">History</h3>
-      <%= link_to new_account_valuation_path(@account), data: { turbo_frame: dom_id(Valuation.new) }, class: "flex gap-1 font-medium items-center bg-gray-50 text-gray-900 p-2 rounded-lg" do %>
-        <%= lucide_icon("plus", class: "w-5 h-5 text-gray-900") %>
-        <span class="text-sm">New entry</span>
-      <% end %>
+  <div data-controller="tabs" data-tabs-active-class="bg-gray-100" data-tabs-default-tab-value="account-history-tab">
+    <div class="flex gap-1 text-sm text-gray-900 font-medium mb-4">
+      <button data-id="account-history-tab" class="p-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">History</button>
+      <button data-id="account-transactions-tab" class="p-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Transactions</button>
     </div>
-    <div class="rounded-xl bg-gray-25 p-1">
-      <div class="flex flex-col rounded-lg space-y-1">
-        <div class="text-xs font-medium text-gray-500 uppercase flex items-center px-4 py-2">
-          <div class="w-16">date</div>
-          <div class="flex items-center justify-between grow">
-            <div></div>
-            <div>value</div>
-          </div>
-          <div class="w-56 text-right">change</div>
-          <div class="w-[72px]"></div>
-        </div>
-        <div class="rounded-lg bg-white border-alpha-black-25 shadow-xs">
-          <%= turbo_frame_tag dom_id(Valuation.new) %>
-          <%= turbo_frame_tag "valuations_list" do %>
-            <%= render partial: "accounts/account_valuation_list", locals: { valuation_series: @valuation_series } %>
-          <% end %>
-        </div>
+    <div class="min-h-[800px]">
+      <div data-tabs-target="tab" id="account-history-tab">
+        <%= render partial: "accounts/account_history", locals: { account: @account, valuation_series: @valuation_series } %>
+      </div>
+      <div data-tabs-target="tab" id="account-transactions-tab">
+        <%= render partial: "accounts/transactions", locals: { transactions: @account.transactions.order(date: :desc) } %>
       </div>
     </div>
   </div>

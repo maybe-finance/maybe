@@ -3,6 +3,7 @@ class Account < ApplicationRecord
   belongs_to :family
   has_many :balances, class_name: "AccountBalance"
   has_many :valuations
+  has_many :transactions
 
   delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
 

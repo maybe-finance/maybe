@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resource :password
   resource :settings, only: %i[edit update]
 
+  resources :transactions
   resources :accounts, shallow: true do
     resources :valuations
   end
