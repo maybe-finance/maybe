@@ -85,26 +85,15 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: Prepare database
+      - name: Run tests and smoke test seed
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
           # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:prepare
-
-      - name: Run tests
-        env:
-          RAILS_ENV: test
-        run: bin/rails test:all
-
-      - name: Smoke test database seeds
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432
         run: |
-          bin/rails db:drop 
-          bin/rails db:create 
-          bin/rails db:migrate 
+          bin/rails db:create
+          bin/rails db:schema:load
+          bin/rails test:all
           bin/rails db:seed
 
       - name: Keep screenshots from failed system tests
