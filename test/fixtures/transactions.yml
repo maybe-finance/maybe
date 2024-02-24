@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  date: 2024-02-23
+  amount: 9.99
+  currency: MyString
+  account: dylan_checking
+
+two:
+  name: MyString
+  date: 2024-02-20
+  amount: 9.99
+  currency: MyString
+  account: dylan_checking

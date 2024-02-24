@@ -1,3 +1,4 @@
-<%# TODO: We need a way to determine the order the new valuation needs to be in the array, calculate the trend, and append it to the right spot %>
-<%= turbo_stream.update Valuation.new, "" %>
+<%= turbo_stream.replace Valuation.new, body: turbo_frame_tag(dom_id(Valuation.new)) %>
 <%= turbo_stream.append "notification-tray", partial: "shared/notification", locals: { type: "success", content: "Valuation created" } %>
+<%= turbo_stream.replace "valuations_list", partial: "accounts/account_valuation_list", locals: { valuation_series: @account.valuation_series } %>
+<%= turbo_stream.replace "sync_message", partial: "accounts/sync_message", locals: { is_syncing: true } %>

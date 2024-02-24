@@ -36,30 +36,20 @@ export default class extends Controller {
     }[trendDirection];
   }
 
-  /**
-   * @param {Array} balances - An array of objects where each object represents a balance entry. Each object should have the following properties:
-   *   - date: {Date} The date of the balance entry.
-   *   - value: {number} The numerical value of the balance.
-   *   - formatted: {string} The formatted string representation of the balance value.
-   *   - trend: {Object} An object containing information about the trend compared to the previous balance entry. It should have:
-   *     - amount: {number} The numerical difference in value from the previous entry.
-   *     - direction: {string} A string indicating the direction of the trend ("up", "down", or "flat").
-   *     - percent: {number} The percentage change from the previous entry.
-   */
   drawChart(balances) {
     const data = balances.map((b) => ({
-      ...b,
-      value: +b.value,
-      date: new Date(b.date),
+      date: new Date(b.data.date + "T00:00:00"),
+      value: +b.data.balance,
       styles: this.trendStyles(b.trend.direction),
+      trend: b.trend,
       formatted: {
         value: Intl.NumberFormat("en-US", {
           style: "currency",
-          currency: b.currency || "USD",
-        }).format(b.value),
+          currency: b.data.currency || "USD",
+        }).format(b.data.balance),
         change: Intl.NumberFormat("en-US", {
           style: "currency",
-          currency: b.currency || "USD",
+          currency: b.data.currency || "USD",
           signDisplay: "always",
         }).format(b.trend.amount),
       },
@@ -87,7 +77,7 @@ export default class extends Controller {
       ])
       .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
 
-    const margin = { top: 20, right: 0, bottom: 30, left: 0 },
+    const margin = { top: 20, right: 1, bottom: 30, left: 1 },
       width = +svg.attr("width") - margin.left - margin.right,
       height = +svg.attr("height") - margin.top - margin.bottom,
       g = svg
@@ -216,7 +206,7 @@ export default class extends Controller {
           .html(
             `<div style="margin-bottom: 4px; color: ${
               tailwindColors.gray[500]
-            }">${d3.timeFormat("%b %Y")(d.date)}</div>
+            }">${d3.timeFormat("%b %d, %Y")(d.date)}</div>
                  <div style="display: flex; align-items: center; gap: 8px;">
                    <svg width="10" height="10">
                      <circle cx="5" cy="5" r="4" stroke="${

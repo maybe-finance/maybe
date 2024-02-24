@@ -1,0 +1,75 @@
+<div class="space-y-4">
+  <div class="flex justify-between items-center text-gray-900 font-medium">
+    <h1 class="text-xl">Transactions</h1>
+    <div class="flex items-center gap-5">
+      <div class="flex items-center gap-1 cursor-not-allowed">
+        <span class="text-sm">USD $</span>
+        <%= lucide_icon("chevron-down", class: "w-5 h-5 text-gray-500") %>
+      </div>
+      <div class="border-r border-alpha-black-200 h-5"></div>
+      <div class="flex items-center gap-2">
+        <%= lucide_icon("settings-2", class: "cursor-not-allowed w-5 h-5 text-gray-500") %>
+        <%= link_to new_transaction_path, class: "rounded-full w-9 h-9 bg-gray-900 text-white flex items-center justify-center hover:bg-gray-700" do %>
+          <%= lucide_icon("plus", class: "w-5 h-5") %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="grid grid-cols-3 bg-white rounded-xl border border-alpha-black-25 shadow-xs px-4 divide-x divide-alpha-black-100">
+    <div class="p-4 space-y-2">
+      <p class="text-sm text-gray-500">Total transactions</p>
+      <p class="text-gray-900 font-medium text-xl"><%= @transactions.size %></p>
+    </div>
+    <div class="p-4 space-y-2">
+      <p class="text-sm text-gray-500">Income</p>
+      <p class="text-gray-900 font-medium text-xl">
+        <%= number_to_currency(@transactions.select { |t| t.amount < 0 }.sum(&:amount).abs, precision: 2) %>
+      </p>
+    </div>
+    <div class="p-4 space-y-2">
+      <p class="text-sm text-gray-500">Expenses</p>
+      <p class="text-gray-900 font-medium text-xl">
+        <%= number_to_currency(@transactions.select { |t| t.amount >= 0 }.sum(&:amount), precision: 2) %>
+      </p>
+    </div>
+  </div>
+  <div id="transactions" class="bg-white rounded-xl border border-alpha-black-25 shadow-xs p-4 space-y-4">
+    <div class="flex gap-2">
+      <div class="grow cursor-not-allowed">
+        <%= form_with url: transactions_path, method: :get, local: true, html: { role: 'search' } do |form| %>
+          <div class="relative flex items-center bg-white border border-gray-200 rounded-lg">
+            <%= form.text_field :search, placeholder: "Search transaction by merchant, category or amount", class: "placeholder:text-sm placeholder:text-gray-500 relative pl-10 w-full border-none rounded-lg cursor-not-allowed", 'data-action': "input->search#perform", disabled: true %>
+            <%= lucide_icon("search", class: "w-5 h-5 text-gray-500 ml-2 absolute inset-0 transform top-1/2 -translate-y-1/2") %>
+          </div>
+        <% end %>
+      </div>
+      <div>
+        <button class="cursor-not-allowed border border-gray-200 block h-full rounded-lg flex items-center gap-2 px-4">
+          <%= lucide_icon("list-filter", class: "w-5 h-5 text-gray-500") %>
+          <p class="text-sm font-medium text-gray-900">Filter</p>
+        </button>
+      </div>
+      <%= form_with url: "#", method: :get, class: "flex items-center gap-4", html: { class: "" } do |f| %>
+        <%= f.select :period, options_for_select([['7D', 'last_7_days'], ['1M', 'last_30_days'], ["1Y", "last_365_days"], ['All', 'all']], selected: params[:period]), {}, { class: "block h-full w-full border border-gray-200 rounded-lg text-sm py-2 pr-8 pl-2 cursor-not-allowed", onchange: "this.form.submit();", disabled: true } %>
+      <% end %>
+    </div>
+    <div class="bg-gray-25 rounded-xl px-5 py-3 text-xs font-medium text-gray-500 flex items-center gap-6">
+      <div class="w-96">
+        <p class="uppercase">transaction</p>
+      </div>
+      <div class="grow uppercase flex justify-between items-center gap-5 text-xs font-medium text-gray-500">
+        <p>account</p>
+        <p>amount</p>
+      </div>
+    </div>
+    <% if @transactions.empty? %>
+      <p class="text-gray-500 py-4">No transactions for this account yet.</p>
+    <% else %>
+      <div class="space-y-6">
+        <% @transactions.group_by { |transaction| transaction.date }.each do |date, grouped_transactions| %>
+          <%= render partial: "transactions/transaction_group", locals: { date: date, transactions: grouped_transactions } %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

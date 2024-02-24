@@ -1,7 +1,7 @@
 <div>
-  <h1 class="font-bold text-4xl">Edit Valuation: <%= @valuation.type %></h1>
+  <h1 class="font-bold text-4xl">Edit Valuation</h1>
   <%= turbo_frame_tag dom_id(@valuation) do %>
-    <%= form_with model: @valuation, url: valuation_path(@valuation), scope: :valuation do |f| %>
+    <%= form_with model: @valuation, url: valuation_path(@valuation), html: { class: "" } do |f| %>
       <%= render 'form_row', f: f, form_icon: "pencil-line", submit_button_text: "Update" %>
     <% end %>
   <% end %>

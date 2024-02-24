@@ -1,0 +1,7 @@
+<%= form_with model: @transaction do |f| %>
+  <%= f.collection_select :account_id, Current.family.accounts, :id, :name, { prompt: "Select an Account", label: "Account" } %>
+  <%= f.date_field :date, label: "Date" %>
+  <%= f.text_field :name, label: "Name" %>
+  <%= f.number_field :amount, label: "Amount", step: :any, placeholder: number_to_currency(0), in: 0.00..100000000.00 %>
+  <%= f.submit %>
+<% end %>
