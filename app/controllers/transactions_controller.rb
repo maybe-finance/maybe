@@ -18,6 +18,11 @@ class TransactionsController < ApplicationController
 
   def create
     @transaction = Transaction.new(transaction_params)
+    account = Current.family.accounts.find(params[:transaction][:account_id])
+
+    raise ActiveRecord::RecordNotFound, "Account not found or not accessible" if account.nil?
+
+    @transaction.account = account
 
     respond_to do |format|
       if @transaction.save
@@ -54,6 +59,6 @@ class TransactionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def transaction_params
-      params.require(:transaction).permit(:name, :date, :amount, :currency, :account_id)
+      params.require(:transaction).permit(:name, :date, :amount, :currency)
     end
 end
