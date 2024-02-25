@@ -2,7 +2,7 @@
   <button type="button" class="flex items-center justify-between w-20 px-2 py-1 text-sm rounded-lg hover:bg-gray-100 focus:bg-gray-100" data-action="click->currency-dropdown#toggleMenu">
     <div data-currency-dropdown-target="label"><%= f.object.original_currency %></div>
     <%# Example of how account currency value is updated %>
-    <%#= f.hidden_field :currency, data: {currency_dropdown_target: "input"} %>
+    <%= f.hidden_field :original_currency, data: {currency_dropdown_target: "input"} %>
     <%= lucide_icon("chevron-down", class: "text-gray-500 w-5 h-5" ) %>
   </button>
   <ul data-currency-dropdown-target="menu" class="hidden fixed p-1 bg-white rounded-[10px] min-w-[112px] z-50 translate-y-2 border border-alpha-black-100 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)]">
