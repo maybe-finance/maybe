@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: cd4a5b07332c8b1f1101d43b4db736e7d75dbdc3
+  revision: 2abee307fe622939f005e9dd9a6925df0dd7ec4c
   branch: main
   specs:
     actioncable (7.2.0.alpha)
@@ -153,12 +153,12 @@ GEM
     faraday-net_http (3.1.0)
       net-http
     ffi (1.16.3)
-    fugit (1.9.0)
+    fugit (1.10.0)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    good_job (3.24.0)
+    good_job (3.25.0)
       activejob (>= 6.0.0)
       activerecord (>= 6.0.0)
       concurrent-ruby (>= 1.0.2)
@@ -261,7 +261,7 @@ GEM
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.7.3)
-    rack (3.0.9)
+    rack (3.0.9.1)
     rack-session (2.0.0)
       rack (>= 3.0.0)
     rack-test (2.1.0)
@@ -291,7 +291,7 @@ GEM
     redis-client (0.19.1)
       connection_pool
     regexp_parser (2.9.0)
-    reline (0.4.2)
+    reline (0.4.3)
       io-console (~> 0.5)
     rexml (3.2.6)
     rubocop (1.60.2)
@@ -323,26 +323,26 @@ GEM
       rubocop-minitest
       rubocop-performance
       rubocop-rails
-    ruby-lsp (0.14.1)
+    ruby-lsp (0.14.3)
       language_server-protocol (~> 3.17.0)
       prism (>= 0.22.0, < 0.25)
       sorbet-runtime (>= 0.5.10782)
-    ruby-lsp-rails (0.3.0)
+    ruby-lsp-rails (0.3.1)
       actionpack (>= 6.0)
       activerecord (>= 6.0)
       railties (>= 6.0)
-      ruby-lsp (>= 0.14.0, < 0.15.0)
+      ruby-lsp (>= 0.14.2, < 0.15.0)
       sorbet-runtime (>= 0.5.9897)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
-    selenium-webdriver (4.17.0)
+    selenium-webdriver (4.18.1)
       base64 (~> 0.2)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
     smart_properties (1.17.0)
-    sorbet-runtime (0.5.11262)
+    sorbet-runtime (0.5.11268)
     stimulus-rails (1.3.3)
       railties (>= 6.0.0)
     stringio (3.1.0)
@@ -362,7 +362,7 @@ GEM
       unicode-display_width (>= 1.1.1, < 3)
     thor (1.3.0)
     timeout (0.4.1)
-    turbo-rails (2.0.3)
+    turbo-rails (2.0.4)
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
       railties (>= 6.0.0)
