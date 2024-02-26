@@ -17,12 +17,9 @@ class TransactionsController < ApplicationController
   end
 
   def create
-    @transaction = Transaction.new(transaction_params)
     account = Current.family.accounts.find(params[:transaction][:account_id])
 
-    raise ActiveRecord::RecordNotFound, "Account not found or not accessible" if account.nil?
-
-    @transaction.account = account
+    @transaction = account.transactions.build(transaction_params)
 
     respond_to do |format|
       if @transaction.save
