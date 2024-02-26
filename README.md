@@ -56,6 +56,8 @@ If you'd like multi-currency support, there are a few extra steps to follow.
 
 This is 100% optional and meant for devs who don't want to worry about installing requirements manually for their platform. You can follow [this guide](https://code.visualstudio.com/docs/devcontainers/containers) to learn more about Dev Containers.
 
+If you run into `could not connect to server` errors, you may need to change your `.env`'s `DB_HOST` environment variable value to `db` to point to the Postgres container.
+
 #### Mac
 
 Please visit our [Mac dev setup guide](https://github.com/maybe-finance/maybe/wiki/Mac-Dev-Setup-Guide).

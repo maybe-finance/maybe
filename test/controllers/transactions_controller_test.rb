@@ -17,11 +17,12 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create transaction" do
+    name = "transaction_name"
     assert_difference("Transaction.count") do
-      post transactions_url, params: { transaction: { account_id: @transaction.account_id, amount: @transaction.amount, currency: @transaction.currency, date: @transaction.date, name: @transaction.name } }
+      post transactions_url, params: { transaction: { account_id: @transaction.account_id, amount: @transaction.amount, currency: @transaction.currency, date: @transaction.date, name: } }
     end
 
-    assert_redirected_to transaction_url(Transaction.last)
+    assert_redirected_to transaction_url(Transaction.find_by(name:))
   end
 
   test "should show transaction" do
