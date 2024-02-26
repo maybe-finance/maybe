@@ -11,7 +11,7 @@
     <div class="flex items-center gap-3">
       <div class="relative cursor-not-allowed">
         <div class="flex items-center gap-2 px-3 py-2">
-          <span class="text-gray-900">USD $</span>
+          <span class="text-gray-900"><%= @account.original_currency %> <%= @account.original_currency.currency_unit %></span>
           <%= lucide_icon("chevron-down", class: "w-5 h-5 text-gray-500") %>
         </div>
       </div>
@@ -29,9 +29,9 @@
         <p class="text-sm text-gray-500">Total Value</p>
         <%# TODO: Will need a better way to split a formatted monetary value into these 3 parts %>
         <p class="text-gray-900">
-          <span class="text-gray-500"><%= number_to_currency(@account.original_balance)[0] %></span>
-          <span class="text-xl font-medium"><%= number_with_delimiter(@account.original_balance.round) %></span>
-          <span class="text-gray-500">.<%= number_to_currency(@account.original_balance, precision: 2)[-2, 2] %></span>
+          <span class="text-gray-500"><%= @account.original_currency.currency_unit %></span>
+          <span class="text-xl font-medium"><%= format_currency(@account.original_balance, precision: 0, unit: '') %></span>
+          <span class="text-gray-500"><%= @account.original_currency.currency_separator %><%= @account.original_balance.to_s.cents_part %></span>
         </p>
         <% if @balance_series.nil? %>
           <p class="text-sm text-gray-500">Data not available for the selected period</p>
