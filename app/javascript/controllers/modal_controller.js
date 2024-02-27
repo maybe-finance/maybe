@@ -13,4 +13,8 @@ export default class extends Controller {
       this.element.close();
     }
   }
+
+  close() {
+    this.element.close();
+  }
 }
