@@ -3,11 +3,11 @@ en:
   activerecord:
     attributes:
       account:
+        balance: Balance
+        currency: Currency
         family: Family
         family_id: Family
         name: Name
-        balance: Balance
-        currency: Currency
         subtype: Subtype
     models:
       account: Account

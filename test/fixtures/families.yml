@@ -1,7 +1,2 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 dylan_family:
   name: The Dylan Family
-
-richards_family:
-  name: The Richards Family
