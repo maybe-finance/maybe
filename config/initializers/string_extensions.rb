@@ -6,4 +6,8 @@ class String
   def separator
     CURRENCY_OPTIONS[self.to_sym][:separator]
   end
+
+  def precision
+    CURRENCY_OPTIONS[self.to_sym][:precision]
+  end
 end

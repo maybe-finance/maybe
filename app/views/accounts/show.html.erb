@@ -31,7 +31,9 @@
         <p class="text-gray-900">
           <span class="text-gray-500"><%= @account.original_currency.unit %></span>
           <span class="text-xl font-medium"><%= format_currency(@account.original_balance, precision: 0, unit: '') %></span>
-          <span class="text-gray-500"><%= @account.original_currency.separator %><%= @account.original_balance.cents %></span>
+          <%- if @account.original_currency.precision.positive? -%>
+            <span class="text-gray-500"><%= @account.original_currency.separator %><%= @account.original_balance.cents(precision: @account.original_currency.precision) %></span>
+          <% end %>
         </p>
         <% if @balance_series.nil? %>
           <p class="text-sm text-gray-500">Data not available for the selected period</p>

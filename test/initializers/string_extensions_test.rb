@@ -11,4 +11,9 @@ class StringExtensionsTest < ActiveSupport::TestCase
     assert_equal ".", "USD".separator
     assert_equal ",", "EUR".separator
   end
+
+  test "#precision returns the currency's precision for a given currency code" do
+    assert_equal 2, "USD".precision
+    assert_equal 0, "KRW".precision
+  end
 end
