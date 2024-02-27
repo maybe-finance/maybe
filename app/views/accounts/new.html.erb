@@ -29,7 +29,7 @@
         </div>
       </div>
       <div class="flex items-center space-x-2">
-        <span>Close</span> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-8 h-5 shrink-0 grow-0 items-center justify-center text-xs">ESC</kbd>
+        <button data-action="modal#close">Close</button> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-8 h-5 shrink-0 grow-0 items-center justify-center text-xs">ESC</kbd>
       </div>
     </div>
   <% elsif params[:step] == 'method' && @account.accountable.present? %>
@@ -57,7 +57,7 @@
         </div>
       </div>
       <div class="flex items-center space-x-2">
-        <span>Close</span> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-8 h-5 shrink-0 grow-0 items-center justify-center text-xs">ESC</kbd>
+        <button data-action="modal#close">Close</button> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-8 h-5 shrink-0 grow-0 items-center justify-center text-xs">ESC</kbd>
       </div>
     </div>
   <% else %>
