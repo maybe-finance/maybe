@@ -28,7 +28,7 @@ Currency.find_or_create_by(iso_code: "USD", name: "United States Dollar")
 
 current_balance = 350000
 
-account = Account.create_or_find_by(name: "Seed Property Account", accountable: Account::Property.new, family: family, original_balance: current_balance, original_currency: "USD")
+account = Account.create_or_find_by(name: "Seed Property Account", accountable: Account::Property.new, family: family, balance: current_balance, currency: "USD")
 puts "Account created: #{account.name}"
 
 # Represent user-defined "Valuations" at various dates

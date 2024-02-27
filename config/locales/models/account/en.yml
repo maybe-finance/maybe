@@ -6,8 +6,8 @@ en:
         family: Family
         family_id: Family
         name: Name
-        original_balance: Balance
-        original_currency: Currency
+        balance: Balance
+        currency: Currency
         subtype: Subtype
     models:
       account: Account

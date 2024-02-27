@@ -29,9 +29,9 @@
         <p class="text-sm text-gray-500">Total Value</p>
         <%# TODO: Will need a better way to split a formatted monetary value into these 3 parts %>
         <p class="text-gray-900">
-          <span class="text-gray-500"><%= number_to_currency(@account.original_balance)[0] %></span>
-          <span class="text-xl font-medium"><%= number_with_delimiter(@account.original_balance.round) %></span>
-          <span class="text-gray-500">.<%= number_to_currency(@account.original_balance, precision: 2)[-2, 2] %></span>
+          <span class="text-gray-500"><%= number_to_currency(@account.balance)[0] %></span>
+          <span class="text-xl font-medium"><%= number_with_delimiter(@account.balance.round) %></span>
+          <span class="text-gray-500">.<%= number_to_currency(@account.balance, precision: 2)[-2, 2] %></span>
         </p>
         <% if @balance_series.nil? %>
           <p class="text-sm text-gray-500">Data not available for the selected period</p>
