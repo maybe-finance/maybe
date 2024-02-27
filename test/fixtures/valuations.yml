@@ -1,11 +1,26 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# For collectible account that only has valuations (no transactions)
+collectible_one:
+  value: 550
+  date: <%= 4.days.ago.to_date %>
+  account: collectible
 
-one:
-  value: 9.99
-  date: 2024-02-15
-  account: dylan_checking
+collectible_two:
+  value: 700
+  date: <%= 12.days.ago.to_date %>
+  account: collectible
 
-two:
-  value: 9.99
-  date: 2024-02-15
-  account: richards_savings
+collectible_three:
+  value: 400
+  date: <%= 30.days.ago.to_date %>
+  account: collectible
+
+# For checking account that has valuations and transactions
+savings_one:
+  value: 20500
+  date: <%= 3.days.ago.to_date %>
+  account: savings_with_valuation_overrides
+
+savings_two:
+  value: 19500
+  date: <%= 12.days.ago.to_date %>
+  account: savings_with_valuation_overrides

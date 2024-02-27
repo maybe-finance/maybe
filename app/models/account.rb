@@ -49,11 +49,11 @@ class Account < ApplicationRecord
   end
 
   def check_currency
-    if self.original_currency == self.family.currency
-      self.converted_balance = self.original_balance
-      self.converted_currency = self.original_currency
+    if self.currency == self.family.currency
+      self.converted_balance = self.balance
+      self.converted_currency = self.currency
     else
-      self.converted_balance = ExchangeRate.convert(self.original_currency, self.family.currency, self.original_balance)
+      self.converted_balance = ExchangeRate.convert(self.currency, self.family.currency, self.balance)
       self.converted_currency = self.family.currency
     end
   end

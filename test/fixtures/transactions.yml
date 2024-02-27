@@ -1,15 +1,55 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# Checking account transactions
+checking_one:
+  name: Starbucks
+  date: <%= 5.days.ago.to_date %>
+  amount: 10
+  account: checking
 
-one:
-  name: MyString
-  date: 2024-02-23
-  amount: 9.99
-  currency: MyString
-  account: dylan_checking
+checking_two:
+  name: Chipotle
+  date: <%= 12.days.ago.to_date %>
+  amount: 30
+  account: checking
 
-two:
-  name: MyString
-  date: 2024-02-20
-  amount: 9.99
-  currency: MyString
-  account: dylan_checking
+checking_three:
+  name: Amazon
+  date: <%= 15.days.ago.to_date %>
+  amount: 20
+  account: checking
+
+checking_four:
+  name: Paycheck
+  date: <%= 22.days.ago.to_date %>
+  amount: -1075
+  account: checking
+
+checking_five:
+  name: Netflix
+  date: <%= 30.days.ago.to_date %>
+  amount: 15
+  account: checking
+
+# Savings account that has these transactions and valuation overrides
+savings_one:
+  name: Interest Received
+  date: <%= 5.days.ago.to_date %>
+  amount: -200
+  account: savings_with_valuation_overrides
+
+savings_two:
+  name: Check Deposit
+  date: <%= 12.days.ago.to_date %>
+  amount: -50
+  account: savings_with_valuation_overrides
+
+savings_three:
+  name: Withdrawal
+  date: <%= 18.days.ago.to_date %>
+  amount: 2000
+  account: savings_with_valuation_overrides
+
+savings_four:
+  name: Check Deposit
+  date: <%= 30.days.ago.to_date %>
+  amount: -500
+  account: savings_with_valuation_overrides

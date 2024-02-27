@@ -2,7 +2,7 @@ require "test_helper"
 
 class PasswordResetsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @user = users(:bob)
+    @user = users(:family_admin)
   end
 
   test "new" do

@@ -1,14 +1,23 @@
-dylan_checking:
+# No transactions, no valuations, just a generic account
+generic:
   family: dylan_family
-  name: Bob's Checking
-  original_balance: 1200
+  name: No history, generic account
+  balance: 1200
 
-dylan_roth:
+# Account with only valuations
+collectible:
   family: dylan_family
-  name: Bob's Roth IRA
-  original_balance: 1200
+  name: Collectible Account
+  balance: 500
 
-richards_savings:
-  family: richards_family
-  name: Keef's HYSA
-  original_balance: 1500
+# Account with only transactions
+checking:
+  family: dylan_family
+  name: Checking Account
+  balance: 5000
+
+# Account with both transactions and valuations
+savings_with_valuation_overrides:
+  family: dylan_family
+  name: Savings account with valuation overrides
+  balance: 20000

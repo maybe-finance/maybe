@@ -12,7 +12,7 @@ CURRENCY_OPTIONS = Hash.new { |hash, key| hash[key] = default_currency_options.d
   "NZD": { unit: "NZ$", precision: 2, delimiter: ",", separator: "." },
   "AUD": { unit: "A$", precision: 2, delimiter: ",", separator: "." },
   "KRW": { unit: "₩", precision: 0, delimiter: ",", separator: "." },
-  "INR": { unit: "₹", precision: 0, delimiter: ",", separator: "." }
+  "INR": { unit: "₹", precision: 2, delimiter: ",", separator: "." }
 )
 
 EXCHANGE_RATE_ENABLED = ENV["OPEN_EXCHANGE_APP_ID"].present?
