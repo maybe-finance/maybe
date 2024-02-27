@@ -1,90 +1,82 @@
 <h1 class="text-3xl font-semibold font-display"><%= t('.title')%></h1>
-
 <%= modal do %>
   <div class="flex flex-col min-h-[530px]" data-controller="list-keyboard-navigation">
-  <% if @account.accountable.blank? %>
-    <div class="border-b border-alpha-black-25 p-4 text-gray-400">
-      <%= t '.select_accountable_type' %>
-    </div>
-    <div class="flex flex-col p-2 text-sm grow">
-      <button hidden data-controller="hotkey" data-hotkey="k,K,ArrowUp,ArrowLeft" data-action="list-keyboard-navigation#focusPrevious">Previous</button>
-      <button hidden data-controller="hotkey" data-hotkey="j,J,ArrowDown,ArrowRight" data-action="list-keyboard-navigation#focusNext">Next</button>
-
-      <%= render "account_type", type: Account::Depository.new, bg_color: "bg-blue-50", text_color: "text-blue-500", icon: "landmark" %>
-      <%= render "account_type", type: Account::Investment.new, bg_color: "bg-green-50", text_color: "text-green-500", icon: "line-chart" %>
-      <%= render "account_type", type: Account::Property.new, bg_color: "bg-pink-50", text_color: "text-pink-500", icon: "home" %>
-      <%= render "account_type", type: Account::Vehicle.new, bg_color: "bg-indigo-50", text_color: "text-indigo-500", icon: "car-front" %>
-      <%= render "account_type", type: Account::Credit.new, bg_color: "bg-violet-50", text_color: "text-violet-500", icon: "credit-card" %>
-      <%= render "account_type", type: Account::Loan.new, bg_color: "bg-yellow-50", text_color: "text-yellow-500", icon: "hand-coins" %>
-      <%= render "account_type", type: Account::OtherAsset.new, bg_color: "bg-green-50", text_color: "text-green-500", icon: "plus" %>
-      <%= render "account_type", type: Account::OtherLiability.new, bg_color: "bg-red-50", text_color: "text-red-500", icon: "minus" %>
-    </div>
-    <div class="border-t border-alpha-black-25 p-4 text-gray-500 text-sm flex justify-between">
-      <div class="flex space-x-5">
-        <div class="flex items-center space-x-2">
-          <span>Select</span> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('corner-down-left', class: 'inline w-3 h-3')%></kbd>
+    <% if @account.accountable.blank? %>
+      <div class="border-b border-alpha-black-25 p-4 text-gray-400">
+        <%= t '.select_accountable_type' %>
+      </div>
+      <div class="flex flex-col p-2 text-sm grow">
+        <button hidden data-controller="hotkey" data-hotkey="k,K,ArrowUp,ArrowLeft" data-action="list-keyboard-navigation#focusPrevious">Previous</button>
+        <button hidden data-controller="hotkey" data-hotkey="j,J,ArrowDown,ArrowRight" data-action="list-keyboard-navigation#focusNext">Next</button>
+        <%= render "account_type", type: Account::Depository.new, bg_color: "bg-blue-50", text_color: "text-blue-500", icon: "landmark" %>
+        <%= render "account_type", type: Account::Investment.new, bg_color: "bg-green-50", text_color: "text-green-500", icon: "line-chart" %>
+        <%= render "account_type", type: Account::Property.new, bg_color: "bg-pink-50", text_color: "text-pink-500", icon: "home" %>
+        <%= render "account_type", type: Account::Vehicle.new, bg_color: "bg-indigo-50", text_color: "text-indigo-500", icon: "car-front" %>
+        <%= render "account_type", type: Account::Credit.new, bg_color: "bg-violet-50", text_color: "text-violet-500", icon: "credit-card" %>
+        <%= render "account_type", type: Account::Loan.new, bg_color: "bg-yellow-50", text_color: "text-yellow-500", icon: "hand-coins" %>
+        <%= render "account_type", type: Account::OtherAsset.new, bg_color: "bg-green-50", text_color: "text-green-500", icon: "plus" %>
+        <%= render "account_type", type: Account::OtherLiability.new, bg_color: "bg-red-50", text_color: "text-red-500", icon: "minus" %>
+      </div>
+      <div class="border-t border-alpha-black-25 p-4 text-gray-500 text-sm flex justify-between">
+        <div class="flex space-x-5">
+          <div class="flex items-center space-x-2">
+            <span>Select</span> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('corner-down-left', class: 'inline w-3 h-3')%></kbd>
+          </div>
+          <div class="flex items-center space-x-2">
+            <span>Navigate</span> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('arrow-up', class: 'inline w-3 h-3')%></kbd> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('arrow-down', class: 'inline w-3 h-3')%></kbd>
+          </div>
         </div>
         <div class="flex items-center space-x-2">
-          <span>Navigate</span> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('arrow-up', class: 'inline w-3 h-3')%></kbd> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('arrow-down', class: 'inline w-3 h-3')%></kbd>
+          <button data-action="modal#close">Close</button> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-8 h-5 shrink-0 grow-0 items-center justify-center text-xs">ESC</kbd>
         </div>
       </div>
-      <div class="flex items-center space-x-2">
-        <button data-action="modal#close">Close</button> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-8 h-5 shrink-0 grow-0 items-center justify-center text-xs">ESC</kbd>
+    <% elsif params[:step] == 'method' && @account.accountable.present? %>
+      <div class="border-b border-alpha-black-25 p-4 text-gray-400 flex items-center space-x-3">
+        <%= link_to new_account_path, class: "flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-alpha-black-50 back focus:outline-gray-300 focus:outline" do %>
+          <%= lucide_icon('arrow-left', class: 'text-gray-500 w-5 h-5') %>
+        <% end %>
+        <span>How would you like to add it?</span>
       </div>
-    </div>
-  <% elsif params[:step] == 'method' && @account.accountable.present? %>
-    <div class="border-b border-alpha-black-25 p-4 text-gray-400 flex items-center space-x-3">
-      <%= link_to new_account_path, class: "flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-alpha-black-50 back focus:outline-gray-300 focus:outline" do %>
-        <%= lucide_icon('arrow-left', class: 'text-gray-500 w-5 h-5') %>
-      <% end %>
-      <span>How would you like to add it?</span>
-    </div>
-    <div class="flex flex-col p-2 text-sm grow">
-      <button hidden data-controller="hotkey" data-hotkey="k,K,ArrowUp,ArrowLeft" data-action="list-keyboard-navigation#focusPrevious">Previous</button>
-      <button hidden data-controller="hotkey" data-hotkey="j,J,ArrowDown,ArrowRight" data-action="list-keyboard-navigation#focusNext">Next</button>
-
-      <%= render "entry_method", type: @account.accountable, text: 'Enter account balance manually', icon: "keyboard" %>
-      <%= render "entry_method", type: @account.accountable, text: 'Securely link bank account with data provider (coming soon)', icon: "link-2", disabled: true %>
-      <%= render "entry_method", type: @account.accountable, text: 'Upload spreadsheet (coming soon)', icon: "sheet", disabled: true %>
-    </div>
-    <div class="border-t border-alpha-black-25 p-4 text-gray-500 text-sm flex justify-between">
-      <div class="flex space-x-5">
+      <div class="flex flex-col p-2 text-sm grow">
+        <button hidden data-controller="hotkey" data-hotkey="k,K,ArrowUp,ArrowLeft" data-action="list-keyboard-navigation#focusPrevious">Previous</button>
+        <button hidden data-controller="hotkey" data-hotkey="j,J,ArrowDown,ArrowRight" data-action="list-keyboard-navigation#focusNext">Next</button>
+        <%= render "entry_method", type: @account.accountable, text: 'Enter account balance manually', icon: "keyboard" %>
+        <%= render "entry_method", type: @account.accountable, text: 'Securely link bank account with data provider (coming soon)', icon: "link-2", disabled: true %>
+        <%= render "entry_method", type: @account.accountable, text: 'Upload spreadsheet (coming soon)', icon: "sheet", disabled: true %>
+      </div>
+      <div class="border-t border-alpha-black-25 p-4 text-gray-500 text-sm flex justify-between">
+        <div class="flex space-x-5">
+          <div class="flex items-center space-x-2">
+            <span>Select</span> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('corner-down-left', class: 'inline w-3 h-3')%></kbd>
+          </div>
+          <div class="flex items-center space-x-2">
+            <span>Navigate</span> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('arrow-up', class: 'inline w-3 h-3')%></kbd> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('arrow-down', class: 'inline w-3 h-3')%></kbd>
+          </div>
+        </div>
         <div class="flex items-center space-x-2">
-          <span>Select</span> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('corner-down-left', class: 'inline w-3 h-3')%></kbd>
-        </div>
-        <div class="flex items-center space-x-2">
-          <span>Navigate</span> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('arrow-up', class: 'inline w-3 h-3')%></kbd> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon('arrow-down', class: 'inline w-3 h-3')%></kbd>
+          <button data-action="modal#close">Close</button> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-8 h-5 shrink-0 grow-0 items-center justify-center text-xs">ESC</kbd>
         </div>
       </div>
-      <div class="flex items-center space-x-2">
-        <button data-action="modal#close">Close</button> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-8 h-5 shrink-0 grow-0 items-center justify-center text-xs">ESC</kbd>
+    <% else %>
+      <div class="border-b border-alpha-black-25 p-4 text-gray-800 flex items-center space-x-3">
+        <%= link_to new_account_path(step: 'method', type: params[:type]), class: "flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-alpha-black-50 focus:outline-gray-300 focus:outline" do %>
+          <%= lucide_icon('arrow-left', class: 'text-gray-500 w-5 h-5') %>
+        <% end %>
+        <span>Add <%= @account.accountable.model_name.human.downcase %></span>
       </div>
-    </div>
-  <% else %>
-    <div class="border-b border-alpha-black-25 p-4 text-gray-800 flex items-center space-x-3">
-      <%= link_to new_account_path(step: 'method', type: params[:type]), class: "flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-alpha-black-50 focus:outline-gray-300 focus:outline" do %>
-        <%= lucide_icon('arrow-left', class: 'text-gray-500 w-5 h-5') %>
-      <% end %>
-      <span>Add <%= @account.accountable.model_name.human.downcase %></span>
-    </div>
-
-    <%= form_with model: @account, url: accounts_path, scope: :account, html: { class: "m-5 mt-1 flex flex-col justify-between grow", data: { turbo: false } } do |f| %>
+      <%= form_with model: @account, url: accounts_path, scope: :account, html: { class: "m-5 mt-1 flex flex-col justify-between grow", data: { turbo: false } } do |f| %>
         <div class="space-y-4 grow">
           <%= f.hidden_field :accountable_type %>
-
           <%= f.text_field :name, placeholder: t('accounts.new.name.placeholder'), required: 'required', label: t('accounts.new.name.label'), autofocus: true %>
-
           <%= render "accounts/#{permitted_accountable_partial(@account.accountable_type)}", f: f %>
-
-        <%= form_field_tag do %>
-          <%= f.label :original_balance, class: "form-field__label" %>
-          <%= f.number_field :original_balance, step: :any, placeholder: number_to_currency(0), in: 0.00..100000000.00, required: 'required', class: 'form-field__input max-w-[80%]' %>
-          <%= currency_dropdown(f: f, options: Currency.all.order(:iso_code).pluck(:iso_code)) if Currency.count > 1 %>
-        <% end %>
-      </div>
-
-      <%= f.submit "Add #{@account.accountable.model_name.human.downcase}" %>
+          <%= form_field_tag do %>
+            <%= f.label :balance, class: "form-field__label" %>
+            <%= f.number_field :balance, step: :any, placeholder: number_to_currency(0), in: 0.00..100000000.00, required: 'required', class: 'form-field__input max-w-[80%]' %>
+            <%= currency_dropdown(f: f, options: Currency.all.order(:iso_code).pluck(:iso_code)) if Currency.count > 1 %>
+          <% end %>
+        </div>
+        <%= f.submit "Add #{@account.accountable.model_name.human.downcase}" %>
+      <% end %>
     <% end %>
-  <% end %>
   </div>
 <% end %>

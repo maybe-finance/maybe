@@ -2,8 +2,8 @@ require "test_helper"
 
 class TransactionsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in @user = users(:bob)
-    @transaction = transactions(:one)
+    sign_in @user = users(:family_admin)
+    @transaction = transactions(:checking_one)
   end
 
   test "should get index" do

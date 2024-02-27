@@ -3,7 +3,7 @@ class AccountsController < ApplicationController
 
   def new
     @account = Account.new(
-      original_balance: nil,
+      balance: nil,
       accountable: Accountable.from_type(params[:type])&.new
     )
   end
@@ -41,6 +41,6 @@ class AccountsController < ApplicationController
   private
 
   def account_params
-    params.require(:account).permit(:name, :accountable_type, :original_balance, :original_currency, :subtype)
+    params.require(:account).permit(:name, :accountable_type, :balance, :currency, :subtype)
   end
 end

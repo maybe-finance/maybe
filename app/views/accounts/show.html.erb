@@ -11,7 +11,7 @@
     <div class="flex items-center gap-3">
       <div class="relative cursor-not-allowed">
         <div class="flex items-center gap-2 px-3 py-2">
-          <span class="text-gray-900"><%= @account.original_currency %> <%= @account.original_currency.unit %></span>
+          <span class="text-gray-900"><%= @account.currency %> <%= @account.currency.unit %></span>
           <%= lucide_icon("chevron-down", class: "w-5 h-5 text-gray-500") %>
         </div>
       </div>
@@ -29,10 +29,10 @@
         <p class="text-sm text-gray-500">Total Value</p>
         <%# TODO: Will need a better way to split a formatted monetary value into these 3 parts %>
         <p class="text-gray-900">
-          <span class="text-gray-500"><%= @account.original_currency.unit %></span>
-          <span class="text-xl font-medium"><%= format_currency(@account.original_balance, precision: 0, unit: '') %></span>
-          <%- if @account.original_currency.precision.positive? -%>
-            <span class="text-gray-500"><%= @account.original_currency.separator %><%= @account.original_balance.cents(precision: @account.original_currency.precision) %></span>
+          <span class="text-gray-500"><%= @account.currency.unit %></span>
+          <span class="text-xl font-medium"><%= format_currency(@account.balance, precision: 0, unit: '') %></span>
+          <%- if @account.currency.precision.positive? -%>
+            <span class="text-gray-500"><%= @account.currency.separator %><%= @account.balance.cents(precision: @account.currency.precision) %></span>
           <% end %>
         </p>
         <% if @balance_series.nil? %>
