@@ -79,7 +79,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_02_27_142457) do
     t.decimal "converted_balance", precision: 19, scale: 4, default: "0.0"
     t.string "converted_currency", default: "USD"
     t.string "status", default: "OK"
-    t.date "start_date"
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id"], name: "index_accounts_on_family_id"
   end
