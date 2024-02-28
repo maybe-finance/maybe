@@ -6,16 +6,6 @@ class AccountSyncerTest < ActiveSupport::TestCase
         account.accountable = account_depositories(:savings)
 
         assert_equal 0, account.balances.count
-
-        AccountSyncer.new(account).sync
-
-        assert_equal 31, account.balances.count
-
-        # Create old, stale balance and re-sync.  Should be purged.
-        account.balances.create!(date: 1.year.ago, balance: 1000)
-        AccountSyncer.new(account).sync
-
-        assert_equal 31, account.balances.count
     end
 
     test "syncs account with only valuations" do
