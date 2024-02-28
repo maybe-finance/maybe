@@ -1,4 +1,4 @@
-class AccountSyncer
+class Account::Syncer
     def initialize(account)
       @account = account
     end

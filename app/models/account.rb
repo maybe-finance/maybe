@@ -13,11 +13,10 @@ class Account < ApplicationRecord
   def sync_later
     AccountSyncJob.perform_later self
   end
-  
-  def sync
-   update!(status: "SYNCING")
 
-    AccountSyncer.new(self).sync
+  def sync
+    update!(status: "SYNCING")
+    Account::Syncer.new(self).sync
     update!(status: "OK")
   rescue => e
     update!(status: "ERROR")

@@ -1,6 +1,6 @@
 require "test_helper"
 
-class AccountSyncerTest < ActiveSupport::TestCase
+class Account::SyncerTest < ActiveSupport::TestCase
     test "account has no balances until synced" do
         account = accounts(:savings_with_valuation_overrides)
         account.accountable = account_depositories(:savings)
@@ -12,7 +12,7 @@ class AccountSyncerTest < ActiveSupport::TestCase
         account = accounts(:collectable)
         account.accountable = account_other_assets(:one)
 
-        AccountSyncer.new(account).sync
+        Account::Syncer.new(account).sync
 
         expected_balances = [
             400, 400, 400, 400, 400, 400, 400, 400, 400, 400,
@@ -28,7 +28,7 @@ class AccountSyncerTest < ActiveSupport::TestCase
         account = accounts(:checking)
         account.accountable = account_depositories(:checking)
 
-        AccountSyncer.new(account).sync
+        Account::Syncer.new(account).sync
 
         expected_balances = [
             4000, 3985, 3985, 3985, 3985, 3985, 3985, 3985, 5060, 5060,
@@ -43,7 +43,7 @@ class AccountSyncerTest < ActiveSupport::TestCase
     test "syncs account with both valuations and transactions" do
         account = accounts(:savings_with_valuation_overrides)
         account.accountable = account_depositories(:savings)
-        AccountSyncer.new(account).sync
+        Account::Syncer.new(account).sync
 
         expected_balances = [
             21250, 21750, 21750, 21750, 21750, 21000, 21000, 21000, 21000, 21000,
@@ -64,7 +64,7 @@ class AccountSyncerTest < ActiveSupport::TestCase
         account.balances.create!(date: 2.years.ago, balance: 2000)
         account.balances.create!(date: 3.years.ago, balance: 3000)
 
-        AccountSyncer.new(account).sync
+        Account::Syncer.new(account).sync
 
         assert_equal 31, account.balances.count
     end
