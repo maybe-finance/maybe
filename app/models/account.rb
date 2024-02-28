@@ -16,8 +16,6 @@ class Account < ApplicationRecord
 
   # Represents the earliest date we can calculate an account balance for
   def effective_start_date
-    return start_date if start_date # user-defined start date
-
     first_valuation_date = valuations.order(:date).pluck(:date).first
     first_transaction_date = transactions.order(:date).pluck(:date).first
 
