@@ -18,7 +18,7 @@ class AccountSyncerTest < ActiveSupport::TestCase
             400, 400, 400, 400, 400, 400, 400, 400, 400, 400,
             400, 400, 400, 400, 400, 400, 400, 400, 700, 700,
             700, 700, 700, 700, 700, 700, 550, 550, 550, 550,
-            500
+            550
         ].map(&:to_d)
 
         assert_equal expected_balances, account.balances.order(:date).map(&:balance)

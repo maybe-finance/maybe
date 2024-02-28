@@ -8,7 +8,7 @@ generic:
 collectable:
   family: dylan_family
   name: Collectable Account
-  balance: 500
+  balance: 550
 
 # Account with only transactions
 checking:
