@@ -71,7 +71,7 @@
           <%= render "accounts/#{permitted_accountable_partial(@account.accountable_type)}", f: f %>
           <%= form_field_tag do %>
             <%= f.label :balance, class: "form-field__label" %>
-            <%= f.number_field :balance, step: :any, placeholder: number_to_currency(0), in: 0.00..100000000.00, required: 'required', class: 'form-field__input max-w-[80%]' %>
+            <%= f.number_field :balance, step: :any, placeholder: format_currency(0), in: 0.00..100000000.00, required: 'required', class: 'form-field__input max-w-[80%]' %>
             <%= currency_dropdown(f: f, options: Currency.all.order(:iso_code).pluck(:iso_code)) if Currency.count > 1 %>
           <% end %>
         </div>
