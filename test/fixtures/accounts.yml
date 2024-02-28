@@ -5,9 +5,9 @@ generic:
   balance: 1200
 
 # Account with only valuations
-collectible:
+collectable:
   family: dylan_family
-  name: Collectible Account
+  name: Collectable Account
   balance: 500
 
 # Account with only transactions

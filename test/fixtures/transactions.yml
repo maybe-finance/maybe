@@ -25,7 +25,7 @@ checking_four:
 
 checking_five:
   name: Netflix
-  date: <%= 30.days.ago.to_date %>
+  date: <%= 29.days.ago.to_date %>
   amount: 15
   account: checking
 
@@ -50,6 +50,6 @@ savings_three:
 
 savings_four:
   name: Check Deposit
-  date: <%= 30.days.ago.to_date %>
+  date: <%= 29.days.ago.to_date %>
   amount: -500
   account: savings_with_valuation_overrides

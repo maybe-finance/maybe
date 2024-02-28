@@ -10,16 +10,18 @@ class Account < ApplicationRecord
   delegate :type_name, to: :accountable
   before_create :check_currency
 
-  def sync(start_date: nil)
-    AccountSyncJob.perform_later(account_id: self.id, start_date: start_date)
+  def sync
+    AccountSyncJob.perform_later(account_id: self.id)
   end
 
+  # Represents the earliest date we can calculate an account balance for
   def effective_start_date
-    start_date ||
-      [ valuations, transactions ].map { |relation|
-        relation.order(:date).pluck(:date).first
-      }.compact.min ||
-      7.days.ago.to_date
+    return start_date if start_date # user-defined start date
+
+    first_valuation_date = valuations.order(:date).pluck(:date).first
+    first_transaction_date = transactions.order(:date).pluck(:date).first
+
+    [ first_valuation_date, first_transaction_date&.prev_day ].compact.min || Date.current
   end
 
   def balance_series(period)

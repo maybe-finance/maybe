@@ -9,6 +9,6 @@ class Valuation < ApplicationRecord
 
   private
     def sync_account
-      self.account.sync(start_date: self.date)
+      self.account.sync
     end
 end
