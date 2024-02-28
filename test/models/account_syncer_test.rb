@@ -28,7 +28,7 @@ class AccountSyncerTest < ActiveSupport::TestCase
             400, 400, 400, 400, 400, 400, 400, 400, 400, 400,
             400, 400, 400, 400, 400, 400, 400, 400, 700, 700,
             700, 700, 700, 700, 700, 700, 550, 550, 550, 550,
-            550
+            500
         ].map(&:to_d)
 
         assert_equal expected_balances, account.balances.order(:date).map(&:balance)
@@ -59,7 +59,7 @@ class AccountSyncerTest < ActiveSupport::TestCase
             21250, 21750, 21750, 21750, 21750, 21000, 21000, 21000, 21000, 21000,
             21000, 21000, 19000, 19000, 19000, 19000, 19000, 19000, 19500, 19500,
             19500, 19500, 19500, 19500, 19500, 19700, 19700, 20500, 20500, 20500,
-            20500
+            20000
         ].map(&:to_d)
 
         assert_equal expected_balances, account.balances.order(:date).map(&:balance)
