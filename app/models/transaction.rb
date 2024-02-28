@@ -6,6 +6,6 @@ class Transaction < ApplicationRecord
   private
 
     def sync_account
-      self.account.sync
+      self.account.sync_later
     end
 end
