@@ -10,8 +10,18 @@ class Account < ApplicationRecord
   delegate :type_name, to: :accountable
   before_create :check_currency
 
+  def sync_later
+    AccountSyncJob.perform_later self
+  end
+  
   def sync
-    AccountSyncJob.perform_later(account_id: self.id)
+   update!(status: "SYNCING")
+
+    AccountSyncer.new(self).sync
+    update!(status: "OK")
+  rescue => e
+    update!(status: "ERROR")
+    Rails.logger.error("Failed to sync account #{id}: #{e.message}")
   end
 
   # Represents the earliest date we can calculate an account balance for
