@@ -1,7 +1,7 @@
-<%# locals: (valuation_series:) %>
+<%# locals: (valuation_series:, classification:) %>
 <% valuation_series.with_index do |valuation_item, index| %>
   <% valuation, trend = valuation_item.values_at(:value, :trend) %>
-  <% valuation_styles = trend_styles(valuation_item[:trend]) %>
+  <% valuation_styles = trend_styles(valuation_item[:trend], mode: classification) %>
   <%= turbo_frame_tag dom_id(valuation) do %>
     <div class="p-4 flex items-center">
       <div class="w-16">

@@ -21,3 +21,9 @@ savings_with_valuation_overrides:
   family: dylan_family
   name: Savings account with valuation overrides
   balance: 20000
+
+# Liability account
+credit_card:
+  family: dylan_family
+  name: Credit Card
+  balance: 1000

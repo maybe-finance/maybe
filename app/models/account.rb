@@ -12,6 +12,21 @@ class Account < ApplicationRecord
   delegate :type_name, to: :accountable
   before_create :check_currency
 
+  def classification
+    classifications = {
+      "Account::Depository" => :asset,
+      "Account::Investment" => :asset,
+      "Account::Property" => :asset,
+      "Account::Vehicle" => :asset,
+      "Account::OtherAsset" => :asset,
+      "Account::Loan" => :liability,
+      "Account::Credit" => :liability,
+      "Account::OtherLiability" => :liability
+    }
+
+    classifications[accountable_type]
+  end
+
   def balance_series(period)
     filtered_balances = balances.in_period(period).order(:date)
     return nil if filtered_balances.empty?

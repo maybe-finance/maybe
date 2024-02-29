@@ -49,12 +49,13 @@ module ApplicationHelper
   end
 
   # Styles to use when displaying a change in value
-  def trend_styles(trend)
+  def trend_styles(trend, mode: :asset)
+    puts mode == :liability ? "it is a liability" : "it is an asset"
     bg_class, text_class, symbol, icon = case trend.direction
     when "up"
-      [ "bg-green-500/5", "text-green-500", "+", "arrow-up" ]
+      mode == :liability ? [ "bg-red-500/5", "text-red-500", "+", "arrow-up" ] : [ "bg-green-500/5", "text-green-500", "+", "arrow-up" ]
     when "down"
-      [ "bg-red-500/5", "text-red-500", "-", "arrow-down" ]
+      mode == :liability ? [ "bg-green-500/5", "text-green-500", "-", "arrow-down" ] : [ "bg-red-500/5", "text-red-500", "-", "arrow-down" ]
     when "flat"
       [ "bg-gray-500/5", "text-gray-500", "", "minus" ]
     else

@@ -53,3 +53,28 @@ savings_four:
   date: <%= 29.days.ago.to_date %>
   amount: -500
   account: savings_with_valuation_overrides
+
+# Credit card account transactions
+credit_card_one:
+  name: Starbucks
+  date: <%= 5.days.ago.to_date %>
+  amount: 10
+  account: credit_card
+
+credit_card_two:
+  name: Chipotle
+  date: <%= 12.days.ago.to_date %>
+  amount: 30
+  account: credit_card
+
+credit_card_three:
+  name: Amazon
+  date: <%= 15.days.ago.to_date %>
+  amount: 20
+  account: credit_card
+
+credit_card_four:
+  name: CC Payment
+  date: <%= 29.days.ago.to_date %>
+  amount: -100
+  account: credit_card
