@@ -47,4 +47,19 @@ class Account::BalanceCalculatorTest < ActiveSupport::TestCase
 
         assert_equal expected_balances, daily_balances.map { |b| b[:balance] }
     end
+
+    test "syncs liability account" do
+        account = accounts(:credit_card)
+        account.accountable = account_credits(:one)
+        daily_balances = Account::BalanceCalculator.new(account).daily_balances
+
+        expected_balances = [
+            1040, 940, 940, 940, 940, 940, 940, 940, 940, 940,
+            940, 940, 940, 940, 940, 960, 960, 960, 990, 990,
+            990, 990, 990, 990, 990, 1000, 1000, 1000, 1000, 1000,
+            1000
+        ].map(&:to_d)
+
+        assert_equal expected_balances, daily_balances.map { |b| b[:balance] }
+    end
 end

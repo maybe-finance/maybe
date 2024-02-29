@@ -21,7 +21,7 @@
       <div class="rounded-lg bg-white border-alpha-black-25 shadow-xs">
         <%= turbo_frame_tag dom_id(Valuation.new) %>
         <%= turbo_frame_tag "valuations_list" do %>
-          <%= render partial: "accounts/account_valuation_list", locals: { valuation_series: valuation_series } %>
+          <%= render partial: "accounts/account_valuation_list", locals: { valuation_series: valuation_series, classification: account.classification } %>
         <% end %>
       </div>
     </div>
