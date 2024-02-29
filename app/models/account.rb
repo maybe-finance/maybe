@@ -12,14 +12,6 @@ class Account < ApplicationRecord
   delegate :type_name, to: :accountable
   before_create :check_currency
 
-  # Represents the earliest date we can calculate an account balance for
-  def effective_start_date
-    first_valuation_date = valuations.order(:date).pluck(:date).first
-    first_transaction_date = transactions.order(:date).pluck(:date).first
-
-    [ first_valuation_date, first_transaction_date&.prev_day ].compact.min || Date.current
-  end
-
   def balance_series(period)
     filtered_balances = balances.in_period(period).order(:date)
     return nil if filtered_balances.empty?

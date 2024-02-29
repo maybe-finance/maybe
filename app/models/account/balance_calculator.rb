@@ -4,17 +4,17 @@ class Account::BalanceCalculator
     end
 
     def daily_balances(start_date = nil)
-      sync_start_date = [ start_date, @account.effective_start_date ].compact.max
+      calc_start_date = [ start_date, @account.effective_start_date ].compact.max
 
-      valuations = @account.valuations.where("date >= ?", sync_start_date).order(:date).select(:date, :value)
-      transactions = @account.transactions.where("date > ?", sync_start_date).order(:date).select(:date, :amount)
+      valuations = @account.valuations.where("date >= ?", calc_start_date).order(:date).select(:date, :value)
+      transactions = @account.transactions.where("date > ?", calc_start_date).order(:date).select(:date, :amount)
       oldest_entry = [ valuations.first, transactions.first ].compact.min_by(&:date)
 
       net_transaction_flows = transactions.sum(&:amount)
       implied_start_balance = oldest_entry.is_a?(Valuation) ? oldest_entry.value : @account.balance + net_transaction_flows
 
       prior_balance = implied_start_balance
-      calculated_balances = ((sync_start_date + 1.day)...Date.current).map do |date|
+      calculated_balances = ((calc_start_date + 1.day)...Date.current).map do |date|
         valuation = valuations.find { |v| v.date == date }
 
         if valuation
@@ -30,7 +30,7 @@ class Account::BalanceCalculator
       end
 
       [
-        { date: sync_start_date, balance: implied_start_balance, updated_at: Time.current },
+        { date: calc_start_date, balance: implied_start_balance, updated_at: Time.current },
         *calculated_balances,
         { date: Date.current, balance: @account.balance, updated_at: Time.current } # Last balance must always match "source of truth"
       ]
