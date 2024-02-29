@@ -1,18 +1,18 @@
-# For collectible account that only has valuations (no transactions)
-collectible_one:
+# For collectable account that only has valuations (no transactions)
+collectable_one:
   value: 550
   date: <%= 4.days.ago.to_date %>
-  account: collectible
+  account: collectable
 
-collectible_two:
+collectable_two:
   value: 700
   date: <%= 12.days.ago.to_date %>
-  account: collectible
+  account: collectable
 
-collectible_three:
+collectable_three:
   value: 400
   date: <%= 30.days.ago.to_date %>
-  account: collectible
+  account: collectable
 
 # For checking account that has valuations and transactions
 savings_one:
@@ -23,4 +23,9 @@ savings_one:
 savings_two:
   value: 19500
   date: <%= 12.days.ago.to_date %>
+  account: savings_with_valuation_overrides
+
+savings_three:
+  value: 21000
+  date: <%= 25.days.ago.to_date %>
   account: savings_with_valuation_overrides
