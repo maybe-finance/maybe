@@ -1,18 +1,11 @@
 require "test_helper"
 
-class Account::SyncerTest < ActiveSupport::TestCase
-    test "account has no balances until synced" do
-        account = accounts(:savings_with_valuation_overrides)
-        account.accountable = account_depositories(:savings)
-
-        assert_equal 0, account.balances.count
-    end
-
+class Account::BalanceCalculatorTest < ActiveSupport::TestCase
     test "syncs account with only valuations" do
         account = accounts(:collectable)
         account.accountable = account_other_assets(:one)
 
-        Account::Syncer.new(account).sync
+        daily_balances = Account::BalanceCalculator.new(account).daily_balances
 
         expected_balances = [
             400, 400, 400, 400, 400, 400, 400, 400, 400, 400,
@@ -21,14 +14,14 @@ class Account::SyncerTest < ActiveSupport::TestCase
             550
         ].map(&:to_d)
 
-        assert_equal expected_balances, account.balances.order(:date).map(&:balance)
+        assert_equal expected_balances, daily_balances.map { |b| b[:balance] }
     end
 
     test "syncs account with only transactions" do
         account = accounts(:checking)
         account.accountable = account_depositories(:checking)
 
-        Account::Syncer.new(account).sync
+        daily_balances = Account::BalanceCalculator.new(account).daily_balances
 
         expected_balances = [
             4000, 3985, 3985, 3985, 3985, 3985, 3985, 3985, 5060, 5060,
@@ -37,13 +30,13 @@ class Account::SyncerTest < ActiveSupport::TestCase
             5000
         ].map(&:to_d)
 
-        assert_equal expected_balances, account.balances.order(:date).map(&:balance)
+        assert_equal expected_balances, daily_balances.map { |b| b[:balance] }
     end
 
     test "syncs account with both valuations and transactions" do
         account = accounts(:savings_with_valuation_overrides)
         account.accountable = account_depositories(:savings)
-        Account::Syncer.new(account).sync
+        daily_balances = Account::BalanceCalculator.new(account).daily_balances
 
         expected_balances = [
             21250, 21750, 21750, 21750, 21750, 21000, 21000, 21000, 21000, 21000,
@@ -52,20 +45,6 @@ class Account::SyncerTest < ActiveSupport::TestCase
             20000
         ].map(&:to_d)
 
-        assert_equal expected_balances, account.balances.order(:date).map(&:balance)
-    end
-
-    test "stale account balances are purged" do
-        account = accounts(:savings_with_valuation_overrides)
-        account.accountable = account_depositories(:savings)
-
-        # Create old, stale balances that should be purged (since they are before account start date)
-        account.balances.create!(date: 1.year.ago, balance: 1000)
-        account.balances.create!(date: 2.years.ago, balance: 2000)
-        account.balances.create!(date: 3.years.ago, balance: 3000)
-
-        Account::Syncer.new(account).sync
-
-        assert_equal 31, account.balances.count
+        assert_equal expected_balances, daily_balances.map { |b| b[:balance] }
     end
 end
