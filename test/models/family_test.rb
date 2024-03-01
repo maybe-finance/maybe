@@ -18,6 +18,10 @@ class FamilyTest < ActiveSupport::TestCase
     assert @family.accounts.size > 0
   end
 
+  test "should have many transaction categories" do
+    assert @dylan_family.categories.size > 0
+  end
+
   test "should destroy dependent users" do
     assert_difference("User.count", -@family.users.count) do
       @family.destroy

@@ -4,30 +4,35 @@ checking_one:
   date: <%= 5.days.ago.to_date %>
   amount: 10
   account: checking
+  category: expense_default
 
 checking_two:
   name: Chipotle
   date: <%= 12.days.ago.to_date %>
   amount: 30
   account: checking
+  category: expense_food
 
 checking_three:
   name: Amazon
   date: <%= 15.days.ago.to_date %>
   amount: 20
   account: checking
+  category: expense_default
 
 checking_four:
   name: Paycheck
   date: <%= 22.days.ago.to_date %>
   amount: -1075
   account: checking
+  category: income_default
 
 checking_five:
   name: Netflix
   date: <%= 29.days.ago.to_date %>
   amount: 15
   account: checking
+  category: expense_default
 
 # Savings account that has these transactions and valuation overrides
 savings_one:
@@ -35,24 +40,28 @@ savings_one:
   date: <%= 5.days.ago.to_date %>
   amount: -200
   account: savings_with_valuation_overrides
+  category: income_default
 
 savings_two:
   name: Check Deposit
   date: <%= 12.days.ago.to_date %>
   amount: -50
   account: savings_with_valuation_overrides
+  category: income_default
 
 savings_three:
   name: Withdrawal
   date: <%= 18.days.ago.to_date %>
   amount: 2000
   account: savings_with_valuation_overrides
+  category: expense_default
 
 savings_four:
   name: Check Deposit
   date: <%= 29.days.ago.to_date %>
   amount: -500
   account: savings_with_valuation_overrides
+  category: income_default
 
 # Credit card account transactions
 credit_card_one:
@@ -60,21 +69,25 @@ credit_card_one:
   date: <%= 5.days.ago.to_date %>
   amount: 10
   account: credit_card
+  category: expense_default
 
 credit_card_two:
   name: Chipotle
   date: <%= 12.days.ago.to_date %>
   amount: 30
   account: credit_card
+  category: expense_food
 
 credit_card_three:
   name: Amazon
   date: <%= 15.days.ago.to_date %>
   amount: 20
   account: credit_card
+  category: expense_default
 
 credit_card_four:
   name: CC Payment
   date: <%= 29.days.ago.to_date %>
   amount: -100
   account: credit_card
+  category: income_default
