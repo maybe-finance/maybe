@@ -1,1 +1,104 @@
-<h1 class="text-3xl font-semibold font-display"><%= t('.title')%></h1>
+<div class="space-y-4">
+  <div>
+    <h1 class="sr-only">Dashboard</h1>
+    <p class="text-xl font-medium text-gray-900 mb-1"><%= t('.greeting', name: Current.user.first_name )%></p>
+    <p class="text-gray-500 text-sm font-medium"><%= Date.current.strftime('%A, %b %d') %></p>
+  </div>
+  <section class="bg-white rounded-xl shadow-xs border border-alpha-black-25">
+    <div class="flex justify-between p-4">
+      <div>
+        <%= render partial: "shared/balance_heading", locals: { 
+            label: "Net Worth", 
+            period: @period, 
+            balance: {
+                currency: Current.family.currency, 
+                value: Current.family.net_worth,
+                classification: :asset,
+                trend: @net_worth_series[:trend]
+            } 
+        } 
+        %>
+      </div>
+      <%= render partial: "shared/period_dropdown", locals: { period: @period, path: root_path } %>
+    </div>
+    <div class="h-96 flex items-center justify-center text-2xl font-bold">
+      <%= render partial: "shared/line_chart", locals: { series: @net_worth_series } %>
+    </div>
+    <div class="border-t border-t-alpha-black-100 flex divide-x divide-gray-200">
+      <div class="w-1/2 p-4 flex items-stretch justify-between">
+        <div class="space-y-2 grow">
+          <%= render partial: "shared/balance_heading", locals: { 
+                label: "Assets",
+                period: @period,
+                balance: { 
+                    currency: Current.family.currency, 
+                    value: Current.family.assets, 
+                    classification: :asset,
+                    trend: @asset_series[:trend] 
+                },
+            } %>
+        </div>
+        <div 
+            data-controller="trendline" 
+            id="assetsTrendline" 
+            class="h-full w-2/5" 
+            data-trendline-series-value='[{"date":"2023-09-01","value":100},{"date":"2023-09-02","value":150},{"date":"2023-09-03","value":200},{"date":"2023-09-04","value":250},{"date":"2023-09-05","value":300},{"date":"2023-09-06","value":350},{"date":"2023-09-07","value":400}]'
+            data-trendline-classification-value="asset"
+            ></div>
+      </div>
+      <div class="w-1/2 p-4 flex items-stretch justify-between">
+        <div class="space-y-2 grow">
+          <%= render partial: "shared/balance_heading", locals: { 
+                label: "Liabilities",
+                size: "md",
+                balance: {
+                    currency: Current.family.currency, 
+                    value: 1000, 
+                    classification: :liability,
+                    trend: @liability_series[:trend] 
+                },
+                period: @period
+            } %>
+        </div>
+        <div 
+            data-controller="trendline" 
+            id="liabilitiesTrendline" 
+            class="h-full w-2/5" 
+            data-trendline-series-value='[{"date":"2023-09-01","value":100},{"date":"2023-09-02","value":150},{"date":"2023-09-03","value":200},{"date":"2023-09-04","value":250},{"date":"2023-09-05","value":300},{"date":"2023-09-06","value":350},{"date":"2023-09-07","value":400}]'
+            data-trendline-classification-value="liability"
+            ></div>
+      </div>
+    </div>
+  </section>
+  <section class="p-4 bg-white rounded-xl shadow-xs border border-alpha-black-25">
+    <div data-controller="tabs" data-tabs-active-class="bg-white border border-alpha-black-25 shadow-xs" data-tabs-default-tab-value="asset-summary-tab">
+      <div class="flex justify-between items-center mb-6">
+        <div class="bg-gray-50 rounded-lg p-1 flex gap-1 text-sm text-gray-900 font-medium">
+          <button data-id="asset-summary-tab" class="px-2 py-1 rounded-md" data-tabs-target="btn" data-action="tabs#select">Assets</button>
+          <button data-id="liability-summary-tab" class="px-2 py-1 rounded-md" data-tabs-target="btn" data-action="tabs#select">Liabilities</button>
+        </div>
+        <div class="flex items-center gap-2">
+          <%= link_to new_account_path, class: "flex items-center gap-1 p-2 text-gray-900 text-sm font-medium bg-gray-50 rounded-lg hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
+            <%= lucide_icon("plus", class: "w-5 h-5 text-gray-500") %>
+            <p><%= t('.new') %></p>
+          <% end %>
+          <%= render partial: "shared/period_dropdown", locals: { period: @period, path: root_path } %>
+        </div>
+      </div>
+      <div>
+        <div data-tabs-target="tab" id="asset-summary-tab" class="space-y-6">
+          <%= render partial: "account_percentages_bar" %>
+          <%= render partial: "account_percentages_table" %>
+          <p>Assets</p>
+        </div>
+        <div data-tabs-target="tab" id="liability-summary-tab" class="space-y-6 hidden">
+          <%= render partial: "account_percentages_bar" %>
+          <%= render partial: "account_percentages_table" %>
+          <p>Liabilities</p>
+        </div>
+      </div>
+    </div>
+    <div>
+    </div>
+  </section>
+</div>

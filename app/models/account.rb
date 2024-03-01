@@ -28,29 +28,17 @@ class Account < ApplicationRecord
   end
 
   def balance_series(period)
-    filtered_balances = balances.in_period(period).order(:date)
-    return nil if filtered_balances.empty?
-
-    series_data = [ nil, *filtered_balances ].each_cons(2).map do |previous, current|
-      trend = current&.trend(previous)
-      { data: current, trend: { amount: trend&.amount, direction: trend&.direction, percent: trend&.percent } }
-    end
-
-    last_balance = series_data.last[:data]
-
-    {
-      series_data: series_data,
-      last_balance: last_balance.balance,
-      trend: last_balance.trend(series_data.first[:data])
-    }
+    MoneySeries.new(
+      balances.in_period(period).order(:date),
+      { trend_type: classification }
+    )
   end
 
   def valuation_series
-    series_data = [ nil, *valuations.order(:date) ].each_cons(2).map do |previous, current|
-      { value: current, trend: current&.trend(previous) }
-    end
-
-    series_data.reverse_each
+    MoneySeries.new(
+      valuations.order(:date),
+      { trend_type: classification }
+    )
   end
 
   def check_currency

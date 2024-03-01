@@ -1,9 +1,10 @@
 class Trend
-    attr_reader :current, :previous
+    attr_reader :current, :previous, :type
 
-    def initialize(current, previous)
+    def initialize(current:, previous: nil, type: :asset)
         @current = current
         @previous = previous
+        @type = type # :asset means positive trend is good, :liability means negative trend is good
     end
 
     def direction

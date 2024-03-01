@@ -1,5 +1,5 @@
-<%# locals: (valuation_series:, classification:) %>
-<% valuation_series.with_index do |valuation_item, index| %>
+<%# locals: (account:) %>
+<% account.valuation_series.data.reverse_each.with_index do |valuation_item, index| %>
   <% valuation, trend = valuation_item.values_at(:value, :trend) %>
   <% valuation_styles = trend_styles(valuation_item[:trend], mode: classification) %>
   <%= turbo_frame_tag dom_id(valuation) do %>
