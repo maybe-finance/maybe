@@ -65,7 +65,7 @@ module ApplicationHelper
     { bg_class: bg_class, text_class: text_class, symbol: symbol, icon: icon }
   end
 
-  def trend_label(period)
+  def period_label(period)
     return "since account creation" if period.date_range.nil?
     start_date, end_date = period.date_range.first, period.date_range.last
 
