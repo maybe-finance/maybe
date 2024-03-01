@@ -1,5 +1,6 @@
 <%= turbo_stream_from @account %>
-<% balance_trend_styles = @balance_series.nil? ? {} : trend_styles(@balance_series[:trend], mode: @account.classification) %>
+<% balance_trend_styles = trend_styles(@balance_series.trend, mode: @account.classification) %>
+<% balance = Money.from_amount(@account.balance, @account.currency) %>
 <div class="space-y-4">
   <div class="flex justify-between items-center">
     <div class="flex items-center gap-3">
@@ -11,7 +12,7 @@
     <div class="flex items-center gap-3">
       <div class="relative cursor-not-allowed">
         <div class="flex items-center gap-2 px-3 py-2">
-          <span class="text-gray-900"><%= @account.currency %> <%= @account.currency.unit %></span>
+          <span class="text-gray-900"><%= balance.currency %> <%= balance.symbol %></span>
           <%= lucide_icon("chevron-down", class: "w-5 h-5 text-gray-500") %>
         </div>
       </div>
@@ -44,7 +45,7 @@
     </div>
     <div class="h-96 flex items-center justify-center text-2xl font-bold">
       <% if @balance_series %>
-        <div data-controller="line-chart" id="lineChart" class="w-full h-full" data-line-chart-series-value="<%= @balance_series[:series_data].to_json %>"></div>
+        <div data-controller="line-chart" id="lineChart" class="w-full h-full" data-line-chart-series-value="<%= @balance_series.serialize_for_d3_chart %>"></div>
       <% else %>
         <div class="w-full h-full flex items-center justify-center">
           <p class="text-gray-500">No data available for the selected period.</p>
@@ -61,7 +62,7 @@
       <div data-tabs-target="tab" id="account-history-tab">
         <%= render partial: "accounts/account_history", locals: { account: @account, valuation_series: @valuation_series } %>
       </div>
-      <div data-tabs-target="tab" id="account-transactions-tab">
+      <div data-tabs-target="tab" id="account-transactions-tab" class="hidden">
         <%= render partial: "accounts/transactions", locals: { transactions: @account.transactions.order(date: :desc) } %>
       </div>
     </div>
