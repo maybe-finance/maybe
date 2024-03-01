@@ -9,13 +9,9 @@
       <div>
         <%= render partial: "shared/balance_heading", locals: { 
             label: "Net Worth", 
-            period: @period, 
-            balance: {
-                currency: Current.family.currency, 
-                value: Current.family.net_worth,
-                classification: :asset,
-                trend: @net_worth_series[:trend]
-            } 
+            period: @period,
+            balance: Money.from_amount(Current.family.net_worth, Current.family.currency),
+            trend: @net_worth_series.trend
         } 
         %>
       </div>

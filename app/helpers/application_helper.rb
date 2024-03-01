@@ -48,8 +48,7 @@ module ApplicationHelper
     end
   end
 
-  # Styles to use when displaying a change in value
-  def trend_styles(trend, mode: :asset)
+  def trend_styles(trend)
     fallback = { bg_class: "bg-gray-500/5", text_class: "text-gray-500", symbol: "", icon: "minus" }
     return fallback if trend.nil? || trend.direction == "flat"
 
