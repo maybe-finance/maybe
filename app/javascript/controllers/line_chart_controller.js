@@ -4,7 +4,7 @@ import * as d3 from "d3";
 
 // Connects to data-controller="line-chart"
 export default class extends Controller {
-  static values = { series: Array };
+  static values = { series: Object };
 
   connect() {
     this.renderChart(this.seriesValue);
@@ -36,26 +36,26 @@ export default class extends Controller {
     }[trendDirection];
   }
 
-  drawChart(balances) {
-    const data = balances.map((b) => ({
-      date: new Date(b.data.date + "T00:00:00"),
-      value: +b.data.balance,
+  drawChart(series) {
+    const data = series.data.map((b) => ({
+      date: new Date(b.date + "T00:00:00"),
+      value: +b.amount,
       styles: this.trendStyles(b.trend.direction),
       trend: b.trend,
       formatted: {
         value: Intl.NumberFormat("en-US", {
           style: "currency",
-          currency: b.data.currency || "USD",
-        }).format(b.data.balance),
+          currency: b.currency || "USD",
+        }).format(b.amount),
         change: Intl.NumberFormat("en-US", {
           style: "currency",
-          currency: b.data.currency || "USD",
+          currency: b.currency || "USD",
           signDisplay: "always",
         }).format(b.trend.amount),
       },
     }));
 
-    const chartContainer = d3.select("#lineChart");
+    const chartContainer = d3.select(this.element);
 
     // Clear any existing chart
     chartContainer.selectAll("svg").remove();

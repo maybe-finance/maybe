@@ -4,7 +4,7 @@ class Valuation < ApplicationRecord
   after_commit :sync_account
 
   def trend(previous)
-    Trend.new(value, previous&.value)
+    Trend.new(current: value, previous: previous&.value, type: account.classification)
   end
 
   private

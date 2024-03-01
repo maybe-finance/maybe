@@ -1,5 +1,5 @@
 <%= turbo_stream_from @account %>
-<% balance_trend_styles = @balance_series.nil? ? {} : trend_styles(@balance_series[:trend], mode: @account.classification) %>
+<% balance_trend_styles = @balance_series.nil? ? {} : trend_styles(@balance_series.trend, mode: @account.classification) %>
 <% balance = Money.from_amount(@account.balance, @account.currency) %>
 <div class="space-y-4">
   <div class="flex justify-between items-center">
@@ -37,12 +37,12 @@
         </p>
         <% if @balance_series.nil? %>
           <p class="text-sm text-gray-500">Data not available for the selected period</p>
-        <% elsif @balance_series[:trend].amount == 0 %>
+        <% elsif @balance_series.trend.amount == 0 %>
           <p class="text-sm text-gray-500">No change vs. prior period</p>
         <% else %>
           <p class="text-sm <%= balance_trend_styles[:text_class] %>">
-            <span><%= balance_trend_styles[:symbol] %><%= number_to_currency(@balance_series[:trend].amount.abs, precision: 2) %></span>
-            <span>(<%= lucide_icon(@balance_series[:trend].amount > 0 ? 'arrow-up' : 'arrow-down', class: "w-4 h-4 align-text-bottom inline") %> <%= @balance_series[:trend].percent %>%)</span>
+            <span><%= balance_trend_styles[:symbol] %><%= number_to_currency(@balance_series.trend.amount.abs, precision: 2) %></span>
+            <span>(<%= lucide_icon(@balance_series.trend.amount > 0 ? 'arrow-up' : 'arrow-down', class: "w-4 h-4 align-text-bottom inline") %> <%= @balance_series.trend.percent %>%)</span>
             <span class="text-gray-500"><%= trend_label(@period) %></span>
           </p>
         <% end %>
@@ -53,7 +53,7 @@
     </div>
     <div class="h-96 flex items-center justify-center text-2xl font-bold">
       <% if @balance_series %>
-        <div data-controller="line-chart" id="lineChart" class="w-full h-full" data-line-chart-series-value="<%= @balance_series[:series_data].to_json %>"></div>
+        <div data-controller="line-chart" id="lineChart" class="w-full h-full" data-line-chart-series-value="<%= @balance_series.serialize_for_d3_chart %>"></div>
       <% else %>
         <div class="w-full h-full flex items-center justify-center">
           <p class="text-gray-500">No data available for the selected period.</p>
