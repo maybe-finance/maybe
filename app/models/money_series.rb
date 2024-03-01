@@ -12,11 +12,12 @@ class MoneySeries
     def data
         [ nil, *@series ].each_cons(2).map do |previous, current|
             {
-                date: datum.date,
-                value: Money.from_amount(current.send(@accessor), datum.currency),
+                raw: current,
+                date: current.date,
+                value: Money.from_amount(current.send(@accessor), current.currency),
                 trend: Trend.new(
                     current: current.send(@accessor),
-                    previous: previous.send(@accessor),
+                    previous: previous&.send(@accessor),
                     type: @trend_type
                 )
             }
@@ -24,12 +25,18 @@ class MoneySeries
     end
 
     def trend
-        Trend.new(current: last, previous: first, type: @trend_type)
+        return Trend.new(current: 0, type: @trend_type) unless valid?
+
+        Trend.new(
+            current: @series.last.send(@accessor),
+            previous: @series.first&.send(@accessor),
+            type: @trend_type
+        )
     end
 
     def serialize_for_d3_chart
         {
-            series: data.map do |datum|
+            data: data.map do |datum|
                 {
                     date: datum[:date],
                     amount: datum[:value].amount,

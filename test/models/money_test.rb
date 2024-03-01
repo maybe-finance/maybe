@@ -1,7 +1,7 @@
 require "test_helper"
 
 class MoneyTest < ActiveSupport::TestCase
-    test "#unit returns the currency unit for a given currency code" do
+    test "#symbol returns the currency symbol for a given currency code" do
         assert_equal "$", Money.from_amount(0, "USD").symbol
         assert_equal "€", Money.from_amount(0, "EUR").symbol
     end

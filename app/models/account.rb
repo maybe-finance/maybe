@@ -37,7 +37,7 @@ class Account < ApplicationRecord
   def valuation_series
     MoneySeries.new(
       valuations.order(:date),
-      { trend_type: classification }
+      { trend_type: classification, amount_accessor: :value }
     )
   end
 

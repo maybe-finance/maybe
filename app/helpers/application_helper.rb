@@ -55,9 +55,11 @@ module ApplicationHelper
 
     bg_class, text_class, symbol, icon = case trend.direction
     when "up"
-      mode == :liability ? [ "bg-red-500/5", "text-red-500", "+", "arrow-up" ] : [ "bg-green-500/5", "text-green-500", "+", "arrow-up" ]
+      trend.type == :liability ? [ "bg-red-500/5", "text-red-500", "+", "arrow-up" ] : [ "bg-green-500/5", "text-green-500", "+", "arrow-up" ]
     when "down"
-      mode == :liability ? [ "bg-green-500/5", "text-green-500", "-", "arrow-down" ] : [ "bg-red-500/5", "text-red-500", "-", "arrow-down" ]
+      trend.type == :liability ? [ "bg-green-500/5", "text-green-500", "-", "arrow-down" ] : [ "bg-red-500/5", "text-red-500", "-", "arrow-down" ]
+    when "flat"
+      [ "bg-gray-500/5", "text-gray-500", "", "minus" ]
     else
       raise ArgumentError, "Invalid trend direction: #{trend.direction}"
     end
