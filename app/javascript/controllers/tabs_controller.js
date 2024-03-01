@@ -8,11 +8,17 @@ export default class extends Controller {
 
   connect() {
     this.updateClasses(this.defaultTabValue);
-    document.addEventListener("turbo:load", this.#turboHandler.bind(this));
+    document.addEventListener(
+      "turbo:load",
+      this.updateClasses.bind(this, this.defaultTabValue)
+    );
   }
 
   disconnect() {
-    document.removeEventListener("turbo:load", this.#turboHandler.bind(this));
+    document.removeEventListener(
+      "turbo:load",
+      this.updateClasses.bind(this, this.defaultTabValue)
+    );
   }
 
   select(event) {
@@ -34,9 +40,5 @@ export default class extends Controller {
         tab.classList.remove("hidden");
       }
     });
-  }
-
-  #turboHandler() {
-    this.updateClasses(this.defaultTabValue);
   }
 }

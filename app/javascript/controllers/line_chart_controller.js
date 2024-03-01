@@ -55,7 +55,7 @@ export default class extends Controller {
       },
     }));
 
-    const chartContainer = d3.select("#lineChart");
+    const chartContainer = d3.select(this.element);
 
     // Clear any existing chart
     chartContainer.selectAll("svg").remove();
