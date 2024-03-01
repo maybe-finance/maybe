@@ -41,6 +41,9 @@
 # Ignore Jetbrains IDEs
 .idea
 
+# Ignore VS Code
+.vscode
+
 # Ignore macOS specific files
 */.DS_Store
 .DS_Store

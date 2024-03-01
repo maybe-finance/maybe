@@ -11,6 +11,14 @@ namespace :demo_data do
 
     puts "Reset user: #{user.email} with family: #{family.name}"
 
+    expense_categories = {
+      car: Category.find_or_create_by(name: "Car", color: "#dbca9f", category_type: "expense", family:),
+      bills: Category.find_or_create_by(name: "Bills", color: "#a9d9ec", category_type: "expense", family:)
+    }
+
+    income_categories = {
+      salary: Category.find_or_create_by(name: "Salary", color: "#800080", category_type: "income", family:)
+    }
 
     checking = Account.find_or_create_by(name: "Demo Checking") do |a|
       a.family = family
@@ -21,16 +29,16 @@ namespace :demo_data do
     checking_transactions = [
       { date: Date.today - 84, amount: -3000, name: "Direct Deposit" },
       { date: Date.today - 70, amount: 1500, name: "Credit Card Payment" },
-      { date: Date.today - 70, amount: 200, name: "Utility Bill" },
+      { date: Date.today - 70, amount: 200, name: "Utility Bill", category: expense_categories[:bills] },
       { date: Date.today - 56, amount: -3000, name: "Direct Deposit" },
       { date: Date.today - 42, amount: 1500, name: "Credit Card Payment" },
-      { date: Date.today - 42, amount: 100, name: "Internet Bill" },
+      { date: Date.today - 42, amount: 100, name: "Internet Bill", category: expense_categories[:bills] },
       { date: Date.today - 28, amount: -3000, name: "Direct Deposit" },
       { date: Date.today - 28, amount: 1500, name: "Credit Card Payment" },
-      { date: Date.today - 28, amount: 50, name: "Mobile Bill" },
-      { date: Date.today - 14, amount: -3000, name: "Direct Deposit" },
+      { date: Date.today - 28, amount: 50, name: "Mobile Bill", category: expense_categories[:bills] },
+      { date: Date.today - 14, amount: -3000, name: "Direct Deposit", category: income_categories[:salary] },
       { date: Date.today - 14, amount: 1500, name: "Credit Card Payment" },
-      { date: Date.today - 14, amount: 200, name: "Car Loan Payment" },
+      { date: Date.today - 14, amount: 200, name: "Car Loan Payment", category: expense_categories[:car] },
       { date: Date.today - 7, amount: 150, name: "Insurance" },
       { date: Date.today - 2, amount: 100, name: "Gym Membership" }
     ]
