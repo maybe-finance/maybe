@@ -6,7 +6,7 @@
     <span class="<%= size == "lg" ? "text-xl" : "text-lg" %> font-medium"><%= format_currency(balance.amount, precision: 0, unit: '') %></span>
     <%- if balance.precision.positive? -%>
       <span class="text-gray-500">
-        <%= balance.separator %><%= balance.cents(precision: balance.precision) %>
+        <%= balance.separator %><%= balance.cents %>
       </span>
     <% end %>
   </p>
