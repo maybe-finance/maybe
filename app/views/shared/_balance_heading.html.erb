@@ -1,0 +1,25 @@
+<%# locals: (label:, period:, balance:, size: "lg")%>
+<div class="space-y-2">
+  <p class="text-sm text-gray-500"><%= label %></p>
+  <p class="text-gray-900 -space-x-0.5">
+    <span class="text-gray-500"><%= balance[:currency].unit %></span>
+    <span class="<%= size == "lg" ? "text-xl" : "text-lg" %> font-medium"><%= format_currency(balance[:value], precision: 0, unit: '') %></span>
+    <%- if balance[:currency].precision.positive? -%>
+      <span class="text-gray-500">
+        <%= balance[:currency].separator %><%= balance[:value].cents(precision: balance[:currency].precision) %>
+      </span>
+    <% end %>
+  </p>
+  <% if balance[:trend].nil? %>
+    <p class="text-sm text-gray-500">Data not available for the selected period</p>
+  <% elsif balance[:trend].direction == "flat" %>
+    <p class="text-sm text-gray-500">No change vs. prior period</p>
+  <% else %>
+    <% styles = trend_styles(balance[:trend], mode: balance[:classification]) %>
+    <p class="text-sm <%= styles[:text_class] %>">
+      <span><%= styles[:symbol] %><%= format_currency(balance[:trend].amount.abs, precision: balance[:currency].precision) %></span>
+      <span>(<%= lucide_icon(styles[:icon], class: "w-4 h-4 align-text-bottom inline") %><%= balance[:trend].percent %>%)</span>
+      <span class="text-gray-500"><%= period_label(period) %></span>
+    </p>
+  <% end %>
+</div>

@@ -1,5 +1,4 @@
 <%= turbo_stream_from @account %>
-<% balance_trend_styles = @balance_series.nil? ? {} : trend_styles(@balance_series[:trend], mode: @account.classification) %>
 <div class="space-y-4">
   <div class="flex justify-between items-center">
     <div class="flex items-center gap-3">
@@ -26,39 +25,22 @@
   <div class="bg-white shadow-xs rounded-xl border border-alpha-black-25 rounded-lg">
     <div class="p-4 flex justify-between">
       <div class="space-y-2">
-        <p class="text-sm text-gray-500">Total Value</p>
-        <%# TODO: Will need a better way to split a formatted monetary value into these 3 parts %>
-        <p class="text-gray-900">
-          <span class="text-gray-500"><%= @account.currency.unit %></span>
-          <span class="text-xl font-medium"><%= format_currency(@account.balance, precision: 0, unit: '') %></span>
-          <%- if @account.currency.precision.positive? -%>
-            <span class="text-gray-500"><%= @account.currency.separator %><%= @account.balance.cents(precision: @account.currency.precision) %></span>
-          <% end %>
-        </p>
-        <% if @balance_series.nil? %>
-          <p class="text-sm text-gray-500">Data not available for the selected period</p>
-        <% elsif @balance_series[:trend].amount == 0 %>
-          <p class="text-sm text-gray-500">No change vs. prior period</p>
-        <% else %>
-          <p class="text-sm <%= balance_trend_styles[:text_class] %>">
-            <span><%= balance_trend_styles[:symbol] %><%= number_to_currency(@balance_series[:trend].amount.abs, precision: 2) %></span>
-            <span>(<%= lucide_icon(@balance_series[:trend].amount > 0 ? 'arrow-up' : 'arrow-down', class: "w-4 h-4 align-text-bottom inline") %> <%= @balance_series[:trend].percent %>%)</span>
-            <span class="text-gray-500"><%= trend_label(@period) %></span>
-          </p>
-        <% end %>
+        <%= render partial: "shared/balance_heading", locals: { 
+            label: "Total Value", 
+            period: @period, 
+            balance: { 
+              currency: @account.currency, 
+              value: @account.balance, 
+              classification: @account.classification,
+              trend: @balance_series[:trend]
+            } 
+          } 
+        %>
       </div>
-      <%= form_with url: account_path(@account), method: :get, class: "flex items-center gap-4", html: { class: "" } do |f| %>
-        <%= f.select :period, options_for_select([['7D', 'last_7_days'], ['1M', 'last_30_days'], ["1Y", "last_365_days"], ['All', 'all']], selected: params[:period]), {}, { class: "block w-full border border-alpha-black-100 shadow-xs rounded-lg text-sm py-2 pr-8 pl-2 cursor-pointer", onchange: "this.form.submit();" } %>
-      <% end %>
+      <%= render partial: "shared/period_dropdown", locals: { period: @period, path: account_path(@account) } %>
     </div>
     <div class="h-96 flex items-center justify-center text-2xl font-bold">
-      <% if @balance_series %>
-        <div data-controller="line-chart" id="lineChart" class="w-full h-full" data-line-chart-series-value="<%= @balance_series[:series_data].to_json %>"></div>
-      <% else %>
-        <div class="w-full h-full flex items-center justify-center">
-          <p class="text-gray-500">No data available for the selected period.</p>
-        </div>
-      <% end %>
+      <%= render partial: "shared/line_chart", locals: { series: @balance_series } %>
     </div>
   </div>
   <div data-controller="tabs" data-tabs-active-class="bg-gray-100" data-tabs-default-tab-value="account-history-tab">
@@ -70,7 +52,7 @@
       <div data-tabs-target="tab" id="account-history-tab">
         <%= render partial: "accounts/account_history", locals: { account: @account, valuation_series: @valuation_series } %>
       </div>
-      <div data-tabs-target="tab" id="account-transactions-tab">
+      <div data-tabs-target="tab" id="account-transactions-tab" class="hidden">
         <%= render partial: "accounts/transactions", locals: { transactions: @account.transactions.order(date: :desc) } %>
       </div>
     </div>

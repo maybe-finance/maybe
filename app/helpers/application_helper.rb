@@ -50,14 +50,14 @@ module ApplicationHelper
 
   # Styles to use when displaying a change in value
   def trend_styles(trend, mode: :asset)
-    puts mode == :liability ? "it is a liability" : "it is an asset"
+    fallback = { bg_class: "bg-gray-500/5", text_class: "text-gray-500", symbol: "", icon: "minus" }
+    return fallback if trend.nil? || trend.direction == "flat"
+
     bg_class, text_class, symbol, icon = case trend.direction
     when "up"
       mode == :liability ? [ "bg-red-500/5", "text-red-500", "+", "arrow-up" ] : [ "bg-green-500/5", "text-green-500", "+", "arrow-up" ]
     when "down"
       mode == :liability ? [ "bg-green-500/5", "text-green-500", "-", "arrow-down" ] : [ "bg-red-500/5", "text-red-500", "-", "arrow-down" ]
-    when "flat"
-      [ "bg-gray-500/5", "text-gray-500", "", "minus" ]
     else
       raise ArgumentError, "Invalid trend direction: #{trend.direction}"
     end
@@ -65,7 +65,7 @@ module ApplicationHelper
     { bg_class: bg_class, text_class: text_class, symbol: symbol, icon: icon }
   end
 
-  def trend_label(period)
+  def period_label(period)
     return "since account creation" if period.date_range.nil?
     start_date, end_date = period.date_range.first, period.date_range.last
 
