@@ -7,27 +7,38 @@ export default class extends Controller {
   static values = { defaultTab: String };
 
   connect() {
-    const defaultTab = this.defaultTabValue;
-    this.tabTargets.forEach((tab) => {
-      if (tab.id === defaultTab) {
-        tab.hidden = false;
-        this.btnTargets
-          .find((btn) => btn.dataset.id === defaultTab)
-          .classList.add(...this.activeClasses);
-      } else {
-        tab.hidden = true;
-      }
-    });
+    this.updateClasses(this.defaultTabValue);
+    document.addEventListener(
+      "turbo:load",
+      this.updateClasses.bind(this, this.defaultTabValue)
+    );
+  }
+
+  disconnect() {
+    document.removeEventListener(
+      "turbo:load",
+      this.updateClasses.bind(this, this.defaultTabValue)
+    );
   }
 
   select(event) {
-    const selectedTabId = event.currentTarget.dataset.id;
-    this.tabTargets.forEach((tab) => (tab.hidden = tab.id !== selectedTabId));
-    this.btnTargets.forEach((btn) =>
-      btn.classList.toggle(
-        ...this.activeClasses,
-        btn.dataset.id === selectedTabId
-      )
-    );
+    this.updateClasses(event.target.dataset.id);
+  }
+
+  updateClasses(selectedId) {
+    this.btnTargets.forEach((btn) => btn.classList.remove(this.activeClass));
+    this.tabTargets.forEach((tab) => tab.classList.add("hidden"));
+
+    this.btnTargets.forEach((btn) => {
+      if (btn.dataset.id === selectedId) {
+        btn.classList.add(this.activeClass);
+      }
+    });
+
+    this.tabTargets.forEach((tab) => {
+      if (tab.id === selectedId) {
+        tab.classList.remove("hidden");
+      }
+    });
   }
 }
