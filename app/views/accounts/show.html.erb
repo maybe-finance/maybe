@@ -1,5 +1,6 @@
 <%= turbo_stream_from @account %>
 <% balance_trend_styles = @balance_series.nil? ? {} : trend_styles(@balance_series[:trend], mode: @account.classification) %>
+<% balance = Money.from_amount(@account.balance, @account.currency) %>
 <div class="space-y-4">
   <div class="flex justify-between items-center">
     <div class="flex items-center gap-3">
@@ -11,7 +12,7 @@
     <div class="flex items-center gap-3">
       <div class="relative cursor-not-allowed">
         <div class="flex items-center gap-2 px-3 py-2">
-          <span class="text-gray-900"><%= @account.currency %> <%= @account.currency.unit %></span>
+          <span class="text-gray-900"><%= balance.currency %> <%= balance.symbol %></span>
           <%= lucide_icon("chevron-down", class: "w-5 h-5 text-gray-500") %>
         </div>
       </div>
@@ -27,12 +28,11 @@
     <div class="p-4 flex justify-between">
       <div class="space-y-2">
         <p class="text-sm text-gray-500">Total Value</p>
-        <%# TODO: Will need a better way to split a formatted monetary value into these 3 parts %>
         <p class="text-gray-900">
-          <span class="text-gray-500"><%= @account.currency.unit %></span>
-          <span class="text-xl font-medium"><%= format_currency(@account.balance, precision: 0, unit: '') %></span>
-          <%- if @account.currency.precision.positive? -%>
-            <span class="text-gray-500"><%= @account.currency.separator %><%= @account.balance.cents(precision: @account.currency.precision) %></span>
+          <span class="text-gray-500"><%= balance.symbol %></span>
+          <span class="text-xl font-medium"><%= format_currency(balance.amount, precision: 0, unit: '') %></span>
+          <%- if balance.precision.positive? -%>
+            <span class="text-gray-500"><%= balance.separator %><%= balance.cents %></span>
           <% end %>
         </p>
         <% if @balance_series.nil? %>
