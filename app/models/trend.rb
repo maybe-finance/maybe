@@ -2,16 +2,16 @@ class Trend
   attr_reader :current, :previous, :type
 
   def initialize(current:, previous: nil, type: :asset)
-      @current = current
-      @previous = previous
-      @type = type # :asset means positive trend is good, :liability means negative trend is good
+    @current = current
+    @previous = previous
+    @type = type # :asset means positive trend is good, :liability means negative trend is good
   end
 
   def direction
-      return "flat" unless @previous
-      return "up" if @current > @previous
-      return "down" if @current < @previous
-      "flat"
+    return "flat" unless @previous
+    return "up" if @current > @previous
+    return "down" if @current < @previous
+    "flat"
   end
 
   def amount
