@@ -25,9 +25,11 @@ class MoneySeries
     end
 
     def trend
+        return Trend.new(current: 0, type: @trend_type) unless valid?
+
         Trend.new(
             current: @series.last.send(@accessor),
-            previous: @series.first.send(@accessor),
+            previous: @series.first&.send(@accessor),
             type: @trend_type
         )
     end

@@ -1,5 +1,5 @@
 <%= turbo_stream_from @account %>
-<% balance_trend_styles = @balance_series.nil? ? {} : trend_styles(@balance_series.trend, mode: @account.classification) %>
+<% balance_trend_styles = trend_styles(@balance_series.trend, mode: @account.classification) %>
 <% balance = Money.from_amount(@account.balance, @account.currency) %>
 <div class="space-y-4">
   <div class="flex justify-between items-center">
