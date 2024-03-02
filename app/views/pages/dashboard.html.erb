@@ -26,12 +26,8 @@
           <%= render partial: "shared/balance_heading", locals: { 
                 label: "Assets",
                 period: @period,
-                balance: { 
-                    currency: Current.family.currency, 
-                    value: Current.family.assets, 
-                    classification: :asset,
-                    trend: @asset_series[:trend] 
-                },
+                balance: Money.from_amount(Current.family.assets, Current.family.currency),
+                trend: @asset_series.trend 
             } %>
         </div>
         <div 
@@ -46,14 +42,10 @@
         <div class="space-y-2 grow">
           <%= render partial: "shared/balance_heading", locals: { 
                 label: "Liabilities",
+                period: @period,
                 size: "md",
-                balance: {
-                    currency: Current.family.currency, 
-                    value: 1000, 
-                    classification: :liability,
-                    trend: @liability_series[:trend] 
-                },
-                period: @period
+                balance: Money.from_amount(Current.family.liabilities, Current.family.currency),
+                trend: @liability_series.trend
             } %>
         </div>
         <div 
