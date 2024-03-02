@@ -31,7 +31,7 @@ class FamilyTest < ActiveSupport::TestCase
     end
   end
 
-  test "should calculate total assets" do 
+  test "should calculate total assets" do
     assert_equal BigDecimal("25550"), @family.assets
   end
 
@@ -39,41 +39,41 @@ class FamilyTest < ActiveSupport::TestCase
     assert_equal BigDecimal("1000"), @family.liabilities
   end
 
-  test "should calculate net worth" do 
+  test "should calculate net worth" do
     assert_equal BigDecimal("24550"), @family.net_worth
   end
 
-  test "calculates asset series" do 
+  test "calculates asset series" do
     # Sum of expected balances for all asset accounts in balance_calculator_test.rb
     expected_balances = [
       25650, 26135, 26135, 26135, 26135, 25385, 25385, 25385, 26460, 26460,
       26460, 26460, 24460, 24460, 24460, 24440, 24440, 24440, 25210, 25210,
       25210, 25210, 25210, 25210, 25210, 25400, 25250, 26050, 26050, 26050,
-      25550,
+      25550
     ].map(&:to_d)
 
     assert_equal expected_balances, @family.asset_series.data.map { |b| b[:value].amount }
   end
 
-  test "calculates liability series" do 
+  test "calculates liability series" do
     # Sum of expected balances for all liability accounts in balance_calculator_test.rb
     expected_balances = [
       1040, 940, 940, 940, 940, 940, 940, 940, 940, 940,
       940, 940, 940, 940, 940, 960, 960, 960, 990, 990,
       990, 990, 990, 990, 990, 1000, 1000, 1000, 1000, 1000,
-      1000,
+      1000
     ].map(&:to_d)
 
     assert_equal expected_balances, @family.liability_series.data.map { |b| b[:value].amount }
   end
 
-  test "calculates net worth" do 
+  test "calculates net worth" do
     # Net difference between asset and liability series above
     expected_balances = [
       24610, 25195, 25195, 25195, 25195, 24445, 24445, 24445, 25520, 25520,
       25520, 25520, 23520, 23520, 23520, 23480, 23480, 23480, 24220, 24220,
       24220, 24220, 24220, 24220, 24220, 24400, 24250, 25050, 25050, 25050,
-      24550,
+      24550
     ].map(&:to_d)
 
     assert_equal expected_balances, @family.net_worth_series.data.map { |b| b[:value].amount }
