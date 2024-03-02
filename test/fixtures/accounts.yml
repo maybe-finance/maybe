@@ -1,29 +1,27 @@
-# No transactions, no valuations, just a generic account
-generic:
-  family: dylan_family
-  name: No history, generic account
-  balance: 1200
-
 # Account with only valuations
 collectable:
   family: dylan_family
   name: Collectable Account
   balance: 550
+  accountable_type: Account::OtherAsset
 
 # Account with only transactions
 checking:
   family: dylan_family
   name: Checking Account
   balance: 5000
+  accountable_type: Account::Depository
 
 # Account with both transactions and valuations
 savings_with_valuation_overrides:
   family: dylan_family
   name: Savings account with valuation overrides
   balance: 20000
+  accountable_type: Account::Depository
 
 # Liability account
 credit_card:
   family: dylan_family
   name: Credit Card
   balance: 1000
+  accountable_type: Account::Credit

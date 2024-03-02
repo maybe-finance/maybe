@@ -3,7 +3,7 @@ require "test_helper"
 class AccountsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
-    @account = accounts(:generic)
+    @account = accounts(:checking)
   end
 
   test "new" do

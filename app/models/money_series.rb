@@ -1,6 +1,6 @@
 class MoneySeries
     def initialize(series, options = {})
-        @trend_type = options[:trend_type] || :asset # Defines whether a positive trend is good or bad
+        @trend_type = options[:trend_type] || "asset" # Defines whether a positive trend is good or bad
         @accessor = options[:amount_accessor] || :balance
         @series = series
     end

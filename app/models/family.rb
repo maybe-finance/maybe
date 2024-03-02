@@ -4,76 +4,64 @@ class Family < ApplicationRecord
   has_many :transactions, through: :accounts
 
   def net_worth
-    assets - liabilities
+    accounts.sum("CASE WHEN classification = 'asset' THEN balance ELSE -balance END")
   end
 
   def assets
-    accounts.reduce(0) do |sum, account|
-      sum += account.balance if account.classification == :asset
-      sum
-    end
+    accounts.where(classification: 'asset').sum(:balance)
   end
 
   def liabilities
-    accounts.reduce(0) do |sum, account|
-      sum += account.balance if account.classification == :liability
-      sum
+    accounts.where(classification: 'liability').sum(:balance)
+  end
+
+  def net_worth_series(period = nil)
+    query = accounts.joins(:balances)
+      .select("account_balances.date, SUM(CASE WHEN accounts.classification = 'asset' THEN account_balances.balance ELSE -account_balances.balance END) AS balance, 'USD' as currency")
+      .group("account_balances.date")
+      .order("account_balances.date ASC")
+    
+    if period && period.date_range
+      query = query.where("account_balances.date BETWEEN ? AND ?", period.date_range.begin, period.date_range.end)
     end
-  end
-
-  # TODO: Replace test data with calculation
-  def net_worth_series(period)
-    series_data = accounts.includes(:balances).each_with_object({}) do |account, hash|
-      account.balances.in_period(period).each do |balance|
-        hash[balance.date] ||= 0
-        if account.classification == :asset
-          hash[balance.date] += balance.balance
-        elsif account.classification == :liability
-          hash[balance.date] -= balance.balance
-        end
-      end
-    end.map do |date, balance|
-      { date: date, balance: balance }
-    end.sort_by { |data| data[:date] }
-
 
     MoneySeries.new(
-      series_data,
-      { trend_type: :asset }
+      query,
+      { trend_type: 'asset' }
     )
   end
 
-  def asset_series(period)
-    series_data = accounts.includes(:balances).each_with_object({}) do |account, hash|
-      next unless account.classification == :asset
-      account.balances.in_period(period).each do |balance|
-        hash[balance.date] ||= 0
-        hash[balance.date] += balance.balance
-      end
-    end.map do |date, balance|
-      { date: date, value: balance }
-    end.sort_by { |data| data[:date] }
+  def asset_series(period = nil)
+    query = accounts.joins(:balances)
+      .select("account_balances.date, SUM(account_balances.balance) AS balance, 'asset' AS classification, 'USD' AS currency")
+      .group("account_balances.date")
+      .order("account_balances.date ASC")
+      .where(classification: 'asset')
+  
+    if period && period.date_range
+      query = query.where("account_balances.date BETWEEN ? AND ?", period.date_range.begin, period.date_range.end)
+    end
 
     MoneySeries.new(
-      series_data,
-      { trend_type: :asset }
+      query,
+      { trend_type: 'asset' }
     )
   end
 
-  def liability_series(period)
-    series_data = accounts.includes(:balances).each_with_object({}) do |account, hash|
-      next unless account.classification == :liability
-      account.balances.in_period(period).each do |balance|
-        hash[balance.date] ||= 0
-        hash[balance.date] -= balance.balance
-      end
-    end.map do |date, balance|
-      { date: date, value: balance }
-    end.sort_by { |data| data[:date] }
+  def liability_series(period = nil)
+    query = accounts.joins(:balances)
+      .select("account_balances.date, SUM(account_balances.balance) AS balance, 'liability' AS classification, 'USD' AS currency")
+      .group("account_balances.date")
+      .order("account_balances.date ASC")
+      .where(classification: 'liability')
+  
+    if period && period.date_range
+      query = query.where("account_balances.date BETWEEN ? AND ?", period.date_range.begin, period.date_range.end)
+    end
 
     MoneySeries.new(
-      series_data,
-      { trend_type: :liability }
+      query,
+      { trend_type: 'liability' }
     )
   end
 end
