@@ -22,7 +22,7 @@ class Account::BalanceCalculator
             current_balance = valuation.value
         else
             current_day_net_transaction_flows = transactions.select { |t| t.date == date }.sum(&:amount)
-            current_day_net_transaction_flows *= -1 if @account.classification == "liability" 
+            current_day_net_transaction_flows *= -1 if @account.classification == "liability"
             current_balance = prior_balance - current_day_net_transaction_flows
         end
 
