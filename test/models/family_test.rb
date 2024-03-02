@@ -18,8 +18,9 @@ class FamilyTest < ActiveSupport::TestCase
     assert @family.accounts.size > 0
   end
 
-  test "should have many transaction categories" do
-    assert @dylan_family.categories.size > 0
+  test "should have default transaction categories and others" do
+    assert @dylan_family.categories.where(is_default: true).size == 2
+    assert @dylan_family.categories.size > 2
   end
 
   test "should destroy dependent users" do
@@ -171,6 +172,12 @@ class FamilyTest < ActiveSupport::TestCase
       assert_equal expected_values[:end_balance], liability_groups[type][:end_balance]
       assert_equal expected_values[:start_balance], liability_groups[type][:start_balance]
       assert_equal expected_values[:allocation], liability_groups[type][:allocation]
+    end
+  end
+
+  test "should destroy dependent categories" do
+    assert_difference("Category.count", -@dylan_family.categories.count) do
+      @dylan_family.destroy
     end
   end
 end

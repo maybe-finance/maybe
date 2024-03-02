@@ -13,7 +13,7 @@ class Transaction < ApplicationRecord
 
     def assign_default_category
       if category.blank?
-        category_type = self.amount < 0 ? "expense" : "income"
+        category_type = self.amount > 0 ? :expense : :income
         self.category = self.account.family.categories.find_by(category_type:, is_default: true)
       end
     end

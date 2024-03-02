@@ -71,7 +71,7 @@ class Family < ApplicationRecord
   private
 
     def create_default_categories
-      Category.create(name: "Other income", color: "#abbd9a", category_type: "income", is_default: true, family: self)
-      Category.create(name: "Other expense", color: "#942c3c", category_type: "expense", is_default: true, family: self)
+      Category.create(name: I18n.t("category.default_income_category"), color: "#abbd9a", category_type: :income, is_default: true, family: self)
+      Category.create(name: I18n.t("category.default_expense_category"), color: "#942c3c", category_type: :expense, is_default: true, family: self)
     end
 end
