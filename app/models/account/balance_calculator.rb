@@ -11,7 +11,7 @@ class Account::BalanceCalculator
       oldest_entry = [ valuations.first, transactions.first ].compact.min_by(&:date)
 
       net_transaction_flows = transactions.sum(&:amount)
-      net_transaction_flows *= -1 if @account.classification == :liability
+      net_transaction_flows *= -1 if @account.classification == "liability"
       implied_start_balance = oldest_entry.is_a?(Valuation) ? oldest_entry.value : @account.balance + net_transaction_flows
 
       prior_balance = implied_start_balance
@@ -22,7 +22,7 @@ class Account::BalanceCalculator
             current_balance = valuation.value
         else
             current_day_net_transaction_flows = transactions.select { |t| t.date == date }.sum(&:amount)
-            current_day_net_transaction_flows *= -1 if @account.classification == :liability
+            current_day_net_transaction_flows *= -1 if @account.classification == "liability" 
             current_balance = prior_balance - current_day_net_transaction_flows
         end
 

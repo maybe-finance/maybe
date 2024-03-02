@@ -3,6 +3,11 @@ require "test_helper"
 class FamilyTest < ActiveSupport::TestCase
   def setup
     @family = families(:dylan_family)
+
+    @family.accounts.each do |account|
+      account.accountable = account.classification == "asset" ? account_other_assets(:one) : account_other_liabilities(:one)
+      account.sync
+    end
   end
 
   test "should have many users" do
@@ -39,19 +44,38 @@ class FamilyTest < ActiveSupport::TestCase
   end
 
   test "calculates asset series" do 
-    @family.accounts.each do |account|
-      account.sync
-    end
-
     # Sum of expected balances for all asset accounts in balance_calculator_test.rb
     expected_balances = [
       25650, 26135, 26135, 26135, 26135, 25385, 25385, 25385, 26460, 26460,
       26460, 26460, 24460, 24460, 24460, 24440, 24440, 24440, 25210, 25210,
       25210, 25210, 25210, 25210, 25210, 25400, 25250, 26050, 26050, 26050,
-      26000,
+      25550,
     ].map(&:to_d)
 
-    assert_equal expected_balances, @family.asset_series.map { |b| b[:balance] }
+    assert_equal expected_balances, @family.asset_series.data.map { |b| b[:value].amount }
   end
 
+  test "calculates liability series" do 
+    # Sum of expected balances for all liability accounts in balance_calculator_test.rb
+    expected_balances = [
+      1040, 940, 940, 940, 940, 940, 940, 940, 940, 940,
+      940, 940, 940, 940, 940, 960, 960, 960, 990, 990,
+      990, 990, 990, 990, 990, 1000, 1000, 1000, 1000, 1000,
+      1000,
+    ].map(&:to_d)
+
+    assert_equal expected_balances, @family.liability_series.data.map { |b| b[:value].amount }
+  end
+
+  test "calculates net worth" do 
+    # Net difference between asset and liability series above
+    expected_balances = [
+      24610, 25195, 25195, 25195, 25195, 24445, 24445, 24445, 25520, 25520,
+      25520, 25520, 23520, 23520, 23520, 23480, 23480, 23480, 24220, 24220,
+      24220, 24220, 24220, 24220, 24220, 24400, 24250, 25050, 25050, 25050,
+      24550,
+    ].map(&:to_d)
+
+    assert_equal expected_balances, @family.net_worth_series.data.map { |b| b[:value].amount }
+  end
 end

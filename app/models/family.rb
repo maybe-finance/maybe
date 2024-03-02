@@ -17,9 +17,9 @@ class Family < ApplicationRecord
 
   def net_worth_series(period = nil)
     query = accounts.joins(:balances)
-                    .select("account_balances.date, SUM(CASE WHEN accounts.classification = 'asset' THEN account_balances.balance ELSE -account_balances.balance END) AS daily_net_worth")
-                    .group("account_balances.date")
-                    .order("account_balances.date ASC")
+      .select("account_balances.date, SUM(CASE WHEN accounts.classification = 'asset' THEN account_balances.balance ELSE -account_balances.balance END) AS balance, 'USD' as currency")
+      .group("account_balances.date")
+      .order("account_balances.date ASC")
     
     if period && period.date_range
       query = query.where("account_balances.date BETWEEN ? AND ?", period.date_range.begin, period.date_range.end)
@@ -33,7 +33,7 @@ class Family < ApplicationRecord
 
   def asset_series(period = nil)
     query = accounts.joins(:balances)
-      .select("account_balances.date, SUM(account_balances.balance) AS balance, 'asset' AS classification")
+      .select("account_balances.date, SUM(account_balances.balance) AS balance, 'asset' AS classification, 'USD' AS currency")
       .group("account_balances.date")
       .order("account_balances.date ASC")
       .where(classification: 'asset')
@@ -50,12 +50,15 @@ class Family < ApplicationRecord
 
   def liability_series(period = nil)
     query = accounts.joins(:balances)
-      .select("account_balances.date, SUM(account_balances.balance) AS daily_liabilities")
+      .select("account_balances.date, SUM(account_balances.balance) AS balance, 'liability' AS classification, 'USD' AS currency")
       .group("account_balances.date")
       .order("account_balances.date ASC")
       .where(classification: 'liability')
-    query = query.where("account_balances.date BETWEEN ? AND ?", period.date_range.begin, period.date_range.end) if period
-    
+  
+    if period && period.date_range
+      query = query.where("account_balances.date BETWEEN ? AND ?", period.date_range.begin, period.date_range.end)
+    end
+
     MoneySeries.new(
       query,
       { trend_type: 'liability' }
