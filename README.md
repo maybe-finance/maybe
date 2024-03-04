@@ -47,7 +47,7 @@ For further instructions, see guides below.
 
 If you'd like multi-currency support, there are a few extra steps to follow.
 
-1. Sign up for an API key at [Open Exchange Rates](https://openexchangerates.org/signup). For now, you'll need the Developer plan, which is $12/mo.
+1. Sign up for an API key at [Synth](https://synthfinance.com). It's a Maybe product and the free plan is sufficient for multi-currency support.
 2. Add your API key to your `.env` file.
 3. Set the currencies you'd like to support in the `.env` file.
 4. Run `rake currencies:seed`
