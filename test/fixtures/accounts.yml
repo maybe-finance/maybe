@@ -4,6 +4,7 @@ collectable:
   name: Collectable Account
   balance: 550
   accountable_type: Account::OtherAsset
+  accountable_id: "123e4567-e89b-12d3-a456-426614174002"
 
 # Account with only transactions
 checking:
@@ -11,6 +12,7 @@ checking:
   name: Checking Account
   balance: 5000
   accountable_type: Account::Depository
+  accountable_id: "123e4567-e89b-12d3-a456-426614174000"
 
 # Account with both transactions and valuations
 savings_with_valuation_overrides:
@@ -18,6 +20,7 @@ savings_with_valuation_overrides:
   name: Savings account with valuation overrides
   balance: 20000
   accountable_type: Account::Depository
+  accountable_id: "123e4567-e89b-12d3-a456-426614174001"
 
 # Liability account
 credit_card:
@@ -25,3 +28,4 @@ credit_card:
   name: Credit Card
   balance: 1000
   accountable_type: Account::Credit
+  accountable_id: "123e4567-e89b-12d3-a456-426614174003"

@@ -5,7 +5,6 @@ class FamilyTest < ActiveSupport::TestCase
     @family = families(:dylan_family)
 
     @family.accounts.each do |account|
-      account.accountable = account.classification == "asset" ? account_other_assets(:one) : account_other_liabilities(:one)
       account.sync
     end
   end
@@ -77,5 +76,44 @@ class FamilyTest < ActiveSupport::TestCase
     ].map(&:to_d)
 
     assert_equal expected_balances, @family.net_worth_series.data.map { |b| b[:value].amount }
+  end
+
+  test "calculates balances by type" do
+    result = @family.balances_by_type
+
+    assets_result = result["asset"].map { |a| a.except(:trend) }
+    liabilities_result = result["liability"].map { |a| a.except(:trend) }
+
+    expected_assets = [
+      { accountable_type: "Account::Depository", current: BigDecimal("25000"), previous: BigDecimal("25250") },
+      { accountable_type: "Account::OtherAsset", current: BigDecimal("550"), previous: BigDecimal("400") }
+    ]
+
+    expected_liabilities = [
+      { accountable_type: "Account::Credit", current: BigDecimal("1000"), previous: BigDecimal("1040") }
+    ]
+
+    assert_equal expected_assets, assets_result
+    assert_equal expected_liabilities, liabilities_result
+  end
+
+  test "calculates balances by type with date range filter" do
+    period = Period.find_by_name("last_7_days")
+    result = @family.balances_by_type(period)
+
+    assets_result = result["asset"].map { |a| a.except(:trend) }
+    liabilities_result = result["liability"].map { |a| a.except(:trend) }
+
+    expected_assets = [
+      { accountable_type: "Account::Depository", current: BigDecimal("25000"), previous: BigDecimal("24510") },
+      { accountable_type: "Account::OtherAsset", current: BigDecimal("550"), previous: BigDecimal("700") }
+    ]
+
+    expected_liabilities = [
+      { accountable_type: "Account::Credit", current: BigDecimal("1000"), previous: BigDecimal("990") }
+    ]
+
+    assert_equal expected_assets, assets_result
+    assert_equal expected_liabilities, liabilities_result
   end
 end
