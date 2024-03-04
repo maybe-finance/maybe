@@ -9,23 +9,7 @@ class Account < ApplicationRecord
 
   delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
 
-  delegate :type_name, to: :accountable
   before_create :check_currency
-
-  def classification
-    classifications = {
-      "Account::Depository" => :asset,
-      "Account::Investment" => :asset,
-      "Account::Property" => :asset,
-      "Account::Vehicle" => :asset,
-      "Account::OtherAsset" => :asset,
-      "Account::Loan" => :liability,
-      "Account::Credit" => :liability,
-      "Account::OtherLiability" => :liability
-    }
-
-    classifications[accountable_type]
-  end
 
   def balance_series(period)
     MoneySeries.new(

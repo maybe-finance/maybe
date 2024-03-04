@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_02_27_142457) do
+ActiveRecord::Schema[7.2].define(version: 2024_03_02_145715) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -79,6 +79,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_02_27_142457) do
     t.decimal "converted_balance", precision: 19, scale: 4, default: "0.0"
     t.string "converted_currency", default: "USD"
     t.string "status", default: "OK"
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Account::Loan'::character varying, 'Account::Credit'::character varying, 'Account::OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id"], name: "index_accounts_on_family_id"
   end
