@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: 2abee307fe622939f005e9dd9a6925df0dd7ec4c
+  revision: db30dd6fe71341ac132bb1e850bd4df2596a2803
   branch: main
   specs:
     actioncable (7.2.0.alpha)
@@ -213,7 +213,7 @@ GEM
       net-imap
       net-pop
       net-smtp
-    marcel (1.0.2)
+    marcel (1.0.4)
     matrix (0.4.2)
     mini_mime (1.1.5)
     minitest (5.21.2)
@@ -246,7 +246,7 @@ GEM
     parser (3.3.0.5)
       ast (~> 2.4.1)
       racc
-    pg (1.5.5)
+    pg (1.5.6)
     prism (0.24.0)
     propshaft (0.8.0)
       actionpack (>= 7.0.0)
