@@ -11,20 +11,6 @@ class Account < ApplicationRecord
 
   before_create :check_currency
 
-  def balance_series(period)
-    MoneySeries.new(
-      balances.in_period(period).order(:date),
-      { trend_type: classification }
-    )
-  end
-
-  def valuation_series
-    MoneySeries.new(
-      valuations.order(:date),
-      { trend_type: classification, amount_accessor: :value }
-    )
-  end
-
   def check_currency
     if self.currency == self.family.currency
       self.converted_balance = self.balance

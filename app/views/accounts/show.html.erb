@@ -47,7 +47,7 @@
     </div>
     <div class="min-h-[800px]">
       <div data-tabs-target="tab" id="account-history-tab">
-        <%= render partial: "accounts/account_history", locals: { account: @account } %>
+        <%= render partial: "accounts/account_history", locals: { account: @account, valuations: @valuation_series } %>
       </div>
       <div data-tabs-target="tab" id="account-transactions-tab" class="hidden">
         <%= render partial: "accounts/transactions", locals: { transactions: @account.transactions.order(date: :desc) } %>

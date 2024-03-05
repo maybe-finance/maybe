@@ -22,4 +22,10 @@ class Period
     ]
 
     INDEX = BUILTIN.index_by(&:name)
+
+    BUILTIN.each do |period|
+        define_singleton_method(period.name) do
+            period
+        end
+    end
 end

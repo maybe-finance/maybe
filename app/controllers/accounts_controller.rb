@@ -11,8 +11,8 @@ class AccountsController < ApplicationController
 
   def show
     @account = Current.family.accounts.find(params[:id])
-    @balance_series = @account.balance_series(@period)
-    @valuation_series = @account.valuation_series
+    @balance_series = @account.balances.to_series(@account, @period)
+    @valuation_series = @account.valuations.to_series(@account)
   end
 
   def create
