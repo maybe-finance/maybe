@@ -17,6 +17,11 @@ class Account < ApplicationRecord
     Trend.new(current: last.balance, previous: first.balance, type: classification)
   end
 
+  def self.by_provider
+    # TODO: When 3rd party providers are supported, dynamically load all providers and their accounts
+    [ { name: "Manual accounts", accounts: all.order(balance: :desc).group_by(&:accountable_type) } ]
+  end
+
   # TODO: We will need a better way to encapsulate large queries & transformation logic, but leaving all in one spot until
   # we have a better understanding of the requirements
   def self.by_group(period = Period.all)

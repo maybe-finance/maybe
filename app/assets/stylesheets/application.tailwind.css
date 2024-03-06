@@ -49,6 +49,10 @@
   .form-field__submit {
     @apply w-full p-3 text-center text-white bg-black rounded-lg hover:bg-gray-700;
   }
+
+  input:checked + label + .toggle-switch-dot {
+    transform: translateX(100%);
+  }
 }
 
 /* Small, single purpose classes that should take precedence over other styles */

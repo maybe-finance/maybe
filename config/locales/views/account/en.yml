@@ -1,10 +1,12 @@
 ---
 en:
   accounts:
+    update:
+      success: Account updated successfully
     create:
       success: New account created successfully
     index:
-      title: Cash
+      new_account: New account
     new:
       name:
         label: Account name

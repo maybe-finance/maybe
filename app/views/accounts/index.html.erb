@@ -1,17 +1,66 @@
-
-<h2 class="text-2xl font-semibold font-display"><%= t('.title')%></h2>
-<h3 class="mt-1 mb-4 text-sm text-gray-500"><%#= number_to_currency Current.family.cash_balance %></h3>
-
-<% Current.family.accounts.each do |account| %>
-    <div class="flex flex-row items-center justify-between px-3 py-3 mb-2 bg-white shadow-sm rounded-xl">
-      <div class="flex items-center w-1/3 text-sm">
-        <%= account.name %>
-      </div>
-      <div class="flex items-center w-1/3 text-sm">
-        <%= to_accountable_title(account.accountable) %>
-      </div>
-      <p class="flex w-1/3 text-sm text-right">
-        <span class="block mb-1"><%= format_currency account.converted_balance %></span>
-      </p>
-    </div>
-<% end %>
+<div class="space-y-4">
+  <div class="flex items-center justify-between">
+    <h1 class="text-xl font-medium text-gray-900">Accounts</h1>
+    <%= link_to new_account_path, class: "flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2", data: { turbo_frame: "modal" } do %>
+      <%= lucide_icon("plus", class: "w-5 h-5") %>
+      <span><%= t('.new_account') %></span>
+    <% end %>
+  </div>
+  <div>
+    <% Current.family.accounts.by_provider.each do |item| %>
+      <details class="bg-white group p-4 border border-alpha-black-25 shadow-xs rounded-xl">
+        <summary class="flex items-center gap-2">
+          <%= lucide_icon("chevron-down", class: "hidden group-open:block w-5 h-5 text-gray-500") %>
+          <%= lucide_icon("chevron-right", class: "group-open:hidden w-5 h-5 text-gray-500") %>
+          <% if item[:name] == "Manual accounts" %>
+            <div class="flex items-center justify-center h-8 w-8 rounded-full bg-black/5">
+              <%= lucide_icon("folder-pen", class: "w-5 h-5 text-gray-500") %>
+            </div>
+          <% end %>
+          <span class="text-sm font-medium text-gray-900">
+            <%= item[:name] %>
+          </span>
+        </summary>
+        <div class="space-y-4 mt-4">
+          <% item[:accounts].each do |group, accounts| %>
+            <div class="bg-gray-25 p-1 rounded-xl">
+              <div class="flex items-center px-4 py-2 text-xs font-medium text-gray-500">
+                <p><%= to_accountable_title(Accountable.from_type(group)) %></p>
+                <span class="text-gray-400 mx-2">&middot;</span>
+                <p><%= accounts.count %></p>
+                <p class="ml-auto"><%= format_currency accounts.sum(&:balance) %></p>
+              </div>
+              <div class="bg-white">
+                <% accounts.each do |account| %>
+                  <div class="p-4 flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 flex items-center justify-center rounded-full text-xs font-medium <%= account.is_active ? "bg-blue-500/10 text-blue-500" : "bg-gray-500/10 text-gray-500" %>">
+                        <%= account.name[0].upcase %>
+                      </div>
+                      <p class="text-sm font-medium <%= account.is_active ? "text-gray-900" : "text-gray-400" %>">
+                        <%= account.name %>
+                      </p>
+                    </div>
+                    <div class="flex items-center gap-8">
+                      <p class="text-sm font-medium <%= account.is_active ? "text-gray-900" : "text-gray-400" %>">
+                        <%= format_currency account.balance %>
+                      </p>
+                      <%= turbo_frame_tag "toggle_form_#{account.id}" do %>
+                        <%= form_with model: account, method: :patch, local: true, html: { class: "flex items-center" } do |form| %>
+                          <div class="relative inline-block select-none">
+                            <%= form.check_box :is_active, class: "sr-only peer", id: "is_active_#{account.id}", onchange: "this.form.submit();" %>
+                            <label for="is_active_<%= account.id %>" class="block bg-gray-100 w-9 h-5 rounded-full cursor-pointer after:content-[''] after:block after:absolute after:top-0.5 after:left-0.5 after:bg-white after:w-4 after:h-4 after:rounded-full after:transition-transform after:duration-300 after:ease-in-out peer-checked:bg-green-600 peer-checked:after:translate-x-4"></label>
+                          </div>
+                        <% end %>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </details>
+    <% end %>
+  </div>
+</div>
