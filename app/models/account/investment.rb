@@ -10,6 +10,7 @@ class Account::Investment < ApplicationRecord
     [ "Health Savings Account", "hsa" ],
     [ "Mutual Fund", "mutual_fund" ],
     [ "Roth IRA", "roth_ira" ],
-    [ "Roth 401k", "roth_401k" ]
+    [ "Roth 401k", "roth_401k" ],
+    [ "Angel", "angel" ]
   ].freeze
 end
