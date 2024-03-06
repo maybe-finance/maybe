@@ -11,14 +11,7 @@ namespace :demo_data do
 
     puts "Reset user: #{user.email} with family: #{family.name}"
 
-    expense_categories = {
-      car: Category.find_or_create_by(name: "Car", color: "#dbca9f", category_type: "expense", family:),
-      bills: Category.find_or_create_by(name: "Bills", color: "#a9d9ec", category_type: "expense", family:)
-    }
-
-    income_categories = {
-      salary: Category.find_or_create_by(name: "Salary", color: "#800080", category_type: "income", family:)
-    }
+    Transaction::Category.create_default_categories(family)
 
     checking = Account.find_or_create_by(name: "Demo Checking") do |a|
       a.family = family
@@ -29,16 +22,16 @@ namespace :demo_data do
     checking_transactions = [
       { date: Date.today - 84, amount: -3000, name: "Direct Deposit" },
       { date: Date.today - 70, amount: 1500, name: "Credit Card Payment" },
-      { date: Date.today - 70, amount: 200, name: "Utility Bill", category: expense_categories[:bills] },
+      { date: Date.today - 70, amount: 200, name: "Utility Bill" },
       { date: Date.today - 56, amount: -3000, name: "Direct Deposit" },
       { date: Date.today - 42, amount: 1500, name: "Credit Card Payment" },
-      { date: Date.today - 42, amount: 100, name: "Internet Bill", category: expense_categories[:bills] },
+      { date: Date.today - 42, amount: 100, name: "Internet Bill" },
       { date: Date.today - 28, amount: -3000, name: "Direct Deposit" },
       { date: Date.today - 28, amount: 1500, name: "Credit Card Payment" },
-      { date: Date.today - 28, amount: 50, name: "Mobile Bill", category: expense_categories[:bills] },
-      { date: Date.today - 14, amount: -3000, name: "Direct Deposit", category: income_categories[:salary] },
+      { date: Date.today - 28, amount: 50, name: "Mobile Bill" },
+      { date: Date.today - 14, amount: -3000, name: "Direct Deposit" },
       { date: Date.today - 14, amount: 1500, name: "Credit Card Payment" },
-      { date: Date.today - 14, amount: 200, name: "Car Loan Payment", category: expense_categories[:car] },
+      { date: Date.today - 14, amount: 200, name: "Car Loan Payment" },
       { date: Date.today - 7, amount: 150, name: "Insurance" },
       { date: Date.today - 2, amount: 100, name: "Gym Membership" }
     ]
@@ -84,13 +77,13 @@ namespace :demo_data do
 
     credit_card_transactions = [
       { date: Date.today - 90, amount: 75, name: "Grocery Store" },
-      { date: Date.today - 89, amount: 30, name: "Gas Station", category: expense_categories[:car] },
+      { date: Date.today - 89, amount: 30, name: "Gas Station" },
       { date: Date.today - 88, amount: 12, name: "Coffee Shop" },
       { date: Date.today - 85, amount: 50, name: "Restaurant" },
       { date: Date.today - 84, amount: 25, name: "Online Subscription" },
       { date: Date.today - 82, amount: 100, name: "Clothing Store" },
       { date: Date.today - 80, amount: 60, name: "Pharmacy" },
-      { date: Date.today - 78, amount: 40, name: "Utility Bill", category: expense_categories[:bills] },
+      { date: Date.today - 78, amount: 40, name: "Utility Bill" },
       { date: Date.today - 75, amount: 90, name: "Home Improvement Store" },
       { date: Date.today - 74, amount: 20, name: "Book Store" },
       { date: Date.today - 72, amount: 15, name: "Movie Theater" },
@@ -98,22 +91,22 @@ namespace :demo_data do
       { date: Date.today - 68, amount: 35, name: "Pet Store" },
       { date: Date.today - 65, amount: 80, name: "Sporting Goods Store" },
       { date: Date.today - 63, amount: 55, name: "Department Store" },
-      { date: Date.today - 60, amount: 110, name: "Auto Repair Shop", category: expense_categories[:car] },
+      { date: Date.today - 60, amount: 110, name: "Auto Repair Shop" },
       { date: Date.today - 58, amount: 45, name: "Beauty Salon" },
       { date: Date.today - 55, amount: 95, name: "Furniture Store" },
       { date: Date.today - 53, amount: 22, name: "Fast Food" },
       { date: Date.today - 50, amount: 120, name: "Airline Ticket" },
       { date: Date.today - 48, amount: 65, name: "Hotel" },
-      { date: Date.today - 45, amount: 30, name: "Car Rental", category: expense_categories[:car] },
+      { date: Date.today - 45, amount: 30, name: "Car Rental" },
       { date: Date.today - 43, amount: 18, name: "Music Store" },
       { date: Date.today - 40, amount: 70, name: "Grocery Store" },
-      { date: Date.today - 38, amount: 32, name: "Gas Station", category: expense_categories[:car] },
+      { date: Date.today - 38, amount: 32, name: "Gas Station" },
       { date: Date.today - 36, amount: 14, name: "Coffee Shop" },
       { date: Date.today - 33, amount: 52, name: "Restaurant" },
       { date: Date.today - 31, amount: 28, name: "Online Subscription" },
       { date: Date.today - 29, amount: 105, name: "Clothing Store" },
       { date: Date.today - 27, amount: 62, name: "Pharmacy" },
-      { date: Date.today - 25, amount: 42, name: "Utility Bill", category: expense_categories[:bills] },
+      { date: Date.today - 25, amount: 42, name: "Utility Bill" },
       { date: Date.today - 22, amount: 92, name: "Home Improvement Store" },
       { date: Date.today - 20, amount: 23, name: "Book Store" },
       { date: Date.today - 18, amount: 17, name: "Movie Theater" },

@@ -2,9 +2,7 @@ class Family < ApplicationRecord
   has_many :users, dependent: :destroy
   has_many :accounts, dependent: :destroy
   has_many :transactions, through: :accounts
-  has_many :categories, dependent: :destroy
-
-  after_create :create_default_categories
+  has_many :transaction_categories, dependent: :destroy, class_name: "Transaction::Category"
 
   def net_worth
     accounts.active.sum("CASE WHEN classification = 'asset' THEN balance ELSE -balance END")
@@ -67,11 +65,4 @@ class Family < ApplicationRecord
       { trend_type: "liability" }
     )
   end
-
-  private
-
-    def create_default_categories
-      Category.create(name: I18n.t("category.default_income_category"), color: "#abbd9a", category_type: :income, is_default: true, family: self)
-      Category.create(name: I18n.t("category.default_expense_category"), color: "#942c3c", category_type: :expense, is_default: true, family: self)
-    end
 end

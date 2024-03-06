@@ -1,0 +1,13 @@
+income:
+  name: Income
+  internal_category: income
+  color: "#fd7f6f"
+  icon: piggy-bank
+  family: dylan_family
+
+food_and_drink:
+  name: Food & Drink
+  internal_category: food_and_drink
+  color: "#7eb0d5"
+  icon: utensils
+  family: dylan_family
