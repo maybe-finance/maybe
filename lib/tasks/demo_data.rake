@@ -5,6 +5,8 @@ namespace :demo_data do
     user = User.find_or_create_by(email: "user@maybe.local") do |u|
       u.password = "password"
       u.family = family
+      u.first_name = "User"
+      u.last_name = "Demo"
     end
 
     puts "Reset user: #{user.email} with family: #{family.name}"

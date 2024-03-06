@@ -1,0 +1,20 @@
+<%# locals: (account_groups:) %>
+<div class="bg-gray-25 p-1 rounded-xl">
+  <div class="px-4 py-2 flex items-center uppercase text-xs font-medium text-gray-500">
+    <div>Name</div>
+    <div class="ml-auto text-right flex items-center gap-10">
+      <div class="w-24">
+        <p>% of total</p>
+      </div>
+      <div class="w-24">
+        <p>Value</p>
+      </div>
+      <div class="w-40">
+        <p>Change</p>
+      </div>
+    </div>
+  </div>
+  <div class="bg-white border border-alpha-black-25 shadow-xs rounded-lg divide-y divide-alpha-black-50">
+    <%= render partial: "account_group_disclosure", collection: account_groups, as: :account_group %>
+  </div>
+</div>

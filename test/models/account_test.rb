@@ -2,9 +2,7 @@ require "test_helper"
 
 class AccountTest < ActiveSupport::TestCase
   def setup
-    depository = account_depositories(:checking)
     @account = accounts(:checking)
-    @account.accountable = depository
   end
 
   test "new account should be valid" do

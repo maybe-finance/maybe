@@ -1,0 +1,10 @@
+<%# locals: (progress:, radius: 7, stroke: 2, text_class: "text-green-500") %>
+<% circumference = Math::PI * 2 * radius %>
+<% progress_percent = progress.clamp(0, 100) %>
+<% stroke_dashoffset = ((100 - progress_percent) * circumference) / 100 %>
+<svg width="<%= radius * 2 + stroke %>" height="<%= radius * 2 + stroke %>">
+  <!-- Background Circle -->
+  <circle class="fill-transparent stroke-current text-gray-300" r="<%= radius %>" cx="<%= radius + stroke / 2 %>" cy="<%= radius + stroke / 2 %>" stroke-width="<%= stroke %>" />
+  <!-- Foreground Circle -->
+  <circle class="fill-transparent stroke-current <%= text_class %>" r="<%= radius %>" cx="<%= radius + stroke / 2 %>" cy="<%= radius + stroke / 2 %>" stroke-width="<%= stroke %>" stroke-dasharray="<%= circumference %>" stroke-dashoffset="<%= stroke_dashoffset %>" transform="rotate(-90, <%= radius + stroke / 2 %>, <%= radius + stroke / 2 %>)" />
+  </svg>

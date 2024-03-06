@@ -1,4 +1,4 @@
-<%# locals: (account:, valuation_series:) %>
+<%# locals: (account:, valuations:) %>
 <div class="bg-white space-y-4 p-5 border border-alpha-black-25 rounded-xl shadow-xs">
   <div class="flex justify-between items-center">
     <h3 class="font-medium text-lg">History</h3>
@@ -21,7 +21,7 @@
       <div class="rounded-lg bg-white border-alpha-black-25 shadow-xs">
         <%= turbo_frame_tag dom_id(Valuation.new) %>
         <%= turbo_frame_tag "valuations_list" do %>
-          <%= render partial: "accounts/account_valuation_list", locals: { valuation_series: valuation_series, classification: account.classification } %>
+          <%= render partial: "accounts/account_valuation_list", locals: { valuation_series: valuations } %>
         <% end %>
       </div>
     </div>

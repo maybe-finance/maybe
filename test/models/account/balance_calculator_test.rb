@@ -3,7 +3,6 @@ require "test_helper"
 class Account::BalanceCalculatorTest < ActiveSupport::TestCase
     test "syncs account with only valuations" do
         account = accounts(:collectable)
-        account.accountable = account_other_assets(:one)
 
         daily_balances = Account::BalanceCalculator.new(account).daily_balances
 
@@ -19,7 +18,6 @@ class Account::BalanceCalculatorTest < ActiveSupport::TestCase
 
     test "syncs account with only transactions" do
         account = accounts(:checking)
-        account.accountable = account_depositories(:checking)
 
         daily_balances = Account::BalanceCalculator.new(account).daily_balances
 
@@ -35,7 +33,6 @@ class Account::BalanceCalculatorTest < ActiveSupport::TestCase
 
     test "syncs account with both valuations and transactions" do
         account = accounts(:savings_with_valuation_overrides)
-        account.accountable = account_depositories(:savings)
         daily_balances = Account::BalanceCalculator.new(account).daily_balances
 
         expected_balances = [
@@ -50,7 +47,6 @@ class Account::BalanceCalculatorTest < ActiveSupport::TestCase
 
     test "syncs liability account" do
         account = accounts(:credit_card)
-        account.accountable = account_credits(:one)
         daily_balances = Account::BalanceCalculator.new(account).daily_balances
 
         expected_balances = [
