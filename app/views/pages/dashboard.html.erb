@@ -34,7 +34,7 @@
             data-controller="trendline" 
             id="assetsTrendline" 
             class="h-full w-2/5" 
-            data-trendline-series-value='[{"date":"2023-09-01","value":100},{"date":"2023-09-02","value":150},{"date":"2023-09-03","value":200},{"date":"2023-09-04","value":250},{"date":"2023-09-05","value":300},{"date":"2023-09-06","value":350},{"date":"2023-09-07","value":400}]'
+            data-trendline-series-value="<%= @asset_series.serialize_for_d3_chart %>"
             data-trendline-classification-value="asset"
             ></div>
       </div>
@@ -52,7 +52,7 @@
             data-controller="trendline" 
             id="liabilitiesTrendline" 
             class="h-full w-2/5" 
-            data-trendline-series-value='[{"date":"2023-09-01","value":100},{"date":"2023-09-02","value":150},{"date":"2023-09-03","value":200},{"date":"2023-09-04","value":250},{"date":"2023-09-05","value":300},{"date":"2023-09-06","value":350},{"date":"2023-09-07","value":400}]'
+            data-trendline-series-value="<%= @liability_series.serialize_for_d3_chart %>"
             data-trendline-classification-value="liability"
             ></div>
       </div>
@@ -75,14 +75,12 @@
       </div>
       <div>
         <div data-tabs-target="tab" id="asset-summary-tab" class="space-y-6">
-          <%= render partial: "account_percentages_bar" %>
-          <%= render partial: "account_percentages_table" %>
-          <p>Assets</p>
+          <%= render partial: "account_percentages_bar", locals: { account_groups: @account_groups[:asset][:groups] } %>
+          <%= render partial: "account_percentages_table", locals: { account_groups: @account_groups[:asset][:groups] } %>
         </div>
         <div data-tabs-target="tab" id="liability-summary-tab" class="space-y-6 hidden">
-          <%= render partial: "account_percentages_bar" %>
-          <%= render partial: "account_percentages_table" %>
-          <p>Liabilities</p>
+          <%= render partial: "account_percentages_bar", locals: { account_groups: @account_groups[:liability][:groups] } %>
+          <%= render partial: "account_percentages_table", locals: { account_groups: @account_groups[:liability][:groups] } %>
         </div>
       </div>
     </div>

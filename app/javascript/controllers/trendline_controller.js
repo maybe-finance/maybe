@@ -3,7 +3,7 @@ import tailwindColors from "@maybe/tailwindcolors";
 import * as d3 from "d3";
 
 export default class extends Controller {
-  static values = { series: Array, classification: String };
+  static values = { series: Object, classification: String };
 
   connect() {
     this.renderChart(this.seriesValue);
@@ -19,6 +19,12 @@ export default class extends Controller {
   }
 
   drawChart(series) {
+    const data = series.data.map((d) => ({
+      ...d,
+      date: new Date(d.date + "T00:00:00"),
+      amount: +d.amount,
+    }));
+    console.log(data);
     const chartContainer = d3.select(this.element);
     chartContainer.selectAll("*").remove();
     const initialDimensions = {
@@ -43,7 +49,7 @@ export default class extends Controller {
     const height = initialDimensions.height - margin.top - margin.bottom;
 
     const isLiability = this.classificationValue === "liability";
-    const trendDirection = series[series.length - 1].value - series[0].value;
+    const trendDirection = data[data.length - 1].amount - data[0].amount;
     let lineColor;
 
     if (trendDirection > 0) {
@@ -61,11 +67,11 @@ export default class extends Controller {
     const xScale = d3
       .scaleTime()
       .rangeRound([0, width])
-      .domain(d3.extent(series, (d) => new Date(d.date + "T00:00:00")));
+      .domain(d3.extent(data, (d) => d.date));
 
     const PADDING = 0.05;
-    const dataMin = d3.min(series, (d) => d.value);
-    const dataMax = d3.max(series, (d) => d.value);
+    const dataMin = d3.min(data, (d) => d.amount);
+    const dataMax = d3.max(data, (d) => d.amount);
     const padding = (dataMax - dataMin) * PADDING;
 
     const yScale = d3
@@ -75,12 +81,12 @@ export default class extends Controller {
 
     const line = d3
       .line()
-      .x((d) => xScale(new Date(d.date + "T00:00:00")))
-      .y((d) => yScale(d.value));
+      .x((d) => xScale(d.date))
+      .y((d) => yScale(d.amount));
 
     svg
       .append("path")
-      .datum(series)
+      .datum(data)
       .attr("fill", "none")
       .attr("stroke", lineColor)
       .attr("stroke-width", 2)

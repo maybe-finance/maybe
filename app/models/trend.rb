@@ -21,6 +21,6 @@ class Trend
   def percent
     return 0 if @previous.nil?
     return Float::INFINITY if @previous == 0
-    ((@current - @previous).abs / @previous.to_f * 100).round(1)
+    ((@current - @previous).abs / @previous.abs.to_f * 100).round(1)
   end
 end
