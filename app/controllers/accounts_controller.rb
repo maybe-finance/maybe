@@ -22,7 +22,15 @@ class AccountsController < ApplicationController
     @account = Current.family.accounts.find(params[:id])
 
     if @account.update(account_params.except(:accountable_type))
-      redirect_to accounts_path, notice: t(".success")
+      respond_to do |format|
+        format.html { redirect_to accounts_path, notice: t(".success") }
+        format.turbo_stream do
+          render turbo_stream: [
+            turbo_stream.append("notification-tray", partial: "shared/notification", locals: { type: "success", content: t(".success") }),
+            turbo_stream.replace("account_#{@account.id}", partial: "accounts/account", locals: { account: @account })
+          ]
+        end
+      end
     else
       render "edit", status: :unprocessable_entity
     end
