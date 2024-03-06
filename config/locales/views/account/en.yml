@@ -1,8 +1,6 @@
 ---
 en:
   accounts:
-    update:
-      success: Account updated successfully
     create:
       success: New account created successfully
     index:
@@ -13,3 +11,5 @@ en:
         placeholder: Example account name
       select_accountable_type: What would you like to add?
       title: Add an account
+    update:
+      success: Account updated successfully
