@@ -24,7 +24,6 @@ export default class extends Controller {
       date: new Date(d.date + "T00:00:00"),
       amount: +d.amount,
     }));
-    console.log(data);
     const chartContainer = d3.select(this.element);
     chartContainer.selectAll("*").remove();
     const initialDimensions = {
