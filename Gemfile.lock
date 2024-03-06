@@ -193,6 +193,9 @@ GEM
     irb (1.11.2)
       rdoc
       reline (>= 0.4.2)
+    jbuilder (2.11.5)
+      actionview (>= 5.0.0)
+      activesupport (>= 5.0.0)
     json (2.7.1)
     language_server-protocol (3.17.0.3)
     launchy (2.5.2)
@@ -401,6 +404,7 @@ DEPENDENCIES
   i18n-tasks
   importmap-rails
   inline_svg
+  jbuilder
   letter_opener
   lucide-rails!
   pg (~> 1.5)

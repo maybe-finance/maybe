@@ -29,6 +29,7 @@ gem "good_job"
 # Other
 gem "bcrypt", "~> 3.1.7"
 gem "inline_svg"
+gem "jbuilder"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "faraday"
 
