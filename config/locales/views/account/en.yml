@@ -4,10 +4,12 @@ en:
     create:
       success: New account created successfully
     index:
-      title: Cash
+      new_account: New account
     new:
       name:
         label: Account name
         placeholder: Example account name
       select_accountable_type: What would you like to add?
       title: Add an account
+    update:
+      success: Account updated successfully

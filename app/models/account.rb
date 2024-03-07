@@ -7,6 +7,8 @@ class Account < ApplicationRecord
   has_many :valuations
   has_many :transactions
 
+  scope :active, -> { where(is_active: true) }
+
   delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
 
   before_create :check_currency
@@ -17,10 +19,15 @@ class Account < ApplicationRecord
     Trend.new(current: last.balance, previous: first.balance, type: classification)
   end
 
+  def self.by_provider
+    # TODO: When 3rd party providers are supported, dynamically load all providers and their accounts
+    [ { name: "Manual accounts", accounts: all.order(balance: :desc).group_by(&:accountable_type) } ]
+  end
+
   # TODO: We will need a better way to encapsulate large queries & transformation logic, but leaving all in one spot until
   # we have a better understanding of the requirements
   def self.by_group(period = Period.all)
-    ranked_balances_cte = joins(:balances)
+    ranked_balances_cte = active.joins(:balances)
         .select("
           account_balances.account_id,
           account_balances.balance,
