@@ -2,8 +2,7 @@ class CreateTransactionCategories < ActiveRecord::Migration[7.2]
   def change
     create_table :transaction_categories, id: :uuid do |t|
       t.string "name", null: false
-      t.string "icon", null: false
-      t.string "color", null: false
+      t.string "color", default: "#6172F3", null: false
       t.string "internal_category"
       t.references :family, null: false, foreign_key: true, type: :uuid
 

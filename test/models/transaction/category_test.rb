@@ -29,7 +29,6 @@ class Transaction::CategoryTest < ActiveSupport::TestCase
   test "updating other field than name should not clear the internal_category field" do
     category = Transaction::Category.take
     assert_no_changes "category.reload.internal_category" do
-      category.update_attribute(:icon, "arrow-right")
       category.update_attribute(:color, "#000")
     end
   end

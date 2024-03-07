@@ -5,14 +5,14 @@ class Transaction::Category < ApplicationRecord
   before_update :clear_internal_category, if: :name_changed?
 
   DEFAULT_CATEGORIES = [
-    { internal_category: "income", color: "#fd7f6f", icon: "piggy-bank" },
-    { internal_category: "food_and_drink", color: "#7eb0d5", icon: "utensils" },
-    { internal_category: "entertainment", color: "#b2e061", icon: "drama" },
-    { internal_category: "personal_care", color: "#bd7ebe", icon: "person-standing" },
-    { internal_category: "general_services", color: "#ffb55a", icon: "cog" },
-    { internal_category: "auto_and_transport", color: "#ffee65", icon: "car" },
-    { internal_category: "rent_and_utilities", color: "#beb9db", icon: "home" },
-    { internal_category: "home_improvement", color: "#fdcce5", icon: "hand-coins" }
+    { internal_category: "income", color: "#fd7f6f" },
+    { internal_category: "food_and_drink", color: "#7eb0d5" },
+    { internal_category: "entertainment", color: "#b2e061" },
+    { internal_category: "personal_care", color: "#bd7ebe" },
+    { internal_category: "general_services", color: "#ffb55a" },
+    { internal_category: "auto_and_transport", color: "#ffee65" },
+    { internal_category: "rent_and_utilities", color: "#beb9db" },
+    { internal_category: "home_improvement", color: "#fdcce5" }
   ]
 
   def self.create_default_categories(family)
@@ -25,7 +25,6 @@ class Transaction::Category < ApplicationRecord
       name: I18n.t("transaction.default_category.#{c[:internal_category]}"),
       internal_category: c[:internal_category],
       color: c[:color],
-      icon: c[:icon],
       family_id:
     } }
     self.insert_all(categories)
