@@ -4,15 +4,15 @@ class Family < ApplicationRecord
   has_many :transactions, through: :accounts
 
   def net_worth
-    accounts.sum("CASE WHEN classification = 'asset' THEN balance ELSE -balance END")
+    accounts.active.sum("CASE WHEN classification = 'asset' THEN balance ELSE -balance END")
   end
 
   def assets
-    accounts.where(classification: "asset").sum(:balance)
+    accounts.active.where(classification: "asset").sum(:balance)
   end
 
   def liabilities
-    accounts.where(classification: "liability").sum(:balance)
+    accounts.active.where(classification: "liability").sum(:balance)
   end
 
   def net_worth_series(period = nil)

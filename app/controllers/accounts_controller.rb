@@ -22,6 +22,9 @@ class AccountsController < ApplicationController
     @account = Current.family.accounts.find(params[:id])
 
     if @account.update(account_params.except(:accountable_type))
+
+      @account.sync_later if account_params[:is_active] == "1"
+
       respond_to do |format|
         format.html { redirect_to accounts_path, notice: t(".success") }
         format.turbo_stream do
