@@ -2,6 +2,9 @@ namespace :demo_data do
   desc "Creates or resets demo data used in development environment"
   task reset: :environment do
     family = Family.find_or_create_by(name: "Demo Family")
+
+    family.accounts.destroy_all
+
     user = User.find_or_create_by(email: "user@maybe.local") do |u|
       u.password = "password"
       u.family = family
@@ -11,7 +14,33 @@ namespace :demo_data do
 
     puts "Reset user: #{user.email} with family: #{family.name}"
 
-    Transaction::Category.create_default_categories(family)
+    Transaction::Category.create_default_categories(family) if family.transaction_categories.empty?
+
+    multi_currency_checking = Account.find_or_create_by(name: "Demo Multi-Currency Checking") do |a|
+      a.family = family
+      a.accountable = Account::Depository.new
+      a.balance = 4000
+      a.currency = "EUR"
+    end
+
+    multi_currency_checking_transactions = [
+      { date: Date.today - 84, amount: 3000, name: "Paycheck", currency: "USD" },
+      { date: Date.today - 70, amount: -1500, name: "Rent Payment", currency: "EUR" },
+      { date: Date.today - 70, amount: -200, name: "Groceries", currency: "EUR" },
+      { date: Date.today - 56, amount: 3000, name: "Paycheck", currency: "USD" },
+      { date: Date.today - 42, amount: -1500, name: "Rent Payment", currency: "EUR" },
+      { date: Date.today - 42, amount: -100, name: "Utilities", currency: "EUR" },
+      { date: Date.today - 28, amount: 3000, name: "Paycheck", currency: "USD" },
+      { date: Date.today - 28, amount: -1500, name: "Rent Payment", currency: "EUR" },
+      { date: Date.today - 28, amount: -50, name: "Internet Bill", currency: "EUR" },
+      { date: Date.today - 14, amount: 3000, name: "Paycheck", currency: "USD" }
+    ]
+
+    multi_currency_checking_transactions.each do |t|
+      multi_currency_checking.transactions.find_or_create_by(date: t[:date], amount: t[:amount], name: t[:name], currency: t[:currency])
+    end
+
+    multi_currency_checking.sync
 
     checking = Account.find_or_create_by(name: "Demo Checking") do |a|
       a.family = family
@@ -68,6 +97,34 @@ namespace :demo_data do
     end
 
     savings.sync
+
+    euro_savings = Account.find_or_create_by(name: "Demo Euro Savings") do |a|
+      a.family = family
+      a.accountable = Account::Depository.new
+      a.balance = 10000
+      a.currency = "EUR"
+    end
+
+    euro_savings_transactions = [
+      { date: Date.today - 360, amount: -500, name: "Initial Deposit", currency: "EUR" },
+      { date: Date.today - 330, amount: -100, name: "Monthly Savings", currency: "EUR" },
+      { date: Date.today - 300, amount: -100, name: "Monthly Savings", currency: "EUR" },
+      { date: Date.today - 270, amount: -100, name: "Monthly Savings", currency: "EUR" },
+      { date: Date.today - 240, amount: -100, name: "Monthly Savings", currency: "EUR" },
+      { date: Date.today - 210, amount: -100, name: "Monthly Savings", currency: "EUR" },
+      { date: Date.today - 180, amount: -100, name: "Monthly Savings", currency: "EUR" },
+      { date: Date.today - 150, amount: -100, name: "Monthly Savings", currency: "EUR" },
+      { date: Date.today - 120, amount: -100, name: "Monthly Savings", currency: "EUR" },
+      { date: Date.today - 90, amount: 500, name: "Withdrawal", currency: "EUR" },
+      { date: Date.today - 60, amount: -100, name: "Monthly Savings", currency: "EUR" },
+      { date: Date.today - 30, amount: -100, name: "Monthly Savings", currency: "EUR" }
+    ]
+
+    euro_savings_transactions.each do |t|
+      euro_savings.transactions.find_or_create_by(date: t[:date], amount: t[:amount], name: t[:name], currency: t[:currency])
+    end
+
+    euro_savings.sync
 
     credit_card = Account.find_or_create_by(name: "Demo Credit Card") do |a|
       a.family = family
@@ -217,15 +274,15 @@ namespace :demo_data do
     house = Account.find_or_create_by(name: "Demo Primary Residence") do |a|
       a.family = family
       a.accountable = Account::Property.new
-      a.balance = 500000
+      a.balance = 2500000
     end
 
     house_valuations = [
-      { date: 5.years.ago.to_date, value: 450000 },
-      { date: 4.years.ago.to_date, value: 470000 },
-      { date: 3.years.ago.to_date, value: 460000 },
-      { date: 2.years.ago.to_date, value: 480000 },
-      { date: 1.year.ago.to_date, value: 500000 }
+      { date: 5.years.ago.to_date, value: 3000000 },
+      { date: 4.years.ago.to_date, value: 2800000 },
+      { date: 3.years.ago.to_date, value: 2700000 },
+      { date: 2.years.ago.to_date, value: 2600000 },
+      { date: 1.year.ago.to_date, value: 2500000 }
     ]
 
     house.valuations.upsert_all(house_valuations, unique_by: :index_valuations_on_account_id_and_date)
