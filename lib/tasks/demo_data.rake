@@ -11,6 +11,7 @@ namespace :demo_data do
 
     puts "Reset user: #{user.email} with family: #{family.name}"
 
+    Transaction::Category.create_default_categories(family)
 
     checking = Account.find_or_create_by(name: "Demo Checking") do |a|
       a.family = family

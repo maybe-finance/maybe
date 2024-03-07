@@ -30,6 +30,12 @@ class FamilyTest < ActiveSupport::TestCase
     end
   end
 
+  test "should destroy dependent transaction categories" do
+    assert_difference("Transaction::Category.count", -@family.transaction_categories.count) do
+      @family.destroy
+    end
+  end
+
   test "should calculate total assets" do
     assert_equal BigDecimal("25550"), @family.assets
   end

@@ -1,5 +1,6 @@
 class Transaction < ApplicationRecord
   belongs_to :account
+  belongs_to :category, optional: true
 
   after_commit :sync_account
 

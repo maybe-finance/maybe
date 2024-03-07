@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_03_06_193345) do
+ActiveRecord::Schema[7.2].define(version: 2024_03_07_082827) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -79,7 +79,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_06_193345) do
     t.decimal "converted_balance", precision: 19, scale: 4, default: "0.0"
     t.string "converted_currency", default: "USD"
     t.string "status", default: "OK"
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Account::Loan'::character varying)::text, ('Account::Credit'::character varying)::text, ('Account::OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Account::Loan'::character varying, 'Account::Credit'::character varying, 'Account::OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.boolean "is_active", default: true, null: false
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id"], name: "index_accounts_on_family_id"
@@ -198,6 +198,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_06_193345) do
     t.index ["token"], name: "index_invite_codes_on_token", unique: true
   end
 
+  create_table "transaction_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "color", default: "#6172F3", null: false
+    t.string "internal_category"
+    t.uuid "family_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["family_id"], name: "index_transaction_categories_on_family_id"
+  end
+
   create_table "transactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.date "date", null: false
@@ -206,7 +216,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_06_193345) do
     t.uuid "account_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "category_id"
     t.index ["account_id"], name: "index_transactions_on_account_id"
+    t.index ["category_id"], name: "index_transactions_on_category_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -233,7 +245,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_06_193345) do
 
   add_foreign_key "account_balances", "accounts", on_delete: :cascade
   add_foreign_key "accounts", "families"
+  add_foreign_key "transaction_categories", "families"
   add_foreign_key "transactions", "accounts", on_delete: :cascade
+  add_foreign_key "transactions", "transaction_categories", column: "category_id"
   add_foreign_key "users", "families"
   add_foreign_key "valuations", "accounts", on_delete: :cascade
 end

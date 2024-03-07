@@ -4,12 +4,14 @@ checking_one:
   date: <%= 5.days.ago.to_date %>
   amount: 10
   account: checking
+  category: food_and_drink
 
 checking_two:
   name: Chipotle
   date: <%= 12.days.ago.to_date %>
   amount: 30
   account: checking
+  category: food_and_drink
 
 checking_three:
   name: Amazon
@@ -22,6 +24,7 @@ checking_four:
   date: <%= 22.days.ago.to_date %>
   amount: -1075
   account: checking
+  category: income
 
 checking_five:
   name: Netflix
@@ -35,12 +38,14 @@ savings_one:
   date: <%= 5.days.ago.to_date %>
   amount: -200
   account: savings_with_valuation_overrides
+  category: income
 
 savings_two:
   name: Check Deposit
   date: <%= 12.days.ago.to_date %>
   amount: -50
   account: savings_with_valuation_overrides
+  category: income
 
 savings_three:
   name: Withdrawal
@@ -53,6 +58,7 @@ savings_four:
   date: <%= 29.days.ago.to_date %>
   amount: -500
   account: savings_with_valuation_overrides
+  category: income
 
 # Credit card account transactions
 credit_card_one:
@@ -60,12 +66,14 @@ credit_card_one:
   date: <%= 5.days.ago.to_date %>
   amount: 10
   account: credit_card
+  category: food_and_drink
 
 credit_card_two:
   name: Chipotle
   date: <%= 12.days.ago.to_date %>
   amount: 30
   account: credit_card
+  category: food_and_drink
 
 credit_card_three:
   name: Amazon

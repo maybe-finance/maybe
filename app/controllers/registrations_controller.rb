@@ -13,6 +13,7 @@ class RegistrationsController < ApplicationController
     @user.family = family
 
     if @user.save
+      Transaction::Category.create_default_categories(@user.family)
       login @user
       flash[:notice] = t(".success")
       redirect_to root_path
