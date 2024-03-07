@@ -1,7 +1,9 @@
 <div id="<%= dom_id transaction %>" class="flex items-center gap-6 py-4 text-sm font-medium">
   <div class="w-96 flex items-center gap-2">
     <div class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-600/5 text-gray-600"><%= transaction.name[0].upcase %></div>
-    <p class="text-gray-900"><%= transaction.name %></p>
+    <%= link_to transaction_path(transaction), data: { turbo_frame: "modal" }, class: "text-gray-900" do %>
+     <%= transaction.name %>
+    <% end %>
   </div>
   <div>
     <p><%= transaction.account.name %></p>
