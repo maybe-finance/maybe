@@ -3,8 +3,13 @@ class Valuation < ApplicationRecord
 
   after_commit :sync_account
 
-  def trend(previous)
-    Trend.new(current: value, previous: previous&.value, type: account.classification)
+  scope :in_period, ->(period) { period.date_range.nil? ? all : where(date: period.date_range) }
+
+  def self.to_series(account, period = Period.all)
+    MoneySeries.new(
+      in_period(period).order(:date),
+      { trend_type: account.classification, amount_accessor: :value }
+    )
   end
 
   private

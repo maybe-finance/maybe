@@ -15,11 +15,9 @@
   <% elsif trend.direction == "flat" %>
     <p class="text-sm text-gray-500">No change vs. prior period</p>
   <% else %>
-    <% styles = trend_styles(trend) %>
-    <p class="text-sm <%= styles[:text_class] %>">
-      <span><%= styles[:symbol] %><%= format_currency(trend.amount.abs, precision: balance.precision) %></span>
-      <span>(<%= lucide_icon(styles[:icon], class: "w-4 h-4 align-text-bottom inline") %><%= trend.percent %>%)</span>
-      <span class="text-gray-500"><%= period_label(period) %></span>
-    </p>
+    <div class="flex items-center gap-2">
+      <%= render partial: "shared/trend_change", locals: { trend: trend } %>
+      <span class="text-sm text-gray-500"><%= period_label(period) %></span>
+    </div>
   <% end %>
 </div>

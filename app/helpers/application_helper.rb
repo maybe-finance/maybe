@@ -48,8 +48,10 @@ module ApplicationHelper
     end
   end
 
-  # Styles to use when displaying a change in value
   def trend_styles(trend)
+    fallback = { bg_class: "bg-gray-500/5", text_class: "text-gray-500", symbol: "", icon: "minus" }
+    return fallback if trend.nil? || trend.direction == "flat"
+
     bg_class, text_class, symbol, icon = case trend.direction
     when "up"
       trend.type == "liability" ? [ "bg-red-500/5", "text-red-500", "+", "arrow-up" ] : [ "bg-green-500/5", "text-green-500", "+", "arrow-up" ]
