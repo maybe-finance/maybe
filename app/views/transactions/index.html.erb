@@ -70,6 +70,7 @@
           <%= render partial: "transactions/transaction_group", locals: { date: date, transactions: grouped_transactions } %>
         <% end %>
       </div>
+      <%== pagy_nav(@pagy)  %>
     <% end %>
   </div>
 </div>
