@@ -11,4 +11,18 @@
       </div>
     </div>
   <% end %>
+  <h3 class="text-2xl font-medium mb-1"><%= @transaction.amount %></h3>
+  <span class="text-sm"><%= @transaction.date.strftime("%A %d %B") %></span>
+
+  <%= form_with model: @transaction do |f| %>
+    <div class="bg-gray-25 rounded-xl p-1 mt-4 mb-2">
+      <div class="py-2 px-4 flex items-center justify-between font-medium text-xs text-gray-500">
+        Overview
+      </div>
+    </div>
+
+    <%= f.date_field :date, label: "Date" %>
+    <%= f.collection_select :account_id, Current.family.accounts, :id, :name, { prompt: "Select an Account", label: "Account" } %>
+  <% end %>
+
 <% end %>

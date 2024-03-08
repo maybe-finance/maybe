@@ -1,12 +1,14 @@
 <%= turbo_frame_tag "modal" do %>
-  <dialog class="bg-white border border-alpha-black-25 rounded-2xl max-h-[calc(100vh-32px)] max-w-[480px] w-full shadow-xs h-full mt-4 mr-4 p-4" data-controller="modal" data-action="click->modal#click_outside">
-    <div class="flex justify-end items-center h-9">
-      <div data-action="click->modal#close" class="cursor-pointer">
-        <%= lucide_icon("x", class: "w-5 h-5 shrink-0") %>
+  <dialog class="bg-white border border-alpha-black-25 rounded-2xl max-h-[calc(100vh-32px)] max-w-[480px] w-full shadow-xs h-full mt-4 mr-4" data-controller="modal" data-action="click->modal#click_outside">
+    <div class="flex flex-col h-full p-4">
+      <div class="flex justify-end items-center h-9">
+        <div data-action="click->modal#close" class="cursor-pointer">
+          <%= lucide_icon("x", class: "w-5 h-5 shrink-0") %>
+        </div>
       </div>
-    </div>
-    <div class="flex flex-col">
-      <%= content %>
+      <div class="flex flex-col">
+        <%= content %>
+      </div>
     </div>
   </dialog>
 <% end %>
