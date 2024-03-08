@@ -3,7 +3,7 @@ class TransactionsController < ApplicationController
   before_action :set_transaction, only: %i[ show edit update destroy ]
 
   def index
-    @pagy, @transactions = pagy(Current.family.transactions, items: 50)
+    @pagy, @transactions = pagy(Current.family.transactions.order(date: :desc), items: 50)
   end
 
   def show
