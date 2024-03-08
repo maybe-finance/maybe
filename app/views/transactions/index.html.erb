@@ -70,9 +70,11 @@
           <%= render partial: "transactions/transaction_group", locals: { date: date, transactions: grouped_transactions } %>
         <% end %>
       </div>
-      <nav class="flex items-center justify-center px-4 sm:px-0">
-        <%= render partial: "transactions/pagination", locals: { pagy: @pagy } %>
-      </nav>
+      <% if @pagy.pages > 1 %>
+        <nav class="flex items-center justify-center px-4 sm:px-0">
+          <%= render partial: "transactions/pagination", locals: { pagy: @pagy } %>
+        </nav>
+      <% end %>
     <% end %>
   </div>
 </div>
