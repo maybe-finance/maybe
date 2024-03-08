@@ -31,6 +31,7 @@ gem "bcrypt", "~> 3.1.7"
 gem "inline_svg"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "faraday"
+gem "pagy"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
