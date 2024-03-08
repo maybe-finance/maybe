@@ -1,3 +1,11 @@
+<!-- start mobile pagination -->
+  <div class="flex flex-1 justify-center md:hidden">
+    <a href="#" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50">Previous</a>
+    <a href="#" class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50">Next</a>
+  </div>
+<!-- end mobile pagination -->
+
+<!-- start desktop pagination -->
 <div class="hidden md:-mt-px md:flex">
   <% if pagy.prev %>
     <div>
@@ -25,3 +33,4 @@
     </div>
   <% end %>
 </div>
+<!-- end desktop pagination -->
