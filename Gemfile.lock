@@ -278,6 +278,10 @@ GEM
       railties (>= 6.0.0, < 8)
     rainbow (3.1.1)
     rake (13.1.0)
+    ransack (4.1.1)
+      activerecord (>= 6.1.5)
+      activesupport (>= 6.1.5)
+      i18n
     rb-fsevent (0.11.2)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
@@ -409,6 +413,7 @@ DEPENDENCIES
   propshaft
   puma (>= 5.0)
   rails!
+  ransack
   redis (>= 4.0.1)
   rubocop-rails-omakase
   ruby-lsp-rails
