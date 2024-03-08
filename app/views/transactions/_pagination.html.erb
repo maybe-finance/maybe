@@ -1,0 +1,31 @@
+<div class="hidden md:-mt-px md:flex">
+  <% if pagy.prev %>
+    <div>
+      <a href="<%= pagy_url_for(pagy, pagy.prev) %>" class="inline-flex items-center  px-3 py-3 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+          <path fill-rule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+        </svg>
+      </a>
+    </div>
+  <% end %>
+  <div class="bg-gray-25 rounded-xl">
+    <% pagy.series.each do |series_item| %>
+      <% if series_item.is_a?(Integer) %>
+        <a href="<%= pagy_url_for(pagy, series_item) %>" class="inline-flex items-center  px-3 py-3 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"><%= series_item %></a>
+      <% elsif series_item.is_a?(String) %>
+        <a href="<%= pagy_url_for(pagy, series_item) %>" class="shadow-lg ring-2 ring-inset ring-gray-200 rounded-xl bg-white inline-flex items-center m-1 px-4 py-2 text-sm font-medium text-gray-900"><%= series_item %></a>
+      <% elsif series_item == :gap %>
+        <span class="inline-flex items-center  px-3 py-3 text-sm font-medium text-gray-500">...</span>
+      <% end %>
+    <% end %>
+  </div>
+  <% if pagy.next %>
+    <div>
+      <a href="<%= pagy_url_for(pagy, pagy.next) %>" class="inline-flex items-center  px-3 py-3 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+          <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+        </svg>
+      </a>
+    </div>
+  <% end %>
+</div>
