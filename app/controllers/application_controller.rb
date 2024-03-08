@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  include Authentication
+  include Authentication, SetCurrency
 
   default_form_builder ApplicationFormBuilder
 

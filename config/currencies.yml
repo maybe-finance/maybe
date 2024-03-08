@@ -1,0 +1,2520 @@
+usd:
+  name: United States Dollar
+  priority: 1
+  iso_code: USD
+  iso_numeric: "840"
+  html_code: "&dollar;"
+  symbol: "$"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+eur:
+  name: Euro
+  priority: 2
+  iso_code: EUR
+  iso_numeric: "978"
+  html_code: "&euro;"
+  symbol: "€"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: ","
+  delimiter: "."
+  default_format: "%u%n"
+  default_precision: 2
+gbp:
+  name: British Pound
+  priority: 3
+  iso_code: GBP
+  iso_numeric: "826"
+  html_code: "&pound;"
+  symbol: "£"
+  minor_unit: Penny
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+aud:
+  name: Australian Dollar
+  priority: 4
+  iso_code: AUD
+  iso_numeric: "036"
+  html_code: "$"
+  symbol: "$"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+cad:
+  name: Canadian Dollar
+  priority: 5
+  iso_code: CAD
+  iso_numeric: "124"
+  html_code: "$"
+  symbol: "$"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+jpy:
+  name: Japanese Yen
+  priority: 6
+  iso_code: JPY
+  iso_numeric: "392"
+  html_code: "&yen;"
+  symbol: "¥"
+  minor_unit:
+  minor_unit_conversion: 1
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 0
+byr:
+  name: Belarusian Ruble
+  priority: 50
+  iso_code: BYR
+  iso_numeric: "974"
+  html_code: ""
+  symbol: Br
+  minor_unit:
+  minor_unit_conversion: 1
+  smallest_denomination: 100
+  separator: ","
+  delimiter: " "
+  default_format: "%n %u"
+  default_precision: 0
+sar:
+  name: Saudi Riyal
+  priority: 100
+  iso_code: SAR
+  iso_numeric: "682"
+  html_code: "&#xFDFC;"
+  symbol: ر.س
+  minor_unit: Hallallah
+  minor_unit_conversion: 100
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+sbd:
+  name: Solomon Islands Dollar
+  priority: 100
+  iso_code: SBD
+  iso_numeric: "090"
+  html_code: "$"
+  symbol: "$"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 10
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+scr:
+  name: Seychellois Rupee
+  priority: 100
+  iso_code: SCR
+  iso_numeric: "690"
+  html_code: "&#x20A8;"
+  symbol: "₨"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+sdg:
+  name: Sudanese Pound
+  priority: 100
+  iso_code: SDG
+  iso_numeric: "938"
+  html_code: ""
+  symbol: "£"
+  minor_unit: Piastre
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+sek:
+  name: Swedish Krona
+  priority: 100
+  iso_code: SEK
+  iso_numeric: "752"
+  html_code: ""
+  symbol: kr
+  minor_unit: Öre
+  minor_unit_conversion: 100
+  smallest_denomination: 100
+  separator: ","
+  delimiter: " "
+  default_format: "%n %u"
+  default_precision: 2
+sgd:
+  name: Singapore Dollar
+  priority: 100
+  iso_code: SGD
+  iso_numeric: "702"
+  html_code: "$"
+  symbol: "$"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+shp:
+  name: Saint Helenian Pound
+  priority: 100
+  iso_code: SHP
+  iso_numeric: "654"
+  html_code: "&#x00A3;"
+  symbol: "£"
+  minor_unit: Penny
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+skk:
+  name: Slovak Koruna
+  priority: 100
+  iso_code: SKK
+  iso_numeric: "703"
+  html_code: ""
+  symbol: Sk
+  minor_unit: Halier
+  minor_unit_conversion: 100
+  smallest_denomination: 50
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+sle:
+  name: New Leone
+  priority: 100
+  iso_code: SLE
+  iso_numeric: "925"
+  html_code: ""
+  symbol: Le
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 1000
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+sll:
+  name: Sierra Leonean Leone
+  priority: 100
+  iso_code: SLL
+  iso_numeric: "694"
+  html_code: ""
+  symbol: Le
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 1000
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+sos:
+  name: Somali Shilling
+  priority: 100
+  iso_code: SOS
+  iso_numeric: "706"
+  html_code: ""
+  symbol: Sh
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+srd:
+  name: Surinamese Dollar
+  priority: 100
+  iso_code: SRD
+  iso_numeric: "968"
+  html_code: ""
+  symbol: "$"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+ssp:
+  name: South Sudanese Pound
+  priority: 100
+  iso_code: SSP
+  iso_numeric: "728"
+  html_code: "&#x00A3;"
+  symbol: "£"
+  minor_unit: piaster
+  minor_unit_conversion: 100
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+std:
+  name: São Tomé and Príncipe Dobra
+  priority: 100
+  iso_code: STD
+  iso_numeric: "678"
+  html_code: ""
+  symbol: Db
+  minor_unit: Cêntimo
+  minor_unit_conversion: 100
+  smallest_denomination: 10000
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+stn:
+  name: São Tomé and Príncipe Second Dobra
+  priority: 100
+  iso_code: STN
+  iso_numeric: "930"
+  html_code: ""
+  symbol: Db
+  minor_unit: Cêntimo
+  minor_unit_conversion: 100
+  smallest_denomination: 10
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+svc:
+  name: Salvadoran Colón
+  priority: 100
+  iso_code: SVC
+  iso_numeric: "222"
+  html_code: "&#x20A1;"
+  symbol: "₡"
+  minor_unit: Centavo
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+syp:
+  name: Syrian Pound
+  priority: 100
+  iso_code: SYP
+  iso_numeric: "760"
+  html_code: "&#x00A3;"
+  symbol: "£S"
+  minor_unit: Piastre
+  minor_unit_conversion: 100
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+szl:
+  name: Swazi Lilangeni
+  priority: 100
+  iso_code: SZL
+  iso_numeric: "748"
+  html_code: ""
+  symbol: E
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+xbc:
+  name: European Unit of Account 9
+  priority: 100
+  iso_code: XBC
+  iso_numeric: "957"
+  html_code: ""
+  symbol: ""
+  minor_unit: ""
+  minor_unit_conversion: 1
+  smallest_denomination:
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 0
+mvr:
+  name: Maldivian Rufiyaa
+  priority: 100
+  iso_code: MVR
+  iso_numeric: "462"
+  html_code: ""
+  symbol: MVR
+  minor_unit: Laari
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+mwk:
+  name: Malawian Kwacha
+  priority: 100
+  iso_code: MWK
+  iso_numeric: "454"
+  html_code: ""
+  symbol: MK
+  minor_unit: Tambala
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+mxn:
+  name: Mexican Peso
+  priority: 100
+  iso_code: MXN
+  iso_numeric: "484"
+  html_code: "$"
+  symbol: "$"
+  minor_unit: Centavo
+  minor_unit_conversion: 100
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+myr:
+  name: Malaysian Ringgit
+  priority: 100
+  iso_code: MYR
+  iso_numeric: "458"
+  html_code: ""
+  symbol: RM
+  minor_unit: Sen
+  minor_unit_conversion: 100
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+mzn:
+  name: Mozambican Metical
+  priority: 100
+  iso_code: MZN
+  iso_numeric: "943"
+  html_code: ""
+  symbol: MTn
+  minor_unit: Centavo
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: ","
+  delimiter: "."
+  default_format: "%u%n"
+  default_precision: 2
+nad:
+  name: Namibian Dollar
+  priority: 100
+  iso_code: NAD
+  iso_numeric: "516"
+  html_code: "$"
+  symbol: "$"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+ngn:
+  name: Nigerian Naira
+  priority: 100
+  iso_code: NGN
+  iso_numeric: "566"
+  html_code: "&#x20A6;"
+  symbol: "₦"
+  minor_unit: Kobo
+  minor_unit_conversion: 100
+  smallest_denomination: 50
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+nio:
+  name: Nicaraguan Córdoba
+  priority: 100
+  iso_code: NIO
+  iso_numeric: "558"
+  html_code: ""
+  symbol: C$
+  minor_unit: Centavo
+  minor_unit_conversion: 100
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+nok:
+  name: Norwegian Krone
+  priority: 100
+  iso_code: NOK
+  iso_numeric: "578"
+  html_code: kr
+  symbol: kr
+  minor_unit: Øre
+  minor_unit_conversion: 100
+  smallest_denomination: 100
+  separator: ","
+  delimiter: "."
+  default_format: "%n %u"
+  default_precision: 2
+npr:
+  name: Nepalese Rupee
+  priority: 100
+  iso_code: NPR
+  iso_numeric: "524"
+  html_code: "&#x20A8;"
+  symbol: Rs.
+  minor_unit: Paisa
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+nzd:
+  name: New Zealand Dollar
+  priority: 100
+  iso_code: NZD
+  iso_numeric: "554"
+  html_code: "$"
+  symbol: "$"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 10
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+omr:
+  name: Omani Rial
+  priority: 100
+  iso_code: OMR
+  iso_numeric: "512"
+  html_code: "&#xFDFC;"
+  symbol: ر.ع.
+  minor_unit: Baisa
+  minor_unit_conversion: 1000
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 3
+pab:
+  name: Panamanian Balboa
+  priority: 100
+  iso_code: PAB
+  iso_numeric: "590"
+  html_code: ""
+  symbol: B/.
+  minor_unit: Centésimo
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+pen:
+  name: Peruvian Sol
+  priority: 100
+  iso_code: PEN
+  iso_numeric: "604"
+  html_code: S/
+  symbol: S/
+  minor_unit: Céntimo
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: ","
+  delimiter: "."
+  default_format: "%u%n"
+  default_precision: 2
+pgk:
+  name: Papua New Guinean Kina
+  priority: 100
+  iso_code: PGK
+  iso_numeric: "598"
+  html_code: ""
+  symbol: K
+  minor_unit: Toea
+  minor_unit_conversion: 100
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+php:
+  name: Philippine Peso
+  priority: 100
+  iso_code: PHP
+  iso_numeric: "608"
+  html_code: "&#x20B1;"
+  symbol: "₱"
+  minor_unit: Centavo
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+pkr:
+  name: Pakistani Rupee
+  priority: 100
+  iso_code: PKR
+  iso_numeric: "586"
+  html_code: "&#x20A8;"
+  symbol: "₨"
+  minor_unit: Paisa
+  minor_unit_conversion: 100
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+pln:
+  name: Polish Złoty
+  priority: 100
+  iso_code: PLN
+  iso_numeric: "985"
+  html_code: z&#322;
+  symbol: zł
+  minor_unit: Grosz
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: ","
+  delimiter: " "
+  default_format: "%n %u"
+  default_precision: 2
+pyg:
+  name: Paraguayan Guaraní
+  priority: 100
+  iso_code: PYG
+  iso_numeric: "600"
+  html_code: "&#x20B2;"
+  symbol: "₲"
+  minor_unit: Céntimo
+  minor_unit_conversion: 1
+  smallest_denomination: 5000
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 0
+qar:
+  name: Qatari Riyal
+  priority: 100
+  iso_code: QAR
+  iso_numeric: "634"
+  html_code: "&#xFDFC;"
+  symbol: ر.ق
+  minor_unit: Dirham
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+ron:
+  name: Romanian Leu
+  priority: 100
+  iso_code: RON
+  iso_numeric: "946"
+  html_code: ""
+  symbol: Lei
+  minor_unit: Bani
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: ","
+  delimiter: "."
+  default_format: "%n %u"
+  default_precision: 2
+rsd:
+  name: Serbian Dinar
+  priority: 100
+  iso_code: RSD
+  iso_numeric: "941"
+  html_code: ""
+  symbol: РСД
+  minor_unit: Para
+  minor_unit_conversion: 100
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+rub:
+  name: Russian Ruble
+  priority: 100
+  iso_code: RUB
+  iso_numeric: "643"
+  html_code: "&#x20BD;"
+  symbol: "₽"
+  minor_unit: Kopeck
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: ","
+  delimiter: "."
+  default_format: "%n %u"
+  default_precision: 2
+rwf:
+  name: Rwandan Franc
+  priority: 100
+  iso_code: RWF
+  iso_numeric: "646"
+  html_code: ""
+  symbol: FRw
+  minor_unit: Centime
+  minor_unit_conversion: 1
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 0
+xbd:
+  name: European Unit of Account 17
+  priority: 100
+  iso_code: XBD
+  iso_numeric: "958"
+  html_code: ""
+  symbol: ""
+  minor_unit: ""
+  minor_unit_conversion: 1
+  smallest_denomination:
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 0
+xcd:
+  name: East Caribbean Dollar
+  priority: 100
+  iso_code: XCD
+  iso_numeric: "951"
+  html_code: "$"
+  symbol: "$"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+xdr:
+  name: Special Drawing Rights
+  priority: 100
+  iso_code: XDR
+  iso_numeric: "960"
+  html_code: "$"
+  symbol: SDR
+  minor_unit: ""
+  minor_unit_conversion: 1
+  smallest_denomination:
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 0
+xof:
+  name: West African Cfa Franc
+  priority: 100
+  iso_code: XOF
+  iso_numeric: "952"
+  html_code: ""
+  symbol: Fr
+  minor_unit: Centime
+  minor_unit_conversion: 1
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 0
+xpd:
+  name: Palladium
+  priority: 100
+  iso_code: XPD
+  iso_numeric: "964"
+  html_code: ""
+  symbol: oz t
+  minor_unit: oz
+  minor_unit_conversion: 1
+  smallest_denomination:
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 0
+xpf:
+  name: Cfp Franc
+  priority: 100
+  iso_code: XPF
+  iso_numeric: "953"
+  html_code: ""
+  symbol: Fr
+  minor_unit: Centime
+  minor_unit_conversion: 1
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 0
+xpt:
+  name: Platinum
+  priority: 100
+  iso_code: XPT
+  iso_numeric: "962"
+  html_code: ""
+  symbol: oz t
+  minor_unit: ""
+  minor_unit_conversion: 1
+  smallest_denomination: ""
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 0
+xts:
+  name: Codes specifically reserved for testing purposes
+  priority: 100
+  iso_code: XTS
+  iso_numeric: "963"
+  html_code: ""
+  symbol: ""
+  minor_unit: ""
+  minor_unit_conversion: 1
+  smallest_denomination: ""
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 0
+yer:
+  name: Yemeni Rial
+  priority: 100
+  iso_code: YER
+  iso_numeric: "886"
+  html_code: "&#xFDFC;"
+  symbol: "﷼"
+  minor_unit: Fils
+  minor_unit_conversion: 100
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+zar:
+  name: South African Rand
+  priority: 100
+  iso_code: ZAR
+  iso_numeric: "710"
+  html_code: "&#x0052;"
+  symbol: R
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 10
+  separator: ","
+  delimiter: " "
+  default_format: "%u%n"
+  default_precision: 2
+zmk:
+  name: Zambian Kwacha
+  priority: 100
+  iso_code: ZMK
+  iso_numeric: "894"
+  html_code: ""
+  symbol: ZK
+  minor_unit: Ngwee
+  minor_unit_conversion: 100
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+zmw:
+  name: Zambian Kwacha
+  priority: 100
+  iso_code: ZMW
+  iso_numeric: "967"
+  html_code: ""
+  symbol: K
+  minor_unit: Ngwee
+  minor_unit_conversion: 100
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+bch:
+  name: Bitcoin Cash
+  priority: 100
+  iso_code: BCH
+  iso_numeric: ""
+  html_code: "&#x20bf;"
+  symbol: "₿"
+  minor_unit: Satoshi
+  minor_unit_conversion: 100000000
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 8
+btc:
+  name: Bitcoin
+  priority: 100
+  iso_code: BTC
+  iso_numeric: ""
+  html_code: "&#x20bf;"
+  symbol: "₿"
+  minor_unit: Satoshi
+  minor_unit_conversion: 100000000
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 8
+jep:
+  name: Jersey Pound
+  priority: 100
+  iso_code: JEP
+  iso_numeric: ""
+  html_code: "&#x00A3;"
+  symbol: "£"
+  minor_unit: Penny
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+ggp:
+  name: Guernsey Pound
+  priority: 100
+  iso_code: GGP
+  iso_numeric: ""
+  html_code: "&#x00A3;"
+  symbol: "£"
+  minor_unit: Penny
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+imp:
+  name: Isle of Man Pound
+  priority: 100
+  iso_code: IMP
+  iso_numeric: ""
+  html_code: "&#x00A3;"
+  symbol: "£"
+  minor_unit: Penny
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+xfu:
+  name: UIC Franc
+  priority: 100
+  iso_code: XFU
+  iso_numeric: ""
+  html_code: ""
+  symbol: ""
+  minor_unit: ""
+  minor_unit_conversion: 100
+  smallest_denomination: ""
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+gbx:
+  name: British Penny
+  priority: 100
+  iso_code: GBX
+  iso_numeric: ""
+  html_code: ""
+  symbol: ""
+  minor_unit: ""
+  minor_unit_conversion: 1
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 0
+cnh:
+  name: Chinese Renminbi Yuan Offshore
+  priority: 100
+  iso_code: CNH
+  iso_numeric: ""
+  html_code: "￥"
+  symbol: "¥"
+  minor_unit: Fen
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+usdc:
+  name: USD Coin
+  priority: 100
+  iso_code: USDC
+  iso_numeric: ""
+  html_code: "$"
+  symbol: USDC
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+thb:
+  name: Thai Baht
+  priority: 100
+  iso_code: THB
+  iso_numeric: "764"
+  html_code: "&#x0E3F;"
+  symbol: "฿"
+  minor_unit: Satang
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+tjs:
+  name: Tajikistani Somoni
+  priority: 100
+  iso_code: TJS
+  iso_numeric: "972"
+  html_code: ""
+  symbol: ЅМ
+  minor_unit: Diram
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+tmt:
+  name: Turkmenistani Manat
+  priority: 100
+  iso_code: TMT
+  iso_numeric: "934"
+  html_code: ""
+  symbol: T
+  minor_unit: Tenge
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+tnd:
+  name: Tunisian Dinar
+  priority: 100
+  iso_code: TND
+  iso_numeric: "788"
+  html_code: ""
+  symbol: د.ت
+  minor_unit: Millime
+  minor_unit_conversion: 1000
+  smallest_denomination: 10
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 3
+top:
+  name: Tongan Paʻanga
+  priority: 100
+  iso_code: TOP
+  iso_numeric: "776"
+  html_code: ""
+  symbol: T$
+  minor_unit: Seniti
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+try:
+  name: Turkish Lira
+  priority: 100
+  iso_code: TRY
+  iso_numeric: "949"
+  html_code: "&#8378;"
+  symbol: "₺"
+  minor_unit: kuruş
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: ","
+  delimiter: "."
+  default_format: "%u%n"
+  default_precision: 2
+ttd:
+  name: Trinidad and Tobago Dollar
+  priority: 100
+  iso_code: TTD
+  iso_numeric: "780"
+  html_code: "$"
+  symbol: "$"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+twd:
+  name: New Taiwan Dollar
+  priority: 100
+  iso_code: TWD
+  iso_numeric: "901"
+  html_code: "$"
+  symbol: "$"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 50
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+tzs:
+  name: Tanzanian Shilling
+  priority: 100
+  iso_code: TZS
+  iso_numeric: "834"
+  html_code: ""
+  symbol: Sh
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 5000
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+uah:
+  name: Ukrainian Hryvnia
+  priority: 100
+  iso_code: UAH
+  iso_numeric: "980"
+  html_code: "&#x20B4;"
+  symbol: "₴"
+  minor_unit: Kopiyka
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+ugx:
+  name: Ugandan Shilling
+  priority: 100
+  iso_code: UGX
+  iso_numeric: "800"
+  html_code: ""
+  symbol: USh
+  minor_unit: Cent
+  minor_unit_conversion: 1
+  smallest_denomination: 1000
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 0
+uyu:
+  name: Uruguayan Peso
+  priority: 100
+  iso_code: UYU
+  iso_numeric: "858"
+  html_code: "$U"
+  symbol: "$U"
+  minor_unit: Centésimo
+  minor_unit_conversion: 100
+  smallest_denomination: 100
+  separator: ","
+  delimiter: "."
+  default_format: "%u%n"
+  default_precision: 2
+uzs:
+  name: Uzbekistan Som
+  priority: 100
+  iso_code: UZS
+  iso_numeric: "860"
+  html_code: ""
+  symbol: so'm
+  minor_unit: Tiyin
+  minor_unit_conversion: 100
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+ves:
+  name: Venezuelan Bolívar Soberano
+  priority: 100
+  iso_code: VES
+  iso_numeric: "928"
+  html_code: ""
+  symbol: Bs
+  minor_unit: Céntimo
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: ","
+  delimiter: "."
+  default_format: "%u%n"
+  default_precision: 2
+vnd:
+  name: Vietnamese Đồng
+  priority: 100
+  iso_code: VND
+  iso_numeric: "704"
+  html_code: "&#x20AB;"
+  symbol: "₫"
+  minor_unit: Hào
+  minor_unit_conversion: 1
+  smallest_denomination: 100
+  separator: ","
+  delimiter: "."
+  default_format: "%n %u"
+  default_precision: 0
+vuv:
+  name: Vanuatu Vatu
+  priority: 100
+  iso_code: VUV
+  iso_numeric: "548"
+  html_code: ""
+  symbol: Vt
+  minor_unit:
+  minor_unit_conversion: 1
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 0
+wst:
+  name: Samoan Tala
+  priority: 100
+  iso_code: WST
+  iso_numeric: "882"
+  html_code: ""
+  symbol: T
+  minor_unit: Sene
+  minor_unit_conversion: 100
+  smallest_denomination: 10
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+xaf:
+  name: Central African Cfa Franc
+  priority: 100
+  iso_code: XAF
+  iso_numeric: "950"
+  html_code: ""
+  symbol: CFA
+  minor_unit: Centime
+  minor_unit_conversion: 1
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 0
+xag:
+  name: Silver (Troy Ounce)
+  priority: 100
+  iso_code: XAG
+  iso_numeric: "961"
+  html_code: ""
+  symbol: oz t
+  minor_unit: oz
+  minor_unit_conversion: 1
+  smallest_denomination:
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 0
+xau:
+  name: Gold (Troy Ounce)
+  priority: 100
+  iso_code: XAU
+  iso_numeric: "959"
+  html_code: ""
+  symbol: oz t
+  minor_unit: oz
+  minor_unit_conversion: 1
+  smallest_denomination:
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 0
+xba:
+  name: European Composite Unit
+  priority: 100
+  iso_code: XBA
+  iso_numeric: "955"
+  html_code: ""
+  symbol: ""
+  minor_unit: ""
+  minor_unit_conversion: 1
+  smallest_denomination:
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 0
+xbb:
+  name: European Monetary Unit
+  priority: 100
+  iso_code: XBB
+  iso_numeric: "956"
+  html_code: ""
+  symbol: ""
+  minor_unit: ""
+  minor_unit_conversion: 1
+  smallest_denomination:
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 0
+byn:
+  name: Belarusian Ruble
+  priority: 100
+  iso_code: BYN
+  iso_numeric: "933"
+  html_code: ""
+  symbol: Br
+  minor_unit: Kapeyka
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: ","
+  delimiter: " "
+  default_format: "%n %u"
+  default_precision: 2
+bzd:
+  name: Belize Dollar
+  priority: 100
+  iso_code: BZD
+  iso_numeric: "084"
+  html_code: "$"
+  symbol: "$"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+cdf:
+  name: Congolese Franc
+  priority: 100
+  iso_code: CDF
+  iso_numeric: "976"
+  html_code: ""
+  symbol: Fr
+  minor_unit: Centime
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+chf:
+  name: Swiss Franc
+  priority: 100
+  iso_code: CHF
+  iso_numeric: "756"
+  html_code: ""
+  symbol: CHF
+  minor_unit: Rappen
+  minor_unit_conversion: 100
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%u %n"
+  default_precision: 2
+clf:
+  name: Unidad de Fomento
+  priority: 100
+  iso_code: CLF
+  iso_numeric: "990"
+  html_code: "&#x20B1;"
+  symbol: UF
+  minor_unit: Peso
+  minor_unit_conversion: 10000
+  smallest_denomination:
+  separator: ","
+  delimiter: "."
+  default_format: "%u%n"
+  default_precision: 4
+clp:
+  name: Chilean Peso
+  priority: 100
+  iso_code: CLP
+  iso_numeric: "152"
+  html_code: "&#36;"
+  symbol: "$"
+  minor_unit: Peso
+  minor_unit_conversion: 1
+  smallest_denomination: 1
+  separator: ","
+  delimiter: "."
+  default_format: "%u%n"
+  default_precision: 0
+cny:
+  name: Chinese Renminbi Yuan
+  priority: 100
+  iso_code: CNY
+  iso_numeric: "156"
+  html_code: "￥"
+  symbol: "¥"
+  minor_unit: Fen
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+cop:
+  name: Colombian Peso
+  priority: 100
+  iso_code: COP
+  iso_numeric: "170"
+  html_code: "&#36;"
+  symbol: "$"
+  minor_unit: Centavo
+  minor_unit_conversion: 100
+  smallest_denomination: 20
+  separator: ","
+  delimiter: "."
+  default_format: "%u%n"
+  default_precision: 2
+crc:
+  name: Costa Rican Colón
+  priority: 100
+  iso_code: CRC
+  iso_numeric: "188"
+  html_code: "&#x20A1;"
+  symbol: "₡"
+  minor_unit: Céntimo
+  minor_unit_conversion: 100
+  smallest_denomination: 500
+  separator: ","
+  delimiter: "."
+  default_format: "%u%n"
+  default_precision: 2
+cuc:
+  name: Cuban Convertible Peso
+  priority: 100
+  iso_code: CUC
+  iso_numeric: "931"
+  html_code: ""
+  symbol: "$"
+  minor_unit: Centavo
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+cup:
+  name: Cuban Peso
+  priority: 100
+  iso_code: CUP
+  iso_numeric: "192"
+  html_code: "&#x20B1;"
+  symbol: "$"
+  minor_unit: Centavo
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+cve:
+  name: Cape Verdean Escudo
+  priority: 100
+  iso_code: CVE
+  iso_numeric: "132"
+  html_code: ""
+  symbol: "$"
+  minor_unit: Centavo
+  minor_unit_conversion: 100
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+czk:
+  name: Czech Koruna
+  priority: 100
+  iso_code: CZK
+  iso_numeric: "203"
+  html_code: ""
+  symbol: Kč
+  minor_unit: Haléř
+  minor_unit_conversion: 100
+  smallest_denomination: 100
+  separator: ","
+  delimiter: " "
+  default_format: "%n %u"
+  default_precision: 2
+djf:
+  name: Djiboutian Franc
+  priority: 100
+  iso_code: DJF
+  iso_numeric: "262"
+  html_code: ""
+  symbol: Fdj
+  minor_unit: Centime
+  minor_unit_conversion: 1
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 0
+dkk:
+  name: Danish Krone
+  priority: 100
+  iso_code: DKK
+  iso_numeric: "208"
+  html_code: ""
+  symbol: kr.
+  minor_unit: Øre
+  minor_unit_conversion: 100
+  smallest_denomination: 50
+  separator: ","
+  delimiter: "."
+  default_format: "%n %u"
+  default_precision: 2
+dop:
+  name: Dominican Peso
+  priority: 100
+  iso_code: DOP
+  iso_numeric: "214"
+  html_code: "&#x20B1;"
+  symbol: "$"
+  minor_unit: Centavo
+  minor_unit_conversion: 100
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+dzd:
+  name: Algerian Dinar
+  priority: 100
+  iso_code: DZD
+  iso_numeric: "012"
+  html_code: ""
+  symbol: د.ج
+  minor_unit: Centime
+  minor_unit_conversion: 100
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+egp:
+  name: Egyptian Pound
+  priority: 100
+  iso_code: EGP
+  iso_numeric: "818"
+  html_code: "&#x00A3;"
+  symbol: ج.م
+  minor_unit: Piastre
+  minor_unit_conversion: 100
+  smallest_denomination: 25
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+ern:
+  name: Eritrean Nakfa
+  priority: 100
+  iso_code: ERN
+  iso_numeric: "232"
+  html_code: ""
+  symbol: Nfk
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+etb:
+  name: Ethiopian Birr
+  priority: 100
+  iso_code: ETB
+  iso_numeric: "230"
+  html_code: ""
+  symbol: Br
+  minor_unit: Santim
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+fjd:
+  name: Fijian Dollar
+  priority: 100
+  iso_code: FJD
+  iso_numeric: "242"
+  html_code: "$"
+  symbol: "$"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+khr:
+  name: Cambodian Riel
+  priority: 100
+  iso_code: KHR
+  iso_numeric: "116"
+  html_code: "&#x17DB;"
+  symbol: "៛"
+  minor_unit: Sen
+  minor_unit_conversion: 100
+  smallest_denomination: 5000
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+aed:
+  name: United Arab Emirates Dirham
+  priority: 100
+  iso_code: AED
+  iso_numeric: "784"
+  html_code: ""
+  symbol: د.إ
+  minor_unit: Fils
+  minor_unit_conversion: 100
+  smallest_denomination: 25
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+afn:
+  name: Afghan Afghani
+  priority: 100
+  iso_code: AFN
+  iso_numeric: "971"
+  html_code: ""
+  symbol: "؋"
+  minor_unit: Pul
+  minor_unit_conversion: 100
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+all:
+  name: Albanian Lek
+  priority: 100
+  iso_code: ALL
+  iso_numeric: "008"
+  html_code: ""
+  symbol: L
+  minor_unit: Qintar
+  minor_unit_conversion: 100
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+amd:
+  name: Armenian Dram
+  priority: 100
+  iso_code: AMD
+  iso_numeric: "051"
+  html_code: ""
+  symbol: դր.
+  minor_unit: Luma
+  minor_unit_conversion: 100
+  smallest_denomination: 10
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+ang:
+  name: Netherlands Antillean Gulden
+  priority: 100
+  iso_code: ANG
+  iso_numeric: "532"
+  html_code: "&#x0192;"
+  symbol: ƒ
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: ","
+  delimiter: "."
+  default_format: "%u%n"
+  default_precision: 2
+aoa:
+  name: Angolan Kwanza
+  priority: 100
+  iso_code: AOA
+  iso_numeric: "973"
+  html_code: ""
+  symbol: Kz
+  minor_unit: Cêntimo
+  minor_unit_conversion: 100
+  smallest_denomination: 10
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+ars:
+  name: Argentine Peso
+  priority: 100
+  iso_code: ARS
+  iso_numeric: "032"
+  html_code: "$"
+  symbol: "$"
+  minor_unit: Centavo
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: ","
+  delimiter: "."
+  default_format: "%u%n"
+  default_precision: 2
+awg:
+  name: Aruban Florin
+  priority: 100
+  iso_code: AWG
+  iso_numeric: "533"
+  html_code: "&#x0192;"
+  symbol: ƒ
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+azn:
+  name: Azerbaijani Manat
+  priority: 100
+  iso_code: AZN
+  iso_numeric: "944"
+  html_code: ""
+  symbol: "₼"
+  minor_unit: Qəpik
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+bam:
+  name: Bosnia and Herzegovina Convertible Mark
+  priority: 100
+  iso_code: BAM
+  iso_numeric: "977"
+  html_code: ""
+  symbol: КМ
+  minor_unit: Fening
+  minor_unit_conversion: 100
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+bbd:
+  name: Barbadian Dollar
+  priority: 100
+  iso_code: BBD
+  iso_numeric: "052"
+  html_code: "$"
+  symbol: "$"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+bdt:
+  name: Bangladeshi Taka
+  priority: 100
+  iso_code: BDT
+  iso_numeric: "050"
+  html_code: ""
+  symbol: "৳"
+  minor_unit: Paisa
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+bgn:
+  name: Bulgarian Lev
+  priority: 100
+  iso_code: BGN
+  iso_numeric: "975"
+  html_code: ""
+  symbol: лв.
+  minor_unit: Stotinka
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+bhd:
+  name: Bahraini Dinar
+  priority: 100
+  iso_code: BHD
+  iso_numeric: "048"
+  html_code: ""
+  symbol: د.ب
+  minor_unit: Fils
+  minor_unit_conversion: 1000
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 3
+bif:
+  name: Burundian Franc
+  priority: 100
+  iso_code: BIF
+  iso_numeric: "108"
+  html_code: ""
+  symbol: Fr
+  minor_unit: Centime
+  minor_unit_conversion: 1
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 0
+bmd:
+  name: Bermudian Dollar
+  priority: 100
+  iso_code: BMD
+  iso_numeric: "060"
+  html_code: "$"
+  symbol: "$"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+bnd:
+  name: Brunei Dollar
+  priority: 100
+  iso_code: BND
+  iso_numeric: "096"
+  html_code: "$"
+  symbol: "$"
+  minor_unit: Sen
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+bob:
+  name: Bolivian Boliviano
+  priority: 100
+  iso_code: BOB
+  iso_numeric: "068"
+  html_code: ""
+  symbol: Bs.
+  minor_unit: Centavo
+  minor_unit_conversion: 100
+  smallest_denomination: 10
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+brl:
+  name: Brazilian Real
+  priority: 100
+  iso_code: BRL
+  iso_numeric: "986"
+  html_code: R$
+  symbol: R$
+  minor_unit: Centavo
+  minor_unit_conversion: 100
+  smallest_denomination: 5
+  separator: ","
+  delimiter: "."
+  default_format: "%u%n"
+  default_precision: 2
+bsd:
+  name: Bahamian Dollar
+  priority: 100
+  iso_code: BSD
+  iso_numeric: "044"
+  html_code: "$"
+  symbol: "$"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+btn:
+  name: Bhutanese Ngultrum
+  priority: 100
+  iso_code: BTN
+  iso_numeric: "064"
+  html_code: ""
+  symbol: Nu.
+  minor_unit: Chertrum
+  minor_unit_conversion: 100
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+bwp:
+  name: Botswana Pula
+  priority: 100
+  iso_code: BWP
+  iso_numeric: "072"
+  html_code: ""
+  symbol: P
+  minor_unit: Thebe
+  minor_unit_conversion: 100
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+kmf:
+  name: Comorian Franc
+  priority: 100
+  iso_code: KMF
+  iso_numeric: "174"
+  html_code: ""
+  symbol: Fr
+  minor_unit: Centime
+  minor_unit_conversion: 1
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 0
+kpw:
+  name: North Korean Won
+  priority: 100
+  iso_code: KPW
+  iso_numeric: "408"
+  html_code: "&#x20A9;"
+  symbol: "₩"
+  minor_unit: Chŏn
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+krw:
+  name: South Korean Won
+  priority: 100
+  iso_code: KRW
+  iso_numeric: "410"
+  html_code: "&#x20A9;"
+  symbol: "₩"
+  minor_unit:
+  minor_unit_conversion: 1
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 0
+kwd:
+  name: Kuwaiti Dinar
+  priority: 100
+  iso_code: KWD
+  iso_numeric: "414"
+  html_code: ""
+  symbol: د.ك
+  minor_unit: Fils
+  minor_unit_conversion: 1000
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 3
+kyd:
+  name: Cayman Islands Dollar
+  priority: 100
+  iso_code: KYD
+  iso_numeric: "136"
+  html_code: "$"
+  symbol: "$"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+kzt:
+  name: Kazakhstani Tenge
+  priority: 100
+  iso_code: KZT
+  iso_numeric: "398"
+  html_code: ""
+  symbol: "₸"
+  minor_unit: Tiyn
+  minor_unit_conversion: 100
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+lak:
+  name: Lao Kip
+  priority: 100
+  iso_code: LAK
+  iso_numeric: "418"
+  html_code: "&#x20AD;"
+  symbol: "₭"
+  minor_unit: Att
+  minor_unit_conversion: 100
+  smallest_denomination: 10
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+lbp:
+  name: Lebanese Pound
+  priority: 100
+  iso_code: LBP
+  iso_numeric: "422"
+  html_code: "&#x00A3;"
+  symbol: ل.ل
+  minor_unit: Piastre
+  minor_unit_conversion: 100
+  smallest_denomination: 25000
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+lkr:
+  name: Sri Lankan Rupee
+  priority: 100
+  iso_code: LKR
+  iso_numeric: "144"
+  html_code: "&#8360;"
+  symbol: "₨"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+lrd:
+  name: Liberian Dollar
+  priority: 100
+  iso_code: LRD
+  iso_numeric: "430"
+  html_code: "$"
+  symbol: "$"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+lsl:
+  name: Lesotho Loti
+  priority: 100
+  iso_code: LSL
+  iso_numeric: "426"
+  html_code: ""
+  symbol: L
+  minor_unit: Sente
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+lyd:
+  name: Libyan Dinar
+  priority: 100
+  iso_code: LYD
+  iso_numeric: "434"
+  html_code: ""
+  symbol: ل.د
+  minor_unit: Dirham
+  minor_unit_conversion: 1000
+  smallest_denomination: 50
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 3
+mad:
+  name: Moroccan Dirham
+  priority: 100
+  iso_code: MAD
+  iso_numeric: "504"
+  html_code: ""
+  symbol: د.م.
+  minor_unit: Centime
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+mdl:
+  name: Moldovan Leu
+  priority: 100
+  iso_code: MDL
+  iso_numeric: "498"
+  html_code: ""
+  symbol: L
+  minor_unit: Ban
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+mga:
+  name: Malagasy Ariary
+  priority: 100
+  iso_code: MGA
+  iso_numeric: "969"
+  html_code: ""
+  symbol: Ar
+  minor_unit: Iraimbilanja
+  minor_unit_conversion: 5
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 1
+mkd:
+  name: Macedonian Denar
+  priority: 100
+  iso_code: MKD
+  iso_numeric: "807"
+  html_code: ""
+  symbol: ден
+  minor_unit: Deni
+  minor_unit_conversion: 100
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+mmk:
+  name: Myanmar Kyat
+  priority: 100
+  iso_code: MMK
+  iso_numeric: "104"
+  html_code: ""
+  symbol: K
+  minor_unit: Pya
+  minor_unit_conversion: 100
+  smallest_denomination: 50
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+mnt:
+  name: Mongolian Tögrög
+  priority: 100
+  iso_code: MNT
+  iso_numeric: "496"
+  html_code: "&#x20AE;"
+  symbol: "₮"
+  minor_unit: Möngö
+  minor_unit_conversion: 100
+  smallest_denomination: 2000
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+mop:
+  name: Macanese Pataca
+  priority: 100
+  iso_code: MOP
+  iso_numeric: "446"
+  html_code: ""
+  symbol: P
+  minor_unit: Avo
+  minor_unit_conversion: 100
+  smallest_denomination: 10
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+mru:
+  name: Mauritanian Ouguiya
+  priority: 100
+  iso_code: MRU
+  iso_numeric: "929"
+  html_code: ""
+  symbol: UM
+  minor_unit: Khoums
+  minor_unit_conversion: 5
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 1
+mur:
+  name: Mauritian Rupee
+  priority: 100
+  iso_code: MUR
+  iso_numeric: "480"
+  html_code: "&#x20A8;"
+  symbol: "₨"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+fkp:
+  name: Falkland Pound
+  priority: 100
+  iso_code: FKP
+  iso_numeric: "238"
+  html_code: "&#x00A3;"
+  symbol: "£"
+  minor_unit: Penny
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+gel:
+  name: Georgian Lari
+  priority: 100
+  iso_code: GEL
+  iso_numeric: "981"
+  html_code: ""
+  symbol: "₾"
+  minor_unit: Tetri
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+ghs:
+  name: Ghanaian Cedi
+  priority: 100
+  iso_code: GHS
+  iso_numeric: "936"
+  html_code: "&#x20B5;"
+  symbol: "₵"
+  minor_unit: Pesewa
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+gip:
+  name: Gibraltar Pound
+  priority: 100
+  iso_code: GIP
+  iso_numeric: "292"
+  html_code: "&#x00A3;"
+  symbol: "£"
+  minor_unit: Penny
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+gmd:
+  name: Gambian Dalasi
+  priority: 100
+  iso_code: GMD
+  iso_numeric: "270"
+  html_code: ""
+  symbol: D
+  minor_unit: Butut
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+gnf:
+  name: Guinean Franc
+  priority: 100
+  iso_code: GNF
+  iso_numeric: "324"
+  html_code: ""
+  symbol: Fr
+  minor_unit: Centime
+  minor_unit_conversion: 1
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 0
+gtq:
+  name: Guatemalan Quetzal
+  priority: 100
+  iso_code: GTQ
+  iso_numeric: "320"
+  html_code: ""
+  symbol: Q
+  minor_unit: Centavo
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+gyd:
+  name: Guyanese Dollar
+  priority: 100
+  iso_code: GYD
+  iso_numeric: "328"
+  html_code: "$"
+  symbol: "$"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 100
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+hkd:
+  name: Hong Kong Dollar
+  priority: 100
+  iso_code: HKD
+  iso_numeric: "344"
+  html_code: "$"
+  symbol: "$"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 10
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+hnl:
+  name: Honduran Lempira
+  priority: 100
+  iso_code: HNL
+  iso_numeric: "340"
+  html_code: ""
+  symbol: L
+  minor_unit: Centavo
+  minor_unit_conversion: 100
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+htg:
+  name: Haitian Gourde
+  priority: 100
+  iso_code: HTG
+  iso_numeric: "332"
+  html_code: ""
+  symbol: G
+  minor_unit: Centime
+  minor_unit_conversion: 100
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2
+huf:
+  name: Hungarian Forint
+  priority: 100
+  iso_code: HUF
+  iso_numeric: "348"
+  html_code: ""
+  symbol: Ft
+  minor_unit: ""
+  minor_unit_conversion: 1
+  smallest_denomination: 5
+  separator: ","
+  delimiter: " "
+  default_format: "%n %u"
+  default_precision: 0
+idr:
+  name: Indonesian Rupiah
+  priority: 100
+  iso_code: IDR
+  iso_numeric: "360"
+  html_code: ""
+  symbol: Rp
+  minor_unit: Sen
+  minor_unit_conversion: 100
+  smallest_denomination: 5000
+  separator: ","
+  delimiter: "."
+  default_format: "%u%n"
+  default_precision: 2
+ils:
+  name: Israeli New Sheqel
+  priority: 100
+  iso_code: ILS
+  iso_numeric: "376"
+  html_code: "&#x20AA;"
+  symbol: "₪"
+  minor_unit: Agora
+  minor_unit_conversion: 100
+  smallest_denomination: 10
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+inr:
+  name: Indian Rupee
+  priority: 100
+  iso_code: INR
+  iso_numeric: "356"
+  html_code: "&#x20b9;"
+  symbol: "₹"
+  minor_unit: Paisa
+  minor_unit_conversion: 100
+  smallest_denomination: 50
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+iqd:
+  name: Iraqi Dinar
+  priority: 100
+  iso_code: IQD
+  iso_numeric: "368"
+  html_code: ""
+  symbol: ع.د
+  minor_unit: Fils
+  minor_unit_conversion: 1000
+  smallest_denomination: 50000
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 3
+irr:
+  name: Iranian Rial
+  priority: 100
+  iso_code: IRR
+  iso_numeric: "364"
+  html_code: "&#xFDFC;"
+  symbol: "﷼"
+  minor_unit:
+  minor_unit_conversion: 100
+  smallest_denomination: 5000
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+isk:
+  name: Icelandic Króna
+  priority: 100
+  iso_code: ISK
+  iso_numeric: "352"
+  html_code: ""
+  symbol: kr.
+  minor_unit:
+  minor_unit_conversion: 1
+  smallest_denomination: 1
+  separator: ","
+  delimiter: "."
+  default_format: "%n %u"
+  default_precision: 0
+jmd:
+  name: Jamaican Dollar
+  priority: 100
+  iso_code: JMD
+  iso_numeric: "388"
+  html_code: "$"
+  symbol: "$"
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+jod:
+  name: Jordanian Dinar
+  priority: 100
+  iso_code: JOD
+  iso_numeric: "400"
+  html_code: ""
+  symbol: د.ا
+  minor_unit: Fils
+  minor_unit_conversion: 1000
+  smallest_denomination: 5
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 3
+kes:
+  name: Kenyan Shilling
+  priority: 100
+  iso_code: KES
+  iso_numeric: "404"
+  html_code: ""
+  symbol: KSh
+  minor_unit: Cent
+  minor_unit_conversion: 100
+  smallest_denomination: 50
+  separator: "."
+  delimiter: ","
+  default_format: "%u%n"
+  default_precision: 2
+kgs:
+  name: Kyrgyzstani Som
+  priority: 100
+  iso_code: KGS
+  iso_numeric: "417"
+  html_code: ""
+  symbol: som
+  minor_unit: Tyiyn
+  minor_unit_conversion: 100
+  smallest_denomination: 1
+  separator: "."
+  delimiter: ","
+  default_format: "%n %u"
+  default_precision: 2

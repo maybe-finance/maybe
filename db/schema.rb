@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_03_07_082827) do
+ActiveRecord::Schema[7.2].define(version: 2024_03_08_121431) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -83,14 +83,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_07_082827) do
     t.boolean "is_active", default: true, null: false
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id"], name: "index_accounts_on_family_id"
-  end
-
-  create_table "currencies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name"
-    t.string "iso_code"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["iso_code"], name: "index_currencies_on_iso_code", unique: true
   end
 
   create_table "exchange_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
