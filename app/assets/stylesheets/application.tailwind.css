@@ -4,6 +4,9 @@
 
 /* Reset rules, default styles applied to plain HTML */
 @layer base {
+  details > summary::-webkit-details-marker {
+    @apply hidden;
+  }
 }
 
 @layer components {
@@ -45,6 +48,10 @@
 
   .form-field__submit {
     @apply w-full p-3 text-center text-white bg-black rounded-lg hover:bg-gray-700;
+  }
+
+  input:checked + label + .toggle-switch-dot {
+    transform: translateX(100%);
   }
 }
 

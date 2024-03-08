@@ -1,20 +1,19 @@
 class Valuation < ApplicationRecord
   belongs_to :account
 
-  after_commit :sync_account_balances, on: [ :create, :update ]
-  after_destroy :sync_account_balances_after_destroy
+  after_commit :sync_account
 
-  def trend(previous)
-    Trend.new(value, previous&.value)
+  scope :in_period, ->(period) { period.date_range.nil? ? all : where(date: period.date_range) }
+
+  def self.to_series(account, period = Period.all)
+    MoneySeries.new(
+      in_period(period).order(:date),
+      { trend_type: account.classification, amount_accessor: :value }
+    )
   end
 
   private
-
-    def sync_account_balances_after_destroy
-      AccountBalanceSyncJob.perform_later(account_id: account_id, valuation_date: date, sync_type: "valuation", sync_action: "destroy")
-    end
-
-    def sync_account_balances
-      AccountBalanceSyncJob.perform_later(account_id: account_id, valuation_date: date, sync_type: "valuation", sync_action: "update")
+    def sync_account
+      self.account.sync_later
     end
 end

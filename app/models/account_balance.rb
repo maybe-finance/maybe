@@ -3,7 +3,10 @@ class AccountBalance < ApplicationRecord
 
   scope :in_period, ->(period) { period.date_range.nil? ? all : where(date: period.date_range) }
 
-  def trend(previous)
-    Trend.new(balance, previous&.balance)
+  def self.to_series(account, period = Period.all)
+    MoneySeries.new(
+      in_period(period).order(:date),
+      { trend_type: account.classification }
+    )
   end
 end

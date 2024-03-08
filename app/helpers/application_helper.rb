@@ -48,13 +48,15 @@ module ApplicationHelper
     end
   end
 
-  # Styles to use when displaying a change in value
   def trend_styles(trend)
+    fallback = { bg_class: "bg-gray-500/5", text_class: "text-gray-500", symbol: "", icon: "minus" }
+    return fallback if trend.nil? || trend.direction == "flat"
+
     bg_class, text_class, symbol, icon = case trend.direction
     when "up"
-      [ "bg-green-500/5", "text-green-500", "+", "arrow-up" ]
+      trend.type == "liability" ? [ "bg-red-500/5", "text-red-500", "+", "arrow-up" ] : [ "bg-green-500/5", "text-green-500", "+", "arrow-up" ]
     when "down"
-      [ "bg-red-500/5", "text-red-500", "-", "arrow-down" ]
+      trend.type == "liability" ? [ "bg-green-500/5", "text-green-500", "-", "arrow-down" ] : [ "bg-red-500/5", "text-red-500", "-", "arrow-down" ]
     when "flat"
       [ "bg-gray-500/5", "text-gray-500", "", "minus" ]
     else
@@ -64,7 +66,7 @@ module ApplicationHelper
     { bg_class: bg_class, text_class: text_class, symbol: symbol, icon: icon }
   end
 
-  def trend_label(period)
+  def period_label(period)
     return "since account creation" if period.date_range.nil?
     start_date, end_date = period.date_range.first, period.date_range.last
 
@@ -90,32 +92,8 @@ module ApplicationHelper
   def format_currency(number, options = {})
     user_currency_preference = Current.family.try(:currency) || "USD"
 
-    case user_currency_preference
-    when "USD"
-      options.reverse_merge!(unit: "$", precision: 2, delimiter: ",", separator: ".")
-    when "EUR"
-      options.reverse_merge!(unit: "€", precision: 2, delimiter: ".", separator: ",")
-    when "GBP"
-      options.reverse_merge!(unit: "£", precision: 2, delimiter: ",", separator: ".")
-    when "CAD"
-      options.reverse_merge!(unit: "C$", precision: 2, delimiter: ",", separator: ".")
-    when "MXN"
-      options.reverse_merge!(unit: "MX$", precision: 2, delimiter: ",", separator: ".")
-    when "HKD"
-      options.reverse_merge!(unit: "HK$", precision: 2, delimiter: ",", separator: ".")
-    when "CHF"
-      options.reverse_merge!(unit: "CHF", precision: 2, delimiter: ".", separator: ",")
-    when "SGD"
-      options.reverse_merge!(unit: "S$", precision: 2, delimiter: ",", separator: ".")
-    when "NZD"
-      options.reverse_merge!(unit: "NZ$", precision: 2, delimiter: ",", separator: ".")
-    when "AUD"
-      options.reverse_merge!(unit: "A$", precision: 2, delimiter: ",", separator: ".")
-    when "KRW"
-      options.reverse_merge!(unit: "₩", precision: 0, delimiter: ",", separator: ".")
-    else
-      options.reverse_merge!(unit: "$", precision: 2, delimiter: ",", separator: ".")
-    end
+    currency_options = CURRENCY_OPTIONS[user_currency_preference.to_sym]
+    options.reverse_merge!(currency_options)
 
     number_to_currency(number, options)
   end

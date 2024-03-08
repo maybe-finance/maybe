@@ -2,8 +2,8 @@ require "test_helper"
 
 class ValuationsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in @user = users(:bob)
-    @account = accounts(:dylan_checking)
+    sign_in @user = users(:family_admin)
+    @account = accounts(:checking)
   end
 
   test "new" do

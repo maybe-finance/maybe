@@ -2,8 +2,7 @@ require "test_helper"
 
 class AccountTest < ActiveSupport::TestCase
   def setup
-    depository = Account::Depository.create!
-    @account = Account.create!(family: families(:dylan_family), name: "Explicit Checking", original_balance: 1200, accountable: depository)
+    @account = accounts(:checking)
   end
 
   test "new account should be valid" do
