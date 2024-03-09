@@ -1,9 +1,7 @@
-<div id="<%= dom_id transaction %>" class="flex items-center gap-6 py-4 text-sm font-medium">
+<%= link_to transaction_path(transaction), data: { turbo_frame: "modal" }, class: "text-gray-900 flex items-center gap-6 py-4 text-sm font-medium hover:bg-gray-50 px-4", id: dom_id(transaction) do %>
   <div class="w-96 flex items-center gap-2">
     <div class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-600/5 text-gray-600"><%= transaction.name[0].upcase %></div>
-    <%= link_to transaction_path(transaction), data: { turbo_frame: "modal" }, class: "text-gray-900" do %>
-     <%= transaction.name %>
-    <% end %>
+    <p class="text-gray-900"><%= transaction.name %></p>
   </div>
   <div>
     <p><%= transaction.account.name %></p>
@@ -11,4 +9,4 @@
   <div class="ml-auto">
     <p class="<%= transaction.amount < 0 ? "text-green-600" : "" %>"><%= number_to_currency(-transaction.amount, { precision: 2 }) %></p>
   </div>
-</div>
+<% end %>

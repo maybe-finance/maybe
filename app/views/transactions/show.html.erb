@@ -11,18 +11,58 @@
       </div>
     </div>
   <% end %>
-  <h3 class="text-2xl font-medium mb-1"><%= @transaction.amount %></h3>
-  <span class="text-sm"><%= @transaction.date.strftime("%A %d %B") %></span>
+  <h3 class="font-medium mb-1">
+    <span class="text-2xl"><%=format_currency @transaction.amount %></span>
+    <span class="text-lg text-gray-500"><%= @transaction.currency %></span>
+  </h3>
+  <span class="text-sm text-gray-500"><%= @transaction.date.strftime("%A %d %B") %></span>
 
   <%= form_with model: @transaction do |f| %>
-    <div class="bg-gray-25 rounded-xl p-1 mt-4 mb-2">
-      <div class="py-2 px-4 flex items-center justify-between font-medium text-xs text-gray-500">
-        Overview
-      </div>
-    </div>
+    <details class="mb-6 group" open>
+      <summary class="list-none bg-gray-25 rounded-xl py-1 mt-4 mb-2">
+        <div class="py-2 px-[11px] flex items-center justify-between font-medium text-xs text-gray-500">
+          Overview
+          <%= lucide_icon("chevron-down", class: "hidden group-open:block text-gray-500 w-5 h-5") %>
+          <%= lucide_icon("chevron-right", class: "group-open:hidden text-gray-500 w-5 h-5") %>
+        </div>
+      </summary>
 
-    <%= f.date_field :date, label: "Date" %>
-    <%= f.collection_select :account_id, Current.family.accounts, :id, :name, { prompt: "Select an Account", label: "Account" } %>
+      <%= f.date_field :date, label: "Date" %>
+      <div class="h-2"></div>
+      <%= f.collection_select :account_id, Current.family.accounts, :id, :name, { prompt: "Select an Account", label: "Account" } %>
+    </details>
+
+    <details class="mb-6 group" open>
+      <summary class="list-none bg-gray-25 rounded-xl py-1 mt-4 mb-2">
+        <div class="py-2 px-[11px] flex items-center justify-between font-medium text-xs text-gray-500">
+          <span>Settings</span>
+          <%= lucide_icon("chevron-down", class: "hidden group-open:block text-gray-500 w-5 h-5") %>
+          <%= lucide_icon("chevron-right", class: "group-open:hidden text-gray-500 w-5 h-5") %>
+        </div>
+      </summary>
+
+      <label class="flex items-center cursor-pointer justify-between mx-3">
+        <%= f.check_box :excluded, class: "sr-only peer" %>
+        <div class="flex flex-col justify-center text-sm w-[340px] py-3">
+          <span class="text-gray-900 mb-1">Exclude from analytics</span>
+          <span class="text-gray-500">This excludes the transaction from any in-app features or analytics.</span>
+        </div>
+        <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-100 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+      </label>
+    </details>
+
+    <details class="mb-6 group" open>
+      <summary class="list-none bg-gray-25 rounded-xl py-1 mt-4 mb-2">
+        <div class="py-2 px-[11px] flex items-center justify-between font-medium text-xs text-gray-500">
+          <span>Additional</span>
+          <%= lucide_icon("chevron-down", class: "hidden group-open:block text-gray-500 w-5 h-5") %>
+          <%= lucide_icon("chevron-right", class: "group-open:hidden text-gray-500 w-5 h-5") %>
+        </div>
+      </summary>
+
+      <%= f.text_area :notes, label: "Notes", placeholder: "Enter a note" %>
+    </details>
+    
   <% end %>
 
 <% end %>
