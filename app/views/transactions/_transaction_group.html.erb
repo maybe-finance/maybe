@@ -4,7 +4,7 @@
     <h4><%= date.strftime('%b %d, %Y') %> &middot; <%= transactions.size %></h4>
     <span><%= number_to_currency(-transactions.sum(&:amount)) %></span>
   </div>
-  <div class="bg-white shadow-xs rounded-md border border-alpha-black-25 divide-y divide-alpha-black-50 px-4">
+  <div class="bg-white shadow-xs rounded-md border border-alpha-black-25 divide-y divide-alpha-black-50">
     <%= render partial: "transactions/transaction", collection: transactions %>
   </div>
 </div>
