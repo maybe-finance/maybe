@@ -17,9 +17,9 @@
   </h3>
   <span class="text-sm text-gray-500"><%= @transaction.date.strftime("%A %d %B") %></span>
 
-  <%= form_with model: @transaction do |f| %>
-    <details class="mb-6 group" open>
-      <summary class="list-none bg-gray-25 rounded-xl py-1 mt-4 mb-2">
+  <%= form_with model: @transaction, html: {data: {controller: "auto-submit-form"}} do |f| %>
+    <details class="group" open>
+      <summary class="list-none bg-gray-25 rounded-xl py-1 mt-4 group-open:mb-2">
         <div class="py-2 px-[11px] flex items-center justify-between font-medium text-xs text-gray-500">
           Overview
           <%= lucide_icon("chevron-down", class: "hidden group-open:block text-gray-500 w-5 h-5") %>
@@ -29,11 +29,23 @@
 
       <%= f.date_field :date, label: "Date" %>
       <div class="h-2"></div>
-      <%= f.collection_select :account_id, Current.family.accounts, :id, :name, { prompt: "Select an Account", label: "Account" } %>
+      <%= f.collection_select :account_id, Current.family.accounts, :id, :name, { prompt: "Select an Account", label: "Account", class: "text-gray-400" }, {class: "form-field__input cursor-not-allowed text-gray-400", disabled: "disabled"} %>
     </details>
 
-    <details class="mb-6 group" open>
-      <summary class="list-none bg-gray-25 rounded-xl py-1 mt-4 mb-2">
+    <details class="group" open>
+      <summary class="list-none bg-gray-25 rounded-xl py-1 mt-6 group-open:mb-2">
+        <div class="py-2 px-[11px] flex items-center justify-between font-medium text-xs text-gray-500">
+          Description
+          <%= lucide_icon("chevron-down", class: "hidden group-open:block text-gray-500 w-5 h-5") %>
+          <%= lucide_icon("chevron-right", class: "group-open:hidden text-gray-500 w-5 h-5") %>
+        </div>
+      </summary>
+
+      <%= f.text_field :name, label: "Name" %>
+    </details>
+
+    <details class="group" open>
+      <summary class="list-none bg-gray-25 rounded-xl py-1 mt-6 group-open:mb-2">
         <div class="py-2 px-[11px] flex items-center justify-between font-medium text-xs text-gray-500">
           <span>Settings</span>
           <%= lucide_icon("chevron-down", class: "hidden group-open:block text-gray-500 w-5 h-5") %>
@@ -51,8 +63,8 @@
       </label>
     </details>
 
-    <details class="mb-6 group" open>
-      <summary class="list-none bg-gray-25 rounded-xl py-1 mt-4 mb-2">
+    <details class="group" open>
+      <summary class="list-none bg-gray-25 rounded-xl py-1 mt-6 mb-2">
         <div class="py-2 px-[11px] flex items-center justify-between font-medium text-xs text-gray-500">
           <span>Additional</span>
           <%= lucide_icon("chevron-down", class: "hidden group-open:block text-gray-500 w-5 h-5") %>
