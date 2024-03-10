@@ -7,6 +7,8 @@ class Account < ApplicationRecord
   has_many :valuations
   has_many :transactions
 
+  enum :status, { ok: "ok", syncing: "syncing", error: "error" }, validate: true
+
   scope :active, -> { where(is_active: true) }
 
   delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
@@ -22,6 +24,10 @@ class Account < ApplicationRecord
   def self.by_provider
     # TODO: When 3rd party providers are supported, dynamically load all providers and their accounts
     [ { name: "Manual accounts", accounts: all.order(balance: :desc).group_by(&:accountable_type) } ]
+  end
+
+  def self.some_syncing?
+    exists?(status: "syncing")
   end
 
   # TODO: We will need a better way to encapsulate large queries & transformation logic, but leaving all in one spot until

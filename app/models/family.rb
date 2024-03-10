@@ -3,6 +3,10 @@ class Family < ApplicationRecord
   has_many :accounts, dependent: :destroy
   has_many :transactions, through: :accounts
   has_many :transaction_categories, dependent: :destroy, class_name: "Transaction::Category"
+  has_many :snapshots, dependent: :destroy
+
+  def snapshot
+  end
 
   def net_worth
     accounts.active.sum("CASE WHEN classification = 'asset' THEN balance ELSE -balance END")

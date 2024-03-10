@@ -10,10 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_03_07_082827) do
+ActiveRecord::Schema[7.2].define(version: 2024_03_09_180636) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  # Custom types defined in this database.
+  # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "account_status", ["ok", "syncing", "error"]
 
   create_table "account_balances", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "account_id", null: false
@@ -78,19 +82,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_07_082827) do
     t.string "currency", default: "USD"
     t.decimal "converted_balance", precision: 19, scale: 4, default: "0.0"
     t.string "converted_currency", default: "USD"
-    t.string "status", default: "OK"
     t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Account::Loan'::character varying)::text, ('Account::Credit'::character varying)::text, ('Account::OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.boolean "is_active", default: true, null: false
+    t.enum "status", default: "ok", null: false, enum_type: "account_status"
+    t.jsonb "sync_warnings", default: "[]", null: false
+    t.jsonb "sync_errors", default: "[]", null: false
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id"], name: "index_accounts_on_family_id"
-  end
-
-  create_table "currencies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name"
-    t.string "iso_code"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["iso_code"], name: "index_currencies_on_iso_code", unique: true
   end
 
   create_table "exchange_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -110,6 +108,27 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_07_082827) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "currency", default: "USD"
+  end
+
+  create_table "family_snapshots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "family_id", null: false
+    t.date "date", null: false
+    t.string "currency", default: "USD", null: false
+    t.decimal "net_worth", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "assets", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "liabilities", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "credits", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "depositories", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "investments", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "loans", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "other_assets", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "other_liabilities", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "properties", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "vehicles", precision: 19, scale: 4, default: "0.0", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["family_id", "date"], name: "index_family_snapshots_on_family_id_and_date", unique: true
+    t.index ["family_id"], name: "index_family_snapshots_on_family_id"
   end
 
   create_table "good_job_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -245,6 +264,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_07_082827) do
 
   add_foreign_key "account_balances", "accounts", on_delete: :cascade
   add_foreign_key "accounts", "families"
+  add_foreign_key "family_snapshots", "families", on_delete: :cascade
   add_foreign_key "transaction_categories", "families"
   add_foreign_key "transactions", "accounts", on_delete: :cascade
   add_foreign_key "transactions", "transaction_categories", column: "category_id"
