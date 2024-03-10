@@ -1,16 +1,4 @@
 <%= sidebar_modal do %>
-  <% if false %>
-    <div class="mx-auto md:w-2/3 w-full flex">
-      <div class="mx-auto">
-        <%= render @transaction %>
-        <%= link_to "Edit this transaction", edit_transaction_path(@transaction), class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-        <div class="inline-block ml-2">
-          <%= button_to "Destroy this transaction", transaction_path(@transaction), method: :delete, class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
-        </div>
-        <%= link_to "Back to transactions", transactions_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-      </div>
-    </div>
-  <% end %>
   <h3 class="font-medium mb-1">
     <span class="text-2xl"><%=format_currency @transaction.amount %></span>
     <span class="text-lg text-gray-500"><%= @transaction.currency %></span>
