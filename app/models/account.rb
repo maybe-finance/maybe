@@ -3,7 +3,7 @@ class Account < ApplicationRecord
 
   broadcasts_refreshes
   belongs_to :family
-  has_many :balances, class_name: "AccountBalance"
+  has_many :balances
   has_many :valuations
   has_many :transactions
 
@@ -52,7 +52,7 @@ class Account < ApplicationRecord
       ranked_balances_cte = ranked_balances_cte.where("account_balances.date BETWEEN ? AND ?", period.date_range.begin, period.date_range.end)
     end
 
-    accounts_with_period_balances = AccountBalance.with(
+    accounts_with_period_balances = Account::Balance.with(
       ranked_balances: ranked_balances_cte
     )
       .from("ranked_balances AS rb")

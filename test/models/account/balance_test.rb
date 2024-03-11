@@ -1,6 +1,6 @@
 require "test_helper"
 
-class AccountBalanceTest < ActiveSupport::TestCase
+class Account::BalanceTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

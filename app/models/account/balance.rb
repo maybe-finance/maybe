@@ -1,4 +1,4 @@
-class AccountBalance < ApplicationRecord
+class Account::Balance < ApplicationRecord
   belongs_to :account
 
   scope :in_period, ->(period) { period.date_range.nil? ? all : where(date: period.date_range) }

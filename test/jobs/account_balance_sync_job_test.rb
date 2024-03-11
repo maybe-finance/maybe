@@ -1,6 +1,6 @@
 require "test_helper"
 
-class AccountBalanceSyncJobTest < ActiveJob::TestCase
+class Account::BalanceSyncJobTest < ActiveJob::TestCase
   # test "the truth" do
   #   assert true
   # end
