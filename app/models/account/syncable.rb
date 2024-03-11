@@ -10,7 +10,6 @@ module Account::Syncable
         synced_daily_balances = Account::BalanceCalculator.new(self).daily_balances
         self.balances.upsert_all(synced_daily_balances, unique_by: :index_account_balances_on_account_id_and_date)
         self.balances.where("date < ?", effective_start_date).delete_all
-        self.family.snapshot
         update!(status: "ok")
     rescue => e
         update!(status: "error")
