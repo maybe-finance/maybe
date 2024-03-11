@@ -1,4 +1,4 @@
-import { Controller } from "@hotwired/stimulus"
+import {Controller} from "@hotwired/stimulus"
 
 // Connects to data-controller="modal"
 export default class extends Controller {
@@ -9,9 +9,9 @@ export default class extends Controller {
 
   // Hide the dialog when the user clicks outside of it
   click_outside(e) {
-    e.preventDefault()
-    e.stopPropagation()
     if (e.target === this.element) {
+      e.preventDefault()
+      e.stopPropagation()
       this.element.close();
     }
   }

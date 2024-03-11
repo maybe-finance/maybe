@@ -4,14 +4,15 @@ import {Controller} from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["menu"]
 
-  toggleMenu(event) {
-    event.preventDefault();
-    event.stopPropagation(); // Prevent event from closing the menu immediately
+  toggleMenu(e) {
+    e.preventDefault();
+    e.stopPropagation(); // Prevent event from closing the menu immediately
     this.menuTarget.classList.toggle("hidden");
   }
 
   hideMenu = (e) => {
     if (this.menuTarget.contains(e.target)) {
+      console.log('1up!!')
       e.stopPropagation();
       return;
     }

@@ -4,52 +4,53 @@
     <p class="text-gray-900"><%= transaction.name %></p>
   </div>
   <div class="w-40">
-    <div class="relative" data-controller="dropdown">
-      <div class="flex cursor-pointer" data-action="click->dropdown#toggleMenu">
-        <%= render partial: "shared/category_badge", locals: transaction.category.nil? ? {} : { name: transaction.category.name, color: transaction.category.color } %>
-      </div>
-      <div class="absolute z-10 hidden w-screen mt-2 max-w-min" data-dropdown-target="menu">
-        <div class="w-60 text-sm font-semibold leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-          <div class="flex flex-col">
-            <div class="grow p-1 cursor-not-allowed">
-              <%= form_with url: transactions_path, method: :get, local: true, html: { role: 'search' } do |form| %>
-                <div class="relative flex items-center bg-white border border-gray-200 rounded-lg">
-                  <%= form.text_field :search, placeholder: "Search", class: "placeholder:text-sm placeholder:text-gray-500 relative pl-10 w-full border-none rounded-lg cursor-not-allowed", 'data-action': "input->search#perform", disabled: true %>
-                  <%= lucide_icon("search", class: "w-5 h-5 text-gray-500 ml-2 absolute inset-0 transform top-1/2 -translate-y-1/2") %>
-                </div>
-              <% end %>
-            </div>
-            <div class="p-1 mt-1">
-              <%= form_with model: transaction, html: { data: { controller: "auto-submit-form" }, class: "flex flex-col gap-0.5" } do |f| %>
-                <% Current.family.transaction_categories.each do |category| %>
-                  <div class="flex items-center hover:bg-gray-25 border-none rounded-lg py-1 group">
-                    <%= f.radio_button :category_id, category.id, class: "hidden" %>
-                    <%= label :transaction, :category_id, value: category.id, class: "flex items-center gap-2 cursor-pointer" do %>
+    <%= turbo_frame_tag dom_id(transaction) do %>
+      <div class="relative" data-controller="dropdown">
+        <div class="flex cursor-pointer" data-action="click->dropdown#toggleMenu">
+          <%= render partial: "shared/category_badge", locals: transaction.category.nil? ? {} : { name: transaction.category.name, color: transaction.category.color } %>
+        </div>
+        <div class="absolute z-10 hidden w-screen mt-2 max-w-min cursor-default" data-dropdown-target="menu">
+          <div class="w-60 text-sm font-semibold leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+            <div class="flex flex-col">
+              <div class="grow p-1 cursor-not-allowed">
+                <%= form_with url: transactions_path, method: :get, local: true, html: { role: 'search' } do |form| %>
+                  <div class="relative flex items-center bg-white border border-gray-200 rounded-lg">
+                    <%= form.text_field :search, placeholder: "Search", class: "placeholder:text-sm placeholder:text-gray-500 relative pl-10 w-full border-none rounded-lg cursor-not-allowed", 'data-action': "input->search#perform", disabled: true %>
+                    <%= lucide_icon("search", class: "w-5 h-5 text-gray-500 ml-2 absolute inset-0 transform top-1/2 -translate-y-1/2") %>
+                  </div>
+                <% end %>
+              </div>
+              <div class="p-1 mt-1">
+                <%= form_with model: transaction, html: { data: { xxx: transaction.id, turbo_frame: "_top", controller: "auto-submit-form" }, class: "flex flex-col gap-0.5" } do |form| %>
+                  <% Current.family.transaction_categories.each do |category| %>
+                    <div class="flex items-center hover:bg-gray-25 border-none rounded-lg py-1 group">
+                      <%= form.radio_button :category_id, category.id, class: "hidden" %>
+                      <%= label :transaction, :category_id, value: category.id, class: "flex items-center gap-2 cursor-pointer" do %>
                       <span class="w-5 h-5">
                         <%= lucide_icon("check", class: "w-5 h-5 text-gray-500") if !transaction.category.nil? and category.id == transaction.category.id %>
                       </span>
-                      <%= render partial: "shared/category_badge", locals: { name: category.name, color: category.color } %>
-                    <% end %>
-
-                    <%= lucide_icon("search", class: "w-5 h-5 text-gray-500 ml-auto invisible group-hover:visible cursor-not-allowed") %>
-                  </div>
+                        <%= render partial: "shared/category_badge", locals: { name: category.name, color: category.color } %>
+                      <% end %>
+                      <%= lucide_icon("more-horizontal", class: "w-5 h-5 text-gray-500 ml-auto invisible group-hover:visible cursor-not-allowed") %>
+                    </div>
+                  <% end %>
                 <% end %>
-              <% end %>
+              </div>
+              <hr/>
+              <button class="cursor-not-allowed flex text-sm font-medium items-center gap-2 text-gray-500 p-5">
+                <%= lucide_icon("plus", class: "w-5 h-5") %>
+                Add new
+              </button>
             </div>
-            <hr/>
-            <button class="cursor-not-allowed flex text-sm font-medium items-center gap-2 text-gray-500 p-5">
-              <%= lucide_icon("plus", class: "w-5 h-5 0") %>
-              Add new
-            </button>
           </div>
         </div>
       </div>
+      </div>
+    <% end %>
+    <div>
+      <p><%= transaction.account.name %></p>
     </div>
-  </div>
-  <div>
-    <p><%= transaction.account.name %></p>
-  </div>
-  <div class="ml-auto">
-    <p class="<%= transaction.amount < 0 ? "text-green-600" : "" %>"><%= number_to_currency(-transaction.amount, { precision: 2 }) %></p>
-  </div>
+    <div class="ml-auto">
+      <p class="<%= transaction.amount < 0 ? "text-green-600" : "" %>"><%= number_to_currency(-transaction.amount, { precision: 2 }) %></p>
+    </div>
 <% end %>
