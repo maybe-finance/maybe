@@ -7,14 +7,14 @@ export default class extends Controller {
 
   connect() {
     this.renderChart(this.seriesValue);
-    document.addEventListener("turbo:load", this.renderChart.bind(this));
+    document.addEventListener("turbo:load", this.renderChart);
   }
 
   disconnect() {
-    document.removeEventListener("turbo:load", this.renderChart.bind(this));
+    document.removeEventListener("turbo:load", this.renderChart);
   }
 
-  renderChart() {
+  renderChart = () => {
     this.drawChart(this.seriesValue);
   }
 
