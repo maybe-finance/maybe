@@ -15,16 +15,14 @@ export default class extends Controller {
   }
 
   connect() {
-    this.inputElements.forEach(el => el.addEventListener('change', this.handler.bind(this)));
-    this.selectElements.forEach(el => el.addEventListener('change', this.handler.bind(this)));
+    [...this.inputElements, ...this.selectElements].forEach(el => el.addEventListener('change', this.handler));
   }
 
   disconnect() {
-    this.inputElements.forEach(el => el.removeEventListener('change', this.handler.bind(this)));
-    this.selectElements.forEach(el => el.removeEventListener('change', this.handler.bind(this)));
+    [...this.inputElements, ...this.selectElements].forEach(el => el.removeEventListener('change', this.handler));
   }
 
-  handler(e) {
+  handler = (e) => {
     console.log(e);
     this.element.requestSubmit();
   }

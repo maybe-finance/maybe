@@ -8,24 +8,22 @@ export default class extends Controller {
 
   connect() {
     this.updateClasses(this.defaultTabValue);
-    document.addEventListener(
-      "turbo:load",
-      this.updateClasses.bind(this, this.defaultTabValue)
-    );
+    document.addEventListener("turbo:load", this.onTurboLoad);
   }
 
   disconnect() {
-    document.removeEventListener(
-      "turbo:load",
-      this.updateClasses.bind(this, this.defaultTabValue)
-    );
+    document.removeEventListener("turbo:load", this.onTurboLoad);
   }
 
   select(event) {
     this.updateClasses(event.target.dataset.id);
   }
 
-  updateClasses(selectedId) {
+  onTurboLoad = () => {
+    this.updateClasses(this.defaultTabValue);
+  }
+
+  updateClasses = (selectedId) => {
     this.btnTargets.forEach((btn) => btn.classList.remove(this.activeClass));
     this.tabTargets.forEach((tab) => tab.classList.add("hidden"));
 
