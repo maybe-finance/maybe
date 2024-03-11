@@ -1,4 +1,5 @@
 require "test_helper"
+require "csv"
 
 class FamilyTest < ActiveSupport::TestCase
   def setup
@@ -48,6 +49,45 @@ class FamilyTest < ActiveSupport::TestCase
     assert_equal BigDecimal("24550"), @family.net_worth
   end
 
+  test "should calculate snapshot correctly" do
+    # See this Google Sheet for calculations and expected results for dylan_family:
+    # https://docs.google.com/spreadsheets/d/18LN5N-VLq4b49Mq1fNwF7_eBiHSQB46qQduRtdAEN98/edit?usp=sharing
+    expected_snapshots = CSV.read("test/fixtures/family/expected_snapshots.csv", headers: true).map do |row|
+      {
+        "date" => (Date.current + row["date_offset"].to_i.days).to_date,
+        "net_worth" => row["net_worth"],
+        "assets" => row["assets"],
+        "liabilities" => row["liabilities"]
+      }
+    end
+
+    asset_series = @family.snapshot[:asset_series]
+    liability_series = @family.snapshot[:liability_series]
+    net_worth_series = @family.snapshot[:net_worth_series]
+
+    assert_equal expected_snapshots.count, asset_series.data.count
+    assert_equal expected_snapshots.count, liability_series.data.count
+    assert_equal expected_snapshots.count, net_worth_series.data.count
+
+    expected_snapshots.each_with_index do |row, index|
+      expected = {
+        date: row["date"],
+        assets: row["assets"].to_d,
+        liabilities: row["liabilities"].to_d,
+        net_worth: row["net_worth"].to_d
+      }
+
+      actual = {
+        date: asset_series.data[index][:date],
+        assets: asset_series.data[index][:value].amount,
+        liabilities: liability_series.data[index][:value].amount,
+        net_worth: net_worth_series.data[index][:value].amount
+      }
+
+      assert_equal expected, actual
+    end
+  end
+
   test "should exclude disabled accounts from calculations" do
     assets_before = @family.assets
     liabilities_before = @family.liabilities
@@ -62,42 +102,6 @@ class FamilyTest < ActiveSupport::TestCase
     assert_equal assets_before - disabled_checking.balance, @family.assets
     assert_equal liabilities_before - disabled_cc.balance, @family.liabilities
     assert_equal net_worth_before - disabled_checking.balance + disabled_cc.balance, @family.net_worth
-  end
-
-  test "calculates asset series" do
-    # Sum of expected balances for all asset accounts in balance_calculator_test.rb
-    expected_balances = [
-      25650, 26135, 26135, 26135, 26135, 25385, 25385, 25385, 26460, 26460,
-      26460, 26460, 24460, 24460, 24460, 24440, 24440, 24440, 25210, 25210,
-      25210, 25210, 25210, 25210, 25210, 25400, 25250, 26050, 26050, 26050,
-      25550
-    ].map(&:to_d)
-
-    assert_equal expected_balances, @family.asset_series.data.map { |b| b[:value].amount }
-  end
-
-  test "calculates liability series" do
-    # Sum of expected balances for all liability accounts in balance_calculator_test.rb
-    expected_balances = [
-      1040, 940, 940, 940, 940, 940, 940, 940, 940, 940,
-      940, 940, 940, 940, 940, 960, 960, 960, 990, 990,
-      990, 990, 990, 990, 990, 1000, 1000, 1000, 1000, 1000,
-      1000
-    ].map(&:to_d)
-
-    assert_equal expected_balances, @family.liability_series.data.map { |b| b[:value].amount }
-  end
-
-  test "calculates net worth" do
-    # Net difference between asset and liability series above
-    expected_balances = [
-      24610, 25195, 25195, 25195, 25195, 24445, 24445, 24445, 25520, 25520,
-      25520, 25520, 23520, 23520, 23520, 23480, 23480, 23480, 24220, 24220,
-      24220, 24220, 24220, 24220, 24220, 24400, 24250, 25050, 25050, 25050,
-      24550
-    ].map(&:to_d)
-
-    assert_equal expected_balances, @family.net_worth_series.data.map { |b| b[:value].amount }
   end
 
   test "calculates balances by type" do
