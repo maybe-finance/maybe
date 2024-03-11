@@ -15,6 +15,14 @@ class Transaction::Category < ApplicationRecord
     { internal_category: "home_improvement", color: "#fdcce5" }
   ]
 
+  def self.ransackable_attributes(auth_object = nil)
+    %w[name]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    %w[]
+  end
+
   def self.create_default_categories(family)
     if family.transaction_categories.size > 0
       raise ArgumentError, "Family already has some categories"

@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: db30dd6fe71341ac132bb1e850bd4df2596a2803
+  revision: bf96dcfa0d0e0e88ebada8cbc3b64b93298dd0e4
   branch: main
   specs:
     actioncable (7.2.0.alpha)
@@ -169,7 +169,7 @@ GEM
       actioncable (>= 6.0.0)
       listen (>= 3.0.0)
       railties (>= 6.0.0)
-    i18n (1.14.1)
+    i18n (1.14.4)
       concurrent-ruby (~> 1.0)
     i18n-tasks (1.0.13)
       activesupport (>= 4.0.2)
@@ -190,7 +190,7 @@ GEM
       activesupport (>= 3.0)
       nokogiri (>= 1.6)
     io-console (0.7.2)
-    irb (1.11.2)
+    irb (1.12.0)
       rdoc
       reline (>= 0.4.2)
     json (2.7.1)
@@ -239,6 +239,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.2-x86_64-linux)
       racc (~> 1.4)
+    pagy (7.0.10)
     parallel (1.24.0)
     parser (3.3.0.5)
       ast (~> 2.4.1)
@@ -277,6 +278,10 @@ GEM
       railties (>= 6.0.0, < 8)
     rainbow (3.1.1)
     rake (13.1.0)
+    ransack (4.1.1)
+      activerecord (>= 6.1.5)
+      activesupport (>= 6.1.5)
+      i18n
     rb-fsevent (0.11.2)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
@@ -357,7 +362,7 @@ GEM
       unicode-display_width (>= 1.1.1, < 3)
     thor (1.3.1)
     timeout (0.4.1)
-    turbo-rails (2.0.4)
+    turbo-rails (2.0.5)
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
       railties (>= 6.0.0)
@@ -403,10 +408,12 @@ DEPENDENCIES
   inline_svg
   letter_opener
   lucide-rails!
+  pagy
   pg (~> 1.5)
   propshaft
   puma (>= 5.0)
   rails!
+  ransack
   redis (>= 4.0.1)
   rubocop-rails-omakase
   ruby-lsp-rails

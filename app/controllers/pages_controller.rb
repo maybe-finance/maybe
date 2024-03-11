@@ -3,9 +3,10 @@ class PagesController < ApplicationController
   before_action :authenticate_user!
 
   def dashboard
-    @asset_series = Current.family.asset_series(@period)
-    @liability_series = Current.family.liability_series(@period)
-    @net_worth_series = Current.family.net_worth_series(@period)
+    snapshot = Current.family.snapshot(@period)
+    @net_worth_series = snapshot[:net_worth_series]
+    @asset_series = snapshot[:asset_series]
+    @liability_series = snapshot[:liability_series]
     @account_groups = Current.family.accounts.by_group(@period)
   end
 end

@@ -6,13 +6,13 @@ module Account::Syncable
     end
 
     def sync
-        update!(status: "SYNCING")
+        update!(status: "syncing")
         synced_daily_balances = Account::BalanceCalculator.new(self).daily_balances
         self.balances.upsert_all(synced_daily_balances, unique_by: :index_account_balances_on_account_id_and_date)
         self.balances.where("date < ?", effective_start_date).delete_all
-        update!(status: "OK")
+        update!(status: "ok")
     rescue => e
-        update!(status: "ERROR")
+        update!(status: "error")
         Rails.logger.error("Failed to sync account #{id}: #{e.message}")
     end
 

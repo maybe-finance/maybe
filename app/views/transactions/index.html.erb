@@ -34,42 +34,58 @@
     </div>
   </div>
   <div id="transactions" class="bg-white rounded-xl border border-alpha-black-25 shadow-xs p-4 space-y-4">
-    <div class="flex gap-2">
-      <div class="grow cursor-not-allowed">
-        <%= form_with url: transactions_path, method: :get, local: true, html: { role: 'search' } do |form| %>
+    <%= search_form_for @q, url: transactions_path, method: :get, remote: true, html: { class: "search-form", "data-controller": "transactions-search", "data-action": "keyup->transactions-search#search change->transactions-search#search", "data-turbo-frame": "transactions_list" } do |form| %>
+      <div class="flex gap-2 mb-4">
+        <div class="grow">
           <div class="relative flex items-center bg-white border border-gray-200 rounded-lg">
-            <%= form.text_field :search, placeholder: "Search transaction by merchant, category or amount", class: "placeholder:text-sm placeholder:text-gray-500 relative pl-10 w-full border-none rounded-lg cursor-not-allowed", 'data-action': "input->search#perform", disabled: true %>
+            <%= form.search_field :category_name_or_account_name_or_name_cont, placeholder: "Search transaction by name, category or amount", class: "placeholder:text-sm placeholder:text-gray-500 relative pl-10 w-full border-none rounded-lg", "data-transactions-search-target": "search", 'data-action': "input->transactions-search#search" %>
             <%= lucide_icon("search", class: "w-5 h-5 text-gray-500 ml-2 absolute inset-0 transform top-1/2 -translate-y-1/2") %>
           </div>
-        <% end %>
+        </div>
+        <div>
+          <button class="cursor-not-allowed border border-gray-200 block h-full rounded-lg flex items-center gap-2 px-4">
+            <%= lucide_icon("list-filter", class: "w-5 h-5 text-gray-500") %>
+            <p class="text-sm font-medium text-gray-900">Filter</p>
+          </button>
+        </div>
+        <div>
+          <%= form.select :date, options_for_select([['All', 'all'], ['7D', 'last_7_days'], ['1M', 'last_30_days'], ["1Y", "last_365_days"]], selected: params.dig(:q, :date)), {}, { class: "block h-full w-full border border-gray-200 rounded-lg text-sm py-2 pr-8 pl-2", "data-transactions-search-target": "date" } %>
+          
+          <!-- Hidden fields for date range -->
+          <%= form.hidden_field :date_gteq, value: '', "data-transactions-search-target": "dateGteq" %>
+          <%= form.hidden_field :date_lteq, value: '', "data-transactions-search-target": "dateLteq" %>
+        </div>
       </div>
-      <div>
-        <button class="cursor-not-allowed border border-gray-200 block h-full rounded-lg flex items-center gap-2 px-4">
-          <%= lucide_icon("list-filter", class: "w-5 h-5 text-gray-500") %>
-          <p class="text-sm font-medium text-gray-900">Filter</p>
-        </button>
-      </div>
-      <%= form_with url: "#", method: :get, class: "flex items-center gap-4", html: { class: "" } do |f| %>
-        <%= f.select :period, options_for_select([['7D', 'last_7_days'], ['1M', 'last_30_days'], ["1Y", "last_365_days"], ['All', 'all']], selected: params[:period]), {}, { class: "block h-full w-full border border-gray-200 rounded-lg text-sm py-2 pr-8 pl-2 cursor-not-allowed", onchange: "this.form.submit();", disabled: true } %>
+    <% end %>
+    <%= turbo_frame_tag "transactions_list" do %>
+      <% if @transactions.empty? %>
+        <div class="flex flex-col items-center justify-center py-40">
+          <p class="text-gray-500 mb-2">No transactions found</p>
+          <p class="text-gray-400 max-w-xs text-center">Try adding a transaction, editing filters or refining your search</p>
+        </div>
+      <% else %>
+        <div class="bg-gray-25 rounded-xl px-5 py-3 text-xs font-medium text-gray-500 flex items-center gap-6 mb-4">
+          <div class="w-96">
+            <p class="uppercase">transaction</p>
+          </div>
+          <div class="grow uppercase flex justify-between items-center gap-5 text-xs font-medium text-gray-500">
+            <p>account</p>
+            <p>amount</p>
+          </div>
+        </div>
+        
+        <div class="space-y-6">
+          <% @transactions.group_by { |transaction| transaction.date }.each do |date, grouped_transactions| %>
+            <%= render partial: "transactions/transaction_group", locals: { date: date, transactions: grouped_transactions } %>
+          <% end %>
+        </div>
       <% end %>
-    </div>
-    <div class="bg-gray-25 rounded-xl px-5 py-3 text-xs font-medium text-gray-500 flex items-center gap-6">
-      <div class="w-96">
-        <p class="uppercase">transaction</p>
-      </div>
-      <div class="grow uppercase flex justify-between items-center gap-5 text-xs font-medium text-gray-500">
-        <p>account</p>
-        <p>amount</p>
-      </div>
-    </div>
-    <% if @transactions.empty? %>
-      <p class="text-gray-500 py-4">No transactions for this account yet.</p>
-    <% else %>
-      <div class="space-y-6">
-        <% @transactions.group_by { |transaction| transaction.date }.each do |date, grouped_transactions| %>
-          <%= render partial: "transactions/transaction_group", locals: { date: date, transactions: grouped_transactions } %>
-        <% end %>
-      </div>
+
+      <% if @pagy.pages > 1 %>
+        <nav class="flex items-center justify-center px-4 mt-4 sm:px-0">
+          <%= render partial: "transactions/pagination", locals: { pagy: @pagy } %>
+        </nav>
+      <% end %>
     <% end %>
   </div>
 </div>

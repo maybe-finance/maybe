@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   include Authentication, SetCurrency
+  include Pagy::Backend
 
   default_form_builder ApplicationFormBuilder
 

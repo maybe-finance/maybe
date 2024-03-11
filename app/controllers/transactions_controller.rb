@@ -3,7 +3,19 @@ class TransactionsController < ApplicationController
   before_action :set_transaction, only: %i[ show edit update destroy ]
 
   def index
-    @transactions = Current.family.transactions
+    search_params = params[:q] || {}
+    period = Period.find_by_name(search_params[:date])
+    if period&.date_range
+      search_params.merge!({ date_gteq: period.date_range.begin, date_lteq: period.date_range.end })
+    end
+
+    @q = Current.family.transactions.ransack(search_params)
+    @pagy, @transactions = pagy(@q.result.order(date: :desc), items: 50)
+
+    respond_to do |format|
+      format.html # For full page reloads
+      format.turbo_stream # For Turbo Frame requests
+    end
   end
 
   def show
@@ -56,6 +68,6 @@ class TransactionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def transaction_params
-      params.require(:transaction).permit(:name, :date, :amount, :currency)
+      params.require(:transaction).permit(:name, :date, :amount, :currency, :notes, :excluded)
     end
 end

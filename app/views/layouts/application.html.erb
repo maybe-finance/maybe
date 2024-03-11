@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="bg-gray-25 h-full">
+<html class="h-full bg-gray-25">
   <head>
     <title><%= content_for(:title) || "Maybe" %></title>
     <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -8,10 +8,15 @@
     <meta name="apple-mobile-web-app-title" content="Maybe">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ffffff">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
+    
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
@@ -20,7 +25,7 @@
     <%= yield :head %>
   </head>
   <body class="h-full">
-    <div id="notification-tray" class="fixed top-6 right-6 space-y-1 z-50"></div>
+    <div id="notification-tray" class="fixed z-50 space-y-1 top-6 right-6"></div>
     <%= safe_join(flash.map { |type, message| notification(message, type: type) }) %>
     <div class="flex">
       <div class="flex-col p-5 min-w-80">
@@ -71,7 +76,7 @@
           <% end %>
         </div>
       </div>
-      <main class="flex-grow py-6 px-20">
+      <main class="flex-grow px-20 py-6">
         <%= yield %>
       </main>
     </div>

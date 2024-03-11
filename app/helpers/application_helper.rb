@@ -1,4 +1,6 @@
 module ApplicationHelper
+  include Pagy::Frontend
+
   def title(page_title)
     content_for(:title) { page_title }
   end
@@ -28,6 +30,12 @@ module ApplicationHelper
   def currency_dropdown(f: nil, options: [])
     render partial: "shared/currency_dropdown", locals: { f: f, options: options }
   end
+
+  def sidebar_modal(&block)
+    content = capture &block
+    render partial: "shared/sidebar_modal", locals: { content: content }
+  end
+
 
   def sidebar_link_to(name, path, options = {})
     base_class_names = [ "block", "border", "border-transparent", "rounded-xl", "-ml-2", "p-2", "text-sm", "font-medium", "text-gray-500", "flex", "items-center" ]
