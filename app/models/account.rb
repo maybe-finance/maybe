@@ -10,6 +10,8 @@ class Account < ApplicationRecord
   enum :status, { ok: "ok", syncing: "syncing", error: "error" }, validate: true
 
   scope :active, -> { where(is_active: true) }
+  scope :assets, -> { where(classification: "asset") }
+  scope :liabilities, -> { where(classification: "liability") }
 
   delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
 
@@ -76,50 +78,8 @@ class Account < ApplicationRecord
     total_liabilities = liabilities.sum(&:end_balance)
 
     {
-      asset: {
-        total: total_assets,
-        groups: assets.group_by(&:accountable_type).transform_values do |rows|
-          end_balance = rows.sum(&:end_balance)
-          start_balance = rows.sum(&:start_balance)
-          {
-            start_balance: start_balance,
-            end_balance: end_balance,
-            allocation: (end_balance / total_assets * 100).round(2),
-            trend: Trend.new(current: end_balance, previous: start_balance, type: "asset"),
-            accounts: rows.map do |account|
-              {
-                name: account.name,
-                start_balance: account.start_balance,
-                end_balance: account.end_balance,
-                allocation: (account.end_balance / total_assets * 100).round(2),
-                trend: Trend.new(current: account.end_balance, previous: account.start_balance, type: "asset")
-              }
-            end
-          }
-        end
-      },
-      liability: {
-        total: total_liabilities,
-        groups: liabilities.group_by(&:accountable_type).transform_values do |rows|
-          end_balance = rows.sum(&:end_balance)
-          start_balance = rows.sum(&:start_balance)
-          {
-            start_balance: start_balance,
-            end_balance: end_balance,
-            allocation: (end_balance / total_liabilities * 100).round(2),
-            trend: Trend.new(current: end_balance, previous: start_balance, type: "liability"),
-            accounts: rows.map do |account|
-              {
-                name: account.name,
-                start_balance: account.start_balance,
-                end_balance: account.end_balance,
-                allocation: (account.end_balance / total_liabilities * 100).round(2),
-                trend: Trend.new(current: account.end_balance, previous: account.start_balance, type: "liability")
-              }
-            end
-          }
-        end
-      }
+      asset: build_group_summary(assets, "asset"),
+      liability: build_group_summary(liabilities, "liability")
     }
   end
 
@@ -133,5 +93,35 @@ class Account < ApplicationRecord
         self.converted_balance = ExchangeRate.convert(self.currency, self.family.currency, self.balance)
         self.converted_currency = self.family.currency
       end
+    end
+
+    def self.build_group_summary(accounts, classification)
+      total_balance = accounts.sum(&:end_balance)
+      {
+        total: total_balance,
+        groups: accounts.group_by(&:accountable_type).transform_values do |rows|
+          build_account_summary(rows, total_balance, classification)
+        end
+      }
+    end
+
+    def self.build_account_summary(accounts, total_balance, classification)
+      end_balance = accounts.sum(&:end_balance)
+      start_balance = accounts.sum(&:start_balance)
+      {
+        start_balance: start_balance,
+        end_balance: end_balance,
+        allocation: (end_balance / total_balance * 100).round(2),
+        trend: Trend.new(current: end_balance, previous: start_balance, type: classification),
+        accounts: accounts.map do |account|
+          {
+            name: account.name,
+            start_balance: account.start_balance,
+            end_balance: account.end_balance,
+            allocation: (account.end_balance / total_balance * 100).round(2),
+            trend: Trend.new(current: account.end_balance, previous: account.start_balance, type: classification)
+          }
+        end
+      }
     end
 end

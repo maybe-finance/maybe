@@ -3,9 +3,31 @@ class Family < ApplicationRecord
   has_many :accounts, dependent: :destroy
   has_many :transactions, through: :accounts
   has_many :transaction_categories, dependent: :destroy, class_name: "Transaction::Category"
-  has_many :snapshots, dependent: :destroy
 
-  def snapshot
+  def snapshot(period = Period.all)
+    query = accounts.active.joins(:balances)
+      .where("account_balances.currency = ?", self.currency)
+      .select(
+        "account_balances.currency",
+        "account_balances.date",
+        "SUM(CASE WHEN accounts.classification = 'liability' THEN account_balances.balance ELSE 0 END) AS liabilities",
+        "SUM(CASE WHEN accounts.classification = 'asset' THEN account_balances.balance ELSE 0 END) AS assets",
+        "SUM(CASE WHEN accounts.classification = 'asset' THEN account_balances.balance WHEN accounts.classification = 'liability' THEN -account_balances.balance ELSE 0 END) AS net_worth",
+      )
+      .group("account_balances.date, account_balances.currency")
+      .order("account_balances.date")
+
+    query = query.where("account_balances.date BETWEEN ? AND ?", period.date_range.begin, period.date_range.end) if period.date_range
+
+    {
+      asset_series: MoneySeries.new(query, { trend_type: :asset, amount_accessor: "assets" }),
+      liability_series: MoneySeries.new(query, { trend_type: :liability, amount_accessor: "liabilities" }),
+      net_worth_series: MoneySeries.new(query, { trend_type: :asset, amount_accessor: "net_worth" })
+    }
+  end
+
+  def effective_start_date
+    accounts.active.joins(:balances).minimum("account_balances.date") || Date.current
   end
 
   def net_worth
@@ -13,60 +35,10 @@ class Family < ApplicationRecord
   end
 
   def assets
-    accounts.active.where(classification: "asset").sum(:balance)
+   accounts.active.assets.sum(:balance)
   end
 
   def liabilities
-    accounts.active.where(classification: "liability").sum(:balance)
-  end
-
-  def net_worth_series(period = nil)
-    query = accounts.joins(:balances)
-      .select("account_balances.date, SUM(CASE WHEN accounts.classification = 'asset' THEN account_balances.balance ELSE -account_balances.balance END) AS balance, 'USD' as currency")
-      .group("account_balances.date")
-      .order("account_balances.date ASC")
-
-    if period && period.date_range
-      query = query.where("account_balances.date BETWEEN ? AND ?", period.date_range.begin, period.date_range.end)
-    end
-
-    MoneySeries.new(
-      query,
-      { trend_type: "asset" }
-    )
-  end
-
-  def asset_series(period = nil)
-    query = accounts.joins(:balances)
-      .select("account_balances.date, SUM(account_balances.balance) AS balance, 'asset' AS classification, 'USD' AS currency")
-      .group("account_balances.date")
-      .order("account_balances.date ASC")
-      .where(classification: "asset")
-
-    if period && period.date_range
-      query = query.where("account_balances.date BETWEEN ? AND ?", period.date_range.begin, period.date_range.end)
-    end
-
-    MoneySeries.new(
-      query,
-      { trend_type: "asset" }
-    )
-  end
-
-  def liability_series(period = nil)
-    query = accounts.joins(:balances)
-      .select("account_balances.date, SUM(account_balances.balance) AS balance, 'liability' AS classification, 'USD' AS currency")
-      .group("account_balances.date")
-      .order("account_balances.date ASC")
-      .where(classification: "liability")
-
-    if period && period.date_range
-      query = query.where("account_balances.date BETWEEN ? AND ?", period.date_range.begin, period.date_range.end)
-    end
-
-    MoneySeries.new(
-      query,
-      { trend_type: "liability" }
-    )
+    accounts.active.liabilities.sum(:balance)
   end
 end
