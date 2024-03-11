@@ -2,6 +2,22 @@
  * To keep consistent styling across the app, this file can be imported in
  * Stimulus controllers to reference our color palette.  Mostly used for D3 charts.
  */
+
+export const categoryBaseColors = [
+   "#e99537",
+   "#4da568",
+   "#6471eb",
+   "#db5a54",
+   "#df4e92",
+   "#c44fe9",
+   "#eb5429",
+   "#61c9ea",
+   "#805dee",
+   "#6ad28a"
+]
+
+export const categoryDefaultColor = "#737373"
+
 export default {
   transparent: "transparent",
   current: "currentColor",
@@ -138,4 +154,44 @@ export default {
     600: "#7839EE",
     700: "#6927DA",
   },
+  fuchsia: {
+    25: "#FEFAFF",
+    50: "#FDF4FF",
+    100: "#FBE8FF",
+    200: "#F6D0FE",
+    300: "#EEAAFD",
+    400: "#E478FA",
+    500: "#D444F1",
+    600: "#BA24D5",
+    700: "#9F1AB1",
+    800: "#821890",
+    900: "#6F1877",
+  },
+  pink: {
+    25: "#FFFAFC",
+    50: "#FEF0F7",
+    100: "#FFD1E2",
+    200: "#FFB1CE",
+    300: "#FD8FBA",
+    400: "#F86BA7",
+    500: "#F23E94",
+    600: "#D5327F",
+    700: "#BA256B",
+    800: "#9E1958",
+    900: "#840B45",
+  },
+  orange: {
+    25: "#FFF9F5",
+    50: "#FFF4ED",
+    100: "#FFE6D5",
+    200: "#FFD6AE",
+    300: "#FF9C66",
+    400: "#FF692E",
+    500: "#FF4405",
+    600: "#E62E05",
+    700: "#BC1B06",
+    800: "#97180C",
+    900: "#771A0D",
+  },
+
 };
