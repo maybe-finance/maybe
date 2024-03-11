@@ -26,6 +26,9 @@ gem "turbo-rails"
 # Background Jobs
 gem "good_job"
 
+# Search
+gem "ransack"
+
 # Other
 gem "bcrypt", "~> 3.1.7"
 gem "inline_svg"

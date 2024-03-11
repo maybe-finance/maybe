@@ -15,6 +15,10 @@ class Account < ApplicationRecord
 
   before_create :check_currency
 
+  def self.ransackable_attributes(auth_object = nil)
+    %w[name]
+  end
+
   def trend(period = Period.all)
     first = balances.in_period(period).order(:date).first
     last = balances.in_period(period).order(date: :desc).first

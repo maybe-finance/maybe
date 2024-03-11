@@ -216,6 +216,9 @@ module.exports = {
       fontSize: {
         "2xs": ".625rem",
       },
+      spacing: {
+        '40': '10rem',
+      },
       keyframes: {
         "appear-then-fade": {
           "0%,100%": { opacity: 0 },
