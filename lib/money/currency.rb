@@ -1,7 +1,25 @@
 class Money::Currency
+    class UnknownCurrencyError < ArgumentError; end
+
     CURRENCIES_FILE_PATH = Rails.root.join("config", "currencies.yml")
 
+    # Cached instances by iso code
+    @@instances = {}
+
     class << self
+        def new(object)
+            iso_code = case object
+            when String, Symbol
+              object.to_s.downcase
+            when Money::Currency
+              object.iso_code.downcase
+            else
+              raise ArgumentError, "Invalid argument type"
+            end
+
+            @@instances[iso_code] ||= super(iso_code)
+        end
+
         def all
             @all ||= YAML.load_file(CURRENCIES_FILE_PATH)
         end
@@ -15,19 +33,9 @@ class Money::Currency
                 :symbol, :minor_unit, :minor_unit_conversion, :smallest_denomination,
                 :separator, :delimiter, :default_format, :default_precision
 
-    def initialize(object)
-        iso_code = case object
-        when String, Symbol
-          object.to_s.downcase
-        when Money::Currency
-          object.iso_code.downcase
-        else
-          raise ArgumentError, "Invalid argument type"
-        end
-
+    def initialize(iso_code)
         currency_data = self.class.all[iso_code]
-
-        raise ArgumentError, "Currency not found" if currency_data.nil?
+        raise UnknownCurrencyError if currency_data.nil?
 
         @name = currency_data["name"]
         @priority = currency_data["priority"]
@@ -42,9 +50,5 @@ class Money::Currency
         @delimiter = currency_data["delimiter"]
         @default_format = currency_data["default_format"]
         @default_precision = currency_data["default_precision"]
-    end
-
-    def ==(other)
-        other.is_a?(Money::Currency) && iso_code == other.iso_code
     end
 end
