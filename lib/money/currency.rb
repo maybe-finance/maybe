@@ -7,11 +7,7 @@ class Money::Currency
         end
 
         def popular
-            all.values.sort_by { |currency| currency["priority"] }.first(12)
-        end
-
-        def find(iso_code)
-            all[iso_code.to_s.downcase]
+            all.values.sort_by { |currency| currency["priority"] }.first(12).map { |currency_data| new(currency_data["iso_code"]) }
         end
     end
 
@@ -29,7 +25,7 @@ class Money::Currency
           raise ArgumentError, "Invalid argument type"
         end
 
-        currency_data = self.class.find(iso_code)
+        currency_data = self.class.all[iso_code]
 
         raise ArgumentError, "Currency not found" if currency_data.nil?
 
