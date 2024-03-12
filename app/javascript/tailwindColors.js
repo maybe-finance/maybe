@@ -3,7 +3,7 @@
  * Stimulus controllers to reference our color palette.  Mostly used for D3 charts.
  */
 
-export const categoryBaseColors = [
+export const categoryColors = [
    "#e99537",
    "#4da568",
    "#6471eb",

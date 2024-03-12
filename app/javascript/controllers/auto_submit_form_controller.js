@@ -1,4 +1,4 @@
-import {Controller} from '@hotwired/stimulus';
+import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
 
@@ -26,5 +26,6 @@ export default class extends Controller {
     console.log(e);
     this.element.requestSubmit();
   }
+
 }
 

@@ -1,4 +1,4 @@
-import {Controller} from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="dropdown"
 export default class extends Controller {
@@ -7,12 +7,11 @@ export default class extends Controller {
   toggleMenu = (e) => {
     e.preventDefault();
     e.stopPropagation(); // Prevent event from closing the menu immediately
-    this.menuTarget.classList.contains("hidden") ? this.showMenu() : this.hideMenu()
+    this.menuTarget.classList.contains("hidden") ? this.showMenu() : this.hideMenu();
   }
 
   showMenu = () => {
     document.addEventListener("click", this.onDocumentClick);
-    this.menuTarget.addEventListener("click", this.onDropdownClick);
     this.menuTarget.classList.remove("hidden");
   }
 
@@ -22,7 +21,7 @@ export default class extends Controller {
   }
 
   disconnect = () => {
-    document.removeEventListener("click", this.onDocumentClick);
+    this.hideMenu();
   }
 
   onDocumentClick = (e) => {
@@ -32,6 +31,6 @@ export default class extends Controller {
       return;
     }
 
-    this.hideMenu()
+    this.hideMenu();
   }
 }
