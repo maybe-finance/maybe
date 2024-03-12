@@ -4,26 +4,34 @@ import {Controller} from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["menu"]
 
-  toggleMenu(e) {
+  toggleMenu = (e) => {
     e.preventDefault();
     e.stopPropagation(); // Prevent event from closing the menu immediately
-    this.menuTarget.classList.toggle("hidden");
+    this.menuTarget.classList.contains("hidden") ? this.showMenu() : this.hideMenu()
   }
 
-  hideMenu = (e) => {
-    if (this.menuTarget.contains(e.target)) {
-      console.log('1up!!')
-      e.stopPropagation();
-      return;
-    }
+  showMenu = () => {
+    document.addEventListener("click", this.onDocumentClick);
+    this.menuTarget.addEventListener("click", this.onDropdownClick);
+    this.menuTarget.classList.remove("hidden");
+  }
+
+  hideMenu = () => {
+    document.removeEventListener("click", this.onDocumentClick);
     this.menuTarget.classList.add("hidden");
   }
 
-  connect() {
-    document.addEventListener("click", this.hideMenu);
+  disconnect = () => {
+    document.removeEventListener("click", this.onDocumentClick);
   }
 
-  disconnect() {
-    document.removeEventListener("click", this.hideMenu);
+  onDocumentClick = (e) => {
+    if (this.menuTarget.contains(e.target)) {
+      // user has clicked inside of the dropdown
+      e.stopPropagation();
+      return;
+    }
+
+    this.hideMenu()
   }
 }
