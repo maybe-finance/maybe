@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_03_09_180636) do
+ActiveRecord::Schema[7.2].define(version: 2024_03_13_141813) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -26,7 +26,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_09_180636) do
     t.string "currency", default: "USD", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id", "date"], name: "index_account_balances_on_account_id_and_date", unique: true
+    t.index ["account_id", "date", "currency"], name: "index_account_balances_on_account_id_date_currency_unique", unique: true
     t.index ["account_id"], name: "index_account_balances_on_account_id"
   end
 
@@ -98,7 +98,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_09_180636) do
     t.date "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["base_currency", "converted_currency", "date"], name: "idx_on_base_currency_converted_currency_date_255be792be", unique: true
+    t.index ["base_currency", "converted_currency", "date"], name: "index_exchange_rates_on_base_converted_date_unique", unique: true
     t.index ["base_currency"], name: "index_exchange_rates_on_base_currency"
     t.index ["converted_currency"], name: "index_exchange_rates_on_converted_currency"
   end

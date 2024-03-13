@@ -9,7 +9,7 @@ class Period
         INDEX.keys.sort
     end
 
-    def initialize(name:, date_range:)
+    def initialize(name: "custom", date_range:)
         @name = name
         @date_range = date_range
     end

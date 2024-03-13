@@ -5,6 +5,7 @@ checking_one:
   amount: 10
   account: checking
   category: food_and_drink
+  currency: USD
 
 checking_two:
   name: Chipotle
@@ -12,12 +13,14 @@ checking_two:
   amount: 30
   account: checking
   category: food_and_drink
+  currency: USD
 
 checking_three:
   name: Amazon
   date: <%= 15.days.ago.to_date %>
   amount: 20
   account: checking
+  currency: USD
 
 checking_four:
   name: Paycheck
@@ -25,12 +28,14 @@ checking_four:
   amount: -1075
   account: checking
   category: income
+  currency: USD
 
 checking_five:
   name: Netflix
   date: <%= 29.days.ago.to_date %>
   amount: 15
   account: checking
+  currency: USD
 
 # Savings account that has these transactions and valuation overrides
 savings_one:
@@ -39,6 +44,7 @@ savings_one:
   amount: -200
   account: savings_with_valuation_overrides
   category: income
+  currency: USD
 
 savings_two:
   name: Check Deposit
@@ -46,12 +52,14 @@ savings_two:
   amount: -50
   account: savings_with_valuation_overrides
   category: income
+  currency: USD
 
 savings_three:
   name: Withdrawal
   date: <%= 18.days.ago.to_date %>
   amount: 2000
   account: savings_with_valuation_overrides
+  currency: USD
 
 savings_four:
   name: Check Deposit
@@ -59,6 +67,7 @@ savings_four:
   amount: -500
   account: savings_with_valuation_overrides
   category: income
+  currency: USD
 
 # Credit card account transactions
 credit_card_one:
@@ -67,6 +76,7 @@ credit_card_one:
   amount: 10
   account: credit_card
   category: food_and_drink
+  currency: USD
 
 credit_card_two:
   name: Chipotle
@@ -74,15 +84,69 @@ credit_card_two:
   amount: 30
   account: credit_card
   category: food_and_drink
+  currency: USD
 
 credit_card_three:
   name: Amazon
   date: <%= 15.days.ago.to_date %>
   amount: 20
   account: credit_card
+  currency: USD
 
 credit_card_four:
   name: CC Payment
   date: <%= 29.days.ago.to_date %>
   amount: -100
   account: credit_card
+  currency: USD
+
+# eur_checking transactions
+eur_checking_one:
+  name: Check
+  date: <%= 9.days.ago.to_date %>
+  amount: -50
+  currency: EUR
+  account: eur_checking
+
+eur_checking_two:
+  name: Shopping trip
+  date: <%= 19.days.ago.to_date %>
+  amount: 100
+  currency: EUR
+  account: eur_checking
+
+eur_checking_three:
+  name: Check
+  date: <%= 29.days.ago.to_date %>
+  amount: -200
+  currency: EUR
+  account: eur_checking
+
+# multi_currency transactions
+multi_currency_one:
+  name: Outflow 1
+  date: <%= 4.days.ago.to_date %>
+  amount: 800
+  currency: EUR
+  account: multi_currency
+
+multi_currency_two:
+  name: Inflow 1
+  date: <%= 9.days.ago.to_date %>
+  amount: -50
+  currency: USD
+  account: multi_currency
+
+multi_currency_three:
+  name: Outflow 2
+  date: <%= 19.days.ago.to_date %>
+  amount: 100
+  currency: EUR
+  account: multi_currency
+
+multi_currency_four:
+  name: Inflow 2
+  date: <%= 29.days.ago.to_date %>
+  amount: -200
+  currency: USD
+  account: multi_currency

@@ -97,12 +97,9 @@ module ApplicationHelper
     end
   end
 
-  def format_currency(number, options = {})
-    user_currency_preference = Current.family.try(:currency) || "USD"
-
-    currency_options = CURRENCY_OPTIONS[user_currency_preference.to_sym]
-    options.reverse_merge!(currency_options)
-
-    number_to_currency(number, options)
+  def format_currency(money_or_amount, options = {})
+    money = Money.new(money_or_amount)
+    options.reverse_merge!(money.default_format_options)
+    number_to_currency(money.amount, options)
   end
 end

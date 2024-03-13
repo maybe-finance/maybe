@@ -29,4 +29,13 @@ class Money
 
         parts.last.ljust(precision, "0")
     end
+
+    def default_format_options
+        {
+            unit: @currency.symbol,
+            precision: @currency.default_precision,
+            delimiter: @currency.delimiter,
+            separator: @currency.separator
+        }
+    end
 end

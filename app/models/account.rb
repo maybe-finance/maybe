@@ -27,6 +27,27 @@ class Account < ApplicationRecord
     Trend.new(current: last.balance, previous: first.balance, type: classification)
   end
 
+  # def balance
+  #   Money.new(read_attribute(:balance), currency)
+  # end
+
+  # def balance=(money_or_amount)
+  #   money = money_or_amount.is_a?(Money) ? money_or_amount : Money.new(money_or_amount, currency)
+  #   write_attribute(:balance, money.amount)
+  #   write_attribute(:currency, money.currency.iso_code)
+  # end
+
+  # e.g. Wise, Revolut accounts that have transactions in multiple currencies
+  def multi_currency?
+    currencies = [ valuations.pluck(:currency), transactions.pluck(:currency) ].flatten.uniq
+    currencies.count > 1
+  end
+
+  # e.g. Accounts denominated in currency other than family currency
+  def foreign_currency?
+    currency != family.currency
+  end
+
   def self.by_provider
     # TODO: When 3rd party providers are supported, dynamically load all providers and their accounts
     [ { name: "Manual accounts", accounts: all.order(balance: :desc).group_by(&:accountable_type) } ]
@@ -38,7 +59,10 @@ class Account < ApplicationRecord
 
   # TODO: We will need a better way to encapsulate large queries & transformation logic, but leaving all in one spot until
   # we have a better understanding of the requirements
-  def self.by_group(period = Period.all)
+  def self.by_group(options = {})
+    period = options[:period] || Period.all
+    currency = options[:currency] || "USD"
+
     ranked_balances_cte = active.joins(:balances)
         .select("
           account_balances.account_id,
@@ -47,6 +71,7 @@ class Account < ApplicationRecord
           ROW_NUMBER() OVER (PARTITION BY account_balances.account_id ORDER BY date ASC) AS rn_asc,
           ROW_NUMBER() OVER (PARTITION BY account_balances.account_id ORDER BY date DESC) AS rn_desc
         ")
+        .where("account_balances.currency = ?", currency)
 
     if period.date_range
       ranked_balances_cte = ranked_balances_cte.where("account_balances.date BETWEEN ? AND ?", period.date_range.begin, period.date_range.end)

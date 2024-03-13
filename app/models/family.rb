@@ -31,14 +31,33 @@ class Family < ApplicationRecord
   end
 
   def net_worth
-    accounts.active.sum("CASE WHEN classification = 'asset' THEN balance ELSE -balance END")
+    accounts.active.map do |account|
+      if account.currency == self.currency
+        account.classification == "asset" ? account.balance : -account.balance
+      else
+        converted_balance = ExchangeRate.convert(account.currency, self.currency, account.balance)
+        account.classification == "asset" ? converted_balance : -converted_balance
+      end
+    end.sum
   end
 
   def assets
-   accounts.active.assets.sum(:balance)
+    accounts.active.assets.map do |account|
+      if account.currency == self.currency
+        account.balance
+      else
+        ExchangeRate.convert(account.currency, self.currency, account.balance)
+      end
+    end.sum
   end
 
   def liabilities
-    accounts.active.liabilities.sum(:balance)
+    accounts.active.liabilities.map do |account|
+      if account.currency == self.currency
+        account.balance
+      else
+        ExchangeRate.convert(account.currency, self.currency, account.balance)
+      end
+    end.sum
   end
 end

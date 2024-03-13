@@ -14,6 +14,15 @@ class Account::SyncableTest < ActiveSupport::TestCase
         assert_equal 31, account.balances.count
     end
 
+    test "foreign currency account has balances in each currency after syncing" do
+        account = accounts(:eur_checking)
+        account.sync
+
+        assert_equal 62, account.balances.count
+        assert_equal 31, account.balances.where(currency: "EUR").count
+        assert_equal 31, account.balances.where(currency: "USD").count
+    end
+
     test "stale balances are purged after syncing" do
         account = accounts(:savings_with_valuation_overrides)
 
