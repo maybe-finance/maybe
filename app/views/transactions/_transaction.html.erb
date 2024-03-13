@@ -3,10 +3,8 @@
     <div class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-600/5 text-gray-600"><%= transaction.name[0].upcase %></div>
     <p class="text-gray-900"><%= transaction.name %></p>
   </div>
-  <div class="w-40">
-    <%= turbo_frame_tag dom_id(transaction) do %>
-      <%= render partial: "transactions/category_dropdown", locals: { transaction: } %>
-    <% end %>
+  <div class="w-48">
+    <%= render partial: "transactions/category_dropdown", locals: { transaction: } %>
   </div>
   <div>
     <p><%= transaction.account.name %></p>
