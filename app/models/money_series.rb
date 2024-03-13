@@ -2,6 +2,7 @@ class MoneySeries
     def initialize(series, options = {})
         @trend_type = options[:trend_type] || "asset" # Defines whether a positive trend is good or bad
         @accessor = options[:amount_accessor] || :balance
+        @fallback = options[:fallback]
         @series = series
     end
 
@@ -10,7 +11,7 @@ class MoneySeries
     end
 
     def data
-        [ nil, *@series ].each_cons(2).map do |previous, current|
+        series_data = [ nil, *@series ].each_cons(2).map do |previous, current|
             {
                 raw: current,
                 date: current.date,
@@ -22,6 +23,16 @@ class MoneySeries
                 )
             }
         end
+
+        if series_data.empty? && @fallback
+            series_data = [ { date: Date.current, value: @fallback, trend: Trend.new(current: 0, type: @trend_type) } ]
+        end
+
+        series_data
+    end
+
+    def last
+        data.last[:value]
     end
 
     def trend

@@ -20,9 +20,9 @@ class Family < ApplicationRecord
     query = query.where("account_balances.date BETWEEN ? AND ?", period.date_range.begin, period.date_range.end) if period.date_range
 
     {
-      asset_series: MoneySeries.new(query, { trend_type: :asset, amount_accessor: "assets" }),
-      liability_series: MoneySeries.new(query, { trend_type: :liability, amount_accessor: "liabilities" }),
-      net_worth_series: MoneySeries.new(query, { trend_type: :asset, amount_accessor: "net_worth" })
+      asset_series: MoneySeries.new(query, { trend_type: :asset, amount_accessor: "assets", fallback: self.assets }),
+      liability_series: MoneySeries.new(query, { trend_type: :liability, amount_accessor: "liabilities", fallback: self.liabilities }),
+      net_worth_series: MoneySeries.new(query, { trend_type: :asset, amount_accessor: "net_worth", fallback: self.net_worth })
     }
   end
 
@@ -31,33 +31,33 @@ class Family < ApplicationRecord
   end
 
   def net_worth
-    accounts.active.map do |account|
-      if account.currency == self.currency
-        account.classification == "asset" ? account.balance : -account.balance
-      else
-        converted_balance = ExchangeRate.convert(account.currency, self.currency, account.balance)
-        account.classification == "asset" ? converted_balance : -converted_balance
-      end
-    end.sum
+    total = accounts.active.reduce(0) do |sum, account|
+      balance = account.balance
+      balance = ExchangeRate.convert(account.currency, self.currency, balance) unless account.currency == self.currency
+      balance = balance.nil? ? 0 : balance
+      balance *= -1 if account.classification == "liability"
+      sum + balance
+    end
+    Money.new(total, self.currency)
   end
 
   def assets
-    accounts.active.assets.map do |account|
-      if account.currency == self.currency
-        account.balance
-      else
-        ExchangeRate.convert(account.currency, self.currency, account.balance)
-      end
-    end.sum
+    total_assets = accounts.active.assets.reduce(0) do |sum, account|
+      balance = account.balance
+      balance = ExchangeRate.convert(account.currency, self.currency, balance) unless account.currency == self.currency
+      balance = balance.nil? ? 0 : balance
+      sum + balance
+    end
+    Money.new(total_assets, self.currency)
   end
 
   def liabilities
-    accounts.active.liabilities.map do |account|
-      if account.currency == self.currency
-        account.balance
-      else
-        ExchangeRate.convert(account.currency, self.currency, account.balance)
-      end
-    end.sum
+    total_liabilities = accounts.active.liabilities.reduce(0) do |sum, account|
+      balance = account.balance
+      balance = ExchangeRate.convert(account.currency, self.currency, balance) unless account.currency == self.currency
+      balance = balance.nil? ? 0 : balance
+      sum + balance
+    end
+    Money.new(total_liabilities, self.currency)
   end
 end

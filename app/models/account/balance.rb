@@ -6,7 +6,7 @@ class Account::Balance < ApplicationRecord
   def self.to_series(account, period = Period.all)
     MoneySeries.new(
       in_period(period).order(:date),
-      { trend_type: account.classification }
+      { trend_type: account.classification, fallback: Money.new(account.balance, account.currency) }
     )
   end
 end

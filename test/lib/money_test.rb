@@ -16,4 +16,8 @@ class MoneyTest < ActiveSupport::TestCase
         assert_equal value2.currency.iso_code, value3.currency.iso_code
         assert_equal value3.currency.iso_code, value4.currency.iso_code
     end
+
+    test "can compare equality" do
+        assert_equal Money.new(1000), Money.new(1000)
+    end
 end

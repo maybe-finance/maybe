@@ -16,6 +16,14 @@ namespace :demo_data do
 
     Transaction::Category.create_default_categories(family) if family.transaction_categories.empty?
 
+    # No historical data for this account
+    empty_account = Account.find_or_create_by(name: "Demo Empty Account") do |a|
+      a.family = family
+      a.accountable = Account::Depository.new
+      a.balance = 500
+      a.currency = "USD"
+    end
+
     multi_currency_checking = Account.find_or_create_by(name: "Demo Multi-Currency Checking") do |a|
       a.family = family
       a.accountable = Account::Depository.new

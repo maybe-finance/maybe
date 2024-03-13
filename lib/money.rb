@@ -30,6 +30,11 @@ class Money
         parts.last.ljust(precision, "0")
     end
 
+    def ==(other)
+        return false unless other.is_a?(Money)
+        amount == other.amount && currency == other.currency
+    end
+
     def default_format_options
         {
             unit: @currency.symbol,

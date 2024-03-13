@@ -15,8 +15,6 @@ class Account < ApplicationRecord
 
   delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
 
-  before_create :check_currency
-
   def self.ransackable_attributes(auth_object = nil)
     %w[name]
   end
@@ -83,6 +81,7 @@ class Account < ApplicationRecord
       .from("ranked_balances AS rb")
       .joins("JOIN accounts a ON a.id = rb.account_id")
       .select("
+        a.id,
         a.name,
         a.accountable_type,
         a.classification,
@@ -110,16 +109,6 @@ class Account < ApplicationRecord
 
   private
 
-    def check_currency
-      if self.currency == self.family.currency
-        self.converted_balance = self.balance
-        self.converted_currency = self.currency
-      else
-        self.converted_balance = ExchangeRate.convert(self.currency, self.family.currency, self.balance)
-        self.converted_currency = self.family.currency
-      end
-    end
-
     def self.build_group_summary(accounts, classification)
       total_balance = accounts.sum(&:end_balance)
       {
@@ -138,8 +127,10 @@ class Account < ApplicationRecord
         end_balance: end_balance,
         allocation: (end_balance / total_balance * 100).round(2),
         trend: Trend.new(current: end_balance, previous: start_balance, type: classification),
+        classification: classification,
         accounts: accounts.map do |account|
           {
+            id: account.id,
             name: account.name,
             start_balance: account.start_balance,
             end_balance: account.end_balance,

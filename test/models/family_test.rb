@@ -49,15 +49,15 @@ class FamilyTest < ActiveSupport::TestCase
   end
 
   test "should calculate total assets" do
-    assert_equal @expected_snapshots.last["assets"].to_d, @family.assets
+    assert_equal Money.new(@expected_snapshots.last["assets"].to_d, @family.currency), @family.assets
   end
 
   test "should calculate total liabilities" do
-    assert_equal @expected_snapshots.last["liabilities"].to_d, @family.liabilities
+    assert_equal Money.new(@expected_snapshots.last["liabilities"].to_d, @family.currency), @family.liabilities
   end
 
   test "should calculate net worth" do
-    assert_equal @expected_snapshots.last["net_worth"].to_d, @family.net_worth
+    assert_equal Money.new(@expected_snapshots.last["net_worth"].to_d, @family.currency), @family.net_worth
   end
 
   test "should calculate snapshot correctly" do
@@ -99,8 +99,8 @@ class FamilyTest < ActiveSupport::TestCase
     disabled_checking.update!(is_active: false)
     disabled_cc.update!(is_active: false)
 
-    assert_equal assets_before - disabled_checking.balance, @family.assets
-    assert_equal liabilities_before - disabled_cc.balance, @family.liabilities
-    assert_equal net_worth_before - disabled_checking.balance + disabled_cc.balance, @family.net_worth
+    assert_equal Money.new(assets_before.amount - disabled_checking.balance, @family.currency), @family.assets
+    assert_equal Money.new(liabilities_before.amount - disabled_cc.balance, @family.currency), @family.liabilities
+    assert_equal Money.new(net_worth_before.amount - disabled_checking.balance + disabled_cc.balance, @family.currency), @family.net_worth
   end
 end

@@ -29,7 +29,7 @@
         <%= render partial: "shared/balance_heading", locals: { 
             label: "Total Value", 
             period: @period,
-            balance: Money.new(@account.balance, @account.currency),
+            balance: @balance_series.last,
             trend: @balance_series.trend
           } 
         %>
