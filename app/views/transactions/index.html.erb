@@ -50,7 +50,7 @@
         </div>
         <div>
           <%= form.select :date, options_for_select([['All', 'all'], ['7D', 'last_7_days'], ['1M', 'last_30_days'], ["1Y", "last_365_days"]], selected: params.dig(:q, :date)), {}, { class: "block h-full w-full border border-gray-200 rounded-lg text-sm py-2 pr-8 pl-2", "data-transactions-search-target": "date" } %>
-          
+
           <!-- Hidden fields for date range -->
           <%= form.hidden_field :date_gteq, value: '', "data-transactions-search-target": "dateGteq" %>
           <%= form.hidden_field :date_lteq, value: '', "data-transactions-search-target": "dateLteq" %>
@@ -68,12 +68,15 @@
           <div class="w-96">
             <p class="uppercase">transaction</p>
           </div>
+          <div class="w-48">
+            <p class="uppercase">category</p>
+          </div>
           <div class="grow uppercase flex justify-between items-center gap-5 text-xs font-medium text-gray-500">
             <p>account</p>
             <p>amount</p>
           </div>
         </div>
-        
+
         <div class="space-y-6">
           <% @transactions.group_by { |transaction| transaction.date }.each do |date, grouped_transactions| %>
             <%= render partial: "transactions/transaction_group", locals: { date: date, transactions: grouped_transactions } %>

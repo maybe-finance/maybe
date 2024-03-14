@@ -8,7 +8,7 @@ export default class extends Controller {
   }
 
   // Hide the dialog when the user clicks outside of it
-  click_outside(e) {
+  clickOutside(e) {
     if (e.target === this.element) {
       this.element.close();
     }
