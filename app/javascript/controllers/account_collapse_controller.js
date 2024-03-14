@@ -3,21 +3,19 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="account-collapse"
 export default class extends Controller {
   static values = { type: String }
-  boundOnToggle = null
   initialToggle = false
   STORAGE_NAME = "accountCollapseStates"
 
   connect() {
-    this.boundOnToggle = this.onToggle.bind(this)
-    this.element.addEventListener("toggle", this.boundOnToggle)
+    this.element.addEventListener("toggle", this.onToggle)
     this.updateFromLocalStorage()
   }
 
   disconnect() {
-    this.element.removeEventListener("toggle", this.boundOnToggle)
+    this.element.removeEventListener("toggle", this.onToggle)
   }
 
-  onToggle() {
+  onToggle = () => {
     if (this.initialToggle) {
       this.initialToggle = false
       return

@@ -19,7 +19,7 @@ class RegistrationsController < ApplicationController
       redirect_to root_path
     else
       flash[:alert] = t(".failure")
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 

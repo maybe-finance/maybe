@@ -10,10 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_03_07_082827) do
+ActiveRecord::Schema[7.2].define(version: 2024_03_09_180636) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  # Custom types defined in this database.
+  # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "account_status", ["ok", "syncing", "error"]
 
   create_table "account_balances", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "account_id", null: false
@@ -78,9 +82,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_07_082827) do
     t.string "currency", default: "USD"
     t.decimal "converted_balance", precision: 19, scale: 4, default: "0.0"
     t.string "converted_currency", default: "USD"
-    t.string "status", default: "OK"
     t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Account::Loan'::character varying)::text, ('Account::Credit'::character varying)::text, ('Account::OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.boolean "is_active", default: true, null: false
+    t.enum "status", default: "ok", null: false, enum_type: "account_status"
+    t.jsonb "sync_warnings", default: "[]", null: false
+    t.jsonb "sync_errors", default: "[]", null: false
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id"], name: "index_accounts_on_family_id"
   end
@@ -217,6 +223,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_07_082827) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "category_id"
+    t.boolean "excluded", default: false
+    t.text "notes"
     t.index ["account_id"], name: "index_transactions_on_account_id"
     t.index ["category_id"], name: "index_transactions_on_category_id"
   end
