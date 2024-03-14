@@ -1,6 +1,8 @@
 class AccountBalance < ApplicationRecord
   belongs_to :account
 
+  validates :account_id, :date, :balance, presence: true
+
   scope :in_period, ->(period) { period.date_range.nil? ? all : where(date: period.date_range) }
 
   def self.to_series(account, period = Period.all)

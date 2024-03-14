@@ -1,6 +1,8 @@
 class Account < ApplicationRecord
   include Syncable
 
+  validates :family_id, presence: true
+
   broadcasts_refreshes
   belongs_to :family
   has_many :balances, class_name: "AccountBalance"
