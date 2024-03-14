@@ -5,7 +5,6 @@ export default class extends Controller {
   static targets = ["menu"]
 
   toggleMenu = (e) => {
-    e.preventDefault();
     e.stopPropagation(); // Prevent event from closing the menu immediately
     this.menuTarget.classList.contains("hidden") ? this.showMenu() : this.hideMenu();
   }
