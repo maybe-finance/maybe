@@ -23,6 +23,7 @@
     <%= javascript_importmap_tags %>
 
     <%= hotwire_livereload_tags if Rails.env.development? %>
+    <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
   </head>
 
   <body class="h-full">
