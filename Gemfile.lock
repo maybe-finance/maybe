@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: bf96dcfa0d0e0e88ebada8cbc3b64b93298dd0e4
+  revision: 89adf24a570b0adf9f62011339b042046471f421
   branch: main
   specs:
     actioncable (7.2.0.alpha)
@@ -116,7 +116,7 @@ GEM
       erubi (~> 1.4)
       parser (>= 2.4)
       smart_properties
-    bigdecimal (3.1.6)
+    bigdecimal (3.1.7)
     bindex (0.8.1)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
