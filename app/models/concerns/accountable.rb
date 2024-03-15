@@ -1,15 +1,22 @@
 module Accountable
   extend ActiveSupport::Concern
 
-  TYPES = %w[ Account::Credit Account::Depository Account::Investment Account::Loan Account::OtherAsset Account::OtherLiability Account::Property Account::Vehicle ]
+  ASSET_TYPES = %w[ Account::Depository Account::Investment Account::OtherAsset Account::Property Account::Vehicle ]
+  LIABILITY_TYPES = %w[ Account::Credit Account::Loan Account::OtherLiability ]
+  TYPES = ASSET_TYPES + LIABILITY_TYPES
 
   def self.from_type(type)
     return nil unless types.include?(type) || TYPES.include?(type)
     "Account::#{type.demodulize}".constantize
   end
 
-  def self.types
-    TYPES.map { |type| type.demodulize }
+  def self.types(classification = nil)
+    types = classification ? (classification.to_sym == :asset ? ASSET_TYPES : LIABILITY_TYPES) : TYPES
+    types.map { |type| type.demodulize }
+  end
+
+  def self.classification(type)
+    ASSET_TYPES.include?(type) ? :asset : :liability
   end
 
   included do
