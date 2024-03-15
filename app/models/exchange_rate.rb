@@ -1,4 +1,6 @@
 class ExchangeRate < ApplicationRecord
+  validates :base_currency, :converted_currency, presence: true
+
   def self.convert(from, to, amount)
     return amount unless EXCHANGE_RATE_ENABLED
 

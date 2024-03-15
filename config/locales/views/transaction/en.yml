@@ -1,0 +1,9 @@
+---
+en:
+  transactions:
+    create:
+      success: New transaction created successfully
+    destroy:
+      success: Transaction deleted successfully
+    update:
+      success: Transaction updated successfully
