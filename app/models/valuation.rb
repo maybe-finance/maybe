@@ -1,7 +1,7 @@
 class Valuation < ApplicationRecord
   belongs_to :account
 
-  validates :account_id, :date, :value, presence: true
+  validates :account, :date, :value, presence: true
 
   after_commit :sync_account
 

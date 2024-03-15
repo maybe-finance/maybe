@@ -2,7 +2,7 @@ class Transaction < ApplicationRecord
   belongs_to :account
   belongs_to :category, optional: true
 
-  validates :name, :date, :amount, :account_id, presence: true
+  validates :name, :date, :amount, :account, presence: true
 
   after_commit :sync_account
 
