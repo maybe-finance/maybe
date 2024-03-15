@@ -79,12 +79,12 @@ class ValueGroupTest < ActiveSupport::TestCase
 
     # Percentage of parent group (i.e. collectable is 100% of "Other Assets" group)
     test "group calculates percent of parent total" do
-        assert_equal 1, @assets.percent_of_total
-        assert_in_delta 0.9785, @depositories.percent_of_total, 0.01
-        assert_in_delta 0.0215, @other_assets.percent_of_total, 0.01
-        assert_in_delta 0.80, @savings_node.percent_of_total, 0.01
-        assert_in_delta 0.20, @checking_node.percent_of_total, 0.01
-        assert_equal 1, @collectable_node.percent_of_total
+        assert_equal 100, @assets.percent_of_total
+        assert_in_delta 97.85, @depositories.percent_of_total, 0.1
+        assert_in_delta 2.15, @other_assets.percent_of_total, 0.1
+        assert_in_delta 80.0, @savings_node.percent_of_total, 0.1
+        assert_in_delta 20.0, @checking_node.percent_of_total, 0.1
+        assert_equal 100, @collectable_node.percent_of_total
     end
 
     test "handles unbalanced tree" do

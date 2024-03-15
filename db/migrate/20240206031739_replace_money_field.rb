@@ -6,7 +6,7 @@ class ReplaceMoneyField < ActiveRecord::Migration[7.2]
     Account.reset_column_information
 
     Account.find_each do |account|
-      account.update_columns(balance_cents: Money.from_amount(account.balance_in_database, account.currency).cents)
+      account.update_columns(balance_cents: Money.new(account.balance_in_database, account.currency).cents)
     end
 
     remove_column :accounts, :balance

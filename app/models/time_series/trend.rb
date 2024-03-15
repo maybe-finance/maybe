@@ -2,12 +2,9 @@ class TimeSeries::Trend
   attr_reader :type
 
   # Tells us whether an increasing/decreasing trend is good or bad (i.e. a liability decreasing is good)
-  TYPES = {
-    normal: "normal",
-    inverse: "inverse"
-  }.freeze
+  TYPES = %i[normal inverse].freeze
 
-  def initialize(current: nil, previous: nil, type: TYPES[:normal])
+  def initialize(current: nil, previous: nil, type: :normal)
     validate_data_types(current, previous)
     validate_type(type)
     @current = current
@@ -35,7 +32,7 @@ class TimeSeries::Trend
 
   private
     def validate_type(type)
-      raise ArgumentError, "Invalid type" unless TYPES.values.include?(type)
+      raise ArgumentError, "Invalid type" unless TYPES.include?(type)
     end
 
     def validate_data_types(current, previous)

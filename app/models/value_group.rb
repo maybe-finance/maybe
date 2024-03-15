@@ -42,8 +42,8 @@
     end
 
     def percent_of_total
-        return 1 if parent.nil?
-        sum / parent.sum
+        return 100 if parent.nil?
+        ((sum / parent.sum) * 100).round(1)
     end
 
     def leaf?

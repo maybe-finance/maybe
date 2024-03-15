@@ -3,7 +3,7 @@ class TimeSeries
     attr_reader :type
 
     def initialize(balances, options = {})
-        @type = options[:type] || TimeSeries::Trend::TYPES[:normal]
+        @type = options[:type] || :normal
         @balances = (balances.nil? || balances.empty?) ? [] : balances.map { |b| TimeSeries::Value.new(b) }.sort_by(&:date)
     end
 

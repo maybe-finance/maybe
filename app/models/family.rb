@@ -19,10 +19,12 @@ class Family < ApplicationRecord
 
     query = query.where("account_balances.date BETWEEN ? AND ?", period.date_range.begin, period.date_range.end) if period.date_range
 
+    result = query.to_a
+
     {
-      asset_series: TimeSeries.new(query, { trend_type: :asset, amount_accessor: "assets" }),
-      liability_series: TimeSeries.new(query, { trend_type: :liability, amount_accessor: "liabilities" }),
-      net_worth_series: TimeSeries.new(query, { trend_type: :asset, amount_accessor: "net_worth" })
+      asset_series: TimeSeries.new(result.map { |r| { date: r.date, value: r.assets } }),
+      liability_series: TimeSeries.new(result.map { |r| { date: r.date, value: r.liabilities } }),
+      net_worth_series: TimeSeries.new(result.map { |r| { date: r.date, value: r.net_worth } })
     }
   end
 

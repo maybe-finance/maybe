@@ -26,7 +26,7 @@ class Account < ApplicationRecord
   def trend(period = Period.all)
     first = balances.in_period(period).order(:date).first
     last = balances.in_period(period).order(date: :desc).first
-    TimeSeries::Trend.new(current: last&.balance, previous: first&.balance, classification: classification)
+    # TimeSeries::Trend.new(current: last&.balance, previous: first&.balance, classification: classification)
   end
 
   def balance_on(date)
@@ -42,26 +42,24 @@ class Account < ApplicationRecord
     exists?(status: "syncing")
   end
 
+  def series(period = Period.all)
+    TimeSeries.new(balances.in_period(period))
+  end
+
   def self.by_group(period = Period.all)
-    root = Account::Group.new
-    assets = root.add_child("Assets", classification: :asset)
-    liabilities =root.add_child("Liabilities", classification: :liability)
+    grouped_accounts = { assets: ValueGroup.new("Assets"), liabilities: ValueGroup.new("Liabilities") }
 
-    Accountable.types(:asset).each do |type|
-      group = assets.add_child(type.demodulize.pluralize, classification: :asset)
-      Accountable.from_type(type).all.each do |accountable|
-        group.add_account(accountable.account)
+    Accountable.by_classification.each do |classification, types|
+      types.each do |type|
+        group = grouped_accounts[classification.to_sym].add_child_node(type)
+        Accountable.from_type(type).includes(:account).find_each do |accountable|
+          value_node = group.add_value_node(accountable.account)
+          value_node.attach_series(accountable.account.series(period))
+        end
       end
     end
 
-    Accountable.types(:liability).each do |type|
-      group = liabilities.add_child(type.demodulize.pluralize, classification: :liability)
-      Accountable.from_type(type).all.each do |accountable|
-        group.add_account(accountable.account)
-      end
-    end
-
-    root
+    grouped_accounts
   end
 
   private

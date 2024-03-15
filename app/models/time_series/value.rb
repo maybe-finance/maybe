@@ -2,9 +2,10 @@ class TimeSeries::Value
     include Comparable
 
     attr_accessor :trend
-    attr_reader :value, :date
+    attr_reader :value, :date, :original
 
     def initialize(obj)
+        @original = obj
         normalize_input(obj)
         validate_input
     end

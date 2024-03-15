@@ -10,6 +10,10 @@ module Accountable
     "Account::#{type.demodulize}".constantize
   end
 
+  def self.by_classification
+    { assets: ASSET_TYPES, liabilities: LIABILITY_TYPES }
+  end
+
   def self.types(classification = nil)
     types = classification ? (classification.to_sym == :asset ? ASSET_TYPES : LIABILITY_TYPES) : TYPES
     types.map { |type| type.demodulize }
