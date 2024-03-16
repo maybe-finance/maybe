@@ -22,9 +22,9 @@ class Family < ApplicationRecord
     result = query.to_a
 
     {
-      asset_series: TimeSeries.new(result.map { |r| { date: r.date, value: r.assets } }),
-      liability_series: TimeSeries.new(result.map { |r| { date: r.date, value: r.liabilities } }),
-      net_worth_series: TimeSeries.new(result.map { |r| { date: r.date, value: r.net_worth } })
+      asset_series: TimeSeries.new(result.map { |r| { date: r.date, value: Money.new(r.assets, r.currency) } }),
+      liability_series: TimeSeries.new(result.map { |r| { date: r.date, value: Money.new(r.liabilities, r.currency) } }),
+      net_worth_series: TimeSeries.new(result.map { |r| { date: r.date, value: Money.new(r.net_worth, r.currency) } })
     }
   end
 

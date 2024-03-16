@@ -26,7 +26,7 @@ class ValueGroupTest < ActiveSupport::TestCase
         assert_equal [], group.children
         assert_equal 0, group.sum
         assert_equal 0, group.avg
-        assert_equal 1, group.percent_of_total
+        assert_equal 100, group.percent_of_total
         assert_nil group.parent
     end
 
