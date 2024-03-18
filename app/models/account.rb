@@ -40,7 +40,7 @@ class Account < ApplicationRecord
   end
 
   def series(period = Period.all)
-    TimeSeries.new(balances.in_period(period).map { |b| { date: b.date, value: Money.new(b.balance, currency) } })
+    TimeSeries.new(balances.in_period(period).map { |b| { date: b.date, value: b.balance_money } })
   end
 
   def self.by_group(period = Period.all)
@@ -50,7 +50,6 @@ class Account < ApplicationRecord
       types.each do |type|
         group = grouped_accounts[classification.to_sym].add_child_node(type)
         Accountable.from_type(type).includes(:account).find_each do |accountable|
-          accountable.account.balance = Money.new(accountable.account.balance, accountable.account.currency)
           value_node = group.add_value_node(accountable.account)
           value_node.attach_series(accountable.account.series(period))
         end

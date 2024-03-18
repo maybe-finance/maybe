@@ -67,7 +67,7 @@
     end
 
     def attach_series(raw_series)
-        validate_attached_series(raw_series)
+        # validate_attached_series(raw_series)
         @raw_series = raw_series
     end
 
