@@ -14,7 +14,7 @@ class MoneySeries
             {
                 raw: current,
                 date: current.date,
-                value: Money.from_amount(current.send(@accessor), current.currency),
+                value: Money.new(current.send(@accessor), current.currency),
                 trend: Trend.new(
                     current: current.send(@accessor),
                     previous: previous&.send(@accessor),

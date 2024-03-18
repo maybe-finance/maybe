@@ -22,7 +22,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
       post transactions_url, params: { transaction: { account_id: @transaction.account_id, amount: @transaction.amount, currency: @transaction.currency, date: @transaction.date, name: } }
     end
 
-    assert_redirected_to transaction_url(Transaction.find_by(name:))
+    assert_redirected_to transactions_url
   end
 
   test "should show transaction" do

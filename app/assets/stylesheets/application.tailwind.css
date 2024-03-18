@@ -42,7 +42,7 @@
   }
 
   .form-field__input {
-    @apply p-3 pt-1 w-full bg-transparent border-none opacity-50;
+    @apply p-3 w-full bg-transparent border-none opacity-50;
     @apply focus:outline-none focus:ring-0 focus:opacity-100;
   }
 
