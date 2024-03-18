@@ -324,11 +324,11 @@ GEM
       rubocop-minitest
       rubocop-performance
       rubocop-rails
-    ruby-lsp (0.14.3)
+    ruby-lsp (0.14.6)
       language_server-protocol (~> 3.17.0)
       prism (>= 0.22.0, < 0.25)
       sorbet-runtime (>= 0.5.10782)
-    ruby-lsp-rails (0.3.2)
+    ruby-lsp-rails (0.3.3)
       actionpack (>= 6.0)
       activerecord (>= 6.0)
       railties (>= 6.0)
@@ -342,7 +342,7 @@ GEM
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
     smart_properties (1.17.0)
-    sorbet-runtime (0.5.11284)
+    sorbet-runtime (0.5.11294)
     stimulus-rails (1.3.3)
       railties (>= 6.0.0)
     stringio (3.1.0)
