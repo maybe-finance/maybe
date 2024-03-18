@@ -1,5 +1,5 @@
 class InviteCode < ApplicationRecord
-  before_validation :generate_token, on: :create
+  before_create :generate_token
 
   class << self
     def claim!(token)
