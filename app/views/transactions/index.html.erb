@@ -23,13 +23,13 @@
     <div class="p-4 space-y-2">
       <p class="text-sm text-gray-500">Income</p>
       <p class="text-gray-900 font-medium text-xl">
-        <%= format_currency @transactions.inflows.sum(&:amount).abs %>
+        <%= format_money @transactions.inflows.sum(&:amount_money).abs %>
       </p>
     </div>
     <div class="p-4 space-y-2">
       <p class="text-sm text-gray-500">Expenses</p>
       <p class="text-gray-900 font-medium text-xl">
-        <%= format_currency @transactions.outflows.sum(&:amount) %>
+        <%= format_money @transactions.outflows.sum(&:amount_money) %>
       </p>
     </div>
   </div>

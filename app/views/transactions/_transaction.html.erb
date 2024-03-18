@@ -12,6 +12,6 @@
     <p><%= transaction.account.name %></p>
   </div>
   <div class="ml-auto">
-    <p class="<%= transaction.amount < 0 ? "text-green-600" : "" %>"><%= format_currency -transaction.amount %></p>
+    <p class="<%= transaction.amount < 0 ? "text-green-600" : "" %>"><%= format_money -transaction.amount_money %></p>
   </div>
 <% end %>

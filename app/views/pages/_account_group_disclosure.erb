@@ -14,7 +14,7 @@
         <p><%= account_group.percent_of_total.round(1) %>%</p>
       </div>
       <div class="w-24">
-        <p><%= format_currency account_group.sum %></p>
+        <p><%= format_money account_group.sum %></p>
       </div>
       <div class="w-40">
         <%= render partial: "shared/trend_change", locals: { trend: account_group.series.trend } %>
@@ -38,7 +38,7 @@
             <p><%= account.percent_of_total %>%</p>
           </div>
           <div class="w-24">
-            <p><%= format_currency account.sum %></p>
+            <p><%= format_money account.sum %></p>
           </div>
           <div class="w-40">
             <%= render partial: "shared/trend_change", locals: { trend: account.series.trend } %>
