@@ -1,8 +1,12 @@
 class Family < ApplicationRecord
+  include Monetizable
+
   has_many :users, dependent: :destroy
   has_many :accounts, dependent: :destroy
   has_many :transactions, through: :accounts
   has_many :transaction_categories, dependent: :destroy, class_name: "Transaction::Category"
+
+  monetize :net_worth, :assets, :liabilities
 
   def snapshot(period = Period.all)
     query = accounts.active.joins(:balances)
@@ -31,14 +35,14 @@ class Family < ApplicationRecord
   end
 
   def net_worth
-    Money.new(accounts.active.sum("CASE WHEN classification = 'asset' THEN balance ELSE -balance END"), currency)
+    accounts.active.sum("CASE WHEN classification = 'asset' THEN balance ELSE -balance END")
   end
 
   def assets
-    Money.new(accounts.active.assets.sum(:balance), currency)
+    accounts.active.assets.sum(:balance)
   end
 
   def liabilities
-    Money.new(accounts.active.liabilities.sum(:balance), currency)
+    accounts.active.liabilities.sum(:balance)
   end
 end

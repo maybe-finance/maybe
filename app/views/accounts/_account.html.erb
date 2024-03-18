@@ -10,7 +10,7 @@
     </div>
     <div class="flex items-center gap-8">
       <p class="text-sm font-medium <%= account.is_active ? "text-gray-900" : "text-gray-400" %>">
-        <%= format_currency account.balance %>
+        <%= format_money account.balance_money %>
       </p>
       <%= form_with model: account, method: :patch, html: { class: "flex items-center", data: { turbo_frame: "_top" } } do |form| %>
         <div class="relative inline-block select-none">
