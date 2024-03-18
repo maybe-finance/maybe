@@ -33,14 +33,14 @@ class Family < ApplicationRecord
   end
 
   def net_worth
-    accounts.active.sum("CASE WHEN classification = 'asset' THEN balance ELSE -balance END")
+    Money.new(accounts.active.sum("CASE WHEN classification = 'asset' THEN balance ELSE -balance END"), currency)
   end
 
   def assets
-   accounts.active.assets.sum(:balance)
+    Money.new(accounts.active.assets.sum(:balance), currency)
   end
 
   def liabilities
-    accounts.active.liabilities.sum(:balance)
+    Money.new(accounts.active.liabilities.sum(:balance), currency)
   end
 end

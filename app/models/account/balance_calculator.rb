@@ -6,8 +6,8 @@ class Account::BalanceCalculator
     def daily_balances(start_date = nil)
       calc_start_date = [ start_date, @account.effective_start_date ].compact.max
 
-      valuations = @account.valuations.where("date >= ?", calc_start_date).order(:date).select(:date, :value)
-      transactions = @account.transactions.where("date > ?", calc_start_date).order(:date).select(:date, :amount)
+      valuations = @account.valuations.where("date >= ?", calc_start_date).order(:date).select(:date, :value, :currency)
+      transactions = @account.transactions.where("date > ?", calc_start_date).order(:date).select(:date, :amount, :currency)
       oldest_entry = [ valuations.first, transactions.first ].compact.min_by(&:date)
 
       net_transaction_flows = transactions.sum(&:amount)

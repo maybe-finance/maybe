@@ -38,15 +38,15 @@ class FamilyTest < ActiveSupport::TestCase
   end
 
   test "should calculate total assets" do
-    assert_equal BigDecimal("25550"), @family.assets
+    assert_equal Money.new(25550), @family.assets
   end
 
   test "should calculate total liabilities" do
-    assert_equal BigDecimal("1000"), @family.liabilities
+    assert_equal Money.new(1000), @family.liabilities
   end
 
   test "should calculate net worth" do
-    assert_equal BigDecimal("24550"), @family.net_worth
+    assert_equal Money.new(24550), @family.net_worth
   end
 
   test "should calculate snapshot correctly" do

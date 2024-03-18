@@ -1,5 +1,6 @@
 class Account < ApplicationRecord
   include Syncable
+  include Monetizable
 
   validates :family, presence: true
 
@@ -8,6 +9,8 @@ class Account < ApplicationRecord
   has_many :balances, class_name: "AccountBalance"
   has_many :valuations
   has_many :transactions
+
+  monetize :balance
 
   enum :status, { ok: "ok", syncing: "syncing", error: "error" }, validate: true
 
