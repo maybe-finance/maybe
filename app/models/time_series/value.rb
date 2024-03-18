@@ -5,8 +5,16 @@ class TimeSeries::Value
     attr_reader :value, :date, :original
 
     def initialize(obj)
-        @original = obj
-        normalize_input(obj)
+        @original = obj[:original] || obj
+
+        if obj.is_a?(Hash)
+            @date = obj[:date]
+            @value = obj[:value]
+        else
+            @date = obj.date
+            @value = obj.value
+        end
+
         validate_input
     end
 
@@ -17,31 +25,8 @@ class TimeSeries::Value
     end
 
     private
-        # Accept hash or object so we can pass raw query results or model instances
-        def normalize_input(obj)
-            if obj.is_a?(Hash)
-                @trend = obj[:trend] if obj.key?(:trend)
-                @date = normalize_date(obj[:date]) if obj.key?(:date)
-                value_key = obj.key?(:value) ? :value : obj.key?(:amount) ? :amount : :balance
-                @value = obj[value_key] if obj.key?(value_key)
-            else
-                @trend = obj.trend if obj.respond_to?(:trend)
-                @date = normalize_date(obj.date) if obj.respond_to?(:date)
-                value_method = obj.respond_to?(:value) ? :value : obj.respond_to?(:amount) ? :amount : :balance
-                @value = obj.send(value_method) if obj.respond_to?(value_method)
-            end
-        end
-
-        def normalize_date(date)
-          return date if date.is_a?(Date)
-          return date.to_date if date.respond_to?(:to_date)
-          Date.iso8601(date)
-        rescue ArgumentError
-          raise ArgumentError, "Invalid date"
-        end
-
         def validate_input
             raise ArgumentError, "Date is required" unless @date.is_a?(Date)
-            raise ArgumentError, "Value is required" unless @value
+            raise ArgumentError, "Money or Numeric value is required" unless @value.is_a?(Money) || @value.is_a?(Numeric)
         end
 end
