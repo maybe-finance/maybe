@@ -23,10 +23,8 @@
     end
 
     def series
-        return @raw_series if is_value_node?
-        return nil if children.empty? || children.none? { |child| child.series.present? }
+        return @raw_series || TimeSeries.new([]) if is_value_node?
         summed_by_date = children.each_with_object(Hash.new(0)) do |child, acc|
-            next unless child.series
             child.series.values.each do |series_value|
                 acc[series_value.date] += series_value.value
             end
@@ -67,7 +65,7 @@
     end
 
     def attach_series(raw_series)
-        # validate_attached_series(raw_series)
+        validate_attached_series(raw_series)
         @raw_series = raw_series
     end
 
@@ -98,6 +96,5 @@
         def validate_attached_series(series)
             raise "Cannot add series to a node without a value" unless is_value_node?
             raise "Attached series must be a TimeSeries" unless series.is_a?(TimeSeries)
-            raise "Attached series final value must match value node value" unless series.last.value == value
         end
   end

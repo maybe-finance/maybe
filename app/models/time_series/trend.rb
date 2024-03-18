@@ -13,7 +13,7 @@ class TimeSeries::Trend
   end
 
   def direction
-    return "flat" if @current == @previous || @previous.nil?
+    return "flat" if @previous.nil? || @current == @previous
     return "up" if @current && @current > @previous
     "down"
   end
@@ -25,9 +25,9 @@ class TimeSeries::Trend
   end
 
   def percent
-    return 0 if @previous.nil?
+    return 0.0 if @previous.nil?
     return Float::INFINITY if @previous == 0
-    ((extract_numeric(@current) - extract_numeric(@previous)).abs / extract_numeric(@previous).abs.to_f * 100).round(1)
+    ((extract_numeric(@current) - extract_numeric(@previous)).abs / extract_numeric(@previous).abs.to_f * 100).round(1).to_f
   end
 
   private

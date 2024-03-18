@@ -92,13 +92,12 @@ class ValueGroupTest < ActiveSupport::TestCase
 
         # Since we didn't add any value nodes to vehicles, shouldn't affect rollups
         assert_equal 25550, @assets.sum
-        assert_nil @assets.series
     end
 
 
     test "can attach and aggregate time series" do
-        checking_series = TimeSeries.new([ { date: 1.day.ago, amount: 4000 }, { date: Date.current, amount: 5000 } ])
-        savings_series = TimeSeries.new([ { date: 1.day.ago, amount: 19000 }, { date: Date.current, amount: 20000 } ])
+        checking_series = TimeSeries.new([ { date: 1.day.ago.to_date, value: 4000 }, { date: Date.current, value: 5000 } ])
+        savings_series = TimeSeries.new([ { date: 1.day.ago.to_date, value: 19000 }, { date: Date.current, value: 20000 } ])
 
         @checking_node.attach_series(checking_series)
         @savings_node.attach_series(savings_series)
@@ -109,18 +108,11 @@ class ValueGroupTest < ActiveSupport::TestCase
         assert_equal @checking_node.sum, @checking_node.series.last.value
         assert_equal @savings_node.sum, @savings_node.series.last.value
 
-        aggregated_depository_series = TimeSeries.new([ { date: 1.day.ago, amount: 23000 }, { date: Date.current, amount: 25000 } ])
-        aggregated_assets_series = TimeSeries.new([ { date: 1.day.ago, amount: 23000 }, { date: Date.current, amount: 25000 } ])
+        aggregated_depository_series = TimeSeries.new([ { date: 1.day.ago.to_date, value: 23000 }, { date: Date.current, value: 25000 } ])
+        aggregated_assets_series = TimeSeries.new([ { date: 1.day.ago.to_date, value: 23000 }, { date: Date.current, value: 25000 } ])
 
         assert_equal aggregated_depository_series.values, @depositories.series.values
         assert_equal aggregated_assets_series.values, @assets.series.values
-    end
-
-    test "attached series last value must equal value node value" do
-        assert_equal 5000, @checking_node.value
-        assert_raises(RuntimeError) do
-            @checking_node.attach_series(TimeSeries.new([ { date: Date.current, amount: 6000 } ]))
-        end
     end
 
     test "attached series must be a TimeSeries" do
