@@ -27,9 +27,7 @@ module ApplicationHelper
     render partial: "shared/modal", locals: { content: content }
   end
 
-  def currency_dropdown(f: nil, options: [])
-    render partial: "shared/currency_dropdown", locals: { f: f, options: options }
-  end
+
 
   def sidebar_modal(&block)
     content = capture &block
@@ -97,12 +95,15 @@ module ApplicationHelper
     end
   end
 
-  def format_currency(number, options = {})
-    user_currency_preference = Current.family.try(:currency) || "USD"
+  def format_money(number_or_money, options = {})
+    money = Money.new(number_or_money)
+    options.reverse_merge!(money.default_format_options)
+    number_to_currency(money.amount, options)
+  end
 
-    currency_options = CURRENCY_OPTIONS[user_currency_preference.to_sym]
-    options.reverse_merge!(currency_options)
-
-    number_to_currency(number, options)
+  def format_money_without_symbol(number_or_money, options = {})
+    money = Money.new(number_or_money)
+    options.reverse_merge!(money.default_format_options)
+    ActiveSupport::NumberHelper.number_to_delimited(money.amount.round(options[:precision] || 0), { delimiter: options[:delimiter], separator: options[:separator] })
   end
 end

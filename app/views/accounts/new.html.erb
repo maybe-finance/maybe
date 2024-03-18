@@ -69,11 +69,7 @@
           <%= f.hidden_field :accountable_type %>
           <%= f.text_field :name, placeholder: t('accounts.new.name.placeholder'), required: 'required', label: t('accounts.new.name.label'), autofocus: true %>
           <%= render "accounts/#{permitted_accountable_partial(@account.accountable_type)}", f: f %>
-          <%= form_field_tag do %>
-            <%= f.label :balance, class: "form-field__label" %>
-            <%= f.number_field :balance, step: :any, placeholder: number_to_currency(0), in: 0.00..100000000.00, required: 'required', class: 'form-field__input max-w-[80%]' %>
-            <%= currency_dropdown(f: f, options: Currency.all.order(:iso_code).pluck(:iso_code)) if Currency.count > 1 %>
-          <% end %>
+          <%= f.money_field :balance_money, label: "Balance", required: 'required' %>
         </div>
         <%= f.submit "Add #{@account.accountable.model_name.human.downcase}" %>
       <% end %>

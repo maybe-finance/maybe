@@ -35,7 +35,7 @@ class TransactionsController < ApplicationController
 
     respond_to do |format|
       if @transaction.save
-        format.html { redirect_to transaction_url(@transaction), notice: t(".success") }
+        format.html { redirect_to transactions_url, notice: t(".success") }
       else
         format.html { render :new, status: :unprocessable_entity }
       end

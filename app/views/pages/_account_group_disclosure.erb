@@ -15,7 +15,7 @@
         <p><%= account_details[:allocation] %>%</p>
       </div>
       <div class="w-24">
-        <p><%= format_currency account_details[:end_balance] %></p>
+        <p><%= format_money account_details[:end_balance] %></p>
       </div>
       <div class="w-40">
         <%= render partial: "shared/trend_change", locals: { trend: account_details[:trend] } %>
@@ -39,7 +39,7 @@
             <p><%= account[:allocation] %>%</p>
           </div>
           <div class="w-24">
-            <p><%= format_currency account[:end_balance] %></p>
+            <p><%= format_money account[:end_balance] %></p>
           </div>
           <div class="w-40">
             <%= render partial: "shared/trend_change", locals: { trend: account[:trend] } %>

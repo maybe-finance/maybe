@@ -17,7 +17,7 @@ export default class extends Controller {
 
   renderChart = () => {
     this.drawChart(this.seriesValue);
-  }
+  };
 
   trendStyles(trendDirection) {
     return {
@@ -45,11 +45,11 @@ export default class extends Controller {
       formatted: {
         value: Intl.NumberFormat("en-US", {
           style: "currency",
-          currency: b.currency || "USD",
+          currency: b.currency.iso_code || "USD",
         }).format(b.amount),
         change: Intl.NumberFormat("en-US", {
           style: "currency",
-          currency: b.currency || "USD",
+          currency: b.currency.iso_code || "USD",
           signDisplay: "always",
         }).format(b.trend.amount),
       },

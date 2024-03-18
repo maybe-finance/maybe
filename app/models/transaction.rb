@@ -1,10 +1,18 @@
 class Transaction < ApplicationRecord
+  include Monetizable
+
   belongs_to :account
   belongs_to :category, optional: true
 
   validates :name, :date, :amount, :account, presence: true
 
   after_commit :sync_account
+
+  monetize :amount
+
+  scope :inflows, -> { where("amount > 0") }
+  scope :outflows, -> { where("amount < 0") }
+  scope :active, -> { where(excluded: false) }
 
   def self.ransackable_attributes(auth_object = nil)
     %w[name amount date]
