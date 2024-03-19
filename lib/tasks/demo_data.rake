@@ -222,14 +222,15 @@ namespace :demo_data do
     crypto = Account.find_or_create_by(name: "Bitcoin Account") do |a|
       a.family = family
       a.accountable = Account::Crypto.new
-      a.balance = 10000
+      a.currency = "BTC"
+      a.balance = 0.1
       end
 
     crypto_valuations = [
-    { date: 1.year.ago.to_date, value: 9000 },
-    { date: 200.days.ago.to_date, value: 9500 },
-    { date: 100.days.ago.to_date, value: 9444.96 },
-    { date: 20.days.ago.to_date, value: 10000 }
+    { date: 1.year.ago.to_date, value: 0.05, currency: "BTC" },
+    { date: 200.days.ago.to_date, value: 0.06, currency: "BTC" },
+    { date: 100.days.ago.to_date, value: 0.08, currency: "BTC" },
+    { date: 20.days.ago.to_date, value: 0.1, currency: "BTC" }
     ]
 
     crypto.valuations.upsert_all(crypto_valuations, unique_by: :index_valuations_on_account_id_and_date)
