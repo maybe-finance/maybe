@@ -12,6 +12,6 @@
     <p><%= transaction.account.name %></p>
   </div>
   <div class="ml-auto">
-    <p class="<%= transaction.amount < 0 ? "text-green-600" : "" %>"><%= number_to_currency(-transaction.amount, { precision: 2 }) %></p>
+    <p class="<%= transaction.amount < 0 ? "text-green-600" : "" %>"><%= format_money -transaction.amount_money %></p>
   </div>
 <% end %>

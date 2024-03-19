@@ -1,48 +1,47 @@
 <%# locals: (account_group:) %>
-<% accountable_type, account_details = account_group%>
-<% text_class = accountable_text_class(accountable_type) %>
+<% text_class = accountable_text_class(account_group.name) %>
 <details class="open:bg-gray-25 group">
   <summary class="flex p-4 items-center w-full rounded-lg font-medium hover:bg-gray-50 text-gray-500 text-sm font-medium cursor-pointer">
     <%= lucide_icon("chevron-down", class: "hidden group-open:block w-5 h-5") %>
     <%= lucide_icon("chevron-right", class: "group-open:hidden w-5 h-5") %>
-    <div class="ml-4 h-2.5 w-2.5 rounded-full <%= accountable_bg_class(accountable_type) %>"></div>
-    <p class="text-gray-900 ml-2"><%= to_accountable_title(Accountable.from_type(accountable_type)) %></p>
+    <div class="ml-4 h-2.5 w-2.5 rounded-full <%= accountable_bg_class(account_group.name) %>"></div>
+    <p class="text-gray-900 ml-2"><%= to_accountable_title(Accountable.from_type(account_group.name)) %></p>
     <span class="mx-1">&middot;</span>
-    <div ><%= account_details[:accounts].size %></div>
+    <div ><%= account_group.children.count %></div>
     <div class="ml-auto text-right flex items-center gap-10 text-sm font-medium text-gray-900">
       <div class="flex items-center justify-end gap-2 w-24">
-        <%= render partial: "shared/progress_circle", locals: { progress: account_details[:allocation], text_class: text_class } %>
-        <p><%= account_details[:allocation] %>%</p>
+        <%= render partial: "shared/progress_circle", locals: { progress: account_group.percent_of_total, text_class: text_class } %>
+        <p><%= account_group.percent_of_total.round(1) %>%</p>
       </div>
       <div class="w-24">
-        <p><%= format_currency account_details[:end_balance] %></p>
+        <p><%= format_money account_group.sum %></p>
       </div>
       <div class="w-40">
-        <%= render partial: "shared/trend_change", locals: { trend: account_details[:trend] } %>
+        <%= render partial: "shared/trend_change", locals: { trend: account_group.series.trend } %>
       </div>
     </div>
   </summary>
   <div class="px-4 py-3 space-y-4">
-    <% account_details[:accounts].map do |account| %>
+    <% account_group.children.map do |account| %>
       <div class="flex items-center justify-between text-sm font-medium text-gray-900">
         <div class="flex items-center gap-4">
-          <div class="flex items-center justify-center w-8 h-8 rounded-full <%= text_class %> <%= accountable_bg_transparent_class(accountable_type) %>">
-            <%= account[:name][0].upcase %>
+          <div class="flex items-center justify-center w-8 h-8 rounded-full <%= text_class %> <%= accountable_bg_transparent_class(account_group.name) %>">
+            <%= account.name[0].upcase %>
           </div>
           <div>
-            <p><%= account[:name] %></p>
+            <p><%= account.name %></p>
           </div>
         </div>
         <div class="flex gap-10 items-center text-right">
           <div class="flex items-center justify-end gap-2 w-24">
-            <%= render partial: "shared/progress_circle", locals: { progress: account[:allocation], text_class: text_class } %>
-            <p><%= account[:allocation] %>%</p>
+            <%= render partial: "shared/progress_circle", locals: { progress: account.percent_of_total, text_class: text_class } %>
+            <p><%= account.percent_of_total %>%</p>
           </div>
           <div class="w-24">
-            <p><%= format_currency account[:end_balance] %></p>
+            <p><%= format_money account.sum %></p>
           </div>
           <div class="w-40">
-            <%= render partial: "shared/trend_change", locals: { trend: account[:trend] } %>
+            <%= render partial: "shared/trend_change", locals: { trend: account.series.trend } %>
           </div>
         </div>
       </div>

@@ -1,5 +1,4 @@
 <%= turbo_stream_from @account %>
-<% balance = Money.from_amount(@account.balance, @account.currency) %>
 <div class="space-y-4">
   <div class="flex justify-between items-center">
     <div class="flex items-center gap-3">
@@ -11,7 +10,7 @@
     <div class="flex items-center gap-3">
       <div class="relative cursor-not-allowed">
         <div class="flex items-center gap-2 px-3 py-2">
-          <span class="text-gray-900"><%= balance.currency %> <%= balance.symbol %></span>
+          <span class="text-gray-900"><%= @account.balance_money.currency.iso_code %> <%= @account.balance_money.currency.symbol %></span>
           <%= lucide_icon("chevron-down", class: "w-5 h-5 text-gray-500") %>
         </div>
       </div>
@@ -29,7 +28,7 @@
         <%= render partial: "shared/balance_heading", locals: { 
             label: "Total Value", 
             period: @period,
-            balance: Money.from_amount(@account.balance, @account.currency),
+            balance: @account.balance_money,
             trend: @balance_series.trend
           } 
         %>
