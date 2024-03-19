@@ -7,20 +7,20 @@ class ValueGroupTest < ActiveSupport::TestCase
         collectable = accounts(:collectable)
 
         # Level 1
-        @assets = ValueGroup.new("Assets")
+        @assets = ValueGroup.new("Assets", :usd)
 
         # Level 2
-        @depositories = @assets.add_child_node("Depositories")
-        @other_assets = @assets.add_child_node("Other Assets")
+        @depositories = @assets.add_child_group("Depositories", :usd)
+        @other_assets = @assets.add_child_group("Other Assets", :usd)
 
         # Level 3 (leaf/value nodes)
-        @checking_node = @depositories.add_value_node(checking)
-        @savings_node = @depositories.add_value_node(savings)
-        @collectable_node = @other_assets.add_value_node(collectable)
+        @checking_node = @depositories.add_value_node(OpenStruct.new({ name: "Checking", value: Money.new(5000) }), :value)
+        @savings_node = @depositories.add_value_node(OpenStruct.new({ name: "Savings", value: Money.new(20000) }), :value)
+        @collectable_node = @other_assets.add_value_node(OpenStruct.new({ name: "Collectable", value: Money.new(550) }), :value)
     end
 
     test "empty group works" do
-        group = ValueGroup.new
+        group = ValueGroup.new("Root", :usd)
 
         assert_equal "Root", group.name
         assert_equal [], group.children
@@ -32,7 +32,7 @@ class ValueGroupTest < ActiveSupport::TestCase
 
     test "group without value nodes has no value" do
         assets = ValueGroup.new("Assets")
-        depositories = assets.add_child_node("Depositories")
+        depositories = assets.add_child_group("Depositories")
 
         assert_equal 0, assets.sum
         assert_equal 0, depositories.sum
@@ -57,24 +57,24 @@ class ValueGroupTest < ActiveSupport::TestCase
     end
 
     test "group with value nodes aggregates totals correctly" do
-        assert_equal 5000, @checking_node.sum
-        assert_equal 20000, @savings_node.sum
-        assert_equal 550, @collectable_node.sum
+        assert_equal Money.new(5000), @checking_node.sum
+        assert_equal Money.new(20000), @savings_node.sum
+        assert_equal Money.new(550), @collectable_node.sum
 
-        assert_equal 25000, @depositories.sum
-        assert_equal 550, @other_assets.sum
+        assert_equal Money.new(25000), @depositories.sum
+        assert_equal Money.new(550), @other_assets.sum
 
-        assert_equal 25550, @assets.sum
+        assert_equal Money.new(25550), @assets.sum
     end
 
     test "group averages leaf nodes" do
-        assert_equal 5000, @checking_node.avg
-        assert_equal 20000, @savings_node.avg
-        assert_equal 550, @collectable_node.avg
+        assert_equal Money.new(5000), @checking_node.avg
+        assert_equal Money.new(20000), @savings_node.avg
+        assert_equal Money.new(550), @collectable_node.avg
 
-        assert_in_delta 12500, @depositories.avg, 0.01
-        assert_in_delta 550, @other_assets.avg, 0.01
-        assert_in_delta 8516.67, @assets.avg, 0.01
+        assert_in_delta 12500, @depositories.avg.amount, 0.01
+        assert_in_delta 550, @other_assets.avg.amount, 0.01
+        assert_in_delta 8516.67, @assets.avg.amount, 0.01
     end
 
     # Percentage of parent group (i.e. collectable is 100% of "Other Assets" group)
@@ -88,19 +88,19 @@ class ValueGroupTest < ActiveSupport::TestCase
     end
 
     test "handles unbalanced tree" do
-        vehicles = @assets.add_child_node("Vehicles")
+        vehicles = @assets.add_child_group("Vehicles")
 
         # Since we didn't add any value nodes to vehicles, shouldn't affect rollups
-        assert_equal 25550, @assets.sum
+        assert_equal Money.new(25550), @assets.sum
     end
 
 
     test "can attach and aggregate time series" do
-        checking_series = TimeSeries.new([ { date: 1.day.ago.to_date, value: 4000 }, { date: Date.current, value: 5000 } ])
-        savings_series = TimeSeries.new([ { date: 1.day.ago.to_date, value: 19000 }, { date: Date.current, value: 20000 } ])
+        checking_series = TimeSeries.new([ { date: 1.day.ago.to_date, value: Money.new(4000) }, { date: Date.current, value: Money.new(5000) } ])
+        savings_series = TimeSeries.new([ { date: 1.day.ago.to_date, value: Money.new(19000) }, { date: Date.current, value: Money.new(20000) } ])
 
-        @checking_node.attach_series(checking_series)
-        @savings_node.attach_series(savings_series)
+        @checking_node.series = checking_series
+        @savings_node.series = savings_series
 
         assert_not_nil @checking_node.series
         assert_not_nil @savings_node.series
@@ -108,8 +108,8 @@ class ValueGroupTest < ActiveSupport::TestCase
         assert_equal @checking_node.sum, @checking_node.series.last.value
         assert_equal @savings_node.sum, @savings_node.series.last.value
 
-        aggregated_depository_series = TimeSeries.new([ { date: 1.day.ago.to_date, value: 23000 }, { date: Date.current, value: 25000 } ])
-        aggregated_assets_series = TimeSeries.new([ { date: 1.day.ago.to_date, value: 23000 }, { date: Date.current, value: 25000 } ])
+        aggregated_depository_series = TimeSeries.new([ { date: 1.day.ago.to_date, value: Money.new(23000) }, { date: Date.current, value: Money.new(25000) } ])
+        aggregated_assets_series = TimeSeries.new([ { date: 1.day.ago.to_date, value: Money.new(23000) }, { date: Date.current, value: Money.new(25000) } ])
 
         assert_equal aggregated_depository_series.values, @depositories.series.values
         assert_equal aggregated_assets_series.values, @assets.series.values
@@ -117,29 +117,29 @@ class ValueGroupTest < ActiveSupport::TestCase
 
     test "attached series must be a TimeSeries" do
         assert_raises(RuntimeError) do
-            @checking_node.attach_series([])
+            @checking_node.series = []
         end
     end
 
     test "cannot add time series to non-leaf node" do
         assert_raises(RuntimeError) do
-            @assets.attach_series(TimeSeries.new([]))
+            @assets.series = TimeSeries.new([])
         end
     end
 
     test "can only add value node at leaf level of tree" do
         root = ValueGroup.new("Root Level")
-        grandparent = root.add_child_node("Grandparent")
-        parent = grandparent.add_child_node("Parent")
+        grandparent = root.add_child_group("Grandparent")
+        parent = grandparent.add_child_group("Parent")
 
-        value_node = parent.add_value_node(OpenStruct.new({ name: "Value Node", value: 100 }))
+        value_node = parent.add_value_node(OpenStruct.new({ name: "Value Node", value: Money.new(100) }), :value)
 
         assert_raises(RuntimeError) do
-            value_node.add_value_node(OpenStruct.new({ name: "Value Node", value: 100 }))
+            value_node.add_value_node(OpenStruct.new({ name: "Value Node", value: Money.new(100) }), :value)
         end
 
         assert_raises(RuntimeError) do
-            grandparent.add_value_node(OpenStruct.new({ name: "Value Node", value: 100 }))
+            grandparent.add_value_node(OpenStruct.new({ name: "Value Node", value: Money.new(100) }), :value)
         end
     end
 end

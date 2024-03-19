@@ -48,20 +48,28 @@ class Account < ApplicationRecord
     exists?(status: "syncing")
   end
 
-  def series(period = Period.all)
-    TimeSeries.from_collection(balances.in_period(period), :balance_money)
+  def series(period: Period.all, currency: self.currency)
+    balance_series = balances.in_period(period).where(currency: Money::Currency.new(currency).iso_code)
+
+    if balance_series.empty? && period.date_range.end == Date.current
+      TimeSeries.new([ { date: Date.current, value: balance_money } ])
+    else
+      TimeSeries.from_collection(balance_series, :balance_money)
+    end
   end
 
-  def self.by_group(period = Period.all)
-    grouped_accounts = { assets: ValueGroup.new("Assets"), liabilities: ValueGroup.new("Liabilities") }
+  def self.by_group(period: Period.all, currency: Money.default_currency)
+    grouped_accounts = { assets: ValueGroup.new("Assets", currency), liabilities: ValueGroup.new("Liabilities", currency) }
 
     Accountable.by_classification.each do |classification, types|
       types.each do |type|
-        group = grouped_accounts[classification.to_sym].add_child_node(type)
+        group = grouped_accounts[classification.to_sym].add_child_group(type, currency)
         Accountable.from_type(type).includes(:account).each do |accountable|
-          account = accountable.account
-          value_node = group.add_value_node(account)
-          value_node.attach_series(account.series(period))
+          value_node = group.add_value_node(
+            accountable.account,
+            :balance_money,
+            accountable.account.series(period: period)
+          )
         end
       end
     end

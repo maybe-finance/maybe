@@ -44,72 +44,63 @@ class AccountTest < ActiveSupport::TestCase
     assert_not multi_currency_account.foreign_currency?
   end
 
+  test "syncs regular account" do
+    @account.sync
+    assert_equal "ok", @account.status
+    assert_equal 31, @account.balances.count
+  end
+
+  test "syncs foreign currency account" do
+    account = accounts(:eur_checking)
+    account.sync
+    assert_equal "ok", account.status
+    assert_equal 31, account.balances.where(currency: "USD").count
+    assert_equal 31, account.balances.where(currency: "EUR").count
+  end
   test "groups accounts by type" do
     @family.accounts.each do |account|
       account.sync
     end
 
-    result = @family.accounts.by_group({ period: Period.all, currency: @family.currency })
+    result = @family.accounts.by_group(period: Period.all)
 
     expected_assets = @snapshots.last["assets"].to_d
     expected_liabilities = @snapshots.last["liabilities"].to_d
 
-    assets = result[:asset][:total]
-    liabilities = result[:liability][:total]
+    assets = result[:assets]
+    liabilities = result[:liabilities]
 
-    assert_equal expected_assets, assets
-    assert_equal expected_liabilities, liabilities
+    assert_equal @family.assets_money, assets.sum
+    assert_equal @family.liabilities_money, liabilities.sum
 
-    assert_equal [ "Account::OtherAsset", "Account::Depository"  ], result[:asset][:groups].keys
-    assert_equal [ "Account::Credit" ], result[:liability][:groups].keys
+    depositories = assets.children.find { |group| group.name == "Account::Depository" }
+    properties = assets.children.find { |group| group.name == "Account::Property" }
+    vehicles = assets.children.find { |group| group.name == "Account::Vehicle" }
+    investments = assets.children.find { |group| group.name == "Account::Investment" }
+    other_assets = assets.children.find { |group| group.name == "Account::OtherAsset" }
 
-    assert_equal @snapshots.last["Account::Depository"].to_d, result[:asset][:groups]["Account::Depository"][:end_balance]
-    assert_equal @snapshots.last["Account::Credit"].to_d, result[:liability][:groups]["Account::Credit"][:end_balance]
-    assert_equal @snapshots.last["Account::OtherAsset"].to_d, result[:asset][:groups]["Account::OtherAsset"][:end_balance]
+    credits = liabilities.children.find { |group| group.name == "Account::Credit" }
+    loans = liabilities.children.find { |group| group.name == "Account::Loan" }
+    other_liabilities = liabilities.children.find { |group| group.name == "Account::OtherLiability" }
 
-    assert_equal @snapshots.first["Account::Depository"].to_d, result[:asset][:groups]["Account::Depository"][:start_balance]
-    assert_equal @snapshots.first["Account::Credit"].to_d, result[:liability][:groups]["Account::Credit"][:start_balance]
-    assert_equal @snapshots.first["Account::OtherAsset"].to_d, result[:asset][:groups]["Account::OtherAsset"][:start_balance]
+    assert_equal 4, depositories.children.count
+    assert_equal 0, properties.children.count
+    assert_equal 0, vehicles.children.count
+    assert_equal 0, investments.children.count
+    assert_equal 1, other_assets.children.count
 
-    assert_equal 4, result[:asset][:groups]["Account::Depository"][:accounts].count
-    assert_equal 1, result[:asset][:groups]["Account::OtherAsset"][:accounts].count
-    assert_equal 1, result[:liability][:groups]["Account::Credit"][:accounts].count
-
-    expected_depository_allocation = @snapshots.last["Account::Depository"].to_d / expected_assets * 100
-    expected_credit_allocation = @snapshots.last["Account::Credit"].to_d / expected_liabilities * 100
-    expected_other_asset_allocation = @snapshots.last["Account::OtherAsset"].to_d / expected_assets * 100
-
-    assert_equal expected_depository_allocation.round(2), result[:asset][:groups]["Account::Depository"][:allocation]
-    assert_equal expected_credit_allocation.round(2), result[:liability][:groups]["Account::Credit"][:allocation]
-    assert_equal expected_other_asset_allocation.round(2), result[:asset][:groups]["Account::OtherAsset"][:allocation]
+    assert_equal 1, credits.children.count
+    assert_equal 0, loans.children.count
+    assert_equal 0, other_liabilities.children.count
   end
 
-  test "groups accounts by type with period" do
-    @family.accounts.each do |account|
-      account.sync
-    end
+  test "generates series with last balance equal to current account balance" do
+    # If account hasn't been synced, series falls back to a single point with the current balance
+    assert_equal @account.balance_money, @account.series.last.value
 
-    START_OFFSET = 7
-    END_OFFSET = 2
+    @account.sync
 
-    result = @family.accounts.by_group({ period: Period.new(date_range: START_OFFSET.days.ago.to_date..END_OFFSET.days.ago.to_date), currency: @family.currency })
-
-    expected_start_depository = @snapshots[-START_OFFSET-1]["Account::Depository"].to_d
-    expected_end_depository = @snapshots[-END_OFFSET-1]["Account::Depository"].to_d
-
-    assert_equal expected_start_depository, result[:asset][:groups]["Account::Depository"][:start_balance]
-    assert_equal expected_end_depository, result[:asset][:groups]["Account::Depository"][:end_balance]
-
-    expected_start_credit = @snapshots[-START_OFFSET-1]["Account::Credit"].to_d
-    expected_end_credit = @snapshots[-END_OFFSET-1]["Account::Credit"].to_d
-
-    assert_equal expected_start_credit, result[:liability][:groups]["Account::Credit"][:start_balance]
-    assert_equal expected_end_credit, result[:liability][:groups]["Account::Credit"][:end_balance]
-
-    expected_start_other_asset = @snapshots[-START_OFFSET-1]["Account::OtherAsset"].to_d
-    expected_end_other_asset = @snapshots[-END_OFFSET-1]["Account::OtherAsset"].to_d
-
-    assert_equal expected_start_other_asset, result[:asset][:groups]["Account::OtherAsset"][:start_balance]
-    assert_equal expected_end_other_asset, result[:asset][:groups]["Account::OtherAsset"][:end_balance]
+    # Synced series will always have final balance equal to the current account balance
+    assert_equal @account.balance_money, @account.series.last.value
   end
 end
