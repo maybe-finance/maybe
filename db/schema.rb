@@ -35,6 +35,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_13_203622) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "account_cryptos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "account_depositories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

@@ -227,6 +227,24 @@ namespace :demo_data do
 
     brokerage.sync
 
+    crypto = Account.find_or_create_by(name: "Bitcoin Account") do |a|
+      a.family = family
+      a.accountable = Account::Crypto.new
+      a.currency = "BTC"
+      a.balance = 0.1
+      end
+
+    crypto_valuations = [
+    { date: 1.year.ago.to_date, value: 0.05, currency: "BTC" },
+    { date: 200.days.ago.to_date, value: 0.06, currency: "BTC" },
+    { date: 100.days.ago.to_date, value: 0.08, currency: "BTC" },
+    { date: 20.days.ago.to_date, value: 0.1, currency: "BTC" }
+    ]
+
+    crypto.valuations.upsert_all(crypto_valuations, unique_by: :index_valuations_on_account_id_and_date)
+
+    crypto.sync
+
     mortgage = Account.find_or_create_by(name: "Demo Mortgage") do |a|
       a.family = family
       a.accountable = Account::Loan.new
