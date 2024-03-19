@@ -3,7 +3,7 @@
   <p class="text-sm text-gray-500"><%= label %></p>
   <p class="text-gray-900 -space-x-0.5">
     <span class="text-gray-500"><%= balance.currency.symbol %></span>
-    <span class="<%= size == "lg" ? "text-xl" : "text-lg" %> font-medium"><%= format_currency(balance.amount, precision: 0, unit: '') %></span>
+    <span class="<%= size == "lg" ? "text-xl" : "text-lg" %> font-medium"><%= format_money_without_symbol balance, precision: 0 %></span>
     <%- if balance.currency.default_precision.positive? -%>
       <span class="text-gray-500">
         <%= balance.currency.separator %><%= balance.cents_str %>

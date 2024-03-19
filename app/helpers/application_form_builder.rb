@@ -22,6 +22,34 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     RUBY_EVAL
   end
 
+  # See `Monetizable` concern, which adds a _money suffix to the attribute name
+  # For a monetized field, the setter will always be the attribute name without the _money suffix
+  def money_field(method, options = {})
+    money = @object.send(method)
+    raise ArgumentError, "The value of #{method} is not a Money object" unless money.is_a?(Money) || money.nil?
+
+    money_amount_method = method.to_s.chomp("_money").to_sym
+    money_currency_method = :currency
+
+    readonly_currency = options[:readonly_currency] || false
+
+    default_options = {
+      class: "form-field__input",
+      value: money&.amount,
+      placeholder: Money.new(0, money&.currency || Money.default_currency).format
+    }
+
+    merged_options = default_options.merge(options)
+
+    @template.form_field_tag do
+      (label(method, *label_args(options)).to_s if options[:label]) +
+      @template.tag.div(class: "flex items-center") do
+        number_field(money_amount_method, merged_options.except(:label)) +
+        select(money_currency_method, Money::Currency.popular.map(&:iso_code), { selected: money&.currency&.iso_code }, { disabled: readonly_currency, class: "ml-auto form-field__input w-fit pr-8" })
+      end
+    end
+  end
+
   def select(method, choices, options = {}, html_options = {})
     default_options = { class: "form-field__input" }
     merged_options = default_options.merge(html_options)

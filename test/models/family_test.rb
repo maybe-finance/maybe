@@ -49,15 +49,15 @@ class FamilyTest < ActiveSupport::TestCase
   end
 
   test "should calculate total assets" do
-    assert_equal Money.new(@expected_snapshots.last["assets"].to_d, @family.currency), @family.assets
+    assert_equal Money.new(25550), @family.assets_money
   end
 
   test "should calculate total liabilities" do
-    assert_equal Money.new(@expected_snapshots.last["liabilities"].to_d, @family.currency), @family.liabilities
+    assert_equal Money.new(1000), @family.liabilities_money
   end
 
   test "should calculate net worth" do
-    assert_equal Money.new(@expected_snapshots.last["net_worth"].to_d, @family.currency), @family.net_worth
+    assert_equal Money.new(24550), @family.net_worth_money
   end
 
   test "should calculate snapshot correctly" do
@@ -65,26 +65,18 @@ class FamilyTest < ActiveSupport::TestCase
     liability_series = @family.snapshot[:liability_series]
     net_worth_series = @family.snapshot[:net_worth_series]
 
-    assert_equal @expected_snapshots.count, asset_series.data.count
-    assert_equal @expected_snapshots.count, liability_series.data.count
-    assert_equal @expected_snapshots.count, net_worth_series.data.count
+    assert_equal expected_snapshots.count, asset_series.values.count
+    assert_equal expected_snapshots.count, liability_series.values.count
+    assert_equal expected_snapshots.count, net_worth_series.values.count
 
-    @expected_snapshots.each_with_index do |row, index|
-      expected = {
-        date: row["date"],
-        assets: row["assets"].to_d.round(2),
-        liabilities: row["liabilities"].to_d.round(2),
-        net_worth: row["net_worth"].to_d.round(2)
-      }
+    expected_snapshots.each_with_index do |row, index|
+      expected_assets = TimeSeries::Value.new(date: row["date"], value: Money.new(row["assets"].to_d))
+      expected_liabilities = TimeSeries::Value.new(date: row["date"], value: Money.new(row["liabilities"].to_d))
+      expected_net_worth = TimeSeries::Value.new(date: row["date"], value: Money.new(row["net_worth"].to_d))
 
-      actual = {
-        date: asset_series.data[index][:date],
-        assets: asset_series.data[index][:value].amount.round(2),
-        liabilities: liability_series.data[index][:value].amount.round(2),
-        net_worth: net_worth_series.data[index][:value].amount.round(2)
-      }
-
-      assert_equal expected, actual
+      assert_equal expected_assets, asset_series.values[index]
+      assert_equal expected_liabilities, liability_series.values[index]
+      assert_equal expected_net_worth, net_worth_series.values[index]
     end
   end
 
@@ -99,8 +91,8 @@ class FamilyTest < ActiveSupport::TestCase
     disabled_checking.update!(is_active: false)
     disabled_cc.update!(is_active: false)
 
-    assert_equal Money.new(assets_before.amount - disabled_checking.balance, @family.currency), @family.assets
-    assert_equal Money.new(liabilities_before.amount - disabled_cc.balance, @family.currency), @family.liabilities
-    assert_equal Money.new(net_worth_before.amount - disabled_checking.balance + disabled_cc.balance, @family.currency), @family.net_worth
+    assert_equal assets_before - disabled_checking.balance, @family.assets
+    assert_equal liabilities_before - disabled_cc.balance, @family.liabilities
+    assert_equal net_worth_before - disabled_checking.balance + disabled_cc.balance, @family.net_worth
   end
 end

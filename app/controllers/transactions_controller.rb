@@ -35,7 +35,7 @@ class TransactionsController < ApplicationController
 
     respond_to do |format|
       if @transaction.save
-        format.html { redirect_to transaction_url(@transaction), notice: "Transaction was successfully created." }
+        format.html { redirect_to transactions_url, notice: t(".success") }
       else
         format.html { render :new, status: :unprocessable_entity }
       end
@@ -45,7 +45,13 @@ class TransactionsController < ApplicationController
   def update
     respond_to do |format|
       if @transaction.update(transaction_params)
-        format.html { redirect_to transaction_url(@transaction), notice: "Transaction was successfully updated." }
+        format.html { redirect_to transaction_url(@transaction), notice: t(".success") }
+        format.turbo_stream do
+          render turbo_stream: [
+            turbo_stream.append("notification-tray", partial: "shared/notification", locals: { type: "success", content: t(".success") }),
+            turbo_stream.replace("transaction_#{@transaction.id}", partial: "transactions/transaction", locals: { transaction: @transaction })
+          ]
+        end
       else
         format.html { render :edit, status: :unprocessable_entity }
       end
@@ -56,7 +62,7 @@ class TransactionsController < ApplicationController
     @transaction.destroy!
 
     respond_to do |format|
-      format.html { redirect_to transactions_url, notice: "Transaction was successfully destroyed." }
+      format.html { redirect_to transactions_url, notice: t(".success") }
     end
   end
 
@@ -68,6 +74,6 @@ class TransactionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def transaction_params
-      params.require(:transaction).permit(:name, :date, :amount, :currency, :notes, :excluded)
+      params.require(:transaction).permit(:name, :date, :amount, :currency, :notes, :excluded, :category_id)
     end
 end

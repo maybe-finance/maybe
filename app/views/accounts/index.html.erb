@@ -40,7 +40,7 @@
                   <p><%= to_accountable_title(Accountable.from_type(group)) %></p>
                   <span class="text-gray-400 mx-2">&middot;</span>
                   <p><%= accounts.count %></p>
-                  <p class="ml-auto"><%= format_currency accounts.sum(&:balance) %></p>
+                  <p class="ml-auto"><%= format_money accounts.sum(&:balance_money)  %></p>
                 </div>
                 <div class="bg-white">
                   <% accounts.each do |account| %>

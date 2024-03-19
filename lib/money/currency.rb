@@ -1,4 +1,6 @@
 class Money::Currency
+    include Comparable
+
     class UnknownCurrencyError < ArgumentError; end
 
     CURRENCIES_FILE_PATH = Rails.root.join("config", "currencies.yml")
@@ -50,5 +52,10 @@ class Money::Currency
         @delimiter = currency_data["delimiter"]
         @default_format = currency_data["default_format"]
         @default_precision = currency_data["default_precision"]
+    end
+
+    def <=>(other)
+        return nil unless other.is_a?(Money::Currency)
+        @iso_code <=> other.iso_code
     end
 end

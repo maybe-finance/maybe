@@ -1,4 +1,7 @@
 class Money
+    include Comparable
+    include Arithmetic
+
     attr_reader :amount, :currency
 
     class << self
@@ -30,9 +33,25 @@ class Money
         parts.last.ljust(precision, "0")
     end
 
-    def ==(other)
-        return false unless other.is_a?(Money)
-        amount == other.amount && currency == other.currency
+    # Basic formatting only.  Use the Rails number_to_currency helper for more advanced formatting.
+    alias to_s format
+    def format
+        whole_part, fractional_part = sprintf("%.#{@currency.default_precision}f", @amount).split(".")
+        whole_with_delimiters = whole_part.chars.to_a.reverse.each_slice(3).map(&:join).join(@currency.delimiter).reverse
+        formatted_amount = "#{whole_with_delimiters}#{@currency.separator}#{fractional_part}"
+        @currency.default_format.gsub("%n", formatted_amount).gsub("%u", @currency.symbol)
+    end
+
+    def to_json(*_args)
+        { amount: @amount, currency: @currency.iso_code }.to_json
+    end
+
+    def <=>(other)
+        raise TypeError, "Money can only be compared with other Money objects except for 0" unless other.is_a?(Money) || other.eql?(0)
+        return @amount <=> other if other.is_a?(Numeric)
+        amount_comparison = @amount <=> other.amount
+        return amount_comparison unless amount_comparison == 0
+        @currency <=> other.currency
     end
 
     def default_format_options

@@ -1,11 +1,16 @@
 class Account < ApplicationRecord
   include Syncable
+  include Monetizable
+
+  validates :family, presence: true
 
   broadcasts_refreshes
   belongs_to :family
   has_many :balances
   has_many :valuations
   has_many :transactions
+
+  monetize :balance
 
   enum :status, { ok: "ok", syncing: "syncing", error: "error" }, validate: true
 
@@ -19,10 +24,8 @@ class Account < ApplicationRecord
     %w[name]
   end
 
-  def trend(period = Period.all)
-    first = balances.in_period(period).order(:date).first
-    last = balances.in_period(period).order(date: :desc).first
-    Trend.new(current: last.balance, previous: first.balance, type: classification)
+  def balance_on(date)
+    balances.where("date <= ?", date).order(date: :desc).first&.balance
   end
 
   # def balance
@@ -55,89 +58,35 @@ class Account < ApplicationRecord
     exists?(status: "syncing")
   end
 
-  # TODO: We will need a better way to encapsulate large queries & transformation logic, but leaving all in one spot until
-  # we have a better understanding of the requirements
-  def self.by_group(options = {})
-    period = options[:period] || Period.all
-    currency = options[:currency] || "USD"
+  def series(period = Period.all)
+    TimeSeries.from_collection(balances.in_period(period), :balance_money)
+  end
 
-    ranked_balances_cte = active.joins(:balances)
-        .select("
-          account_balances.account_id,
-          account_balances.balance,
-          account_balances.date,
-          ROW_NUMBER() OVER (PARTITION BY account_balances.account_id ORDER BY date ASC) AS rn_asc,
-          ROW_NUMBER() OVER (PARTITION BY account_balances.account_id ORDER BY date DESC) AS rn_desc
-        ")
-        .where("account_balances.currency = ?", currency)
+  def self.by_group(period = Period.all)
+    grouped_accounts = { assets: ValueGroup.new("Assets"), liabilities: ValueGroup.new("Liabilities") }
 
-    if period.date_range
-      ranked_balances_cte = ranked_balances_cte.where("account_balances.date BETWEEN ? AND ?", period.date_range.begin, period.date_range.end)
+    Accountable.by_classification.each do |classification, types|
+      types.each do |type|
+        group = grouped_accounts[classification.to_sym].add_child_node(type)
+        Accountable.from_type(type).includes(:account).each do |accountable|
+          account = accountable.account
+          value_node = group.add_value_node(account)
+          value_node.attach_series(account.series(period))
+        end
+      end
     end
 
-    accounts_with_period_balances = Account::Balance.with(
-      ranked_balances: ranked_balances_cte
-    )
-      .from("ranked_balances AS rb")
-      .joins("JOIN accounts a ON a.id = rb.account_id")
-      .select("
-        a.id,
-        a.name,
-        a.accountable_type,
-        a.classification,
-        SUM(CASE WHEN rb.rn_asc = 1 THEN rb.balance ELSE 0 END) AS start_balance,
-        MAX(CASE WHEN rb.rn_asc = 1 THEN rb.date ELSE NULL END) as start_date,
-        SUM(CASE WHEN rb.rn_desc = 1 THEN rb.balance ELSE 0 END) AS end_balance,
-        MAX(CASE WHEN rb.rn_desc = 1 THEN rb.date ELSE NULL END) as end_date
-      ")
-      .where("rb.rn_asc = 1 OR rb.rn_desc = 1")
-      .group("a.id")
-      .order("end_balance")
-      .to_a
-
-    assets = accounts_with_period_balances.select { |row| row.classification == "asset" }
-    liabilities = accounts_with_period_balances.select { |row| row.classification == "liability" }
-
-    total_assets = assets.sum(&:end_balance)
-    total_liabilities = liabilities.sum(&:end_balance)
-
-    {
-      asset: build_group_summary(assets, "asset"),
-      liability: build_group_summary(liabilities, "liability")
-    }
+    grouped_accounts
   end
 
   private
-
-    def self.build_group_summary(accounts, classification)
-      total_balance = accounts.sum(&:end_balance)
-      {
-        total: total_balance,
-        groups: accounts.group_by(&:accountable_type).transform_values do |rows|
-          build_account_summary(rows, total_balance, classification)
-        end
-      }
-    end
-
-    def self.build_account_summary(accounts, total_balance, classification)
-      end_balance = accounts.sum(&:end_balance)
-      start_balance = accounts.sum(&:start_balance)
-      {
-        start_balance: start_balance,
-        end_balance: end_balance,
-        allocation: (end_balance / total_balance * 100).round(2),
-        trend: Trend.new(current: end_balance, previous: start_balance, type: classification),
-        classification: classification,
-        accounts: accounts.map do |account|
-          {
-            id: account.id,
-            name: account.name,
-            start_balance: account.start_balance,
-            end_balance: account.end_balance,
-            allocation: (account.end_balance / total_balance * 100).round(2),
-            trend: Trend.new(current: account.end_balance, previous: account.start_balance, type: classification)
-          }
-        end
-      }
+    def check_currency
+      if self.currency == self.family.currency
+        self.converted_balance = self.balance
+        self.converted_currency = self.currency
+      else
+        self.converted_balance = ExchangeRate.convert(self.currency, self.family.currency, self.balance)
+        self.converted_currency = self.family.currency
+      end
     end
 end

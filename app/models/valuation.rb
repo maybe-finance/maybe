@@ -1,15 +1,15 @@
 class Valuation < ApplicationRecord
-  belongs_to :account
+  include Monetizable
 
+  belongs_to :account
+  validates :account, :date, :value, presence: true
   after_commit :sync_account
+  monetize :value
 
   scope :in_period, ->(period) { period.date_range.nil? ? all : where(date: period.date_range) }
 
-  def self.to_series(account, period = Period.all)
-    MoneySeries.new(
-      in_period(period).order(:date),
-      { trend_type: account.classification, amount_accessor: :value }
-    )
+  def self.to_series
+    TimeSeries.from_collection all, :value_money
   end
 
   private

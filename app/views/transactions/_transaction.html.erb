@@ -1,12 +1,17 @@
-<%= link_to transaction_path(transaction), data: { turbo_frame: "modal" }, class: "text-gray-900 flex items-center gap-6 py-4 text-sm font-medium hover:bg-gray-50 px-4", id: dom_id(transaction) do %>
-  <div class="w-96 flex items-center gap-2">
-    <div class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-600/5 text-gray-600"><%= transaction.name[0].upcase %></div>
-    <p class="text-gray-900"><%= transaction.name %></p>
+<%= turbo_frame_tag dom_id(transaction), class:"text-gray-900 flex items-center gap-6 py-4 text-sm font-medium px-4" do %>
+  <%= link_to transaction_path(transaction), data: { turbo_frame: "modal" }, class: "group", id: dom_id(transaction) do %>
+    <div class="w-96 flex items-center gap-2">
+      <div class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-600/5 text-gray-600"><%= transaction.name[0].upcase %></div>
+      <p class="text-gray-900 group-hover:underline group-hover:text-gray-800"><%= transaction.name %></p>
+    </div>
+  <% end %>
+  <div class="w-48">
+    <%= render partial: "transactions/category_dropdown", locals: { transaction: } %>
   </div>
   <div>
     <p><%= transaction.account.name %></p>
   </div>
   <div class="ml-auto">
-    <p class="<%= transaction.amount < 0 ? "text-green-600" : "" %>"><%= number_to_currency(-transaction.amount, { precision: 2 }) %></p>
+    <p class="<%= transaction.amount < 0 ? "text-green-600" : "" %>"><%= format_money -transaction.amount_money %></p>
   </div>
 <% end %>
