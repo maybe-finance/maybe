@@ -1,7 +1,7 @@
 module Accountable
   extend ActiveSupport::Concern
 
-  ASSET_TYPES = %w[ Account::Depository Account::Investment Account::OtherAsset Account::Property Account::Vehicle ]
+  ASSET_TYPES = %w[ Account::Depository Account::Investment Account::Crypto Account::OtherAsset Account::Property Account::Vehicle ]
   LIABILITY_TYPES = %w[ Account::Credit Account::Loan Account::OtherLiability ]
   TYPES = ASSET_TYPES + LIABILITY_TYPES
 

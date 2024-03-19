@@ -39,12 +39,12 @@ class TimeSeriesTest < ActiveSupport::TestCase
     expected_values = {
       values: [
         {
-          date: "2024-03-17",
+          date: 1.day.ago.to_date,
           value: { amount: "100.0", currency: "USD" },
           trend: { type: "normal", direction: "flat", value: { amount: "0.0", currency: "USD" }, percent: 0.0 }
         },
         {
-          date: "2024-03-18",
+          date: Date.current,
           value: { amount: "200.0", currency: "USD" },
           trend: { type: "normal", direction: "up", value: { amount: "100.0", currency: "USD" }, percent: 100.0 }
         }
