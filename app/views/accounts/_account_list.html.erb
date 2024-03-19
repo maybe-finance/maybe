@@ -8,7 +8,7 @@
       <%= lucide_icon("chevron-right", class: "group-open:hidden text-gray-500 w-5 h-5") %>
       <div class="text-left"><%= type.model_name.human %></div>
       <div class="ml-auto flex flex-col items-end">
-        <p class="text-right"><%= format_currency accounts.sum(&:balance) %></p>
+        <p class="text-right"><%= format_money accounts.sum(&:balance) %></p>
       </div>
     </summary>
     <% accounts.each do |account| %>
@@ -19,7 +19,7 @@
             <p class="text-xs text-gray-500"><%= account.subtype&.humanize %></p>
           <% end %>
         </div>
-        <p class="ml-auto font-medium"><%= format_currency Money.new(account.balance, account.currency) %></p>
+        <p class="ml-auto font-medium"><%= format_money account.balance_money %></p>
       <% end %>
     <% end %>
     <%= link_to new_account_path(step: 'method', type: type.name.demodulize), class: "flex items-center gap-4 px-2 py-3 mb-1 text-gray-500 text-sm font-medium rounded-[10px] hover:bg-gray-100", data: { turbo_frame: "modal" } do %>

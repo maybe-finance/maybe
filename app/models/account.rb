@@ -28,16 +28,6 @@ class Account < ApplicationRecord
     balances.where("date <= ?", date).order(date: :desc).first&.balance
   end
 
-  # def balance
-  #   Money.new(read_attribute(:balance), currency)
-  # end
-
-  # def balance=(money_or_amount)
-  #   money = money_or_amount.is_a?(Money) ? money_or_amount : Money.new(money_or_amount, currency)
-  #   write_attribute(:balance, money.amount)
-  #   write_attribute(:currency, money.currency.iso_code)
-  # end
-
   # e.g. Wise, Revolut accounts that have transactions in multiple currencies
   def multi_currency?
     currencies = [ valuations.pluck(:currency), transactions.pluck(:currency) ].flatten.uniq
@@ -78,15 +68,4 @@ class Account < ApplicationRecord
 
     grouped_accounts
   end
-
-  private
-    def check_currency
-      if self.currency == self.family.currency
-        self.converted_balance = self.balance
-        self.converted_currency = self.currency
-      else
-        self.converted_balance = ExchangeRate.convert(self.currency, self.family.currency, self.balance)
-        self.converted_currency = self.family.currency
-      end
-    end
 end
