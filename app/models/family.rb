@@ -23,10 +23,12 @@ class Family < ApplicationRecord
 
     query = query.where("account_balances.date BETWEEN ? AND ?", period.date_range.begin, period.date_range.end) if period.date_range
 
+    result = query.to_a
+
     {
-      asset_series: MoneySeries.new(query, { trend_type: :asset, amount_accessor: "assets" }),
-      liability_series: MoneySeries.new(query, { trend_type: :liability, amount_accessor: "liabilities" }),
-      net_worth_series: MoneySeries.new(query, { trend_type: :asset, amount_accessor: "net_worth" })
+      asset_series: TimeSeries.new(result.map { |r| { date: r.date, value: Money.new(r.assets, r.currency) } }),
+      liability_series: TimeSeries.new(result.map { |r| { date: r.date, value: Money.new(r.liabilities, r.currency) } }),
+      net_worth_series: TimeSeries.new(result.map { |r| { date: r.date, value: Money.new(r.net_worth, r.currency) } })
     }
   end
 
@@ -35,7 +37,7 @@ class Family < ApplicationRecord
   end
 
   def net_worth
-    accounts.active.sum("CASE WHEN classification = 'asset' THEN balance ELSE -balance END")
+    Money.new(accounts.active.sum("CASE WHEN classification = 'asset' THEN balance ELSE -balance END"), currency)
   end
 
   def assets
@@ -43,6 +45,6 @@ class Family < ApplicationRecord
   end
 
   def liabilities
-    accounts.active.liabilities.sum(:balance)
+    Money.new(accounts.active.liabilities.sum(:balance), currency)
   end
 end

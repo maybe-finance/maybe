@@ -3,7 +3,7 @@ import tailwindColors from "@maybe/tailwindcolors";
 import * as d3 from "d3";
 
 export default class extends Controller {
-  static values = { series: Object, classification: String };
+  static values = { series: Object };
 
   connect() {
     this.renderChart(this.seriesValue);
@@ -15,15 +15,18 @@ export default class extends Controller {
   }
 
   renderChart = () => {
-    this.drawChart(this.seriesValue);
+    const data = this.prepareData(this.seriesValue);
+    this.drawChart(data);
+  };
+
+  prepareData(series) {
+    return series.values.map((d) => ({
+      date: new Date(d.date + "T00:00:00"),
+      value: +d.value.amount,
+    }));
   }
 
-  drawChart(series) {
-    const data = series.data.map((d) => ({
-      ...d,
-      date: new Date(d.date + "T00:00:00"),
-      amount: +d.amount,
-    }));
+  drawChart(data) {
     const chartContainer = d3.select(this.element);
     chartContainer.selectAll("*").remove();
     const initialDimensions = {
@@ -48,7 +51,7 @@ export default class extends Controller {
     const height = initialDimensions.height - margin.top - margin.bottom;
 
     const isLiability = this.classificationValue === "liability";
-    const trendDirection = data[data.length - 1].amount - data[0].amount;
+    const trendDirection = data[data.length - 1].value - data[0].value;
     let lineColor;
 
     if (trendDirection > 0) {
@@ -69,8 +72,8 @@ export default class extends Controller {
       .domain(d3.extent(data, (d) => d.date));
 
     const PADDING = 0.05;
-    const dataMin = d3.min(data, (d) => d.amount);
-    const dataMax = d3.max(data, (d) => d.amount);
+    const dataMin = d3.min(data, (d) => d.value);
+    const dataMax = d3.max(data, (d) => d.value);
     const padding = (dataMax - dataMin) * PADDING;
 
     const yScale = d3
@@ -81,7 +84,7 @@ export default class extends Controller {
     const line = d3
       .line()
       .x((d) => xScale(d.date))
-      .y((d) => yScale(d.amount));
+      .y((d) => yScale(d.value));
 
     svg
       .append("path")

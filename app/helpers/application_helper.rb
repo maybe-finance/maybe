@@ -29,6 +29,7 @@ module ApplicationHelper
 
 
 
+
   def sidebar_modal(&block)
     content = capture &block
     render partial: "shared/sidebar_modal", locals: { content: content }

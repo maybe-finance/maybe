@@ -16,7 +16,8 @@ export default class extends Controller {
   }
 
   renderChart = () => {
-    this.drawChart(this.seriesValue);
+    const data = this.prepareData(this.seriesValue);
+    this.drawChart(data);
   };
 
   trendStyles(trendDirection) {
@@ -36,25 +37,27 @@ export default class extends Controller {
     }[trendDirection];
   }
 
-  drawChart(series) {
-    const data = series.data.map((b) => ({
+  prepareData(series) {
+    return series.values.map((b) => ({
       date: new Date(b.date + "T00:00:00"),
-      value: +b.amount,
+      value: +b.value.amount,
       styles: this.trendStyles(b.trend.direction),
       trend: b.trend,
       formatted: {
-        value: Intl.NumberFormat("en-US", {
+        value: Intl.NumberFormat(undefined, {
           style: "currency",
-          currency: b.currency.iso_code || "USD",
-        }).format(b.amount),
-        change: Intl.NumberFormat("en-US", {
+          currency: b.value.currency || "USD",
+        }).format(b.value.amount),
+        change: Intl.NumberFormat(undefined, {
           style: "currency",
-          currency: b.currency.iso_code || "USD",
+          currency: b.value.currency || "USD",
           signDisplay: "always",
-        }).format(b.trend.amount),
+        }).format(b.trend.value.amount),
       },
     }));
+  }
 
+  drawChart(data) {
     const chartContainer = d3.select(this.element);
 
     // Clear any existing chart
@@ -76,6 +79,11 @@ export default class extends Controller {
         initialDimensions.height,
       ])
       .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+
+    if (data.length === 1) {
+      this.renderEmpty(svg, initialDimensions);
+      return;
+    }
 
     const margin = { top: 20, right: 1, bottom: 30, left: 1 },
       width = +svg.attr("width") - margin.left - margin.right,
@@ -236,5 +244,27 @@ export default class extends Controller {
         g.selectAll(".data-point-circle").remove();
         tooltip.style("opacity", 0);
       });
+  }
+
+  // Dot in middle of chart as placeholder for empty chart
+  renderEmpty(svg, { width, height }) {
+    svg
+      .append("line")
+      .attr("x1", width / 2)
+      .attr("y1", 0)
+      .attr("x2", width / 2)
+      .attr("y2", height)
+      .attr("stroke", tailwindColors.gray[300])
+      .attr("stroke-dasharray", "4, 4");
+
+    svg
+      .append("circle")
+      .attr("cx", width / 2)
+      .attr("cy", height / 2)
+      .attr("r", 4)
+      .style("fill", tailwindColors.gray[400]);
+
+    svg.selectAll(".tick").remove();
+    svg.selectAll(".domain").remove();
   }
 }

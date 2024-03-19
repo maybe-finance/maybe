@@ -42,6 +42,10 @@ class Money
         @currency.default_format.gsub("%n", formatted_amount).gsub("%u", @currency.symbol)
     end
 
+    def to_json(*_args)
+        { amount: @amount, currency: @currency.iso_code }.to_json
+    end
+
     def <=>(other)
         raise TypeError, "Money can only be compared with other Money objects except for 0" unless other.is_a?(Money) || other.eql?(0)
         return @amount <=> other if other.is_a?(Numeric)
