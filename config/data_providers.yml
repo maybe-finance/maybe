@@ -1,0 +1,7 @@
+exchange_rates:
+  provider: Synth
+  api_key: <%= ENV["SYNTH_API_KEY"] %>
+# Add additional modules below (stock prices, crypto prices, housing data, etc.)
+# stock_prices:
+#   provider: Synth
+#   api_key: <%= ENV["SYNTH_API_KEY"] %>
