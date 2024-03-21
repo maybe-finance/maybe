@@ -55,15 +55,15 @@ module Account::Syncable
         existing_rates_set = existing_rates.map { |er| [ er[0], er[1], er[2].to_s ] }.to_set
 
         rate_candidates.each do |rate_candidate|
-            rc_from = Money::Currency.new(rate_candidate[:from_currency])
-            rc_to = Money::Currency.new(rate_candidate[:to_currency])
+            rc_from = rate_candidate[:from_currency]
+            rc_to = rate_candidate[:to_currency]
             rc_date = rate_candidate[:date]
 
-            next if existing_rates_set.include?([ rc_from.iso_code, rc_to.iso_code, rc_date.to_s ])
+            next if existing_rates_set.include?([ rc_from, rc_to, rc_date.to_s ])
 
-            logger.info "Fetching exchange rate from provider for #{rc_from.iso_code} to #{rc_to.iso_code} on #{rc_date}"
-            rate = ExchangeRate.fetch_rate_from_provider(rc_from.iso_code, rc_to.iso_code, rc_date)
-            ExchangeRate.create! base_currency: rc_from.iso_code, converted_currency: rc_to.iso_code, date: rc_date, rate: rate if rate
+            logger.info "Fetching exchange rate from provider for account #{self.name}: #{self.id} (#{rc_from} to #{rc_to} on #{rc_date})"
+            rate = ExchangeRate.fetch_rate_from_provider(rc_from, rc_to, rc_date)
+            ExchangeRate.create! base_currency: rc_from, converted_currency: rc_to, date: rc_date, rate: rate if rate
         end
 
         nil

@@ -6,9 +6,9 @@ class Account < ApplicationRecord
 
   broadcasts_refreshes
   belongs_to :family
-  has_many :balances
-  has_many :valuations
-  has_many :transactions
+  has_many :balances, dependent: :destroy
+  has_many :valuations, dependent: :destroy
+  has_many :transactions, dependent: :destroy
 
   monetize :balance
 
@@ -72,6 +72,7 @@ class Account < ApplicationRecord
         group = grouped_accounts[classification.to_sym].add_child_group(type, currency)
         Accountable.from_type(type).includes(:account).each do |accountable|
           account = accountable.account
+          next unless account
 
           value_node = group.add_value_node(
             account,
