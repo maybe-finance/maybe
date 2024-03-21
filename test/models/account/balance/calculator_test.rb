@@ -1,7 +1,7 @@
 require "test_helper"
 require "csv"
 
-class Account::BalanceCalculatorTest < ActiveSupport::TestCase
+class Account::Balance::CalculatorTest < ActiveSupport::TestCase
     # See: https://docs.google.com/spreadsheets/d/18LN5N-VLq4b49Mq1fNwF7_eBiHSQB46qQduRtdAEN98/edit?usp=sharing
     setup do
         @expected_balances = CSV.read("test/fixtures/account/expected_balances.csv", headers: true).map do |row|
@@ -23,7 +23,7 @@ class Account::BalanceCalculatorTest < ActiveSupport::TestCase
     test "syncs account with only valuations" do
         account = accounts(:collectable)
 
-        calculator = Account::BalanceCalculator.new(account)
+        calculator = Account::Balance::Calculator.new(account)
         calculator.calculate
 
         expected = @expected_balances.map { |row| row["collectable"].to_d }
@@ -35,7 +35,7 @@ class Account::BalanceCalculatorTest < ActiveSupport::TestCase
     test "syncs account with only transactions" do
         account = accounts(:checking)
 
-        calculator = Account::BalanceCalculator.new(account)
+        calculator = Account::Balance::Calculator.new(account)
         calculator.calculate
 
         expected = @expected_balances.map { |row| row["checking"].to_d }
@@ -47,7 +47,7 @@ class Account::BalanceCalculatorTest < ActiveSupport::TestCase
     test "syncs account with both valuations and transactions" do
         account = accounts(:savings_with_valuation_overrides)
 
-        calculator = Account::BalanceCalculator.new(account)
+        calculator = Account::Balance::Calculator.new(account)
         calculator.calculate
 
         expected = @expected_balances.map { |row| row["savings_with_valuation_overrides"].to_d }
@@ -59,7 +59,7 @@ class Account::BalanceCalculatorTest < ActiveSupport::TestCase
     test "syncs liability account" do
         account = accounts(:credit_card)
 
-        calculator = Account::BalanceCalculator.new(account)
+        calculator = Account::Balance::Calculator.new(account)
         calculator.calculate
 
         expected = @expected_balances.map { |row| row["credit_card"].to_d }
@@ -70,7 +70,7 @@ class Account::BalanceCalculatorTest < ActiveSupport::TestCase
 
     test "syncs foreign currency account" do
         account = accounts(:eur_checking)
-        calculator = Account::BalanceCalculator.new(account)
+        calculator = Account::Balance::Calculator.new(account)
         calculator.calculate
 
         # Calculator should calculate balances in both account and family currency
@@ -86,7 +86,7 @@ class Account::BalanceCalculatorTest < ActiveSupport::TestCase
 
     test "syncs multi currency account" do
         account = accounts(:multi_currency)
-        calculator = Account::BalanceCalculator.new(account)
+        calculator = Account::Balance::Calculator.new(account)
         calculator.calculate
 
         expected_balances = @expected_balances.map { |row| row["multi_currency"].to_d }

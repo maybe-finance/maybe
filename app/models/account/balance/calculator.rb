@@ -1,4 +1,4 @@
-class Account::BalanceCalculator
+class Account::Balance::Calculator
     attr_reader :daily_balances, :errors, :warnings
 
     @daily_balances = []
