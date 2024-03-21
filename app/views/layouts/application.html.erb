@@ -8,7 +8,6 @@
     <meta name="apple-mobile-web-app-title" content="Maybe">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -16,7 +15,6 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ffffff">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="theme-color" content="#ffffff">
-    
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
@@ -71,8 +69,8 @@
             <%= lucide_icon("plus", class: "w-5 h-5") %>
             <p><%= t('.new_account') %></p>
           <% end %>
-          <% Accountable.types.each do |type| %>
-            <%= render 'accounts/account_list', type: Accountable.from_type(type) %>
+          <% account_groups.each do |group| %>
+            <%= render 'accounts/account_list', group: group %>
           <% end %>
         </div>
       </div>

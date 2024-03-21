@@ -27,8 +27,10 @@ module ApplicationHelper
     render partial: "shared/modal", locals: { content: content }
   end
 
-
-
+  def account_groups
+    assets, liabilities = Current.family.accounts.by_group(currency: Current.family.currency, period: Period.last_30_days).values_at(:assets, :liabilities)
+    [ assets.children, liabilities.children ].flatten
+  end
 
   def sidebar_modal(&block)
     content = capture &block

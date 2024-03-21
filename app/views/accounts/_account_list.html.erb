@@ -1,25 +1,24 @@
-<%# locals: (type:) -%>
-<% period = Period.last_30_days %>
-<% accounts = Current.family.accounts.active.where(accountable_type: type.name) %>
-<% if accounts.any? %>
+<%# locals: (group:) -%>
+<% type = Accountable.from_type(group.name) %>
+<% if group %>
   <details class="mb-1 text-sm group" data-controller="account-collapse" data-account-collapse-type-value="<%= type %>">
     <summary class="flex gap-4 px-3 py-2 items-center w-full rounded-[10px] font-medium hover:bg-gray-100">
       <%= lucide_icon("chevron-down", class: "hidden group-open:block text-gray-500 w-5 h-5") %>
       <%= lucide_icon("chevron-right", class: "group-open:hidden text-gray-500 w-5 h-5") %>
       <div class="text-left"><%= type.model_name.human %></div>
       <div class="ml-auto flex flex-col items-end">
-        <p class="text-right"><%= format_money accounts.sum(&:balance) %></p>
+        <p class="text-right"><%= format_money group.sum %></p>
       </div>
     </summary>
-    <% accounts.each do |account| %>
-      <%= link_to account_path(account), class: "flex items-center w-full gap-3 px-2 py-3 mb-1 hover:bg-gray-100 rounded-[10px]" do %>
+    <% group.children.each do |account_value_node| %>
+      <%= link_to account_path(account_value_node.original), class: "flex items-center w-full gap-3 px-2 py-3 mb-1 hover:bg-gray-100 rounded-[10px]" do %>
         <div>
-          <p class="font-medium"><%= account.name %></p>
-          <% if account.subtype %>
-            <p class="text-xs text-gray-500"><%= account.subtype&.humanize %></p>
+          <p class="font-medium"><%= account_value_node.name %></p>
+          <% if account_value_node.original.subtype %>
+            <p class="text-xs text-gray-500"><%= account_value_node.original.subtype&.humanize %></p>
           <% end %>
         </div>
-        <p class="ml-auto font-medium"><%= format_money account.balance_money %></p>
+        <p class="ml-auto font-medium"><%= format_money account_value_node.original.balance_money %></p>
       <% end %>
     <% end %>
     <%= link_to new_account_path(step: 'method', type: type.name.demodulize), class: "flex items-center gap-4 px-2 py-3 mb-1 text-gray-500 text-sm font-medium rounded-[10px] hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
@@ -27,9 +26,4 @@
       <p>New <%= type.model_name.human.downcase %></p>
     <% end %>
   </details>
-  <%= link_to new_account_path(step: 'method', type: type.name.demodulize), class: "flex items-center gap-4 px-2 py-3 mb-1 text-gray-500 text-sm font-medium rounded-[10px] hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
-    <%= lucide_icon("plus", class: "w-5 h-5") %>
-    <p>New <%= type.model_name.human.downcase %></p>
-  <% end %>
-</details>
 <% end %>
