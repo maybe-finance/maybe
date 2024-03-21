@@ -1,2 +1,0 @@
-class Currency < ApplicationRecord
-end

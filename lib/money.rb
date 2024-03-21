@@ -23,6 +23,14 @@ class Money
         @currency = obj.is_a?(Money) ? obj.currency : Money::Currency.new(currency)
     end
 
+    # TODO: Replace with injected rate store
+    def exchange_to(other_currency, date = Date.current)
+        return self if @currency == Money::Currency.new(other_currency)
+        rate = ExchangeRate.get_rate(@currency, other_currency, date)
+        return nil if rate.nil?
+        Money.new(@amount * rate.rate, other_currency)
+    end
+
     def cents_str(precision = @currency.default_precision)
         format_str = "%.#{precision}f"
         amount_str = format_str % @amount

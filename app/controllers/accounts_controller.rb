@@ -11,7 +11,7 @@ class AccountsController < ApplicationController
 
   def show
     @account = Current.family.accounts.find(params[:id])
-    @balance_series = @account.series(@period)
+    @balance_series = @account.series(period: @period)
     @valuation_series = @account.valuations.to_series
   end
 
@@ -47,6 +47,21 @@ class AccountsController < ApplicationController
       redirect_to accounts_path, notice: t(".success")
     else
       render "new", status: :unprocessable_entity
+    end
+  end
+
+  def sync
+    @account = Current.family.accounts.find(params[:id])
+    @account.sync_later
+
+    respond_to do |format|
+      format.html { redirect_to account_path(@account), notice: t(".success") }
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.append("notification-tray", partial: "shared/notification", locals: { type: "success", content: t(".success") }),
+          turbo_stream.replace("sync_message", partial: "accounts/sync_message", locals: { is_syncing: true })
+        ]
+      end
     end
   end
 

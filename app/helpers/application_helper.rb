@@ -27,8 +27,10 @@ module ApplicationHelper
     render partial: "shared/modal", locals: { content: content }
   end
 
-
-
+  def account_groups
+    assets, liabilities = Current.family.accounts.by_group(currency: Current.family.currency, period: Period.last_30_days).values_at(:assets, :liabilities)
+    [ assets.children, liabilities.children ].flatten
+  end
 
   def sidebar_modal(&block)
     content = capture &block
@@ -74,7 +76,7 @@ module ApplicationHelper
   end
 
   def period_label(period)
-    return "since account creation" if period.date_range.nil?
+    return "since account creation" if period.date_range.begin.nil?
     start_date, end_date = period.date_range.first, period.date_range.last
 
     return "Starting from #{start_date.strftime('%b %d, %Y')}" if end_date.nil?

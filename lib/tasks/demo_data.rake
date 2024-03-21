@@ -3,7 +3,8 @@ namespace :demo_data do
   task reset: :environment do
     family = Family.find_or_create_by(name: "Demo Family")
 
-    family.accounts.destroy_all
+    family.accounts.delete_all
+    ExchangeRate.delete_all
 
     user = User.find_or_create_by(email: "user@maybe.local") do |u|
       u.password = "password"
@@ -14,39 +15,71 @@ namespace :demo_data do
 
     puts "Reset user: #{user.email} with family: #{family.name}"
 
-    Transaction::Category.create_default_categories(family) if family.transaction_categories.empty?
-
-    multi_currency_checking = Account.find_or_create_by(name: "Demo Multi-Currency Checking") do |a|
-      a.family = family
-      a.accountable = Account::Depository.new
-      a.balance = 4000
-      a.currency = "EUR"
+    # Mock exchange rates for last 60 days (these rates are reasonable for EUR:USD, but not exact)
+    exchange_rates = (0..60).map do |days_ago|
+      {
+        date: Date.current - days_ago.days,
+        base_currency: "EUR",
+        converted_currency: "USD",
+        rate: rand(1.0840..1.0924).round(4)
+      }
     end
 
+    exchange_rates += (0..20).map do |days_ago|
+      {
+        date: Date.current - days_ago.days,
+        base_currency: "BTC",
+        converted_currency: "USD",
+        rate: rand(60000..65000).round(2)
+      }
+    end
+
+    # Multi-currency account needs a few USD:EUR rates
+    exchange_rates += [
+      { date: Date.current - 45.days, base_currency: "USD", converted_currency: "EUR", rate: 0.89 },
+      { date: Date.current - 34.days, base_currency: "USD", converted_currency: "EUR", rate: 0.87 },
+      { date: Date.current - 28.days, base_currency: "USD", converted_currency: "EUR", rate: 0.88 },
+      { date: Date.current - 14.days, base_currency: "USD", converted_currency: "EUR", rate: 0.86 }
+    ]
+
+    ExchangeRate.insert_all(exchange_rates)
+
+    puts "Loaded mock exchange rates for last 60 days"
+
+    Transaction::Category.create_default_categories(family) if family.transaction_categories.empty?
+
+    # ========== Accounts ================
+    empty_account = Account.create(name: "Demo Empty Account", family: family, accountable: Account::Depository.new, balance: 500, currency: "USD")
+    multi_currency_checking = Account.create(name: "Demo Multi-Currency Checking", family: family, accountable: Account::Depository.new, balance: 4000, currency: "EUR")
+    checking = Account.create(name: "Demo Checking", family: family, accountable: Account::Depository.new, balance: 5000, currency: "USD")
+    savings = Account.create(name: "Demo Savings", family: family, accountable: Account::Depository.new, balance: 20000, currency: "USD")
+    credit_card = Account.create(name: "Demo Credit Card", family: family, accountable: Account::Credit.new, balance: 1500, currency: "USD")
+    retirement = Account.create(name: "Demo 401k", family: family, accountable: Account::Investment.new, balance: 100000, currency: "USD")
+    euro_savings = Account.create(name: "Demo Euro Savings", family: family, accountable: Account::Depository.new, balance: 10000, currency: "EUR")
+    brokerage = Account.create(name: "Demo Brokerage Account", family: family, accountable: Account::Investment.new, balance: 10000, currency: "USD")
+    crypto = Account.create(name: "Bitcoin Account", family: family, accountable: Account::Crypto.new, balance: 0.1, currency: "BTC")
+    mortgage = Account.create(name: "Demo Mortgage", family: family, accountable: Account::Loan.new, balance: 450000, currency: "USD")
+    main_car = Account.create(name: "Demo Main Car", family: family, accountable: Account::Vehicle.new, balance: 25000, currency: "USD")
+    cash = Account.create(name: "Demo Physical Cash", family: family, accountable: Account::OtherAsset.new, balance: 500, currency: "USD")
+    car_loan = Account.create(name: "Demo Car Loan", family: family, accountable: Account::Loan.new, balance: 10000, currency: "USD")
+    house = Account.create(name: "Demo Primary Residence", family: family, accountable: Account::Property.new, balance: 2500000, currency: "USD")
+    personal_iou = Account.create(name: "Demo Personal IOU", family: family, accountable: Account::OtherLiability.new, balance: 1000, currency: "USD")
+    second_car = Account.create(name: "Demo Secondary Car", family: family, accountable: Account::Vehicle.new, balance: 12000, currency: "USD")
+
+
+    # ========== Transactions ================
     multi_currency_checking_transactions = [
-      { date: Date.today - 84, amount: 3000, name: "Paycheck", currency: "USD" },
-      { date: Date.today - 70, amount: -1500, name: "Rent Payment", currency: "EUR" },
-      { date: Date.today - 70, amount: -200, name: "Groceries", currency: "EUR" },
-      { date: Date.today - 56, amount: 3000, name: "Paycheck", currency: "USD" },
-      { date: Date.today - 42, amount: -1500, name: "Rent Payment", currency: "EUR" },
-      { date: Date.today - 42, amount: -100, name: "Utilities", currency: "EUR" },
+      { date: Date.today - 45, amount: 3000, name: "Paycheck", currency: "USD" },
+      { date: Date.today - 41, amount: -1500, name: "Rent Payment", currency: "EUR" },
+      { date: Date.today - 39, amount: -200, name: "Groceries", currency: "EUR" },
+      { date: Date.today - 34, amount: 3000, name: "Paycheck", currency: "USD" },
+      { date: Date.today - 31, amount: -1500, name: "Rent Payment", currency: "EUR" },
+      { date: Date.today - 28, amount: -100, name: "Utilities", currency: "EUR" },
       { date: Date.today - 28, amount: 3000, name: "Paycheck", currency: "USD" },
       { date: Date.today - 28, amount: -1500, name: "Rent Payment", currency: "EUR" },
       { date: Date.today - 28, amount: -50, name: "Internet Bill", currency: "EUR" },
       { date: Date.today - 14, amount: 3000, name: "Paycheck", currency: "USD" }
     ]
-
-    multi_currency_checking_transactions.each do |t|
-      multi_currency_checking.transactions.find_or_create_by(date: t[:date], amount: t[:amount], name: t[:name], currency: t[:currency])
-    end
-
-    multi_currency_checking.sync
-
-    checking = Account.find_or_create_by(name: "Demo Checking") do |a|
-      a.family = family
-      a.accountable = Account::Depository.new
-      a.balance = 5000
-    end
 
     checking_transactions = [
       { date: Date.today - 84, amount: -3000, name: "Direct Deposit" },
@@ -65,18 +98,6 @@ namespace :demo_data do
       { date: Date.today - 2, amount: 100, name: "Gym Membership" }
     ]
 
-    checking_transactions.each do |t|
-      checking.transactions.find_or_create_by(date: t[:date], amount: t[:amount], name: t[:name])
-    end
-
-    checking.sync
-
-    savings = Account.find_or_create_by(name: "Demo Savings") do |a|
-      a.family = family
-      a.accountable = Account::Depository.new
-      a.balance = 20000
-    end
-
     savings_transactions = [
       { date: Date.today - 360, amount: -1000, name: "Initial Deposit" },
       { date: Date.today - 330, amount: -200, name: "Monthly Savings" },
@@ -92,45 +113,15 @@ namespace :demo_data do
       { date: Date.today - 30, amount: -200, name: "Monthly Savings" }
     ]
 
-    savings_transactions.each do |t|
-      savings.transactions.find_or_create_by(date: t[:date], amount: t[:amount], name: t[:name])
-    end
-
-    savings.sync
-
-    euro_savings = Account.find_or_create_by(name: "Demo Euro Savings") do |a|
-      a.family = family
-      a.accountable = Account::Depository.new
-      a.balance = 10000
-      a.currency = "EUR"
-    end
-
     euro_savings_transactions = [
-      { date: Date.today - 360, amount: -500, name: "Initial Deposit", currency: "EUR" },
-      { date: Date.today - 330, amount: -100, name: "Monthly Savings", currency: "EUR" },
-      { date: Date.today - 300, amount: -100, name: "Monthly Savings", currency: "EUR" },
-      { date: Date.today - 270, amount: -100, name: "Monthly Savings", currency: "EUR" },
-      { date: Date.today - 240, amount: -100, name: "Monthly Savings", currency: "EUR" },
-      { date: Date.today - 210, amount: -100, name: "Monthly Savings", currency: "EUR" },
-      { date: Date.today - 180, amount: -100, name: "Monthly Savings", currency: "EUR" },
-      { date: Date.today - 150, amount: -100, name: "Monthly Savings", currency: "EUR" },
-      { date: Date.today - 120, amount: -100, name: "Monthly Savings", currency: "EUR" },
-      { date: Date.today - 90, amount: 500, name: "Withdrawal", currency: "EUR" },
-      { date: Date.today - 60, amount: -100, name: "Monthly Savings", currency: "EUR" },
-      { date: Date.today - 30, amount: -100, name: "Monthly Savings", currency: "EUR" }
+      { date: Date.today - 55, amount: -500, name: "Initial Deposit", currency: "EUR" },
+      { date: Date.today - 40, amount: -100, name: "Savings", currency: "EUR" },
+      { date: Date.today - 15, amount: -100, name: "Savings", currency: "EUR" },
+      { date: Date.today - 10, amount: -100, name: "Savings", currency: "EUR" },
+      { date: Date.today - 9, amount: 500, name: "Withdrawal", currency: "EUR" },
+      { date: Date.today - 5, amount: -100, name: "Savings", currency: "EUR" },
+      { date: Date.today - 2, amount: -100, name: "Savings", currency: "EUR" }
     ]
-
-    euro_savings_transactions.each do |t|
-      euro_savings.transactions.find_or_create_by(date: t[:date], amount: t[:amount], name: t[:name], currency: t[:currency])
-    end
-
-    euro_savings.sync
-
-    credit_card = Account.find_or_create_by(name: "Demo Credit Card") do |a|
-      a.family = family
-      a.accountable = Account::Credit.new
-      a.balance = 1500
-    end
 
     credit_card_transactions = [
       { date: Date.today - 90, amount: 75, name: "Grocery Store" },
@@ -179,94 +170,11 @@ namespace :demo_data do
       { date: Date.today, amount: -1000, name: "Credit Card Payment" }
     ]
 
-    credit_card_transactions.each do |t|
-      credit_card.transactions.find_or_create_by(date: t[:date], amount: t[:amount], name: t[:name])
-    end
-
-    credit_card.sync
-
-    retirement = Account.find_or_create_by(name: "Demo 401k") do |a|
-      a.family = family
-      a.accountable = Account::Investment.new
-      a.balance = 100000
-    end
-
-    retirement_valuations = [
-      { date: 1.year.ago.to_date, value: 90000 },
-      { date: 200.days.ago.to_date, value: 95000 },
-      { date: 100.days.ago.to_date, value: 94444.96 },
-      { date: 20.days.ago.to_date, value: 100000 }
-    ]
-
-    retirement.valuations.upsert_all(retirement_valuations, unique_by: :index_valuations_on_account_id_and_date)
-
-    retirement.sync
-
-    brokerage = Account.find_or_create_by(name: "Demo Brokerage Account") do |a|
-      a.family = family
-      a.accountable = Account::Investment.new
-      a.balance = 10000
-    end
-
-    brokerage_valuations = [
-      { date: 1.year.ago.to_date, value: 9000 },
-      { date: 200.days.ago.to_date, value: 9500 },
-      { date: 100.days.ago.to_date, value: 9444.96 },
-      { date: 20.days.ago.to_date, value: 10000 }
-    ]
-
-    brokerage.valuations.upsert_all(brokerage_valuations, unique_by: :index_valuations_on_account_id_and_date)
-
-    brokerage.sync
-
-    crypto = Account.find_or_create_by(name: "Bitcoin Account") do |a|
-      a.family = family
-      a.accountable = Account::Crypto.new
-      a.currency = "BTC"
-      a.balance = 0.1
-      end
-
-    crypto_valuations = [
-    { date: 1.year.ago.to_date, value: 0.05, currency: "BTC" },
-    { date: 200.days.ago.to_date, value: 0.06, currency: "BTC" },
-    { date: 100.days.ago.to_date, value: 0.08, currency: "BTC" },
-    { date: 20.days.ago.to_date, value: 0.1, currency: "BTC" }
-    ]
-
-    crypto.valuations.upsert_all(crypto_valuations, unique_by: :index_valuations_on_account_id_and_date)
-
-    crypto.sync
-
-    mortgage = Account.find_or_create_by(name: "Demo Mortgage") do |a|
-      a.family = family
-      a.accountable = Account::Loan.new
-      a.balance = 450000
-    end
-
     mortgage_transactions = [
       { date: Date.today - 90, amount: -1500, name: "Mortgage Payment" },
       { date: Date.today - 60, amount: -1500, name: "Mortgage Payment" },
       { date: Date.today - 30, amount: -1500, name: "Mortgage Payment" }
     ]
-
-    mortgage_transactions.each do |t|
-      mortgage.transactions.find_or_create_by(date: t[:date], amount: t[:amount], name: t[:name])
-    end
-
-    mortgage_valuations = [
-      { date: 2.years.ago.to_date, value: 500000 },
-      { date: 6.months.ago.to_date, value: 455000 }
-    ]
-
-    mortgage.valuations.upsert_all(mortgage_valuations, unique_by: :index_valuations_on_account_id_and_date)
-
-    mortgage.sync
-
-    car_loan = Account.find_or_create_by(name: "Demo Car Loan") do |a|
-      a.family = family
-      a.accountable = Account::Loan.new
-      a.balance = 10000
-    end
 
     car_loan_transactions = [
       { date: 12.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
@@ -283,17 +191,30 @@ namespace :demo_data do
       { date: 1.month.ago.to_date, amount: -1250, name: "Car Loan Payment" }
     ]
 
-    car_loan_transactions.each do |t|
-      car_loan.transactions.find_or_create_by(date: t[:date], amount: t[:amount], name: t[:name])
-    end
+    # ========== Valuations ================
+    retirement_valuations = [
+      { date: 1.year.ago.to_date, value: 90000 },
+      { date: 200.days.ago.to_date, value: 95000 },
+      { date: 100.days.ago.to_date, value: 94444.96 },
+      { date: 20.days.ago.to_date, value: 100000 }
+    ]
 
-    car_loan.sync
+    brokerage_valuations = [
+      { date: 1.year.ago.to_date, value: 9000 },
+      { date: 200.days.ago.to_date, value: 9500 },
+      { date: 100.days.ago.to_date, value: 9444.96 },
+      { date: 20.days.ago.to_date, value: 10000 }
+    ]
 
-    house = Account.find_or_create_by(name: "Demo Primary Residence") do |a|
-      a.family = family
-      a.accountable = Account::Property.new
-      a.balance = 2500000
-    end
+    crypto_valuations = [
+      { date: 1.week.ago.to_date, value: 0.08, currency: "BTC" },
+      { date: 2.days.ago.to_date, value: 0.1, currency: "BTC" }
+    ]
+
+    mortgage_valuations = [
+      { date: 2.years.ago.to_date, value: 500000 },
+      { date: 6.months.ago.to_date, value: 455000 }
+    ]
 
     house_valuations = [
       { date: 5.years.ago.to_date, value: 3000000 },
@@ -303,67 +224,51 @@ namespace :demo_data do
       { date: 1.year.ago.to_date, value: 2500000 }
     ]
 
-    house.valuations.upsert_all(house_valuations, unique_by: :index_valuations_on_account_id_and_date)
-
-    house.sync
-
-    main_car = Account.find_or_create_by(name: "Demo Main Car") do |a|
-      a.family = family
-      a.accountable = Account::Vehicle.new
-      a.balance = 25000
-    end
-
     main_car_valuations = [
       { date: 1.year.ago.to_date, value: 25000 }
     ]
-
-    main_car.valuations.upsert_all(main_car_valuations, unique_by: :index_valuations_on_account_id_and_date)
-
-    main_car.sync
-
-    second_car = Account.find_or_create_by(name: "Demo Secondary Car") do |a|
-      a.family = family
-      a.accountable = Account::Vehicle.new
-      a.balance = 12000
-    end
 
     second_car_valuations = [
       { date: 2.years.ago.to_date, value: 11000 },
       { date: 1.year.ago.to_date, value: 12000 }
     ]
 
-    second_car.valuations.upsert_all(second_car_valuations, unique_by: :index_valuations_on_account_id_and_date)
-
-    second_car.sync
-
-    cash = Account.find_or_create_by(name: "Demo Physical Cash") do |a|
-      a.family = family
-      a.accountable = Account::OtherAsset.new
-      a.balance =  500
-    end
-
     cash_valuations = [
       { date: 1.month.ago.to_date, value: 500 }
     ]
-
-    cash.valuations.upsert_all(cash_valuations, unique_by: :index_valuations_on_account_id_and_date)
-
-    cash.sync
-
-    personal_iou = Account.find_or_create_by(name: "Demo Personal IOU") do |a|
-      a.family = family
-      a.accountable = Account::OtherLiability.new
-      a.balance =  1000
-    end
 
     personal_iou_valuations = [
       { date: 1.month.ago.to_date, value: 1000 }
     ]
 
-    personal_iou.valuations.upsert_all(personal_iou_valuations, unique_by: :index_valuations_on_account_id_and_date)
+    # Insert valuations
+    retirement.valuations.insert_all(retirement_valuations)
+    brokerage.valuations.insert_all(brokerage_valuations)
+    crypto.valuations.insert_all(crypto_valuations)
+    mortgage.valuations.insert_all(mortgage_valuations)
+    house.valuations.insert_all(house_valuations)
+    main_car.valuations.insert_all(main_car_valuations)
+    second_car.valuations.insert_all(second_car_valuations)
+    cash.valuations.insert_all(cash_valuations)
+    personal_iou.valuations.insert_all(personal_iou_valuations)
 
-    personal_iou.sync
+    # Insert transactions
+    multi_currency_checking.transactions.insert_all(multi_currency_checking_transactions)
+    checking.transactions.insert_all(checking_transactions)
+    savings.transactions.insert_all(savings_transactions)
+    euro_savings.transactions.insert_all(euro_savings_transactions)
+    credit_card.transactions.insert_all(credit_card_transactions)
+    mortgage.transactions.insert_all(mortgage_transactions)
+    car_loan.transactions.insert_all(car_loan_transactions)
 
-    puts "Demo data reset complete"
+    puts "Created demo accounts, transactions, and valuations for family: #{family.name}"
+
+    puts "Syncing accounts...  This may take a few seconds."
+
+    family.accounts.each do |account|
+      account.sync
+    end
+
+    puts "Accounts synced.  Demo data reset complete."
   end
 end

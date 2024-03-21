@@ -26,7 +26,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_19_154732) do
     t.string "currency", default: "USD", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id", "date"], name: "index_account_balances_on_account_id_and_date", unique: true
+    t.index ["account_id", "date", "currency"], name: "index_account_balances_on_account_id_date_currency_unique", unique: true
     t.index ["account_id"], name: "index_account_balances_on_account_id"
   end
 
@@ -85,8 +85,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_19_154732) do
     t.uuid "accountable_id"
     t.decimal "balance", precision: 19, scale: 4, default: "0.0"
     t.string "currency", default: "USD"
-    t.decimal "converted_balance", precision: 19, scale: 4, default: "0.0"
-    t.string "converted_currency", default: "USD"
     t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Account::Loan'::character varying, 'Account::Credit'::character varying, 'Account::OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.boolean "is_active", default: true, null: false
     t.enum "status", default: "ok", null: false, enum_type: "account_status"
@@ -96,14 +94,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_19_154732) do
     t.index ["family_id"], name: "index_accounts_on_family_id"
   end
 
-  create_table "currencies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name"
-    t.string "iso_code"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["iso_code"], name: "index_currencies_on_iso_code", unique: true
-  end
-
   create_table "exchange_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "base_currency", null: false
     t.string "converted_currency", null: false
@@ -111,7 +101,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_19_154732) do
     t.date "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["base_currency", "converted_currency", "date"], name: "idx_on_base_currency_converted_currency_date_255be792be", unique: true
+    t.index ["base_currency", "converted_currency", "date"], name: "index_exchange_rates_on_base_converted_date_unique", unique: true
     t.index ["base_currency"], name: "index_exchange_rates_on_base_currency"
     t.index ["converted_currency"], name: "index_exchange_rates_on_converted_currency"
   end

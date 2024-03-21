@@ -1,13 +1,310 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-# one:
-#   base_currency: one
-#   converted_currency: one
-#   rate: 9.99
-#   date: 2024-02-09
-
-# two:
-#   base_currency: two
-#   converted_currency: two
-#   rate: 9.99
-#   date: 2024-02-09
+day_30_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0926
+  date: <%= 30.days.ago.to_date %>
+day_29_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.094
+  date: <%= 29.days.ago.to_date %>
+day_28_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.095
+  date: <%= 28.days.ago.to_date %>
+day_27_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0898
+  date: <%= 27.days.ago.to_date %>
+day_26_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0858
+  date: <%= 26.days.ago.to_date %>
+day_25_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0856
+  date: <%= 25.days.ago.to_date %>
+day_24_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.084
+  date: <%= 24.days.ago.to_date %>
+day_23_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0807
+  date: <%= 23.days.ago.to_date %>
+day_22_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0839
+  date: <%= 22.days.ago.to_date %>
+day_21_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0845
+  date: <%= 21.days.ago.to_date %>
+day_20_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0854
+  date: <%= 20.days.ago.to_date %>
+day_19_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0822
+  date: <%= 19.days.ago.to_date %>
+day_18_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0824
+  date: <%= 18.days.ago.to_date %>
+day_17_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0818
+  date: <%= 17.days.ago.to_date %>
+day_16_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0809
+  date: <%= 16.days.ago.to_date %>
+day_15_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.078
+  date: <%= 15.days.ago.to_date %>
+day_14_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0778
+  date: <%= 14.days.ago.to_date %>
+day_13_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0773
+  date: <%= 13.days.ago.to_date %>
+day_12_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0729
+  date: <%= 12.days.ago.to_date %>
+day_11_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0709
+  date: <%= 11.days.ago.to_date %>
+day_10_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0773
+  date: <%= 10.days.ago.to_date %>
+day_9_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0783
+  date: <%= 9.days.ago.to_date %>
+day_8_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0778
+  date: <%= 8.days.ago.to_date %>
+day_7_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0774
+  date: <%= 7.days.ago.to_date %>
+day_6_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0755
+  date: <%= 6.days.ago.to_date %>
+day_5_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0743
+  date: <%= 5.days.ago.to_date %>
+day_4_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0788
+  date: <%= 4.days.ago.to_date %>
+day_3_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0872
+  date: <%= 3.days.ago.to_date %>
+day_2_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0819
+  date: <%= 2.days.ago.to_date %>
+day_1_ago_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0845
+  date: <%= 1.days.ago.to_date %>
+today_eur_to_usd:
+  base_currency: EUR
+  converted_currency: USD
+  rate: 1.0834
+  date: <%= Date.current %>
+day_30_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9179
+  date: <%= 30.days.ago.to_date %>
+day_29_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9154
+  date: <%= 29.days.ago.to_date %>
+day_28_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9107
+  date: <%= 28.days.ago.to_date %>
+day_27_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9139
+  date: <%= 27.days.ago.to_date %>
+day_26_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9082
+  date: <%= 26.days.ago.to_date %>
+day_25_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9077
+  date: <%= 25.days.ago.to_date %>
+day_24_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9054
+  date: <%= 24.days.ago.to_date %>
+day_23_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9004
+  date: <%= 23.days.ago.to_date %>
+day_22_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9040
+  date: <%= 22.days.ago.to_date %>
+day_21_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9060
+  date: <%= 21.days.ago.to_date %>
+day_20_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9052
+  date: <%= 20.days.ago.to_date %>
+day_19_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9139
+  date: <%= 19.days.ago.to_date %>
+day_18_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9155
+  date: <%= 18.days.ago.to_date %>
+day_17_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9135
+  date: <%= 17.days.ago.to_date %>
+day_16_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9141
+  date: <%= 16.days.ago.to_date %>
+day_15_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9131
+  date: <%= 15.days.ago.to_date %>
+day_14_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9147
+  date: <%= 14.days.ago.to_date %>
+day_13_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9112
+  date: <%= 13.days.ago.to_date %>
+day_12_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9115
+  date: <%= 12.days.ago.to_date %>
+day_11_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9132
+  date: <%= 11.days.ago.to_date %>
+day_10_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9130
+  date: <%= 10.days.ago.to_date %>
+day_9_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9192
+  date: <%= 9.days.ago.to_date %>
+day_8_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9188
+  date: <%= 8.days.ago.to_date %>
+day_7_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9194
+  date: <%= 7.days.ago.to_date %>
+day_6_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9177
+  date: <%= 6.days.ago.to_date %>
+day_5_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9187
+  date: <%= 5.days.ago.to_date %>
+day_4_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9213
+  date: <%= 4.days.ago.to_date %>
+day_3_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9186
+  date: <%= 3.days.ago.to_date %>
+day_2_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9218
+  date: <%= 2.days.ago.to_date %>
+day_1_ago_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9213
+  date: <%= 1.days.ago.to_date %>
+today_usd_to_eur:
+  base_currency: USD
+  converted_currency: EUR
+  rate: 0.9141
+  date: <%= Date.current %>

@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   resources :transactions
   resources :accounts, shallow: true do
+    post :sync, on: :member
     resources :valuations
   end
 

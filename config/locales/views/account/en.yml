@@ -11,5 +11,7 @@ en:
         placeholder: Example account name
       select_accountable_type: What would you like to add?
       title: Add an account
+    sync:
+      success: Account sync started
     update:
       success: Account updated successfully

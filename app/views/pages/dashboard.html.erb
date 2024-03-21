@@ -10,7 +10,7 @@
         <%= render partial: "shared/balance_heading", locals: { 
             label: "Net Worth", 
             period: @period,
-            balance: Current.family.net_worth_money,
+            balance: Current.family.net_worth,
             trend: @net_worth_series.trend
         } 
         %>
@@ -26,7 +26,7 @@
           <%= render partial: "shared/balance_heading", locals: { 
                 label: "Assets",
                 period: @period,
-                balance: Current.family.assets_money,
+                balance: Current.family.assets,
                 trend: @asset_series.trend 
             } %>
         </div>
@@ -44,7 +44,7 @@
                 label: "Liabilities",
                 period: @period,
                 size: "md",
-                balance: Current.family.liabilities_money,
+                balance: Current.family.liabilities,
                 trend: @liability_series.trend
             } %>
         </div>

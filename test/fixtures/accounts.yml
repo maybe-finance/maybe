@@ -29,3 +29,20 @@ credit_card:
   balance: 1000
   accountable_type: Account::Credit
   accountable_id: "123e4567-e89b-12d3-a456-426614174003"
+
+eur_checking:
+  family: dylan_family
+  name: Euro Checking Account
+  currency: EUR
+  balance: 12000
+  accountable_type: Account::Depository
+  accountable_id: "123e4567-e89b-12d3-a456-426614174004"
+
+# Multi-currency account (e.g. Wise, Revolut, etc.)
+multi_currency:
+  family: dylan_family
+  name: Multi Currency Account
+  currency: USD # multi-currency accounts still have a "primary" currency
+  balance: 10000
+  accountable_type: Account::Depository
+  accountable_id: "123e4567-e89b-12d3-a456-426614174005"
