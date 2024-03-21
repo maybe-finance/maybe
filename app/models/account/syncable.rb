@@ -7,6 +7,9 @@ module Account::Syncable
 
     def sync
         update!(status: "syncing")
+
+        sync_exchange_rates
+
         calculator = Account::Balance::Calculator.new(self)
         calculator.calculate
         self.balances.upsert_all(calculator.daily_balances, unique_by: :index_account_balances_on_account_id_date_currency_unique)
@@ -23,5 +26,46 @@ module Account::Syncable
         first_transaction_date = self.transactions.order(:date).pluck(:date).first
 
         [ first_valuation_date, first_transaction_date&.prev_day ].compact.min || Date.current
+    end
+
+    # Finds all the rate pairs that are required to calculate balances for an account and syncs them
+    def sync_exchange_rates
+        rate_candidates = []
+
+        if multi_currency?
+            transactions_in_foreign_currency = self.transactions.where.not(currency: self.currency).pluck(:currency, :date).uniq
+            transactions_in_foreign_currency.each do |currency, date|
+                rate_candidates << { date: date, from_currency: currency, to_currency: self.currency }
+            end
+        end
+
+        if foreign_currency?
+            (effective_start_date..Date.current).each do |date|
+                rate_candidates << { date: date, from_currency: self.currency, to_currency: self.family.currency }
+            end
+        end
+
+        existing_rates = ExchangeRate.where(
+            base_currency: rate_candidates.map { |rc| rc[:from_currency] },
+            converted_currency: rate_candidates.map { |rc| rc[:to_currency] },
+            date: rate_candidates.map { |rc| rc[:date] }
+        ).pluck(:base_currency, :converted_currency, :date)
+
+        # Convert to a set for faster lookup
+        existing_rates_set = existing_rates.map { |er| [ er[0], er[1], er[2].to_s ] }.to_set
+
+        rate_candidates.each do |rate_candidate|
+            rc_from = Money::Currency.new(rate_candidate[:from_currency])
+            rc_to = Money::Currency.new(rate_candidate[:to_currency])
+            rc_date = rate_candidate[:date]
+
+            next if existing_rates_set.include?([ rc_from.iso_code, rc_to.iso_code, rc_date.to_s ])
+
+            logger.info "Fetching exchange rate from Synth for #{rc_from.iso_code} to #{rc_to.iso_code} on #{rc_date}"
+            rate = ExchangeRate.fetch_rate_from_provider(rc_from.iso_code, rc_to.iso_code, rc_date)
+            ExchangeRate.create! base_currency: rc_from.iso_code, converted_currency: rc_to.iso_code, date: rc_date, rate: rate if rate
+        end
+
+        nil
     end
 end

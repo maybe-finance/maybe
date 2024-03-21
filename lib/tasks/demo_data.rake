@@ -33,8 +33,8 @@ namespace :demo_data do
 
     multi_currency_checking_transactions = [
       { date: Date.today - 84, amount: 3000, name: "Paycheck", currency: "USD" },
-      { date: Date.today - 70, amount: -1500, name: "Rent Payment", currency: "EUR" },
-      { date: Date.today - 70, amount: -200, name: "Groceries", currency: "EUR" },
+      { date: Date.today - 58, amount: -1500, name: "Rent Payment", currency: "EUR" },
+      { date: Date.today - 57, amount: -200, name: "Groceries", currency: "EUR" },
       { date: Date.today - 56, amount: 3000, name: "Paycheck", currency: "USD" },
       { date: Date.today - 42, amount: -1500, name: "Rent Payment", currency: "EUR" },
       { date: Date.today - 42, amount: -100, name: "Utilities", currency: "EUR" },
@@ -114,18 +114,13 @@ namespace :demo_data do
     end
 
     euro_savings_transactions = [
-      { date: Date.today - 360, amount: -500, name: "Initial Deposit", currency: "EUR" },
-      { date: Date.today - 330, amount: -100, name: "Monthly Savings", currency: "EUR" },
-      { date: Date.today - 300, amount: -100, name: "Monthly Savings", currency: "EUR" },
-      { date: Date.today - 270, amount: -100, name: "Monthly Savings", currency: "EUR" },
-      { date: Date.today - 240, amount: -100, name: "Monthly Savings", currency: "EUR" },
-      { date: Date.today - 210, amount: -100, name: "Monthly Savings", currency: "EUR" },
-      { date: Date.today - 180, amount: -100, name: "Monthly Savings", currency: "EUR" },
-      { date: Date.today - 150, amount: -100, name: "Monthly Savings", currency: "EUR" },
-      { date: Date.today - 120, amount: -100, name: "Monthly Savings", currency: "EUR" },
-      { date: Date.today - 90, amount: 500, name: "Withdrawal", currency: "EUR" },
-      { date: Date.today - 60, amount: -100, name: "Monthly Savings", currency: "EUR" },
-      { date: Date.today - 30, amount: -100, name: "Monthly Savings", currency: "EUR" }
+      { date: Date.today - 55, amount: -500, name: "Initial Deposit", currency: "EUR" },
+      { date: Date.today - 40, amount: -100, name: "Savings", currency: "EUR" },
+      { date: Date.today - 15, amount: -100, name: "Savings", currency: "EUR" },
+      { date: Date.today - 10, amount: -100, name: "Savings", currency: "EUR" },
+      { date: Date.today - 9, amount: 500, name: "Withdrawal", currency: "EUR" },
+      { date: Date.today - 5, amount: -100, name: "Savings", currency: "EUR" },
+      { date: Date.today - 2, amount: -100, name: "Savings", currency: "EUR" }
     ]
 
     euro_savings_transactions.each do |t|
@@ -235,10 +230,8 @@ namespace :demo_data do
       end
 
     crypto_valuations = [
-    { date: 1.year.ago.to_date, value: 0.05, currency: "BTC" },
-    { date: 200.days.ago.to_date, value: 0.06, currency: "BTC" },
-    { date: 100.days.ago.to_date, value: 0.08, currency: "BTC" },
-    { date: 20.days.ago.to_date, value: 0.1, currency: "BTC" }
+      { date: 1.week.ago.to_date, value: 0.08, currency: "BTC" },
+      { date: 2.days.ago.to_date, value: 0.1, currency: "BTC" }
     ]
 
     crypto.valuations.upsert_all(crypto_valuations, unique_by: :index_valuations_on_account_id_and_date)
@@ -372,101 +365,24 @@ namespace :demo_data do
 
     personal_iou.sync
 
-    # Just a few exchange rates for demo purposes to get started
-    exchange_rates = [
-      { date: "2024-03-11", base_currency: "USD", converted_currency: "EUR", rate: 0.9152 },
-      { date: "2024-03-08", base_currency: "USD", converted_currency: "EUR", rate: 0.9141 },
-      { date: "2024-03-07", base_currency: "USD", converted_currency: "EUR", rate: 0.9133 },
-      { date: "2024-03-06", base_currency: "USD", converted_currency: "EUR", rate: 0.9176 },
-      { date: "2024-03-05", base_currency: "USD", converted_currency: "EUR", rate: 0.9209 },
-      { date: "2024-03-04", base_currency: "USD", converted_currency: "EUR", rate: 0.9212 },
-      { date: "2024-03-01", base_currency: "USD", converted_currency: "EUR", rate: 0.9224 },
-      { date: "2024-02-29", base_currency: "USD", converted_currency: "EUR", rate: 0.9254 },
-      { date: "2024-02-28", base_currency: "USD", converted_currency: "EUR", rate: 0.9225 },
-      { date: "2024-02-27", base_currency: "USD", converted_currency: "EUR", rate: 0.9220 },
-      { date: "2024-02-26", base_currency: "USD", converted_currency: "EUR", rate: 0.9214 },
-      { date: "2024-02-23", base_currency: "USD", converted_currency: "EUR", rate: 0.9240 },
-      { date: "2024-02-22", base_currency: "USD", converted_currency: "EUR", rate: 0.9238 },
-      { date: "2024-02-21", base_currency: "USD", converted_currency: "EUR", rate: 0.9243 },
-      { date: "2024-02-20", base_currency: "USD", converted_currency: "EUR", rate: 0.9252 },
-      { date: "2024-02-19", base_currency: "USD", converted_currency: "EUR", rate: 0.9275 },
-      { date: "2024-02-16", base_currency: "USD", converted_currency: "EUR", rate: 0.9278 },
-      { date: "2024-02-15", base_currency: "USD", converted_currency: "EUR", rate: 0.9282 },
-      { date: "2024-02-14", base_currency: "USD", converted_currency: "EUR", rate: 0.9322 },
-      { date: "2024-02-13", base_currency: "USD", converted_currency: "EUR", rate: 0.9338 },
-      { date: "2024-02-12", base_currency: "USD", converted_currency: "EUR", rate: 0.9283 },
-      { date: "2024-02-09", base_currency: "USD", converted_currency: "EUR", rate: 0.9273 },
-      { date: "2024-02-08", base_currency: "USD", converted_currency: "EUR", rate: 0.9278 },
-      { date: "2024-02-07", base_currency: "USD", converted_currency: "EUR", rate: 0.9282 },
-      { date: "2024-02-06", base_currency: "USD", converted_currency: "EUR", rate: 0.9298 },
-      { date: "2024-02-05", base_currency: "USD", converted_currency: "EUR", rate: 0.9308 },
-      { date: "2024-02-02", base_currency: "USD", converted_currency: "EUR", rate: 0.9270 },
-      { date: "2024-02-01", base_currency: "USD", converted_currency: "EUR", rate: 0.9198 },
-      { date: "2024-01-31", base_currency: "USD", converted_currency: "EUR", rate: 0.9243 },
-      { date: "2024-01-30", base_currency: "USD", converted_currency: "EUR", rate: 0.9221 },
-      { date: "2024-01-29", base_currency: "USD", converted_currency: "EUR", rate: 0.9231 },
-      { date: "2024-03-11", base_currency: "EUR", converted_currency: "USD", rate: 1.0926 },
-      { date: "2024-03-08", base_currency: "EUR", converted_currency: "USD", rate: 1.0940 },
-      { date: "2024-03-07", base_currency: "EUR", converted_currency: "USD", rate: 1.0950 },
-      { date: "2024-03-06", base_currency: "EUR", converted_currency: "USD", rate: 1.0898 },
-      { date: "2024-03-05", base_currency: "EUR", converted_currency: "USD", rate: 1.0858 },
-      { date: "2024-03-04", base_currency: "EUR", converted_currency: "USD", rate: 1.0856 },
-      { date: "2024-03-01", base_currency: "EUR", converted_currency: "USD", rate: 1.0840 },
-      { date: "2024-02-29", base_currency: "EUR", converted_currency: "USD", rate: 1.0807 },
-      { date: "2024-02-28", base_currency: "EUR", converted_currency: "USD", rate: 1.0839 },
-      { date: "2024-02-27", base_currency: "EUR", converted_currency: "USD", rate: 1.0845 },
-      { date: "2024-02-26", base_currency: "EUR", converted_currency: "USD", rate: 1.0854 },
-      { date: "2024-02-23", base_currency: "EUR", converted_currency: "USD", rate: 1.0822 },
-      { date: "2024-02-22", base_currency: "EUR", converted_currency: "USD", rate: 1.0824 },
-      { date: "2024-02-21", base_currency: "EUR", converted_currency: "USD", rate: 1.0818 },
-      { date: "2024-02-20", base_currency: "EUR", converted_currency: "USD", rate: 1.0809 },
-      { date: "2024-02-19", base_currency: "EUR", converted_currency: "USD", rate: 1.0780 },
-      { date: "2024-02-16", base_currency: "EUR", converted_currency: "USD", rate: 1.0778 },
-      { date: "2024-02-15", base_currency: "EUR", converted_currency: "USD", rate: 1.0773 },
-      { date: "2024-02-14", base_currency: "EUR", converted_currency: "USD", rate: 1.0729 },
-      { date: "2024-02-13", base_currency: "EUR", converted_currency: "USD", rate: 1.0709 },
-      { date: "2024-02-12", base_currency: "EUR", converted_currency: "USD", rate: 1.0773 },
-      { date: "2024-02-09", base_currency: "EUR", converted_currency: "USD", rate: 1.0783 },
-      { date: "2024-02-08", base_currency: "EUR", converted_currency: "USD", rate: 1.0778 },
-      { date: "2024-02-07", base_currency: "EUR", converted_currency: "USD", rate: 1.0774 },
-      { date: "2024-02-06", base_currency: "EUR", converted_currency: "USD", rate: 1.0755 },
-      { date: "2024-02-05", base_currency: "EUR", converted_currency: "USD", rate: 1.0743 },
-      { date: "2024-02-02", base_currency: "EUR", converted_currency: "USD", rate: 1.0788 },
-      { date: "2024-02-01", base_currency: "EUR", converted_currency: "USD", rate: 1.0872 },
-      { date: "2024-01-31", base_currency: "EUR", converted_currency: "USD", rate: 1.0819 },
-      { date: "2024-01-30", base_currency: "EUR", converted_currency: "USD", rate: 1.0845 },
-      { date: "2024-01-29", base_currency: "EUR", converted_currency: "USD", rate: 1.0834 },
-      { date: "2024-01-26", base_currency: "EUR", converted_currency: "USD", rate: 1.0855 },
-      { date: "2024-01-25", base_currency: "EUR", converted_currency: "USD", rate: 1.0849 },
-      { date: "2024-01-24", base_currency: "EUR", converted_currency: "USD", rate: 1.0886 },
-      { date: "2024-01-23", base_currency: "EUR", converted_currency: "USD", rate: 1.0855 },
-      { date: "2024-01-22", base_currency: "EUR", converted_currency: "USD", rate: 1.0884 },
-      { date: "2024-01-19", base_currency: "EUR", converted_currency: "USD", rate: 1.0897 },
-      { date: "2024-01-18", base_currency: "EUR", converted_currency: "USD", rate: 1.0877 },
-      { date: "2024-01-17", base_currency: "EUR", converted_currency: "USD", rate: 1.0883 },
-      { date: "2024-01-16", base_currency: "EUR", converted_currency: "USD", rate: 1.0878 },
-      { date: "2024-01-15", base_currency: "EUR", converted_currency: "USD", rate: 1.0953 },
-      { date: "2024-01-12", base_currency: "EUR", converted_currency: "USD", rate: 1.0951 },
-      { date: "2024-01-11", base_currency: "EUR", converted_currency: "USD", rate: 1.0972 },
-      { date: "2024-01-10", base_currency: "EUR", converted_currency: "USD", rate: 1.0975 },
-      { date: "2024-01-09", base_currency: "EUR", converted_currency: "USD", rate: 1.0933 },
-      { date: "2024-01-08", base_currency: "EUR", converted_currency: "USD", rate: 1.0952 },
-      { date: "2024-01-05", base_currency: "EUR", converted_currency: "USD", rate: 1.0939 },
-      { date: "2024-01-04", base_currency: "EUR", converted_currency: "USD", rate: 1.0946 },
-      { date: "2024-01-03", base_currency: "EUR", converted_currency: "USD", rate: 1.0922 },
-      { date: "2024-01-02", base_currency: "EUR", converted_currency: "USD", rate: 1.0940 },
-      { date: "2024-01-01", base_currency: "EUR", converted_currency: "USD", rate: 1.1047 },
-      { date: "2023-12-29", base_currency: "EUR", converted_currency: "USD", rate: 1.1038 },
-      { date: "2023-12-28", base_currency: "EUR", converted_currency: "USD", rate: 1.1061 },
-      { date: "2023-12-27", base_currency: "EUR", converted_currency: "USD", rate: 1.1106 },
-      { date: "2023-12-26", base_currency: "EUR", converted_currency: "USD", rate: 1.1044 },
-      { date: "2023-12-25", base_currency: "EUR", converted_currency: "USD", rate: 1.1017 },
-      { date: "2023-12-22", base_currency: "EUR", converted_currency: "USD", rate: 1.1014 },
-      { date: "2023-12-21", base_currency: "EUR", converted_currency: "USD", rate: 1.1011 },
-      { date: "2023-12-20", base_currency: "EUR", converted_currency: "USD", rate: 1.0942 },
-      { date: "2023-12-19", base_currency: "EUR", converted_currency: "USD", rate: 1.0980 },
-      { date: "2023-12-18", base_currency: "EUR", converted_currency: "USD", rate: 1.0924 }
-    ]
+    # Mock exchange rates for last 60 days (these rates are reasonable for EUR:USD, but not exact)
+    exchange_rates = (0..60).map do |days_ago|
+      {
+        date: Date.current - days_ago.days,
+        base_currency: "EUR",
+        converted_currency: "USD",
+        rate: rand(1.0840..1.0924).round(4)
+      }
+    end
+
+    exchange_rates += (0..20).map do |days_ago|
+      {
+        date: Date.current - days_ago.days,
+        base_currency: "BTC",
+        converted_currency: "USD",
+        rate: rand(60000..65000).round(2)
+      }
+    end
 
     ExchangeRate.upsert_all(exchange_rates, unique_by: :index_exchange_rates_on_base_converted_date_unique)
 

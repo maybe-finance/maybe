@@ -64,10 +64,6 @@ class Account < ApplicationRecord
     end
   end
 
-  def balance_money_converted
-    balance_money.exchange_to(family.currency) || Money.new(0, family.currency)
-  end
-
   def self.by_group(period: Period.all, currency: Money.default_currency)
     grouped_accounts = { assets: ValueGroup.new("Assets", currency), liabilities: ValueGroup.new("Liabilities", currency) }
 
@@ -75,12 +71,12 @@ class Account < ApplicationRecord
       types.each do |type|
         group = grouped_accounts[classification.to_sym].add_child_group(type, currency)
         Accountable.from_type(type).includes(:account).each do |accountable|
-          next if accountable.account.balance_money_converted.nil?
+          account = accountable.account
 
           value_node = group.add_value_node(
-            accountable.account,
-            :balance_money_converted,
-            accountable.account.series(period: period, currency: currency)
+            account,
+            account.balance_money.exchange_to(currency) || Money.new(0, currency),
+            account.series(period: period, currency: currency)
           )
         end
       end

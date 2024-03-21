@@ -14,9 +14,9 @@ class ValueGroupTest < ActiveSupport::TestCase
         @other_assets = @assets.add_child_group("Other Assets", :usd)
 
         # Level 3 (leaf/value nodes)
-        @checking_node = @depositories.add_value_node(OpenStruct.new({ name: "Checking", value: Money.new(5000) }), :value)
-        @savings_node = @depositories.add_value_node(OpenStruct.new({ name: "Savings", value: Money.new(20000) }), :value)
-        @collectable_node = @other_assets.add_value_node(OpenStruct.new({ name: "Collectable", value: Money.new(550) }), :value)
+        @checking_node = @depositories.add_value_node(OpenStruct.new({ name: "Checking", value: Money.new(5000) }), Money.new(5000))
+        @savings_node = @depositories.add_value_node(OpenStruct.new({ name: "Savings", value: Money.new(20000) }), Money.new(20000))
+        @collectable_node = @other_assets.add_value_node(OpenStruct.new({ name: "Collectable", value: Money.new(550) }), Money.new(550))
     end
 
     test "empty group works" do
@@ -132,14 +132,14 @@ class ValueGroupTest < ActiveSupport::TestCase
         grandparent = root.add_child_group("Grandparent")
         parent = grandparent.add_child_group("Parent")
 
-        value_node = parent.add_value_node(OpenStruct.new({ name: "Value Node", value: Money.new(100) }), :value)
+        value_node = parent.add_value_node(OpenStruct.new({ name: "Value Node", value: Money.new(100) }), Money.new(100))
 
         assert_raises(RuntimeError) do
-            value_node.add_value_node(OpenStruct.new({ name: "Value Node", value: Money.new(100) }), :value)
+            value_node.add_value_node(OpenStruct.new({ name: "Value Node", value: Money.new(100) }), Money.new(100))
         end
 
         assert_raises(RuntimeError) do
-            grandparent.add_value_node(OpenStruct.new({ name: "Value Node", value: Money.new(100) }), :value)
+            grandparent.add_value_node(OpenStruct.new({ name: "Value Node", value: Money.new(100) }), Money.new(100))
         end
     end
 end

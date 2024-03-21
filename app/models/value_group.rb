@@ -68,13 +68,13 @@
         child
     end
 
-    def add_value_node(obj, value_method, series = nil)
+    def add_value_node(original, value, series = nil)
         raise "Cannot add value node to a non-leaf node" unless can_add_value_node?
-        child = self.class.new(obj.name)
-        child.value = obj.send(value_method)
-        child.original = obj
-        child.parent = self
+        child = self.class.new(original.name)
+        child.original = original
+        child.value = value
         child.series = series
+        child.parent = self
         @children << child
         child
     end

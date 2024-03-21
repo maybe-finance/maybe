@@ -47,7 +47,7 @@ For further instructions, see guides below.
 
 If you'd like multi-currency support, there are a few extra steps to follow.
 
-1. Sign up for an API key at [Synth](https://synthfinance.com). It's a Maybe product and the free plan is sufficient for multi-currency support.
+1. Sign up for an API key at [Synth](https://synthfinance.com). It's a Maybe product and the free plan is sufficient for basic multi-currency support.
 2. Add your API key to your `.env` file.
 
 ### Setup Guides

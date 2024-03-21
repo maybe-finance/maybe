@@ -44,13 +44,11 @@ class Account::Balance::Calculator
 
     private
       def convert_balances_to_family_currency
-        rates = ExchangeRate.where(
-                  base_currency: @account.currency,
-                  converted_currency: @account.family.currency,
-                  date: @calc_start_date..Date.current
-                )
-                .order(:date)
-                .to_a
+        rates = ExchangeRate.get_rate_series(
+          @account.currency,
+          @account.family.currency,
+          @calc_start_date..Date.current
+        ).to_a
 
         @daily_balances.map do |balance|
           rate = rates.find { |rate| rate.date == balance[:date] }
