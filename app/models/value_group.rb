@@ -50,8 +50,12 @@
         children.flat_map { |child| child.value_nodes }
     end
 
+    def empty?
+        value_nodes.empty?
+    end
+
     def percent_of_total
-        return 100 if parent.nil?
+        return 100 if parent.nil? || parent.sum.zero?
         ((sum / parent.sum) * 100).round(1)
     end
 

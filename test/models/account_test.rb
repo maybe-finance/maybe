@@ -70,8 +70,8 @@ class AccountTest < ActiveSupport::TestCase
     assets = result[:assets]
     liabilities = result[:liabilities]
 
-    assert_equal @family.assets_money, assets.sum
-    assert_equal @family.liabilities_money, liabilities.sum
+    assert_equal @family.assets, assets.sum
+    assert_equal @family.liabilities, liabilities.sum
 
     depositories = assets.children.find { |group| group.name == "Account::Depository" }
     properties = assets.children.find { |group| group.name == "Account::Property" }
@@ -102,5 +102,12 @@ class AccountTest < ActiveSupport::TestCase
 
     # Synced series will always have final balance equal to the current account balance
     assert_equal @account.balance_money, @account.series.last.value
+  end
+
+  test "generates empty series for foreign currency if no exchange rate" do
+    account = accounts(:eur_checking)
+
+    # We know EUR -> NZD exchange rate is not available in fixtures
+    assert_equal 0, account.series(currency: "NZD").values.count
   end
 end

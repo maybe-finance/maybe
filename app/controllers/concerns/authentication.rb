@@ -10,7 +10,6 @@ module Authentication
   def authenticate_user!
     if user = User.find_by(id: session[:user_id])
       Current.user = user
-      set_user_defaults(user)
     else
       redirect_to new_session_url
     end
@@ -29,9 +28,5 @@ module Authentication
   def logout
     Current.user = nil
     reset_session
-  end
-
-  def set_user_defaults(user)
-    Money.default_currency = user.family.currency
   end
 end

@@ -1,12 +1,8 @@
 class Family < ApplicationRecord
-  include Monetizable
-
   has_many :users, dependent: :destroy
   has_many :accounts, dependent: :destroy
   has_many :transactions, through: :accounts
   has_many :transaction_categories, dependent: :destroy, class_name: "Transaction::Category"
-
-  monetize :net_worth, :assets, :liabilities
 
   def snapshot(period = Period.all)
     query = accounts.active.joins(:balances)
@@ -21,10 +17,8 @@ class Family < ApplicationRecord
       .group("account_balances.date, account_balances.currency")
       .order("account_balances.date")
 
-    query = query.where("account_balances.date BETWEEN ? AND ?", period.date_range.begin, period.date_range.end) if period.date_range
-
-    result = query.to_a
-
+    query = query.where("account_balances.date >= ?", period.date_range.begin) if period.date_range.begin
+    query = query.where("account_balances.date <= ?", period.date_range.end) if period.date_range.end
     result = query.to_a
 
     {
@@ -39,14 +33,14 @@ class Family < ApplicationRecord
   end
 
   def net_worth
-    Money.new(accounts.active.sum("CASE WHEN classification = 'asset' THEN balance ELSE -balance END"), currency)
+    assets - liabilities
   end
 
   def assets
-    accounts.active.assets.sum(:balance)
+    Money.new(accounts.active.assets.map { |account| account.balance_money.exchange_to(currency) || 0 }.sum, currency)
   end
 
   def liabilities
-    Money.new(accounts.active.liabilities.sum(:balance), currency)
+    Money.new(accounts.active.liabilities.map { |account| account.balance_money.exchange_to(currency) || 0 }.sum, currency)
   end
 end

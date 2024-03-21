@@ -9,11 +9,4 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     get root_path
     assert_response :ok
   end
-
-  test "default currency set" do
-    @user.family.update(currency: "EUR")
-    get root_path
-    assert_equal "EUR", Money.default_currency.iso_code
-    assert_response :ok
-  end
 end

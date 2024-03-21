@@ -48,14 +48,24 @@ class Account < ApplicationRecord
     exists?(status: "syncing")
   end
 
+
   def series(period: Period.all, currency: self.currency)
     balance_series = balances.in_period(period).where(currency: Money::Currency.new(currency).iso_code)
 
     if balance_series.empty? && period.date_range.end == Date.current
-      TimeSeries.new([ { date: Date.current, value: balance_money } ])
+      converted_balance = balance_money.exchange_to(currency)
+      if converted_balance
+        TimeSeries.new([ { date: Date.current, value: converted_balance } ])
+      else
+        TimeSeries.new([])
+      end
     else
       TimeSeries.from_collection(balance_series, :balance_money)
     end
+  end
+
+  def balance_money_converted
+    balance_money.exchange_to(family.currency) || Money.new(0, family.currency)
   end
 
   def self.by_group(period: Period.all, currency: Money.default_currency)
@@ -65,10 +75,12 @@ class Account < ApplicationRecord
       types.each do |type|
         group = grouped_accounts[classification.to_sym].add_child_group(type, currency)
         Accountable.from_type(type).includes(:account).each do |accountable|
+          next if accountable.account.balance_money_converted.nil?
+
           value_node = group.add_value_node(
             accountable.account,
-            :balance_money,
-            accountable.account.series(period: period)
+            :balance_money_converted,
+            accountable.account.series(period: period, currency: currency)
           )
         end
       end
