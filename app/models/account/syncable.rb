@@ -61,7 +61,7 @@ module Account::Syncable
 
             next if existing_rates_set.include?([ rc_from.iso_code, rc_to.iso_code, rc_date.to_s ])
 
-            logger.info "Fetching exchange rate from Synth for #{rc_from.iso_code} to #{rc_to.iso_code} on #{rc_date}"
+            logger.info "Fetching exchange rate from provider for #{rc_from.iso_code} to #{rc_to.iso_code} on #{rc_date}"
             rate = ExchangeRate.fetch_rate_from_provider(rc_from.iso_code, rc_to.iso_code, rc_date)
             ExchangeRate.create! base_currency: rc_from.iso_code, converted_currency: rc_to.iso_code, date: rc_date, rate: rate if rate
         end

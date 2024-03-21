@@ -76,7 +76,7 @@ module ApplicationHelper
   end
 
   def period_label(period)
-    return "since account creation" if period.date_range.nil?
+    return "since account creation" if period.date_range.begin.nil?
     start_date, end_date = period.date_range.first, period.date_range.last
 
     return "Starting from #{start_date.strftime('%b %d, %Y')}" if end_date.nil?
