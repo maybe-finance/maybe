@@ -92,8 +92,4 @@ class MoneyTest < ActiveSupport::TestCase
         er = exchange_rates(:today_usd_to_eur)
         assert_equal Money.new(1000).exchange_to(:eur), Money.new(1000 * er.rate, :eur)
     end
-
-    test "returns nil if exchange rate not available" do
-        assert_nil Money.new(1000).exchange_to(:jpy)
-    end
 end

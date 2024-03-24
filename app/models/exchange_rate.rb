@@ -13,8 +13,7 @@ class ExchangeRate < ApplicationRecord
       _to = Money::Currency.new(to)
       find_by! base_currency: _from.iso_code, converted_currency: _to.iso_code, date: date
     rescue
-      logger.warn "Exchange rate not found for #{_from.iso_code} to #{_to.iso_code} on #{date}"
-      nil
+      Provided::ExchangeRate.new.fetch_exchange_rate(from:, to:, date:).tap(&:save!)
     end
 
     def get_rate_series(from, to, date_range)
