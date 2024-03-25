@@ -21,7 +21,7 @@ class ExchangeRate < ApplicationRecord
 
     private
       def fetch_rate_from_provider(from:, to:, date:)
-        Provided::ExchangeRate.new.fetch_exchange_rate(from:, to:, date:)
+        Provided::ExchangeRate.new.fetch(from:, to:, date:)
       end
   end
 end

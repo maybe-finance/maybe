@@ -5,7 +5,7 @@ class Provided::ExchangeRate
     @provider ||= exchange_rates_provider
   end
 
-  def fetch_exchange_rate(from:, to:, date:)
+  def fetch(from:, to:, date:)
     retrying Provider::Base.known_transient_errors do
       response = provider.fetch_exchange_rate(from:, to:, date:)
 
