@@ -6,15 +6,10 @@ class SettingsController < ApplicationController
 
   def update
     user_params_with_family = user_params
-    # Ensure we're only updating the family associated with the current user
+
     if Current.family
       family_attributes = user_params_with_family[:family_attributes].merge({ id: Current.family.id })
       user_params_with_family[:family_attributes] = family_attributes
-    end
-
-    # If the family attribute for currency is changed, we need to convert all account balances to the new currency with the ConvertCurrencyJob job
-    if user_params_with_family[:family_attributes][:currency] != Current.family.currency
-      ConvertCurrencyJob.perform_later(Current.family)
     end
 
     if Current.user.update(user_params_with_family)
