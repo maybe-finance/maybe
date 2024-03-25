@@ -1,7 +1,7 @@
 module Providable
   extend ActiveSupport::Concern
 
-  KNOWN_PROVIDERS = %w[ synth null ]
+  KNOWN_PROVIDERS = %w[ synth zillow null ]
 
   class_methods do
     def exchange_rates_provider
