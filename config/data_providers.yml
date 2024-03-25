@@ -1,4 +1,4 @@
 shared:
   exchange_rates:
     provider: <%= ENV.fetch "EXCHANGE_RATES_PROVIDER", "synth" %>
-    key: <%= ENV.fetch "EXCHANGE_RATES_API_KEY" %>
+    key: <%= ENV.fetch "EXCHANGE_RATES_API_KEY", ENV["SYNTH_API_KEY"] %>
