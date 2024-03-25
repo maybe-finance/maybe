@@ -1,8 +1,8 @@
 class Provided::ExchangeRate
   include Providable, Retryable
 
-  def provider
-    @provider ||= exchange_rates_provider
+  def initialize
+    @provider = exchange_rates_provider
   end
 
   def fetch(from:, to:, date:)
@@ -16,4 +16,7 @@ class Provided::ExchangeRate
         date: date
     end
   end
+
+  private
+    attr_reader :provider
 end

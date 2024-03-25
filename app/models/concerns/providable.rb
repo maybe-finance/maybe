@@ -5,11 +5,11 @@ module Providable
 
   class_methods do
     def exchange_rates_provider
-      provider :exchange_rates
+      provider_for :exchange_rates
     end
 
     private
-      def provider(concept)
+      def provider_for(concept)
         "Provider::#{provider_name(concept).camelize}"
           .constantize
           .new(provider_api_key(concept))
