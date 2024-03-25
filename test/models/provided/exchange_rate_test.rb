@@ -29,7 +29,7 @@ class Provided::ExchangeRateTest < ActiveSupport::TestCase
       .times(3)
 
     assert_raises(Provider::Base::ProviderError, "error message") do
-      ExchangeRate.get_rate("USD", "MXN", Date.parse("2024-03-24"))
+      ExchangeRate.find_rate_or_fetch from: "USD", to: "MXN", date: Date.parse("2024-03-24")
     end
   end
 
@@ -37,7 +37,7 @@ class Provided::ExchangeRateTest < ActiveSupport::TestCase
     Faraday.expects(:get).raises(Faraday::TimeoutError).times(3)
 
     assert_raises(Faraday::TimeoutError, "error message") do
-      ExchangeRate.get_rate("USD", "MXN", Date.parse("2024-03-24"))
+      ExchangeRate.find_rate_or_fetch from: "USD", to: "MXN", date: Date.parse("2024-03-24")
     end
   end
 end

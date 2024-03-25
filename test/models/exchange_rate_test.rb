@@ -1,29 +1,24 @@
 require "test_helper"
 
 class ExchangeRateTest < ActiveSupport::TestCase
-  test "get rate from db" do
+  test "find rate in db" do
     assert_equal exchange_rates(:day_30_ago_eur_to_usd),
-      ExchangeRate.get_rate("EUR", "USD", 30.days.ago.to_date)
+      ExchangeRate.find_rate_or_fetch(from: "EUR", to: "USD", date: 30.days.ago.to_date)
   end
 
-  test "get rate from provider when it's not found in db" do
+  test "fetch rate from provider when it's not found in db" do
     Provided::ExchangeRate.any_instance
       .expects(:fetch_exchange_rate)
       .returns(ExchangeRate.new(base_currency: "USD", converted_currency: "MXN", rate: 1.0, date: Date.parse("2024-03-24")))
 
-    get_missing_exchange_rate
+    ExchangeRate.find_rate_or_fetch from: "USD", to: "MXN", date: Date.parse("2024-03-24")
   end
 
-  test "save provided rates to the db" do
+  test "provided rates are saved to the db" do
     VCR.use_cassette("synth_exchange_rate") do
       assert_difference "ExchangeRate.count", 1 do
-        get_missing_exchange_rate
+        ExchangeRate.find_rate_or_fetch from: "USD", to: "MXN", date: Date.parse("2024-03-24")
       end
     end
   end
-
-  private
-    def get_missing_exchange_rate
-      ExchangeRate.get_rate("USD", "MXN", Date.parse("2024-03-24"))
-    end
 end
