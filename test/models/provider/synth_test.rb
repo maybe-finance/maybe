@@ -2,13 +2,9 @@ require "test_helper"
 
 class Provider::SynthTest < ActiveSupport::TestCase
   include ExchangeRateProviderInterfaceTest
+  include MerchantDataProviderInterfaceTest
 
   setup do
-    VCR.insert_cassette("synth_exchange_rate")
-    @subject = Provider::Synth.new("FAKE_API_KEY")
-  end
-
-  teardown do
-    VCR.eject_cassette
+    @subject = Provider::Synth.new(ENV["SYNTH_API_KEY"])
   end
 end

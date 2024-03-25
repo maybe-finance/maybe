@@ -9,7 +9,11 @@ VCR.configure do |config|
   config.cassette_library_dir = "test/vcr_cassettes"
   config.hook_into :webmock
   config.ignore_localhost = true
+
+  config.filter_sensitive_data("<SYNTH_API_KEY>") { ENV["SYNTH_API_KEY"] }
   config.filter_sensitive_data("<EXCHANGE_RATES_API_KEY>") { ENV["EXCHANGE_RATES_API_KEY"] }
+  config.filter_sensitive_data("<MERCHANT_DATA_API_KEY>") { ENV["MERCHANT_DATA_API_KEY"] }
+  config.filter_sensitive_data("<REAL_ESTATE_VALUATIONS_API_KEY>") { ENV["REAL_ESTATE_VALUATIONS_API_KEY"] }
 end
 
 module ActiveSupport

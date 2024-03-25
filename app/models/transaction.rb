@@ -23,8 +23,11 @@ class Transaction < ApplicationRecord
   end
 
   private
-
     def sync_account
       self.account.sync_later
+    end
+
+    def fetch_merchant_details
+      Provided::MerchantData.new.fetch details: "TODO: Implement me!"
     end
 end

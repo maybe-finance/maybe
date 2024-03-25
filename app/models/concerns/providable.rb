@@ -8,6 +8,14 @@ module Providable
       provider_for :exchange_rates
     end
 
+    def merchant_data_provider
+      provider_for :merchant_data
+    end
+
+    def real_estate_valuations_provider
+      provider_for :real_estate_valuations
+    end
+
     private
       def provider_for(concept)
         "Provider::#{provider_name(concept).camelize}"
@@ -31,5 +39,13 @@ module Providable
 
   def exchange_rates_provider
     self.class.exchange_rates_provider
+  end
+
+  def merchant_data_provider
+    self.class.merchant_data_provider
+  end
+
+  def real_estate_valuations
+    self.class.real_estate_valuations_provider
   end
 end
