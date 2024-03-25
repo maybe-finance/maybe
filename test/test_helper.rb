@@ -26,7 +26,12 @@ module ActiveSupport
     end
 
     def swap_provider_for(concept, to:)
-      Providable.stubs(:provider_name).with(concept).returns(to.to_s)
+      modified_providers = Rails.application.config_for("data_providers").tap do |providers|
+        providers[concept.to_sym] = { provider: to.to_s }
+      end
+
+      Rails.application.stubs(:config_for).with("data_providers").returns(modified_providers)
+
       yield
     end
   end

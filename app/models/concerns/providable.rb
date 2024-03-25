@@ -1,7 +1,9 @@
 module Providable
+  extend ActiveSupport::Concern
+
   KNOWN_PROVIDERS = %w[ synth null ]
 
-  class << self
+  class_methods do
     def exchange_rates_provider
       provider :exchange_rates
     end
@@ -28,6 +30,6 @@ module Providable
   end
 
   def exchange_rates_provider
-    Providable.exchange_rates_provider
+    self.class.exchange_rates_provider
   end
 end
