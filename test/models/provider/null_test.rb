@@ -1,9 +1,9 @@
 require "test_helper"
 
-class Provider::LocalTest < ActiveSupport::TestCase
+class Provider::NullTest < ActiveSupport::TestCase
   include ExchangeRateProviderInterfaceTest
 
   setup do
-    @subject = Provider::Local.new
+    @subject = Provider::Null.new
   end
 end

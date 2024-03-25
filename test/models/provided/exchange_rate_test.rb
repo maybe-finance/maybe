@@ -16,8 +16,8 @@ class Provided::ExchangeRateTest < ActiveSupport::TestCase
   end
 
   test "can be configured to use a different provider" do
-    swap_provider_for :exchange_rates, to: :local do
-      Provider::Local.any_instance.expects(:fetch_exchange_rate).with(from: "USD", to: "MXN", date: Date.parse("2024-03-24")).returns(OpenStruct.new(rate: 1.0))
+    swap_provider_for :exchange_rates, to: :null do
+      Provider::Null.any_instance.expects(:fetch_exchange_rate).with(from: "USD", to: "MXN", date: Date.parse("2024-03-24")).returns(OpenStruct.new(rate: 1.0))
       Provided::ExchangeRate.new.fetch_exchange_rate(from: "USD", to: "MXN", date: Date.parse("2024-03-24"))
     end
   end

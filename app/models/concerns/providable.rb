@@ -1,5 +1,5 @@
 module Providable
-  KNOWN_PROVIDERS = %w[ synth local ]
+  KNOWN_PROVIDERS = %w[ synth null ]
 
   class << self
     def exchange_rates_provider

@@ -1,7 +1,8 @@
 class Provider::Base
   ProviderError = Class.new(StandardError)
+  UnsupportedOperationError = Class.new(StandardError)
 
-  RETRYABLE_NETWORK_ERRORS = [
+  TRANSIENT_NETWORK_ERRORS = [
     Faraday::TimeoutError,
     Faraday::ConnectionFailed,
     Faraday::SSLError,
@@ -11,7 +12,7 @@ class Provider::Base
 
   class << self
     def known_transient_errors
-      RETRYABLE_NETWORK_ERRORS + [ ProviderError ]
+      TRANSIENT_NETWORK_ERRORS + [ ProviderError ]
     end
   end
 end
