@@ -9,7 +9,7 @@ class ExchangeRateTest < ActiveSupport::TestCase
   test "get rate from provider when it's not found in db" do
     Provided::ExchangeRate.any_instance
       .expects(:fetch_exchange_rate)
-      .returns(ExchangeRate.new(base_currency: "USD", converted_currency: "MXN", rate: 1.0, date: Date.current))
+      .returns(ExchangeRate.new(base_currency: "USD", converted_currency: "MXN", rate: 1.0, date: Date.parse("2024-03-24")))
 
     get_missing_exchange_rate
   end
@@ -24,6 +24,6 @@ class ExchangeRateTest < ActiveSupport::TestCase
 
   private
     def get_missing_exchange_rate
-      ExchangeRate.get_rate("USD", "MXN", Date.current)
+      ExchangeRate.get_rate("USD", "MXN", Date.parse("2024-03-24"))
     end
 end

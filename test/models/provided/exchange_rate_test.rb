@@ -4,21 +4,21 @@ class Provided::ExchangeRateTest < ActiveSupport::TestCase
   test "fetch rate" do
     VCR.use_cassette("synth_exchange_rate") do
       assert_instance_of ExchangeRate,
-        Provided::ExchangeRate.new.fetch_exchange_rate(from: "USD", to: "MXN", date: Date.current)
+        Provided::ExchangeRate.new.fetch_exchange_rate(from: "USD", to: "MXN", date: Date.parse("2024-03-24"))
     end
   end
 
   test "synth is used by default" do
     VCR.use_cassette("synth_exchange_rate") do
-      Provider::Synth.any_instance.expects(:fetch_exchange_rate).with(from: "USD", to: "MXN", date: Date.current).returns(OpenStruct.new(rate: 1.0))
-      Provided::ExchangeRate.new.fetch_exchange_rate(from: "USD", to: "MXN", date: Date.current)
+      Provider::Synth.any_instance.expects(:fetch_exchange_rate).with(from: "USD", to: "MXN", date: Date.parse("2024-03-24")).returns(OpenStruct.new(rate: 1.0))
+      Provided::ExchangeRate.new.fetch_exchange_rate(from: "USD", to: "MXN", date: Date.parse("2024-03-24"))
     end
   end
 
   test "can be configured to use a different provider" do
     swap_provider_for :exchange_rates, to: :local do
-      Provider::Local.any_instance.expects(:fetch_exchange_rate).with(from: "USD", to: "MXN", date: Date.current).returns(OpenStruct.new(rate: 1.0))
-      Provided::ExchangeRate.new.fetch_exchange_rate(from: "USD", to: "MXN", date: Date.current)
+      Provider::Local.any_instance.expects(:fetch_exchange_rate).with(from: "USD", to: "MXN", date: Date.parse("2024-03-24")).returns(OpenStruct.new(rate: 1.0))
+      Provided::ExchangeRate.new.fetch_exchange_rate(from: "USD", to: "MXN", date: Date.parse("2024-03-24"))
     end
   end
 
@@ -29,7 +29,7 @@ class Provided::ExchangeRateTest < ActiveSupport::TestCase
       .times(3)
 
     assert_raises(Provider::Base::ProviderError, "error message") do
-      ExchangeRate.get_rate("USD", "MXN", Date.current)
+      ExchangeRate.get_rate("USD", "MXN", Date.parse("2024-03-24"))
     end
   end
 
@@ -37,7 +37,7 @@ class Provided::ExchangeRateTest < ActiveSupport::TestCase
     Faraday.expects(:get).raises(Faraday::TimeoutError).times(3)
 
     assert_raises(Faraday::TimeoutError, "error message") do
-      ExchangeRate.get_rate("USD", "MXN", Date.current)
+      ExchangeRate.get_rate("USD", "MXN", Date.parse("2024-03-24"))
     end
   end
 end
