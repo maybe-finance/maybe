@@ -1,6 +1,6 @@
 class Provider::Synth < Provider::Base
   def initialize(api_key)
-    @api_key = api_key
+    @api_key = api_key || ENV["SYNTH_API_KEY"]
   end
 
   def fetch_exchange_rate(from:, to:, date:)

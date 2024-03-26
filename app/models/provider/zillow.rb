@@ -1,6 +1,6 @@
 class Provider::Zillow < Provider::Base
   def initialize(api_key)
-    @api_key = api_key
+    @api_key = api_key || ENV["ZILLOW_API_KEY"]
   end
 
   def fetch_real_estate_valuation(address:)
