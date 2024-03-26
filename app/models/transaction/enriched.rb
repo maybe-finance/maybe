@@ -1,4 +1,4 @@
-module Transaction::Provided
+module Transaction::Enriched
   include Providable
 
   def fetch_merchant_data_from_provider

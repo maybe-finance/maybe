@@ -1,4 +1,4 @@
 class Account::Property < ApplicationRecord
   include Accountable
-  include Provided
+  include Appraised
 end

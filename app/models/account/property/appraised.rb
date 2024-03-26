@@ -1,4 +1,4 @@
-module Account::Property::Provided
+module Account::Property::Appraised
   include Providable
 
   def fetch_valuation_from_provider

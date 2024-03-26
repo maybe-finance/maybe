@@ -1,6 +1,6 @@
 class Transaction < ApplicationRecord
   include Monetizable
-  include Provided
+  include Enriched
 
   belongs_to :account
   belongs_to :category, optional: true
