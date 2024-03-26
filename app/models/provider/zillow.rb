@@ -1,4 +1,4 @@
-class Provider::Zillow < Provider::Base
+class Provider::Zillow
   include Retryable
 
   def initialize(api_key)

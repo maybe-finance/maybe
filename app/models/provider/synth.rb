@@ -1,4 +1,4 @@
-class Provider::Synth < Provider::Base
+class Provider::Synth
   include Retryable
 
   def initialize(api_key)

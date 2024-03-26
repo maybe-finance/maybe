@@ -1,4 +1,4 @@
-class Provider::Null < Provider::Base
+class Provider::Null
   def initialize(...)
   end
 
