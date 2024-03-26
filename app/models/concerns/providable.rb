@@ -45,7 +45,7 @@ module Providable
     self.class.merchant_data_provider
   end
 
-  def real_estate_valuations
+  def real_estate_valuations_provider
     self.class.real_estate_valuations_provider
   end
 end
