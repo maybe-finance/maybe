@@ -3,7 +3,9 @@ module Retryable
     attempts = 0
 
     begin
-      yield
+      on_last_attempt = attempts == max_retries - 1
+
+      yield on_last_attempt
     rescue *retryable_errors => e
       attempts += 1
 

@@ -7,7 +7,7 @@ module ExchangeRateProviderInterfaceTest
 
   def test_exchange_rate_provider_response_contract
     accounting_for_http_providers do
-      assert_respond_to @subject.fetch_exchange_rate(from: "USD", to: "MXN", date: Date.parse("2024-03-24")), :rate
+      assert_respond_to @subject.fetch_exchange_rate(from: "USD", to: "MXN", date: Date.current), :rate
     end
   rescue Provider::Base::UnsupportedOperationError
     # raising this error is also acceptable

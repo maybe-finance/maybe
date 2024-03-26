@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api.synthfinance.com/rates/historical?date=2024-03-24&from=USD&to=MXN
+    uri: https://api.synthfinance.com/rates/historical?date=<%= Date.current.to_s %>&from=USD&to=MXN
     body:
       encoding: US-ASCII
       string: ''
@@ -64,6 +64,6 @@ http_interactions:
       - h3=":443"; ma=86400
     body:
       encoding: ASCII-8BIT
-      string: '{"data":{"date":"2024-03-24","source":"USD","rates":{"MXN":16.772475}},"meta":{"total_records":1,"credits_used":1,"credits_remaining":989}}'
+      string: '{"data":{"date":"<%= Date.current.to_s %>","source":"USD","rates":{"MXN":16.772475}},"meta":{"total_records":1,"credits_used":1,"credits_remaining":989}}'
   recorded_at: Sun, 24 Mar 2024 20:26:46 GMT
 recorded_with: VCR 6.2.0
