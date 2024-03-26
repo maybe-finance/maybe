@@ -26,7 +26,7 @@ class Money
     # TODO: Replace with injected rate store
     def exchange_to(other_currency, date = Date.current)
         return self if @currency == Money::Currency.new(other_currency)
-        rate = ExchangeRate.find_rate_or_fetch(from: @currency, to: other_currency, date: date)
+        rate = ExchangeRate.find_rate(from: @currency, to: other_currency, date: date)
         return nil if rate.nil?
         Money.new(@amount * rate.rate, other_currency)
     end
