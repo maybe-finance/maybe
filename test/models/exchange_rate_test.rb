@@ -25,7 +25,7 @@ class ExchangeRateTest < ActiveSupport::TestCase
   test "retrying, then raising on provider error" do
     Faraday.expects(:get).returns(OpenStruct.new(success?: false)).times(3)
 
-    error = assert_raises StandardError do
+    error = assert_raises Provider::Base::ProviderError do
       ExchangeRate.find_rate_or_fetch from: "USD", to: "MXN", date: Date.current
     end
 
