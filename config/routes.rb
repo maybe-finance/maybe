@@ -7,7 +7,10 @@ Rails.application.routes.draw do
   resource :password
   resource :settings, only: %i[edit update]
 
-  resources :transactions
+  resources :transactions do
+    match "search" => "transactions#search", on: :collection, via: [ :get, :post ], as: :search
+  end
+
   resources :accounts, shallow: true do
     post :sync, on: :member
     resources :valuations

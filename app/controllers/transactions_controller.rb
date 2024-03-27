@@ -3,19 +3,14 @@ class TransactionsController < ApplicationController
   before_action :set_transaction, only: %i[ show edit update destroy ]
 
   def index
-    search_params = params[:q] || {}
-    period = Period.find_by_name(search_params[:date])
-    if period&.date_range
-      search_params.merge!({ date_gteq: period.date_range.begin, date_lteq: period.date_range.end })
-    end
+    @q = ransack_params
+    @pagy, @transactions = ransack_result_with_pagination
+  end
 
-    @q = Current.family.transactions.ransack(search_params)
-    @pagy, @transactions = pagy(@q.result.order(date: :desc), items: 50)
-
-    respond_to do |format|
-      format.html # For full page reloads
-      format.turbo_stream # For Turbo Frame requests
-    end
+  def search
+    @q = ransack_params
+    @pagy, @transactions = ransack_result_with_pagination
+    render :index
   end
 
   def show
@@ -67,6 +62,18 @@ class TransactionsController < ApplicationController
   end
 
   private
+    def ransack_params
+      Current.family.transactions.ransack(params[:q])
+    end
+
+    def ransack_result
+      @q.result.order(date: :desc)
+    end
+
+    def ransack_result_with_pagination
+      pagy(ransack_result, items: 50)
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_transaction
       @transaction = Transaction.find(params[:id])
