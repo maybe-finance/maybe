@@ -35,7 +35,7 @@ class Provider::Synth
   private
     attr_reader :api_key
 
-    ExchangeRateResponse = Struct.new(:rate, :success?, :error, :raw_response, keyword_init: true)
+    ExchangeRateResponse = Struct.new :rate, :success?, :error, :raw_response, keyword_init: true
 
     def base_url
       "https://api.synthfinance.com"

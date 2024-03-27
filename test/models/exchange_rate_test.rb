@@ -15,7 +15,7 @@ class ExchangeRateTest < ActiveSupport::TestCase
   end
 
   test "provided rates are saved to the db" do
-    VCR.use_cassette("synth_exchange_rate") do
+    VCR.use_cassette "synth_exchange_rate" do
       assert_difference "ExchangeRate.count", 1 do
         ExchangeRate.find_rate_or_fetch from: "USD", to: "MXN", date: Date.current
       end
