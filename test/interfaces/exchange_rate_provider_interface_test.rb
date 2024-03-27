@@ -9,7 +9,12 @@ module ExchangeRateProviderInterfaceTest
 
   test "exchange rate provider response contract" do
     accounting_for_http_calls do
-      assert_respond_to @subject.fetch_exchange_rate(from: "USD", to: "MXN", date: Date.current), :rate
+      response = @subject.fetch_exchange_rate(from: "USD", to: "MXN", date: Date.current)
+
+      assert_respond_to response, :rate
+      assert_respond_to response, :success?
+      assert_respond_to response, :error
+      assert_respond_to response, :raw_response
     end
   end
 
