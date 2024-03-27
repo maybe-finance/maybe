@@ -1,0 +1,69 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.synthfinance.com/rates/historical?date=<%= Date.current.to_s %>&from=USD&to=MXN
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v2.9.0
+      Authorization:
+      - Bearer <SYNTH_API_KEY>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 27 Mar 2024 02:54:11 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '138'
+      Connection:
+      - keep-alive
+      Cf-Ray:
+      - 86ac182ad9ec7ce5-LAX
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Etag:
+      - W/"46780d3f34043bb3bc799b1efae62418"
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains
+      Vary:
+      - Accept-Encoding
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Rndr-Id:
+      - 3ca97b82-f963-43a3
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Render-Origin-Server:
+      - Render
+      X-Request-Id:
+      - 64731a8c-4cad-4e42-81c9-60b0d3634a0f
+      X-Runtime:
+      - '0.021432'
+      X-Xss-Protection:
+      - '0'
+      Server:
+      - cloudflare
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: ASCII-8BIT
+      string: '{"data":{"date":"<%= Date.current.to_s %>","source":"USD","rates":{"MXN":16.64663}},"meta":{"total_records":1,"credits_used":1,"credits_remaining":976}}'
+  recorded_at: Wed, 27 Mar 2024 02:54:11 GMT
+recorded_with: VCR 6.2.0
