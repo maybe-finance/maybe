@@ -26,7 +26,6 @@ export default class extends Controller {
   onDocumentClick = (e) => {
     if (this.menuTarget.contains(e.target)) {
       // user has clicked inside of the dropdown
-      e.stopPropagation();
       return;
     }
 
