@@ -1,0 +1,7 @@
+<%= turbo_stream.replace dom_id(@transaction, "category_dropdown_form") do %>
+  <% if @categories.any? %>
+    <%= render partial: "transactions/category_dropdown_list", locals: { transaction: @transaction, transaction_categories: @categories } %>
+  <% else %>
+    <%= content_tag(:div, t(".not_found"), id: dom_id(@transaction, "category_dropdown_form"), class: "py-8 pl-4 mt-0.5 mr-2 text-gray-500") %>
+  <% end %>
+<% end %>

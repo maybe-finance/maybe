@@ -5,5 +5,7 @@ en:
       success: New transaction created successfully
     destroy:
       success: Transaction deleted successfully
+    search_category:
+      not_found: No categories found
     update:
       success: Transaction updated successfully

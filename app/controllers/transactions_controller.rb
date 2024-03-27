@@ -1,6 +1,6 @@
 class TransactionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_transaction, only: %i[ show edit update destroy ]
+  before_action :set_transaction, only: %i[ show edit update destroy search_category ]
 
   def index
     search_params = params[:q] || {}
@@ -63,6 +63,14 @@ class TransactionsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to transactions_url, notice: t(".success") }
+    end
+  end
+
+  def search_category
+    if params[:q].blank?
+      @categories = Current.family.transaction_categories
+    else
+      @categories = Current.family.transaction_categories.where("name % ?", params[:q])
     end
   end
 
