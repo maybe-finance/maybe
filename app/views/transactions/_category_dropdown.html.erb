@@ -1,5 +1,5 @@
 <%# locals: (transaction:) %>
-<div class="relative" data-controller="dropdown">
+<div class="relative" data-controller="dropdown" data-dropdown-close-on-click-value="false">
   <div class="flex cursor-pointer" data-action="click->dropdown#toggleMenu">
     <%= render partial: "shared/category_badge", locals: transaction.category.nil? ? {} : { name: transaction.category.name, color: transaction.category.color } %>
   </div>
