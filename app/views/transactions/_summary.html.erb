@@ -1,0 +1,21 @@
+ <%# locals: (totals:) %>
+<%= turbo_frame_tag "transactions_summary" do %>
+  <div class="grid grid-cols-3 bg-white rounded-xl border border-alpha-black-25 shadow-xs px-4 divide-x divide-alpha-black-100">
+    <div class="p-4 space-y-2">
+      <p class="text-sm text-gray-500">Total transactions</p>
+      <p class="text-gray-900 font-medium text-xl"><%= totals[:count] %></p>
+    </div>
+    <div class="p-4 space-y-2">
+      <p class="text-sm text-gray-500">Income</p>
+      <p class="text-gray-900 font-medium text-xl">
+        <%= format_money totals[:income] %>
+      </p>
+    </div>
+    <div class="p-4 space-y-2">
+      <p class="text-sm text-gray-500">Expenses</p>
+      <p class="text-gray-900 font-medium text-xl">
+        <%= format_money totals[:expense] %>
+      </p>
+    </div>
+  </div>
+<% end %>

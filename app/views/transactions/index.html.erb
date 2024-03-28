@@ -11,23 +11,8 @@
       </div>
     </div>
   </div>
-  <div class="grid grid-cols-3 bg-white rounded-xl border border-alpha-black-25 shadow-xs px-4 divide-x divide-alpha-black-100">
-    <div class="p-4 space-y-2">
-      <p class="text-sm text-gray-500">Total transactions</p>
-      <p class="text-gray-900 font-medium text-xl"><%= @totals[:count] %></p>
-    </div>
-    <div class="p-4 space-y-2">
-      <p class="text-sm text-gray-500">Income</p>
-      <p class="text-gray-900 font-medium text-xl">
-        <%= format_money @totals[:income] %>
-      </p>
-    </div>
-    <div class="p-4 space-y-2">
-      <p class="text-sm text-gray-500">Expenses</p>
-      <p class="text-gray-900 font-medium text-xl">
-        <%= format_money @totals[:expense] %>
-      </p>
-    </div>
+  <div>
+    <%= render partial: "transactions/summary", locals: { totals: @totals } %>
   </div>
   <div id="transactions" class="bg-white rounded-xl border border-alpha-black-25 shadow-xs p-4 space-y-4">
     <%= search_form_for @q, url: search_transactions_path, html: { method: :post, data: { turbo_frame: "transactions_list", "controller": "auto-submit-form" } } do |form| %>
@@ -65,7 +50,7 @@
                     <div class="my-2" id="list" data-list-filter-target="list">
                       <% Current.family.accounts.each do |account| %>
                         <div class="filterable-item flex items-center gap-2 p-2" data-filter-name="<%= account.name %>">
-                          <%= form.check_box :account_id_in, { multiple: true, id: dom_id(account), class: "rounded-sm border-gray-300 text-indigo-600 shadow-xs focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" }, account.id, nil %>
+                          <%= form.check_box :account_id_in, { "data-auto-submit-form-target": "auto", multiple: true, id: dom_id(account), class: "rounded-sm border-gray-300 text-indigo-600 shadow-xs focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" }, account.id, nil %>
                           <%= form.label :account_id_in, account.name, value: account.id, class: "text-sm text-gray-900" %>
                         </div>
                       <% end %>

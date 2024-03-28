@@ -5,11 +5,12 @@ class TransactionsController < ApplicationController
   def index
     search_params = session[ransack_session_key] || params[:q]
     @q = Current.family.transactions.ransack(search_params)
-    @pagy, @transactions = pagy(@q.result.order(date: :desc), items: 20)
+    result = @q.result.order(date: :desc)
+    @pagy, @transactions = pagy(result, items: 20)
     @totals = {
-      count: Current.family.transactions.count,
-      income: Current.family.transactions.inflows.sum(&:amount_money).abs,
-      expense: Current.family.transactions.outflows.sum(&:amount_money).abs
+      count: result.count,
+      income: result.inflows.sum(&:amount_money).abs,
+      expense: result.outflows.sum(&:amount_money).abs
     }
 
     respond_to do |format|
@@ -26,11 +27,10 @@ class TransactionsController < ApplicationController
     respond_to do |format|
       format.html { render :index }
       format.turbo_stream do
-        render turbo_stream: turbo_stream.replace(
-          "transactions_list",
-          partial: "transactions/list",
-          locals: { transactions: @transactions, pagy: @pagy }
-        )
+        render turbo_stream: [
+          turbo_stream.replace("transactions_list", partial: "transactions/list", locals: { transactions: @transactions, pagy: @pagy }),
+          turbo_stream.replace("transactions_summary", partial: "transactions/summary", locals: { totals: @totals })
+        ]
       end
     end
   end
