@@ -1,0 +1,23 @@
+<%# locals: (filter:) %>
+<div class="flex items-center gap-1 text-sm border border-alpha-black-200 rounded-3xl p-1.5">
+  <% if filter[:type] == "account" %>
+    <div class="flex items-center gap-2">
+      <div class="w-5 h-5 bg-blue-600/10 text-xs flex items-center justify-center rounded-full"><%= filter[:value].name[0].upcase %></div>
+      <p><%= filter[:value].name %></p>
+    </div>
+  <% elsif filter[:type] == "search" %>
+    <div class="flex items-center gap-2">
+      <%= lucide_icon "text", class: "w-5 h-5 text-gray-500" %>
+      <p><%= "\"#{filter[:value]}\"".truncate(20) %></p>
+    </div>
+  <% end %>
+  <%= form_with url: search_transactions_path, html: { class: "flex items-center" } do |form| %>
+    <%= form.hidden_field :remove_param, value: filter[:original][:key] %>
+    <% if filter[:original][:value] %>
+      <%= form.hidden_field :remove_param_value, value: filter[:original][:value] %>
+    <% end %>
+    <%= form.button type: "submit", class: "hover:text-gray-900" do %>
+      <%= lucide_icon "x", class: "w-4 h-4 text-gray-500" %>
+    <% end %>
+  <% end %>
+</div>

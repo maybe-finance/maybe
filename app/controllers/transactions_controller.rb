@@ -6,12 +6,13 @@ class TransactionsController < ApplicationController
     search_params = session[ransack_session_key] || params[:q]
     @q = Current.family.transactions.ransack(search_params)
     result = @q.result.order(date: :desc)
-    @pagy, @transactions = pagy(result, items: 20)
+    @pagy, @transactions = pagy(result, items: 10)
     @totals = {
       count: result.count,
       income: result.inflows.sum(&:amount_money).abs,
       expense: result.outflows.sum(&:amount_money).abs
     }
+    @filter_list = Transaction.build_filter_list(search_params, Current.family)
 
     respond_to do |format|
       format.html
@@ -20,7 +21,15 @@ class TransactionsController < ApplicationController
   end
 
   def search
-    session[ransack_session_key] = params[:q] if params[:q]
+    if params[:clear]
+      session.delete(ransack_session_key)
+    elsif params[:remove_param]
+      current_params = session[ransack_session_key] || {}
+      updated_params = delete_search_param(current_params, params[:remove_param], value: params[:remove_param_value])
+      session[ransack_session_key] = updated_params
+    elsif params[:q]
+      session[ransack_session_key] = params[:q]
+    end
 
     index
 
@@ -28,8 +37,10 @@ class TransactionsController < ApplicationController
       format.html { render :index }
       format.turbo_stream do
         render turbo_stream: [
-          turbo_stream.replace("transactions_list", partial: "transactions/list", locals: { transactions: @transactions, pagy: @pagy }),
-          turbo_stream.replace("transactions_summary", partial: "transactions/summary", locals: { totals: @totals })
+          turbo_stream.replace("transactions_summary", partial: "transactions/summary", locals: { totals: @totals }),
+          turbo_stream.replace("transactions_search_form", partial: "transactions/search_form", locals: { q: @q }),
+          turbo_stream.replace("transactions_filters", partial: "transactions/filters", locals: { filters: @filter_list }),
+          turbo_stream.replace("transactions_list", partial: "transactions/list", locals: { transactions: @transactions, pagy: @pagy })
         ]
       end
     end
@@ -84,6 +95,17 @@ class TransactionsController < ApplicationController
   end
 
   private
+    def delete_search_param(params, key, value: nil)
+      if value
+        params[key]&.delete(value)
+        params.delete(key) if params[key].empty? # Remove key if it's empty after deleting value
+      else
+        params.delete(key)
+      end
+
+      params
+    end
+
     def ransack_session_key
       :ransack_transactions_q
     end

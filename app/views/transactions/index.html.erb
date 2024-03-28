@@ -2,11 +2,10 @@
   <div class="flex justify-between items-center text-gray-900 font-medium">
     <h1 class="text-xl">Transactions</h1>
     <div class="flex items-center gap-5">
-      <div class="border-r border-alpha-black-200 h-5"></div>
       <div class="flex items-center gap-2">
-        <%= lucide_icon("settings-2", class: "cursor-not-allowed w-5 h-5 text-gray-500") %>
-        <%= link_to new_transaction_path, class: "rounded-full w-9 h-9 bg-gray-900 text-white flex items-center justify-center hover:bg-gray-700" do %>
+        <%= link_to new_transaction_path, class: "rounded-lg bg-gray-900 text-white flex items-center gap-1 justify-center hover:bg-gray-700 px-3 py-2" do %>
           <%= lucide_icon("plus", class: "w-5 h-5") %>
+          <p>New transaction</p>
         <% end %>
       </div>
     </div>
@@ -15,70 +14,8 @@
     <%= render partial: "transactions/summary", locals: { totals: @totals } %>
   </div>
   <div id="transactions" class="bg-white rounded-xl border border-alpha-black-25 shadow-xs p-4 space-y-4">
-    <%= search_form_for @q, url: search_transactions_path, html: { method: :post, data: { turbo_frame: "transactions_list", "controller": "auto-submit-form" } } do |form| %>
-      <div class="flex gap-2 mb-4">
-        <div class="grow">
-          <div class="relative flex items-center bg-white border border-gray-200 rounded-lg">
-            <%= form.search_field :category_name_or_account_name_or_name_cont, 
-                                  placeholder: "Search transaction by name, category or amount", 
-                                  class: "placeholder:text-sm placeholder:text-gray-500 relative pl-10 w-full border-none rounded-lg",
-                                  "data-auto-submit-form-target": "auto" %>
-            <%= lucide_icon("search", class: "w-5 h-5 text-gray-500 ml-2 absolute inset-0 transform top-1/2 -translate-y-1/2") %>
-          </div>
-        </div>
-        <div data-controller="dropdown" class="relative">
-          <button type="button" data-action="dropdown#toggleMenu" class="border border-gray-200 block h-full rounded-lg flex items-center gap-2 px-4">
-            <%= lucide_icon("list-filter", class: "w-5 h-5 text-gray-500") %>
-            <p class="text-sm font-medium text-gray-900">Filter</p>
-          </button>
-          <div class="hidden absolute z-10 top-12 right-0 border border-alpha-black-25 bg-white rounded-lg shadow-xs" data-dropdown-target="menu">
-            <div data-controller="tabs" data-tabs-active-class="border-b-2 border-b-black text-gray-900" data-tabs-default-tab-value="txn-account-filter">
-              <div class="flex items-center px-3 text-sm font-medium text-gray-500 gap-4 border-b border-b-alpha-black-50">
-                <button class="py-2 border-b-2" type="button" data-id="txn-account-filter" data-tabs-target="btn" data-action="tabs#select">Account</button>
-                <button class="py-2 border-b-2" type="button" data-id="txn-amount-filter" data-tabs-target="btn" data-action="tabs#select">Amount</button>
-                <button class="py-2 border-b-2" type="button" data-id="txn-category-filter" data-tabs-target="btn" data-action="tabs#select">Category</button>
-                <button class="py-2 border-b-2" type="button" data-id="txn-description-filter" data-tabs-target="btn" data-action="tabs#select">Description</button>
-                <button class="py-2 border-b-2" type="button" data-id="txn-merchant-filter" data-tabs-target="btn" data-action="tabs#select">Merchant</button>
-              </div>
-              <div class="p-2 max-h-[300px] overflow-y-auto">
-                <div id="txn-account-filter" data-tabs-target="tab">
-                  <div data-controller="list-filter">
-                    <div class="relative">
-                      <input type="search" placeholder="Filter accounts" data-list-filter-target="input" data-action="input->list-filter#filter" class="block w-full border border-gray-200 rounded-md py-2 pl-10 pr-3 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                      <%= lucide_icon("search", class: "w-5 h-5 text-gray-500 absolute inset-y-0 left-2 top-1/2 transform -translate-y-1/2") %>
-                    </div>
-                    <div class="my-2" id="list" data-list-filter-target="list">
-                      <% Current.family.accounts.each do |account| %>
-                        <div class="filterable-item flex items-center gap-2 p-2" data-filter-name="<%= account.name %>">
-                          <%= form.check_box :account_id_in, { "data-auto-submit-form-target": "auto", multiple: true, id: dom_id(account), class: "rounded-sm border-gray-300 text-indigo-600 shadow-xs focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" }, account.id, nil %>
-                          <%= form.label :account_id_in, account.name, value: account.id, class: "text-sm text-gray-900" %>
-                        </div>
-                      <% end %>
-                    </div>
-                  </div>
-                </div>
-                <div id="txn-amount-filter" data-tabs-target="tab">
-                  txn amount filter
-                </div>
-                <div id="txn-category-filter" data-tabs-target="tab">
-                  txn category filter
-                </div>
-                <div id="txn-description-filter" data-tabs-target="tab">
-                  txn description filter
-                </div>
-                <div id="txn-merchant-filter" data-tabs-target="tab">
-                  txn merchant filter
-                </div>
-              </div>
-            </div>
-            <div class="text-sm p-3 flex items-center justify-between border-t border-t-alpha-black-50">
-              <p class="text-gray-500">No filters applied</p>
-              <button type="button" class="text-gray-900 font-medium">Clear all</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    <% end %>
+    <%= render partial: "transactions/search_form", locals: { q: @q } %>
+    <%= render partial: "transactions/filters", locals: { filters: @filter_list } %>
     <%= render partial: "transactions/list", locals: { transactions: @transactions, pagy: @pagy } %>
   </div>
 </div>
