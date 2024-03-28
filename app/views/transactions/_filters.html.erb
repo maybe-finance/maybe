@@ -1,0 +1,10 @@
+<%# locals: (filters:) %>
+<div>
+  <%= turbo_frame_tag "transactions_filters" do %>
+    <div class="flex items-center gap-2">
+      <% filters.each do |filter| %>
+        <%= render partial: "transactions/filter", locals: { filter: filter } %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,46 @@
+<%# locals: (q:) %>
+<div>
+  <%= turbo_frame_tag "transactions_search_form" do %>
+    <%= search_form_for @q, url: search_transactions_path, html: { method: :post, data: { turbo_frame: "transactions_list", "controller": "auto-submit-form" } } do |form| %>
+      <div class="flex gap-2 mb-4">
+        <div class="grow">
+          <%= render partial: "transactions/search_form/search_filter", locals: { form: form } %>
+        </div>
+        <div data-controller="dropdown" class="relative">
+          <button type="button" data-action="dropdown#toggleMenu" class="border border-gray-200 block h-full rounded-lg flex items-center gap-2 px-4">
+            <%= lucide_icon("list-filter", class: "w-5 h-5 text-gray-500") %>
+            <p class="text-sm font-medium text-gray-900">Filter</p>
+          </button>
+          <div class="hidden absolute z-10 top-12 right-0 border border-alpha-black-25 bg-white rounded-lg shadow-xs min-w-[450px]" data-dropdown-target="menu">
+            <div data-controller="tabs" data-tabs-active-class="border-b-2 border-b-black text-gray-900" data-tabs-default-tab-value="txn-account-filter">
+              <div class="flex items-center px-3 text-sm font-medium text-gray-500 gap-4 border-b border-b-alpha-black-50">
+                <button class="py-2 border-b-2" type="button" data-id="txn-account-filter" data-tabs-target="btn" data-action="tabs#select">Account</button>
+                <button class="py-2 border-b-2" type="button" data-id="txn-amount-filter" data-tabs-target="btn" data-action="tabs#select">Amount</button>
+                <button class="py-2 border-b-2" type="button" data-id="txn-category-filter" data-tabs-target="btn" data-action="tabs#select">Category</button>
+                <button class="py-2 border-b-2" type="button" data-id="txn-merchant-filter" data-tabs-target="btn" data-action="tabs#select">Merchant</button>
+              </div>
+              <div class="p-2 max-h-[300px] overflow-y-auto">
+                <div id="txn-account-filter" data-tabs-target="tab">
+                  <%= render partial: "transactions/search_form/account_filter", locals: { form: form } %>
+                </div>
+                <div id="txn-amount-filter" data-tabs-target="tab">
+                  <%= render partial: "transactions/search_form/amount_filter", locals: { form: form } %>
+                </div>
+                <div id="txn-category-filter" data-tabs-target="tab">
+                  <%= render partial: "transactions/search_form/category_filter", locals: { form: form } %>
+                </div>
+                <div id="txn-merchant-filter" data-tabs-target="tab">
+                  <%= render partial: "transactions/search_form/merchant_filter", locals: { form: form } %>
+                </div>
+              </div>
+            </div>
+            <div class="text-sm p-3 flex items-center justify-between border-t border-t-alpha-black-50">
+              <p class="text-gray-500"><%= q.conditions.reject { |condition| condition.values.any?(&:blank?) }.size %> filters applied</p>
+              <%= button_to "Clear all", search_transactions_path(clear: true), method: :post, class: "text-gray-900 font-medium", form: { "data-turbo-frame": "transactions_list" } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</div>

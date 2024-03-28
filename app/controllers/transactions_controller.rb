@@ -3,18 +3,46 @@ class TransactionsController < ApplicationController
   before_action :set_transaction, only: %i[ show edit update destroy ]
 
   def index
-    search_params = params[:q] || {}
-    period = Period.find_by_name(search_params[:date])
-    if period&.date_range
-      search_params.merge!({ date_gteq: period.date_range.begin, date_lteq: period.date_range.end })
-    end
-
+    search_params = session[ransack_session_key] || params[:q]
     @q = Current.family.transactions.ransack(search_params)
-    @pagy, @transactions = pagy(@q.result.order(date: :desc), items: 50)
+    result = @q.result.order(date: :desc)
+    @pagy, @transactions = pagy(result, items: 10)
+    @totals = {
+      count: result.count,
+      income: result.inflows.sum(&:amount_money).abs,
+      expense: result.outflows.sum(&:amount_money).abs
+    }
+    @filter_list = Transaction.build_filter_list(search_params, Current.family)
 
     respond_to do |format|
-      format.html # For full page reloads
-      format.turbo_stream # For Turbo Frame requests
+      format.html
+      format.turbo_stream
+    end
+  end
+
+  def search
+    if params[:clear]
+      session.delete(ransack_session_key)
+    elsif params[:remove_param]
+      current_params = session[ransack_session_key] || {}
+      updated_params = delete_search_param(current_params, params[:remove_param], value: params[:remove_param_value])
+      session[ransack_session_key] = updated_params
+    elsif params[:q]
+      session[ransack_session_key] = params[:q]
+    end
+
+    index
+
+    respond_to do |format|
+      format.html { render :index }
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.replace("transactions_summary", partial: "transactions/summary", locals: { totals: @totals }),
+          turbo_stream.replace("transactions_search_form", partial: "transactions/search_form", locals: { q: @q }),
+          turbo_stream.replace("transactions_filters", partial: "transactions/filters", locals: { filters: @filter_list }),
+          turbo_stream.replace("transactions_list", partial: "transactions/list", locals: { transactions: @transactions, pagy: @pagy })
+        ]
+      end
     end
   end
 
@@ -67,6 +95,21 @@ class TransactionsController < ApplicationController
   end
 
   private
+    def delete_search_param(params, key, value: nil)
+      if value
+        params[key]&.delete(value)
+        params.delete(key) if params[key].empty? # Remove key if it's empty after deleting value
+      else
+        params.delete(key)
+      end
+
+      params
+    end
+
+    def ransack_session_key
+      :ransack_transactions_q
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_transaction
       @transaction = Transaction.find(params[:id])

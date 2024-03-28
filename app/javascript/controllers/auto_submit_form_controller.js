@@ -1,31 +1,26 @@
-import { Controller } from '@hotwired/stimulus';
+import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-
-  get cssInputSelector() {
-    return 'input:not(.no-auto-submit), textarea:not(.no-auto-submit)';
-  }
-
-  get inputElements() {
-    return this.element.querySelectorAll(this.cssInputSelector);
-  }
-
-  get selectElements() {
-    return this.element.querySelectorAll('select:not(.no-auto-submit)');
-  }
+  // By default, auto-submit is "opt-in" to avoid unexpected behavior.  Each `auto` target
+  // will trigger a form submission when the input event is triggered.
+  static targets = ["auto"];
 
   connect() {
-    [...this.inputElements, ...this.selectElements].forEach(el => el.addEventListener('change', this.handler));
+    this.autoTargets.forEach((element) => {
+      element.addEventListener("input", this.handleInput);
+    });
   }
 
   disconnect() {
-    [...this.inputElements, ...this.selectElements].forEach(el => el.removeEventListener('change', this.handler));
+    this.autoTargets.forEach((element) => {
+      element.removeEventListener("input", this.handleInput);
+    });
   }
 
-  handler = (e) => {
-    console.log(e);
-    this.element.requestSubmit();
-  }
-
+  handleInput = () => {
+    clearTimeout(this.timeout);
+    this.timeout = setTimeout(() => {
+      this.element.requestSubmit();
+    }, 500);
+  };
 }
-

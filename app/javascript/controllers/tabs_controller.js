@@ -21,15 +21,17 @@ export default class extends Controller {
 
   onTurboLoad = () => {
     this.updateClasses(this.defaultTabValue);
-  }
+  };
 
   updateClasses = (selectedId) => {
-    this.btnTargets.forEach((btn) => btn.classList.remove(this.activeClass));
+    this.btnTargets.forEach((btn) =>
+      btn.classList.remove(...this.activeClasses)
+    );
     this.tabTargets.forEach((tab) => tab.classList.add("hidden"));
 
     this.btnTargets.forEach((btn) => {
       if (btn.dataset.id === selectedId) {
-        btn.classList.add(this.activeClass);
+        btn.classList.add(...this.activeClasses);
       }
     });
 
@@ -38,5 +40,5 @@ export default class extends Controller {
         tab.classList.remove("hidden");
       }
     });
-  }
+  };
 }
