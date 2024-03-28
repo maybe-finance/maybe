@@ -1,0 +1,16 @@
+<dialog id="turbo-confirm" class="max-w-[420px] w-full rounded-xl">
+  <form method="dialog" class="p-4">
+    <div class="flex flex-col mb-4">
+      <div class="flex justify-between mb-2 gap-4">
+        <h3 id="turbo-confirm-title" class="font-medium text-md"><%= t('turbo_confirm.default.title') %></h3>
+        <button value="cancel">
+          <%= lucide_icon("x", class: "w-5 h-5 shrink-0 text-gray-500") %>
+        </button>
+      </div>
+      <p id="turbo-confirm-body" class="text-gray-500 text-sm">
+        <%= t('turbo_confirm.default.body') %>
+      </p>
+    </div>
+    <button id="turbo-confirm-accept" class="w-full text-red-600 rounded-xl text-center p-[10px] border" value="confirm"><%= t('turbo_confirm.default.title') %></button>
+  </form>
+</dialog>
