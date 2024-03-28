@@ -33,7 +33,7 @@
             <%= lucide_icon("pencil-line", class: "w-5 h-5 text-gray-500 shrink-0") %>
             <span class="text-gray-900 text-sm">Edit entry</span>
           <% end %>
-          <%= link_to valuation_path(valuation.original),  data: { turbo_method: :delete, turbo_confirm: { title: t('turbo_confirm.history.title'), body: t('turbo_confirm.history.body'), accept: t('turbo_confirm.history.accept') }.to_json }, class: "text-red-600 flex gap-1 items-center hover:bg-gray-50 rounded-md p-2" do %>
+          <%= link_to valuation_path(valuation.original),  data: { turbo_method: :delete, turbo_confirm: { title: t('turbo_confirm.history.title'), body: t('turbo_confirm.history.body'), accept: t('turbo_confirm.history.accept') } }, class: "text-red-600 flex gap-1 items-center hover:bg-gray-50 rounded-md p-2" do %>
             <%= lucide_icon("trash-2", class: "w-5 h-5 shrink-0") %>
             <span class="text-sm">Delete entry</span>
           <% end %>
