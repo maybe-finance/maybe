@@ -3,6 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="dropdown"
 export default class extends Controller {
   static targets = ["menu"]
+  static values = { closeOnClick: { type: Boolean, default: true } }
 
   toggleMenu = (e) => {
     e.stopPropagation(); // Prevent event from closing the menu immediately
@@ -24,8 +25,9 @@ export default class extends Controller {
   }
 
   onDocumentClick = (e) => {
-    if (this.menuTarget.contains(e.target)) {
+    if (this.menuTarget.contains(e.target) && !this.closeOnClickValue ) {
       // user has clicked inside of the dropdown
+      e.stopPropagation();
       return;
     }
 
