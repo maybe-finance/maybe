@@ -2,7 +2,7 @@ module Account::Syncable
     extend ActiveSupport::Concern
 
     def sync_later
-        AccountSyncJob.perform_later self
+        AccountSyncJob.perform_later(id)
     end
 
     def sync
