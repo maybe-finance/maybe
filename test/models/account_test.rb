@@ -110,4 +110,22 @@ class AccountTest < ActiveSupport::TestCase
     # We know EUR -> NZD exchange rate is not available in fixtures
     assert_equal 0, account.series(currency: "NZD").values.count
   end
+
+  test "should destroy dependent transactions" do
+    assert_difference("Transaction.count", -@account.transactions.count) do
+      @account.destroy
+    end
+  end
+
+  test "should destroy dependent balances" do
+    assert_difference("Account::Balance.count", -@account.balances.count) do
+      @account.destroy
+    end
+  end
+
+  test "should destroy dependent valuations" do
+    assert_difference("Valuation.count", -@account.valuations.count) do
+      @account.destroy
+    end
+  end
 end

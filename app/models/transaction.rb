@@ -6,8 +6,6 @@ class Transaction < ApplicationRecord
 
   validates :name, :date, :amount, :account, presence: true
 
-  after_commit :sync_account
-
   monetize :amount
 
   scope :inflows, -> { where("amount > 0") }
@@ -42,10 +40,4 @@ class Transaction < ApplicationRecord
 
     filters
   end
-
-  private
-
-    def sync_account
-      self.account.sync_later
-    end
 end
