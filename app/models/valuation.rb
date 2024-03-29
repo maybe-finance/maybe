@@ -3,7 +3,6 @@ class Valuation < ApplicationRecord
 
   belongs_to :account
   validates :account, :date, :value, presence: true
-  after_commit :sync_account
   monetize :value
 
   scope :in_period, ->(period) { period.date_range.nil? ? all : where(date: period.date_range) }
@@ -11,9 +10,4 @@ class Valuation < ApplicationRecord
   def self.to_series
     TimeSeries.from_collection all, :value_money
   end
-
-  private
-    def sync_account
-      self.account.sync_later
-    end
 end
