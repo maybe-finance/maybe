@@ -3,6 +3,8 @@ en:
   accounts:
     create:
       success: New account created successfully
+    destroy:
+      success: Account deleted successfully
     index:
       new_account: New account
     new:

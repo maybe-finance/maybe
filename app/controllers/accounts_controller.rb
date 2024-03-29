@@ -1,6 +1,7 @@
 class AccountsController < ApplicationController
   include Filterable
   before_action :authenticate_user!
+  before_action :set_account, only: %i[ show update destroy sync ]
 
   def new
     @account = Account.new(
@@ -10,7 +11,6 @@ class AccountsController < ApplicationController
   end
 
   def show
-    @account = Current.family.accounts.find(params[:id])
     @balance_series = @account.series(period: @period)
     @valuation_series = @account.valuations.to_series
   end
@@ -19,8 +19,6 @@ class AccountsController < ApplicationController
   end
 
   def update
-    @account = Current.family.accounts.find(params[:id])
-
     if @account.update(account_params.except(:accountable_type))
 
       @account.sync_later if account_params[:is_active] == "1"
@@ -50,8 +48,12 @@ class AccountsController < ApplicationController
     end
   end
 
+  def destroy
+    @account.destroy!
+    redirect_to accounts_path, notice: t(".success")
+  end
+
   def sync
-    @account = Current.family.accounts.find(params[:id])
     @account.sync_later
 
     respond_to do |format|
@@ -66,6 +68,10 @@ class AccountsController < ApplicationController
   end
 
   private
+
+  def set_account
+    @account = Current.family.accounts.find(params[:id])
+  end
 
   def account_params
     params.require(:account).permit(:name, :accountable_type, :balance, :currency, :subtype, :is_active)

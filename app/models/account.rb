@@ -6,9 +6,9 @@ class Account < ApplicationRecord
 
   broadcasts_refreshes
   belongs_to :family
-  has_many :balances
-  has_many :valuations
-  has_many :transactions
+  has_many :balances, dependent: :destroy
+  has_many :valuations, dependent: :destroy
+  has_many :transactions, dependent: :destroy
 
   monetize :balance
 
