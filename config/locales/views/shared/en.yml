@@ -1,0 +1,10 @@
+en:
+  custom_turbo_confirm:
+    default:
+      title: Are you sure?
+      body_html: "<p>You will not be able to undo this decision</p>"
+      accept: Confirm
+    history:
+      title: Delete Entry?
+      body_html: "<p>Deleting this entry will remove it from the account’s history which will impact different parts of your account. This includes the net worth and account graphs.</p></br><p>The only way you’ll be able to add this entry back is by re-entering it manually via a new entry</p>"
+      accept: Delete entry

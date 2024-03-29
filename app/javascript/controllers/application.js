@@ -6,27 +6,30 @@ const application = Application.start()
 application.debug = false
 window.Stimulus   = application
 
-Turbo.setConfirmMethod((message, element) => {
-  let dialog = document.getElementById("turbo-confirm")
-  let msg;
+Turbo.setConfirmMethod((message) => {
+  const dialog = document.getElementById("turbo-confirm");
 
   try {
-    msg = JSON.parse(message)
-  } catch (e) {
-    msg = {
-      title: "Are you sure?",
-      body: "You will not be able to undo this decision",
-      accept: "Confirm"
+    const { title, body, accept } = JSON.parse(message);
+
+    if (title) {
+      document.getElementById("turbo-confirm-title").innerHTML = title;
     }
+
+    if (body) {
+      document.getElementById("turbo-confirm-body").innerHTML = body;
+    }
+
+    if (accept) {
+      document.getElementById("turbo-confirm-accept").innerHTML = accept;
+    }
+  } catch (e) {
+    document.getElementById("turbo-confirm-title").innerText = message;
   }
 
-  dialog.querySelector("[id='turbo-confirm-title']").innerHTML = msg.title ? msg.title : "Are you sure?";
-  dialog.querySelector("[id='turbo-confirm-body']").innerHTML = msg.body ? msg.body : "You will not be able to undo this decision";
-  dialog.querySelector("[id='turbo-confirm-accept']").innerHTML = msg.accept ? msg.accept : "Confirm";
+  dialog.showModal();
 
-  dialog.showModal()
-
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     dialog.addEventListener("close", () => {
         resolve(dialog.returnValue == "confirm")
     }, { once: true })
