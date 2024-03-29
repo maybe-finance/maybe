@@ -5,8 +5,6 @@ class Valuation < ApplicationRecord
   validates :account, :date, :value, presence: true
   monetize :value
 
-  after_commit :sync_account
-
   scope :in_period, ->(period) { period.date_range.nil? ? all : where(date: period.date_range) }
 
   def self.to_series
