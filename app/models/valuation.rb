@@ -10,9 +10,4 @@ class Valuation < ApplicationRecord
   def self.to_series
     TimeSeries.from_collection all, :value_money
   end
-
-  private
-    def sync_account
-      self.account.sync_later
-    end
 end

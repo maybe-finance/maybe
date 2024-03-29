@@ -40,10 +40,4 @@ class Transaction < ApplicationRecord
 
     filters
   end
-
-  private
-
-    def sync_account
-      self.account.sync_later
-    end
 end

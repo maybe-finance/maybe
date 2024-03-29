@@ -63,6 +63,7 @@ class TransactionsController < ApplicationController
 
     respond_to do |format|
       if @transaction.save
+        @transaction.account.sync_later
         format.html { redirect_to transactions_url, notice: t(".success") }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -73,6 +74,8 @@ class TransactionsController < ApplicationController
   def update
     respond_to do |format|
       if @transaction.update(transaction_params)
+        @transaction.account.sync_later
+
         format.html { redirect_to transaction_url(@transaction), notice: t(".success") }
         format.turbo_stream do
           render turbo_stream: [
@@ -88,6 +91,7 @@ class TransactionsController < ApplicationController
 
   def destroy
     @transaction.destroy!
+    @transaction.account.sync_later
 
     respond_to do |format|
       format.html { redirect_to transactions_url, notice: t(".success") }
