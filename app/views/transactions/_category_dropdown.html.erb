@@ -5,18 +5,21 @@
   </div>
   <div class="absolute z-10 hidden w-screen mt-2 max-w-min cursor-default" data-dropdown-target="menu">
     <div class="w-64 text-sm font-semibold leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-      <div class="flex flex-col">
-        <div class="grow p-1.5 cursor-not-allowed">
+      <div class="flex flex-col" data-controller="list-filter">
+        <div class="grow p-1.5">
           <div class="relative flex items-center bg-white border border-gray-200 rounded-lg">
-            <input placeholder="Search" class="placeholder:text-sm placeholder:text-gray-500 h-10 relative pl-10 w-full border-none rounded-lg cursor-not-allowed" disabled/>
+            <input placeholder="Search" class="placeholder:text-sm placeholder:text-gray-500 font-normal h-10 relative pl-10 w-full border-none rounded-lg" data-list-filter-target="input" data-action="list-filter#filter" />
             <%= lucide_icon("search", class: "w-5 h-5 text-gray-500 ml-2 absolute inset-0 transform top-1/2 -translate-y-1/2") %>
           </div>
         </div>
-        <%= form_with model: transaction, namespace: dom_id(transaction), html: { data: { controller: "auto-submit-form" }, class: "flex flex-col gap-0.5 p-1.5 mt-0.5 mr-2 max-h-64 overflow-y-scroll scrollbar" } do |form| %>
+        <%= form_with model: transaction, namespace: dom_id(transaction), html: { data: { controller: "auto-submit-form", list_filter_target: "list" }, class: "flex flex-col gap-0.5 p-1.5 mt-0.5 mr-2 max-h-64 overflow-y-scroll scrollbar" } do |form| %>
+          <div class="py-8 pl-4 mt-0.5 mr-2 text-gray-500 hidden" data-list-filter-target="emptyMessage">
+            No categories found
+          </div>
           <% Current.family.transaction_categories.each do |category| %>
-            <% is_selected = (!transaction.category.nil? and category.id == transaction.category.id) %>
-            <div class="flex items-center <%= class_names("bg-gray-25": is_selected) %> hover:bg-gray-25 border-none rounded-lg px-2 py-1 group">
-              <%= form.radio_button :category_id, category.id, class: "hidden" %>
+            <% is_selected = category.id == transaction.category.try(:id) %>
+            <%= content_tag :div, class: ["filterable-item flex items-center hover:bg-gray-25 border-none rounded-lg px-2 py-1 group", { "bg-gray-25": is_selected }], data: { filter_name: category.name } do %>
+              <%= form.radio_button :category_id, category.id, class: "hidden", data: { auto_submit_form_target: "auto" } %>
               <%= label dom_id(transaction), :transaction_category_id, value: category.id, class: "flex w-full items-center gap-1.5 cursor-pointer" do %>
                 <span class="w-5 h-5">
                   <%= lucide_icon("check", class: "w-5 h-5 text-gray-500") if is_selected %>
@@ -26,7 +29,7 @@
               <button class="ml-auto flex items-center justify-center hover:bg-gray-50 w-8 h-8 rounded-lg invisible group-hover:visible cursor-not-allowed" type="button" disabled>
                 <%= lucide_icon("more-horizontal", class: "w-5 h-5 text-gray-500") %>
               </button>
-            </div>
+            <% end %>
           <% end %>
         <% end %>
         <hr/>
