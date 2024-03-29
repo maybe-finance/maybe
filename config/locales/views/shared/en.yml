@@ -1,6 +1,14 @@
 ---
 en:
   custom_turbo_confirm:
+    account_destroy:
+      accept: Delete "%{name}"
+      body_html: "<p>By deleting this account, you will erase its value history, affecting
+        various aspects of your overall account. This action will have a direct impact
+        on your net worth calculations and the account graphs.</p><br /> <p>After
+        deletion, there is no way you'll be able to restore the account information
+        because you'll need to add it as a new account.</p>"
+      title: Delete account?
     default:
       accept: Confirm
       body_html: "<p>You will not be able to undo this decision</p>"

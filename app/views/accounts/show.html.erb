@@ -23,7 +23,7 @@
         </div>
         <div class="absolute z-10 top-10 right-0 border border-alpha-black-25 bg-white rounded-lg shadow-xs hidden" data-dropdown-target="menu">
           <div class="w-48 px-3 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-            <%= button_to account_path(@account), method: :delete, class: "block w-full py-2 text-red-600 hover:text-red-800 flex items-center", data: { turbo_confirm: "Are you sure you want to delete the account \"#{@account.name}\"?" } do %>
+            <%= button_to account_path(@account), method: :delete, class: "block w-full py-2 text-red-600 hover:text-red-800 flex items-center", data: { turbo_confirm: { title: t("custom_turbo_confirm.account_destroy.title"), body: t("custom_turbo_confirm.account_destroy.body_html"), accept: t("custom_turbo_confirm.account_destroy.accept", name: @account.name) } } do %>
               <%= lucide_icon("trash-2", class: "w-5 h-5 mr-2") %> Delete account
             <% end %>
           </div>
