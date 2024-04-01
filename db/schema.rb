@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_03_25_064211) do
+ActiveRecord::Schema[7.2].define(version: 2024_04_01_213443) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -90,6 +90,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_03_25_064211) do
     t.enum "status", default: "ok", null: false, enum_type: "account_status"
     t.jsonb "sync_warnings", default: "[]", null: false
     t.jsonb "sync_errors", default: "[]", null: false
+    t.date "last_sync_date"
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id"], name: "index_accounts_on_family_id"
   end
