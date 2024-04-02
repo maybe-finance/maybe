@@ -6,7 +6,7 @@
         <div class="grow">
           <%= render partial: "transactions/search_form/search_filter", locals: { form: form } %>
         </div>
-        <div data-controller="dropdown" class="relative">
+        <div data-controller="dropdown" data-dropdown-close-on-click-value="false" class="relative">
           <button type="button" data-action="dropdown#toggleMenu" class="border border-gray-200 block h-full rounded-lg flex items-center gap-2 px-4">
             <%= lucide_icon("list-filter", class: "w-5 h-5 text-gray-500") %>
             <p class="text-sm font-medium text-gray-900">Filter</p>
