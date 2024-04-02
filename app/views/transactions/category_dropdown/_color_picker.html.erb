@@ -1,0 +1,8 @@
+<%# locals: (value:) %>
+<div class="flex gap-1.5 p-2">
+  <% Transaction::Category::COLORS.each do |color| %>
+    <% is_selected = value === color %>
+    <% border_color = "color-mix(in srgb, #{color} 30%, white)" %>
+    <span class="w-7 h-7 rounded-full inline-block border-4" style="background-color: <%= color %>; border-color: <%= is_selected ? border_color : "white" %>" ></span>
+  <% end %>
+</div>

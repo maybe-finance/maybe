@@ -6,15 +6,19 @@ class Transaction::Category < ApplicationRecord
 
   before_update :clear_internal_category, if: :name_changed?
 
+  COLORS = %w[#e99537 #4da568 #6471eb #db5a54 #df4e92 #c44fe9 #eb5429 #61c9ea #805dee #6ad28a]
+
+  UNCATEGORIZED_COLOR = "#737373"
+
   DEFAULT_CATEGORIES = [
-    { internal_category: "income", color: "#e99537" },
-    { internal_category: "food_and_drink", color: "#4da568" },
-    { internal_category: "entertainment", color: "#6471eb" },
-    { internal_category: "personal_care", color: "#db5a54" },
-    { internal_category: "general_services", color: "#df4e92" },
-    { internal_category: "auto_and_transport", color: "#c44fe9" },
-    { internal_category: "rent_and_utilities", color: "#eb5429" },
-    { internal_category: "home_improvement", color: "#61c9ea" }
+    { internal_category: "income", color: COLORS[0] },
+    { internal_category: "food_and_drink", color: COLORS[1] },
+    { internal_category: "entertainment", color: COLORS[2] },
+    { internal_category: "personal_care", color: COLORS[3] },
+    { internal_category: "general_services", color: COLORS[4] },
+    { internal_category: "auto_and_transport", color: COLORS[5] },
+    { internal_category: "rent_and_utilities", color: COLORS[6] },
+    { internal_category: "home_improvement", color: COLORS[7] }
   ]
 
   def self.ransackable_attributes(auth_object = nil)

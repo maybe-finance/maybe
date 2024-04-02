@@ -6,12 +6,15 @@ export default class extends Controller {
   static values = { closeOnClick: { type: Boolean, default: true } }
 
   toggleMenu = (e) => {
-    e.stopPropagation(); // Prevent event from closing the menu immediately
     this.menuTarget.classList.contains("hidden") ? this.showMenu() : this.hideMenu();
   }
 
   showMenu = () => {
-    document.addEventListener("click", this.onDocumentClick);
+    setTimeout(() => {
+      // Registering the listener asynchronously prevents event from closing the menu immediately
+      document.addEventListener("click", this.onDocumentClick);
+    }, 0)
+
     this.menuTarget.classList.remove("hidden");
   }
 
@@ -25,7 +28,7 @@ export default class extends Controller {
   }
 
   onDocumentClick = (e) => {
-    if (this.menuTarget.contains(e.target) && !this.closeOnClickValue ) {
+    if (this.element.contains(e.target) && !this.closeOnClickValue ) {
       // user has clicked inside of the dropdown
       e.stopPropagation();
       return;
