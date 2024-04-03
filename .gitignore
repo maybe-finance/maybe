@@ -50,3 +50,4 @@
 
 # Ignore .devcontainer files
 compose-dev.yaml
+compose.yml
