@@ -2,7 +2,13 @@ module Authentication
   extend ActiveSupport::Concern
 
   included do
-    helper_method :user_signed_in?
+    before_action :authenticate_user!
+  end
+
+  class_methods do
+    def skip_authentication(**options)
+      skip_before_action :authenticate_user!, **options
+    end
   end
 
   private
@@ -13,10 +19,6 @@ module Authentication
     else
       redirect_to new_session_url
     end
-  end
-
-  def user_signed_in?
-    Current.user.present?
   end
 
   def login(user)

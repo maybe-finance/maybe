@@ -1,4 +1,6 @@
 class RegistrationsController < ApplicationController
+  skip_authentication
+
   layout "auth"
 
   before_action :set_user, only: :create

@@ -1,4 +1,6 @@
 class PasswordResetsController < ApplicationController
+  skip_authentication
+
   layout "auth"
 
   before_action :set_user_by_token, only: :update
