@@ -1,31 +1,40 @@
 import { Controller } from "@hotwired/stimulus";
 
 /**
- * A "listbox" is a custom "select" element that follows accessibility patterns of a native select element.
+ * A custom "select" element that follows accessibility patterns of a native select element.
  *
  * - If you need to display arbitrary content including non-clickable items, links, buttons, and forms, use the "popover" controller instead.
  */
 export default class extends Controller {
   static classes = ["active"];
-  static targets = ["option", "button", "list", "input"];
+  static targets = ["option", "button", "list", "input", "buttonText"];
 
   connect() {
     this.show = false;
     this.syncButtonTextWithInput();
     this.listTarget.classList.add("hidden");
+    this.buttonTarget.addEventListener("click", this.toggleList);
     this.element.addEventListener("keydown", this.handleKeydown);
     document.addEventListener("click", this.handleOutsideClick);
+    this.element.addEventListener("turbo:load", this.handleTurboLoad);
   }
 
   disconnect() {
     this.element.removeEventListener("keydown", this.handleKeydown);
     document.removeEventListener("click", this.handleOutsideClick);
+    this.buttonTarget.removeEventListener("click", this.toggleList);
+    this.element.removeEventListener("turbo:load", this.handleTurboLoad);
   }
 
   handleOutsideClick = (event) => {
     if (this.show && !this.element.contains(event.target)) {
       this.close();
     }
+  };
+
+  handleTurboLoad = () => {
+    this.close();
+    this.syncButtonTextWithInput();
   };
 
   handleKeydown = (event) => {
@@ -75,7 +84,7 @@ export default class extends Controller {
     this.optionTargets[nextIndex].focus();
   }
 
-  toggleList() {
+  toggleList = () => {
     this.show = !this.show;
     this.listTarget.classList.toggle("hidden", !this.show);
     this.buttonTarget.setAttribute("aria-expanded", this.show.toString());
@@ -87,7 +96,7 @@ export default class extends Controller {
       );
       (selectedOption || this.optionTargets[0]).focus();
     }
-  }
+  };
 
   close() {
     this.show = false;
@@ -106,12 +115,19 @@ export default class extends Controller {
     selectedOption.classList.add(...this.activeClasses);
     selectedOption.setAttribute("aria-selected", "true");
     selectedOption.focus();
-    this.toggleList(false); // Close the list after selection
+    this.close(); // Close the list after selection
 
     // Update the hidden input's value
     const selectedValue = selectedOption.getAttribute("data-value");
     this.inputTarget.value = selectedValue;
     this.syncButtonTextWithInput();
+
+    // Auto-submit controller listens for this even to auto-submit
+    const inputEvent = new Event("input", {
+      bubbles: true,
+      cancelable: true,
+    });
+    this.inputTarget.dispatchEvent(inputEvent);
   }
 
   syncButtonTextWithInput() {
@@ -119,7 +135,7 @@ export default class extends Controller {
       (option) => option.getAttribute("data-value") === this.inputTarget.value
     );
     if (matchingOption) {
-      this.buttonTarget.textContent = matchingOption.textContent.trim();
+      this.buttonTextTarget.textContent = matchingOption.textContent.trim();
     }
   }
 }

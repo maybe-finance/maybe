@@ -29,17 +29,24 @@
       <div class="flex-col p-5 min-w-80">
         <div class="flex items-center justify-between">
           <%= link_to root_path do %>
-            <%= image_tag 'logo.svg', alt: 'Maybe' %>
+            <%= image_tag 'logo.svg', alt: 'Maybe', class: "h-[22px]" %>
           <% end %>
-          <div class="relative cursor-pointer" data-controller="dropdown">
-            <div class="flex" data-action="click->dropdown#toggleMenu">
-              <div class="mr-1.5 text-white w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= Current.user.email.first %></div>
-            </div>
-            <div class="absolute z-10 hidden w-screen px-2 mt-2 -translate-x-1/2 left-1/2 max-w-min" data-dropdown-target="menu">
-              <div class="w-48 px-3 text-sm font-semibold leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-                <%= link_to "Settings", edit_settings_path, class: 'block p-2 hover:text-gray-600' %>
-                <%= button_to "Log Out", session_path, method: :delete, class: 'block p-2 hover:text-gray-600' %>
-              </div>
+          <div class="relative" data-controller="menu">
+            <button data-menu-target="button">
+              <div class="text-white w-9 h-9 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= Current.user.email.first %></div>
+            </button>
+            <div 
+              data-menu-target="content" 
+              class="absolute min-w-[200px] z-10 top-10 right-0 bg-white p-1 rounded-sm shadow-xs border border-alpha-black-25 w-fit"
+            >
+              <%= link_to edit_settings_path, class: "flex gap-1 items-center hover:bg-gray-50 rounded-md p-2" do %>
+                <%= lucide_icon("pencil-line", class: "w-5 h-5 text-gray-500 shrink-0") %>
+                <span class="text-gray-900 text-sm">Settings</span>
+              <% end %>
+              <%= button_to session_path, method: :delete, class: "w-full text-gray-900 flex gap-1 items-center hover:bg-gray-50 rounded-md p-2" do %>
+                <%= lucide_icon("log-out", class: "w-5 h-5 shrink-0") %>
+                <span class="text-sm">Logout</span>
+              <% end %>
             </div>
           </div>
         </div>
@@ -79,7 +86,6 @@
       </main>
     </div>
     <%= turbo_frame_tag "modal" %>
-
     <%= render 'shared/custom_confirm_modal' %>
   </body>
 </html>
