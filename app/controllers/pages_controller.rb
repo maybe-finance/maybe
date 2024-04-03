@@ -1,6 +1,5 @@
 class PagesController < ApplicationController
   include Filterable
-  before_action :authenticate_user!
 
   def dashboard
     snapshot = Current.family.snapshot(@period)
