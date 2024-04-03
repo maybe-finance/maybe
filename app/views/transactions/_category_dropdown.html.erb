@@ -17,7 +17,7 @@
             No categories found
           </div>
           <% Current.family.transaction_categories.each do |category| %>
-            <%= render partial: "transactions/category_dropdown/category_row", locals: { form:, category:, is_selected: category.id == transaction.category.try(:id), namespace: dom_id(transaction) } %>
+            <%= render partial: "transactions/category_dropdown/row", locals: { form:, category:, is_selected: category.id == transaction.category.try(:id), namespace: dom_id(transaction) } %>
           <% end %>
         <% end %>
         <hr/>
