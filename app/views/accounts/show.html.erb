@@ -17,13 +17,22 @@
           <%= lucide_icon("chevron-down", class: "w-5 h-5 text-gray-500") %>
         </div>
       </div>
-      <div class="relative cursor-pointer" data-controller="dropdown">
-        <div class="flex hover:bg-gray-100 p-2 rounded" data-action="click->dropdown#toggleMenu">
+      <div class="relative cursor-pointer" data-controller="menu">
+        <button data-menu-target="button" class="flex hover:bg-gray-100 p-2 rounded">
           <%= lucide_icon("more-horizontal", class: "w-5 h-5 text-gray-500") %>
-        </div>
-        <div class="absolute z-10 top-10 right-0 border border-alpha-black-25 bg-white rounded-lg shadow-xs hidden" data-dropdown-target="menu">
+        </button>
+        <div data-menu-target="content" class="absolute z-10 top-10 right-0 border border-alpha-black-25 bg-white rounded-lg shadow-xs hidden">
           <div class="w-48 px-3 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-            <%= button_to account_path(@account), method: :delete, class: "block w-full py-2 text-red-600 hover:text-red-800 flex items-center", data: { turbo_confirm: { title: t("custom_turbo_confirm.account_destroy.title"), body: t("custom_turbo_confirm.account_destroy.body_html"), accept: t("custom_turbo_confirm.account_destroy.accept", name: @account.name) } } do %>
+            <%= button_to account_path(@account), 
+                method: :delete, 
+                class: "block w-full py-2 text-red-600 hover:text-red-800 flex items-center", 
+                data: { 
+                  turbo_confirm: { 
+                    title: t("custom_turbo_confirm.account_destroy.title"), 
+                    body: t("custom_turbo_confirm.account_destroy.body_html"), 
+                    accept: t("custom_turbo_confirm.account_destroy.accept", name: @account.name) 
+                  } 
+                } do %>
               <%= lucide_icon("trash-2", class: "w-5 h-5 mr-2") %> Delete account
             <% end %>
           </div>
@@ -45,7 +54,9 @@
           } 
         %>
       </div>
-      <%= render partial: "shared/period_dropdown", locals: { period: @period, path: account_path(@account) } %>
+      <%= form_with url: account_path(@account), method: :get, class: "flex items-center gap-4", data: { controller: "auto-submit-form" } do %>
+        <%= render partial: "shared/period_select", locals: { value: @period.name } %>
+      <% end %>
     </div>
     <div class="h-96 flex items-center justify-center text-2xl font-bold">
       <%= render partial: "shared/line_chart", locals: { series: @balance_series } %>

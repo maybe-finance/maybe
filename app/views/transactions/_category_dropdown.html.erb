@@ -1,14 +1,14 @@
 <%# locals: (transaction:) %>
-<div class="relative" data-controller="dropdown" data-dropdown-close-on-click-value="false">
-  <div class="flex cursor-pointer" data-action="click->dropdown#toggleMenu">
+<div class="relative" data-controller="menu">
+  <button data-menu-target="button" class="flex">
     <%= render partial: "shared/category_badge", locals: transaction.category.nil? ? {} : { name: transaction.category.name, color: transaction.category.color } %>
-  </div>
-  <div class="absolute z-10 hidden w-screen mt-2 max-w-min cursor-default" data-dropdown-target="menu">
+  </button>
+  <div data-menu-target="content" class="absolute z-10 hidden w-screen mt-2 max-w-min cursor-default">
     <div class="w-64 text-sm font-semibold leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
       <div class="flex flex-col" data-controller="list-filter">
         <div class="grow p-1.5">
           <div class="relative flex items-center bg-white border border-gray-200 rounded-lg">
-            <input placeholder="Search" class="placeholder:text-sm placeholder:text-gray-500 font-normal h-10 relative pl-10 w-full border-none rounded-lg" data-list-filter-target="input" data-action="list-filter#filter" />
+            <input placeholder="Search" type="search" class="placeholder:text-sm placeholder:text-gray-500 font-normal h-10 relative pl-10 w-full border-none rounded-lg" data-list-filter-target="input" data-action="list-filter#filter" />
             <%= lucide_icon("search", class: "w-5 h-5 text-gray-500 ml-2 absolute inset-0 transform top-1/2 -translate-y-1/2") %>
           </div>
         </div>
