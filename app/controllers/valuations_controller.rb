@@ -1,6 +1,4 @@
 class ValuationsController < ApplicationController
-  before_action :authenticate_user!
-
   def create
     @account = Current.family.accounts.find(params[:account_id])
 

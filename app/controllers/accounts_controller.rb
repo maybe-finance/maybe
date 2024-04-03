@@ -1,6 +1,5 @@
 class AccountsController < ApplicationController
   include Filterable
-  before_action :authenticate_user!
   before_action :set_account, only: %i[ show update destroy sync ]
 
   def new
