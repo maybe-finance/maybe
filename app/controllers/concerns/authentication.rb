@@ -3,11 +3,13 @@ module Authentication
 
   included do
     before_action :authenticate_user!
+    after_action :set_last_login_at
   end
 
   class_methods do
     def skip_authentication(**options)
       skip_before_action :authenticate_user!, **options
+      skip_after_action :set_last_login_at, **options
     end
   end
 
@@ -30,5 +32,9 @@ module Authentication
   def logout
     Current.user = nil
     reset_session
+  end
+
+  def set_last_login_at
+    Current.user.update(last_login_at: DateTime.now)
   end
 end
