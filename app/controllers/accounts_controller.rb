@@ -20,7 +20,7 @@ class AccountsController < ApplicationController
   def update
     if @account.update(account_params.except(:accountable_type))
 
-      @account.sync_later if account_params[:is_active] == "1"
+      @account.sync_later if account_params[:is_active] == "1" && @account.can_sync?
 
       respond_to do |format|
         format.html { redirect_to accounts_path, notice: t(".success") }
@@ -53,15 +53,12 @@ class AccountsController < ApplicationController
   end
 
   def sync
-    @account.sync_later
+    @account.sync_later if @account.can_sync?
 
     respond_to do |format|
       format.html { redirect_to account_path(@account), notice: t(".success") }
       format.turbo_stream do
-        render turbo_stream: [
-          turbo_stream.append("notification-tray", partial: "shared/notification", locals: { type: "success", content: t(".success") }),
-          turbo_stream.replace("sync_message", partial: "accounts/sync_message", locals: { is_syncing: true })
-        ]
+        render turbo_stream: turbo_stream.append("notification-tray", partial: "shared/notification", locals: { type: "success", content: t(".success") })
       end
     end
   end
