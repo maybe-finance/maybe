@@ -1,6 +1,15 @@
 ---
 en:
   transactions:
+    categories:
+      create:
+        error: Error creating transaction category
+        success: New transaction category created successfully
+      destroy:
+        success: Transaction category deleted successfully
+      update:
+        error: Error updating transaction category
+        success: Transaction category updated successfully
     create:
       success: New transaction created successfully
     destroy:

@@ -1,0 +1,2 @@
+module Transactions::CategoriesHelper
+end

@@ -8,12 +8,25 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static classes = ["active"];
   static targets = ["option", "button", "list", "input", "buttonText"];
+  static values = { selected: String };
+
+  initialize() {
+    this.show = false;
+
+    const selectedElement = this.optionTargets.find(
+      (option) => option.dataset.value === this.selectedValue
+    );
+    if (selectedElement) {
+      this.updateAriaAttributesAndClasses(selectedElement);
+      this.syncButtonTextWithInput();
+    }
+  }
 
   connect() {
-    this.show = false;
     this.syncButtonTextWithInput();
-    this.listTarget.classList.add("hidden");
-    this.buttonTarget.addEventListener("click", this.toggleList);
+    if (this.hasButtonTarget) {
+      this.buttonTarget.addEventListener("click", this.toggleList);
+    }
     this.element.addEventListener("keydown", this.handleKeydown);
     document.addEventListener("click", this.handleOutsideClick);
     this.element.addEventListener("turbo:load", this.handleTurboLoad);
@@ -22,8 +35,15 @@ export default class extends Controller {
   disconnect() {
     this.element.removeEventListener("keydown", this.handleKeydown);
     document.removeEventListener("click", this.handleOutsideClick);
-    this.buttonTarget.removeEventListener("click", this.toggleList);
     this.element.removeEventListener("turbo:load", this.handleTurboLoad);
+
+    if (this.hasButtonTarget) {
+      this.buttonTarget.removeEventListener("click", this.toggleList);
+    }
+  }
+
+  selectedValueChanged() {
+    this.syncButtonTextWithInput();
   }
 
   handleOutsideClick = (event) => {
@@ -42,7 +62,10 @@ export default class extends Controller {
       case " ":
       case "Enter":
         event.preventDefault(); // Prevent the default action to avoid scrolling
-        if (document.activeElement === this.buttonTarget) {
+        if (
+          this.hasButtonTarget &&
+          document.activeElement === this.buttonTarget
+        ) {
           this.toggleList();
         } else {
           this.selectOption(event);
@@ -58,7 +81,9 @@ export default class extends Controller {
         break;
       case "Escape":
         this.close();
-        this.buttonTarget.focus(); // Bring focus back to the button
+        if (this.hasButtonTarget) {
+          this.buttonTarget.focus(); // Bring focus back to the button
+        }
         break;
       case "Tab":
         this.close();
@@ -85,6 +110,8 @@ export default class extends Controller {
   }
 
   toggleList = () => {
+    if (!this.hasButtonTarget) return; // Ensure button target is present before toggling
+
     this.show = !this.show;
     this.listTarget.classList.toggle("hidden", !this.show);
     this.buttonTarget.setAttribute("aria-expanded", this.show.toString());
@@ -99,14 +126,24 @@ export default class extends Controller {
   };
 
   close() {
-    this.show = false;
-    this.listTarget.classList.add("hidden");
-    this.buttonTarget.setAttribute("aria-expanded", "false");
+    if (this.hasButtonTarget) {
+      this.show = false;
+      this.listTarget.classList.add("hidden");
+      this.buttonTarget.setAttribute("aria-expanded", "false");
+    }
   }
 
   selectOption(event) {
     const selectedOption =
       event.type === "keydown" ? document.activeElement : event.currentTarget;
+    this.updateAriaAttributesAndClasses(selectedOption);
+    if (this.inputTarget.value !== selectedOption.getAttribute("data-value")) {
+      this.updateInputValueAndEmitEvent(selectedOption);
+    }
+    this.close(); // Close the list after selection
+  }
+
+  updateAriaAttributesAndClasses(selectedOption) {
     this.optionTargets.forEach((option) => {
       option.setAttribute("aria-selected", "false");
       option.setAttribute("tabindex", "-1");
@@ -115,14 +152,15 @@ export default class extends Controller {
     selectedOption.classList.add(...this.activeClasses);
     selectedOption.setAttribute("aria-selected", "true");
     selectedOption.focus();
-    this.close(); // Close the list after selection
+  }
 
+  updateInputValueAndEmitEvent(selectedOption) {
     // Update the hidden input's value
     const selectedValue = selectedOption.getAttribute("data-value");
     this.inputTarget.value = selectedValue;
     this.syncButtonTextWithInput();
 
-    // Auto-submit controller listens for this even to auto-submit
+    // Emit an input event for auto-submit functionality
     const inputEvent = new Event("input", {
       bubbles: true,
       cancelable: true,
@@ -134,7 +172,7 @@ export default class extends Controller {
     const matchingOption = this.optionTargets.find(
       (option) => option.getAttribute("data-value") === this.inputTarget.value
     );
-    if (matchingOption) {
+    if (matchingOption && this.hasButtonTextTarget) {
       this.buttonTextTarget.textContent = matchingOption.textContent.trim();
     }
   }

@@ -1,5 +1,5 @@
 class Transaction::Category < ApplicationRecord
-  has_many :transactions
+  has_many :transactions, dependent: :nullify
   belongs_to :family
 
   validates :name, :color, :family, presence: true

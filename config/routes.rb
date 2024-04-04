@@ -11,6 +11,10 @@ Rails.application.routes.draw do
     match "search" => "transactions#search", on: :collection, via: [ :get, :post ], as: :search
   end
 
+  namespace :transactions do
+    resources :categories
+  end
+
   resources :accounts, shallow: true do
     post :sync, on: :member
     resources :valuations

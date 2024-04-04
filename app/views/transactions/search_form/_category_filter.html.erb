@@ -9,7 +9,7 @@
       <div class="filterable-item flex items-center gap-2 p-2" data-filter-name="<%= transaction_category.name %>">
         <%= form.check_box :category_id_in, { "data-auto-submit-form-target": "auto", multiple: true, class: "rounded-sm border-gray-300 text-indigo-600 shadow-xs focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" }, transaction_category.id, nil %>
         <%= form.label :category_id_in, transaction_category.name, value: transaction_category.id, class: "text-sm text-gray-900" do %>
-          <%= render partial: "shared/category_badge", locals: { name: transaction_category.name, color: transaction_category.color } %>
+          <%= render partial: "transactions/categories/badge", locals: { name: transaction_category.name, color: transaction_category.color } %>
         <%end%>
       </div>
     <% end %>
