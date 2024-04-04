@@ -14,10 +14,21 @@ module Account::Syncable
         calculator.calculate
         self.balances.upsert_all(calculator.daily_balances, unique_by: :index_account_balances_on_account_id_date_currency_unique)
         self.balances.where("date < ?", effective_start_date).delete_all
-        update!(status: "ok")
+        update!(status: "ok", last_sync_date: Date.today)
     rescue => e
         update!(status: "error")
         Rails.logger.error("Failed to sync account #{id}: #{e.message}")
+    end
+
+    def can_sync?
+        # Skip account sync if account is not active or the sync process is already running
+        return false unless is_active
+        return false if syncing?
+        # If last_sync_date is blank (i.e. the account has never been synced before) allow syncing
+        return true if last_sync_date.blank?
+
+        # If last_sync_date is not today, allow syncing
+        last_sync_date != Date.today
     end
 
     # The earliest date we can calculate a balance for
