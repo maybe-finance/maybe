@@ -5,6 +5,8 @@ namespace :demo_data do
 
     family.accounts.delete_all
     ExchangeRate.delete_all
+    family.transaction_categories.delete_all
+    Transaction::Category.create_default_categories(family)
 
     user = User.find_or_create_by(email: "user@maybe.local") do |u|
       u.password = "password"
@@ -45,8 +47,6 @@ namespace :demo_data do
     ExchangeRate.insert_all(exchange_rates)
 
     puts "Loaded mock exchange rates for last 60 days"
-
-    Transaction::Category.create_default_categories(family) if family.transaction_categories.empty?
 
     # ========== Accounts ================
     empty_account = Account.create(name: "Demo Empty Account", family: family, accountable: Account::Depository.new, balance: 500, currency: "USD")
