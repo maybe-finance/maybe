@@ -38,7 +38,7 @@ jobs:
       - name: Scan for security vulnerabilities in JavaScript dependencies
         run: bin/importmap audit
 
-  lint:
+  lint_ruby:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -53,6 +53,22 @@ jobs:
 
       - name: Lint code for consistent style
         run: bin/rubocop -f github
+
+  lint_templates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Lint templates for consistent style
+        run: ./bin/erblint ./app/**/*.erb
 
   test:
     runs-on: ubuntu-latest
