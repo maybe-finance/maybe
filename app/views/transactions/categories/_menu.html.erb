@@ -8,7 +8,7 @@
       <div class="flex flex-col relative" data-controller="list-filter">
         <div class="grow p-1.5">
           <div class="relative flex items-center bg-white border border-gray-200 rounded-lg">
-            <input placeholder="Search" type="search" class="placeholder:text-sm placeholder:text-gray-500 font-normal h-10 relative pl-10 w-full border-none rounded-lg" data-list-filter-target="input" data-action="list-filter#filter" />
+            <input placeholder="Search" autocomplete="nope" type="search" class="placeholder:text-sm placeholder:text-gray-500 font-normal h-10 relative pl-10 w-full border-none rounded-lg" data-list-filter-target="input" data-action="list-filter#filter">
             <%= lucide_icon("search", class: "w-5 h-5 text-gray-500 ml-2 absolute inset-0 transform top-1/2 -translate-y-1/2") %>
           </div>
         </div>
@@ -21,7 +21,7 @@
             <%= render partial: "transactions/categories/dropdown/row", locals: { category:, transaction: } %>
           <% end %>
         </div>
-        <hr/>
+        <hr>
         <div data-controller="menu" class="relative p-1.5 w-full">
           <button data-menu-target="button" class="flex text-sm font-medium items-center gap-2 text-gray-500 w-full rounded-lg p-2 hover:bg-gray-100">
             <%= lucide_icon("plus", class: "w-5 h-5") %>

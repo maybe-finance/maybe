@@ -35,10 +35,9 @@
             <button data-menu-target="button">
               <div class="text-white w-9 h-9 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= Current.user.email.first %></div>
             </button>
-            <div 
-              data-menu-target="content" 
-              class="hidden absolute min-w-[200px] z-10 top-10 right-0 bg-white p-1 rounded-sm shadow-xs border border-alpha-black-25 w-fit"
-            >
+            <div
+              data-menu-target="content"
+              class="hidden absolute min-w-[200px] z-10 top-10 right-0 bg-white p-1 rounded-sm shadow-xs border border-alpha-black-25 w-fit">
               <%= link_to edit_settings_path, class: "flex gap-1 items-center hover:bg-gray-50 rounded-md p-2" do %>
                 <%= lucide_icon("pencil-line", class: "w-5 h-5 text-gray-500 shrink-0") %>
                 <span class="text-gray-900 text-sm">Settings</span>
@@ -65,7 +64,7 @@
         </nav>
         <div class="flex flex-col mt-6">
           <div class="flex items-center justify-between">
-            <%= link_to accounts_path, class: 'text-xs uppercase text-gray-500 font-bold tracking-wide' do%>
+            <%= link_to accounts_path, class: 'text-xs uppercase text-gray-500 font-bold tracking-wide' do %>
               <%= t('.accounts') %>
             <% end %>
             <%= link_to new_account_path, class: 'block hover:bg-gray-100 p-2 text-sm font-semibold text-gray-900 flex items-center rounded', title: t('.new_account'), data: { turbo_frame: "modal" } do %>

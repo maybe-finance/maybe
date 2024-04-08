@@ -1,19 +1,18 @@
 <div class="space-y-4">
   <div>
     <h1 class="sr-only">Dashboard</h1>
-    <p class="text-xl font-medium text-gray-900 mb-1"><%= t('.greeting', name: Current.user.first_name )%></p>
+    <p class="text-xl font-medium text-gray-900 mb-1"><%= t('.greeting', name: Current.user.first_name ) %></p>
     <p class="text-gray-500 text-sm font-medium"><%= Date.current.strftime('%A, %b %d') %></p>
   </div>
   <section class="bg-white rounded-xl shadow-xs border border-alpha-black-25">
     <div class="flex justify-between p-4">
       <div>
-        <%= render partial: "shared/balance_heading", locals: { 
-            label: "Net Worth", 
+        <%= render partial: "shared/balance_heading", locals: {
+            label: "Net Worth",
             period: @period,
             balance: Current.family.net_worth,
             trend: @net_worth_series.trend
-        } 
-        %>
+        } %>
       </div>
       <%= form_with url: root_path, method: :get, class: "flex items-center gap-4", data: { controller: "auto-submit-form" } do %>
         <%= render partial: "shared/period_select", locals: { value: @period.name } %>
@@ -25,24 +24,23 @@
     <div class="border-t border-t-alpha-black-100 flex divide-x divide-gray-200">
       <div class="w-1/2 p-4 flex items-stretch justify-between">
         <div class="space-y-2 grow">
-          <%= render partial: "shared/balance_heading", locals: { 
+          <%= render partial: "shared/balance_heading", locals: {
                 label: "Assets",
                 period: @period,
                 balance: Current.family.assets,
-                trend: @asset_series.trend 
+                trend: @asset_series.trend
             } %>
         </div>
-        <div 
-            data-controller="trendline" 
-            id="assetsTrendline" 
-            class="h-full w-2/5" 
+        <div
+            data-controller="trendline"
+            id="assetsTrendline"
+            class="h-full w-2/5"
             data-trendline-series-value="<%= @asset_series.to_json %>"
-            data-trendline-classification-value="asset"
-            ></div>
+            data-trendline-classification-value="asset"></div>
       </div>
       <div class="w-1/2 p-4 flex items-stretch justify-between">
         <div class="space-y-2 grow">
-          <%= render partial: "shared/balance_heading", locals: { 
+          <%= render partial: "shared/balance_heading", locals: {
                 label: "Liabilities",
                 period: @period,
                 size: "md",
@@ -50,13 +48,12 @@
                 trend: @liability_series.trend
             } %>
         </div>
-        <div 
-            data-controller="trendline" 
-            id="liabilitiesTrendline" 
-            class="h-full w-2/5" 
+        <div
+            data-controller="trendline"
+            id="liabilitiesTrendline"
+            class="h-full w-2/5"
             data-trendline-series-value="<%= @liability_series.to_json %>"
-            data-trendline-classification-value="liability"
-            ></div>
+            data-trendline-classification-value="liability"></div>
       </div>
     </div>
   </section>
