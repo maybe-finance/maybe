@@ -29,6 +29,11 @@ gem "good_job"
 # Search
 gem "ransack"
 
+# Error logging
+gem "stackprof"
+gem "sentry-ruby"
+gem "sentry-rails"
+
 # Other
 gem "bcrypt", "~> 3.1.7"
 gem "inline_svg"
