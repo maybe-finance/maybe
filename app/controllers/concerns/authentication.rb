@@ -3,7 +3,7 @@ module Authentication
 
   included do
     before_action :authenticate_user!
-    after_action :set_last_login_at
+    after_action :set_last_login_at, if: -> { Current.user }
   end
 
   class_methods do
