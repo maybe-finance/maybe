@@ -6,6 +6,9 @@ en:
     index:
       new_account: New account
     new:
+      currency:
+        all_others: All Others
+        popular: Popular
       name:
         label: Account name
         placeholder: Example account name

@@ -41,12 +41,28 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
 
     merged_options = default_options.merge(options)
 
+    grouped_options = currency_options_for_select
+    selected_currency = money&.currency&.iso_code
+
     @template.form_field_tag do
       (label(method, *label_args(options)).to_s if options[:label]) +
       @template.tag.div(class: "flex items-center") do
         number_field(money_amount_method, merged_options.except(:label)) +
-        select(money_currency_method, Money::Currency.popular.map(&:iso_code), { selected: money&.currency&.iso_code }, { disabled: readonly_currency, class: "ml-auto form-field__input w-fit pr-8" })
+        grouped_select(money_currency_method, grouped_options, { selected: selected_currency, disabled: readonly_currency }, class: "ml-auto form-field__input w-fit pr-8")
       end
+    end
+  end
+
+
+  def grouped_select(method, grouped_choices, options = {}, html_options = {})
+    default_options = { class: "form-field__input" }
+    merged_html_options = default_options.merge(html_options)
+
+    label_html = label(method, *label_args(options)).to_s if options[:label]
+    select_html = @template.grouped_collection_select(@object_name, method, grouped_choices, :last, :first, :last, :first, options, merged_html_options)
+
+    @template.content_tag(:div, class: "flex items-center") do
+      label_html.to_s.html_safe + select_html
     end
   end
 
@@ -82,6 +98,17 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   private
+
+  def currency_options_for_select
+    popular_currencies = Money::Currency.popular.map { |currency| [ currency.iso_code, currency.iso_code ] }
+    all_currencies = Money::Currency.all_instances.map { |currency| [ currency.iso_code, currency.iso_code ] }
+    all_other_currencies = all_currencies.reject { |c| popular_currencies.map(&:last).include?(c.last) }.sort_by(&:last)
+
+    {
+      I18n.t("accounts.new.currency.popular") => popular_currencies,
+      I18n.t("accounts.new.currency.all_others") => all_other_currencies
+    }
+  end
 
   def label_args(options)
     case options[:label]
