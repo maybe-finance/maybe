@@ -1,8 +1,8 @@
 <div class="space-y-4">
   <div>
     <h1 class="sr-only">Dashboard</h1>
-    <p class="text-xl font-medium text-gray-900 mb-1"><%= t('.greeting', name: Current.user.first_name ) %></p>
-    <p class="text-gray-500 text-sm font-medium"><%= Date.current.strftime('%A, %b %d') %></p>
+    <p class="text-xl font-medium text-gray-900 mb-1"><%= t(".greeting", name: Current.user.first_name ) %></p>
+    <p class="text-gray-500 text-sm font-medium"><%= Date.current.strftime("%A, %b %d") %></p>
   </div>
   <section class="bg-white rounded-xl shadow-xs border border-alpha-black-25">
     <div class="flex justify-between p-4">
@@ -67,7 +67,7 @@
         <div class="flex items-center gap-2">
           <%= link_to new_account_path, class: "flex items-center gap-1 p-2 text-gray-900 text-sm font-medium bg-gray-50 rounded-lg hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
             <%= lucide_icon("plus", class: "w-5 h-5 text-gray-500") %>
-            <p><%= t('.new') %></p>
+            <p><%= t(".new") %></p>
           <% end %>
           <%= form_with url: root_path, method: :get, class: "flex items-center gap-4", data: { controller: "auto-submit-form" } do %>
             <%= render partial: "shared/period_select", locals: { value: @period.name } %>

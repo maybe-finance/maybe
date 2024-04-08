@@ -3,7 +3,7 @@
     <h1 class="text-xl font-medium text-gray-900">Accounts</h1>
     <%= link_to new_account_path, class: "flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2", data: { turbo_frame: "modal" } do %>
       <%= lucide_icon("plus", class: "w-5 h-5") %>
-      <span><%= t('.new_account') %></span>
+      <span><%= t(".new_account") %></span>
     <% end %>
   </div>
   <% if Current.family.accounts.empty? %>
@@ -13,7 +13,7 @@
         <p class="text-gray-500 mb-4">Add an account either via connection, importing or entering manually.</p>
         <%= link_to new_account_path, class: "w-fit flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2", data: { turbo_frame: "modal" } do %>
           <%= lucide_icon("plus", class: "w-5 h-5") %>
-          <span><%= t('.new_account') %></span>
+          <span><%= t(".new_account") %></span>
         <% end %>
       </div>
     </div>

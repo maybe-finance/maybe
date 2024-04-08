@@ -29,7 +29,7 @@
       <div class="flex-col p-5 min-w-80">
         <div class="flex items-center justify-between">
           <%= link_to root_path do %>
-            <%= image_tag 'logo.svg', alt: 'Maybe', class: "h-[22px]" %>
+            <%= image_tag "logo.svg", alt: "Maybe", class: "h-[22px]" %>
           <% end %>
           <div class="relative" data-controller="menu">
             <button data-menu-target="button">
@@ -52,31 +52,31 @@
         <nav>
           <ul class="mt-6 space-y-1">
             <li>
-              <%= sidebar_link_to t('.dashboard'), root_path, icon: 'layout-grid' %>
+              <%= sidebar_link_to t(".dashboard"), root_path, icon: "layout-grid" %>
             </li>
             <li>
-              <%= sidebar_link_to t('.accounts'), accounts_path, icon: 'layers' %>
+              <%= sidebar_link_to t(".accounts"), accounts_path, icon: "layers" %>
             </li>
             <li>
-              <%= sidebar_link_to t('.transactions'), transactions_path, icon: 'credit-card' %>
+              <%= sidebar_link_to t(".transactions"), transactions_path, icon: "credit-card" %>
             </li>
           </ul>
         </nav>
         <div class="flex flex-col mt-6">
           <div class="flex items-center justify-between">
-            <%= link_to accounts_path, class: 'text-xs uppercase text-gray-500 font-bold tracking-wide' do %>
-              <%= t('.accounts') %>
+            <%= link_to accounts_path, class: "text-xs uppercase text-gray-500 font-bold tracking-wide" do %>
+              <%= t(".accounts") %>
             <% end %>
-            <%= link_to new_account_path, class: 'block hover:bg-gray-100 p-2 text-sm font-semibold text-gray-900 flex items-center rounded', title: t('.new_account'), data: { turbo_frame: "modal" } do %>
+            <%= link_to new_account_path, class: "block hover:bg-gray-100 p-2 text-sm font-semibold text-gray-900 flex items-center rounded", title: t(".new_account"), data: { turbo_frame: "modal" } do %>
               <%= lucide_icon("plus", class: "w-5 h-5 text-gray-500") %>
             <% end %>
           </div>
           <%= link_to new_account_path, class: "flex items-center gap-4 px-2 py-3 mb-1 text-gray-500 text-sm font-medium rounded-[10px] hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
             <%= lucide_icon("plus", class: "w-5 h-5") %>
-            <p><%= t('.new_account') %></p>
+            <p><%= t(".new_account") %></p>
           <% end %>
           <% account_groups.each do |group| %>
-            <%= render 'accounts/account_list', group: group %>
+            <%= render "accounts/account_list", group: group %>
           <% end %>
         </div>
       </div>
@@ -85,6 +85,6 @@
       </main>
     </div>
     <%= turbo_frame_tag "modal" %>
-    <%= render 'shared/custom_confirm_modal' %>
+    <%= render "shared/custom_confirm_modal" %>
   </body>
 </html>

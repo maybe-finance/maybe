@@ -33,16 +33,16 @@
         <%= render "shared/logo" %>
 
         <h2 class="mt-6 text-3xl font-semibold tracking-tight text-center font-display">
-          <%= content_for?(:header_title) ? yield(:header_title).html_safe : t('.your_account') %>
+          <%= content_for?(:header_title) ? yield(:header_title).html_safe : t(".your_account") %>
         </h2>
 
         <% if controller_name == "sessions" %>
         <p class="mt-2 text-sm text-center text-gray-600">
-          <%= t('.or') %> <%= link_to t('.sign_up'), new_registration_path, class: 'font-medium text-gray-600 hover:text-gray-400 transition' %>
+          <%= t(".or") %> <%= link_to t(".sign_up"), new_registration_path, class: "font-medium text-gray-600 hover:text-gray-400 transition" %>
         </p>
         <% elsif controller_name == "registrations" %>
         <p class="mt-2 text-sm text-center text-gray-600">
-          <%= t('.or') %> <%= link_to t('.sign_in'), new_session_path, class: 'font-medium text-gray-600 hover:text-gray-400 transition' %>
+          <%= t(".or") %> <%= link_to t(".sign_in"), new_session_path, class: "font-medium text-gray-600 hover:text-gray-400 transition" %>
         </p>
         <% end %>
 
@@ -53,7 +53,7 @@
       </div>
 
       <div class="p-8 mt-2 text-center">
-        <p class="mt-6 text-sm text-black"><%= link_to t('.privacy_policy'), "/privacy", class: "font-medium text-gray-600 hover:text-gray-400 transition" %> &bull; <%= link_to t('.terms_of_service'), "/terms", class: "font-medium text-gray-600 hover:text-gray-400 transition" %></p>
+        <p class="mt-6 text-sm text-black"><%= link_to t(".privacy_policy"), "/privacy", class: "font-medium text-gray-600 hover:text-gray-400 transition" %> &bull; <%= link_to t(".terms_of_service"), "/terms", class: "font-medium text-gray-600 hover:text-gray-400 transition" %></p>
       </div>
 
     </div>
