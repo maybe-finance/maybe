@@ -55,7 +55,7 @@ jobs:
         run: bin/rubocop -f github
 
       - name: Lint templates for consistent style
-        run: ./bin/erblint --lint-all
+        run: ./bin/erblint ./app/**/*.erb
 
   test:
     runs-on: ubuntu-latest
