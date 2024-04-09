@@ -1,0 +1,9 @@
+EnableDefaultLinters: true
+linters:
+  Rubocop:
+    enabled: true
+    only: [Style/StringLiterals]
+    rubocop_config:
+      Style/StringLiterals:
+        Enabled: true
+        EnforcedStyle: double_quotes

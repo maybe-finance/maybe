@@ -6,8 +6,8 @@
     </div>
   </div>
   <div class="flex items-center justify-between grow">
-    <%= f.date_field :date, required: 'required', class: "border border-alpha-black-200 bg-white rounded-lg shadow-xs min-w-[200px] px-3 py-1.5 text-gray-900 text-sm" %>
-    <%= f.number_field :value, required: 'required', placeholder: "0.00", class: "bg-white border border-alpha-black-200 rounded-lg shadow-xs text-gray-900 text-sm px-3 py-1.5 text-right" %>
+    <%= f.date_field :date, required: "required", class: "border border-alpha-black-200 bg-white rounded-lg shadow-xs min-w-[200px] px-3 py-1.5 text-gray-900 text-sm" %>
+    <%= f.number_field :value, required: "required", placeholder: "0.00", class: "bg-white border border-alpha-black-200 rounded-lg shadow-xs text-gray-900 text-sm px-3 py-1.5 text-right" %>
   </div>
   <div class="w-[296px] flex gap-2 justify-end items-center">
     <%= link_to "Cancel", account_path(@valuation.account), class: "text-sm text-gray-900 hover:text-gray-800 font-medium px-3 py-1.5" %>

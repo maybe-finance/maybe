@@ -48,6 +48,7 @@ group :development, :test do
   gem "dotenv-rails"
   gem "letter_opener"
   gem "i18n-tasks"
+  gem "erb_lint"
 end
 
 group :development do

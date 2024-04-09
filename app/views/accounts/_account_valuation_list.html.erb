@@ -25,26 +25,24 @@
         <% end %>
       </div>
       <div class="relative w-[72px]" data-controller="menu">
-        <button 
-          data-menu-target="button" 
-          class="ml-auto flex items-center justify-center hover:bg-gray-50 w-8 h-8 rounded-lg"
-          >
+        <button
+          data-menu-target="button"
+          class="ml-auto flex items-center justify-center hover:bg-gray-50 w-8 h-8 rounded-lg">
           <%= lucide_icon("more-horizontal", class: "w-5 h-5 text-gray-500") %>
         </button>
-        <div 
-          data-menu-target="content" 
-          class="absolute min-w-[200px] z-10 top-10 right-0 bg-white p-1 rounded-sm shadow-xs border border-alpha-black-25 w-fit"
-        >
-          <%= link_to edit_valuation_path(valuation.original), 
+        <div
+          data-menu-target="content"
+          class="absolute min-w-[200px] z-10 top-10 right-0 bg-white p-1 rounded-sm shadow-xs border border-alpha-black-25 w-fit">
+          <%= link_to edit_valuation_path(valuation.original),
               class: "flex gap-1 items-center hover:bg-gray-50 rounded-md p-2" do %>
             <%= lucide_icon("pencil-line", class: "w-5 h-5 text-gray-500 shrink-0") %>
             <span class="text-gray-900 text-sm">Edit entry</span>
           <% end %>
-          <%= link_to valuation_path(valuation.original), 
-              data: { turbo_method: :delete, 
-                      turbo_confirm: { title: t('custom_turbo_confirm.history.title'), 
-                                       body: t('custom_turbo_confirm.history.body_html'), 
-                                       accept: t('custom_turbo_confirm.history.accept') } }, 
+          <%= link_to valuation_path(valuation.original),
+              data: { turbo_method: :delete,
+                      turbo_confirm: { title: t("custom_turbo_confirm.history.title"),
+                                       body: t("custom_turbo_confirm.history.body_html"),
+                                       accept: t("custom_turbo_confirm.history.accept") } },
               class: "text-red-600 flex gap-1 items-center hover:bg-gray-50 rounded-md p-2" do %>
             <%= lucide_icon("trash-2", class: "w-5 h-5 shrink-0") %>
             <span class="text-sm">Delete entry</span>

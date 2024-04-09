@@ -23,15 +23,15 @@
         </button>
         <div data-menu-target="content" class="absolute z-10 top-10 right-0 border border-alpha-black-25 bg-white rounded-lg shadow-xs hidden">
           <div class="w-48 px-3 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-            <%= button_to account_path(@account), 
-                method: :delete, 
-                class: "block w-full py-2 text-red-600 hover:text-red-800 flex items-center", 
-                data: { 
-                  turbo_confirm: { 
-                    title: t("custom_turbo_confirm.account_destroy.title"), 
-                    body: t("custom_turbo_confirm.account_destroy.body_html"), 
-                    accept: t("custom_turbo_confirm.account_destroy.accept", name: @account.name) 
-                  } 
+            <%= button_to account_path(@account),
+                method: :delete,
+                class: "block w-full py-2 text-red-600 hover:text-red-800 flex items-center",
+                data: {
+                  turbo_confirm: {
+                    title: t("custom_turbo_confirm.account_destroy.title"),
+                    body: t("custom_turbo_confirm.account_destroy.body_html"),
+                    accept: t("custom_turbo_confirm.account_destroy.accept", name: @account.name)
+                  }
                 } do %>
               <%= lucide_icon("trash-2", class: "w-5 h-5 mr-2") %> Delete account
             <% end %>
@@ -46,13 +46,12 @@
   <div class="bg-white shadow-xs rounded-xl border border-alpha-black-25 rounded-lg">
     <div class="p-4 flex justify-between">
       <div class="space-y-2">
-        <%= render partial: "shared/balance_heading", locals: { 
-            label: "Total Value", 
+        <%= render partial: "shared/balance_heading", locals: {
+            label: "Total Value",
             period: @period,
             balance: @account.balance_money,
             trend: @balance_series.trend
-          } 
-        %>
+          } %>
       </div>
       <%= form_with url: account_path(@account), method: :get, class: "flex items-center gap-4", data: { controller: "auto-submit-form" } do %>
         <%= render partial: "shared/period_select", locals: { value: @period.name } %>

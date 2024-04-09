@@ -148,6 +148,13 @@ GEM
       dotenv (= 3.1.0)
       railties (>= 6.1)
     drb (2.2.1)
+    erb_lint (0.5.0)
+      activesupport
+      better_html (>= 2.0.1)
+      parser (>= 2.7.1.4)
+      rainbow
+      rubocop
+      smart_properties
     erubi (1.12.0)
     et-orbi (1.2.11)
       tzinfo
@@ -418,6 +425,7 @@ DEPENDENCIES
   capybara
   debug
   dotenv-rails
+  erb_lint
   faraday
   good_job
   hotwire-livereload
