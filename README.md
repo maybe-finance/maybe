@@ -17,6 +17,16 @@ We spent the better part of $1,000,000 building the app (employees + contractors
 
 We're now reviving the product as a fully open-source project. The goal is to let you run the app yourself, for free, and use it to manage your own finances and eventually offer a hosted version of the app for a small monthly fee.
 
+## Self Hosting
+
+You can deploy Maybe in one click, for FREE, in less than 5 minutes with Render. Just click the button below to get started:
+
+<a href="https://render.com/deploy?repo=https://github.com/maybe-finance/maybe">
+<img src="https://render.com/images/deploy-to-render-button.svg" alt="Deploy to Render" />
+</a>
+
+For additional configuration options and instructions, please visit our [full guide on self hosting here](https://github.com/maybe-finance/maybe/blob/main/docs/self-hosting.md).
+
 ## Local Development Setup
 
 ### Requirements
@@ -79,14 +89,6 @@ In development, we use `letter_opener` to automatically open emails in your brow
 Before contributing, you'll likely find it helpful to [understand context and general vision/direction](https://github.com/maybe-finance/maybe/wiki).
 
 Once you've done that, please visit our [contributing guide](https://github.com/maybe-finance/maybe/blob/main/CONTRIBUTING.md) to get started!
-
-## Self Hosting
-
-Our long term goal is to make self-hosting as easy as possible. That said, during these early stages of building the product, we are focusing our efforts on development.
-
-We will update this section as we get closer to an initial release.
-
-Please see our [guide on self hosting here](https://github.com/maybe-finance/maybe/wiki/Self-Hosting-Setup-Guide).
 
 ## Repo Activity
 
