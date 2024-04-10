@@ -9,5 +9,12 @@ module Providable
     def exchange_rates_provider
       Provider::Synth.new
     end
+
+    def git_repository_provider
+      Provider::Github.new \
+        name: "maybe",
+        owner: "maybe-finance",
+        branch: "main"
+    end
   end
 end

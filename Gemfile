@@ -33,6 +33,8 @@ gem "ransack"
 gem "stackprof"
 gem "sentry-ruby"
 gem "sentry-rails"
+gem "rails-settings-cached"
+gem "octokit"
 
 # Other
 gem "bcrypt", "~> 3.1.7"

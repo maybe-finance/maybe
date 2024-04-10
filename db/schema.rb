@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_04_04_112829) do
+ActiveRecord::Schema[7.2].define(version: 2024_04_10_183531) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -85,7 +85,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_04_112829) do
     t.uuid "accountable_id"
     t.decimal "balance", precision: 19, scale: 4, default: "0.0"
     t.string "currency", default: "USD"
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Account::Loan'::character varying, 'Account::Credit'::character varying, 'Account::OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Account::Loan'::character varying)::text, ('Account::Credit'::character varying)::text, ('Account::OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.boolean "is_active", default: true, null: false
     t.enum "status", default: "ok", null: false, enum_type: "account_status"
     t.jsonb "sync_warnings", default: "[]", null: false
@@ -198,6 +198,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_04_112829) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["token"], name: "index_invite_codes_on_token", unique: true
+  end
+
+  create_table "settings", force: :cascade do |t|
+    t.string "var", null: false
+    t.text "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["var"], name: "index_settings_on_var", unique: true
   end
 
   create_table "transaction_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
