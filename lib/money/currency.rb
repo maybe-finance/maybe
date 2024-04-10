@@ -26,6 +26,10 @@ class Money::Currency
             @all ||= YAML.load_file(CURRENCIES_FILE_PATH)
         end
 
+        def all_instances
+            all.values.map { |currency_data| new(currency_data["iso_code"]) }
+        end
+
         def popular
             all.values.sort_by { |currency| currency["priority"] }.first(12).map { |currency_data| new(currency_data["iso_code"]) }
         end
