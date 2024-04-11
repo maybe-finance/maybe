@@ -5,7 +5,10 @@ Rails.application.routes.draw do
   resource :session
   resource :password_reset
   resource :password
-  resource :settings, only: %i[edit update]
+
+  resource :settings, only: %i[edit update] do
+    resource :self_hosting, only: %i[edit update], controller: "settings/self_hosting"
+  end
 
   resources :transactions do
     match "search" => "transactions#search", on: :collection, via: [ :get, :post ], as: :search

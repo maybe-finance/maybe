@@ -1,0 +1,12 @@
+<h1 class="text-3xl font-semibold font-display">Edit Self Hosting Settings</h1>
+<%= form_with model: Setting.new, url: settings_self_hosting_path, method: :patch, local: true, html: { class: "space-y-4" } do |form| %>
+  <%= form.text_field :render_deploy_hook, label: "Render Deploy Hook", placeholder: "https://api.render.com/deploy/srv-xyz...", value: Setting.render_deploy_hook %>
+  <div class="pl-3 text-sm text-gray-900">
+    <p>Learn more: <%= link_to "https://docs.render.com/docs/deploy-hooks", "https://docs.render.com/docs/deploy-hooks", target: "_blank", rel: "noopener noreferrer", class: "text-blue-500 hover:underline" %></p>
+  </div>
+  <div class="fixed right-5 bottom-5">
+    <button type="submit" class="flex items-center justify-center w-12 h-12 mb-2 bg-black rounded-full shrink-0 grow-0 hover:bg-gray-600">
+      <%= inline_svg_tag("icn-check.svg", class: "text-white fill-current") %>
+    </button>
+  </div>
+<% end %>

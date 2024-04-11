@@ -1,0 +1,2 @@
+module Settings::SelfHostingHelper
+end
