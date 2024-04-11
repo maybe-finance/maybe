@@ -1,8 +1,11 @@
 class Settings::SelfHostingController < ApplicationController
   def edit
+    redirect_to edit_settings_path unless self_hosted?
   end
 
   def update
+    render "settings/edit", status: :forbidden and return unless self_hosted?
+
     if all_updates_valid?
       self_hosting_params.keys.each do |key|
         Setting.send("#{key}=", self_hosting_params[key].strip)

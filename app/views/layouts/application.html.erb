@@ -42,9 +42,11 @@
                 <%= lucide_icon("pencil-line", class: "w-5 h-5 text-gray-500 shrink-0") %>
                 <span class="text-gray-900 text-sm">General Settings</span>
               <% end %>
-              <%= link_to edit_settings_self_hosting_path, class: "flex gap-1 items-center hover:bg-gray-50 rounded-md p-2" do %>
-                <%= lucide_icon("pencil-line", class: "w-5 h-5 text-gray-500 shrink-0") %>
-                <span class="text-gray-900 text-sm">Self Host Settings</span>
+              <% if self_hosted? %>
+                <%= link_to edit_settings_self_hosting_path, class: "flex gap-1 items-center hover:bg-gray-50 rounded-md p-2" do %>
+                  <%= lucide_icon("pencil-line", class: "w-5 h-5 text-gray-500 shrink-0") %>
+                  <span class="text-gray-900 text-sm">Self Host Settings</span>
+                <% end %>
               <% end %>
               <%= button_to session_path, method: :delete, class: "w-full text-gray-900 flex gap-1 items-center hover:bg-gray-50 rounded-md p-2" do %>
                 <%= lucide_icon("log-out", class: "w-5 h-5 shrink-0") %>
