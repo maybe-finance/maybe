@@ -12,9 +12,9 @@ module Providable
 
     def git_repository_provider
       Provider::Github.new \
-        name: "maybe",
-        owner: "maybe-finance",
-        branch: "main"
+        name: ENV.fetch("GITHUB_REPO_NAME", "maybe"),
+        owner: ENV.fetch("GITHUB_REPO_OWNER", "maybe-finance"),
+        branch: ENV.fetch("GITHUB_REPO_BRANCH", "main")
     end
   end
 end

@@ -10,7 +10,7 @@ module Maybe
 
     private
       def semver
-        "0.0.0" # Placeholder until first release to support self host flow
+        "0.0.0"
       end
   end
 end
