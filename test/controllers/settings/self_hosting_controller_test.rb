@@ -5,13 +5,13 @@ class Settings::SelfHostingControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:family_admin)
   end
   test "should get edit when self hosting is enabled" do
-    ENV["SELF_HOSTING_ENABLED"] = "true"
+    ApplicationController.any_instance.stubs(:self_hosted?).returns(true)
     get edit_settings_self_hosting_url
     assert_response :success
   end
 
   test "cannot edit when self hosting is disabled" do
-    ENV["SELF_HOSTING_ENABLED"] = "false"
+    ApplicationController.any_instance.stubs(:self_hosted?).returns(false)
 
     get edit_settings_self_hosting_url
     assert_redirected_to edit_settings_url
@@ -19,7 +19,7 @@ class Settings::SelfHostingControllerTest < ActionDispatch::IntegrationTest
 
   test "can update settings when self hosting is enabled" do
     NEW_RENDER_DEPLOY_HOOK = "https://api.render.com/deploy/srv-"
-    ENV["SELF_HOSTING_ENABLED"] = "true"
+    ApplicationController.any_instance.stubs(:self_hosted?).returns(true)
 
     assert_nil Setting.render_deploy_hook
     patch settings_self_hosting_url, params: { setting: { render_deploy_hook: NEW_RENDER_DEPLOY_HOOK } }
@@ -27,7 +27,7 @@ class Settings::SelfHostingControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "cannot update dynamic settings when self hosting is disabled" do
-    ENV["SELF_HOSTING_ENABLED"] = "false"
+    ApplicationController.any_instance.stubs(:self_hosted?).returns(false)
 
     patch settings_self_hosting_url, params: { setting: { render_deploy_hook: "https://example.com" } }
 

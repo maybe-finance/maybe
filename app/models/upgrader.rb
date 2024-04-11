@@ -5,7 +5,7 @@ class Upgrader
     attr_writer :config
 
     def config
-      @config ||= default_config
+      @config ||= Config.new
     end
 
     def find_upgrade(commit)
@@ -18,7 +18,7 @@ class Upgrader
     end
 
     def available_upgrades
-      return [] unless config.mode == :upgrades
+      return [] unless config.mode == :enabled
       upgrade_candidates.select(&:available?)
     end
 
@@ -27,12 +27,9 @@ class Upgrader
     end
 
     private
-      def default_config
-        enable_upgrades = ENV["SELF_HOSTING_ENABLED"] == "true"
-        Config.new({ mode: enable_upgrades ? :upgrades : :alerts })
-      end
-
       def upgrade_candidates
+        return [] if config.mode == :disabled
+
         latest_candidates = fetch_latest_upgrade_candidates_from_provider
         return [] unless latest_candidates
 

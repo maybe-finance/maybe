@@ -8,8 +8,8 @@ class Provider::Github
   end
 
   def fetch_latest_upgrade_candidates
-    Rails.logger.info "Fetching latest GitHub upgrade candidates"
-    Rails.cache.fetch("latest_github_upgrade_candidates", expires_in: 1.minute) do
+    Rails.cache.fetch("latest_github_upgrade_candidates", expires_in: 5.minutes) do
+      Rails.logger.info "Fetching latest GitHub upgrade candidates"
       begin
         latest_release = Octokit.releases(repo).first
         latest_version = latest_release ? Semver.from_release_tag(latest_release.tag_name) : Semver.new(Maybe.version)

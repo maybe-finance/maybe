@@ -11,7 +11,7 @@ class UpgraderTest < ActiveSupport::TestCase
 
   # Default setup assumes app is up to date
   setup do
-    Upgrader.config = Upgrader::Config.new({ mode: :upgrades })
+    Upgrader.config = Upgrader::Config.new({ mode: :enabled })
 
     Maybe.stubs(:version).returns(CURRENT_VERSION)
     Maybe.stubs(:commit_sha).returns(CURRENT_COMMIT)
@@ -68,14 +68,14 @@ class UpgraderTest < ActiveSupport::TestCase
   end
 
   test "can see latest upgrades but no available upgrades in alerts mode" do
-    Upgrader.config = Upgrader::Config.new({ mode: :alerts })
+    Upgrader.config = Upgrader::Config.new({ mode: :alerts_only })
 
     assert_equal 1, Upgrader.completed_upgrades.count
     assert_equal 0, Upgrader.available_upgrades.count
   end
 
   test "deployer is null by default" do
-    Upgrader.config = Upgrader::Config.new({ mode: :alerts })
+    Upgrader.config = Upgrader::Config.new({ mode: :alerts_only })
     Upgrader::Deployer::Null.any_instance.expects(:deploy).with(nil).once
     Upgrader.upgrade_to(nil)
   end

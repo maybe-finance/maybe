@@ -1,7 +1,7 @@
 class Upgrader::Deployer
   def self.for(platform)
     case platform
-    when nil
+    when nil, "localhost"
       Upgrader::Deployer::Null.new
     when "render"
       Upgrader::Deployer::Render.new

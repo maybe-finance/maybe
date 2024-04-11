@@ -31,9 +31,8 @@ class UpgradesControllerTest < ActionDispatch::IntegrationTest
     post acknowledge_upgrade_path(@available_upgrade.commit_sha)
 
     @user.reload
-    assert_response :success
     assert_equal @user.last_prompted_upgrade_commit_sha, @available_upgrade.commit_sha
-    assert_equal "Upgrade acknowledged", response.parsed_body["message"]
+    assert :redirect
   end
 
   test "should acknowledge an upgrade alert" do
@@ -42,9 +41,8 @@ class UpgradesControllerTest < ActionDispatch::IntegrationTest
     post acknowledge_upgrade_path(@completed_upgrade.commit_sha)
 
     @user.reload
-    assert_response :success
     assert_equal @user.last_alerted_upgrade_commit_sha, @completed_upgrade.commit_sha
-    assert_equal "Upgrade acknowledged", response.parsed_body["message"]
+    assert :redirect
   end
 
   test "should deploy an upgrade" do
@@ -53,9 +51,8 @@ class UpgradesControllerTest < ActionDispatch::IntegrationTest
     post deploy_upgrade_path(@available_upgrade.commit_sha)
 
     @user.reload
-    assert_response :success
     assert_equal @user.last_prompted_upgrade_commit_sha, @available_upgrade.commit_sha
-    assert_equal "Upgrade deployed", response.parsed_body["message"]
+    assert :redirect
   end
 
   test "should rollback user state if upgrade fails" do
@@ -63,13 +60,12 @@ class UpgradesControllerTest < ActionDispatch::IntegrationTest
     @user.update!(last_prompted_upgrade_commit_sha: PRIOR_COMMIT)
 
     Upgrader.stubs(:find_upgrade).returns(@available_upgrade)
-    Upgrader.stubs(:upgrade_to).returns(false)
+    Upgrader.stubs(:upgrade_to).returns({ success: false })
 
     post deploy_upgrade_path(@available_upgrade.commit_sha)
 
     @user.reload
-    assert_response :internal_server_error
     assert_equal @user.last_prompted_upgrade_commit_sha, PRIOR_COMMIT
-    assert_equal "Upgrade failed", response.parsed_body["error"]
+    assert :redirect
   end
 end

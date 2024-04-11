@@ -1,6 +1,8 @@
 class Upgrader::Deployer::Null
   def deploy(upgrade)
-    # no-op
-    true
+    {
+      success: true,
+      message: "No-op: null deployer initiated deploy successfully"
+    }
   end
 end
