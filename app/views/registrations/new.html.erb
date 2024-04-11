@@ -1,19 +1,13 @@
 <%
   header_title t(".title")
 %>
-
 <%= form_with model: @user, url: registration_path do |form| %>
   <%= auth_messages form %>
-
   <%= form.email_field :email, autofocus: false, autocomplete: "email", required: "required", placeholder: "you@example.com", label: true %>
-
   <%= form.password_field :password, autocomplete: "new-password", required: "required", label: true %>
-
   <%= form.password_field :password_confirmation, autocomplete: "new-password", required: "required", label: true %>
-
-  <% if hosted_app? %>
+  <% if invite_code_required? %>
     <%= form.password_field :invite_code, required: "required", label: true %>
   <% end %>
-
   <%= form.submit %>
 <% end %>
