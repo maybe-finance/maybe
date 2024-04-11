@@ -1,21 +1,23 @@
 class Upgrader::Config
-  DEFAULT_HOSTING_PLATFORM = "render"
+  DEFAULT_MODE = :alerts
 
-  attr_reader :env, :mode
+  attr_reader :env, :options
 
-  def initialize(env: ENV, deployer_factory: Upgrader::Deployer)
+  def initialize(options, env: ENV)
     @env = env
-    @deployer_factory = deployer_factory
-
-    # Determines the operational mode of the application based on the hosting environment.
-    # :full mode indicates the application is self-hosted with capabilities for full upgrades.
-    # :notifications mode indicates the application is externally hosted with only upgrade notifications supported.
-    @mode = env["SELF_HOSTING_ENABLED"] == "true" ? :upgrades : :alerts
+    @options = options
   end
 
   def deployer
-    return @deployer_factory.for(nil) unless mode == :upgrades
-    platform = env["HOSTING_PLATFORM"] || DEFAULT_HOSTING_PLATFORM
-    @deployer_factory.for(platform)
+    factory = options[:deployer_factory] || Upgrader::Deployer
+    factory.for(hosting_platform)
+  end
+
+  def hosting_platform
+    options[:hosting_platform] || env["HOSTING_PLATFORM"]
+  end
+
+  def mode
+    options[:mode] || DEFAULT_MODE
   end
 end

@@ -2,26 +2,34 @@ class Upgrader
   include Provided
 
   class << self
-    def upgrade_to(candidate)
-      config.deployer.deploy(candidate)
+    attr_writer :config
+
+    def config
+      @config ||= default_config
+    end
+
+    def find_upgrade(commit)
+      upgrade_candidates.find { |candidate| candidate.commit_sha == commit }
+    end
+
+    def upgrade_to(commit_or_upgrade)
+      upgrade = commit_or_upgrade.is_a?(String) ? find_upgrade(commit_or_upgrade) : commit_or_upgrade
+      config.deployer.deploy(upgrade)
     end
 
     def available_upgrades
       return [] unless config.mode == :upgrades
-      upgrade_candidates.select do |upgrade|
-        upgrade.version > Maybe.version || (upgrade.version == Maybe.version && upgrade.commit_sha != Maybe.commit_sha)
-      end
+      upgrade_candidates.select(&:available?)
     end
 
     def completed_upgrades
-      upgrade_candidates.select do |upgrade|
-        upgrade.commit_sha == Maybe.commit_sha
-      end
+      upgrade_candidates.select(&:complete?)
     end
 
     private
-      def config
-        @config ||= Upgrader::Config.new
+      def default_config
+        enable_upgrades = ENV["SELF_HOSTING_ENABLED"] == "true"
+        Config.new({ mode: enable_upgrades ? :upgrades : :alerts })
       end
 
       def upgrade_candidates

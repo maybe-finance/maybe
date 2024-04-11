@@ -22,4 +22,4 @@ _Docker is not yet supported, but will be soon._
 
 ## Self hosting disclaimer
 
-While we provide cost estimates for each hosting option
+While we attempt to provide cost-effective deployment options, please remember, **self-hosting _may_ incur monthly charges on your hosting platform of choice**. While we provide cost estimates for each deployment option, it is your responsibility to manage these costs.

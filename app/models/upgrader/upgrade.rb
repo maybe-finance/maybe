@@ -7,4 +7,12 @@ class Upgrader::Upgrade
     @version = data[:version]
     @url = data[:url]
   end
+
+  def complete?
+    commit_sha == Maybe.commit_sha
+  end
+
+  def available?
+    version > Maybe.version || (version == Maybe.version && commit_sha != Maybe.commit_sha)
+  end
 end

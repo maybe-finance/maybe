@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_04_10_183531) do
+ActiveRecord::Schema[7.2].define(version: 2024_04_11_102931) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -242,6 +242,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_10_183531) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "last_login_at"
+    t.string "last_prompted_upgrade_commit_sha"
+    t.string "last_alerted_upgrade_commit_sha"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["family_id"], name: "index_users_on_family_id"
   end
