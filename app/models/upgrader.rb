@@ -38,6 +38,10 @@ class Upgrader
     end
 
     private
+      def available_upgrade_by_type(type)
+        available_upgrades.find { |upgrade| upgrade.type == type }
+      end
+
       def available_upgrades
         upgrade_candidates.select(&:available?)
       end

@@ -27,7 +27,7 @@ class UpgraderTest < ActiveSupport::TestCase
     assert_nil Upgrader.available_upgrade
   end
 
-  test "finds 1 available upgrade when app is on latest release but behind latest commit" do
+  test "finds 1 available and 1 completed upgrade when app is on latest release but behind latest commit" do
     stub_github_data(
       commit: create_upgrade_stub(CURRENT_VERSION, NEXT_COMMIT),
       release: create_upgrade_stub(CURRENT_VERSION, CURRENT_COMMIT)
