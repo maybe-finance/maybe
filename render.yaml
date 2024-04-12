@@ -9,8 +9,8 @@ services:
     autoDeploy: false
     runtime: ruby
     name: maybe
-    repo: https://github.com/maybe-finance/maybe.git
-    branch: main
+    repo: https://github.com/zachgoll/maybe.git
+    branch: self-hosting
     healthCheckPath: /up
     buildCommand: "./bin/render-build.sh"
     preDeployCommand: "bundle exec rails db:migrate"
@@ -39,11 +39,11 @@ services:
       # The app uses this info to know which repo to fetch latest commit data from for upgrades
       # This should MATCH the `repo` and `branch` keys in the config above ALWAYS
       - key: GITHUB_REPO_OWNER
-        value: maybe-finance
+        value: zachgoll
       - key: GITHUB_REPO_NAME
         value: maybe
       - key: GITHUB_REPO_BRANCH
-        value: main
+        value: self-hosting
 
       # Allows your self-hosted instance to auto-upgrade itself
       - key: UPGRADES_MODE
