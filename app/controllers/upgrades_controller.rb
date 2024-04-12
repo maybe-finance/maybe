@@ -1,4 +1,6 @@
 class UpgradesController < ApplicationController
+  before_action :verify_upgrades_enabled
+
   def acknowledge
     commit_sha = params[:id]
     upgrade = Upgrader.find_upgrade(commit_sha)
@@ -46,4 +48,9 @@ class UpgradesController < ApplicationController
 
     redirect_back(fallback_location: root_path)
   end
+
+  private
+    def verify_upgrades_enabled
+      head :not_found unless ENV["UPGRADES_ENABLED"] == "true"
+    end
 end

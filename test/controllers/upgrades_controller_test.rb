@@ -4,7 +4,7 @@ class UpgradesControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
 
-    ENV["AUTO_UPGRADES_MODE"] = "enabled"
+    ENV["UPGRADES_ENABLED"] = "true"
 
     @completed_upgrade = Upgrader::Upgrade.new(
       "commit",
@@ -27,10 +27,20 @@ class UpgradesControllerTest < ActionDispatch::IntegrationTest
     @available_upgrade.stubs(:complete?).returns(false)
   end
 
+  test "controller not available when upgrades are disabled" do
+    ENV["UPGRADES_ENABLED"] = "false"
+
+    post "/upgrades/acknowledge/47bb430954292d2fdcc81082af731a16b9587da3"
+    assert_response :not_found
+
+    post "/upgrades/deploy/47bb430954292d2fdcc81082af731a16b9587da3"
+    assert_response :not_found
+  end
+
   test "should acknowledge an upgrade prompt" do
     Upgrader.stubs(:find_upgrade).returns(@available_upgrade)
 
-    post acknowledge_upgrade_path(@available_upgrade.commit_sha)
+    post acknowledge_upgrade_url(@available_upgrade.commit_sha)
 
     @user.reload
     assert_equal @user.last_prompted_upgrade_commit_sha, @available_upgrade.commit_sha
@@ -40,7 +50,7 @@ class UpgradesControllerTest < ActionDispatch::IntegrationTest
   test "should acknowledge an upgrade alert" do
     Upgrader.stubs(:find_upgrade).returns(@completed_upgrade)
 
-    post acknowledge_upgrade_path(@completed_upgrade.commit_sha)
+    post acknowledge_upgrade_url(@completed_upgrade.commit_sha)
 
     @user.reload
     assert_equal @user.last_alerted_upgrade_commit_sha, @completed_upgrade.commit_sha

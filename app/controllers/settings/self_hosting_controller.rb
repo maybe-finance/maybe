@@ -1,11 +1,10 @@
 class Settings::SelfHostingController < ApplicationController
+  before_action :verify_self_hosting_enabled
+
   def edit
-    redirect_to edit_settings_path unless self_hosted?
   end
 
   def update
-    render "settings/edit", status: :forbidden and return unless self_hosted?
-
     if all_updates_valid?
       self_hosting_params.keys.each do |key|
         Setting.send("#{key}=", self_hosting_params[key].strip)
@@ -30,7 +29,7 @@ class Settings::SelfHostingController < ApplicationController
         end
       end
 
-      if self_hosting_params[:auto_upgrades_target] != "none" && self_hosting_params[:render_deploy_hook].blank?
+      if self_hosting_params[:upgrades_mode] == "auto" && self_hosting_params[:render_deploy_hook].blank?
         @errors.add(:render_deploy_hook, "Render deploy hook must be provided to enable auto upgrades")
       end
 
@@ -38,6 +37,10 @@ class Settings::SelfHostingController < ApplicationController
     end
 
     def self_hosting_params
-      params.require(:setting).permit(:render_deploy_hook, :auto_upgrades_target)
+      params.require(:setting).permit(:render_deploy_hook, :upgrades_mode, :upgrades_target)
+    end
+
+    def verify_self_hosting_enabled
+      head :not_found unless self_hosted?
     end
 end

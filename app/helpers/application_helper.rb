@@ -37,17 +37,6 @@ module ApplicationHelper
     render partial: "shared/sidebar_modal", locals: { content: content }
   end
 
-  def upgrade_notification
-    completed_upgrade = Upgrader.completed_upgrade
-    return completed_upgrade if completed_upgrade && Current.user.last_alerted_upgrade_commit_sha != completed_upgrade.commit_sha
-
-    # We only prompt a user to upgrade if "auto upgrades" is turned OFF
-    available_upgrade = Upgrader.available_upgrade
-    if Setting.auto_upgrades_target == "none" && available_upgrade && Current.user.last_prompted_upgrade_commit_sha != available_upgrade.commit_sha
-      available_upgrade
-    end
-  end
-
   def sidebar_link_to(name, path, options = {})
     base_class_names = [ "block", "border", "border-transparent", "rounded-xl", "-ml-2", "p-2", "text-sm", "font-medium", "text-gray-500", "flex", "items-center" ]
     hover_class_names = [ "hover:bg-white", "hover:border-alpha-black-50", "hover:text-gray-900", "hover:shadow-xs" ]

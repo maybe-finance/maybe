@@ -12,23 +12,23 @@
       <p class="text-gray-500">This setting controls how often your self hosted app will update and what method it uses to do so.</p>
       <div class="space-y-2">
         <div class="flex items-center gap-2">
-          <%= form.radio_button :auto_upgrades_target, "none", checked: Setting.auto_upgrades_target == "none" %>
-          <%= form.label :auto_upgrades_target_none, class: Setting.auto_upgrades_target == "none" ? "text-gray-900" : "text-gray-500" do %>
-            <span class="font-semibold">Manual</span> - you will be prompted to manually upgrade to new versions of the app
-          <% end %>
+          <%= form.check_box :upgrades_mode, { checked: Setting.upgrades_mode == "auto", unchecked_value: "manual" }, "auto", "manual" %>
+          <%= form.label :upgrades_mode, "Enable auto upgrades", class: "text-gray-900" %>
         </div>
-        <div class="flex items-center gap-2">
-          <%= form.radio_button :auto_upgrades_target, "release", checked: Setting.auto_upgrades_target == "release" %>
-          <%= form.label :auto_upgrades_target_release, class: Setting.auto_upgrades_target == "release" ? "text-gray-900" : "text-gray-500" do %>
-            <span class="font-semibold">Latest Release (suggested)</span> - you will automatically be upgraded to the latest stable release of Maybe
-          <% end %>
-        </div>
-        <div class="flex items-center gap-2">
-          <%= form.radio_button :auto_upgrades_target, "commit", checked: Setting.auto_upgrades_target == "commit" %>
-          <%= form.label :auto_upgrades_target_commit, class: Setting.auto_upgrades_target == "commit" ? "text-gray-900" : "text-gray-500" do %>
-            <span class="font-semibold">Latest Commit</span> - you will automatically be upgraded any time the Maybe repo is updated
-          <% end %>
-        </div>
+        <% if Setting.upgrades_mode == "auto" %>
+          <div class="flex items-center gap-2">
+            <%= form.radio_button :upgrades_target, "release", checked: Setting.upgrades_target == "release" %>
+            <%= form.label :upgrades_target_release, class: Setting.upgrades_target == "release" ? "text-gray-900" : "text-gray-500" do %>
+              <span class="font-semibold">Latest Release (suggested)</span> - you will automatically be upgraded to the latest stable release of Maybe
+            <% end %>
+          </div>
+          <div class="flex items-center gap-2">
+            <%= form.radio_button :upgrades_target, "commit", checked: Setting.upgrades_target == "commit" %>
+            <%= form.label :upgrades_target_commit, class: Setting.upgrades_target == "commit" ? "text-gray-900" : "text-gray-500" do %>
+              <span class="font-semibold">Latest Commit</span> - you will automatically be upgraded any time the Maybe repo is updated
+            <% end %>
+          </div>
+        <% end %>
       </div>
     </section>
     <div class="fixed right-5 bottom-5">
