@@ -42,8 +42,9 @@
   }
 
   .form-field__input {
-    @apply p-3 w-full bg-transparent border-none opacity-50;
+    @apply p-3 w-full bg-transparent border-none opacity-100;
     @apply focus:outline-none focus:ring-0 focus:opacity-100;
+    @apply placeholder-shown:opacity-50;
   }
 
   .form-field__submit {
