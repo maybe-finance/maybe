@@ -4,6 +4,8 @@ class UpgradesControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
 
+    ENV["AUTO_UPGRADES_MODE"] = "enabled"
+
     @completed_upgrade = Upgrader::Upgrade.new(
       "commit",
       commit_sha: "47bb430954292d2fdcc81082af731a16b9587da3",
