@@ -10,7 +10,7 @@ class Settings::SelfHostingController < ApplicationController
         Setting.send("#{key}=", self_hosting_params[key].strip)
       end
 
-      redirect_to edit_settings_self_hosting_path, notice: "Settings updated successfully."
+      redirect_to edit_settings_self_hosting_path, notice: t(".success")
     else
       flash.now[:error] = @errors.first.message
       render :edit, status: :unprocessable_entity
@@ -30,7 +30,7 @@ class Settings::SelfHostingController < ApplicationController
       end
 
       if self_hosting_params[:upgrades_mode] == "auto" && self_hosting_params[:render_deploy_hook].blank?
-        @errors.add(:render_deploy_hook, "Render deploy hook must be provided to enable auto upgrades")
+        @errors.add(:render_deploy_hook, t("settings.self_hosting.update.render_deploy_hook_error"))
       end
 
       @errors.empty?

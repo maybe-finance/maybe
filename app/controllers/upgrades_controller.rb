@@ -8,15 +8,15 @@ class UpgradesController < ApplicationController
     if upgrade
       if upgrade.available?
         Current.user.acknowledge_upgrade_prompt(upgrade.commit_sha)
-        flash[:notice] = "Upgrade dismissed.  View available upgrades in self host settings."
+        flash[:notice] = t(".upgrade_dismissed")
       elsif upgrade.complete?
         Current.user.acknowledge_upgrade_alert(upgrade.commit_sha)
-        flash[:notice] = "We hope you enjoy the new features!"
+        flash[:notice] = t(".upgrade_complete_dismiss")
       else
-        flash[:alert] = "Upgrade not available"
+        flash[:alert] = t(".upgrade_not_available")
       end
     else
-      flash[:alert] = "Upgrade not found"
+      flash[:alert] = t(".upgrade_not_found")
     end
 
     redirect_back(fallback_location: root_path)
@@ -27,7 +27,7 @@ class UpgradesController < ApplicationController
     upgrade = Upgrader.find_upgrade(commit_sha)
 
     unless upgrade
-      flash[:alert] = "Upgrade not found"
+      flash[:alert] = t(".upgrade_not_found")
       return redirect_back(fallback_location: root_path)
     end
 

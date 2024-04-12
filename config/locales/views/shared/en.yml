@@ -20,3 +20,9 @@ en:
         and account graphs.</p></br><p>The only way you’ll be able to add this entry
         back is by re-entering it manually via a new entry</p>"
       title: Delete Entry?
+  shared:
+    upgrade_notification:
+      app_upgraded: The app has been upgraded to %{version}.
+      dismiss: Dismiss
+      new_version_available: A new version of Maybe is available for upgrade.
+      upgrade_now: Upgrade Now

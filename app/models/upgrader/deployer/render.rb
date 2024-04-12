@@ -3,12 +3,12 @@ class Upgrader::Deployer::Render
     if Setting.render_deploy_hook.blank?
       return {
         success: false,
-        message: "Render deploy hook URL is not set",
+        message: I18n.t("upgrader.deployer.render.error_message_not_set"),
         troubleshooting_url: "/settings/self_hosting/edit"
       }
     end
 
-    Rails.logger.info "Deploying #{upgrade.type} #{upgrade.commit_sha} to Render..."
+    Rails.logger.info I18n.t("upgrader.deployer.render.deploy_log_info", type: upgrade.type, commit_sha: upgrade.commit_sha)
 
     begin
       uri = URI.parse(Setting.render_deploy_hook)
@@ -16,16 +16,16 @@ class Upgrader::Deployer::Render
       response = Faraday.post(uri.to_s)
 
       unless response.success?
-        Rails.logger.error "Failed to deploy #{upgrade.type} #{upgrade.commit_sha} to Render: #{response.body}"
+        Rails.logger.error I18n.t("upgrader.deployer.render.deploy_log_error", type: upgrade.type, commit_sha: upgrade.commit_sha, error_message: response.body)
         return default_error_response
       end
 
       {
         success: true,
-        message: "Triggered deployment to Render for commit: #{upgrade.commit_sha.slice(0, 7)}"
+        message: I18n.t("upgrader.deployer.render.success_message", commit_sha: upgrade.commit_sha.slice(0, 7))
       }
     rescue => e
-      Rails.logger.error "Failed to deploy #{upgrade.type} #{upgrade.commit_sha} to Render: #{e.message}"
+      Rails.logger.error I18n.t("upgrader.deployer.render.deploy_log_error", type: upgrade.type, commit_sha: upgrade.commit_sha, error_message: e.message)
       default_error_response
     end
   end
@@ -34,8 +34,8 @@ class Upgrader::Deployer::Render
     def default_error_response
       {
         success: false,
-        message: "Failed to deploy to Render",
-        troubleshooting_url: "https://render.com/docs/deploy-hooks"
+        message: I18n.t("upgrader.deployer.render.error_message_failed_deploy"),
+        troubleshooting_url: I18n.t("upgrader.deployer.render.troubleshooting_url")
       }
     end
 end
