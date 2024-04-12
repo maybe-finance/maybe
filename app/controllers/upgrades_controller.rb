@@ -36,14 +36,14 @@ class UpgradesController < ApplicationController
     # Optimistically acknowledge the upgrade prompt
     Current.user.acknowledge_upgrade_prompt(upgrade.commit_sha)
 
-    deploy = Upgrader.upgrade_to(upgrade)
+    upgrade_result = Upgrader.upgrade_to(upgrade)
 
-    if deploy[:success]
-      flash[:notice] = deploy[:message]
+    if upgrade_result[:success]
+      flash[:notice] = upgrade_result[:message]
     else
       # If the upgrade fails, revert to the prior acknowledged upgrade
       Current.user.acknowledge_upgrade_prompt(prior_acknowledged_upgrade_commit_sha)
-      flash[:alert] = deploy[:message]
+      flash[:alert] = upgrade_result[:message]
     end
 
     redirect_back(fallback_location: root_path)
