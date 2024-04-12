@@ -19,13 +19,20 @@ We're now reviving the product as a fully open-source project. The goal is to le
 
 ## Self Hosting
 
-You can deploy Maybe in one click, for FREE, in less than 5 minutes with Render. Just click the button below to get started:
+You can find [detailed setup guides for self hosting here](https://github.com/maybe-finance/maybe/blob/main/docs/self-hosting.md).
 
-<a href="https://render.com/deploy?repo=https://github.com/maybe-finance/maybe">
+### One-Click Render deploy
+
+We recommend Render to self-host Maybe. You can get started in 3 easy steps (for FREE):
+
+1. Click the button below.
+
+<a href="https://render.com/deploy?repo=https://github.com/zachgoll/maybe">
 <img src="https://render.com/images/deploy-to-render-button.svg" alt="Deploy to Render" />
 </a>
 
-For additional configuration options and instructions, please visit our [full guide on self hosting here](https://github.com/maybe-finance/maybe/blob/main/docs/self-hosting.md).
+2. Sign in (or create an account) on Render
+3.
 
 ## Local Development Setup
 

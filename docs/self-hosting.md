@@ -1,20 +1,22 @@
-## Quick Start
-
 The fastest way to get your own version of Maybe running is a "one-click deploy". Below are the currently supported platforms:
 
-### One-Click Deploys
+## One-Click Deploys
 
-#### Render (recommended)
+### Render (recommended)
 
 **Estimated cost:** $0-14 per month (one-click deploy is FREE, but for optimal performance, it will cost a minimum of $14 for the database and web service)
 
-Click the button below to deploy to Render (default config is FREE):
+#### Step 1: Create Render Blueprint
 
-<a href="https://render.com/deploy?repo=https://github.com/maybe-finance/maybe">
+1. Click the button below:
+
+<a href="https://render.com/deploy?repo=https://github.com/zachgoll/maybe">
 <img src="https://render.com/images/deploy-to-render-button.svg" alt="Deploy to Render" />
 </a>
 
-### Docker
+2.
+
+## Docker
 
 **Estimated cost:** $5-15 per month
 
