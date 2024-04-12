@@ -8,17 +8,6 @@ class Upgrader
       @config ||= Config.new
     end
 
-    def attempt_latest_upgrade(upgrades_target)
-      candidate = available_upgrade_by_type(upgrades_target)
-
-      if candidate
-        Rails.logger.info "Auto upgrading to #{candidate.type} #{candidate.commit_sha}..."
-        upgrade_to(candidate)
-      else
-        Rails.logger.info "No auto upgrade available at this time"
-      end
-    end
-
     def upgrade_to(commit_or_upgrade)
       upgrade = commit_or_upgrade.is_a?(String) ? find_upgrade(commit_or_upgrade) : commit_or_upgrade
       config.deployer.deploy(upgrade)
@@ -37,11 +26,11 @@ class Upgrader
       completed_upgrades.find { |upgrade| upgrade.type == "release" } || completed_upgrades.first
     end
 
-    private
-      def available_upgrade_by_type(type)
-        available_upgrades.find { |upgrade| upgrade.type == type }
-      end
+    def available_upgrade_by_type(type)
+      available_upgrades.find { |upgrade| upgrade.type == type }
+    end
 
+    private
       def available_upgrades
         upgrade_candidates.select(&:available?)
       end
