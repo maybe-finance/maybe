@@ -26,7 +26,7 @@ _**IMPORTANT:** if you plan to host Maybe on Render long-term, you MUST upgrade 
 
 1. Click the button above.
 2. Sign in or create your account with Render (FREE)
-3. Give you blueprint a name (we suggest `Maybe`)
+3. Give your blueprint a name (we suggest `Maybe`)
 4. Select the `main` branch
 5. You should see a section at the bottom with a "Key:Value" field for `SECRET_KEY_BASE`. Do NOT click "generate".
 6. On your computer, open a terminal and make sure you have the [openssl](https://github.com/openssl/openssl) utility installed on your computer. You can run `openssl --version` to verify it is installed.
