@@ -4,17 +4,12 @@ The fastest way to get your own version of Maybe running is a "one-click deploy"
 
 ### Render (recommended)
 
-**Estimated cost:** $0-14 per month (one-click deploy is FREE, but for optimal performance, it will cost a minimum of $14 for the database and web service)
-
-#### Step 1: Create Render Blueprint
-
-1. Click the button below:
-
 <a href="https://render.com/deploy?repo=https://github.com/zachgoll/maybe">
 <img src="https://render.com/images/deploy-to-render-button.svg" alt="Deploy to Render" />
 </a>
 
-2.
+1. Click the button above
+2. Follow the instructions in the [Render self-hosting guide](docs/self-hosting/render.md)
 
 ## Docker
 
