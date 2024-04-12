@@ -20,7 +20,7 @@ _**IMPORTANT:** if you plan to host Maybe on Render long-term, you MUST upgrade 
 
 ### Step 1: Create Render Blueprint
 
-<a href="https://render.com/deploy?repo=https://github.com/zachgoll/maybe">
+<a href="https://render.com/deploy?repo=https://github.com/maybe-finance/maybe">
 <img src="https://render.com/images/deploy-to-render-button.svg" alt="Deploy to Render" />
 </a>
 

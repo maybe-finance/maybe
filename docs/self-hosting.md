@@ -4,7 +4,7 @@ The fastest way to get your own version of Maybe running is a "one-click deploy"
 
 ### Render (recommended)
 
-<a href="https://render.com/deploy?repo=https://github.com/zachgoll/maybe">
+<a href="https://render.com/deploy?repo=https://github.com/maybe-finance/maybe">
 <img src="https://render.com/images/deploy-to-render-button.svg" alt="Deploy to Render" />
 </a>
 
