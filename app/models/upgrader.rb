@@ -8,11 +8,13 @@ class Upgrader
       @config ||= Config.new
     end
 
-    def attempt_auto_upgrade(auto_upgrades_mode)
-      Rails.logger.info "Attempting auto upgrade..."
-      return Rails.logger.info("Skipping all upgrades: auto upgrades are disabled") if config.mode == :disabled || auto_upgrades_mode == "disabled"
+    def attempt_auto_upgrade(auto_upgrades_target)
+      raise_if_disabled
 
-      candidate = available_upgrade_by_type(auto_upgrades_mode)
+      Rails.logger.info "Attempting auto upgrade..."
+      return Rails.logger.info("Skipping all upgrades: auto upgrades are disabled") if auto_upgrades_target == "none"
+
+      candidate = available_upgrade_by_type(auto_upgrades_target)
 
       if candidate
         Rails.logger.info "Auto upgrading to #{candidate.type} #{candidate.commit_sha}..."
@@ -27,6 +29,8 @@ class Upgrader
     end
 
     def upgrade_to(commit_or_upgrade)
+      raise_if_disabled
+
       upgrade = commit_or_upgrade.is_a?(String) ? find_upgrade(commit_or_upgrade) : commit_or_upgrade
       config.deployer.deploy(upgrade)
     end
@@ -35,18 +39,34 @@ class Upgrader
       available_upgrades.find { |upgrade| upgrade.type == type }
     end
 
-    def available_upgrades
-      return [] unless config.mode == :enabled
-      upgrade_candidates.select(&:available?)
+    def available_upgrade
+      available_upgrades.first
     end
 
-    def completed_upgrades
-      upgrade_candidates.select(&:complete?)
+    # Default to showing releases first, then commits
+    def completed_upgrade
+      completed_upgrades.find { |upgrade| upgrade.type == "release" } || completed_upgrades.first
     end
 
     private
+
+      def raise_if_disabled
+        raise "Upgrades are disabled.  Please set AUTO_UPGRADES_MODE=enabled to enable upgrades." if config.upgrades_disabled?
+      end
+
+      def available_upgrades
+        return [] if config.upgrades_disabled?
+        upgrade_candidates.select(&:available?)
+      end
+
+      def completed_upgrades
+        return [] if config.alerts_disabled?
+        upgrade_candidates.select(&:complete?)
+      end
+
       def upgrade_candidates
-        return [] if config.mode == :disabled
+        # If everything is disabled, don't fetch from Github provider
+        return [] if config.upgrades_disabled? && config.alerts_disabled?
 
         latest_candidates = fetch_latest_upgrade_candidates_from_provider
         return [] unless latest_candidates

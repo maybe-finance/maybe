@@ -7,8 +7,8 @@ class Setting < RailsSettings::Base
         default: ENV["RENDER_DEPLOY_HOOK"],
         validates: { allow_blank: true, format: { with: /\Ahttps:\/\/api\.render\.com\/deploy\/srv-.+\z/ } }
 
-  field :auto_upgrades_mode,
+  field :auto_upgrades_target,
         type: :string,
-        default: ENV["SELF_HOSTING_AUTO_UPGRADES_MODE"] || "disabled",
-        validates: { inclusion: { in: %w[disabled release commit] } }
+        default: ENV["AUTO_UPGRADES_TARGET"] || "none",
+        validates: { inclusion: { in: %w[none release commit] } }
 end

@@ -23,8 +23,8 @@ class UpgraderTest < ActiveSupport::TestCase
   end
 
   test "finds 1 completed upgrade, 0 available upgrades when app is up to date" do
-    assert_equal 1, Upgrader.completed_upgrades.count
-    assert_equal 0, Upgrader.available_upgrades.count
+    assert_instance_of Upgrader::Upgrade, Upgrader.completed_upgrade
+    assert_nil Upgrader.available_upgrade
   end
 
   test "finds 1 available upgrade when app is on latest release but behind latest commit" do
@@ -33,11 +33,11 @@ class UpgraderTest < ActiveSupport::TestCase
       release: create_upgrade_stub(CURRENT_VERSION, CURRENT_COMMIT)
     )
 
-    assert_equal 1, Upgrader.available_upgrades.count # commit is ahead of release
-    assert_equal 1, Upgrader.completed_upgrades.count # release is completed
+    assert_instance_of Upgrader::Upgrade, Upgrader.available_upgrade # commit is ahead of release
+    assert_instance_of Upgrader::Upgrade, Upgrader.completed_upgrade # release is completed
   end
 
-  test "finds 2 available upgrades when app is on prior version and latest commit is ahead of latest tag" do
+  test "when app is behind latest version and latest commit is ahead of release finds release upgrade and no completed upgrades" do
     Maybe.stubs(:version).returns(PRIOR_VERSION)
     Maybe.stubs(:commit_sha).returns(PRIOR_COMMIT)
 
@@ -46,8 +46,10 @@ class UpgraderTest < ActiveSupport::TestCase
       release: create_upgrade_stub(CURRENT_VERSION, CURRENT_COMMIT)
     )
 
-    assert_equal 2, Upgrader.available_upgrades.count
-    assert_equal 0, Upgrader.completed_upgrades.count
+    assert_equal "release", Upgrader.available_upgrade.type
+    assert_instance_of Upgrader::Upgrade, Upgrader.available_upgrade_by_type("release")
+    assert_instance_of Upgrader::Upgrade, Upgrader.available_upgrade_by_type("commit")
+    assert_nil Upgrader.completed_upgrade
   end
 
   test "defaults to app version when no release is found" do
@@ -57,25 +59,32 @@ class UpgraderTest < ActiveSupport::TestCase
     )
 
     # Upstream is 1 commit ahead, and we assume we're on the same release
-    assert_equal 1, Upgrader.available_upgrades.count
+    assert_equal "commit", Upgrader.available_upgrade.type
   end
 
   test "gracefully handles empty github info" do
     Provider::Github.any_instance.stubs(:fetch_latest_upgrade_candidates).returns(nil)
 
-    assert_equal 0, Upgrader.available_upgrades.count
-    assert_equal 0, Upgrader.completed_upgrades.count
+    assert_nil Upgrader.available_upgrade
+    assert_nil Upgrader.completed_upgrade
   end
 
   test "can see latest upgrades but no available upgrades in alerts mode" do
     Upgrader.config = Upgrader::Config.new({ mode: :alerts_only })
 
-    assert_equal 1, Upgrader.completed_upgrades.count
-    assert_equal 0, Upgrader.available_upgrades.count
+    assert_instance_of Upgrader::Upgrade, Upgrader.completed_upgrade
+    assert_nil Upgrader.available_upgrade
+  end
+
+  test "raises when upgrade attempted in disabled mode" do
+    Upgrader.config = Upgrader::Config.new({ mode: :disabled })
+    assert_raises RuntimeError do
+      Upgrader.upgrade_to(nil)
+    end
   end
 
   test "deployer is null by default" do
-    Upgrader.config = Upgrader::Config.new({ mode: :alerts_only })
+    Upgrader.config = Upgrader::Config.new({ mode: :enabled })
     Upgrader::Deployer::Null.any_instance.expects(:deploy).with(nil).once
     Upgrader.upgrade_to(nil)
   end

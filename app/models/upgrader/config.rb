@@ -15,12 +15,22 @@ class Upgrader::Config
     options[:hosting_platform] || env["HOSTING_PLATFORM"]
   end
 
+  def upgrades_disabled?
+    mode != :enabled
+  end
+
+  def alerts_disabled?
+    mode == :disabled
+  end
+
+  private
+
   # Upgrader Mode:
   # - "disabled": (default) No upgrades or upgrade alerts enabled (this is usually the best setting for local development)
   # - "alerts_only": App users cannot upgrade the running app, but will see alerts when a new version is pushed to production
   # - "enabled": App users can upgrade the running app to the latest version (best for self-hosting)
   def mode
-    mode_value = (options[:mode] || ENV["UPGRADES_MODE"] || :disabled).to_sym
+    mode_value = (options[:mode] || ENV["AUTO_UPGRADES_MODE"] || :disabled).to_sym
     unless [ :disabled, :alerts_only, :enabled ].include?(mode_value)
       raise ArgumentError, "Invalid mode: #{mode_value}"
     end

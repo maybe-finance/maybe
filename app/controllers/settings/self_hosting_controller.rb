@@ -30,10 +30,14 @@ class Settings::SelfHostingController < ApplicationController
         end
       end
 
+      if self_hosting_params[:auto_upgrades_target] != "none" && self_hosting_params[:render_deploy_hook].blank?
+        @errors.add(:render_deploy_hook, "Render deploy hook must be provided to enable auto upgrades")
+      end
+
       @errors.empty?
     end
 
     def self_hosting_params
-      params.require(:setting).permit(:render_deploy_hook, :auto_upgrades_mode)
+      params.require(:setting).permit(:render_deploy_hook, :auto_upgrades_target)
     end
 end

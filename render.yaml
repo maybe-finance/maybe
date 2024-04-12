@@ -48,8 +48,10 @@ services:
         value: self-hosting
 
       # Allows your self-hosted instance to auto-upgrade itself
-      - key: UPGRADES_MODE
+      - key: AUTO_UPGRADES_MODE
         value: enabled
+      - key: AUTO_UPGRADES_TARGET
+        value: none
 
       # If you upgrade your instance to a paid plan, you can set this to false (or remove it)
       # See note in `render-build.sh` script.

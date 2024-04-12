@@ -38,8 +38,12 @@ module ApplicationHelper
   end
 
   def upgrade_notification
-    Upgrader.completed_upgrades.find { |upgrade| upgrade.commit_sha != Current.user.last_alerted_upgrade_commit_sha } ||
-    Upgrader.available_upgrades.find { |upgrade| upgrade.commit_sha != Current.user.last_prompted_upgrade_commit_sha }
+    completed_upgrade = Upgrader.completed_upgrade
+
+    # We only prompt a user to upgrade if "auto upgrades" is turned OFF
+    available_upgrade = Setting.auto_upgrades_target == "none" ? Upgrader.available_upgrade : nil
+
+    completed_upgrade || available_upgrade
   end
 
   def sidebar_link_to(name, path, options = {})
