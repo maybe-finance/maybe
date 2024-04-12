@@ -2,6 +2,6 @@ class AutoUpgradeJob < ApplicationJob
   queue_as :default
 
   def perform(*args)
-    puts "Placeholder: AutoUpgradeJob.perform"
+    Upgrader.attempt_auto_upgrade
   end
 end

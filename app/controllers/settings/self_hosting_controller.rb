@@ -28,21 +28,12 @@ class Settings::SelfHostingController < ApplicationController
         unless setting.valid?
           @errors.merge!(setting.errors)
         end
-
-        if key == "render_deploy_hook" && !deploy_hook_valid?(setting.value)
-          @errors.add(:render_deploy_hook, "Invalid Render deploy hook URL")
-        end
       end
 
       @errors.empty?
     end
 
-    def deploy_hook_valid?(value)
-      return true if value.blank?
-      value.present? && value.start_with?("https://api.render.com/deploy/srv-")
-    end
-
     def self_hosting_params
-      params.require(:setting).permit(:render_deploy_hook)
+      params.require(:setting).permit(:render_deploy_hook, :auto_upgrades_mode)
     end
 end

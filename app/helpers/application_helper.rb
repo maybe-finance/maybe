@@ -38,9 +38,8 @@ module ApplicationHelper
   end
 
   def upgrade_notification
-    to_show = Upgrader.completed_upgrades.find { |upgrade| upgrade.commit_sha != Current.user.last_alerted_upgrade_commit_sha } ||
+    Upgrader.completed_upgrades.find { |upgrade| upgrade.commit_sha != Current.user.last_alerted_upgrade_commit_sha } ||
     Upgrader.available_upgrades.find { |upgrade| upgrade.commit_sha != Current.user.last_prompted_upgrade_commit_sha }
-    to_show
   end
 
   def sidebar_link_to(name, path, options = {})

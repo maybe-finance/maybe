@@ -8,6 +8,20 @@ class Upgrader
       @config ||= Config.new
     end
 
+    def attempt_auto_upgrade(auto_upgrades_mode)
+      Rails.logger.info "Attempting auto upgrade..."
+      return Rails.logger.info("Auto upgrades are disabled") if config.mode == :disabled || auto_upgrades_mode == "disabled"
+
+      candidate = available_upgrade_by_type(auto_upgrades_mode)
+
+      if candidate
+        Rails.logger.info "Auto upgrading to #{candidate.type} #{candidate.commit_sha}..."
+        upgrade_to(candidate)
+      else
+        Rails.logger.info "No auto upgrade available at this time"
+      end
+    end
+
     def find_upgrade(commit)
       upgrade_candidates.find { |candidate| candidate.commit_sha == commit }
     end
@@ -15,6 +29,10 @@ class Upgrader
     def upgrade_to(commit_or_upgrade)
       upgrade = commit_or_upgrade.is_a?(String) ? find_upgrade(commit_or_upgrade) : commit_or_upgrade
       config.deployer.deploy(upgrade)
+    end
+
+    def available_upgrade_by_type(type)
+      available_upgrades.find { |upgrade| upgrade.type == type }
     end
 
     def available_upgrades

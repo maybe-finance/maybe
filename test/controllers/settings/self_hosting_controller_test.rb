@@ -18,7 +18,7 @@ class Settings::SelfHostingControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "can update settings when self hosting is enabled" do
-    NEW_RENDER_DEPLOY_HOOK = "https://api.render.com/deploy/srv-"
+    NEW_RENDER_DEPLOY_HOOK = "https://api.render.com/deploy/srv-abc123"
     ApplicationController.any_instance.stubs(:self_hosted?).returns(true)
 
     assert_nil Setting.render_deploy_hook
