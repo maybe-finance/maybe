@@ -19,6 +19,8 @@ We're now reviving the product as a fully open-source project. The goal is to le
 
 ## Self Hosting
 
+temp: trigger deploy
+
 You can find [detailed setup guides for self hosting here](docs/self-hosting.md).
 
 ### One-Click Render deploy (recommended)
