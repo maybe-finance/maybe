@@ -11,10 +11,7 @@ module Providable
     end
 
     def git_repository_provider
-      Provider::Github.new \
-        name: ENV.fetch("GITHUB_REPO_NAME", "maybe"),
-        owner: ENV.fetch("GITHUB_REPO_OWNER", "maybe-finance"),
-        branch: ENV.fetch("GITHUB_REPO_BRANCH", "main")
+      Provider::Github.new
     end
   end
 end

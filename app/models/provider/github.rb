@@ -1,15 +1,15 @@
 class Provider::Github
   attr_reader :name, :owner, :branch
 
-  def initialize(config)
-    @name = config[:name]
-    @owner = config[:owner]
-    @branch = config[:branch]
+  def initialize(config = {})
+    @name = config[:name] || ENV.fetch("GITHUB_REPO_NAME", "maybe")
+    @owner = config[:owner] || ENV.fetch("GITHUB_REPO_OWNER", "maybe-finance")
+    @branch = config[:branch] || ENV.fetch("GITHUB_REPO_BRANCH", "main")
   end
 
   def fetch_latest_upgrade_candidates
     Rails.cache.fetch("latest_github_upgrade_candidates", expires_in: 5.minutes) do
-      Rails.logger.info "Fetching latest GitHub upgrade candidates"
+      Rails.logger.info "Fetching latest GitHub upgrade candidates from #{repo} on branch #{branch}..."
       begin
         latest_release = Octokit.releases(repo).first
         latest_version = latest_release ? Semver.from_release_tag(latest_release.tag_name) : Semver.new(Maybe.version)
