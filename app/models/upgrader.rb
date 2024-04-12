@@ -10,7 +10,7 @@ class Upgrader
 
     def attempt_auto_upgrade(auto_upgrades_mode)
       Rails.logger.info "Attempting auto upgrade..."
-      return Rails.logger.info("Auto upgrades are disabled") if config.mode == :disabled || auto_upgrades_mode == "disabled"
+      return Rails.logger.info("Skipping all upgrades: auto upgrades are disabled") if config.mode == :disabled || auto_upgrades_mode == "disabled"
 
       candidate = available_upgrade_by_type(auto_upgrades_mode)
 

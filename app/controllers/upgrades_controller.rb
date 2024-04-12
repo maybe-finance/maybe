@@ -9,7 +9,7 @@ class UpgradesController < ApplicationController
         flash[:notice] = "Upgrade dismissed.  View available upgrades in self host settings."
       elsif upgrade.complete?
         Current.user.acknowledge_upgrade_alert(upgrade.commit_sha)
-        flash[:notice] = "Upgrade dismissed.  We hope you enjoy the new features!"
+        flash[:notice] = "We hope you enjoy the new features!"
       else
         flash[:alert] = "Upgrade not available"
       end
