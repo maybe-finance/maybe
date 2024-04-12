@@ -17,8 +17,6 @@ We spent the better part of $1,000,000 building the app (employees + contractors
 
 We're now reviving the product as a fully open-source project. The goal is to let you run the app yourself, for free, and use it to manage your own finances and eventually offer a hosted version of the app for a small monthly fee.
 
-trigger upgrade
-
 ## Self Hosting
 
 You can find [detailed setup guides for self hosting here](docs/self-hosting.md).
