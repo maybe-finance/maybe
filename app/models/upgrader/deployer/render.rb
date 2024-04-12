@@ -11,7 +11,9 @@ class Upgrader::Deployer::Render
     Rails.logger.info "Deploying #{upgrade.type} #{upgrade.commit_sha} to Render..."
 
     begin
-      response = Faraday.post("#{Setting.render_deploy_hook}?ref=#{upgrade.commit_sha}")
+      uri = URI.parse(Setting.render_deploy_hook)
+      uri.query = [ uri.query, "ref=#{upgrade.commit_sha}" ].compact.join("&")
+      response = Faraday.post(uri.to_s)
 
       unless response.success?
         Rails.logger.error "Failed to deploy #{upgrade.type} #{upgrade.commit_sha} to Render: #{response.body}"
