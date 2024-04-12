@@ -1,9 +1,13 @@
 Rails.application.configure do
   config.good_job.enable_cron = true
-  config.good_job.cron = {
-    maintenance: {
-      cron: "0 22 * * *",
-      class: "DailyExchangeRateJob"
+
+  if ENV.fetch("SELF_HOSTING_ENABLED", false)
+    config.good_job.cron = {
+      auto_upgrade: {
+        cron: "every 30 seconds",
+        class: "AutoUpgradeJob",
+        description: "Check for new versions of the app and upgrade if necessary"
+      }
     }
-  }
+  end
 end
