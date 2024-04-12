@@ -27,7 +27,12 @@ class Upgrader
     end
 
     def available_upgrade_by_type(type)
-      available_upgrades.find { |upgrade| upgrade.type == type }
+      if type == "commit"
+        commit_upgrade = available_upgrades.find { |upgrade| upgrade.type == "commit" }
+        commit_upgrade || available_upgrades.first
+      elsif type == "release"
+        available_upgrades.find { |upgrade| upgrade.type == "release" }
+      end
     end
 
     private
