@@ -1,0 +1,14 @@
+---
+ca:
+  sessions:
+    create:
+      invalid_credentials: Correu electrònic o contrasenya no vàlids.
+    destroy:
+      logout_successful: Heu tancat la sessió correctament.
+    new:
+      email: Correu electrònic
+      email_placeholder: usuari@exemple.cat
+      forgot_password: Heu oblidat la contrasenya?
+      reset_password: Restableix-la
+      submit: Inicia la sessió
+      title: Inicieu sessió al vostre compte
