@@ -1,0 +1,7 @@
+---
+ca:
+  settings:
+    self_hosting:
+      update:
+        render_deploy_hook_error: S'ha de proporcionar el «hook» del desplegament del renderitzatge per a activar les actualitzacions automàtiques
+        success: S'ha actualitzat la configuració correctament.
