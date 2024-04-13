@@ -2,7 +2,7 @@
 ca:
   transaction:
     default_category:
-      auto_and_transport: Cotxe i transport
+      auto_and_transport: Vehicles i transport
       entertainment: Entreteniment
       food_and_drink: Menjar i beguda
       general_services: Serveis generals
