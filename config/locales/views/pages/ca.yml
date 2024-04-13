@@ -1,0 +1,6 @@
+---
+ca:
+  pages:
+    dashboard:
+      greeting: Bentornat, %{name}
+      new: Nou
