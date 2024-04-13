@@ -1,0 +1,12 @@
+---
+ca:
+  activerecord:
+    attributes:
+      user:
+        email: Correu electrònic
+        family: Família
+        family_id: Família
+        first_name: Nom
+        last_name: Cognom
+        password: Contrasenya
+        password_confirmation: Confirmació de la contrasenya
