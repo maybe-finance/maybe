@@ -1,0 +1,12 @@
+---
+ca:
+  transaction:
+    default_category:
+      auto_and_transport: Cotxe i transport
+      entertainment: Entreteniment
+      food_and_drink: Menjar i beguda
+      general_services: Serveis generals
+      home_improvement: Reformes de la llar
+      income: Ingressos
+      personal_care: Cura personal
+      rent_and_utilities: Lloguer i subministraments
