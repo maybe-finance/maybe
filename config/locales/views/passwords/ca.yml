@@ -1,0 +1,10 @@
+---
+ca:
+  passwords:
+    edit:
+      password: Contrasenya nova
+      password_challenge: Contrasenya actual
+      submit: Restableix la contrasenya
+      title: Actualitza la contrasenya
+    update:
+      success: S'ha restablert la contrasenya.
