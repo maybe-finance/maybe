@@ -9,7 +9,7 @@ The fastest way to get your own version of Maybe running is a "one-click deploy"
 </a>
 
 1. Click the button above
-2. Follow the instructions in the [Render self-hosting guide](/docs/self-hosting/render.md)
+2. Follow the instructions in the [Render self-hosting guide](../self-hosting/render.md)
 
 ## Docker
 
