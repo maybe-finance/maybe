@@ -5,7 +5,10 @@ Rails.application.routes.draw do
   resource :session
   resource :password_reset
   resource :password
-  resource :settings, only: %i[edit update]
+
+  resource :settings, only: %i[edit update] do
+    resource :self_hosting, only: %i[edit update], controller: "settings/self_hosting"
+  end
 
   resources :transactions do
     match "search" => "transactions#search", on: :collection, via: [ :get, :post ], as: :search
@@ -18,6 +21,14 @@ Rails.application.routes.draw do
   resources :accounts, shallow: true do
     post :sync, on: :member
     resources :valuations
+  end
+
+  # For managing self-hosted upgrades and release notifications
+  resources :upgrades, only: [] do
+    member do
+      post :acknowledge
+      post :deploy
+    end
   end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

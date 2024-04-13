@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  include Authentication
+  include Authentication, Invitable, SelfHostable
   include Pagy::Backend
 
   before_action :sync_accounts
@@ -10,11 +10,6 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
   private
-
-  def hosted_app?
-    ENV["HOSTED"] == "true"
-  end
-  helper_method :hosted_app?
 
   def sync_accounts
     return if Current.user.blank?

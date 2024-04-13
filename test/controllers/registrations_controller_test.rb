@@ -25,7 +25,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "create when hosted requires an invite code" do
-    in_hosted_app do
+    in_invited_app do
       assert_no_difference "User.count" do
         post registration_url, params: { user: {
           email: "john@example.com",
@@ -54,10 +54,10 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
 
   private
 
-  def in_hosted_app
-    ENV["HOSTED"] = "true"
+  def in_invited_app
+    ENV["REQUIRE_INVITE_CODE"] = "true"
     yield
   ensure
-    ENV["HOSTED"] = nil
+    ENV["REQUIRE_INVITE_CODE"] = nil
   end
 end

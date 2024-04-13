@@ -4,7 +4,7 @@ class RegistrationsController < ApplicationController
   layout "auth"
 
   before_action :set_user, only: :create
-  before_action :claim_invite_code, only: :create, if: :hosted_app?
+  before_action :claim_invite_code, only: :create, if: :invite_code_required?
 
   def new
     @user = User.new

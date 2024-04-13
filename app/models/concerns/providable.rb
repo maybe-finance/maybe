@@ -9,5 +9,9 @@ module Providable
     def exchange_rates_provider
       Provider::Synth.new
     end
+
+    def git_repository_provider
+      Provider::Github.new
+    end
   end
 end
