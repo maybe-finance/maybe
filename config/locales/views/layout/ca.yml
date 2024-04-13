@@ -1,0 +1,15 @@
+---
+ca:
+  layouts:
+    application:
+      accounts: Comptes
+      dashboard: Tauler
+      new_account: Afegeix un compte
+      transactions: Transaccions
+    auth:
+      or: o
+      privacy_policy: Política de privacitat
+      sign_in: inicieu sessió al vostre compte
+      sign_up: creeu un compte
+      terms_of_service: Condicions del servei
+      your_account: El vostre compte
