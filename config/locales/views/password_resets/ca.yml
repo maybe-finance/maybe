@@ -1,0 +1,14 @@
+---
+ca:
+  password_resets:
+    create:
+      requested: Si existeix un compte amb aquest correu electrònic, li hem enviat un enllaç per a restablir la contrasenya.
+    edit:
+      submit: Actualitza la contrasenya
+      title: Restabliment de contrasenya
+    new:
+      submit: Restableix la contrasenya
+      title: Restabliment de contrasenya
+    update:
+      invalid_token: Testimoni no vàlid.
+      success: S'ha restablert la contrasenya.
