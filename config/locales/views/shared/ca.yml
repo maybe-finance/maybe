@@ -1,5 +1,5 @@
 ---
-en:
+ca:
   custom_turbo_confirm:
     account_destroy:
       accept: Elimina "%{name}"
