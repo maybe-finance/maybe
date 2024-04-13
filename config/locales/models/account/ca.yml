@@ -1,0 +1,21 @@
+---
+ca:
+  activerecord:
+    attributes:
+      account:
+        balance: Saldo
+        currency: Moneda
+        family: Família
+        family_id: Família
+        name: Nom
+        subtype: Subtipus
+    models:
+      account: Compte
+      account/credit: Targeta de crèdit
+      account/depository: Compte bancari
+      account/investment: Inversió
+      account/loan: Préstec
+      account/other_asset: Altres actius
+      account/other_liability: Altres passius
+      account/property: Béns immobles
+      account/vehicle: Vehicle
