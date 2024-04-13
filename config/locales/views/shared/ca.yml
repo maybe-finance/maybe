@@ -1,0 +1,28 @@
+---
+en:
+  custom_turbo_confirm:
+    account_destroy:
+      accept: Elimina "%{name}"
+      body_html: "<p>En eliminar aquest compte, esborrareu el seu historial de valors, afectant
+        diversos aspectes del compte global. Aquesta acció tindrà un impacte directe
+        en els càlculs del patrimoni net i en els gràfics del compte.</p><br /> <p>
+        Després de l'eliminació, no hi ha manera de restaurar la informació del compte,
+        ja que l'hauríeu d'afegir com a un compte nou.</p>"
+      title: Voleu eliminar el compte?
+    default:
+      accept: Confirma
+      body_html: "<p>No podreu desfer aquesta decisió</p>"
+      title: Segur?
+    history:
+      accept: Elimina l'entrada
+      body_html: "<p>Deleting this entry will remove it from the account’s history
+        which will impact different parts of your account. This includes the net worth
+        and account graphs.</p></br><p>The only way you’ll be able to add this entry
+        back is by re-entering it manually via a new entry</p>"
+      title: Voleu eliminar l'entrada?
+  shared:
+    upgrade_notification:
+      app_upgraded: S'ha actualitzat l'aplicació a %{version}.
+      dismiss: Ignora
+      new_version_available: Hi ha una versió nova de Maybe disponible per a actualitzar.
+      upgrade_now: Actualiza
