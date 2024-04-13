@@ -3,7 +3,7 @@ ca:
   activerecord:
     attributes:
       account:
-        balance: Saldo
+        balance: Balanç
         currency: Moneda
         family: Família
         family_id: Família
