@@ -1,0 +1,15 @@
+---
+a  helpers:
+    label:
+      user:
+        invite_code: Codi d'invitació
+    submit:
+      user:
+        create: Continua
+  registrations:
+    create:
+      failure: Les dades introduïdes no són vàlides, torneu-ho a provar.
+      invalid_invite_code: El codi d'invitació no és vàlid, torneu-ho a provar.
+      success: Us heu registrat correctament.
+    new:
+      title: Creeu un compte
