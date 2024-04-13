@@ -1,5 +1,6 @@
 ---
-a  helpers:
+ca:
+ helpers:
     label:
       user:
         invite_code: Codi d'invitació
