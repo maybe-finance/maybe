@@ -1,0 +1,10 @@
+---
+ca:
+  upgrades:
+    acknowledge:
+      upgrade_complete_dismiss: Esperem que gaudiu les noves funcionalitats!
+      upgrade_dismissed: Actualització ignorada
+      upgrade_not_available: L'actualització no està disponible
+      upgrade_not_found: No s'ha trobat l'actualització
+    deploy:
+      upgrade_not_found: No s'ha trobat l'actualització
