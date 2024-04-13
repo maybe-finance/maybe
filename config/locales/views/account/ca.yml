@@ -1,0 +1,22 @@
+---
+ca:
+  accounts:
+    create:
+      success: S'ha creat el compte correctament
+    destroy:
+      success: S'ha eliminat el compte correctament
+    index:
+      new_account: Afegeix un compte
+    new:
+      currency:
+        all_others: Tots els altres
+        popular: Popular
+      name:
+        label: Nom del compte
+        placeholder: Exemple de nom del compte
+      select_accountable_type: Què voleu afegir?
+      title: Afegeix un compte
+    sync:
+      success: S'ha iniciat la sincronització del compte
+    update:
+      success: S'ha actualitzat el compte correctament
