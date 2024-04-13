@@ -1,0 +1,5 @@
+---
+ca:
+  password_mailer:
+    password_reset:
+      cta: Restableix la contrasenya
