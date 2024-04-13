@@ -3,11 +3,11 @@ ca:
   upgrader:
     deployer:
       null_deployer:
-        success_message: 'No-op: null deployer initiated deploy successfully'
+        success_message: 'No-op: S'ha iniciat el desplegament nul correctament'
       render:
-        deploy_log_error: 'Failed to deploy %{type} %{commit_sha} to Render: %{error_message}'
-        deploy_log_info: Deploying %{type} %{commit_sha} to Render...
-        error_message_failed_deploy: Failed to deploy to Render
-        error_message_not_set: Render deploy hook URL is not set
-        success_message: 'Triggered deployment to Render for commit: %{commit_sha}'
+        deploy_log_error: 'Ha fallat el desplegament %{type} %{commit_sha} a Render: %{error_message}'
+        deploy_log_info: S'està desplegant %{type} %{commit_sha} a Render...
+        error_message_failed_deploy: Ha fallat el desplegament a Render
+        error_message_not_set: No s'ha configurat l'URL del «hook» de desplegament de Render
+        success_message: 'S'ha activat el desplegament a Render per a la comissió: %{commit_sha}'
         troubleshooting_url: https://render.com/docs/deploy-hooks
