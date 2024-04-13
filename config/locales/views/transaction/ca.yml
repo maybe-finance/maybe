@@ -1,0 +1,18 @@
+---
+ca:
+  transactions:
+    categories:
+      create:
+        error: Ha fallat la creació de la categoria
+        success: S'ha creat la categoria correctament
+      destroy:
+        success: S'ha eliminat la categoria correctament
+      update:
+        error: Ha fallat l'actualització de la categoria
+        success: S'ha actualitzat la categoria correctament
+    create:
+      success: S'ha creat la transacció correctament
+    destroy:
+      success: S'ha eliminat la transacció correctament
+    update:
+      success: S'ha actualitzat la transacció correctament
