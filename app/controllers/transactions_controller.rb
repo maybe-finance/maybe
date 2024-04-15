@@ -59,6 +59,8 @@ class TransactionsController < ApplicationController
     account = Current.family.accounts.find(params[:transaction][:account_id])
 
     @transaction = account.transactions.build(transaction_params)
+    @transaction.amount = @transaction.amount.abs
+    @transaction.amount = -@transaction.amount if params[:transaction][:kind] == "income"
 
     if @transaction.save
       @transaction.account.sync_later
