@@ -367,7 +367,7 @@ GEM
     sentry-rails (5.17.2)
       railties (>= 5.0)
       sentry-ruby (~> 5.17.2)
-    sentry-ruby (5.17.2)
+    sentry-ruby (5.17.3)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
     smart_properties (1.17.0)
