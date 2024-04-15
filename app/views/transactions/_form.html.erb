@@ -1,7 +1,47 @@
 <%= form_with model: @transaction do |f| %>
-  <%= f.collection_select :account_id, Current.family.accounts, :id, :name, { prompt: "Select an Account", label: "Account" } %>
-  <%= f.date_field :date, label: "Date" %>
-  <%= f.text_field :name, label: "Name", placeholder: "Groceries" %>
-  <%= f.money_field :amount_money, label: "Amount" %>
-  <%= f.submit %>
+  <div class="bg-gray-50 rounded-lg p-1 flex gap-1 text-sm text-gray-900 font-medium">
+    <%= f.radio_button :kind, "expense", class: "peer/expense hidden", checked: true %>
+    <%=
+      f.label(
+        :kind_expense,
+        class: "
+          px-2 py-1 rounded-md flex-1 flex justify-center items-center gap-2 text-center border border-transparent
+          peer-checked/expense:bg-white peer-checked/expense:border peer-checked/expense:border-alpha-black-25 peer-checked/expense:shadow-xs
+        "
+      ) do
+    %>
+      <%= lucide_icon "minus-circle", class: "w-4 h-4" %>
+      <span>Expense</span>
+    <% end %>
+    <%= f.radio_button :kind, "income", class: "peer/income hidden" %>
+    <%=
+      f.label(
+        :kind_income,
+        class: "
+          px-2 py-1 rounded-md flex-1 flex justify-center items-center gap-2 text-center border border-transparent
+          peer-checked/income:bg-white peer-checked/income:border peer-checked/income:border-alpha-black-25 peer-checked/income:shadow-xs
+        "
+      ) do
+    %>
+      <%= lucide_icon "plus-circle", class: "w-4 h-4" %>
+      <span>Income</span>
+    <% end %>
+    <button disabled class="px-2 py-1 rounded-md flex-1 flex justify-center items-center gap-2 text-center cursor-not-allowed">
+      <%= lucide_icon "arrow-right-left", class: "w-4 h-4" %>
+      <span>Transfer</span>
+    </button>
+  </div>
+
+  <%= f.text_field :name, label: "Description", placeholder: "Describe transaction...", required: true %>
+
+  <%= f.collection_select :account_id, Current.family.accounts, :id, :name, { prompt: "Select an Account", label: "Account" }, required: true %>
+
+  <%= f.money_field :amount_money, label: "Amount", required: true %>
+
+  <% sorted_categories = Current.family.transaction_categories.sort_by { |category| category.id == transaction.category_id ? 0 : 1 } %>
+  <%= f.collection_select :category_id, sorted_categories, :id, :name, { prompt: "Select an category", label: "Category" }, required: true %>
+
+  <%= f.date_field :date, label: "Date", required: true %>
+
+  <%= f.submit "Add transaction" %>
 <% end %>

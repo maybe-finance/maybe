@@ -1,7 +1,7 @@
-<div class="mx-auto md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl mb-4">New transaction</h1>
-  <%= render "form", transaction: @transaction %>
-</div>
-<div class="flex justify-center">
-  <%= link_to "Back to transactions", transactions_path, class: "mt-8 underline text-lg font-bold" %>
-</div>
+<%= modal do %>
+  <div class="flex flex-col min-h-[530px] p-4">
+    <h1 class="text-gray-800 font-medium">New transaction</h1>
+
+    <%= render "form", transaction: @transaction %>
+  </div>
+<% end %>
