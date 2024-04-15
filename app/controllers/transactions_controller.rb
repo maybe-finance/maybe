@@ -50,6 +50,7 @@ class TransactionsController < ApplicationController
 
   def new
     @transaction = Transaction.new
+    @transaction.account = Current.family.accounts.find(params[:account_id]) if params[:account_id]
   end
 
   def edit
