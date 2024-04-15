@@ -60,10 +60,27 @@ class TransactionsController < ApplicationController
 
     @transaction = account.transactions.build(transaction_params)
 
+    if params[:transaction][:type].to_s == "expense"
+        @transaction.amount = @transaction.amount
+    else
+      @transaction.amount = -(@transaction.amount)
+    end
+
     respond_to do |format|
       if @transaction.save
         @transaction.account.sync_later
+        index
+
         format.html { redirect_to transactions_url, notice: t(".success") }
+        format.turbo_stream do
+          render turbo_stream: [
+            turbo_stream.append("notification-tray", partial: "shared/notification", locals: { type: "success", content: t(".success") }),
+            turbo_stream.replace("transactions_summary", partial: "transactions/summary", locals: { totals: @totals }),
+            turbo_stream.replace("transactions_search_form", partial: "transactions/search_form", locals: { q: @q }),
+            turbo_stream.replace("transactions_filters", partial: "transactions/filters", locals: { filters: @filter_list }),
+            turbo_stream.replace("transactions_list", partial: "transactions/list", locals: { transactions: @transactions, pagy: @pagy })
+          ]
+      end
       else
         format.html { render :new, status: :unprocessable_entity }
       end
