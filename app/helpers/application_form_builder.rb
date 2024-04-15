@@ -36,7 +36,8 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     default_options = {
       class: "form-field__input",
       value: money&.amount,
-      placeholder: Money.new(0, money&.currency || Money.default_currency).format
+      placeholder: Money.new(0, money&.currency || Money.default_currency).format,
+      step: 0.01
     }
 
     merged_options = default_options.merge(options)
