@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: bad7ff1664fb05cc227d0386ee3cbe4c292efe05
+  revision: 778039b896be1dcb3da606f761921d006cab67c9
   branch: main
   specs:
     actioncable (7.2.0.alpha)
@@ -242,17 +242,17 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.1)
-    nokogiri (1.16.3-aarch64-linux)
+    nokogiri (1.16.4-aarch64-linux)
       racc (~> 1.4)
-    nokogiri (1.16.3-arm-linux)
+    nokogiri (1.16.4-arm-linux)
       racc (~> 1.4)
-    nokogiri (1.16.3-arm64-darwin)
+    nokogiri (1.16.4-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.16.3-x86-linux)
+    nokogiri (1.16.4-x86-linux)
       racc (~> 1.4)
-    nokogiri (1.16.3-x86_64-darwin)
+    nokogiri (1.16.4-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.16.3-x86_64-linux)
+    nokogiri (1.16.4-x86_64-linux)
       racc (~> 1.4)
     octokit (8.1.0)
       base64
@@ -314,7 +314,7 @@ GEM
     redis-client (0.19.1)
       connection_pool
     regexp_parser (2.9.0)
-    reline (0.5.0)
+    reline (0.5.1)
       io-console (~> 0.5)
     rexml (3.2.6)
     rubocop (1.60.2)
