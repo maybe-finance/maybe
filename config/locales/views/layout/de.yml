@@ -1,0 +1,15 @@
+---
+de:
+  layouts:
+    application:
+      accounts: Konten
+      dashboard: Dashboard
+      new_account: Neues Konto
+      transactions: Transaktionen
+    auth:
+      or: oder
+      privacy_policy: Datenschutzrichtlinie
+      sign_in: anmelden
+      sign_up: neues Konto erstellen
+      terms_of_service: Nutzungsbedingungen
+      your_account: Ihr Konto

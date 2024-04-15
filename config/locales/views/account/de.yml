@@ -1,0 +1,22 @@
+---
+de:
+  accounts:
+    create:
+      success: Neues Konto erfolgreich erstellt
+    destroy:
+      success: Konto erfolgreich gelöscht
+    index:
+      new_account: Neues Konto
+    new:
+      currency:
+        all_others: Alle anderen
+        popular: Beliebt
+      name:
+        label: Kontoname
+        placeholder: Beispiel Kontoname
+      select_accountable_type: Was möchten Sie hinzufügen?
+      title: Konto hinzufügen
+    sync:
+      success: Konto Synchronisation gestartet
+    update:
+      success: Konto erfolgreich aktualisiert

@@ -1,0 +1,6 @@
+---
+de:
+  pages:
+    dashboard:
+      greeting: Willkommen zurück, %{name}
+      new: Neu

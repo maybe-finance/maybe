@@ -1,0 +1,12 @@
+---
+de:
+  transaction:
+    default_category:
+      auto_and_transport: Auto & Transport
+      entertainment: Unterhaltung
+      food_and_drink: Essen & Trinken
+      general_services: Generelle Dienstleistungen
+      home_improvement: Hausverbesserung
+      income: Einkommen
+      personal_care: Körperpflege
+      rent_and_utilities: Miete & Nebenkosten

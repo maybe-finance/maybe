@@ -1,0 +1,10 @@
+---
+de:
+  upgrades:
+    acknowledge:
+      upgrade_complete_dismiss: Wir hoffen, dass Ihnen die Aktualisierung gefällt!
+      upgrade_dismissed: Aktualisierung verworfen
+      upgrade_not_available: Aktualisierung nicht verfügbar
+      upgrade_not_found: Aktualisierung nicht gefunden
+    deploy:
+      upgrade_not_found: Aktualisierung nicht gefunden

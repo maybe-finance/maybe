@@ -1,0 +1,5 @@
+---
+de:
+  password_mailer:
+    password_reset:
+      cta: Setze dein Passwort zurück

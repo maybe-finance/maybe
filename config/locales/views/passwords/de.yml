@@ -1,0 +1,10 @@
+---
+de:
+  passwords:
+    edit:
+      password: Neues Passwort
+      password_challenge: Derzeitiges Passwort
+      submit: Password zurücksetzen
+      title: Passwort aktualisieren
+    update:
+      success: Ihr Passwort wurde zurückgesetzt.

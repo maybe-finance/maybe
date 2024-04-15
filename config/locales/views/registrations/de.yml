@@ -1,0 +1,16 @@
+---
+de:
+  helpers:
+    label:
+      user:
+        invite_code: Einladungscode
+    submit:
+      user:
+        create: Fortfahren
+  registrations:
+    create:
+      failure: Eingabe ungültig, bitte versuchen Sie es erneut.
+      invalid_invite_code: Einladungscode ungültig, bitte versuchen Sie es erneut.
+      success: Sie haben sich erfolgreich registriert.
+    new:
+      title: Erstellen Sie ein Konto

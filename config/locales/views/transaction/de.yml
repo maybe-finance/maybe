@@ -1,0 +1,18 @@
+---
+de:
+  transactions:
+    categories:
+      create:
+        error: Fehler beim Erstellen der neuen Transaktions-Kategorie
+        success: Neue Transaktions-Kategorie erfolgreich erstellt
+      destroy:
+        success: Transaktions-Kategorie erfolgreich gelöscht
+      update:
+        error: Fehler beim Aktualisieren der Transaktions-Kategorie
+        success: Transaktions-Kategorie erfolgreich aktualisiert
+    create:
+      success: Neue Transaktion erfolgreich erstellt
+    destroy:
+      success: Transaktion erfolgreich gelöscht
+    update:
+      success: Transaktion erfolgreich aktualisiert

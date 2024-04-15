@@ -1,0 +1,15 @@
+---
+de:
+  password_resets:
+    create:
+      requested: Wenn ein Konto mit dieser Email existiert haben wir
+        einen Link zum Zurücksetzen Ihres Passworts gesendet.
+    edit:
+      submit: Passwort aktualisieren
+      title: Passwort zurücksetzen
+    new:
+      submit: Passwort zurücksetzen
+      title: Passwort zurücksetzen
+    update:
+      invalid_token: Ungültiges Token.
+      success: Ihr Passwort wurde erfolgreich zurückgesetzt.

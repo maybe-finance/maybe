@@ -1,0 +1,14 @@
+---
+de:
+  sessions:
+    create:
+      invalid_credentials: Ungültige Email-Adresse oder Passwort.
+    destroy:
+      logout_successful: Sie haben sich erfolgreich abgemeldet.
+    new:
+      email: Email-Adresse
+      email_placeholder: max@mustermann.com
+      forgot_password: Passwort vergessen?
+      reset_password: Passwort zurücksetzen
+      submit: Anmelden
+      title: In Ihrem Konto anmelden

@@ -1,0 +1,12 @@
+---
+de:
+  activerecord:
+    attributes:
+      user:
+        email: Email
+        family: Familie
+        family_id: Familie
+        first_name: Vorname
+        last_name: Nachname
+        password: Passwort
+        password_confirmation: Passwort Bestätigung
