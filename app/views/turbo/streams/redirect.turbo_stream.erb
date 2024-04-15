@@ -1,5 +1,5 @@
 <%= turbo_stream.append_all "head" do %>
-  <%= javascript_tag nonce: true, data: { turbo_cache: false } do %>
+  <script data-turbo-cache="false">
     window.Turbo.visit("<%= escape_javascript response.location %>", {
       frame: "<%= escape_javascript turbo_frame %>",
       <% if turbo_action.present? %>
@@ -7,5 +7,5 @@
       <% end %>
     })
     document.currentScript.remove()
-  <% end %>
+  </script>
 <% end %>
