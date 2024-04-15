@@ -4,7 +4,7 @@ de:
     edit:
       password: Neues Passwort
       password_challenge: Derzeitiges Passwort
-      submit: Password zurücksetzen
+      submit: Passwort zurücksetzen
       title: Passwort aktualisieren
     update:
       success: Ihr Passwort wurde zurückgesetzt.
