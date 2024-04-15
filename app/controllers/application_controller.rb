@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  include Authentication, Invitable, SelfHostable
+  include Authentication, Invitable, SelfHostable, TurboStreamsRedirect
   include Pagy::Backend
 
   before_action :sync_accounts

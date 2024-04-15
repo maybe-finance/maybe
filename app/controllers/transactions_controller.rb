@@ -15,7 +15,6 @@ class TransactionsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.turbo_stream
     end
   end
 
@@ -61,13 +60,11 @@ class TransactionsController < ApplicationController
 
     @transaction = account.transactions.build(transaction_params)
 
-    respond_to do |format|
-      if @transaction.save
-        @transaction.account.sync_later
-        format.html { redirect_to transactions_url, notice: t(".success") }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-      end
+    if @transaction.save
+      @transaction.account.sync_later
+      redirect_to transactions_url, notice: t(".success"), turbo_frame: "_top"
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
