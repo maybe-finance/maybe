@@ -3,9 +3,11 @@ de:
   upgrader:
     deployer:
       null_deployer:
-        success_message: 'No-op: Null-Deployer hat die Bereitstellung erfolgreich initiiert'
+        success_message: 'No-op: Null-Deployer hat die Bereitstellung erfolgreich
+          initiiert'
       render:
-        deploy_log_error: 'Fehler beim Bereitstellen von %{type} %{commit_sha} bei Render: %{error_message}'
+        deploy_log_error: 'Fehler beim Bereitstellen von %{type} %{commit_sha} bei
+          Render: %{error_message}'
         deploy_log_info: Bereitstellen von %{type} %{commit_sha} bei Render...
         error_message_failed_deploy: Bereitstellung bei Render fehlgeschlagen
         error_message_not_set: Die Render-Deploy-Hook-URL ist nicht festgelegt

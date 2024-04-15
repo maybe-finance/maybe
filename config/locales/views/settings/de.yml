@@ -3,6 +3,6 @@ de:
   settings:
     self_hosting:
       update:
-        render_deploy_hook_error: Um automatische Aktualisierungen zu aktivieren
-          muss eine Render-Deploy-Hook bereitgestellt werden.
+        render_deploy_hook_error: Um automatische Aktualisierungen zu aktivieren muss
+          eine Render-Deploy-Hook bereitgestellt werden.
         success: Einstellungen erfolgreich aktualisiert.

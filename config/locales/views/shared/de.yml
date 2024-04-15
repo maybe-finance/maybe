@@ -3,11 +3,11 @@ de:
   custom_turbo_confirm:
     account_destroy:
       accept: Konto "%{name}" löschen
-      body_html: "<p>Durch das Löschen dieses Kontos wird auch sein Wertverlauf gelöscht, was sich auf
-        verschiedene Aspekte Ihres Gesamtkontos auswirkt. Diese Aktion wird direkte Auswirkungen
-        auf Ihre Nettovermögensberechnungen und die Kontodiagramme haben.</p><br /> <p>Nach dem
-        Löschen können Sie die Kontoinformationen nicht mehr wiederherstellen, da Sie diese als
-        neues Konto wieder hinzufügen müssen.</p>"
+      body_html: "<p>Durch das Löschen dieses Kontos wird auch sein Wertverlauf gelöscht,
+        was sich auf verschiedene Aspekte Ihres Gesamtkontos auswirkt. Diese Aktion
+        wird direkte Auswirkungen auf Ihre Nettovermögensberechnungen und die Kontodiagramme
+        haben.</p><br /> <p>Nach dem Löschen können Sie die Kontoinformationen nicht
+        mehr wiederherstellen, da Sie diese als neues Konto wieder hinzufügen müssen.</p>"
       title: Konto löschen?
     default:
       accept: Bestätigen
@@ -15,10 +15,11 @@ de:
       title: Bist du sicher?
     history:
       accept: Eintrag löschen
-      body_html: "<p>Wenn Sie diesen Eintrag löschen, wird er aus dem Kontoverlauf entfernt.
-        Dies wirkt sich auf verschiedene Teile Ihres Kontos aus. Dazu gehört auch das Nettovermögen
-        und Kontodiagramme.</p></br><p>Sie können diesen Eintrag nur wieder hinzufügen, indem Sie ihn
-        eine manuelle Neueingabe über einen neuen Eintrag machen</p>"
+      body_html: "<p>Wenn Sie diesen Eintrag löschen, wird er aus dem Kontoverlauf
+        entfernt. Dies wirkt sich auf verschiedene Teile Ihres Kontos aus. Dazu gehört
+        auch das Nettovermögen und Kontodiagramme.</p></br><p>Sie können diesen Eintrag
+        nur wieder hinzufügen, indem Sie ihn eine manuelle Neueingabe über einen neuen
+        Eintrag machen</p>"
       title: Eintrag löschen?
   shared:
     upgrade_notification:
