@@ -30,7 +30,11 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     "
 
     content = @template.capture(&block) if block_given?
-    content ||= tag_value.to_s.humanize
+    unless content
+      label_text = @template.tag.span(options[:label] || tag_value.to_s.humanize)
+      icon = options[:icon] ? @template.lucide_icon(options[:icon], class: "w-4 h-4") : ""
+      content = @template.safe_join([ icon, label_text ])
+    end
 
     label("#{method}_#{tag_value}".to_sym, class: tab_class) do
       radio_button(method, tag_value, options.except(:label).merge(class: "hidden")) +
