@@ -17,6 +17,7 @@ class Account < ApplicationRecord
   scope :active, -> { where(is_active: true) }
   scope :assets, -> { where(classification: "asset") }
   scope :liabilities, -> { where(classification: "liability") }
+  scope :alphabetically, -> { order(:name) }
 
   delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
 
