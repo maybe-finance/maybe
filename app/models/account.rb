@@ -71,10 +71,7 @@ class Account < ApplicationRecord
     Accountable.by_classification.each do |classification, types|
       types.each do |type|
         group = grouped_accounts[classification.to_sym].add_child_group(type, currency)
-        Accountable.from_type(type).includes(:account).each do |accountable|
-          account = accountable.account
-          next unless account
-
+        self.where(accountable_type: type).each do |account|
           value_node = group.add_value_node(
             account,
             account.balance_money.exchange_to(currency) || Money.new(0, currency),
