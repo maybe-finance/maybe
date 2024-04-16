@@ -1,0 +1,2 @@
+module Settings::HostingHelper
+end

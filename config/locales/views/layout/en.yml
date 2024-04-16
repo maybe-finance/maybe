@@ -1,11 +1,6 @@
 ---
 en:
   layouts:
-    application:
-      accounts: Accounts
-      dashboard: Dashboard
-      new_account: New account
-      transactions: Transactions
     auth:
       or: or
       privacy_policy: Privacy Policy
@@ -13,3 +8,8 @@ en:
       sign_up: create an account
       terms_of_service: Terms of Service
       your_account: Your account
+    sidebar:
+      accounts: Accounts
+      dashboard: Dashboard
+      new_account: New account
+      transactions: Transactions

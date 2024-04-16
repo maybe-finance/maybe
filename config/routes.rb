@@ -6,8 +6,12 @@ Rails.application.routes.draw do
   resource :password_reset
   resource :password
 
-  resource :settings, only: %i[edit update] do
-    resource :self_hosting, only: %i[edit update], controller: "settings/self_hosting"
+  namespace :settings do
+    resource :profile, only: %i[show update]
+    resource :preferences, only: %i[show update]
+    resource :notifications, only: %i[show update]
+    resource :billing, only: %i[show update]
+    resource :hosting, only: %i[show update]
   end
 
   resources :transactions do

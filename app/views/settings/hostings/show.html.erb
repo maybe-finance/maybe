@@ -1,11 +1,14 @@
+<% content_for :sidebar do %>
+  <%= render "settings/nav" %>
+<% end %>
 <div class="space-y-4">
-  <h1 class="text-3xl font-semibold font-display">Edit Self Hosting Settings</h1>
+  <h1 class="text-3xl font-semibold font-display">Self Hosting</h1>
   <hr>
-  <%= form_with model: Setting.new, url: settings_self_hosting_path, method: :patch, local: true, html: { class: "space-y-4" } do |form| %>
+  <%= form_with model: Setting.new, url: settings_hosting_path, method: :patch, local: true, html: { class: "space-y-4" } do |form| %>
     <section class="space-y-3">
       <h2 class="text-2xl font-semibold">Render Deploy Hook</h2>
       <p class="text-gray-500">You must fill this in so your app can trigger upgrades when Maybe releases upgrades.  Learn more about deploy hooks and how they work in the <%= link_to "Render documentation", "https://docs.render.com/docs/deploy-hooks", target: "_blank", rel: "noopener noreferrer", class: "text-blue-500 hover:underline" %>.</p>
-      <%= form.text_field :render_deploy_hook, label: "Render Deploy Hook", placeholder: "https://api.render.com/deploy/srv-xyz...", value: Setting.render_deploy_hook %>
+      <%= form.url_field :render_deploy_hook, label: "Render Deploy Hook", placeholder: "https://api.render.com/deploy/srv-xyz...", value: Setting.render_deploy_hook %>
     </section>
     <section class="space-y-3">
       <h2 class="text-2xl font-semibold">Auto Upgrades Setting</h2>

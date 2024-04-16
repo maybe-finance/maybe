@@ -38,21 +38,16 @@ module ApplicationHelper
   end
 
   def sidebar_link_to(name, path, options = {})
-    base_class_names = [ "block", "border", "border-transparent", "rounded-xl", "-ml-2", "p-2", "text-sm", "font-medium", "text-gray-500", "flex", "items-center" ]
-    hover_class_names = [ "hover:bg-white", "hover:border-alpha-black-50", "hover:text-gray-900", "hover:shadow-xs" ]
-    current_page_class_names = [ "bg-white", "border-alpha-black-50", "text-gray-900", "shadow-xs" ]
+    is_current = current_page?(path) || (request.path.start_with?(path) && path != "/")
 
-    link_class_names = if current_page?(path) || (request.path.start_with?(path) && path != "/")
-                         base_class_names.delete("border-transparent")
-                         base_class_names + hover_class_names + current_page_class_names
-    else
-                         base_class_names + hover_class_names
-    end
+    classes = [
+      "flex items-center gap-2 p-2 rounded-xl border text-sm font-medium text-gray-500",
+      (is_current ? "bg-white text-gray-900 shadow-xs border-alpha-black-50" : "hover:bg-gray-100 border-transparent")
+    ].compact.join(" ")
 
-    merged_options = options.reverse_merge(class: link_class_names.join(" ")).except(:icon)
-
-    link_to path, merged_options do
-      lucide_icon(options[:icon], class: "w-5 h-5 mr-2") + name
+    link_to path, **options.merge(class: classes), aria: { current: ("page" if current_page?(path)) } do
+      concat(lucide_icon(options[:icon], class: "w-5 h-5")) if options[:icon]
+      concat(name)
     end
   end
 

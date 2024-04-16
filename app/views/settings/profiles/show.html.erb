@@ -1,5 +1,8 @@
+<% content_for :sidebar do %>
+  <%= render "settings/nav" %>
+<% end %>
 <h1 class="text-3xl font-semibold font-display">Update settings</h1>
-<%= form_with model: Current.user, url: settings_path, html: { class: "space-y-4" } do |form| %>
+<%= form_with model: Current.user, url: settings_profile_path, html: { class: "space-y-4" } do |form| %>
   <%= form.fields_for :family_attributes do |family_fields| %>
     <%= family_fields.text_field :name, placeholder: "Family name", value: Current.family.name, label: "Family name" %>
     <%= family_fields.select :currency, options_for_select(Money::Currency.popular.map { |currency| ["#{currency.iso_code} (#{currency.name})", currency.iso_code] }, selected: Current.family.currency), { label: "Currency" } %>

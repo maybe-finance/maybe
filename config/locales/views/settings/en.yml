@@ -1,8 +1,14 @@
 ---
 en:
   settings:
-    self_hosting:
+    nav:
+      profile_label: Profile
+      billing_label: Billing
+      notifications_label: Notifications
+      preferences_label: Preferences
+    hosting:
       update:
-        render_deploy_hook_error: Render deploy hook must be provided to enable auto
+        render_deploy_hook_error:
+          Render deploy hook must be provided to enable auto
           upgrades
         success: Settings updated successfully.

@@ -1,0 +1,23 @@
+<div class="flex items-center gap-1 mb-6">
+  <%= link_to root_path, class: "flex items-center gap-1 text-gray-900 font-medium text-sm" do %>
+    <%= lucide_icon "chevron-left", class: "w-5 h-5 text-gray-500" %>
+    <span>Back</span>
+  <% end %>
+  <span data-controller="hotkey" data-hotkey="Escape" data-action="hotkey#navigateBack" class="uppercase bg-gray-100 rounded-sm px-1 py-0.5 text-xs text-gray-500 shadow-sm ml-1">
+    esc
+  </span>
+</div>
+<nav>
+  <div class="flex items-center gap-2">
+    <h3 class="uppercase text-gray-500 font-medium text-xs">General</h3>
+    <div class="h-px bg-alpha-black-100 w-full"></div>
+  </div>
+  <ul class="mt-6 space-y-1">
+    <li>
+      <%= sidebar_link_to t(".profile_label"), settings_profile_path, icon: "layout-grid" %>
+      <%= sidebar_link_to t(".preferences_label"), settings_preferences_path, icon: "layout-grid" %>
+      <%= sidebar_link_to t(".notifications_label"), settings_notifications_path, icon: "layout-grid" %>
+      <%= sidebar_link_to t(".billing_label"), settings_billing_path, icon: "layout-grid" %>
+    </li>
+  </ul>
+</nav>
