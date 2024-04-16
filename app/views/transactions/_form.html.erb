@@ -1,7 +1,21 @@
-<%= form_with model: @transaction do |f| %>
-  <%= f.collection_select :account_id, Current.family.accounts, :id, :name, { prompt: "Select an Account", label: "Account" } %>
-  <%= f.date_field :date, label: "Date" %>
-  <%= f.text_field :name, label: "Name", placeholder: "Groceries" %>
-  <%= f.money_field :amount_money, label: "Amount" %>
-  <%= f.submit %>
+<%= form_with model: @transaction, data: { turbo: false } do |f| %>
+  <section>
+    <fieldset class="bg-gray-50 rounded-lg p-1 grid grid-flow-col justify-stretch gap-x-2">
+      <%= radio_tab_tag form: f, name: :nature, value: :expense, label: t(".expense"), icon: "minus-circle", checked: true %>
+      <%= radio_tab_tag form: f, name: :nature, value: :income, label: t(".income"), icon: "plus-circle" %>
+      <%= radio_tab_tag form: f, name: :nature, value: :transfer, label: t(".transfer"), icon: "arrow-right-left", disabled: true %>
+    </fieldset>
+  </section>
+
+  <section class="space-y-2">
+    <%= f.text_field :name, label: t(".description"), placeholder: t(".description_placeholder"), required: true %>
+    <%= f.collection_select :account_id, Current.family.accounts.alphabetically, :id, :name, { prompt: t(".account_prompt"), label: t(".account") }, required: true %>
+    <%= f.money_field :amount_money, label: t(".amount"), required: true %>
+    <%= f.collection_select :category_id, Current.family.transaction_categories.alphabetically, :id, :name, { prompt: t(".category_prompt"), label: t(".category") }, required: true %>
+    <%= f.date_field :date, label: t(".date"), required: true %>
+  </section>
+
+  <section>
+    <%= f.submit t(".submit") %>
+  </section>
 <% end %>
