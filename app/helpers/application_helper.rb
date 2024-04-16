@@ -17,7 +17,7 @@ module ApplicationHelper
     content = tag.p(text)
     content = capture &block if block_given?
 
-    render partial: "shared/notification", locals: { type: options[:type], content: content }
+    render partial: "shared/notification", locals: { type: options[:type], content: { body: content } }
   end
 
   # Wrap view with <%= modal do %> ... <% end %> to have it open in a modal
