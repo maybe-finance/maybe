@@ -22,6 +22,22 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     RUBY_EVAL
   end
 
+  def radio_tab_field(method, tag_value, options = {}, &block)
+    tab_class = "
+      px-2 py-1 rounded-md flex-1 flex justify-center items-center gap-2 text-center border border-transparent
+      has-[:checked]:bg-white has-[:checked]:border has-[:checked]:border-alpha-black-25 has-[:checked]:shadow-xs
+      has-[:disabled]:cursor-not-allowed
+    "
+
+    content = @template.capture(&block) if block_given?
+    content ||= tag_value.to_s.humanize
+
+    label("#{method}_#{tag_value}".to_sym, class: tab_class) do
+      radio_button(method, tag_value, options.except(:label).merge(class: "hidden")) +
+      content
+    end
+  end
+
   # See `Monetizable` concern, which adds a _money suffix to the attribute name
   # For a monetized field, the setter will always be the attribute name without the _money suffix
   def money_field(method, options = {})
