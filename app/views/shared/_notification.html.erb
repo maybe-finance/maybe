@@ -5,25 +5,25 @@
     <% actions = options[:auto_dismiss] ? "animationend->element-removal#remove" : "" %>
     <% animation = options[:auto_dismiss] ? "animate-[appear-then-fades_5s_300ms_both]" : "animate-[appear_5s_300ms_both]" %>
     <%= content_tag :div,
-      class: "max-w-80 bg-white shadow-xs border border-alpha-black-50 border-solid py-3 px-4 rounded-[10px] text-sm font-medium flex gap-3 #{animation}",
+      class: "max-w-80 bg-white shadow-xs border border-alpha-black-50 border-solid py-3 px-4 rounded-[10px] text-sm font-medium flex gap-4 #{animation}",
       data: {controller: "element-removal", action: actions },
       role: type == "error" ? "alert" : "status" do -%>
       <% base_class = "w-5 h-5 p-1 text-white flex shrink-0 items-center justify-center rounded-full" %>
       <%= type.in?(["error", "alert"]) ? lucide_icon("x", class: "#{base_class} bg-error") : lucide_icon("check", class: "#{base_class} bg-success") %>
-      <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-        <% if content[:title].present? %>
-          <h1 class="text-base font-semibold leading-6 text-gray-900" id="modal-title"><%= content[:title] %></h1>
-        <% end %>
-        <div class="mt-2">
-          <p class="text-sm text-gray-500"><%= content[:body] %></p>
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-1">
+          <% if content[:title].present? %>
+            <h1 class="text-sm text-gray-900 font-medium"><%= content[:title] %></h1>
+          <% end %>
+          <p class="text-sm text-gray-500 font-normal"><%= content[:body] %></p>
         </div>
 
-        <div class="mt-2">
+        <div class="flex flex-row justify-end gap-2">
           <% if !options[:auto_dismiss] %>
-            <a aria-label="Close notification" data-action="click->element-removal#remove" class="hover:bg-gray-300 text-gray-800 py-2 px-4 rounded">Dissmiss</a>
+            <a aria-label="Close notification" data-action="click->element-removal#remove" class="flex gap-1 font-medium items-center text-gray-900 px-3 py-1.5 rounded-lg cursor-pointer">Dissmiss</a>
           <% end %>
           <% if action[:label].present? && action[:url].present? %>
-            <%= link_to action[:label], action[:url], class: "bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded" %>
+            <%= link_to action[:label], action[:url], class: "flex gap-1 font-medium items-center bg-gray-50 text-gray-900 px-3 py-1.5 rounded-lg" %>
           <% end %>
         </div>
       </div>
