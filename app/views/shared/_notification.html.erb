@@ -1,4 +1,4 @@
-<%# locals: (type: "success", content: { title: '', body: ''}, action: { label:'' , url:'' }, options: { auto_dismiss: true }) -%>
+<%# locals: (type: "success", content: { title: '', body: ''}, action: { label:'' , url:'' }, options: { auto_dismiss: false }) -%>
 
 <turbo-stream action="append" target="notification-tray">
   <template>
@@ -20,7 +20,7 @@
 
         <div class="flex flex-row justify-end gap-2">
           <% if !options[:auto_dismiss] %>
-            <a aria-label="Close notification" data-action="click->element-removal#remove" class="flex gap-1 font-medium items-center text-gray-900 px-3 py-1.5 rounded-lg cursor-pointer">Dissmiss</a>
+            <%= content_tag :a, t('.dismiss'), data: { action: "click->element-removal#remove" }, class:"flex gap-1 font-medium items-center text-gray-900 px-3 py-1.5 rounded-lg cursor-pointer" %>
           <% end %>
           <% if action[:label].present? && action[:url].present? %>
             <%= link_to action[:label], action[:url], class: "flex gap-1 font-medium items-center bg-gray-50 text-gray-900 px-3 py-1.5 rounded-lg" %>
