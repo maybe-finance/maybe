@@ -58,9 +58,7 @@ class TransactionsController < ApplicationController
   def create
     account = Current.family.accounts.find(params[:transaction][:account_id])
 
-    @transaction = account.transactions.build(transaction_params)
-    @transaction.amount = @transaction.amount.abs
-    @transaction.amount = -@transaction.amount if params[:transaction][:kind] == "income"
+    @transaction = account.transactions.build(transaction_params.merge(amount: transaction_amount))
 
     if @transaction.save
       @transaction.account.sync_later
@@ -121,5 +119,17 @@ class TransactionsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def transaction_params
       params.require(:transaction).permit(:name, :date, :amount, :currency, :notes, :excluded, :category_id)
+    end
+
+    def transaction_amount
+      if transaction_kind.income?
+        -transaction_params[:amount].to_d.abs
+      else
+        transaction_params[:amount].to_d.abs
+      end
+    end
+
+    def transaction_kind
+      params[:transaction][:kind].to_s.inquiry
     end
 end
