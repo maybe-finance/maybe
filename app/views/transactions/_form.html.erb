@@ -22,7 +22,7 @@
 
   <%= f.money_field :amount_money, label: "Amount", required: true %>
 
-  <%= f.collection_select :category_id, Current.family.transaction.categories, :id, :name, { prompt: "Select an category", label: "Category" }, required: true %>
+  <%= f.collection_select :category_id, Current.family.transaction_categories.all, :id, :name, { prompt: "Select an category", label: "Category" }, required: true %>
 
   <%= f.date_field :date, label: "Date", required: true %>
 
