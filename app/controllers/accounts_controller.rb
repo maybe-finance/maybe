@@ -26,7 +26,7 @@ class AccountsController < ApplicationController
         format.html { redirect_to accounts_path, notice: t(".success") }
         format.turbo_stream do
           render turbo_stream: [
-            turbo_stream.append("notification-tray", partial: "shared/notification", locals: { type: "success", content: t(".success") }),
+            turbo_stream.append("notification-tray", partial: "shared/notification", locals: { type: "success", content: { body: t(".success") } }),
             turbo_stream.replace("account_#{@account.id}", partial: "accounts/account", locals: { account: @account })
           ]
         end
@@ -58,7 +58,7 @@ class AccountsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to account_path(@account), notice: t(".success") }
       format.turbo_stream do
-        render turbo_stream: turbo_stream.append("notification-tray", partial: "shared/notification", locals: { type: "success", content: t(".success") })
+        render turbo_stream: turbo_stream.append("notification-tray", partial: "shared/notification", locals: { type: "success", content: { body: t(".success") } })
       end
     end
   end
