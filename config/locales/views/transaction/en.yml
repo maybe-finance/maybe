@@ -14,5 +14,18 @@ en:
       success: New transaction created successfully
     destroy:
       success: Transaction deleted successfully
+    form:
+      account: Account
+      account_prompt: Select an Account
+      amount: Amount
+      category: Category
+      category_prompt: Select a Category
+      date: Date
+      description: Description
+      description_placeholder: Describe transaction
+      expense: Expense
+      income: Income
+      submit: Add transaction
+      transfer: Transfer
     update:
       success: Transaction updated successfully

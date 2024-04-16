@@ -3,7 +3,7 @@
     <h1 class="text-xl">Transactions</h1>
     <div class="flex items-center gap-5">
       <div class="flex items-center gap-2">
-        <%= link_to new_transaction_path, class: "rounded-lg bg-gray-900 text-white flex items-center gap-1 justify-center hover:bg-gray-700 px-3 py-2" do %>
+        <%= link_to new_transaction_path, class: "rounded-lg bg-gray-900 text-white flex items-center gap-1 justify-center hover:bg-gray-700 px-3 py-2", data: { turbo_frame: :modal } do %>
           <%= lucide_icon("plus", class: "w-5 h-5") %>
           <p>New transaction</p>
         <% end %>
