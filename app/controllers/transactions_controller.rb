@@ -82,7 +82,7 @@ class TransactionsController < ApplicationController
         format.html { redirect_to transaction_url(@transaction), notice: t(".success") }
         format.turbo_stream do
           render turbo_stream: [
-            turbo_stream.append("notification-tray", partial: "shared/notification", locals: { type: "success", content: t(".success") }),
+            turbo_stream.append("notification-tray", partial: "shared/notification", locals: { type: "success", content: { body: t(".success") } }),
             turbo_stream.replace("transaction_#{@transaction.id}", partial: "transactions/transaction", locals: { transaction: @transaction })
           ]
         end
