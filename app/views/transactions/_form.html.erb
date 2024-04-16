@@ -22,8 +22,7 @@
 
   <%= f.money_field :amount_money, label: "Amount", required: true %>
 
-  <% sorted_categories = Current.family.transaction_categories.sort_by { |category| category.id == transaction.category_id ? 0 : 1 } %>
-  <%= f.collection_select :category_id, sorted_categories, :id, :name, { prompt: "Select an category", label: "Category" }, required: true %>
+  <%= f.collection_select :category_id, Current.family.transaction.categories, :id, :name, { prompt: "Select an category", label: "Category" }, required: true %>
 
   <%= f.date_field :date, label: "Date", required: true %>
 
