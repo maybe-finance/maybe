@@ -50,6 +50,10 @@ class TransactionsController < ApplicationController
 
   def new
     @transaction = Transaction.new
+
+    if params[:account_id].present?
+      @transaction.account_id = params[:account_id]
+    end
   end
 
   def edit

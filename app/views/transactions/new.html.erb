@@ -9,7 +9,7 @@
     <%= f.radio_button :type, 'income' %> Income
     <%= f.radio_button :type, 'transfer', class: "cursor-not-allowed", disabled: true %> Transfer
   </div>
-  <%= f.collection_select :account_id, Current.family.accounts, :id, :name, { prompt: "Select an Account", label: "Account" } %>
+  <%= f.collection_select :account_id, Current.family.accounts, :id, :name, { prompt: "Select an Account", label: "Account"} %>
   <%= f.date_field :date, label: "Date" %>
   <%= f.text_field :name, label: "Name", placeholder: "Groceries" %>
   <%= f.collection_select :category_id, Current.family.transaction_categories, :id, :name, { prompt: "Select a category", label: "Category" } %>
