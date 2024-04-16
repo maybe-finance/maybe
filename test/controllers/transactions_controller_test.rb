@@ -31,6 +31,21 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to transactions_url
   end
 
+  test "creation preserves decimals" do
+    assert_difference("Transaction.count") do
+      post transactions_url, params: { transaction: {
+        nature: "expense",
+        account_id: @transaction.account_id,
+        amount: 123.45,
+        currency: @transaction.currency,
+        date: @transaction.date,
+        name: @transaction.name } }
+    end
+
+    assert_redirected_to transactions_url
+    assert_equal 123.45.to_d, Transaction.order(created_at: :desc).first.amount
+  end
+
   test "expenses are positive" do
     assert_difference("Transaction.count") do
       post transactions_url, params: { transaction: {
