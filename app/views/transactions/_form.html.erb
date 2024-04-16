@@ -2,29 +2,29 @@
   <div class="bg-gray-50 rounded-lg p-1 flex gap-1 text-sm text-gray-900 font-medium">
     <%= f.radio_tab_field :kind, :expense, checked: true do %>
       <%= lucide_icon "minus-circle", class: "w-4 h-4" %>
-      <span>Expense</span>
+      <span><%= t(".expense") %></span>
     <% end %>
 
     <%= f.radio_tab_field :kind, :income do %>
       <%= lucide_icon "plus-circle", class: "w-4 h-4" %>
-      <span>Income</span>
+      <span><%= t(".income") %></span>
     <% end %>
 
     <%= f.radio_tab_field :kind, :transfer, disabled: true do %>
       <%= lucide_icon "arrow-right-left", class: "w-4 h-4" %>
-      <span>Transfer</span>
+      <span><%= t(".transfer") %></span>
     <% end %>
   </div>
 
-  <%= f.text_field :name, label: "Description", placeholder: "Describe transaction...", required: true %>
+  <%= f.text_field :name, label: t(".description.label"), placeholder: t(".description.placeholder"), required: true %>
 
-  <%= f.collection_select :account_id, Current.family.accounts, :id, :name, { prompt: "Select an Account", label: "Account" }, required: true %>
+  <%= f.collection_select :account_id, Current.family.accounts, :id, :name, { prompt: t(".account.prompt"), label: t(".account.label") }, required: true %>
 
-  <%= f.money_field :amount_money, label: "Amount", required: true %>
+  <%= f.money_field :amount_money, label: t(".amount.label"), required: true %>
 
-  <%= f.collection_select :category_id, Current.family.transaction_categories.all, :id, :name, { prompt: "Select an category", label: "Category" }, required: true %>
+  <%= f.collection_select :category_id, Current.family.transaction_categories.all, :id, :name, { prompt: t(".category.prompt"), label: t(".category.label")}, required: true %>
 
-  <%= f.date_field :date, label: "Date", required: true %>
+  <%= f.date_field :date, label: t(".date.label"), required: true %>
 
-  <%= f.submit "Add transaction" %>
+  <%= f.submit t(".submit") %>
 <% end %>

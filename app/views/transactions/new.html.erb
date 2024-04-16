@@ -1,7 +1,7 @@
 <%= modal do %>
   <div class="flex flex-col min-h-[530px] p-4">
     <div class="flex justify-between">
-      <h1 class="text-gray-800 font-medium">New transaction</h1>
+      <h1 class="text-gray-800 font-medium"><%= t(".title") %></h1>
       <%= lucide_icon "x", class: "w-5 h-5 text-gray-500", data: { action: "click->modal#close" } %>
     </div>
 

@@ -1,6 +1,26 @@
 ---
 en:
   transactions:
+    new:
+      title: New Transaction
+    form:
+      expense: Expense
+      income: Income
+      transfer: Transfer
+      description:
+        label: Description
+        placeholder: Describe transaction...
+      account:
+        prompt: Select an Account
+        label: Account
+      amount:
+        label: Amount
+      category:
+        prompt: Select a Category
+        label: Category
+      date:
+        label: Date
+      submit: Add transaction
     categories:
       create:
         error: Error creating transaction category
