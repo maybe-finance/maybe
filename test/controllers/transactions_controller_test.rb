@@ -16,6 +16,14 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should prefill account when account_id is provided" do
+    get new_transaction_url(account_id: accounts(:checking).id)
+    assert_response :success
+    assert_select "select[name=?]", "transaction[account_id]" do
+      assert_select "option[selected][value=?]", accounts(:checking).id.to_s
+    end
+  end
+
   test "should create transaction" do
     name = "transaction_name"
     assert_difference("Transaction.count") do
@@ -23,6 +31,24 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to transactions_url
+  end
+
+  test "should ensure expense is positive" do
+    assert_difference("Transaction.count") do
+      post transactions_url, params: { transaction: { kind: "expense", account_id: @transaction.account_id, amount: 100, currency: @transaction.currency, date: @transaction.date, name: @transaction.name } }
+    end
+
+    assert_redirected_to transactions_url
+    assert Transaction.order(created_at: :asc).last.amount.positive?, "Amount should be positive not #{Transaction.last.amount}"
+  end
+
+  test "should ensure income is negative" do
+    assert_difference("Transaction.count") do
+      post transactions_url, params: { transaction: { kind: "income", account_id: @transaction.account_id, amount: 100, currency: @transaction.currency, date: @transaction.date, name: @transaction.name } }
+    end
+
+    assert_redirected_to transactions_url
+    assert Transaction.order(created_at: :asc).last.amount.negative?, "Amount should be negative"
   end
 
   test "should show transaction" do
