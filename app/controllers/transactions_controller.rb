@@ -49,16 +49,20 @@ class TransactionsController < ApplicationController
   end
 
   def new
-    @transaction = Transaction.new
+    @transaction = Transaction.new.tap do |txn|
+      if params[:account_id]
+        txn.account = Current.family.accounts.find(params[:account_id])
+      end
+    end
   end
 
   def edit
   end
 
   def create
-    account = Current.family.accounts.find(params[:transaction][:account_id])
-
-    @transaction = account.transactions.build(transaction_params)
+    @transaction = Current.family.accounts
+      .find(params[:transaction][:account_id])
+      .transactions.build(transaction_params.merge(amount: amount))
 
     respond_to do |format|
       if @transaction.save
@@ -116,6 +120,18 @@ class TransactionsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_transaction
       @transaction = Transaction.find(params[:id])
+    end
+
+    def amount
+      if nature.income?
+        transaction_params[:amount].to_i * -1
+      else
+        transaction_params[:amount].to_i
+      end
+    end
+
+    def nature
+      params[:transaction][:nature].to_s.inquiry
     end
 
     # Only allow a list of trusted parameters through.
