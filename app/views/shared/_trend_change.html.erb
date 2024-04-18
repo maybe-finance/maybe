@@ -1,10 +1,10 @@
-<%# locals: (trend:) %>
+<%# locals: { trend: } %>
 <% styles = trend_styles(trend) %>
 <p class="text-sm <%= styles[:text_class] %>">
   <% if trend.direction == "flat" %>
     <span>No change</span>
   <% else %>
-    <span><%= styles[:symbol] %><%= format_money trend.value.abs %></span>
+    <span><%= styles[:symbol] %><%= trend.value.is_a?(Money) ? format_money(trend.value.abs) : trend.value.abs %></span>
     <span>(<%= lucide_icon(styles[:icon], class: "w-4 h-4 align-text-bottom inline") %><%= trend.percent %>%)</span>
   <% end %>
 </p>

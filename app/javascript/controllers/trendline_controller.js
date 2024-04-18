@@ -22,7 +22,7 @@ export default class extends Controller {
   prepareData(series) {
     return series.values.map((d) => ({
       date: new Date(d.date + "T00:00:00"),
-      value: +d.value.amount,
+      value: d.value.amount ? +d.value.amount : +d.value,
     }));
   }
 

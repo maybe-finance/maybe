@@ -9,10 +9,10 @@
   <div class="bg-white rounded-xl shadow-xs border border-alpha-black-100 flex divide-x divide-gray-200">
     <div class="w-1/2 p-4 flex items-stretch justify-between">
       <div class="space-y-2 grow">
-        <%= render partial: "shared/balance_heading", locals: {
+        <%= render partial: "shared/value_heading", locals: {
           label: "Assets",
                 period: @period,
-                balance: Current.family.assets,
+                value: Current.family.assets,
                 trend: @asset_series.trend
             } %>
       </div>
@@ -25,11 +25,11 @@
     </div>
     <div class="w-1/2 p-4 flex items-stretch justify-between">
       <div class="space-y-2 grow">
-        <%= render partial: "shared/balance_heading", locals: {
+        <%= render partial: "shared/value_heading", locals: {
           label: "Liabilities",
                 period: @period,
                 size: "md",
-                balance: Current.family.liabilities,
+                value: Current.family.liabilities,
                 trend: @liability_series.trend
             } %>
       </div>

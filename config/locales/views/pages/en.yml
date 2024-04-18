@@ -2,5 +2,17 @@
 en:
   pages:
     dashboard:
+      allocation_chart:
+        assets: Assets
+        debts: Debts
+      categories: Categories
       greeting: Welcome back, %{name}
-      new: New
+      income: Income (coming soon...)
+      investing: Investing (coming soon...)
+      net_worth: Net Worth
+      new: New account
+      recurring: Recurring
+      savings_rate: Savings Rate (coming soon...)
+      spending: Spending (coming soon...)
+      subtitle: Here's what's happening today
+      transactions: Transactions
