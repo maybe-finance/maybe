@@ -5,7 +5,7 @@
       <%= lucide_icon("arrow-left") %>
     </div>
   <% end %>
-  <div class="<%= 'flex-grow' if direction == 'next' %> <%= 'text-right' if direction == 'previous' %>">
+  <div class="<%= "flex-grow" if direction == "next" %> <%= "text-right" if direction == "previous" %>">
     <span class="block text-sm text-gray-500"><%= t(".#{direction}") %></span>
     <span class="block text-sm font-medium text-gray-900"><%= title %></span>
   </div>
