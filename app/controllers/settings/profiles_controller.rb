@@ -1,5 +1,5 @@
-class SettingsController < ApplicationController
-  def edit
+class Settings::ProfilesController < ApplicationController
+  def show
   end
 
   def update

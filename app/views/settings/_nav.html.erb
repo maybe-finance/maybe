@@ -1,0 +1,56 @@
+<div class="flex items-center gap-1 mb-6">
+  <%= link_to root_path, class: "flex items-center gap-1 text-gray-900 font-medium text-sm" do %>
+    <%= lucide_icon "chevron-left", class: "w-5 h-5 text-gray-500" %>
+    <span>Back</span>
+  <% end %>
+  <span data-controller="hotkey" data-hotkey="Escape" data-action="hotkey#navigateBack" class="uppercase bg-gray-100 rounded-sm px-1 py-0.5 text-xs text-gray-500 shadow-sm ml-1">
+    esc
+  </span>
+</div>
+<nav class="space-y-4">
+  <section class="space-y-2">
+    <div class="flex items-center gap-2">
+      <h3 class="uppercase text-gray-500 font-medium text-xs">General</h3>
+      <div class="h-px bg-alpha-black-100 w-full"></div>
+    </div>
+    <ul class="space-y-1">
+      <li>
+        <%= sidebar_link_to t(".profile_label"), settings_profile_path, icon: "circle-user" %>
+        <%= sidebar_link_to t(".preferences_label"), settings_preferences_path, icon: "bolt" %>
+        <%= sidebar_link_to t(".notifications_label"), settings_notifications_path, icon: "bell-dot" %>
+        <%= sidebar_link_to t(".security_label"), settings_security_path, icon: "shield-check" %>
+        <%= sidebar_link_to t(".billing_label"), settings_billing_path, icon: "circle-dollar-sign" %>
+      </li>
+    </ul>
+  </section>
+  <section class="space-y-2">
+    <div class="flex items-center gap-2">
+      <h3 class="uppercase text-gray-500 font-medium text-xs">Setup</h3>
+      <div class="h-px bg-alpha-black-100 w-full"></div>
+    </div>
+    <ul class="space-y-1">
+      <li>
+        <% if self_hosted? %>
+          <%= sidebar_link_to t(".self_hosting_label"), settings_hosting_path, icon: "database" %>
+        <% end %>
+        <%= sidebar_link_to t(".accounts_label"), accounts_path, icon: "layers" %>
+        <%= sidebar_link_to t(".categories_label"), transactions_categories_path, icon: "tags" %>
+        <%= sidebar_link_to t(".merchants_label"), transactions_merchants_path, icon: "store" %>
+        <%= sidebar_link_to t(".rules_label"), transactions_rules_path, icon: "list-checks" %>
+      </li>
+    </ul>
+  </section>
+  <section class="space-y-2">
+    <div class="flex items-center gap-2">
+      <h3 class="uppercase text-gray-500 font-medium text-xs">More</h3>
+      <div class="h-px bg-alpha-black-100 w-full"></div>
+    </div>
+    <ul class="space-y-1">
+      <li>
+        <%= sidebar_link_to t(".whats_new_label"), changelog_path, icon: "box" %>
+        <%= sidebar_link_to t(".feedback_label"), feedback_path, icon: "megaphone" %>
+        <%= sidebar_link_to t(".invite_label"), invites_path, icon: "gift" %>
+      </li>
+    </ul>
+  </section>
+</nav>

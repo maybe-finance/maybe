@@ -1,0 +1,15 @@
+<% content_for :sidebar do %>
+  <%= render "settings/nav" %>
+<% end %>
+<div class="space-y-4">
+  <h1 class="text-gray-900 text-xl font-medium mb-4">Security</h1>
+  <div class="bg-white shadow-xs border border-alpha-black-25 rounded-xl p-4">
+    <div class="flex justify-center items-center py-20">
+      <p class="text-gray-500">Security settings coming soon...</p>
+    </div>
+  </div>
+  <div class="flex justify-between gap-4">
+    <%= previous_setting("Notifications", settings_notifications_path) %>
+    <%= next_setting("Billing", settings_billing_path) %>
+  </div>
+</div>

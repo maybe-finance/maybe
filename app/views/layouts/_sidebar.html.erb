@@ -1,0 +1,88 @@
+<div class="flex items-center justify-between">
+  <%= link_to root_path do %>
+    <%= image_tag "logo.svg", alt: "Maybe", class: "h-[22px]" %>
+  <% end %>
+  <div id="user-menu" data-controller="menu">
+    <button data-menu-target="button">
+      <div class="text-white w-9 h-9 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= Current.user.email.first %></div>
+    </button>
+    <div data-menu-target="content" class="hidden absolute w-[240px] z-10 top-10 left-[255px] top-[72px] bg-white rounded-sm shadow-xs border border-alpha-black-25">
+      <div class="p-3 flex items-center gap-3">
+        <div class="text-white shrink-0 w-9 h-9 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= Current.user.email.first %></div>
+        <div>
+          <span class="text-gray-900 font-medium text-sm"><%= Current.user.first_name %> <%= Current.user.last_name %></span>
+          <span class="text-gray-500 text-sm"><%= Current.user.email %></span>
+        </div>
+      </div>
+      <div class="border-t border-b border-alpha-black-100 p-1">
+        <%= link_to settings_profile_path, class: "flex gap-2 items-center hover:bg-gray-50 rounded-lg px-3 py-2" do %>
+          <%= lucide_icon("settings", class: "w-5 h-5 text-gray-500 shrink-0") %>
+          <span class="text-gray-900 text-sm">Settings</span>
+        <% end %>
+        <div class="flex justify-between items-center gap-2">
+          <div class="flex items-center gap-2 rounded-lg px-3 py-2">
+            <%= lucide_icon("app-window", class: "w-5 h-5 text-gray-500 shrink-0") %>
+            <div>
+              <span class="text-gray-900 text-sm">Demo mode</span>
+              <span class="text-gray-500 text-xs block">Coming soon...</span>
+            </div>
+          </div>
+          <%# TODO: This will be a form toggle when implemented %>
+          <div class="relative inline-block cursor-not-allowed" title="Coming soon...">
+            <label class="cursor-not-allowed block bg-gray-100 w-9 h-5 rounded-full after:content-[''] after:block after:absolute after:top-0.5 after:left-0.5 after:bg-white after:w-4 after:h-4 after:rounded-full after:transition-transform after:duration-300 after:ease-in-out peer-checked:bg-green-600 peer-checked:after:translate-x-4"></label>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-b border-alpha-black-100 p-1">
+        <%= link_to changelog_path, class: "flex gap-2 items-center hover:bg-gray-50 rounded-lg px-3 py-2" do %>
+          <%= lucide_icon("box", class: "w-5 h-5 text-gray-500 shrink-0") %>
+          <span class="text-gray-900 text-sm">Changelog</span>
+        <% end %>
+        <%= link_to feedback_path, class: "flex gap-2 items-center hover:bg-gray-50 rounded-lg px-3 py-2" do %>
+          <%= lucide_icon("megaphone", class: "w-5 h-5 text-gray-500 shrink-0") %>
+          <span class="text-gray-900 text-sm">Feedback</span>
+        <% end %>
+        <%= link_to "https://link.maybe.co/discord", class: "flex gap-2 items-center hover:bg-gray-50 rounded-lg px-3 py-2" do %>
+          <%= lucide_icon("message-square-more", class: "w-5 h-5 text-gray-500 shrink-0") %>
+          <span class="text-gray-900 text-sm">Contact</span>
+        <% end %>
+      </div>
+      <div class="p-1">
+        <%= button_to session_path, method: :delete, class: "w-full text-red-400 flex gap-1 items-center hover:bg-gray-50 rounded-lg px-3 py-2" do %>
+          <%= lucide_icon("log-out", class: "w-5 h-5 shrink-0") %>
+          <span class="text-sm">Logout</span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<nav>
+  <ul class="mt-6 space-y-1">
+    <li>
+      <%= sidebar_link_to t(".dashboard"), root_path, icon: "layout-grid" %>
+    </li>
+    <li>
+      <%= sidebar_link_to t(".accounts"), summary_accounts_path, icon: "layers" %>
+    </li>
+    <li>
+      <%= sidebar_link_to t(".transactions"), transactions_path, icon: "credit-card" %>
+    </li>
+  </ul>
+</nav>
+<div class="flex flex-col mt-6">
+  <div class="flex items-center justify-between">
+    <%= link_to accounts_path, class: "text-xs uppercase text-gray-500 font-bold tracking-wide" do %>
+      <%= t(".accounts") %>
+    <% end %>
+    <%= link_to new_account_path, class: "block hover:bg-gray-100 p-2 text-sm font-semibold text-gray-900 flex items-center rounded", title: t(".new_account"), data: { turbo_frame: "modal" } do %>
+      <%= lucide_icon("plus", class: "w-5 h-5 text-gray-500") %>
+    <% end %>
+  </div>
+  <%= link_to new_account_path, class: "flex items-center gap-4 px-2 py-3 mb-1 text-gray-500 text-sm font-medium rounded-[10px] hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
+    <%= lucide_icon("plus", class: "w-5 h-5") %>
+    <p><%= t(".new_account") %></p>
+  <% end %>
+  <% account_groups.each do |group| %>
+    <%= render "accounts/account_list", group: group %>
+  <% end %>
+</div>

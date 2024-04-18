@@ -25,73 +25,28 @@
   <body class="h-full">
     <div id="notification-tray" class="fixed z-50 space-y-1 top-6 right-6"></div>
     <%= safe_join(flash.map { |type, message| notification(message, type: type) }) %>
-    <div class="flex">
-      <div class="flex-col p-5 min-w-80">
-        <div class="flex items-center justify-between">
-          <%= link_to root_path do %>
-            <%= image_tag "logo.svg", alt: "Maybe", class: "h-[22px]" %>
-          <% end %>
-          <div class="relative" data-controller="menu">
-            <button data-menu-target="button">
-              <div class="text-white w-9 h-9 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= Current.user.email.first %></div>
-            </button>
-            <div
-              data-menu-target="content"
-              class="hidden absolute min-w-[200px] z-10 top-10 right-0 bg-white p-1 rounded-sm shadow-xs border border-alpha-black-25 w-fit">
-              <%= link_to edit_settings_path, class: "flex gap-1 items-center hover:bg-gray-50 rounded-md p-2" do %>
-                <%= lucide_icon("pencil-line", class: "w-5 h-5 text-gray-500 shrink-0") %>
-                <span class="text-gray-900 text-sm">General Settings</span>
-              <% end %>
-              <% if self_hosted? %>
-                <%= link_to edit_settings_self_hosting_path, class: "flex gap-1 items-center hover:bg-gray-50 rounded-md p-2" do %>
-                  <%= lucide_icon("pencil-line", class: "w-5 h-5 text-gray-500 shrink-0") %>
-                  <span class="text-gray-900 text-sm">Self Host Settings</span>
-                <% end %>
-              <% end %>
-              <%= button_to session_path, method: :delete, class: "w-full text-gray-900 flex gap-1 items-center hover:bg-gray-50 rounded-md p-2" do %>
-                <%= lucide_icon("log-out", class: "w-5 h-5 shrink-0") %>
-                <span class="text-sm">Logout</span>
-              <% end %>
-            </div>
-          </div>
-        </div>
-        <nav>
-          <ul class="mt-6 space-y-1">
-            <li>
-              <%= sidebar_link_to t(".dashboard"), root_path, icon: "layout-grid" %>
-            </li>
-            <li>
-              <%= sidebar_link_to t(".accounts"), accounts_path, icon: "layers" %>
-            </li>
-            <li>
-              <%= sidebar_link_to t(".transactions"), transactions_path, icon: "credit-card" %>
-            </li>
-          </ul>
-        </nav>
-        <div class="flex flex-col mt-6">
-          <div class="flex items-center justify-between">
-            <%= link_to accounts_path, class: "text-xs uppercase text-gray-500 font-bold tracking-wide" do %>
-              <%= t(".accounts") %>
-            <% end %>
-            <%= link_to new_account_path, class: "block hover:bg-gray-100 p-2 text-sm font-semibold text-gray-900 flex items-center rounded", title: t(".new_account"), data: { turbo_frame: "modal" } do %>
-              <%= lucide_icon("plus", class: "w-5 h-5 text-gray-500") %>
-            <% end %>
-          </div>
-          <%= link_to new_account_path, class: "flex items-center gap-4 px-2 py-3 mb-1 text-gray-500 text-sm font-medium rounded-[10px] hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
-            <%= lucide_icon("plus", class: "w-5 h-5") %>
-            <p><%= t(".new_account") %></p>
-          <% end %>
-          <% account_groups.each do |group| %>
-            <%= render "accounts/account_list", group: group %>
-          <% end %>
-        </div>
+    <div class="flex h-full">
+      <div class="p-6 w-80 shrink-0 h-full overflow-y-auto">
+        <% if content_for?(:sidebar) %>
+          <%= yield :sidebar %>
+        <% else %>
+          <%= render "layouts/sidebar" %>
+        <% end %>
       </div>
-      <main class="flex-grow px-20 py-6">
+      <main class="grow px-20 py-6 h-full overflow-y-auto">
         <%= yield %>
       </main>
     </div>
     <%= turbo_frame_tag "modal" %>
     <%= render "shared/custom_confirm_modal" %>
     <%= render "shared/upgrade_notification" %>
+    <% if self_hosted? %>
+      <div class="flex items-center py-0.5 px-0.5 gap-1 fixed bottom-2 right-2 shadow-xs border border-alpha-black-50 rounded-md bg-white">
+        <p class="text-xs text-gray-500 pl-2">Self-hosted Maybe: <%= Maybe.version.to_release_tag %></p>
+        <%= link_to settings_hosting_path, class: "flex gap-1 items-center hover:bg-gray-50 rounded-md p-2" do %>
+          <%= lucide_icon("settings", class: "w-4 h-4 text-gray-500 shrink-0") %>
+        <% end %>
+      </div>
+    <% end %>
   </body>
 </html>

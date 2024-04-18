@@ -8,4 +8,13 @@ class PagesController < ApplicationController
     @liability_series = snapshot[:liability_series]
     @account_groups = Current.family.accounts.by_group(period: @period, currency: Current.family.currency)
   end
+
+  def changelog
+  end
+
+  def feedback
+  end
+
+  def invites
+  end
 end
