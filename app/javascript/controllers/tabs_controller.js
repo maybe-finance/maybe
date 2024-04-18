@@ -16,7 +16,10 @@ export default class extends Controller {
   }
 
   select(event) {
-    this.updateClasses(event.target.dataset.id);
+    const element = event.target.closest("[data-id]");
+    if (element) {
+      this.updateClasses(element.dataset.id);
+    }
   }
 
   onTurboLoad = () => {
