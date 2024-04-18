@@ -5,7 +5,7 @@ class TimeSeries::Value
     attr_reader :value, :date, :original
 
     def initialize(obj)
-        @original = obj[:original] || obj
+        @original = obj.fetch(:original, obj)
 
         if obj.is_a?(Hash)
             @date = obj[:date]

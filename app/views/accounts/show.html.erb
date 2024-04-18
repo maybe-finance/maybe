@@ -46,10 +46,10 @@
   <div class="bg-white shadow-xs rounded-xl border border-alpha-black-25 rounded-lg">
     <div class="p-4 flex justify-between">
       <div class="space-y-2">
-        <%= render partial: "shared/balance_heading", locals: {
+        <%= render partial: "shared/value_heading", locals: {
             label: "Total Value",
             period: @period,
-            balance: @account.balance_money,
+            value: @account.balance_money,
             trend: @balance_series.trend
           } %>
       </div>

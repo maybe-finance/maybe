@@ -3,4 +3,16 @@ en:
   pages:
     dashboard:
       greeting: Welcome back, %{name}
-      new: New
+      subtitle: Here's what's happening today
+      new: New account
+      income: Income (coming soon...)
+      spending: Spending (coming soon...)
+      savings_rate: Savings Rate (coming soon...)
+      investing: Investing (coming soon...)
+      transactions: Transactions
+      recurring: Recurring
+      categories: Categories
+      net_worth: Net Worth
+      allocation_chart:
+        assets: Assets
+        debts: Debts

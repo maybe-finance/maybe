@@ -26,14 +26,14 @@
     <div id="notification-tray" class="fixed z-50 space-y-1 top-6 right-6"></div>
     <%= safe_join(flash.map { |type, message| notification(message, type: type) }) %>
     <div class="flex h-full">
-      <div class="p-6 w-80 shrink-0 h-full overflow-y-auto">
+      <div class="p-6 pb-20 w-80 shrink-0 h-full overflow-y-auto">
         <% if content_for?(:sidebar) %>
           <%= yield :sidebar %>
         <% else %>
           <%= render "layouts/sidebar" %>
         <% end %>
       </div>
-      <main class="grow px-20 py-6 h-full overflow-y-auto">
+      <main class="grow px-20 pt-6 pb-32 h-full overflow-y-auto">
         <%= yield %>
       </main>
     </div>

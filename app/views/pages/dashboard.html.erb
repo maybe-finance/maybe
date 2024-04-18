@@ -1,91 +1,127 @@
 <div class="space-y-4">
-  <div>
-    <h1 class="sr-only">Dashboard</h1>
-    <p class="text-xl font-medium text-gray-900 mb-1"><%= t(".greeting", name: Current.user.first_name ) %></p>
-    <p class="text-gray-500 text-sm font-medium"><%= Date.current.strftime("%A, %b %d") %></p>
-  </div>
-  <section class="bg-white rounded-xl shadow-xs border border-alpha-black-25">
-    <div class="flex justify-between p-4">
-      <div>
-        <%= render partial: "shared/balance_heading", locals: {
-            label: "Net Worth",
+  <header class="flex items-center justify-between">
+    <div>
+      <h1 class="sr-only">Dashboard</h1>
+      <p class="text-xl font-medium text-gray-900 mb-1"><%= t(".greeting", name: Current.user.first_name ) %></p>
+      <p class="text-gray-500 text-sm"><%= t(".subtitle") %></p>
+    </div>
+    <%= link_to new_account_path, class: "flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2", data: { turbo_frame: "modal" } do %>
+      <%= lucide_icon("plus", class: "w-5 h-5") %>
+      <span><%= t(".new") %></span>
+    <% end %>
+  </header>
+  <section class="flex gap-4">
+    <div class="bg-white border border-alpha-black-25 shadow-xs rounded-xl w-3/4 min-h-48">
+      <div class="flex justify-between p-4">
+        <div>
+          <%= render partial: "shared/value_heading", locals: {
+            label: t(".net_worth"),
             period: @period,
-            balance: Current.family.net_worth,
+            value: Current.family.net_worth,
             trend: @net_worth_series.trend
-        } %>
+          } %>
+        </div>
+        <%= form_with url: root_path, method: :get, class: "flex items-center gap-4", data: { controller: "auto-submit-form" } do %>
+          <%= render partial: "shared/period_select", locals: { value: @period.name } %>
+        <% end %>
       </div>
-      <%= form_with url: root_path, method: :get, class: "flex items-center gap-4", data: { controller: "auto-submit-form" } do %>
-        <%= render partial: "shared/period_select", locals: { value: @period.name } %>
-      <% end %>
+      <%= render partial: "pages/dashboard/net_worth_chart", locals: { series: @net_worth_series } %>
     </div>
-    <div class="h-96 flex items-center justify-center text-2xl font-bold">
-      <%= render partial: "shared/line_chart", locals: { series: @net_worth_series } %>
+    <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl w-1/4">
+      <%= render partial: "pages/dashboard/allocation_chart" %>
     </div>
-    <div class="border-t border-t-alpha-black-100 flex divide-x divide-gray-200">
-      <div class="w-1/2 p-4 flex items-stretch justify-between">
-        <div class="space-y-2 grow">
-          <%= render partial: "shared/balance_heading", locals: {
-                label: "Assets",
-                period: @period,
-                balance: Current.family.assets,
-                trend: @asset_series.trend
-            } %>
+  </section>
+  <section class="grid grid-cols-2 gap-4">
+    <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">
+      <div class="flex gap-4 h-full">
+        <div class="grow">
+          <%= render partial: "shared/value_heading", locals: {
+          label: t(".income"),
+            period: @period,
+            value: @income_series.last.value,
+            trend: @income_series.trend
+          } %>
         </div>
         <div
-            data-controller="trendline"
-            id="assetsTrendline"
-            class="h-full w-2/5"
-            data-trendline-series-value="<%= @asset_series.to_json %>"
-            data-trendline-classification-value="asset"></div>
+          data-controller="trendline"
+          class="h-full w-2/5"
+          data-trendline-series-value="<%= @income_series.to_json %>"
+          data-trendline-classification-value="asset"></div>
       </div>
-      <div class="w-1/2 p-4 flex items-stretch justify-between">
-        <div class="space-y-2 grow">
-          <%= render partial: "shared/balance_heading", locals: {
-                label: "Liabilities",
-                period: @period,
-                size: "md",
-                balance: Current.family.liabilities,
-                trend: @liability_series.trend
-            } %>
+    </div>
+    <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">
+      <div class="flex gap-4 h-full">
+        <div class="grow">
+          <%= render partial: "shared/value_heading", locals: {
+          label: t(".spending"),
+            period: @period,
+            value: @spending_series.last.value,
+            trend: @spending_series.trend
+          } %>
         </div>
         <div
-            data-controller="trendline"
-            id="liabilitiesTrendline"
-            class="h-full w-2/5"
-            data-trendline-series-value="<%= @liability_series.to_json %>"
-            data-trendline-classification-value="liability"></div>
+          data-controller="trendline"
+          class="h-full w-2/5"
+          data-trendline-series-value="<%= @spending_series.to_json %>"
+          data-trendline-classification-value="asset"></div>
+      </div>
+    </div>
+    <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">
+      <div class="flex gap-4 h-full">
+        <div class="grow">
+          <%= render partial: "shared/value_heading", locals: {
+          label: t(".savings_rate"),
+            period: @period,
+            value: @savings_rate_series.last.value,
+            trend: @savings_rate_series.trend,
+            is_percentage: true
+          } %>
+        </div>
+        <div
+          data-controller="trendline"
+          class="h-full w-2/5"
+          data-trendline-series-value="<%= @savings_rate_series.to_json %>"
+          data-trendline-classification-value="asset"></div>
+      </div>
+    </div>
+    <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">
+      <div class="flex gap-4 h-full">
+        <div class="grow">
+          <%= render partial: "shared/value_heading", locals: {
+          label: t(".investing"),
+            period: @period,
+            value: @investing_series.last.value,
+            trend: @investing_series.trend
+          } %>
+        </div>
+        <div
+          data-controller="trendline"
+          class="h-full w-2/5"
+          data-trendline-series-value="<%= @investing_series.to_json %>"
+          data-trendline-classification-value="asset"></div>
       </div>
     </div>
   </section>
-  <section class="p-4 bg-white rounded-xl shadow-xs border border-alpha-black-25">
-    <div data-controller="tabs" data-tabs-active-class="bg-white border border-alpha-black-25 shadow-xs" data-tabs-default-tab-value="asset-summary-tab">
-      <div class="flex justify-between items-center mb-6">
-        <div class="bg-gray-50 rounded-lg p-1 flex gap-1 text-sm text-gray-900 font-medium">
-          <button data-id="asset-summary-tab" class="px-2 py-1 rounded-md" data-tabs-target="btn" data-action="tabs#select">Assets</button>
-          <button data-id="liability-summary-tab" class="px-2 py-1 rounded-md" data-tabs-target="btn" data-action="tabs#select">Liabilities</button>
-        </div>
-        <div class="flex items-center gap-2">
-          <%= link_to new_account_path, class: "flex items-center gap-1 p-2 text-gray-900 text-sm font-medium bg-gray-50 rounded-lg hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
-            <%= lucide_icon("plus", class: "w-5 h-5 text-gray-500") %>
-            <p><%= t(".new") %></p>
-          <% end %>
-          <%= form_with url: root_path, method: :get, class: "flex items-center gap-4", data: { controller: "auto-submit-form" } do %>
-            <%= render partial: "shared/period_select", locals: { value: @period.name } %>
-          <% end %>
-        </div>
-      </div>
-      <div>
-        <div data-tabs-target="tab" id="asset-summary-tab" class="space-y-6">
-          <%= render partial: "account_percentages_bar", locals: { account_groups: @account_groups[:assets].children } %>
-          <%= render partial: "account_percentages_table", locals: { account_groups: @account_groups[:assets].children } %>
-        </div>
-        <div data-tabs-target="tab" id="liability-summary-tab" class="space-y-6 hidden">
-          <%= render partial: "account_percentages_bar", locals: { account_groups: @account_groups[:liabilities].children } %>
-          <%= render partial: "account_percentages_table", locals: { account_groups: @account_groups[:liabilities].children } %>
-        </div>
+  <section class="flex items-start gap-4">
+    <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl w-1/2 space-y-4">
+      <h2 class="text-lg font-medium text-gray-900"><%= t(".transactions") %></h2>
+      <div class="text-gray-500 flex items-center justify-center py-12">
+        <p>Coming soon...</p>
       </div>
     </div>
-    <div>
+    <div class="w-1/2 space-y-4">
+      <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl space-y-4">
+        <h2 class="text-lg font-medium text-gray-900"><%= t(".recurring") %></h2>
+        <div class="text-gray-500 flex items-center justify-center py-12">
+          <p>Coming soon...</p>
+        </div>
+      </div>
+      <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl space-y-4">
+        <h2 class="text-lg font-medium text-gray-900"><%= t(".categories") %></h2>
+        <div class="text-gray-500 flex items-center justify-center py-12">
+          <p>Coming soon...</p>
+        </div>
+      </div>
     </div>
   </section>
 </div>
