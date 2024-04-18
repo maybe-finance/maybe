@@ -41,7 +41,7 @@ module ApplicationHelper
     is_current = current_page?(path) || (request.path.start_with?(path) && path != "/")
 
     classes = [
-      "flex items-center gap-2 p-2 rounded-xl border text-sm font-medium text-gray-500",
+      "flex items-center gap-2 px-3 py-2 rounded-xl border text-sm font-medium text-gray-500",
       (is_current ? "bg-white text-gray-900 shadow-xs border-alpha-black-50" : "hover:bg-gray-100 border-transparent")
     ].compact.join(" ")
 

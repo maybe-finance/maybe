@@ -2,14 +2,14 @@
   <%= render "settings/nav" %>
 <% end %>
 <div class="space-y-4">
-  <h1 class="text-gray-900 text-xl font-medium mb-4">Preferences</h1>
+  <h1 class="text-gray-900 text-xl font-medium mb-4">Rules</h1>
   <div class="bg-white shadow-xs border border-alpha-black-25 rounded-xl p-4">
     <div class="flex justify-center items-center py-20">
-      <p class="text-gray-500">Preferences coming soon...</p>
+      <p class="text-gray-500">Transaction rules coming soon...</p>
     </div>
   </div>
   <div class="flex justify-between gap-4">
-    <%= previous_setting("Account", settings_profile_path) %>
-    <%= next_setting("Notifications", settings_notifications_path) %>
+    <%= previous_setting("Merchants", transactions_merchants_path) %>
+    <%= next_setting("What's New", changelog_path) %>
   </div>
 </div>

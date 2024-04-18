@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   mount GoodJob::Engine => "jobs"
 
+  get "changelog" => "pages#changelog", as: :changelog
+  get "feedback" => "pages#feedback", as: :feedback
+  get "invites" => "pages#invites", as: :invites
+
   resource :registration
   resource :session
   resource :password_reset
@@ -12,17 +16,24 @@ Rails.application.routes.draw do
     resource :notifications, only: %i[show update]
     resource :billing, only: %i[show update]
     resource :hosting, only: %i[show update]
+    resource :security, only: %i[show update]
+  end
+
+  namespace :transactions do
+    resources :categories
+
+    # TODO: These are *placeholders*
+    # Uncomment `only` and add the necessary actions as they are implemented.
+    resources :rules, only: [ :index ]
+    resources :merchants, only: [ :index ]
   end
 
   resources :transactions do
     match "search" => "transactions#search", on: :collection, via: [ :get, :post ], as: :search
   end
 
-  namespace :transactions do
-    resources :categories
-  end
-
   resources :accounts, shallow: true do
+    get :summary, on: :collection
     post :sync, on: :member
     resources :valuations
   end

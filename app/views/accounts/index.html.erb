@@ -1,3 +1,6 @@
+<% content_for :sidebar do %>
+  <%= render "settings/nav" %>
+<% end %>
 <div class="space-y-4">
   <div class="flex items-center justify-between">
     <h1 class="text-xl font-medium text-gray-900">Accounts</h1>
@@ -6,7 +9,7 @@
       <span><%= t(".new_account") %></span>
     <% end %>
   </div>
-  <% if Current.family.accounts.empty? %>
+  <% if @accounts.empty? %>
     <div class="flex justify-center items-center h-[800px] text-sm">
       <div class="text-center flex flex-col items-center max-w-[300px]">
         <p class="text-gray-900 mb-1 font-medium">No accounts yet</p>
@@ -19,8 +22,8 @@
     </div>
   <% else %>
     <div>
-      <% Current.family.accounts.by_provider.each do |item| %>
-        <details class="bg-white group p-4 border border-alpha-black-25 shadow-xs rounded-xl">
+      <% @accounts.by_provider.each do |item| %>
+        <details open class="bg-white group p-4 border border-alpha-black-25 shadow-xs rounded-xl">
           <summary class="flex items-center gap-2">
             <%= lucide_icon("chevron-down", class: "hidden group-open:block w-5 h-5 text-gray-500") %>
             <%= lucide_icon("chevron-right", class: "group-open:hidden w-5 h-5 text-gray-500") %>
@@ -54,4 +57,12 @@
       <% end %>
     </div>
   <% end %>
+  <div class="flex justify-between gap-4">
+    <% if self_hosted? %>
+      <%= previous_setting("Self Hosting", settings_hosting_path) %>
+    <% else %>
+      <%= previous_setting("Billing", settings_billing_path) %>
+    <% end %>
+    <%= next_setting("Categories", transactions_categories_path) %>
+  </div>
 </div>

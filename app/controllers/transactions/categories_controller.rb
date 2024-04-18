@@ -1,6 +1,9 @@
 class Transactions::CategoriesController < ApplicationController
   before_action :set_category, only: [ :update, :destroy ]
 
+  def index
+  end
+
   def create
     if Current.family.transaction_categories.create(category_params)
       redirect_to transactions_path, notice: t(".success")

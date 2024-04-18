@@ -1,14 +1,25 @@
 ---
 en:
   settings:
-    nav:
-      profile_label: Profile
-      billing_label: Billing
-      notifications_label: Notifications
-      preferences_label: Preferences
-    hosting:
+    hostings:
       update:
-        render_deploy_hook_error:
-          Render deploy hook must be provided to enable auto
+        render_deploy_hook_error: Render deploy hook must be provided to enable auto
           upgrades
         success: Settings updated successfully.
+    nav:
+      accounts_label: Accounts
+      billing_label: Billing
+      categories_label: Categories
+      feedback_label: Feedback
+      invite_label: Invite friends
+      merchants_label: Merchants
+      notifications_label: Notifications
+      preferences_label: Preferences
+      profile_label: Account
+      rules_label: Rules
+      security_label: Security
+      self_hosting_label: Self Hosting
+      whats_new_label: What's New
+    nav_link_large:
+      next: Next
+      previous: Back

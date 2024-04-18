@@ -40,5 +40,13 @@
     <%= turbo_frame_tag "modal" %>
     <%= render "shared/custom_confirm_modal" %>
     <%= render "shared/upgrade_notification" %>
+    <% if self_hosted? %>
+      <div class="flex items-center py-0.5 px-0.5 gap-1 fixed bottom-2 right-2 shadow-xs border border-alpha-black-50 rounded-md bg-white">
+        <p class="text-xs text-gray-500 pl-2">Self-hosted Maybe: <%= Maybe.version.to_release_tag %></p>
+        <%= link_to settings_hosting_path, class: "flex gap-1 items-center hover:bg-gray-50 rounded-md p-2" do %>
+          <%= lucide_icon("settings", class: "w-4 h-4 text-gray-500 shrink-0") %>
+        <% end %>
+      </div>
+    <% end %>
   </body>
 </html>

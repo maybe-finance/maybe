@@ -1,3 +1,7 @@
+# Require individual test files to enable these as needed
+ENV["SELF_HOSTING_ENABLED"] = "false"
+ENV["UPGRADES_ENABLED"] = "false"
+
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"

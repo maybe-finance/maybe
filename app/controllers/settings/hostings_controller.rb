@@ -10,7 +10,7 @@ class Settings::HostingsController < ApplicationController
         Setting.send("#{key}=", hosting_params[key].strip)
       end
 
-      redirect_to edit_settings_hosting_path, notice: t(".success")
+      redirect_to settings_hosting_path, notice: t(".success")
     else
       flash.now[:error] = @errors.first.message
       render :edit, status: :unprocessable_entity
@@ -30,7 +30,7 @@ class Settings::HostingsController < ApplicationController
       end
 
       if hosting_params[:upgrades_mode] == "auto" && hosting_params[:render_deploy_hook].blank?
-        @errors.add(:render_deploy_hook, t("settings.hosting.update.render_deploy_hook_error"))
+        @errors.add(:render_deploy_hook, t("settings.hostings.update.render_deploy_hook_error"))
       end
 
       @errors.empty?

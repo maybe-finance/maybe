@@ -12,9 +12,10 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
       fill_in "Password", with: "password"
       click_button "Log in"
     end
-    assert_text "Dashboard", wait: 5
-    find('[data-controller="menu"]').click
+  end
+
+  def sign_out
+    find("#user-menu").click
     click_button "Logout"
-    assert_text "Sign in to your account"
   end
 end

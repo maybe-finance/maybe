@@ -1,6 +1,6 @@
 require "test_helper"
 
-class Settings::HostingControllerTest < ActionDispatch::IntegrationTest
+class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
   setup do
     ENV["SELF_HOSTING_ENABLED"] = "true"
     sign_in users(:family_admin)
@@ -9,14 +9,14 @@ class Settings::HostingControllerTest < ActionDispatch::IntegrationTest
   test "cannot edit when self hosting is disabled" do
     ENV["SELF_HOSTING_ENABLED"] = "false"
 
-    get edit_settings_hosting_url
+    get settings_hosting_url
     assert :not_found
 
     patch settings_hosting_url, params: { setting: { render_deploy_hook: "https://example.com" } }
     assert :not_found
   end
   test "should get edit when self hosting is enabled" do
-    get edit_settings_hosting_url
+    get settings_hosting_url
     assert_response :success
   end
 
