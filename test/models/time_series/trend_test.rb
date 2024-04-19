@@ -24,4 +24,13 @@ class TimeSeries::TrendTest < ActiveSupport::TestCase
   test "infinitely up" do
     assert_equal "up", TimeSeries::Trend.new(current: 100, previous: 0).direction
   end
+
+  test "infinitely down" do
+    assert_equal "down", TimeSeries::Trend.new(current: nil, previous: 100).direction
+    assert_equal "down", TimeSeries::Trend.new(current: 0, previous: 100).direction
+  end
+
+  test "empty" do
+    assert_equal "flat", TimeSeries::Trend.new(current: nil, previous: nil).direction
+  end
 end
