@@ -121,12 +121,12 @@ export default class extends Controller {
 
     // Y-Axis
     const y = d3
-    .scaleLinear()
-    .rangeRound([height, 0])
-    .domain([dataMin - padding, dataMax + padding]);
-    
+      .scaleLinear()
+      .rangeRound([height, 0])
+      .domain([dataMin - padding, dataMax + padding]);
+
     const isLabelDisabled = this.labelValue === "disable";
-    
+
     if(!isLabelDisabled){
       // X-Axis labels
       g.append("g")
