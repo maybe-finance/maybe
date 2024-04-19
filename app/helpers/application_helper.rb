@@ -53,7 +53,7 @@ module ApplicationHelper
 
   def trend_styles(trend)
     fallback = { bg_class: "bg-gray-500/5", text_class: "text-gray-500", symbol: "", icon: "minus" }
-    return fallback if trend.nil? || trend.direction == "flat"
+    return fallback if trend.nil? || trend.direction.flat?
 
     bg_class, text_class, symbol, icon = case trend.direction
     when "up"

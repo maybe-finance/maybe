@@ -1,21 +1,18 @@
 class TimeSeries::Value
   include Comparable
+  include ActiveModel::Validations
 
-  attr_accessor :trend
   attr_reader :value, :date, :original
 
-  def initialize(obj)
-    @original = obj.fetch(:original, obj)
+  validates :date, presence: true
+  validate :value_must_be_of_known_type
 
-    if obj.is_a?(Hash)
-      @date = obj[:date]
-      @value = obj[:value]
-    else
-      @date = obj.date
-      @value = obj.value
-    end
+  def initialize(obj, series: nil, previous: nil)
+    @date, @value, @original = parse_object obj
+    @series = series
+    @trend = create_trend previous
 
-    validate_input
+    validate!
   end
 
   def <=>(other)
@@ -24,9 +21,41 @@ class TimeSeries::Value
     result
   end
 
+  def as_json
+    {
+      date: date,
+      value: value.as_json,
+      trend: trend.as_json
+    }
+  end
+
   private
-    def validate_input
-      raise ArgumentError, "Date is required" unless @date.is_a?(Date)
-      raise ArgumentError, "Money or Numeric value is required" unless @value.is_a?(Money) || @value.is_a?(Numeric)
+    attr_reader :series, :trend
+
+    def parse_object(obj)
+      if obj.is_a?(Hash)
+        date = obj[:date]
+        value = obj[:value]
+        original = obj.fetch(:original, obj)
+      else
+        date = obj.date
+        value = obj.value
+        original = obj
+      end
+
+      [ date, value, original ]
+    end
+
+    def create_trend(previous)
+      TimeSeries::Trend.new \
+        current: value,
+        previous: previous&.value,
+        series: series
+    end
+
+    def value_must_be_of_known_type
+      unless value.is_a?(Money) || value.is_a?(Numeric)
+        errors.add :value, "must be a Money or Numeric"
+      end
     end
 end
