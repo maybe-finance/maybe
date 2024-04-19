@@ -2,7 +2,7 @@ class TimeSeries::Value
   include Comparable
   include ActiveModel::Validations
 
-  attr_reader :value, :date, :original
+  attr_reader :value, :date, :original, :trend
 
   validates :date, presence: true
   validate :value_must_be_of_known_type
@@ -30,7 +30,7 @@ class TimeSeries::Value
   end
 
   private
-    attr_reader :series, :trend
+    attr_reader :series
 
     def parse_object(obj)
       if obj.is_a?(Hash)
