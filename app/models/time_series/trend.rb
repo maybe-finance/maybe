@@ -8,7 +8,7 @@ class TimeSeries::Trend
   validate :values_must_be_of_same_type, :values_must_be_of_known_type
 
   def initialize(current:, previous:, series: nil)
-    @current = current || 0
+    @current = current
     @previous = previous
     @series = series
 
@@ -68,12 +68,12 @@ class TimeSeries::Trend
     end
 
     def values_must_be_of_known_type
-      unless current.is_a?(Money) || current.is_a?(Numeric)
-        errors.add :current, "must be of type Money or Numeric"
+      unless current.is_a?(Money) || current.is_a?(Numeric) || current.nil?
+        errors.add :current, "must be of type Money, Numeric, or nil"
       end
 
       unless previous.is_a?(Money) || previous.is_a?(Numeric) || previous.nil?
-        errors.add :previous, "must be of type Money, Numeric or nil"
+        errors.add :previous, "must be of type Money, Numeric, or nil"
       end
     end
 
