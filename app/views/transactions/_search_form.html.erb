@@ -1,7 +1,7 @@
 <%# locals: (q:) %>
 <div>
   <%= turbo_frame_tag "transactions_search_form" do %>
-    <%= search_form_for @q, url: search_transactions_path, html: { method: :post, data: { turbo_frame: "transactions_list", "controller": "auto-submit-form" } } do |form| %>
+    <%= search_form_for @q, url: search_transactions_path, html: { method: :post, data: { turbo_frame: "transactions_list" } } do |form| %>
       <div class="flex gap-2 mb-4">
         <div class="grow">
           <%= render partial: "transactions/search_form/search_filter", locals: { form: form } %>
@@ -11,52 +11,40 @@
             <%= lucide_icon("list-filter", class: "w-5 h-5 text-gray-500") %>
             <p class="text-sm font-medium text-gray-900">Filter</p>
           </button>
-          <%# TODO: Refactor this for readability and maintainability %>
-          <div data-menu-target="content" data-controller="tabs" data-tabs-active-class="bg-gray-25 text-gray-900" data-tabs-default-tab-value="txn-account-filter" class="hidden absolute flex z-10 h-80 w-[540px] top-12 right-0 border border-alpha-black-25 bg-white rounded-lg shadow-xs">
+          <div
+            data-menu-target="content"
+            data-controller="tabs"
+            data-tabs-active-class="bg-gray-25 text-gray-900"
+            data-tabs-default-tab-value="<%= transaction_filter_id(transaction_filter_by_name("Account")) %>"
+            class="hidden absolute flex z-10 h-80 w-[540px] top-12 right-0 border border-alpha-black-25 bg-white rounded-lg shadow-xs">
             <div class="flex w-44 flex-col items-start p-3 text-sm font-medium text-gray-500 border-r border-r-alpha-black-25">
-              <button class="flex text-gray-500 hover:bg-gray-25 items-center gap-2 px-3 rounded-md py-2 w-full" type="button" data-id="txn-date-filter" data-tabs-target="btn" data-action="tabs#select">
-                <%= lucide_icon("calendar", class: "w-5 h-5") %>
-                <span class="text-sm font-medium">Date</span>
-              </button>
-              <button class="flex text-gray-500 hover:bg-gray-25 items-center gap-2 px-3 rounded-md py-2 w-full" type="button" data-id="txn-account-filter" data-tabs-target="btn" data-action="tabs#select">
-                <%= lucide_icon("layers", class: "w-5 h-5") %>
-                <span class="text-sm font-medium">Account</span>
-              </button>
-              <button class="flex text-gray-500 hover:bg-gray-25 items-center gap-2 px-3 rounded-md py-2 w-full" type="button" data-id="txn-type-filter" data-tabs-target="btn" data-action="tabs#select">
-                <%= lucide_icon("shapes", class: "w-5 h-5") %>
-                <span class="text-sm font-medium">Type</span>
-              </button>
-              <button class="flex text-gray-500 hover:bg-gray-25 items-center gap-2 px-3 rounded-md py-2 w-full" type="button" data-id="txn-amount-filter" data-tabs-target="btn" data-action="tabs#select">
-                <%= lucide_icon("hash", class: "w-5 h-5") %>
-                <span class="text-sm font-medium">Amount</span>
-              </button>
-              <button class="flex text-gray-500 hover:bg-gray-25 items-center gap-2 px-3 rounded-md py-2 w-full" type="button" data-id="txn-category-filter" data-tabs-target="btn" data-action="tabs#select">
-                <%= lucide_icon("tag", class: "w-5 h-5") %>
-                <span class="text-sm font-medium">Category</span>
-              </button>
-              <button class="flex text-gray-500 hover:bg-gray-25 items-center gap-2 px-3 rounded-md py-2 w-full" type="button" data-id="txn-merchant-filter" data-tabs-target="btn" data-action="tabs#select">
-                <%= lucide_icon("store", class: "w-5 h-5") %>
-                <span class="text-sm font-medium">Merchant</span>
-              </button>
+              <% transaction_filters.each do |filter| %>
+                <button
+                  class="flex text-gray-500 hover:bg-gray-25 items-center gap-2 px-3 rounded-md py-2 w-full"
+                  type="button"
+                  data-id="<%= transaction_filter_id(filter) %>"
+                  data-tabs-target="btn"
+                  data-action="tabs#select">
+                  <%= lucide_icon(filter[:icon], class: "w-5 h-5") %>
+                  <span class="text-sm font-medium"><%= filter[:name] %></span>
+                </button>
+              <% end %>
             </div>
-            <div class="p-2 max-h-full overflow-y-auto grow">
-              <div id="txn-date-filter" data-tabs-target="tab">
-                <%= render partial: "transactions/search_form/date_filter", locals: { form: form } %>
+            <div class="flex flex-col grow">
+              <div class="grow p-2 border-b border-b-alpha-black-25 overflow-y-auto">
+                <% transaction_filters.each do |filter| %>
+                  <div id="<%= transaction_filter_id(filter) %>" data-tabs-target="tab">
+                    <%= render partial: "transactions/search_form/#{filter[:partial]}", locals: { form: form } %>
+                  </div>
+                <% end %>
               </div>
-              <div id="txn-account-filter" data-tabs-target="tab">
-                <%= render partial: "transactions/search_form/account_filter", locals: { form: form } %>
-              </div>
-              <div id="txn-type-filter" data-tabs-target="tab">
-                <%= render partial: "transactions/search_form/type_filter", locals: { form: form } %>
-              </div>
-              <div id="txn-amount-filter" data-tabs-target="tab">
-                <%= render partial: "transactions/search_form/amount_filter", locals: { form: form } %>
-              </div>
-              <div id="txn-category-filter" data-tabs-target="tab">
-                <%= render partial: "transactions/search_form/category_filter", locals: { form: form } %>
-              </div>
-              <div id="txn-merchant-filter" data-tabs-target="tab">
-                <%= render partial: "transactions/search_form/merchant_filter", locals: { form: form } %>
+              <div class="flex justify-end items-center gap-2 bg-white p-3">
+                <%= button_tag type: "reset", data: { action: "menu#close" }, class: "py-2 px-3 bg-gray-50 rounded-lg text-sm text-gray-900 font-medium" do %>
+                  Cancel
+                <% end %>
+                <%= button_tag type: "submit", class: "py-2 px-3 bg-gray-900 rounded-lg text-sm text-white font-medium" do %>
+                  Apply
+                <% end %>
               </div>
             </div>
           </div>
