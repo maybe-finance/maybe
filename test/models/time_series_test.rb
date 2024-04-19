@@ -60,12 +60,12 @@ class TimeSeriesTest < ActiveSupport::TestCase
 
   test "numeric series can be serialized to json" do
     expected_values = {
-        values: [
-            { date: 1.day.ago.to_date, value: 100, trend: { type: "normal", direction: "flat", value: 0, percent: 0.0 } },
-            { date: Date.current, value: 200, trend: { type: "normal", direction: "up", value: 100, percent: 100.0 } }
-        ],
-        trend: { type: "normal", direction: "up", value: 100, percent: 100.0 },
-        type: "normal"
+      values: [
+        { date: 1.day.ago.to_date, value: 100, trend: { type: "normal", direction: "flat", value: 0, percent: 0.0 } },
+        { date: Date.current, value: 200, trend: { type: "normal", direction: "up", value: 100, percent: 100.0 } }
+      ],
+      trend: { type: "normal", direction: "up", value: 100, percent: 100.0 },
+      type: "normal"
     }.to_json
 
     series = TimeSeries.new([ { date: 1.day.ago.to_date, value: 100 }, { date: Date.current, value: 200 } ])

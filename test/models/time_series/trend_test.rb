@@ -7,6 +7,7 @@ class TimeSeries::TrendTest < ActiveSupport::TestCase
     assert_equal Money.new(50), trend.value
     assert_equal 100.0, trend.percent
   end
+
   test "up" do
     trend = TimeSeries::Trend.new(current: 100, previous: 50)
     assert_equal "up", trend.direction
@@ -39,7 +40,7 @@ class TimeSeries::TrendTest < ActiveSupport::TestCase
   end
 
   test "empty" do
-    trend =TimeSeries::Trend.new
+    trend = TimeSeries::Trend.new
     assert_equal "flat", trend.direction
   end
 end
