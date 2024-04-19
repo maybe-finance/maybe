@@ -107,7 +107,7 @@ export default class extends Controller {
     } else {
       lineColor = tailwindColors.gray[500];
     }
-
+      
     // X-Axis
     const x = d3
       .scaleTime()
@@ -210,6 +210,33 @@ export default class extends Controller {
           const d0 = data[x0 - 1];
           const d1 = data[x0];
           const d = xPos - x(d0.date) > x(d1.date) - xPos ? d1 : d0;
+          const grayedOutData = data.filter(item => item.date >= d.date);
+          const highlightedData = data.filter(item => item.date <= d.date);
+
+          g.selectAll("path").remove()
+
+          g.append("path")
+            .datum(grayedOutData)
+            .attr("fill", "none")
+            .attr("stroke", tailwindColors.gray[300])
+            .attr("stroke-linejoin", "round")
+            .attr("stroke-linecap", "round")
+            .attr("stroke-width", 1.5)
+            .attr("class", "line-chart-path")
+            .attr("d", line)
+            .attr("pointer-events", "none");
+
+          
+          g.append("path")
+            .datum(highlightedData)
+            .attr("fill", "none")
+            .attr("stroke", lineColor)
+            .attr("stroke-linejoin", "round")
+            .attr("stroke-linecap", "round")
+            .attr("stroke-width", 1.5)
+            .attr("class", "line-chart-path")
+            .attr("d", line)
+            .attr("pointer-events", "none");
   
           // Adjust tooltip position based on overflow
           const adjustedX =
@@ -260,12 +287,23 @@ export default class extends Controller {
             .attr("x2", x(d.date))
             .attr("y2", height)
             .attr("stroke", tailwindColors.gray[300])
-            .attr("stroke-dasharray", "4, 4");
+            .attr("stroke-dasharray", "4, 4")
+            .attr("pointer-events", "none");
         })
         .on("mouseout", () => {
           g.selectAll(".guideline").remove();
           g.selectAll(".data-point-circle").remove();
           tooltip.style("opacity", 0);
+
+          g.append("path")
+            .datum(data)
+            .attr("fill", "none")
+            .attr("stroke", lineColor)
+            .attr("stroke-linejoin", "round")
+            .attr("stroke-linecap", "round")
+            .attr("stroke-width", 1.5)
+            .attr("class", "line-chart-path")
+            .attr("d", line);
         });
     }
   }
