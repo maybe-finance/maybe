@@ -31,6 +31,34 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to transactions_url
   end
 
+  test "should sync account after create" do
+    name = "transaction_name"
+    account = @transaction.account
+    date = @transaction.date
+    amount_difference = @transaction.amount
+
+    account.sync
+
+    assert_difference("account.balance_on(date - 1.day)", amount_difference) do
+      post transactions_url, params: { transaction: { account_id: @transaction.account_id, amount: @transaction.amount, currency: @transaction.currency, date: @transaction.date, name: } }
+      perform_enqueued_jobs
+    end
+  end
+
+  test "should do a partial account sync after create" do
+    name = "transaction_name"
+    account = @transaction.account
+    date = @transaction.date
+
+    account.sync
+    account.balances.where(date: date - 10.day).update!(balance: 200)
+
+    assert_no_changes("account.balance_on(date - 10.day)") do
+      post transactions_url, params: { transaction: { account_id: @transaction.account_id, amount: @transaction.amount, currency: @transaction.currency, date: @transaction.date, name: } }
+      perform_enqueued_jobs
+    end
+  end
+
   test "creation preserves decimals" do
     assert_difference("Transaction.count") do
       post transactions_url, params: { transaction: {
@@ -91,11 +119,64 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to transaction_url(@transaction)
   end
 
+  test "should sync account after update" do
+    account = @transaction.account
+    date = @transaction.date
+    amount_difference = 20
+    new_amount = @transaction.amount + amount_difference
+
+    account.sync
+
+    assert_difference("account.balance_on(date - 1.day)", amount_difference) do
+      patch transaction_url(@transaction), params: { transaction: { account_id: @transaction.account_id, amount: new_amount, currency: @transaction.currency, date: @transaction.date, name: @transaction.name } }
+      perform_enqueued_jobs
+    end
+  end
+
+  test "should do a partial account sync after update" do
+    account = @transaction.account
+    date = @transaction.date
+
+    account.sync
+    account.balances.where(date: date - 10.day).update!(balance: 200)
+
+    assert_no_changes("account.balance_on(date - 10.day)") do
+      patch transaction_url(@transaction), params: { transaction: { account_id: @transaction.account_id, amount: @transaction.account, currency: @transaction.currency, date: @transaction.date, name: @transaction.name } }
+      perform_enqueued_jobs
+    end
+  end
+
   test "should destroy transaction" do
     assert_difference("Transaction.count", -1) do
       delete transaction_url(@transaction)
     end
 
     assert_redirected_to transactions_url
+  end
+
+  test "should sync account after destroy" do
+    account = @transaction.account
+    date = @transaction.date
+    amount = @transaction.amount
+
+    account.sync
+
+    assert_difference("account.balance_on(date - 1.day)", -amount) do
+      delete transaction_url(@transaction)
+      perform_enqueued_jobs
+    end
+  end
+
+  test "should do a partial account sync after destroy" do
+    account = @transaction.account
+    date = @transaction.date
+
+    account.sync
+    account.balances.where(date: date - 10.day).update!(balance: 200)
+
+    assert_no_changes("account.balance_on(date - 10.day)") do
+      delete transaction_url(@transaction)
+      perform_enqueued_jobs
+    end
   end
 end

@@ -5,7 +5,7 @@ class ValuationsController < ApplicationController
     # TODO: placeholder logic until we have a better abstraction for trends
     @valuation = @account.valuations.new(valuation_params.merge(currency: Current.family.currency))
     if @valuation.save
-      @valuation.account.sync_later
+      @valuation.account.sync_later(@valuation.date - 1.day)
 
       respond_to do |format|
         format.html { redirect_to account_path(@account), notice: "Valuation created" }
@@ -29,8 +29,9 @@ class ValuationsController < ApplicationController
 
   def update
     @valuation = Valuation.find(params[:id])
+    sync_start_date = [ @valuation.date, Date.parse(valuation_params[:date]) ].compact.min
     if @valuation.update(valuation_params)
-      @valuation.account.sync_later
+      @valuation.account.sync_later(sync_start_date - 1.day)
 
       redirect_to account_path(@valuation.account), notice: "Valuation updated"
     else
@@ -43,9 +44,10 @@ class ValuationsController < ApplicationController
 
   def destroy
     @valuation = Valuation.find(params[:id])
+    sync_start_date = Valuation.where("date < ?", @valuation.date).order(date: :desc).first&.date
     @account = @valuation.account
     @valuation.destroy!
-    @account.sync_later
+    @account.sync_later(sync_start_date)
 
     respond_to do |format|
       format.html { redirect_to account_path(@account), notice: "Valuation deleted" }

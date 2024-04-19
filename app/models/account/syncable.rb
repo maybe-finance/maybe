@@ -1,16 +1,16 @@
 module Account::Syncable
     extend ActiveSupport::Concern
 
-    def sync_later
-        AccountSyncJob.perform_later self
+    def sync_later(start_date = nil)
+        AccountSyncJob.perform_later(self, start_date)
     end
 
-    def sync
+    def sync(start_date = nil)
         update!(status: "syncing")
 
         sync_exchange_rates
 
-        calculator = Account::Balance::Calculator.new(self)
+        calculator = Account::Balance::Calculator.new(self, { calc_start_date: start_date })
         calculator.calculate
         self.balances.upsert_all(calculator.daily_balances, unique_by: :index_account_balances_on_account_id_date_currency_unique)
         self.balances.where("date < ?", effective_start_date).delete_all

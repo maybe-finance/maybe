@@ -96,7 +96,7 @@ class Account::Balance::Calculator
         oldest_transaction_date = normalized_transactions.first&.dig("date")
         oldest_entry_date = [ oldest_valuation_date, oldest_transaction_date ].compact.min
 
-        if oldest_entry_date == oldest_valuation_date
+        if oldest_entry_date.present? && oldest_entry_date == oldest_valuation_date
           oldest_valuation = normalized_valuations.find { |v| v["date"] == oldest_valuation_date }
           oldest_valuation["value"].to_d
         else

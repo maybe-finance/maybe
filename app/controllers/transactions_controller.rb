@@ -75,7 +75,7 @@ class TransactionsController < ApplicationController
 
     respond_to do |format|
       if @transaction.save
-        @transaction.account.sync_later
+        @transaction.account.sync_later(@transaction.date - 1.day)
         format.html { redirect_to transactions_url, notice: t(".success") }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -85,8 +85,9 @@ class TransactionsController < ApplicationController
 
   def update
     respond_to do |format|
+      sync_start_date = [ @transaction.date, Date.parse(transaction_params[:date]) ].compact.min
       if @transaction.update(transaction_params)
-        @transaction.account.sync_later
+        @transaction.account.sync_later(sync_start_date - 1.day)
 
         format.html { redirect_to transaction_url(@transaction), notice: t(".success") }
         format.turbo_stream do
@@ -102,8 +103,9 @@ class TransactionsController < ApplicationController
   end
 
   def destroy
+    sync_start_date = Transaction.where("date < ?", @transaction.date).order(date: :desc).first&.date
     @transaction.destroy!
-    @transaction.account.sync_later
+    @transaction.account.sync_later(sync_start_date)
 
     respond_to do |format|
       format.html { redirect_to transactions_url, notice: t(".success") }

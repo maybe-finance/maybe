@@ -95,4 +95,17 @@ class Account::Balance::CalculatorTest < ActiveSupport::TestCase
 
         assert_equal expected_balances, actual_balances
     end
+
+    test "syncs with overridden start date" do
+        account = accounts(:multi_currency)
+        calc_start_date = 10.days.ago.to_date
+        calculator = Account::Balance::Calculator.new(account, { calc_start_date: })
+        calculator.calculate
+
+        expected_balances = @expected_balances.filter { |row| row["date"] >= calc_start_date }.map { |row| row["multi_currency"].to_d }
+
+        actual_balances = calculator.daily_balances.map { |b| b[:balance] }
+
+        assert_equal expected_balances, actual_balances
+    end
 end

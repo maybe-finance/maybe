@@ -14,6 +14,49 @@ class Account::SyncableTest < ActiveSupport::TestCase
         assert_equal 31, account.balances.count
     end
 
+    test "account balances can be synced from a start date" do
+        account = accounts(:savings_with_valuation_overrides)
+        account.sync 10.days.ago.to_date
+
+        assert_equal 11, account.balances.count
+    end
+
+    test "balances are updated after syncing" do
+        account = accounts(:savings_with_valuation_overrides)
+        balance_date = 10.days.ago
+        account.balances.create!(date: balance_date, balance: 1000)
+        account.sync
+
+        assert_equal 19500, account.balances.find_by(date: balance_date)[:balance]
+    end
+
+    test "balances before sync start date are not updated after syncing" do
+        account = accounts(:savings_with_valuation_overrides)
+        balance_date = 10.days.ago
+        account.balances.create!(date: balance_date, balance: 1000)
+        account.sync 5.days.ago.to_date
+
+        assert_equal 1000, account.balances.find_by(date: balance_date)[:balance]
+    end
+
+    test "balances after sync start date are updated after syncing" do
+        account = accounts(:savings_with_valuation_overrides)
+        balance_date = 10.days.ago
+        account.balances.create!(date: balance_date, balance: 1000)
+        account.sync 20.days.ago.to_date
+
+        assert_equal 19500, account.balances.find_by(date: balance_date)[:balance]
+    end
+
+    test "balance on the sync date is updated after syncing" do
+        account = accounts(:savings_with_valuation_overrides)
+        balance_date = 5.days.ago
+        account.balances.create!(date: balance_date, balance: 1000)
+        account.sync balance_date.to_date
+
+        assert_equal 19800, account.balances.find_by(date: balance_date)[:balance]
+    end
+
     test "foreign currency account has balances in each currency after syncing" do
         account = accounts(:eur_checking)
         account.sync
