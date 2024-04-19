@@ -37,13 +37,13 @@ class TimeSeries
       series: self
   end
 
-  # `to_json` returns the data shape used by D3 charts
-  def to_json
+  # `as_json` returns the data shape used by D3 charts
+  def as_json
     {
       values: values.map(&:as_json),
       trend: trend.as_json,
       favorable_direction: favorable_direction
-    }.to_json
+    }.as_json
   end
 
   private
