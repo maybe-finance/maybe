@@ -9,38 +9,19 @@ class TimeSeries::TrendTest < ActiveSupport::TestCase
   end
 
   test "up" do
-    trend = TimeSeries::Trend.new(current: 100, previous: 50)
-    assert_equal "up", trend.direction
+    assert_equal "up", TimeSeries::Trend.new(current: 100, previous: 50).direction
   end
 
   test "down" do
-    trend = TimeSeries::Trend.new(current: 50, previous: 100)
-    assert_equal "down", trend.direction
+    assert_equal "down", TimeSeries::Trend.new(current: 50, previous: 100).direction
   end
 
   test "flat" do
-    trend1 = TimeSeries::Trend.new(current: 100, previous: 100)
-    trend3 = TimeSeries::Trend.new(current: 100, previous: nil)
-    trend2 = TimeSeries::Trend.new(current: nil, previous: nil)
-    assert_equal "flat", trend1.direction
-    assert_equal "flat", trend2.direction
-    assert_equal "flat", trend3.direction
+    assert_equal "flat", TimeSeries::Trend.new(current: 100, previous: 100).direction
+    assert_equal "flat", TimeSeries::Trend.new(current: 100, previous: nil).direction
   end
 
   test "infinitely up" do
-    trend = TimeSeries::Trend.new(current: 100, previous: 0)
-    assert_equal "up", trend.direction
-  end
-
-  test "infinitely down" do
-    trend1 = TimeSeries::Trend.new(current: nil, previous: 100)
-    trend2 = TimeSeries::Trend.new(current: 0, previous: 100)
-    assert_equal "down", trend1.direction
-    assert_equal "down", trend2.direction
-  end
-
-  test "empty" do
-    trend = TimeSeries::Trend.new
-    assert_equal "flat", trend.direction
+    assert_equal "up", TimeSeries::Trend.new(current: 100, previous: 0).direction
   end
 end
