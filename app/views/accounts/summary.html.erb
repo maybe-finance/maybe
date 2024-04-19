@@ -17,11 +17,9 @@
             } %>
       </div>
       <div
-            data-controller="trendline"
-            id="assetsTrendline"
-            class="h-full w-2/5"
-            data-trendline-series-value="<%= @asset_series.to_json %>"
-            data-trendline-classification-value="asset"></div>
+        data-controller="time-series-chart"
+        class="h-full w-2/5"
+        data-time-series-chart-series-value="<%= @asset_series.to_json %>"></div>
     </div>
     <div class="w-1/2 p-4 flex items-stretch justify-between">
       <div class="space-y-2 grow">
