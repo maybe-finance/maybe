@@ -13,6 +13,8 @@ class TransactionsController < ApplicationController
     }
     @filter_list = Transaction.build_filter_list(search_params, Current.family)
 
+    puts @filter_list
+
     respond_to do |format|
       format.html
       format.turbo_stream
@@ -24,7 +26,16 @@ class TransactionsController < ApplicationController
       session.delete(ransack_session_key)
     elsif params[:remove_param]
       current_params = session[ransack_session_key] || {}
-      updated_params = delete_search_param(current_params, params[:remove_param], value: params[:remove_param_value])
+      if params[:remove_param] == "date_range"
+        updated_params = current_params.except("date_gteq", "date_lteq")
+      elsif params[:remove_param_value]
+        key_to_remove = params[:remove_param]
+        value_to_remove = params[:remove_param_value]
+        updated_params = current_params.deep_dup
+        updated_params[key_to_remove] = updated_params[key_to_remove] - [ value_to_remove ]
+      else
+        updated_params = current_params.except(params[:remove_param])
+      end
       session[ransack_session_key] = updated_params
     elsif params[:q]
       session[ransack_session_key] = params[:q]

@@ -16,11 +16,25 @@
       <%= lucide_icon "text", class: "w-5 h-5 text-gray-500" %>
       <p><%= "\"#{filter[:value]}\"".truncate(20) %></p>
     </div>
+  <% when "date_range" %>
+    <div class="flex items-center gap-2">
+      <%= lucide_icon "calendar", class: "w-5 h-5 text-gray-500" %>
+      <p>
+        <% if filter[:value][:gteq] && filter[:value][:lteq] %>
+          <%= filter[:value][:gteq] %> &rarr; <%= filter[:value][:lteq] %>
+        <% elsif filter[:value][:gteq] %>
+          on or after <%= filter[:value][:gteq] %>
+        <% elsif filter[:value][:lteq] %>
+          on or before <%= filter[:value][:lteq] %>
+        <% end %>
+      </p>
+    </div>
   <% end %>
   <%= form_with url: search_transactions_path, html: { class: "flex items-center" } do |form| %>
     <%= form.hidden_field :remove_param, value: filter[:original][:key] %>
     <% if filter[:original][:value] %>
       <%= form.hidden_field :remove_param_value, value: filter[:original][:value] %>
+    <% else %>
     <% end %>
     <%= form.button type: "submit", class: "hover:text-gray-900" do %>
       <%= lucide_icon "x", class: "w-4 h-4 text-gray-500" %>
