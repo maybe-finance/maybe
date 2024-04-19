@@ -43,10 +43,9 @@
           } %>
         </div>
         <div
-          data-controller="trendline"
+          data-controller="time-series-chart"
           class="h-full w-2/5"
-          data-trendline-series-value="<%= @income_series.to_json %>"
-          data-trendline-classification-value="asset"></div>
+          data-time-series-chart-series-value="<%= @income_series.to_json %>"></div>
       </div>
     </div>
     <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">
@@ -60,10 +59,9 @@
           } %>
         </div>
         <div
-          data-controller="trendline"
+          data-controller="time-series-chart"
           class="h-full w-2/5"
-          data-trendline-series-value="<%= @spending_series.to_json %>"
-          data-trendline-classification-value="asset"></div>
+          data-time-series-chart-series-value="<%= @spending_series.to_json %>"></div>
       </div>
     </div>
     <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">
@@ -78,10 +76,9 @@
           } %>
         </div>
         <div
-          data-controller="trendline"
+          data-controller="time-series-chart"
           class="h-full w-2/5"
-          data-trendline-series-value="<%= @savings_rate_series.to_json %>"
-          data-trendline-classification-value="asset"></div>
+          data-time-series-chart-series-value="<%= @savings_rate_series.to_json %>"></div>
       </div>
     </div>
     <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">
@@ -95,10 +92,9 @@
           } %>
         </div>
         <div
-          data-controller="trendline"
+          data-controller="time-series-chart"
           class="h-full w-2/5"
-          data-trendline-series-value="<%= @investing_series.to_json %>"
-          data-trendline-classification-value="asset"></div>
+          data-time-series-chart-series-value="<%= @investing_series.to_json %>"></div>
       </div>
     </div>
   </section>

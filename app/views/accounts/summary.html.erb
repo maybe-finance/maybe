@@ -32,11 +32,9 @@
             } %>
       </div>
       <div
-            data-controller="trendline"
-            id="liabilitiesTrendline"
-            class="h-full w-2/5"
-            data-trendline-series-value="<%= @liability_series.to_json %>"
-            data-trendline-classification-value="liability"></div>
+        data-controller="time-series-chart"
+        class="h-full w-2/5"
+        data-time-series-chart-series-value="<%= @liability_series.to_json %>"></div>
     </div>
   </div>
   <div class="p-4 bg-white rounded-xl shadow-xs border border-alpha-black-25 space-y-4">
