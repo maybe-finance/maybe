@@ -33,11 +33,13 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
 
     readonly_currency = options[:readonly_currency] || false
 
+    currency = money&.currency || Money.default_currency
     default_options = {
       class: "form-field__input",
       value: money&.amount,
-      placeholder: Money.new(0, money&.currency || Money.default_currency).format,
-      step: "0.01" # Not all currencies have 2 decimal places
+      "data-money-field-target" => "amount",
+      placeholder: Money.new(0, currency).format,
+      step: currency.step
     }
 
     merged_options = default_options.merge(options)
@@ -45,11 +47,11 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     grouped_options = currency_options_for_select
     selected_currency = money&.currency&.iso_code
 
-    @template.form_field_tag do
+    @template.form_field_tag data: { controller: "money-field" } do
       (label(method, *label_args(options)).to_s if options[:label]) +
       @template.tag.div(class: "flex items-center") do
         number_field(money_amount_method, merged_options.except(:label)) +
-        grouped_select(money_currency_method, grouped_options, { selected: selected_currency, disabled: readonly_currency }, class: "ml-auto form-field__input w-fit pr-8")
+        grouped_select(money_currency_method, grouped_options, { selected: selected_currency, disabled: readonly_currency }, class: "ml-auto form-field__input w-fit pr-8", data: { "money-field-target" => "currency", action: "change->money-field#handleCurrencyChange"} )
       end
     end
   end
