@@ -59,7 +59,7 @@ class TimeSeries::Trend
     attr_reader :series
 
     def values_must_be_of_same_type
-      unless current.class == previous.class || previous.nil?
+      unless current.class == previous.class || [ previous, current ].any?(&:nil?)
         errors.add :current, "must be of the same type as previous"
         errors.add :previous, "must be of the same type as current"
       end
