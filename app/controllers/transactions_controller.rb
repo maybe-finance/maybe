@@ -13,8 +13,6 @@ class TransactionsController < ApplicationController
     }
     @filter_list = Transaction.build_filter_list(search_params, Current.family)
 
-    puts @filter_list
-
     respond_to do |format|
       format.html
       format.turbo_stream
