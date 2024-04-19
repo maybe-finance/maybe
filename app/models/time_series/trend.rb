@@ -26,10 +26,8 @@ class TimeSeries::Trend
   end
 
   def value
-    if previous.nil? && current.is_a?(Money)
-      Money.new 0
-    elsif previous.nil?
-      0
+    if previous.nil?
+      current.is_a?(Money) ? Money.new(0) : 0
     else
       current - previous
     end
@@ -38,7 +36,7 @@ class TimeSeries::Trend
   def percent
     if previous.nil?
       0.0
-    elsif previous == 0
+    elsif previous.zero?
       Float::INFINITY
     else
       change = (current_amount - previous_amount).abs
