@@ -11,32 +11,53 @@
             <%= lucide_icon("list-filter", class: "w-5 h-5 text-gray-500") %>
             <p class="text-sm font-medium text-gray-900">Filter</p>
           </button>
-          <div data-menu-target="content" class="hidden absolute z-10 top-12 right-0 border border-alpha-black-25 bg-white rounded-lg shadow-xs min-w-[450px]">
-            <div data-controller="tabs" data-tabs-active-class="border-b-2 border-b-black text-gray-900" data-tabs-default-tab-value="txn-account-filter">
-              <div class="flex items-center px-3 text-sm font-medium text-gray-500 gap-4 border-b border-b-alpha-black-50">
-                <button class="py-2 border-b-2" type="button" data-id="txn-account-filter" data-tabs-target="btn" data-action="tabs#select">Account</button>
-                <button class="py-2 border-b-2" type="button" data-id="txn-amount-filter" data-tabs-target="btn" data-action="tabs#select">Amount</button>
-                <button class="py-2 border-b-2" type="button" data-id="txn-category-filter" data-tabs-target="btn" data-action="tabs#select">Category</button>
-                <button class="py-2 border-b-2" type="button" data-id="txn-merchant-filter" data-tabs-target="btn" data-action="tabs#select">Merchant</button>
-              </div>
-              <div class="p-2 max-h-[300px] overflow-y-auto">
-                <div id="txn-account-filter" data-tabs-target="tab">
-                  <%= render partial: "transactions/search_form/account_filter", locals: { form: form } %>
-                </div>
-                <div id="txn-amount-filter" data-tabs-target="tab">
-                  <%= render partial: "transactions/search_form/amount_filter", locals: { form: form } %>
-                </div>
-                <div id="txn-category-filter" data-tabs-target="tab">
-                  <%= render partial: "transactions/search_form/category_filter", locals: { form: form } %>
-                </div>
-                <div id="txn-merchant-filter" data-tabs-target="tab">
-                  <%= render partial: "transactions/search_form/merchant_filter", locals: { form: form } %>
-                </div>
-              </div>
+          <%# TODO: Refactor this for readability and maintainability %>
+          <div data-menu-target="content" data-controller="tabs" data-tabs-active-class="bg-gray-25 text-gray-900" data-tabs-default-tab-value="txn-account-filter" class="hidden absolute flex z-10 h-80 w-[540px] top-12 right-0 border border-alpha-black-25 bg-white rounded-lg shadow-xs">
+            <div class="flex w-44 flex-col items-start p-3 text-sm font-medium text-gray-500 border-r border-r-alpha-black-25">
+              <button class="flex text-gray-500 hover:bg-gray-25 items-center gap-2 px-3 rounded-md py-2 w-full" type="button" data-id="txn-date-filter" data-tabs-target="btn" data-action="tabs#select">
+                <%= lucide_icon("calendar", class: "w-5 h-5") %>
+                <span class="text-sm font-medium">Date</span>
+              </button>
+              <button class="flex text-gray-500 hover:bg-gray-25 items-center gap-2 px-3 rounded-md py-2 w-full" type="button" data-id="txn-account-filter" data-tabs-target="btn" data-action="tabs#select">
+                <%= lucide_icon("layers", class: "w-5 h-5") %>
+                <span class="text-sm font-medium">Account</span>
+              </button>
+              <button class="flex text-gray-500 hover:bg-gray-25 items-center gap-2 px-3 rounded-md py-2 w-full" type="button" data-id="txn-type-filter" data-tabs-target="btn" data-action="tabs#select">
+                <%= lucide_icon("shapes", class: "w-5 h-5") %>
+                <span class="text-sm font-medium">Type</span>
+              </button>
+              <button class="flex text-gray-500 hover:bg-gray-25 items-center gap-2 px-3 rounded-md py-2 w-full" type="button" data-id="txn-amount-filter" data-tabs-target="btn" data-action="tabs#select">
+                <%= lucide_icon("hash", class: "w-5 h-5") %>
+                <span class="text-sm font-medium">Amount</span>
+              </button>
+              <button class="flex text-gray-500 hover:bg-gray-25 items-center gap-2 px-3 rounded-md py-2 w-full" type="button" data-id="txn-category-filter" data-tabs-target="btn" data-action="tabs#select">
+                <%= lucide_icon("tag", class: "w-5 h-5") %>
+                <span class="text-sm font-medium">Category</span>
+              </button>
+              <button class="flex text-gray-500 hover:bg-gray-25 items-center gap-2 px-3 rounded-md py-2 w-full" type="button" data-id="txn-merchant-filter" data-tabs-target="btn" data-action="tabs#select">
+                <%= lucide_icon("store", class: "w-5 h-5") %>
+                <span class="text-sm font-medium">Merchant</span>
+              </button>
             </div>
-            <div class="text-sm p-3 flex items-center justify-between border-t border-t-alpha-black-50">
-              <p class="text-gray-500"><%= q.conditions.reject { |condition| condition.values.any?(&:blank?) }.size %> filters applied</p>
-              <%= button_to "Clear all", search_transactions_path(clear: true), method: :post, class: "text-gray-900 font-medium", form: { "data-turbo-frame": "transactions_list" } %>
+            <div class="p-2 max-h-full overflow-y-auto grow">
+              <div id="txn-date-filter" data-tabs-target="tab">
+                <%= render partial: "transactions/search_form/date_filter", locals: { form: form } %>
+              </div>
+              <div id="txn-account-filter" data-tabs-target="tab">
+                <%= render partial: "transactions/search_form/account_filter", locals: { form: form } %>
+              </div>
+              <div id="txn-type-filter" data-tabs-target="tab">
+                <%= render partial: "transactions/search_form/type_filter", locals: { form: form } %>
+              </div>
+              <div id="txn-amount-filter" data-tabs-target="tab">
+                <%= render partial: "transactions/search_form/amount_filter", locals: { form: form } %>
+              </div>
+              <div id="txn-category-filter" data-tabs-target="tab">
+                <%= render partial: "transactions/search_form/category_filter", locals: { form: form } %>
+              </div>
+              <div id="txn-merchant-filter" data-tabs-target="tab">
+                <%= render partial: "transactions/search_form/merchant_filter", locals: { form: form } %>
+              </div>
             </div>
           </div>
         </div>
