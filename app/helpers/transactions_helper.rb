@@ -17,4 +17,8 @@ module TransactionsHelper
   def transaction_filter_by_name(name)
     transaction_filters.find { |filter| filter[:name] == name }
   end
+
+  def full_width_transaction_row?(route)
+    route != "/"
+  end
 end

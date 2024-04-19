@@ -7,6 +7,7 @@ class PagesController < ApplicationController
     @asset_series = snapshot[:asset_series]
     @liability_series = snapshot[:liability_series]
     @account_groups = Current.family.accounts.by_group(period: @period, currency: Current.family.currency)
+    @transactions = Current.family.transactions.limit(5).order(date: :desc)
 
     # TODO: Placeholders for trendlines
     placeholder_series_data = 10.times.map do |i|
