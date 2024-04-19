@@ -34,13 +34,42 @@ export default class extends Controller {
   }
 
   #normalizeDataPoints() {
-    this.#dataPoints = this.seriesValue.values.map((d) => ({
+    this.#dataPoints = (this.seriesValue.values || []).map((d) => ({
       date: new Date(d.date),
       value: d.value.amount ? +d.value.amount : +d.value,
     }))
   }
 
   #draw() {
+    if (this.#dataPoints.length < 2) {
+      this.#drawEmpty()
+    } else {
+      this.#drawLine()
+    }
+  }
+
+  #drawEmpty() {
+    this.#d3Svg.selectAll(".tick").remove()
+    this.#d3Svg.selectAll(".domain").remove()
+
+    this.#d3Svg
+      .append("line")
+      .attr("x1", this.#d3Svg.node().clientWidth / 2)
+      .attr("y1", 0)
+      .attr("x2", this.#d3Svg.node().clientWidth / 2)
+      .attr("y2", this.#d3Svg.node().clientHeight)
+      .attr("stroke", tailwindColors.gray[300])
+      .attr("stroke-dasharray", "4, 4")
+
+    this.#d3Svg
+      .append("circle")
+      .attr("cx", this.#d3Svg.node().clientWidth / 2)
+      .attr("cy", this.#d3Svg.node().clientHeight / 2)
+      .attr("r", 4)
+      .style("fill", tailwindColors.gray[400])
+  }
+
+  #drawLine() {
     this.#d3Svg
       .append("path")
       .datum(this.#dataPoints)
