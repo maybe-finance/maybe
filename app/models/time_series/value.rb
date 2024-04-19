@@ -7,10 +7,9 @@ class TimeSeries::Value
   validates :date, presence: true
   validate :value_must_be_of_known_type
 
-  def initialize(obj, series: nil, previous: nil)
-    @date, @value, @original = parse_object obj
-    @series = series
-    @trend = create_trend previous
+  def initialize(date:, value:, original: nil, series: nil, previous_value: nil)
+    @date, @value, @original, @series = date, value, original, series
+    @trend = create_trend previous_value
 
     validate!
   end
@@ -32,24 +31,10 @@ class TimeSeries::Value
   private
     attr_reader :series
 
-    def parse_object(obj)
-      if obj.is_a?(Hash)
-        date = obj[:date]
-        value = obj[:value]
-        original = obj.fetch(:original, obj)
-      else
-        date = obj.date
-        value = obj.value
-        original = obj
-      end
-
-      [ date, value, original ]
-    end
-
-    def create_trend(previous)
+    def create_trend(previous_value)
       TimeSeries::Trend.new \
         current: value,
-        previous: previous&.value,
+        previous: previous_value,
         series: series
     end
 

@@ -49,8 +49,8 @@ class TimeSeries
   private
     def initialize_values(data)
       [ nil, *data ].each_cons(2).map do |previous, current|
-        TimeSeries::Value.new current,
-          previous: (TimeSeries::Value.new(previous) if previous),
+        TimeSeries::Value.new **current,
+          previous_value: previous.try(:[], :value),
           series: self
       end
     end

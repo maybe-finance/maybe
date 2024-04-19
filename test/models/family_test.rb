@@ -73,9 +73,9 @@ class FamilyTest < ActiveSupport::TestCase
     assert_equal @expected_snapshots.count, net_worth_series.values.count
 
     @expected_snapshots.each_with_index do |row, index|
-      expected_assets = TimeSeries::Value.new({ date: row["date"], value: Money.new(row["assets"].to_d) })
-      expected_liabilities = TimeSeries::Value.new({ date: row["date"], value: Money.new(row["liabilities"].to_d) })
-      expected_net_worth = TimeSeries::Value.new({ date: row["date"], value: Money.new(row["net_worth"].to_d) })
+      expected_assets = TimeSeries::Value.new(date: row["date"], value: Money.new(row["assets"].to_d))
+      expected_liabilities = TimeSeries::Value.new(date: row["date"], value: Money.new(row["liabilities"].to_d))
+      expected_net_worth = TimeSeries::Value.new(date: row["date"], value: Money.new(row["net_worth"].to_d))
 
       assert_in_delta expected_assets.value.amount, Money.new(asset_series.values[index].value).amount, 0.01
       assert_in_delta expected_liabilities.value.amount, Money.new(liability_series.values[index].value).amount, 0.01
