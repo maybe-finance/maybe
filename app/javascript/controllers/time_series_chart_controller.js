@@ -50,7 +50,7 @@ export default class extends Controller {
       ...d,
       date: new Date(d.date),
       value: d.value.amount ? +d.value.amount : +d.value,
-      currency: d.value.currency || "USD",
+      currency: d.value.currency
     }))
   }
 
@@ -250,17 +250,31 @@ export default class extends Controller {
 
 
   #tooltipTemplate(data) {
-    return(`
-      <div style="margin-bottom: 4px; color: ${tailwindColors.gray[500]};">
-        ${d3.timeFormat("%b %d, %Y")(data.date)}
-      </div>
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <svg width="10" height="10">
-          <circle cx="5" cy="5" r="4" stroke="${this.#dataTrendColor(data)}" fill="transparent" stroke-width="1"></circle>
-        </svg>
-        ${this.#currencyValue(data)} <span style="color: ${this.#dataTrendColor(data)};">${this.#currencyChange(data)} (${data.trend.percent}%)</span>
-      </div>
-    `)
+    if (data.currency) {
+      return(`
+        <div style="margin-bottom: 4px; color: ${tailwindColors.gray[500]};">
+          ${d3.timeFormat("%b %d, %Y")(data.date)}
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <svg width="10" height="10">
+            <circle cx="5" cy="5" r="4" stroke="${this.#dataTrendColor(data)}" fill="transparent" stroke-width="1"></circle>
+          </svg>
+          ${this.#currencyValue(data)} <span style="color: ${this.#dataTrendColor(data)};">${this.#currencyChange(data)} (${data.trend.percent}%)</span>
+        </div>
+      `)
+    } else {
+      return(`
+        <div style="margin-bottom: 4px; color: ${tailwindColors.gray[500]};">
+          ${d3.timeFormat("%b %d, %Y")(data.date)}
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <svg width="10" height="10">
+            <circle cx="5" cy="5" r="4" stroke="${this.#dataTrendColor(data)}" fill="transparent" stroke-width="1"></circle>
+          </svg>
+          ${data.value} <span style="color: ${this.#dataTrendColor(data)};">${this.#decimalChange(data)} (${data.trend.percent}%)</span>
+        </div>
+      `)
+    }
   }
 
   #dataTrendColor(data) {
@@ -274,16 +288,23 @@ export default class extends Controller {
   #currencyValue(data) {
     return Intl.NumberFormat(undefined, {
       style: "currency",
-      currency: data.currency || "USD",
+      currency: data.currency,
     }).format(data.value)
   }
 
   #currencyChange(data) {
     return Intl.NumberFormat(undefined, {
       style: "currency",
-      currency: data.currency || "USD",
+      currency: data.currency,
       signDisplay: "always",
     }).format(data.trend.value.amount)
+  }
+
+  #decimalChange(data) {
+    return Intl.NumberFormat(undefined, {
+      style: "decimal",
+      signDisplay: "always",
+    }).format(data.trend.value)
   }
 
 
