@@ -118,15 +118,58 @@ export default class extends Controller {
   }
 
   #drawTrendline() {
+    this.#installTrendlineSplit()
+
     this.#d3Group
       .append("path")
       .datum(this.#normalDataPoints)
       .attr("fill", "none")
-      .attr("stroke", this.#trendColor)
+      .attr("stroke", `url(#${this.element.id}-split-gradient)`)
       .attr("d", this.#d3Line)
       .attr("stroke-linejoin", "round")
       .attr("stroke-linecap", "round")
-      .attr("stroke-width", this.strokeWidthValue)
+      .attr("stroke-width", 2)
+  }
+
+  #installTrendlineSplit() {
+    const gradient = this.#d3Svg
+      .append("defs")
+      .append("linearGradient")
+      .attr("id", `${this.element.id}-split-gradient`)
+      .attr("gradientUnits", "userSpaceOnUse")
+      .attr("x1", this.#d3XScale.range()[0])
+      .attr("x2", this.#d3XScale.range()[1])
+
+    gradient.append("stop")
+      .attr("class", "start-color")
+      .attr("offset", "0%")
+      .attr("stop-color", this.#trendColor)
+
+    gradient.append("stop")
+      .attr("class", "middle-color")
+      .attr("offset", "100%")
+      .attr("stop-color", this.#trendColor)
+
+    gradient.append("stop")
+      .attr("class", "end-color")
+      .attr("offset", "100%")
+      .attr("stop-color", tailwindColors.gray[300])
+  }
+
+  #setTrendlineSplitAt(percent) {
+    this.#d3Svg
+      .select(`#${this.element.id}-split-gradient`)
+      .select(".middle-color")
+      .attr("offset", `${percent * 100}%`)
+
+    this.#d3Svg
+      .select(`#${this.element.id}-split-gradient`)
+      .select(".end-color")
+      .attr("offset", `${percent * 100}%`)
+
+    this.#d3Svg
+      .select(`#${this.element.id}-trendline-gradient-rect`)
+      .attr("width", this.#d3ContainerWidth * percent)
   }
 
   #drawXAxisLabels() {
@@ -196,6 +239,7 @@ export default class extends Controller {
     // Apply the gradient + clip path
     this.#d3Group
       .append("rect")
+      .attr("id", `${this.element.id}-trendline-gradient-rect`)
       .attr("width", this.#d3ContainerWidth)
       .attr("height", this.#d3ContainerHeight)
       .attr("clip-path", `url(#${this.element.id}-clip-below-trendline)`)
@@ -220,7 +264,8 @@ export default class extends Controller {
   #trackMouseForShowingTooltip() {
     const bisectDate = d3.bisector(d => d.date).left
 
-    this.#d3Group.append("rect")
+    this.#d3Group
+      .append("rect")
       .attr("width", this.#d3ContainerWidth)
       .attr("height", this.#d3ContainerHeight)
       .attr("fill", "none")
@@ -237,6 +282,9 @@ export default class extends Controller {
         const d0 = this.#normalDataPoints[x0 - 1]
         const d1 = this.#normalDataPoints[x0]
         const d = xPos - this.#d3XScale(d0.date) > this.#d3XScale(d1.date) - xPos ? d1 : d0
+        const xPercent = this.#d3XScale(d.date) / this.#d3ContainerWidth
+
+        this.#setTrendlineSplitAt(xPercent)
 
         // Reset
         this.#d3Group.selectAll(".data-point-circle").remove()
@@ -281,10 +329,16 @@ export default class extends Controller {
           .style("left", adjustedX + "px")
           .style("top", event.pageY - 10 + "px")
       })
-      .on("mouseout", () => {
-        this.#d3Group.selectAll(".guideline").remove()
-        this.#d3Group.selectAll(".data-point-circle").remove()
-        this.#d3Tooltip.style("opacity", 0)
+      .on("mouseout", (event) => {
+        const hoveringOnGuideline = event.toElement?.classList.contains("guideline")
+
+        if (!hoveringOnGuideline) {
+          this.#d3Group.selectAll(".guideline").remove()
+          this.#d3Group.selectAll(".data-point-circle").remove()
+          this.#d3Tooltip.style("opacity", 0)
+
+          this.#setTrendlineSplitAt(1)
+        }
       })
   }
 
