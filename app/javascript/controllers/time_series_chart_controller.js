@@ -62,7 +62,7 @@ export default class extends Controller {
 
 
   #draw() {
-    if (this.#dataPoints.length == 0) {
+    if (this.#dataPoints.length < 2) {
       this.#drawEmpty()
     } else if (this.#isFullChart) {
       this.#drawFullChart()
