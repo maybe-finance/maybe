@@ -23,6 +23,7 @@ export default class extends Controller {
   }
 
   disconnect() {
+    this.#teardown()
     document.removeEventListener("turbo:load", this.#reinstall)
   }
 
