@@ -108,12 +108,25 @@ export default class extends Controller {
 
     if (this.useLabelsValue) {
       this.#drawXAxisLabels()
+      this.#drawGradientBelowTrendline()
     }
 
     if (this.useTooltipValue) {
       this.#drawTooltip()
       this.#trackMouseForShowingTooltip()
     }
+  }
+
+  #drawTrendline() {
+    this.#d3Group
+      .append("path")
+      .datum(this.#normalDataPoints)
+      .attr("fill", "none")
+      .attr("stroke", this.#trendColor)
+      .attr("d", this.#d3Line)
+      .attr("stroke-linejoin", "round")
+      .attr("stroke-linecap", "round")
+      .attr("stroke-width", this.strokeWidthValue)
   }
 
   #drawXAxisLabels() {
@@ -144,21 +157,55 @@ export default class extends Controller {
       .attr("dy", "0em")
   }
 
-  #drawTrendline() {
+  #drawGradientBelowTrendline() {
+    // Define gradient
+    const gradient = this.#d3Group
+      .append("defs")
+      .append("linearGradient")
+      .attr("id", `${this.element.id}-trendline-gradient`)
+      .attr("gradientUnits", "userSpaceOnUse")
+      .attr("x1", 0)
+      .attr("x2", 0)
+      .attr("y1", this.#d3YScale(d3.max(this.#normalDataPoints, d => d.value)))
+      .attr("y2", this.#d3ContainerHeight)
+
+    gradient
+      .append("stop")
+      .attr("offset", 0)
+      .attr("stop-color", this.#trendColor)
+      .attr("stop-opacity", 0.06)
+
+    gradient
+      .append("stop")
+      .attr("offset", 0.5)
+      .attr("stop-color", this.#trendColor)
+      .attr("stop-opacity", 0)
+
+    // Clip path makes gradient start at the trendline
     this.#d3Group
+      .append("clipPath")
+      .attr("id", `${this.element.id}-clip-below-trendline`)
       .append("path")
       .datum(this.#normalDataPoints)
-      .attr("fill", "none")
-      .attr("stroke", this.#trendColor)
-      .attr("d", this.#d3Line)
-      .attr("stroke-linejoin", "round")
-      .attr("stroke-linecap", "round")
-      .attr("stroke-width", this.strokeWidthValue)
+      .attr("d", d3.area()
+        .x(d => this.#d3XScale(d.date))
+        .y0(this.#d3ContainerHeight)
+        .y1(d => this.#d3YScale(d.value))
+      )
+
+    // Apply the gradient + clip path
+    this.#d3Group
+      .append("rect")
+      .attr("width", this.#d3ContainerWidth)
+      .attr("height", this.#d3ContainerHeight)
+      .attr("clip-path", `url(#${this.element.id}-clip-below-trendline)`)
+      .style("fill", `url(#${this.element.id}-trendline-gradient)`)
   }
+
 
   #drawTooltip() {
     this.#d3Tooltip = d3
-      .select("#lineChart")
+      .select(`#${this.element.id}`)
       .append("div")
       .style("position", "absolute")
       .style("padding", "8px")
@@ -195,6 +242,17 @@ export default class extends Controller {
         this.#d3Group.selectAll(".data-point-circle").remove()
         this.#d3Group.selectAll(".guideline").remove()
 
+        // Guideline
+        this.#d3Group
+          .append("line")
+          .attr("class", "guideline")
+          .attr("x1", this.#d3XScale(d.date))
+          .attr("y1", 0)
+          .attr("x2", this.#d3XScale(d.date))
+          .attr("y2", this.#d3ContainerHeight)
+          .attr("stroke", tailwindColors.gray[300])
+          .attr("stroke-dasharray", "4, 4")
+
         // Big circle
         this.#d3Group
           .append("circle")
@@ -216,17 +274,6 @@ export default class extends Controller {
           .attr("fill", this.#trendColor)
           .attr("pointer-events", "none")
 
-        // Guideline
-        this.#d3Group
-          .append("line")
-          .attr("class", "guideline")
-          .attr("x1", this.#d3XScale(d.date))
-          .attr("y1", 0)
-          .attr("x2", this.#d3XScale(d.date))
-          .attr("y2", this.#d3ContainerHeight)
-          .attr("stroke", tailwindColors.gray[300])
-          .attr("stroke-dasharray", "4, 4")
-
         // Render tooltip
         this.#d3Tooltip
           .html(this.#tooltipTemplate(d))
@@ -240,7 +287,6 @@ export default class extends Controller {
         this.#d3Tooltip.style("opacity", 0)
       })
   }
-
 
   #tooltipTemplate(data) {
     return(`
@@ -354,7 +400,7 @@ export default class extends Controller {
 
   get #margin() {
     if (this.useLabelsValue) {
-      return { top: 20, right: 1, bottom: 30, left: 1 }
+      return { top: 20, right: 0, bottom: 30, left: 0 }
     } else {
       return { top: 0, right: 0, bottom: 0, left: 0 }
     }
