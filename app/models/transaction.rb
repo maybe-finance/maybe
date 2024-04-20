@@ -23,6 +23,8 @@ class Transaction < ApplicationRecord
   def self.build_filter_list(params, family)
     filters = []
 
+    date_filters = { gteq: nil, lteq: nil }
+
     if params
       params.each do |key, value|
         next if value.blank?
@@ -38,7 +40,15 @@ class Transaction < ApplicationRecord
           end
         when "category_name_or_account_name_or_name_cont"
           filters << { type: "search", value: value, original: { key: key, value: nil } }
+        when "date_gteq"
+          date_filters[:gteq] = value
+        when "date_lteq"
+          date_filters[:lteq] = value
         end
+      end
+
+      unless date_filters.values.compact.empty?
+        filters << { type: "date_range", value: date_filters, original: { key: "date_range", value: nil } }
       end
     end
 
