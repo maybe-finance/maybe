@@ -4,7 +4,7 @@ import * as d3 from "d3"
 
 export default class extends Controller {
   static values = {
-    series: Object,
+    data: Object,
     useLabels: Boolean,
     useTooltip: Boolean,
     strokeWidth: { type: Number, default: 2 }
@@ -13,7 +13,7 @@ export default class extends Controller {
   #_d3MainSvg = null
   #_d3MainGroup = null
   #d3Tooltip = null
-  #dataPoints = []
+  #normalDataPoints = []
   #d3InitialContainerWidth = 0
   #d3InitialContainerHeight = 0
 
@@ -37,7 +37,7 @@ export default class extends Controller {
     this.#_d3MainSvg = null
     this.#_d3MainGroup = null
     this.#d3Tooltip = null
-    this.#dataPoints = []
+    this.#normalDataPoints = []
 
     this.#d3Container.selectAll("*").remove()
   }
@@ -50,7 +50,7 @@ export default class extends Controller {
 
 
   #normalizeDataPoints() {
-    this.#dataPoints = (this.seriesValue.values || []).map((d) => ({
+    this.#normalDataPoints = (this.dataValue.values || []).map((d) => ({
       ...d,
       date: new Date(d.date),
       value: d.value.amount ? +d.value.amount : +d.value,
@@ -66,7 +66,7 @@ export default class extends Controller {
 
 
   #draw() {
-    if (this.#dataPoints.length < 2) {
+    if (this.#normalDataPoints.length < 2) {
       this.#drawEmpty()
     } else {
       this.#drawChart()
@@ -124,7 +124,7 @@ export default class extends Controller {
       .call(
         d3
           .axisBottom(this.#d3XScale)
-          .tickValues([ this.#dataPoints[0].date, this.#dataPoints[this.#dataPoints.length - 1].date ])
+          .tickValues([ this.#normalDataPoints[0].date, this.#normalDataPoints[this.#normalDataPoints.length - 1].date ])
           .tickSize(0)
           .tickFormat(d3.timeFormat("%b %Y"))
       )
@@ -147,7 +147,7 @@ export default class extends Controller {
   #drawTrendline() {
     this.#d3MainGroup
       .append("path")
-      .datum(this.#dataPoints)
+      .datum(this.#normalDataPoints)
       .attr("fill", "none")
       .attr("stroke", this.#trendColor)
       .attr("d", this.#d3Line)
@@ -186,9 +186,9 @@ export default class extends Controller {
         const adjustedX = overflowX > 0 ? event.pageX - overflowX - 20 : tooltipX
 
         const [xPos] = d3.pointer(event)
-        const x0 = bisectDate(this.#dataPoints, this.#d3XScale.invert(xPos), 1)
-        const d0 = this.#dataPoints[x0 - 1]
-        const d1 = this.#dataPoints[x0]
+        const x0 = bisectDate(this.#normalDataPoints, this.#d3XScale.invert(xPos), 1)
+        const d0 = this.#normalDataPoints[x0 - 1]
+        const d1 = this.#normalDataPoints[x0]
         const d = xPos - this.#d3XScale(d0.date) > this.#d3XScale(d1.date) - xPos ? d1 : d0
 
         // Reset
@@ -363,11 +363,11 @@ export default class extends Controller {
   }
 
   get #trendDirection() {
-    return this.seriesValue.trend.direction
+    return this.dataValue.trend.direction
   }
 
   get #favorableDirection() {
-    return this.seriesValue.trend.favorableDirection
+    return this.dataValue.trend.favorableDirection
   }
 
   get #d3Line() {
@@ -381,13 +381,13 @@ export default class extends Controller {
     return d3
       .scaleTime()
       .rangeRound([ 0, this.#d3ContainerWidth ])
-      .domain(d3.extent(this.#dataPoints, d => d.date))
+      .domain(d3.extent(this.#normalDataPoints, d => d.date))
   }
 
   get #d3YScale() {
     const reductionPercent = this.useLabelsValue ? 0.15 : 0.05
-    const dataMin = d3.min(this.#dataPoints, d => d.value)
-    const dataMax = d3.max(this.#dataPoints, d => d.value)
+    const dataMin = d3.min(this.#normalDataPoints, d => d.value)
+    const dataMax = d3.max(this.#normalDataPoints, d => d.value)
     const padding = (dataMax - dataMin) * reductionPercent
 
     return d3
