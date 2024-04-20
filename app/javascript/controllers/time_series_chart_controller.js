@@ -2,13 +2,16 @@ import { Controller } from "@hotwired/stimulus"
 import tailwindColors from "@maybe/tailwindcolors"
 import * as d3 from "d3"
 
-const CHART_TYPES = [ "mini", "full" ]
-
 export default class extends Controller {
-  static values = { series: Object, chartType: String }
+  static values = {
+    series: Object,
+    useLabels: Boolean,
+    useTooltip: Boolean,
+    strokeWidth: { type: Number, default: 2 }
+  }
 
   #_d3MainSvg = null
-  #_d3FullChartGroup = null
+  #_d3MainGroup = null
   #d3Tooltip = null
   #dataPoints = []
   #d3InitialContainerWidth = 0
@@ -31,7 +34,7 @@ export default class extends Controller {
 
   #teardown() {
     this.#_d3MainSvg = null
-    this.#_d3FullChartGroup = null
+    this.#_d3MainGroup = null
     this.#d3Tooltip = null
     this.#dataPoints = []
 
@@ -64,10 +67,8 @@ export default class extends Controller {
   #draw() {
     if (this.#dataPoints.length < 2) {
       this.#drawEmpty()
-    } else if (this.#isFullChart) {
-      this.#drawFullChart()
     } else {
-      this.#drawTrendline()
+      this.#drawChart()
     }
   }
 
@@ -101,16 +102,23 @@ export default class extends Controller {
   }
 
 
-  #drawFullChart() {
-    this.#drawXAxisLabels()
+  #drawChart() {
     this.#drawTrendline()
-    this.#drawTooltip()
-    this.#trackMouseForShowingTooltip()
+
+    if (this.useLabelsValue) {
+      this.#drawXAxisLabels()
+    }
+
+    if (this.useTooltipValue) {
+      this.#drawTooltip()
+      this.#trackMouseForShowingTooltip()
+    }
   }
 
   #drawXAxisLabels() {
     // Add ticks
-    this.#d3FullChartGroup.append("g")
+    this.#d3MainGroup
+      .append("g")
       .attr("transform", `translate(0,${this.#d3ContainerHeight})`)
       .call(
         d3
@@ -123,7 +131,7 @@ export default class extends Controller {
       .remove()
 
     // Style ticks
-    this.#d3FullChartGroup.selectAll(".tick text")
+    this.#d3MainGroup.selectAll(".tick text")
       .style("fill", tailwindColors.gray[500])
       .style("font-size", "12px")
       .style("font-weight", "500")
@@ -136,31 +144,15 @@ export default class extends Controller {
   }
 
   #drawTrendline() {
-    let container
-
-    if (this.#isFullChart) {
-      container = this.#d3FullChartGroup
-    } else {
-      container = this.#d3MainSvg
-    }
-
-    const line = container
+    this.#d3MainGroup
       .append("path")
       .datum(this.#dataPoints)
       .attr("fill", "none")
       .attr("stroke", this.#trendColor)
       .attr("d", this.#d3Line)
-
-    if (this.#isFullChart) {
-      line
-        .attr("stroke-linejoin", "round")
-        .attr("stroke-linecap", "round")
-        .attr("stroke-width", 1.5)
-        .attr("class", "line-chart-path")
-    } else {
-      line
-        .attr("stroke-width", 2)
-    }
+      .attr("stroke-linejoin", "round")
+      .attr("stroke-linecap", "round")
+      .attr("stroke-width", this.strokeWidthValue)
   }
 
   #drawTooltip() {
@@ -180,7 +172,7 @@ export default class extends Controller {
   #trackMouseForShowingTooltip() {
     const bisectDate = d3.bisector(d => d.date).left
 
-    this.#d3FullChartGroup.append("rect")
+    this.#d3MainGroup.append("rect")
       .attr("width", this.#d3ContainerWidth)
       .attr("height", this.#d3ContainerHeight)
       .attr("fill", "none")
@@ -199,11 +191,11 @@ export default class extends Controller {
         const d = xPos - this.#d3XScale(d0.date) > this.#d3XScale(d1.date) - xPos ? d1 : d0
 
         // Reset
-        this.#d3FullChartGroup.selectAll(".data-point-circle").remove()
-        this.#d3FullChartGroup.selectAll(".guideline").remove()
+        this.#d3MainGroup.selectAll(".data-point-circle").remove()
+        this.#d3MainGroup.selectAll(".guideline").remove()
 
         // Big circle
-        this.#d3FullChartGroup
+        this.#d3MainGroup
           .append("circle")
           .attr("class", "data-point-circle")
           .attr("cx", this.#d3XScale(d.date))
@@ -214,7 +206,7 @@ export default class extends Controller {
           .attr("pointer-events", "none")
 
         // Small circle
-        this.#d3FullChartGroup
+        this.#d3MainGroup
           .append("circle")
           .attr("class", "data-point-circle")
           .attr("cx", this.#d3XScale(d.date))
@@ -224,7 +216,7 @@ export default class extends Controller {
           .attr("pointer-events", "none")
 
         // Guideline
-        this.#d3FullChartGroup
+        this.#d3MainGroup
           .append("line")
           .attr("class", "guideline")
           .attr("x1", this.#d3XScale(d.date))
@@ -242,8 +234,8 @@ export default class extends Controller {
           .style("top", event.pageY - 10 + "px")
       })
       .on("mouseout", () => {
-        this.#d3FullChartGroup.selectAll(".guideline").remove()
-        this.#d3FullChartGroup.selectAll(".data-point-circle").remove()
+        this.#d3MainGroup.selectAll(".guideline").remove()
+        this.#d3MainGroup.selectAll(".data-point-circle").remove()
         this.#d3Tooltip.style("opacity", 0)
       })
   }
@@ -331,28 +323,16 @@ export default class extends Controller {
     }
   }
 
-  get #d3FullChartGroup() {
-    if (this.#_d3FullChartGroup) {
-      return this.#_d3FullChartGroup
+  get #d3MainGroup() {
+    if (this.#_d3MainGroup) {
+      return this.#_d3MainGroup
     } else {
-      return this.#_d3FullChartGroup = this.#createFullChartGroup()
-    }
-  }
-
-  get #isFullChart() {
-    return this.#chartType === "full"
-  }
-
-  get #chartType() {
-    if (CHART_TYPES.includes(this.chartTypeValue)) {
-      return this.chartTypeValue
-    } else {
-      return "mini"
+      return this.#_d3MainGroup = this.#createFullChartGroup()
     }
   }
 
   get #margin() {
-    if (this.#isFullChart) {
+    if (this.useLabelsValue) {
       return { top: 20, right: 1, bottom: 30, left: 1 }
     } else {
       return { top: 0, right: 0, bottom: 0, left: 0 }
@@ -404,17 +384,10 @@ export default class extends Controller {
   }
 
   get #d3YScale() {
-    let percentPadding
-
-    if (this.#isFullChart) {
-      percentPadding = 0.15
-    } else {
-      percentPadding = 0.05
-    }
-
+    const reductionPercent = this.useLabelsValue ? 0.15 : 0.05
     const dataMin = d3.min(this.#dataPoints, d => d.value)
     const dataMax = d3.max(this.#dataPoints, d => d.value)
-    const padding = (dataMax - dataMin) * percentPadding
+    const padding = (dataMax - dataMin) * reductionPercent
 
     return d3
       .scaleLinear()

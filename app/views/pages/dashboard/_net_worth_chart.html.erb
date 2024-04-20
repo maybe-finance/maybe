@@ -5,7 +5,9 @@
     class="w-full h-full"
     data-controller="time-series-chart"
     data-time-series-chart-series-value="<%= series.to_json %>"
-    data-time-series-chart-chart-type-value="full"></div>
+    data-time-series-chart-use-labels-value="true"
+    data-time-series-chart-use-tooltip-value="true"
+    data-time-series-chart-stroke-width-value="1.5"></div>
 <% else %>
   <div class="w-full h-full flex items-center justify-center">
     <p class="text-gray-500">No data available for the selected period.</p>
