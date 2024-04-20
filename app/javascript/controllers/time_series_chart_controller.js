@@ -10,12 +10,12 @@ export default class extends Controller {
     strokeWidth: { type: Number, default: 2 }
   }
 
-  #_d3MainSvg = null
-  #_d3MainGroup = null
+  #d3SvgMemo = null
+  #d3GroupMemo = null
   #d3Tooltip = null
-  #normalDataPoints = []
   #d3InitialContainerWidth = 0
   #d3InitialContainerHeight = 0
+  #normalDataPoints = []
 
   connect() {
     this.#install()
@@ -34,8 +34,8 @@ export default class extends Controller {
   }
 
   #teardown() {
-    this.#_d3MainSvg = null
-    this.#_d3MainGroup = null
+    this.#d3SvgMemo = null
+    this.#d3GroupMemo = null
     this.#d3Tooltip = null
     this.#normalDataPoints = []
 
@@ -75,15 +75,15 @@ export default class extends Controller {
 
 
   #drawEmpty() {
-    this.#d3MainSvg.selectAll(".tick").remove()
-    this.#d3MainSvg.selectAll(".domain").remove()
+    this.#d3Svg.selectAll(".tick").remove()
+    this.#d3Svg.selectAll(".domain").remove()
 
     this.#drawDashedLineEmptyState()
     this.#drawCenteredCircleEmptyState()
   }
 
   #drawDashedLineEmptyState() {
-    this.#d3MainSvg
+    this.#d3Svg
       .append("line")
       .attr("x1", this.#d3InitialContainerWidth / 2)
       .attr("y1", 0)
@@ -94,7 +94,7 @@ export default class extends Controller {
   }
 
   #drawCenteredCircleEmptyState() {
-    this.#d3MainSvg
+    this.#d3Svg
       .append("circle")
       .attr("cx", this.#d3InitialContainerWidth / 2)
       .attr("cy", this.#d3InitialContainerHeight / 2)
@@ -118,7 +118,7 @@ export default class extends Controller {
 
   #drawXAxisLabels() {
     // Add ticks
-    this.#d3MainGroup
+    this.#d3Group
       .append("g")
       .attr("transform", `translate(0,${this.#d3ContainerHeight})`)
       .call(
@@ -132,7 +132,7 @@ export default class extends Controller {
       .remove()
 
     // Style ticks
-    this.#d3MainGroup.selectAll(".tick text")
+    this.#d3Group.selectAll(".tick text")
       .style("fill", tailwindColors.gray[500])
       .style("font-size", "12px")
       .style("font-weight", "500")
@@ -145,7 +145,7 @@ export default class extends Controller {
   }
 
   #drawTrendline() {
-    this.#d3MainGroup
+    this.#d3Group
       .append("path")
       .datum(this.#normalDataPoints)
       .attr("fill", "none")
@@ -173,7 +173,7 @@ export default class extends Controller {
   #trackMouseForShowingTooltip() {
     const bisectDate = d3.bisector(d => d.date).left
 
-    this.#d3MainGroup.append("rect")
+    this.#d3Group.append("rect")
       .attr("width", this.#d3ContainerWidth)
       .attr("height", this.#d3ContainerHeight)
       .attr("fill", "none")
@@ -192,11 +192,11 @@ export default class extends Controller {
         const d = xPos - this.#d3XScale(d0.date) > this.#d3XScale(d1.date) - xPos ? d1 : d0
 
         // Reset
-        this.#d3MainGroup.selectAll(".data-point-circle").remove()
-        this.#d3MainGroup.selectAll(".guideline").remove()
+        this.#d3Group.selectAll(".data-point-circle").remove()
+        this.#d3Group.selectAll(".guideline").remove()
 
         // Big circle
-        this.#d3MainGroup
+        this.#d3Group
           .append("circle")
           .attr("class", "data-point-circle")
           .attr("cx", this.#d3XScale(d.date))
@@ -207,7 +207,7 @@ export default class extends Controller {
           .attr("pointer-events", "none")
 
         // Small circle
-        this.#d3MainGroup
+        this.#d3Group
           .append("circle")
           .attr("class", "data-point-circle")
           .attr("cx", this.#d3XScale(d.date))
@@ -217,7 +217,7 @@ export default class extends Controller {
           .attr("pointer-events", "none")
 
         // Guideline
-        this.#d3MainGroup
+        this.#d3Group
           .append("line")
           .attr("class", "guideline")
           .attr("x1", this.#d3XScale(d.date))
@@ -235,8 +235,8 @@ export default class extends Controller {
           .style("top", event.pageY - 10 + "px")
       })
       .on("mouseout", () => {
-        this.#d3MainGroup.selectAll(".guideline").remove()
-        this.#d3MainGroup.selectAll(".data-point-circle").remove()
+        this.#d3Group.selectAll(".guideline").remove()
+        this.#d3Group.selectAll(".data-point-circle").remove()
         this.#d3Tooltip.style("opacity", 0)
       })
   }
@@ -309,26 +309,26 @@ export default class extends Controller {
       .attr("viewBox", [ 0, 0, this.#d3InitialContainerWidth, this.#d3InitialContainerHeight ])
   }
 
-  #createFullChartGroup() {
-    return this.#d3MainSvg
+  #createMainGroup() {
+    return this.#d3Svg
       .append("g")
       .attr("transform", `translate(${this.#margin.left},${this.#margin.top})`)
   }
 
 
-  get #d3MainSvg() {
-    if (this.#_d3MainSvg) {
-      return this.#_d3MainSvg
+  get #d3Svg() {
+    if (this.#d3SvgMemo) {
+      return this.#d3SvgMemo
     } else {
-      return this.#_d3MainSvg = this.#createMainSvg()
+      return this.#d3SvgMemo = this.#createMainSvg()
     }
   }
 
-  get #d3MainGroup() {
-    if (this.#_d3MainGroup) {
-      return this.#_d3MainGroup
+  get #d3Group() {
+    if (this.#d3GroupMemo) {
+      return this.#d3GroupMemo
     } else {
-      return this.#_d3MainGroup = this.#createFullChartGroup()
+      return this.#d3GroupMemo = this.#createMainGroup()
     }
   }
 
