@@ -203,26 +203,29 @@ export default class extends Controller {
         this.#d3FullChartGroup.selectAll(".guideline").remove()
 
         // Big circle
-        this.#d3FullChartGroup.append("circle")
+        this.#d3FullChartGroup
+          .append("circle")
           .attr("class", "data-point-circle")
           .attr("cx", this.#d3XScale(d.date))
           .attr("cy", this.#d3YScale(d.value))
           .attr("r", 8)
-          .attr("fill", tailwindColors.green[500])
+          .attr("fill", this.#trendColor)
           .attr("fill-opacity", "0.1")
           .attr("pointer-events", "none")
 
         // Small circle
-        this.#d3FullChartGroup.append("circle")
+        this.#d3FullChartGroup
+          .append("circle")
           .attr("class", "data-point-circle")
           .attr("cx", this.#d3XScale(d.date))
           .attr("cy", this.#d3YScale(d.value))
           .attr("r", 3)
-          .attr("fill", tailwindColors.green[500])
+          .attr("fill", this.#trendColor)
           .attr("pointer-events", "none")
 
         // Guideline
-        this.#d3FullChartGroup.append("line")
+        this.#d3FullChartGroup
+          .append("line")
           .attr("class", "guideline")
           .attr("x1", this.#d3XScale(d.date))
           .attr("y1", 0)
