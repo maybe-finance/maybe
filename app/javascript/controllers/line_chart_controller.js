@@ -4,7 +4,7 @@ import * as d3 from "d3";
 
 // Connects to data-controller="line-chart"
 export default class extends Controller {
-  static values = { series: Object, label: String, tooltip: String, classification: String };
+  static values = { series: Object, label: String, tooltip: String, classification: String, percentage: String };
 
   connect() {
     this.renderChart(this.seriesValue);
@@ -47,12 +47,12 @@ export default class extends Controller {
         value: Intl.NumberFormat(undefined, {
           style: "currency",
           currency: b.value.currency || "USD",
-        }).format(b.value.amount),
+        }).format(b.value.amount ? +b.value.amount : +b.value),
         change: Intl.NumberFormat(undefined, {
           style: "currency",
           currency: b.value.currency || "USD",
           signDisplay: "always",
-        }).format(b.trend.value.amount),
+        }).format(b.trend.value.amount ? b.trend.value.amount : b.trend.value),
       },
     }));
   }
@@ -159,6 +159,35 @@ export default class extends Controller {
       .x((d) => x(d.date))
       .y((d) => y(d.value));
 
+    const gradient = g
+      .append("linearGradient")
+      .attr("id", "zero-point-gradient")
+      .attr("gradientUnits", "userSpaceOnUse")
+      .attr("x1", 0)
+      .attr("y1", 0)
+      .attr("x2", 0)
+      .attr("y2", height);
+
+    gradient.append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", lineColor)
+      .attr("stop-opacity", 0.5);
+
+    gradient.append("stop")
+      .attr("offset", `${y(0) / height * 100}%`)
+      .attr("stop-color", "white")
+      .attr("stop-opacity", 0);
+
+    gradient.append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", "white")
+      .attr("stop-opacity", 0.5);
+
+    const area = d3.area()
+    .x((d) => x(d.date))
+    .y0(height) // Bottom of the chart
+    .y1((d) => y(d.value)); 
+
     g.append("path")
       .datum(data)
       .attr("fill", "none")
@@ -168,6 +197,12 @@ export default class extends Controller {
       .attr("stroke-width", 1.5)
       .attr("class", "line-chart-path")
       .attr("d", line);
+    
+     // Apply the gradient to the area below the line
+     g.append("path")
+      .datum(data)
+      .attr("fill", "url(#zero-point-gradient)")
+      .attr("d", area);
 
     const isTooltipDisabled = this.tooltipValue === "disable";
 
@@ -259,25 +294,46 @@ export default class extends Controller {
             .attr("r", 3)
             .attr("fill", lineColor)
             .attr("pointer-events", "none");
-  
-          tooltip
-            .html(
-              `<div style="margin-bottom: 4px; color: ${
-                tailwindColors.gray[500]
-              }">${d3.timeFormat("%b %d, %Y")(d.date)}</div>
-                   <div style="display: flex; align-items: center; gap: 8px;">
-                     <svg width="10" height="10">
-                       <circle cx="5" cy="5" r="4" stroke="${
-                         d.styles.color
-                       }" fill="transparent" stroke-width="1"></circle>
-                     </svg>
-                     ${d.formatted.value} <span style="color: ${
-                d.styles.color
-              };">${d.formatted.change} (${d.trend.percent}%)</span>
-              </div>`
-            )
-            .style("left", adjustedX + "px")
-            .style("top", event.pageY - 10 + "px");
+
+          const isPercentageEnabled = this.percentageValue === "enable";
+
+          if(isPercentageEnabled){
+            tooltip
+              .html(
+                `<div style="margin-bottom: 4px; color: ${
+                  tailwindColors.gray[500]
+                }">${d3.timeFormat("%b %d, %Y")(d.date)}</div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <svg width="10" height="10">
+                        <circle cx="5" cy="5" r="4" stroke="${
+                          d.styles.color
+                        }" fill="transparent" stroke-width="1"></circle>
+                      </svg>
+                      <span style="color: ${d.styles.color};">${d.trend.percent}%</span>
+                </div>`
+              )
+              .style("left", adjustedX + "px")
+              .style("top", event.pageY - 10 + "px");
+          }else{
+            tooltip
+              .html(
+                `<div style="margin-bottom: 4px; color: ${
+                  tailwindColors.gray[500]
+                }">${d3.timeFormat("%b %d, %Y")(d.date)}</div>
+                     <div style="display: flex; align-items: center; gap: 8px;">
+                       <svg width="10" height="10">
+                         <circle cx="5" cy="5" r="4" stroke="${
+                           d.styles.color
+                         }" fill="transparent" stroke-width="1"></circle>
+                       </svg>
+                       ${d.formatted.value} <span style="color: ${
+                  d.styles.color
+                };">${d.formatted.change} (${d.trend.percent}%)</span>
+                </div>`
+              )
+              .style("left", adjustedX + "px")
+              .style("top", event.pageY - 10 + "px");
+          }
   
           g.selectAll(".guideline").remove(); // Remove existing line to ensure only one is shown at a time
           g.append("line")
