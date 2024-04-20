@@ -6,8 +6,7 @@ export default class extends Controller {
   static values = {
     data: Object,
     useLabels: Boolean,
-    useTooltip: Boolean,
-    strokeWidth: { type: Number, default: 2 }
+    useTooltip: Boolean
   }
 
   #d3SvgMemo = null
