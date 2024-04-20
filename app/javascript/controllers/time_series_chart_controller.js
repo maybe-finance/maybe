@@ -243,39 +243,53 @@ export default class extends Controller {
 
 
   #tooltipTemplate(data) {
-    if (data.currency) {
-      return(`
-        <div style="margin-bottom: 4px; color: ${tailwindColors.gray[500]};">
-          ${d3.timeFormat("%b %d, %Y")(data.date)}
-        </div>
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <svg width="10" height="10">
-            <circle cx="5" cy="5" r="4" stroke="${this.#dataTrendColor(data)}" fill="transparent" stroke-width="1"></circle>
-          </svg>
-          ${this.#currencyValue(data)} <span style="color: ${this.#dataTrendColor(data)};">${this.#currencyChange(data)} (${data.trend.percent}%)</span>
-        </div>
-      `)
-    } else {
-      return(`
-        <div style="margin-bottom: 4px; color: ${tailwindColors.gray[500]};">
-          ${d3.timeFormat("%b %d, %Y")(data.date)}
-        </div>
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <svg width="10" height="10">
-            <circle cx="5" cy="5" r="4" stroke="${this.#dataTrendColor(data)}" fill="transparent" stroke-width="1"></circle>
-          </svg>
-          ${data.value} <span style="color: ${this.#dataTrendColor(data)};">${this.#decimalChange(data)} (${data.trend.percent}%)</span>
-        </div>
-      `)
-    }
+    return(`
+      <div style="margin-bottom: 4px; color: ${tailwindColors.gray[500]};">
+        ${d3.timeFormat("%b %d, %Y")(data.date)}
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <svg width="10" height="10">
+          <circle
+            cx="5"
+            cy="5"
+            r="4"
+            stroke="${this.#tooltipTrendColor(data)}"
+            fill="transparent"
+            stroke-width="1"></circle>
+        </svg>
+
+        ${this.#tooltipValue(data)}
+
+        <span style="color: ${this.#tooltipTrendColor(data)};">
+          ${this.#tooltipChange(data)} (${data.trend.percent}%)
+        </span>
+      </div>
+    `)
   }
 
-  #dataTrendColor(data) {
+  #tooltipTrendColor(data) {
     return {
       up: tailwindColors.success,
       down: tailwindColors.error,
       flat: tailwindColors.gray[500],
     }[data.trend.direction]
+  }
+
+  #tooltipValue(data) {
+    if (data.currency) {
+      return this.#currencyValue(data)
+    } else {
+      return data.value
+    }
+  }
+
+  #tooltipChange(data) {
+    if (data.currency) {
+      return this.#currencyChange(data)
+    } else {
+      return this.#decimalChange(data)
+    }
   }
 
   #currencyValue(data) {
