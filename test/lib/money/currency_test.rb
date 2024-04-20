@@ -46,4 +46,8 @@ class Money::CurrencyTest < ActiveSupport::TestCase
         assert_equal "12", value4.cents_str(2)
         assert_equal "123", value4.cents_str(3)
     end
+
+    test "step returns the smallest value of the currency" do
+      assert_equal 0.01, @currency.step
+    end
 end

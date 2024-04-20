@@ -1,6 +1,7 @@
 module FormsHelper
-  def form_field_tag(&)
-    tag.div class: "form-field", &
+  def form_field_tag(options = {}, &block)
+    options[:class] = [ "form-field", options[:class] ].compact.join(" ")
+    tag.div **options, &block
   end
 
   def radio_tab_tag(form:, name:, value:, label:, icon:, checked: false, disabled: false)
