@@ -98,4 +98,17 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to transactions_url
   end
+
+  test "should sync account after destroy" do
+    account = @transaction.account
+    date = @transaction.date
+    amount = @transaction.amount
+
+    account.sync
+
+    assert_difference("account.balance_on(date)", amount) do
+      delete transaction_url(@transaction)
+      perform_enqueued_jobs
+    end
+  end
 end

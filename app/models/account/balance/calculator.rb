@@ -100,7 +100,8 @@ class Account::Balance::Calculator
           oldest_valuation = normalized_valuations.find { |v| v["date"] == oldest_valuation_date }
           oldest_valuation["value"].to_d
         else
-          net_transaction_flows = normalized_transactions.sum { |t| t["amount"].to_d }
+          prior_transactions = normalize_entries_to_account_currency(@account.transactions.where("date < ?", @calc_start_date).select(:date, :amount, :currency), :amount)
+          net_transaction_flows = prior_transactions.sum { |t| t["amount"].to_d }
           net_transaction_flows *= -1 if @account.classification == "liability"
           @account.balance.to_d + net_transaction_flows
         end
