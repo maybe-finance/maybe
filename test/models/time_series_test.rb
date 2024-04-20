@@ -29,7 +29,7 @@ class TimeSeriesTest < ActiveSupport::TestCase
 
     assert_nil series.first
     assert_nil series.last
-    assert_equal({ values: [], trend: { favorable_direction: "up", direction: "flat", value: 0, percent: 0.0 }, favorable_direction: "up" }.to_json, series.to_json)
+    assert_equal({ values: [], trend: { favorableDirection: "up", direction: "flat", value: 0, percent: 0.0 }, favorableDirection: "up" }.to_json, series.to_json)
   end
 
   test "money series can be serialized to json" do
@@ -38,16 +38,16 @@ class TimeSeriesTest < ActiveSupport::TestCase
         {
           date: 1.day.ago.to_date,
           value: { amount: "100.0", currency: "USD" },
-          trend: { favorable_direction: "up", direction: "flat", value: { amount: "0.0", currency: "USD" }, percent: 0.0 }
+          trend: { favorableDirection: "up", direction: "flat", value: { amount: "0.0", currency: "USD" }, percent: 0.0 }
         },
         {
           date: Date.current,
           value: { amount: "200.0", currency: "USD" },
-          trend: { favorable_direction: "up", direction: "up", value: { amount: "100.0", currency: "USD" }, percent: 100.0 }
+          trend: { favorableDirection: "up", direction: "up", value: { amount: "100.0", currency: "USD" }, percent: 100.0 }
         }
       ],
-      trend: { favorable_direction: "up", direction: "up", value: { amount: "100.0", currency: "USD" }, percent: 100.0 },
-      favorable_direction: "up"
+      trend: { favorableDirection: "up", direction: "up", value: { amount: "100.0", currency: "USD" }, percent: 100.0 },
+      favorableDirection: "up"
     }.to_json
 
     series = TimeSeries.new([ { date: 1.day.ago.to_date, value: Money.new(100) }, { date: Date.current, value: Money.new(200) } ])
@@ -58,11 +58,11 @@ class TimeSeriesTest < ActiveSupport::TestCase
   test "numeric series can be serialized to json" do
     expected_values = {
       values: [
-        { date: 1.day.ago.to_date, value: 100, trend: { favorable_direction: "up", direction: "flat", value: 0, percent: 0.0 } },
-        { date: Date.current, value: 200, trend: { favorable_direction: "up", direction: "up", value: 100, percent: 100.0 } }
+        { date: 1.day.ago.to_date, value: 100, trend: { favorableDirection: "up", direction: "flat", value: 0, percent: 0.0 } },
+        { date: Date.current, value: 200, trend: { favorableDirection: "up", direction: "up", value: 100, percent: 100.0 } }
       ],
-      trend: { favorable_direction: "up", direction: "up", value: 100, percent: 100.0 },
-      favorable_direction: "up"
+      trend: { favorableDirection: "up", direction: "up", value: 100, percent: 100.0 },
+      favorableDirection: "up"
     }.to_json
 
     series = TimeSeries.new([ { date: 1.day.ago.to_date, value: 100 }, { date: Date.current, value: 200 } ])
