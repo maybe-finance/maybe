@@ -62,7 +62,7 @@ export default class extends Controller {
 
 
   #draw() {
-    if (this.#dataPoints.length < 2) {
+    if (this.#dataPoints.length == 0) {
       this.#drawEmpty()
     } else if (this.#isFullChart) {
       this.#drawFullChart()
@@ -86,7 +86,7 @@ export default class extends Controller {
       .attr("x1", this.#d3InitialContainerWidth / 2)
       .attr("y1", 0)
       .attr("x2", this.#d3InitialContainerWidth / 2)
-      .attr("y2", this.d3InitialContainerHeight)
+      .attr("y2", this.#d3InitialContainerHeight)
       .attr("stroke", tailwindColors.gray[300])
       .attr("stroke-dasharray", "4, 4")
   }
@@ -95,7 +95,7 @@ export default class extends Controller {
     this.#d3MainSvg
       .append("circle")
       .attr("cx", this.#d3InitialContainerWidth / 2)
-      .attr("cy", this.d3InitialContainerHeight / 2)
+      .attr("cy", this.#d3InitialContainerHeight / 2)
       .attr("r", 4)
       .style("fill", tailwindColors.gray[400])
   }
