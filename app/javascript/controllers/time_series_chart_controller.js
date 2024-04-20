@@ -2,13 +2,15 @@ import { Controller } from "@hotwired/stimulus"
 import tailwindColors from "@maybe/tailwindcolors"
 import * as d3 from "d3"
 
-const CHARTABLE_TYPES = [ "scalar", "currency" ]
+const CHART_TYPES = [ "mini", "full" ]
 
 export default class extends Controller {
-  static values = { series: Object, chartedType: String }
+  static values = { series: Object, chartType: String }
 
   #_dataPoints = []
   #_d3Svg = null
+  #_d3FullChartGroup = null
+  #_d3Tooltip = null
   #_d3InitialContainerWidth = 0
   #_d3InitialContainerHeight = 0
 
@@ -34,8 +36,7 @@ export default class extends Controller {
 
   #install() {
     this.#normalizeDataPoints()
-    this.#d3InitialContainerWidth = this.#d3Container.node().clientWidth
-    this.#d3InitialContainerHeight = this.#d3Container.node().clientHeight
+    this.#rememberInitialContainerSize()
     this.#draw()
   }
 
@@ -48,11 +49,16 @@ export default class extends Controller {
     }))
   }
 
+  #rememberInitialContainerSize() {
+    this.#d3InitialContainerWidth = this.#d3Container.node().clientWidth
+    this.#d3InitialContainerHeight = this.#d3Container.node().clientHeight
+  }
+
   #draw() {
     if (this.#dataPoints.length < 2) {
       this.#drawEmpty()
-    } else if (this.#chartedType === "currency") {
-      this.#drawCurrency()
+    } else if (this.#isFullChart) {
+      this.#drawFullChart()
     } else {
       this.#drawLine()
     }
@@ -62,6 +68,11 @@ export default class extends Controller {
     this.#d3Svg.selectAll(".tick").remove()
     this.#d3Svg.selectAll(".domain").remove()
 
+    this.#drawDashedLine()
+    this.#drawCenteredCircle()
+  }
+
+  #drawDashedLine() {
     this.#d3Svg
       .append("line")
       .attr("x1", this.#d3InitialContainerWidth / 2)
@@ -70,7 +81,9 @@ export default class extends Controller {
       .attr("y2", this.d3InitialContainerHeight)
       .attr("stroke", tailwindColors.gray[300])
       .attr("stroke-dasharray", "4, 4")
+  }
 
+  #drawCenteredCircle() {
     this.#d3Svg
       .append("circle")
       .attr("cx", this.#d3InitialContainerWidth / 2)
@@ -79,13 +92,16 @@ export default class extends Controller {
       .style("fill", tailwindColors.gray[400])
   }
 
-  #drawCurrency() {
-    const g = this.#d3Svg
-      .append("g")
-      .attr("transform", `translate(${this.#margin.left},${this.#margin.top})`)
+  #drawFullChart() {
+    this.#drawXAxisLabels()
+    this.#drawLine()
+    this.#drawTooltip()
+    this.#trackMouseForShowingTooltip()
+  }
 
-    // X-Axis labels
-    g.append("g")
+  #drawXAxisLabels() {
+    // Add ticks
+    this.#d3FullChartGroup.append("g")
       .attr("transform", `translate(0,${this.#d3ContainerHeight})`)
       .call(
         d3
@@ -97,7 +113,8 @@ export default class extends Controller {
       .select(".domain")
       .remove()
 
-    g.selectAll(".tick text")
+    // Style ticks
+    this.#d3FullChartGroup.selectAll(".tick text")
       .style("fill", tailwindColors.gray[500])
       .style("font-size", "12px")
       .style("font-weight", "500")
@@ -107,111 +124,9 @@ export default class extends Controller {
         return i === 0 ? "5em" : "-5em"
       })
       .attr("dy", "0em")
-
-    g.append("path")
-      .datum(this.#dataPoints)
-      .attr("fill", "none")
-      .attr("stroke", tailwindColors.green[500])
-      .attr("stroke-linejoin", "round")
-      .attr("stroke-linecap", "round")
-      .attr("stroke-width", 1.5)
-      .attr("class", "line-chart-path")
-      .attr("d", this.#d3Line)
-
-    const tooltip = d3
-      .select("#lineChart")
-      .append("div")
-      .style("position", "absolute")
-      .style("padding", "8px")
-      .style("font", "14px Inter, sans-serif")
-      .style("background", tailwindColors.white)
-      .style("border", `1px solid ${tailwindColors["alpha-black"][100]}`)
-      .style("border-radius", "10px")
-      .style("pointer-events", "none")
-      .style("opacity", 0) // Starts as hidden
-
-    // Helper to find the closest data point to the mouse
-    const bisectDate = d3.bisector(function (d) {
-      return d.date
-    }).left
-
-    // Create an invisible rectangle that captures mouse events (regular SVG elements don't capture mouse events by default)
-    g.append("rect")
-      .attr("width", this.#d3ContainerWidth)
-      .attr("height", this.#d3ContainerHeight)
-      .attr("fill", "none")
-      .attr("pointer-events", "all")
-      // When user hovers over the chart, show the tooltip and a circle at the closest data point
-      .on("mousemove", (event) => {
-        tooltip.style("opacity", 1)
-
-        const tooltipWidth = 250 // Estimate or dynamically calculate the tooltip width
-        const pageWidth = document.body.clientWidth
-        const tooltipX = event.pageX + 10
-        const overflowX = tooltipX + tooltipWidth - pageWidth
-
-        const [xPos] = d3.pointer(event)
-
-        const x0 = bisectDate(this.#dataPoints, this.#d3XScale.invert(xPos), 1)
-        const d0 = this.#dataPoints[x0 - 1]
-        const d1 = this.#dataPoints[x0]
-        const d = xPos - this.#d3XScale(d0.date) > this.#d3XScale(d1.date) - xPos ? d1 : d0
-
-        // Adjust tooltip position based on overflow
-        const adjustedX =
-          overflowX > 0 ? event.pageX - overflowX - 20 : tooltipX
-
-        g.selectAll(".data-point-circle").remove() // Remove existing circles to ensure only one is shown at a time
-        g.append("circle")
-          .attr("class", "data-point-circle")
-          .attr("cx", this.#d3XScale(d.date))
-          .attr("cy", this.#d3YScale(d.value))
-          .attr("r", 8)
-          .attr("fill", tailwindColors.green[500])
-          .attr("fill-opacity", "0.1")
-          .attr("pointer-events", "none")
-
-        g.append("circle")
-          .attr("class", "data-point-circle")
-          .attr("cx", this.#d3XScale(d.date))
-          .attr("cy", this.#d3YScale(d.value))
-          .attr("r", 3)
-          .attr("fill", tailwindColors.green[500])
-          .attr("pointer-events", "none")
-
-        tooltip
-          .html(
-            `<div style="margin-bottom: 4px; color: ${tailwindColors.gray[500]};">
-              ${d3.timeFormat("%b %d, %Y")(d.date)}
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <svg width="10" height="10">
-                <circle cx="5" cy="5" r="4" stroke="${this.#currencyColor(d)}" fill="transparent" stroke-width="1"></circle>
-              </svg>
-              ${this.#currencyValue(d)} <span style="color: ${this.#currencyColor(d)};">${this.#currencyChange(d)} (${d.trend.percent}%)</span>
-            </div>`
-          )
-          .style("left", adjustedX + "px")
-          .style("top", event.pageY - 10 + "px")
-
-        g.selectAll(".guideline").remove() // Remove existing line to ensure only one is shown at a time
-        g.append("line")
-          .attr("class", "guideline")
-          .attr("x1", this.#d3XScale(d.date))
-          .attr("y1", 0)
-          .attr("x2", this.#d3XScale(d.date))
-          .attr("y2", this.#d3ContainerHeight)
-          .attr("stroke", tailwindColors.gray[300])
-          .attr("stroke-dasharray", "4, 4")
-      })
-      .on("mouseout", () => {
-        g.selectAll(".guideline").remove()
-        g.selectAll(".data-point-circle").remove()
-        tooltip.style("opacity", 0)
-      })
   }
 
-  #currencyColor(data) {
+  #dataTrendColor(data) {
     return {
       up: tailwindColors.success,
       down: tailwindColors.error,
@@ -235,13 +150,113 @@ export default class extends Controller {
   }
 
   #drawLine() {
-    this.#d3Svg
+    let container
+
+    if (this.#isFullChart) {
+      container = this.#d3FullChartGroup
+    } else {
+      container = this.#d3Svg
+    }
+
+    const line = container
       .append("path")
       .datum(this.#dataPoints)
       .attr("fill", "none")
       .attr("stroke", this.#trendColor)
-      .attr("stroke-width", 2)
       .attr("d", this.#d3Line)
+
+    if (this.#isFullChart) {
+      line
+        .attr("stroke-linejoin", "round")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-width", 1.5)
+        .attr("class", "line-chart-path")
+    } else {
+      line
+        .attr("stroke-width", 2)
+    }
+  }
+
+  #drawTooltip() {
+    this.#d3Tooltip = d3
+      .select("#lineChart")
+      .append("div")
+      .style("position", "absolute")
+      .style("padding", "8px")
+      .style("font", "14px Inter, sans-serif")
+      .style("background", tailwindColors.white)
+      .style("border", `1px solid ${tailwindColors["alpha-black"][100]}`)
+      .style("border-radius", "10px")
+      .style("pointer-events", "none")
+      .style("opacity", 0) // Starts as hidden
+  }
+
+  #trackMouseForShowingTooltip() {
+    const bisectDate = d3.bisector(d => d.date).left
+
+    this.#d3FullChartGroup.append("rect")
+      .attr("width", this.#d3ContainerWidth)
+      .attr("height", this.#d3ContainerHeight)
+      .attr("fill", "none")
+      .attr("pointer-events", "all")
+      .on("mousemove", (event) => {
+        const estimatedTooltipWidth = 250
+        const pageWidth = document.body.clientWidth
+        const tooltipX = event.pageX + 10
+        const overflowX = tooltipX + estimatedTooltipWidth - pageWidth
+        const adjustedX = overflowX > 0 ? event.pageX - overflowX - 20 : tooltipX
+
+        const [xPos] = d3.pointer(event)
+        const x0 = bisectDate(this.#dataPoints, this.#d3XScale.invert(xPos), 1)
+        const d0 = this.#dataPoints[x0 - 1]
+        const d1 = this.#dataPoints[x0]
+        const d = xPos - this.#d3XScale(d0.date) > this.#d3XScale(d1.date) - xPos ? d1 : d0
+
+        // Reset
+        this.#d3FullChartGroup.selectAll(".data-point-circle").remove()
+        this.#d3FullChartGroup.selectAll(".guideline").remove()
+
+        // Big circle
+        this.#d3FullChartGroup.append("circle")
+          .attr("class", "data-point-circle")
+          .attr("cx", this.#d3XScale(d.date))
+          .attr("cy", this.#d3YScale(d.value))
+          .attr("r", 8)
+          .attr("fill", tailwindColors.green[500])
+          .attr("fill-opacity", "0.1")
+          .attr("pointer-events", "none")
+
+        // Small circle
+        this.#d3FullChartGroup.append("circle")
+          .attr("class", "data-point-circle")
+          .attr("cx", this.#d3XScale(d.date))
+          .attr("cy", this.#d3YScale(d.value))
+          .attr("r", 3)
+          .attr("fill", tailwindColors.green[500])
+          .attr("pointer-events", "none")
+
+        // Guideline
+        this.#d3FullChartGroup.append("line")
+          .attr("class", "guideline")
+          .attr("x1", this.#d3XScale(d.date))
+          .attr("y1", 0)
+          .attr("x2", this.#d3XScale(d.date))
+          .attr("y2", this.#d3ContainerHeight)
+          .attr("stroke", tailwindColors.gray[300])
+          .attr("stroke-dasharray", "4, 4")
+
+        // Render tooltip
+        this.#d3Tooltip
+          .html(this.#tooltipTemplate(d))
+          .style("opacity", 1)
+          .style("left", adjustedX + "px")
+          .style("top", event.pageY - 10 + "px")
+      })
+      .on("mouseout", () => {
+        this.#d3FullChartGroup.selectAll(".guideline").remove()
+        this.#d3FullChartGroup.selectAll(".data-point-circle").remove()
+        this.#d3Tooltip.style("opacity", 0)
+      })
   }
 
   #createD3Svg() {
@@ -252,8 +267,32 @@ export default class extends Controller {
       .attr("viewBox", [ 0, 0, this.#d3InitialContainerWidth, this.#d3InitialContainerHeight ])
   }
 
+  #createD3FullChartGroup() {
+    return this.#d3Svg
+      .append("g")
+      .attr("transform", `translate(${this.#margin.left},${this.#margin.top})`)
+  }
+
+  #tooltipTemplate(data) {
+    return(`
+      <div style="margin-bottom: 4px; color: ${tailwindColors.gray[500]};">
+        ${d3.timeFormat("%b %d, %Y")(data.date)}
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <svg width="10" height="10">
+          <circle cx="5" cy="5" r="4" stroke="${this.#dataTrendColor(data)}" fill="transparent" stroke-width="1"></circle>
+        </svg>
+        ${this.#currencyValue(data)} <span style="color: ${this.#dataTrendColor(data)};">${this.#currencyChange(data)} (${data.trend.percent}%)</span>
+      </div>
+    `)
+  }
+
+  get #isFullChart() {
+    return this.#chartType === "full"
+  }
+
   get #margin() {
-    if (this.#chartedType === "currency") {
+    if (this.#isFullChart) {
       return { top: 20, right: 1, bottom: 30, left: 1 }
     } else {
       return { top: 0, right: 0, bottom: 0, left: 0 }
@@ -268,11 +307,11 @@ export default class extends Controller {
     this.#_dataPoints = dataPoints
   }
 
-  get #chartedType() {
-    if (CHARTABLE_TYPES.includes(this.chartedTypeValue)) {
-      return this.chartedTypeValue
+  get #chartType() {
+    if (CHART_TYPES.includes(this.chartTypeValue)) {
+      return this.chartTypeValue
     } else {
-      return "scalar"
+      return "mini"
     }
   }
 
@@ -281,6 +320,14 @@ export default class extends Controller {
       return this.#_d3Svg
     } else {
       return this.#_d3Svg = this.#createD3Svg()
+    }
+  }
+
+  get #d3FullChartGroup() {
+    if (this.#_d3FullChartGroup) {
+      return this.#_d3FullChartGroup
+    } else {
+      return this.#_d3FullChartGroup = this.#createD3FullChartGroup()
     }
   }
 
@@ -298,6 +345,14 @@ export default class extends Controller {
 
   set #d3InitialContainerHeight(value) {
     this.#_d3InitialContainerHeight = value
+  }
+
+  get #d3Tooltip() {
+    return this.#_d3Tooltip
+  }
+
+  set #d3Tooltip(value) {
+    this.#_d3Tooltip = value
   }
 
   get #d3ContainerWidth() {
@@ -347,7 +402,7 @@ export default class extends Controller {
   get #d3YScale() {
     let percentPadding
 
-    if (this.#chartedType === "currency") {
+    if (this.#isFullChart) {
       percentPadding = 0.15
     } else {
       percentPadding = 0.05
