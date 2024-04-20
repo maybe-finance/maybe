@@ -248,22 +248,28 @@ export default class extends Controller {
         ${d3.timeFormat("%b %d, %Y")(data.date)}
       </div>
 
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <svg width="10" height="10">
-          <circle
-            cx="5"
-            cy="5"
-            r="4"
-            stroke="${this.#tooltipTrendColor(data)}"
-            fill="transparent"
-            stroke-width="1"></circle>
-        </svg>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <svg width="10" height="10">
+            <circle
+              cx="5"
+              cy="5"
+              r="4"
+              stroke="${this.#tooltipTrendColor(data)}"
+              fill="transparent"
+              stroke-width="1"></circle>
+          </svg>
 
-        ${this.#tooltipValue(data)}
+          ${this.#tooltipValue(data)}
+        </div>
 
-        <span style="color: ${this.#tooltipTrendColor(data)};">
-          ${this.#tooltipChange(data)} (${data.trend.percent}%)
-        </span>
+        ${data.trend.value == 0 || data.trend.value.amount == 0 ? `
+          <span style="width: 80px;"></span>
+        ` : `
+          <span style="color: ${this.#tooltipTrendColor(data)};">
+            ${this.#tooltipChange(data)} (${data.trend.percent}%)
+          </span>
+        `}
       </div>
     `)
   }
