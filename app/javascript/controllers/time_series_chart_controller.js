@@ -7,12 +7,12 @@ const CHART_TYPES = [ "mini", "full" ]
 export default class extends Controller {
   static values = { series: Object, chartType: String }
 
-  #_dataPoints = []
-  #_d3Svg = null
+  #_d3MainSvg = null
   #_d3FullChartGroup = null
-  #_d3Tooltip = null
-  #_d3InitialContainerWidth = 0
-  #_d3InitialContainerHeight = 0
+  #d3Tooltip = null
+  #dataPoints = []
+  #d3InitialContainerWidth = 0
+  #d3InitialContainerHeight = 0
 
   connect() {
     this.#install()
@@ -23,14 +23,18 @@ export default class extends Controller {
     document.removeEventListener("turbo:load", this.#reinstall)
   }
 
+
   #reinstall = () => {
     this.#teardown()
     this.#install()
   }
 
   #teardown() {
-    this.#_d3Svg = null
-    this.#_dataPoints = []
+    this.#_d3MainSvg = null
+    this.#_d3FullChartGroup = null
+    this.#d3Tooltip = null
+    this.#dataPoints = []
+
     this.#d3Container.selectAll("*").remove()
   }
 
@@ -39,6 +43,7 @@ export default class extends Controller {
     this.#rememberInitialContainerSize()
     this.#draw()
   }
+
 
   #normalizeDataPoints() {
     this.#dataPoints = (this.seriesValue.values || []).map((d) => ({
@@ -49,10 +54,12 @@ export default class extends Controller {
     }))
   }
 
+
   #rememberInitialContainerSize() {
     this.#d3InitialContainerWidth = this.#d3Container.node().clientWidth
     this.#d3InitialContainerHeight = this.#d3Container.node().clientHeight
   }
+
 
   #draw() {
     if (this.#dataPoints.length < 2) {
@@ -60,20 +67,21 @@ export default class extends Controller {
     } else if (this.#isFullChart) {
       this.#drawFullChart()
     } else {
-      this.#drawLine()
+      this.#drawTrendline()
     }
   }
 
-  #drawEmpty() {
-    this.#d3Svg.selectAll(".tick").remove()
-    this.#d3Svg.selectAll(".domain").remove()
 
-    this.#drawDashedLine()
-    this.#drawCenteredCircle()
+  #drawEmpty() {
+    this.#d3MainSvg.selectAll(".tick").remove()
+    this.#d3MainSvg.selectAll(".domain").remove()
+
+    this.#drawDashedLineEmptyState()
+    this.#drawCenteredCircleEmptyState()
   }
 
-  #drawDashedLine() {
-    this.#d3Svg
+  #drawDashedLineEmptyState() {
+    this.#d3MainSvg
       .append("line")
       .attr("x1", this.#d3InitialContainerWidth / 2)
       .attr("y1", 0)
@@ -83,8 +91,8 @@ export default class extends Controller {
       .attr("stroke-dasharray", "4, 4")
   }
 
-  #drawCenteredCircle() {
-    this.#d3Svg
+  #drawCenteredCircleEmptyState() {
+    this.#d3MainSvg
       .append("circle")
       .attr("cx", this.#d3InitialContainerWidth / 2)
       .attr("cy", this.d3InitialContainerHeight / 2)
@@ -92,9 +100,10 @@ export default class extends Controller {
       .style("fill", tailwindColors.gray[400])
   }
 
+
   #drawFullChart() {
     this.#drawXAxisLabels()
-    this.#drawLine()
+    this.#drawTrendline()
     this.#drawTooltip()
     this.#trackMouseForShowingTooltip()
   }
@@ -126,36 +135,13 @@ export default class extends Controller {
       .attr("dy", "0em")
   }
 
-  #dataTrendColor(data) {
-    return {
-      up: tailwindColors.success,
-      down: tailwindColors.error,
-      flat: tailwindColors.gray[500],
-    }[data.trend.direction]
-  }
-
-  #currencyValue(data) {
-    return Intl.NumberFormat(undefined, {
-      style: "currency",
-      currency: data.currency || "USD",
-    }).format(data.value)
-  }
-
-  #currencyChange(data) {
-    return Intl.NumberFormat(undefined, {
-      style: "currency",
-      currency: data.currency || "USD",
-      signDisplay: "always",
-    }).format(data.trend.value.amount)
-  }
-
-  #drawLine() {
+  #drawTrendline() {
     let container
 
     if (this.#isFullChart) {
       container = this.#d3FullChartGroup
     } else {
-      container = this.#d3Svg
+      container = this.#d3MainSvg
     }
 
     const line = container
@@ -259,19 +245,6 @@ export default class extends Controller {
       })
   }
 
-  #createD3Svg() {
-    return this.#d3Container
-      .append("svg")
-      .attr("width", this.#d3InitialContainerWidth)
-      .attr("height", this.#d3InitialContainerHeight)
-      .attr("viewBox", [ 0, 0, this.#d3InitialContainerWidth, this.#d3InitialContainerHeight ])
-  }
-
-  #createD3FullChartGroup() {
-    return this.#d3Svg
-      .append("g")
-      .attr("transform", `translate(${this.#margin.left},${this.#margin.top})`)
-  }
 
   #tooltipTemplate(data) {
     return(`
@@ -287,24 +260,63 @@ export default class extends Controller {
     `)
   }
 
-  get #isFullChart() {
-    return this.#chartType === "full"
+  #dataTrendColor(data) {
+    return {
+      up: tailwindColors.success,
+      down: tailwindColors.error,
+      flat: tailwindColors.gray[500],
+    }[data.trend.direction]
   }
 
-  get #margin() {
-    if (this.#isFullChart) {
-      return { top: 20, right: 1, bottom: 30, left: 1 }
+  #currencyValue(data) {
+    return Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency: data.currency || "USD",
+    }).format(data.value)
+  }
+
+  #currencyChange(data) {
+    return Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency: data.currency || "USD",
+      signDisplay: "always",
+    }).format(data.trend.value.amount)
+  }
+
+
+  #createMainSvg() {
+    return this.#d3Container
+      .append("svg")
+      .attr("width", this.#d3InitialContainerWidth)
+      .attr("height", this.#d3InitialContainerHeight)
+      .attr("viewBox", [ 0, 0, this.#d3InitialContainerWidth, this.#d3InitialContainerHeight ])
+  }
+
+  #createFullChartGroup() {
+    return this.#d3MainSvg
+      .append("g")
+      .attr("transform", `translate(${this.#margin.left},${this.#margin.top})`)
+  }
+
+
+  get #d3MainSvg() {
+    if (this.#_d3MainSvg) {
+      return this.#_d3MainSvg
     } else {
-      return { top: 0, right: 0, bottom: 0, left: 0 }
+      return this.#_d3MainSvg = this.#createMainSvg()
     }
   }
 
-  get #dataPoints() {
-    return this.#_dataPoints
+  get #d3FullChartGroup() {
+    if (this.#_d3FullChartGroup) {
+      return this.#_d3FullChartGroup
+    } else {
+      return this.#_d3FullChartGroup = this.#createFullChartGroup()
+    }
   }
 
-  set #dataPoints(dataPoints) {
-    this.#_dataPoints = dataPoints
+  get #isFullChart() {
+    return this.#chartType === "full"
   }
 
   get #chartType() {
@@ -315,44 +327,12 @@ export default class extends Controller {
     }
   }
 
-  get #d3Svg() {
-    if (this.#_d3Svg) {
-      return this.#_d3Svg
+  get #margin() {
+    if (this.#isFullChart) {
+      return { top: 20, right: 1, bottom: 30, left: 1 }
     } else {
-      return this.#_d3Svg = this.#createD3Svg()
+      return { top: 0, right: 0, bottom: 0, left: 0 }
     }
-  }
-
-  get #d3FullChartGroup() {
-    if (this.#_d3FullChartGroup) {
-      return this.#_d3FullChartGroup
-    } else {
-      return this.#_d3FullChartGroup = this.#createD3FullChartGroup()
-    }
-  }
-
-  get #d3InitialContainerWidth() {
-    return this.#_d3InitialContainerWidth
-  }
-
-  set #d3InitialContainerWidth(value) {
-    this.#_d3InitialContainerWidth = value
-  }
-
-  get #d3InitialContainerHeight() {
-    return this.#_d3InitialContainerHeight
-  }
-
-  set #d3InitialContainerHeight(value) {
-    this.#_d3InitialContainerHeight = value
-  }
-
-  get #d3Tooltip() {
-    return this.#_d3Tooltip
-  }
-
-  set #d3Tooltip(value) {
-    this.#_d3Tooltip = value
   }
 
   get #d3ContainerWidth() {
@@ -360,7 +340,7 @@ export default class extends Controller {
   }
 
   get #d3ContainerHeight() {
-    return this.#_d3InitialContainerHeight - this.#margin.top - this.#margin.bottom
+    return this.#d3InitialContainerHeight - this.#margin.top - this.#margin.bottom
   }
 
   get #d3Container() {
