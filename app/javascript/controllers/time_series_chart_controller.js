@@ -182,7 +182,7 @@ export default class extends Controller {
           .axisBottom(this.#d3XScale)
           .tickValues([ this.#normalDataPoints[0].date, this.#normalDataPoints[this.#normalDataPoints.length - 1].date ])
           .tickSize(0)
-          .tickFormat(d3.timeFormat("%b %Y"))
+          .tickFormat(d3.timeFormat("%d %b %Y"))
       )
       .select(".domain")
       .remove()
