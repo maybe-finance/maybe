@@ -6,7 +6,8 @@ export default class extends Controller {
   static values = {
     data: Object,
     useLabels: Boolean,
-    useTooltip: Boolean
+    useTooltip: Boolean,
+    usePercentSign: Boolean
   }
 
   #d3SvgMemo = null
@@ -359,7 +360,7 @@ export default class extends Controller {
               stroke-width="1"></circle>
           </svg>
 
-          ${this.#tooltipValue(data)}
+          ${this.#tooltipValue(data)}${this.usePercentSignValue ? "%" : ""}
         </div>
 
         ${data.trend.value == 0 || data.trend.value.amount == 0 ? `
