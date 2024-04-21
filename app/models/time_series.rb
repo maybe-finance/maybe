@@ -15,7 +15,7 @@ class TimeSeries
 
   def initialize(data, favorable_direction: "up")
     @favorable_direction = (favorable_direction.presence_in(DIRECTIONS) || "up").inquiry
-    @values = initialize_values data
+    @values = initialize_values data.sort_by { |d| d[:date] }
   end
 
   def first
