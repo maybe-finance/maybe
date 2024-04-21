@@ -308,7 +308,7 @@ export default class extends Controller {
           .attr("cx", this.#d3XScale(d.date))
           .attr("cy", this.#d3YScale(d.value))
           .attr("r", 8)
-          .attr("fill", this.#trendColor)
+          .attr("fill", this.#tooltipTrendColor(d))
           .attr("fill-opacity", "0.1")
           .attr("pointer-events", "none")
 
@@ -319,7 +319,7 @@ export default class extends Controller {
           .attr("cx", this.#d3XScale(d.date))
           .attr("cy", this.#d3YScale(d.value))
           .attr("r", 3)
-          .attr("fill", this.#trendColor)
+          .attr("fill", this.#tooltipTrendColor(d))
           .attr("pointer-events", "none")
 
         // Render tooltip
