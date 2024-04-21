@@ -5,8 +5,8 @@ import * as d3 from "d3"
 export default class extends Controller {
   static values = {
     data: Object,
-    useLabels: Boolean,
-    useTooltip: Boolean,
+    useLabels: { type: Boolean, default: true },
+    useTooltip: { type: Boolean, default: true },
     usePercentSign: Boolean
   }
 
