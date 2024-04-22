@@ -342,10 +342,10 @@ export default class extends Controller {
       })
   }
 
-  #tooltipTemplate(data) {
+  #tooltipTemplate(datum) {
     return(`
       <div style="margin-bottom: 4px; color: ${tailwindColors.gray[500]};">
-        ${d3.timeFormat("%b %d, %Y")(data.date)}
+        ${d3.timeFormat("%b %d, %Y")(datum.date)}
       </div>
 
       <div style="display: flex; align-items: center; gap: 16px;">
@@ -355,69 +355,69 @@ export default class extends Controller {
               cx="5"
               cy="5"
               r="4"
-              stroke="${this.#tooltipTrendColor(data)}"
+              stroke="${this.#tooltipTrendColor(datum)}"
               fill="transparent"
               stroke-width="1"></circle>
           </svg>
 
-          ${this.#tooltipValue(data)}${this.usePercentSignValue ? "%" : ""}
+          ${this.#tooltipValue(datum)}${this.usePercentSignValue ? "%" : ""}
         </div>
 
-        ${data.trend.value == 0 || data.trend.value.amount == 0 ? `
+        ${datum.trend.value == 0 || datum.trend.value.amount == 0 ? `
           <span style="width: 80px;"></span>
         ` : `
-          <span style="color: ${this.#tooltipTrendColor(data)};">
-            ${this.#tooltipChange(data)} (${data.trend.percent}%)
+          <span style="color: ${this.#tooltipTrendColor(datum)};">
+            ${this.#tooltipChange(datum)} (${datum.trend.percent}%)
           </span>
         `}
       </div>
     `)
   }
 
-  #tooltipTrendColor(data) {
+  #tooltipTrendColor(datum) {
     return {
       up: tailwindColors.success,
       down: tailwindColors.error,
       flat: tailwindColors.gray[500],
-    }[data.trend.direction]
+    }[datum.trend.direction]
   }
 
-  #tooltipValue(data) {
-    if (data.currency) {
-      return this.#currencyValue(data)
+  #tooltipValue(datum) {
+    if (datum.currency) {
+      return this.#currencyValue(datum)
     } else {
-      return data.value
+      return datum.value
     }
   }
 
-  #tooltipChange(data) {
-    if (data.currency) {
-      return this.#currencyChange(data)
+  #tooltipChange(datum) {
+    if (datum.currency) {
+      return this.#currencyChange(datum)
     } else {
-      return this.#decimalChange(data)
+      return this.#decimalChange(datum)
     }
   }
 
-  #currencyValue(data) {
+  #currencyValue(datum) {
     return Intl.NumberFormat(undefined, {
       style: "currency",
-      currency: data.currency,
-    }).format(data.value)
+      currency: datum.currency,
+    }).format(datum.value)
   }
 
-  #currencyChange(data) {
+  #currencyChange(datum) {
     return Intl.NumberFormat(undefined, {
       style: "currency",
-      currency: data.currency,
+      currency: datum.currency,
       signDisplay: "always",
-    }).format(data.trend.value.amount)
+    }).format(datum.trend.value.amount)
   }
 
-  #decimalChange(data) {
+  #decimalChange(datum) {
     return Intl.NumberFormat(undefined, {
       style: "decimal",
       signDisplay: "always",
-    }).format(data.trend.value)
+    }).format(datum.trend.value)
   }
 
 
