@@ -363,7 +363,7 @@ export default class extends Controller {
           ${this.#tooltipValue(datum)}${this.usePercentSignValue ? "%" : ""}
         </div>
 
-        ${datum.trend.value == 0 || datum.trend.value.amount == 0 ? `
+        ${this.usePercentSignValue || datum.trend.value === 0 || datum.trend.value.amount === 0 ? `
           <span style="width: 80px;"></span>
         ` : `
           <span style="color: ${this.#tooltipTrendColor(datum)};">
