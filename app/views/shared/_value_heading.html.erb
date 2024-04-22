@@ -16,7 +16,7 @@
   </p>
   <% if trend.nil? %>
     <p class="text-sm text-gray-500">Data not available for the selected period</p>
-  <% elsif trend.direction == "flat" %>
+  <% elsif trend.direction.flat? %>
     <p class="text-sm text-gray-500">No change vs. prior period</p>
   <% else %>
     <div class="flex items-center gap-2">
