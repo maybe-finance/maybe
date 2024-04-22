@@ -22,7 +22,7 @@ class TimeSeries::Value
 
   def as_json
     {
-      date: date,
+      date: date.iso8601,
       value: value.as_json,
       trend: trend.as_json
     }
