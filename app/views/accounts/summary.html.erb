@@ -17,11 +17,11 @@
             } %>
       </div>
       <div
-            data-controller="trendline"
-            id="assetsTrendline"
-            class="h-full w-2/5"
-            data-trendline-series-value="<%= @asset_series.to_json %>"
-            data-trendline-classification-value="asset"></div>
+        id="assetsChart"
+        class="h-full w-2/5"
+        data-controller="time-series-chart"
+        data-time-series-chart-data-value="<%= @asset_series.to_json %>"
+        data-time-series-chart-use-labels-value="false"></div>
     </div>
     <div class="w-1/2 p-4 flex items-stretch justify-between">
       <div class="space-y-2 grow">
@@ -34,11 +34,11 @@
             } %>
       </div>
       <div
-            data-controller="trendline"
-            id="liabilitiesTrendline"
-            class="h-full w-2/5"
-            data-trendline-series-value="<%= @liability_series.to_json %>"
-            data-trendline-classification-value="liability"></div>
+        id="liabilitiesChart"
+        class="h-full w-2/5"
+        data-controller="time-series-chart"
+        data-time-series-chart-data-value="<%= @liability_series.to_json %>"
+        data-time-series-chart-use-labels-value="false"></div>
     </div>
   </div>
   <div class="p-4 bg-white rounded-xl shadow-xs border border-alpha-black-25 space-y-4">

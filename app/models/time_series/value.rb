@@ -1,32 +1,46 @@
 class TimeSeries::Value
-    include Comparable
+  include Comparable
+  include ActiveModel::Validations
 
-    attr_accessor :trend
-    attr_reader :value, :date, :original
+  attr_reader :value, :date, :original, :trend
 
-    def initialize(obj)
-        @original = obj.fetch(:original, obj)
+  validates :date, presence: true
+  validate :value_must_be_of_known_type
 
-        if obj.is_a?(Hash)
-            @date = obj[:date]
-            @value = obj[:value]
-        else
-            @date = obj.date
-            @value = obj.value
-        end
+  def initialize(date:, value:, original: nil, series: nil, previous_value: nil)
+    @date, @value, @original, @series = date, value, original, series
+    @trend = create_trend previous_value
 
-        validate_input
+    validate!
+  end
+
+  def <=>(other)
+    result = date <=> other.date
+    result = value <=> other.value if result == 0
+    result
+  end
+
+  def as_json
+    {
+      date: date.iso8601,
+      value: value.as_json,
+      trend: trend.as_json
+    }
+  end
+
+  private
+    attr_reader :series
+
+    def create_trend(previous_value)
+      TimeSeries::Trend.new \
+        current: value,
+        previous: previous_value,
+        series: series
     end
 
-    def <=>(other)
-        result = date <=> other.date
-        result = value <=> other.value if result == 0
-        result
+    def value_must_be_of_known_type
+      unless value.is_a?(Money) || value.is_a?(Numeric)
+        errors.add :value, "must be a Money or Numeric"
+      end
     end
-
-    private
-        def validate_input
-            raise ArgumentError, "Date is required" unless @date.is_a?(Date)
-            raise ArgumentError, "Money or Numeric value is required" unless @value.is_a?(Money) || @value.is_a?(Numeric)
-        end
 end

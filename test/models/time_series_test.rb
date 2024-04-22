@@ -6,7 +6,7 @@ class TimeSeriesTest < ActiveSupport::TestCase
 
     assert_equal Money.new(100), series.first.value
     assert_equal Money.new(200), series.last.value
-    assert_equal :normal, series.type
+    assert_equal "up", series.favorable_direction
     assert_equal "up", series.trend.direction
     assert_equal Money.new(100), series.trend.value
     assert_equal 100.0, series.trend.percent
@@ -18,21 +18,18 @@ class TimeSeriesTest < ActiveSupport::TestCase
     assert_equal 100, series.first.value
     assert_equal 200, series.last.value
     assert_equal 100, series.on(1.day.ago.to_date).value
-    assert_equal :normal, series.type
+    assert_equal "up", series.favorable_direction
     assert_equal "up", series.trend.direction
     assert_equal 100, series.trend.value
     assert_equal 100.0, series.trend.percent
   end
 
-  test "when nil or empty array passed, it returns empty series" do
-    series = TimeSeries.new(nil)
-    assert_equal [], series.values
-
+  test "when empty array passed, it returns empty series" do
     series = TimeSeries.new([])
 
     assert_nil series.first
     assert_nil series.last
-    assert_equal({ values: [], trend: { type: "normal", direction: "flat", value: 0, percent: 0.0 }, type: "normal" }.to_json, series.to_json)
+    assert_equal({ values: [], trend: { favorable_direction: "up", direction: "flat", value: 0, percent: 0.0 }, favorable_direction: "up" }.to_json, series.to_json)
   end
 
   test "money series can be serialized to json" do
@@ -41,16 +38,16 @@ class TimeSeriesTest < ActiveSupport::TestCase
         {
           date: 1.day.ago.to_date,
           value: { amount: "100.0", currency: "USD" },
-          trend: { type: "normal", direction: "flat", value: { amount: "0.0", currency: "USD" }, percent: 0.0 }
+          trend: { favorable_direction: "up", direction: "flat", value: { amount: "0.0", currency: "USD" }, percent: 0.0 }
         },
         {
           date: Date.current,
           value: { amount: "200.0", currency: "USD" },
-          trend: { type: "normal", direction: "up", value: { amount: "100.0", currency: "USD" }, percent: 100.0 }
+          trend: { favorable_direction: "up", direction: "up", value: { amount: "100.0", currency: "USD" }, percent: 100.0 }
         }
       ],
-      trend: { type: "normal", direction: "up", value: { amount: "100.0", currency: "USD" }, percent: 100.0 },
-      type: "normal"
+      trend: { favorable_direction: "up", direction: "up", value: { amount: "100.0", currency: "USD" }, percent: 100.0 },
+      favorable_direction: "up"
     }.to_json
 
     series = TimeSeries.new([ { date: 1.day.ago.to_date, value: Money.new(100) }, { date: Date.current, value: Money.new(200) } ])
@@ -60,12 +57,12 @@ class TimeSeriesTest < ActiveSupport::TestCase
 
   test "numeric series can be serialized to json" do
     expected_values = {
-        values: [
-            { date: 1.day.ago.to_date, value: 100, trend: { type: "normal", direction: "flat", value: 0, percent: 0.0 } },
-            { date: Date.current, value: 200, trend: { type: "normal", direction: "up", value: 100, percent: 100.0 } }
-        ],
-        trend: { type: "normal", direction: "up", value: 100, percent: 100.0 },
-        type: "normal"
+      values: [
+        { date: 1.day.ago.to_date, value: 100, trend: { favorable_direction: "up", direction: "flat", value: 0, percent: 0.0 } },
+        { date: Date.current, value: 200, trend: { favorable_direction: "up", direction: "up", value: 100, percent: 100.0 } }
+      ],
+      trend: { favorable_direction: "up", direction: "up", value: 100, percent: 100.0 },
+      favorable_direction: "up"
     }.to_json
 
     series = TimeSeries.new([ { date: 1.day.ago.to_date, value: 100 }, { date: Date.current, value: 200 } ])

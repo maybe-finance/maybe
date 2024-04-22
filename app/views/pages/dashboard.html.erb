@@ -43,10 +43,11 @@
           } %>
         </div>
         <div
-          data-controller="trendline"
+          id="incomeChart"
           class="h-full w-2/5"
-          data-trendline-series-value="<%= @income_series.to_json %>"
-          data-trendline-classification-value="asset"></div>
+          data-controller="time-series-chart"
+          data-time-series-chart-data-value="<%= @income_series.to_json %>"
+          data-time-series-chart-use-labels-value="false"></div>
       </div>
     </div>
     <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">
@@ -60,10 +61,11 @@
           } %>
         </div>
         <div
-          data-controller="trendline"
+          id="spendingChart"
           class="h-full w-2/5"
-          data-trendline-series-value="<%= @spending_series.to_json %>"
-          data-trendline-classification-value="asset"></div>
+          data-controller="time-series-chart"
+          data-time-series-chart-data-value="<%= @spending_series.to_json %>"
+          data-time-series-chart-use-labels-value="false"></div>
       </div>
     </div>
     <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">
@@ -78,10 +80,11 @@
           } %>
         </div>
         <div
-          data-controller="trendline"
+          id="savingsRateChart"
           class="h-full w-2/5"
-          data-trendline-series-value="<%= @savings_rate_series.to_json %>"
-          data-trendline-classification-value="asset"></div>
+          data-controller="time-series-chart"
+          data-time-series-chart-data-value="<%= @savings_rate_series.to_json %>"
+          data-time-series-chart-use-labels-value="false"></div>
       </div>
     </div>
     <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">
@@ -95,10 +98,11 @@
           } %>
         </div>
         <div
-          data-controller="trendline"
+          id="investingChart"
           class="h-full w-2/5"
-          data-trendline-series-value="<%= @investing_series.to_json %>"
-          data-trendline-classification-value="asset"></div>
+          data-controller="time-series-chart"
+          data-time-series-chart-data-value="<%= @investing_series.to_json %>"
+          data-time-series-chart-use-labels-value="false"></div>
       </div>
     </div>
   </section>
