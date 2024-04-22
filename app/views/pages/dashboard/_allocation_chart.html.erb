@@ -1,3 +1,4 @@
+<%# locals: (account_groups:) -%>
 <div data-controller="tabs" data-tabs-active-class="bg-white border-alpha-black-25 shadow-xs text-gray-900" data-tabs-default-tab-value="asset-tab">
   <div class="bg-gray-25 rounded-lg p-1 flex gap-1 text-sm text-gray-500 font-medium">
     <button data-id="asset-tab" class="w-1/2 px-2 py-1 rounded-md border border-transparent" data-tabs-target="btn" data-action="tabs#select"><%= t(".assets") %></button>
@@ -5,13 +6,25 @@
   </div>
   <div>
     <div data-tabs-target="tab" id="asset-tab" class="space-y-6">
-      <div class="text-gray-500 flex items-center justify-center py-12">
-        <p>Coming soon...</p>
+      <div class="text-gray-500 flex items-center justify-center pt-12">
+        <div
+          data-controller="pie-chart"
+          class="w-full aspect-1"
+          data-pie-chart-label-value="Total Assets"
+          data-pie-chart-data-value="<%= value_group_pie_data(account_groups[:assets]) %>"
+        >
+        </div>
       </div>
     </div>
     <div data-tabs-target="tab" id="liability-tab" class="space-y-6 hidden">
-      <div class="text-gray-500 flex items-center justify-center py-12">
-        <p>Coming soon...</p>
+      <div class="text-gray-500 flex items-center justify-center pt-12">
+        <div
+          data-controller="pie-chart"
+          class="w-full aspect-1"
+          data-pie-chart-label-value="Total Debts"
+          data-pie-chart-data-value="<%= value_group_pie_data(account_groups[:liabilities]) %>"
+        >
+        </div>
       </div>
     </div>
   </div>
