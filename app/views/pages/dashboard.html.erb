@@ -106,14 +106,21 @@
       </div>
     </div>
   </section>
-  <section class="flex items-start gap-4">
-    <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl w-1/2 space-y-4">
+  <section class="grid grid-cols-2 gap-4 items-baseline">
+    <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl space-y-4">
       <h2 class="text-lg font-medium text-gray-900"><%= t(".transactions") %></h2>
-      <div class="text-gray-500 flex items-center justify-center py-12">
-        <p>Coming soon...</p>
-      </div>
+      <% if @transactions.empty? %>
+        <div class="text-gray-500 flex items-center justify-center py-12">
+          <p><%= t(".no_transactions") %></p>
+        </div>
+      <% else %>
+        <div class="text-gray-500 flex items-center justify-center flex-col bg-gray-25 rounded-md">
+          <%= render partial: "transactions/transaction_group", collection: @transactions.group_by(&:date), as: :transaction_group %>
+          <p class="py-2 text-sm"><%= link_to t(".view_all"), transactions_path %></p>
+        </div>
+      <% end %>
     </div>
-    <div class="w-1/2 space-y-4">
+    <div class="space-y-4">
       <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl space-y-4">
         <h2 class="text-lg font-medium text-gray-900"><%= t(".recurring") %></h2>
         <div class="text-gray-500 flex items-center justify-center py-12">

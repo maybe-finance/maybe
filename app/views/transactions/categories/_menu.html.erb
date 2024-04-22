@@ -1,6 +1,6 @@
 <%# locals: (transaction:) %>
 <div class="relative" data-controller="menu">
-  <button data-menu-target="button" class="flex">
+  <button data-menu-target="button cursor-pointer" class="flex">
     <%= render partial: "transactions/categories/badge", locals: transaction.category.nil? ? {} : { name: transaction.category.name, color: transaction.category.color } %>
   </button>
   <div data-menu-target="content" class="absolute z-10 hidden w-screen mt-2 max-w-min cursor-default">
