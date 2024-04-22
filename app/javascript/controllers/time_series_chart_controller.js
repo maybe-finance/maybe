@@ -326,6 +326,7 @@ export default class extends Controller {
         this.#d3Tooltip
           .html(this.#tooltipTemplate(d))
           .style("opacity", 1)
+          .style("z-index", 999)
           .style("left", adjustedX + "px")
           .style("top", event.pageY - 10 + "px")
       })
