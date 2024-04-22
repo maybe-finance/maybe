@@ -487,7 +487,7 @@ export default class extends Controller {
   }
 
   get #favorableDirection() {
-    return this.dataValue.trend.favorableDirection
+    return this.dataValue.trend.favorable_direction
   }
 
   get #d3Line() {

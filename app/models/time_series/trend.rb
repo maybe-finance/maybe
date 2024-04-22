@@ -48,7 +48,7 @@ class TimeSeries::Trend
 
   def as_json
     {
-      favorableDirection: favorable_direction,
+      favorable_direction: favorable_direction,
       direction: direction,
       value: value,
       percent: percent

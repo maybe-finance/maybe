@@ -42,7 +42,7 @@ class TimeSeries
     {
       values: values.map(&:as_json),
       trend: trend.as_json,
-      favorableDirection: favorable_direction
+      favorable_direction: favorable_direction
     }.as_json
   end
 
