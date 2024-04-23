@@ -49,7 +49,7 @@ class Family < ApplicationRecord
   end
 
   def snapshot_transactions
-    rolling_totals = Transaction.daily_rolling_totals(transactions, period: Period.last_30_days)
+    rolling_totals = Transaction.daily_rolling_totals(transactions, period: Period.last_30_days, currency: self.currency)
 
     spending = []
     income = []

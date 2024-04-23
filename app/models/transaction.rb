@@ -34,12 +34,12 @@ class Transaction < ApplicationRecord
       .group("gs.date")
   end
 
-  def self.daily_rolling_totals(transactions, period: Period.last_30_days)
+  def self.daily_rolling_totals(transactions, period: Period.last_30_days, currency: Current.family.currency)
     # Extend the period to include the rolling window
     period_with_rolling = period.extend_backward(period.date_range.count.days)
 
     # Aggregate the rolling sum of spending and income based on daily totals
-    rolling_totals = from(daily_totals(transactions, period: period_with_rolling))
+    rolling_totals = from(daily_totals(transactions, period: period_with_rolling, currency: currency))
       .select(
         "*",
         sanitize_sql_array([ "SUM(spending) OVER (ORDER BY date RANGE BETWEEN INTERVAL ? PRECEDING AND CURRENT ROW) as rolling_spend", "#{period.date_range.count} days" ]),
