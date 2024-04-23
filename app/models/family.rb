@@ -50,30 +50,28 @@ class Family < ApplicationRecord
 
   def snapshot_transactions
     period = Period.last_30_days
-    days_rolling = 30
+    days_rolling = period.date_range.count
 
     start_date = period.date_range.first - days_rolling.days
     end_date = period.date_range.last
     sql_dates = self.class.sanitize_sql([ "generate_series(?, ?, interval '1 day') AS gs(date)", start_date, end_date ])
-    sql_distinct_currencies = "(#{transactions.select("DISTINCT transactions.currency").to_sql}) AS c"
 
     normalized_query = Transaction
       .select(
         "gs.date",
-        "c.currency",
-        "COALESCE(SUM(amount) FILTER (WHERE amount > 0), 0) AS spending",
-        "COALESCE(SUM(-amount) FILTER (WHERE amount < 0), 0) AS income"
+        "COALESCE(SUM(converted_amount) FILTER (WHERE converted_amount > 0), 0) AS spending",
+        "COALESCE(SUM(-converted_amount) FILTER (WHERE converted_amount < 0), 0) AS income"
       )
-      .from(transactions, :t)
-      .joins("RIGHT JOIN (#{sql_dates} CROSS JOIN #{sql_distinct_currencies}) ON t.date = gs.date AND t.currency = c.currency")
-      .group("gs.date", "c.currency")
+      .from(transactions.with_converted_amount, :t)
+      .joins("RIGHT JOIN #{sql_dates} ON t.date = gs.date")
+      .group("gs.date")
 
     rolling_query = Transaction
       .from(normalized_query, :v)
       .select(
         "v.*",
-        "SUM(spending) OVER (PARTITION BY currency ORDER BY date RANGE BETWEEN INTERVAL '#{days_rolling} days' PRECEDING AND CURRENT ROW) as rolling_spend",
-        "SUM(income) OVER (PARTITION BY currency ORDER BY date RANGE BETWEEN INTERVAL '#{days_rolling} days' PRECEDING AND CURRENT ROW) as rolling_income"
+        "SUM(spending) OVER (ORDER BY date RANGE BETWEEN INTERVAL '#{days_rolling} days' PRECEDING AND CURRENT ROW) as rolling_spend",
+        "SUM(income) OVER (ORDER BY date RANGE BETWEEN INTERVAL '#{days_rolling} days' PRECEDING AND CURRENT ROW) as rolling_income"
       )
       .order("date")
 
@@ -85,12 +83,12 @@ class Family < ApplicationRecord
     query.each do |r|
       spending << {
         date: r.date,
-        value: Money.new(r.rolling_spend, r.currency)
+        value: Money.new(r.rolling_spend, self.currency)
       }
 
       income << {
         date: r.date,
-        value: Money.new(r.rolling_income, r.currency)
+        value: Money.new(r.rolling_income, self.currency)
       }
     end
 

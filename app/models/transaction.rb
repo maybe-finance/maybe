@@ -11,6 +11,14 @@ class Transaction < ApplicationRecord
   scope :inflows, -> { where("amount > 0") }
   scope :outflows, -> { where("amount < 0") }
   scope :active, -> { where(excluded: false) }
+  scope :with_converted_amount, ->(currency = Current.family.currency) {
+    select(
+      "transactions.*",
+      "transactions.amount * COALESCE(er.rate, 1) AS converted_amount"
+    )
+    .joins(sanitize_sql_array(["LEFT JOIN exchange_rates er ON transactions.date = er.date AND transactions.currency = er.base_currency AND er.converted_currency = ?", currency]))
+    .where("er.rate IS NOT NULL OR transactions.currency = ?", currency)
+  }
 
   def self.ransackable_attributes(auth_object = nil)
     %w[name amount date]
