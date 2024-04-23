@@ -43,8 +43,8 @@ class Family < ApplicationRecord
       .to_a
 
     {
-      top_spenders: results.sort_by { |a| a.spending }.filter { |a| a.spending > 0 }.reverse,
-      top_earners: results.sort_by { |a| a.income }.filter { |a| a.income > 0 }.reverse
+      top_spenders: results.sort_by(&:spending).select { |a| a.spending > 0 }.reverse,
+      top_earners: results.sort_by(&:income).select { |a| a.income > 0 }.reverse
     }
   end
 
@@ -55,6 +55,7 @@ class Family < ApplicationRecord
     start_date = period.date_range.first - days_rolling.days
     end_date = period.date_range.last
     sql_dates = self.class.sanitize_sql([ "generate_series(?, ?, interval '1 day') AS gs(date)", start_date, end_date ])
+    sql_distinct_currencies = "(#{transactions.select("DISTINCT transactions.currency").to_sql}) AS c"
 
     normalized_query = Transaction
       .select(
@@ -64,7 +65,7 @@ class Family < ApplicationRecord
         "COALESCE(SUM(-amount) FILTER (WHERE amount < 0), 0) AS income"
       )
       .from(transactions, :t)
-      .joins("RIGHT JOIN (#{sql_dates} CROSS JOIN (SELECT DISTINCT currency FROM transactions) AS c) ON t.date = gs.date AND t.currency = c.currency")
+      .joins("RIGHT JOIN (#{sql_dates} CROSS JOIN #{sql_distinct_currencies}) ON t.date = gs.date AND t.currency = c.currency")
       .group("gs.date", "c.currency")
 
     rolling_query = Transaction
