@@ -14,6 +14,10 @@ class Period
         @date_range = date_range
     end
 
+    def extend_backward(duration)
+        Period.new(name: name + "_extended", date_range: (date_range.first - duration)..date_range.last)
+    end
+
     BUILTIN = [
         new(name: "all", date_range: nil..Date.current),
         new(name: "last_7_days", date_range: 7.days.ago.to_date..Date.current),

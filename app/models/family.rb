@@ -49,38 +49,11 @@ class Family < ApplicationRecord
   end
 
   def snapshot_transactions
-    period = Period.last_30_days
-    days_rolling = period.date_range.count
-
-    start_date = period.date_range.first - days_rolling.days
-    end_date = period.date_range.last
-    sql_dates = self.class.sanitize_sql([ "generate_series(?, ?, interval '1 day') AS gs(date)", start_date, end_date ])
-
-    normalized_query = Transaction
-      .select(
-        "gs.date",
-        "COALESCE(SUM(converted_amount) FILTER (WHERE converted_amount > 0), 0) AS spending",
-        "COALESCE(SUM(-converted_amount) FILTER (WHERE converted_amount < 0), 0) AS income"
-      )
-      .from(transactions.with_converted_amount, :t)
-      .joins("RIGHT JOIN #{sql_dates} ON t.date = gs.date")
-      .group("gs.date")
-
-    rolling_query = Transaction
-      .from(normalized_query, :v)
-      .select(
-        "v.*",
-        "SUM(spending) OVER (ORDER BY date RANGE BETWEEN INTERVAL '#{days_rolling.to_i} days' PRECEDING AND CURRENT ROW) as rolling_spend",
-        "SUM(income) OVER (ORDER BY date RANGE BETWEEN INTERVAL '#{days_rolling.to_i} days' PRECEDING AND CURRENT ROW) as rolling_income"
-      )
-      .order("date")
-
-    query = Transaction.select("*").from(rolling_query, :rq)
-    query = query.where("date >= ?", period.date_range.begin) if period.date_range.begin
+    rolling_totals = Transaction.daily_rolling_totals(transactions, period: Period.last_30_days)
 
     spending = []
     income = []
-    query.each do |r|
+    rolling_totals.each do |r|
       spending << {
         date: r.date,
         value: Money.new(r.rolling_spend, self.currency)
