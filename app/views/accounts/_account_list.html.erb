@@ -1,5 +1,6 @@
 <%# locals: (group:) -%>
 <% type = Accountable.from_type(group.name) %>
+<% styles = trend_styles(group.series.trend) %>
 <% if group %>
   <details class="mb-1 text-sm group" data-controller="account-collapse" data-account-collapse-type-value="<%= type %>">
     <summary class="flex gap-4 px-3 py-2 items-center w-full rounded-[10px] font-medium hover:bg-gray-100">
@@ -8,17 +9,44 @@
       <div class="text-left"><%= type.model_name.human %></div>
       <div class="ml-auto flex flex-col items-end">
         <p class="text-right"><%= format_money group.sum %></p>
+        <div class="flex gap-2">
+              <div
+                class="h-5 w-5"
+                id="blah"
+                data-controller="time-series-chart"
+                data-time-series-chart-data-value="<%= group.series.to_json %>"
+                data-time-series-chart-use-labels-value="false"
+                data-time-series-chart-use-tooltip-value="false">
+            </div>
+          <p class="text-right <%= styles[:text_class] %>"><%= group.series.favorable_direction == "down" ? "-" : "+" %><%= group.series.trend.percent %>%</p>
+        </div>
       </div>
     </summary>
     <% group.children.each do |account_value_node| %>
       <%= link_to account_path(account_value_node.original), class: "flex items-center w-full gap-3 px-2 py-3 mb-1 hover:bg-gray-100 rounded-[10px]" do %>
-        <div>
+        <div class="flex items-center gap-3">
+          <div class="bg-green-600/10 rounded-full h-8 w-8 flex items-center justify-center">
+            <span class="text-green-600"><%= type.name[0].upcase %></span>
+          </div>
           <p class="font-medium"><%= account_value_node.name %></p>
           <% if account_value_node.original.subtype %>
             <p class="text-xs text-gray-500"><%= account_value_node.original.subtype&.humanize %></p>
           <% end %>
         </div>
-        <p class="ml-auto font-medium"><%= format_money account_value_node.original.balance_money %></p>
+        <div class="ml-auto flex flex-col items-end">
+          <p class="text-right font-medium"><%= format_money account_value_node.original.balance_money %></p>
+          <div class="flex gap-2">
+                <div
+                  class="h-5 w-5"
+                  id="blah"
+                  data-controller="time-series-chart"
+                  data-time-series-chart-data-value="<%= account_value_node.original.series.to_json %>"
+                  data-time-series-chart-use-labels-value="false"
+                  data-time-series-chart-use-tooltip-value="false">
+              </div>
+            <p class="text-right <%= styles[:text_class] %>"><%= account_value_node.original.series.favorable_direction == "down" ? "-" : "+" %><%= account_value_node.original.series.trend.percent %>%</p>
+          </div>
+        </div>
       <% end %>
     <% end %>
     <%= link_to new_account_path(step: "method", type: type.name.demodulize), class: "flex items-center gap-4 px-2 py-3 mb-1 text-gray-500 text-sm font-medium rounded-[10px] hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
