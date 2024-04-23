@@ -16,7 +16,7 @@ class Transaction < ApplicationRecord
       "transactions.*",
       "transactions.amount * COALESCE(er.rate, 1) AS converted_amount"
     )
-    .joins(sanitize_sql_array(["LEFT JOIN exchange_rates er ON transactions.date = er.date AND transactions.currency = er.base_currency AND er.converted_currency = ?", currency]))
+    .joins(sanitize_sql_array([ "LEFT JOIN exchange_rates er ON transactions.date = er.date AND transactions.currency = er.base_currency AND er.converted_currency = ?", currency ]))
     .where("er.rate IS NOT NULL OR transactions.currency = ?", currency)
   }
 
