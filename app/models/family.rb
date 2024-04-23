@@ -70,8 +70,8 @@ class Family < ApplicationRecord
       .from(normalized_query, :v)
       .select(
         "v.*",
-        "SUM(spending) OVER (ORDER BY date RANGE BETWEEN INTERVAL '#{days_rolling} days' PRECEDING AND CURRENT ROW) as rolling_spend",
-        "SUM(income) OVER (ORDER BY date RANGE BETWEEN INTERVAL '#{days_rolling} days' PRECEDING AND CURRENT ROW) as rolling_income"
+        "SUM(spending) OVER (ORDER BY date RANGE BETWEEN INTERVAL '#{days_rolling.to_i} days' PRECEDING AND CURRENT ROW) as rolling_spend",
+        "SUM(income) OVER (ORDER BY date RANGE BETWEEN INTERVAL '#{days_rolling.to_i} days' PRECEDING AND CURRENT ROW) as rolling_income"
       )
       .order("date")
 
