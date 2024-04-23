@@ -38,7 +38,7 @@
           <div class="grow">
           <%= render partial: "shared/value_heading", locals: {
             label: t(".income"),
-              period: @period,
+              period: Period.last_30_days,
               value: @income_series.last&.value,
               trend: @income_series.trend
             } %>
@@ -52,13 +52,16 @@
             data-time-series-chart-use-tooltip-value="false"></div>
         </div>
         <div class="flex gap-1.5">
-          <% @top_earners.each do |account| %>
+          <% @top_earners.first(3).each do |account| %>
             <%= link_to account, class: "border border-alpha-black-25 rounded-full p-1 pr-2 flex items-center gap-1 text-xs text-gray-900 font-medium hover:bg-gray-25" do %>
               <div class="flex items-center justify-center text-xs w-5 h-5 rounded-full <%= accountable_text_class(account.accountable_type) %> <%= accountable_bg_transparent_class(account.accountable_type) %>">
                 <%= account.name[0].upcase %>
               </div>
               <span>+<%= Money.new(account.income, account.currency) %></span>
             <% end %>
+          <% end %>
+          <% if @top_earners.count > 3 %>
+            <div class="bg-gray-25 rounded-full flex h-full aspect-1 items-center justify-center text-xs font-medium text-gray-500">+<%= @top_earners.count - 3 %></div>
           <% end %>
         </div>
       </div>
@@ -69,7 +72,7 @@
           <div class="grow">
             <%= render partial: "shared/value_heading", locals: {
             label: t(".spending"),
-              period: @period,
+              period: Period.last_30_days,
               value: @spending_series.last&.value,
               trend: @spending_series.trend
             } %>
@@ -83,13 +86,16 @@
             data-time-series-chart-use-tooltip-value="false"></div>
         </div>
         <div class="flex gap-1.5">
-          <% @top_spenders.each do |account| %>
+          <% @top_spenders.first(3).each do |account| %>
             <%= link_to account, class: "border border-alpha-black-25 rounded-full p-1 pr-2 flex items-center gap-1 text-xs text-gray-900 font-medium hover:bg-gray-25" do %>
               <div class="flex items-center justify-center text-xs w-5 h-5 rounded-full <%= accountable_text_class(account.accountable_type) %> <%= accountable_bg_transparent_class(account.accountable_type) %>">
                 <%= account.name[0].upcase %>
               </div>
               -<%= Money.new(account.spending, account.currency) %>
             <% end %>
+          <% end %>
+          <% if @top_spenders.count > 3 %>
+            <div class="bg-gray-25 rounded-full flex h-full aspect-1 items-center justify-center text-xs font-medium text-gray-500">+<%= @top_spenders.count - 3 %></div>
           <% end %>
         </div>
       </div>
