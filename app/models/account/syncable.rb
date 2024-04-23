@@ -10,7 +10,9 @@ module Account::Syncable
 
         sync_exchange_rates
 
-        calculator = Account::Balance::Calculator.new(self, { calc_start_date: start_date })
+        calc_start_date = start_date - 1.day if start_date.present? && self.balance_on(start_date - 1.day).present?
+
+        calculator = Account::Balance::Calculator.new(self, { calc_start_date: })
         calculator.calculate
         self.balances.upsert_all(calculator.daily_balances, unique_by: :index_account_balances_on_account_id_date_currency_unique)
         self.balances.where("date < ?", effective_start_date).delete_all

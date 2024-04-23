@@ -14,11 +14,11 @@ class Account::SyncableTest < ActiveSupport::TestCase
     assert_equal 31, account.balances.count
   end
 
-  test "account balances can be synced from a start date" do
+  test "partial sync with missing historical balances performs a full sync" do
     account = accounts(:savings_with_valuation_overrides)
     account.sync 10.days.ago.to_date
 
-    assert_equal 11, account.balances.count
+    assert_equal 31, account.balances.count
   end
 
   test "balances are updated after syncing" do
@@ -54,7 +54,7 @@ class Account::SyncableTest < ActiveSupport::TestCase
     account.balances.create!(date: balance_date, balance: 1000)
     account.sync balance_date.to_date
 
-    assert_equal 19800, account.balances.find_by(date: balance_date)[:balance]
+    assert_equal 19700, account.balances.find_by(date: balance_date)[:balance]
   end
 
   test "foreign currency account has balances in each currency after syncing" do

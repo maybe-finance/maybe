@@ -98,6 +98,7 @@ class Account::Balance::CalculatorTest < ActiveSupport::TestCase
 
   test "syncs with overridden start date" do
     account = accounts(:multi_currency)
+    account.sync
     calc_start_date = 10.days.ago.to_date
     calculator = Account::Balance::Calculator.new(account, { calc_start_date: })
     calculator.calculate

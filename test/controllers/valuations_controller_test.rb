@@ -19,23 +19,23 @@ class ValuationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should sync account after create" do
-    date = Date.current
+    date = Date.current - 1.day
     value = 2
 
     @account.sync
 
-    assert_changes("@account.balance_on(date - 1.day)", to: value) do
+    assert_changes("@account.balance_on(date)", to: value) do
       post account_valuations_url(@account), params: { valuation: { value:, date:, type: "Appraisal" } }
       perform_enqueued_jobs
     end
   end
 
   test "should do a partial account sync after create" do
-    date = Date.current
+    date = Date.current - 1.day
     @account.sync
-    @account.balances.where(date: date - 2.day).update!(balance: 200)
+    @account.balances.where(date: date - 1.day).update!(balance: 200)
 
-    assert_no_changes("@account.balance_on(date - 2.day)") do
+    assert_no_changes("@account.balance_on(date - 1.day)") do
       post account_valuations_url(@account), params: { valuation: { value: 1, date:, type: "Appraisal" } }
       perform_enqueued_jobs
     end
@@ -54,7 +54,7 @@ class ValuationsControllerTest < ActionDispatch::IntegrationTest
 
     account.sync
 
-    assert_changes("account.balance_on(date - 1.day)", value) do
+    assert_changes("account.balance_on(date)", value) do
       patch valuation_url(@valuation), params: { valuation: { account_id: @valuation.account_id, value:, date:, type: "Appraisal" } }
       perform_enqueued_jobs
     end
@@ -88,7 +88,7 @@ class ValuationsControllerTest < ActionDispatch::IntegrationTest
     value = @account.balance
     account.sync
 
-    assert_changes("@account.balance_on(date - 1.day)", to: value) do
+    assert_changes("@account.balance_on(date)", to: 19700) do
       delete valuation_url(@valuation)
       perform_enqueued_jobs
     end

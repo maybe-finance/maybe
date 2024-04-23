@@ -38,8 +38,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     amount_difference = @transaction.amount
 
     account.sync
-
-    assert_difference("account.balance_on(date - 1.day)", amount_difference) do
+    assert_difference("account.balance_on(date)", -amount_difference) do
       post transactions_url, params: { transaction: { account_id: @transaction.account_id, amount: @transaction.amount, currency: @transaction.currency, date: @transaction.date, name: } }
       perform_enqueued_jobs
     end
@@ -127,7 +126,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
 
     account.sync
 
-    assert_difference("account.balance_on(date - 1.day)", amount_difference) do
+    assert_difference("account.balance_on(date)", -amount_difference) do
       patch transaction_url(@transaction), params: { transaction: { account_id: @transaction.account_id, amount: new_amount, currency: @transaction.currency, date: @transaction.date, name: @transaction.name } }
       perform_enqueued_jobs
     end
@@ -161,7 +160,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
 
     account.sync
 
-    assert_difference("account.balance_on(date - 1.day)", -amount) do
+    assert_difference("account.balance_on(date)", amount) do
       delete transaction_url(@transaction)
       perform_enqueued_jobs
     end
