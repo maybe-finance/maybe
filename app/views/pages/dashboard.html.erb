@@ -38,7 +38,7 @@
           <%= render partial: "shared/value_heading", locals: {
           label: t(".income"),
             period: @period,
-            value: @income_series.last.value,
+            value: @income_series.last&.value,
             trend: @income_series.trend
           } %>
         </div>
@@ -47,7 +47,8 @@
           class="h-full w-2/5"
           data-controller="time-series-chart"
           data-time-series-chart-data-value="<%= @income_series.to_json %>"
-          data-time-series-chart-use-labels-value="false"></div>
+          data-time-series-chart-use-labels-value="false"
+          data-time-series-chart-use-tooltip-value="false"></div>
       </div>
     </div>
     <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">
@@ -56,7 +57,7 @@
           <%= render partial: "shared/value_heading", locals: {
           label: t(".spending"),
             period: @period,
-            value: @spending_series.last.value,
+            value: @spending_series.last&.value,
             trend: @spending_series.trend
           } %>
         </div>
@@ -65,7 +66,8 @@
           class="h-full w-2/5"
           data-controller="time-series-chart"
           data-time-series-chart-data-value="<%= @spending_series.to_json %>"
-          data-time-series-chart-use-labels-value="false"></div>
+          data-time-series-chart-use-labels-value="false"
+          data-time-series-chart-use-tooltip-value="false"></div>
       </div>
     </div>
     <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">

@@ -28,6 +28,57 @@ class Family < ApplicationRecord
     }
   end
 
+  def snapshot_transactions
+    period = Period.last_7_days
+    days_rolling = 30
+
+    start_date = period.date_range.first - days_rolling.days
+    end_date = period.date_range.last
+    sql_dates = self.class.sanitize_sql([ "generate_series(?, ?, interval '1 day') AS gs(date)", start_date, end_date ])
+
+    normalized_query = Transaction
+      .select(
+        "gs.date",
+        "c.currency",
+        "COALESCE(SUM(CASE WHEN t.amount > 0 THEN t.amount ELSE 0 END), 0) AS spending",
+        "COALESCE(SUM(CASE WHEN t.amount < 0 THEN -t.amount ELSE 0 END), 0) AS income"
+      )
+      .from(transactions, :t)
+      .joins("RIGHT JOIN (#{sql_dates} CROSS JOIN (SELECT DISTINCT currency FROM transactions) AS c) ON t.date = gs.date AND t.currency = c.currency")
+      .group("gs.date", "c.currency")
+
+    rolling_query = Transaction
+      .from(normalized_query, :v)
+      .select(
+        "v.*",
+        "SUM(spending) OVER (PARTITION BY currency ORDER BY date RANGE BETWEEN INTERVAL '#{days_rolling} days' PRECEDING AND CURRENT ROW) as rolling_spend",
+        "SUM(income) OVER (PARTITION BY currency ORDER BY date RANGE BETWEEN INTERVAL '#{days_rolling} days' PRECEDING AND CURRENT ROW) as rolling_income"
+      )
+      .order("date")
+
+    query = Transaction.select("*").from(rolling_query, :rq)
+    query = query.where("date >= ?", period.date_range.begin) if period.date_range.begin
+
+    spending = []
+    income = []
+    query.each do |r|
+      spending << {
+        date: r.date,
+        value: Money.new(r.rolling_spend, r.currency)
+      }
+
+      income << {
+        date: r.date,
+        value: Money.new(r.rolling_income, r.currency)
+      }
+    end
+
+    {
+      income_series: TimeSeries.new(income, favorable_direction: "up"),
+      spending_series: TimeSeries.new(spending, favorable_direction: "down")
+    }
+  end
+
   def effective_start_date
     accounts.active.joins(:balances).minimum("account_balances.date") || Date.current
   end
