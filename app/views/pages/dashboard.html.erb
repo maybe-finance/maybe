@@ -11,7 +11,7 @@
     <% end %>
   </header>
   <section class="flex gap-4">
-    <div class="bg-white border border-alpha-black-25 shadow-xs rounded-xl w-3/4 min-h-48">
+    <div class="bg-white border border-alpha-black-25 shadow-xs rounded-xl w-3/4 min-h-48 flex flex-col">
       <div class="flex justify-between p-4">
         <div>
           <%= render partial: "shared/value_heading", locals: {
@@ -28,7 +28,7 @@
       <%= render partial: "pages/dashboard/net_worth_chart", locals: { series: @net_worth_series } %>
     </div>
     <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl w-1/4">
-      <%= render partial: "pages/dashboard/allocation_chart" %>
+      <%= render partial: "pages/dashboard/allocation_chart", locals: { account_groups: @account_groups } %>
     </div>
   </section>
   <section class="grid grid-cols-2 gap-4">
