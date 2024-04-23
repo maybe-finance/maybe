@@ -11,6 +11,10 @@ class PagesController < ApplicationController
     @income_series = snapshot_transactions[:income_series]
     @spending_series = snapshot_transactions[:spending_series]
 
+    snapshot_account_transactions = Current.family.snapshot_account_transactions
+    @top_spenders = snapshot_account_transactions[:top_spenders]
+    @top_earners = snapshot_account_transactions[:top_earners]
+
     @account_groups = Current.family.accounts.by_group(period: @period, currency: Current.family.currency)
     @transactions = Current.family.transactions.limit(5).order(date: :desc)
 

@@ -28,8 +28,28 @@ class Family < ApplicationRecord
     }
   end
 
+  def snapshot_account_transactions
+    period = Period.last_30_days
+
+    results = accounts.active.joins(:transactions)
+      .select(
+        "accounts.*",
+        "COALESCE(SUM(CASE WHEN transactions.amount > 0 THEN amount ELSE 0 END), 0) AS spending",
+        "COALESCE(SUM(CASE WHEN transactions.amount < 0 THEN -amount ELSE 0 END), 0) AS income"
+      )
+      .where("transactions.date >= ?", period.date_range.begin)
+      .where("transactions.date <= ?", period.date_range.end)
+      .group("id")
+      .to_a
+
+    {
+      top_spenders: results.sort_by { |a| a.spending }.filter { |a| a.spending > 0 }.reverse,
+      top_earners: results.sort_by { |a| a.income }.filter { |a| a.income > 0 }.reverse
+    }
+  end
+
   def snapshot_transactions
-    period = Period.last_7_days
+    period = Period.last_30_days
     days_rolling = 30
 
     start_date = period.date_range.first - days_rolling.days
