@@ -34,8 +34,8 @@ class Family < ApplicationRecord
     results = accounts.active.joins(:transactions)
       .select(
         "accounts.*",
-        "COALESCE(SUM(CASE WHEN transactions.amount > 0 THEN amount ELSE 0 END), 0) AS spending",
-        "COALESCE(SUM(CASE WHEN transactions.amount < 0 THEN -amount ELSE 0 END), 0) AS income"
+        "COALESCE(SUM(amount) FILTER (WHERE amount > 0), 0) AS spending",
+        "COALESCE(SUM(-amount) FILTER (WHERE amount < 0), 0) AS income"
       )
       .where("transactions.date >= ?", period.date_range.begin)
       .where("transactions.date <= ?", period.date_range.end)
@@ -60,8 +60,8 @@ class Family < ApplicationRecord
       .select(
         "gs.date",
         "c.currency",
-        "COALESCE(SUM(CASE WHEN t.amount > 0 THEN t.amount ELSE 0 END), 0) AS spending",
-        "COALESCE(SUM(CASE WHEN t.amount < 0 THEN -t.amount ELSE 0 END), 0) AS income"
+        "COALESCE(SUM(amount) FILTER (WHERE amount > 0), 0) AS spending",
+        "COALESCE(SUM(-amount) FILTER (WHERE amount < 0), 0) AS income"
       )
       .from(transactions, :t)
       .joins("RIGHT JOIN (#{sql_dates} CROSS JOIN (SELECT DISTINCT currency FROM transactions) AS c) ON t.date = gs.date AND t.currency = c.currency")
