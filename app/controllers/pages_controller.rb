@@ -10,10 +10,12 @@ class PagesController < ApplicationController
     snapshot_transactions = Current.family.snapshot_transactions
     @income_series = snapshot_transactions[:income_series]
     @spending_series = snapshot_transactions[:spending_series]
+    @savings_rate_series = snapshot_transactions[:savings_rate_series]
 
     snapshot_account_transactions = Current.family.snapshot_account_transactions
     @top_spenders = snapshot_account_transactions[:top_spenders]
     @top_earners = snapshot_account_transactions[:top_earners]
+    @top_savers = snapshot_account_transactions[:top_savers]
 
     @account_groups = Current.family.accounts.by_group(period: @period, currency: Current.family.currency)
     @transactions = Current.family.transactions.limit(5).order(date: :desc)
@@ -22,7 +24,6 @@ class PagesController < ApplicationController
     placeholder_series_data = 10.times.map do |i|
       { date: Date.current - i.days, value: Money.new(0) }
     end
-    @savings_rate_series = TimeSeries.new(10.times.map { |i| { date: Date.current - i.days, value: 0 } })
     @investing_series = TimeSeries.new(placeholder_series_data)
   end
 

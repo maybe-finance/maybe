@@ -18,7 +18,8 @@ class FamilyTest < ActiveSupport::TestCase
         "assets" => row["assets"],
         "liabilities" => row["liabilities"],
         "rolling_spend" => row["rolling_spend"],
-        "rolling_income" => row["rolling_income"]
+        "rolling_income" => row["rolling_income"],
+        "savings_rate" => row["savings_rate"]
       }
     end
   end
@@ -88,16 +89,20 @@ class FamilyTest < ActiveSupport::TestCase
   test "should calculate transaction snapshot correctly" do
     spending_series = @family.snapshot_transactions[:spending_series]
     income_series = @family.snapshot_transactions[:income_series]
+    savings_rate_series = @family.snapshot_transactions[:savings_rate_series]
 
     assert_equal @expected_snapshots.count, spending_series.values.count
     assert_equal @expected_snapshots.count, income_series.values.count
+    assert_equal @expected_snapshots.count, savings_rate_series.values.count
 
     @expected_snapshots.each_with_index do |row, index|
       expected_spending = TimeSeries::Value.new(date: row["date"], value: Money.new(row["rolling_spend"].to_d))
       expected_income = TimeSeries::Value.new(date: row["date"], value: Money.new(row["rolling_income"].to_d))
+      expected_savings_rate = TimeSeries::Value.new(date: row["date"], value: Money.new(row["savings_rate"].to_d))
 
       assert_in_delta expected_spending.value.amount, Money.new(spending_series.values[index].value).amount, 0.01
       assert_in_delta expected_income.value.amount, Money.new(income_series.values[index].value).amount, 0.01
+      assert_in_delta expected_savings_rate.value.amount, savings_rate_series.values[index].value, 0.01
     end
   end
 
