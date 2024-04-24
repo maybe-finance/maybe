@@ -30,7 +30,6 @@ class Family < ApplicationRecord
 
   def snapshot_account_transactions
     period = Period.last_30_days
-
     results = accounts.active.joins(:transactions)
       .select(
         "accounts.*",
@@ -42,9 +41,16 @@ class Family < ApplicationRecord
       .group("id")
       .to_a
 
+    results.each do |r|
+      r.define_singleton_method(:savings_rate) do
+        (income - spending) / income
+      end
+    end
+
     {
       top_spenders: results.sort_by(&:spending).select { |a| a.spending > 0 }.reverse,
-      top_earners: results.sort_by(&:income).select { |a| a.income > 0 }.reverse
+      top_earners: results.sort_by(&:income).select { |a| a.income > 0 }.reverse,
+      top_savers: results.sort_by { |a| a.savings_rate }.reverse
     }
   end
 
@@ -53,6 +59,7 @@ class Family < ApplicationRecord
 
     spending = []
     income = []
+    savings = []
     rolling_totals.each do |r|
       spending << {
         date: r.date,
@@ -63,11 +70,17 @@ class Family < ApplicationRecord
         date: r.date,
         value: Money.new(r.rolling_income, self.currency)
       }
+
+      savings << {
+        date: r.date,
+        value: r.rolling_income != 0 ? (r.rolling_income - r.rolling_spend) / r.rolling_income : 0.to_d
+      }
     end
 
     {
       income_series: TimeSeries.new(income, favorable_direction: "up"),
-      spending_series: TimeSeries.new(spending, favorable_direction: "down")
+      spending_series: TimeSeries.new(spending, favorable_direction: "down"),
+      savings_rate_series: TimeSeries.new(savings, favorable_direction: "up")
     }
   end
 
