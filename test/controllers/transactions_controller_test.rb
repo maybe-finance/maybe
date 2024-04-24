@@ -4,6 +4,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
     @transaction = transactions(:checking_one)
+    @account = @transaction.account
   end
 
   test "should get index" do
@@ -29,6 +30,12 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to transactions_url
+  end
+
+  test "create should sync account with correct start date" do
+    assert_enqueued_with(job: AccountSyncJob, args: [ @account, @transaction.date ]) do
+      post transactions_url, params: { transaction: { account_id: @transaction.account_id, amount: @transaction.amount, currency: @transaction.currency, date: @transaction.date, name: @transaction.name } }
+    end
   end
 
   test "creation preserves decimals" do
@@ -91,11 +98,35 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to transaction_url(@transaction)
   end
 
+  test "update should sync account with correct start date" do
+    new_date = @transaction.date - 1.day
+    assert_enqueued_with(job: AccountSyncJob, args: [ @account, new_date ]) do
+      patch transaction_url(@transaction), params: { transaction: { account_id: @transaction.account_id, amount: @transaction.amount, currency: @transaction.currency, date: new_date, name: @transaction.name } }
+    end
+
+    new_date = @transaction.reload.date + 1.day
+    assert_enqueued_with(job: AccountSyncJob, args: [ @account, @transaction.date ]) do
+      patch transaction_url(@transaction), params: { transaction: { account_id: @transaction.account_id, amount: @transaction.amount, currency: @transaction.currency, date: new_date, name: @transaction.name } }
+    end
+  end
+
   test "should destroy transaction" do
     assert_difference("Transaction.count", -1) do
       delete transaction_url(@transaction)
     end
 
     assert_redirected_to transactions_url
+  end
+
+  test "destroy should sync account with correct start date" do
+    first, second = @transaction.account.transactions.order(:date).all
+
+    assert_enqueued_with(job: AccountSyncJob, args: [ @account, first.date ]) do
+      delete transaction_url(second)
+    end
+
+    assert_enqueued_with(job: AccountSyncJob, args: [ @account, nil ]) do
+      delete transaction_url(first)
+    end
   end
 end
