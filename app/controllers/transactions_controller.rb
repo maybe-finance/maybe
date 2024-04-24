@@ -103,9 +103,10 @@ class TransactionsController < ApplicationController
   end
 
   def destroy
-    sync_start_date = Transaction.where("date < ?", @transaction.date).order(date: :desc).first&.date
+    @account = @transaction.account
+    sync_start_date = @account.transactions.where("date < ?", @transaction.date).order(date: :desc).first&.date
     @transaction.destroy!
-    @transaction.account.sync_later(sync_start_date)
+    @account.sync_later(sync_start_date)
 
     respond_to do |format|
       format.html { redirect_to transactions_url, notice: t(".success") }

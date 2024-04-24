@@ -18,26 +18,11 @@ class ValuationsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "should sync account after create" do
+  test "create should sync account with correct start date" do
     date = Date.current - 1.day
-    value = 2
 
-    @account.sync
-
-    assert_changes("@account.balance_on(date)", to: value) do
-      post account_valuations_url(@account), params: { valuation: { value:, date:, type: "Appraisal" } }
-      perform_enqueued_jobs
-    end
-  end
-
-  test "should do a partial account sync after create" do
-    date = Date.current - 1.day
-    @account.sync
-    @account.balances.where(date: date - 1.day).update!(balance: 200)
-
-    assert_no_changes("@account.balance_on(date - 1.day)") do
-      post account_valuations_url(@account), params: { valuation: { value: 1, date:, type: "Appraisal" } }
-      perform_enqueued_jobs
+    assert_enqueued_with(job: AccountSyncJob, args: [@account, date]) do
+      post account_valuations_url(@account), params: { valuation: { value: 2, date:, type: "Appraisal" } }
     end
   end
 
@@ -47,30 +32,15 @@ class ValuationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to account_path(@valuation.account)
   end
 
-  test "should sync account after update" do
-    account = @valuation.account
-    date = @valuation.date
-    value = 2
-
-    account.sync
-
-    assert_changes("account.balance_on(date)", value) do
-      patch valuation_url(@valuation), params: { valuation: { account_id: @valuation.account_id, value:, date:, type: "Appraisal" } }
-      perform_enqueued_jobs
+  test "update should sync account with correct start date" do
+    new_date = @valuation.date - 1.day
+    assert_enqueued_with(job: AccountSyncJob, args: [@account, new_date]) do
+      patch valuation_url(@valuation), params: { valuation: { account_id: @valuation.account_id, value: @valuation.value, date: new_date, type: "Appraisal" } }
     end
-  end
 
-  test "should do a partial account sync after update" do
-    account = @valuation.account
-    date = @valuation.date
-    value = 2
-
-    account.sync
-    account.balances.where(date: date - 2.day).update!(balance: 200)
-
-    assert_no_changes("account.balance_on(date - 2.day)") do
-      patch valuation_url(@valuation), params: { valuation: { account_id: @valuation.account_id, value:, date:, type: "Appraisal" } }
-      perform_enqueued_jobs
+    new_date = @valuation.reload.date + 1.day
+    assert_enqueued_with(job: AccountSyncJob, args: [@account, @valuation.date]) do
+      patch valuation_url(@valuation), params: { valuation: { account_id: @valuation.account_id, value: @valuation.value, date: new_date, type: "Appraisal" } }
     end
   end
 
@@ -82,28 +52,15 @@ class ValuationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to account_path(@account)
   end
 
-  test "should sync account after destroy" do
-    account = @valuation.account
-    date = @valuation.date
-    value = @account.balance
-    account.sync
+  test "destroy should sync account with correct start date" do
+    first, second = @account.valuations.order(:date).all
 
-    assert_changes("@account.balance_on(date)", to: 19700) do
-      delete valuation_url(@valuation)
-      perform_enqueued_jobs
+    assert_enqueued_with(job: AccountSyncJob, args: [@account, first.date]) do
+      delete valuation_url(second)
     end
-  end
 
-  test "should do a partial account sync after destroy" do
-    account = @valuation.account
-    date = @valuation.date
-
-    account.sync
-    account.balances.where(date: date - 10.day).update!(balance: 200)
-
-    assert_no_changes("account.balance_on(date - 10.day)") do
-      delete valuation_url(@valuation)
-      perform_enqueued_jobs
+    assert_enqueued_with(job: AccountSyncJob, args: [@account, nil]) do
+      delete valuation_url(first)
     end
   end
 end
