@@ -21,7 +21,7 @@ class ValuationsControllerTest < ActionDispatch::IntegrationTest
   test "create should sync account with correct start date" do
     date = Date.current - 1.day
 
-    assert_enqueued_with(job: AccountSyncJob, args: [@account, date]) do
+    assert_enqueued_with(job: AccountSyncJob, args: [ @account, date ]) do
       post account_valuations_url(@account), params: { valuation: { value: 2, date:, type: "Appraisal" } }
     end
   end
@@ -34,12 +34,12 @@ class ValuationsControllerTest < ActionDispatch::IntegrationTest
 
   test "update should sync account with correct start date" do
     new_date = @valuation.date - 1.day
-    assert_enqueued_with(job: AccountSyncJob, args: [@account, new_date]) do
+    assert_enqueued_with(job: AccountSyncJob, args: [ @account, new_date ]) do
       patch valuation_url(@valuation), params: { valuation: { account_id: @valuation.account_id, value: @valuation.value, date: new_date, type: "Appraisal" } }
     end
 
     new_date = @valuation.reload.date + 1.day
-    assert_enqueued_with(job: AccountSyncJob, args: [@account, @valuation.date]) do
+    assert_enqueued_with(job: AccountSyncJob, args: [ @account, @valuation.date ]) do
       patch valuation_url(@valuation), params: { valuation: { account_id: @valuation.account_id, value: @valuation.value, date: new_date, type: "Appraisal" } }
     end
   end
@@ -55,11 +55,11 @@ class ValuationsControllerTest < ActionDispatch::IntegrationTest
   test "destroy should sync account with correct start date" do
     first, second = @account.valuations.order(:date).all
 
-    assert_enqueued_with(job: AccountSyncJob, args: [@account, first.date]) do
+    assert_enqueued_with(job: AccountSyncJob, args: [ @account, first.date ]) do
       delete valuation_url(second)
     end
 
-    assert_enqueued_with(job: AccountSyncJob, args: [@account, nil]) do
+    assert_enqueued_with(job: AccountSyncJob, args: [ @account, nil ]) do
       delete valuation_url(first)
     end
   end
