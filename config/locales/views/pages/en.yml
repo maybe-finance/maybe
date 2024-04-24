@@ -7,14 +7,14 @@ en:
         debts: Debts
       categories: Categories
       greeting: Welcome back, %{name}
-      income: Income (coming soon...)
+      income: Income
       investing: Investing (coming soon...)
       net_worth: Net Worth
       new: New account
       no_transactions: You have no recent transactions
       recurring: Recurring
       savings_rate: Savings Rate (coming soon...)
-      spending: Spending (coming soon...)
+      spending: Spending
       subtitle: Here's what's happening today
       transactions: Transactions
       view_all: View all
