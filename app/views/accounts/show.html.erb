@@ -26,9 +26,9 @@
                 class: "block w-full py-2 text-red-600 hover:text-red-800 flex items-center",
                 data: {
                   turbo_confirm: {
-                    title: t("custom_turbo_confirm.account_destroy.title"),
-                    body: t("custom_turbo_confirm.account_destroy.body_html"),
-                    accept: t("custom_turbo_confirm.account_destroy.accept", name: @account.name)
+                    title: t(".confirm_title"),
+                    body: t(".confirm_body_html"),
+                    accept: t(".confirm_accept", name: @account.name)
                   }
                 } do %>
               <%= lucide_icon("trash-2", class: "w-5 h-5 mr-2") %> Delete account
