@@ -48,6 +48,9 @@ class SettingsTest < ApplicationSystemTestCase
   test "can see conditional nav items" do
     ENV["SELF_HOSTING_ENABLED"] = "true"
 
+    visit root_path
+    sign_in @user
+
     open_settings_from_sidebar
 
     click_link "Self-Hosting"
