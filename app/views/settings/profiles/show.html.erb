@@ -2,23 +2,71 @@
   <%= render "settings/nav" %>
 <% end %>
 <div class="space-y-4">
-  <h1 class="text-gray-900 text-xl font-medium mb-4">Account</h1>
-  <%= form_with model: Current.user, url: settings_profile_path, html: { class: "space-y-4" } do |form| %>
-    <%= form.fields_for :family_attributes do |family_fields| %>
-      <%= family_fields.text_field :name, placeholder: "Family name", value: Current.family.name, label: "Family name" %>
-      <%= family_fields.select :currency, options_for_select(Money::Currency.popular.map { |currency| ["#{currency.iso_code} (#{currency.name})", currency.iso_code] }, selected: Current.family.currency), { label: "Currency" } %>
+  <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
+  <div class="space-y-4">
+    <%= settings_section title: t(".profile_title"), subtitle: t(".profile_subtitle") do %>
+      <div class="flex items-center gap-4">
+        <div class="flex justify-center items-center bg-gray-50 w-24 h-24 rounded-full border border-alpha-black-25">
+          <%= lucide_icon "image-plus", class: "w-6 h-6 text-gray-500" %>
+        </div>
+        <div class="space-y-3">
+          <p><%= t(".profile_image_type") %></p>
+          <button class="cursor-not-allowed px-3 py-2 bg-gray-50 text-gray-900 rounded-md text-sm font-medium" disabled><%= t(".profile_image_choose") %></button>
+        </div>
+      </div>
+      <div>
+        <%= form_with model: Current.user, url: settings_profile_path, html: { class: "space-y-4" } do |form| %>
+          <div class="grid grid-cols-2 gap-4">
+            <%= form.text_field :first_name, placeholder: "First name", value: Current.user.first_name, label: true %>
+            <%= form.text_field :last_name, placeholder: "Last name", value: Current.user.last_name, label: true %>
+          </div>
+          <div class="flex justify-end">
+            <%= form.submit t(".save"), class: "bg-gray-900 text-white rounded-lg px-3 py-2" %>
+          </div>
+        <% end %>
+      </div>
     <% end %>
-    <%= form.text_field :first_name, placeholder: "First name", value: Current.user.first_name, label: true %>
-    <%= form.text_field :last_name, placeholder: "Last name", value: Current.user.last_name, label: true %>
-    <%= form.email_field :email, placeholder: "Email", value: Current.user.email, label: true %>
-    <%= form.password_field :password, label: true %>
-    <%= form.password_field :password_confirmation, label: true %>
-    <div class="fixed right-5 bottom-5">
-      <button type="submit" class="flex items-center justify-center w-12 h-12 mb-2 bg-black rounded-full shrink-0 grow-0 hover:bg-gray-600">
-        <%= inline_svg_tag("icn-check.svg", class: "text-white fill-current") %>
-      </button>
-    </div>
-  <% end %>
+    <%= settings_section title: t(".household_title"), subtitle: t(".household_subtitle") do %>
+      <div class="space-y-4">
+        <%= form_with model: Current.user, url: settings_profile_path, html: { class: "space-y-4", data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value": "blur" } } do |form| %>
+          <%= form.fields_for :family_attributes do |family_fields| %>
+            <%= family_fields.text_field :name, placeholder: t(".household_form_input_placeholder"), value: Current.family.name, label: t(".household_form_label"), disabled: !Current.user.admin?, "data-auto-submit-form-target": "auto" %>
+          <% end %>
+        <% end %>
+        <div class="bg-gray-25 rounded-xl p-1">
+          <div class="px-4 py-2">
+            <p class="uppercase text-xs text-gray-500 font-medium"><%= Current.family.name %> &middot; <%= Current.family.users.size %></p>
+          </div>
+          <div class="flex gap-2 items-center bg-white p-4 border border-alpha-black-25 rounded-lg">
+            <div class="mr-1 flex justify-center items-center bg-gray-50 w-8 h-8 rounded-full border border-alpha-black-25">
+              <p class="uppercase text-xs text-gray-500"><%= Current.user.first_name.first %></p>
+            </div>
+            <p class="text-gray-900 font-medium text-sm"><%= Current.user.first_name %> <%= Current.user.last_name %></p>
+            <div class="rounded-md bg-gray-100 px-1.5 py-0.5">
+              <p class="uppercase text-gray-500 font-medium text-xs"><%= Current.user.role %></p>
+            </div>
+          </div>
+          <div>
+            <button disabled class="cursor-not-allowed flex gap-1 justify-center w-full block items-center px-4 py-2">
+              <%= lucide_icon "plus", class: "w-4 h-4 text-gray-500" %>
+              <span class="text-gray-500 text-sm font-medium"><%= t(".add_member") %></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    <%= settings_section title: t(".danger_zone_title") do %>
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="font-medium text-gray-900"><%= t(".delete_account") %></h3>
+          <p class="text-gray-500 text-sm"><%= t(".delete_account_warning") %></p>
+        </div>
+        <button disabled class="bg-red-500 text-white text-sm font-medium rounded-lg px-3 py-2 cursor-not-allowed">
+          <%= t(".delete_account") %>
+        </button>
+      </div>
+    <% end %>
+  </div>
   <div class="flex gap-4">
     <%= next_setting("Preferences", settings_preferences_path) %>
   </div>
