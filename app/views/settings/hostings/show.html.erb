@@ -2,43 +2,44 @@
   <%= render "settings/nav" %>
 <% end %>
 <div class="space-y-4">
-  <h1 class="text-3xl font-semibold font-display">Self Hosting</h1>
-  <hr>
-  <%= form_with model: Setting.new, url: settings_hosting_path, method: :patch, local: true, html: { class: "space-y-4" } do |form| %>
-    <section class="space-y-3">
-      <h2 class="text-2xl font-semibold">Render Deploy Hook</h2>
-      <p class="text-gray-500">You must fill this in so your app can trigger upgrades when Maybe releases upgrades.  Learn more about deploy hooks and how they work in the <%= link_to "Render documentation", "https://docs.render.com/docs/deploy-hooks", target: "_blank", rel: "noopener noreferrer", class: "text-blue-500 hover:underline" %>.</p>
-      <%= form.url_field :render_deploy_hook, label: "Render Deploy Hook", placeholder: "https://api.render.com/deploy/srv-xyz...", value: Setting.render_deploy_hook %>
-    </section>
-    <section class="space-y-3">
-      <h2 class="text-2xl font-semibold">Auto Upgrades Setting</h2>
-      <p class="text-gray-500">This setting controls how often your self hosted app will update and what method it uses to do so.</p>
-      <div class="space-y-2">
-        <div class="flex items-center gap-2">
-          <%= form.check_box :upgrades_mode, { checked: Setting.upgrades_mode == "auto", unchecked_value: "manual" }, "auto", "manual" %>
-          <%= form.label :upgrades_mode, "Enable auto upgrades", class: "text-gray-900" %>
+  <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
+  <%= settings_section title: t(".general_settings_title") do %>
+    <%= form_with model: Setting.new, url: settings_hosting_path, method: :patch, local: true, html: { class: "space-y-4" } do |form| %>
+      <section class="space-y-3">
+        <h2 class="font-medium"><%= t(".render_deploy_hook_title") %></h2>
+        <p class="text-gray-500"><%= t(".render_deploy_hook_description") %></p>
+        <%= form.url_field :render_deploy_hook, label: t(".render_deploy_hook_label"), placeholder: "https://api.render.com/deploy/srv-xyz...", value: Setting.render_deploy_hook %>
+      </section>
+      <section class="space-y-3">
+        <h2 class="font-medium"><%= t(".auto_upgrades_title") %></h2>
+        <p class="text-gray-500"><%= t(".auto_upgrades_description") %></p>
+        <div class="space-y-2">
+          <div class="flex items-center gap-2">
+            <%= form.check_box :upgrades_mode, { checked: Setting.upgrades_mode == "auto", unchecked_value: "manual" }, "auto", "manual" %>
+            <%= form.label :upgrades_mode, "Enable auto upgrades", class: "text-gray-900" %>
+          </div>
+          <% if Setting.upgrades_mode == "auto" %>
+            <div class="flex items-center gap-2">
+              <%= form.radio_button :upgrades_target, "release", checked: Setting.upgrades_target == "release" %>
+              <%= form.label :upgrades_target_release, class: Setting.upgrades_target == "release" ? "text-gray-900" : "text-gray-500" do %>
+                <span class="font-semibold">Latest Release (suggested)</span> - you will automatically be upgraded to the latest stable release of Maybe
+              <% end %>
+            </div>
+            <div class="flex items-center gap-2">
+              <%= form.radio_button :upgrades_target, "commit", checked: Setting.upgrades_target == "commit" %>
+              <%= form.label :upgrades_target_commit, class: Setting.upgrades_target == "commit" ? "text-gray-900" : "text-gray-500" do %>
+                <span class="font-semibold">Latest Commit</span> - you will automatically be upgraded any time the Maybe repo is updated
+              <% end %>
+            </div>
+          <% end %>
         </div>
-        <% if Setting.upgrades_mode == "auto" %>
-          <div class="flex items-center gap-2">
-            <%= form.radio_button :upgrades_target, "release", checked: Setting.upgrades_target == "release" %>
-            <%= form.label :upgrades_target_release, class: Setting.upgrades_target == "release" ? "text-gray-900" : "text-gray-500" do %>
-              <span class="font-semibold">Latest Release (suggested)</span> - you will automatically be upgraded to the latest stable release of Maybe
-            <% end %>
-          </div>
-          <div class="flex items-center gap-2">
-            <%= form.radio_button :upgrades_target, "commit", checked: Setting.upgrades_target == "commit" %>
-            <%= form.label :upgrades_target_commit, class: Setting.upgrades_target == "commit" ? "text-gray-900" : "text-gray-500" do %>
-              <span class="font-semibold">Latest Commit</span> - you will automatically be upgraded any time the Maybe repo is updated
-            <% end %>
-          </div>
-        <% end %>
+      </section>
+      <div class="fixed right-5 bottom-5">
+        <button type="submit" class="flex items-center justify-center w-12 h-12 mb-2 bg-black rounded-full shrink-0 grow-0 hover:bg-gray-600">
+          <%= inline_svg_tag("icn-check.svg", class: "text-white fill-current") %>
+        </button>
       </div>
-    </section>
-    <div class="fixed right-5 bottom-5">
-      <button type="submit" class="flex items-center justify-center w-12 h-12 mb-2 bg-black rounded-full shrink-0 grow-0 hover:bg-gray-600">
-        <%= inline_svg_tag("icn-check.svg", class: "text-white fill-current") %>
-      </button>
-    </div>
+    <% end %>
   <% end %>
   <div class="flex justify-between gap-4">
     <%= previous_setting("Billing", settings_billing_path) %>
