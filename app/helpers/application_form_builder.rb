@@ -56,6 +56,11 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+  def radio_button(method, tag_value, options = {})
+    default_options = { class: "form-field__radio" }
+    merged_options = default_options.merge(options)
+    super(method, tag_value, merged_options)
+  end
 
   def grouped_select(method, grouped_choices, options = {}, html_options = {})
     default_options = { class: "form-field__input" }

@@ -48,6 +48,10 @@
     @apply disabled:opacity-50;
   }
 
+  .form-field__radio {
+    @apply text-gray-900;
+  }
+
   .form-field__submit {
     @apply w-full p-3 text-center text-white bg-black rounded-lg hover:bg-gray-700;
   }

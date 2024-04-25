@@ -2,6 +2,43 @@
 en:
   settings:
     hostings:
+      show:
+        general_settings_title: General Settings
+        page_title: Self-Hosting
+        provider_settings:
+          title: Provider Settings
+        render_deploy_hook_description: Input the deploy hook URL provided by Render
+        render_deploy_hook_label: Render Deploy Hook URL
+        render_deploy_hook_placeholder: https://api.render.com/deploy/srv-xyz...
+        smtp_settings:
+          description: Configure outgoing mail server settings for notifications and
+            alerts
+          domain: App Domain
+          domain_placeholder: mydomain.com
+          host: SMTP Host
+          host_placeholder: smtp.gmail.com
+          password: Password
+          password_placeholder: "*******"
+          port: Port
+          port_placeholder: 587
+          send_test_email: Send Test Email
+          send_test_email_button: Send Test Email
+          send_test_email_description: Verify SMTP settings by sending a test email
+          title: SMTP Email Configuration (coming soon...)
+          username: Username
+          username_placeholder: username@gmail.com
+        upgrades:
+          description: Choose how your application receives updates
+          latest_commit:
+            description: Automatically update to the latest commit (unstable)
+            title: Latest Commit
+          latest_release:
+            description: Automatically update to the most recent release (stable)
+            title: Latest Release
+          manual:
+            description: You control when to download and install updates
+            title: Manual
+          title: Auto upgrade
       update:
         render_deploy_hook_error: Render deploy hook must be provided to enable auto
           upgrades
@@ -18,7 +55,7 @@ en:
       profile_label: Account
       rules_label: Rules
       security_label: Security
-      self_hosting_label: Self Hosting
+      self_hosting_label: Self-Hosting
       whats_new_label: What's New
     nav_link_large:
       next: Next

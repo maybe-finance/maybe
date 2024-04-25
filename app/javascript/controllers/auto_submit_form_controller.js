@@ -10,13 +10,17 @@ export default class extends Controller {
 
   connect() {
     this.autoTargets.forEach((element) => {
-      element.addEventListener(this.triggerEventValue, this.handleInput);
+      const event =
+        element.dataset.autosubmitTriggerEvent || this.triggerEventValue;
+      element.addEventListener(event, this.handleInput);
     });
   }
 
   disconnect() {
     this.autoTargets.forEach((element) => {
-      element.removeEventListener(this.triggerEventValue, this.handleInput);
+      const event =
+        element.dataset.autosubmitTriggerEvent || this.triggerEventValue;
+      element.removeEventListener(event, this.handleInput);
     });
   }
 
