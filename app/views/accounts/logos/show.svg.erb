@@ -1,0 +1,21 @@
+<svg
+  version="1.1"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  viewBox="0 0 32 32"
+  aria-hidden="true">
+  <g>
+    <rect width="100%" height="100%" rx="50%" fill="<%= accountable_color(@account.accountable_type) %>" opacity="0.1" />
+    <text
+      x="50%"
+      y="50%"
+      fill="<%= accountable_color(@account.accountable_type) %>"
+      text-anchor="middle"
+      dy="0.35em"
+      font-family="ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji"
+      font-size="16"
+      font-weight="400">
+      <%= @account.name[0].upcase %>
+    </text>
+  </g>
+</svg>
