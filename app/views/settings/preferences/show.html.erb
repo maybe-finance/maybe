@@ -19,21 +19,21 @@
           <%= image_tag("light-mode-preview.png", alt: "Light Theme Preview", class: "h-44 mb-4") %>
           <div class="flex justify-center items-center gap-2">
             <%= form.radio_button :theme, t(".theme_light"), checked: true %>
-            <%= form.label :theme_light, t(".theme_light"), value: 'light' %>
+            <%= form.label :theme_light, t(".theme_light"), value: "light" %>
           </div>
         </div>
         <div class="text-center">
           <%= image_tag("dark-mode-preview.png", alt: "Dark Theme Preview", class: "h-44 mb-4") %>
           <div class="flex justify-center items-center gap-2">
             <%= form.radio_button :theme, t(".theme_dark"), disabled: true, class: "cursor-not-allowed" %>
-            <%= form.label :theme_dark, t(".theme_dark"), value: 'dark' %>
+            <%= form.label :theme_dark, t(".theme_dark"), value: "dark" %>
           </div>
         </div>
         <div class="text-center">
           <%= image_tag("system-mode-preview.png", alt: "System Theme Preview", class: "h-44 mb-4") %>
           <div class="flex items-center gap-2 justify-center">
             <%= form.radio_button :theme, t(".theme_system"), disabled: true, class: "cursor-not-allowed" %>
-            <%= form.label :theme_system, t(".theme_system"), value: 'system' %>
+            <%= form.label :theme_system, t(".theme_system"), value: "system" %>
           </div>
         </div>
       <% end %>

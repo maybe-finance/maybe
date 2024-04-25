@@ -30,7 +30,7 @@
       <div class="space-y-4">
         <%= form_with model: Current.user, url: settings_profile_path, html: { class: "space-y-4", data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value": "blur" } } do |form| %>
           <%= form.fields_for :family_attributes do |family_fields| %>
-            <%= family_fields.text_field :name, placeholder: t(".household_form_input_placeholder"), value: Current.family.name, label: t(".household_form_label"), disabled: !Current.user.admin?, "data-auto-submit-form-target": "auto"  %>
+            <%= family_fields.text_field :name, placeholder: t(".household_form_input_placeholder"), value: Current.family.name, label: t(".household_form_label"), disabled: !Current.user.admin?, "data-auto-submit-form-target": "auto" %>
           <% end %>
         <% end %>
         <div class="bg-gray-25 rounded-xl p-1">
