@@ -76,21 +76,9 @@
         <%= t(".accounts") %>
       <% end %>
       <div class="w-1 h-1 bg-gray-500 rounded-full"></div>
-      <% options = [["7D", "last_7_days"], ["1M", "last_30_days"]] %>
-      <div data-controller="select" data-select-active-class="bg-alpha-black-50" class="relative" data-select-selected-value="<%= @period.name %>">
-        <button type="button" data-select-target="button" class="flex items-center gap-1 w-full shadow-xs rounded-lg text-sm cursor-pointer">
-          <span data-select-target="buttonText" class="text-gray-500 text-sm"><%= options.find { |option| option[1] == @period.name }[0] %></span>
-          <%= lucide_icon("chevron-down", class: "w-5 h-5 text-gray-500") %>
-        </button>
-        <input type="hidden" name="period" data-select-target="input" data-auto-submit-form-target="auto">
-        <ul data-select-target="list" class="hidden absolute z-10 top-10 right-0 border border-alpha-black-25 bg-white rounded-lg shadow-xs">
-          <% options.each do |label, value| %>
-            <li tabindex="0" data-select-target="option" data-action="click->select#selectOption" data-value="<%= value %>" class="text-sm text-gray-900 rounded-lg cursor-pointer hover:bg-alpha-black-50 px-5 py-1">
-              <%= label %>
-            </li>
-          <% end %>
-        </ul>
-      </div>
+      <%= form_with method: :get, class: "flex items-center gap-4", data: { controller: "auto-submit-form"} do %>
+        <%= render partial: "layouts/period_select", locals: { value: @period.name } %>
+      <% end %>
     </div>
     <%= link_to new_account_path, class: "block hover:bg-gray-100 p-2 text-sm font-semibold text-gray-900 flex items-center rounded", title: t(".new_account"), data: { turbo_frame: "modal" } do %>
       <%= lucide_icon("plus", class: "w-5 h-5 text-gray-500") %>

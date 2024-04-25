@@ -10,41 +10,41 @@
       <div class="ml-auto flex flex-col items-end">
         <p class="text-right"><%= format_money group.sum %></p>
         <div class="flex gap-2">
-              <div
-                class="h-5 w-5"
-                id="blah"
-                data-controller="time-series-chart"
-                data-time-series-chart-data-value="<%= group.series.to_json %>"
-                data-time-series-chart-use-labels-value="false"
-                data-time-series-chart-use-tooltip-value="false">
-            </div>
-          <p class="text-right <%= styles[:text_class] %>"><%= group.series.favorable_direction == "down" ? "-" : "+" %><%= group.series.trend.percent %>%</p>
+          <div
+            class="h-5 w-5"
+            data-controller="time-series-chart"
+            data-time-series-chart-data-value="<%= group.series.to_json %>"
+            data-time-series-chart-use-labels-value="false"
+            data-time-series-chart-use-tooltip-value="false">
+          </div>  
+          <p class="text-right <%= styles[:text_class] %>"><%= styles[:symbol] %><%= group.series.trend.percent %>%</p>
         </div>
       </div>
     </summary>
     <% group.children.each do |account_value_node| %>
       <%= link_to account_path(account_value_node.original), class: "flex items-center w-full gap-3 px-2 py-3 mb-1 hover:bg-gray-100 rounded-[10px]" do %>
         <div class="flex items-center gap-3">
-          <div class="bg-green-600/10 rounded-full h-8 w-8 flex items-center justify-center">
+          <div class="bg-green-600/10 rounded-full h-8 w-8 flex items-center justify-center p-3">
             <span class="text-green-600"><%= type.name[0].upcase %></span>
           </div>
-          <p class="font-medium"><%= account_value_node.name %></p>
-          <% if account_value_node.original.subtype %>
-            <p class="text-xs text-gray-500"><%= account_value_node.original.subtype&.humanize %></p>
-          <% end %>
+          <div class="flex flex-col gap-0.5">
+            <p class="font-medium"><%= account_value_node.name %></p>
+            <% if account_value_node.original.subtype %>
+              <p class="text-xs text-gray-500"><%= account_value_node.original.subtype&.humanize %></p>
+            <% end %>
+          </div>
         </div>
         <div class="ml-auto flex flex-col items-end">
           <p class="text-right font-medium"><%= format_money account_value_node.original.balance_money %></p>
           <div class="flex gap-2">
-                <div
-                  class="h-5 w-5"
-                  id="blah"
-                  data-controller="time-series-chart"
-                  data-time-series-chart-data-value="<%= account_value_node.original.series.to_json %>"
-                  data-time-series-chart-use-labels-value="false"
-                  data-time-series-chart-use-tooltip-value="false">
-              </div>
-            <p class="text-right <%= styles[:text_class] %>"><%= account_value_node.original.series.favorable_direction == "down" ? "-" : "+" %><%= account_value_node.original.series.trend.percent %>%</p>
+            <div
+              class="h-5 w-5"
+              data-controller="time-series-chart"
+              data-time-series-chart-data-value="<%= account_value_node.original.series.to_json %>"
+              data-time-series-chart-use-labels-value="false"
+              data-time-series-chart-use-tooltip-value="false">
+            </div>
+            <p class="text-right <%= styles[:text_class] %>"><%= styles[:symbol] %><%= account_value_node.original.series.trend.percent %>%</p>
           </div>
         </div>
       <% end %>
