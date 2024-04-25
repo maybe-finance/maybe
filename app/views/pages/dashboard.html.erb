@@ -54,9 +54,7 @@
         <div class="flex gap-1.5">
           <% @top_earners.first(3).each do |account| %>
             <%= link_to account, class: "border border-alpha-black-25 rounded-full p-1 pr-2 flex items-center gap-1 text-xs text-gray-900 font-medium hover:bg-gray-25" do %>
-              <div class="flex items-center justify-center text-xs w-5 h-5 rounded-full <%= accountable_text_class(account.accountable_type) %> <%= accountable_bg_transparent_class(account.accountable_type) %>">
-                <%= account.name[0].upcase %>
-              </div>
+              <%= image_tag account_logo_url(account), class: "w-5 h-5" %>
               <span>+<%= Money.new(account.income, account.currency) %></span>
             <% end %>
           <% end %>
@@ -88,9 +86,7 @@
         <div class="flex gap-1.5">
           <% @top_spenders.first(3).each do |account| %>
             <%= link_to account, class: "border border-alpha-black-25 rounded-full p-1 pr-2 flex items-center gap-1 text-xs text-gray-900 font-medium hover:bg-gray-25" do %>
-              <div class="flex items-center justify-center text-xs w-5 h-5 rounded-full <%= accountable_text_class(account.accountable_type) %> <%= accountable_bg_transparent_class(account.accountable_type) %>">
-                <%= account.name[0].upcase %>
-              </div>
+              <%= image_tag account_logo_url(account), class: "w-5 h-5" %>
               -<%= Money.new(account.spending, account.currency) %>
             <% end %>
           <% end %>
@@ -123,9 +119,7 @@
         <div class="flex gap-1.5">
           <% @top_savers.first(3).each do |account| %>
             <%= link_to account, class: "border border-alpha-black-25 rounded-full p-1 pr-2 flex items-center gap-1 text-xs text-gray-900 font-medium hover:bg-gray-25" do %>
-              <div class="flex items-center justify-center text-xs w-5 h-5 rounded-full <%= accountable_text_class(account.accountable_type) %> <%= accountable_bg_transparent_class(account.accountable_type) %>">
-                <%= account.name[0].upcase %>
-              </div>
+              <%= image_tag account_logo_url(account), class: "w-5 h-5" %>
               <span><%= account.savings_rate > 0 ? "+" : "-" %><%= number_to_percentage(account.savings_rate.abs * 100, precision: 2) %></span>
             <% end %>
           <% end %>
