@@ -20,10 +20,6 @@ en:
         smtp_settings:
           description: Configure outgoing mail server settings for notifications and
             alerts
-          domain: App Domain
-          domain_placeholder: mydomain.com
-          email_sender: Email Sender
-          email_sender_placeholder: user@mydomain.com
           host: SMTP Host
           host_placeholder: smtp.gmail.com
           password: Password
