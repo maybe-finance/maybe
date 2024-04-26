@@ -16,4 +16,13 @@ class Setting < RailsSettings::Base
         type: :string,
         default: ENV.fetch("UPGRADES_TARGET", "release"),
         validates: { inclusion: { in: %w[release commit] } }
+
+  field :app_domain, default: ENV["APP_DOMAIN"]
+
+  scope :smtp_configuration do
+    field :smtp_host, default: ENV["SMTP_ADDRESS"]
+    field :smtp_port, default: ENV["SMTP_PORT"]
+    field :smtp_username, default: ENV["SMTP_USERNAME"]
+    field :smtp_password, default: ENV["SMTP_PASSWORD"]
+  end
 end
