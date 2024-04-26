@@ -61,9 +61,20 @@
           <h3 class="font-medium text-gray-900"><%= t(".delete_account") %></h3>
           <p class="text-gray-500 text-sm"><%= t(".delete_account_warning") %></p>
         </div>
-        <button disabled class="bg-red-500 text-white text-sm font-medium rounded-lg px-3 py-2 cursor-not-allowed">
-          <%= t(".delete_account") %>
-        </button>
+        <%= button_to settings_profile_path,
+            method: :delete,
+            class: "block bg-red-500 text-white hover:opacity-9 text-sm font-medium rounded-lg px-3 py-2 flex items-center",
+            data: {
+              turbo_confirm: {
+                title: t(".confirm_delete_title"),
+                body: t(".confirm_delete_body_html"),
+                accept: t(".delete_account"),
+                reject: t(".cancel"),
+                acceptClass: ' text-white bg-red-500'
+              }
+            } do %>
+          <%= lucide_icon("trash-2", class: "w-5 h-5 mr-2") %> <%= t(".delete_account") %>
+        <% end %>
       </div>
     <% end %>
   </div>

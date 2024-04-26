@@ -78,6 +78,9 @@ en:
     profiles:
       show:
         add_member: Add Member
+        cancel: Cancel
+        confirm_delete_title: Delete account?
+        confirm_delete_body_html: "<p>Are you sure you want to permanently delete your account? This action is irreversible.</p>"
         danger_zone_title: Danger Zone
         delete_account: Delete Account
         delete_account_warning: Deleting your account will permanently remove all
@@ -95,3 +98,6 @@ en:
         save: Save
       update:
         success: Profile updated successfully.
+      destroy:
+        success: Account deleted successfully.
+        account_deletion_failed: Sorry, there was an error deleting your account. Try again later or contact support.
