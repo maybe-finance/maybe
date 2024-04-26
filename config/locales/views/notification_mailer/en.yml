@@ -2,5 +2,6 @@
 en:
   notification_mailer:
     test_email:
+      test_email_body: Congratulation ! Connection to the SMTP server is now correctly
+        configured.
       test_email_subject: SMTP settings verified !
-      test_email_body: Congratulation ! Connection to the SMTP server is now correctly configured. 

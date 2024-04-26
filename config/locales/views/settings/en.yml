@@ -2,7 +2,14 @@
 en:
   settings:
     hostings:
+      send_test_email:
+        error: 'Configuration error: Test email could not be sent'
+        success: Test email has been sent successfully
       show:
+        domain: App Domain
+        domain_placeholder: mydomain.com
+        email_sender: Email Sender
+        email_sender_placeholder: user@mydomain.com
         general_settings_title: General Settings
         page_title: Self-Hosting
         provider_settings:
@@ -10,17 +17,13 @@ en:
         render_deploy_hook_description: Input the deploy hook URL provided by Render
         render_deploy_hook_label: Render Deploy Hook URL
         render_deploy_hook_placeholder: https://api.render.com/deploy/srv-xyz...
-        email_sender: Email Sender
-        email_sender_placeholder: user@mydomain.com
-        domain: App Domain
-        domain_placeholder: mydomain.com
         smtp_settings:
           description: Configure outgoing mail server settings for notifications and
             alerts
-          email_sender: Email Sender
-          email_sender_placeholder: user@mydomain.com
           domain: App Domain
           domain_placeholder: mydomain.com
+          email_sender: Email Sender
+          email_sender_placeholder: user@mydomain.com
           host: SMTP Host
           host_placeholder: smtp.gmail.com
           password: Password
@@ -49,9 +52,6 @@ en:
         render_deploy_hook_error: Render deploy hook must be provided to enable auto
           upgrades
         success: Settings updated successfully.
-      send_test_email:
-        error: 'Configuration error: Test email could not be sent'
-        success: Test email has been sent successfully
     nav:
       accounts_label: Accounts
       billing_label: Billing
