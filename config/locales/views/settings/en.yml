@@ -29,7 +29,7 @@ en:
           send_test_email: Send Test Email
           send_test_email_button: Send Test Email
           send_test_email_description: Verify SMTP settings by sending a test email
-          title: SMTP Email Configuration (coming soon...)
+          title: SMTP Email Configuration
           username: Username
           username_placeholder: username@gmail.com
         upgrades:
