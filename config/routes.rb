@@ -15,7 +15,9 @@ Rails.application.routes.draw do
     resource :preferences, only: %i[show update]
     resource :notifications, only: %i[show update]
     resource :billing, only: %i[show update]
-    resource :hosting, only: %i[show update]
+    resource :hosting, only: %i[show update] do
+      get :send_test_email, on: :collection
+    end
     resource :security, only: %i[show update]
   end
 
