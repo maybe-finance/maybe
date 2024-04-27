@@ -18,9 +18,8 @@ class Settings::HostingsController < ApplicationController
   end
 
   def send_test_email
-    current_user_email = Current.user.email
     begin
-      NotificationMailer.test_email(current_user_email).deliver_now
+      NotificationMailer.with(user: Current.user).test_email.deliver_now
       notice = t(".success")
     rescue => e
       notice = t(".error")
