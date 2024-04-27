@@ -20,6 +20,7 @@ en:
         new: New
       menu:
         add_new: Add new
+        clear: Clear
       new:
         new_category: New category
       row:

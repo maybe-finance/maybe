@@ -30,6 +30,17 @@
 
             <%= t(".add_new") %>
           <% end %>
+
+          <% if transaction.category %>
+            <%= button_to transaction_path(transaction),
+                  method: :patch,
+                  params: { transaction: { category_id: nil } },
+                  class: "flex text-sm font-medium items-center gap-2 text-gray-500 w-full rounded-lg p-2 hover:bg-gray-100" do %>
+              <%= lucide_icon "minus", class: "w-5 h-5" %>
+
+              <%= t(".clear") %>
+            <% end %>
+          <% end %>
         </div>
       </div>
     </div>
