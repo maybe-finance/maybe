@@ -5,7 +5,7 @@
     <span class="w-5 h-5">
       <%= lucide_icon("check", class: "w-5 h-5 text-gray-500") if is_selected %>
     </span>
-    <%= render partial: "transactions/categories/badge", locals: { name: category.name, color: category.color } %>
+    <%= render partial: "transactions/categories/badge", locals: { category: category } %>
   <% end %>
   <div data-controller="menu">
     <button data-menu-target="button" type="button" class="flex items-center justify-center hover:bg-gray-50 w-8 h-8 rounded-lg">
