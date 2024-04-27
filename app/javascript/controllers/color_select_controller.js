@@ -47,8 +47,8 @@ function hexToRGBA(hex, alpha = 1) {
   hex = hex.replace(/^#/, '');
 
   if (hex.length === 8) {
-      alpha = parseInt(hex.slice(6, 8), 16) / 255;
-      hex = hex.slice(0, 6);
+    alpha = parseInt(hex.slice(6, 8), 16) / 255;
+    hex = hex.slice(0, 6);
   }
 
   let r = parseInt(hex.slice(0, 2), 16);
