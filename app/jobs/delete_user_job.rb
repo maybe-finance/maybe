@@ -5,7 +5,7 @@ class DeleteUserJob < ApplicationJob
     user = User.new(user_attributes)
     family = Family.find(user.family_id)
 
-    if user.role == "member"
+    if user.isMember
       other_family_users = User.where(family_id: user.family_id).where.not(id: user.id).count
 
       ActiveRecord::Base.transaction do
@@ -16,7 +16,7 @@ class DeleteUserJob < ApplicationJob
           end
         end
       end
-    elsif user.role == "admin"
+    elsif user.isAdmin
       other_admins = User.where(family_id: user.family_id, role: "admin").where.not(id: user.id).count
 
       if other_admins == 0
