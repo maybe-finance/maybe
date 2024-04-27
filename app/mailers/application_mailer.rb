@@ -17,7 +17,7 @@ class ApplicationMailer < ActionMailer::Base
         port:      Setting.smtp_port,
         user_name: Setting.smtp_username,
         password:  Setting.smtp_password,
-        tls:       ENV["TLS"] == "true"
+        tls:       ENV["SMTP_TLS_ENABLED"] == "true"
         }
     end
 end
