@@ -40,6 +40,7 @@ gem "octokit"
 gem 'aws-sdk-s3', '~> 1'
 gem 'azure-storage-blob', '~> 1.0', '>= 1.0.1'
 gem "google-cloud-storage", "~> 1.11", require: false
+gem "image_processing", ">= 1.2"
 
 # Other
 gem "bcrypt", "~> 3.1.7"
@@ -56,6 +57,7 @@ group :development, :test do
   gem "letter_opener"
   gem "i18n-tasks"
   gem "erb_lint"
+  gem "byebug"
 end
 
 group :development do
