@@ -5,8 +5,6 @@ class DeleteUserJob < ApplicationJob
     user = User.new(user_attributes)
     family = Family.find(user.family_id)
 
-    puts user_attributes
-
     if user.role == "member"
       other_family_users = User.where(family_id: user.family_id).where.not(id: user.id).count
 
