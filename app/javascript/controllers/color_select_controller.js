@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = [ "input" ]
+  static targets = [ "input", "decoration" ]
   static values = { selection: String }
 
   connect() {
@@ -30,6 +30,7 @@ export default class extends Controller {
   #check(option) {
     option.setAttribute("aria-checked", "true")
     option.style.boxShadow = `0px 0px 0px 4px ${hexToRGBA(option.dataset.value, 0.2)}`
+    this.decorationTarget.style.backgroundColor = option.dataset.value
   }
 
   #uncheck(option) {
