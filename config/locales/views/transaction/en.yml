@@ -3,12 +3,20 @@ en:
   transactions:
     categories:
       create:
-        error: Error creating transaction category
         success: New transaction category created successfully
       destroy:
         success: Transaction category deleted successfully
+      edit:
+        edit: Edit category
+      form:
+        create: Create category
+        update: Update
+      index:
+        categories: Categories
+      row:
+        delete: Delete category
+        edit: Edit category
       update:
-        error: Error updating transaction category
         success: Transaction category updated successfully
     create:
       success: New transaction created successfully
@@ -27,5 +35,7 @@ en:
       income: Income
       submit: Add transaction
       transfer: Transfer
+    index:
+      edit_categories: Edit categories
     update:
       success: Transaction updated successfully

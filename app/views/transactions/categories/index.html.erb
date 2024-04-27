@@ -2,14 +2,18 @@
   <%= render "settings/nav" %>
 <% end %>
 <div class="space-y-4">
-  <h1 class="text-gray-900 text-xl font-medium mb-4">Categories</h1>
+  <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".categories") %></h1>
   <div class="bg-white shadow-xs border border-alpha-black-25 rounded-xl p-4">
-    <div class="flex justify-center items-center py-20">
-      <p class="text-gray-500">Transaction categories coming soon...</p>
+    <div class="rounded-xl bg-gray-25 p-1">
+      <h2 class="uppercase px-4 py-2 text-gray-500 text-xs"><%= t(".categories") %> · <%= @categories.size %></h2>
+
+      <div class="border border-alpha-gray-100 rounded-lg bg-white shadow-xs">
+        <%= render collection: @categories, partial: "transactions/categories/row" %>
+      </div>
     </div>
   </div>
   <div class="flex justify-between gap-4">
     <%= previous_setting("Accounts", accounts_path) %>
-    <%= next_setting("Merchants", transactions_merchants_path) %>
+    <%= next_setting("Merchants", transaction_merchants_path) %>
   </div>
 </div>
