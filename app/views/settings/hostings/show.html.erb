@@ -69,7 +69,7 @@
               </div>
             </div>
             <div>
-              <%= link_to t(".smtp_settings.send_test_email_button"), send_test_email_settings_hosting_path, class:"bg-gray-50 text-gray-900 text-sm font-medium rounded-lg px-3 py-2" %>
+              <%= link_to t(".smtp_settings.send_test_email_button"), send_test_email_settings_hosting_path, data: { turbo_method: :post }, class:"bg-gray-50 text-gray-900 text-sm font-medium rounded-lg px-3 py-2" %>
             </div>
           </div>
         </div>
