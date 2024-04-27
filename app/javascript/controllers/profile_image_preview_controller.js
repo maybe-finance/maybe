@@ -21,5 +21,6 @@ export default class extends Controller {
     this.templateTarget.classList.remove("hidden");
     this.imagePreviewTarget.innerHTML = this.templateTarget.innerHTML;
     this.clearBtnTarget.classList.add("hidden");
+    this.element.submit();
   }
 }
