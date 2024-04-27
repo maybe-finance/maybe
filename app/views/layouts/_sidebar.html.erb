@@ -4,14 +4,16 @@
   <% end %>
   <div id="user-menu" data-controller="menu">
     <button data-menu-target="button">
-      <div class="text-white w-9 h-9 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= Current.user.email.first %></div>
+      <div class="text-white w-9 h-9 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= Current.user.initial %></div>
     </button>
     <div data-menu-target="content" class="hidden absolute w-[240px] z-10 top-10 left-[255px] top-[72px] bg-white rounded-sm shadow-xs border border-alpha-black-25">
       <div class="p-3 flex items-center gap-3">
-        <div class="text-white shrink-0 w-9 h-9 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= Current.user.email.first %></div>
+        <div class="text-white shrink-0 w-9 h-9 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= Current.user.initial %></div>
         <div>
-          <span class="text-gray-900 font-medium text-sm"><%= Current.user.first_name %> <%= Current.user.last_name %></span>
-          <span class="text-gray-500 text-sm"><%= Current.user.email %></span>
+          <span class="text-gray-900 font-medium text-sm"><%= Current.user.display_name %></span>
+          <% if Current.user.display_name != Current.user.email %>
+            <span class="text-gray-500 text-sm"><%= Current.user.email %></span>
+          <% end %>
         </div>
       </div>
       <div class="border-t border-b border-alpha-black-100 p-1">
