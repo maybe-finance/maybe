@@ -79,6 +79,8 @@ en:
       destroy:
         account_deletion_failed: Sorry, there was an error deleting your account.
           Try again later or contact support.
+        cannot_delete_admin_account_warning: Sorry, your account cannot be deleted
+          while other members are present. Please delete all members first.
         success: Account deleted successfully.
       show:
         add_member: Add Member

@@ -19,12 +19,16 @@ class Settings::ProfilesController < ApplicationController
   
   def destroy
     begin
-      delete_user
-      logout
+      if Current.user.admin?
+        other_admins_count = Current.family.admins.where.not(id: Current.user.id).count
+        members_count = Current.family.members.count
+
+        if other_admins_count === 0 && members_count > 0
+          return redirect_to settings_profile_path, alert: t(".cannot_delete_admin_account_warning")
+        end
+      end
+      mark_user_for_deletion_and_logout
       redirect_to new_registration_path, notice: t(".success")
-    rescue ActiveRecord::RecordNotDestroyed => e
-      Rails.logger.error "Error deleting account: #{e.message}"
-      return redirect_to settings_profile_path, alert: t(".account_deletion_failed")
     rescue StandardError => e
       Rails.logger.error "An unexpected error occurred: #{e.message}"
       redirect_to settings_profile_path, alert: t(".account_deletion_failed")
@@ -38,10 +42,9 @@ class Settings::ProfilesController < ApplicationController
                                  family_attributes: [ :name, :id ])
   end
 
-  def delete_user
-    attributes = Current.user.attributes
-    Current.user.destroy!
-
-    DeleteUserJob.perform_later(attributes)
+  def mark_user_for_deletion_and_logout
+    Current.user.update!(marked_for_deletion: true)
+    DeleteUserJob.perform_later(Current.user)
+    logout
   end
 end

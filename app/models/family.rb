@@ -4,6 +4,14 @@ class Family < ApplicationRecord
   has_many :transactions, through: :accounts
   has_many :transaction_categories, dependent: :destroy, class_name: "Transaction::Category"
 
+  def admins
+    users.where(users: { role: "admin" })
+  end
+
+  def members
+    users.where(users: { role: "member" })
+  end
+
   def snapshot(period = Period.all)
     query = accounts.active.joins(:balances)
       .where("account_balances.currency = ?", self.currency)

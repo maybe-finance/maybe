@@ -13,14 +13,6 @@ class User < ApplicationRecord
     password_salt&.last(10)
   end
 
-  def isAdmin
-    role.downcase === "admin"
-  end
-
-  def isMember
-    role.downcase === "member"
-  end
-
   def acknowledge_upgrade_prompt(commit_sha)
     update!(last_prompted_upgrade_commit_sha: commit_sha)
   end

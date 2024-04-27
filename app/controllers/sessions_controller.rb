@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    if user = User.authenticate_by(email: params[:email], password: params[:password])
+    if user = User.authenticate_by(email: params[:email], password: params[:password], marked_for_deletion: false)
       login user
       redirect_to root_path
     else
