@@ -29,13 +29,8 @@ Turbo.setConfirmMethod((message) => {
     }
 
     if (reject) {
-      const button = document.createElement("button")
-      button.setAttribute("id", "turbo-confirm-reject")
-      button.setAttribute("class", "w-full text-red-600 rounded-xl text-center p-[10px] border mt-2")
-      button.setAttribute("value", "reject")
-      button.innerHTML = reject
-
-      document.getElementById("turbo-confirm-dialog-form").appendChild(button)
+      const className = document.getElementById("turbo-confirm-reject").className.replace("hidden", "")
+      document.getElementById("turbo-confirm-reject").className = className
     }
 
   } catch (e) {
