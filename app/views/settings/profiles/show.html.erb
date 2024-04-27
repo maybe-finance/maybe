@@ -53,9 +53,9 @@
           </div>
           <div class="flex gap-2 items-center bg-white p-4 border border-alpha-black-25 rounded-lg">
             <div class="mr-1 flex justify-center items-center bg-gray-50 w-8 h-8 rounded-full border border-alpha-black-25">
-              <p class="uppercase text-xs text-gray-500"><%= Current.user.first_name.first %></p>
+              <p class="uppercase text-xs text-gray-500"><%= Current.user.initial %></p>
             </div>
-            <p class="text-gray-900 font-medium text-sm"><%= Current.user.first_name %> <%= Current.user.last_name %></p>
+            <p class="text-gray-900 font-medium text-sm"><%= Current.user.display_name %></p>
             <div class="rounded-md bg-gray-100 px-1.5 py-0.5">
               <p class="uppercase text-gray-500 font-medium text-xs"><%= Current.user.role %></p>
             </div>

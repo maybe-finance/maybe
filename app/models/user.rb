@@ -7,6 +7,8 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   normalizes :email, with: ->(email) { email.strip.downcase }
 
+  normalizes :first_name, :last_name, with: ->(value) { value.strip.presence }
+
   enum :role, { member: "member", admin: "admin" }, validate: true
 
   has_one_attached :profile_image
@@ -18,6 +20,14 @@ class User < ApplicationRecord
 
   def profile_image_thumbnail
     profile_image.variant(resize_to_limit: [150, 150])
+  end
+  
+  def display_name
+    [ first_name, last_name ].compact.join(" ").presence || email
+  end
+
+  def initial
+    (display_name&.first || email.first).upcase
   end
 
   def acknowledge_upgrade_prompt(commit_sha)
