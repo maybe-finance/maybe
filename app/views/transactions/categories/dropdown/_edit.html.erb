@@ -4,7 +4,7 @@
     <%= render partial: "transactions/categories/dropdown/form", locals: { category: } %>
     <hr>
     <div class="p-1.5 w-full">
-      <%= button_to transactions_category_path(category),
+      <%= button_to transaction_category_path(category),
               method: :delete,
               class: "flex text-sm font-medium items-center gap-2 text-red-600 w-full rounded-lg p-2 hover:bg-gray-100",
               data: { turbo: false } do %>
