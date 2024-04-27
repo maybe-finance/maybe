@@ -16,7 +16,7 @@ class Settings::ProfilesController < ApplicationController
       render :edit, status: :unprocessable_entity
     end
   end
-  
+
   def destroy
     begin
       if Current.user.admin?

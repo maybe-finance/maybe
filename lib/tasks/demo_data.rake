@@ -13,7 +13,7 @@ namespace :demo_data do
       u.family = family
       u.first_name = "User"
       u.last_name = "Demo"
-      u.marked_for_deletion = false #if existing user found
+      u.marked_for_deletion = false # if existing user found
     end
 
     puts "Reset user: #{user.email} with family: #{family.name}"

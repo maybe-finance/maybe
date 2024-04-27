@@ -23,6 +23,6 @@ class Settings::ProfilesControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
 
     assert User.find(@user.id).marked_for_deletion
-    assert_enqueued_with(job: DeleteUserJob, args: [@user])
+    assert_enqueued_with(job: DeleteUserJob, args: [ @user ])
   end
 end
