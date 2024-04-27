@@ -7,32 +7,35 @@ class DeleteUserJobTest < ActiveJob::TestCase
     @user_member = users(:family_member)
   end
 
-  test "can be enqueued with user attributes" do
-    assert_enqueued_with(job: DeleteUserJob, args: [@user_member.attributes]) do
-      DeleteUserJob.perform_later(@user_member.attributes)
+  test "can be enqueued with user" do
+    assert_enqueued_with(job: DeleteUserJob, args: [@user_member]) do
+      DeleteUserJob.perform_later(@user_member)
     end
   end
 
-  test "can be enqueued with admin user attributes" do
-    assert_enqueued_with(job: DeleteUserJob, args: [@user_admin.attributes]) do
-      DeleteUserJob.perform_later(@user_admin.attributes)
+  test "can be enqueued with admin user" do
+    assert_enqueued_with(job: DeleteUserJob, args: [@user_admin]) do
+      DeleteUserJob.perform_later(@user_admin)
     end
   end
 
-  test "deleting a member with an admin will not delete the family" do
-    DeleteUserJob.perform_now(@user_member.attributes)
-    Family.find(@user_member.family_id)
+  test "deleting a member just deletes user and related data" do
+    DeleteUserJob.perform_now(@user_member)
+
+    assert_raises(ActiveRecord::RecordNotFound) do
+      User.find(@user_member.id)
+    end
   end
 
   test "family, related accounts and other members are deleted for the last remaining admin" do
-    DeleteUserJob.perform_now(@user_admin.attributes)
+    DeleteUserJob.perform_now(@user_admin)
 
     assert_raises(ActiveRecord::RecordNotFound) do
-      puts Family.find(@user_admin.family_id)
+      Family.find(@user_admin.family_id)
     end
 
     assert_raises(ActiveRecord::RecordNotFound) do
-      puts Family.find(@user_admin.family_id).accounts
+      Family.find(@user_admin.family_id).accounts
     end
 
     assert_equal Account.where(family_id: @user_admin.family_id).count, 0
