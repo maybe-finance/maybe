@@ -17,7 +17,7 @@ class Settings::ProfilesController < ApplicationController
     if Current.user.update(user_params_with_family)
       redirect_to settings_profile_path, notice: t(".success")
     else
-      render :edit, status: :unprocessable_entity
+      redirect_to settings_profile_path, alert: t(".file_size_error")
     end
   end
 
