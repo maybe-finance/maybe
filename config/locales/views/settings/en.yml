@@ -95,3 +95,4 @@ en:
         save: Save
       update:
         success: Profile updated successfully.
+        error: Profile could not be updated
