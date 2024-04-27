@@ -11,7 +11,11 @@ Rails.application.routes.draw do
   resource :password
 
   namespace :settings do
-    resource :profile, only: %i[show update]
+    resource :profile, only: %i[show update] do
+      member do
+        delete :remove_avatar
+      end
+    end
     resource :preferences, only: %i[show update]
     resource :notifications, only: %i[show update]
     resource :billing, only: %i[show update]
