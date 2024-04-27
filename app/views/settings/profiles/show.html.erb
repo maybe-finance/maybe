@@ -11,7 +11,7 @@
             <div data-profile-image-preview-target="imagePreview">
               <% profile_image_attached = Current.user.profile_image.attached? %>
               <% if profile_image_attached %>
-                <%= image_tag Current.user.profile_image.variant(resize_to_limit: [96, 96]), class: "w-24 h-24 rounded-full" %>
+                <%= image_tag Current.user.profile_image_thumbnail, class: "w-24 h-24 rounded-full" %>
               <% else %>
                 <%= lucide_icon "image-plus", class: "w-6 h-6 text-gray-500" %>
               <% end %>

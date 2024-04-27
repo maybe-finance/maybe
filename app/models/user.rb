@@ -16,6 +16,10 @@ class User < ApplicationRecord
     password_salt&.last(10)
   end
 
+  def profile_image_thumbnail
+    profile_image.variant(resize_to_limit: [150, 150])
+  end
+
   def acknowledge_upgrade_prompt(commit_sha)
     update!(last_prompted_upgrade_commit_sha: commit_sha)
   end
