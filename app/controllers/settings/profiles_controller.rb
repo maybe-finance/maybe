@@ -17,6 +17,15 @@ class Settings::ProfilesController < ApplicationController
     end
   end
 
+  def remove_avatar
+    if Current.user
+      Current.user.avatar.purge_later
+      redirect_to settings_profile_path, notice: t(".success")
+    else
+      redirect_to settings_profile_path, notice: t(".error")
+    end
+  end
+
   private
 
   def user_params
