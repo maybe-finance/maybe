@@ -4,14 +4,14 @@ class ApplicationMailer < ActionMailer::Base
 
   def mail(headers = {}, &block)
     if Rails.application.config.action_mailer.delivery_method = :smtp
-      headers[:delivery_method_options] = smpt_settings
+      headers[:delivery_method_options] = smtp_settings
     end
 
     super(headers, &block)
   end
 
   private
-    def smpt_settings
+    def smtp_settings
       {
         address:   Setting.smtp_host,
         port:      Setting.smtp_port,
