@@ -5,26 +5,36 @@
   <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
   <div class="space-y-4">
     <%= settings_section title: t(".profile_title"), subtitle: t(".profile_subtitle") do %>
-      <div class="flex items-center gap-4">
-        <div class="flex justify-center items-center bg-gray-50 w-24 h-24 rounded-full border border-alpha-black-25">
-          <%= lucide_icon "image-plus", class: "w-6 h-6 text-gray-500" %>
+      <%= form_with model: Current.user, url: settings_profile_path, html: {data: { controller: "profile-image-preview" }} do |form| %>
+        <div class="flex items-center gap-4">
+          <div class="relative flex justify-center items-center bg-gray-50 w-24 h-24 rounded-full border border-alpha-black-25">
+            <div data-profile-image-preview-target="imagePreview">
+              <% if Current.user.profile_image.attached? %>
+                <%= image_tag Current.user.profile_image.variant(resize_to_limit: [96, 96]), class: "w-24 h-24 rounded-full" %>
+              <% else %>
+                <%= lucide_icon "image-plus", class: "w-6 h-6 text-gray-500" %>
+              <% end %>
+            </div>
+            <div data-profile-image-preview-target="clearButton" data-action="click->profile-image-preview#clear" class="hidden cursor-pointer absolute bottom-0 right-0 w-8 h-8 bg-gray-50 rounded-full flex justify-center items-center border border-white border-2">
+              <%= lucide_icon "x", class: "w-4 h-4 text-gray-500" %>
+            </div>
+          </div>
+          <div class="space-y-3">
+            <p><%= t(".profile_image_type") %></p>
+            <%= form.label :profile_image, t(".profile_image_choose"), class: "inline-block cursor-pointer px-3 py-2 bg-gray-50 text-gray-900 rounded-md text-sm font-medium" %>
+            <%= form.file_field :profile_image, class: "hidden px-3 py-2 bg-gray-50 text-gray-900 rounded-md text-sm font-medium", data: {profile_image_preview_target: "fileField", action: "change->profile-image-preview#preview"} %>
+          </div>
         </div>
-        <div class="space-y-3">
-          <p><%= t(".profile_image_type") %></p>
-          <button class="cursor-not-allowed px-3 py-2 bg-gray-50 text-gray-900 rounded-md text-sm font-medium" disabled><%= t(".profile_image_choose") %></button>
-        </div>
-      </div>
-      <div>
-        <%= form_with model: Current.user, url: settings_profile_path, html: { class: "space-y-4" } do |form| %>
-          <div class="grid grid-cols-2 gap-4">
+        <div>
+          <div class="grid grid-cols-2 gap-4 mt-4">
             <%= form.text_field :first_name, placeholder: "First name", value: Current.user.first_name, label: true %>
             <%= form.text_field :last_name, placeholder: "Last name", value: Current.user.last_name, label: true %>
           </div>
-          <div class="flex justify-end">
+          <div class="flex justify-end mt-4">
             <%= form.submit t(".save"), class: "bg-gray-900 text-white rounded-lg px-3 py-2" %>
           </div>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
     <% end %>
     <%= settings_section title: t(".household_title"), subtitle: t(".household_subtitle") do %>
       <div class="space-y-4">
