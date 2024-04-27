@@ -1,0 +1,9 @@
+netflix:
+  name: Netflix
+  color: "#fd7f6f"
+  family: dylan_family
+
+amazon:
+  name: Amazon
+  color: "#fd7f6f"
+  family: dylan_family

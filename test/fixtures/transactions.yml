@@ -21,6 +21,7 @@ checking_three:
   amount: 20
   account: checking
   currency: USD
+  merchant: amazon
 
 checking_four:
   name: Paycheck
@@ -36,6 +37,7 @@ checking_five:
   amount: 15
   account: checking
   currency: USD
+  merchant: netflix
 
 # Savings account that has these transactions and valuation overrides
 savings_one:
@@ -92,6 +94,7 @@ credit_card_three:
   amount: 20
   account: credit_card
   currency: USD
+  merchant: amazon
 
 credit_card_four:
   name: CC Payment
