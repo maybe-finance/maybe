@@ -1,0 +1,5 @@
+<%# locals: (merchant:) %>
+<% name = merchant.name || "?" %>
+<% background_color = "color-mix(in srgb, #{merchant.color} 5%, white)" %>
+<% border_color = "color-mix(in srgb, #{merchant.color} 10%, white)" %>
+<span class="w-8 h-8 flex items-center justify-center rounded-full" style="background-color: <%= background_color %>; border-color: <%= border_color %>; color: <%= merchant.color %>"><%= name[0].upcase %></span>
