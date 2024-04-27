@@ -3,7 +3,7 @@ source "https://rubygems.org"
 ruby file: ".ruby-version"
 
 # Rails
-gem "rails", github: "rails/rails", branch: "main"
+gem 'rails', '~> 7.1', '>= 7.1.3.2'
 
 # Drivers
 gem "pg", "~> 1.5"
@@ -28,6 +28,15 @@ gem "good_job"
 
 # Search
 gem "ransack"
+
+
+# File Uploads
+gem 'activestorage', '~> 7.1', '>= 7.1.3.2'
+gem 'active_storage_validations'
+gem 'aws-sdk-s3', require: false
+gem "azure-storage-blob", "~> 2.0", require: false
+gem "google-cloud-storage", "~> 1.11", require: false
+
 
 # Error logging
 gem "stackprof"
