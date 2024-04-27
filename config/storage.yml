@@ -8,20 +8,19 @@ test:
 
 amazon:
   service: S3
-  access_key_id: ENV["S3_ACCESS_KEY_ID"] %>
-  secret_access_key: ENV["S3_SECRET_ACCESS_KEY"] %>
-  region: us-east-1
-  bucket: your_own_bucket-<%= Rails.env %>
-
+  access_key_id: <%= ENV["S3_ACCESS_KEY_ID"] %> 
+  secret_access_key: <%= ENV["S3_SECRET_ACCESS_KEY"] %>
+  region: <%= ENV["S3_REGION"] || "us-east-1" %>
+  bucket: <%= ENV["S3_BUCKET"] %>
 # Replace credentials with your own GCS keyfile
 google:
   service: GCS
-  project: your_project
-  credentials: <%= Rails.root.join("path/to/gcs.keyfile") %>
-  bucket: ENV["GCS_BUCKET"] %>
+  project: <%= ENV["GCS_PROJECT"] %>
+  credentials: <%= Rails.root.join("gcp-storage-keyfile.json") %>
+  bucket: <%= ENV["GCS_BUCKET"] %> 
 
 microsoft:
   service: AzureStorage
-  storage_account_name: ENV["AZURE_STORAGE_ACCOUNT_NAME"] %>
-  storage_access_key: ENV["AZURE_STORAGE_ACCESS_KEY"] %>
-  container: ENV["AZURE_STORAGE_CONTAINER"] %>
+  storage_account_name: <%= ENV["AZURE_STORAGE_ACCOUNT_NAME"] %>
+  storage_access_key: <%= ENV["AZURE_STORAGE_ACCESS_KEY"] %>
+  container: <%= ENV["AZURE_STORAGE_CONTAINER"] %> 
