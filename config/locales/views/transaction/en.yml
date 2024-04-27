@@ -17,6 +17,11 @@ en:
         update: Update
       index:
         categories: Categories
+        new: New
+      menu:
+        add_new: Add new
+      new:
+        new_category: New category
       row:
         delete: Delete category
         edit: Edit category

@@ -26,6 +26,8 @@
     </fieldset>
 
     <section>
+      <%= hidden_field_tag :transaction_id, params[:transaction_id] %>
+
       <% if category.persisted? %>
         <%= form.submit t(".update") %>
       <% else %>

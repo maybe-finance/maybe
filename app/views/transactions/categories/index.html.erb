@@ -1,8 +1,16 @@
 <% content_for :sidebar do %>
   <%= render "settings/nav" %>
 <% end %>
-<div class="space-y-4">
-  <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".categories") %></h1>
+<section class="space-y-4">
+  <header class="flex items-center justify-between">
+    <h1 class="text-gray-900 text-xl font-medium"><%= t(".categories") %></h1>
+
+    <%= link_to new_transaction_category_path, class: "rounded-lg bg-gray-900 text-white flex items-center gap-1 justify-center hover:bg-gray-700 px-3 py-2", data: { turbo_frame: :modal } do %>
+      <%= lucide_icon "plus", class: "w-5 h-5" %>
+      <p><%= t(".new") %></p>
+    <% end %>
+  </header>
+
   <div class="bg-white shadow-xs border border-alpha-black-25 rounded-xl p-4">
     <div class="rounded-xl bg-gray-25 p-1">
       <h2 class="uppercase px-4 py-2 text-gray-500 text-xs"><%= t(".categories") %> · <%= @categories.size %></h2>
@@ -12,8 +20,9 @@
       </div>
     </div>
   </div>
-  <div class="flex justify-between gap-4">
+
+  <footer class="flex justify-between gap-4">
     <%= previous_setting("Accounts", accounts_path) %>
     <%= next_setting("Merchants", transaction_merchants_path) %>
-  </div>
-</div>
+  </footer>
+</section>
