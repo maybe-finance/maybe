@@ -36,6 +36,11 @@ gem "sentry-rails"
 gem "rails-settings-cached"
 gem "octokit"
 
+# Active Storage
+gem 'aws-sdk-s3', '~> 1'
+gem 'azure-storage-blob', '~> 1.0', '>= 1.0.1'
+gem "google-cloud-storage", "~> 1.11", require: false
+
 # Other
 gem "bcrypt", "~> 3.1.7"
 gem "inline_svg"
