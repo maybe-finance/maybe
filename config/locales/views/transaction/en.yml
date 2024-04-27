@@ -10,6 +10,15 @@ en:
       update:
         error: Error updating transaction category
         success: Transaction category updated successfully
+    merchants:
+      create:
+        error: Error creating merchant
+        success: New merchant created successfully
+      destroy:
+        success: Merchant deleted successfully
+      update:
+        error: Error updating merchant
+        success: Merchant updated successfully
     create:
       success: New transaction created successfully
     destroy:

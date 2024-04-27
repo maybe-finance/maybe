@@ -3,6 +3,7 @@ class Transaction < ApplicationRecord
 
   belongs_to :account
   belongs_to :category, optional: true
+  belongs_to :merchant, optional: true
 
   validates :name, :date, :amount, :account, presence: true
 
@@ -56,7 +57,7 @@ class Transaction < ApplicationRecord
   end
 
   def self.ransackable_associations(auth_object = nil)
-    %w[category account]
+    %w[category merchant account]
   end
 
   def self.build_filter_list(params, family)
@@ -77,7 +78,11 @@ class Transaction < ApplicationRecord
           value.each do |category_id|
             filters << { type: "category", value: family.transaction_categories.find(category_id), original: { key: key, value: category_id } }
           end
-        when "category_name_or_account_name_or_name_cont"
+        when "merchant_id_in"
+          value.each do |merchant_id|
+            filters << { type: "merchant", value: family.transaction_merchants.find(merchant_id), original: { key: key, value: merchant_id } }
+          end
+        when "category_name_or_merchant_name_or_account_name_or_name_cont"
           filters << { type: "search", value: value, original: { key: key, value: nil } }
         when "date_gteq"
           date_filters[:gteq] = value

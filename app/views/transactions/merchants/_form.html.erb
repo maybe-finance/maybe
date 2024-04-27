@@ -1,0 +1,10 @@
+<%= form_with model: @merchant, url: transactions_merchants_path(@merchant), data: { turbo: false } do |f| %>
+  <section class="space-y-2">
+    <%= f.text_field :name, label: t(".name"), placeholder: t(".name_placeholder"), required: true %>
+    <%= f.text_field :color, label: t(".color"), placeholder: t(".color_placeholder"), required: true %>
+  </section>
+
+  <section>
+    <%= f.submit t(".submit") %>
+  </section>
+<% end %>
