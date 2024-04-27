@@ -19,7 +19,6 @@ class Settings::ProfilesController < ApplicationController
   
   def destroy
     begin
-      Rails.logger.info "DESTROYING"
       delete_user
       logout
       redirect_to new_registration_path, notice: t(".success")
