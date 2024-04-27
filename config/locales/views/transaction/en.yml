@@ -6,6 +6,10 @@ en:
         success: New transaction category created successfully
       destroy:
         success: Transaction category deleted successfully
+      dropdown:
+        row:
+          delete: Delete category
+          edit: Edit category
       edit:
         edit: Edit category
       form:
