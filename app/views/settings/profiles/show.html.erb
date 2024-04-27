@@ -6,9 +6,16 @@
   <div class="space-y-4">
     <%= settings_section title: t(".profile_title"), subtitle: t(".profile_subtitle") do %>
       <div class="flex items-center gap-4">
-        <div class="flex justify-center items-center bg-gray-50 w-24 h-24 rounded-full border border-alpha-black-25">
-          <%= lucide_icon "image-plus", class: "w-6 h-6 text-gray-500" %>
-        </div>
+          <% if Current.user.avatar.attached? %>
+            <div class="flex bg-gray-50 w-24 h-24 rounded-full border border-alpha-black-25" data-target="avatar_preview.preview">
+              <%= image_tag Current.user.avatar, class:"w-24 h-24 rounded-full border border-alpha-black-25" %>
+            </div>
+            <%= link_to lucide_icon("x"), remove_avatar_settings_profile_path, method: :delete, data: { confirm: "Are you sure you want to delete this user?" }, class: "cursor-pointer w-6 h-6 text-gray-500" %>
+          <% else %>
+            <div class="flex justify-center items-center bg-gray-50 w-24 h-24 rounded-full border border-alpha-black-25">
+              <%= lucide_icon "image-plus", class: "w-6 h-6 text-gray-500" %>
+            </div>
+          <% end  %>
         <div class="space-y-3">
           <p><%= t(".profile_image_type") %></p>
           <button class="cursor-not-allowed px-3 py-2 bg-gray-50 text-gray-900 rounded-md text-sm font-medium" disabled><%= t(".profile_image_choose") %></button>
