@@ -1,5 +1,6 @@
 <%# locals: (category:, transaction:) %>
 <% is_selected = transaction.category_id == category.id %>
+
 <%= content_tag :div, class: ["filterable-item flex justify-between items-center border-none rounded-lg px-2 py-1 group w-full", { "bg-gray-25": is_selected }], data: { filter_name: category.name } do %>
   <%= button_to transaction_path(transaction, transaction: { category_id: category.id }), method: :patch, class: "flex w-full items-center gap-1.5 cursor-pointer" do %>
     <span class="w-5 h-5">
@@ -7,12 +8,24 @@
     </span>
     <%= render partial: "transactions/categories/badge", locals: { category: category } %>
   <% end %>
-  <div data-controller="menu">
-    <button data-menu-target="button" type="button" class="flex items-center justify-center hover:bg-gray-50 w-8 h-8 rounded-lg">
-      <%= lucide_icon("more-horizontal", class: "w-5 h-5 text-gray-500") %>
-    </button>
-    <div data-menu-target="content" class="absolute z-30 hidden w-screen mt-2 max-w-min">
-      <%= render partial: "transactions/categories/dropdown/edit", locals: { category: } %>
+
+  <%= contextual_menu do %>
+    <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+      <%= link_to edit_transaction_category_path(category),
+            class: "block w-full py-2 px-3 space-x-2 text-gray-900 hover:bg-gray-50 flex items-center rounded-lg",
+            data: { turbo_frame: :modal } do %>
+        <%= lucide_icon "pencil-line", class: "w-5 h-5 text-gray-500" %>
+
+        <span><%= t(".edit") %></span>
+      <% end %>
+
+      <%= link_to new_transaction_category_deletion_path(category),
+            class: "block w-full py-2 px-3 space-x-2 text-red-600 hover:bg-red-50 flex items-center rounded-lg",
+            data: { turbo_frame: :modal } do %>
+        <%= lucide_icon "trash-2", class: "w-5 h-5" %>
+
+        <span><%= t(".delete") %></span>
+      <% end %>
     </div>
-  </div>
+  <% end %>
 <% end %>
