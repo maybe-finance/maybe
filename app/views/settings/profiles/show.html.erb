@@ -16,9 +16,12 @@
               <%= lucide_icon "image-plus", class: "w-6 h-6 text-gray-500" %>
             </div>
           <% end  %>
-        <div class="space-y-3">
-          <p><%= t(".profile_image_type") %></p>
-          <button class="cursor-not-allowed px-3 py-2 bg-gray-50 text-gray-900 rounded-md text-sm font-medium" disabled><%= t(".profile_image_choose") %></button>
+          <div class="space-y-3">
+            <p class="mb-4"><%= t(".profile_image_type") %></p>
+            <label class="cursor-pointer px-3 py-2 bg-gray-50 text-gray-900 rounded-md text-sm font-medium"><%= t(".profile_image_choose") %>
+            <%= form.file_field :avatar, class:"hidden", data: { action:"change->avatar_preview#loadPreview" } %>
+            </label>
+          </div>
         </div>
       </div>
       <div>
