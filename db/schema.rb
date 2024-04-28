@@ -221,7 +221,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_26_191312) do
 
   create_table "transaction_merchants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
-    t.string "color", default: "#6172F3", null: false
+    t.string "color", default: "#e99537", null: false
     t.uuid "family_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
