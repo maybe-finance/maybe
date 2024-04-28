@@ -22,9 +22,9 @@ module ApplicationHelper
 
   # Wrap view with <%= modal do %> ... <% end %> to have it open in a modal
   # Make sure to add data-turbo-frame="modal" to the link/button that opens the modal
-  def modal(classes = "", &block)
+  def modal(options = {}, &block)
     content = capture &block
-    render partial: "shared/modal", locals: { content:, classes: }
+    render partial: "shared/modal", locals: { content:, classes: options[:classes] }
   end
 
   def account_groups

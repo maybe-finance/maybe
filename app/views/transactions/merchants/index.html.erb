@@ -29,8 +29,8 @@
         </div>
 
         <% @merchants.each do |merchant| %>
-          <div class="flex justify-between items-center px-2 py-4 bg-white">
-            <div class="flex w-full items-center gap-1.5">
+          <div class="flex justify-between items-center p-4 bg-white">
+            <div class="flex w-full items-center gap-2.5">
               <%= render partial: "transactions/merchants/avatar", locals: { merchant: } %>
               <p class="text-gray-900 text-sm truncate">
                 <%= merchant.name %>
