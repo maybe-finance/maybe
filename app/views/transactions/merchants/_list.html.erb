@@ -1,0 +1,41 @@
+<%# locals: (merchants:) %>
+<% merchants.each.with_index do |merchant, index| %>
+  <div class="flex justify-between items-center p-4 bg-white">
+    <div class="flex w-full items-center gap-2.5">
+      <%= render partial: "transactions/merchants/avatar", locals: { merchant: } %>
+      <p class="text-gray-900 text-sm truncate">
+        <%= merchant.name %>
+      </p>
+    </div>
+    <div class="relative cursor-pointer" data-controller="menu">
+      <button data-menu-target="button" class="flex hover:bg-gray-100 p-2 rounded">
+        <%= lucide_icon("more-horizontal", class: "w-5 h-5 text-gray-500") %>
+      </button>
+      <div data-menu-target="content" class="absolute z-10 top-10 right-0 border border-alpha-black-25 bg-white rounded-lg shadow-xs w-48 hidden">
+        <div class="border-t border-b border-alpha-black-100 p-1">
+          <%= button_to edit_transactions_merchant_path(merchant),
+                        method: :get,
+                        class: "flex w-full gap-1 items-center text-sm hover:bg-gray-50 rounded-lg px-3 py-2",
+                        data: { turbo_frame: "modal" } do %>
+            <%= lucide_icon("pencil-line", class: "w-5 h-5 mr-2") %> <%= t(".edit") %>
+          <% end %>
+          <%= button_to transactions_merchant_path(merchant),
+                        method: :delete,
+                        class: "flex w-full gap-1 items-center text-sm text-red-600 hover:text-red-800 hover:bg-gray-50 rounded-lg px-3 py-2",
+                        data: {
+                          turbo_confirm: {
+                            title: t(".confirm_title"),
+                            body: t(".confirm_body"),
+                            accept: t(".confirm_accept")
+                          }
+                        } do %>
+            <%= lucide_icon("trash-2", class: "w-5 h-5 mr-1") %> <%= t(".delete") %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% unless index == merchants.size - 1 %>
+    <div class="h-px bg-alpha-black-50 ml-14 mr-6"></div>
+  <% end %>
+<% end %>
