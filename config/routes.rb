@@ -25,7 +25,7 @@ Rails.application.routes.draw do
     # TODO: These are *placeholders*
     # Uncomment `only` and add the necessary actions as they are implemented.
     resources :rules, only: [ :index ]
-    resources :merchants, only: %i[index new show create edit update destroy]
+    resources :merchants, only: %i[index new create edit update destroy]
   end
 
   resources :transactions do

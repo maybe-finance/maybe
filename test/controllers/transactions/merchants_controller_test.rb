@@ -6,6 +6,11 @@ class Transactions::MerchantsControllerTest < ActionDispatch::IntegrationTest
     @merchant = transaction_merchants(:netflix)
   end
 
+  test "index" do
+    get transactions_merchants_path
+    assert_response :success
+  end
+
   test "new" do
     get new_transactions_merchant_path
     assert_response :success

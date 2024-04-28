@@ -1,5 +1,5 @@
 class Transactions::MerchantsController < ApplicationController
-  before_action :set_merchant, only: %i[ show edit update destroy ]
+  before_action :set_merchant, only: %i[ edit update destroy ]
 
   def index
     @merchants = Current.family.transaction_merchants
@@ -7,9 +7,6 @@ class Transactions::MerchantsController < ApplicationController
 
   def new
     @merchant = Transaction::Merchant.new
-  end
-
-  def show
   end
 
   def create
