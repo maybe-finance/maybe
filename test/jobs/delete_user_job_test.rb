@@ -33,10 +33,6 @@ class DeleteUserJobTest < ActiveJob::TestCase
       Family.find(@user_admin.family_id)
     end
 
-    assert_raises(ActiveRecord::RecordNotFound) do
-      Family.find(@user_admin.family_id).accounts
-    end
-
     assert_equal Account.where(family_id: @user_admin.family_id).count, 0
     assert_equal User.where(family_id: @user_admin.family_id).count, 0
   end
