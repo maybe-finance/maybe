@@ -1,4 +1,6 @@
 <%# locals: (category:) %>
+<% category ||= null_category %>
+
 <span class="border text-sm font-medium px-2.5 py-1 rounded-full cursor-pointer content-center"
   style="
     background-color: color-mix(in srgb, <%= category.color %> 5%, white);

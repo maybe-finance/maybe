@@ -1,7 +1,7 @@
 <%# locals: (transaction:) %>
 <div class="relative" data-controller="menu">
   <button data-menu-target="button cursor-pointer" class="flex">
-    <%= render partial: "transactions/categories/badge", locals: { category: transaction.category || null_category } %>
+    <%= render partial: "transactions/categories/badge", locals: { category: transaction.category } %>
   </button>
   <div data-menu-target="content" class="absolute z-10 hidden w-screen mt-2 max-w-min cursor-default">
     <div class="w-64 text-sm font-semibold leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">

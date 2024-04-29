@@ -13,7 +13,7 @@
   <% else %>
     <%= render partial: "transactions/transaction_name", locals: { name: transaction.name } %>
     <div class="w-36">
-      <%= render partial: "transactions/categories/badge", locals: { category: transaction.category || null_category } %>
+      <%= render partial: "transactions/categories/badge", locals: { category: transaction.category } %>
     </div>
   <% end %>
   <div class="ml-auto">
