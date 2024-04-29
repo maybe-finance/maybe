@@ -19,6 +19,6 @@ class DeleteUserJob < ApplicationJob
     end
   rescue => e
     Rails.logger.error "An error occurred during DeleteUserJob: #{e.message} for the user #{user.id}"
-    raise e #just propagating
+    raise e # just propagating
   end
 end
