@@ -11,7 +11,9 @@
             <div data-profile-image-preview-target="imagePreview">
               <% profile_image_attached = Current.user.profile_image.attached? %>
               <% if profile_image_attached %>
-                <%= render "shared/user_profile_image", user: Current.user %>
+                <div class="h-24 w-24">
+                  <%= render "shared/user_profile_image", user: Current.user %>
+                </div>
               <% else %>
                 <%= lucide_icon "image-plus", class: "w-6 h-6 text-gray-500" %>
               <% end %>
