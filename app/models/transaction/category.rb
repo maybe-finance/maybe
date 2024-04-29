@@ -46,6 +46,13 @@ class Transaction::Category < ApplicationRecord
     self.insert_all(categories)
   end
 
+  def reassign_and_destroy!(replacement)
+    transaction do
+      transactions.update_all category_id: replacement&.id
+      destroy!
+    end
+  end
+
   private
 
   def clear_internal_category

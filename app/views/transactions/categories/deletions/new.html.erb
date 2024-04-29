@@ -1,0 +1,33 @@
+<%= modal do %>
+  <article class="mx-auto p-4 w-screen max-w-md">
+    <div class="space-y-2">
+      <header class="flex justify-between">
+        <h2 class="font-medium text-xl"><%= t(".delete_category") %></h2>
+        <%= lucide_icon "x", class: "w-5 h-5 text-gray-500", data: { action: "click->modal#close" } %>
+      </header>
+
+      <p class="text-gray-500 font-light">
+        <%= t(".explanation", category_name: @category.name) %>
+      </p>
+    </div>
+
+    <%= form_with url: transaction_category_deletions_path(@category),
+          data: {
+            turbo: false,
+            controller: "category-deletion",
+            category_deletion_dangerous_action_class: "form-field__submit bg-white text-red-600 border hover:bg-red-50",
+            category_deletion_safe_action_class: "form-field__submit border border-transparent",
+            category_deletion_submit_text_when_not_replacing_value: t(".delete_and_leave_uncategorized", category_name: @category.name),
+            category_deletion_submit_text_when_replacing_value: t(".delete_and_recategorize", category_name: @category.name) } do |f| %>
+      <%= f.collection_select :replacement_category_id,
+            Current.family.transaction_categories.alphabetically.without(@category),
+            :id, :name,
+            { prompt: t(".replacement_category_prompt"), label: t(".category") },
+            { data: { category_deletion_target: "replacementCategoryField", action: "category-deletion#replacementUpdated" } } %>
+
+      <%= f.submit t(".delete_and_leave_uncategorized", category_name: @category.name),
+            class: "form-field__submit bg-white text-red-600 border hover:bg-red-50",
+            data: { category_deletion_target: "submitButton" } %>
+    <% end %>
+  </article>
+<% end %>

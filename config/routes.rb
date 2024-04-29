@@ -25,7 +25,7 @@ Rails.application.routes.draw do
     collection do
       scope module: :transactions do
         resources :categories, as: :transaction_categories do
-          resources :deletions, only: :new
+          resources :deletions, only: %i[ new create ], module: :categories
         end
 
         resources :rules, only: [ :index ], as: :transaction_rules

@@ -4,8 +4,18 @@ en:
     categories:
       create:
         success: New transaction category created successfully
-      destroy:
-        success: Transaction category deleted successfully
+      deletions:
+        create:
+          success: Transaction category deleted successfully
+        new:
+          category: Category
+          delete_and_leave_uncategorized: Delete "%{category_name}" and leave uncategorized
+          delete_and_recategorize: Delete "%{category_name}" and assign new category
+          delete_category: Delete category?
+          explanation: By deleting this category, every transaction that has the "%{category_name}"
+            category will be uncategorized. Instead of leaving them uncategorized,
+            you can also assign a new category below.
+          replacement_category_prompt: Select category
       dropdown:
         row:
           delete: Delete category
@@ -26,6 +36,8 @@ en:
       row:
         delete: Delete category
         edit: Edit category
+      stroy:
+        success: Transaction category deleted successfully
       update:
         success: Transaction category updated successfully
     create:
