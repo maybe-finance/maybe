@@ -5,6 +5,7 @@ import * as d3 from "d3"
 export default class extends Controller {
   static values = {
     data: Object,
+    strokeWidth: { type: Number, default: 2 },
     useLabels: { type: Boolean, default: true },
     useTooltip: { type: Boolean, default: true },
     usePercentSign: Boolean
@@ -128,7 +129,7 @@ export default class extends Controller {
       .attr("d", this.#d3Line)
       .attr("stroke-linejoin", "round")
       .attr("stroke-linecap", "round")
-      .attr("stroke-width", 2)
+      .attr("stroke-width", this.strokeWidthValue)
   }
 
   #installTrendlineSplit() {
