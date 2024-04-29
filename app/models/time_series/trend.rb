@@ -39,8 +39,8 @@ class TimeSeries::Trend
     elsif previous.zero?
       Float::INFINITY
     else
-      change = (current_amount - previous_amount).abs
-      base = previous_amount.abs.to_f
+      change = (current_amount - previous_amount)
+      base = previous_amount.to_f
 
       (change / base * 100).round(1).to_f
     end
