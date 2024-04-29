@@ -51,11 +51,12 @@
         <p class="text-gray-500 text-sm mb-4"><%= t(".smtp_settings.description") %></p>
         <div class="space-y-4">
           <div class="space-y-3">
-            <%= form.text_field :smtp_domain, disabled: true, label: t(".smtp_settings.domain"), placeholder: t(".smtp_settings.domain_placeholder") %>
-            <%= form.text_field :smtp_host, disabled: true, label: t(".smtp_settings.host"), placeholder: t(".smtp_settings.host_placeholder") %>
-            <%= form.number_field :smtp_port, disabled: true, label: t(".smtp_settings.port"), placeholder: t(".smtp_settings.port_placeholder") %>
-            <%= form.text_field :smtp_username, disabled: true, label: t(".smtp_settings.username"), placeholder: t(".smtp_settings.username_placeholder") %>
-            <%= form.password_field :smtp_password, disabled: true, label: t(".smtp_settings.password"), placeholder: t(".smtp_settings.password_placeholder") %>
+            <%= form.text_field :email_sender, label: t(".email_sender"), placeholder: t(".email_sender_placeholder"), value: Setting.email_sender, data: { "auto-submit-form-target" => "auto" } %>
+            <%= form.text_field :app_domain, label: t(".domain"), placeholder: t(".domain_placeholder"), value: Setting.app_domain, data: { "auto-submit-form-target" => "auto" } %>
+            <%= form.text_field :smtp_host, label: t(".smtp_settings.host"), placeholder: t(".smtp_settings.host_placeholder"), value: Setting.smtp_host, data: { "auto-submit-form-target" => "auto" } %>
+            <%= form.number_field :smtp_port, label: t(".smtp_settings.port"), placeholder: t(".smtp_settings.port_placeholder"), value: Setting.smtp_port, data: { "auto-submit-form-target" => "auto" } %>
+            <%= form.text_field :smtp_username, label: t(".smtp_settings.username"), placeholder: t(".smtp_settings.username_placeholder"), value: Setting.smtp_username, data: { "auto-submit-form-target" => "auto" } %>
+            <%= form.password_field :smtp_password, label: t(".smtp_settings.password"), placeholder: t(".smtp_settings.password_placeholder"), value: Setting.smtp_password, data: { "auto-submit-form-target" => "auto" } %>
           </div>
           <div class="flex items-center justify-between bg-white border border-alpha-black-100 p-4 rounded-lg">
             <div class="flex items-center gap-3">
@@ -68,7 +69,7 @@
               </div>
             </div>
             <div>
-              <button type="button" class="bg-gray-50 text-gray-900 text-sm font-medium rounded-lg px-3 py-2 cursor-not-allowed" disabled><%= t(".smtp_settings.send_test_email_button") %></button>
+              <%= link_to t(".smtp_settings.send_test_email_button"), send_test_email_settings_hosting_path, data: { turbo_method: :post }, class:"bg-gray-50 text-gray-900 text-sm font-medium rounded-lg px-3 py-2" %>
             </div>
           </div>
         </div>
