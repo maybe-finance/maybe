@@ -8,11 +8,7 @@ export default class extends Controller {
     submitTextWhenNotReplacing: String
   }
 
-  replacementUpdated() {
-    this.#updateSubmitButton()
-  }
-
-  #updateSubmitButton() {
+  updateSubmitButton() {
     if (this.replacementCategoryFieldTarget.value) {
       this.submitButtonTarget.value = this.submitTextWhenReplacingValue
       this.#markSafe()

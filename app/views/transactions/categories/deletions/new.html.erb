@@ -23,7 +23,7 @@
             Current.family.transaction_categories.alphabetically.without(@category),
             :id, :name,
             { prompt: t(".replacement_category_prompt"), label: t(".category") },
-            { data: { category_deletion_target: "replacementCategoryField", action: "category-deletion#replacementUpdated" } } %>
+            { data: { category_deletion_target: "replacementCategoryField", action: "category-deletion#updateSubmitButton" } } %>
 
       <%= f.submit t(".delete_and_leave_uncategorized", category_name: @category.name),
             class: "form-field__submit bg-white text-red-600 border hover:bg-red-50",
