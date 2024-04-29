@@ -6,6 +6,14 @@ family_admin:
   password_digest: <%= BCrypt::Password.create('password') %>
   role: admin
 
+other_family_admin:
+  family: dylan_family
+  first_name: Duran
+  last_name: Dylan
+  email: bob2@bobdylan.com
+  password_digest: <%= BCrypt::Password.create('password') %>
+  role: admin
+
 family_member:
   family: dylan_family
   first_name: Jakob
