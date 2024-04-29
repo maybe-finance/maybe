@@ -28,12 +28,6 @@ class Transactions::CategoriesController < ApplicationController
     redirect_back_or_to transactions_path, notice: t(".success")
   end
 
-  def destroy
-    @category.destroy!
-
-    redirect_back_or_to transactions_path, notice: t(".success")
-  end
-
   private
     def set_category
       @category = Current.family.transaction_categories.find(params[:id])

@@ -36,8 +36,6 @@ en:
       row:
         delete: Delete category
         edit: Edit category
-      stroy:
-        success: Transaction category deleted successfully
       update:
         success: Transaction category updated successfully
     create:
