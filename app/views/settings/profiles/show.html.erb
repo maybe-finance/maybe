@@ -19,9 +19,7 @@
               <% end %>
             </div>
             <%= lucide_icon "image-plus", class: "hidden w-6 h-6 text-gray-500", data: { profile_image_preview_target: "template" } %>
-            <div data-profile-image-preview-target="clearBtn" 
-                data-action="click->profile-image-preview#clear" 
-                class="<%= profile_image_attached ? '' : 'hidden' %> cursor-pointer absolute bottom-0 right-0 w-8 h-8 bg-gray-50 rounded-full flex justify-center items-center border border-white border-2">
+            <div data-profile-image-preview-target="clearBtn" data-action="click->profile-image-preview#clear" class="<%= profile_image_attached ? "" : "hidden" %> cursor-pointer absolute bottom-0 right-0 w-8 h-8 bg-gray-50 rounded-full flex justify-center items-center border border-white border-2">
               <%= lucide_icon "x", class: "w-4 h-4 text-gray-500" %>
             </div>
           </div>
