@@ -57,7 +57,7 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
     NotificationMailer.expects(:with).with(user: users(:family_admin)).returns(mailer_mock)
 
     post send_test_email_settings_hosting_path
-    assert_response :success
+    assert_response :found
     assert controller.flash[:notice].present?
   end
 

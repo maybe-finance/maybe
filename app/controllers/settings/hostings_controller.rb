@@ -26,13 +26,13 @@ class Settings::HostingsController < ApplicationController
 
     begin
       NotificationMailer.with(user: Current.user).test_email.deliver_now
-    rescue
+    rescue => _e
       flash.notice = t(".error")
       render :show, status: :unprocessable_entity
       return
     end
 
-    render :show, notice: t(".success")
+    redirect_to settings_hosting_path, notice: t(".success")
   end
 
   private
