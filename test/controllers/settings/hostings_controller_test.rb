@@ -46,11 +46,7 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test " #send_test_email if smtp settings are populated try to send an email and redirect with notice" do
-    Setting.smtp_host = "smtp.example.com"
-    Setting.smtp_port = 466
-    Setting.smtp_username = "user@example.com"
-    Setting.smtp_password = "notification@example.com"
-    Setting.email_sender = "password"
+    Setting.stubs(:smtp_settings_populated?).returns(true)
 
     test_email_mock = mock
     test_email_mock.expects(:deliver_now)
@@ -66,12 +62,7 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "#send_test_email with one blank smtp setting" do
-    Setting.smtp_host = ""
-    Setting.smtp_port = 466
-    Setting.smtp_username = "user@example.com"
-    Setting.smtp_password = "notification@example.com"
-    Setting.email_sender = "password"
-
+    Setting.stubs(:smtp_settings_populated?).returns(false)
     NotificationMailer.expects(:with).never
 
     post send_test_email_settings_hosting_path
@@ -79,7 +70,7 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
     assert controller.flash[:notice].present?
   end
 
-  test "#send_test_email with email delivering raising an error" do
+  test "#send_test_email when sending the email raise an error" do
     Setting.stubs(:smtp_settings_populated?).returns(true)
     NotificationMailer.stubs(:with).raises(StandardError)
 
