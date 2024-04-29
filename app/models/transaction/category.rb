@@ -46,7 +46,7 @@ class Transaction::Category < ApplicationRecord
     self.insert_all(categories)
   end
 
-  def reassign_and_destroy!(replacement)
+  def reassign_transactions_then_destroy!(replacement)
     transaction do
       transactions.update_all category_id: replacement&.id
       destroy!
