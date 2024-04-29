@@ -11,15 +11,14 @@ class User < ApplicationRecord
 
   enum :role, { member: "member", admin: "admin" }, validate: true
 
-  has_one_attached :profile_image
+  has_one_attached :profile_image do |attachable|
+    attachable.variant :thumbnail, resize_to_limit: [150, 150], preprocessed: true
+  end
+
   validate :profile_image_size
 
   generates_token_for :password_reset, expires_in: 15.minutes do
     password_salt&.last(10)
-  end
-
-  def profile_image_thumbnail
-    profile_image.variant(resize_to_limit: [150, 150])
   end
   
   def display_name
