@@ -5,11 +5,11 @@ class Family < ApplicationRecord
   has_many :transaction_categories, dependent: :destroy, class_name: "Transaction::Category"
 
   def admins
-    users.where(users: { role: "admin" })
+    users.where(users: { role: "admin", marked_for_deletion: false })
   end
 
   def members
-    users.where(users: { role: "member" })
+    users.where(users: { role: "member", marked_for_deletion: false })
   end
 
   def snapshot(period = Period.all)

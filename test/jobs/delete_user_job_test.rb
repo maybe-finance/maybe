@@ -27,6 +27,7 @@ class DeleteUserJobTest < ActiveJob::TestCase
   end
 
   test "family, related accounts and other members are deleted for the last remaining admin" do
+    User.where(id: @user_member.id).destroy_all # just making sure the user has been deleted
     DeleteUserJob.perform_now(@user_admin)
 
     assert_raises(ActiveRecord::RecordNotFound) do

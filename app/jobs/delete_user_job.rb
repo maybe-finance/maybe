@@ -8,7 +8,9 @@ class DeleteUserJob < ApplicationJob
       other_admins = user.family.admins.where.not(id: user.id).count
 
       if other_admins == 0
-        user.family.destroy # this destroys related users and accounts
+        if user.family.members.count == 0
+          user.family.destroy
+        end
       else
         user.destroy
       end
