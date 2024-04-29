@@ -31,7 +31,7 @@ class ApplicationMailerTest < ActionMailer::TestCase
       port: ENV["SMTP_PORT"],
       user_name: ENV["SMTP_USERNAME"],
       password: ENV["SMTP_PASSWORD"],
-      tls: ENV["SMTP_TLS_ENABLED"] == "true",
+      tls: ENV["SMTP_TLS_ENABLED"] == "true"
     }
 
     ApplicationMailer.define_method(:test_email) { mail(to: "user@example.com", subject: "Test email subject", body: "Test email body") }

@@ -18,6 +18,6 @@ class AccountTest < ActiveSupport::TestCase
     Setting.smtp_password = "notification@example.com"
     Setting.email_sender = "password"
 
-    refute Setting.smtp_settings_populated?
+    assert_not Setting.smtp_settings_populated?
   end
 end
