@@ -51,6 +51,12 @@ class FamilyTest < ActiveSupport::TestCase
     end
   end
 
+  test "should destroy dependent merchants" do
+    assert_difference("Transaction::Merchant.count", -@family.transaction_merchants.count) do
+      @family.destroy
+    end
+  end
+
   test "should calculate total assets" do
     expected = @expected_snapshots.last["assets"].to_d
     assert_equal Money.new(expected), @family.assets
