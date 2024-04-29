@@ -2,60 +2,44 @@ require "test_helper"
 
 class ApplicationMailerTest < ActionMailer::TestCase
   setup do
-    ENV["SMTP_TLS_ENABLED"] = "true"
-    ENV["SMTP_ADDRESS"] = "smtp.example.com"
-    ENV["SMTP_PORT"] = "465"
-    ENV["SMTP_USERNAME"] = "user@example.env"
-    ENV["SMTP_PASSWORD"] = "password.env"
-    ENV["EMAIL_SENDER"] = "notification@example.env"
-    @smtp_settings_from_env = { address: ENV["SMTP_ADDRESS"],
-                                port: ENV["SMTP_PORT"],
-                                user_name: ENV["SMTP_USERNAME"],
-                                password: ENV["SMTP_PASSWORD"],
-                                tls: ENV["SMTP_TLS_ENABLED"] == "true" }
-
-    Setting.smtp_host = "smtp.example.com"
-    Setting.smtp_port = 466
-    Setting.smtp_username = "user@example.com"
-    Setting.smtp_password = "password"
-    Setting.email_sender = "notification@example.com"
-    @smtp_settings_from_settings = { address: Setting.smtp_host,
-                                     port: Setting.smtp_port,
-                                     user_name: Setting.smtp_username,
-                                     password: Setting.smtp_password,
-                                     tls: ENV["SMTP_TLS_ENABLED"] == "true" }
-
-    ActionMailer::Base.delivery_method = :smtp
-    ActionMailer::Base.smtp_settings = {
-      address: ENV["SMTP_ADDRESS"],
-      port: ENV["SMTP_PORT"],
-      user_name: ENV["SMTP_USERNAME"],
-      password: ENV["SMTP_PASSWORD"],
-      tls: ENV["SMTP_TLS_ENABLED"] == "true"
-    }
-    ActionMailer::Base.default_options = { from: ENV["EMAIL_SENDER"] }
-
-    ApplicationMailer.define_method(:test_email) { mail(to: "user@example.com", subject: "Test email subject", body: "Test email body") }
+    class TestMailer < ApplicationMailer
+      def test_email
+        mail(to: "testto@email.com", from: "testfrom@email.com", subject: "Test email subject", body: "Test email body")
+      end
+    end
   end
 
-  teardown do
-    ApplicationMailer.remove_method(:test_email)
-    ENV["SELF_HOSTING_ENABLED"] = "false"
-    ActionMailer::Base.smtp_settings = {}
-    ActionMailer::Base.delivery_method = :test
-  end
-
-  test "should return ENV config when self hosting is not enabled" do
-    ENV["SELF_HOSTING_ENABLED"] = "false"
-    email = ApplicationMailer.test_email
-    assert_equal @smtp_settings_from_env, email.delivery_method.settings.slice(:address, :port, :user_name, :password, :tls)
-    assert_equal ENV["EMAIL_SENDER"], email.from.first
-  end
-
-  test "should return setting config when self hosting is enabled" do
+  test "should use self host settings when self host enabled" do
     ENV["SELF_HOSTING_ENABLED"] = "true"
-    email = ApplicationMailer.test_email
-    assert_equal @smtp_settings_from_settings, email.delivery_method.settings.slice(:address, :port, :user_name, :password, :tls)
-    assert_equal Setting.email_sender, email.from.first
+
+    smtp_host = "smtp.example.com"
+    smtp_port = 466
+    smtp_username = "user@example.com"
+    smtp_password = "password"
+    email_sender = "notification@example.com"
+
+    smtp_settings_from_settings = { address: smtp_host,
+                                    port: smtp_port,
+                                    user_name: smtp_username,
+                                    password: smtp_password }
+
+    Setting.stubs(:smtp_host).returns(smtp_host)
+    Setting.stubs(:smtp_port).returns(smtp_port)
+    Setting.stubs(:smtp_username).returns(smtp_username)
+    Setting.stubs(:smtp_password).returns(smtp_password)
+    Setting.stubs(:email_sender).returns(email_sender)
+
+    TestMailer.test_email.deliver_now
+    assert_emails 1
+    assert_equal smtp_settings_from_settings, ActionMailer::Base.deliveries.first.delivery_method.settings.slice(:address, :port, :user_name, :password)
+  end
+
+  test "should use regular env settings when self host disabled" do
+    ENV["SELF_HOSTING_ENABLED"] = "false"
+
+    TestMailer.test_email.deliver_now
+
+    assert_emails 1
+    assert_nil ActionMailer::Base.deliveries.first.delivery_method.settings[:address]
   end
 end
