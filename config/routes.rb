@@ -34,6 +34,7 @@ Rails.application.routes.draw do
 
   resources :accounts, shallow: true do
     get :summary, on: :collection
+    get :list, on: :collection
     post :sync, on: :member
     resource :logo, only: %i[show], module: :accounts
     resources :valuations
