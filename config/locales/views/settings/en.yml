@@ -3,8 +3,8 @@ en:
   settings:
     hostings:
       send_test_email:
-        missing_smtp_setting_error: 'Ensure that all smtp settings are filled in'
         error: 'Configuration error: Test email could not be sent'
+        missing_smtp_setting_error: Ensure that all smtp settings are filled in
         success: Test email has been sent successfully
       show:
         domain: App Domain
