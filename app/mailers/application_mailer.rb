@@ -1,5 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: ENV["EMAIL_SENDER"]
   layout "mailer"
 
   after_action :set_self_host_settings, if: -> { ENV["SELF_HOSTING_ENABLED"] == "true" && Rails.application.config.action_mailer.delivery_method = :smtp }
