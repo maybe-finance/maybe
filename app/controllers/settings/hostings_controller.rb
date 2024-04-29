@@ -18,13 +18,21 @@ class Settings::HostingsController < ApplicationController
   end
 
   def send_test_email
+    unless Setting.smtp_settings_populated?
+      flash.notice = t(".error")
+      render(:show, status: :unprocessable_entity)
+      return
+    end
+
     begin
       NotificationMailer.with(user: Current.user).test_email.deliver_now
-      notice = t(".success")
     rescue => e
-      notice = t(".error")
+      flash.notice = t(".error")
+      render :show, status: :unprocessable_entity
+      return
     end
-    redirect_to settings_hosting_path, notice: notice
+
+    redirect_to settings_hosting_path, notice: t(".success")
   end
 
   private
