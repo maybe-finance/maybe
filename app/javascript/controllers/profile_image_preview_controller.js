@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["imagePreview", "fileField", "clearBtn", "template"]
+  static targets = ["imagePreview", "fileField", "deleteField", "clearBtn", "template"]
 
   preview(event) {
     const file = event.target.files[0];
@@ -17,6 +17,7 @@ export default class extends Controller {
   }
 
   clear() {
+    this.deleteFieldTarget.value = true;
     this.fileFieldTarget.value = null;
     this.templateTarget.classList.remove("hidden");
     this.imagePreviewTarget.innerHTML = this.templateTarget.innerHTML;

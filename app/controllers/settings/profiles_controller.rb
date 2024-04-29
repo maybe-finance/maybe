@@ -5,7 +5,7 @@ class Settings::ProfilesController < ApplicationController
   def update
     user_params_with_family = user_params
 
-    if params[:user][:profile_image].blank?
+    if params[:user][:delete_profile_image] == "true"
       Current.user.profile_image.purge
     end
 
