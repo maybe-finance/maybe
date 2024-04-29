@@ -16,6 +16,8 @@ class ValuationsControllerTest < ActionDispatch::IntegrationTest
     assert_difference("Valuation.count") do
       post account_valuations_url(@account), params: { valuation: { value: 1, date: Date.current, type: "Appraisal" } }
     end
+
+    assert_redirected_to account_path(@valuation.account)
   end
 
   test "create should sync account with correct start date" do

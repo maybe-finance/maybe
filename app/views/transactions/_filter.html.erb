@@ -11,6 +11,11 @@
       <div class="w-2 h-4 text-xs flex items-center justify-center rounded-full" style="background-color: <%= filter[:value].color %>"></div>
       <p><%= filter[:value].name %></p>
     </div>
+  <% when "merchant" %>
+    <div class="flex items-center gap-2">
+      <div class="w-2 h-4 text-xs flex items-center justify-center rounded-full" style="background-color: <%= filter[:value].color %>"></div>
+      <p><%= filter[:value].name %></p>
+    </div>
   <% when "search" %>
     <div class="flex items-center gap-2">
       <%= lucide_icon "text", class: "w-5 h-5 text-gray-500" %>

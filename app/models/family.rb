@@ -3,6 +3,7 @@ class Family < ApplicationRecord
   has_many :accounts, dependent: :destroy
   has_many :transactions, through: :accounts
   has_many :transaction_categories, dependent: :destroy, class_name: "Transaction::Category"
+  has_many :transaction_merchants, dependent: :destroy, class_name: "Transaction::Merchant"
 
   def snapshot(period = Period.all)
     query = accounts.active.joins(:balances)
