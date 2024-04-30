@@ -32,6 +32,6 @@ class Transactions::CategoriesController < ApplicationController
   end
 
   def category_params
-    params.require(:transaction_category).permit(:name, :name, :color)
+    params.require(:transaction_category).permit(:name, :color)
   end
 end

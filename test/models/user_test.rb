@@ -37,10 +37,37 @@ class UserTest < ActiveSupport::TestCase
     assert_not duplicate_user.valid?
   end
 
-  test "email addresses are be saved as lower-case" do
-    mixed_case_email = "Foo@ExAMPle.CoM"
-    @user.email = mixed_case_email
-    @user.save
-    assert_equal mixed_case_email.downcase, @user.reload.email
+  test "email address is normalized" do
+    @user.update!(email: " User@ExAMPle.CoM ")
+    assert_equal "user@example.com", @user.reload.email
+  end
+
+  test "display name" do
+    user = User.new(email: "user@example.com")
+    assert_equal "user@example.com", user.display_name
+    user.first_name = "Bob"
+    assert_equal "Bob", user.display_name
+    user.last_name = "Dylan"
+    assert_equal "Bob Dylan", user.display_name
+  end
+
+  test "initial" do
+    user = User.new(email: "user@example.com")
+    assert_equal "U", user.initial
+    user.first_name = "Bob"
+    assert_equal "B", user.initial
+    user.first_name = nil
+    user.last_name = "Dylan"
+    assert_equal "D", user.initial
+  end
+
+  test "names are normalized" do
+    @user.update!(first_name: "", last_name: "")
+    assert_nil @user.first_name
+    assert_nil @user.last_name
+
+    @user.update!(first_name: " Bob ", last_name: " Dylan ")
+    assert_equal "Bob", @user.first_name
+    assert_equal "Dylan", @user.last_name
   end
 end

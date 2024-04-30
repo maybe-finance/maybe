@@ -4,14 +4,16 @@
   <% end %>
   <div id="user-menu" data-controller="menu">
     <button data-menu-target="button">
-      <div class="text-white w-9 h-9 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= Current.user.email.first %></div>
+      <div class="text-white w-9 h-9 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= Current.user.initial %></div>
     </button>
     <div data-menu-target="content" class="hidden absolute w-[240px] z-10 top-10 left-[255px] top-[72px] bg-white rounded-sm shadow-xs border border-alpha-black-25">
       <div class="p-3 flex items-center gap-3">
-        <div class="text-white shrink-0 w-9 h-9 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= Current.user.email.first %></div>
+        <div class="text-white shrink-0 w-9 h-9 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= Current.user.initial %></div>
         <div>
-          <span class="text-gray-900 font-medium text-sm"><%= Current.user.first_name %> <%= Current.user.last_name %></span>
-          <span class="text-gray-500 text-sm"><%= Current.user.email %></span>
+          <span class="text-gray-900 font-medium text-sm"><%= Current.user.display_name %></span>
+          <% if Current.user.display_name != Current.user.email %>
+            <span class="text-gray-500 text-sm"><%= Current.user.email %></span>
+          <% end %>
         </div>
       </div>
       <div class="border-t border-b border-alpha-black-100 p-1">
@@ -70,19 +72,23 @@
   </ul>
 </nav>
 <div class="flex flex-col mt-6">
-  <div class="flex items-center justify-between">
-    <%= link_to accounts_path, class: "text-xs uppercase text-gray-500 font-bold tracking-wide" do %>
-      <%= t(".accounts") %>
-    <% end %>
+  <div class="flex items-center justify-between px-3 py-2 mb-2">
+    <div class="flex items-center gap-2 text-xs uppercase text-gray-500">
+      <%= link_to accounts_path, class: "text-xs uppercase text-gray-500 font-bold tracking-wide" do %>
+        <%= t(".portfolio") %>
+      <% end %>
+      <span class="font-bold tracking-wide">&bull;</span>
+      <%= form_with url: list_accounts_path, method: :get, class: "flex items-center gap-4", data: { controller: "auto-submit-form", turbo_frame: "account-list" } do %>
+        <%= render partial: "shared/period_select", locals: { button_class: "flex items-center gap-1 w-full cursor-pointer font-bold tracking-wide" } %>
+      <% end %>
+    </div>
     <%= link_to new_account_path, class: "block hover:bg-gray-100 p-2 text-sm font-semibold text-gray-900 flex items-center rounded", title: t(".new_account"), data: { turbo_frame: "modal" } do %>
       <%= lucide_icon("plus", class: "w-5 h-5 text-gray-500") %>
     <% end %>
   </div>
-  <%= link_to new_account_path, class: "flex items-center gap-4 px-2 py-3 mb-1 text-gray-500 text-sm font-medium rounded-[10px] hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
-    <%= lucide_icon("plus", class: "w-5 h-5") %>
-    <p><%= t(".new_account") %></p>
-  <% end %>
-  <% account_groups.each do |group| %>
-    <%= render "accounts/account_list", group: group %>
-  <% end %>
+  <turbo-frame id="account-list" target="_top">
+    <% account_groups.each do |group| %>
+      <%= render "accounts/account_list", group: group %>
+    <% end %>
+  </turbo-frame>
 </div>

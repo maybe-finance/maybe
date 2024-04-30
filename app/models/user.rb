@@ -7,6 +7,8 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   normalizes :email, with: ->(email) { email.strip.downcase }
 
+  normalizes :first_name, :last_name, with: ->(value) { value.strip.presence }
+
   enum :role, { member: "member", admin: "admin" }, validate: true
 
   generates_token_for :password_reset, expires_in: 15.minutes do
@@ -23,6 +25,14 @@ class User < ApplicationRecord
     else
       destroy!
     end
+  end
+  
+  def display_name
+    [ first_name, last_name ].compact.join(" ").presence || email
+  end
+
+  def initial
+    (display_name&.first || email.first).upcase
   end
 
   def acknowledge_upgrade_prompt(commit_sha)

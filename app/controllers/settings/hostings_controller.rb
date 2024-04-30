@@ -17,6 +17,24 @@ class Settings::HostingsController < ApplicationController
     end
   end
 
+  def send_test_email
+    unless Setting.smtp_settings_populated?
+      flash[:error] = t(".missing_smtp_setting_error")
+      render(:show, status: :unprocessable_entity)
+      return
+    end
+
+    begin
+      NotificationMailer.with(user: Current.user).test_email.deliver_now
+    rescue => _e
+      flash[:error] = t(".error")
+      render :show, status: :unprocessable_entity
+      return
+    end
+
+    redirect_to settings_hosting_path, notice: t(".success")
+  end
+
   private
     def all_updates_valid?
       @errors = ActiveModel::Errors.new(Setting)
@@ -37,12 +55,13 @@ class Settings::HostingsController < ApplicationController
     end
 
     def hosting_params
-      permitted_params = params.require(:setting).permit(:render_deploy_hook, :upgrades_mode)
+      permitted_params = params.require(:setting).permit(:render_deploy_hook, :upgrades_mode, :email_sender, :app_domain, :smtp_host, :smtp_port, :smtp_username, :smtp_password)
 
       result = {}
       result[:upgrades_mode] = permitted_params[:upgrades_mode] == "manual" ? "manual" : "auto" if permitted_params.key?(:upgrades_mode)
       result[:render_deploy_hook] = permitted_params[:render_deploy_hook] if permitted_params.key?(:render_deploy_hook)
       result[:upgrades_target] = permitted_params[:upgrades_mode] unless permitted_params[:upgrades_mode] == "manual" if permitted_params.key?(:upgrades_mode)
+      result.merge!(permitted_params.slice(:email_sender, :app_domain, :smtp_host, :smtp_port, :smtp_username, :smtp_password))
       result
     end
 

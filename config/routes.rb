@@ -15,7 +15,9 @@ Rails.application.routes.draw do
     resource :preferences, only: %i[show update]
     resource :notifications, only: %i[show update]
     resource :billing, only: %i[show update]
-    resource :hosting, only: %i[show update]
+    resource :hosting, only: %i[show update] do
+      post :send_test_email, on: :collection
+    end
     resource :security, only: %i[show update]
   end
 
@@ -25,7 +27,7 @@ Rails.application.routes.draw do
     # TODO: These are *placeholders*
     # Uncomment `only` and add the necessary actions as they are implemented.
     resources :rules, only: [ :index ]
-    resources :merchants, only: [ :index ]
+    resources :merchants, only: %i[index new create edit update destroy]
   end
 
   resources :transactions do
@@ -34,6 +36,7 @@ Rails.application.routes.draw do
 
   resources :accounts, shallow: true do
     get :summary, on: :collection
+    get :list, on: :collection
     post :sync, on: :member
     resource :logo, only: %i[show], module: :accounts
     resources :valuations

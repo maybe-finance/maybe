@@ -2,7 +2,15 @@
 en:
   settings:
     hostings:
+      send_test_email:
+        error: 'Configuration error: Test email could not be sent'
+        missing_smtp_setting_error: Ensure that all smtp settings are filled in
+        success: Test email has been sent successfully
       show:
+        domain: App Domain
+        domain_placeholder: mydomain.com
+        email_sender: Email Sender
+        email_sender_placeholder: user@mydomain.com
         general_settings_title: General Settings
         page_title: Self-Hosting
         provider_settings:
@@ -13,8 +21,6 @@ en:
         smtp_settings:
           description: Configure outgoing mail server settings for notifications and
             alerts
-          domain: App Domain
-          domain_placeholder: mydomain.com
           host: SMTP Host
           host_placeholder: smtp.gmail.com
           password: Password
@@ -24,7 +30,7 @@ en:
           send_test_email: Send Test Email
           send_test_email_button: Send Test Email
           send_test_email_description: Verify SMTP settings by sending a test email
-          title: SMTP Email Configuration (coming soon...)
+          title: SMTP Email Configuration
           username: Username
           username_placeholder: username@gmail.com
         upgrades:

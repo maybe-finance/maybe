@@ -74,7 +74,7 @@ Rails.application.configure do
     port:      ENV["SMTP_PORT"],
     user_name: ENV["SMTP_USERNAME"],
     password:  ENV["SMTP_PASSWORD"],
-    tls:       ENV["TLS"] == "true"
+    tls:       ENV["SMTP_TLS_ENABLED"] == "true"
   }
 
   # Ignore bad email addresses and do not raise email delivery errors.
