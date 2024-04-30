@@ -12,7 +12,7 @@ class User < ApplicationRecord
   enum :role, { member: "member", admin: "admin" }, validate: true
 
   has_one_attached :profile_image do |attachable|
-    attachable.variant :thumbnail, resize_to_limit: [150, 150], preprocessed: true
+    attachable.variant :thumbnail, resize_to_limit: [ 150, 150 ], preprocessed: true
   end
 
   validate :profile_image_size
@@ -20,7 +20,7 @@ class User < ApplicationRecord
   generates_token_for :password_reset, expires_in: 15.minutes do
     password_salt&.last(10)
   end
-  
+
   def display_name
     [ first_name, last_name ].compact.join(" ").presence || email
   end
@@ -45,7 +45,7 @@ class User < ApplicationRecord
     last_alerted_upgrade_commit_sha == upgrade.commit_sha
   end
 
-  private 
+  private
 
   def profile_image_size
     if profile_image.attached? && profile_image.byte_size > 5.megabytes
