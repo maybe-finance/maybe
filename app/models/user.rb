@@ -26,7 +26,7 @@ class User < ApplicationRecord
       destroy!
     end
   end
-  
+
   def display_name
     [ first_name, last_name ].compact.join(" ").presence || email
   end
