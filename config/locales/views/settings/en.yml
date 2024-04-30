@@ -82,8 +82,14 @@ en:
       update:
         success: Preferences updated successfully.
     profiles:
+      destroy:
+        success: Account deleted successfully.
       show:
         add_member: Add Member
+        confirm_delete:
+          body: Are you sure you want to permanently delete your account? This action
+            is irreversible.
+          title: Delete account?
         danger_zone_title: Danger Zone
         delete_account: Delete Account
         delete_account_warning: Deleting your account will permanently remove all

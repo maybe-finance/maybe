@@ -63,13 +63,13 @@
         </div>
         <%=
           button_to t(".delete_account"), settings_profile_path, method: :delete,
+            class: "bg-red-500 text-white text-sm font-medium rounded-lg px-3 py-2",
             data: { turbo_confirm: {
-              title: "Delete account?",
-              body: "Are you sure you want to permanently delete your account? This action is irreversible.",
-              accept: "Delete Account",
+              title: t(".confirm_delete.title"),
+              body: t(".confirm_delete.body"),
+              accept: t(".delete_account"),
               acceptClass: "w-full bg-red-500 text-white rounded-xl text-center p-[10px] border mb-2"
-            }},
-            class: "bg-red-500 text-white text-sm font-medium rounded-lg px-3 py-2"
+            }}
         %>
       </div>
     <% end %>

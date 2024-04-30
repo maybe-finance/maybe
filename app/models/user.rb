@@ -49,7 +49,7 @@ class User < ApplicationRecord
 
   def can_deactivate
     if admin? && family.users.count > 1
-      errors.add(:base, "Admin cannot delete account while other users are present. Please delete all members first.")
+      errors.add(:base, I18n.t('activerecord.errors.user.cannot_deactivate_admin_with_other_users'))
     end
   end
 
