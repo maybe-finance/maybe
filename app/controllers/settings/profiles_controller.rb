@@ -44,7 +44,7 @@ class Settings::ProfilesController < ApplicationController
 
   def mark_user_for_deletion_and_logout
     Current.user.update!(marked_for_deletion: true)
-    DeleteUserJob.perform_later(Current.user)
+    Current.user.purge_data_later
     logout
   end
 end

@@ -5,11 +5,15 @@ class Family < ApplicationRecord
   has_many :transaction_categories, dependent: :destroy, class_name: "Transaction::Category"
 
   def admins
-    users.where(users: { role: "admin", marked_for_deletion: false })
+    users.where(users: { role: "admin" })
   end
 
   def members
-    users.where(users: { role: "member", marked_for_deletion: false })
+    users.where(users: { role: "member" })
+  end
+
+  def can_be_destroyed_by?(user)
+    users.count == 1 && user.admin?
   end
 
   def snapshot(period = Period.all)

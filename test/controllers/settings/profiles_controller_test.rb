@@ -28,10 +28,8 @@ class Settings::ProfilesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "cannot delete admin while other members are present" do
-    other_admin = users(:other_family_admin)
-    User.where.not(id: other_admin.id).destroy_all # just delete other admin so this is last
-
-    sign_in @admin = other_admin
+    sign_in @admin = users(:other_family_admin)
+    User.where.not(id: @admin.id).destroy_all # just delete other admin so this is last
 
     delete settings_profile_url
     assert_response :redirect

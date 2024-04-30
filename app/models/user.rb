@@ -13,6 +13,18 @@ class User < ApplicationRecord
     password_salt&.last(10)
   end
 
+  def purge_data_later
+    DeleteUserJob.perform_later(self)
+  end
+
+  def purge_data
+    if family.can_be_destroyed_by?(self)
+      family.destroy!
+    else
+      destroy!
+    end
+  end
+
   def acknowledge_upgrade_prompt(commit_sha)
     update!(last_prompted_upgrade_commit_sha: commit_sha)
   end
