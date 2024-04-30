@@ -107,6 +107,30 @@ GEM
     addressable (2.8.6)
       public_suffix (>= 2.0.2, < 6.0)
     ast (2.4.2)
+    aws-eventstream (1.3.0)
+    aws-partitions (1.922.0)
+    aws-sdk-core (3.193.0)
+      aws-eventstream (~> 1, >= 1.3.0)
+      aws-partitions (~> 1, >= 1.651.0)
+      aws-sigv4 (~> 1.8)
+      jmespath (~> 1, >= 1.6.1)
+    aws-sdk-kms (1.80.0)
+      aws-sdk-core (~> 3, >= 3.193.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-s3 (1.148.0)
+      aws-sdk-core (~> 3, >= 3.193.0)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.8)
+    aws-sigv4 (1.8.0)
+      aws-eventstream (~> 1, >= 1.0.2)
+    azure-storage-blob (2.0.3)
+      azure-storage-common (~> 2.0)
+      nokogiri (~> 1, >= 1.10.8)
+    azure-storage-common (2.0.4)
+      faraday (~> 1.0)
+      faraday_middleware (~> 1.0, >= 1.0.0.rc1)
+      net-http-persistent (~> 4.0)
+      nokogiri (~> 1, >= 1.10.8)
     base64 (0.2.0)
     bcrypt (3.1.20)
     better_html (2.0.2)
@@ -123,6 +147,7 @@ GEM
     brakeman (6.1.2)
       racc
     builder (3.2.4)
+    byebug (11.1.3)
     capybara (3.40.0)
       addressable
       matrix
@@ -143,6 +168,9 @@ GEM
     debug (1.9.2)
       irb (~> 1.10)
       reline (>= 0.3.8)
+    declarative (0.0.20)
+    digest-crc (0.6.5)
+      rake (>= 12.0.0, < 14.0.0)
     dotenv (3.1.0)
     dotenv-rails (3.1.0)
       dotenv (= 3.1.0)
@@ -158,10 +186,11 @@ GEM
     erubi (1.12.0)
     et-orbi (1.2.11)
       tzinfo
-    faraday (2.9.0)
-      faraday-net_http (>= 2.0, < 3.2)
-    faraday-net_http (3.1.0)
-      net-http
+    faraday (1.2.0)
+      multipart-post (>= 1.2, < 3)
+      ruby2_keywords
+    faraday_middleware (1.2.0)
+      faraday (~> 1.0)
     ffi (1.16.3)
     fugit (1.11.0)
       et-orbi (~> 1, >= 1.2.11)
@@ -175,12 +204,47 @@ GEM
       fugit (>= 1.1)
       railties (>= 6.0.0)
       thor (>= 0.14.1)
+    google-apis-core (0.14.1)
+      addressable (~> 2.5, >= 2.5.1)
+      googleauth (~> 1.9)
+      httpclient (>= 2.8.1, < 3.a)
+      mini_mime (~> 1.0)
+      representable (~> 3.0)
+      retriable (>= 2.0, < 4.a)
+      rexml
+    google-apis-iamcredentials_v1 (0.20.0)
+      google-apis-core (>= 0.14.0, < 2.a)
+    google-apis-storage_v1 (0.37.0)
+      google-apis-core (>= 0.14.0, < 2.a)
+    google-cloud-core (1.7.0)
+      google-cloud-env (>= 1.0, < 3.a)
+      google-cloud-errors (~> 1.0)
+    google-cloud-env (2.1.1)
+      faraday (>= 1.0, < 3.a)
+    google-cloud-errors (1.4.0)
+    google-cloud-storage (1.51.0)
+      addressable (~> 2.8)
+      digest-crc (~> 0.4)
+      google-apis-core (~> 0.13)
+      google-apis-iamcredentials_v1 (~> 0.18)
+      google-apis-storage_v1 (~> 0.37)
+      google-cloud-core (~> 1.6)
+      googleauth (~> 1.9)
+      mini_mime (~> 1.0)
+    googleauth (1.11.0)
+      faraday (>= 1.0, < 3.a)
+      google-cloud-env (~> 2.1)
+      jwt (>= 1.4, < 3.0)
+      multi_json (~> 1.11)
+      os (>= 0.9, < 2.0)
+      signet (>= 0.16, < 2.a)
     hashdiff (1.1.0)
     highline (3.0.1)
     hotwire-livereload (1.3.2)
       actioncable (>= 6.0.0)
       listen (>= 3.0.0)
       railties (>= 6.0.0)
+    httpclient (2.8.3)
     i18n (1.14.4)
       concurrent-ruby (~> 1.0)
     i18n-tasks (1.0.13)
@@ -194,6 +258,9 @@ GEM
       rails-i18n
       rainbow (>= 2.2.2, < 4.0)
       terminal-table (>= 1.5.1)
+    image_processing (1.12.2)
+      mini_magick (>= 4.9.5, < 5)
+      ruby-vips (>= 2.0.17, < 3)
     importmap-rails (2.0.1)
       actionpack (>= 6.0.0)
       activesupport (>= 6.0.0)
@@ -205,7 +272,10 @@ GEM
     irb (1.12.0)
       rdoc
       reline (>= 0.4.2)
+    jmespath (1.6.2)
     json (2.7.1)
+    jwt (2.8.1)
+      base64
     language_server-protocol (3.17.0.3)
     launchy (3.0.0)
       addressable (~> 2.8)
@@ -225,13 +295,16 @@ GEM
       net-smtp
     marcel (1.0.4)
     matrix (0.4.2)
+    mini_magick (4.12.0)
     mini_mime (1.1.5)
     minitest (5.21.2)
     mocha (2.2.0)
       ruby2_keywords (>= 0.0.5)
     msgpack (1.7.2)
-    net-http (0.4.1)
-      uri
+    multi_json (1.15.0)
+    multipart-post (2.4.0)
+    net-http-persistent (4.0.2)
+      connection_pool (~> 2.2)
     net-imap (0.4.10)
       date
       net-protocol
@@ -258,6 +331,7 @@ GEM
       base64
       faraday (>= 1, < 3)
       sawyer (~> 0.9)
+    os (1.1.4)
     pagy (8.3.0)
     parallel (1.24.0)
     parser (3.3.0.5)
@@ -316,6 +390,11 @@ GEM
     regexp_parser (2.9.0)
     reline (0.5.3)
       io-console (~> 0.5)
+    representable (3.2.0)
+      declarative (< 0.1.0)
+      trailblazer-option (>= 0.1.1, < 0.2.0)
+      uber (< 0.2.0)
+    retriable (3.1.2)
     rexml (3.2.6)
     rubocop (1.60.2)
       json (~> 2.3)
@@ -354,6 +433,8 @@ GEM
       ruby-lsp (>= 0.16.0, < 0.17.0)
       sorbet-runtime (>= 0.5.9897)
     ruby-progressbar (1.13.0)
+    ruby-vips (2.2.1)
+      ffi (~> 1.12)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
     sawyer (0.9.2)
@@ -370,6 +451,11 @@ GEM
     sentry-ruby (5.17.3)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
+    signet (0.19.0)
+      addressable (~> 2.8)
+      faraday (>= 0.17.5, < 3.a)
+      jwt (>= 1.5, < 3.0)
+      multi_json (~> 1.10)
     smart_properties (1.17.0)
     sorbet-runtime (0.5.11332)
     stackprof (0.2.26)
@@ -392,14 +478,15 @@ GEM
       unicode-display_width (>= 1.1.1, < 3)
     thor (1.3.1)
     timeout (0.4.1)
+    trailblazer-option (0.1.2)
     turbo-rails (2.0.5)
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
       railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    uber (0.1.0)
     unicode-display_width (2.5.0)
-    uri (0.13.0)
     useragent (0.16.10)
     vcr (6.2.0)
     web-console (4.2.1)
@@ -429,17 +516,22 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  aws-sdk-s3
+  azure-storage-blob (~> 2.0)
   bcrypt (~> 3.1.7)
   bootsnap
   brakeman
+  byebug
   capybara
   debug
   dotenv-rails
   erb_lint
   faraday
   good_job
+  google-cloud-storage (~> 1.11)
   hotwire-livereload
   i18n-tasks
+  image_processing (>= 1.2)
   importmap-rails
   inline_svg
   letter_opener

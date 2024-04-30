@@ -50,3 +50,6 @@
 
 # Ignore .devcontainer files
 compose-dev.yaml
+
+# Ignore GCP keyfile
+gcp-storage-keyfile.json

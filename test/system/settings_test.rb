@@ -61,6 +61,18 @@ class SettingsTest < ApplicationSystemTestCase
     # TODO: Implement test for back navigation and escape key functionality.
   end
 
+  test "can upload profile image" do
+    open_settings_from_sidebar
+
+    label = find("label", text: "Choose")
+
+    attach_file(label["for"], Rails.root.join("test/fixtures/files/profile_image.png"), make_visible: true)
+
+    click_button "Save"
+
+    assert_selector("img[src*='profile_image.png']")
+  end
+
   private
     def open_settings_from_sidebar
       find("#user-menu").click

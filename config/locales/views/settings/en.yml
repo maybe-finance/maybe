@@ -106,4 +106,5 @@ en:
         profile_title: Profile
         save: Save
       update:
+        file_size_error: File size must be less than 5MB
         success: Profile updated successfully.

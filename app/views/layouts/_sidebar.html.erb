@@ -4,11 +4,24 @@
   <% end %>
   <div id="user-menu" data-controller="menu">
     <button data-menu-target="button">
-      <div class="text-white w-9 h-9 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= Current.user.initial %></div>
+      <% profile_image_attached = Current.user.profile_image.attached? %>
+      <% if profile_image_attached %>
+        <div class="text-white w-9 h-9">
+          <%= render "shared/user_profile_image", user: Current.user %>
+        </div>
+      <% else %>
+        <div class="text-white w-9 h-9 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= Current.user.initial %></div>
+      <% end %>
     </button>
     <div data-menu-target="content" class="hidden absolute w-[240px] z-10 top-10 left-[255px] top-[72px] bg-white rounded-sm shadow-xs border border-alpha-black-25">
       <div class="p-3 flex items-center gap-3">
-        <div class="text-white shrink-0 w-9 h-9 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= Current.user.initial %></div>
+        <% if profile_image_attached %>
+          <div class="text-white shrink-0 w-9 h-9">
+            <%= render "shared/user_profile_image", user: Current.user %>
+          </div>
+        <% else %>
+          <div class="text-white shrink-0 w-9 h-9 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= Current.user.initial %></div>
+        <% end %>
         <div>
           <span class="text-gray-900 font-medium text-sm"><%= Current.user.display_name %></span>
           <% if Current.user.display_name != Current.user.email %>
