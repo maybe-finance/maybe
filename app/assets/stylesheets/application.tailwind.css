@@ -33,18 +33,23 @@
   }
 
   .form-field {
-    @apply relative border bg-white rounded-xl shadow-sm;
+    @apply relative border border-alpha-black-100 bg-white rounded-md shadow-xs;
     @apply focus-within:shadow-none focus-within:border-gray-900 focus-within:ring-4 focus-within:ring-gray-100;
   }
 
   .form-field__label {
-    @apply p-3 pb-0 block text-sm font-medium opacity-50;
+    @apply px-3 pt-2 pb-0 block text-xs text-gray-500;
   }
 
   .form-field__input {
-    @apply p-3 w-full bg-transparent border-none opacity-100;
+    @apply px-3 pb-2 pt-1 text-sm w-full bg-transparent border-none opacity-100;
     @apply focus:outline-none focus:ring-0 focus:opacity-100;
     @apply placeholder-shown:opacity-50;
+    @apply disabled:opacity-50;
+  }
+
+  .form-field__radio {
+    @apply text-gray-900;
   }
 
   .form-field__submit {

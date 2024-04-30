@@ -2,9 +2,7 @@
 <div class="space-y-4">
   <div class="flex justify-between items-center">
     <div class="flex items-center gap-3">
-      <div class="bg-green-600/10 rounded-full h-8 w-8 flex items-center justify-center">
-        <span class="text-green-600"><%= @account.name[0].upcase %></span>
-      </div>
+      <%= image_tag account_logo_url(@account), class: "w-8 h-8" %>
       <h2 class="font-medium text-xl"><%= @account.name %></h2>
     </div>
     <div class="flex items-center gap-3">
@@ -28,9 +26,9 @@
                 class: "block w-full py-2 text-red-600 hover:text-red-800 flex items-center",
                 data: {
                   turbo_confirm: {
-                    title: t("custom_turbo_confirm.account_destroy.title"),
-                    body: t("custom_turbo_confirm.account_destroy.body_html"),
-                    accept: t("custom_turbo_confirm.account_destroy.accept", name: @account.name)
+                    title: t(".confirm_title"),
+                    body: t(".confirm_body_html"),
+                    accept: t(".confirm_accept", name: @account.name)
                   }
                 } do %>
               <%= lucide_icon("trash-2", class: "w-5 h-5 mr-2") %> Delete account

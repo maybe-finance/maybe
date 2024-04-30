@@ -16,7 +16,10 @@ class FamilyTest < ActiveSupport::TestCase
         "date" => (Date.current + row["date_offset"].to_i.days).to_date,
         "net_worth" => row["net_worth"],
         "assets" => row["assets"],
-        "liabilities" => row["liabilities"]
+        "liabilities" => row["liabilities"],
+        "rolling_spend" => row["rolling_spend"],
+        "rolling_income" => row["rolling_income"],
+        "savings_rate" => row["savings_rate"]
       }
     end
   end
@@ -44,6 +47,12 @@ class FamilyTest < ActiveSupport::TestCase
 
   test "should destroy dependent transaction categories" do
     assert_difference("Transaction::Category.count", -@family.transaction_categories.count) do
+      @family.destroy
+    end
+  end
+
+  test "should destroy dependent merchants" do
+    assert_difference("Transaction::Merchant.count", -@family.transaction_merchants.count) do
       @family.destroy
     end
   end
@@ -80,6 +89,26 @@ class FamilyTest < ActiveSupport::TestCase
       assert_in_delta expected_assets.value.amount, Money.new(asset_series.values[index].value).amount, 0.01
       assert_in_delta expected_liabilities.value.amount, Money.new(liability_series.values[index].value).amount, 0.01
       assert_in_delta expected_net_worth.value.amount, Money.new(net_worth_series.values[index].value).amount, 0.01
+    end
+  end
+
+  test "should calculate transaction snapshot correctly" do
+    spending_series = @family.snapshot_transactions[:spending_series]
+    income_series = @family.snapshot_transactions[:income_series]
+    savings_rate_series = @family.snapshot_transactions[:savings_rate_series]
+
+    assert_equal @expected_snapshots.count, spending_series.values.count
+    assert_equal @expected_snapshots.count, income_series.values.count
+    assert_equal @expected_snapshots.count, savings_rate_series.values.count
+
+    @expected_snapshots.each_with_index do |row, index|
+      expected_spending = TimeSeries::Value.new(date: row["date"], value: Money.new(row["rolling_spend"].to_d))
+      expected_income = TimeSeries::Value.new(date: row["date"], value: Money.new(row["rolling_income"].to_d))
+      expected_savings_rate = TimeSeries::Value.new(date: row["date"], value: Money.new(row["savings_rate"].to_d))
+
+      assert_in_delta expected_spending.value.amount, Money.new(spending_series.values[index].value).amount, 0.01
+      assert_in_delta expected_income.value.amount, Money.new(income_series.values[index].value).amount, 0.01
+      assert_in_delta expected_savings_rate.value.amount, savings_rate_series.values[index].value, 0.01
     end
   end
 

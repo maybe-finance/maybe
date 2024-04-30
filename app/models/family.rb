@@ -3,6 +3,7 @@ class Family < ApplicationRecord
   has_many :accounts, dependent: :destroy
   has_many :transactions, through: :accounts
   has_many :transaction_categories, dependent: :destroy, class_name: "Transaction::Category"
+  has_many :transaction_merchants, dependent: :destroy, class_name: "Transaction::Merchant"
 
   def snapshot(period = Period.all)
     query = accounts.active.joins(:balances)
@@ -25,6 +26,62 @@ class Family < ApplicationRecord
       asset_series: TimeSeries.new(result.map { |r| { date: r.date, value: Money.new(r.assets, r.currency) } }),
       liability_series: TimeSeries.new(result.map { |r| { date: r.date, value: Money.new(r.liabilities, r.currency) } }),
       net_worth_series: TimeSeries.new(result.map { |r| { date: r.date, value: Money.new(r.net_worth, r.currency) } })
+    }
+  end
+
+  def snapshot_account_transactions
+    period = Period.last_30_days
+    results = accounts.active.joins(:transactions)
+      .select(
+        "accounts.*",
+        "COALESCE(SUM(amount) FILTER (WHERE amount > 0), 0) AS spending",
+        "COALESCE(SUM(-amount) FILTER (WHERE amount < 0), 0) AS income"
+      )
+      .where("transactions.date >= ?", period.date_range.begin)
+      .where("transactions.date <= ?", period.date_range.end)
+      .group("id")
+      .to_a
+
+    results.each do |r|
+      r.define_singleton_method(:savings_rate) do
+        (income - spending) / income
+      end
+    end
+
+    {
+      top_spenders: results.sort_by(&:spending).select { |a| a.spending > 0 }.reverse,
+      top_earners: results.sort_by(&:income).select { |a| a.income > 0 }.reverse,
+      top_savers: results.sort_by { |a| a.savings_rate }.reverse
+    }
+  end
+
+  def snapshot_transactions
+    rolling_totals = Transaction.daily_rolling_totals(transactions, period: Period.last_30_days, currency: self.currency)
+
+    spending = []
+    income = []
+    savings = []
+    rolling_totals.each do |r|
+      spending << {
+        date: r.date,
+        value: Money.new(r.rolling_spend, self.currency)
+      }
+
+      income << {
+        date: r.date,
+        value: Money.new(r.rolling_income, self.currency)
+      }
+
+      savings << {
+        date: r.date,
+        value: r.rolling_income != 0 ? (r.rolling_income - r.rolling_spend) / r.rolling_income : 0.to_d
+      }
+    end
+
+    {
+      income_series: TimeSeries.new(income, favorable_direction: "up"),
+      spending_series: TimeSeries.new(spending, favorable_direction: "down"),
+      savings_rate_series: TimeSeries.new(savings, favorable_direction: "up")
     }
   end
 

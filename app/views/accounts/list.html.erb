@@ -1,0 +1,5 @@
+<turbo-frame id="account-list" target="_top">
+  <% account_groups(period: @period).each do |group| %>
+    <%= render "accounts/account_list", group: group %>
+  <% end %>
+</turbo-frame>

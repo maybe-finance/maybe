@@ -42,16 +42,19 @@ class SettingsTest < ApplicationSystemTestCase
     end
 
     # Conditional nav items don't show by default
-    assert_no_text "Self Hosting"
+    assert_no_text "Self-Hosting"
   end
 
   test "can see conditional nav items" do
     ENV["SELF_HOSTING_ENABLED"] = "true"
 
+    visit root_path
+    sign_in @user
+
     open_settings_from_sidebar
 
-    click_link "Self Hosting"
-    assert_selector "h1", text: "Self Hosting"
+    click_link "Self-Hosting"
+    assert_selector "h1", text: "Self-Hosting"
   end
 
   test "clicking back or hitting escape key takes user back page they opened settings from" do

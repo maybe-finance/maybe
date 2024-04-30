@@ -26,7 +26,7 @@
     <div id="notification-tray" class="fixed z-50 space-y-1 top-6 right-6"></div>
     <%= safe_join(flash.map { |type, message| notification(message, type: type) }) %>
     <div class="flex h-full">
-      <div class="p-6 pb-20 w-80 shrink-0 h-full overflow-y-auto">
+      <div class="p-6 pb-20 w-[368px] shrink-0 h-full overflow-y-auto">
         <% if content_for?(:sidebar) %>
           <%= yield :sidebar %>
         <% else %>
@@ -38,7 +38,7 @@
       </main>
     </div>
     <%= turbo_frame_tag "modal" %>
-    <%= render "shared/custom_confirm_modal" %>
+    <%= render "shared/confirm_modal" %>
     <%= render "shared/upgrade_notification" %>
     <% if self_hosted? %>
       <div class="flex items-center py-0.5 px-0.5 gap-1 fixed bottom-2 right-2 shadow-xs border border-alpha-black-50 rounded-md bg-white">

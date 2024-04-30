@@ -2,12 +2,43 @@
   <%= render "settings/nav" %>
 <% end %>
 <div class="space-y-4">
-  <h1 class="text-gray-900 text-xl font-medium mb-4">Preferences</h1>
-  <div class="bg-white shadow-xs border border-alpha-black-25 rounded-xl p-4">
-    <div class="flex justify-center items-center py-20">
-      <p class="text-gray-500">Preferences coming soon...</p>
+  <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
+  <%= settings_section title: t(".general_title"), subtitle: t(".general_subtitle") do %>
+    <div>
+      <%= form_with model: Current.user, url: settings_preferences_path, html: { class: "space-y-4", data: { controller: "auto-submit-form" } } do |form| %>
+        <%= form.fields_for :family_attributes do |family_fields| %>
+          <%= family_fields.select :currency, options_for_select(Money::Currency.popular.map { |currency| ["#{currency.iso_code} (#{currency.name})", currency.iso_code] }, selected: Current.family.currency), { label: "Currency" }, { data: { auto_submit_form_target: "auto" } } %>
+        <% end %>
+      <% end %>
     </div>
-  </div>
+  <% end %>
+  <%= settings_section title: t(".theme_title"), subtitle: t(".theme_subtitle") do %>
+    <div>
+      <%= form_with model: Current.user, url: settings_preferences_path, local: true, html: { class: "flex justify-between items-center" } do |form| %>
+        <div class="text-center">
+          <%= image_tag("light-mode-preview.png", alt: "Light Theme Preview", class: "h-44 mb-4") %>
+          <div class="flex justify-center items-center gap-2">
+            <%= form.radio_button :theme, t(".theme_light"), checked: true %>
+            <%= form.label :theme_light, t(".theme_light"), value: "light" %>
+          </div>
+        </div>
+        <div class="text-center">
+          <%= image_tag("dark-mode-preview.png", alt: "Dark Theme Preview", class: "h-44 mb-4") %>
+          <div class="flex justify-center items-center gap-2">
+            <%= form.radio_button :theme, t(".theme_dark"), disabled: true, class: "cursor-not-allowed" %>
+            <%= form.label :theme_dark, t(".theme_dark"), value: "dark" %>
+          </div>
+        </div>
+        <div class="text-center">
+          <%= image_tag("system-mode-preview.png", alt: "System Theme Preview", class: "h-44 mb-4") %>
+          <div class="flex items-center gap-2 justify-center">
+            <%= form.radio_button :theme, t(".theme_system"), disabled: true, class: "cursor-not-allowed" %>
+            <%= form.label :theme_system, t(".theme_system"), value: "system" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
   <div class="flex justify-between gap-4">
     <%= previous_setting("Account", settings_profile_path) %>
     <%= next_setting("Notifications", settings_notifications_path) %>

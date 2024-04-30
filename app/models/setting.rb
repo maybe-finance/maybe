@@ -16,4 +16,18 @@ class Setting < RailsSettings::Base
         type: :string,
         default: ENV.fetch("UPGRADES_TARGET", "release"),
         validates: { inclusion: { in: %w[release commit] } }
+
+  field :app_domain, type: :string, default: ENV["APP_DOMAIN"]
+  field :email_sender, type: :string, default: ENV["EMAIL_SENDER"]
+
+  scope :smtp_settings do
+    field :smtp_host, type: :string, read_only: true, default: ENV["SMTP_ADDRESS"]
+    field :smtp_port, type: :string, read_only: true, default: ENV["SMTP_PORT"]
+    field :smtp_username, type: :string, read_only: true, default: ENV["SMTP_USERNAME"]
+    field :smtp_password, type: :string, read_only: true, default: ENV["SMTP_PASSWORD"]
+  end
+
+  def self.smtp_settings_populated?
+    Setting.defined_fields.select { |f| f.scope == :smtp_settings }.map(&:read).all?(&:present?)
+  end
 end

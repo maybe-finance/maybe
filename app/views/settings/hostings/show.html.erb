@@ -2,43 +2,79 @@
   <%= render "settings/nav" %>
 <% end %>
 <div class="space-y-4">
-  <h1 class="text-3xl font-semibold font-display">Self Hosting</h1>
-  <hr>
-  <%= form_with model: Setting.new, url: settings_hosting_path, method: :patch, local: true, html: { class: "space-y-4" } do |form| %>
-    <section class="space-y-3">
-      <h2 class="text-2xl font-semibold">Render Deploy Hook</h2>
-      <p class="text-gray-500">You must fill this in so your app can trigger upgrades when Maybe releases upgrades.  Learn more about deploy hooks and how they work in the <%= link_to "Render documentation", "https://docs.render.com/docs/deploy-hooks", target: "_blank", rel: "noopener noreferrer", class: "text-blue-500 hover:underline" %>.</p>
-      <%= form.url_field :render_deploy_hook, label: "Render Deploy Hook", placeholder: "https://api.render.com/deploy/srv-xyz...", value: Setting.render_deploy_hook %>
-    </section>
-    <section class="space-y-3">
-      <h2 class="text-2xl font-semibold">Auto Upgrades Setting</h2>
-      <p class="text-gray-500">This setting controls how often your self hosted app will update and what method it uses to do so.</p>
-      <div class="space-y-2">
-        <div class="flex items-center gap-2">
-          <%= form.check_box :upgrades_mode, { checked: Setting.upgrades_mode == "auto", unchecked_value: "manual" }, "auto", "manual" %>
-          <%= form.label :upgrades_mode, "Enable auto upgrades", class: "text-gray-900" %>
+  <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
+  <%= settings_section title: t(".general_settings_title") do %>
+    <%= form_with model: Setting.new, url: settings_hosting_path, method: :patch, local: true, html: { class: "space-y-6", data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } } do |form| %>
+      <div>
+        <h2 class="font-medium mb-1"><%= t(".upgrades.title") %></h2>
+        <p class="text-gray-500 text-sm mb-4"><%= t(".upgrades.description") %></p>
+        <div class="space-y-4">
+          <div class="flex items-center gap-4">
+            <%= form.radio_button :upgrades_mode, "manual", checked: Setting.upgrades_mode == "manual", data: { "auto-submit-form-target" => "auto", "autosubmit-trigger-event": "input" } %>
+            <%= form.label :upgrades_mode_manual, t(".upgrades.manual.title"), class: "text-gray-900 text-sm" do %>
+              <span class="font-medium"><%= t(".upgrades.manual.title") %></span>
+              <br>
+              <span class="text-gray-500">
+                <%= t(".upgrades.manual.description") %>
+              </span>
+            <% end %>
+          </div>
+          <div class="flex items-center gap-4">
+            <%= form.radio_button :upgrades_mode, "release", checked: Setting.upgrades_mode == "auto" && Setting.upgrades_target == "release", data: { "auto-submit-form-target" => "auto", "autosubmit-trigger-event": "input" } %>
+            <%= form.label :upgrades_mode_release, t(".upgrades.latest_release.title"), class: "text-gray-900 text-sm" do %>
+              <span class="font-medium"><%= t(".upgrades.latest_release.title") %></span>
+              <br>
+              <span class="text-gray-500">
+                <%= t(".upgrades.latest_release.description") %>
+              </span>
+            <% end %>
+          </div>
+          <div class="flex items-center gap-4">
+            <%= form.radio_button :upgrades_mode, "commit", checked: Setting.upgrades_mode == "auto" && Setting.upgrades_target == "commit", data: { "auto-submit-form-target" => "auto", "autosubmit-trigger-event": "input" } %>
+            <%= form.label :upgrades_mode_commit, t(".upgrades.latest_commit.title"), class: "text-gray-900 text-sm" do %>
+              <span class="font-medium"><%= t(".upgrades.latest_commit.title") %></span>
+              <br>
+              <span class="text-gray-500">
+                <%= t(".upgrades.latest_commit.description") %>
+              </span>
+            <% end %>
+          </div>
         </div>
-        <% if Setting.upgrades_mode == "auto" %>
-          <div class="flex items-center gap-2">
-            <%= form.radio_button :upgrades_target, "release", checked: Setting.upgrades_target == "release" %>
-            <%= form.label :upgrades_target_release, class: Setting.upgrades_target == "release" ? "text-gray-900" : "text-gray-500" do %>
-              <span class="font-semibold">Latest Release (suggested)</span> - you will automatically be upgraded to the latest stable release of Maybe
-            <% end %>
-          </div>
-          <div class="flex items-center gap-2">
-            <%= form.radio_button :upgrades_target, "commit", checked: Setting.upgrades_target == "commit" %>
-            <%= form.label :upgrades_target_commit, class: Setting.upgrades_target == "commit" ? "text-gray-900" : "text-gray-500" do %>
-              <span class="font-semibold">Latest Commit</span> - you will automatically be upgraded any time the Maybe repo is updated
-            <% end %>
-          </div>
-        <% end %>
       </div>
-    </section>
-    <div class="fixed right-5 bottom-5">
-      <button type="submit" class="flex items-center justify-center w-12 h-12 mb-2 bg-black rounded-full shrink-0 grow-0 hover:bg-gray-600">
-        <%= inline_svg_tag("icn-check.svg", class: "text-white fill-current") %>
-      </button>
-    </div>
+      <div>
+        <h2 class="font-medium mb-1"><%= t(".provider_settings.title") %></h2>
+        <p class="text-gray-500 text-sm mb-4"><%= t(".render_deploy_hook_description") %></p>
+        <%= form.url_field :render_deploy_hook, label: t(".render_deploy_hook_label"), placeholder: t(".render_deploy_hook_placeholder"), value: Setting.render_deploy_hook, data: { "auto-submit-form-target" => "auto" } %>
+      </div>
+      <div>
+        <h2 class="font-medium mb-1"><%= t(".smtp_settings.title") %></h2>
+        <p class="text-gray-500 text-sm mb-4"><%= t(".smtp_settings.description") %></p>
+        <div class="space-y-4">
+          <div class="space-y-3">
+            <%= form.text_field :email_sender, label: t(".email_sender"), placeholder: t(".email_sender_placeholder"), value: Setting.email_sender, data: { "auto-submit-form-target" => "auto" } %>
+            <%= form.text_field :app_domain, label: t(".domain"), placeholder: t(".domain_placeholder"), value: Setting.app_domain, data: { "auto-submit-form-target" => "auto" } %>
+            <%= form.text_field :smtp_host, label: t(".smtp_settings.host"), placeholder: t(".smtp_settings.host_placeholder"), value: Setting.smtp_host, data: { "auto-submit-form-target" => "auto" } %>
+            <%= form.number_field :smtp_port, label: t(".smtp_settings.port"), placeholder: t(".smtp_settings.port_placeholder"), value: Setting.smtp_port, data: { "auto-submit-form-target" => "auto" } %>
+            <%= form.text_field :smtp_username, label: t(".smtp_settings.username"), placeholder: t(".smtp_settings.username_placeholder"), value: Setting.smtp_username, data: { "auto-submit-form-target" => "auto" } %>
+            <%= form.password_field :smtp_password, label: t(".smtp_settings.password"), placeholder: t(".smtp_settings.password_placeholder"), value: Setting.smtp_password, data: { "auto-submit-form-target" => "auto" } %>
+          </div>
+          <div class="flex items-center justify-between bg-white border border-alpha-black-100 p-4 rounded-lg">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-gray-25 flex items-center justify-center">
+                <%= lucide_icon "mails", class: "w-6 h-6 text-gray-500" %>
+              </div>
+              <div>
+                <p class="text-gray-900 font-medium text-sm"><%= t(".smtp_settings.send_test_email") %></p>
+                <p class="text-gray-500 text-sm"><%= t(".smtp_settings.send_test_email_description") %></p>
+              </div>
+            </div>
+            <div>
+              <%= link_to t(".smtp_settings.send_test_email_button"), send_test_email_settings_hosting_path, data: { turbo_method: :post }, class:"bg-gray-50 text-gray-900 text-sm font-medium rounded-lg px-3 py-2" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
   <% end %>
   <div class="flex justify-between gap-4">
     <%= previous_setting("Billing", settings_billing_path) %>

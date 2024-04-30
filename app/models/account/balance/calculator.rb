@@ -25,7 +25,7 @@ class Account::Balance::Calculator
 
         prior_balance = current_balance
 
-        { date: date, balance: current_balance, currency: @account.currency, updated_at: Time.current }
+        { date:, balance: current_balance, currency: @account.currency, updated_at: Time.current }
       end
 
       @daily_balances = [
@@ -92,11 +92,15 @@ class Account::Balance::Calculator
       end
 
       def implied_start_balance
+        if @calc_start_date > @account.effective_start_date
+          return @account.balance_on(@calc_start_date)
+        end
+
         oldest_valuation_date = normalized_valuations.first&.dig("date")
         oldest_transaction_date = normalized_transactions.first&.dig("date")
         oldest_entry_date = [ oldest_valuation_date, oldest_transaction_date ].compact.min
 
-        if oldest_entry_date == oldest_valuation_date
+        if oldest_entry_date.present? && oldest_entry_date == oldest_valuation_date
           oldest_valuation = normalized_valuations.find { |v| v["date"] == oldest_valuation_date }
           oldest_valuation["value"].to_d
         else

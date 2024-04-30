@@ -14,6 +14,9 @@ class AccountsController < ApplicationController
     @account_groups = Current.family.accounts.by_group(period: @period, currency: Current.family.currency)
   end
 
+  def list
+  end
+
   def new
     @account = Account.new(
       balance: nil,

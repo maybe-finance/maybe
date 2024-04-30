@@ -33,58 +33,100 @@
   </section>
   <section class="grid grid-cols-2 gap-4">
     <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">
-      <div class="flex gap-4 h-full">
-        <div class="grow">
+      <div class="flex flex-col gap-4 h-full">
+        <div class="flex gap-4">
+          <div class="grow">
           <%= render partial: "shared/value_heading", locals: {
-          label: t(".income"),
-            period: @period,
-            value: @income_series.last.value,
-            trend: @income_series.trend
-          } %>
+            label: t(".income"),
+              period: Period.last_30_days,
+              value: @income_series.last&.value,
+              trend: @income_series.trend
+            } %>
+          </div>
+          <div
+            id="incomeChart"
+            class="h-full w-2/5"
+            data-controller="time-series-chart"
+            data-time-series-chart-data-value="<%= @income_series.to_json %>"
+            data-time-series-chart-use-labels-value="false"
+            data-time-series-chart-use-tooltip-value="false"></div>
         </div>
-        <div
-          id="incomeChart"
-          class="h-full w-2/5"
-          data-controller="time-series-chart"
-          data-time-series-chart-data-value="<%= @income_series.to_json %>"
-          data-time-series-chart-use-labels-value="false"></div>
+        <div class="flex gap-1.5">
+          <% @top_earners.first(3).each do |account| %>
+            <%= link_to account, class: "border border-alpha-black-25 rounded-full p-1 pr-2 flex items-center gap-1 text-xs text-gray-900 font-medium hover:bg-gray-25" do %>
+              <%= image_tag account_logo_url(account), class: "w-5 h-5" %>
+              <span>+<%= Money.new(account.income, account.currency) %></span>
+            <% end %>
+          <% end %>
+          <% if @top_earners.count > 3 %>
+            <div class="bg-gray-25 rounded-full flex h-full aspect-1 items-center justify-center text-xs font-medium text-gray-500">+<%= @top_earners.count - 3 %></div>
+          <% end %>
+        </div>
       </div>
     </div>
     <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">
-      <div class="flex gap-4 h-full">
-        <div class="grow">
-          <%= render partial: "shared/value_heading", locals: {
-          label: t(".spending"),
-            period: @period,
-            value: @spending_series.last.value,
-            trend: @spending_series.trend
-          } %>
+      <div class="flex flex-col gap-4 h-full">
+        <div class="flex gap-4">
+          <div class="grow">
+            <%= render partial: "shared/value_heading", locals: {
+            label: t(".spending"),
+              period: Period.last_30_days,
+              value: @spending_series.last&.value,
+              trend: @spending_series.trend
+            } %>
+          </div>
+          <div
+            id="spendingChart"
+            class="h-full w-2/5"
+            data-controller="time-series-chart"
+            data-time-series-chart-data-value="<%= @spending_series.to_json %>"
+            data-time-series-chart-use-labels-value="false"
+            data-time-series-chart-use-tooltip-value="false"></div>
         </div>
-        <div
-          id="spendingChart"
-          class="h-full w-2/5"
-          data-controller="time-series-chart"
-          data-time-series-chart-data-value="<%= @spending_series.to_json %>"
-          data-time-series-chart-use-labels-value="false"></div>
+        <div class="flex gap-1.5">
+          <% @top_spenders.first(3).each do |account| %>
+            <%= link_to account, class: "border border-alpha-black-25 rounded-full p-1 pr-2 flex items-center gap-1 text-xs text-gray-900 font-medium hover:bg-gray-25" do %>
+              <%= image_tag account_logo_url(account), class: "w-5 h-5" %>
+              -<%= Money.new(account.spending, account.currency) %>
+            <% end %>
+          <% end %>
+          <% if @top_spenders.count > 3 %>
+            <div class="bg-gray-25 rounded-full flex h-full aspect-1 items-center justify-center text-xs font-medium text-gray-500">+<%= @top_spenders.count - 3 %></div>
+          <% end %>
+        </div>
       </div>
     </div>
     <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">
-      <div class="flex gap-4 h-full">
-        <div class="grow">
-          <%= render partial: "shared/value_heading", locals: {
-          label: t(".savings_rate"),
-            period: @period,
-            value: @savings_rate_series.last.value,
-            trend: @savings_rate_series.trend,
-            is_percentage: true
-          } %>
+      <div class="flex flex-col gap-4 h-full">
+        <div class="flex gap-4">
+          <div class="grow">
+            <%= render partial: "shared/value_heading", locals: {
+            label: t(".savings_rate"),
+              period: Period.last_30_days,
+              value: @savings_rate_series.last&.value,
+              trend: @savings_rate_series.trend,
+              is_percentage: true
+            } %>
+          </div>
+          <div
+            id="savingsRateChart"
+            class="h-full w-2/5"
+            data-controller="time-series-chart"
+            data-time-series-chart-data-value="<%= @savings_rate_series.to_json %>"
+            data-time-series-chart-use-labels-value="false"
+            data-time-series-chart-use-tooltip-value="false"></div>
         </div>
-        <div
-          id="savingsRateChart"
-          class="h-full w-2/5"
-          data-controller="time-series-chart"
-          data-time-series-chart-data-value="<%= @savings_rate_series.to_json %>"
-          data-time-series-chart-use-labels-value="false"></div>
+        <div class="flex gap-1.5">
+          <% @top_savers.first(3).each do |account| %>
+            <%= link_to account, class: "border border-alpha-black-25 rounded-full p-1 pr-2 flex items-center gap-1 text-xs text-gray-900 font-medium hover:bg-gray-25" do %>
+              <%= image_tag account_logo_url(account), class: "w-5 h-5" %>
+              <span><%= account.savings_rate > 0 ? "+" : "-" %><%= number_to_percentage(account.savings_rate.abs * 100, precision: 2) %></span>
+            <% end %>
+          <% end %>
+          <% if @top_savers.count > 3 %>
+            <div class="bg-gray-25 rounded-full flex h-full aspect-1 items-center justify-center text-xs font-medium text-gray-500">+<%= @top_savers.count - 3 %></div>
+          <% end %>
+        </div>
       </div>
     </div>
     <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">

@@ -2,6 +2,49 @@
 en:
   settings:
     hostings:
+      send_test_email:
+        error: 'Configuration error: Test email could not be sent'
+        missing_smtp_setting_error: Ensure that all smtp settings are filled in
+        success: Test email has been sent successfully
+      show:
+        domain: App Domain
+        domain_placeholder: mydomain.com
+        email_sender: Email Sender
+        email_sender_placeholder: user@mydomain.com
+        general_settings_title: General Settings
+        page_title: Self-Hosting
+        provider_settings:
+          title: Provider Settings
+        render_deploy_hook_description: Input the deploy hook URL provided by Render
+        render_deploy_hook_label: Render Deploy Hook URL
+        render_deploy_hook_placeholder: https://api.render.com/deploy/srv-xyz...
+        smtp_settings:
+          description: Configure outgoing mail server settings for notifications and
+            alerts
+          host: SMTP Host
+          host_placeholder: smtp.gmail.com
+          password: Password
+          password_placeholder: "*******"
+          port: Port
+          port_placeholder: 587
+          send_test_email: Send Test Email
+          send_test_email_button: Send Test Email
+          send_test_email_description: Verify SMTP settings by sending a test email
+          title: SMTP Email Configuration
+          username: Username
+          username_placeholder: username@gmail.com
+        upgrades:
+          description: Choose how your application receives updates
+          latest_commit:
+            description: Automatically update to the latest commit (unstable)
+            title: Latest Commit
+          latest_release:
+            description: Automatically update to the most recent release (stable)
+            title: Latest Release
+          manual:
+            description: You control when to download and install updates
+            title: Manual
+          title: Auto upgrade
       update:
         render_deploy_hook_error: Render deploy hook must be provided to enable auto
           upgrades
@@ -11,15 +54,50 @@ en:
       billing_label: Billing
       categories_label: Categories
       feedback_label: Feedback
+      general_section_title: General
       invite_label: Invite friends
       merchants_label: Merchants
       notifications_label: Notifications
+      other_section_title: More
       preferences_label: Preferences
       profile_label: Account
       rules_label: Rules
       security_label: Security
-      self_hosting_label: Self Hosting
+      self_hosting_label: Self-Hosting
+      transactions_section_title: Transactions
       whats_new_label: What's New
     nav_link_large:
       next: Next
       previous: Back
+    preferences:
+      show:
+        general_subtitle: Configure your preferences
+        general_title: General
+        page_title: Preferences
+        theme_dark: Dark
+        theme_light: Light
+        theme_subtitle: Choose a preferred theme for the app (coming soon...)
+        theme_system: System
+        theme_title: Theme
+      update:
+        success: Preferences updated successfully.
+    profiles:
+      show:
+        add_member: Add Member
+        danger_zone_title: Danger Zone
+        delete_account: Delete Account
+        delete_account_warning: Deleting your account will permanently remove all
+          your data and cannot be undone.
+        household_form_input_placeholder: Enter household name
+        household_form_label: Household name
+        household_subtitle: Invite family members, partners and other inviduals.  Invitees
+          can login to your household and access your shared accounts.
+        household_title: Household
+        page_title: Account
+        profile_image_choose: Choose
+        profile_image_type: JPG, GIF or PNG. 5MB max.
+        profile_subtitle: Customize how you appear on Maybe
+        profile_title: Profile
+        save: Save
+      update:
+        success: Profile updated successfully.
