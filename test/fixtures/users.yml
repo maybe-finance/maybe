@@ -4,6 +4,7 @@ family_admin:
   last_name: Dylan
   email: bob@bobdylan.com
   password_digest: <%= BCrypt::Password.create('password') %>
+  role: admin
 
 family_member:
   family: dylan_family
