@@ -10,7 +10,7 @@ Turbo.setConfirmMethod((message) => {
   const dialog = document.getElementById("turbo-confirm");
 
   try {
-    const { title, body, accept } = JSON.parse(message);
+    const { title, body, accept, acceptClass } = JSON.parse(message);
 
     if (title) {
       document.getElementById("turbo-confirm-title").innerHTML = title;
@@ -22,6 +22,10 @@ Turbo.setConfirmMethod((message) => {
 
     if (accept) {
       document.getElementById("turbo-confirm-accept").innerHTML = accept;
+    }
+
+    if (acceptClass) {
+      document.getElementById("turbo-confirm-accept").className = acceptClass;
     }
   } catch (e) {
     document.getElementById("turbo-confirm-title").innerText = message;

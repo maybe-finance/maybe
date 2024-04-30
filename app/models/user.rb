@@ -45,7 +45,41 @@ class User < ApplicationRecord
     last_alerted_upgrade_commit_sha == upgrade.commit_sha
   end
 
+  # Deactivation
+  validate :can_deactivate, if: -> { active_changed? && !active }
+  after_update_commit :purge_later, if: -> { saved_change_to_active?(from: true, to: false) }
+
+  def deactivate
+    update active: false, email: deactivated_email
+  end
+
+  def can_deactivate
+    if admin? && family.users.count > 1
+      errors.add(:base, I18n.t("activerecord.errors.user.cannot_deactivate_admin_with_other_users"))
+    end
+  end
+
+  def purge_later
+    UserPurgeJob.perform_later(self)
+  end
+
+  def purge
+    if last_user_in_family?
+      family.destroy
+    else
+      destroy
+    end
+  end
+
   private
+
+  def last_user_in_family?
+    family.users.count == 1
+  end
+
+  def deactivated_email
+    email.gsub(/@/, "-deactivated-#{SecureRandom.uuid}@")
+  end
 
   def profile_image_size
     if profile_image.attached? && profile_image.byte_size > 5.megabytes

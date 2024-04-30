@@ -76,9 +76,16 @@
           <h3 class="font-medium text-gray-900"><%= t(".delete_account") %></h3>
           <p class="text-gray-500 text-sm"><%= t(".delete_account_warning") %></p>
         </div>
-        <button disabled class="bg-red-500 text-white text-sm font-medium rounded-lg px-3 py-2 cursor-not-allowed">
-          <%= t(".delete_account") %>
-        </button>
+        <%=
+          button_to t(".delete_account"), settings_profile_path, method: :delete,
+            class: "bg-red-500 text-white text-sm font-medium rounded-lg px-3 py-2",
+            data: { turbo_confirm: {
+              title: t(".confirm_delete.title"),
+              body: t(".confirm_delete.body"),
+              accept: t(".delete_account"),
+              acceptClass: "w-full bg-red-500 text-white rounded-xl text-center p-[10px] border mb-2"
+            }}
+        %>
       </div>
     <% end %>
   </div>

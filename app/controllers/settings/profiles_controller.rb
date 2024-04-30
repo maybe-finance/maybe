@@ -21,6 +21,15 @@ class Settings::ProfilesController < ApplicationController
     end
   end
 
+  def destroy
+    if Current.user.deactivate
+      logout
+      redirect_to root_path, notice: t(".success")
+    else
+      redirect_to settings_profile_path, alert: Current.user.errors.full_messages.to_sentence
+    end
+  end
+
   private
 
   def user_params

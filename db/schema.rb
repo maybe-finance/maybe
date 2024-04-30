@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_04_26_191312) do
+ActiveRecord::Schema[7.2].define(version: 2024_04_30_111641) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -86,7 +86,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_26_191312) do
     t.uuid "accountable_id"
     t.decimal "balance", precision: 19, scale: 4, default: "0.0"
     t.string "currency", default: "USD"
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Account::Loan'::character varying)::text, ('Account::Credit'::character varying)::text, ('Account::OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Account::Loan'::character varying, 'Account::Credit'::character varying, 'Account::OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.boolean "is_active", default: true, null: false
     t.enum "status", default: "ok", null: false, enum_type: "account_status"
     t.jsonb "sync_warnings", default: "[]", null: false
@@ -285,6 +285,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_26_191312) do
     t.string "last_prompted_upgrade_commit_sha"
     t.string "last_alerted_upgrade_commit_sha"
     t.enum "role", default: "member", null: false, enum_type: "user_role"
+    t.boolean "active", default: true, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["family_id"], name: "index_users_on_family_id"
   end
