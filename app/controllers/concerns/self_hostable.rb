@@ -7,6 +7,6 @@ module SelfHostable
 
   private
     def self_hosted?
-      ENV["SELF_HOSTING_ENABLED"] == "true"
+      Rails.configuration.app_mode.self_hosted?
     end
 end

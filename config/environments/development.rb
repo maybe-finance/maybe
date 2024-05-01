@@ -85,4 +85,6 @@ Rails.application.configure do
 
   # Allow connection from any host in development
   config.hosts = nil
+
+  config.app_mode = (ENV["SELF_HOSTING_ENABLED"] == "true" ? "self_hosted" : "managed").inquiry
 end
