@@ -13,13 +13,13 @@
       </button>
       <div data-menu-target="content" class="absolute z-10 top-10 right-0 border border-alpha-black-25 bg-white rounded-lg shadow-xs w-48 hidden">
         <div class="border-t border-b border-alpha-black-100 p-1">
-          <%= button_to edit_transactions_merchant_path(merchant),
+          <%= button_to edit_transaction_merchant_path(merchant),
                         method: :get,
                         class: "flex w-full gap-1 items-center text-sm hover:bg-gray-50 rounded-lg px-3 py-2",
                         data: { turbo_frame: "modal" } do %>
             <%= lucide_icon("pencil-line", class: "w-5 h-5 mr-2") %> <%= t(".edit") %>
           <% end %>
-          <%= button_to transactions_merchant_path(merchant),
+          <%= button_to transaction_merchant_path(merchant),
                         method: :delete,
                         class: "flex w-full gap-1 items-center text-sm text-red-600 hover:text-red-800 hover:bg-gray-50 rounded-lg px-3 py-2",
                         data: {
