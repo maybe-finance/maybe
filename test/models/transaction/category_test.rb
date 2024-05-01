@@ -32,4 +32,20 @@ class Transaction::CategoryTest < ActiveSupport::TestCase
       category.update_attribute(:color, "#000")
     end
   end
+
+  test "replacing and destroying" do
+    transctions = transaction_categories(:food_and_drink).transactions.to_a
+
+    transaction_categories(:food_and_drink).replace_and_destroy!(transaction_categories(:income))
+
+    assert_equal transaction_categories(:income), transactions.map { |t| t.reload.category }.uniq.first
+  end
+
+  test "replacing with nil should nullify the category" do
+    transactions = transaction_categories(:food_and_drink).transactions.to_a
+
+    transaction_categories(:food_and_drink).replace_and_destroy!(nil)
+
+    assert_nil transactions.map { |t| t.reload.category }.uniq.first
+  end
 end
