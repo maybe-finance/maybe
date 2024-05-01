@@ -40,7 +40,7 @@
 
 # Ignore Jetbrains IDEs
 .idea
-.tool_versions
+.tool-versions
 
 # Ignore VS Code
 .vscode
