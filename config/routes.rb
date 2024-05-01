@@ -11,11 +11,13 @@ Rails.application.routes.draw do
   resource :password
 
   namespace :settings do
-    resource :profile, only: %i[show update]
+    resource :profile, only: %i[show update destroy]
     resource :preferences, only: %i[show update]
     resource :notifications, only: %i[show update]
     resource :billing, only: %i[show update]
-    resource :hosting, only: %i[show update]
+    resource :hosting, only: %i[show update] do
+      post :send_test_email, on: :collection
+    end
     resource :security, only: %i[show update]
   end
 
@@ -28,14 +30,15 @@ Rails.application.routes.draw do
           resources :deletions, only: %i[ new create ], module: :categories
         end
 
-        resources :rules, only: [ :index ], as: :transaction_rules
-        resources :merchants, only: [ :index ], as: :transaction_merchants
+        resources :rules, only: %i[ index ], as: :transaction_rules
+        resources :merchants, only: %i[ index new create edit update destroy ], as: :transaction_merchants
       end
     end
   end
 
   resources :accounts, shallow: true do
     get :summary, on: :collection
+    get :list, on: :collection
     post :sync, on: :member
     resource :logo, only: %i[show], module: :accounts
     resources :valuations

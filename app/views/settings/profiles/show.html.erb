@@ -5,26 +5,41 @@
   <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
   <div class="space-y-4">
     <%= settings_section title: t(".profile_title"), subtitle: t(".profile_subtitle") do %>
-      <div class="flex items-center gap-4">
-        <div class="flex justify-center items-center bg-gray-50 w-24 h-24 rounded-full border border-alpha-black-25">
-          <%= lucide_icon "image-plus", class: "w-6 h-6 text-gray-500" %>
+      <%= form_with model: Current.user, url: settings_profile_path, html: {data: { controller: "profile-image-preview" }} do |form| %>
+        <div class="flex items-center gap-4">
+          <div class="relative flex justify-center items-center bg-gray-50 w-24 h-24 rounded-full border border-alpha-black-25">
+            <div data-profile-image-preview-target="imagePreview">
+              <% profile_image_attached = Current.user.profile_image.attached? %>
+              <% if profile_image_attached %>
+                <div class="h-24 w-24">
+                  <%= render "shared/user_profile_image", user: Current.user %>
+                </div>
+              <% else %>
+                <%= lucide_icon "image-plus", class: "w-6 h-6 text-gray-500" %>
+              <% end %>
+            </div>
+            <%= lucide_icon "image-plus", class: "hidden w-6 h-6 text-gray-500", data: { profile_image_preview_target: "template" } %>
+            <div data-profile-image-preview-target="clearBtn" data-action="click->profile-image-preview#clear" class="<%= profile_image_attached ? "" : "hidden" %> cursor-pointer absolute bottom-0 right-0 w-8 h-8 bg-gray-50 rounded-full flex justify-center items-center border border-white border-2">
+              <%= lucide_icon "x", class: "w-4 h-4 text-gray-500" %>
+            </div>
+          </div>
+          <div class="space-y-3">
+            <p><%= t(".profile_image_type") %></p>
+            <%= form.label :profile_image, t(".profile_image_choose"), class: "inline-block cursor-pointer px-3 py-2 bg-gray-50 text-gray-900 rounded-md text-sm font-medium" %>
+            <%= form.file_field :profile_image, accept: "wimage/png, image/jpeg, image/gif", class: "hidden px-3 py-2 bg-gray-50 text-gray-900 rounded-md text-sm font-medium", data: {profile_image_preview_target: "fileField", action: "change->profile-image-preview#preview"} %>
+            <%= form.hidden_field :delete_profile_image, value: false, data: {profile_image_preview_target: "deleteField"} %>
+          </div>
         </div>
-        <div class="space-y-3">
-          <p><%= t(".profile_image_type") %></p>
-          <button class="cursor-not-allowed px-3 py-2 bg-gray-50 text-gray-900 rounded-md text-sm font-medium" disabled><%= t(".profile_image_choose") %></button>
-        </div>
-      </div>
-      <div>
-        <%= form_with model: Current.user, url: settings_profile_path, html: { class: "space-y-4" } do |form| %>
-          <div class="grid grid-cols-2 gap-4">
+        <div>
+          <div class="grid grid-cols-2 gap-4 mt-4">
             <%= form.text_field :first_name, placeholder: "First name", value: Current.user.first_name, label: true %>
             <%= form.text_field :last_name, placeholder: "Last name", value: Current.user.last_name, label: true %>
           </div>
-          <div class="flex justify-end">
+          <div class="flex justify-end mt-4">
             <%= form.submit t(".save"), class: "bg-gray-900 text-white rounded-lg px-3 py-2" %>
           </div>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
     <% end %>
     <%= settings_section title: t(".household_title"), subtitle: t(".household_subtitle") do %>
       <div class="space-y-4">
@@ -39,9 +54,9 @@
           </div>
           <div class="flex gap-2 items-center bg-white p-4 border border-alpha-black-25 rounded-lg">
             <div class="mr-1 flex justify-center items-center bg-gray-50 w-8 h-8 rounded-full border border-alpha-black-25">
-              <p class="uppercase text-xs text-gray-500"><%= Current.user.first_name.first %></p>
+              <p class="uppercase text-xs text-gray-500"><%= Current.user.initial %></p>
             </div>
-            <p class="text-gray-900 font-medium text-sm"><%= Current.user.first_name %> <%= Current.user.last_name %></p>
+            <p class="text-gray-900 font-medium text-sm"><%= Current.user.display_name %></p>
             <div class="rounded-md bg-gray-100 px-1.5 py-0.5">
               <p class="uppercase text-gray-500 font-medium text-xs"><%= Current.user.role %></p>
             </div>
@@ -61,9 +76,16 @@
           <h3 class="font-medium text-gray-900"><%= t(".delete_account") %></h3>
           <p class="text-gray-500 text-sm"><%= t(".delete_account_warning") %></p>
         </div>
-        <button disabled class="bg-red-500 text-white text-sm font-medium rounded-lg px-3 py-2 cursor-not-allowed">
-          <%= t(".delete_account") %>
-        </button>
+        <%=
+          button_to t(".delete_account"), settings_profile_path, method: :delete,
+            class: "bg-red-500 text-white text-sm font-medium rounded-lg px-3 py-2",
+            data: { turbo_confirm: {
+              title: t(".confirm_delete.title"),
+              body: t(".confirm_delete.body"),
+              accept: t(".delete_account"),
+              acceptClass: "w-full bg-red-500 text-white rounded-xl text-center p-[10px] border mb-2"
+            }}
+        %>
       </div>
     <% end %>
   </div>

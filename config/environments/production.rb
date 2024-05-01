@@ -31,7 +31,7 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = "X-Accel-Redirect" # for NGINX
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
+  config.active_storage.service = ENV.fetch("ACTIVE_STORAGE_SERVICE", "local").to_sym
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
@@ -74,7 +74,7 @@ Rails.application.configure do
     port:      ENV["SMTP_PORT"],
     user_name: ENV["SMTP_USERNAME"],
     password:  ENV["SMTP_PASSWORD"],
-    tls:       ENV["TLS"] == "true"
+    tls:       ENV["SMTP_TLS_ENABLED"] == "true"
   }
 
   # Ignore bad email addresses and do not raise email delivery errors.

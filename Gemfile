@@ -36,6 +36,12 @@ gem "sentry-rails"
 gem "rails-settings-cached"
 gem "octokit"
 
+# Active Storage
+gem "aws-sdk-s3", require: false
+gem "azure-storage-blob", "~> 2.0", require: false
+gem "google-cloud-storage", "~> 1.11", require: false
+gem "image_processing", ">= 1.2"
+
 # Other
 gem "bcrypt", "~> 3.1.7"
 gem "inline_svg"
@@ -51,6 +57,7 @@ group :development, :test do
   gem "letter_opener"
   gem "i18n-tasks"
   gem "erb_lint"
+  gem "byebug"
 end
 
 group :development do

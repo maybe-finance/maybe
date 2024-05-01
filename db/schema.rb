@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_04_25_000110) do
+ActiveRecord::Schema[7.2].define(version: 2024_04_30_111641) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -86,7 +86,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_25_000110) do
     t.uuid "accountable_id"
     t.decimal "balance", precision: 19, scale: 4, default: "0.0"
     t.string "currency", default: "USD"
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Account::Loan'::character varying)::text, ('Account::Credit'::character varying)::text, ('Account::OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Account::Loan'::character varying, 'Account::Credit'::character varying, 'Account::OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.boolean "is_active", default: true, null: false
     t.enum "status", default: "ok", null: false, enum_type: "account_status"
     t.jsonb "sync_warnings", default: "[]", null: false
@@ -94,6 +94,34 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_25_000110) do
     t.date "last_sync_date"
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id"], name: "index_accounts_on_family_id"
+  end
+
+  create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.uuid "record_id", null: false
+    t.uuid "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
   create_table "exchange_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -219,6 +247,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_25_000110) do
     t.index ["family_id"], name: "index_transaction_categories_on_family_id"
   end
 
+  create_table "transaction_merchants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "color", default: "#e99537", null: false
+    t.uuid "family_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["family_id"], name: "index_transaction_merchants_on_family_id"
+  end
+
   create_table "transactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.date "date", null: false
@@ -230,8 +267,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_25_000110) do
     t.uuid "category_id"
     t.boolean "excluded", default: false
     t.text "notes"
+    t.uuid "merchant_id"
     t.index ["account_id"], name: "index_transactions_on_account_id"
     t.index ["category_id"], name: "index_transactions_on_category_id"
+    t.index ["merchant_id"], name: "index_transactions_on_merchant_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -246,6 +285,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_25_000110) do
     t.string "last_prompted_upgrade_commit_sha"
     t.string "last_alerted_upgrade_commit_sha"
     t.enum "role", default: "member", null: false, enum_type: "user_role"
+    t.boolean "active", default: true, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["family_id"], name: "index_users_on_family_id"
   end
@@ -263,9 +303,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_25_000110) do
 
   add_foreign_key "account_balances", "accounts", on_delete: :cascade
   add_foreign_key "accounts", "families"
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "transaction_categories", "families"
+  add_foreign_key "transaction_merchants", "families"
   add_foreign_key "transactions", "accounts", on_delete: :cascade
   add_foreign_key "transactions", "transaction_categories", column: "category_id", on_delete: :nullify
+  add_foreign_key "transactions", "transaction_merchants", column: "merchant_id"
   add_foreign_key "users", "families"
   add_foreign_key "valuations", "accounts", on_delete: :cascade
 end
