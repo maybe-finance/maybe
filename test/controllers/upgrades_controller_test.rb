@@ -4,8 +4,6 @@ class UpgradesControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
 
-    ENV["UPGRADES_ENABLED"] = "true"
-
     @completed_upgrade = Upgrader::Upgrade.new(
       "commit",
       commit_sha: "47bb430954292d2fdcc81082af731a16b9587da3",
@@ -28,56 +26,64 @@ class UpgradesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "controller not available when upgrades are disabled" do
-    ENV["UPGRADES_ENABLED"] = "false"
+    with_env_overrides UPGRADES_ENABLED: "false" do
+      MOCK_COMMIT = "47bb430954292d2fdcc81082af731a16b9587da3"
 
-    post "/upgrades/acknowledge/47bb430954292d2fdcc81082af731a16b9587da3"
-    assert_response :not_found
+      post acknowledge_upgrade_url(MOCK_COMMIT)
+      assert_response :not_found
 
-    post "/upgrades/deploy/47bb430954292d2fdcc81082af731a16b9587da3"
-    assert_response :not_found
+      post deploy_upgrade_url(MOCK_COMMIT)
+      assert_response :not_found
+    end
   end
 
   test "should acknowledge an upgrade prompt" do
-    Upgrader.stubs(:find_upgrade).returns(@available_upgrade)
+    with_env_overrides UPGRADES_ENABLED: "true" do
+      Upgrader.stubs(:find_upgrade).returns(@available_upgrade)
 
-    post acknowledge_upgrade_url(@available_upgrade.commit_sha)
+      post acknowledge_upgrade_url(@available_upgrade.commit_sha)
 
-    @user.reload
-    assert_equal @user.last_prompted_upgrade_commit_sha, @available_upgrade.commit_sha
-    assert :redirect
+      @user.reload
+      assert_equal @user.last_prompted_upgrade_commit_sha, @available_upgrade.commit_sha
+      assert :redirect
+    end
   end
 
   test "should acknowledge an upgrade alert" do
-    Upgrader.stubs(:find_upgrade).returns(@completed_upgrade)
-
-    post acknowledge_upgrade_url(@completed_upgrade.commit_sha)
-
-    @user.reload
-    assert_equal @user.last_alerted_upgrade_commit_sha, @completed_upgrade.commit_sha
-    assert :redirect
+    with_env_overrides UPGRADES_ENABLED: "true" do
+      Upgrader.stubs(:find_upgrade).returns(@completed_upgrade)
+      post acknowledge_upgrade_url(@completed_upgrade.commit_sha)
+      @user.reload
+      assert_equal @user.last_alerted_upgrade_commit_sha, @completed_upgrade.commit_sha
+      assert :redirect
+    end
   end
 
   test "should deploy an upgrade" do
-    Upgrader.stubs(:find_upgrade).returns(@available_upgrade)
+    with_env_overrides UPGRADES_ENABLED: "true" do
+      Upgrader.stubs(:find_upgrade).returns(@available_upgrade)
 
-    post deploy_upgrade_path(@available_upgrade.commit_sha)
+      post deploy_upgrade_path(@available_upgrade.commit_sha)
 
-    @user.reload
-    assert_equal @user.last_prompted_upgrade_commit_sha, @available_upgrade.commit_sha
-    assert :redirect
+      @user.reload
+      assert_equal @user.last_prompted_upgrade_commit_sha, @available_upgrade.commit_sha
+      assert :redirect
+    end
   end
 
   test "should rollback user state if upgrade fails" do
-    PRIOR_COMMIT = "47bb430954292d2fdcc81082af731a16b9587da2"
-    @user.update!(last_prompted_upgrade_commit_sha: PRIOR_COMMIT)
+    with_env_overrides UPGRADES_ENABLED: "true" do
+      PRIOR_COMMIT = "47bb430954292d2fdcc81082af731a16b9587da2"
+      @user.update!(last_prompted_upgrade_commit_sha: PRIOR_COMMIT)
 
-    Upgrader.stubs(:find_upgrade).returns(@available_upgrade)
-    Upgrader.stubs(:upgrade_to).returns({ success: false })
+      Upgrader.stubs(:find_upgrade).returns(@available_upgrade)
+      Upgrader.stubs(:upgrade_to).returns({ success: false })
 
-    post deploy_upgrade_path(@available_upgrade.commit_sha)
+      post deploy_upgrade_path(@available_upgrade.commit_sha)
 
-    @user.reload
-    assert_equal @user.last_prompted_upgrade_commit_sha, PRIOR_COMMIT
-    assert :redirect
+      @user.reload
+      assert_equal @user.last_prompted_upgrade_commit_sha, PRIOR_COMMIT
+      assert :redirect
+    end
   end
 end

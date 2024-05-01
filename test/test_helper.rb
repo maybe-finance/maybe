@@ -1,5 +1,4 @@
 ENV["RAILS_ENV"] = "test"
-ENV["UPGRADES_ENABLED"] = "false"
 
 require_relative "../config/environment"
 require "rails/test_help"
@@ -31,6 +30,10 @@ module ActiveSupport
     def with_self_hosting
       Rails.configuration.stubs(:app_mode).returns("self_hosted".inquiry)
       yield
+    end
+
+    def with_env_overrides(overrides = {}, &block)
+      ClimateControl.modify(overrides, &block)
     end
   end
 end
