@@ -6,7 +6,7 @@ class Transactions::Categories::DeletionsController < ApplicationController
   end
 
   def create
-    @category.reassign_transactions_then_destroy! @replacement_category
+    @category.replace_and_destroy! @replacement_category
 
     redirect_back_or_to transactions_path, notice: t(".success")
   end
