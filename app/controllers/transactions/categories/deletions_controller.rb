@@ -17,7 +17,7 @@ class Transactions::Categories::DeletionsController < ApplicationController
     end
 
     def set_replacement_category
-      if params[:replacement_category_id]
+      if params[:replacement_category_id].present?
         @replacement_category = Current.family.transaction_categories.find(params[:replacement_category_id])
       end
     end
