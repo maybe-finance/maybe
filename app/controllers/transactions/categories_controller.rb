@@ -34,7 +34,7 @@ class Transactions::CategoriesController < ApplicationController
     end
 
     def set_transaction
-      if params[:transaction_id]
+      if params[:transaction_id].present?
         @transaction = Current.family.transactions.find(params[:transaction_id])
       end
     end
