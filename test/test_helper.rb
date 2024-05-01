@@ -1,8 +1,5 @@
-# Require individual test files to enable these as needed
-ENV["SELF_HOSTING_ENABLED"] = "false"
-ENV["UPGRADES_ENABLED"] = "false"
+ENV["RAILS_ENV"] = "test"
 
-ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
 require "minitest/mock"
@@ -28,6 +25,11 @@ module ActiveSupport
     # Add more helper methods to be used by all tests here...
     def sign_in(user)
       post session_path, params: { email: user.email, password: "password" }
+    end
+
+    def with_self_hosting
+      Rails.configuration.stubs(:app_mode).returns("self_hosted".inquiry)
+      yield
     end
   end
 end

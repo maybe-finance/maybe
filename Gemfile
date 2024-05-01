@@ -53,17 +53,17 @@ group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
   gem "brakeman", require: false
   gem "rubocop-rails-omakase", require: false
-  gem "dotenv-rails"
-  gem "letter_opener"
   gem "i18n-tasks"
   gem "erb_lint"
   gem "byebug"
 end
 
 group :development do
-  gem "web-console"
+  gem "dotenv-rails"
   gem "hotwire-livereload"
+  gem "letter_opener"
   gem "ruby-lsp-rails"
+  gem "web-console"
 end
 
 group :test do
