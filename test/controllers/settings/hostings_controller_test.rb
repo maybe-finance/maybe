@@ -49,6 +49,7 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
       assert_equal NEW_RENDER_DEPLOY_HOOK, Setting.render_deploy_hook
     end
   end
+end
 
   test " #send_test_email if smtp settings are populated try to send an email and redirect with notice" do
     with_self_hosting do
