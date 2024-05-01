@@ -12,6 +12,7 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
     patch settings_hosting_url, params: { setting: { render_deploy_hook: "https://example.com" } }
     assert :not_found
   end
+
   test "should get edit when self hosting is enabled" do
     with_self_hosting do
       get settings_hosting_url
@@ -49,7 +50,6 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
       assert_equal NEW_RENDER_DEPLOY_HOOK, Setting.render_deploy_hook
     end
   end
-end
 
   test " #send_test_email if smtp settings are populated try to send an email and redirect with notice" do
     with_self_hosting do
