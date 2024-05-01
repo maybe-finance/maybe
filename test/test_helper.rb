@@ -1,4 +1,5 @@
 ENV["RAILS_ENV"] = "test"
+ENV["UPGRADES_ENABLED"] = "false"
 
 require_relative "../config/environment"
 require "rails/test_help"

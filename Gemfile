@@ -56,10 +56,10 @@ group :development, :test do
   gem "i18n-tasks"
   gem "erb_lint"
   gem "byebug"
+  gem "dotenv-rails"
 end
 
 group :development do
-  gem "dotenv-rails"
   gem "hotwire-livereload"
   gem "letter_opener"
   gem "ruby-lsp-rails"

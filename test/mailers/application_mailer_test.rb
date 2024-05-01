@@ -10,36 +10,34 @@ class ApplicationMailerTest < ActionMailer::TestCase
   end
 
   test "should use self host settings when self host enabled" do
-    ENV["SELF_HOSTING_ENABLED"] = "true"
+    with_self_hosting do
+      smtp_host = "smtp.example.com"
+      smtp_port = 466
+      smtp_username = "user@example.com"
+      smtp_password = "password"
+      email_sender = "notification@example.com"
 
-    smtp_host = "smtp.example.com"
-    smtp_port = 466
-    smtp_username = "user@example.com"
-    smtp_password = "password"
-    email_sender = "notification@example.com"
+      smtp_settings_from_settings = { address: smtp_host,
+                                      port: smtp_port,
+                                      user_name: smtp_username,
+                                      password: smtp_password }
 
-    smtp_settings_from_settings = { address: smtp_host,
-                                    port: smtp_port,
-                                    user_name: smtp_username,
-                                    password: smtp_password }
+      Setting.stubs(:smtp_host).returns(smtp_host)
+      Setting.stubs(:smtp_port).returns(smtp_port)
+      Setting.stubs(:smtp_username).returns(smtp_username)
+      Setting.stubs(:smtp_password).returns(smtp_password)
+      Setting.stubs(:email_sender).returns(email_sender)
 
-    Setting.stubs(:smtp_host).returns(smtp_host)
-    Setting.stubs(:smtp_port).returns(smtp_port)
-    Setting.stubs(:smtp_username).returns(smtp_username)
-    Setting.stubs(:smtp_password).returns(smtp_password)
-    Setting.stubs(:email_sender).returns(email_sender)
-
-    TestMailer.test_email.deliver_now
-    assert_emails 1
-    assert_equal smtp_settings_from_settings, ActionMailer::Base.deliveries.first.delivery_method.settings.slice(:address, :port, :user_name, :password)
+      TestMailer.test_email.deliver_now
+      assert_emails 1
+      assert_equal smtp_settings_from_settings, ActionMailer::Base.deliveries.first.delivery_method.settings.slice(:address, :port, :user_name, :password)
+    end
   end
 
   test "should use regular env settings when self host disabled" do
-    ENV["SELF_HOSTING_ENABLED"] = "false"
+      TestMailer.test_email.deliver_now
 
-    TestMailer.test_email.deliver_now
-
-    assert_emails 1
-    assert_nil ActionMailer::Base.deliveries.first.delivery_method.settings[:address]
+      assert_emails 1
+      assert_nil ActionMailer::Base.deliveries.first.delivery_method.settings[:address]
   end
 end

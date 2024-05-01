@@ -1,7 +1,7 @@
 class ApplicationMailer < ActionMailer::Base
   layout "mailer"
 
-  after_action :set_self_host_settings, if: -> { ENV["SELF_HOSTING_ENABLED"] == "true" }
+  after_action :set_self_host_settings, if: -> { Rails.configuration.app_mode.self_hosted? }
 
   private
 

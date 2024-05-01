@@ -51,36 +51,42 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test " #send_test_email if smtp settings are populated try to send an email and redirect with notice" do
-    Setting.stubs(:smtp_settings_populated?).returns(true)
+    with_self_hosting do
+      Setting.stubs(:smtp_settings_populated?).returns(true)
 
-    test_email_mock = mock
-    test_email_mock.expects(:deliver_now)
+      test_email_mock = mock
+      test_email_mock.expects(:deliver_now)
 
-    mailer_mock = mock
-    mailer_mock.expects(:test_email).returns(test_email_mock)
+      mailer_mock = mock
+      mailer_mock.expects(:test_email).returns(test_email_mock)
 
-    NotificationMailer.expects(:with).with(user: users(:family_admin)).returns(mailer_mock)
+      NotificationMailer.expects(:with).with(user: users(:family_admin)).returns(mailer_mock)
 
-    post send_test_email_settings_hosting_path
-    assert_response :found
-    assert controller.flash[:notice].present?
+      post send_test_email_settings_hosting_path
+      assert_response :found
+      assert controller.flash[:notice].present?
+    end
   end
 
   test "#send_test_email with one blank smtp setting" do
-    Setting.stubs(:smtp_settings_populated?).returns(false)
-    NotificationMailer.expects(:with).never
+    with_self_hosting do
+      Setting.stubs(:smtp_settings_populated?).returns(false)
+      NotificationMailer.expects(:with).never
 
-    post send_test_email_settings_hosting_path
-    assert_response :unprocessable_entity
-    assert controller.flash[:error].present?
+      post send_test_email_settings_hosting_path
+      assert_response :unprocessable_entity
+      assert controller.flash[:error].present?
+    end
   end
 
   test "#send_test_email when sending the email raise an error" do
-    Setting.stubs(:smtp_settings_populated?).returns(true)
-    NotificationMailer.stubs(:with).raises(StandardError)
+    with_self_hosting do
+      Setting.stubs(:smtp_settings_populated?).returns(true)
+      NotificationMailer.stubs(:with).raises(StandardError)
 
-    post send_test_email_settings_hosting_path
-    assert_response :unprocessable_entity
-    assert controller.flash[:error].present?
+      post send_test_email_settings_hosting_path
+      assert_response :unprocessable_entity
+      assert controller.flash[:error].present?
+    end
   end
 end
