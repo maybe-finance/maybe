@@ -29,6 +29,10 @@ module ActiveSupport
     def sign_in(user)
       post session_path, params: { email: user.email, password: "password" }
     end
+
+    def with_env_overrides(overrides = {}, &block)
+      ClimateControl.modify(**overrides, &block)
+    end
   end
 end
 

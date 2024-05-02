@@ -69,4 +69,5 @@ group :test do
   gem "mocha"
   gem "vcr"
   gem "webmock"
+  gem "climate_control"
 end
