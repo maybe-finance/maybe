@@ -9,6 +9,7 @@ class Account < ApplicationRecord
   has_many :balances, dependent: :destroy
   has_many :valuations, dependent: :destroy
   has_many :transactions, dependent: :destroy
+  has_many :imports, dependent: :destroy
 
   monetize :balance
 

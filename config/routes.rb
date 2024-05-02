@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :imports
   mount GoodJob::Engine => "jobs"
 
   get "changelog" => "pages#changelog", as: :changelog
