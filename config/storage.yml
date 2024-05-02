@@ -12,14 +12,16 @@ amazon:
   secret_access_key: <%= ENV["S3_SECRET_ACCESS_KEY"] %>
   region: <%= ENV["S3_REGION"] || "us-east-1" %>
   bucket: <%= ENV["S3_BUCKET"] %>
-google:
-  service: GCS
-  project: <%= ENV["GCS_PROJECT"] %>
-  credentials: <%= Rails.root.join("gcp-storage-keyfile.json") %>
-  bucket: <%= ENV["GCS_BUCKET"] %> 
 
-azure:
-  service: AzureStorage
-  storage_account_name: <%= ENV["AZURE_STORAGE_ACCOUNT_NAME"] %>
-  storage_access_key: <%= ENV["AZURE_STORAGE_ACCESS_KEY"] %>
-  container: <%= ENV["AZURE_STORAGE_CONTAINER"] %> 
+# Removed in #702.  Uncomment, add gems, update .env.example to enable.
+#google:
+#  service: GCS
+#  project: <%#= ENV["GCS_PROJECT"] %>
+#  credentials: <%#= Rails.root.join("gcp-storage-keyfile.json") %>
+#  bucket: <%#= ENV["GCS_BUCKET"] %>
+
+#azure:
+#  service: AzureStorage
+#  storage_account_name: <%#= ENV["AZURE_STORAGE_ACCOUNT_NAME"] %>
+#  storage_access_key: <%#= ENV["AZURE_STORAGE_ACCESS_KEY"] %>
+#  container: <%#= ENV["AZURE_STORAGE_CONTAINER"] %>
