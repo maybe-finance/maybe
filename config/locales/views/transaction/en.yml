@@ -59,7 +59,6 @@ en:
       edit_categories: Edit categories
     merchants:
       create:
-        error: Error creating merchant
         success: New merchant created successfully
       destroy:
         success: Merchant deleted successfully
@@ -84,7 +83,6 @@ en:
       new:
         title: New merchant
       update:
-        error: Error updating merchant
         success: Merchant updated successfully
     update:
       success: Transaction updated successfully
