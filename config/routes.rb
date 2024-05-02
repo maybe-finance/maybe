@@ -21,17 +21,19 @@ Rails.application.routes.draw do
     resource :security, only: %i[show update]
   end
 
-  namespace :transactions do
-    resources :categories
-
-    # TODO: These are *placeholders*
-    # Uncomment `only` and add the necessary actions as they are implemented.
-    resources :rules, only: [ :index ]
-    resources :merchants, only: %i[index new create edit update destroy]
-  end
-
   resources :transactions do
     match "search" => "transactions#search", on: :collection, via: [ :get, :post ], as: :search
+
+    collection do
+      scope module: :transactions do
+        resources :categories, as: :transaction_categories do
+          resources :deletions, only: %i[ new create ], module: :categories
+        end
+
+        resources :rules, only: %i[ index ], as: :transaction_rules
+        resources :merchants, only: %i[ index new create edit update destroy ], as: :transaction_merchants
+      end
+    end
   end
 
   resources :accounts, shallow: true do

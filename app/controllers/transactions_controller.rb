@@ -85,7 +85,12 @@ class TransactionsController < ApplicationController
 
   def update
     respond_to do |format|
-      sync_start_date = [ @transaction.date, Date.parse(transaction_params[:date]) ].compact.min
+      sync_start_date = if transaction_params[:date]
+        [ @transaction.date, Date.parse(transaction_params[:date]) ].compact.min
+      else
+        @transaction.date
+      end
+
       if @transaction.update(transaction_params)
         @transaction.account.sync_later(sync_start_date)
 

@@ -1,6 +1,6 @@
 <%# locals: (content:, classes:) -%>
 <%= turbo_frame_tag "modal" do %>
-  <dialog class="bg-white border border-alpha-black-25 rounded-2xl max-h-[648px] max-w-[580px] w-full shadow-xs h-fit <%= classes %>" data-controller="modal" data-action="click->modal#clickOutside">
+  <dialog class="bg-white border border-alpha-black-25 rounded-2xl max-h-[648px] max-w-[580px] w-min-content shadow-xs h-fit <%= classes %>" data-controller="modal" data-action="click->modal#clickOutside">
     <div class="flex flex-col">
       <%= content %>
     </div>

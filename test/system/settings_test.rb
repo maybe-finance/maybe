@@ -11,9 +11,9 @@ class SettingsTest < ApplicationSystemTestCase
       [ "Security", "Security", settings_security_path ],
       [ "Billing", "Billing", settings_billing_path ],
       [ "Accounts", "Accounts", accounts_path ],
-      [ "Categories", "Categories", transactions_categories_path ],
-      [ "Merchants", "Merchants", transactions_merchants_path ],
-      [ "Rules", "Rules", transactions_rules_path ],
+      [ "Categories", "Categories", transaction_categories_path ],
+      [ "Merchants", "Merchants", transaction_merchants_path ],
+      [ "Rules", "Rules", transaction_rules_path ],
       [ "What's New", "What's New", changelog_path ],
       [ "Feedback", "Feedback", feedback_path ],
       [ "Invite friends", "Invite friends", invites_path ]

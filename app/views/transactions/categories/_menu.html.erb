@@ -1,7 +1,7 @@
 <%# locals: (transaction:) %>
 <div class="relative" data-controller="menu">
   <button data-menu-target="button cursor-pointer" class="flex">
-    <%= render partial: "transactions/categories/badge", locals: transaction.category.nil? ? {} : { name: transaction.category.name, color: transaction.category.color } %>
+    <%= render partial: "transactions/categories/badge", locals: { category: transaction.category } %>
   </button>
   <div data-menu-target="content" class="absolute z-10 hidden w-screen mt-2 max-w-min cursor-default">
     <div class="w-64 text-sm font-semibold leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
@@ -22,16 +22,25 @@
           <% end %>
         </div>
         <hr>
-        <div data-controller="menu" class="relative p-1.5 w-full">
-          <button data-menu-target="button" class="flex text-sm font-medium items-center gap-2 text-gray-500 w-full rounded-lg p-2 hover:bg-gray-100">
-            <%= lucide_icon("plus", class: "w-5 h-5") %>
-            Add new
-          </button>
-          <div data-menu-target="content" class="hidden absolute bottom-14 right-0">
-            <div class="w-96 text-sm font-semibold leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-              <%= render partial: "transactions/categories/dropdown/form" %>
-            </div>
-          </div>
+        <div class="relative p-1.5 w-full">
+          <%= link_to new_transaction_category_path(transaction_id: transaction),
+                class: "flex text-sm font-medium items-center gap-2 text-gray-500 w-full rounded-lg p-2 hover:bg-gray-100",
+                data: { turbo_frame: "modal" } do %>
+            <%= lucide_icon "plus", class: "w-5 h-5" %>
+
+            <%= t(".add_new") %>
+          <% end %>
+
+          <% if transaction.category %>
+            <%= button_to transaction_path(transaction),
+                  method: :patch,
+                  params: { transaction: { category_id: nil } },
+                  class: "flex text-sm font-medium items-center gap-2 text-gray-500 w-full rounded-lg p-2 hover:bg-gray-100" do %>
+              <%= lucide_icon "minus", class: "w-5 h-5" %>
+
+              <%= t(".clear") %>
+            <% end %>
+          <% end %>
         </div>
       </div>
     </div>

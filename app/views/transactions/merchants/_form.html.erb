@@ -1,6 +1,6 @@
 <% is_editing = @merchant.id.present? %>
 <div data-controller="merchant-avatar">
-  <%= form_with model: @merchant, url: is_editing ? transactions_merchant_path(@merchant) : transactions_merchants_path, method: is_editing ? :patch : :post, scope: :transaction_merchant, data: { turbo: false } do |f| %>
+  <%= form_with model: @merchant, url: is_editing ? transaction_merchant_path(@merchant) : transaction_merchants_path, method: is_editing ? :patch : :post, scope: :transaction_merchant, data: { turbo: false } do |f| %>
     <section class="space-y-4">
       <div class="w-fit m-auto">
         <%= render partial: "transactions/merchants/avatar", locals: { merchant: } %>
