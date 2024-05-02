@@ -14,14 +14,14 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get edit when self hosting is enabled" do
-    with_env_overrides SELF_HOSTING_ENABLED: "true" do
+    with_self_hosting do
       get settings_hosting_url
       assert_response :success
     end
   end
 
   test "can update settings when self hosting is enabled" do
-    with_env_overrides SELF_HOSTING_ENABLED: "true" do
+    with_self_hosting do
       NEW_RENDER_DEPLOY_HOOK = "https://api.render.com/deploy/srv-abc123"
       assert_nil Setting.render_deploy_hook
 
@@ -32,14 +32,14 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "cannot set auto upgrades mode without a deploy hook" do
-    with_env_overrides SELF_HOSTING_ENABLED: "true" do
+    with_self_hosting do
       patch settings_hosting_url, params: { setting: { upgrades_mode: "auto" } }
       assert_response :unprocessable_entity
     end
   end
 
   test "can choose auto upgrades mode with a deploy hook" do
-    with_env_overrides SELF_HOSTING_ENABLED: "true" do
+    with_self_hosting do
       NEW_RENDER_DEPLOY_HOOK = "https://api.render.com/deploy/srv-abc123"
       assert_nil Setting.render_deploy_hook
 
@@ -52,7 +52,7 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test " #send_test_email if smtp settings are populated try to send an email and redirect with notice" do
-    with_env_overrides SELF_HOSTING_ENABLED: "true" do
+    with_self_hosting do
       Setting.stubs(:smtp_settings_populated?).returns(true)
 
       test_email_mock = mock
@@ -70,7 +70,7 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "#send_test_email with one blank smtp setting" do
-    with_env_overrides SELF_HOSTING_ENABLED: "true" do
+    with_self_hosting do
       Setting.stubs(:smtp_settings_populated?).returns(false)
       NotificationMailer.expects(:with).never
 
@@ -81,7 +81,7 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "#send_test_email when sending the email raise an error" do
-    with_env_overrides SELF_HOSTING_ENABLED: "true" do
+    with_self_hosting do
       Setting.stubs(:smtp_settings_populated?).returns(true)
       NotificationMailer.stubs(:with).raises(StandardError)
 

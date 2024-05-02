@@ -35,6 +35,11 @@ module ActiveSupport
     def with_env_overrides(overrides = {}, &block)
       ClimateControl.modify(**overrides, &block)
     end
+
+    def with_self_hosting
+      Rails.configuration.stubs(:app_mode).returns("self_hosted".inquiry)
+      yield
+    end
   end
 end
 

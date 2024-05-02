@@ -10,7 +10,7 @@ class ApplicationMailerTest < ActionMailer::TestCase
   end
 
   test "should use self host settings when self host enabled" do
-    with_env_overrides SELF_HOSTING_ENABLED: "true" do
+    with_self_hosting do
       smtp_host = "smtp.example.com"
       smtp_port = 466
       smtp_username = "user@example.com"
