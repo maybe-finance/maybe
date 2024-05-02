@@ -10,22 +10,16 @@ class Transactions::MerchantsController < ApplicationController
   end
 
   def create
-    if Current.family.transaction_merchants.create(merchant_params)
-      redirect_to transaction_merchants_path, notice: t(".success")
-    else
-      render transaction_merchants_path, status: :unprocessable_entity, notice: t(".error")
-    end
+    Current.family.transaction_merchants.create!(merchant_params)
+    redirect_to transaction_merchants_path, notice: t(".success")
   end
 
   def edit
   end
 
   def update
-    if @merchant.update(merchant_params)
-      redirect_to transaction_merchants_path, notice: t(".success")
-    else
-      render transaction_merchants_path, status: :unprocessable_entity, notice: t(".error")
-    end
+    @merchant.update!(merchant_params)
+    redirect_to transaction_merchants_path, notice: t(".success")
   end
 
   def destroy
