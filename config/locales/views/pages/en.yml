@@ -18,3 +18,5 @@ en:
       subtitle: Here's what's happening today
       transactions: Transactions
       view_all: View all
+      no_account: No accounts yet
+      no_account_subtitle: Since no accounts have been added, there's no data to display. Add your first accounts to start viewing dashboard data.
