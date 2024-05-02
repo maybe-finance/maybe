@@ -3,9 +3,11 @@
     <div>
       <h1 class="sr-only">Dashboard</h1>
       <p class="text-xl font-medium text-gray-900 mb-1"><%= t(".greeting", name: Current.user.first_name ) %></p>
-      <p class="text-gray-500 text-sm"><%= t(".subtitle") %></p>
+      <% if !@accounts.blank? %>
+        <p class="text-gray-500 text-sm"><%= t(".subtitle") %></p>
+      <% end %>
     </div>
-    <%= link_to new_account_path, class: "flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2", data: { turbo_frame: "modal" } do %>
+    <%= link_to new_account_path, class: "flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2 pr-3", data: { turbo_frame: "modal" } do %>
       <%= lucide_icon("plus", class: "w-5 h-5") %>
       <span><%= t(".new") %></span>
     <% end %>
@@ -189,4 +191,5 @@
       </div>
     </div>
   </section>
+  <% end %>
 </div>
