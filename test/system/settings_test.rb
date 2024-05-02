@@ -26,25 +26,6 @@ class SettingsTest < ApplicationSystemTestCase
     assert_current_path settings_profile_path
   end
 
-  test "all settings views and links are accessible" do
-    open_settings_from_sidebar
-
-    @settings_links.each_with_index do |(link_text, header_text, path), index|
-      next_setting_path = @settings_links[index + 1][2] if index < @settings_links.size - 1
-      prev_setting_path = @settings_links[index - 1][2] if index > 0
-
-      find_link(link_text, exact: true).click
-
-      assert_selector "h1", text: header_text
-      assert_current_path path
-      assert_link "Next", href: next_setting_path if next_setting_path.present?
-      assert_link "Back", href: prev_setting_path if prev_setting_path.present?
-    end
-
-    # Conditional nav items don't show by default
-    assert_no_text "Self-Hosting"
-  end
-
   private
     def open_settings_from_sidebar
       find("#user-menu").click

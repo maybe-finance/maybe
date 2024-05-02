@@ -25,5 +25,9 @@ module Maybe
     # config.eager_load_paths << Rails.root.join("extras")
 
     config.action_mailer.default_options = { from: ENV["MAILER_SENDER"] }
+
+    config.active_job.queue_adapter = :good_job
+
+    config.app_mode = (ENV["SELF_HOSTING_ENABLED"] == "true" ? "self_hosted" : "managed").inquiry
   end
 end
