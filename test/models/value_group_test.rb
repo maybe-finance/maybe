@@ -1,5 +1,5 @@
 require "test_helper"
-
+require "ostruct"
 class ValueGroupTest < ActiveSupport::TestCase
     setup do
         checking = accounts(:checking)
