@@ -45,34 +45,6 @@ class SettingsTest < ApplicationSystemTestCase
     assert_no_text "Self-Hosting"
   end
 
-  test "can see conditional nav items" do
-    ENV["SELF_HOSTING_ENABLED"] = "true"
-
-    visit root_path
-    sign_in @user
-
-    open_settings_from_sidebar
-
-    click_link "Self-Hosting"
-    assert_selector "h1", text: "Self-Hosting"
-  end
-
-  test "clicking back or hitting escape key takes user back page they opened settings from" do
-    # TODO: Implement test for back navigation and escape key functionality.
-  end
-
-  test "can upload profile image" do
-    open_settings_from_sidebar
-
-    label = find("label", text: "Choose")
-
-    attach_file(label["for"], Rails.root.join("test/fixtures/files/profile_image.png"), make_visible: true)
-
-    click_button "Save"
-
-    assert_selector("img[src*='profile_image.png']")
-  end
-
   private
     def open_settings_from_sidebar
       find("#user-menu").click

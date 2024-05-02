@@ -1,5 +1,5 @@
 require "test_helper"
-
+require "ostruct"
 class ExchangeRateTest < ActiveSupport::TestCase
   test "find rate in db" do
     assert_equal exchange_rates(:day_29_ago_eur_to_usd),
