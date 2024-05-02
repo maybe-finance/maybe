@@ -1,8 +1,10 @@
-# Require individual test files to enable these as needed
+# Test ENV setup:
+# By default, all features should be disabled
+# Use the `with_env_overrides` helper to enable features for individual tests
 ENV["SELF_HOSTING_ENABLED"] = "false"
 ENV["UPGRADES_ENABLED"] = "false"
-
 ENV["RAILS_ENV"] ||= "test"
+
 require_relative "../config/environment"
 require "rails/test_help"
 require "minitest/mock"
