@@ -160,6 +160,7 @@ GEM
     debug (1.9.2)
       irb (~> 1.10)
       reline (>= 0.3.8)
+    docile (1.4.0)
     dotenv (3.1.1)
     dotenv-rails (3.1.1)
       dotenv (= 3.1.1)
@@ -392,6 +393,12 @@ GEM
     sentry-ruby (5.17.3)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
+    simplecov (0.22.0)
+      docile (~> 1.1)
+      simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
+    simplecov-html (0.12.3)
+    simplecov_json_formatter (0.1.4)
     smart_properties (1.17.0)
     sorbet-runtime (0.5.11367)
     stackprof (0.2.26)
@@ -484,6 +491,7 @@ DEPENDENCIES
   selenium-webdriver
   sentry-rails
   sentry-ruby
+  simplecov
   stackprof
   stimulus-rails
   tailwindcss-rails

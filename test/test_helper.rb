@@ -11,6 +11,10 @@ require "minitest/mock"
 require "minitest/autorun"
 require "mocha/minitest"
 
+if ENV["ENABLE_CODE_COVERAGE_REPORT"] == "true"
+  require "simplecov" # Configuration details loaded from .simplecov
+end
+
 VCR.configure do |config|
   config.cassette_library_dir = "test/vcr_cassettes"
   config.hook_into :webmock
