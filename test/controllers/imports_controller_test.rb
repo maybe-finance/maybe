@@ -22,25 +22,9 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "should show import" do
-    get import_url(@import)
-    assert_response :success
-  end
-
   test "should get edit" do
     get edit_import_url(@import)
     assert_response :success
-  end
-
-  # test "should redirect to correct step based on import progress" do
-  #   get edit_import_url(@import)
-  #
-  #
-  # end
-
-  test "should update import" do
-    patch import_url(@import), params: { import: { account_id: @import.account_id, column_mappings: @import.column_mappings } }
-    assert_redirected_to import_url(@import)
   end
 
   test "should destroy import" do

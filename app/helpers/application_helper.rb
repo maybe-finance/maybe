@@ -51,6 +51,11 @@ module ApplicationHelper
     end
   end
 
+  def return_to_path(params, fallback = root_path)
+    uri = URI.parse(params[:return_to] || fallback)
+    uri.relative? ? uri.path : root_path
+  end
+
   def trend_styles(trend)
     fallback = { bg_class: "bg-gray-500/5", text_class: "text-gray-500", symbol: "", icon: "minus" }
     return fallback if trend.nil? || trend.direction.flat?

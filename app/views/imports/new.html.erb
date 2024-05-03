@@ -1,7 +1,12 @@
+<%= content_for :return_to_path, return_to_path(params, imports_path) %>
+
+<%= content_for :nav do %>
+  <%= render partial: "imports/nav", locals: { import: @import } %>
+<% end %>
+
 <div class="mx-auto md:w-2/3 w-full">
   <h1 class="font-bold text-4xl">New import</h1>
 
   <%= render "form", import: @import %>
 
-  <%= link_to "Back to imports", imports_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
 </div>

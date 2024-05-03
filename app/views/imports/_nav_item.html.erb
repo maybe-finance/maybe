@@ -1,0 +1,15 @@
+<%# locals:(name:, index:, path:, is_current:, is_complete:) %>
+<li class="flex items-center <%= is_complete ? "text-green-600" : "text-gray-900" %>">
+  <%= link_to path, class: "flex items-center gap-3" do %>
+    <% if is_complete %>
+      <span class="bg-green-600/10 w-7 h-7 rounded-full shrink-0 inline-flex justify-center items-center border border-alpha-black-25">
+       <%= lucide_icon("check", class: "w-4 h-4") %>
+      </span>
+    <% else %>
+      <span class="<%= is_current ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-500" %> w-7 h-7 rounded-full text-xs font-medium shrink-0 inline-flex justify-center items-center border border-transparent">
+          <%= index + 1 %>
+      </span>
+    <% end %>
+    <span class="text-sm font-medium <%= is_complete ? "text-green-600" : is_current ? "text-gray-900" : "text-gray-500" %>"><%= name %></span>
+  <% end %>
+</li>
