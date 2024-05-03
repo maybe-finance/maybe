@@ -1,4 +1,4 @@
-class Settings::BillingsController < ApplicationController
+class Settings::BillingsController < SettingsController
   def edit
   end
 

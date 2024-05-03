@@ -1,4 +1,4 @@
-class Settings::SecuritiesController < ApplicationController
+class Settings::SecuritiesController < SettingsController
   def edit
   end
 

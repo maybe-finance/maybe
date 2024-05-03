@@ -1,5 +1,6 @@
 class ImportsController < ApplicationController
-  before_action :set_import, only: %i[ show edit update destroy ]
+
+before_action :set_import, only: %i[ show edit update destroy ]
 
   def index
     @imports = Import.all

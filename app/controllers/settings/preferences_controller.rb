@@ -1,4 +1,4 @@
-class Settings::PreferencesController < ApplicationController
+class Settings::PreferencesController < SettingsController
   def edit
   end
 

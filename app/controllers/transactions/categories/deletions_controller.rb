@@ -1,4 +1,6 @@
 class Transactions::Categories::DeletionsController < ApplicationController
+  layout "with_sidebar"
+
   before_action :set_category
   before_action :set_replacement_category, only: :create
 

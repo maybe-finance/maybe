@@ -1,4 +1,4 @@
-class Settings::NotificationsController < ApplicationController
+class Settings::NotificationsController < SettingsController
   def edit
   end
 
