@@ -1,0 +1,10 @@
+<div class="flex justify-center items-center h-[800px] text-sm">
+  <div class="text-center flex flex-col items-center max-w-[300px]">
+    <p class="text-gray-900 mb-1 font-medium"><%= t(".no_account_title") %></p>
+    <p class="text-gray-500 mb-4"><%= t(".no_account_subtitle") %></p>
+    <%= link_to new_account_path, class: "w-fit flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2 pr-3", data: { turbo_frame: "modal" } do %>
+      <%= lucide_icon("plus", class: "w-5 h-5") %>
+      <span><%= t(".new_account") %></span>
+    <% end %>
+  </div>
+</div>

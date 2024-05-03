@@ -17,7 +17,8 @@ class PagesController < ApplicationController
     @top_earners = snapshot_account_transactions[:top_earners]
     @top_savers = snapshot_account_transactions[:top_savers]
 
-    @account_groups = Current.family.accounts.by_group(period: @period, currency: Current.family.currency)
+    @accounts = Current.family.accounts
+    @account_groups = @accounts.by_group(period: @period, currency: Current.family.currency)
     @transactions = Current.family.transactions.limit(5).order(date: :desc)
 
     # TODO: Placeholders for trendlines
