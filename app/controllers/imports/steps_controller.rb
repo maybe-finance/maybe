@@ -1,8 +1,6 @@
 class Imports::StepsController < ApplicationController
-  def select_account
-  end
 
-  def load_data
+  def load
   end
 
   def configure

@@ -21,10 +21,9 @@ Rails.application.routes.draw do
     resource :security, only: %i[show update]
   end
 
-  resources :imports do
+  resources :imports, only: %i[index new create edit destroy] do
     member do
-      get "select-account", to: "imports/steps#select_account", as: :select_account_for
-      get "load-data", to: "imports/steps#load_data", as: :load_data_for
+      get "load", to: "imports/steps#load"
       get "configure", to: "imports/steps#configure"
       get "clean", to: "imports/steps#clean"
       get "confirm", to: "imports/steps#confirm"
