@@ -3,7 +3,7 @@ require "test_helper"
 class ImportsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
-    @import = imports(:one)
+    @import = imports(:basic_checking_account_import)
   end
 
   test "should get index" do
@@ -31,6 +31,12 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     get edit_import_url(@import)
     assert_response :success
   end
+
+  # test "should redirect to correct step based on import progress" do
+  #   get edit_import_url(@import)
+  #
+  #
+  # end
 
   test "should update import" do
     patch import_url(@import), params: { import: { account_id: @import.account_id, column_mappings: @import.column_mappings } }
