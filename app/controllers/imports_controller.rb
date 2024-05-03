@@ -1,9 +1,12 @@
 class ImportsController < ApplicationController
-  before_action :set_import, only: %i[ edit destroy ]
+
+before_action :set_import, only: %i[ show edit update destroy ]
 
   def index
-    @imports = Current.family.imports
-    render layout: "with_sidebar"
+    @imports = Import.all
+  end
+
+  def show
   end
 
   def new
@@ -17,7 +20,13 @@ class ImportsController < ApplicationController
     account = Current.family.accounts.find(params[:import][:account_id])
     @import = Import.create!(account: account)
 
-    redirect_to load_import_path(@import), notice: "Import was successfully created."
+    redirect_to @import, notice: "Import was successfully created."
+  end
+
+  def update
+    # TODO: handle mappings safely
+    @import = Current.family.imports.find(params[:id])
+    redirect_to @import, notice: "Import was successfully updated.", status: :see_other
   end
 
   def destroy
@@ -27,7 +36,7 @@ class ImportsController < ApplicationController
 
   private
 
-    def set_import
-      @import = Current.family.imports.find(params[:id])
-    end
+  def set_import
+    @import = Import.find(params[:id])
+  end
 end

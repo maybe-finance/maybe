@@ -2,8 +2,6 @@ class ApplicationController < ActionController::Base
   include Authentication, Invitable, SelfHostable
   include Pagy::Backend
 
-  layout "with_sidebar"
-
   before_action :sync_accounts
 
   default_form_builder ApplicationFormBuilder
