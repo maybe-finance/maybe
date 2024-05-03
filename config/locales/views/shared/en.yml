@@ -6,6 +6,11 @@ en:
       body_html: "<p>You will not be able to undo this decision</p>"
       cancel: Cancel
       title: Are you sure?
+    no_account_empty_state:
+      new_account: New account
+      no_account_subtitle: Since no accounts have been added, there's no data to display.
+        Add your first accounts to start viewing dashboard data.
+      no_account_title: No accounts yet
     notification:
       dismiss: Dismiss
     upgrade_notification:
