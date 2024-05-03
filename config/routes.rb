@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :imports
   mount GoodJob::Engine => "jobs"
 
   get "changelog" => "pages#changelog", as: :changelog
@@ -22,9 +21,10 @@ Rails.application.routes.draw do
     resource :security, only: %i[show update]
   end
 
-  resources :imports, only: %i[index new create edit destroy] do
+  resources :imports do
     member do
-      get "load", to: "imports/steps#load"
+      get "select-account", to: "imports/steps#select_account", as: :select_account_for
+      get "load-data", to: "imports/steps#load_data", as: :load_data_for
       get "configure", to: "imports/steps#configure"
       get "clean", to: "imports/steps#clean"
       get "confirm", to: "imports/steps#confirm"
@@ -32,7 +32,7 @@ Rails.application.routes.draw do
   end
 
   resources :transactions do
-    match "search" => "transactions#search", on: :collection, via: %i[ get post ], as: :search
+    match "search" => "transactions#search", on: :collection, via: [:get, :post], as: :search
 
     collection do
       scope module: :transactions do
