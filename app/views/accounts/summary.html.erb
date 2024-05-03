@@ -6,71 +6,76 @@
       <span><%= t(".new") %></span>
     <% end %>
   </div>
-  <div class="bg-white rounded-xl shadow-xs border border-alpha-black-100 flex divide-x divide-gray-200">
-    <div class="w-1/2 p-4 flex items-stretch justify-between">
-      <div class="space-y-2 grow">
-        <%= render partial: "shared/value_heading", locals: {
-          label: "Assets",
-                period: @period,
-                value: Current.family.assets,
-                trend: @asset_series.trend
-            } %>
+
+  <% if @accounts.empty? %>
+    <%= render 'shared/no_account_empty_state' %>
+  <% else %>
+    <div class="bg-white rounded-xl shadow-xs border border-alpha-black-100 flex divide-x divide-gray-200">
+      <div class="w-1/2 p-4 flex items-stretch justify-between">
+        <div class="space-y-2 grow">
+          <%= render partial: "shared/value_heading", locals: {
+            label: "Assets",
+                  period: @period,
+                  value: Current.family.assets,
+                  trend: @asset_series.trend
+              } %>
+        </div>
+        <div
+          id="assetsChart"
+          class="h-full w-2/5"
+          data-controller="time-series-chart"
+          data-time-series-chart-data-value="<%= @asset_series.to_json %>"
+          data-time-series-chart-use-labels-value="false"></div>
       </div>
-      <div
-        id="assetsChart"
-        class="h-full w-2/5"
-        data-controller="time-series-chart"
-        data-time-series-chart-data-value="<%= @asset_series.to_json %>"
-        data-time-series-chart-use-labels-value="false"></div>
-    </div>
-    <div class="w-1/2 p-4 flex items-stretch justify-between">
-      <div class="space-y-2 grow">
-        <%= render partial: "shared/value_heading", locals: {
-          label: "Liabilities",
-                period: @period,
-                size: "md",
-                value: Current.family.liabilities,
-                trend: @liability_series.trend
-            } %>
-      </div>
-      <div
-        id="liabilitiesChart"
-        class="h-full w-2/5"
-        data-controller="time-series-chart"
-        data-time-series-chart-data-value="<%= @liability_series.to_json %>"
-        data-time-series-chart-use-labels-value="false"></div>
-    </div>
-  </div>
-  <div class="p-4 bg-white rounded-xl shadow-xs border border-alpha-black-25 space-y-4">
-    <div class="flex justify-between items-center mb-5">
-      <h2 class="text-lg font-medium text-gray-900">Assets</h2>
-      <div class="flex items-center gap-2">
-        <%= link_to new_account_path, class: "flex items-center gap-1 p-2 text-gray-900 text-sm font-medium bg-gray-50 rounded-lg hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
-          <%= lucide_icon("plus", class: "w-5 h-5 text-gray-500") %>
-          <p><%= t(".new") %></p>
-        <% end %>
-        <%= form_with url: summary_accounts_path, method: :get, class: "flex items-center gap-4", data: { controller: "auto-submit-form" } do %>
-          <%= render partial: "shared/period_select", locals: { value: @period.name } %>
-        <% end %>
+      <div class="w-1/2 p-4 flex items-stretch justify-between">
+        <div class="space-y-2 grow">
+          <%= render partial: "shared/value_heading", locals: {
+            label: "Liabilities",
+                  period: @period,
+                  size: "md",
+                  value: Current.family.liabilities,
+                  trend: @liability_series.trend
+              } %>
+        </div>
+        <div
+          id="liabilitiesChart"
+          class="h-full w-2/5"
+          data-controller="time-series-chart"
+          data-time-series-chart-data-value="<%= @liability_series.to_json %>"
+          data-time-series-chart-use-labels-value="false"></div>
       </div>
     </div>
-    <%= render partial: "pages/account_percentages_bar", locals: { account_groups: @account_groups[:assets].children } %>
-    <%= render partial: "pages/account_percentages_table", locals: { account_groups: @account_groups[:assets].children } %>
-  </div>
-  <div class="p-4 bg-white rounded-xl shadow-xs border border-alpha-black-25 space-y-4">
-    <div class="flex justify-between items-center mb-5">
-      <h2 class="text-lg font-medium text-gray-900">Liabilities</h2>
-      <div class="flex items-center gap-2">
-        <%= link_to new_account_path, class: "flex items-center gap-1 p-2 text-gray-900 text-sm font-medium bg-gray-50 rounded-lg hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
-          <%= lucide_icon("plus", class: "w-5 h-5 text-gray-500") %>
-          <p><%= t(".new") %></p>
-        <% end %>
-        <%= form_with url: summary_accounts_path, method: :get, class: "flex items-center gap-4", data: { controller: "auto-submit-form" } do %>
-          <%= render partial: "shared/period_select", locals: { value: @period.name } %>
-        <% end %>
+    <div class="p-4 bg-white rounded-xl shadow-xs border border-alpha-black-25 space-y-4">
+      <div class="flex justify-between items-center mb-5">
+        <h2 class="text-lg font-medium text-gray-900">Assets</h2>
+        <div class="flex items-center gap-2">
+          <%= link_to new_account_path, class: "flex items-center gap-1 p-2 text-gray-900 text-sm font-medium bg-gray-50 rounded-lg hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
+            <%= lucide_icon("plus", class: "w-5 h-5 text-gray-500") %>
+            <p><%= t(".new") %></p>
+          <% end %>
+          <%= form_with url: summary_accounts_path, method: :get, class: "flex items-center gap-4", data: { controller: "auto-submit-form" } do %>
+            <%= render partial: "shared/period_select", locals: { value: @period.name } %>
+          <% end %>
+        </div>
       </div>
+      <%= render partial: "pages/account_percentages_bar", locals: { account_groups: @account_groups[:assets].children } %>
+      <%= render partial: "pages/account_percentages_table", locals: { account_groups: @account_groups[:assets].children } %>
     </div>
-    <%= render partial: "pages/account_percentages_bar", locals: { account_groups: @account_groups[:liabilities].children } %>
-    <%= render partial: "pages/account_percentages_table", locals: { account_groups: @account_groups[:liabilities].children } %>
-  </div>
+    <div class="p-4 bg-white rounded-xl shadow-xs border border-alpha-black-25 space-y-4">
+      <div class="flex justify-between items-center mb-5">
+        <h2 class="text-lg font-medium text-gray-900">Liabilities</h2>
+        <div class="flex items-center gap-2">
+          <%= link_to new_account_path, class: "flex items-center gap-1 p-2 text-gray-900 text-sm font-medium bg-gray-50 rounded-lg hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
+            <%= lucide_icon("plus", class: "w-5 h-5 text-gray-500") %>
+            <p><%= t(".new") %></p>
+          <% end %>
+          <%= form_with url: summary_accounts_path, method: :get, class: "flex items-center gap-4", data: { controller: "auto-submit-form" } do %>
+            <%= render partial: "shared/period_select", locals: { value: @period.name } %>
+          <% end %>
+        </div>
+      </div>
+      <%= render partial: "pages/account_percentages_bar", locals: { account_groups: @account_groups[:liabilities].children } %>
+      <%= render partial: "pages/account_percentages_table", locals: { account_groups: @account_groups[:liabilities].children } %>
+    </div>
+  <% end %>
 </div>
