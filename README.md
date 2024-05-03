@@ -34,7 +34,7 @@ You can find [detailed setup guides for self hosting here](docs/self-hosting.md)
 
 ### Requirements
 
-- Ruby >3 (see `Gemfile`)
+- Ruby 3.3.1
 - PostgreSQL >9.3 (ideally, latest stable version)
 
 After cloning the repo, the basic setup commands are:

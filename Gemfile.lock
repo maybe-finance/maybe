@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: 2c79c87a1906498845542607d1293fc10acafb90
+  revision: 793ff00442723b2ff9ed7b7fb39cae2f5608cc2b
   branch: main
   specs:
     actioncable (7.2.0.alpha)
@@ -334,7 +334,7 @@ GEM
     rdoc (6.6.3.1)
       psych (>= 4.0.0)
     regexp_parser (2.9.0)
-    reline (0.5.4)
+    reline (0.5.5)
       io-console (~> 0.5)
     rexml (3.2.6)
     rubocop (1.63.4)
@@ -494,7 +494,7 @@ DEPENDENCIES
   webmock
 
 RUBY VERSION
-   ruby 3.3.0p0
+   ruby 3.3.1p55
 
 BUNDLED WITH
-   2.5.4
+   2.5.9
