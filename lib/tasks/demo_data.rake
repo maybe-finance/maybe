@@ -66,36 +66,45 @@ namespace :demo_data do
     personal_iou = Account.create(name: "Demo Personal IOU", family: family, accountable: Account::OtherLiability.new, balance: 1000, currency: "USD")
     second_car = Account.create(name: "Demo Secondary Car", family: family, accountable: Account::Vehicle.new, balance: 12000, currency: "USD")
 
+    # ========== Tags ================
+    recurring_tag = Transaction::Tag.create(name: "Recurring", family: family)
+    one_time_tag = Transaction::Tag.create(name: "One Time", family: family)
+    digital_tag = Transaction::Tag.create(name: "Digital", family: family)
+    transportation_tag = Transaction::Tag.create(name: "Transportation", family: family)
+    food_tag = Transaction::Tag.create(name: "Food", family: family)
+    groceries_tag = Transaction::Tag.create(name: "Groceries", family: family)
+    restaurant_tag = Transaction::Tag.create(name: "Restaurant", family: family)
+
 
     # ========== Transactions ================
     multi_currency_checking_transactions = [
-      { date: Date.today - 45, amount: 3000, name: "Paycheck", currency: "USD" },
-      { date: Date.today - 41, amount: -1500, name: "Rent Payment", currency: "EUR" },
-      { date: Date.today - 39, amount: -200, name: "Groceries", currency: "EUR" },
-      { date: Date.today - 34, amount: 3000, name: "Paycheck", currency: "USD" },
-      { date: Date.today - 31, amount: -1500, name: "Rent Payment", currency: "EUR" },
-      { date: Date.today - 28, amount: -100, name: "Utilities", currency: "EUR" },
-      { date: Date.today - 28, amount: 3000, name: "Paycheck", currency: "USD" },
-      { date: Date.today - 28, amount: -1500, name: "Rent Payment", currency: "EUR" },
-      { date: Date.today - 28, amount: -50, name: "Internet Bill", currency: "EUR" },
-      { date: Date.today - 14, amount: 3000, name: "Paycheck", currency: "USD" }
+      { date: Date.today - 45, amount: 3000, name: "Paycheck", currency: "USD", tag_ids: [ recurring_tag.id ] },
+      { date: Date.today - 41, amount: -1500, name: "Rent Payment", currency: "EUR", tag_ids: [ recurring_tag.id ] },
+      { date: Date.today - 39, amount: -200, name: "Groceries", currency: "EUR", tag_ids: [ food_tag.id, groceries_tag.id ] },
+      { date: Date.today - 34, amount: 3000, name: "Paycheck", currency: "USD", tag_ids: [ recurring_tag.id ] },
+      { date: Date.today - 31, amount: -1500, name: "Rent Payment", currency: "EUR", tag_ids: [ recurring_tag.id ] },
+      { date: Date.today - 28, amount: -100, name: "Utilities", currency: "EUR", tag_ids: [ recurring_tag.id ] },
+      { date: Date.today - 28, amount: 3000, name: "Paycheck", currency: "USD", tag_ids: [ recurring_tag.id ] },
+      { date: Date.today - 28, amount: -1500, name: "Rent Payment", currency: "EUR", tag_ids: [ recurring_tag.id ] },
+      { date: Date.today - 28, amount: -50, name: "Internet Bill", currency: "EUR", tag_ids: [ recurring_tag.id ] },
+      { date: Date.today - 14, amount: 3000, name: "Paycheck", currency: "USD", tag_ids: [ recurring_tag.id ] }
     ]
 
     checking_transactions = [
-      { date: Date.today - 84, amount: -3000, name: "Direct Deposit" },
-      { date: Date.today - 70, amount: 1500, name: "Credit Card Payment" },
-      { date: Date.today - 70, amount: 200, name: "Utility Bill" },
-      { date: Date.today - 56, amount: -3000, name: "Direct Deposit" },
-      { date: Date.today - 42, amount: 1500, name: "Credit Card Payment" },
-      { date: Date.today - 42, amount: 100, name: "Internet Bill" },
-      { date: Date.today - 28, amount: -3000, name: "Direct Deposit" },
-      { date: Date.today - 28, amount: 1500, name: "Credit Card Payment" },
-      { date: Date.today - 28, amount: 50, name: "Mobile Bill" },
-      { date: Date.today - 14, amount: -3000, name: "Direct Deposit" },
-      { date: Date.today - 14, amount: 1500, name: "Credit Card Payment" },
-      { date: Date.today - 14, amount: 200, name: "Car Loan Payment" },
-      { date: Date.today - 7, amount: 150, name: "Insurance" },
-      { date: Date.today - 2, amount: 100, name: "Gym Membership" }
+      { date: Date.today - 84, amount: -3000, name: "Direct Deposit", tag_ids: [] },
+      { date: Date.today - 70, amount: 1500, name: "Credit Card Payment", tag_ids: [] },
+      { date: Date.today - 70, amount: 200, name: "Utility Bill", tag_ids: [ recurring_tag.id ] },
+      { date: Date.today - 56, amount: -3000, name: "Direct Deposit", tag_ids: [] },
+      { date: Date.today - 42, amount: 1500, name: "Credit Card Payment", tag_ids: [] },
+      { date: Date.today - 42, amount: 100, name: "Internet Bill", tag_ids: [ recurring_tag.id ] },
+      { date: Date.today - 28, amount: -3000, name: "Direct Deposit", tag_ids: [] },
+      { date: Date.today - 28, amount: 1500, name: "Credit Card Payment", tag_ids: [] },
+      { date: Date.today - 28, amount: 50, name: "Mobile Bill", tag_ids: [ recurring_tag.id ] },
+      { date: Date.today - 14, amount: -3000, name: "Direct Deposit", tag_ids: [] },
+      { date: Date.today - 14, amount: 1500, name: "Credit Card Payment", tag_ids: [] },
+      { date: Date.today - 14, amount: 200, name: "Car Loan Payment", tag_ids: [ recurring_tag.id ] },
+      { date: Date.today - 7, amount: 150, name: "Insurance", tag_ids: [ recurring_tag.id ] },
+      { date: Date.today - 2, amount: 100, name: "Gym Membership", tag_ids: [ recurring_tag.id ] }
     ]
 
     savings_transactions = [
@@ -124,71 +133,71 @@ namespace :demo_data do
     ]
 
     credit_card_transactions = [
-      { date: Date.today - 90, amount: 75, name: "Grocery Store" },
-      { date: Date.today - 89, amount: 30, name: "Gas Station" },
-      { date: Date.today - 88, amount: 12, name: "Coffee Shop" },
-      { date: Date.today - 85, amount: 50, name: "Restaurant" },
-      { date: Date.today - 84, amount: 25, name: "Online Subscription" },
-      { date: Date.today - 82, amount: 100, name: "Clothing Store" },
-      { date: Date.today - 80, amount: 60, name: "Pharmacy" },
-      { date: Date.today - 78, amount: 40, name: "Utility Bill" },
-      { date: Date.today - 75, amount: 90, name: "Home Improvement Store" },
-      { date: Date.today - 74, amount: 20, name: "Book Store" },
-      { date: Date.today - 72, amount: 15, name: "Movie Theater" },
-      { date: Date.today - 70, amount: 200, name: "Electronics Store" },
-      { date: Date.today - 68, amount: 35, name: "Pet Store" },
-      { date: Date.today - 65, amount: 80, name: "Sporting Goods Store" },
-      { date: Date.today - 63, amount: 55, name: "Department Store" },
-      { date: Date.today - 60, amount: 110, name: "Auto Repair Shop" },
-      { date: Date.today - 58, amount: 45, name: "Beauty Salon" },
-      { date: Date.today - 55, amount: 95, name: "Furniture Store" },
-      { date: Date.today - 53, amount: 22, name: "Fast Food" },
-      { date: Date.today - 50, amount: 120, name: "Airline Ticket" },
-      { date: Date.today - 48, amount: 65, name: "Hotel" },
-      { date: Date.today - 45, amount: 30, name: "Car Rental" },
-      { date: Date.today - 43, amount: 18, name: "Music Store" },
-      { date: Date.today - 40, amount: 70, name: "Grocery Store" },
-      { date: Date.today - 38, amount: 32, name: "Gas Station" },
-      { date: Date.today - 36, amount: 14, name: "Coffee Shop" },
-      { date: Date.today - 33, amount: 52, name: "Restaurant" },
-      { date: Date.today - 31, amount: 28, name: "Online Subscription" },
-      { date: Date.today - 29, amount: 105, name: "Clothing Store" },
-      { date: Date.today - 27, amount: 62, name: "Pharmacy" },
-      { date: Date.today - 25, amount: 42, name: "Utility Bill" },
-      { date: Date.today - 22, amount: 92, name: "Home Improvement Store" },
-      { date: Date.today - 20, amount: 23, name: "Book Store" },
-      { date: Date.today - 18, amount: 17, name: "Movie Theater" },
-      { date: Date.today - 15, amount: 205, name: "Electronics Store" },
-      { date: Date.today - 13, amount: 37, name: "Pet Store" },
-      { date: Date.today - 10, amount: 83, name: "Sporting Goods Store" },
-      { date: Date.today - 8, amount: 57, name: "Department Store" },
-      { date: Date.today - 5, amount: 115, name: "Auto Repair Shop" },
-      { date: Date.today - 3, amount: 47, name: "Beauty Salon" },
-      { date: Date.today - 1, amount: 98, name: "Furniture Store" },
-      { date: Date.today - 60, amount: -800, name: "Credit Card Payment" },
-      { date: Date.today - 30, amount: -900, name: "Credit Card Payment" },
-      { date: Date.today, amount: -1000, name: "Credit Card Payment" }
+      { date: Date.today - 90, amount: 75, name: "Grocery Store", tag_ids: [ food_tag.id, groceries_tag.id ] },
+      { date: Date.today - 89, amount: 30, name: "Gas Station", tag_ids: [ transportation_tag.id ]  },
+      { date: Date.today - 88, amount: 12, name: "Coffee Shop", tag_ids: [ food_tag.id, restaurant_tag.id ] },
+      { date: Date.today - 85, amount: 50, name: "Restaurant", tag_ids: [ food_tag.id, restaurant_tag.id ] },
+      { date: Date.today - 84, amount: 25, name: "Online Subscription", tag_ids: [] },
+      { date: Date.today - 82, amount: 100, name: "Clothing Store", tag_ids: [] },
+      { date: Date.today - 80, amount: 60, name: "Pharmacy", tag_ids: [] },
+      { date: Date.today - 78, amount: 40, name: "Utility Bill", tag_ids: [] },
+      { date: Date.today - 75, amount: 90, name: "Home Improvement Store", tag_ids: [] },
+      { date: Date.today - 74, amount: 20, name: "Book Store", tag_ids: [] },
+      { date: Date.today - 72, amount: 15, name: "Movie Theater", tag_ids: [] },
+      { date: Date.today - 70, amount: 200, name: "Electronics Store", tag_ids: [ digital_tag.id ]  },
+      { date: Date.today - 68, amount: 35, name: "Pet Store", tag_ids: [] },
+      { date: Date.today - 65, amount: 80, name: "Sporting Goods Store", tag_ids: [] },
+      { date: Date.today - 63, amount: 55, name: "Department Store", tag_ids: [] },
+      { date: Date.today - 60, amount: 110, name: "Auto Repair Shop", tag_ids: [] },
+      { date: Date.today - 58, amount: 45, name: "Beauty Salon", tag_ids: [] },
+      { date: Date.today - 55, amount: 95, name: "Furniture Store", tag_ids: [] },
+      { date: Date.today - 53, amount: 22, name: "Fast Food", tag_ids: [] },
+      { date: Date.today - 50, amount: 120, name: "Airline Ticket", tag_ids: [ transportation_tag.id ] },
+      { date: Date.today - 48, amount: 65, name: "Hotel", tag_ids: [] },
+      { date: Date.today - 45, amount: 30, name: "Car Rental", tag_ids: [] },
+      { date: Date.today - 43, amount: 18, name: "Music Store", tag_ids: [] },
+      { date: Date.today - 40, amount: 70, name: "Grocery Store", tag_ids: [ food_tag.id, groceries_tag.id ] },
+      { date: Date.today - 38, amount: 32, name: "Gas Station", tag_ids: [] },
+      { date: Date.today - 36, amount: 14, name: "Coffee Shop", tag_ids: [] },
+      { date: Date.today - 33, amount: 52, name: "Restaurant", tag_ids: [] },
+      { date: Date.today - 31, amount: 28, name: "Online Subscription", tag_ids: [] },
+      { date: Date.today - 29, amount: 105, name: "Clothing Store", tag_ids: [] },
+      { date: Date.today - 27, amount: 62, name: "Pharmacy", tag_ids: [] },
+      { date: Date.today - 25, amount: 42, name: "Utility Bill", tag_ids: [] },
+      { date: Date.today - 22, amount: 92, name: "Home Improvement Store", tag_ids: [] },
+      { date: Date.today - 20, amount: 23, name: "Book Store", tag_ids: [] },
+      { date: Date.today - 18, amount: 17, name: "Movie Theater", tag_ids: [] },
+      { date: Date.today - 15, amount: 205, name: "Electronics Store", tag_ids: [] },
+      { date: Date.today - 13, amount: 37, name: "Pet Store", tag_ids: [] },
+      { date: Date.today - 10, amount: 83, name: "Sporting Goods Store", tag_ids: [] },
+      { date: Date.today - 8, amount: 57, name: "Department Store", tag_ids: [] },
+      { date: Date.today - 5, amount: 115, name: "Auto Repair Shop", tag_ids: [] },
+      { date: Date.today - 3, amount: 47, name: "Beauty Salon", tag_ids: [] },
+      { date: Date.today - 1, amount: 98, name: "Furniture Store", tag_ids: [] },
+      { date: Date.today - 60, amount: -800, name: "Credit Card Payment", tag_ids: [] },
+      { date: Date.today - 30, amount: -900, name: "Credit Card Payment", tag_ids: [] },
+      { date: Date.today, amount: -1000, name: "Credit Card Payment", tag_ids: [] }
     ]
 
     mortgage_transactions = [
-      { date: Date.today - 90, amount: -1500, name: "Mortgage Payment" },
-      { date: Date.today - 60, amount: -1500, name: "Mortgage Payment" },
-      { date: Date.today - 30, amount: -1500, name: "Mortgage Payment" }
+      { date: Date.today - 90, amount: -1500, name: "Mortgage Payment", tag_ids: [ recurring_tag.id ] },
+      { date: Date.today - 60, amount: -1500, name: "Mortgage Payment", tag_ids: [ recurring_tag.id ] },
+      { date: Date.today - 30, amount: -1500, name: "Mortgage Payment", tag_ids: [ recurring_tag.id ] }
     ]
 
     car_loan_transactions = [
-      { date: 12.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
-      { date: 11.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
-      { date: 10.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
-      { date: 9.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
-      { date: 8.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
-      { date: 7.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
-      { date: 6.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
-      { date: 5.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
-      { date: 4.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
-      { date: 3.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
-      { date: 2.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
-      { date: 1.month.ago.to_date, amount: -1250, name: "Car Loan Payment" }
+      { date: 12.months.ago.to_date, amount: -1250, name: "Car Loan Payment", tag_ids: [ recurring_tag.id ] },
+      { date: 11.months.ago.to_date, amount: -1250, name: "Car Loan Payment", tag_ids: [ recurring_tag.id ] },
+      { date: 10.months.ago.to_date, amount: -1250, name: "Car Loan Payment", tag_ids: [ recurring_tag.id ] },
+      { date: 9.months.ago.to_date, amount: -1250, name: "Car Loan Payment", tag_ids: [ recurring_tag.id ] },
+      { date: 8.months.ago.to_date, amount: -1250, name: "Car Loan Payment", tag_ids: [ recurring_tag.id ] },
+      { date: 7.months.ago.to_date, amount: -1250, name: "Car Loan Payment", tag_ids: [ recurring_tag.id ] },
+      { date: 6.months.ago.to_date, amount: -1250, name: "Car Loan Payment", tag_ids: [ recurring_tag.id ] },
+      { date: 5.months.ago.to_date, amount: -1250, name: "Car Loan Payment", tag_ids: [ recurring_tag.id ] },
+      { date: 4.months.ago.to_date, amount: -1250, name: "Car Loan Payment", tag_ids: [ recurring_tag.id ] },
+      { date: 3.months.ago.to_date, amount: -1250, name: "Car Loan Payment", tag_ids: [ recurring_tag.id ] },
+      { date: 2.months.ago.to_date, amount: -1250, name: "Car Loan Payment", tag_ids: [ recurring_tag.id ] },
+      { date: 1.month.ago.to_date, amount: -1250, name: "Car Loan Payment", tag_ids: [ recurring_tag.id ] }
     ]
 
     # ========== Valuations ================

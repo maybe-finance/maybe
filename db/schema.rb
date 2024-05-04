@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_04_30_111641) do
+ActiveRecord::Schema[7.2].define(version: 2024_05_04_014747) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -86,7 +86,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_30_111641) do
     t.uuid "accountable_id"
     t.decimal "balance", precision: 19, scale: 4, default: "0.0"
     t.string "currency", default: "USD"
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Account::Loan'::character varying, 'Account::Credit'::character varying, 'Account::OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Account::Loan'::character varying)::text, ('Account::Credit'::character varying)::text, ('Account::OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.boolean "is_active", default: true, null: false
     t.enum "status", default: "ok", null: false, enum_type: "account_status"
     t.jsonb "sync_warnings", default: "[]", null: false
@@ -256,6 +256,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_30_111641) do
     t.index ["family_id"], name: "index_transaction_merchants_on_family_id"
   end
 
+  create_table "transaction_tags", force: :cascade do |t|
+    t.uuid "family_id", null: false
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["family_id"], name: "index_transaction_tags_on_family_id"
+  end
+
   create_table "transactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.date "date", null: false
@@ -268,6 +276,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_30_111641) do
     t.boolean "excluded", default: false
     t.text "notes"
     t.uuid "merchant_id"
+    t.string "details", default: [], array: true
     t.index ["account_id"], name: "index_transactions_on_account_id"
     t.index ["category_id"], name: "index_transactions_on_category_id"
     t.index ["merchant_id"], name: "index_transactions_on_merchant_id"
@@ -307,6 +316,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_30_111641) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "transaction_categories", "families"
   add_foreign_key "transaction_merchants", "families"
+  add_foreign_key "transaction_tags", "families"
   add_foreign_key "transactions", "accounts", on_delete: :cascade
   add_foreign_key "transactions", "transaction_categories", column: "category_id", on_delete: :nullify
   add_foreign_key "transactions", "transaction_merchants", column: "merchant_id"

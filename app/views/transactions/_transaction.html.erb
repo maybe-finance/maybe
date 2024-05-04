@@ -7,6 +7,9 @@
     <div class="w-48">
       <%= render partial: "transactions/categories/menu", locals: { transaction: } %>
     </div>
+        <div class="w-96">
+      <%= render partial: "transactions/tags/badges", locals: { tags: transaction.tags } %>
+    </div>
     <div>
       <p><%= transaction.account.name %></p>
     </div>

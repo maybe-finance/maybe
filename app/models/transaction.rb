@@ -23,6 +23,14 @@ class Transaction < ApplicationRecord
       .where("er.rate IS NOT NULL OR transactions.currency = ?", currency)
   }
 
+  def tags
+    Tag.where(id: self.tag_ids)
+  end
+
+  def tags=(new_tags)
+    self.tag_ids = new_tags.map(&:id)
+  end
+
   def self.daily_totals(transactions, period: Period.last_30_days, currency: Current.family.currency)
     # Sum spending and income for each day in the period with the given currency
     select(

@@ -82,7 +82,11 @@ class AccountsController < ApplicationController
   private
 
   def set_account
-    @account = Current.family.accounts.find(params[:id])
+    begin
+      @account = Current.family.accounts.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      redirect_to accounts_path, alert: "Account not found"
+    end
   end
 
   def account_params

@@ -1,0 +1,11 @@
+<%# locals: (tags:) %>
+<% tags.each do |tag| %>
+  <span class="border text-sm font-medium px-2.5 py-1 rounded-full cursor-pointer content-center"
+    style="
+      background-color: color-mix(in srgb, #737373 5%, white);
+      border-color: color-mix(in srgb, #737373 10%, white);
+      color: #737373;
+      margin-right: 10px">
+    <%= tag.name %>
+  </span>
+<% end %>
