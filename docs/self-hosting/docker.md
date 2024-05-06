@@ -15,8 +15,10 @@ variables. You might want to edit the `DB_HOST`, `DB_PORT`,
 
 ## Prerequisites and Setup
 
-Install Docker on your machine by following the appropriate guide for your operating system. If you need a GUI, install [Docker Desktop](https://docs.docker.com/desktop/), otherwise innstall
-[Docker Engine](https://docs.docker.com/engine/install/) (recommended for production).
+Install Docker on your machine by following the appropriate guide for your
+operating system. If you need a GUI, install [Docker
+Desktop](https://docs.docker.com/desktop/), otherwise innstall [Docker
+Engine](https://docs.docker.com/engine/install/) (recommended for production).
 
 Next, follow these steps (shared between docker-compose and standalone):
 
