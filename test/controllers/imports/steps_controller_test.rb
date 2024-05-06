@@ -3,7 +3,7 @@ require "test_helper"
 class Imports::StepsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in users(:family_admin)
-    @import = imports(:basic_checking_account_import)
+    @import = imports(:completed_import)
   end
 
   test "should get load" do
