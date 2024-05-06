@@ -76,11 +76,6 @@ jobs:
         run: docker context create builders
         shell: bash
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        with:
-          endpoint: builders
-
       - name: Log in to the container registry
         uses: docker/login-action@v3
         with:
@@ -95,11 +90,12 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           flavor: latest=auto
           tags: |
+            # Explicit commit sha and version tags
+            type=sha
             type=semver,pattern={{version}}
-            type=semver,pattern={{major}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}.{{minor}}.{{patch}}
-            type=ref,event=branch
+            # Aliases
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+            type=raw,value=stable,enable=${{ startsWith(github.ref, 'refs/tags/v') }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -109,13 +105,3 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Prune all untagged docker images
-        uses: vlaurin/action-ghcr-prune@v0.6.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          organization: maybe-finance
-          container: ${{ github.event.repository.name }}
-          keep-younger-than: 7 # days
-          dry-run: false
-          prune-untagged: true

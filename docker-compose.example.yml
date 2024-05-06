@@ -3,14 +3,15 @@ services:
   app:
     image: ghcr.io/maybe-finance/maybe:latest
     ports:
-      - 3000:3000
+      - 127.0.0.1:3000:3000
     restart: unless-stopped
     env_file:
       - .env
     environment:
       DB_HOST: "postgres"
-      HOSTING_PLATFORM: "localhost"
-      DISABLE_SSL: "true"
+      RAILS_ENV: "production"
+      RAILS_FORCE_SSL: false
+      RAILS_ASSUME_SSL: false
     depends_on:
       postgres:
         condition: service_healthy

@@ -30,9 +30,9 @@ You can find [detailed setup guides for self hosting here](docs/self-hosting.md)
 1. Click the button above
 2. Follow the instructions in the [Render self-hosting guide](docs/self-hosting/render.md)
 
-### Manual docker deploy
+### Docker
 
-A docker image, along with an example docker-compose file are provided for those who wish to deploy the application that way.
+To host Maybe with Docker Compose, please follow our [Docker self-hosting guide](docs/self-hosting/docker.md).
 
 ## Local Development Setup
 
