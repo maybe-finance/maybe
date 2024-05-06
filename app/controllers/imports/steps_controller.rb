@@ -1,5 +1,4 @@
 class Imports::StepsController < ApplicationController
-
   def load
   end
 
