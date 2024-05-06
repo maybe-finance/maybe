@@ -1,3 +1,10 @@
-basic_checking_account_import:
+completed_import:
   account: checking
   column_mappings:
+  created_at: <%= 2.days.ago %>
+
+pending_import:
+  account: checking
+  column_mappings:
+  created_at: <%= 20.minutes.ago %>
+

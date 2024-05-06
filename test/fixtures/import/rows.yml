@@ -1,3 +1,3 @@
 one:
-  import: basic_checking_account_import
+  import: completed_import
   data:
