@@ -1,5 +1,4 @@
 class ImportsController < ApplicationController
-
   before_action :set_import, only: %i[ edit destroy ]
 
   def index
