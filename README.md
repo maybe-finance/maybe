@@ -30,6 +30,10 @@ You can find [detailed setup guides for self hosting here](docs/self-hosting.md)
 1. Click the button above
 2. Follow the instructions in the [Render self-hosting guide](docs/self-hosting/render.md)
 
+### Docker
+
+To host Maybe with Docker Compose, please follow our [Docker self-hosting guide](docs/self-hosting/docker.md).
+
 ## Local Development Setup
 
 ### Requirements

@@ -15,8 +15,11 @@ The fastest way to get your own version of Maybe running is a "one-click deploy"
 
 **Estimated cost:** $5-15 per month
 
-_Docker is not yet supported, but will be soon._
+Please see the [Docker self-hosting guide](self-hosting/docker.md) for detailed setup instructions.
 
 ## Self hosting disclaimer
 
-While we attempt to provide cost-effective deployment options, please remember, **self-hosting _may_ incur monthly charges on your hosting platform of choice**. While we provide cost estimates for each deployment option, it is your responsibility to manage these costs.
+While we attempt to provide cost-effective deployment options, please remember,
+**self-hosting _may_ incur monthly charges on your hosting platform of
+choice**. While we provide cost estimates for each deployment option, it is
+your responsibility to manage these costs.
