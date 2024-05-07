@@ -31,7 +31,7 @@ Rails.application.routes.draw do
   end
 
   resources :transactions do
-    match "search" => "transactions#search", on: :collection, via: [:get, :post], as: :search
+    match "search" => "transactions#search", on: :collection, via: %i[ get post ], as: :search
 
     collection do
       scope module: :transactions do

@@ -2,7 +2,7 @@ class ImportsController < ApplicationController
   before_action :set_import, only: %i[ edit destroy ]
 
   def index
-    @imports = Import.all
+    @imports = Current.family.imports
     render layout: "with_sidebar"
   end
 
@@ -28,6 +28,6 @@ class ImportsController < ApplicationController
   private
 
   def set_import
-    @import = Import.find(params[:id])
+    @import = Current.family.imports.find(params[:id])
   end
 end
