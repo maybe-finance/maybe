@@ -12,3 +12,12 @@ en:
       imports: Imports
       new: New import
       title: Imports
+    type_selector:
+      description: You can manually import transactions from CSVs or from other financial
+        apps like Mint, Empower (formerly Personal Capital) or Apple Card.
+      import_from_apple: Import from Apple Card
+      import_from_csv: Import from CSV
+      import_from_empower: Import from Empower
+      import_from_mint: Import from Mint
+      soon: Soon
+      sources: Sources

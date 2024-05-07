@@ -1,6 +1,5 @@
 ---
 en:
-  import: Import
   transactions:
     categories:
       create:
