@@ -9,6 +9,10 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
   test "should get index" do
     get imports_url
     assert_response :success
+
+    @imports.each do |import|
+      assert_select "#" + dom_id(import), count: 1
+    end
   end
 
   test "should get new" do

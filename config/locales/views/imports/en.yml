@@ -1,0 +1,14 @@
+---
+en:
+  imports:
+    empty:
+      message: No imports to show
+      new: New Import
+    import:
+      delete: Delete
+      edit: Edit
+      label: 'Import for: %{account}'
+    index:
+      imports: Imports
+      new: New import
+      title: Imports
