@@ -66,9 +66,11 @@ jobs:
     name: Build docker image
     runs-on: ubuntu-latest
     needs: [ test ]
+
     permissions:
       contents: read
       packages: write
+
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
@@ -91,10 +93,8 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           flavor: latest=auto
           tags: |
-            # Explicit commit sha and version tags
-            type=sha
+            type=sha,format=long
             type=semver,pattern={{version}}
-            # Aliases
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
             type=raw,value=stable,enable=${{ startsWith(github.ref, 'refs/tags/v') }}
 
