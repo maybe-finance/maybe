@@ -1,6 +1,5 @@
 ---
 en:
-  import: Import
   transactions:
     categories:
       create:
@@ -58,6 +57,7 @@ en:
       transfer: Transfer
     index:
       edit_categories: Edit categories
+      import: Import
     merchants:
       create:
         success: New merchant created successfully

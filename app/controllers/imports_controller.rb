@@ -27,7 +27,7 @@ class ImportsController < ApplicationController
 
   private
 
-  def set_import
-    @import = Current.family.imports.find(params[:id])
-  end
+    def set_import
+      @import = Current.family.imports.find(params[:id])
+    end
 end
