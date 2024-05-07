@@ -7,7 +7,7 @@
     <div>
       <%= form_with model: Current.user, url: settings_preferences_path, html: { class: "space-y-4", data: { controller: "auto-submit-form" } } do |form| %>
         <%= form.fields_for :family_attributes do |family_fields| %>
-          <%= family_fields.select :currency, options_for_select(Money::Currency.popular.map { |currency| ["#{currency.iso_code} (#{currency.name})", currency.iso_code] }, selected: Current.family.currency), { label: "Currency" }, { data: { auto_submit_form_target: "auto" } } %>
+          <%= family_fields.currency_select :currency, { selected: Current.family.currency, label: "Currency" }, { data: { auto_submit_form_target: "auto" } } %>
         <% end %>
       <% end %>
     </div>
