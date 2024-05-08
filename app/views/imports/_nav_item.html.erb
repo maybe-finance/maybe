@@ -1,4 +1,4 @@
-<%# locals:(name:, index:, path:, is_current:, is_complete:) %>
+<%# locals:(name:, index:, path: "#", is_current:, is_complete:) %>
 <li class="flex items-center <%= is_complete ? "text-green-600" : "text-gray-900" %>">
   <%= link_to path, class: "flex items-center gap-3" do %>
     <% if is_complete %>

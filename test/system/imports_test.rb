@@ -19,6 +19,14 @@ class ImportsTest < ApplicationSystemTestCase
     end
 
     assert_selector "h1", text: "New import"
+
+    within "form" do
+      select "Checking Account", from: "import_account_id"
+    end
+
+    click_button "Next"
+
+    assert_selector "h1", text: "Load import"
   end
 
   private

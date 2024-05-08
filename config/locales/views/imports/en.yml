@@ -4,6 +4,10 @@ en:
     empty:
       message: No imports to show
       new: New Import
+    form:
+      account: Account
+      next: Next
+      select_account: Select account
     import:
       delete: Delete
       edit: Edit
@@ -12,6 +16,10 @@ en:
       imports: Imports
       new: New import
       title: Imports
+    new:
+      description_text: Importing transactions can only be done for one account at
+        a time. You will need to go through this process again for other accounts.
+      header_text: Select the account your transactions will belong to
     type_selector:
       description: You can manually import transactions from CSVs or from other financial
         apps like Mint, Empower (formerly Personal Capital) or Apple Card.

@@ -1,12 +1,14 @@
 <%= content_for :content do %>
-  <div class="flex items-center justify-between">
+  <div class="flex items-center justify-between p-8">
     <%= link_to root_path do %>
       <%= image_tag "logo.svg", alt: "Maybe", class: "h-[22px]" %>
     <% end %>
     <nav>
       <%= content_for :nav %>
     </nav>
-    <%= link_to "Back", content_for(:return_to_path) %>
+    <%= link_to content_for(:return_to_path) do %>
+      <%= lucide_icon("x", class: "text-gray-500 w-5 h-5") %>
+    <% end %>
   </div>
 
   <%= yield %>

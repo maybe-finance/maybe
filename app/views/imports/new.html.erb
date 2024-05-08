@@ -1,18 +1,20 @@
 <%= content_for :return_to_path, return_to_path(params, imports_path) %>
 
-<%= content_for :nav do %>
-  <%= render "nav", import: @import %>
-<% end %>
-
 <% if params[:enable_type_selector].present? %>
   <%= modal do %>
     <%= render "type_selector" %>
   <% end %>
 <% end %>
 
-<div class="mx-auto md:w-2/3 w-full">
+<%= content_for :nav do %>
+  <%= render "nav", import: @import %>
+<% end %>
+
+<div class="mx-auto max-w-[400px] w-full py-56">
   <h1 class="sr-only">New import</h1>
-
+  <div class="space-y-2 mb-6 text-center">
+    <p class="text-3xl font-medium text-gray-900"><%= t(".header_text") %></p>
+    <p class="text-gray-500 text-sm"><%= t(".description_text") %></p>
+  </div>
   <%= render "form", import: @import %>
-
 </div>
