@@ -20,6 +20,12 @@ class ValuationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to account_path(@valuation.account)
   end
 
+  test "should create valuation with account's currency" do
+    foreign_account = accounts(:eur_checking)
+    post account_valuations_url(foreign_account), params: { valuation: { value: 1, date: Date.current, type: "Appraisal" } }
+    assert_equal foreign_account.currency, Valuation.order(created_at: :desc).first.currency
+  end
+
   test "create should sync account with correct start date" do
     date = Date.current - 1.day
 
