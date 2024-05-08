@@ -6,7 +6,7 @@ if ! gem list foreman -i --silent; then
 fi
 
 # Default to port 3000 if not specified
-export PORT="${PORT:-ENV.fetch("PORT") { 3000 }}"
+export PORT="${PORT:-3000}"
 
 # Let the debug gem allow remote connections,
 # but avoid loading until `debugger` is called
