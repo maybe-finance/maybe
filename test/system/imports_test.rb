@@ -55,6 +55,11 @@ class ImportsTest < ApplicationSystemTestCase
     click_button "Next"
 
     assert_selector "h1", text: "Configure import"
+
+    # If raw CSV already has correct columns, no need to edit the mappings
+    click_button "Next"
+
+    assert_selector "h1", text: "Clean import"
   end
 
   private

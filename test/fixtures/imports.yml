@@ -2,8 +2,8 @@ completed_import:
   account: checking
   column_mappings:
   raw_csv: |
-    col1,col2
-    val1,val2
+    date,merchant,category,amount
+    2024-01-01,Starbucks,Food,20
   created_at: <%= 2.days.ago %>
 
 pending_import:

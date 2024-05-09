@@ -1,4 +1,9 @@
+<%= content_for :return_to_path, return_to_path(params, imports_path) %>
+
+<%= content_for :nav do %>
+  <%= render "imports/nav", import: @import %>
+<% end %>
+
 <div>
-  <h1 class="font-bold text-4xl">Clean import</h1>
-  <p>Find me in app/views/imports/cleans/show.html.erb</p>
+  <h1 class="sr-only">Clean import</h1>
 </div>
