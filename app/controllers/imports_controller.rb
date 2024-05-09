@@ -17,7 +17,7 @@ class ImportsController < ApplicationController
     account = Current.family.accounts.find(params[:import][:account_id])
     @import = Import.create!(account: account)
 
-    redirect_to load_import_path(@import), notice: "Import was successfully created."
+    redirect_to import_load_path(@import), notice: "Import was successfully created."
   end
 
   def destroy

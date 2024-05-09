@@ -24,6 +24,8 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     assert_difference("Import.count") do
       post imports_url, params: { import: { account_id: @imports.first.account_id, column_mappings: @imports.first.column_mappings } }
     end
+
+    assert_redirected_to import_load_path(Import.ordered.last)
   end
 
   test "should get edit" do

@@ -22,12 +22,10 @@ Rails.application.routes.draw do
   end
 
   resources :imports, only: %i[index new create edit destroy] do
-    member do
-      get "load", to: "imports/steps#load"
-      get "configure", to: "imports/steps#configure"
-      get "clean", to: "imports/steps#clean"
-      get "confirm", to: "imports/steps#confirm"
-    end
+    resource :load, only: %i[show update], module: :imports
+    resource :configure, only: %i[show update], module: :imports
+    resource :clean, only: %i[show update], module: :imports
+    resource :confirm, only: %i[show update], module: :imports
   end
 
   resources :transactions do
