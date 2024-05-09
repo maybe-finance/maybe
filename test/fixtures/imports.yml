@@ -8,3 +8,7 @@ pending_import:
   column_mappings:
   created_at: <%= 20.minutes.ago %>
 
+empty_import:
+  account: checking
+  column_mappings:
+  created_at: <%= 1.minute.ago %>

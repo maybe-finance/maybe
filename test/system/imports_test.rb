@@ -24,6 +24,13 @@ class ImportsTest < ApplicationSystemTestCase
   end
 
   test "can perform basic CSV import" do
+    sample_csv_input = <<-ROWS
+      date,merchant,category,amount
+      2024-01-10,Starbucks,Food,8.25
+      2024-02-02,Amazon,Clothing,86
+      2024-04-29,Shell,Transportation,48.22
+    ROWS
+
     trigger_import_from_transactions
     verify_import_modal
 
@@ -40,6 +47,14 @@ class ImportsTest < ApplicationSystemTestCase
     click_button "Next"
 
     assert_selector "h1", text: "Load import"
+
+    within "form" do
+      fill_in "CSV", with: sample_csv_input
+    end
+
+    click_button "Next"
+
+    assert_selector "h1", text: "Configure import"
   end
 
   private

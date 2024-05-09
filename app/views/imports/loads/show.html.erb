@@ -9,7 +9,7 @@
 
   <%= form_with model: @import, url: import_load_path(@import), method: :patch do |form| %>
     <div class="mb-4">
-      <%= form.text_area :raw, class: "", required: true %>
+      <%= form.text_area :raw_csv, label: "CSV", value: @import.raw_csv, class: "", required: true %>
     </div>
 
     <%= form.submit t(".next"), class: "px-4 py-2 block w-full rounded-lg bg-gray-900 text-white text-sm font-medium" %>

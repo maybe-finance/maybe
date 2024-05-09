@@ -46,6 +46,7 @@ gem "octokit"
 gem "pagy"
 gem "rails-settings-cached"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
+gem "csv"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
