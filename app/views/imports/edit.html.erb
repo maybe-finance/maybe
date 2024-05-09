@@ -1,8 +1,14 @@
-<div class="mx-auto md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">Editing import</h1>
+<%= content_for :return_to_path, return_to_path(params, imports_path) %>
 
+<%= content_for :nav do %>
+  <%= render "nav", import: @import %>
+<% end %>
+
+<div class="mx-auto max-w-[400px] w-full py-56">
+  <h1 class="sr-only">New import</h1>
+  <div class="space-y-2 mb-6 text-center">
+    <p class="text-3xl font-medium text-gray-900"><%= t(".header_text") %></p>
+    <p class="text-gray-500 text-sm"><%= t(".description_text") %></p>
+  </div>
   <%= render "form", import: @import %>
-
-  <%= link_to "Show this import", @import, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-  <%= link_to "Back to imports", imports_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
 </div>

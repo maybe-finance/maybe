@@ -21,7 +21,7 @@ Rails.application.routes.draw do
     resource :security, only: %i[show update]
   end
 
-  resources :imports, only: %i[index new create edit destroy] do
+  resources :imports, except: :show do
     resource :load, only: %i[show update], module: :imports
     resource :configure, only: %i[show update], module: :imports
     resource :clean, only: %i[show update], module: :imports

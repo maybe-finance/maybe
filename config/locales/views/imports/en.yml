@@ -1,6 +1,10 @@
 ---
 en:
   imports:
+    edit:
+      description_text: Importing transactions can only be done for one account at
+        a time. You will need to go through this process again for other accounts.
+      header_text: Select the account your transactions will belong to
     empty:
       message: No imports to show
       new: New Import
@@ -16,6 +20,9 @@ en:
       imports: Imports
       new: New import
       title: Imports
+    loads:
+      show:
+        next: Next
     new:
       description_text: Importing transactions can only be done for one account at
         a time. You will need to go through this process again for other accounts.

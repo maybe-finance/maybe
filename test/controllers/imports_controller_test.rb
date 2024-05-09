@@ -33,6 +33,11 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should update import" do
+    patch import_url(@imports.first), params: { import: { account_id: @imports.first.account_id } }
+    assert_redirected_to import_load_path(@imports.first)
+  end
+
   test "should destroy import" do
     assert_difference("Import.count", -1) do
       delete import_url(@imports.first)

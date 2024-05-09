@@ -1,5 +1,5 @@
 class ImportsController < ApplicationController
-  before_action :set_import, only: %i[ edit destroy ]
+  before_action :set_import, only: %i[ edit update destroy ]
 
   def index
     @imports = Current.family.imports
@@ -11,6 +11,12 @@ class ImportsController < ApplicationController
   end
 
   def edit
+  end
+
+  def update
+    @import.update!(account_id: params[:import][:account_id])
+
+    redirect_to import_load_path(@import), notice: "Import updated"
   end
 
   def create
