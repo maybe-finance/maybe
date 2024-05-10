@@ -4,8 +4,7 @@ Below are our "one-click deploy" options for running Maybe in the cloud:
 
 ## Render
 
-Welcome to the one-click deploy guide for Maybe on [Render](https://render.
-com/)!
+Welcome to the one-click deploy guide for Maybe on [Render](https://render.com/)!
 
 Render is a hosting platform with a generous free tier and makes it easy to get
 started with Maybe:
