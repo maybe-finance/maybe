@@ -10,7 +10,7 @@ class Account < ApplicationRecord
   has_many :valuations, dependent: :destroy
   has_many :transactions, dependent: :destroy
 
-  monetize :balance
+  monetize :balance, :start_balance
 
   enum :status, { ok: "ok", syncing: "syncing", error: "error" }, validate: true
 
@@ -38,6 +38,11 @@ class Account < ApplicationRecord
   # e.g. Accounts denominated in currency other than family currency
   def foreign_currency?
     currency != family.currency
+  end
+
+  # Whether this is a manual or connected (via a 3rd party provider) account
+  def manual?
+    start_balance.present?
   end
 
   def self.by_provider

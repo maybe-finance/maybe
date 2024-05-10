@@ -23,6 +23,34 @@ class Transaction < ApplicationRecord
       .where("er.rate IS NOT NULL OR transactions.currency = ?", currency)
   }
 
+  # after_create :update_account_balance_after_create
+  # after_update :update_account_balance_after_update
+  # after_destroy :update_account_balance_after_destroy
+
+  # def update_account_balance_after_create
+  #   newer_valuation_exists = self.account.valuations.where("date >= ?", self.date).exists?
+  #   if self.account.manual? && !newer_valuation_exists
+  #     self.account.balance -= self.amount
+  #     self.account.save!
+  #   end
+  # end
+  #
+  # def update_account_balance_after_update
+  #   newer_valuation_exists = self.account.valuations.where("date >= ?", self.date).exists?
+  #   if self.account.manual? && self.amount_changed? && !newer_valuation_exists
+  #     self.account.balance += (self.amount - self.amount_was)
+  #     self.account.save!
+  #   end
+  # end
+  #
+  # def update_account_balance_after_destroy
+  #   newer_valuation_exists = self.account.valuations.where("date >= ?", self.date).exists?
+  #   if self.account.manual? && !newer_valuation_exists
+  #     self.account.balance += self.amount
+  #     self.account.save!
+  #   end
+  # end
+
   def self.daily_totals(transactions, period: Period.last_30_days, currency: Current.family.currency)
     # Sum spending and income for each day in the period with the given currency
     select(

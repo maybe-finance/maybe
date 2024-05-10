@@ -56,6 +56,9 @@ class AccountsController < ApplicationController
     @account = Current.family.accounts.build(account_params.except(:accountable_type))
     @account.accountable = Accountable.from_type(account_params[:accountable_type])&.new
 
+    # TODO: Make sure `start_balance` is nil for connected accounts
+    @account.start_balance = @account.balance
+
     if @account.save
       redirect_to accounts_path, notice: t(".success")
     else

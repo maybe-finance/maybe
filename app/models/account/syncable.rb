@@ -10,6 +10,12 @@ module Account::Syncable
 
         sync_exchange_rates
 
+        if self.manual?
+            calculator = Account::Balance::ManualAccountBalanceCalculator.new(self)
+            self.balance = calculator.calculate
+            self.save!
+        end
+
         calc_start_date = start_date - 1.day if start_date.present? && self.balance_on(start_date - 1.day).present?
 
         calculator = Account::Balance::Calculator.new(self, { calc_start_date: })
