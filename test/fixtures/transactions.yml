@@ -153,3 +153,18 @@ multi_currency_four:
   amount: -200
   currency: USD
   account: multi_currency
+
+# manual transactions
+manual_one:
+  name: Bus ticket
+  date: <%= 5.days.ago.to_date %>
+  amount: 5
+  account: manual
+  currency: USD
+
+manual_two:
+  name: Pocket money
+  date: <%= 10.days.ago.to_date %>
+  amount: -50
+  account: manual
+  currency: USD

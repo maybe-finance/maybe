@@ -1,9 +1,4 @@
 class Account::Balance::ManualAccountBalanceCalculator
-    attr_reader :errors, :warnings
-
-    @errors = []
-    @warnings = []
-
     def initialize(account, options = {})
       @account = account
       @calc_start_date = [ options[:calc_start_date], @account.effective_start_date ].compact.max
@@ -17,7 +12,7 @@ class Account::Balance::ManualAccountBalanceCalculator
       current_balance = start_balance - net_transaction_flows
 
       if @account.foreign_currency?
-        # converted_balances = convert_balances_to_family_currency
+        current_balance = convert_balance_to_family_currency(current_balance)
         # @daily_balances.concat(converted_balances)
       end
 
@@ -25,19 +20,15 @@ class Account::Balance::ManualAccountBalanceCalculator
     end
 
     private
-      def convert_balances_to_family_currency
-        rates = ExchangeRate.get_rate_series(
-          @account.currency,
-          @account.family.currency,
-          @calc_start_date..Date.current
-        ).to_a
+      def convert_balance_to_family_currency(balance)
+        rate = ExchangeRate.find_rate(
+          from: @account.currency,
+          to: @account.family.currency,
+          date: Date.current
+        )
 
-        @daily_balances.map do |balance|
-          rate = rates.find { |rate| rate.date == balance[:date] }
-          raise "Rate for #{@account.currency} to #{@account.family.currency} on #{balance[:date]} not found" if rate.nil?
-          converted_balance = balance[:balance] * rate.rate
-          { date: balance[:date], balance: converted_balance, currency: @account.family.currency, updated_at: Time.current }
-        end
+        raise "Rate for #{@account.currency} to #{@account.family.currency} on #{balance[:date]} not found" if rate.nil?
+        balance * rate.rate
       end
 
       # For calculation, all transactions and valuations need to be normalized to the same currency (the account's primary currency)
@@ -68,6 +59,4 @@ class Account::Balance::ManualAccountBalanceCalculator
         newest_valuation_date = [ @calc_start_date, normalized_valuations.first&.dig("date") ].compact.max
         @normalized_transactions ||= normalize_entries_to_account_currency(@account.transactions.where("date >= ?", newest_valuation_date).order(:date).select(:date, :amount, :currency), :amount)
       end
-
-
 end

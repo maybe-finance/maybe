@@ -78,4 +78,18 @@ class Account::SyncableTest < ActiveSupport::TestCase
 
     assert_equal 31, account.balances.count
   end
+
+  test "current balance of a connected account is unchanged after syncing" do
+    account = accounts(:checking)
+    assert_no_difference "account.balance" do
+      account.sync
+    end
+  end
+
+  test "current balance of a manual account is updated after syncing" do
+    account = accounts(:manual)
+    assert_changes "account.balance", to: 245 do
+      account.sync
+    end
+  end
 end
