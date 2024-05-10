@@ -11,7 +11,6 @@ class Imports::CleansController < ApplicationController
       col_idx: import_params[:col_idx],
       value: import_params[:value]
 
-    flash.now[:notice] = "Value updated"
     render :show
   end
 

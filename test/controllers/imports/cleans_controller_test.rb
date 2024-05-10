@@ -31,7 +31,6 @@ class Imports::CleansControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response :success
-    assert_equal "Value updated", flash[:notice]
 
     @import.reload
     assert_equal "new_merchant", @import.parsed_csv[0][1]

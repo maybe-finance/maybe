@@ -3,6 +3,10 @@ class Imports::ConfirmsController < ApplicationController
   before_action :set_import
 
   def show
+    unless @import.row_errors.flatten.empty?
+      flash[:error] = "There are invalid values"
+      redirect_to import_clean_path(@import)
+    end
   end
 
   def update

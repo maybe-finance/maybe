@@ -17,6 +17,17 @@ class Imports::ConfirmsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should redirect back to clean step if any values are invalid" do
+    @import.update_cell! \
+      row_idx: 0,
+      col_idx: 0,
+      value: "invalid date value"
+
+    get import_confirm_url(@import)
+    assert_redirected_to import_clean_path(@import)
+    assert_equal "There are invalid values", flash[:error]
+  end
+
   test "should confirm import" do
     patch import_confirm_url(@import)
     assert_redirected_to transactions_path
