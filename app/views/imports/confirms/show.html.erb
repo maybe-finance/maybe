@@ -1,0 +1,9 @@
+<%= content_for :return_to_path, return_to_path(params, imports_path) %>
+
+<%= content_for :nav do %>
+  <%= render "imports/nav", import: @import %>
+<% end %>
+
+<div>
+  <h1 class="sr-only">Confirm import</h1>
+</div>

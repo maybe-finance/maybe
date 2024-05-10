@@ -59,6 +59,20 @@ class ImportTest < ActiveSupport::TestCase
     assert_includes @import.errors.full_messages, "column map has key merchant, but could not find merchant in raw csv input"
   end
 
+  test "can update a cell value" do
+    import = imports(:empty_import)
+    import.update! raw_csv: valid_csv_str
+
+    assert_equal "Starbucks", import.parsed_csv[0][1]
+
+    import.update_cell! \
+      row_idx: 0,
+      col_idx: 1,
+      value: "new_merchant"
+
+    assert_equal "new_merchant", import.parsed_csv[0][1]
+  end
+
   test "cannot modify a completed import" do
     import = imports(:completed_import)
 

@@ -1,6 +1,5 @@
 class Import < ApplicationRecord
   belongs_to :account
-  has_many :rows, dependent: :destroy
   validate :raw_csv_must_be_valid_csv, :column_mappings_must_contain_expected_fields
   before_update :prevent_update_after_complete
 
@@ -13,12 +12,22 @@ class Import < ApplicationRecord
     false
   end
 
+  def parsed_csv
+    CSV.parse(raw_csv || "", headers: true, header_converters: :symbol, converters: [ ->(str) { str.strip } ])
+  end
+
+  def update_cell!(row_idx:, col_idx:, value:)
+    csv_copy = parsed_csv.by_col_or_row
+    csv_copy[row_idx][col_idx] = value
+    update! raw_csv: csv_copy.to_csv
+  end
+
   def default_column_mappings
     {
-      "date" => csv.headers[0] || "date",
-      "merchant" => csv.headers[1] || "merchant",
-      "category" => csv.headers[2] || "category",
-      "amount" => csv.headers[3] || "amount"
+      "date" => parsed_csv.headers[0] || "date",
+      "merchant" => parsed_csv.headers[1] || "merchant",
+      "category" => parsed_csv.headers[2] || "category",
+      "amount" => parsed_csv.headers[3] || "amount"
     }
   end
 
@@ -37,14 +46,10 @@ class Import < ApplicationRecord
         end
 
         expected_header = column_mappings[key] || ""
-        unless csv.headers.include?(expected_header.to_sym)
+        unless parsed_csv.headers.include?(expected_header.to_sym)
           errors.add(:base, "column map has key #{key}, but could not find #{key} in raw csv input")
         end
       end
-    end
-
-    def csv
-      CSV.parse(raw_csv || "", headers: true, header_converters: :symbol, converters: [ ->(str) { str.strip } ])
     end
 
     def prevent_update_after_complete

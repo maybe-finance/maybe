@@ -1,15 +1,14 @@
 completed_import:
   account: checking
   column_mappings:
+    date: date
+    merchant: merchant
+    category: category
+    amount: amount
   raw_csv: |
     date,merchant,category,amount
     2024-01-01,Starbucks,Food,20
   created_at: <%= 2.days.ago %>
-
-pending_import:
-  account: checking
-  column_mappings:
-  created_at: <%= 20.minutes.ago %>
 
 empty_import:
   account: checking

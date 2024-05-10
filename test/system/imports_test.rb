@@ -1,6 +1,8 @@
 require "application_system_test_case"
 
 class ImportsTest < ApplicationSystemTestCase
+  include ImportTestHelper
+
   setup do
     sign_in @user = users(:family_admin)
 
@@ -24,13 +26,6 @@ class ImportsTest < ApplicationSystemTestCase
   end
 
   test "can perform basic CSV import" do
-    sample_csv_input = <<-ROWS
-      date,merchant,category,amount
-      2024-01-10,Starbucks,Food,8.25
-      2024-02-02,Amazon,Clothing,86
-      2024-04-29,Shell,Transportation,48.22
-    ROWS
-
     trigger_import_from_transactions
     verify_import_modal
 
@@ -45,21 +40,22 @@ class ImportsTest < ApplicationSystemTestCase
     end
 
     click_button "Next"
-
     assert_selector "h1", text: "Load import"
 
     within "form" do
-      fill_in "CSV", with: sample_csv_input
+      fill_in "CSV", with: valid_csv_str
     end
 
     click_button "Next"
-
     assert_selector "h1", text: "Configure import"
 
     # If raw CSV already has correct columns, no need to edit the mappings
     click_button "Next"
-
     assert_selector "h1", text: "Clean import"
+
+    # For part 1 of this implementation, user cannot "clean" their data inline, so data is assumed to be cleaned at this point
+    click_link "Next"
+    assert_selector "h1", text: "Confirm import"
   end
 
   private
