@@ -1,6 +1,8 @@
 require "test_helper"
 
 class ImportsControllerTest < ActionDispatch::IntegrationTest
+  include ImportTestHelper
+
   setup do
     sign_in @user = users(:family_admin)
     @imports = @user.family.imports.ordered.to_a
@@ -25,7 +27,7 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
       post imports_url, params: { import: { account_id: @imports.first.account_id, column_mappings: @imports.first.column_mappings } }
     end
 
-    assert_redirected_to import_load_path(Import.ordered.last)
+    assert_redirected_to load_import_path(Import.ordered.last)
   end
 
   test "should get edit" do
@@ -35,7 +37,7 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
 
   test "should update import" do
     patch import_url(@imports.first), params: { import: { account_id: @imports.first.account_id } }
-    assert_redirected_to import_load_path(@imports.first)
+    assert_redirected_to load_import_path(@imports.first)
   end
 
   test "should destroy import" do
@@ -44,5 +46,30 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to imports_url
+  end
+
+  test "should get load" do
+    import = imports(:completed_import)
+
+    get load_import_url(import)
+    assert_response :success
+  end
+
+  test "should save raw CSV if valid" do
+    import = imports(:empty_import)
+
+    post load_import_url(import), params: { import: { raw_csv: valid_csv_str } }
+
+    assert_redirected_to import_configure_path(import)
+    assert_equal "Import uploaded", flash[:notice]
+  end
+
+  test "should flash error message if invalid CSV input" do
+    import = imports(:empty_import)
+
+    post load_import_url(import), params: { import: { raw_csv: malformed_csv_str } }
+
+    assert_response :unprocessable_entity
+    assert_equal "Raw csv is not a valid CSV format", flash[:error]
   end
 end

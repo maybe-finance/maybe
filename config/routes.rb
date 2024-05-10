@@ -22,7 +22,16 @@ Rails.application.routes.draw do
   end
 
   resources :imports, except: :show do
-    resource :load, only: %i[show update], module: :imports
+    member do
+      get "load"
+      post "load" => "imports#update_csv"
+      # get "configure"
+      # post "configure" => "imports#update_mappings"
+      # get "clean"
+      # get "confirm"
+      # post "confirm" => "imports#publish"
+    end
+
     resource :configure, only: %i[show update], module: :imports
     resource :clean, only: %i[show update], module: :imports
     resource :confirm, only: %i[show update], module: :imports
@@ -63,7 +72,7 @@ Rails.application.routes.draw do
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
+  get "up" => "rails/health#load", as: :rails_health_check
 
   # Render dynamic PWA files from app/views/pwa/*
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
