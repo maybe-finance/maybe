@@ -6,4 +6,8 @@
 
 <div>
   <h1 class="sr-only">Confirm import</h1>
+
+  <%= render partial: "imports/confirms/preview_transaction_group", collection: @import.preview_transactions.group_by(&:date), as: :transaction_group %>
+
+  <%= button_to "Import " + @import.preview_transactions.size.to_s + " transactions", import_confirm_path(@import), method: :patch, data: { turbo: false } %>
 </div>

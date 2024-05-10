@@ -6,6 +6,8 @@ class Imports::ConfirmsController < ApplicationController
   end
 
   def update
+    @import.confirm!
+    redirect_to transactions_path, notice: "Import complete!"
   end
 
   private

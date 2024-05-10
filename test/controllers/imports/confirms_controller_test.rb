@@ -16,4 +16,10 @@ class Imports::ConfirmsControllerTest < ActionDispatch::IntegrationTest
     get import_confirm_url(@import)
     assert_response :success
   end
+
+  test "should confirm import" do
+    patch import_confirm_url(@import)
+    assert_redirected_to transactions_path
+    assert_equal "Import complete!", flash[:notice]
+  end
 end

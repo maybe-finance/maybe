@@ -56,6 +56,12 @@ class ImportsTest < ApplicationSystemTestCase
     # For part 1 of this implementation, user cannot "clean" their data inline, so data is assumed to be cleaned at this point
     click_link "Next"
     assert_selector "h1", text: "Confirm import"
+
+    click_button "Import 2 transactions"
+    assert_selector "h1", text: "Transactions"
+
+    # visit imports_url
+    # assert_selector "h1", text: "Imports"
   end
 
   private

@@ -12,6 +12,27 @@ class Import < ApplicationRecord
     false
   end
 
+  def confirm!
+    puts "confirmed"
+  end
+
+  def preview_transactions
+    rows = []
+    parsed_csv.each do |row|
+      preview_txn = Transaction.new \
+        name: "imported transaction",
+        date: row[:date],
+        category: Transaction::Category.new(name: row[:category]),
+        merchant: Transaction::Merchant.new(name: row[:merchant]),
+        amount: row[:amount],
+        account: account
+
+      rows << preview_txn
+    end
+
+    rows
+  end
+
   def parsed_csv
     CSV.parse(raw_csv || "", headers: true, header_converters: :symbol, converters: [ ->(str) { str.strip } ])
   end
