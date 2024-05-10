@@ -47,6 +47,7 @@ multi_currency:
   accountable_type: Account::Depository
   accountable_id: "123e4567-e89b-12d3-a456-426614174005"
 
+# Manual account (not connected to a 3rd party provider)
 manual:
   family: dylan_family
   name: Physical Cash
