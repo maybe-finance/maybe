@@ -141,9 +141,9 @@ class TransactionsController < ApplicationController
 
     def amount
       if nature.income?
-        transaction_params[:amount].to_d * -1
-      else
         transaction_params[:amount].to_d
+      else
+        transaction_params[:amount].to_d * -1
       end
     end
 
