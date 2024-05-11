@@ -53,7 +53,7 @@ class ImportsController < ApplicationController
       redirect_to clean_import_path(@import), notice: "Mappings saved"
     else
       flash.now[:error] = @import.errors.full_messages.first
-      render :show, status: :unprocessable_entity
+      render :configure, status: :unprocessable_entity
     end
   end
 
