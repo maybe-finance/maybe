@@ -1,5 +1,6 @@
 class Import < ApplicationRecord
   belongs_to :account
+  has_many :rows, dependent: :destroy
   validate :raw_csv_must_be_valid_csv, :column_mappings_must_contain_expected_fields
   before_update :prevent_update_after_complete
 

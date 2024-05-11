@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_05_10_130308) do
+ActiveRecord::Schema[7.2].define(version: 2024_05_11_122528) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -222,6 +222,18 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_10_130308) do
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
 
+  create_table "import_rows", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "import_id", null: false
+    t.string "date"
+    t.string "name"
+    t.string "category"
+    t.string "merchant"
+    t.string "amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["import_id"], name: "index_import_rows_on_import_id"
+  end
+
   create_table "imports", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "account_id", null: false
     t.jsonb "column_mappings"
@@ -314,6 +326,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_10_130308) do
   add_foreign_key "accounts", "families"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "import_rows", "imports"
   add_foreign_key "imports", "accounts"
   add_foreign_key "transaction_categories", "families"
   add_foreign_key "transaction_merchants", "families"
