@@ -58,18 +58,65 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
   test "should save raw CSV if valid" do
     import = imports(:empty_import)
 
-    post load_import_url(import), params: { import: { raw_csv: valid_csv_str } }
+    patch load_import_url(import), params: { import: { raw_csv: valid_csv_str } }
 
-    assert_redirected_to import_configure_path(import)
+    assert_redirected_to configure_import_path(import)
     assert_equal "Import uploaded", flash[:notice]
   end
 
   test "should flash error message if invalid CSV input" do
     import = imports(:empty_import)
 
-    post load_import_url(import), params: { import: { raw_csv: malformed_csv_str } }
+    patch load_import_url(import), params: { import: { raw_csv: malformed_csv_str } }
 
     assert_response :unprocessable_entity
     assert_equal "Raw csv is not a valid CSV format", flash[:error]
+  end
+
+  test "should get configure" do
+    import = imports(:completed_import)
+
+    get configure_import_url(import)
+    assert_response :success
+  end
+
+  test "should update if mappings valid" do
+    import = imports(:empty_import)
+    import.raw_csv = valid_csv_str
+    import.save!
+
+    patch configure_import_url(import), params: {
+      import: {
+        column_mappings: {
+          date: "date",
+          merchant: "merchant",
+          category: "category",
+          amount: "amount"
+        }
+      }
+    }
+
+    assert_redirected_to import_clean_path(import)
+    assert_equal "Mappings saved", flash[:notice]
+  end
+
+  test "should flash error if mappings are not valid" do
+    import = imports(:empty_import)
+    import.raw_csv = valid_csv_str
+    import.save!
+
+    patch configure_import_url(import), params: {
+      import: {
+        column_mappings: {
+          date: "invalid",
+          merchant: "invalid",
+          category: "invalid",
+          amount: "invalid"
+        }
+      }
+    }
+
+    assert_response :unprocessable_entity
+    assert_equal "column map has key date, but could not find date in raw csv input", flash[:error]
   end
 end

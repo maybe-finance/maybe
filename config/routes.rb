@@ -24,15 +24,14 @@ Rails.application.routes.draw do
   resources :imports, except: :show do
     member do
       get "load"
-      post "load" => "imports#update_csv"
-      # get "configure"
-      # post "configure" => "imports#update_mappings"
+      patch "load" => "imports#update_csv"
+      get "configure"
+      patch "configure" => "imports#update_mappings"
       # get "clean"
       # get "confirm"
       # post "confirm" => "imports#publish"
     end
 
-    resource :configure, only: %i[show update], module: :imports
     resource :clean, only: %i[show update], module: :imports
     resource :confirm, only: %i[show update], module: :imports
   end

@@ -1,9 +1,8 @@
 ---
 en:
   imports:
-    configures:
-      show:
-        next: Next
+    configure:
+      next: Next
     edit:
       description_text: Importing transactions can only be done for one account at
         a time. You will need to go through this process again for other accounts.

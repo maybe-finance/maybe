@@ -7,7 +7,7 @@
 <div>
   <h1 class="sr-only">Load import</h1>
 
-  <%= form_with model: @import, url: load_import_path(@import), method: :post do |form| %>
+  <%= form_with model: @import, url: load_import_path(@import) do |form| %>
     <div class="mb-4">
       <%= form.text_area :raw_csv, label: "CSV", value: @import.raw_csv, required: true %>
     </div>
