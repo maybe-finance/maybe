@@ -1,0 +1,13 @@
+<%= content_for :return_to_path, return_to_path(params, imports_path) %>
+
+<%= content_for :nav do %>
+  <%= render "imports/nav", import: @import %>
+<% end %>
+
+<div>
+  <h1 class="sr-only">Confirm import</h1>
+
+  <%= render partial: "imports/preview_transaction_group", collection: @import.preview_transactions.group_by(&:date), as: :transaction_group %>
+
+  <%= button_to "Import " + @import.preview_transactions.size.to_s + " transactions", confirm_import_path(@import), method: :patch, data: { turbo: false } %>
+</div>

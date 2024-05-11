@@ -153,4 +153,41 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     import.reload
     assert_equal "new_merchant", import.parsed_csv[0][1]
   end
+
+  test "should get confirm if all values are valid" do
+    import = imports(:empty_import)
+    import.update! \
+      raw_csv: valid_csv_str,
+      column_mappings: import.default_column_mappings
+
+    get confirm_import_url(import)
+    assert_response :success
+  end
+
+  test "should redirect back to clean step if any values are invalid" do
+    import = imports(:empty_import)
+    import.update! \
+      raw_csv: valid_csv_str,
+      column_mappings: import.default_column_mappings
+
+    import.update_cell! \
+      row_idx: 0,
+      col_idx: 0,
+      value: "invalid date value"
+
+    get confirm_import_url(import)
+    assert_redirected_to clean_import_path(import)
+    assert_equal "There are invalid values", flash[:error]
+  end
+
+  test "should confirm import" do
+    import = imports(:empty_import)
+    import.update! \
+      raw_csv: valid_csv_str,
+      column_mappings: import.default_column_mappings
+
+    patch confirm_import_url(import)
+    assert_redirected_to transactions_path
+    assert_equal "Import complete!", flash[:notice]
+  end
 end

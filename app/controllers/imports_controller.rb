@@ -69,6 +69,18 @@ class ImportsController < ApplicationController
     render :clean
   end
 
+  def confirm
+    unless @import.row_errors.flatten.empty?
+      flash[:error] = "There are invalid values"
+      redirect_to clean_import_path(@import)
+    end
+  end
+
+  def publish
+    @import.confirm!
+    redirect_to transactions_path, notice: "Import complete!"
+  end
+
   private
 
     def set_import

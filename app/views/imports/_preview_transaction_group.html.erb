@@ -8,6 +8,6 @@
     <span><%= format_money -transactions.sum(&:amount_money) %></span>
   </div>
   <div class="bg-white shadow-xs rounded-md border border-alpha-black-25 divide-y divide-alpha-black-50">
-    <%= render partial: "imports/confirms/preview_transaction", collection: transactions, as: :transaction %>
+    <%= render partial: "imports/preview_transaction", collection: transactions, as: :transaction %>
   </div>
 </div>

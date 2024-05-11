@@ -25,16 +25,16 @@ Rails.application.routes.draw do
     member do
       get "load"
       patch "load" => "imports#update_csv"
+
       get "configure"
       patch "configure" => "imports#update_mappings"
+
       get "clean"
       patch "clean" => "imports#update_cell_temporary"
-      # get "confirm"
-      # post "confirm" => "imports#publish"
-    end
 
-    resource :clean, only: %i[show update], module: :imports
-    resource :confirm, only: %i[show update], module: :imports
+      get "confirm"
+      patch "confirm" => "imports#publish"
+    end
   end
 
   resources :transactions do
