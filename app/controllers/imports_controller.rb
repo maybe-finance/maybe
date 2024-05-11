@@ -50,11 +50,23 @@ class ImportsController < ApplicationController
 
   def update_mappings
     if @import.update(import_params)
-      redirect_to import_clean_path(@import), notice: "Mappings saved"
+      redirect_to clean_import_path(@import), notice: "Mappings saved"
     else
       flash.now[:error] = @import.errors.full_messages.first
       render :show, status: :unprocessable_entity
     end
+  end
+
+  def clean
+  end
+
+  def update_cell_temporary
+    @import.update_cell! \
+      row_idx: import_params_temporary[:row_idx],
+      col_idx: import_params_temporary[:col_idx],
+      value: import_params_temporary[:value]
+
+    render :clean
   end
 
   private
@@ -65,5 +77,12 @@ class ImportsController < ApplicationController
 
     def import_params
       params.require(:import).permit(:raw_csv, column_mappings: [ :date, :merchant, :category, :amount ])
+    end
+
+    def import_params_temporary
+      permitted_params = params.require(:csv_update).permit(:row_idx, :col_idx, :value)
+      permitted_params[:row_idx] = permitted_params[:row_idx].to_i
+      permitted_params[:col_idx] = permitted_params[:col_idx].to_i
+      permitted_params
     end
 end

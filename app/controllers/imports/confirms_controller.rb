@@ -5,7 +5,7 @@ class Imports::ConfirmsController < ApplicationController
   def show
     unless @import.row_errors.flatten.empty?
       flash[:error] = "There are invalid values"
-      redirect_to import_clean_path(@import)
+      redirect_to clean_import_path(@import)
     end
   end
 

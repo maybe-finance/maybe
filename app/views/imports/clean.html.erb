@@ -12,7 +12,7 @@
       <tr>
         <% row.fields.each_with_index do |value, col_index| %>
           <td class="<%= @import.row_errors[row_index][col_index].empty? ? "" : "border border-red-500" %>">
-            <%= form_with model: @import, url: import_clean_url(@import), method: :patch, data: { turbo: false, controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
+            <%= form_with model: @import, url: clean_import_url(@import), method: :patch, data: { turbo: false, controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
               <%= fields_for :csv_update do |ff| %>
                 <%= ff.hidden_field :row_idx, value: row_index %>
                 <%= ff.hidden_field :col_idx, value: col_index %>

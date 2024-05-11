@@ -96,7 +96,7 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
-    assert_redirected_to import_clean_path(import)
+    assert_redirected_to clean_import_path(import)
     assert_equal "Mappings saved", flash[:notice]
   end
 
@@ -118,5 +118,39 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_entity
     assert_equal "column map has key date, but could not find date in raw csv input", flash[:error]
+  end
+
+  test "should get clean" do
+    import = imports(:empty_import)
+    import.update! \
+      raw_csv: valid_csv_str,
+      column_mappings: import.default_column_mappings
+
+    get clean_import_url(import)
+    assert_response :success
+
+    assert_dom "table tbody tr", import.parsed_csv.length
+  end
+
+  test "can update a cell" do
+    import = imports(:empty_import)
+    import.update! \
+      raw_csv: valid_csv_str,
+      column_mappings: import.default_column_mappings
+
+    assert_equal import.parsed_csv[0][1], "Starbucks"
+
+    patch clean_import_url(import), params: {
+      csv_update: {
+        row_idx: 0,
+        col_idx: 1,
+        value: "new_merchant"
+      }
+    }
+
+    assert_response :success
+
+    import.reload
+    assert_equal "new_merchant", import.parsed_csv[0][1]
   end
 end

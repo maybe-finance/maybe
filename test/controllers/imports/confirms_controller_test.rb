@@ -24,7 +24,7 @@ class Imports::ConfirmsControllerTest < ActionDispatch::IntegrationTest
       value: "invalid date value"
 
     get import_confirm_url(@import)
-    assert_redirected_to import_clean_path(@import)
+    assert_redirected_to clean_import_path(@import)
     assert_equal "There are invalid values", flash[:error]
   end
 

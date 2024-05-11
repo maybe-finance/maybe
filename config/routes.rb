@@ -27,7 +27,8 @@ Rails.application.routes.draw do
       patch "load" => "imports#update_csv"
       get "configure"
       patch "configure" => "imports#update_mappings"
-      # get "clean"
+      get "clean"
+      patch "clean" => "imports#update_cell_temporary"
       # get "confirm"
       # post "confirm" => "imports#publish"
     end
