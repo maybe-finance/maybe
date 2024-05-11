@@ -1,2 +1,0 @@
-module Imports::ConfirmsHelper
-end
