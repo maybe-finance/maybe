@@ -7,7 +7,7 @@
 <div>
   <h1 class="sr-only">Confirm import</h1>
 
-  <%= render partial: "imports/preview_transaction_group", collection: @import.preview_transactions.group_by(&:date), as: :transaction_group %>
+  <%= render partial: "imports/rows/transaction/preview_group", collection: @import.rows.group_by(&:date), as: :group %>
 
-  <%= button_to "Import " + @import.preview_transactions.size.to_s + " transactions", confirm_import_path(@import), method: :patch, data: { turbo: false } %>
+  <%= button_to "Import " + @import.rows.size.to_s + " transactions", confirm_import_path(@import), method: :patch, data: { turbo: false } %>
 </div>

@@ -22,6 +22,8 @@ Rails.application.routes.draw do
   end
 
   resources :imports, except: :show do
+    resources :rows, only: %i[update], module: :imports
+
     member do
       get "load"
       patch "load" => "imports#update_csv"

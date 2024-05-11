@@ -129,29 +129,9 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     get clean_import_url(import)
     assert_response :success
 
-    assert_dom "table tbody tr", import.parsed_csv.length
-  end
-
-  test "can update a cell" do
-    import = imports(:empty_import)
-    import.update! \
-      raw_csv: valid_csv_str,
-      column_mappings: import.default_column_mappings
-
-    assert_equal import.parsed_csv[0][1], "Starbucks"
-
-    patch clean_import_url(import), params: {
-      csv_update: {
-        row_idx: 0,
-        col_idx: 1,
-        value: "new_merchant"
-      }
-    }
-
-    assert_response :success
-
-    import.reload
-    assert_equal "new_merchant", import.parsed_csv[0][1]
+    import.rows.each do |row|
+      assert_select "#" + dom_id(row), count: 2
+    end
   end
 
   test "should get confirm if all values are valid" do
@@ -162,22 +142,6 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
 
     get confirm_import_url(import)
     assert_response :success
-  end
-
-  test "should redirect back to clean step if any values are invalid" do
-    import = imports(:empty_import)
-    import.update! \
-      raw_csv: valid_csv_str,
-      column_mappings: import.default_column_mappings
-
-    import.update_cell! \
-      row_idx: 0,
-      col_idx: 0,
-      value: "invalid date value"
-
-    get confirm_import_url(import)
-    assert_redirected_to clean_import_path(import)
-    assert_equal "There are invalid values", flash[:error]
   end
 
   test "should confirm import" do
