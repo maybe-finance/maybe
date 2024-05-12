@@ -3,7 +3,7 @@ class PasswordResetsController < ApplicationController
 
   layout "auth"
 
-  before_action :set_user_by_token, only: :update
+  before_action :set_user_by_token, only: %i[ edit update ]
 
   def new
   end
@@ -20,6 +20,7 @@ class PasswordResetsController < ApplicationController
   end
 
   def edit
+    @user = User.new
   end
 
   def update
