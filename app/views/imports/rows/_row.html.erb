@@ -1,18 +1,22 @@
-<%= form_with model: row,
-              url: import_row_path(row.import, row),
-              data: { turbo: false, controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
-  <div id="<%= dom_id row %>" class="flex gap-2 items-center">
-    <div class="border border-gray-100">
-      <%= form.text_field :name, data: { "auto-submit-form-target" => "auto" } %>
-    </div>
-    <div class="border border-gray-100">
-      <%= form.text_field :date, data: { "auto-submit-form-target" => "auto" } %>
-    </div>
-    <div class="border border-gray-100">
-      <%= form.text_field :category, data: { "auto-submit-form-target" => "auto" } %>
-    </div>
-    <div class="border border-gray-100">
-      <%= form.text_field :amount, data: { "auto-submit-form-target" => "auto" } %>
-    </div>
+<div class="flex gap-2 items-center">
+  <div class="border border-gray-100">
+    <%= form_with url: clean_import_path(row.import), method: :patch, data: { turbo: false, controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
+      <%= form.text_field :date, value: row.date, data: { "auto-submit-form-target" => "auto" } %>
+    <% end %>
   </div>
-<% end %>
+  <div class="border border-gray-100">
+    <%= form_with url: clean_import_path(row.import), method: :patch, data: { turbo: false, controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
+      <%= form.text_field :name, value: row.name, data: { "auto-submit-form-target" => "auto" } %>
+    <% end %>
+  </div>
+  <div class="border border-gray-100">
+    <%= form_with url: clean_import_path(row.import), method: :patch, data: { turbo: false, controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
+      <%= form.text_field :category, value: row.category, data: { "auto-submit-form-target" => "auto" } %>
+    <% end %>
+  </div>
+  <div class="border border-gray-100">
+    <%= form_with url: clean_import_path(row.import), method: :patch, data: { turbo: false, controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
+      <%= form.text_field :amount, value: row.amount, data: { "auto-submit-form-target" => "auto" } %>
+    <% end %>
+  </div>
+</div>

@@ -1,8 +1,6 @@
 class Import < ApplicationRecord
   belongs_to :account
-  has_many :rows, dependent: :destroy
   validate :raw_csv_must_be_valid_csv, :column_mappings_must_contain_expected_fields
-  validates_associated :rows
 
   enum :status, { pending: "pending", complete: "complete", importing: "importing", failed: "failed" }, validate: true
 
@@ -39,11 +37,20 @@ class Import < ApplicationRecord
     rows
   end
 
-  def rows_preview
-    rows_mapped.first(3).map do |row|
+  def update_csv!(row_idx:, col_idx:, value:)
+    csv_copy = parsed_csv.by_col_or_row
+    csv_copy[row_idx][col_idx] = value
+    update! raw_csv: csv_copy.to_csv
+  end
+
+  def rows
+    rows_mapped.map do |row|
       Import::Row.new \
         import: self,
-        **row
+        date: row["date"],
+        name: row["name"],
+        category: row["category"],
+        amount: row["amount"]
     end
   end
 

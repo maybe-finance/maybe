@@ -8,6 +8,9 @@ class ImportTest < ActiveSupport::TestCase
   end
 
   test "raw csv input cannot be empty" do
+    @import.raw_csv = nil
+    assert @import.valid?
+
     @import.raw_csv = ""
     assert_not @import.valid?
   end
@@ -44,6 +47,19 @@ class ImportTest < ActiveSupport::TestCase
     assert @import.valid?
   end
 
+  test "can update csv value" do
+    @import.update! raw_csv: valid_csv_str
+
+    assert_equal "Starbucks drink", @import.parsed_csv[0][1]
+
+    @import.update_csv! \
+      row_idx: 0,
+      col_idx: 1,
+      value: "new_category"
+
+    assert_equal "new_category", @import.parsed_csv[0][1]
+  end
+
   test "column mappings must find a valid header in the input csv" do
     @import.raw_csv = valid_csv_str
 
@@ -66,13 +82,11 @@ class ImportTest < ActiveSupport::TestCase
   end
 
   test "publishes a valid import" do
-    @import.rows.insert_all(
-      [
-        { date: "2024-01-01", name: "Test row", category: "category", amount: "20" }
-      ]
-    )
+    @import.raw_csv = valid_csv_str
+    @import.column_mappings = @import.default_column_mappings
+    @import.save!
 
-    assert_difference "Transaction.count", 1 do
+    assert_difference "Transaction.count", 2 do
       @import.publish
     end
 
@@ -82,11 +96,9 @@ class ImportTest < ActiveSupport::TestCase
   end
 
   test "failed publish results in error status" do
-    @import.rows.insert_all(
-      [
-        { date: "invalid date", name: "Test row", category: "category", amount: "invalid numeric" }
-      ]
-    )
+    @import.raw_csv = valid_csv_with_invalid_values
+    @import.column_mappings = @import.default_column_mappings
+    @import.save!
 
     assert_difference "Transaction.count", 0 do
       @import.publish

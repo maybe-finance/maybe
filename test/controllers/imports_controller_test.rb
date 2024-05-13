@@ -112,6 +112,27 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "column map has key date, but could not find date in raw csv input", flash[:error]
   end
 
+  test "can update a cell" do
+    @empty_import.update! \
+      raw_csv: valid_csv_str,
+      column_mappings: @empty_import.default_column_mappings
+
+    assert_equal @empty_import.parsed_csv[0][1], "Starbucks drink"
+
+    patch clean_import_url(@empty_import), params: {
+      csv_update: {
+        row_idx: 0,
+        col_idx: 1,
+        value: "new_merchant"
+      }
+    }
+
+    assert_response :success
+
+    @empty_import.reload
+    assert_equal "new_merchant", @empty_import.parsed_csv[0][1]
+  end
+
   test "should get clean" do
     @empty_import.update! \
       raw_csv: valid_csv_str,
@@ -119,10 +140,6 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
 
     get clean_import_url(@empty_import)
     assert_response :success
-
-    @empty_import.rows.each do |row|
-      assert_select "#" + dom_id(row), count: 2
-    end
   end
 
   test "should get confirm if all values are valid" do

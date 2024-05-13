@@ -1,7 +1,0 @@
-one:
-  import: completed_import
-  date: 2024-01-01
-  name: coffee
-  category: Food
-  merchant: Starbucks
-  amount: 20

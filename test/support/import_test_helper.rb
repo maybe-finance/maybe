@@ -7,6 +7,13 @@ module ImportTestHelper
     ROWS
   end
 
+  def valid_csv_with_invalid_values
+    <<-ROWS
+      date,name,category,amount
+      invalid_date,Starbucks drink,Food,invalid_amount
+    ROWS
+  end
+
   def insufficient_columns_csv_str
     <<-ROWS
       date,name

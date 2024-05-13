@@ -55,7 +55,6 @@ class ImportsController < ApplicationController
 
   def update_mappings
     if @import.update(import_params)
-      @import.rows.insert_all(@import.rows_mapped)
       redirect_to clean_import_path(@import), notice: "Mappings saved"
     else
       flash.now[:error] = @import.errors.full_messages.first
@@ -64,6 +63,13 @@ class ImportsController < ApplicationController
   end
 
   def clean
+  end
+
+  def update_cell
+    @import.update_csv! \
+      row_idx: Integer(update_csv_params[:row_idx]),
+      col_idx: Integer(update_csv_params[:col_idx]),
+      value: update_csv_params[:value]
   end
 
   def confirm
@@ -86,6 +92,10 @@ class ImportsController < ApplicationController
     end
 
     def import_params
-      params.require(:import).permit(:raw_csv, column_mappings: [ :date, :name, :category, :amount ])
+      params.require(:import).permit(:raw_csv, column_mappings: [ :date, :name, :category, :amount ], csv_update: [ :row_idx, :col_idx, :value ])
+    end
+
+    def update_csv_params
+      params.require(:csv_update).permit(:row_idx, :col_idx, :value)
     end
 end

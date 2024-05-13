@@ -32,7 +32,7 @@ Rails.application.routes.draw do
       patch "configure" => "imports#update_mappings"
 
       get "clean"
-      patch "clean" => "imports#update_cell_temporary"
+      patch "clean" => "imports#update_cell"
 
       get "confirm"
       patch "confirm" => "imports#publish"
