@@ -6,12 +6,25 @@
         <%= t(".label", account: import.account.name) %>
       </p>
 
-      <% unless import.complete? %>
-        <span class="px-1 py text-xs rounded-full bg-yellow-500/5 text-yellow-500 border border-alpha-black-50">
+      <% if import.pending? %>
+        <span class="px-1 py text-xs rounded-full bg-gray-500/5 text-gray-500 border border-alpha-black-50">
           In progress
         </span>
+      <% elsif import.importing? %>
+       <span class="px-1 py text-xs animate-pulse rounded-full bg-orange-500/5 text-orange-500 border border-alpha-black-50">
+          Import in progress
+       </span>
+      <% elsif import.failed? %>
+       <span class="px-1 py text-xs rounded-full bg-red-500/5 text-red-500 border border-alpha-black-50">
+          Failed
+       </span>
+      <% elsif import.complete? %>
+       <span class="px-1 py text-xs rounded-full bg-green-500/5 text-green-500 border border-alpha-black-50">
+         Complete
+       </span>
       <% end %>
     </div>
+
 
     <% if import.complete? %>
       <p class="text-xs text-gray-500">Completed on <%= import.updated_at.to_formatted_s %></p>

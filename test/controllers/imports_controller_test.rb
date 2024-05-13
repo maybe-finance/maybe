@@ -140,7 +140,7 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
       column_mappings: @empty_import.default_column_mappings
 
     patch confirm_import_url(@empty_import)
-    assert_redirected_to transactions_path
-    assert_equal "Import complete!", flash[:notice]
+    assert_redirected_to imports_path
+    assert_equal "Import has started in the background", flash[:notice]
   end
 end

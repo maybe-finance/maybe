@@ -1,7 +1,7 @@
 require "test_helper"
 
 class ImportTest < ActiveSupport::TestCase
-  include ImportTestHelper
+  include ImportTestHelper, ActiveJob::TestHelper
 
   setup do
     @import = imports(:empty_import)
@@ -57,5 +57,42 @@ class ImportTest < ActiveSupport::TestCase
     assert_not @import.valid?
     assert_includes @import.errors.full_messages, "column map has key date, but could not find date in raw csv input"
     assert_includes @import.errors.full_messages, "column map has key name, but could not find name in raw csv input"
+  end
+
+  test "publishes later" do
+    assert_enqueued_with(job: ImportJob) do
+      @import.publish_later
+    end
+  end
+
+  test "publishes a valid import" do
+    @import.rows.insert_all(
+      [
+        { date: "2024-01-01", name: "Test row", category: "category", amount: "20" }
+      ]
+    )
+
+    assert_difference "Transaction.count", 1 do
+      @import.publish
+    end
+
+    @import.reload
+
+    assert @import.complete?
+  end
+
+  test "failed publish results in error status" do
+    @import.rows.insert_all(
+      [
+        { date: "invalid date", name: "Test row", category: "category", amount: "invalid numeric" }
+      ]
+    )
+
+    assert_difference "Transaction.count", 0 do
+      @import.publish
+    end
+
+    @import.reload
+    assert @import.failed?
   end
 end

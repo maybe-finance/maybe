@@ -67,10 +67,7 @@ class ImportsTest < ApplicationSystemTestCase
     assert_selector "h1", text: "Confirm import"
 
     click_button "Import 2 transactions"
-    assert_selector "h1", text: "Transactions"
-
-    # visit imports_url
-    # assert_selector "h1", text: "Imports"
+    assert_selector "h1", text: "Imports"
   end
 
   private

@@ -18,7 +18,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_13_114739) do
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "account_status", ["ok", "syncing", "error"]
-  create_enum "import_status", ["pending", "completed"]
+  create_enum "import_status", ["pending", "importing", "complete", "failed"]
   create_enum "user_role", ["admin", "member"]
 
   create_table "account_balances", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

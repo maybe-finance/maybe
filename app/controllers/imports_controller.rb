@@ -70,7 +70,13 @@ class ImportsController < ApplicationController
   end
 
   def publish
-    redirect_to transactions_path, notice: "Import complete!"
+    if @import.valid?
+      @import.publish_later
+      redirect_to imports_path, notice: "Import has started in the background"
+    else
+      flash.now[:error] = "Import is not valid, please return to prior steps to fix this"
+      render :confirm, status: :unprocessable_entity
+    end
   end
 
   private

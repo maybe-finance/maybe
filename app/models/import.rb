@@ -2,8 +2,9 @@ class Import < ApplicationRecord
   belongs_to :account
   has_many :rows, dependent: :destroy
   validate :raw_csv_must_be_valid_csv, :column_mappings_must_contain_expected_fields
+  validates_associated :rows
 
-  enum :status, { pending: "pending", complete: "complete" }, validate: true
+  enum :status, { pending: "pending", complete: "complete", importing: "importing", failed: "failed" }, validate: true
 
   store_accessor :column_mappings, :date, :merchant, :category, :amount
 
@@ -11,8 +12,17 @@ class Import < ApplicationRecord
   scope :complete, -> { where(status: "complete") }
   scope :pending, -> { where(status: "pending") }
 
-  def confirm!
-    puts "confirmed"
+  def publish
+    update!(status: "importing")
+    import_rows
+    update!(status: "complete")
+  rescue => e
+    update!(status: "failed")
+    Rails.logger.error("Import with id #{id} failed: #{e}")
+  end
+
+  def publish_later
+    ImportJob.perform_later(self)
   end
 
   def parsed_csv
@@ -47,6 +57,19 @@ class Import < ApplicationRecord
   end
 
   private
+
+    def import_rows
+      rows.each do |row|
+        family = self.account.family
+        category = family.transaction_categories.find_or_create_by! name: row.category
+        account.transactions.create! \
+          name: row.name,
+          date: Date.parse(row.date),
+          category: category,
+          amount: BigDecimal(row.amount),
+          currency: account.currency
+      end
+    end
 
     def required_keys
       %w[date name category amount]
