@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_05_13_114739) do
+ActiveRecord::Schema[7.2].define(version: 2024_05_02_205006) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -87,7 +87,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_13_114739) do
     t.uuid "accountable_id"
     t.decimal "balance", precision: 19, scale: 4, default: "0.0"
     t.string "currency", default: "USD"
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Account::Loan'::character varying)::text, ('Account::Credit'::character varying)::text, ('Account::OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Account::Loan'::character varying, 'Account::Credit'::character varying, 'Account::OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.boolean "is_active", default: true, null: false
     t.enum "status", default: "ok", null: false, enum_type: "account_status"
     t.jsonb "sync_warnings", default: "[]", null: false
@@ -223,25 +223,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_13_114739) do
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
 
-  create_table "import_rows", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "import_id", null: false
-    t.string "date"
-    t.string "name"
-    t.string "category"
-    t.string "merchant"
-    t.string "amount"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["import_id"], name: "index_import_rows_on_import_id"
-  end
-
   create_table "imports", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "account_id", null: false
     t.jsonb "column_mappings"
+    t.enum "status", default: "pending", enum_type: "import_status"
+    t.string "raw_csv"
+    t.string "cleaned_csv"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "raw_csv"
-    t.enum "status", default: "pending", enum_type: "import_status"
     t.index ["account_id"], name: "index_imports_on_account_id"
   end
 
@@ -328,7 +317,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_13_114739) do
   add_foreign_key "accounts", "families"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "import_rows", "imports"
   add_foreign_key "imports", "accounts"
   add_foreign_key "transaction_categories", "families"
   add_foreign_key "transaction_merchants", "families"
