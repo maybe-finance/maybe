@@ -29,3 +29,15 @@ savings_three:
   value: 21000
   date: <%= 25.days.ago.to_date %>
   account: savings_with_valuation_overrides
+
+# For manual account that has valuations and transactions
+manual_one:
+  value: 500
+  date: <%= 7.days.ago.to_date %>
+  account: manual_with_valuation_overrides
+
+manual_two:
+  value: 5000
+  date: <%= 12.days.ago.to_date %>
+  account: manual_with_valuation_overrides
+

@@ -12,7 +12,7 @@ module Account::Syncable
 
         if self.manual?
           calculator = Account::Balance::ManualAccountBalanceCalculator.new(self)
-          self.balance = calculator.calculate
+          self.balance = calculator.calculate_current_balance
           self.save!
         end
 

@@ -154,7 +154,7 @@ multi_currency_four:
   currency: USD
   account: multi_currency
 
-# manual transactions
+# manual account transactions
 manual_one:
   name: Bus ticket
   date: <%= 5.days.ago.to_date %>
@@ -167,4 +167,19 @@ manual_two:
   date: <%= 10.days.ago.to_date %>
   amount: -50
   account: manual
+  currency: USD
+
+# manual account with valuation overrides transactions
+manual_with_valuation_one:
+  name: Bus ticket
+  date: <%= 5.days.ago.to_date %>
+  amount: 5
+  account: manual_with_valuation_overrides
+  currency: USD
+
+manual_with_valuation_two:
+  name: Pocket money
+  date: <%= 10.days.ago.to_date %>
+  amount: -50
+  account: manual_with_valuation_overrides
   currency: USD

@@ -8,3 +8,5 @@ multi_currency:
   id: "123e4567-e89b-12d3-a456-426614174005"
 manual:
   id: "123e4567-e89b-12d3-a456-426614174006"
+manual_with_valuation_overrides:
+  id: "123e4567-e89b-12d3-a456-426614174007"

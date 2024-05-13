@@ -66,10 +66,7 @@ class Account::Balance::Calculator
           value = entry.send(value_key)
 
           if currency != @account.currency
-            rate = ExchangeRate.find_by(base_currency: currency, converted_currency: @account.currency, date: date)
-            raise "Rate for #{currency} to #{@account.currency} not found" unless rate
-
-            value *= rate.rate
+            value = ExchangeRate.convert(value:, from: currency, to: @account.currency, date:)
             currency = @account.currency
           end
 

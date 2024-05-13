@@ -55,3 +55,11 @@ manual:
   start_balance: 200
   accountable_type: Account::OtherAsset
   accountable_id: "123e4567-e89b-12d3-a456-426614174006"
+
+manual_with_valuation_overrides:
+  family: dylan_family
+  name: Physical Cash with valuation overrides
+  balance: 1000
+  start_balance: 1000
+  accountable_type: Account::OtherAsset
+  accountable_id: "123e4567-e89b-12d3-a456-426614174007"
