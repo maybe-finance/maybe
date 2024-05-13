@@ -16,9 +16,14 @@ class ImportsController < ApplicationController
   end
 
   def update
-    @import.update!(account_id: params[:import][:account_id])
+    account = Current.family.accounts.find(params[:import][:account_id])
 
-    redirect_to load_import_path(@import), notice: "Import updated"
+    if @import.update(account: account)
+      redirect_to load_import_path(@import), notice: "Import updated"
+    else
+      flash.now[:error] = "Could not update account"
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   def create
@@ -50,6 +55,7 @@ class ImportsController < ApplicationController
 
   def update_mappings
     if @import.update(import_params)
+      @import.rows.insert_all(@import.rows_mapped)
       redirect_to clean_import_path(@import), notice: "Mappings saved"
     else
       flash.now[:error] = @import.errors.full_messages.first
@@ -74,6 +80,6 @@ class ImportsController < ApplicationController
     end
 
     def import_params
-      params.require(:import).permit(:raw_csv, column_mappings: [ :date, :merchant, :category, :amount ])
+      params.require(:import).permit(:raw_csv, column_mappings: [ :date, :name, :category, :amount ])
     end
 end

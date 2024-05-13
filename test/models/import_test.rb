@@ -36,7 +36,7 @@ class ImportTest < ActiveSupport::TestCase
 
     @import.column_mappings = {
       "date" => "date",
-      "merchant" => "merchant",
+      "name" => "name",
       "category" => "category",
       "amount" => "amount"
     }
@@ -49,28 +49,13 @@ class ImportTest < ActiveSupport::TestCase
 
     @import.column_mappings = {
       "date" => "invalid_date_key_that_does_not_match_input_csv",
-      "merchant" => "another_invalid_key",
+      "name" => "another_invalid_key",
       "category" => "category",
       "amount" => "amount"
     }
 
     assert_not @import.valid?
     assert_includes @import.errors.full_messages, "column map has key date, but could not find date in raw csv input"
-    assert_includes @import.errors.full_messages, "column map has key merchant, but could not find merchant in raw csv input"
-  end
-
-  test "cannot modify a completed import" do
-    import = imports(:completed_import)
-
-    # Placeholder implementation
-    import.stubs(:complete?).returns(true)
-
-    assert import.complete?
-    import.raw_csv = valid_csv_str
-
-    saved = import.save
-
-    assert_not saved
-    assert_includes import.errors.full_messages, "Update not allowed on a completed import."
+    assert_includes @import.errors.full_messages, "column map has key name, but could not find name in raw csv input"
   end
 end

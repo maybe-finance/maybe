@@ -6,7 +6,7 @@ class ImportsTest < ApplicationSystemTestCase
   setup do
     sign_in @user = users(:family_admin)
 
-    @imports = @user.family.imports
+    @imports = @user.family.imports.ordered.to_a
   end
 
   test "can trigger new import from settings" do
@@ -25,12 +25,21 @@ class ImportsTest < ApplicationSystemTestCase
     assert_current_path edit_import_path(@imports.first)
   end
 
-  test "can perform basic CSV import" do
+  test "can resume latest import" do
     trigger_import_from_transactions
     verify_import_modal
 
+    click_link "Resume latest import"
+
+    assert_current_path edit_import_path(@imports.first)
+  end
+
+  test "can perform basic CSV import" do
+    trigger_import_from_settings
+    verify_import_modal
+
     within "#modal" do
-      click_link "Import from CSV"
+      click_link "New import from CSV"
     end
 
     assert_selector "h1", text: "New import"
@@ -57,7 +66,7 @@ class ImportsTest < ApplicationSystemTestCase
     click_link "Next"
     assert_selector "h1", text: "Confirm import"
 
-    click_button "Import 0 transactions"
+    click_button "Import 2 transactions"
     assert_selector "h1", text: "Transactions"
 
     # visit imports_url

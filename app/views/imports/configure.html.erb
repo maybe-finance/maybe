@@ -11,7 +11,7 @@
     <div class="mb-4">
       <%= form.fields_for :column_mappings, OpenStruct.new(@import.column_mappings || @import.default_column_mappings) do |mappings| %>
         <%= mappings.text_field :date, label: "Date" %>
-        <%= mappings.text_field :merchant, label: "Merchant" %>
+        <%= mappings.text_field :name, label: "Name" %>
         <%= mappings.text_field :category, label: "Category" %>
         <%= mappings.text_field :amount, label: "Amount" %>
       <% end %>

@@ -2,16 +2,14 @@ class Import < ApplicationRecord
   belongs_to :account
   has_many :rows, dependent: :destroy
   validate :raw_csv_must_be_valid_csv, :column_mappings_must_contain_expected_fields
-  before_update :prevent_update_after_complete
+
+  enum :status, { pending: "pending", complete: "complete" }, validate: true
 
   store_accessor :column_mappings, :date, :merchant, :category, :amount
 
   scope :ordered, -> { order(:created_at) }
-
-  def complete?
-    # Interim placeholder
-    false
-  end
+  scope :complete, -> { where(status: "complete") }
+  scope :pending, -> { where(status: "pending") }
 
   def confirm!
     puts "confirmed"
@@ -21,10 +19,28 @@ class Import < ApplicationRecord
     CSV.parse(raw_csv || "", headers: true, header_converters: :symbol, converters: [ ->(str) { str.strip } ])
   end
 
+  def rows_mapped
+    rows = []
+    parsed_csv.map do |row|
+      preview_row = {}
+      required_keys.each { |key| preview_row[key] = row[column_mappings[key].to_sym] }
+      rows << preview_row
+    end
+    rows
+  end
+
+  def rows_preview
+    rows_mapped.first(3).map do |row|
+      Import::Row.new \
+        import: self,
+        **row
+    end
+  end
+
   def default_column_mappings
     {
       "date" => parsed_csv.headers[0] || "date",
-      "merchant" => parsed_csv.headers[1] || "merchant",
+      "name" => parsed_csv.headers[1] || "name",
       "category" => parsed_csv.headers[2] || "category",
       "amount" => parsed_csv.headers[3] || "amount"
     }
@@ -33,7 +49,7 @@ class Import < ApplicationRecord
   private
 
     def required_keys
-      %w[date merchant category amount]
+      %w[date name category amount]
     end
 
     def column_mappings_must_contain_expected_fields
@@ -48,13 +64,6 @@ class Import < ApplicationRecord
         unless parsed_csv.headers.include?(expected_header.to_sym)
           errors.add(:base, "column map has key #{key}, but could not find #{key} in raw csv input")
         end
-      end
-    end
-
-    def prevent_update_after_complete
-      if complete?
-        errors.add(:base, "Update not allowed on a completed import.")
-        throw(:abort)
       end
     end
 

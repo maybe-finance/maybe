@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_05_11_122528) do
+ActiveRecord::Schema[7.2].define(version: 2024_05_13_114739) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -18,6 +18,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_11_122528) do
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "account_status", ["ok", "syncing", "error"]
+  create_enum "import_status", ["pending", "completed"]
   create_enum "user_role", ["admin", "member"]
 
   create_table "account_balances", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -240,6 +241,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_11_122528) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "raw_csv"
+    t.enum "status", default: "pending", enum_type: "import_status"
     t.index ["account_id"], name: "index_imports_on_account_id"
   end
 
