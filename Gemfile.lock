@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: 793ff00442723b2ff9ed7b7fb39cae2f5608cc2b
+  revision: dae4867b33506ea3fbbc25b105968f05e7902e78
   branch: main
   specs:
     actioncable (7.2.0.alpha)
@@ -132,7 +132,7 @@ GEM
       erubi (~> 1.4)
       parser (>= 2.4)
       smart_properties
-    bigdecimal (3.1.7)
+    bigdecimal (3.1.8)
     bindex (0.8.1)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
@@ -200,7 +200,7 @@ GEM
       actioncable (>= 6.0.0)
       listen (>= 3.0.0)
       railties (>= 6.0.0)
-    i18n (1.14.4)
+    i18n (1.14.5)
       concurrent-ruby (~> 1.0)
     i18n-tasks (1.0.13)
       activesupport (>= 4.0.2)
@@ -256,7 +256,7 @@ GEM
     msgpack (1.7.2)
     net-http (0.4.1)
       uri
-    net-imap (0.4.10)
+    net-imap (0.4.11)
       date
       net-protocol
     net-pop (0.1.2)
@@ -265,7 +265,7 @@ GEM
       timeout
     net-smtp (0.5.0)
       net-protocol
-    nio4r (2.7.1)
+    nio4r (2.7.3)
     nokogiri (1.16.4-aarch64-linux)
       racc (~> 1.4)
     nokogiri (1.16.4-arm-linux)
@@ -301,7 +301,7 @@ GEM
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.7.3)
-    rack (3.0.10)
+    rack (3.0.11)
     rack-session (2.0.0)
       rack (>= 3.0.0)
     rack-test (2.1.0)
@@ -334,7 +334,7 @@ GEM
     rdoc (6.6.3.1)
       psych (>= 4.0.0)
     regexp_parser (2.9.0)
-    reline (0.5.5)
+    reline (0.5.6)
       io-console (~> 0.5)
     rexml (3.2.6)
     rubocop (1.63.4)
