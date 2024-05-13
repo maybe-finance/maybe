@@ -66,6 +66,7 @@ namespace :demo_data do
     personal_iou = Account.create(name: "Demo Personal IOU", family: family, accountable: Account::OtherLiability.new, balance: 1000, currency: "USD")
     second_car = Account.create(name: "Demo Secondary Car", family: family, accountable: Account::Vehicle.new, balance: 12000, currency: "USD")
 
+
     # ========== Transactions ================
     multi_currency_checking_transactions = [
       { date: Date.today - 45, amount: 3000, name: "Paycheck", currency: "USD" },
