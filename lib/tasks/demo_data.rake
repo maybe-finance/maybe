@@ -60,12 +60,11 @@ namespace :demo_data do
     crypto = Account.create(name: "Bitcoin Account", family: family, accountable: Account::Crypto.new, balance: 0.1, currency: "BTC")
     mortgage = Account.create(name: "Demo Mortgage", family: family, accountable: Account::Loan.new, balance: 450000, currency: "USD")
     main_car = Account.create(name: "Demo Main Car", family: family, accountable: Account::Vehicle.new, balance: 25000, currency: "USD")
-    cash = Account.create(name: "Demo Physical Cash", family: family, accountable: Account::OtherAsset.new, balance: 500, currency: "USD")
+    cash = Account.create(name: "Demo Physical Cash", family: family, accountable: Account::OtherAsset.new, start_balance: 500, balance: 500, currency: "USD")
     car_loan = Account.create(name: "Demo Car Loan", family: family, accountable: Account::Loan.new, balance: 10000, currency: "USD")
     house = Account.create(name: "Demo Primary Residence", family: family, accountable: Account::Property.new, balance: 2500000, currency: "USD")
     personal_iou = Account.create(name: "Demo Personal IOU", family: family, accountable: Account::OtherLiability.new, balance: 1000, currency: "USD")
     second_car = Account.create(name: "Demo Secondary Car", family: family, accountable: Account::Vehicle.new, balance: 12000, currency: "USD")
-
 
     # ========== Transactions ================
     multi_currency_checking_transactions = [
