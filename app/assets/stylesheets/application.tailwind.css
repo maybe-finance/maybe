@@ -59,7 +59,6 @@
   input:checked + label + .toggle-switch-dot {
     transform: translateX(100%);
   }
-
 }
 
 /* Small, single purpose classes that should take precedence over other styles */
