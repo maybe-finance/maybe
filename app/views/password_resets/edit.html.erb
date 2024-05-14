@@ -2,7 +2,7 @@
   header_title t(".title")
 %>
 
-<%= form_with url: password_reset_path(token: params[:token]), html: {class: "space-y-6"} do |form| %>
+<%= form_with model: @user, url: password_reset_path(token: params[:token]), method: :patch, html: {class: "space-y-6"} do |form| %>
   <%= auth_messages form %>
 
   <div class="relative border border-gray-100 bg-gray-25 rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">

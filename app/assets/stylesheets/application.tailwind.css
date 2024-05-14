@@ -53,7 +53,7 @@
   }
 
   .form-field__submit {
-    @apply w-full p-3 text-center text-white bg-black rounded-lg hover:bg-gray-700;
+    @apply w-full p-3 text-center text-white bg-black rounded-lg cursor-pointer hover:bg-gray-700;
   }
 
   input:checked + label + .toggle-switch-dot {
