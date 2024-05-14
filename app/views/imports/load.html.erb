@@ -22,10 +22,19 @@
   <% end %>
 
   <div class="bg-alpha-black-25 rounded-xl p-1">
-    <div class="flex gap-2 text-gray-500 p-2 mb-2">
-      <%= lucide_icon("info", class: "w-5 h-5 shrink-0") %>
-      <p class="text-sm">Your CSV should have the following columns and formats for the best import experience.</p>
+    <div class="text-gray-500 p-2 mb-2">
+      <div class="flex gap-2 mb-2">
+        <%= lucide_icon("info", class: "w-5 h-5 shrink-0") %>
+        <p class="text-sm">Your CSV should have the following columns and formats for the best import experience.</p>
+      </div>
+
+      <ul class="list-disc text-sm pl-10">
+        <li>Dates must be in mm/dd/yyyy format</li>
+        <li>Negative transaction is an "inflow" (income), positive is an "outflow" (expense)</li>
+      </ul>
     </div>
+
+
 
     <%= render partial: "imports/sample_table" %>
 

@@ -51,6 +51,9 @@ class ImportsController < ApplicationController
   end
 
   def configure
+    unless @import.loaded?
+      redirect_to load_import_path(@import), alert: "Please load a valid CSV first"
+    end
   end
 
   def update_mappings
@@ -63,6 +66,9 @@ class ImportsController < ApplicationController
   end
 
   def clean
+    unless @import.configured?
+      redirect_to configure_import_path(@import), alert: "You have not configured your column mappings"
+    end
   end
 
   def update_cell
@@ -70,9 +76,14 @@ class ImportsController < ApplicationController
       row_idx: Integer(update_csv_params[:row_idx]),
       col_idx: Integer(update_csv_params[:col_idx]),
       value: update_csv_params[:value]
+
+    render :clean
   end
 
   def confirm
+    unless @import.cleaned?
+      redirect_to clean_import_path(@import), alert: "You have invalid data, please fix before continuing"
+    end
   end
 
   def publish

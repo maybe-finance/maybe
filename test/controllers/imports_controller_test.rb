@@ -74,6 +74,12 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should redirect back to load step with an alert message if not loaded" do
+    get configure_import_url(@empty_import)
+    assert_equal "Please load a valid CSV first", flash[:alert]
+    assert_redirected_to load_import_path(@empty_import)
+  end
+
   test "should update if mappings valid" do
     @empty_import.raw_csv = valid_csv_str
     @empty_import.save!
@@ -142,6 +148,14 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should redirect back to configure step with alert if mappings not valid" do
+    @empty_import.update! raw_csv: valid_csv_str
+
+    get clean_import_url(@empty_import)
+    assert_equal "You have not configured your column mappings", flash[:alert]
+    assert_redirected_to configure_import_path(@empty_import)
+  end
+
   test "should get confirm if all values are valid" do
     @empty_import.update! \
       raw_csv: valid_csv_str,
@@ -149,6 +163,16 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
 
     get confirm_import_url(@empty_import)
     assert_response :success
+  end
+
+  test "should redirect back to clean if data is invalid" do
+    @empty_import.update! \
+      raw_csv: valid_csv_with_invalid_values,
+      column_mappings: @empty_import.default_column_mappings
+
+    get confirm_import_url(@empty_import)
+    assert_equal "You have invalid data, please fix before continuing", flash[:alert]
+    assert_redirected_to clean_import_path(@empty_import)
   end
 
   test "should confirm import" do

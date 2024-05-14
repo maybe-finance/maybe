@@ -18,8 +18,8 @@
     </div>
 
     <div class="bg-white border border-alpha-black-200 rounded-xl shadow-xs divide-y divide-alpha-black-200">
-      <% @import.parsed_csv.each_with_index do |row, row_index| %>
-        <div class="grid grid-cols-6 divide-x divide-alpha-black-200">
+      <% @import.rows.each_with_index do |row, row_index| %>
+        <div class="grid grid-cols-6 divide-x divide-alpha-black-200 <%= row.invalid? ? "!border !border-red-500" : "" %>">
           <% row.fields.each_with_index do |value, col_index| %>
             <div class="group <%= col_index == 0 || col_index == 3 ? "col-span-1" : "col-span-2" %>">
               <%= form_with model: @import, builder: ActionView::Helpers::FormBuilder, url: clean_import_url(@import), method: :patch, html: { class: "" }, data: { turbo: false, controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>

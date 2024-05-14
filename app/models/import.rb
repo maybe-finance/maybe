@@ -46,7 +46,7 @@ class Import < ApplicationRecord
   end
 
   def cleaned?
-    loaded? && configured? && self.valid?
+    loaded? && configured? && csv_valid?
   end
 
   def columns
@@ -89,7 +89,7 @@ class Import < ApplicationRecord
           name: row.name,
           date: Date.parse(row.date),
           category: category,
-          amount: BigDecimal(row.amount),
+          amount: BigDecimal(-row.amount),
           currency: account.currency
       end
     end
@@ -111,6 +111,10 @@ class Import < ApplicationRecord
           errors.add(:base, "column map has key #{key}, but could not find #{key} in raw csv input")
         end
       end
+    end
+
+    def csv_valid?
+      rows.all?(&:valid?)
     end
 
     def raw_csv_must_be_valid_csv

@@ -7,6 +7,6 @@
   </div>
 
   <div class="ml-auto">
-    <%= content_tag :p, format_money(BigDecimal(transaction.amount)), class: ["whitespace-nowrap", { "text-red-600": BigDecimal(transaction.amount).negative? }] %>
+    <%= content_tag :p, format_money(BigDecimal(transaction.amount)), class: ["whitespace-nowrap", BigDecimal(transaction.amount).negative? ? "text-red-600" : "text-green-600"] %>
   </div>
 </div>
