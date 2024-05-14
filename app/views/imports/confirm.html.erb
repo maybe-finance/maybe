@@ -1,12 +1,11 @@
 <%= content_for :return_to_path, return_to_path(params, imports_path) %>
 
 <div class="mx-auto max-w-screen-md w-full py-24">
-  <h1 class="sr-only">Confirm import</h1>
+  <h1 class="sr-only"><%= t(".confirm_title") %></h1>
 
   <div class="text-center space-y-2 max-w-[400px] mx-auto mb-8">
-    <h2 class="text-3xl text-gray-900 font-medium">Confirm your transactions</h2>
-    <p class="text-gray-500 text-sm">Preview your transactions below and check to see if there are any changes that are
-      required.</p>
+    <h2 class="text-3xl text-gray-900 font-medium"><%= t(".confirm_subtitle") %></h2>
+    <p class="text-gray-500 text-sm"><%= t(".confirm_description") %></p>
   </div>
 
   <div class="mb-8 space-y-4">

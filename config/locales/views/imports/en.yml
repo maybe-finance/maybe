@@ -1,11 +1,37 @@
 ---
 en:
   imports:
+    clean:
+      amount: amount
+      category: category
+      clean_and_edit: Clean and edit your data
+      clean_description: Edit your transactions in the table below. Click on any cell
+        to change the date, name, category, or amount.
+      clean_import: Clean import
+      date: date
+      invalid_column_mappings: Please configure your column mappings first
+      name: name
     configure:
+      configure_description: Select the columns that match the necessary data fields,
+        so that the columns in your CSV can be correctly mapped with our format.
+      configure_subtitle: Setup your CSV file
+      configure_title: Configure import
+      invalid_csv: Please load a valid CSV first
       next: Next
+    confirm:
+      confirm_description: Preview your transactions below and check to see if there
+        are any changes that are required.
+      confirm_subtitle: Confirm your transactions
+      confirm_title: Confirm import
+      invalid_data: You have invalid data, please fix before continuing
+    create:
+      import_created: Import created
+    destroy:
+      import_destroyed: Import destroyed
     edit:
       description_text: Importing transactions can only be done for one account at
         a time. You will need to go through this process again for other accounts.
+      edit_title: Edit import
       header_text: Select the account your transactions will belong to
     empty:
       message: No imports to show
@@ -15,19 +41,39 @@ en:
       next: Next
       select_account: Select account
     import:
+      complete: Complete
+      completed_on: Completed on %{datetime}
       delete: Delete
       edit: Edit
+      failed: Failed
+      in_progress: In progress
       label: 'Import for: %{account}'
+      started_on: Started on %{datetime}
+      uploading: Processing rows
     index:
       imports: Imports
       new: New import
       title: Imports
     load:
+      description: Create a spreadsheet or upload an exported CSV from your financial
+        institution.
+      instructions: Your CSV should have the following columns and formats for the
+        best import experience.
+      load_title: Load import
       next: Next
+      requirement1: Dates must be in ISO 8601 format (YYYY-MM-DD)
+      requirement2: Negative transaction is an "outflow" (expense), positive is an
+        "inflow" (income)
+      subtitle: Import your transactions
+    load_csv:
+      import_loaded: Import CSV loaded
     new:
       description_text: Importing transactions can only be done for one account at
         a time. You will need to go through this process again for other accounts.
       header_text: Select the account your transactions will belong to
+    publish:
+      import_published: Import has started in the background
+      invalid_data: Your import is invalid
     type_selector:
       description: You can manually import transactions from CSVs or from other financial
         apps like Mint, Empower (formerly Personal Capital) or Apple Card.
@@ -35,6 +81,11 @@ en:
       import_from_csv: New import from CSV
       import_from_empower: Import from Empower
       import_from_mint: Import from Mint
+      import_transactions: Import transactions
       resume_latest_import: Resume latest import
       soon: Soon
       sources: Sources
+    update:
+      import_updated: Import updated
+    update_mappings:
+      column_mappings_saved: Column mappings saved

@@ -1,20 +1,19 @@
 <%= content_for :return_to_path, return_to_path(params, imports_path) %>
 
 <div class="mx-auto max-w-screen-md w-full py-24">
-  <h1 class="sr-only">Clean import</h1>
+  <h1 class="sr-only"><%= t(".clean_import") %></h1>
 
   <div class="text-center space-y-2 max-w-[400px] mx-auto mb-8">
-    <h2 class="text-3xl text-gray-900 font-medium">Clean and edit your data</h2>
-    <p class="text-gray-500 text-sm">Edit your transactions in the table below. Click on any cell to change the date,
-      name, category, or amount.</p>
+    <h2 class="text-3xl text-gray-900 font-medium"><%= t(".clean_and_edit") %></h2>
+    <p class="text-gray-500 text-sm"><%= t(".clean_description") %></p>
   </div>
 
   <div class="bg-gray-25 rounded-xl p-1 mb-6">
     <div class="grid grid-cols-6 items-center uppercase text-xs font-medium text-gray-500 py-3">
-      <div class="px-5">date</div>
-      <div class="col-span-2 px-5">name</div>
-      <div class="col-span-2 px-5">category</div>
-      <div class="text-right px-5">amount</div>
+      <div class="px-5"><%= t(".date") %></div>
+      <div class="col-span-2 px-5"><%= t(".name") %></div>
+      <div class="col-span-2 px-5"><%= t(".category") %></div>
+      <div class="text-right px-5"><%= t(".amount") %></div>
     </div>
 
     <div class="bg-white border border-alpha-black-200 rounded-xl shadow-xs divide-y divide-alpha-black-200">

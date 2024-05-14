@@ -18,24 +18,20 @@ class ImportsController < ApplicationController
   def update
     account = Current.family.accounts.find(params[:import][:account_id])
 
-    if @import.update(account: account)
-      redirect_to load_import_path(@import), notice: "Import updated"
-    else
-      flash.now[:error] = "Could not update account"
-      render :edit, status: :unprocessable_entity
-    end
+    @import.update! account: account
+    redirect_to load_import_path(@import), notice: t(".import_updated")
   end
 
   def create
     account = Current.family.accounts.find(params[:import][:account_id])
     @import = Import.create!(account: account)
 
-    redirect_to load_import_path(@import), notice: "Import was successfully created."
+    redirect_to load_import_path(@import), notice: t(".import_created")
   end
 
   def destroy
     @import.destroy!
-    redirect_to imports_url, notice: "Import was successfully destroyed.", status: :see_other
+    redirect_to imports_url, notice: t(".import_destroyed"), status: :see_other
   end
 
   def load
@@ -43,7 +39,7 @@ class ImportsController < ApplicationController
 
   def load_csv
     if @import.update(import_params)
-      redirect_to configure_import_path(@import), notice: "Import uploaded"
+      redirect_to configure_import_path(@import), notice: t(".import_loaded")
     else
       flash.now[:error] = @import.errors.full_messages.to_sentence
       render :load, status: :unprocessable_entity
@@ -52,13 +48,13 @@ class ImportsController < ApplicationController
 
   def configure
     unless @import.loaded?
-      redirect_to load_import_path(@import), alert: "Please load a valid CSV first"
+      redirect_to load_import_path(@import), alert: t(".invalid_csv")
     end
   end
 
   def update_mappings
     if @import.update(import_params)
-      redirect_to clean_import_path(@import), notice: "Mappings saved"
+      redirect_to clean_import_path(@import), notice: t(".column_mappings_saved")
     else
       flash.now[:error] = @import.errors.full_messages.first
       render :configure, status: :unprocessable_entity
@@ -67,7 +63,7 @@ class ImportsController < ApplicationController
 
   def clean
     unless @import.configured?
-      redirect_to configure_import_path(@import), alert: "You have not configured your column mappings"
+      redirect_to configure_import_path(@import), alert: t(".invalid_column_mappings")
     end
   end
 
@@ -82,16 +78,16 @@ class ImportsController < ApplicationController
 
   def confirm
     unless @import.cleaned?
-      redirect_to clean_import_path(@import), alert: "You have invalid data, please fix before continuing"
+      redirect_to clean_import_path(@import), alert: t(".invalid_data")
     end
   end
 
   def publish
     if @import.valid?
       @import.publish_later
-      redirect_to imports_path, notice: "Import has started in the background"
+      redirect_to imports_path, notice: t(".import_published")
     else
-      flash.now[:error] = "Import is not valid, please return to prior steps to fix this"
+      flash.now[:error] = t(".invalid_data")
       render :confirm, status: :unprocessable_entity
     end
   end

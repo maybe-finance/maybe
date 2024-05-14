@@ -59,7 +59,7 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     patch load_import_url(@empty_import), params: { import: { raw_csv: valid_csv_str } }
 
     assert_redirected_to configure_import_path(@empty_import)
-    assert_equal "Import uploaded", flash[:notice]
+    assert_equal "Import CSV loaded", flash[:notice]
   end
 
   test "should flash error message if invalid CSV input" do
@@ -96,7 +96,7 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_redirected_to clean_import_path(@empty_import)
-    assert_equal "Mappings saved", flash[:notice]
+    assert_equal "Column mappings saved", flash[:notice]
   end
 
   test "should flash error if mappings are not valid" do
@@ -152,7 +152,7 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     @empty_import.update! raw_csv: valid_csv_str
 
     get clean_import_url(@empty_import)
-    assert_equal "You have not configured your column mappings", flash[:alert]
+    assert_equal "Please configure your column mappings first", flash[:alert]
     assert_redirected_to configure_import_path(@empty_import)
   end
 
