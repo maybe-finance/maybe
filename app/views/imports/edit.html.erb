@@ -1,9 +1,5 @@
 <%= content_for :return_to_path, return_to_path(params, imports_path) %>
 
-<%= content_for :nav do %>
-  <%= render "nav", import: @import %>
-<% end %>
-
 <div class="mx-auto max-w-[400px] w-full py-56">
   <h1 class="sr-only">New import</h1>
   <div class="space-y-2 mb-6 text-center">

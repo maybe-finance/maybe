@@ -59,6 +59,16 @@
   input:checked + label + .toggle-switch-dot {
     transform: translateX(100%);
   }
+
+  .table-primary {
+    @apply border-separate border-spacing-0 rounded-md shadow-xs;
+  }
+
+  .table-primary td {
+    @apply px-3 py-2.5 text-sm border border-alpha-black-200;
+  }
+
+
 }
 
 /* Small, single purpose classes that should take precedence over other styles */

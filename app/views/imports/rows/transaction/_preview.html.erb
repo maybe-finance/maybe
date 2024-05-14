@@ -5,11 +5,8 @@
   <div class="w-48">
     <%= render partial: "transactions/categories/badge", locals: { category: Transaction::Category.new(name: transaction.category, family: Current.family) } %>
   </div>
-  <div>
-    <p><%= transaction.import.account.name %></p>
-  </div>
 
   <div class="ml-auto">
-    <%= content_tag :p, format_money(BigDecimal(-transaction.amount)), class: ["whitespace-nowrap", { "text-green-600": BigDecimal(transaction.amount).negative? }] %>
+    <%= content_tag :p, format_money(BigDecimal(transaction.amount)), class: ["whitespace-nowrap", { "text-red-600": BigDecimal(transaction.amount).negative? }] %>
   </div>
 </div>

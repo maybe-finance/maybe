@@ -92,7 +92,7 @@ class ImportsController < ApplicationController
     end
 
     def import_params
-      params.require(:import).permit(:raw_csv, column_mappings: [ :date, :name, :category, :amount ], csv_update: [ :row_idx, :col_idx, :value ])
+      params.require(:import).permit(:raw_csv, column_mappings: [ :date, :name, :category, :amount ])
     end
 
     def update_csv_params

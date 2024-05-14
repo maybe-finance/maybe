@@ -1,23 +1,24 @@
 <%= content_for :return_to_path, return_to_path(params, imports_path) %>
 
-<%= content_for :nav do %>
-  <%= render "imports/nav", import: @import %>
-<% end %>
-
-<div>
+<div class="mx-auto max-w-[400px] w-full py-24 space-y-4">
   <h1 class="sr-only">Configure import</h1>
 
+  <div class="text-center space-y-2">
+    <h2 class="text-3xl text-gray-900 font-medium">Setup your CSV file</h2>
+    <p class="text-gray-500 text-sm">Select the columns that match the necessary data fields, so that the columns in
+      your CSV can be correctly mapped with our format.</p>
+  </div>
+
   <%= form_with model: @import, url: configure_import_path(@import) do |form| %>
-    <div class="mb-4">
+    <div class="mb-4 space-y-4">
       <%= form.fields_for :column_mappings, OpenStruct.new(@import.column_mappings || @import.default_column_mappings) do |mappings| %>
-        <%= mappings.text_field :date, label: "Date" %>
-        <%= mappings.text_field :name, label: "Name" %>
-        <%= mappings.text_field :category, label: "Category" %>
-        <%= mappings.text_field :amount, label: "Amount" %>
+        <%= mappings.select :date, options_for_select(@import.columns, @import.column_mappings&.dig("date") || @import.default_column_mappings["date"]), label: "Date" %>
+        <%= mappings.select :name, options_for_select(@import.columns, @import.column_mappings&.dig("name") || @import.default_column_mappings["name"]), label: "Name" %>
+        <%= mappings.select :category, options_for_select(@import.columns, @import.column_mappings&.dig("category") || @import.default_column_mappings["category"]), label: "Category" %>
+        <%= mappings.select :amount, options_for_select(@import.columns, @import.column_mappings&.dig("amount") || @import.default_column_mappings["amount"]), label: "Amount" %>
       <% end %>
     </div>
 
     <%= form.submit t(".next"), class: "px-4 py-2 block w-full rounded-lg bg-gray-900 text-white text-sm font-medium" %>
-
   <% end %>
 </div>

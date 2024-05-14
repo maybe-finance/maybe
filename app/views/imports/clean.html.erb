@@ -1,29 +1,45 @@
 <%= content_for :return_to_path, return_to_path(params, imports_path) %>
 
-<%= content_for :nav do %>
-  <%= render "imports/nav", import: @import %>
-<% end %>
-
-<div>
+<div class="mx-auto max-w-screen-md w-full py-24">
   <h1 class="sr-only">Clean import</h1>
 
-  <div>
-    <% @import.parsed_csv.each_with_index do |row, row_index| %>
-      <div class="flex">
-        <% row.fields.each_with_index do |value, col_index| %>
-          <div>
-            <%= form_with model: @import, url: clean_import_url(@import), method: :patch, data: { turbo: false, controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
-              <%= fields_for :csv_update do |ff| %>
-                <%= ff.hidden_field :row_idx, value: row_index %>
-                <%= ff.hidden_field :col_idx, value: col_index %>
-                <%= ff.text_field :value, value: value, id: "cell-#{row_index}-#{col_index}", data: { "auto-submit-form-target" => "auto" } %>
-              <% end %>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
-    <% end %>
+  <div class="text-center space-y-2 max-w-[400px] mx-auto mb-8">
+    <h2 class="text-3xl text-gray-900 font-medium">Clean and edit your data</h2>
+    <p class="text-gray-500 text-sm">Edit your transactions in the table below. Click on any cell to change the date,
+      name, category, or amount.</p>
   </div>
 
-  <%= link_to "Next", confirm_import_path(@import), class: "px-4 py-2 block w-full rounded-lg bg-gray-900 text-white text-sm font-medium", data: { turbo: false } %>
+  <div class="bg-gray-25 rounded-xl p-1 mb-6">
+    <div class="grid grid-cols-6 items-center uppercase text-xs font-medium text-gray-500 py-3">
+      <div class="px-5">date</div>
+      <div class="col-span-2 px-5">name</div>
+      <div class="col-span-2 px-5">category</div>
+      <div class="text-right px-5">amount</div>
+    </div>
+
+    <div class="bg-white border border-alpha-black-200 rounded-xl shadow-xs divide-y divide-alpha-black-200">
+      <% @import.parsed_csv.each_with_index do |row, row_index| %>
+        <div class="grid grid-cols-6 divide-x divide-alpha-black-200">
+          <% row.fields.each_with_index do |value, col_index| %>
+            <div class="group <%= col_index == 0 || col_index == 3 ? "col-span-1" : "col-span-2" %>">
+              <%= form_with model: @import, builder: ActionView::Helpers::FormBuilder, url: clean_import_url(@import), method: :patch, html: { class: "" }, data: { turbo: false, controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
+                <%= fields_for :csv_update do |ff| %>
+                  <%= ff.hidden_field :row_idx, value: row_index %>
+                  <%= ff.hidden_field :col_idx, value: col_index %>
+                  <%= ff.text_field :value, value: value,
+                                    id: "cell-#{row_index}-#{col_index}",
+                                    class: "px-4 py-3.5 text-sm w-full border-none bg-transparent focus:ring-gray-900 focus:ring-2 focus-visible:outline-none group-last:text-right #{table_corner_class(row_index, col_index, @import.parsed_csv, row.fields)}",
+                                    data: { "auto-submit-form-target" => "auto" } %>
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+
+
+  <%= link_to "Next", confirm_import_path(@import), class: "px-4 py-2 block w-60 text-center mx-auto rounded-lg bg-gray-900 text-white text-sm font-medium", data: { turbo: false } %>
 </div>

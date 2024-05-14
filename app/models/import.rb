@@ -37,6 +37,22 @@ class Import < ApplicationRecord
     rows
   end
 
+  def loaded?
+    raw_csv.present?
+  end
+
+  def configured?
+    column_mappings.present?
+  end
+
+  def cleaned?
+    loaded? && configured? && self.valid?
+  end
+
+  def columns
+    parsed_csv.headers
+  end
+
   def update_csv!(row_idx:, col_idx:, value:)
     csv_copy = parsed_csv.by_col_or_row
     csv_copy[row_idx][col_idx] = value

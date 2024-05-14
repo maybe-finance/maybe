@@ -1,0 +1,18 @@
+<% is_current = request.path == step[:path] %>
+<% text_class = if is_current
+                  "text-gray-900"
+                else
+                  step[:complete] ? "text-green-600" : "text-gray-500"
+                end %>
+<% step_class = if is_current
+                  "bg-gray-900 text-white"
+                else
+                  step[:complete] ? "bg-green-600/10 border-alpha-black-25" : "bg-gray-50"
+                end %>
+
+<div class="flex items-center gap-2 text-sm font-medium <%= text_class %>">
+  <span class="<%= step_class %> w-7 h-7 rounded-full shrink-0 inline-flex items-center justify-center border border-transparent">
+    <%= step[:complete] && !is_current ? lucide_icon("check", class: "w-4 h-4") : step_idx + 1 %>
+  </span>
+  <span><%= step[:name] %></span>
+</div>
