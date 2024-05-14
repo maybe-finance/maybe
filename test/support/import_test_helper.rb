@@ -2,8 +2,8 @@ module ImportTestHelper
   def valid_csv_str
     <<-ROWS
       date,name,category,amount
-      01/01/2024,Starbucks drink,Food,20
-      01/02/2024,Amazon stuff,Shopping,200
+      2024-01-01,Starbucks drink,Food,20
+      2024-01-02,Amazon stuff,Shopping,200
     ROWS
   end
 

@@ -7,7 +7,7 @@ completed_import:
     amount: amount
   raw_csv: |
     date,name,category,amount
-    01/01/2024,Starbucks,Food,20
+    2024-01-01,Starbucks,Food,20
   created_at: <%= 2.days.ago %>
 
 empty_import:
