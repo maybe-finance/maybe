@@ -41,7 +41,7 @@ class ImportsController < ApplicationController
   def load
   end
 
-  def update_csv
+  def load_csv
     if @import.update(import_params)
       redirect_to configure_import_path(@import), notice: "Import uploaded"
     else
@@ -71,7 +71,7 @@ class ImportsController < ApplicationController
     end
   end
 
-  def update_cell
+  def update_csv
     @import.update_csv! \
       row_idx: Integer(update_csv_params[:row_idx]),
       col_idx: Integer(update_csv_params[:col_idx]),
