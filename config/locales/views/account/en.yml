@@ -15,6 +15,8 @@ en:
     index:
       new_account: New account
     new:
+      balance:
+        label: Balance
       currency:
         all_others: All Others
         popular: Popular
@@ -22,6 +24,8 @@ en:
         label: Account name
         placeholder: Example account name
       select_accountable_type: What would you like to add?
+      start_date:
+        label: Start date
       title: Add an account
     show:
       confirm_accept: Delete "%{name}"

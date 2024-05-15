@@ -13,7 +13,7 @@ class Account::Balance::Calculator
     def calculate
       prior_balance = implied_start_balance
 
-      calculated_balances = ((@calc_start_date + 1.day)...Date.current).map do |date|
+      calculated_balances = ((@calc_start_date + 1.day)..Date.current).map do |date|
         valuation = normalized_valuations.find { |v| v["date"] == date }
 
         if valuation
@@ -30,8 +30,7 @@ class Account::Balance::Calculator
 
       @daily_balances = [
         { date: @calc_start_date, balance: implied_start_balance, currency: @account.currency, updated_at: Time.current },
-        *calculated_balances,
-        { date: Date.current, balance: @account.balance, currency: @account.currency, updated_at: Time.current } # Last balance must always match "source of truth"
+        *calculated_balances
       ]
 
       if @account.foreign_currency?
@@ -93,17 +92,16 @@ class Account::Balance::Calculator
           return @account.balance_on(@calc_start_date)
         end
 
-        oldest_valuation_date = normalized_valuations.first&.dig("date")
-        oldest_transaction_date = normalized_transactions.first&.dig("date")
-        oldest_entry_date = [ oldest_valuation_date, oldest_transaction_date ].compact.min
+        net_transaction_multiplier = @account.classification == "liability" ? -1 : 1
 
-        if oldest_entry_date.present? && oldest_entry_date == oldest_valuation_date
+        oldest_valuation_date = normalized_valuations.first&.dig("date")
+        if oldest_valuation_date.present?
+          net_transaction_flows = normalized_transactions.select { |t| t["date"] <= oldest_valuation_date }.sum { |t| t["amount"].to_d }
           oldest_valuation = normalized_valuations.find { |v| v["date"] == oldest_valuation_date }
-          oldest_valuation["value"].to_d
+          oldest_valuation["value"].to_d + net_transaction_flows * net_transaction_multiplier
         else
           net_transaction_flows = normalized_transactions.sum { |t| t["amount"].to_d }
-          net_transaction_flows *= -1 if @account.classification == "liability"
-          @account.balance.to_d + net_transaction_flows
+          @account.balance.to_d + net_transaction_flows * net_transaction_multiplier
         end
       end
 end

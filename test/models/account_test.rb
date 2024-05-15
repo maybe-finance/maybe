@@ -87,7 +87,7 @@ class AccountTest < ActiveSupport::TestCase
     assert_equal 0, properties.children.count
     assert_equal 0, vehicles.children.count
     assert_equal 0, investments.children.count
-    assert_equal 3, other_assets.children.count
+    assert_equal 1, other_assets.children.count
 
     assert_equal 1, credits.children.count
     assert_equal 0, loans.children.count
