@@ -92,16 +92,17 @@ class Account::Balance::Calculator
           return @account.balance_on(@calc_start_date)
         end
 
-        net_transaction_multiplier = @account.classification == "liability" ? -1 : 1
-
         oldest_valuation_date = normalized_valuations.first&.dig("date")
-        if oldest_valuation_date.present?
-          net_transaction_flows = normalized_transactions.select { |t| t["date"] <= oldest_valuation_date }.sum { |t| t["amount"].to_d }
+        oldest_transaction_date = normalized_transactions.first&.dig("date")
+        oldest_entry_date = [ oldest_valuation_date, oldest_transaction_date ].compact.min
+
+        if oldest_entry_date.present? && oldest_entry_date == oldest_valuation_date
           oldest_valuation = normalized_valuations.find { |v| v["date"] == oldest_valuation_date }
-          oldest_valuation["value"].to_d + net_transaction_flows * net_transaction_multiplier
+          oldest_valuation["value"].to_d
         else
           net_transaction_flows = normalized_transactions.sum { |t| t["amount"].to_d }
-          @account.balance.to_d + net_transaction_flows * net_transaction_multiplier
+          net_transaction_flows *= -1 if @account.classification == "liability"
+          @account.balance.to_d + net_transaction_flows
         end
       end
 end
