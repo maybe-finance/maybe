@@ -21,7 +21,7 @@ class ExchangeRate < ApplicationRecord
 
     def convert(value:, from:, to:, date:)
       rate = ExchangeRate.find_by(base_currency: from, converted_currency: to, date:)
-      raise "Rate for #{from} to #{@account.to} not found" unless rate
+      raise "Conversion from: #{from} to: #{to} on: #{date} not found" unless rate
 
       value * rate.rate
     end
