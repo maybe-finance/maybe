@@ -61,7 +61,13 @@ class ImportsController < ApplicationController
   end
 
   def update_csv
-    @import.update_csv! ** import_params[:csv_update].to_h.symbolize_keys
+    update_params = import_params[:csv_update]
+
+    @import.update_csv! \
+      row_idx: update_params[:row_idx],
+      col_idx: update_params[:col_idx],
+      value: update_params[:value]
+
     render :clean
   end
 
