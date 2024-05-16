@@ -56,17 +56,17 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should save raw CSV if valid" do
-    patch load_import_url(@empty_import), params: { import: { raw_csv: valid_csv_str } }
+    patch load_import_url(@empty_import), params: { import: { raw_csv_str: valid_csv_str } }
 
     assert_redirected_to configure_import_path(@empty_import)
     assert_equal "Import CSV loaded", flash[:notice]
   end
 
   test "should flash error message if invalid CSV input" do
-    patch load_import_url(@empty_import), params: { import: { raw_csv: malformed_csv_str } }
+    patch load_import_url(@empty_import), params: { import: { raw_csv_str: malformed_csv_str } }
 
     assert_response :unprocessable_entity
-    assert_equal "Raw csv is not a valid CSV format", flash[:error]
+    assert_equal "Raw csv str is not a valid CSV format", flash[:error]
   end
 
   test "should get configure" do
@@ -80,8 +80,8 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to load_import_path(@empty_import)
   end
 
-  test "should update if mappings valid" do
-    @empty_import.raw_csv = valid_csv_str
+  test "should update mappings" do
+    @empty_import.raw_csv_str = valid_csv_str
     @empty_import.save!
 
     patch configure_import_url(@empty_import), params: {
@@ -99,76 +99,43 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Column mappings saved", flash[:notice]
   end
 
-  test "should flash error if mappings are not valid" do
-    @empty_import.raw_csv = valid_csv_str
-    @empty_import.save!
-
-    patch configure_import_url(@empty_import), params: {
-      import: {
-        column_mappings: {
-          date: "invalid",
-          name: "invalid",
-          category: "invalid",
-          amount: "invalid"
-        }
-      }
-    }
-
-    assert_response :unprocessable_entity
-    assert_equal "column map has key date, but could not find date in raw csv input", flash[:error]
-  end
-
   test "can update a cell" do
-    @empty_import.update! \
-      raw_csv: valid_csv_str,
-      column_mappings: @empty_import.default_column_mappings
+    @empty_import.update! raw_csv_str: valid_csv_str
 
-    assert_equal @empty_import.parsed_csv[0][1], "Starbucks drink"
+    assert_equal @empty_import.csv.table[0][1], "Starbucks drink"
 
     patch clean_import_url(@empty_import), params: {
-      csv_update: {
-        row_idx: 0,
-        col_idx: 1,
-        value: "new_merchant"
+      import: {
+        csv_update: {
+          row_idx: 0,
+          col_idx: 1,
+          value: "new_merchant"
+        }
       }
     }
 
     assert_response :success
 
     @empty_import.reload
-    assert_equal "new_merchant", @empty_import.parsed_csv[0][1]
+    assert_equal "new_merchant", @empty_import.csv.table[0][1]
   end
 
   test "should get clean" do
-    @empty_import.update! \
-      raw_csv: valid_csv_str,
-      column_mappings: @empty_import.default_column_mappings
+    @empty_import.update! raw_csv_str: valid_csv_str
 
     get clean_import_url(@empty_import)
     assert_response :success
   end
 
-  test "should redirect back to configure step with alert if mappings not valid" do
-    @empty_import.update! raw_csv: valid_csv_str
-
-    get clean_import_url(@empty_import)
-    assert_equal "Please configure your column mappings first", flash[:alert]
-    assert_redirected_to configure_import_path(@empty_import)
-  end
-
   test "should get confirm if all values are valid" do
-    @empty_import.update! \
-      raw_csv: valid_csv_str,
-      column_mappings: @empty_import.default_column_mappings
+    @empty_import.update! raw_csv_str: valid_csv_str
 
     get confirm_import_url(@empty_import)
     assert_response :success
   end
 
   test "should redirect back to clean if data is invalid" do
-    @empty_import.update! \
-      raw_csv: valid_csv_with_invalid_values,
-      column_mappings: @empty_import.default_column_mappings
+    @empty_import.update! raw_csv_str: valid_csv_with_invalid_values
 
     get confirm_import_url(@empty_import)
     assert_equal "You have invalid data, please fix before continuing", flash[:alert]
@@ -176,9 +143,7 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should confirm import" do
-    @empty_import.update! \
-      raw_csv: valid_csv_str,
-      column_mappings: @empty_import.default_column_mappings
+    @empty_import.update! raw_csv_str: valid_csv_str
 
     patch confirm_import_url(@empty_import)
     assert_redirected_to imports_path

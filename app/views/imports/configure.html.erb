@@ -10,11 +10,12 @@
 
   <%= form_with model: @import, url: configure_import_path(@import) do |form| %>
     <div class="mb-4 space-y-4">
-      <%= form.fields_for :column_mappings, OpenStruct.new(@import.column_mappings || @import.default_column_mappings) do |mappings| %>
-        <%= mappings.select :date, options_for_select(@import.columns, @import.column_mappings&.dig("date") || @import.default_column_mappings["date"]), label: "Date" %>
-        <%= mappings.select :name, options_for_select(@import.columns, @import.column_mappings&.dig("name") || @import.default_column_mappings["name"]), label: "Name" %>
-        <%= mappings.select :category, options_for_select(@import.columns, @import.column_mappings&.dig("category") || @import.default_column_mappings["category"]), label: "Category" %>
-        <%= mappings.select :amount, options_for_select(@import.columns, @import.column_mappings&.dig("amount") || @import.default_column_mappings["amount"]), label: "Amount" %>
+      <%= form.fields_for :column_mappings do |mappings| %>
+        <% @import.expected_fields.each do |field| %>
+          <%= mappings.select field.key,
+                              options_for_select(@import.available_headers, field.key),
+                              label: field.label %>
+        <% end %>
       <% end %>
     </div>
 

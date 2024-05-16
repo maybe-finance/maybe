@@ -9,8 +9,8 @@
   </div>
 
   <div class="mb-8 space-y-4">
-    <%= render partial: "imports/rows/transaction/preview_group", collection: @import.rows.group_by(&:date), as: :group %>
+    <%= render partial: "imports/transactions/transaction_group", collection: @import.dry_run.group_by(&:date) %>
   </div>
 
-  <%= button_to "Import " + @import.rows.size.to_s + " transactions", confirm_import_path(@import), method: :patch, class: "px-4 py-2 block w-60 text-center mx-auto rounded-lg bg-gray-900 text-white text-sm font-medium", data: { turbo: false } %>
+  <%= button_to "Import " + @import.csv.table.size.to_s + " transactions", confirm_import_path(@import), method: :patch, class: "px-4 py-2 block w-60 text-center mx-auto rounded-lg bg-gray-900 text-white text-sm font-medium", data: { turbo: false } %>
 </div>

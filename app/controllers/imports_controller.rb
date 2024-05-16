@@ -53,26 +53,15 @@ class ImportsController < ApplicationController
   end
 
   def update_mappings
-    if @import.update(import_params)
-      redirect_to clean_import_path(@import), notice: t(".column_mappings_saved")
-    else
-      flash.now[:error] = @import.errors.full_messages.first
-      render :configure, status: :unprocessable_entity
-    end
+    @import.update! import_params(@import.expected_fields.map(&:key))
+    redirect_to clean_import_path(@import), notice: t(".column_mappings_saved")
   end
 
   def clean
-    unless @import.configured?
-      redirect_to configure_import_path(@import), alert: t(".invalid_column_mappings")
-    end
   end
 
   def update_csv
-    @import.update_csv! \
-      row_idx: Integer(update_csv_params[:row_idx]),
-      col_idx: Integer(update_csv_params[:col_idx]),
-      value: update_csv_params[:value]
-
+    @import.update_csv! ** import_params[:csv_update].to_h.symbolize_keys
     render :clean
   end
 
@@ -98,11 +87,7 @@ class ImportsController < ApplicationController
       @import = Current.family.imports.find(params[:id])
     end
 
-    def import_params
-      params.require(:import).permit(:raw_csv, column_mappings: [ :date, :name, :category, :amount ])
-    end
-
-    def update_csv_params
-      params.require(:csv_update).permit(:row_idx, :col_idx, :value)
+    def import_params(permitted_mappings = nil)
+      params.require(:import).permit(:raw_csv_str, column_mappings: permitted_mappings, csv_update: [ :row_idx, :col_idx, :value ])
     end
 end

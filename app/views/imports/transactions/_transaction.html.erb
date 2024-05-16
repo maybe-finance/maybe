@@ -1,0 +1,12 @@
+<%# locals: (transaction:) %>
+<div class="text-gray-900 flex items-center gap-6 py-4 text-sm font-medium px-4">
+  <%= render partial: "transactions/transaction_name", locals: { name: transaction.name } %>
+
+  <div class="w-48">
+    <%= render partial: "transactions/categories/badge", locals: { category: transaction.category } %>
+  </div>
+
+  <div class="ml-auto">
+    <%= content_tag :p, format_money(transaction.amount), class: ["whitespace-nowrap", BigDecimal(transaction.amount).negative? ? "text-red-600" : "text-green-600"] %>
+  </div>
+</div>

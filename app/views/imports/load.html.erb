@@ -10,9 +10,8 @@
 
   <%= form_with model: @import, url: load_import_path(@import) do |form| %>
     <div>
-      <%= form.text_area :raw_csv,
+      <%= form.text_area :raw_csv_str,
                          rows: 10,
-                         value: @import.raw_csv,
                          required: true,
                          placeholder: "Paste your CSV file contents here",
                          class: "rounded-md w-full border text-sm border-alpha-black-100 bg-white placeholder:text-gray-400 p-4" %>

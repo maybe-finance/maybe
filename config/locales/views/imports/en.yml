@@ -2,15 +2,10 @@
 en:
   imports:
     clean:
-      amount: amount
-      category: category
       clean_and_edit: Clean and edit your data
       clean_description: Edit your transactions in the table below. Click on any cell
         to change the date, name, category, or amount.
       clean_import: Clean import
-      date: date
-      invalid_column_mappings: Please configure your column mappings first
-      name: name
     configure:
       configure_description: Select the columns that match the necessary data fields,
         so that the columns in your CSV can be correctly mapped with our format.

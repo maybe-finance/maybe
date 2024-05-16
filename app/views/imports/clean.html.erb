@@ -9,29 +9,34 @@
   </div>
 
   <div class="bg-gray-25 rounded-xl p-1 mb-6">
-    <div class="grid grid-cols-6 items-center uppercase text-xs font-medium text-gray-500 py-3">
-      <div class="px-5"><%= t(".date") %></div>
-      <div class="col-span-2 px-5"><%= t(".name") %></div>
-      <div class="col-span-2 px-5"><%= t(".category") %></div>
-      <div class="text-right px-5"><%= t(".amount") %></div>
+    <div
+      class="grid items-center uppercase text-xs font-medium text-gray-500 py-3"
+      style="grid-template-columns: repeat(<%= @import.expected_fields.size %>, 1fr);">
+      <% @import.expected_fields.each do |field| %>
+        <div class="px-5"><%= field.label %></div>
+      <% end %>
     </div>
 
     <div class="bg-white border border-alpha-black-200 rounded-xl shadow-xs divide-y divide-alpha-black-200">
-      <% @import.rows.each_with_index do |row, row_index| %>
-        <div class="grid grid-cols-6 divide-x divide-alpha-black-200 <%= row.invalid? ? "!border !border-red-500" : "" %>">
+      <% @import.csv.table.each_with_index do |row, row_index| %>
+        <div
+          class="grid divide-x divide-alpha-black-200"
+          style="grid-template-columns: repeat(<%= @import.expected_fields.size %>, 1fr);">
           <% row.fields.each_with_index do |value, col_index| %>
-            <div class="group <%= col_index == 0 || col_index == 3 ? "col-span-1" : "col-span-2" %>">
-              <%= form_with model: @import, builder: ActionView::Helpers::FormBuilder, url: clean_import_url(@import), method: :patch, html: { class: "" }, data: { turbo: false, controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
-                <%= fields_for :csv_update do |ff| %>
-                  <%= ff.hidden_field :row_idx, value: row_index %>
-                  <%= ff.hidden_field :col_idx, value: col_index %>
-                  <%= ff.text_field :value, value: value,
-                                    id: "cell-#{row_index}-#{col_index}",
-                                    class: "px-4 py-3.5 text-sm w-full border-none bg-transparent focus:ring-gray-900 focus:ring-2 focus-visible:outline-none group-last:text-right #{table_corner_class(row_index, col_index, @import.parsed_csv, row.fields)}",
-                                    data: { "auto-submit-form-target" => "auto" } %>
-                <% end %>
+            <%= form_with model: @import,
+                          builder: ActionView::Helpers::FormBuilder,
+                          url: clean_import_url(@import),
+                          method: :patch,
+                          data: { turbo: false, controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
+              <%= form.fields_for :csv_update do |ff| %>
+                <%= ff.hidden_field :row_idx, value: row_index %>
+                <%= ff.hidden_field :col_idx, value: col_index %>
+                <%= ff.text_field :value, value: value,
+                                  id: "cell-#{row_index}-#{col_index}",
+                                  class: "px-4 py-3.5 text-sm w-full border-none bg-transparent focus:ring-gray-900 focus:ring-2 focus-visible:outline-none #{table_corner_class(row_index, col_index, @import.csv.table, row.fields)}",
+                                  data: { "auto-submit-form-target" => "auto" } %>
               <% end %>
-            </div>
+            <% end %>
           <% end %>
         </div>
       <% end %>

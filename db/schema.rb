@@ -227,8 +227,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_02_205006) do
     t.uuid "account_id", null: false
     t.jsonb "column_mappings"
     t.enum "status", default: "pending", enum_type: "import_status"
-    t.string "raw_csv"
-    t.string "cleaned_csv"
+    t.string "raw_csv_str"
+    t.string "normalized_csv_str"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_imports_on_account_id"

@@ -52,7 +52,7 @@ class ImportsTest < ApplicationSystemTestCase
     assert_selector "h1", text: "Load import"
 
     within "form" do
-      fill_in "import_raw_csv", with: valid_csv_str
+      fill_in "import_raw_csv_str", with: valid_csv_str
     end
 
     click_button "Next"
