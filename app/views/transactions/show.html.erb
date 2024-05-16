@@ -13,7 +13,7 @@
           <%= lucide_icon("chevron-right", class: "group-open:hidden text-gray-500 w-5 h-5") %>
         </div>
       </summary>
-      <%= f.date_field :date, label: "Date", "data-auto-submit-form-target": "auto" %>
+      <%= f.date_field :date, label: "Date", max: Date.today, "data-auto-submit-form-target": "auto" %>
       <div class="h-2"></div>
       <%= f.collection_select :account_id, Current.family.accounts, :id, :name, { prompt: "Select an Account", label: "Account", class: "text-gray-400" }, {class: "form-field__input cursor-not-allowed text-gray-400", disabled: "disabled"} %>
     </details>

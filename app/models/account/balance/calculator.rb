@@ -13,7 +13,7 @@ class Account::Balance::Calculator
     def calculate
       prior_balance = implied_start_balance
 
-      calculated_balances = ((@calc_start_date + 1.day)...Date.current).map do |date|
+      calculated_balances = ((@calc_start_date + 1.day)..Date.current).map do |date|
         valuation = normalized_valuations.find { |v| v["date"] == date }
 
         if valuation
@@ -30,8 +30,7 @@ class Account::Balance::Calculator
 
       @daily_balances = [
         { date: @calc_start_date, balance: implied_start_balance, currency: @account.currency, updated_at: Time.current },
-        *calculated_balances,
-        { date: Date.current, balance: @account.balance, currency: @account.currency, updated_at: Time.current } # Last balance must always match "source of truth"
+        *calculated_balances
       ]
 
       if @account.foreign_currency?
@@ -66,10 +65,7 @@ class Account::Balance::Calculator
           value = entry.send(value_key)
 
           if currency != @account.currency
-            rate = ExchangeRate.find_by(base_currency: currency, converted_currency: @account.currency, date: date)
-            raise "Rate for #{currency} to #{@account.currency} not found" unless rate
-
-            value *= rate.rate
+            value = ExchangeRate.convert(value:, from: currency, to: @account.currency, date:)
             currency = @account.currency
           end
 
