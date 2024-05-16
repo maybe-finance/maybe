@@ -16,10 +16,20 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
-  test "create" do
+  test "should create account" do
     assert_difference -> { Account.count }, +1 do
       post accounts_path, params: { account: { accountable_type: "Account::Credit" } }
       assert_redirected_to accounts_url
     end
+  end
+
+  test "should create a valuation together with account" do
+    balance = 700
+    start_date = 3.days.ago.to_date
+    post accounts_path, params: { account: { accountable_type: "Account::Credit", balance:, start_date: } }
+
+    new_valuation = Valuation.order(:created_at).last
+    assert new_valuation.value == balance
+    assert new_valuation.date == start_date
   end
 end

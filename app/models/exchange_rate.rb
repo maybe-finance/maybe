@@ -18,5 +18,12 @@ class ExchangeRate < ApplicationRecord
     def get_rate_series(from, to, date_range)
       where(base_currency: from, converted_currency: to, date: date_range).order(:date)
     end
+
+    def convert(value:, from:, to:, date:)
+      rate = ExchangeRate.find_by(base_currency: from, converted_currency: to, date:)
+      raise "Conversion from: #{from} to: #{to} on: #{date} not found" unless rate
+
+      value * rate.rate
+    end
   end
 end
