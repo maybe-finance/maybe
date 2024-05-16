@@ -78,4 +78,12 @@ class Account::SyncableTest < ActiveSupport::TestCase
 
     assert_equal 31, account.balances.count
   end
+
+  test "account balance is updated after sync" do
+    account = accounts(:savings_with_valuation_overrides)
+
+    assert_changes -> { account.balance }, to: 20500 do
+      account.sync
+    end
+  end
 end

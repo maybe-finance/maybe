@@ -53,7 +53,7 @@ class AccountsController < ApplicationController
   end
 
   def create
-    @account = Current.family.accounts.build(account_params.except(:accountable_type))
+    @account = Current.family.accounts.build(account_params.except(:accountable_type, :start_date))
     @account.accountable = Accountable.from_type(account_params[:accountable_type])&.new
 
     if @account.save
