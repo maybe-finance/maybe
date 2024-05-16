@@ -16,7 +16,7 @@ module Account::Syncable
         calculator.calculate
         self.balances.upsert_all(calculator.daily_balances, unique_by: :index_account_balances_on_account_id_date_currency_unique)
         self.balances.where("date < ?", effective_start_date).delete_all
-        new_balance = calculator.daily_balances.last[:balance]
+        new_balance = calculator.daily_balances.select { |b| b[:currency] == self.currency }.last[:balance]
         self.balance = new_balance
         self.save!
 
