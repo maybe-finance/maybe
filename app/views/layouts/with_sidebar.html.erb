@@ -12,7 +12,9 @@
     </main>
   </div>
 
-  <%= render "shared/upgrade_notification" %>
+  <% if (upgrade = get_upgrade_for_notification(Current.user, Setting.upgrades_mode)) %>
+    <%= render partial: "shared/upgrade_notification", locals: { upgrade: upgrade } %>
+  <% end %>
 <% end %>
 
 <%= render template: "layouts/application" %>
