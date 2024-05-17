@@ -42,6 +42,7 @@ class ImportsTest < ApplicationSystemTestCase
       click_link "New import from CSV"
     end
 
+    # 1) Create import step
     assert_selector "h1", text: "New import"
 
     within "form" do
@@ -49,23 +50,45 @@ class ImportsTest < ApplicationSystemTestCase
     end
 
     click_button "Next"
+
+    # 2) Load Step
     assert_selector "h1", text: "Load import"
 
     within "form" do
-      fill_in "import_raw_csv_str", with: valid_csv_str
+      fill_in "import_raw_csv_str", with: <<-ROWS
+        date,Custom Name Column,category,amount
+        invalid_date,Starbucks drink,Food,-20.50
+        2024-01-01,Amazon purchase,Shopping,-89.50
+      ROWS
     end
 
     click_button "Next"
+
+    # 3) Configure step
     assert_selector "h1", text: "Configure import"
 
-    # If raw CSV already has correct columns, no need to edit the mappings
+    within "form" do
+      select "Custom Name Column", from: "import_column_mappings_name"
+    end
+
     click_button "Next"
+
+    # 4) Clean step
     assert_selector "h1", text: "Clean import"
 
-    # For part 1 of this implementation, user cannot "clean" their data inline, so data is assumed to be cleaned at this point
-    click_link "Next"
-    assert_selector "h1", text: "Confirm import"
+    # We have an invalid value, so user cannot click next yet
+    assert_no_text "Next"
 
+    # Replace invalid date with valid date
+    fill_in "cell-0-0", with: "2024-01-02"
+
+    # Trigger blur event so value saves
+    find("body").click
+
+    click_link "Next"
+
+    # 5) Confirm step
+    assert_selector "h1", text: "Confirm import"
     click_button "Import 2 transactions"
     assert_selector "h1", text: "Imports"
   end

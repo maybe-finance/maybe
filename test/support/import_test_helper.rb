@@ -14,12 +14,6 @@ module ImportTestHelper
     ROWS
   end
 
-  def insufficient_columns_csv_str
-    <<-ROWS
-      date,name
-    ROWS
-  end
-
   def malformed_csv_str
     <<-ROWS
       name,age
