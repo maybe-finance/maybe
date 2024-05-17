@@ -1,19 +1,17 @@
-<% if upgrade_notification %>
-  <% upgrade = upgrade_notification %>
-  <div class="bg-white space-y-4 text-right fixed bottom-10 right-10 p-5 border border-alpha-black-200 shadow-xs rounded-md z-50 max-w-[350px]">
-    <div>
-      <p><%= link_to upgrade.to_s, upgrade.url, class: "text-sm text-blue-500 underline hover:text-blue-700", target: "_blank" %></p>
-      <% if upgrade.complete? %>
-        <p class="text-gray-900"><%= t(".app_upgraded", version: upgrade.to_s) %></p>
-      <% else %>
-        <p class="text-gray-900"><%= t(".new_version_available") %></p>
-      <% end %>
-    </div>
-    <div class="flex justify-end items-center gap-2">
-      <%= button_to t(".dismiss"), acknowledge_upgrade_path(upgrade.commit_sha), method: :post, class: "#{upgrade.complete? ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'} text-sm font-bold p-2 rounded-lg" %>
-      <% if upgrade.available? %>
-        <%= button_to t(".upgrade_now"), deploy_upgrade_path(upgrade.commit_sha), method: :post, class: "bg-gray-900 hover:bg-gray-700 text-white font-medium text-sm p-2 rounded-lg" %>
-      <% end %>
-    </div>
+<%# locals: (upgrade:) %>
+<div class="bg-white space-y-4 text-right fixed bottom-10 right-10 p-5 border border-alpha-black-200 shadow-xs rounded-md z-50 max-w-[350px]">
+  <div>
+    <p><%= link_to upgrade.to_s, upgrade.url, class: "text-sm text-blue-500 underline hover:text-blue-700", target: "_blank" %></p>
+    <% if upgrade.complete? %>
+      <p class="text-gray-900"><%= t(".app_upgraded", version: upgrade.to_s) %></p>
+    <% else %>
+      <p class="text-gray-900"><%= t(".new_version_available") %></p>
+    <% end %>
   </div>
-<% end %>
+  <div class="flex justify-end items-center gap-2">
+    <%= button_to t(".dismiss"), acknowledge_upgrade_path(upgrade.commit_sha), method: :post, class: "#{upgrade.complete? ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'} text-sm font-bold p-2 rounded-lg" %>
+    <% if upgrade.available? %>
+      <%= button_to t(".upgrade_now"), deploy_upgrade_path(upgrade.commit_sha), method: :post, class: "bg-gray-900 hover:bg-gray-700 text-white font-medium text-sm p-2 rounded-lg" %>
+    <% end %>
+  </div>
+</div>

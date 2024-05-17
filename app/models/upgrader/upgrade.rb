@@ -13,7 +13,9 @@ class Upgrader::Upgrade
   end
 
   def available?
-    version > Maybe.version || (version == Maybe.version && commit_sha != Maybe.commit_sha)
+    return false if commit_sha == Maybe.commit_sha || version < Maybe.version
+    return false if version == Maybe.version && type == "release"
+    true
   end
 
   def to_s
