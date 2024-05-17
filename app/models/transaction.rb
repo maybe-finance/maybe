@@ -9,8 +9,8 @@ class Transaction < ApplicationRecord
 
   monetize :amount
 
-  scope :inflows, -> { where("amount > 0") }
-  scope :outflows, -> { where("amount < 0") }
+  scope :inflows, -> { where("amount <= 0") }
+  scope :outflows, -> { where("amount > 0") }
   scope :active, -> { where(excluded: false) }
   scope :with_converted_amount, ->(currency = Current.family.currency) {
     # Join with exchange rates to convert the amount to the given currency
