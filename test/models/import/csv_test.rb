@@ -36,6 +36,11 @@ class Import::CsvTest < ActiveSupport::TestCase
     assert_not invalid_csv.valid?
   end
 
+  test "csv with additional columns and empty values" do
+    csv = Import::Csv.new valid_csv_with_extra_column
+    assert csv.valid?
+  end
+
   test "updating a cell returns a copy of the original csv" do
     original_date = "2024-01-01"
     new_date = "2024-01-01"
