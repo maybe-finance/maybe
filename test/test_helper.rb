@@ -5,6 +5,10 @@ ENV["SELF_HOSTING_ENABLED"] = "false"
 ENV["UPGRADES_ENABLED"] = "false"
 ENV["RAILS_ENV"] ||= "test"
 
+# Fixes Segfaults on M1 Macs when running tests in parallel (temporary workaround)
+# https://github.com/ged/ruby-pg/issues/538#issuecomment-1591629049
+ENV["PGGSSENCMODE"] = "disable"
+
 require_relative "../config/environment"
 require "rails/test_help"
 require "minitest/mock"

@@ -2,10 +2,15 @@
 name: Bug report
 about: Create a report to help us improve
 title: 'Bug: '
-labels: ":bug: Bug"
+labels: ":bug: Bug, :rocket: Feature"
 assignees: ''
 
 ---
+
+**Where did this bug occur?**
+
+- [ ] Local development
+- [ ] Self hosted app (i.e. Docker)
 
 **Describe the bug**
 A clear and concise description of what the bug is.

@@ -1,11 +1,13 @@
 ---
-name: Feature Spec
-about: A fully scoped feature that is ready to be worked on.
+name: Feature Specification
+about: A fully scoped feature with designs, requirements, and implementation plan
 title: 'Feature: '
 labels: ":rocket: Feature"
 assignees: ''
 
 ---
+
+_If your feature requires designs, UI changes, or input from the Maybe team, you should open a feature request instead.  This template is for a **fully scoped and ready** feature. _
 
 ## Feature Overview
 

@@ -1,0 +1,39 @@
+services:
+
+  app:
+    image: ghcr.io/maybe-finance/maybe:latest
+    volumes:
+      - ./storage:/rails/storage
+    ports:
+      - 127.0.0.1:3000:3000
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      SELF_HOSTING_ENABLED: true
+      DB_HOST: postgres
+      RAILS_FORCE_SSL: false
+      RAILS_ASSUME_SSL: false
+      POSTGRES_USER: postgres
+      GOOD_JOB_EXECUTION_MODE: async
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-maybe_production}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-data:

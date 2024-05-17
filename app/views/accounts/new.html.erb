@@ -67,9 +67,10 @@
       <%= form_with model: @account, url: accounts_path, scope: :account, html: { class: "m-5 mt-1 flex flex-col justify-between grow", data: { turbo: false } } do |f| %>
         <div class="space-y-4 grow">
           <%= f.hidden_field :accountable_type %>
-          <%= f.text_field :name, placeholder: t("accounts.new.name.placeholder"), required: "required", label: t("accounts.new.name.label"), autofocus: true %>
+          <%= f.text_field :name, placeholder: t(".name.placeholder"), required: "required", label: t(".name.label"), autofocus: true %>
           <%= render "accounts/#{permitted_accountable_partial(@account.accountable_type)}", f: f %>
-          <%= f.money_field :balance_money, label: "Balance", required: "required" %>
+          <%= f.money_field :balance_money, label: t(".balance.label"), required: "required" %>
+          <%= f.date_field :date, label: t(".start_date.label"), required: true, max: Date.today, value: Date.today %>
         </div>
         <%= f.submit "Add #{@account.accountable.model_name.human.downcase}" %>
       <% end %>

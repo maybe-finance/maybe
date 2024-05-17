@@ -4,7 +4,7 @@ class ValuationsController < ApplicationController
     @account = Current.family.accounts.find(params[:account_id])
 
     # TODO: placeholder logic until we have a better abstraction for trends
-    @valuation = @account.valuations.new(valuation_params.merge(currency: Current.family.currency))
+    @valuation = @account.valuations.new(valuation_params.merge(currency: @account.currency))
     if @valuation.save
       @valuation.account.sync_later(@valuation.date)
 

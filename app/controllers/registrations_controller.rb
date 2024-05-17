@@ -13,6 +13,7 @@ class RegistrationsController < ApplicationController
   def create
     family = Family.new
     @user.family = family
+    @user.role = :admin
 
     if @user.save
       Transaction::Category.create_default_categories(@user.family)
