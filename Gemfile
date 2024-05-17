@@ -71,4 +71,5 @@ group :test do
   gem "vcr"
   gem "webmock"
   gem "climate_control"
+  gem "simplecov", require: false
 end
