@@ -7,7 +7,7 @@ class Import < ApplicationRecord
 
   enum :status, { pending: "pending", complete: "complete", importing: "importing", failed: "failed" }, validate: true
 
-  store_accessor :column_mappings, :date, :merchant, :category, :amount
+  store_accessor :column_mappings, :define_column_accessors
 
   scope :ordered, -> { order(created_at: :desc) }
   scope :complete, -> { where(status: "complete") }
@@ -145,6 +145,12 @@ class Import < ApplicationRecord
         validator: ->(value) { Import::Field.bigdecimal_validator(value) }
 
       [ date_field, name_field, category_field, amount_field ]
+    end
+
+    def define_column_accessors
+      expected_fields.each do |field|
+        field.key.to_sym
+      end
     end
 
     def raw_csv_must_be_parsable
