@@ -26,9 +26,9 @@
     </div>
 
     <% if import.complete? %>
-      <p class="text-xs text-gray-500"><%= t(".completed_on", datetime: import.updated_at.to_formatted_s) %></p>
+      <p class="text-xs text-gray-500"><%= t(".completed_on", datetime: import.updated_at.strftime("%Y-%m-%d")) %></p>
     <% else %>
-      <p class="text-xs text-gray-500"><%= t(".started_on", datetime: import.created_at.to_formatted_s) %></p>
+      <p class="text-xs text-gray-500"><%= t(".started_on", datetime: import.created_at.strftime("%Y-%m-%d")) %></p>
     <% end %>
   </div>
 

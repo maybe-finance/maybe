@@ -29,7 +29,7 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
       post imports_url, params: { import: { account_id: @user.family.accounts.first.id } }
     end
 
-    assert_redirected_to load_import_path(Import.ordered.last)
+    assert_redirected_to load_import_path(Import.ordered.first)
   end
 
   test "should get edit" do
@@ -76,7 +76,7 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
 
   test "should redirect back to load step with an alert message if not loaded" do
     get configure_import_url(@empty_import)
-    assert_equal "Please load a valid CSV first", flash[:alert]
+    assert_equal "Please load a CSV first", flash[:alert]
     assert_redirected_to load_import_path(@empty_import)
   end
 

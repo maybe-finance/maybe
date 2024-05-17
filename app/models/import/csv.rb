@@ -22,13 +22,7 @@ class Import::Csv
       end
     end
 
-    csv = new(generated_csv_str)
-
-    fields.each do |field|
-      csv.define_validator(field.key, field.validator) if field.validator
-    end
-
-    csv
+    new(generated_csv_str)
   end
 
   attr_reader :csv_str

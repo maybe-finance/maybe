@@ -1,4 +1,18 @@
 class Import::Field
+  def self.iso_date_validator(value)
+    Date.iso8601(value)
+    true
+  rescue
+    false
+  end
+
+  def self.bigdecimal_validator(value)
+    BigDecimal(value)
+    true
+  rescue
+    false
+  end
+
   attr_reader :key, :label, :validator
 
   def initialize(key:, label:, validator: nil)

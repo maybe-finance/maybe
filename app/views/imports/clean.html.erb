@@ -33,7 +33,7 @@
                 <%= ff.hidden_field :col_idx, value: col_index %>
                 <%= ff.text_field :value, value: value,
                                   id: "cell-#{row_index}-#{col_index}",
-                                  class: "px-4 py-3.5 text-sm w-full border-none bg-transparent focus:ring-gray-900 focus:ring-2 focus-visible:outline-none #{table_corner_class(row_index, col_index, @import.csv.table, row.fields)}",
+                                  class: "#{@import.csv.cell_valid?(row_index, col_index) ? "focus:border-transparent border-transparent" : "border-red-500"} border px-4 py-3.5 text-sm w-full bg-transparent focus:ring-gray-900 focus:ring-2 focus-visible:outline-none #{table_corner_class(row_index, col_index, @import.csv.table, row.fields)}",
                                   data: { "auto-submit-form-target" => "auto" } %>
               <% end %>
             <% end %>
@@ -43,5 +43,7 @@
     </div>
   </div>
 
-  <%= link_to "Next", confirm_import_path(@import), class: "px-4 py-2 block w-60 text-center mx-auto rounded-lg bg-gray-900 text-white text-sm font-medium", data: { turbo: false } %>
+  <% if @import.csv.valid? %>
+    <%= link_to "Next", confirm_import_path(@import), class: "px-4 py-2 block w-60 text-center mx-auto rounded-lg bg-gray-900 text-white text-sm font-medium", data: { turbo: false } %>
+  <% end %>
 </div>

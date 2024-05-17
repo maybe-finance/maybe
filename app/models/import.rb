@@ -9,7 +9,7 @@ class Import < ApplicationRecord
 
   store_accessor :column_mappings, :date, :merchant, :category, :amount
 
-  scope :ordered, -> { order(:created_at) }
+  scope :ordered, -> { order(created_at: :desc) }
   scope :complete, -> { where(status: "complete") }
   scope :pending, -> { where(status: "pending") }
 
@@ -30,11 +30,15 @@ class Import < ApplicationRecord
   end
 
   def csv
-    get_normalized_csv
+    get_normalized_csv_with_validation
   end
 
   def available_headers
     get_raw_csv.table.headers
+  end
+
+  def get_selected_header_for_field(field)
+    column_mappings&.dig(field) || field.key
   end
 
   def update_csv!(row_idx:, col_idx:, value:)
@@ -68,9 +72,16 @@ class Import < ApplicationRecord
 
   private
 
-    def get_normalized_csv
+    def get_normalized_csv_with_validation
       return nil if normalized_csv_str.nil?
-      generate_normalized_csv(normalized_csv_str)
+
+      csv = Import::Csv.new(normalized_csv_str)
+
+      expected_fields.each do |field|
+        csv.define_validator(field.key, field.validator) if field.validator
+      end
+
+      csv
     end
 
     def get_raw_csv
@@ -103,10 +114,10 @@ class Import < ApplicationRecord
       csv.table.each do |row|
         category = account.family.transaction_categories.find_or_initialize_by(name: row["category"])
         txn = account.transactions.build \
-          name: row["name"],
+          name: row["name"] || "Imported transaction",
           date: Date.iso8601(row["date"]),
           category: category,
-          amount: BigDecimal(row["amount"])
+          amount: BigDecimal(row["amount"]) * -1 # User inputs amounts with opposite signage of our internal representation
 
         transactions << txn
       end
@@ -118,7 +129,7 @@ class Import < ApplicationRecord
       date_field = Import::Field.new \
         key: "date",
         label: "Date",
-        validator: method(:iso_date_validator)
+        validator: ->(value) { Import::Field.iso_date_validator(value) }
 
       name_field = Import::Field.new \
         key: "name",
@@ -130,16 +141,10 @@ class Import < ApplicationRecord
 
       amount_field = Import::Field.new \
         key: "amount",
-        label: "Amount"
+        label: "Amount",
+        validator: ->(value) { Import::Field.bigdecimal_validator(value) }
 
       [ date_field, name_field, category_field, amount_field ]
-    end
-
-    def iso_date_validator(value)
-      Date.iso8601(value)
-      true
-    rescue
-      false
     end
 
     def raw_csv_must_be_parsable

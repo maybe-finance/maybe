@@ -72,13 +72,8 @@ class Import::CsvTest < ActiveSupport::TestCase
     csv = Import::Csv.create_with_field_mappings(raw_csv_str, fields, mappings)
 
     assert_equal %w[ date name ], csv.table.headers
-
-    assert_not csv.valid?
-    assert_not csv.cell_valid?(0, 0)
-    assert_equal "invalid_date_value", csv.table[0][0]
-
-    assert csv.cell_valid?(0, 1)
-    assert_equal "Starbucks drink", csv.table[0][1]
+    assert_equal 2, csv.table.size
+    assert_equal "Amazon stuff", csv.table[1][1]
   end
 
   private

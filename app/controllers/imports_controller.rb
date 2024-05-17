@@ -58,6 +58,9 @@ class ImportsController < ApplicationController
   end
 
   def clean
+    unless @import.loaded?
+      redirect_to load_import_path(@import), alert: t(".invalid_csv")
+    end
   end
 
   def update_csv
