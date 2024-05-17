@@ -7,11 +7,9 @@ class Import < ApplicationRecord
 
   enum :status, { pending: "pending", complete: "complete", importing: "importing", failed: "failed" }, validate: true
 
-  store_accessor :column_mappings, :define_column_accessors
+  store_accessor :column_mappings, :define_column_mapping_keys
 
   scope :ordered, -> { order(created_at: :desc) }
-  scope :complete, -> { where(status: "complete") }
-  scope :pending, -> { where(status: "pending") }
 
   def publish_later
     ImportJob.perform_later(self)
@@ -147,7 +145,7 @@ class Import < ApplicationRecord
       [ date_field, name_field, category_field, amount_field ]
     end
 
-    def define_column_accessors
+    def define_column_mapping_keys
       expected_fields.each do |field|
         field.key.to_sym
       end
