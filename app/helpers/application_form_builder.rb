@@ -33,7 +33,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
 
     readonly_currency = options[:readonly_currency] || false
 
-    currency = money&.currency || Money.default_currency
+    currency = money&.currency || Money::Currency.new(Current.family.currency)  || Money.default_currency
     default_options = {
       class: "form-field__input",
       value: money&.amount,
@@ -45,7 +45,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     merged_options = default_options.merge(options)
 
     grouped_options = currency_options_for_select
-    selected_currency = money&.currency&.iso_code
+    selected_currency = money&.currency&.iso_code || currency.iso_code
 
     @template.form_field_tag data: { controller: "money-field" } do
       (label(method, *label_args(options)).to_s if options[:label]) +
