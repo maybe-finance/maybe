@@ -3,7 +3,7 @@ source "https://rubygems.org"
 ruby file: ".ruby-version"
 
 # Rails
-gem "rails", github: "rails/rails", branch: "main"
+gem "rails", github: "rails/rails", branch: "7-2-stable"
 
 # Drivers
 gem "pg", "~> 1.5"
@@ -26,7 +26,7 @@ gem "turbo-rails"
 gem "good_job"
 
 # Search
-gem "ransack"
+gem "ransack", github: "maybe-finance/ransack", branch: "main"
 
 # Error logging
 gem "stackprof"
