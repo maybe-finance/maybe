@@ -21,8 +21,24 @@ Rails.application.routes.draw do
     resource :security, only: %i[show update]
   end
 
+  resources :imports, except: :show do
+    member do
+      get "load"
+      patch "load" => "imports#load_csv"
+
+      get "configure"
+      patch "configure" => "imports#update_mappings"
+
+      get "clean"
+      patch "clean" => "imports#update_csv"
+
+      get "confirm"
+      patch "confirm" => "imports#publish"
+    end
+  end
+
   resources :transactions do
-    match "search" => "transactions#search", on: :collection, via: [ :get, :post ], as: :search
+    match "search" => "transactions#search", on: :collection, via: %i[ get post ], as: :search
 
     collection do
       scope module: :transactions do

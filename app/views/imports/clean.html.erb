@@ -1,0 +1,49 @@
+<%= content_for :return_to_path, return_to_path(params, imports_path) %>
+
+<div class="mx-auto max-w-screen-md w-full py-24">
+  <h1 class="sr-only"><%= t(".clean_import") %></h1>
+
+  <div class="text-center space-y-2 max-w-[400px] mx-auto mb-8">
+    <h2 class="text-3xl text-gray-900 font-medium"><%= t(".clean_and_edit") %></h2>
+    <p class="text-gray-500 text-sm"><%= t(".clean_description") %></p>
+  </div>
+
+  <div class="bg-gray-25 rounded-xl p-1 mb-6">
+    <div
+      class="grid items-center uppercase text-xs font-medium text-gray-500 py-3"
+      style="grid-template-columns: repeat(<%= @import.expected_fields.size %>, 1fr);">
+      <% @import.expected_fields.each do |field| %>
+        <div class="px-5"><%= field.label %></div>
+      <% end %>
+    </div>
+
+    <div class="bg-white border border-alpha-black-200 rounded-xl shadow-xs divide-y divide-alpha-black-200">
+      <% @import.csv.table.each_with_index do |row, row_index| %>
+        <div
+          class="grid divide-x divide-alpha-black-200"
+          style="grid-template-columns: repeat(<%= @import.expected_fields.size %>, 1fr);">
+          <% row.fields.each_with_index do |value, col_index| %>
+            <%= form_with model: @import,
+                          builder: ActionView::Helpers::FormBuilder,
+                          url: clean_import_url(@import),
+                          method: :patch,
+                          data: { turbo: false, controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
+              <%= form.fields_for :csv_update do |ff| %>
+                <%= ff.hidden_field :row_idx, value: row_index %>
+                <%= ff.hidden_field :col_idx, value: col_index %>
+                <%= ff.text_field :value, value: value,
+                                  id: "cell-#{row_index}-#{col_index}",
+                                  class: "#{@import.csv.cell_valid?(row_index, col_index) ? "focus:border-transparent border-transparent" : "border-red-500"} border px-4 py-3.5 text-sm w-full bg-transparent focus:ring-gray-900 focus:ring-2 focus-visible:outline-none #{table_corner_class(row_index, col_index, @import.csv.table, row.fields)}",
+                                  data: { "auto-submit-form-target" => "auto" } %>
+              <% end %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <% if @import.csv.valid? %>
+    <%= link_to "Next", confirm_import_path(@import), class: "px-4 py-2 block w-60 text-center mx-auto rounded-lg bg-gray-900 text-white text-sm font-medium", data: { turbo: false } %>
+  <% end %>
+</div>

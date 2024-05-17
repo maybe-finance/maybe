@@ -1,0 +1,34 @@
+<%= content_for :content do %>
+  <div class="flex items-center justify-between p-8">
+    <%= link_to root_path do %>
+      <%= image_tag "logo.svg", alt: "Maybe", class: "h-[22px]" %>
+    <% end %>
+    <nav>
+      <div>
+        <ul class="flex items-center gap-2">
+          <% nav_steps(@import).each_with_index do |step, idx| %>
+            <li class="group flex items-center gap-2">
+              <% if step[:path].present? %>
+                <%= link_to step[:path], class: "flex items-center gap-3" do %>
+                  <%= render partial: "nav_step", locals: { step: step, step_idx: idx } %>
+                <% end %>
+              <% else %>
+                <%= render partial: "nav_step", locals: { step: step, step_idx: idx } %>
+              <% end %>
+              <% if idx < nav_steps.size %>
+                <div class="h-px bg-alpha-black-200 w-12 group-last:hidden"></div>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </nav>
+    <%= link_to content_for(:return_to_path) do %>
+      <%= lucide_icon("x", class: "text-gray-500 w-5 h-5") %>
+    <% end %>
+  </div>
+
+  <%= yield %>
+<% end %>
+
+<%= render template: "layouts/application" %>

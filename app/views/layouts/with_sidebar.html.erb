@@ -1,0 +1,18 @@
+<%= content_for :content do %>
+  <div class="flex h-full bg-gray-25">
+    <div class="p-6 pb-20 w-[368px] shrink-0 h-full overflow-y-auto">
+      <% if content_for?(:sidebar) %>
+        <%= yield :sidebar %>
+      <% else %>
+        <%= render "layouts/sidebar" %>
+      <% end %>
+    </div>
+    <main class="grow px-20 pt-6 pb-32 h-full overflow-y-auto">
+      <%= yield %>
+    </main>
+  </div>
+
+  <%= render "shared/upgrade_notification" %>
+<% end %>
+
+<%= render template: "layouts/application" %>

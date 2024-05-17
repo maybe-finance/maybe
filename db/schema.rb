@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_04_30_111641) do
+ActiveRecord::Schema[7.2].define(version: 2024_05_02_205006) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -18,6 +18,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_30_111641) do
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "account_status", ["ok", "syncing", "error"]
+  create_enum "import_status", ["pending", "importing", "complete", "failed"]
   create_enum "user_role", ["admin", "member"]
 
   create_table "account_balances", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -222,6 +223,17 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_30_111641) do
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
 
+  create_table "imports", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "account_id", null: false
+    t.jsonb "column_mappings"
+    t.enum "status", default: "pending", enum_type: "import_status"
+    t.string "raw_csv_str"
+    t.string "normalized_csv_str"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_imports_on_account_id"
+  end
+
   create_table "invite_codes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "token", null: false
     t.datetime "created_at", null: false
@@ -305,6 +317,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_30_111641) do
   add_foreign_key "accounts", "families"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "imports", "accounts"
   add_foreign_key "transaction_categories", "families"
   add_foreign_key "transaction_merchants", "families"
   add_foreign_key "transactions", "accounts", on_delete: :cascade

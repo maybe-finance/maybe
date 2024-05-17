@@ -1,4 +1,6 @@
 class PagesController < ApplicationController
+  layout "with_sidebar"
+
   include Filterable
 
   def dashboard

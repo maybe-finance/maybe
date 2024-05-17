@@ -1,61 +1,31 @@
-<!DOCTYPE html>
-<html class="h-full bg-white">
-  <head>
-    <title>Maybe</title>
-    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Maybe">
+<%= content_for :content do %>
+  <div class="flex flex-col justify-center min-h-full px-6 py-12">
+    <div class="sm:mx-auto sm:w-full sm:max-w-md">
+      <%= render "shared/logo" %>
 
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ffffff">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="theme-color" content="#ffffff">
+      <h2 class="mt-6 text-3xl font-semibold tracking-tight text-center font-display">
+        <%= content_for?(:header_title) ? yield(:header_title).html_safe : t(".your_account") %>
+      </h2>
 
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
-
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
-
-    <%= hotwire_livereload_tags if Rails.env.development? %>
-    <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
-  </head>
-
-  <body class="h-full">
-    <div class="flex flex-col justify-center min-h-full px-6 py-12">
-
-      <div class="sm:mx-auto sm:w-full sm:max-w-md">
-        <%= render "shared/logo" %>
-
-        <h2 class="mt-6 text-3xl font-semibold tracking-tight text-center font-display">
-          <%= content_for?(:header_title) ? yield(:header_title).html_safe : t(".your_account") %>
-        </h2>
-
-        <% if controller_name == "sessions" %>
+      <% if controller_name == "sessions" %>
         <p class="mt-2 text-sm text-center text-gray-600">
           <%= t(".or") %> <%= link_to t(".sign_up"), new_registration_path, class: "font-medium text-gray-600 hover:text-gray-400 transition" %>
         </p>
-        <% elsif controller_name == "registrations" %>
+      <% elsif controller_name == "registrations" %>
         <p class="mt-2 text-sm text-center text-gray-600">
           <%= t(".or") %> <%= link_to t(".sign_in"), new_session_path, class: "font-medium text-gray-600 hover:text-gray-400 transition" %>
         </p>
-        <% end %>
-
-      </div>
-
-      <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-lg">
-        <%= yield %>
-      </div>
-
-      <div class="p-8 mt-2 text-center">
-        <p class="mt-6 text-sm text-black"><%= link_to t(".privacy_policy"), "/privacy", class: "font-medium text-gray-600 hover:text-gray-400 transition" %> &bull; <%= link_to t(".terms_of_service"), "/terms", class: "font-medium text-gray-600 hover:text-gray-400 transition" %></p>
-      </div>
-
+      <% end %>
     </div>
-  </body>
-</html>
+
+    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-lg">
+      <%= yield %>
+    </div>
+
+    <div class="p-8 mt-2 text-center">
+      <p class="mt-6 text-sm text-black"><%= link_to t(".privacy_policy"), "/privacy", class: "font-medium text-gray-600 hover:text-gray-400 transition" %> &bull; <%= link_to t(".terms_of_service"), "/terms", class: "font-medium text-gray-600 hover:text-gray-400 transition" %></p>
+    </div>
+  </div>
+<% end %>
+
+<%= render template: "layouts/application" %>

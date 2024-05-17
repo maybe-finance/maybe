@@ -1,4 +1,6 @@
 class TransactionsController < ApplicationController
+  layout "with_sidebar"
+
   before_action :set_transaction, only: %i[ show edit update destroy ]
 
   def index

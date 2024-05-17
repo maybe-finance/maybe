@@ -1,4 +1,6 @@
 class AccountsController < ApplicationController
+  layout "with_sidebar"
+
   include Filterable
   before_action :set_account, only: %i[ show update destroy sync ]
 
@@ -48,7 +50,7 @@ class AccountsController < ApplicationController
         end
       end
     else
-      render "edit", status: :unprocessable_entity
+      render "show", status: :unprocessable_entity
     end
   end
 
@@ -84,11 +86,11 @@ class AccountsController < ApplicationController
 
   private
 
-  def set_account
-    @account = Current.family.accounts.find(params[:id])
-  end
+    def set_account
+      @account = Current.family.accounts.find(params[:id])
+    end
 
-  def account_params
-    params.require(:account).permit(:name, :accountable_type, :balance, :start_date, :currency, :subtype, :is_active)
-  end
+    def account_params
+      params.require(:account).permit(:name, :accountable_type, :balance, :start_date, :currency, :subtype, :is_active)
+    end
 end

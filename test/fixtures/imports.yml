@@ -1,0 +1,32 @@
+empty_import:
+  account: checking
+  created_at: <%= 1.minute.ago %>
+
+loaded_import:
+  account: checking
+  raw_csv_str: |
+    date,name,category,amount
+    2024-01-01,Starbucks drink,Food,20
+    2024-01-02,Amazon stuff,Shopping,200
+  normalized_csv_str: |
+    date,name,category,amount
+    2024-01-01,Starbucks drink,Food,20
+    2024-01-02,Amazon stuff,Shopping,200
+  created_at: <%= 2.days.ago %>
+
+completed_import:
+  account: checking
+  column_mappings:
+    date: date
+    name: name
+    category: category
+    amount: amount
+  raw_csv_str: |
+    date,name,category,amount
+    2024-01-01,Starbucks drink,Food,20
+  normalized_csv_str: |
+    date,name,category,amount
+    2024-01-01,Starbucks drink,Food,20
+  created_at: <%= 2.days.ago %>
+
+

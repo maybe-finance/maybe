@@ -1,4 +1,4 @@
-class Settings::HostingsController < ApplicationController
+class Settings::HostingsController < SettingsController
   before_action :verify_hosting_mode
 
   def show

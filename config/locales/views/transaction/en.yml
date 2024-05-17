@@ -57,6 +57,8 @@ en:
       transfer: Transfer
     index:
       edit_categories: Edit categories
+      edit_imports: Edit imports
+      import: Import
     merchants:
       create:
         success: New merchant created successfully
