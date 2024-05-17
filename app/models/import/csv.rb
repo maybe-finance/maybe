@@ -1,6 +1,6 @@
 class Import::Csv
   def self.parse_csv(csv_str)
-    CSV.parse((csv_str || "").strip, headers: true, converters: [ ->(str) { str.strip } ])
+    CSV.parse((csv_str || "").strip, headers: true, converters: [ ->(str) { str&.strip } ])
   end
 
   def self.create_with_field_mappings(raw_csv_str, fields, field_mappings)

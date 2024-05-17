@@ -14,6 +14,14 @@ module ImportTestHelper
     ROWS
   end
 
+  def valid_csv_with_extra_column
+    <<-ROWS
+      date,name,category,"optional id",amount
+      2024-01-01,Starbucks drink,Food,1234,20
+      2024-01-02,Amazon stuff,Shopping,,200
+    ROWS
+  end
+
   def malformed_csv_str
     <<-ROWS
       name,age
