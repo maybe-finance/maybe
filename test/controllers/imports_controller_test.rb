@@ -5,8 +5,8 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
 
   setup do
     sign_in @user = users(:family_admin)
-    @imports = @user.family.imports.ordered.to_a
     @empty_import = imports(:empty_import)
+    @loaded_import = imports(:loaded_import)
     @completed_import = imports(:completed_import)
   end
 
@@ -14,7 +14,7 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     get imports_url
     assert_response :success
 
-    @imports.each do |import|
+    @user.family.imports.ordered.each do |import|
       assert_select "#" + dom_id(import), count: 1
     end
   end
@@ -70,7 +70,7 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get configure" do
-    get configure_import_url(@completed_import)
+    get configure_import_url(@loaded_import)
     assert_response :success
   end
 
@@ -81,10 +81,7 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update mappings" do
-    @empty_import.raw_csv_str = valid_csv_str
-    @empty_import.save!
-
-    patch configure_import_url(@empty_import), params: {
+    patch configure_import_url(@loaded_import), params: {
       import: {
         column_mappings: {
           date: "date",
@@ -95,16 +92,14 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
-    assert_redirected_to clean_import_path(@empty_import)
+    assert_redirected_to clean_import_path(@loaded_import)
     assert_equal "Column mappings saved", flash[:notice]
   end
 
   test "can update a cell" do
-    @empty_import.update! raw_csv_str: valid_csv_str
+    assert_equal @loaded_import.csv.table[0][1], "Starbucks drink"
 
-    assert_equal @empty_import.csv.table[0][1], "Starbucks drink"
-
-    patch clean_import_url(@empty_import), params: {
+    patch clean_import_url(@loaded_import), params: {
       import: {
         csv_update: {
           row_idx: 0,
@@ -116,21 +111,17 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    @empty_import.reload
-    assert_equal "new_merchant", @empty_import.csv.table[0][1]
+    @loaded_import.reload
+    assert_equal "new_merchant", @loaded_import.csv.table[0][1]
   end
 
   test "should get clean" do
-    @empty_import.update! raw_csv_str: valid_csv_str
-
-    get clean_import_url(@empty_import)
+    get clean_import_url(@loaded_import)
     assert_response :success
   end
 
   test "should get confirm if all values are valid" do
-    @empty_import.update! raw_csv_str: valid_csv_str
-
-    get confirm_import_url(@empty_import)
+    get confirm_import_url(@loaded_import)
     assert_response :success
   end
 
@@ -143,9 +134,7 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should confirm import" do
-    @empty_import.update! raw_csv_str: valid_csv_str
-
-    patch confirm_import_url(@empty_import)
+    patch confirm_import_url(@loaded_import)
     assert_redirected_to imports_path
     assert_equal "Import has started in the background", flash[:notice]
   end
