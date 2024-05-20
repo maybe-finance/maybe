@@ -112,7 +112,7 @@ class Import < ApplicationRecord
       csv.table.each do |row|
         category = account.family.transaction_categories.find_or_initialize_by(name: row["category"])
         txn = account.transactions.build \
-          name: row["name"] || "Imported transaction",
+          name: row["name"].presence || "Imported transaction",
           date: Date.iso8601(row["date"]),
           category: category,
           amount: BigDecimal(row["amount"]) * -1, # User inputs amounts with opposite signage of our internal representation
