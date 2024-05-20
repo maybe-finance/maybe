@@ -1,0 +1,23 @@
+title: Feature Request
+labels: [ ":bulb: Feature Request" ]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your interest in Maybe!  Please follow the template below to submit your feature request.  You can visit our [roadmap](https://github.com/orgs/maybe-finance/projects/13) to see what's currently planned.
+  - type: textarea
+    attributes:
+      label: Describe the feature
+      description: Provide a clear and concise description of the feature you would like.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Why is this feature important?
+      description: Tell us what specific problem(s) this feature solves for you or other users.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Additional context, screenshots, and relevant links
+      description: Provide additional info to help us evaluate whether this feature is a good fit for the product.
