@@ -115,7 +115,8 @@ class Import < ApplicationRecord
           name: row["name"] || "Imported transaction",
           date: Date.iso8601(row["date"]),
           category: category,
-          amount: BigDecimal(row["amount"]) * -1 # User inputs amounts with opposite signage of our internal representation
+          amount: BigDecimal(row["amount"]) * -1, # User inputs amounts with opposite signage of our internal representation
+          currency: account.currency
 
         transactions << txn
       end
