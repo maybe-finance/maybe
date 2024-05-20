@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: fb4300ce193c338e00c8fe3a8372dc594f6c5de8
+  revision: ed50b93ebcf3c1a92ac3481297c07c33d9f7c161
   branch: 7-2-stable
   specs:
     actioncable (7.2.0.alpha)
@@ -86,7 +86,7 @@ GIT
       connection_pool (>= 2.2.5)
       drb
       i18n (>= 1.6, < 2)
-      minitest (>= 5.1, < 5.22.0)
+      minitest (>= 5.1)
       tzinfo (~> 2.0, >= 2.0.5)
     rails (7.2.0.alpha)
       actioncable (= 7.2.0.alpha)
@@ -261,7 +261,7 @@ GEM
     matrix (0.4.2)
     mini_magick (4.12.0)
     mini_mime (1.1.5)
-    minitest (5.21.2)
+    minitest (5.23.0)
     mocha (2.3.0)
       ruby2_keywords (>= 0.0.5)
     msgpack (1.7.2)
