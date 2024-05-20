@@ -70,7 +70,7 @@
           <%= f.text_field :name, placeholder: t(".name.placeholder"), required: "required", label: t(".name.label"), autofocus: true %>
           <%= render "accounts/#{permitted_accountable_partial(@account.accountable_type)}", f: f %>
           <%= f.money_field :balance_money, label: t(".balance.label"), required: "required" %>
-          <%= f.date_field :date, label: t(".start_date.label"), required: true, max: Date.today, value: Date.today %>
+          <%= f.date_field :start_date, label: t(".start_date.label"), required: true, max: Date.today, value: Date.today %>
         </div>
         <%= f.submit "Add #{@account.accountable.model_name.human.downcase}" %>
       <% end %>
