@@ -1,7 +1,7 @@
 class TransactionsController < ApplicationController
   layout "with_sidebar"
 
-  before_action :set_transaction, only: %i[ show edit update destroy category_menu ]
+  before_action :set_transaction, only: %i[ show edit update destroy category_menu_content ]
 
   def index
     search_params = session[ransack_session_key] || params[:q]
@@ -70,7 +70,7 @@ class TransactionsController < ApplicationController
   def edit
   end
 
-  def category_menu
+  def category_menu_content
   end
 
   def create

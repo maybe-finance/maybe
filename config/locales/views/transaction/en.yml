@@ -28,9 +28,6 @@ en:
       index:
         categories: Categories
         new: New
-      menu:
-        add_new: Add new
-        clear: Clear
       new:
         new_category: New category
       row:
@@ -38,6 +35,9 @@ en:
         edit: Edit category
       update:
         success: Transaction category updated successfully
+    category_menu_content:
+      add_new: Add new
+      clear: Clear
     create:
       success: New transaction created successfully
     destroy:
