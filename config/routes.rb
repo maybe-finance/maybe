@@ -39,7 +39,7 @@ Rails.application.routes.draw do
 
   resources :transactions do
     match "search" => "transactions#search", on: :collection, via: %i[ get post ], as: :search
-    get :category_menu_content, on: :member
+    get "categories/dropdown" => "transactions/categories/dropdowns#new", only: %i[ new ], on: :member
 
     collection do
       scope module: :transactions do

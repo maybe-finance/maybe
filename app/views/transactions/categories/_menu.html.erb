@@ -5,7 +5,11 @@
   </button>
   <div data-menu-target="content" class="absolute z-10 hidden w-screen mt-2 max-w-min cursor-default">
     <div class="w-64 text-sm font-semibold leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-      <%= turbo_frame_tag "category_menu_content", src: category_menu_content_transaction_path(transaction), loading: :lazy %>
+      <%= turbo_frame_tag "category_menu_content", src: categories_dropdown_transaction_path(transaction), loading: :lazy do %>
+        <div class="p-6 flex items-center justify-center">
+          <p class="text-sm text-gray-500 animate-pulse"><%= t(".loading") %></p>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>

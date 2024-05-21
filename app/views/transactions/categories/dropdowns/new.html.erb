@@ -12,7 +12,7 @@
       </div>
       <% sorted_categories = Current.family.transaction_categories.sort_by { |category| category.id == @transaction.category_id ? 0 : 1 } %>
       <% sorted_categories.each do |category| %>
-        <%= render partial: "transactions/categories/dropdown/row", locals: { category:, transaction: @transaction } %>
+        <%= render partial: "transactions/categories/dropdowns/row", locals: { category:, transaction: @transaction } %>
       <% end %>
     </div>
     <hr>
