@@ -15,7 +15,7 @@ class Transactions::Categories::DeletionsController < ApplicationController
 
   private
     def set_category
-      @category = Current.family.transaction_categories.find(params[:transaction_category_id])
+      @category = Current.family.transaction_categories.find(params[:category_id])
     end
 
     def set_replacement_category

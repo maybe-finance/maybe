@@ -17,14 +17,14 @@ en:
             you can also assign a new category below.
           replacement_category_prompt: Select category
       dropdowns:
+        row:
+          delete: Delete category
+          edit: Edit category
         show:
           add_new: Add new
           clear: Clear
           no_categories: No categories found
           search_placeholder: Search
-        row:
-          delete: Delete category
-          edit: Edit category
       edit:
         edit: Edit category
       form:

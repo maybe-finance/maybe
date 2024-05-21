@@ -3,13 +3,12 @@ class Transactions::Categories::DropdownsController < ApplicationController
 
   def show
     @categories = categories_scope.to_a.excluding(@selected_category).prepend(@selected_category).compact
-    @selected_category_id = params[:selected_category_id]
   end
 
   private
   def set_from_params
-    if params[:selected_category_id]
-      @selected_category = categories_scope.find(params[:selected_category_id])
+    if params[:category_id]
+      @selected_category = categories_scope.find(params[:category_id])
     end
 
     if params[:transaction_id]

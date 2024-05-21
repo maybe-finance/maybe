@@ -38,19 +38,19 @@ Rails.application.routes.draw do
   end
 
   resources :transactions do
-    match "search" => "transactions#search", on: :collection, via: %i[ get post ], as: :search
-
     collection do
-      scope module: :transactions do
-        resources :categories, as: :transaction_categories do
+      match "search" => "transactions#search", via: %i[ get post ]
+
+      scope module: :transactions, as: :transaction do
+        resources :categories do
           resources :deletions, only: %i[ new create ], module: :categories
           collection do
-            resource :dropdown, only: :show, module: :categories, as: :transaction_categories_dropdown
+            resource :dropdown, only: :show, module: :categories, as: :category_dropdown
           end
         end
 
-        resources :rules, only: %i[ index ], as: :transaction_rules
-        resources :merchants, only: %i[ index new create edit update destroy ], as: :transaction_merchants
+        resources :rules, only: %i[ index ]
+        resources :merchants, only: %i[ index new create edit update destroy ]
       end
     end
   end
