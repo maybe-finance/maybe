@@ -1,14 +1,14 @@
-<%= turbo_frame_tag "category_menu_content" do %>
+<%= turbo_frame_tag "category_dropdown" do %>
   <div class="flex flex-col relative" data-controller="list-filter">
     <div class="grow p-1.5">
       <div class="relative flex items-center bg-white border border-gray-200 rounded-lg">
-        <input placeholder="Search" autocomplete="nope" type="search" class="placeholder:text-sm placeholder:text-gray-500 font-normal h-10 relative pl-10 w-full border-none rounded-lg" data-list-filter-target="input" data-action="list-filter#filter">
+        <input placeholder="<%= t(".search_placeholder") %>" autocomplete="nope" type="search" class="placeholder:text-sm placeholder:text-gray-500 font-normal h-10 relative pl-10 w-full border-none rounded-lg" data-list-filter-target="input" data-action="list-filter#filter">
         <%= lucide_icon("search", class: "w-5 h-5 text-gray-500 ml-2 absolute inset-0 transform top-1/2 -translate-y-1/2") %>
       </div>
     </div>
     <div data-list-filter-target="list" class="flex flex-col gap-0.5 p-1.5 mt-0.5 mr-2 max-h-64 overflow-y-scroll scrollbar">
       <div class="pb-2 pl-4 mr-2 text-gray-500 hidden" data-list-filter-target="emptyMessage">
-        No categories found
+        <%= t(".no_categories") %>
       </div>
       <% sorted_categories = Current.family.transaction_categories.sort_by { |category| category.id == @transaction.category_id ? 0 : 1 } %>
       <% sorted_categories.each do |category| %>
