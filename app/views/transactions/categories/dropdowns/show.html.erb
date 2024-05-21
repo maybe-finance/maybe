@@ -10,9 +10,8 @@
       <div class="pb-2 pl-4 mr-2 text-gray-500 hidden" data-list-filter-target="emptyMessage">
         <%= t(".no_categories") %>
       </div>
-      <% sorted_categories = Current.family.transaction_categories.sort_by { |category| category.id == @transaction.category_id ? 0 : 1 } %>
-      <% sorted_categories.each do |category| %>
-        <%= render partial: "transactions/categories/dropdowns/row", locals: { category:, transaction: @transaction } %>
+      <% @categories.each do |category| %>
+        <%= render partial: "transactions/categories/dropdowns/row", locals: { category: } %>
       <% end %>
     </div>
     <hr>

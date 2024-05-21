@@ -17,7 +17,7 @@ en:
             you can also assign a new category below.
           replacement_category_prompt: Select category
       dropdowns:
-        new:
+        show:
           add_new: Add new
           clear: Clear
           no_categories: No categories found
