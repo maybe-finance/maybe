@@ -110,9 +110,13 @@ class Import < ApplicationRecord
 
     def generate_transactions
       transactions = []
+      category_cache = {}
 
       csv.table.each do |row|
-        category = account.family.transaction_categories.find_or_initialize_by(name: row["category"]) if row["category"].present?
+        category_name = row["category"]
+
+        category = category_cache[category_name] ||= account.family.transaction_categories.find_or_initialize_by(name: category_name) if row["category"].present?
+
         txn = account.transactions.build \
           name: row["name"].presence || FALLBACK_TRANSACTION_NAME,
           date: Date.iso8601(row["date"]),

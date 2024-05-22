@@ -39,7 +39,10 @@ class ImportTest < ActiveSupport::TestCase
   end
 
   test "publishes a valid import" do
-    assert_difference -> { Transaction::Category.count } => 2, -> { Transaction.count } => 2 do
+    # Import has 3 unique categories: "Food & Drink", "Income", and "Shopping" (x2)
+    # Fixtures already define "Food & Drink" and "Income", so these should not be created
+    # "Shopping" is a new category, but should only be created 1x during import
+    assert_difference -> { Transaction.count } => 4, -> { Transaction::Category.count } => 1 do
       @loaded_import.publish
     end
 
