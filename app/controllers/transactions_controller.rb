@@ -72,8 +72,8 @@ class TransactionsController < ApplicationController
 
   def create
     @transaction = Current.family.accounts
-      .find(params[:transaction][:account_id])
-      .transactions.build(transaction_params.merge(amount: amount))
+                     .find(params[:transaction][:account_id])
+                     .transactions.build(transaction_params.merge(amount: amount))
 
     respond_to do |format|
       if @transaction.save
@@ -88,9 +88,20 @@ class TransactionsController < ApplicationController
   def update
     respond_to do |format|
       sync_start_date = if transaction_params[:date]
-        [ @transaction.date, Date.parse(transaction_params[:date]) ].compact.min
+                          [ @transaction.date, Date.parse(transaction_params[:date]) ].compact.min
       else
         @transaction.date
+      end
+
+      puts params[:transaction]
+
+      if params[:transaction][:tag_id].present?
+        tag = Current.family.tags.find(params[:transaction][:tag_id])
+        @transaction.tags << tag unless @transaction.tags.include?(tag)
+      end
+
+      if params[:transaction][:remove_tag_id].present?
+        @transaction.tags.delete(params[:transaction][:remove_tag_id])
       end
 
       if @transaction.update(transaction_params)
@@ -121,6 +132,7 @@ class TransactionsController < ApplicationController
   end
 
   private
+
     def delete_search_param(params, key, value: nil)
       if value
         params[key]&.delete(value)
@@ -153,8 +165,7 @@ class TransactionsController < ApplicationController
       params[:transaction][:nature].to_s.inquiry
     end
 
-    # Only allow a list of trusted parameters through.
     def transaction_params
-      params.require(:transaction).permit(:name, :date, :amount, :currency, :notes, :excluded, :category_id, :merchant_id)
+      params.require(:transaction).permit(:name, :date, :amount, :currency, :notes, :excluded, :category_id, :merchant_id, :tag_id, :remove_tag_id).except(:tag_id, :remove_tag_id)
     end
 end

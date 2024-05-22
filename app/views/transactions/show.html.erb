@@ -4,37 +4,44 @@
     <span class="text-lg text-gray-500"><%= @transaction.currency %></span>
   </h3>
   <span class="text-sm text-gray-500"><%= @transaction.date.strftime("%A %d %B") %></span>
-  <%= form_with model: @transaction, html: {data: {controller: "auto-submit-form"}} do |f| %>
-    <details class="group" open>
-      <summary class="list-none bg-gray-25 rounded-xl py-1 mt-4 group-open:mb-2">
-        <div class="py-2 px-[11px] flex items-center justify-between font-medium text-xs text-gray-500">
-          Overview
-          <%= lucide_icon("chevron-down", class: "hidden group-open:block text-gray-500 w-5 h-5") %>
-          <%= lucide_icon("chevron-right", class: "group-open:hidden text-gray-500 w-5 h-5") %>
-        </div>
-      </summary>
-      <%= f.date_field :date, label: "Date", max: Date.today, "data-auto-submit-form-target": "auto" %>
-      <div class="h-2"></div>
-      <%= f.collection_select :account_id, Current.family.accounts, :id, :name, { prompt: "Select an Account", label: "Account", class: "text-gray-400" }, {class: "form-field__input cursor-not-allowed text-gray-400", disabled: "disabled"} %>
-    </details>
-    <details class="group" open>
-      <summary class="list-none bg-gray-25 rounded-xl py-1 mt-6 group-open:mb-2">
-        <div class="py-2 px-[11px] flex items-center justify-between font-medium text-xs text-gray-500">
-          Description
-          <%= lucide_icon("chevron-down", class: "hidden group-open:block text-gray-500 w-5 h-5") %>
-          <%= lucide_icon("chevron-right", class: "group-open:hidden text-gray-500 w-5 h-5") %>
-        </div>
-      </summary>
+
+  <details class="group" open>
+    <summary class="list-none bg-gray-25 rounded-xl py-1 mt-4 group-open:mb-2">
+      <div class="py-2 px-[11px] flex items-center justify-between font-medium text-xs text-gray-500">
+        Overview
+        <%= lucide_icon("chevron-down", class: "hidden group-open:block text-gray-500 w-5 h-5") %>
+        <%= lucide_icon("chevron-right", class: "group-open:hidden text-gray-500 w-5 h-5") %>
+      </div>
+    </summary>
+    <%= form_with model: @transaction, html: { data: { controller: "auto-submit-form" } } do |f| %>
+      <div class="space-y-2">
+        <%= f.date_field :date, label: "Date", max: Date.today, "data-auto-submit-form-target": "auto" %>
+        <%= f.collection_select :category_id, Current.family.transaction_categories, :id, :name, { prompt: "Select a category", label: "Category", class: "text-gray-400" }, "data-auto-submit-form-target": "auto" %>
+        <%= f.collection_select :account_id, Current.family.accounts, :id, :name, { prompt: "Select an Account", label: "Account", class: "text-gray-500" }, { class: "form-field__input cursor-not-allowed text-gray-400", disabled: "disabled" } %>
+      </div>
+    <% end %>
+  </details>
+  <details class="group" open>
+    <summary class="list-none bg-gray-25 rounded-xl py-1 mt-6 group-open:mb-2">
+      <div class="py-2 px-[11px] flex items-center justify-between font-medium text-xs text-gray-500">
+        Description
+        <%= lucide_icon("chevron-down", class: "hidden group-open:block text-gray-500 w-5 h-5") %>
+        <%= lucide_icon("chevron-right", class: "group-open:hidden text-gray-500 w-5 h-5") %>
+      </div>
+    </summary>
+    <%= form_with model: @transaction, html: { data: { controller: "auto-submit-form" } } do |f| %>
       <%= f.text_field :name, label: "Name", "data-auto-submit-form-target": "auto" %>
-    </details>
-    <details class="group" open>
-      <summary class="list-none bg-gray-25 rounded-xl py-1 mt-6 group-open:mb-2">
-        <div class="py-2 px-[11px] flex items-center justify-between font-medium text-xs text-gray-500">
-          <span>Settings</span>
-          <%= lucide_icon("chevron-down", class: "hidden group-open:block text-gray-500 w-5 h-5") %>
-          <%= lucide_icon("chevron-right", class: "group-open:hidden text-gray-500 w-5 h-5") %>
-        </div>
-      </summary>
+    <% end %>
+  </details>
+  <details class="group" open>
+    <summary class="list-none bg-gray-25 rounded-xl py-1 mt-6 group-open:mb-2">
+      <div class="py-2 px-[11px] flex items-center justify-between font-medium text-xs text-gray-500">
+        <span>Settings</span>
+        <%= lucide_icon("chevron-down", class: "hidden group-open:block text-gray-500 w-5 h-5") %>
+        <%= lucide_icon("chevron-right", class: "group-open:hidden text-gray-500 w-5 h-5") %>
+      </div>
+    </summary>
+    <%= form_with model: @transaction, html: { data: { controller: "auto-submit-form" } } do |f| %>
       <label class="flex items-center cursor-pointer justify-between mx-3">
         <%= f.check_box :excluded, class: "sr-only peer", "data-auto-submit-form-target": "auto" %>
         <div class="flex flex-col justify-center text-sm w-[340px] py-3">
@@ -43,16 +50,39 @@
         </div>
         <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-100 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
       </label>
-    </details>
-    <details class="group" open>
-      <summary class="list-none bg-gray-25 rounded-xl py-1 mt-6 mb-2">
-        <div class="py-2 px-[11px] flex items-center justify-between font-medium text-xs text-gray-500">
-          <span>Additional</span>
-          <%= lucide_icon("chevron-down", class: "hidden group-open:block text-gray-500 w-5 h-5") %>
-          <%= lucide_icon("chevron-right", class: "group-open:hidden text-gray-500 w-5 h-5") %>
+    <% end %>
+  </details>
+  <details class="group" open>
+    <summary class="list-none bg-gray-25 rounded-xl py-1 mt-6 mb-2">
+      <div class="py-2 px-[11px] flex items-center justify-between font-medium text-xs text-gray-500">
+        <span>Additional</span>
+        <%= lucide_icon("chevron-down", class: "hidden group-open:block text-gray-500 w-5 h-5") %>
+        <%= lucide_icon("chevron-right", class: "group-open:hidden text-gray-500 w-5 h-5") %>
+      </div>
+    </summary>
+
+    <div class="mb-2">
+
+      <% if @transaction.tags.any? %>
+        <div class="pt-3 pb-2 flex flex-wrap items-center gap-1">
+          <% @transaction.tags.each do |tag| %>
+            <div class="relative">
+              <%= render partial: "tags/badge", locals: { tag: tag } %>
+              <%= button_to transaction_path(@transaction, transaction: { remove_tag_id: tag.id }), method: :patch, "data-turbo": false, class: "absolute -top-2 -right-1 px-0.5 py rounded-full hover:bg-alpha-black-200 border border-alpha-black-100" do %>
+                <%= lucide_icon("x", class: "w-3 h-3") %>
+              <% end %>
+            </div>
+          <% end %>
         </div>
-      </summary>
+      <% end %>
+
+      <%= form_with model: @transaction, html: { data: { controller: "auto-submit-form", turbo: false } } do |f| %>
+        <%= f.collection_select :tag_id, Current.family.tags.alphabetically.excluding(@transaction.tags), :id, :name, { prompt: "Select a tag", label: "Select a tag", class: "placeholder:text-gray-500" }, "data-auto-submit-form-target": "auto", "data-turbo": false %>
+      <% end %>
+    </div>
+
+    <%= form_with model: @transaction, html: { data: { controller: "auto-submit-form" } } do |f| %>
       <%= f.text_area :notes, label: "Notes", placeholder: "Enter a note", "data-auto-submit-form-target": "auto" %>
-    </details>
-  <% end %>
+    <% end %>
+  </details>
 <% end %>
