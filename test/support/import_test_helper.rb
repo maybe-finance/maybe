@@ -2,8 +2,9 @@ module ImportTestHelper
   def valid_csv_str
     <<-ROWS
       date,name,category,amount
-      2024-01-01,Starbucks drink,Food,20
-      2024-01-02,Amazon stuff,Shopping,200
+      2024-01-01,Starbucks drink,Food,-20
+      2024-01-02,Amazon stuff,Shopping,-200
+      2024-01-03,Paycheck,Income,1000
     ROWS
   end
 
@@ -17,8 +18,8 @@ module ImportTestHelper
   def valid_csv_with_extra_column
     <<-ROWS
       date,name,category,"optional id",amount
-      2024-01-01,Starbucks drink,Food,1234,20
-      2024-01-02,Amazon stuff,Shopping,,200
+      2024-01-01,Starbucks drink,Food,1234,-20
+      2024-01-02,Amazon stuff,Shopping,,-200
     ROWS
   end
 
