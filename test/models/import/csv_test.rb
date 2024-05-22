@@ -37,7 +37,7 @@ class Import::CsvTest < ActiveSupport::TestCase
   end
 
   test "csv with additional columns and empty values" do
-    csv = Import::Csv.new valid_csv_with_extra_column
+    csv = Import::Csv.new valid_csv_with_missing_data
     assert csv.valid?
   end
 
