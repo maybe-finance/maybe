@@ -31,7 +31,7 @@ Then you're ready to run the app, which will be available at
 `http://localhost:3000` in your browser:
 
 ```bash
-docker-compose up -d
+docker compose -f docker-compose.example.yml up -d
 ```
 
 Lastly, go to `http://localhost:3000` in your browser, **create a new
