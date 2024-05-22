@@ -6,6 +6,7 @@ class ImportTest < ActiveSupport::TestCase
   setup do
     @empty_import = imports(:empty_import)
     @loaded_import = imports(:loaded_import)
+    @loaded_import_with_missing_data = imports(:loaded_import_with_missing_data)
   end
 
   test "raw csv input must conform to csv spec" do
@@ -39,13 +40,29 @@ class ImportTest < ActiveSupport::TestCase
   end
 
   test "publishes a valid import" do
-    assert_difference "Transaction.count", 2 do
-      @loaded_import.publish
+    assert_difference("Transaction::Category.count", 2) do
+      assert_difference "Transaction.count", 2 do
+        @loaded_import.publish
+      end
     end
 
     @loaded_import.reload
 
     assert @loaded_import.complete?
+  end
+
+  test "publishes a valid import with missing data" do
+    assert_difference("Transaction::Category.count", 1) do
+      assert_difference "Transaction.count", 2 do
+        @loaded_import_with_missing_data.publish
+      end
+    end
+
+    assert_not_nil Transaction.find_sole_by(name: Import::FALLBACK_TRANSACTION_NAME)
+
+    @loaded_import_with_missing_data.reload
+
+    assert @loaded_import_with_missing_data.complete?
   end
 
   test "failed publish results in error status" do
