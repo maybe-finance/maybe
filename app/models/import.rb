@@ -11,6 +11,8 @@ class Import < ApplicationRecord
 
   scope :ordered, -> { order(created_at: :desc) }
 
+  FALLBACK_TRANSACTION_NAME = "Imported transaction"
+
   def publish_later
     ImportJob.perform_later(self)
   end
@@ -113,10 +115,10 @@ class Import < ApplicationRecord
       csv.table.each do |row|
         category_name = row["category"]
 
-        category = category_cache[category_name] ||= account.family.transaction_categories.find_or_initialize_by(name: category_name)
+        category = category_cache[category_name] ||= account.family.transaction_categories.find_or_initialize_by(name: category_name) if row["category"].present?
 
         txn = account.transactions.build \
-          name: row["name"].presence || "Imported transaction",
+          name: row["name"].presence || FALLBACK_TRANSACTION_NAME,
           date: Date.iso8601(row["date"]),
           category: category,
           amount: BigDecimal(row["amount"]) * -1, # User inputs amounts with opposite signage of our internal representation

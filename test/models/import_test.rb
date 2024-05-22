@@ -51,6 +51,19 @@ class ImportTest < ActiveSupport::TestCase
     assert @loaded_import.complete?
   end
 
+  test "publishes a valid import with missing data" do
+    @empty_import.update! raw_csv_str: valid_csv_with_missing_data
+    assert_difference -> { Transaction::Category.count } => 1, -> { Transaction.count } => 2 do
+      @empty_import.publish
+    end
+
+    assert_not_nil Transaction.find_sole_by(name: Import::FALLBACK_TRANSACTION_NAME)
+
+    @empty_import.reload
+
+    assert @empty_import.complete?
+  end
+
   test "failed publish results in error status" do
     @empty_import.update! raw_csv_str: valid_csv_with_invalid_values
 
