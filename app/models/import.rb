@@ -108,9 +108,13 @@ class Import < ApplicationRecord
 
     def generate_transactions
       transactions = []
+      category_cache = {}
 
       csv.table.each do |row|
-        category = account.family.transaction_categories.find_or_initialize_by(name: row["category"])
+        category_name = row["category"]
+
+        category = category_cache[category_name] ||= account.family.transaction_categories.find_or_initialize_by(name: category_name)
+
         txn = account.transactions.build \
           name: row["name"].presence || "Imported transaction",
           date: Date.iso8601(row["date"]),
