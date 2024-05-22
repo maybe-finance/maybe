@@ -1,8 +1,8 @@
-<%# locals: (category:, transaction:) %>
-<% is_selected = transaction.category_id == category.id %>
+<%# locals: (category:) %>
+<% is_selected = category.id === @selected_category&.id %>
 
 <%= content_tag :div, class: ["filterable-item flex justify-between items-center border-none rounded-lg px-2 py-1 group w-full", { "bg-gray-25": is_selected }], data: { filter_name: category.name } do %>
-  <%= button_to transaction_path(transaction, transaction: { category_id: category.id }), method: :patch, class: "flex w-full items-center gap-1.5 cursor-pointer" do %>
+  <%= button_to transaction_path(@transaction, transaction: { category_id: category.id }), method: :patch, class: "flex w-full items-center gap-1.5 cursor-pointer" do %>
     <span class="w-5 h-5">
       <%= lucide_icon("check", class: "w-5 h-5 text-gray-500") if is_selected %>
     </span>
