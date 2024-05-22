@@ -27,10 +27,10 @@ completed_import:
     amount: amount
   raw_csv_str: |
     date,name,category,amount
-    2024-01-01,Starbucks drink,Food & Drink,20
+    2024-01-01,Starbucks drink,Food & Drink,-20
   normalized_csv_str: |
     date,name,category,amount
-    2024-01-01,Starbucks drink,Food & Drink,20
+    2024-01-01,Starbucks drink,Food & Drink,-20
   created_at: <%= 2.days.ago %>
 
 
