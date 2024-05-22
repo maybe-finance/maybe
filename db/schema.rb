@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_05_20_074309) do
+ActiveRecord::Schema[7.2].define(version: 2024_05_22_151453) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -87,7 +87,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_20_074309) do
     t.uuid "accountable_id"
     t.decimal "balance", precision: 19, scale: 4, default: "0.0"
     t.string "currency", default: "USD"
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Account::Loan'::character varying, 'Account::Credit'::character varying, 'Account::OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Account::Loan'::character varying)::text, ('Account::Credit'::character varying)::text, ('Account::OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.boolean "is_active", default: true, null: false
     t.enum "status", default: "ok", null: false, enum_type: "account_status"
     t.jsonb "sync_warnings", default: "[]", null: false
@@ -249,6 +249,25 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_20_074309) do
     t.index ["var"], name: "index_settings_on_var", unique: true
   end
 
+  create_table "taggings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "tag_id", null: false
+    t.string "taggable_type"
+    t.uuid "taggable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tag_id"], name: "index_taggings_on_tag_id"
+    t.index ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable"
+  end
+
+  create_table "tags", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.string "color", default: "#e99537", null: false
+    t.uuid "family_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["family_id"], name: "index_tags_on_family_id"
+  end
+
   create_table "transaction_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "color", default: "#6172F3", null: false
@@ -318,6 +337,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_20_074309) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "imports", "accounts"
+  add_foreign_key "taggings", "tags"
+  add_foreign_key "tags", "families"
   add_foreign_key "transaction_categories", "families"
   add_foreign_key "transaction_merchants", "families"
   add_foreign_key "transactions", "accounts", on_delete: :cascade
