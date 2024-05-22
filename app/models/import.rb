@@ -111,16 +111,24 @@ class Import < ApplicationRecord
     def generate_transactions
       transactions = []
       category_cache = {}
+      tag_cache = {}
 
       csv.table.each do |row|
-        category_name = row["category"]
+        category_name = row["category"].presence
+        tag_strings = row["tags"].presence&.split("|") || []
+        tags = []
 
-        category = category_cache[category_name] ||= account.family.transaction_categories.find_or_initialize_by(name: category_name) if row["category"].present?
+        tag_strings.each do |tag_string|
+          tags << tag_cache[tag_string] ||= account.family.tags.find_or_initialize_by(name: tag_string)
+        end
+
+        category = category_cache[category_name] ||= account.family.transaction_categories.find_or_initialize_by(name: category_name)
 
         txn = account.transactions.build \
           name: row["name"].presence || FALLBACK_TRANSACTION_NAME,
           date: Date.iso8601(row["date"]),
           category: category,
+          tags: tags,
           amount: BigDecimal(row["amount"]) * -1, # User inputs amounts with opposite signage of our internal representation
           currency: account.currency
 
@@ -144,12 +152,16 @@ class Import < ApplicationRecord
         key: "category",
         label: "Category"
 
+      tags_field = Import::Field.new \
+        key: "tags",
+        label: "Tags"
+
       amount_field = Import::Field.new \
         key: "amount",
         label: "Amount",
         validator: ->(value) { Import::Field.bigdecimal_validator(value) }
 
-      [ date_field, name_field, category_field, amount_field ]
+      [ date_field, name_field, category_field, tags_field, amount_field ]
     end
 
     def define_column_mapping_keys
