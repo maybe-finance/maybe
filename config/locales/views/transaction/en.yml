@@ -16,10 +16,15 @@ en:
             category will be uncategorized. Instead of leaving them uncategorized,
             you can also assign a new category below.
           replacement_category_prompt: Select category
-      dropdown:
+      dropdowns:
         row:
           delete: Delete category
           edit: Edit category
+        show:
+          add_new: Add new
+          clear: Clear
+          no_categories: No categories found
+          search_placeholder: Search
       edit:
         edit: Edit category
       form:
@@ -29,8 +34,7 @@ en:
         categories: Categories
         new: New
       menu:
-        add_new: Add new
-        clear: Clear
+        loading: Loading...
       new:
         new_category: New category
       row:
