@@ -2,6 +2,14 @@
 
 Below are our "one-click deploy" options for running Maybe in the cloud:
 
+## RepoCloud.io
+
+[![Deploy to RepoCloud](https://d16t0pc4846x52.cloudfront.net/deploylobe.svg)](https://repocloud.io/details/?app_id=285)
+
+RepoCloud is an open source app cloud marketplace where users can effortlessly deploy applications with one click
+- Half the cost of major cloud costs
+- Free credit for new users
+
 ## Render
 
 Welcome to the one-click deploy guide for Maybe on [Render](https://render.com/)!
