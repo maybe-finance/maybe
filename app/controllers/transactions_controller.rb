@@ -93,8 +93,6 @@ class TransactionsController < ApplicationController
         @transaction.date
       end
 
-      puts params[:transaction]
-
       if params[:transaction][:tag_id].present?
         tag = Current.family.tags.find(params[:transaction][:tag_id])
         @transaction.tags << tag unless @transaction.tags.include?(tag)
