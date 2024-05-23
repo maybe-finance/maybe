@@ -20,21 +20,38 @@ module ApplicationHelper
     render partial: "shared/notification", locals: { type: options[:type], content: { body: content } }
   end
 
-  # Wrap view with <%= modal do %> ... <% end %> to have it open in a modal
-  # Make sure to add data-turbo-frame="modal" to the link/button that opens the modal
+  ##
+  # Helper to open a centered and overlayed modal with custom contents
+  #
+  # @example Basic usage
+  #   <%= modal classes: "custom-class" do %>
+  #     <div>Content here</div>
+  #   <% end %>
+  #
+  # @note can also be triggered via ?modal=model&entity_id=uuid query params
+  #
   def modal(options = {}, &block)
     content = capture &block
     render partial: "shared/modal", locals: { content:, classes: options[:classes] }
   end
 
+  ##
+  # Helper to open a drawer on the right side of the screen with custom contents
+  #
+  # @example Basic usage
+  #   <%= drawer do %>
+  #     <div>Content here</div>
+  #   <% end %>
+  #
+  # @note can also be triggered via ?drawer=model&entity_id=uuid query params
+  def drawer(&block)
+    content = capture &block
+    render partial: "shared/drawer", locals: { content: content }
+  end
+
   def account_groups(period: nil)
     assets, liabilities = Current.family.accounts.by_group(currency: Current.family.currency, period: period || Period.last_30_days).values_at(:assets, :liabilities)
     [ assets.children, liabilities.children ].flatten
-  end
-
-  def sidebar_modal(&block)
-    content = capture &block
-    render partial: "shared/sidebar_modal", locals: { content: content }
   end
 
   def sidebar_link_to(name, path, options = {})
