@@ -8,6 +8,12 @@ module Account::Syncable
   def sync(start_date = nil)
     update!(status: "syncing")
 
+    if self.foreign_currency? && !ExchangeRate.exchange_rates_provider.initialized?
+      logger.error("Cancelling sync of foreign account #{id}: No exchange rate provider ready")
+      update!(status: "error")
+      return
+    end
+
     sync_exchange_rates
 
     calc_start_date = start_date - 1.day if start_date.present? && self.balance_on(start_date - 1.day).present?
@@ -21,10 +27,11 @@ module Account::Syncable
     update!(status: "ok", last_sync_date: Date.today, balance: new_balance)
   rescue => e
     update!(status: "error")
-    Rails.logger.error("Failed to sync account #{id}: #{e.message}")
+    logger.error("Failed to sync account #{id}: #{e.message}")
   end
 
   def can_sync?
+    return false if self.foreign_currency? && !ExchangeRate.exchange_rates_provider.initialized?
     # Skip account sync if account is not active or the sync process is already running
     return false unless is_active
     return false if syncing?

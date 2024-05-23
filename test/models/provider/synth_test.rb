@@ -4,6 +4,6 @@ class Provider::SynthTest < ActiveSupport::TestCase
   include ExchangeRateProviderInterfaceTest
 
   setup do
-    @subject = Provider::Synth.new
+    @subject = Provider::Synth
   end
 end

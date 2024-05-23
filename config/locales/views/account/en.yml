@@ -35,6 +35,8 @@ en:
         /> <p>After deletion, there is no way you'll be able to restore the account
         information because you'll need to add it as a new account.</p>"
       confirm_title: Delete account?
+      no_exchange_rate_provider: This account cannot be synced at the moment as there
+        is no exchange rate provider configured.
     summary:
       new: New account
     sync:

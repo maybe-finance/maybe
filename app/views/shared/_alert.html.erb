@@ -1,0 +1,12 @@
+<%# locals: (type: "error", content: "") -%>
+<% color = type == "error" ? "red" : "blue" %>
+<%= content_tag :div,
+  class: "flex justify-between bg-#{color}-50 rounded-xl p-3",
+  data: {controller: "element-removal" },
+  role: type == "error" ? "alert" : "status" do %>
+  <div class="flex gap-3 text-<%= color %>-500 items-center">
+    <%= lucide_icon("info", class: "w-5 h-5 shrink-0") %>
+    <p class="text-sm"><%= content %></p>
+  </div>
+  <%= content_tag :a, lucide_icon("x", class: "w-5 h-5 shrink-0 text-#{color}-500"), data: { action: "click->element-removal#remove" }, class:"flex gap-1 font-medium items-center text-gray-900 px-3 py-1.5 rounded-lg cursor-pointer" %>
+<% end %>

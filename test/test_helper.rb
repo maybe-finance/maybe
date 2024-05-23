@@ -46,6 +46,10 @@ module ActiveSupport
       end
     end
 
+    Provider::Synth.configure do |config|
+      config.api_key = "api_key"
+    end
+
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
 
