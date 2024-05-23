@@ -1,0 +1,49 @@
+<% content_for :sidebar do %>
+  <%= render "settings/nav" %>
+<% end %>
+
+<section class="space-y-4">
+  <header class="flex items-center justify-between">
+    <h1 class="text-gray-900 text-xl font-medium"><%= t(".tags") %></h1>
+
+    <%= link_to new_tag_path, class: "rounded-lg bg-gray-900 text-white flex items-center gap-1 justify-center hover:bg-gray-700 px-3 py-2", data: { turbo_frame: :modal } do %>
+      <%= lucide_icon "plus", class: "w-5 h-5" %>
+      <p><%= t(".new") %></p>
+    <% end %>
+  </header>
+
+  <div class="bg-white shadow-xs border border-alpha-black-25 rounded-xl p-4">
+
+    <% if @tags.any? %>
+
+      <div class="rounded-xl bg-gray-25 p-1">
+        <h2 class="uppercase px-4 py-2 text-gray-500 text-xs"><%= t(".tags") %> · <%= @tags.size %></h2>
+
+        <div class="border border-alpha-gray-100 rounded-lg bg-white shadow-xs">
+
+          <%= render @tags %>
+
+        </div>
+      </div>
+
+    <% else %>
+
+      <div class="flex justify-center items-center py-20">
+        <div class="text-center flex flex-col items-center max-w-[300px]">
+          <p class="text-gray-900 mb-1 font-medium text-sm"><%= t(".empty") %></p>
+          <%= link_to new_tag_path, class: "w-fit flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2 pr-3", data: { turbo_frame: "modal" } do %>
+            <%= lucide_icon("plus", class: "w-5 h-5") %>
+            <span><%= t(".new") %></span>
+          <% end %>
+        </div>
+      </div>
+
+    <% end %>
+
+  </div>
+
+  <footer class="flex justify-between gap-4">
+    <%= previous_setting("Accounts", accounts_path) %>
+    <%= next_setting("Categories", transaction_categories_path) %>
+  </footer>
+</section>

@@ -37,6 +37,10 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :tags, except: %i[ show destroy ] do
+    resources :deletions, only: %i[ new create ], module: :tags
+  end
+
   resources :transactions do
     collection do
       match "search" => "transactions#search", via: %i[ get post ]

@@ -6,7 +6,10 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
     @empty_import = imports(:empty_import)
-    @loaded_import = imports(:loaded_import)
+
+    @loaded_import = @empty_import.dup
+    @loaded_import.update! raw_csv_str: valid_csv_str
+
     @completed_import = imports(:completed_import)
   end
 

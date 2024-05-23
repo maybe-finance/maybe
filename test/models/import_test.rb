@@ -5,7 +5,9 @@ class ImportTest < ActiveSupport::TestCase
 
   setup do
     @empty_import = imports(:empty_import)
-    @loaded_import = imports(:loaded_import)
+
+    @loaded_import = @empty_import.dup
+    @loaded_import.update! raw_csv_str: valid_csv_str
   end
 
   test "raw csv input must conform to csv spec" do
@@ -42,7 +44,11 @@ class ImportTest < ActiveSupport::TestCase
     # Import has 3 unique categories: "Food & Drink", "Income", and "Shopping" (x2)
     # Fixtures already define "Food & Drink" and "Income", so these should not be created
     # "Shopping" is a new category, but should only be created 1x during import
-    assert_difference -> { Transaction.count } => 4, -> { Transaction::Category.count } => 1 do
+    assert_difference \
+      -> { Transaction.count } => 4,
+      -> { Transaction::Category.count } => 1,
+      -> { Tagging.count } => 4,
+      -> { Tag.count } => 2 do
       @loaded_import.publish
     end
 

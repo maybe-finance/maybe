@@ -65,6 +65,7 @@ en:
       rules_label: Rules
       security_label: Security
       self_hosting_label: Self-Hosting
+      tags_label: Tags
       transactions_section_title: Transactions
       whats_new_label: What's New
     nav_link_large:

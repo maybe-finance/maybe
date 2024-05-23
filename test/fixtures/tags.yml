@@ -1,0 +1,11 @@
+trips:
+  name: Trips
+  family: dylan_family
+
+hawaii_trip:
+  name: Hawaii Trip
+  family: dylan_family
+
+emergency_fund:
+  name: Emergency Fund
+  family: dylan_family

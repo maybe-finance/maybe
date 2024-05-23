@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = [ "replacementCategoryField", "submitButton" ]
+  static targets = ["replacementField", "submitButton"]
   static classes = [ "dangerousAction", "safeAction" ]
   static values = {
     submitTextWhenReplacing: String,
@@ -9,7 +9,7 @@ export default class extends Controller {
   }
 
   updateSubmitButton() {
-    if (this.replacementCategoryFieldTarget.value) {
+    if (this.replacementFieldTarget.value) {
       this.submitButtonTarget.value = this.submitTextWhenReplacingValue
       this.#markSafe()
     } else {

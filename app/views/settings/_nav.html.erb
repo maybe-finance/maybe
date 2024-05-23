@@ -47,6 +47,9 @@
   </div>
   <ul class="space-y-1">
     <li>
+      <%= sidebar_link_to t(".tags_label"), tags_path, icon: "tags" %>
+    </li>
+    <li>
       <%= sidebar_link_to t(".categories_label"), transaction_categories_path, icon: "tags" %>
     </li>
     <li>

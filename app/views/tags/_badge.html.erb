@@ -1,0 +1,10 @@
+<%# locals: (tag:) %>
+<% tag ||= null_category %>
+
+<span class="border text-sm font-medium px-2.5 py-1 rounded-full content-center"
+      style="
+      background-color: color-mix(in srgb, <%= tag.color %> 5%, white);
+        border-color: color-mix(in srgb, <%= tag.color %> 10%, white);
+        color: <%= tag.color %>;">
+  <%= tag.name %>
+</span>
