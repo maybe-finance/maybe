@@ -122,7 +122,7 @@ class Import < ApplicationRecord
           tags << tag_cache[tag_string] ||= account.family.tags.find_or_initialize_by(name: tag_string)
         end
 
-        category = category_cache[category_name] ||= account.family.transaction_categories.find_or_initialize_by(name: category_name)
+        category = category_cache[category_name] ||= account.family.transaction_categories.find_or_initialize_by(name: category_name) if category_name.present?
 
         txn = account.transactions.build \
           name: row["name"].presence || FALLBACK_TRANSACTION_NAME,
