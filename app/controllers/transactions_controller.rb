@@ -4,16 +4,7 @@ class TransactionsController < ApplicationController
   before_action :set_transaction, only: %i[ show edit update destroy ]
 
   def index
-    search_params = session[ransack_session_key] || params[:q]
-    @q = Current.family.transactions.ransack(search_params)
-    result = @q.result.order(date: :desc)
-    @pagy, @transactions = pagy(result, items: 10)
-    @totals = {
-      count: result.count,
-      income: result.inflows.sum(&:amount_money).abs,
-      expense: result.outflows.sum(&:amount_money).abs
-    }
-    @filter_list = Transaction.build_filter_list(search_params, Current.family)
+    perform_ransack_search
 
     respond_to do |format|
       format.html
@@ -41,7 +32,7 @@ class TransactionsController < ApplicationController
       session[ransack_session_key] = params[:q]
     end
 
-    index
+    perform_ransack_search
 
     respond_to do |format|
       format.html { render :index }
@@ -130,6 +121,20 @@ class TransactionsController < ApplicationController
   end
 
   private
+
+    def perform_ransack_search
+      search_params = session[ransack_session_key] || params[:q]
+      @q = Current.family.transactions.ordered.ransack(search_params)
+      result = @q.result
+      @pagy, @transactions = pagy(result, items: 10)
+
+      @totals = {
+        count: result.count,
+        income: result.inflows.sum(&:amount_money).abs,
+        expense: result.outflows.sum(&:amount_money).abs
+      }
+      @filter_list = Transaction.build_filter_list(search_params, Current.family)
+    end
 
     def delete_search_param(params, key, value: nil)
       if value

@@ -1,17 +1,18 @@
 <%# locals: (q:) %>
 <div>
   <%= turbo_frame_tag "transactions_search_form" do %>
-    <%= search_form_for @q, url: search_transactions_path, html: { method: :post, data: { turbo_frame: "transactions_list" } } do |form| %>
+    <%= search_form_for @q, url: search_transactions_path, html: { method: :post, data: { turbo_frame: "transactions_list", controller: "auto-submit-form" } } do |form| %>
       <div class="flex gap-2 mb-4">
         <div class="grow">
           <%= render partial: "transactions/search_form/search_filter", locals: { form: form } %>
         </div>
         <div data-controller="menu" class="relative">
-          <button data-menu-target="button" type="button" class="border border-gray-200 block h-full rounded-lg flex items-center gap-2 px-4">
+          <button id="transaction-filters-button" data-menu-target="button" type="button" class="border border-gray-200 block h-full rounded-lg flex items-center gap-2 px-4">
             <%= lucide_icon("list-filter", class: "w-5 h-5 text-gray-500") %>
             <p class="text-sm font-medium text-gray-900">Filter</p>
           </button>
           <div
+            id="transaction-filters-menu"
             data-menu-target="content"
             data-controller="tabs"
             data-tabs-active-class="bg-gray-25 text-gray-900"

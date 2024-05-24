@@ -12,6 +12,7 @@ class Transaction < ApplicationRecord
 
   monetize :amount
 
+  scope :ordered, -> { order(date: :desc) }
   scope :inflows, -> { where("amount <= 0") }
   scope :outflows, -> { where("amount > 0") }
   scope :active, -> { where(excluded: false) }
