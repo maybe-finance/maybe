@@ -1,24 +1,7 @@
-<!-- start mobile pagination -->
-  <div class="flex flex-1 justify-center md:hidden">
-    <% if pagy.prev %>
-      <%= link_to "Previous", pagy_url_for(pagy, pagy.prev), class: "relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50" %>
-    <% else %>
-      <div class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-200">Previous</div>
-    <% end %>
-
-    <% if pagy.next %>
-      <%= link_to "Next", pagy_url_for(pagy, pagy.next), class: "relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50" %>
-    <% else %>
-      <div class="relative ml-3  inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-200">Next</div>
-    <% end %>
-  </div>
-<!-- end mobile pagination -->
-
-<!-- start desktop pagination -->
-<div class="hidden md:-mt-px md:flex">
+<%= turbo_frame_tag "pagination-controls", target: "_top", action: "advance", class: "flex -mt-px" do %>
   <div>
     <% if pagy.prev %>
-      <%= link_to pagy_url_for(pagy, pagy.prev), class: "inline-flex items-center  px-3 py-3 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700" do %>
+      <%= link_to pagy_url_for(pagy, pagy.prev), class: "inline-flex items-center px-3 py-3 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700" do %>
         <%= lucide_icon("chevron-left", class: "w-5 h-5 text-gray-500") %>
       <% end %>
     <% else %>
@@ -44,7 +27,7 @@
   </div>
     <div>
       <% if pagy.next %>
-        <%= link_to pagy_url_for(pagy, pagy.next), class: "inline-flex items-center  px-3 py-3 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700" do %>
+        <%= link_to pagy_url_for(pagy, pagy.next), class: "inline-flex items-center px-3 py-3 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700" do %>
           <%= lucide_icon("chevron-right", class: "w-5 h-5 text-gray-500") %>
         <% end %>
       <% else %>
@@ -53,5 +36,4 @@
         </div>
       <% end %>
     </div>
-</div>
-<!-- end desktop pagination -->
+<% end %>
