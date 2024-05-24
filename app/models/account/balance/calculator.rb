@@ -50,7 +50,7 @@ class Account::Balance::Calculator
 
         # Abort conversion if some required rates are missing
         if rates.length != @daily_balances.length
-          @errors << :missing_rates
+          @errors << :sync_message_missing_rates
           return []
         end
 
