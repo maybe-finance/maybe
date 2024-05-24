@@ -12,7 +12,7 @@ class ExchangeRate < ApplicationRecord
     end
 
     def find_rate_or_fetch(from:, to:, date:)
-      find_rate(from:, to:, date:) || fetch_rate_from_provider(from:, to:, date:).tap(&:save!)
+      find_rate(from:, to:, date:) || fetch_rate_from_provider(from:, to:, date:)&.tap(&:save!)
     end
 
     def get_rate_series(from, to, date_range)

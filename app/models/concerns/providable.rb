@@ -7,7 +7,7 @@ module Providable
 
   class_methods do
     def exchange_rates_provider
-      Provider::Synth
+      Provider::Synth.new
     end
 
     def git_repository_provider

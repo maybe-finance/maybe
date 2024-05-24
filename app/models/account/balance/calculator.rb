@@ -1,11 +1,10 @@
 class Account::Balance::Calculator
     attr_reader :daily_balances, :errors, :warnings
 
-    @daily_balances = []
-    @errors = []
-    @warnings = []
-
     def initialize(account, options = {})
+      @daily_balances = []
+      @errors = []
+      @warnings = []
       @account = account
       @calc_start_date = [ options[:calc_start_date], @account.effective_start_date ].compact.max
     end
@@ -48,6 +47,12 @@ class Account::Balance::Calculator
           @account.family.currency,
           @calc_start_date..Date.current
         ).to_a
+
+        # Abort conversion if some required rates are missing
+        if rates.length != @daily_balances.length
+          @errors << :missing_rates
+          return []
+        end
 
         @daily_balances.map do |balance|
           rate = rates.find { |rate| rate.date == balance[:date] }

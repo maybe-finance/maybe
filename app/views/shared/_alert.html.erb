@@ -1,5 +1,5 @@
 <%# locals: (type: "error", content: "") -%>
-<% color = type == "error" ? "red" : "blue" %>
+<% color = type == "error" ? "red" : "yellow" %>
 <%= content_tag :div,
   class: "flex justify-between bg-#{color}-50 rounded-xl p-3",
   data: {controller: "element-removal" },
