@@ -65,6 +65,7 @@ class Transaction < ApplicationRecord
 
   def self.build_filter_list(params, family)
     filters = []
+    valid_params = {}
 
     date_filters = { gteq: nil, lteq: nil }
 
@@ -74,23 +75,35 @@ class Transaction < ApplicationRecord
 
         case key
         when "account_id_in"
-          value.each do |account_id|
-            filters << { type: "account", value: family.accounts.find(account_id), original: { key: key, value: account_id } }
+          valid_accounts = value.select do |account_id|
+            account = family.accounts.find_by(id: account_id)
+            filters << { type: "account", value: account, original: { key: key, value: account_id } } if account.present?
+            account.present?
           end
+          valid_params[key] = valid_accounts unless valid_accounts.empty?
         when "category_id_in"
-          value.each do |category_id|
-            filters << { type: "category", value: family.transaction_categories.find(category_id), original: { key: key, value: category_id } }
+          valid_categories = value.select do |category_id|
+            category = family.transaction_categories.find_by(id: category_id)
+            filters << { type: "category", value: category, original: { key: key, value: category_id } } if category.present?
+            category.present?
           end
+          valid_params[key] = valid_categories unless valid_categories.empty?
         when "merchant_id_in"
-          value.each do |merchant_id|
-            filters << { type: "merchant", value: family.transaction_merchants.find(merchant_id), original: { key: key, value: merchant_id } }
+          valid_merchants = value.select do |merchant_id|
+            merchant = family.transaction_merchants.find_by(id: merchant_id)
+            filters << { type: "merchant", value: merchant, original: { key: key, value: merchant_id } } if merchant.present?
+            merchant.present?
           end
+          valid_params[key] = valid_merchants unless valid_merchants.empty?
         when "category_name_or_merchant_name_or_account_name_or_name_cont"
           filters << { type: "search", value: value, original: { key: key, value: nil } }
+          valid_params[key] = value
         when "date_gteq"
           date_filters[:gteq] = value
+          valid_params[key] = value
         when "date_lteq"
           date_filters[:lteq] = value
+          valid_params[key] = value
         end
       end
 
@@ -99,6 +112,6 @@ class Transaction < ApplicationRecord
       end
     end
 
-    filters
+    [ filters, valid_params ]
   end
 end

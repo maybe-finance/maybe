@@ -13,7 +13,8 @@ class TransactionsController < ApplicationController
       income: result.inflows.sum(&:amount_money).abs,
       expense: result.outflows.sum(&:amount_money).abs
     }
-    @filter_list = Transaction.build_filter_list(search_params, Current.family)
+    @filter_list, valid_params = Transaction.build_filter_list(search_params, Current.family)
+    session[ransack_session_key] = valid_params
 
     respond_to do |format|
       format.html
