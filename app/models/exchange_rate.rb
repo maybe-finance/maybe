@@ -15,8 +15,8 @@ class ExchangeRate < ApplicationRecord
       find_rate(from:, to:, date:) || fetch_rate_from_provider(from:, to:, date:)&.tap(&:save!)
     end
 
-    def get_rate_series(from, to, date_range)
-      where(base_currency: from, converted_currency: to, date: date_range).order(:date)
+    def get_rates(from, to, dates)
+      where(base_currency: from, converted_currency: to, date: dates).order(:date)
     end
 
     def convert(value:, from:, to:, date:)

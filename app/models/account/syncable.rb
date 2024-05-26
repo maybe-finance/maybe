@@ -20,7 +20,7 @@ module Account::Syncable
 
     update!(status: "ok", last_sync_date: Date.today, balance: new_balance, sync_errors: calculator.errors, sync_warnings: calculator.warnings)
   rescue => e
-    update!(status: "error")
+    update!(status: "error", sync_errors: [ :sync_message_unknown_error ])
     logger.error("Failed to sync account #{id}: #{e.message}")
   end
 
