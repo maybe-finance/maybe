@@ -26,7 +26,7 @@
           <div class="space-y-3">
             <p><%= t(".profile_image_type") %></p>
             <%= form.label :profile_image, t(".profile_image_choose"), class: "inline-block cursor-pointer px-3 py-2 bg-gray-50 text-gray-900 rounded-md text-sm font-medium" %>
-            <%= form.file_field :profile_image, accept: "wimage/png, image/jpeg, image/gif", class: "hidden px-3 py-2 bg-gray-50 text-gray-900 rounded-md text-sm font-medium", data: {profile_image_preview_target: "fileField", action: "change->profile-image-preview#preview"} %>
+            <%= form.file_field :profile_image, accept: "image/png, image/jpeg, image/gif", class: "hidden px-3 py-2 bg-gray-50 text-gray-900 rounded-md text-sm font-medium", data: {profile_image_preview_target: "fileField", action: "change->profile-image-preview#preview"} %>
             <%= form.hidden_field :delete_profile_image, value: false, data: {profile_image_preview_target: "deleteField"} %>
           </div>
         </div>
