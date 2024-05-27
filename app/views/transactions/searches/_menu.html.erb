@@ -4,8 +4,7 @@
   data-controller="tabs"
   data-tabs-active-class="bg-gray-25 text-gray-900"
   data-tabs-default-tab-value="<%= get_default_transaction_search_filter[:key] %>"
-  class="hidden absolute flex z-10 h-80 w-[540px] top-12 right-0 border border-alpha-black-25 bg-white rounded-lg shadow-xs"
->
+  class="hidden absolute flex z-10 h-80 w-[540px] top-12 right-0 border border-alpha-black-25 bg-white rounded-lg shadow-xs">
   <div class="flex w-44 flex-col items-start p-3 text-sm font-medium text-gray-500 border-r border-r-alpha-black-25">
     <% transaction_search_filters.each do |filter| %>
       <button
@@ -32,9 +31,7 @@
       <%= button_tag type: "reset", data: { action: "menu#close" }, class: "py-2 px-3 bg-gray-50 rounded-lg text-sm text-gray-900 font-medium" do %>
         Cancel
       <% end %>
-      <%= button_tag type: "submit", class: "py-2 px-3 bg-gray-900 rounded-lg text-sm text-white font-medium" do %>
-        Apply
-      <% end %>
+      <%= form.submit "Apply", name: nil, class: "py-2 px-3 bg-gray-900 rounded-lg text-sm text-white font-medium" %>
     </div>
   </div>
 </div>

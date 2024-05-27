@@ -7,8 +7,15 @@
   <div class="my-2" id="list" data-list-filter-target="list">
     <% Current.family.accounts.each do |account| %>
       <div class="filterable-item flex items-center gap-2 p-2" data-filter-name="<%= account.name %>">
-        <%= form.check_box :account_id_in, { multiple: true, class: "rounded-sm border-gray-300 text-indigo-600 shadow-xs focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" }, account.id, nil %>
-        <%= form.label :account_id_in, account.name, value: account.id, class: "text-sm text-gray-900" %>
+        <%= form.check_box :accounts,
+                           {
+                             multiple: true,
+                             checked: @q[:accounts]&.include?(account.name),
+                             class: "rounded-sm border-gray-300 text-indigo-600 shadow-xs focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                           },
+                           account.name,
+                           nil %>
+        <%= form.label :accounts, account.name, value: account.name, class: "text-sm text-gray-900" %>
       </div>
     <% end %>
   </div>

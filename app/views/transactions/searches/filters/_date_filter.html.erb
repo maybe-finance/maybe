@@ -1,5 +1,11 @@
 <%# locals: (form:) %>
 <div class="p-3">
-  <%= form.date_field :date_gteq, placeholder: "Start date", class: "block w-full border border-gray-200 rounded-md py-2 pl-3 pr-3 focus:border-gray-500 focus:ring-gray-500 sm:text-sm" %>
-  <%= form.date_field :date_lteq, placeholder: "End date", class: "block w-full border border-gray-200 rounded-md py-2 pl-3 pr-3 focus:border-gray-500 focus:ring-gray-500 sm:text-sm mt-2" %>
+  <%= form.date_field :start_date,
+                      placeholder: "Start date",
+                      value: @q[:start_date],
+                      class: "block w-full border border-gray-200 rounded-md py-2 pl-3 pr-3 focus:border-gray-500 focus:ring-gray-500 sm:text-sm" %>
+  <%= form.date_field :end_date,
+                      placeholder: "End date",
+                      value: @q[:end_date],
+                      class: "block w-full border border-gray-200 rounded-md py-2 pl-3 pr-3 focus:border-gray-500 focus:ring-gray-500 sm:text-sm mt-2" %>
 </div>

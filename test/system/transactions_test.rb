@@ -17,8 +17,8 @@ class TransactionsTest < ApplicationSystemTestCase
   test "can search for a transaction" do
     assert_selector "h1", text: "Transactions"
 
-    within "form#transaction_search" do
-      fill_in "Search transaction by name, merchant, category or amount", with: @target_txn.name
+    within "form#transactions-search" do
+      fill_in "Search transactions by name", with: @target_txn.name
 
       # TODO: Add back Turbo
       send_keys :enter
@@ -44,9 +44,8 @@ class TransactionsTest < ApplicationSystemTestCase
     assert_selector "#" + dom_id(@target_txn), count: 1
 
     within "#transaction-search-filters" do
-      # TODO: Add back account and category names (rather than IDs)
-      assert_text @target_txn.account.id
-      assert_text @target_txn.category.id
+      assert_text @target_txn.account.name
+      assert_text @target_txn.category.name
     end
   end
 end

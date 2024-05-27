@@ -38,7 +38,7 @@
   <div id="transactions" class="bg-white rounded-xl border border-alpha-black-25 shadow-xs p-4 space-y-4">
 
     <div id="transactions-search">
-      <%= render partial: "transactions/searches/search", locals: { q: @q } %>
+      <%= render partial: "transactions/searches/search", locals: { transactions: @transactions } %>
     </div>
 
     <%= render partial: "transactions/list", locals: { transactions: @transactions, pagy: @pagy } %>

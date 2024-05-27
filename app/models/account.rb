@@ -22,10 +22,6 @@ class Account < ApplicationRecord
 
   delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
 
-  def self.ransackable_attributes(auth_object = nil)
-    %w[name id]
-  end
-
   def balance_on(date)
     balances.where("date <= ?", date).order(date: :desc).first&.balance
   end

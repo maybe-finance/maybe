@@ -1,26 +1,23 @@
-<%# locals: (q:) %>
-<div>
-  <%= turbo_frame_tag "transactions_search_form" do %>
-    <%= search_form_for @q, url: transactions_path, data: { turbo: false } do |form| %>
-      <div class="flex gap-2 mb-4">
-        <div class="grow">
-          <div class="relative flex items-center bg-white border border-gray-200 rounded-lg">
-            <%= form.search_field :category_name_or_merchant_name_or_account_name_or_name_cont,
-                                  placeholder: "Search transaction by name, merchant, category or amount",
-                                  class: "placeholder:text-sm placeholder:text-gray-500 relative pl-10 w-full border-none rounded-lg",
-                                  "data-auto-submit-form-target": "auto" %>
-            <%= lucide_icon("search", class: "w-5 h-5 text-gray-500 ml-2 absolute inset-0 transform top-1/2 -translate-y-1/2") %>
-          </div>
-        </div>
-        <div data-controller="menu" class="relative">
-          <button id="transaction-filters-button" data-menu-target="button" type="button" class="border border-gray-200 block h-full rounded-lg flex items-center gap-2 px-4">
-            <%= lucide_icon("list-filter", class: "w-5 h-5 text-gray-500") %>
-            <p class="text-sm font-medium text-gray-900">Filter</p>
-          </button>
-
-          <%= render "transactions/searches/menu", form: form %>
-        </div>
+<%# locals: (transactions:) %>
+<%= form_with url: transactions_path, scope: :q, method: :get, id: "transactions-search", data: { turbo: false } do |form| %>
+  <div class="flex gap-2 mb-4">
+    <div class="grow">
+      <div class="relative flex items-center bg-white border border-gray-200 rounded-lg">
+        <%= form.text_field :search,
+                            placeholder: "Search transactions by name",
+                            value: @q[:search],
+                            class: "placeholder:text-sm placeholder:text-gray-500 relative pl-10 w-full border-none rounded-lg",
+                            "data-auto-submit-form-target": "auto" %>
+        <%= lucide_icon("search", class: "w-5 h-5 text-gray-500 ml-2 absolute inset-0 transform top-1/2 -translate-y-1/2") %>
       </div>
-    <% end %>
-  <% end %>
-</div>
+    </div>
+    <div data-controller="menu" class="relative">
+      <button id="transaction-filters-button" data-menu-target="button" type="button" class="border border-gray-200 block h-full rounded-lg flex items-center gap-2 px-4">
+        <%= lucide_icon("list-filter", class: "w-5 h-5 text-gray-500") %>
+        <p class="text-sm font-medium text-gray-900">Filter</p>
+      </button>
+
+      <%= render "transactions/searches/menu", form: form %>
+    </div>
+  </div>
+<% end %>

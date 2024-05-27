@@ -22,11 +22,11 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     assert_dom "#total-transactions", count: 1, text: @user.family.transactions.count.to_s
 
     new_transaction = @user.family.accounts.first.transactions.create! \
-      name: "Ransack transaction to search for",
+      name: "Transaction to search for",
       date: Date.current,
       amount: 0
 
-    get transactions_url(q: { category_name_or_merchant_name_or_account_name_or_name_cont: new_transaction.name })
+    get transactions_url(q: { search: new_transaction.name })
 
     # Only finds 1 transaction that matches filter
     assert_dom "#" + dom_id(new_transaction), count: 1

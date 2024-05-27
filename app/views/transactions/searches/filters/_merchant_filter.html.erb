@@ -7,8 +7,15 @@
   <div class="my-2" id="list" data-list-filter-target="list">
     <% Current.family.transaction_merchants.each do |merchant| %>
       <div class="filterable-item flex items-center gap-2 p-2" data-filter-name="<%= merchant.name %>">
-        <%= form.check_box :merchant_id_in, { multiple: true, class: "rounded-sm border-gray-300 text-indigo-600 shadow-xs focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" }, merchant.id, nil %>
-        <%= form.label :merchant_id_in, merchant.name, value: merchant.id, class: "text-sm text-gray-900" %>
+        <%= form.check_box :merchants,
+                           {
+                             multiple: true,
+                             checked: @q[:merchants]&.include?(merchant.name),
+                             class: "rounded-sm border-gray-300 text-indigo-600 shadow-xs focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                           },
+                           merchant.name,
+                           nil %>
+        <%= form.label :merchants, merchant.name, class: "text-sm text-gray-900" %>
       </div>
     <% end %>
   </div>

@@ -4,9 +4,8 @@ class TransactionsController < ApplicationController
   before_action :set_transaction, only: %i[ show edit update destroy ]
 
   def index
-    search_params = params[:q]
-    @q = Current.family.transactions.ordered.ransack(search_params)
-    result = @q.result
+    @q = search_params
+    result = Current.family.transactions.search(@q).ordered
     @pagy, @transactions = pagy(result, items: 10)
 
     @totals = {
@@ -106,6 +105,10 @@ class TransactionsController < ApplicationController
 
     def nature
       params[:transaction][:nature].to_s.inquiry
+    end
+
+    def search_params
+      params.fetch(:q, {}).permit(:start_date, :end_date, :search, accounts: [], categories: [], merchants: [])
     end
 
     def transaction_params

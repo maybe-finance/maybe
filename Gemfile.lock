@@ -6,16 +6,6 @@ GIT
       railties (>= 4.1.0)
 
 GIT
-  remote: https://github.com/maybe-finance/ransack.git
-  revision: dec20edc9ccccac77f5b4b8a1c1a9f20dc58fa04
-  branch: main
-  specs:
-    ransack (4.1.1)
-      activerecord (>= 6.1.5)
-      activesupport (>= 6.1.5)
-      i18n
-
-GIT
   remote: https://github.com/rails/rails.git
   revision: ed50b93ebcf3c1a92ac3481297c07c33d9f7c161
   branch: 7-2-stable
@@ -494,7 +484,6 @@ DEPENDENCIES
   puma (>= 5.0)
   rails!
   rails-settings-cached
-  ransack!
   rubocop-rails-omakase
   ruby-lsp-rails
   selenium-webdriver

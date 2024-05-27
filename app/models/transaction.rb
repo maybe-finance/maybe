@@ -26,6 +26,12 @@ class Transaction < ApplicationRecord
       .joins(sanitize_sql_array([ "LEFT JOIN exchange_rates er ON transactions.date = er.date AND transactions.currency = er.base_currency AND er.converted_currency = ?", currency ]))
       .where("er.rate IS NOT NULL OR transactions.currency = ?", currency)
   }
+  scope :by_name, ->(name) { where("transactions.name ILIKE ?", "%#{name}%") if name.present? }
+  scope :with_categories, ->(categories) { joins(:category).where(transaction_categories: { name: categories }) if categories.present? }
+  scope :with_accounts, ->(accounts) { joins(:account).where(accounts: { name: accounts }) if accounts.present? }
+  scope :with_merchants, ->(merchants) { joins(:merchant).where(transaction_merchants: { name: merchants }) if merchants.present? }
+  scope :on_or_after_date, ->(date) { where("transactions.date >= ?", date) if date.present? }
+  scope :on_or_before_date, ->(date) { where("transactions.date <= ?", date) if date.present? }
 
   def self.daily_totals(transactions, period: Period.last_30_days, currency: Current.family.currency)
     # Sum spending and income for each day in the period with the given currency
@@ -56,11 +62,14 @@ class Transaction < ApplicationRecord
     select("*").from(rolling_totals).where("date >= ?", period.date_range.first)
   end
 
-  def self.ransackable_attributes(auth_object = nil)
-    %w[name amount date]
-  end
-
-  def self.ransackable_associations(auth_object = nil)
-    %w[category merchant account]
+  def self.search(params)
+    query = all
+    query = query.by_name(params[:search])
+                 .with_categories(params[:categories])
+                 .with_accounts(params[:accounts])
+                 .with_merchants(params[:merchants])
+                 .on_or_after_date(params[:start_date])
+                 .on_or_before_date(params[:end_date])
+    query
   end
 end
