@@ -1,6 +1,4 @@
 class TransactionsController < ApplicationController
-  include Searchable
-
   layout "with_sidebar"
 
   before_action :set_transaction, only: %i[ show edit update destroy ]
@@ -123,10 +121,6 @@ class TransactionsController < ApplicationController
   end
 
   private
-
-    def search_session_key
-      Transaction.search_session_key
-    end
 
     def perform_ransack_search
       search_params = session[ransack_session_key] || params[:q]

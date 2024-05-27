@@ -43,11 +43,9 @@ Rails.application.routes.draw do
 
   resources :transactions do
     collection do
-      scope module: :transactions, as: :transaction do
-        resource :search, only: %i[ update destroy ] do
-          resources :filters, only: :destroy, module: :searches
-        end
+      match "search" => "transactions#search", via: %i[ get post ]
 
+      scope module: :transactions, as: :transaction do
         resources :categories do
           resources :deletions, only: %i[ new create ], module: :categories
           collection do
