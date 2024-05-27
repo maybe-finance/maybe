@@ -1,0 +1,7 @@
+<%= render partial: "transactions/searches/form", locals: { q: q } %>
+
+<div id="transaction-search-filters" class="flex items-center flex-wrap gap-2">
+  <% filter_list.each do |filter| %>
+    <%= render partial: "transactions/searches/filters/badge", locals: { filter: filter } %>
+  <% end %>
+</div>

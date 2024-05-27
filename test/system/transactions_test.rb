@@ -23,7 +23,7 @@ class TransactionsTest < ApplicationSystemTestCase
 
     assert_selector "#" + dom_id(@target_txn), count: 1
 
-    within "#transactions_filters" do
+    within "#transaction-search-filters" do
       assert_text @target_txn.name
     end
   end
@@ -40,7 +40,7 @@ class TransactionsTest < ApplicationSystemTestCase
 
     assert_selector "#" + dom_id(@target_txn), count: 1
 
-    within "#transactions_filters" do
+    within "#transaction-search-filters" do
       assert_text @target_txn.account.name
       assert_text @target_txn.category.name
     end

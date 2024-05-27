@@ -36,8 +36,11 @@
     <%= render partial: "transactions/summary", locals: { totals: @totals } %>
   </div>
   <div id="transactions" class="bg-white rounded-xl border border-alpha-black-25 shadow-xs p-4 space-y-4">
-    <%= render partial: "transactions/search_form", locals: { q: @q } %>
-    <%= render partial: "transactions/filters", locals: { filters: @filter_list } %>
+
+    <div id="transactions-search">
+      <%= render partial: "transactions/searches/search", locals: { q: @q, filter_list: @filter_list } %>
+    </div>
+
     <%= render partial: "transactions/list", locals: { transactions: @transactions, pagy: @pagy } %>
   </div>
 </div>

@@ -39,8 +39,7 @@ class TransactionsController < ApplicationController
       format.turbo_stream do
         render turbo_stream: [
           turbo_stream.replace("transactions_summary", partial: "transactions/summary", locals: { totals: @totals }),
-          turbo_stream.replace("transactions_search_form", partial: "transactions/search_form", locals: { q: @q }),
-          turbo_stream.replace("transactions_filters", partial: "transactions/filters", locals: { filters: @filter_list }),
+          turbo_stream.replace("transactions-search", partial: "transactions/searches/search", locals: { q: @q, filter_list: @filter_list }),
           turbo_stream.replace("transactions_list", partial: "transactions/list", locals: { transactions: @transactions, pagy: @pagy })
         ]
       end
