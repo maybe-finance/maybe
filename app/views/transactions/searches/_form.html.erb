@@ -1,7 +1,7 @@
 <%# locals: (q:) %>
 <div>
   <%= turbo_frame_tag "transactions_search_form" do %>
-    <%= search_form_for @q, url: search_transactions_path, html: { method: :post, data: { turbo_frame: "transactions_list", controller: "auto-submit-form" } } do |form| %>
+    <%= search_form_for @q, url: transactions_path, data: { turbo: false } do |form| %>
       <div class="flex gap-2 mb-4">
         <div class="grow">
           <div class="relative flex items-center bg-white border border-gray-200 rounded-lg">

@@ -4,46 +4,16 @@ class TransactionsController < ApplicationController
   before_action :set_transaction, only: %i[ show edit update destroy ]
 
   def index
-    perform_ransack_search
+    search_params = params[:q]
+    @q = Current.family.transactions.ordered.ransack(search_params)
+    result = @q.result
+    @pagy, @transactions = pagy(result, items: 10)
 
-    respond_to do |format|
-      format.html
-      format.turbo_stream
-    end
-  end
-
-  def search
-    if params[:clear]
-      session.delete(ransack_session_key)
-    elsif params[:remove_param]
-      current_params = session[ransack_session_key] || {}
-      if params[:remove_param] == "date_range"
-        updated_params = current_params.except("date_gteq", "date_lteq")
-      elsif params[:remove_param_value]
-        key_to_remove = params[:remove_param]
-        value_to_remove = params[:remove_param_value]
-        updated_params = current_params.deep_dup
-        updated_params[key_to_remove] = updated_params[key_to_remove] - [ value_to_remove ]
-      else
-        updated_params = current_params.except(params[:remove_param])
-      end
-      session[ransack_session_key] = updated_params
-    elsif params[:q]
-      session[ransack_session_key] = params[:q]
-    end
-
-    perform_ransack_search
-
-    respond_to do |format|
-      format.html { render :index }
-      format.turbo_stream do
-        render turbo_stream: [
-          turbo_stream.replace("transactions_summary", partial: "transactions/summary", locals: { totals: @totals }),
-          turbo_stream.replace("transactions-search", partial: "transactions/searches/search", locals: { q: @q, filter_list: @filter_list }),
-          turbo_stream.replace("transactions_list", partial: "transactions/list", locals: { transactions: @transactions, pagy: @pagy })
-        ]
-      end
-    end
+    @totals = {
+      count: result.count,
+      income: result.inflows.sum(&:amount_money).abs,
+      expense: result.outflows.sum(&:amount_money).abs
+    }
   end
 
   def show
@@ -120,35 +90,6 @@ class TransactionsController < ApplicationController
   end
 
   private
-
-    def perform_ransack_search
-      search_params = session[ransack_session_key] || params[:q]
-      @q = Current.family.transactions.ordered.ransack(search_params)
-      result = @q.result
-      @pagy, @transactions = pagy(result, items: 10)
-
-      @totals = {
-        count: result.count,
-        income: result.inflows.sum(&:amount_money).abs,
-        expense: result.outflows.sum(&:amount_money).abs
-      }
-      @filter_list = Transaction.build_filter_list(search_params, Current.family)
-    end
-
-    def delete_search_param(params, key, value: nil)
-      if value
-        params[key]&.delete(value)
-        params.delete(key) if params[key].empty? # Remove key if it's empty after deleting value
-      else
-        params.delete(key)
-      end
-
-      params
-    end
-
-    def ransack_session_key
-      :ransack_transactions_q
-    end
 
     # Use callbacks to share common setup or constraints between actions.
     def set_transaction
