@@ -4,7 +4,7 @@ class Transactions::MerchantsController < ApplicationController
   before_action :set_merchant, only: %i[ edit update destroy ]
 
   def index
-    @merchants = Current.family.transaction_merchants
+    @merchants = Current.family.transaction_merchants.alphabetically
   end
 
   def new
