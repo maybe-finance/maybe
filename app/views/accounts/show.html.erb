@@ -41,6 +41,12 @@
   <%= turbo_frame_tag "sync_message" do %>
     <%= render partial: "accounts/sync_message", locals: { is_syncing: @account.syncing? } %>
   <% end %>
+  <% @account.sync_errors.each do |message| %>
+    <%= render partial: "shared/alert", locals: { type: "error", content: t("." + message) } %>
+  <% end %>
+  <% @account.sync_warnings.each do |message| %>
+    <%= render partial: "shared/alert", locals: { type: "warning", content: t("." + message) } %>
+  <% end %>
   <div class="bg-white shadow-xs rounded-xl border border-alpha-black-25 rounded-lg">
     <div class="p-4 flex justify-between">
       <div class="space-y-2">

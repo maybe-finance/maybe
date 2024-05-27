@@ -5,6 +5,8 @@ module ExchangeRate::Provided
   class_methods do
     private
       def fetch_rate_from_provider(from:, to:, date:)
+        return nil unless exchange_rates_provider.configured?
+
         response = exchange_rates_provider.fetch_exchange_rate \
           from: Money::Currency.new(from).iso_code,
           to: Money::Currency.new(to).iso_code,

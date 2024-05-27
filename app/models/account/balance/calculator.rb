@@ -1,11 +1,10 @@
 class Account::Balance::Calculator
     attr_reader :daily_balances, :errors, :warnings
 
-    @daily_balances = []
-    @errors = []
-    @warnings = []
-
     def initialize(account, options = {})
+      @daily_balances = []
+      @errors = []
+      @warnings = []
       @account = account
       @calc_start_date = [ options[:calc_start_date], @account.effective_start_date ].compact.max
     end
@@ -43,34 +42,50 @@ class Account::Balance::Calculator
 
     private
       def convert_balances_to_family_currency
-        rates = ExchangeRate.get_rate_series(
+        rates = ExchangeRate.get_rates(
           @account.currency,
           @account.family.currency,
           @calc_start_date..Date.current
         ).to_a
 
-        @daily_balances.map do |balance|
-          rate = rates.find { |rate| rate.date == balance[:date] }
-          raise "Rate for #{@account.currency} to #{@account.family.currency} on #{balance[:date]} not found" if rate.nil?
-          converted_balance = balance[:balance] * rate.rate
+        # Abort conversion if some required rates are missing
+        if rates.length != @daily_balances.length
+          @errors << :sync_message_missing_rates
+          return []
+        end
+
+        @daily_balances.map.with_index do |balance, index|
+          converted_balance = balance[:balance] * rates[index].rate
           { date: balance[:date], balance: converted_balance, currency: @account.family.currency, updated_at: Time.current }
         end
       end
 
       # For calculation, all transactions and valuations need to be normalized to the same currency (the account's primary currency)
       def normalize_entries_to_account_currency(entries, value_key)
-        entries.map do |entry|
-          currency = entry.currency
-          date = entry.date
-          value = entry.send(value_key)
+        grouped_entries = entries.group_by(&:currency)
+        normalized_entries = []
 
+        grouped_entries.each do |currency, entries|
           if currency != @account.currency
-            value = ExchangeRate.convert(value:, from: currency, to: @account.currency, date:)
-            currency = @account.currency
+            dates = entries.map(&:date).uniq
+            rates = ExchangeRate.get_rates(currency, @account.currency, dates).to_a
+            if rates.length != dates.length
+              @errors << :sync_message_missing_rates
+            else
+              entries.each do |entry|
+                ## There can be several entries on the same date so we cannot rely on indeces
+                rate = rates.find { |rate| rate.date == entry.date }
+                value = entry.send(value_key)
+                value *= rate.rate
+                normalized_entries << entry.attributes.merge(value_key.to_s => value, "currency" => currency)
+              end
+            end
+          else
+            normalized_entries.concat(entries)
           end
-
-          entry.attributes.merge(value_key.to_s => value, "currency" => currency)
         end
+
+        normalized_entries
       end
 
       def normalized_valuations
@@ -92,8 +107,8 @@ class Account::Balance::Calculator
           return @account.balance_on(@calc_start_date)
         end
 
-        oldest_valuation_date = normalized_valuations.first&.dig("date")
-        oldest_transaction_date = normalized_transactions.first&.dig("date")
+        oldest_valuation_date = normalized_valuations.first&.date
+        oldest_transaction_date = normalized_transactions.first&.date
         oldest_entry_date = [ oldest_valuation_date, oldest_transaction_date ].compact.min
 
         if oldest_entry_date.present? && oldest_entry_date == oldest_valuation_date

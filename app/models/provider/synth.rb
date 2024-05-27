@@ -5,6 +5,10 @@ class Provider::Synth
     @api_key = api_key || ENV["SYNTH_API_KEY"]
   end
 
+  def configured?
+    @api_key.present?
+  end
+
   def fetch_exchange_rate(from:, to:, date:)
     retrying Provider::Base.known_transient_errors do |on_last_attempt|
       response = Faraday.get("#{base_url}/rates/historical") do |req|

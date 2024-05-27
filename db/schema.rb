@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_05_22_151453) do
+ActiveRecord::Schema[7.2].define(version: 2024_05_24_203959) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -90,8 +90,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_22_151453) do
     t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Account::Loan'::character varying)::text, ('Account::Credit'::character varying)::text, ('Account::OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.boolean "is_active", default: true, null: false
     t.enum "status", default: "ok", null: false, enum_type: "account_status"
-    t.jsonb "sync_warnings", default: "[]", null: false
-    t.jsonb "sync_errors", default: "[]", null: false
+    t.jsonb "sync_warnings", default: [], null: false
+    t.jsonb "sync_errors", default: [], null: false
     t.date "last_sync_date"
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id"], name: "index_accounts_on_family_id"
