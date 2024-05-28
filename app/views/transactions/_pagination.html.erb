@@ -1,4 +1,4 @@
-<%= turbo_frame_tag "pagination-controls", target: "_top", action: "advance", class: "flex -mt-px" do %>
+<nav class="flex items-center justify-center px-4 mt-4 sm:px-0">
   <div>
     <% if pagy.prev %>
       <%= link_to pagy_url_for(pagy, pagy.prev), class: "inline-flex items-center px-3 py-3 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700" do %>
@@ -25,15 +25,15 @@
       <% end %>
     <% end %>
   </div>
-    <div>
-      <% if pagy.next %>
-        <%= link_to pagy_url_for(pagy, pagy.next), class: "inline-flex items-center px-3 py-3 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700" do %>
-          <%= lucide_icon("chevron-right", class: "w-5 h-5 text-gray-500") %>
-        <% end %>
-      <% else %>
-        <div class="inline-flex items-center px-3 py-3 text-sm font-medium hover:border-gray-300">
-          <%= lucide_icon("chevron-right", class: "w-5 h-5 text-gray-200") %>
-        </div>
+  <div>
+    <% if pagy.next %>
+      <%= link_to pagy_url_for(pagy, pagy.next), class: "inline-flex items-center px-3 py-3 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700" do %>
+        <%= lucide_icon("chevron-right", class: "w-5 h-5 text-gray-500") %>
       <% end %>
-    </div>
-<% end %>
+    <% else %>
+      <div class="inline-flex items-center px-3 py-3 text-sm font-medium hover:border-gray-300">
+        <%= lucide_icon("chevron-right", class: "w-5 h-5 text-gray-200") %>
+      </div>
+    <% end %>
+  </div>
+</nav>

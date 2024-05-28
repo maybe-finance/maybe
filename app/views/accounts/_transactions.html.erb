@@ -11,7 +11,9 @@
     <p class="text-gray-500 py-4">No transactions for this account yet.</p>
   <% else %>
     <div class="space-y-6">
-      <%= render partial: "transactions/transaction_group", collection: transactions.group_by(&:date), as: :transaction_group %>
+      <% transactions.group_by(&:date).each do |date, transactions| %>
+        <%= render partial: "accounts/transactions/date_group", locals: { date: date, transactions: transactions } %>
+      <% end %>
     </div>
   <% end %>
 </div>

@@ -1,13 +1,10 @@
-<%# locals: (transaction_group:) %>
-<% date = transaction_group[0] %>
-<% transactions = transaction_group[1] %>
-
+<%# locals: (date:, transactions:) %>
 <div class="bg-gray-25 rounded-xl p-1 w-full">
   <div class="py-2 px-4 flex items-center justify-between font-medium text-xs text-gray-500">
     <h4><%= date.strftime("%b %d, %Y") %> &middot; <%= transactions.size %></h4>
     <span><%= format_money -transactions.sum(&:amount_money) %></span>
   </div>
   <div class="bg-white shadow-xs rounded-md border border-alpha-black-25 divide-y divide-alpha-black-50">
-    <%= render partial: "transactions/transaction", collection: transactions %>
+    <%= render transactions %>
   </div>
 </div>

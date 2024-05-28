@@ -1,6 +1,9 @@
 ---
 en:
   transactions:
+    empty:
+      title: No transactions found
+      description: Try adding a transaction, editing filters or refining your search
     categories:
       create:
         success: New transaction category created successfully
@@ -59,7 +62,7 @@ en:
       income: Income
       submit: Add transaction
       transfer: Transfer
-    index:
+    header:
       edit_categories: Edit categories
       edit_imports: Edit imports
       import: Import

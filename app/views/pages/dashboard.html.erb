@@ -161,9 +161,12 @@
           <p><%= t(".no_transactions") %></p>
         </div>
       <% else %>
-        <div class="text-gray-500 flex items-center justify-center flex-col bg-gray-25 rounded-md">
-          <%= render partial: "transactions/transaction_group", collection: @transactions.group_by(&:date), as: :transaction_group %>
-          <p class="py-2 text-sm"><%= link_to t(".view_all"), transactions_path %></p>
+        <div class="text-gray-500 p-1 space-y-1 bg-gray-25 rounded-xl">
+          <% @transactions.group_by(&:date).each do |date, transactions| %>
+            <%= render partial: "pages/dashboard/transactions/date_group", locals: { date: date, transactions: transactions } %>
+          <% end %>
+
+          <p class="py-2 text-sm text-center"><%= link_to t(".view_all"), transactions_path %></p>
         </div>
       <% end %>
     </div>

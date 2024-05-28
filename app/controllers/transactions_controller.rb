@@ -6,7 +6,7 @@ class TransactionsController < ApplicationController
   def index
     @q = search_params
     result = Current.family.transactions.search(@q).ordered
-    @pagy, @transactions = pagy(result, items: 10)
+    @pagy, @transactions = pagy(result, items: 100)
 
     @totals = {
       count: result.count,

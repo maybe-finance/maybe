@@ -1,0 +1,10 @@
+<%# locals: (date:, transactions:) %>
+<div>
+  <div class="py-2 px-4 flex items-center justify-between font-medium text-xs text-gray-500">
+    <h4><%= date.strftime("%b %d, %Y") %> &middot; <%= transactions.size %></h4>
+    <span><%= format_money -transactions.sum(&:amount_money) %></span>
+  </div>
+  <div class="bg-white shadow-xs rounded-md border border-alpha-black-25 divide-y divide-alpha-black-50">
+    <%= render partial: "pages/dashboard/transactions/transaction", collection: transactions %>
+  </div>
+</div>
