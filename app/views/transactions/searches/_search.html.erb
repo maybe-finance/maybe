@@ -1,6 +1,6 @@
 <%= render partial: "transactions/searches/form", locals: { transactions: transactions } %>
 
-<div id="transaction-search-filters" class="flex items-center flex-wrap gap-2">
+<ul id="transaction-search-filters" class="flex items-center flex-wrap gap-2">
   <% @q.each do |param_key, param_value| %>
     <% unless param_value.blank? %>
       <% Array(param_value).each do |value| %>
@@ -8,4 +8,4 @@
       <% end %>
     <% end %>
   <% end %>
-</div>
+</ul>
