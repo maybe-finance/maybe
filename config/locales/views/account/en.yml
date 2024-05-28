@@ -35,6 +35,9 @@ en:
         /> <p>After deletion, there is no way you'll be able to restore the account
         information because you'll need to add it as a new account.</p>"
       confirm_title: Delete account?
+      sync_message_missing_rates: Since exchange rates haven't been synced, balance
+        graphs may not reflect accurate values.
+      sync_message_unknown_error: An error has occurred during the sync.
     summary:
       new: New account
     sync:

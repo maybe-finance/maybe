@@ -28,3 +28,4 @@ ignore_unused:
   - 'activerecord.models.account*' # i18n-tasks does not detect use in dynamic model names (e.g. object.model_name.human)
   - 'helpers.submit.*' # i18n-tasks does not detect used at forms
   - 'helpers.label.*' # i18n-tasks does not detect used at forms
+  - 'accounts.show.sync_message_*' # messages generated in the sync ActiveJob
