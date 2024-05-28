@@ -90,6 +90,7 @@ jobs:
           bin/rails db:create
           bin/rails db:schema:load
           bin/rails test
+          bin/rails test:system
           bin/rails db:seed
 
       - name: Keep screenshots from failed system tests

@@ -1,9 +1,6 @@
 ---
 en:
   transactions:
-    empty:
-      title: No transactions found
-      description: Try adding a transaction, editing filters or refining your search
     categories:
       create:
         success: New transaction category created successfully
@@ -49,6 +46,9 @@ en:
       success: New transaction created successfully
     destroy:
       success: Transaction deleted successfully
+    empty:
+      description: Try adding a transaction, editing filters or refining your search
+      title: No transactions found
     form:
       account: Account
       account_prompt: Select an Account
