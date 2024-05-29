@@ -38,10 +38,6 @@ class Transaction < ApplicationRecord
     amount > 0
   end
 
-  def previous_series_value
-    self.account.transactions.where("date < ?", date).order(date: :desc).first
-  end
-
   def sync_account_later
     if destroyed?
       sync_start_date = prior_transaction&.date

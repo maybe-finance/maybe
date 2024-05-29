@@ -5,17 +5,6 @@ module Account::Syncable
     AccountSyncJob.perform_later(self, start_date)
   end
 
-  def sync_associated_record_change_later(record)
-    if record.destroyed?
-      prior_record = record.previous_series_value
-      sync_start_date = prior_record&.date
-    else
-      sync_start_date = [ record.date_previously_was, record.date ].compact.min
-    end
-
-    sync_later(sync_start_date)
-  end
-
   def sync(start_date = nil)
     update!(status: "syncing")
 

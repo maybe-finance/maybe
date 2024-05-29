@@ -35,7 +35,7 @@ class TransactionsController < ApplicationController
                      .transactions.build(transaction_params.merge(amount: amount))
 
     @transaction.save!
-    @transaction.account.sync_associated_record_change_later(@transaction)
+    @transaction.sync_account_later
     redirect_to transactions_url, notice: t(".success")
   end
 
@@ -50,13 +50,13 @@ class TransactionsController < ApplicationController
     end
 
     @transaction.update! transaction_params
-    @transaction.account.sync_associated_record_change_later(@transaction)
+    @transaction.sync_account_later
     redirect_to transaction_url(@transaction), notice: t(".success")
   end
 
   def destroy
     @transaction.destroy!
-    @transaction.account.sync_associated_record_change_later(@transaction)
+    @transaction.sync_account_later
     redirect_to transactions_url, notice: t(".success")
   end
 
