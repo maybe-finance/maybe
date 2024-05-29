@@ -17,28 +17,9 @@ class TransactionTest < ActiveSupport::TestCase
     assert outflow_transaction.outflow?
   end
 
-  test "triggers sync with correct start date when transaction is set to prior date" do
-    prior_date = @transaction.date - 1
-    @transaction.update! date: prior_date
-
-    @transaction.account.expects(:sync_later).with(prior_date)
-    @transaction.sync_account_later
-  end
-
-  test "triggers sync with correct start date when transaction is set to future date" do
-    prior_date = @transaction.date
-    @transaction.update! date: @transaction.date + 1
-
-    @transaction.account.expects(:sync_later).with(prior_date)
-    @transaction.sync_account_later
-  end
-
-  test "triggers sync with correct start date when transaction deleted" do
-    prior_transaction = transactions(:checking_two) # 12 days ago
-    current_transaction = transactions(:checking_one) # 5 days ago
-    current_transaction.destroy!
-
-    current_transaction.account.expects(:sync_later).with(prior_transaction.date)
-    current_transaction.sync_account_later
+  test "finds prior series value" do
+    latest_txn = transactions(:checking_one)
+    prior_txn = transactions(:checking_two)
+    assert_equal prior_txn, latest_txn.previous_series_value
   end
 end

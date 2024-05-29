@@ -98,4 +98,32 @@ class Account::SyncableTest < ActiveSupport::TestCase
       account.sync
     end
   end
+
+  test "triggers sync with correct start date when transaction is set to prior date" do
+    transaction = @account.transactions.order(:date).last
+    prior_date = transaction.date - 1
+    transaction.update! date: prior_date
+
+    @account.expects(:sync_later).with(prior_date)
+    @account.sync_associated_record_change_later(transaction)
+  end
+
+  test "triggers sync with correct start date when transaction is set to future date" do
+    transaction = @account.transactions.order(:date).last
+    prior_date = transaction.date
+    transaction.update! date: transaction.date + 1
+
+    @account.expects(:sync_later).with(prior_date)
+    @account.sync_associated_record_change_later(transaction)
+  end
+
+  test "triggers sync with correct start date when transaction deleted" do
+    prior_transaction = @account.transactions.order(:date)[-2]
+    current_transaction = @account.transactions.order(:date)[-1]
+
+    current_transaction.destroy!
+
+    @account.expects(:sync_later).with(prior_transaction.date)
+    @account.sync_associated_record_change_later(current_transaction)
+  end
 end

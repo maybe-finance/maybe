@@ -17,13 +17,6 @@ class AccountTest < ActiveSupport::TestCase
     end
   end
 
-  test "finds prior transaction" do
-    transactions = @account.transactions.order(:date)
-    first_txn = transactions.first
-    second_txn = transactions.second
-    assert_equal first_txn, @account.find_prior_transaction(second_txn.date)
-  end
-
   test "new account should be valid" do
     assert @account.valid?
     assert_not_nil @account.accountable_id
