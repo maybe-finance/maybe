@@ -6,8 +6,8 @@ class Transaction < ApplicationRecord
   belongs_to :account
   belongs_to :category, optional: true
   belongs_to :merchant, optional: true
-  has_many :tags, through: :taggings
   has_many :taggings, as: :taggable, dependent: :destroy
+  has_many :tags, through: :taggings
 
   validates :name, :date, :amount, :account, presence: true
 
