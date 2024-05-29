@@ -7,7 +7,7 @@
     <%= render "transactions/categories/menu", transaction: transaction %>
   </div>
 
-  <%= content_tag :p,
-                  format_money(transaction.amount_money),
-                  class: ["col-span-1 ml-auto", "text-green-600": transaction.amount.negative?] %>
+  <div class="col-span-1 ml-auto">
+    <%= render "transactions/amount", transaction: transaction %>
+  </div>
 </div>

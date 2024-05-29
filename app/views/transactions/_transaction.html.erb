@@ -11,7 +11,7 @@
               account_path(transaction.account),
               class: ["col-span-3 hover:underline"] %>
 
-  <%= content_tag :p,
-                  format_money(transaction.amount_money),
-                  class: ["col-span-2 ml-auto", "text-green-600": transaction.amount.negative?] %>
+  <div class="col-span-2 ml-auto">
+    <%= render "amount", transaction: transaction %>
+  </div>
 <% end %>
