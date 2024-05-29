@@ -51,7 +51,11 @@ class TransactionsController < ApplicationController
 
     @transaction.update! transaction_params
     @transaction.sync_account_later
-    redirect_to transaction_url(@transaction), notice: t(".success")
+
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.replace(@transaction) }
+      format.html { redirect_to transaction_url(@transaction), notice: t(".success") }
+    end
   end
 
   def destroy
