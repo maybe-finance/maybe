@@ -6,12 +6,12 @@ class TransactionsController < ApplicationController
   def index
     @q = search_params
     result = Current.family.transactions.search(@q).ordered
-    @pagy, @transactions = pagy(result, items: 100)
+    @pagy, @transactions = pagy(result, items: 50)
 
     @totals = {
-      count: result.count,
-      income: result.inflows.sum(&:amount_money).abs,
-      expense: result.outflows.sum(&:amount_money).abs
+      count: @transactions.count,
+      income: @transactions.select { |t| t.inflow? }.sum(&:amount_money).abs,
+      expense: @transactions.select { |t| t.outflow? }.sum(&:amount_money).abs
     }
   end
 
@@ -90,9 +90,8 @@ class TransactionsController < ApplicationController
 
   private
 
-    # Use callbacks to share common setup or constraints between actions.
     def set_transaction
-      @transaction = Transaction.find(params[:id])
+      @transaction = Current.family.transactions.find(params[:id])
     end
 
     def amount

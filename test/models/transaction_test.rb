@@ -7,8 +7,9 @@ class TransactionTest < ActiveSupport::TestCase
     outflow_transaction = transactions(:checking_five)
 
     assert inflow_transaction.amount < 0
+    assert inflow_transaction.inflow?
+
     assert outflow_transaction.amount >= 0
-    assert Transaction.inflows.include? inflow_transaction
-    assert Transaction.outflows.include? outflow_transaction
+    assert outflow_transaction.outflow?
   end
 end
