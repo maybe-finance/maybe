@@ -21,9 +21,6 @@ class TransactionsTest < ApplicationSystemTestCase
 
     within "form#transactions-search" do
       fill_in "Search transactions by name", with: @target_txn.name
-
-      # TODO: Add back Turbo
-      send_keys :enter
     end
 
     assert_selector "#" + dom_id(@target_txn), count: 1
@@ -54,9 +51,6 @@ class TransactionsTest < ApplicationSystemTestCase
   test "all filters work and empty state shows if no match" do
     within "form#transactions-search" do
       fill_in "Search transactions by name", with: @target_txn.name
-
-      # TODO: Add back Turbo
-      send_keys :enter
     end
 
     find("#transaction-filters-button").click

@@ -1,5 +1,9 @@
 <%# locals: (transactions:) %>
-<%= form_with url: transactions_path, scope: :q, method: :get, id: "transactions-search", data: { turbo: false } do |form| %>
+<%= form_with url: transactions_path,
+              id: "transactions-search",
+              scope: :q,
+              method: :get,
+              data: { controller: "auto-submit-form" } do |form| %>
   <div class="flex gap-2 mb-4">
     <div class="grow">
       <div class="relative flex items-center bg-white border border-gray-200 rounded-lg">

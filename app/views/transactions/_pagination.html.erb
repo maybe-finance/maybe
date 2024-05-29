@@ -13,7 +13,7 @@
   <div class="bg-gray-25 rounded-xl">
     <% pagy.series.each do |series_item| %>
       <% if series_item.is_a?(Integer) %>
-        <%= link_to pagy_url_for(pagy, series_item), class: "inline-flex items-center  px-3 py-3 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700" do %>
+        <%= link_to pagy_url_for(pagy, series_item), class: "inline-flex items-center px-3 py-3 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700" do %>
           <%= series_item %>
         <% end %>
       <% elsif series_item.is_a?(String) %>

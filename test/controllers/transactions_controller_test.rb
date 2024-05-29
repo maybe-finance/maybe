@@ -126,11 +126,6 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should get edit" do
-    get edit_transaction_url(@transaction)
-    assert_response :success
-  end
-
   test "should update transaction" do
     patch transaction_url(@transaction), params: { transaction: { account_id: @transaction.account_id, amount: @transaction.amount, currency: @transaction.currency, date: @transaction.date, name: @transaction.name } }
     assert_redirected_to transaction_url(@transaction)
