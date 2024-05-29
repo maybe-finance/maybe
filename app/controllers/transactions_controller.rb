@@ -72,7 +72,7 @@ class TransactionsController < ApplicationController
           ]
         end
       else
-        format.html { render :edit, status: :unprocessable_entity }
+        format.html { render :show, status: :unprocessable_entity }
       end
     end
   end
