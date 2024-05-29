@@ -34,58 +34,30 @@ class TransactionsController < ApplicationController
                      .find(params[:transaction][:account_id])
                      .transactions.build(transaction_params.merge(amount: amount))
 
-    respond_to do |format|
-      if @transaction.save
-        @transaction.account.sync_later(@transaction.date)
-        format.html { redirect_to transactions_url, notice: t(".success") }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-      end
-    end
+    @transaction.save!
+    @transaction.sync_account_later
+    redirect_to transactions_url, notice: t(".success")
   end
 
   def update
-    respond_to do |format|
-      sync_start_date = if transaction_params[:date]
-                          [ @transaction.date, Date.parse(transaction_params[:date]) ].compact.min
-      else
-        @transaction.date
-      end
-
-      if params[:transaction][:tag_id].present?
-        tag = Current.family.tags.find(params[:transaction][:tag_id])
-        @transaction.tags << tag unless @transaction.tags.include?(tag)
-      end
-
-      if params[:transaction][:remove_tag_id].present?
-        @transaction.tags.delete(params[:transaction][:remove_tag_id])
-      end
-
-      if @transaction.update(transaction_params)
-        @transaction.account.sync_later(sync_start_date)
-
-        format.html { redirect_to transaction_url(@transaction), notice: t(".success") }
-        format.turbo_stream do
-          render turbo_stream: [
-            turbo_stream.append("notification-tray", partial: "shared/notification", locals: { type: "success", content: { body: t(".success") } }),
-            turbo_stream.replace("transaction_#{@transaction.id}", partial: "transactions/transaction", locals: { transaction: @transaction })
-          ]
-        end
-      else
-        format.html { render :show, status: :unprocessable_entity }
-      end
+    if params[:transaction][:tag_id].present?
+      tag = Current.family.tags.find(params[:transaction][:tag_id])
+      @transaction.tags << tag unless @transaction.tags.include?(tag)
     end
+
+    if params[:transaction][:remove_tag_id].present?
+      @transaction.tags.delete(params[:transaction][:remove_tag_id])
+    end
+
+    @transaction.update! transaction_params
+    @transaction.sync_account_later
+    redirect_to transaction_url(@transaction), notice: t(".success")
   end
 
   def destroy
-    @account = @transaction.account
-    sync_start_date = @account.transactions.where("date < ?", @transaction.date).order(date: :desc).first&.date
     @transaction.destroy!
-    @account.sync_later(sync_start_date)
-
-    respond_to do |format|
-      format.html { redirect_to transactions_url, notice: t(".success") }
-    end
+    @transaction.sync_account_later
+    redirect_to transactions_url, notice: t(".success")
   end
 
   private

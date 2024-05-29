@@ -38,6 +38,16 @@ class Transaction < ApplicationRecord
     amount > 0
   end
 
+  def sync_account_later
+    if destroyed?
+      sync_start_date = prior_transaction&.date
+    else
+      sync_start_date = [ date_previously_was, date ].compact.min
+    end
+
+    account.sync_later(sync_start_date)
+  end
+
   class << self
     def daily_totals(transactions, period: Period.last_30_days, currency: Current.family.currency)
       # Sum spending and income for each day in the period with the given currency
@@ -78,4 +88,10 @@ class Transaction < ApplicationRecord
         .on_or_before_date(params[:end_date])
     end
   end
+
+  private
+
+    def prior_transaction
+      account.find_prior_transaction(self.date)
+    end
 end

@@ -1,6 +1,18 @@
 require "test_helper"
 
 class Account::SyncableTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
+
+  setup do
+    @account = accounts(:savings_with_valuation_overrides)
+  end
+
+  test "triggers sync job" do
+    assert_enqueued_with(job: AccountSyncJob, args: [ @account, Date.current ]) do
+      @account.sync_later(Date.current)
+    end
+  end
+
   test "account has no balances until synced" do
     account = accounts(:savings_with_valuation_overrides)
 
