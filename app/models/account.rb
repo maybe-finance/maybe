@@ -26,10 +26,6 @@ class Account < ApplicationRecord
     balances.where("date <= ?", date).order(date: :desc).first&.balance
   end
 
-  def find_prior_transaction(date)
-    transactions.where("date < ?", date).order(date: :desc).first
-  end
-
   # e.g. Wise, Revolut accounts that have transactions in multiple currencies
   def multi_currency?
     currencies = [ valuations.pluck(:currency), transactions.pluck(:currency) ].flatten.uniq

@@ -40,7 +40,7 @@ class Transaction < ApplicationRecord
 
   def sync_account_later
     if destroyed?
-      sync_start_date = prior_transaction&.date
+      sync_start_date = previous_transaction_date
     else
       sync_start_date = [ date_previously_was, date ].compact.min
     end
@@ -91,7 +91,11 @@ class Transaction < ApplicationRecord
 
   private
 
-    def prior_transaction
-      account.find_prior_transaction(self.date)
+    def previous_transaction_date
+      self.account
+          .transactions
+          .where("date < ?", date)
+          .order(date: :desc)
+          .first&.date
     end
 end
