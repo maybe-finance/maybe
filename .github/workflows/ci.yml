@@ -1,7 +1,7 @@
 name: CI
 
 on:
-  pull_request:
+  workflow_call:
 
 jobs:
   scan_ruby:
@@ -59,6 +59,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432
+      RAILS_ENV: test
+
     services:
       postgres:
         image: postgres
@@ -82,15 +86,18 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: Run tests and smoke test seed
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+      - name: DB setup and smoke test
         run: |
           bin/rails db:create
           bin/rails db:schema:load
-          bin/rails test
           bin/rails db:seed
+
+      - name: Unit and integration tests
+        run: bin/rails test
+
+      - name: System tests
+        run: DISABLE_PARALLELIZATION=true bin/rails test:system
+        continue-on-error: true # TODO: Eventually we'll enforce for PRs
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
