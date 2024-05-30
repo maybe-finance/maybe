@@ -53,6 +53,8 @@ class TransactionsTest < ApplicationSystemTestCase
       fill_in "Search transactions by name", with: @target_txn.name
     end
 
+    assert_selector "#" + dom_id(@target_txn), count: 1
+
     find("#transaction-filters-button").click
 
     within "#transaction-filters-menu" do

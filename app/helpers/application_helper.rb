@@ -28,8 +28,6 @@ module ApplicationHelper
   #     <div>Content here</div>
   #   <% end %>
   #
-  # @note can also be triggered via ?modal=model&entity_id=uuid query params
-  #
   def modal(options = {}, &block)
     content = capture &block
     render partial: "shared/modal", locals: { content:, classes: options[:classes] }
@@ -43,7 +41,6 @@ module ApplicationHelper
   #     <div>Content here</div>
   #   <% end %>
   #
-  # @note can also be triggered via ?drawer=model&entity_id=uuid query params
   def drawer(&block)
     content = capture &block
     render partial: "shared/drawer", locals: { content: content }
