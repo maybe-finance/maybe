@@ -60,6 +60,7 @@ jobs:
     timeout-minutes: 10
     env:
       DATABASE_URL: postgres://postgres:postgres@localhost:5432
+      RAILS_ENV: test
 
     services:
       postgres:
