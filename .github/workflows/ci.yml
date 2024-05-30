@@ -83,6 +83,9 @@ jobs:
           bundler-cache: true
 
       - name: DB Smoke test
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
         run: |
           bin/rails db:create
           bin/rails db:schema:load
