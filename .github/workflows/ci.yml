@@ -1,7 +1,7 @@
 name: CI
 
 on:
-  pull_request:
+  workflow_call:
 
 jobs:
   scan_ruby:
@@ -58,6 +58,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+
     env:
       DATABASE_URL: postgres://postgres:postgres@localhost:5432
       RAILS_ENV: test
@@ -85,7 +86,7 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: DB Smoke test
+      - name: DB setup and smoke test
         run: |
           bin/rails db:create
           bin/rails db:schema:load

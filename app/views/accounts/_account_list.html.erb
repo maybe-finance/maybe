@@ -27,7 +27,7 @@
           </div>
       </div>
     </summary>
-    <% group.children.each do |account_value_node| %>
+    <% group.children.sort_by(&:name).each do |account_value_node| %>
       <% account = account_value_node.original %>
       <%= link_to account_path(account), class: "flex items-center w-full gap-3 px-3 py-2 mb-1 hover:bg-gray-100 rounded-[10px]" do %>
         <%= image_tag account_logo_url(account), class: "w-6 h-6" %>
