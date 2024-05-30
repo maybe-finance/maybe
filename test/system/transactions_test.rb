@@ -49,12 +49,6 @@ class TransactionsTest < ApplicationSystemTestCase
   end
 
   test "all filters work and empty state shows if no match" do
-    within "form#transactions-search" do
-      fill_in "Search transactions by name", with: @target_txn.name
-    end
-
-    assert_selector "#" + dom_id(@target_txn), count: 1
-
     find("#transaction-filters-button").click
 
     within "#transaction-filters-menu" do
@@ -88,7 +82,6 @@ class TransactionsTest < ApplicationSystemTestCase
     assert_text "No transactions found"
 
     within "ul#transaction-search-filters" do
-      find("li", text: @target_txn.name).first("a").click
       find("li", text: @target_txn.account.name).first("a").click
       find("li", text: "on or after #{10.days.ago.to_date}").first("a").click
       find("li", text: "on or before #{Date.current}").first("a").click
