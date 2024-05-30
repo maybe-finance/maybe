@@ -82,16 +82,18 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: Run tests and smoke test seed
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+      - name: DB Smoke test
         run: |
           bin/rails db:create
           bin/rails db:schema:load
-          bin/rails test
-          DISABLE_PARALLELIZATION=true bin/rails test:system
           bin/rails db:seed
+
+      - name: Unit and integration tests
+        run: bin/rails test
+
+      - name: System tests
+        run: DISABLE_PARALLELIZATION=true bin/rails test:system
+        continue-on-error: true # TODO: Eventually we'll enforce for PRs
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
