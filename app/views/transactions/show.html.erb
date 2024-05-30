@@ -62,22 +62,15 @@
     </summary>
 
     <div class="mb-2">
-
-      <% if @transaction.tags.any? %>
-        <div class="pt-3 pb-2 flex flex-wrap items-center gap-1">
-          <% @transaction.tags.each do |tag| %>
-            <div class="relative">
-              <%= render partial: "tags/badge", locals: { tag: tag } %>
-              <%= button_to transaction_path(@transaction, transaction: { remove_tag_id: tag.id }), method: :patch, "data-turbo": false, class: "absolute -top-2 -right-1 px-0.5 py rounded-full hover:bg-alpha-black-200 border border-alpha-black-100" do %>
-                <%= lucide_icon("x", class: "w-3 h-3") %>
-              <% end %>
-            </div>
-          <% end %>
-        </div>
-      <% end %>
-
-      <%= form_with model: @transaction, html: { data: { controller: "auto-submit-form", turbo: false } } do |f| %>
-        <%= f.collection_select :tag_id, Current.family.tags.alphabetically.excluding(@transaction.tags), :id, :name, { prompt: "Select a tag", label: "Select a tag", class: "placeholder:text-gray-500" }, "data-auto-submit-form-target": "auto", "data-turbo": false %>
+      <%= form_with model: @transaction, html: { data: { controller: "auto-submit-form" } } do |f| %>
+        <%= f.select :tag_ids,
+                     options_for_select(Current.family.tags.alphabetically.pluck(:name, :id), @transaction.tag_ids),
+                     {
+                       multiple: true,
+                       label: t(".select_tags"),
+                       class: "placeholder:text-gray-500"
+                     },
+                     "data-auto-submit-form-target": "auto" %>
       <% end %>
     </div>
 

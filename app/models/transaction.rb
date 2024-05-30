@@ -8,17 +8,21 @@ class Transaction < ApplicationRecord
   belongs_to :merchant, optional: true
   has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings
+  accepts_nested_attributes_for :taggings, allow_destroy: true
 
   validates :name, :date, :amount, :account, presence: true
 
   scope :ordered, -> { order(date: :desc) }
   scope :active, -> { where(excluded: false) }
-  scope :by_name, ->(name) { where("transactions.name ILIKE ?", "%#{name}%") if name.present? }
-  scope :with_categories, ->(categories) { joins(:category).where(transaction_categories: { name: categories }) if categories.present? }
-  scope :with_accounts, ->(accounts) { joins(:account).where(accounts: { name: accounts }) if accounts.present? }
-  scope :with_merchants, ->(merchants) { joins(:merchant).where(transaction_merchants: { name: merchants }) if merchants.present? }
-  scope :on_or_after_date, ->(date) { where("transactions.date >= ?", date) if date.present? }
-  scope :on_or_before_date, ->(date) { where("transactions.date <= ?", date) if date.present? }
+  scope :inflows, -> { where("amount <= 0") }
+  scope :outflows, -> { where("amount > 0") }
+  scope :by_name, ->(name) { where("transactions.name ILIKE ?", "%#{name}%") }
+  scope :with_categories, ->(categories) { joins(:category).where(transaction_categories: { name: categories }) }
+  scope :with_accounts, ->(accounts) { joins(:account).where(accounts: { name: accounts }) }
+  scope :with_account_ids, ->(account_ids) { joins(:account).where(accounts: { id: account_ids }) }
+  scope :with_merchants, ->(merchants) { joins(:merchant).where(transaction_merchants: { name: merchants }) }
+  scope :on_or_after_date, ->(date) { where("transactions.date >= ?", date) }
+  scope :on_or_before_date, ->(date) { where("transactions.date <= ?", date) }
   scope :with_converted_amount, ->(currency = Current.family.currency) {
     # Join with exchange rates to convert the amount to the given currency
     # If no rate is available, exclude the transaction from the results
@@ -79,13 +83,15 @@ class Transaction < ApplicationRecord
     end
 
     def search(params)
-      all
-        .by_name(params[:search])
-        .with_categories(params[:categories])
-        .with_accounts(params[:accounts])
-        .with_merchants(params[:merchants])
-        .on_or_after_date(params[:start_date])
-        .on_or_before_date(params[:end_date])
+      query = all
+      query = query.by_name(params[:search]) if params[:search].present?
+      query = query.with_categories(params[:categories]) if params[:categories].present?
+      query = query.with_accounts(params[:accounts]) if params[:accounts].present?
+      query = query.with_account_ids(params[:account_ids]) if params[:account_ids].present?
+      query = query.with_merchants(params[:merchants]) if params[:merchants].present?
+      query = query.on_or_after_date(params[:start_date]) if params[:start_date].present?
+      query = query.on_or_before_date(params[:end_date]) if params[:end_date].present?
+      query
     end
   end
 

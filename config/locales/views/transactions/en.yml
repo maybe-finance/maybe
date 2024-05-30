@@ -93,5 +93,7 @@ en:
         title: New merchant
       update:
         success: Merchant updated successfully
+    show:
+      select_tags: Select one or more tags
     update:
       success: Transaction updated successfully

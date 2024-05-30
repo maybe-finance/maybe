@@ -9,9 +9,9 @@ class TransactionsController < ApplicationController
     @pagy, @transactions = pagy(result, items: 50)
 
     @totals = {
-      count: @transactions.count,
-      income: @transactions.select { |t| t.inflow? }.sum(&:amount_money).abs,
-      expense: @transactions.select { |t| t.outflow? }.sum(&:amount_money).abs
+      count: result.count,
+      income: result.inflows.sum(&:amount_money).abs,
+      expense: result.outflows.sum(&:amount_money).abs
     }
   end
 
@@ -40,22 +40,10 @@ class TransactionsController < ApplicationController
   end
 
   def update
-    if params[:transaction][:tag_id].present?
-      tag = Current.family.tags.find(params[:transaction][:tag_id])
-      @transaction.tags << tag unless @transaction.tags.include?(tag)
-    end
-
-    if params[:transaction][:remove_tag_id].present?
-      @transaction.tags.delete(params[:transaction][:remove_tag_id])
-    end
-
     @transaction.update! transaction_params
     @transaction.sync_account_later
 
-    respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.replace(@transaction) }
-      format.html { redirect_to transaction_url(@transaction), notice: t(".success") }
-    end
+    redirect_to transaction_url(@transaction), notice: t(".success")
   end
 
   def destroy
@@ -83,10 +71,10 @@ class TransactionsController < ApplicationController
     end
 
     def search_params
-      params.fetch(:q, {}).permit(:start_date, :end_date, :search, accounts: [], categories: [], merchants: [])
+      params.fetch(:q, {}).permit(:start_date, :end_date, :search, accounts: [], account_ids: [], categories: [], merchants: [])
     end
 
     def transaction_params
-      params.require(:transaction).permit(:name, :date, :amount, :currency, :notes, :excluded, :category_id, :merchant_id, :tag_id, :remove_tag_id).except(:tag_id, :remove_tag_id)
+      params.require(:transaction).permit(:name, :date, :amount, :currency, :notes, :excluded, :category_id, :merchant_id, tag_ids: [], taggings_attributes: [ :id, :tag_id, :_destroy ])
     end
 end

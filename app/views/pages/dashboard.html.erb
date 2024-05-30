@@ -163,7 +163,7 @@
       <% else %>
         <div class="text-gray-500 p-1 space-y-1 bg-gray-25 rounded-xl">
           <% @transactions.group_by(&:date).each do |date, transactions| %>
-            <%= render partial: "pages/dashboard/transactions/date_group", locals: { date: date, transactions: transactions } %>
+            <%= transactions_group(date, transactions, "pages/dashboard/transactions/transaction") %>
           <% end %>
 
           <p class="py-2 text-sm text-center"><%= link_to t(".view_all"), transactions_path %></p>

@@ -7,12 +7,13 @@
       <span class="text-sm">New transaction</span>
     <% end %>
   </div>
+
   <% if transactions.empty? %>
     <p class="text-gray-500 py-4">No transactions for this account yet.</p>
   <% else %>
     <div class="space-y-6">
       <% transactions.group_by(&:date).each do |date, transactions| %>
-        <%= render partial: "accounts/transactions/date_group", locals: { date: date, transactions: transactions } %>
+        <%= transactions_group(date, transactions) %>
       <% end %>
     </div>
   <% end %>

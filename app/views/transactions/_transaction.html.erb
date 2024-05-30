@@ -1,6 +1,6 @@
-<%= content_tag :div, id: dom_id(transaction), class: "grid grid-cols-12 items-center text-gray-900 py-4 text-sm font-medium px-4" do %>
+<%= turbo_frame_tag dom_id(transaction), class: "grid grid-cols-12 items-center text-gray-900 py-4 text-sm font-medium px-4" do %>
   <div class="col-span-4">
-    <%= render "name", transaction: transaction %>
+    <%= render "transactions/name", transaction: transaction %>
   </div>
 
   <div class="col-span-3">
@@ -12,6 +12,6 @@
               class: ["col-span-3 hover:underline"] %>
 
   <div class="col-span-2 ml-auto">
-    <%= render "amount", transaction: transaction %>
+    <%= render "transactions/amount", transaction: transaction %>
   </div>
 <% end %>

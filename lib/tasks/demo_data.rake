@@ -6,6 +6,8 @@ namespace :demo_data do
     family.accounts.delete_all
     ExchangeRate.delete_all
     family.transaction_categories.delete_all
+    Tagging.delete_all
+    family.tags.delete_all
     Transaction::Category.create_default_categories(family)
 
     user = User.find_or_create_by(email: "user@maybe.local") do |u|
@@ -16,6 +18,15 @@ namespace :demo_data do
     end
 
     puts "Reset user: #{user.email} with family: #{family.name}"
+
+    # Tags
+    tags = [
+      { name: "Hawaii Trip", color: "#e99537" },
+      { name: "Trips", color: "#4da568" },
+      { name: "Emergency Fund", color: "#db5a54" }
+    ]
+
+    family.tags.insert_all(tags)
 
     # Mock exchange rates for last 60 days (these rates are reasonable for EUR:USD, but not exact)
     exchange_rates = (0..60).map do |days_ago|
@@ -69,16 +80,16 @@ namespace :demo_data do
 
     # ========== Transactions ================
     multi_currency_checking_transactions = [
-      { date: Date.today - 45, amount: 3000, name: "Paycheck", currency: "USD" },
-      { date: Date.today - 41, amount: -1500, name: "Rent Payment", currency: "EUR" },
-      { date: Date.today - 39, amount: -200, name: "Groceries", currency: "EUR" },
-      { date: Date.today - 34, amount: 3000, name: "Paycheck", currency: "USD" },
-      { date: Date.today - 31, amount: -1500, name: "Rent Payment", currency: "EUR" },
-      { date: Date.today - 28, amount: -100, name: "Utilities", currency: "EUR" },
-      { date: Date.today - 28, amount: 3000, name: "Paycheck", currency: "USD" },
-      { date: Date.today - 28, amount: -1500, name: "Rent Payment", currency: "EUR" },
-      { date: Date.today - 28, amount: -50, name: "Internet Bill", currency: "EUR" },
-      { date: Date.today - 14, amount: 3000, name: "Paycheck", currency: "USD" }
+      { date: Date.today - 45, amount: -3000, name: "Paycheck", currency: "USD" },
+      { date: Date.today - 41, amount: 1500, name: "Rent Payment", currency: "EUR" },
+      { date: Date.today - 39, amount: 200, name: "Groceries", currency: "EUR" },
+      { date: Date.today - 34, amount: -3000, name: "Paycheck", currency: "USD" },
+      { date: Date.today - 31, amount: 1500, name: "Rent Payment", currency: "EUR" },
+      { date: Date.today - 28, amount: 100, name: "Utilities", currency: "EUR" },
+      { date: Date.today - 28, amount: -3000, name: "Paycheck", currency: "USD" },
+      { date: Date.today - 28, amount: 1500, name: "Rent Payment", currency: "EUR" },
+      { date: Date.today - 28, amount: 50, name: "Internet Bill", currency: "EUR" },
+      { date: Date.today - 14, amount: -3000, name: "Paycheck", currency: "USD" }
     ]
 
     checking_transactions = [
@@ -171,24 +182,24 @@ namespace :demo_data do
     ]
 
     mortgage_transactions = [
-      { date: Date.today - 90, amount: -1500, name: "Mortgage Payment" },
-      { date: Date.today - 60, amount: -1500, name: "Mortgage Payment" },
-      { date: Date.today - 30, amount: -1500, name: "Mortgage Payment" }
+      { date: Date.today - 90, amount: 1500, name: "Mortgage Payment" },
+      { date: Date.today - 60, amount: 1500, name: "Mortgage Payment" },
+      { date: Date.today - 30, amount: 1500, name: "Mortgage Payment" }
     ]
 
     car_loan_transactions = [
-      { date: 12.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
-      { date: 11.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
-      { date: 10.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
-      { date: 9.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
-      { date: 8.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
-      { date: 7.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
-      { date: 6.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
-      { date: 5.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
-      { date: 4.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
-      { date: 3.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
-      { date: 2.months.ago.to_date, amount: -1250, name: "Car Loan Payment" },
-      { date: 1.month.ago.to_date, amount: -1250, name: "Car Loan Payment" }
+      { date: 12.months.ago.to_date, amount: 1250, name: "Car Loan Payment" },
+      { date: 11.months.ago.to_date, amount: 1250, name: "Car Loan Payment" },
+      { date: 10.months.ago.to_date, amount: 1250, name: "Car Loan Payment" },
+      { date: 9.months.ago.to_date, amount: 1250, name: "Car Loan Payment" },
+      { date: 8.months.ago.to_date, amount: 1250, name: "Car Loan Payment" },
+      { date: 7.months.ago.to_date, amount: 1250, name: "Car Loan Payment" },
+      { date: 6.months.ago.to_date, amount: 1250, name: "Car Loan Payment" },
+      { date: 5.months.ago.to_date, amount: 1250, name: "Car Loan Payment" },
+      { date: 4.months.ago.to_date, amount: 1250, name: "Car Loan Payment" },
+      { date: 3.months.ago.to_date, amount: 1250, name: "Car Loan Payment" },
+      { date: 2.months.ago.to_date, amount: 1250, name: "Car Loan Payment" },
+      { date: 1.month.ago.to_date, amount: 1250, name: "Car Loan Payment" }
     ]
 
     # ========== Valuations ================
@@ -260,6 +271,21 @@ namespace :demo_data do
     credit_card.transactions.insert_all(credit_card_transactions)
     mortgage.transactions.insert_all(mortgage_transactions)
     car_loan.transactions.insert_all(car_loan_transactions)
+
+    # Tag a few transactions
+    emergency_fund_tag = Tag.find_by(name: "Emergency Fund")
+    trips_tag = Tag.find_by(name: "Trips")
+    hawaii_trip_tag = Tag.find_by(name: "Hawaii Trip")
+
+    savings.transactions.order(date: :desc).limit(5).each do |txn|
+      txn.tags << emergency_fund_tag
+      txn.save!
+    end
+
+    checking.transactions.order(date: :desc).limit(5).each do |txn|
+      txn.tags = [ trips_tag, hawaii_trip_tag ]
+      txn.save!
+    end
 
     puts "Created demo accounts, transactions, and valuations for family: #{family.name}"
 
