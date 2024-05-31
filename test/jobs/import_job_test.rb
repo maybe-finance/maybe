@@ -14,5 +14,6 @@ class ImportJobTest < ActiveJob::TestCase
     end
 
     assert import.reload.complete?
+    assert import.account.balances.present?
   end
 end

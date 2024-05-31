@@ -56,6 +56,8 @@ class Import < ApplicationRecord
       end
     end
 
+    self.account.sync
+
     update!(status: "complete")
   rescue => e
     update!(status: "failed")

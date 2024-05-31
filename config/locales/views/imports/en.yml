@@ -68,6 +68,7 @@ en:
       requirement1: Dates must be in ISO 8601 format (YYYY-MM-DD)
       requirement2: Negative transaction is an "outflow" (expense), positive is an
         "inflow" (income)
+      requirement3: Can have 0 or more tags separated by |
       subtitle: Import your transactions
     load_csv:
       import_loaded: Import CSV loaded
