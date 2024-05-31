@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="h-full">
+<html class="h-full" lang="en">
   <head>
     <title><%= content_for(:title) || "Maybe" %></title>
 
@@ -13,7 +13,8 @@
     <%= hotwire_livereload_tags if Rails.env.development? %>
     <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
 
-    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport"
+          content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Maybe">
@@ -30,10 +31,13 @@
     <%= content_for?(:content) ? yield(:content) : yield %>
 
     <%= turbo_frame_tag "modal" %>
+    <%= turbo_frame_tag "drawer" %>
+
     <%= render "shared/confirm_modal" %>
 
     <% if self_hosted? %>
     <%= render "shared/app_version" %>
     <% end %>
   </body>
+
 </html>

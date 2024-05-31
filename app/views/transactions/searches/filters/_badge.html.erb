@@ -1,0 +1,34 @@
+<%# locals: (param_key:, param_value:) %>
+<li class="flex items-center gap-1 text-sm border border-alpha-black-200 rounded-3xl p-1.5">
+
+  <% if param_key == "start_date" || param_key == "end_date" %>
+    <div class="flex items-center gap-2">
+      <%= lucide_icon "calendar", class: "w-5 h-5 text-gray-500" %>
+      <p>
+        <% if param_key == "start_date" %>
+          on or after <%= param_value %>
+        <% else %>
+          on or before <%= param_value %>
+        <% end %>
+      </p>
+    </div>
+  <% elsif param_key == "search" %>
+    <div class="flex items-center gap-2">
+      <%= lucide_icon "text", class: "w-5 h-5 text-gray-500" %>
+      <p><%= "\"#{param_value}\"".truncate(20) %></p>
+    </div>
+  <% elsif param_key == "accounts" %>
+    <div class="flex items-center gap-2">
+      <div class="w-5 h-5 bg-blue-600/10 text-xs flex items-center justify-center rounded-full"><%= param_value[0].upcase %></div>
+      <p><%= param_value %></p>
+    </div>
+  <% else %>
+    <div class="flex items-center gap-2">
+      <p><%= param_value %></p>
+    </div>
+  <% end %>
+
+  <%= link_to transactions_path_without_param(param_key, param_value), data: { id: "clear-param-btn", turbo: false }, class: "flex items-center" do %>
+    <%= lucide_icon "x", class: "w-4 h-4 text-gray-500" %>
+  <% end %>
+</li>

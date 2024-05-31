@@ -33,7 +33,7 @@ end
 module ActiveSupport
   class TestCase
     # Run tests in parallel with specified workers
-    parallelize(workers: :number_of_processors)
+    parallelize(workers: :number_of_processors) unless ENV["DISABLE_PARALLELIZATION"]
 
     # https://github.com/simplecov-ruby/simplecov/issues/718#issuecomment-538201587
     if ENV["COVERAGE"]

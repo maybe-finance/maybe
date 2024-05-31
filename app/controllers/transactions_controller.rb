@@ -4,57 +4,15 @@ class TransactionsController < ApplicationController
   before_action :set_transaction, only: %i[ show edit update destroy ]
 
   def index
-    search_params = session[ransack_session_key] || params[:q]
-    @q = Current.family.transactions.ransack(search_params)
-    result = @q.result.order(date: :desc)
-    @pagy, @transactions = pagy(result, items: 10)
+    @q = search_params
+    result = Current.family.transactions.search(@q).ordered
+    @pagy, @transactions = pagy(result, items: 50)
+
     @totals = {
       count: result.count,
       income: result.inflows.sum(&:amount_money).abs,
       expense: result.outflows.sum(&:amount_money).abs
     }
-    @filter_list, valid_params = Transaction.build_filter_list(search_params, Current.family)
-    session[ransack_session_key] = valid_params
-
-    respond_to do |format|
-      format.html
-      format.turbo_stream
-    end
-  end
-
-  def search
-    if params[:clear]
-      session.delete(ransack_session_key)
-    elsif params[:remove_param]
-      current_params = session[ransack_session_key] || {}
-      if params[:remove_param] == "date_range"
-        updated_params = current_params.except("date_gteq", "date_lteq")
-      elsif params[:remove_param_value]
-        key_to_remove = params[:remove_param]
-        value_to_remove = params[:remove_param_value]
-        updated_params = current_params.deep_dup
-        updated_params[key_to_remove] = updated_params[key_to_remove] - [ value_to_remove ]
-      else
-        updated_params = current_params.except(params[:remove_param])
-      end
-      session[ransack_session_key] = updated_params
-    elsif params[:q]
-      session[ransack_session_key] = params[:q]
-    end
-
-    index
-
-    respond_to do |format|
-      format.html { render :index }
-      format.turbo_stream do
-        render turbo_stream: [
-          turbo_stream.replace("transactions_summary", partial: "transactions/summary", locals: { totals: @totals }),
-          turbo_stream.replace("transactions_search_form", partial: "transactions/search_form", locals: { q: @q }),
-          turbo_stream.replace("transactions_filters", partial: "transactions/filters", locals: { filters: @filter_list }),
-          turbo_stream.replace("transactions_list", partial: "transactions/list", locals: { transactions: @transactions, pagy: @pagy })
-        ]
-      end
-    end
   end
 
   def show
@@ -76,80 +34,28 @@ class TransactionsController < ApplicationController
                      .find(params[:transaction][:account_id])
                      .transactions.build(transaction_params.merge(amount: amount))
 
-    respond_to do |format|
-      if @transaction.save
-        @transaction.account.sync_later(@transaction.date)
-        format.html { redirect_to transactions_url, notice: t(".success") }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-      end
-    end
+    @transaction.save!
+    @transaction.sync_account_later
+    redirect_to transactions_url, notice: t(".success")
   end
 
   def update
-    respond_to do |format|
-      sync_start_date = if transaction_params[:date]
-                          [ @transaction.date, Date.parse(transaction_params[:date]) ].compact.min
-      else
-        @transaction.date
-      end
+    @transaction.update! transaction_params
+    @transaction.sync_account_later
 
-      if params[:transaction][:tag_id].present?
-        tag = Current.family.tags.find(params[:transaction][:tag_id])
-        @transaction.tags << tag unless @transaction.tags.include?(tag)
-      end
-
-      if params[:transaction][:remove_tag_id].present?
-        @transaction.tags.delete(params[:transaction][:remove_tag_id])
-      end
-
-      if @transaction.update(transaction_params)
-        @transaction.account.sync_later(sync_start_date)
-
-        format.html { redirect_to transaction_url(@transaction), notice: t(".success") }
-        format.turbo_stream do
-          render turbo_stream: [
-            turbo_stream.append("notification-tray", partial: "shared/notification", locals: { type: "success", content: { body: t(".success") } }),
-            turbo_stream.replace("transaction_#{@transaction.id}", partial: "transactions/transaction", locals: { transaction: @transaction })
-          ]
-        end
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-      end
-    end
+    redirect_to transaction_url(@transaction), notice: t(".success")
   end
 
   def destroy
-    @account = @transaction.account
-    sync_start_date = @account.transactions.where("date < ?", @transaction.date).order(date: :desc).first&.date
     @transaction.destroy!
-    @account.sync_later(sync_start_date)
-
-    respond_to do |format|
-      format.html { redirect_to transactions_url, notice: t(".success") }
-    end
+    @transaction.sync_account_later
+    redirect_to transactions_url, notice: t(".success")
   end
 
   private
 
-    def delete_search_param(params, key, value: nil)
-      if value
-        params[key]&.delete(value)
-        params.delete(key) if params[key].empty? # Remove key if it's empty after deleting value
-      else
-        params.delete(key)
-      end
-
-      params
-    end
-
-    def ransack_session_key
-      :ransack_transactions_q
-    end
-
-    # Use callbacks to share common setup or constraints between actions.
     def set_transaction
-      @transaction = Transaction.find(params[:id])
+      @transaction = Current.family.transactions.find(params[:id])
     end
 
     def amount
@@ -164,7 +70,11 @@ class TransactionsController < ApplicationController
       params[:transaction][:nature].to_s.inquiry
     end
 
+    def search_params
+      params.fetch(:q, {}).permit(:start_date, :end_date, :search, accounts: [], account_ids: [], categories: [], merchants: [])
+    end
+
     def transaction_params
-      params.require(:transaction).permit(:name, :date, :amount, :currency, :notes, :excluded, :category_id, :merchant_id, :tag_id, :remove_tag_id).except(:tag_id, :remove_tag_id)
+      params.require(:transaction).permit(:name, :date, :amount, :currency, :notes, :excluded, :category_id, :merchant_id, tag_ids: [], taggings_attributes: [ :id, :tag_id, :_destroy ])
     end
 end

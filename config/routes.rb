@@ -46,6 +46,8 @@ Rails.application.routes.draw do
       match "search" => "transactions#search", via: %i[ get post ]
 
       scope module: :transactions, as: :transaction do
+        resources :rows, only: %i[ show update ]
+
         resources :categories do
           resources :deletions, only: %i[ new create ], module: :categories
           collection do

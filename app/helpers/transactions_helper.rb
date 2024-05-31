@@ -1,24 +1,20 @@
 module TransactionsHelper
-  def transaction_filters
-    [
-      { name: "Account", partial: "account_filter", icon: "layers" },
-      { name: "Date", partial: "date_filter", icon: "calendar" },
-      { name: "Type", partial: "type_filter", icon: "shapes" },
-      { name: "Amount", partial: "amount_filter", icon: "hash" },
-      { name: "Category", partial: "category_filter", icon: "tag" },
-      { name: "Merchant", partial: "merchant_filter", icon: "store" }
-    ]
-  end
+  def transactions_group(date, transactions, transaction_partial_path = "transactions/transaction")
+    header_left = content_tag :span do
+      "#{date.strftime('%b %d, %Y')} · #{transactions.size}".html_safe
+    end
 
-  def transaction_filter_id(filter)
-    "txn-#{filter[:name].downcase}-filter"
-  end
+    header_right = content_tag :span do
+      format_money(-transactions.sum(&:amount_money))
+    end
 
-  def transaction_filter_by_name(name)
-    transaction_filters.find { |filter| filter[:name] == name }
-  end
+    header = header_left.concat(header_right)
 
-  def full_width_transaction_row?(route)
-    route != "/"
+    content = render partial: transaction_partial_path, collection: transactions
+
+    render partial: "shared/list_group", locals: {
+      header: header,
+      content: content
+    }
   end
 end

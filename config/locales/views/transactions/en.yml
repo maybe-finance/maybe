@@ -46,6 +46,9 @@ en:
       success: New transaction created successfully
     destroy:
       success: Transaction deleted successfully
+    empty:
+      description: Try adding a transaction, editing filters or refining your search
+      title: No transactions found
     form:
       account: Account
       account_prompt: Select an Account
@@ -59,7 +62,7 @@ en:
       income: Income
       submit: Add transaction
       transfer: Transfer
-    index:
+    header:
       edit_categories: Edit categories
       edit_imports: Edit imports
       import: Import
@@ -90,5 +93,7 @@ en:
         title: New merchant
       update:
         success: Merchant updated successfully
+    show:
+      select_tags: Select one or more tags
     update:
       success: Transaction updated successfully

@@ -25,9 +25,6 @@ gem "turbo-rails"
 # Background Jobs
 gem "good_job"
 
-# Search
-gem "ransack", github: "maybe-finance/ransack", branch: "main"
-
 # Error logging
 gem "stackprof"
 gem "sentry-ruby"
