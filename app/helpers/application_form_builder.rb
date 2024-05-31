@@ -39,6 +39,8 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
       value: money&.amount,
       "data-money-field-target" => "amount",
       placeholder: Money.new(0, currency).format,
+      min: -99999999999999,
+      max: 99999999999999,
       step: currency.step
     }
 
