@@ -15,16 +15,19 @@ module Account::Syncable
       state :syncing
       state :error
 
-      event :start_sync do
-        transitions from: :ok, to: :syncing, guard: :can_sync?
+      event :sync do
+        transitions from: :ok, to: :syncing, if: :can_sync?
+        transitions from: :ok, to: :error, if: :can_sync?
+        after { |start_date| start_sync(start_date) }
+        error { sync_fails }
       end
 
       event :sync_fails do
-        transitions from: :syncing, to: :error
+        transitions to: :error
       end
 
       event :sync_succeeds do
-        transitions from: :syncing, to: :ok
+        transitions to: :ok
       end
     end
   end
@@ -33,9 +36,7 @@ module Account::Syncable
     AccountSyncJob.perform_later(self, start_date)
   end
 
-  def sync(start_date = nil)
-    update!(status: "syncing")
-
+  def start_sync(start_date = nil)
     sync_exchange_rates
 
     calc_start_date = start_date - 1.day if start_date.present? && self.balance_on(start_date - 1.day).present?
@@ -46,9 +47,11 @@ module Account::Syncable
     self.balances.where("date < ?", effective_start_date).delete_all
     new_balance = calculator.daily_balances.select { |b| b[:currency] == self.currency }.last[:balance]
 
-    update!(status: "ok", last_sync_date: Date.today, balance: new_balance, sync_errors: calculator.errors, sync_warnings: calculator.warnings)
+    update!(last_sync_date: Date.today, balance: new_balance, sync_errors: calculator.errors, sync_warnings: calculator.warnings)
+    sync_succeeds
   rescue => e
-    update!(status: "error", sync_errors: [ :sync_message_unknown_error ])
+    sync_fails
+    update!(sync_errors: [ :sync_message_unknown_error ])
     logger.error("Failed to sync account #{id}: #{e.message}")
   end
 

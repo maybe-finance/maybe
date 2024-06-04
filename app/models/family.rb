@@ -104,6 +104,6 @@ class Family < ApplicationRecord
   end
 
   def sync_accounts
-    accounts.each { |account| account.sync_later if account.can_sync? }
+    accounts.each { |account| account.sync_later }
   end
 end
