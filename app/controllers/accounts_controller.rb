@@ -38,7 +38,7 @@ class AccountsController < ApplicationController
   def update
     if @account.update(account_params.except(:accountable_type))
 
-      @account.sync_later if @account.may_start_sync?
+      @account.sync_later
 
       respond_to do |format|
         format.html { redirect_to accounts_path, notice: t(".success") }
