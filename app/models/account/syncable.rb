@@ -7,7 +7,7 @@ module Account::Syncable
     enum :status, { ok: "ok", syncing: "syncing", error: "error" }, validate: true
 
     def some_syncing?
-      exists?(status: "syncing")
+      syncing.any?
     end
 
     aasm column: :status, enum: true do
