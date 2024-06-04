@@ -74,7 +74,7 @@ class AccountsController < ApplicationController
   end
 
   def sync
-    if @account.may_start_sync?
+    if @account.may_sync?
       @account.sync_later
       respond_to do |format|
         format.html { redirect_to account_path(@account), notice: t(".success") }
