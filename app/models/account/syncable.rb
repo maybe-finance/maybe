@@ -58,7 +58,6 @@ module Account::Syncable
   def can_sync?
     # Skip account sync if account is not active or the sync process is already running
     return false unless is_active
-    return false if syncing?
     # If last_sync_date is blank (i.e. the account has never been synced before) allow syncing
     return true if last_sync_date.blank?
 
