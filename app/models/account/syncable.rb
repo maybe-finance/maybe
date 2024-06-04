@@ -1,6 +1,34 @@
 module Account::Syncable
   extend ActiveSupport::Concern
 
+  included do
+    include AASM
+
+    enum :status, { ok: "ok", syncing: "syncing", error: "error" }, validate: true
+
+    def some_syncing?
+      exists?(status: "syncing")
+    end
+
+    aasm column: :status, enum: true do
+      state :ok, initial: true
+      state :syncing
+      state :error
+
+      event :start_sync do
+        transitions from: :ok, to: :syncing, guard: :can_sync?
+      end
+
+      event :sync_fails do
+        transitions from: :syncing, to: :error
+      end
+
+      event :sync_succeeds do
+        transitions from: :syncing, to: :ok
+      end
+    end
+  end
+
   def sync_later(start_date = nil)
     AccountSyncJob.perform_later(self, start_date)
   end

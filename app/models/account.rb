@@ -13,8 +13,6 @@ class Account < ApplicationRecord
 
   monetize :balance
 
-  enum :status, { ok: "ok", syncing: "syncing", error: "error" }, validate: true
-
   scope :active, -> { where(is_active: true) }
   scope :assets, -> { where(classification: "asset") }
   scope :liabilities, -> { where(classification: "liability") }
@@ -42,11 +40,6 @@ class Account < ApplicationRecord
     [ { name: "Manual accounts", accounts: all.order(balance: :desc).group_by(&:accountable_type) } ]
   end
 
-  def self.some_syncing?
-    exists?(status: "syncing")
-  end
-
-
   def series(period: Period.all, currency: self.currency)
     balance_series = balances.in_period(period).where(currency: Money::Currency.new(currency).iso_code)
 
@@ -69,7 +62,7 @@ class Account < ApplicationRecord
       types.each do |type|
         group = grouped_accounts[classification.to_sym].add_child_group(type, currency)
         self.where(accountable_type: type).each do |account|
-          value_node = group.add_value_node(
+          group.add_value_node(
             account,
             account.balance_money.exchange_to(currency) || Money.new(0, currency),
             account.series(period: period, currency: currency)
