@@ -2,6 +2,7 @@ class TransactionsController < ApplicationController
   layout "with_sidebar"
 
   before_action :set_transaction, only: %i[ show edit update destroy ]
+  before_action :set_selection
 
   def index
     @q = search_params
@@ -52,7 +53,41 @@ class TransactionsController < ApplicationController
     redirect_to transactions_url, notice: t(".success")
   end
 
+  def toggle_selected
+    if selection_params[:selected] == "1"
+      session[selection_session_key] |= selection_params[:transaction_ids]
+    else
+      session[selection_session_key] -= selection_params[:transaction_ids]
+    end
+
+    redirect_back_or_to transactions_url
+  end
+
+  def select_all
+    session[selection_session_key] = Current.family.transactions.pluck(:id)
+
+    redirect_back_or_to transactions_url
+  end
+
+  def deselect_all
+    session[selection_session_key] = []
+
+    redirect_back_or_to transactions_url
+  end
+
   private
+
+    def set_selection
+      @selected_transaction_ids = get_selection
+    end
+
+    def get_selection
+      session[selection_session_key] ||= []
+    end
+
+    def selection_session_key
+      :selected_transaction_ids
+    end
 
     def set_transaction
       @transaction = Current.family.transactions.find(params[:id])
@@ -68,6 +103,10 @@ class TransactionsController < ApplicationController
 
     def nature
       params[:transaction][:nature].to_s.inquiry
+    end
+
+    def selection_params
+      params.require(:selection).permit(:selected, transaction_ids: [])
     end
 
     def search_params

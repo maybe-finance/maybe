@@ -4,6 +4,7 @@ class TransactionsTest < ApplicationSystemTestCase
   setup do
     sign_in @user = users(:family_admin)
 
+    @latest_transactions = @user.family.transactions.ordered.limit(20).to_a
     @test_category = @user.family.transaction_categories.create! name: "System Test Category"
     @test_merchant = @user.family.transaction_merchants.create! name: "System Test Merchant"
     @target_txn = @user.family.accounts.first.transactions.create! \
@@ -91,4 +92,37 @@ class TransactionsTest < ApplicationSystemTestCase
 
     assert_selector "#" + dom_id(@user.family.transactions.ordered.first), count: 1
   end
+
+  test "can select and deselect one or more transactions" do
+    check_transaction_selection(@latest_transactions.first)
+    assert_selection_count(1)
+    check_transaction_selection(@latest_transactions.second)
+    assert_selection_count(2)
+    uncheck_transaction_selection(@latest_transactions.first)
+    assert_selection_count(1)
+  end
+
+  private
+
+    def assert_selection_count(count)
+      within "#transaction-selection-bar" do
+        assert_text "#{count} transaction#{count == 1 ? "" : "s"} selected"
+      end
+    end
+
+    def check_transaction_selection(transaction)
+      within "#" + dom_id(transaction, "selection_form") do
+        find("input[type='checkbox']").check
+
+        assert_checked_field
+      end
+    end
+
+    def uncheck_transaction_selection(transaction)
+      within "#" + dom_id(transaction, "selection_form") do
+        find("input[type='checkbox']").uncheck
+
+        refute_checked_field
+      end
+    end
 end

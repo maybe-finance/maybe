@@ -1,5 +1,9 @@
 <div class="space-y-4">
 
+  <% if @selected_transaction_ids.any? %>
+    <%= render "selection_bar", selected_ids: @selected_transaction_ids %>
+  <% end %>
+
   <%= render "header" %>
 
   <%= render partial: "transactions/summary", locals: { totals: @totals } %>

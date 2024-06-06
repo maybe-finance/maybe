@@ -1,0 +1,24 @@
+<%# locals:(selected_ids:) %>
+
+<div id="transaction-selection-bar" class="fixed bottom-6 z-10 flex items-center justify-between rounded-xl bg-gray-900 px-4 text-sm text-white w-[420px] py-1.5">
+  <div class="flex items-center gap-2">
+    <%= form_with url: deselect_all_transactions_path,
+                  class: "flex items-center",
+                  builder: ActionView::Helpers::FormBuilder,
+                  data: { controller: "auto-submit-form", turbo_frame: "_top" } do |form| %>
+      <%= form.check_box :selected, { checked: true, class: "rounded-sm custom-checkbox--dark", "data-auto-submit-form-target": "auto" } %>
+    <% end %>
+
+    <p><%= pluralize(selected_ids.count, t(".transaction")) %> selected</p>
+  </div>
+
+  <div class="flex items-center gap-1 text-gray-500">
+    <%= button_to "#", disabled: true, class: "cursor-not-allowed p-1.5 group hover:bg-gray-700 flex items-center justify-center rounded-md", title: "Edit" do %>
+      <%= lucide_icon "pencil-line", class: "w-5 group-hover:text-white" %>
+    <% end %>
+
+    <%= button_to "#", disabled: true, class: "cursor-not-allowed p-1.5 group hover:bg-gray-700 flex items-center justify-center rounded-md", title: "Delete" do %>
+      <%= lucide_icon "trash-2", class: "w-5 group-hover:text-white" %>
+    <% end %>
+  </div>
+</div>

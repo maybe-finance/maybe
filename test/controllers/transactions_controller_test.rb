@@ -138,4 +138,30 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to transactions_url
     assert_enqueued_with(job: AccountSyncJob)
   end
+
+  test "can select one or more transactions" do
+    selected_transactions = @recent_transactions.first(2)
+
+    post toggle_selected_transactions_url params: { selection: { selected: 1, transaction_ids: selected_transactions.pluck(:id) } }
+
+    assert_redirected_to transactions_url
+  end
+
+  test "can select all transactions" do
+    post select_all_transactions_url
+
+    assert_redirected_to transactions_url
+  end
+
+  test "can deselect one or more transactions" do
+    post toggle_selected_transactions_url, params: { selection: { selected: 0, transaction_ids: [ Transaction.all.first.id ] } }
+
+    assert_redirected_to transactions_url
+  end
+
+  test "can deselect all transactions" do
+    post deselect_all_transactions_url
+
+    assert_redirected_to transactions_url
+  end
 end
