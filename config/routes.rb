@@ -44,6 +44,7 @@ Rails.application.routes.draw do
   resources :transactions do
     collection do
       post "bulk_delete"
+      get "bulk_edit"
       post "bulk_update"
 
       scope module: :transactions, as: :transaction do

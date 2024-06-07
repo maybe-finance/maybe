@@ -57,13 +57,16 @@ class TransactionsController < ApplicationController
     redirect_to transactions_url, notice: t(".success", count: destroyed.count)
   end
 
+  def bulk_edit
+  end
+
   def bulk_update
     transactions = Current.family.transactions.where(id: bulk_update_params[:transaction_ids])
-    updates = bulk_update_params.except(:transaction_ids)
-    if transactions.update_all(bulk_update_params.except(:transaction_ids).to_h)
+    if transactions.update_all(bulk_update_params.except(:transaction_ids).to_h.compact_blank!)
       redirect_to transactions_url, notice: t(".success", count: transactions.count)
     else
-      render :index, status: :unprocessable_entity, notice: t(".failure")
+      flash.now[:error] = t(".failure")
+      render :index, status: :unprocessable_entity
     end
   end
 
@@ -90,7 +93,7 @@ class TransactionsController < ApplicationController
     end
 
     def bulk_update_params
-      params.require(:bulk_update).permit(:category_id, :excluded, :currency, tag_ids: [], transaction_ids: [])
+      params.require(:bulk_update).permit(:date, :notes, :excluded, :category_id, :merchant_id, transaction_ids: [])
     end
 
     def search_params
