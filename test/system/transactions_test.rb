@@ -158,20 +158,4 @@ class TransactionsTest < ApplicationSystemTestCase
         end
       end
     end
-
-    def check_transaction_selection(transaction)
-      within "#" + dom_id(transaction, "selection_form") do
-        find("input[type='checkbox']").check
-
-        assert_checked_field
-      end
-    end
-
-    def uncheck_transaction_selection(transaction)
-      within "#" + dom_id(transaction, "selection_form") do
-        find("input[type='checkbox']").uncheck
-
-        refute_checked_field
-      end
-    end
 end
