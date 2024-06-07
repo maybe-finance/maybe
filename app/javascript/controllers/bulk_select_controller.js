@@ -2,7 +2,7 @@ import {Controller} from "@hotwired/stimulus"
 
 // Connects to data-controller="bulk-select"
 export default class extends Controller {
-  static targets = ["row", "group", "selectionBar", "selectionBarText"]
+  static targets = ["row", "group", "selectionBar", "selectionBarText", "bulkEditDrawerTitle"]
   static values = {
     resource: String,
     selectedIds: {type: Array, default: []}
@@ -18,9 +18,14 @@ export default class extends Controller {
     document.removeEventListener("turbo:load", this.#updateView)
   }
 
-  submitBulkDeletionRequest(e) {
+  bulkEditDrawerTitleTargetConnected(element) {
+    element.innerText = `Edit ${this.selectedIdsValue.length} ${this.#pluralizedResourceName()}`
+  }
+
+  submitBulkRequest(e) {
     const form = e.target.closest("form");
-    this.#addHiddenFormInputsForSelectedIds(form, "bulk_delete[transaction_ids][]", this.selectedIdsValue)
+    const scope = e.params.scope
+    this.#addHiddenFormInputsForSelectedIds(form, `${scope}[transaction_ids][]`, this.selectedIdsValue)
     form.requestSubmit()
   }
 
@@ -96,9 +101,13 @@ export default class extends Controller {
 
   #updateSelectionBar() {
     const count = this.selectedIdsValue.length
-    this.selectionBarTextTarget.innerText = `${count} ${this.resourceValue}${count === 1 ? "" : "s"} selected`
+    this.selectionBarTextTarget.innerText = `${count} ${this.#pluralizedResourceName()} selected`
     this.selectionBarTarget.hidden = count === 0
     this.selectionBarTarget.querySelector("input[type='checkbox']").checked = count > 0
+  }
+
+  #pluralizedResourceName() {
+    return `${this.resourceValue}${this.selectedIdsValue.length === 1 ? "" : "s"}`
   }
 
   #updateGroups() {

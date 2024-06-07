@@ -157,15 +157,21 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     transactions = @user.family.transactions.ordered.limit(20)
 
     transactions.each do |transaction|
-      transaction.update! excluded: false, currency: "USD", category_id: Transaction::Category.first.id
+      transaction.update! \
+        excluded: false,
+        category_id: Transaction::Category.first.id,
+        merchant_id: Transaction::Merchant.first.id,
+        notes: "Starting note"
     end
 
     post bulk_update_transactions_url, params: {
       bulk_update: {
+        date: Date.current,
         transaction_ids: transactions.map(&:id),
         excluded: true,
-        currency: "CAD",
-        category_id: Transaction::Category.second.id
+        category_id: Transaction::Category.second.id,
+        merchant_id: Transaction::Merchant.second.id,
+        notes: "Updated note"
       }
     }
 
@@ -173,9 +179,11 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "#{transactions.count} transactions updated", flash[:notice]
 
     transactions.reload.each do |transaction|
+      assert_equal Date.current, transaction.date
       assert transaction.excluded
-      assert_equal "CAD", transaction.currency
       assert_equal Transaction::Category.second, transaction.category
+      assert_equal Transaction::Merchant.second, transaction.merchant
+      assert_equal "Updated note", transaction.notes
     end
   end
 end

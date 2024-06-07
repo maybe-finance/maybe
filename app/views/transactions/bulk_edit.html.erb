@@ -1,0 +1,80 @@
+<%= turbo_frame_tag "bulk_transaction_edit_drawer" do %>
+  <dialog data-controller="modal"
+          data-action="click->modal#clickOutside"
+          class="bg-white border border-alpha-black-25 rounded-2xl max-h-[calc(100vh-32px)] max-w-[480px] w-full shadow-xs h-full mt-4 mr-4">
+    <%= form_with url: bulk_update_transactions_path, scope: "bulk_update", html: { class: "h-full" }, data: { turbo_frame: "_top" } do |form| %>
+      <div class="flex h-full flex-col justify-between p-4">
+        <div>
+          <div class="flex h-9 items-center justify-end">
+            <div data-action="click->modal#close" class="cursor-pointer">
+              <%= lucide_icon("x", class: "w-5 h-5 shrink-0") %>
+            </div>
+          </div>
+
+          <div class="flex flex-col overflow-scroll">
+            <div>
+              <header class="mb-4 space-y-1">
+                <h3 class="text-2xl font-medium" data-bulk-select-target="bulkEditDrawerTitle">
+                  Edit transactions
+                </h3>
+              </header>
+
+              <div class="space-y-2">
+                <details class="group space-y-2" open>
+                  <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2 text-xs font-medium uppercase text-gray-500 bg-gray-25 focus-visible:outline-none">
+                    <h4><%= t(".overview") %></h4>
+                    <%= lucide_icon "chevron-down", class: "group-open:transform group-open:rotate-180 text-gray-500 w-5" %>
+                  </summary>
+
+                  <div class="pb-6 space-y-2">
+                    <%= form.date_field :date, label: t(".date"), max: Date.current %>
+                    <%= form.collection_select :category_id, Current.family.transaction_categories, :id, :name, { prompt: t(".select_category"), label: t(".category"), class: "text-gray-400" } %>
+                    <%= form.collection_select :merchant_id, Current.family.transaction_merchants, :id, :name, { prompt: t(".select_merchant"), label: t(".merchant"), class: "text-gray-400" } %>
+                  </div>
+                </details>
+
+                <details class="group space-y-2" open>
+                  <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2 text-xs font-medium uppercase text-gray-500 bg-gray-25 focus-visible:outline-none">
+                    <h4><%= t(".additional") %></h4>
+                    <%= lucide_icon "chevron-down", class: "group-open:transform group-open:rotate-180 text-gray-500 w-5" %>
+                  </summary>
+
+                  <div>
+                    <%= form.text_area :notes, label: t(".note"), placeholder: t(".note_placeholder"), rows: 5 %>
+                  </div>
+                </details>
+
+                <details class="group space-y-2" open>
+                  <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2 text-xs font-medium uppercase text-gray-500 bg-gray-25 focus-visible:outline-none">
+                    <h4><%= t(".settings") %></h4>
+                    <%= lucide_icon "chevron-down", class: "group-open:transform group-open:rotate-180 text-gray-500 w-5" %>
+                  </summary>
+
+                  <div class="flex cursor-pointer items-center justify-between gap-4 p-3 pb-6">
+                    <div class="text-sm space-y-1">
+                      <h4 class="text-gray-900"><%= t(".exclude_title") %></h4>
+                      <p class="text-gray-500"><%= t(".exclude_subtitle") %></p>
+                    </div>
+
+                    <div class="relative inline-block select-none">
+                      <%= form.check_box :excluded, class: "sr-only peer" %>
+                      <label for="bulk_update_excluded" class="maybe-switch"></label>
+                    </div>
+                  </div>
+                </details>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-end items-center gap-2">
+          <%= link_to t(".cancel"), transactions_path, class: "text-sm font-medium text-gray-900 px-3 py-2" %>
+
+          <%= tag.button t(".save"),
+                         type: "button",
+                         data: { "bulk-select-scope-param": "bulk_update", action: "bulk-select#submitBulkRequest" },
+                         class: "px-3 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg" %>
+        </div>
+      </div>
+    <% end %>
+  </dialog>
+<% end %>
