@@ -13,7 +13,7 @@
   <% else %>
     <div class="space-y-6">
       <% transactions.group_by(&:date).each do |date, transactions| %>
-        <%= transactions_group(date, transactions) %>
+        <%= transactions_group(date, transactions, "accounts/transactions/transaction") %>
       <% end %>
     </div>
   <% end %>

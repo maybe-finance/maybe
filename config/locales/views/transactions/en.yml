@@ -66,6 +66,8 @@ en:
       edit_categories: Edit categories
       edit_imports: Edit imports
       import: Import
+    index:
+      transaction: transaction
     merchants:
       create:
         success: New merchant created successfully

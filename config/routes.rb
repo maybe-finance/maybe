@@ -43,8 +43,6 @@ Rails.application.routes.draw do
 
   resources :transactions do
     collection do
-      match "search" => "transactions#search", via: %i[ get post ]
-
       scope module: :transactions, as: :transaction do
         resources :rows, only: %i[ show update ]
 
