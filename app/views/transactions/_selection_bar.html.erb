@@ -10,8 +10,10 @@
       <%= lucide_icon "pencil-line", class: "w-5 group-hover:text-white" %>
     <% end %>
 
-    <%= button_to "#", disabled: true, class: "cursor-not-allowed p-1.5 group hover:bg-gray-700 flex items-center justify-center rounded-md", title: "Delete" do %>
-      <%= lucide_icon "trash-2", class: "w-5 group-hover:text-white" %>
+    <%= form_with url: bulk_delete_transactions_path, builder: ActionView::Helpers::FormBuilder, data: { turbo_confirm: true } do %>
+      <button type="button" data-action="bulk-select#submitBulkDeletionRequest" class="p-1.5 group hover:bg-gray-700 flex items-center justify-center rounded-md" title="Delete">
+        <%= lucide_icon "trash-2", class: "w-5 group-hover:text-white" %>
+      </button>
     <% end %>
   </div>
 </div>
