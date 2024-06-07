@@ -43,10 +43,6 @@ Rails.application.routes.draw do
 
   resources :transactions do
     collection do
-      post "toggle_selected"
-      post "select_all"
-      post "deselect_all"
-
       scope module: :transactions, as: :transaction do
         resources :rows, only: %i[ show update ]
 
