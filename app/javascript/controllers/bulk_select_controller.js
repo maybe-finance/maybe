@@ -18,6 +18,12 @@ export default class extends Controller {
     document.removeEventListener("turbo:load", this.#updateView)
   }
 
+  submitBulkDeletionRequest(e) {
+    const form = e.target.closest("form");
+    this.#addHiddenFormInputsForSelectedIds(form, "bulk_delete[transaction_ids][]", this.selectedIdsValue)
+    form.requestSubmit()
+  }
+
   togglePageSelection(e) {
     if (e.target.checked) {
       this.#selectAll()
@@ -52,6 +58,16 @@ export default class extends Controller {
 
   selectedIdsValueChanged() {
     this.#updateView()
+  }
+
+  #addHiddenFormInputsForSelectedIds(form, paramName, transactionIds) {
+    transactionIds.forEach(id => {
+      const input = document.createElement("input");
+      input.type = 'hidden'
+      input.name = paramName
+      input.value = id
+      form.appendChild(input)
+    })
   }
 
   #rowsForGroup(group) {
