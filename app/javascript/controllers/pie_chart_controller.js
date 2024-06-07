@@ -110,9 +110,9 @@ export default class extends Controller {
     const firstDigitIndex = formattedValue.search(/\d/);
     const currencyPrefix = formattedValue.substring(0, firstDigitIndex);
     const mainPart = formattedValue.substring(firstDigitIndex);
-    const [integerPart, fractionalPart] = mainPart.split(".");
+    const [integerPart, fractionalPart] = mainPart.split(",");
 
-    return `<p class="text-gray-500 -space-x-0.5">${currencyPrefix}<span class="text-xl text-gray-900 font-medium">${integerPart}</span>.${fractionalPart}</p>`;
+    return `<p class="text-gray-500 -space-x-0.5">${currencyPrefix}<span class="text-xl text-gray-900 font-medium">${integerPart}</span>${fractionalPart ? "." + fractionalPart : ""}</p>`;
   }
 
   get #radius() {
