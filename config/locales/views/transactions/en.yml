@@ -1,6 +1,11 @@
 ---
 en:
   transactions:
+    bulk_delete:
+      success: "%{count} transactions deleted"
+    bulk_update:
+      failure: Could not update transactions
+      success: "%{count} transactions updated"
     categories:
       create:
         success: New transaction category created successfully
@@ -96,20 +101,17 @@ en:
       update:
         success: Merchant updated successfully
     show:
+      additional: Additional
+      delete: Delete
+      delete_subtitle: This permanently deletes the transaction, affects your historical
+        balances, and cannot be undone.
+      delete_title: Delete transaction
+      description: Description
+      exclude_subtitle: This excludes the transaction from any in-app features or
+        analytics.
+      exclude_title: Exclude transaction
+      overview: Overview
       select_tags: Select one or more tags
-      delete: "Delete"
-      delete_title: "Delete transaction"
-      delete_subtitle: "This permanently deletes the transaction, affects your historical balances, and cannot be undone."
-      overview: "Overview"
-      description: "Description"
-      additional: "Additional"
-      settings: "Settings"
-      exclude_title: "Exclude transaction"
-      exclude_subtitle: "This excludes the transaction from any in-app features or analytics."
+      settings: Settings
     update:
       success: Transaction updated successfully
-    bulk_delete:
-      success: "%{count} transactions deleted"
-    bulk_update:
-      failure: "Could not update transactions"
-      success: "%{count} transactions updated"
