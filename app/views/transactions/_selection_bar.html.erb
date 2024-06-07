@@ -1,15 +1,8 @@
-<%# locals:(selected_ids:) %>
-
-<div id="transaction-selection-bar" class="fixed bottom-6 z-10 flex items-center justify-between rounded-xl bg-gray-900 px-4 text-sm text-white w-[420px] py-1.5">
+<div class="fixed bottom-6 z-10 flex items-center justify-between rounded-xl bg-gray-900 px-4 text-sm text-white w-[420px] py-1.5">
   <div class="flex items-center gap-2">
-    <%= form_with url: deselect_all_transactions_path,
-                  class: "flex items-center",
-                  builder: ActionView::Helpers::FormBuilder,
-                  data: { controller: "auto-submit-form", turbo_frame: "_top" } do |form| %>
-      <%= form.check_box :selected, { checked: true, class: "rounded-sm custom-checkbox--dark", "data-auto-submit-form-target": "auto" } %>
-    <% end %>
+    <%= check_box_tag "transaction_selection", 1, true, class: "maybe-checkbox maybe-checkbox--dark", data: { action: "bulk-select#deselectAll" } %>
 
-    <p><%= pluralize(selected_ids.count, t(".transaction")) %> selected</p>
+    <p data-bulk-select-target="selectionBarText">Placeholder selection text</p>
   </div>
 
   <div class="flex items-center gap-1 text-gray-500">

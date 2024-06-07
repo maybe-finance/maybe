@@ -99,3 +99,5 @@ en:
       select_tags: Select one or more tags
     update:
       success: Transaction updated successfully
+    index:
+      transaction: "transaction"
