@@ -66,6 +66,8 @@ en:
       edit_categories: Edit categories
       edit_imports: Edit imports
       import: Import
+    index:
+      transaction: transaction
     merchants:
       create:
         success: New merchant created successfully
@@ -93,11 +95,7 @@ en:
         title: New merchant
       update:
         success: Merchant updated successfully
-    selection_bar:
-      transaction: transaction
     show:
       select_tags: Select one or more tags
     update:
       success: Transaction updated successfully
-    index:
-      transaction: "transaction"

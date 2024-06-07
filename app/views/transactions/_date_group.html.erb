@@ -4,6 +4,7 @@
     <div class="flex pl-0.5 items-center gap-4">
       <%= check_box_tag "#{date}_transactions_selection",
                         class: "maybe-checkbox maybe-checkbox--light",
+                        id: "selection_transaction_#{date}",
                         data: { action: "bulk-select#toggleGroupSelection" } %>
       <%= tag.span "#{date.strftime('%b %d, %Y')} · #{transactions.size}" %>
     </div>
