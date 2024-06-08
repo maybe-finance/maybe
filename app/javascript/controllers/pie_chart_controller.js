@@ -4,7 +4,12 @@ import * as d3 from "d3";
 // Connects to data-controller="pie-chart"
 export default class extends Controller {
   static values = {
-    data: Array,
+    data: {
+      values: Array,
+      total: Number,
+      formatted_total: String,
+      currency_symbol: String,
+    },
     label: String,
   };
 
@@ -15,6 +20,7 @@ export default class extends Controller {
   #d3ViewboxHeight = 200;
 
   connect() {
+    console.log(this.dataValue);
     this.#draw();
     document.addEventListener("turbo:load", this.#redraw);
   }
@@ -53,7 +59,7 @@ export default class extends Controller {
 
     const arcs = this.#d3Group
       .selectAll("arc")
-      .data(pie(this.dataValue))
+      .data(pie(this.dataValue.values))
       .enter()
       .append("g")
       .attr("class", "arc");
@@ -80,12 +86,11 @@ export default class extends Controller {
   }
 
   #contentSummaryTemplate(data) {
-    const total = data.reduce((acc, cur) => acc + cur.value, 0);
-    const currency = data[0].currency;
+    const currency = data.values?.[0]?.currency_symbol;
 
     return `${this.#currencyValue({
-      value: total,
-      currency,
+      formatted_value: data.formatted_total,
+      currency_symbol: currency,
     })} <span class="text-xs">${this.labelValue}</span>`;
   }
 
@@ -101,18 +106,9 @@ export default class extends Controller {
   }
 
   #currencyValue(datum) {
-    const formattedValue = Intl.NumberFormat(undefined, {
-      style: "currency",
-      currency: datum.currency,
-      currencyDisplay: "narrowSymbol",
-    }).format(datum.value);
+    const [mainPart, fractionalPart] = datum.formatted_value.split(".");
 
-    const firstDigitIndex = formattedValue.search(/\d/);
-    const currencyPrefix = formattedValue.substring(0, firstDigitIndex);
-    const mainPart = formattedValue.substring(firstDigitIndex);
-    const [integerPart, fractionalPart] = mainPart.split(",");
-
-    return `<p class="text-gray-500 -space-x-0.5">${currencyPrefix}<span class="text-xl text-gray-900 font-medium">${integerPart}</span>${fractionalPart ? "." + fractionalPart : ""}</p>`;
+    return `<p class="text-gray-500 -space-x-0.5"><span class="text-xl text-gray-900 font-medium">${mainPart}</span>${fractionalPart ? "." + fractionalPart : ""}</p>`;
   }
 
   get #radius() {
