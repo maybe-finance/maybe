@@ -20,7 +20,7 @@
     }
 
     th {
-      @apply whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900;
+      @apply whitespace-nowrap px-2 text-left text-sm font-semibold text-gray-900 py-3.5;
     }
 
     tbody {
@@ -28,22 +28,22 @@
     }
 
     td {
-      @apply px-2 py-2 text-sm text-gray-500 whitespace-nowrap;
+      @apply whitespace-nowrap px-2 py-2 text-sm text-gray-500;
     }
   }
 
   .form-field {
-    @apply relative border border-alpha-black-100 bg-white rounded-md shadow-xs;
-    @apply focus-within:shadow-none focus-within:border-gray-900 focus-within:ring-4 focus-within:ring-gray-100;
+    @apply relative rounded-md border bg-white border-alpha-black-100 shadow-xs;
+    @apply focus-within:border-gray-900 focus-within:shadow-none focus-within:ring-4 focus-within:ring-gray-100;
   }
 
   .form-field__label {
-    @apply px-3 pt-2 pb-0 block text-xs text-gray-500;
+    @apply block px-3 pt-2 pb-0 text-xs text-gray-500;
   }
 
   .form-field__input {
-    @apply px-3 pb-2 pt-1 text-sm w-full bg-transparent border-none opacity-100;
-    @apply focus:outline-none focus:ring-0 focus:opacity-100;
+    @apply w-full border-none bg-transparent px-3 pt-1 pb-2 text-sm opacity-100;
+    @apply focus:opacity-100 focus:outline-none focus:ring-0;
     @apply placeholder-shown:opacity-50;
     @apply disabled:opacity-50;
   }
@@ -53,11 +53,33 @@
   }
 
   .form-field__submit {
-    @apply w-full p-3 text-center text-white bg-black rounded-lg cursor-pointer hover:bg-gray-700;
+    @apply w-full cursor-pointer rounded-lg bg-black p-3 text-center text-white hover:bg-gray-700;
   }
 
   input:checked + label + .toggle-switch-dot {
     transform: translateX(100%);
+  }
+
+  [type='checkbox'].maybe-checkbox {
+    @apply rounded-sm;
+  }
+
+  [type='checkbox'].maybe-checkbox--light {
+    @apply border-alpha-black-200 checked:bg-gray-900 checked:ring-gray-900 focus:ring-gray-900 focus-visible:ring-gray-900 checked:hover:bg-gray-500;
+  }
+
+  [type='checkbox'].maybe-checkbox--dark {
+    @apply ring-gray-900 checked:text-white;
+  }
+
+  [type='checkbox'].maybe-checkbox--dark:checked {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='111827' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+  }
+
+  .maybe-switch {
+    @apply block bg-gray-100 w-9 h-5 rounded-full cursor-pointer;
+    @apply after:content-[''] after:block after:absolute after:top-0.5 after:left-0.5 after:bg-white after:w-4 after:h-4 after:rounded-full after:transition-transform after:duration-300 after:ease-in-out;
+    @apply peer-checked:bg-green-600 peer-checked:after:translate-x-4;
   }
 }
 

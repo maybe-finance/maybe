@@ -1,6 +1,27 @@
 ---
 en:
   transactions:
+    bulk_delete:
+      success: "%{count} transactions deleted"
+    bulk_edit:
+      additional: Additional
+      cancel: Cancel
+      category: Category
+      date: Date
+      exclude_subtitle: This excludes the transaction from any in-app features or
+        analytics.
+      exclude_title: Exclude transaction
+      merchant: Merchant
+      note: Notes
+      note_placeholder: Enter a note that will be applied to selected transactions
+      overview: Overview
+      save: Save
+      select_category: Select a category
+      select_merchant: Select a merchant
+      settings: Settings
+    bulk_update:
+      failure: Could not update transactions
+      success: "%{count} transactions updated"
     categories:
       create:
         success: New transaction category created successfully
@@ -66,6 +87,8 @@ en:
       edit_categories: Edit categories
       edit_imports: Edit imports
       import: Import
+    index:
+      transaction: transaction
     merchants:
       create:
         success: New merchant created successfully
@@ -94,6 +117,17 @@ en:
       update:
         success: Merchant updated successfully
     show:
+      additional: Additional
+      delete: Delete
+      delete_subtitle: This permanently deletes the transaction, affects your historical
+        balances, and cannot be undone.
+      delete_title: Delete transaction
+      description: Description
+      exclude_subtitle: This excludes the transaction from any in-app features or
+        analytics.
+      exclude_title: Exclude transaction
+      overview: Overview
       select_tags: Select one or more tags
+      settings: Settings
     update:
       success: Transaction updated successfully

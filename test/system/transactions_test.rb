@@ -4,6 +4,7 @@ class TransactionsTest < ApplicationSystemTestCase
   setup do
     sign_in @user = users(:family_admin)
 
+    @latest_transactions = @user.family.transactions.ordered.limit(20).to_a
     @test_category = @user.family.transaction_categories.create! name: "System Test Category"
     @test_merchant = @user.family.transaction_merchants.create! name: "System Test Merchant"
     @target_txn = @user.family.accounts.first.transactions.create! \
@@ -91,4 +92,70 @@ class TransactionsTest < ApplicationSystemTestCase
 
     assert_selector "#" + dom_id(@user.family.transactions.ordered.first), count: 1
   end
+
+  test "can select and deselect entire page of transactions" do
+    all_transactions_checkbox.check
+    assert_selection_count(number_of_transactions_on_page)
+    all_transactions_checkbox.uncheck
+    assert_selection_count(0)
+  end
+
+  test "can select and deselect groups of transactions" do
+    date_transactions_checkbox(12.days.ago.to_date).check
+    assert_selection_count(3)
+    date_transactions_checkbox(12.days.ago.to_date).uncheck
+    assert_selection_count(0)
+  end
+
+  test "can select and deselect individual transactions" do
+    transaction_checkbox(@latest_transactions.first).check
+    assert_selection_count(1)
+    transaction_checkbox(@latest_transactions.second).check
+    assert_selection_count(2)
+    transaction_checkbox(@latest_transactions.second).uncheck
+    assert_selection_count(1)
+  end
+
+  test "outermost group always overrides inner selections" do
+    transaction_checkbox(@latest_transactions.first).check
+    assert_selection_count(1)
+    all_transactions_checkbox.check
+    assert_selection_count(number_of_transactions_on_page)
+    transaction_checkbox(@latest_transactions.first).uncheck
+    assert_selection_count(number_of_transactions_on_page - 1)
+    date_transactions_checkbox(12.days.ago.to_date).uncheck
+    assert_selection_count(number_of_transactions_on_page - 4)
+    all_transactions_checkbox.uncheck
+    assert_selection_count(0)
+  end
+
+  private
+
+    def number_of_transactions_on_page
+      page_size = 50
+
+      [ @user.family.transactions.count, page_size ].min
+    end
+
+    def all_transactions_checkbox
+      find("#selection_transaction")
+    end
+
+    def date_transactions_checkbox(date)
+      find("#selection_transaction_#{date}")
+    end
+
+    def transaction_checkbox(transaction)
+      find("#" + dom_id(transaction, "selection"))
+    end
+
+    def assert_selection_count(count)
+      if count == 0
+        assert_no_selector("#transaction-selection-bar")
+      else
+        within "#transaction-selection-bar" do
+          assert_text "#{count} transaction#{count == 1 ? "" : "s"} selected"
+        end
+      end
+    end
 end

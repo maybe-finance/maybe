@@ -97,13 +97,16 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
 
   test "incomes are negative" do
     assert_difference("Transaction.count") do
-      post transactions_url, params: { transaction: {
-        nature: "income",
-        account_id: @transaction.account_id,
-        amount: @transaction.amount,
-        currency: @transaction.currency,
-        date: @transaction.date,
-        name: @transaction.name } }
+      post transactions_url, params: {
+        transaction: {
+          nature: "income",
+          account_id: @transaction.account_id,
+          amount: @transaction.amount,
+          currency: @transaction.currency,
+          date: @transaction.date,
+          name: @transaction.name
+        }
+      }
     end
 
     assert_redirected_to transactions_url
@@ -122,7 +125,8 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
         amount: @transaction.amount,
         currency: @transaction.currency,
         date: @transaction.date,
-        name: @transaction.name
+        name: @transaction.name,
+        tag_ids: [ Tag.first.id, Tag.second.id ]
       }
     }
 
@@ -137,5 +141,49 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to transactions_url
     assert_enqueued_with(job: AccountSyncJob)
+  end
+
+  test "can destroy many transactions at once" do
+    delete_count = 10
+    assert_difference("Transaction.count", -delete_count) do
+      post bulk_delete_transactions_url, params: { bulk_delete: { transaction_ids: @recent_transactions.first(delete_count).pluck(:id) } }
+    end
+
+    assert_redirected_to transactions_url
+    assert_equal "10 transactions deleted", flash[:notice]
+  end
+
+  test "can update many transactions at once" do
+    transactions = @user.family.transactions.ordered.limit(20)
+
+    transactions.each do |transaction|
+      transaction.update! \
+        excluded: false,
+        category_id: Transaction::Category.first.id,
+        merchant_id: Transaction::Merchant.first.id,
+        notes: "Starting note"
+    end
+
+    post bulk_update_transactions_url, params: {
+      bulk_update: {
+        date: Date.current,
+        transaction_ids: transactions.map(&:id),
+        excluded: true,
+        category_id: Transaction::Category.second.id,
+        merchant_id: Transaction::Merchant.second.id,
+        notes: "Updated note"
+      }
+    }
+
+    assert_redirected_to transactions_url
+    assert_equal "#{transactions.count} transactions updated", flash[:notice]
+
+    transactions.reload.each do |transaction|
+      assert_equal Date.current, transaction.date
+      assert transaction.excluded
+      assert_equal Transaction::Category.second, transaction.category
+      assert_equal Transaction::Merchant.second, transaction.merchant
+      assert_equal "Updated note", transaction.notes
+    end
   end
 end
