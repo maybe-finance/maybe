@@ -107,8 +107,10 @@ export default class extends Controller {
 
   #currencyValue(datum) {
     const [mainPart, fractionalPart] = datum.formatted_value.split(".");
+    const currencySymbolIdx = mainPart?.indexOf(datum.currency_symbol);
+    const mainPartWithoutSymbol = mainPart?.slice(currencySymbolIdx + 1);
 
-    return `<p class="text-gray-500 -space-x-0.5"><span class="text-xl text-gray-900 font-medium">${mainPart}</span>${fractionalPart ? "." + fractionalPart : ""}</p>`;
+    return `<p class="text-gray-500 -space-x-0.5">${currencySymbolIdx === 0 ? datum.currency_symbol : ""}<span class="text-xl text-gray-900 font-medium">${mainPartWithoutSymbol}</span>${fractionalPart ? "." + fractionalPart : ""}${currencySymbolIdx !== 0 ? datum.currency_symbol : ""}</p>`;
   }
 
   get #radius() {
