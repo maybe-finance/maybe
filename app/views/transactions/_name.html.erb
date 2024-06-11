@@ -1,9 +1,9 @@
 <%= content_tag :div, class: ["flex items-center gap-2"] do %>
-  <div class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-600/5 text-gray-600">
+  <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-600/5 text-gray-600">
     <%= transaction.name[0].upcase %>
   </div>
 
-  <div class="text-gray-900 truncate">
+  <div class="truncate text-gray-900">
     <% if transaction.new_record? %>
       <%= content_tag :p, transaction.name %>
     <% else %>
