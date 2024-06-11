@@ -15,27 +15,30 @@
           <%= lucide_icon("chevron-down", class: "w-5 h-5 text-gray-500") %>
         </div>
       </div>
-      <div class="relative cursor-pointer" data-controller="menu">
-        <button data-menu-target="button" class="flex hover:bg-gray-100 p-2 rounded">
-          <%= lucide_icon("more-horizontal", class: "w-5 h-5 text-gray-500") %>
-        </button>
-        <div data-menu-target="content" class="absolute z-10 top-10 right-0 border border-alpha-black-25 bg-white rounded-lg shadow-xs hidden">
-          <div class="w-48 px-3 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-            <%= button_to account_path(@account),
-                method: :delete,
-                class: "block w-full py-2 text-red-600 hover:text-red-800 flex items-center",
-                data: {
-                  turbo_confirm: {
-                    title: t(".confirm_title"),
-                    body: t(".confirm_body_html"),
-                    accept: t(".confirm_accept", name: @account.name)
-                  }
-                } do %>
-              <%= lucide_icon("trash-2", class: "w-5 h-5 mr-2") %> Delete account
-            <% end %>
-          </div>
+
+      <%= contextual_menu do %>
+        <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+          <%= link_to new_import_path(account_id: @account.id),
+                      class: "block w-full py-2 px-3 space-x-2 text-gray-900 hover:bg-gray-50 flex items-center rounded-lg" do %>
+            <%= lucide_icon "download", class: "w-5 h-5 text-gray-500" %>
+
+            <span><%= t(".import") %></span>
+          <% end %>
+
+          <%= button_to account_path(@account),
+                        method: :delete,
+                        class: "block w-full py-2 px-3 space-x-2 text-red-600 hover:bg-red-50 flex items-center rounded-lg",
+                        data: {
+                          turbo_confirm: {
+                            title: t(".confirm_title"),
+                            body: t(".confirm_body_html"),
+                            accept: t(".confirm_accept", name: @account.name)
+                          }
+                        } do %>
+            <%= lucide_icon("trash-2", class: "w-5 h-5 mr-2") %> Delete account
+          <% end %>
         </div>
-      </div>
+      <% end %>
     </div>
   </div>
   <%= turbo_frame_tag "sync_message" do %>
