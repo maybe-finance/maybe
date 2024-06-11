@@ -18,6 +18,7 @@ en:
       confirm_title: Are you sure?
       invalid_csv: Please load a CSV first
       next: Next
+      optional: "(optional) No column selected"
     confirm:
       confirm_description: Preview your transactions below and check to see if there
         are any changes that are required.

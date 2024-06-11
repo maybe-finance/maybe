@@ -148,15 +148,18 @@ class Import < ApplicationRecord
 
       name_field = Import::Field.new \
         key: "name",
-        label: "Name"
+        label: "Name",
+        is_optional: true
 
       category_field = Import::Field.new \
         key: "category",
-        label: "Category"
+        label: "Category",
+        is_optional: true
 
       tags_field = Import::Field.new \
         key: "tags",
-        label: "Tags"
+        label: "Tags",
+        is_optional: true
 
       amount_field = Import::Field.new \
         key: "amount",
