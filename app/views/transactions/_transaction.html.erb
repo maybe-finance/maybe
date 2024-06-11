@@ -4,7 +4,9 @@
                       class: "maybe-checkbox maybe-checkbox--light",
                       data: { id: transaction.id, "bulk-select-target": "row", action: "bulk-select#toggleRowSelection" } %>
 
-    <%= render "transactions/name", transaction: transaction %>
+    <div class="max-w-full pr-10">
+      <%= render "transactions/name", transaction: transaction %>
+    </div>
   </div>
 
   <div class="col-span-3">
@@ -13,6 +15,7 @@
 
   <%= link_to transaction.account.name,
               account_path(transaction.account),
+              data: { turbo_frame: "_top" },
               class: ["col-span-3 hover:underline"] %>
 
   <div class="col-span-2 ml-auto">

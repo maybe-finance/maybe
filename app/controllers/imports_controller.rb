@@ -9,7 +9,8 @@ class ImportsController < ApplicationController
   end
 
   def new
-    @import = Import.new
+    account = Current.family.accounts.find_by(id: params[:account_id])
+    @import = Import.new account: account
   end
 
   def edit

@@ -4,18 +4,20 @@
       <div class="w-8 h-8 flex items-center justify-center rounded-full text-xs font-medium <%= account.is_active ? "bg-blue-500/10 text-blue-500" : "bg-gray-500/10 text-gray-500" %>">
         <%= account.name[0].upcase %>
       </div>
-      <p class="text-sm font-medium <%= account.is_active ? "text-gray-900" : "text-gray-400" %>">
-        <%= account.name %>
-      </p>
+      <%= link_to account.name, account, class: [(account.is_active ? "text-gray-900" : "text-gray-400"), "text-sm font-medium hover:underline"], data: { turbo_frame: "_top" } %>
     </div>
     <div class="flex items-center gap-8">
       <p class="text-sm font-medium <%= account.is_active ? "text-gray-900" : "text-gray-400" %>">
         <%= format_money account.balance_money %>
       </p>
-      <%= form_with model: account, method: :patch, html: { class: "flex items-center", data: { turbo_frame: "_top" } } do |form| %>
+
+      <%= form_with model: account,
+                    namespace: account.id,
+                    builder: ActionView::Helpers::FormBuilder,
+                    data: { controller: "auto-submit-form", turbo_frame: "_top" } do |form| %>
         <div class="relative inline-block select-none">
-          <%= form.check_box :is_active, class: "sr-only peer", id: "is_active_#{account.id}", onchange: "this.form.requestSubmit();" %>
-          <label for="is_active_<%= account.id %>" class="block bg-gray-100 w-9 h-5 rounded-full cursor-pointer after:content-[''] after:block after:absolute after:top-0.5 after:left-0.5 after:bg-white after:w-4 after:h-4 after:rounded-full after:transition-transform after:duration-300 after:ease-in-out peer-checked:bg-green-600 peer-checked:after:translate-x-4"></label>
+          <%= form.check_box :is_active, { class: "sr-only peer", data: { "auto-submit-form-target": "auto" } } %>
+          <%= form.label :is_active, "&nbsp;".html_safe, class: "maybe-switch" %>
         </div>
       <% end %>
     </div>

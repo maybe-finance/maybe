@@ -12,6 +12,10 @@ en:
       success: New account created successfully
     destroy:
       success: Account deleted successfully
+    header:
+      accounts: Accounts
+      manage: Manage accounts
+      new: New account
     index:
       new_account: New account
     new:
@@ -35,6 +39,7 @@ en:
         /> <p>After deletion, there is no way you'll be able to restore the account
         information because you'll need to add it as a new account.</p>"
       confirm_title: Delete account?
+      import: Import transactions
       sync_message_missing_rates: Since exchange rates haven't been synced, balance
         graphs may not reflect accurate values.
       sync_message_unknown_error: An error has occurred during the sync.
@@ -44,4 +49,4 @@ en:
       cannot_sync: Account cannot be synced at the moment
       success: Account sync started
     update:
-      success: Account updated successfully
+      success: Account updated
