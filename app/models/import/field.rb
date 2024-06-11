@@ -15,10 +15,15 @@ class Import::Field
 
   attr_reader :key, :label, :validator
 
-  def initialize(key:, label:, validator: nil)
+  def initialize(key:, label:, is_optional: false, validator: nil)
     @key = key.to_s
     @label = label
+    @is_optional = is_optional
     @validator = validator
+  end
+
+  def optional?
+    @is_optional
   end
 
   def define_validator(validator = nil, &block)

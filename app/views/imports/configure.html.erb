@@ -14,7 +14,8 @@
         <% @import.expected_fields.each do |field| %>
           <%= mappings.select field.key,
                               options_for_select(@import.available_headers, @import.get_selected_header_for_field(field)),
-                              label: field.label %>
+                              label: field.label,
+                              include_blank: field.optional? ? t(".optional") : false %>
         <% end %>
       <% end %>
     </div>
