@@ -16,10 +16,21 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
+  test "should update account" do
+    patch account_url(@account), params: {
+      account: {
+        is_active: "0"
+      }
+    }
+
+    assert_redirected_to account_url(@account)
+    assert_equal "Account updated", flash[:notice]
+  end
+
   test "should create account" do
     assert_difference -> { Account.count }, +1 do
       post accounts_path, params: { account: { accountable_type: "Account::Credit" } }
-      assert_redirected_to accounts_url
+      assert_redirected_to account_url(Account.order(:created_at).last)
     end
   end
 

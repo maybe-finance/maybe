@@ -2,7 +2,7 @@ class AccountsController < ApplicationController
   layout "with_sidebar"
 
   include Filterable
-  before_action :set_account, only: %i[ show update destroy sync ]
+  before_action :set_account, only: %i[ show destroy sync update ]
 
   def index
     @accounts = Current.family.accounts
@@ -32,26 +32,9 @@ class AccountsController < ApplicationController
     @valuation_series = @account.valuations.to_series
   end
 
-  def edit
-  end
-
   def update
-    if @account.update(account_params.except(:accountable_type))
-
-      @account.sync_later if account_params[:is_active] == "1" && @account.can_sync?
-
-      respond_to do |format|
-        format.html { redirect_to accounts_path, notice: t(".success") }
-        format.turbo_stream do
-          render turbo_stream: [
-            turbo_stream.append("notification-tray", partial: "shared/notification", locals: { type: "success", content: { body: t(".success") } }),
-            turbo_stream.replace("account_#{@account.id}", partial: "accounts/account", locals: { account: @account })
-          ]
-        end
-      end
-    else
-      render "show", status: :unprocessable_entity
-    end
+    @account.update! account_params.except(:accountable_type)
+    redirect_back_or_to account_path(@account), notice: t(".success")
   end
 
   def create
@@ -62,7 +45,7 @@ class AccountsController < ApplicationController
       @valuation = @account.valuations.new(date: account_params[:start_date] || Date.today, value: @account.balance, currency: @account.currency)
       @valuation.save!
 
-      redirect_to accounts_path, notice: t(".success")
+      redirect_to account_path(@account), notice: t(".success")
     else
       render "new", status: :unprocessable_entity
     end
