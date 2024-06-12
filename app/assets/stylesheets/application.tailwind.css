@@ -81,6 +81,43 @@
     @apply after:content-[''] after:block after:absolute after:top-0.5 after:left-0.5 after:bg-white after:w-4 after:h-4 after:rounded-full after:transition-transform after:duration-300 after:ease-in-out;
     @apply peer-checked:bg-green-600 peer-checked:after:translate-x-4;
   }
+
+  .releases-notes-row {
+    @apply mb-12;
+  }
+  .releases-notes-details {
+    @apply text-gray-500 text-sm;
+  }
+  .releases-notes-details h2 {
+    @apply text-lg mt-3.5 mb-2.5;
+  }
+  .releases-notes-details ul {
+    @apply list-disc my-2.5 pl-4;
+  }
+  .releases-notes-details p {
+    @apply my-2.5;
+  }
+  .releases-notes-details a {
+    @apply underline;
+  }
+  .releases-notes-details .user-mention {
+    @apply font-bold no-underline;
+  }
+  .releases-notes-details details {
+    @apply my-3.5 rounded-xl;
+  }
+  .releases-notes-details details video {
+    @apply rounded-b-xl;
+  }
+  .releases-notes-details summary {
+    @apply flex items-center gap-x-1;
+  }
+  .releases-notes-details .dropdown-caret {
+    @apply content-none border-4 border-b-0 border-transparent border-t-gray-500 size-0 inline-block;
+  }
+  .releases-notes-details .octicon {
+    @apply inline-block overflow-visible align-text-bottom fill-current;
+  }
 }
 
 /* Small, single purpose classes that should take precedence over other styles */
