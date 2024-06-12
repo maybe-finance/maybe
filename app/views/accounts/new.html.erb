@@ -20,14 +20,18 @@
       <div class="border-t border-alpha-black-25 p-4 text-gray-500 text-sm flex justify-between">
         <div class="flex space-x-5">
           <div class="flex items-center space-x-2">
-            <span>Select</span> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon("corner-down-left", class: "inline w-3 h-3") %></kbd>
+            <span>Select</span>
+            <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon("corner-down-left", class: "inline w-3 h-3") %></kbd>
           </div>
           <div class="flex items-center space-x-2">
-            <span>Navigate</span> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon("arrow-up", class: "inline w-3 h-3") %></kbd> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon("arrow-down", class: "inline w-3 h-3") %></kbd>
+            <span>Navigate</span>
+            <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon("arrow-up", class: "inline w-3 h-3") %></kbd>
+            <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon("arrow-down", class: "inline w-3 h-3") %></kbd>
           </div>
         </div>
         <div class="flex items-center space-x-2">
-          <button data-action="modal#close">Close</button> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-8 h-5 shrink-0 grow-0 items-center justify-center text-xs">ESC</kbd>
+          <button data-action="modal#close">Close</button>
+          <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-8 h-5 shrink-0 grow-0 items-center justify-center text-xs">ESC</kbd>
         </div>
       </div>
     <% elsif params[:step] == 'method' && @account.accountable.present? %>
@@ -47,14 +51,18 @@
       <div class="border-t border-alpha-black-25 p-4 text-gray-500 text-sm flex justify-between">
         <div class="flex space-x-5">
           <div class="flex items-center space-x-2">
-            <span>Select</span> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon("corner-down-left", class: "inline w-3 h-3") %></kbd>
+            <span>Select</span>
+            <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon("corner-down-left", class: "inline w-3 h-3") %></kbd>
           </div>
           <div class="flex items-center space-x-2">
-            <span>Navigate</span> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon("arrow-up", class: "inline w-3 h-3") %></kbd> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon("arrow-down", class: "inline w-3 h-3") %></kbd>
+            <span>Navigate</span>
+            <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon("arrow-up", class: "inline w-3 h-3") %></kbd>
+            <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon("arrow-down", class: "inline w-3 h-3") %></kbd>
           </div>
         </div>
         <div class="flex items-center space-x-2">
-          <button data-action="modal#close">Close</button> <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-8 h-5 shrink-0 grow-0 items-center justify-center text-xs">ESC</kbd>
+          <button data-action="modal#close">Close</button>
+          <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-8 h-5 shrink-0 grow-0 items-center justify-center text-xs">ESC</kbd>
         </div>
       </div>
     <% else %>
@@ -69,8 +77,17 @@
           <%= f.hidden_field :accountable_type %>
           <%= f.text_field :name, placeholder: t(".name.placeholder"), required: "required", label: t(".name.label"), autofocus: true %>
           <%= render "accounts/#{permitted_accountable_partial(@account.accountable_type)}", f: f %>
-          <%= f.money_field :balance_money, label: t(".balance.label"), required: "required" %>
-          <%= f.date_field :start_date, label: t(".start_date.label"), required: true, max: Date.today, value: Date.today %>
+          <%= f.money_field :balance_money, label: t(".balance"), required: "required" %>
+
+          <div>
+            <%= check_box_tag :add_start_values, class: "maybe-checkbox maybe-checkbox--light peer mb-1" %>
+            <%= label_tag :add_start_values, t(".optional_start_balance_message"), class: "pl-1 text-sm text-gray-500" %>
+
+            <div class="hidden peer-checked:flex items-center gap-2 mt-3">
+              <div class="w-1/2"><%= f.date_field :start_date, label: t(".start_date"), max: Date.current %></div>
+              <div class="w-1/2"><%= f.number_field :start_balance, label: t(".start_balance") %></div>
+            </div>
+          </div>
         </div>
         <%= f.submit "Add #{@account.accountable.model_name.human.downcase}" %>
       <% end %>
