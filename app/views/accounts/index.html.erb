@@ -1,62 +1,46 @@
 <% content_for :sidebar do %>
   <%= render "settings/nav" %>
 <% end %>
+
 <div class="space-y-4">
-  <div class="flex items-center justify-between">
-    <h1 class="text-xl font-medium text-gray-900">Accounts</h1>
-    <%= link_to new_account_path, class: "flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2 pr-3", data: { turbo_frame: "modal" } do %>
-      <%= lucide_icon("plus", class: "w-5 h-5") %>
-      <span><%= t(".new_account") %></span>
-    <% end %>
-  </div>
-  <% if @accounts.empty? %>
-    <div class="flex justify-center items-center h-[800px] text-sm">
-      <div class="text-center flex flex-col items-center max-w-[300px]">
-        <p class="text-gray-900 mb-1 font-medium">No accounts yet</p>
-        <p class="text-gray-500 mb-4">Add an account either via connection, importing or entering manually.</p>
-        <%= link_to new_account_path, class: "w-fit flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2 pr-3", data: { turbo_frame: "modal" } do %>
+  <header class="flex justify-between items-center text-gray-900 font-medium">
+    <h1 class="text-xl"><%= t(".accounts") %></h1>
+    <div class="flex items-center gap-5">
+      <div class="flex items-center gap-2">
+        <%= contextual_menu do %>
+          <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+            <%= link_to new_institution_path,
+                        class: "block w-full py-2 px-3 space-x-2 text-gray-900 hover:bg-gray-50 flex items-center rounded-lg font-normal",
+                        data: { turbo_frame: "modal" } do %>
+              <%= lucide_icon "building-2", class: "w-5 h-5 text-gray-500" %>
+              <span class="text-black"><%= t(".add_institution") %></span>
+            <% end %>
+          </div>
+        <% end %>
+
+        <%= link_to new_account_path,
+                    data: { turbo_frame: "modal" },
+                    class: "rounded-lg bg-gray-900 text-white flex items-center gap-1 justify-center hover:bg-gray-700 px-3 py-2" do %>
           <%= lucide_icon("plus", class: "w-5 h-5") %>
-          <span><%= t(".new_account") %></span>
+          <p class="text-sm font-medium"><%= t(".new_account") %></p>
         <% end %>
       </div>
     </div>
+  </header>
+
+
+  <% if @accounts.empty? && @institutions.empty? %>
+    <%= render "empty" %>
   <% else %>
-    <div>
-      <% @accounts.by_provider.each do |item| %>
-        <details open class="bg-white group p-4 border border-alpha-black-25 shadow-xs rounded-xl">
-          <summary class="flex items-center gap-2">
-            <%= lucide_icon("chevron-down", class: "hidden group-open:block w-5 h-5 text-gray-500") %>
-            <%= lucide_icon("chevron-right", class: "group-open:hidden w-5 h-5 text-gray-500") %>
-            <% if item[:name] == "Manual accounts" %>
-              <div class="flex items-center justify-center h-8 w-8 rounded-full bg-black/5">
-                <%= lucide_icon("folder-pen", class: "w-5 h-5 text-gray-500") %>
-              </div>
-            <% end %>
-            <span class="text-sm font-medium text-gray-900">
-              <%= item[:name] %>
-            </span>
-          </summary>
-          <div class="space-y-4 mt-4">
-            <% item[:accounts].each do |group, accounts| %>
-              <div class="bg-gray-25 p-1 rounded-xl">
-                <div class="flex items-center px-4 py-2 text-xs font-medium text-gray-500">
-                  <p><%= to_accountable_title(Accountable.from_type(group)) %></p>
-                  <span class="text-gray-400 mx-2">&middot;</span>
-                  <p><%= accounts.count %></p>
-                  <p class="ml-auto"><%= format_money accounts.sum(&:balance_money) %></p>
-                </div>
-                <div class="bg-white">
-                  <% accounts.each do |account| %>
-                    <%= render account %>
-                  <% end %>
-                </div>
-              </div>
-            <% end %>
-          </div>
-        </details>
+    <div class="space-y-2">
+      <% @institutions.each do |institution| %>
+        <%= render "institution_accounts", institution: %>
       <% end %>
+
+      <%= render "institutionless_accounts", accounts: @accounts %>
     </div>
   <% end %>
+
   <div class="flex justify-between gap-4">
     <% if self_hosted? %>
       <%= previous_setting("Self-Hosting", settings_hosting_path) %>

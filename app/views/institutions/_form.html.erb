@@ -1,0 +1,27 @@
+<%= form_with model: institution, data: { turbo_frame: "_top", controller: "profile-image-preview" } do |f| %>
+
+  <div class="flex justify-center items-center py-4">
+    <%= f.label :logo do %>
+      <div class="relative cursor-pointer hover:opacity-80 w-16 h-16 rounded-full bg-gray-50">
+        <% persisted_logo = institution_logo(institution) %>
+
+        <% if persisted_logo %>
+          <%= image_tag persisted_logo, class: "absolute inset-0 rounded-full w-full h-full object-cover" %>
+        <% end %>
+
+        <div data-profile-image-preview-target="imagePreview" class="absolute inset-0 h-full w-full flex items-center justify-center">
+          <% unless persisted_logo %>
+            <%= lucide_icon "image-plus", class: "w-5 h-5 text-gray-500 cursor-pointer", data: { profile_image_preview_target: "template" } %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <%= f.file_field :logo,
+                   accept: "image/png, image/jpeg",
+                   class: "hidden",
+                   data: { profile_image_preview_target: "fileField", action: "profile-image-preview#preview" } %>
+  <%= f.text_field :name, label: t(".name") %>
+  <%= f.submit %>
+<% end %>

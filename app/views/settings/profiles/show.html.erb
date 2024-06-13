@@ -8,7 +8,7 @@
       <%= form_with model: Current.user, url: settings_profile_path, html: {data: { controller: "profile-image-preview" }} do |form| %>
         <div class="flex items-center gap-4">
           <div class="relative flex justify-center items-center bg-gray-50 w-24 h-24 rounded-full border border-alpha-black-25">
-            <div data-profile-image-preview-target="imagePreview">
+            <div data-profile-image-preview-target="imagePreview" class="h-full w-full flex justify-center items-center">
               <% profile_image_attached = Current.user.profile_image.attached? %>
               <% if profile_image_attached %>
                 <div class="h-24 w-24">

@@ -12,12 +12,29 @@ en:
       success: New account created successfully
     destroy:
       success: Account deleted successfully
+    empty:
+      empty_message: Add an account either via connection, importing or entering manually.
+      new_account: New account
+      no_accounts: No accounts yet
     header:
       accounts: Accounts
       manage: Manage accounts
       new: New account
     index:
+      accounts: Accounts
+      add_institution: Add institution
       new_account: New account
+    institution_accounts:
+      confirm_accept: Delete institution
+      confirm_body: Don't worry, none of the accounts within this institution will
+        be affected by this deletion. Accounts will be ungrouped and all historical
+        data will remain intact.
+      confirm_title: Delete financial institution?
+      delete: Delete institution
+      edit: Edit institution
+      new_account: Add account
+    institutionless_accounts:
+      other_accounts: Other accounts
     new:
       balance:
         label: Balance

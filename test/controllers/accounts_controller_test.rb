@@ -6,6 +6,15 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
     @account = accounts(:checking)
   end
 
+  test "gets accounts list" do
+    get accounts_url
+    assert_response :success
+
+    @user.family.accounts.each do |account|
+      assert_dom "#" + dom_id(account), count: 1
+    end
+  end
+
   test "new" do
     get new_account_path
     assert_response :ok

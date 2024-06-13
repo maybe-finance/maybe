@@ -1,0 +1,8 @@
+chase:
+  name: Chase
+  family: dylan_family
+
+revolut:
+  name: Revolut
+  family: dylan_family
+  logo_url: <%= "file://" + Rails.root.join('test/fixtures/files/square-placeholder.png').to_s %>

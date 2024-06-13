@@ -71,6 +71,8 @@ Rails.application.routes.draw do
     resources :valuations
   end
 
+  resources :institutions, except: %i[ index show ]
+
   # For managing self-hosted upgrades and release notifications
   resources :upgrades, only: [] do
     member do

@@ -1,0 +1,62 @@
+<%# locals: (institution:) %>
+
+<details open class="group bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">
+  <summary class="flex items-center gap-2 focus-visible:outline-none">
+    <%= lucide_icon "chevron-right", class: "group-open:transform group-open:rotate-90 text-gray-500 w-5" %>
+
+    <div class="flex items-center justify-center h-8 w-8 bg-blue-600/10 rounded-full bg-black/5">
+      <% if institution_logo(institution) %>
+        <%= image_tag institution_logo(institution), class: "rounded-full h-full w-full" %>
+      <% else %>
+        <div class="flex items-center justify-center">
+          <%= tag.p institution.name.first.upcase, class: "text-blue-600 text-xs font-medium" %>
+        </div>
+      <% end %>
+    </div>
+
+    <%= link_to institution.name, edit_institution_path(institution), data: { turbo_frame: :modal }, class: "text-sm font-medium text-gray-900 ml-1 mr-auto hover:underline" %>
+
+    <%= contextual_menu do %>
+      <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+        <%= link_to edit_institution_path(institution),
+                    class: "block w-full py-2 px-3 space-x-2 text-gray-900 hover:bg-gray-50 flex items-center rounded-lg",
+                    data: { turbo_frame: :modal } do %>
+          <%= lucide_icon "pencil-line", class: "w-5 h-5 text-gray-500" %>
+
+          <span><%= t(".edit") %></span>
+        <% end %>
+
+        <%= button_to institution_path(institution),
+                      method: :delete,
+                      class: "block w-full py-2 px-3 space-x-2 text-red-600 hover:bg-red-50 flex items-center rounded-lg",
+                      data: {
+                        turbo_confirm: {
+                          title: t(".confirm_title"),
+                          body: t(".confirm_body"),
+                          accept: t(".confirm_accept")
+                        }
+                      } do %>
+          <%= lucide_icon "trash-2", class: "w-5 h-5" %>
+
+          <span><%= t(".delete") %></span>
+        <% end %>
+      </div>
+
+
+    <% end %>
+  </summary>
+
+  <div class="space-y-4 mt-4">
+    <% if institution.accounts.any? %>
+      <%= render "accountable_group", accounts: institution.accounts %>
+    <% else %>
+      <div class="p-4 flex flex-col gap-3 items-center justify-center">
+        <p class="text-gray-500 text-sm">There are no accounts in this financial institution</p>
+        <%= link_to new_account_path, class: "w-fit flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-1.5 pr-2", data: { turbo_frame: "modal" } do %>
+          <%= lucide_icon("plus", class: "w-4 h-4") %>
+          <span><%= t(".new_account") %></span>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</details>

@@ -8,7 +8,7 @@ export default class extends Controller {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        this.imagePreviewTarget.innerHTML = `<img src="${e.target.result}" alt="Preview" class="w-24 h-24 rounded-full object-cover" />`;
+        this.imagePreviewTarget.innerHTML = `<img src="${e.target.result}" alt="Preview" class="w-full h-full rounded-full object-cover" />`;
         this.templateTarget.classList.add("hidden");
         this.clearBtnTarget.classList.remove("hidden");
       };

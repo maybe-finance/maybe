@@ -2,10 +2,12 @@ class Account < ApplicationRecord
   include Syncable
   include Monetizable
 
+  broadcasts_refreshes
+
   validates :family, presence: true
 
-  broadcasts_refreshes
   belongs_to :family
+  belongs_to :institution, optional: true
   has_many :balances, dependent: :destroy
   has_many :valuations, dependent: :destroy
   has_many :transactions, dependent: :destroy
@@ -19,6 +21,7 @@ class Account < ApplicationRecord
   scope :assets, -> { where(classification: "asset") }
   scope :liabilities, -> { where(classification: "liability") }
   scope :alphabetically, -> { order(:name) }
+  scope :ungrouped, -> { where(institution_id: nil) }
 
   delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
 

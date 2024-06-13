@@ -13,6 +13,7 @@ checking:
   balance: 5000
   accountable_type: Account::Depository
   accountable_id: "123e4567-e89b-12d3-a456-426614174000"
+  institution: chase
 
 # Account with both transactions and valuations
 savings_with_valuation_overrides:
@@ -21,6 +22,7 @@ savings_with_valuation_overrides:
   balance: 20000
   accountable_type: Account::Depository
   accountable_id: "123e4567-e89b-12d3-a456-426614174001"
+  institution: chase
 
 # Liability account
 credit_card:
@@ -29,6 +31,7 @@ credit_card:
   balance: 1000
   accountable_type: Account::Credit
   accountable_id: "123e4567-e89b-12d3-a456-426614174003"
+  institution: chase
 
 eur_checking:
   family: dylan_family
@@ -37,6 +40,7 @@ eur_checking:
   balance: 12000
   accountable_type: Account::Depository
   accountable_id: "123e4567-e89b-12d3-a456-426614174004"
+  institution: revolut
 
 # Multi-currency account (e.g. Wise, Revolut, etc.)
 multi_currency:
@@ -46,3 +50,4 @@ multi_currency:
   balance: 10000
   accountable_type: Account::Depository
   accountable_id: "123e4567-e89b-12d3-a456-426614174005"
+  institution: revolut

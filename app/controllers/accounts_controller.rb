@@ -5,7 +5,8 @@ class AccountsController < ApplicationController
   before_action :set_account, only: %i[ show destroy sync update ]
 
   def index
-    @accounts = Current.family.accounts
+    @institutions = Current.family.institutions
+    @accounts = Current.family.accounts.ungrouped.alphabetically
   end
 
   def summary
