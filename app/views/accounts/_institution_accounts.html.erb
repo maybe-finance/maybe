@@ -42,7 +42,6 @@
         <% end %>
       </div>
 
-
     <% end %>
   </summary>
 
@@ -52,7 +51,7 @@
     <% else %>
       <div class="p-4 flex flex-col gap-3 items-center justify-center">
         <p class="text-gray-500 text-sm">There are no accounts in this financial institution</p>
-        <%= link_to new_account_path, class: "w-fit flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-1.5 pr-2", data: { turbo_frame: "modal" } do %>
+        <%= link_to new_account_path(institution_id: institution.id), class: "w-fit flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-1.5 pr-2", data: { turbo_frame: "modal" } do %>
           <%= lucide_icon("plus", class: "w-4 h-4") %>
           <span><%= t(".new_account") %></span>
         <% end %>

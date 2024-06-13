@@ -1,0 +1,21 @@
+<%= modal do %>
+  <article class="mx-auto w-full p-4 space-y-4 min-w-[350px]">
+    <header class="flex justify-between">
+      <h2 class="font-medium text-xl"><%= t(".edit", account: @account.name) %></h2>
+      <%= lucide_icon "x", class: "w-5 h-5 text-gray-500", data: { action: "click->modal#close" } %>
+    </header>
+
+    <%= form_with model: @account, data: { turbo_frame: "_top" } do |f| %>
+      <%= f.text_field :name, label: "Name" %>
+
+      <div class="relative">
+        <%= f.collection_select :institution_id, Current.family.institutions.alphabetically, :id, :name, { include_blank: t(".ungrouped"), label: t(".institution") } %>
+        <%= link_to new_institution_path do %>
+          <%= lucide_icon "plus", class: "text-gray-700 hover:text-gray-500 w-4 h-4 absolute right-3 top-2" %>
+        <% end %>
+      </div>
+
+      <%= f.submit %>
+    <% end %>
+  </article>
+<% end %>

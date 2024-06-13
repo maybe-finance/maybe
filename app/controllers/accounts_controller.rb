@@ -2,7 +2,7 @@ class AccountsController < ApplicationController
   layout "with_sidebar"
 
   include Filterable
-  before_action :set_account, only: %i[ show destroy sync update ]
+  before_action :set_account, only: %i[ edit show destroy sync update ]
   after_action :sync_account, only: :create
 
   def index
@@ -25,13 +25,17 @@ class AccountsController < ApplicationController
   def new
     @account = Account.new(
       balance: nil,
-      accountable: Accountable.from_type(params[:type])&.new
+      accountable: Accountable.from_type(params[:type])&.new,
+      institution_id: params[:institution_id],
     )
   end
 
   def show
     @balance_series = @account.series(period: @period)
     @valuation_series = @account.valuations.to_series
+  end
+
+  def edit
   end
 
   def update
@@ -81,7 +85,7 @@ class AccountsController < ApplicationController
     end
 
     def account_params
-      params.require(:account).permit(:name, :accountable_type, :balance, :start_date, :start_balance, :currency, :subtype, :is_active)
+      params.require(:account).permit(:name, :accountable_type, :balance, :start_date, :start_balance, :currency, :subtype, :is_active, :institution_id)
     end
 
     def sync_account

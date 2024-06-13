@@ -28,7 +28,9 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
   test "should update account" do
     patch account_url(@account), params: {
       account: {
-        is_active: "0"
+        name: "Updated name",
+        is_active: "0",
+        institution_id: institutions(:chase).id
       }
     }
 
@@ -42,7 +44,8 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
         account: {
           accountable_type: "Account::Depository",
           balance: 200,
-          subtype: "checking"
+          subtype: "checking",
+          institution_id: institutions(:chase).id
         }
       }
 
@@ -58,6 +61,7 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
           accountable_type: "Account::Depository",
           balance: 200,
           subtype: "checking",
+          institution_id: institutions(:chase).id,
           start_balance: 100,
           start_date: 10.days.ago
         }
