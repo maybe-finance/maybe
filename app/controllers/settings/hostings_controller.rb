@@ -47,7 +47,7 @@ class Settings::HostingsController < SettingsController
         end
       end
 
-      if hosting_params[:upgrades_mode] != "manual" && hosting_params[:render_deploy_hook].blank?
+      if hosting_params[:upgrades_mode] == "auto" && hosting_params[:render_deploy_hook].blank?
         @errors.add(:render_deploy_hook, t("settings.hostings.update.render_deploy_hook_error"))
       end
 
