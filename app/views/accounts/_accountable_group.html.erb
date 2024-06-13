@@ -1,0 +1,17 @@
+<%# locals: (accounts:) %>
+
+<% accounts.group_by(&:accountable_type).each do |group, accounts| %>
+  <div class="bg-gray-25 p-1 rounded-xl">
+    <div class="flex items-center px-4 py-2 text-xs font-medium text-gray-500">
+      <p><%= to_accountable_title(Accountable.from_type(group)) %></p>
+      <span class="text-gray-400 mx-2">&middot;</span>
+      <p><%= accounts.count %></p>
+      <p class="ml-auto"><%= format_money accounts.sum(&:balance_money) %></p>
+    </div>
+    <div class="bg-white">
+      <% accounts.each do |account| %>
+        <%= render account %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

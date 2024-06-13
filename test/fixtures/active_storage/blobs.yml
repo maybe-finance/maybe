@@ -1,0 +1,1 @@
+square_placeholder_blob: <%= ActiveStorage::FixtureSet.blob filename: "square-placeholder.png" %>

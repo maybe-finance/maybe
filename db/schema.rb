@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_05_24_203959) do
+ActiveRecord::Schema[7.2].define(version: 2024_06_12_164944) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -93,8 +93,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_24_203959) do
     t.jsonb "sync_warnings", default: [], null: false
     t.jsonb "sync_errors", default: [], null: false
     t.date "last_sync_date"
+    t.uuid "institution_id"
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id"], name: "index_accounts_on_family_id"
+    t.index ["institution_id"], name: "index_accounts_on_institution_id"
   end
 
   create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -234,6 +236,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_24_203959) do
     t.index ["account_id"], name: "index_imports_on_account_id"
   end
 
+  create_table "institutions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "logo_url"
+    t.uuid "family_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["family_id"], name: "index_institutions_on_family_id"
+  end
+
   create_table "invite_codes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "token", null: false
     t.datetime "created_at", null: false
@@ -334,9 +345,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_24_203959) do
 
   add_foreign_key "account_balances", "accounts", on_delete: :cascade
   add_foreign_key "accounts", "families"
+  add_foreign_key "accounts", "institutions"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "imports", "accounts"
+  add_foreign_key "institutions", "families"
   add_foreign_key "taggings", "tags"
   add_foreign_key "tags", "families"
   add_foreign_key "transaction_categories", "families"

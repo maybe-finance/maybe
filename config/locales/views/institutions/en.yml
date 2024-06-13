@@ -1,0 +1,15 @@
+---
+en:
+  institutions:
+    create:
+      success: Institution created
+    destroy:
+      success: Institution deleted
+    edit:
+      edit: Edit %{institution}
+    form:
+      name: Financial institution name
+    new:
+      new_institution: New financial institution
+    update:
+      success: Institution updated
