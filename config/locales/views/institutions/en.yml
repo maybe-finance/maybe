@@ -7,3 +7,9 @@ en:
       name: Financial institution name
     new:
       new_institution: New financial institution
+    create:
+      success: "Institution created"
+    update:
+      success: "Institution updated"
+    destroy:
+      success: "Institution deleted"

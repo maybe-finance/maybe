@@ -7,7 +7,7 @@ class InstitutionsController < ApplicationController
 
   def create
     Current.family.institutions.create!(institution_params)
-    redirect_to accounts_path, notice: "Institution created"
+    redirect_to accounts_path, notice: t(".success")
   end
 
   def edit
@@ -15,12 +15,12 @@ class InstitutionsController < ApplicationController
 
   def update
     @institution.update!(institution_params)
-    redirect_to accounts_path, notice: "Institution updated"
+    redirect_to accounts_path, notice: t(".success")
   end
 
   def destroy
     @institution.destroy!
-    redirect_to accounts_path, notice: "Institution deleted"
+    redirect_to accounts_path, notice: t(".success")
   end
 
   private

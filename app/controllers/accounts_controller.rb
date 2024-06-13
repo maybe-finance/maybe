@@ -25,7 +25,7 @@ class AccountsController < ApplicationController
   def new
     @account = Account.new(
       balance: nil,
-      accountable: Accountable.from_type(params[:type])&.new,
+      accountable: Accountable.from_type(params[:type])&.new
     )
 
     if params[:institution_id]
