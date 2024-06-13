@@ -35,6 +35,11 @@ There are 3 primary ways to use the Maybe app:
 
 ## Local Development Setup
 
+**If you are trying to _self-host_ the Maybe app, stop here. You
+should [read this guide to get started](docs/hosting/docker.md).**
+
+The instructions below are for developers to get started with contributing to the app.
+
 ### Requirements
 
 - Ruby 3.3.1
