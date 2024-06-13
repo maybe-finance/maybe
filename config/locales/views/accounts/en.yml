@@ -46,7 +46,6 @@ en:
     summary:
       new: New account
     sync:
-      cannot_sync: Account cannot be synced at the moment
       success: Account sync started
     update:
       success: Account updated
