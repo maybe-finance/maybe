@@ -36,20 +36,35 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Account updated", flash[:notice]
   end
 
-  test "should create account" do
-    assert_difference -> { Account.count }, +1 do
-      post accounts_path, params: { account: { accountable_type: "Account::Credit" } }
+  test "should create an account" do
+    assert_difference [ "Account.count", "Valuation.count" ], 1 do
+      post accounts_path, params: {
+        account: {
+          accountable_type: "Account::Depository",
+          balance: 200,
+          subtype: "checking"
+        }
+      }
+
+      assert_equal "New account created successfully", flash[:notice]
       assert_redirected_to account_url(Account.order(:created_at).last)
     end
   end
 
-  test "should create a valuation together with account" do
-    balance = 700
-    start_date = 3.days.ago.to_date
-    post accounts_path, params: { account: { accountable_type: "Account::Credit", balance:, start_date: } }
+  test "can add optional start date and balance to an account on create" do
+    assert_difference -> { Account.count } => 1, -> { Valuation.count } => 2 do
+      post accounts_path, params: {
+        account: {
+          accountable_type: "Account::Depository",
+          balance: 200,
+          subtype: "checking",
+          start_balance: 100,
+          start_date: 10.days.ago
+        }
+      }
 
-    new_valuation = Valuation.order(:created_at).last
-    assert new_valuation.value == balance
-    assert new_valuation.date == start_date
+      assert_equal "New account created successfully", flash[:notice]
+      assert_redirected_to account_url(Account.order(:created_at).last)
+    end
   end
 end

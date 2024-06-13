@@ -3,6 +3,7 @@ class AccountsController < ApplicationController
 
   include Filterable
   before_action :set_account, only: %i[ show destroy sync update ]
+  after_action :sync_account, only: :create
 
   def index
     @institutions = Current.family.institutions
@@ -39,17 +40,14 @@ class AccountsController < ApplicationController
   end
 
   def create
-    @account = Current.family.accounts.build(account_params.except(:accountable_type, :start_date))
-    @account.accountable = Accountable.from_type(account_params[:accountable_type])&.new
+    @account = Current.family
+                      .accounts
+                      .create_with_optional_start_balance! \
+                        attributes: account_params.except(:start_date, :start_balance),
+                        start_date: account_params[:start_date],
+                        start_balance: account_params[:start_balance]
 
-    if @account.save
-      @valuation = @account.valuations.new(date: account_params[:start_date] || Date.today, value: @account.balance, currency: @account.currency)
-      @valuation.save!
-
-      redirect_to account_path(@account), notice: t(".success")
-    else
-      render "new", status: :unprocessable_entity
-    end
+    redirect_to account_path(@account), notice: t(".success")
   end
 
   def destroy
@@ -83,6 +81,10 @@ class AccountsController < ApplicationController
     end
 
     def account_params
-      params.require(:account).permit(:name, :accountable_type, :balance, :start_date, :currency, :subtype, :is_active)
+      params.require(:account).permit(:name, :accountable_type, :balance, :start_date, :start_balance, :currency, :subtype, :is_active)
+    end
+
+    def sync_account
+      @account.sync_later
     end
 end

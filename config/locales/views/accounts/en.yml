@@ -36,17 +36,17 @@ en:
     institutionless_accounts:
       other_accounts: Other accounts
     new:
-      balance:
-        label: Balance
+      balance: Current balance
       currency:
         all_others: All Others
         popular: Popular
       name:
         label: Account name
         placeholder: Example account name
+      optional_start_balance_message: Add a start balance for this account
       select_accountable_type: What would you like to add?
-      start_date:
-        label: Start date
+      start_balance: Start balance (optional)
+      start_date: Start date (optional)
       title: Add an account
     show:
       confirm_accept: Delete "%{name}"

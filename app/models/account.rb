@@ -83,4 +83,20 @@ class Account < ApplicationRecord
 
     grouped_accounts
   end
+
+  def self.create_with_optional_start_balance!(attributes:, start_date: nil, start_balance: nil)
+    account = self.new(attributes.except(:accountable_type))
+    account.accountable = Accountable.from_type(attributes[:accountable_type])&.new
+
+    # Always build the initial valuation
+    account.valuations.build(date: Date.current, value: attributes[:balance], currency: account.currency)
+
+    # Conditionally build the optional start valuation
+    if start_date.present? && start_balance.present?
+      account.valuations.build(date: start_date, value: start_balance, currency: account.currency)
+    end
+
+    account.save!
+    account
+  end
 end
