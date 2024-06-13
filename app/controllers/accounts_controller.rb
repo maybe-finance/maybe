@@ -63,22 +63,11 @@ class AccountsController < ApplicationController
   end
 
   def sync
-    if @account.can_sync?
+    unless @account.syncing?
       @account.sync_later
-      respond_to do |format|
-        format.html { redirect_to account_path(@account), notice: t(".success") }
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.append("notification-tray", partial: "shared/notification", locals: { type: "success", content: { body: t(".success") } })
-        end
-      end
-    else
-      respond_to do |format|
-        format.html { redirect_to account_path(@account), notice: t(".cannot_sync") }
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.append("notification-tray", partial: "shared/notification", locals: { type: "error", content: { body: t(".cannot_sync") } })
-        end
-      end
     end
+
+    redirect_to account_path(@account), notice: t(".success")
   end
 
   private

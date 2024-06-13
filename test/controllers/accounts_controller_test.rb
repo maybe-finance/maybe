@@ -25,6 +25,11 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
+  test "can sync an account" do
+    post sync_account_path(@account)
+    assert_redirected_to account_url(@account)
+  end
+
   test "should update account" do
     patch account_url(@account), params: {
       account: {
