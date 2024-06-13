@@ -26,8 +26,11 @@ class AccountsController < ApplicationController
     @account = Account.new(
       balance: nil,
       accountable: Accountable.from_type(params[:type])&.new,
-      institution_id: params[:institution_id],
     )
+
+    if params[:institution_id]
+      @account.institution = Current.family.institutions.find_by(id: params[:institution_id])
+    end
   end
 
   def show
@@ -51,7 +54,7 @@ class AccountsController < ApplicationController
                         start_date: account_params[:start_date],
                         start_balance: account_params[:start_balance]
 
-    redirect_to account_path(@account), notice: t(".success")
+    redirect_back_or_to account_path(@account), notice: t(".success")
   end
 
   def destroy

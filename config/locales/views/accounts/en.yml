@@ -29,6 +29,7 @@ en:
       add_institution: Add institution
       new_account: New account
     institution_accounts:
+      add_account_to_institution: Add new account
       confirm_accept: Delete institution
       confirm_body: Don't worry, none of the accounts within this institution will
         be affected by this deletion. Accounts will be ungrouped and all historical

@@ -18,6 +18,15 @@
 
     <%= contextual_menu do %>
       <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+        <%= link_to new_account_path(institution_id: institution.id),
+                    class: "block w-full py-2 px-3 space-x-2 text-gray-900 hover:bg-gray-50 flex items-center rounded-lg",
+                    data: { turbo_frame: :modal } do %>
+          <%= lucide_icon "plus", class: "w-5 h-5 text-gray-500" %>
+
+          <span><%= t(".add_account_to_institution") %></span>
+        <% end %>
+
+
         <%= link_to edit_institution_path(institution),
                     class: "block w-full py-2 px-3 space-x-2 text-gray-900 hover:bg-gray-50 flex items-center rounded-lg",
                     data: { turbo_frame: :modal } do %>
