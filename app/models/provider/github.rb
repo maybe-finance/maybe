@@ -40,6 +40,26 @@ class Provider::Github
     end
   end
 
+  def fetch_latest_releases_notes
+    begin
+      Rails.cache.fetch("latest_github_releases_notes", expires_in: 2.hours) do
+        releases = Octokit.releases(repo)
+        releases.map do |release|
+          {
+            avatar: release.author.avatar_url,
+            name: release.name,
+            published_at: release.published_at,
+            body: Octokit.markdown(release.body, mode: "gfm", context: repo)
+          }
+        end
+      end
+
+    rescue => e
+      Rails.logger.error "Failed to fetch latest GitHub releases notes: #{e.message}"
+      []
+    end
+  end
+
   private
     def repo
       "#{owner}/#{name}"
