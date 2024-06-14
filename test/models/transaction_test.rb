@@ -3,6 +3,7 @@ require "test_helper"
 class TransactionTest < ActiveSupport::TestCase
   setup do
     @transaction = transactions(:checking_one)
+    @family = families(:dylan_family)
   end
 
   # See: https://github.com/maybe-finance/maybe/wiki/vision#signage-of-money
@@ -40,5 +41,13 @@ class TransactionTest < ActiveSupport::TestCase
 
     current_transaction.account.expects(:sync_later).with(prior_transaction.date)
     current_transaction.sync_account_later
+  end
+
+  test "can calculate total spending for a group of transactions" do
+    assert_equal Money.new(0), @family.transactions.expense_total
+  end
+
+  test "can calculate total income for a group of transactions" do
+    assert_equal Money.new(0), @family.transactions.income_total
   end
 end

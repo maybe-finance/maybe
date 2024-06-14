@@ -39,12 +39,48 @@ checking_five:
   currency: USD
   merchant: netflix
 
-# Savings account that has these transactions and valuation overrides
+checking_six_payment:
+  name: Payment to Credit Card
+  date: <%= 29.days.ago.to_date %>
+  amount: 100
+  account: checking
+  currency: USD
+  marked_as_transfer: true
+  transfer: credit_card_payment
+
+checking_seven_transfer:
+  name: Transfer to Savings
+  date: <%= 30.days.ago.to_date %>
+  amount: 250
+  account: checking
+  currency: USD
+  marked_as_transfer: true
+  transfer: savings_transfer
+
+checking_eight_external_payment:
+  name: Transfer TO external CC account (owned by user but not known to app)
+  date: <%= 30.days.ago.to_date %>
+  amount: 800
+  account: checking
+  currency: USD
+  marked_as_transfer: true
+  transfer: external_transfer_cc
+
+checking_nine_external_transfer:
+  name: Transfer FROM external investing account (owned by user but not known to app)
+  date: <%= 30.days.ago.to_date %>
+  amount: -200
+  account: checking
+  currency: USD
+  marked_as_transfer: true
+  transfer: external_transfer_investing
+
+# Savings account that has transactions and valuation overrides
 savings_one:
   name: Interest Received
   date: <%= 5.days.ago.to_date %>
   amount: -200
-  account: savings_with_valuation_overrides
+  account: savings
   category: income
   currency: USD
 
@@ -52,7 +88,7 @@ savings_two:
   name: Check Deposit
   date: <%= 12.days.ago.to_date %>
   amount: -50
-  account: savings_with_valuation_overrides
+  account: savings
   category: income
   currency: USD
 
@@ -60,16 +96,25 @@ savings_three:
   name: Withdrawal
   date: <%= 18.days.ago.to_date %>
   amount: 2000
-  account: savings_with_valuation_overrides
+  account: savings
   currency: USD
 
 savings_four:
   name: Check Deposit
   date: <%= 29.days.ago.to_date %>
   amount: -500
-  account: savings_with_valuation_overrides
+  account: savings
   category: income
   currency: USD
+
+savings_five_transfer:
+  name: Received Transfer from Checking Account
+  date: <%= 30.days.ago.to_date %>
+  amount: -250
+  account: savings
+  currency: USD
+  marked_as_transfer: true
+  transfer: savings_transfer
 
 # Credit card account transactions
 credit_card_one:
@@ -96,12 +141,14 @@ credit_card_three:
   currency: USD
   merchant: amazon
 
-credit_card_four:
-  name: CC Payment
+credit_card_four_payment:
+  name: Received CC Payment from Checking Account
   date: <%= 29.days.ago.to_date %>
   amount: -100
   account: credit_card
   currency: USD
+  marked_as_transfer: true
+  transfer: credit_card_payment
 
 # eur_checking transactions
 eur_checking_one:
@@ -120,7 +167,7 @@ eur_checking_two:
 
 eur_checking_three:
   name: Check
-  date: <%= 29.days.ago.to_date %>
+  date: <%= 30.days.ago.to_date %>
   amount: -200
   currency: EUR
   account: eur_checking
@@ -143,7 +190,7 @@ multi_currency_two:
 multi_currency_three:
   name: Outflow 2
   date: <%= 19.days.ago.to_date %>
-  amount: 100
+  amount: 110.85
   currency: EUR
   account: multi_currency
 

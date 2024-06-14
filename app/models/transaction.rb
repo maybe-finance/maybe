@@ -4,6 +4,7 @@ class Transaction < ApplicationRecord
   monetize :amount
 
   belongs_to :account
+  belongs_to :transfer, optional: true
   belongs_to :category, optional: true
   belongs_to :merchant, optional: true
   has_many :taggings, as: :taggable, dependent: :destroy
@@ -53,6 +54,14 @@ class Transaction < ApplicationRecord
   end
 
   class << self
+    def income_total
+      Money.new 0
+    end
+
+    def expense_total
+      Money.new 0
+    end
+
     def daily_totals(transactions, period: Period.last_30_days, currency: Current.family.currency)
       # Sum spending and income for each day in the period with the given currency
       select(
