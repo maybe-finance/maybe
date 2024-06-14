@@ -143,7 +143,7 @@ credit_card_three:
 
 credit_card_four_payment:
   name: Received CC Payment from Checking Account
-  date: <%= 29.days.ago.to_date %>
+  date: <%= 30.days.ago.to_date %>
   amount: -100
   account: credit_card
   currency: USD

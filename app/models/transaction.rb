@@ -69,7 +69,7 @@ class Transaction < ApplicationRecord
         "COALESCE(SUM(converted_amount) FILTER (WHERE converted_amount > 0), 0) AS spending",
         "COALESCE(SUM(-converted_amount) FILTER (WHERE converted_amount < 0), 0) AS income"
       )
-        .from(transactions.with_converted_amount(currency), :t)
+        .from(transactions.with_converted_amount(currency).where(marked_as_transfer: false), :t)
         .joins(sanitize_sql([ "RIGHT JOIN generate_series(?, ?, interval '1 day') AS gs(date) ON t.date = gs.date", period.date_range.first, period.date_range.last ]))
         .group("gs.date")
     end

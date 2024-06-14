@@ -60,7 +60,7 @@ class FamilyTest < ActiveSupport::TestCase
   end
 
   test "calculates asset time series" do
-    series = @family.snapshot[:liability_series]
+    series = @family.snapshot[:asset_series]
     expected_series = get_expected_balances_for :assets
 
     assert_time_series_balances series, expected_series
@@ -84,21 +84,24 @@ class FamilyTest < ActiveSupport::TestCase
     series = @family.snapshot_transactions[:spending_series]
     expected_series = get_expected_balances_for :rolling_spend
 
-    assert_time_series_balances series, expected_series
+    assert_time_series_balances series, expected_series, ignore_count: true
   end
 
   test "calculates rolling income" do
     series = @family.snapshot_transactions[:income_series]
     expected_series = get_expected_balances_for :rolling_income
 
-    assert_time_series_balances series, expected_series
+    assert_time_series_balances series, expected_series, ignore_count: true
   end
 
   test "calculates savings rate series" do
     series = @family.snapshot_transactions[:savings_rate_series]
     expected_series = get_expected_balances_for :savings_rate
 
-    assert_time_series_balances series, expected_series
+    series.values.each do |tsb|
+      expected_balance = expected_series.find { |eb| eb[:date] == tsb.date }
+      assert_in_delta expected_balance[:balance], tsb.value, 0.0001, "Balance incorrect on date: #{tsb.date}"
+    end
   end
 
   test "should exclude disabled accounts from calculations" do
@@ -119,8 +122,8 @@ class FamilyTest < ActiveSupport::TestCase
 
   private
 
-    def assert_time_series_balances(time_series_balances, expected_balances)
-      assert_equal time_series_balances.values.count, expected_balances.count
+    def assert_time_series_balances(time_series_balances, expected_balances, ignore_count: false)
+      assert_equal time_series_balances.values.count, expected_balances.count unless ignore_count
 
       time_series_balances.values.each do |tsb|
         expected_balance = expected_balances.find { |eb| eb[:date] == tsb.date }

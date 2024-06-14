@@ -14,6 +14,11 @@ class Account::Balance::CalculatorTest < ActiveSupport::TestCase
     assert_account_balances calculated_balances_for(:iou), expected_balances
   end
 
+  test "syncs credit balances" do
+    expected_balances = get_expected_balances_for :credit_card
+    assert_account_balances calculated_balances_for(:credit_card), expected_balances
+  end
+
   test "syncs checking account balances" do
     expected_balances = get_expected_balances_for(:checking)
     assert_account_balances calculated_balances_for(:checking), expected_balances
@@ -63,7 +68,6 @@ class Account::Balance::CalculatorTest < ActiveSupport::TestCase
   end
 
   private
-
     def assert_account_balances(actual_balances, expected_balances)
       assert_equal expected_balances.count, actual_balances.count
 
