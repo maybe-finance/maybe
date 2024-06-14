@@ -2,7 +2,7 @@
   <%= render "settings/nav" %>
 <% end %>
 <div class="space-y-4">
-  <h1 class="text-gray-900 text-xl font-medium mb-4">What's New</h1>
+  <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".title") %></h1>
   <div class="bg-white shadow-xs border border-alpha-black-25 rounded-xl p-4">
     <% @releases_notes.each do |release_notes| %>
       <div class="flex justify-between gap-4 mb-12 last:mb-0">
