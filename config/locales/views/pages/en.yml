@@ -1,6 +1,8 @@
 ---
 en:
   pages:
+    changelog:
+      title: What's new
     dashboard:
       allocation_chart:
         assets: Assets
