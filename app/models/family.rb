@@ -2,6 +2,7 @@ class Family < ApplicationRecord
   has_many :users, dependent: :destroy
   has_many :tags, dependent: :destroy
   has_many :accounts, dependent: :destroy
+  has_many :institutions, dependent: :destroy
   has_many :transactions, through: :accounts
   has_many :imports, through: :accounts
   has_many :transaction_categories, dependent: :destroy, class_name: "Transaction::Category"

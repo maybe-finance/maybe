@@ -9,15 +9,17 @@
       <%= button_to sync_account_path(@account), method: :post, class: "flex items-center gap-2", title: "Sync Account" do %>
         <%= lucide_icon "refresh-cw", class: "w-4 h-4 text-gray-900 hover:text-gray-500" %>
       <% end %>
-      <div class="relative cursor-not-allowed">
-        <div class="flex items-center gap-2 px-3 py-2">
-          <span class="text-gray-900"><%= @account.balance_money.currency.iso_code %> <%= @account.balance_money.currency.symbol %></span>
-          <%= lucide_icon("chevron-down", class: "w-5 h-5 text-gray-500") %>
-        </div>
-      </div>
 
       <%= contextual_menu do %>
         <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+          <%= link_to edit_account_path(@account),
+                      data: { turbo_frame: :modal },
+                      class: "block w-full py-2 px-3 space-x-2 text-gray-900 hover:bg-gray-50 flex items-center rounded-lg" do %>
+            <%= lucide_icon "pencil-line", class: "w-5 h-5 text-gray-500" %>
+
+            <span><%= t(".edit") %></span>
+          <% end %>
+
           <%= link_to new_import_path(account_id: @account.id),
                       class: "block w-full py-2 px-3 space-x-2 text-gray-900 hover:bg-gray-50 flex items-center rounded-lg" do %>
             <%= lucide_icon "download", class: "w-5 h-5 text-gray-500" %>

@@ -31,6 +31,7 @@ class PagesController < ApplicationController
   end
 
   def changelog
+    @releases_notes = Provider::Github.new.fetch_latest_releases_notes
   end
 
   def feedback

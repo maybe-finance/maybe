@@ -12,17 +12,40 @@ en:
       success: New account created successfully
     destroy:
       success: Account deleted successfully
+    edit:
+      edit: Edit %{account}
+      institution: Financial institution
+      ungrouped: "(none)"
+    empty:
+      empty_message: Add an account either via connection, importing or entering manually.
+      new_account: New account
+      no_accounts: No accounts yet
     header:
       accounts: Accounts
       manage: Manage accounts
       new: New account
     index:
+      accounts: Accounts
+      add_institution: Add institution
       new_account: New account
+    institution_accounts:
+      add_account_to_institution: Add new account
+      confirm_accept: Delete institution
+      confirm_body: Don't worry, none of the accounts within this institution will
+        be affected by this deletion. Accounts will be ungrouped and all historical
+        data will remain intact.
+      confirm_title: Delete financial institution?
+      delete: Delete institution
+      edit: Edit institution
+      new_account: Add account
+    institutionless_accounts:
+      other_accounts: Other accounts
     new:
       balance: Current balance
       currency:
         all_others: All Others
         popular: Popular
+      institution: Financial institution
       name:
         label: Account name
         placeholder: Example account name
@@ -31,6 +54,7 @@ en:
       start_balance: Start balance (optional)
       start_date: Start date (optional)
       title: Add an account
+      ungrouped: "(none)"
     show:
       confirm_accept: Delete "%{name}"
       confirm_body_html: "<p>By deleting this account, you will erase its value history,
@@ -39,6 +63,7 @@ en:
         /> <p>After deletion, there is no way you'll be able to restore the account
         information because you'll need to add it as a new account.</p>"
       confirm_title: Delete account?
+      edit: Edit
       import: Import transactions
       sync_message_missing_rates: Since exchange rates haven't been synced, balance
         graphs may not reflect accurate values.
@@ -46,7 +71,6 @@ en:
     summary:
       new: New account
     sync:
-      cannot_sync: Account cannot be synced at the moment
       success: Account sync started
     update:
       success: Account updated

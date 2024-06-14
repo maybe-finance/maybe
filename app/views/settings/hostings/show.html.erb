@@ -5,47 +5,52 @@
   <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
   <%= settings_section title: t(".general_settings_title") do %>
     <%= form_with model: Setting.new, url: settings_hosting_path, method: :patch, local: true, html: { class: "space-y-6", data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } } do |form| %>
-      <div>
-        <h2 class="font-medium mb-1"><%= t(".upgrades.title") %></h2>
-        <p class="text-gray-500 text-sm mb-4"><%= t(".upgrades.description") %></p>
-        <div class="space-y-4">
-          <div class="flex items-center gap-4">
-            <%= form.radio_button :upgrades_mode, "manual", checked: Setting.upgrades_mode == "manual", data: { "auto-submit-form-target" => "auto", "autosubmit-trigger-event": "input" } %>
-            <%= form.label :upgrades_mode_manual, t(".upgrades.manual.title"), class: "text-gray-900 text-sm" do %>
-              <span class="font-medium"><%= t(".upgrades.manual.title") %></span>
-              <br>
-              <span class="text-gray-500">
+
+      <% if ENV["HOSTING_PLATFORM"] == "render" %>
+        <div>
+          <h2 class="font-medium mb-1"><%= t(".upgrades.title") %></h2>
+          <p class="text-gray-500 text-sm mb-4"><%= t(".upgrades.description") %></p>
+          <div class="space-y-4">
+            <div class="flex items-center gap-4">
+              <%= form.radio_button :upgrades_mode, "manual", checked: Setting.upgrades_mode == "manual", data: { "auto-submit-form-target" => "auto", "autosubmit-trigger-event": "input" } %>
+              <%= form.label :upgrades_mode_manual, t(".upgrades.manual.title"), class: "text-gray-900 text-sm" do %>
+                <span class="font-medium"><%= t(".upgrades.manual.title") %></span>
+                <br>
+                <span class="text-gray-500">
                 <%= t(".upgrades.manual.description") %>
               </span>
-            <% end %>
-          </div>
-          <div class="flex items-center gap-4">
-            <%= form.radio_button :upgrades_mode, "release", checked: Setting.upgrades_mode == "auto" && Setting.upgrades_target == "release", data: { "auto-submit-form-target" => "auto", "autosubmit-trigger-event": "input" } %>
-            <%= form.label :upgrades_mode_release, t(".upgrades.latest_release.title"), class: "text-gray-900 text-sm" do %>
-              <span class="font-medium"><%= t(".upgrades.latest_release.title") %></span>
-              <br>
-              <span class="text-gray-500">
+              <% end %>
+            </div>
+            <div class="flex items-center gap-4">
+              <%= form.radio_button :upgrades_mode, "release", checked: Setting.upgrades_mode == "auto" && Setting.upgrades_target == "release", data: { "auto-submit-form-target" => "auto", "autosubmit-trigger-event": "input" } %>
+              <%= form.label :upgrades_mode_release, t(".upgrades.latest_release.title"), class: "text-gray-900 text-sm" do %>
+                <span class="font-medium"><%= t(".upgrades.latest_release.title") %></span>
+                <br>
+                <span class="text-gray-500">
                 <%= t(".upgrades.latest_release.description") %>
               </span>
-            <% end %>
-          </div>
-          <div class="flex items-center gap-4">
-            <%= form.radio_button :upgrades_mode, "commit", checked: Setting.upgrades_mode == "auto" && Setting.upgrades_target == "commit", data: { "auto-submit-form-target" => "auto", "autosubmit-trigger-event": "input" } %>
-            <%= form.label :upgrades_mode_commit, t(".upgrades.latest_commit.title"), class: "text-gray-900 text-sm" do %>
-              <span class="font-medium"><%= t(".upgrades.latest_commit.title") %></span>
-              <br>
-              <span class="text-gray-500">
+              <% end %>
+            </div>
+            <div class="flex items-center gap-4">
+              <%= form.radio_button :upgrades_mode, "commit", checked: Setting.upgrades_mode == "auto" && Setting.upgrades_target == "commit", data: { "auto-submit-form-target" => "auto", "autosubmit-trigger-event": "input" } %>
+              <%= form.label :upgrades_mode_commit, t(".upgrades.latest_commit.title"), class: "text-gray-900 text-sm" do %>
+                <span class="font-medium"><%= t(".upgrades.latest_commit.title") %></span>
+                <br>
+                <span class="text-gray-500">
                 <%= t(".upgrades.latest_commit.description") %>
               </span>
-            <% end %>
+              <% end %>
+            </div>
           </div>
         </div>
-      </div>
-      <div>
-        <h2 class="font-medium mb-1"><%= t(".provider_settings.title") %></h2>
-        <p class="text-gray-500 text-sm mb-4"><%= t(".render_deploy_hook_description") %></p>
-        <%= form.url_field :render_deploy_hook, label: t(".render_deploy_hook_label"), placeholder: t(".render_deploy_hook_placeholder"), value: Setting.render_deploy_hook, data: { "auto-submit-form-target" => "auto" } %>
-      </div>
+
+        <div>
+          <h2 class="font-medium mb-1"><%= t(".provider_settings.title") %></h2>
+          <p class="text-gray-500 text-sm mb-4"><%= t(".render_deploy_hook_description") %></p>
+          <%= form.url_field :render_deploy_hook, label: t(".render_deploy_hook_label"), placeholder: t(".render_deploy_hook_placeholder"), value: Setting.render_deploy_hook, data: { "auto-submit-form-target" => "auto" } %>
+        </div>
+      <% end %>
+
       <div>
         <h2 class="font-medium mb-1"><%= t(".smtp_settings.title") %></h2>
         <p class="text-gray-500 text-sm mb-4"><%= t(".smtp_settings.description") %></p>
@@ -69,13 +74,14 @@
               </div>
             </div>
             <div>
-              <%= link_to t(".smtp_settings.send_test_email_button"), send_test_email_settings_hosting_path, data: { turbo_method: :post }, class:"bg-gray-50 text-gray-900 text-sm font-medium rounded-lg px-3 py-2" %>
+              <%= link_to t(".smtp_settings.send_test_email_button"), send_test_email_settings_hosting_path, data: { turbo_method: :post }, class: "bg-gray-50 text-gray-900 text-sm font-medium rounded-lg px-3 py-2" %>
             </div>
           </div>
         </div>
       </div>
     <% end %>
   <% end %>
+
   <div class="flex justify-between gap-4">
     <%= previous_setting("Billing", settings_billing_path) %>
     <%= next_setting("Accounts", accounts_path) %>
