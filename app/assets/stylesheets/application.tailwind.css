@@ -10,28 +10,6 @@
 }
 
 @layer components {
-  .prose {
-    table {
-      @apply divide-y divide-gray-300;
-    }
-
-    tr {
-      @apply divide-x divide-gray-100;
-    }
-
-    th {
-      @apply whitespace-nowrap px-2 text-left text-sm font-semibold text-gray-900 py-3.5;
-    }
-
-    tbody {
-      @apply divide-y divide-gray-200;
-    }
-
-    td {
-      @apply whitespace-nowrap px-2 py-2 text-sm text-gray-500;
-    }
-  }
-
   .form-field {
     @apply relative rounded-md border bg-white border-alpha-black-100 shadow-xs;
     @apply focus-within:border-gray-900 focus-within:shadow-none focus-within:ring-4 focus-within:ring-gray-100;
@@ -82,41 +60,18 @@
     @apply peer-checked:bg-green-600 peer-checked:after:translate-x-4;
   }
 
-  .releases-notes-row {
-    @apply mb-12;
-  }
-  .releases-notes-details {
-    @apply text-gray-500 text-sm;
-  }
-  .releases-notes-details h2 {
-    @apply text-lg mt-3.5 mb-2.5;
-  }
-  .releases-notes-details ul {
-    @apply list-disc my-2.5 pl-4;
-  }
-  .releases-notes-details p {
-    @apply my-2.5;
-  }
-  .releases-notes-details a {
-    @apply underline;
-  }
-  .releases-notes-details .user-mention {
-    @apply font-bold no-underline;
-  }
-  .releases-notes-details details {
-    @apply my-3.5 rounded-xl;
-  }
-  .releases-notes-details details video {
-    @apply rounded-b-xl;
-  }
-  .releases-notes-details summary {
-    @apply flex items-center gap-x-1;
-  }
-  .releases-notes-details .dropdown-caret {
-    @apply content-none border-4 border-b-0 border-transparent border-t-gray-500 size-0 inline-block;
-  }
-  .releases-notes-details .octicon {
-    @apply inline-block overflow-visible align-text-bottom fill-current;
+  .prose--github-release-notes {
+    .octicon {
+      @apply inline-block overflow-visible align-text-bottom fill-current;
+    }
+
+    .dropdown-caret {
+      @apply content-none border-4 border-b-0 border-transparent border-t-gray-500 size-0 inline-block;
+    }
+
+    .user-mention {
+      @apply font-bold;
+    }
   }
 }
 

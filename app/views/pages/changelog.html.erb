@@ -5,7 +5,7 @@
   <h1 class="text-gray-900 text-xl font-medium mb-4">What's New</h1>
   <div class="bg-white shadow-xs border border-alpha-black-25 rounded-xl p-4">
     <% @releases_notes.each do |release_notes| %>
-      <div class="flex justify-between gap-4 releases-notes-row">
+      <div class="flex justify-between gap-4 mb-12 last:mb-0">
         <div class="w-1/3">
           <div class="px-3 flex items-center gap-3">
             <div class="text-white shrink-0 w-9 h-9">
@@ -17,8 +17,8 @@
           </div>
         </div>
         </div>
-        <div class="w-2/3 releases-notes-details">
-          <h1 class="mb-5 text-xl text-gray-900"><%= release_notes[:name] %></h1>
+        <div class="w-2/3 text-gray-500 text-sm prose prose--github-release-notes">
+          <h2 class="mb-5 text-xl text-gray-900"><%= release_notes[:name] %></h2>
           <%= release_notes[:body].html_safe %>
         </div>
       </div>
