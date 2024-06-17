@@ -7,11 +7,6 @@ assignees: ''
 
 ---
 
-**Where did this bug occur?**
-
-- [ ] Local development
-- [ ] Self hosted app (i.e. Docker)
-
 **Describe the bug**
 A clear and concise description of what the bug is.
 
