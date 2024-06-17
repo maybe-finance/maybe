@@ -88,3 +88,41 @@ periods of inactivity.
 
 For the _fastest_ Maybe experience, you should upgrade your web service (a "
 starter" instance is $7/month)
+
+## Zeabur
+
+Welcome to the one-click deploy guide for Maybe on [Zeabur](https://zeabur.com/)!
+
+Zeabur is a hosting platform for full stack applications and databases, which makes it easy to get started with Maybe:
+
+- Getting started is FREE
+- Up and running in <5 minutes
+- Upgrade and backup at any time
+
+### Estimated Costs
+
+- FREE to _get up and running_
+- $5 per month for Developer plan(Maybe instance is included)
+
+_**IMPORTANT:** if you plan to host Maybe on Zeabur long-term, you MUST upgrade
+to a paid plan._
+
+### Instructions
+
+#### Step 1: Deploy through Zeabur template
+
+1. Click the button below to deploy Maybe on Zeabur:
+
+[![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/SBZTJ7)
+
+2. You will be navigated to Zeabur template page, click on the `Deploy` button and select your favorite region to deploy Maybe.
+
+#### Step 2: Bind a domain for Maybe
+
+1. After the deployment is completed, open the `Networking` tab to bind a domain for Maybe service.
+
+#### Step 3: Upgrade to Developer Plan
+
+By default, you are in the Serverless Plan on Zeabur, to keep your Maybe instance running long-term, you MUST upgrade to the Developer Plan or Team Plan.
+
+You can upgrade your plan directly in the Zeabur dashboard.
