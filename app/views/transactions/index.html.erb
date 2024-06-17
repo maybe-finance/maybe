@@ -9,7 +9,6 @@
       <%= render partial: "transactions/searches/search", locals: { transactions: @transactions } %>
     </div>
 
-
     <% if @transactions.present? %>
       <div hidden id="transaction-selection-bar" data-bulk-select-target="selectionBar">
         <%= render "selection_bar" %>
