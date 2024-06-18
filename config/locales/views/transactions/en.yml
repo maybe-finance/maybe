@@ -144,8 +144,8 @@ en:
       note_placeholder: Enter a note
       overview: Overview
       settings: Settings
+      tags_label: Select one or more tags
     unmark_transfers:
       success: Transfer removed
-      tags_label: Select one or more tags
     update:
       success: Transaction updated successfully
