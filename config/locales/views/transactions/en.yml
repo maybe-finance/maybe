@@ -6,18 +6,18 @@ en:
     bulk_edit:
       additional: Additional
       cancel: Cancel
-      category: Category
-      date: Date
+      category_label: Category
+      category_placeholder: Select a category
+      date_label: Date
       exclude_subtitle: This excludes the transaction from any in-app features or
         analytics.
       exclude_title: Exclude transaction
-      merchant: Merchant
-      note: Notes
+      merchant_label: Merchant
+      merchant_placeholder: Select a merchant
+      note_label: Notes
       note_placeholder: Enter a note that will be applied to selected transactions
       overview: Overview
       save: Save
-      select_category: Select a category
-      select_merchant: Select a merchant
       settings: Settings
     bulk_update:
       failure: Could not update transactions
@@ -117,7 +117,12 @@ en:
       update:
         success: Merchant updated successfully
     show:
+      account_label: Account
+      account_placeholder: Select an account
       additional: Additional
+      category_label: Category
+      category_placeholder: Select a category
+      date_label: Date
       delete: Delete
       delete_subtitle: This permanently deletes the transaction, affects your historical
         balances, and cannot be undone.
@@ -126,8 +131,13 @@ en:
       exclude_subtitle: This excludes the transaction from any in-app features or
         analytics.
       exclude_title: Exclude transaction
+      merchant_label: Merchant
+      merchant_placeholder: Select a merchant
+      name_label: Name
+      note_label: Notes
+      note_placeholder: Enter a note
       overview: Overview
-      select_tags: Select one or more tags
       settings: Settings
+      tags_label: Select one or more tags
     update:
       success: Transaction updated successfully
