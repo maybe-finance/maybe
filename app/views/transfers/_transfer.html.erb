@@ -8,9 +8,9 @@
                       data: {
                         turbo_frame: "_top",
                         turbo_confirm: {
-                          title: "Remove transfer?",
-                          body: "This will NOT delete the underlying transactions.  It will just remove the transfer.",
-                          confirm: "Confirm"
+                          title: t(".remove_title"),
+                          body: t(".remove_body"),
+                          confirm: t(".remove_confirm")
                         }
                       } do %>
           <%= lucide_icon "arrow-left-right", class: "group-hover/transfer:hidden w-5 h-5 text-gray-500" %>
