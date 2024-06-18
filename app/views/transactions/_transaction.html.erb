@@ -1,22 +1,41 @@
-<%= turbo_frame_tag dom_id(transaction), class: "grid grid-cols-12 items-center text-gray-900 py-4 text-sm font-medium px-4" do %>
-  <div class="col-span-4 flex items-center gap-4">
+<%= turbo_frame_tag dom_id(transaction), class: "grid grid-cols-12 items-center text-gray-900 text-sm font-medium p-4" do %>
+  <div class="pr-10 flex items-center gap-4 <%= unconfirmed_transfer?(transaction) ? "col-span-10" : "col-span-4" %>">
     <%= check_box_tag dom_id(transaction, "selection"),
                       class: "maybe-checkbox maybe-checkbox--light",
                       data: { id: transaction.id, "bulk-select-target": "row", action: "bulk-select#toggleRowSelection" } %>
 
-    <div class="max-w-full pr-10">
+    <div class="max-w-full">
       <%= render "transactions/name", transaction: transaction %>
     </div>
+
+    <% if unconfirmed_transfer?(transaction) %>
+      <%= form_with url: unmark_transfers_transactions_path, builder: ActionView::Helpers::FormBuilder, class: "flex items-center", data: {
+        turbo_confirm: {
+          title: "Remove transfer",
+          body: "This will remove the transfer from this transaction",
+          accept: "Confirm",
+        },
+        turbo_frame: "_top"
+      } do |f| %>
+        <%= f.hidden_field "bulk_update[transaction_ids][]", value: transaction.id %>
+        <%= f.button class: "flex items-center justify-center group", title: "Remove transfer" do %>
+          <%= lucide_icon "arrow-left-right", class: "group-hover:hidden text-gray-500 w-4 h-4" %>
+          <%= lucide_icon "unlink", class: "hidden group-hover:inline-block text-gray-900 w-4 h-4" %>
+        <% end %>
+      <% end %>
+    <% end %>
   </div>
 
-  <div class="col-span-3">
-    <%= render "transactions/categories/menu", transaction: transaction %>
-  </div>
+  <% unless unconfirmed_transfer?(transaction) %>
+    <div class="col-span-3">
+      <%= render "transactions/categories/menu", transaction: transaction %>
+    </div>
 
-  <%= link_to transaction.account.name,
-              account_path(transaction.account),
-              data: { turbo_frame: "_top" },
-              class: ["col-span-3 hover:underline"] %>
+    <%= link_to transaction.account.name,
+                account_path(transaction.account),
+                data: { turbo_frame: "_top" },
+                class: ["col-span-3 hover:underline"] %>
+  <% end %>
 
   <div class="col-span-2 ml-auto">
     <%= render "transactions/amount", transaction: transaction %>

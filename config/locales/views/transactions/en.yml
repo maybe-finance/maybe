@@ -89,6 +89,8 @@ en:
       import: Import
     index:
       transaction: transaction
+    mark_transfers:
+      success: Marked as transfer
     merchants:
       create:
         success: New merchant created successfully
@@ -116,18 +118,24 @@ en:
         title: New merchant
       update:
         success: Merchant updated successfully
+    selection_bar:
+      mark_transfers: Mark as transfers?
+      mark_transfers_confirm: Mark as transfers
+      mark_transfers_message: By marking transactions as transfers, they will no longer
+        be included in income or spending calculations.
     show:
       additional: Additional
       delete: Delete
       delete_subtitle: This permanently deletes the transaction, affects your historical
         balances, and cannot be undone.
       delete_title: Delete transaction
-      description: Description
       exclude_subtitle: This excludes the transaction from any in-app features or
         analytics.
       exclude_title: Exclude transaction
       overview: Overview
       select_tags: Select one or more tags
       settings: Settings
+    unmark_transfers:
+      success: Transfer removed
     update:
       success: Transaction updated successfully

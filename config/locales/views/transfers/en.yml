@@ -1,0 +1,21 @@
+---
+en:
+  transfers:
+    create:
+      success: Transfer created
+    destroy:
+      success: Transfer removed
+    form:
+      amount: Amount
+      date: Date
+      description: Description
+      description_placeholder: Transfer from Checking to Savings
+      expense: Expense
+      from: From
+      income: Income
+      select_account: Select account
+      submit: Create transfer
+      to: To
+      transfer: Transfer
+    transfer:
+      transfer_name: Transfer from %{from_account} to %{to_account}

@@ -44,10 +44,12 @@ class TransactionTest < ActiveSupport::TestCase
   end
 
   test "can calculate total spending for a group of transactions" do
-    assert_equal Money.new(0), @family.transactions.expense_total
+    assert_equal Money.new(2135), @family.transactions.expense_total("USD")
+    assert_equal Money.new(1010.85, "EUR"), @family.transactions.expense_total("EUR")
   end
 
   test "can calculate total income for a group of transactions" do
-    assert_equal Money.new(0), @family.transactions.income_total
+    assert_equal -Money.new(2075), @family.transactions.income_total("USD")
+    assert_equal -Money.new(250, "EUR"), @family.transactions.income_total("EUR")
   end
 end

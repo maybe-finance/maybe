@@ -64,7 +64,6 @@ checking_eight_external_payment:
   account: checking
   currency: USD
   marked_as_transfer: true
-  transfer: external_transfer_cc
 
 checking_nine_external_transfer:
   name: Transfer FROM external investing account (owned by user but not known to app)
@@ -73,7 +72,6 @@ checking_nine_external_transfer:
   account: checking
   currency: USD
   marked_as_transfer: true
-  transfer: external_transfer_investing
 
 # Savings account that has transactions and valuation overrides
 savings_one:

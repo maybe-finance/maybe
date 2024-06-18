@@ -3,8 +3,8 @@ require "test_helper"
 class TransferTest < ActiveSupport::TestCase
   setup do
     # Transfers can be posted on different dates
-    @outflow = accounts(:checking).transactions.create! date: 1.day.ago.to_date, name: "Transfer to Savings", amount: 100
-    @inflow = accounts(:savings).transactions.create! date: Date.current, name: "Transfer from Savings", amount: -100
+    @outflow = accounts(:checking).transactions.create! date: 1.day.ago.to_date, name: "Transfer to Savings", amount: 100, marked_as_transfer: true
+    @inflow = accounts(:savings).transactions.create! date: Date.current, name: "Transfer from Savings", amount: -100, marked_as_transfer: true
   end
 
   test "transfer valid if it has inflow and outflow from different accounts for the same amount" do
@@ -13,18 +13,12 @@ class TransferTest < ActiveSupport::TestCase
     assert transfer.valid?
   end
 
-  test "transfer is valid with a single transaction" do
-    transfer = Transfer.create! transactions: [ @outflow ]
+  test "transfer must have 2 transactions" do
+    invalid_transfer_1 = Transfer.new transactions: [ @outflow ]
+    invalid_transfer_2 = Transfer.new transactions: [ @inflow, @outflow, transactions(:savings_four) ]
 
-    assert transfer.valid?
-  end
-
-  test "transfer cannot have more than 2 transactions" do
-    unrelated_transaction = transactions :savings_four
-
-    assert_raise ActiveRecord::RecordInvalid do
-      Transfer.create! transactions: [ @inflow, @outflow, unrelated_transaction ]
-    end
+    assert invalid_transfer_1.invalid?
+    assert invalid_transfer_2.invalid?
   end
 
   test "transfer cannot have 2 transactions from the same account" do
@@ -34,6 +28,14 @@ class TransferTest < ActiveSupport::TestCase
 
     assert_raise ActiveRecord::RecordInvalid do
       Transfer.create! transactions: [ inflow, outflow ]
+    end
+  end
+
+  test "all transfer transactions must be marked as transfers" do
+    @inflow.update! marked_as_transfer: false
+
+    assert_raise ActiveRecord::RecordInvalid do
+      Transfer.create! transactions: [ @inflow, @outflow ]
     end
   end
 
