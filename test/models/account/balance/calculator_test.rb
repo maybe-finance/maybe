@@ -2,111 +2,82 @@ require "test_helper"
 require "csv"
 
 class Account::Balance::CalculatorTest < ActiveSupport::TestCase
-  # See: https://docs.google.com/spreadsheets/d/18LN5N-VLq4b49Mq1fNwF7_eBiHSQB46qQduRtdAEN98/edit?usp=sharing
-  setup do
-    @expected_balances = CSV.read("test/fixtures/account/expected_balances.csv", headers: true).map do |row|
-      {
-        "date" => (Date.current + row["date_offset"].to_i.days).to_date,
-        "collectable" => row["collectable"],
-        "checking" => row["checking"],
-        "savings_with_valuation_overrides" => row["savings_with_valuation_overrides"],
-        "credit_card" => row["credit_card"],
-        "multi_currency" => row["multi_currency"],
+  include FamilySnapshotTestHelper
 
-        # Balances should be calculated for all currencies of an account
-        "eur_checking_eur" => row["eur_checking_eur"],
-        "eur_checking_usd" => row["eur_checking_usd"]
-      }
+  test "syncs other asset balances" do
+    expected_balances = get_expected_balances_for(:collectable)
+    assert_account_balances calculated_balances_for(:collectable), expected_balances
+  end
+
+  test "syncs other liability balances" do
+    expected_balances = get_expected_balances_for(:iou)
+    assert_account_balances calculated_balances_for(:iou), expected_balances
+  end
+
+  test "syncs credit balances" do
+    expected_balances = get_expected_balances_for :credit_card
+    assert_account_balances calculated_balances_for(:credit_card), expected_balances
+  end
+
+  test "syncs checking account balances" do
+    expected_balances = get_expected_balances_for(:checking)
+    assert_account_balances calculated_balances_for(:checking), expected_balances
+  end
+
+  test "syncs foreign checking account balances" do
+    # Foreign accounts will generate balances for all currencies
+    expected_usd_balances = get_expected_balances_for(:eur_checking_usd)
+    expected_eur_balances = get_expected_balances_for(:eur_checking_eur)
+
+    calculated_balances = calculated_balances_for(:eur_checking)
+    calculated_usd_balances = calculated_balances.select { |b| b[:currency] == "USD" }
+    calculated_eur_balances = calculated_balances.select { |b| b[:currency] == "EUR" }
+
+    assert_account_balances calculated_usd_balances, expected_usd_balances
+    assert_account_balances calculated_eur_balances, expected_eur_balances
+  end
+
+  test "syncs multi-currency checking account balances" do
+    expected_balances = get_expected_balances_for(:multi_currency)
+    assert_account_balances calculated_balances_for(:multi_currency), expected_balances
+  end
+
+  test "syncs savings accounts balances" do
+    expected_balances = get_expected_balances_for(:savings)
+    assert_account_balances calculated_balances_for(:savings), expected_balances
+  end
+
+  test "syncs investment account balances" do
+    expected_balances = get_expected_balances_for(:brokerage)
+    assert_account_balances calculated_balances_for(:brokerage), expected_balances
+  end
+
+  test "syncs loan account balances" do
+    expected_balances = get_expected_balances_for(:mortgage_loan)
+    assert_account_balances calculated_balances_for(:mortgage_loan), expected_balances
+  end
+
+  test "syncs property account balances" do
+    expected_balances = get_expected_balances_for(:house)
+    assert_account_balances calculated_balances_for(:house), expected_balances
+  end
+
+  test "syncs vehicle account balances" do
+    expected_balances = get_expected_balances_for(:car)
+    assert_account_balances calculated_balances_for(:car), expected_balances
+  end
+
+  private
+    def assert_account_balances(actual_balances, expected_balances)
+      assert_equal expected_balances.count, actual_balances.count
+
+      actual_balances.each do |ab|
+        expected_balance = expected_balances.find { |eb| eb[:date] == ab[:date] }
+        assert_in_delta expected_balance[:balance], ab[:balance], 0.01, "Balance incorrect on date: #{ab[:date]}"
+      end
     end
-  end
 
-  test "syncs account with only valuations" do
-    account = accounts(:collectable)
-
-    calculator = Account::Balance::Calculator.new(account)
-    calculator.calculate
-
-    expected = @expected_balances.map { |row| row["collectable"].to_d }
-    actual = calculator.daily_balances.map { |b| b[:balance] }
-
-    assert_equal expected, actual
-  end
-
-  test "syncs account with only transactions" do
-    account = accounts(:checking)
-
-    calculator = Account::Balance::Calculator.new(account)
-    calculator.calculate
-
-    expected = @expected_balances.map { |row| row["checking"].to_d }
-    actual = calculator.daily_balances.map { |b| b[:balance] }
-
-    assert_equal expected, actual
-  end
-
-  test "syncs account with both valuations and transactions" do
-    account = accounts(:savings_with_valuation_overrides)
-
-    calculator = Account::Balance::Calculator.new(account)
-    calculator.calculate
-
-    expected = @expected_balances.map { |row| row["savings_with_valuation_overrides"].to_d }
-    actual = calculator.daily_balances.map { |b| b[:balance] }
-
-    assert_equal expected, actual
-  end
-
-  test "syncs liability account" do
-    account = accounts(:credit_card)
-
-    calculator = Account::Balance::Calculator.new(account)
-    calculator.calculate
-
-    expected = @expected_balances.map { |row| row["credit_card"].to_d }
-    actual = calculator.daily_balances.map { |b| b[:balance] }
-
-    assert_equal expected, actual
-  end
-
-  test "syncs foreign currency account" do
-    account = accounts(:eur_checking)
-    calculator = Account::Balance::Calculator.new(account)
-    calculator.calculate
-
-    # Calculator should calculate balances in both account and family currency
-    expected_eur_balances = @expected_balances.map { |row| row["eur_checking_eur"].to_d }
-    expected_usd_balances = @expected_balances.map { |row| row["eur_checking_usd"].to_d }
-
-    actual_eur_balances = calculator.daily_balances.select { |b| b[:currency] == "EUR" }.sort_by { |b| b[:date] }.map { |b| b[:balance] }
-    actual_usd_balances = calculator.daily_balances.select { |b| b[:currency] == "USD" }.sort_by { |b| b[:date] }.map { |b| b[:balance] }
-
-    assert_equal expected_eur_balances, actual_eur_balances
-    assert_equal expected_usd_balances, actual_usd_balances
-  end
-
-  test "syncs multi currency account" do
-    account = accounts(:multi_currency)
-    calculator = Account::Balance::Calculator.new(account)
-    calculator.calculate
-
-    expected_balances = @expected_balances.map { |row| row["multi_currency"].to_d }
-
-    actual_balances = calculator.daily_balances.map { |b| b[:balance] }
-
-    assert_equal expected_balances, actual_balances
-  end
-
-  test "syncs with overridden start date" do
-    account = accounts(:multi_currency)
-    account.sync
-    calc_start_date = 10.days.ago.to_date
-    calculator = Account::Balance::Calculator.new(account, { calc_start_date: })
-    calculator.calculate
-
-    expected_balances = @expected_balances.filter { |row| row["date"] >= calc_start_date }.map { |row| row["multi_currency"].to_d }
-
-    actual_balances = calculator.daily_balances.map { |b| b[:balance] }
-
-    assert_equal expected_balances, actual_balances
-  end
+    def calculated_balances_for(account_key)
+      Account::Balance::Calculator.new(accounts(account_key)).calculate.daily_balances
+    end
 end

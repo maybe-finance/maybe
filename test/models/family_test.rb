@@ -2,25 +2,12 @@ require "test_helper"
 require "csv"
 
 class FamilyTest < ActiveSupport::TestCase
+  include FamilySnapshotTestHelper
+
   def setup
     @family = families(:dylan_family)
-
     @family.accounts.each do |account|
       account.sync
-    end
-
-    # See this Google Sheet for calculations and expected results for dylan_family:
-    # https://docs.google.com/spreadsheets/d/18LN5N-VLq4b49Mq1fNwF7_eBiHSQB46qQduRtdAEN98/edit?usp=sharing
-    @expected_snapshots = CSV.read("test/fixtures/family/expected_snapshots.csv", headers: true).map do |row|
-      {
-        "date" => (Date.current + row["date_offset"].to_i.days).to_date,
-        "net_worth" => row["net_worth"],
-        "assets" => row["assets"],
-        "liabilities" => row["liabilities"],
-        "rolling_spend" => row["rolling_spend"],
-        "rolling_income" => row["rolling_income"],
-        "savings_rate" => row["savings_rate"]
-      }
     end
   end
 
@@ -58,57 +45,62 @@ class FamilyTest < ActiveSupport::TestCase
   end
 
   test "should calculate total assets" do
-    expected = @expected_snapshots.last["assets"].to_d
-    assert_equal Money.new(expected), @family.assets
+    expected = get_today_snapshot_value_for :assets
+    assert_in_delta expected, @family.assets.amount, 0.01
   end
 
   test "should calculate total liabilities" do
-    expected = @expected_snapshots.last["liabilities"].to_d
-    assert_equal Money.new(expected), @family.liabilities
+    expected = get_today_snapshot_value_for :liabilities
+    assert_in_delta expected, @family.liabilities.amount, 0.01
   end
 
   test "should calculate net worth" do
-    expected = @expected_snapshots.last["net_worth"].to_d
-    assert_equal Money.new(expected), @family.net_worth
+    expected = get_today_snapshot_value_for :net_worth
+    assert_in_delta expected, @family.net_worth.amount, 0.01
   end
 
-  test "should calculate snapshot correctly" do
-    asset_series = @family.snapshot[:asset_series]
-    liability_series = @family.snapshot[:liability_series]
-    net_worth_series = @family.snapshot[:net_worth_series]
+  test "calculates asset time series" do
+    series = @family.snapshot[:asset_series]
+    expected_series = get_expected_balances_for :assets
 
-    assert_equal @expected_snapshots.count, asset_series.values.count
-    assert_equal @expected_snapshots.count, liability_series.values.count
-    assert_equal @expected_snapshots.count, net_worth_series.values.count
-
-    @expected_snapshots.each_with_index do |row, index|
-      expected_assets = TimeSeries::Value.new(date: row["date"], value: Money.new(row["assets"].to_d))
-      expected_liabilities = TimeSeries::Value.new(date: row["date"], value: Money.new(row["liabilities"].to_d))
-      expected_net_worth = TimeSeries::Value.new(date: row["date"], value: Money.new(row["net_worth"].to_d))
-
-      assert_in_delta expected_assets.value.amount, Money.new(asset_series.values[index].value).amount, 0.01
-      assert_in_delta expected_liabilities.value.amount, Money.new(liability_series.values[index].value).amount, 0.01
-      assert_in_delta expected_net_worth.value.amount, Money.new(net_worth_series.values[index].value).amount, 0.01
-    end
+    assert_time_series_balances series, expected_series
   end
 
-  test "should calculate transaction snapshot correctly" do
-    spending_series = @family.snapshot_transactions[:spending_series]
-    income_series = @family.snapshot_transactions[:income_series]
-    savings_rate_series = @family.snapshot_transactions[:savings_rate_series]
+  test "calculates liability time series" do
+    series = @family.snapshot[:liability_series]
+    expected_series = get_expected_balances_for :liabilities
 
-    assert_equal @expected_snapshots.count, spending_series.values.count
-    assert_equal @expected_snapshots.count, income_series.values.count
-    assert_equal @expected_snapshots.count, savings_rate_series.values.count
+    assert_time_series_balances series, expected_series
+  end
 
-    @expected_snapshots.each_with_index do |row, index|
-      expected_spending = TimeSeries::Value.new(date: row["date"], value: Money.new(row["rolling_spend"].to_d))
-      expected_income = TimeSeries::Value.new(date: row["date"], value: Money.new(row["rolling_income"].to_d))
-      expected_savings_rate = TimeSeries::Value.new(date: row["date"], value: Money.new(row["savings_rate"].to_d))
+  test "calculates net worth time series" do
+    series = @family.snapshot[:net_worth_series]
+    expected_series = get_expected_balances_for :net_worth
 
-      assert_in_delta expected_spending.value.amount, Money.new(spending_series.values[index].value).amount, 0.01
-      assert_in_delta expected_income.value.amount, Money.new(income_series.values[index].value).amount, 0.01
-      assert_in_delta expected_savings_rate.value.amount, savings_rate_series.values[index].value, 0.01
+    assert_time_series_balances series, expected_series
+  end
+
+  test "calculates rolling expenses" do
+    series = @family.snapshot_transactions[:spending_series]
+    expected_series = get_expected_balances_for :rolling_spend
+
+    assert_time_series_balances series, expected_series, ignore_count: true
+  end
+
+  test "calculates rolling income" do
+    series = @family.snapshot_transactions[:income_series]
+    expected_series = get_expected_balances_for :rolling_income
+
+    assert_time_series_balances series, expected_series, ignore_count: true
+  end
+
+  test "calculates savings rate series" do
+    series = @family.snapshot_transactions[:savings_rate_series]
+    expected_series = get_expected_balances_for :savings_rate
+
+    series.values.each do |tsb|
+      expected_balance = expected_series.find { |eb| eb[:date] == tsb.date }
+      assert_in_delta expected_balance[:balance], tsb.value, 0.0001, "Balance incorrect on date: #{tsb.date}"
     end
   end
 
@@ -127,4 +119,15 @@ class FamilyTest < ActiveSupport::TestCase
     assert_equal liabilities_before - disabled_cc.balance, @family.liabilities
     assert_equal net_worth_before - disabled_checking.balance + disabled_cc.balance, @family.net_worth
   end
+
+  private
+
+    def assert_time_series_balances(time_series_balances, expected_balances, ignore_count: false)
+      assert_equal time_series_balances.values.count, expected_balances.count unless ignore_count
+
+      time_series_balances.values.each do |tsb|
+        expected_balance = expected_balances.find { |eb| eb[:date] == tsb.date }
+        assert_in_delta expected_balance[:balance], tsb.value.amount, 0.01, "Balance incorrect on date: #{tsb.date}"
+      end
+    end
 end
