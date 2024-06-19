@@ -3,7 +3,7 @@ zh:
   settings:
     hostings:
       send_test_email:
-        error: '配置错误：测试邮件无法发送'
+        error: 配置错误：测试邮件无法发送
         missing_smtp_setting_error: 确保所有SMTP设置都已填写
         success: 测试邮件已成功发送
       show:
@@ -74,9 +74,9 @@ zh:
         en: English
         zh: 简体中文
       show:
+        currency_lable: 货币
         general_subtitle: 配置您的偏好设置
         general_title: 通用
-        currency_lable: 货币
         language_lable: 语言
         page_title: 偏好
         theme_dark: 深色

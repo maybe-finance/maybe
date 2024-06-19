@@ -3,9 +3,7 @@ zh:
   accounts:
     account_valuation_list:
       confirm_accept: 删除条目
-      confirm_body_html: "<p>删除此条目将从账户历史中移除它，这将影响账户的不同部分，包括净资产和账户图表。</p>
-        <br />
-        <p>唯一能恢复此条目的方法是通过新条目手动重新输入。</p>"
+      confirm_body_html: "<p>删除此条目将从账户历史中移除它，这将影响账户的不同部分，包括净资产和账户图表。</p> <br /> <p>唯一能恢复此条目的方法是通过新条目手动重新输入。</p>"
       confirm_title: 删除条目？
     create:
       success: 新账户创建成功
@@ -54,9 +52,8 @@ zh:
       ungrouped: "(无)"
     show:
       confirm_accept: 删除“%{name}”
-      confirm_body_html: "<p>删除此账户将删除其价值历史，影响您整体账户的各个方面。这将直接影响您的净资产计算和账户图表。</p>
-        <br />
-        <p>删除后，您将无法恢复账户信息，因为您需要将其作为新账户添加。</p>"
+      confirm_body_html: "<p>删除此账户将删除其价值历史，影响您整体账户的各个方面。这将直接影响您的净资产计算和账户图表。</p> <br
+        /> <p>删除后，您将无法恢复账户信息，因为您需要将其作为新账户添加。</p>"
       confirm_title: 删除账户？
       edit: 编辑
       import: 导入交易

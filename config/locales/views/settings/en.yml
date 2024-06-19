@@ -76,9 +76,9 @@ en:
         en: English
         zh: 简体中文
       show:
+        currency_lable: Currency
         general_subtitle: Configure your preferences
         general_title: General
-        currency_lable: Currency
         language_lable: Language
         page_title: Preferences
         theme_dark: Dark
