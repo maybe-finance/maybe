@@ -77,6 +77,15 @@ Rails.application.configure do
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
 
+  # Load all locales from config/locales/*.rb,yml
+  # config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
+
+  # Set default locale
+  config.i18n.default_locale = :zh
+
+  # Ensure available locales include your desired languages
+  config.i18n.available_locales = [:en, :zh]
+
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true
