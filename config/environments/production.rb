@@ -84,7 +84,7 @@ Rails.application.configure do
   config.i18n.default_locale = :en
 
   # Ensure available locales include your desired languages
-  config.i18n.available_locales = [:en, :zh]
+  config.i18n.available_locales = [ :en, :zh ]
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
