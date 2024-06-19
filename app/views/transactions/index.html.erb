@@ -31,6 +31,15 @@
             <%= render partial: "date_group", locals: { date:, transactions: } %>
           <% end %>
         </div>
+
+        <p class="col-span-3 pl-4">category</p>
+        <p class="col-span-3">account</p>
+        <p class="col-span-2 justify-self-end">amount</p>
+      </div>
+      <div class="space-y-6">
+        <% group_transactions_by_date(@transactions).each do |date, group| %>
+          <%= render partial: "date_group", locals: { date:, group: } %>
+        <% end %>
       </div>
     <% else %>
       <%= render "empty" %>
