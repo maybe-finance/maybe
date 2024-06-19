@@ -66,6 +66,8 @@ export default class extends Controller {
   }
 
   #addHiddenFormInputsForSelectedIds(form, paramName, transactionIds) {
+    this.#resetFormInputs(form, paramName);
+
     transactionIds.forEach(id => {
       const input = document.createElement("input");
       input.type = 'hidden'
@@ -73,6 +75,11 @@ export default class extends Controller {
       input.value = id
       form.appendChild(input)
     })
+  }
+
+  #resetFormInputs(form, paramName) {
+    const existingInputs = form.querySelectorAll(`input[name='${paramName}']`);
+    existingInputs.forEach((input) => input.remove());
   }
 
   #rowsForGroup(group) {
