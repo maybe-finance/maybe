@@ -1,0 +1,70 @@
+---
+zh:
+  accounts:
+    account_valuation_list:
+      confirm_accept: 删除条目
+      confirm_body_html: "<p>删除此条目将从账户历史中移除它，这将影响账户的不同部分，包括净资产和账户图表。</p>
+        <br />
+        <p>唯一能恢复此条目的方法是通过新条目手动重新输入。</p>"
+      confirm_title: 删除条目？
+    create:
+      success: 新账户创建成功
+    destroy:
+      success: 账户删除成功
+    edit:
+      edit: 编辑%{account}
+      institution: 金融机构
+      ungrouped: "(无)"
+    empty:
+      empty_message: 通过连接、导入或手动输入添加一个账户。
+      new_account: 新账户
+      no_accounts: 还没有账户
+    header:
+      accounts: 账户
+      manage: 管理账户
+      new: 新账户
+    index:
+      accounts: 账户
+      add_institution: 添加机构
+      new_account: 新账户
+    institution_accounts:
+      add_account_to_institution: 添加新账户
+      confirm_accept: 删除机构
+      confirm_body: 不用担心，删除此机构不会影响其中的任何账户。账户将被取消分组，所有历史数据将保持不变。
+      confirm_title: 删除金融机构？
+      delete: 删除机构
+      edit: 编辑机构
+      new_account: 添加账户
+    institutionless_accounts:
+      other_accounts: 其他账户
+    new:
+      balance: 当前余额
+      currency:
+        all_others: 其他所有
+        popular: 常用
+      institution: 金融机构
+      name:
+        label: 账户名称
+        placeholder: 示例账户名称
+      optional_start_balance_message: 为此账户添加一个起始余额
+      select_accountable_type: 您想添加什么？
+      start_balance: 起始余额（可选）
+      start_date: 起始日期（可选）
+      title: 添加账户
+      ungrouped: "(无)"
+    show:
+      confirm_accept: 删除“%{name}”
+      confirm_body_html: "<p>删除此账户将删除其价值历史，影响您整体账户的各个方面。这将直接影响您的净资产计算和账户图表。</p>
+        <br />
+        <p>删除后，您将无法恢复账户信息，因为您需要将其作为新账户添加。</p>"
+      confirm_title: 删除账户？
+      edit: 编辑
+      import: 导入交易
+      sync_message_missing_rates: 由于汇率未同步，余额图表可能不反映准确的值。
+      sync_message_unknown_error: 同步期间发生错误。
+    summary:
+      new: 新账户
+    sync:
+      success: 账户同步已启动
+    update:
+      success: 账户更新成功

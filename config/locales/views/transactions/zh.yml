@@ -1,0 +1,137 @@
+---
+zh:
+  transactions:
+    bulk_delete:
+      success: "%{count} 笔交易已删除"
+    bulk_edit:
+      additional: 附加
+      cancel: 取消
+      category_label: 分类
+      category_placeholder: 选择一个分类
+      date_label: 日期
+      exclude_subtitle: 这将排除该交易的所有应用内功能或分析。
+      exclude_title: 排除交易
+      merchant_label: 商家
+      merchant_placeholder: 选择一个商家
+      note_label: 备注
+      note_placeholder: 输入将应用于所选交易的备注
+      overview: 概览
+      save: 保存
+      settings: 设置
+    bulk_update:
+      failure: 无法更新交易
+      success: "%{count} 笔交易已更新"
+    categories:
+      create:
+        success: 新交易分类创建成功
+      deletions:
+        create:
+          success: 交易分类删除成功
+        new:
+          category: 分类
+          delete_and_leave_uncategorized: 删除 "%{category_name}" 并保持未分类
+          delete_and_recategorize: 删除 "%{category_name}" 并分配新分类
+          delete_category: 删除分类？
+          explanation: 删除此分类后，所有属于 "%{category_name}" 分类的交易将变为未分类。您也可以在下方分配一个新分类。
+          replacement_category_prompt: 选择分类
+      dropdowns:
+        row:
+          delete: 删除分类
+          edit: 编辑分类
+        show:
+          add_new: 添加新分类
+          clear: 清除
+          no_categories: 未找到分类
+          search_placeholder: 搜索
+      edit:
+        edit: 编辑分类
+      form:
+        create: 创建分类
+        update: 更新
+      index:
+        categories: 分类
+        new: 新建
+      menu:
+        loading: 加载中...
+      new:
+        new_category: 新分类
+      row:
+        delete: 删除分类
+        edit: 编辑分类
+      update:
+        success: 交易分类更新成功
+    create:
+      success: 新交易创建成功
+    destroy:
+      success: 交易删除成功
+    empty:
+      description: 尝试添加交易、编辑筛选器或优化搜索
+      title: 未找到交易
+    form:
+      account: 账户
+      account_prompt: 选择一个账户
+      amount: 金额
+      category: 分类
+      category_prompt: 选择一个分类
+      date: 日期
+      description: 描述
+      description_placeholder: 描述交易
+      expense: 支出
+      income: 收入
+      submit: 添加交易
+      transfer: 转账
+    header:
+      edit_categories: 编辑分类
+      edit_imports: 编辑导入
+      import: 导入
+    index:
+      transaction: 交易
+    merchants:
+      create:
+        success: 新商家创建成功
+      destroy:
+        success: 商家删除成功
+      edit:
+        title: 编辑商家
+      form:
+        name_placeholder: 商家名称
+        submit_create: 添加商家
+        submit_edit: 更新
+      index:
+        empty: 还没有商家
+        new_long: 新商家
+        new_short: 新建
+        title: 商家
+      list:
+        confirm_accept: 删除商家
+        confirm_body: 确定要删除此商家吗？删除此商家将解除所有关联交易的链接，并可能影响您的报告。
+        confirm_title: 删除商家？
+        delete: 删除商家
+        edit: 编辑商家
+      new:
+        title: 新商家
+      update:
+        success: 商家更新成功
+    show:
+      account_label: 账户
+      account_placeholder: 选择一个账户
+      additional: 附加
+      category_label: 分类
+      category_placeholder: 选择一个分类
+      date_label: 日期
+      delete: 删除
+      delete_subtitle: 这将永久删除交易，影响您的历史余额，且无法撤销。
+      delete_title: 删除交易
+      description: 描述
+      exclude_subtitle: 这将排除该交易的所有应用内功能或分析。
+      exclude_title: 排除交易
+      merchant_label: 商家
+      merchant_placeholder: 选择一个商家
+      name_label: 名称
+      note_label: 备注
+      note_placeholder: 输入备注
+      overview: 概览
+      settings: 设置
+      tags_label: 选择一个或多个标签
+    update:
+      success: 交易更新成功

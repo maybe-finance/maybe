@@ -1,0 +1,86 @@
+---
+zh:
+  imports:
+    clean:
+      clean_and_edit: 清理和编辑您的数据
+      clean_description: 在下表中编辑您的交易。点击任意单元格以更改日期、名称、分类或金额。
+      clean_import: 清理导入
+      invalid_csv: 请先加载CSV文件
+    configure:
+      configure_description: 选择与必要数据字段匹配的列，以便CSV中的列可以正确映射到我们的格式。
+      configure_subtitle: 设置您的CSV文件
+      configure_title: 配置导入
+      confirm_accept: 更改映射
+      confirm_body: 更改映射可能会删除您到目前为止对CSV所做的任何编辑。
+      confirm_title: 您确定吗？
+      invalid_csv: 请先加载CSV文件
+      next: 下一步
+      optional: "(可选) 未选择列"
+    confirm:
+      confirm_description: 在下方预览您的交易，并检查是否需要进行任何更改。
+      confirm_subtitle: 确认您的交易
+      confirm_title: 确认导入
+      invalid_data: 您有无效数据，请修复后继续
+    create:
+      import_created: 导入已创建
+    destroy:
+      import_destroyed: 导入已删除
+    edit:
+      description_text: 每次只能为一个账户导入交易。对于其他账户，您需要重新进行此过程。
+      edit_title: 编辑导入
+      header_text: 选择您的交易所属的账户
+    empty:
+      message: 没有可显示的导入
+      new: 新导入
+    form:
+      account: 账户
+      next: 下一步
+      select_account: 选择账户
+    import:
+      complete: 完成
+      completed_on: 完成于%{datetime}
+      delete: 删除
+      edit: 编辑
+      failed: 失败
+      in_progress: 进行中
+      label: '导入至: %{account}'
+      started_on: 开始于%{datetime}
+      uploading: 正在处理行
+    index:
+      imports: 导入
+      new: 新导入
+      title: 导入
+    load:
+      confirm_accept: 是的，重新开始！
+      confirm_body: 这将重置您的导入。您对CSV所做的任何更改将被删除。
+      confirm_title: 您确定吗？
+      description: 创建一个电子表格或上传您金融机构导出的CSV。
+      instructions: 为了获得最佳的导入体验，您的CSV应包含以下列和格式。
+      load_title: 加载导入
+      next: 下一步
+      requirement1: 日期必须为ISO 8601格式（YYYY-MM-DD）
+      requirement2: 负交易是“流出”（支出），正交易是“流入”（收入）
+      requirement3: 可以有0个或多个用|分隔的标签
+      subtitle: 导入您的交易
+    load_csv:
+      import_loaded: 已加载CSV导入
+    new:
+      description_text: 每次只能为一个账户导入交易。对于其他账户，您需要重新进行此过程。
+      header_text: 选择您的交易所属的账户
+    publish:
+      import_published: 导入已在后台启动
+      invalid_data: 您的导入无效
+    type_selector:
+      description: 您可以手动从CSV或其他金融应用（如Mint、Empower（前身为Personal Capital）或Apple Card）导入交易。
+      import_from_apple: 从Apple Card导入
+      import_from_csv: 从CSV新导入
+      import_from_empower: 从Empower导入
+      import_from_mint: 从Mint导入
+      import_transactions: 导入交易
+      resume_latest_import: 继续最新导入
+      soon: 即将推出
+      sources: 来源
+    update:
+      import_updated: 导入已更新
+    update_mappings:
+      column_mappings_saved: 列映射已保存

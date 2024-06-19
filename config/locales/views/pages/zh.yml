@@ -1,0 +1,22 @@
+---
+zh:
+  pages:
+    changelog:
+      title: 新功能
+    dashboard:
+      allocation_chart:
+        assets: 资产
+        debts: 债务
+      categories: 分类
+      greeting: 欢迎回来，%{name}
+      income: 收入
+      investing: 投资（即将推出…）
+      net_worth: 净资产
+      new: 新账户
+      no_transactions: 您最近没有交易
+      recurring: 定期
+      savings_rate: 储蓄率
+      spending: 支出
+      subtitle: 今天的情况如下
+      transactions: 交易
+      view_all: 查看全部

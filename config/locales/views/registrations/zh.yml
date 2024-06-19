@@ -1,0 +1,16 @@
+---
+zh:
+  helpers:
+    label:
+      user:
+        invite_code: 邀请码
+    submit:
+      user:
+        create: 继续
+  registrations:
+    create:
+      failure: 输入无效，请重试。
+      invalid_invite_code: 无效的邀请码，请重试。
+      success: 您已成功注册。
+    new:
+      title: 创建账户

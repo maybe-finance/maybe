@@ -1,0 +1,31 @@
+---
+zh:
+  tags:
+    create:
+      created: 标签已创建
+    deletions:
+      create:
+        deleted: 标签已删除
+      new:
+        delete_and_leave_uncategorized: 删除"%{tag_name}"
+        delete_and_recategorize: 删除"%{tag_name}"并分配新标签
+        delete_tag: 删除标签？
+        explanation: "%{tag_name}将从交易和其他可标记实体中移除。您可以选择在下方分配一个新标签，而不是将它们留作未标记。"
+        replacement_tag_prompt: 选择标签
+        tag: 标签
+    edit:
+      edit: 编辑标签
+    form:
+      create: 创建标签
+      update: 更新
+    index:
+      empty: 还没有标签
+      new: 新标签
+      tags: 标签
+    new:
+      new: 新标签
+    tag:
+      delete: 删除
+      edit: 编辑
+    update:
+      updated: 标签已更新

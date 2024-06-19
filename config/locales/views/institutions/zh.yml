@@ -1,0 +1,15 @@
+---
+zh:
+  institutions:
+    create:
+      success: 金融机构创建成功
+    destroy:
+      success: 金融机构删除成功
+    edit:
+      edit: 编辑%{institution}
+    form:
+      name: 金融机构名称
+    new:
+      new_institution: 新金融机构
+    update:
+      success: 金融机构更新成功
