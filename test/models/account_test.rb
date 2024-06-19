@@ -10,9 +10,9 @@ class AccountTest < ActiveSupport::TestCase
         "date" => (Date.current + row["date_offset"].to_i.days).to_date,
         "assets" => row["assets"],
         "liabilities" => row["liabilities"],
-        "Account::Depository" => row["depositories"],
-        "Account::Credit" => row["credits"],
-        "Account::OtherAsset" => row["other_assets"]
+        "Depository" => row["depositories"],
+        "CreditCard" => row["credits"],
+        "OtherAsset" => row["other_assets"]
       }
     end
   end
@@ -73,15 +73,15 @@ class AccountTest < ActiveSupport::TestCase
     assert_equal @family.assets, assets.sum
     assert_equal @family.liabilities, liabilities.sum
 
-    depositories = assets.children.find { |group| group.name == "Account::Depository" }
-    properties = assets.children.find { |group| group.name == "Account::Property" }
-    vehicles = assets.children.find { |group| group.name == "Account::Vehicle" }
-    investments = assets.children.find { |group| group.name == "Account::Investment" }
-    other_assets = assets.children.find { |group| group.name == "Account::OtherAsset" }
+    depositories = assets.children.find { |group| group.name == "Depository" }
+    properties = assets.children.find { |group| group.name == "Property" }
+    vehicles = assets.children.find { |group| group.name == "Vehicle" }
+    investments = assets.children.find { |group| group.name == "Investment" }
+    other_assets = assets.children.find { |group| group.name == "OtherAsset" }
 
-    credits = liabilities.children.find { |group| group.name == "Account::Credit" }
-    loans = liabilities.children.find { |group| group.name == "Account::Loan" }
-    other_liabilities = liabilities.children.find { |group| group.name == "Account::OtherLiability" }
+    credits = liabilities.children.find { |group| group.name == "CreditCard" }
+    loans = liabilities.children.find { |group| group.name == "Loan" }
+    other_liabilities = liabilities.children.find { |group| group.name == "OtherLiability" }
 
     assert_equal 4, depositories.children.count
     assert_equal 0, properties.children.count

@@ -1,6 +1,6 @@
 require "test_helper"
 
-class Account::CryptoTest < ActiveSupport::TestCase
+class DepositoryTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

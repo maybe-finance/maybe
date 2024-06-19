@@ -64,10 +64,19 @@ Rails.application.routes.draw do
   end
 
   resources :accounts, shallow: true do
-    get :summary, on: :collection
-    get :list, on: :collection
-    post :sync, on: :member
-    resource :logo, only: %i[show], module: :accounts
+    collection do
+      get :summary
+      get :list
+    end
+
+    member do
+      post :sync
+    end
+
+    scope module: :accounts do
+      resource :logo, only: :show
+    end
+
     resources :valuations
   end
 

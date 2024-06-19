@@ -60,22 +60,22 @@ namespace :demo_data do
     puts "Loaded mock exchange rates for last 60 days"
 
     # ========== Accounts ================
-    empty_account = Account.create(name: "Demo Empty Account", family: family, accountable: Account::Depository.new, balance: 500, currency: "USD")
-    multi_currency_checking = Account.create(name: "Demo Multi-Currency Checking", family: family, accountable: Account::Depository.new, balance: 4000, currency: "EUR")
-    checking = Account.create(name: "Demo Checking", family: family, accountable: Account::Depository.new, balance: 5000, currency: "USD")
-    savings = Account.create(name: "Demo Savings", family: family, accountable: Account::Depository.new, balance: 20000, currency: "USD")
-    credit_card = Account.create(name: "Demo Credit Card", family: family, accountable: Account::Credit.new, balance: 1500, currency: "USD")
-    retirement = Account.create(name: "Demo 401k", family: family, accountable: Account::Investment.new, balance: 100000, currency: "USD")
-    euro_savings = Account.create(name: "Demo Euro Savings", family: family, accountable: Account::Depository.new, balance: 10000, currency: "EUR")
-    brokerage = Account.create(name: "Demo Brokerage Account", family: family, accountable: Account::Investment.new, balance: 10000, currency: "USD")
-    crypto = Account.create(name: "Bitcoin Account", family: family, accountable: Account::Crypto.new, balance: 0.1, currency: "BTC")
-    mortgage = Account.create(name: "Demo Mortgage", family: family, accountable: Account::Loan.new, balance: 450000, currency: "USD")
-    main_car = Account.create(name: "Demo Main Car", family: family, accountable: Account::Vehicle.new, balance: 25000, currency: "USD")
-    cash = Account.create(name: "Demo Physical Cash", family: family, accountable: Account::OtherAsset.new, balance: 500, currency: "USD")
-    car_loan = Account.create(name: "Demo Car Loan", family: family, accountable: Account::Loan.new, balance: 10000, currency: "USD")
-    house = Account.create(name: "Demo Primary Residence", family: family, accountable: Account::Property.new, balance: 2500000, currency: "USD")
-    personal_iou = Account.create(name: "Demo Personal IOU", family: family, accountable: Account::OtherLiability.new, balance: 1000, currency: "USD")
-    second_car = Account.create(name: "Demo Secondary Car", family: family, accountable: Account::Vehicle.new, balance: 12000, currency: "USD")
+    empty_account = Account.create(name: "Demo Empty Account", family: family, accountable: Depository.new, balance: 500, currency: "USD")
+    multi_currency_checking = Account.create(name: "Demo Multi-Currency Checking", family: family, accountable: Depository.new, balance: 4000, currency: "EUR")
+    checking = Account.create(name: "Demo Checking", family: family, accountable: Depository.new, balance: 5000, currency: "USD")
+    savings = Account.create(name: "Demo Savings", family: family, accountable: Depository.new, balance: 20000, currency: "USD")
+    credit_card = Account.create(name: "Demo Credit Card", family: family, accountable: CreditCard.new, balance: 1500, currency: "USD")
+    retirement = Account.create(name: "Demo 401k", family: family, accountable: Investment.new, balance: 100000, currency: "USD")
+    euro_savings = Account.create(name: "Demo Euro Savings", family: family, accountable: Depository.new, balance: 10000, currency: "EUR")
+    brokerage = Account.create(name: "Demo Brokerage Account", family: family, accountable: Investment.new, balance: 10000, currency: "USD")
+    crypto = Account.create(name: "Bitcoin Account", family: family, accountable: Crypto.new, balance: 0.1, currency: "BTC")
+    mortgage = Account.create(name: "Demo Mortgage", family: family, accountable: Loan.new, balance: 450000, currency: "USD")
+    main_car = Account.create(name: "Demo Main Car", family: family, accountable: Vehicle.new, balance: 25000, currency: "USD")
+    cash = Account.create(name: "Demo Physical Cash", family: family, accountable: OtherAsset.new, balance: 500, currency: "USD")
+    car_loan = Account.create(name: "Demo Car Loan", family: family, accountable: Loan.new, balance: 10000, currency: "USD")
+    house = Account.create(name: "Demo Primary Residence", family: family, accountable: Property.new, balance: 2500000, currency: "USD")
+    personal_iou = Account.create(name: "Demo Personal IOU", family: family, accountable: OtherLiability.new, balance: 1000, currency: "USD")
+    second_car = Account.create(name: "Demo Secondary Car", family: family, accountable: Vehicle.new, balance: 12000, currency: "USD")
 
 
     # ========== Transactions ================

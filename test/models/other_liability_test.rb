@@ -1,6 +1,6 @@
 require "test_helper"
 
-class Account::LoanTest < ActiveSupport::TestCase
+class OtherLiabilityTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
