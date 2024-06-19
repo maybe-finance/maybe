@@ -145,6 +145,10 @@ en:
       overview: Overview
       settings: Settings
       tags_label: Select one or more tags
+    transaction:
+      remove_transfer: Remove transfer
+      remove_transfer_body: This will remove the transfer from this transaction
+      remove_transfer_confirm: Confirm
     unmark_transfers:
       success: Transfer removed
     update:

@@ -11,9 +11,9 @@
     <% if unconfirmed_transfer?(transaction) %>
       <%= form_with url: unmark_transfers_transactions_path, builder: ActionView::Helpers::FormBuilder, class: "flex items-center", data: {
         turbo_confirm: {
-          title: "Remove transfer",
-          body: "This will remove the transfer from this transaction",
-          accept: "Confirm",
+          title: t(".remove_transfer"),
+          body: t(".remove_transfer_body"),
+          accept: t(".remove_transfer_confirm"),
         },
         turbo_frame: "_top"
       } do |f| %>
