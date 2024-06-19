@@ -1,8 +1,4 @@
-checking:
-  id: "123e4567-e89b-12d3-a456-426614174000"
-savings:
-  id: "123e4567-e89b-12d3-a456-426614174001"
-eur_checking:
-  id: "123e4567-e89b-12d3-a456-426614174004"
-multi_currency:
-  id: "123e4567-e89b-12d3-a456-426614174005"
+depository_checking: { }
+depository_savings: { }
+depository_eur_checking: { }
+depository_multi_currency: { }

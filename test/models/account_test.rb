@@ -5,16 +5,6 @@ class AccountTest < ActiveSupport::TestCase
   def setup
     @account = accounts(:checking)
     @family = families(:dylan_family)
-    @snapshots = CSV.read("test/fixtures/family/expected_snapshots.csv", headers: true).map do |row|
-      {
-        "date" => (Date.current + row["date_offset"].to_i.days).to_date,
-        "assets" => row["assets"],
-        "liabilities" => row["liabilities"],
-        "Depository" => row["depositories"],
-        "CreditCard" => row["credits"],
-        "OtherAsset" => row["other_assets"]
-      }
-    end
   end
 
   test "new account should be valid" do
@@ -47,26 +37,23 @@ class AccountTest < ActiveSupport::TestCase
   test "syncs regular account" do
     @account.sync
     assert_equal "ok", @account.status
-    assert_equal 31, @account.balances.count
+    assert_equal 32, @account.balances.count
   end
 
   test "syncs foreign currency account" do
     account = accounts(:eur_checking)
     account.sync
     assert_equal "ok", account.status
-    assert_equal 31, account.balances.where(currency: "USD").count
-    assert_equal 31, account.balances.where(currency: "EUR").count
+    assert_equal 32, account.balances.where(currency: "USD").count
+    assert_equal 32, account.balances.where(currency: "EUR").count
   end
+
   test "groups accounts by type" do
     @family.accounts.each do |account|
       account.sync
     end
 
     result = @family.accounts.by_group(period: Period.all)
-
-    expected_assets = @snapshots.last["assets"].to_d
-    expected_liabilities = @snapshots.last["liabilities"].to_d
-
     assets = result[:assets]
     liabilities = result[:liabilities]
 
@@ -84,14 +71,14 @@ class AccountTest < ActiveSupport::TestCase
     other_liabilities = liabilities.children.find { |group| group.name == "OtherLiability" }
 
     assert_equal 4, depositories.children.count
-    assert_equal 0, properties.children.count
-    assert_equal 0, vehicles.children.count
-    assert_equal 0, investments.children.count
+    assert_equal 1, properties.children.count
+    assert_equal 1, vehicles.children.count
+    assert_equal 1, investments.children.count
     assert_equal 1, other_assets.children.count
 
     assert_equal 1, credits.children.count
-    assert_equal 0, loans.children.count
-    assert_equal 0, other_liabilities.children.count
+    assert_equal 1, loans.children.count
+    assert_equal 1, other_liabilities.children.count
   end
 
   test "generates series with last balance equal to current account balance" do

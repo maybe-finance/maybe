@@ -46,6 +46,8 @@ Rails.application.routes.draw do
       post "bulk_delete"
       get "bulk_edit"
       post "bulk_update"
+      post "mark_transfers"
+      post "unmark_transfers"
 
       scope module: :transactions, as: :transaction do
         resources :rows, only: %i[ show update ]
@@ -62,6 +64,8 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  resources :transfers, only: %i[ new create destroy ]
 
   resources :accounts, shallow: true do
     collection do
