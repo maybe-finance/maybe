@@ -60,7 +60,7 @@ brokerage:
   name: Robinhood Brokerage Account
   currency: USD
   balance: 10000
-  accountable_type: Account::Investment
+  accountable_type: Investment
   accountable: investment_brokerage
 
 mortgage_loan:
@@ -68,7 +68,7 @@ mortgage_loan:
   name: Mortgage Loan
   currency: USD
   balance: 500000
-  accountable_type: Account::Loan
+  accountable_type: Loan
   accountable: loan_mortgage
 
 house:
@@ -76,7 +76,7 @@ house:
   name: 123 Maybe Court
   currency: USD
   balance: 550000
-  accountable_type: Account::Property
+  accountable_type: Property
   accountable: property_house
 
 car:
@@ -84,5 +84,5 @@ car:
   name: Honda Accord
   currency: USD
   balance: 18000
-  accountable_type: Account::Vehicle
+  accountable_type: Vehicle
   accountable: vehicle_honda_accord
