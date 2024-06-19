@@ -95,7 +95,7 @@
         <%= render partial: "shared/period_select", locals: { button_class: "flex items-center gap-1 w-full cursor-pointer font-bold tracking-wide" } %>
       <% end %>
     </div>
-    <%= link_to new_account_path, class: "block hover:bg-gray-100 p-2 text-sm font-semibold text-gray-900 flex items-center rounded", title: t(".new_account"), data: { turbo_frame: "modal" } do %>
+    <%= link_to new_account_path, id: "sidebar-new-account", class: "block hover:bg-gray-100 p-2 text-sm font-semibold text-gray-900 flex items-center rounded", title: t(".new_account"), data: { turbo_frame: "modal" } do %>
       <%= lucide_icon("plus", class: "w-5 h-5 text-gray-500") %>
     <% end %>
   </div>
