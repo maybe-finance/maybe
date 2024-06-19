@@ -1,0 +1,37 @@
+<%= turbo_frame_tag dom_id(transfer), class: "block" do %>
+  <details class="group flex items-center text-gray-900 p-4 text-sm font-medium">
+    <summary class="flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <%= button_to transfer_path(transfer),
+                      method: :delete,
+                      class: "flex items-center group/transfer",
+                      data: {
+                        turbo_frame: "_top",
+                        turbo_confirm: {
+                          title: t(".remove_title"),
+                          body: t(".remove_body"),
+                          confirm: t(".remove_confirm")
+                        }
+                      } do %>
+          <%= lucide_icon "arrow-left-right", class: "group-hover/transfer:hidden w-5 h-5 text-gray-500" %>
+          <%= lucide_icon "unlink", class: "group-hover/transfer:inline-block hidden w-5 h-5 text-gray-500" %>
+        <% end %>
+
+        <div class="max-w-full pr-10 select-none">
+          <%= tag.p t(".transfer_name", from_account: transfer.outflow_transaction&.account&.name, to_account: transfer.inflow_transaction&.account&.name) %>
+        </div>
+      </div>
+
+      <%= lucide_icon "chevron-down", class: "group-open:transform group-open:rotate-180 text-gray-500 w-5" %>
+    </summary>
+
+    <div class="pt-2 divide-y divide-alpha-black-200">
+      <% transfer.transactions.each do |transaction| %>
+        <div class="py-3 flex items-center justify-between">
+          <%= render "transactions/name", transaction: transaction %>
+          <%= render "transactions/amount", transaction: transaction %>
+        </div>
+      <% end %>
+    </div>
+  </details>
+<% end %>

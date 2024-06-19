@@ -11,21 +11,45 @@ collectable_two:
 
 collectable_three:
   value: 400
-  date: <%= 30.days.ago.to_date %>
+  date: <%= 31.days.ago.to_date %>
   account: collectable
 
-# For checking account that has valuations and transactions
-savings_one:
-  value: 20500
-  date: <%= 3.days.ago.to_date %>
-  account: savings_with_valuation_overrides
+iou_one:
+  value: 200
+  date: <%= 31.days.ago.to_date %>
+  account: iou
 
-savings_two:
+multi_currency_one:
+  value: 10200
+  date: <%= 31.days.ago.to_date %>
+  account: multi_currency
+
+savings_one:
   value: 19500
   date: <%= 12.days.ago.to_date %>
-  account: savings_with_valuation_overrides
+  account: savings
 
-savings_three:
+savings_two:
   value: 21000
   date: <%= 25.days.ago.to_date %>
-  account: savings_with_valuation_overrides
+  account: savings
+
+brokerage_one:
+  value: 10000
+  date: <%= 31.days.ago.to_date %>
+  account: brokerage
+
+mortgage_loan_one:
+  value: 500000
+  date: <%= 31.days.ago.to_date %>
+  account: mortgage_loan
+
+house_one:
+  value: 550000
+  date: <%= 31.days.ago.to_date %>
+  account: house
+
+car_one:
+  value: 18000
+  date: <%= 31.days.ago.to_date %>
+  account: car

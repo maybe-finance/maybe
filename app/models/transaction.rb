@@ -4,6 +4,7 @@ class Transaction < ApplicationRecord
   monetize :amount
 
   belongs_to :account
+  belongs_to :transfer, optional: true
   belongs_to :category, optional: true
   belongs_to :merchant, optional: true
   has_many :taggings, as: :taggable, dependent: :destroy
@@ -42,6 +43,10 @@ class Transaction < ApplicationRecord
     amount > 0
   end
 
+  def transfer?
+    marked_as_transfer
+  end
+
   def sync_account_later
     if destroyed?
       sync_start_date = previous_transaction_date
@@ -53,6 +58,21 @@ class Transaction < ApplicationRecord
   end
 
   class << self
+    def income_total(currency = "USD")
+      inflows.reject(&:transfer?).select { |t| t.currency == currency }.sum(&:amount_money)
+    end
+
+    def expense_total(currency = "USD")
+      outflows.reject(&:transfer?).select { |t| t.currency == currency }.sum(&:amount_money)
+    end
+
+    def mark_transfers!
+      update_all marked_as_transfer: true
+
+      # Attempt to "auto match" and save a transfer if 2 transactions selected
+      Transfer.new(transactions: all).save if all.count == 2
+    end
+
     def daily_totals(transactions, period: Period.last_30_days, currency: Current.family.currency)
       # Sum spending and income for each day in the period with the given currency
       select(
@@ -60,7 +80,7 @@ class Transaction < ApplicationRecord
         "COALESCE(SUM(converted_amount) FILTER (WHERE converted_amount > 0), 0) AS spending",
         "COALESCE(SUM(-converted_amount) FILTER (WHERE converted_amount < 0), 0) AS income"
       )
-        .from(transactions.with_converted_amount(currency), :t)
+        .from(transactions.with_converted_amount(currency).where(marked_as_transfer: false), :t)
         .joins(sanitize_sql([ "RIGHT JOIN generate_series(?, ?, interval '1 day') AS gs(date) ON t.date = gs.date", period.date_range.first, period.date_range.last ]))
         .group("gs.date")
     end
@@ -83,7 +103,7 @@ class Transaction < ApplicationRecord
     end
 
     def search(params)
-      query = all
+      query = all.includes(:transfer)
       query = query.by_name(params[:search]) if params[:search].present?
       query = query.with_categories(params[:categories]) if params[:categories].present?
       query = query.with_accounts(params[:accounts]) if params[:accounts].present?
@@ -96,7 +116,6 @@ class Transaction < ApplicationRecord
   end
 
   private
-
     def previous_transaction_date
       self.account
           .transactions
