@@ -113,7 +113,7 @@ export default class extends Controller {
   #updateGroups() {
     this.groupTargets.forEach(group => {
       const rows = this.rowTargets.filter(row => group.contains(row))
-      const groupSelected = rows.every(row => this.selectedIdsValue.includes(row.dataset.id))
+      const groupSelected = rows.length > 0 && rows.every(row => this.selectedIdsValue.includes(row.dataset.id))
       group.querySelector("input[type='checkbox']").checked = groupSelected
     })
   }

@@ -134,7 +134,7 @@ class TransactionsTest < ApplicationSystemTestCase
     def number_of_transactions_on_page
       page_size = 50
 
-      [ @user.family.transactions.count, page_size ].min
+      [ @user.family.transactions.where(transfer_id: nil).count, page_size ].min
     end
 
     def all_transactions_checkbox

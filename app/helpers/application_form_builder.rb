@@ -25,7 +25,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
   # See `Monetizable` concern, which adds a _money suffix to the attribute name
   # For a monetized field, the setter will always be the attribute name without the _money suffix
   def money_field(method, options = {})
-    money = @object.send(method)
+    money = @object && @object.respond_to?(method) ? @object.send(method) : nil
     raise ArgumentError, "The value of #{method} is not a Money object" unless money.is_a?(Money) || money.nil?
 
     money_amount_method = method.to_s.chomp("_money").to_sym

@@ -7,6 +7,10 @@
   details > summary::-webkit-details-marker {
     @apply hidden;
   }
+
+  details > summary {
+    @apply list-none;
+  }
 }
 
 @layer components {
