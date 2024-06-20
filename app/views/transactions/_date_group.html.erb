@@ -1,26 +1,17 @@
-<%# locals: (date:, group:) %>
+<%# locals: (date:, transactions:) %>
 <div class="bg-gray-25 rounded-xl p-1 w-full" data-bulk-select-target="group">
   <div class="py-2 px-4 flex items-center justify-between font-medium text-xs text-gray-500">
     <div class="flex pl-0.5 items-center gap-4">
       <%= check_box_tag "#{date}_transactions_selection",
-                        class: ["maybe-checkbox maybe-checkbox--light", "hidden": group[:transactions].count == 0],
+                        class: "maybe-checkbox maybe-checkbox--light",
                         id: "selection_transaction_#{date}",
                         data: { action: "bulk-select#toggleGroupSelection" } %>
-
-      <%= tag.span "#{date.strftime('%b %d, %Y')} · #{group[:transactions].size + (group[:transfers].size * 2)}" %>
+      <%= tag.span "#{date.strftime('%b %d, %Y')} · #{transactions.size}" %>
     </div>
 
-    <div>
-      <% transactions_by_currency = group[:transactions].group_by(&:currency) %>
-      <% transactions_by_currency.each_with_index do |(_currency, transactions), idx| %>
-        <%= tag.span format_money(-transactions.sum(&:amount_money)) %>
-        <%= tag.span "|", class: "mx-2" if idx < transactions_by_currency.count - 1 %>
-      <% end %>
-    </div>
-
+    <%= tag.span format_money(-transactions.sum(&:amount_money)) %>
   </div>
   <div class="bg-white shadow-xs rounded-md border border-alpha-black-25 divide-y divide-alpha-black-50">
-    <%= render group[:transactions] %>
-    <%= render group[:transfers] %>
+    <%= render transactions %>
   </div>
 </div>

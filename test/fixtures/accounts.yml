@@ -1,39 +1,36 @@
+# Account with only valuations
 collectable:
   family: dylan_family
   name: Collectable Account
   balance: 550
   accountable_type: Account::OtherAsset
-  accountable: other_asset_collectable
+  accountable_id: "123e4567-e89b-12d3-a456-426614174002"
 
-iou:
-  family: dylan_family
-  name: IOU (personal debt to friend)
-  balance: 200
-  accountable_type: Account::OtherLiability
-  accountable: other_liability_iou
-
+# Account with only transactions
 checking:
   family: dylan_family
   name: Checking Account
   balance: 5000
   accountable_type: Account::Depository
-  accountable: depository_checking
+  accountable_id: "123e4567-e89b-12d3-a456-426614174000"
   institution: chase
 
-savings:
+# Account with both transactions and valuations
+savings_with_valuation_overrides:
   family: dylan_family
   name: Savings account with valuation overrides
-  balance: 19700
+  balance: 20000
   accountable_type: Account::Depository
-  accountable: depository_savings
+  accountable_id: "123e4567-e89b-12d3-a456-426614174001"
   institution: chase
 
+# Liability account
 credit_card:
   family: dylan_family
   name: Credit Card
   balance: 1000
   accountable_type: Account::Credit
-  accountable: credit_one
+  accountable_id: "123e4567-e89b-12d3-a456-426614174003"
   institution: chase
 
 eur_checking:
@@ -42,7 +39,7 @@ eur_checking:
   currency: EUR
   balance: 12000
   accountable_type: Account::Depository
-  accountable: depository_eur_checking
+  accountable_id: "123e4567-e89b-12d3-a456-426614174004"
   institution: revolut
 
 # Multi-currency account (e.g. Wise, Revolut, etc.)
@@ -50,39 +47,7 @@ multi_currency:
   family: dylan_family
   name: Multi Currency Account
   currency: USD # multi-currency accounts still have a "primary" currency
-  balance: 9467
-  accountable_type: Account::Depository
-  accountable: depository_multi_currency
-  institution: revolut
-
-brokerage:
-  family: dylan_family
-  name: Robinhood Brokerage Account
-  currency: USD
   balance: 10000
-  accountable_type: Account::Investment
-  accountable: investment_brokerage
-
-mortgage_loan:
-  family: dylan_family
-  name: Mortgage Loan
-  currency: USD
-  balance: 500000
-  accountable_type: Account::Loan
-  accountable: loan_mortgage
-
-house:
-  family: dylan_family
-  name: 123 Maybe Court
-  currency: USD
-  balance: 550000
-  accountable_type: Account::Property
-  accountable: property_house
-
-car:
-  family: dylan_family
-  name: Honda Accord
-  currency: USD
-  balance: 18000
-  accountable_type: Account::Vehicle
-  accountable: vehicle_honda_accord
+  accountable_type: Account::Depository
+  accountable_id: "123e4567-e89b-12d3-a456-426614174005"
+  institution: revolut

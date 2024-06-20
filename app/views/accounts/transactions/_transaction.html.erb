@@ -4,14 +4,7 @@
   </div>
 
   <div class="col-span-3">
-    <% if transaction.marked_as_transfer %>
-      <div class="flex items-center gap-1 text-gray-500 pl-5">
-        <%= lucide_icon "arrow-right-left", class: "w-4 h-4 text-gray-500" %>
-        <p>Transfer</p>
-      </div>
-    <% else %>
-      <%= render "transactions/categories/badge", category: transaction.category %>
-    <% end %>
+    <%= render "transactions/categories/badge", category: transaction.category %>
   </div>
 
   <%= link_to transaction.account.name,

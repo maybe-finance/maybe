@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: 5d34172ff44ec0c88ac03a979679b31e1ed78745
+  revision: f9c847fac102039d9174106f44b59144da267751
   branch: 7-2-stable
   specs:
     actioncable (7.2.0.beta2)
@@ -109,16 +109,16 @@ GEM
       public_suffix (>= 2.0.2, < 6.0)
     ast (2.4.2)
     aws-eventstream (1.3.0)
-    aws-partitions (1.944.0)
+    aws-partitions (1.941.0)
     aws-sdk-core (3.197.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.8)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-kms (1.84.0)
+    aws-sdk-kms (1.83.0)
       aws-sdk-core (~> 3, >= 3.197.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.152.3)
+    aws-sdk-s3 (1.152.0)
       aws-sdk-core (~> 3, >= 3.197.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.8)
@@ -175,7 +175,7 @@ GEM
       rainbow
       rubocop
       smart_properties
-    erubi (1.13.0)
+    erubi (1.12.0)
     et-orbi (1.2.11)
       tzinfo
     faraday (2.9.1)
@@ -226,7 +226,7 @@ GEM
       activesupport (>= 3.0)
       nokogiri (>= 1.6)
     io-console (0.7.2)
-    irb (1.13.2)
+    irb (1.13.1)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jmespath (1.6.2)
@@ -254,12 +254,12 @@ GEM
     mini_magick (4.12.0)
     mini_mime (1.1.5)
     minitest (5.23.1)
-    mocha (2.4.0)
+    mocha (2.3.0)
       ruby2_keywords (>= 0.0.5)
     msgpack (1.7.2)
     net-http (0.4.1)
       uri
-    net-imap (0.4.13)
+    net-imap (0.4.12)
       date
       net-protocol
     net-pop (0.1.2)
@@ -269,19 +269,20 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.3)
-    nokogiri (1.16.6-aarch64-linux)
+    nokogiri (1.16.5-aarch64-linux)
       racc (~> 1.4)
-    nokogiri (1.16.6-arm-linux)
+    nokogiri (1.16.5-arm-linux)
       racc (~> 1.4)
-    nokogiri (1.16.6-arm64-darwin)
+    nokogiri (1.16.5-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.16.6-x86-linux)
+    nokogiri (1.16.5-x86-linux)
       racc (~> 1.4)
-    nokogiri (1.16.6-x86_64-darwin)
+    nokogiri (1.16.5-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.16.6-x86_64-linux)
+    nokogiri (1.16.5-x86_64-linux)
       racc (~> 1.4)
-    octokit (9.1.0)
+    octokit (8.1.0)
+      base64
       faraday (>= 1, < 3)
       sawyer (~> 0.9)
     pagy (8.4.4)
@@ -298,12 +299,12 @@ GEM
       railties (>= 7.0.0)
     psych (5.1.2)
       stringio
-    public_suffix (5.1.0)
+    public_suffix (5.0.5)
     puma (6.4.2)
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.0)
-    rack (3.1.3)
+    rack (3.0.11)
     rack-session (2.0.0)
       rack (>= 3.0.0)
     rack-test (2.1.0)
@@ -332,7 +333,7 @@ GEM
     rdoc (6.7.0)
       psych (>= 4.0.0)
     regexp_parser (2.9.2)
-    reline (0.5.9)
+    reline (0.5.8)
       io-console (~> 0.5)
     rexml (3.2.8)
       strscan (>= 3.0.9)
@@ -401,7 +402,7 @@ GEM
     stackprof (0.2.26)
     stimulus-rails (1.3.3)
       railties (>= 6.0.0)
-    stringio (3.1.1)
+    stringio (3.1.0)
     strscan (3.1.0)
     tailwindcss-rails (2.6.1)
       railties (>= 7.0.0)
@@ -445,7 +446,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.16)
+    zeitwerk (2.6.15)
 
 PLATFORMS
   aarch64-linux

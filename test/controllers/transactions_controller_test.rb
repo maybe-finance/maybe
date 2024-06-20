@@ -4,7 +4,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
     @transaction = transactions(:checking_one)
-    @recent_transactions = @user.family.transactions.ordered.where(transfer_id: nil).limit(20).to_a
+    @recent_transactions = @user.family.transactions.ordered.limit(20).to_a
   end
 
   test "should get paginated index with most recent transactions first" do
@@ -18,7 +18,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
 
   test "transaction count represents filtered total" do
     get transactions_url
-    assert_dom "#total-transactions", count: 1, text: @user.family.transactions.select { |t| t.currency == "USD" }.count.to_s
+    assert_dom "#total-transactions", count: 1, text: @user.family.transactions.count.to_s
 
     new_transaction = @user.family.accounts.first.transactions.create! \
       name: "Transaction to search for",
@@ -42,7 +42,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "loads last page when page is out of range" do
-    user_oldest_transaction = @user.family.transactions.ordered.reject(&:transfer?).last
+    user_oldest_transaction = @user.family.transactions.ordered.last
     get transactions_url(page: 9999999999)
 
     assert_response :success

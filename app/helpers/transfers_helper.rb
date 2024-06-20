@@ -1,2 +1,0 @@
-module TransfersHelper
-end

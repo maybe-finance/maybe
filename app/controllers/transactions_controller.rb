@@ -9,9 +9,9 @@ class TransactionsController < ApplicationController
     @pagy, @transactions = pagy(result, items: params[:per_page] || "50")
 
     @totals = {
-      count: result.select { |t| t.currency == Current.family.currency }.count,
-      income: result.income_total(Current.family.currency).abs,
-      expense: result.expense_total(Current.family.currency)
+      count: result.count,
+      income: result.inflows.sum(&:amount_money).abs,
+      expense: result.outflows.sum(&:amount_money).abs
     }
   end
 
@@ -54,7 +54,7 @@ class TransactionsController < ApplicationController
 
   def bulk_delete
     destroyed = Current.family.transactions.destroy_by(id: bulk_delete_params[:transaction_ids])
-    redirect_back_or_to transactions_url, notice: t(".success", count: destroyed.count)
+    redirect_to transactions_url, notice: t(".success", count: destroyed.count)
   end
 
   def bulk_edit
@@ -63,29 +63,11 @@ class TransactionsController < ApplicationController
   def bulk_update
     transactions = Current.family.transactions.where(id: bulk_update_params[:transaction_ids])
     if transactions.update_all(bulk_update_params.except(:transaction_ids).to_h.compact_blank!)
-      redirect_back_or_to transactions_url, notice: t(".success", count: transactions.count)
+      redirect_to transactions_url, notice: t(".success", count: transactions.count)
     else
       flash.now[:error] = t(".failure")
       render :index, status: :unprocessable_entity
     end
-  end
-
-  def mark_transfers
-    Current.family
-           .transactions
-           .where(id: bulk_update_params[:transaction_ids])
-           .mark_transfers!
-
-    redirect_back_or_to transactions_url, notice: t(".success")
-  end
-
-  def unmark_transfers
-    Current.family
-           .transactions
-           .where(id: bulk_update_params[:transaction_ids])
-           .update_all marked_as_transfer: false
-
-    redirect_back_or_to transactions_url, notice: t(".success")
   end
 
   private

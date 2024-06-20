@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_06_14_121110) do
+ActiveRecord::Schema[7.2].define(version: 2024_06_12_164944) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -87,7 +87,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_14_121110) do
     t.uuid "accountable_id"
     t.decimal "balance", precision: 19, scale: 4, default: "0.0"
     t.string "currency", default: "USD"
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Account::Loan'::character varying, 'Account::Credit'::character varying, 'Account::OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Account::Loan'::character varying)::text, ('Account::Credit'::character varying)::text, ('Account::OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.boolean "is_active", default: true, null: false
     t.enum "status", default: "ok", null: false, enum_type: "account_status"
     t.jsonb "sync_warnings", default: [], null: false
@@ -310,17 +310,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_14_121110) do
     t.boolean "excluded", default: false
     t.text "notes"
     t.uuid "merchant_id"
-    t.uuid "transfer_id"
-    t.boolean "marked_as_transfer", default: false, null: false
     t.index ["account_id"], name: "index_transactions_on_account_id"
     t.index ["category_id"], name: "index_transactions_on_category_id"
     t.index ["merchant_id"], name: "index_transactions_on_merchant_id"
-    t.index ["transfer_id"], name: "index_transactions_on_transfer_id"
-  end
-
-  create_table "transfers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -365,7 +357,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_14_121110) do
   add_foreign_key "transactions", "accounts", on_delete: :cascade
   add_foreign_key "transactions", "transaction_categories", column: "category_id", on_delete: :nullify
   add_foreign_key "transactions", "transaction_merchants", column: "merchant_id"
-  add_foreign_key "transactions", "transfers"
   add_foreign_key "users", "families"
   add_foreign_key "valuations", "accounts", on_delete: :cascade
 end

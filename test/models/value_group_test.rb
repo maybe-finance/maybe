@@ -3,7 +3,7 @@ require "ostruct"
 class ValueGroupTest < ActiveSupport::TestCase
     setup do
         checking = accounts(:checking)
-        savings = accounts(:savings)
+        savings = accounts(:savings_with_valuation_overrides)
         collectable = accounts(:collectable)
 
         # Level 1

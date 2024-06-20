@@ -27,9 +27,9 @@
                   </summary>
 
                   <div class="pb-6 space-y-2">
-                    <%= form.date_field :date, label: t(".date_label"), max: Date.current %>
-                    <%= form.collection_select :category_id, Current.family.transaction_categories.alphabetically, :id, :name, { prompt: t(".category_placeholder"), label: t(".category_label"), class: "text-gray-400" } %>
-                    <%= form.collection_select :merchant_id, Current.family.transaction_merchants.alphabetically, :id, :name, { prompt: t(".merchant_placeholder"), label: t(".merchant_label"), class: "text-gray-400" } %>
+                    <%= form.date_field :date, label: t(".date"), max: Date.current %>
+                    <%= form.collection_select :category_id, Current.family.transaction_categories, :id, :name, { prompt: t(".select_category"), label: t(".category"), class: "text-gray-400" } %>
+                    <%= form.collection_select :merchant_id, Current.family.transaction_merchants, :id, :name, { prompt: t(".select_merchant"), label: t(".merchant"), class: "text-gray-400" } %>
                   </div>
                 </details>
 
@@ -40,7 +40,7 @@
                   </summary>
 
                   <div>
-                    <%= form.text_area :notes, label: t(".note_label"), placeholder: t(".note_placeholder"), rows: 5 %>
+                    <%= form.text_area :notes, label: t(".note"), placeholder: t(".note_placeholder"), rows: 5 %>
                   </div>
                 </details>
 

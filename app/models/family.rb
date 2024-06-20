@@ -10,16 +10,16 @@ class Family < ApplicationRecord
 
   def snapshot(period = Period.all)
     query = accounts.active.joins(:balances)
-              .where("account_balances.currency = ?", self.currency)
-              .select(
-                "account_balances.currency",
-                "account_balances.date",
-                "SUM(CASE WHEN accounts.classification = 'liability' THEN account_balances.balance ELSE 0 END) AS liabilities",
-                "SUM(CASE WHEN accounts.classification = 'asset' THEN account_balances.balance ELSE 0 END) AS assets",
-                "SUM(CASE WHEN accounts.classification = 'asset' THEN account_balances.balance WHEN accounts.classification = 'liability' THEN -account_balances.balance ELSE 0 END) AS net_worth",
-              )
-              .group("account_balances.date, account_balances.currency")
-              .order("account_balances.date")
+      .where("account_balances.currency = ?", self.currency)
+      .select(
+        "account_balances.currency",
+        "account_balances.date",
+        "SUM(CASE WHEN accounts.classification = 'liability' THEN account_balances.balance ELSE 0 END) AS liabilities",
+        "SUM(CASE WHEN accounts.classification = 'asset' THEN account_balances.balance ELSE 0 END) AS assets",
+        "SUM(CASE WHEN accounts.classification = 'asset' THEN account_balances.balance WHEN accounts.classification = 'liability' THEN -account_balances.balance ELSE 0 END) AS net_worth",
+      )
+      .group("account_balances.date, account_balances.currency")
+      .order("account_balances.date")
 
     query = query.where("account_balances.date >= ?", period.date_range.begin) if period.date_range.begin
     query = query.where("account_balances.date <= ?", period.date_range.end) if period.date_range.end
@@ -35,16 +35,15 @@ class Family < ApplicationRecord
   def snapshot_account_transactions
     period = Period.last_30_days
     results = accounts.active.joins(:transactions)
-                .select(
-                  "accounts.*",
-                  "COALESCE(SUM(amount) FILTER (WHERE amount > 0), 0) AS spending",
-                  "COALESCE(SUM(-amount) FILTER (WHERE amount < 0), 0) AS income"
-                )
-                .where("transactions.date >= ?", period.date_range.begin)
-                .where("transactions.date <= ?", period.date_range.end)
-                .where("transactions.marked_as_transfer = ?", false)
-                .group("id")
-                .to_a
+      .select(
+        "accounts.*",
+        "COALESCE(SUM(amount) FILTER (WHERE amount > 0), 0) AS spending",
+        "COALESCE(SUM(-amount) FILTER (WHERE amount < 0), 0) AS income"
+      )
+      .where("transactions.date >= ?", period.date_range.begin)
+      .where("transactions.date <= ?", period.date_range.end)
+      .group("id")
+      .to_a
 
     results.each do |r|
       r.define_singleton_method(:savings_rate) do
