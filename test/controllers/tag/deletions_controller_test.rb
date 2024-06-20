@@ -1,6 +1,6 @@
 require "test_helper"
 
-class Tags::DeletionsControllerTest < ActionDispatch::IntegrationTest
+class Tag::DeletionsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
     @user_tags = @user.family.tags

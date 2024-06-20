@@ -38,17 +38,23 @@ Rails.application.routes.draw do
   end
 
   resources :tags, except: %i[ show destroy ] do
-    resources :deletions, only: %i[ new create ], module: :tags
+    resources :deletions, only: %i[ new create ], module: :tag
+  end
+
+  namespace :category do
+    resource :dropdown, only: :show
   end
 
   resources :categories do
-    resources :deletions, only: %i[ new create ], module: :categories
-    collection do
-      resource :dropdown, only: :show, module: :categories, as: :category_dropdown
-    end
+    resources :deletions, only: %i[ new create ], module: :category
   end
 
   resources :merchants, only: %i[ index new create edit update destroy ]
+
+  namespace :transaction do
+    resources :rows, only: %i[ show update ]
+    resources :rules, only: %i[ index ]
+  end
 
   resources :transactions do
     collection do
@@ -57,17 +63,14 @@ Rails.application.routes.draw do
       post "bulk_update"
       post "mark_transfers"
       post "unmark_transfers"
-
-      scope module: :transactions, as: :transaction do
-        resources :rows, only: %i[ show update ]
-        resources :rules, only: %i[ index ]
-      end
     end
   end
 
-  resources :transfers, only: %i[ new create destroy ]
+  namespace :account do
+    resources :transfers, only: %i[ new create destroy ]
+  end
 
-  resources :accounts, shallow: true do
+  resources :accounts do
     collection do
       get :summary
       get :list
@@ -77,11 +80,8 @@ Rails.application.routes.draw do
       post :sync
     end
 
-    scope module: :accounts do
-      resource :logo, only: :show
-    end
-
-    resources :valuations
+    resource :logo, only: :show, module: :account
+    resources :valuations, shallow: true
   end
 
   resources :institutions, except: %i[ index show ]

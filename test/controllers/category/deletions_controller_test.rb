@@ -1,6 +1,6 @@
 require "test_helper"
 
-class Categories::DeletionsControllerTest < ActionDispatch::IntegrationTest
+class Category::DeletionsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in users(:family_admin)
     @category = categories(:food_and_drink)

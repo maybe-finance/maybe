@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_06_20_122201) do
+ActiveRecord::Schema[7.2].define(version: 2024_06_20_125026) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -30,6 +30,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_20_122201) do
     t.datetime "updated_at", null: false
     t.index ["account_id", "date", "currency"], name: "index_account_balances_on_account_id_date_currency_unique", unique: true
     t.index ["account_id"], name: "index_account_balances_on_account_id"
+  end
+
+  create_table "account_transfers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "accounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -313,11 +318,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_20_122201) do
     t.index ["transfer_id"], name: "index_transactions_on_transfer_id"
   end
 
-  create_table "transfers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "family_id", null: false
     t.string "first_name"
@@ -362,10 +362,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_20_122201) do
   add_foreign_key "merchants", "families"
   add_foreign_key "taggings", "tags"
   add_foreign_key "tags", "families"
+  add_foreign_key "transactions", "account_transfers", column: "transfer_id"
   add_foreign_key "transactions", "accounts", on_delete: :cascade
   add_foreign_key "transactions", "categories", on_delete: :nullify
   add_foreign_key "transactions", "merchants"
-  add_foreign_key "transactions", "transfers"
   add_foreign_key "users", "families"
   add_foreign_key "valuations", "accounts", on_delete: :cascade
 end

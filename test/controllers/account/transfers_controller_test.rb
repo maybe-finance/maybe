@@ -1,19 +1,19 @@
 require "test_helper"
 
-class TransfersControllerTest < ActionDispatch::IntegrationTest
+class Account::TransfersControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in users(:family_admin)
   end
 
   test "should get new" do
-    get new_transfer_url
+    get new_account_transfer_url
     assert_response :success
   end
 
   test "can create transfers" do
-    assert_difference "Transfer.count", 1 do
-      post transfers_url, params: {
-        transfer: {
+    assert_difference "Account::Transfer.count", 1 do
+      post account_transfers_url, params: {
+        account_transfer: {
           from_account_id: accounts(:checking).id,
           to_account_id: accounts(:savings).id,
           date: Date.current,
@@ -26,8 +26,8 @@ class TransfersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "can destroy transfer" do
-    assert_difference -> { Transfer.count } => -1, -> { Transaction.count } => 0 do
-      delete transfer_url(transfers(:credit_card_payment))
+    assert_difference -> { Account::Transfer.count } => -1, -> { Transaction.count } => 0 do
+      delete account_transfer_url(account_transfers(:credit_card_payment))
     end
   end
 end
