@@ -1,4 +1,4 @@
-class Account::Investment < ApplicationRecord
+class Investment < ApplicationRecord
   include Accountable
 
   SUBTYPES = [

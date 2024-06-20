@@ -2,21 +2,21 @@ collectable:
   family: dylan_family
   name: Collectable Account
   balance: 550
-  accountable_type: Account::OtherAsset
+  accountable_type: OtherAsset
   accountable: other_asset_collectable
 
 iou:
   family: dylan_family
   name: IOU (personal debt to friend)
   balance: 200
-  accountable_type: Account::OtherLiability
+  accountable_type: OtherLiability
   accountable: other_liability_iou
 
 checking:
   family: dylan_family
   name: Checking Account
   balance: 5000
-  accountable_type: Account::Depository
+  accountable_type: Depository
   accountable: depository_checking
   institution: chase
 
@@ -24,7 +24,7 @@ savings:
   family: dylan_family
   name: Savings account with valuation overrides
   balance: 19700
-  accountable_type: Account::Depository
+  accountable_type: Depository
   accountable: depository_savings
   institution: chase
 
@@ -32,7 +32,7 @@ credit_card:
   family: dylan_family
   name: Credit Card
   balance: 1000
-  accountable_type: Account::Credit
+  accountable_type: CreditCard
   accountable: credit_one
   institution: chase
 
@@ -41,7 +41,7 @@ eur_checking:
   name: Euro Checking Account
   currency: EUR
   balance: 12000
-  accountable_type: Account::Depository
+  accountable_type: Depository
   accountable: depository_eur_checking
   institution: revolut
 
@@ -51,7 +51,7 @@ multi_currency:
   name: Multi Currency Account
   currency: USD # multi-currency accounts still have a "primary" currency
   balance: 9467
-  accountable_type: Account::Depository
+  accountable_type: Depository
   accountable: depository_multi_currency
   institution: revolut
 
@@ -60,7 +60,7 @@ brokerage:
   name: Robinhood Brokerage Account
   currency: USD
   balance: 10000
-  accountable_type: Account::Investment
+  accountable_type: Investment
   accountable: investment_brokerage
 
 mortgage_loan:
@@ -68,7 +68,7 @@ mortgage_loan:
   name: Mortgage Loan
   currency: USD
   balance: 500000
-  accountable_type: Account::Loan
+  accountable_type: Loan
   accountable: loan_mortgage
 
 house:
@@ -76,7 +76,7 @@ house:
   name: 123 Maybe Court
   currency: USD
   balance: 550000
-  accountable_type: Account::Property
+  accountable_type: Property
   accountable: property_house
 
 car:
@@ -84,5 +84,5 @@ car:
   name: Honda Accord
   currency: USD
   balance: 18000
-  accountable_type: Account::Vehicle
+  accountable_type: Vehicle
   accountable: vehicle_honda_accord

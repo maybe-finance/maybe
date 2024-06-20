@@ -1,6 +1,6 @@
 require "test_helper"
 
-class Account::OtherAssetTest < ActiveSupport::TestCase
+class PropertyTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
