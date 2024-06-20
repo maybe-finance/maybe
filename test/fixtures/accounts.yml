@@ -22,7 +22,7 @@ checking:
 
 savings:
   family: dylan_family
-  name: Savings account with valuation overrides
+  name: Savings account
   balance: 19700
   accountable_type: Depository
   accountable: depository_savings

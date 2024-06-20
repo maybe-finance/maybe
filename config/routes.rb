@@ -65,12 +65,14 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :transfers, only: %i[ new create destroy ]
-
-  resources :accounts, shallow: true do
+  resources :accounts do
     collection do
       get :summary
       get :list
+
+      scope module: :accounts, as: :account do
+        resources :transfers, only: %i[ new create destroy ]
+      end
     end
 
     member do
@@ -81,7 +83,7 @@ Rails.application.routes.draw do
       resource :logo, only: :show
     end
 
-    resources :valuations
+    resources :valuations, shallow: true
   end
 
   resources :institutions, except: %i[ index show ]

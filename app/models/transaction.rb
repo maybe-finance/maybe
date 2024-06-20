@@ -4,7 +4,7 @@ class Transaction < ApplicationRecord
   monetize :amount
 
   belongs_to :account
-  belongs_to :transfer, optional: true
+  belongs_to :transfer, optional: true, class_name: "Account::Transfer"
   belongs_to :category, optional: true
   belongs_to :merchant, optional: true
   has_many :taggings, as: :taggable, dependent: :destroy
@@ -70,7 +70,7 @@ class Transaction < ApplicationRecord
       update_all marked_as_transfer: true
 
       # Attempt to "auto match" and save a transfer if 2 transactions selected
-      Transfer.new(transactions: all).save if all.count == 2
+      Account::Transfer.new(transactions: all).save if all.count == 2
     end
 
     def daily_totals(transactions, period: Period.last_30_days, currency: Current.family.currency)

@@ -1,4 +1,4 @@
-class Transfer < ApplicationRecord
+class Account::Transfer < ApplicationRecord
   has_many :transactions, dependent: :nullify
 
   validate :transaction_count, :from_different_accounts, :net_zero_flows, :all_transactions_marked

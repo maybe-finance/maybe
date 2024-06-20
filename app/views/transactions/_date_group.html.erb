@@ -1,5 +1,5 @@
 <%# locals: (date:, group:) %>
-<div class="bg-gray-25 rounded-xl p-1 w-full" data-bulk-select-target="group">
+<div id="date-group-<%= date %>" class="bg-gray-25 rounded-xl p-1 w-full" data-bulk-select-target="group">
   <div class="py-2 px-4 flex items-center justify-between font-medium text-xs text-gray-500">
     <div class="flex pl-0.5 items-center gap-4">
       <%= check_box_tag "#{date}_transactions_selection",
@@ -21,6 +21,6 @@
   </div>
   <div class="bg-white shadow-xs rounded-md border border-alpha-black-25 divide-y divide-alpha-black-50">
     <%= render group[:transactions] %>
-    <%= render group[:transfers] %>
+    <%= render partial: "accounts/transfers/transfer", collection: group[:transfers] %>
   </div>
 </div>
