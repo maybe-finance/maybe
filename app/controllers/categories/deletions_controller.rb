@@ -1,4 +1,4 @@
-class Transactions::Categories::DeletionsController < ApplicationController
+class Categories::DeletionsController < ApplicationController
   layout "with_sidebar"
 
   before_action :set_category
@@ -15,12 +15,12 @@ class Transactions::Categories::DeletionsController < ApplicationController
 
   private
     def set_category
-      @category = Current.family.transaction_categories.find(params[:category_id])
+      @category = Current.family.categories.find(params[:category_id])
     end
 
     def set_replacement_category
       if params[:replacement_category_id].present?
-        @replacement_category = Current.family.transaction_categories.find(params[:replacement_category_id])
+        @replacement_category = Current.family.categories.find(params[:replacement_category_id])
       end
     end
 end

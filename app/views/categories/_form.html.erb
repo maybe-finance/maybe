@@ -14,7 +14,7 @@
       <%= form.hidden_field :color, data: { color_select_target: "input" } %>
 
       <ul role="radiogroup" class="flex justify-between items-center py-2">
-        <% Transaction::Category::COLORS.each do |color| %>
+        <% Category::COLORS.each do |color| %>
           <li tabindex="0"
               role="radio"
               data-action="click->color-select#select keydown.enter->color-select#select keydown.space->color-select#select"

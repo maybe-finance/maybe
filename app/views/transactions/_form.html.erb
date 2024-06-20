@@ -14,7 +14,7 @@
     <%= f.text_field :name, label: t(".description"), placeholder: t(".description_placeholder"), required: true %>
     <%= f.collection_select :account_id, Current.family.accounts.alphabetically, :id, :name, { prompt: t(".account_prompt"), label: t(".account") }, required: true %>
     <%= f.money_field :amount_money, label: t(".amount"), required: true %>
-    <%= f.collection_select :category_id, Current.family.transaction_categories.alphabetically, :id, :name, { prompt: t(".category_prompt"), label: t(".category") } %>
+    <%= f.collection_select :category_id, Current.family.categories.alphabetically, :id, :name, { prompt: t(".category_prompt"), label: t(".category") } %>
     <%= f.date_field :date, label: t(".date"), required: true, max: Date.today %>
   </section>
 

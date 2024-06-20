@@ -1,4 +1,4 @@
-class Transaction::Category < ApplicationRecord
+class Category < ApplicationRecord
   has_many :transactions, dependent: :nullify
   belongs_to :family
 
@@ -24,7 +24,7 @@ class Transaction::Category < ApplicationRecord
   ]
 
   def self.create_default_categories(family)
-    if family.transaction_categories.size > 0
+    if family.categories.size > 0
       raise ArgumentError, "Family already has some categories"
     end
 

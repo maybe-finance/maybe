@@ -1,20 +1,20 @@
-class Transactions::CategoriesController < ApplicationController
+class CategoriesController < ApplicationController
   layout "with_sidebar"
 
   before_action :set_category, only: %i[ edit update ]
   before_action :set_transaction, only: :create
 
   def index
-    @categories = Current.family.transaction_categories.alphabetically
+    @categories = Current.family.categories.alphabetically
   end
 
   def new
-    @category = Current.family.transaction_categories.new color: Transaction::Category::COLORS.sample
+    @category = Current.family.categories.new color: Category::COLORS.sample
   end
 
   def create
-    Transaction::Category.transaction do
-      category = Current.family.transaction_categories.create!(category_params)
+    Category.transaction do
+      category = Current.family.categories.create!(category_params)
       @transaction.update!(category_id: category.id) if @transaction
     end
 
@@ -32,7 +32,7 @@ class Transactions::CategoriesController < ApplicationController
 
   private
     def set_category
-      @category = Current.family.transaction_categories.find(params[:id])
+      @category = Current.family.categories.find(params[:id])
     end
 
     def set_transaction
@@ -42,6 +42,6 @@ class Transactions::CategoriesController < ApplicationController
     end
 
     def category_params
-      params.require(:transaction_category).permit(:name, :color)
+      params.require(:category).permit(:name, :color)
     end
 end

@@ -41,6 +41,13 @@ Rails.application.routes.draw do
     resources :deletions, only: %i[ new create ], module: :tags
   end
 
+  resources :categories do
+    resources :deletions, only: %i[ new create ], module: :categories
+    collection do
+      resource :dropdown, only: :show, module: :categories, as: :category_dropdown
+    end
+  end
+
   resources :transactions do
     collection do
       post "bulk_delete"
@@ -51,14 +58,6 @@ Rails.application.routes.draw do
 
       scope module: :transactions, as: :transaction do
         resources :rows, only: %i[ show update ]
-
-        resources :categories do
-          resources :deletions, only: %i[ new create ], module: :categories
-          collection do
-            resource :dropdown, only: :show, module: :categories, as: :category_dropdown
-          end
-        end
-
         resources :rules, only: %i[ index ]
         resources :merchants, only: %i[ index new create edit update destroy ]
       end

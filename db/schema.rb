@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_06_19_125949) do
+ActiveRecord::Schema[7.2].define(version: 2024_06_20_114307) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -48,7 +48,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_19_125949) do
     t.jsonb "sync_errors", default: [], null: false
     t.date "last_sync_date"
     t.uuid "institution_id"
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Loan'::character varying, 'CreditCard'::character varying, 'OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Loan'::character varying)::text, ('CreditCard'::character varying)::text, ('OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id"], name: "index_accounts_on_family_id"
     t.index ["institution_id"], name: "index_accounts_on_institution_id"
@@ -80,6 +80,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_19_125949) do
     t.uuid "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "color", default: "#6172F3", null: false
+    t.string "internal_category"
+    t.uuid "family_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["family_id"], name: "index_categories_on_family_id"
   end
 
   create_table "credit_cards", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -274,16 +284,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_19_125949) do
     t.index ["family_id"], name: "index_tags_on_family_id"
   end
 
-  create_table "transaction_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name", null: false
-    t.string "color", default: "#6172F3", null: false
-    t.string "internal_category"
-    t.uuid "family_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["family_id"], name: "index_transaction_categories_on_family_id"
-  end
-
   create_table "transaction_merchants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "color", default: "#e99537", null: false
@@ -356,14 +356,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_19_125949) do
   add_foreign_key "accounts", "institutions"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "categories", "families"
   add_foreign_key "imports", "accounts"
   add_foreign_key "institutions", "families"
   add_foreign_key "taggings", "tags"
   add_foreign_key "tags", "families"
-  add_foreign_key "transaction_categories", "families"
   add_foreign_key "transaction_merchants", "families"
   add_foreign_key "transactions", "accounts", on_delete: :cascade
-  add_foreign_key "transactions", "transaction_categories", column: "category_id", on_delete: :nullify
+  add_foreign_key "transactions", "categories", on_delete: :nullify
   add_foreign_key "transactions", "transaction_merchants", column: "merchant_id"
   add_foreign_key "transactions", "transfers"
   add_foreign_key "users", "families"

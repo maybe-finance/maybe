@@ -18,7 +18,7 @@ class Transaction < ApplicationRecord
   scope :inflows, -> { where("amount <= 0") }
   scope :outflows, -> { where("amount > 0") }
   scope :by_name, ->(name) { where("transactions.name ILIKE ?", "%#{name}%") }
-  scope :with_categories, ->(categories) { joins(:category).where(transaction_categories: { name: categories }) }
+  scope :with_categories, ->(categories) { joins(:category).where(categories: { name: categories }) }
   scope :with_accounts, ->(accounts) { joins(:account).where(accounts: { name: accounts }) }
   scope :with_account_ids, ->(account_ids) { joins(:account).where(accounts: { id: account_ids }) }
   scope :with_merchants, ->(merchants) { joins(:merchant).where(transaction_merchants: { name: merchants }) }
