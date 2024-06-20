@@ -1,5 +1,31 @@
 ---
 en:
+  account:
+    transfers:
+      create:
+        success: Transfer created
+      destroy:
+        success: Transfer removed
+      form:
+        amount: Amount
+        date: Date
+        description: Description
+        description_placeholder: Transfer from Checking to Savings
+        expense: Expense
+        from: From
+        income: Income
+        select_account: Select account
+        submit: Create transfer
+        to: To
+        transfer: Transfer
+      new:
+        title: New transfer
+      transfer:
+        remove_body: This will NOT delete the underlying transactions.  It will just
+          remove the transfer.
+        remove_confirm: Confirm
+        remove_title: Remove transfer?
+        transfer_name: Transfer from %{from_account} to %{to_account}
   accounts:
     account_valuation_list:
       confirm_accept: Delete entry
@@ -72,30 +98,5 @@ en:
       new: New account
     sync:
       success: Account sync started
-    transfers:
-      create:
-        success: Transfer created
-      destroy:
-        success: Transfer removed
-      form:
-        amount: Amount
-        date: Date
-        description: Description
-        description_placeholder: Transfer from Checking to Savings
-        expense: Expense
-        from: From
-        income: Income
-        select_account: Select account
-        submit: Create transfer
-        to: To
-        transfer: Transfer
-      new:
-        title: New transfer
-      transfer:
-        remove_body: This will NOT delete the underlying transactions.  It will just
-          remove the transfer.
-        remove_confirm: Confirm
-        remove_title: Remove transfer?
-        transfer_name: Transfer from %{from_account} to %{to_account}
     update:
       success: Account updated

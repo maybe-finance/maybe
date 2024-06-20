@@ -21,6 +21,6 @@
   </div>
   <div class="bg-white shadow-xs rounded-md border border-alpha-black-25 divide-y divide-alpha-black-50">
     <%= render group[:transactions] %>
-    <%= render partial: "accounts/transfers/transfer", collection: group[:transfers] %>
+    <%= render group[:transfers] %>
   </div>
 </div>

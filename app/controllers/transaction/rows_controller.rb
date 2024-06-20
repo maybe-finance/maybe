@@ -1,4 +1,4 @@
-class Transactions::RowsController < ApplicationController
+class Transaction::RowsController < ApplicationController
   before_action :set_transaction, only: %i[ show update ]
 
   def show

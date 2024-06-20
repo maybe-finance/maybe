@@ -1,4 +1,4 @@
-class Accounts::LogosController < ApplicationController
+class Account::LogosController < ApplicationController
   def show
     @account = Current.family.accounts.find(params[:account_id])
     render_placeholder

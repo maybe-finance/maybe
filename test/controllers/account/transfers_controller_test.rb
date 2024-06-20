@@ -1,6 +1,6 @@
 require "test_helper"
 
-class Accounts::TransfersControllerTest < ActionDispatch::IntegrationTest
+class Account::TransfersControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in users(:family_admin)
   end
