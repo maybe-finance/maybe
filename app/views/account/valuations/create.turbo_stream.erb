@@ -1,4 +1,4 @@
-<%= turbo_stream.replace Valuation.new, body: turbo_frame_tag(dom_id(Valuation.new)) %>
+<%= turbo_stream.replace Account::Valuation.new, body: turbo_frame_tag(dom_id(Account::Valuation.new)) %>
 <%= turbo_stream.append "notification-tray", partial: "shared/notification", locals: { type: "success", content: { body: "Valuation created" } } %>
 <%= turbo_stream.replace "valuations_list", partial: "accounts/account_valuation_list", locals: { valuation_series: @account.valuations.to_series } %>
 <%= turbo_stream.replace "sync_message", partial: "accounts/sync_message", locals: { is_syncing: true } %>

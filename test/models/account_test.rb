@@ -111,7 +111,7 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test "should destroy dependent valuations" do
-    assert_difference("Valuation.count", -@account.valuations.count) do
+    assert_difference("Account::Valuation.count", -@account.valuations.count) do
       @account.destroy
     end
   end

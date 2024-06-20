@@ -1,6 +1,6 @@
 require "test_helper"
 
-class TransferTest < ActiveSupport::TestCase
+class Account::TransferTest < ActiveSupport::TestCase
   setup do
     # Transfers can be posted on different dates
     @outflow = accounts(:checking).transactions.create! date: 1.day.ago.to_date, name: "Transfer to Savings", amount: 100, marked_as_transfer: true

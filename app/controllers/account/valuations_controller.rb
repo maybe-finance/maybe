@@ -1,4 +1,4 @@
-class ValuationsController < ApplicationController
+class Account::ValuationsController < ApplicationController
   before_action :set_valuation, only: %i[ edit update destroy ]
   def create
     @account = Current.family.accounts.find(params[:account_id])
@@ -61,10 +61,10 @@ class ValuationsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_valuation
-      @valuation = Valuation.find(params[:id])
+      @valuation = Account::Valuation.find(params[:id])
     end
 
     def valuation_params
-      params.require(:valuation).permit(:date, :value)
+      params.require(:account_valuation).permit(:date, :value)
     end
 end

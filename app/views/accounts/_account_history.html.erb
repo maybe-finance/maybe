@@ -2,7 +2,7 @@
 <div class="bg-white space-y-4 p-5 border border-alpha-black-25 rounded-xl shadow-xs">
   <div class="flex justify-between items-center">
     <h3 class="font-medium text-lg">History</h3>
-    <%= link_to new_account_valuation_path(account), data: { turbo_frame: dom_id(Valuation.new) }, class: "flex gap-1 font-medium items-center bg-gray-50 text-gray-900 p-2 rounded-lg" do %>
+    <%= link_to new_account_valuation_path(account), data: { turbo_frame: dom_id(Account::Valuation.new) }, class: "flex gap-1 font-medium items-center bg-gray-50 text-gray-900 p-2 rounded-lg" do %>
       <%= lucide_icon("plus", class: "w-5 h-5 text-gray-900") %>
       <span class="text-sm">New entry</span>
     <% end %>
@@ -19,7 +19,7 @@
         <div class="w-[72px]"></div>
       </div>
       <div class="rounded-lg bg-white border-alpha-black-25 shadow-xs">
-        <%= turbo_frame_tag dom_id(Valuation.new) %>
+        <%= turbo_frame_tag dom_id(Account::Valuation.new) %>
         <%= turbo_frame_tag "valuations_list" do %>
           <%= render partial: "accounts/account_valuation_list", locals: { valuation_series: valuations } %>
         <% end %>

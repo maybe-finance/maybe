@@ -1,4 +1,4 @@
-class Valuation < ApplicationRecord
+class Account::Valuation < ApplicationRecord
   include Monetizable
 
   belongs_to :account

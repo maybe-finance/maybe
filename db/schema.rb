@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_06_20_125026) do
+ActiveRecord::Schema[7.2].define(version: 2024_06_20_221801) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -35,6 +35,17 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_20_125026) do
   create_table "account_transfers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "account_valuations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "account_id", null: false
+    t.date "date", null: false
+    t.decimal "value", precision: 19, scale: 4, null: false
+    t.string "currency", default: "USD", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "date"], name: "index_account_valuations_on_account_id_and_date", unique: true
+    t.index ["account_id"], name: "index_account_valuations_on_account_id"
   end
 
   create_table "accounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -335,23 +346,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_20_125026) do
     t.index ["family_id"], name: "index_users_on_family_id"
   end
 
-  create_table "valuations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "account_id", null: false
-    t.date "date", null: false
-    t.decimal "value", precision: 19, scale: 4, null: false
-    t.string "currency", default: "USD", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["account_id", "date"], name: "index_valuations_on_account_id_and_date", unique: true
-    t.index ["account_id"], name: "index_valuations_on_account_id"
-  end
-
   create_table "vehicles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   add_foreign_key "account_balances", "accounts", on_delete: :cascade
+  add_foreign_key "account_valuations", "accounts", on_delete: :cascade
   add_foreign_key "accounts", "families"
   add_foreign_key "accounts", "institutions"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -367,5 +368,4 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_20_125026) do
   add_foreign_key "transactions", "categories", on_delete: :nullify
   add_foreign_key "transactions", "merchants"
   add_foreign_key "users", "families"
-  add_foreign_key "valuations", "accounts", on_delete: :cascade
 end

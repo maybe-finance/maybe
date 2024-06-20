@@ -80,8 +80,10 @@ Rails.application.routes.draw do
       post :sync
     end
 
-    resource :logo, only: :show, module: :account
-    resources :valuations, shallow: true
+    scope module: :account, shallow: true do
+      resource :logo, only: :show
+      resources :valuations
+    end
   end
 
   resources :institutions, except: %i[ index show ]
