@@ -160,7 +160,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
       transaction.update! \
         excluded: false,
         category_id: Category.first.id,
-        merchant_id: Transaction::Merchant.first.id,
+        merchant_id: Merchant.first.id,
         notes: "Starting note"
     end
 
@@ -170,7 +170,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
         transaction_ids: transactions.map(&:id),
         excluded: true,
         category_id: Category.second.id,
-        merchant_id: Transaction::Merchant.second.id,
+        merchant_id: Merchant.second.id,
         notes: "Updated note"
       }
     }
@@ -182,7 +182,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
       assert_equal Date.current, transaction.date
       assert transaction.excluded
       assert_equal Category.second, transaction.category
-      assert_equal Transaction::Merchant.second, transaction.merchant
+      assert_equal Merchant.second, transaction.merchant
       assert_equal "Updated note", transaction.notes
     end
   end

@@ -29,7 +29,7 @@
                   <div class="pb-6 space-y-2">
                     <%= form.date_field :date, label: t(".date_label"), max: Date.current %>
                     <%= form.collection_select :category_id, Current.family.categories.alphabetically, :id, :name, { prompt: t(".category_placeholder"), label: t(".category_label"), class: "text-gray-400" } %>
-                    <%= form.collection_select :merchant_id, Current.family.transaction_merchants.alphabetically, :id, :name, { prompt: t(".merchant_placeholder"), label: t(".merchant_label"), class: "text-gray-400" } %>
+                    <%= form.collection_select :merchant_id, Current.family.merchants.alphabetically, :id, :name, { prompt: t(".merchant_placeholder"), label: t(".merchant_label"), class: "text-gray-400" } %>
                   </div>
                 </details>
 

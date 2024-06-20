@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_06_20_114307) do
+ActiveRecord::Schema[7.2].define(version: 2024_06_20_122201) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -242,6 +242,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_20_114307) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "merchants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "color", default: "#e99537", null: false
+    t.uuid "family_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["family_id"], name: "index_merchants_on_family_id"
+  end
+
   create_table "other_assets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -282,15 +291,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_20_114307) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["family_id"], name: "index_tags_on_family_id"
-  end
-
-  create_table "transaction_merchants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name", null: false
-    t.string "color", default: "#e99537", null: false
-    t.uuid "family_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["family_id"], name: "index_transaction_merchants_on_family_id"
   end
 
   create_table "transactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -359,12 +359,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_20_114307) do
   add_foreign_key "categories", "families"
   add_foreign_key "imports", "accounts"
   add_foreign_key "institutions", "families"
+  add_foreign_key "merchants", "families"
   add_foreign_key "taggings", "tags"
   add_foreign_key "tags", "families"
-  add_foreign_key "transaction_merchants", "families"
   add_foreign_key "transactions", "accounts", on_delete: :cascade
   add_foreign_key "transactions", "categories", on_delete: :nullify
-  add_foreign_key "transactions", "transaction_merchants", column: "merchant_id"
+  add_foreign_key "transactions", "merchants"
   add_foreign_key "transactions", "transfers"
   add_foreign_key "users", "families"
   add_foreign_key "valuations", "accounts", on_delete: :cascade

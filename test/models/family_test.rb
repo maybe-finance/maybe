@@ -39,7 +39,7 @@ class FamilyTest < ActiveSupport::TestCase
   end
 
   test "should destroy dependent merchants" do
-    assert_difference("Transaction::Merchant.count", -@family.transaction_merchants.count) do
+    assert_difference("Merchant.count", -@family.merchants.count) do
       @family.destroy
     end
   end

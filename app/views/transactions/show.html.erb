@@ -30,7 +30,7 @@
 
               <% unless @transaction.marked_as_transfer %>
                 <%= f.collection_select :category_id, Current.family.categories.alphabetically, :id, :name, { prompt: t(".category_placeholder"), label: t(".category_label"), class: "text-gray-400" }, "data-auto-submit-form-target": "auto" %>
-                <%= f.collection_select :merchant_id, Current.family.transaction_merchants.alphabetically, :id, :name, { prompt: t(".merchant_placeholder"), label: t(".merchant_label"), class: "text-gray-400" }, "data-auto-submit-form-target": "auto" %>
+                <%= f.collection_select :merchant_id, Current.family.merchants.alphabetically, :id, :name, { prompt: t(".merchant_placeholder"), label: t(".merchant_label"), class: "text-gray-400" }, "data-auto-submit-form-target": "auto" %>
               <% end %>
 
               <%= f.collection_select :account_id, Current.family.accounts.alphabetically, :id, :name, { prompt: t(".account_placeholder"), label: t(".account_label"), class: "text-gray-500" }, { class: "form-field__input cursor-not-allowed text-gray-400", disabled: "disabled" } %>

@@ -1,4 +1,4 @@
-class Transaction::Merchant < ApplicationRecord
+class Merchant < ApplicationRecord
   has_many :transactions, dependent: :nullify
   belongs_to :family
 

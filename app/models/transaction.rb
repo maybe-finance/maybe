@@ -21,7 +21,7 @@ class Transaction < ApplicationRecord
   scope :with_categories, ->(categories) { joins(:category).where(categories: { name: categories }) }
   scope :with_accounts, ->(accounts) { joins(:account).where(accounts: { name: accounts }) }
   scope :with_account_ids, ->(account_ids) { joins(:account).where(accounts: { id: account_ids }) }
-  scope :with_merchants, ->(merchants) { joins(:merchant).where(transaction_merchants: { name: merchants }) }
+  scope :with_merchants, ->(merchants) { joins(:merchant).where(merchants: { name: merchants }) }
   scope :on_or_after_date, ->(date) { where("transactions.date >= ?", date) }
   scope :on_or_before_date, ->(date) { where("transactions.date <= ?", date) }
   scope :with_converted_amount, ->(currency = Current.family.currency) {
