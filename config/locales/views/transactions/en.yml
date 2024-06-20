@@ -131,3 +131,4 @@ en:
       settings: Settings
     update:
       success: Transaction updated successfully
+    rows_per_page: Rows per page

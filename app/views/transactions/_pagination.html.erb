@@ -40,9 +40,17 @@
   </div>
   <% per_page = params[:per_page] || "50" %>
   <div class="flex items-center gap-4">
-  <p class="text-sm text-gray-500">Rows per page</p>
-  <%= form_with url: transactions_path, method: :get, class: "flex items-center gap-4", data: { controller: "auto-submit-form" } do %>
-    <%= render partial: "pagination_per_page_selector", locals: { value: per_page } %>
+    <%= form_with url: transactions_path,
+                builder: ActionView::Helpers::FormBuilder,
+                method: :get,
+                class: "flex items-center gap-4",
+                data: { controller: "auto-submit-form" } do |f| %>
+    <%= f.label :per_page, t(".rows_per_page"), class: "text-sm text-gray-500" %>
+    <%= f.select :per_page,
+                 options_for_select(["10", "20", "30", "50"], params[:per_page]),
+                 {},
+                 class: "py-1.5 pr-8 text-sm text-gray-900 font-medium border border-gray-200 rounded-lg focus:border-gray-900 focus:ring-gray-900 focus-visible:ring-gray-900",
+                 data: { "auto-submit-form-target": "auto" } %>
   <% end %>
   </div>
 </nav>
