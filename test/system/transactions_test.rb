@@ -6,7 +6,7 @@ class TransactionsTest < ApplicationSystemTestCase
 
     @latest_transactions = @user.family.transactions.ordered.limit(20).to_a
     @test_category = @user.family.categories.create! name: "System Test Category"
-    @test_merchant = @user.family.transaction_merchants.create! name: "System Test Merchant"
+    @test_merchant = @user.family.merchants.create! name: "System Test Merchant"
     @target_txn = @user.family.accounts.first.transactions.create! \
       name: "Oldest transaction",
       date: 10.years.ago.to_date,

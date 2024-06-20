@@ -1,14 +1,14 @@
 <% is_editing = @merchant.id.present? %>
 <div data-controller="merchant-avatar">
-  <%= form_with model: @merchant, url: is_editing ? transaction_merchant_path(@merchant) : transaction_merchants_path, method: is_editing ? :patch : :post, scope: :transaction_merchant, data: { turbo: false } do |f| %>
+  <%= form_with model: @merchant, url: is_editing ? merchant_path(@merchant) : merchants_path, method: is_editing ? :patch : :post, scope: :merchant, data: { turbo: false } do |f| %>
     <section class="space-y-4">
       <div class="w-fit m-auto">
-        <%= render partial: "transactions/merchants/avatar", locals: { merchant: } %>
+        <%= render partial: "merchants/avatar", locals: { merchant: } %>
       </div>
-      <div data-controller="select" data-select-active-class="bg-gray-200" data-select-selected-value="<%= @merchant&.color || Transaction::Merchant::COLORS[0] %>">
+      <div data-controller="select" data-select-active-class="bg-gray-200" data-select-selected-value="<%= @merchant&.color || Merchant::COLORS[0] %>">
         <%= f.hidden_field :color, data: { select_target: "input", merchant_avatar_target: "color" } %>
         <ul data-select-target="list" class="flex gap-2 items-center">
-          <% Transaction::Merchant::COLORS.each do |color| %>
+          <% Merchant::COLORS.each do |color| %>
             <li tabindex="0" data-select-target="option" data-action="click->select#selectOption" data-value="<%= color %>" class="flex shrink-0 justify-center items-center w-6 h-6 cursor-pointer hover:bg-gray-200 rounded-full">
               <div style="background-color: <%= color %>" class="shrink-0 w-4 h-4 rounded-full"></div>
             </li>

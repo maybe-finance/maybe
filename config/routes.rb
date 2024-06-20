@@ -48,6 +48,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :merchants, only: %i[ index new create edit update destroy ]
+
   resources :transactions do
     collection do
       post "bulk_delete"
@@ -59,7 +61,6 @@ Rails.application.routes.draw do
       scope module: :transactions, as: :transaction do
         resources :rows, only: %i[ show update ]
         resources :rules, only: %i[ index ]
-        resources :merchants, only: %i[ index new create edit update destroy ]
       end
     end
   end
