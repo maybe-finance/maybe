@@ -52,49 +52,6 @@ module.exports = {
           to: { "stroke-dashoffset": 0 },
         },
       },
-      typography: {
-        DEFAULT: {
-          css: {
-            maxWidth: "none",
-            a: {
-              color: "inherit",
-              textDecoration: "underline",
-            },
-            h2: {
-              fontSize: "1.125rem",
-              fontWeight: "inherit",
-              lineHeight: "1.75rem",
-              marginBottom: "0.625rem",
-              marginTop: "0.875rem",
-            },
-            p: {
-              marginBottom: "0.625rem",
-              marginTop: "0.875rem",
-            },
-            strong: {
-              color: "inherit",
-            },
-            li: {
-              margin: 0,
-            },
-            details: {
-              borderRadius: "12px",
-              marginBottom: "0.875rem",
-              marginTop: "0.875rem",
-            },
-            summary: {
-              display: "flex",
-              alignItems: "center",
-              columnGap: "0.25rem",
-            },
-            video: {
-              margin: 0,
-              borderBottomLeftRadius: "12px",
-              borderBottomRightRadius: "12px",
-            },
-          },
-        },
-      },
     },
   },
   plugins: [
