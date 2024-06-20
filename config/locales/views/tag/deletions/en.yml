@@ -1,0 +1,15 @@
+---
+en:
+  tag:
+    deletions:
+      create:
+        deleted: Tag deleted
+      new:
+        delete_and_leave_uncategorized: Delete "%{tag_name}"
+        delete_and_recategorize: Delete "%{tag_name}" and assign new tag
+        delete_tag: Delete tag?
+        explanation: "%{tag_name} will be removed from transactions and other taggable
+          entities.  Instead of leaving them untagged, you can also assign a new tag
+          below."
+        replacement_tag_prompt: Select tag
+        tag: Tag

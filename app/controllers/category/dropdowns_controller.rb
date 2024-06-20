@@ -1,4 +1,4 @@
-class Categories::DropdownsController < ApplicationController
+class Category::DropdownsController < ApplicationController
   before_action :set_from_params
 
   def show

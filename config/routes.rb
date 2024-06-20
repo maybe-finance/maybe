@@ -38,14 +38,15 @@ Rails.application.routes.draw do
   end
 
   resources :tags, except: %i[ show destroy ] do
-    resources :deletions, only: %i[ new create ], module: :tags
+    resources :deletions, only: %i[ new create ], module: :tag
+  end
+
+  namespace :category do
+    resource :dropdown, only: :show
   end
 
   resources :categories do
-    resources :deletions, only: %i[ new create ], module: :categories
-    collection do
-      resource :dropdown, only: :show, module: :categories, as: :category_dropdown
-    end
+    resources :deletions, only: %i[ new create ], module: :category
   end
 
   resources :merchants, only: %i[ index new create edit update destroy ]
