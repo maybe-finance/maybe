@@ -5,10 +5,10 @@ namespace :demo_data do
 
     family.accounts.delete_all
     ExchangeRate.delete_all
-    family.transaction_categories.delete_all
+    family.categories.delete_all
     Tagging.delete_all
     family.tags.delete_all
-    Transaction::Category.create_default_categories(family)
+    Category.create_default_categories(family)
 
     user = User.find_or_create_by(email: "user@maybe.local") do |u|
       u.password = "password"

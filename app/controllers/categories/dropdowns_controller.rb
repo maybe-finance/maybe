@@ -1,4 +1,4 @@
-class Transactions::Categories::DropdownsController < ApplicationController
+class Categories::DropdownsController < ApplicationController
   before_action :set_from_params
 
   def show
@@ -17,6 +17,6 @@ class Transactions::Categories::DropdownsController < ApplicationController
   end
 
   def categories_scope
-    Current.family.transaction_categories.alphabetically
+    Current.family.categories.alphabetically
   end
 end
