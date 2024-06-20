@@ -7,31 +7,13 @@
   details > summary::-webkit-details-marker {
     @apply hidden;
   }
+
+  details > summary {
+    @apply list-none;
+  }
 }
 
 @layer components {
-  .prose {
-    table {
-      @apply divide-y divide-gray-300;
-    }
-
-    tr {
-      @apply divide-x divide-gray-100;
-    }
-
-    th {
-      @apply whitespace-nowrap px-2 text-left text-sm font-semibold text-gray-900 py-3.5;
-    }
-
-    tbody {
-      @apply divide-y divide-gray-200;
-    }
-
-    td {
-      @apply whitespace-nowrap px-2 py-2 text-sm text-gray-500;
-    }
-  }
-
   .form-field {
     @apply relative rounded-md border bg-white border-alpha-black-100 shadow-xs;
     @apply focus-within:border-gray-900 focus-within:shadow-none focus-within:ring-4 focus-within:ring-gray-100;
@@ -80,6 +62,20 @@
     @apply block bg-gray-100 w-9 h-5 rounded-full cursor-pointer;
     @apply after:content-[''] after:block after:absolute after:top-0.5 after:left-0.5 after:bg-white after:w-4 after:h-4 after:rounded-full after:transition-transform after:duration-300 after:ease-in-out;
     @apply peer-checked:bg-green-600 peer-checked:after:translate-x-4;
+  }
+
+  .prose--github-release-notes {
+    .octicon {
+      @apply inline-block overflow-visible align-text-bottom fill-current;
+    }
+
+    .dropdown-caret {
+      @apply content-none border-4 border-b-0 border-transparent border-t-gray-500 size-0 inline-block;
+    }
+
+    .user-mention {
+      @apply font-bold;
+    }
   }
 }
 

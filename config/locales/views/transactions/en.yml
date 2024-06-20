@@ -6,18 +6,18 @@ en:
     bulk_edit:
       additional: Additional
       cancel: Cancel
-      category: Category
-      date: Date
+      category_label: Category
+      category_placeholder: Select a category
+      date_label: Date
       exclude_subtitle: This excludes the transaction from any in-app features or
         analytics.
       exclude_title: Exclude transaction
-      merchant: Merchant
-      note: Notes
+      merchant_label: Merchant
+      merchant_placeholder: Select a merchant
+      note_label: Notes
       note_placeholder: Enter a note that will be applied to selected transactions
       overview: Overview
       save: Save
-      select_category: Select a category
-      select_merchant: Select a merchant
       settings: Settings
     bulk_update:
       failure: Could not update transactions
@@ -89,6 +89,8 @@ en:
       import: Import
     index:
       transaction: transaction
+    mark_transfers:
+      success: Marked as transfer
     merchants:
       create:
         success: New merchant created successfully
@@ -116,19 +118,39 @@ en:
         title: New merchant
       update:
         success: Merchant updated successfully
+    selection_bar:
+      mark_transfers: Mark as transfers?
+      mark_transfers_confirm: Mark as transfers
+      mark_transfers_message: By marking transactions as transfers, they will no longer
+        be included in income or spending calculations.
     show:
+      account_label: Account
+      account_placeholder: Select an account
       additional: Additional
+      category_label: Category
+      category_placeholder: Select a category
+      date_label: Date
       delete: Delete
       delete_subtitle: This permanently deletes the transaction, affects your historical
         balances, and cannot be undone.
       delete_title: Delete transaction
-      description: Description
       exclude_subtitle: This excludes the transaction from any in-app features or
         analytics.
       exclude_title: Exclude transaction
+      merchant_label: Merchant
+      merchant_placeholder: Select a merchant
+      name_label: Name
+      note_label: Notes
+      note_placeholder: Enter a note
       overview: Overview
-      select_tags: Select one or more tags
       settings: Settings
+      tags_label: Select one or more tags
+    transaction:
+      remove_transfer: Remove transfer
+      remove_transfer_body: This will remove the transfer from this transaction
+      remove_transfer_confirm: Confirm
+    unmark_transfers:
+      success: Transfer removed
     update:
       success: Transaction updated successfully
     rows_per_page: Rows per page

@@ -1,10 +1,16 @@
 <%= drawer do %>
   <div>
     <header class="mb-4 space-y-1">
-      <h3 class="font-medium">
-        <span class="text-2xl"><%= format_money @transaction.amount_money %></span>
-        <span class="text-lg text-gray-500"><%= @transaction.currency %></span>
-      </h3>
+      <div class="flex items-center gap-4">
+        <h3 class="font-medium">
+          <span class="text-2xl"><%= format_money -@transaction.amount_money %></span>
+          <span class="text-lg text-gray-500"><%= @transaction.currency %></span>
+        </h3>
+
+        <% if @transaction.marked_as_transfer %>
+          <%= lucide_icon "arrow-left-right", class: "text-gray-500 mt-1 w-5 h-5" %>
+        <% end %>
+      </div>
 
       <span class="text-sm text-gray-500"><%= @transaction.date.strftime("%A %d %B") %></span>
     </header>
@@ -19,23 +25,16 @@
         <div class="pb-6">
           <%= form_with model: @transaction, html: { data: { controller: "auto-submit-form" } } do |f| %>
             <div class="space-y-2">
-              <%= f.date_field :date, label: "Date", max: Date.today, "data-auto-submit-form-target": "auto" %>
-              <%= f.collection_select :category_id, Current.family.transaction_categories, :id, :name, { prompt: "Select a category", label: "Category", class: "text-gray-400" }, "data-auto-submit-form-target": "auto" %>
-              <%= f.collection_select :account_id, Current.family.accounts, :id, :name, { prompt: "Select an Account", label: "Account", class: "text-gray-500" }, { class: "form-field__input cursor-not-allowed text-gray-400", disabled: "disabled" } %>
+              <%= f.text_field :name, label: t(".name_label"), "data-auto-submit-form-target": "auto" %>
+              <%= f.date_field :date, label: t(".date_label"), max: Date.today, "data-auto-submit-form-target": "auto" %>
+
+              <% unless @transaction.marked_as_transfer %>
+                <%= f.collection_select :category_id, Current.family.transaction_categories.alphabetically, :id, :name, { prompt: t(".category_placeholder"), label: t(".category_label"), class: "text-gray-400" }, "data-auto-submit-form-target": "auto" %>
+                <%= f.collection_select :merchant_id, Current.family.transaction_merchants.alphabetically, :id, :name, { prompt: t(".merchant_placeholder"), label: t(".merchant_label"), class: "text-gray-400" }, "data-auto-submit-form-target": "auto" %>
+              <% end %>
+
+              <%= f.collection_select :account_id, Current.family.accounts.alphabetically, :id, :name, { prompt: t(".account_placeholder"), label: t(".account_label"), class: "text-gray-500" }, { class: "form-field__input cursor-not-allowed text-gray-400", disabled: "disabled" } %>
             </div>
-          <% end %>
-        </div>
-      </details>
-
-      <details class="group space-y-2" open>
-        <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2 text-xs font-medium uppercase text-gray-500 bg-gray-25 focus-visible:outline-none">
-          <h4><%= t(".description") %></h4>
-          <%= lucide_icon "chevron-down", class: "group-open:transform group-open:rotate-180 text-gray-500 w-5" %>
-        </summary>
-
-        <div class="pb-6">
-          <%= form_with model: @transaction, html: { data: { controller: "auto-submit-form" } } do |f| %>
-            <%= f.text_field :name, label: "Name", "data-auto-submit-form-target": "auto" %>
           <% end %>
         </div>
       </details>
@@ -52,14 +51,11 @@
                          options_for_select(Current.family.tags.alphabetically.pluck(:name, :id), @transaction.tag_ids),
                          {
                            multiple: true,
-                           label: t(".select_tags"),
+                           label: t(".tags_label"),
                            class: "placeholder:text-gray-500"
                          },
                          "data-auto-submit-form-target": "auto" %>
-          <% end %>
-
-          <%= form_with model: @transaction, html: { data: { controller: "auto-submit-form" } } do |f| %>
-            <%= f.text_area :notes, label: "Notes", placeholder: "Enter a note", "data-auto-submit-form-target": "auto" %>
+            <%= f.text_area :notes, label: t(".note_label"), placeholder: t(".note_placeholder"), "data-auto-submit-form-target": "auto" %>
           <% end %>
         </div>
       </details>
@@ -72,8 +68,8 @@
 
         <div class="pb-6">
 
-          <%= form_with model: @transaction, html: { class: "p-3", data: { controller: "auto-submit-form" } } do |f| %>
-            <div class="flex cursor-pointer items-center justify-between">
+          <%= form_with model: @transaction, html: { class: "p-3 space-y-3", data: { controller: "auto-submit-form" } } do |f| %>
+            <div class="flex cursor-pointer items-center gap-2 justify-between">
               <div class="text-sm space-y-1">
                 <h4 class="text-gray-900"><%= t(".exclude_title") %></h4>
                 <p class="text-gray-500"><%= t(".exclude_subtitle") %></p>
@@ -86,18 +82,20 @@
             </div>
           <% end %>
 
-          <div class="flex items-center justify-between gap-2 p-3">
-            <div class="text-sm space-y-1">
-              <h4 class="text-gray-900"><%= t(".delete_title") %></h4>
-              <p class="text-gray-500"><%= t(".delete_subtitle") %></p>
-            </div>
+          <% unless @transaction.transfer? %>
+            <div class="flex items-center justify-between gap-2 p-3">
+              <div class="text-sm space-y-1">
+                <h4 class="text-gray-900"><%= t(".delete_title") %></h4>
+                <p class="text-gray-500"><%= t(".delete_subtitle") %></p>
+              </div>
 
-            <%= button_to t(".delete"),
-                          transaction_path(@transaction),
-                          method: :delete,
-                          class: "rounded-lg px-3 py-2 text-red-500 text-sm font-medium border border-alpha-black-200",
-                          data: { turbo_confirm: true, turbo_frame: "_top" } %>
-          </div>
+              <%= button_to t(".delete"),
+                            transaction_path(@transaction),
+                            method: :delete,
+                            class: "rounded-lg px-3 py-2 text-red-500 text-sm font-medium border border-alpha-black-200",
+                            data: { turbo_confirm: true, turbo_frame: "_top" } %>
+            </div>
+          <% end %>
         </div>
       </details>
     </div>
