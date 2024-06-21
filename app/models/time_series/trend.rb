@@ -25,6 +25,17 @@ class TimeSeries::Trend
     end.inquiry
   end
 
+  def color
+    case direction
+    when "up"
+      series&.favorable_direction&.down? ? red_hex : green_hex
+    when "down"
+      series&.favorable_direction&.down? ? green_hex : red_hex
+    else
+      gray_hex
+    end
+  end
+
   def value
     if previous.nil?
       current.is_a?(Money) ? Money.new(0) : 0
@@ -56,7 +67,20 @@ class TimeSeries::Trend
   end
 
   private
+
     attr_reader :series
+
+    def red_hex
+      "#F13636" # red-500
+    end
+
+    def green_hex
+      "#10A861" # green-600
+    end
+
+    def gray_hex
+      "#737373" # gray-500
+    end
 
     def values_must_be_of_same_type
       unless current.class == previous.class || [ previous, current ].any?(&:nil?)

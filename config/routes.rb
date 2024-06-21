@@ -80,7 +80,7 @@ Rails.application.routes.draw do
       post :sync
     end
 
-    scope module: :account, shallow: true do
+    scope module: :account do
       resource :logo, only: :show
       resources :valuations
     end

@@ -1,23 +1,19 @@
 class Account::ValuationsController < ApplicationController
+  before_action :set_account
   before_action :set_valuation, only: %i[ edit update destroy ]
+
   def create
-    @account = Current.family.accounts.find(params[:account_id])
+    @valuation = @account.valuations.build(valuation_params)
 
-    # TODO: placeholder logic until we have a better abstraction for trends
-    @valuation = @account.valuations.new(valuation_params.merge(currency: @account.currency))
     if @valuation.save
-      @valuation.account.sync_later(@valuation.date)
-
-      respond_to do |format|
-        format.html { redirect_to account_path(@account), notice: "Valuation created" }
-        format.turbo_stream
-      end
+      @valuation.sync_account_later
+      redirect_to account_path(@account), notice: "Valuation created"
     else
-      render :new, status: :unprocessable_entity
+      # TODO: this is not an ideal way to handle errors and should eventually be improved.
+      # See: https://github.com/hotwired/turbo-rails/pull/367
+      flash[:error] = @valuation.errors.full_messages.to_sentence
+      redirect_to account_path(@account)
     end
-  rescue ActiveRecord::RecordNotUnique
-    flash.now[:error] = "Valuation already exists for this date"
-    render :new, status: :unprocessable_entity
   end
 
   def show
@@ -59,12 +55,16 @@ class Account::ValuationsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+
+    def set_account
+      @account = Current.family.accounts.find(params[:account_id])
+    end
+
     def set_valuation
-      @valuation = Account::Valuation.find(params[:id])
+      @valuation = @account.valuations.find(params[:id])
     end
 
     def valuation_params
-      params.require(:account_valuation).permit(:date, :value)
+      params.require(:account_valuation).permit(:date, :value, :currency)
     end
 end

@@ -11,11 +11,13 @@ class TimeSeries::TrendTest < ActiveSupport::TestCase
   test "up" do
     trend = TimeSeries::Trend.new(current: 100, previous: 50)
     assert_equal "up", trend.direction
+    assert_equal "#10A861", trend.color
   end
 
   test "down" do
     trend = TimeSeries::Trend.new(current: 50, previous: 100)
     assert_equal "down", trend.direction
+    assert_equal "#F13636", trend.color
   end
 
   test "flat" do
@@ -25,6 +27,7 @@ class TimeSeries::TrendTest < ActiveSupport::TestCase
     assert_equal "flat", trend1.direction
     assert_equal "flat", trend2.direction
     assert_equal "flat", trend3.direction
+    assert_equal "#737373", trend1.color
   end
 
   test "infinitely up" do
