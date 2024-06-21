@@ -44,8 +44,26 @@ class Account::Transfer < ApplicationRecord
     end
 
     def net_zero_flows
-      unless transactions.sum(&:amount).zero?
+      first, second = transactions
+      return if first.nil? || second.nil?
+
+      same_currency = first.currency == second.currency
+      if same_currency && !transactions.sum(&:amount).zero?
         errors.add :transactions, "must have an inflow and outflow that net to zero"
+      end
+
+      if !same_currency
+        rate = ExchangeRate.find_rate_or_fetch from: first.currency, to: second.currency, date: first.date
+        if rate.nil?
+          errors.add :transactions, "must have an exchange rate between currencies"
+          return
+        end
+
+        converted_amount = first.amount * rate.rate
+        allowed_error = 1
+        unless (converted_amount + second.amount).abs < allowed_error
+          errors.add :transactions, "must have an inflow and outflow that net close to zero in common currency"
+        end
       end
     end
 
