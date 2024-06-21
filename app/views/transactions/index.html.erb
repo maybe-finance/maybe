@@ -3,7 +3,7 @@
 
   <%= render partial: "transactions/summary", locals: { totals: @totals } %>
 
-  <div id="transactions" data-controller="bulk-select" data-bulk-select-resource-value="<%= t(".transaction") %>" class="grow overflow-y-auto flex flex-col bg-white rounded-xl border border-alpha-black-25 shadow-xs pb-4">
+  <div id="transactions" data-controller="bulk-select" data-bulk-select-resource-value="<%= t(".transaction") %>" class="overflow-y-auto flex flex-col bg-white rounded-xl border border-alpha-black-25 shadow-xs pb-4">
 
     <div class="p-4 pb-0">
       <%= render partial: "transactions/searches/search", locals: { transactions: @transactions } %>
