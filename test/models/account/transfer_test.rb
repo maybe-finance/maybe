@@ -39,7 +39,7 @@ class Account::TransferTest < ActiveSupport::TestCase
     end
   end
 
-  test "transfer invalid if transactions do not net to zero" do
+  test "single-currency transfer transactions must net to zero" do
     @outflow.update! amount: 105
 
     assert_raises ActiveRecord::RecordInvalid do
@@ -47,20 +47,10 @@ class Account::TransferTest < ActiveSupport::TestCase
     end
   end
 
-  test "transfer valid if transactions in different currencies net close to zero" do
-    @outflow.update! amount: 100, currency: "USD"
-    @inflow.update! amount: -92, currency: "EUR"
-    assert_nothing_raised do
-      Account::Transfer.create! transactions: [ @inflow, @outflow ]
-    end
-  end
+  test "multi-currency transfer transactions do not have to net to zero" do
+    @outflow.update! amount: 105, currency: "EUR"
+    transfer = Account::Transfer.create! transactions: [ @inflow, @outflow ]
 
-  test "transfer invalid if transactions in different currencies do not net close to zero" do
-    @outflow.update! amount: 100, currency: "USD"
-    @inflow.update! amount: -90, currency: "EUR"
-
-    assert_raises ActiveRecord::RecordInvalid do
-      Account::Transfer.create! transactions: [ @inflow, @outflow ]
-    end
+    assert transfer.valid?
   end
 end

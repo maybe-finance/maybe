@@ -1,7 +1,8 @@
 class Account::Transfer < ApplicationRecord
   has_many :transactions, dependent: :nullify
 
-  validate :transaction_count, :from_different_accounts, :net_zero_flows, :all_transactions_marked
+  validate :net_zero_flows, if: :single_currency_transfer?
+  validate :transaction_count, :from_different_accounts, :all_transactions_marked
 
   def inflow_transaction
     transactions.find { |t| t.inflow? }
@@ -32,6 +33,10 @@ class Account::Transfer < ApplicationRecord
 
   private
 
+    def single_currency_transfer?
+      transactions.map(&:currency).uniq.size == 1
+    end
+
     def transaction_count
       unless transactions.size == 2
         errors.add :transactions, "must have exactly 2 transactions"
@@ -44,26 +49,8 @@ class Account::Transfer < ApplicationRecord
     end
 
     def net_zero_flows
-      first, second = transactions
-      return if first.nil? || second.nil?
-
-      same_currency = first.currency == second.currency
-      if same_currency && !transactions.sum(&:amount).zero?
+      unless transactions.sum(&:amount).zero?
         errors.add :transactions, "must have an inflow and outflow that net to zero"
-      end
-
-      if !same_currency
-        rate = ExchangeRate.find_rate_or_fetch from: first.currency, to: second.currency, date: first.date
-        if rate.nil?
-          errors.add :transactions, "must have an exchange rate between currencies"
-          return
-        end
-
-        converted_amount = first.amount * rate.rate
-        allowed_error = 1
-        unless (converted_amount + second.amount).abs < allowed_error
-          errors.add :transactions, "must have an inflow and outflow that net close to zero in common currency"
-        end
       end
     end
 
