@@ -118,6 +118,8 @@ en:
         title: New merchant
       update:
         success: Merchant updated successfully
+    pagination:
+      rows_per_page: Rows per page
     selection_bar:
       mark_transfers: Mark as transfers?
       mark_transfers_confirm: Mark as transfers
@@ -153,4 +155,3 @@ en:
       success: Transfer removed
     update:
       success: Transaction updated successfully
-    rows_per_page: Rows per page
