@@ -1,12 +1,13 @@
 class Account::Valuation < ApplicationRecord
   include Monetizable
 
-  belongs_to :account
-  validates :account, :date, :value, presence: true
-  validates :date, uniqueness: { scope: :account_id }
   monetize :value
 
-  scope :in_period, ->(period) { period.date_range.nil? ? all : where(date: period.date_range) }
+  belongs_to :account
+
+  validates :account, :date, :value, presence: true
+  validates :date, uniqueness: { scope: :account_id }
+
   scope :chronological, -> { order(:date) }
   scope :reverse_chronological, -> { order(date: :desc) }
 
@@ -20,10 +21,6 @@ class Account::Valuation < ApplicationRecord
 
   def last_of_series?
     account.valuations.reverse_chronological.limit(1).pluck(:date).first == self.date
-  end
-
-  def self.to_series
-    TimeSeries.from_collection all, :value_money
   end
 
   def sync_account_later
