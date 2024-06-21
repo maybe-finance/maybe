@@ -27,9 +27,13 @@
 
     <div class="pt-2 divide-y divide-alpha-black-200">
       <% transfer.transactions.each do |transaction| %>
-        <div class="py-3 flex items-center justify-between">
-          <%= render "transactions/name", transaction: transaction %>
-          <%= render "transactions/amount", transaction: transaction %>
+        <div class="py-3 grid grid-cols-12 items-center">
+          <div class="col-span-10">
+            <%= render "transactions/name", transaction: transaction %>
+          </div>
+          <div class="col-span-2 ml-auto">
+            <%= render "transactions/amount", transaction: transaction %>
+          </div>
         </div>
       <% end %>
     </div>
