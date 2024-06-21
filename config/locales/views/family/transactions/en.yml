@@ -1,0 +1,17 @@
+---
+en:
+  family:
+    transactions:
+      header:
+        edit_categories: Edit categories
+        edit_imports: Edit imports
+        import: Import
+      index:
+        transaction: transaction
+      pagination:
+        rows_per_page: Rows per page
+      selection_bar:
+        mark_transfers: Mark as transfers?
+        mark_transfers_confirm: Mark as transfers
+        mark_transfers_message: By marking transactions as transfers, they will no
+          longer be included in income or spending calculations.

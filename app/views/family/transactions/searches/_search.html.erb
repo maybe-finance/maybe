@@ -1,0 +1,13 @@
+<%= render partial: "family/transactions/searches/form", locals: { transactions: transactions } %>
+
+<ul id="transaction-search-filters" class="flex items-center flex-wrap gap-2">
+  <% @q.each do |param_key, param_value| %>
+    <% unless param_value.blank? %>
+    <div class="pb-4">
+      <% Array(param_value).each do |value| %>
+        <%= render partial: "family/transactions/searches/filters/badge", locals: { param_key: param_key, param_value: value } %>
+      <% end %>
+    </div>
+    <% end %>
+  <% end %>
+</ul>

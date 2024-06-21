@@ -1,0 +1,46 @@
+<div class="space-y-4 h-full flex flex-col overflow-y-auto">
+  <%= render "header" %>
+
+  <%= render "summary", totals: @totals %>
+
+  <div id="transactions" data-controller="bulk-select" data-bulk-select-resource-value="<%= t(".transaction") %>" class="overflow-y-auto flex flex-col bg-white rounded-xl border border-alpha-black-25 shadow-xs pb-4">
+
+    <div class="p-4 pb-0">
+      <%= render partial: "family/transactions/searches/search", locals: { transactions: @transactions } %>
+    </div>
+
+    <% if @transactions.present? %>
+      <div hidden id="transaction-selection-bar" data-bulk-select-target="selectionBar">
+        <%= render "selection_bar" %>
+      </div>
+      <div class="grow overflow-y-auto px-4">
+        <div class="grid grid-cols-12 bg-gray-25 rounded-xl px-5 py-3 text-xs uppercase font-medium text-gray-500 items-center mb-4">
+          <div class="pl-0.5 col-span-4 flex items-center gap-4">
+            <%= check_box_tag "selection_transaction",
+                              class: "maybe-checkbox maybe-checkbox--light",
+                              data: { action: "bulk-select#togglePageSelection" } %>
+            <p class="col-span-4">transaction</p>
+          </div>
+
+          <p class="col-span-3 pl-4">category</p>
+          <p class="col-span-3">account</p>
+          <p class="col-span-2 justify-self-end">amount</p>
+        </div>
+        <div class="space-y-6">
+          <% group_transactions_by_date(@transactions).each do |date, group| %>
+            <%= render partial: "account/transactions/date_group", locals: { date:, group: } %>
+          <% end %>
+        </div>
+      </div>
+    <% else %>
+      <%= render "account/transactions/empty" %>
+    <% end %>
+
+    <div class="px-4">
+      <% if @pagy.pages > 1 %>
+        <%= render "pagination", pagy: @pagy %>
+      <% end %>
+    </div>
+
+  </div>
+</div>

@@ -15,7 +15,7 @@ class Account::TransferTest < ActiveSupport::TestCase
 
   test "transfer must have 2 transactions" do
     invalid_transfer_1 = Account::Transfer.new transactions: [ @outflow ]
-    invalid_transfer_2 = Account::Transfer.new transactions: [ @inflow, @outflow, transactions(:savings_four) ]
+    invalid_transfer_2 = Account::Transfer.new transactions: [ @inflow, @outflow, account_transactions(:savings_four) ]
 
     assert invalid_transfer_1.invalid?
     assert invalid_transfer_2.invalid?

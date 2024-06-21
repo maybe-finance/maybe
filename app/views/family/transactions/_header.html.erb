@@ -1,0 +1,33 @@
+<header class="flex justify-between items-center text-gray-900 font-medium">
+  <h1 class="text-xl">Transactions</h1>
+  <div class="flex items-center gap-5">
+    <div class="flex items-center gap-2">
+      <%= contextual_menu do %>
+        <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+          <%= link_to categories_path,
+                      class: "block w-full py-2 px-3 space-x-2 text-gray-900 hover:bg-gray-50 flex items-center rounded-lg font-normal" do %>
+            <%= lucide_icon "tags", class: "w-5 h-5 text-gray-500" %>
+            <span class="text-black"><%= t(".edit_categories") %></span>
+          <% end %>
+
+          <%= link_to imports_path,
+                      class: "block w-full py-2 px-3 space-x-2 text-gray-900 hover:bg-gray-50 flex items-center rounded-lg font-normal" do %>
+            <%= lucide_icon "hard-drive-upload", class: "w-5 h-5 text-gray-500" %>
+            <span class="text-black"><%= t(".edit_imports") %></span>
+          <% end %>
+        </div>
+
+      <% end %>
+
+      <%= link_to new_import_path(enable_type_selector: true), class: "rounded-lg bg-gray-50 border border-gray-200 flex items-center gap-1 justify-center px-3 py-2", data: { turbo_frame: "modal" } do %>
+        <%= lucide_icon("download", class: "text-gray-500 w-4 h-4") %>
+        <p class="text-sm font-medium text-gray-900"><%= t(".import") %></p>
+      <% end %>
+
+      <%= link_to new_account_transaction_path, class: "rounded-lg bg-gray-900 text-white flex items-center gap-1 justify-center hover:bg-gray-700 px-3 py-2", data: { turbo_frame: :modal } do %>
+        <%= lucide_icon("plus", class: "w-5 h-5") %>
+        <p class="text-sm font-medium">New transaction</p>
+      <% end %>
+    </div>
+  </div>
+</header>
