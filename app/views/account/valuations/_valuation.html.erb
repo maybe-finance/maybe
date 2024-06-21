@@ -1,47 +1,50 @@
 <%# locals: (valuation:) %>
 
 <%= turbo_frame_tag dom_id(valuation) do %>
-  <div class="p-4 flex items-center">
-    <div class="w-16">
-      <div class="w-8 h-8 rounded-full p-1.5 flex items-center justify-center"
-           style="background-color: color-mix(in srgb, <%= valuation.trend.color %> 5%, white);
-             border-color: color-mix(in srgb, <%= valuation.trend.color %> 10%, white);
-             color: <%= valuation.trend.color %>;">
-        <%= lucide_icon valuation_icon(valuation), style: "color: #{valuation.trend.color}", class: "w-4 h-4" %>
-      </div>
-    </div>
+  <div class="p-4 grid grid-cols-10 items-center">
+    <div class="col-span-5 flex items-center gap-4">
+      <%= tag.div class: "w-8 h-8 rounded-full p-1.5 flex items-center justify-center", style: valuation_style(valuation).html_safe do %>
+        <%= lucide_icon valuation_icon(valuation), class: "w-4 h-4" %>
+      <% end %>
 
-    <div class="flex items-center justify-between grow">
       <div class="text-sm">
-        <%= tag.p valuation.date %>
+        <%= tag.p valuation.date, class: "text-gray-900 font-medium" %>
         <%= tag.p valuation_label(valuation), class: "text-gray-500" %>
       </div>
-
-      <div class="flex text-sm font-medium text-right"><%= format_money valuation.value_money %></div>
     </div>
 
-    <div class="flex w-56 justify-end text-right text-sm font-medium" style="color: <%= valuation.trend.color %>">
+    <div class="col-span-2 justify-self-end">
+      <%= tag.p format_money(valuation.value_money), class: "font-medium text-sm text-gray-900" %>
+    </div>
+
+    <div class="col-span-2 justify-self-end font-medium text-sm" style="color: <%= valuation.trend.color %>">
       <% if valuation.trend.direction.flat? %>
         <%= tag.span t(".no_change"), class: "text-gray-500" %>
       <% else %>
         <%= tag.span format_money(valuation.trend.value) %>
-        <%= tag.span "#{valuation.trend.percent}%" %>
+        <%= tag.span "(#{valuation.trend.percent}%)" %>
       <% end %>
     </div>
 
-    <%= contextual_menu do %>
-      <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-        <%= contextual_menu_modal_action_item t(".edit_entry"), edit_account_valuation_path(valuation.account, valuation) %>
+    <div class="col-span-1 justify-self-end">
+      <%= contextual_menu do %>
+        <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+          <%= contextual_menu_modal_action_item t(".edit_entry"), edit_account_valuation_path(valuation.account, valuation) %>
 
-        <%= contextual_menu_destructive_item t(".delete_entry"),
-                                             account_valuation_path(valuation.account, valuation),
-                                             confirm_title: t(".confirm_title"),
-                                             confirm_body: t(".confirm_body_html"),
-                                             confirm_accept: t(".confirm_accept") %>
-      </div>
-    <% end %>
+          <%= contextual_menu_destructive_item t(".delete_entry"),
+                                               account_valuation_path(valuation.account, valuation),
+                                               turbo_frame: "_top",
+                                               turbo_confirm: {
+                                                 title: t(".confirm_title"),
+                                                 body: t(".confirm_body_html"),
+                                                 accept: t(".confirm_accept")
+                                               } %>
+        </div>
+      <% end %>
+    </div>
   </div>
+
   <% unless valuation.last_of_series? %>
-    <div class="h-px bg-alpha-black-50 ml-20 mr-4"></div>
+    <div class="h-px bg-alpha-black-50 ml-16 mr-4"></div>
   <% end %>
 <% end %>

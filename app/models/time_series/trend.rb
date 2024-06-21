@@ -1,16 +1,15 @@
 class TimeSeries::Trend
   include ActiveModel::Validations
 
-  attr_reader :current, :previous
-
-  delegate :favorable_direction, to: :series
+  attr_reader :current, :previous, :favorable_direction
 
   validate :values_must_be_of_same_type, :values_must_be_of_known_type
 
-  def initialize(current:, previous:, series: nil)
+  def initialize(current:, previous:, series: nil, favorable_direction: nil)
     @current = current
     @previous = previous
     @series = series
+    @favorable_direction = get_favorable_direction(favorable_direction)
 
     validate!
   end
@@ -28,9 +27,9 @@ class TimeSeries::Trend
   def color
     case direction
     when "up"
-      series&.favorable_direction&.down? ? red_hex : green_hex
+      favorable_direction.down? ? red_hex : green_hex
     when "down"
-      series&.favorable_direction&.down? ? green_hex : red_hex
+      favorable_direction.down? ? green_hex : red_hex
     else
       gray_hex
     end
@@ -113,5 +112,10 @@ class TimeSeries::Trend
       else
         obj
       end
+    end
+
+    def get_favorable_direction(favorable_direction)
+      direction = favorable_direction.presence || series&.favorable_direction
+      (direction.presence_in(TimeSeries::DIRECTIONS) || "up").inquiry
     end
 end

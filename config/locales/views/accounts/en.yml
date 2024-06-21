@@ -70,6 +70,7 @@ en:
       sync_message_unknown_error: An error has occurred during the sync.
       valuations: "Value history"
       new_entry: "New entry"
+      loading_history: "Loading account history..."
     summary:
       new: New account
     sync:

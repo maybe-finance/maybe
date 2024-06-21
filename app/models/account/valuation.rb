@@ -7,17 +7,19 @@ class Account::Valuation < ApplicationRecord
   monetize :value
 
   scope :in_period, ->(period) { period.date_range.nil? ? all : where(date: period.date_range) }
+  scope :chronological, -> { order(:date) }
+  scope :reverse_chronological, -> { order(date: :desc) }
 
   def trend
-    TimeSeries::Trend.new current: 0, previous: 0
+    @trend ||= create_trend
   end
 
   def first_of_series?
-    account.valuations.order(:date).limit(1).pluck(:date).first == self.date
+    account.valuations.chronological.limit(1).pluck(:date).first == self.date
   end
 
   def last_of_series?
-    account.valuations.order(date: :desc).limit(1).pluck(:date).first == self.date
+    account.valuations.reverse_chronological.limit(1).pluck(:date).first == self.date
   end
 
   def self.to_series
@@ -26,7 +28,7 @@ class Account::Valuation < ApplicationRecord
 
   def sync_account_later
     if destroyed?
-      sync_start_date = previous_valuation_date
+      sync_start_date = previous_valuation&.date
     else
       sync_start_date = [ date_previously_was, date ].compact.min
     end
@@ -36,11 +38,18 @@ class Account::Valuation < ApplicationRecord
 
   private
 
-    def previous_valuation_date
-      self.account
+    def previous_valuation
+      @previous_valuation ||= self.account
           .valuations
           .where("date < ?", date)
           .order(date: :desc)
-          .first&.date
+                                  .first
+    end
+
+    def create_trend
+      TimeSeries::Trend.new \
+        current: self.value,
+        previous: previous_valuation&.value,
+        favorable_direction: account.favorable_direction
     end
 end

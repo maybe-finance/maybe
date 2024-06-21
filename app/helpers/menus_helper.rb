@@ -6,17 +6,18 @@ module MenusHelper
     end
   end
 
-  def contextual_menu_modal_action_item(label, url, icon: "pencil-line")
-    link_to url, class: "flex items-center rounded-lg text-gray-900 hover:bg-gray-50 py-2 px-3 gap-2" do
+  def contextual_menu_modal_action_item(label, url, icon: "pencil-line", turbo_frame: nil)
+    link_to url, class: "flex items-center rounded-lg text-gray-900 hover:bg-gray-50 py-2 px-3 gap-2", data: { turbo_frame: } do
       concat(lucide_icon(icon, class: "shrink-0 w-5 h-5 text-gray-500"))
       concat(tag.span(label, class: "text-sm"))
     end
   end
 
-  def contextual_menu_destructive_item(label, url, confirm_title:, confirm_body:, confirm_accept:)
-    link_to url,
-            class: "flex items-center rounded-lg text-red-500 hover:bg-red-500/5 py-2 px-3 gap-2",
-            data: { turbo_confirm: { confirm_title:, confirm_body:, confirm_accept: } } do
+  def contextual_menu_destructive_item(label, url, turbo_confirm: true, turbo_frame: nil)
+    button_to url,
+              method: :delete,
+              class: "flex items-center w-full rounded-lg text-red-500 hover:bg-red-500/5 py-2 px-3 gap-2",
+              data: { turbo_confirm: turbo_confirm, turbo_frame: } do
       concat(lucide_icon("trash-2", class: "shrink-0 w-5 h-5"))
       concat(tag.span(label, class: "text-sm"))
     end

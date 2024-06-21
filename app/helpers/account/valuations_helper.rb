@@ -11,6 +11,16 @@ module Account::ValuationsHelper
     end
   end
 
+  def valuation_style(valuation)
+    color = valuation.first_of_series? ? "#D444F1" : valuation.trend.color
+
+    <<-STYLE.strip
+      background-color: color-mix(in srgb, #{color} 5%, white);
+      border-color: color-mix(in srgb, #{color} 10%, white);
+      color: #{color};
+    STYLE
+  end
+
   def valuation_label(valuation)
     valuation.first_of_series? ? t(".start_balance") : t(".value_update")
   end

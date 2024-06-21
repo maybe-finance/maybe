@@ -1,5 +1,3 @@
-<%= tag.h1 t(".valuations") %>
-
 <%= turbo_frame_tag dom_id(@account, "valuations") do %>
   <div class="grid grid-cols-10 items-center uppercase text-xs font-medium text-gray-500 px-4 py-2">
     <%= tag.p t(".date"), class: "col-span-5" %>
@@ -10,7 +8,7 @@
 
   <div class="rounded-lg bg-white border-alpha-black-25 shadow-xs">
     <%= turbo_frame_tag dom_id(Account::Valuation.new) %>
-    <% @account.valuations.each do |valuation| %>
+    <% @account.valuations.reverse_chronological.each do |valuation| %>
       <%= render valuation %>
     <% end %>
   </div>

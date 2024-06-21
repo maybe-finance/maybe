@@ -89,7 +89,7 @@
           <div class="rounded-xl bg-gray-25 p-1">
             <%= turbo_frame_tag dom_id(@account, "valuations"), src: account_valuations_path(@account) do %>
               <div class="p-5 flex justify-center items-center">
-                <p class="text-gray-500 animate-pulse text-sm">Loading account history...</p>
+                <%= tag.p t(".loading_history"), class: "text-gray-500 animate-pulse text-sm" %>
               </div>
             <% end %>
           </div>

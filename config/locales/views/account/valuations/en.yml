@@ -17,5 +17,11 @@ en:
           this entry back is by re-entering it manually via a new entry</p>"
         confirm_title: Delete Entry?
         delete_entry: "Delete entry"
+      destroy:
+        success: "Valuation deleted"
+      update:
+        success: "Valuation updated"
+      form:
+        cancel: "Cancel"
   start_balance: "Starting balance"
   value_update: "Value update"
