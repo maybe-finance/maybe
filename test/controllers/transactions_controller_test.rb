@@ -4,7 +4,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
     @transaction = transactions(:checking_one)
-    @recent_transactions = @user.family.transactions.ordered.where(transfer_id: nil).limit(20).to_a
+    @recent_transactions = @user.family.transactions.ordered.limit(20).to_a
   end
 
   test "should get paginated index with most recent transactions first" do
@@ -36,7 +36,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     get transactions_url(page: 2)
     assert_response :success
 
-    @recent_transactions[10, 10].each do |transaction|
+    @recent_transactions[10, 10].select { |t| t.transfer_id == nil }.each do |transaction|
       assert_dom "#" + dom_id(transaction), count: 1
     end
   end
