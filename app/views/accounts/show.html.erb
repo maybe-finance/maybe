@@ -56,11 +56,11 @@
     <div class="p-4 flex justify-between">
       <div class="space-y-2">
         <%= render partial: "shared/value_heading", locals: {
-            label: "Total Value",
-            period: @period,
-            value: @account.balance_money,
-            trend: @balance_series.trend
-          } %>
+          label: "Total Value",
+          period: @period,
+          value: @account.balance_money,
+          trend: @balance_series.trend
+        } %>
       </div>
       <%= form_with url: account_path(@account), method: :get, class: "flex items-center gap-4", data: { controller: "auto-submit-form" } do %>
         <%= render partial: "shared/period_select", locals: { value: @period.name } %>
@@ -77,7 +77,23 @@
     </div>
     <div class="min-h-[800px]">
       <div data-tabs-target="tab" id="account-history-tab">
-        <%= render partial: "accounts/account_history", locals: { account: @account, valuations: @valuation_series } %>
+        <div class="bg-white space-y-4 p-5 border border-alpha-black-25 rounded-xl shadow-xs">
+          <div class="flex items-center justify-between">
+            <%= tag.h2 t(".valuations"), class: "font-medium text-lg" %>
+            <%= link_to new_account_valuation_path(@account), data: { turbo_frame: dom_id(Account::Valuation.new) }, class: "flex gap-1 font-medium items-center bg-gray-50 text-gray-900 p-2 rounded-lg" do %>
+              <%= lucide_icon("plus", class: "w-5 h-5 text-gray-900") %>
+              <%= tag.span t(".new_entry"), class: "text-sm" %>
+            <% end %>
+          </div>
+
+          <div class="rounded-xl bg-gray-25 p-1">
+            <%= turbo_frame_tag dom_id(@account, "valuations"), src: account_valuations_path(@account) do %>
+              <div class="p-5 flex justify-center items-center">
+                <%= tag.p t(".loading_history"), class: "text-gray-500 animate-pulse text-sm" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
       </div>
       <div data-tabs-target="tab" id="account-transactions-tab" class="hidden">
         <%= render partial: "accounts/transactions", locals: { account: @account, transactions: @account.transactions.order(date: :desc) } %>

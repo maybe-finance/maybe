@@ -44,7 +44,7 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create an account" do
-    assert_difference [ "Account.count", "Valuation.count" ], 1 do
+    assert_difference [ "Account.count", "Account::Valuation.count" ], 1 do
       post accounts_path, params: {
         account: {
           accountable_type: "Depository",
@@ -60,7 +60,7 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "can add optional start date and balance to an account on create" do
-    assert_difference -> { Account.count } => 1, -> { Valuation.count } => 2 do
+    assert_difference -> { Account.count } => 1, -> { Account::Valuation.count } => 2 do
       post accounts_path, params: {
         account: {
           accountable_type: "Depository",

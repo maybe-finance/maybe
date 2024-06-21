@@ -1,13 +1,6 @@
 ---
 en:
   accounts:
-    account_valuation_list:
-      confirm_accept: Delete entry
-      confirm_body_html: "<p>Deleting this entry will remove it from the account’s
-        history which will impact different parts of your account. This includes the
-        net worth and account graphs.</p></br><p>The only way you’ll be able to add
-        this entry back is by re-entering it manually via a new entry</p>"
-      confirm_title: Delete Entry?
     create:
       success: New account created successfully
     destroy:
@@ -65,9 +58,12 @@ en:
       confirm_title: Delete account?
       edit: Edit
       import: Import transactions
+      loading_history: Loading account history...
+      new_entry: New entry
       sync_message_missing_rates: Since exchange rates haven't been synced, balance
         graphs may not reflect accurate values.
       sync_message_unknown_error: An error has occurred during the sync.
+      valuations: Value history
     summary:
       new: New account
     sync:

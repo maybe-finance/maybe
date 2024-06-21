@@ -1,0 +1,50 @@
+<%# locals: (valuation:) %>
+
+<%= turbo_frame_tag dom_id(valuation) do %>
+  <div class="p-4 grid grid-cols-10 items-center">
+    <div class="col-span-5 flex items-center gap-4">
+      <%= tag.div class: "w-8 h-8 rounded-full p-1.5 flex items-center justify-center", style: valuation_style(valuation).html_safe do %>
+        <%= lucide_icon valuation_icon(valuation), class: "w-4 h-4" %>
+      <% end %>
+
+      <div class="text-sm">
+        <%= tag.p valuation.date, class: "text-gray-900 font-medium" %>
+        <%= tag.p valuation.first_of_series? ? t(".start_balance") : t(".value_update"), class: "text-gray-500" %>
+      </div>
+    </div>
+
+    <div class="col-span-2 justify-self-end">
+      <%= tag.p format_money(valuation.value_money), class: "font-medium text-sm text-gray-900" %>
+    </div>
+
+    <div class="col-span-2 justify-self-end font-medium text-sm" style="color: <%= valuation.trend.color %>">
+      <% if valuation.trend.direction.flat? %>
+        <%= tag.span t(".no_change"), class: "text-gray-500" %>
+      <% else %>
+        <%= tag.span format_money(valuation.trend.value) %>
+        <%= tag.span "(#{valuation.trend.percent}%)" %>
+      <% end %>
+    </div>
+
+    <div class="col-span-1 justify-self-end">
+      <%= contextual_menu do %>
+        <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+          <%= contextual_menu_modal_action_item t(".edit_entry"), edit_account_valuation_path(valuation.account, valuation) %>
+
+          <%= contextual_menu_destructive_item t(".delete_entry"),
+                                               account_valuation_path(valuation.account, valuation),
+                                               turbo_frame: "_top",
+                                               turbo_confirm: {
+                                                 title: t(".confirm_title"),
+                                                 body: t(".confirm_body_html"),
+                                                 accept: t(".confirm_accept")
+                                               } %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <% unless valuation.last_of_series? %>
+    <div class="h-px bg-alpha-black-50 ml-16 mr-4"></div>
+  <% end %>
+<% end %>
