@@ -9,7 +9,7 @@
 
       <div class="text-sm">
         <%= tag.p valuation.date, class: "text-gray-900 font-medium" %>
-        <%= tag.p valuation_label(valuation), class: "text-gray-500" %>
+        <%= tag.p valuation.first_of_series? ? t(".start_balance") : t(".value_update"), class: "text-gray-500" %>
       </div>
     </div>
 

@@ -40,9 +40,9 @@ class Account::Valuation < ApplicationRecord
 
     def previous_valuation
       @previous_valuation ||= self.account
-          .valuations
-          .where("date < ?", date)
-          .order(date: :desc)
+                                .valuations
+                                .where("date < ?", date)
+                                .order(date: :desc)
                                   .first
     end
 

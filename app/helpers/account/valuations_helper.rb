@@ -20,8 +20,4 @@ module Account::ValuationsHelper
       color: #{color};
     STYLE
   end
-
-  def valuation_label(valuation)
-    valuation.first_of_series? ? t(".start_balance") : t(".value_update")
-  end
 end
