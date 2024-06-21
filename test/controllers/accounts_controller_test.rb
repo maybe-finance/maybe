@@ -47,7 +47,7 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
     assert_difference [ "Account.count", "Valuation.count" ], 1 do
       post accounts_path, params: {
         account: {
-          accountable_type: "Account::Depository",
+          accountable_type: "Depository",
           balance: 200,
           subtype: "checking",
           institution_id: institutions(:chase).id
@@ -63,7 +63,7 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
     assert_difference -> { Account.count } => 1, -> { Valuation.count } => 2 do
       post accounts_path, params: {
         account: {
-          accountable_type: "Account::Depository",
+          accountable_type: "Depository",
           balance: 200,
           subtype: "checking",
           institution_id: institutions(:chase).id,

@@ -16,7 +16,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "create seeds default transaction categories" do
-    assert_difference "Transaction::Category.count", Transaction::Category::DEFAULT_CATEGORIES.size do
+    assert_difference "Category.count", Category::DEFAULT_CATEGORIES.size do
       post registration_url, params: { user: {
       email: "john@example.com",
       password: "password",

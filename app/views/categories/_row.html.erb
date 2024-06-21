@@ -1,0 +1,23 @@
+<div class="flex justify-between mx-4 py-5 border-b last:border-b-0 border-alpha-black-50">
+  <%= render partial: "categories/badge", locals: { category: row } %>
+
+  <%= contextual_menu do %>
+    <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+      <%= link_to edit_category_path(row),
+            class: "block w-full py-2 px-3 space-x-2 text-gray-900 hover:bg-gray-50 flex items-center rounded-lg",
+            data: { turbo_frame: :modal } do %>
+        <%= lucide_icon "pencil-line", class: "w-5 h-5 text-gray-500" %>
+
+        <span><%= t(".edit") %></span>
+      <% end %>
+
+      <%= link_to new_category_deletion_path(row),
+            class: "block w-full py-2 px-3 space-x-2 text-red-600 hover:bg-red-50 flex items-center rounded-lg",
+            data: { turbo_frame: :modal } do %>
+        <%= lucide_icon "trash-2", class: "w-5 h-5" %>
+
+        <span><%= t(".delete") %></span>
+      <% end %>
+    </div>
+  <% end %>
+</div>

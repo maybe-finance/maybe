@@ -8,14 +8,14 @@ class TransferTest < ActiveSupport::TestCase
   end
 
   test "transfer valid if it has inflow and outflow from different accounts for the same amount" do
-    transfer = Transfer.create! transactions: [ @inflow, @outflow ]
+    transfer = Account::Transfer.create! transactions: [ @inflow, @outflow ]
 
     assert transfer.valid?
   end
 
   test "transfer must have 2 transactions" do
-    invalid_transfer_1 = Transfer.new transactions: [ @outflow ]
-    invalid_transfer_2 = Transfer.new transactions: [ @inflow, @outflow, transactions(:savings_four) ]
+    invalid_transfer_1 = Account::Transfer.new transactions: [ @outflow ]
+    invalid_transfer_2 = Account::Transfer.new transactions: [ @inflow, @outflow, transactions(:savings_four) ]
 
     assert invalid_transfer_1.invalid?
     assert invalid_transfer_2.invalid?
@@ -27,7 +27,7 @@ class TransferTest < ActiveSupport::TestCase
     outflow = account.transactions.create! date: Date.current, name: "Outflow", amount: 100
 
     assert_raise ActiveRecord::RecordInvalid do
-      Transfer.create! transactions: [ inflow, outflow ]
+      Account::Transfer.create! transactions: [ inflow, outflow ]
     end
   end
 
@@ -35,7 +35,7 @@ class TransferTest < ActiveSupport::TestCase
     @inflow.update! marked_as_transfer: false
 
     assert_raise ActiveRecord::RecordInvalid do
-      Transfer.create! transactions: [ @inflow, @outflow ]
+      Account::Transfer.create! transactions: [ @inflow, @outflow ]
     end
   end
 
@@ -43,7 +43,7 @@ class TransferTest < ActiveSupport::TestCase
     @outflow.update! amount: 105
 
     assert_raises ActiveRecord::RecordInvalid do
-      Transfer.create! transactions: [ @inflow, @outflow ]
+      Account::Transfer.create! transactions: [ @inflow, @outflow ]
     end
   end
 end
