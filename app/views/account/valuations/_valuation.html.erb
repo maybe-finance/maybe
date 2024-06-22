@@ -21,7 +21,7 @@
       <% if valuation.trend.direction.flat? %>
         <%= tag.span t(".no_change"), class: "text-gray-500" %>
       <% else %>
-        <%= tag.span format_money(valuation.trend.value) %>
+        <%= tag.span format_money(Money.new(valuation.trend.value, valuation.value_money.currency)) %>
         <%= tag.span "(#{valuation.trend.percent}%)" %>
       <% end %>
     </div>
