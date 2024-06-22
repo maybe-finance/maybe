@@ -4,7 +4,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
     @transaction = transactions(:checking_one)
-    @recent_transactions = @user.family.transactions.ordered.where(transfer_id: nil).limit(20).to_a
+    @recent_transactions = @user.family.transactions.ordered.limit(20).to_a
   end
 
   test "should get paginated index with most recent transactions first" do
@@ -36,7 +36,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     get transactions_url(page: 2)
     assert_response :success
 
-    @recent_transactions[10, 10].each do |transaction|
+    @recent_transactions[10, 10].select { |t| t.transfer_id == nil }.each do |transaction|
       assert_dom "#" + dom_id(transaction), count: 1
     end
   end
@@ -75,7 +75,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_equal transaction_params[:amount].to_d, Transaction.order(created_at: :desc).first.amount
-    assert_equal flash[:notice], "New transaction created successfully"
+    assert_equal "New transaction created successfully", flash[:notice]
     assert_enqueued_with(job: AccountSyncJob)
     assert_redirected_to transactions_url
   end
@@ -159,8 +159,8 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     transactions.each do |transaction|
       transaction.update! \
         excluded: false,
-        category_id: Transaction::Category.first.id,
-        merchant_id: Transaction::Merchant.first.id,
+        category_id: Category.first.id,
+        merchant_id: Merchant.first.id,
         notes: "Starting note"
     end
 
@@ -169,8 +169,8 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
         date: Date.current,
         transaction_ids: transactions.map(&:id),
         excluded: true,
-        category_id: Transaction::Category.second.id,
-        merchant_id: Transaction::Merchant.second.id,
+        category_id: Category.second.id,
+        merchant_id: Merchant.second.id,
         notes: "Updated note"
       }
     }
@@ -181,8 +181,8 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     transactions.reload.each do |transaction|
       assert_equal Date.current, transaction.date
       assert transaction.excluded
-      assert_equal Transaction::Category.second, transaction.category
-      assert_equal Transaction::Merchant.second, transaction.merchant
+      assert_equal Category.second, transaction.category
+      assert_equal Merchant.second, transaction.merchant
       assert_equal "Updated note", transaction.notes
     end
   end

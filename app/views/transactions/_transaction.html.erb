@@ -28,7 +28,7 @@
 
   <% unless unconfirmed_transfer?(transaction) %>
     <div class="col-span-3">
-      <%= render "transactions/categories/menu", transaction: transaction %>
+      <%= render "categories/menu", transaction: transaction %>
     </div>
 
     <%= link_to transaction.account.name,

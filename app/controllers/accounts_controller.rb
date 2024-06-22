@@ -35,7 +35,6 @@ class AccountsController < ApplicationController
 
   def show
     @balance_series = @account.series(period: @period)
-    @valuation_series = @account.valuations.to_series
   end
 
   def edit

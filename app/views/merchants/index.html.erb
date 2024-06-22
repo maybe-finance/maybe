@@ -1,0 +1,38 @@
+<% content_for :sidebar do %>
+  <%= render "settings/nav" %>
+<% end %>
+<div class="space-y-4">
+  <div class="flex items-center justify-between">
+    <h1 class="text-xl font-medium text-gray-900"><%= t(".title") %></h1>
+    <%= link_to new_merchant_path, class: "flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2 pr-3", data: { turbo_frame: "modal" } do %>
+      <%= lucide_icon("plus", class: "w-5 h-5") %>
+      <span><%= t(".new_short") %></span>
+    <% end %>
+  </div>
+  <div class="bg-white shadow-xs border border-alpha-black-25 rounded-xl p-4">
+    <% if @merchants.empty? %>
+      <div class="flex justify-center items-center py-20">
+        <div class="text-center flex flex-col items-center max-w-[300px]">
+          <p class="text-gray-900 mb-1 font-medium text-sm"><%= t(".empty") %></p>
+          <%= link_to new_merchant_path, class: "w-fit flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2 pr-3", data: { turbo_frame: "modal" } do %>
+            <%= lucide_icon("plus", class: "w-5 h-5") %>
+            <span><%= t(".new_long") %></span>
+          <% end %>
+        </div>
+      </div>
+    <% else %>
+      <div class="bg-gray-25 p-1 rounded-xl">
+        <div class="flex items-center px-4 py-2 text-xs font-medium text-gray-500">
+          <p><%= t(".title") %></p>
+          <span class="text-gray-400 mx-2">&middot;</span>
+          <p><%= @merchants.count %></p>
+        </div>
+        <%= render partial: "merchants/list", locals: { merchants: @merchants } %>
+      </div>
+    <% end %>
+  </div>
+  <div class="flex justify-between gap-4">
+    <%= previous_setting("Categories", categories_path) %>
+    <%= next_setting("Rules", transaction_rules_path) %>
+  </div>
+</div>

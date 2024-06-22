@@ -33,13 +33,13 @@ class FamilyTest < ActiveSupport::TestCase
   end
 
   test "should destroy dependent transaction categories" do
-    assert_difference("Transaction::Category.count", -@family.transaction_categories.count) do
+    assert_difference("Category.count", -@family.categories.count) do
       @family.destroy
     end
   end
 
   test "should destroy dependent merchants" do
-    assert_difference("Transaction::Merchant.count", -@family.transaction_merchants.count) do
+    assert_difference("Merchant.count", -@family.merchants.count) do
       @family.destroy
     end
   end

@@ -22,47 +22,6 @@ en:
     bulk_update:
       failure: Could not update transactions
       success: "%{count} transactions updated"
-    categories:
-      create:
-        success: New transaction category created successfully
-      deletions:
-        create:
-          success: Transaction category deleted successfully
-        new:
-          category: Category
-          delete_and_leave_uncategorized: Delete "%{category_name}" and leave uncategorized
-          delete_and_recategorize: Delete "%{category_name}" and assign new category
-          delete_category: Delete category?
-          explanation: By deleting this category, every transaction that has the "%{category_name}"
-            category will be uncategorized. Instead of leaving them uncategorized,
-            you can also assign a new category below.
-          replacement_category_prompt: Select category
-      dropdowns:
-        row:
-          delete: Delete category
-          edit: Edit category
-        show:
-          add_new: Add new
-          clear: Clear
-          no_categories: No categories found
-          search_placeholder: Search
-      edit:
-        edit: Edit category
-      form:
-        create: Create category
-        update: Update
-      index:
-        categories: Categories
-        new: New
-      menu:
-        loading: Loading...
-      new:
-        new_category: New category
-      row:
-        delete: Delete category
-        edit: Edit category
-      update:
-        success: Transaction category updated successfully
     create:
       success: New transaction created successfully
     destroy:
@@ -91,33 +50,8 @@ en:
       transaction: transaction
     mark_transfers:
       success: Marked as transfer
-    merchants:
-      create:
-        success: New merchant created successfully
-      destroy:
-        success: Merchant deleted successfully
-      edit:
-        title: Edit merchant
-      form:
-        name_placeholder: Merchant name
-        submit_create: Add merchant
-        submit_edit: Update
-      index:
-        empty: No merchants yet
-        new_long: New merchant
-        new_short: New
-        title: Merchants
-      list:
-        confirm_accept: Delete merchant
-        confirm_body: Are you sure you want to delete this merchant? Removing this
-          merchant will unlink all associated transactions and may effect your reporting.
-        confirm_title: Delete merchant?
-        delete: Delete merchant
-        edit: Edit merchant
-      new:
-        title: New merchant
-      update:
-        success: Merchant updated successfully
+    pagination:
+      rows_per_page: Rows per page
     selection_bar:
       mark_transfers: Mark as transfers?
       mark_transfers_confirm: Mark as transfers

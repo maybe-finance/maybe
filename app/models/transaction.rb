@@ -4,7 +4,7 @@ class Transaction < ApplicationRecord
   monetize :amount
 
   belongs_to :account
-  belongs_to :transfer, optional: true
+  belongs_to :transfer, optional: true, class_name: "Account::Transfer"
   belongs_to :category, optional: true
   belongs_to :merchant, optional: true
   has_many :taggings, as: :taggable, dependent: :destroy
@@ -18,10 +18,10 @@ class Transaction < ApplicationRecord
   scope :inflows, -> { where("amount <= 0") }
   scope :outflows, -> { where("amount > 0") }
   scope :by_name, ->(name) { where("transactions.name ILIKE ?", "%#{name}%") }
-  scope :with_categories, ->(categories) { joins(:category).where(transaction_categories: { name: categories }) }
+  scope :with_categories, ->(categories) { joins(:category).where(categories: { name: categories }) }
   scope :with_accounts, ->(accounts) { joins(:account).where(accounts: { name: accounts }) }
   scope :with_account_ids, ->(account_ids) { joins(:account).where(accounts: { id: account_ids }) }
-  scope :with_merchants, ->(merchants) { joins(:merchant).where(transaction_merchants: { name: merchants }) }
+  scope :with_merchants, ->(merchants) { joins(:merchant).where(merchants: { name: merchants }) }
   scope :on_or_after_date, ->(date) { where("transactions.date >= ?", date) }
   scope :on_or_before_date, ->(date) { where("transactions.date <= ?", date) }
   scope :with_converted_amount, ->(currency = Current.family.currency) {
@@ -70,7 +70,7 @@ class Transaction < ApplicationRecord
       update_all marked_as_transfer: true
 
       # Attempt to "auto match" and save a transfer if 2 transactions selected
-      Transfer.new(transactions: all).save if all.count == 2
+      Account::Transfer.new(transactions: all).save if all.count == 2
     end
 
     def daily_totals(transactions, period: Period.last_30_days, currency: Current.family.currency)
