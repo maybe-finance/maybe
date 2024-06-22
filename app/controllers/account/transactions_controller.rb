@@ -1,18 +1,11 @@
 class Account::TransactionsController < ApplicationController
   layout "with_sidebar"
 
+  before_action :set_account
   before_action :set_transaction, only: %i[ show update destroy ]
 
   def index
-    @q = search_params
-    result = Current.family.transactions.search(@q).ordered
-    @pagy, @transactions = pagy(result, items: params[:per_page] || "10")
-
-    @totals = {
-      count: result.select { |t| t.currency == Current.family.currency }.count,
-      income: result.income_total(Current.family.currency).abs,
-      expense: result.expense_total(Current.family.currency)
-    }
+    @transactions = @account.transactions.ordered
   end
 
   def show
@@ -32,8 +25,13 @@ class Account::TransactionsController < ApplicationController
   end
 
   private
+
+    def set_account
+      @account = Current.family.accounts.find(params[:account_id])
+    end
+
     def set_transaction
-      @transaction = Current.family.accounts.find(params[:account_id]).transactions.find(params[:id])
+      @transaction = @account.transactions.find(params[:id])
     end
 
     def search_params
