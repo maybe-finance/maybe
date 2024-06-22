@@ -11,7 +11,7 @@ module Account::Transaction::SearchesHelper
   end
 
   def get_transaction_search_filter_partial_path(filter)
-    "family/transactions/searches/filters/#{filter[:key]}"
+    "transactions/searches/filters/#{filter[:key]}"
   end
 
   def get_default_transaction_search_filter

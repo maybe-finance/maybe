@@ -1,3 +1,6 @@
+<%# locals: (transaction:, test: false, test2: false) %>
+<%= tag.p "Test working" if test %>
+<%= tag.p "Test 2 working" if test2 %>
 <%= turbo_frame_tag dom_id(transaction), class: "grid grid-cols-12 items-center text-gray-900 text-sm font-medium p-4" do %>
   <div class="pr-10 flex items-center gap-4 <%= unconfirmed_transfer?(transaction) ? "col-span-10" : "col-span-4" %>">
     <%= check_box_tag dom_id(transaction, "selection"),
@@ -9,7 +12,7 @@
     </div>
 
     <% if unconfirmed_transfer?(transaction) %>
-      <%= form_with url: unmark_transfers_account_transactions_path, builder: ActionView::Helpers::FormBuilder, class: "flex items-center", data: {
+      <%= form_with url: unmark_transfers_transactions_path, builder: ActionView::Helpers::FormBuilder, class: "flex items-center", data: {
         turbo_confirm: {
           title: t(".remove_transfer"),
           body: t(".remove_transfer_body"),
