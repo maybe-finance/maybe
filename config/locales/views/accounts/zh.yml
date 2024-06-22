@@ -1,10 +1,6 @@
 ---
 zh:
   accounts:
-    account_valuation_list:
-      confirm_accept: 删除条目
-      confirm_body_html: "<p>删除此条目将从账户历史中移除它，这将影响账户的不同部分，包括净资产和账户图表。</p> <br /> <p>唯一能恢复此条目的方法是通过新条目手动重新输入。</p>"
-      confirm_title: 删除条目？
     create:
       success: 新账户创建成功
     destroy:
@@ -57,8 +53,11 @@ zh:
       confirm_title: 删除账户？
       edit: 编辑
       import: 导入交易
+      loading_history:
+      new_entry:
       sync_message_missing_rates: 由于汇率未同步，余额图表可能不反映准确的值。
       sync_message_unknown_error: 同步期间发生错误。
+      valuations:
     summary:
       new: 新账户
     sync:

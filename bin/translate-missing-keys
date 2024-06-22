@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'rubygems'
+require 'bundler/setup'
+require 'i18n/tasks'
+
+module I18nTasksSync
+  def self.translate_text(text, target_locale)
+    translate = Google::Cloud::Translate::V2.new
+    translation = translate.translate text, to: target_locale
+    translation.text
+  end
+
+  def self.add_missing_keys
+    puts "Adding missing keys..."
+    system('bundle exec i18n-tasks add-missing --nil-value')
+  end
+
+  def self.remove_unused_keys
+    puts "Removing unused keys..."
+    system('yes | bundle exec i18n-tasks remove-unused')
+  end
+
+  def self.auto_translate_missing_keys
+    # ...translate
+  end
+end
+
+I18nTasksSync.add_missing_keys
+I18nTasksSync.remove_unused_keys
+# I18nTasksSync.auto_translate_missing_keys
+
+puts "Translation files have been synchronized and translated."

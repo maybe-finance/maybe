@@ -1,0 +1,23 @@
+---
+zh:
+  account:
+    valuations:
+      destroy:
+        success:
+      form:
+        cancel:
+      index:
+        change:
+        date:
+        value:
+      update:
+        success:
+      valuation:
+        confirm_accept:
+        confirm_body_html:
+        confirm_title:
+        delete_entry:
+        edit_entry:
+        no_change:
+        start_balance:
+        value_update:

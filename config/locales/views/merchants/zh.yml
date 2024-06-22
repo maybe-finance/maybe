@@ -1,0 +1,28 @@
+---
+zh:
+  merchants:
+    create:
+      success:
+    destroy:
+      success:
+    edit:
+      title:
+    form:
+      name_placeholder:
+      submit_create:
+      submit_edit:
+    index:
+      empty:
+      new_long:
+      new_short:
+      title:
+    list:
+      confirm_accept:
+      confirm_body:
+      confirm_title:
+      delete:
+      edit:
+    new:
+      title:
+    update:
+      success:

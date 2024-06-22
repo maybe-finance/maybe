@@ -1,0 +1,13 @@
+---
+zh:
+  tag:
+    deletions:
+      create:
+        deleted:
+      new:
+        delete_and_leave_uncategorized:
+        delete_and_recategorize:
+        delete_tag:
+        explanation:
+        replacement_tag_prompt:
+        tag:

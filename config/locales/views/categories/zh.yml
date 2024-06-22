@@ -1,0 +1,22 @@
+---
+zh:
+  categories:
+    create:
+      success:
+    edit:
+      edit:
+    form:
+      create:
+      update:
+    index:
+      categories:
+      new:
+    menu:
+      loading:
+    new:
+      new_category:
+    row:
+      delete:
+      edit:
+    update:
+      success:

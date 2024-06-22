@@ -1,0 +1,12 @@
+---
+zh:
+  category:
+    dropdowns:
+      row:
+        delete:
+        edit:
+      show:
+        add_new:
+        clear:
+        no_categories:
+        search_placeholder:

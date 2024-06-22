@@ -8,6 +8,9 @@ data:
   write:
     - config/locales/**/*%{locale}.yml
   router: conservative_router
+missing:
+  warn_missing: true
+  locales: [zh]
 search:
   paths:
     - app/

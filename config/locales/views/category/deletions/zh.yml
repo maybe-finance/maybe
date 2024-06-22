@@ -1,0 +1,13 @@
+---
+zh:
+  category:
+    deletions:
+      create:
+        success:
+      new:
+        category:
+        delete_and_leave_uncategorized:
+        delete_and_recategorize:
+        delete_category:
+        explanation:
+        replacement_category_prompt:

@@ -1,0 +1,27 @@
+---
+zh:
+  account:
+    transfers:
+      create:
+        success:
+      destroy:
+        success:
+      form:
+        amount:
+        date:
+        description:
+        description_placeholder:
+        expense:
+        from:
+        income:
+        select_account:
+        submit:
+        to:
+        transfer:
+      new:
+        title:
+      transfer:
+        remove_body:
+        remove_confirm:
+        remove_title:
+        transfer_name:
