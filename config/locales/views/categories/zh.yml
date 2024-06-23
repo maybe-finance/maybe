@@ -2,21 +2,21 @@
 zh:
   categories:
     create:
-      success:
+      success: 新交易类别创建成功
     edit:
-      edit:
+      edit: 编辑类别
     form:
-      create:
-      update:
+      create: 创建类别
+      update: 更新
     index:
-      categories:
-      new:
+      categories: 类别
+      new: 新建
     menu:
-      loading:
+      loading: 加载中...
     new:
-      new_category:
+      new_category: 新类别
     row:
-      delete:
-      edit:
+      delete: 删除类别
+      edit: 编辑类别
     update:
-      success:
+      success: 交易类别更新成功

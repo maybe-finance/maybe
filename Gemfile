@@ -51,6 +51,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
   gem "i18n-tasks"
   gem "easy_translate"
+  gem "ruby-openai"
   gem "erb_lint"
 end
 

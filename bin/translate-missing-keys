@@ -19,6 +19,8 @@ module I18nTasksSync
   def self.auto_translate_missing_keys
     puts "Translating missing keys..."
     system('bundle exec i18n-tasks translate-missing --from=en')
+    # or backend open ai
+    # system('bundle exec i18n-tasks translate-missing --from=en --backend=openai')
   end
 end
 

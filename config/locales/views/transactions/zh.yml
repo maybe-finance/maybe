@@ -48,13 +48,13 @@ zh:
     index:
       transaction: 交易
     mark_transfers:
-      success:
+      success: 标记为转账
     pagination:
-      rows_per_page:
+      rows_per_page: 每页行数
     selection_bar:
-      mark_transfers:
-      mark_transfers_confirm:
-      mark_transfers_message:
+      mark_transfers: 标记为转账？
+      mark_transfers_confirm: 标记为转账
+      mark_transfers_message: 通过将交易标记为转账，它们将不再包含在收入或支出计算中。
     show:
       account_label: 账户
       account_placeholder: 选择一个账户
@@ -76,10 +76,10 @@ zh:
       settings: 设置
       tags_label: 选择一个或多个标签
     transaction:
-      remove_transfer:
-      remove_transfer_body:
-      remove_transfer_confirm:
+      remove_transfer: 移除转账
+      remove_transfer_body: 这将从此交易中移除转账
+      remove_transfer_confirm: 确认
     unmark_transfers:
-      success:
+      success: 转账已移除
     update:
       success: 交易更新成功

@@ -3,10 +3,10 @@ zh:
   category:
     dropdowns:
       row:
-        delete:
-        edit:
+        delete: 删除类别
+        edit: 编辑类别
       show:
-        add_new:
-        clear:
-        no_categories:
-        search_placeholder:
+        add_new: 新增
+        clear: 清除
+        no_categories: 未找到类别
+        search_placeholder: 搜索

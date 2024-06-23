@@ -53,11 +53,11 @@ zh:
       confirm_title: 删除账户？
       edit: 编辑
       import: 导入交易
-      loading_history:
-      new_entry:
+      loading_history: 正在加载账户历史...
+      new_entry: 新条目
       sync_message_missing_rates: 由于汇率未同步，余额图表可能不反映准确的值。
       sync_message_unknown_error: 同步期间发生错误。
-      valuations:
+      valuations: 价值历史
     summary:
       new: 新账户
     sync:

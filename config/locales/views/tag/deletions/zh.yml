@@ -3,11 +3,11 @@ zh:
   tag:
     deletions:
       create:
-        deleted:
+        deleted: 标签已删除
       new:
-        delete_and_leave_uncategorized:
-        delete_and_recategorize:
-        delete_tag:
-        explanation:
-        replacement_tag_prompt:
-        tag:
+        delete_and_leave_uncategorized: 删除 "%{tag_name}"
+        delete_and_recategorize: 删除 "%{tag_name}" 并分配新标签
+        delete_tag: 删除标签？
+        explanation: "%{tag_name} 将从交易和其他可标记实体中移除。您也可以在下面分配一个新标签，而不是将它们留为未标记。"
+        replacement_tag_prompt: 选择标签
+        tag: 标签

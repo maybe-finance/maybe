@@ -181,8 +181,11 @@ GEM
     erubi (1.13.0)
     et-orbi (1.2.11)
       tzinfo
+    event_stream_parser (1.0.0)
     faraday (2.9.1)
       faraday-net_http (>= 2.0, < 3.2)
+    faraday-multipart (1.0.4)
+      multipart-post (~> 2)
     faraday-net_http (3.1.0)
       net-http
     faraday-retry (2.2.1)
@@ -260,6 +263,7 @@ GEM
     mocha (2.4.0)
       ruby2_keywords (>= 0.0.5)
     msgpack (1.7.2)
+    multipart-post (2.4.1)
     net-http (0.4.1)
       uri
     net-imap (0.4.13)
@@ -374,6 +378,10 @@ GEM
       sorbet-runtime (>= 0.5.10782)
     ruby-lsp-rails (0.3.7)
       ruby-lsp (>= 0.17.0, < 0.18.0)
+    ruby-openai (7.1.0)
+      event_stream_parser (>= 0.3.0, < 2.0.0)
+      faraday (>= 1)
+      faraday-multipart (>= 1)
     ruby-progressbar (1.13.0)
     ruby-vips (2.2.1)
       ffi (~> 1.12)
@@ -492,6 +500,7 @@ DEPENDENCIES
   rails-settings-cached
   rubocop-rails-omakase
   ruby-lsp-rails
+  ruby-openai
   selenium-webdriver
   sentry-rails
   sentry-ruby
