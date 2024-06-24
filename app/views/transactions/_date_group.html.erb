@@ -11,13 +11,8 @@
     </div>
 
     <div>
-      <% transactions_by_currency = group[:transactions].group_by(&:currency) %>
-      <% transactions_by_currency.each_with_index do |(_currency, transactions), idx| %>
-        <%= tag.span format_money(-transactions.sum(&:amount_money)) %>
-        <%= tag.span "|", class: "mx-2" if idx < transactions_by_currency.count - 1 %>
-      <% end %>
+      <%= format_amount_by_curreny(collection: group[:transactions], money_method: :amount_money, negate: true) %>
     </div>
-
   </div>
   <div class="bg-white shadow-xs rounded-md border border-alpha-black-25 divide-y divide-alpha-black-50">
     <%= render group[:transactions] %>

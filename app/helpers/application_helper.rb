@@ -122,4 +122,11 @@ module ApplicationHelper
     options.reverse_merge!(money.default_format_options)
     ActiveSupport::NumberHelper.number_to_delimited(money.amount.round(options[:precision] || 0), { delimiter: options[:delimiter], separator: options[:separator] })
   end
+
+  def format_amount_by_curreny(collection:, money_method:, seperator: " | ", negate: false, options: {})
+    collection.group_by(&:currency)
+              .transform_values { |item| negate ? item.sum(&money_method) * -1 : item.sum(&money_method) }
+              .map { |_currency, money| format_money(money) }
+              .join(seperator)
+  end
 end
