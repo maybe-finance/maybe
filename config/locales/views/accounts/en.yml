@@ -58,12 +58,9 @@ en:
       confirm_title: Delete account?
       edit: Edit
       import: Import transactions
-      loading_history: Loading account history...
-      new_entry: New entry
       sync_message_missing_rates: Since exchange rates haven't been synced, balance
         graphs may not reflect accurate values.
       sync_message_unknown_error: An error has occurred during the sync.
-      valuations: Value history
     summary:
       new: New account
     sync:

@@ -1,4 +1,4 @@
-class Transaction::RowsController < ApplicationController
+class Account::Transaction::RowsController < ApplicationController
   before_action :set_transaction, only: %i[ show update ]
 
   def show
@@ -7,7 +7,7 @@ class Transaction::RowsController < ApplicationController
   def update
     @transaction.update! transaction_params
 
-    redirect_to transaction_row_path(@transaction)
+    redirect_to account_transaction_row_path(@transaction.account, @transaction)
   end
 
   private
@@ -17,6 +17,6 @@ class Transaction::RowsController < ApplicationController
     end
 
     def set_transaction
-      @transaction = Current.family.transactions.find(params[:id])
+      @transaction = Current.family.accounts.find(params[:account_id]).transactions.find(params[:transaction_id])
     end
 end

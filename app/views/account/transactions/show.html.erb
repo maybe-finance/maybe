@@ -90,7 +90,7 @@
               </div>
 
               <%= button_to t(".delete"),
-                            transaction_path(@transaction),
+                            account_transaction_path(@transaction),
                             method: :delete,
                             class: "rounded-lg px-3 py-2 text-red-500 text-sm font-medium border border-alpha-black-200",
                             data: { turbo_confirm: true, turbo_frame: "_top" } %>

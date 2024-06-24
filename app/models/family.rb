@@ -3,7 +3,7 @@ class Family < ApplicationRecord
   has_many :tags, dependent: :destroy
   has_many :accounts, dependent: :destroy
   has_many :institutions, dependent: :destroy
-  has_many :transactions, through: :accounts
+  has_many :transactions, through: :accounts, class_name: "Account::Transaction"
   has_many :imports, through: :accounts
   has_many :categories, dependent: :destroy
   has_many :merchants, dependent: :destroy
@@ -40,9 +40,9 @@ class Family < ApplicationRecord
                   "COALESCE(SUM(amount) FILTER (WHERE amount > 0), 0) AS spending",
                   "COALESCE(SUM(-amount) FILTER (WHERE amount < 0), 0) AS income"
                 )
-                .where("transactions.date >= ?", period.date_range.begin)
-                .where("transactions.date <= ?", period.date_range.end)
-                .where("transactions.marked_as_transfer = ?", false)
+                .where("account_transactions.date >= ?", period.date_range.begin)
+                .where("account_transactions.date <= ?", period.date_range.end)
+                .where("account_transactions.marked_as_transfer = ?", false)
                 .group("id")
                 .to_a
 
@@ -60,7 +60,7 @@ class Family < ApplicationRecord
   end
 
   def snapshot_transactions
-    rolling_totals = Transaction.daily_rolling_totals(transactions, period: Period.last_30_days, currency: self.currency)
+    rolling_totals = Account::Transaction.daily_rolling_totals(transactions, period: Period.last_30_days, currency: self.currency)
 
     spending = []
     income = []

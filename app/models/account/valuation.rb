@@ -15,12 +15,8 @@ class Account::Valuation < ApplicationRecord
     @trend ||= create_trend
   end
 
-  def first_of_series?
+  def oldest?
     account.valuations.chronological.limit(1).pluck(:date).first == self.date
-  end
-
-  def last_of_series?
-    account.valuations.reverse_chronological.limit(1).pluck(:date).first == self.date
   end
 
   def sync_account_later

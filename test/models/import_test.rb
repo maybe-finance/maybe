@@ -45,7 +45,7 @@ class ImportTest < ActiveSupport::TestCase
     # Fixtures already define "Food & Drink" and "Income", so these should not be created
     # "Shopping" is a new category, but should only be created 1x during import
     assert_difference \
-      -> { Transaction.count } => 4,
+      -> { Account::Transaction.count } => 4,
       -> { Category.count } => 1,
       -> { Tagging.count } => 4,
       -> { Tag.count } => 2 do
@@ -59,11 +59,11 @@ class ImportTest < ActiveSupport::TestCase
 
   test "publishes a valid import with missing data" do
     @empty_import.update! raw_csv_str: valid_csv_with_missing_data
-    assert_difference -> { Category.count } => 1, -> { Transaction.count } => 2 do
+    assert_difference -> { Category.count } => 1, -> { Account::Transaction.count } => 2 do
       @empty_import.publish
     end
 
-    assert_not_nil Transaction.find_sole_by(name: Import::FALLBACK_TRANSACTION_NAME)
+    assert_not_nil Account::Transaction.find_sole_by(name: Import::FALLBACK_TRANSACTION_NAME)
 
     @empty_import.reload
 
@@ -73,7 +73,7 @@ class ImportTest < ActiveSupport::TestCase
   test "failed publish results in error status" do
     @empty_import.update! raw_csv_str: valid_csv_with_invalid_values
 
-    assert_difference "Transaction.count", 0 do
+    assert_difference "Account::Transaction.count", 0 do
       @empty_import.publish
     end
 

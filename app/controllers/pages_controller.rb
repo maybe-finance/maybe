@@ -21,7 +21,7 @@ class PagesController < ApplicationController
 
     @accounts = Current.family.accounts
     @account_groups = @accounts.by_group(period: @period, currency: Current.family.currency)
-    @transactions = Current.family.transactions.limit(5).order(date: :desc)
+    @transactions = Current.family.transactions.limit(6).order(date: :desc)
 
     # TODO: Placeholders for trendlines
     placeholder_series_data = 10.times.map do |i|

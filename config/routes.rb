@@ -51,23 +51,12 @@ Rails.application.routes.draw do
 
   resources :merchants, only: %i[ index new create edit update destroy ]
 
-  namespace :transaction do
-    resources :rows, only: %i[ show update ]
-    resources :rules, only: %i[ index ]
-  end
-
-  resources :transactions do
-    collection do
-      post "bulk_delete"
-      get "bulk_edit"
-      post "bulk_update"
-      post "mark_transfers"
-      post "unmark_transfers"
-    end
-  end
-
   namespace :account do
     resources :transfers, only: %i[ new create destroy ]
+
+    namespace :transaction do
+      resources :rules, only: %i[ index ]
+    end
   end
 
   resources :accounts do
@@ -82,7 +71,22 @@ Rails.application.routes.draw do
 
     scope module: :account do
       resource :logo, only: :show
+
       resources :valuations
+
+      resources :transactions, only: %i[ index show update destroy ] do
+        resource :row, only: %i[ show update ], module: :transaction
+      end
+    end
+  end
+
+  resources :transactions, only: %i[ index new create ] do
+    collection do
+      post "bulk_delete"
+      get "bulk_edit"
+      post "bulk_update"
+      post "mark_transfers"
+      post "unmark_transfers"
     end
   end
 

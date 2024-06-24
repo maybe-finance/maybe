@@ -99,7 +99,7 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test "should destroy dependent transactions" do
-    assert_difference("Transaction.count", -@account.transactions.count) do
+    assert_difference("Account::Transaction.count", -@account.transactions.count) do
       @account.destroy
     end
   end

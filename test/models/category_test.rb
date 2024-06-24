@@ -34,7 +34,7 @@ class CategoryTest < ActiveSupport::TestCase
   end
 
   test "replacing and destroying" do
-    transctions = categories(:food_and_drink).transactions.to_a
+    transactions = categories(:food_and_drink).transactions.to_a
 
     categories(:food_and_drink).replace_and_destroy!(categories(:income))
 

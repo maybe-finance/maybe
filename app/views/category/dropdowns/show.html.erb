@@ -25,7 +25,7 @@
       <% end %>
 
       <% if @transaction.category %>
-        <%= button_to transaction_row_path(@transaction),
+        <%= button_to account_transaction_row_path(@transaction.account, @transaction),
                       method: :patch,
                       data: { turbo_frame: dom_id(@transaction) },
                       params: { transaction: { category_id: nil } },

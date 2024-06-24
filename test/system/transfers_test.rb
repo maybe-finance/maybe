@@ -33,8 +33,8 @@ class TransfersTest < ApplicationSystemTestCase
 
   test "can match 2 transactions and create a transfer" do
     transfer_date = Date.current
-    outflow = Transaction.create! name: "Outflow from savings account", date: transfer_date, account: accounts(:savings), amount: 100
-    inflow = Transaction.create! name: "Inflow to checking account", date: transfer_date, account: accounts(:checking), amount: -100
+    outflow = Account::Transaction.create! name: "Outflow from savings account", date: transfer_date, account: accounts(:savings), amount: 100
+    inflow = Account::Transaction.create! name: "Inflow to checking account", date: transfer_date, account: accounts(:checking), amount: -100
 
     visit transactions_url
 

@@ -1,4 +1,4 @@
-<%= form_with model: @transaction, data: { turbo_frame: "_top" } do |f| %>
+<%= form_with model: @transaction, url: transactions_path, scope: "transaction", data: { turbo_frame: "_top" } do |f| %>
   <section>
     <fieldset class="bg-gray-50 rounded-lg p-1 grid grid-flow-col justify-stretch gap-x-2">
       <%= radio_tab_tag form: f, name: :nature, value: :expense, label: t(".expense"), icon: "minus-circle", checked: params[:nature] == "expense" || params[:nature].nil? %>

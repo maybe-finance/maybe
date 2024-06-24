@@ -1,15 +1,15 @@
 require "test_helper"
 
-class TransactionTest < ActiveSupport::TestCase
+class Account::TransactionTest < ActiveSupport::TestCase
   setup do
-    @transaction = transactions(:checking_one)
+    @transaction = account_transactions(:checking_one)
     @family = families(:dylan_family)
   end
 
   # See: https://github.com/maybe-finance/maybe/wiki/vision#signage-of-money
   test "negative amounts are inflows, positive amounts are outflows to an account" do
-    inflow_transaction = transactions(:checking_four)
-    outflow_transaction = transactions(:checking_five)
+    inflow_transaction = account_transactions(:checking_four)
+    outflow_transaction = account_transactions(:checking_five)
 
     assert inflow_transaction.amount < 0
     assert inflow_transaction.inflow?
@@ -35,8 +35,8 @@ class TransactionTest < ActiveSupport::TestCase
   end
 
   test "triggers sync with correct start date when transaction deleted" do
-    prior_transaction = transactions(:checking_two) # 12 days ago
-    current_transaction = transactions(:checking_one) # 5 days ago
+    prior_transaction = account_transactions(:checking_two) # 12 days ago
+    current_transaction = account_transactions(:checking_one) # 5 days ago
     current_transaction.destroy!
 
     current_transaction.account.expects(:sync_later).with(prior_transaction.date)
