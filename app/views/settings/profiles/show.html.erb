@@ -36,7 +36,7 @@
             <%= form.text_field :last_name, placeholder: "Last name", value: Current.user.last_name, label: true %>
           </div>
           <div class="flex justify-end mt-4">
-            <%= form.submit t(".save"), class: "bg-gray-900 text-white rounded-lg px-3 py-2" %>
+            <%= form.submit t(".save"), class: "bg-gray-900 hover:bg-gray-700 cursor-pointer text-white rounded-lg px-3 py-2" %>
           </div>
         </div>
       <% end %>

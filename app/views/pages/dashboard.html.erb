@@ -7,7 +7,7 @@
         <p class="text-gray-500 text-sm"><%= t(".subtitle") %></p>
       <% end %>
     </div>
-    <%= link_to new_account_path, class: "flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2 pr-3", data: { turbo_frame: "modal" } do %>
+    <%= link_to new_account_path, class: "flex text-white text-sm font-medium items-center gap-1 bg-gray-900 hover:bg-gray-700 rounded-lg p-2 pr-3", data: { turbo_frame: "modal" } do %>
       <%= lucide_icon("plus", class: "w-5 h-5") %>
       <span><%= t(".new") %></span>
     <% end %>
