@@ -11,7 +11,7 @@
     </div>
 
     <div>
-      <%= format_amount_by_curreny(collection: group[:transactions], money_method: :amount_money, negate: true) %>
+      <%= totals_by_currency(collection: group[:transactions], money_method: :amount_money, negate: true) %>
     </div>
   </div>
   <div class="bg-white shadow-xs rounded-md border border-alpha-black-25 divide-y divide-alpha-black-50">
