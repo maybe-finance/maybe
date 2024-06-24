@@ -38,7 +38,7 @@ class Import < ApplicationRecord
   end
 
   def get_selected_header_for_field(field)
-    column_mappings&.dig(field) || field.key
+    column_mappings&.dig(field.key) || field.key
   end
 
   def update_csv!(row_idx:, col_idx:, value:)

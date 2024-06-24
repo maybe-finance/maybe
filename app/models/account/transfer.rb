@@ -1,7 +1,8 @@
 class Account::Transfer < ApplicationRecord
   has_many :transactions, dependent: :nullify
 
-  validate :transaction_count, :from_different_accounts, :net_zero_flows, :all_transactions_marked
+  validate :net_zero_flows, if: :single_currency_transfer?
+  validate :transaction_count, :from_different_accounts, :all_transactions_marked
 
   def inflow_transaction
     transactions.find { |t| t.inflow? }
@@ -31,6 +32,10 @@ class Account::Transfer < ApplicationRecord
   end
 
   private
+
+    def single_currency_transfer?
+      transactions.map(&:currency).uniq.size == 1
+    end
 
     def transaction_count
       unless transactions.size == 2

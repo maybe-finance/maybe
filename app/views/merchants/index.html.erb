@@ -1,10 +1,12 @@
 <% content_for :sidebar do %>
   <%= render "settings/nav" %>
 <% end %>
+
 <div class="space-y-4">
   <div class="flex items-center justify-between">
-    <h1 class="text-xl font-medium text-gray-900"><%= t(".title") %></h1>
-    <%= link_to new_merchant_path, class: "flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2 pr-3", data: { turbo_frame: "modal" } do %>
+    <h1 class="text-gray-900 text-xl font-medium"><%= t(".title") %></h1>
+
+    <%= link_to new_merchant_path, class: "rounded-lg bg-gray-900 text-white flex items-center gap-1 justify-center hover:bg-gray-700 px-3 py-2", data: { turbo_frame: :modal } do %>
       <%= lucide_icon("plus", class: "w-5 h-5") %>
       <span><%= t(".new_short") %></span>
     <% end %>
