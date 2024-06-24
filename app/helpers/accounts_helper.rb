@@ -37,4 +37,11 @@ module AccountsHelper
       "Vehicle" => { text: "text-pink-500", bg: "bg-pink-500", bg_transparent: "bg-pink-500/10", fill: "fill-pink-500", hex: "#F23E94" }
     }.fetch(accountable_type, { text: "text-gray-500", bg: "bg-gray-500", bg_transparent: "bg-gray-500/10", fill: "fill-gray-500", hex: "#737373" })
   end
+
+  def format_accounts_balance(accounts, options = {})
+    accounts.group_by(&:currency)
+            .transform_values { |acc| acc.sum(&:balance_money) }
+            .map { |_currency, balance| balance.to_s }
+            .join(", ")
+  end
 end
