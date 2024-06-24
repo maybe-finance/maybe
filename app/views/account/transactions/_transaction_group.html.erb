@@ -12,14 +12,7 @@
       <%= tag.span "#{date.strftime('%b %d, %Y')} · #{transactions.size + (transfers.size * 2)}" %>
     </div>
 
-    <div>
-      <% transactions_by_currency = transactions.group_by(&:currency) %>
-      <% transactions_by_currency.each_with_index do |(_currency, currency_transactions), idx| %>
-        <%= tag.span format_money(-currency_transactions.sum(&:amount_money)) %>
-        <%= tag.span "|", class: "mx-2" if idx < transactions_by_currency.count - 1 %>
-      <% end %>
-    </div>
-
+    <%= totals_by_currency(collection: transactions, money_method: :amount_money, negate: true) %>
   </div>
   <div class="bg-white shadow-xs rounded-md border border-alpha-black-25 divide-y divide-alpha-black-50">
     <%= render transactions, selectable:, **transaction_opts.except(:selectable) %>
