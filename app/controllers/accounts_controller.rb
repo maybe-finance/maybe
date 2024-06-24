@@ -35,6 +35,10 @@ class AccountsController < ApplicationController
 
   def show
     @balance_series = @account.series(period: @period)
+
+    if params[:transaction_id]
+      @transaction = @account.transactions.find(params[:transaction_id])
+    end
   end
 
   def edit

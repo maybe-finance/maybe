@@ -1,6 +1,6 @@
 module Account::ValuationsHelper
   def valuation_icon(valuation)
-    if valuation.first_of_series?
+    if valuation.oldest?
       "keyboard"
     elsif valuation.trend.direction.up?
       "arrow-up"
@@ -12,7 +12,7 @@ module Account::ValuationsHelper
   end
 
   def valuation_style(valuation)
-    color = valuation.first_of_series? ? "#D444F1" : valuation.trend.color
+    color = valuation.oldest? ? "#D444F1" : valuation.trend.color
 
     <<-STYLE.strip
       background-color: color-mix(in srgb, #{color} 5%, white);

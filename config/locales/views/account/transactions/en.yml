@@ -7,6 +7,18 @@ en:
       empty:
         description: Try adding a transaction, editing filters or refining your search
         title: No transactions found
+      index:
+        new: New transaction
+        no_transactions: No transactions for this account yet.
+        transaction: transaction
+        transactions: Transactions
+      loading:
+        loading: Loading transactions...
+      selection_bar:
+        mark_transfers: Mark as transfers?
+        mark_transfers_confirm: Mark as transfers
+        mark_transfers_message: By marking transactions as transfers, they will no
+          longer be included in income or spending calculations.
       show:
         account_label: Account
         account_placeholder: Select an account

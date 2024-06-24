@@ -1,4 +1,5 @@
 <%= turbo_stream_from @account %>
+
 <div class="space-y-4">
   <div class="flex justify-between items-center">
     <div class="flex items-center gap-3">
@@ -70,38 +71,23 @@
       <%= render partial: "shared/line_chart", locals: { series: @balance_series } %>
     </div>
   </div>
-  <div data-controller="tabs" data-tabs-active-class="bg-gray-100" data-tabs-default-tab-value="account-history-tab">
-    <div class="flex gap-1 text-sm text-gray-900 font-medium mb-4">
-      <button data-id="account-history-tab" class="p-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">History</button>
-      <button data-id="account-transactions-tab" class="p-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Transactions</button>
-    </div>
-    <div class="min-h-[800px]">
-      <div data-tabs-target="tab" id="account-history-tab">
-        <div class="bg-white space-y-4 p-5 border border-alpha-black-25 rounded-xl shadow-xs">
-          <div class="flex items-center justify-between">
-            <%= tag.h2 t(".valuations"), class: "font-medium text-lg" %>
-            <%= link_to new_account_valuation_path(@account), data: { turbo_frame: dom_id(Account::Valuation.new) }, class: "flex gap-1 font-medium items-center bg-gray-50 text-gray-900 p-2 rounded-lg" do %>
-              <%= lucide_icon("plus", class: "w-5 h-5 text-gray-900") %>
-              <%= tag.span t(".new_entry"), class: "text-sm" %>
-            <% end %>
-          </div>
 
-          <div class="rounded-xl bg-gray-25 p-1">
-            <%= turbo_frame_tag dom_id(@account, "valuations"), src: account_valuations_path(@account) do %>
-              <div class="p-5 flex justify-center items-center">
-                <%= tag.p t(".loading_history"), class: "text-gray-500 animate-pulse text-sm" %>
-              </div>
-            <% end %>
-          </div>
-        </div>
-      </div>
-      <div data-tabs-target="tab" id="account-transactions-tab" class="hidden">
-        <%= turbo_frame_tag dom_id(@account, "transactions"), src: account_transactions_path(@account) do %>
-          <div class="p-5 flex justify-center items-center">
-            <%= tag.p t(".loading_history"), class: "text-gray-500 animate-pulse text-sm" %>
-          </div>
-        <% end %>
-      </div>
-    </div>
+  <% selected_tab = params[:tab] || "history" %>
+
+  <div class="flex gap-1 text-sm text-gray-900 font-medium mb-4">
+    <%= link_to "History", account_path(tab: "history"), class: ["p-2 rounded-lg", "bg-gray-100": selected_tab == "history"] %>
+    <%= link_to "Transactions", account_path(tab: "transactions"), class: ["p-2 rounded-lg", "bg-gray-100": selected_tab == "transactions"] %>
+  </div>
+
+  <div class="min-h-[800px]">
+    <% if selected_tab == "transactions" %>
+      <%= turbo_frame_tag dom_id(@account, "transactions"), src: account_transactions_path(@account) do %>
+        <%= render "account/transactions/loading" %>
+      <% end %>
+    <% else %>
+      <%= turbo_frame_tag dom_id(@account, "valuations"), src: account_valuations_path(@account) do %>
+        <%= render "account/valuations/loading" %>
+      <% end %>
+    <% end %>
   </div>
 </div>

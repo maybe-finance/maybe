@@ -28,7 +28,7 @@ class TransactionsController < ApplicationController
                           .create!(transaction_params.merge(amount: amount))
 
     @transaction.sync_account_later
-    redirect_to account_transaction_path(@transaction.account, @transaction), notice: t(".success")
+    redirect_back_or_to account_path(@transaction.account), notice: t(".success")
   end
 
   def bulk_delete
@@ -94,6 +94,6 @@ class TransactionsController < ApplicationController
     end
 
     def transaction_params
-      params.require(:transaction).permit(:name, :date, :amount, :currency, :notes, :excluded, :category_id, :merchant_id, tag_ids: [])
+      params.require(:transaction).permit(:name, :date, :amount, :currency, :category_id, tag_ids: [])
     end
 end

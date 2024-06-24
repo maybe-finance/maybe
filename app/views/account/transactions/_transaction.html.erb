@@ -1,43 +1,89 @@
+<%# locals: (transaction:, selectable: true, editable: true, short: false, show_tags: false) %>
 <%= turbo_frame_tag dom_id(transaction), class: "grid grid-cols-12 items-center text-gray-900 text-sm font-medium p-4" do %>
-  <div class="pr-10 flex items-center gap-4 <%= unconfirmed_transfer?(transaction) ? "col-span-10" : "col-span-4" %>">
-    <%= check_box_tag dom_id(transaction, "selection"),
-                      class: "maybe-checkbox maybe-checkbox--light",
-                      data: { id: transaction.id, "bulk-select-target": "row", action: "bulk-select#toggleRowSelection" } %>
+
+  <% name_col_span = unconfirmed_transfer?(transaction) ? "col-span-10" : short ? "col-span-6" : "col-span-4" %>
+  <div class="pr-10 flex items-center gap-4 <%= name_col_span %>">
+    <% if selectable %>
+      <%= check_box_tag dom_id(transaction, "selection"),
+                        class: "maybe-checkbox maybe-checkbox--light",
+                        data: { id: transaction.id, "bulk-select-target": "row", action: "bulk-select#toggleRowSelection" } %>
+    <% end %>
 
     <div class="max-w-full">
-      <%= render "account/transactions/name", transaction: transaction %>
+      <%= content_tag :div, class: ["flex items-center gap-2"] do %>
+        <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-600/5 text-gray-600">
+          <%= transaction.name[0].upcase %>
+        </div>
+
+        <div class="truncate text-gray-900">
+          <% if transaction.new_record? %>
+            <%= content_tag :p, transaction.name %>
+          <% else %>
+            <%= link_to transaction.name,
+                        account_transaction_path(transaction.account, transaction),
+                        data: { turbo_frame: "drawer", turbo_prefetch: false },
+                        class: "hover:underline hover:text-gray-800" %>
+          <% end %>
+        </div>
+      <% end %>
     </div>
 
     <% if unconfirmed_transfer?(transaction) %>
-      <%= form_with url: unmark_transfers_transactions_path, builder: ActionView::Helpers::FormBuilder, class: "flex items-center", data: {
-        turbo_confirm: {
-          title: t(".remove_transfer"),
-          body: t(".remove_transfer_body"),
-          accept: t(".remove_transfer_confirm"),
-        },
-        turbo_frame: "_top"
-      } do |f| %>
-        <%= f.hidden_field "bulk_update[transaction_ids][]", value: transaction.id %>
-        <%= f.button class: "flex items-center justify-center group", title: "Remove transfer" do %>
-          <%= lucide_icon "arrow-left-right", class: "group-hover:hidden text-gray-500 w-4 h-4" %>
-          <%= lucide_icon "unlink", class: "hidden group-hover:inline-block text-gray-900 w-4 h-4" %>
+      <% if editable %>
+        <%= form_with url: unmark_transfers_transactions_path, builder: ActionView::Helpers::FormBuilder, class: "flex items-center", data: {
+          turbo_confirm: {
+            title: t(".remove_transfer"),
+            body: t(".remove_transfer_body"),
+            accept: t(".remove_transfer_confirm"),
+          },
+          turbo_frame: "_top"
+        } do |f| %>
+          <%= f.hidden_field "bulk_update[transaction_ids][]", value: transaction.id %>
+          <%= f.button class: "flex items-center justify-center group", title: "Remove transfer" do %>
+            <%= lucide_icon "arrow-left-right", class: "group-hover:hidden text-gray-500 w-4 h-4" %>
+            <%= lucide_icon "unlink", class: "hidden group-hover:inline-block text-gray-900 w-4 h-4" %>
+          <% end %>
         <% end %>
+      <% else %>
+        <%= lucide_icon "arrow-left-right", class: "text-gray-500 w-4 h-4" %>
       <% end %>
     <% end %>
   </div>
 
   <% unless unconfirmed_transfer?(transaction) %>
-    <div class="col-span-3">
-      <%= render "categories/menu", transaction: transaction %>
-    </div>
+    <% unless short %>
+      <div class="flex items-center gap-1 <%= show_tags ? "col-span-6" : "col-span-3" %>">
+        <% if editable %>
+          <%= render "categories/menu", transaction: transaction %>
+        <% else %>
+          <%= render "categories/badge", category: transaction.category %>
+        <% end %>
 
-    <%= link_to transaction.account.name,
-                account_path(transaction.account),
-                data: { turbo_frame: "_top" },
-                class: ["col-span-3 hover:underline"] %>
+        <% if show_tags %>
+          <% transaction.tags.each do |tag| %>
+            <%= render partial: "tags/badge", locals: { tag: tag } %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% unless show_tags %>
+      <%= tag.div class: short ? "col-span-4" : "col-span-3" do %>
+        <% if transaction.new_record? %>
+          <%= tag.p transaction.account.name %>
+        <% else %>
+          <%= link_to transaction.account.name,
+                      account_path(transaction.account, tab: "transactions"),
+                      data: { turbo_frame: "_top" },
+                      class: "hover:underline" %>
+        <% end %>
+      <% end %>
+    <% end %>
   <% end %>
 
   <div class="col-span-2 ml-auto">
-    <%= render "account/transactions/amount", transaction: transaction %>
+    <%= content_tag :p,
+                    format_money(-transaction.amount_money),
+                    class: ["text-green-600": transaction.inflow?] %>
   </div>
 <% end %>

@@ -35,7 +35,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal transaction_params[:amount].to_d, Account::Transaction.order(created_at: :desc).first.amount
     assert_equal "New transaction created successfully", flash[:notice]
     assert_enqueued_with(job: AccountSyncJob)
-    assert_redirected_to account_transaction_url(account, Account::Transaction.order(:created_at).last)
+    assert_redirected_to account_url(account)
   end
 
   test "expenses are positive" do
@@ -54,7 +54,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
 
     created_transaction = Account::Transaction.order(created_at: :desc).first
 
-    assert_redirected_to account_transaction_url(@transaction.account, created_transaction)
+    assert_redirected_to account_url(@transaction.account)
     assert created_transaction.amount.positive?, "Amount should be positive"
   end
 
@@ -74,7 +74,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
 
     created_transaction = Account::Transaction.order(created_at: :desc).first
 
-    assert_redirected_to account_transaction_url(@transaction.account, created_transaction)
+    assert_redirected_to account_url(@transaction.account)
     assert created_transaction.amount.negative?, "Amount should be negative"
   end
 

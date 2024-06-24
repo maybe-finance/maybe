@@ -1,21 +1,29 @@
 <%= turbo_frame_tag dom_id(@account, "transactions") do %>
   <div class="bg-white space-y-4 p-5 border border-alpha-black-25 rounded-xl shadow-xs">
     <div class="flex justify-between items-center">
-      <h3 class="font-medium text-lg">Transactions</h3>
-      <%= link_to new_transaction_path(account_id: @account), class: "flex gap-1 font-medium items-center bg-gray-50 text-gray-900 p-2 rounded-lg", data: { turbo_frame: :modal } do %>
+      <h3 class="font-medium text-lg"><%= t(".transactions") %></h3>
+      <%= link_to new_transaction_path(account_id: @account),
+                  class: "flex gap-1 font-medium items-center bg-gray-50 text-gray-900 p-2 rounded-lg",
+                  data: { turbo_frame: :modal } do %>
         <%= lucide_icon("plus", class: "w-5 h-5 text-gray-900") %>
-        <span class="text-sm">New transaction</span>
+        <span class="text-sm"><%= t(".new") %></span>
       <% end %>
     </div>
 
-    <% if @transactions.empty? %>
-      <p class="text-gray-500 py-4">No transactions for this account yet.</p>
-    <% else %>
-      <div class="space-y-6">
-        <% @transactions.group_by(&:date).each do |date, grouped_transactions| %>
-          <%= transactions_group(date, grouped_transactions) %>
-        <% end %>
+    <div id="transactions" data-controller="bulk-select" data-bulk-select-resource-value="<%= t(".transaction") %>">
+      <div hidden id="transaction-selection-bar" data-bulk-select-target="selectionBar">
+        <%= render "account/transactions/selection_bar" %>
       </div>
-    <% end %>
+
+      <% if @transactions.empty? %>
+        <p class="text-gray-500 py-4"><%= t(".no_transactions") %></p>
+      <% else %>
+        <div class="space-y-6">
+          <% group_transactions_by_date(@transactions).each do |date, group| %>
+            <%= render "transaction_group", date:, transactions: group[:transactions], transfers: group[:transfers] %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
   </div>
 <% end %>

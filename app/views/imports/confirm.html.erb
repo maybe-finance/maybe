@@ -9,8 +9,15 @@
   </div>
 
   <div class="mb-8 space-y-4">
-    <% @import.dry_run.group_by(&:date).each do |date, draft_transactions| %>
-      <%= transactions_group(date, draft_transactions, "imports/transactions/transaction") %>
+    <% transactions = @import.dry_run %>
+    <% group_transactions_by_date(transactions).each do |date, group| %>
+      <%= render "account/transactions/transaction_group",
+                 date: date,
+                 transactions: group[:transactions],
+                 transfers: group[:transfers],
+                 show_tags: true,
+                 selectable: false,
+                 editable: false %>
     <% end %>
   </div>
 
