@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: 5d34172ff44ec0c88ac03a979679b31e1ed78745
+  revision: 9e370f0243870b39ea9801eeb95498f3a0d7bd83
   branch: 7-2-stable
   specs:
     actioncable (7.2.0.beta2)
@@ -253,13 +253,13 @@ GEM
     matrix (0.4.2)
     mini_magick (4.12.0)
     mini_mime (1.1.5)
-    minitest (5.23.1)
+    minitest (5.24.0)
     mocha (2.4.0)
       ruby2_keywords (>= 0.0.5)
     msgpack (1.7.2)
     net-http (0.4.1)
       uri
-    net-imap (0.4.13)
+    net-imap (0.4.14)
       date
       net-protocol
     net-pop (0.1.2)
@@ -303,7 +303,7 @@ GEM
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.0)
-    rack (3.1.3)
+    rack (3.1.4)
     rack-session (2.0.0)
       rack (>= 3.0.0)
     rack-test (2.1.0)
