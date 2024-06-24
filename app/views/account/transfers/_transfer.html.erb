@@ -1,6 +1,6 @@
 <%= turbo_frame_tag dom_id(transfer), class: "block" do %>
-  <details class="group flex items-center text-gray-900 p-4 text-sm font-medium">
-    <summary class="flex items-center justify-between">
+  <details class="group flex items-center text-gray-900 text-sm font-medium">
+    <summary class="flex items-center justify-between p-4">
       <div class="flex items-center gap-4">
         <%= button_to account_transfer_path(transfer),
                       method: :delete,
@@ -25,16 +25,9 @@
       <%= lucide_icon "chevron-down", class: "group-open:transform group-open:rotate-180 text-gray-500 w-5" %>
     </summary>
 
-    <div class="pt-2 divide-y divide-alpha-black-200">
+    <div class="divide-y divide-alpha-black-200">
       <% transfer.transactions.each do |transaction| %>
-        <div class="py-3 grid grid-cols-12 items-center">
-          <div class="col-span-10">
-            <%= render "account/transactions/name", transaction: transaction %>
-          </div>
-          <div class="col-span-2 ml-auto">
-            <%= render "account/transactions/amount", transaction: transaction %>
-          </div>
-        </div>
+        <%= render transaction, selectable: false, editable: false %>
       <% end %>
     </div>
   </details>

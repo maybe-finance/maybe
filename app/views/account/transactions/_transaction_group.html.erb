@@ -22,7 +22,7 @@
 
   </div>
   <div class="bg-white shadow-xs rounded-md border border-alpha-black-25 divide-y divide-alpha-black-50">
-    <%= render transactions, selectable:, **transaction_opts %>
+    <%= render transactions, selectable:, **transaction_opts.except(:selectable) %>
     <%= render transfers %>
   </div>
 </div>

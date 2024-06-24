@@ -1,7 +1,7 @@
 <%# locals: (transaction:, selectable: true, editable: true, short: false, show_tags: false) %>
 <%= turbo_frame_tag dom_id(transaction), class: "grid grid-cols-12 items-center text-gray-900 text-sm font-medium p-4" do %>
 
-  <% name_col_span = unconfirmed_transfer?(transaction) ? "col-span-10" : short ? "col-span-6" : "col-span-4" %>
+  <% name_col_span = transaction.transfer? ? "col-span-10" : short ? "col-span-6" : "col-span-4" %>
   <div class="pr-10 flex items-center gap-4 <%= name_col_span %>">
     <% if selectable %>
       <%= check_box_tag dom_id(transaction, "selection"),
@@ -50,7 +50,7 @@
     <% end %>
   </div>
 
-  <% unless unconfirmed_transfer?(transaction) %>
+  <% unless transaction.transfer? %>
     <% unless short %>
       <div class="flex items-center gap-1 <%= show_tags ? "col-span-6" : "col-span-3" %>">
         <% if editable %>
