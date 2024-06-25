@@ -25,7 +25,7 @@
   </head>
 
   <body class="h-full">
-    <div id="notification-tray" class="fixed z-50 space-y-1 top-6 right-6"></div>
+    <div id="notification-tray" class="fixed z-50 space-y-1 top-6 right-10"></div>
     <%= safe_join(flash.map { |type, message| notification(message, type: type) }) %>
 
     <%= content_for?(:content) ? yield(:content) : yield %>
