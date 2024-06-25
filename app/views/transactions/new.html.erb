@@ -5,6 +5,6 @@
       <%= lucide_icon "x", class: "w-5 h-5 text-gray-500", data: { action: "click->modal#close" } %>
     </header>
 
-    <%= render "form", transaction: @transaction %>
+    <%= render "form", transaction: @transaction, entry: @entry %>
   </article>
 <% end %>

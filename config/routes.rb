@@ -72,6 +72,8 @@ Rails.application.routes.draw do
     scope module: :account do
       resource :logo, only: :show
 
+      resources :entries
+
       resources :valuations
 
       resources :transactions, only: %i[ index show update destroy ] do

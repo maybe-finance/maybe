@@ -3,7 +3,7 @@ class TransactionsController < ApplicationController
 
   def index
     @q = search_params
-    result = Current.family.transactions.search(@q).ordered
+    result = Current.family.transactions.search(@q)
     @pagy, @transactions = pagy(result, items: params[:per_page] || "10")
 
     @totals = {
@@ -14,21 +14,23 @@ class TransactionsController < ApplicationController
   end
 
   def new
-    @transaction = Account::Transaction.new.tap do |txn|
+    @transaction = Account::Transaction.new
+    @entry = Account::Entry.new(entryable: @transaction).tap do |e|
       if params[:account_id]
-        txn.account = Current.family.accounts.find(params[:account_id])
+        e.account = Current.family.accounts.find(params[:account_id])
       end
     end
   end
 
   def create
-    @transaction = Current.family.accounts
-                          .find(params[:transaction][:account_id])
-                          .transactions
-                          .create!(transaction_params.merge(amount: amount))
+    @entry = Current.family
+                    .accounts
+                    .find(params[:account_entry][:account_id])
+                    .entries
+                    .create!(transaction_entry_params.merge(amount: amount))
 
-    @transaction.sync_account_later
-    redirect_back_or_to account_path(@transaction.account), notice: t(".success")
+    @entry.sync_account_later
+    redirect_back_or_to account_path(@entry.account), notice: t(".success")
   end
 
   def bulk_delete
@@ -71,14 +73,14 @@ class TransactionsController < ApplicationController
 
     def amount
       if nature.income?
-        transaction_params[:amount].to_d * -1
+        transaction_entry_params[:amount].to_d * -1
       else
-        transaction_params[:amount].to_d
+        transaction_entry_params[:amount].to_d
       end
     end
 
     def nature
-      params[:transaction][:nature].to_s.inquiry
+      params[:account_entry][:nature].to_s.inquiry
     end
 
     def bulk_delete_params
@@ -93,7 +95,10 @@ class TransactionsController < ApplicationController
       params.fetch(:q, {}).permit(:start_date, :end_date, :search, accounts: [], account_ids: [], categories: [], merchants: [])
     end
 
-    def transaction_params
-      params.require(:transaction).permit(:name, :date, :amount, :currency, :category_id, tag_ids: [])
+    def transaction_entry_params
+      params.require(:account_entry)
+            .permit(:name, :date, :amount, :currency, :entryable_type, entryable_attributes: [ :category_id ])
+            # Delegated types require both of these to have values, AND they must be in this exact order (potential upstream bug)
+            .with_defaults(entryable_type: "Account::Transaction", entryable_attributes: {})
     end
 end

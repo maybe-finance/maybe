@@ -32,13 +32,14 @@ class Account::TransactionsController < ApplicationController
 
     def set_transaction
       @transaction = @account.transactions.find(params[:id])
+      @entry = @transaction.entry
     end
 
     def search_params
       params.fetch(:q, {}).permit(:start_date, :end_date, :search, accounts: [], account_ids: [], categories: [], merchants: [])
     end
 
-    def transaction_params
-      params.require(:transaction).permit(:name, :date, :amount, :currency, :notes, :excluded, :category_id, :merchant_id, tag_ids: [])
+    def entry_params
+      params.require(:account_entry).permit(:name, :date, :amount, :currency, entryable_attributes: [ :notes, :excluded, :category_id, :merchant_id, tag_ids: [] ])
     end
 end

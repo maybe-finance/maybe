@@ -1,7 +1,7 @@
-<%# locals: (valuation:) %>
-<%= form_with model: valuation,
+<%# locals: (entry:, valuation:) %>
+<%= form_with model: entry,
               data: { turbo_frame: "_top" },
-              url: valuation.new_record? ? account_valuations_path(valuation.account) : account_valuation_path(valuation.account, valuation),
+              url: entry.new_record? ? account_valuations_path(entry.account) : account_valuation_path(entry.account, valuation),
               builder: ActionView::Helpers::FormBuilder do |f| %>
   <div class="grid grid-cols-10 p-4 items-center">
     <div class="col-span-7 flex items-center gap-4">
@@ -10,13 +10,13 @@
       </div>
       <div class="w-full flex items-center justify-between gap-2">
         <%= f.date_field :date, required: "required", max: Date.today, class: "border border-alpha-black-200 bg-white rounded-lg shadow-xs min-w-[200px] px-3 py-1.5 text-gray-900 text-sm" %>
-        <%= f.number_field :value, required: "required", placeholder: "0.00", step: "0.01", class: "bg-white border border-alpha-black-200 rounded-lg shadow-xs text-gray-900 text-sm px-3 py-1.5 text-right" %>
-        <%= f.hidden_field :currency, value: valuation.account.currency %>
+        <%= f.number_field :amount, required: "required", placeholder: "0.00", step: "0.01", class: "bg-white border border-alpha-black-200 rounded-lg shadow-xs text-gray-900 text-sm px-3 py-1.5 text-right" %>
+        <%= f.hidden_field :currency, value: entry.account.currency %>
       </div>
     </div>
 
     <div class="col-span-3 flex gap-2 justify-end items-center">
-      <%= link_to t(".cancel"), account_valuations_path(valuation.account), class: "text-sm text-gray-900 hover:text-gray-800 font-medium px-3 py-1.5" %>
+      <%= link_to t(".cancel"), account_valuations_path(entry.account), class: "text-sm text-gray-900 hover:text-gray-800 font-medium px-3 py-1.5" %>
       <%= f.submit class: "bg-gray-50 rounded-lg font-medium px-3 py-1.5 cursor-pointer hover:bg-gray-100 text-sm" %>
     </div>
   </div>

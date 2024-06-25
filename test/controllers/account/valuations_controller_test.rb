@@ -4,7 +4,7 @@ class Account::ValuationsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
     @valuation = account_valuations(:savings_one)
-    @account = @valuation.account
+    @account = @valuation.entry.account
   end
 
   test "get valuations for an account" do
@@ -18,10 +18,11 @@ class Account::ValuationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create valuation" do
-    assert_difference("Account::Valuation.count") do
+    assert_difference [ "Account::Entry.count", "Account::Valuation.count" ], 1 do
       post account_valuations_url(@account), params: {
-        account_valuation: {
-          value: 19800,
+        account_entry: {
+          amount: 19800,
+          currency: "USD",
           date: Date.current
         }
       }
@@ -35,9 +36,9 @@ class Account::ValuationsControllerTest < ActionDispatch::IntegrationTest
   test "error when valuation already exists for date" do
     assert_difference("Account::Valuation.count", 0) do
       post account_valuations_url(@account), params: {
-        account_valuation: {
-          value: 19800,
-          date: @valuation.date
+        account_entry: {
+          amount: 19800,
+          date: @valuation.entry.date
         }
       }
     end
@@ -48,8 +49,8 @@ class Account::ValuationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should update valuation" do
     patch account_valuation_url(@account, @valuation), params: {
-      account_valuation: {
-        value: 19550,
+      account_entry: {
+        amount: 19550,
         date: Date.current
       }
     }
@@ -60,7 +61,7 @@ class Account::ValuationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy valuation" do
-    assert_difference("Account::Valuation.count", -1) do
+    assert_difference [ "Account::Valuation.count", "Account::Entry.count" ], -1 do
       delete account_valuation_url(@account, @valuation)
     end
 

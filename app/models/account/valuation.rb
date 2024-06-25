@@ -1,22 +1,12 @@
 class Account::Valuation < ApplicationRecord
-  include Monetizable
-
-  monetize :value
-
-  belongs_to :account
-
-  validates :account, :date, :value, presence: true
-  validates :date, uniqueness: { scope: :account_id }
-
-  scope :chronological, -> { order(:date) }
-  scope :reverse_chronological, -> { order(date: :desc) }
+  include Account::Entryable
 
   def trend
     @trend ||= create_trend
   end
 
   def oldest?
-    account.valuations.chronological.limit(1).pluck(:date).first == self.date
+    entry.account.valuations.with_entry.chronological.limit(1).first.entry.date == self.entry.date
   end
 
   def sync_account_later
@@ -32,17 +22,18 @@ class Account::Valuation < ApplicationRecord
   private
 
     def previous_valuation
-      @previous_valuation ||= self.account
-                                .valuations
-                                .where("date < ?", date)
-                                .order(date: :desc)
+      @previous_valuation ||= self.entry.account
+                                  .valuations
+                                  .with_entry
+                                  .where("date < ?", self.entry.date)
+                                  .order(date: :desc)
                                   .first
     end
 
     def create_trend
       TimeSeries::Trend.new \
-        current: self.value,
-        previous: previous_valuation&.value,
-        favorable_direction: account.favorable_direction
+        current: self.entry.amount_money,
+        previous: previous_valuation&.entry&.amount_money,
+        favorable_direction: self.entry.account.favorable_direction
     end
 end

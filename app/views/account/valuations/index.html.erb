@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between">
       <%= tag.h2 t(".valuations"), class: "font-medium text-lg" %>
       <%= link_to new_account_valuation_path(@account),
-                  data: { turbo_frame: dom_id(Account::Valuation.new) },
+                  data: { turbo_frame: dom_id(@account.valuations.new) },
                   class: "flex gap-1 font-medium items-center bg-gray-50 text-gray-900 p-2 rounded-lg" do %>
         <%= lucide_icon("plus", class: "w-5 h-5 text-gray-900") %>
         <%= tag.span t(".new_entry"), class: "text-sm" %>
@@ -19,12 +19,12 @@
       </div>
 
       <div class="rounded-lg bg-white border-alpha-black-25 shadow-xs">
-        <%= turbo_frame_tag dom_id(Account::Valuation.new) %>
+        <%= turbo_frame_tag dom_id(@account.valuations.new) %>
 
-        <% valuations = @account.valuations.reverse_chronological %>
+        <% valuations = @account.valuations.with_entry.reverse_chronological %>
         <% if valuations.any? %>
           <%= render partial: "valuation",
-                     collection: @account.valuations.reverse_chronological,
+                     collection: @account.valuations.with_entry.reverse_chronological,
                      spacer_template: "valuation_ruler" %>
         <% else %>
           <p class="text-gray-500 text-sm p-4"><%= t(".no_valuations") %></p>

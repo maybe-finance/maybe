@@ -3,22 +3,23 @@ class Account::ValuationsController < ApplicationController
   before_action :set_valuation, only: %i[ show edit update destroy ]
 
   def new
-    @valuation = @account.valuations.new
+    @valuation = Account::Valuation.new
+    @entry = @account.entries.build entryable: @valuation
   end
 
   def show
   end
 
   def create
-    @valuation = @account.valuations.build(valuation_params)
+    @entry = @account.entries.build(entry_params.merge(entryable: Account::Valuation.new))
 
-    if @valuation.save
-      @valuation.sync_account_later
+    if @entry.save
+      @entry.sync_account_later
       redirect_to account_path(@account), notice: "Valuation created"
     else
       # TODO: this is not an ideal way to handle errors and should eventually be improved.
       # See: https://github.com/hotwired/turbo-rails/pull/367
-      flash[:error] = @valuation.errors.full_messages.to_sentence
+      flash[:error] = @entry.errors.full_messages.to_sentence
       redirect_to account_path(@account)
     end
   end
@@ -27,20 +28,20 @@ class Account::ValuationsController < ApplicationController
   end
 
   def update
-    if @valuation.update(valuation_params)
-      @valuation.sync_account_later
+    if @entry.update(entry_params)
+      @entry.sync_account_later
       redirect_to account_path(@account), notice: t(".success")
     else
       # TODO: this is not an ideal way to handle errors and should eventually be improved.
       # See: https://github.com/hotwired/turbo-rails/pull/367
-      flash[:error] = @valuation.errors.full_messages.to_sentence
+      flash[:error] = @entry.errors.full_messages.to_sentence
       redirect_to account_path(@account)
     end
   end
 
   def destroy
-    @valuation.destroy!
-    @valuation.sync_account_later
+    @entry.destroy!
+    @entry.sync_account_later
 
     redirect_to account_path(@account), notice: t(".success")
   end
@@ -53,9 +54,10 @@ class Account::ValuationsController < ApplicationController
 
     def set_valuation
       @valuation = @account.valuations.find(params[:id])
+      @entry = @valuation.entry
     end
 
-    def valuation_params
-      params.require(:account_valuation).permit(:date, :value, :currency)
+    def entry_params
+      params.require(:account_entry).permit(:date, :amount, :currency)
     end
 end

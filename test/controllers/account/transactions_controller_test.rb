@@ -4,7 +4,7 @@ class Account::TransactionsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
     @transaction = account_transactions(:checking_one)
-    @account = @transaction.account
+    @account = @transaction.entry.account
     @recent_transactions = @user.family.transactions.ordered.limit(20).to_a
   end
 

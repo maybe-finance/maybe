@@ -13,69 +13,75 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "prefills account_id" do
-    get new_transaction_url(account_id: @transaction.account.id)
+    get new_transaction_url(account_id: @transaction.entry.account.id)
     assert_response :success
-    assert_select "option[selected][value='#{@transaction.account.id}']"
+    assert_select "option[selected][value='#{@transaction.entry.account.id}']"
   end
 
   test "should create transaction" do
     account = @user.family.accounts.first
-    transaction_params = {
+    entry_params = {
       account_id: account.id,
       amount: 100.45,
       currency: "USD",
       date: Date.current,
-      name: "Test transaction"
+      name: "Test transaction",
+      entryable_type: "Account::Transaction",
+      entryable_attributes: { category_id: categories(:food_and_drink).id }
     }
 
-    assert_difference("Account::Transaction.count") do
-      post transactions_url, params: { transaction: transaction_params }
+    assert_difference [ "Account::Entry.count", "Account::Transaction.count" ], 1 do
+      post transactions_url, params: { account_entry: entry_params }
     end
 
-    assert_equal transaction_params[:amount].to_d, Account::Transaction.order(created_at: :desc).first.amount
+    assert_equal entry_params[:amount].to_d, Account::Transaction.order(created_at: :desc).first.entry.amount
     assert_equal "New transaction created successfully", flash[:notice]
     assert_enqueued_with(job: AccountSyncJob)
     assert_redirected_to account_url(account)
   end
 
   test "expenses are positive" do
+    entry = @transaction.entry
+
     assert_difference("Account::Transaction.count") do
       post transactions_url, params: {
-        transaction: {
+        account_entry: {
           nature: "expense",
-          account_id: @transaction.account_id,
-          amount: @transaction.amount,
-          currency: @transaction.currency,
-          date: @transaction.date,
-          name: @transaction.name
+          account_id: entry.account_id,
+          amount: entry.amount,
+          currency: entry.currency,
+          date: entry.date,
+          name: entry.name
         }
       }
     end
 
-    created_transaction = Account::Transaction.order(created_at: :desc).first
+    created_entry = Account::Transaction.order(created_at: :desc).first.entry
 
-    assert_redirected_to account_url(@transaction.account)
-    assert created_transaction.amount.positive?, "Amount should be positive"
+    assert_redirected_to account_url(entry.account)
+    assert created_entry.amount.positive?, "Amount should be positive"
   end
 
   test "incomes are negative" do
+    entry = @transaction.entry
+
     assert_difference("Account::Transaction.count") do
       post transactions_url, params: {
-        transaction: {
+        account_entry: {
           nature: "income",
-          account_id: @transaction.account_id,
-          amount: @transaction.amount,
-          currency: @transaction.currency,
-          date: @transaction.date,
-          name: @transaction.name
+          account_id: entry.account_id,
+          amount: entry.amount,
+          currency: entry.currency,
+          date: entry.date,
+          name: entry.name
         }
       }
     end
 
-    created_transaction = Account::Transaction.order(created_at: :desc).first
+    created_entry = Account::Transaction.order(created_at: :desc).first.entry
 
-    assert_redirected_to account_url(@transaction.account)
-    assert created_transaction.amount.negative?, "Amount should be negative"
+    assert_redirected_to account_url(entry.account)
+    assert created_entry.amount.negative?, "Amount should be negative"
   end
 
   test "should get paginated index with most recent transactions first" do

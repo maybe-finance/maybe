@@ -6,7 +6,7 @@ module Monetizable
         fields.each do |field|
           define_method("#{field}_money") do
             value = self.send(field)
-            value.nil? ? nil : Money.new(value, currency)
+            value.nil? ? nil : Money.new(value, currency || Money.default_currency)
           end
         end
       end
