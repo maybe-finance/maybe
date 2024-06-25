@@ -41,6 +41,29 @@ en:
       account: Account
       next: Next
       select_account: Select account
+    csv_paste:
+      next: Next
+      confirm_title: Are you sure?
+      confirm_body:
+        This will reset your import. Any changes you have made to the
+        CSV will be erased.
+      confirm_accept: Yep, start over!
+      instructions:
+        Your CSV should have the following columns and formats for the
+        best import experience.
+      requirement1: Dates must be in ISO 8601 format (YYYY-MM-DD)
+      requirement2:
+        Negative transaction is an "outflow" (expense), positive is an
+        "inflow" (income)
+      requirement3: Can have 0 or more tags separated by |
+    csv_upload:
+      next: Next
+      confirm_title: Are you sure?
+      confirm_body:
+        This will reset your import. Any changes you have made to the
+        CSV will be erased.
+      confirm_accept: Yep, start over!
+      instructions: The csv file must be in the format below. You can also reuse and
     import:
       complete: Complete
       completed_on: Completed on %{datetime}
@@ -62,14 +85,8 @@ en:
       confirm_title: Are you sure?
       description: Create a spreadsheet or upload an exported CSV from your financial
         institution.
-      instructions: Your CSV should have the following columns and formats for the
-        best import experience.
       load_title: Load import
       next: Next
-      requirement1: Dates must be in ISO 8601 format (YYYY-MM-DD)
-      requirement2: Negative transaction is an "outflow" (expense), positive is an
-        "inflow" (income)
-      requirement3: Can have 0 or more tags separated by |
       subtitle: Import your transactions
     load_csv:
       import_loaded: Import CSV loaded
