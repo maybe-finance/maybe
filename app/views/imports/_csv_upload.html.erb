@@ -1,0 +1,34 @@
+<%= form_with model: @import, url: load_import_path(@import) do |form| %>
+
+<div class="flex items-center justify-center w-full">
+    <label for="raw_csv_str" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50">
+        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+            <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+            </svg>
+
+            <p class="mb-2 text-sm text-gray-500 mt-3">Drag and drop your csv file here or <span class="text-black">click to browse</span></p>
+            <p class="text-xs text-gray-500">CSV (Max. 5MB)</p>
+        </div>
+        <%= form.file_field :raw_csv_str, required: true, class: "hidden" %>
+    </label>
+</div>
+
+
+  <%= form.submit t(".next"), class: "px-4 py-2 mb-4 block w-full rounded-lg bg-alpha-black-25 text-gray text-sm font-medium", data: { turbo_confirm: (@import.raw_csv_str? ? { title: t(".confirm_title"), body: t(".confirm_body"), accept: t(".confirm_accept") } : nil) } %>
+<% end %>
+
+<div class="bg-alpha-black-25 rounded-xl p-1 mt-5">
+  <div class="text-gray-500 p-2 mb-2">
+    <div class="flex gap-2 mb-2">
+      <%= lucide_icon("info", class: "w-5 h-5 shrink-0") %>
+      <p class="text-sm">
+        <%= t(".instructions") %>
+        <span class="text-black underline">
+          <%= link_to 'download this template', '/transactions.csv', download: '' %>
+        </span>
+      </p>
+    </div>
+  </div>
+  <%= render partial: "imports/sample_table" %>
+</div>
