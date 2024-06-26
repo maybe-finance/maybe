@@ -78,6 +78,6 @@ class Account::Balance::CalculatorTest < ActiveSupport::TestCase
     end
 
     def calculated_balances_for(account_key)
-      Account::Balance::Calculator.new(accounts(account_key)).calculate.daily_balances
+      Account::Balance::Calculator.new(accounts(account_key)).daily_balances
     end
 end

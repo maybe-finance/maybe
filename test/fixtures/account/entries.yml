@@ -73,7 +73,7 @@ checking_eight_external_payment:
 
 checking_nine_external_transfer:
   name: Transfer FROM external investing account (owned by user but not known to app)
-  date: <%= 30.days.ago.to_date %>
+  date: <%= 31.days.ago.to_date %>
   amount: -200
   account: checking
   currency: USD
@@ -118,7 +118,7 @@ savings_four:
 
 savings_five_transfer:
   name: Received Transfer from Checking Account
-  date: <%= 30.days.ago.to_date %>
+  date: <%= 31.days.ago.to_date %>
   amount: -250
   account: savings
   currency: USD
@@ -154,7 +154,7 @@ credit_card_three:
 
 credit_card_four_payment:
   name: Received CC Payment from Checking Account
-  date: <%= 30.days.ago.to_date %>
+  date: <%= 31.days.ago.to_date %>
   amount: -100
   account: credit_card
   currency: USD
@@ -181,7 +181,7 @@ eur_checking_two:
 
 eur_checking_three:
   name: Check
-  date: <%= 30.days.ago.to_date %>
+  date: <%= 31.days.ago.to_date %>
   amount: -200
   currency: EUR
   account: eur_checking

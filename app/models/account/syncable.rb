@@ -8,17 +8,22 @@ module Account::Syncable
   def sync(start_date = nil)
     update!(status: "syncing")
 
-    sync_exchange_rates
+    if multi_currency? || foreign_currency?
+      sync_exchange_rates
+    end
 
-    calc_start_date = start_date - 1.day if start_date.present? && self.balance_on(start_date - 1.day).present?
+    calculator = Account::Balance::Calculator.new(self, { calc_start_date: start_date })
 
-    calculator = Account::Balance::Calculator.new(self, { calc_start_date: })
-    calculator.calculate
     self.balances.upsert_all(calculator.daily_balances, unique_by: :index_account_balances_on_account_id_date_currency_unique)
     self.balances.where("date < ?", effective_start_date).delete_all
     new_balance = calculator.daily_balances.select { |b| b[:currency] == self.currency }.last[:balance]
 
-    update!(status: "ok", last_sync_date: Date.today, balance: new_balance, sync_errors: calculator.errors, sync_warnings: calculator.warnings)
+    update! \
+      status: "ok",
+      last_sync_date: Date.current,
+      balance: new_balance,
+      sync_errors: calculator.errors,
+      sync_warnings: calculator.warnings
   rescue => e
     update!(status: "error", sync_errors: [ :sync_message_unknown_error ])
     logger.error("Failed to sync account #{id}: #{e.message}")
@@ -37,10 +42,7 @@ module Account::Syncable
 
   # The earliest date we can calculate a balance for
   def effective_start_date
-    first_valuation_date = self.valuations.order(:date).pluck(:date).first
-    first_transaction_date = self.transactions.order(:date).pluck(:date).first
-
-    [ first_valuation_date, first_transaction_date&.prev_day ].compact.min || Date.current
+    @effective_start_date ||= entries.order(:date).first.try(:date) || Date.current
   end
 
   # Finds all the rate pairs that are required to calculate balances for an account and syncs them
@@ -48,7 +50,7 @@ module Account::Syncable
     rate_candidates = []
 
     if multi_currency?
-      transactions_in_foreign_currency = self.transactions.where.not(currency: self.currency).pluck(:currency, :date).uniq
+      transactions_in_foreign_currency = self.entries.where.not(currency: self.currency).pluck(:currency, :date).uniq
       transactions_in_foreign_currency.each do |currency, date|
         rate_candidates << { date: date, from_currency: currency, to_currency: self.currency }
       end
@@ -59,6 +61,8 @@ module Account::Syncable
         rate_candidates << { date: date, from_currency: self.currency, to_currency: self.family.currency }
       end
     end
+
+    return if rate_candidates.blank?
 
     existing_rates = ExchangeRate.where(
       base_currency: rate_candidates.map { |rc| rc[:from_currency] },
