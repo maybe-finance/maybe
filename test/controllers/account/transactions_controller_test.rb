@@ -25,7 +25,7 @@ class Account::TransactionsControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
-    assert_response :success
+    assert_redirected_to account_transaction_url(@transaction.account, @transaction)
     assert_enqueued_with(job: AccountSyncJob)
   end
 
