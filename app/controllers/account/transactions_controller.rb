@@ -15,7 +15,7 @@ class Account::TransactionsController < ApplicationController
     @transaction.update! transaction_params
     @transaction.sync_account_later
 
-    render turbo_stream: turbo_stream.replace(@transaction, partial: 'transaction', locals: { transaction: @transaction })
+    render turbo_stream: turbo_stream.replace(@transaction, partial: "transaction", locals: { transaction: @transaction })
   end
 
   def destroy
