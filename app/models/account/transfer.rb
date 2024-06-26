@@ -24,10 +24,21 @@ class Account::Transfer < ApplicationRecord
 
   class << self
     def build_from_accounts(from_account, to_account, date:, amount:, currency:, name:)
-      outflow = from_account.transactions.build(amount: amount.abs, currency: currency, date: date, name: name, marked_as_transfer: true)
-      inflow = to_account.transactions.build(amount: -amount.abs, currency: currency, date: date, name: name, marked_as_transfer: true)
+      outflow = from_account.entries.build \
+        amount: amount.abs,
+        currency: currency,
+        date: date,
+        name: name,
+        entryable: Account::Transaction.new(marked_as_transfer: true)
 
-      new transactions: [ outflow, inflow ]
+      inflow = to_account.entries.build \
+        amount: -amount.abs,
+        currency: currency,
+        date: date,
+        name: name,
+        entryable: Account::Transaction.new(marked_as_transfer: true)
+
+      new transactions: [ outflow.account_transaction, inflow.account_transaction ]
     end
   end
 
@@ -44,7 +55,7 @@ class Account::Transfer < ApplicationRecord
     end
 
     def from_different_accounts
-      accounts = transactions.map(&:account_id).uniq
+      accounts = transactions.map { |transaction| transaction.entry.account_id }.uniq
       errors.add :transactions, "must be from different accounts" if accounts.size < transactions.size
     end
 
