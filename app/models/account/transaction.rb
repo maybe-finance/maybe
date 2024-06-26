@@ -91,8 +91,13 @@ class Account::Transaction < ApplicationRecord
       query = query.where("account_entries.date >= ?", params[:start_date]) if params[:start_date].present?
       query = query.where("account_entries.date <= ?", params[:end_date]) if params[:end_date].present?
       query = query.joins("LEFT JOIN categories ON categories.id = account_transactions.category_id").where(categories: { name: params[:categories] }) if params[:categories].present?
-      query = query.joins("INNER JOIN accounts ON accounts.id = account_entries.account_id").where(accounts: { name: params[:accounts] }) if params[:accounts].present?
-      query = query.joins("INNER JOIN accounts ON accounts.id = account_entries.account_id").where(accounts: { id: params[:account_ids] }) if params[:account_ids].present?
+
+      if params[:accounts] || params[:account_ids]
+        query.joins("INNER JOIN accounts ON accounts.id = account_entries.account_id")
+      end
+
+      query = query.where(accounts: { name: params[:accounts] }) if params[:accounts].present?
+      query = query.where(accounts: { id: params[:account_ids] }) if params[:account_ids].present?
       query = query.joins("LEFT JOIN merchants ON merchants.id = account_transactions.merchant_id").where(merchants: { name: params[:merchants] }) if params[:merchants].present?
       query
     end

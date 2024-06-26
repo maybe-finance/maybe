@@ -4,15 +4,16 @@ class TransactionsTest < ApplicationSystemTestCase
   setup do
     sign_in @user = users(:family_admin)
 
-    @latest_transactions = @user.family.transactions.ordered.limit(20).to_a
+    @latest_transactions = @user.family.transactions.ordered_with_entry.limit(20).to_a
     @test_category = @user.family.categories.create! name: "System Test Category"
     @test_merchant = @user.family.merchants.create! name: "System Test Merchant"
-    @target_txn = @user.family.accounts.first.transactions.create! \
-      name: "Oldest transaction",
-      date: 10.years.ago.to_date,
+    @target_txn = Account::Transaction.create! \
       category: @test_category,
       merchant: @test_merchant,
-      amount: 100
+      entry: @user.family.accounts.first.entries.build(name: "Oldest transaction",
+                                                       date: 10.years.ago.to_date,
+                                                       currency: @user.family.currency,
+                                                       amount: 100)
 
     visit transactions_url
   end
@@ -21,13 +22,13 @@ class TransactionsTest < ApplicationSystemTestCase
     assert_selector "h1", text: "Transactions"
 
     within "form#transactions-search" do
-      fill_in "Search transactions by name", with: @target_txn.name
+      fill_in "Search transactions by name", with: @target_txn.entry.name
     end
 
     assert_selector "#" + dom_id(@target_txn), count: 1
 
     within "#transaction-search-filters" do
-      assert_text @target_txn.name
+      assert_text @target_txn.entry.name
     end
   end
 
@@ -35,7 +36,7 @@ class TransactionsTest < ApplicationSystemTestCase
     find("#transaction-filters-button").click
 
     within "#transaction-filters-menu" do
-      check(@target_txn.account.name)
+      check(@target_txn.entry.account.name)
       click_button "Category"
       check(@test_category.name)
       click_button "Apply"
@@ -44,7 +45,7 @@ class TransactionsTest < ApplicationSystemTestCase
     assert_selector "#" + dom_id(@target_txn), count: 1
 
     within "#transaction-search-filters" do
-      assert_text @target_txn.account.name
+      assert_text @target_txn.entry.account.name
       assert_text @target_txn.category.name
     end
   end
@@ -54,7 +55,7 @@ class TransactionsTest < ApplicationSystemTestCase
 
     within "#transaction-filters-menu" do
       click_button "Account"
-      check(@target_txn.account.name)
+      check(@target_txn.entry.account.name)
 
       click_button "Date"
       fill_in "q_start_date", with: 10.days.ago.to_date
@@ -83,14 +84,14 @@ class TransactionsTest < ApplicationSystemTestCase
     assert_text "No transactions found"
 
     within "ul#transaction-search-filters" do
-      find("li", text: @target_txn.account.name).first("a").click
+      find("li", text: @target_txn.entry.account.name).first("a").click
       find("li", text: "on or after #{10.days.ago.to_date}").first("a").click
       find("li", text: "on or before #{Date.current}").first("a").click
       find("li", text: @target_txn.category.name).first("a").click
       find("li", text: @target_txn.merchant.name).first("a").click
     end
 
-    assert_selector "#" + dom_id(@user.family.transactions.ordered.first), count: 1
+    assert_selector "#" + dom_id(@user.family.transactions.ordered_with_entry.first), count: 1
   end
 
   test "can select and deselect entire page of transactions" do

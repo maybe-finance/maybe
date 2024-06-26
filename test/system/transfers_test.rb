@@ -33,8 +33,10 @@ class TransfersTest < ApplicationSystemTestCase
 
   test "can match 2 transactions and create a transfer" do
     transfer_date = Date.current
-    outflow = Account::Transaction.create! name: "Outflow from savings account", date: transfer_date, account: accounts(:savings), amount: 100
-    inflow = Account::Transaction.create! name: "Inflow to checking account", date: transfer_date, account: accounts(:checking), amount: -100
+    outflow = Account::Transaction.create! \
+      entry: accounts(:savings).entries.build(name: "Outflow from savings account", date: transfer_date, amount: 100, currency: "USD")
+    inflow = Account::Transaction.create! \
+      entry: accounts(:checking).entries.build(name: "Inflow to checking account", date: transfer_date, amount: -100, currency: "USD")
 
     visit transactions_url
 
@@ -46,15 +48,15 @@ class TransfersTest < ApplicationSystemTestCase
     click_on "Mark as transfers"
 
     within "#date-group-" + transfer_date.to_s do
-      transfer_name = "Transfer from #{outflow.account.name} to #{inflow.account.name}"
+      transfer_name = "Transfer from #{outflow.entry.account.name} to #{inflow.entry.account.name}"
       find("details", text: transfer_name).click
-      assert_text inflow.name
-      assert_text outflow.name
+      assert_text inflow.entry.name
+      assert_text outflow.entry.name
     end
   end
 
   test "can mark a single transaction as a transfer" do
-    txn = @user.family.transactions.ordered.first
+    txn = @user.family.transactions.ordered_with_entry.first
 
     within "#" + dom_id(txn) do
       assert_text "Uncategorized"
