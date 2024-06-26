@@ -23,7 +23,7 @@
         </summary>
 
         <div class="pb-6">
-          <%= form_with model: @transaction, html: { data: { controller: "auto-submit-form" } } do |f| %>
+          <%= form_with model: [@account, @transaction], url: account_transaction_path, html: { data: { controller: "auto-submit-form" } } do |f| %>
             <div class="space-y-2">
               <%= f.text_field :name, label: t(".name_label"), "data-auto-submit-form-target": "auto" %>
               <%= f.date_field :date, label: t(".date_label"), max: Date.current, "data-auto-submit-form-target": "auto" %>
@@ -46,7 +46,7 @@
         </summary>
 
         <div class="pb-6 space-y-2">
-          <%= form_with model: @transaction, html: { data: { controller: "auto-submit-form" } } do |f| %>
+          <%= form_with model: [@account, @transaction], url: account_transaction_path, html: { data: { controller: "auto-submit-form" } } do |f| %>
             <%= f.select :tag_ids,
                          options_for_select(Current.family.tags.alphabetically.pluck(:name, :id), @transaction.tag_ids),
                          {
@@ -68,7 +68,7 @@
 
         <div class="pb-6">
 
-          <%= form_with model: @transaction, html: { class: "p-3 space-y-3", data: { controller: "auto-submit-form" } } do |f| %>
+          <%= form_with model: [@account, @transaction], url: account_transaction_path, html: { class: "p-3 space-y-3", data: { controller: "auto-submit-form" } } do |f| %>
             <div class="flex cursor-pointer items-center gap-2 justify-between">
               <div class="text-sm space-y-1">
                 <h4 class="text-gray-900"><%= t(".exclude_title") %></h4>
@@ -77,7 +77,7 @@
 
               <div class="relative inline-block select-none">
                 <%= f.check_box :excluded, class: "sr-only peer", "data-auto-submit-form-target": "auto" %>
-                <label for="transaction_excluded" class="maybe-switch"></label>
+                <label for="account_transaction_excluded" class="maybe-switch"></label>
               </div>
             </div>
           <% end %>
@@ -90,7 +90,7 @@
               </div>
 
               <%= button_to t(".delete"),
-                            account_transaction_path(@transaction),
+                            account_transaction_path(@account, @transaction),
                             method: :delete,
                             class: "rounded-lg px-3 py-2 text-red-500 text-sm font-medium border border-alpha-black-200",
                             data: { turbo_confirm: true, turbo_frame: "_top" } %>
