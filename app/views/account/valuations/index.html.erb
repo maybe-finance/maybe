@@ -21,10 +21,10 @@
       <div class="rounded-lg bg-white border-alpha-black-25 shadow-xs">
         <%= turbo_frame_tag dom_id(@account.valuations.new) %>
 
-        <% valuations = @account.valuations.with_entry.reverse_chronological %>
+        <% valuations = @account.valuations.ordered_with_entry %>
         <% if valuations.any? %>
           <%= render partial: "valuation",
-                     collection: @account.valuations.with_entry.reverse_chronological,
+                     collection: valuations,
                      spacer_template: "valuation_ruler" %>
         <% else %>
           <p class="text-gray-500 text-sm p-4"><%= t(".no_valuations") %></p>

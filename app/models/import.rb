@@ -126,13 +126,13 @@ class Import < ApplicationRecord
 
         category = category_cache[category_name] ||= account.family.categories.find_or_initialize_by(name: category_name) if category_name.present?
 
-        txn = account.transactions.build \
-          name: row["name"].presence || FALLBACK_TRANSACTION_NAME,
-          date: Date.iso8601(row["date"]),
+        txn = Account::Transaction.new \
           category: category,
           tags: tags,
-          amount: BigDecimal(row["amount"]) * -1, # User inputs amounts with opposite signage of our internal representation
-          currency: account.currency
+          entry: account.entries.build(name: row["name"].presence || FALLBACK_TRANSACTION_NAME,
+                                       date: Date.iso8601(row["date"]),
+                                       currency: account.currency,
+                                       amount: BigDecimal(row["amount"]) * -1)
 
         transactions << txn
       end

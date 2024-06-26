@@ -24,28 +24,22 @@ class Account::Transfer < ApplicationRecord
 
   class << self
     def build_from_accounts(from_account, to_account, date:, amount:, currency:, name:)
-      outflow = from_account.entries.build \
-        amount: amount.abs,
-        currency: currency,
-        date: date,
-        name: name,
-        entryable: Account::Transaction.new(marked_as_transfer: true)
+      outflow = Account::Transaction.new \
+        marked_as_transfer: true,
+        entry: from_account.entries.build(amount: amount.abs, currency: currency, date: date, name: name)
 
-      inflow = to_account.entries.build \
-        amount: -amount.abs,
-        currency: currency,
-        date: date,
-        name: name,
-        entryable: Account::Transaction.new(marked_as_transfer: true)
+      inflow = Account::Transaction.new \
+        marked_as_transfer: true,
+        entry: to_account.entries.build(amount: amount.abs * -1, currency: currency, date: date, name: name)
 
-      new transactions: [ outflow.account_transaction, inflow.account_transaction ]
+      new transactions: [ outflow, inflow ]
     end
   end
 
   private
 
     def single_currency_transfer?
-      transactions.map(&:currency).uniq.size == 1
+      transactions.map { |t| t.entry.currency }.uniq.size == 1
     end
 
     def transaction_count
@@ -55,12 +49,12 @@ class Account::Transfer < ApplicationRecord
     end
 
     def from_different_accounts
-      accounts = transactions.map { |transaction| transaction.entry.account_id }.uniq
+      accounts = transactions.map { |t| t.entry.account_id }.uniq
       errors.add :transactions, "must be from different accounts" if accounts.size < transactions.size
     end
 
     def net_zero_flows
-      unless transactions.sum(&:amount).zero?
+      unless transactions.map { |t| t.entry.amount }.sum.zero?
         errors.add :transactions, "must have an inflow and outflow that net to zero"
       end
     end

@@ -8,7 +8,6 @@ en:
       cancel: Cancel
       category_label: Category
       category_placeholder: Select a category
-      date_label: Date
       exclude_subtitle: This excludes the transaction from any in-app features or
         analytics.
       exclude_title: Exclude transaction

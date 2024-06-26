@@ -16,10 +16,10 @@ class Account::TransactionsControllerTest < ActionDispatch::IntegrationTest
   test "should update transaction" do
     patch account_transaction_url(@transaction.entry.account, @transaction), params: {
       account_entry: {
-        amount: @transaction.amount,
-        currency: @transaction.currency,
-        date: @transaction.date,
-        name: @transaction.name,
+        amount: @transaction.entry.amount,
+        currency: @transaction.entry.currency,
+        date: @transaction.entry.date,
+        name: @transaction.entry.name,
         tag_ids: [ Tag.first.id, Tag.second.id ]
       }
     }

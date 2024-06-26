@@ -36,16 +36,6 @@ class Account::Transaction < ApplicationRecord
     marked_as_transfer
   end
 
-  def sync_account_later
-    if destroyed?
-      sync_start_date = previous_transaction_date
-    else
-      sync_start_date = [ date_previously_was, date ].compact.min
-    end
-
-    account.sync_later(sync_start_date)
-  end
-
   class << self
     def income_total(currency = "USD")
       without_transfers.joins(:entry)

@@ -7,7 +7,7 @@ class TransactionsController < ApplicationController
     @pagy, @transactions = pagy(result, items: params[:per_page] || "10")
 
     @totals = {
-      count: result.select { |t| t.currency == Current.family.currency }.count,
+      count: result.select { |t| t.entry.currency == Current.family.currency }.count,
       income: result.income_total(Current.family.currency).abs,
       expense: result.expense_total(Current.family.currency)
     }

@@ -11,10 +11,10 @@ class Account::TransactionTest < ActiveSupport::TestCase
     inflow_transaction = account_transactions(:checking_four)
     outflow_transaction = account_transactions(:checking_five)
 
-    assert inflow_transaction.amount < 0
+    assert inflow_transaction.entry.amount < 0
     assert inflow_transaction.inflow?
 
-    assert outflow_transaction.amount >= 0
+    assert outflow_transaction.entry.amount >= 0
     assert outflow_transaction.outflow?
   end
 

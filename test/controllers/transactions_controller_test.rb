@@ -95,7 +95,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
 
   test "transaction count represents filtered total" do
     get transactions_url
-    assert_dom "#total-transactions", count: 1, text: @user.family.transactions.select { |t| t.currency == "USD" }.count.to_s
+    assert_dom "#total-transactions", count: 1, text: @user.family.transactions.select { |t| t.entry.currency == "USD" }.count.to_s
 
     new_transaction = @user.family.accounts.first.entries.create! \
       entryable: Account::Transaction.new,

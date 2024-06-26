@@ -18,7 +18,7 @@
         <% end %>
 
         <div class="max-w-full pr-10 select-none">
-          <%= tag.p t(".transfer_name", from_account: transfer.outflow_transaction&.account&.name, to_account: transfer.inflow_transaction&.account&.name) %>
+          <%= tag.p t(".transfer_name", from_account: transfer.outflow_transaction&.entry&.account&.name, to_account: transfer.inflow_transaction&.entry&.account&.name) %>
         </div>
       </div>
 

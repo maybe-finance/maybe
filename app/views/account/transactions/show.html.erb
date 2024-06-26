@@ -3,8 +3,8 @@
     <header class="mb-4 space-y-1">
       <div class="flex items-center gap-4">
         <h3 class="font-medium">
-          <span class="text-2xl"><%= format_money -@transaction.amount_money %></span>
-          <span class="text-lg text-gray-500"><%= @transaction.currency %></span>
+          <span class="text-2xl"><%= format_money -@transaction.entry.amount_money %></span>
+          <span class="text-lg text-gray-500"><%= @transaction.entry.currency %></span>
         </h3>
 
         <% if @transaction.marked_as_transfer %>
@@ -12,7 +12,7 @@
         <% end %>
       </div>
 
-      <span class="text-sm text-gray-500"><%= @transaction.date.strftime("%A %d %B") %></span>
+      <span class="text-sm text-gray-500"><%= @transaction.entry.date.strftime("%A %d %B") %></span>
     </header>
 
     <div class="space-y-2">
@@ -26,7 +26,7 @@
           <%= form_with model: @transaction, html: { data: { controller: "auto-submit-form" } } do |f| %>
             <div class="space-y-2">
               <%= f.text_field :name, label: t(".name_label"), "data-auto-submit-form-target": "auto" %>
-              <%= f.date_field :date, label: t(".date_label"), max: Date.today, "data-auto-submit-form-target": "auto" %>
+              <%= f.date_field :date, label: t(".date_label"), max: Date.current, "data-auto-submit-form-target": "auto" %>
 
               <% unless @transaction.marked_as_transfer %>
                 <%= f.collection_select :category_id, Current.family.categories.alphabetically, :id, :name, { prompt: t(".category_placeholder"), label: t(".category_label"), class: "text-gray-400" }, "data-auto-submit-form-target": "auto" %>

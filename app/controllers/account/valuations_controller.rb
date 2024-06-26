@@ -2,6 +2,9 @@ class Account::ValuationsController < ApplicationController
   before_action :set_account
   before_action :set_valuation, only: %i[ show edit update destroy ]
 
+  def index
+  end
+
   def new
     @valuation = Account::Valuation.new
     @entry = @account.entries.build entryable: @valuation

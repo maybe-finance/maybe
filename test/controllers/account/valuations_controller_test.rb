@@ -38,6 +38,7 @@ class Account::ValuationsControllerTest < ActionDispatch::IntegrationTest
       post account_valuations_url(@account), params: {
         account_entry: {
           amount: 19800,
+          currency: @account.currency,
           date: @valuation.entry.date
         }
       }
