@@ -20,7 +20,6 @@ export default class extends Controller {
   #d3ViewboxHeight = 200;
 
   connect() {
-    console.log(this.dataValue);
     this.#draw();
     document.addEventListener("turbo:load", this.#redraw);
   }
@@ -86,11 +85,13 @@ export default class extends Controller {
   }
 
   #contentSummaryTemplate(data) {
-    const currency = data.values?.[0]?.currency_symbol;
+    const currency_symbol = data.currency.symbol;
+    const currency_displayed_before_value = data.currency.displayed_before_value;
 
     return `${this.#currencyValue({
-      formatted_value: data.formatted_total,
-      currency_symbol: currency,
+      value_str: data.value_str,
+      currency_symbol: currency_symbol,
+      currency_displayed_before_value: currency_displayed_before_value
     })} <span class="text-xs">${this.labelValue}</span>`;
   }
 
@@ -106,11 +107,13 @@ export default class extends Controller {
   }
 
   #currencyValue(datum) {
-    const [mainPart, fractionalPart] = datum.formatted_value.split(".");
-    const currencySymbolIdx = mainPart?.indexOf(datum.currency_symbol);
-    const mainPartWithoutSymbol = mainPart?.slice(currencySymbolIdx + 1);
-
-    return `<p class="text-gray-500 -space-x-0.5">${currencySymbolIdx === 0 ? datum.currency_symbol : ""}<span class="text-xl text-gray-900 font-medium">${mainPartWithoutSymbol}</span>${fractionalPart ? "." + fractionalPart : ""}${currencySymbolIdx !== 0 ? datum.currency_symbol : ""}</p>`;
+    return `
+      <p class="text-gray-500 -space-x-0.5">
+        ${datum.currency_displayed_before_value === true ? datum.currency_symbol : ""}
+          <span class="text-xl text-gray-900 font-medium">${datum.value_str.main_part}</span>
+          ${datum.value_str.fractional_part ? "." + datum.value_str.fractional_part : ""}
+        ${datum.currency_displayed_before_value !== true ? datum.currency_symbol : ""}
+      </p>`;
   }
 
   get #radius() {
