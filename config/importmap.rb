@@ -48,3 +48,4 @@ pin "internmap" # @2.0.3
 pin "robust-predicates" # @3.0.2
 pin "dropzone" # @6.0.0
 pin "just-extend" # @5.1.1
+pin "@rails/activestorage", to: "activestorage.esm.js"
