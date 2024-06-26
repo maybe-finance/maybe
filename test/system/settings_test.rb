@@ -14,7 +14,7 @@ class SettingsTest < ApplicationSystemTestCase
       [ "Tags", "Tags", tags_path ],
       [ "Categories", "Categories", categories_path ],
       [ "Merchants", "Merchants", merchants_path ],
-      [ "Rules", "Rules", transaction_rules_path ],
+      [ "Rules", "Rules", account_transaction_rules_path ],
       [ "Imports", "Imports", imports_path ],
       [ "What's New", "What's New", changelog_path ],
       [ "Feedback", "Feedback", feedback_path ],

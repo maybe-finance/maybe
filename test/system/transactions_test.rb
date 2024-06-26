@@ -132,7 +132,7 @@ class TransactionsTest < ApplicationSystemTestCase
   private
 
     def number_of_transactions_on_page
-      page_size = 50
+      page_size = 10
 
       [ @user.family.transactions.where(transfer_id: nil).count, page_size ].min
     end

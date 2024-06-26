@@ -1,4 +1,4 @@
-class Transaction < ApplicationRecord
+class Account::Transaction < ApplicationRecord
   include Monetizable
 
   monetize :amount
@@ -17,22 +17,22 @@ class Transaction < ApplicationRecord
   scope :active, -> { where(excluded: false) }
   scope :inflows, -> { where("amount <= 0") }
   scope :outflows, -> { where("amount > 0") }
-  scope :by_name, ->(name) { where("transactions.name ILIKE ?", "%#{name}%") }
+  scope :by_name, ->(name) { where("account_transactions.name ILIKE ?", "%#{name}%") }
   scope :with_categories, ->(categories) { joins(:category).where(categories: { name: categories }) }
   scope :with_accounts, ->(accounts) { joins(:account).where(accounts: { name: accounts }) }
   scope :with_account_ids, ->(account_ids) { joins(:account).where(accounts: { id: account_ids }) }
   scope :with_merchants, ->(merchants) { joins(:merchant).where(merchants: { name: merchants }) }
-  scope :on_or_after_date, ->(date) { where("transactions.date >= ?", date) }
-  scope :on_or_before_date, ->(date) { where("transactions.date <= ?", date) }
+  scope :on_or_after_date, ->(date) { where("account_transactions.date >= ?", date) }
+  scope :on_or_before_date, ->(date) { where("account_transactions.date <= ?", date) }
   scope :with_converted_amount, ->(currency = Current.family.currency) {
     # Join with exchange rates to convert the amount to the given currency
     # If no rate is available, exclude the transaction from the results
     select(
-      "transactions.*",
-      "transactions.amount * COALESCE(er.rate, 1) AS converted_amount"
+      "account_transactions.*",
+      "account_transactions.amount * COALESCE(er.rate, 1) AS converted_amount"
     )
-      .joins(sanitize_sql_array([ "LEFT JOIN exchange_rates er ON transactions.date = er.date AND transactions.currency = er.base_currency AND er.converted_currency = ?", currency ]))
-      .where("er.rate IS NOT NULL OR transactions.currency = ?", currency)
+      .joins(sanitize_sql_array([ "LEFT JOIN exchange_rates er ON account_transactions.date = er.date AND account_transactions.currency = er.base_currency AND er.converted_currency = ?", currency ]))
+      .where("er.rate IS NOT NULL OR account_transactions.currency = ?", currency)
   }
 
   def inflow?

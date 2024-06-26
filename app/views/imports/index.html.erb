@@ -5,7 +5,8 @@
 <div class="space-y-4">
   <div class="flex items-center justify-between">
     <h1 class="text-xl font-medium text-gray-900"><%= t(".title") %></h1>
-    <%= link_to new_import_path(enable_type_selector: true), class: "flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2 pr-3", data: { turbo_frame: "modal" } do %>
+
+    <%= link_to new_import_path(enable_type_selector: true), class: "rounded-lg bg-gray-900 text-white flex items-center gap-1 justify-center hover:bg-gray-700 px-3 py-2", data: { turbo_frame: :modal } do %>
       <%= lucide_icon("plus", class: "w-5 h-5") %>
       <span><%= t(".new") %></span>
     <% end %>
@@ -24,7 +25,7 @@
     <% end %>
   </div>
   <div class="flex justify-between gap-4">
-    <%= previous_setting("Rules", transaction_rules_path) %>
+    <%= previous_setting("Rules", account_transaction_rules_path) %>
     <%= next_setting("What's new", changelog_path) %>
   </div>
 </div>

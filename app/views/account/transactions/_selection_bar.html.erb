@@ -12,6 +12,7 @@
                   builder: ActionView::Helpers::FormBuilder,
                   scope: "bulk_update",
                   data: {
+                    turbo_frame: "_top",
                     turbo_confirm: {
                       title: t(".mark_transfers"),
                       body: t(".mark_transfers_message"),
@@ -30,7 +31,7 @@
       <%= lucide_icon "pencil-line", class: "w-5 group-hover:text-white" %>
     <% end %>
 
-    <%= form_with url: bulk_delete_transactions_path, builder: ActionView::Helpers::FormBuilder, data: { turbo_confirm: true } do %>
+    <%= form_with url: bulk_delete_transactions_path, builder: ActionView::Helpers::FormBuilder, data: { turbo_confirm: true, turbo_frame: "_top" } do %>
       <button type="button" data-bulk-select-scope-param="bulk_delete" data-action="bulk-select#submitBulkRequest" class="p-1.5 group hover:bg-gray-700 flex items-center justify-center rounded-md" title="Delete">
         <%= lucide_icon "trash-2", class: "w-5 group-hover:text-white" %>
       </button>

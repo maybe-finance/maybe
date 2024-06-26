@@ -3,11 +3,11 @@
     <div>
       <h1 class="sr-only">Dashboard</h1>
       <p class="text-xl font-medium text-gray-900 mb-1"><%= t(".greeting", name: Current.user.first_name ) %></p>
-      <% if !@accounts.blank? %>
+      <% unless @accounts.blank? %>
         <p class="text-gray-500 text-sm"><%= t(".subtitle") %></p>
       <% end %>
     </div>
-    <%= link_to new_account_path, class: "flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2 pr-3", data: { turbo_frame: "modal" } do %>
+    <%= link_to new_account_path, class: "flex text-white text-sm font-medium items-center gap-1 bg-gray-900 hover:bg-gray-700 rounded-lg p-2 pr-3", data: { turbo_frame: "modal" } do %>
       <%= lucide_icon("plus", class: "w-5 h-5") %>
       <span><%= t(".new") %></span>
     <% end %>
@@ -162,8 +162,14 @@
         </div>
       <% else %>
         <div class="text-gray-500 p-1 space-y-1 bg-gray-25 rounded-xl">
-          <% @transactions.group_by(&:date).each do |date, transactions| %>
-            <%= transactions_group(date, transactions, "pages/dashboard/transactions/transaction") %>
+          <% group_transactions_by_date(@transactions).each do |date, group| %>
+            <%= render "account/transactions/transaction_group",
+                       date: date,
+                       transactions: group[:transactions],
+                       transfers: group[:transfers],
+                       selectable: false,
+                       editable: false,
+                       short: true %>
           <% end %>
 
           <p class="py-2 text-sm text-center"><%= link_to t(".view_all"), transactions_path %></p>

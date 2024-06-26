@@ -37,7 +37,7 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
 
     assert_difference "Category.count", +1 do
       post categories_url, params: {
-        transaction_id: transactions(:checking_one).id,
+        transaction_id: account_transactions(:checking_one).id,
         category: {
           name: "New Category",
           color: color } }
@@ -48,7 +48,7 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to transactions_url
     assert_equal "New Category", new_category.name
     assert_equal color, new_category.color
-    assert_equal transactions(:checking_one).reload.category, new_category
+    assert_equal account_transactions(:checking_one).reload.category, new_category
   end
 
   test "edit" do

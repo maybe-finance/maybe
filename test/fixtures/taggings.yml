@@ -1,10 +1,10 @@
 one:
   tag: hawaii_trip
   taggable: checking_one
-  taggable_type: Transaction
+  taggable_type: Account::Transaction
 
 two:
   tag: emergency_fund
   taggable: checking_two
-  taggable_type: Transaction
+  taggable_type: Account::Transaction
 

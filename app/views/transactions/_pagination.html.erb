@@ -1,3 +1,4 @@
+<%# locals: (pagy:) %>
 <nav class="flex items-center justify-between px-4 mt-4 sm:px-0 w-full">
   <div class="flex">
     <div>
@@ -38,7 +39,6 @@
       <% end %>
     </div>
   </div>
-  <% per_page = params[:per_page] || "50" %>
   <div class="flex items-center gap-4">
     <%= form_with url: transactions_path,
                 builder: ActionView::Helpers::FormBuilder,

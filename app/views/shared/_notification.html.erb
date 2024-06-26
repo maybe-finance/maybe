@@ -5,13 +5,13 @@
     <% actions = options[:auto_dismiss] ? "animationend->element-removal#remove" : "" %>
     <% animation = options[:auto_dismiss] ? "animate-[appear-then-fades_5s_300ms_both]" : "animate-[appear_5s_300ms_both]" %>
     <%= content_tag :div,
-      class: "max-w-80 bg-white shadow-xs border border-alpha-black-50 border-solid py-3 px-4 rounded-[10px] text-sm font-medium flex gap-4 #{animation}",
+      class: "max-w-80 bg-white shadow-xs border border-alpha-black-50 border-solid py-4 px-4 rounded-[10px] text-sm font-medium flex gap-4 #{animation} group",
       data: {controller: "element-removal", action: actions },
       role: type == "error" ? "alert" : "status" do -%>
       <% base_class = "w-5 h-5 p-1 text-white flex shrink-0 items-center justify-center rounded-full" %>
       <%= type.in?(["error", "alert"]) ? lucide_icon("x", class: "#{base_class} bg-error") : lucide_icon("check", class: "#{base_class} bg-success") %>
-      <div class="flex flex-col gap-4">
-        <div class="flex flex-col gap-1">
+      <div class="flex flex-col">
+        <div class="flex flex-col">
           <% if content[:title].present? %>
             <h1 class="text-sm text-gray-900 font-medium"><%= content[:title] %></h1>
           <% end %>
@@ -34,6 +34,9 @@
             <path d="M18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10ZM3.6 10C3.6 13.5346 6.46538 16.4 10 16.4C13.5346 16.4 16.4 13.5346 16.4 10C16.4 6.46538 13.5346 3.6 10 3.6C6.46538 3.6 3.6 6.46538 3.6 10Z" fill="#E5E5E5" />
             <circle class="origin-center -rotate-90 animate-[stroke-fill_5s_300ms_forwards]" stroke="#141414" stroke-opacity="0.4" r="7.2" cx="10" cy="10" stroke-dasharray="43.9822971503" stroke-dashoffset="43.9822971503" />
           </svg>
+          <div class="absolute -top-2 -right-2">
+            <%= lucide_icon "x", class: "w-5 h-5 p-0.5 hidden group-hover:inline-block border border-alpha-black-50 border-solid rounded-lg bg-white text-gray-400 cursor-pointer", data: { action: "click->element-removal#remove" } %>
+          </div>
         </div>
       <% end %>
     <% end -%>

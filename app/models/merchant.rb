@@ -1,5 +1,5 @@
 class Merchant < ApplicationRecord
-  has_many :transactions, dependent: :nullify
+  has_many :transactions, dependent: :nullify, class_name: "Account::Transaction"
   belongs_to :family
 
   validates :name, :color, :family, presence: true
