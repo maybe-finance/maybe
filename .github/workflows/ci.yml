@@ -55,7 +55,44 @@ jobs:
       - name: Lint templates for consistent style
         run: ./bin/erblint ./app/**/*.erb
 
+  i18n_sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      branch: ${{ steps.sync.outputs.branch }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Sync i18n keys
+        id: sync
+        run: |
+          bin/translate-missing-keys
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b i18n-sync-branch
+          git add config/locales/**/*.yml
+          git commit -m "Automated i18n sync and translation"
+          git push origin i18n-sync-branch
+          echo "::set-output name=branch::i18n-sync-branch"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: i18n-sync-branch
+          title: "Automated i18n sync and translation"
+          body: "This pull request contains automated i18n sync and translation changes."
+          labels: i18n, automation
+
   test:
+    needs: i18n_sync
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
