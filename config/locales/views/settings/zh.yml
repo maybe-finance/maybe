@@ -1,0 +1,112 @@
+---
+zh:
+  settings:
+    hostings:
+      send_test_email:
+        error: 配置错误：测试邮件无法发送
+        missing_smtp_setting_error: 确保所有SMTP设置都已填写
+        success: 测试邮件已成功发送
+      show:
+        domain: 应用域名
+        domain_placeholder: mydomain.com
+        email_sender: 邮件发送者
+        email_sender_placeholder: user@mydomain.com
+        general_settings_title: 通用设置
+        page_title: 自托管
+        provider_settings:
+          title: 提供商设置
+        render_deploy_hook_description: 输入Render提供的部署钩子URL
+        render_deploy_hook_label: Render部署钩子URL
+        render_deploy_hook_placeholder: https://api.render.com/deploy/srv-xyz...
+        smtp_settings:
+          description: 配置用于通知和警报的外发邮件服务器设置
+          host: SMTP主机
+          host_placeholder: smtp.gmail.com
+          password: 密码
+          password_placeholder: "*******"
+          port: 端口
+          port_placeholder: 587
+          send_test_email: 发送测试邮件
+          send_test_email_button: 发送测试邮件
+          send_test_email_description: 通过发送测试邮件验证SMTP设置
+          title: SMTP邮件配置
+          username: 用户名
+          username_placeholder: username@gmail.com
+        upgrades:
+          description: 选择您的应用程序如何接收更新
+          latest_commit:
+            description: 自动更新到最新提交（不稳定）
+            title: 最新提交
+          latest_release:
+            description: 自动更新到最新发布版本（稳定）
+            title: 最新发布
+          manual:
+            description: 您控制何时下载和安装更新
+            title: 手动
+          title: 自动升级
+      update:
+        render_deploy_hook_error: 必须提供Render部署钩子以启用自动升级
+        success: 设置更新成功。
+    nav:
+      accounts_label: 账户
+      billing_label: 账单
+      categories_label: 分类
+      feedback_label: 反馈
+      general_section_title: 通用
+      imports_label: 导入
+      invite_label: 邀请朋友
+      merchants_label: 商家
+      notifications_label: 通知
+      other_section_title: 更多
+      preferences_label: 偏好
+      profile_label: 账户
+      rules_label: 规则
+      security_label: 安全
+      self_hosting_label: 自托管
+      tags_label: 标签
+      transactions_section_title: 交易
+      whats_new_label: 新功能
+    nav_link_large:
+      next: 下一步
+      previous: 返回
+    preferences:
+      language:
+        en: English
+        zh: 简体中文
+      show:
+        currency_lable: 货币
+        general_subtitle: 配置您的偏好设置
+        general_title: 通用
+        language_lable: 语言
+        page_title: 偏好
+        theme_dark: 深色
+        theme_light: 浅色
+        theme_subtitle: 选择应用程序的首选主题（即将推出...）
+        theme_system: 系统
+        theme_title: 主题
+      update:
+        success: 偏好设置更新成功。
+    profiles:
+      destroy:
+        success: 账户删除成功。
+      show:
+        add_member: 添加成员
+        confirm_delete:
+          body: 您确定要永久删除您的账户吗？此操作不可逆。
+          title: 删除账户？
+        danger_zone_title: 危险区
+        delete_account: 删除账户
+        delete_account_warning: 删除您的账户将永久移除您的所有数据，且无法撤销。
+        household_form_input_placeholder: 输入家庭名称
+        household_form_label: 家庭名称
+        household_subtitle: 邀请家庭成员、伴侣和其他个人。受邀者可以登录到您的家庭并访问您共享的账户。
+        household_title: 家庭
+        page_title: 账户
+        profile_image_choose: 选择
+        profile_image_type: JPG, GIF或PNG。最大5MB。
+        profile_subtitle: 自定义您在Maybe上的显示方式
+        profile_title: 个人资料
+        save: 保存
+      update:
+        file_size_error: 文件大小必须小于5MB
+        success: 个人资料更新成功。

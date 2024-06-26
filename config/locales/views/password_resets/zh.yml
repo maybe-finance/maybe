@@ -1,0 +1,14 @@
+---
+zh:
+  password_resets:
+    create:
+      requested: 如果该邮箱有账户存在，我们已发送重置密码的链接。
+    edit:
+      submit: 更新密码
+      title: 重置密码
+    new:
+      submit: 重置密码
+      title: 重置密码
+    update:
+      invalid_token: 无效的令牌。
+      success: 您的密码已重置。

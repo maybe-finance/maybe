@@ -1,0 +1,5 @@
+---
+zh:
+  password_mailer:
+    password_reset:
+      cta: 重置您的密码

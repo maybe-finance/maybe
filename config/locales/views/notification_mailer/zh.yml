@@ -1,0 +1,6 @@
+---
+zh:
+  notification_mailer:
+    test_email:
+      test_email_body: 恭喜！与SMTP服务器的连接已正确配置。
+      test_email_subject: SMTP设置已验证！

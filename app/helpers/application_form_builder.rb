@@ -90,6 +90,20 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+  def language_select(method, options = {}, html_options = {})
+    default_options = { class: "form-field__input" }
+    merged_options = default_options.merge(html_options)
+
+    choices = I18n.available_locales.map { |locale| [ I18n.t("settings.preferences.language.#{locale}", default: locale.to_s.capitalize), locale ] }
+
+    return @template.select(@object_name, method, choices, options, merged_options) unless options[:label]
+
+    @template.form_field_tag do
+      label(method, *label_args(options)) +
+        @template.select(@object_name, method, choices, options, merged_options.except(:label))
+    end
+  end
+
   def select(method, choices, options = {}, html_options = {})
     default_options = { class: "form-field__input" }
     merged_options = default_options.merge(html_options)

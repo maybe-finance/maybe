@@ -1,0 +1,22 @@
+---
+zh:
+  categories:
+    create:
+      success: 新交易类别创建成功
+    edit:
+      edit: 编辑类别
+    form:
+      create: 创建类别
+      update: 更新
+    index:
+      categories: 类别
+      new: 新建
+    menu:
+      loading: 加载中...
+    new:
+      new_category: 新类别
+    row:
+      delete: 删除类别
+      edit: 编辑类别
+    update:
+      success: 交易类别更新成功

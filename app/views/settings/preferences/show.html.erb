@@ -7,8 +7,13 @@
     <div>
       <%= form_with model: Current.user, url: settings_preferences_path, html: { class: "space-y-4", data: { controller: "auto-submit-form" } } do |form| %>
         <%= form.fields_for :family_attributes do |family_fields| %>
-          <%= family_fields.currency_select :currency, { selected: Current.family.currency, label: "Currency" }, { data: { auto_submit_form_target: "auto" } } %>
+          <%= family_fields.currency_select :currency, { selected: Current.family.currency, label: t(".currency_lable") }, { data: { auto_submit_form_target: "auto" } } %>
         <% end %>
+      <% end %>
+    </div>
+    <div>
+      <%= form_with url: "#", html: { class: "space-y-4", data: { controller: "language" } } do |form| %>
+        <%= form.language_select :language, { selected: I18n.locale, label: t(".language_lable") }, { data: { action: "change->language#change", target: "language.auto" } } %>
       <% end %>
     </div>
   <% end %>

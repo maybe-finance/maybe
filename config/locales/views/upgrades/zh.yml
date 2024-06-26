@@ -1,0 +1,10 @@
+---
+zh:
+  upgrades:
+    acknowledge:
+      upgrade_complete_dismiss: 我们希望您喜欢新功能！
+      upgrade_dismissed: 升级已忽略
+      upgrade_not_available: 升级不可用
+      upgrade_not_found: 未找到升级
+    deploy:
+      upgrade_not_found: 未找到升级

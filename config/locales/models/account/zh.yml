@@ -1,0 +1,21 @@
+---
+zh:
+  activerecord:
+    attributes:
+      account:
+        balance: 余额
+        currency: 货币
+        family: 家庭
+        family_id: 家庭
+        name: 名称
+        subtype: 子类型
+    models:
+      account: 账户
+      account/credit: 信用卡
+      account/depository: 银行账户
+      account/investment: 投资
+      account/loan: 贷款
+      account/other_asset: 其他资产
+      account/other_liability: 其他负债
+      account/property: 房地产
+      account/vehicle: 车辆

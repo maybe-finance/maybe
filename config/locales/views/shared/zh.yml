@@ -1,0 +1,19 @@
+---
+zh:
+  shared:
+    confirm_modal:
+      accept: 确认
+      body_html: "<p>您将无法撤销此决定</p>"
+      cancel: 取消
+      title: 您确定吗？
+    no_account_empty_state:
+      new_account: 新账户
+      no_account_subtitle: 由于尚未添加任何账户，因此没有数据显示。添加您的第一个账户以开始查看仪表板数据。
+      no_account_title: 还没有账户
+    notification:
+      dismiss: 忽略
+    upgrade_notification:
+      app_upgraded: 应用程序已升级到%{version}。
+      dismiss: 忽略
+      new_version_available: 有新版本的Maybe可供升级。
+      upgrade_now: 立即升级

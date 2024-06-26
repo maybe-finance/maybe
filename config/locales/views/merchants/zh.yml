@@ -1,0 +1,28 @@
+---
+zh:
+  merchants:
+    create:
+      success: 新商户创建成功
+    destroy:
+      success: 商户删除成功
+    edit:
+      title: 编辑商户
+    form:
+      name_placeholder: 商户名称
+      submit_create: 添加商户
+      submit_edit: 更新
+    index:
+      empty: 尚无商户
+      new_long: 新商户
+      new_short: 新建
+      title: 商户
+    list:
+      confirm_accept: 删除商户
+      confirm_body: 您确定要删除此商户吗？删除此商户将取消所有相关交易的链接，并可能影响您的报告。
+      confirm_title: 删除商户？
+      delete: 删除商户
+      edit: 编辑商户
+    new:
+      title: 新商户
+    update:
+      success: 商户更新成功

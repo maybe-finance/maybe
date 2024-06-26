@@ -1,0 +1,12 @@
+---
+zh:
+  transaction:
+    default_category:
+      auto_and_transport: 汽车与交通
+      entertainment: 娱乐
+      food_and_drink: 食物与饮料
+      general_services: 一般服务
+      home_improvement: 家庭改善
+      income: 收入
+      personal_care: 个人护理
+      rent_and_utilities: 租金与公用事业

@@ -1,0 +1,27 @@
+---
+zh:
+  account:
+    transfers:
+      create:
+        success: 转账已创建
+      destroy:
+        success: 转账已删除
+      form:
+        amount: 金额
+        date: 日期
+        description: 描述
+        description_placeholder: 从支票账户转到储蓄账户
+        expense: 支出
+        from: 从
+        income: 收入
+        select_account: 选择账户
+        submit: 创建转账
+        to: 到
+        transfer: 转账
+      new:
+        title: 新转账
+      transfer:
+        remove_body: 这不会删除基础交易。它只会移除转账。
+        remove_confirm: 确认
+        remove_title: 移除转账？
+        transfer_name: 从%{from_account}转到%{to_account}

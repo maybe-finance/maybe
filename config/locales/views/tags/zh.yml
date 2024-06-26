@@ -1,0 +1,21 @@
+---
+zh:
+  tags:
+    create:
+      created: 标签已创建
+    edit:
+      edit: 编辑标签
+    form:
+      create: 创建标签
+      update: 更新
+    index:
+      empty: 还没有标签
+      new: 新标签
+      tags: 标签
+    new:
+      new: 新标签
+    tag:
+      delete: 删除
+      edit: 编辑
+    update:
+      updated: 标签已更新

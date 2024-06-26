@@ -1,0 +1,85 @@
+---
+zh:
+  transactions:
+    bulk_delete:
+      success: "%{count} 笔交易已删除"
+    bulk_edit:
+      additional: 附加
+      cancel: 取消
+      category_label: 分类
+      category_placeholder: 选择一个分类
+      date_label: 日期
+      exclude_subtitle: 这将排除该交易的所有应用内功能或分析。
+      exclude_title: 排除交易
+      merchant_label: 商家
+      merchant_placeholder: 选择一个商家
+      note_label: 备注
+      note_placeholder: 输入将应用于所选交易的备注
+      overview: 概览
+      save: 保存
+      settings: 设置
+    bulk_update:
+      failure: 无法更新交易
+      success: "%{count} 笔交易已更新"
+    create:
+      success: 新交易创建成功
+    destroy:
+      success: 交易删除成功
+    empty:
+      description: 尝试添加交易、编辑筛选器或优化搜索
+      title: 未找到交易
+    form:
+      account: 账户
+      account_prompt: 选择一个账户
+      amount: 金额
+      category: 分类
+      category_prompt: 选择一个分类
+      date: 日期
+      description: 描述
+      description_placeholder: 描述交易
+      expense: 支出
+      income: 收入
+      submit: 添加交易
+      transfer: 转账
+    header:
+      edit_categories: 编辑分类
+      edit_imports: 编辑导入
+      import: 导入
+    index:
+      transaction: 交易
+    mark_transfers:
+      success: 标记为转账
+    pagination:
+      rows_per_page: 每页行数
+    selection_bar:
+      mark_transfers: 标记为转账？
+      mark_transfers_confirm: 标记为转账
+      mark_transfers_message: 通过将交易标记为转账，它们将不再包含在收入或支出计算中。
+    show:
+      account_label: 账户
+      account_placeholder: 选择一个账户
+      additional: 附加
+      category_label: 分类
+      category_placeholder: 选择一个分类
+      date_label: 日期
+      delete: 删除
+      delete_subtitle: 这将永久删除交易，影响您的历史余额，且无法撤销。
+      delete_title: 删除交易
+      exclude_subtitle: 这将排除该交易的所有应用内功能或分析。
+      exclude_title: 排除交易
+      merchant_label: 商家
+      merchant_placeholder: 选择一个商家
+      name_label: 名称
+      note_label: 备注
+      note_placeholder: 输入备注
+      overview: 概览
+      settings: 设置
+      tags_label: 选择一个或多个标签
+    transaction:
+      remove_transfer: 移除转账
+      remove_transfer_body: 这将从此交易中移除转账
+      remove_transfer_confirm: 确认
+    unmark_transfers:
+      success: 转账已移除
+    update:
+      success: 交易更新成功

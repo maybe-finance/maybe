@@ -1,10 +1,16 @@
 base_locale: en
+locales: 
+  - en
+  - zh
 data:
   read:
     - config/locales/**/*%{locale}.yml
   write:
     - config/locales/**/*%{locale}.yml
   router: conservative_router
+missing:
+  warn_missing: true
+  locales: [zh]
 search:
   paths:
     - app/

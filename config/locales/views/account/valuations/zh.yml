@@ -1,0 +1,23 @@
+---
+zh:
+  account:
+    valuations:
+      destroy:
+        success: 估值已删除
+      form:
+        cancel: 取消
+      index:
+        change: 更改
+        date: 日期
+        value: 价值
+      update:
+        success: 估值已更新
+      valuation:
+        confirm_accept: 删除条目
+        confirm_body_html: "<p>删除此条目将从账户历史记录中移除它，这将影响账户的不同部分。这包括净资产和账户图表。</p></br><p>您唯一能将此条目添加回来的方法是通过新条目手动重新输入。</p>"
+        confirm_title: 删除条目？
+        delete_entry: 删除条目
+        edit_entry: 编辑条目
+        no_change: 无更改
+        start_balance: 起始余额
+        value_update: 价值更新
