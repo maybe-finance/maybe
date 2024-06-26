@@ -25,11 +25,11 @@ class Account::Transaction < ApplicationRecord
   }
 
   def inflow?
-    amount <= 0
+    entry.amount <= 0
   end
 
   def outflow?
-    amount > 0
+    entry.amount > 0
   end
 
   def transfer?
@@ -89,7 +89,7 @@ class Account::Transaction < ApplicationRecord
                            sanitize_sql_array([ "SUM(spending) OVER (ORDER BY date RANGE BETWEEN INTERVAL ? PRECEDING AND CURRENT ROW) as rolling_spend", "#{period.date_range.count} days" ]),
                            sanitize_sql_array([ "SUM(income) OVER (ORDER BY date RANGE BETWEEN INTERVAL ? PRECEDING AND CURRENT ROW) as rolling_income", "#{period.date_range.count} days" ])
                          )
-                         .order("date")
+                         .order(:date)
 
       # Trim the results to the original period
       select("*").from(rolling_totals).where("date >= ?", period.date_range.first)

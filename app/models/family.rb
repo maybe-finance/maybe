@@ -34,14 +34,14 @@ class Family < ApplicationRecord
 
   def snapshot_account_transactions
     period = Period.last_30_days
-    results = accounts.active.joins(:entries)
+    results = accounts.active.joins(:entries).joins(:transactions)
                       .select(
                         "accounts.*",
-                        "COALESCE(SUM(amount) FILTER (WHERE amount > 0), 0) AS spending",
-                        "COALESCE(SUM(-amount) FILTER (WHERE amount < 0), 0) AS income"
+                        "COALESCE(SUM(account_entries.amount) FILTER (WHERE account_entries.amount > 0), 0) AS spending",
+                        "COALESCE(SUM(-account_entries.amount) FILTER (WHERE account_entries.amount < 0), 0) AS income"
                       )
-                      .where("account_transactions.date >= ?", period.date_range.begin)
-                      .where("account_transactions.date <= ?", period.date_range.end)
+                      .where("account_entries.date >= ?", period.date_range.begin)
+                      .where("account_entries.date <= ?", period.date_range.end)
                       .where("account_transactions.marked_as_transfer = ?", false)
                       .where("account_entries.entryable_type = ?", "Account::Transaction")
                       .group("id")
