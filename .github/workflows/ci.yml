@@ -58,6 +58,9 @@ jobs:
   i18n_sync:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_MODEL: ${{ secrets.OPENAI_MODEL }}
     outputs:
       branch: ${{ steps.sync.outputs.branch }}
     steps:
