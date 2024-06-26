@@ -15,7 +15,10 @@ class Account::TransactionsController < ApplicationController
     @transaction.update! transaction_params
     @transaction.sync_account_later
 
-    redirect_back_or_to account_transaction_url(@transaction.account, @transaction), notice: t(".success")
+    respond_to do |format|
+      format.html { redirect_back_or_to account_transaction_path(@account, @transaction), notice: t(".success") }
+      format.turbo_stream { render turbo_stream: turbo_stream.replace(@transaction) }
+    end
   end
 
   def destroy
@@ -39,6 +42,6 @@ class Account::TransactionsController < ApplicationController
     end
 
     def transaction_params
-      params.require(:transaction).permit(:name, :date, :amount, :currency, :notes, :excluded, :category_id, :merchant_id, tag_ids: [])
+      params.require(:account_transaction).permit(:name, :date, :amount, :currency, :notes, :excluded, :category_id, :merchant_id, tag_ids: [])
     end
 end
