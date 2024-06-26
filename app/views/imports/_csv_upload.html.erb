@@ -1,16 +1,13 @@
 <%= form_with model: @import, url: load_import_path(@import) do |form| %>
 
-<div class="flex items-center justify-center w-full">
+<div class="flex items-center justify-center w-full dropzone dz-clickable" data-controller="dropzone" data-dropzone-max-file-size="5" data-dropzone-accepted-files="text/csv" data-dropzone-max-files="1">
     <label for="raw_csv_str" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50">
         <div class="flex flex-col items-center justify-center pt-5 pb-6">
-            <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
-            </svg>
-
-            <p class="mb-2 text-sm text-gray-500 mt-3">Drag and drop your csv file here or <span class="text-black">click to browse</span></p>
+            <%= lucide_icon "plus", class: "w-5 h-5 text-gray-500" %>
+            <%= form.file_field :raw_csv_str, direct_upload: false, data: { dropzone_target: 'input' } %>
+            <p class="mb-2 text-sm text-gray-500 mt-3 dropzone-msg dz-message">Drag and drop your csv file here or <span class="text-black needsclick">click to browse</span></p>
             <p class="text-xs text-gray-500">CSV (Max. 5MB)</p>
         </div>
-        <%= form.file_field :raw_csv_str, required: true, class: "hidden" %>
     </label>
 </div>
 
