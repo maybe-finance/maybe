@@ -5,23 +5,23 @@ class Account::TransactionsController < ApplicationController
   before_action :set_transaction, only: %i[ show update destroy ]
 
   def index
-    @transactions = @account.transactions.ordered
+    @transactions = @account.transactions.ordered_with_entry
   end
 
   def show
   end
 
   def update
-    @transaction.update! transaction_params
-    @transaction.sync_account_later
+    @transaction.entry.update! transaction_entry_params
+    @transaction.entry.sync_account_later
 
-    redirect_back_or_to account_transaction_url(@transaction.account, @transaction), notice: t(".success")
+    redirect_back_or_to account_transaction_path(@transaction.entry.account, @transaction), notice: t(".success")
   end
 
   def destroy
-    @transaction.destroy!
-    @transaction.sync_account_later
-    redirect_back_or_to account_url(@transaction.account), notice: t(".success")
+    @transaction.entry.destroy!
+    @transaction.entry.sync_account_later
+    redirect_back_or_to account_url(@transaction.entry.account), notice: t(".success")
   end
 
   private
@@ -32,14 +32,12 @@ class Account::TransactionsController < ApplicationController
 
     def set_transaction
       @transaction = @account.transactions.find(params[:id])
-      @entry = @transaction.entry
     end
 
-    def search_params
-      params.fetch(:q, {}).permit(:start_date, :end_date, :search, accounts: [], account_ids: [], categories: [], merchants: [])
-    end
-
-    def entry_params
-      params.require(:account_entry).permit(:name, :date, :amount, :currency, entryable_attributes: [ :notes, :excluded, :category_id, :merchant_id, tag_ids: [] ])
+    def transaction_entry_params
+      params.require(:account_entry)
+            .permit(:name, :date, :amount, :currency, :entryable_type, entryable_attributes: [ :notes, :excluded, :category_id, :merchant_id, tag_ids: [] ])
+            # Delegated types require both of these to have values, AND they must be in this exact order (potential upstream bug)
+            .with_defaults(entryable_type: "Account::Transaction", entryable_attributes: {})
     end
 end

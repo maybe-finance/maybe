@@ -4,7 +4,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
     @transaction = account_transactions(:checking_one)
-    @recent_transactions = @user.family.transactions.ordered.limit(20).to_a
+    @recent_transactions = @user.family.transactions.ordered_with_entry.limit(20).to_a
   end
 
   test "should get new" do
@@ -97,15 +97,17 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     get transactions_url
     assert_dom "#total-transactions", count: 1, text: @user.family.transactions.select { |t| t.currency == "USD" }.count.to_s
 
-    new_transaction = @user.family.accounts.first.transactions.create! \
+    new_transaction = @user.family.accounts.first.entries.create! \
+      entryable: Account::Transaction.new,
       name: "Transaction to search for",
       date: Date.current,
-      amount: 0
+      amount: 0,
+      currency: "USD"
 
     get transactions_url(q: { search: new_transaction.name })
 
     # Only finds 1 transaction that matches filter
-    assert_dom "#" + dom_id(new_transaction), count: 1
+    assert_dom "#" + dom_id(new_transaction.account_transaction), count: 1
     assert_dom "#total-transactions", count: 1, text: "1"
   end
 
@@ -119,7 +121,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "loads last page when page is out of range" do
-    user_oldest_transaction = @user.family.transactions.ordered.reject(&:transfer?).last
+    user_oldest_transaction = @user.family.transactions.without_transfers.ordered_with_entry.last
     get transactions_url(page: 9999999999)
 
     assert_response :success
@@ -141,7 +143,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "can update many transactions at once" do
-    transactions = @user.family.transactions.ordered.limit(20)
+    transactions = @user.family.transactions.ordered_with_entry.limit(20)
 
     transactions.each do |transaction|
       transaction.update! \
@@ -153,7 +155,6 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
 
     post bulk_update_transactions_url, params: {
       bulk_update: {
-        date: Date.current,
         transaction_ids: transactions.map(&:id),
         excluded: true,
         category_id: Category.second.id,
@@ -165,9 +166,10 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to transactions_url
     assert_equal "#{transactions.count} transactions updated", flash[:notice]
 
-    transactions.reload.each do |transaction|
-      assert_equal Date.current, transaction.date
-      assert transaction.excluded
+    transactions.reload
+
+    transactions.each do |transaction|
+      assert transaction.excluded?
       assert_equal Category.second, transaction.category
       assert_equal Merchant.second, transaction.merchant
       assert_equal "Updated note", transaction.notes

@@ -5,18 +5,17 @@ class Account::TransactionsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user = users(:family_admin)
     @transaction = account_transactions(:checking_one)
     @account = @transaction.entry.account
-    @recent_transactions = @user.family.transactions.ordered.limit(20).to_a
+    @recent_transactions = @user.family.transactions.ordered_with_entry.limit(20).to_a
   end
 
   test "should show transaction" do
-    get account_transaction_url(@transaction.account, @transaction)
+    get account_transaction_url(@transaction.entry.account, @transaction)
     assert_response :success
   end
 
   test "should update transaction" do
-    patch account_transaction_url(@transaction.account, @transaction), params: {
-      transaction: {
-        account_id: @transaction.account_id,
+    patch account_transaction_url(@transaction.entry.account, @transaction), params: {
+      account_entry: {
         amount: @transaction.amount,
         currency: @transaction.currency,
         date: @transaction.date,
@@ -25,16 +24,16 @@ class Account::TransactionsControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
-    assert_redirected_to account_transaction_url(@transaction.account, @transaction)
+    assert_redirected_to account_transaction_url(@transaction.entry.account, @transaction)
     assert_enqueued_with(job: AccountSyncJob)
   end
 
   test "should destroy transaction" do
     assert_difference("Account::Transaction.count", -1) do
-      delete account_transaction_url(@transaction.account, @transaction)
+      delete account_transaction_url(@transaction.entry.account, @transaction)
     end
 
-    assert_redirected_to account_url(@transaction.account)
+    assert_redirected_to account_url(@transaction.entry.account)
     assert_enqueued_with(job: AccountSyncJob)
   end
 end

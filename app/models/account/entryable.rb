@@ -7,10 +7,10 @@ module Account::Entryable
     delegate :name, to: :entry
     delegate :date, to: :entry
     delegate :amount, to: :entry
+    delegate :amount_money, to: :entry
     delegate :currency, to: :entry
 
-    has_one :account, through: :entry, class_name: "Account"
-
-    default_scope -> { includes(:entry) }
+    scope :with_entry, -> { includes(:entry) }
+    scope :ordered_with_entry, -> { joins(:entry).order("account_entries.date DESC, account_entries.id ASC") }
   end
 end
