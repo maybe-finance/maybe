@@ -4,6 +4,9 @@ en:
     entries:
       destroy:
         success: Entry deleted
+      empty:
+        description: Try adding an entry, editing filters or refining your search
+        title: No entries found
       entryables:
         transaction:
           remove_transfer: Remove transfer
@@ -31,5 +34,12 @@ en:
             overview: Overview
             settings: Settings
             tags_label: Select one or more tags
+      loading:
+        loading: Loading entries...
+      transactions:
+        new: New transaction
+        no_transactions: No transactions for this account yet.
+        transaction: transaction
+        transactions: Transactions
       update:
         success: Entry updated

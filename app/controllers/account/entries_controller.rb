@@ -1,9 +1,11 @@
 class Account::EntriesController < ApplicationController
   layout "with_sidebar"
 
+  before_action :set_account
   before_action :set_entry, only: %i[ edit update show destroy ]
 
-  def index
+  def transactions
+    @transaction_entries = @account.entries.account_transactions.reverse_chronological
   end
 
   def new
@@ -33,9 +35,12 @@ class Account::EntriesController < ApplicationController
 
   private
 
+    def set_account
+      @account = Current.family.accounts.find(params[:account_id])
+    end
+
     def set_entry
-      @entry = Current.family.entries.find(params[:id])
-      @account = @entry.account
+      @entry = @account.entries.find(params[:id])
     end
 
     def permitted_entryable_attributes

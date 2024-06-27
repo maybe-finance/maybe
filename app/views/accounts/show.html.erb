@@ -81,12 +81,12 @@
 
   <div class="min-h-[800px]">
     <% if selected_tab == "transactions" %>
-      <%= turbo_frame_tag dom_id(@account, "transactions"), src: account_transactions_path(@account) do %>
-        <%= render "account/transactions/loading" %>
+      <%= turbo_frame_tag dom_id(@account, "transactions"), src: transaction_account_entries_path(@account) do %>
+        <%= render "account/entries/loading" %>
       <% end %>
     <% else %>
       <%= turbo_frame_tag dom_id(@account, "valuations"), src: account_valuations_path(@account) do %>
-        <%= render "account/valuations/loading" %>
+        <%= render "account/entries/loading" %>
       <% end %>
     <% end %>
   </div>

@@ -73,8 +73,12 @@ Rails.application.routes.draw do
       resource :logo, only: :show
 
       resources :valuations
-      resources :transactions, only: %i[ index destroy ]
-      resources :entries
+
+      resources :entries, except: :index do
+        collection do
+          get "transactions", as: :transaction
+        end
+      end
     end
   end
 

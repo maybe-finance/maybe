@@ -16,8 +16,8 @@ class Account::EntriesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should get index" do
-    get account_entries_url(@transaction_entry.account)
+  test "should get list of transaction entries" do
+    get transaction_account_entries_url(Account.first)
     assert_response :success
   end
 

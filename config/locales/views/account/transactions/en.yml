@@ -5,11 +5,6 @@ en:
       empty:
         description: Try adding a transaction, editing filters or refining your search
         title: No transactions found
-      index:
-        new: New transaction
-        no_transactions: No transactions for this account yet.
-        transaction: transaction
-        transactions: Transactions
       loading:
         loading: Loading transactions...
       selection_bar:
