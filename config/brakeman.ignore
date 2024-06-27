@@ -1,0 +1,40 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "a670080bb9557f6306e0fa8d5cbbc9cbbde5770e8d08da0d9d6106a0bb8cd4d5",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/account/entries/show.html.erb",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(partial => \"account/entries/entryables/#{permitted_entryable_key(Current.family.entries.find(params[:id]))}/show\", { :locals => ({ :entry => Current.family.entries.find(params[:id]) }) })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Account::EntriesController",
+          "method": "show",
+          "line": 26,
+          "file": "app/controllers/account/entries_controller.rb",
+          "rendered": {
+            "name": "account/entries/show",
+            "file": "app/views/account/entries/show.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "account/entries/show"
+      },
+      "user_input": "params[:id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    }
+  ],
+  "updated": "2024-06-27 14:57:21 -0400",
+  "brakeman_version": "6.1.2"
+}
