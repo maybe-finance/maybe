@@ -24,6 +24,10 @@ class Account::Entry < ApplicationRecord
     account.sync_later(sync_start_date)
   end
 
+  def entryable_name_short
+    entryable_name.gsub(/^account_/, "")
+  end
+
   private
 
     def previous_entry

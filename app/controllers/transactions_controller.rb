@@ -69,6 +69,9 @@ class TransactionsController < ApplicationController
     redirect_back_or_to transactions_url, notice: t(".success")
   end
 
+  def rules
+  end
+
   private
 
     def amount

@@ -15,12 +15,12 @@
         <%= render "account/transactions/selection_bar" %>
       </div>
 
-      <% if @transactions.empty? %>
+      <% if @transaction_entries.empty? %>
         <p class="text-gray-500 py-4"><%= t(".no_transactions") %></p>
       <% else %>
         <div class="space-y-6">
-          <% group_transactions_by_date(@transactions).each do |date, group| %>
-            <%= render "transaction_group", date:, transactions: group[:transactions], transfers: group[:transfers] %>
+          <% @transaction_entries.group_by(&:date).each do |date, entries| %>
+            <%= render "account/entries/entry_group", date:, entries: entries %>
           <% end %>
         </div>
       <% end %>

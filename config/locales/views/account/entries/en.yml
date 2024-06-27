@@ -1,0 +1,35 @@
+---
+en:
+  account:
+    entries:
+      destroy:
+        success: Entry deleted
+      entryables:
+        transaction:
+          remove_transfer: Remove transfer
+          remove_transfer_body: This will remove the transfer from this transaction
+          remove_transfer_confirm: Confirm
+          show:
+            account_label: Account
+            account_placeholder: Select an account
+            additional: Additional
+            category_label: Category
+            category_placeholder: Select a category
+            date_label: Date
+            delete: Delete
+            delete_subtitle: This permanently deletes the transaction, affects your
+              historical balances, and cannot be undone.
+            delete_title: Delete transaction
+            exclude_subtitle: This excludes the transaction from any in-app features
+              or analytics.
+            exclude_title: Exclude transaction
+            merchant_label: Merchant
+            merchant_placeholder: Select a merchant
+            name_label: Name
+            note_label: Notes
+            note_placeholder: Enter a note
+            overview: Overview
+            settings: Settings
+            tags_label: Select one or more tags
+      update:
+        success: Entry updated

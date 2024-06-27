@@ -4,6 +4,7 @@ class Family < ApplicationRecord
   has_many :accounts, dependent: :destroy
   has_many :institutions, dependent: :destroy
   has_many :transactions, through: :accounts
+  has_many :entries, through: :accounts
   has_many :imports, through: :accounts
   has_many :categories, dependent: :destroy
   has_many :merchants, dependent: :destroy

@@ -9,7 +9,7 @@ class Account < ApplicationRecord
   belongs_to :family
   belongs_to :institution, optional: true
 
-  has_many :entries, dependent: :destroy
+  has_many :entries, dependent: :destroy, class_name: "Account::Entry"
   has_many :transactions, through: :entries, source: :entryable, source_type: "Account::Transaction"
   has_many :valuations, through: :entries, source: :entryable, source_type: "Account::Valuation"
   has_many :balances, dependent: :destroy
