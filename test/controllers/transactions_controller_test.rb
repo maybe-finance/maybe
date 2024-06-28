@@ -123,7 +123,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "loads last page when page is out of range" do
-    user_oldest_transaction_entry = @user.family.entries.chronological.first
+    user_oldest_transaction_entry = @user.family.entries.account_transactions.chronological.first
     get transactions_url(page: 9999999999)
 
     assert_response :success
