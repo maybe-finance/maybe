@@ -5,6 +5,16 @@ class Account::Valuation < ApplicationRecord
     @trend ||= create_trend
   end
 
+  class << self
+    def search(_params)
+      all
+    end
+
+    def requires_search?(_params)
+      false
+    end
+  end
+
   private
 
     def previous_valuation

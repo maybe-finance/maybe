@@ -4,7 +4,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
     @transaction = account_transactions(:checking_one)
-    @recent_transactions = @user.family.transactions.ordered_with_entry.limit(20).to_a
+    @recent_transaction_entries = @user.family.entries.account_transactions.reverse_chronological.limit(20).to_a
   end
 
   test "should get new" do
@@ -85,17 +85,17 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get paginated index with most recent transactions first" do
-    get transactions_url
+    get transactions_url(per_page: 10)
     assert_response :success
 
-    @recent_transactions.first(10).each do |transaction|
+    @recent_transaction_entries.first(10).each do |transaction|
       assert_dom "#" + dom_id(transaction), count: 1
     end
   end
 
   test "transaction count represents filtered total" do
-    get transactions_url
-    assert_dom "#total-transactions", count: 1, text: @user.family.transactions.select { |t| t.entry.currency == "USD" }.count.to_s
+    get transactions_url(per_page: 10)
+    assert_dom "#total-transactions", count: 1, text: @user.family.entries.account_transactions.select { |t| t.currency == "USD" }.count.to_s
 
     new_transaction = @user.family.accounts.first.entries.create! \
       entryable: Account::Transaction.new,
@@ -107,25 +107,25 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     get transactions_url(q: { search: new_transaction.name })
 
     # Only finds 1 transaction that matches filter
-    assert_dom "#" + dom_id(new_transaction.account_transaction), count: 1
+    assert_dom "#" + dom_id(new_transaction), count: 1
     assert_dom "#total-transactions", count: 1, text: "1"
   end
 
   test "can navigate to paginated result" do
-    get transactions_url(page: 2)
+    get transactions_url(page: 2, per_page: 10)
     assert_response :success
 
-    @recent_transactions[10, 10].select { |t| t.transfer_id == nil }.each do |transaction|
+    @recent_transaction_entries[10, 10].select { |t| t.account_transaction.transfer_id == nil }.each do |transaction|
       assert_dom "#" + dom_id(transaction), count: 1
     end
   end
 
   test "loads last page when page is out of range" do
-    user_oldest_transaction = @user.family.transactions.without_transfers.ordered_with_entry.last
+    user_oldest_transaction_entry = @user.family.entries.reverse_chronological.first
     get transactions_url(page: 9999999999)
 
     assert_response :success
-    assert_dom "#" + dom_id(user_oldest_transaction), count: 1
+    assert_dom "#" + dom_id(user_oldest_transaction_entry), count: 1
   end
 
   test "can destroy many transactions at once" do
@@ -133,7 +133,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     assert_difference("Account::Transaction.count", -delete_count) do
       post bulk_delete_transactions_url, params: {
         bulk_delete: {
-          transaction_ids: @recent_transactions.first(delete_count).pluck(:id)
+          transaction_ids: @recent_transaction_entries.first(delete_count).pluck(:id)
         }
       }
     end

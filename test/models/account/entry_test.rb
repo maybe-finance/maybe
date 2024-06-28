@@ -40,4 +40,24 @@ class Account::EntryTest < ActiveSupport::TestCase
     current_entry.account.expects(:sync_later).with(prior_entry.date)
     current_entry.sync_account_later
   end
+
+  test "can search entries" do
+    params = { search: "a" }
+
+    assert_equal 12, Account::Entry.search(params).size
+
+    params = params.merge(categories: [ "Food & Drink" ]) # transaction specific search param
+
+    assert_equal 2, Account::Entry.search(params).size
+  end
+
+  test "can calculate total spending for a group of transactions" do
+    assert_equal Money.new(2135), @family.entries.expense_total("USD")
+    assert_equal Money.new(1010.85, "EUR"), @family.entries.expense_total("EUR")
+  end
+
+  test "can calculate total income for a group of transactions" do
+    assert_equal -Money.new(2075), @family.entries.income_total("USD")
+    assert_equal -Money.new(250, "EUR"), @family.entries.income_total("EUR")
+  end
 end

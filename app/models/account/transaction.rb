@@ -37,18 +37,6 @@ class Account::Transaction < ApplicationRecord
   end
 
   class << self
-    def income_total(currency = "USD")
-      without_transfers.joins(:entry)
-                       .where("account_entries.currency = ? AND account_entries.amount <= 0", currency)
-                       .sum { |t| t.entry.amount_money }
-    end
-
-    def expense_total(currency = "USD")
-      without_transfers.joins(:entry)
-                       .where("account_entries.currency = ? AND account_entries.amount > 0", currency)
-                       .sum { |t| t.entry.amount_money }
-    end
-
     def mark_transfers!
       update_all marked_as_transfer: true
 
@@ -86,21 +74,21 @@ class Account::Transaction < ApplicationRecord
     end
 
     def search(params)
-      query = all.ordered_with_entry
-      query = query.where("account_entries.name ILIKE ?", "%#{params[:search]}%") if params[:search].present?
-      query = query.where("account_entries.date >= ?", params[:start_date]) if params[:start_date].present?
-      query = query.where("account_entries.date <= ?", params[:end_date]) if params[:end_date].present?
+      query = all
       query = query.joins("LEFT JOIN categories ON categories.id = account_transactions.category_id").where(categories: { name: params[:categories] }) if params[:categories].present?
-
-      if params[:accounts] || params[:account_ids]
-        query.joins("INNER JOIN accounts ON accounts.id = account_entries.account_id")
-      end
-
-      query = query.where(accounts: { name: params[:accounts] }) if params[:accounts].present?
-      query = query.where(accounts: { id: params[:account_ids] }) if params[:account_ids].present?
       query = query.joins("LEFT JOIN merchants ON merchants.id = account_transactions.merchant_id").where(merchants: { name: params[:merchants] }) if params[:merchants].present?
       query
     end
+
+    def requires_search?(params)
+      searchable_keys.any? { |key| params.key?(key) }
+    end
+
+    private
+
+      def searchable_keys
+        %i[ categories merchants ]
+      end
   end
 
   private
