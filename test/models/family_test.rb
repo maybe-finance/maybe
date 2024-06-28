@@ -84,8 +84,6 @@ class FamilyTest < ActiveSupport::TestCase
     series = @family.snapshot_transactions[:spending_series]
     expected_series = get_expected_balances_for :rolling_spend
 
-    puts series.to_json
-
     assert_time_series_balances series, expected_series, ignore_count: true
   end
 
