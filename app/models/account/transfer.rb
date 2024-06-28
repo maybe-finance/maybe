@@ -4,8 +4,12 @@ class Account::Transfer < ApplicationRecord
   validate :net_zero_flows, if: :single_currency_transfer?
   validate :transaction_count, :from_different_accounts, :all_transactions_marked
 
+  def date
+    outflow_transaction&.date
+  end
+
   def amount_money
-    entries.first.amount_money.abs
+    entries.first&.amount_money&.abs
   end
 
   def from_name
@@ -17,7 +21,8 @@ class Account::Transfer < ApplicationRecord
   end
 
   def name
-    I18n.t(".transfer_name", from_account: from_name, to_account: to_name)
+    return nil unless from_name && to_name
+    I18n.t("account.transfer.name", from_account: from_name, to_account: to_name)
   end
 
   def inflow_transaction
@@ -40,15 +45,23 @@ class Account::Transfer < ApplicationRecord
 
   class << self
     def build_from_accounts(from_account, to_account, date:, amount:, currency:, name:)
-      outflow = Account::Transaction.new \
+      outflow = from_account.entries.build \
+        amount: amount.abs,
+        currency: currency,
+        date: date,
+        name: name,
         marked_as_transfer: true,
-        entry: from_account.entries.build(amount: amount.abs, currency: currency, date: date, name: name)
+        entryable: Account::Transaction.new
 
-      inflow = Account::Transaction.new \
+      inflow = to_account.entries.build \
+        amount: amount.abs * -1,
+        currency: currency,
+        date: date,
+        name: name,
         marked_as_transfer: true,
-        entry: to_account.entries.build(amount: amount.abs * -1, currency: currency, date: date, name: name)
+        entryable: Account::Transaction.new
 
-      new transactions: [ outflow, inflow ]
+      new entries: [ outflow, inflow ]
     end
   end
 

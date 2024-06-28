@@ -1,17 +1,21 @@
+<%# locals: (transfer:, selectable: true, editable: true, short: false, **opts) %>
+
 <%= turbo_frame_tag dom_id(transfer) do %>
   <div class="grid grid-cols-12 items-center text-gray-900 text-sm font-medium p-4">
     <div class="col-span-7 flex items-center">
-      <%= check_box_tag dom_id(transfer, "selection"),
-                        disabled: true,
-                        class: "cursor-not-allowed maybe-checkbox maybe-checkbox--light" %>
+      <% if selectable %>
+        <%= check_box_tag dom_id(transfer, "selection"),
+                          disabled: true,
+                          class: "mr-3 cursor-not-allowed maybe-checkbox maybe-checkbox--light" %>
+      <% end %>
 
-      <div class="max-w-[250px] ml-3">
+      <%= tag.div class: short ? "max-w-[250px]" : "max-w-[325px]" do %>
         <div class="flex items-center gap-2">
           <%= circle_logo("T") %>
 
           <%= tag.p transfer.name, class: "truncate text-gray-900" %>
         </div>
-      </div>
+      <% end %>
 
       <%= button_to account_transfer_path(transfer),
                     method: :delete,
@@ -30,13 +34,15 @@
       <% end %>
     </div>
 
-    <div class="col-span-3 flex items-center gap-2">
-      <%= circle_logo(transfer.from_name[0].upcase, size: "sm") %>
-      <span class="text-gray-500 font-medium">&rarr;</span>
-      <%= circle_logo(transfer.to_name[0].upcase, size: "sm") %>
-    </div>
+    <% unless short %>
+      <div class="col-span-3 flex items-center gap-2">
+        <%= circle_logo(transfer.from_name[0].upcase, size: "sm") %>
+        <span class="text-gray-500 font-medium">&rarr;</span>
+        <%= circle_logo(transfer.to_name[0].upcase, size: "sm") %>
+      </div>
+    <% end %>
 
-    <div class="col-span-2 ml-auto">
+    <div class="ml-auto <%= short ? "col-span-5" : "col-span-2" %>">
       <%= tag.p format_money(transfer.amount_money), class: "font-medium" %>
     </div>
   </div>

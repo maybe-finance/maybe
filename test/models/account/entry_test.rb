@@ -60,4 +60,16 @@ class Account::EntryTest < ActiveSupport::TestCase
     assert_equal -Money.new(2075), @family.entries.income_total("USD")
     assert_equal -Money.new(250, "EUR"), @family.entries.income_total("EUR")
   end
+
+  # See: https://github.com/maybe-finance/maybe/wiki/vision#signage-of-money
+  test "transactions with negative amounts are inflows, positive amounts are outflows to an account" do
+    inflow_transaction = account_entries(:checking_four)
+    outflow_transaction = account_entries(:checking_five)
+
+    assert inflow_transaction.amount < 0
+    assert inflow_transaction.inflow?
+
+    assert outflow_transaction.amount >= 0
+    assert outflow_transaction.outflow?
+  end
 end

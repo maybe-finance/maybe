@@ -21,7 +21,10 @@ class Account::EntriesController < ApplicationController
     @entry.update! entry_params
     @entry.sync_account_later
 
-    redirect_back_or_to account_entry_path(@account, @entry), notice: t(".success")
+    respond_to do |format|
+      format.html { redirect_to account_entry_path(@account, @entry), notice: t(".success") }
+      format.turbo_stream { render turbo_stream: turbo_stream.replace(@entry) }
+    end
   end
 
   def show

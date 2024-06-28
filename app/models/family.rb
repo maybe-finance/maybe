@@ -35,7 +35,7 @@ class Family < ApplicationRecord
 
   def snapshot_account_transactions
     period = Period.last_30_days
-    results = accounts.active.joins(:entries).joins(:transactions)
+    results = accounts.active.joins(:entries)
                       .select(
                         "accounts.*",
                         "COALESCE(SUM(account_entries.amount) FILTER (WHERE account_entries.amount > 0), 0) AS spending",
@@ -43,7 +43,7 @@ class Family < ApplicationRecord
                       )
                       .where("account_entries.date >= ?", period.date_range.begin)
                       .where("account_entries.date <= ?", period.date_range.end)
-                .where("account_entries.marked_as_transfer = ?", false)
+                      .where("account_entries.marked_as_transfer = ?", false)
                       .where("account_entries.entryable_type = ?", "Account::Transaction")
                       .group("id")
                       .to_a
@@ -62,7 +62,8 @@ class Family < ApplicationRecord
   end
 
   def snapshot_transactions
-    rolling_totals = Account::Transaction.daily_rolling_totals(transactions, self.currency, period: Period.last_30_days)
+    candidate_entries = entries.account_transactions.without_transfers
+    rolling_totals = Account::Entry.daily_rolling_totals(candidate_entries, self.currency, period: Period.last_30_days)
 
     spending = []
     income = []
@@ -89,10 +90,6 @@ class Family < ApplicationRecord
       spending_series: TimeSeries.new(spending, favorable_direction: "down"),
       savings_rate_series: TimeSeries.new(savings, favorable_direction: "up")
     }
-  end
-
-  def effective_start_date
-    accounts.active.joins(:balances).minimum("account_balances.date") || Date.current
   end
 
   def net_worth

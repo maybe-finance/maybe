@@ -111,7 +111,7 @@ class Import < ApplicationRecord
     end
 
     def generate_transactions
-      transactions = []
+      transaction_entries = []
       category_cache = {}
       tag_cache = {}
 
@@ -126,18 +126,17 @@ class Import < ApplicationRecord
 
         category = category_cache[category_name] ||= account.family.categories.find_or_initialize_by(name: category_name) if category_name.present?
 
-        txn = Account::Transaction.new \
-          category: category,
-          tags: tags,
-          entry: account.entries.build(name: row["name"].presence || FALLBACK_TRANSACTION_NAME,
-                                       date: Date.iso8601(row["date"]),
-                                       currency: account.currency,
-                                       amount: BigDecimal(row["amount"]) * -1)
+        entry = account.entries.build \
+          name: row["name"].presence || FALLBACK_TRANSACTION_NAME,
+          date: Date.iso8601(row["date"]),
+          currency: account.currency,
+          amount: BigDecimal(row["amount"]) * -1,
+          entryable: Account::Transaction.new(category: category, tags: tags)
 
-        transactions << txn
+        transaction_entries << entry
       end
 
-      transactions
+      transaction_entries
     end
 
     def create_expected_fields

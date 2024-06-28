@@ -4,22 +4,18 @@ en:
     bulk_delete:
       success: "%{count} transactions deleted"
     bulk_edit:
-      additional: Additional
       cancel: Cancel
       category_label: Category
       category_placeholder: Select a category
-      exclude_subtitle: This excludes the transaction from any in-app features or
-        analytics.
-      exclude_title: Exclude transaction
+      date_label: Date
+      details: Details
       merchant_label: Merchant
       merchant_placeholder: Select a merchant
       note_label: Notes
       note_placeholder: Enter a note that will be applied to selected transactions
       overview: Overview
       save: Save
-      settings: Settings
     bulk_update:
-      failure: Could not update transactions
       success: "%{count} transactions updated"
     create:
       success: New transaction created successfully

@@ -14,19 +14,13 @@ checking_four:
 checking_five:
   merchant: netflix
 
-checking_six_payment:
-  marked_as_transfer: true
-  transfer: credit_card_payment
+checking_six_payment: { }
 
-checking_seven_transfer:
-  marked_as_transfer: true
-  transfer: savings_transfer
+checking_seven_transfer: { }
 
-checking_eight_external_payment:
-  marked_as_transfer: true
+checking_eight_external_payment: { }
 
-checking_nine_external_transfer:
-  marked_as_transfer: true
+checking_nine_external_transfer: { }
 
 # Savings account that has transactions and valuation overrides
 savings_one:
@@ -40,9 +34,7 @@ savings_three: { }
 savings_four:
   category: income
 
-savings_five_transfer:
-  marked_as_transfer: true
-  transfer: savings_transfer
+savings_five_transfer: { }
 
 # Credit card account transactions
 credit_card_one:
@@ -54,9 +46,7 @@ credit_card_two:
 credit_card_three:
   merchant: amazon
 
-credit_card_four_payment:
-  marked_as_transfer: true
-  transfer: credit_card_payment
+credit_card_four_payment: { }
 
 # eur_checking transactions
 eur_checking_one: { }

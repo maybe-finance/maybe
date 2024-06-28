@@ -2,17 +2,8 @@
 en:
   account:
     transactions:
-      empty:
-        description: Try adding a transaction, editing filters or refining your search
-        title: No transactions found
-      loading:
-        loading: Loading transactions...
       selection_bar:
         mark_transfers: Mark as transfers?
         mark_transfers_confirm: Mark as transfers
         mark_transfers_message: By marking transactions as transfers, they will no
           longer be included in income or spending calculations.
-      transaction:
-        remove_transfer: Remove transfer
-        remove_transfer_body: This will remove the transfer from this transaction
-        remove_transfer_confirm: Confirm

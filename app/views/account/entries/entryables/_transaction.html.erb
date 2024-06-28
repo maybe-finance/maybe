@@ -39,7 +39,7 @@
           },
           turbo_frame: "_top"
         } do |f| %>
-          <%= f.hidden_field "bulk_update[transaction_ids][]", value: transaction.id %>
+          <%= f.hidden_field "bulk_update[entry_ids][]", value: entry.id %>
           <%= f.button class: "flex items-center justify-center group", title: "Remove transfer" do %>
             <%= lucide_icon "arrow-left-right", class: "group-hover:hidden text-gray-500 w-4 h-4" %>
             <%= lucide_icon "unlink", class: "hidden group-hover:inline-block text-gray-900 w-4 h-4" %>
@@ -85,6 +85,6 @@
   <div class="col-span-2 ml-auto">
     <%= content_tag :p,
                     format_money(-entry.amount_money),
-                    class: ["text-green-600": transaction.inflow?] %>
+                    class: ["text-green-600": entry.inflow?] %>
   </div>
 </div>

@@ -16,7 +16,17 @@ class Account::Entry < ApplicationRecord
 
   scope :chronological, -> { order(:date, :created_at) }
   scope :reverse_chronological, -> { order(date: :desc, created_at: :desc) }
-  scope :without_transfers, -> { where(transfer_id: nil) }
+  scope :without_transfers, -> { where(marked_as_transfer: false) }
+  scope :with_converted_amount, ->(currency) {
+    # Join with exchange rates to convert the amount to the given currency
+    # If no rate is available, exclude the transaction from the results
+    select(
+      "account_entries.*",
+      "account_entries.amount * COALESCE(er.rate, 1) AS converted_amount"
+    )
+      .joins(sanitize_sql_array([ "LEFT JOIN exchange_rates er ON account_entries.date = er.date AND account_entries.currency = er.base_currency AND er.converted_currency = ?", currency ]))
+      .where("er.rate IS NOT NULL OR account_entries.currency = ?", currency)
+  }
 
   def sync_account_later
     if destroyed?
@@ -29,11 +39,11 @@ class Account::Entry < ApplicationRecord
   end
 
   def inflow?
-    amount <= 0
+    amount <= 0 && account_transaction?
   end
 
   def outflow?
-    amount > 0
+    amount > 0 && account_transaction?
   end
 
   def entryable_name_short
@@ -41,11 +51,62 @@ class Account::Entry < ApplicationRecord
   end
 
   class << self
+    def daily_totals(entries, currency, period: Period.last_30_days)
+      # Sum spending and income for each day in the period with the given currency
+      select(
+        "gs.date",
+        "COALESCE(SUM(converted_amount) FILTER (WHERE converted_amount > 0), 0) AS spending",
+        "COALESCE(SUM(-converted_amount) FILTER (WHERE converted_amount < 0), 0) AS income"
+      )
+        .from(entries.with_converted_amount(currency), :e)
+        .joins(sanitize_sql([ "RIGHT JOIN generate_series(?, ?, interval '1 day') AS gs(date) ON e.date = gs.date", period.date_range.first, period.date_range.last ]))
+        .group("gs.date")
+    end
+
+    def daily_rolling_totals(entries, currency, period: Period.last_30_days)
+      # Extend the period to include the rolling window
+      period_with_rolling = period.extend_backward(period.date_range.count.days)
+
+      # Aggregate the rolling sum of spending and income based on daily totals
+      rolling_totals = from(daily_totals(entries, currency, period: period_with_rolling))
+                         .select(
+                           "*",
+                           sanitize_sql_array([ "SUM(spending) OVER (ORDER BY date RANGE BETWEEN INTERVAL ? PRECEDING AND CURRENT ROW) as rolling_spend", "#{period.date_range.count} days" ]),
+                           sanitize_sql_array([ "SUM(income) OVER (ORDER BY date RANGE BETWEEN INTERVAL ? PRECEDING AND CURRENT ROW) as rolling_income", "#{period.date_range.count} days" ])
+                         )
+                         .order(:date)
+
+      # Trim the results to the original period
+      select("*").from(rolling_totals).where("date >= ?", period.date_range.first)
+    end
+
     def mark_transfers!
       update_all marked_as_transfer: true
 
       # Attempt to "auto match" and save a transfer if 2 transactions selected
       Account::Transfer.new(entries: all).save if all.count == 2
+    end
+
+    def bulk_update!(bulk_update_params)
+      bulk_attributes = {
+        date: bulk_update_params[:date],
+        entryable_attributes: {
+          notes: bulk_update_params[:notes],
+          category_id: bulk_update_params[:category_id],
+          merchant_id: bulk_update_params[:merchant_id]
+        }.compact_blank
+      }.compact_blank
+
+      return 0 if bulk_attributes.blank?
+
+      transaction do
+        all.each do |entry|
+          bulk_attributes[:entryable_attributes][:id] = entry.entryable_id if bulk_attributes[:entryable_attributes].present?
+          entry.update! bulk_attributes
+        end
+      end
+
+      all.size
     end
 
     def income_total(currency = "USD")

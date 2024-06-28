@@ -11,7 +11,7 @@
           <span class="text-lg text-gray-500"><%= entry.currency %></span>
         </h3>
 
-        <% if transaction.marked_as_transfer %>
+        <% if entry.marked_as_transfer? %>
           <%= lucide_icon "arrow-left-right", class: "text-gray-500 mt-1 w-5 h-5" %>
         <% end %>
       </div>
@@ -33,7 +33,7 @@
               <%= f.date_field :date, label: t(".date_label"), max: Date.current, "data-auto-submit-form-target": "auto" %>
 
               <%= f.fields_for :entryable do |ef| %>
-                <% unless transaction.marked_as_transfer %>
+                <% unless entry.marked_as_transfer? %>
                   <%= ef.collection_select :category_id, selectable_categories, :id, :name, { prompt: t(".category_placeholder"), label: t(".category_label"), class: "text-gray-400" }, "data-auto-submit-form-target": "auto" %>
                   <%= ef.collection_select :merchant_id, selectable_merchants, :id, :name, { prompt: t(".merchant_placeholder"), label: t(".merchant_label"), class: "text-gray-400" }, "data-auto-submit-form-target": "auto" %>
                 <% end %>
@@ -92,7 +92,7 @@
             <% end %>
           <% end %>
 
-          <% unless transaction.transfer? %>
+          <% unless entry.marked_as_transfer? %>
             <div class="flex items-center justify-between gap-2 p-3">
               <div class="text-sm space-y-1">
                 <h4 class="text-gray-900"><%= t(".delete_title") %></h4>

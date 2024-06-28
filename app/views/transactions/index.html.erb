@@ -10,13 +10,13 @@
     <%= render "transactions/searches/search" %>
 
     <% if @transaction_entries.present? %>
-      <div hidden id="transaction-selection-bar" data-bulk-select-target="selectionBar">
+      <div hidden id="entry-selection-bar" data-bulk-select-target="selectionBar">
         <%= render "account/transactions/selection_bar" %>
       </div>
       <div class="grow overflow-y-auto">
         <div class="grid grid-cols-12 bg-gray-25 rounded-xl px-5 py-3 text-xs uppercase font-medium text-gray-500 items-center mb-4">
           <div class="pl-0.5 col-span-4 flex items-center gap-4">
-            <%= check_box_tag "selection_transaction",
+            <%= check_box_tag "selection_entry",
                               class: "maybe-checkbox maybe-checkbox--light",
                               data: { action: "bulk-select#togglePageSelection" } %>
             <p class="col-span-4">transaction</p>
@@ -38,7 +38,6 @@
 
     <div class="pt-4">
       <%= render "pagination", pagy: @pagy %>
-
     </div>
   </div>
 </div>

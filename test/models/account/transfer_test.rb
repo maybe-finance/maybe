@@ -3,33 +3,32 @@ require "test_helper"
 class Account::TransferTest < ActiveSupport::TestCase
   setup do
     # Transfers can be posted on different dates
-    outflow_entry = accounts(:checking).entries.create! \
+    @outflow = accounts(:checking).entries.create! \
       date: 1.day.ago.to_date,
       name: "Transfer to Savings",
       amount: 100,
       currency: "USD",
-      entryable: Account::Transaction.new(marked_as_transfer: true)
+      marked_as_transfer: true,
+      entryable: Account::Transaction.new
 
-    inflow_entry = accounts(:savings).entries.create! \
+    @inflow = accounts(:savings).entries.create! \
       date: Date.current,
       name: "Transfer from Savings",
       amount: -100,
       currency: "USD",
-      entryable: Account::Transaction.new(marked_as_transfer: true)
-
-    @inflow = inflow_entry.account_transaction
-    @outflow = outflow_entry.account_transaction
+      marked_as_transfer: true,
+      entryable: Account::Transaction.new
   end
 
   test "transfer valid if it has inflow and outflow from different accounts for the same amount" do
-    transfer = Account::Transfer.create! transactions: [ @inflow, @outflow ]
+    transfer = Account::Transfer.create! entries: [ @inflow, @outflow ]
 
     assert transfer.valid?
   end
 
   test "transfer must have 2 transactions" do
-    invalid_transfer_1 = Account::Transfer.new transactions: [ @outflow ]
-    invalid_transfer_2 = Account::Transfer.new transactions: [ @inflow, @outflow, account_transactions(:savings_four) ]
+    invalid_transfer_1 = Account::Transfer.new entries: [ @outflow ]
+    invalid_transfer_2 = Account::Transfer.new entries: [ @inflow, @outflow, account_entries(:savings_four) ]
 
     assert invalid_transfer_1.invalid?
     assert invalid_transfer_2.invalid?
@@ -42,17 +41,19 @@ class Account::TransferTest < ActiveSupport::TestCase
       name: "Inflow",
       amount: -100,
       currency: "USD",
-      entryable: Account::Transaction.new(marked_as_transfer: true)
+      marked_as_transfer: true,
+      entryable: Account::Transaction.new
 
     outflow = account.entries.create! \
       date: Date.current,
       name: "Outflow",
       amount: 100,
       currency: "USD",
-      entryable: Account::Transaction.new(marked_as_transfer: true)
+      marked_as_transfer: true,
+      entryable: Account::Transaction.new
 
     assert_raise ActiveRecord::RecordInvalid do
-      Account::Transfer.create! transactions: [ inflow.account_transaction, outflow.account_transaction ]
+      Account::Transfer.create! entries: [ inflow, outflow ]
     end
   end
 
@@ -60,21 +61,21 @@ class Account::TransferTest < ActiveSupport::TestCase
     @inflow.update! marked_as_transfer: false
 
     assert_raise ActiveRecord::RecordInvalid do
-      Account::Transfer.create! transactions: [ @inflow, @outflow ]
+      Account::Transfer.create! entries: [ @inflow, @outflow ]
     end
   end
 
   test "single-currency transfer transactions must net to zero" do
-    @outflow.entry.update! amount: 105
+    @outflow.update! amount: 105
 
     assert_raises ActiveRecord::RecordInvalid do
-      Account::Transfer.create! transactions: [ @inflow, @outflow ]
+      Account::Transfer.create! entries: [ @inflow, @outflow ]
     end
   end
 
   test "multi-currency transfer transactions do not have to net to zero" do
-    @outflow.entry.update! amount: 105, currency: "EUR"
-    transfer = Account::Transfer.create! transactions: [ @inflow, @outflow ]
+    @outflow.update! amount: 105, currency: "EUR"
+    transfer = Account::Transfer.create! entries: [ @inflow, @outflow ]
 
     assert transfer.valid?
   end

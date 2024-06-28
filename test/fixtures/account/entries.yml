@@ -52,6 +52,8 @@ checking_six_payment:
   currency: USD
   entryable_type: Account::Transaction
   entryable: checking_six_payment
+  marked_as_transfer: true
+  transfer: credit_card_payment
 
 checking_seven_transfer:
   name: Transfer to Savings
@@ -59,6 +61,8 @@ checking_seven_transfer:
   amount: 250
   account: checking
   currency: USD
+  marked_as_transfer: true
+  transfer: savings_transfer
   entryable_type: Account::Transaction
   entryable: checking_seven_transfer
 
@@ -68,6 +72,7 @@ checking_eight_external_payment:
   amount: 800
   account: checking
   currency: USD
+  marked_as_transfer: true
   entryable_type: Account::Transaction
   entryable: checking_eight_external_payment
 
@@ -77,6 +82,7 @@ checking_nine_external_transfer:
   amount: -200
   account: checking
   currency: USD
+  marked_as_transfer: true
   entryable_type: Account::Transaction
   entryable: checking_nine_external_transfer
 
@@ -122,6 +128,8 @@ savings_five_transfer:
   amount: -250
   account: savings
   currency: USD
+  marked_as_transfer: true
+  transfer: savings_transfer
   entryable_type: Account::Transaction
   entryable: savings_five_transfer
 
@@ -158,6 +166,8 @@ credit_card_four_payment:
   amount: -100
   account: credit_card
   currency: USD
+  marked_as_transfer: true
+  transfer: credit_card_payment
   entryable_type: Account::Transaction
   entryable: credit_card_four_payment
 
