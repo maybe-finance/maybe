@@ -1,8 +1,4 @@
 module Account::TransactionsHelper
-  def unconfirmed_transfer?(transaction)
-    transaction.marked_as_transfer && transaction.transfer.nil?
-  end
-
   def group_transactions_by_date(transactions)
     grouped_by_date = {}
 

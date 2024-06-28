@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_06_24_164119) do
+ActiveRecord::Schema[7.2].define(version: 2024_06_28_104551) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -42,7 +42,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_24_164119) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "transfer_id"
+    t.boolean "marked_as_transfer", default: false, null: false
     t.index ["account_id"], name: "index_account_entries_on_account_id"
+    t.index ["transfer_id"], name: "index_account_entries_on_transfer_id"
   end
 
   create_table "account_transactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -52,11 +55,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_24_164119) do
     t.boolean "excluded", default: false
     t.text "notes"
     t.uuid "merchant_id"
-    t.uuid "transfer_id"
-    t.boolean "marked_as_transfer", default: false, null: false
     t.index ["category_id"], name: "index_account_transactions_on_category_id"
     t.index ["merchant_id"], name: "index_account_transactions_on_merchant_id"
-    t.index ["transfer_id"], name: "index_account_transactions_on_transfer_id"
   end
 
   create_table "account_transfers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -353,8 +353,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_24_164119) do
   end
 
   add_foreign_key "account_balances", "accounts", on_delete: :cascade
+  add_foreign_key "account_entries", "account_transfers", column: "transfer_id"
   add_foreign_key "account_entries", "accounts"
-  add_foreign_key "account_transactions", "account_transfers", column: "transfer_id"
   add_foreign_key "account_transactions", "categories", on_delete: :nullify
   add_foreign_key "account_transactions", "merchants"
   add_foreign_key "accounts", "families"

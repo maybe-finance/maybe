@@ -1,7 +1,6 @@
 class Account::Transaction < ApplicationRecord
   include Account::Entryable
 
-  belongs_to :transfer, optional: true, class_name: "Account::Transfer"
   belongs_to :category, optional: true
   belongs_to :merchant, optional: true
   has_many :taggings, as: :taggable, dependent: :destroy
@@ -12,7 +11,6 @@ class Account::Transaction < ApplicationRecord
   scope :active, -> { where(excluded: false) }
   scope :inflows, -> { where("amount <= 0") }
   scope :outflows, -> { where("amount > 0") }
-  scope :without_transfers, -> { where(marked_as_transfer: false) }
   scope :with_converted_amount, ->(currency) {
     # Join with exchange rates to convert the amount to the given currency
     # If no rate is available, exclude the transaction from the results
@@ -32,18 +30,7 @@ class Account::Transaction < ApplicationRecord
     entry.amount > 0
   end
 
-  def transfer?
-    marked_as_transfer
-  end
-
   class << self
-    def mark_transfers!
-      update_all marked_as_transfer: true
-
-      # Attempt to "auto match" and save a transfer if 2 transactions selected
-      Account::Transfer.new(transactions: all).save if all.count == 2
-    end
-
     def daily_totals(transactions, currency, period: Period.last_30_days)
       # Sum spending and income for each day in the period with the given currency
       select(
@@ -51,7 +38,7 @@ class Account::Transaction < ApplicationRecord
         "COALESCE(SUM(converted_amount) FILTER (WHERE converted_amount > 0), 0) AS spending",
         "COALESCE(SUM(-converted_amount) FILTER (WHERE converted_amount < 0), 0) AS income"
       )
-        .from(transactions.without_transfers.with_converted_amount(currency), :t)
+        .from(transactions.with_converted_amount(currency), :t)
         .joins(sanitize_sql([ "RIGHT JOIN generate_series(?, ?, interval '1 day') AS gs(date) ON t.date = gs.date", period.date_range.first, period.date_range.last ]))
         .group("gs.date")
     end

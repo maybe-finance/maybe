@@ -156,17 +156,16 @@
   <section class="grid grid-cols-2 gap-4 items-baseline">
     <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl space-y-4">
       <h2 class="text-lg font-medium text-gray-900"><%= t(".transactions") %></h2>
-      <% if @transactions.empty? %>
+      <% if @transaction_entries.empty? %>
         <div class="text-gray-500 flex items-center justify-center py-12">
           <p><%= t(".no_transactions") %></p>
         </div>
       <% else %>
         <div class="text-gray-500 p-1 space-y-1 bg-gray-25 rounded-xl">
-          <% group_transactions_by_date(@transactions).each do |date, group| %>
-            <%= render "account/transactions/transaction_group",
+          <% @transaction_entries.group_by(&:date).each do |date, transactions| %>
+            <%= render "account/entries/entry_group",
                        date: date,
-                       transactions: group[:transactions],
-                       transfers: group[:transfers],
+                       entries: transactions,
                        selectable: false,
                        editable: false,
                        short: true %>

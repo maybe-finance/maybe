@@ -14,10 +14,6 @@ module Account::ValuationsHelper
   def valuation_style(valuation, is_oldest: false)
     color = is_oldest ? "#D444F1" : valuation.trend.color
 
-    <<-STYLE.strip
-      background-color: color-mix(in srgb, #{color} 5%, white);
-      border-color: color-mix(in srgb, #{color} 10%, white);
-      color: #{color};
-    STYLE
+    mixed_hex_styles(color)
   end
 end

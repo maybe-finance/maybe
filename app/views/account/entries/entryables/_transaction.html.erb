@@ -1,8 +1,8 @@
-<%# locals: (entry:, selectable: true, editable: true, short: false, show_tags: false) %>
+<%# locals: (entry:, selectable: true, editable: true, short: false, show_tags: false, **opts) %>
 <% transaction, account = entry.account_transaction, entry.account %>
 
 <div class="grid grid-cols-12 items-center text-gray-900 text-sm font-medium p-4">
-  <% name_col_span = transaction.transfer? ? "col-span-10" : short ? "col-span-6" : "col-span-4" %>
+  <% name_col_span = entry.marked_as_transfer? ? "col-span-10" : short ? "col-span-6" : "col-span-4" %>
   <div class="pr-10 flex items-center gap-4 <%= name_col_span %>">
     <% if selectable %>
       <%= check_box_tag dom_id(entry, "selection"),
@@ -29,7 +29,7 @@
       <% end %>
     </div>
 
-    <% if unconfirmed_transfer?(transaction) %>
+    <% if unconfirmed_transfer?(entry) %>
       <% if editable %>
         <%= form_with url: unmark_transfers_transactions_path, builder: ActionView::Helpers::FormBuilder, class: "flex items-center", data: {
           turbo_confirm: {
@@ -51,7 +51,7 @@
     <% end %>
   </div>
 
-  <% unless transaction.transfer? %>
+  <% unless entry.marked_as_transfer? %>
     <% unless short %>
       <div class="flex items-center gap-1 <%= show_tags ? "col-span-6" : "col-span-3" %>">
         <% if editable %>

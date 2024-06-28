@@ -65,6 +65,20 @@ module ApplicationHelper
     end
   end
 
+  def mixed_hex_styles(hex)
+    color = hex || "#1570EF" # blue-600
+
+    <<-STYLE.strip
+      background-color: color-mix(in srgb, #{color} 5%, white);
+      border-color: color-mix(in srgb, #{color} 10%, white);
+      color: #{color};
+    STYLE
+  end
+
+  def circle_logo(name, hex: nil, size: "md")
+    render partial: "shared/circle_logo", locals: { name: name, hex: hex, size: size }
+  end
+
   def return_to_path(params, fallback = root_path)
     uri = URI.parse(params[:return_to] || fallback)
     uri.relative? ? uri.path : root_path

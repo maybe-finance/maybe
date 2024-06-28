@@ -6,6 +6,7 @@ class Account::Entry < ApplicationRecord
   monetize :amount
 
   belongs_to :account
+  belongs_to :transfer, optional: true
 
   delegated_type :entryable, types: TYPES, dependent: :destroy
   accepts_nested_attributes_for :entryable
@@ -15,6 +16,7 @@ class Account::Entry < ApplicationRecord
 
   scope :chronological, -> { order(:date, :created_at) }
   scope :reverse_chronological, -> { order(date: :desc, created_at: :desc) }
+  scope :without_transfers, -> { where(transfer_id: nil) }
 
   def sync_account_later
     if destroyed?
@@ -26,16 +28,31 @@ class Account::Entry < ApplicationRecord
     account.sync_later(sync_start_date)
   end
 
+  def inflow?
+    amount <= 0
+  end
+
+  def outflow?
+    amount > 0
+  end
+
   def entryable_name_short
     entryable_name.gsub(/^account_/, "")
   end
 
   class << self
+    def mark_transfers!
+      update_all marked_as_transfer: true
+
+      # Attempt to "auto match" and save a transfer if 2 transactions selected
+      Account::Transfer.new(entries: all).save if all.count == 2
+    end
+
     def income_total(currency = "USD")
       account_transactions.includes(:entryable)
                           .where("account_entries.amount <= 0")
                           .where("account_entries.currency = ?", currency)
-                          .reject { |e| e.account_transaction.transfer? }
+        .reject { |e| e.marked_as_transfer? }
                           .sum(&:amount_money)
     end
 
@@ -43,7 +60,7 @@ class Account::Entry < ApplicationRecord
       account_transactions.includes(:entryable)
                           .where("account_entries.amount > 0")
                           .where("account_entries.currency = ?", currency)
-                          .reject { |e| e.account_transaction.transfer? }
+        .reject { |e| e.marked_as_transfer? }
                           .sum(&:amount_money)
     end
 

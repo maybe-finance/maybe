@@ -1,34 +1,43 @@
-<%= turbo_frame_tag dom_id(transfer), class: "block" do %>
-  <details class="group flex items-center text-gray-900 text-sm font-medium">
-    <summary class="flex items-center justify-between p-4">
-      <div class="flex items-center gap-4">
-        <%= button_to account_transfer_path(transfer),
-                      method: :delete,
-                      class: "flex items-center group/transfer",
-                      data: {
-                        turbo_frame: "_top",
-                        turbo_confirm: {
-                          title: t(".remove_title"),
-                          body: t(".remove_body"),
-                          confirm: t(".remove_confirm")
-                        }
-                      } do %>
-          <%= lucide_icon "arrow-left-right", class: "group-hover/transfer:hidden w-5 h-5 text-gray-500" %>
-          <%= lucide_icon "unlink", class: "group-hover/transfer:inline-block hidden w-5 h-5 text-gray-500" %>
-        <% end %>
+<%= turbo_frame_tag dom_id(transfer) do %>
+  <div class="grid grid-cols-12 items-center text-gray-900 text-sm font-medium p-4">
+    <div class="col-span-7 flex items-center">
+      <%= check_box_tag dom_id(transfer, "selection"),
+                        disabled: true,
+                        class: "cursor-not-allowed maybe-checkbox maybe-checkbox--light" %>
 
-        <div class="max-w-full pr-10 select-none">
-          <%= tag.p t(".transfer_name", from_account: transfer.outflow_transaction&.entry&.account&.name, to_account: transfer.inflow_transaction&.entry&.account&.name) %>
+      <div class="max-w-[250px] ml-3">
+        <div class="flex items-center gap-2">
+          <%= circle_logo("T") %>
+
+          <%= tag.p transfer.name, class: "truncate text-gray-900" %>
         </div>
       </div>
 
-      <%= lucide_icon "chevron-down", class: "group-open:transform group-open:rotate-180 text-gray-500 w-5" %>
-    </summary>
+      <%= button_to account_transfer_path(transfer),
+                    method: :delete,
+                    class: "ml-2 flex items-center group/transfer hover:bg-gray-50 rounded-md p-1",
+                    data: {
+                      turbo_frame: "_top",
+                      turbo_confirm: {
+                        title: t(".remove_title"),
+                        body: t(".remove_body"),
+                        confirm: t(".remove_confirm")
+                      }
+                    } do %>
 
-    <div class="divide-y divide-alpha-black-200">
-      <% transfer.transactions.each do |transaction| %>
-        <%= render transaction, selectable: false, editable: false %>
+        <%= lucide_icon "link-2", class: "group-hover/transfer:hidden w-4 h-4 text-gray-500" %>
+        <%= lucide_icon "unlink", class: "group-hover/transfer:inline-block hidden w-4 h-4 text-gray-500" %>
       <% end %>
     </div>
-  </details>
+
+    <div class="col-span-3 flex items-center gap-2">
+      <%= circle_logo(transfer.from_name[0].upcase, size: "sm") %>
+      <span class="text-gray-500 font-medium">&rarr;</span>
+      <%= circle_logo(transfer.to_name[0].upcase, size: "sm") %>
+    </div>
+
+    <div class="col-span-2 ml-auto">
+      <%= tag.p format_money(transfer.amount_money), class: "font-medium" %>
+    </div>
+  </div>
 <% end %>

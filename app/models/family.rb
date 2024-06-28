@@ -43,7 +43,7 @@ class Family < ApplicationRecord
                       )
                       .where("account_entries.date >= ?", period.date_range.begin)
                       .where("account_entries.date <= ?", period.date_range.end)
-                      .where("account_transactions.marked_as_transfer = ?", false)
+                .where("account_entries.marked_as_transfer = ?", false)
                       .where("account_entries.entryable_type = ?", "Account::Transaction")
                       .group("id")
                       .to_a
