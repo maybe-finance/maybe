@@ -11,7 +11,7 @@
 
     <% if @transaction_entries.present? %>
       <div hidden id="entry-selection-bar" data-bulk-select-target="selectionBar">
-        <%= render "account/transactions/selection_bar" %>
+        <%= render "account/entries/selection_bar" %>
       </div>
       <div class="grow overflow-y-auto">
         <div class="grid grid-cols-12 bg-gray-25 rounded-xl px-5 py-3 text-xs uppercase font-medium text-gray-500 items-center mb-4">

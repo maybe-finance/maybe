@@ -36,6 +36,11 @@ en:
             tags_label: Select one or more tags
       loading:
         loading: Loading entries...
+      selection_bar:
+        mark_transfers: Mark as transfers?
+        mark_transfers_confirm: Mark as transfers
+        mark_transfers_message: By marking transactions as transfers, they will no
+          longer be included in income or spending calculations.
       transactions:
         new: New transaction
         no_transactions: No transactions for this account yet.
