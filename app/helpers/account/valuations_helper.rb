@@ -1,2 +1,0 @@
-module Account::ValuationsHelper
-end

@@ -1,4 +1,4 @@
-module Account::Transaction::SearchesHelper
+module TransactionsHelper
   def transaction_search_filters
     [
       { key: "account_filter", name: "Account", icon: "layers" },
