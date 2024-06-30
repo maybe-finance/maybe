@@ -46,11 +46,29 @@ class Account::Entry < ApplicationRecord
     amount > 0 && account_transaction?
   end
 
+  def first_of_type?
+    first_entry = account
+                    .entries
+                    .where("entryable_type = ?", entryable_type)
+                    .order(:date)
+                    .first
+
+    first_entry&.id == id
+  end
+
   def entryable_name_short
-    entryable_name.gsub(/^account_/, "")
+    entryable_type.demodulize.underscore
+  end
+
+  def trend
+    @trend ||= create_trend
   end
 
   class << self
+    def from_type(entryable_type)
+      entryable_type.presence_in(Account::Entry::TYPES).constantize
+    end
+
     def daily_totals(entries, currency, period: Period.last_30_days)
       # Sum spending and income for each day in the period with the given currency
       select(
@@ -172,7 +190,15 @@ class Account::Entry < ApplicationRecord
       @previous_entry ||= account
                             .entries
                             .where("date < ?", date)
+                            .where("entryable_type = ?", entryable_type)
                             .order(date: :desc)
                             .first
+    end
+
+    def create_trend
+      TimeSeries::Trend.new \
+        current: amount_money,
+        previous: previous_entry&.amount_money,
+        favorable_direction: account.favorable_direction
     end
 end

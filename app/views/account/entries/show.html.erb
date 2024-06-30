@@ -1,1 +1,1 @@
-<%= render partial: "account/entries/entryables/#{permitted_entryable_key(@entry)}/show", locals: { entry: @entry } %>
+<%= render partial: permitted_entryable_partial_path(@entry, "show"), locals: { entry: @entry } %>

@@ -3,6 +3,40 @@
     {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
+      "fingerprint": "7a182d062523a7fe890fbe5945c0004aeec1044ac764430f1d464326e5fa2710",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/account/entries/edit.html.erb",
+      "line": 2,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => permitted_entryable_partial_path(Current.family.accounts.find(params[:account_id]).entries.find(params[:id]), \"edit\"), { :entry => Current.family.accounts.find(params[:account_id]).entries.find(params[:id]) })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Account::EntriesController",
+          "method": "edit",
+          "line": 29,
+          "file": "app/controllers/account/entries_controller.rb",
+          "rendered": {
+            "name": "account/entries/edit",
+            "file": "app/views/account/entries/edit.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "account/entries/edit"
+      },
+      "user_input": "params[:id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
       "fingerprint": "ffd85f31354ec495e4a704077c5e6f657e385d5f73ca294b435b71a1aed65d6a",
       "check_name": "Render",
       "message": "Render path contains parameter value",
@@ -15,7 +49,7 @@
           "type": "controller",
           "class": "Account::EntriesController",
           "method": "show",
-          "line": 28,
+          "line": 42,
           "file": "app/controllers/account/entries_controller.rb",
           "rendered": {
             "name": "account/entries/show",
@@ -35,6 +69,6 @@
       "note": ""
     }
   ],
-  "updated": "2024-06-27 16:22:02 -0400",
+  "updated": "2024-06-30 08:47:04 -0400",
   "brakeman_version": "6.1.2"
 }

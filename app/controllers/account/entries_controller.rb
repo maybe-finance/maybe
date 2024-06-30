@@ -8,7 +8,18 @@ class Account::EntriesController < ApplicationController
     @transaction_entries = @account.entries.account_transactions.reverse_chronological
   end
 
+  def valuations
+    @valuation_entries = @account.entries.account_valuations.reverse_chronological
+  end
+
   def new
+    @entry = @account.entries.build.tap do |entry|
+      if params[:entryable_type]
+        entry.entryable = Account::Entry.from_type(params[:entryable_type]).new
+      else
+        entry.entryable = Account::Valuation.new
+      end
+    end
   end
 
   def create

@@ -3,55 +3,90 @@ require "test_helper"
 class Account::EntriesControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
-    @transaction_entry = account_entries(:checking_one)
+    @account = accounts(:savings)
+    @transaction_entry = @account.entries.account_transactions.first
+    @valuation_entry = @account.entries.account_valuations.first
   end
 
-  test "should get edit" do
-    get edit_account_entry_url(@transaction_entry.account, @transaction_entry)
+  test "should edit valuation entry" do
+    get edit_account_entry_url(@account, @valuation_entry)
     assert_response :success
   end
 
-  test "should get show" do
-    get account_entry_url(@transaction_entry.account, @transaction_entry)
+  test "should show transaction entry" do
+    get account_entry_url(@account, @transaction_entry)
+    assert_response :success
+  end
+
+  test "should show valuation entry" do
+    get account_entry_url(@account, @valuation_entry)
     assert_response :success
   end
 
   test "should get list of transaction entries" do
-    get transaction_account_entries_url(Account.first)
+    get transaction_account_entries_url(@account)
     assert_response :success
   end
 
-  test "should update transaction entry" do
-    assert_difference [ "Account::Entry.count", "Account::Transaction.count" ], 0 do
-      patch account_entry_url(@transaction_entry.account, @transaction_entry), params: {
+  test "should get list of valuation entries" do
+    get valuation_account_entries_url(@account)
+    assert_response :success
+  end
+
+  test "can update entry without entryable attributes" do
+    assert_no_difference_in_entries do
+      patch account_entry_url(@account, @valuation_entry), params: {
         account_entry: {
-          amount: @transaction_entry.amount,
-          currency: @transaction_entry.currency,
-          date: @transaction_entry.date,
-          name: @transaction_entry.name,
-          entryable_type: "Account::Transaction",
+          name: "Updated name"
+        }
+      }
+    end
+
+    assert_redirected_to account_entry_url(@account, @valuation_entry)
+    assert_enqueued_with(job: AccountSyncJob)
+  end
+
+  test "should update transaction entry with entryable attributes" do
+    assert_no_difference_in_entries do
+      patch account_entry_url(@account, @transaction_entry), params: {
+        account_entry: {
+          name: "Updated name",
+          date: Date.current,
+          currency: "USD",
+          amount: 20,
+          entryable_type: @transaction_entry.entryable_type,
           entryable_attributes: {
-            id: @transaction_entry.account_transaction.id,
+            id: @transaction_entry.entryable_id,
             tag_ids: [ Tag.first.id, Tag.second.id ],
             category_id: Category.first.id,
             merchant_id: Merchant.first.id,
-            notes: "some note",
+            notes: "test notes",
             excluded: false
           }
         }
       }
     end
 
-    assert_redirected_to account_entry_url(@transaction_entry.account, @transaction_entry)
+    assert_redirected_to account_entry_url(@account, @transaction_entry)
     assert_enqueued_with(job: AccountSyncJob)
   end
 
   test "should destroy transaction entry" do
-    assert_difference [ "Account::Entry.count", "Account::Transaction.count" ], -1 do
-      delete account_entry_url(@transaction_entry.account, @transaction_entry)
-    end
+    [ @transaction_entry, @valuation_entry ].each do |entry|
+      assert_difference -> { Account::Entry.count } => -1, -> { entry.entryable_class.count } => -1 do
+        delete account_entry_url(@account, entry)
+      end
 
-    assert_redirected_to account_url(@transaction_entry.account)
-    assert_enqueued_with(job: AccountSyncJob)
+      assert_redirected_to account_url(@account)
+      assert_enqueued_with(job: AccountSyncJob)
+    end
   end
+
+  private
+
+    # Simple guard to verify that nested attributes are passed the record ID to avoid new creation of record
+    # See `update_only` option of accepts_nested_attributes_for
+    def assert_no_difference_in_entries(&block)
+      assert_no_difference [ "Account::Entry.count", "Account::Transaction.count", "Account::Valuation.count" ], &block
+    end
 end

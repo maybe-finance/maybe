@@ -85,7 +85,7 @@
         <%= render "account/entries/loading" %>
       <% end %>
     <% else %>
-      <%= turbo_frame_tag dom_id(@account, "valuations"), src: account_valuations_path(@account) do %>
+      <%= turbo_frame_tag dom_id(@account, "valuations"), src: valuation_account_entries_path(@account) do %>
         <%= render "account/entries/loading" %>
       <% end %>
     <% end %>

@@ -77,6 +77,7 @@ Rails.application.routes.draw do
       resources :entries, except: :index do
         collection do
           get "transactions", as: :transaction
+          get "valuations", as: :valuation
         end
       end
     end

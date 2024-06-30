@@ -9,9 +9,6 @@ en:
         title: No entries found
       entryables:
         transaction:
-          remove_transfer: Remove transfer
-          remove_transfer_body: This will remove the transfer from this transaction
-          remove_transfer_confirm: Confirm
           show:
             account_label: Account
             account_placeholder: Select an account
@@ -34,6 +31,26 @@ en:
             overview: Overview
             settings: Settings
             tags_label: Select one or more tags
+          transaction:
+            remove_transfer: Remove transfer
+            remove_transfer_body: This will remove the transfer from this transaction
+            remove_transfer_confirm: Confirm
+        valuation:
+          form:
+            cancel: Cancel
+          valuation:
+            confirm_accept: Delete entry
+            confirm_body_html: "<p>Deleting this entry will remove it from the account’s
+              history which will impact different parts of your account. This includes
+              the net worth and account graphs.</p></br><p>The only way you’ll be
+              able to add this entry back is by re-entering it manually via a new
+              entry</p>"
+            confirm_title: Delete Entry?
+            delete_entry: Delete entry
+            edit_entry: Edit entry
+            no_change: No change
+            start_balance: Starting balance
+            value_update: Value update
       loading:
         loading: Loading entries...
       selection_bar:
@@ -48,3 +65,10 @@ en:
         transactions: Transactions
       update:
         success: Entry updated
+      valuations:
+        change: change
+        date: date
+        new_entry: New entry
+        no_valuations: No valuations for this account yet
+        valuations: Value history
+        value: value
