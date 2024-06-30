@@ -12,7 +12,7 @@ class Account::Entry < ApplicationRecord
   accepts_nested_attributes_for :entryable
 
   validates :date, :amount, :currency, presence: true
-  validates :date, uniqueness: { scope: :account_id }, if: -> { account_valuation? }
+  validates :date, uniqueness: { scope: [ :account_id, :entryable_type ] }, if: -> { account_valuation? }
 
   scope :chronological, -> { order(:date, :created_at) }
   scope :reverse_chronological, -> { order(date: :desc, created_at: :desc) }

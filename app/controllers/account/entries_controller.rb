@@ -23,6 +23,17 @@ class Account::EntriesController < ApplicationController
   end
 
   def create
+    @entry = @account.entries.build(entry_params_with_defaults(entry_params))
+
+    if @entry.save
+      @entry.sync_account_later
+      redirect_to account_path(@account), notice: t(".success", name: @entry.entryable_name_short.upcase_first)
+    else
+      # TODO: this is not an ideal way to handle errors and should eventually be improved.
+      # See: https://github.com/hotwired/turbo-rails/pull/367
+      flash[:error] = @entry.errors.full_messages.to_sentence
+      redirect_to account_path(@account)
+    end
   end
 
   def edit
@@ -69,6 +80,12 @@ class Account::EntriesController < ApplicationController
     end
 
     def entry_params
-      params.require(:account_entry).permit(:name, :date, :amount, :currency, :entryable_type, entryable_attributes: permitted_entryable_attributes)
+      params.require(:account_entry)
+            .permit(:name, :date, :amount, :currency, :entryable_type, entryable_attributes: permitted_entryable_attributes)
+    end
+
+    # entryable_type is required here because Rails expects both of these params in this exact order (potential upstream bug)
+    def entry_params_with_defaults(params)
+      params.with_defaults(entryable_type: params[:entryable_type], entryable_attributes: {})
     end
 end

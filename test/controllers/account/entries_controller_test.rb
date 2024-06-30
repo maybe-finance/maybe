@@ -33,6 +33,47 @@ class Account::EntriesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "gets new entry by type" do
+    get new_account_entry_url(@account, entryable_type: "Account::Valuation")
+    assert_response :success
+  end
+
+  test "should create valuation" do
+    assert_difference [ "Account::Entry.count", "Account::Valuation.count" ], 1 do
+      post account_entries_url(@account), params: {
+        account_entry: {
+          name: "Manual valuation",
+          amount: 19800,
+          date: Date.current,
+          currency: @account.currency,
+          entryable_type: "Account::Valuation",
+          entryable_attributes: {}
+        }
+      }
+    end
+
+    assert_equal "Valuation created", flash[:notice]
+    assert_enqueued_with job: AccountSyncJob
+    assert_redirected_to account_path(@account)
+  end
+
+  test "error when valuation already exists for date" do
+    assert_no_difference_in_entries do
+      post account_entries_url(@account), params: {
+        account_entry: {
+          amount: 19800,
+          date: @valuation_entry.date,
+          currency: @valuation_entry.currency,
+          entryable_type: "Account::Valuation",
+          entryable_attributes: {}
+        }
+      }
+    end
+
+    assert_equal "Date has already been taken", flash[:error]
+    assert_redirected_to account_path(@account)
+  end
+
   test "can update entry without entryable attributes" do
     assert_no_difference_in_entries do
       patch account_entry_url(@account, @valuation_entry), params: {
