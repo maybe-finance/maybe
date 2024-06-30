@@ -85,7 +85,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_28_104551) do
     t.jsonb "sync_errors", default: [], null: false
     t.date "last_sync_date"
     t.uuid "institution_id"
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Loan'::character varying, 'CreditCard'::character varying, 'OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Loan'::character varying)::text, ('CreditCard'::character varying)::text, ('OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id"], name: "index_accounts_on_family_id"
     t.index ["institution_id"], name: "index_accounts_on_institution_id"
