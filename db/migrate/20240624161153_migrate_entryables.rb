@@ -18,22 +18,6 @@ class MigrateEntryables < ActiveRecord::Migration[7.2]
       end
 
       dir.down do
-        # Recreate Account::Transaction data
-        execute <<-SQL.squish
-          INSERT INTO account_transactions (name, date, amount, currency, account_id, created_at, updated_at)
-          SELECT name, date, amount, currency, account_id, created_at, updated_at
-          FROM account_entries
-          WHERE entryable_type = 'Account::Transaction'
-        SQL
-
-        # Recreate Account::Valuation data
-        execute <<-SQL.squish
-          INSERT INTO account_valuations (date, value, currency, account_id, created_at, updated_at)
-          SELECT date, amount AS value, currency, account_id, created_at, updated_at
-          FROM account_entries
-          WHERE entryable_type = 'Account::Valuation'
-        SQL
-
         # Delete the entries from account_entries
         execute <<-SQL.squish
           DELETE FROM account_entries WHERE entryable_type IN ('Account::Transaction', 'Account::Valuation')
