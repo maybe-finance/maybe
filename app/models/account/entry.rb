@@ -1,6 +1,4 @@
 class Account::Entry < ApplicationRecord
-  TYPES = %w[ Account::Valuation Account::Transaction ]
-
   include Monetizable
 
   monetize :amount
@@ -8,7 +6,7 @@ class Account::Entry < ApplicationRecord
   belongs_to :account
   belongs_to :transfer, optional: true
 
-  delegated_type :entryable, types: TYPES, dependent: :destroy
+  delegated_type :entryable, types: Account::Entryable::TYPES, dependent: :destroy
   accepts_nested_attributes_for :entryable
 
   validates :date, :amount, :currency, presence: true
@@ -65,10 +63,6 @@ class Account::Entry < ApplicationRecord
   end
 
   class << self
-    def from_type(entryable_type)
-      entryable_type.presence_in(Account::Entry::TYPES).constantize
-    end
-
     def daily_totals(entries, currency, period: Period.last_30_days)
       # Sum spending and income for each day in the period with the given currency
       select(
@@ -171,7 +165,7 @@ class Account::Entry < ApplicationRecord
         entryable_ids = []
         entryable_search_performed = false
 
-        TYPES.map(&:constantize).each do |entryable|
+        Account::Entryable::TYPES.map(&:constantize).each do |entryable|
           next unless entryable.requires_search?(params)
 
           entryable_search_performed = true

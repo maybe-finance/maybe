@@ -15,7 +15,7 @@ class Account::EntriesController < ApplicationController
   def new
     @entry = @account.entries.build.tap do |entry|
       if params[:entryable_type]
-        entry.entryable = Account::Entry.from_type(params[:entryable_type]).new
+        entry.entryable = Account::Entryable.from_type(params[:entryable_type]).new
       else
         entry.entryable = Account::Valuation.new
       end
