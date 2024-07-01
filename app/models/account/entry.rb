@@ -152,11 +152,9 @@ class Account::Entry < ApplicationRecord
 
       # Search attributes on each entryable to further refine results
       entryable_ids = entryable_search(params)
-      if entryable_ids.present?
-        query.where(entryable_id: entryable_ids)
-      else
-        query
-      end
+      query = query.where(entryable_id: entryable_ids) unless entryable_ids.nil?
+
+      query
     end
 
     private
