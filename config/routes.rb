@@ -72,10 +72,11 @@ Rails.application.routes.draw do
     scope module: :account do
       resource :logo, only: :show
 
-      resources :valuations
-
-      resources :transactions, only: %i[ index show update destroy ] do
-        resource :row, only: %i[ show update ], module: :transaction
+      resources :entries, except: :index do
+        collection do
+          get "transactions", as: :transaction
+          get "valuations", as: :valuation
+        end
       end
     end
   end
@@ -87,6 +88,7 @@ Rails.application.routes.draw do
       post "bulk_update"
       post "mark_transfers"
       post "unmark_transfers"
+      get "rules"
     end
   end
 

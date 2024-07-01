@@ -1,0 +1,5 @@
+---
+en:
+  account:
+    transfer:
+      name: Transfer from %{from_account} to %{to_account}

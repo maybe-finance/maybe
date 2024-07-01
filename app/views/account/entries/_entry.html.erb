@@ -1,0 +1,4 @@
+<%# locals: (entry:, **opts) %>
+<%= turbo_frame_tag dom_id(entry) do %>
+  <%= render permitted_entryable_partial_path(entry, entry.entryable_name_short), entry: entry, **opts %>
+<% end %>

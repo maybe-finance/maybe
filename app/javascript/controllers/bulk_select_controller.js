@@ -25,7 +25,7 @@ export default class extends Controller {
   submitBulkRequest(e) {
     const form = e.target.closest("form");
     const scope = e.params.scope
-    this.#addHiddenFormInputsForSelectedIds(form, `${scope}[transaction_ids][]`, this.selectedIdsValue)
+    this.#addHiddenFormInputsForSelectedIds(form, `${scope}[entry_ids][]`, this.selectedIdsValue)
     form.requestSubmit()
   }
 

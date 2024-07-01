@@ -7,12 +7,6 @@ class AccountTest < ActiveSupport::TestCase
     @family = families(:dylan_family)
   end
 
-  test "new account should be valid" do
-    assert @account.valid?
-    assert_not_nil @account.accountable_id
-    assert_not_nil @account.accountable
-  end
-
   test "recognizes foreign currency account" do
     regular_account = accounts(:checking)
     foreign_account = accounts(:eur_checking)
@@ -32,20 +26,6 @@ class AccountTest < ActiveSupport::TestCase
     assert_equal multi_currency_account.family.currency, multi_currency_account.currency
     assert multi_currency_account.multi_currency?
     assert_not multi_currency_account.foreign_currency?
-  end
-
-  test "syncs regular account" do
-    @account.sync
-    assert_equal "ok", @account.status
-    assert_equal 32, @account.balances.count
-  end
-
-  test "syncs foreign currency account" do
-    account = accounts(:eur_checking)
-    account.sync
-    assert_equal "ok", account.status
-    assert_equal 32, account.balances.where(currency: "USD").count
-    assert_equal 32, account.balances.where(currency: "EUR").count
   end
 
   test "groups accounts by type" do

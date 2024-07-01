@@ -8,14 +8,17 @@ class Account < ApplicationRecord
 
   belongs_to :family
   belongs_to :institution, optional: true
+
+  has_many :entries, dependent: :destroy, class_name: "Account::Entry"
+  has_many :transactions, through: :entries, source: :entryable, source_type: "Account::Transaction"
+  has_many :valuations, through: :entries, source: :entryable, source_type: "Account::Valuation"
   has_many :balances, dependent: :destroy
-  has_many :valuations, dependent: :destroy
-  has_many :transactions, dependent: :destroy
   has_many :imports, dependent: :destroy
 
   monetize :balance
 
   enum :status, { ok: "ok", syncing: "syncing", error: "error" }, validate: true
+  enum :classification, { asset: "asset", liability: "liability" }, validate: { allow_nil: true }
 
   scope :active, -> { where(is_active: true) }
   scope :assets, -> { where(classification: "asset") }
@@ -35,24 +38,13 @@ class Account < ApplicationRecord
 
   # e.g. Wise, Revolut accounts that have transactions in multiple currencies
   def multi_currency?
-    currencies = [ valuations.pluck(:currency), transactions.pluck(:currency) ].flatten.uniq
-    currencies.count > 1
+    entries.select(:currency).distinct.count > 1
   end
 
   # e.g. Accounts denominated in currency other than family currency
   def foreign_currency?
     currency != family.currency
   end
-
-  def self.by_provider
-    # TODO: When 3rd party providers are supported, dynamically load all providers and their accounts
-    [ { name: "Manual accounts", accounts: all.order(balance: :desc).group_by(&:accountable_type) } ]
-  end
-
-  def self.some_syncing?
-    exists?(status: "syncing")
-  end
-
 
   def series(period: Period.all, currency: self.currency)
     balance_series = balances.in_period(period).where(currency: Money::Currency.new(currency).iso_code)
@@ -93,11 +85,19 @@ class Account < ApplicationRecord
     account.accountable = Accountable.from_type(attributes[:accountable_type])&.new
 
     # Always build the initial valuation
-    account.valuations.build(date: Date.current, value: attributes[:balance], currency: account.currency)
+    account.entries.build \
+      date: Date.current,
+      amount: attributes[:balance],
+      currency: account.currency,
+      entryable: Account::Valuation.new
 
     # Conditionally build the optional start valuation
     if start_date.present? && start_balance.present?
-      account.valuations.build(date: start_date, value: start_balance, currency: account.currency)
+      account.entries.build \
+        date: start_date,
+        amount: start_balance,
+        currency: account.currency,
+        entryable: Account::Valuation.new
     end
 
     account.save!

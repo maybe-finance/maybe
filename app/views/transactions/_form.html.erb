@@ -1,4 +1,4 @@
-<%= form_with model: @transaction, url: transactions_path, scope: "transaction", data: { turbo_frame: "_top" } do |f| %>
+<%= form_with model: @entry, url: transactions_path, data: { turbo_frame: "_top" } do |f| %>
   <section>
     <fieldset class="bg-gray-50 rounded-lg p-1 grid grid-flow-col justify-stretch gap-x-2">
       <%= radio_tab_tag form: f, name: :nature, value: :expense, label: t(".expense"), icon: "minus-circle", checked: params[:nature] == "expense" || params[:nature].nil? %>
@@ -14,7 +14,10 @@
     <%= f.text_field :name, label: t(".description"), placeholder: t(".description_placeholder"), required: true %>
     <%= f.collection_select :account_id, Current.family.accounts.alphabetically, :id, :name, { prompt: t(".account_prompt"), label: t(".account") }, required: true %>
     <%= f.money_field :amount_money, label: t(".amount"), required: true %>
-    <%= f.collection_select :category_id, Current.family.categories.alphabetically, :id, :name, { prompt: t(".category_prompt"), label: t(".category") } %>
+    <%= f.hidden_field :entryable_type, value: "Account::Transaction" %>
+    <%= f.fields_for :entryable do |ef| %>
+      <%= ef.collection_select :category_id, Current.family.categories.alphabetically, :id, :name, { prompt: t(".category_prompt"), label: t(".category") } %>
+    <% end %>
     <%= f.date_field :date, label: t(".date"), required: true, max: Date.today %>
   </section>
 

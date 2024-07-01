@@ -1,0 +1,76 @@
+---
+en:
+  account:
+    entries:
+      create:
+        success: "%{name} created"
+      destroy:
+        success: Entry deleted
+      empty:
+        description: Try adding an entry, editing filters or refining your search
+        title: No entries found
+      entryables:
+        transaction:
+          show:
+            account_label: Account
+            account_placeholder: Select an account
+            additional: Additional
+            category_label: Category
+            category_placeholder: Select a category
+            date_label: Date
+            delete: Delete
+            delete_subtitle: This permanently deletes the transaction, affects your
+              historical balances, and cannot be undone.
+            delete_title: Delete transaction
+            exclude_subtitle: This excludes the transaction from any in-app features
+              or analytics.
+            exclude_title: Exclude transaction
+            merchant_label: Merchant
+            merchant_placeholder: Select a merchant
+            name_label: Name
+            note_label: Notes
+            note_placeholder: Enter a note
+            overview: Overview
+            settings: Settings
+            tags_label: Select one or more tags
+          transaction:
+            remove_transfer: Remove transfer
+            remove_transfer_body: This will remove the transfer from this transaction
+            remove_transfer_confirm: Confirm
+        valuation:
+          form:
+            cancel: Cancel
+          valuation:
+            confirm_accept: Delete entry
+            confirm_body_html: "<p>Deleting this entry will remove it from the account’s
+              history which will impact different parts of your account. This includes
+              the net worth and account graphs.</p></br><p>The only way you’ll be
+              able to add this entry back is by re-entering it manually via a new
+              entry</p>"
+            confirm_title: Delete Entry?
+            delete_entry: Delete entry
+            edit_entry: Edit entry
+            no_change: No change
+            start_balance: Starting balance
+            value_update: Value update
+      loading:
+        loading: Loading entries...
+      selection_bar:
+        mark_transfers: Mark as transfers?
+        mark_transfers_confirm: Mark as transfers
+        mark_transfers_message: By marking transactions as transfers, they will no
+          longer be included in income or spending calculations.
+      transactions:
+        new: New transaction
+        no_transactions: No transactions for this account yet.
+        transaction: transaction
+        transactions: Transactions
+      update:
+        success: Entry updated
+      valuations:
+        change: change
+        date: date
+        new_entry: New entry
+        no_valuations: No valuations for this account yet
+        valuations: Value history
+        value: value

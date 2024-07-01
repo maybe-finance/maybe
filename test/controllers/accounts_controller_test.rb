@@ -44,7 +44,7 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create an account" do
-    assert_difference [ "Account.count", "Account::Valuation.count" ], 1 do
+    assert_difference [ "Account.count", "Account::Valuation.count", "Account::Entry.count" ], 1 do
       post accounts_path, params: {
         account: {
           accountable_type: "Depository",

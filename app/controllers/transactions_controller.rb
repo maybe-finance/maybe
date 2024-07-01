@@ -3,8 +3,8 @@ class TransactionsController < ApplicationController
 
   def index
     @q = search_params
-    result = Current.family.transactions.search(@q).ordered
-    @pagy, @transactions = pagy(result, items: params[:per_page] || "10")
+    result = Current.family.entries.account_transactions.search(@q).reverse_chronological
+    @pagy, @transaction_entries = pagy(result, items: params[:per_page] || "50")
 
     @totals = {
       count: result.select { |t| t.currency == Current.family.currency }.count,
@@ -14,25 +14,26 @@ class TransactionsController < ApplicationController
   end
 
   def new
-    @transaction = Account::Transaction.new.tap do |txn|
+    @entry = Current.family.entries.new(entryable: Account::Transaction.new).tap do |e|
       if params[:account_id]
-        txn.account = Current.family.accounts.find(params[:account_id])
+        e.account = Current.family.accounts.find(params[:account_id])
       end
     end
   end
 
   def create
-    @transaction = Current.family.accounts
-                          .find(params[:transaction][:account_id])
-                          .transactions
-                          .create!(transaction_params.merge(amount: amount))
+    @entry = Current.family
+                    .accounts
+                    .find(params[:account_entry][:account_id])
+                    .entries
+                    .create!(transaction_entry_params.merge(amount: amount))
 
-    @transaction.sync_account_later
-    redirect_back_or_to account_path(@transaction.account), notice: t(".success")
+    @entry.sync_account_later
+    redirect_back_or_to account_path(@entry.account), notice: t(".success")
   end
 
   def bulk_delete
-    destroyed = Current.family.transactions.destroy_by(id: bulk_delete_params[:transaction_ids])
+    destroyed = Current.family.entries.destroy_by(id: bulk_delete_params[:entry_ids])
     redirect_back_or_to transactions_url, notice: t(".success", count: destroyed.count)
   end
 
@@ -40,19 +41,18 @@ class TransactionsController < ApplicationController
   end
 
   def bulk_update
-    transactions = Current.family.transactions.where(id: bulk_update_params[:transaction_ids])
-    if transactions.update_all(bulk_update_params.except(:transaction_ids).to_h.compact_blank!)
-      redirect_back_or_to transactions_url, notice: t(".success", count: transactions.count)
-    else
-      flash.now[:error] = t(".failure")
-      render :index, status: :unprocessable_entity
-    end
+    updated = Current.family
+                     .entries
+                     .where(id: bulk_update_params[:entry_ids])
+                     .bulk_update!(bulk_update_params)
+
+    redirect_back_or_to transactions_url, notice: t(".success", count: updated)
   end
 
   def mark_transfers
     Current.family
-           .transactions
-           .where(id: bulk_update_params[:transaction_ids])
+      .entries
+      .where(id: bulk_update_params[:entry_ids])
            .mark_transfers!
 
     redirect_back_or_to transactions_url, notice: t(".success")
@@ -60,40 +60,45 @@ class TransactionsController < ApplicationController
 
   def unmark_transfers
     Current.family
-           .transactions
-           .where(id: bulk_update_params[:transaction_ids])
+      .entries
+      .where(id: bulk_update_params[:entry_ids])
            .update_all marked_as_transfer: false
 
     redirect_back_or_to transactions_url, notice: t(".success")
+  end
+
+  def rules
   end
 
   private
 
     def amount
       if nature.income?
-        transaction_params[:amount].to_d * -1
+        transaction_entry_params[:amount].to_d * -1
       else
-        transaction_params[:amount].to_d
+        transaction_entry_params[:amount].to_d
       end
     end
 
     def nature
-      params[:transaction][:nature].to_s.inquiry
+      params[:account_entry][:nature].to_s.inquiry
     end
 
     def bulk_delete_params
-      params.require(:bulk_delete).permit(transaction_ids: [])
+      params.require(:bulk_delete).permit(entry_ids: [])
     end
 
     def bulk_update_params
-      params.require(:bulk_update).permit(:date, :notes, :excluded, :category_id, :merchant_id, transaction_ids: [])
+      params.require(:bulk_update).permit(:date, :notes, :category_id, :merchant_id, entry_ids: [])
     end
 
     def search_params
       params.fetch(:q, {}).permit(:start_date, :end_date, :search, accounts: [], account_ids: [], categories: [], merchants: [])
     end
 
-    def transaction_params
-      params.require(:transaction).permit(:name, :date, :amount, :currency, :category_id, tag_ids: [])
+    def transaction_entry_params
+      params.require(:account_entry)
+            .permit(:name, :date, :amount, :currency, :entryable_type, entryable_attributes: [ :category_id ])
+            .with_defaults(entryable_type: "Account::Transaction", entryable_attributes: {})
     end
 end

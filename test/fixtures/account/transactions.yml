@@ -1,200 +1,60 @@
 # Checking account transactions
 checking_one:
-  name: Starbucks
-  date: <%= 5.days.ago.to_date %>
-  amount: 10
-  account: checking
   category: food_and_drink
-  currency: USD
 
 checking_two:
-  name: Chipotle
-  date: <%= 12.days.ago.to_date %>
-  amount: 30
-  account: checking
   category: food_and_drink
-  currency: USD
 
 checking_three:
-  name: Amazon
-  date: <%= 15.days.ago.to_date %>
-  amount: 20
-  account: checking
-  currency: USD
   merchant: amazon
 
 checking_four:
-  name: Paycheck
-  date: <%= 22.days.ago.to_date %>
-  amount: -1075
-  account: checking
   category: income
-  currency: USD
 
 checking_five:
-  name: Netflix
-  date: <%= 29.days.ago.to_date %>
-  amount: 15
-  account: checking
-  currency: USD
   merchant: netflix
 
-checking_six_payment:
-  name: Payment to Credit Card
-  date: <%= 29.days.ago.to_date %>
-  amount: 100
-  account: checking
-  currency: USD
-  marked_as_transfer: true
-  transfer: credit_card_payment
+checking_six_payment: { }
 
-checking_seven_transfer:
-  name: Transfer to Savings
-  date: <%= 30.days.ago.to_date %>
-  amount: 250
-  account: checking
-  currency: USD
-  marked_as_transfer: true
-  transfer: savings_transfer
+checking_seven_transfer: { }
 
-checking_eight_external_payment:
-  name: Transfer TO external CC account (owned by user but not known to app)
-  date: <%= 30.days.ago.to_date %>
-  amount: 800
-  account: checking
-  currency: USD
-  marked_as_transfer: true
+checking_eight_external_payment: { }
 
-checking_nine_external_transfer:
-  name: Transfer FROM external investing account (owned by user but not known to app)
-  date: <%= 30.days.ago.to_date %>
-  amount: -200
-  account: checking
-  currency: USD
-  marked_as_transfer: true
+checking_nine_external_transfer: { }
 
 # Savings account that has transactions and valuation overrides
 savings_one:
-  name: Interest Received
-  date: <%= 5.days.ago.to_date %>
-  amount: -200
-  account: savings
   category: income
-  currency: USD
 
 savings_two:
-  name: Check Deposit
-  date: <%= 12.days.ago.to_date %>
-  amount: -50
-  account: savings
   category: income
-  currency: USD
 
-savings_three:
-  name: Withdrawal
-  date: <%= 18.days.ago.to_date %>
-  amount: 2000
-  account: savings
-  currency: USD
+savings_three: { }
 
 savings_four:
-  name: Check Deposit
-  date: <%= 29.days.ago.to_date %>
-  amount: -500
-  account: savings
   category: income
-  currency: USD
 
-savings_five_transfer:
-  name: Received Transfer from Checking Account
-  date: <%= 30.days.ago.to_date %>
-  amount: -250
-  account: savings
-  currency: USD
-  marked_as_transfer: true
-  transfer: savings_transfer
+savings_five_transfer: { }
 
 # Credit card account transactions
 credit_card_one:
-  name: Starbucks
-  date: <%= 5.days.ago.to_date %>
-  amount: 10
-  account: credit_card
   category: food_and_drink
-  currency: USD
 
 credit_card_two:
-  name: Chipotle
-  date: <%= 12.days.ago.to_date %>
-  amount: 30
-  account: credit_card
   category: food_and_drink
-  currency: USD
 
 credit_card_three:
-  name: Amazon
-  date: <%= 15.days.ago.to_date %>
-  amount: 20
-  account: credit_card
-  currency: USD
   merchant: amazon
 
-credit_card_four_payment:
-  name: Received CC Payment from Checking Account
-  date: <%= 30.days.ago.to_date %>
-  amount: -100
-  account: credit_card
-  currency: USD
-  marked_as_transfer: true
-  transfer: credit_card_payment
+credit_card_four_payment: { }
 
 # eur_checking transactions
-eur_checking_one:
-  name: Check
-  date: <%= 9.days.ago.to_date %>
-  amount: -50
-  currency: EUR
-  account: eur_checking
-
-eur_checking_two:
-  name: Shopping trip
-  date: <%= 19.days.ago.to_date %>
-  amount: 100
-  currency: EUR
-  account: eur_checking
-
-eur_checking_three:
-  name: Check
-  date: <%= 30.days.ago.to_date %>
-  amount: -200
-  currency: EUR
-  account: eur_checking
+eur_checking_one: { }
+eur_checking_two: { }
+eur_checking_three: { }
 
 # multi_currency transactions
-multi_currency_one:
-  name: Outflow 1
-  date: <%= 4.days.ago.to_date %>
-  amount: 800
-  currency: EUR
-  account: multi_currency
-
-multi_currency_two:
-  name: Inflow 1
-  date: <%= 9.days.ago.to_date %>
-  amount: -50
-  currency: USD
-  account: multi_currency
-
-multi_currency_three:
-  name: Outflow 2
-  date: <%= 19.days.ago.to_date %>
-  amount: 110.85
-  currency: EUR
-  account: multi_currency
-
-multi_currency_four:
-  name: Inflow 2
-  date: <%= 29.days.ago.to_date %>
-  amount: -200
-  currency: USD
-  account: multi_currency
+multi_currency_one: { }
+multi_currency_two: { }
+multi_currency_three: { }
+multi_currency_four: { }

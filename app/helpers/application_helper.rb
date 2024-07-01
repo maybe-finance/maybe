@@ -65,6 +65,20 @@ module ApplicationHelper
     end
   end
 
+  def mixed_hex_styles(hex)
+    color = hex || "#1570EF" # blue-600
+
+    <<-STYLE.strip
+      background-color: color-mix(in srgb, #{color} 5%, white);
+      border-color: color-mix(in srgb, #{color} 10%, white);
+      color: #{color};
+    STYLE
+  end
+
+  def circle_logo(name, hex: nil, size: "md")
+    render partial: "shared/circle_logo", locals: { name: name, hex: hex, size: size }
+  end
+
   def return_to_path(params, fallback = root_path)
     uri = URI.parse(params[:return_to] || fallback)
     uri.relative? ? uri.path : root_path
@@ -123,7 +137,7 @@ module ApplicationHelper
     ActiveSupport::NumberHelper.number_to_delimited(money.amount.round(options[:precision] || 0), { delimiter: options[:delimiter], separator: options[:separator] })
   end
 
-  def totals_by_currency(collection:, money_method:, separator: " | ", negate: false, options: {})
+  def totals_by_currency(collection:, money_method:, separator: " | ", negate: false)
     collection.group_by(&:currency)
               .transform_values { |item| negate ? item.sum(&money_method) * -1 : item.sum(&money_method) }
               .map { |_currency, money| format_money(money) }

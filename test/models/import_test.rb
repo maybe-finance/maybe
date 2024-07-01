@@ -46,6 +46,7 @@ class ImportTest < ActiveSupport::TestCase
     # "Shopping" is a new category, but should only be created 1x during import
     assert_difference \
       -> { Account::Transaction.count } => 4,
+      -> { Account::Entry.count } => 4,
       -> { Category.count } => 1,
       -> { Tagging.count } => 4,
       -> { Tag.count } => 2 do
@@ -59,11 +60,13 @@ class ImportTest < ActiveSupport::TestCase
 
   test "publishes a valid import with missing data" do
     @empty_import.update! raw_csv_str: valid_csv_with_missing_data
-    assert_difference -> { Category.count } => 1, -> { Account::Transaction.count } => 2 do
+    assert_difference -> { Category.count } => 1,
+                      -> { Account::Transaction.count } => 2,
+                      -> { Account::Entry.count } => 2 do
       @empty_import.publish
     end
 
-    assert_not_nil Account::Transaction.find_sole_by(name: Import::FALLBACK_TRANSACTION_NAME)
+    assert_not_nil Account::Entry.find_sole_by(name: Import::FALLBACK_TRANSACTION_NAME)
 
     @empty_import.reload
 

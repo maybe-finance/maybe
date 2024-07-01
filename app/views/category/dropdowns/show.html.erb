@@ -25,10 +25,10 @@
       <% end %>
 
       <% if @transaction.category %>
-        <%= button_to account_transaction_row_path(@transaction.account, @transaction),
+        <%= button_to account_entry_path(@transaction.entry.account, @transaction.entry),
                       method: :patch,
-                      data: { turbo_frame: dom_id(@transaction) },
-                      params: { transaction: { category_id: nil } },
+                      data: { turbo_frame: dom_id(@transaction.entry) },
+                      params: { account_entry: { entryable_type: "Account::Transaction", entryable_attributes: { id: @transaction.id, category_id: nil } } },
                       class: "flex text-sm font-medium items-center gap-2 text-gray-500 w-full rounded-lg p-2 hover:bg-gray-100" do %>
           <%= lucide_icon "minus", class: "w-5 h-5" %>
 

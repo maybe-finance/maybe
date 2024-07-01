@@ -1,13 +1,26 @@
 namespace :demo_data do
   desc "Creates or resets demo data used in development environment"
+  task reset_empty: :environment do
+    Family.all.each do |family|
+      family.destroy
+    end
+
+    family = Family.create(name: "Demo Family")
+    family.users.create! \
+      email: "user@maybe.local",
+      password: "password",
+      first_name: "Demo",
+      last_name: "User"
+  end
+
   task reset: :environment do
     family = Family.find_or_create_by(name: "Demo Family")
 
-    family.accounts.delete_all
+    family.accounts.destroy_all
     ExchangeRate.delete_all
-    family.categories.delete_all
+    family.categories.destroy_all
     Tagging.delete_all
-    family.tags.delete_all
+    family.tags.destroy_all
     Category.create_default_categories(family)
 
     user = User.find_or_create_by(email: "user@maybe.local") do |u|
@@ -252,25 +265,44 @@ namespace :demo_data do
       { date: 1.month.ago.to_date, value: 1000 }
     ]
 
-    # Insert valuations
-    retirement.valuations.insert_all(retirement_valuations)
-    brokerage.valuations.insert_all(brokerage_valuations)
-    crypto.valuations.insert_all(crypto_valuations)
-    mortgage.valuations.insert_all(mortgage_valuations)
-    house.valuations.insert_all(house_valuations)
-    main_car.valuations.insert_all(main_car_valuations)
-    second_car.valuations.insert_all(second_car_valuations)
-    cash.valuations.insert_all(cash_valuations)
-    personal_iou.valuations.insert_all(personal_iou_valuations)
+    accounts = [
+      [ empty_account, [], [] ],
+      [ multi_currency_checking, multi_currency_checking_transactions, [] ],
+      [ checking, checking_transactions, [] ],
+      [ savings, savings_transactions, [] ],
+      [ credit_card, credit_card_transactions, [] ],
+      [ retirement, [], retirement_valuations ],
+      [ euro_savings, euro_savings_transactions, [] ],
+      [ brokerage, [], brokerage_valuations ],
+      [ crypto, [], crypto_valuations ],
+      [ mortgage, mortgage_transactions, mortgage_valuations ],
+      [ main_car, [], main_car_valuations ],
+      [ cash, [], cash_valuations ],
+      [ car_loan, car_loan_transactions, [] ],
+      [ house, [], house_valuations ],
+      [ personal_iou, [], personal_iou_valuations ],
+      [ second_car, [], second_car_valuations ]
+    ]
 
-    # Insert transactions
-    multi_currency_checking.transactions.insert_all(multi_currency_checking_transactions)
-    checking.transactions.insert_all(checking_transactions)
-    savings.transactions.insert_all(savings_transactions)
-    euro_savings.transactions.insert_all(euro_savings_transactions)
-    credit_card.transactions.insert_all(credit_card_transactions)
-    mortgage.transactions.insert_all(mortgage_transactions)
-    car_loan.transactions.insert_all(car_loan_transactions)
+    accounts.each do |account, transactions, valuations|
+      transactions.each do |transaction|
+        account.entries.create! \
+          name: transaction[:name],
+          date: transaction[:date],
+          amount: transaction[:amount],
+          currency: transaction[:currency] || "USD",
+          entryable: Account::Transaction.new(category: family.categories.first, tags: [ Tag.first ])
+      end
+
+      valuations.each do |valuation|
+        account.entries.create! \
+          name: "Manual valuation",
+          date: valuation[:date],
+          amount: valuation[:value],
+          currency: valuation[:currency] || "USD",
+          entryable: Account::Valuation.new
+      end
+    end
 
     # Tag a few transactions
     emergency_fund_tag = Tag.find_by(name: "Emergency Fund")

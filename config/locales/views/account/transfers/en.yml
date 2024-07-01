@@ -25,4 +25,3 @@ en:
           remove the transfer.
         remove_confirm: Confirm
         remove_title: Remove transfer?
-        transfer_name: Transfer from %{from_account} to %{to_account}

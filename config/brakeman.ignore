@@ -1,0 +1,74 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "6179565a9eb1786348e6bbaf5d838b77f9075551930a6ca8ba33fbbf6d2adf26",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/account/entries/show.html.erb",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(partial => permitted_entryable_partial_path(Current.family.accounts.find(params[:account_id]).entries.find(params[:id]), \"show\"), { :locals => ({ :entry => Current.family.accounts.find(params[:account_id]).entries.find(params[:id]) }) })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Account::EntriesController",
+          "method": "show",
+          "line": 42,
+          "file": "app/controllers/account/entries_controller.rb",
+          "rendered": {
+            "name": "account/entries/show",
+            "file": "app/views/account/entries/show.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "account/entries/show"
+      },
+      "user_input": "params[:id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "7a182d062523a7fe890fbe5945c0004aeec1044ac764430f1d464326e5fa2710",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/account/entries/edit.html.erb",
+      "line": 2,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => permitted_entryable_partial_path(Current.family.accounts.find(params[:account_id]).entries.find(params[:id]), \"edit\"), { :entry => Current.family.accounts.find(params[:account_id]).entries.find(params[:id]) })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Account::EntriesController",
+          "method": "edit",
+          "line": 29,
+          "file": "app/controllers/account/entries_controller.rb",
+          "rendered": {
+            "name": "account/entries/edit",
+            "file": "app/views/account/entries/edit.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "account/entries/edit"
+      },
+      "user_input": "params[:id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    }
+  ],
+  "updated": "2024-06-30 12:52:10 -0400",
+  "brakeman_version": "6.1.2"
+}

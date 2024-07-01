@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_06_21_212528) do
+ActiveRecord::Schema[7.2].define(version: 2024_06_28_104551) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -32,24 +32,31 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_21_212528) do
     t.index ["account_id"], name: "index_account_balances_on_account_id"
   end
 
-  create_table "account_transactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name"
-    t.date "date", null: false
-    t.decimal "amount", precision: 19, scale: 4, null: false
-    t.string "currency", default: "USD", null: false
+  create_table "account_entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "account_id", null: false
+    t.string "entryable_type"
+    t.uuid "entryable_id"
+    t.decimal "amount", precision: 19, scale: 4
+    t.string "currency"
+    t.date "date"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.uuid "transfer_id"
+    t.boolean "marked_as_transfer", default: false, null: false
+    t.index ["account_id"], name: "index_account_entries_on_account_id"
+    t.index ["transfer_id"], name: "index_account_entries_on_transfer_id"
+  end
+
+  create_table "account_transactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "category_id"
     t.boolean "excluded", default: false
     t.text "notes"
     t.uuid "merchant_id"
-    t.uuid "transfer_id"
-    t.boolean "marked_as_transfer", default: false, null: false
-    t.index ["account_id"], name: "index_account_transactions_on_account_id"
     t.index ["category_id"], name: "index_account_transactions_on_category_id"
     t.index ["merchant_id"], name: "index_account_transactions_on_merchant_id"
-    t.index ["transfer_id"], name: "index_account_transactions_on_transfer_id"
   end
 
   create_table "account_transfers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -58,14 +65,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_21_212528) do
   end
 
   create_table "account_valuations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "account_id", null: false
-    t.date "date", null: false
-    t.decimal "value", precision: 19, scale: 4, null: false
-    t.string "currency", default: "USD", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id", "date"], name: "index_account_valuations_on_account_id_and_date", unique: true
-    t.index ["account_id"], name: "index_account_valuations_on_account_id"
   end
 
   create_table "accounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -352,11 +353,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_21_212528) do
   end
 
   add_foreign_key "account_balances", "accounts", on_delete: :cascade
-  add_foreign_key "account_transactions", "account_transfers", column: "transfer_id"
-  add_foreign_key "account_transactions", "accounts", on_delete: :cascade
+  add_foreign_key "account_entries", "account_transfers", column: "transfer_id"
+  add_foreign_key "account_entries", "accounts"
   add_foreign_key "account_transactions", "categories", on_delete: :nullify
   add_foreign_key "account_transactions", "merchants"
-  add_foreign_key "account_valuations", "accounts", on_delete: :cascade
   add_foreign_key "accounts", "families"
   add_foreign_key "accounts", "institutions"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

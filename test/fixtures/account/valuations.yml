@@ -1,55 +1,18 @@
-# For collectable account that only has valuations (no transactions)
-collectable_one:
-  value: 550
-  date: <%= 4.days.ago.to_date %>
-  account: collectable
+collectable_one: { }
+collectable_two: { }
+collectable_three: { }
 
-collectable_two:
-  value: 700
-  date: <%= 12.days.ago.to_date %>
-  account: collectable
+iou_one: { }
 
-collectable_three:
-  value: 400
-  date: <%= 31.days.ago.to_date %>
-  account: collectable
+multi_currency_one: { }
 
-iou_one:
-  value: 200
-  date: <%= 31.days.ago.to_date %>
-  account: iou
+savings_one: { }
+savings_two: { }
 
-multi_currency_one:
-  value: 10200
-  date: <%= 31.days.ago.to_date %>
-  account: multi_currency
+brokerage_one: { }
 
-savings_one:
-  value: 19500
-  date: <%= 12.days.ago.to_date %>
-  account: savings
+mortgage_loan_one: { }
 
-savings_two:
-  value: 21000
-  date: <%= 25.days.ago.to_date %>
-  account: savings
+house_one: { }
 
-brokerage_one:
-  value: 10000
-  date: <%= 31.days.ago.to_date %>
-  account: brokerage
-
-mortgage_loan_one:
-  value: 500000
-  date: <%= 31.days.ago.to_date %>
-  account: mortgage_loan
-
-house_one:
-  value: 550000
-  date: <%= 31.days.ago.to_date %>
-  account: house
-
-car_one:
-  value: 18000
-  date: <%= 31.days.ago.to_date %>
-  account: car
+car_one: { }

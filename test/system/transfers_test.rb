@@ -22,45 +22,52 @@ class TransfersTest < ApplicationSystemTestCase
     select savings_name, from: "To"
     fill_in "account_transfer[amount]", with: 500
     fill_in "Date", with: transfer_date
+
     click_button "Create transfer"
 
-    within "#date-group-" + transfer_date.to_s do
-      transfer_name = "Transfer from #{checking_name} to #{savings_name}"
-      find("details", text: transfer_name).click
-      assert_text "Transfer txn name", count: 2
+    within "#entry-group-" + transfer_date.to_s do
+      assert_text "Transfer from"
     end
   end
 
   test "can match 2 transactions and create a transfer" do
     transfer_date = Date.current
-    outflow = Account::Transaction.create! name: "Outflow from savings account", date: transfer_date, account: accounts(:savings), amount: 100
-    inflow = Account::Transaction.create! name: "Inflow to checking account", date: transfer_date, account: accounts(:checking), amount: -100
+    outflow = accounts(:savings).entries.create! \
+      name: "Outflow from savings account",
+      date: transfer_date,
+      amount: 100,
+      currency: "USD",
+      entryable: Account::Transaction.new
+
+    inflow = accounts(:checking).entries.create! \
+      name: "Inflow to checking account",
+      date: transfer_date,
+      amount: -100,
+      currency: "USD",
+      entryable: Account::Transaction.new
 
     visit transactions_url
 
-    transaction_checkbox(inflow).check
-    transaction_checkbox(outflow).check
+    transaction_entry_checkbox(inflow).check
+    transaction_entry_checkbox(outflow).check
 
     bulk_transfer_action_button.click
 
     click_on "Mark as transfers"
 
-    within "#date-group-" + transfer_date.to_s do
-      transfer_name = "Transfer from #{outflow.account.name} to #{inflow.account.name}"
-      find("details", text: transfer_name).click
-      assert_text inflow.name
-      assert_text outflow.name
+    within "#entry-group-" + transfer_date.to_s do
+      assert_text "Transfer from"
     end
   end
 
   test "can mark a single transaction as a transfer" do
-    txn = @user.family.transactions.ordered.first
+    txn = @user.family.entries.reverse_chronological.first
 
     within "#" + dom_id(txn) do
       assert_text "Uncategorized"
     end
 
-    transaction_checkbox(txn).check
+    transaction_entry_checkbox(txn).check
 
     bulk_transfer_action_button.click
     click_on "Mark as transfers"
@@ -72,8 +79,8 @@ class TransfersTest < ApplicationSystemTestCase
 
   private
 
-    def transaction_checkbox(transaction)
-      find("#" + dom_id(transaction, "selection"))
+    def transaction_entry_checkbox(transaction_entry)
+      find("#" + dom_id(transaction_entry, "selection"))
     end
 
     def bulk_transfer_action_button

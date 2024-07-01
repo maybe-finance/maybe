@@ -3,19 +3,20 @@
 
   <%= render "summary", totals: @totals %>
 
-  <div id="transactions" data-controller="bulk-select" data-bulk-select-resource-value="<%= t(".transaction") %>" class="overflow-y-auto flex flex-col bg-white rounded-xl border border-alpha-black-25 shadow-xs pb-4">
-    <div class="p-4 pb-0">
-      <%= render partial: "transactions/searches/search", locals: { transactions: @transactions } %>
-    </div>
+  <div id="transactions"
+       data-controller="bulk-select"
+       data-bulk-select-resource-value="<%= t(".transaction") %>"
+       class="overflow-y-auto flex flex-col bg-white rounded-xl border border-alpha-black-25 shadow-xs p-4">
+    <%= render "transactions/searches/search" %>
 
-    <% if @transactions.present? %>
-      <div hidden id="transaction-selection-bar" data-bulk-select-target="selectionBar">
-        <%= render "account/transactions/selection_bar" %>
+    <% if @transaction_entries.present? %>
+      <div hidden id="entry-selection-bar" data-bulk-select-target="selectionBar">
+        <%= render "account/entries/selection_bar" %>
       </div>
-      <div class="grow overflow-y-auto px-4">
+      <div class="grow overflow-y-auto">
         <div class="grid grid-cols-12 bg-gray-25 rounded-xl px-5 py-3 text-xs uppercase font-medium text-gray-500 items-center mb-4">
           <div class="pl-0.5 col-span-4 flex items-center gap-4">
-            <%= check_box_tag "selection_transaction",
+            <%= check_box_tag "selection_entry",
                               class: "maybe-checkbox maybe-checkbox--light",
                               data: { action: "bulk-select#togglePageSelection" } %>
             <p class="col-span-4">transaction</p>
@@ -26,19 +27,17 @@
           <p class="col-span-2 justify-self-end">amount</p>
         </div>
         <div class="space-y-6">
-          <% group_transactions_by_date(@transactions).each do |date, group| %>
-            <%= render "account/transactions/transaction_group", date:, transactions: group[:transactions], transfers: group[:transfers] %>
+          <% @transaction_entries.group_by(&:date).each do |date, entries| %>
+            <%= render "account/entries/entry_group", date:, entries: %>
           <% end %>
         </div>
       </div>
     <% else %>
-      <%= render "account/transactions/empty" %>
+      <%= render "account/entries/empty" %>
     <% end %>
 
-    <div class="px-4">
-      <% if @pagy.pages > 1 %>
-        <%= render "pagination", pagy: @pagy %>
-      <% end %>
+    <div class="pt-4">
+      <%= render "pagination", pagy: @pagy %>
     </div>
   </div>
 </div>

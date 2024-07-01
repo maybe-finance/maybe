@@ -1,0 +1,90 @@
+<%# locals: (entry:, selectable: true, editable: true, short: false, show_tags: false, **opts) %>
+<% transaction, account = entry.account_transaction, entry.account %>
+
+<div class="grid grid-cols-12 items-center text-gray-900 text-sm font-medium p-4">
+  <% name_col_span = entry.marked_as_transfer? ? "col-span-10" : short ? "col-span-6" : "col-span-4" %>
+  <div class="pr-10 flex items-center gap-4 <%= name_col_span %>">
+    <% if selectable %>
+      <%= check_box_tag dom_id(entry, "selection"),
+                        class: "maybe-checkbox maybe-checkbox--light",
+                        data: { id: entry.id, "bulk-select-target": "row", action: "bulk-select#toggleRowSelection" } %>
+    <% end %>
+
+    <div class="max-w-full">
+      <%= content_tag :div, class: ["flex items-center gap-2"] do %>
+        <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-600/5 text-gray-600">
+          <%= entry.name[0].upcase %>
+        </div>
+
+        <div class="truncate text-gray-900">
+          <% if entry.new_record? %>
+            <%= content_tag :p, entry.name %>
+          <% else %>
+            <%= link_to entry.name,
+                        account_entry_path(account, entry),
+                        data: { turbo_frame: "drawer", turbo_prefetch: false },
+                        class: "hover:underline hover:text-gray-800" %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <% if unconfirmed_transfer?(entry) %>
+      <% if editable %>
+        <%= form_with url: unmark_transfers_transactions_path, builder: ActionView::Helpers::FormBuilder, class: "flex items-center", data: {
+          turbo_confirm: {
+            title: t(".remove_transfer"),
+            body: t(".remove_transfer_body"),
+            accept: t(".remove_transfer_confirm"),
+          },
+          turbo_frame: "_top"
+        } do |f| %>
+          <%= f.hidden_field "bulk_update[entry_ids][]", value: entry.id %>
+          <%= f.button class: "flex items-center justify-center group", title: "Remove transfer" do %>
+            <%= lucide_icon "arrow-left-right", class: "group-hover:hidden text-gray-500 w-4 h-4" %>
+            <%= lucide_icon "unlink", class: "hidden group-hover:inline-block text-gray-900 w-4 h-4" %>
+          <% end %>
+        <% end %>
+      <% else %>
+        <%= lucide_icon "arrow-left-right", class: "text-gray-500 w-4 h-4" %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <% unless entry.marked_as_transfer? %>
+    <% unless short %>
+      <div class="flex items-center gap-1 <%= show_tags ? "col-span-6" : "col-span-3" %>">
+        <% if editable %>
+          <%= render "categories/menu", transaction: transaction %>
+        <% else %>
+          <%= render "categories/badge", category: transaction.category %>
+        <% end %>
+
+        <% if show_tags %>
+          <% transaction.tags.each do |tag| %>
+            <%= render partial: "tags/badge", locals: { tag: tag } %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% unless show_tags %>
+      <%= tag.div class: short ? "col-span-4" : "col-span-3" do %>
+        <% if entry.new_record? %>
+          <%= tag.p account.name %>
+        <% else %>
+          <%= link_to account.name,
+                      account_path(account, tab: "transactions"),
+                      data: { turbo_frame: "_top" },
+                      class: "hover:underline" %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <div class="col-span-2 ml-auto">
+    <%= content_tag :p,
+                    format_money(-entry.amount_money),
+                    class: ["text-green-600": entry.inflow?] %>
+  </div>
+</div>

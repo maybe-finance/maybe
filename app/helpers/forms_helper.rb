@@ -11,6 +11,22 @@ module FormsHelper
     end
   end
 
+  def selectable_categories
+    Current.family.categories.alphabetically
+  end
+
+  def selectable_merchants
+    Current.family.merchants.alphabetically
+  end
+
+  def selectable_accounts
+    Current.family.accounts.alphabetically
+  end
+
+  def selectable_tags
+    Current.family.tags.alphabetically.pluck(:name, :id)
+  end
+
   private
     def radio_tab_contents(label:, icon:)
       tag.div(class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-gray-400 group-has-[:checked]:bg-white group-has-[:checked]:text-gray-800 group-has-[:checked]:shadow-sm") do
