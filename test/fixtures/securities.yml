@@ -1,0 +1,14 @@
+aapl:
+  isin: US0378331005
+  symbol: AAPL
+  name: Apple Inc.
+
+toyota:
+  isin: JP3633400001
+  symbol: TM
+  name: Toyota Motor Corporation
+
+microsoft:
+  isin: US5949181045
+  symbol: MSFT
+  name: Microsoft Corporation

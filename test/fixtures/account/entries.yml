@@ -234,6 +234,114 @@ multi_currency_four:
   entryable_type: Account::Transaction
   entryable: multi_currency_four
 
+brokerage_aapl_buy_1:
+  name: Purchase 20 shares of AAPL
+  date: <%= 29.days.ago.to_date %>
+  amount: 4240.00
+  currency: USD
+  account: brokerage
+  entryable_type: Account::Trade
+  entryable: aapl_buy_1
+
+brokerage_msft_buy_1:
+  name: Purchase 10 shares of MSFT
+  date: <%= 26.days.ago.to_date %>
+  amount: 4540.00
+  currency: USD
+  account: brokerage
+  entryable_type: Account::Trade
+  entryable: msft_buy_1
+
+brokerage_aapl_sell_1:
+  name: Sell 5 shares of AAPL
+  date: <%= 21.days.ago.to_date %>
+  amount: 1065.00
+  currency: USD
+  account: brokerage
+  entryable_type: Account::Trade
+  entryable: aapl_sell_1
+
+brokerage_msft_sell_1:
+  name: Sell 5 shares of MSFT
+  date: <%= 19.days.ago.to_date %>
+  amount: 2279.65
+  currency: USD
+  account: brokerage
+  entryable_type: Account::Trade
+  entryable: msft_sell_1
+
+brokerage_msft_buy_2:
+  name: Purchase 5 shares of MSFT
+  date: <%= 13.days.ago.to_date %>
+  amount: 2278.35
+  currency: USD
+  account: brokerage
+  entryable_type: Account::Trade
+  entryable: msft_buy_2
+
+brokerage_toyota_buy_1:
+  name: Purchase 10 shares of Toyota
+  date: <%= 15.days.ago.to_date %>
+  amount: 2033.00
+  currency: USD
+  account: brokerage
+  entryable_type: Account::Trade
+  entryable: toyota_buy_1
+
+brokerage_toyota_buy_2:
+  name: Purchase 10 shares of Toyota
+  date: <%= 11.days.ago.to_date %>
+  amount: 2049.00
+  currency: USD
+  account: brokerage
+  entryable_type: Account::Trade
+  entryable: toyota_buy_2
+
+brokerage_aapl_sell_2:
+  name: Sell 5 shares of AAPL
+  date: <%= 11.days.ago.to_date %>
+  amount: 1065.50
+  currency: USD
+  account: brokerage
+  entryable_type: Account::Trade
+  entryable: aapl_sell_2
+
+brokerage_msft_sell_2:
+  name: Sell 5 shares of MSFT
+  date: <%= 8.days.ago.to_date %>
+  amount: 2275.10
+  currency: USD
+  account: brokerage
+  entryable_type: Account::Trade
+  entryable: msft_sell_2
+
+brokerage_toyota_buy_3:
+  name: Purchase 10 shares of Toyota
+  date: <%= 6.days.ago.to_date %>
+  amount: 2069.00
+  currency: USD
+  account: brokerage
+  entryable_type: Account::Trade
+  entryable: toyota_buy_3
+
+brokerage_msft_buy_3:
+  name: Purchase 5 shares of MSFT
+  date: <%= 2.days.ago.to_date %>
+  amount: 2286.05
+  currency: USD
+  account: brokerage
+  entryable_type: Account::Trade
+  entryable: msft_buy_3
+
+brokerage_aapl_sell_3:
+  name: Sell 10 shares of AAPL
+  date: <%= 1.day.ago.to_date %>
+  amount: 2146.80
+  currency: USD
+  account: brokerage
+  entryable_type: Account::Trade
+  entryable: aapl_sell_3
+
 collectable_one_valuation:
   amount: 550
   date: <%= 4.days.ago.to_date %>

@@ -1,0 +1,71 @@
+aapl_buy_1:
+  account: brokerage
+  security: aapl
+  qty: 20
+  price: 212.00
+
+msft_buy_1:
+  account: brokerage
+  security: microsoft
+  qty: 10
+  price: 454.00
+
+aapl_sell_1:
+  account: brokerage
+  security: aapl
+  qty: -5
+  price: 213.00
+
+msft_sell_1:
+  account: brokerage
+  security: microsoft
+  qty: -5
+  price: 455.93
+
+toyota_buy_1:
+  account: brokerage
+  security: toyota
+  qty: 10
+  price: 203.30
+
+msft_buy_2:
+  account: brokerage
+  security: microsoft
+  qty: 5
+  price: 455.67
+
+toyota_buy_2:
+  account: brokerage
+  security: toyota
+  qty: 10
+  price: 204.90
+
+aapl_sell_2:
+  account: brokerage
+  security: aapl
+  qty: -5
+  price: 213.10
+
+msft_sell_2:
+  account: brokerage
+  security: microsoft
+  qty: -5
+  price: 455.02
+
+toyota_buy_3:
+  account: brokerage
+  security: toyota
+  qty: 10
+  price: 206.90
+
+msft_buy_3:
+  account: brokerage
+  security: microsoft
+  qty: 5
+  price: 457.21
+
+aapl_sell_3:
+  account: brokerage
+  security: aapl
+  qty: -10
+  price: 214.68

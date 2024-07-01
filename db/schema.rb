@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_06_28_104551) do
+ActiveRecord::Schema[7.2].define(version: 2024_07_01_203220) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -46,6 +46,29 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_28_104551) do
     t.boolean "marked_as_transfer", default: false, null: false
     t.index ["account_id"], name: "index_account_entries_on_account_id"
     t.index ["transfer_id"], name: "index_account_entries_on_transfer_id"
+  end
+
+  create_table "account_holdings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "account_id", null: false
+    t.uuid "security_id", null: false
+    t.decimal "qty", precision: 19, scale: 4
+    t.decimal "amount", precision: 19, scale: 4
+    t.string "currency"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_account_holdings_on_account_id"
+    t.index ["security_id"], name: "index_account_holdings_on_security_id"
+  end
+
+  create_table "account_trades", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "account_id", null: false
+    t.uuid "security_id", null: false
+    t.decimal "qty", precision: 19, scale: 4
+    t.decimal "price", precision: 19, scale: 4
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_account_trades_on_account_id"
+    t.index ["security_id"], name: "index_account_trades_on_security_id"
   end
 
   create_table "account_transactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -303,6 +326,22 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_28_104551) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "securities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "isin", null: false
+    t.string "symbol"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "security_prices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.date "date", null: false
+    t.decimal "price", precision: 19, scale: 4, null: false
+    t.string "currency", default: "USD", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "settings", force: :cascade do |t|
     t.string "var", null: false
     t.text "value"
@@ -355,6 +394,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_28_104551) do
   add_foreign_key "account_balances", "accounts", on_delete: :cascade
   add_foreign_key "account_entries", "account_transfers", column: "transfer_id"
   add_foreign_key "account_entries", "accounts"
+  add_foreign_key "account_holdings", "accounts"
+  add_foreign_key "account_holdings", "securities"
+  add_foreign_key "account_trades", "accounts"
+  add_foreign_key "account_trades", "securities"
   add_foreign_key "account_transactions", "categories", on_delete: :nullify
   add_foreign_key "account_transactions", "merchants"
   add_foreign_key "accounts", "families"
