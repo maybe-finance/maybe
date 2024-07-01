@@ -4,12 +4,8 @@ import * as d3 from "d3";
 // Connects to data-controller="pie-chart"
 export default class extends Controller {
   static values = {
-    data: {
-      values: Array,
-      total: Number,
-      formatted_total: String,
-      currency_symbol: String,
-    },
+    data: Array,
+    total: String,
     label: String,
   };
 
@@ -43,7 +39,7 @@ export default class extends Controller {
 
   #draw() {
     this.#d3Container.attr("class", "relative");
-    this.#d3Content.html(this.#contentSummaryTemplate(this.dataValue));
+    this.#d3Content.html(this.#contentSummaryTemplate());
 
     const pie = d3
       .pie()
@@ -58,7 +54,7 @@ export default class extends Controller {
 
     const arcs = this.#d3Group
       .selectAll("arc")
-      .data(pie(this.dataValue.values))
+      .data(pie(this.dataValue))
       .enter()
       .append("g")
       .attr("class", "arc");
@@ -80,24 +76,17 @@ export default class extends Controller {
         this.#d3Svg
           .selectAll(".arc path")
           .attr("class", (d) => d.data.fill_color);
-        this.#d3ContentMemo.html(this.#contentSummaryTemplate(this.dataValue));
+        this.#d3ContentMemo.html(this.#contentSummaryTemplate());
       });
   }
 
-  #contentSummaryTemplate(data) {
-    const currency_symbol = data.currency.symbol;
-    const currency_displayed_before_value = data.currency.displayed_before_value;
-
-    return `${this.#currencyValue({
-      value_str: data.value_str,
-      currency_symbol: currency_symbol,
-      currency_displayed_before_value: currency_displayed_before_value
-    })} <span class="text-xs">${this.labelValue}</span>`;
+  #contentSummaryTemplate() {
+    return `<span class="text-xl text-gray-900 font-medium">${this.totalValue}</span> <span class="text-xs">${this.labelValue}</span>`;
   }
 
   #contentDetailTemplate(datum) {
     return `
-      <span>${this.#currencyValue(datum)}</span>
+      <span class="text-xl text-gray-900 font-medium">${datum.formatted_value}</span>
       <div class="flex flex-row text-xs gap-2 items-center">
       <div class="w-[10px] h-[10px] rounded-full ${datum.bg_color}"></div>
         <span>${datum.label}</span>
