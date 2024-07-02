@@ -27,9 +27,21 @@ export default class extends Controller {
 
   bindEvents() {
     this.dropZone.on("addedfile", (file) => {
-      setTimeout(() => {
-        file.accepted && createDirectUploadController(this, file).start();
-      }, 500);
+      this.submitButton.classList.remove([
+        "bg-alpha-black-25",
+        "text-gray",
+        "cursor-not-allowed",
+      ]);
+      this.submitButton.classList.add(
+        "bg-gray-900",
+        "text-white",
+        "cursor-pointer",
+      );
+      this.submitButton.disabled = false;
+      // setTimeout(() => {
+      //   // file.accepted && createDirectUploadController(this, file).start();
+      //   console.log("file added");
+      // }, 500);
     });
 
     this.dropZone.on("removedfile", (file) => {
@@ -46,6 +58,12 @@ export default class extends Controller {
 
     this.dropZone.on("queuecomplete", (file) => {
       this.submitButton.disabled = false;
+    });
+
+    this.dropZone.on("maxfilesexceeded", (file) => {
+      this.dropZone.removeAllFiles();
+      this.dropZone.addFile(file);
+      console.log("max files exceeded");
     });
   }
 
@@ -161,11 +179,14 @@ function createDirectUpload(file, url, controller) {
 function createDropZone(controller) {
   return new Dropzone(controller.element, {
     url: controller.url,
+    method: controller.method,
     headers: controller.headers,
     maxFiles: controller.maxFiles,
     maxFilesize: controller.maxFileSize,
     acceptedFiles: controller.acceptedFiles,
     addRemoveLinks: controller.addRemoveLinks,
     autoQueue: false,
+    previewsContainer: controller.element.querySelector(".csv-preview"),
+    previewTemplate: document.querySelector("#template-preview").innerHTML,
   });
 }

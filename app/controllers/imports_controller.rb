@@ -98,6 +98,7 @@ class ImportsController < ApplicationController
     end
 
     def import_params(permitted_mappings = nil)
+      debugger
       params.require(:import).permit(:raw_csv_str, column_mappings: permitted_mappings, csv_update: [ :row_idx, :col_idx, :value ])
     end
 end
