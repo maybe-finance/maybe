@@ -3,13 +3,7 @@
   <p class="text-sm text-gray-500 font-medium"><%= label %></p>
   <p class="text-gray-900 -space-x-0.5">
     <% if value.is_a?(Money) %>
-      <span class="text-gray-500"><%= value.currency.symbol %></span>
-      <span class="<%= size == "lg" ? "text-xl" : "text-lg" %> font-medium"><%= format_money_without_symbol value, precision: 0 %></span>
-      <%- if value.currency.default_precision.positive? -%>
-        <span class="text-gray-500">
-          <%= value.currency.separator %><%= value.cents_str %>
-        </span>
-      <% end %>
+      <span class="<%= size == "lg" ? "text-xl" : "text-lg" %> font-medium"><%= format_money value %></span>
     <% else %>
       <span class="<%= size == "lg" ? "text-xl" : "text-lg" %> font-medium"><%= is_percentage ? number_to_percentage(value, precision: 2) : value %></span>
     <% end %>
