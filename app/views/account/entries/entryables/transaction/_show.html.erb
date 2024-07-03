@@ -30,6 +30,16 @@
           <%= form_with model: [account, entry], url: account_entry_path(account, entry), html: { data: { controller: "auto-submit-form" } } do |f| %>
             <div class="space-y-2">
               <%= f.text_field :name, label: t(".name_label"), "data-auto-submit-form-target": "auto" %>
+              <% unless entry.marked_as_transfer? %>
+                <div class="flex space-x-2">
+                  <div>
+                    <%= f.select :nature, [["Expense", "expense"], ["Income", "income"]], { label: t(".nature"), selected: entry.amount.negative? ? "income" : "expense" }, "data-auto-submit-form-target": "auto" %>
+                  </div>
+                  <div class="flex-grow">
+                    <%= f.number_field :amount, value: entry.amount.abs, label: t(".amount"), step: "0.01", "data-auto-submit-form-target": "auto", "data-autosubmit-trigger-event": "change" %>
+                  </div>
+                </div>
+              <% end %>
               <%= f.date_field :date, label: t(".date_label"), max: Date.current, "data-auto-submit-form-target": "auto" %>
 
               <%= f.fields_for :entryable do |ef| %>
