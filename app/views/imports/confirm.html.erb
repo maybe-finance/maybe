@@ -13,7 +13,7 @@
     <% transaction_entries.group_by(&:date).each do |date, transactions| %>
       <%= render "account/entries/entry_group",
                  date: date,
-                 entries: transaction_entries,
+                 entries: transactions,
                  show_tags: true,
                  selectable: false,
                  editable: false %>
