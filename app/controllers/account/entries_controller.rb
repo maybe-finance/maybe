@@ -40,7 +40,9 @@ class Account::EntriesController < ApplicationController
   end
 
   def update
-    @entry.update! entry_params
+    @entry.assign_attributes entry_params
+    @entry.amount = amount if nature.present?
+    @entry.save!
     @entry.sync_account_later
 
     respond_to do |format|
@@ -82,6 +84,18 @@ class Account::EntriesController < ApplicationController
     def entry_params
       params.require(:account_entry)
             .permit(:name, :date, :amount, :currency, :entryable_type, entryable_attributes: permitted_entryable_attributes)
+    end
+
+    def amount
+      if nature.income?
+        entry_params[:amount].to_d.abs * -1
+      else
+        entry_params[:amount].to_d.abs
+      end
+    end
+
+    def nature
+      params[:account_entry][:nature].to_s.inquiry
     end
 
     # entryable_type is required here because Rails expects both of these params in this exact order (potential upstream bug)
