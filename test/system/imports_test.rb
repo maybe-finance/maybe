@@ -89,6 +89,7 @@ class ImportsTest < ApplicationSystemTestCase
 
     # 5) Confirm step
     assert_selector "h1", text: "Confirm import"
+    assert_selector "#new_account_entry", count: 2
     click_button "Import 2 transactions"
     assert_selector "h1", text: "Imports"
   end
