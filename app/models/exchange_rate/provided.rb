@@ -4,22 +4,32 @@ module ExchangeRate::Provided
 
   class_methods do
     private
-      def fetch_rate_from_provider(from:, to:, date:)
-        return nil unless exchange_rates_provider.configured?
+
+      def fetch_rates_from_provider(from:, to:, dates:, cache: false)
+        dates.map do |date|
+          fetch_rate_from_provider from:, to:, date:, cache:
+        end.compact
+      end
+
+      def fetch_rate_from_provider(from:, to:, date:, cache: false)
+        return nil unless exchange_rates_provider.present?
 
         response = exchange_rates_provider.fetch_exchange_rate \
-          from: Money::Currency.new(from).iso_code,
-          to: Money::Currency.new(to).iso_code,
+          from: from,
+          to: to,
           date: date
 
         if response.success?
-          ExchangeRate.new \
+          rate = ExchangeRate.new \
             base_currency: from,
             converted_currency: to,
             rate: response.rate,
             date: date
+
+          rate.save! if cache
+          rate
         else
-          raise response.error
+          nil
         end
       end
   end

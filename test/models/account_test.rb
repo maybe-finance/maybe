@@ -7,6 +7,52 @@ class AccountTest < ActiveSupport::TestCase
     @family = families(:dylan_family)
   end
 
+  test "calculates required exchange rates for foreign currency account" do
+    account = accounts(:eur_checking)
+
+    expected = (31.days.ago.to_date..Date.current).map do |date|
+      { date:, from: "EUR", to: "USD" }
+    end
+
+    assert_equal expected, account.required_exchange_rates.sort_by { |r| r[:date] }
+  end
+
+  test "calculates required exchange rates for multi-currency account" do
+    account = accounts(:multi_currency)
+
+    expected = [
+      { date: 19.days.ago.to_date, from: "EUR", to: "USD" },
+      { date: 4.days.ago.to_date, from: "EUR", to: "USD" }
+    ]
+
+    assert_equal expected, account.required_exchange_rates.sort_by { |r| r[:date] }
+  end
+
+  test "returns empty array if account does not require exchange rates" do
+    assert_equal [], @account.required_exchange_rates
+  end
+
+  test "calculated required securities prices for investment accounts" do
+    account = accounts(:brokerage)
+
+    assert_equal 31.days.ago.to_date, account.effective_start_date
+
+    expected = {
+      start_date: account.effective_start_date,
+      isin_codes: [ securities(:aapl).isin, securities(:toyota).isin, securities(:microsoft).isin ]
+    }
+
+    assert_equal expected, account.required_securities_prices
+  end
+
+  test "returns empty array if account does not require securities prices" do
+    assert_equal [], @account.required_securities_prices
+  end
+
+  test "provides required securities prices" do
+    assert_equal [], @account.required_securities_prices
+  end
+
   test "recognizes foreign currency account" do
     regular_account = accounts(:checking)
     foreign_account = accounts(:eur_checking)

@@ -2,7 +2,7 @@ class Money
   include Comparable, Arithmetic
   include ActiveModel::Validations
 
-  attr_reader :amount, :currency
+  attr_reader :amount, :currency, :store
 
   validate :source_must_be_of_known_type
 
@@ -16,20 +16,22 @@ class Money
     end
   end
 
-  def initialize(obj, currency = Money.default_currency)
+  def initialize(obj, currency = Money.default_currency, store: ExchangeRate)
     @source = obj
     @amount = obj.is_a?(Money) ? obj.amount : BigDecimal(obj.to_s)
     @currency = obj.is_a?(Money) ? obj.currency : Money::Currency.new(currency)
+    @store = store
 
     validate!
   end
 
-  # TODO: Replace with injected rate store
   def exchange_to(other_currency, date = Date.current)
-    if currency == Money::Currency.new(other_currency)
+    other = Money::Currency.new(other_currency)
+
+    if currency == other
       self
-    elsif rate = ExchangeRate.find_rate(from: currency, to: other_currency, date: date)
-      Money.new(amount * rate.rate, other_currency)
+    elsif fetched_rate = store.find_rate(from: currency.iso_code, to: other.iso_code, date: date)
+      Money.new(amount * fetched_rate.rate, other)
     end
   end
 

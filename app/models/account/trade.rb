@@ -1,4 +1,5 @@
 class Account::Trade < ApplicationRecord
-  belongs_to :account
+  include Account::Entryable
+
   belongs_to :security
 end

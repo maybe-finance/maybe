@@ -51,10 +51,10 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
   gem "i18n-tasks"
   gem "erb_lint"
+  gem "dotenv-rails"
 end
 
 group :development do
-  gem "dotenv-rails"
   gem "hotwire-livereload"
   gem "letter_opener"
   gem "ruby-lsp-rails"

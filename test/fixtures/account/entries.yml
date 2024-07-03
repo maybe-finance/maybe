@@ -123,6 +123,17 @@ savings_four:
   entryable: savings_four
 
 savings_five_transfer:
+  name: Transfer to Brokerage account
+  date: <%= 30.days.ago.to_date %>
+  amount: 10000
+  account: savings
+  currency: USD
+  marked_as_transfer: true
+  transfer: brokerage_transfer
+  entryable_type: Account::Transaction
+  entryable: savings_five_transfer
+
+savings_six_transfer:
   name: Received Transfer from Checking Account
   date: <%= 31.days.ago.to_date %>
   amount: -250
@@ -131,7 +142,7 @@ savings_five_transfer:
   marked_as_transfer: true
   transfer: savings_transfer
   entryable_type: Account::Transaction
-  entryable: savings_five_transfer
+  entryable: savings_six_transfer
 
 credit_card_one:
   name: Starbucks
@@ -233,6 +244,15 @@ multi_currency_four:
   account: multi_currency
   entryable_type: Account::Transaction
   entryable: multi_currency_four
+
+brokerage_deposit:
+  name: Deposit from Savings Account
+  date: <%= 30.days.ago.to_date %>
+  amount: -10000
+  currency: USD
+  account: brokerage
+  entryable_type: Account::Transaction
+  entryable: brokerage_deposit
 
 brokerage_aapl_buy_1:
   name: Purchase 20 shares of AAPL
@@ -401,6 +421,14 @@ savings_two_valuation:
 brokerage_one_valuation:
   amount: 10000
   date: <%= 31.days.ago.to_date %>
+  account: brokerage
+  currency: USD
+  entryable_type: Account::Valuation
+  entryable: brokerage_one
+
+brokerage_two_valuation:
+  amount: 25000
+  date: <%= 27.days.ago.to_date %>
   account: brokerage
   currency: USD
   entryable_type: Account::Valuation

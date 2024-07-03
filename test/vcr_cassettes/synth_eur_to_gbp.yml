@@ -1,0 +1,135 @@
+---
+http_interactions:
+  - request:
+      method: get
+      uri: https://api.synthfinance.com/rates/historical?date=2024-06-30&from=EUR&to=GBP
+      body:
+        encoding: US-ASCII
+        string: ''
+      headers:
+        User-Agent:
+          - Faraday v2.9.2
+        Authorization:
+          - Bearer <SYNTH_API_KEY>
+        Accept-Encoding:
+          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+        Accept:
+          - "*/*"
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Date:
+          - Tue, 02 Jul 2024 17:36:53 GMT
+        Content-Type:
+          - application/json; charset=utf-8
+        Content-Length:
+          - '138'
+        Connection:
+          - keep-alive
+        Cf-Ray:
+          - 89d0668af98913a7-CMH
+        Cf-Cache-Status:
+          - DYNAMIC
+        Cache-Control:
+          - max-age=0, private, must-revalidate
+        Etag:
+          - W/"e0be61146fd549aba0436fd442da0553"
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Vary:
+          - Accept-Encoding
+        Referrer-Policy:
+          - strict-origin-when-cross-origin
+        Rndr-Id:
+          - 27027c8d-be19-4432
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-Permitted-Cross-Domain-Policies:
+          - none
+        X-Render-Origin-Server:
+          - Render
+        X-Request-Id:
+          - cbd62d48-8c48-4ec5-ba8a-c128f1f13b3d
+        X-Runtime:
+          - '0.025987'
+        X-Xss-Protection:
+          - '0'
+        Server:
+          - cloudflare
+        Alt-Svc:
+          - h3=":443"; ma=86400
+      body:
+        encoding: ASCII-8BIT
+        string: '{"data":{"date":"2024-06-30","source":"EUR","rates":{"GBP":0.847272}},"meta":{"total_records":1,"credits_used":1,"credits_remaining":994}}'
+    recorded_at: Tue, 02 Jul 2024 17:36:53 GMT
+  - request:
+      method: get
+      uri: https://api.synthfinance.com/rates/historical?date=2024-07-01&from=EUR&to=GBP
+      body:
+        encoding: US-ASCII
+        string: ''
+      headers:
+        User-Agent:
+          - Faraday v2.9.2
+        Authorization:
+          - Bearer <SYNTH_API_KEY>
+        Accept-Encoding:
+          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+        Accept:
+          - "*/*"
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Date:
+          - Tue, 02 Jul 2024 17:36:53 GMT
+        Content-Type:
+          - application/json; charset=utf-8
+        Content-Length:
+          - '138'
+        Connection:
+          - keep-alive
+        Cf-Ray:
+          - 89d0668c8d816a4d-CMH
+        Cf-Cache-Status:
+          - DYNAMIC
+        Cache-Control:
+          - max-age=0, private, must-revalidate
+        Etag:
+          - W/"f9ff90aea0fcab2de1f0b62fb417fe2c"
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Vary:
+          - Accept-Encoding
+        Referrer-Policy:
+          - strict-origin-when-cross-origin
+        Rndr-Id:
+          - 832e7ed3-8f2e-4970
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-Permitted-Cross-Domain-Policies:
+          - none
+        X-Render-Origin-Server:
+          - Render
+        X-Request-Id:
+          - 320f7ccf-8dc6-4790-8fac-5c621f7fb52f
+        X-Runtime:
+          - '0.026974'
+        X-Xss-Protection:
+          - '0'
+        Server:
+          - cloudflare
+        Alt-Svc:
+          - h3=":443"; ma=86400
+      body:
+        encoding: ASCII-8BIT
+        string: '{"data":{"date":"2024-07-01","source":"EUR","rates":{"GBP":0.848743}},"meta":{"total_records":1,"credits_used":1,"credits_remaining":993}}'
+    recorded_at: Tue, 02 Jul 2024 17:36:53 GMT
+recorded_with: VCR 6.2.0

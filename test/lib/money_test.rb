@@ -1,99 +1,103 @@
 require "test_helper"
+require "ostruct"
 
 class MoneyTest < ActiveSupport::TestCase
-    test "can create with default currency" do
-        value = Money.new(1000)
-        assert_equal 1000, value.amount
-    end
+  test "can create with default currency" do
+    value = Money.new(1000)
+    assert_equal 1000, value.amount
+  end
 
-    test "can create with custom currency" do
-        value1 = Money.new(1000, :EUR)
-        value2 = Money.new(1000, :eur)
-        value3 = Money.new(1000, "eur")
-        value4 = Money.new(1000, "EUR")
+  test "can create with custom currency" do
+    value1 = Money.new(1000, :EUR)
+    value2 = Money.new(1000, :eur)
+    value3 = Money.new(1000, "eur")
+    value4 = Money.new(1000, "EUR")
 
-        assert_equal value1.currency.iso_code, value2.currency.iso_code
-        assert_equal value2.currency.iso_code, value3.currency.iso_code
-        assert_equal value3.currency.iso_code, value4.currency.iso_code
-    end
+    assert_equal value1.currency.iso_code, value2.currency.iso_code
+    assert_equal value2.currency.iso_code, value3.currency.iso_code
+    assert_equal value3.currency.iso_code, value4.currency.iso_code
+  end
 
-    test "equality tests amount and currency" do
-        assert_equal Money.new(1000), Money.new(1000)
-        assert_not_equal Money.new(1000), Money.new(1001)
-        assert_not_equal Money.new(1000, :usd), Money.new(1000, :eur)
-    end
+  test "equality tests amount and currency" do
+    assert_equal Money.new(1000), Money.new(1000)
+    assert_not_equal Money.new(1000), Money.new(1001)
+    assert_not_equal Money.new(1000, :usd), Money.new(1000, :eur)
+  end
 
-    test "can compare with zero Numeric" do
-        assert_equal Money.new(0), 0
-        assert_raises(TypeError) { Money.new(1) == 1 }
-    end
+  test "can compare with zero Numeric" do
+    assert_equal Money.new(0), 0
+    assert_raises(TypeError) { Money.new(1) == 1 }
+  end
 
-    test "can negate" do
-        assert_equal (-Money.new(1000)), Money.new(-1000)
-    end
+  test "can negate" do
+    assert_equal (-Money.new(1000)), Money.new(-1000)
+  end
 
-    test "can use comparison operators" do
-        assert_operator Money.new(1000), :>, Money.new(999)
-        assert_operator Money.new(1000), :>=, Money.new(1000)
-        assert_operator Money.new(1000), :<, Money.new(1001)
-        assert_operator Money.new(1000), :<=, Money.new(1000)
-    end
+  test "can use comparison operators" do
+    assert_operator Money.new(1000), :>, Money.new(999)
+    assert_operator Money.new(1000), :>=, Money.new(1000)
+    assert_operator Money.new(1000), :<, Money.new(1001)
+    assert_operator Money.new(1000), :<=, Money.new(1000)
+  end
 
-    test "can add and subtract" do
-        assert_equal Money.new(1000) + Money.new(1000), Money.new(2000)
-        assert_equal Money.new(1000) + 1000, Money.new(2000)
-        assert_equal Money.new(1000) - Money.new(1000), Money.new(0)
-        assert_equal Money.new(1000) - 1000, Money.new(0)
-    end
+  test "can add and subtract" do
+    assert_equal Money.new(1000) + Money.new(1000), Money.new(2000)
+    assert_equal Money.new(1000) + 1000, Money.new(2000)
+    assert_equal Money.new(1000) - Money.new(1000), Money.new(0)
+    assert_equal Money.new(1000) - 1000, Money.new(0)
+  end
 
-    test "can multiply" do
-        assert_equal Money.new(1000) * 2, Money.new(2000)
-        assert_raises(TypeError) { Money.new(1000) * Money.new(2) }
-    end
+  test "can multiply" do
+    assert_equal Money.new(1000) * 2, Money.new(2000)
+    assert_raises(TypeError) { Money.new(1000) * Money.new(2) }
+  end
 
-    test "can divide" do
-        assert_equal Money.new(1000) / 2, Money.new(500)
-        assert_equal Money.new(1000) / Money.new(500), 2
-        assert_raise(TypeError) { 1000 / Money.new(2) }
-    end
+  test "can divide" do
+    assert_equal Money.new(1000) / 2, Money.new(500)
+    assert_equal Money.new(1000) / Money.new(500), 2
+    assert_raise(TypeError) { 1000 / Money.new(2) }
+  end
 
-    test "operator order does not matter" do
-        assert_equal Money.new(1000) + 1000, 1000 + Money.new(1000)
-        assert_equal Money.new(1000) - 1000, 1000 - Money.new(1000)
-        assert_equal Money.new(1000) * 2, 2 * Money.new(1000)
-    end
+  test "operator order does not matter" do
+    assert_equal Money.new(1000) + 1000, 1000 + Money.new(1000)
+    assert_equal Money.new(1000) - 1000, 1000 - Money.new(1000)
+    assert_equal Money.new(1000) * 2, 2 * Money.new(1000)
+  end
 
-    test "can get absolute value" do
-        assert_equal Money.new(1000).abs, Money.new(1000)
-        assert_equal Money.new(-1000).abs, Money.new(1000)
-    end
+  test "can get absolute value" do
+    assert_equal Money.new(1000).abs, Money.new(1000)
+    assert_equal Money.new(-1000).abs, Money.new(1000)
+  end
 
-    test "can test if zero" do
-        assert Money.new(0).zero?
-        assert_not Money.new(1000).zero?
-    end
+  test "can test if zero" do
+    assert Money.new(0).zero?
+    assert_not Money.new(1000).zero?
+  end
 
-    test "can test if negative" do
-        assert Money.new(-1000).negative?
-        assert_not Money.new(1000).negative?
-    end
+  test "can test if negative" do
+    assert Money.new(-1000).negative?
+    assert_not Money.new(1000).negative?
+  end
 
-    test "can test if positive" do
-        assert Money.new(1000).positive?
-        assert_not Money.new(-1000).positive?
-    end
+  test "can test if positive" do
+    assert Money.new(1000).positive?
+    assert_not Money.new(-1000).positive?
+  end
 
-    test "can cast to string with basic formatting" do
-        assert_equal "$1,000.90", Money.new(1000.899).format
-        assert_equal "€1.000,12", Money.new(1000.12, :eur).format
-    end
+  test "can cast to string with basic formatting" do
+    assert_equal "$1,000.90", Money.new(1000.899).format
+    assert_equal "€1.000,12", Money.new(1000.12, :eur).format
+  end
 
-    test "can exchange to another currency" do
-        er = exchange_rates(:today_usd_to_eur)
-        assert_equal Money.new(1000).exchange_to(:eur), Money.new(1000 * er.rate, :eur)
-    end
+  test "converts currency when rate available" do
+    ExchangeRate.expects(:find_rate).returns(OpenStruct.new(rate: 1.2))
 
-    test "returns nil if exchange rate not available" do
-        assert_nil Money.new(1000).exchange_to(:jpy)
-    end
+    assert_equal Money.new(1000).exchange_to(:eur), Money.new(1000 * 1.2, :eur)
+  end
+
+  test "returns nil when no conversion rate available" do
+    ExchangeRate.expects(:find_rate).returns(nil)
+
+    assert_nil Money.new(1000).exchange_to(:jpy)
+  end
 end

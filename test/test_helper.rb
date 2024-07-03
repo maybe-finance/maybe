@@ -1,22 +1,21 @@
-if ENV["COVERAGE"]
+if ENV["COVERAGE"] == "true"
   require "simplecov"
   SimpleCov.start "rails" do
     enable_coverage :branch
   end
 end
 
-# Test ENV setup:
-# By default, all features should be disabled
-# Use the `with_env_overrides` helper to enable features for individual tests
+ENV["RAILS_ENV"] ||= "test"
+require_relative "../config/environment"
+
+# See .env.test.example for more configurable variables
 ENV["SELF_HOSTING_ENABLED"] = "false"
 ENV["UPGRADES_ENABLED"] = "false"
-ENV["RAILS_ENV"] ||= "test"
 
 # Fixes Segfaults on M1 Macs when running tests in parallel (temporary workaround)
 # https://github.com/ged/ruby-pg/issues/538#issuecomment-1591629049
 ENV["PGGSSENCMODE"] = "disable"
 
-require_relative "../config/environment"
 require "rails/test_help"
 require "minitest/mock"
 require "minitest/autorun"
@@ -33,10 +32,10 @@ end
 module ActiveSupport
   class TestCase
     # Run tests in parallel with specified workers
-    parallelize(workers: :number_of_processors) unless ENV["DISABLE_PARALLELIZATION"]
+    parallelize(workers: :number_of_processors) unless ENV["DISABLE_PARALLELIZATION"] == "true"
 
     # https://github.com/simplecov-ruby/simplecov/issues/718#issuecomment-538201587
-    if ENV["COVERAGE"]
+    if ENV["COVERAGE"] == "true"
       parallelize_setup do |worker|
         SimpleCov.command_name "#{SimpleCov.command_name}-#{worker}"
       end
@@ -61,6 +60,16 @@ module ActiveSupport
     def with_self_hosting
       Rails.configuration.stubs(:app_mode).returns("self_hosted".inquiry)
       yield
+    end
+
+    def with_synth(&block)
+      # Live key is only needed for generating VCR cassette fixtures one time
+      key = ENV["SYNTH_API_KEY"] || "foo"
+      with_env_overrides SYNTH_API_KEY: key, &block
+    end
+
+    def with_data_providers_disabled(&block)
+      with_env_overrides SYNTH_API_KEY: nil, &block
     end
   end
 end

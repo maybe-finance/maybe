@@ -35,6 +35,7 @@ savings_four:
   category: income
 
 savings_five_transfer: { }
+savings_six_transfer: { }
 
 # Credit card account transactions
 credit_card_one:
@@ -58,3 +59,5 @@ multi_currency_one: { }
 multi_currency_two: { }
 multi_currency_three: { }
 multi_currency_four: { }
+
+brokerage_deposit: { }

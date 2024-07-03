@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_07_01_203220) do
+ActiveRecord::Schema[7.2].define(version: 2024_07_03_143546) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -28,6 +28,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_07_01_203220) do
     t.string "currency", default: "USD", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "holdings_balance", precision: 19, scale: 4
+    t.decimal "cash_balance", precision: 19, scale: 4
     t.index ["account_id", "date", "currency"], name: "index_account_balances_on_account_id_date_currency_unique", unique: true
     t.index ["account_id"], name: "index_account_balances_on_account_id"
   end
@@ -51,6 +53,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_07_01_203220) do
   create_table "account_holdings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "account_id", null: false
     t.uuid "security_id", null: false
+    t.date "date", null: false
     t.decimal "qty", precision: 19, scale: 4
     t.decimal "amount", precision: 19, scale: 4
     t.string "currency"
@@ -60,14 +63,19 @@ ActiveRecord::Schema[7.2].define(version: 2024_07_01_203220) do
     t.index ["security_id"], name: "index_account_holdings_on_security_id"
   end
 
+  create_table "account_syncs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "status"
+    t.date "start_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "account_trades", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "account_id", null: false
     t.uuid "security_id", null: false
     t.decimal "qty", precision: 19, scale: 4
     t.decimal "price", precision: 19, scale: 4
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_account_trades_on_account_id"
     t.index ["security_id"], name: "index_account_trades_on_security_id"
   end
 
@@ -288,6 +296,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_07_01_203220) do
   create_table "investments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "cash_balance", precision: 19, scale: 4
+    t.decimal "holdings_balance", precision: 19, scale: 4
   end
 
   create_table "invite_codes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -335,6 +345,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_07_01_203220) do
   end
 
   create_table "security_prices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "isin", null: false
     t.date "date", null: false
     t.decimal "price", precision: 19, scale: 4, null: false
     t.string "currency", default: "USD", null: false
@@ -396,7 +407,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_07_01_203220) do
   add_foreign_key "account_entries", "accounts"
   add_foreign_key "account_holdings", "accounts"
   add_foreign_key "account_holdings", "securities"
-  add_foreign_key "account_trades", "accounts"
   add_foreign_key "account_trades", "securities"
   add_foreign_key "account_transactions", "categories", on_delete: :nullify
   add_foreign_key "account_transactions", "merchants"

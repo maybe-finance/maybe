@@ -1,12 +1,8 @@
 class Provider::Synth
   include Retryable
 
-  def initialize(api_key = ENV["SYNTH_API_KEY"])
-    @api_key = api_key || ENV["SYNTH_API_KEY"]
-  end
-
-  def configured?
-    @api_key.present?
+  def initialize(api_key)
+    @api_key = api_key
   end
 
   def fetch_exchange_rate(from:, to:, date:)
@@ -19,13 +15,13 @@ class Provider::Synth
       end
 
       if response.success?
-        ExchangeRateResponse.new \
+        Provider::Base::ExchangeRateResponse.new \
           rate: JSON.parse(response.body).dig("data", "rates", to),
           success?: true,
           raw_response: response
       else
         if on_last_attempt
-          ExchangeRateResponse.new \
+          Provider::Base::ExchangeRateResponse.new \
             success?: false,
             error: build_error(response),
             raw_response: response
@@ -38,8 +34,6 @@ class Provider::Synth
 
   private
     attr_reader :api_key
-
-    ExchangeRateResponse = Struct.new :rate, :success?, :error, :raw_response, keyword_init: true
 
     def base_url
       "https://api.synthfinance.com"

@@ -21,16 +21,19 @@
 
 <% (0...32).each do |i| %>
 aapl_<%= 31 - i %>_days_ago:
+  isin: US0378331005
   date: <%= i.days.ago.to_date %>
   price: <%= aapl_prices[i] %>
   currency: USD
 
 toyota_<%= 31 - i %>_days_ago:
+  isin: JP3633400001
   date: <%= i.days.ago.to_date %>
   price: <%= toyota_prices[i] %>
   currency: USD
 
 microsoft_<%= 31 - i %>_days_ago:
+  isin: US5949181045
   date: <%= i.days.ago.to_date %>
   price: <%= microsoft_prices[i] %>
   currency: USD

@@ -18,6 +18,8 @@ namespace :demo_data do
 
     family.accounts.destroy_all
     ExchangeRate.delete_all
+    Security.delete_all
+    Security::Price.delete_all
     family.categories.destroy_all
     Tagging.delete_all
     family.tags.destroy_all
@@ -70,7 +72,54 @@ namespace :demo_data do
 
     ExchangeRate.insert_all(exchange_rates)
 
-    puts "Loaded mock exchange rates for last 60 days"
+    aapl = { isin: "US0378331005", symbol: "AAPL", name: "Apple Inc." }
+    toyota = { isin: "JP3633400001", symbol: "TM", name: "Toyota Motor Corporation" }
+    microsoft = { isin: "US5949181045", symbol: "MSFT", name: "Microsoft Corporation" }
+
+    Security.insert_all([ aapl, toyota, microsoft ])
+
+    aapl_prices = [
+      208.89, 209.17, 212.00, 210.80, 211.50, 211.30, 210.25, 209.90, 212.20, 210.70,
+      213.00, 213.10, 211.50, 210.00, 210.30, 211.80, 210.50, 210.90, 209.50, 210.00,
+      211.30, 210.20, 209.80, 210.70, 209.90, 210.50, 211.00, 210.20, 210.90, 214.68,
+      214.68, 215.47
+    ]
+
+    toyota_prices = [
+      197.10, 197.30, 197.70, 198.10, 198.50, 198.90, 199.30, 199.70, 200.10, 200.50,
+      200.90, 201.30, 201.70, 202.10, 202.50, 202.90, 203.30, 203.70, 204.10, 204.50,
+      204.90, 205.30, 205.70, 206.10, 206.50, 206.90, 207.30, 207.70, 208.10, 199.78,
+      199.78, 202.20
+    ]
+
+    microsoft_prices = [
+      451.29, 452.21, 453.54, 455.23, 454.67, 454.00, 454.35, 455.45, 455.22, 455.78,
+      455.87, 456.21, 455.93, 455.65, 455.75, 455.84, 455.94, 456.05, 455.67, 455.89,
+      455.12, 454.87, 454.76, 455.02, 454.98, 455.22, 455.45, 455.89, 456.23, 457.21,
+      457.21, 455.54
+    ]
+
+    (0...32).each do |i|
+      Security::Price.create! \
+        isin: aapl[:isin],
+        date: i.days.ago.to_date,
+        currency: "USD",
+        price: aapl_prices[i]
+
+      Security::Price.create! \
+        isin: toyota[:isin],
+        date: i.days.ago.to_date,
+        currency: "USD",
+        price: toyota_prices[i]
+
+      Security::Price.create! \
+        isin: microsoft[:isin],
+        date: i.days.ago.to_date,
+        currency: "USD",
+        price: microsoft_prices[i]
+    end
+
+    puts "Loaded mock exchange rates and security prices for last 60 days"
 
     # ========== Accounts ================
     empty_account = Account.create(name: "Demo Empty Account", family: family, accountable: Depository.new, balance: 500, currency: "USD")
@@ -215,6 +264,25 @@ namespace :demo_data do
       { date: 1.month.ago.to_date, amount: 1250, name: "Car Loan Payment" }
     ]
 
+    brokerage_transactions = [
+      { date: 30.days.ago.to_date, amount: -10000, name: "Deposit from Savings" }
+    ]
+
+    brokerage_trades = [
+      { date: 29.days.ago.to_date, amount: 4240, name: "Buy 20 shares aapl", isin: "US0378331005", qty: 20, price: 212 },
+      { date: 26.days.ago.to_date, amount: 4540, name: "Buy 10 shares msft", isin: "US5949181045", qty: 10, price: 454 },
+      { date: 21.days.ago.to_date, amount: -1065, name: "Sell 5 shares aapl", isin: "US0378331005", qty: -5, price: 213 },
+      { date: 19.days.ago.to_date, amount: -2279.65, name: "Sell 5 shares msft", isin: "US5949181045", qty: -5, price: 455.93 },
+      { date: 15.days.ago.to_date, amount: 2033, name: "Buy 10 shares tm", isin: "JP3633400001", qty: 10, price: 203.3 },
+      { date: 13.days.ago.to_date, amount: 2278.35, name: "Buy 5 shares msft", isin: "US5949181045", qty: 5, price: 455.67 },
+      { date: 11.days.ago.to_date, amount: 2049, name: "Buy 10 shares tm", isin: "JP3633400001", qty: 10, price: 204.9 },
+      { date: 11.days.ago.to_date, amount: -1065.5, name: "Sell 5 shares aapl", isin: "US0378331005", qty: -5, price: 213.1 },
+      { date: 6.days.ago.to_date, amount: -2275.1, name: "Sell 5 shares msft", isin: "US5949181045", qty: -5, price: 455.02 },
+      { date: 6.days.ago.to_date, amount: 2069, name: "Buy 10 shares tm", isin: "JP3633400001", qty: 10, price: 206.9 },
+      { date: 2.days.ago.to_date, amount: 2286.05, name: "Buy 5 shares msft", isin: "US5949181045", qty: 5, price: 457.21 },
+      { date: 1.day.ago.to_date, amount: -2146.8, name: "Sell 10 shares aapl", isin: "US0378331005", qty: -10, price: 214.68 }
+    ]
+
     # ========== Valuations ================
     retirement_valuations = [
       { date: 1.year.ago.to_date, value: 90000 },
@@ -224,10 +292,8 @@ namespace :demo_data do
     ]
 
     brokerage_valuations = [
-      { date: 1.year.ago.to_date, value: 9000 },
-      { date: 200.days.ago.to_date, value: 9500 },
-      { date: 100.days.ago.to_date, value: 9444.96 },
-      { date: 20.days.ago.to_date, value: 10000 }
+      { date: 31.days.ago.to_date, value: 10000 },
+      { date: 27.days.ago.to_date, value: 25000 }
     ]
 
     crypto_valuations = [
@@ -266,25 +332,25 @@ namespace :demo_data do
     ]
 
     accounts = [
-      [ empty_account, [], [] ],
-      [ multi_currency_checking, multi_currency_checking_transactions, [] ],
-      [ checking, checking_transactions, [] ],
-      [ savings, savings_transactions, [] ],
-      [ credit_card, credit_card_transactions, [] ],
-      [ retirement, [], retirement_valuations ],
-      [ euro_savings, euro_savings_transactions, [] ],
-      [ brokerage, [], brokerage_valuations ],
-      [ crypto, [], crypto_valuations ],
-      [ mortgage, mortgage_transactions, mortgage_valuations ],
-      [ main_car, [], main_car_valuations ],
-      [ cash, [], cash_valuations ],
-      [ car_loan, car_loan_transactions, [] ],
-      [ house, [], house_valuations ],
-      [ personal_iou, [], personal_iou_valuations ],
-      [ second_car, [], second_car_valuations ]
+      [ empty_account, [], [], [] ],
+      [ multi_currency_checking, multi_currency_checking_transactions, [], [] ],
+      [ checking, checking_transactions, [], [] ],
+      [ savings, savings_transactions, [], [] ],
+      [ credit_card, credit_card_transactions, [], [] ],
+      [ retirement, [], retirement_valuations, [] ],
+      [ euro_savings, euro_savings_transactions, [], [] ],
+      [ brokerage, brokerage_transactions, brokerage_valuations, brokerage_trades ],
+      [ crypto, [], crypto_valuations, [] ],
+      [ mortgage, mortgage_transactions, mortgage_valuations, [] ],
+      [ main_car, [], main_car_valuations, [] ],
+      [ cash, [], cash_valuations, [] ],
+      [ car_loan, car_loan_transactions, [], [] ],
+      [ house, [], house_valuations, [] ],
+      [ personal_iou, [], personal_iou_valuations, [] ],
+      [ second_car, [], second_car_valuations, [] ]
     ]
 
-    accounts.each do |account, transactions, valuations|
+    accounts.each do |account, transactions, valuations, trades|
       transactions.each do |transaction|
         account.entries.create! \
           name: transaction[:name],
@@ -301,6 +367,17 @@ namespace :demo_data do
           amount: valuation[:value],
           currency: valuation[:currency] || "USD",
           entryable: Account::Valuation.new
+      end
+
+      trades.each do |trade|
+        security = Security.find_by(isin: trade[:isin])
+
+        account.entries.create! \
+          name: trade[:name],
+          date: trade[:date],
+          amount: trade[:amount],
+          currency: "USD",
+          entryable: Account::Trade.new(security: security, qty: trade[:qty], price: trade[:price])
       end
     end
 

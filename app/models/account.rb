@@ -12,8 +12,10 @@ class Account < ApplicationRecord
   has_many :entries, dependent: :destroy, class_name: "Account::Entry"
   has_many :transactions, through: :entries, source: :entryable, source_type: "Account::Transaction"
   has_many :valuations, through: :entries, source: :entryable, source_type: "Account::Valuation"
+  has_many :trades, through: :entries, source: :entryable, source_type: "Account::Trade"
   has_many :balances, dependent: :destroy
   has_many :imports, dependent: :destroy
+  has_many :syncs, dependent: :destroy
 
   monetize :balance
 
@@ -44,6 +46,30 @@ class Account < ApplicationRecord
   # e.g. Accounts denominated in currency other than family currency
   def foreign_currency?
     currency != family.currency
+  end
+
+  def required_exchange_rates
+    required_rates = []
+
+    if foreign_currency?
+      required_rates += (effective_start_date..Date.current).map do |date|
+        { date: date, from: self.currency, to: family.currency }
+      end
+    end
+
+    foreign_entries = self.entries.where.not(currency: family.currency).pluck(:currency, :date)
+    required_rates += foreign_entries.map do |currency, date|
+      { date: date, from: currency, to: family.currency }
+    end
+
+    required_rates.compact.uniq
+  end
+
+  def required_securities_prices
+    {
+      isin_codes: self.trades.includes(:security).map { |trade| trade.security.isin }.uniq,
+      start_date: effective_start_date
+    }
   end
 
   def series(period: Period.all, currency: self.currency)
