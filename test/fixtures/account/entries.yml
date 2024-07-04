@@ -251,6 +251,8 @@ brokerage_deposit:
   amount: -10000
   currency: USD
   account: brokerage
+  marked_as_transfer: true
+  transfer: brokerage_transfer
   entryable_type: Account::Transaction
   entryable: brokerage_deposit
 

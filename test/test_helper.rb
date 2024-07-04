@@ -63,13 +63,16 @@ module ActiveSupport
     end
 
     def with_synth(&block)
-      # Live key is only needed for generating VCR cassette fixtures one time
-      key = ENV["SYNTH_API_KEY"] || "foo"
-      with_env_overrides SYNTH_API_KEY: key, &block
+      with_env_overrides SYNTH_API_KEY: synth_api_key, &block
     end
 
     def with_data_providers_disabled(&block)
       with_env_overrides SYNTH_API_KEY: nil, &block
+    end
+
+    def synth_api_key
+      # Live key is only needed for generating VCR cassette fixtures one time
+      key = ENV["SYNTH_API_KEY"] || "foo"
     end
   end
 end

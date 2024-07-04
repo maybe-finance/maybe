@@ -2,7 +2,7 @@ class Account::Transfer < ApplicationRecord
   has_many :entries, dependent: :nullify
 
   validate :net_zero_flows, if: :single_currency_transfer?
-  validate :transaction_count, :from_different_accounts, :all_transactions_marked
+  validate :entry_count, :from_different_accounts, :all_entries_marked
 
   def date
     outflow_transaction&.date
@@ -71,7 +71,7 @@ class Account::Transfer < ApplicationRecord
       entries.map { |e| e.currency }.uniq.size == 1
     end
 
-    def transaction_count
+    def entry_count
       unless entries.size == 2
         errors.add :entries, "must have exactly 2 entries"
       end
@@ -88,7 +88,7 @@ class Account::Transfer < ApplicationRecord
       end
     end
 
-    def all_transactions_marked
+    def all_entries_marked
       unless entries.all?(&:marked_as_transfer)
         errors.add :entries, "must be marked as transfer"
       end

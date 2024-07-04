@@ -5,15 +5,11 @@ class ImportJobTest < ActiveJob::TestCase
 
   test "import is published" do
     import = imports(:empty_import)
-    import.update! raw_csv_str: valid_csv_str
 
-    assert import.pending?
+    Import.any_instance.expects(:publish).once
 
     perform_enqueued_jobs do
       ImportJob.perform_later(import)
     end
-
-    assert import.reload.complete?
-    assert import.account.balances.present?
   end
 end

@@ -27,7 +27,7 @@ class Account::Balance::Calculator
     def calculate_daily_balances
       prior_balance = nil
 
-      calculated_balances = (calc_start_date..Date.current).map do |date|
+      (calc_start_date..Date.current).map do |date|
         valuation_entry = find_valuation_entry(date)
 
         if valuation_entry
@@ -44,12 +44,6 @@ class Account::Balance::Calculator
 
         { date:, balance: current_balance, currency: account.currency, updated_at: Time.current }
       end
-
-      if account.foreign_currency?
-        calculated_balances.concat(convert_balances_to_family_currency(calculated_balances))
-      end
-
-      calculated_balances
     end
 
     def syncable_entries
@@ -65,47 +59,20 @@ class Account::Balance::Calculator
     end
 
     def transaction_flows(transaction_entries)
-      converted_entries = transaction_entries.map { |entry| convert_entry_to_account_currency(entry) }.compact
-      flows = converted_entries.sum(&:amount)
+      converted_amounts = []
+      transaction_entries.each do |entry|
+        converted = entry.amount_money.exchange_to(account.currency)
+
+        if converted
+          converted_amounts << converted
+        else
+          @warnings << "missing exchange rate from #{entry.currency} to #{account.currency} on #{entry.date}"
+        end
+      end
+
+      flows = converted_amounts.map(&:amount).sum
       flows *= -1 if account.liability?
       flows
-    end
-
-    def convert_balances_to_family_currency(balances)
-      rates = ExchangeRate.get_rates(
-        account.currency,
-        account.family.currency,
-        calc_start_date..Date.current
-      ).to_a
-
-      # Abort conversion if some required rates are missing
-      if rates.length != balances.length
-        @errors << :sync_message_missing_rates
-        return []
-      end
-
-      balances.map.with_index do |balance, index|
-        converted_balance = balance[:balance] * rates[index].rate
-        { date: balance[:date], balance: converted_balance, currency: account.family.currency, updated_at: Time.current }
-      end
-    end
-
-    # Multi-currency accounts have transactions in many currencies
-    def convert_entry_to_account_currency(entry)
-      return entry if entry.currency == account.currency
-
-      converted_entry = entry.dup
-
-      rate = ExchangeRate.find_rate(from: entry.currency, to: account.currency, date: entry.date)
-
-      unless rate
-        @errors << :sync_message_missing_rates
-        return nil
-      end
-
-      converted_entry.currency = account.currency
-      converted_entry.amount = entry.amount * rate.rate
-      converted_entry
     end
 
     def implied_start_balance

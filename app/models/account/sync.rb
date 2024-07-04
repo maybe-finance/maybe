@@ -1,45 +1,50 @@
 class Account::Sync < ApplicationRecord
-  include Syncable
-
   belongs_to :account
 
-  enum status: { pending: "pending", running: "running", completed: "completed", failed: "failed" }
-
-  def start(start_date = nil)
-    start!(start_date)
-
-    sync_exchange_rates
-    sync_securities_prices
-    sync_holdings
-    sync_balances
-
-    complete!
-  rescue StandardError => error
-    fail! error: error
-  end
+  enum :status, { pending: "pending", syncing: "syncing", completed: "completed", failed: "failed" }
 
   class << self
-    def for(account)
-      create! account: account
+    def for(account, start_date = nil)
+      create! account: account, start_date: start_date
     end
+
+    def latest
+      order(created_at: :desc).first
+    end
+  end
+
+  def start(syncables, start_date = nil)
+    raise "Sync has already been run" unless status == "pending"
+
+    start!
+
+    syncables.each do |syncable|
+      sync_result = syncable.sync(account, start_date: start_date)
+
+      process_sync(sync_result)
+    end
+
+    complete!
+  rescue Syncable::Error => error
+    fail! error
   end
 
   private
 
     def process_sync(sync_response)
       unless sync_response.success?
-        raise sync_response.errors.join(", ")
+        raise sync_response.error
       end
 
-      append_warnings(sync_response.warnings)
+      append_warnings(sync_response.warnings) if sync_response.warnings
     end
 
     def append_warnings(new_warnings)
       update! warnings: warnings + new_warnings.map(&:message)
     end
 
-    def start!(start_date = nil)
-      update! start_date: start_date, status: "running"
+    def start!
+      update! status: "syncing"
     end
 
     def complete!
@@ -48,21 +53,5 @@ class Account::Sync < ApplicationRecord
 
     def fail!(error)
       update! status: "failed", error: error.message
-    end
-
-    def sync_exchange_rates
-      process_sync ExchangeRate.sync(account, start_date)
-    end
-
-    def sync_securities_prices
-      process_sync Security.sync(account, start_date)
-    end
-
-    def sync_holdings
-      process_sync Account::Holding.sync(account, start_date)
-    end
-
-    def sync_balances
-      process_sync Account::Balance.sync(account, start_date)
     end
 end

@@ -1,7 +1,14 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  status: MyString
+  status: "pending"
+  account: checking
 
 two:
-  status: MyString
+  status: "failed"
+  error: "Test error"
+  warnings: [ "Warning 1", "Warning 2" ]
+  account: checking
+
+three:
+  status: "completed"
+  warnings: [ "Warning 1" ]
+  account: checking

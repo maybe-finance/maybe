@@ -2,9 +2,54 @@ require "test_helper"
 require "csv"
 
 class AccountTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
+
   def setup
     @account = accounts(:checking)
     @family = families(:dylan_family)
+  end
+
+  test "calculates effective start date" do
+    assert_equal 31.days.ago.to_date, accounts(:collectable).effective_start_date
+    assert_equal 31.days.ago.to_date, @account.effective_start_date
+  end
+
+  test "recognizes foreign currency account" do
+    regular_account = accounts(:checking)
+    foreign_account = accounts(:eur_checking)
+    assert_not regular_account.foreign_currency?
+    assert foreign_account.foreign_currency?
+  end
+
+  test "recognizes multi currency account" do
+    regular_account = accounts(:checking)
+    multi_currency_account = accounts(:multi_currency)
+    assert_not regular_account.multi_currency?
+    assert multi_currency_account.multi_currency?
+  end
+
+  test "shows alert" do
+    sync_with_errors = account_syncs(:two)
+    Account::Sync.stubs(:latest).returns(sync_with_errors)
+
+    assert_equal "Test error", @account.alert
+  end
+
+  test "can sync later" do
+    assert_enqueued_with(job: AccountSyncJob, args: [ @account, Date.current ]) do
+      @account.sync_later(Date.current)
+    end
+  end
+
+  test "can sync" do
+    start_date = 10.days.ago.to_date
+    ordered_syncables = [ ExchangeRate, Security::Price, Account::Holding, Account::Balance ]
+
+    mock_sync = mock("Account::Sync")
+    Account::Sync.expects(:for).with(@account, start_date).returns(mock_sync).once
+    mock_sync.expects(:start).with(ordered_syncables).once
+
+    @account.sync(start_date)
   end
 
   test "calculates required exchange rates for foreign currency account" do
@@ -42,43 +87,19 @@ class AccountTest < ActiveSupport::TestCase
       isin_codes: [ securities(:aapl).isin, securities(:toyota).isin, securities(:microsoft).isin ]
     }
 
-    assert_equal expected, account.required_securities_prices
-  end
+    result = account.required_securities_prices
 
-  test "returns empty array if account does not require securities prices" do
-    assert_equal [], @account.required_securities_prices
+    assert_equal expected[:start_date], result[:start_date]
+    assert_equal expected[:isin_codes].sort, result[:isin_codes].sort
   end
 
   test "provides required securities prices" do
-    assert_equal [], @account.required_securities_prices
-  end
-
-  test "recognizes foreign currency account" do
-    regular_account = accounts(:checking)
-    foreign_account = accounts(:eur_checking)
-    assert_not regular_account.foreign_currency?
-    assert foreign_account.foreign_currency?
-  end
-
-  test "recognizes multi currency account" do
-    regular_account = accounts(:checking)
-    multi_currency_account = accounts(:multi_currency)
-    assert_not regular_account.multi_currency?
-    assert multi_currency_account.multi_currency?
-  end
-
-  test "multi currency and foreign currency are different concepts" do
-    multi_currency_account = accounts(:multi_currency)
-    assert_equal multi_currency_account.family.currency, multi_currency_account.currency
-    assert multi_currency_account.multi_currency?
-    assert_not multi_currency_account.foreign_currency?
+    result = @account.required_securities_prices
+    assert_equal @account.effective_start_date, result[:start_date]
+    assert_equal [], result[:isin_codes]
   end
 
   test "groups accounts by type" do
-    @family.accounts.each do |account|
-      account.sync
-    end
-
     result = @family.accounts.by_group(period: Period.all)
     assets = result[:assets]
     liabilities = result[:liabilities]

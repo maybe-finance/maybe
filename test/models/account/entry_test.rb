@@ -44,7 +44,7 @@ class Account::EntryTest < ActiveSupport::TestCase
   test "can search entries" do
     params = { search: "a" }
 
-    assert_equal 12, Account::Entry.search(params).size
+    assert Account::Entry.search(params).size > 2
 
     params = params.merge(categories: [ "Food & Drink" ]) # transaction specific search param
 

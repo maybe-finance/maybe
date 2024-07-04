@@ -63,12 +63,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_07_03_201841) do
   end
 
   create_table "account_syncs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "account_id", null: false
     t.string "status", default: "pending", null: false
     t.date "start_date"
     t.string "error"
     t.text "warnings", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_account_syncs_on_account_id"
   end
 
   create_table "account_trades", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -404,6 +406,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_07_03_201841) do
   add_foreign_key "account_entries", "accounts"
   add_foreign_key "account_holdings", "accounts"
   add_foreign_key "account_holdings", "securities"
+  add_foreign_key "account_syncs", "accounts"
   add_foreign_key "account_trades", "securities"
   add_foreign_key "account_transactions", "categories", on_delete: :nullify
   add_foreign_key "account_transactions", "merchants"

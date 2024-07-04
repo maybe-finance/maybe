@@ -1,9 +1,13 @@
 module Syncable
   extend ActiveSupport::Concern
 
-  included do
-    SyncResponse = Struct.new(:success?, :warnings, :errors, keyword_init: true)
-    SyncError = Class.new(StandardError)
-    SyncWarning = Struct.new(:message)
+  Response = Struct.new(:success?, :error, :warnings, keyword_init: true)
+  Error = Class.new(StandardError)
+  Warning = Struct.new(:message)
+
+  class_methods do
+    def sync(scope, start_date: nil)
+      raise NotImplementedError, "#{self}.sync needs valid implementation"
+    end
   end
 end

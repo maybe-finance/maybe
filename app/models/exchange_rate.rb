@@ -4,9 +4,9 @@ class ExchangeRate < ApplicationRecord
   validates :base_currency, :converted_currency, presence: true
 
   class << self
-    def sync(syncable, start_date)
-      required_rates = syncable.required_exchange_rates(start_date)
-      puts "syncing exchange rates"
+    def sync(scope, start_date: nil)
+      required_rates = scope.required_exchange_rates(start_date)
+      Syncable::Response.new(success?: true)
     end
 
     def find_rate(from:, to:, date:, cache: true)

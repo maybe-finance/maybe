@@ -29,12 +29,49 @@ class Account < ApplicationRecord
 
   delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
 
-  def balance_on(date)
-    balances.where("date <= ?", date).order(date: :desc).first&.balance
-  end
+  class << self
+    def by_group(period: Period.all, currency: Money.default_currency)
+      grouped_accounts = { assets: ValueGroup.new("Assets", currency), liabilities: ValueGroup.new("Liabilities", currency) }
 
-  def favorable_direction
-    classification == "asset" ? "up" : "down"
+      Accountable.by_classification.each do |classification, types|
+        types.each do |type|
+          group = grouped_accounts[classification.to_sym].add_child_group(type, currency)
+          self.where(accountable_type: type).each do |account|
+            group.add_value_node(
+              account,
+              account.balance_money.exchange_to(currency) || Money.new(0, currency),
+              account.series(period: period, currency: currency)
+            )
+          end
+        end
+      end
+
+      grouped_accounts
+    end
+
+    def create_with_optional_start_balance!(attributes:, start_date: nil, start_balance: nil)
+      account = self.new(attributes.except(:accountable_type))
+      account.accountable = Accountable.from_type(attributes[:accountable_type])&.new
+
+      # Always build the initial valuation
+      account.entries.build \
+        date: Date.current,
+        amount: attributes[:balance],
+        currency: account.currency,
+        entryable: Account::Valuation.new
+
+      # Conditionally build the optional start valuation
+      if start_date.present? && start_balance.present?
+        account.entries.build \
+          date: start_date,
+          amount: start_balance,
+          currency: account.currency,
+          entryable: Account::Valuation.new
+      end
+
+      account.save!
+      account
+    end
   end
 
   # e.g. Wise, Revolut accounts that have transactions in multiple currencies
@@ -47,16 +84,50 @@ class Account < ApplicationRecord
     currency != family.currency
   end
 
+  def alert
+    latest_sync = syncs.latest
+    [ latest_sync&.error, *latest_sync&.warnings ].compact.first
+  end
+
+  def syncing?
+    syncs.syncing.any?
+  end
+
+  def sync_later(start_date = nil)
+    AccountSyncJob.perform_later(self, start_date)
+  end
+
+  def sync(start_date = nil)
+    ordered_syncables = [ ExchangeRate, Security::Price, Account::Holding, Account::Balance ]
+
+    Account::Sync.for(self, start_date)
+                 .start(ordered_syncables)
+  end
+
+  # The earliest date we can calculate a balance for
+  def effective_start_date
+    @effective_start_date ||= entries.order(:date).first.try(:date) || Date.current
+  end
+
+  def favorable_direction
+    classification == "asset" ? "up" : "down"
+  end
+
   def required_exchange_rates(start_date = nil)
+    calculation_start_date = [ start_date, effective_start_date ].compact.max
     required_rates = []
 
     if foreign_currency?
-      required_rates += (effective_start_date..Date.current).map do |date|
+      required_rates += (calculation_start_date..Date.current).map do |date|
         { date: date, from: self.currency, to: family.currency }
       end
     end
 
-    foreign_entries = self.entries.where.not(currency: family.currency).pluck(:currency, :date)
+    foreign_entries = self.entries
+                          .where("date >= ?", calculation_start_date)
+                          .where.not(currency: family.currency)
+                          .pluck(:currency, :date)
+
     required_rates += foreign_entries.map do |currency, date|
       { date: date, from: currency, to: family.currency }
     end
@@ -64,7 +135,7 @@ class Account < ApplicationRecord
     required_rates.compact.uniq
   end
 
-  def required_securities_prices(start_date = nil)
+  def required_securities_prices
     {
       isin_codes: self.trades.includes(:security).map { |trade| trade.security.isin }.uniq,
       start_date: effective_start_date
@@ -84,48 +155,5 @@ class Account < ApplicationRecord
     else
       TimeSeries.from_collection(balance_series, :balance_money)
     end
-  end
-
-  def self.by_group(period: Period.all, currency: Money.default_currency)
-    grouped_accounts = { assets: ValueGroup.new("Assets", currency), liabilities: ValueGroup.new("Liabilities", currency) }
-
-    Accountable.by_classification.each do |classification, types|
-      types.each do |type|
-        group = grouped_accounts[classification.to_sym].add_child_group(type, currency)
-        self.where(accountable_type: type).each do |account|
-          value_node = group.add_value_node(
-            account,
-            account.balance_money.exchange_to(currency) || Money.new(0, currency),
-            account.series(period: period, currency: currency)
-          )
-        end
-      end
-    end
-
-    grouped_accounts
-  end
-
-  def self.create_with_optional_start_balance!(attributes:, start_date: nil, start_balance: nil)
-    account = self.new(attributes.except(:accountable_type))
-    account.accountable = Accountable.from_type(attributes[:accountable_type])&.new
-
-    # Always build the initial valuation
-    account.entries.build \
-      date: Date.current,
-      amount: attributes[:balance],
-      currency: account.currency,
-      entryable: Account::Valuation.new
-
-    # Conditionally build the optional start valuation
-    if start_date.present? && start_balance.present?
-      account.entries.build \
-        date: start_date,
-        amount: start_balance,
-        currency: account.currency,
-        entryable: Account::Valuation.new
-    end
-
-    account.save!
-    account
   end
 end
