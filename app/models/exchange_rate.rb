@@ -1,9 +1,14 @@
 class ExchangeRate < ApplicationRecord
-  include Provided
+  include Provided, Syncable
 
   validates :base_currency, :converted_currency, presence: true
 
   class << self
+    def sync(syncable, start_date)
+      required_rates = syncable.required_exchange_rates(start_date)
+      puts "syncing exchange rates"
+    end
+
     def find_rate(from:, to:, date:, cache: true)
       result = find_by \
         base_currency: from,

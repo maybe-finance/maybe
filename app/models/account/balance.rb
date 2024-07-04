@@ -1,5 +1,5 @@
 class Account::Balance < ApplicationRecord
-    include Monetizable
+  include Monetizable, Syncable
 
     belongs_to :account
     validates :account, :date, :balance, presence: true
@@ -10,7 +10,7 @@ class Account::Balance < ApplicationRecord
     scope :reverse_chronological, -> { order(date: :desc) }
 
     class << self
-      def sync(account, start_date: nil)
+      def sync(account, start_date = nil)
         calculator = Account::Balance::Calculator.new(account, { calc_start_date: start_date })
 
         upsert_all(calculator.daily_balances, unique_by: :index_account_balances_on_account_id_date_currency_unique)

@@ -23,15 +23,12 @@ module Account::Syncable
     #   logger.error("Failed to sync account #{id}: #{e.message}")
   end
 
-  def can_sync?
-    # Skip account sync if account is not active or the sync process is already running
-    return false unless is_active
-    return false if syncing?
-    # If last_sync_date is blank (i.e. the account has never been synced before) allow syncing
-    return true if last_sync_date.blank?
+  def last_sync_attempted_at
+    syncs.order(created_at: :desc).first.try(:created_at)
+  end
 
-    # If last_sync_date is not today, allow syncing
-    last_sync_date != Date.today
+  def needs_sync?
+    last_synced_at.nil? || entries.where("updated_at > ?", last_synced_at).exists?
   end
 
   # The earliest date we can calculate a balance for

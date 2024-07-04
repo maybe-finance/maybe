@@ -10,14 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_07_03_143546) do
+ActiveRecord::Schema[7.2].define(version: 2024_07_03_201841) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
-  create_enum "account_status", ["ok", "syncing", "error"]
   create_enum "import_status", ["pending", "importing", "complete", "failed"]
   create_enum "user_role", ["admin", "member"]
 
@@ -64,8 +63,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_07_03_143546) do
   end
 
   create_table "account_syncs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "status"
+    t.string "status", default: "pending", null: false
     t.date "start_date"
+    t.string "error"
+    t.text "warnings", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -111,10 +112,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_07_03_143546) do
     t.decimal "balance", precision: 19, scale: 4, default: "0.0"
     t.string "currency", default: "USD"
     t.boolean "is_active", default: true, null: false
-    t.enum "status", default: "ok", null: false, enum_type: "account_status"
-    t.jsonb "sync_warnings", default: [], null: false
-    t.jsonb "sync_errors", default: [], null: false
-    t.date "last_sync_date"
     t.uuid "institution_id"
     t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Loan'::character varying)::text, ('CreditCard'::character varying)::text, ('OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"

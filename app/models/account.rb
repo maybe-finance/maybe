@@ -19,7 +19,6 @@ class Account < ApplicationRecord
 
   monetize :balance
 
-  enum :status, { ok: "ok", syncing: "syncing", error: "error" }, validate: true
   enum :classification, { asset: "asset", liability: "liability" }, validate: { allow_nil: true }
 
   scope :active, -> { where(is_active: true) }
@@ -48,7 +47,7 @@ class Account < ApplicationRecord
     currency != family.currency
   end
 
-  def required_exchange_rates
+  def required_exchange_rates(start_date = nil)
     required_rates = []
 
     if foreign_currency?
@@ -65,7 +64,7 @@ class Account < ApplicationRecord
     required_rates.compact.uniq
   end
 
-  def required_securities_prices
+  def required_securities_prices(start_date = nil)
     {
       isin_codes: self.trades.includes(:security).map { |trade| trade.security.isin }.uniq,
       start_date: effective_start_date
