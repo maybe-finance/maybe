@@ -18,6 +18,7 @@ class Account::TransfersController < ApplicationController
                                              name: transfer_params[:name]
 
     if @transfer.save
+      @transfer.entries.each(&:sync_account_later)
       redirect_to transactions_path, notice: t(".success")
     else
       # TODO: this is not an ideal way to handle errors and should eventually be improved.
