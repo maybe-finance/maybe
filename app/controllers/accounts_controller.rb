@@ -79,9 +79,9 @@ class AccountsController < ApplicationController
     end
 
     if synced_accounts_count > 0
-      redirect_to accounts_path, notice: t(".success", count: synced_accounts_count)
+      redirect_back_or_to accounts_path, notice: t(".success", count: synced_accounts_count)
     else
-      redirect_to accounts_path, alert: t(".no_accounts_to_sync")
+      redirect_back_or_to accounts_path, alert: t(".no_accounts_to_sync")
     end
   end
 
