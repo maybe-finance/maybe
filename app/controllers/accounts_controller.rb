@@ -74,7 +74,7 @@ class AccountsController < ApplicationController
     Current.family.accounts.each do |account|
       next unless account.can_sync?
 
-      account.sync_later(Date.current)
+      account.sync_later
       synced_accounts_count += 1
     end
 
