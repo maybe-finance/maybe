@@ -69,6 +69,22 @@ class AccountsController < ApplicationController
     redirect_to account_path(@account), notice: t(".success")
   end
 
+  def sync_all
+    synced_accounts_count = 0
+    Current.family.accounts.each do |account|
+      next unless account.can_sync?
+
+      account.sync_later
+      synced_accounts_count += 1
+    end
+
+    if synced_accounts_count > 0
+      redirect_back_or_to accounts_path, notice: t(".success", count: synced_accounts_count)
+    else
+      redirect_back_or_to accounts_path, alert: t(".no_accounts_to_sync")
+    end
+  end
+
   private
 
     def set_account
