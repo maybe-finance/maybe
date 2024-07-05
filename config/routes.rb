@@ -63,6 +63,7 @@ Rails.application.routes.draw do
     collection do
       get :summary
       get :list
+      post :sync_all
     end
 
     member do

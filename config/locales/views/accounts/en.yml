@@ -65,5 +65,8 @@ en:
       new: New account
     sync:
       success: Account sync started
+    sync_all:
+      no_accounts_to_sync: No accounts were eligible for syncing.
+      success: Successfully queued %{count} accounts for syncing.
     update:
       success: Account updated
