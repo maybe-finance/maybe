@@ -2,6 +2,7 @@ require "ostruct"
 
 class ImportsController < ApplicationController
   before_action :set_import, except: %i[ index new create ]
+  protect_from_forgery with: :null_session, include: %i[ upload_csv ]
 
   def index
     @imports = Current.family.imports
@@ -44,6 +45,24 @@ class ImportsController < ApplicationController
     else
       flash.now[:error] = @import.errors.full_messages.to_sentence
       render :load, status: :unprocessable_entity
+    end
+  end
+
+  def upload_csv
+    raw_csv = params[:file].read
+
+    begin
+      csv = Import::Csv.new(raw_csv)
+      if csv.valid?
+        render turbo_stream: turbo_stream.action(
+          :update_input, "raw_csv_text_area", raw_csv
+        )
+      else
+        render json: { message: "CSV contents is not valid" }, status: :unprocessable_entity
+      end
+    rescue CSV::MalformedCSVError => error
+      file_extension = params[:file].path.split(".").last
+      render json: { message: "Expected file format CSV, but recieved #{file_extension}", error: error }, status: :bad_request
     end
   end
 
