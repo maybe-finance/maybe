@@ -42,19 +42,19 @@
     transform: translateX(100%);
   }
 
-  [type='checkbox'].maybe-checkbox {
+  [type="checkbox"].maybe-checkbox {
     @apply rounded-sm;
   }
 
-  [type='checkbox'].maybe-checkbox--light {
+  [type="checkbox"].maybe-checkbox--light {
     @apply border-alpha-black-200 checked:bg-gray-900 checked:ring-gray-900 focus:ring-gray-900 focus-visible:ring-gray-900 checked:hover:bg-gray-500;
   }
 
-  [type='checkbox'].maybe-checkbox--dark {
+  [type="checkbox"].maybe-checkbox--dark {
     @apply ring-gray-900 checked:text-white;
   }
 
-  [type='checkbox'].maybe-checkbox--dark:checked {
+  [type="checkbox"].maybe-checkbox--dark:checked {
     background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='111827' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
   }
 
@@ -76,6 +76,10 @@
     .user-mention {
       @apply font-bold;
     }
+  }
+
+  .invalid-submit > input[type="submit"] {
+    @apply bg-gray-50 text-gray-400 cursor-not-allowed;
   }
 }
 
