@@ -95,16 +95,6 @@ export default class extends Controller {
     `;
   }
 
-  #currencyValue(datum) {
-    return `
-      <p class="text-gray-500 -space-x-0.5">
-        ${datum.currency_displayed_before_value === true ? datum.currency_symbol : ""}
-          <span class="text-xl text-gray-900 font-medium">${datum.value_str.main_part}</span>
-          ${datum.value_str.fractional_part ? "." + datum.value_str.fractional_part : ""}
-        ${datum.currency_displayed_before_value !== true ? datum.currency_symbol : ""}
-      </p>`;
-  }
-
   get #radius() {
     return Math.min(this.#d3ViewboxWidth, this.#d3ViewboxHeight) / 2;
   }
