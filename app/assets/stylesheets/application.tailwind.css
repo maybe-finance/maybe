@@ -77,6 +77,14 @@
       @apply font-bold;
     }
   }
+
+  .dropzone-drag-over > button {
+    @apply bg-gray-50;
+  }
+
+  .text-as-button {
+    @apply text-black py-1.5 px-3 border rounded-lg w-fit cursor-pointer;
+  }
 }
 
 /* Small, single purpose classes that should take precedence over other styles */
