@@ -71,6 +71,9 @@ en:
         "inflow" (income)
       requirement3: Can have 0 or more tags separated by |
       subtitle: Import your transactions
+      drag_and_drop_csv: Drag and drop your CSV file here or
+      file_upload_tab: Upload CSV
+      copy_paste_tab: Copy & Paste
     load_csv:
       import_loaded: Import CSV loaded
     new:
