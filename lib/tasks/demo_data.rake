@@ -45,8 +45,8 @@ namespace :demo_data do
     exchange_rates = (0..60).map do |days_ago|
       {
         date: Date.current - days_ago.days,
-        base_currency: "EUR",
-        converted_currency: "USD",
+        from_currency: "EUR",
+        to_currency: "USD",
         rate: rand(1.0840..1.0924).round(4)
       }
     end
@@ -54,18 +54,18 @@ namespace :demo_data do
     exchange_rates += (0..20).map do |days_ago|
       {
         date: Date.current - days_ago.days,
-        base_currency: "BTC",
-        converted_currency: "USD",
+        from_currency: "BTC",
+        to_currency: "USD",
         rate: rand(60000..65000).round(2)
       }
     end
 
     # Multi-currency account needs a few USD:EUR rates
     exchange_rates += [
-      { date: Date.current - 45.days, base_currency: "USD", converted_currency: "EUR", rate: 0.89 },
-      { date: Date.current - 34.days, base_currency: "USD", converted_currency: "EUR", rate: 0.87 },
-      { date: Date.current - 28.days, base_currency: "USD", converted_currency: "EUR", rate: 0.88 },
-      { date: Date.current - 14.days, base_currency: "USD", converted_currency: "EUR", rate: 0.86 }
+      { date: Date.current - 45.days, from_currency: "USD", to_currency: "EUR", rate: 0.89 },
+      { date: Date.current - 34.days, from_currency: "USD", to_currency: "EUR", rate: 0.87 },
+      { date: Date.current - 28.days, from_currency: "USD", to_currency: "EUR", rate: 0.88 },
+      { date: Date.current - 14.days, from_currency: "USD", to_currency: "EUR", rate: 0.86 }
     ]
 
     ExchangeRate.insert_all(exchange_rates)

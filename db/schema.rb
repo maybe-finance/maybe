@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_06_28_104551) do
+ActiveRecord::Schema[7.2].define(version: 2024_07_06_151026) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -145,15 +145,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_28_104551) do
   end
 
   create_table "exchange_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "base_currency", null: false
-    t.string "converted_currency", null: false
+    t.string "from_currency", null: false
+    t.string "to_currency", null: false
     t.decimal "rate"
     t.date "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["base_currency", "converted_currency", "date"], name: "index_exchange_rates_on_base_converted_date_unique", unique: true
-    t.index ["base_currency"], name: "index_exchange_rates_on_base_currency"
-    t.index ["converted_currency"], name: "index_exchange_rates_on_converted_currency"
+    t.index ["from_currency", "to_currency", "date"], name: "index_exchange_rates_on_base_converted_date_unique", unique: true
+    t.index ["from_currency"], name: "index_exchange_rates_on_from_currency"
+    t.index ["to_currency"], name: "index_exchange_rates_on_to_currency"
   end
 
   create_table "families", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -65,10 +65,10 @@ module Account::Syncable
     return if rate_candidates.blank?
 
     existing_rates = ExchangeRate.where(
-      base_currency: rate_candidates.map { |rc| rc[:from_currency] },
-      converted_currency: rate_candidates.map { |rc| rc[:to_currency] },
+      from_currency: rate_candidates.map { |rc| rc[:from_currency] },
+      to_currency: rate_candidates.map { |rc| rc[:to_currency] },
       date: rate_candidates.map { |rc| rc[:date] }
-    ).pluck(:base_currency, :converted_currency, :date)
+    ).pluck(:from_currency, :to_currency, :date)
 
     # Convert to a set for faster lookup
     existing_rates_set = existing_rates.map { |er| [ er[0], er[1], er[2].to_s ] }.to_set

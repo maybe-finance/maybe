@@ -22,7 +22,7 @@ class Account::Entry < ApplicationRecord
       "account_entries.*",
       "account_entries.amount * COALESCE(er.rate, 1) AS converted_amount"
     )
-      .joins(sanitize_sql_array([ "LEFT JOIN exchange_rates er ON account_entries.date = er.date AND account_entries.currency = er.base_currency AND er.converted_currency = ?", currency ]))
+      .joins(sanitize_sql_array([ "LEFT JOIN exchange_rates er ON account_entries.date = er.date AND account_entries.currency = er.from_currency AND er.to_currency = ?", currency ]))
       .where("er.rate IS NOT NULL OR account_entries.currency = ?", currency)
   }
 

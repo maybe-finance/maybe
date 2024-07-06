@@ -25,6 +25,17 @@ class Account::Balance::CalculatorTest < ActiveSupport::TestCase
   end
 
   test "syncs foreign checking account balances" do
+    required_exchange_rates_for_sync = [
+      1.0834, 1.0845, 1.0819, 1.0872, 1.0788, 1.0743, 1.0755, 1.0774,
+      1.0778, 1.0783, 1.0773, 1.0709, 1.0729, 1.0773, 1.0778, 1.078,
+      1.0809, 1.0818, 1.0824, 1.0822, 1.0854, 1.0845, 1.0839, 1.0807,
+      1.084, 1.0856, 1.0858, 1.0898, 1.095, 1.094, 1.0926, 1.0986
+    ]
+
+    required_exchange_rates_for_sync.each_with_index do |exchange_rate, idx|
+      ExchangeRate.create! date: idx.days.ago.to_date, from_currency: "EUR", to_currency: "USD", rate: exchange_rate
+    end
+
     # Foreign accounts will generate balances for all currencies
     expected_usd_balances = get_expected_balances_for(:eur_checking_usd)
     expected_eur_balances = get_expected_balances_for(:eur_checking_eur)
@@ -38,6 +49,13 @@ class Account::Balance::CalculatorTest < ActiveSupport::TestCase
   end
 
   test "syncs multi-currency checking account balances" do
+    required_exchange_rates_for_sync = [
+      { from_currency: "EUR", to_currency: "USD", date: 4.days.ago.to_date, rate: 1.0788 },
+      { from_currency: "EUR", to_currency: "USD", date: 19.days.ago.to_date, rate: 1.0822 }
+    ]
+
+    ExchangeRate.insert_all(required_exchange_rates_for_sync)
+
     expected_balances = get_expected_balances_for(:multi_currency)
     assert_account_balances calculated_balances_for(:multi_currency), expected_balances
   end
