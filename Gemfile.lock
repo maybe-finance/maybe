@@ -388,7 +388,7 @@ GEM
     sentry-rails (5.18.0)
       railties (>= 5.0)
       sentry-ruby (~> 5.18.0)
-    sentry-ruby (5.18.0)
+    sentry-ruby (5.18.1)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
     simplecov (0.22.0)
