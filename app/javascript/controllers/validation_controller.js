@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus";
 // Connects to data-controller="validation"
 export default class extends Controller {
   static classes = ["invalid"];
-  static targets = ["empty", "submit"];
+  static targets = ["nonEmpty", "submit"];
   static values = { isValid: { type: Boolean, default: false } };
 
   isValidValueChanged() {
@@ -26,8 +26,8 @@ export default class extends Controller {
 
   validate() {
     // Add the validation targets and their respective logic here.
-    for (const target of this.emptyTargets) {
-      if (target.value === "") {
+    for (const target of this.nonEmptyTargets) {
+      if (!target || !target.value || target.value === "") {
         this.isValidValue = false;
         return;
       }
