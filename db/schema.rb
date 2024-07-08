@@ -97,7 +97,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_07_07_130331) do
     t.jsonb "sync_errors", default: [], null: false
     t.date "last_sync_date"
     t.uuid "institution_id"
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Loan'::character varying, 'CreditCard'::character varying, 'OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Loan'::character varying)::text, ('CreditCard'::character varying)::text, ('OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id"], name: "index_accounts_on_family_id"
     t.index ["institution_id"], name: "index_accounts_on_institution_id"
@@ -157,15 +157,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_07_07_130331) do
   end
 
   create_table "exchange_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "base_currency", null: false
-    t.string "converted_currency", null: false
+    t.string "from_currency", null: false
+    t.string "to_currency", null: false
     t.decimal "rate"
     t.date "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["base_currency", "converted_currency", "date"], name: "index_exchange_rates_on_base_converted_date_unique", unique: true
-    t.index ["base_currency"], name: "index_exchange_rates_on_base_currency"
-    t.index ["converted_currency"], name: "index_exchange_rates_on_converted_currency"
+    t.index ["from_currency", "to_currency", "date"], name: "index_exchange_rates_on_base_converted_date_unique", unique: true
+    t.index ["from_currency"], name: "index_exchange_rates_on_from_currency"
+    t.index ["to_currency"], name: "index_exchange_rates_on_to_currency"
   end
 
   create_table "families", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

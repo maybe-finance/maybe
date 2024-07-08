@@ -1,12 +1,8 @@
 class Provider::Synth
   include Retryable
 
-  def initialize(api_key = ENV["SYNTH_API_KEY"])
-    @api_key = api_key || ENV["SYNTH_API_KEY"]
-  end
-
-  def configured?
-    @api_key.present?
+  def initialize(api_key)
+    @api_key = api_key
   end
 
   def fetch_exchange_rate(from:, to:, date:)

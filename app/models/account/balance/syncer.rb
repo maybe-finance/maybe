@@ -85,10 +85,10 @@ class Account::Balance::Syncer
     end
 
     def convert_balances_to_family_currency(balances)
-      rates = ExchangeRate.get_rates(
-        account.currency,
-        account.family.currency,
-        start_date..Date.current
+      rates = ExchangeRate.find_rates(
+        from: account.currency,
+        to: account.family.currency,
+        start_date: calc_start_date
       ).to_a
 
       # Abort conversion if some required rates are missing
@@ -97,8 +97,9 @@ class Account::Balance::Syncer
         return []
       end
 
-      balances.map.with_index do |balance, index|
-        converted_balance = balance[:balance] * rates[index].rate
+      balances.map do |balance|
+        rate = rates.find { |r| r.date == balance[:date] }
+        converted_balance = balance[:balance] * rate&.rate
         { date: balance[:date], balance: converted_balance, currency: account.family.currency, updated_at: Time.current }
       end
     end
