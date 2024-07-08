@@ -6,10 +6,20 @@ en:
       body_html: "<p>You will not be able to undo this decision</p>"
       cancel: Cancel
       title: Are you sure?
+    dropzone:
+      click_to_browse: click to browse.
+      drag_and_drop_default: Drag and drop your file here or
+      error:
+        body: This could be due to an incorrect file format or other issues listed
+          here.
+        title: There was a problem with your upload
+        try_again: Try again
+      uploading:
+        cancel: Cancel
+        title: Uploading ${file_name}
     no_account_empty_state:
       new_account: New account
-      no_account_subtitle:
-        Since no accounts have been added, there's no data to display.
+      no_account_subtitle: Since no accounts have been added, there's no data to display.
         Add your first accounts to start viewing dashboard data.
       no_account_title: No accounts yet
     notification:
@@ -19,13 +29,3 @@ en:
       dismiss: Dismiss
       new_version_available: A new version of Maybe is available for upgrade.
       upgrade_now: Upgrade Now
-    dropzone:
-      drag_and_drop_default: Drag and drop your file here or
-      click_to_browse: click to browse.
-      uploading:
-        title: Uploading ${file_name}
-        cancel: Cancel
-      error:
-        title: There was a problem with your upload
-        body: This could be due to an incorrect file format or other issues listed here.
-        try_again: Try again

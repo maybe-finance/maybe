@@ -60,8 +60,11 @@ en:
       confirm_body: This will reset your import. Any changes you have made to the
         CSV will be erased.
       confirm_title: Are you sure?
+      copy_paste_tab: Copy & Paste
       description: Create a spreadsheet or upload an exported CSV from your financial
         institution.
+      drag_and_drop_csv: Drag and drop your CSV file here or
+      file_upload_tab: Upload CSV
       instructions: Your CSV should have the following columns and formats for the
         best import experience.
       load_title: Load import
@@ -71,9 +74,6 @@ en:
         "inflow" (income)
       requirement3: Can have 0 or more tags separated by |
       subtitle: Import your transactions
-      drag_and_drop_csv: Drag and drop your CSV file here or
-      file_upload_tab: Upload CSV
-      copy_paste_tab: Copy & Paste
     load_csv:
       import_loaded: Import CSV loaded
     new:
