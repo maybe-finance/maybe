@@ -3,7 +3,6 @@ class AccountsController < ApplicationController
 
   include Filterable
   before_action :set_account, only: %i[ edit show destroy sync update ]
-  after_action :sync_account, only: :create
 
   def index
     @institutions = Current.family.institutions
@@ -52,8 +51,10 @@ class AccountsController < ApplicationController
                         attributes: account_params.except(:start_date, :start_balance),
                         start_date: account_params[:start_date],
                         start_balance: account_params[:start_balance]
-
+    @account.sync_later
     redirect_back_or_to account_path(@account), notice: t(".success")
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_back_or_to accounts_path, alert: e.record.errors.full_messages.to_sentence
   end
 
   def destroy
@@ -93,9 +94,5 @@ class AccountsController < ApplicationController
 
     def account_params
       params.require(:account).permit(:name, :accountable_type, :balance, :start_date, :start_balance, :currency, :subtype, :is_active, :institution_id)
-    end
-
-    def sync_account
-      @account.sync_later
     end
 end
