@@ -1,11 +1,20 @@
-class Account::Balance::Calculator
+class Account::Balance::Syncer
   attr_reader :errors, :warnings
 
-  def initialize(account, options = {})
+  def initialize(account, start_date:)
+    @account = account
     @errors = []
     @warnings = []
-    @account = account
-    @calc_start_date = calculate_sync_start(options[:calc_start_date])
+    @start_date = start_date
+  end
+
+  def run
+    daily_balances = calculate_daily_balances
+    converted_daily_balances = convert_balances_to_family_currency(daily_balances)
+
+    Account::Balance.transaction do
+      Account::Balance.upsert_all(daily_balances.concat(converted_daily_balances), unique_by: :index_account_balances_on_account_id_date_currency_unique)
+    end
   end
 
   def daily_balances
@@ -14,7 +23,11 @@ class Account::Balance::Calculator
 
   private
 
-    attr_reader :calc_start_date, :account
+    attr_reader :start_date, :account
+
+    def purge_stale_balances
+      account.balances.where("date < ?", account.effective_start_date).delete_all
+    end
 
     def calculate_sync_start(provided_start_date = nil)
       if account.balances.any?
@@ -27,7 +40,7 @@ class Account::Balance::Calculator
     def calculate_daily_balances
       prior_balance = nil
 
-      calculated_balances = (calc_start_date..Date.current).map do |date|
+      calculated_balances = (start_date..Date.current).map do |date|
         valuation_entry = find_valuation_entry(date)
 
         if valuation_entry
@@ -53,7 +66,7 @@ class Account::Balance::Calculator
     end
 
     def syncable_entries
-      @entries ||= account.entries.where("date >= ?", calc_start_date).to_a
+      @entries ||= account.entries.where("date >= ?", start_date).to_a
     end
 
     def syncable_transaction_entries
@@ -75,7 +88,7 @@ class Account::Balance::Calculator
       rates = ExchangeRate.get_rates(
         account.currency,
         account.family.currency,
-        calc_start_date..Date.current
+        start_date..Date.current
       ).to_a
 
       # Abort conversion if some required rates are missing
@@ -109,7 +122,7 @@ class Account::Balance::Calculator
     end
 
     def implied_start_balance
-      transaction_entries = syncable_transaction_entries.select { |e| e.date > calc_start_date }
+      transaction_entries = syncable_transaction_entries.select { |e| e.date > start_date }
       account.balance.to_d + transaction_flows(transaction_entries)
     end
 end

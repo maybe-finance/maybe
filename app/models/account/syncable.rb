@@ -1,32 +1,12 @@
 module Account::Syncable
   extend ActiveSupport::Concern
 
-  def sync_later(start_date = nil)
-    AccountSyncJob.perform_later(self, start_date)
+  def sync_later(start_date: nil)
+    AccountSyncJob.perform_later(self, start_date: start_date)
   end
 
-  def sync(start_date = nil)
-    update!(status: "syncing")
-
-    if multi_currency? || foreign_currency?
-      sync_exchange_rates
-    end
-
-    calculator = Account::Balance::Calculator.new(self, { calc_start_date: start_date })
-
-    self.balances.upsert_all(calculator.daily_balances, unique_by: :index_account_balances_on_account_id_date_currency_unique)
-    self.balances.where("date < ?", effective_start_date).delete_all
-    new_balance = calculator.daily_balances.select { |b| b[:currency] == self.currency }.last[:balance]
-
-    update! \
-      status: "ok",
-      last_sync_date: Date.current,
-      balance: new_balance,
-      sync_errors: calculator.errors,
-      sync_warnings: calculator.warnings
-  rescue => e
-    update!(status: "error", sync_errors: [ :sync_message_unknown_error ])
-    logger.error("Failed to sync account #{id}: #{e.message}")
+  def sync(start_date: nil)
+    Account::Sync.for(self, start_date: start_date || effective_start_date).run
   end
 
   def can_sync?

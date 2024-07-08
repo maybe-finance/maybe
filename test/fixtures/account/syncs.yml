@@ -1,0 +1,13 @@
+one:
+  account: checking
+  status: failed
+  start_date: 2024-07-07
+  last_ran_at: 2024-07-07 09:03:31
+  error: test sync error
+  warnings: [ "test warning 1", "test warning 2" ]
+
+two:
+  account: brokerage
+  status: completed
+  start_date: 2024-07-07
+  last_ran_at: 2024-07-07 09:03:32

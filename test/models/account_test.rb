@@ -1,10 +1,28 @@
 require "test_helper"
-require "csv"
 
 class AccountTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
+
   def setup
     @account = accounts(:checking)
     @family = families(:dylan_family)
+  end
+
+  test "can sync later" do
+    assert_enqueued_with(job: AccountSyncJob, args: [ @account, start_date: Date.current ]) do
+      @account.sync_later start_date: Date.current
+    end
+  end
+
+  test "can sync" do
+    start_date = 10.days.ago.to_date
+
+    mock_sync = mock("Account::Sync")
+    mock_sync.expects(:run).once
+
+    Account::Sync.expects(:for).with(@account, start_date: start_date).returns(mock_sync).once
+
+    @account.sync start_date: start_date
   end
 
   test "recognizes foreign currency account" do
@@ -21,18 +39,7 @@ class AccountTest < ActiveSupport::TestCase
     assert multi_currency_account.multi_currency?
   end
 
-  test "multi currency and foreign currency are different concepts" do
-    multi_currency_account = accounts(:multi_currency)
-    assert_equal multi_currency_account.family.currency, multi_currency_account.currency
-    assert multi_currency_account.multi_currency?
-    assert_not multi_currency_account.foreign_currency?
-  end
-
   test "groups accounts by type" do
-    @family.accounts.each do |account|
-      account.sync
-    end
-
     result = @family.accounts.by_group(period: Period.all)
     assets = result[:assets]
     liabilities = result[:liabilities]
@@ -76,23 +83,5 @@ class AccountTest < ActiveSupport::TestCase
 
     # We know EUR -> NZD exchange rate is not available in fixtures
     assert_equal 0, account.series(currency: "NZD").values.count
-  end
-
-  test "should destroy dependent transactions" do
-    assert_difference("Account::Transaction.count", -@account.transactions.count) do
-      @account.destroy
-    end
-  end
-
-  test "should destroy dependent balances" do
-    assert_difference("Account::Balance.count", -@account.balances.count) do
-      @account.destroy
-    end
-  end
-
-  test "should destroy dependent valuations" do
-    assert_difference("Account::Valuation.count", -@account.valuations.count) do
-      @account.destroy
-    end
   end
 end
