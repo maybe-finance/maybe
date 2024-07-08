@@ -65,11 +65,25 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Import CSV loaded", flash[:notice]
   end
 
-  test "should flash error message if invalid CSV input" do
+  test "should flash error message if invalid raw CSV input" do
     patch load_import_url(@empty_import), params: { import: { raw_csv_str: malformed_csv_str } }
 
     assert_response :unprocessable_entity
     assert_equal "Raw csv str is not a valid CSV format", flash[:error]
+  end
+
+  test "should save raw CSV if CSV file is valid" do
+    post load_csv_file_import_url(@empty_import), xhr: true, params: { file: fixture_file_upload("valid_csv.csv") }
+
+    assert_response :success
+  end
+
+  test "should return error message if CSV file is not a CSV file" do
+    post load_csv_file_import_url(@empty_import), xhr: true, params: { file: fixture_file_upload("profile_image.png") }
+
+    assert_response :bad_request
+    assert_equal "Expected file format CSV, but recieved png", JSON.parse(response.body)["message"], "Error message for invalid file is incorrect"
+    assert_not_nil JSON.parse(response.body)["error"], "Error attribute in JSON response is nil"
   end
 
   test "should get configure" do
