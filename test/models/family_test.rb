@@ -6,6 +6,18 @@ class FamilyTest < ActiveSupport::TestCase
 
   def setup
     @family = families(:dylan_family)
+
+    required_exchange_rates_for_family = [
+      1.0834, 1.0845, 1.0819, 1.0872, 1.0788, 1.0743, 1.0755, 1.0774,
+      1.0778, 1.0783, 1.0773, 1.0709, 1.0729, 1.0773, 1.0778, 1.078,
+      1.0809, 1.0818, 1.0824, 1.0822, 1.0854, 1.0845, 1.0839, 1.0807,
+      1.084, 1.0856, 1.0858, 1.0898, 1.095, 1.094, 1.0926, 1.0986
+    ]
+
+    required_exchange_rates_for_family.each_with_index do |exchange_rate, idx|
+      ExchangeRate.create! date: idx.days.ago.to_date, from_currency: "EUR", to_currency: "USD", rate: exchange_rate
+    end
+
     @family.accounts.each do |account|
       account.sync
     end

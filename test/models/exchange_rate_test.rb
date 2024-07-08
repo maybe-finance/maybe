@@ -1,50 +1,95 @@
 require "test_helper"
 require "ostruct"
+
 class ExchangeRateTest < ActiveSupport::TestCase
-  test "find rate in db" do
-    assert_equal exchange_rates(:day_29_ago_eur_to_usd),
-      ExchangeRate.find_rate_or_fetch(from: "EUR", to: "USD", date: 29.days.ago.to_date)
+  setup do
+    @provider = mock
+
+    ExchangeRate.stubs(:exchange_rates_provider).returns(@provider)
   end
 
-  test "fetch rate from provider when it's not found in db" do
-    with_env_overrides SYNTH_API_KEY: "true" do
-      ExchangeRate
-        .expects(:fetch_rate_from_provider)
-        .returns(ExchangeRate.new(base_currency: "USD", converted_currency: "MXN", rate: 1.0, date: Date.current))
+  test "exchange rate provider nil if no api key configured" do
+    ExchangeRate.unstub(:exchange_rates_provider)
 
-      ExchangeRate.find_rate_or_fetch from: "USD", to: "MXN", date: Date.current
+    with_env_overrides SYNTH_API_KEY: nil do
+      assert_nil ExchangeRate.exchange_rates_provider
     end
   end
 
-  test "provided rates are saved to the db" do
-    with_env_overrides SYNTH_API_KEY: "true" do
-      VCR.use_cassette "synth_exchange_rate" do
-        assert_difference "ExchangeRate.count", 1 do
-          ExchangeRate.find_rate_or_fetch from: "USD", to: "MXN", date: Date.current
-        end
-      end
+  test "finds single rate in DB" do
+    @provider.expects(:fetch_exchange_rate).never
+
+    rate = exchange_rates(:one)
+
+    assert_equal exchange_rates(:one), ExchangeRate.find_rate(from: rate.from_currency, to: rate.to_currency, date: rate.date)
+  end
+
+  test "finds single rate from provider and caches to DB" do
+    expected_rate = 1.21
+    @provider.expects(:fetch_exchange_rate).once.returns(OpenStruct.new(success?: true, rate: expected_rate))
+
+    fetched_rate = ExchangeRate.find_rate(from: "USD", to: "EUR", date: Date.current, cache: true)
+    refetched_rate = ExchangeRate.find_rate(from: "USD", to: "EUR", date: Date.current, cache: true)
+
+    assert_equal expected_rate, fetched_rate.rate
+    assert_equal expected_rate, refetched_rate.rate
+  end
+
+  test "nil if rate is not found in DB and provider throws an error" do
+    @provider.expects(:fetch_exchange_rate).with(from: "USD", to: "EUR", date: Date.current).once.returns(OpenStruct.new(success?: false))
+
+    assert_nil ExchangeRate.find_rate(from: "USD", to: "EUR", date: Date.current)
+  end
+
+  test "nil if rate is not found in DB and provider is disabled" do
+    ExchangeRate.unstub(:exchange_rates_provider)
+
+    with_env_overrides SYNTH_API_KEY: nil do
+      assert_nil ExchangeRate.find_rate(from: "USD", to: "EUR", date: Date.current)
     end
   end
 
-  test "retrying, then raising on provider error" do
-    with_env_overrides SYNTH_API_KEY: "true" do
-      Faraday.expects(:get).returns(OpenStruct.new(success?: false)).times(3)
+  test "finds multiple rates in DB" do
+    @provider.expects(:fetch_exchange_rate).never
 
-      error = assert_raises Provider::Base::ProviderError do
-        ExchangeRate.find_rate_or_fetch from: "USD", to: "MXN", date: Date.current
-      end
+    rate1 = exchange_rates(:one) # EUR -> GBP, today
+    rate2 = exchange_rates(:two) # EUR -> GBP, yesterday
 
-      assert_match "Failed to fetch exchange rate from Provider::Synth", error.message
-    end
+    fetched_rates = ExchangeRate.find_rates(from: rate1.from_currency, to: rate1.to_currency, start_date: 1.day.ago.to_date).sort_by(&:date)
+
+    assert_equal rate1, fetched_rates[1]
+    assert_equal rate2, fetched_rates[0]
   end
 
-  test "retrying, then raising on network error" do
-    with_env_overrides SYNTH_API_KEY: "true" do
-      Faraday.expects(:get).raises(Faraday::TimeoutError).times(3)
+  test "finds multiple rates from provider and caches to DB" do
+    @provider.expects(:fetch_exchange_rate).with(from: "EUR", to: "USD", date: 1.day.ago.to_date).returns(OpenStruct.new(success?: true, rate: 1.1)).once
+    @provider.expects(:fetch_exchange_rate).with(from: "EUR", to: "USD", date: Date.current).returns(OpenStruct.new(success?: true, rate: 1.2)).once
 
-      assert_raises Faraday::TimeoutError do
-        ExchangeRate.find_rate_or_fetch from: "USD", to: "MXN", date: Date.current
-      end
+    fetched_rates = ExchangeRate.find_rates(from: "EUR", to: "USD", start_date: 1.day.ago.to_date, cache: true)
+    refetched_rates = ExchangeRate.find_rates(from: "EUR", to: "USD", start_date: 1.day.ago.to_date)
+
+    assert_equal [ 1.1, 1.2 ], fetched_rates.sort_by(&:date).map(&:rate)
+    assert_equal [ 1.1, 1.2 ], refetched_rates.sort_by(&:date).map(&:rate)
+  end
+
+  test "finds missing db rates from provider and appends to results" do
+    @provider.expects(:fetch_exchange_rate).with(from: "EUR", to: "GBP", date: 2.days.ago.to_date).returns(OpenStruct.new(success?: true, rate: 1.1)).once
+
+    rate1 = exchange_rates(:one) # EUR -> GBP, today
+    rate2 = exchange_rates(:two) # EUR -> GBP, yesterday
+
+    fetched_rates = ExchangeRate.find_rates(from: "EUR", to: "GBP", start_date: 2.days.ago.to_date, cache: true)
+    refetched_rates = ExchangeRate.find_rates(from: "EUR", to: "GBP", start_date: 2.days.ago.to_date)
+
+    assert_equal [ 1.1, rate2.rate, rate1.rate ], fetched_rates.sort_by(&:date).map(&:rate)
+    assert_equal [ 1.1, rate2.rate, rate1.rate ], refetched_rates.sort_by(&:date).map(&:rate)
+  end
+
+  test "returns empty array if no rates found in DB or provider" do
+    ExchangeRate.unstub(:exchange_rates_provider)
+
+    with_env_overrides SYNTH_API_KEY: nil do
+      assert_equal [], ExchangeRate.find_rates(from: "USD", to: "JPY", start_date: 10.days.ago.to_date)
     end
   end
 end
