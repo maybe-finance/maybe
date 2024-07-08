@@ -8,7 +8,6 @@
     <p class="text-gray-500 text-sm"><%= t(".description") %></p>
   </div>
 
-  
   <%= form_with model: @import, url: load_import_path(@import) do |form| %>
   <div data-controller="tabs" data-tabs-active-class="bg-white border-alpha-black-25 shadow-xs text-gray-900" data-tabs-default-tab-value="csv-file">
     <div class="bg-gray-25 w-fit rounded-lg p-1 flex gap-1 text-sm text-gray-500 font-medium mx-auto mb-4">
@@ -21,7 +20,7 @@
                               required: true,
                               id: "raw_csv_text_area",
                               placeholder: "Paste your CSV file contents here",
-                              class: "rounded-md w-full border text-sm border-alpha-black-100 bg-white placeholder:text-gray-400 p-4"%>
+                              class: "rounded-md w-full border text-sm border-alpha-black-100 bg-white placeholder:text-gray-400 p-4" %>
     </div>
     <div data-tabs-target="tab" id="csv-file" class="space-y-6 hidden">
       <%= render "shared/dropzone", body_text: t(".drag_and_drop_csv"), upload_url: load_csv_file_import_url(@import) %>

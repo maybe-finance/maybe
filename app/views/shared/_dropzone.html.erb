@@ -1,6 +1,6 @@
 <%# locals: (body_text:, upload_url:) %>
 
-<% body_text = local_assigns[:body_text].nil? ? t(".drag_and_drop_default") : local_assigns[:body_text]  %>
+<% body_text = local_assigns[:body_text].nil? ? t(".drag_and_drop_default") : local_assigns[:body_text] %>
 <% upload_url = local_assigns[:upload_url] %>
 <div class="w-full">
     <div id="dropzone" data-controller="dropzone" data-action="click->dropzone#trigger drop->dropzone#acceptFiles" data-dropzone-drag-over-class="dropzone-drag-over" data-dropzone-url-value="<%= upload_url %>">
@@ -9,12 +9,12 @@
         class="rounded-md w-full bg-muted border border-dashed border-gray-300 h-60 px-20 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" type="button">
         <div id="ready-dropzone" class="w-4/5 mx-auto" data-dropzone-target="readyWrapper">
           <%= lucide_icon("plus", class: "mx-auto w-5 h-5 text-gray-500") %>
-          <p><span class="mt-3 text-gray-500"><%= body_text %></span><span> <%= t(".click_to_browse")%></span></p>
+          <p><span class="mt-3 text-gray-500"><%= body_text %></span><span> <%= t(".click_to_browse") %></span></p>
         </div>
         <div id="error-dropzone" class="w-4/5 mx-auto hidden" data-dropzone-target="errorWrapper">
           <%= lucide_icon("x", class: "mx-auto w-6 h-6 p-1 text-white bg-red-600 rounded-full") %>
-          <p class="mt-3"><%= t(".error.title")%></p><p class="text-gray-500"> <%= t(".error.body")%></p>
-          <p class="text-as-button mx-auto mt-7" data-dropzone-target="tryAgainButton"><%= t(".error.try_again")%></p>
+          <p class="mt-3"><%= t(".error.title") %></p><p class="text-gray-500"> <%= t(".error.body") %></p>
+          <p class="text-as-button mx-auto mt-7" data-dropzone-target="tryAgainButton"><%= t(".error.try_again") %></p>
         </div>
         <div id="progress-dropzone" data-dropzone-target="progressWrapper" class="hidden">
           <%= lucide_icon("check", class: "hidden w-6 h-6 p-1 text-white bg-success rounded-full mx-auto", data: { "dropzone-target": "successIcon" }) %>
