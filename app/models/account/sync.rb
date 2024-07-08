@@ -1,7 +1,4 @@
 class Account::Sync < ApplicationRecord
-  class SyncError < StandardError
-  end
-
   belongs_to :account
 
   enum :status, { pending: "pending", syncing: "syncing", completed: "completed", failed: "failed" }
@@ -22,14 +19,22 @@ class Account::Sync < ApplicationRecord
     sync_balances
 
     complete!
-  rescue SyncError => error
+  rescue StandardError => error
     fail! error
   end
 
   private
 
     def sync_balances
-      Account::Balance::Syncer.new(account, start_date: start_date).run
+      syncer = Account::Balance::Syncer.new(account, start_date: start_date).run
+
+      append_warnings(syncer.warnings)
+
+      raise syncer.error if syncer.error
+    end
+
+    def append_warnings(new_warnings)
+      update! warnings: warnings + new_warnings
     end
 
     def start!

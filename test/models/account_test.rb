@@ -3,7 +3,7 @@ require "test_helper"
 class AccountTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
-  def setup
+  setup do
     @account = accounts(:checking)
     @family = families(:dylan_family)
   end
@@ -68,20 +68,26 @@ class AccountTest < ActiveSupport::TestCase
     assert_equal 1, other_liabilities.children.count
   end
 
-  test "generates series with last balance equal to current account balance" do
-    # If account hasn't been synced, series falls back to a single point with the current balance
-    assert_equal @account.balance_money, @account.series.last.value
-
-    @account.sync
-
-    # Synced series will always have final balance equal to the current account balance
-    assert_equal @account.balance_money, @account.series.last.value
+  test "generates balance series" do
+    assert_equal 2, @account.series.values.count
   end
 
-  test "generates empty series for foreign currency if no exchange rate" do
+  test "generates balance series with single value if no balances" do
+    assert_equal 1, accounts(:savings).series.values.count
+  end
+
+  test "generates balance series in period" do
+    assert_equal 2, @account.series(period: Period.last_30_days).values.count
+
+    @account.balances.create! date: 31.days.ago.to_date, balance: 5000, currency: "USD" # out of period range
+    @account.balances.create! date: 30.days.ago.to_date, balance: 5000, currency: "USD" # in range
+
+    assert_equal 3, @account.series(period: Period.last_30_days).values.count
+  end
+
+  test "generates empty series if no balances and no exchange rate" do
     account = accounts(:eur_checking)
 
-    # We know EUR -> NZD exchange rate is not available in fixtures
     assert_equal 0, account.series(currency: "NZD").values.count
   end
 end
