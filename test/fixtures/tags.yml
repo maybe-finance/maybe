@@ -1,11 +1,7 @@
-trips:
+one:
   name: Trips
   family: dylan_family
 
-hawaii_trip:
-  name: Hawaii Trip
-  family: dylan_family
-
-emergency_fund:
-  name: Emergency Fund
+two:
+  name: Emergency fund
   family: dylan_family

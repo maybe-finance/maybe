@@ -105,6 +105,6 @@ class Family < ApplicationRecord
   end
 
   def sync(start_date: nil)
-    accounts.active.each { |a| a.sync_later(start_date: start_date) }
+    accounts.active.sync(start_date: start_date)
   end
 end

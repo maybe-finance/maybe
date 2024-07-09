@@ -73,6 +73,11 @@ class Account < ApplicationRecord
     end
   end
 
+  def alert
+    latest_sync = syncs.latest
+    [ latest_sync&.error, *latest_sync&.warnings ].compact.first
+  end
+
   def favorable_direction
     classification == "asset" ? "up" : "down"
   end

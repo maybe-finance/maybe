@@ -33,7 +33,7 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
   test "can sync all accounts" do
     post sync_all_accounts_path
     assert_redirected_to accounts_url
-    assert_equal "Successfully queued #{ @user.family.accounts.size } accounts for syncing.", flash[:notice]
+    assert_equal "Successfully queued accounts for syncing.", flash[:notice]
   end
 
   test "should update account" do
