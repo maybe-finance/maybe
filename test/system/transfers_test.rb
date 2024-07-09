@@ -64,7 +64,7 @@ class TransfersTest < ApplicationSystemTestCase
     txn = @user.family.entries.reverse_chronological.first
 
     within "#" + dom_id(txn) do
-      assert_text "Uncategorized"
+      assert_text txn.account_transaction.category.name || "Uncategorized"
     end
 
     transaction_entry_checkbox(txn).check
