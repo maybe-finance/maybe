@@ -23,7 +23,7 @@ gem "stimulus-rails"
 gem "turbo-rails"
 
 # Background Jobs
-gem "good_job"
+gem "good_job", "3.99"
 
 # Error logging
 gem "stackprof"
