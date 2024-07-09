@@ -33,7 +33,7 @@ class Account::Entry < ApplicationRecord
       sync_start_date = [ date_previously_was, date ].compact.min
     end
 
-    account.sync_later(sync_start_date)
+    account.sync_later(start_date: sync_start_date)
   end
 
   def inflow?
@@ -122,19 +122,17 @@ class Account::Entry < ApplicationRecord
     end
 
     def income_total(currency = "USD")
-      account_transactions.includes(:entryable)
+      without_transfers.account_transactions.includes(:entryable)
                           .where("account_entries.amount <= 0")
-                          .where("account_entries.currency = ?", currency)
-        .reject { |e| e.marked_as_transfer? }
-                          .sum(&:amount_money)
+                       .map { |e| e.amount_money.exchange_to(currency, date: e.date, fallback_rate: 0) }
+                       .sum
     end
 
     def expense_total(currency = "USD")
-      account_transactions.includes(:entryable)
-                          .where("account_entries.amount > 0")
-                          .where("account_entries.currency = ?", currency)
-        .reject { |e| e.marked_as_transfer? }
-                          .sum(&:amount_money)
+      without_transfers.account_transactions.includes(:entryable)
+                       .where("account_entries.amount > 0")
+                       .map { |e| e.amount_money.exchange_to(currency, date: e.date, fallback_rate: 0) }
+                       .sum
     end
 
     def search(params)

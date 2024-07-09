@@ -14,7 +14,7 @@ income_transaction:
   currency: USD
   account: checking
   entryable_type: Account::Transaction
-  entryable: expense
+  entryable: income
 
 transfer_out:
   name: Payment to credit card account
