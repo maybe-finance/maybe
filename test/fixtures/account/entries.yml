@@ -1,11 +1,42 @@
-transaction:
+expense_transaction:
   name: Starbucks
-  date: <%= 2.days.ago.to_date %>
-  amount: 8.75
+  date: <%= 1.day.ago.to_date %>
+  amount: 10
   currency: USD
   account: checking
   entryable_type: Account::Transaction
-  entryable: one
+  entryable: expense
+
+income_transaction:
+  name: Paycheck
+  date: <%= 2.days.ago.to_date %>
+  amount: -1500
+  currency: USD
+  account: checking
+  entryable_type: Account::Transaction
+  entryable: expense
+
+transfer_out:
+  name: Payment to credit card account
+  date: <%= 3.days.ago.to_date %>
+  amount: 100
+  currency: USD
+  account: checking
+  marked_as_transfer: true
+  transfer: one
+  entryable_type: Account::Transaction
+  entryable: transfer_out
+
+transfer_in:
+  name: Payment received from checking account
+  date: <%= 3.days.ago.to_date %>
+  amount: -100
+  currency: USD
+  account: credit_card
+  marked_as_transfer: true
+  transfer: one
+  entryable_type: Account::Transaction
+  entryable: transfer_in
 
 valuation:
   name: Manual valuation

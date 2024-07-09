@@ -25,20 +25,6 @@ class AccountTest < ActiveSupport::TestCase
     @account.sync start_date: start_date
   end
 
-  test "recognizes foreign currency account" do
-    regular_account = accounts(:checking)
-    foreign_account = accounts(:eur_checking)
-    assert_not regular_account.foreign_currency?
-    assert foreign_account.foreign_currency?
-  end
-
-  test "recognizes multi currency account" do
-    regular_account = accounts(:checking)
-    multi_currency_account = accounts(:multi_currency)
-    assert_not regular_account.multi_currency?
-    assert multi_currency_account.multi_currency?
-  end
-
   test "groups accounts by type" do
     result = @family.accounts.by_group(period: Period.all)
     assets = result[:assets]

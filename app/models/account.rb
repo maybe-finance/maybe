@@ -14,10 +14,10 @@ class Account < ApplicationRecord
   has_many :valuations, through: :entries, source: :entryable, source_type: "Account::Valuation"
   has_many :balances, dependent: :destroy
   has_many :imports, dependent: :destroy
+  has_many :syncs, dependent: :destroy
 
   monetize :balance
 
-  enum :status, { ok: "ok", syncing: "syncing", error: "error" }, validate: true
   enum :classification, { asset: "asset", liability: "liability" }, validate: { allow_nil: true }
 
   scope :active, -> { where(is_active: true) }
@@ -73,22 +73,8 @@ class Account < ApplicationRecord
     end
   end
 
-  def balance_on(date)
-    balances.where("date <= ?", date).order(date: :desc).first&.balance
-  end
-
   def favorable_direction
     classification == "asset" ? "up" : "down"
-  end
-
-  # e.g. Wise, Revolut accounts that have transactions in multiple currencies
-  def multi_currency?
-    entries.select(:currency).distinct.count > 1
-  end
-
-  # e.g. Accounts denominated in currency other than family currency
-  def foreign_currency?
-    currency != family.currency
   end
 
   def series(period: Period.all, currency: self.currency)

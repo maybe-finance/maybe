@@ -10,5 +10,9 @@ class CreateAccountSyncs < ActiveRecord::Migration[7.2]
 
       t.timestamps
     end
+
+    remove_column :accounts, :status, :string
+    remove_column :accounts, :sync_warnings, :jsonb
+    remove_column :accounts, :sync_errors, :jsonb
   end
 end

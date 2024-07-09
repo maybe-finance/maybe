@@ -26,11 +26,11 @@ class Account::Sync < ApplicationRecord
   private
 
     def sync_balances
-      syncer = Account::Balance::Syncer.new(account, start_date: start_date).run
+      syncer = Account::Balance::Syncer.new(account, start_date: start_date)
+
+      syncer.run
 
       append_warnings(syncer.warnings)
-
-      raise syncer.error if syncer.error
     end
 
     def append_warnings(new_warnings)
@@ -38,7 +38,7 @@ class Account::Sync < ApplicationRecord
     end
 
     def start!
-      update! status: "syncing"
+      update! status: "syncing", last_ran_at: Time.now
     end
 
     def complete!

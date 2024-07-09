@@ -92,9 +92,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_07_07_130331) do
     t.decimal "balance", precision: 19, scale: 4, default: "0.0"
     t.string "currency", default: "USD"
     t.boolean "is_active", default: true, null: false
-    t.enum "status", default: "ok", null: false, enum_type: "account_status"
-    t.jsonb "sync_warnings", default: [], null: false
-    t.jsonb "sync_errors", default: [], null: false
     t.date "last_sync_date"
     t.uuid "institution_id"
     t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Loan'::character varying, 'CreditCard'::character varying, 'OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
