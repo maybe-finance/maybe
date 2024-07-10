@@ -178,6 +178,8 @@ GEM
     erubi (1.13.0)
     et-orbi (1.2.11)
       tzinfo
+    faker (3.4.1)
+      i18n (>= 1.8.11, < 2)
     faraday (2.9.2)
       faraday-net_http (>= 2.0, < 3.2)
     faraday-net_http (3.1.0)
@@ -470,6 +472,7 @@ DEPENDENCIES
   debug
   dotenv-rails
   erb_lint
+  faker
   faraday
   faraday-retry
   good_job
