@@ -20,7 +20,7 @@ class CategoryTest < ActiveSupport::TestCase
   end
 
   test "updating name should clear the internal_category field" do
-    category = Category.take
+    category = categories(:income)
     assert_changes "category.reload.internal_category", to: nil do
       category.update_attribute(:name, "new name")
     end

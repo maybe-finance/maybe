@@ -1,3 +1,7 @@
+one:
+  name: Test
+  family: empty
+
 income:
   name: Income
   internal_category: income

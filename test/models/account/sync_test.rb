@@ -2,7 +2,7 @@ require "test_helper"
 
 class Account::SyncTest < ActiveSupport::TestCase
   setup do
-    @account = accounts(:checking)
+    @account = accounts(:depository)
 
     @sync = Account::Sync.for(@account)
     @balance_syncer = mock("Account::Balance::Syncer")

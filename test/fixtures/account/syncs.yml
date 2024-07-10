@@ -1,5 +1,5 @@
 one:
-  account: checking
+  account: depository
   status: failed
   start_date: 2024-07-07
   last_ran_at: 2024-07-07 09:03:31
@@ -7,7 +7,7 @@ one:
   warnings: [ "test warning 1", "test warning 2" ]
 
 two:
-  account: brokerage
+  account: investment
   status: completed
   start_date: 2024-07-07
   last_ran_at: 2024-07-07 09:03:32

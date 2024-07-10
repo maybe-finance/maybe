@@ -1,9 +1,6 @@
-expense:
+one:
   category: food_and_drink
   merchant: amazon
-
-income:
-  category: income
 
 transfer_out: { }
 transfer_in: { }

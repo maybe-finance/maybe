@@ -1,10 +1,10 @@
 one:
   tag: one
-  taggable: expense
+  taggable: one
   taggable_type: Account::Transaction
 
 two:
   tag: two
-  taggable: income
+  taggable: one
   taggable_type: Account::Transaction
 

@@ -14,8 +14,8 @@ class Account::TransfersControllerTest < ActionDispatch::IntegrationTest
     assert_difference "Account::Transfer.count", 1 do
       post account_transfers_url, params: {
         account_transfer: {
-          from_account_id: accounts(:checking).id,
-          to_account_id: accounts(:savings).id,
+          from_account_id: accounts(:depository).id,
+          to_account_id: accounts(:credit_card).id,
           date: Date.current,
           amount: 100,
           currency: "USD",

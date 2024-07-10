@@ -1,9 +1,11 @@
 require "test_helper"
 
 class TransactionsControllerTest < ActionDispatch::IntegrationTest
+  include Account::EntriesTestHelper
+
   setup do
     sign_in @user = users(:family_admin)
-    @transaction = account_entries(:expense_transaction)
+    @transaction = account_entries(:transaction)
   end
 
   test "should get new" do
@@ -84,30 +86,37 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "transaction count represents filtered total" do
-    clear_entries_and_create_transactions
+    family = families(:empty)
+    sign_in family.users.first
+    account = family.accounts.create! name: "Test", balance: 0, accountable: Depository.new
+
+    3.times do
+      create_transaction(account: account)
+    end
 
     get transactions_url(per_page: 10)
 
-    assert_dom "#total-transactions", count: 1, text: @transactions.select { |t| t.currency == "USD" }.count.to_s
+    assert_dom "#total-transactions", count: 1, text: family.entries.account_transactions.size.to_s
 
-    new_transaction = accounts(:savings).entries.create! \
-      entryable: Account::Transaction.new,
-      name: "Transaction to search for",
-      date: Date.current,
-      amount: 0,
-      currency: "USD"
+    searchable_transaction = create_transaction(account: account, name: "Unique test name")
 
-    get transactions_url(q: { search: new_transaction.name })
+    get transactions_url(q: { search: searchable_transaction.name })
 
     # Only finds 1 transaction that matches filter
-    assert_dom "#" + dom_id(new_transaction), count: 1
+    assert_dom "#" + dom_id(searchable_transaction), count: 1
     assert_dom "#total-transactions", count: 1, text: "1"
   end
 
   test "can paginate" do
-    clear_entries_and_create_transactions
+    family = families(:empty)
+    sign_in family.users.first
+    account = family.accounts.create! name: "Test", balance: 0, accountable: Depository.new
 
-    sorted_transactions = @transactions.reverse_chronological
+    11.times do
+      create_transaction(account: account)
+    end
+
+    sorted_transactions = family.entries.account_transactions.reverse_chronological.to_a
 
     assert_equal 11, sorted_transactions.count
 
@@ -144,12 +153,12 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "can update many transactions at once" do
-    clear_entries_and_create_transactions
+    transactions = @user.family.entries.account_transactions
 
     assert_difference [ "Account::Entry.count", "Account::Transaction.count" ], 0 do
       post bulk_update_transactions_url, params: {
         bulk_update: {
-          entry_ids: @transactions.map(&:id),
+          entry_ids: transactions.map(&:id),
           date: 1.day.ago.to_date,
           category_id: Category.second.id,
           merchant_id: Merchant.second.id,
@@ -159,32 +168,13 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to transactions_url
-    assert_equal "#{@transactions.count} transactions updated", flash[:notice]
+    assert_equal "#{transactions.count} transactions updated", flash[:notice]
 
-    @transactions.reload.each do |transaction|
+    transactions.reload.each do |transaction|
       assert_equal 1.day.ago.to_date, transaction.date
       assert_equal Category.second, transaction.account_transaction.category
       assert_equal Merchant.second, transaction.account_transaction.merchant
       assert_equal "Updated note", transaction.account_transaction.notes
     end
   end
-
-  private
-
-    def clear_entries_and_create_transactions
-      Account::Entry.delete_all # blank slate
-
-      account = accounts(:savings)
-
-      (10.days.ago.to_date..Date.current).each do |date|
-        account.entries.create! \
-          name: "txn",
-          date: date,
-          amount: 100,
-          currency: "USD",
-          entryable: Account::Transaction.new
-      end
-
-      @transactions = account.entries.account_transactions
-    end
 end

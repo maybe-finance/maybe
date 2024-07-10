@@ -2,22 +2,8 @@ require "test_helper"
 
 class Account::TransferTest < ActiveSupport::TestCase
   setup do
-    # Transfers can be posted on different dates
-    @outflow = accounts(:checking).entries.create! \
-      date: 1.day.ago.to_date,
-      name: "Transfer to Savings",
-      amount: 100,
-      currency: "USD",
-      marked_as_transfer: true,
-      entryable: Account::Transaction.new
-
-    @inflow = accounts(:savings).entries.create! \
-      date: Date.current,
-      name: "Transfer from Savings",
-      amount: -100,
-      currency: "USD",
-      marked_as_transfer: true,
-      entryable: Account::Transaction.new
+    @outflow = account_entries(:transfer_out)
+    @inflow = account_entries(:transfer_in)
   end
 
   test "transfer valid if it has inflow and outflow from different accounts for the same amount" do
@@ -28,14 +14,15 @@ class Account::TransferTest < ActiveSupport::TestCase
 
   test "transfer must have 2 transactions" do
     invalid_transfer_1 = Account::Transfer.new entries: [ @outflow ]
-    invalid_transfer_2 = Account::Transfer.new entries: [ @inflow, @outflow, account_entries(:expense_transaction) ]
+    invalid_transfer_2 = Account::Transfer.new entries: [ @inflow, @outflow, account_entries(:transaction) ]
 
     assert invalid_transfer_1.invalid?
     assert invalid_transfer_2.invalid?
   end
 
   test "transfer cannot have 2 transactions from the same account" do
-    account = accounts(:checking)
+    account = accounts(:depository)
+
     inflow = account.entries.create! \
       date: Date.current,
       name: "Inflow",

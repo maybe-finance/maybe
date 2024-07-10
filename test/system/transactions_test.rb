@@ -153,7 +153,7 @@ class TransactionsTest < ApplicationSystemTestCase
   private
 
     def create_transaction(name, date, amount, category: nil, merchant: nil, tags: [])
-      account = accounts(:checking)
+      account = accounts(:depository)
 
       account.entries.create! \
         name: name,

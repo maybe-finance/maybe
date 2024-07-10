@@ -1,27 +1,27 @@
-expense_transaction:
+valuation:
+  name: Manual valuation
+  date: <%= 4.days.ago.to_date %>
+  amount: 4995
+  currency: USD
+  account: depository
+  entryable_type: Account::Valuation
+  entryable: one
+
+transaction:
   name: Starbucks
   date: <%= 1.day.ago.to_date %>
   amount: 10
   currency: USD
-  account: checking
+  account: depository
   entryable_type: Account::Transaction
-  entryable: expense
-
-income_transaction:
-  name: Paycheck
-  date: <%= 2.days.ago.to_date %>
-  amount: -1500
-  currency: USD
-  account: checking
-  entryable_type: Account::Transaction
-  entryable: income
+  entryable: one
 
 transfer_out:
   name: Payment to credit card account
   date: <%= 3.days.ago.to_date %>
   amount: 100
   currency: USD
-  account: checking
+  account: depository
   marked_as_transfer: true
   transfer: one
   entryable_type: Account::Transaction
@@ -37,12 +37,3 @@ transfer_in:
   transfer: one
   entryable_type: Account::Transaction
   entryable: transfer_in
-
-valuation:
-  name: Manual valuation
-  date: <%= 4.days.ago.to_date %>
-  amount: 4995
-  currency: USD
-  account: checking
-  entryable_type: Account::Valuation
-  entryable: one

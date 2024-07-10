@@ -3,7 +3,7 @@ require "test_helper"
 class Account::EntriesControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
-    @transaction = account_entries :expense_transaction
+    @transaction = account_entries :transaction
     @valuation = account_entries :valuation
   end
 

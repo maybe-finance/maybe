@@ -7,8 +7,8 @@ class TransfersTest < ApplicationSystemTestCase
   end
 
   test "can create a transfer" do
-    checking_name = accounts(:checking).name
-    savings_name = accounts(:savings).name
+    checking_name = accounts(:depository).name
+    savings_name = accounts(:credit_card).name
     transfer_date = Date.current
 
     click_on "New transaction"
@@ -32,15 +32,15 @@ class TransfersTest < ApplicationSystemTestCase
 
   test "can match 2 transactions and create a transfer" do
     transfer_date = Date.current
-    outflow = accounts(:savings).entries.create! \
-      name: "Outflow from savings account",
+    outflow = accounts(:depository).entries.create! \
+      name: "Outflow from checking account",
       date: transfer_date,
       amount: 100,
       currency: "USD",
       entryable: Account::Transaction.new
 
-    inflow = accounts(:checking).entries.create! \
-      name: "Inflow to checking account",
+    inflow = accounts(:credit_card).entries.create! \
+      name: "Inflow to cc account",
       date: transfer_date,
       amount: -100,
       currency: "USD",

@@ -4,7 +4,7 @@ class AccountTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
   setup do
-    @account = accounts(:checking)
+    @account = accounts(:depository)
     @family = families(:dylan_family)
   end
 
@@ -43,7 +43,7 @@ class AccountTest < ActiveSupport::TestCase
     loans = liabilities.children.find { |group| group.name == "Loan" }
     other_liabilities = liabilities.children.find { |group| group.name == "OtherLiability" }
 
-    assert_equal 4, depositories.children.count
+    assert_equal 1, depositories.children.count
     assert_equal 1, properties.children.count
     assert_equal 1, vehicles.children.count
     assert_equal 1, investments.children.count
@@ -59,21 +59,19 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test "generates balance series with single value if no balances" do
-    assert_equal 1, accounts(:savings).series.values.count
+    @account.balances.delete_all
+    assert_equal 1, @account.series.values.count
   end
 
   test "generates balance series in period" do
-    assert_equal 2, @account.series(period: Period.last_30_days).values.count
-
+    @account.balances.delete_all
     @account.balances.create! date: 31.days.ago.to_date, balance: 5000, currency: "USD" # out of period range
     @account.balances.create! date: 30.days.ago.to_date, balance: 5000, currency: "USD" # in range
 
-    assert_equal 3, @account.series(period: Period.last_30_days).values.count
+    assert_equal 1, @account.series(period: Period.last_30_days).values.count
   end
 
   test "generates empty series if no balances and no exchange rate" do
-    account = accounts(:eur_checking)
-
-    assert_equal 0, account.series(currency: "NZD").values.count
+    assert_equal 0, @account.series(currency: "NZD").values.count
   end
 end
