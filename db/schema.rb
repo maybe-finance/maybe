@@ -48,6 +48,18 @@ ActiveRecord::Schema[7.2].define(version: 2024_07_09_152243) do
     t.index ["transfer_id"], name: "index_account_entries_on_transfer_id"
   end
 
+  create_table "account_syncs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "account_id", null: false
+    t.string "status", default: "pending", null: false
+    t.date "start_date"
+    t.datetime "last_ran_at"
+    t.string "error"
+    t.text "warnings", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_account_syncs_on_account_id"
+  end
+
   create_table "account_transactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -80,12 +92,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_07_09_152243) do
     t.decimal "balance", precision: 19, scale: 4, default: "0.0"
     t.string "currency", default: "USD"
     t.boolean "is_active", default: true, null: false
-    t.enum "status", default: "ok", null: false, enum_type: "account_status"
-    t.jsonb "sync_warnings", default: [], null: false
-    t.jsonb "sync_errors", default: [], null: false
     t.date "last_sync_date"
     t.uuid "institution_id"
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Loan'::character varying)::text, ('CreditCard'::character varying)::text, ('OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Loan'::character varying, 'CreditCard'::character varying, 'OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id"], name: "index_accounts_on_family_id"
     t.index ["institution_id"], name: "index_accounts_on_institution_id"
@@ -364,6 +373,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_07_09_152243) do
   add_foreign_key "account_balances", "accounts", on_delete: :cascade
   add_foreign_key "account_entries", "account_transfers", column: "transfer_id"
   add_foreign_key "account_entries", "accounts"
+  add_foreign_key "account_syncs", "accounts"
   add_foreign_key "account_transactions", "categories", on_delete: :nullify
   add_foreign_key "account_transactions", "merchants"
   add_foreign_key "accounts", "families"

@@ -1,31 +1,23 @@
-collectable:
+other_asset:
   family: dylan_family
   name: Collectable Account
   balance: 550
   accountable_type: OtherAsset
-  accountable: other_asset_collectable
+  accountable: one
 
-iou:
+other_liability:
   family: dylan_family
   name: IOU (personal debt to friend)
   balance: 200
   accountable_type: OtherLiability
-  accountable: other_liability_iou
+  accountable: one
 
-checking:
+depository:
   family: dylan_family
   name: Checking Account
   balance: 5000
   accountable_type: Depository
-  accountable: depository_checking
-  institution: chase
-
-savings:
-  family: dylan_family
-  name: Savings account
-  balance: 19700
-  accountable_type: Depository
-  accountable: depository_savings
+  accountable: one
   institution: chase
 
 credit_card:
@@ -33,56 +25,37 @@ credit_card:
   name: Credit Card
   balance: 1000
   accountable_type: CreditCard
-  accountable: credit_one
+  accountable: one
   institution: chase
 
-eur_checking:
-  family: dylan_family
-  name: Euro Checking Account
-  currency: EUR
-  balance: 12000
-  accountable_type: Depository
-  accountable: depository_eur_checking
-  institution: revolut
-
-# Multi-currency account (e.g. Wise, Revolut, etc.)
-multi_currency:
-  family: dylan_family
-  name: Multi Currency Account
-  currency: USD # multi-currency accounts still have a "primary" currency
-  balance: 9467
-  accountable_type: Depository
-  accountable: depository_multi_currency
-  institution: revolut
-
-brokerage:
+investment:
   family: dylan_family
   name: Robinhood Brokerage Account
   currency: USD
   balance: 10000
   accountable_type: Investment
-  accountable: investment_brokerage
+  accountable: one
 
-mortgage_loan:
+loan:
   family: dylan_family
   name: Mortgage Loan
   currency: USD
   balance: 500000
   accountable_type: Loan
-  accountable: loan_mortgage
+  accountable: one
 
-house:
+property:
   family: dylan_family
   name: 123 Maybe Court
   currency: USD
   balance: 550000
   accountable_type: Property
-  accountable: property_house
+  accountable: one
 
-car:
+vehicle:
   family: dylan_family
   name: Honda Accord
   currency: USD
   balance: 18000
   accountable_type: Vehicle
-  accountable: vehicle_honda_accord
+  accountable: one

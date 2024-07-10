@@ -2,144 +2,148 @@ require "test_helper"
 require "csv"
 
 class FamilyTest < ActiveSupport::TestCase
-  include FamilySnapshotTestHelper
+  include Account::EntriesTestHelper
 
   def setup
-    @family = families(:dylan_family)
-
-    required_exchange_rates_for_family = [
-      1.0834, 1.0845, 1.0819, 1.0872, 1.0788, 1.0743, 1.0755, 1.0774,
-      1.0778, 1.0783, 1.0773, 1.0709, 1.0729, 1.0773, 1.0778, 1.078,
-      1.0809, 1.0818, 1.0824, 1.0822, 1.0854, 1.0845, 1.0839, 1.0807,
-      1.084, 1.0856, 1.0858, 1.0898, 1.095, 1.094, 1.0926, 1.0986
-    ]
-
-    required_exchange_rates_for_family.each_with_index do |exchange_rate, idx|
-      ExchangeRate.create! date: idx.days.ago.to_date, from_currency: "EUR", to_currency: "USD", rate: exchange_rate
-    end
-
-    @family.accounts.each do |account|
-      account.sync
-    end
+    @family = families :empty
   end
 
-  test "should have many users" do
-    assert @family.users.size > 0
-    assert @family.users.include?(users(:family_admin))
+  test "calculates assets" do
+    assert_equal Money.new(0, @family.currency), @family.assets
+
+    @family.accounts.create!(balance: 1000, accountable: Depository.new)
+    @family.accounts.create!(balance: 5000, accountable: OtherAsset.new)
+    @family.accounts.create!(balance: 10000, accountable: CreditCard.new) # ignored
+
+    assert_equal Money.new(1000 + 5000, @family.currency), @family.assets
   end
 
-  test "should have many accounts" do
-    assert @family.accounts.size > 0
+  test "calculates liabilities" do
+    assert_equal Money.new(0, @family.currency), @family.liabilities
+
+    @family.accounts.create!(balance: 1000, accountable: CreditCard.new)
+    @family.accounts.create!(balance: 5000, accountable: OtherLiability.new)
+    @family.accounts.create!(balance: 10000, accountable: Depository.new) # ignored
+
+    assert_equal Money.new(1000 + 5000, @family.currency), @family.liabilities
   end
 
-  test "should destroy dependent users" do
-    assert_difference("User.count", -@family.users.count) do
-      @family.destroy
-    end
-  end
+  test "calculates net worth" do
+    assert_equal Money.new(0, @family.currency), @family.net_worth
 
-  test "should destroy dependent accounts" do
-    assert_difference("Account.count", -@family.accounts.count) do
-      @family.destroy
-    end
-  end
+    @family.accounts.create!(balance: 1000, accountable: CreditCard.new)
+    @family.accounts.create!(balance: 50000, accountable: Depository.new)
 
-  test "should destroy dependent transaction categories" do
-    assert_difference("Category.count", -@family.categories.count) do
-      @family.destroy
-    end
-  end
-
-  test "should destroy dependent merchants" do
-    assert_difference("Merchant.count", -@family.merchants.count) do
-      @family.destroy
-    end
-  end
-
-  test "should calculate total assets" do
-    expected = get_today_snapshot_value_for :assets
-    assert_in_delta expected, @family.assets.amount, 0.01
-  end
-
-  test "should calculate total liabilities" do
-    expected = get_today_snapshot_value_for :liabilities
-    assert_in_delta expected, @family.liabilities.amount, 0.01
-  end
-
-  test "should calculate net worth" do
-    expected = get_today_snapshot_value_for :net_worth
-    assert_in_delta expected, @family.net_worth.amount, 0.01
-  end
-
-  test "calculates asset time series" do
-    series = @family.snapshot[:asset_series]
-    expected_series = get_expected_balances_for :assets
-
-    assert_time_series_balances series, expected_series
-  end
-
-  test "calculates liability time series" do
-    series = @family.snapshot[:liability_series]
-    expected_series = get_expected_balances_for :liabilities
-
-    assert_time_series_balances series, expected_series
-  end
-
-  test "calculates net worth time series" do
-    series = @family.snapshot[:net_worth_series]
-    expected_series = get_expected_balances_for :net_worth
-
-    assert_time_series_balances series, expected_series
-  end
-
-  test "calculates rolling expenses" do
-    series = @family.snapshot_transactions[:spending_series]
-    expected_series = get_expected_balances_for :rolling_spend
-
-    assert_time_series_balances series, expected_series, ignore_count: true
-  end
-
-  test "calculates rolling income" do
-    series = @family.snapshot_transactions[:income_series]
-    expected_series = get_expected_balances_for :rolling_income
-
-    assert_time_series_balances series, expected_series, ignore_count: true
-  end
-
-  test "calculates savings rate series" do
-    series = @family.snapshot_transactions[:savings_rate_series]
-    expected_series = get_expected_balances_for :savings_rate
-
-    series.values.each do |tsb|
-      expected_balance = expected_series.find { |eb| eb[:date] == tsb.date }
-      assert_in_delta expected_balance[:balance], tsb.value, 0.0001, "Balance incorrect on date: #{tsb.date}"
-    end
+    assert_equal Money.new(50000 - 1000, @family.currency), @family.net_worth
   end
 
   test "should exclude disabled accounts from calculations" do
-    assets_before = @family.assets
-    liabilities_before = @family.liabilities
-    net_worth_before = @family.net_worth
+    cc = @family.accounts.create!(balance: 1000, accountable: CreditCard.new)
+    @family.accounts.create!(balance: 50000, accountable: Depository.new)
 
-    disabled_checking = accounts(:checking)
-    disabled_cc = accounts(:credit_card)
+    assert_equal Money.new(50000 - 1000, @family.currency), @family.net_worth
 
-    disabled_checking.update!(is_active: false)
-    disabled_cc.update!(is_active: false)
+    cc.update! is_active: false
 
-    assert_equal assets_before - disabled_checking.balance, @family.assets
-    assert_equal liabilities_before - disabled_cc.balance, @family.liabilities
-    assert_equal net_worth_before - disabled_checking.balance + disabled_cc.balance, @family.net_worth
+    assert_equal Money.new(50000, @family.currency), @family.net_worth
   end
 
-  private
+  test "syncs active accounts" do
+    account = @family.accounts.create!(balance: 1000, accountable: CreditCard.new, is_active: false)
 
-    def assert_time_series_balances(time_series_balances, expected_balances, ignore_count: false)
-      assert_equal time_series_balances.values.count, expected_balances.count unless ignore_count
+    Account.any_instance.expects(:sync_later).never
 
-      time_series_balances.values.each do |tsb|
-        expected_balance = expected_balances.find { |eb| eb[:date] == tsb.date }
-        assert_in_delta expected_balance[:balance], tsb.value.amount, 0.01, "Balance incorrect on date: #{tsb.date}"
-      end
-    end
+    @family.sync
+
+    account.update! is_active: true
+
+    Account.any_instance.expects(:sync_later).with(start_date: nil).once
+
+    @family.sync
+  end
+
+  test "calculates snapshot" do
+    asset = @family.accounts.create!(balance: 500, accountable: Depository.new)
+    liability = @family.accounts.create!(balance: 100, accountable: CreditCard.new)
+
+    asset.balances.create! date: 1.day.ago.to_date, currency: "USD", balance: 450
+    asset.balances.create! date: Date.current, currency: "USD", balance: 500
+
+    liability.balances.create! date: 1.day.ago.to_date, currency: "USD", balance: 50
+    liability.balances.create! date: Date.current, currency: "USD", balance: 100
+
+    expected_asset_series = [
+      { date: 1.day.ago.to_date, value: Money.new(450) },
+      { date: Date.current, value: Money.new(500) }
+    ]
+
+    expected_liability_series = [
+      { date: 1.day.ago.to_date, value: Money.new(50) },
+      { date: Date.current, value: Money.new(100) }
+    ]
+
+    expected_net_worth_series = [
+      { date: 1.day.ago.to_date, value: Money.new(450 - 50) },
+      { date: Date.current, value: Money.new(500 - 100) }
+    ]
+
+    assert_equal expected_asset_series, @family.snapshot[:asset_series].values.map { |v| { date: v.date, value: v.value } }
+    assert_equal expected_liability_series, @family.snapshot[:liability_series].values.map { |v| { date: v.date, value: v.value } }
+    assert_equal expected_net_worth_series, @family.snapshot[:net_worth_series].values.map { |v| { date: v.date, value: v.value } }
+  end
+
+  test "calculates top movers" do
+    checking_account = @family.accounts.create!(balance: 500, accountable: Depository.new)
+    savings_account = @family.accounts.create!(balance: 1000, accountable: Depository.new)
+
+    create_transaction(account: checking_account, date: 2.days.ago.to_date, amount: -1000)
+    create_transaction(account: checking_account, date: 1.day.ago.to_date, amount: 10)
+    create_transaction(account: savings_account, date: 2.days.ago.to_date, amount: -5000)
+
+    snapshot = @family.snapshot_account_transactions
+    top_spenders = snapshot[:top_spenders]
+    top_earners = snapshot[:top_earners]
+    top_savers = snapshot[:top_savers]
+
+    assert_equal 10, top_spenders.first.spending
+
+    assert_equal 5000, top_earners.first.income
+    assert_equal 1000, top_earners.second.income
+
+    assert_equal 1, top_savers.first.savings_rate
+    assert_equal ((1000 - 10).to_f / 1000), top_savers.second.savings_rate
+  end
+
+  test "calculates rolling transaction totals" do
+    account = @family.accounts.create!(balance: 1000, accountable: Depository.new)
+    create_transaction(account: account, date: 2.days.ago.to_date, amount: -500)
+    create_transaction(account: account, date: 1.day.ago.to_date, amount: 100)
+    create_transaction(account: account, date: Date.current, amount: 20)
+
+    snapshot = @family.snapshot_transactions
+
+    expected_income_series = [
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 500, 500, 500
+    ]
+
+    assert_equal expected_income_series, snapshot[:income_series].values.map(&:value).map(&:amount)
+
+    expected_spending_series = [
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 100, 120
+    ]
+
+    assert_equal expected_spending_series, snapshot[:spending_series].values.map(&:value).map(&:amount)
+
+    expected_savings_rate_series = [
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 1, 0.8, 0.76
+    ]
+
+    assert_equal expected_savings_rate_series, snapshot[:savings_rate_series].values.map(&:value).map { |v| v.round(2) }
+  end
 end

@@ -3,8 +3,7 @@ require "test_helper"
 class Tag::DeletionsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
-    @user_tags = @user.family.tags
-    @tag = tags(:hawaii_trip)
+    @tag = tags(:one)
   end
 
   test "should get new" do
@@ -13,7 +12,7 @@ class Tag::DeletionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "create with replacement" do
-    replacement_tag = tags(:trips)
+    replacement_tag = tags(:two)
 
     affected_transaction_count = @tag.transactions.count
 

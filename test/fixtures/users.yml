@@ -1,3 +1,10 @@
+empty:
+  family: empty
+  first_name: User
+  last_name: One
+  email: user1@email.com
+  password_digest: <%= BCrypt::Password.create('password') %>
+
 family_admin:
   family: dylan_family
   first_name: Bob

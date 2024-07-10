@@ -323,9 +323,7 @@ namespace :demo_data do
 
     puts "Syncing accounts...  This may take a few seconds."
 
-    family.accounts.each do |account|
-      account.sync
-    end
+    family.sync
 
     puts "Accounts synced.  Demo data reset complete."
   end
