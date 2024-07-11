@@ -38,10 +38,10 @@ export default class extends Controller {
         "cursor-pointer",
       );
       this.submitButton.disabled = false;
-      // setTimeout(() => {
-      //   // file.accepted && createDirectUploadController(this, file).start();
-      //   console.log("file added");
-      // }, 500);
+      setTimeout(() => {
+        // file.accepted && createDirectUploadController(this, file).start();
+        console.log("file added");
+      }, 500);
     });
 
     this.dropZone.on("removedfile", (file) => {

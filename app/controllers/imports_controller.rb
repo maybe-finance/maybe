@@ -38,6 +38,21 @@ class ImportsController < ApplicationController
   def load
   end
 
+  def upload_csv
+    file = import_params[:raw_csv_str]
+    @import.raw_csv_str = file.read
+    CSV.parse(@import.raw_csv_str)
+    if @import.save
+      redirect_to configure_import_path(@import), notice: t(".import_loaded")
+    else
+      flash.now[:error] = @import.errors.full_messages.to_sentence
+      render :load, status: :unprocessable_entity
+    end
+  rescue CSV::MalformedCSVError, ArgumentError => error
+    flash.now[:error] = error.message
+    render :load, status: :unprocessable_entity
+  end
+
   def load_csv
     if @import.update(import_params)
       redirect_to configure_import_path(@import), notice: t(".import_loaded")
@@ -98,7 +113,6 @@ class ImportsController < ApplicationController
     end
 
     def import_params(permitted_mappings = nil)
-      debugger
       params.require(:import).permit(:raw_csv_str, column_mappings: permitted_mappings, csv_update: [ :row_idx, :col_idx, :value ])
     end
 end
