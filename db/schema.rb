@@ -53,10 +53,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_07_10_184249) do
     t.uuid "security_id", null: false
     t.date "date"
     t.decimal "qty", precision: 19, scale: 4
+    t.decimal "price", precision: 19, scale: 4
     t.decimal "amount", precision: 19, scale: 4
     t.string "currency"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["account_id", "security_id", "date", "currency"], name: "idx_on_account_id_security_id_date_currency_234024c8e3", unique: true
     t.index ["account_id"], name: "index_account_holdings_on_account_id"
     t.index ["security_id"], name: "index_account_holdings_on_security_id"
   end

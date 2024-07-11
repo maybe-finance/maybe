@@ -1,9 +1,9 @@
-one:
+aapl:
   isin: US0378331005
   symbol: aapl
   name: Apple
 
-two:
+msft:
   isin: US5949181045
   symbol: msft
   name: Microsoft

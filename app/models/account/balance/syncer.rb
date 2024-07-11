@@ -22,13 +22,9 @@ class Account::Balance::Syncer
     attr_reader :sync_start_date, :account
 
     def upsert_balances!(balances)
+      current_time = Time.now
       balances_to_upsert = balances.map do |balance|
-        {
-          date: balance.date,
-          balance: balance.balance,
-          currency: balance.currency,
-          updated_at: Time.now
-        }
+        balance.attributes.slice("date", "balance", "currency").merge("updated_at" => current_time)
       end
 
       account.balances.upsert_all(balances_to_upsert, unique_by: %i[account_id date currency])
