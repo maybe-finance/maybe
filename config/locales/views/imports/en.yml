@@ -90,6 +90,8 @@ en:
       subtitle: Import your transactions
     load_csv:
       import_loaded: Import CSV loaded
+    upload_csv:
+      import_loaded: CSV File loaded
     new:
       description_text: Importing transactions can only be done for one account at
         a time. You will need to go through this process again for other accounts.
