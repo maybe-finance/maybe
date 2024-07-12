@@ -41,6 +41,7 @@ class AccountsController < ApplicationController
 
   def update
     @account.update! account_params.except(:accountable_type)
+    @account.sync_later
     redirect_back_or_to account_path(@account), notice: t(".success")
   end
 

@@ -9,6 +9,8 @@ en:
       edit: Edit %{account}
       institution: Financial institution
       ungrouped: "(none)"
+      balance: "Balance"
+      name: "Name"
     empty:
       empty_message: Add an account either via connection, importing or entering manually.
       new_account: New account
@@ -61,6 +63,10 @@ en:
       sync_message_missing_rates: Since exchange rates haven't been synced, balance
         graphs may not reflect accurate values.
       sync_message_unknown_error: An error has occurred during the sync.
+      value: "Value"
+      transactions: "Transactions"
+      total_value: Total Value
+      no_change: "No change"
     summary:
       new: New account
     sync:

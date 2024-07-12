@@ -41,11 +41,14 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
       account: {
         name: "Updated name",
         is_active: "0",
+        balance: 5000,
+        currency: "EUR",
         institution_id: institutions(:chase).id
       }
     }
 
     assert_redirected_to account_url(@account)
+    assert_enqueued_with job: AccountSyncJob
     assert_equal "Account updated", flash[:notice]
   end
 
