@@ -57,17 +57,12 @@
     <div class="p-4 flex justify-between">
       <div class="space-y-2">
         <%= tag.p t(".total_value"), class: "text-sm font-medium text-gray-500" %>
-        <div class="flex items-center gap-2 group">
-          <%= tag.p format_money(@account.balance_money), class: "text-gray-900 text-3xl font-medium" %>
-          <%= link_to edit_account_path(@account), data: { turbo_frame: :modal } do %>
-            <%= lucide_icon "pencil-line", class: "hidden group-hover:inline text-gray-500 w-5 h-5" %>
-          <% end %>
-        </div>
+        <%= tag.p format_money(@account.balance_money, precision: 0), class: "text-gray-900 text-3xl font-medium" %>
         <div>
           <% if @balance_series.trend.direction.flat? %>
             <%= tag.span t(".no_change"), class: "text-gray-500" %>
           <% else %>
-            <%= tag.span @balance_series.trend.value, style: "color: #{@balance_series.trend.color}" %>
+            <%= tag.span format_money(@balance_series.trend.value), style: "color: #{@balance_series.trend.color}" %>
             <%= tag.span "(#{@balance_series.trend.percent}%)", style: "color: #{@balance_series.trend.color}" %>
           <% end %>
 
