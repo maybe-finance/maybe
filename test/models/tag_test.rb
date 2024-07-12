@@ -2,8 +2,8 @@ require "test_helper"
 
 class TagTest < ActiveSupport::TestCase
   test "replace and destroy" do
-    old_tag = tags(:hawaii_trip)
-    new_tag = tags(:trips)
+    old_tag = tags(:one)
+    new_tag = tags(:two)
 
     assert_difference "Tag.count", -1 do
       old_tag.replace_and_destroy!(new_tag)

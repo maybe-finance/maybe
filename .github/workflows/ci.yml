@@ -97,7 +97,6 @@ jobs:
 
       - name: System tests
         run: DISABLE_PARALLELIZATION=true bin/rails test:system
-        continue-on-error: true # TODO: Eventually we'll enforce for PRs
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4

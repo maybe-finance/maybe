@@ -1,3 +1,7 @@
+one:
+  name: Test
+  family: empty
+
 netflix:
   name: Netflix
   color: "#fd7f6f"

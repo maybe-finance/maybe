@@ -3,7 +3,6 @@ class AccountsController < ApplicationController
 
   include Filterable
   before_action :set_account, only: %i[ edit show destroy sync update ]
-  after_action :sync_account, only: :create
 
   def index
     @institutions = Current.family.institutions
@@ -52,8 +51,10 @@ class AccountsController < ApplicationController
                         attributes: account_params.except(:start_date, :start_balance),
                         start_date: account_params[:start_date],
                         start_balance: account_params[:start_balance]
-
+    @account.sync_later
     redirect_back_or_to account_path(@account), notice: t(".success")
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_back_or_to accounts_path, alert: e.record.errors.full_messages.to_sentence
   end
 
   def destroy
@@ -70,19 +71,8 @@ class AccountsController < ApplicationController
   end
 
   def sync_all
-    synced_accounts_count = 0
-    Current.family.accounts.each do |account|
-      next unless account.can_sync?
-
-      account.sync_later
-      synced_accounts_count += 1
-    end
-
-    if synced_accounts_count > 0
-      redirect_back_or_to accounts_path, notice: t(".success", count: synced_accounts_count)
-    else
-      redirect_back_or_to accounts_path, alert: t(".no_accounts_to_sync")
-    end
+    Current.family.accounts.active.sync
+    redirect_back_or_to accounts_path, notice: t(".success")
   end
 
   private
@@ -93,9 +83,5 @@ class AccountsController < ApplicationController
 
     def account_params
       params.require(:account).permit(:name, :accountable_type, :balance, :start_date, :start_balance, :currency, :subtype, :is_active, :institution_id)
-    end
-
-    def sync_account
-      @account.sync_later
     end
 end

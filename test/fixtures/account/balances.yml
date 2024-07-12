@@ -1,0 +1,11 @@
+one:
+  date: <%= 2.days.ago.to_date %>
+  balance: 4990
+  currency: USD
+  account: depository
+
+two:
+  date: <%= 1.day.ago.to_date %>
+  balance: 4980
+  currency: USD
+  account: depository

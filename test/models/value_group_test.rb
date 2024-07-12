@@ -2,10 +2,6 @@ require "test_helper"
 require "ostruct"
 class ValueGroupTest < ActiveSupport::TestCase
     setup do
-        checking = accounts(:checking)
-        savings = accounts(:savings)
-        collectable = accounts(:collectable)
-
         # Level 1
         @assets = ValueGroup.new("Assets", :usd)
 
