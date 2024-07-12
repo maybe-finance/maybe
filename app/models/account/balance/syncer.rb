@@ -14,6 +14,11 @@ class Account::Balance::Syncer
     Account::Balance.transaction do
       upsert_balances!(daily_balances)
       purge_stale_balances!
+
+      if daily_balances.any?
+        account.reload
+        account.update! balance: daily_balances.select { |db| db.currency == account.currency }.last&.balance
+      end
     end
   end
 
@@ -53,16 +58,13 @@ class Account::Balance::Syncer
       entries = account.entries.where("date >= ?", sync_start_date).to_a
       prior_balance = find_prior_balance
 
-      daily_balances = (sync_start_date...Date.current).map do |date|
+      (sync_start_date..Date.current).map do |date|
         current_balance = calculate_balance_for_date(date, entries:, prior_balance:)
 
         prior_balance = current_balance
 
         build_balance(date, current_balance)
       end
-
-      # Last balance of series is always equal to account balance
-      daily_balances << build_balance(Date.current, account.balance)
     end
 
     def calculate_converted_balances(balances)
