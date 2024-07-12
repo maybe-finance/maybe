@@ -22,7 +22,8 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
     syncer = Account::Balance::Syncer.new(@account)
     syncer.run
 
-    assert_equal [ 22000, 22000, @account.balance ], @account.balances.chronological.map(&:balance)
+    assert_equal 22000, @account.balance
+    assert_equal [ 22000, 22000, 22000 ], @account.balances.chronological.map(&:balance)
   end
 
   test "syncs account with transactions only" do
@@ -32,7 +33,8 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
     syncer = Account::Balance::Syncer.new(@account)
     syncer.run
 
-    assert_equal [ 19600, 19500, 19500, 20000, 20000, @account.balance ], @account.balances.chronological.map(&:balance)
+    assert_equal 20000, @account.balance
+    assert_equal [ 19600, 19500, 19500, 20000, 20000, 20000 ], @account.balances.chronological.map(&:balance)
   end
 
   test "syncs account with valuations and transactions" do
@@ -44,7 +46,8 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
     syncer = Account::Balance::Syncer.new(@account)
     syncer.run
 
-    assert_equal [ 20000, 20000, 20500, 20400, 25000, @account.balance ], @account.balances.chronological.map(&:balance)
+    assert_equal 25000, @account.balance
+    assert_equal [ 20000, 20000, 20500, 20400, 25000, 25000 ], @account.balances.chronological.map(&:balance)
   end
 
   test "syncs account with transactions in multiple currencies" do
@@ -57,7 +60,8 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
     syncer = Account::Balance::Syncer.new(@account)
     syncer.run
 
-    assert_equal [ 21000, 20900, 20600, 20000, @account.balance ], @account.balances.chronological.map(&:balance)
+    assert_equal 20000, @account.balance
+    assert_equal [ 21000, 20900, 20600, 20000, 20000 ], @account.balances.chronological.map(&:balance)
   end
 
   test "converts foreign account balances to family currency" do
@@ -75,8 +79,9 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
     usd_balances = @account.balances.where(currency: "USD").chronological.map(&:balance)
     eur_balances = @account.balances.where(currency: "EUR").chronological.map(&:balance)
 
-    assert_equal [ 21000, 20000, @account.balance ], eur_balances # native account balances
-    assert_equal [ 42000, 40000, @account.balance * 2 ], usd_balances # converted balances at rate of 2:1
+    assert_equal 20000, @account.balance
+    assert_equal [ 21000, 20000, 20000 ], eur_balances # native account balances
+    assert_equal [ 42000, 40000, 40000 ], usd_balances # converted balances at rate of 2:1
   end
 
   test "fails with error if exchange rate not available for any entry" do

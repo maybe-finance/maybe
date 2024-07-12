@@ -46,6 +46,37 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_redirected_to account_url(@account)
+    assert_enqueued_with job: AccountSyncJob
+    assert_equal "Account updated", flash[:notice]
+  end
+
+  test "updates account balance by creating new valuation" do
+    assert_difference [ "Account::Entry.count", "Account::Valuation.count" ], 1 do
+      patch account_url(@account), params: {
+        account: {
+          balance: 10000
+        }
+      }
+    end
+
+    assert_redirected_to account_url(@account)
+    assert_enqueued_with job: AccountSyncJob
+    assert_equal "Account updated", flash[:notice]
+  end
+
+  test "updates account balance by editing existing valuation for today" do
+    @account.entries.create! date: Date.current, amount: 6000, currency: "USD", entryable: Account::Valuation.new
+
+    assert_no_difference [ "Account::Entry.count", "Account::Valuation.count" ] do
+      patch account_url(@account), params: {
+        account: {
+          balance: 10000
+        }
+      }
+    end
+
+    assert_redirected_to account_url(@account)
+    assert_enqueued_with job: AccountSyncJob
     assert_equal "Account updated", flash[:notice]
   end
 
