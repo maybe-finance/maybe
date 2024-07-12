@@ -95,4 +95,18 @@ class Account < ApplicationRecord
   rescue Money::ConversionError
     TimeSeries.new([])
   end
+
+  def update_balance!(balance)
+    valuation = entries.account_valuations.find_by(date: Date.current)
+
+    if valuation
+      valuation.update! amount: balance
+    else
+      entries.create! \
+        date: Date.current,
+        amount: balance,
+        currency: currency,
+        entryable: Account::Valuation.new
+    end
+  end
 end

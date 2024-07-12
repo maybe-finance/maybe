@@ -53,7 +53,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
       (label(method, *label_args(options)).to_s if options[:label]) +
         @template.tag.div(class: "flex items-center") do
           number_field(money_amount_method, merged_options.except(:label)) +
-            grouped_select(money_currency_method, grouped_options, { selected: selected_currency, disabled: readonly_currency }, class: "ml-auto form-field__input w-fit pr-8", data: { "money-field-target" => "currency", action: "change->money-field#handleCurrencyChange" })
+            grouped_select(money_currency_method, grouped_options, { selected: selected_currency }, disabled: readonly_currency, class: "ml-auto form-field__input w-fit pr-8", data: { "money-field-target" => "currency", action: "change->money-field#handleCurrencyChange" })
         end
     end
   end
