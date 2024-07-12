@@ -55,7 +55,11 @@ class ImportsTest < ApplicationSystemTestCase
     assert_selector "h1", text: "Load import"
 
     within "form" do
-      fill_in "import_raw_csv_str", with: <<-ROWS
+      click_button "Copy & Paste"
+    end
+
+    within "form" do
+      fill_in "raw_csv_text_area", with: <<-ROWS
         date,Custom Name Column,category,amount
         invalid_date,Starbucks drink,Food,-20.50
         2024-01-01,Amazon purchase,Shopping,-89.50
