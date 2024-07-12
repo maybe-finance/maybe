@@ -97,14 +97,14 @@ class Family < ApplicationRecord
   end
 
   def assets
-    Money.new(accounts.active.assets.map { |account| account.balance_money.exchange_to(currency) || 0 }.sum, currency)
+    Money.new(accounts.active.assets.map { |account| account.balance_money.exchange_to(currency, fallback_rate: 0) }.sum, currency)
   end
 
   def liabilities
-    Money.new(accounts.active.liabilities.map { |account| account.balance_money.exchange_to(currency) || 0 }.sum, currency)
+    Money.new(accounts.active.liabilities.map { |account| account.balance_money.exchange_to(currency, fallback_rate: 0) }.sum, currency)
   end
 
-  def sync_accounts
-    accounts.each { |account| account.sync_later if account.can_sync? }
+  def sync(start_date: nil)
+    accounts.active.sync(start_date: start_date)
   end
 end

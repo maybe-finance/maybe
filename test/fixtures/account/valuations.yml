@@ -1,18 +1,2 @@
-collectable_one: { }
-collectable_two: { }
-collectable_three: { }
-
-iou_one: { }
-
-multi_currency_one: { }
-
-savings_one: { }
-savings_two: { }
-
-brokerage_one: { }
-
-mortgage_loan_one: { }
-
-house_one: { }
-
-car_one: { }
+one: { }
+two: { }

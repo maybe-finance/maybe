@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_06_28_104551) do
+ActiveRecord::Schema[7.2].define(version: 2024_07_09_152243) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -48,6 +48,18 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_28_104551) do
     t.index ["transfer_id"], name: "index_account_entries_on_transfer_id"
   end
 
+  create_table "account_syncs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "account_id", null: false
+    t.string "status", default: "pending", null: false
+    t.date "start_date"
+    t.datetime "last_ran_at"
+    t.string "error"
+    t.text "warnings", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_account_syncs_on_account_id"
+  end
+
   create_table "account_transactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -80,12 +92,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_28_104551) do
     t.decimal "balance", precision: 19, scale: 4, default: "0.0"
     t.string "currency", default: "USD"
     t.boolean "is_active", default: true, null: false
-    t.enum "status", default: "ok", null: false, enum_type: "account_status"
-    t.jsonb "sync_warnings", default: [], null: false
-    t.jsonb "sync_errors", default: [], null: false
     t.date "last_sync_date"
     t.uuid "institution_id"
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Loan'::character varying)::text, ('CreditCard'::character varying)::text, ('OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Loan'::character varying, 'CreditCard'::character varying, 'OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id"], name: "index_accounts_on_family_id"
     t.index ["institution_id"], name: "index_accounts_on_institution_id"
@@ -145,15 +154,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_28_104551) do
   end
 
   create_table "exchange_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "base_currency", null: false
-    t.string "converted_currency", null: false
+    t.string "from_currency", null: false
+    t.string "to_currency", null: false
     t.decimal "rate"
     t.date "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["base_currency", "converted_currency", "date"], name: "index_exchange_rates_on_base_converted_date_unique", unique: true
-    t.index ["base_currency"], name: "index_exchange_rates_on_base_currency"
-    t.index ["converted_currency"], name: "index_exchange_rates_on_converted_currency"
+    t.index ["from_currency", "to_currency", "date"], name: "index_exchange_rates_on_base_converted_date_unique", unique: true
+    t.index ["from_currency"], name: "index_exchange_rates_on_from_currency"
+    t.index ["to_currency"], name: "index_exchange_rates_on_to_currency"
   end
 
   create_table "families", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -189,13 +198,18 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_28_104551) do
     t.datetime "finished_at"
     t.text "error"
     t.integer "error_event", limit: 2
+    t.text "error_backtrace", array: true
+    t.uuid "process_id"
+    t.interval "duration"
     t.index ["active_job_id", "created_at"], name: "index_good_job_executions_on_active_job_id_and_created_at"
+    t.index ["process_id", "created_at"], name: "index_good_job_executions_on_process_id_and_created_at"
   end
 
   create_table "good_job_processes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "state"
+    t.integer "lock_type", limit: 2
   end
 
   create_table "good_job_settings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -228,6 +242,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_28_104551) do
     t.text "job_class"
     t.integer "error_event", limit: 2
     t.text "labels", array: true
+    t.uuid "locked_by_id"
+    t.datetime "locked_at"
     t.index ["active_job_id", "created_at"], name: "index_good_jobs_on_active_job_id_and_created_at"
     t.index ["batch_callback_id"], name: "index_good_jobs_on_batch_callback_id", where: "(batch_callback_id IS NOT NULL)"
     t.index ["batch_id"], name: "index_good_jobs_on_batch_id", where: "(batch_id IS NOT NULL)"
@@ -236,8 +252,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_28_104551) do
     t.index ["cron_key", "cron_at"], name: "index_good_jobs_on_cron_key_and_cron_at_cond", unique: true, where: "(cron_key IS NOT NULL)"
     t.index ["finished_at"], name: "index_good_jobs_jobs_on_finished_at", where: "((retried_good_job_id IS NULL) AND (finished_at IS NOT NULL))"
     t.index ["labels"], name: "index_good_jobs_on_labels", where: "(labels IS NOT NULL)", using: :gin
+    t.index ["locked_by_id"], name: "index_good_jobs_on_locked_by_id", where: "(locked_by_id IS NOT NULL)"
     t.index ["priority", "created_at"], name: "index_good_job_jobs_for_candidate_lookup", where: "(finished_at IS NULL)"
     t.index ["priority", "created_at"], name: "index_good_jobs_jobs_on_priority_created_at_when_unfinished", order: { priority: "DESC NULLS LAST" }, where: "(finished_at IS NULL)"
+    t.index ["priority", "scheduled_at"], name: "index_good_jobs_on_priority_scheduled_at_unfinished_unlocked", where: "((finished_at IS NULL) AND (locked_by_id IS NULL))"
     t.index ["queue_name", "scheduled_at"], name: "index_good_jobs_on_queue_name_and_scheduled_at", where: "(finished_at IS NULL)"
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
@@ -355,6 +373,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_06_28_104551) do
   add_foreign_key "account_balances", "accounts", on_delete: :cascade
   add_foreign_key "account_entries", "account_transfers", column: "transfer_id"
   add_foreign_key "account_entries", "accounts"
+  add_foreign_key "account_syncs", "accounts"
   add_foreign_key "account_transactions", "categories", on_delete: :nullify
   add_foreign_key "account_transactions", "merchants"
   add_foreign_key "accounts", "families"

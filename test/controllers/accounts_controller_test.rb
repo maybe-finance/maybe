@@ -3,7 +3,7 @@ require "test_helper"
 class AccountsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
-    @account = accounts(:checking)
+    @account = accounts(:depository)
   end
 
   test "gets accounts list" do
@@ -33,7 +33,7 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
   test "can sync all accounts" do
     post sync_all_accounts_path
     assert_redirected_to accounts_url
-    assert_equal "Successfully queued #{ @user.family.accounts.size } accounts for syncing.", flash[:notice]
+    assert_equal "Successfully queued accounts for syncing.", flash[:notice]
   end
 
   test "should update account" do

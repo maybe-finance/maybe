@@ -7,7 +7,13 @@ module Providable
 
   class_methods do
     def exchange_rates_provider
-      Provider::Synth.new
+      api_key = ENV["SYNTH_API_KEY"]
+
+      if api_key.present?
+        Provider::Synth.new api_key
+      else
+        nil
+      end
     end
 
     def git_repository_provider

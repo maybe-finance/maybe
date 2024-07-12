@@ -5,4 +5,5 @@ class Account::Balance < ApplicationRecord
     validates :account, :date, :balance, presence: true
     monetize :balance
     scope :in_period, ->(period) { period.date_range.nil? ? all : where(date: period.date_range) }
+    scope :chronological, -> { order(:date) }
 end
