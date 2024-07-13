@@ -45,9 +45,9 @@ class Account::Balance::Syncer
       return valuation.amount if valuation
       return derived_sync_start_balance(entries) unless prior_balance
 
-      transactions = entries.select { |e| e.date == date && e.account_transaction? }
+      entries = entries.select { |e| e.date == date }
 
-      prior_balance - net_transaction_flows(transactions)
+      prior_balance - net_entry_flows(entries)
     end
 
     def calculate_daily_balances
@@ -91,19 +91,19 @@ class Account::Balance::Syncer
     end
 
     def derived_sync_start_balance(entries)
-      transactions = entries.select { |e| e.account_transaction? && e.date > sync_start_date }
+      transactions_and_trades = entries.reject { |e| e.account_valuation? }.select { |e| e.date > sync_start_date }
 
-      account.balance + net_transaction_flows(transactions)
+      account.balance + net_entry_flows(transactions_and_trades)
     end
 
     def find_prior_balance
       account.balances.where("date < ?", sync_start_date).order(date: :desc).first&.balance
     end
 
-    def net_transaction_flows(transactions, target_currency = account.currency)
-      converted_transaction_amounts = transactions.map { |t| t.amount_money.exchange_to(target_currency, date: t.date) }
+    def net_entry_flows(entries, target_currency = account.currency)
+      converted_entry_amounts = entries.map { |t| t.amount_money.exchange_to(target_currency, date: t.date) }
 
-      flows = converted_transaction_amounts.sum(&:amount)
+      flows = converted_entry_amounts.sum(&:amount)
 
       account.liability? ? flows * -1 : flows
     end

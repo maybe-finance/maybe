@@ -5,13 +5,13 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
 
   setup do
     @account = families(:empty).accounts.create!(name: "Test", balance: 20000, currency: "USD", accountable: Depository.new)
+    @investment_account = families(:empty).accounts.create!(name: "Test Investment", balance: 50000, currency: "USD", accountable: Investment.new)
   end
 
   test "syncs account with no entries" do
     assert_equal 0, @account.balances.count
 
-    syncer = Account::Balance::Syncer.new(@account)
-    syncer.run
+    run_sync_for @account
 
     assert_equal [ @account.balance ], @account.balances.chronological.map(&:balance)
   end
@@ -19,8 +19,7 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
   test "syncs account with valuations only" do
     create_valuation(account: @account, date: 2.days.ago.to_date, amount: 22000)
 
-    syncer = Account::Balance::Syncer.new(@account)
-    syncer.run
+    run_sync_for @account
 
     assert_equal 22000, @account.balance
     assert_equal [ 22000, 22000, 22000 ], @account.balances.chronological.map(&:balance)
@@ -30,11 +29,19 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
     create_transaction(account: @account, date: 4.days.ago.to_date, amount: 100)
     create_transaction(account: @account, date: 2.days.ago.to_date, amount: -500)
 
-    syncer = Account::Balance::Syncer.new(@account)
-    syncer.run
+    run_sync_for @account
 
     assert_equal 20000, @account.balance
     assert_equal [ 19600, 19500, 19500, 20000, 20000, 20000 ], @account.balances.chronological.map(&:balance)
+  end
+
+  test "syncs account with trades only" do
+    aapl = securities(:aapl)
+    create_trade(account: @investment_account, date: 1.day.ago.to_date, security: aapl, qty: 10, price: 200)
+
+    run_sync_for @investment_account
+
+    assert_equal [ 52000, 50000, 50000 ], @investment_account.balances.chronological.map(&:balance)
   end
 
   test "syncs account with valuations and transactions" do
@@ -43,8 +50,7 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
     create_transaction(account: @account, date: 2.days.ago.to_date, amount: 100)
     create_valuation(account: @account, date: 1.day.ago.to_date, amount: 25000)
 
-    syncer = Account::Balance::Syncer.new(@account)
-    syncer.run
+    run_sync_for(@account)
 
     assert_equal 25000, @account.balance
     assert_equal [ 20000, 20000, 20500, 20400, 25000, 25000 ], @account.balances.chronological.map(&:balance)
@@ -57,8 +63,7 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
     create_transaction(account: @account, date: 2.days.ago.to_date, amount: 300, currency: "USD")
     create_transaction(account: @account, date: 1.day.ago.to_date, amount: 500, currency: "EUR") # €500 * 1.2 = $600
 
-    syncer = Account::Balance::Syncer.new(@account)
-    syncer.run
+    run_sync_for(@account)
 
     assert_equal 20000, @account.balance
     assert_equal [ 21000, 20900, 20600, 20000, 20000 ], @account.balances.chronological.map(&:balance)
@@ -73,8 +78,7 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
     create_exchange_rate(1.day.ago.to_date, from: "EUR", to: "USD", rate: 2)
     create_exchange_rate(Date.current, from: "EUR", to: "USD", rate: 2)
 
-    syncer = Account::Balance::Syncer.new(@account)
-    syncer.run
+    run_sync_for(@account)
 
     usd_balances = @account.balances.where(currency: "USD").chronological.map(&:balance)
     eur_balances = @account.balances.where(currency: "EUR").chronological.map(&:balance)
@@ -113,8 +117,7 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
 
     assert_equal 2, @account.balances.size
 
-    syncer = Account::Balance::Syncer.new(@account)
-    syncer.run
+    run_sync_for(@account)
 
     assert_equal [ @account.balance ], @account.balances.chronological.map(&:balance)
   end
@@ -124,13 +127,17 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
 
     transaction = create_transaction(account: @account, date: 1.day.ago.to_date, amount: 100, currency: "USD")
 
-    syncer = Account::Balance::Syncer.new(@account, start_date: 1.day.ago.to_date)
-    syncer.run
+    run_sync_for(@account, start_date: 1.day.ago.to_date)
 
     assert_equal [ existing_balance.balance, existing_balance.balance - transaction.amount, @account.balance ], @account.balances.chronological.map(&:balance)
   end
 
   private
+
+    def run_sync_for(account, start_date: nil)
+      syncer = Account::Balance::Syncer.new(account, start_date: start_date)
+      syncer.run
+    end
 
     def create_exchange_rate(date, from:, to:, rate:)
       ExchangeRate.create! date: date, from_currency: from, to_currency: to, rate: rate
