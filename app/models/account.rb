@@ -109,4 +109,12 @@ class Account < ApplicationRecord
         entryable: Account::Valuation.new
     end
   end
+
+  def holding_qty(security, date: Date.current)
+    entries.account_trades
+           .joins("JOIN account_trades ON account_entries.entryable_id = account_trades.id")
+           .where(account_trades: { security_id: security.id })
+           .where("account_entries.date <= ?", date)
+           .sum("account_trades.qty")
+  end
 end

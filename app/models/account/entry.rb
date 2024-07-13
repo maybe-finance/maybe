@@ -11,6 +11,7 @@ class Account::Entry < ApplicationRecord
 
   validates :date, :amount, :currency, presence: true
   validates :date, uniqueness: { scope: [ :account_id, :entryable_type ] }, if: -> { account_valuation? }
+  validate :trade_valid?, if: -> { account_trade? }
 
   scope :chronological, -> { order(:date, :created_at) }
   scope :reverse_chronological, -> { order(date: :desc, created_at: :desc) }
@@ -123,7 +124,7 @@ class Account::Entry < ApplicationRecord
 
     def income_total(currency = "USD")
       without_transfers.account_transactions.includes(:entryable)
-                          .where("account_entries.amount <= 0")
+        .where("account_entries.amount <= 0")
                        .map { |e| e.amount_money.exchange_to(currency, date: e.date, fallback_rate: 0) }
                        .sum
     end
@@ -190,5 +191,15 @@ class Account::Entry < ApplicationRecord
         current: amount_money,
         previous: previous_entry&.amount_money,
         favorable_direction: account.favorable_direction
+    end
+
+    def trade_valid?
+      if account_trade.sell?
+        current_qty = account.holding_qty(account_trade.security)
+
+        if current_qty < account_trade.qty.abs
+          errors.add(:base, "cannot sell #{account_trade.qty.abs} shares of #{account_trade.security.symbol} because you only own #{current_qty} shares")
+        end
+      end
     end
 end
