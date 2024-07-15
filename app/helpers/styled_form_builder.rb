@@ -18,10 +18,6 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
     RUBY_EVAL
   end
 
-  # Any field that should be styled like a "text" input
-  def textish_field(form_field_method, object_method, options = {})
-  end
-
   # See `Monetizable` concern, which adds a _money suffix to the attribute name
   # For a monetized field, the setter will always be the attribute name without the _money suffix
   def money_field(method, options = {})
