@@ -1,4 +1,9 @@
 module FormsHelper
+  def styled_form_with(**options, &block)
+    options[:builder] = StyledFormBuilder
+    form_with(**options, &block)
+  end
+
   def form_field_tag(options = {}, &block)
     options[:class] = [ "form-field", options[:class] ].compact.join(" ")
     tag.div **options, &block
@@ -11,23 +16,19 @@ module FormsHelper
     end
   end
 
-  def selectable_categories
-    Current.family.categories.alphabetically
+  def period_select(form:, selected:, classes: "border border-alpha-black-100 shadow-xs rounded-lg text-sm pr-7 cursor-pointer text-gray-900 focus:outline-none focus:ring-0")
+    options = [ [ "7D", "last_7_days" ], [ "1M", "last_30_days" ], [ "1Y", "last_365_days" ], [ "All", "all" ] ]
+    form.select(:period, options, { selected: selected }, class: classes, data: { "auto-submit-form-target": "auto" })
   end
 
-  def selectable_merchants
-    Current.family.merchants.alphabetically
+  def money_input(form:)
   end
 
-  def selectable_accounts
-    Current.family.accounts.alphabetically
-  end
-
-  def selectable_tags
-    Current.family.tags.alphabetically.pluck(:name, :id)
+  def money_input_with_currency(form:)
   end
 
   private
+
     def radio_tab_contents(label:, icon:)
       tag.div(class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-gray-400 group-has-[:checked]:bg-white group-has-[:checked]:text-gray-800 group-has-[:checked]:shadow-sm") do
         concat lucide_icon(icon, class: "w-5 h-5")

@@ -1,4 +1,4 @@
-<%= form_with model: @import do |form| %>
+<%= styled_form_with model: @import do |form| %>
   <div class="mb-4">
     <%= form.collection_select :account_id, Current.family.accounts.alphabetically, :id, :name, { prompt: t(".select_account"), label: t(".account"), required: true } %>
   </div>

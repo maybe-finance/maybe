@@ -17,7 +17,6 @@
 
       <%= form_with model: account,
                     namespace: account.id,
-                    builder: ActionView::Helpers::FormBuilder,
                     data: { controller: "auto-submit-form", turbo_frame: "_top" } do |form| %>
         <div class="relative inline-block select-none">
           <%= form.check_box :is_active, { class: "sr-only peer", data: { "auto-submit-form-target": "auto" } } %>

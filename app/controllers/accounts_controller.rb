@@ -19,6 +19,7 @@ class AccountsController < ApplicationController
   end
 
   def list
+    render layout: false
   end
 
   def new

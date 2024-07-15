@@ -1,12 +1,8 @@
-class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
-  def initialize(object_name, object, template, options)
-    options[:html] ||= {}
-    options[:html][:class] ||= "space-y-4"
+class StyledFormBuilder < ActionView::Helpers::FormBuilder
+  # Fields that visually inherit from "text field"
+  class_attribute :text_field_helpers, default: field_helpers - [ :label, :check_box, :radio_button, :fields_for, :fields, :hidden_field, :file_field ]
 
-    super(object_name, object, template, options)
-  end
-
-  (field_helpers - [ :label, :check_box, :radio_button, :fields_for, :fields, :hidden_field, :file_field ]).each do |selector|
+  text_field_helpers.each do |selector|
     class_eval <<-RUBY_EVAL, __FILE__, __LINE__ + 1
       def #{selector}(method, options = {})
         default_options = { class: "form-field__input" }
@@ -20,6 +16,10 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
         end
       end
     RUBY_EVAL
+  end
+
+  # Any field that should be styled like a "text" input
+  def textish_field(form_field_method, object_method, options = {})
   end
 
   # See `Monetizable` concern, which adds a _money suffix to the attribute name

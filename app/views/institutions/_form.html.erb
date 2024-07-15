@@ -1,5 +1,4 @@
-<%= form_with model: institution, data: { turbo_frame: "_top", controller: "profile-image-preview" } do |f| %>
-
+<%= styled_form_with model: institution, class: "space-y-4", data: { turbo_frame: "_top", controller: "profile-image-preview" } do |f| %>
   <div class="flex justify-center items-center py-4">
     <%= f.label :logo do %>
       <div class="relative cursor-pointer hover:opacity-80 w-16 h-16 rounded-full bg-gray-50">
