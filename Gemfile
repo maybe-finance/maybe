@@ -59,6 +59,7 @@ group :development do
   gem "letter_opener"
   gem "ruby-lsp-rails"
   gem "web-console"
+  gem "faker"
 end
 
 group :test do

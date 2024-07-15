@@ -41,7 +41,11 @@ class AccountsController < ApplicationController
   end
 
   def update
-    @account.update! account_params.except(:accountable_type)
+    Account.transaction do
+      @account.update! account_params.except(:accountable_type, :balance)
+      @account.update_balance!(account_params[:balance]) if account_params[:balance]
+    end
+    @account.sync_later
     redirect_back_or_to account_path(@account), notice: t(".success")
   end
 

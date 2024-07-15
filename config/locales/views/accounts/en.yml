@@ -6,8 +6,10 @@ en:
     destroy:
       success: Account deleted successfully
     edit:
+      balance: Balance
       edit: Edit %{account}
       institution: Financial institution
+      name: Name
       ungrouped: "(none)"
     empty:
       empty_message: Add an account either via connection, importing or entering manually.
@@ -58,9 +60,13 @@ en:
       confirm_title: Delete account?
       edit: Edit
       import: Import transactions
+      no_change: No change
       sync_message_missing_rates: Since exchange rates haven't been synced, balance
         graphs may not reflect accurate values.
       sync_message_unknown_error: An error has occurred during the sync.
+      total_value: Total Value
+      transactions: Transactions
+      value: Value
     summary:
       new: New account
     sync:

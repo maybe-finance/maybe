@@ -6,7 +6,8 @@
     </header>
 
     <%= styled_form_with model: @account, class: "space-y-4", data: { turbo_frame: "_top" } do |f| %>
-      <%= f.text_field :name, label: "Name" %>
+      <%= f.text_field :name, label: t(".name") %>
+      <%= f.money_field :balance_money, label: t(".balance"), readonly_currency: true %>
 
       <div class="relative">
         <%= f.collection_select :institution_id, Current.family.institutions.alphabetically, :id, :name, { include_blank: t(".ungrouped"), label: t(".institution") } %>
