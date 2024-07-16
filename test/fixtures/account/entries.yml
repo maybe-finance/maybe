@@ -7,6 +7,15 @@ valuation:
   entryable_type: Account::Valuation
   entryable: one
 
+trade:
+  name: Purchase 10 shares of AAPL
+  date: <%= 1.day.ago.to_date %>
+  amount: 2140 # 10 shares * $214 per share
+  currency: USD
+  account: investment
+  entryable_type: Account::Trade
+  entryable: one
+
 transaction:
   name: Starbucks
   date: <%= 1.day.ago.to_date %>

@@ -27,4 +27,13 @@ module Account::EntriesTestHelper
 
     Account::Entry.create! entry_defaults.merge(attributes)
   end
+
+  def create_trade(account:, security:, qty:, price:, date:)
+    account.entries.create! \
+      date: date,
+      amount: qty * price,
+      currency: "USD",
+      name: "Trade",
+      entryable: Account::Trade.new(qty: qty, price: price, security: security)
+  end
 end

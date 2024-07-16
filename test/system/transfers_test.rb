@@ -61,7 +61,7 @@ class TransfersTest < ApplicationSystemTestCase
   end
 
   test "can mark a single transaction as a transfer" do
-    txn = @user.family.entries.reverse_chronological.first
+    txn = @user.family.entries.account_transactions.reverse_chronological.first
 
     within "#" + dom_id(txn) do
       assert_text txn.account_transaction.category.name || "Uncategorized"

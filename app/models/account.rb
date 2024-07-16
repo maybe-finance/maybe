@@ -12,6 +12,8 @@ class Account < ApplicationRecord
   has_many :entries, dependent: :destroy, class_name: "Account::Entry"
   has_many :transactions, through: :entries, source: :entryable, source_type: "Account::Transaction"
   has_many :valuations, through: :entries, source: :entryable, source_type: "Account::Valuation"
+  has_many :trades, through: :entries, source: :entryable, source_type: "Account::Trade"
+  has_many :holdings, dependent: :destroy
   has_many :balances, dependent: :destroy
   has_many :imports, dependent: :destroy
   has_many :syncs, dependent: :destroy
@@ -106,5 +108,13 @@ class Account < ApplicationRecord
         currency: currency,
         entryable: Account::Valuation.new
     end
+  end
+
+  def holding_qty(security, date: Date.current)
+    entries.account_trades
+           .joins("JOIN account_trades ON account_entries.entryable_id = account_trades.id")
+           .where(account_trades: { security_id: security.id })
+           .where("account_entries.date <= ?", date)
+           .sum("account_trades.qty")
   end
 end
