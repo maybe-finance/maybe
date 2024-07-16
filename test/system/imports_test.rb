@@ -51,6 +51,8 @@ class ImportsTest < ApplicationSystemTestCase
 
     click_button "Next"
 
+    click_button "Copy & Paste"
+
     # 2) Load Step
     assert_selector "h1", text: "Load import"
 
@@ -61,6 +63,60 @@ class ImportsTest < ApplicationSystemTestCase
         2024-01-01,Amazon purchase,Shopping,-89.50
       ROWS
     end
+
+    click_button "Next"
+
+    # 3) Configure step
+    assert_selector "h1", text: "Configure import"
+
+    within "form" do
+      select "Custom Name Column", from: "import_column_mappings_name"
+    end
+
+    click_button "Next"
+
+    # 4) Clean step
+    assert_selector "h1", text: "Clean import"
+
+    # We have an invalid value, so user cannot click next yet
+    assert_no_text "Next"
+
+    # Replace invalid date with valid date
+    fill_in "cell-0-0", with: "2024-01-02"
+
+    # Trigger blur event so value saves
+    find("body").click
+
+    click_link "Next"
+
+    # 5) Confirm step
+    assert_selector "h1", text: "Confirm import"
+    assert_selector "#new_account_entry", count: 2
+    click_button "Import 2 transactions"
+    assert_selector "h1", text: "Imports"
+  end
+
+  test "can perform import by CSV upload" do
+    trigger_import_from_settings
+    verify_import_modal
+
+    within "#modal" do
+      click_link "New import from CSV"
+    end
+
+    # 1) Create import step
+    assert_selector "h1", text: "New import"
+
+    within "form" do
+      select "Checking Account", from: "import_account_id"
+    end
+
+    click_button "Next"
+
+    click_button "Upload CSV"
+
+    find(".csv-drop-box").drop File.join(file_fixture_path, "transactions.csv")
+    assert_selector "div.csv-preview", text: "transactions.csv"
 
     click_button "Next"
 
