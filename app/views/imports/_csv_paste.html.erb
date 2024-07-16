@@ -1,11 +1,9 @@
-<%= form_with model: @import, url: load_import_path(@import) do |form| %>
-  <div>
+<%= styled_form_with model: @import, url: load_import_path(@import), class: "space-y-4" do |form| %>
     <%= form.text_area :raw_csv_str,
                        rows: 10,
                        required: true,
                        placeholder: "Paste your CSV file contents here",
-                       class: "rounded-md w-full border text-sm border-alpha-black-100 bg-white placeholder:text-gray-400 p-4" %>
-  </div>
+                       class: "rounded-md w-full border text-sm border-alpha-black-100 bg-white placeholder:text-gray-400" %>
 
   <%= form.submit t(".next"), class: "px-4 py-2 mb-4 block w-full rounded-lg bg-gray-900 text-white text-sm font-medium", data: { turbo_confirm: (@import.raw_csv_str? ? { title: t(".confirm_title"), body: t(".confirm_body"), accept: t(".confirm_accept") } : nil) } %>
 <% end %>
