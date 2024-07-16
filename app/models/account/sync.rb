@@ -17,6 +17,7 @@ class Account::Sync < ApplicationRecord
     start!
 
     sync_balances
+    sync_holdings
 
     complete!
   rescue StandardError => error
@@ -27,6 +28,14 @@ class Account::Sync < ApplicationRecord
 
     def sync_balances
       syncer = Account::Balance::Syncer.new(account, start_date: start_date)
+
+      syncer.run
+
+      append_warnings(syncer.warnings)
+    end
+
+    def sync_holdings
+      syncer = Account::Holding::Syncer.new(account, start_date: start_date)
 
       syncer.run
 

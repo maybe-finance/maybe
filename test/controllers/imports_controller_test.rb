@@ -65,11 +65,40 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Import CSV loaded", flash[:notice]
   end
 
+  test "should upload CSV file if valid" do
+    Tempfile.open([ "transactions.csv", ".csv" ]) do |temp|
+      CSV.open(temp, "wb", headers: true) do |csv|
+        valid_csv_str.split("\n").each { |row| csv << row.split(",") }
+      end
+
+      patch upload_import_url(@empty_import), params: { import: { raw_csv_str: Rack::Test::UploadedFile.new(temp, ".csv") } }
+      assert_redirected_to configure_import_path(@empty_import)
+      assert_equal "CSV File loaded", flash[:notice]
+    end
+  end
+
   test "should flash error message if invalid CSV input" do
     patch load_import_url(@empty_import), params: { import: { raw_csv_str: malformed_csv_str } }
 
     assert_response :unprocessable_entity
     assert_equal "Raw csv str is not a valid CSV format", flash[:error]
+  end
+
+  test "should flash error message if invalid CSV file upload" do
+    Tempfile.open([ "transactions.csv", ".csv" ]) do |temp|
+      temp.write(malformed_csv_str)
+      temp.rewind
+
+      patch upload_import_url(@empty_import), params: { import: { raw_csv_str: Rack::Test::UploadedFile.new(temp, ".csv") } }
+      assert_response :unprocessable_entity
+      assert_equal "Raw csv str is not a valid CSV format", flash[:error]
+    end
+  end
+
+  test "should flash error message if no fileprovided for upload" do
+    patch upload_import_url(@empty_import), params: { import: { raw_csv_str: nil } }
+    assert_response :unprocessable_entity
+    assert_equal "Please select a file to upload", flash[:error]
   end
 
   test "should get configure" do

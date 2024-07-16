@@ -51,6 +51,9 @@
 # Ignore .devcontainer files
 compose-dev.yaml
 
+# Ignore asdf ruby version file
+.tool-versions
+
 # Ignore GCP keyfile
 gcp-storage-keyfile.json
 

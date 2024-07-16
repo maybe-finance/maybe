@@ -12,6 +12,7 @@ class Account::EntryTest < ActiveSupport::TestCase
 
     new_valuation = Account::Entry.new \
       entryable: Account::Valuation.new,
+      account: existing_valuation.account,
       date: existing_valuation.date, # invalid
       currency: existing_valuation.currency,
       amount: existing_valuation.amount
@@ -62,6 +63,9 @@ class Account::EntryTest < ActiveSupport::TestCase
     params = params.merge(categories: [ category.name ], merchants: [ merchant.name ]) # transaction specific search param
 
     assert_equal 1, family.entries.search(params).size
+
+    params = { search: "%" }
+    assert_equal 0, family.entries.search(params).size
   end
 
   test "can calculate total spending for a group of transactions" do
@@ -88,5 +92,21 @@ class Account::EntryTest < ActiveSupport::TestCase
   test "transactions with negative amounts are inflows, positive amounts are outflows to an account" do
     assert create_transaction(amount: -10).inflow?
     assert create_transaction(amount: 10).outflow?
+  end
+
+  test "cannot sell more shares of stock than owned" do
+    account = families(:empty).accounts.create! name: "Test", balance: 0, accountable: Investment.new
+    security = securities(:aapl)
+
+    error = assert_raises ActiveRecord::RecordInvalid do
+      account.entries.create! \
+        date: Date.current,
+        amount: 100,
+        currency: "USD",
+        name: "Sell 10 shares of AMZN",
+        entryable: Account::Trade.new(qty: -10, price: 200, security: security)
+    end
+
+    assert_match /cannot sell 10.0 shares of aapl because you only own 0.0 shares/, error.message
   end
 end

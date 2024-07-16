@@ -1,0 +1,15 @@
+one:
+  account: investment
+  security: aapl
+  date: <%= Date.current %>
+  qty: 10
+  amount: 2150 # 10 * $215
+  currency: USD
+
+two:
+  account: investment
+  security: aapl
+  date: <%= 1.day.ago.to_date %>
+  qty: 10
+  amount: 2140 # 10 * $214
+  currency: USD

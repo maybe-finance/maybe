@@ -27,6 +27,25 @@ en:
       invalid_data: You have invalid data, please fix before continuing
     create:
       import_created: Import created
+    csv_paste:
+      confirm_accept: Yep, start over!
+      confirm_body: This will reset your import. Any changes you have made to the
+        CSV will be erased.
+      confirm_title: Are you sure?
+      instructions: Your CSV should have the following columns and formats for the
+        best import experience.
+      next: Next
+      requirement1: Dates must be in ISO 8601 format (YYYY-MM-DD)
+      requirement2: Negative transaction is an "outflow" (expense), positive is an
+        "inflow" (income)
+      requirement3: Can have 0 or more tags separated by |
+    csv_upload:
+      confirm_accept: Yep, start over!
+      confirm_body: This will reset your import. Any changes you have made to the
+        CSV will be erased.
+      confirm_title: Are you sure?
+      instructions: The csv file must be in the format below. You can also reuse and
+      next: Next
     destroy:
       import_destroyed: Import destroyed
     edit:
@@ -56,20 +75,9 @@ en:
       new: New import
       title: Imports
     load:
-      confirm_accept: Yep, start over!
-      confirm_body: This will reset your import. Any changes you have made to the
-        CSV will be erased.
-      confirm_title: Are you sure?
       description: Create a spreadsheet or upload an exported CSV from your financial
         institution.
-      instructions: Your CSV should have the following columns and formats for the
-        best import experience.
       load_title: Load import
-      next: Next
-      requirement1: Dates must be in ISO 8601 format (YYYY-MM-DD)
-      requirement2: Negative transaction is an "outflow" (expense), positive is an
-        "inflow" (income)
-      requirement3: Can have 0 or more tags separated by |
       subtitle: Import your transactions
     load_csv:
       import_loaded: Import CSV loaded
@@ -95,3 +103,5 @@ en:
       import_updated: Import updated
     update_mappings:
       column_mappings_saved: Column mappings saved
+    upload_csv:
+      import_loaded: CSV File loaded

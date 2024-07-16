@@ -1,0 +1,9 @@
+aapl:
+  isin: US0378331005
+  symbol: aapl
+  name: Apple
+
+msft:
+  isin: US5949181045
+  symbol: msft
+  name: Microsoft

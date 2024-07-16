@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     member do
       get "load"
       patch "load" => "imports#load_csv"
+      patch "upload" => "imports#upload_csv"
 
       get "configure"
       patch "configure" => "imports#update_mappings"

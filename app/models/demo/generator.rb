@@ -13,31 +13,33 @@ class Demo::Generator
   end
 
   def reset_data!
-    clear_data!
-    create_user!
+    Family.transaction do
+      clear_data!
+      create_user!
 
-    puts "user reset"
+      puts "user reset"
 
-    create_tags!
-    create_categories!
-    create_merchants!
+      create_tags!
+      create_categories!
+      create_merchants!
 
-    puts "tags, categories, merchants created"
+      puts "tags, categories, merchants created"
 
-    create_credit_card_account!
-    create_checking_account!
-    create_savings_account!
+      create_credit_card_account!
+      create_checking_account!
+      create_savings_account!
 
-    create_investment_account!
-    create_house_and_mortgage!
-    create_car_and_loan!
+      create_investment_account!
+      create_house_and_mortgage!
+      create_car_and_loan!
 
-    puts "accounts created"
+      puts "accounts created"
 
-    family.sync
+      family.sync
 
-    puts "balances synced"
-    puts "Demo data loaded successfully!"
+      puts "balances synced"
+      puts "Demo data loaded successfully!"
+    end
   end
 
   private
@@ -55,6 +57,8 @@ class Demo::Generator
 
     def clear_data!
       ExchangeRate.destroy_all
+      Security.destroy_all
+      Security::Price.destroy_all
     end
 
     def create_user!
@@ -161,16 +165,52 @@ class Demo::Generator
       end
     end
 
+    def load_securities!
+      securities = [
+        { isin: "US0378331005", symbol: "AAPL", name: "Apple Inc.", reference_price: 210 },
+        { isin: "JP3633400001", symbol: "TM", name: "Toyota Motor Corporation", reference_price: 202 },
+        { isin: "US5949181045", symbol: "MSFT", name: "Microsoft Corporation", reference_price: 455 }
+      ]
+
+      securities.each do |security_attributes|
+        security = Security.create! security_attributes.except(:reference_price)
+
+        # Load prices for last 2 years
+        (730.days.ago.to_date..Date.current).each do |date|
+          reference = security_attributes[:reference_price]
+          low_price = reference - 20
+          high_price = reference + 20
+          Security::Price.create! \
+            isin: security.isin,
+            date: date,
+            price: Faker::Number.positive(from: low_price, to: high_price)
+        end
+      end
+    end
+
     def create_investment_account!
+      load_securities!
+
       account = family.accounts.create! \
         accountable: Investment.new,
         name: "Robinhood",
         balance: 100000,
         institution: family.institutions.find_or_create_by(name: "Robinhood")
 
-      create_valuation!(account, 2.years.ago.to_date, 60000)
-      create_valuation!(account, 1.year.ago.to_date, 70000)
-      create_valuation!(account, 3.months.ago.to_date, 92000)
+      15.times do
+        date = Faker::Number.positive(to: 730).days.ago.to_date
+        security = securities.sample
+        qty = Faker::Number.between(from: -10, to: 10)
+        price = Security::Price.find_by!(isin: security.isin, date: date).price
+        name_prefix = qty < 0 ? "Sell " : "Buy "
+
+        account.entries.create! \
+          date: date,
+          amount: qty * price,
+          currency: "USD",
+          name: name_prefix + "#{qty} shares of #{security.symbol}",
+          entryable: Account::Trade.new(qty: qty, price: price, security: security)
+      end
     end
 
     def create_house_and_mortgage!
@@ -260,6 +300,10 @@ class Demo::Generator
       tag_from_merchant = tags.find { |t| t.name == mapping[merchant.name] }
 
       tag_from_merchant || tags.find { |t| t.name == "Demo Tag" }
+    end
+
+    def securities
+      @securities ||= Security.all.to_a
     end
 
     def merchants
