@@ -79,7 +79,7 @@
           <%= f.text_field :name, placeholder: t(".name.placeholder"), required: "required", label: t(".name.label"), autofocus: true %>
           <%= f.collection_select :institution_id, Current.family.institutions.alphabetically, :id, :name, { include_blank: t(".ungrouped"), label: t(".institution") } %>
           <%= render "accounts/accountables/#{permitted_accountable_partial(@account.accountable_type)}", f: f %>
-          <%= f.money_field :balance_money, label: t(".balance"), required: "required" %>
+          <%= money_with_currency_field f, :balance_money, label: t(".balance"), required: "required" %>
 
           <div>
             <%= check_box_tag :add_start_values, class: "maybe-checkbox maybe-checkbox--light peer mb-1" %>

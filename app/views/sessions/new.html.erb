@@ -7,7 +7,7 @@
 
   <%= form.email_field :email, label: t(".email"), autofocus: false, autocomplete: "email", required: "required", placeholder: t(".email_placeholder") %>
 
-  <%= form.password_field :password, label: true, required: "required" %>
+  <%= form.password_field :password, label: t(".password"), required: "required" %>
 
   <%= form.submit t(".submit") %>
 <% end %>

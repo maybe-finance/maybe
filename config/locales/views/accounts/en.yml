@@ -37,9 +37,6 @@ en:
       other_accounts: Other accounts
     new:
       balance: Current balance
-      currency:
-        all_others: All Others
-        popular: Popular
       institution: Financial institution
       name:
         label: Account name

@@ -15,16 +15,16 @@
 
 @layer components {
   .form-field {
-    @apply relative rounded-md border bg-white border-alpha-black-100 shadow-xs;
+    @apply flex flex-col gap-1 relative px-3 py-2 rounded-md border bg-white border-alpha-black-100 shadow-xs w-full;
     @apply focus-within:border-gray-900 focus-within:shadow-none focus-within:ring-4 focus-within:ring-gray-100;
   }
 
   .form-field__label {
-    @apply block px-3 pt-2 pb-0 text-xs text-gray-500;
+    @apply block text-xs text-gray-500;
   }
 
   .form-field__input {
-    @apply w-full border-none bg-transparent px-3 pt-1 pb-2 text-sm opacity-100;
+    @apply border-none bg-transparent text-sm opacity-100 w-full p-0;
     @apply focus:opacity-100 focus:outline-none focus:ring-0;
     @apply placeholder-shown:opacity-50;
     @apply disabled:opacity-50;
@@ -59,7 +59,7 @@
   }
 
   select[multiple="multiple"] {
-    @apply p-2 space-y-0.5;
+    @apply py-2 space-y-0.5;
   }
 
   select[multiple="multiple"] option {

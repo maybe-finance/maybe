@@ -12,3 +12,4 @@ en:
       reset_password: Reset it
       submit: Log in
       title: Sign in to your account
+      password: "Password"
