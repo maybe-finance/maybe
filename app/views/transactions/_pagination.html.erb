@@ -41,7 +41,6 @@
   </div>
   <div class="flex items-center gap-4">
     <%= form_with url: transactions_path,
-                builder: ActionView::Helpers::FormBuilder,
                 method: :get,
                 class: "flex items-center gap-4",
                 data: { controller: "auto-submit-form" } do |f| %>

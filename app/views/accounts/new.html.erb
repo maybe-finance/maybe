@@ -73,13 +73,13 @@
         <% end %>
         <span>Add <%= @account.accountable.model_name.human.downcase %></span>
       </div>
-      <%= form_with model: @account, url: accounts_path, scope: :account, html: { class: "m-5 mt-1 flex flex-col justify-between grow", data: { turbo: false } } do |f| %>
+      <%= styled_form_with model: @account, url: accounts_path, scope: :account, class: "m-5 mt-1 flex flex-col justify-between grow", data: { turbo: false } do |f| %>
         <div class="space-y-4 grow">
           <%= f.hidden_field :accountable_type %>
           <%= f.text_field :name, placeholder: t(".name.placeholder"), required: "required", label: t(".name.label"), autofocus: true %>
           <%= f.collection_select :institution_id, Current.family.institutions.alphabetically, :id, :name, { include_blank: t(".ungrouped"), label: t(".institution") } %>
           <%= render "accounts/accountables/#{permitted_accountable_partial(@account.accountable_type)}", f: f %>
-          <%= f.money_field :balance_money, label: t(".balance"), required: "required" %>
+          <%= money_with_currency_field f, :balance_money, label: t(".balance"), required: "required" %>
 
           <div>
             <%= check_box_tag :add_start_values, class: "maybe-checkbox maybe-checkbox--light peer mb-1" %>

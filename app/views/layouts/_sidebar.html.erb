@@ -91,17 +91,18 @@
         <%= t(".portfolio") %>
       <% end %>
       <span class="font-bold tracking-wide">&bull;</span>
-      <%= form_with url: list_accounts_path, method: :get, class: "flex items-center gap-4", data: { controller: "auto-submit-form", turbo_frame: "account-list" } do %>
-        <%= render partial: "shared/period_select", locals: { button_class: "flex items-center gap-1 w-full cursor-pointer font-bold tracking-wide" } %>
+      <%= form_with url: list_accounts_path, method: :get, data: { controller: "auto-submit-form", turbo_frame: "account-list" } do |form| %>
+        <%= period_select form: form, selected: "last_7_days", classes: "w-full border-none pl-2 pr-7 text-xs bg-transparent gap-1 cursor-pointer font-semibold tracking-wide focus:outline-none focus:ring-0" %>
       <% end %>
     </div>
-    <%= link_to new_account_path, id: "sidebar-new-account", class: "block hover:bg-gray-100 p-2 text-sm font-semibold text-gray-900 flex items-center rounded", title: t(".new_account"), data: { turbo_frame: "modal" } do %>
+    <%= link_to new_account_path, id: "sidebar-new-account", class: "block hover:bg-gray-100 font-semibold text-gray-900 flex items-center rounded", title: t(".new_account"), data: { turbo_frame: "modal" } do %>
       <%= lucide_icon("plus", class: "w-5 h-5 text-gray-500") %>
     <% end %>
   </div>
-  <turbo-frame id="account-list" target="_top">
+
+  <%= turbo_frame_tag "account-list", target: "_top" do %>
     <% account_groups.each do |group| %>
       <%= render "accounts/account_list", group: group %>
     <% end %>
-  </turbo-frame>
+  <% end %>
 </div>

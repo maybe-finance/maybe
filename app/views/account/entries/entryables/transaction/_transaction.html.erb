@@ -31,7 +31,7 @@
 
     <% if unconfirmed_transfer?(entry) %>
       <% if editable %>
-        <%= form_with url: unmark_transfers_transactions_path, builder: ActionView::Helpers::FormBuilder, class: "flex items-center", data: {
+        <%= form_with url: unmark_transfers_transactions_path, class: "flex items-center", data: {
           turbo_confirm: {
             title: t(".remove_transfer"),
             body: t(".remove_transfer_body"),

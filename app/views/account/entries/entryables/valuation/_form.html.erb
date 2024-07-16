@@ -1,8 +1,7 @@
 <%# locals: (entry:) %>
 <%= form_with model: [entry.account, entry],
               data: { turbo_frame: "_top" },
-              url: entry.new_record? ? account_entries_path(entry.account) : account_entry_path(entry.account, entry),
-              builder: ActionView::Helpers::FormBuilder do |f| %>
+              url: entry.new_record? ? account_entries_path(entry.account) : account_entry_path(entry.account, entry) do |f| %>
   <div class="grid grid-cols-10 p-4 items-center">
     <div class="col-span-7 flex items-center gap-4">
       <div class="w-8 h-8 rounded-full p-1.5 flex items-center justify-center bg-gray-500/5">

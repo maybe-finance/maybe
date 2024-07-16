@@ -5,7 +5,7 @@
   <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
   <div class="space-y-4">
     <%= settings_section title: t(".profile_title"), subtitle: t(".profile_subtitle") do %>
-      <%= form_with model: Current.user, url: settings_profile_path, html: {data: { controller: "profile-image-preview" }} do |form| %>
+      <%= styled_form_with model: Current.user, url: settings_profile_path, class: "space-y-4", data: { controller: "profile-image-preview" } do |form| %>
         <div class="flex items-center gap-4">
           <div class="relative flex justify-center items-center bg-gray-50 w-24 h-24 rounded-full border border-alpha-black-25">
             <div data-profile-image-preview-target="imagePreview" class="h-full w-full flex justify-center items-center">
@@ -43,7 +43,7 @@
     <% end %>
     <%= settings_section title: t(".household_title"), subtitle: t(".household_subtitle") do %>
       <div class="space-y-4">
-        <%= form_with model: Current.user, url: settings_profile_path, html: { class: "space-y-4", data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value": "blur" } } do |form| %>
+        <%= styled_form_with model: Current.user, url: settings_profile_path, class: "space-y-4", data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value": "blur" } do |form| %>
           <%= form.fields_for :family_attributes do |family_fields| %>
             <%= family_fields.text_field :name, placeholder: t(".household_form_input_placeholder"), value: Current.family.name, label: t(".household_form_label"), disabled: !Current.user.admin?, "data-auto-submit-form-target": "auto" %>
           <% end %>

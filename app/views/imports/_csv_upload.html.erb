@@ -1,4 +1,4 @@
-<%= form_with model: @import, url: upload_import_path(@import), class: "dropzone", data: { controller: "csv-upload" }, method: :patch, multipart: true do |form| %>
+<%= styled_form_with model: @import, url: upload_import_path(@import), class: "dropzone space-y-4", data: { controller: "csv-upload" }, method: :patch, multipart: true do |form| %>
   <div class="flex items-center justify-center w-full">
     <label for="import_raw_csv_str" class="csv-drop-box flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50" data-action="dragover->csv-upload#dragover dragleave->csv-upload#dragleave drop->csv-upload#drop">
       <div class="flex flex-col items-center justify-center pt-5 pb-6">

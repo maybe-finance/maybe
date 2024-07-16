@@ -69,8 +69,8 @@
           <%= tag.span period_label(@period), class: "text-gray-500" %>
         </div>
       </div>
-      <%= form_with url: account_path(@account), method: :get, class: "flex items-center gap-4", data: { controller: "auto-submit-form" } do %>
-        <%= render partial: "shared/period_select", locals: { value: @period.name } %>
+      <%= form_with url: account_path(@account), method: :get, data: { controller: "auto-submit-form" } do |form| %>
+        <%= period_select form: form, selected: @period.name %>
       <% end %>
     </div>
     <div class="h-96 flex items-center justify-center text-2xl font-bold">

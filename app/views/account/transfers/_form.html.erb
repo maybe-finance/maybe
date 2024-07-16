@@ -1,4 +1,4 @@
-<%= form_with model: transfer, data: { turbo_frame: "_top" } do |f| %>
+<%= styled_form_with model: transfer, class: "space-y-4", data: { turbo_frame: "_top" } do |f| %>
   <section>
     <fieldset class="bg-gray-50 rounded-lg p-1 grid grid-flow-col justify-stretch gap-x-2">
       <%= link_to new_transaction_path(nature: "expense"), data: { turbo_frame: :modal }, class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-gray-400" do %>
@@ -22,7 +22,8 @@
     <%= f.text_field :name, value: transfer.name, label: t(".description"), placeholder: t(".description_placeholder"), required: true %>
     <%= f.collection_select :from_account_id, Current.family.accounts.alphabetically, :id, :name, { prompt: t(".select_account"), label: t(".from") }, required: true %>
     <%= f.collection_select :to_account_id, Current.family.accounts.alphabetically, :id, :name, { prompt: t(".select_account"), label: t(".to") }, required: true %>
-    <%= f.money_field :amount_money, label: t(".amount"), required: true %>
+    <%= money_field f, :amount_money, label: t(".amount"), required: true %>
+    <%= f.hidden_field :currency, value: Current.family.currency %>
     <%= f.date_field :date, value: transfer.date, label: t(".date"), required: true, max: Date.current %>
   </section>
 

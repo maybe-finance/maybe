@@ -2,7 +2,7 @@
   <dialog data-controller="modal"
           data-action="click->modal#clickOutside"
           class="bg-white border border-alpha-black-25 rounded-2xl max-h-[calc(100vh-32px)] max-w-[480px] w-full shadow-xs h-full mt-4 mr-4">
-    <%= form_with url: bulk_update_transactions_path, scope: "bulk_update", html: { class: "h-full" }, data: { turbo_frame: "_top" } do |form| %>
+    <%= styled_form_with url: bulk_update_transactions_path, scope: "bulk_update", class: "h-full", data: { turbo_frame: "_top" } do |form| %>
       <div class="flex h-full flex-col justify-between p-4">
         <div>
           <div class="flex h-9 items-center justify-end">

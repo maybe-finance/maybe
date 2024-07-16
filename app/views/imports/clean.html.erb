@@ -24,7 +24,6 @@
           style="grid-template-columns: repeat(<%= @import.expected_fields.size %>, 1fr);">
           <% row.fields.each_with_index do |value, col_index| %>
             <%= form_with model: @import,
-                          builder: ActionView::Helpers::FormBuilder,
                           url: clean_import_url(@import),
                           method: :patch,
                           data: { turbo: false, controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>

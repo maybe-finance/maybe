@@ -4,7 +4,7 @@
 <div class="space-y-4">
   <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
   <%= settings_section title: t(".general_settings_title") do %>
-    <%= form_with model: Setting.new, url: settings_hosting_path, method: :patch, local: true, html: { class: "space-y-6", data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } } do |form| %>
+    <%= styled_form_with model: Setting.new, url: settings_hosting_path, method: :patch, local: true, class: "space-y-6", data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
 
       <% if ENV["HOSTING_PLATFORM"] == "render" %>
         <div>

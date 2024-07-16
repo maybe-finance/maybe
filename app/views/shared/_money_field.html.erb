@@ -1,0 +1,24 @@
+<%# locals: (form:, money_method:, default_currency: "USD", disable_currency: false, hide_currency: false, label: nil) %>
+<% fallback_label = t(".money-label") %>
+<div class="form-field pr-0" data-controller="money-field">
+  <%= form.label label || fallback_label, { class: "form-field__label" } %>
+
+  <div class="flex items-center gap-1">
+    <div class="flex items-center grow gap-1">
+      <span class="text-gray-500 text-sm" data-money-field-target="symbol">$</span>
+      <%= money_field form, money_method, { inline: true, "data-money-field-target" => "amount", default_currency: default_currency } %>
+    </div>
+    <% unless hide_currency %>
+      <div>
+        <%= currency_select form, :currency, { inline: true }, {
+          class: "form-field__input text-right pr-8 disabled:text-gray-500",
+          disabled: disable_currency,
+          data: {
+            "money-field-target" => "currency",
+            action: "money-field#handleCurrencyChange"
+          }
+        } %>
+      </div>
+    <% end %>
+  </div>
+</div>

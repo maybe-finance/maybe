@@ -6,6 +6,8 @@ en:
       body_html: "<p>You will not be able to undo this decision</p>"
       cancel: Cancel
       title: Are you sure?
+    money_field:
+      money-label: Amount
     no_account_empty_state:
       new_account: New account
       no_account_subtitle: Since no accounts have been added, there's no data to display.

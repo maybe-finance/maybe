@@ -5,16 +5,16 @@
   <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
   <%= settings_section title: t(".general_title"), subtitle: t(".general_subtitle") do %>
     <div>
-      <%= form_with model: Current.user, url: settings_preferences_path, html: { class: "space-y-4", data: { controller: "auto-submit-form" } } do |form| %>
-        <%= form.fields_for :family_attributes do |family_fields| %>
-          <%= family_fields.currency_select :currency, { selected: Current.family.currency, label: "Currency" }, { data: { auto_submit_form_target: "auto" } } %>
+      <%= styled_form_with model: Current.user, url: settings_preferences_path, class: "space-y-4", data: { controller: "auto-submit-form" } do |form| %>
+        <%= form.fields_for :family_attributes do |family_form| %>
+          <%= currency_select_full family_form, :currency, { label: "Currency", selected: Current.family.currency }, { data: { auto_submit_form_target: "auto" } } %>
         <% end %>
       <% end %>
     </div>
   <% end %>
   <%= settings_section title: t(".theme_title"), subtitle: t(".theme_subtitle") do %>
     <div>
-      <%= form_with model: Current.user, url: settings_preferences_path, local: true, html: { class: "flex justify-between items-center" } do |form| %>
+      <%= styled_form_with model: Current.user, url: settings_preferences_path, local: true, class: "flex justify-between items-center" do |form| %>
         <div class="text-center">
           <%= image_tag("light-mode-preview.png", alt: "Light Theme Preview", class: "h-44 mb-4") %>
           <div class="flex justify-center items-center gap-2">

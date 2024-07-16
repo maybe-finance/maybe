@@ -1,6 +1,6 @@
 <h1><% t(".title") %></h1>
 
-<%= form_with model: Current.user, url: password_path do |form| %>
+<%= styled_form_with model: Current.user, url: password_path, class: "space-y-4" do |form| %>
   <%= auth_messages form %>
 
   <div>
