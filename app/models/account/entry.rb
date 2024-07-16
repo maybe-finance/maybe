@@ -137,7 +137,7 @@ class Account::Entry < ApplicationRecord
 
     def search(params)
       query = all
-      query = query.where("account_entries.name ILIKE ?", "%#{params[:search]}%") if params[:search].present?
+      query = query.where("account_entries.name ILIKE ?", "%#{sanitize_sql_like(params[:search])}%") if params[:search].present?
       query = query.where("account_entries.date >= ?", params[:start_date]) if params[:start_date].present?
       query = query.where("account_entries.date <= ?", params[:end_date]) if params[:end_date].present?
 

@@ -62,6 +62,9 @@ class Account::EntryTest < ActiveSupport::TestCase
     params = params.merge(categories: [ category.name ], merchants: [ merchant.name ]) # transaction specific search param
 
     assert_equal 1, family.entries.search(params).size
+
+    params = { search: "%" }
+    assert_equal 0, family.entries.search(params).size
   end
 
   test "can calculate total spending for a group of transactions" do
