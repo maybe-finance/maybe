@@ -39,18 +39,18 @@ class ImportsController < ApplicationController
   end
 
   def upload_csv
-    file = import_params[:raw_csv_str]
-    @import.raw_csv_str = file.read
-    CSV.parse(@import.raw_csv_str)
+    begin
+      @import.raw_csv_str = import_params[:raw_csv_str].read
+    rescue NoMethodError
+      flash.now[:error] = "Please select a file to upload"
+      render :load, status: :unprocessable_entity and return
+    end
     if @import.save
       redirect_to configure_import_path(@import), notice: t(".import_loaded")
     else
       flash.now[:error] = @import.errors.full_messages.to_sentence
       render :load, status: :unprocessable_entity
     end
-  rescue CSV::MalformedCSVError, ArgumentError => error
-    flash.now[:error] = error.message
-    render :load, status: :unprocessable_entity
   end
 
   def load_csv
