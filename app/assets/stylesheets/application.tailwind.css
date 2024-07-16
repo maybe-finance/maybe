@@ -59,7 +59,7 @@
   }
 
   select[multiple="multiple"] {
-    @apply py-2 space-y-0.5;
+    @apply py-2 pr-2 space-y-0.5;
   }
 
   select[multiple="multiple"] option {
