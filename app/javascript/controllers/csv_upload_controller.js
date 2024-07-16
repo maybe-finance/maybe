@@ -1,11 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["input", "preview", "submit", "progressBar", "progressContainer", "filename", "filesize"]
+  static targets = ["input", "preview", "submit", "filename", "filesize"]
 
   connect() {
     this.submitTarget.disabled = true
-    this.progressContainerTarget.classList.add("hidden")
   }
 
   addFile(event) {
