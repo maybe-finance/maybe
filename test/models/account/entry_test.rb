@@ -48,7 +48,7 @@ class Account::EntryTest < ActiveSupport::TestCase
 
   test "can search entries" do
     family = families(:empty)
-    account = family.accounts.create! name: "Test", balance: 0, accountable: Depository.new
+    account = family.accounts.create! name: "Test", balance: 0, currency: "USD", accountable: Depository.new
     category = family.categories.first
     merchant = family.merchants.first
 
@@ -70,7 +70,7 @@ class Account::EntryTest < ActiveSupport::TestCase
 
   test "can calculate total spending for a group of transactions" do
     family = families(:empty)
-    account = family.accounts.create! name: "Test", balance: 0, accountable: Depository.new
+    account = family.accounts.create! name: "Test", balance: 0, currency: "USD", accountable: Depository.new
     create_transaction(account: account, amount: 100)
     create_transaction(account: account, amount: 100)
     create_transaction(account: account, amount: -500) # income, will be ignored
@@ -80,7 +80,7 @@ class Account::EntryTest < ActiveSupport::TestCase
 
   test "can calculate total income for a group of transactions" do
     family = families(:empty)
-    account = family.accounts.create! name: "Test", balance: 0, accountable: Depository.new
+    account = family.accounts.create! name: "Test", balance: 0, currency: "USD", accountable: Depository.new
     create_transaction(account: account, amount: -100)
     create_transaction(account: account, amount: -100)
     create_transaction(account: account, amount: 500) # income, will be ignored
@@ -95,7 +95,7 @@ class Account::EntryTest < ActiveSupport::TestCase
   end
 
   test "cannot sell more shares of stock than owned" do
-    account = families(:empty).accounts.create! name: "Test", balance: 0, accountable: Investment.new
+    account = families(:empty).accounts.create! name: "Test", balance: 0, currency: "USD", accountable: Investment.new
     security = securities(:aapl)
 
     error = assert_raises ActiveRecord::RecordInvalid do
