@@ -100,6 +100,7 @@ class Demo::Generator
         accountable: CreditCard.new,
         name: "Chase Credit Card",
         balance: 2300,
+        currency: "USD",
         institution: family.institutions.find_or_create_by(name: "Chase")
 
       50.times do
@@ -126,6 +127,7 @@ class Demo::Generator
         accountable: Depository.new,
         name: "Chase Checking",
         balance: 15000,
+        currency: "USD",
         institution: family.institutions.find_or_create_by(name: "Chase")
 
       10.times do
@@ -149,6 +151,7 @@ class Demo::Generator
         accountable: Depository.new,
         name: "Demo Savings",
         balance: 40000,
+        currency: "USD",
         subtype: "savings",
         institution: family.institutions.find_or_create_by(name: "Chase")
 
@@ -195,6 +198,7 @@ class Demo::Generator
         accountable: Investment.new,
         name: "Robinhood",
         balance: 100000,
+        currency: "USD",
         institution: family.institutions.find_or_create_by(name: "Robinhood")
 
       aapl = Security.find_by(symbol: "AAPL")
@@ -228,7 +232,8 @@ class Demo::Generator
       house = family.accounts.create! \
         accountable: Property.new,
         name: "123 Maybe Way",
-        balance: 560000
+        balance: 560000,
+        currency: "USD"
 
       create_valuation!(house, 3.years.ago.to_date, 520000)
       create_valuation!(house, 2.years.ago.to_date, 540000)
@@ -237,19 +242,22 @@ class Demo::Generator
       family.accounts.create! \
         accountable: Loan.new,
         name: "Mortgage",
-        balance: 495000
+        balance: 495000,
+        currency: "USD"
     end
 
     def create_car_and_loan!
       family.accounts.create! \
         accountable: Vehicle.new,
         name: "Honda Accord",
-        balance: 18000
+        balance: 18000,
+        currency: "USD"
 
       family.accounts.create! \
         accountable: Loan.new,
         name: "Car Loan",
-        balance: 8000
+        balance: 8000,
+        currency: "USD"
     end
 
     def create_transaction!(attributes = {})
