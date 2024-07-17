@@ -23,10 +23,7 @@ class AccountsController < ApplicationController
   end
 
   def new
-    @account = Account.new(
-      balance: nil,
-      accountable: Accountable.from_type(params[:type])&.new
-    )
+    @account = Account.new(accountable: Accountable.from_type(params[:type])&.new)
 
     if params[:institution_id]
       @account.institution = Current.family.institutions.find_by(id: params[:institution_id])

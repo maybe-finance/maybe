@@ -86,6 +86,7 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
         account: {
           accountable_type: "Depository",
           balance: 200,
+          currency: "USD",
           subtype: "checking",
           institution_id: institutions(:chase).id
         }
@@ -102,6 +103,7 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
         account: {
           accountable_type: "Depository",
           balance: 200,
+          currency: "USD",
           subtype: "checking",
           institution_id: institutions(:chase).id,
           start_balance: 100,

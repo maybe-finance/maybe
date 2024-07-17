@@ -25,6 +25,7 @@ module FormsHelper
     render partial: "shared/money_field", locals: {
       form: form,
       money_method: money_method,
+      default_currency: options[:default_currency] || "USD",
       disable_currency: options[:disable_currency] || false,
       hide_currency: options[:hide_currency] || false,
       label: options[:label] || "Amount"
@@ -34,7 +35,11 @@ module FormsHelper
   def money_field(form, method, options = {})
     value = form.object.send(method)
 
+    puts "Money field value: #{value}"
+
     currency = value&.currency || Money::Currency.new(options[:default_currency] || "USD")
+
+    puts "Money field currency: #{currency.iso_code}"
 
     # See "Monetizable" concern
     money_amount_method = method.to_s.chomp("_money").to_sym
