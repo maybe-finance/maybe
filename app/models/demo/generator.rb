@@ -197,10 +197,21 @@ class Demo::Generator
         balance: 100000,
         institution: family.institutions.find_or_create_by(name: "Robinhood")
 
-      15.times do
+      aapl = Security.find_by(symbol: "AAPL")
+      tm = Security.find_by(symbol: "TM")
+      msft = Security.find_by(symbol: "MSFT")
+
+      trades = [
+        { security: aapl, qty: 20 }, { security: msft, qty: 10 }, { security: aapl, qty: -5 },
+        { security: msft, qty: -5 }, { security: tm, qty: 10 }, { security: msft, qty: 5 },
+        { security: tm, qty: 10 }, { security: aapl, qty: -5 }, { security: msft, qty: -5 },
+        { security: tm, qty: 10 }, { security: msft, qty: 5 }, { security: aapl, qty: -10 }
+      ]
+
+      trades.each do |trade|
         date = Faker::Number.positive(to: 730).days.ago.to_date
-        security = securities.sample
-        qty = Faker::Number.between(from: -10, to: 10)
+        security = trade[:security]
+        qty = trade[:qty]
         price = Security::Price.find_by!(isin: security.isin, date: date).price
         name_prefix = qty < 0 ? "Sell " : "Buy "
 
