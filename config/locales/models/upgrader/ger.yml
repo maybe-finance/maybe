@@ -1,0 +1,13 @@
+---
+en:
+  upgrader:
+    deployer:
+      null_deployer:
+        success_message: 'No-op: null Deployer initiierte Bereitstellung erfolgreich'
+      render:
+        deploy_log_error: 'Fehler bei der Bereitstellung von %{type} %{commit_sha} an Render: %{error_message}'
+        deploy_log_info: Bereitstellung von %{type} %{commit_sha} an Render...
+        error_message_failed_deploy: Bereitstellung in Render fehlgeschlagen
+        error_message_not_set: Render-Deploy-Hook-URL ist nicht gesetzt
+        success_message: Ausgelöster Einsatz zum Rendering für Commit: %{commit_sha}'
+        troubleshooting_url: https://render.com/docs/deploy-hooks
