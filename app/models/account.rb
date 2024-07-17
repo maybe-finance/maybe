@@ -4,7 +4,7 @@ class Account < ApplicationRecord
 
   broadcasts_refreshes
 
-  validates :family, presence: true
+  validates :name, :balance, :currency, presence: true
 
   belongs_to :family
   belongs_to :institution, optional: true
