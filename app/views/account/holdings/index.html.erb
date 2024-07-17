@@ -1,0 +1,5 @@
+<%= turbo_frame_tag dom_id(@account, "holdings") do %>
+  <% @holdings.each do |holding| %>
+    <p><%= holding.security.name %></p>
+  <% end %>
+<% end %>

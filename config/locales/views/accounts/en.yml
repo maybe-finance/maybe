@@ -62,8 +62,9 @@ en:
         graphs may not reflect accurate values.
       sync_message_unknown_error: An error has occurred during the sync.
       total_value: Total Value
-      transactions: Transactions
       value: Value
+      transactions: Transactions
+      holdings: Holdings
     summary:
       new: New account
     sync:

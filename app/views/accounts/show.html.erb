@@ -78,22 +78,17 @@
     </div>
   </div>
 
-  <% selected_tab = params[:tab] || "value" %>
+  <% selected_tab_key, selected_tab_content_path = selected_account_tab(@account).values_at(:key, :content_path) %>
 
   <div class="flex gap-2 text-sm text-gray-900 font-medium mb-4">
-    <%= link_to t(".value"), account_path(tab: "value"), class: ["px-2 py-1.5 rounded-md border border-transparent", "bg-white shadow-xs border-alpha-black-50": selected_tab == "value"] %>
-    <%= link_to t(".transactions"), account_path(tab: "transactions"), class: ["px-2 py-1.5 rounded-md border border-transparent", "bg-white shadow-xs border-alpha-black-50": selected_tab == "transactions"] %>
+    <% account_tabs(@account).each do |tab| %>
+      <%= link_to tab[:label], tab[:path], class: ["px-2 py-1.5 rounded-md border border-transparent", "bg-white shadow-xs border-alpha-black-50": selected_tab_key == tab[:key]] %>
+    <% end %>
   </div>
 
   <div class="min-h-[800px]">
-    <% if selected_tab == "transactions" %>
-      <%= turbo_frame_tag dom_id(@account, "transactions"), src: transaction_account_entries_path(@account) do %>
-        <%= render "account/entries/loading" %>
-      <% end %>
-    <% else %>
-      <%= turbo_frame_tag dom_id(@account, "valuations"), src: valuation_account_entries_path(@account) do %>
-        <%= render "account/entries/loading" %>
-      <% end %>
+    <%= turbo_frame_tag dom_id(@account, selected_tab_key), src: selected_tab_content_path do %>
+      <%= render "account/entries/loading" %>
     <% end %>
   </div>
 </div>
