@@ -35,11 +35,7 @@ module FormsHelper
   def money_field(form, method, options = {})
     value = form.object.send(method)
 
-    puts "Money field value: #{value}"
-
     currency = value&.currency || Money::Currency.new(options[:default_currency] || "USD")
-
-    puts "Money field currency: #{currency.iso_code}"
 
     # See "Monetizable" concern
     money_amount_method = method.to_s.chomp("_money").to_sym
