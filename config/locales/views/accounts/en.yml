@@ -67,8 +67,6 @@ en:
       holdings: Holdings
     summary:
       new: New account
-    sync:
-      success: Account sync started
     sync_all:
       success: Successfully queued accounts for syncing.
     update:

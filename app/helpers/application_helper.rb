@@ -13,11 +13,18 @@ module ApplicationHelper
     name.underscore
   end
 
-  def notification(text, **options, &block)
-    content = tag.p(text)
-    content = capture &block if block_given?
+  def family_notifications_stream
+    turbo_stream_from [ Current.family, :notifications ] if Current.family
+  end
 
-    render partial: "shared/notification", locals: { type: options[:type], content: { body: content } }
+  def render_flash_notifications
+    notifications = flash.flat_map do |type, message_or_messages|
+      Array(message_or_messages).map do |message|
+        render partial: "shared/notification", locals: { type: type, message: message }
+      end
+    end
+
+    safe_join(notifications)
   end
 
   ##

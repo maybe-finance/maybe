@@ -11,9 +11,9 @@ class FamilyTest < ActiveSupport::TestCase
   test "calculates assets" do
     assert_equal Money.new(0, @family.currency), @family.assets
 
-    @family.accounts.create!(balance: 1000, accountable: Depository.new)
-    @family.accounts.create!(balance: 5000, accountable: OtherAsset.new)
-    @family.accounts.create!(balance: 10000, accountable: CreditCard.new) # ignored
+    create_account(balance: 1000, accountable: Depository.new)
+    create_account(balance: 5000, accountable: OtherAsset.new)
+    create_account(balance: 10000, accountable: CreditCard.new) # ignored
 
     assert_equal Money.new(1000 + 5000, @family.currency), @family.assets
   end
@@ -21,9 +21,9 @@ class FamilyTest < ActiveSupport::TestCase
   test "calculates liabilities" do
     assert_equal Money.new(0, @family.currency), @family.liabilities
 
-    @family.accounts.create!(balance: 1000, accountable: CreditCard.new)
-    @family.accounts.create!(balance: 5000, accountable: OtherLiability.new)
-    @family.accounts.create!(balance: 10000, accountable: Depository.new) # ignored
+    create_account(balance: 1000, accountable: CreditCard.new)
+    create_account(balance: 5000, accountable: OtherLiability.new)
+    create_account(balance: 10000, accountable: Depository.new) # ignored
 
     assert_equal Money.new(1000 + 5000, @family.currency), @family.liabilities
   end
@@ -31,15 +31,15 @@ class FamilyTest < ActiveSupport::TestCase
   test "calculates net worth" do
     assert_equal Money.new(0, @family.currency), @family.net_worth
 
-    @family.accounts.create!(balance: 1000, accountable: CreditCard.new)
-    @family.accounts.create!(balance: 50000, accountable: Depository.new)
+    create_account(balance: 1000, accountable: CreditCard.new)
+    create_account(balance: 50000, accountable: Depository.new)
 
     assert_equal Money.new(50000 - 1000, @family.currency), @family.net_worth
   end
 
   test "should exclude disabled accounts from calculations" do
-    cc = @family.accounts.create!(balance: 1000, accountable: CreditCard.new)
-    @family.accounts.create!(balance: 50000, accountable: Depository.new)
+    cc = create_account(balance: 1000, accountable: CreditCard.new)
+    create_account(balance: 50000, accountable: Depository.new)
 
     assert_equal Money.new(50000 - 1000, @family.currency), @family.net_worth
 
@@ -49,7 +49,7 @@ class FamilyTest < ActiveSupport::TestCase
   end
 
   test "syncs active accounts" do
-    account = @family.accounts.create!(balance: 1000, accountable: CreditCard.new, is_active: false)
+    account = create_account(balance: 1000, accountable: CreditCard.new, is_active: false)
 
     Account.any_instance.expects(:sync_later).never
 
@@ -63,8 +63,8 @@ class FamilyTest < ActiveSupport::TestCase
   end
 
   test "calculates snapshot" do
-    asset = @family.accounts.create!(balance: 500, accountable: Depository.new)
-    liability = @family.accounts.create!(balance: 100, accountable: CreditCard.new)
+    asset = create_account(balance: 500, accountable: Depository.new)
+    liability = create_account(balance: 100, accountable: CreditCard.new)
 
     asset.balances.create! date: 1.day.ago.to_date, currency: "USD", balance: 450
     asset.balances.create! date: Date.current, currency: "USD", balance: 500
@@ -93,8 +93,8 @@ class FamilyTest < ActiveSupport::TestCase
   end
 
   test "calculates top movers" do
-    checking_account = @family.accounts.create!(balance: 500, accountable: Depository.new)
-    savings_account = @family.accounts.create!(balance: 1000, accountable: Depository.new)
+    checking_account = create_account(balance: 500, accountable: Depository.new)
+    savings_account = create_account(balance: 1000, accountable: Depository.new)
 
     create_transaction(account: checking_account, date: 2.days.ago.to_date, amount: -1000)
     create_transaction(account: checking_account, date: 1.day.ago.to_date, amount: 10)
@@ -115,7 +115,7 @@ class FamilyTest < ActiveSupport::TestCase
   end
 
   test "calculates rolling transaction totals" do
-    account = @family.accounts.create!(balance: 1000, accountable: Depository.new)
+    account = create_account(balance: 1000, accountable: Depository.new)
     create_transaction(account: account, date: 2.days.ago.to_date, amount: -500)
     create_transaction(account: account, date: 1.day.ago.to_date, amount: 100)
     create_transaction(account: account, date: Date.current, amount: 20)
@@ -146,4 +146,11 @@ class FamilyTest < ActiveSupport::TestCase
 
     assert_equal expected_savings_rate_series, snapshot[:savings_rate_series].values.map(&:value).map { |v| v.round(2) }
   end
+
+  private
+
+    def create_account(attributes = {})
+      account = @family.accounts.create! name: "Test", currency: "USD", **attributes
+      account
+    end
 end

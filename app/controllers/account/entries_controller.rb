@@ -31,7 +31,7 @@ class Account::EntriesController < ApplicationController
     else
       # TODO: this is not an ideal way to handle errors and should eventually be improved.
       # See: https://github.com/hotwired/turbo-rails/pull/367
-      flash[:error] = @entry.errors.full_messages.to_sentence
+      flash[:alert] = @entry.errors.full_messages.to_sentence
       redirect_to account_path(@account)
     end
   end

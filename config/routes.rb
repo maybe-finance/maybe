@@ -10,6 +10,10 @@ Rails.application.routes.draw do
   resource :password_reset
   resource :password
 
+  namespace :help do
+    resources :articles, only: :show
+  end
+
   namespace :settings do
     resource :profile, only: %i[show update destroy]
     resource :preferences, only: %i[show update]

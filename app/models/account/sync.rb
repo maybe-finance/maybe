@@ -48,13 +48,35 @@ class Account::Sync < ApplicationRecord
 
     def start!
       update! status: "syncing", last_ran_at: Time.now
+      broadcast_start
     end
 
     def complete!
       update! status: "completed"
+      broadcast_result type: "notice", message: "Sync complete"
     end
 
     def fail!(error)
       update! status: "failed", error: error.message
+      broadcast_result type: "alert", message: error.message
+    end
+
+    def broadcast_start
+      broadcast_append_to(
+        [ account.family, :notifications ],
+        target: "notification-tray",
+        partial: "shared/notification",
+        locals: { id: id, type: "processing", message: "Syncing account balances" }
+      )
+    end
+
+    def broadcast_result(type:, message:)
+      broadcast_remove_to account.family, :notifications, target: id # Remove persistent syncing notification
+      broadcast_append_to(
+        [ account.family, :notifications ],
+        target: "notification-tray",
+        partial: "shared/notification",
+        locals: { type: type, message: message }
+      )
     end
 end

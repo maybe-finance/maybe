@@ -25,8 +25,13 @@
   </head>
 
   <body class="h-full">
-    <div id="notification-tray" class="fixed z-50 space-y-1 top-6 right-10"></div>
-    <%= safe_join(flash.map { |type, message| notification(message, type: type) }) %>
+  <div class="fixed z-50 space-y-1 top-6 right-10">
+    <div id="notification-tray">
+      <%= render_flash_notifications %>
+    </div>
+  </div>
+
+  <%= family_notifications_stream %>
 
     <%= content_for?(:content) ? yield(:content) : yield %>
 
@@ -39,5 +44,4 @@
     <%= render "shared/app_version" %>
     <% end %>
   </body>
-
 </html>

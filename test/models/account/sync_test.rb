@@ -26,9 +26,15 @@ class Account::SyncTest < ActiveSupport::TestCase
 
     @sync.run
 
+    streams = capture_turbo_stream_broadcasts [ @account.family, :notifications ]
+
     assert_equal "completed", @sync.status
     assert_equal [ "test balance sync warning", "test holding sync warning" ], @sync.warnings
     assert @sync.last_ran_at
+
+    assert_equal "append", streams.first["action"]
+    assert_equal "remove", streams.second["action"]
+    assert_equal "append", streams.third["action"]
   end
 
   test "handles sync errors" do

@@ -81,7 +81,7 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     patch load_import_url(@empty_import), params: { import: { raw_csv_str: malformed_csv_str } }
 
     assert_response :unprocessable_entity
-    assert_equal "Raw csv str is not a valid CSV format", flash[:error]
+    assert_equal "Raw csv str is not a valid CSV format", flash[:alert]
   end
 
   test "should flash error message if invalid CSV file upload" do
@@ -91,14 +91,14 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
 
       patch upload_import_url(@empty_import), params: { import: { raw_csv_str: Rack::Test::UploadedFile.new(temp, ".csv") } }
       assert_response :unprocessable_entity
-      assert_equal "Raw csv str is not a valid CSV format", flash[:error]
+      assert_equal "Raw csv str is not a valid CSV format", flash[:alert]
     end
   end
 
   test "should flash error message if no fileprovided for upload" do
     patch upload_import_url(@empty_import), params: { import: { raw_csv_str: nil } }
     assert_response :unprocessable_entity
-    assert_equal "Please select a file to upload", flash[:error]
+    assert_equal "Please select a file to upload", flash[:alert]
   end
 
   test "should get configure" do

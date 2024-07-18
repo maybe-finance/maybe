@@ -42,13 +42,13 @@ class ImportsController < ApplicationController
     begin
       @import.raw_csv_str = import_params[:raw_csv_str].read
     rescue NoMethodError
-      flash.now[:error] = "Please select a file to upload"
+      flash.now[:alert] = "Please select a file to upload"
       render :load, status: :unprocessable_entity and return
     end
     if @import.save
       redirect_to configure_import_path(@import), notice: t(".import_loaded")
     else
-      flash.now[:error] = @import.errors.full_messages.to_sentence
+      flash.now[:alert] = @import.errors.full_messages.to_sentence
       render :load, status: :unprocessable_entity
     end
   end
@@ -57,7 +57,7 @@ class ImportsController < ApplicationController
     if @import.update(import_params)
       redirect_to configure_import_path(@import), notice: t(".import_loaded")
     else
-      flash.now[:error] = @import.errors.full_messages.to_sentence
+      flash.now[:alert] = @import.errors.full_messages.to_sentence
       render :load, status: :unprocessable_entity
     end
   end

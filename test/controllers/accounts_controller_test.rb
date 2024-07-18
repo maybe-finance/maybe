@@ -27,7 +27,7 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
 
   test "can sync an account" do
     post sync_account_path(@account)
-    assert_redirected_to account_url(@account)
+    assert_response :no_content
   end
 
   test "can sync all accounts" do
@@ -84,6 +84,7 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
     assert_difference [ "Account.count", "Account::Valuation.count", "Account::Entry.count" ], 1 do
       post accounts_path, params: {
         account: {
+          name: "Test",
           accountable_type: "Depository",
           balance: 200,
           currency: "USD",
@@ -101,6 +102,7 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
     assert_difference -> { Account.count } => 1, -> { Account::Valuation.count } => 2 do
       post accounts_path, params: {
         account: {
+          name: "Test",
           accountable_type: "Depository",
           balance: 200,
           currency: "USD",

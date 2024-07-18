@@ -88,7 +88,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
   test "transaction count represents filtered total" do
     family = families(:empty)
     sign_in family.users.first
-    account = family.accounts.create! name: "Test", balance: 0, accountable: Depository.new
+    account = family.accounts.create! name: "Test", balance: 0, currency: "USD", accountable: Depository.new
 
     3.times do
       create_transaction(account: account)
@@ -110,7 +110,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
   test "can paginate" do
     family = families(:empty)
     sign_in family.users.first
-    account = family.accounts.create! name: "Test", balance: 0, accountable: Depository.new
+    account = family.accounts.create! name: "Test", balance: 0, currency: "USD", accountable: Depository.new
 
     11.times do
       create_transaction(account: account)
