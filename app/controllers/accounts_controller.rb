@@ -68,8 +68,6 @@ class AccountsController < ApplicationController
     unless @account.syncing?
       @account.sync_later
     end
-
-    redirect_to account_path(@account), notice: t(".success")
   end
 
   def sync_all

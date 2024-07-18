@@ -76,7 +76,7 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
 
       post send_test_email_settings_hosting_path
       assert_response :unprocessable_entity
-      assert controller.flash[:error].present?
+      assert controller.flash[:alert].present?
     end
   end
 
@@ -87,7 +87,7 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
 
       post send_test_email_settings_hosting_path
       assert_response :unprocessable_entity
-      assert controller.flash[:error].present?
+      assert controller.flash[:alert].present?
     end
   end
 end

@@ -69,7 +69,7 @@ class Account::EntriesControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    assert_equal "Date has already been taken", flash[:error]
+    assert_equal "Date has already been taken", flash[:alert]
     assert_redirected_to account_path(@valuation.account)
   end
 
