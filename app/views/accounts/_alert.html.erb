@@ -1,0 +1,19 @@
+<%# locals: (message:, help_path: nil) -%>
+<%= tag.div class: "flex gap-6 items-center rounded-xl px-4 py-3 bg-error/5",
+            data: { controller: "element-removal" },
+            role: "alert" do %>
+  <div class="flex gap-3 items-center text-red-500 grow overflow-x-scroll">
+    <%= lucide_icon("alert-octagon", class: "w-5 h-5 shrink-0") %>
+    <p class="text-sm whitespace-nowrap"><%= message %></p>
+  </div>
+
+  <div class="flex items-center gap-4 ml-auto">
+    <% if help_path %>
+      <%= link_to "Troubleshoot", help_path, class: "text-red-500 font-medium hover:underline", data: { turbo_frame: :drawer } %>
+    <% end %>
+
+    <%= tag.button data: { action: "click->element-removal#remove" } do %>
+      <%= lucide_icon("x", class: "w-5 h-5 shrink-0 text-red-500") %>
+    <% end %>
+  </div>
+<% end %>

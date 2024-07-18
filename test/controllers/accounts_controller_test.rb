@@ -27,7 +27,7 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
 
   test "can sync an account" do
     post sync_account_path(@account)
-    assert_redirected_to account_url(@account)
+    assert_response :no_content
   end
 
   test "can sync all accounts" do

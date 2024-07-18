@@ -19,7 +19,7 @@ class Settings::HostingsController < SettingsController
 
   def send_test_email
     unless Setting.smtp_settings_populated?
-      flash[:error] = t(".missing_smtp_setting_error")
+      flash[:alert] = t(".missing_smtp_setting_error")
       render(:show, status: :unprocessable_entity)
       return
     end
@@ -27,7 +27,7 @@ class Settings::HostingsController < SettingsController
     begin
       NotificationMailer.with(user: Current.user).test_email.deliver_now
     rescue => _e
-      flash[:error] = t(".error")
+      flash[:alert] = t(".error")
       render :show, status: :unprocessable_entity
       return
     end

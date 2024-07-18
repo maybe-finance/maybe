@@ -2,8 +2,6 @@ class Account < ApplicationRecord
   include Syncable
   include Monetizable
 
-  broadcasts_refreshes
-
   validates :name, :balance, :currency, presence: true
 
   belongs_to :family
