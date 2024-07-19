@@ -78,12 +78,13 @@ Rails.application.routes.draw do
     scope module: :account do
       resource :logo, only: :show
 
-      resources :holdings, only: :index
+      resources :holdings, only: %i[ index new show ]
 
       resources :entries, except: :index do
         collection do
           get "transactions", as: :transaction
           get "valuations", as: :valuation
+          get "trades", as: :trade
         end
       end
     end

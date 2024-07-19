@@ -1,0 +1,19 @@
+---
+en:
+  account:
+    holdings:
+      holding:
+        per_share: per share
+        shares: "%{qty} shares"
+      index:
+        cost: cost
+        holdings: Holdings
+        name: name
+        new_holding: New holding
+        no_holdings: No holdings to show.  Please add a holding or sync your account.
+        return: total return
+        weight: weight
+      show:
+        history: History
+        overview: Overview
+        settings: Settings

@@ -1,0 +1,42 @@
+<%= turbo_frame_tag dom_id(@account, "trades") do %>
+  <div id="trades" data-controller="bulk-select" data-bulk-select-resource-value="<%= t(".trade") %>" class="bg-white space-y-4 p-5 border border-alpha-black-25 rounded-xl shadow-xs">
+    <div class="flex justify-between items-center">
+      <h3 class="font-medium text-lg"><%= t(".trades") %></h3>
+      <%= link_to new_account_entry_path(@account),
+                  disabled: true,
+                  class: "cursor-not-allowed flex gap-1 font-medium items-center bg-gray-50 text-gray-900 p-2 rounded-lg",
+                  data: { turbo_frame: :modal } do %>
+        <%= lucide_icon("plus", class: "w-5 h-5 text-gray-900") %>
+        <span class="text-sm"><%= t(".new") %></span>
+      <% end %>
+    </div>
+
+    <div class="bg-gray-25 rounded-xl grid grid-cols-12 items-center uppercase text-xs font-medium text-gray-500 px-5 py-3">
+      <div class="pl-0.5 col-span-6 flex items-center gap-4">
+        <%= check_box_tag "selection_entry",
+                          class: "maybe-checkbox maybe-checkbox--light",
+                          data: { action: "bulk-select#togglePageSelection" } %>
+        <%= tag.p t(".trade") %>
+      </div>
+
+      <%= tag.p t(".type"), class: "col-span-3 justify-self-end" %>
+      <%= tag.p t(".amount"), class: "col-span-3 justify-self-end" %>
+    </div>
+
+    <div>
+      <div hidden id="transaction-selection-bar" data-bulk-select-target="selectionBar">
+        <%= render "account/entries/entryables/trade/selection_bar" %>
+      </div>
+
+      <% if @trades.empty? %>
+        <p class="text-gray-500 py-4"><%= t(".no_trades") %></p>
+      <% else %>
+        <div class="space-y-6">
+          <% @trades.group_by(&:date).each do |date, entries| %>
+            <%= render "entry_group", date:, entries: entries %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

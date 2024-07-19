@@ -26,11 +26,12 @@ module AccountsHelper
   def account_tabs(account)
     holdings_tab = { key: "holdings", label: t("accounts.show.holdings"), path: account_path(account, tab: "holdings"), content_path: account_holdings_path(account) }
     value_tab = { key: "valuations", label: t("accounts.show.value"), path: account_path(account, tab: "valuations"), content_path: valuation_account_entries_path(account) }
-    transaction_tab = { key: "transactions", label: t("accounts.show.transactions"), path: account_path(account, tab: "transactions"), content_path: transaction_account_entries_path(account) }
+    transactions_tab = { key: "transactions", label: t("accounts.show.transactions"), path: account_path(account, tab: "transactions"), content_path: transaction_account_entries_path(account) }
+    trades_tab = { key: "trades", label: t("accounts.show.trades"), path: account_path(account, tab: "trades"), content_path: trade_account_entries_path(account) }
 
-    return [ holdings_tab, transaction_tab ] if account.investment?
+    return [ holdings_tab, trades_tab ] if account.investment?
 
-    [ value_tab, transaction_tab ]
+    [ value_tab, transactions_tab ]
   end
 
   def selected_account_tab(account)

@@ -12,6 +12,10 @@ class Account::EntriesController < ApplicationController
     @valuation_entries = @account.entries.account_valuations.reverse_chronological
   end
 
+  def trades
+    @trades = @account.entries.account_trades.reverse_chronological
+  end
+
   def new
     @entry = @account.entries.build.tap do |entry|
       if params[:entryable_type]

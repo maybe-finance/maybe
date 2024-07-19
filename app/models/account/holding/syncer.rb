@@ -45,7 +45,8 @@ class Account::Holding::Syncer
           security_id: holding[:security_id],
           qty: holding[:qty],
           price: price,
-          amount: price * holding[:qty]
+          amount: price * holding[:qty],
+          currency: holding[:currency]
       end
     end
 
@@ -61,6 +62,7 @@ class Account::Holding::Syncer
           qty: new_qty,
           price: price,
           amount: new_qty * price,
+          currency: entry.currency,
           security_id: trade.security_id
         }
       end
@@ -85,6 +87,7 @@ class Account::Holding::Syncer
           qty: holding.qty,
           price: holding.price,
           amount: holding.amount,
+          currency: holding.currency,
           security_id: holding.security_id
         }
       end

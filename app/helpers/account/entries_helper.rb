@@ -33,7 +33,7 @@ module Account::EntriesHelper
   private
 
     def permitted_entryable_key(entry)
-      permitted_entryable_paths = %w[transaction valuation]
+      permitted_entryable_paths = %w[transaction valuation trade]
       entry.entryable_name_short.presence_in(permitted_entryable_paths)
     end
 end
