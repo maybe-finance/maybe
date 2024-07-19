@@ -6,7 +6,6 @@ class Account::HoldingsController < ApplicationController
 
   def index
     @holdings = @account.holdings.current
-    puts @holdings
   end
 
   def show
