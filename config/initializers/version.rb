@@ -10,7 +10,7 @@ module Maybe
 
     private
       def semver
-        "0.1.0-alpha.10"
+        "0.1.0-alpha.11"
       end
   end
 end
