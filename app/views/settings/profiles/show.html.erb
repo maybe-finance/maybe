@@ -32,8 +32,8 @@
         </div>
         <div>
           <div class="grid grid-cols-2 gap-4 mt-4">
-            <%= form.text_field :first_name, placeholder: "First name", value: Current.user.first_name, label: true %>
-            <%= form.text_field :last_name, placeholder: "Last name", value: Current.user.last_name, label: true %>
+            <%= form.text_field :first_name, placeholder: "First name", value: Current.user.first_name, label: t(".first_name") %>
+            <%= form.text_field :last_name, placeholder: "Last name", value: Current.user.last_name, label: t(".last_name") %>
           </div>
           <div class="flex justify-end mt-4">
             <%= form.submit t(".save"), class: "bg-gray-900 hover:bg-gray-700 cursor-pointer text-white rounded-lg px-3 py-2" %>
