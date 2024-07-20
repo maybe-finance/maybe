@@ -7,7 +7,7 @@
   <%= form.password_field :password, autocomplete: "new-password", required: "required", label: t(".password") %>
   <%= form.password_field :password_confirmation, autocomplete: "new-password", required: "required", label: t(".password_confirmation") %>
   <% if invite_code_required? %>
-    <%= form.password_field :invite_code, required: "required", label: t(".password") %>
+    <%= form.password_field :invite_code, required: "required", label: t(".invite_code") %>
   <% end %>
   <%= form.submit %>
 <% end %>
