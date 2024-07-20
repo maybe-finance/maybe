@@ -5,7 +5,7 @@
 <%= styled_form_with url: password_reset_path, class: "space-y-4" do |form| %>
   <%= auth_messages form %>
 
-  <%= form.email_field :email, label: t(".email"), autofocus: false, autocomplete: "email", required: "required", placeholder: "you@example.com" %>
+  <%= form.email_field :email, label: true, autofocus: false, autocomplete: "email", required: "required", placeholder: "you@example.com" %>
 
   <%= form.submit t(".submit") %>
 <% end %>
