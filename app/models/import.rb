@@ -46,6 +46,15 @@ class Import < ApplicationRecord
     update! normalized_csv_str: updated_csv.to_s
   end
 
+  def add_headers_if_missing
+    return if raw_csv_str.blank?
+    first_raw = CSV.new(raw_csv_str).shift
+
+    unless header_row?(first_raw)
+      self.raw_csv_str = first_raw.join(",") + "\n" + raw_csv_str
+    end
+  end
+
   # Type-specific methods (potential STI inheritance in future when more import types added)
   def publish
     update!(status: "importing")
@@ -73,6 +82,14 @@ class Import < ApplicationRecord
   end
 
   private
+
+    def header_row?(row)
+      row.none? { |col| numeric?(col) }
+    end
+
+    def numeric?(string)
+      true if Float(string) rescue false
+    end
 
     def get_normalized_csv_with_validation
       return nil if normalized_csv_str.nil?

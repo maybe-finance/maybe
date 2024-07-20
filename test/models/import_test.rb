@@ -8,6 +8,9 @@ class ImportTest < ActiveSupport::TestCase
 
     @loaded_import = @empty_import.dup
     @loaded_import.update! raw_csv_str: valid_csv_str
+
+    @import_with_header = Import.new(raw_csv_str: "column1,column2,column3\nvalue1,value2,value3")
+    @import_without_header = Import.new(raw_csv_str: "121.45,value2,value3\nvalue4,value5,value6")
   end
 
   test "raw csv input must conform to csv spec" do
@@ -82,5 +85,21 @@ class ImportTest < ActiveSupport::TestCase
 
     @empty_import.reload
     assert @empty_import.failed?
+  end
+
+  test "Import#add_headers_if_missing should not add headers if they already exist" do
+    @import_with_header.add_headers_if_missing
+    assert_equal "column1,column2,column3\nvalue1,value2,value3", @import_with_header.raw_csv_str
+  end
+
+  test "Import#add_headers_if_missing should add headers if they are missing" do
+    @import_without_header.add_headers_if_missing
+    expected_csv = "121.45,value2,value3\n121.45,value2,value3\nvalue4,value5,value6"
+    assert_equal expected_csv, @import_without_header.raw_csv_str
+  end
+
+  test "Import#add_headers_if_missing should handle empty CSV string" do
+    @empty_import.add_headers_if_missing
+    assert_nil @empty_import.raw_csv_str
   end
 end
