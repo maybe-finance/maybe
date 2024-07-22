@@ -178,7 +178,7 @@ GEM
     erubi (1.13.0)
     et-orbi (1.2.11)
       tzinfo
-    faker (3.4.1)
+    faker (3.4.2)
       i18n (>= 1.8.11, < 2)
     faraday (2.10.0)
       faraday-net_http (>= 2.0, < 3.2)
