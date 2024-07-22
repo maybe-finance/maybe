@@ -3,13 +3,11 @@ module Authentication
 
   included do
     before_action :authenticate_user!
-    after_action :set_last_login_at, if: -> { Current.user }
   end
 
   class_methods do
     def skip_authentication(**options)
       skip_before_action :authenticate_user!, **options
-      skip_after_action :set_last_login_at, **options
     end
   end
 
@@ -27,6 +25,7 @@ module Authentication
     Current.user = user
     reset_session
     session[:user_id] = user.id
+    set_last_login_at
   end
 
   def logout

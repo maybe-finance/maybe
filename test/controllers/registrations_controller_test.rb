@@ -24,6 +24,14 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "sets last_login_at on successful registration" do
+    post registration_url, params: { user: {
+      email: "john@example.com",
+      password: "password",
+      password_confirmation: "password" } }
+    assert_not_nil User.find_by(email: "john@example.com").last_login_at
+  end
+
   test "create when hosted requires an invite code" do
     with_env_overrides REQUIRE_INVITE_CODE: "true" do
       assert_no_difference "User.count" do
