@@ -4,7 +4,7 @@ class TransactionsController < ApplicationController
   def index
     @q = search_params
     result = Current.family.entries.account_transactions.search(@q).reverse_chronological
-    @pagy, @transaction_entries = pagy(result, items: params[:per_page] || "50")
+    @pagy, @transaction_entries = pagy(result, limit: params[:per_page] || "50")
 
     @totals = {
       count: result.select { |t| t.currency == Current.family.currency }.count,
