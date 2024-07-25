@@ -91,8 +91,7 @@ class Money
       unit: currency.symbol,
       precision: currency.default_precision,
       delimiter: currency.delimiter,
-      separator: currency.separator,
-      format: currency.default_format
+      separator: currency.separator
     }
   end
 
