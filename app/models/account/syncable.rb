@@ -11,6 +11,14 @@ module Account::Syncable
     syncs.syncing.any?
   end
 
+  def latest_sync_date
+    syncs.where.not(last_ran_at: nil).pluck(:last_ran_at).max&.to_date
+  end
+
+  def needs_sync?
+    latest_sync_date.nil? || latest_sync_date < Date.current
+  end
+
   def sync_later(start_date: nil)
     AccountSyncJob.perform_later(self, start_date: start_date)
   end
