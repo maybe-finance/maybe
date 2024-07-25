@@ -46,7 +46,7 @@
                 data: { controller: "auto-submit-form" } do |f| %>
     <%= f.label :per_page, t(".rows_per_page"), class: "text-sm text-gray-500" %>
     <%= f.select :per_page,
-                 options_for_select(["10", "20", "30", "50"], pagy.items),
+                 options_for_select(["10", "20", "30", "50"], pagy.limit),
                  {},
                  class: "py-1.5 pr-8 text-sm text-gray-900 font-medium border border-gray-200 rounded-lg focus:border-gray-900 focus:ring-gray-900 focus-visible:ring-gray-900",
                  data: { "auto-submit-form-target": "auto" } %>

@@ -50,6 +50,9 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
     end
 
     def label_html(method, options)
-      options[:label] ? label(method, options[:label], class: "form-field__label") : "".html_safe
+      return label(method, class: "form-field__label") if options[:label] == true
+      return "".html_safe unless options[:label]
+
+      label(method, options[:label], class: "form-field__label")
     end
 end
