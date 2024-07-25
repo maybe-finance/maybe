@@ -107,7 +107,7 @@ class Family < ApplicationRecord
   def sync(start_date: nil)
     accounts.active.each do |account|
       if account.needs_sync?
-        account.sync(start_date: start_date || account.last_sync_date)
+        account.sync_later(start_date: start_date || account.last_sync_date)
       end
     end
 

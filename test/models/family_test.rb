@@ -48,6 +48,14 @@ class FamilyTest < ActiveSupport::TestCase
     assert_equal Money.new(50000, @family.currency), @family.net_worth
   end
 
+  test "needs sync if last family sync was before today" do
+    assert @family.needs_sync?
+
+    @family.update! last_synced_at: Time.now
+
+    assert_not @family.needs_sync?
+  end
+
   test "syncs active accounts" do
     account = create_account(balance: 1000, accountable: CreditCard.new, is_active: false)
 
@@ -57,7 +65,9 @@ class FamilyTest < ActiveSupport::TestCase
 
     account.update! is_active: true
 
-    Account.any_instance.expects(:sync_later).with(start_date: nil).once
+    Account.any_instance.expects(:needs_sync?).once.returns(true)
+    Account.any_instance.expects(:last_sync_date).once.returns(2.days.ago.to_date)
+    Account.any_instance.expects(:sync_later).with(start_date: 2.days.ago.to_date).once
 
     @family.sync
   end
