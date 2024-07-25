@@ -7,14 +7,6 @@ module Account::Syncable
     end
   end
 
-  def needs_sync?
-    syncs.where("DATE(last_ran_at) = ?", Date.current).empty?
-  end
-
-  def latest_sync_date?
-    syncs.pluck(:last_ran_at).max.to_date
-  end
-
   def syncing?
     syncs.syncing.any?
   end
