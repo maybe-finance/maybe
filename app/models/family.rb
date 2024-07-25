@@ -105,6 +105,16 @@ class Family < ApplicationRecord
   end
 
   def sync(start_date: nil)
-    accounts.active.sync(start_date: start_date)
+    accounts.active.each do |account|
+      if account.needs_sync?
+        account.sync(start_date: start_date || account.last_sync_date)
+      end
+    end
+
+    update! last_synced_at: Time.now
+  end
+
+  def needs_sync?
+    last_synced_at.nil? || last_synced_at.to_date < Date.current
   end
 end

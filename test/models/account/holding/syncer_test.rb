@@ -45,6 +45,27 @@ class Account::Holding::SyncerTest < ActiveSupport::TestCase
     assert_holdings(expected)
   end
 
+  test "generates all holdings even when missing security prices" do
+    aapl = create_security("AMZN", prices: [
+      { date: 1.day.ago.to_date, price: 215 }
+    ])
+
+    create_trade(aapl, account: @account, qty: 10, date: 2.days.ago.to_date, price: 210)
+
+    # 2 days ago — no daily price found, but since this is day of entry, we fall back to entry price
+    # 1 day ago — finds daily price, uses it
+    # Today — no daily price, no entry, so price and amount are `nil`
+    expected = [
+      { symbol: "AMZN", qty: 10, price: 210, amount: 10 * 210, date: 2.days.ago.to_date },
+      { symbol: "AMZN", qty: 10, price: 215, amount: 10 * 215, date: 1.day.ago.to_date },
+      { symbol: "AMZN", qty: 10, price: nil, amount: nil, date: Date.current }
+    ]
+
+    run_sync_for(@account)
+
+    assert_holdings(expected)
+  end
+
   private
 
     def assert_holdings(expected_holdings)

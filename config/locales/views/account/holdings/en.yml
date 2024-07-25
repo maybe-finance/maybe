@@ -10,7 +10,8 @@ en:
         holdings: Holdings
         name: name
         new_holding: New holding
-        no_holdings: No holdings to show.  Please add a holding or sync your account.
+        no_holdings: No holdings to show.
+        needs_sync: Your account needs to sync the latest prices to calculate this portfolio
         return: total return
         weight: weight
       show:

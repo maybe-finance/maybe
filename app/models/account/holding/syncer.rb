@@ -38,14 +38,17 @@ class Account::Holding::Syncer
       @portfolio = generate_next_portfolio(@portfolio, trades)
 
       @portfolio.map do |isin, holding|
-        price = Security::Price.find_by!(date: date, isin: isin).price
+        trade = trades.find { |trade| trade.account_trade.security_id == holding[:security_id] }
+        trade_price = trade&.account_trade&.price
+
+        price = Security::Price.find_by(date: date, isin: isin)&.price || trade_price
 
         account.holdings.build \
           date: date,
           security_id: holding[:security_id],
           qty: holding[:qty],
           price: price,
-          amount: price * holding[:qty],
+          amount: price ? (price * holding[:qty]) : nil,
           currency: holding[:currency]
       end
     end

@@ -1,4 +1,6 @@
-<div class="space-y-4">
+<%= turbo_stream_from @account %>
+
+<%= tag.div id: dom_id(@account), class: "space-y-4" do %>
   <div class="flex justify-between items-center">
     <div class="flex items-center gap-3">
       <%= image_tag account_logo_url(@account), class: "w-8 h-8" %>
@@ -85,4 +87,4 @@
       <%= render "account/entries/loading" %>
     <% end %>
   </div>
-</div>
+<% end %>

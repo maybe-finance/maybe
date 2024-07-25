@@ -34,10 +34,6 @@ class Demo::Generator
       create_car_and_loan!
 
       puts "accounts created"
-
-      family.sync
-
-      puts "balances synced"
       puts "Demo data loaded successfully!"
     end
   end
@@ -169,6 +165,9 @@ class Demo::Generator
     end
 
     def load_securities!
+      # Create an unknown security to simulate edge cases
+      Security.create! isin: "unknown", symbol: "UNKNOWN", name: "Unknown Demo Stock"
+
       securities = [
         { isin: "US0378331005", symbol: "AAPL", name: "Apple Inc.", reference_price: 210 },
         { isin: "JP3633400001", symbol: "TM", name: "Toyota Motor Corporation", reference_price: 202 },
@@ -204,6 +203,10 @@ class Demo::Generator
       aapl = Security.find_by(symbol: "AAPL")
       tm = Security.find_by(symbol: "TM")
       msft = Security.find_by(symbol: "MSFT")
+      unknown = Security.find_by(symbol: "UNKNOWN")
+
+      # Buy 20 shares of the unknown stock to simulate a stock where we can't fetch security prices
+      account.entries.create! date: 10.days.ago.to_date, amount: 100, currency: "USD", name: "Buy unknown stock", entryable: Account::Trade.new(qty: 20, price: 5, security: unknown)
 
       trades = [
         { security: aapl, qty: 20 }, { security: msft, qty: 10 }, { security: aapl, qty: -5 },
@@ -216,7 +219,7 @@ class Demo::Generator
         date = Faker::Number.positive(to: 730).days.ago.to_date
         security = trade[:security]
         qty = trade[:qty]
-        price = Security::Price.find_by!(isin: security.isin, date: date).price
+        price = Security::Price.find_by(isin: security.isin, date: date)&.price || 1
         name_prefix = qty < 0 ? "Sell " : "Buy "
 
         account.entries.create! \

@@ -6,7 +6,7 @@ class Account::Holding < ApplicationRecord
   belongs_to :account
   belongs_to :security
 
-  validates :amount, :qty, :price, :currency, presence: true
+  validates :qty, :currency, presence: true
 
   scope :chronological, -> { order(:date) }
   scope :current, -> { where(date: Date.current).order(amount: :desc) }
@@ -16,7 +16,9 @@ class Account::Holding < ApplicationRecord
   delegate :symbol, to: :security
 
   def weight
-    portfolio_value = account.holdings.current.sum(&:amount)
+    return nil unless amount
+
+    portfolio_value = account.holdings.current.where.not(amount: nil).sum(&:amount)
     portfolio_value.zero? ? 1 : amount / portfolio_value * 100
   end
 
@@ -33,6 +35,8 @@ class Account::Holding < ApplicationRecord
   private
 
     def calculate_trend
+      return nil unless amount_money
+
       start_amount = qty * avg_cost
 
       TimeSeries::Trend.new \
