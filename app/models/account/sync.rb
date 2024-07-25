@@ -78,6 +78,6 @@ class Account::Sync < ApplicationRecord
         partial: "shared/notification",
         locals: { type: type, message: message }
       )
-      broadcast_refresh_to account
+      account.family.broadcast_refresh
     end
 end
