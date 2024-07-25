@@ -34,10 +34,6 @@ class Demo::Generator
       create_car_and_loan!
 
       puts "accounts created"
-
-      family.sync
-
-      puts "balances synced"
       puts "Demo data loaded successfully!"
     end
   end

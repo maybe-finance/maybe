@@ -25,6 +25,10 @@ class AccountTest < ActiveSupport::TestCase
     @account.sync start_date: start_date
   end
 
+  test "needs sync if account has not synced today" do
+    assert @account.needs_sync?
+  end
+
   test "groups accounts by type" do
     result = @family.accounts.by_group(period: Period.all)
     assets = result[:assets]
