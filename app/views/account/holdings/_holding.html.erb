@@ -1,0 +1,45 @@
+<%# locals: (holding:) %>
+
+<%= turbo_frame_tag dom_id(holding) do %>
+  <div class="grid grid-cols-12 items-center text-gray-900 text-sm font-medium p-4">
+    <div class="col-span-4 flex items-center gap-4">
+      <%= render "shared/circle_logo", name: holding.name %>
+      <div>
+        <%= link_to holding.name, account_holding_path(holding.account, holding), data: { turbo_frame: :drawer }, class: "hover:underline" %>
+        <%= tag.p holding.symbol, class: "text-gray-500 text-xs uppercase" %>
+      </div>
+    </div>
+
+    <div class="col-span-2 flex justify-end items-center gap-2">
+      <% if holding.weight %>
+        <%= render "shared/progress_circle", progress: holding.weight, text_class: "text-blue-500" %>
+        <%= tag.p number_to_percentage(holding.weight, precision: 1) %>
+      <% else %>
+        <%= tag.p "?", class: "text-gray-500" %>
+      <% end %>
+    </div>
+
+    <div class="col-span-2 text-right">
+      <%= tag.p format_money holding.avg_cost %>
+      <%= tag.p t(".per_share"), class: "font-normal text-gray-500" %>
+    </div>
+
+    <div class="col-span-2 text-right">
+      <% if holding.amount_money %>
+        <%= tag.p format_money holding.amount_money %>
+      <% else %>
+        <%= tag.p "?", class: "text-gray-500" %>
+      <% end %>
+      <%= tag.p t(".shares", qty: number_with_precision(holding.qty, precision: 1)), class: "font-normal text-gray-500" %>
+    </div>
+
+    <div class="col-span-2 text-right">
+      <% if holding.trend %>
+        <%= tag.p format_money(holding.trend.value), style: "color: #{holding.trend.color};" %>
+        <%= tag.p "(#{number_to_percentage(holding.trend.percent, precision: 1)})", style: "color: #{holding.trend.color};" %>
+      <% else %>
+        <%= tag.p "?", class: "text-gray-500" %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

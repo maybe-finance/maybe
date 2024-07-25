@@ -59,6 +59,7 @@ export default class extends Controller {
 
   deselectAll() {
     this.selectedIdsValue = []
+    this.element.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false)
   }
 
   selectedIdsValueChanged() {

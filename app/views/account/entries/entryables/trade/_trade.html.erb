@@ -1,0 +1,41 @@
+<%# locals: (entry:, selectable: true, **opts) %>
+
+<% trade, account = entry.account_trade, entry.account %>
+
+<div class="grid grid-cols-12 items-center text-gray-900 text-sm font-medium p-4">
+  <div class="pr-10 flex items-center gap-4 col-span-6">
+    <% if selectable %>
+      <%= check_box_tag dom_id(entry, "selection"),
+                        class: "maybe-checkbox maybe-checkbox--light",
+                        data: { id: entry.id, "bulk-select-target": "row", action: "bulk-select#toggleRowSelection" } %>
+    <% end %>
+
+    <div class="max-w-full">
+      <%= tag.div class: ["flex items-center gap-2"] do %>
+        <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-600/5 text-gray-600">
+          <%= entry.name[0].upcase %>
+        </div>
+
+        <div class="truncate text-gray-900">
+          <% if entry.new_record? %>
+            <%= content_tag :p, entry.name %>
+          <% else %>
+            <%= link_to entry.name,
+                        account_entry_path(account, entry),
+                        data: { turbo_frame: "drawer", turbo_prefetch: false },
+                        class: "hover:underline hover:text-gray-800" %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="flex items-center justify-end gap-1 col-span-3">
+    <%= tag.p trade.buy? ? t(".buy") : t(".sell") %>
+  </div>
+
+  <div class="col-span-3 flex items-center justify-end">
+    <%= tag.p format_money(entry.amount_money * -1), class: { "text-green-500": trade.sell? } %>
+  </div>
+
+</div>

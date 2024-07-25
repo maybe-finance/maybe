@@ -1,0 +1,45 @@
+<%= drawer do %>
+  <div class="space-y-4">
+    <header class="flex justify-between">
+      <div>
+        <%= tag.h3 @holding.name, class: "text-2xl font-medium text-gray-900" %>
+        <%= tag.p @holding.symbol.upcase, class: "text-sm text-gray-500" %>
+      </div>
+
+      <%= render "shared/circle_logo", name: @holding.name %>
+    </header>
+
+    <details class="group space-y-2">
+      <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2 text-xs font-medium uppercase text-gray-500 bg-gray-25 focus-visible:outline-none">
+        <h4><%= t(".overview") %></h4>
+        <%= lucide_icon "chevron-down", class: "group-open:transform group-open:rotate-180 text-gray-500 w-5" %>
+      </summary>
+
+      <div>
+        <p class="pl-4 text-gray-500">Coming soon...</p>
+      </div>
+    </details>
+
+    <details class="group space-y-2">
+      <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2 text-xs font-medium uppercase text-gray-500 bg-gray-25 focus-visible:outline-none">
+        <h4><%= t(".history") %></h4>
+        <%= lucide_icon "chevron-down", class: "group-open:transform group-open:rotate-180 text-gray-500 w-5" %>
+      </summary>
+
+      <div>
+        <p class="pl-4 text-gray-500">Coming soon...</p>
+      </div>
+    </details>
+
+    <details class="group space-y-2">
+      <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2 text-xs font-medium uppercase text-gray-500 bg-gray-25 focus-visible:outline-none">
+        <h4><%= t(".settings") %></h4>
+        <%= lucide_icon "chevron-down", class: "group-open:transform group-open:rotate-180 text-gray-500 w-5" %>
+      </summary>
+
+      <div>
+        <p class="pl-4 text-gray-500">Coming soon...</p>
+      </div>
+    </details>
+  </div>
+<% end %>

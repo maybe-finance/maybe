@@ -28,12 +28,19 @@ module Account::EntriesTestHelper
     Account::Entry.create! entry_defaults.merge(attributes)
   end
 
-  def create_trade(account:, security:, qty:, price:, date:)
+  def create_trade(security, account:, qty:, date:, price: nil)
+    trade_price = price || Security::Price.find_by!(isin: security.isin, date: date).price
+
+    trade = Account::Trade.new \
+      qty: qty,
+      security: security,
+      price: trade_price
+
     account.entries.create! \
-      date: date,
-      amount: qty * price,
-      currency: "USD",
       name: "Trade",
-      entryable: Account::Trade.new(qty: qty, price: price, security: security)
+      date: date,
+      amount: qty * trade_price,
+      currency: "USD",
+      entryable: trade
   end
 end

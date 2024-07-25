@@ -10,7 +10,18 @@ en:
         description: Try adding an entry, editing filters or refining your search
         title: No entries found
       entryables:
+        trade:
+          show:
+            overview: Overview
+          trade:
+            buy: Buy
+            sell: Sell
         transaction:
+          selection_bar:
+            mark_transfers: Mark as transfers?
+            mark_transfers_confirm: Mark as transfers
+            mark_transfers_message: By marking transactions as transfers, they will
+              no longer be included in income or spending calculations.
           show:
             account_label: Account
             account_placeholder: Select an account
@@ -57,11 +68,13 @@ en:
             value_update: Value update
       loading:
         loading: Loading entries...
-      selection_bar:
-        mark_transfers: Mark as transfers?
-        mark_transfers_confirm: Mark as transfers
-        mark_transfers_message: By marking transactions as transfers, they will no
-          longer be included in income or spending calculations.
+      trades:
+        amount: Amount
+        new: New trade
+        no_trades: No trades for this account yet.
+        trade: trade
+        trades: Trades
+        type: Type
       transactions:
         new: New transaction
         no_transactions: No transactions for this account yet.

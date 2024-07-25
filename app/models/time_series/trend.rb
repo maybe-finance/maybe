@@ -44,7 +44,7 @@ class TimeSeries::Trend
   end
 
   def percent
-    if previous.nil?
+    if previous.nil? || (previous.zero? && current.zero?)
       0.0
     elsif previous.zero?
       Float::INFINITY

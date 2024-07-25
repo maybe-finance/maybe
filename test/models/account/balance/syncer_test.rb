@@ -37,11 +37,11 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
 
   test "syncs account with trades only" do
     aapl = securities(:aapl)
-    create_trade(account: @investment_account, date: 1.day.ago.to_date, security: aapl, qty: 10, price: 200)
+    create_trade(aapl, account: @investment_account, date: 1.day.ago.to_date, qty: 10)
 
     run_sync_for @investment_account
 
-    assert_equal [ 52000, 50000, 50000 ], @investment_account.balances.chronological.map(&:balance)
+    assert_equal [ 52140, 50000, 50000 ], @investment_account.balances.chronological.map(&:balance)
   end
 
   test "syncs account with valuations and transactions" do
