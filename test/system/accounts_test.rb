@@ -60,7 +60,7 @@ class AccountsTest < ApplicationSystemTestCase
       select "Chase", from: "Financial institution"
       fill_in "account[balance]", with: 100.99
       check "Add a start balance for this account"
-      fill_in "Start date (optional)", with: 10.days.ago.to_date.to_s
+      fill_in "Start date (optional)", with: 10.days.ago.to_date
       fill_in "Start balance (optional)", with: 95
       click_button "Add #{humanized_accountable(accountable_type).downcase}"
 
