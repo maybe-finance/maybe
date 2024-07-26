@@ -1,5 +1,5 @@
 class Account::HoldingsController < ApplicationController
-  layout "with_sidebar"
+  layout :with_sidebar
 
   before_action :set_account
   before_action :set_holding, only: :show

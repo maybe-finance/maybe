@@ -1,3 +1,3 @@
 class SettingsController < ApplicationController
-  layout "with_sidebar"
+  layout :with_sidebar
 end
