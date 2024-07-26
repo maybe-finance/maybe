@@ -7,6 +7,12 @@ class Account::EntryTest < ActiveSupport::TestCase
     @entry = account_entries :transaction
   end
 
+  test "entry cannot be older than 10 years ago" do
+    assert_raises ActiveRecord::RecordInvalid do
+      @entry.update! date: 50.years.ago.to_date
+    end
+  end
+
   test "valuations cannot have more than one entry per day" do
     existing_valuation = account_entries :valuation
 

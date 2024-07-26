@@ -11,6 +11,7 @@ class Account::Entry < ApplicationRecord
 
   validates :date, :amount, :currency, presence: true
   validates :date, uniqueness: { scope: [ :account_id, :entryable_type ] }, if: -> { account_valuation? }
+  validates :date, comparison: { greater_than: -> { :min_supported_date } }
   validate :trade_valid?, if: -> { account_trade? }
 
   scope :chronological, -> { order(:date, :created_at) }
@@ -64,6 +65,11 @@ class Account::Entry < ApplicationRecord
   end
 
   class << self
+    # arbitrary cutoff date to avoid expensive sync operations
+    def min_supported_date
+      10.years.ago.to_date
+    end
+
     def daily_totals(entries, currency, period: Period.last_30_days)
       # Sum spending and income for each day in the period with the given currency
       select(

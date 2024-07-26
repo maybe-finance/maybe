@@ -86,7 +86,7 @@
             <%= label_tag :add_start_values, t(".optional_start_balance_message"), class: "pl-1 text-sm text-gray-500" %>
 
             <div class="hidden peer-checked:flex items-center gap-2 mt-3 mb-6">
-              <div class="w-1/2"><%= f.date_field :start_date, label: t(".start_date"), max: Date.yesterday %></div>
+              <div class="w-1/2"><%= f.date_field :start_date, label: t(".start_date"), max: Date.yesterday, min: Account::Entry.min_supported_date %></div>
               <div class="w-1/2"><%= f.number_field :start_balance, label: t(".start_balance") %></div>
             </div>
           </div>
