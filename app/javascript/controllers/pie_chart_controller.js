@@ -5,6 +5,7 @@ import * as d3 from "d3";
 export default class extends Controller {
   static values = {
     data: Array,
+    total: String,
     label: String,
   };
 
@@ -38,7 +39,7 @@ export default class extends Controller {
 
   #draw() {
     this.#d3Container.attr("class", "relative");
-    this.#d3Content.html(this.#contentSummaryTemplate(this.dataValue));
+    this.#d3Content.html(this.#contentSummaryTemplate());
 
     const pie = d3
       .pie()
@@ -75,44 +76,23 @@ export default class extends Controller {
         this.#d3Svg
           .selectAll(".arc path")
           .attr("class", (d) => d.data.fill_color);
-        this.#d3ContentMemo.html(this.#contentSummaryTemplate(this.dataValue));
+        this.#d3ContentMemo.html(this.#contentSummaryTemplate());
       });
   }
 
-  #contentSummaryTemplate(data) {
-    const total = data.reduce((acc, cur) => acc + cur.value, 0);
-    const currency = data[0].currency;
-
-    return `${this.#currencyValue({
-      value: total,
-      currency,
-    })} <span class="text-xs">${this.labelValue}</span>`;
+  #contentSummaryTemplate() {
+    return `<span class="text-xl text-gray-900 font-medium">${this.totalValue}</span> <span class="text-xs">${this.labelValue}</span>`;
   }
 
   #contentDetailTemplate(datum) {
     return `
-      <span>${this.#currencyValue(datum)}</span>
+      <span class="text-xl text-gray-900 font-medium">${datum.formatted_value}</span>
       <div class="flex flex-row text-xs gap-2 items-center">
       <div class="w-[10px] h-[10px] rounded-full ${datum.bg_color}"></div>
         <span>${datum.label}</span>
         <span>${datum.percent_of_total}%</span>
       </div>
     `;
-  }
-
-  #currencyValue(datum) {
-    const formattedValue = Intl.NumberFormat(undefined, {
-      style: "currency",
-      currency: datum.currency,
-      currencyDisplay: "narrowSymbol",
-    }).format(datum.value);
-
-    const firstDigitIndex = formattedValue.search(/\d/);
-    const currencyPrefix = formattedValue.substring(0, firstDigitIndex);
-    const mainPart = formattedValue.substring(firstDigitIndex);
-    const [integerPart, fractionalPart] = mainPart.split(".");
-
-    return `<p class="text-gray-500 -space-x-0.5">${currencyPrefix}<span class="text-xl text-gray-900 font-medium">${integerPart}</span>.${fractionalPart}</p>`;
   }
 
   get #radius() {
