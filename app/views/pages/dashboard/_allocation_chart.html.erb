@@ -10,8 +10,8 @@
         <div
           data-controller="pie-chart"
           class="w-full aspect-1"
-          data-pie-chart-label-value="Total Assets"
-          data-pie-chart-data-value="<%= value_group_pie_data(account_groups[:assets]) %>">
+          data-pie-chart-data-value="<%= value_group_pie_data(account_groups[:assets]) %>"
+          data-pie-chart-total-value="<%= format_money(account_groups[:assets].sum, precision: 0) %>">
         </div>
       </div>
     </div>
@@ -20,8 +20,8 @@
         <div
           data-controller="pie-chart"
           class="w-full aspect-1"
-          data-pie-chart-label-value="Total Debts"
-          data-pie-chart-data-value="<%= value_group_pie_data(account_groups[:liabilities]) %>">
+          data-pie-chart-data-value="<%= value_group_pie_data(account_groups[:liabilities]) %>"
+          data-pie-chart-total-value="<%= format_money(account_groups[:liabilities].sum, precision: 0) %>">
         </div>
       </div>
     </div>
