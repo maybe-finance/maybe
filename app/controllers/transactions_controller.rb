@@ -1,5 +1,5 @@
 class TransactionsController < ApplicationController
-  layout "with_sidebar"
+  layout :with_sidebar
 
   def index
     @q = search_params

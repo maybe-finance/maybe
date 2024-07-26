@@ -1,5 +1,5 @@
 class Help::ArticlesController < ApplicationController
-  layout "with_sidebar"
+  layout :with_sidebar
 
   def show
     @article = Help::Article.find(params[:id])

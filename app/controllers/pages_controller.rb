@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  layout "with_sidebar"
+  layout :with_sidebar
 
   include Filterable
 

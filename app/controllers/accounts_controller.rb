@@ -1,5 +1,5 @@
 class AccountsController < ApplicationController
-  layout "with_sidebar"
+  layout :with_sidebar
 
   include Filterable
   before_action :set_account, only: %i[ edit show destroy sync update ]
