@@ -11,7 +11,7 @@ class Account::Entry < ApplicationRecord
 
   validates :date, :amount, :currency, presence: true
   validates :date, uniqueness: { scope: [ :account_id, :entryable_type ] }, if: -> { account_valuation? }
-  validates :date, comparison: { greater_than: -> { :min_supported_date } }
+  validates :date, comparison: { greater_than: -> { min_supported_date } }
   validate :trade_valid?, if: -> { account_trade? }
 
   scope :chronological, -> { order(:date, :created_at) }
