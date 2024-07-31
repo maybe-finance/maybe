@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_07_25_163339) do
+ActiveRecord::Schema[7.2].define(version: 2024_07_31_191344) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -347,15 +347,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_07_25_163339) do
   end
 
   create_table "securities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "isin", null: false
-    t.string "symbol"
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "ticker"
   end
 
   create_table "security_prices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "isin"
+    t.string "ticker"
     t.date "date"
     t.decimal "price", precision: 19, scale: 4
     t.string "currency", default: "USD"

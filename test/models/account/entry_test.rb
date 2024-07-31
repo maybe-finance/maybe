@@ -113,6 +113,6 @@ class Account::EntryTest < ActiveSupport::TestCase
         entryable: Account::Trade.new(qty: -10, price: 200, security: security)
     end
 
-    assert_match /cannot sell 10.0 shares of aapl because you only own 0.0 shares/, error.message
+    assert_match /cannot sell 10.0 shares of AAPL because you only own 0.0 shares/, error.message
   end
 end
