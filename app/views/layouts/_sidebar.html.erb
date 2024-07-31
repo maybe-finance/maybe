@@ -22,7 +22,7 @@
         <% else %>
           <div class="text-white shrink-0 w-9 h-9 bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= Current.user.initial %></div>
         <% end %>
-        <div>
+        <div class="overflow-hidden text-ellipsis">
           <span class="text-gray-900 font-medium text-sm"><%= Current.user.display_name %></span>
           <% if Current.user.display_name != Current.user.email %>
             <span class="text-gray-500 text-sm"><%= Current.user.email %></span>
