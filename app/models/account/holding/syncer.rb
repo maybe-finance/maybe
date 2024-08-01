@@ -32,16 +32,42 @@ class Account::Holding::Syncer
                                .order(:date)
     end
 
+    def get_cached_price(ticker, date)
+      return nil unless security_prices.key?(ticker)
+
+      price = security_prices[ticker].find { |p| p.date == date }
+      price ? price[:price] : nil
+    end
+
+    def security_prices
+      @security_prices ||= begin
+                             prices = {}
+                             ticker_start_dates = {}
+
+                             sync_entries.each do |entry|
+                               unless ticker_start_dates[entry.account_trade.security.ticker]
+                                 ticker_start_dates[entry.account_trade.security.ticker] = entry.date
+                               end
+                             end
+
+                             ticker_start_dates.each do |ticker, date|
+                               prices[ticker] = Security::Price.find_prices(ticker: ticker, start_date: date, end_date: Date.current)
+                             end
+
+                             prices
+                           end
+    end
+
     def build_holdings_for_date(date)
       trades = sync_entries.select { |trade| trade.date == date }
 
       @portfolio = generate_next_portfolio(@portfolio, trades)
 
-      @portfolio.map do |isin, holding|
+      @portfolio.map do |ticker, holding|
         trade = trades.find { |trade| trade.account_trade.security_id == holding[:security_id] }
         trade_price = trade&.account_trade&.price
 
-        price = Security::Price.find_by(date: date, isin: isin)&.price || trade_price
+        price = get_cached_price(ticker, date) || trade_price
 
         account.holdings.build \
           date: date,
@@ -58,10 +84,10 @@ class Account::Holding::Syncer
         trade = entry.account_trade
 
         price = trade.price
-        prior_qty = prior_portfolio.dig(trade.security.isin, :qty) || 0
+        prior_qty = prior_portfolio.dig(trade.security.ticker, :qty) || 0
         new_qty = prior_qty + trade.qty
 
-        new_portfolio[trade.security.isin] = {
+        new_portfolio[trade.security.ticker] = {
           qty: new_qty,
           price: price,
           amount: new_qty * price,
@@ -86,7 +112,7 @@ class Account::Holding::Syncer
       prior_day_holdings = account.holdings.where(date: sync_date_range.begin - 1.day)
 
       prior_day_holdings.each do |holding|
-        @portfolio[holding.security.isin] = {
+        @portfolio[holding.security.ticker] = {
           qty: holding.qty,
           price: holding.price,
           amount: holding.amount,

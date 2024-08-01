@@ -167,12 +167,12 @@ class Demo::Generator
 
     def load_securities!
       # Create an unknown security to simulate edge cases
-      Security.create! isin: "unknown", symbol: "UNKNOWN", name: "Unknown Demo Stock"
+      Security.create! ticker: "UNKNOWN", name: "Unknown Demo Stock"
 
       securities = [
-        { isin: "US0378331005", symbol: "AAPL", name: "Apple Inc.", reference_price: 210 },
-        { isin: "JP3633400001", symbol: "TM", name: "Toyota Motor Corporation", reference_price: 202 },
-        { isin: "US5949181045", symbol: "MSFT", name: "Microsoft Corporation", reference_price: 455 }
+        { ticker: "AAPL", name: "Apple Inc.", reference_price: 210 },
+        { ticker: "TM", name: "Toyota Motor Corporation", reference_price: 202 },
+        { ticker: "MSFT", name: "Microsoft Corporation", reference_price: 455 }
       ]
 
       securities.each do |security_attributes|
@@ -184,7 +184,7 @@ class Demo::Generator
           low_price = reference - 20
           high_price = reference + 20
           Security::Price.create! \
-            isin: security.isin,
+            ticker: security.ticker,
             date: date,
             price: Faker::Number.positive(from: low_price, to: high_price)
         end
@@ -201,10 +201,10 @@ class Demo::Generator
         currency: "USD",
         institution: family.institutions.find_or_create_by(name: "Robinhood")
 
-      aapl = Security.find_by(symbol: "AAPL")
-      tm = Security.find_by(symbol: "TM")
-      msft = Security.find_by(symbol: "MSFT")
-      unknown = Security.find_by(symbol: "UNKNOWN")
+      aapl = Security.find_by(ticker: "AAPL")
+      tm = Security.find_by(ticker: "TM")
+      msft = Security.find_by(ticker: "MSFT")
+      unknown = Security.find_by(ticker: "UNKNOWN")
 
       # Buy 20 shares of the unknown stock to simulate a stock where we can't fetch security prices
       account.entries.create! date: 10.days.ago.to_date, amount: 100, currency: "USD", name: "Buy unknown stock", entryable: Account::Trade.new(qty: 20, price: 5, security: unknown)
@@ -220,14 +220,14 @@ class Demo::Generator
         date = Faker::Number.positive(to: 730).days.ago.to_date
         security = trade[:security]
         qty = trade[:qty]
-        price = Security::Price.find_by(isin: security.isin, date: date)&.price || 1
+        price = Security::Price.find_by(ticker: security.ticker, date: date)&.price || 1
         name_prefix = qty < 0 ? "Sell " : "Buy "
 
         account.entries.create! \
           date: date,
           amount: qty * price,
           currency: "USD",
-          name: name_prefix + "#{qty} shares of #{security.symbol}",
+          name: name_prefix + "#{qty} shares of #{security.ticker}",
           entryable: Account::Trade.new(qty: qty, price: price, security: security)
       end
     end

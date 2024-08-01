@@ -93,8 +93,10 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
 
     syncer = Account::Balance::Syncer.new(@account)
 
-    assert_raises Money::ConversionError do
-      syncer.run
+    with_env_overrides SYNTH_API_KEY: nil do
+      assert_raises Money::ConversionError do
+        syncer.run
+      end
     end
   end
 
@@ -104,7 +106,10 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
     @account.update! currency: "EUR"
 
     syncer = Account::Balance::Syncer.new(@account)
-    syncer.run
+
+    with_env_overrides SYNTH_API_KEY: nil do
+      syncer.run
+    end
 
     assert_equal 1, syncer.warnings.count
   end

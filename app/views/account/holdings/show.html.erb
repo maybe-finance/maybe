@@ -3,7 +3,7 @@
     <header class="flex justify-between">
       <div>
         <%= tag.h3 @holding.name, class: "text-2xl font-medium text-gray-900" %>
-        <%= tag.p @holding.symbol.upcase, class: "text-sm text-gray-500" %>
+        <%= tag.p @holding.ticker, class: "text-sm text-gray-500" %>
       </div>
 
       <%= render "shared/circle_logo", name: @holding.name %>

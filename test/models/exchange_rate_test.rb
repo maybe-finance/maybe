@@ -12,7 +12,7 @@ class ExchangeRateTest < ActiveSupport::TestCase
     ExchangeRate.unstub(:exchange_rates_provider)
 
     with_env_overrides SYNTH_API_KEY: nil do
-      assert_nil ExchangeRate.exchange_rates_provider
+      assert_not ExchangeRate.exchange_rates_provider
     end
   end
 
@@ -21,7 +21,7 @@ class ExchangeRateTest < ActiveSupport::TestCase
 
     rate = exchange_rates(:one)
 
-    assert_equal exchange_rates(:one), ExchangeRate.find_rate(from: rate.from_currency, to: rate.to_currency, date: rate.date)
+    assert_equal rate, ExchangeRate.find_rate(from: rate.from_currency, to: rate.to_currency, date: rate.date)
   end
 
   test "finds single rate from provider and caches to DB" do
@@ -38,14 +38,14 @@ class ExchangeRateTest < ActiveSupport::TestCase
   test "nil if rate is not found in DB and provider throws an error" do
     @provider.expects(:fetch_exchange_rate).with(from: "USD", to: "EUR", date: Date.current).once.returns(OpenStruct.new(success?: false))
 
-    assert_nil ExchangeRate.find_rate(from: "USD", to: "EUR", date: Date.current)
+    assert_not ExchangeRate.find_rate(from: "USD", to: "EUR", date: Date.current)
   end
 
   test "nil if rate is not found in DB and provider is disabled" do
     ExchangeRate.unstub(:exchange_rates_provider)
 
     with_env_overrides SYNTH_API_KEY: nil do
-      assert_nil ExchangeRate.find_rate(from: "USD", to: "EUR", date: Date.current)
+      assert_not ExchangeRate.find_rate(from: "USD", to: "EUR", date: Date.current)
     end
   end
 

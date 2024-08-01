@@ -6,18 +6,25 @@ module Providable
   extend ActiveSupport::Concern
 
   class_methods do
-    def exchange_rates_provider
-      api_key = ENV["SYNTH_API_KEY"]
+    def security_prices_provider
+      synth_provider
+    end
 
-      if api_key.present?
-        Provider::Synth.new api_key
-      else
-        nil
-      end
+    def exchange_rates_provider
+      synth_provider
     end
 
     def git_repository_provider
       Provider::Github.new
     end
+
+    private
+
+      def synth_provider
+        @synth_provider ||= begin
+                              api_key = ENV["SYNTH_API_KEY"]
+                              api_key.present? ? Provider::Synth.new(api_key) : nil
+                            end
+      end
   end
 end

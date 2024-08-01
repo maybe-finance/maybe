@@ -6,7 +6,7 @@
       <%= render "shared/circle_logo", name: holding.name %>
       <div>
         <%= link_to holding.name, account_holding_path(holding.account, holding), data: { turbo_frame: :drawer }, class: "hover:underline" %>
-        <%= tag.p holding.symbol, class: "text-gray-500 text-xs uppercase" %>
+        <%= tag.p holding.ticker, class: "text-gray-500 text-xs uppercase" %>
       </div>
     </div>
 

@@ -13,7 +13,7 @@ class Account::Holding < ApplicationRecord
   scope :for, ->(security) { where(security_id: security).order(:date) }
 
   delegate :name, to: :security
-  delegate :symbol, to: :security
+  delegate :ticker, to: :security
 
   def weight
     return nil unless amount
