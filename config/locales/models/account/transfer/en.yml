@@ -2,4 +2,6 @@
 en:
   account:
     transfer:
+      from_fallback_name: Originator
       name: Transfer from %{from_account} to %{to_account}
+      to_fallback_name: Receiver
