@@ -45,12 +45,28 @@ class Account::Holding::SyncerTest < ActiveSupport::TestCase
     assert_holdings(expected)
   end
 
-  test "generates all holdings even when missing security prices" do
-    aapl = create_security("AMZN", prices: [
-      { date: 1.day.ago.to_date, price: 215 }
-    ])
+  test "generates holdings with prices" do
+    provider = mock
+    Security::Price.stubs(:security_prices_provider).returns(provider)
 
-    create_trade(aapl, account: @account, qty: 10, date: 2.days.ago.to_date, price: 210)
+    provider.expects(:fetch_security_prices).never
+
+    amzn = create_security("AMZN", prices: [ { date: Date.current, price: 215 } ])
+    create_trade(amzn, account: @account, qty: 10, date: Date.current, price: 215)
+
+    expected = [
+      { ticker: "AMZN", qty: 10, price: 215, amount: 10 * 215, date: Date.current }
+    ]
+
+    run_sync_for(@account)
+
+    assert_holdings(expected)
+  end
+
+  test "generates all holdings even when missing security prices" do
+    amzn = create_security("AMZN", prices: [])
+
+    create_trade(amzn, account: @account, qty: 10, date: 2.days.ago.to_date, price: 210)
 
     # 2 days ago — no daily price found, but since this is day of entry, we fall back to entry price
     # 1 day ago — finds daily price, uses it
@@ -60,6 +76,13 @@ class Account::Holding::SyncerTest < ActiveSupport::TestCase
       { ticker: "AMZN", qty: 10, price: 215, amount: 10 * 215, date: 1.day.ago.to_date },
       { ticker: "AMZN", qty: 10, price: nil, amount: nil, date: Date.current }
     ]
+
+    Security::Price.expects(:find_prices)
+                   .with(start_date: 2.days.ago.to_date, end_date: Date.current, ticker: "AMZN")
+                   .once
+                   .returns([
+                              Security::Price.new(ticker: "AMZN", date: 1.day.ago.to_date, price: 215)
+                            ])
 
     run_sync_for(@account)
 

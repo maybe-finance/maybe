@@ -32,6 +32,27 @@ class Account::Holding::Syncer
                                .order(:date)
     end
 
+    def get_cached_price(ticker, date)
+      return nil unless security_prices.key?(ticker)
+
+      price = security_prices[ticker].find { |p| p.date == date }
+      price ? price[:price] : nil
+    end
+
+    def security_prices
+      @security_prices ||= begin
+                             prices = {}
+                             start_date = sync_date_range.begin
+                             tickers = sync_entries.map { |entry| entry.account_trade.security.ticker }.uniq
+
+                             tickers.each do |ticker|
+                               prices[ticker] = Security::Price.find_prices(ticker: ticker, start_date: start_date, end_date: Date.current)
+                             end
+
+                             prices
+                           end
+    end
+
     def build_holdings_for_date(date)
       trades = sync_entries.select { |trade| trade.date == date }
 
@@ -41,7 +62,7 @@ class Account::Holding::Syncer
         trade = trades.find { |trade| trade.account_trade.security_id == holding[:security_id] }
         trade_price = trade&.account_trade&.price
 
-        price = Security::Price.find_by(date: date, ticker: ticker)&.price || trade_price
+        price = get_cached_price(ticker, date) || trade_price
 
         account.holdings.build \
           date: date,
