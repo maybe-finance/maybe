@@ -52,7 +52,7 @@ class Demo::Generator
     end
 
     def clear_data!
-      User.destroy_all
+      User.find_by_email("user@maybe.local")&.destroy
       ExchangeRate.destroy_all
       Security.destroy_all
       Security::Price.destroy_all
