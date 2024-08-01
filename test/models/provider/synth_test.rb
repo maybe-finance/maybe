@@ -5,7 +5,15 @@ class Provider::SynthTest < ActiveSupport::TestCase
   include ExchangeRateProviderInterfaceTest, SecurityPriceProviderInterfaceTest
 
   setup do
-    @subject = @synth = Provider::Synth.new("fookey")
+    @subject = @synth = Provider::Synth.new(ENV["SYNTH_API_KEY"])
+  end
+
+  test "fetches paginated securities prices" do
+    VCR.use_cassette("synth/security_prices") do
+      response = @synth.fetch_security_prices ticker: "AAPL", start_date: Date.iso8601("2024-01-01"), end_date: Date.iso8601("2024-08-01")
+
+      assert 213, response.size
+    end
   end
 
   test "retries then provides failed response" do

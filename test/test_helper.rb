@@ -1,13 +1,12 @@
-if ENV["COVERAGE"]
+if ENV["COVERAGE"] == "true"
   require "simplecov"
   SimpleCov.start "rails" do
     enable_coverage :branch
   end
 end
 
-# Test ENV setup:
-# By default, all features should be disabled
-# Use the `with_env_overrides` helper to enable features for individual tests
+require_relative "../config/environment"
+
 ENV["SELF_HOSTING_ENABLED"] = "false"
 ENV["UPGRADES_ENABLED"] = "false"
 ENV["RAILS_ENV"] ||= "test"
@@ -16,7 +15,6 @@ ENV["RAILS_ENV"] ||= "test"
 # https://github.com/ged/ruby-pg/issues/538#issuecomment-1591629049
 ENV["PGGSSENCMODE"] = "disable"
 
-require_relative "../config/environment"
 require "rails/test_help"
 require "minitest/mock"
 require "minitest/autorun"
@@ -33,10 +31,10 @@ end
 module ActiveSupport
   class TestCase
     # Run tests in parallel with specified workers
-    parallelize(workers: :number_of_processors) unless ENV["DISABLE_PARALLELIZATION"]
+    parallelize(workers: :number_of_processors) unless ENV["DISABLE_PARALLELIZATION"] == "true"
 
     # https://github.com/simplecov-ruby/simplecov/issues/718#issuecomment-538201587
-    if ENV["COVERAGE"]
+    if ENV["COVERAGE"] == "true"
       parallelize_setup do |worker|
         SimpleCov.command_name "#{SimpleCov.command_name}-#{worker}"
       end

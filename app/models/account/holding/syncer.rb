@@ -42,11 +42,16 @@ class Account::Holding::Syncer
     def security_prices
       @security_prices ||= begin
                              prices = {}
-                             start_date = sync_date_range.begin
-                             tickers = sync_entries.map { |entry| entry.account_trade.security.ticker }.uniq
+                             ticker_start_dates = {}
 
-                             tickers.each do |ticker|
-                               prices[ticker] = Security::Price.find_prices(ticker: ticker, start_date: start_date, end_date: Date.current)
+                             sync_entries.each do |entry|
+                               unless ticker_start_dates[entry.account_trade.security.ticker]
+                                 ticker_start_dates[entry.account_trade.security.ticker] = entry.date
+                               end
+                             end
+
+                             ticker_start_dates.each do |ticker, date|
+                               prices[ticker] = Security::Price.find_prices(ticker: ticker, start_date: date, end_date: Date.current)
                              end
 
                              prices

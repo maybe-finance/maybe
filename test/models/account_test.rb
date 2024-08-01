@@ -76,7 +76,9 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test "generates empty series if no balances and no exchange rate" do
-    assert_equal 0, @account.series(currency: "NZD").values.count
+    with_env_overrides SYNTH_API_KEY: nil do
+      assert_equal 0, @account.series(currency: "NZD").values.count
+    end
   end
 
   test "calculates shares owned of holding for date" do

@@ -9,7 +9,7 @@ module ExchangeRateProviderInterfaceTest
 
   test "exchange rate provider response contract" do
     VCR.use_cassette "synth/exchange_rate" do
-      response = @subject.fetch_exchange_rate from: "USD", to: "MXN", date: Date.current
+      response = @subject.fetch_exchange_rate from: "USD", to: "MXN", date: Date.iso8601("2024-08-01")
 
       assert_respond_to response, :rate
       assert_respond_to response, :success?

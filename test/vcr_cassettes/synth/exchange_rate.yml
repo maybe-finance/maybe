@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api.synthfinance.com/rates/historical?date=<%= Date.current.to_s %>&from=USD&to=MXN
+    uri: https://api.synthfinance.com/rates/historical?date=2024-08-01&from=USD&to=MXN
     body:
       encoding: US-ASCII
       string: ''
@@ -21,7 +21,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-        - Wed, 31 Jul 2024 21:29:55 GMT
+        - Thu, 01 Aug 2024 17:20:28 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -29,13 +29,13 @@ http_interactions:
       Connection:
       - keep-alive
       Cf-Ray:
-        - 8ac0afc6eb4a13ae-CMH
+        - 8ac77fbcc9d013ae-CMH
       Cf-Cache-Status:
       - DYNAMIC
       Cache-Control:
       - max-age=0, private, must-revalidate
       Etag:
-        - W/"8664ef0fdb69c414d09a2c978ce5b58c"
+        - W/"668c8ac287a5ff6d6a705c35c69823b1"
       Strict-Transport-Security:
       - max-age=63072000; includeSubDomains
       Vary:
@@ -43,7 +43,7 @@ http_interactions:
       Referrer-Policy:
       - strict-origin-when-cross-origin
       Rndr-Id:
-        - 17105d86-81b0-4eb8
+        - ff56c2fe-6252-4b2c
       X-Content-Type-Options:
       - nosniff
       X-Frame-Options:
@@ -53,9 +53,9 @@ http_interactions:
       X-Render-Origin-Server:
       - Render
       X-Request-Id:
-        - d97c979e-f641-4c62-918a-aadcaf296b07
+        - 61992b01-969b-4af5-8119-9b17e385da07
       X-Runtime:
-        - '0.343107'
+        - '0.369358'
       X-Xss-Protection:
       - '0'
       Server:
@@ -64,6 +64,6 @@ http_interactions:
       - h3=":443"; ma=86400
     body:
       encoding: ASCII-8BIT
-      string: '{"data":{"date":"<%= Date.current.to_s %>","source":"USD","rates":{"MXN":18.769807}},"meta":{"total_records":1,"credits_used":1,"credits_remaining":870}}'
-  recorded_at: Wed, 31 Jul 2024 21:29:55 GMT
+      string: '{"data":{"date":"2024-08-01","source":"USD","rates":{"MXN":18.645877}},"meta":{"total_records":1,"credits_used":1,"credits_remaining":248999}}'
+  recorded_at: Thu, 01 Aug 2024 17:20:28 GMT
 recorded_with: VCR 6.2.0
