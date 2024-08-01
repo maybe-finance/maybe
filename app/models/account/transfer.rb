@@ -13,15 +13,14 @@ class Account::Transfer < ApplicationRecord
   end
 
   def from_name
-    outflow_transaction&.account&.name
+    outflow_transaction&.account&.name || I18n.t("account.transfer.from_fallback_name")
   end
 
   def to_name
-    inflow_transaction&.account&.name
+    inflow_transaction&.account&.name || I18n.t("account.transfer.to_fallback_name")
   end
 
   def name
-    return nil unless from_name && to_name
     I18n.t("account.transfer.name", from_account: from_name, to_account: to_name)
   end
 
