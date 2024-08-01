@@ -1,0 +1,69 @@
+---
+http_interactions:
+  - request:
+      method: get
+      uri: https://api.synthfinance.com/tickers/AAPL/open-close?end_date=<%= Date.current.to_s %>&start_date=<%= 1.day.ago.to_date.to_s %>
+      body:
+        encoding: US-ASCII
+        string: ''
+      headers:
+        User-Agent:
+          - Faraday v2.10.0
+        Authorization:
+          - Bearer <SYNTH_API_KEY>
+        Accept-Encoding:
+          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+        Accept:
+          - "*/*"
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Date:
+          - Wed, 31 Jul 2024 21:29:57 GMT
+        Content-Type:
+          - application/json; charset=utf-8
+        Transfer-Encoding:
+          - chunked
+        Connection:
+          - keep-alive
+        Cf-Ray:
+          - 8ac0afcbbdc413aa-CMH
+        Cf-Cache-Status:
+          - DYNAMIC
+        Cache-Control:
+          - max-age=0, private, must-revalidate
+        Etag:
+          - W/"7e2538379e5b767b1acebdca56c85993"
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Vary:
+          - Accept-Encoding
+        Referrer-Policy:
+          - strict-origin-when-cross-origin
+        Rndr-Id:
+          - e7a21bce-de39-47b9
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-Permitted-Cross-Domain-Policies:
+          - none
+        X-Render-Origin-Server:
+          - Render
+        X-Request-Id:
+          - c1eb6c64-f2a1-4049-bec6-e0fe4456a780
+        X-Runtime:
+          - '1.642478'
+        X-Xss-Protection:
+          - '0'
+        Server:
+          - cloudflare
+        Alt-Svc:
+          - h3=":443"; ma=86400
+      body:
+        encoding: ASCII-8BIT
+        string: '{"ticker":"AAPL","prices":[{"date":"<%= 1.day.ago.to_date.to_s %>","open":219.19,"close":218.8,"high":220.33,"low":216.12,"volume":40681625},{"date":"<%= Date.current.to_s %>","open":221.44,"close":222.08,"high":223.78,"low":218.4,"volume":49537751}],"paging":{"prev":"/tickers/AAPL/open-close?end_date=2024-07-31\u0026start_date=2024-07-30\u0026page=","next":"/tickers/AAPL/open-close?end_date=2024-07-31\u0026start_date=2024-07-30\u0026page=","total_records":2,"current_page":1,"per_page":100,"total_pages":1},"meta":{"credits_used":1,"credits_remaining":869}}'
+    recorded_at: Wed, 31 Jul 2024 21:29:57 GMT
+recorded_with: VCR 6.2.0

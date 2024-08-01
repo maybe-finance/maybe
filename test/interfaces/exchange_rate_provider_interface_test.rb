@@ -8,7 +8,7 @@ module ExchangeRateProviderInterfaceTest
   end
 
   test "exchange rate provider response contract" do
-    accounting_for_http_calls do
+    VCR.use_cassette "synth/exchange_rate" do
       response = @subject.fetch_exchange_rate from: "USD", to: "MXN", date: Date.current
 
       assert_respond_to response, :rate
@@ -17,11 +17,4 @@ module ExchangeRateProviderInterfaceTest
       assert_respond_to response, :raw_response
     end
   end
-
-  private
-    def accounting_for_http_calls
-      VCR.use_cassette "synth_exchange_rate" do
-        yield
-      end
-    end
 end

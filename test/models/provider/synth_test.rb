@@ -2,7 +2,7 @@ require "test_helper"
 require "ostruct"
 
 class Provider::SynthTest < ActiveSupport::TestCase
-  include ExchangeRateProviderInterfaceTest
+  include ExchangeRateProviderInterfaceTest, SecurityPriceProviderInterfaceTest
 
   setup do
     @subject = @synth = Provider::Synth.new("fookey")
@@ -13,7 +13,7 @@ class Provider::SynthTest < ActiveSupport::TestCase
 
     response = @synth.fetch_exchange_rate from: "USD", to: "MXN", date: Date.current
 
-    assert_match "Failed to fetch exchange rate from Provider::Synth", response.error.message
+    assert_match "Failed to fetch data from Provider::Synth", response.error.message
   end
 
   test "retrying, then raising on network error" do
