@@ -9,7 +9,7 @@ class Account::Transfer < ApplicationRecord
   end
 
   def amount_money
-    entries.first&.amount_money&.abs
+    entries.first&.amount_money&.abs || Money.new(0)
   end
 
   def from_name
