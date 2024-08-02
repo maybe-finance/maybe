@@ -53,13 +53,13 @@
     <div class="p-4 flex justify-between">
       <div class="space-y-2">
         <%= tag.p t(".total_value"), class: "text-sm font-medium text-gray-500" %>
-        <%= tag.p format_money(@account.balance_money, precision: 0), class: "text-gray-900 text-3xl font-medium" %>
+        <%= tag.p format_money(@account.value, precision: 0), class: "text-gray-900 text-3xl font-medium" %>
         <div>
-          <% if @balance_series.trend.direction.flat? %>
+          <% if @series.trend.direction.flat? %>
             <%= tag.span t(".no_change"), class: "text-gray-500" %>
           <% else %>
-            <%= tag.span format_money(@balance_series.trend.value), style: "color: #{@balance_series.trend.color}" %>
-            <%= tag.span "(#{@balance_series.trend.percent}%)", style: "color: #{@balance_series.trend.color}" %>
+            <%= tag.span format_money(@series.trend.value), style: "color: #{@trend.color}" %>
+            <%= tag.span "(#{@trend.percent}%)", style: "color: #{@trend.color}" %>
           <% end %>
 
           <%= tag.span period_label(@period), class: "text-gray-500" %>
@@ -70,7 +70,7 @@
       <% end %>
     </div>
     <div class="h-96 flex items-center justify-center text-2xl font-bold">
-      <%= render partial: "shared/line_chart", locals: { series: @balance_series } %>
+      <%= render partial: "shared/line_chart", locals: { series: @series } %>
     </div>
   </div>
 

@@ -28,7 +28,7 @@
         </div>
         <div class="space-y-6">
           <% @transaction_entries.group_by(&:date).each do |date, entries| %>
-            <%= render "account/entries/entry_group", date:, entries: %>
+            <%= render "account/entries/entry_group", date:, view: "global", entries: %>
           <% end %>
         </div>
       </div>

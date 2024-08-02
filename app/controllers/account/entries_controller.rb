@@ -13,7 +13,7 @@ class Account::EntriesController < ApplicationController
   end
 
   def trades
-    @trades = @account.entries.account_trades.reverse_chronological
+    @trades = @account.entries.where(entryable_type: [ "Account::Transaction", "Account::Trade" ]).reverse_chronological
   end
 
   def new

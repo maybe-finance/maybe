@@ -1,0 +1,8 @@
+---
+en:
+  account:
+    cashes:
+      index:
+        cash: Cash
+        name: Name
+        value: Total Balance

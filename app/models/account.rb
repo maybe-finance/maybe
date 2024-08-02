@@ -28,8 +28,10 @@ class Account < ApplicationRecord
 
   delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
 
+  delegate :value, :series, to: :accountable
+
   class << self
-    def by_group(period: Period.all, currency: Money.default_currency)
+    def by_group(period: Period.all, currency: Money.default_currency.iso_code)
       grouped_accounts = { assets: ValueGroup.new("Assets", currency), liabilities: ValueGroup.new("Liabilities", currency) }
 
       Accountable.by_classification.each do |classification, types|
@@ -80,18 +82,6 @@ class Account < ApplicationRecord
 
   def favorable_direction
     classification == "asset" ? "up" : "down"
-  end
-
-  def series(period: Period.all, currency: self.currency)
-    balance_series = balances.in_period(period).where(currency: Money::Currency.new(currency).iso_code)
-
-    if balance_series.empty? && period.date_range.end == Date.current
-      TimeSeries.new([ { date: Date.current, value: balance_money.exchange_to(currency) } ])
-    else
-      TimeSeries.from_collection(balance_series, :balance_money)
-    end
-  rescue Money::ConversionError
-    TimeSeries.new([])
   end
 
   def update_balance!(balance)
