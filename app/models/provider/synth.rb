@@ -24,6 +24,11 @@ class Provider::Synth
       prices: prices,
       success?: true,
       raw_response: prices.to_json
+  rescue StandardError => error
+    SecurityPriceResponse.new \
+      success?: false,
+      error: error,
+      raw_response: error
   end
 
   def fetch_exchange_rate(from:, to:, date:)
