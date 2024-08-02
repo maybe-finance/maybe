@@ -48,6 +48,7 @@ en:
       title: Add an account
       ungrouped: "(none)"
     show:
+      cash: Cash
       confirm_accept: Delete "%{name}"
       confirm_body_html: "<p>By deleting this account, you will erase its value history,
         affecting various aspects of your overall account. This action will have a
@@ -63,7 +64,7 @@ en:
         graphs may not reflect accurate values.
       sync_message_unknown_error: An error has occurred during the sync.
       total_value: Total Value
-      trades: Trades
+      trades: Transactions
       transactions: Transactions
       value: Value
     summary:

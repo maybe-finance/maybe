@@ -79,6 +79,7 @@ Rails.application.routes.draw do
       resource :logo, only: :show
 
       resources :holdings, only: %i[ index new show ]
+      resources :cashes, only: :index
 
       resources :entries, except: :index do
         collection do

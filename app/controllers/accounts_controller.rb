@@ -31,7 +31,8 @@ class AccountsController < ApplicationController
   end
 
   def show
-    @balance_series = @account.series(period: @period)
+    @series = @account.series(period: @period)
+    @trend = @series.trend
   end
 
   def edit
