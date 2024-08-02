@@ -1,4 +1,4 @@
-<%# locals: (date:, entries:, selectable: true, view: "account", **opts) %>
+<%# locals: (date:, entries:, selectable: true, combine_transfers: false, **opts) %>
 <div id="entry-group-<%= date %>" class="bg-gray-25 rounded-xl p-1 w-full" data-bulk-select-target="group">
   <div class="py-2 px-4 flex items-center justify-between font-medium text-xs text-gray-500">
     <div class="flex pl-0.5 items-center gap-4">
@@ -15,7 +15,7 @@
     <%= totals_by_currency(collection: entries, money_method: :amount_money, negate: true) %>
   </div>
   <div class="bg-white shadow-xs rounded-md border border-alpha-black-25 divide-y divide-alpha-black-50">
-    <% if view == "global" %>
+    <% if combine_transfers %>
       <%= render entries.reject { |e| e.transfer_id.present? }, selectable:, **opts %>
       <%= render transfer_entries(entries), selectable: false, **opts %>
     <% else %>
