@@ -33,8 +33,7 @@ class Provider::Synth
 
   def fetch_exchange_rate(from:, to:, date:)
     retrying Provider::Base.known_transient_errors do |on_last_attempt|
-      response = Faraday.get("#{base_url}/rates/historical") do |req|
-        req.headers["Authorization"] = "Bearer #{api_key}"
+      response = client.get("#{base_url}/rates/historical") do |req|
         req.params["date"] = date.to_s
         req.params["from"] = from
         req.params["to"] = to
@@ -69,6 +68,22 @@ class Provider::Synth
       "https://api.synthfinance.com"
     end
 
+    def app_name
+      "maybe_app"
+    end
+
+    def app_type
+      Rails.application.config.app_mode
+    end
+
+    def client
+      @client ||= Faraday.new(url: base_url) do |faraday|
+        faraday.headers["Authorization"] = "Bearer #{api_key}"
+        faraday.headers["X-Source"] = app_name
+        faraday.headers["X-Source-Type"] = app_type
+      end
+    end
+
     def build_error(response)
       Provider::Base::ProviderError.new(<<~ERROR)
         Failed to fetch data from #{self.class}
@@ -78,7 +93,7 @@ class Provider::Synth
     end
 
     def fetch_page(url, page, params = {})
-      Faraday.get(url) do |req|
+      client.get(url) do |req|
         req.headers["Authorization"] = "Bearer #{api_key}"
         params.each { |k, v| req.params[k.to_s] = v.to_s }
         req.params["page"] = page
