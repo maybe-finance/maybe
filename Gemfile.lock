@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: 5cb5cad3224d03114313fbe28c4dd1374c313d8f
+  revision: 43530b4ac911b8722b8a7ac8025eb9298e1292b4
   branch: 7-2-stable
   specs:
     actioncable (7.2.0.beta3)
@@ -35,7 +35,7 @@ GIT
       activesupport (= 7.2.0.beta3)
       nokogiri (>= 1.8.5)
       racc
-      rack (>= 2.2.4)
+      rack (>= 2.2.4, < 3.2)
       rack-session (>= 1.0.1)
       rack-test (>= 0.6.3)
       rails-dom-testing (~> 2.2)
@@ -78,6 +78,7 @@ GIT
       i18n (>= 1.6, < 2)
       logger (>= 1.4.2)
       minitest (>= 5.1)
+      securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
     rails (7.2.0.beta3)
       actioncable (= 7.2.0.beta3)
@@ -392,6 +393,7 @@ GEM
     sawyer (0.9.2)
       addressable (>= 2.3.5)
       faraday (>= 0.17.3, < 3)
+    securerandom (0.3.1)
     selenium-webdriver (4.23.0)
       base64 (~> 0.2)
       logger (~> 1.4)
