@@ -17,18 +17,24 @@ class Provider::SynthTest < ActiveSupport::TestCase
   end
 
   test "retries then provides failed response" do
-    Faraday.expects(:get).returns(OpenStruct.new(success?: false)).times(3)
+    @client = mock
+    Faraday.stubs(:new).returns(@client)
 
-    response = @synth.fetch_exchange_rate from: "USD", to: "MXN", date: Date.current
+    @client.expects(:get).returns(OpenStruct.new(success?: false)).times(3)
+
+    response = @synth.fetch_exchange_rate from: "USD", to: "MXN", date: Date.iso8601("2024-08-01")
 
     assert_match "Failed to fetch data from Provider::Synth", response.error.message
   end
 
   test "retrying, then raising on network error" do
-    Faraday.expects(:get).raises(Faraday::TimeoutError).times(3)
+    @client = mock
+    Faraday.stubs(:new).returns(@client)
+
+    @client.expects(:get).raises(Faraday::TimeoutError).times(3)
 
     assert_raises Faraday::TimeoutError do
-      @synth.fetch_exchange_rate from: "USD", to: "MXN", date: Date.current
+      @synth.fetch_exchange_rate from: "USD", to: "MXN", date: Date.iso8601("2024-08-01")
     end
   end
 end
