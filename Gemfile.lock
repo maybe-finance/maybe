@@ -180,10 +180,10 @@ GEM
       tzinfo
     faker (3.4.2)
       i18n (>= 1.8.11, < 2)
-    faraday (2.10.0)
+    faraday (2.10.1)
       faraday-net_http (>= 2.0, < 3.2)
       logger
-    faraday-net_http (3.1.0)
+    faraday-net_http (3.1.1)
       net-http
     faraday-retry (2.2.1)
       faraday (~> 2.0)
