@@ -1,14 +1,15 @@
+@import "tooltip.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* Reset rules, default styles applied to plain HTML */
 @layer base {
-  details > summary::-webkit-details-marker {
+  details>summary::-webkit-details-marker {
     @apply hidden;
   }
 
-  details > summary {
+  details>summary {
     @apply list-none;
   }
 }
@@ -38,7 +39,7 @@
     @apply w-full cursor-pointer rounded-lg bg-black p-3 text-center text-white hover:bg-gray-700;
   }
 
-  input:checked + label + .toggle-switch-dot {
+  input:checked+label+.toggle-switch-dot {
     transform: translateX(100%);
   }
 
