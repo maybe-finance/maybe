@@ -11,14 +11,14 @@ en:
         title: No entries found
       entryables:
         trade:
+          new:
+            title: New transaction
+            type: Type
           show:
             overview: Overview
           trade:
             buy: Buy
             sell: Sell
-          new:
-            title: "New transaction"
-            type: "Type"
         transaction:
           selection_bar:
             mark_transfers: Mark as transfers?
