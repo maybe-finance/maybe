@@ -11,7 +11,7 @@ en:
         name: name
         needs_sync: Your account needs to sync the latest prices to calculate this
           portfolio
-        new_holding: New holding
+        new_holding: New transaction
         no_holdings: No holdings to show.
         return: total return
         weight: weight

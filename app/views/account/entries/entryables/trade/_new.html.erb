@@ -1,0 +1,8 @@
+<%= modal_form_wrapper title: t(".title") do %>
+  <%= styled_form_with model: entry do |form| %>
+    <div class="space-y-4">
+      <%= form.select :type, options_for_select(["Buy", "Sell"], "Buy"), label: t(".type") %>
+      <%= form.submit "Add transaction" %>
+    </div>
+  <% end %>
+<% end %>

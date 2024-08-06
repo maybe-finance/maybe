@@ -5,6 +5,22 @@ class Account::EntriesControllerTest < ActionDispatch::IntegrationTest
     sign_in @user = users(:family_admin)
     @transaction = account_entries :transaction
     @valuation = account_entries :valuation
+    @trade = account_entries :trade
+  end
+
+  test "new trade" do
+    get new_account_entry_url(@trade.account)
+    assert_response :success
+  end
+
+  test "shows trade entry" do
+    get account_entry_url(@trade.account, @trade)
+    assert_response :success
+  end
+
+  test "should get list of trade entries" do
+    get trade_account_entries_url(@trade.account)
+    assert_response :success
   end
 
   test "should edit valuation entry" do

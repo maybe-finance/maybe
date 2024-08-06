@@ -16,6 +16,9 @@ en:
           trade:
             buy: Buy
             sell: Sell
+          new:
+            title: "New transaction"
+            type: "Type"
         transaction:
           selection_bar:
             mark_transfers: Mark as transfers?
