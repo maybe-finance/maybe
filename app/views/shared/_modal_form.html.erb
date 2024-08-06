@@ -1,0 +1,18 @@
+<%# locals: (title:, content:, subtitle: nil) %>
+
+<%= modal do %>
+  <article class="mx-auto w-full p-4 space-y-4 min-w-[450px] max-w-xl">
+    <div class="space-y-2">
+      <header class="flex justify-between">
+        <h2 class="font-medium text-xl"><%= title %></h2>
+        <%= lucide_icon("x", class: "w-5 h-5 text-gray-500", data: { action: "click->modal#close" }) %>
+      </header>
+
+      <% if subtitle.present? %>
+        <%= tag.p subtitle, class: "text-gray-500 font-light" %>
+      <% end %>
+    </div>
+
+    <%= content %>
+  </article>
+<% end %>

@@ -1,4 +1,11 @@
 <%= styled_form_with model: transfer, class: "space-y-4", data: { turbo_frame: "_top" } do |f| %>
+  <% if transfer.errors.present? %>
+    <div class="text-red-600 flex items-center gap-2">
+      <%= lucide_icon "circle-alert", class: "w-5 h-5" %>
+      <p class="text-sm"><%= @transfer.errors.full_messages.to_sentence %></p>
+    </div>
+  <% end %>
+
   <section>
     <fieldset class="bg-gray-50 rounded-lg p-1 grid grid-flow-col justify-stretch gap-x-2">
       <%= link_to new_transaction_path(nature: "expense"), data: { turbo_frame: :modal }, class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-gray-400" do %>

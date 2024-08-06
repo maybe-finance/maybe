@@ -4,6 +4,12 @@ module FormsHelper
     form_with(**options, &block)
   end
 
+  def modal_form_wrapper(title:, subtitle: nil, &block)
+    content = capture &block
+
+    render partial: "shared/modal_form", locals: { title:, subtitle:, content: }
+  end
+
   def form_field_tag(options = {}, &block)
     options[:class] = [ "form-field", options[:class] ].compact.join(" ")
     tag.div(**options, &block)
