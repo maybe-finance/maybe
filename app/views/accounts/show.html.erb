@@ -56,7 +56,7 @@
           <div>
             <%= tag.p t(".total_value"), class: "text-sm font-medium text-gray-500" %>
           </div>
-          <%= render 'tooltip', account: @account if @account.investment? %>
+          <%= render "tooltip", account: @account if @account.investment? %>
         </div>
         <%= tag.p format_money(@account.value, precision: 0), class: "text-gray-900 text-3xl font-medium" %>
         <div>
