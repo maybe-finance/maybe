@@ -3,6 +3,9 @@ require "test_helper"
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   setup do
     Capybara.default_max_wait_time = 5
+
+    # Prevent "auto sync" from running when tests execute enqueued jobs
+    families(:dylan_family).update! last_synced_at: Time.now
   end
 
   driven_by :selenium, using: ENV["CI"].present? ? :headless_chrome : :chrome, screen_size: [ 1400, 1400 ]

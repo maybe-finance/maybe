@@ -30,6 +30,14 @@ module Account::EntriesHelper
     mixed_hex_styles(color)
   end
 
+  def trade_name(entry)
+    trade     = entry.account_trade
+    prefix    = trade.sell? ? "Sell " : "Buy "
+    generated = prefix + "#{trade.qty.abs} shares of #{trade.security.ticker}"
+    name      = entry.name || generated
+    name
+  end
+
   private
 
     def permitted_entryable_key(entry)

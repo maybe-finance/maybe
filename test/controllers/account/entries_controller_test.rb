@@ -8,48 +8,89 @@ class Account::EntriesControllerTest < ActionDispatch::IntegrationTest
     @trade = account_entries :trade
   end
 
-  test "new trade" do
-    get new_account_entry_url(@trade.account)
-    assert_response :success
+  # =================
+  # Shared
+  # =================
+
+  test "should destroy entry" do
+    [ @transaction, @valuation, @trade ].each do |entry|
+      assert_difference -> { Account::Entry.count } => -1, -> { entry.entryable_class.count } => -1 do
+        delete account_entry_url(entry.account, entry)
+      end
+
+      assert_redirected_to account_url(entry.account)
+      assert_enqueued_with(job: AccountSyncJob)
+    end
   end
 
-  test "shows trade entry" do
-    get account_entry_url(@trade.account, @trade)
-    assert_response :success
+  test "gets new entry" do
+    [ @valuation, @trade ].each do |entry|
+      get new_account_entry_url(entry.account, entryable_type: entry.entryable_type)
+      assert_response :success
+    end
   end
 
-  test "should get list of trade entries" do
-    get trade_account_entries_url(@trade.account)
-    assert_response :success
+  test "gets entry detail" do
+    [ @transaction, @valuation, @trade ].each do |entry|
+      get account_entry_url(entry.account, entry)
+      assert_response :success
+    end
   end
 
-  test "should edit valuation entry" do
-    get edit_account_entry_url(@valuation.account, @valuation)
-    assert_response :success
+  test "can update entry without entryable attributes" do
+    [ @transaction, @valuation, @trade ].each do |entry|
+      assert_no_difference_in_entries do
+        patch account_entry_url(entry.account, entry), params: {
+          account_entry: generic_entry_attributes
+        }
+      end
+
+      assert_redirected_to account_entry_url(entry.account, entry)
+      assert_enqueued_with(job: AccountSyncJob)
+    end
   end
 
-  test "should show transaction entry" do
-    get account_entry_url(@transaction.account, @transaction)
-    assert_response :success
-  end
-
-  test "should show valuation entry" do
-    get account_entry_url(@valuation.account, @valuation)
-    assert_response :success
-  end
+  # =================
+  # Transactions
+  # =================
 
   test "should get list of transaction entries" do
     get transaction_account_entries_url(@transaction.account)
     assert_response :success
   end
 
+  test "update transaction" do
+    assert_no_difference_in_entries do
+      patch account_entry_url(@transaction.account, @transaction), params: {
+        account_entry: generic_entry_attributes.merge({
+                                                        entryable_type:       @transaction.entryable_type,
+                                                        entryable_attributes: {
+                                                          id:          @transaction.entryable_id,
+                                                          tag_ids:     [ Tag.first.id, Tag.second.id ],
+                                                          category_id: Category.first.id,
+                                                          merchant_id: Merchant.first.id,
+                                                          notes:       "test notes",
+                                                          excluded:    false
+                                                        }
+                                                      })
+      }
+    end
+
+    assert_redirected_to account_entry_url(@transaction.account, @transaction)
+    assert_enqueued_with(job: AccountSyncJob)
+  end
+
+  # =================
+  # Valuations
+  # =================
+
   test "should get list of valuation entries" do
     get valuation_account_entries_url(@valuation.account)
     assert_response :success
   end
 
-  test "gets new entry by type" do
-    get new_account_entry_url(@valuation.account, entryable_type: "Account::Valuation")
+  test "edit valuation entry" do
+    get edit_account_entry_url(@valuation.account, @valuation)
     assert_response :success
   end
 
@@ -89,54 +130,71 @@ class Account::EntriesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to account_path(@valuation.account)
   end
 
-  test "can update entry without entryable attributes" do
-    assert_no_difference_in_entries do
-      patch account_entry_url(@valuation.account, @valuation), params: {
-        account_entry: {
-          name: "Updated name"
-        }
-      }
-    end
+  # =================
+  # Trades
+  # =================
 
-    assert_redirected_to account_entry_url(@valuation.account, @valuation)
-    assert_enqueued_with(job: AccountSyncJob)
+  test "should get list of trade entries" do
+    get trade_account_entries_url(@trade.account)
+    assert_response :success
   end
 
-  test "should update transaction entry with entryable attributes" do
-    assert_no_difference_in_entries do
-      patch account_entry_url(@transaction.account, @transaction), params: {
+  test "creates trade buy entry" do
+    assert_difference [ "Account::Entry.count", "Account::Trade.count", "Security.count" ], 1 do
+      post account_entries_url(@trade.account), params: {
         account_entry: {
-          name: "Updated name",
-          date: Date.current,
-          currency: "USD",
-          amount: 20,
-          entryable_type: @transaction.entryable_type,
+          type:                 "buy",
+          name:                 "Name",
+          date:                 Date.current,
+          currency:             "USD",
+          entryable_type:       @trade.entryable_type,
           entryable_attributes: {
-            id: @transaction.entryable_id,
-            tag_ids: [ Tag.first.id, Tag.second.id ],
-            category_id: Category.first.id,
-            merchant_id: Merchant.first.id,
-            notes: "test notes",
-            excluded: false
+            qty:      10,
+            price:    10,
+            currency: "USD",
+            ticker:   "NVDA"
           }
         }
       }
     end
 
-    assert_redirected_to account_entry_url(@transaction.account, @transaction)
-    assert_enqueued_with(job: AccountSyncJob)
+    created_entry = Account::Entry.order(created_at: :desc).first
+
+    assert created_entry.amount.positive?
+    assert created_entry.account_trade.qty.positive?
+    assert_equal "Trade created", flash[:notice]
+    assert_enqueued_with job: AccountSyncJob
+    assert_redirected_to account_path(@trade.account)
   end
 
-  test "should destroy transaction entry" do
-    [ @transaction, @valuation ].each do |entry|
-      assert_difference -> { Account::Entry.count } => -1, -> { entry.entryable_class.count } => -1 do
-        delete account_entry_url(entry.account, entry)
-      end
-
-      assert_redirected_to account_url(entry.account)
-      assert_enqueued_with(job: AccountSyncJob)
+  test "creates trade sell entry" do
+    assert_difference [ "Account::Entry.count", "Account::Trade.count" ], 1 do
+      post account_entries_url(@trade.account), params: {
+        account_entry: {
+          type:                 "sell",
+          name:                 "Name",
+          date: Date.current,
+          currency: "USD",
+          entryable_type:       @trade.entryable_type,
+          entryable_attributes: {
+            qty:      10,
+            price:    10,
+            currency: "USD",
+            ticker:   "AAPL"
+          }
+        }
+      }
     end
+
+    created_entry = Account::Entry.order(created_at: :desc).first
+
+    assert created_entry.amount.negative?
+    assert created_entry.account_trade.qty.negative?
+    assert_equal "Trade created", flash[:notice]
+    assert_enqueued_with job: AccountSyncJob
+    assert_redirected_to account_path(@trade.account)
   end
+
 
   private
 
@@ -144,5 +202,14 @@ class Account::EntriesControllerTest < ActionDispatch::IntegrationTest
     # See `update_only` option of accepts_nested_attributes_for
     def assert_no_difference_in_entries(&block)
       assert_no_difference [ "Account::Entry.count", "Account::Transaction.count", "Account::Valuation.count" ], &block
+    end
+
+    def generic_entry_attributes
+      {
+        name:     "Name",
+        date:     Date.current,
+        currency: "USD",
+        amount:   100
+      }
     end
 end

@@ -11,9 +11,14 @@ en:
         title: No entries found
       entryables:
         trade:
+          form:
+            holding: Holding
+            price: Price per share
+            qty: Quantity
+            submit: Add transaction
+            type: Type
           new:
             title: New transaction
-            type: Type
           show:
             overview: Overview
           trade:

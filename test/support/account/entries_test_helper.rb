@@ -34,7 +34,8 @@ module Account::EntriesTestHelper
     trade = Account::Trade.new \
       qty: qty,
       security: security,
-      price: trade_price
+      price:    trade_price,
+      currency: "USD"
 
     account.entries.create! \
       name: "Trade",

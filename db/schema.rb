@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_07_31_191344) do
+ActiveRecord::Schema[7.2].define(version: 2024_08_07_153618) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -81,6 +81,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_07_31_191344) do
     t.decimal "price", precision: 19, scale: 4
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "currency"
     t.index ["security_id"], name: "index_account_trades_on_security_id"
   end
 

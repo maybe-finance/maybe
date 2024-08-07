@@ -1,6 +1,7 @@
 class Account::EntriesController < ApplicationController
   layout :with_sidebar
 
+  before_action :set_entryable_type, only: :new
   before_action :set_account
   before_action :set_entry, only: %i[ edit update show destroy ]
 
@@ -18,16 +19,25 @@ class Account::EntriesController < ApplicationController
 
   def new
     @entry = @account.entries.build.tap do |entry|
-      if params[:entryable_type]
-        entry.entryable = Account::Entryable.from_type(params[:entryable_type]).new
-      else
-        entry.entryable = Account::Valuation.new
-      end
+      entry.entryable = Account::Entryable.from_type(@entryable_type).new
     end
   end
 
   def create
-    @entry = @account.entries.build(entry_params_with_defaults(entry_params))
+    # TODO: refactor after tests passing
+    entry_params_modified = entry_params_with_defaults(entry_params)
+    if entry_params_modified[:entryable_type] == "Account::Trade"
+      ticker                   = entry_params_modified[:entryable_attributes].delete(:ticker)
+      security                 = Security.find_or_create_by(ticker: ticker)
+      price                    = entry_params_modified[:entryable_attributes][:price]
+      qty                      = entry_params_modified[:entryable_attributes][:qty]
+      qty                      = params[:account_entry][:type] == "buy" ? qty : -1 * qty.to_f
+      amount                   = price.to_f * qty.to_f
+      new_entryable_attributes = entry_params_modified[:entryable_attributes].merge(qty: qty, security_id: security.id)
+      @entry                   = @account.entries.build(entry_params_modified.merge(amount: amount, entryable_attributes: new_entryable_attributes))
+    else
+      @entry = @account.entries.build(entry_params_modified)
+    end
 
     if @entry.save
       @entry.sync_account_later
@@ -66,6 +76,11 @@ class Account::EntriesController < ApplicationController
 
   private
 
+    def set_entryable_type
+      raise "Must provide entryable type" unless params[:entryable_type].present?
+      @entryable_type = params[:entryable_type]
+    end
+
     def set_account
       @account = Current.family.accounts.find(params[:account_id])
     end
@@ -80,6 +95,8 @@ class Account::EntriesController < ApplicationController
       case entryable_type
       when "Account::Transaction"
         [ :id, :notes, :excluded, :category_id, :merchant_id, tag_ids: [] ]
+      when "Account::Trade"
+        [ :id, :ticker, :qty, :price, :currency ]
       else
         [ :id ]
       end
@@ -87,7 +104,7 @@ class Account::EntriesController < ApplicationController
 
     def entry_params
       params.require(:account_entry)
-            .permit(:name, :date, :amount, :currency, :entryable_type, entryable_attributes: permitted_entryable_attributes)
+        .permit(:name, :date, :amount, :currency, :entryable_type, entryable_attributes: permitted_entryable_attributes)
     end
 
     def amount
