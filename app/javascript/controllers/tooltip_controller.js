@@ -39,12 +39,12 @@ export default class extends Controller {
     tooltip.style.display = '';
   }
 
-  hideAllElements() {
-    document.querySelectorAll('#tooltip').forEach(element => element.removeAttribute("data-show"));
+  hideAllElements = () => {
+    document.querySelectorAll('#tooltip').forEach(element => element.style.display = '');
   }
 
   disconnect() {
-    hideAllElements();
+    this.hideAllElements;
   }
 
   #update() {
