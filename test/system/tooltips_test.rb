@@ -12,7 +12,7 @@ class TooltipsTest < ApplicationSystemTestCase
   test "can see account information tooltip" do
     visit account_path(@account)
     find('[data-controller="tooltip"]').hover
-    assert_selector("#tooltip[data-show]", visible: true)
+    assert find("#tooltip", visible: true)
     within "#tooltip" do
       assert_text I18n.t("accounts.tooltip.total_value_tooltip")
       assert_text I18n.t("accounts.tooltip.holdings")
@@ -21,6 +21,6 @@ class TooltipsTest < ApplicationSystemTestCase
       assert_text format_money(@account.balance_money, precision: 0)
     end
     find("body").click
-    assert_no_selector("#tooltip[data-show]", visible: true)
+    assert find("#tooltip", visible: false)
   end
 end

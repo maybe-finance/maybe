@@ -1,53 +1,82 @@
 import { Controller } from '@hotwired/stimulus'
-import { createPopper } from "@popperjs/core";
+import {
+  computePosition,
+  flip,
+  shift,
+  offset,
+  arrow
+} from '@floating-ui/dom';
 
 export default class extends Controller {
   static targets = ["element", "tooltip"];
   static values = {
     placement: String,
-    offset: Array
+    offset: Number,
+    crossAxis: Number
   };
 
   initialize() {
-    this.placementValue = this.placementValue || "top"
-    this.offsetValue = this.offsetValue || [0, 8]
+    this.placementOption = this.placementValue || "top"
+    this.offsetOption = this.offsetValue || 10
+    this.crossAxisOption = this.crossAxisValue || 0
+    this.alignmentAxisOption = this.alignmentValue || null
+    this.arrowElement = document.querySelector('#arrow');
   }
 
   connect() {
-    this.popperInstance = createPopper(this.elementTarget, this.tooltipTarget, {
-      placement: this.placementValue,
-      modifiers: [
-        {
-          name: "offset",
-          options: {
-            offset: this.offsetValue,
-          },
-        },
-      ],
-    });
+    this.elementTarget.addEventListener("mouseenter", this.showTooltip);
+    this.elementTarget.addEventListener("mouseleave", this.hideTooltip);
+    this.elementTarget.addEventListener("focus", this.showTooltip);
+    this.elementTarget.addEventListener("blur", this.hideTooltip);
   }
 
-  show(event) {
-    this.hideAllElements();
-    this.tooltipTarget.setAttribute("data-show", "");
-
-    // We need to tell Popper to update the tooltip position
-    // after we show the tooltip, otherwise it will be incorrect
-    this.popperInstance.update();
+  showTooltip = () => {
+    tooltip.style.display = 'block';
+    this.#update();
   }
 
-  hide(event) {
-    this.tooltipTarget.removeAttribute("data-show");
+  hideTooltip = () => {
+    tooltip.style.display = '';
   }
 
   hideAllElements() {
     document.querySelectorAll('#tooltip').forEach(element => element.removeAttribute("data-show"));
   }
 
-  // Destroy the Popper instance
   disconnect() {
-    if (this.popperInstance) {
-      this.popperInstance.destroy();
-    }
+    hideAllElements();
+  }
+
+  #update() {
+    computePosition(this.elementTarget, this.tooltipTarget, {
+      placement: this.placementOption,
+      middleware: [
+        offset({ mainAxis: this.offsetOption, crossAxis: this.crossAxisOption, alignmentAxis: this.alignmentAxisOption }),
+        flip(),
+        shift({ padding: 5 }),
+        arrow({ element: this.arrowElement }),
+      ],
+    }).then(({ x, y, placement, middlewareData }) => {
+      Object.assign(tooltip.style, {
+        left: `${x}px`,
+        top: `${y}px`,
+      });
+
+      const { x: arrowX, y: arrowY } = middlewareData.arrow;
+      const staticSide = {
+        top: 'bottom',
+        right: 'left',
+        bottom: 'top',
+        left: 'right',
+      }[placement.split('-')[0]];
+
+      Object.assign(this.arrowElement.style, {
+        left: arrowX != null ? `${arrowX}px` : '',
+        top: arrowY != null ? `${arrowY}px` : '',
+        right: '',
+        bottom: '',
+        [staticSide]: '-4px',
+      });
+    });
   }
 }
