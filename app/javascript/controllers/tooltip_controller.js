@@ -32,10 +32,6 @@ export default class extends Controller {
     this.tooltipTarget.style.display = '';
   };
 
-  hideAllElements = () => {
-    document.querySelectorAll('#tooltip').forEach(element => element.style.display = '');
-  };
-
   disconnect() {
     this.element.removeEventListener("mouseenter", this.showTooltip);
     this.element.removeEventListener("mouseleave", this.hideTooltip);
