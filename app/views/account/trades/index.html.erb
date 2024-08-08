@@ -33,7 +33,7 @@
       <% else %>
         <div class="space-y-6">
           <%= entries_by_date(@entries) do |entries| %>
-            <%= render partial: "account/entries/entryables/trade", collection: entries, as: :entry %>
+            <%= render partial: "account/entries/entryables/trade/trade", collection: entries, as: :entry %>
           <% end %>
         </div>
       <% end %>

@@ -65,10 +65,6 @@ class Account::Entry < ApplicationRecord
   end
 
   class << self
-    def build_trade_with_ticker(ticker:, entry:)
-      entry
-    end
-
     # arbitrary cutoff date to avoid expensive sync operations
     def min_supported_date
       10.years.ago.to_date

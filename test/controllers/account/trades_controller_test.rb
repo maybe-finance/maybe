@@ -11,8 +11,8 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should get show" do
-    get account_trade_url(@entry.account, @entry)
+  test "should get new" do
+    get new_account_trade_url(@entry.account)
     assert_response :success
   end
 end

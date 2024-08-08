@@ -10,9 +10,4 @@ class Account::TransactionsControllerTest < ActionDispatch::IntegrationTest
     get account_transactions_url(@entry.account)
     assert_response :success
   end
-
-  test "should get show" do
-    get account_transaction_url(@entry.account, @entry)
-    assert_response :success
-  end
 end

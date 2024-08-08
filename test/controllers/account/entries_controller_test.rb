@@ -23,9 +23,9 @@ class Account::EntriesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "gets new entry" do
-    [ @valuation, @trade ].each do |entry|
-      get new_account_entry_url(entry.account, entryable_type: entry.entryable_type)
+  test "shows entry" do
+    [ @transaction, @valuation, @trade ].each do |entry|
+      get account_entry_url(entry.account, entry)
       assert_response :success
     end
   end

@@ -21,7 +21,7 @@
             <%= content_tag :p, entry_name(entry) %>
           <% else %>
             <%= link_to entry_name(entry),
-                        entry.account_transaction? ? account_transaction_path(account, entry) : account_trade_path(account, entry),
+                        account_entry_path(account, entry),
                         data: { turbo_frame: "drawer", turbo_prefetch: false },
                         class: "hover:underline hover:text-gray-800" %>
           <% end %>

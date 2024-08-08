@@ -1,4 +1,6 @@
-<% entry, transaction, account = @entry, @entry.account_transaction, @entry.account %>
+<%# locals: (entry:) %>
+
+<% transaction, account = entry.account_transaction, entry.account %>
 
 <%= drawer do %>
   <div>

@@ -1,15 +1,8 @@
 class Account::EntriesController < ApplicationController
   layout :with_sidebar
 
-  before_action :set_entryable_type, only: :new
   before_action :set_account
   before_action :set_entry, only: %i[ edit update show destroy ]
-
-  def new
-    @entry = @account.entries.build.tap do |entry|
-      entry.entryable = Account::Entryable.from_type(@entryable_type).new
-    end
-  end
 
   def create
     # TODO: refactor after tests passing
@@ -63,11 +56,6 @@ class Account::EntriesController < ApplicationController
   end
 
   private
-
-    def set_entryable_type
-      raise "Must provide entryable type" unless params[:entryable_type].present?
-      @entryable_type = params[:entryable_type]
-    end
 
     def set_account
       @account = Current.family.accounts.find(params[:account_id])

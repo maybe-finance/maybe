@@ -9,5 +9,5 @@ en:
         trade: transaction
         trades: Transactions
         type: Type
-      show:
-        overview: Overview
+      new:
+        title: New transaction

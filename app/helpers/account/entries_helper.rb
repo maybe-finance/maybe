@@ -1,7 +1,4 @@
 module Account::EntriesHelper
-  def entryable_partial_path(entry)
-    "account/entries/entryables/#{permitted_entryable_key(entry)}"
-  end
   def permitted_entryable_partial_path(entry, relative_partial_path)
     "account/entries/entryables/#{permitted_entryable_key(entry)}/#{relative_partial_path}"
   end
