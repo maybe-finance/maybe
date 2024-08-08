@@ -62,8 +62,16 @@ class ExchangeRateTest < ActiveSupport::TestCase
   end
 
   test "finds multiple rates from provider and caches to DB" do
-    @provider.expects(:fetch_exchange_rate).with(from: "EUR", to: "USD", date: 1.day.ago.to_date).returns(OpenStruct.new(success?: true, rate: 1.1)).once
-    @provider.expects(:fetch_exchange_rate).with(from: "EUR", to: "USD", date: Date.current).returns(OpenStruct.new(success?: true, rate: 1.2)).once
+    @provider.expects(:fetch_exchange_rate_for_date_range).with(from: "EUR", to: "USD", date_start: 1.day.ago.to_date, date_end: Date.current)
+      .returns(
+        OpenStruct.new(
+          rates: [
+            OpenStruct.new(date: 1.day.ago.to_date, rate: 1.1),
+            OpenStruct.new(date: Date.current, rate: 1.2)
+          ],
+          success?: true
+        )
+      ).once
 
     fetched_rates = ExchangeRate.find_rates(from: "EUR", to: "USD", start_date: 1.day.ago.to_date, cache: true)
     refetched_rates = ExchangeRate.find_rates(from: "EUR", to: "USD", start_date: 1.day.ago.to_date)
@@ -73,7 +81,15 @@ class ExchangeRateTest < ActiveSupport::TestCase
   end
 
   test "finds missing db rates from provider and appends to results" do
-    @provider.expects(:fetch_exchange_rate).with(from: "EUR", to: "GBP", date: 2.days.ago.to_date).returns(OpenStruct.new(success?: true, rate: 1.1)).once
+    @provider.expects(:fetch_exchange_rate_for_date_range).with(from: "EUR", to: "GBP", date_start: 2.days.ago.to_date, date_end: 2.days.ago.to_date)
+      .returns(
+        OpenStruct.new(
+          rates: [
+            OpenStruct.new(date: 2.day.ago.to_date, rate: 1.1)
+          ],
+          success?: true
+        )
+      ).once
 
     rate1 = exchange_rates(:one) # EUR -> GBP, today
     rate2 = exchange_rates(:two) # EUR -> GBP, yesterday

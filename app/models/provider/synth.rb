@@ -57,12 +57,44 @@ class Provider::Synth
     end
   end
 
+  def fetch_exchange_rate_for_date_range(from:, to:, date_start:, date_end:)
+    retrying Provider::Base.known_transient_errors do |on_last_attempt|
+      response = client.get("#{base_url}/rates/historical-range") do |req|
+        req.params["from"] = from
+        req.params["to"] = to
+        req.params["date_start"] = date_start.to_s
+        req.params["date_end"] = date_end.to_s
+      end
+
+      if response.success?
+        exchange_rates = JSON.parse(response.body).dig("data").map do |exchange_rate|
+          RateObjekt.new(date: exchange_rate.fetch("date"), rate: exchange_rate.dig("rates", to))
+        end
+        ExchangeRatesResponse.new \
+          rates: exchange_rates,
+          success?: true,
+          raw_response: response
+      else
+        if on_last_attempt
+          ExchangeRatesResponse.new \
+            success?: false,
+            error: build_error(response),
+            raw_response: response
+        else
+          raise build_error(response)
+        end
+      end
+    end
+  end
+
   private
 
     attr_reader :api_key
 
     ExchangeRateResponse = Struct.new :rate, :success?, :error, :raw_response, keyword_init: true
     SecurityPriceResponse = Struct.new :prices, :success?, :error, :raw_response, keyword_init: true
+    ExchangeRatesResponse = Struct.new :rates, :success?, :error, :raw_response, keyword_init: true
+    RateObjekt = Struct.new :date, :rate, keyword_init: true
 
     def base_url
       "https://api.synthfinance.com"

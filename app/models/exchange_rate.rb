@@ -15,12 +15,12 @@ class ExchangeRate < ApplicationRecord
 
     def find_rates(from:, to:, start_date:, end_date: Date.current, cache: true)
       rates = self.where(from_currency: from, to_currency: to, date: start_date..end_date).to_a
-      all_dates = (start_date..end_date).to_a.to_set
-      existing_dates = rates.map(&:date).to_set
+      all_dates = (start_date..end_date).to_a
+      existing_dates = rates.map(&:date)
       missing_dates = all_dates - existing_dates
 
       if missing_dates.any?
-        rates += fetch_rates_from_provider(from:, to:, dates: missing_dates, cache:)
+        rates += fetch_rates_from_provider(from:, to:, start_date: missing_dates.first, end_date: missing_dates.last, cache:)
       end
 
       rates
