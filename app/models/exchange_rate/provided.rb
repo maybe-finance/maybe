@@ -20,8 +20,8 @@ module ExchangeRate::Provided
             rate = ExchangeRate.new \
               from_currency: from,
               to_currency: to,
-              date: exchange_rate.date.to_date,
-              rate: exchange_rate.rate
+              date: exchange_rate.dig(:date).to_date,
+              rate: exchange_rate.dig(:rate)
 
             rate.save! if cache
             rate
