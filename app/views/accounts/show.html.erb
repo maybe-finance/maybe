@@ -52,7 +52,12 @@
   <div class="bg-white shadow-xs rounded-xl border border-alpha-black-25 rounded-lg">
     <div class="p-4 flex justify-between">
       <div class="space-y-2">
-        <%= tag.p t(".total_value"), class: "text-sm font-medium text-gray-500" %>
+        <div class="flex items-center gap-1">
+          <div>
+            <%= tag.p t(".total_value"), class: "text-sm font-medium text-gray-500" %>
+          </div>
+          <%= render "tooltip", account: @account if @account.investment? %>
+        </div>
         <%= tag.p format_money(@account.value, precision: 0), class: "text-gray-900 text-3xl font-medium" %>
         <div>
           <% if @series.trend.direction.flat? %>
