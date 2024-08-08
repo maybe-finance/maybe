@@ -10,16 +10,13 @@ import {
 export default class extends Controller {
   static targets = ["element", "tooltip"];
   static values = {
-    placement: String,
-    offset: Number,
-    crossAxis: Number
-  };
+    placement: { type: String, default: "top" },
+    offset: { type: Number, default: 10 },
+    crossAxis: { type: Number, default: 0 },
+    alignmentAxis: { type: Number, default: null },
+  }
 
   initialize() {
-    this.placementOption = this.placementValue || "top"
-    this.offsetOption = this.offsetValue || 10
-    this.crossAxisOption = this.crossAxisValue || 0
-    this.alignmentAxisOption = this.alignmentValue || null
     this.arrowElement = document.querySelector('#arrow');
   }
 
@@ -49,9 +46,9 @@ export default class extends Controller {
 
   #update() {
     computePosition(this.elementTarget, this.tooltipTarget, {
-      placement: this.placementOption,
+      placement: this.placementValue,
       middleware: [
-        offset({ mainAxis: this.offsetOption, crossAxis: this.crossAxisOption, alignmentAxis: this.alignmentAxisOption }),
+        offset({ mainAxis: this.offsetValue, crossAxis: this.crossAxisValue, alignmentAxis: this.alignmentAxisValue }),
         flip(),
         shift({ padding: 5 }),
         arrow({ element: this.arrowElement }),
