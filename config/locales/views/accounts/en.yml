@@ -71,5 +71,10 @@ en:
       new: New account
     sync_all:
       success: Successfully queued accounts for syncing.
+    tooltip:
+      cash: Cash
+      holdings: Holdings
+      total_value_tooltip: The total value is the sum of cash balance and your holdings
+        value, minus margin loans.
     update:
       success: Account updated
