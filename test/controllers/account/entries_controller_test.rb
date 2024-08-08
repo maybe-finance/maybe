@@ -30,13 +30,6 @@ class Account::EntriesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "gets entry detail" do
-    [ @transaction, @valuation, @trade ].each do |entry|
-      get account_entry_url(entry.account, entry)
-      assert_response :success
-    end
-  end
-
   test "can update entry without entryable attributes" do
     [ @transaction, @valuation, @trade ].each do |entry|
       assert_no_difference_in_entries do
@@ -53,11 +46,6 @@ class Account::EntriesControllerTest < ActionDispatch::IntegrationTest
   # =================
   # Transactions
   # =================
-
-  test "should get list of transaction entries" do
-    get transaction_account_entries_url(@transaction.account)
-    assert_response :success
-  end
 
   test "update transaction" do
     assert_no_difference_in_entries do
@@ -83,11 +71,6 @@ class Account::EntriesControllerTest < ActionDispatch::IntegrationTest
   # =================
   # Valuations
   # =================
-
-  test "should get list of valuation entries" do
-    get valuation_account_entries_url(@valuation.account)
-    assert_response :success
-  end
 
   test "edit valuation entry" do
     get edit_account_entry_url(@valuation.account, @valuation)
@@ -133,11 +116,6 @@ class Account::EntriesControllerTest < ActionDispatch::IntegrationTest
   # =================
   # Trades
   # =================
-
-  test "should get list of trade entries" do
-    get trade_account_entries_url(@trade.account)
-    assert_response :success
-  end
 
   test "creates trade buy entry" do
     assert_difference [ "Account::Entry.count", "Account::Trade.count", "Security.count" ], 1 do

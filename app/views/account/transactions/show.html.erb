@@ -1,6 +1,4 @@
-<%# locals: (entry:) %>
-
-<% transaction, account = entry.account_transaction, entry.account %>
+<% entry, transaction, account = @entry, @entry.account_transaction, @entry.account %>
 
 <%= drawer do %>
   <div>
@@ -67,8 +65,8 @@
                             options_for_select(Current.family.tags.alphabetically.pluck(:name, :id), transaction.tag_ids),
                             {
                               multiple: true,
-                              label: t(".tags_label"),
-                              class: "placeholder:text-gray-500"
+                              label:    t(".tags_label"),
+                              class:    "placeholder:text-gray-500"
                             },
                             "data-auto-submit-form-target": "auto" %>
               <%= ef.text_area :notes, label: t(".note_label"), placeholder: t(".note_placeholder"), "data-auto-submit-form-target": "auto" %>
@@ -110,8 +108,8 @@
               <%= button_to t(".delete"),
                             account_entry_path(account, entry),
                             method: :delete,
-                            class: "rounded-lg px-3 py-2 text-red-500 text-sm font-medium border border-alpha-black-200",
-                            data: { turbo_confirm: true, turbo_frame: "_top" } %>
+                            class:  "rounded-lg px-3 py-2 text-red-500 text-sm font-medium border border-alpha-black-200",
+                            data:   { turbo_confirm: true, turbo_frame: "_top" } %>
             </div>
           <% end %>
         </div>

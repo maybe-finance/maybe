@@ -19,8 +19,6 @@ en:
             type: Type
           new:
             title: New transaction
-          show:
-            overview: Overview
           trade:
             buy: Buy
             sell: Sell
@@ -30,30 +28,6 @@ en:
             mark_transfers_confirm: Mark as transfers
             mark_transfers_message: By marking transactions as transfers, they will
               no longer be included in income or spending calculations.
-          show:
-            account_label: Account
-            account_placeholder: Select an account
-            additional: Additional
-            amount: Amount
-            category_label: Category
-            category_placeholder: Select a category
-            date_label: Date
-            delete: Delete
-            delete_subtitle: This permanently deletes the transaction, affects your
-              historical balances, and cannot be undone.
-            delete_title: Delete transaction
-            exclude_subtitle: This excludes the transaction from any in-app features
-              or analytics.
-            exclude_title: Exclude transaction
-            merchant_label: Merchant
-            merchant_placeholder: Select a merchant
-            name_label: Name
-            nature: Transaction type
-            note_label: Notes
-            note_placeholder: Enter a note
-            overview: Overview
-            settings: Settings
-            tags_label: Select one or more tags
           transaction:
             deposit: Deposit
             remove_transfer: Remove transfer
@@ -78,24 +52,5 @@ en:
             value_update: Value update
       loading:
         loading: Loading entries...
-      trades:
-        amount: Amount
-        new: New transaction
-        no_trades: No transactions for this account yet.
-        trade: transaction
-        trades: Transactions
-        type: Type
-      transactions:
-        new: New transaction
-        no_transactions: No transactions for this account yet.
-        transaction: transaction
-        transactions: Transactions
       update:
         success: Entry updated
-      valuations:
-        change: change
-        date: date
-        new_entry: New entry
-        no_valuations: No valuations for this account yet
-        valuations: Value history
-        value: value

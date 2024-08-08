@@ -1,0 +1,11 @@
+---
+en:
+  account:
+    valuations:
+      index:
+        change: change
+        date: date
+        new_entry: New entry
+        no_valuations: No valuations for this account yet
+        valuations: Value history
+        value: value

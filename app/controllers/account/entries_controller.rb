@@ -5,18 +5,6 @@ class Account::EntriesController < ApplicationController
   before_action :set_account
   before_action :set_entry, only: %i[ edit update show destroy ]
 
-  def transactions
-    @transaction_entries = @account.entries.account_transactions.reverse_chronological
-  end
-
-  def valuations
-    @valuation_entries = @account.entries.account_valuations.reverse_chronological
-  end
-
-  def trades
-    @trades = @account.entries.where(entryable_type: [ "Account::Transaction", "Account::Trade" ]).reverse_chronological
-  end
-
   def new
     @entry = @account.entries.build.tap do |entry|
       entry.entryable = Account::Entryable.from_type(@entryable_type).new

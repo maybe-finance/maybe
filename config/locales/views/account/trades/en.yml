@@ -1,0 +1,13 @@
+---
+en:
+  account:
+    trades:
+      index:
+        amount: Amount
+        new: New transaction
+        no_trades: No transactions for this account yet.
+        trade: transaction
+        trades: Transactions
+        type: Type
+      show:
+        overview: Overview
