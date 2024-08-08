@@ -32,8 +32,8 @@
         <p class="text-gray-500 py-4"><%= t(".no_trades") %></p>
       <% else %>
         <div class="space-y-6">
-          <% @entries.group_by(&:date).each do |date, entries| %>
-            <%= render "account/entries/entry_group", date:, entries: entries %>
+          <%= entries_by_date(@entries) do |entries| %>
+            <%= render partial: "account/entries/entryables/trade", collection: entries, as: :entry %>
           <% end %>
         </div>
       <% end %>

@@ -1,6 +1,5 @@
 <%# locals: (entry:, selectable: true, editable: true, short: false, show_tags: false, **opts) %>
 <% transaction, account = entry.account_transaction, entry.account %>
-<% is_investment_transfer = entry.account.investment? && entry.transfer.present? %>
 
 <div class="grid grid-cols-12 items-center text-gray-900 text-sm font-medium p-4">
   <% name_col_span = unconfirmed_transfer?(entry) ? "col-span-10" : short ? "col-span-6" : "col-span-4" %>
@@ -22,7 +21,7 @@
             <%= content_tag :p, entry.name %>
           <% else %>
             <%= link_to entry.name,
-                        account_entry_path(account, entry),
+                        account_transaction_path(account, entry),
                         data: { turbo_frame: "drawer", turbo_prefetch: false },
                         class: "hover:underline hover:text-gray-800" %>
           <% end %>
@@ -51,12 +50,6 @@
       <% end %>
     <% end %>
   </div>
-
-  <% if is_investment_transfer %>
-    <div class="col-span-5 text-right">
-      <%= tag.p entry.inflow? ? t(".deposit") : t(".withdrawal") %>
-    </div>
-  <% end %>
 
   <% unless entry.marked_as_transfer? %>
     <% unless short %>
@@ -89,7 +82,7 @@
     <% end %>
   <% end %>
 
-  <div class="<%= is_investment_transfer ? "col-span-3" : "col-span-2" %> ml-auto">
+  <div class="col-span-2 ml-auto">
     <%= content_tag :p,
                     format_money(-entry.amount_money),
                     class: ["text-green-600": entry.inflow?] %>

@@ -29,12 +29,12 @@ module FormsHelper
 
   def money_with_currency_field(form, money_method, options = {})
     render partial: "shared/money_field", locals: {
-      form: form,
-      money_method: money_method,
+      form:          form,
+      money_method:  money_method,
       default_currency: options[:default_currency] || "USD",
       disable_currency: options[:disable_currency] || false,
       hide_currency: options[:hide_currency] || false,
-      label: options[:label] || "Amount"
+      label:         options[:label] || "Amount"
     }
   end
 
@@ -49,9 +49,9 @@ module FormsHelper
     money_options = {
       value: value&.amount,
       placeholder: 100,
-      min: -99999999999999,
-      max: 99999999999999,
-      step: currency.step
+      min:   -99999999999999,
+      max:   99999999999999,
+      step:  currency.step
     }
 
     merged_options = options.merge(money_options)

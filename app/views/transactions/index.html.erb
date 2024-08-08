@@ -27,8 +27,9 @@
           <p class="col-span-2 justify-self-end">amount</p>
         </div>
         <div class="space-y-6">
-          <% @transaction_entries.group_by(&:date).each do |date, entries| %>
-            <%= render "account/entries/entry_group", date:, combine_transfers: true, entries: %>
+          <%= entries_by_date(@transaction_entries) do |entries| %>
+            <%= render entries.reject { |e| e.transfer_id.present? }, selectable: true %>
+            <%= render transfer_entries(entries), selectable: false %>
           <% end %>
         </div>
       </div>

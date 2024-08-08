@@ -22,7 +22,7 @@
         <%= turbo_frame_tag dom_id(@account.entries.account_valuations.new) %>
 
         <% if @entries.any? %>
-          <%= render partial:         "account/entries/entryables/valuation/valuation",
+          <%= render partial: "account/entries/entryables/valuation",
                      collection:      @entries,
                      as:              :entry,
                      spacer_template: "account/entries/ruler" %>
