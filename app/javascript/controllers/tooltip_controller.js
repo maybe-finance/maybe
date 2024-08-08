@@ -28,12 +28,12 @@ export default class extends Controller {
   }
 
   showTooltip = () => {
-    tooltip.style.display = 'block';
+    this.tooltipTarget.style.display = 'block';
     this.#update();
   }
 
   hideTooltip = () => {
-    tooltip.style.display = '';
+    this.tooltipTarget.style.display = '';
   }
 
   hideAllElements = () => {
@@ -54,7 +54,7 @@ export default class extends Controller {
         arrow({ element: this.arrowElement }),
       ],
     }).then(({ x, y, placement, middlewareData }) => {
-      Object.assign(tooltip.style, {
+      Object.assign(this.tooltipTarget.style, {
         left: `${x}px`,
         top: `${y}px`,
       });
