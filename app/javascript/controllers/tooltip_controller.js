@@ -8,50 +8,49 @@ import {
 } from '@floating-ui/dom';
 
 export default class extends Controller {
-  static targets = ["element", "tooltip"];
+  static targets = ["arrow", "tooltip"];
   static values = {
     placement: { type: String, default: "top" },
     offset: { type: Number, default: 10 },
     crossAxis: { type: Number, default: 0 },
     alignmentAxis: { type: Number, default: null },
-  }
-
-  initialize() {
-    this.arrowElement = document.querySelector('#arrow');
-  }
+  };
 
   connect() {
-    this.elementTarget.addEventListener("mouseenter", this.showTooltip);
-    this.elementTarget.addEventListener("mouseleave", this.hideTooltip);
-    this.elementTarget.addEventListener("focus", this.showTooltip);
-    this.elementTarget.addEventListener("blur", this.hideTooltip);
-  }
+    this.element.addEventListener("mouseenter", this.showTooltip);
+    this.element.addEventListener("mouseleave", this.hideTooltip);
+    this.element.addEventListener("focus", this.showTooltip);
+    this.element.addEventListener("blur", this.hideTooltip);
+  };
 
   showTooltip = () => {
     this.tooltipTarget.style.display = 'block';
     this.#update();
-  }
+  };
 
   hideTooltip = () => {
     this.tooltipTarget.style.display = '';
-  }
+  };
 
   hideAllElements = () => {
     document.querySelectorAll('#tooltip').forEach(element => element.style.display = '');
-  }
+  };
 
   disconnect() {
-    this.hideAllElements;
-  }
+    this.element.removeEventListener("mouseenter", this.showTooltip);
+    this.element.removeEventListener("mouseleave", this.hideTooltip);
+    this.element.removeEventListener("focus", this.showTooltip);
+    this.element.removeEventListener("blur", this.hideTooltip);
+  };
 
   #update() {
-    computePosition(this.elementTarget, this.tooltipTarget, {
+    computePosition(this.element, this.tooltipTarget, {
       placement: this.placementValue,
       middleware: [
         offset({ mainAxis: this.offsetValue, crossAxis: this.crossAxisValue, alignmentAxis: this.alignmentAxisValue }),
         flip(),
         shift({ padding: 5 }),
-        arrow({ element: this.arrowElement }),
+        arrow({ element: this.arrowTarget }),
       ],
     }).then(({ x, y, placement, middlewareData }) => {
       Object.assign(this.tooltipTarget.style, {
@@ -67,7 +66,7 @@ export default class extends Controller {
         left: 'right',
       }[placement.split('-')[0]];
 
-      Object.assign(this.arrowElement.style, {
+      Object.assign(this.arrowTarget.style, {
         left: arrowX != null ? `${arrowX}px` : '',
         top: arrowY != null ? `${arrowY}px` : '',
         right: '',
@@ -75,5 +74,5 @@ export default class extends Controller {
         [staticSide]: '-4px',
       });
     });
-  }
+  };
 }
