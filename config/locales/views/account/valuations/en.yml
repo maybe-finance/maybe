@@ -4,6 +4,8 @@ en:
     valuations:
       create:
         success: Valuation created successfully.
+      form:
+        cancel: Cancel
       index:
         change: change
         date: date

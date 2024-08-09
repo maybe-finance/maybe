@@ -32,6 +32,7 @@ class Account::EntriesController < ApplicationController
   end
 
   def edit
+    render entryable_view_path(:edit)
   end
 
   def update
@@ -45,6 +46,7 @@ class Account::EntriesController < ApplicationController
   end
 
   def show
+    render entryable_view_path(:show)
   end
 
   def destroy
@@ -54,6 +56,10 @@ class Account::EntriesController < ApplicationController
   end
 
   private
+
+    def entryable_view_path(action)
+      @entry.entryable_type.underscore.pluralize + "/" + action.to_s
+    end
 
     def set_account
       @account = Current.family.accounts.find(params[:account_id])

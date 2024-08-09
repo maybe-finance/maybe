@@ -1,4 +1,5 @@
 <%# locals: (entry:) %>
+
 <%= form_with model: [entry.account, entry],
               data: { turbo_frame: "_top" },
               url: entry.new_record? ? account_entries_path(entry.account) : account_entry_path(entry.account, entry) do |f| %>

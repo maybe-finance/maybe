@@ -11,3 +11,5 @@ en:
         type: Type
       new:
         title: New transaction
+      show:
+        overview: Overview

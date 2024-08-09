@@ -7,5 +7,29 @@ en:
         no_transactions: No transactions for this account yet.
         transaction: transaction
         transactions: Transactions
+      show:
+        account_label: Account
+        account_placeholder: Select an account
+        additional: Additional
+        amount: Amount
+        category_label: Category
+        category_placeholder: Select a category
+        date_label: Date
+        delete: Delete
+        delete_subtitle: This permanently deletes the transaction, affects your historical
+          balances, and cannot be undone.
+        delete_title: Delete transaction
+        exclude_subtitle: This excludes the transaction from any in-app features or
+          analytics.
+        exclude_title: Exclude transaction
+        merchant_label: Merchant
+        merchant_placeholder: Select a merchant
+        name_label: Name
+        nature: Transaction type
+        note_label: Notes
+        note_placeholder: Enter a note
+        overview: Overview
+        settings: Settings
+        tags_label: Select one or more tags
       update:
         success: Transaction updated successfully.

@@ -17,8 +17,6 @@ en:
             qty: Quantity
             submit: Add transaction
             type: Type
-          show:
-            overview: Overview
           trade:
             buy: Buy
             deposit: Deposit
@@ -32,37 +30,11 @@ en:
             mark_transfers_confirm: Mark as transfers
             mark_transfers_message: By marking transactions as transfers, they will
               no longer be included in income or spending calculations.
-          show:
-            account_label: Account
-            account_placeholder: Select an account
-            additional: Additional
-            amount: Amount
-            category_label: Category
-            category_placeholder: Select a category
-            date_label: Date
-            delete: Delete
-            delete_subtitle: This permanently deletes the transaction, affects your
-              historical balances, and cannot be undone.
-            delete_title: Delete transaction
-            exclude_subtitle: This excludes the transaction from any in-app features
-              or analytics.
-            exclude_title: Exclude transaction
-            merchant_label: Merchant
-            merchant_placeholder: Select a merchant
-            name_label: Name
-            nature: Transaction type
-            note_label: Notes
-            note_placeholder: Enter a note
-            overview: Overview
-            settings: Settings
-            tags_label: Select one or more tags
           transaction:
             remove_transfer: Remove transfer
             remove_transfer_body: This will remove the transfer from this transaction
             remove_transfer_confirm: Confirm
         valuation:
-          form:
-            cancel: Cancel
           valuation:
             confirm_accept: Delete entry
             confirm_body_html: "<p>Deleting this entry will remove it from the account’s
