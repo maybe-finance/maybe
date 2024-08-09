@@ -16,6 +16,17 @@ class Provider::SynthTest < ActiveSupport::TestCase
     end
   end
 
+  test "fetches paginated exchange_rate historical data" do
+    VCR.use_cassette("synth/exchange_rate_historical") do
+      response = @synth.fetch_exchange_rates(
+        from: "USD", to: "GBP", start_date: Date.parse("01.01.2024"), end_date: Date.parse("31.07.2024")
+      )
+
+      assert 213, response.rates.size # 213 days between 01.01.2024 and 31.07.2024
+      assert_equal [ :date, :rate ], response.rates.first.keys
+    end
+  end
+
   test "retries then provides failed response" do
     @client = mock
     Faraday.stubs(:new).returns(@client)
