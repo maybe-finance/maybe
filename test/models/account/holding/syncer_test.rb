@@ -103,8 +103,8 @@ class Account::Holding::SyncerTest < ActiveSupport::TestCase
 
         assert actual_holding, "expected #{ticker} holding on date: #{date}"
         assert_equal expected_holding[:qty], actual_holding.qty, "expected #{expected_qty} qty for holding #{ticker} on date: #{date}"
-        assert_equal expected_holding[:amount].to_i, actual_holding.amount.to_i, "expected #{expected_amount} amount for holding #{ticker} on date: #{date}"
-        assert_equal expected_holding[:price].to_i, actual_holding.price.to_i, "expected #{expected_price} price for holding #{ticker} on date: #{date}"
+        assert_equal expected_holding[:amount].to_d, actual_holding.amount.to_d, "expected #{expected_amount} amount for holding #{ticker} on date: #{date}"
+        assert_equal expected_holding[:price].to_d, actual_holding.price.to_d, "expected #{expected_price} price for holding #{ticker} on date: #{date}"
       end
     end
 
