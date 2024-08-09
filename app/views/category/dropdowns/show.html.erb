@@ -25,7 +25,7 @@
       <% end %>
 
       <% if @transaction.category %>
-        <%= button_to account_entry_path(@transaction.entry.account, @transaction.entry),
+        <%= button_to account_transaction_path(@transaction.entry.account, @transaction.entry),
                       method: :patch,
                       data: { turbo_frame: dom_id(@transaction.entry) },
                       params: { account_entry: { entryable_type: "Account::Transaction", entryable_attributes: { id: @transaction.id, category_id: nil } } },
