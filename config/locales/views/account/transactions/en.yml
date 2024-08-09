@@ -7,3 +7,5 @@ en:
         no_transactions: No transactions for this account yet.
         transaction: transaction
         transactions: Transactions
+      update:
+        success: Transaction updated successfully.

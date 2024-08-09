@@ -2,6 +2,8 @@
 en:
   account:
     valuations:
+      create:
+        success: Valuation created successfully.
       index:
         change: change
         date: date

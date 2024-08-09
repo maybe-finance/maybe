@@ -11,6 +11,12 @@ class Account::TradesController < ApplicationController
     @entries = @account.entries.reverse_chronological.reject(&:account_valuation?)
   end
 
+  def update
+  end
+
+  def create
+  end
+
   private
 
     def set_account

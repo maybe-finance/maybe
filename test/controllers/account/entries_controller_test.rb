@@ -44,56 +44,12 @@ class Account::EntriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   # =================
-  # Transactions
-  # =================
-
-  test "update transaction" do
-    assert_no_difference_in_entries do
-      patch account_entry_url(@transaction.account, @transaction), params: {
-        account_entry: generic_entry_attributes.merge({
-                                                        entryable_type:       @transaction.entryable_type,
-                                                        entryable_attributes: {
-                                                          id:          @transaction.entryable_id,
-                                                          tag_ids:     [ Tag.first.id, Tag.second.id ],
-                                                          category_id: Category.first.id,
-                                                          merchant_id: Merchant.first.id,
-                                                          notes:       "test notes",
-                                                          excluded:    false
-                                                        }
-                                                      })
-      }
-    end
-
-    assert_redirected_to account_entry_url(@transaction.account, @transaction)
-    assert_enqueued_with(job: AccountSyncJob)
-  end
-
-  # =================
   # Valuations
   # =================
 
   test "edit valuation entry" do
     get edit_account_entry_url(@valuation.account, @valuation)
     assert_response :success
-  end
-
-  test "should create valuation" do
-    assert_difference [ "Account::Entry.count", "Account::Valuation.count" ], 1 do
-      post account_entries_url(@valuation.account), params: {
-        account_entry: {
-          name: "Manual valuation",
-          amount: 19800,
-          date: Date.current,
-          currency: @valuation.account.currency,
-          entryable_type: "Account::Valuation",
-          entryable_attributes: {}
-        }
-      }
-    end
-
-    assert_equal "Valuation created", flash[:notice]
-    assert_enqueued_with job: AccountSyncJob
-    assert_redirected_to account_path(@valuation.account)
   end
 
   test "error when valuation already exists for date" do

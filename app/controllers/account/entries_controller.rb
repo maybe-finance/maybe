@@ -35,9 +35,7 @@ class Account::EntriesController < ApplicationController
   end
 
   def update
-    @entry.assign_attributes entry_params
-    @entry.amount = amount if nature.present?
-    @entry.save!
+    @entry.update!(entry_params)
     @entry.sync_account_later
 
     respond_to do |format|

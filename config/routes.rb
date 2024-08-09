@@ -81,8 +81,8 @@ Rails.application.routes.draw do
       resources :holdings, only: %i[ index new show ]
       resources :cashes, only: :index
 
-      resources :transactions, only: %i[ index ]
-      resources :valuations, only: %i[ index new ]
+      resources :transactions, only: %i[ index update ]
+      resources :valuations, only: %i[ index new create ]
       resources :trades, only: %i[ index new ]
 
       resources :entries, except: :index
