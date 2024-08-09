@@ -16,6 +16,61 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "creates deposit entry" do
+    from_account = accounts(:depository) # Account the deposit is coming from
+
+    assert_difference -> { Account::Entry.count } => 2,
+                      -> { Account::Transaction.count } => 2,
+                      -> { Account::Transfer.count } => 1 do
+      post account_trades_url(@entry.account), params: {
+        account_entry: {
+          type: "transfer_in",
+          date: Date.current,
+          amount: 10,
+          transfer_account_id: from_account.id
+        }
+      }
+    end
+
+    assert_redirected_to account_path(@entry.account)
+  end
+
+  test "creates withdrawal entry" do
+    to_account = accounts(:depository) # Account the withdrawal is going to
+
+    assert_difference -> { Account::Entry.count } => 2,
+                      -> { Account::Transaction.count } => 2,
+                      -> { Account::Transfer.count } => 1 do
+      post account_trades_url(@entry.account), params: {
+        account_entry: {
+          type: "transfer_out",
+          date: Date.current,
+          amount: 10,
+          transfer_account_id: to_account.id
+        }
+      }
+    end
+
+    assert_redirected_to account_path(@entry.account)
+  end
+
+  test "creates interest entry" do
+    assert_difference [ "Account::Entry.count", "Account::Transaction.count" ], 1 do
+      post account_trades_url(@entry.account), params: {
+        account_entry: {
+          type: "interest",
+          date: Date.current,
+          amount: 10
+        }
+      }
+    end
+
+    created_entry = Account::Entry.order(created_at: :desc).first
+
+    assert created_entry.amount.negative?
+    assert_redirected_to account_path(@entry.account)
+  end
+
   test "creates trade buy entry" do
     assert_difference [ "Account::Entry.count", "Account::Trade.count", "Security.count" ], 1 do
       post account_trades_url(@entry.account), params: {

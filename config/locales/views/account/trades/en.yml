@@ -3,6 +3,7 @@ en:
   account:
     trades:
       create:
+        failure: Something went wrong
         success: Transaction created successfully.
       form:
         holding: Ticker symbol
