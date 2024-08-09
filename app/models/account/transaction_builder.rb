@@ -10,81 +10,54 @@ class Account::TransactionBuilder
 
   def save
     if valid?
-      create_entry
+      transfer? ? create_transfer : create_transaction
     end
   end
 
   private
 
-    def create_entry
-      case type
-      when "transfer_in"
-        create_transfer_in
-      when "transfer_out"
-        create_transfer_out
-      else
-        create_transaction
-      end
+    def transfer?
+      %w[transfer_in transfer_out].include?(type)
     end
 
-    def create_transfer_in
-      from_account_id = transfer_account_id
-      to_account_id = account.id
+    def create_transfer
+      return create_unlinked_transfer(account.id, signed_amount) unless transfer_account_id
 
-      if from_account_id && to_account_id
-        create_transfer(from_account_id, to_account_id)
-      else
-        create_unconfirmed_transfer
-      end
-    end
+      from_account_id = type == "transfer_in" ? transfer_account_id : account.id
+      to_account_id = type == "transfer_in" ? account.id : transfer_account_id
 
-    def create_transfer_out
-      to_account_id = transfer_account_id
-      from_account_id = account.id
-
-      if from_account_id && to_account_id
-        create_transfer(from_account_id, to_account_id)
-      else
-        create_unconfirmed_transfer
-      end
-    end
-
-    def create_transfer(from_account_id, to_account_id)
-      outflow = Account::Entry.new \
-        account_id: from_account_id,
-        amount: signed_amount.abs,
-        currency: account.currency,
-        date: date,
-        marked_as_transfer: true,
-        entryable: Account::Transaction.new
-
-      inflow = Account::Entry.new \
-        account_id: to_account_id,
-        amount: signed_amount.abs * -1,
-        currency: account.currency,
-        date: date,
-        marked_as_transfer: true,
-        entryable: Account::Transaction.new
+      outflow = create_unlinked_transfer(from_account_id, signed_amount.abs)
+      inflow = create_unlinked_transfer(to_account_id, signed_amount.abs * -1)
 
       Account::Transfer.create! entries: [ outflow, inflow ]
 
       inflow
     end
 
-    def create_unconfirmed_transfer
-      create_transaction(marked_as_transfer: true)
+    def create_unlinked_transfer(account_id, amount)
+      build_entry(account_id, amount, marked_as_transfer: true).tap(&:save!)
     end
 
-    def create_transaction(marked_as_transfer: false)
-      account.entries.create! \
-        date: date,
-        amount: signed_amount,
+    def create_transaction
+      build_entry(account.id, signed_amount).tap(&:save!)
+    end
+
+    def build_entry(account_id, amount, marked_as_transfer: false)
+      Account::Entry.new \
+        account_id: account_id,
+        amount: amount,
         currency: account.currency,
+        date: date,
         marked_as_transfer: marked_as_transfer,
         entryable: Account::Transaction.new
     end
 
     def signed_amount
-      type == "expense" ? amount.to_d : amount.to_d * -1
+      case type
+      when "expense", "transfer_out"
+        amount.to_d
+      else
+        amount.to_d * -1
+      end
     end
 end

@@ -54,6 +54,26 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to account_path(@entry.account)
   end
 
+  test "deposit and withdrawal has optional transfer account" do
+    assert_difference -> { Account::Entry.count } => 1,
+                      -> { Account::Transaction.count } => 1,
+                      -> { Account::Transfer.count } => 0 do
+      post account_trades_url(@entry.account), params: {
+        account_entry: {
+          type: "transfer_out",
+          date: Date.current,
+          amount: 10
+        }
+      }
+    end
+
+    created_entry = Account::Entry.order(created_at: :desc).first
+
+    assert created_entry.amount.positive?
+    assert created_entry.marked_as_transfer
+    assert_redirected_to account_path(@entry.account)
+  end
+
   test "creates interest entry" do
     assert_difference [ "Account::Entry.count", "Account::Transaction.count" ], 1 do
       post account_trades_url(@entry.account), params: {
