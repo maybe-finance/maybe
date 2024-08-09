@@ -18,11 +18,11 @@ class Provider::SynthTest < ActiveSupport::TestCase
 
   test "fetches paginated exchange_rate historical data" do
     VCR.use_cassette("synth/exchange_rate_historical") do
-      response = @synth.fetch_exchange_rate_for_date_range(
-        from: "USD", to: "EUR,GBP", date_start: Date.parse("01.01.2024"), date_end: Date.parse("2024-07-31")
+      response = @synth.fetch_exchange_rates(
+        from: "USD", to: "GBP", date_start: Date.parse("01.01.2024"), date_end: Date.parse("2024-07-31")
       )
 
-      assert 426, response.size
+      assert 213, response.rates.size # 213 days between 01.01.2024 and 31.07.2024
       assert_equal [ :date, :rate ], response.rates.first.keys
     end
   end

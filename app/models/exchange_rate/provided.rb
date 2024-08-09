@@ -9,7 +9,7 @@ module ExchangeRate::Provided
       def fetch_rates_from_provider(from:, to:, start_date:, end_date: Date.current, cache: false)
         return [] unless exchange_rates_provider.present?
 
-        response = exchange_rates_provider.fetch_exchange_rate_for_date_range \
+        response = exchange_rates_provider.fetch_exchange_rates \
           from: from,
           to: to,
           date_start: start_date,

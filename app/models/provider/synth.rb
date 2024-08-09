@@ -57,7 +57,7 @@ class Provider::Synth
     end
   end
 
-  def fetch_exchange_rate_for_date_range(from:, to:, date_start:, date_end:)
+  def fetch_exchange_rates(from:, to:, date_start:, date_end:)
     exchange_rates = paginate(
       "#{base_url}/rates/historical-range",
       from: from,

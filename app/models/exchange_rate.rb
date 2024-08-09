@@ -18,7 +18,6 @@ class ExchangeRate < ApplicationRecord
       all_dates = (start_date..end_date).to_a
       existing_dates = rates.map(&:date)
       missing_dates = all_dates - existing_dates
-
       if missing_dates.any?
         rates += fetch_rates_from_provider(from:, to:, start_date: missing_dates.first, end_date: missing_dates.last, cache:)
       end
