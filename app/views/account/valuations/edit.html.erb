@@ -1,1 +1,3 @@
-<%= render "account/valuations/form", entry: @entry %>
+<%= turbo_frame_tag dom_id(@entry) do %>
+  <%= render "account/valuations/form", entry: @entry %>
+<% end %>

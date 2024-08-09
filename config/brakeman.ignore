@@ -1,40 +1,6 @@
 {
   "ignored_warnings": [
-    {
-      "warning_type": "Dynamic Render Path",
-      "warning_code": 15,
-      "fingerprint": "7a182d062523a7fe890fbe5945c0004aeec1044ac764430f1d464326e5fa2710",
-      "check_name": "Render",
-      "message": "Render path contains parameter value",
-      "file": "app/views/account/entries/edit.html.erb",
-      "line": 2,
-      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
-      "code": "render(action => permitted_entryable_partial_path(Current.family.accounts.find(params[:account_id]).entries.find(params[:id]), \"edit\"), { :entry => Current.family.accounts.find(params[:account_id]).entries.find(params[:id]) })",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "Account::EntriesController",
-          "method": "edit",
-          "line": 42,
-          "file": "app/controllers/account/entries_controller.rb",
-          "rendered": {
-            "name": "account/entries/edit",
-            "file": "app/views/account/entries/edit.html.erb"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "account/entries/edit"
-      },
-      "user_input": "params[:id]",
-      "confidence": "Weak",
-      "cwe_id": [
-        22
-      ],
-      "note": ""
-    }
   ],
-  "updated": "2024-08-08 18:37:49 -0400",
+  "updated": "2024-08-09 10:16:00 -0400",
   "brakeman_version": "6.1.2"
 }

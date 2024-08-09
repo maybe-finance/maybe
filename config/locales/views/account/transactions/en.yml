@@ -7,6 +7,11 @@ en:
         no_transactions: No transactions for this account yet.
         transaction: transaction
         transactions: Transactions
+      selection_bar:
+        mark_transfers: Mark as transfers?
+        mark_transfers_confirm: Mark as transfers
+        mark_transfers_message: By marking transactions as transfers, they will no
+          longer be included in income or spending calculations.
       show:
         account_label: Account
         account_placeholder: Select an account
@@ -31,5 +36,9 @@ en:
         overview: Overview
         settings: Settings
         tags_label: Select one or more tags
+      transaction:
+        remove_transfer: Remove transfer
+        remove_transfer_body: This will remove the transfer from this transaction
+        remove_transfer_confirm: Confirm
       update:
         success: Transaction updated successfully.

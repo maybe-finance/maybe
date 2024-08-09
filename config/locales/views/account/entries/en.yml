@@ -2,52 +2,11 @@
 en:
   account:
     entries:
-      create:
-        success: "%{name} created"
       destroy:
         success: Entry deleted
       empty:
         description: Try adding an entry, editing filters or refining your search
         title: No entries found
-      entryables:
-        trade:
-          form:
-            holding: Holding
-            price: Price per share
-            qty: Quantity
-            submit: Add transaction
-            type: Type
-          trade:
-            buy: Buy
-            deposit: Deposit
-            inflow: Inflow
-            outflow: Outflow
-            sell: Sell
-            withdrawal: Withdrawal
-        transaction:
-          selection_bar:
-            mark_transfers: Mark as transfers?
-            mark_transfers_confirm: Mark as transfers
-            mark_transfers_message: By marking transactions as transfers, they will
-              no longer be included in income or spending calculations.
-          transaction:
-            remove_transfer: Remove transfer
-            remove_transfer_body: This will remove the transfer from this transaction
-            remove_transfer_confirm: Confirm
-        valuation:
-          valuation:
-            confirm_accept: Delete entry
-            confirm_body_html: "<p>Deleting this entry will remove it from the account’s
-              history which will impact different parts of your account. This includes
-              the net worth and account graphs.</p></br><p>The only way you’ll be
-              able to add this entry back is by re-entering it manually via a new
-              entry</p>"
-            confirm_title: Delete Entry?
-            delete_entry: Delete entry
-            edit_entry: Edit entry
-            no_change: No change
-            start_balance: Starting balance
-            value_update: Value update
       loading:
         loading: Loading entries...
       update:

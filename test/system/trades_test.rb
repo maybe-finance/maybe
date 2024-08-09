@@ -16,10 +16,10 @@ class TradesTest < ApplicationSystemTestCase
 
     open_new_trade_modal
 
-    fill_in "Holding", with: "NVDA"
+    fill_in "Ticker symbol", with: "NVDA"
     fill_in "Date", with: Date.current
     fill_in "Quantity", with: shares_qty
-    fill_in "account_entry[entryable_attributes][price]", with: 214.23
+    fill_in "account_entry[price]", with: 214.23
 
     click_button "Add transaction"
 
@@ -37,10 +37,10 @@ class TradesTest < ApplicationSystemTestCase
     open_new_trade_modal
 
     select "Sell", from: "Type"
-    fill_in "Holding", with: aapl.ticker
+    fill_in "Ticker symbol", with: aapl.ticker
     fill_in "Date", with: Date.current
     fill_in "Quantity", with: aapl.qty
-    fill_in "account_entry[entryable_attributes][price]", with: 215.33
+    fill_in "account_entry[price]", with: 215.33
 
     click_button "Add transaction"
 

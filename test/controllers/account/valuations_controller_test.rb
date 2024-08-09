@@ -32,4 +32,19 @@ class Account::ValuationsControllerTest < ActionDispatch::IntegrationTest
     assert_enqueued_with job: AccountSyncJob
     assert_redirected_to account_valuations_path(@entry.account)
   end
+
+  test "error when valuation already exists for date" do
+    assert_no_difference [ "Account::Entry.count", "Account::Valuation.count" ] do
+      post account_valuations_url(@entry.account), params: {
+        account_entry: {
+          amount: 19800,
+          date: @entry.date,
+          currency: "USD"
+        }
+      }
+    end
+
+    assert_equal "Date has already been taken", flash[:alert]
+    assert_redirected_to account_path(@entry.account)
+  end
 end

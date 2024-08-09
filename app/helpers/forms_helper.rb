@@ -39,7 +39,7 @@ module FormsHelper
   end
 
   def money_field(form, method, options = {})
-    value = form.object.send(method)
+    value = form.object ? form.object.send(method) : nil
 
     currency = value&.currency || Money::Currency.new(options[:default_currency] || "USD")
 
@@ -48,7 +48,7 @@ module FormsHelper
 
     money_options = {
       value: value&.amount,
-      placeholder: 100,
+      placeholder: "100",
       min:   -99999999999999,
       max:   99999999999999,
       step:  currency.step

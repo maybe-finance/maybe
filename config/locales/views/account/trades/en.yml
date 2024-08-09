@@ -2,6 +2,15 @@
 en:
   account:
     trades:
+      create:
+        success: Transaction created successfully.
+      form:
+        holding: Ticker symbol
+        price: Price per share
+        qty: Quantity
+        submit: Add transaction
+        ticker_placeholder: AAPL
+        type: Type
       index:
         amount: Amount
         new: New transaction
@@ -13,3 +22,10 @@ en:
         title: New transaction
       show:
         overview: Overview
+      trade:
+        buy: Buy
+        deposit: Deposit
+        inflow: Inflow
+        outflow: Outflow
+        sell: Sell
+        withdrawal: Withdrawal

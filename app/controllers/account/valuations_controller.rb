@@ -4,13 +4,19 @@ class Account::ValuationsController < ApplicationController
   before_action :set_account
 
   def new
-    @entry = @account.entries.account_valuations.new
+    @entry = @account.entries.account_valuations.new(entryable_attributes: {})
   end
 
   def create
-    entry = @account.entries.account_valuations.create!(entry_params.merge(entryable_attributes: {}))
-    entry.sync_account_later
-    redirect_to account_valuations_path(@account), notice: t(".success")
+    @entry = @account.entries.account_valuations.new(entry_params.merge(entryable_attributes: {}))
+
+    if @entry.save
+      @entry.sync_account_later
+      redirect_to account_valuations_path(@account), notice: t(".success")
+    else
+      flash[:alert] = @entry.errors.full_messages.to_sentence
+      redirect_to account_path(@account)
+    end
   end
 
   def index

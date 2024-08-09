@@ -2,7 +2,7 @@
   <div class="bg-white space-y-4 p-5 border border-alpha-black-25 rounded-xl shadow-xs">
     <div class="flex items-center justify-between">
       <%= tag.h2 t(".valuations"), class: "font-medium text-lg" %>
-      <%= link_to new_account_entry_path(@account, entryable_type: "Account::Valuation"),
+      <%= link_to new_account_valuation_path(@account),
                   data:  { turbo_frame: dom_id(@account.entries.account_valuations.new) },
                   class: "flex gap-1 font-medium items-center bg-gray-50 text-gray-900 p-2 rounded-lg" do %>
         <%= lucide_icon("plus", class: "w-5 h-5 text-gray-900") %>
@@ -22,7 +22,7 @@
         <%= turbo_frame_tag dom_id(@account.entries.account_valuations.new) %>
 
         <% if @entries.any? %>
-          <%= render partial: "account/entries/entryables/valuation/valuation",
+          <%= render partial: "account/valuations/valuation",
                      collection:      @entries,
                      as:              :entry,
                      spacer_template: "account/entries/ruler" %>

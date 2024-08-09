@@ -12,7 +12,7 @@
 
     <div id="transactions" data-controller="bulk-select" data-bulk-select-resource-value="<%= t(".transaction") %>">
       <div hidden id="transaction-selection-bar" data-bulk-select-target="selectionBar">
-        <%= render "account/entries/entryables/transaction/selection_bar" %>
+        <%= render "selection_bar" %>
       </div>
 
       <% if @entries.empty? %>

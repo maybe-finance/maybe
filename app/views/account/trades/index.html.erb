@@ -2,7 +2,7 @@
   <div id="trades" data-controller="bulk-select" data-bulk-select-resource-value="<%= t(".trade") %>" class="bg-white space-y-4 p-5 border border-alpha-black-25 rounded-xl shadow-xs">
     <div class="flex justify-between items-center">
       <h3 class="font-medium text-lg"><%= t(".trades") %></h3>
-      <%= link_to new_account_entry_path(@account, entryable_type: "Account::Trade"),
+      <%= link_to new_account_trade_path(@account),
                   id:    dom_id(@account, "new_trade"),
                   class: "flex gap-1 font-medium items-center bg-gray-50 text-gray-900 p-2 rounded-lg",
                   data:  { turbo_frame: :modal } do %>
@@ -25,7 +25,7 @@
 
     <div>
       <div hidden id="transaction-selection-bar" data-bulk-select-target="selectionBar">
-        <%= render "account/entries/entryables/trade/selection_bar" %>
+        <%= render "selection_bar" %>
       </div>
 
       <% if @entries.empty? %>
@@ -33,7 +33,7 @@
       <% else %>
         <div class="space-y-6">
           <%= entries_by_date(@entries) do |entries| %>
-            <%= render partial: "account/entries/entryables/trade/trade", collection: entries, as: :entry %>
+            <%= render partial: "account/trades/trade", collection: entries, as: :entry %>
           <% end %>
         </div>
       <% end %>
