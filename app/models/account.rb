@@ -28,8 +28,6 @@ class Account < ApplicationRecord
 
   delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
 
-  delegate :value, to: :accountable
-
   class << self
     def by_group(period: Period.all, currency: Money.default_currency.iso_code)
       grouped_accounts = { assets: ValueGroup.new("Assets", currency), liabilities: ValueGroup.new("Liabilities", currency) }
