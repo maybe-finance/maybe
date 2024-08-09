@@ -12,8 +12,8 @@ module ExchangeRate::Provided
         response = exchange_rates_provider.fetch_exchange_rates \
           from: from,
           to: to,
-          date_start: start_date,
-          date_end: end_date
+          start_date: start_date,
+          end_date: end_date
 
         if response.success?
           response.rates.map do |exchange_rate|

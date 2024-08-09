@@ -57,13 +57,13 @@ class Provider::Synth
     end
   end
 
-  def fetch_exchange_rates(from:, to:, date_start:, date_end:)
+  def fetch_exchange_rates(from:, to:, start_date:, end_date:)
     exchange_rates = paginate(
       "#{base_url}/rates/historical-range",
       from: from,
       to: to,
-      date_start: date_start.to_s,
-      date_end: date_end.to_s
+      date_start: start_date.to_s,
+      date_end: end_date.to_s
     ) do |body|
       body.dig("data").map do |exchange_rate|
         {
