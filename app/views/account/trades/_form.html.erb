@@ -8,10 +8,8 @@
       <%= form.select :type, options_for_select([%w[Buy buy], %w[Sell sell]], "buy"), label: t(".type") %>
       <%= form.text_field :ticker, value: nil, label: t(".holding"), placeholder: t(".ticker_placeholder") %>
       <%= form.date_field :date, label: true %>
-      <%= form.hidden_field :currency, value: entry.account.currency %>
       <%= form.number_field :qty, label: t(".qty"), placeholder: "10", min: 0 %>
       <%= money_with_currency_field form, :price_money, label: t(".price"), disable_currency: true %>
-      <%= form.hidden_field :currency, value: entry.account.currency %>
     </div>
 
     <%= form.submit t(".submit") %>
