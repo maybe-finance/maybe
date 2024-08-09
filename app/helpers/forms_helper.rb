@@ -4,6 +4,12 @@ module FormsHelper
     form_with(**options, &block)
   end
 
+  def modal_form_wrapper(title:, subtitle: nil, &block)
+    content = capture &block
+
+    render partial: "shared/modal_form", locals: { title:, subtitle:, content: }
+  end
+
   def form_field_tag(options = {}, &block)
     options[:class] = [ "form-field", options[:class] ].compact.join(" ")
     tag.div(**options, &block)
@@ -23,17 +29,17 @@ module FormsHelper
 
   def money_with_currency_field(form, money_method, options = {})
     render partial: "shared/money_field", locals: {
-      form: form,
-      money_method: money_method,
+      form:          form,
+      money_method:  money_method,
       default_currency: options[:default_currency] || "USD",
       disable_currency: options[:disable_currency] || false,
       hide_currency: options[:hide_currency] || false,
-      label: options[:label] || "Amount"
+      label:         options[:label] || "Amount"
     }
   end
 
   def money_field(form, method, options = {})
-    value = form.object.send(method)
+    value = form.object ? form.object.send(method) : nil
 
     currency = value&.currency || Money::Currency.new(options[:default_currency] || "USD")
 
@@ -42,10 +48,10 @@ module FormsHelper
 
     money_options = {
       value: value&.amount,
-      placeholder: 100,
-      min: -99999999999999,
-      max: 99999999999999,
-      step: currency.step
+      placeholder: "100",
+      min:   -99999999999999,
+      max:   99999999999999,
+      step:  currency.step
     }
 
     merged_options = options.merge(money_options)

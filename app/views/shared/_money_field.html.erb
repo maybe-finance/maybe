@@ -1,7 +1,7 @@
 <%# locals: (form:, money_method:, default_currency:, disable_currency: false, hide_currency: false, label: nil) %>
 
 <% fallback_label = t(".money-label") %>
-<% currency = form.object.send(money_method)&.currency || Money::Currency.new(default_currency) %>
+<% currency = form.object ? (form.object.send(money_method)&.currency || Money::Currency.new(default_currency)) : Money::Currency.new(default_currency) %>
 
 <div class="form-field pr-0" data-controller="money-field">
   <%= form.label label || fallback_label, { class: "form-field__label" } %>

@@ -30,6 +30,28 @@ module Account::EntriesHelper
     mixed_hex_styles(color)
   end
 
+  def entry_name(entry)
+    if entry.account_trade?
+      trade     = entry.account_trade
+      prefix    = trade.sell? ? "Sell " : "Buy "
+      generated = prefix + "#{trade.qty.abs} shares of #{trade.security.ticker}"
+      name      = entry.name || generated
+      name
+    else
+      entry.name
+    end
+  end
+
+  def entries_by_date(entries, selectable: true)
+    entries.group_by(&:date).map do |date, grouped_entries|
+      content = capture do
+        yield grouped_entries
+      end
+
+      render partial: "account/entries/entry_group", locals: { date:, entries: grouped_entries, content:, selectable: }
+    end.join.html_safe
+  end
+
   private
 
     def permitted_entryable_key(entry)

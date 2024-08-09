@@ -1,6 +1,4 @@
-<%# locals: (entry:) %>
-
-<% transaction, account = entry.account_transaction, entry.account %>
+<% entry, transaction, account = @entry, @entry.account_transaction, @entry.account %>
 
 <%= drawer do %>
   <div>
@@ -27,7 +25,7 @@
         </summary>
 
         <div class="pb-6">
-          <%= styled_form_with model: [account, entry], url: account_entry_path(account, entry), class: "space-y-2", data: { controller: "auto-submit-form" } do |f| %>
+          <%= styled_form_with model: [account, entry], url: account_transaction_path(account, entry), class: "space-y-2", data: { controller: "auto-submit-form" } do |f| %>
             <%= f.text_field :name, label: t(".name_label"), "data-auto-submit-form-target": "auto" %>
             <% unless entry.marked_as_transfer? %>
               <div class="flex space-x-2">
@@ -60,15 +58,15 @@
         </summary>
 
         <div class="pb-6">
-          <%= styled_form_with model: [account, entry], url: account_entry_path(account, entry), class: "space-y-2", data: { controller: "auto-submit-form" } do |f| %>
+          <%= styled_form_with model: [account, entry], url: account_transaction_path(account, entry), class: "space-y-2", data: { controller: "auto-submit-form" } do |f| %>
 
             <%= f.fields_for :entryable do |ef| %>
               <%= ef.select :tag_ids,
                             options_for_select(Current.family.tags.alphabetically.pluck(:name, :id), transaction.tag_ids),
                             {
                               multiple: true,
-                              label: t(".tags_label"),
-                              class: "placeholder:text-gray-500"
+                              label:    t(".tags_label"),
+                              class:    "placeholder:text-gray-500"
                             },
                             "data-auto-submit-form-target": "auto" %>
               <%= ef.text_area :notes, label: t(".note_label"), placeholder: t(".note_placeholder"), "data-auto-submit-form-target": "auto" %>
@@ -84,7 +82,7 @@
         </summary>
 
         <div class="pb-6">
-          <%= styled_form_with model: [account, entry], url: account_entry_path(account, entry), class: "p-3 space-y-3", data: { controller: "auto-submit-form" } do |f| %>
+          <%= styled_form_with model: [account, entry], url: account_transaction_path(account, entry), class: "p-3 space-y-3", data: { controller: "auto-submit-form" } do |f| %>
             <%= f.fields_for :entryable do |ef| %>
               <div class="flex cursor-pointer items-center gap-2 justify-between">
                 <div class="text-sm space-y-1">
@@ -110,8 +108,8 @@
               <%= button_to t(".delete"),
                             account_entry_path(account, entry),
                             method: :delete,
-                            class: "rounded-lg px-3 py-2 text-red-500 text-sm font-medium border border-alpha-black-200",
-                            data: { turbo_confirm: true, turbo_frame: "_top" } %>
+                            class:  "rounded-lg px-3 py-2 text-red-500 text-sm font-medium border border-alpha-black-200",
+                            data:   { turbo_confirm: true, turbo_frame: "_top" } %>
             </div>
           <% end %>
         </div>

@@ -162,13 +162,8 @@
         </div>
       <% else %>
         <div class="text-gray-500 p-1 space-y-1 bg-gray-25 rounded-xl">
-          <% @transaction_entries.group_by(&:date).each do |date, transactions| %>
-            <%= render "account/entries/entry_group",
-                       date: date,
-                       entries: transactions,
-                       selectable: false,
-                       editable: false,
-                       short: true %>
+          <%= entries_by_date(@transaction_entries, selectable: false) do |entries| %>
+            <%= render entries, selectable: false, editable: false, short: true %>
           <% end %>
 
           <p class="py-2 text-sm text-center"><%= link_to t(".view_all"), transactions_path %></p>

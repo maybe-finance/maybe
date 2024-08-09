@@ -13,14 +13,14 @@
     <div class="max-w-full">
       <%= tag.div class: ["flex items-center gap-2"] do %>
         <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-600/5 text-gray-600">
-          <%= entry.name[0].upcase %>
+          <%= entry_name(entry).first.upcase %>
         </div>
 
         <div class="truncate text-gray-900">
           <% if entry.new_record? %>
-            <%= content_tag :p, entry.name %>
+            <%= content_tag :p, entry_name(entry) %>
           <% else %>
-            <%= link_to entry.name,
+            <%= link_to entry_name(entry),
                         account_entry_path(account, entry),
                         data: { turbo_frame: "drawer", turbo_prefetch: false },
                         class: "hover:underline hover:text-gray-800" %>
@@ -31,11 +31,20 @@
   </div>
 
   <div class="flex items-center justify-end gap-1 col-span-3">
-    <%= tag.p trade.buy? ? t(".buy") : t(".sell") %>
+    <% if entry.account_transaction? && entry.marked_as_transfer? %>
+      <%= tag.p entry.inflow? ? t(".deposit") : t(".withdrawal") %>
+    <% elsif entry.account_transaction? %>
+      <%= tag.p entry.inflow? ? t(".inflow") : t(".outflow") %>
+    <% else %>
+      <%= tag.p trade.buy? ? t(".buy") : t(".sell") %>
+    <% end %>
   </div>
 
   <div class="col-span-3 flex items-center justify-end">
-    <%= tag.p format_money(entry.amount_money * -1), class: { "text-green-500": trade.sell? } %>
+    <% if entry.account_transaction? %>
+      <%= tag.p format_money(entry.amount_money), class: { "text-green-500": entry.inflow? } %>
+    <% else %>
+      <%= tag.p format_money(entry.amount_money * -1), class: { "text-green-500": trade.sell? } %>
+    <% end %>
   </div>
-
 </div>

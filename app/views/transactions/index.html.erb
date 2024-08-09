@@ -11,7 +11,7 @@
 
     <% if @transaction_entries.present? %>
       <div hidden id="entry-selection-bar" data-bulk-select-target="selectionBar">
-        <%= render "account/entries/entryables/transaction/selection_bar" %>
+        <%= render "account/transactions/selection_bar" %>
       </div>
       <div class="grow overflow-y-auto">
         <div class="grid grid-cols-12 bg-gray-25 rounded-xl px-5 py-3 text-xs uppercase font-medium text-gray-500 items-center mb-4">
@@ -27,8 +27,9 @@
           <p class="col-span-2 justify-self-end">amount</p>
         </div>
         <div class="space-y-6">
-          <% @transaction_entries.group_by(&:date).each do |date, entries| %>
-            <%= render "account/entries/entry_group", date:, combine_transfers: true, entries: %>
+          <%= entries_by_date(@transaction_entries) do |entries| %>
+            <%= render entries.reject { |e| e.transfer_id.present? }, selectable: true %>
+            <%= render transfer_entries(entries), selectable: false %>
           <% end %>
         </div>
       </div>

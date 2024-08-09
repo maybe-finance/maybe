@@ -1,10 +1,12 @@
 class Account::Trade < ApplicationRecord
-  include Account::Entryable
+  include Account::Entryable, Monetizable
+
+  monetize :price
 
   belongs_to :security
 
   validates :qty, presence: true, numericality: { other_than: 0 }
-  validates :price, presence: true
+  validates :price, :currency, presence: true
 
   class << self
     def search(_params)

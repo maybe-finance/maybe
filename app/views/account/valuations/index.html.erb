@@ -2,8 +2,8 @@
   <div class="bg-white space-y-4 p-5 border border-alpha-black-25 rounded-xl shadow-xs">
     <div class="flex items-center justify-between">
       <%= tag.h2 t(".valuations"), class: "font-medium text-lg" %>
-      <%= link_to new_account_entry_path(@account, entryable_type: "Account::Valuation"),
-                  data: { turbo_frame: dom_id(@account.entries.account_valuations.new) },
+      <%= link_to new_account_valuation_path(@account),
+                  data:  { turbo_frame: dom_id(@account.entries.account_valuations.new) },
                   class: "flex gap-1 font-medium items-center bg-gray-50 text-gray-900 p-2 rounded-lg" do %>
         <%= lucide_icon("plus", class: "w-5 h-5 text-gray-900") %>
         <%= tag.span t(".new_entry"), class: "text-sm" %>
@@ -21,11 +21,11 @@
       <div class="rounded-lg bg-white border-alpha-black-25 shadow-xs">
         <%= turbo_frame_tag dom_id(@account.entries.account_valuations.new) %>
 
-        <% if @valuation_entries.any? %>
-          <%= render partial: "account/entries/entryables/valuation/valuation",
-                     collection: @valuation_entries,
-                     as: :entry,
-                     spacer_template: "ruler" %>
+        <% if @entries.any? %>
+          <%= render partial: "account/valuations/valuation",
+                     collection:      @entries,
+                     as:              :entry,
+                     spacer_template: "account/entries/ruler" %>
         <% else %>
           <p class="text-gray-500 text-sm p-4"><%= t(".no_valuations") %></p>
         <% end %>
