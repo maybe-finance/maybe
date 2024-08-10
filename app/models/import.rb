@@ -178,7 +178,8 @@ class Import < ApplicationRecord
       begin
         CSV.parse(raw_csv_str || "")
       rescue CSV::MalformedCSVError
-        errors.add(:raw_csv_str, "is not a valid CSV format")
+        # i18n-tasks-use t('activerecord.errors.models.import.attributes.raw_csv_str.invalid_csv_format')
+        errors.add(:raw_csv_str, :invalid_csv_format)
       end
     end
 end

@@ -13,15 +13,15 @@ class Account::Transfer < ApplicationRecord
   end
 
   def from_name
-    outflow_transaction&.account&.name || I18n.t("account.transfer.from_fallback_name")
+    outflow_transaction&.account&.name || I18n.t("account/transfer.from_fallback_name")
   end
 
   def to_name
-    inflow_transaction&.account&.name || I18n.t("account.transfer.to_fallback_name")
+    inflow_transaction&.account&.name || I18n.t("account/transfer.to_fallback_name")
   end
 
   def name
-    I18n.t("account.transfer.name", from_account: from_name, to_account: to_name)
+    I18n.t("account/transfer.name", from_account: from_name, to_account: to_name)
   end
 
   def inflow_transaction
@@ -72,24 +72,28 @@ class Account::Transfer < ApplicationRecord
 
     def transaction_count
       unless entries.size == 2
-        errors.add :entries, "must have exactly 2 entries"
+        # i18n-tasks-use t('activerecord.errors.models.account/transfer.attributes.entries.must_have_exactly_2_entries')
+        errors.add :entries, :must_have_exactly_2_entries
       end
     end
 
     def from_different_accounts
       accounts = entries.map { |e| e.account_id }.uniq
-      errors.add :entries, "must be from different accounts" if accounts.size < entries.size
+      # i18n-tasks-use t('activerecord.errors.models.account/transfer.attributes.entries.must_be_from_different_accounts')
+      errors.add :entries, :must_be_from_different_accounts if accounts.size < entries.size
     end
 
     def net_zero_flows
       unless entries.sum(&:amount).zero?
-        errors.add :transactions, "must have an inflow and outflow that net to zero"
+        # i18n-tasks-use t('activerecord.errors.models.account/transfer.attributes.entries.must_have_an_inflow_and_outflow_that_net_to_zero')
+        errors.add :entries, :must_have_an_inflow_and_outflow_that_net_to_zero
       end
     end
 
     def all_transactions_marked
       unless entries.all?(&:marked_as_transfer)
-        errors.add :entries, "must be marked as transfer"
+        # i18n-tasks-use t('activerecord.errors.models.account/transfer.attributes.entries.must_be_marked_as_transfer')
+        errors.add :entries, :must_be_marked_as_transfer
       end
     end
 end
