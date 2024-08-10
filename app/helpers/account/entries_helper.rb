@@ -38,7 +38,7 @@ module Account::EntriesHelper
       name      = entry.name || generated
       name
     else
-      entry.name
+      entry.name || "Transaction"
     end
   end
 

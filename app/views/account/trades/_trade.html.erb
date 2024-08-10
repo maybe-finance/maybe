@@ -42,7 +42,7 @@
 
   <div class="col-span-3 flex items-center justify-end">
     <% if entry.account_transaction? %>
-      <%= tag.p format_money(entry.amount_money), class: { "text-green-500": entry.inflow? } %>
+      <%= tag.p format_money(entry.amount_money * -1), class: { "text-green-500": entry.inflow? } %>
     <% else %>
       <%= tag.p format_money(entry.amount_money * -1), class: { "text-green-500": trade.sell? } %>
     <% end %>

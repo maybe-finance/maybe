@@ -13,14 +13,14 @@
     <div class="max-w-full">
       <%= content_tag :div, class: ["flex items-center gap-2"] do %>
         <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-600/5 text-gray-600">
-          <%= entry.name[0].upcase %>
+          <%= entry_name(entry).first.upcase %>
         </div>
 
         <div class="truncate text-gray-900">
           <% if entry.new_record? %>
             <%= content_tag :p, entry.name %>
           <% else %>
-            <%= link_to entry.name,
+            <%= link_to entry_name(entry),
                         account_entry_path(account, entry),
                         data: { turbo_frame: "drawer", turbo_prefetch: false },
                         class: "hover:underline hover:text-gray-800" %>

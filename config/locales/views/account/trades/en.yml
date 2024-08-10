@@ -6,6 +6,9 @@ en:
         failure: Something went wrong
         success: Transaction created successfully.
       form:
+        account: Transfer account (optional)
+        account_prompt: Search account
+        amount: Amount
         holding: Ticker symbol
         price: Price per share
         qty: Quantity
