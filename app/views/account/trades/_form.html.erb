@@ -1,17 +1,32 @@
 <%# locals: (entry:) %>
 
-<%= styled_form_with data: { turbo_frame: "_top" },
+<%= styled_form_with data: { turbo_frame: "_top", controller: "trade-form" },
                      scope: :account_entry,
                      url: entry.new_record? ? account_trades_path(entry.account) : account_entry_path(entry.account, entry) do |form| %>
   <div class="space-y-4">
     <div class="space-y-2">
-      <%= form.select :type, options_for_select([%w[Buy buy], %w[Sell sell]], "buy"), label: t(".type") %>
-      <%= form.text_field :ticker, value: nil, label: t(".holding"), placeholder: t(".ticker_placeholder") %>
+      <%= form.select :type, options_for_select([%w[Buy buy], %w[Sell sell], %w[Deposit transfer_in], %w[Withdrawal transfer_out], %w[Interest interest]], "buy"), { label: t(".type") }, { data: { "trade-form-target": "typeInput" } } %>
+      <div data-trade-form-target="tickerInput">
+        <%= form.text_field :ticker, value: nil, label: t(".holding"), placeholder: t(".ticker_placeholder") %>
+      </div>
+
       <%= form.date_field :date, label: true %>
-      <%= form.hidden_field :currency, value: entry.account.currency %>
-      <%= form.number_field :qty, label: t(".qty"), placeholder: "10", min: 0 %>
-      <%= money_with_currency_field form, :price_money, label: t(".price"), disable_currency: true %>
-      <%= form.hidden_field :currency, value: entry.account.currency %>
+
+      <div data-trade-form-target="amountInput" hidden>
+        <%= money_with_currency_field form, :amount_money, label: t(".amount"), disable_currency: true %>
+      </div>
+
+      <div data-trade-form-target="transferAccountInput" hidden>
+        <%= form.collection_select :transfer_account_id, Current.family.accounts.alphabetically, :id, :name, { prompt: t(".account_prompt"), label: t(".account") } %>
+      </div>
+
+      <div data-trade-form-target="qtyInput">
+        <%= form.number_field :qty, label: t(".qty"), placeholder: "10", min: 0 %>
+      </div>
+
+      <div data-trade-form-target="priceInput">
+        <%= money_with_currency_field form, :price_money, label: t(".price"), disable_currency: true %>
+      </div>
     </div>
 
     <%= form.submit t(".submit") %>

@@ -12,13 +12,14 @@ class Account::TradesController < ApplicationController
   end
 
   def create
-    @builder = Account::TradeBuilder.new(entry_params)
+    @builder = Account::EntryBuilder.new(entry_params)
 
     if entry = @builder.save
       entry.sync_account_later
       redirect_to account_path(@account), notice: t(".success")
     else
-      render :new, status: :unprocessable_entity
+      flash[:alert] = t(".failure")
+      redirect_back_or_to account_path(@account)
     end
   end
 
@@ -29,6 +30,8 @@ class Account::TradesController < ApplicationController
     end
 
     def entry_params
-      params.require(:account_entry).permit(:type, :date, :qty, :ticker, :price).merge(account: @account)
+      params.require(:account_entry)
+            .permit(:type, :date, :qty, :ticker, :price, :amount, :currency, :transfer_account_id)
+            .merge(account: @account)
     end
 end
