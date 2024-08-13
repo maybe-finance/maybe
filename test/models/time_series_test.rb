@@ -69,4 +69,34 @@ class TimeSeriesTest < ActiveSupport::TestCase
 
     assert_equal expected_values, series.to_json
   end
+
+  test "it does not accept invalid values in Time Series Trend" do
+    error = assert_raises(ActiveModel::ValidationError) do
+      TimeSeries.new(
+        [
+          { date: 1.day.ago.to_date, value: 100 },
+          { date: Date.current, value: "two hundred" }
+        ]
+      )
+    end
+    assert_match(/Current must be of the same type as previous/, error.message)
+    assert_match(/Previous must be of the same type as current/, error.message)
+    assert_match(/Current must be of type Money, Numeric, or nil/, error.message)
+  end
+
+
+  test "it does not accept invalid values in Time Series Value" do
+    # We need to stub trend otherwise an error is raised before TimeSeries::Value validation
+    TimeSeries::Trend.stub(:new, nil) do
+      error = assert_raises(ActiveModel::ValidationError) do
+        TimeSeries.new(
+          [
+            { date: 1.day.ago.to_date, value: 100 },
+            { date: Date.current, value: "two hundred" }
+          ]
+        )
+      end
+      assert_equal "Validation failed: Value must be a Money or Numeric", error.message
+    end
+  end
 end
