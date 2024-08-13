@@ -40,7 +40,8 @@ class TimeSeries::Value
 
     def value_must_be_of_known_type
       unless value.is_a?(Money) || value.is_a?(Numeric)
-        errors.add :value, "must be a Money or Numeric"
+        # i18n-tasks-use t('activemodel.errors.models.time_series/value.attributes.value.must_be_a_money_or_numeric')
+        errors.add :value, must_be_a_money_or_numeric
       end
     end
 end

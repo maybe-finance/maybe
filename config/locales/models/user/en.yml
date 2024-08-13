@@ -11,6 +11,11 @@ en:
         password: Password
         password_confirmation: Password Confirmation
     errors:
-      user:
-        cannot_deactivate_admin_with_other_users: Admin cannot delete account while
-          other users are present. Please delete all members first.
+      models:
+        user:
+          attributes:
+            base:
+              cannot_deactivate_admin_with_other_users: Admin cannot delete account
+                while other users are present. Please delete all members first.
+            profile_image:
+              invalid_file_size: file size must be less than %{max_megabytes}MB

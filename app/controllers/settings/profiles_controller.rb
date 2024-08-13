@@ -17,7 +17,7 @@ class Settings::ProfilesController < SettingsController
     if Current.user.update(user_params_with_family)
       redirect_to settings_profile_path, notice: t(".success")
     else
-      redirect_to settings_profile_path, alert: t(".file_size_error")
+      redirect_to settings_profile_path, alert: Current.user.errors.full_messages.to_sentence
     end
   end
 

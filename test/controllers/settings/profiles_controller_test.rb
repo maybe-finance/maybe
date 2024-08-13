@@ -25,6 +25,7 @@ class Settings::ProfilesControllerTest < ActionDispatch::IntegrationTest
     delete settings_profile_url
 
     assert_redirected_to settings_profile_url
+    assert_equal "Admin cannot delete account while other users are present. Please delete all members first.", flash[:alert]
     assert_no_enqueued_jobs only: UserPurgeJob
     assert User.find(@admin.id).active?
   end

@@ -1,0 +1,9 @@
+---
+en:
+  activerecord:
+    errors:
+      models:
+        import:
+          attributes:
+            raw_csv_str:
+              invalid_csv_format: is not a valid CSV format
