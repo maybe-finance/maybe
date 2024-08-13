@@ -110,9 +110,22 @@ class Account::EntryTest < ActiveSupport::TestCase
         amount: 100,
         currency: "USD",
         name: "Sell 10 shares of AMZN",
-        entryable: Account::Trade.new(qty: -10, price: 200, security: security)
+        entryable: Account::Trade.new(qty: -10, price: 200, currency: "USD", security: security)
     end
 
     assert_match /cannot sell 10.0 shares of AAPL because you only own 0.0 shares/, error.message
+  end
+
+  # Trade has a denormalized currency field that must match its parent Entry currency
+  test "trade must have same currency as entry" do
+    account = accounts(:investment)
+    assert_raises ActiveRecord::RecordInvalid do
+      account.entries.create! \
+        date: Date.current,
+        amount: 100,
+        currency: "USD",
+        name: "Test",
+        entryable: Account::Trade.new(qty: 10, price: 10, currency: "EUR", security: securities(:aapl))
+    end
   end
 end

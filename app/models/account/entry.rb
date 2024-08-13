@@ -200,6 +200,11 @@ class Account::Entry < ApplicationRecord
     end
 
     def trade_valid?
+      if account_trade.currency != currency
+        # i18n-tasks-use t('activerecord.errors.models.account/entry.attributes.base.currency_mismatch')
+        errors.add(:base, :currency_mismatch)
+      end
+
       if account_trade.sell?
         current_qty = account.holding_qty(account_trade.security)
 
