@@ -78,6 +78,8 @@ Rails.application.routes.draw do
     scope module: :account do
       resource :logo, only: :show
 
+      resources :issues, only: %i[ index show ]
+
       resources :holdings, only: %i[ index new show ]
       resources :cashes, only: :index
 

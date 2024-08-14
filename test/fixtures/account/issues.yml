@@ -1,0 +1,11 @@
+one:
+  account: depository
+  type: Account::Issue::ExchangeRate
+  last_observed_at: 2024-08-14 11:27:45
+  resolved_at: 2024-08-14 11:27:45
+
+two:
+  account: depository
+  type: Account::Issue::ExchangeRateProvider
+  last_observed_at: 2024-08-14 11:27:45
+  resolved_at: 2024-08-14 11:27:45

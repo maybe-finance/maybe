@@ -22,7 +22,7 @@ module Providable
 
       def synth_provider
         @synth_provider ||= begin
-                              api_key = ENV["SYNTH_API_KEY"]
+                              api_key = Setting.synth_api_key
                               api_key.present? ? Provider::Synth.new(api_key) : nil
                             end
       end

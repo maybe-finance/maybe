@@ -1,0 +1,10 @@
+---
+en:
+  account:
+    issue:
+      exchange_rate:
+        title: Missing Exchange Rates
+      exchange_rate_provider:
+        title: Exchange Rate Provider Configuration Error
+      unknown:
+        title: Unknown Account Issue

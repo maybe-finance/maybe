@@ -15,6 +15,7 @@ class Account < ApplicationRecord
   has_many :balances, dependent: :destroy
   has_many :imports, dependent: :destroy
   has_many :syncs, dependent: :destroy
+  has_many :issues, dependent: :destroy
 
   monetize :balance
 

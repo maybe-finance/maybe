@@ -1,0 +1,12 @@
+<%# locals: (issue:) %>
+
+<%= tag.div class: "flex gap-6 items-center rounded-xl px-4 py-3 bg-error/5" do %>
+  <div class="flex gap-3 items-center text-red-500 grow overflow-x-scroll">
+    <%= lucide_icon("alert-octagon", class: "w-5 h-5 shrink-0") %>
+    <p class="text-sm whitespace-nowrap"><%= issue.message %></p>
+  </div>
+
+  <div class="flex items-center gap-4 ml-auto">
+    <%= link_to "Troubleshoot", account_issue_path(issue.account, issue), class: "text-red-500 font-medium hover:underline", data: { turbo_frame: :drawer } %>
+  </div>
+<% end %>
