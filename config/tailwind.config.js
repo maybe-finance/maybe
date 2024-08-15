@@ -64,13 +64,6 @@ module.exports = {
               fontSize: theme("fontSize.lg"),
               fontWeight: theme("fontWeight.medium"),
             },
-            p: {
-              marginBottom: "0.625rem",
-              marginTop: "0.875rem",
-            },
-            strong: {
-              color: "inherit",
-            },
             li: {
               margin: 0,
             },

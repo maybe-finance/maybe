@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  issuable: one
+  code: MyString
+  last_observed_at: 2024-08-15 08:54:04
+  resolved_at: 2024-08-15 08:54:04
+
+two:
+  issuable: two
+  code: MyString
+  last_observed_at: 2024-08-15 08:54:04
+  resolved_at: 2024-08-15 08:54:04

@@ -104,6 +104,12 @@ Rails.application.routes.draw do
 
   resources :institutions, except: %i[ index show ]
 
+  resources :issues, only: :show
+
+  scope module: :issues do
+    resources :exchange_rate_provider_issues, only: :update
+  end
+
   # For managing self-hosted upgrades and release notifications
   resources :upgrades, only: [] do
     member do

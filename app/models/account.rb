@@ -1,6 +1,5 @@
 class Account < ApplicationRecord
-  include Syncable
-  include Monetizable
+  include Syncable, Monetizable, Issuable
 
   validates :name, :balance, :currency, presence: true
 

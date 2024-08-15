@@ -22,9 +22,13 @@ module Providable
 
       def synth_provider
         @synth_provider ||= begin
-                              api_key = Setting.synth_api_key
+                              api_key = self_hosted? ? Setting.synth_api_key : ENV["SYNTH_API_KEY"]
                               api_key.present? ? Provider::Synth.new(api_key) : nil
                             end
+      end
+
+      def self_hosted?
+        Rails.application.config.app_mode.self_hosted?
       end
   end
 end

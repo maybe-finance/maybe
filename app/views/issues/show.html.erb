@@ -1,0 +1,12 @@
+<%= drawer do %>
+  <article class="prose">
+    <%= tag.h2 @issue.title %>
+
+    <%= tag.h3 t(".overview") %>
+    <%= render partial: @issue.to_description_partial_path, locals: { issue: @issue } %>
+
+    <%= tag.h3 t(".action") %>
+    <%= render partial: @issue.to_action_partial_path, locals: { issue: @issue } %>
+  </article>
+<% end %>
+

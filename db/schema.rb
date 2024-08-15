@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_14_152745) do
+ActiveRecord::Schema[7.2].define(version: 2024_08_15_125404) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -61,18 +61,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_14_152745) do
     t.index ["account_id", "security_id", "date", "currency"], name: "idx_on_account_id_security_id_date_currency_234024c8e3", unique: true
     t.index ["account_id"], name: "index_account_holdings_on_account_id"
     t.index ["security_id"], name: "index_account_holdings_on_security_id"
-  end
-
-  create_table "account_issues", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "account_id", null: false
-    t.string "type", null: false
-    t.integer "priority"
-    t.datetime "last_observed_at", default: "2024-08-14 16:11:08"
-    t.datetime "resolved_at"
-    t.jsonb "data"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_account_issues_on_account_id"
   end
 
   create_table "account_syncs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -330,6 +318,17 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_14_152745) do
     t.index ["token"], name: "index_invite_codes_on_token", unique: true
   end
 
+  create_table "issues", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "issuable_type"
+    t.uuid "issuable_id"
+    t.string "code"
+    t.datetime "last_observed_at"
+    t.datetime "resolved_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["issuable_type", "issuable_id"], name: "index_issues_on_issuable"
+  end
+
   create_table "loans", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -429,7 +428,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_14_152745) do
   add_foreign_key "account_entries", "accounts"
   add_foreign_key "account_holdings", "accounts"
   add_foreign_key "account_holdings", "securities"
-  add_foreign_key "account_issues", "accounts"
   add_foreign_key "account_syncs", "accounts"
   add_foreign_key "account_trades", "securities"
   add_foreign_key "account_transactions", "categories", on_delete: :nullify
