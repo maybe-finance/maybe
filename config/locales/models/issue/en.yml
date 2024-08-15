@@ -2,3 +2,4 @@
 en:
   issue:
     exchange_rate_provider_missing: Exchange rate provider missing
+    unknown: Unknown issue occurred

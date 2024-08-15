@@ -55,7 +55,7 @@ class Settings::HostingsController < SettingsController
     end
 
     def hosting_params
-      permitted_params = params.require(:setting).permit(:render_deploy_hook, :upgrades_mode, :synth_api_key, :email_sender, :app_domain, :smtp_host, :smtp_port, :smtp_username, :smtp_password)
+      permitted_params = params.require(:setting).permit(:render_deploy_hook, :upgrades_mode, :email_sender, :app_domain, :smtp_host, :smtp_port, :smtp_username, :smtp_password)
 
       result = {}
       result[:upgrades_mode] = permitted_params[:upgrades_mode] == "manual" ? "manual" : "auto" if permitted_params.key?(:upgrades_mode)

@@ -12,7 +12,11 @@ class Issue < ApplicationRecord
   end
 
   def to_action_partial_path
-    "#{model_name.plural}/actions/#{action_partial}"
+    if issue_details.action_partial
+      "#{model_name.plural}/actions/#{action_partial}"
+    else
+      "issues/actions/default"
+    end
   end
 
   def priority

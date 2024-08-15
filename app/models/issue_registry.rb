@@ -6,6 +6,11 @@ class IssueRegistry
       priority: 1,
       description_partial: :exchange_rate_provider_missing,
       action_partial: :configure_exchange_rate_provider
+    },
+    unknown: {
+      name: I18n.t("issue.unknown"),
+      priority: 3,
+      description_partial: :unknown
     }
   }.freeze
 
@@ -13,9 +18,7 @@ class IssueRegistry
     issue = TYPES[code]
     raise "Unknown issue type: #{code}" unless issue
 
-    action_partial = issue[:action_partial] || :unknown
-
-    IssueTemplate.new(issue.merge(code: code, action_partial: action_partial))
+    IssueTemplate.new(issue.merge(code: code))
   end
 
   private
