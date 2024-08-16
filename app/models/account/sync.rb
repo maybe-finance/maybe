@@ -16,34 +16,25 @@ class Account::Sync < ApplicationRecord
   def run
     start!
 
+    account.resolve_stale_issues
+
     sync_balances
     sync_holdings
 
     complete!
   rescue StandardError => error
+    account.observe_unknown_issue(error)
     fail! error
   end
 
   private
 
     def sync_balances
-      syncer = Account::Balance::Syncer.new(account, start_date: start_date)
-
-      syncer.run
-
-      append_warnings(syncer.warnings)
+      Account::Balance::Syncer.new(account, start_date: start_date).run
     end
 
     def sync_holdings
-      syncer = Account::Holding::Syncer.new(account, start_date: start_date)
-
-      syncer.run
-
-      append_warnings(syncer.warnings)
-    end
-
-    def append_warnings(new_warnings)
-      update! warnings: warnings + new_warnings
+      Account::Holding::Syncer.new(account, start_date: start_date).run
     end
 
     def start!
@@ -53,12 +44,17 @@ class Account::Sync < ApplicationRecord
 
     def complete!
       update! status: "completed"
-      broadcast_result type: "notice", message: "Sync complete"
+
+      if account.has_issues?
+        broadcast_result type: "alert", message: account.highest_priority_issue.title
+      else
+        broadcast_result type: "notice", message: "Sync complete"
+      end
     end
 
     def fail!(error)
       update! status: "failed", error: error.message
-      broadcast_result type: "alert", message: error.message
+      broadcast_result type: "alert", message: t(".failed")
     end
 
     def broadcast_start
@@ -78,6 +74,7 @@ class Account::Sync < ApplicationRecord
         partial: "shared/notification",
         locals: { type: type, message: message }
       )
+
       account.family.broadcast_refresh
     end
 end

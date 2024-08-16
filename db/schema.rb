@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_15_125404) do
+ActiveRecord::Schema[7.2].define(version: 2024_08_15_190722) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -69,7 +69,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_15_125404) do
     t.date "start_date"
     t.datetime "last_ran_at"
     t.string "error"
-    t.text "warnings", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_account_syncs_on_account_id"
@@ -321,9 +320,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_15_125404) do
   create_table "issues", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "issuable_type"
     t.uuid "issuable_id"
-    t.string "code"
+    t.string "type"
+    t.integer "severity"
     t.datetime "last_observed_at"
     t.datetime "resolved_at"
+    t.jsonb "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["issuable_type", "issuable_id"], name: "index_issues_on_issuable"

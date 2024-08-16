@@ -14,3 +14,6 @@ en:
       new_account: New account
       portfolio: Portfolio
       transactions: Transactions
+    issues:
+      description: Issue Description
+      action: How to fix this issue

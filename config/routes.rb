@@ -78,8 +78,6 @@ Rails.application.routes.draw do
     scope module: :account do
       resource :logo, only: :show
 
-      resources :issues, only: %i[ index show ]
-
       resources :holdings, only: %i[ index new show ]
       resources :cashes, only: :index
 
@@ -106,8 +104,8 @@ Rails.application.routes.draw do
 
   resources :issues, only: :show
 
-  scope module: :issues do
-    resources :exchange_rate_provider_issues, only: :update
+  namespace :issue do
+    resources :exchange_rate_provider_missings, only: :update
   end
 
   # For managing self-hosted upgrades and release notifications

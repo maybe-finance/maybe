@@ -46,7 +46,7 @@
   </div>
 
   <% if @account.highest_priority_issue %>
-    <%= render @account.highest_priority_issue %>
+    <%= render partial: "issues/issue", locals: { issue: @account.highest_priority_issue } %>
   <% end %>
 
   <div class="bg-white shadow-xs rounded-xl border border-alpha-black-25 rounded-lg">

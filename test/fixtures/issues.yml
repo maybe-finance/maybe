@@ -1,13 +1,17 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  issuable: one
-  code: MyString
+  issuable: depository
+  issuable_type: Account
+  type: Issue::ExchangeRatesMissing
   last_observed_at: 2024-08-15 08:54:04
-  resolved_at: 2024-08-15 08:54:04
 
 two:
-  issuable: two
-  code: MyString
+  issuable: depository
+  issuable_type: Account
+  type: Issue::Unknown
   last_observed_at: 2024-08-15 08:54:04
-  resolved_at: 2024-08-15 08:54:04
+
+three:
+  issuable: depository
+  issuable_type: Account
+  type: Issue::Unknown
+  last_observed_at: 2024-08-15 08:54:04

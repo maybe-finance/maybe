@@ -3,6 +3,17 @@ class Money
   include ActiveModel::Validations
 
   class ConversionError < StandardError
+    attr_reader :from_currency, :to_currency, :date
+
+    def initialize(from_currency:, to_currency:, date:)
+      @from_currency = from_currency
+      @to_currency = to_currency
+      @date = date
+
+      error_message = message || "Couldn't find exchange rate from #{from_currency} to #{to_currency} on #{date}"
+
+      super(error_message)
+    end
   end
 
   attr_reader :amount, :currency, :store
@@ -37,7 +48,7 @@ class Money
     else
       exchange_rate = store.find_rate(from: iso_code, to: other_iso_code, date: date)&.rate || fallback_rate
 
-      raise ConversionError.new("Couldn't find exchange rate from #{iso_code} to #{other_iso_code} on #{date}") unless exchange_rate
+      raise ConversionError.new(from_currency: iso_code, to_currency: other_iso_code, date: date) unless exchange_rate
 
       Money.new(amount * exchange_rate, other_iso_code)
     end

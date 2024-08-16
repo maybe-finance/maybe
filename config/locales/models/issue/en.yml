@@ -2,4 +2,10 @@
 en:
   issue:
     exchange_rate_provider_missing: Exchange rate provider missing
+    exchange_rates_missing: Exchange rates missing
     unknown: Unknown issue occurred
+  activerecord:
+    models:
+      issue/exchange_rate_provider_missing: Exchange rate provider missing
+      issue/exchange_rates_missing: Exchange rates missing
+      issue/unknown: Unknown issue occurred

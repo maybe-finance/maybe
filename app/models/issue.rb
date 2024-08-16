@@ -1,39 +1,34 @@
 class Issue < ApplicationRecord
   belongs_to :issuable, polymorphic: true
 
-  validates :code, presence: true
+  before_create :set_default_severity
+
+  enum :severity, { critical: 1, error: 2, warning: 3, info: 4 }
+
+  validates :severity, presence: true
+
+  scope :active, -> { where(resolved_at: nil) }
+  scope :ordered, -> { order(:severity) }
 
   def title
-    issue_details.name
+    model_name.human
   end
 
-  def to_description_partial_path
-    "#{model_name.plural}/descriptions/#{description_partial}"
+  def stale?
+    raise NotImplementedError, "#{self.class} must implement #{__method__}"
   end
 
-  def to_action_partial_path
-    if issue_details.action_partial
-      "#{model_name.plural}/actions/#{action_partial}"
-    else
-      "issues/actions/default"
-    end
+  def resolve!
+    update!(resolved_at: Time.current)
   end
 
-  def priority
-    issue_details.priority
+  def default_severity
+    :warning
   end
 
   private
 
-    def issue_details
-      @issue_details ||= IssueRegistry.get(code.to_sym)
-    end
-
-    def action_partial
-      issue_details.action_partial.to_s
-    end
-
-    def description_partial
-      issue_details.description_partial.to_s
+    def set_default_severity
+      self.severity ||= default_severity
     end
 end

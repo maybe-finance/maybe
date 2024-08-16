@@ -1,9 +1,8 @@
 class IssuesController < ApplicationController
-  layout :with_sidebar
-
   before_action :set_issue, only: :show
 
   def show
+    render template: "#{@issue.class.name.underscore.pluralize}/show", layout: "issues"
   end
 
   private

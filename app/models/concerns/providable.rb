@@ -21,10 +21,8 @@ module Providable
     private
 
       def synth_provider
-        @synth_provider ||= begin
-                              api_key = self_hosted? ? Setting.synth_api_key : ENV["SYNTH_API_KEY"]
-                              api_key.present? ? Provider::Synth.new(api_key) : nil
-                            end
+        api_key = self_hosted? ? Setting.synth_api_key : ENV["SYNTH_API_KEY"]
+        api_key.present? ? Provider::Synth.new(api_key) : nil
       end
 
       def self_hosted?

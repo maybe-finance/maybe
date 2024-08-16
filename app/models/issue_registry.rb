@@ -7,6 +7,12 @@ class IssueRegistry
       description_partial: :exchange_rate_provider_missing,
       action_partial: :configure_exchange_rate_provider
     },
+    exchange_rates_missing: {
+      name: I18n.t("issue.exchange_rates_missing"),
+      priority: 2,
+      description_partial: :exchange_rates_missing,
+      action_partial: :request_synth_data
+    },
     unknown: {
       name: I18n.t("issue.unknown"),
       priority: 3,
