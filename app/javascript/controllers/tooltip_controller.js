@@ -4,11 +4,11 @@ import {
   flip,
   shift,
   offset,
-  arrow
+  autoUpdate
 } from '@floating-ui/dom';
 
 export default class extends Controller {
-  static targets = ["arrow", "tooltip"];
+  static targets = ["tooltip"];
   static values = {
     placement: { type: String, default: "top" },
     offset: { type: Number, default: 10 },
@@ -17,58 +17,67 @@ export default class extends Controller {
   };
 
   connect() {
-    this.element.addEventListener("mouseenter", this.showTooltip);
-    this.element.addEventListener("mouseleave", this.hideTooltip);
-    this.element.addEventListener("focus", this.showTooltip);
-    this.element.addEventListener("blur", this.hideTooltip);
-  };
-
-  showTooltip = () => {
-    this.tooltipTarget.style.display = 'block';
-    this.#update();
-  };
-
-  hideTooltip = () => {
-    this.tooltipTarget.style.display = '';
-  };
+    this._cleanup = null;
+    this.boundUpdate = this.update.bind(this);
+    this.startAutoUpdate();
+    this.addEventListeners();
+  }
 
   disconnect() {
-    this.element.removeEventListener("mouseenter", this.showTooltip);
-    this.element.removeEventListener("mouseleave", this.hideTooltip);
-    this.element.removeEventListener("focus", this.showTooltip);
-    this.element.removeEventListener("blur", this.hideTooltip);
-  };
+    this.removeEventListeners();
+    this.stopAutoUpdate();
+  }
 
-  #update() {
+  addEventListeners() {
+    this.element.addEventListener("mouseenter", this.show);
+    this.element.addEventListener("mouseleave", this.hide);
+  }
+
+  removeEventListeners() {
+    this.element.removeEventListener("mouseenter", this.show);
+    this.element.removeEventListener("mouseleave", this.hide);
+  }
+
+  show = () => {
+    this.tooltipTarget.style.display = 'block';
+    this.update(); // Ensure immediate update when shown
+  }
+
+  hide = () => {
+    this.tooltipTarget.style.display = 'none';
+  }
+
+  startAutoUpdate() {
+    if (!this._cleanup) {
+      this._cleanup = autoUpdate(
+        this.element,
+        this.tooltipTarget,
+        this.boundUpdate
+      );
+    }
+  }
+
+  stopAutoUpdate() {
+    if (this._cleanup) {
+      this._cleanup();
+      this._cleanup = null;
+    }
+  }
+
+  update() {
+    // Update position even if not visible, to ensure correct positioning when shown
     computePosition(this.element, this.tooltipTarget, {
       placement: this.placementValue,
       middleware: [
         offset({ mainAxis: this.offsetValue, crossAxis: this.crossAxisValue, alignmentAxis: this.alignmentAxisValue }),
         flip(),
-        shift({ padding: 5 }),
-        arrow({ element: this.arrowTarget }),
+        shift({ padding: 5 })
       ],
     }).then(({ x, y, placement, middlewareData }) => {
       Object.assign(this.tooltipTarget.style, {
         left: `${x}px`,
         top: `${y}px`,
       });
-
-      const { x: arrowX, y: arrowY } = middlewareData.arrow;
-      const staticSide = {
-        top: 'bottom',
-        right: 'left',
-        bottom: 'top',
-        left: 'right',
-      }[placement.split('-')[0]];
-
-      Object.assign(this.arrowTarget.style, {
-        left: arrowX != null ? `${arrowX}px` : '',
-        top: arrowY != null ? `${arrowY}px` : '',
-        right: '',
-        bottom: '',
-        [staticSide]: '-4px',
-      });
     });
-  };
+  }
 }

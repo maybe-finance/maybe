@@ -1,6 +1,8 @@
 class Issue::PricesMissing < Issue
   store_accessor :data, :missing_prices
 
+  after_initialize :initialize_missing_prices
+
   validates :missing_prices, presence: true
 
   def append_missing_price(ticker, date)
@@ -10,7 +12,10 @@ class Issue::PricesMissing < Issue
 
   def stale?
     stale = true
+
     missing_prices.each do |ticker, dates|
+      next unless issuable.owns_ticker?(ticker)
+
       oldest_date = dates.min
       expected_price_count = (oldest_date..Date.current).count
       prices = Security::Price.find_prices(ticker: ticker, start_date: oldest_date)
@@ -19,4 +24,10 @@ class Issue::PricesMissing < Issue
 
     stale
   end
+
+  private
+
+    def initialize_missing_prices
+      self.missing_prices ||= {}
+    end
 end
