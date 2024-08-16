@@ -3,10 +3,6 @@ class Issue::ExchangeRatesMissing < Issue
 
   validates :from_currency, :to_currency, :dates, presence: true
 
-  def default_severity
-    :warning
-  end
-
   def stale?
     if dates.length == 1
       ExchangeRate.find_rate(from: from_currency, to: to_currency, date: dates.first).present?

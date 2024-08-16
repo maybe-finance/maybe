@@ -33,8 +33,14 @@ module Issuable
     )
   end
 
+  def observe_missing_price(ticker:, date:)
+    issue = issues.find_or_create_by(type: Issue::PricesMissing.name, resolved_at: nil)
+    issue.append_missing_price(ticker, date)
+    issue.save!
+  end
+
   def highest_priority_issue
-    issues.active.sort_by(&:priority).last
+    issues.active.ordered.first
   end
 
   private

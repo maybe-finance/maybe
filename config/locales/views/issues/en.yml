@@ -1,9 +1,0 @@
----
-en:
-  issues:
-    show:
-      overview: Issue overview
-      action: How to fix this issue
-    actions:
-      default:
-        description: Because of this issue,

@@ -1,6 +1,6 @@
 <%# locals: (issue:) %>
 
-<% priority_class = issue.priority == 1 ? "bg-error/5" : "bg-warning/5" %>
+<% priority_class = issue.critical? || issue.error? ? "bg-error/5" : "bg-warning/5" %>
 
 <%= tag.div class: "flex gap-6 items-center rounded-xl px-4 py-3 #{priority_class}" do %>
   <div class="flex gap-3 items-center text-red-500 grow overflow-x-scroll">

@@ -1,7 +1,7 @@
 class Issue < ApplicationRecord
   belongs_to :issuable, polymorphic: true
 
-  before_create :set_default_severity
+  after_initialize :set_default_severity
 
   enum :severity, { critical: 1, error: 2, warning: 3, info: 4 }
 

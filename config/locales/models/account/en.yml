@@ -1,12 +1,5 @@
 ---
 en:
-  account:
-    issues:
-      exchange_rate:
-        message: Some required exchange rates are missing for this account.
-      unknown:
-        message: An unknown issue has occurred with this account causing potentially
-          incorrect data.
   activerecord:
     attributes:
       account:
@@ -26,4 +19,3 @@ en:
       account/other_liability: Other Liability
       account/property: Real Estate
       account/vehicle: Vehicle
-  failed: "Sync failed"

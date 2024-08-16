@@ -54,7 +54,7 @@ class Account::Sync < ApplicationRecord
 
     def fail!(error)
       update! status: "failed", error: error.message
-      broadcast_result type: "alert", message: t(".failed")
+      broadcast_result type: "alert", message: I18n.t("account.sync.failed")
     end
 
     def broadcast_start
