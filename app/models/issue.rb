@@ -14,6 +14,7 @@ class Issue < ApplicationRecord
     model_name.human
   end
 
+  # The conditions that must be met for an issue to be fixed
   def stale?
     raise NotImplementedError, "#{self.class} must implement #{__method__}"
   end

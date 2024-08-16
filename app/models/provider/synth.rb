@@ -5,7 +5,7 @@ class Provider::Synth
     @api_key = api_key
   end
 
-  def connected?
+  def healthy?
     response = client.get("#{base_url}/user")
     JSON.parse(response.body).dig("id").present?
   end

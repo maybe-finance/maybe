@@ -4,7 +4,9 @@ module ExchangeRateProviderInterfaceTest
   extend ActiveSupport::Testing::Declarative
 
   test "exchange rate provider interface" do
+    assert_respond_to @subject, :healthy?
     assert_respond_to @subject, :fetch_exchange_rate
+    assert_respond_to @subject, :fetch_exchange_rates
   end
 
   test "exchange rate provider response contract" do

@@ -4,6 +4,10 @@ module ExchangeRate::Provided
   include Providable
 
   class_methods do
+    def provider_healthy?
+      exchange_rates_provider.present? && exchange_rates_provider.healthy?
+    end
+
     private
 
       def fetch_rates_from_provider(from:, to:, start_date:, end_date: Date.current, cache: false)

@@ -4,6 +4,6 @@ class Issue::ExchangeRateProviderMissing < Issue
   end
 
   def stale?
-    ExchangeRate.exchange_rates_provider.present?
+    ExchangeRate.provider_healthy?
   end
 end
