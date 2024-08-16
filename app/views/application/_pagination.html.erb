@@ -40,7 +40,7 @@
     </div>
   </div>
   <div class="flex items-center gap-4">
-    <%= form_with url: transactions_path,
+    <%= form_with url: url_for,
                 method: :get,
                 class: "flex items-center gap-4",
                 data: { controller: "auto-submit-form" } do |f| %>

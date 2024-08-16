@@ -42,7 +42,5 @@ en:
       success: Marked as transfer
     new:
       new_transaction: New transaction
-    pagination:
-      rows_per_page: Rows per page
     unmark_transfers:
       success: Transfer removed

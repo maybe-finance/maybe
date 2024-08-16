@@ -5,7 +5,10 @@ class Account::TransactionsController < ApplicationController
   before_action :set_entry, only: :update
 
   def index
-    @entries = @account.entries.account_transactions.reverse_chronological
+    @pagy, @entries = pagy(
+      @account.entries.account_transactions.reverse_chronological,
+      limit: params[:per_page] || "10"
+    )
   end
 
   def update
