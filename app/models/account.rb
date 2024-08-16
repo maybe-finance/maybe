@@ -28,6 +28,8 @@ class Account < ApplicationRecord
 
   delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
 
+  delegate :value, :series, to: :accountable
+
   class << self
     def by_group(period: Period.all, currency: Money.default_currency.iso_code)
       grouped_accounts = { assets: ValueGroup.new("Assets", currency), liabilities: ValueGroup.new("Liabilities", currency) }
@@ -72,31 +74,6 @@ class Account < ApplicationRecord
       account
     end
   end
-
-  # Start of temporary fix for #1068
-  # ==========================================================================
-
-  # TODO: Both `series` and `value` methods are a temporary fix for #1068, which appears to be a data corruption issue.
-  # Every account should have an accountable no matter what, but some self hosted instances seem to have missing accountables.
-  # When this is fixed, we can add this back to `delegate :value, :series, to: :accountable`
-  def series(period: Period.all, currency: self.currency)
-    if accountable.present?
-      accountable.series(period: period, currency: currency)
-    else
-      TimeSeries.new([])
-    end
-  end
-
-  def value
-    if accountable.present?
-      accountable.value
-    else
-      balance_money
-    end
-  end
-
-  # ==========================================================================
-  # End of temporary fix for #1068
 
   def alert
     latest_sync = syncs.latest

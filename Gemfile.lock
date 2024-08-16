@@ -5,10 +5,8 @@ GIT
     lucide-rails (0.2.0)
       railties (>= 4.1.0)
 
-GIT
-  remote: https://github.com/rails/rails.git
-  revision: f6d62b5f214471f6af0fc0535fe70e4e13b19ed4
-  branch: 7-2-stable
+GEM
+  remote: https://rubygems.org/
   specs:
     actioncable (7.2.0)
       actionpack (= 7.2.0)
@@ -80,32 +78,6 @@ GIT
       minitest (>= 5.1)
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
-    rails (7.2.0)
-      actioncable (= 7.2.0)
-      actionmailbox (= 7.2.0)
-      actionmailer (= 7.2.0)
-      actionpack (= 7.2.0)
-      actiontext (= 7.2.0)
-      actionview (= 7.2.0)
-      activejob (= 7.2.0)
-      activemodel (= 7.2.0)
-      activerecord (= 7.2.0)
-      activestorage (= 7.2.0)
-      activesupport (= 7.2.0)
-      bundler (>= 1.15.0)
-      railties (= 7.2.0)
-    railties (7.2.0)
-      actionpack (= 7.2.0)
-      activesupport (= 7.2.0)
-      irb (~> 1.13)
-      rackup (>= 1.0.0)
-      rake (>= 12.2)
-      thor (~> 1.0, >= 1.2.2)
-      zeitwerk (~> 2.6)
-
-GEM
-  remote: https://rubygems.org/
-  specs:
     addressable (2.8.6)
       public_suffix (>= 2.0.2, < 6.0)
     ast (2.4.2)
@@ -320,6 +292,20 @@ GEM
     rackup (2.1.0)
       rack (>= 3)
       webrick (~> 1.8)
+    rails (7.2.0)
+      actioncable (= 7.2.0)
+      actionmailbox (= 7.2.0)
+      actionmailer (= 7.2.0)
+      actionpack (= 7.2.0)
+      actiontext (= 7.2.0)
+      actionview (= 7.2.0)
+      activejob (= 7.2.0)
+      activemodel (= 7.2.0)
+      activerecord (= 7.2.0)
+      activestorage (= 7.2.0)
+      activesupport (= 7.2.0)
+      bundler (>= 1.15.0)
+      railties (= 7.2.0)
     rails-dom-testing (2.2.0)
       activesupport (>= 5.0.0)
       minitest
@@ -333,6 +319,14 @@ GEM
     rails-settings-cached (2.9.4)
       activerecord (>= 5.0.0)
       railties (>= 5.0.0)
+    railties (7.2.0)
+      actionpack (= 7.2.0)
+      activesupport (= 7.2.0)
+      irb (~> 1.13)
+      rackup (>= 1.0.0)
+      rake (>= 12.2)
+      thor (~> 1.0, >= 1.2.2)
+      zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.2.1)
     rb-fsevent (0.11.2)
@@ -499,7 +493,7 @@ DEPENDENCIES
   pg (~> 1.5)
   propshaft
   puma (>= 5.0)
-  rails!
+  rails (~> 7.2.0)
   rails-settings-cached
   redcarpet
   rubocop-rails-omakase
