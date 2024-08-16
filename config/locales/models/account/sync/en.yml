@@ -1,0 +1,5 @@
+---
+en:
+  account:
+    sync:
+      failed: Sync failed

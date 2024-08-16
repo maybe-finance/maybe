@@ -1,6 +1,5 @@
 class Account < ApplicationRecord
-  include Syncable
-  include Monetizable
+  include Syncable, Monetizable, Issuable
 
   validates :name, :balance, :currency, presence: true
 
@@ -15,6 +14,7 @@ class Account < ApplicationRecord
   has_many :balances, dependent: :destroy
   has_many :imports, dependent: :destroy
   has_many :syncs, dependent: :destroy
+  has_many :issues, as: :issuable, dependent: :destroy
 
   monetize :balance
 

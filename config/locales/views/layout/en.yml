@@ -8,6 +8,9 @@ en:
       sign_up: create an account
       terms_of_service: Terms of Service
       your_account: Your account
+    issues:
+      action: How to fix this issue
+      description: Issue Description
     sidebar:
       accounts: Accounts
       dashboard: Dashboard

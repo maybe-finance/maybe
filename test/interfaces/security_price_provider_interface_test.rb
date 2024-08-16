@@ -4,6 +4,7 @@ module SecurityPriceProviderInterfaceTest
   extend ActiveSupport::Testing::Declarative
 
   test "security price provider interface" do
+    assert_respond_to @subject, :healthy?
     assert_respond_to @subject, :fetch_security_prices
   end
 

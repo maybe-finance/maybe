@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_13_170608) do
+ActiveRecord::Schema[7.2].define(version: 2024_08_15_190722) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -69,7 +69,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_13_170608) do
     t.date "start_date"
     t.datetime "last_ran_at"
     t.string "error"
-    t.text "warnings", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_account_syncs_on_account_id"
@@ -119,7 +118,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_13_170608) do
     t.boolean "is_active", default: true, null: false
     t.date "last_sync_date"
     t.uuid "institution_id"
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Loan'::character varying)::text, ('CreditCard'::character varying)::text, ('OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Loan'::character varying, 'CreditCard'::character varying, 'OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id"], name: "index_accounts_on_family_id"
     t.index ["institution_id"], name: "index_accounts_on_institution_id"
@@ -316,6 +315,19 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_13_170608) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["token"], name: "index_invite_codes_on_token", unique: true
+  end
+
+  create_table "issues", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "issuable_type"
+    t.uuid "issuable_id"
+    t.string "type"
+    t.integer "severity"
+    t.datetime "last_observed_at"
+    t.datetime "resolved_at"
+    t.jsonb "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["issuable_type", "issuable_id"], name: "index_issues_on_issuable"
   end
 
   create_table "loans", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

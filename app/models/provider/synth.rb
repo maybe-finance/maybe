@@ -5,6 +5,11 @@ class Provider::Synth
     @api_key = api_key
   end
 
+  def healthy?
+    response = client.get("#{base_url}/user")
+    JSON.parse(response.body).dig("id").present?
+  end
+
   def fetch_security_prices(ticker:, start_date:, end_date:)
     prices = paginate(
       "#{base_url}/tickers/#{ticker}/open-close",

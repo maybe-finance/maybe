@@ -52,27 +52,17 @@ module.exports = {
           to: { "stroke-dashoffset": 0 },
         },
       },
-      typography: {
+      typography: (theme) => ({
         DEFAULT: {
           css: {
             maxWidth: "none",
-            a: {
-              color: "inherit",
-              textDecoration: "underline",
-            },
             h2: {
-              fontSize: "1.125rem",
-              fontWeight: "inherit",
-              lineHeight: "1.75rem",
-              marginBottom: "0.625rem",
-              marginTop: "0.875rem",
+              fontSize: theme("fontSize.xl"),
+              fontWeight: theme("fontWeight.medium"),
             },
-            p: {
-              marginBottom: "0.625rem",
-              marginTop: "0.875rem",
-            },
-            strong: {
-              color: "inherit",
+            h3: {
+              fontSize: theme("fontSize.lg"),
+              fontWeight: theme("fontWeight.medium"),
             },
             li: {
               margin: 0,
@@ -94,7 +84,7 @@ module.exports = {
             },
           },
         },
-      },
+      }),
     },
   },
   plugins: [
