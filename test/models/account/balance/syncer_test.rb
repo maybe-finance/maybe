@@ -78,7 +78,9 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
     create_exchange_rate(1.day.ago.to_date, from: "EUR", to: "USD", rate: 2)
     create_exchange_rate(Date.current, from: "EUR", to: "USD", rate: 2)
 
-    run_sync_for(@account)
+    with_env_overrides SYNTH_API_KEY: ENV["SYNTH_API_KEY"] || "fookey" do
+      run_sync_for(@account)
+    end
 
     usd_balances = @account.balances.where(currency: "USD").chronological.map(&:balance)
     eur_balances = @account.balances.where(currency: "EUR").chronological.map(&:balance)
