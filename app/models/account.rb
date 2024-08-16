@@ -75,9 +75,11 @@ class Account < ApplicationRecord
     end
   end
 
-  def alert
-    latest_sync = syncs.latest
-    [ latest_sync&.error, *latest_sync&.warnings ].compact.first
+  def owns_ticker?(ticker)
+    security_id = Security.find_by(ticker: ticker)&.id
+    entries.account_trades
+           .joins("JOIN account_trades ON account_entries.entryable_id = account_trades.id")
+           .where(account_trades: { security_id: security_id }).any?
   end
 
   def favorable_direction

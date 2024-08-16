@@ -89,4 +89,12 @@ class AccountTest < ActiveSupport::TestCase
     assert_equal 10, account.holding_qty(security, date: 1.day.ago.to_date)
     assert_equal 0, account.holding_qty(security, date: 2.days.ago.to_date)
   end
+
+  test "can observe missing price" do
+    account = accounts(:investment)
+
+    assert_difference -> { account.issues.count } do
+      account.observe_missing_price(ticker: "AAPL", date: Date.current)
+    end
+  end
 end

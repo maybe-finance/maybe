@@ -25,6 +25,8 @@ class Account::Sync < ApplicationRecord
   rescue StandardError => error
     account.observe_unknown_issue(error)
     fail! error
+
+    raise error if Rails.env.development?
   end
 
   private
