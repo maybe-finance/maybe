@@ -4,7 +4,6 @@ import {
   flip,
   shift,
   offset,
-  arrow,
   autoUpdate
 } from '@floating-ui/dom';
 
@@ -32,15 +31,11 @@ export default class extends Controller {
   addEventListeners() {
     this.element.addEventListener("mouseenter", this.show);
     this.element.addEventListener("mouseleave", this.hide);
-    this.element.addEventListener("focus", this.show);
-    this.element.addEventListener("blur", this.hide);
   }
 
   removeEventListeners() {
     this.element.removeEventListener("mouseenter", this.show);
     this.element.removeEventListener("mouseleave", this.hide);
-    this.element.removeEventListener("focus", this.show);
-    this.element.removeEventListener("blur", this.hide);
   }
 
   show = () => {
@@ -76,29 +71,12 @@ export default class extends Controller {
       middleware: [
         offset({ mainAxis: this.offsetValue, crossAxis: this.crossAxisValue, alignmentAxis: this.alignmentAxisValue }),
         flip(),
-        shift({ padding: 5 }),
-        arrow({ element: this.arrowTarget }),
+        shift({ padding: 5 })
       ],
     }).then(({ x, y, placement, middlewareData }) => {
       Object.assign(this.tooltipTarget.style, {
         left: `${x}px`,
         top: `${y}px`,
-      });
-
-      const { x: arrowX, y: arrowY } = middlewareData.arrow;
-      const staticSide = {
-        top: 'bottom',
-        right: 'left',
-        bottom: 'top',
-        left: 'right',
-      }[placement.split('-')[0]];
-
-      Object.assign(this.arrowTarget.style, {
-        left: arrowX != null ? `${arrowX}px` : '',
-        top: arrowY != null ? `${arrowY}px` : '',
-        right: '',
-        bottom: '',
-        [staticSide]: '-4px',
       });
     });
   }
