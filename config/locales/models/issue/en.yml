@@ -4,5 +4,5 @@ en:
     models:
       issue/exchange_rate_provider_missing: Exchange rate provider missing
       issue/exchange_rates_missing: Exchange rates missing
-      issue/unknown: Unknown issue occurred
       issue/missing_prices: Missing prices
+      issue/unknown: Unknown issue occurred

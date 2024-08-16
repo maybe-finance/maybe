@@ -1,7 +1,7 @@
 <%# locals: (account:) -%>
-<div data-controller="tooltip" data-tooltip-target="element" data-tooltip-placement-value="right" data-tooltip-offset-value=10 data-tooltip-cross-axis-value=50>
+<div data-controller="tooltip" data-tooltip-placement-value="right" data-tooltip-offset-value=10 data-tooltip-cross-axis-value=50>
   <%= lucide_icon("info", class: "w-4 h-4 shrink-0 text-gray-500") %>
-  <div id="tooltip" role="tooltip" data-tooltip-target="tooltip" class="tooltip bg-gray-700 text-sm p-2 rounded w-64">
+  <div role="tooltip" data-tooltip-target="tooltip" class="tooltip bg-gray-700 text-sm p-2 rounded w-64">
     <div class="text-white">
       <%= t(".total_value_tooltip") %>
     </div>
@@ -22,5 +22,4 @@
       </div>
     </div>
   </div>
-  <div data-tooltip-target="arrow"></div>
 </div>
