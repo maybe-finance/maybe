@@ -89,7 +89,7 @@ class Import < ApplicationRecord
 
     def get_raw_csv
       return nil if raw_csv_str.nil?
-      Import::Csv.new(raw_csv_str)
+      Import::Csv.new(raw_csv_str, col_sep:)
     end
 
     def should_initialize_csv?
@@ -103,7 +103,7 @@ class Import < ApplicationRecord
 
     # Uses the user-provided raw CSV + mappings to generate a normalized CSV for the import
     def generate_normalized_csv(csv_str)
-      Import::Csv.create_with_field_mappings(csv_str, expected_fields, column_mappings)
+      Import::Csv.create_with_field_mappings(csv_str, expected_fields, column_mappings, col_sep)
     end
 
     def update_csv(row_idx, col_idx, value)
@@ -177,7 +177,7 @@ class Import < ApplicationRecord
 
     def raw_csv_must_be_parsable
       begin
-        CSV.parse(raw_csv_str || "")
+        CSV.parse(raw_csv_str || "", col_sep:)
       rescue CSV::MalformedCSVError
         # i18n-tasks-use t('activerecord.errors.models.import.attributes.raw_csv_str.invalid_csv_format')
         errors.add(:raw_csv_str, :invalid_csv_format)

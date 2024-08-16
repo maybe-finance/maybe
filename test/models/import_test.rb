@@ -98,4 +98,18 @@ class ImportTest < ActiveSupport::TestCase
     @empty_import.reload
     assert @empty_import.failed?
   end
+
+  test "can create transactions from csv with custom column separator" do
+    loaded_import = @empty_import.dup
+
+    loaded_import.update! raw_csv_str: valid_csv_str_with_semicolon_separator, col_sep: ";"
+    transactions = loaded_import.dry_run
+
+    assert_equal 4, transactions.count
+
+    data = transactions.first.as_json(only: [ :name, :amount, :date ])
+    assert_equal data, { "amount" => "8.55", "date" => "2024-01-01", "name" => "Starbucks drink" }
+
+    assert_equal valid_csv_str, loaded_import.normalized_csv_str
+  end
 end
