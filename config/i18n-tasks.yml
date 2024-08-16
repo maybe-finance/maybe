@@ -25,7 +25,7 @@ search:
     - app/assets/builds
 ignore_unused:
   - 'activerecord.attributes.*' # i18n-tasks does not detect these on forms, forms validations (https://github.com/glebm/i18n-tasks/blob/0b4b483c82664f26c5696fb0f6aa1297356e4683/templates/config/i18n-tasks.yml#L146)
-  - 'activerecord.models.account*' # i18n-tasks does not detect use in dynamic model names (e.g. object.model_name.human)
+  - 'activerecord.models.*' # i18n-tasks does not detect use in dynamic model names (e.g. object.model_name.human)
   - 'helpers.submit.*' # i18n-tasks does not detect used at forms
   - 'helpers.label.*' # i18n-tasks does not detect used at forms
   - 'accounts.show.sync_message_*' # messages generated in the sync ActiveJob

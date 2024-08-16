@@ -78,7 +78,9 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
     create_exchange_rate(1.day.ago.to_date, from: "EUR", to: "USD", rate: 2)
     create_exchange_rate(Date.current, from: "EUR", to: "USD", rate: 2)
 
-    run_sync_for(@account)
+    with_env_overrides SYNTH_API_KEY: ENV["SYNTH_API_KEY"] || "fookey" do
+      run_sync_for(@account)
+    end
 
     usd_balances = @account.balances.where(currency: "USD").chronological.map(&:balance)
     eur_balances = @account.balances.where(currency: "EUR").chronological.map(&:balance)
@@ -88,30 +90,29 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
     assert_equal [ 42000, 40000, 40000 ], usd_balances # converted balances at rate of 2:1
   end
 
-  test "fails with error if exchange rate not available for any entry" do
-    create_transaction(account: @account, currency: "EUR")
+  test "raises issue if missing exchange rates" do
+    create_transaction(date: Date.current, account: @account, currency: "EUR")
+
+    ExchangeRate.expects(:find_rate).with(from: "EUR", to: "USD", date: Date.current).returns(nil)
+    @account.expects(:observe_missing_exchange_rates).with(from: "EUR", to: "USD", dates: [ Date.current ])
 
     syncer = Account::Balance::Syncer.new(@account)
 
-    with_env_overrides SYNTH_API_KEY: nil do
-      assert_raises Money::ConversionError do
-        syncer.run
-      end
-    end
+    syncer.run
   end
 
   # Account is able to calculate balances in its own currency (i.e. can still show a historical graph), but
   # doesn't have exchange rates available to convert those calculated balances to the family currency
-  test "completes with warning if exchange rates not available to convert to family currency" do
+  test "observes issue if exchange rate provider is not configured" do
     @account.update! currency: "EUR"
 
     syncer = Account::Balance::Syncer.new(@account)
 
+    @account.expects(:observe_missing_exchange_rate_provider)
+
     with_env_overrides SYNTH_API_KEY: nil do
       syncer.run
     end
-
-    assert_equal 1, syncer.warnings.count
   end
 
   test "overwrites existing balances and purges stale balances" do

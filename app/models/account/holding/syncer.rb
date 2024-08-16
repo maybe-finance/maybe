@@ -1,9 +1,6 @@
 class Account::Holding::Syncer
-  attr_reader :warnings
-
   def initialize(account, start_date: nil)
     @account = account
-    @warnings = []
     @sync_date_range = calculate_sync_start_date(start_date)..Date.current
     @portfolio = {}
 
@@ -68,6 +65,8 @@ class Account::Holding::Syncer
         trade_price = trade&.account_trade&.price
 
         price = get_cached_price(ticker, date) || trade_price
+
+        account.observe_missing_price(ticker:, date:) unless price
 
         account.holdings.build \
           date: date,
