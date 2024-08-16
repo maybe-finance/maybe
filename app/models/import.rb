@@ -2,6 +2,7 @@ class Import < ApplicationRecord
   belongs_to :account
 
   validate :raw_csv_must_be_parsable
+  validates :col_sep, inclusion: { in: Csv::COL_SEP_LIST }
 
   before_save :initialize_csv, if: :should_initialize_csv?
 

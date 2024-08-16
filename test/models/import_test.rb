@@ -10,6 +10,21 @@ class ImportTest < ActiveSupport::TestCase
     @loaded_import.update! raw_csv_str: valid_csv_str
   end
 
+  test "validates the correct col_sep" do
+    assert_equal ",", @empty_import.col_sep
+
+    assert @empty_import.valid?
+
+    @empty_import.col_sep = "invalid"
+    assert @empty_import.invalid?
+
+    @empty_import.col_sep = ","
+    assert @empty_import.valid?
+
+    @empty_import.col_sep = ";"
+    assert @empty_import.valid?
+  end
+
   test "raw csv input must conform to csv spec" do
     @empty_import.raw_csv_str = malformed_csv_str
     assert_not @empty_import.valid?

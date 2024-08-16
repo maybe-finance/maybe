@@ -1,4 +1,7 @@
 class Import::Csv
+  DEFAULT_COL_SEP = ",".freeze
+  COL_SEP_LIST = [ DEFAULT_COL_SEP, ";" ].freeze
+
   def self.parse_csv(csv_str)
     CSV.parse((csv_str || "").strip, headers: true, converters: [ ->(str) { str&.strip } ])
   end
