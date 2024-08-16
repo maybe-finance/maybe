@@ -2,14 +2,19 @@ class Import::Csv
   DEFAULT_COL_SEP = ",".freeze
   COL_SEP_LIST = [ DEFAULT_COL_SEP, ";" ].freeze
 
-  def self.parse_csv(csv_str)
-    CSV.parse((csv_str || "").strip, headers: true, converters: [ ->(str) { str&.strip } ])
+  def self.parse_csv(csv_str, col_sep: DEFAULT_COL_SEP)
+    CSV.parse(
+      csv_str&.strip || "",
+      headers: true,
+      col_sep:,
+      converters: [ ->(str) { str&.strip } ]
+    )
   end
 
-  def self.create_with_field_mappings(raw_csv_str, fields, field_mappings)
-    raw_csv = self.parse_csv(raw_csv_str)
+  def self.create_with_field_mappings(raw_csv_str, fields, field_mappings, col_sep = DEFAULT_COL_SEP)
+    raw_csv = self.parse_csv(raw_csv_str, col_sep:)
 
-    generated_csv_str = CSV.generate headers: fields.map { |f| f.key }, write_headers: true do |csv|
+    generated_csv_str = CSV.generate headers: fields.map { |f| f.key }, write_headers: true, col_sep: do |csv|
       raw_csv.each do |row|
         row_values = []
 
@@ -25,18 +30,19 @@ class Import::Csv
       end
     end
 
-    new(generated_csv_str)
+    new(generated_csv_str, col_sep:)
   end
 
-  attr_reader :csv_str
+  attr_reader :csv_str, :col_sep
 
-  def initialize(csv_str, column_validators: nil)
+  def initialize(csv_str, column_validators: nil, col_sep: DEFAULT_COL_SEP)
     @csv_str = csv_str
+    @col_sep = col_sep
     @column_validators = column_validators || {}
   end
 
   def table
-    @table ||= self.class.parse_csv(csv_str)
+    @table ||= self.class.parse_csv(csv_str, col_sep:)
   end
 
   def update_cell(row_idx, col_idx, value)

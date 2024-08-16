@@ -36,6 +36,14 @@ class Import::CsvTest < ActiveSupport::TestCase
     assert_not invalid_csv.valid?
   end
 
+  test "CSV with semicolon column separator" do
+    csv = Import::Csv.new(valid_csv_str_with_semicolon_separator, col_sep: ";")
+
+    assert_equal %w[ date name category tags amount ], csv.table.headers
+    assert_equal 4, csv.table.size
+    assert_equal "Paycheck", csv.table[3][1]
+  end
+
   test "csv with additional columns and empty values" do
     csv = Import::Csv.new valid_csv_with_missing_data
     assert csv.valid?
@@ -75,6 +83,35 @@ class Import::CsvTest < ActiveSupport::TestCase
     }
 
     csv = Import::Csv.create_with_field_mappings(raw_csv_str, fields, mappings)
+
+    assert_equal %w[ date name ], csv.table.headers
+    assert_equal 2, csv.table.size
+    assert_equal "Amazon stuff", csv.table[1][1]
+  end
+
+  test "can create CSV with expected columns, field mappings with validators and semicolon column separator" do
+    date_field = Import::Field.new \
+      key: "date",
+      label: "Date",
+      validator: method(:validate_iso_date)
+
+    name_field = Import::Field.new \
+      key: "name",
+      label: "Name"
+
+    fields = [ date_field, name_field ]
+
+    raw_csv_str = <<-ROWS
+      date;Custom Field Header;extra_field
+      invalid_date_value;Starbucks drink;Food
+      2024-01-02;Amazon stuff;Shopping
+    ROWS
+
+    mappings = {
+      "name" => "Custom Field Header"
+    }
+
+    csv = Import::Csv.create_with_field_mappings(raw_csv_str, fields, mappings, ";")
 
     assert_equal %w[ date name ], csv.table.headers
     assert_equal 2, csv.table.size
