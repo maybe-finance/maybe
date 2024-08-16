@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_13_170608) do
+ActiveRecord::Schema[7.2].define(version: 2024_08_16_071555) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -294,6 +294,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_13_170608) do
     t.string "normalized_csv_str"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "col_sep", default: ","
     t.index ["account_id"], name: "index_imports_on_account_id"
   end
 
