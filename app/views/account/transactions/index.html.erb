@@ -23,6 +23,9 @@
             <%= render entries %>
           <% end %>
         </div>
+        <div class="pt-4">
+          <%= render "pagination", pagy: @pagy %>
+        </div>
       <% end %>
     </div>
   </div>
