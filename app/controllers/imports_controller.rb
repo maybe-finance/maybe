@@ -18,14 +18,14 @@ class ImportsController < ApplicationController
 
   def update
     account = Current.family.accounts.find(params[:import][:account_id])
+    @import.update! account: account, col_sep: params[:import][:col_sep]
 
-    @import.update! account: account
     redirect_to load_import_path(@import), notice: t(".import_updated")
   end
 
   def create
     account = Current.family.accounts.find(params[:import][:account_id])
-    @import = Import.create!(account: account)
+    @import = Import.create! account: account, col_sep: params[:import][:col_sep]
 
     redirect_to load_import_path(@import), notice: t(".import_created")
   end

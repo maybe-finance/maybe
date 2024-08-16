@@ -58,8 +58,13 @@ en:
       new: New Import
     form:
       account: Account
+      col_sep: CSV column separator
+      col_sep_char:
+        '44': Comma (,)
+        '59': Semicolon (;)
       next: Next
       select_account: Select account
+      select_col_sep: Select CSV column separator
     import:
       complete: Complete
       completed_on: Completed on %{datetime}

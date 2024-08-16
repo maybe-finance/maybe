@@ -29,7 +29,7 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create import" do
     assert_difference("Import.count") do
-      post imports_url, params: { import: { account_id: @user.family.accounts.first.id } }
+      post imports_url, params: { import: { account_id: @user.family.accounts.first.id, col_sep: "," } }
     end
 
     assert_redirected_to load_import_path(Import.ordered.first)
@@ -41,7 +41,7 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update import" do
-    patch import_url(@empty_import), params: { import: { account_id: @empty_import.account_id } }
+    patch import_url(@empty_import), params: { import: { account_id: @empty_import.account_id, col_sep: "," } }
     assert_redirected_to load_import_path(@empty_import)
   end
 
