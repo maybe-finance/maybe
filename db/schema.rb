@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_16_071555) do
+ActiveRecord::Schema[7.2].define(version: 2024_08_17_144454) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -289,7 +289,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_16_071555) do
     t.uuid "account_id", null: false
     t.jsonb "column_mappings"
     t.enum "status", default: "pending", enum_type: "import_status"
-    t.string "raw_csv_str"
+    t.string "raw_file_str"
     t.string "normalized_csv_str"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

@@ -1,7 +1,7 @@
 class Import < ApplicationRecord
   belongs_to :account
 
-  validate :raw_csv_must_be_parsable
+  validate :raw_file_must_be_parsable
   validates :col_sep, inclusion: { in: Csv::COL_SEP_LIST }
 
   before_save :initialize_csv, if: :should_initialize_csv?
@@ -19,7 +19,7 @@ class Import < ApplicationRecord
   end
 
   def loaded?
-    raw_csv_str.present?
+    raw_file_str.present?
   end
 
   def configured?
@@ -88,16 +88,16 @@ class Import < ApplicationRecord
     end
 
     def get_raw_csv
-      return nil if raw_csv_str.nil?
-      Import::Csv.new(raw_csv_str, col_sep:)
+      return nil if raw_file_str.nil?
+      Import::Csv.new(raw_file_str, col_sep:)
     end
 
     def should_initialize_csv?
-      raw_csv_str_changed? || column_mappings_changed?
+      raw_file_str_changed? || column_mappings_changed?
     end
 
     def initialize_csv
-      generated_csv = generate_normalized_csv(raw_csv_str)
+      generated_csv = generate_normalized_csv(raw_file_str)
       self.normalized_csv_str = generated_csv.table.to_s
     end
 
@@ -175,12 +175,12 @@ class Import < ApplicationRecord
       end
     end
 
-    def raw_csv_must_be_parsable
+    def raw_file_must_be_parsable
       begin
-        CSV.parse(raw_csv_str || "", col_sep:)
+        CSV.parse(raw_file_str || "", col_sep:)
       rescue CSV::MalformedCSVError
-        # i18n-tasks-use t('activerecord.errors.models.import.attributes.raw_csv_str.invalid_csv_format')
-        errors.add(:raw_csv_str, :invalid_csv_format)
+        # i18n-tasks-use t('activerecord.errors.models.import.attributes.raw_file_str.invalid_csv_format')
+        errors.add(:raw_file_str, :invalid_csv_format)
       end
     end
 end

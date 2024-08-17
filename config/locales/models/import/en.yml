@@ -5,5 +5,5 @@ en:
       models:
         import:
           attributes:
-            raw_csv_str:
+            raw_file_str:
               invalid_csv_format: is not a valid CSV format

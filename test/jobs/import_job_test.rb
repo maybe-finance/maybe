@@ -5,7 +5,7 @@ class ImportJobTest < ActiveJob::TestCase
 
   test "import is published" do
     import = imports(:empty_import)
-    import.update! raw_csv_str: valid_csv_str
+    import.update! raw_file_str: valid_csv_str
 
     assert import.pending?
 
