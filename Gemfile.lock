@@ -272,7 +272,7 @@ GEM
       racc
     pg (1.5.7)
     prism (0.30.0)
-    propshaft (0.9.0)
+    propshaft (0.9.1)
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
       rack
