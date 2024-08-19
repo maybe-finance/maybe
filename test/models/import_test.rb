@@ -7,7 +7,7 @@ class ImportTest < ActiveSupport::TestCase
     @empty_import = imports(:empty_import)
 
     @loaded_import = @empty_import.dup
-    @loaded_import.update! raw_csv_str: valid_csv_str
+    @loaded_import.update! raw_file_str: valid_csv_str
   end
 
   test "validates the correct col_sep" do
@@ -26,17 +26,17 @@ class ImportTest < ActiveSupport::TestCase
   end
 
   test "raw csv input must conform to csv spec" do
-    @empty_import.raw_csv_str = malformed_csv_str
+    @empty_import.raw_file_str = malformed_csv_str
     assert_not @empty_import.valid?
 
-    @empty_import.raw_csv_str = valid_csv_str
+    @empty_import.raw_file_str = valid_csv_str
     assert @empty_import.valid?
   end
 
   test "can update csv value without affecting raw input" do
     assert_equal "Starbucks drink", @loaded_import.csv.table[0][1]
 
-    prior_raw_csv_str_value = @loaded_import.raw_csv_str
+    prior_raw_file_str_value = @loaded_import.raw_file_str
     prior_normalized_csv_str_value = @loaded_import.normalized_csv_str
 
     @loaded_import.update_csv! \
@@ -45,7 +45,7 @@ class ImportTest < ActiveSupport::TestCase
       value: "new_category"
 
     assert_equal "new_category", @loaded_import.csv.table[0][1]
-    assert_equal prior_raw_csv_str_value, @loaded_import.raw_csv_str
+    assert_equal prior_raw_file_str_value, @loaded_import.raw_file_str
     assert_not_equal prior_normalized_csv_str_value, @loaded_import.normalized_csv_str
   end
 
@@ -74,7 +74,7 @@ class ImportTest < ActiveSupport::TestCase
   end
 
   test "publishes a valid import with missing data" do
-    @empty_import.update! raw_csv_str: valid_csv_with_missing_data
+    @empty_import.update! raw_file_str: valid_csv_with_missing_data
     assert_difference -> { Category.count } => 1,
                       -> { Account::Transaction.count } => 2,
                       -> { Account::Entry.count } => 2 do
@@ -89,7 +89,7 @@ class ImportTest < ActiveSupport::TestCase
   end
 
   test "failed publish results in error status" do
-    @empty_import.update! raw_csv_str: valid_csv_with_invalid_values
+    @empty_import.update! raw_file_str: valid_csv_with_invalid_values
 
     assert_difference "Account::Transaction.count", 0 do
       @empty_import.publish
@@ -102,7 +102,7 @@ class ImportTest < ActiveSupport::TestCase
   test "can create transactions from csv with custom column separator" do
     loaded_import = @empty_import.dup
 
-    loaded_import.update! raw_csv_str: valid_csv_str_with_semicolon_separator, col_sep: ";"
+    loaded_import.update! raw_file_str: valid_csv_str_with_semicolon_separator, col_sep: ";"
     transactions = loaded_import.dry_run
 
     assert_equal 4, transactions.count

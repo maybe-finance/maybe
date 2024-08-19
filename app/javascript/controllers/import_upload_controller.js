@@ -2,6 +2,11 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["input", "preview", "submit", "filename", "filesize"]
+  static values = {
+    acceptedTypes: Array, // ["text/csv", "application/csv", ".csv"]
+    acceptedExtension: String, // "csv"
+    unacceptableTypeLabel: String, // "Only CSV files are allowed."
+  };
 
   connect() {
     this.submitTarget.disabled = true
@@ -30,13 +35,17 @@ export default class extends Controller {
     event.currentTarget.classList.remove("bg-gray-100")
 
     const file = event.dataTransfer.files[0]
-    if (file && this._isCSVFile(file)) {
+    if (file && this._formatAcceptable(file)) {
       this._setFileInput(file);
       this._fileAdded(file)
     } else {
       this.previewTarget.classList.add("text-red-500")
-      this.previewTarget.textContent = "Only CSV files are allowed."
+      this.previewTarget.textContent = this.unacceptableTypeLabelValue
     }
+  }
+
+  click() {
+    this.inputTarget.click();
   }
 
   // Private
@@ -57,7 +66,7 @@ export default class extends Controller {
     if (file) {
       if (file.size > fileSizeLimit) {
         this.previewTarget.classList.add("text-red-500")
-        this.previewTarget.textContent = "File size exceeds the limit of 5MB"
+        this.previewTarget.textContent = this.unacceptableTypeLabelValue
         return
       }
 
@@ -80,10 +89,9 @@ export default class extends Controller {
     }
   }
 
-  _isCSVFile(file) {
-    const acceptedTypes = ["text/csv", "application/csv", ".csv"]
+  _formatAcceptable(file) {
     const extension = file.name.split('.').pop().toLowerCase()
-    return acceptedTypes.includes(file.type) || extension === "csv"
+    return this.acceptedTypesValue.includes(file.type) || extension === this.acceptedExtensionValue
   }
 
   _setFileInput(file) {

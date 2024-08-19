@@ -72,7 +72,7 @@ class Import::CsvTest < ActiveSupport::TestCase
 
     fields = [ date_field, name_field ]
 
-    raw_csv_str = <<-ROWS
+    raw_file_str = <<-ROWS
       date,Custom Field Header,extra_field
       invalid_date_value,Starbucks drink,Food
       2024-01-02,Amazon stuff,Shopping
@@ -82,7 +82,7 @@ class Import::CsvTest < ActiveSupport::TestCase
       "name" => "Custom Field Header"
     }
 
-    csv = Import::Csv.create_with_field_mappings(raw_csv_str, fields, mappings)
+    csv = Import::Csv.create_with_field_mappings(raw_file_str, fields, mappings)
 
     assert_equal %w[ date name ], csv.table.headers
     assert_equal 2, csv.table.size
@@ -101,7 +101,7 @@ class Import::CsvTest < ActiveSupport::TestCase
 
     fields = [ date_field, name_field ]
 
-    raw_csv_str = <<-ROWS
+    raw_file_str = <<-ROWS
       date;Custom Field Header;extra_field
       invalid_date_value;Starbucks drink;Food
       2024-01-02;Amazon stuff;Shopping
@@ -111,7 +111,7 @@ class Import::CsvTest < ActiveSupport::TestCase
       "name" => "Custom Field Header"
     }
 
-    csv = Import::Csv.create_with_field_mappings(raw_csv_str, fields, mappings, ";")
+    csv = Import::Csv.create_with_field_mappings(raw_file_str, fields, mappings, ";")
 
     assert_equal %w[ date name ], csv.table.headers
     assert_equal 2, csv.table.size

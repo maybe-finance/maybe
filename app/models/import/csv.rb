@@ -11,8 +11,8 @@ class Import::Csv
     )
   end
 
-  def self.create_with_field_mappings(raw_csv_str, fields, field_mappings, col_sep = DEFAULT_COL_SEP)
-    raw_csv = self.parse_csv(raw_csv_str, col_sep:)
+  def self.create_with_field_mappings(raw_file_str, fields, field_mappings, col_sep = DEFAULT_COL_SEP)
+    raw_csv = self.parse_csv(raw_file_str, col_sep:)
 
     generated_csv_str = CSV.generate headers: fields.map { |f| f.key }, write_headers: true, col_sep: do |csv|
       raw_csv.each do |row|

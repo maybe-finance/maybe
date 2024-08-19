@@ -9,7 +9,7 @@ completed_import:
     name: name
     category: category
     amount: amount
-  raw_csv_str: |
+  raw_file_str: |
     date,name,category,tags,amount
     2024-01-01,Starbucks drink,Food & Drink,Test Tag,-20
   normalized_csv_str: |

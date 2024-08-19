@@ -40,6 +40,7 @@ en:
         "inflow" (income)
       requirement3: Can have 0 or more tags separated by |
     csv_upload:
+      allowed_filetypes: Only CSV files are allowed.
       confirm_accept: Yep, start over!
       confirm_body: This will reset your import. Any changes you have made to the
         CSV will be erased.
