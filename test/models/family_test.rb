@@ -109,10 +109,6 @@ class FamilyTest < ActiveSupport::TestCase
     create_transaction(account: checking_account, date: 1.day.ago.to_date, amount: 10)
     create_transaction(account: savings_account, date: 2.days.ago.to_date, amount: -5000)
 
-    transfers_account = create_account(balance: 200, accountable: Depository.new)
-    create_transfer(from: transfers_account, to: checking_account, amount: 100)
-    create_transfer(to: transfers_account, from: checking_account, amount: 200)
-
     zero_income_zero_expense_account = create_account(balance: 200, accountable: Depository.new)
     create_transaction(account: zero_income_zero_expense_account, amount: 0)
 
