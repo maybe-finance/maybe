@@ -105,24 +105,23 @@ class FamilyTest < ActiveSupport::TestCase
   test "calculates top movers" do
     checking_account = create_account(balance: 500, accountable: Depository.new)
     savings_account = create_account(balance: 1000, accountable: Depository.new)
-
     create_transaction(account: checking_account, date: 2.days.ago.to_date, amount: -1000)
     create_transaction(account: checking_account, date: 1.day.ago.to_date, amount: 10)
     create_transaction(account: savings_account, date: 2.days.ago.to_date, amount: -5000)
+
+    zero_income_zero_expense_account = create_account(balance: 200, accountable: Depository.new)
+    create_transaction(account: zero_income_zero_expense_account, amount: 0)
 
     snapshot = @family.snapshot_account_transactions
     top_spenders = snapshot[:top_spenders]
     top_earners = snapshot[:top_earners]
     top_savers = snapshot[:top_savers]
 
-    assert_equal 10, top_spenders.first.spending
-
-    assert_equal 5000, top_earners.first.income
-    assert_equal 1000, top_earners.second.income
-
-    assert_equal 1, top_savers.first.savings_rate
-    assert_equal ((1000 - 10).to_f / 1000), top_savers.second.savings_rate
+    assert_equal [ 10 ], top_spenders.map(&:spending)
+    assert_equal [ 5000, 1000 ], top_earners.map(&:income)
+    assert_equal [ 1, 0.99 ], top_savers.map(&:savings_rate)
   end
+
 
   test "calculates rolling transaction totals" do
     account = create_account(balance: 1000, accountable: Depository.new)

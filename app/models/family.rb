@@ -46,7 +46,8 @@ class Family < ApplicationRecord
                       .where("account_entries.date <= ?", period.date_range.end)
                       .where("account_entries.marked_as_transfer = ?", false)
                       .where("account_entries.entryable_type = ?", "Account::Transaction")
-                      .group("id")
+                      .group("accounts.id")
+                      .having("SUM(ABS(account_entries.amount)) > 0")
                       .to_a
 
     results.each do |r|
