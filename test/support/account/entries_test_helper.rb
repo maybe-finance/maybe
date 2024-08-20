@@ -1,4 +1,11 @@
 module Account::EntriesTestHelper
+  def create_transfer(from:, to:, amount: 100)
+    inflow = create_transaction(account: to, amount: amount.abs, marked_as_transfer: true)
+    outflow = create_transaction(account: from, amount: -amount.abs, marked_as_transfer: true)
+
+    Account::Transfer.create!(entries: [ inflow, outflow ])
+  end
+
   def create_transaction(attributes = {})
     entry_attributes = attributes.except(:category, :tags, :merchant)
     transaction_attributes = attributes.slice(:category, :tags, :merchant)
