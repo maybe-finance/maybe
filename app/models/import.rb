@@ -2,7 +2,9 @@ class Import < ApplicationRecord
   belongs_to :account
 
   validate :raw_file_must_be_parsable
-  validates :col_sep, inclusion: { in: Csv::COL_SEP_LIST }
+  validates :col_sep, inclusion: { in: Csv::COL_SEP_LIST }, if: -> { raw_type == "csv" }
+
+  belongs_to :pdf_regex, optional: true
 
   before_save :initialize_csv, if: :should_initialize_csv?
 
@@ -11,6 +13,13 @@ class Import < ApplicationRecord
   store_accessor :column_mappings, :define_column_mapping_keys
 
   scope :ordered, -> { order(created_at: :desc) }
+
+  delegate :parse_raw, to: :raw_processor
+  delegate :available_fields, to: :raw_processor
+  delegate :generate_normalized_csv, to: :raw_processor
+
+  serialize :raw_file_str, coder: Import::FileCoder
+  encrypts :raw_file_str
 
   FALLBACK_TRANSACTION_NAME = "Imported transaction"
 
@@ -32,10 +41,6 @@ class Import < ApplicationRecord
 
   def csv
     get_normalized_csv_with_validation
-  end
-
-  def available_headers
-    get_raw_csv.table.headers
   end
 
   def get_selected_header_for_field(field)
@@ -87,23 +92,12 @@ class Import < ApplicationRecord
       csv
     end
 
-    def get_raw_csv
-      return nil if raw_file_str.nil?
-      Import::Csv.new(raw_file_str, col_sep:)
-    end
-
     def should_initialize_csv?
       raw_file_str_changed? || column_mappings_changed?
     end
 
     def initialize_csv
-      generated_csv = generate_normalized_csv(raw_file_str)
-      self.normalized_csv_str = generated_csv.table.to_s
-    end
-
-    # Uses the user-provided raw CSV + mappings to generate a normalized CSV for the import
-    def generate_normalized_csv(csv_str)
-      Import::Csv.create_with_field_mappings(csv_str, expected_fields, column_mappings, col_sep)
+      self.normalized_csv_str = generate_normalized_csv.table.to_s
     end
 
     def update_csv(row_idx, col_idx, value)
@@ -175,12 +169,28 @@ class Import < ApplicationRecord
       end
     end
 
+    def raw_processor
+      @raw_processor ||= case raw_type
+      when "csv"
+        RawCsv.new(self)
+      when "pdf"
+        RawPdf.new(self)
+      else
+        raise ArgumentError
+      end
+    end
+
     def raw_file_must_be_parsable
+      return unless loaded?
+
       begin
-        CSV.parse(raw_file_str || "", col_sep:)
+        parse_raw
       rescue CSV::MalformedCSVError
         # i18n-tasks-use t('activerecord.errors.models.import.attributes.raw_file_str.invalid_csv_format')
         errors.add(:raw_file_str, :invalid_csv_format)
+      rescue ::PDF::Reader::MalformedPDFError
+        # i18n-tasks-use t('activerecord.errors.models.import.attributes.raw_file_str.invalid_pdf_format')
+        errors.add(:raw_file_str, :invalid_pdf_format)
       end
     end
 end

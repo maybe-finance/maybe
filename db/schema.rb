@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_23_125526) do
+ActiveRecord::Schema[7.2].define(version: 2024_08_23_175026) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -309,7 +309,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_23_125526) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "col_sep", default: ","
+    t.string "raw_type", null: false
+    t.uuid "pdf_regex_id"
     t.index ["account_id"], name: "index_imports_on_account_id"
+    t.index ["pdf_regex_id"], name: "index_imports_on_pdf_regex_id"
   end
 
   create_table "institutions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -368,6 +371,18 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_23_125526) do
   create_table "other_liabilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "pdf_regexes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "family_id", null: false
+    t.string "name", null: false
+    t.string "transaction_line_regex_str", null: false
+    t.string "metadata_regex_str"
+    t.string "pdf_transaction_date_format", null: false
+    t.string "pdf_range_date_format"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["family_id"], name: "index_pdf_regexes_on_family_id"
   end
 
   create_table "properties", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -463,8 +478,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_23_125526) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "categories", "families"
   add_foreign_key "imports", "accounts"
+  add_foreign_key "imports", "pdf_regexes"
   add_foreign_key "institutions", "families"
   add_foreign_key "merchants", "families"
+  add_foreign_key "pdf_regexes", "families"
   add_foreign_key "taggings", "tags"
   add_foreign_key "tags", "families"
   add_foreign_key "users", "families"

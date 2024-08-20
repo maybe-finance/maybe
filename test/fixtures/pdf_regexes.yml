@@ -1,0 +1,7 @@
+awesome_bank_pdf_regex:
+  family: dylan_family
+  name: Awesome Bank Pdf Regex
+  transaction_line_regex_str: '(?<date>\w{3}\s\d\d?\,\s\d{4})\s+(?<name>.+?(?=\s{4}\s*))\s+\S(?<amount>(\d?\d?\d\,)*(\d?\d?\d\.\d\d))\s+\S(?<balance>(\d?\d?\d\,)*(\d?\d?\d\.\d\d))'
+  metadata_regex_str: '.*Account transactions from (?<start_date>\w+\s\d\d?\,\s\d{4}) to (?<end_date>\w+\s\d\d?\,\s\d{4}).*'
+  pdf_transaction_date_format: "%b %-d, %Y"
+  pdf_range_date_format: "%B %-d,%Y"

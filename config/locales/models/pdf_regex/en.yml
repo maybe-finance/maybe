@@ -1,0 +1,5 @@
+---
+en:
+  activerecord:
+    models:
+      pdf_regex: PDF regex

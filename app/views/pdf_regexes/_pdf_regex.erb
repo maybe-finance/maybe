@@ -1,0 +1,31 @@
+<div id="<%= dom_id(pdf_regex) %>" class="flex justify-between mx-4 py-5 border-b last:border-b-0 border-alpha-black-50">
+  <div class="flex items-center gap-2">
+    <div class="w-8 h-8 flex items-center justify-center rounded-full text-xs font-medium bg-blue-500/10 text-blue-500">
+      <%= pdf_regex.name[0].upcase %>
+    </div>
+    <%= pdf_regex.name %>
+  </div>
+  <%= contextual_menu do %>
+    <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+      <%= link_to edit_pdf_regex_path(pdf_regex),
+                  class: "block w-full py-2 px-3 space-x-2 text-gray-900 hover:bg-gray-50 flex items-center rounded-lg",
+                  data: { turbo_frame: :modal } do %>
+        <%= lucide_icon "pencil-line", class: "w-5 h-5 text-gray-500" %>
+
+        <span><%= t(".edit") %></span>
+      <% end %>
+
+      <%= button_to pdf_regex_path(pdf_regex),
+                        method: :delete,
+                        class: "block w-full py-2 px-3 space-x-2 text-red-600 hover:bg-red-50 flex items-center rounded-lg",
+                        data: {
+                          turbo_confirm: {
+                            title: t(".confirm_title"),
+                            accept: t(".confirm_accept", name: pdf_regex.name)
+                          }
+                        } do %>
+            <%= lucide_icon("trash-2", class: "w-5 h-5 mr-2") %><%= t(".delete") %>
+          <% end %>
+    </div>
+  <% end %>
+</div>

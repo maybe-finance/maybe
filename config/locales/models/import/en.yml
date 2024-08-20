@@ -7,3 +7,4 @@ en:
           attributes:
             raw_file_str:
               invalid_csv_format: is not a valid CSV format
+              invalid_pdf_format: is not a valid PDF format

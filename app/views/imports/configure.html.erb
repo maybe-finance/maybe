@@ -4,17 +4,17 @@
   <h1 class="sr-only"><%= t(".configure_title") %></h1>
 
   <div class="text-center space-y-2">
-    <h2 class="text-3xl text-gray-900 font-medium"><%= t(".configure_subtitle") %></h2>
-    <p class="text-gray-500 text-sm"><%= t(".configure_description") %></p>
+    <h2 class="text-3xl text-gray-900 font-medium"><%= t(".configure_subtitle_#{@import.raw_type}") %></h2>
+    <p class="text-gray-500 text-sm"><%= t(".configure_description_#{@import.raw_type}") %></p>
   </div>
 
   <%= styled_form_with model: @import, url: configure_import_path(@import), class: "space-y-4" do |form| %>
       <%= form.fields_for :column_mappings do |mappings| %>
         <% @import.expected_fields.each do |field| %>
           <%= mappings.select field.key,
-                              options_for_select(@import.available_headers, @import.get_selected_header_for_field(field)),
+                              options_for_select(@import.available_fields, @import.get_selected_header_for_field(field)),
                               label: field.label,
-                              include_blank: field.optional? ? t(".optional") : false %>
+                              include_blank: field.optional? ? t(".optional_#{@import.raw_type}") : false %>
         <% end %>
       <% end %>
 

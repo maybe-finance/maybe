@@ -1,0 +1,25 @@
+---
+en:
+  pdf_regexes:
+    create:
+      created: PDF Regex created
+    destroy:
+      success: PDF regex removed
+    edit:
+      edit: Edit PDF regex
+    form:
+      create: Create PDF regex
+      update: Update
+    index:
+      empty: No PDF regexes yet
+      new: New PDF regex
+      pdf_regexes: PDF regexes
+    new:
+      new: New PDF regex
+    pdf_regex:
+      confirm_accept: Delete PDF regex
+      confirm_title: Delete Entry?
+      delete: Delete PDF regex
+      edit: Edit
+    update:
+      updated: PDF regex updated

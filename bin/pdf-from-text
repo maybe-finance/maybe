@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Utility script to create fake bank/credit card statements
+# Create a PDF file from a colection of numbered txt files in a given folder
+# ex: bin/pdf-from-text tmp/pdfs/026af4
+
+require "rubygems"
+require "bundler/inline"
+
+gemfile do
+  source 'https://rubygems.org'
+  gem 'prawn'
+end
+
+folder_path =  File.expand_path(ARGV[0])
+pdf_path = File.join(File.dirname(folder_path), [File.basename(folder_path), "pdf"].join("."))
+page_paths = Dir["#{folder_path}/*"]
+page_paths = page_paths.select { |file| /\d+.txt/.match(File.basename(file)) }
+page_paths = page_paths.sort_by { |file| /(?<page_number>\d+).txt/.match(File.basename(file))[:page_number].to_i }
+
+raise(ArgumentError, "no txt pages found") if page_paths.size == 0
+
+def page_lines(page_path)
+  File.read(page_path)
+    .gsub(/^([^\S\r\n]+)/m) { |m| Prawn::Text::NBSP * m.size }
+end
+
+Prawn::Document.generate(pdf_path) do |pdf|
+  # mono font in order to spaces render same size as letters
+  pdf.font(File.expand_path("~/Library/Fonts/DejaVu Sans Mono for Powerline.ttf"), size: 6)
+  page_paths[0..-2].each do |page_path|
+    pdf.text(page_lines(page_path))
+    pdf.start_new_page
+  end
+  pdf.text(page_lines(page_paths[-1]))
+end
+
+puts "pdf created in: #{pdf_path}"

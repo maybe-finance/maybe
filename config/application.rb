@@ -29,5 +29,11 @@ module Maybe
     config.active_job.queue_adapter = :good_job
 
     config.app_mode = (ENV["SELF_HOSTING_ENABLED"] == "true" ? "self_hosted" : "managed").inquiry
+
+    config.active_record.encryption.primary_key = ENV["ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY"]
+    config.active_record.encryption.deterministic_key = ENV["ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY"]
+    config.active_record.encryption.key_derivation_salt = ENV["ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT"]
+
+    config.x.maybe.pdf_imports_enabled = ActiveModel::Type::Boolean.new.cast(ENV["MAYBE_PDF_IMPORTS"])
   end
 end

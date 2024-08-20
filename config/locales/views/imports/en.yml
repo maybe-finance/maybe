@@ -8,9 +8,13 @@ en:
       clean_import: Clean import
       invalid_csv: Please load a CSV first
     configure:
-      configure_description: Select the columns that match the necessary data fields,
-        so that the columns in your CSV can be correctly mapped with our format.
-      configure_subtitle: Setup your CSV file
+      configure_description_csv: Select the columns that match the necessary data
+        fields, so that the columns in your CSV can be correctly mapped with our format.
+      configure_description_pdf: Select the regex variables that match the necessary
+        data fields, so that the regex captured fields on your PDF can be correctly
+        mapped with our format.
+      configure_subtitle_csv: Setup your CSV file
+      configure_subtitle_pdf: Setup your PDF file regex
       configure_title: Configure import
       confirm_accept: Change mappings
       confirm_body: Changing your mappings may erase any edits you have made to the
@@ -18,7 +22,8 @@ en:
       confirm_title: Are you sure?
       invalid_csv: Please load a CSV first
       next: Next
-      optional: "(optional) No column selected"
+      optional_csv: "(optional) No column selected"
+      optional_pdf: "(optional) No regex capture selected"
     confirm:
       confirm_description: Preview your transactions below and check to see if there
         are any changes that are required.
@@ -79,10 +84,12 @@ en:
     index:
       imports: Imports
       new: New import
+      pdf_regexes: PDF regexes
       title: Imports
     load:
-      description: Create a spreadsheet or upload an exported CSV from your financial
+      description_csv: Create a spreadsheet or upload an exported CSV from your financial
         institution.
+      description_pdf: Upload an exported PDF from your financial institution.
       load_title: Load import
       subtitle: Import your transactions
     load_csv:
@@ -91,6 +98,13 @@ en:
       description_text: Importing transactions can only be done for one account at
         a time. You will need to go through this process again for other accounts.
       header_text: Select the account your transactions will belong to
+    pdf_upload:
+      allowed_filetypes: Only PDF files are allowed.
+      confirm_accept: Yep, start over!
+      confirm_body: This will reset your import. Any data changes you have made to
+        processed data from this PDF will be erased.
+      confirm_title: Are you sure?
+      next: Next
     publish:
       import_published: Import has started in the background
       invalid_data: Your import is invalid
@@ -101,6 +115,7 @@ en:
       import_from_csv: New import from CSV
       import_from_empower: Import from Empower
       import_from_mint: Import from Mint
+      import_from_pdf: New import from PDF
       import_transactions: Import transactions
       resume_latest_import: Resume latest import
       soon: Soon

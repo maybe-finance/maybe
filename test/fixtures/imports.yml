@@ -1,9 +1,11 @@
 empty_import:
+  raw_type: csv
   account: depository
   created_at: <%= 1.minute.ago %>
 
 completed_import:
   account: depository
+  raw_type: csv
   column_mappings:
     date: date
     name: name

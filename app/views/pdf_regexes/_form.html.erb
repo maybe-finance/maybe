@@ -1,0 +1,60 @@
+<%= styled_form_with model: pdf_regex, data: { turbo: false } do |form| %>
+  <div class="flex flex-col space-y-4 w-96">
+    <fieldset class="relative">
+      <span class="pointer-events-none absolute inset-y-3.5 left-3 flex items-center pl-1 block w-1 rounded-lg"></span>
+      <%= form.text_field :name,
+                          value: pdf_regex.name,
+                          autofocus: "",
+                          required: true,
+                          placeholder: "Enter pdf_regex name",
+                          class: "rounded-lg w-full focus:ring-black focus:border-transparent placeholder:text-gray-500 pl-6" %>
+    </fieldset>
+
+    <fieldset class="relative">
+      <span class="pointer-events-none absolute inset-y-3.5 left-3 flex items-center pl-1 block w-1 rounded-lg"></span>
+      <%= form.text_area :transaction_line_regex_str,
+                          autofocus: "",
+                          required: true,
+                          size: "70x5",
+                          placeholder: "Enter transaction_line_regex_str",
+                          class: "rounded-lg w-full focus:ring-black focus:border-transparent placeholder:text-gray-500 pl-6" %>
+    </fieldset>
+
+    <fieldset class="relative">
+      <span class="pointer-events-none absolute inset-y-3.5 left-3 flex items-center pl-1 block w-1 rounded-lg"></span>
+      <%= form.text_area :metadata_regex_str,
+                          autofocus: "",
+                          size: "70x5",
+                          placeholder: "Enter metadata_regex_str",
+                          class: "rounded-lg w-full focus:ring-black focus:border-transparent placeholder:text-gray-500 pl-6" %>
+    </fieldset>
+
+    <fieldset class="relative">
+      <span class="pointer-events-none absolute inset-y-3.5 left-3 flex items-center pl-1 block w-1 rounded-lg"></span>
+      <%= form.text_field :pdf_transaction_date_format,
+                          autofocus: "",
+                          required: true,
+                          placeholder: "Enter pdf_transaction_date_format",
+                          class: "rounded-lg w-full focus:ring-black focus:border-transparent placeholder:text-gray-500 pl-6" %>
+    </fieldset>
+
+    <fieldset class="relative">
+      <span class="pointer-events-none absolute inset-y-3.5 left-3 flex items-center pl-1 block w-1 rounded-lg"></span>
+      <%= form.text_field :pdf_range_date_format,
+                          autofocus: "",
+                          required: true,
+                          placeholder: "Enter pdf_transaction_date_format",
+                          class: "rounded-lg w-full focus:ring-black focus:border-transparent placeholder:text-gray-500 pl-6" %>
+    </fieldset>
+
+    <section>
+      <%= hidden_field_tag :pdf_regex_id, params[:pdf_regex_id] %>
+
+      <% if pdf_regex.persisted? %>
+        <%= form.submit t(".update") %>
+      <% else %>
+        <%= form.submit t(".create") %>
+      <% end %>
+    </section>
+  </div>
+<% end %>

@@ -9,8 +9,9 @@ class ImportsController < ApplicationController
   end
 
   def new
+    raw_type = params[:raw_type] || "csv"
     account = Current.family.accounts.find_by(id: params[:account_id])
-    @import = Import.new account: account
+    @import = Import.new account: account, raw_type: raw_type
   end
 
   def edit
@@ -18,14 +19,18 @@ class ImportsController < ApplicationController
 
   def update
     account = Current.family.accounts.find(params[:import][:account_id])
-    @import.update! account: account, col_sep: params[:import][:col_sep]
+    pdf_regex = params[:import][:pdf_regex_id].present? ? Current.family.pdf_regexes.find(params[:import][:pdf_regex_id]) : nil
+    @import.update! account: account, col_sep: params[:import][:col_sep], pdf_regex: pdf_regex
 
     redirect_to load_import_path(@import), notice: t(".import_updated")
   end
 
   def create
+    create_params = params.require(:import).permit(:col_sep, :raw_type)
     account = Current.family.accounts.find(params[:import][:account_id])
-    @import = Import.create! account: account, col_sep: params[:import][:col_sep]
+    pdf_regex = params[:import][:pdf_regex_id].present? ? Current.family.pdf_regexes.find(params[:import][:pdf_regex_id]) : nil
+
+    @import = Import.create! account: account, raw_type: create_params[:raw_type] || "csv", col_sep: create_params[:col_sep], pdf_regex: pdf_regex
 
     redirect_to load_import_path(@import), notice: t(".import_created")
   end

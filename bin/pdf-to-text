@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Utility script to create fake bank/credit card statements
+# Create text files for each page of a given PDF
+# ex: bin/pdf-to-text some-folder/file.pdf
+
+require "rubygems"
+require 'securerandom'
+require "bundler/inline"
+
+gemfile do
+  source 'https://rubygems.org'
+  gem 'pdf-reader'
+end
+
+io = open(ARGV[0])
+reader = ::PDF::Reader.new(io)
+folder_path =  File.join(File.expand_path(File.dirname(File.dirname(__FILE__))), "tmp/pdfs/#{SecureRandom.hex(3)}")
+
+Dir.mkdir(folder_path)
+
+reader.pages.each do |page|
+  File.write(File.join(folder_path, "#{page.number}.txt"), page.text)
+end
+
+puts "pdf text written into: #{folder_path}"

@@ -42,6 +42,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :pdf_regexes, except: %i[show]
+
   resources :tags, except: %i[show destroy] do
     resources :deletions, only: %i[new create], module: :tag
   end

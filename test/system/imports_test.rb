@@ -150,6 +150,46 @@ class ImportsTest < ApplicationSystemTestCase
     assert_selector "h1", text: "Imports"
   end
 
+  test "can perform import by PDF upload" do
+    trigger_import_from_settings
+    verify_import_modal
+
+    within "#modal" do
+      click_link "New import from PDF"
+    end
+
+    # 1) Create import step
+    assert_selector "h1", text: "New import"
+
+    within "form" do
+      select "Checking Account", from: "import_account_id"
+      select "Awesome Bank Pdf Regex", from: "import_pdf_regex_id"
+    end
+
+    click_button "Next"
+
+    find(".raw-file-drop-box").drop File.join(file_fixture_path, "transactions.pdf")
+    assert_selector "div.pdf-preview", text: "transactions.pdf"
+
+    click_button "Next"
+
+    # 3) Configure step
+    assert_selector "h1", text: "Configure import"
+
+    click_button "Next"
+
+    # 4) Clean step
+    assert_selector "h1", text: "Clean import"
+
+    click_link "Next"
+
+    # 5) Confirm step
+    assert_selector "h1", text: "Confirm import"
+    assert_selector "#new_account_entry", count: 3
+    click_button "Import 3 transactions"
+    assert_selector "h1", text: "Imports"
+  end
+
   private
 
     def trigger_import_from_settings

@@ -62,6 +62,11 @@ jobs:
     env:
       DATABASE_URL: postgres://postgres:postgres@localhost:5432
       RAILS_ENV: test
+      MAYBE_PDF_IMPORTS: true
+      ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY: maybe_test_encryption_primary_key
+      ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY: maybe_test_encryption_deterministic_key
+      ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT: maybe_test_encryption_key_derivation
+
 
     services:
       postgres:

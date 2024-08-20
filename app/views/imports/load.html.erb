@@ -5,21 +5,28 @@
 
   <div class="text-center space-y-2">
     <h2 class="text-3xl text-gray-900 font-medium"><%= t(".subtitle") %></h2>
-    <p class="text-gray-500 text-sm"><%= t(".description") %></p>
+    <p class="text-gray-500 text-sm"><%= t(".description_#{@import.raw_type}") %></p>
   </div>
 
-  <div data-controller="tabs" data-tabs-active-class="bg-white" data-tabs-default-tab-value="csv-upload-tab">
-    <div class="flex justify-center mb-4">
-      <div class="bg-gray-50 rounded-lg inline-flex p-1 space-x-2 text-sm text-gray-900 font-medium">
-        <button data-id="csv-upload-tab" class="p-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Upload CSV</button>
-        <button data-id="csv-paste-tab" class="p-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Copy & Paste</button>
+  <% case @import.raw_type %>
+  <% when "csv" %>
+    <div data-controller="tabs" data-tabs-active-class="bg-white" data-tabs-default-tab-value="csv-upload-tab">
+      <div class="flex justify-center mb-4">
+        <div class="bg-gray-50 rounded-lg inline-flex p-1 space-x-2 text-sm text-gray-900 font-medium">
+          <button data-id="csv-upload-tab" class="p-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Upload CSV</button>
+          <button data-id="csv-paste-tab" class="p-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Copy & Paste</button>
+        </div>
+      </div>
+      <div data-tabs-target="tab" id="csv-upload-tab">
+        <%= render partial: "imports/csv_upload", locals: { import: @import } %>
+      </div>
+      <div data-tabs-target="tab" id="csv-paste-tab" class="hidden">
+        <%= render partial: "imports/csv_paste", locals: { import: @import } %>
       </div>
     </div>
-    <div data-tabs-target="tab" id="csv-upload-tab">
-      <%= render partial: "imports/csv_upload", locals: { import: @import } %>
+  <% when "pdf" %>
+    <div data-tabs-target="tab" id="raw-upload-tab">
+      <%= render partial: "imports/pdf_upload", locals: { import: @import } %>
     </div>
-    <div data-tabs-target="tab" id="csv-paste-tab" class="hidden">
-      <%= render partial: "imports/csv_paste", locals: { import: @import } %>
-    </div>
-  </div>
+  <% end %>
 </div>
