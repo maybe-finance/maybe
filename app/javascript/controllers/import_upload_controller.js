@@ -44,8 +44,7 @@ export default class extends Controller {
     }
   }
 
-  click() {
-    this.preventDefault();
+  openFilePicker() {
     this.inputTarget.click();
   }
 
