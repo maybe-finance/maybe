@@ -14,8 +14,11 @@ class Account::Holding < ApplicationRecord
   scope :known_value, -> { where.not(amount: nil) }
   scope :for, ->(security) { where(security_id: security).order(:date) }
 
-  delegate :name, to: :security
   delegate :ticker, to: :security
+
+  def name
+    security.name || ticker
+  end
 
   def weight
     return nil unless amount
