@@ -45,6 +45,7 @@ export default class extends Controller {
   }
 
   click() {
+    this.preventDefault();
     this.inputTarget.click();
   }
 
