@@ -29,3 +29,4 @@ ignore_unused:
   - 'helpers.submit.*' # i18n-tasks does not detect used at forms
   - 'helpers.label.*' # i18n-tasks does not detect used at forms
   - 'accounts.show.sync_message_*' # messages generated in the sync ActiveJob
+  - 'address.attributes.*'

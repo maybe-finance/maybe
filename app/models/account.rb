@@ -28,6 +28,8 @@ class Account < ApplicationRecord
 
   delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
 
+  accepts_nested_attributes_for :accountable
+
   delegate :value, :series, to: :accountable
 
   class << self
