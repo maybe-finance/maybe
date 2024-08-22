@@ -5,6 +5,8 @@ class Property < ApplicationRecord
 
   accepts_nested_attributes_for :address
 
+  attribute :area_unit, :string, default: "sqft"
+
   def area
     Measurement.new(area_value, area_unit)
   end

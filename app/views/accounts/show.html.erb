@@ -1,7 +1,7 @@
 <%= turbo_stream_from @account %>
 
 <%= tag.div id: dom_id(@account), class: "space-y-4" do %>
-  <div class="flex justify-between items-center">
+  <header class="flex justify-between items-center">
     <div class="flex items-center gap-3">
       <%= image_tag account_logo_url(@account), class: "w-8 h-8" %>
       <h2 class="font-medium text-xl"><%= @account.name %></h2>
@@ -43,7 +43,7 @@
         </div>
       <% end %>
     </div>
-  </div>
+  </header>
 
   <% if @account.highest_priority_issue %>
     <%= render partial: "issues/issue", locals: { issue: @account.highest_priority_issue } %>

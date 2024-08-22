@@ -73,26 +73,10 @@
         <% end %>
         <span>Add <%= @account.accountable.model_name.human.downcase %></span>
       </div>
-      <%= styled_form_with model: @account, url: accounts_path, scope: :account, class: "m-5 mt-1 flex flex-col justify-between grow", data: { turbo: false } do |f| %>
-        <div class="space-y-4 grow">
-          <%= f.hidden_field :accountable_type %>
-          <%= f.text_field :name, placeholder: t(".name.placeholder"), required: "required", label: t(".name.label"), autofocus: true %>
-          <%= f.collection_select :institution_id, Current.family.institutions.alphabetically, :id, :name, { include_blank: t(".ungrouped"), label: t(".institution") } %>
-          <%= render "accounts/accountables/#{permitted_accountable_partial(@account.accountable_type)}", f: f %>
-          <%= money_with_currency_field f, :balance_money, label: t(".balance"), required: "required", default_currency: Current.family.currency %>
 
-          <div>
-            <%= check_box_tag :add_start_values, class: "maybe-checkbox maybe-checkbox--light peer mb-1" %>
-            <%= label_tag :add_start_values, t(".optional_start_balance_message"), class: "pl-1 text-sm text-gray-500" %>
-
-            <div class="hidden peer-checked:flex items-center gap-2 mt-3 mb-6">
-              <div class="w-1/2"><%= f.date_field :start_date, label: t(".start_date"), max: Date.yesterday, min: Account::Entry.min_supported_date %></div>
-              <div class="w-1/2"><%= f.number_field :start_balance, label: t(".start_balance") %></div>
-            </div>
-          </div>
-        </div>
-        <%= f.submit "Add #{@account.accountable.model_name.human.downcase}" %>
-      <% end %>
+      <div class="p-4 pt-1">
+        <%= render "form", account: @account, url: new_account_form_url(@account) %>
+      </div>
     <% end %>
   </div>
 <% end %>

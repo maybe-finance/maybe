@@ -7,7 +7,7 @@ class PropertiesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "creates property" do
-    assert_difference [ "Account.count", "Property.count" ] do
+    assert_difference [ "Account.count", "Property.count", "Account::Valuation.count" ] do
       post properties_path, params: {
         account: {
           name: "Property",
@@ -33,13 +33,16 @@ class PropertiesControllerTest < ActionDispatch::IntegrationTest
 
     created_account = Account.order(:created_at).last
 
+    assert created_account.property.year_built.present?
+    assert created_account.property.address.line1.present?
+
     assert_redirected_to account_path(created_account)
     assert_equal "Property created successfully", flash[:notice]
     assert_enqueued_with(job: AccountSyncJob)
   end
 
   test "updates property" do
-    assert_no_difference [ "Account.count", "Property.count" ] do
+    assert_no_difference [ "Account.count", "Property.count", "Account::Valuation.count" ] do
       patch property_path(@account), params: {
         account: {
           name: "Updated Property",

@@ -25,6 +25,8 @@ class AccountsController < ApplicationController
   def new
     @account = Account.new(accountable: Accountable.from_type(params[:type])&.new)
 
+    @account.accountable.address = Address.new if @account.accountable.is_a?(Property)
+
     if params[:institution_id]
       @account.institution = Current.family.institutions.find_by(id: params[:institution_id])
     end

@@ -1,20 +1,35 @@
 ---
 en:
   accounts:
+    accountables:
+      property:
+        area_unit: Area unit
+        area_value: Area value (optional)
+        city: City
+        country: Country
+        line1: Address line 1
+        line2: Address line 2 (optional)
+        postal_code: Postal code (optional)
+        state: State
+        year_built: Year built (optional)
     create:
       success: New account created successfully
     destroy:
       success: Account deleted successfully
     edit:
-      balance: Balance
       edit: Edit %{account}
-      institution: Financial institution
-      name: Name
-      ungrouped: "(none)"
     empty:
       empty_message: Add an account either via connection, importing or entering manually.
       new_account: New account
       no_accounts: No accounts yet
+    form:
+      balance: Current balance
+      institution: Financial institution
+      name_label: Account name
+      name_placeholder: Example account name
+      start_balance: Start balance (optional)
+      start_date: Start date (optional)
+      ungrouped: "(none)"
     header:
       accounts: Accounts
       manage: Manage accounts
@@ -36,17 +51,8 @@ en:
     institutionless_accounts:
       other_accounts: Other accounts
     new:
-      balance: Current balance
-      institution: Financial institution
-      name:
-        label: Account name
-        placeholder: Example account name
-      optional_start_balance_message: Add a start balance for this account
       select_accountable_type: What would you like to add?
-      start_balance: Start balance (optional)
-      start_date: Start date (optional)
       title: Add an account
-      ungrouped: "(none)"
     show:
       cash: Cash
       confirm_accept: Delete "%{name}"

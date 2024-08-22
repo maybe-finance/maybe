@@ -23,6 +23,26 @@ module AccountsHelper
     class_mapping(accountable_type)[:hex]
   end
 
+  # Eventually, we'll have an accountable form for each type of accountable, so
+  # this helper is a convenience for now to reuse common logic in the accounts controller
+  def new_account_form_url(account)
+    case account.accountable_type
+    when "Property"
+      properties_path
+    else
+      accounts_path
+    end
+  end
+
+  def edit_account_form_url(account)
+    case account.accountable_type
+    when "Property"
+      property_path(account)
+    else
+      account_path(account)
+    end
+  end
+
   def account_tabs(account)
     holdings_tab = { key: "holdings", label: t("accounts.show.holdings"), path: account_path(account, tab: "holdings"), content_path: account_holdings_path(account) }
     cash_tab = { key: "cash", label: t("accounts.show.cash"), path: account_path(account, tab: "cash"), content_path: account_cashes_path(account) }
