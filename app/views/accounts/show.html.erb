@@ -4,7 +4,13 @@
   <header class="flex justify-between items-center">
     <div class="flex items-center gap-3">
       <%= image_tag account_logo_url(@account), class: "w-8 h-8" %>
-      <h2 class="font-medium text-xl"><%= @account.name %></h2>
+      <div>
+        <h2 class="font-medium text-xl"><%= @account.name %></h2>
+
+        <% if @account.property? && @account.property.address %>
+          <p class="text-gray-500"><%= @account.property.address %></p>
+        <% end %>
+      </div>
     </div>
     <div class="flex items-center gap-3">
       <%= button_to sync_account_path(@account), method: :post, class: "flex items-center gap-2", title: "Sync Account" do %>
@@ -79,7 +85,10 @@
     </div>
   </div>
 
-  <% selected_tab_key, selected_tab_content_path = selected_account_tab(@account).values_at(:key, :content_path) %>
+  <% selected_tab = selected_account_tab(@account) %>
+  <% selected_tab_key = selected_tab[:key] %>
+  <% selected_tab_partial_path = selected_tab[:partial_path] %>
+  <% selected_tab_route = selected_tab[:route] %>
 
   <div class="flex gap-2 text-sm text-gray-900 font-medium mb-4">
     <% account_tabs(@account).each do |tab| %>
@@ -88,8 +97,12 @@
   </div>
 
   <div class="min-h-[800px]">
-    <%= turbo_frame_tag dom_id(@account, selected_tab_key), src: selected_tab_content_path do %>
-      <%= render "account/entries/loading" %>
+    <% if selected_tab_route.present? %>
+      <%= turbo_frame_tag dom_id(@account, selected_tab_key), src: selected_tab_route do %>
+        <%= render "account/entries/loading" %>
+      <% end %>
+    <% else %>
+      <%= render selected_tab_partial_path, account: @account %>
     <% end %>
   </div>
 <% end %>

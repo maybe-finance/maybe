@@ -44,12 +44,14 @@ module AccountsHelper
   end
 
   def account_tabs(account)
-    holdings_tab = { key: "holdings", label: t("accounts.show.holdings"), path: account_path(account, tab: "holdings"), content_path: account_holdings_path(account) }
-    cash_tab = { key: "cash", label: t("accounts.show.cash"), path: account_path(account, tab: "cash"), content_path: account_cashes_path(account) }
-    value_tab        = { key: "valuations", label: t("accounts.show.value"), path: account_path(account, tab: "valuations"), content_path: account_valuations_path(account) }
-    transactions_tab = { key: "transactions", label: t("accounts.show.transactions"), path: account_path(account, tab: "transactions"), content_path: account_transactions_path(account) }
-    trades_tab       = { key: "trades", label: t("accounts.show.trades"), path: account_path(account, tab: "trades"), content_path: account_trades_path(account) }
+    overview_tab = { key: "overview", label: t("accounts.show.overview"), path: account_path(account, tab: "overview"), partial_path: "accounts/overview" }
+    holdings_tab = { key: "holdings", label: t("accounts.show.holdings"), path: account_path(account, tab: "holdings"), route: account_holdings_path(account) }
+    cash_tab = { key: "cash", label: t("accounts.show.cash"), path: account_path(account, tab: "cash"), route: account_cashes_path(account) }
+    value_tab        = { key: "valuations", label: t("accounts.show.value"), path: account_path(account, tab: "valuations"), route: account_valuations_path(account) }
+    transactions_tab = { key: "transactions", label: t("accounts.show.transactions"), path: account_path(account, tab: "transactions"), route: account_transactions_path(account) }
+    trades_tab       = { key: "trades", label: t("accounts.show.trades"), path: account_path(account, tab: "trades"), route: account_trades_path(account) }
 
+    return [ overview_tab, value_tab ] if account.property?
     return [ holdings_tab, cash_tab, trades_tab ] if account.investment?
 
     [ value_tab, transactions_tab ]

@@ -7,13 +7,18 @@ class PropertiesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "creates property" do
-    assert_difference [ "Account.count", "Property.count", "Account::Valuation.count" ] do
+    assert_difference -> { Account.count } => 1,
+      -> { Property.count } => 1,
+      -> { Account::Valuation.count } => 2,
+      -> { Account::Entry.count } => 2 do
       post properties_path, params: {
         account: {
           name: "Property",
           balance: 500000,
           currency: "USD",
           accountable_type: "Property",
+          start_date: 3.years.ago.to_date,
+          start_balance: 450000,
           accountable_attributes: {
             year_built: 2002,
             area_value: 1000,
@@ -42,7 +47,7 @@ class PropertiesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "updates property" do
-    assert_no_difference [ "Account.count", "Property.count", "Account::Valuation.count" ] do
+    assert_no_difference [ "Account.count", "Property.count", "Account::Valuation.count", "Account::Entry.count" ] do
       patch property_path(@account), params: {
         account: {
           name: "Updated Property",

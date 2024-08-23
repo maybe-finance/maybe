@@ -9,6 +9,13 @@ en:
         country: Country
         line1: Address line 1
         line2: Address line 2 (optional)
+        overview:
+          living_area: Living Area
+          market_value: Market Value
+          purchase_price: Purchase Price
+          trend: Trend
+          unknown: Unknown
+          year_built: Year Built
         postal_code: Postal code (optional)
         state: State
         year_built: Year built (optional)
@@ -66,6 +73,7 @@ en:
       holdings: Holdings
       import: Import transactions
       no_change: No change
+      overview: Overview
       sync_message_missing_rates: Since exchange rates haven't been synced, balance
         graphs may not reflect accurate values.
       sync_message_unknown_error: An error has occurred during the sync.
