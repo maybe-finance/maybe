@@ -44,10 +44,6 @@ export default class extends Controller {
     }
   }
 
-  click() {
-    this.inputTarget.click();
-  }
-
   // Private
 
   _fetchFileSize(size) {
