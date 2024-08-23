@@ -3,7 +3,7 @@ class Measurement
 
   attr_reader :value, :unit
 
-  VALID_UNITS = %w[sqft sqm]
+  VALID_UNITS = %w[sqft sqm mi km]
 
   validates :unit, inclusion: { in: VALID_UNITS }
   validates :value, presence: true

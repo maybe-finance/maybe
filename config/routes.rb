@@ -90,6 +90,7 @@ Rails.application.routes.draw do
   end
 
   resources :properties, only: %i[ create update ]
+  resources :vehicles, only: %i[ create update ]
 
   resources :transactions, only: %i[ index new create ] do
     collection do

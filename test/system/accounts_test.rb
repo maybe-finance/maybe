@@ -34,7 +34,12 @@ class AccountsTest < ApplicationSystemTestCase
   end
 
   test "can create vehicle account" do
-    assert_account_created("Vehicle")
+    assert_account_created "Vehicle" do
+      fill_in "Make", with: "Toyota"
+      fill_in "Model", with: "Camry"
+      fill_in "Year", with: "2020"
+      fill_in "Mileage", with: "30000"
+    end
   end
 
   test "can create other asset account" do
