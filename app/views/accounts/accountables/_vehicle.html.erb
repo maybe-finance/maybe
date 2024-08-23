@@ -1,0 +1,23 @@
+<%# locals: (f:) %>
+
+<div>
+  <hr class="my-4">
+
+  <div class="space-y-2">
+    <%= f.fields_for :accountable do |vehicle_form| %>
+
+      <div class="flex items-center gap-2">
+        <%= vehicle_form.text_field :make, label: t(".make"), placeholder: t(".make_placeholder") %>
+        <%= vehicle_form.text_field :model, label: t(".model"), placeholder: t(".model_placeholder") %>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <%= vehicle_form.text_field :year, label: t(".year"), placeholder: t(".year_placeholder") %>
+        <%= vehicle_form.text_field :mileage_value, label: t(".mileage"), placeholder: t(".mileage_placeholder") %>
+        <%= vehicle_form.select :mileage_unit,
+                  [["Miles", "mi"], ["Kilometers", "km"]],
+                  { label: t(".mileage_unit") } %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+---
+en:
+  vehicles:
+    create:
+      success: Vehicle created successfully
+    update:
+      success: Vehicle updated successfully

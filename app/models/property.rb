@@ -15,10 +15,6 @@ class Property < ApplicationRecord
     first_valuation_amount
   end
 
-  def equity_value
-    account.balance_money
-  end
-
   def trend
     TimeSeries::Trend.new(current: account.balance_money, previous: first_valuation_amount)
   end
