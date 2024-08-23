@@ -33,12 +33,12 @@ class PasswordResetsController < ApplicationController
 
   private
 
-    def set_user_by_token
-      @user = User.find_by_token_for(:password_reset, params[:token])
-      redirect_to new_password_reset_path, alert: t("password_resets.update.invalid_token") unless @user.present?
-    end
+  def set_user_by_token
+    @user = User.find_by_token_for(:password_reset, params[:token])
+    redirect_to new_password_reset_path, alert: t("password_resets.update.invalid_token") unless @user.present?
+  end
 
-    def password_params
-      params.require(:user).permit(:password, :password_confirmation)
-    end
+  def password_params
+    params.require(:user).permit(:password, :password_confirmation)
+  end
 end

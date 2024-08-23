@@ -47,7 +47,7 @@ class Category < ApplicationRecord
 
   private
 
-    def clear_internal_category
-      self.internal_category = nil
-    end
+  def clear_internal_category
+    self.internal_category = nil
+  end
 end

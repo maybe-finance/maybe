@@ -1,9 +1,9 @@
 module Filterable
-  extend ActiveSupport::Concern
+    extend ActiveSupport::Concern
 
-  included do
-    before_action :set_period
-  end
+    included do
+        before_action :set_period
+    end
 
     private
 

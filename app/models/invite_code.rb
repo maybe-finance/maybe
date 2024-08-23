@@ -16,10 +16,10 @@ class InviteCode < ApplicationRecord
 
   private
 
-    def generate_token
-      loop do
-        self.token = SecureRandom.hex(4)
-        break token unless self.class.exists?(token: token)
-      end
+  def generate_token
+    loop do
+      self.token = SecureRandom.hex(4)
+      break token unless self.class.exists?(token: token)
     end
+  end
 end

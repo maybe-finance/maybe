@@ -5,12 +5,12 @@ class ApplicationMailer < ActionMailer::Base
 
   private
 
-    def set_self_host_settings
-      mail.from = Setting.email_sender
-      mail.delivery_method.settings.merge!({ address: Setting.smtp_host,
-                                             port: Setting.smtp_port,
-                                             user_name: Setting.smtp_username,
-                                             password: Setting.smtp_password,
-                                             tls: ENV.fetch("SMTP_TLS_ENABLED", "true") == "true" })
-    end
+  def set_self_host_settings
+    mail.from = Setting.email_sender
+    mail.delivery_method.settings.merge!({ address: Setting.smtp_host,
+                                           port: Setting.smtp_port,
+                                           user_name: Setting.smtp_username,
+                                           password: Setting.smtp_password,
+                                           tls: ENV.fetch("SMTP_TLS_ENABLED", "true") == "true" })
+  end
 end
