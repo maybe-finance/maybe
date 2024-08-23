@@ -8,7 +8,7 @@ class Account::TradesController < ApplicationController
   end
 
   def index
-    @entries = @account.entries.reverse_chronological.where(entryable_type: %w[ Account::Trade Account::Transaction ])
+    @entries = @account.entries.reverse_chronological.where(entryable_type: %w[Account::Trade Account::Transaction])
   end
 
   def create

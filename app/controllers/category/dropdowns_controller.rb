@@ -6,17 +6,17 @@ class Category::DropdownsController < ApplicationController
   end
 
   private
-  def set_from_params
-    if params[:category_id]
-      @selected_category = categories_scope.find(params[:category_id])
+    def set_from_params
+      if params[:category_id]
+        @selected_category = categories_scope.find(params[:category_id])
+      end
+
+      if params[:transaction_id]
+        @transaction = Current.family.transactions.find(params[:transaction_id])
+      end
     end
 
-    if params[:transaction_id]
-      @transaction = Current.family.transactions.find(params[:transaction_id])
+    def categories_scope
+      Current.family.categories.alphabetically
     end
-  end
-
-  def categories_scope
-    Current.family.categories.alphabetically
-  end
 end

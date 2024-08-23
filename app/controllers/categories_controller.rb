@@ -1,7 +1,7 @@
 class CategoriesController < ApplicationController
   layout :with_sidebar
 
-  before_action :set_category, only: %i[ edit update ]
+  before_action :set_category, only: %i[edit update]
   before_action :set_transaction, only: :create
 
   def index

@@ -25,7 +25,7 @@ class Account::Transaction < ApplicationRecord
     private
 
       def searchable_keys
-        %i[ categories merchants ]
+        %i[categories merchants]
       end
   end
 
