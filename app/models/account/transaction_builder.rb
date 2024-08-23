@@ -1,7 +1,7 @@
 class Account::TransactionBuilder
   include ActiveModel::Model
 
-  TYPES = %w[ income expense interest transfer_in transfer_out ].freeze
+  TYPES = %w[income expense interest transfer_in transfer_out].freeze
 
   attr_accessor :type, :amount, :date, :account, :transfer_account_id
 

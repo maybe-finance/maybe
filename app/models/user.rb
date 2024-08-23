@@ -74,18 +74,18 @@ class User < ApplicationRecord
 
   private
 
-  def last_user_in_family?
-    family.users.count == 1
-  end
-
-  def deactivated_email
-    email.gsub(/@/, "-deactivated-#{SecureRandom.uuid}@")
-  end
-
-  def profile_image_size
-    if profile_image.attached? && profile_image.byte_size > 5.megabytes
-      # i18n-tasks-use t('activerecord.errors.models.user.attributes.profile_image.invalid_file_size')
-      errors.add(:profile_image, :invalid_file_size, max_megabytes: 5)
+    def last_user_in_family?
+      family.users.count == 1
     end
-  end
+
+    def deactivated_email
+      email.gsub(/@/, "-deactivated-#{SecureRandom.uuid}@")
+    end
+
+    def profile_image_size
+      if profile_image.attached? && profile_image.byte_size > 5.megabytes
+        # i18n-tasks-use t('activerecord.errors.models.user.attributes.profile_image.invalid_file_size')
+        errors.add(:profile_image, :invalid_file_size, max_megabytes: 5)
+      end
+    end
 end

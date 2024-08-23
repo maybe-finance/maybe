@@ -2,7 +2,7 @@ class AccountsController < ApplicationController
   layout :with_sidebar
 
   include Filterable
-  before_action :set_account, only: %i[ edit show destroy sync update ]
+  before_action :set_account, only: %i[edit show destroy sync update]
 
   def index
     @institutions = Current.family.institutions

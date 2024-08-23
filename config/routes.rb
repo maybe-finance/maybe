@@ -42,8 +42,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :tags, except: %i[ show destroy ] do
-    resources :deletions, only: %i[ new create ], module: :tag
+  resources :tags, except: %i[show destroy] do
+    resources :deletions, only: %i[new create], module: :tag
   end
 
   namespace :category do
@@ -51,16 +51,16 @@ Rails.application.routes.draw do
   end
 
   resources :categories do
-    resources :deletions, only: %i[ new create ], module: :category
+    resources :deletions, only: %i[new create], module: :category
   end
 
-  resources :merchants, only: %i[ index new create edit update destroy ]
+  resources :merchants, only: %i[index new create edit update destroy]
 
   namespace :account do
-    resources :transfers, only: %i[ new create destroy ]
+    resources :transfers, only: %i[new create destroy]
 
     namespace :transaction do
-      resources :rules, only: %i[ index ]
+      resources :rules, only: %i[index]
     end
   end
 
@@ -78,21 +78,21 @@ Rails.application.routes.draw do
     scope module: :account do
       resource :logo, only: :show
 
-      resources :holdings, only: %i[ index new show ]
+      resources :holdings, only: %i[index new show]
       resources :cashes, only: :index
 
-      resources :transactions, only: %i[ index update ]
-      resources :valuations, only: %i[ index new create ]
-      resources :trades, only: %i[ index new create ]
+      resources :transactions, only: %i[index update]
+      resources :valuations, only: %i[index new create]
+      resources :trades, only: %i[index new create]
 
-      resources :entries, only: %i[ edit update show destroy ]
+      resources :entries, only: %i[edit update show destroy]
     end
   end
 
-  resources :properties, only: %i[ create update ]
-  resources :vehicles, only: %i[ create update ]
+  resources :properties, only: %i[create update]
+  resources :vehicles, only: %i[create update]
 
-  resources :transactions, only: %i[ index new create ] do
+  resources :transactions, only: %i[index new create] do
     collection do
       post "bulk_delete"
       get "bulk_edit"
@@ -103,7 +103,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :institutions, except: %i[ index show ]
+  resources :institutions, except: %i[index show]
 
   resources :issues, only: :show
 

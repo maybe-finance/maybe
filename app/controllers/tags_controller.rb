@@ -1,7 +1,7 @@
 class TagsController < ApplicationController
   layout :with_sidebar
 
-  before_action :set_tag, only: %i[ edit update ]
+  before_action :set_tag, only: %i[edit update]
 
   def index
     @tags = Current.family.tags.alphabetically

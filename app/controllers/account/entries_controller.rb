@@ -2,7 +2,7 @@ class Account::EntriesController < ApplicationController
   layout :with_sidebar
 
   before_action :set_account
-  before_action :set_entry, only: %i[ edit update show destroy ]
+  before_action :set_entry, only: %i[edit update show destroy]
 
   def edit
     render entryable_view_path(:edit)

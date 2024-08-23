@@ -1,7 +1,7 @@
 module Account::Entryable
   extend ActiveSupport::Concern
 
-  TYPES = %w[ Account::Valuation Account::Transaction Account::Trade ]
+  TYPES = %w[Account::Valuation Account::Transaction Account::Trade]
 
   def self.from_type(entryable_type)
     entryable_type.presence_in(TYPES).constantize

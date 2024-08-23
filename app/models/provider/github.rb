@@ -16,11 +16,11 @@ class Provider::Github
         latest_commit = Octokit.branch(repo, branch)
 
         release_info = if latest_release
-                        {
-                          version: latest_version,
-                          url: latest_release.html_url,
-                          commit_sha: Octokit.commit(repo, latest_release.tag_name).sha
-                        }
+          {
+            version: latest_version,
+            url: latest_release.html_url,
+            commit_sha: Octokit.commit(repo, latest_release.tag_name).sha
+          }
         end
 
         commit_info = {

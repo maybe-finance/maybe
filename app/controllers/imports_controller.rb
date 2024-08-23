@@ -1,7 +1,7 @@
 require "ostruct"
 
 class ImportsController < ApplicationController
-  before_action :set_import, except: %i[ index new create ]
+  before_action :set_import, except: %i[index new create]
 
   def index
     @imports = Current.family.imports

@@ -1,5 +1,5 @@
 class TimeSeries
-  DIRECTIONS = %w[ up down ].freeze
+  DIRECTIONS = %w[up down].freeze
 
   attr_reader :values, :favorable_direction
 

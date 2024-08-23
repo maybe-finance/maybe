@@ -39,7 +39,7 @@ class Import::CsvTest < ActiveSupport::TestCase
   test "CSV with semicolon column separator" do
     csv = Import::Csv.new(valid_csv_str_with_semicolon_separator, col_sep: ";")
 
-    assert_equal %w[ date name category tags amount ], csv.table.headers
+    assert_equal %w[date name category tags amount], csv.table.headers
     assert_equal 4, csv.table.size
     assert_equal "Paycheck", csv.table[3][1]
   end
@@ -84,7 +84,7 @@ class Import::CsvTest < ActiveSupport::TestCase
 
     csv = Import::Csv.create_with_field_mappings(raw_file_str, fields, mappings)
 
-    assert_equal %w[ date name ], csv.table.headers
+    assert_equal %w[date name], csv.table.headers
     assert_equal 2, csv.table.size
     assert_equal "Amazon stuff", csv.table[1][1]
   end
@@ -113,7 +113,7 @@ class Import::CsvTest < ActiveSupport::TestCase
 
     csv = Import::Csv.create_with_field_mappings(raw_file_str, fields, mappings, ";")
 
-    assert_equal %w[ date name ], csv.table.headers
+    assert_equal %w[date name], csv.table.headers
     assert_equal 2, csv.table.size
     assert_equal "Amazon stuff", csv.table[1][1]
   end

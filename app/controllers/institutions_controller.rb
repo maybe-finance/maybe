@@ -1,5 +1,5 @@
 class InstitutionsController < ApplicationController
-  before_action :set_institution, except: %i[ new create ]
+  before_action :set_institution, except: %i[new create]
 
   def new
     @institution = Institution.new

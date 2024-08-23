@@ -1,7 +1,7 @@
 class Account::TradeBuilder < Account::EntryBuilder
   include ActiveModel::Model
 
-  TYPES = %w[ buy sell ].freeze
+  TYPES = %w[buy sell].freeze
 
   attr_accessor :type, :qty, :price, :ticker, :date, :account
 
