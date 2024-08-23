@@ -28,6 +28,8 @@ class Account < ApplicationRecord
 
   delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
 
+  accepts_nested_attributes_for :accountable
+
   delegate :value, :series, to: :accountable
 
   class << self
@@ -51,27 +53,28 @@ class Account < ApplicationRecord
     end
 
     def create_with_optional_start_balance!(attributes:, start_date: nil, start_balance: nil)
-      account = self.new(attributes.except(:accountable_type))
-      account.accountable = Accountable.from_type(attributes[:accountable_type])&.new
+      transaction do
+        attributes[:accountable_attributes] ||= {} # Ensure accountable is created
+        account = new(attributes)
 
-      # Always build the initial valuation
-      account.entries.build \
-        date: Date.current,
-        amount: attributes[:balance],
-        currency: account.currency,
-        entryable: Account::Valuation.new
-
-      # Conditionally build the optional start valuation
-      if start_date.present? && start_balance.present?
+        # Always initialize an account with a valuation entry to begin tracking value history
         account.entries.build \
-          date: start_date,
-          amount: start_balance,
+          date: Date.current,
+          amount: account.balance,
           currency: account.currency,
           entryable: Account::Valuation.new
-      end
 
-      account.save!
-      account
+        if start_date.present? && start_balance.present?
+          account.entries.build \
+            date: start_date,
+            amount: start_balance,
+            currency: account.currency,
+            entryable: Account::Valuation.new
+        end
+
+        account.save!
+        account
+      end
     end
   end
 

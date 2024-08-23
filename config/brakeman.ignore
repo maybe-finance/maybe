@@ -22,8 +22,42 @@
         22
       ],
       "note": ""
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "b7a59d6dd91f4d30873b271659636c7975e25b47f436b4f03900a08809af2e92",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/accounts/show.html.erb",
+      "line": 105,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => selected_account_tab(Current.family.accounts.find(params[:id]))[:partial_path], { :account => Current.family.accounts.find(params[:id]) })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "AccountsController",
+          "method": "show",
+          "line": 38,
+          "file": "app/controllers/accounts_controller.rb",
+          "rendered": {
+            "name": "accounts/show",
+            "file": "app/views/accounts/show.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "accounts/show"
+      },
+      "user_input": "params[:id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
     }
   ],
-  "updated": "2024-08-16 10:19:50 -0400",
-  "brakeman_version": "6.1.2"
+  "updated": "2024-08-23 08:29:05 -0400",
+  "brakeman_version": "6.2.1"
 }

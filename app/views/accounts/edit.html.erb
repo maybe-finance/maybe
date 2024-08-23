@@ -1,15 +1,3 @@
 <%= modal_form_wrapper title: t(".edit", account: @account.name) do %>
-  <%= styled_form_with model: @account, class: "space-y-4", data: { turbo_frame: "_top" } do |f| %>
-    <%= f.text_field :name, label: t(".name") %>
-    <%= money_with_currency_field f, :balance_money, label: t(".balance"), default_currency: @account.currency, disable_currency: true %>
-
-    <div class="relative">
-      <%= f.collection_select :institution_id, Current.family.institutions.alphabetically, :id, :name, { include_blank: t(".ungrouped"), label: t(".institution") } %>
-      <%= link_to new_institution_path do %>
-        <%= lucide_icon "plus", class: "text-gray-700 hover:text-gray-500 w-4 h-4 absolute right-3 top-2" %>
-      <% end %>
-    </div>
-
-    <%= f.submit %>
-  <% end %>
+  <%= render "form", account: @account, url: edit_account_form_url(@account) %>
 <% end %>

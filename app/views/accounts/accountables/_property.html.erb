@@ -1,0 +1,34 @@
+<%# locals: (f:) %>
+
+<div>
+  <hr class="my-4">
+
+  <div class="space-y-2">
+    <%= f.fields_for :accountable do |af| %>
+      <div class="flex gap-2">
+        <%= af.number_field :year_built, label: t(".year_built"), placeholder: 2005 %>
+        <%= af.number_field :area_value, label: t(".area_value"), placeholder: 2000 %>
+        <%= af.select :area_unit,
+                  [["Square feet", "sqft"], ["Square meters", "sqm"]],
+                  { label: t(".area_unit") } %>
+      </div>
+
+      <%= af.fields_for :address do |address_form| %>
+        <div class="flex gap-2">
+          <%= address_form.text_field :line1, label: t(".line1"), placeholder: "123 Main St", required: true %>
+          <%= address_form.text_field :line2, label: t(".line2"), placeholder: "Apt 1" %>
+        </div>
+
+        <div class="flex gap-2">
+          <%= address_form.text_field :locality, label: t(".city"), placeholder: "Sacramento", required: true %>
+          <%= address_form.text_field :region, label: t(".state"), placeholder: "CA", required: true %>
+        </div>
+
+        <div class="flex gap-2">
+          <%= address_form.text_field :postal_code, label: t(".postal_code"), placeholder: "95814" %>
+          <%= address_form.text_field :country, label: t(".country"), placeholder: "USA", required: true %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

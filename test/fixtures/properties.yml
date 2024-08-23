@@ -1,1 +1,4 @@
-one: { }
+one:
+  year_built: 2002
+  area_value: 1000
+  area_unit: "sqft"
