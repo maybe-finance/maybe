@@ -1,0 +1,16 @@
+# https://docs.docker.com/compose/compose-file/
+
+services:
+  db:
+    image: postgres:16.3
+    volumes:
+      - maybe-pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: maybe_development
+
+volumes:
+  maybe-pgdata:
