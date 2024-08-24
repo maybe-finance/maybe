@@ -43,13 +43,14 @@ The instructions below are for developers to get started with contributing to th
 ### Requirements
 
 - Ruby 3.3.4
-- PostgreSQL >9.3 (ideally, latest stable version)
+- PostgreSQL >9.3 (ideally, latest stable version) or Docker to run PostgreSQL in a container
 
 After cloning the repo, the basic setup commands are:
 
 ```sh
 cd maybe
 cp .env.example .env
+# Make sure you have the local db running, either with PostgreSQL or in a Docker container with `make local`.
 bin/setup
 bin/dev
 
