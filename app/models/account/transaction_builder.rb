@@ -21,7 +21,7 @@ class Account::TransactionBuilder
     end
 
     def create_transfer
-      return create_unlinked_transfer(account.id, signed_amount) unless transfer_account_id
+      return create_unlinked_transfer(account.id, signed_amount) if transfer_account_id.blank?
 
       from_account_id = type == "transfer_in" ? transfer_account_id : account.id
       to_account_id = type == "transfer_in" ? account.id : transfer_account_id
