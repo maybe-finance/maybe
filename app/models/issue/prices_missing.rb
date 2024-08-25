@@ -16,7 +16,7 @@ class Issue::PricesMissing < Issue
     missing_prices.each do |ticker, dates|
       next unless issuable.owns_ticker?(ticker)
 
-      oldest_date = dates.min
+      oldest_date = dates.min.to_date
       expected_price_count = (oldest_date..Date.current).count
       prices = Security::Price.find_prices(ticker: ticker, start_date: oldest_date)
       stale = false if prices.count < expected_price_count
