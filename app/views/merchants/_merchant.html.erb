@@ -1,0 +1,26 @@
+<%# locals: (merchant:) %>
+
+<div class="flex justify-between items-center p-4 bg-white">
+  <div class="flex w-full items-center gap-2.5">
+    <%= render partial: "merchants/avatar", locals: { merchant: } %>
+    <p class="text-gray-900 text-sm truncate">
+      <%= merchant.name %>
+    </p>
+  </div>
+  <div class="justify-self-end">
+    <%= contextual_menu do %>
+      <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+        <%= contextual_menu_modal_action_item t(".edit"), edit_merchant_path(merchant) %>
+
+        <%= contextual_menu_destructive_item t(".delete"),
+                                             merchant_path(merchant),
+                                             turbo_frame: "_top",
+                                             turbo_confirm: {
+                                               title: t(".confirm_title"),
+                                               body: t(".confirm_body"),
+                                               accept: t(".confirm_accept")
+                                             } %>
+      </div>
+    <% end %>
+  </div>
+</div>

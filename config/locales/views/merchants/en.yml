@@ -9,14 +9,11 @@ en:
       title: Edit merchant
     form:
       name_placeholder: Merchant name
-      submit_create: Add merchant
-      submit_edit: Update
     index:
       empty: No merchants yet
-      new_long: New merchant
-      new_short: New
+      new: New merchant
       title: Merchants
-    list:
+    merchant:
       confirm_accept: Delete merchant
       confirm_body: Are you sure you want to delete this merchant? Removing this merchant
         will unlink all associated transactions and may effect your reporting.
