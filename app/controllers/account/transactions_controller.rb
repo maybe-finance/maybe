@@ -12,8 +12,7 @@ class Account::TransactionsController < ApplicationController
   end
 
   def update
-    @entry.update!(entry_params.merge(amount: amount))
-    @entry.sync_account_later
+    @entry.update!(entry_params)
 
     respond_to do |format|
       format.html { redirect_to account_entry_path(@account, @entry), notice: t(".success") }
@@ -34,7 +33,7 @@ class Account::TransactionsController < ApplicationController
     def entry_params
       params.require(:account_entry)
             .permit(
-              :name, :date, :amount, :currency, :entryable_type,
+              :name, :date, :amount, :currency, :entryable_type, :nature,
               entryable_attributes: [
                 :id,
                 :notes,
@@ -43,14 +42,18 @@ class Account::TransactionsController < ApplicationController
                 :merchant_id,
                 { tag_ids: [] }
               ]
-            )
-    end
+            ).tap do |permitted_params|
+              nature = permitted_params.delete(:nature)
 
-    def amount
-      if params[:account_entry][:nature] == "income"
-        entry_params[:amount].to_d * -1
-      else
-        entry_params[:amount].to_d
-      end
+              if permitted_params[:amount]
+                amount_value = permitted_params[:amount].to_d
+
+                if nature == "income"
+                  amount_value *= -1
+                end
+
+                permitted_params[:amount] = amount_value
+              end
+            end
     end
 end
