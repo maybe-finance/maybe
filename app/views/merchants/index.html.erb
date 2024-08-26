@@ -8,7 +8,7 @@
 
     <%= link_to new_merchant_path, class: "rounded-lg bg-gray-900 text-white flex items-center gap-1 justify-center hover:bg-gray-700 px-3 py-2", data: { turbo_frame: :modal } do %>
       <%= lucide_icon("plus", class: "w-5 h-5") %>
-      <span><%= t(".new_short") %></span>
+      <span><%= t(".new") %></span>
     <% end %>
   </div>
   <div class="bg-white shadow-xs border border-alpha-black-25 rounded-xl p-4">
@@ -18,18 +18,20 @@
           <p class="text-gray-900 mb-1 font-medium text-sm"><%= t(".empty") %></p>
           <%= link_to new_merchant_path, class: "w-fit flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2 pr-3", data: { turbo_frame: "modal" } do %>
             <%= lucide_icon("plus", class: "w-5 h-5") %>
-            <span><%= t(".new_long") %></span>
+            <span><%= t(".new") %></span>
           <% end %>
         </div>
       </div>
     <% else %>
       <div class="bg-gray-25 p-1 rounded-xl">
-        <div class="flex items-center px-4 py-2 text-xs font-medium text-gray-500">
+        <div class="flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-gray-500">
           <p><%= t(".title") %></p>
-          <span class="text-gray-400 mx-2">&middot;</span>
+          <span class="text-gray-400">&middot;</span>
           <p><%= @merchants.count %></p>
         </div>
-        <%= render partial: "merchants/list", locals: { merchants: @merchants } %>
+        <div class="overflow-hidden rounded-lg">
+          <%= render partial: @merchants, spacer_template: "merchants/ruler" %>
+        </div>
       </div>
     <% end %>
   </div>
