@@ -6,8 +6,7 @@ en:
     edit:
       edit: Edit tag
     form:
-      create: Create tag
-      update: Update
+      placeholder: Tag name
     index:
       empty: No tags yet
       new: New tag
