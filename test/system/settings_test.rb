@@ -5,20 +5,15 @@ class SettingsTest < ApplicationSystemTestCase
     sign_in @user = users(:family_admin)
 
     @settings_links = [
-      [ "Account", "Account", settings_profile_path ],
-      [ "Preferences", "Preferences", settings_preferences_path ],
-      [ "Notifications", "Notifications", settings_notifications_path ],
-      [ "Security", "Security", settings_security_path ],
-      [ "Billing", "Billing", settings_billing_path ],
-      [ "Accounts", "Accounts", accounts_path ],
-      [ "Tags", "Tags", tags_path ],
-      [ "Categories", "Categories", categories_path ],
-      [ "Merchants", "Merchants", merchants_path ],
-      [ "Rules", "Rules", rules_transactions_path ],
-      [ "Imports", "Imports", imports_path ],
-      [ "What's New", "What's New", changelog_path ],
-      [ "Feedback", "Feedback", feedback_path ],
-      [ "Invite friends", "Invite friends", invites_path ]
+      [ "Account", settings_profile_path ],
+      [ "Preferences", settings_preferences_path ],
+      [ "Accounts", accounts_path ],
+      [ "Tags", tags_path ],
+      [ "Categories", categories_path ],
+      [ "Merchants", merchants_path ],
+      [ "Imports", imports_path ],
+      [ "What's new", changelog_path ],
+      [ "Feedback", feedback_path ]
     ]
   end
 
@@ -26,6 +21,12 @@ class SettingsTest < ApplicationSystemTestCase
     open_settings_from_sidebar
     assert_selector "h1", text: "Account"
     assert_current_path settings_profile_path
+
+    @settings_links.each do |name, path|
+      click_link name
+      assert_selector "h1", text: name
+      assert_current_path path
+    end
   end
 
   private

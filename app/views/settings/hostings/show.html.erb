@@ -1,6 +1,7 @@
 <% content_for :sidebar do %>
   <%= render "settings/nav" %>
 <% end %>
+
 <div class="space-y-4">
   <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
   <%= settings_section title: t(".general_settings_title") do %>
@@ -17,8 +18,8 @@
                 <span class="font-medium"><%= t(".upgrades.manual.title") %></span>
                 <br>
                 <span class="text-gray-500">
-                <%= t(".upgrades.manual.description") %>
-              </span>
+                  <%= t(".upgrades.manual.description") %>
+                </span>
               <% end %>
             </div>
             <div class="flex items-center gap-4">
@@ -27,8 +28,8 @@
                 <span class="font-medium"><%= t(".upgrades.latest_release.title") %></span>
                 <br>
                 <span class="text-gray-500">
-                <%= t(".upgrades.latest_release.description") %>
-              </span>
+                  <%= t(".upgrades.latest_release.description") %>
+                </span>
               <% end %>
             </div>
             <div class="flex items-center gap-4">
@@ -37,8 +38,8 @@
                 <span class="font-medium"><%= t(".upgrades.latest_commit.title") %></span>
                 <br>
                 <span class="text-gray-500">
-                <%= t(".upgrades.latest_commit.description") %>
-              </span>
+                  <%= t(".upgrades.latest_commit.description") %>
+                </span>
               <% end %>
             </div>
           </div>
@@ -82,8 +83,5 @@
     <% end %>
   <% end %>
 
-  <div class="flex justify-between gap-4">
-    <%= previous_setting("Billing", settings_billing_path) %>
-    <%= next_setting("Accounts", accounts_path) %>
-  </div>
+  <%= settings_nav_footer %>
 </div>

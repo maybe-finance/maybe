@@ -1,6 +1,7 @@
 <% content_for :sidebar do %>
   <%= render "settings/nav" %>
 <% end %>
+
 <div class="space-y-4">
   <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".title") %></h1>
   <div class="bg-white shadow-xs border border-alpha-black-25 rounded-xl p-4">
@@ -11,11 +12,11 @@
             <div class="text-white shrink-0 w-9 h-9">
               <%= image_tag release_notes[:avatar], class: "rounded-full w-full h-full object-cover" %>
             </div>
-          <div>
-            <div class="text-gray-900 font-medium text-sm"><%= release_notes[:name] %></div>
-            <div class="text-gray-500 text-sm"><%= release_notes[:published_at].strftime("%B %d, %Y") %></div>
+            <div>
+              <div class="text-gray-900 font-medium text-sm"><%= release_notes[:name] %></div>
+              <div class="text-gray-500 text-sm"><%= release_notes[:published_at].strftime("%B %d, %Y") %></div>
+            </div>
           </div>
-        </div>
         </div>
         <div class="w-2/3 text-gray-500 text-sm prose prose--github-release-notes">
           <h2 class="mb-5 text-xl text-gray-900"><%= release_notes[:name] %></h2>
@@ -24,8 +25,6 @@
       </div>
     <% end %>
   </div>
-  <div class="flex justify-between gap-4">
-    <%= previous_setting("Imports", imports_path) %>
-    <%= next_setting("Feedback", feedback_path) %>
-  </div>
+
+  <%= settings_nav_footer %>
 </div>

@@ -51,23 +51,18 @@ en:
         success: Settings updated successfully.
     nav:
       accounts_label: Accounts
-      billing_label: Billing
       categories_label: Categories
       feedback_label: Feedback
       general_section_title: General
       imports_label: Imports
-      invite_label: Invite friends
       merchants_label: Merchants
-      notifications_label: Notifications
       other_section_title: More
       preferences_label: Preferences
       profile_label: Account
-      rules_label: Rules
-      security_label: Security
-      self_hosting_label: Self-Hosting
+      self_hosting_label: Self hosting
       tags_label: Tags
       transactions_section_title: Transactions
-      whats_new_label: What's New
+      whats_new_label: What's new
     nav_link_large:
       next: Next
       previous: Back
