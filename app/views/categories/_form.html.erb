@@ -1,38 +1,25 @@
-<%= styled_form_with model: category, data: { turbo: false } do |form| %>
-  <div class="flex flex-col space-y-4 w-96" data-controller="color-select" data-color-select-selection-value="<%= category.color %>">
-    <fieldset class="relative">
-      <span data-color-select-target="decoration" class="pointer-events-none absolute inset-y-3.5 left-3 flex items-center pl-1 block w-1 rounded-lg"></span>
-      <%= form.text_field :name,
-            value: category.name,
-            autofocus: "",
-            required: true,
-            placeholder: "Enter Category name",
-            class: "rounded-lg w-full focus:ring-black focus:border-transparent placeholder:text-gray-500 pl-6" %>
-    </fieldset>
-
-    <fieldset>
-      <%= form.hidden_field :color, data: { color_select_target: "input" } %>
-
-      <ul role="radiogroup" class="flex justify-between items-center py-2">
+<div data-controller="color-avatar">
+  <%= styled_form_with model: category, class: "space-y-4", data: { turbo: false } do |f| %>
+    <section class="space-y-4">
+      <div class="w-fit m-auto">
+        <%= render partial: "shared/color_avatar", locals: { name: category.name, color: category.color } %>
+      </div>
+      <div class="flex gap-2 items-center justify-center">
         <% Category::COLORS.each do |color| %>
-          <li tabindex="0"
-              role="radio"
-              data-action="click->color-select#select keydown.enter->color-select#select keydown.space->color-select#select"
-              data-value="<%= color %>"
-              class="flex shrink-0 justify-center items-center w-5 h-5 cursor-pointer hover:bg-gray-200 rounded-full">
-          </li>
+          <label class="relative">
+            <%= f.radio_button :color, color, class: "sr-only peer", data: { action: "change->color-avatar#handleColorChange" } %>
+            <div class="w-6 h-6 rounded-full cursor-pointer peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-blue-500" style="background-color: <%= color %>"></div>
+          </label>
         <% end %>
-      </ul>
-    </fieldset>
+      </div>
+      <div class="relative flex items-center border border-gray-200 rounded-lg">
+        <%= f.text_field :name, placeholder: t(".placeholder"), class: "text-sm font-normal placeholder:text-gray-500 h-10 relative pl-3 w-full border-none rounded-lg", required: true, data: { color_avatar_target: "name" } %>
+      </div>
+    </section>
 
     <section>
       <%= hidden_field_tag :transaction_id, params[:transaction_id] %>
-
-      <% if category.persisted? %>
-        <%= form.submit t(".update") %>
-      <% else %>
-        <%= form.submit t(".create") %>
-      <% end %>
+      <%= f.submit %>
     </section>
-  </div>
-<% end %>
+  <% end %>
+</div>

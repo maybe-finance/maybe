@@ -1,61 +1,57 @@
 import { Controller } from "@hotwired/stimulus";
+import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 
 /**
  * A "menu" can contain arbitrary content including non-clickable items, links, buttons, and forms.
- *
- * - If you need a form-enabled "select" element, use the "listbox" controller instead.
  */
 export default class extends Controller {
-  static targets = [
-    "button",
-    "content",
-    "submenu",
-    "submenuButton",
-    "submenuContent",
-  ];
+  static targets = ["button", "content"];
 
   static values = {
-    show: { type: Boolean, default: false },
-    showSubmenu: { type: Boolean, default: false },
+    show: Boolean,
+    placement: { type: String, default: "bottom-end" },
+    offset: { type: Number, default: 5 },
   };
 
-  initialize() {
+  connect() {
     this.show = this.showValue;
-    this.showSubmenu = this.showSubmenuValue;
+    this.boundUpdate = this.update.bind(this);
+    this.addEventListeners();
+    this.startAutoUpdate();
   }
 
-  connect() {
+  disconnect() {
+    this.removeEventListeners();
+    this.stopAutoUpdate();
+    this.close();
+  }
+
+  addEventListeners() {
     this.buttonTarget.addEventListener("click", this.toggle);
     this.element.addEventListener("keydown", this.handleKeydown);
     document.addEventListener("click", this.handleOutsideClick);
     document.addEventListener("turbo:load", this.handleTurboLoad);
   }
 
-  disconnect() {
-    this.element.removeEventListener("keydown", this.handleKeydown);
+  removeEventListeners() {
     this.buttonTarget.removeEventListener("click", this.toggle);
+    this.element.removeEventListener("keydown", this.handleKeydown);
     document.removeEventListener("click", this.handleOutsideClick);
     document.removeEventListener("turbo:load", this.handleTurboLoad);
-    this.close();
   }
 
-  // If turbo reloads, we maintain the state of the menu
   handleTurboLoad = () => {
     if (!this.show) this.close();
   };
 
   handleOutsideClick = (event) => {
-    if (this.show && !this.element.contains(event.target)) {
-      this.close();
-    }
+    if (this.show && !this.element.contains(event.target)) this.close();
   };
 
   handleKeydown = (event) => {
-    switch (event.key) {
-      case "Escape":
-        this.close();
-        this.buttonTarget.focus(); // Bring focus back to the button
-        break;
+    if (event.key === "Escape") {
+      this.close();
+      this.buttonTarget.focus();
     }
   };
 
@@ -63,6 +59,7 @@ export default class extends Controller {
     this.show = !this.show;
     this.contentTarget.classList.toggle("hidden", !this.show);
     if (this.show) {
+      this.update();
       this.focusFirstElement();
     }
   };
@@ -73,12 +70,41 @@ export default class extends Controller {
   }
 
   focusFirstElement() {
-    const focusableElements =
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-    const firstFocusableElement =
-      this.contentTarget.querySelectorAll(focusableElements)[0];
+    const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const firstFocusableElement = this.contentTarget.querySelectorAll(focusableElements)[0];
     if (firstFocusableElement) {
       firstFocusableElement.focus();
     }
+  }
+
+  startAutoUpdate() {
+    if (!this._cleanup) {
+      this._cleanup = autoUpdate(this.buttonTarget, this.contentTarget, this.boundUpdate);
+    }
+  }
+
+  stopAutoUpdate() {
+    if (this._cleanup) {
+      this._cleanup();
+      this._cleanup = null;
+    }
+  }
+
+  update() {
+    computePosition(this.buttonTarget, this.contentTarget, {
+      placement: this.placementValue,
+      middleware: [
+        offset(this.offsetValue),
+        flip(),
+        shift({ padding: 5 })
+      ],
+    }).then(({ x, y }) => {
+      Object.assign(this.contentTarget.style, {
+        position: 'fixed',
+        left: `${x}px`,
+        top: `${y}px`,
+        width: 'max-content',
+      });
+    });
   }
 }

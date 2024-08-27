@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
-// Connects to data-controller="merchant-avatar"
+// Connects to data-controller="color-avatar"
 // Used by the transaction merchant form to show a preview of what the avatar will look like
 export default class extends Controller {
   static targets = [
