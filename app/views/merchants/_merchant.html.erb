@@ -2,7 +2,7 @@
 
 <div class="flex justify-between items-center p-4 bg-white">
   <div class="flex w-full items-center gap-2.5">
-    <%= render partial: "merchants/avatar", locals: { merchant: } %>
+    <%= render partial: "shared/color_avatar", locals: { name: merchant.name, color: merchant.color } %>
     <p class="text-gray-900 text-sm truncate">
       <%= merchant.name %>
     </p>
