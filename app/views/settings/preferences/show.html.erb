@@ -1,6 +1,7 @@
 <% content_for :sidebar do %>
   <%= render "settings/nav" %>
 <% end %>
+
 <div class="space-y-4">
   <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
   <%= settings_section title: t(".general_title"), subtitle: t(".general_subtitle") do %>
@@ -39,8 +40,6 @@
       <% end %>
     </div>
   <% end %>
-  <div class="flex justify-between gap-4">
-    <%= previous_setting("Account", settings_profile_path) %>
-    <%= next_setting("Notifications", settings_notifications_path) %>
-  </div>
+
+  <%= settings_nav_footer %>
 </div>

@@ -3,7 +3,6 @@ Rails.application.routes.draw do
 
   get "changelog" => "pages#changelog", as: :changelog
   get "feedback" => "pages#feedback", as: :feedback
-  get "invites" => "pages#invites", as: :invites
 
   resource :registration
   resource :session
@@ -17,12 +16,9 @@ Rails.application.routes.draw do
   namespace :settings do
     resource :profile, only: %i[show update destroy]
     resource :preferences, only: %i[show update]
-    resource :notifications, only: %i[show update]
-    resource :billing, only: %i[show update]
     resource :hosting, only: %i[show update] do
       post :send_test_email, on: :collection
     end
-    resource :security, only: %i[show update]
   end
 
   resources :imports, except: :show do
@@ -58,10 +54,6 @@ Rails.application.routes.draw do
 
   namespace :account do
     resources :transfers, only: %i[new create destroy]
-
-    namespace :transaction do
-      resources :rules, only: %i[index]
-    end
   end
 
   resources :accounts do

@@ -20,15 +20,6 @@
       <li>
         <%= sidebar_link_to t(".preferences_label"), settings_preferences_path, icon: "bolt" %>
       </li>
-      <li>
-        <%= sidebar_link_to t(".notifications_label"), settings_notifications_path, icon: "bell-dot" %>
-      </li>
-      <li>
-        <%= sidebar_link_to t(".security_label"), settings_security_path, icon: "shield-check" %>
-      </li>
-      <li>
-        <%= sidebar_link_to t(".billing_label"), settings_billing_path, icon: "circle-dollar-sign" %>
-      </li>
       <% if self_hosted? %>
         <li>
           <%= sidebar_link_to t(".self_hosting_label"), settings_hosting_path, icon: "database" %>
@@ -56,9 +47,6 @@
       <%= sidebar_link_to t(".merchants_label"), merchants_path, icon: "store" %>
     </li>
     <li>
-      <%= sidebar_link_to t(".rules_label"), rules_transactions_path, icon: "list-checks" %>
-    </li>
-    <li>
       <%= sidebar_link_to t(".imports_label"), imports_path, icon: "download" %>
     </li>
   </ul>
@@ -72,7 +60,6 @@
     <li>
       <%= sidebar_link_to t(".whats_new_label"), changelog_path, icon: "box" %>
       <%= sidebar_link_to t(".feedback_label"), feedback_path, icon: "megaphone" %>
-      <%= sidebar_link_to t(".invite_label"), invites_path, icon: "gift" %>
     </li>
   </ul>
 </section>
