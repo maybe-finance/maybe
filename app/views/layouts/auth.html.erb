@@ -8,9 +8,11 @@
       </h2>
 
       <% if controller_name == "sessions" %>
-        <p class="mt-2 text-sm text-center text-gray-600">
-          <%= t(".or") %> <%= link_to t(".sign_up"), new_registration_path, class: "font-medium text-gray-600 hover:text-gray-400 transition" %>
-        </p>
+        <% unless invite_code_required? %>
+          <p class="mt-2 text-sm text-center text-gray-600">
+            <%= t(".or") %> <%= link_to t(".sign_up"), new_registration_path, class: "font-medium text-gray-600 hover:text-gray-400 transition" %>
+          </p>
+        <% end %>
       <% elsif controller_name == "registrations" %>
         <p class="mt-2 text-sm text-center text-gray-600">
           <%= t(".or") %> <%= link_to t(".sign_in"), new_session_path, class: "font-medium text-gray-600 hover:text-gray-400 transition" %>
