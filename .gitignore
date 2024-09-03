@@ -59,3 +59,4 @@ compose-dev.yaml
 gcp-storage-keyfile.json
 
 coverage
+.cursorrules
