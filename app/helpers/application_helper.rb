@@ -154,8 +154,4 @@ module ApplicationHelper
               .map { |_currency, money| format_money(money) }
               .join(separator)
   end
-
-  def invite_code_required?
-    ENV["REQUIRE_INVITE_CODE"] == "true"
-  end
 end
