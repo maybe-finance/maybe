@@ -27,7 +27,6 @@ class SettingsTest < ApplicationSystemTestCase
         click_link name
         assert_selector "h1", text: name
         assert_current_path path
-
       end
     end
   end
