@@ -24,6 +24,40 @@
       "note": ""
     },
     {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "b1f821a5c03b8aa348fb21b9297081a3bf9e954244290e7e511c67213d35f3dc",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/pages/changelog.html.erb",
+      "line": 22,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "Provider::Github.new.fetch_latest_release_notes[:body]",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "PagesController",
+          "method": "changelog",
+          "line": 35,
+          "file": "app/controllers/pages_controller.rb",
+          "rendered": {
+            "name": "pages/changelog",
+            "file": "app/views/pages/changelog.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "pages/changelog"
+      },
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
       "fingerprint": "b7a59d6dd91f4d30873b271659636c7975e25b47f436b4f03900a08809af2e92",
@@ -58,6 +92,6 @@
       "note": ""
     }
   ],
-  "updated": "2024-08-23 08:29:05 -0400",
+  "updated": "2024-09-09 14:56:48 -0400",
   "brakeman_version": "6.2.1"
 }
