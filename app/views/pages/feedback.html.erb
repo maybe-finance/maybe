@@ -5,8 +5,23 @@
 <div class="space-y-4">
   <h1 class="text-gray-900 text-xl font-medium mb-4">Feedback</h1>
   <div class="bg-white shadow-xs border border-alpha-black-25 rounded-xl p-4">
-    <div class="flex justify-center items-center py-20">
-      <p class="text-gray-500">Feedback coming soon...</p>
+    <h2 class="text-lg font-medium text-gray-900 mb-1">Leave feedback</h2>
+    <p class="text-sm text-gray-500 mb-4">Let us know if you have any specific feedback. Feel free to include links to videos or screenshots.</p>
+    <div class="flex gap-2">
+      <%= link_to "https://github.com/maybe-finance/maybe/discussions/categories/feature-requests", target: "_blank", rel: "noopener noreferrer", class: "w-1/3 flex flex-col items-center p-4 border border-alpha-black-25 rounded-xl hover:bg-gray-50" do %>
+        <%= image_tag "github-icon.png", class: "w-8 h-8 mb-2" %>
+        <span class="text-sm font-medium text-gray-900">Write a feature request</span>
+      <% end %>
+
+      <%= link_to "https://github.com/maybe-finance/maybe/issues/new?assignees=&labels=bug&template=bug_report.md&title=", target: "_blank", rel: "noopener noreferrer", class: "w-1/3 flex flex-col items-center p-4 border border-alpha-black-25 rounded-xl hover:bg-gray-50" do %>
+        <%= image_tag "github-icon.png", class: "w-8 h-8 mb-2" %>
+        <span class="text-sm font-medium text-gray-900">File a bug report</span>
+      <% end %>
+
+      <%= link_to "https://link.maybe.co/discord", target: "_blank", rel: "noopener noreferrer", class: "w-1/3 flex flex-col items-center p-4 border border-alpha-black-25 rounded-xl hover:bg-gray-50" do %>
+        <%= image_tag "discord-icon.png", class: "w-8 h-8 mb-2" %>
+        <span class="text-sm font-medium text-gray-900">Discuss Maybe with others</span>
+      <% end %>
     </div>
   </div>
 
