@@ -12,7 +12,7 @@ class Account::ValuationsController < ApplicationController
 
     if @entry.save
       @entry.sync_account_later
-      redirect_to account_valuations_path(@account), notice: t(".success")
+      redirect_back_or_to account_valuations_path(@account), notice: t(".success")
     else
       flash[:alert] = @entry.errors.full_messages.to_sentence
       redirect_to account_path(@account)

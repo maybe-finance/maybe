@@ -33,7 +33,7 @@
     <div class="col-span-1 justify-self-end">
       <%= contextual_menu do %>
         <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-          <%= contextual_menu_modal_action_item t(".edit_entry"), edit_account_entry_path(account, entry) %>
+          <%= contextual_menu_modal_action_item t(".edit_entry"), edit_account_entry_path(account, entry), turbo_frame: dom_id(entry) %>
 
           <%= contextual_menu_destructive_item t(".delete_entry"),
                                                account_entry_path(account, entry),
