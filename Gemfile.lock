@@ -270,7 +270,7 @@ GEM
     parser (3.3.4.0)
       ast (~> 2.4.1)
       racc
-    pg (1.5.7)
+    pg (1.5.8)
     prism (0.30.0)
     propshaft (0.9.1)
       actionpack (>= 7.0.0)
