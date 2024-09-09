@@ -9,4 +9,11 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     get root_path
     assert_response :ok
   end
+
+  test "changelog" do
+    VCR.use_cassette("git_repository_provider/fetch_latest_release_notes") do
+      get changelog_path
+      assert_response :ok
+    end
+  end
 end
