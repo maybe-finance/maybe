@@ -40,7 +40,7 @@ class Provider::Github
     end
   end
 
-  def fetch_latest_releases_notes
+  def fetch_latest_release_notes
     begin
       Rails.cache.fetch("latest_github_release_notes", expires_in: 2.hours) do
         release = Octokit.releases(repo).first
