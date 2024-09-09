@@ -203,7 +203,7 @@ GEM
       actionpack (>= 6.0.0)
       activesupport (>= 6.0.0)
       railties (>= 6.0.0)
-    inline_svg (1.9.0)
+    inline_svg (1.10.0)
       activesupport (>= 3.0)
       nokogiri (>= 1.6)
     io-console (0.7.2)
