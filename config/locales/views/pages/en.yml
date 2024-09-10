@@ -7,17 +7,15 @@ en:
       allocation_chart:
         assets: Assets
         debts: Debts
-      categories: Categories
       greeting: Welcome back, %{name}
       income: Income
       investing: Investing (coming soon...)
       net_worth: Net Worth
       new: New account
       no_transactions: You have no recent transactions
-      recurring: Recurring
       savings_rate: Savings Rate
       spending: Spending
       subtitle: Here's what's happening today
+      title: Dashboard
       transactions: Recent transactions
       view_all: View all
-      title: Dashboard

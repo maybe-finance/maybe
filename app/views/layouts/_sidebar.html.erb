@@ -109,7 +109,7 @@
     <% else %>
       <%= link_to new_account_path, class: "flex items-center min-h-10 gap-4 px-3 py-2 mb-1 text-gray-500 text-sm font-medium rounded-[10px] hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
         <%= lucide_icon("plus", class: "w-5 h-5") %>
-        <p>New account</p>
+        <%= tag.p t(".new_account") %>
       <% end %>
     <% end %>
   <% end %>
