@@ -91,8 +91,9 @@
         <%= t(".portfolio") %>
       <% end %>
       <span class="font-bold tracking-wide">&bull;</span>
-      <%= form_with url: list_accounts_path, method: :get, data: { controller: "auto-submit-form", turbo_frame: "account-list" } do |form| %>
-        <%= period_select form: form, selected: "last_7_days", classes: "w-full border-none pl-2 pr-7 text-xs bg-transparent gap-1 cursor-pointer font-semibold tracking-wide focus:outline-none focus:ring-0" %>
+
+      <%= form_with url: list_accounts_path, method: :get, data: { controller: Current.family.accounts.any? ? "auto-submit-form" : nil, turbo_frame: "account-list" } do |form| %>
+        <%= period_select form: form, selected: "last_30_days", classes: "w-full border-none pl-2 pr-7 text-xs bg-transparent gap-1 cursor-pointer font-semibold tracking-wide focus:outline-none focus:ring-0" %>
       <% end %>
     </div>
     <%= link_to new_account_path, id: "sidebar-new-account", class: "block hover:bg-gray-100 font-semibold text-gray-900 flex items-center rounded", title: t(".new_account"), data: { turbo_frame: "modal" } do %>
@@ -101,8 +102,15 @@
   </div>
 
   <%= turbo_frame_tag "account-list", target: "_top" do %>
-    <% account_groups.each do |group| %>
-      <%= render "accounts/account_list", group: group %>
+    <% if Current.family.accounts.any? %>
+      <% account_groups.each do |group| %>
+        <%= render "accounts/account_list", group: group %>
+      <% end %>
+    <% else %>
+      <%= link_to new_account_path, class: "flex items-center min-h-10 gap-4 px-3 py-2 mb-1 text-gray-500 text-sm font-medium rounded-[10px] hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
+        <%= lucide_icon("plus", class: "w-5 h-5") %>
+        <%= tag.p t(".new_account") %>
+      <% end %>
     <% end %>
   <% end %>
 </div>
