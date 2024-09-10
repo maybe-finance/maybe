@@ -12,6 +12,11 @@ en:
         email_sender: Email Sender
         email_sender_placeholder: user@mydomain.com
         general_settings_title: General Settings
+        invite_settings:
+          description: Configuration for invite codes.
+          generate_tokens: Generate invite token
+          require_invite_for_signup: Require invite code for new signups
+          title: Invite Codes
         page_title: Self-Hosting
         provider_settings:
           title: Provider Settings
@@ -33,11 +38,6 @@ en:
           title: SMTP Email Configuration
           username: Username
           username_placeholder: username@gmail.com
-        invite_settings:
-          description: Configuration for invite codes.
-          title: Invite Codes
-          require_invite_for_signup: Require invite code for new signups
-          generate_tokens: Generate invite token
         upgrades:
           description: Choose how your application receives updates
           latest_commit:
