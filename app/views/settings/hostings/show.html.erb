@@ -4,9 +4,8 @@
 
 <div class="space-y-4">
   <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
-  <%= settings_section title: t(".general_settings_title") do %>
-    <%= styled_form_with model: Setting.new, url: settings_hosting_path, method: :patch, local: true, class: "space-y-6", data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
-
+  <%= styled_form_with model: Setting.new, url: settings_hosting_path, method: :patch, local: true, class: "space-y-6", data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
+    <%= settings_section title: t(".general_settings_title") do %>
       <% if ENV["HOSTING_PLATFORM"] == "render" %>
         <div>
           <h2 class="font-medium mb-1"><%= t(".upgrades.title") %></h2>
@@ -51,63 +50,67 @@
           <%= form.url_field :render_deploy_hook, label: t(".render_deploy_hook_label"), placeholder: t(".render_deploy_hook_placeholder"), value: Setting.render_deploy_hook, data: { "auto-submit-form-target" => "auto" } %>
         </div>
       <% end %>
+    <% end %>
 
-      <div>
-        <h2 class="font-medium mb-1"><%= t(".smtp_settings.title") %></h2>
-        <p class="text-gray-500 text-sm mb-4"><%= t(".smtp_settings.description") %></p>
-        <div class="space-y-4">
-          <div class="space-y-3">
-            <%= form.text_field :email_sender, label: t(".email_sender"), placeholder: t(".email_sender_placeholder"), value: Setting.email_sender, data: { "auto-submit-form-target" => "auto" } %>
-            <%= form.text_field :app_domain, label: t(".domain"), placeholder: t(".domain_placeholder"), value: Setting.app_domain, data: { "auto-submit-form-target" => "auto" } %>
-            <%= form.text_field :smtp_host, label: t(".smtp_settings.host"), placeholder: t(".smtp_settings.host_placeholder"), value: Setting.smtp_host, data: { "auto-submit-form-target" => "auto" } %>
-            <%= form.number_field :smtp_port, label: t(".smtp_settings.port"), placeholder: t(".smtp_settings.port_placeholder"), value: Setting.smtp_port, data: { "auto-submit-form-target" => "auto" } %>
-            <%= form.text_field :smtp_username, label: t(".smtp_settings.username"), placeholder: t(".smtp_settings.username_placeholder"), value: Setting.smtp_username, data: { "auto-submit-form-target" => "auto" } %>
-            <%= form.password_field :smtp_password, label: t(".smtp_settings.password"), placeholder: t(".smtp_settings.password_placeholder"), value: Setting.smtp_password, data: { "auto-submit-form-target" => "auto" } %>
-          </div>
-          <div class="flex items-center justify-between bg-white border border-alpha-black-100 p-4 rounded-lg">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-gray-25 flex items-center justify-center">
-                <%= lucide_icon "mails", class: "w-6 h-6 text-gray-500" %>
-              </div>
-              <div>
-                <p class="text-gray-900 font-medium text-sm"><%= t(".smtp_settings.send_test_email") %></p>
-                <p class="text-gray-500 text-sm"><%= t(".smtp_settings.send_test_email_description") %></p>
-              </div>
+    <%= settings_section title: t(".smtp_settings.title") do %>
+      <p class="text-gray-500 text-sm mb-4"><%= t(".smtp_settings.description") %></p>
+      <div class="space-y-4">
+        <div class="space-y-3">
+          <%= form.text_field :email_sender, label: t(".email_sender"), placeholder: t(".email_sender_placeholder"), value: Setting.email_sender, data: { "auto-submit-form-target" => "auto" } %>
+          <%= form.text_field :app_domain, label: t(".domain"), placeholder: t(".domain_placeholder"), value: Setting.app_domain, data: { "auto-submit-form-target" => "auto" } %>
+          <%= form.text_field :smtp_host, label: t(".smtp_settings.host"), placeholder: t(".smtp_settings.host_placeholder"), value: Setting.smtp_host, data: { "auto-submit-form-target" => "auto" } %>
+          <%= form.number_field :smtp_port, label: t(".smtp_settings.port"), placeholder: t(".smtp_settings.port_placeholder"), value: Setting.smtp_port, data: { "auto-submit-form-target" => "auto" } %>
+          <%= form.text_field :smtp_username, label: t(".smtp_settings.username"), placeholder: t(".smtp_settings.username_placeholder"), value: Setting.smtp_username, data: { "auto-submit-form-target" => "auto" } %>
+          <%= form.password_field :smtp_password, label: t(".smtp_settings.password"), placeholder: t(".smtp_settings.password_placeholder"), value: Setting.smtp_password, data: { "auto-submit-form-target" => "auto" } %>
+        </div>
+        <div class="flex items-center justify-between bg-white border border-alpha-black-100 p-4 rounded-lg">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gray-25 flex items-center justify-center">
+              <%= lucide_icon "mails", class: "w-6 h-6 text-gray-500" %>
             </div>
             <div>
-              <%= link_to t(".smtp_settings.send_test_email_button"), send_test_email_settings_hosting_path, data: { turbo_method: :post }, class: "bg-gray-50 text-gray-900 text-sm font-medium rounded-lg px-3 py-2" %>
+              <p class="text-gray-900 font-medium text-sm"><%= t(".smtp_settings.send_test_email") %></p>
+              <p class="text-gray-500 text-sm"><%= t(".smtp_settings.send_test_email_description") %></p>
             </div>
+          </div>
+          <div>
+            <%= link_to t(".smtp_settings.send_test_email_button"), send_test_email_settings_hosting_path, data: { turbo_method: :post }, class: "bg-gray-50 text-gray-900 text-sm font-medium rounded-lg px-3 py-2" %>
           </div>
         </div>
       </div>
+    <% end %>
 
-      <div>
-        <h2 class="font-medium mb-1"><%= t(".invite_settings.title") %></h2>
-        <p class="text-gray-500 text-sm mb-4"><%= t(".invite_settings.description") %></p>
-        <div class="flex cursor-pointer items-center justify-between">
+    <%= settings_section title: t(".invite_settings.title") do %>
+      <div class="flex cursor-pointer items-center justify-between">
+        <div>
+          <p><%= t(".invite_settings.require_invite_for_signup") %></p>
+          <p class="text-gray-500 text-sm mb-4"><%= t(".invite_settings.invite_code_description") %></p>
+        </div>
+        <div class="relative inline-block select-none">
+          <%= form.check_box :require_invite_for_signup, class: "sr-only peer", "data-auto-submit-form-target": "auto", "data-autosubmit-trigger-event": "input" %>
+          <%= form.label :require_invite_for_signup, "&nbsp;".html_safe, class: "maybe-switch" %>
+        </div>
+      </div>
+
+      <% if Setting.require_invite_for_signup %>
+        <div class="flex items-center justify-between">
           <div>
-            <p><%= t(".invite_settings.require_invite_for_signup") %></p>
-          </div>
-          <div class="relative inline-block select-none">
-            <%= form.check_box :require_invite_for_signup, class: "sr-only peer", "data-auto-submit-form-target": "auto", "data-autosubmit-trigger-event": "input" %>
-            <%= form.label :require_invite_for_signup, "&nbsp;".html_safe, class: "maybe-switch" %>
+            <span class="text-gray-900 text-l font-medium mb-4"><%= t(".invite_settings.generated_tokens") %></span>
           </div>
           <div>
-            <% if Setting.require_invite_for_signup %>
-              <%= link_to invite_codes_path,
-                          class: "flex gap-1 bg-gray-50 text-gray-900 text-sm font-medium rounded-lg px-3 py-2",
-                          data: { turbo_method: :post }  do %>
-                <%= lucide_icon "binary", class: "w-5 h-5 text-gray-500" %>
-                <span><%= t(".invite_settings.generate_tokens") %></span>
-              <% end %>
+            <%= link_to invite_codes_path,
+                        class: "flex gap-1 bg-gray-50 text-gray-900 text-base rounded-lg px-3 py-2",
+                        data: { turbo_method: :post }  do %>
+              <span><%= t(".invite_settings.generate_tokens") %></span>
             <% end %>
           </div>
         </div>
-      </div>
 
-      <%= turbo_frame_tag :invite_codes, src: invite_codes_path %>
+        <div>
+          <%= turbo_frame_tag :invite_codes, src: invite_codes_path %>
+        </div>
+      <% end %>
     <% end %>
   <% end %>
-
   <%= settings_nav_footer %>
 </div>

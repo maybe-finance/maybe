@@ -37,12 +37,11 @@ class SettingsTest < ApplicationSystemTestCase
     assert_current_path settings_hosting_path
     assert_selector "h1", text: "Self-Hosting"
     check "setting_require_invite_for_signup", allow_label_click: true
-    assert_selector "a", text: "Generate invite token"
-    click_link "Generate invite token"
-    assert_selector 'input[data-clipboard-target="source"]', visible: true, count: 1 # invite code copy widget
+    click_link "Generate new code"
+    assert_selector 'span[data-clipboard-target="source"]', visible: true, count: 1 # invite code copy widget
     copy_button = find('button[data-action="clipboard#copy"]', match: :first) # Find the first copy button (adjust if needed)
     copy_button.click
-    assert_selector "span", text: "copied", visible: true
+    assert_selector 'span[data-clipboard-target="iconSuccess"]', visible: true, count: 1 # text copied and icon changed to checkmark
   end
 
   private

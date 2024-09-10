@@ -6,8 +6,9 @@ export default class extends Controller {
 
   copy(event) {
     event.preventDefault();
-    if (this.sourceTarget && this.sourceTarget.value) {
-      navigator.clipboard.writeText(this.sourceTarget.value)
+    debugger
+    if (this.sourceTarget && this.sourceTarget.textContent) {
+      navigator.clipboard.writeText(this.sourceTarget.textContent)
         .then(() => {
           this.showSuccess();
         })
