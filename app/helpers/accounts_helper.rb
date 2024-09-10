@@ -69,6 +69,11 @@ module AccountsHelper
     tab || available_tabs.first
   end
 
+  def account_groups(period: nil)
+    assets, liabilities = Current.family.accounts.by_group(currency: Current.family.currency, period: period || Period.last_30_days).values_at(:assets, :liabilities)
+    [ assets.children, liabilities.children ].flatten
+  end
+
   private
 
     def class_mapping(accountable_type)

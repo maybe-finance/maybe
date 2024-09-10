@@ -57,11 +57,6 @@ module ApplicationHelper
     render partial: "shared/drawer", locals: { content: content }
   end
 
-  def account_groups(period: nil)
-    assets, liabilities = Current.family.accounts.by_group(currency: Current.family.currency, period: period || Period.last_30_days).values_at(:assets, :liabilities)
-    [ assets.children, liabilities.children ].flatten
-  end
-
   def sidebar_link_to(name, path, options = {})
     is_current = current_page?(path) || (request.path.start_with?(path) && path != "/")
 

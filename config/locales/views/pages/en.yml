@@ -18,5 +18,6 @@ en:
       savings_rate: Savings Rate
       spending: Spending
       subtitle: Here's what's happening today
-      transactions: Transactions
+      transactions: Recent transactions
       view_all: View all
+      title: Dashboard
