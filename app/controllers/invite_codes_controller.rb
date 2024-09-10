@@ -1,15 +1,10 @@
 class InviteCodesController < ApplicationController
   def index
-    @invite_codes = fetch_invite_codes
-    respond_to do |format|
-      format.html
-      format.turbo_stream { render turbo_stream: turbo_stream.replace("invite_codes", partial: "invite_codes") }
-    end
+    @invite_codes = InviteCode.all
   end
 
-  private
-
-    def fetch_invite_codes
-      InviteCode.pluck(:token).presence || [ InviteCode.generate! ]
-    end
+  def create
+    InviteCode.generate!
+    redirect_back_or_to invite_codes_path, notice: "Code generated"
+  end
 end

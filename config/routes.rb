@@ -96,7 +96,7 @@ Rails.application.routes.draw do
   end
 
   resources :institutions, except: %i[index show]
-  resources :invite_codes, only: %i[index]
+  resources :invite_codes, only: %i[index create]
 
   resources :issues, only: :show
 
