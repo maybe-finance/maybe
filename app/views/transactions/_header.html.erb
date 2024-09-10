@@ -4,19 +4,11 @@
     <div class="flex items-center gap-2">
       <%= contextual_menu do %>
         <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-          <%= link_to categories_path,
-                      class: "block w-full py-2 px-3 space-x-2 text-gray-900 hover:bg-gray-50 flex items-center rounded-lg font-normal" do %>
-            <%= lucide_icon "tags", class: "w-5 h-5 text-gray-500" %>
-            <span class="text-black"><%= t(".edit_categories") %></span>
-          <% end %>
-
-          <%= link_to imports_path,
-                      class: "block w-full py-2 px-3 space-x-2 text-gray-900 hover:bg-gray-50 flex items-center rounded-lg font-normal" do %>
-            <%= lucide_icon "hard-drive-upload", class: "w-5 h-5 text-gray-500" %>
-            <span class="text-black"><%= t(".edit_imports") %></span>
-          <% end %>
+          <%= contextual_menu_modal_action_item t(".edit_categories"), categories_path, icon: "shapes", turbo_frame: :_top %>
+          <%= contextual_menu_modal_action_item t(".edit_tags"), tags_path, icon: "tags", turbo_frame: :_top %>
+          <%= contextual_menu_modal_action_item t(".edit_merchants"), merchants_path, icon: "store", turbo_frame: :_top %>
+          <%= contextual_menu_modal_action_item t(".edit_imports"), imports_path, icon: "hard-drive-upload", turbo_frame: :_top %>
         </div>
-
       <% end %>
 
       <%= link_to new_import_path(enable_type_selector: true), class: "rounded-lg bg-gray-50 border border-gray-200 flex items-center gap-1 justify-center px-3 py-2", data: { turbo_frame: "modal" } do %>
