@@ -96,7 +96,7 @@
             <% if Setting.require_invite_for_signup %>
               <%= link_to invite_codes_path,
                           class: "flex gap-1 bg-gray-50 text-gray-900 text-sm font-medium rounded-lg px-3 py-2",
-                          data: { turbo_frame: "invite_codes", turbo_stream: true }  do %>
+                          data: { turbo_method: :post }  do %>
                 <%= lucide_icon "binary", class: "w-5 h-5 text-gray-500" %>
                 <span><%= t(".invite_settings.generate_tokens") %></span>
               <% end %>
@@ -105,7 +105,7 @@
         </div>
       </div>
 
-      <%= turbo_frame_tag "invite_codes" %>
+      <%= turbo_frame_tag :invite_codes, src: invite_codes_path %>
     <% end %>
   <% end %>
 
