@@ -29,6 +29,22 @@ class SettingsTest < ApplicationSystemTestCase
     end
   end
 
+  test "can update self hosting settings" do
+    Rails.application.config.app_mode.stubs(:self_hosted?).returns(true)
+    open_settings_from_sidebar
+    assert_selector "li", text: "Self hosting"
+    click_link "Self hosting"
+    assert_current_path settings_hosting_path
+    assert_selector "h1", text: "Self-Hosting"
+    check "setting_require_invite_for_signup", allow_label_click: true
+    assert_selector "a", text: "Generate invite token"
+    click_link "Generate invite token"
+    assert_selector 'input[data-clipboard-target="source"]', visible: true, count: 1 # invite code copy widget
+    copy_button = find('button[data-action="clipboard#copy"]', match: :first) # Find the first copy button (adjust if needed)
+    copy_button.click
+    assert_selector "span", text: "copied", visible: true
+  end
+
   private
 
     def open_settings_from_sidebar

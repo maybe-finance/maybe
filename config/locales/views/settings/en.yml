@@ -33,6 +33,11 @@ en:
           title: SMTP Email Configuration
           username: Username
           username_placeholder: username@gmail.com
+        invite_settings:
+          description: Configuration for invite codes.
+          title: Invite Codes
+          require_invite_for_signup: Require invite code for new signups
+          generate_tokens: Generate invite token
         upgrades:
           description: Choose how your application receives updates
           latest_commit:
