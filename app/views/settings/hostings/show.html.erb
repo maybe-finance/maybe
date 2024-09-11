@@ -4,9 +4,9 @@
 
 <div class="space-y-4">
   <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
-  <%= styled_form_with model: Setting.new, url: settings_hosting_path, method: :patch, local: true, class: "space-y-6", data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
-    <%= settings_section title: t(".general_settings_title") do %>
-      <% if ENV["HOSTING_PLATFORM"] == "render" %>
+  <%= settings_section title: t(".general_settings_title") do %>
+    <% if ENV["HOSTING_PLATFORM"] == "render" %>
+      <%= styled_form_with model: Setting.new, url: settings_hosting_path, method: :patch, local: true, class: "space-y-6", data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
         <div>
           <h2 class="font-medium mb-1"><%= t(".upgrades.title") %></h2>
           <p class="text-gray-500 text-sm mb-4"><%= t(".upgrades.description") %></p>
@@ -51,8 +51,10 @@
         </div>
       <% end %>
     <% end %>
+  <% end %>
 
-    <%= settings_section title: t(".smtp_settings.title") do %>
+  <%= settings_section title: t(".smtp_settings.title") do %>
+    <%= styled_form_with model: Setting.new, url: settings_hosting_path, method: :patch, data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
       <p class="text-gray-500 text-sm mb-4"><%= t(".smtp_settings.description") %></p>
       <div class="space-y-4">
         <div class="space-y-3">
@@ -79,38 +81,41 @@
         </div>
       </div>
     <% end %>
+  <% end %>
 
-    <%= settings_section title: t(".invite_settings.title") do %>
-      <div class="flex cursor-pointer items-center justify-between">
-        <div>
-          <p class="text-sm"><%= t(".invite_settings.require_invite_for_signup") %></p>
-          <p class="text-gray-500 text-sm mb-4"><%= t(".invite_settings.invite_code_description") %></p>
-        </div>
+  <%= settings_section title: t(".invite_settings.title") do %>
+    <div class="flex cursor-pointer items-center justify-between">
+      <div>
+        <p class="text-sm"><%= t(".invite_settings.require_invite_for_signup") %></p>
+        <p class="text-gray-500 text-sm mb-4"><%= t(".invite_settings.invite_code_description") %></p>
+      </div>
+      <%= styled_form_with model: Setting.new, url: settings_hosting_path, method: :patch, data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
         <div class="relative inline-block select-none">
           <%= form.check_box :require_invite_for_signup, class: "sr-only peer", "data-auto-submit-form-target": "auto", "data-autosubmit-trigger-event": "input" %>
           <%= form.label :require_invite_for_signup, "&nbsp;".html_safe, class: "maybe-switch" %>
         </div>
+      <% end %>
+    </div>
+
+    <% if Setting.require_invite_for_signup %>
+      <div class="flex items-center justify-between">
+        <div>
+          <span class="text-gray-900 text-l font-medium mb-4"><%= t(".invite_settings.generated_tokens") %></span>
+        </div>
+        <div>
+          <%= link_to invite_codes_path,
+                      class: "flex gap-1 bg-gray-50 text-gray-900 text-base rounded-lg px-3 py-2",
+                      data: { turbo_method: :post }  do %>
+            <span><%= t(".invite_settings.generate_tokens") %></span>
+          <% end %>
+        </div>
       </div>
 
-      <% if Setting.require_invite_for_signup %>
-        <div class="flex items-center justify-between">
-          <div>
-            <span class="text-gray-900 text-l font-medium mb-4"><%= t(".invite_settings.generated_tokens") %></span>
-          </div>
-          <div>
-            <%= link_to invite_codes_path,
-                        class: "flex gap-1 bg-gray-50 text-gray-900 text-base rounded-lg px-3 py-2",
-                        data: { turbo_method: :post }  do %>
-              <span><%= t(".invite_settings.generate_tokens") %></span>
-            <% end %>
-          </div>
-        </div>
-
-        <div>
-          <%= turbo_frame_tag :invite_codes, src: invite_codes_path %>
-        </div>
-      <% end %>
+      <div>
+        <%= turbo_frame_tag :invite_codes, src: invite_codes_path %>
+      </div>
     <% end %>
   <% end %>
+
   <%= settings_nav_footer %>
 </div>
