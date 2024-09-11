@@ -6,7 +6,6 @@ export default class extends Controller {
 
   copy(event) {
     event.preventDefault();
-    debugger
     if (this.sourceTarget && this.sourceTarget.textContent) {
       navigator.clipboard.writeText(this.sourceTarget.textContent)
         .then(() => {
