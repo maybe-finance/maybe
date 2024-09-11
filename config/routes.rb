@@ -98,6 +98,7 @@ Rails.application.routes.draw do
   resources :institutions, except: %i[index show] do
     post :sync, on: :member
   end
+  resources :invite_codes, only: %i[index create]
 
   resources :issues, only: :show
 

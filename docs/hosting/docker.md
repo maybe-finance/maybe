@@ -108,7 +108,7 @@ If everything is working, you will see the Maybe login screen.
 
 ### Step 4: Create your account
 
-The first time you run the app, you will need to register a new account by hitting "register" on the login page.
+The first time you run the app, you will need to register a new account by hitting "create your account" on the login page.
 
 1. Enter your email
 2. Enter a password
