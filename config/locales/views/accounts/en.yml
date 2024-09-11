@@ -1,6 +1,9 @@
 ---
 en:
   accounts:
+    account:
+      has_issues: Issue detected.
+      troubleshoot: Troubleshoot
     accountables:
       property:
         area_unit: Area unit
@@ -63,6 +66,7 @@ en:
       accounts: Accounts
       add_institution: Add institution
       new_account: New account
+      sync_all: Sync all
     institution_accounts:
       add_account_to_institution: Add new account
       confirm_accept: Delete institution
@@ -72,7 +76,11 @@ en:
       confirm_title: Delete financial institution?
       delete: Delete institution
       edit: Edit institution
+      has_issues: Issue detected, see accounts
       new_account: Add account
+      status: Last synced %{last_synced_at} ago
+      status_never: Requires data sync
+      syncing: Syncing...
     institutionless_accounts:
       other_accounts: Other accounts
     new:

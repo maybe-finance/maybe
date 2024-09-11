@@ -18,14 +18,17 @@
           </div>
         <% end %>
 
+        <%= button_to sync_all_accounts_path, class: "btn btn--light flex items-center gap-2", title: "Sync All" do %>
+          <%= lucide_icon "refresh-cw", class: "w-5 h-5" %>
+          <span><%= t(".sync_all") %></span>
+        <% end %>
+
         <%= link_to new_account_path,
                     data: { turbo_frame: "modal" },
-                    class: "rounded-lg bg-gray-900 text-white flex items-center gap-1 justify-center hover:bg-gray-700 px-3 py-2" do %>
+                    class: "btn btn--primary flex items-center gap-1" do %>
           <%= lucide_icon("plus", class: "w-5 h-5") %>
           <p class="text-sm font-medium"><%= t(".new_account") %></p>
         <% end %>
-
-        <%= render "sync_all_button" %>
       </div>
     </div>
   </header>
@@ -38,7 +41,9 @@
         <%= render "institution_accounts", institution: %>
       <% end %>
 
-      <%= render "institutionless_accounts", accounts: @accounts %>
+      <% if @accounts.any? %>
+        <%= render "institutionless_accounts", accounts: @accounts %>
+      <% end %>
     </div>
   <% end %>
 

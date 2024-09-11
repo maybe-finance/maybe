@@ -1,40 +1,62 @@
 <%# locals: (institution:) %>
 
 <details open class="group bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">
-  <summary class="flex items-center gap-2 focus-visible:outline-none">
-    <%= lucide_icon "chevron-right", class: "group-open:transform group-open:rotate-90 text-gray-500 w-5" %>
+  <summary class="flex items-center justify-between gap-2 focus-visible:outline-none">
+    <div class="flex items-center gap-2">
+      <%= lucide_icon "chevron-right", class: "group-open:transform group-open:rotate-90 text-gray-500 w-5" %>
 
-    <div class="flex items-center justify-center h-8 w-8 bg-blue-600/10 rounded-full bg-black/5">
-      <% if institution_logo(institution) %>
-        <%= image_tag institution_logo(institution), class: "rounded-full h-full w-full" %>
-      <% else %>
-        <div class="flex items-center justify-center">
-          <%= tag.p institution.name.first.upcase, class: "text-blue-600 text-xs font-medium" %>
-        </div>
-      <% end %>
+      <div class="flex items-center justify-center h-8 w-8 bg-blue-600/10 rounded-full bg-black/5">
+        <% if institution_logo(institution) %>
+          <%= image_tag institution_logo(institution), class: "rounded-full h-full w-full" %>
+        <% else %>
+          <div class="flex items-center justify-center">
+            <%= tag.p institution.name.first.upcase, class: "text-blue-600 text-xs font-medium" %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="pl-1 text-sm">
+        <%= link_to institution.name, edit_institution_path(institution), data: { turbo_frame: :modal }, class: "font-medium text-gray-900 hover:underline" %>
+        <% if institution.has_issues? %>
+          <div class="flex items-center gap-1 text-error">
+            <%= lucide_icon "alert-octagon", class: "shrink-0 w-4 h-4" %>
+            <%= tag.span t(".has_issues") %>
+          </div>
+        <% elsif institution.syncing? %>
+          <div class="text-gray-500 flex items-center gap-1">
+            <%= lucide_icon "loader", class: "w-4 h-4 animate-pulse" %>
+            <%= tag.span t(".syncing") %>
+          </div>
+        <% else %>
+          <p class="text-gray-500"><%= institution.last_synced_at ? t(".status", last_synced_at: time_ago_in_words(institution.last_synced_at)) : t(".status_never") %></p>
+        <% end %>
+      </div>
     </div>
 
-    <%= link_to institution.name, edit_institution_path(institution), data: { turbo_frame: :modal }, class: "text-sm font-medium text-gray-900 ml-1 mr-auto hover:underline" %>
+    <div class="flex items-center gap-2">
+      <%= button_to sync_institution_path(institution), method: :post, class: "text-gray-900 flex hover:text-gray-800 items-center text-sm font-medium hover:underline" do %>
+        <%= lucide_icon "refresh-cw", class: "w-4 h-4" %>
+      <% end %>
 
-    <%= contextual_menu do %>
-      <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-        <%= link_to new_account_path(institution_id: institution.id),
+      <%= contextual_menu do %>
+        <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+          <%= link_to new_account_path(institution_id: institution.id),
                     class: "block w-full py-2 px-3 space-x-2 text-gray-900 hover:bg-gray-50 flex items-center rounded-lg",
                     data: { turbo_frame: :modal } do %>
-          <%= lucide_icon "plus", class: "w-5 h-5 text-gray-500" %>
+            <%= lucide_icon "plus", class: "w-5 h-5 text-gray-500" %>
 
-          <span><%= t(".add_account_to_institution") %></span>
-        <% end %>
+            <span><%= t(".add_account_to_institution") %></span>
+          <% end %>
 
-        <%= link_to edit_institution_path(institution),
+          <%= link_to edit_institution_path(institution),
                     class: "block w-full py-2 px-3 space-x-2 text-gray-900 hover:bg-gray-50 flex items-center rounded-lg",
                     data: { turbo_frame: :modal } do %>
-          <%= lucide_icon "pencil-line", class: "w-5 h-5 text-gray-500" %>
+            <%= lucide_icon "pencil-line", class: "w-5 h-5 text-gray-500" %>
 
-          <span><%= t(".edit") %></span>
-        <% end %>
+            <span><%= t(".edit") %></span>
+          <% end %>
 
-        <%= button_to institution_path(institution),
+          <%= button_to institution_path(institution),
                       method: :delete,
                       class: "block w-full py-2 px-3 space-x-2 text-red-600 hover:bg-red-50 flex items-center rounded-lg",
                       data: {
@@ -44,13 +66,13 @@
                           accept: t(".confirm_accept")
                         }
                       } do %>
-          <%= lucide_icon "trash-2", class: "w-5 h-5" %>
+            <%= lucide_icon "trash-2", class: "w-5 h-5" %>
 
-          <span><%= t(".delete") %></span>
-        <% end %>
-      </div>
-
-    <% end %>
+            <span><%= t(".delete") %></span>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
   </summary>
 
   <div class="space-y-4 mt-4">

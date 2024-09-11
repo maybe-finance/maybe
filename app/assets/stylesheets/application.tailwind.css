@@ -102,6 +102,10 @@
   .btn--primary {
     @apply bg-gray-900 text-white hover:bg-gray-700;
   }
+
+  .btn--light {
+    @apply bg-gray-25 border border-alpha-black-200 text-gray-900 hover:bg-gray-50;
+  }
 }
 
 /* Small, single purpose classes that should take precedence over other styles */

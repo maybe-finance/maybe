@@ -52,4 +52,11 @@ class InstitutionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to accounts_url
     assert_equal "Institution deleted", flash[:notice]
   end
+
+  test "can sync institution" do
+    post sync_institution_url(@institution)
+
+    assert_redirected_to accounts_url
+    assert_equal "Institution sync started", flash[:notice]
+  end
 end

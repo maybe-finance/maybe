@@ -95,7 +95,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :institutions, except: %i[index show]
+  resources :institutions, except: %i[index show] do
+    post :sync, on: :member
+  end
 
   resources :issues, only: :show
 
