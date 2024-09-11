@@ -11,5 +11,7 @@ en:
       name: Financial institution name
     new:
       new_institution: New financial institution
+    sync:
+      success: Institution sync started
     update:
       success: Institution updated

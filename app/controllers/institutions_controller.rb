@@ -23,6 +23,11 @@ class InstitutionsController < ApplicationController
     redirect_to accounts_path, notice: t(".success")
   end
 
+  def sync
+    @institution.sync
+    redirect_back_or_to accounts_path, notice: t(".success")
+  end
+
   private
 
     def institution_params
