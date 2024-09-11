@@ -55,13 +55,13 @@ class Settings::HostingsController < SettingsController
     end
 
     def hosting_params
-      permitted_params = params.require(:setting).permit(:render_deploy_hook, :upgrades_mode, :email_sender, :app_domain, :smtp_host, :smtp_port, :smtp_username, :smtp_password)
+      permitted_params = params.require(:setting).permit(:render_deploy_hook, :upgrades_mode, :email_sender, :app_domain, :smtp_host, :smtp_port, :smtp_username, :smtp_password, :require_invite_for_signup)
 
       result = {}
       result[:upgrades_mode] = permitted_params[:upgrades_mode] == "manual" ? "manual" : "auto" if permitted_params.key?(:upgrades_mode)
       result[:render_deploy_hook] = permitted_params[:render_deploy_hook] if permitted_params.key?(:render_deploy_hook)
       result[:upgrades_target] = permitted_params[:upgrades_mode] unless permitted_params[:upgrades_mode] == "manual" if permitted_params.key?(:upgrades_mode)
-      result.merge!(permitted_params.slice(:email_sender, :app_domain, :smtp_host, :smtp_port, :smtp_username, :smtp_password))
+      result.merge!(permitted_params.slice(:email_sender, :app_domain, :smtp_host, :smtp_port, :smtp_username, :smtp_password, :require_invite_for_signup))
       result
     end
 

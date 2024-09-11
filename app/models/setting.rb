@@ -22,6 +22,8 @@ class Setting < RailsSettings::Base
 
   field :synth_api_key, type: :string, default: ENV["SYNTH_API_KEY"]
 
+  field :require_invite_for_signup, type: :boolean, default: false
+
   scope :smtp_settings do
     field :smtp_host, type: :string, read_only: true, default: ENV["SMTP_ADDRESS"]
     field :smtp_port, type: :string, read_only: true, default: ENV["SMTP_PORT"]

@@ -12,6 +12,13 @@ en:
         email_sender: Email Sender
         email_sender_placeholder: user@mydomain.com
         general_settings_title: General Settings
+        invite_settings:
+          generate_tokens: Generate new code
+          generated_tokens: Generated codes
+          invite_code_description: Every new user that joins your instance if Maybe
+            can only do so via an invite code
+          require_invite_for_signup: Require invite code for new sign ups
+          title: Invite Codes
         page_title: Self-Hosting
         provider_settings:
           title: Provider Settings
