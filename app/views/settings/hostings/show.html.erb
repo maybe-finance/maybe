@@ -2,45 +2,45 @@
   <%= render "settings/nav" %>
 <% end %>
 
-<div class="space-y-4">
+<div class="space-y-4 pb-32">
   <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
-  <%= settings_section title: t(".general_settings_title") do %>
-    <% if ENV["HOSTING_PLATFORM"] == "render" %>
-      <%= styled_form_with model: Setting.new, url: settings_hosting_path, method: :patch, local: true, class: "space-y-6", data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
-        <div>
-          <h2 class="font-medium mb-1"><%= t(".upgrades.title") %></h2>
-          <p class="text-gray-500 text-sm mb-4"><%= t(".upgrades.description") %></p>
-          <div class="space-y-4">
-            <div class="flex items-center gap-4">
-              <%= form.radio_button :upgrades_mode, "manual", checked: Setting.upgrades_mode == "manual", data: { "auto-submit-form-target" => "auto", "autosubmit-trigger-event": "input" } %>
-              <%= form.label :upgrades_mode_manual, t(".upgrades.manual.title"), class: "text-gray-900 text-sm" do %>
-                <span class="font-medium"><%= t(".upgrades.manual.title") %></span>
-                <br>
-                <span class="text-gray-500">
-                  <%= t(".upgrades.manual.description") %>
-                </span>
-              <% end %>
-            </div>
-            <div class="flex items-center gap-4">
-              <%= form.radio_button :upgrades_mode, "release", checked: Setting.upgrades_mode == "auto" && Setting.upgrades_target == "release", data: { "auto-submit-form-target" => "auto", "autosubmit-trigger-event": "input" } %>
-              <%= form.label :upgrades_mode_release, t(".upgrades.latest_release.title"), class: "text-gray-900 text-sm" do %>
-                <span class="font-medium"><%= t(".upgrades.latest_release.title") %></span>
-                <br>
-                <span class="text-gray-500">
-                  <%= t(".upgrades.latest_release.description") %>
-                </span>
-              <% end %>
-            </div>
-            <div class="flex items-center gap-4">
-              <%= form.radio_button :upgrades_mode, "commit", checked: Setting.upgrades_mode == "auto" && Setting.upgrades_target == "commit", data: { "auto-submit-form-target" => "auto", "autosubmit-trigger-event": "input" } %>
-              <%= form.label :upgrades_mode_commit, t(".upgrades.latest_commit.title"), class: "text-gray-900 text-sm" do %>
-                <span class="font-medium"><%= t(".upgrades.latest_commit.title") %></span>
-                <br>
-                <span class="text-gray-500">
-                  <%= t(".upgrades.latest_commit.description") %>
-                </span>
-              <% end %>
-            </div>
+
+  <% if ENV["HOSTING_PLATFORM"] == "render" %>
+    <%= settings_section title: t(".general_settings_title") do %>
+      <%= styled_form_with model: Setting.new, url: settings_hosting_path, method: :patch, data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
+        <h2 class="font-medium mb-1"><%= t(".upgrades.title") %></h2>
+        <p class="text-gray-500 text-sm mb-4"><%= t(".upgrades.description") %></p>
+
+        <div class="space-y-4">
+          <div class="flex items-center gap-4">
+            <%= form.radio_button :upgrades_mode, "manual", checked: Setting.upgrades_mode == "manual", data: { "auto-submit-form-target" => "auto", "autosubmit-trigger-event": "input" } %>
+            <%= form.label :upgrades_mode_manual, t(".upgrades.manual.title"), class: "text-gray-900 text-sm" do %>
+              <span class="font-medium"><%= t(".upgrades.manual.title") %></span>
+              <br>
+              <span class="text-gray-500">
+                <%= t(".upgrades.manual.description") %>
+              </span>
+            <% end %>
+          </div>
+          <div class="flex items-center gap-4">
+            <%= form.radio_button :upgrades_mode, "release", checked: Setting.upgrades_mode == "auto" && Setting.upgrades_target == "release", data: { "auto-submit-form-target" => "auto", "autosubmit-trigger-event": "input" } %>
+            <%= form.label :upgrades_mode_release, t(".upgrades.latest_release.title"), class: "text-gray-900 text-sm" do %>
+              <span class="font-medium"><%= t(".upgrades.latest_release.title") %></span>
+              <br>
+              <span class="text-gray-500">
+                <%= t(".upgrades.latest_release.description") %>
+              </span>
+            <% end %>
+          </div>
+          <div class="flex items-center gap-4">
+            <%= form.radio_button :upgrades_mode, "commit", checked: Setting.upgrades_mode == "auto" && Setting.upgrades_target == "commit", data: { "auto-submit-form-target" => "auto", "autosubmit-trigger-event": "input" } %>
+            <%= form.label :upgrades_mode_commit, t(".upgrades.latest_commit.title"), class: "text-gray-900 text-sm" do %>
+              <span class="font-medium"><%= t(".upgrades.latest_commit.title") %></span>
+              <br>
+              <span class="text-gray-500">
+                <%= t(".upgrades.latest_commit.description") %>
+              </span>
+            <% end %>
           </div>
         </div>
 
@@ -84,37 +84,40 @@
   <% end %>
 
   <%= settings_section title: t(".invite_settings.title") do %>
-    <div class="flex cursor-pointer items-center justify-between">
-      <div>
-        <p class="text-sm"><%= t(".invite_settings.require_invite_for_signup") %></p>
-        <p class="text-gray-500 text-sm mb-4"><%= t(".invite_settings.invite_code_description") %></p>
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="space-y-1">
+          <p class="text-sm"><%= t(".invite_settings.require_invite_for_signup") %></p>
+          <p class="text-gray-500 text-sm"><%= t(".invite_settings.invite_code_description") %></p>
+        </div>
+
+        <%= styled_form_with model: Setting.new, url: settings_hosting_path, method: :patch, data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
+          <div class="relative inline-block select-none">
+            <%= form.check_box :require_invite_for_signup, class: "sr-only peer", "data-auto-submit-form-target": "auto", "data-autosubmit-trigger-event": "input" %>
+            <%= form.label :require_invite_for_signup, "&nbsp;".html_safe, class: "maybe-switch" %>
+          </div>
+        <% end %>
       </div>
-      <%= styled_form_with model: Setting.new, url: settings_hosting_path, method: :patch, data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
-        <div class="relative inline-block select-none">
-          <%= form.check_box :require_invite_for_signup, class: "sr-only peer", "data-auto-submit-form-target": "auto", "data-autosubmit-trigger-event": "input" %>
-          <%= form.label :require_invite_for_signup, "&nbsp;".html_safe, class: "maybe-switch" %>
+
+      <% if Setting.require_invite_for_signup %>
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <span class="text-gray-900 text-base font-medium"><%= t(".invite_settings.generated_tokens") %></span>
+          </div>
+          <div>
+            <%= button_to invite_codes_path,
+                        method: :post,
+                        class: "flex gap-1 bg-gray-50 text-gray-900 text-sm rounded-lg px-3 py-2" do %>
+              <span><%= t(".invite_settings.generate_tokens") %></span>
+            <% end %>
+          </div>
+        </div>
+
+        <div>
+          <%= turbo_frame_tag :invite_codes, src: invite_codes_path %>
         </div>
       <% end %>
     </div>
-
-    <% if Setting.require_invite_for_signup %>
-      <div class="flex items-center justify-between">
-        <div>
-          <span class="text-gray-900 text-l font-medium mb-4"><%= t(".invite_settings.generated_tokens") %></span>
-        </div>
-        <div>
-          <%= link_to invite_codes_path,
-                      class: "flex gap-1 bg-gray-50 text-gray-900 text-base rounded-lg px-3 py-2",
-                      data: { turbo_method: :post }  do %>
-            <span><%= t(".invite_settings.generate_tokens") %></span>
-          <% end %>
-        </div>
-      </div>
-
-      <div>
-        <%= turbo_frame_tag :invite_codes, src: invite_codes_path %>
-      </div>
-    <% end %>
   <% end %>
 
   <%= settings_nav_footer %>
