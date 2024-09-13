@@ -5,13 +5,13 @@
               data: { controller: "auto-submit-form" } do |form| %>
   <div class="flex gap-2 mb-4">
     <div class="grow">
-      <div class="relative flex items-center bg-white border border-alpha-black-200 rounded-lg focus-within:border-alpha-black-500">
+      <div class="flex items-center px-3 py-2 gap-2 border border-gray-200 rounded-lg focus-within:ring-gray-100 focus-within:border-gray-900">
+        <%= lucide_icon("search", class: "w-5 h-5 text-gray-500") %>
         <%= form.text_field :search,
                             placeholder: "Search transactions by name",
                             value: @q[:search],
-                            class: "placeholder:text-sm placeholder:text-gray-500 relative pl-10 w-full border-none rounded-lg focus:outline-none focus:ring-0",
+                            class: "form-field__input placeholder:text-sm placeholder:text-gray-500",
                             "data-auto-submit-form-target": "auto" %>
-        <%= lucide_icon("search", class: "w-5 h-5 text-gray-500 ml-2 absolute inset-0 transform top-1/2 -translate-y-1/2") %>
       </div>
     </div>
     <div data-controller="menu" class="relative">
