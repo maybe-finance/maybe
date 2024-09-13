@@ -62,12 +62,10 @@ en:
       accounts: Accounts
       manage: Manage accounts
       new: New account
-      sync_all: Sync all
     index:
       accounts: Accounts
       add_institution: Add institution
       new_account: New account
-      sync_all: Sync all
     institution_accounts:
       add_account_to_institution: Add new account
       confirm_accept: Delete institution
@@ -111,6 +109,7 @@ en:
     summary:
       new: New account
     sync_all:
+      button_text: Sync all
       success: Successfully queued accounts for syncing.
     tooltip:
       cash: Cash
