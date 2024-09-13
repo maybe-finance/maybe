@@ -10,7 +10,7 @@ export default class extends Controller {
   static values = {
     show: Boolean,
     placement: { type: String, default: "bottom-end" },
-    offset: { type: Number, default: 5 },
+    offset: { type: Number, default: 6 },
   };
 
   connect() {
@@ -103,7 +103,6 @@ export default class extends Controller {
         position: 'fixed',
         left: `${x}px`,
         top: `${y}px`,
-        width: 'max-content',
       });
     });
   }

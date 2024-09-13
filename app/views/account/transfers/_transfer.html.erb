@@ -10,7 +10,7 @@
       <% end %>
 
       <%= tag.div class: short ? "max-w-[250px]" : "max-w-[325px]" do %>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 <%= selectable ? "" : "pl-8" %>">
           <%= circle_logo(transfer.from_name[0].upcase) %>
 
           <%= tag.p transfer.name, class: "truncate text-gray-900" %>

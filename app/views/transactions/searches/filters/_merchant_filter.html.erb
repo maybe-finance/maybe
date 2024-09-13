@@ -11,11 +11,14 @@
                            {
                              multiple: true,
                              checked: @q[:merchants]&.include?(merchant.name),
-                             class: "rounded-sm border-gray-300 text-indigo-600 shadow-xs focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                             class: "maybe-checkbox maybe-checkbox--light"
                            },
                            merchant.name,
                            nil %>
-        <%= form.label :merchants, merchant.name, value: merchant.name, class: "text-sm text-gray-900" %>
+        <%= form.label :merchants, value: merchant.name, class: "text-sm text-gray-900 flex items-center gap-2" do %>
+          <%= circle_logo(merchant.name, hex: merchant.color, size: "sm") %>
+          <%= merchant.name %>
+        <% end %>
       </div>
     <% end %>
   </div>
