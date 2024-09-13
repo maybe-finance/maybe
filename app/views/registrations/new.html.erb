@@ -7,7 +7,7 @@
     <h2 class="font-bold text-xl"><%= t(".welcome_title") %></h2>
     <p class="text-gray-500 text-sm"><%= t(".welcome_body") %></p>
   </div>
-<% end%>
+<% end %>
 
 <%= styled_form_with model: @user, url: registration_path, class: "space-y-4" do |form| %>
   <%= auth_messages form %>
