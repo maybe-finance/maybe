@@ -62,6 +62,7 @@ en:
       accounts: Accounts
       manage: Manage accounts
       new: New account
+      sync_all: Sync all
     index:
       accounts: Accounts
       add_institution: Add institution
