@@ -1,6 +1,6 @@
 <h1 class="text-3xl font-semibold font-display"><%= t(".title") %></h1>
 <%= modal do %>
-  <div class="flex flex-col min-h-[530px] w-screen max-w-xl" data-controller="list-keyboard-navigation">
+  <div class="flex flex-col w-screen max-w-xl" data-controller="list-keyboard-navigation">
     <% if @account.accountable.blank? %>
       <div class="border-b border-alpha-black-25 p-4 text-gray-400">
         <%= t ".select_accountable_type" %>

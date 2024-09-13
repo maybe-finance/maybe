@@ -21,7 +21,7 @@
       </div>
 
       <div data-trade-form-target="qtyInput">
-        <%= form.number_field :qty, label: t(".qty"), placeholder: "10", min: 0 %>
+        <%= form.number_field :qty, label: t(".qty"), placeholder: "10", min: 0.000000000000000001, step: "any" %>
       </div>
 
       <div data-trade-form-target="priceInput">
