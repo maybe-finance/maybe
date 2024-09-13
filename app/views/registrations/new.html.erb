@@ -1,6 +1,14 @@
 <%
   header_title t(".title")
 %>
+
+<% if self_hosted_first_login? %>
+  <div class="fixed inset-0 w-full h-fit bg-gray-25 p-5 border-b border-alpha-black-200 flex flex-col gap-3 items-center text-center mb-12">
+    <h2 class="font-bold text-xl"><%= t(".welcome_title") %></h2>
+    <p class="text-gray-500 text-sm"><%= t(".welcome_body") %></p>
+  </div>
+<% end%>
+
 <%= styled_form_with model: @user, url: registration_path, class: "space-y-4" do |form| %>
   <%= auth_messages form %>
   <%= form.email_field :email, autofocus: false, autocomplete: "email", required: "required", placeholder: "you@example.com", label: true %>

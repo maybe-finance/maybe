@@ -6,6 +6,7 @@ class Demo::Generator
   end
 
   def reset_and_clear_data!
+    reset_settings!
     clear_data!
     create_user!
 
@@ -14,6 +15,7 @@ class Demo::Generator
 
   def reset_data!
     Family.transaction do
+      reset_settings!
       clear_data!
       create_user!
 
@@ -52,10 +54,15 @@ class Demo::Generator
     end
 
     def clear_data!
+      InviteCode.destroy_all
       User.find_by_email("user@maybe.local")&.destroy
       ExchangeRate.destroy_all
       Security.destroy_all
       Security::Price.destroy_all
+    end
+
+    def reset_settings!
+      Setting.destroy_all
     end
 
     def create_user!
