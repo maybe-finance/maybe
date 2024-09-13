@@ -39,8 +39,9 @@
         </div>
         <div class="flex flex-col ml-auto font-medium text-right">
           <p><%= format_money account.balance_money %></p>
-          <div class="flex items-center gap-1">
-            <%=
+          <% unless account_value_node.series.trend.direction.flat? %>
+            <div class="flex items-center gap-1">
+              <%=
               tag.div(
                 id: dom_id(account, :list_sparkline),
                 class: "h-3 w-8 ml-auto",
@@ -52,10 +53,11 @@
                   "time-series-chart-use-tooltip-value": false
                 }
               )
-            %>
-            <% styles = trend_styles(account_value_node.series.trend) %>
-            <span class="text-xs <%= styles[:text_class] %>"><%= sprintf("%+.2f", account_value_node.series.trend.percent) %>%</span>
-          </div>
+              %>
+              <% styles = trend_styles(account_value_node.series.trend) %>
+              <span class="text-xs <%= styles[:text_class] %>"><%= sprintf("%+.2f", account_value_node.series.trend.percent) %>%</span>
+            </div>
+          <% end %>
         </div>
       <% end %>
     <% end %>
