@@ -83,21 +83,17 @@ class TimeSeries::Trend
 
     def values_must_be_of_same_type
       unless current.class == previous.class || [ previous, current ].any?(&:nil?)
-        # i18n-tasks-use t('activemodel.errors.models.time_series/trend.attributes.current.must_be_of_the_same_type_as_previous')
         errors.add :current, :must_be_of_the_same_type_as_previous
-        # i18n-tasks-use t('activemodel.errors.models.time_series/trend.attributes.previous.must_be_of_the_same_type_as_current')
         errors.add :previous, :must_be_of_the_same_type_as_current
       end
     end
 
     def values_must_be_of_known_type
       unless current.is_a?(Money) || current.is_a?(Numeric) || current.nil?
-        # i18n-tasks-use t('activemodel.errors.models.time_series/trend.attributes.current.must_be_of_type_money_numeric_or_nil')
         errors.add :current, :must_be_of_type_money_numeric_or_nil
       end
 
       unless previous.is_a?(Money) || previous.is_a?(Numeric) || previous.nil?
-        # i18n-tasks-use t('activemodel.errors.models.time_series/trend.attributes.previous.must_be_of_type_money_numeric_or_nil')
         errors.add :previous, :must_be_of_type_money_numeric_or_nil
       end
     end

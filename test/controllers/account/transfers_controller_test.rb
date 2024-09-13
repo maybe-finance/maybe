@@ -18,7 +18,6 @@ class Account::TransfersControllerTest < ActionDispatch::IntegrationTest
           to_account_id: accounts(:credit_card).id,
           date: Date.current,
           amount: 100,
-          currency: "USD",
           name: "Test Transfer"
         }
       }

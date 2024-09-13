@@ -46,7 +46,7 @@ class Account::Transfer < ApplicationRecord
     def build_from_accounts(from_account, to_account, date:, amount:, currency:, name:)
       outflow = from_account.entries.build \
         amount: amount.abs,
-        currency: currency,
+        currency: from_account.currency,
         date: date,
         name: name,
         marked_as_transfer: true,
@@ -54,7 +54,7 @@ class Account::Transfer < ApplicationRecord
 
       inflow = to_account.entries.build \
         amount: amount.abs * -1,
-        currency: currency,
+        currency: from_account.currency,
         date: date,
         name: name,
         marked_as_transfer: true,
@@ -72,27 +72,23 @@ class Account::Transfer < ApplicationRecord
 
     def transaction_count
       unless entries.size == 2
-        # i18n-tasks-use t('activerecord.errors.models.account/transfer.attributes.entries.must_have_exactly_2_entries')
         errors.add :entries, :must_have_exactly_2_entries
       end
     end
 
     def from_different_accounts
       accounts = entries.map { |e| e.account_id }.uniq
-      # i18n-tasks-use t('activerecord.errors.models.account/transfer.attributes.entries.must_be_from_different_accounts')
       errors.add :entries, :must_be_from_different_accounts if accounts.size < entries.size
     end
 
     def net_zero_flows
       unless entries.sum(&:amount).zero?
-        # i18n-tasks-use t('activerecord.errors.models.account/transfer.attributes.entries.must_have_an_inflow_and_outflow_that_net_to_zero')
         errors.add :entries, :must_have_an_inflow_and_outflow_that_net_to_zero
       end
     end
 
     def all_transactions_marked
       unless entries.all?(&:marked_as_transfer)
-        # i18n-tasks-use t('activerecord.errors.models.account/transfer.attributes.entries.must_be_marked_as_transfer')
         errors.add :entries, :must_be_marked_as_transfer
       end
     end

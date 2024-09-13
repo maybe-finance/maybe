@@ -55,7 +55,6 @@ class User < ApplicationRecord
 
   def can_deactivate
     if admin? && family.users.count > 1
-      # i18n-tasks-use t('activerecord.errors.models.user.attributes.base.cannot_deactivate_admin_with_other_users')
       errors.add(:base, :cannot_deactivate_admin_with_other_users)
     end
   end
@@ -84,7 +83,6 @@ class User < ApplicationRecord
 
     def profile_image_size
       if profile_image.attached? && profile_image.byte_size > 5.megabytes
-        # i18n-tasks-use t('activerecord.errors.models.user.attributes.profile_image.invalid_file_size')
         errors.add(:profile_image, :invalid_file_size, max_megabytes: 5)
       end
     end

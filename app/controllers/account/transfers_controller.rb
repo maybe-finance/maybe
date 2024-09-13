@@ -40,6 +40,6 @@ class Account::TransfersController < ApplicationController
     end
 
     def transfer_params
-      params.require(:account_transfer).permit(:from_account_id, :to_account_id, :amount, :currency, :date, :name)
+      params.require(:account_transfer).permit(:from_account_id, :to_account_id, :amount, :date, :name)
     end
 end
