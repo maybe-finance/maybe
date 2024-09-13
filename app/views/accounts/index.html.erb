@@ -18,10 +18,7 @@
           </div>
         <% end %>
 
-        <%= button_to sync_all_accounts_path, class: "btn btn--light flex items-center gap-2", title: "Sync All" do %>
-          <%= lucide_icon "refresh-cw", class: "w-5 h-5" %>
-          <span><%= t(".sync_all") %></span>
-        <% end %>
+        <%= render "sync_all_button" %>
 
         <%= link_to new_account_path,
                     data: { turbo_frame: "modal" },
