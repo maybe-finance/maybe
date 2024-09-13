@@ -204,7 +204,6 @@ class Account::Entry < ApplicationRecord
         current_qty = account.holding_qty(account_trade.security)
 
         if current_qty < account_trade.qty.abs
-          # i18n-tasks-use t('activerecord.errors.models.account/entry.attributes.base.invalid_sell_quantity')
           errors.add(
             :base,
             :invalid_sell_quantity,
