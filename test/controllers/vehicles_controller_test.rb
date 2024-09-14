@@ -43,6 +43,27 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
     assert_enqueued_with(job: AccountSyncJob)
   end
 
+  test "handles errors when creating vehicle" do
+    assert_no_difference [ "Account.count", "Vehicle.count", "Account::Valuation.count", "Account::Entry.count" ] do
+      post vehicles_path, params: {
+        account: {
+          name: "Vehicle",
+          currency: "USD",
+          accountable_type: "Vehicle",
+          accountable_attributes: {
+            make: "Toyota",
+            model: "Camry",
+            year: 2020,
+            mileage_value: 15000,
+            mileage_unit: "mi"
+          }
+        }
+      }
+    end
+    assert_redirected_to accounts_path
+    assert_equal "Balance can't be blank and Entries is invalid", flash[:alert]
+  end
+
   test "updates vehicle" do
     assert_no_difference [ "Account.count", "Vehicle.count", "Account::Valuation.count", "Account::Entry.count" ] do
       patch vehicle_path(@account), params: {

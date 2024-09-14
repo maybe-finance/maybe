@@ -11,12 +11,16 @@ class VehiclesController < ApplicationController
 
     account.sync_later
     redirect_to account, notice: t(".success")
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_back_or_to accounts_path, alert: e.record.errors.full_messages.to_sentence
   end
 
   def update
     @account.update!(account_params)
     @account.sync_later
     redirect_to @account, notice: t(".success")
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_back_or_to account_path(@account), alert: e.record.errors.full_messages.to_sentence
   end
 
   private
