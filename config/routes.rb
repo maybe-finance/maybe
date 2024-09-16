@@ -91,7 +91,6 @@ Rails.application.routes.draw do
       post "bulk_update"
       post "mark_transfers"
       post "unmark_transfers"
-      get "rules"
     end
   end
 

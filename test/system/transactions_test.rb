@@ -77,7 +77,7 @@ class TransactionsTest < ApplicationSystemTestCase
       fill_in "q_end_date", with: 1.day.ago.to_date
 
       click_button "Type"
-      assert_text "Filter by type coming soon..."
+      check("Income")
 
       click_button "Amount"
       assert_text "Filter by amount coming soon..."
@@ -102,6 +102,7 @@ class TransactionsTest < ApplicationSystemTestCase
       find("li", text: account.name).first("a").click
       find("li", text: "on or after #{10.days.ago.to_date}").first("a").click
       find("li", text: "on or before #{1.day.ago.to_date}").first("a").click
+      find("li", text: "Income").first("a").click
       find("li", text: category.name).first("a").click
       find("li", text: merchant.name).first("a").click
     end

@@ -1,4 +1,37 @@
 <%# locals: (form:) %>
-<div class="py-12 flex items-center justify-center">
-  <p class="text-gray-500 text-sm">Filter by type coming soon...</p>
+
+<div class="p-2 space-y-3">
+  <div class="flex items-center gap-3" data-filter-name="income">
+    <%= form.check_box :types,
+                           {
+                             multiple: true,
+                             checked: @q[:types]&.include?('income'),
+                             class: "maybe-checkbox maybe-checkbox--light"
+                           },
+                           'income',
+                           nil %>
+    <%= form.label :types, 'Income', value: 'income', class: "text-sm text-gray-900" %>
+  </div>
+  <div class="flex items-center gap-3" data-filter-name="expense">
+    <%= form.check_box :types,
+                           {
+                             multiple: true,
+                             checked: @q[:types]&.include?('expense'),
+                             class: "maybe-checkbox maybe-checkbox--light"
+                           },
+                           'expense',
+                           nil %>
+    <%= form.label :types, 'Expense', value: 'expense', class: "text-sm text-gray-900" %>
+  </div>
+  <div class="flex items-center gap-3" data-filter-name="transfer">
+    <%= form.check_box :types,
+                           {
+                             multiple: true,
+                             checked: @q[:types]&.include?('transfer'),
+                             class: "maybe-checkbox maybe-checkbox--light"
+                           },
+                           'transfer',
+                           nil %>
+    <%= form.label :types, 'Transfer', value: 'transfer', class: "text-sm text-gray-900" %>
+  </div>
 </div>

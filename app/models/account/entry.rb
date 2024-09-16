@@ -148,6 +148,16 @@ class Account::Entry < ApplicationRecord
       query = query.where("account_entries.date >= ?", params[:start_date]) if params[:start_date].present?
       query = query.where("account_entries.date <= ?", params[:end_date]) if params[:end_date].present?
 
+      if params[:types].present?
+        query = query.where(marked_as_transfer: false) unless params[:types].include?("transfer")
+
+        if params[:types].include?("income") && !params[:types].include?("expense")
+          query = query.where("account_entries.amount < 0")
+        elsif params[:types].include?("expense") && !params[:types].include?("income")
+          query = query.where("account_entries.amount >= 0")
+        end
+      end
+
       if params[:accounts].present? || params[:account_ids].present?
         query = query.joins(:account)
       end

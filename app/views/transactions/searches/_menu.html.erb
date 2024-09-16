@@ -1,3 +1,5 @@
+<%# locals: (form:) %>
+
 <div
   id="transaction-filters-menu"
   data-menu-target="content"
@@ -20,7 +22,7 @@
   </div>
 
   <div class="flex flex-col grow">
-    <div class="grow p-2 border-b border-b-alpha-black-100 overflow-y-auto">
+    <div class="grow p-3 border-b border-b-alpha-black-100 overflow-y-auto">
       <% transaction_search_filters.each do |filter| %>
         <div id="<%= filter[:key] %>" data-tabs-target="tab">
           <%= render partial: get_transaction_search_filter_partial_path(filter), locals: { form: form } %>
