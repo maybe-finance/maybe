@@ -34,7 +34,8 @@ module FormsHelper
       default_currency: options[:default_currency] || "USD",
       disable_currency: options[:disable_currency] || false,
       hide_currency: options[:hide_currency] || false,
-      label:         options[:label] || "Amount"
+      label:         options[:label] || "Amount",
+      required:      options[:required] || false
     }
   end
 
