@@ -1,4 +1,15 @@
 <%# locals: (form:) %>
-<div class="py-12 flex items-center justify-center">
-  <p class="text-gray-500 text-sm">Filter by amount coming soon...</p>
+
+<div class="space-y-2">
+  <div class="form-field">
+    <%= form.select :amount_operator, options_for_select([
+      [t(".equal_to"), "equal"],
+      [t(".greater_than"), "greater"],
+      [t(".less_than"), "less"]
+    ], @q[:amount_operator] || "equal"), {}, class: "form-field__input" %>
+  </div>
+
+  <div class="form-field">
+    <%= form.number_field :amount, step: 0.01, class: "form-field__input", placeholder: t(".placeholder"), value: @q[:amount] %>
+  </div>
 </div>

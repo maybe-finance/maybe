@@ -80,7 +80,8 @@ class TransactionsTest < ApplicationSystemTestCase
       check("Income")
 
       click_button "Amount"
-      assert_text "Filter by amount coming soon..."
+      select "Less than"
+      fill_in "q_amount", with: 200
 
       click_button "Category"
       check(category.name)
@@ -103,6 +104,7 @@ class TransactionsTest < ApplicationSystemTestCase
       find("li", text: "on or after #{10.days.ago.to_date}").first("a").click
       find("li", text: "on or before #{1.day.ago.to_date}").first("a").click
       find("li", text: "Income").first("a").click
+      find("li", text: "less than 200").first("a").click
       find("li", text: category.name).first("a").click
       find("li", text: merchant.name).first("a").click
     end

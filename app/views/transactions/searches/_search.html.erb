@@ -1,10 +1,24 @@
 <%= render "transactions/searches/form" %>
 
 <ul id="transaction-search-filters" class="flex items-center flex-wrap gap-2 mb-4">
-  <% @q.each do |param_key, param_value| %>
+  <% @q.reject { |key| key == "amount_operator" }.each do |param_key, param_value| %>
     <% unless param_value.blank? %>
-      <% Array(param_value).each do |value| %>
-        <%= render partial: "transactions/searches/filters/badge", locals: { param_key: param_key, param_value: value } %>
+      <% if param_key == "amount" %>
+        <% amount_operator = case @q[:amount_operator]
+                             when "equal"
+                               t(".equal_to")
+                             when "greater"
+                               t(".greater_than")
+                             when "less"
+                               t(".less_than")
+                             else
+                               t(@q[:amount_operator])
+                             end %>
+        <%= render partial: "transactions/searches/filters/badge", locals: { param_key: "amount", param_value: "#{amount_operator} #{param_value}" } %>
+      <% else %>
+        <% Array(param_value).each do |value| %>
+          <%= render partial: "transactions/searches/filters/badge", locals: { param_key: param_key, param_value: value } %>
+        <% end %>
       <% end %>
     <% end %>
   <% end %>

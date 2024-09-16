@@ -1,14 +1,13 @@
 <%# locals: (param_key:, param_value:) %>
 <li class="flex items-center gap-1 text-sm border border-alpha-black-200 rounded-3xl p-1.5">
-
   <% if param_key == "start_date" || param_key == "end_date" %>
     <div class="flex items-center gap-2">
       <%= lucide_icon "calendar", class: "w-5 h-5 text-gray-500" %>
       <p>
         <% if param_key == "start_date" %>
-          on or after <%= param_value %>
+          <%= t(".on_or_after", date: param_value) %>
         <% else %>
-          on or before <%= param_value %>
+          <%= t(".on_or_before", date: param_value) %>
         <% end %>
       </p>
     </div>
@@ -22,9 +21,23 @@
       <div class="w-5 h-5 bg-blue-600/10 text-xs flex items-center justify-center rounded-full"><%= param_value[0].upcase %></div>
       <p><%= param_value %></p>
     </div>
+  <% elsif param_key == "amount" %>
+    <div class="flex items-center gap-2">
+      <%= lucide_icon "hash", class: "w-5 h-5 text-gray-500" %>
+      <p><%= param_value %></p>
+    </div>
+  <% elsif param_key == "types" %>
+    <div class="flex items-center gap-2 px-1">
+      <div class="w-1 h-3 rounded-full <%= case param_value.downcase
+                                          when "income" then "bg-green-500"
+                                          when "expense" then "bg-red-500"
+                                          when "transfer" then "bg-blue-500"
+                                          end %>"></div>
+      <p><%= t(".#{param_value.downcase}") %></p>
+    </div>
   <% else %>
     <div class="flex items-center gap-2">
-      <p><%= param_value.titleize %></p>
+      <p><%= param_value %></p>
     </div>
   <% end %>
 

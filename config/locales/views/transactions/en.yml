@@ -44,5 +44,36 @@ en:
       success: Marked as transfer
     new:
       new_transaction: New transaction
+    searches:
+      filters:
+        amount_filter:
+          equal_to: Equal to
+          greater_than: Greater than
+          less_than: Less than
+          placeholder: '0'
+        badge:
+          expense: Expense
+          income: Income
+          on_or_after: on or after %{date}
+          on_or_before: on or before %{date}
+          transfer: Transfer
+        type_filter:
+          expense: Expense
+          income: Income
+          transfer: Transfer
+      menu:
+        account_filter: Account
+        amount_filter: Amount
+        apply: Apply
+        cancel: Cancel
+        category_filter: Category
+        clear_filters: Clear filters
+        date_filter: Date
+        merchant_filter: Merchant
+        type_filter: Type
+      search:
+        equal_to: equal to
+        greater_than: greater than
+        less_than: less than
     unmark_transfers:
       success: Transfer removed

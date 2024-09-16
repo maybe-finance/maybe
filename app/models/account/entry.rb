@@ -158,6 +158,17 @@ class Account::Entry < ApplicationRecord
         end
       end
 
+      if params[:amount].present? && params[:amount_operator].present?
+        case params[:amount_operator]
+        when "equal"
+          query = query.where("ABS(ABS(account_entries.amount) - ?) <= 0.01", params[:amount].to_f.abs)
+        when "less"
+          query = query.where("ABS(account_entries.amount) < ?", params[:amount].to_f.abs)
+        when "greater"
+          query = query.where("ABS(account_entries.amount) > ?", params[:amount].to_f.abs)
+        end
+      end
+
       if params[:accounts].present? || params[:account_ids].present?
         query = query.joins(:account)
       end

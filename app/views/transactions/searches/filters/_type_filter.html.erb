@@ -5,33 +5,33 @@
     <%= form.check_box :types,
                            {
                              multiple: true,
-                             checked: @q[:types]&.include?('income'),
+                             checked: @q[:types]&.include?("income"),
                              class: "maybe-checkbox maybe-checkbox--light"
                            },
-                           'income',
+                           "income",
                            nil %>
-    <%= form.label :types, 'Income', value: 'income', class: "text-sm text-gray-900" %>
+    <%= form.label :types, t(".income"), value: "income", class: "text-sm text-gray-900" %>
   </div>
   <div class="flex items-center gap-3" data-filter-name="expense">
     <%= form.check_box :types,
                            {
                              multiple: true,
-                             checked: @q[:types]&.include?('expense'),
+                             checked: @q[:types]&.include?("expense"),
                              class: "maybe-checkbox maybe-checkbox--light"
                            },
-                           'expense',
+                           "expense",
                            nil %>
-    <%= form.label :types, 'Expense', value: 'expense', class: "text-sm text-gray-900" %>
+    <%= form.label :types, t(".expense"), value: "expense", class: "text-sm text-gray-900" %>
   </div>
   <div class="flex items-center gap-3" data-filter-name="transfer">
     <%= form.check_box :types,
                            {
                              multiple: true,
-                             checked: @q[:types]&.include?('transfer'),
+                             checked: @q[:types]&.include?("transfer"),
                              class: "maybe-checkbox maybe-checkbox--light"
                            },
-                           'transfer',
+                           "transfer",
                            nil %>
-    <%= form.label :types, 'Transfer', value: 'transfer', class: "text-sm text-gray-900" %>
+    <%= form.label :types, t(".transfer"), value: "transfer", class: "text-sm text-gray-900" %>
   </div>
 </div>
