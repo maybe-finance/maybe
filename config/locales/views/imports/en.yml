@@ -95,11 +95,9 @@ en:
       import_published: Import has started in the background
       invalid_data: Your import is invalid
     type_selector:
-      description: You can manually import transactions from CSVs or from other financial
-        apps like Mint, Empower (formerly Personal Capital) or Apple Card.
-      import_from_apple: Import from Apple Card
+      description: You can manually import transactions from CSVs or other financial
+        apps like Mint.
       import_from_csv: New import from CSV
-      import_from_empower: Import from Empower
       import_from_mint: Import from Mint
       import_transactions: Import transactions
       resume_latest_import: Resume latest import
