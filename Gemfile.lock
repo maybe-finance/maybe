@@ -265,7 +265,7 @@ GEM
     octokit (9.1.0)
       faraday (>= 1, < 3)
       sawyer (~> 0.9)
-    pagy (9.0.8)
+    pagy (9.0.9)
     parallel (1.25.1)
     parser (3.3.4.0)
       ast (~> 2.4.1)
