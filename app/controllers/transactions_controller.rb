@@ -67,9 +67,6 @@ class TransactionsController < ApplicationController
     redirect_back_or_to transactions_url, notice: t(".success")
   end
 
-  def rules
-  end
-
   private
 
     def amount
@@ -93,7 +90,8 @@ class TransactionsController < ApplicationController
     end
 
     def search_params
-      params.fetch(:q, {}).permit(:start_date, :end_date, :search, accounts: [], account_ids: [], categories: [], merchants: [])
+      params.fetch(:q, {})
+            .permit(:start_date, :end_date, :search, :amount, :amount_operator, accounts: [], account_ids: [], categories: [], merchants: [], types: [])
     end
 
     def transaction_entry_params
