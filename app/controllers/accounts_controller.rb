@@ -58,8 +58,6 @@ class AccountsController < ApplicationController
                         start_balance: account_params[:start_balance]
     @account.sync_later
     redirect_back_or_to account_path(@account), notice: t(".success")
-  rescue ActiveRecord::RecordInvalid => e
-    redirect_back_or_to accounts_path, alert: e.record.errors.full_messages.to_sentence
   end
 
   def destroy

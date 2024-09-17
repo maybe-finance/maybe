@@ -1,4 +1,4 @@
-<%# locals: (form:, money_method:, default_currency:, disable_currency: false, hide_currency: false, label: nil) %>
+<%# locals: (form:, money_method:, default_currency:, disable_currency: false, hide_currency: false, label: nil, required: false) %>
 
 <% fallback_label = t(".money-label") %>
 <% currency = form.object ? (form.object.send(money_method)&.currency || Money::Currency.new(default_currency)) : Money::Currency.new(default_currency) %>
@@ -9,7 +9,7 @@
   <div class="flex items-center gap-1">
     <div class="flex items-center grow gap-1">
       <span class="text-gray-500 text-sm" data-money-field-target="symbol"><%= currency.symbol %></span>
-      <%= money_field form, money_method, { inline: true, "data-money-field-target" => "amount", default_currency: currency } %>
+      <%= money_field form, money_method, { inline: true, "data-money-field-target" => "amount", default_currency: currency, required: required } %>
     </div>
     <% unless hide_currency %>
       <div>

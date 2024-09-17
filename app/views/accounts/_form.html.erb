@@ -5,7 +5,7 @@
     <%= f.hidden_field :accountable_type %>
     <%= f.text_field :name, placeholder: t(".name_placeholder"), required: "required", label: t(".name_label"), autofocus: true %>
     <%= f.collection_select :institution_id, Current.family.institutions.alphabetically, :id, :name, { include_blank: t(".ungrouped"), label: t(".institution") } %>
-    <%= money_with_currency_field f, :balance_money, label: t(".balance"), required: "required", default_currency: Current.family.currency %>
+    <%= money_with_currency_field f, :balance_money, label: t(".balance"), required: true, default_currency: Current.family.currency %>
 
     <% if account.new_record? %>
       <div class="flex items-center gap-2 mt-3 mb-6">
