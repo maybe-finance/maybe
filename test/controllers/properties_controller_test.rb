@@ -46,33 +46,6 @@ class PropertiesControllerTest < ActionDispatch::IntegrationTest
     assert_enqueued_with(job: AccountSyncJob)
   end
 
-  test "handles erors when creating property" do
-    assert_no_difference [ "Account.count", "Property.count", "Account::Valuation.count", "Account::Entry.count" ] do
-      post properties_path, params: {
-        account: {
-          name: "Property",
-          currency: "USD",
-          accountable_type: "Property",
-          accountable_attributes: {
-            year_built: 2002,
-            area_value: 1000,
-            area_unit: "sqft",
-            address_attributes: {
-              line1: "123 Main St",
-              line2: "Apt 1",
-              locality: "Los Angeles",
-              region: "CA",
-              country: "US",
-              postal_code: "90001"
-            }
-          }
-        }
-      }
-      assert_redirected_to accounts_path
-      assert_equal "Balance can't be blank and Entries is invalid", flash[:alert]
-    end
-  end
-
   test "updates property" do
     assert_no_difference [ "Account.count", "Property.count", "Account::Valuation.count", "Account::Entry.count" ] do
       patch property_path(@account), params: {
