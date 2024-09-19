@@ -13,7 +13,7 @@
   <section class="space-y-2">
     <%= f.text_field :name, label: t(".description"), placeholder: t(".description_placeholder"), required: true %>
     <%= f.collection_select :account_id, Current.family.accounts.alphabetically, :id, :name, { prompt: t(".account_prompt"), label: t(".account") }, required: true %>
-    <%= money_with_currency_field f, :amount_money, label: t(".amount"), required: true, default_currency: @entry.account&.currency || Current.family.currency %>
+    <%= f.money_field :amount_money, label: t(".amount"), required: true, default_currency: @entry.account&.currency || Current.family.currency %>
     <%= f.hidden_field :entryable_type, value: "Account::Transaction" %>
     <%= f.fields_for :entryable do |ef| %>
       <%= ef.collection_select :category_id, Current.family.categories.alphabetically, :id, :name, { prompt: t(".category_prompt"), label: t(".category") } %>

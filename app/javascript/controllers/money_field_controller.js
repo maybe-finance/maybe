@@ -13,7 +13,6 @@ export default class extends Controller {
 
   updateAmount(currency) {
     (new CurrenciesService).get(currency).then((currency) => {
-      console.log(currency)
       this.amountTarget.step = currency.step;
 
       if (isFinite(this.amountTarget.value)) {
