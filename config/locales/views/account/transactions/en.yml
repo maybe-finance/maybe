@@ -14,8 +14,6 @@ en:
           longer be included in income or spending calculations.
       show:
         account_label: Account
-        account_placeholder: Select an account
-        additional: Additional
         amount: Amount
         category_label: Category
         category_placeholder: Select a category
@@ -24,6 +22,7 @@ en:
         delete_subtitle: This permanently deletes the transaction, affects your historical
           balances, and cannot be undone.
         delete_title: Delete transaction
+        details: Details
         exclude_subtitle: This excludes the transaction from any in-app features or
           analytics.
         exclude_title: Exclude transaction

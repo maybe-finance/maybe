@@ -27,51 +27,51 @@
     <div class="space-y-2">
       <!-- Overview Section -->
       <details class="group space-y-2" open>
-        <summary class="flex list-none items-center justify-between 
-                        rounded-xl px-3 py-2 text-xs font-medium 
-                        uppercase text-gray-500 bg-gray-25 
+        <summary class="flex list-none items-center justify-between
+                        rounded-xl px-3 py-2 text-xs font-medium
+                        uppercase text-gray-500 bg-gray-25
                         focus-visible:outline-none">
           <h4><%= t(".overview") %></h4>
-          <%= lucide_icon "chevron-down", 
-              class: "group-open:transform group-open:rotate-180 
+          <%= lucide_icon "chevron-down",
+              class: "group-open:transform group-open:rotate-180
                       text-gray-500 w-5" %>
         </summary>
 
         <div class="pb-6">
-          <%= styled_form_with model: [account, entry], 
-              url: account_transaction_path(account, entry), 
+          <%= styled_form_with model: [account, entry],
+              url: account_transaction_path(account, entry),
               class: "space-y-2",
               data: { controller: "auto-submit-form" } do |f| %>
-            <%= f.text_field :name, 
-                label: t(".name_label"), 
+            <%= f.text_field :name,
+                label: t(".name_label"),
                 "data-auto-submit-form-target": "auto" %>
 
-            <%= f.date_field :date, 
-                label: t(".date_label"), 
-                max: Date.current, 
+            <%= f.date_field :date,
+                label: t(".date_label"),
+                max: Date.current,
                 "data-auto-submit-form-target": "auto" %>
 
             <% unless entry.marked_as_transfer? %>
               <div class="flex items-center gap-2">
-                <%= f.select :nature, 
-                    [["Expense", "expense"], ["Income", "income"]], 
-                    { container_class: "w-2/5 pr-0", label: t(".nature"), selected: entry.amount.negative? ? "income" : "expense" }, 
+                <%= f.select :nature,
+                    [["Expense", "expense"], ["Income", "income"]],
+                    { container_class: "w-2/5 pr-0", label: t(".nature"), selected: entry.amount.negative? ? "income" : "expense" },
                     { data: { "auto-submit-form-target": "auto" } } %>
 
-                <%= f.money_field :amount, :currency, label: t(".amount"), 
-                    container_class: "w-3/5", 
-                    auto_submit: true, 
-                    min: 0, 
+                <%= f.money_field :amount, :currency, label: t(".amount"),
+                    container_class: "w-3/5",
+                    auto_submit: true,
+                    min: 0,
                     value: entry.amount.abs %>
               </div>
             <% end %>
 
-            <%= f.select :account, 
+            <%= f.select :account,
                 options_for_select(
-                  Current.family.accounts.alphabetically.pluck(:name, :id), 
-                  entry.account_id 
-                ), 
-                { label: t(".account_label") }, 
+                  Current.family.accounts.alphabetically.pluck(:name, :id),
+                  entry.account_id
+                ),
+                { label: t(".account_label") },
                 { disabled: true } %>
 
           <% end %>
@@ -80,44 +80,44 @@
 
       <!-- Details Section -->
       <details class="group space-y-2" open>
-        <summary class="flex list-none items-center justify-between 
-                        rounded-xl px-3 py-2 text-xs font-medium 
-                        uppercase text-gray-500 bg-gray-25 
+        <summary class="flex list-none items-center justify-between
+                        rounded-xl px-3 py-2 text-xs font-medium
+                        uppercase text-gray-500 bg-gray-25
                         focus-visible:outline-none">
           <h4><%= t(".details") %></h4>
 
-          <%= lucide_icon "chevron-down", 
-              class: "group-open:transform group-open:rotate-180 
+          <%= lucide_icon "chevron-down",
+              class: "group-open:transform group-open:rotate-180
                       text-gray-500 w-5" %>
         </summary>
 
         <div class="pb-6">
-          <%= styled_form_with model: [account, entry], 
-              url: account_transaction_path(account, entry), 
-              class: "space-y-2", 
+          <%= styled_form_with model: [account, entry],
+              url: account_transaction_path(account, entry),
+              class: "space-y-2",
               data: { controller: "auto-submit-form" } do |f| %>
             <%= f.fields_for :entryable do |ef| %>
               <% unless entry.marked_as_transfer? %>
-                <%= ef.collection_select :category_id, 
-                    Current.family.categories.alphabetically, 
-                    :id, :name, 
-                    { prompt: t(".category_placeholder"), 
-                      label: t(".category_label"), 
-                      class: "text-gray-400" }, 
+                <%= ef.collection_select :category_id,
+                    Current.family.categories.alphabetically,
+                    :id, :name,
+                    { prompt: t(".category_placeholder"),
+                      label: t(".category_label"),
+                      class: "text-gray-400" },
                     "data-auto-submit-form-target": "auto" %>
 
-                <%= ef.collection_select :merchant_id, 
-                    Current.family.merchants.alphabetically, 
-                    :id, :name, 
-                    { prompt: t(".merchant_placeholder"), 
-                      label: t(".merchant_label"), 
-                      class: "text-gray-400" }, 
+                <%= ef.collection_select :merchant_id,
+                    Current.family.merchants.alphabetically,
+                    :id, :name,
+                    { prompt: t(".merchant_placeholder"),
+                      label: t(".merchant_label"),
+                      class: "text-gray-400" },
                     "data-auto-submit-form-target": "auto" %>
               <% end %>
 
               <%= ef.select :tag_ids,
                   options_for_select(
-                    Current.family.tags.alphabetically.pluck(:name, :id), 
+                    Current.family.tags.alphabetically.pluck(:name, :id),
                     transaction.tag_ids
                   ),
                   {
@@ -127,9 +127,9 @@
                   },
                   "data-auto-submit-form-target": "auto" %>
 
-              <%= ef.text_area :notes, 
-                  label: t(".note_label"), 
-                  placeholder: t(".note_placeholder"), 
+              <%= ef.text_area :notes,
+                  label: t(".note_label"),
+                  placeholder: t(".note_placeholder"),
                   "data-auto-submit-form-target": "auto" %>
             <% end %>
           <% end %>
@@ -138,21 +138,21 @@
 
       <!-- Settings Section -->
       <details class="group space-y-2" open>
-        <summary class="flex list-none items-center justify-between 
-                        rounded-xl px-3 py-2 text-xs font-medium 
-                        uppercase text-gray-500 bg-gray-25 
+        <summary class="flex list-none items-center justify-between
+                        rounded-xl px-3 py-2 text-xs font-medium
+                        uppercase text-gray-500 bg-gray-25
                         focus-visible:outline-none">
           <h4><%= t(".settings") %></h4>
-          <%= lucide_icon "chevron-down", 
-              class: "group-open:transform group-open:rotate-180 
+          <%= lucide_icon "chevron-down",
+              class: "group-open:transform group-open:rotate-180
                       text-gray-500 w-5" %>
         </summary>
 
         <div class="pb-6">
           <!-- Exclude Transaction Form -->
-          <%= styled_form_with model: [account, entry], 
-              url: account_transaction_path(account, entry), 
-              class: "p-3 space-y-3", 
+          <%= styled_form_with model: [account, entry],
+              url: account_transaction_path(account, entry),
+              class: "p-3 space-y-3",
               data: { controller: "auto-submit-form" } do |f| %>
             <%= f.fields_for :entryable do |ef| %>
               <div class="flex cursor-pointer items-center gap-2 justify-between">
@@ -162,10 +162,10 @@
                 </div>
 
                 <div class="relative inline-block select-none">
-                  <%= ef.check_box :excluded, 
-                      class: "sr-only peer", 
+                  <%= ef.check_box :excluded,
+                      class: "sr-only peer",
                       "data-auto-submit-form-target": "auto" %>
-                  <label for="account_entry_entryable_attributes_excluded" 
+                  <label for="account_entry_entryable_attributes_excluded"
                          class="maybe-switch"></label>
                 </div>
               </div>
@@ -183,7 +183,7 @@
               <%= button_to t(".delete"),
                   account_entry_path(account, entry),
                   method: :delete,
-                  class:  "rounded-lg px-3 py-2 text-red-500 text-sm 
+                  class:  "rounded-lg px-3 py-2 text-red-500 text-sm
                            font-medium border border-alpha-black-200",
                   data:   { turbo_confirm: true, turbo_frame: "_top" } %>
             </div>

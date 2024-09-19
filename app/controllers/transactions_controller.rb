@@ -17,6 +17,9 @@ class TransactionsController < ApplicationController
     @entry = Current.family.entries.new(entryable: Account::Transaction.new).tap do |e|
       if params[:account_id]
         e.account = Current.family.accounts.find(params[:account_id])
+        e.currency = e.account.currency
+      else
+        e.currency = Current.family.currency
       end
     end
   end

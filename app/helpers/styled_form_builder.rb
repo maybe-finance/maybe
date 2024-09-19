@@ -6,7 +6,7 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
   text_field_helpers.each do |selector|
     class_eval <<-RUBY_EVAL, __FILE__, __LINE__ + 1
       def #{selector}(method, options = {})
-        merged_options = { class: "form-field__input" }.merge(options) 
+        merged_options = { class: "form-field__input" }.merge(options)#{' '}
         label = build_label(method, options)
         field = super(method, merged_options)
 
@@ -25,7 +25,7 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
     merged_html_options = { class: "form-field__input" }.merge(html_options)
 
     label = build_label(method, options)
-    field = super(method, choices, options, merged_html_options) 
+    field = super(method, choices, options, merged_html_options)
 
     build_styled_field(label, field, options)
   end
@@ -33,18 +33,18 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
   def collection_select(method, collection, value_method, text_method, options = {}, html_options = {})
     merged_html_options = { class: "form-field__input" }.merge(html_options)
 
-    label = build_label(method, options) 
+    label = build_label(method, options)
     field = super(method, collection, value_method, text_method, options, merged_html_options)
 
     build_styled_field(label, field, options)
   end
 
   def money_field(amount_method, currency_method, options = {})
-    @template.render partial: "shared/money_field", locals: { 
-      form: self, 
-      amount_method:, 
-      currency_method:, 
-      **options 
+    @template.render partial: "shared/money_field", locals: {
+      form: self,
+      amount_method:,
+      currency_method:,
+      **options
     }
   end
 
@@ -60,7 +60,7 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
       if options[:inline]
         label + field
       else
-        @template.tag.div class: ["form-field", options[:container_class]] do 
+        @template.tag.div class: [ "form-field", options[:container_class] ] do
           label + field
         end
       end
@@ -70,5 +70,5 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
       return "".html_safe unless options[:label]
       return label(method, class: "form-field__label") if options[:label] == true
       label(method, options[:label], class: "form-field__label")
-    end 
+    end
 end
