@@ -10,11 +10,6 @@ module FormsHelper
     render partial: "shared/modal_form", locals: { title:, subtitle:, content: }
   end
 
-  def form_field_tag(options = {}, &block)
-    options[:class] = [ "form-field", options[:class] ].compact.join(" ")
-    tag.div(**options, &block)
-  end
-
   def radio_tab_tag(form:, name:, value:, label:, icon:, checked: false, disabled: false)
     form.label name, for: form.field_id(name, value), class: "group has-[:disabled]:cursor-not-allowed" do
       concat radio_tab_contents(label:, icon:)
@@ -27,56 +22,11 @@ module FormsHelper
     form.select(:period, periods_for_select, { selected: selected }, class: classes, data: { "auto-submit-form-target": "auto" })
   end
 
-  def money_with_currency_field(form, money_method, options = {})
-    render partial: "shared/money_field", locals: {
-      form:          form,
-      money_method:  money_method,
-      default_currency: options[:default_currency] || "USD",
-      disable_currency: options[:disable_currency] || false,
-      hide_currency: options[:hide_currency] || false,
-      label:         options[:label] || "Amount",
-      required:      options[:required] || false
-    }
-  end
-
-  def money_field(form, method, options = {})
-    value = form.object ? form.object.send(method) : nil
-
-    currency = value&.currency || Money::Currency.new(options[:default_currency] || "USD")
-
-    # See "Monetizable" concern
-    money_amount_method = method.to_s.chomp("_money").to_sym
-
-    money_options = {
-      value: value&.amount,
-      placeholder: "100",
-      min:   -99999999999999,
-      max:   99999999999999,
-      step:  currency.step
-    }
-
-    merged_options = options.merge(money_options)
-
-    form.number_field money_amount_method, merged_options
-  end
-
-  def currency_select_full(form, method, options = {}, html_options = {}, &block)
-    choices = currencies_for_select.map { |currency| [ "#{currency.name} (#{currency.iso_code})", currency.iso_code ] }
-    form.select method, choices, options, html_options, &block
-  end
-
-  def currency_select(form, method, options = {}, html_options = {}, &block)
-    choices = currencies_for_select.map(&:iso_code)
-    form.select method, choices, options, html_options, &block
+  def currencies_for_select
+    Money::Currency.all_instances.sort_by(&:priority)
   end
 
   private
-
-    def currencies_for_select
-      Money::Currency.all_instances
-                     .sort_by(&:priority)
-    end
-
     def radio_tab_contents(label:, icon:)
       tag.div(class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-gray-400 group-has-[:checked]:bg-white group-has-[:checked]:text-gray-800 group-has-[:checked]:shadow-sm") do
         concat lucide_icon(icon, class: "w-5 h-5")

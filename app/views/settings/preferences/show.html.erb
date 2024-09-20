@@ -8,7 +8,10 @@
     <div>
       <%= styled_form_with model: Current.user, url: settings_preferences_path, class: "space-y-4", data: { controller: "auto-submit-form" } do |form| %>
         <%= form.fields_for :family_attributes do |family_form| %>
-          <%= currency_select_full family_form, :currency, { label: "Currency", selected: Current.family.currency }, { data: { auto_submit_form_target: "auto" } } %>
+          <%= family_form.select :currency,
+            currencies_for_select.map { |currency| [ "#{currency.name} (#{currency.iso_code})", currency.iso_code ] },
+            { label: "Currency", selected: Current.family.currency },
+            { data: { auto_submit_form_target: "auto" } } %>
         <% end %>
       <% end %>
     </div>

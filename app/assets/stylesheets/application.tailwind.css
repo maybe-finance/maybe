@@ -20,14 +20,14 @@
   }
 
   .form-field__label {
-    @apply block text-xs text-gray-500;
+    @apply block text-xs text-gray-500 peer-disabled:text-gray-400;
   }
 
   .form-field__input {
     @apply border-none bg-transparent text-sm opacity-100 w-full p-0;
     @apply focus:opacity-100 focus:outline-none focus:ring-0;
     @apply placeholder-shown:opacity-50;
-    @apply disabled:opacity-50;
+    @apply disabled:text-gray-400;
   }
 
   .form-field__radio {
@@ -63,12 +63,16 @@
   }
 
   select[multiple="multiple"] option {
-    @apply p-2 rounded-md;
+    @apply py-2 rounded-md;
   }
 
   select[multiple="multiple"] option:checked {
-    @apply bg-gray-50;
-    @apply after:content-['\2713'] after:float-right after:text-gray-500;
+    @apply after:content-['\2713'] bg-white after:text-gray-500 after:ml-2;
+  }
+
+  select[multiple="multiple"] option:active,
+  select[multiple="multiple"] option:focus {
+    @apply bg-white;
   }
 
   .maybe-switch {

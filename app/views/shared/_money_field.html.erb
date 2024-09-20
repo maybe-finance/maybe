@@ -1,26 +1,53 @@
-<%# locals: (form:, money_method:, default_currency:, disable_currency: false, hide_currency: false, label: nil, required: false) %>
+<%# locals: (form:, amount_method:, currency_method:, **options) %>
 
-<% fallback_label = t(".money-label") %>
-<% currency = form.object ? (form.object.send(money_method)&.currency || Money::Currency.new(default_currency)) : Money::Currency.new(default_currency) %>
+<% currency_value = if form.object && form.object.respond_to?(currency_method)
+                      form.object.public_send(currency_method)
+                    end
+   currency = Money::Currency.new(currency_value || options[:default_currency] || "USD") %>
 
-<div class="form-field pr-0" data-controller="money-field">
-  <%= form.label label || fallback_label, { class: "form-field__label" } %>
+<div class="form-field pr-0 <%= options[:container_class] %>" data-controller="money-field">
+  <%= form.label options[:label] || t(".label"), class: "form-field__label" %>
 
   <div class="flex items-center gap-1">
     <div class="flex items-center grow gap-1">
-      <span class="text-gray-500 text-sm" data-money-field-target="symbol"><%= currency.symbol %></span>
-      <%= money_field form, money_method, { inline: true, "data-money-field-target" => "amount", default_currency: currency, required: required } %>
+      <span class="text-gray-500 text-sm" data-money-field-target="symbol">
+        <%= currency.symbol %>
+      </span>
+
+      <%= form.number_field amount_method,
+        class: "form-field__input",
+        inline: true,
+        placeholder: "100",
+        value: if options[:value]
+          sprintf("%.#{currency.default_precision}f", options[:value])
+        elsif form.object && form.object.respond_to?(amount_method)
+          form.object.public_send(amount_method)
+        end,
+        min: options[:min] || -99999999999999,
+        max: options[:max] || 99999999999999,
+        step: currency.step,
+        data: {
+          "money-field-target": "amount",
+          action: "change->money-field#handleAmountChange",
+          "auto-submit-form-target": ("auto" if options[:auto_submit])
+        }.compact,
+        required: options[:required] %>
     </div>
-    <% unless hide_currency %>
+
+    <% unless options[:hide_currency] %>
       <div>
-        <%= currency_select form, :currency, { inline: true, selected: currency.iso_code }, {
-          class: "form-field__input text-right pr-8 disabled:text-gray-500",
-          disabled: disable_currency,
-          data: {
-            "money-field-target" => "currency",
-            action: "money-field#handleCurrencyChange"
-          }
-        } %>
+        <%= form.select currency_method,
+                      currencies_for_select.map(&:iso_code),
+                      { inline: true },
+                      {
+                        class: "w-fit pr-5 disabled:text-gray-400 form-field__input",
+                        disabled: options[:disable_currency],
+                        data: {
+                          "money-field-target": "currency",
+                          action: "change->money-field#handleCurrencyChange",
+                          "auto-submit-form-target": ("auto" if options[:auto_submit])
+                        }.compact
+                      } %>
       </div>
     <% end %>
   </div>

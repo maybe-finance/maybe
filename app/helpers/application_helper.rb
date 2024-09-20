@@ -57,6 +57,11 @@ module ApplicationHelper
     render partial: "shared/drawer", locals: { content: content }
   end
 
+  def disclosure(title, &block)
+    content = capture &block
+    render partial: "shared/disclosure", locals: { title: title, content: content }
+  end
+
   def sidebar_link_to(name, path, options = {})
     is_current = current_page?(path) || (request.path.start_with?(path) && path != "/")
 

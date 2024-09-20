@@ -29,7 +29,7 @@
     <%= f.text_field :name, value: transfer.name, label: t(".description"), placeholder: t(".description_placeholder"), required: true %>
     <%= f.collection_select :from_account_id, Current.family.accounts.alphabetically, :id, :name, { prompt: t(".select_account"), label: t(".from") }, required: true %>
     <%= f.collection_select :to_account_id, Current.family.accounts.alphabetically, :id, :name, { prompt: t(".select_account"), label: t(".to") }, required: true %>
-    <%= money_field f, :amount_money, label: t(".amount"), required: true %>
+    <%= f.money_field :amount, :currency, label: t(".amount"), required: true %>
     <%= f.date_field :date, value: transfer.date, label: t(".date"), required: true, max: Date.current %>
   </section>
 

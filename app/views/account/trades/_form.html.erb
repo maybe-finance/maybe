@@ -2,7 +2,7 @@
 
 <%= styled_form_with data: { turbo_frame: "_top", controller: "trade-form" },
                      scope: :account_entry,
-                     url: entry.new_record? ? account_trades_path(entry.account) : account_entry_path(entry.account, entry) do |form| %>
+                     url: account_trades_path(entry.account) do |form| %>
   <div class="space-y-4">
     <div class="space-y-2">
       <%= form.select :type, options_for_select([%w[Buy buy], %w[Sell sell], %w[Deposit transfer_in], %w[Withdrawal transfer_out], %w[Interest interest]], "buy"), { label: t(".type") }, { data: { "trade-form-target": "typeInput" } } %>
@@ -13,7 +13,7 @@
       <%= form.date_field :date, label: true %>
 
       <div data-trade-form-target="amountInput" hidden>
-        <%= money_with_currency_field form, :amount_money, label: t(".amount"), disable_currency: true %>
+        <%= form.money_field :amount, :currency, label: t(".amount"), disable_currency: true %>
       </div>
 
       <div data-trade-form-target="transferAccountInput" hidden>
@@ -25,7 +25,7 @@
       </div>
 
       <div data-trade-form-target="priceInput">
-        <%= money_with_currency_field form, :price_money, label: t(".price"), disable_currency: true %>
+        <%= form.money_field :price, :currency, label: t(".price"), disable_currency: true %>
       </div>
     </div>
 
