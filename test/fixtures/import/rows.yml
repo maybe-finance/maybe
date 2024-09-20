@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+completed_import_row_one:
+  import: completed_import
+  index: 0
+  fields: >
+    {
+      "date": "2024-01-01",
+      "name": "Starbucks drink",
+      "category": "Food & Drink",
+      "tags": "Test Tag",
+      "amount": -20
+    }

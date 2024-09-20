@@ -31,10 +31,13 @@ Rails.application.routes.draw do
       patch "configure" => "imports#update_mappings"
 
       get "clean"
-      patch "clean" => "imports#update_csv"
 
       get "confirm"
       patch "confirm" => "imports#publish"
+    end
+
+    scope module: :import do
+      resources :rows, only: %i[update]
     end
   end
 

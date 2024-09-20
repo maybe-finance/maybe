@@ -1,9 +1,9 @@
 module ImportsHelper
-  def table_corner_class(row_idx, col_idx, rows, cols)
+  def table_corner_class(row_idx, col_idx, rows_size, cols_size)
     return "rounded-tl-xl" if row_idx == 0 && col_idx == 0
-    return "rounded-tr-xl" if row_idx == 0 && col_idx == cols.size - 1
-    return "rounded-bl-xl" if row_idx == rows.size - 1 && col_idx == 0
-    return "rounded-br-xl" if row_idx == rows.size - 1 && col_idx == cols.size - 1
+    return "rounded-tr-xl" if row_idx == 0 && col_idx == cols_size - 1
+    return "rounded-bl-xl" if row_idx == rows_size - 1 && col_idx == 0
+    return "rounded-br-xl" if row_idx == rows_size - 1 && col_idx == cols_size - 1
     ""
   end
 

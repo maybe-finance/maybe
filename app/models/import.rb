@@ -1,14 +1,20 @@
 class Import < ApplicationRecord
+  FIELDS = [ :date, :name, :category, :tags, :amount ].freeze
+  REQUIRED_FIELDS =  [ :date, :amount ].freeze
+
   belongs_to :account
+  has_many :rows, dependent: :destroy, class_name: "Import::Row"
+
+  accepts_nested_attributes_for :rows
 
   validate :raw_file_must_be_parsable
   validates :col_sep, inclusion: { in: Csv::COL_SEP_LIST }
 
-  before_save :initialize_csv, if: :should_initialize_csv?
+  before_save :recreate_rows, if: :should_recreate_rows?
 
   enum :status, { pending: "pending", complete: "complete", importing: "importing", failed: "failed" }, validate: true
 
-  store_accessor :column_mappings, :define_column_mapping_keys
+  store :column_mappings, accessors: FIELDS, suffix: :column_mapping
 
   scope :ordered, -> { order(created_at: :desc) }
 
@@ -23,28 +29,19 @@ class Import < ApplicationRecord
   end
 
   def configured?
-    csv.present?
+    rows.present?
   end
 
   def cleaned?
-    loaded? && configured? && csv.valid?
+    loaded? && configured? && valid_rows?
   end
 
-  def csv
-    get_normalized_csv_with_validation
+  def valid_rows?
+    rows.all? { |row| row.valid? }
   end
 
-  def available_headers
-    get_raw_csv.table.headers
-  end
-
-  def get_selected_header_for_field(field)
-    column_mappings&.dig(field.key) || field.key
-  end
-
-  def update_csv!(row_idx:, col_idx:, value:)
-    updated_csv = csv.update_cell(row_idx.to_i, col_idx.to_i, value)
-    update! normalized_csv_str: updated_csv.to_s
+  def available_fields
+    Import::Csv.available_fields(raw_file_str, col_sep:)
   end
 
   # Type-specific methods (potential STI inheritance in future when more import types added)
@@ -69,46 +66,17 @@ class Import < ApplicationRecord
     generate_transactions
   end
 
-  def expected_fields
-    @expected_fields ||= create_expected_fields
-  end
-
   private
 
-    def get_normalized_csv_with_validation
-      return nil if normalized_csv_str.nil?
-
-      csv = Import::Csv.new(normalized_csv_str)
-
-      expected_fields.each do |field|
-        csv.define_validator(field.key, field.validator) if field.validator
-      end
-
-      csv
-    end
-
-    def get_raw_csv
-      return nil if raw_file_str.nil?
-      Import::Csv.new(raw_file_str, col_sep:)
-    end
-
-    def should_initialize_csv?
+    def should_recreate_rows?
       raw_file_str_changed? || column_mappings_changed?
     end
 
-    def initialize_csv
-      generated_csv = generate_normalized_csv(raw_file_str)
-      self.normalized_csv_str = generated_csv.table.to_s
-    end
-
-    # Uses the user-provided raw CSV + mappings to generate a normalized CSV for the import
-    def generate_normalized_csv(csv_str)
-      Import::Csv.create_with_field_mappings(csv_str, expected_fields, column_mappings, col_sep)
-    end
-
-    def update_csv(row_idx, col_idx, value)
-      updated_csv = csv.update_cell(row_idx.to_i, col_idx.to_i, value)
-      update! normalized_csv_str: updated_csv.to_s
+    def recreate_rows
+      rows.destroy_all
+      self.rows_attributes = Import::Csv.normalize(raw_file_str, column_mappings, col_sep).map.with_index do |a, index|
+        { fields: a.as_json.to_h, index: index }
+      end
     end
 
     def generate_transactions
@@ -116,9 +84,9 @@ class Import < ApplicationRecord
       category_cache = {}
       tag_cache = {}
 
-      csv.table.each do |row|
-        category_name = row["category"].presence
-        tag_strings = row["tags"].presence&.split("|") || []
+      rows.each do |row|
+        category_name = row.fields["category"].presence
+        tag_strings = row.fields["tags"].presence&.split("|") || []
         tags = []
 
         tag_strings.each do |tag_string|
@@ -128,51 +96,16 @@ class Import < ApplicationRecord
         category = category_cache[category_name] ||= account.family.categories.find_or_initialize_by(name: category_name) if category_name.present?
 
         entry = account.entries.build \
-          name: row["name"].presence || FALLBACK_TRANSACTION_NAME,
-          date: Date.iso8601(row["date"]),
+          name: row.fields["name"].presence || FALLBACK_TRANSACTION_NAME,
+          date: Date.iso8601(row.fields["date"]),
           currency: account.currency,
-          amount: BigDecimal(row["amount"]) * -1,
+          amount: BigDecimal(row.fields["amount"]) * -1,
           entryable: Account::Transaction.new(category: category, tags: tags)
 
         transaction_entries << entry
       end
 
       transaction_entries
-    end
-
-    def create_expected_fields
-      date_field = Import::Field.new \
-        key: "date",
-        label: "Date",
-        validator: ->(value) { Import::Field.iso_date_validator(value) }
-
-      name_field = Import::Field.new \
-        key: "name",
-        label: "Name",
-        is_optional: true
-
-      category_field = Import::Field.new \
-        key: "category",
-        label: "Category",
-        is_optional: true
-
-      tags_field = Import::Field.new \
-        key: "tags",
-        label: "Tags",
-        is_optional: true
-
-      amount_field = Import::Field.new \
-        key: "amount",
-        label: "Amount",
-        validator: ->(value) { Import::Field.bigdecimal_validator(value) }
-
-      [ date_field, name_field, category_field, tags_field, amount_field ]
-    end
-
-    def define_column_mapping_keys
-      expected_fields.each do |field|
-        field.key.to_sym
-      end
     end
 
     def raw_file_must_be_parsable

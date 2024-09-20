@@ -1,0 +1,20 @@
+<%=
+  form_with(
+    model: row,
+    url: import_row_path(import_id: row.import.id, id: row.id),
+    format: :turbo_stream,
+    method: :patch,
+    id: "#{dom_id(row)}_#{field}",
+    data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" }
+  ) do |form|
+%>
+  <%=
+    form.text_field(
+      field,
+      value: value,
+      id: "cell-#{row.index}-#{col_index}",
+      class: "#{attributes_with_errors.include?(field.to_sym) ? "border-red-500" : "focus:border-transparent border-transparent"} border px-4 py-3.5 text-sm w-full bg-transparent focus:ring-gray-900 focus:ring-2 focus-visible:outline-none #{table_corner_class(row.index, col_index, row.import.rows.count, row.fields.size)}",
+      data: { "auto-submit-form-target" => "auto" }
+    )
+  %>
+<% end %>

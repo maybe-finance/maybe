@@ -128,25 +128,6 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Column mappings saved", flash[:notice]
   end
 
-  test "can update a cell" do
-    assert_equal @loaded_import.csv.table[0][1], "Starbucks drink"
-
-    patch clean_import_url(@loaded_import), params: {
-      import: {
-        csv_update: {
-          row_idx: 0,
-          col_idx: 1,
-          value: "new_merchant"
-        }
-      }
-    }
-
-    assert_response :success
-
-    @loaded_import.reload
-    assert_equal "new_merchant", @loaded_import.csv.table[0][1]
-  end
-
   test "should get clean" do
     get clean_import_url(@loaded_import)
     assert_response :success

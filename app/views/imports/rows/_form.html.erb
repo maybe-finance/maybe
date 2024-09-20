@@ -1,0 +1,7 @@
+<% row.valid? %>
+<% attributes_with_errors = row.errors.attribute_names %>
+<% row.errors.clear %>
+
+<% row.fields.each.with_index do |(field, value), col_index| %>
+  <%= render "imports/rows/field_form", row:, field: field.to_sym, value:, col_index:, attributes_with_errors: %>
+<% end %>

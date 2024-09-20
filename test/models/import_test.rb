@@ -33,22 +33,6 @@ class ImportTest < ActiveSupport::TestCase
     assert @empty_import.valid?
   end
 
-  test "can update csv value without affecting raw input" do
-    assert_equal "Starbucks drink", @loaded_import.csv.table[0][1]
-
-    prior_raw_file_str_value = @loaded_import.raw_file_str
-    prior_normalized_csv_str_value = @loaded_import.normalized_csv_str
-
-    @loaded_import.update_csv! \
-      row_idx: 0,
-      col_idx: 1,
-      value: "new_category"
-
-    assert_equal "new_category", @loaded_import.csv.table[0][1]
-    assert_equal prior_raw_file_str_value, @loaded_import.raw_file_str
-    assert_not_equal prior_normalized_csv_str_value, @loaded_import.normalized_csv_str
-  end
-
   test "publishes later" do
     assert_enqueued_with(job: ImportJob) do
       @loaded_import.publish_later
@@ -102,14 +86,24 @@ class ImportTest < ActiveSupport::TestCase
   test "can create transactions from csv with custom column separator" do
     loaded_import = @empty_import.dup
 
+    assert_equal 0, loaded_import.rows.count
+
     loaded_import.update! raw_file_str: valid_csv_str_with_semicolon_separator, col_sep: ";"
+
+    expected_rows = [
+      { import_id: loaded_import.id, index: 0, fields: { date: "2024-01-01", name: "Starbucks drink", category: "Food & Drink", tags: "Tag1|Tag2", amount: "-8.55" } },
+      { import_id: loaded_import.id, index: 1, fields: { date: "2024-01-01", name: "Etsy", category: "Shopping", tags: "Tag1", amount: "-80.98" } },
+      { import_id: loaded_import.id, index: 2, fields: { date: "2024-01-02", name: "Amazon stuff", category: "Shopping", tags: "Tag2", amount: "-200" } },
+      { import_id: loaded_import.id, index: 3, fields: { date: "2024-01-03", name: "Paycheck", category: "Income", tags: nil, amount: "1000" } }
+    ].as_json
+
+    assert_equal expected_rows, loaded_import.rows.map { |r| r.as_json(except: [ :id, :created_at, :updated_at ]) }
+
     transactions = loaded_import.dry_run
 
     assert_equal 4, transactions.count
 
     data = transactions.first.as_json(only: [ :name, :amount, :date ])
     assert_equal data, { "amount" => "8.55", "date" => "2024-01-01", "name" => "Starbucks drink" }
-
-    assert_equal valid_csv_str, loaded_import.normalized_csv_str
   end
 end

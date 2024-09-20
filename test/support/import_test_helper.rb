@@ -41,4 +41,13 @@ module ImportTestHelper
       "Jane Doe",25
     ROWS
   end
+
+  def valid_column_mappings
+    {
+      date: "date",
+      name: "name",
+      category: "category",
+      amount: "amount"
+    }
+  end
 end

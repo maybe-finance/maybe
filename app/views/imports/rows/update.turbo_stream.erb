@@ -1,0 +1,13 @@
+<% @row.valid? %>
+<% attributes_with_errors = @row.errors.attribute_names %>
+<% @row.errors.clear %>
+
+<% col_index = @row.fields.find_index { |k, v| k == @field } %>
+
+<%= turbo_stream.replace "#{dom_id(@row)}_#{@field}" do %>
+  <%= render "imports/rows/field_form", row: @row, field: @field, value: @row.public_send(@field.to_sym), col_index:, attributes_with_errors: %>
+<% end %>
+
+<%= turbo_stream.replace("clean_next") do %>
+  <%= render "imports/clean_next" %>
+<% end %>
