@@ -63,12 +63,16 @@
   }
 
   select[multiple="multiple"] option {
-    @apply p-2 rounded-md;
+    @apply py-2 rounded-md;
   }
 
   select[multiple="multiple"] option:checked {
-    @apply bg-gray-50;
-    @apply after:content-['\2713'] after:float-right after:text-gray-500;
+    @apply after:content-['\2713'] bg-white after:text-gray-500 after:ml-2;
+  }
+
+  select[multiple="multiple"] option:active,
+  select[multiple="multiple"] option:focus {
+    @apply bg-white;
   }
 
   .maybe-switch {

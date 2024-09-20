@@ -6,7 +6,7 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
   text_field_helpers.each do |selector|
     class_eval <<-RUBY_EVAL, __FILE__, __LINE__ + 1
       def #{selector}(method, options = {})
-        merged_options = { class: "form-field__input" }.merge(options)#{' '}
+        merged_options = { class: "form-field__input" }.merge(options)
         label = build_label(method, options)
         field = super(method, merged_options)
 

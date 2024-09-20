@@ -1,104 +1,81 @@
 <% entry, transaction, account = @entry, @entry.account_transaction, @entry.account %>
 
 <%= drawer do %>
-  <div>
-    <header class="mb-4 space-y-1">
-      <div class="flex items-center gap-4">
-        <h3 class="font-medium">
-          <span class="text-2xl">
-            <%= format_money -entry.amount_money %>
-          </span>
+  <header class="mb-4 space-y-1">
+    <div class="flex items-center gap-4">
+      <h3 class="font-medium">
+        <span class="text-2xl">
+          <%= format_money -entry.amount_money %>
+        </span>
 
-          <span class="text-lg text-gray-500">
-            <%= entry.currency %>
-          </span>
-        </h3>
+        <span class="text-lg text-gray-500">
+          <%= entry.currency %>
+        </span>
+      </h3>
 
-        <% if entry.marked_as_transfer? %>
-          <%= lucide_icon "arrow-left-right", class: "text-gray-500 mt-1 w-5 h-5" %>
-        <% end %>
-      </div>
+      <% if entry.marked_as_transfer? %>
+        <%= lucide_icon "arrow-left-right", class: "text-gray-500 mt-1 w-5 h-5" %>
+      <% end %>
+    </div>
 
-      <span class="text-sm text-gray-500">
-        <%= entry.date.strftime("%A %d %B") %>
-      </span>
-    </header>
+    <span class="text-sm text-gray-500">
+      <%= entry.date.strftime("%A %d %B") %>
+    </span>
+  </header>
 
-    <div class="space-y-2">
-      <!-- Overview Section -->
-      <details class="group space-y-2" open>
-        <summary class="flex list-none items-center justify-between
-                        rounded-xl px-3 py-2 text-xs font-medium
-                        uppercase text-gray-500 bg-gray-25
-                        focus-visible:outline-none">
-          <h4><%= t(".overview") %></h4>
-          <%= lucide_icon "chevron-down",
-              class: "group-open:transform group-open:rotate-180
-                      text-gray-500 w-5" %>
-        </summary>
-
-        <div class="pb-6">
-          <%= styled_form_with model: [account, entry],
+  <div class="space-y-2">
+    <!-- Overview Section -->
+    <%= disclosure t(".overview") do %>
+      <div class="pb-4">
+        <%= styled_form_with model: [account, entry],
               url: account_transaction_path(account, entry),
               class: "space-y-2",
               data: { controller: "auto-submit-form" } do |f| %>
-            <%= f.text_field :name,
+          <%= f.text_field :name,
                 label: t(".name_label"),
                 "data-auto-submit-form-target": "auto" %>
 
-            <%= f.date_field :date,
+          <%= f.date_field :date,
                 label: t(".date_label"),
                 max: Date.current,
                 "data-auto-submit-form-target": "auto" %>
 
-            <% unless entry.marked_as_transfer? %>
-              <div class="flex items-center gap-2">
-                <%= f.select :nature,
+          <% unless entry.marked_as_transfer? %>
+            <div class="flex items-center gap-2">
+              <%= f.select :nature,
                     [["Expense", "expense"], ["Income", "income"]],
                     { container_class: "w-2/5 pr-0", label: t(".nature"), selected: entry.amount.negative? ? "income" : "expense" },
                     { data: { "auto-submit-form-target": "auto" } } %>
 
-                <%= f.money_field :amount, :currency, label: t(".amount"),
+              <%= f.money_field :amount, :currency, label: t(".amount"),
                     container_class: "w-3/5",
                     auto_submit: true,
                     min: 0,
                     value: entry.amount.abs %>
-              </div>
-            <% end %>
+            </div>
+          <% end %>
 
-            <%= f.select :account,
+          <%= f.select :account,
                 options_for_select(
                   Current.family.accounts.alphabetically.pluck(:name, :id),
                   entry.account_id
                 ),
                 { label: t(".account_label") },
                 { disabled: true } %>
+        <% end %>
+      </div>
+    <% end %>
 
-          <% end %>
-        </div>
-      </details>
-
-      <!-- Details Section -->
-      <details class="group space-y-2" open>
-        <summary class="flex list-none items-center justify-between
-                        rounded-xl px-3 py-2 text-xs font-medium
-                        uppercase text-gray-500 bg-gray-25
-                        focus-visible:outline-none">
-          <h4><%= t(".details") %></h4>
-
-          <%= lucide_icon "chevron-down",
-              class: "group-open:transform group-open:rotate-180
-                      text-gray-500 w-5" %>
-        </summary>
-
-        <div class="pb-6">
-          <%= styled_form_with model: [account, entry],
+    <!-- Details Section -->
+    <%= disclosure t(".details") do %>
+      <div class="pb-4">
+        <%= styled_form_with model: [account, entry],
               url: account_transaction_path(account, entry),
               class: "space-y-2",
               data: { controller: "auto-submit-form" } do |f| %>
-            <%= f.fields_for :entryable do |ef| %>
-              <% unless entry.marked_as_transfer? %>
-                <%= ef.collection_select :category_id,
+          <%= f.fields_for :entryable do |ef| %>
+            <% unless entry.marked_as_transfer? %>
+              <%= ef.collection_select :category_id,
                     Current.family.categories.alphabetically,
                     :id, :name,
                     { prompt: t(".category_placeholder"),
@@ -106,16 +83,16 @@
                       class: "text-gray-400" },
                     "data-auto-submit-form-target": "auto" %>
 
-                <%= ef.collection_select :merchant_id,
+              <%= ef.collection_select :merchant_id,
                     Current.family.merchants.alphabetically,
                     :id, :name,
                     { prompt: t(".merchant_placeholder"),
                       label: t(".merchant_label"),
                       class: "text-gray-400" },
                     "data-auto-submit-form-target": "auto" %>
-              <% end %>
+            <% end %>
 
-              <%= ef.select :tag_ids,
+            <%= ef.select :tag_ids,
                   options_for_select(
                     Current.family.tags.alphabetically.pluck(:name, :id),
                     transaction.tag_ids
@@ -123,73 +100,63 @@
                   {
                     multiple: true,
                     label:    t(".tags_label"),
-                    class:    "placeholder:text-gray-500"
+                    container_class: "h-40"
                   },
-                  "data-auto-submit-form-target": "auto" %>
+                  { "data-auto-submit-form-target": "auto" } %>
 
-              <%= ef.text_area :notes,
+            <%= ef.text_area :notes,
                   label: t(".note_label"),
                   placeholder: t(".note_placeholder"),
+                  rows: 5,
                   "data-auto-submit-form-target": "auto" %>
-            <% end %>
           <% end %>
-        </div>
-      </details>
+        <% end %>
+      </div>
+    <% end %>
 
-      <!-- Settings Section -->
-      <details class="group space-y-2" open>
-        <summary class="flex list-none items-center justify-between
-                        rounded-xl px-3 py-2 text-xs font-medium
-                        uppercase text-gray-500 bg-gray-25
-                        focus-visible:outline-none">
-          <h4><%= t(".settings") %></h4>
-          <%= lucide_icon "chevron-down",
-              class: "group-open:transform group-open:rotate-180
-                      text-gray-500 w-5" %>
-        </summary>
-
-        <div class="pb-6">
-          <!-- Exclude Transaction Form -->
-          <%= styled_form_with model: [account, entry],
+    <!-- Settings Section -->
+    <%= disclosure t(".settings") do %>
+      <div class="pb-4">
+        <!-- Exclude Transaction Form -->
+        <%= styled_form_with model: [account, entry],
               url: account_transaction_path(account, entry),
-              class: "p-3 space-y-3",
+              class: "p-3",
               data: { controller: "auto-submit-form" } do |f| %>
-            <%= f.fields_for :entryable do |ef| %>
-              <div class="flex cursor-pointer items-center gap-2 justify-between">
-                <div class="text-sm space-y-1">
-                  <h4 class="text-gray-900"><%= t(".exclude_title") %></h4>
-                  <p class="text-gray-500"><%= t(".exclude_subtitle") %></p>
-                </div>
+          <%= f.fields_for :entryable do |ef| %>
+            <div class="flex cursor-pointer items-center gap-2 justify-between">
+              <div class="text-sm space-y-1">
+                <h4 class="text-gray-900"><%= t(".exclude_title") %></h4>
+                <p class="text-gray-500"><%= t(".exclude_subtitle") %></p>
+              </div>
 
-                <div class="relative inline-block select-none">
-                  <%= ef.check_box :excluded,
+              <div class="relative inline-block select-none">
+                <%= ef.check_box :excluded,
                       class: "sr-only peer",
                       "data-auto-submit-form-target": "auto" %>
-                  <label for="account_entry_entryable_attributes_excluded"
+                <label for="account_entry_entryable_attributes_excluded"
                          class="maybe-switch"></label>
-                </div>
               </div>
-            <% end %>
+            </div>
           <% end %>
+        <% end %>
 
-          <!-- Delete Transaction Form -->
-          <% unless entry.marked_as_transfer? %>
-            <div class="flex items-center justify-between gap-2 p-3">
-              <div class="text-sm space-y-1">
-                <h4 class="text-gray-900"><%= t(".delete_title") %></h4>
-                <p class="text-gray-500"><%= t(".delete_subtitle") %></p>
-              </div>
+        <!-- Delete Transaction Form -->
+        <% unless entry.marked_as_transfer? %>
+          <div class="flex items-center justify-between gap-2 p-3">
+            <div class="text-sm space-y-1">
+              <h4 class="text-gray-900"><%= t(".delete_title") %></h4>
+              <p class="text-gray-500"><%= t(".delete_subtitle") %></p>
+            </div>
 
-              <%= button_to t(".delete"),
+            <%= button_to t(".delete"),
                   account_entry_path(account, entry),
                   method: :delete,
                   class:  "rounded-lg px-3 py-2 text-red-500 text-sm
                            font-medium border border-alpha-black-200",
                   data:   { turbo_confirm: true, turbo_frame: "_top" } %>
-            </div>
-          <% end %>
-        </div>
-      </details>
-    </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
   </div>
 <% end %>
