@@ -62,6 +62,7 @@ en:
       feedback_label: Feedback
       general_section_title: General
       imports_label: Imports
+      logout: Logout
       merchants_label: Merchants
       other_section_title: More
       preferences_label: Preferences
@@ -89,7 +90,6 @@ en:
       destroy:
         success: Account deleted successfully.
       show:
-        add_member: Add member
         confirm_delete:
           body: Are you sure you want to permanently delete your account? This action
             is irreversible.
