@@ -34,8 +34,8 @@ en:
           password_placeholder: "*******"
           port: Port
           port_placeholder: 587
-          send_test_email: Send Test Email
-          send_test_email_button: Send Test Email
+          send_test_email: Send test email
+          send_test_email_button: Send test email
           send_test_email_description: Verify SMTP settings by sending a test email
           title: SMTP Email Configuration
           username: Username
@@ -62,6 +62,7 @@ en:
       feedback_label: Feedback
       general_section_title: General
       imports_label: Imports
+      logout: Logout
       merchants_label: Merchants
       other_section_title: More
       preferences_label: Preferences
@@ -89,13 +90,12 @@ en:
       destroy:
         success: Account deleted successfully.
       show:
-        add_member: Add Member
         confirm_delete:
           body: Are you sure you want to permanently delete your account? This action
             is irreversible.
           title: Delete account?
         danger_zone_title: Danger Zone
-        delete_account: Delete Account
+        delete_account: Delete account
         delete_account_warning: Deleting your account will permanently remove all
           your data and cannot be undone.
         household_form_input_placeholder: Enter household name

@@ -70,6 +70,7 @@ class Demo::Generator
         email: "user@maybe.local",
         first_name: "Demo",
         last_name: "User",
+        role: "admin",
         password: "password"
     end
 

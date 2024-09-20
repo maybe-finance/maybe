@@ -1,66 +1,76 @@
-<div class="flex items-center gap-1 mb-6">
-  <%= link_to return_to_path(params), class: "flex items-center gap-1 text-gray-900 font-medium text-sm" do %>
-    <%= lucide_icon "chevron-left", class: "w-5 h-5 text-gray-500" %>
-    <span>Back</span>
-  <% end %>
-  <span data-controller="hotkey" data-hotkey="Escape" data-action="hotkey#navigateBack" class="uppercase bg-gray-100 rounded-sm px-1 py-0.5 text-xs text-gray-500 shadow-sm ml-1">
-    esc
-  </span>
-</div>
-<nav class="space-y-4">
-  <section class="space-y-2">
-    <div class="flex items-center gap-2">
-      <h3 class="uppercase text-gray-500 font-medium text-xs"><%= t(".general_section_title") %></h3>
-      <div class="h-px bg-alpha-black-100 w-full"></div>
-    </div>
-    <ul class="space-y-1">
-      <li>
-        <%= sidebar_link_to t(".profile_label"), settings_profile_path, icon: "circle-user" %>
-      </li>
-      <li>
-        <%= sidebar_link_to t(".preferences_label"), settings_preferences_path, icon: "bolt" %>
-      </li>
-      <% if self_hosted? %>
+<div class="space-y-4">
+  <div class="flex items-center gap-2 p-2">
+    <%= link_to return_to_path(params), class: "flex items-center gap-1 text-gray-900 font-medium text-sm" do %>
+      <%= lucide_icon "chevron-left", class: "w-5 h-5 text-gray-500" %>
+      <span>Back</span>
+    <% end %>
+    <span data-controller="hotkey" data-hotkey="Escape" data-action="hotkey#navigateBack" class="uppercase bg-gray-100 rounded-sm px-1 py-0.5 text-xs text-gray-500 shadow-sm ml-1">
+      esc
+    </span>
+  </div>
+  <nav class="space-y-4">
+    <section class="space-y-2">
+      <div class="flex items-center gap-2 px-3">
+        <h3 class="uppercase text-gray-500 font-medium text-xs"><%= t(".general_section_title") %></h3>
+        <div class="h-px bg-alpha-black-100 w-full"></div>
+      </div>
+      <ul class="space-y-1">
         <li>
-          <%= sidebar_link_to t(".self_hosting_label"), settings_hosting_path, icon: "database" %>
+          <%= sidebar_link_to t(".profile_label"), settings_profile_path, icon: "circle-user" %>
         </li>
+        <li>
+          <%= sidebar_link_to t(".preferences_label"), settings_preferences_path, icon: "bolt" %>
+        </li>
+        <% if self_hosted? %>
+          <li>
+            <%= sidebar_link_to t(".self_hosting_label"), settings_hosting_path, icon: "database" %>
+          </li>
+        <% end %>
+        <li>
+          <%= sidebar_link_to t(".accounts_label"), accounts_path, icon: "layers" %>
+        </li>
+      </ul>
+    </section>
+
+    <section class="space-y-2">
+      <div class="flex items-center gap-2 px-3">
+        <h3 class="uppercase text-gray-500 font-medium text-xs"><%= t(".transactions_section_title") %></h3>
+        <div class="h-px bg-alpha-black-100 w-full"></div>
+      </div>
+      <ul class="space-y-1">
+        <li>
+          <%= sidebar_link_to t(".tags_label"), tags_path, icon: "tags" %>
+        </li>
+        <li>
+          <%= sidebar_link_to t(".categories_label"), categories_path, icon: "shapes" %>
+        </li>
+        <li>
+          <%= sidebar_link_to t(".merchants_label"), merchants_path, icon: "store" %>
+        </li>
+        <li>
+          <%= sidebar_link_to t(".imports_label"), imports_path, icon: "download" %>
+        </li>
+      </ul>
+    </section>
+
+    <section class="space-y-2">
+      <div class="flex items-center gap-2 px-3">
+        <h3 class="uppercase text-gray-500 font-medium text-xs"><%= t(".other_section_title") %></h3>
+        <div class="h-px bg-alpha-black-100 w-full"></div>
+      </div>
+      <ul class="space-y-1">
+        <li>
+          <%= sidebar_link_to t(".whats_new_label"), changelog_path, icon: "box" %>
+          <%= sidebar_link_to t(".feedback_label"), feedback_path, icon: "megaphone" %>
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <%= button_to session_path, method: :delete, class: "flex items-center gap-2 px-3 py-2 rounded-xl border text-sm font-medium w-full text-error hover:bg-gray-100 border-transparent" do %>
+        <%= lucide_icon("log-out", class: "w-5 h-5 shrink-0") %>
+        <span><%= t(".logout") %></span>
       <% end %>
-      <li>
-        <%= sidebar_link_to t(".accounts_label"), accounts_path, icon: "layers" %>
-      </li>
-    </li>
-  </ul>
-</section>
-<section class="space-y-2">
-  <div class="flex items-center gap-2">
-    <h3 class="uppercase text-gray-500 font-medium text-xs"><%= t(".transactions_section_title") %></h3>
-    <div class="h-px bg-alpha-black-100 w-full"></div>
-  </div>
-  <ul class="space-y-1">
-    <li>
-      <%= sidebar_link_to t(".tags_label"), tags_path, icon: "tags" %>
-    </li>
-    <li>
-      <%= sidebar_link_to t(".categories_label"), categories_path, icon: "shapes" %>
-    </li>
-    <li>
-      <%= sidebar_link_to t(".merchants_label"), merchants_path, icon: "store" %>
-    </li>
-    <li>
-      <%= sidebar_link_to t(".imports_label"), imports_path, icon: "download" %>
-    </li>
-  </ul>
-</section>
-<section class="space-y-2">
-  <div class="flex items-center gap-2">
-    <h3 class="uppercase text-gray-500 font-medium text-xs"><%= t(".other_section_title") %></h3>
-    <div class="h-px bg-alpha-black-100 w-full"></div>
-  </div>
-  <ul class="space-y-1">
-    <li>
-      <%= sidebar_link_to t(".whats_new_label"), changelog_path, icon: "box" %>
-      <%= sidebar_link_to t(".feedback_label"), feedback_path, icon: "megaphone" %>
-    </li>
-  </ul>
-</section>
-</nav>
+    </section>
+  </nav>
+</div>
