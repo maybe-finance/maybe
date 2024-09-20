@@ -29,12 +29,12 @@ en:
         merchant_label: Merchant
         merchant_placeholder: Select a merchant
         name_label: Name
-        nature: Transaction type
+        nature: Type
         note_label: Notes
         note_placeholder: Enter a note
         overview: Overview
         settings: Settings
-        tags_label: Tags 
+        tags_label: Tags
       transaction:
         remove_transfer: Remove transfer
         remove_transfer_body: This will remove the transfer from this transaction

@@ -44,11 +44,11 @@
             <div class="flex items-center gap-2">
               <%= f.select :nature,
                     [["Expense", "expense"], ["Income", "income"]],
-                    { container_class: "w-2/5 pr-0", label: t(".nature"), selected: entry.amount.negative? ? "income" : "expense" },
+                    { container_class: "w-1/3", label: t(".nature"), selected: entry.amount.negative? ? "income" : "expense" },
                     { data: { "auto-submit-form-target": "auto" } } %>
 
               <%= f.money_field :amount, :currency, label: t(".amount"),
-                    container_class: "w-3/5",
+                    container_class: "w-2/3",
                     auto_submit: true,
                     min: 0,
                     value: entry.amount.abs %>

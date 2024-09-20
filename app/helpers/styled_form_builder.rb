@@ -27,7 +27,7 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
     label = build_label(method, options)
     field = super(method, choices, options, merged_html_options)
 
-    build_styled_field(label, field, options)
+    build_styled_field(label, field, options, remove_padding_right: true)
   end
 
   def collection_select(method, collection, value_method, text_method, options = {}, html_options = {})
@@ -36,7 +36,7 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
     label = build_label(method, options)
     field = super(method, collection, value_method, text_method, options, merged_html_options)
 
-    build_styled_field(label, field, options)
+    build_styled_field(label, field, options, remove_padding_right: true)
   end
 
   def money_field(amount_method, currency_method, options = {})
@@ -56,11 +56,11 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
 
   private
 
-    def build_styled_field(label, field, options)
+    def build_styled_field(label, field, options, remove_padding_right: false)
       if options[:inline]
         label + field
       else
-        @template.tag.div class: [ "form-field", options[:container_class] ] do
+        @template.tag.div class: [ "form-field", options[:container_class], ("pr-0" if remove_padding_right) ] do
           label + field
         end
       end

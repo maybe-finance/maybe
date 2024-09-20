@@ -20,14 +20,14 @@
   }
 
   .form-field__label {
-    @apply block text-xs text-gray-500;
+    @apply block text-xs text-gray-500 peer-disabled:text-gray-400;
   }
 
   .form-field__input {
     @apply border-none bg-transparent text-sm opacity-100 w-full p-0;
     @apply focus:opacity-100 focus:outline-none focus:ring-0;
     @apply placeholder-shown:opacity-50;
-    @apply disabled:opacity-50;
+    @apply disabled:text-gray-400;
   }
 
   .form-field__radio {
