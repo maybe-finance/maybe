@@ -1,9 +1,9 @@
 empty_import:
-  account: depository
+  family: dylan_family
   created_at: <%= 1.minute.ago %>
 
 completed_import:
-  account: depository
+  family: dylan_family 
   column_mappings:
     date: date
     name: name

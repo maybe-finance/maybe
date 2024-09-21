@@ -9,11 +9,11 @@ module ImportsHelper
 
   def nav_steps(import = Import.new)
     [
-      { name: "Select", complete: import.persisted?, path: import.persisted? ? edit_import_path(import) : new_import_path },
+      { name: "New", complete: import.persisted?, path: import.persisted? ? edit_import_path(import) : new_import_path },
       { name: "Import", complete: import.loaded?, path: import.persisted? ? load_import_path(import) : nil },
-      { name: "Setup", complete: import.configured?, path: import.persisted? ? configure_import_path(import) : nil },
+      { name: "Configure", complete: import.configured?, path: import.persisted? ? configure_import_path(import) : nil },
       { name: "Clean", complete: import.cleaned?, path: import.persisted? ? clean_import_path(import) : nil },
-      { name: "Confirm", complete: import.complete?, path: import.persisted? ? confirm_import_path(import) : nil }
+      { name: "Finalize", complete: import.complete?, path: import.persisted? ? confirm_import_path(import) : nil }
     ]
   end
 end

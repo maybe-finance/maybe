@@ -1,6 +1,6 @@
 <%= styled_form_with model: @import do |form| %>
   <div class="mb-4 space-y-3">
-    <%= form.collection_select :account_id, Current.family.accounts.alphabetically, :id, :name, { prompt: t(".select_account"), label: t(".account"), required: true } %>
+    <%= form.collection_select :account_id, Current.family.accounts.alphabetically, :id, :name, { prompt: t(".select_account"), label: t(".account") } %>
     <%= form.collection_select :col_sep, Import::Csv::COL_SEP_LIST, :to_s, -> { t(".col_sep_char.#{_1.ord}") }, { prompt: t(".select_col_sep"), label: t(".col_sep"), required: true } %>
   </div>
 

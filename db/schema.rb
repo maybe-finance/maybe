@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_11_143158) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_21_170426) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -301,7 +301,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_11_143158) do
   end
 
   create_table "imports", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "account_id", null: false
     t.jsonb "column_mappings"
     t.enum "status", default: "pending", enum_type: "import_status"
     t.string "raw_file_str"
@@ -309,7 +308,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_11_143158) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "col_sep", default: ","
-    t.index ["account_id"], name: "index_imports_on_account_id"
+    t.uuid "family_id", null: false
+    t.uuid "original_account_id"
+    t.index ["family_id"], name: "index_imports_on_family_id"
   end
 
   create_table "institutions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -463,7 +464,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_11_143158) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "categories", "families"
-  add_foreign_key "imports", "accounts"
+  add_foreign_key "imports", "families"
   add_foreign_key "institutions", "families"
   add_foreign_key "merchants", "families"
   add_foreign_key "taggings", "tags"

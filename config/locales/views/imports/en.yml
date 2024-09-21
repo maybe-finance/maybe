@@ -64,7 +64,7 @@ en:
         '44': Comma (,)
         '59': Semicolon (;)
       next: Next
-      select_account: Select account
+      select_account: Multiple accounts
       select_col_sep: Select CSV column separator
     import:
       complete: Complete
@@ -73,7 +73,7 @@ en:
       edit: Edit
       failed: Failed
       in_progress: In progress
-      label: 'Import for: %{account}'
+      label: Import
       started_on: Started on %{datetime}
       uploading: Processing rows
     index:
@@ -88,9 +88,9 @@ en:
     load_csv:
       import_loaded: Import CSV loaded
     new:
-      description_text: Importing transactions can only be done for one account at
-        a time. You will need to go through this process again for other accounts.
-      header_text: Select the account your transactions will belong to
+      description_text: You can select an account to import transactions to or import
+        transactions to multiple accounts at once.
+      header_text: Create your import
     publish:
       import_published: Import has started in the background
       invalid_data: Your import is invalid

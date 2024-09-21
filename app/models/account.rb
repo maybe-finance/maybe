@@ -12,7 +12,6 @@ class Account < ApplicationRecord
   has_many :trades, through: :entries, source: :entryable, source_type: "Account::Trade"
   has_many :holdings, dependent: :destroy
   has_many :balances, dependent: :destroy
-  has_many :imports, dependent: :destroy
   has_many :syncs, dependent: :destroy
   has_many :issues, as: :issuable, dependent: :destroy
 

@@ -1,5 +1,5 @@
 class Import < ApplicationRecord
-  belongs_to :account
+  belongs_to :family
 
   validate :raw_file_must_be_parsable
   validates :col_sep, inclusion: { in: Csv::COL_SEP_LIST }
@@ -109,6 +109,11 @@ class Import < ApplicationRecord
     def update_csv(row_idx, col_idx, value)
       updated_csv = csv.update_cell(row_idx.to_i, col_idx.to_i, value)
       update! normalized_csv_str: updated_csv.to_s
+    end
+
+    # TODO: Temporary during refactor, should be removed and handled via import rows
+    def account 
+      family.accounts.first
     end
 
     def generate_transactions
