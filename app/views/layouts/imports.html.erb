@@ -6,20 +6,7 @@
     <nav>
       <div>
         <ul class="flex items-center gap-2">
-          <% nav_steps(@import).each_with_index do |step, idx| %>
-            <li class="group flex items-center gap-2">
-              <% if step[:path].present? %>
-                <%= link_to step[:path], class: "flex items-center gap-3" do %>
-                  <%= render partial: "nav_step", locals: { step: step, step_idx: idx } %>
-                <% end %>
-              <% else %>
-                <%= render partial: "nav_step", locals: { step: step, step_idx: idx } %>
-              <% end %>
-              <% if idx < nav_steps.size %>
-                <div class="h-px bg-alpha-black-200 w-12 group-last:hidden"></div>
-              <% end %>
-            </li>
-          <% end %>
+          <li>Import step placeholder</li>
         </ul>
       </div>
     </nav>

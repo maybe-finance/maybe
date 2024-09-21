@@ -21,23 +21,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :imports, except: :show do
-    member do
-      get "load"
-      patch "load" => "imports#load_csv"
-      patch "upload" => "imports#upload_csv"
-
-      get "configure"
-      patch "configure" => "imports#update_mappings"
-
-      get "clean"
-      patch "clean" => "imports#update_csv"
-
-      get "confirm"
-      patch "confirm" => "imports#publish"
-    end
-  end
-
   resources :tags, except: %i[show destroy] do
     resources :deletions, only: %i[new create], module: :tag
   end
@@ -55,6 +38,8 @@ Rails.application.routes.draw do
   namespace :account do
     resources :transfers, only: %i[new create destroy]
   end
+
+  resources :imports, except: :show
 
   resources :accounts do
     collection do
