@@ -1,21 +1,24 @@
 <%= content_for :content do %>
-  <div class="flex items-center justify-between p-8">
-    <%= link_to root_path do %>
-      <%= image_tag "logo.svg", alt: "Maybe", class: "h-[22px]" %>
-    <% end %>
-    <nav>
-      <div>
-        <ul class="flex items-center gap-2">
-          <li>Import step placeholder</li>
-        </ul>
+  <div class="flex flex-col h-dvh">
+    <header class="flex items-center justify-between p-8">
+      <div class="flex items-center gap-2">
+        <%= lucide_icon "chevron-left", class: "w-8 h-8" %>
+        <%= lucide_icon "chevron-right", class: "w-8 h-8" %>
       </div>
-    </nav>
-    <%= link_to content_for(:return_to_path) do %>
-      <%= lucide_icon("x", class: "text-gray-500 w-8 h-8 hover:bg-gray-100 rounded-full p-2") %>
-    <% end %>
-  </div>
 
-  <%= yield %>
+      <nav>
+        <%= yield :header_nav %>
+      </nav>
+
+      <%= link_to imports_path do %>
+        <%= lucide_icon("x", class: "text-gray-500 w-8 h-8 hover:bg-gray-100 rounded-full p-2") %>
+      <% end %>
+    </header>
+
+    <main class="flex-grow px-8 pt-12 pb-32 overflow-y-auto">
+      <%= yield %>
+    </main>
+  </div>
 <% end %>
 
 <%= render template: "layouts/application" %>

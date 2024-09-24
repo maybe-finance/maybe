@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_21_170426) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_24_121844) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -300,6 +300,36 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_21_170426) do
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
 
+  create_table "import_mappings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "key"
+    t.string "type"
+    t.boolean "create_when_empty", default: false
+    t.uuid "import_id", null: false
+    t.string "mappable_type"
+    t.uuid "mappable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["import_id"], name: "index_import_mappings_on_import_id"
+    t.index ["mappable_type", "mappable_id"], name: "index_import_mappings_on_mappable"
+  end
+
+  create_table "import_rows", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "import_id", null: false
+    t.string "type", null: false
+    t.string "date"
+    t.string "qty"
+    t.string "price"
+    t.string "amount"
+    t.string "name"
+    t.string "category"
+    t.string "tags"
+    t.string "trade_type"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["import_id"], name: "index_import_rows_on_import_id"
+  end
+
   create_table "imports", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.jsonb "column_mappings"
     t.enum "status", default: "pending", enum_type: "import_status"
@@ -310,6 +340,19 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_21_170426) do
     t.string "col_sep", default: ","
     t.uuid "family_id", null: false
     t.uuid "original_account_id"
+    t.string "type"
+    t.string "date_col_label"
+    t.string "amount_col_label"
+    t.string "name_col_label"
+    t.string "category_col_label"
+    t.string "tags_col_label"
+    t.string "account_col_label"
+    t.string "qty_col_label"
+    t.string "price_col_label"
+    t.string "type_col_label"
+    t.string "date_format", default: "YYYY-MM-DD"
+    t.string "amount_sign_format", default: "incomes_are_negative"
+    t.string "notes_col_label"
     t.index ["family_id"], name: "index_imports_on_family_id"
   end
 
@@ -464,6 +507,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_21_170426) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "categories", "families"
+  add_foreign_key "import_rows", "imports"
   add_foreign_key "imports", "families"
   add_foreign_key "institutions", "families"
   add_foreign_key "merchants", "families"

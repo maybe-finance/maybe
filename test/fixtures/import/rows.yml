@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  import: one
+  date: 2024-09-23
+  qty: 9.99
+  price: 9.99
+  amount: 9.99
+  name: MyString
+  category: MyString
+  tags: MyString
+  type: 
+  notes: MyString
+
+two:
+  import: two
+  date: 2024-09-23
+  qty: 9.99
+  price: 9.99
+  amount: 9.99
+  name: MyString
+  category: MyString
+  tags: MyString
+  type: 
+  notes: MyString

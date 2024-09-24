@@ -1,9 +1,12 @@
-empty_import:
+pending:
   family: dylan_family
+  template: transaction
   created_at: <%= 1.minute.ago %>
 
-completed_import:
+completed:
+  status: complete
   family: dylan_family 
+  template: transaction
   column_mappings:
     date: date
     name: name

@@ -1,0 +1,18 @@
+<%# locals: (import:) %>
+
+<div class="bg-gray-25 rounded-xl p-1 mb-6">
+  <div class="grid grid-cols-6 items-center uppercase text-xs font-medium text-gray-500 py-3">
+    <div class="px-5">Date</div>
+    <div class="px-5">Name</div>
+    <div class="px-5">Amount</div>
+    <div class="px-5">Category</div>
+    <div class="px-5">Tags</div>
+    <div class="px-5">Notes</div>
+  </div>
+
+  <div class="bg-white border border-alpha-black-200 rounded-xl shadow-xs divide-y divide-alpha-black-200">
+    <% @import.rows.each do |row| %>
+      <%= render "import/rows/transaction_import/form", row: row %>
+    <% end %>
+  </div>
+</div>

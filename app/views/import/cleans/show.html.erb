@@ -1,0 +1,27 @@
+<%= content_for :header_nav do %>
+  <%= render "imports/nav", import: @import %>
+<% end %>
+
+<div class="mx-auto max-w-screen-lg w-full py-24">
+  <h1 class="sr-only"><%= t(".clean_import") %></h1>
+
+  <div class="text-center space-y-2 max-w-[400px] mx-auto mb-8">
+    <h2 class="text-3xl text-gray-900 font-medium"><%= t(".clean_and_edit") %></h2>
+    <p class="text-gray-500 text-sm"><%= t(".clean_description") %></p>
+  </div>
+
+  <%= render "import/cleans/#{@import.type.underscore}", import: @import %>
+</div>
+
+<div class="fixed bottom-0 left-1/2 -translate-x-1/2 p-6">
+  <div class="w-[640px] mx-auto border border-alpha-black-100 rounded-2xl px-4 py-2 shadow-xs bg-white">
+    <div class="flex items-center justify-between">
+      <p class="text-gray-900 text-sm font-medium">3. Clean your data</p>
+
+      <div class="flex items-center gap-2">
+        <%= link_to "Back", import_configuration_path(@import), class: "btn btn--secondary" %>
+        <%= link_to "Next", import_confirm_path(@import), class: "btn btn--primary" %>
+      </div>
+    </div>
+  </div>
+</div>

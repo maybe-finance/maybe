@@ -1,0 +1,31 @@
+<%= content_for :header_nav do %>
+  <%= render "imports/nav", import: @import %>
+<% end %>
+
+<%= render "import/confirms/steps/#{@import.mapping_steps[(params[:step] || "1").to_i - 1]}", import: @import %>
+
+<div class="fixed bottom-0 left-1/2 -translate-x-1/2 p-6">
+  <div class="w-[640px] mx-auto border border-alpha-black-100 rounded-2xl px-4 py-2 shadow-xs bg-white">
+    <div class="flex items-center justify-between">
+      <p class="text-gray-900 text-sm font-medium">4. Set up data mappings</p>
+
+      <div class="flex items-center gap-2">
+        <% if params[:step].nil? || params[:step].to_i == 1 %>
+          <%= link_to "Back", import_clean_path(@import), class: "btn btn--secondary" %>
+        <% else %>
+          <%= link_to "Back", import_confirm_path(@import, step: params[:step].to_i - 1), class: "btn btn--secondary" %>
+        <% end %>
+
+        <% if params[:step].nil? %>
+          <%= link_to "Next", import_confirm_path(@import, step: 2), class: "btn btn--primary" %>
+        <% else %>
+          <% if params[:step].to_i == @import.mapping_steps.count %>
+            <%= link_to "Next", import_path(@import), class: "btn btn--primary" %>
+          <% else %>
+            <%= link_to "Next", import_confirm_path(@import, step: params[:step].to_i + 1), class: "btn btn--primary" %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

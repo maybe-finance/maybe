@@ -39,7 +39,17 @@ Rails.application.routes.draw do
     resources :transfers, only: %i[new create destroy]
   end
 
-  resources :imports, except: :show
+  resources :imports, except: :edit do
+    post :publish, on: :member
+
+    resource :upload, only: %i[show update], module: :import
+    resource :configuration, only: %i[show update], module: :import
+    resource :clean, only: %i[show update], module: :import
+    resource :confirm, only: %i[show update], module: :import
+
+    resources :rows, only: %i[show update], module: :import
+    resources :mappings, only: %i[create update], module: :import
+  end
 
   resources :accounts do
     collection do

@@ -1,0 +1,48 @@
+<%# locals: (import:) %>
+
+<div>
+  <div class="my-8">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <% import.csv_headers.each do |header| %>
+            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500 tracking-wider">
+              <%= header %>
+            </th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <% import.sample.each do |row| %>
+          <tr>
+            <% row.fields.each do |cell| %>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <%= cell %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <%= styled_form_with model: @import, url: import_configuration_path(@import), scope: :import, method: :patch, class: "space-y-2" do |form| %>
+
+    <div class="flex items-center gap-2">
+      <%= form.select :date_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Date" }, required: true %>
+      <%= form.select :date_format, [["DD-MM-YYYY", "%d-%m-%Y"], ["MM-DD-YYYY", "%m-%d-%Y"], ["YYYY-MM-DD", "%Y-%m-%d"], ["DD/MM/YYYY", "%d/%m/%Y"], ["YYYY/MM/DD", "%Y/%m/%d"], ["MM/DD/YYYY", "%m/%d/%Y"]], label: true, required: true %>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <%= form.select :amount_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Amount" }, required: true %>
+      <%= form.select :amount_sign_format, [["Incomes are negative", "incomes_are_negative"], ["Incomes are positive", "incomes_are_positive"]], label: true %>
+    </div>
+
+    <%= form.select :account_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Account (optional)" } %>
+    <%= form.select :name_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Name (optional)" } %>
+    <%= form.select :category_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Category (optional)" } %>
+    <%= form.select :tags_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Tags (optional)" } %>
+
+    <%= form.submit "Apply configuration", class: "w-full btn btn--primary" %>
+  <% end %>
+</div>

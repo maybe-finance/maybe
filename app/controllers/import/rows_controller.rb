@@ -1,0 +1,23 @@
+class Import::RowsController < ApplicationController
+  before_action :set_import_row
+
+  def update
+    @row.assign_attributes(row_params)
+    @row.save!(validate: false)
+
+    redirect_to import_row_path(@row.import, @row)
+  end
+
+  def show
+  end
+
+  private
+    def row_params
+      params.require(:import_row).permit(:date, :name, :amount, :category, :tags, :notes)
+    end
+
+    def set_import_row
+      @import = Current.family.imports.find(params[:import_id])
+      @row = @import.rows.find(params[:id])
+    end
+end

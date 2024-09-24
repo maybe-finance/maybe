@@ -1,0 +1,34 @@
+<div>
+  <div class="grid grid-cols-3 gap-2">
+    <p>CSV Category</p>
+    <p>Maybe Category</p>
+    <p>Transactions</p>
+  </div>
+
+  <% @import.csv_categories.each do |csv_category| %>
+    <% category_mapping = @import.mappings
+                                .of_type(Import::CategoryMapping)
+                                .find_or_initialize_by(key: csv_category) %>
+
+    <%= styled_form_with model: category_mapping, 
+                         scope: :import_mapping,
+                         url: category_mapping.new_record? ? import_mappings_path(@import) : import_mapping_path(@import, category_mapping),
+                         class: "grid grid-cols-3 gap-2", 
+                         data: { controller: "auto-submit-form" } do |form| %>
+      <span><%= csv_category %></span>
+
+      <%= form.hidden_field :mappable_type, value: Category %>
+      <%= form.select :mappable_id, 
+                      [["Add as new category", "internal_new"]] + 
+                      Current.family.categories.map { |category| [category.name, category.id] }, 
+                      { include_blank: "Leave uncategorized", selected: category_mapping.create_when_empty? ? "internal_new" : category_mapping.mappable_id }, 
+                      "data-auto-submit-form-target": "auto" %>
+
+      <%= form.hidden_field :key, value: csv_category %>
+      <%= form.hidden_field :type, value: Import::CategoryMapping %>
+
+      <span><%= @import.csv_categories.select { |csv_category| csv_category == category_mapping.key }.count %></span>
+
+    <% end %>
+  <% end %>
+</div>

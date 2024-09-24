@@ -49,7 +49,7 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def submit(value = nil, options = {})
-    merged_options = { class: "form-field__submit" }.merge(options)
+    merged_options = { class: "btn btn--primary w-full" }.merge(options)
     value, options = nil, value if value.is_a?(Hash)
     super(value, merged_options)
   end
