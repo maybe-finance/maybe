@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_24_121844) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_25_004729) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -44,7 +44,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_24_121844) do
     t.datetime "updated_at", null: false
     t.uuid "transfer_id"
     t.boolean "marked_as_transfer", default: false, null: false
+    t.uuid "import_id"
     t.index ["account_id"], name: "index_account_entries_on_account_id"
+    t.index ["import_id"], name: "index_account_entries_on_import_id"
     t.index ["transfer_id"], name: "index_account_entries_on_transfer_id"
   end
 
@@ -119,8 +121,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_24_121844) do
     t.date "last_sync_date"
     t.uuid "institution_id"
     t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Loan'::character varying)::text, ('CreditCard'::character varying)::text, ('OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.uuid "import_id"
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id"], name: "index_accounts_on_family_id"
+    t.index ["import_id"], name: "index_accounts_on_import_id"
     t.index ["institution_id"], name: "index_accounts_on_institution_id"
   end
 
@@ -327,6 +331,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_24_121844) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "account"
     t.index ["import_id"], name: "index_import_rows_on_import_id"
   end
 
@@ -496,6 +501,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_24_121844) do
   add_foreign_key "account_balances", "accounts", on_delete: :cascade
   add_foreign_key "account_entries", "account_transfers", column: "transfer_id"
   add_foreign_key "account_entries", "accounts"
+  add_foreign_key "account_entries", "imports"
   add_foreign_key "account_holdings", "accounts"
   add_foreign_key "account_holdings", "securities"
   add_foreign_key "account_syncs", "accounts"
@@ -503,6 +509,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_24_121844) do
   add_foreign_key "account_transactions", "categories", on_delete: :nullify
   add_foreign_key "account_transactions", "merchants"
   add_foreign_key "accounts", "families"
+  add_foreign_key "accounts", "imports"
   add_foreign_key "accounts", "institutions"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"

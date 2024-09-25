@@ -2,43 +2,42 @@
   <%= render "imports/nav", import: @import %>
 <% end %>
 
-<div class="mx-auto max-w-[550px] w-full space-y-4">
-  <h1 class="sr-only"><%= t(".load_title") %></h1>
+<%= content_for :previous_path, imports_path %>
 
-  <div class="text-center space-y-2">
-    <h2 class="text-3xl text-gray-900 font-medium"><%= t(".subtitle") %></h2>
-    <p class="text-gray-500 text-sm"><%= t(".description") %></p>
-  </div>
-
-  <div data-controller="tabs" data-tabs-active-class="bg-white" data-tabs-default-tab-value="csv-paste-tab">
-    <div class="flex justify-center mb-4">
-      <div class="bg-gray-50 rounded-lg inline-flex p-1 space-x-2 text-sm text-gray-900 font-medium">
-        <button type="button" data-id="csv-paste-tab" class="p-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Copy & Paste</button>
-        <button type="button" data-id="csv-upload-tab" class="p-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Upload CSV</button>
-      </div>
+<div class="space-y-12">
+  <div class="space-y-4 mx-auto max-w-md">
+    <div class="text-center space-y-2">
+      <h1 class="text-3xl text-gray-900 font-medium"><%= t(".title") %></h1>
+      <p class="text-gray-500 text-sm"><%= t(".description") %></p>
     </div>
 
-    <div data-tabs-target="tab" id="csv-paste-tab">
-      <%= styled_form_with model: @import, scope: :import, url: import_upload_path(@import), multipart: true, class: "space-y-2" do |form| %>
-        <%= form.select :col_sep, [["Comma (,)", ","], ["Semicolon (;)", ";"]], label: true %>
-        <%= form.text_area :raw_file_str,
+    <div data-controller="tabs" data-tabs-active-class="bg-white" data-tabs-default-tab-value="csv-paste-tab">
+      <div class="flex justify-center mb-4">
+        <div class="bg-gray-50 rounded-lg inline-flex p-1 space-x-2 text-sm text-gray-900 font-medium">
+          <button type="button" data-id="csv-paste-tab" class="p-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Copy & Paste</button>
+          <button type="button" data-id="csv-upload-tab" class="p-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Upload CSV</button>
+        </div>
+      </div>
+
+      <div data-tabs-target="tab" id="csv-paste-tab">
+        <%= styled_form_with model: @import, scope: :import, url: import_upload_path(@import), multipart: true, class: "space-y-2" do |form| %>
+          <%= form.select :col_sep, [["Comma (,)", ","], ["Semicolon (;)", ";"]], label: true %>
+          <%= form.text_area :raw_file_str,
                        rows: 10,
                        required: true,
                        placeholder: "Paste your CSV file contents here",
                        "data-auto-submit-form-target": "auto" %>
 
-        <%= form.submit %>
-      <% end %>
+          <%= form.submit %>
+        <% end %>
 
-      <%= render partial: "import/uploads/sample_table" %>
-    </div>
+      </div>
 
-    <div data-tabs-target="tab" id="csv-upload-tab" class="hidden">
-      <div class="flex items-center justify-center w-full">
+      <div data-tabs-target="tab" id="csv-upload-tab" class="hidden">
         <%= styled_form_with model: @import, scope: :import, url: import_upload_path(@import), multipart: true, class: "space-y-2" do |form| %>
           <%= form.select :col_sep, [["Comma (,)", ","], ["Semicolon (;)", ";"]], label: true %>
 
-          <label for="import_csv_file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50">
+          <label for="import_csv_file" class="flex flex-col items-center justify-center w-full h-56 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50">
             <div class="flex flex-col items-center justify-center pt-5 pb-6">
               <%= form.file_field :csv_file, class: "ml-32", "data-auto-submit-form-target": "auto"  %>
             </div>
@@ -49,17 +48,22 @@
       </div>
     </div>
   </div>
-</div>
 
-<div class="fixed bottom-0 left-1/2 -translate-x-1/2 p-6">
-  <div class="w-[640px] mx-auto border border-alpha-black-100 rounded-2xl px-4 py-2 shadow-xs bg-white">
-    <div class="flex items-center justify-between">
-      <p class="text-gray-900 text-sm font-medium">1. Upload your CSV</p>
+  <div class="bg-alpha-black-25 rounded-xl p-1 mt-5 mx-auto max-w-screen-md">
+    <div class="text-gray-500 p-2 mb-2">
+      <div class="flex gap-2 mb-2">
+        <%= lucide_icon("info", class: "w-5 h-5 shrink-0") %>
+        <p class="text-sm"><%= t(".instructions_1") %></p>
 
-      <div class="flex items-center gap-2">
-        <%= link_to "Cancel", imports_path, class: "btn btn--secondary" %>
-        <%= link_to "Next", import_configuration_path(@import), class: "btn btn--primary" %>
       </div>
+
+      <ul class="list-disc list-inside text-sm pl-8">
+        <li><%= t(".instructions_2") %></li>
+        <li><%= t(".instructions_3") %></li>
+        <li><%= t(".instructions_4") %></li>
+      </ul>
     </div>
+
+    <%= render partial: "imports/table", locals: { headers: @import.csv_template.headers, rows: @import.csv_template } %>
   </div>
 </div>

@@ -2,30 +2,22 @@
   <%= render "imports/nav", import: @import %>
 <% end %>
 
-<%= render "import/confirms/steps/#{@import.mapping_steps[(params[:step] || "1").to_i - 1]}", import: @import %>
-
-<div class="fixed bottom-0 left-1/2 -translate-x-1/2 p-6">
-  <div class="w-[640px] mx-auto border border-alpha-black-100 rounded-2xl px-4 py-2 shadow-xs bg-white">
-    <div class="flex items-center justify-between">
-      <p class="text-gray-900 text-sm font-medium">4. Set up data mappings</p>
-
-      <div class="flex items-center gap-2">
-        <% if params[:step].nil? || params[:step].to_i == 1 %>
-          <%= link_to "Back", import_clean_path(@import), class: "btn btn--secondary" %>
-        <% else %>
-          <%= link_to "Back", import_confirm_path(@import, step: params[:step].to_i - 1), class: "btn btn--secondary" %>
-        <% end %>
-
-        <% if params[:step].nil? %>
-          <%= link_to "Next", import_confirm_path(@import, step: 2), class: "btn btn--primary" %>
-        <% else %>
-          <% if params[:step].to_i == @import.mapping_steps.count %>
-            <%= link_to "Next", import_path(@import), class: "btn btn--primary" %>
-          <% else %>
-            <%= link_to "Next", import_confirm_path(@import, step: params[:step].to_i + 1), class: "btn btn--primary" %>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
+<div class="space-y-12 mx-auto max-w-md mb-6">
+  <div class="flex justify-center items-center gap-2">
+    <% @import.mapping_steps.each_with_index do |step, index| %>
+      <% is_active = (params[:step] || "1").to_i == index + 1 %>
+      <%= link_to import_confirm_path(@import, step: index + 1), class: "w-5 h-[3px] #{is_active ? 'bg-gray-900' : 'bg-gray-100'} rounded-xl hover:bg-gray-300 transition-colors duration-200" do %>
+        <span class="sr-only">Step <%= index + 1 %></span>
+      <% end %>
+    <% end %>
   </div>
+
+  <div class="text-center space-y-2">
+    <h1 class="text-3xl text-gray-900 font-medium"><%= t(".step#{params[:step] || '1'}_title") %></h1>
+    <p class="text-gray-500 text-sm"><%= t(".step#{params[:step] || '1'}_description") %></p>
+  </div>
+</div>
+
+<div class="max-w-screen-md mx-auto flex justify-center">
+  <%= render "import/confirms/steps/#{@import.mapping_steps[(params[:step] || "1").to_i - 1]}", import: @import %>
 </div>

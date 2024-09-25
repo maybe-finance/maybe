@@ -1,6 +1,6 @@
 module ImportsHelper
   def cell_class(row, field)
-    base = "focus:ring-gray-900 focus:border-gray-900 max-w-full"
+    base = "text-sm focus:ring-gray-900 focus:border-gray-900 max-w-full"
 
     row.valid? # populate errors
 

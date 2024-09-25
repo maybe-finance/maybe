@@ -5,6 +5,7 @@ class Account::Entry < ApplicationRecord
 
   belongs_to :account
   belongs_to :transfer, optional: true
+  belongs_to :import, optional: true
 
   delegated_type :entryable, types: Account::Entryable::TYPES, dependent: :destroy
   accepts_nested_attributes_for :entryable

@@ -2,31 +2,97 @@
   <%= render "imports/nav", import: @import %>
 <% end %>
 
-<div class="mx-auto max-w-[550px] w-full space-y-4">
-  <h1 class="text-3xl text-gray-900 font-medium">Publish your import</h1>
-  <p class="text-gray-500 text-sm">Review your final import settings and publish your import.</p>
-
-  <div class="bg-gray-50 rounded-lg p-4 space-y-2">
-    <h2 class="text-2xl text-gray-900 font-medium">Import Summary</h2>
-    <p class="text-gray-500 text-sm">Below are the resources that will be created as a result of this import.</p>
-
-    <ul class="list-disc list-inside text-gray-700">
-      <li>Transactions: <%= @import.rows.count %></li>
-      <li>Categories: 2</li>
-      <li>Tags: 1</li>
-    </ul>
+<% if @import.importing? %>
+  <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-4 rounded">
+    <p class="font-semibold flex items-center">
+      <%= lucide_icon "loader", class: "animate-spin mr-2 h-5 w-5" %>
+      Importing...
+    </p>
   </div>
-</div>
+<% elsif @import.complete? %>
+  <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded">
+    <p class="font-semibold flex items-center">
+      <%= lucide_icon "check-circle", class: "mr-2 h-5 w-5" %>
+      Import complete
+    </p>
+  </div>
+<% elsif @import.failed? %>
+  <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
+    <p class="font-semibold flex items-center">
+      <%= lucide_icon "alert-triangle", class: "mr-2 h-5 w-5" %>
+      Import failed
+    </p>
+  </div>
+<% else %>
+  <div class="text-center space-y-2 mb-4 mx-auto max-w-md">
+    <h1 class="text-3xl text-gray-900 font-medium"><%= t(".title") %></h1>
+    <p class="text-gray-500 text-sm"><%= t(".description") %></p>
+  </div>
 
-<div class="fixed bottom-0 left-1/2 -translate-x-1/2 p-6">
-  <div class="w-[640px] mx-auto border border-alpha-black-100 rounded-2xl px-4 py-2 shadow-xs bg-white">
-    <div class="flex items-center justify-between">
-      <p class="text-gray-900 text-sm font-medium">5. Publish your import</p>
+  <div class="mx-auto max-w-screen-sm space-y-4">
+    <div class="bg-gray-25 rounded-xl p-1 space-y-1">
+      <div class="flex justify-between items-center text-xs font-medium text-gray-500 uppercase px-5 py-3">
+        <p>item</p>
+        <p class="justify-self-end">count</p>
+      </div>
 
-      <div class="flex items-center gap-2">
-        <%= link_to "Back", import_confirm_path(@import), class: "btn btn--secondary" %>
-        <%= button_to "Publish import", publish_import_path(@import), class: "btn btn--primary" %>
+      <div class="bg-white border border-alpha-black-25 rounded-lg shadow-xs text-sm">
+        <div class="flex items-center justify-between gap-2 bg-white px-5 py-3 rounded-tl-lg rounded-tr-lg">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-cyan-500/5 flex justify-center items-center">
+              <%= lucide_icon "credit-card", class: "text-cyan-500 w-5 h-5 shrink-0" %>
+            </div>
+
+            <p>Transactions</p>
+          </div>
+
+          <p class="justify-self-end"><%= @import.rows.count %></p>
+        </div>
+
+        <div class="h-px bg-alpha-black-50 ml-14 mr-5"></div>
+
+        <div class="flex items-center justify-between gap-2 bg-white px-5 py-3">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-blue-500/5 flex justify-center items-center">
+              <%= lucide_icon "shapes", class: "text-blue-500 w-5 h-5 shrink-0" %>
+            </div>
+
+            <p>Categories</p>
+          </div>
+
+          <p class="justify-self-end"><%= @import.mappings.of_type(Import::CategoryMapping).count %></p>
+        </div>
+
+        <div class="h-px bg-alpha-black-50 ml-14 mr-5"></div>
+
+        <div class="flex items-center justify-between gap-2 bg-white px-5 py-3">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-violet-500/5 flex justify-center items-center">
+              <%= lucide_icon "tags", class: "text-violet-500 w-5 h-5 shrink-0" %>
+            </div>
+
+            <p>Tags</p>
+          </div>
+
+          <p class="justify-self-end"><%= @import.mappings.of_type(Import::TagMapping).count %></p>
+        </div>
+
+        <div class="h-px bg-alpha-black-50 ml-14 mr-5"></div>
+
+        <div class="flex items-center justify-between gap-2 bg-white px-5 py-3 rounded-bl-lg rounded-br-lg">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-orange-500/5 flex justify-center items-center">
+              <%= lucide_icon "layers", class: "text-orange-500 w-5 h-5 shrink-0" %>
+            </div>
+
+            <p>Accounts</p>
+          </div>
+
+          <p class="justify-self-end"><%= @import.mappings.of_type(Import::AccountMapping).count %></p>
+        </div>
       </div>
     </div>
+
+    <%= button_to "Publish import", publish_import_path(@import), class: "btn btn--primary w-full" %>
   </div>
-</div>
+<% end %>

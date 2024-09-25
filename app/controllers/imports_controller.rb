@@ -2,6 +2,8 @@ class ImportsController < ApplicationController
   before_action :set_import, only: %i[show update destroy publish]
 
   def publish
+    @import.update! status: :importing
+    @import.publish
     redirect_to import_path(@import), notice: "Import published."
   end
 

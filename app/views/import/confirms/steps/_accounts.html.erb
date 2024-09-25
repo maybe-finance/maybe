@@ -1,0 +1,60 @@
+<div class="space-y-4">
+  <div class="bg-gray-25 rounded-xl p-1 space-y-1 w-[650px]">
+    <div class="grid grid-cols-3 gap-2 text-xs font-medium text-gray-500 uppercase px-5 py-3">
+      <p>CSV Account</p>
+      <p>Maybe Account</p>
+      <p class="justify-self-end">Transactions</p>
+    </div>
+
+    <div class="border border-alpha-black-25 rounded-md shadow-xs divide-y divide-alpha-black-100 text-sm">
+      <% [*import.csv_accounts, "_internal_unassigned"].each do |csv_account| %>
+        <% account_mapping = import.mappings
+                                .of_type(Import::AccountMapping)
+                                .find_or_initialize_by(key: csv_account) %>
+
+        <div class="px-5 py-3 bg-white first:rounded-tl-xl first:rounded-tr-xl last:rounded-bl-xl last:rounded-br-xl">
+          <%= styled_form_with model: account_mapping, 
+                         scope: :import_mapping,
+                         url: account_mapping.new_record? ? import_mappings_path(import) : import_mapping_path(import, account_mapping),
+                         class: "grid grid-cols-3 gap-2 items-center", 
+                         data: { controller: "auto-submit-form" } do |form| %>
+            <span><%= account_mapping.key == "_internal_unassigned" ? "Unassigned" : account_mapping.key %></span>
+
+            <%= form.hidden_field :mappable_type, value: Account %>
+
+            <% if account_mapping.key == "_internal_unassigned" %>
+              <%= form.select :mappable_id, 
+                      Current.family.accounts.map { |account| [account.name, account.id] }, 
+                      { include_blank: "Select account", selected: account_mapping.mappable_id }, 
+                      "data-auto-submit-form-target": "auto" %>
+            <% else %>
+              <%= form.select :mappable_id, 
+                      [["Add as new account", "internal_new"]] + 
+                      Current.family.accounts.map { |account| [account.name, account.id] }, 
+                      { include_blank: "Leave unassigned", selected: account_mapping.create_when_empty? ? "internal_new" : account_mapping.mappable_id }, 
+                      "data-auto-submit-form-target": "auto" %>
+            <% end %>
+
+            <%= form.hidden_field :key, value: csv_account %>
+            <%= form.hidden_field :type, value: Import::AccountMapping %>
+
+            <span class="justify-self-end">
+              <% if account_mapping.key == "_internal_unassigned" %>
+                <%= import.rows.where(account: nil).count %>
+              <% else %>
+                <%= import.csv_accounts.select { |csv_account| csv_account == account_mapping.key }.count %>
+              <% end %>
+            </span>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="flex justify-center">
+    <%= link_to import_path(import), class: "btn btn--primary w-36 flex items-center justify-between gap-2" do  %>
+      <span>Next</span>
+      <%= lucide_icon "arrow-right", class: "w-5 h-5" %>
+    <% end %>
+  </div>
+</div>

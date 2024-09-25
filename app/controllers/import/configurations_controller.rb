@@ -9,7 +9,8 @@ class Import::ConfigurationsController < ApplicationController
   def update
     @import.update!(import_params)
     @import.generate_rows_from_csv
-    redirect_back_or_to import_configuration_path(@import)
+
+    redirect_to import_clean_path(@import), notice: "Import configured successfully."
   end
 
   private

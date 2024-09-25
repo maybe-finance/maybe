@@ -12,6 +12,8 @@ class Import < ApplicationRecord
 
   has_many :rows, dependent: :destroy
   has_many :mappings, dependent: :destroy
+  has_many :accounts, dependent: :nullify
+  has_many :entries, dependent: :nullify, class_name: "Account::Entry"
 
   def csv_rows
     @csv_rows ||= parsed_csv
@@ -21,8 +23,8 @@ class Import < ApplicationRecord
     parsed_csv.headers
   end
 
-  def sample
-    @sample ||= parsed_csv.first(2)
+  def csv_sample
+    @csv_sample ||= parsed_csv.first(2)
   end
 
   def uploaded?

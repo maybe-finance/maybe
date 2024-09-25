@@ -1,17 +1,16 @@
 <%= content_for :content do %>
   <div class="flex flex-col h-dvh">
     <header class="flex items-center justify-between p-8">
-      <div class="flex items-center gap-2">
-        <%= lucide_icon "chevron-left", class: "w-8 h-8" %>
-        <%= lucide_icon "chevron-right", class: "w-8 h-8" %>
-      </div>
+      <%= link_to content_for(:previous_path) do %>
+        <%= lucide_icon "arrow-left", class: "w-5 h-5 text-gray-500" %>
+      <% end %>
 
       <nav>
         <%= yield :header_nav %>
       </nav>
 
       <%= link_to imports_path do %>
-        <%= lucide_icon("x", class: "text-gray-500 w-8 h-8 hover:bg-gray-100 rounded-full p-2") %>
+        <%= lucide_icon "x", class: "text-gray-500 w-5 h-5" %>
       <% end %>
     </header>
 

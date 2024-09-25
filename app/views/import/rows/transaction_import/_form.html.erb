@@ -2,7 +2,7 @@
 
 <% form_options = { model: [row.import, row], scope: :import_row, url: import_row_path(row.import, row), method: :patch, data: { controller: "auto-submit-form", auto_submit_form_trigger_event_value: "blur" } } %>
 
-<div class="grid grid-cols-6 divide-x divide-alpha-black-200 group">
+<div class="grid grid-cols-7 divide-x divide-alpha-black-200 group">
   <%= turbo_frame_tag dom_id(row, :date) do%>
     <%= form_with **form_options do |form| %>
       <%= form.text_field :date, "data-auto-submit-form-target": "auto", title: "Must be in the format: #{row.import.date_format}", class: ["group-first:rounded-tl-xl group-last:rounded-bl-xl", cell_class(row, :date)].join(" ") %>
@@ -30,6 +30,12 @@
   <%= turbo_frame_tag dom_id(row, :tags) do %>
     <%= form_with **form_options do |form| %>
       <%= form.text_field :tags, "data-auto-submit-form-target": "auto", class: cell_class(row, :tags) %>
+    <% end %>
+  <% end %>
+
+  <%= turbo_frame_tag dom_id(row, :account) do %>
+    <%= form_with **form_options do |form| %>
+      <%= form.text_field :account, "data-auto-submit-form-target": "auto", class: cell_class(row, :account) %>
     <% end %>
   <% end %>
 

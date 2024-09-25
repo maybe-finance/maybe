@@ -1,13 +1,11 @@
 class TransactionImport < Import
-  # validates :date_format, inclusion: { in: [ "%d-%m-%Y", "%m-%d-%Y", "%Y-%m-%d", "%d/%m/%Y", "%Y/%m/%d", "%m/%d/%Y" ] }
-  # validates :date_col_label, :amount_col_label, :date_format, :amount_sign_format, presence: true
-
   def generate_rows_from_csv
     rows.destroy_all
 
     mapped_rows = csv_rows.map do |row|
       {
         type: "Import::TransactionRow",
+        account: row[account_col_label],
         date: row[date_col_label],
         amount: row[amount_col_label],
         name: row[name_col_label],
@@ -20,20 +18,51 @@ class TransactionImport < Import
     rows.insert_all!(mapped_rows)
   end
 
+  def publish
+    entries = []
+
+    rows.each do |row|
+      account = mappings.of_type(Import::AccountMapping).find_with_fallback(row[:account])&.account
+      category = mappings.of_type(Import::CategoryMapping).find_with_fallback(row[:category])&.category
+
+      tag_keys = row[:tags]&.split("|") || []
+      tags = tag_keys.map { |key| mappings.of_type(Import::TagMapping).find_with_fallback(key)&.tag }.compact
+
+      entry = account.entries.build \
+        date: normalize_date_str(row[:date]),
+        amount: row[:amount].to_d,
+        name: row[:name] || "Imported transaction",
+        currency: account.currency,
+        entryable: Account::Transaction.new(category: category, tags: tags, notes: row[:notes]),
+        import: self
+
+      entries << entry
+    end
+
+    transaction do
+      entries.each(&:save!)
+    end
+
+    self.status = :complete
+    save!
+  end
+
   def mapping_steps
-    %w[categories tags]
+    %w[categories tags accounts]
   end
 
   def csv_tags
-    rows.map do |row|
-      row.tags&.split("|") || []
-    end.flatten.compact.uniq
+    rows.map(&:tags).uniq.compact.flat_map do |tags|
+      tags.split("|").reject(&:blank?)
+    end.uniq
   end
 
   def csv_categories
-    rows.map do |row|
-      row.category
-    end.flatten.compact.uniq
+    rows.map(&:category).reject(&:blank?).uniq
+  end
+
+  def csv_accounts
+    rows.map(&:account).reject(&:blank?).uniq
   end
 
   def csv_valid?
@@ -46,5 +75,15 @@ class TransactionImport < Import
 
   def publishable?
     cleaned?
+  end
+
+  def csv_template
+    template = <<-CSV
+      Date*,Amount*,Account,Name,Category,Tags
+      2024-01-01,-8.55,Checking,Starbucks,Food & Drink,Tag1|Tag2
+      2024-04-15,2000,Savings,Paycheck,Income,
+    CSV
+
+    CSV.parse(template, headers: true)
   end
 end

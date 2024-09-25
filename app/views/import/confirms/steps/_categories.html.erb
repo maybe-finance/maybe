@@ -1,34 +1,54 @@
-<div>
-  <div class="grid grid-cols-3 gap-2">
-    <p>CSV Category</p>
-    <p>Maybe Category</p>
-    <p>Transactions</p>
-  </div>
+<%# locals: (import:) %>
 
-  <% @import.csv_categories.each do |csv_category| %>
-    <% category_mapping = @import.mappings
+<div class="space-y-4">
+  <div class="bg-gray-25 rounded-xl p-1 space-y-1 w-[650px]">
+    <div class="grid grid-cols-3 gap-2 text-xs font-medium text-gray-500 uppercase px-5 py-3">
+      <p>CSV Category</p>
+      <p>Maybe Category</p>
+      <p class="justify-self-end">Transactions</p>
+    </div>
+
+    <div class="border border-alpha-black-25 rounded-md shadow-xs divide-y divide-alpha-black-100 text-sm">
+      <% [*@import.csv_categories, "_internal_unassigned"].each do |csv_category| %>
+        <% category_mapping = import.mappings
                                 .of_type(Import::CategoryMapping)
                                 .find_or_initialize_by(key: csv_category) %>
 
-    <%= styled_form_with model: category_mapping, 
+        <div class="px-5 py-3 bg-white first:rounded-tl-xl first:rounded-tr-xl last:rounded-bl-xl last:rounded-br-xl">
+          <%= styled_form_with model: category_mapping, 
                          scope: :import_mapping,
                          url: category_mapping.new_record? ? import_mappings_path(@import) : import_mapping_path(@import, category_mapping),
-                         class: "grid grid-cols-3 gap-2", 
+                         class: "grid grid-cols-3 gap-2 items-center", 
                          data: { controller: "auto-submit-form" } do |form| %>
-      <span><%= csv_category %></span>
+            <span><%= category_mapping.key == "_internal_unassigned" ? "Uncategorized" : category_mapping.key %></span>
 
-      <%= form.hidden_field :mappable_type, value: Category %>
-      <%= form.select :mappable_id, 
+            <%= form.hidden_field :mappable_type, value: Category %>
+            <%= form.select :mappable_id, 
                       [["Add as new category", "internal_new"]] + 
                       Current.family.categories.map { |category| [category.name, category.id] }, 
                       { include_blank: "Leave uncategorized", selected: category_mapping.create_when_empty? ? "internal_new" : category_mapping.mappable_id }, 
                       "data-auto-submit-form-target": "auto" %>
 
-      <%= form.hidden_field :key, value: csv_category %>
-      <%= form.hidden_field :type, value: Import::CategoryMapping %>
+            <%= form.hidden_field :key, value: csv_category %>
+            <%= form.hidden_field :type, value: Import::CategoryMapping %>
 
-      <span><%= @import.csv_categories.select { |csv_category| csv_category == category_mapping.key }.count %></span>
+            <span class="justify-self-end">
+              <% if category_mapping.key == "_internal_unassigned" %>
+                <%= import.rows.where(category: nil).count %>
+              <% else %>
+                <%= @import.csv_categories.select { |csv_category| csv_category == category_mapping.key }.count %>
+              <% end %>
+            </span>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 
+  <div class="flex justify-center">
+    <%= link_to import_confirm_path(import, step: 2), class: "btn btn--primary w-36 flex items-center justify-between gap-2" do  %>
+      <span>Next</span>
+      <%= lucide_icon "arrow-right", class: "w-5 h-5" %>
     <% end %>
-  <% end %>
+  </div>
 </div>
