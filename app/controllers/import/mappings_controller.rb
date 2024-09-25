@@ -6,7 +6,8 @@ class Import::MappingsController < ApplicationController
       type: mapping_params[:type],
       key: mapping_params[:key],
       create_when_empty: create_when_empty,
-      mappable: mappable
+      mappable: mappable,
+      value: mapping_params[:value]
 
     redirect_back_or_to import_confirm_path(@import)
   end
@@ -16,14 +17,15 @@ class Import::MappingsController < ApplicationController
 
     mapping.update! \
       create_when_empty: create_when_empty,
-      mappable: mappable
+      mappable: mappable,
+      value: mapping_params[:value]
 
     redirect_back_or_to import_confirm_path(@import)
   end
 
   private
     def mapping_params
-      params.require(:import_mapping).permit(:type, :key, :mappable_id, :mappable_type)
+      params.require(:import_mapping).permit(:type, :key, :mappable_id, :mappable_type, :value)
     end
 
     def set_import
@@ -31,6 +33,8 @@ class Import::MappingsController < ApplicationController
     end
 
     def mappable
+      return nil unless mapping_params[:mappable_type].present?
+
       mappable_class = mapping_params[:mappable_type].constantize
 
       @mappable ||= mappable_class.find_by(id: mapping_params[:mappable_id], family: Current.family)

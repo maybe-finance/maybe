@@ -2,22 +2,28 @@
 
 <% form_options = { model: [row.import, row], scope: :import_row, url: import_row_path(row.import, row), method: :patch, data: { controller: "auto-submit-form", auto_submit_form_trigger_event_value: "blur" } } %>
 
-<div class="grid grid-cols-8 divide-x divide-alpha-black-200 group">
+<div class="grid grid-cols-7 divide-x divide-alpha-black-200 group">
   <%= turbo_frame_tag dom_id(row, :date) do%>
     <%= form_with **form_options do |form| %>
       <%= form.text_field :date, "data-auto-submit-form-target": "auto", title: "Must be in the format: #{row.import.date_format}", class: ["group-first:rounded-tl-xl group-last:rounded-bl-xl", cell_class(row, :date)].join(" ") %>
     <% end %>
   <% end %>
 
-  <%= turbo_frame_tag dom_id(row, :name) do %>
+  <%= turbo_frame_tag dom_id(row, :ticker) do %>
     <%= form_with **form_options do |form| %>
-      <%= form.text_field :name, "data-auto-submit-form-target": "auto", class: cell_class(row, :name) %>
+      <%= form.text_field :ticker, "data-auto-submit-form-target": "auto", class: cell_class(row, :ticker) %>
     <% end %>
   <% end %>
 
-  <%= turbo_frame_tag dom_id(row, :amount) do %>
+  <%= turbo_frame_tag dom_id(row, :qty) do %>
     <%= form_with **form_options do |form| %>
-      <%= form.text_field :amount, "data-auto-submit-form-target": "auto", class: cell_class(row, :amount) %>
+      <%= form.text_field :qty, "data-auto-submit-form-target": "auto", class: cell_class(row, :qty) %>
+    <% end %>
+  <% end %>
+
+  <%= turbo_frame_tag dom_id(row, :price) do %>
+    <%= form_with **form_options do |form| %>
+      <%= form.text_field :price, "data-auto-submit-form-target": "auto", class: cell_class(row, :price) %>
     <% end %>
   <% end %>
 
@@ -27,27 +33,15 @@
     <% end %>
   <% end %>
 
-  <%= turbo_frame_tag dom_id(row, :category) do %>
-    <%= form_with **form_options do |form| %>
-      <%= form.text_field :category, "data-auto-submit-form-target": "auto", class: cell_class(row, :category) %>
-    <% end %>
-  <% end %>
-
-  <%= turbo_frame_tag dom_id(row, :tags) do %>
-    <%= form_with **form_options do |form| %>
-      <%= form.text_field :tags, "data-auto-submit-form-target": "auto", class: cell_class(row, :tags) %>
-    <% end %>
-  <% end %>
-
   <%= turbo_frame_tag dom_id(row, :account) do %>
     <%= form_with **form_options do |form| %>
       <%= form.text_field :account, "data-auto-submit-form-target": "auto", class: cell_class(row, :account) %>
     <% end %>
   <% end %>
 
-  <%= turbo_frame_tag dom_id(row, :notes) do %>
+  <%= turbo_frame_tag dom_id(row, :name) do %>
     <%= form_with **form_options do |form| %>
-      <%= form.text_field :notes, "data-auto-submit-form-target": "auto", class: ["group-first:rounded-tr-xl group-last:rounded-br-xl", cell_class(row, :notes)].join(" ") %>
+      <%= form.text_field :name, "data-auto-submit-form-target": "auto", class: cell_class(row, :name) %>
     <% end %>
   <% end %>
 </div>

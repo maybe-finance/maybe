@@ -12,8 +12,8 @@ class Import < ApplicationRecord
 
   has_many :rows, dependent: :destroy
   has_many :mappings, dependent: :destroy
-  has_many :accounts, dependent: :nullify
-  has_many :entries, dependent: :nullify, class_name: "Account::Entry"
+  has_many :accounts, dependent: :destroy
+  has_many :entries, dependent: :destroy, class_name: "Account::Entry"
 
   def csv_rows
     @csv_rows ||= parsed_csv

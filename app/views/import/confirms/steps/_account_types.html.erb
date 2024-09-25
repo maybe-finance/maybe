@@ -1,16 +1,16 @@
 <div class="space-y-4">
   <div class="bg-gray-25 rounded-xl p-1 space-y-1 w-[650px]">
     <div class="grid grid-cols-3 gap-2 text-xs font-medium text-gray-500 uppercase px-5 py-3">
-      <p>CSV Account</p>
-      <p>Maybe Account</p>
-      <p class="justify-self-end">Transactions</p>
+      <p>CSV Type</p>
+      <p>Maybe Type</p>
+      <p class="justify-self-end">Accounts</p>
     </div>
 
     <div class="border border-alpha-black-25 rounded-md shadow-xs divide-y divide-alpha-black-100 text-sm">
-      <% import.csv_accounts.each do |csv_account| %>
+      <% import.csv_account_types.each do |csv_account_type| %>
         <% account_mapping = import.mappings
-                                .of_type(Import::AccountMapping)
-                                .find_or_create_by(key: csv_account) %>
+                                .of_type(Import::AccountTypeMapping)
+                                .find_or_initialize_by(key: csv_account_type) %>
 
         <div class="px-5 py-3 bg-white first:rounded-tl-xl first:rounded-tr-xl last:rounded-bl-xl last:rounded-br-xl">
           <%= styled_form_with model: account_mapping, 
@@ -20,19 +20,16 @@
                          data: { controller: "auto-submit-form" } do |form| %>
             <span><%= account_mapping.key %></span>
 
-            <%= form.hidden_field :mappable_type, value: Account %>
-
-            <%= form.select :mappable_id, 
-                      [["Add as new account", "internal_new"]] + 
-                      Current.family.accounts.map { |account| [account.name, account.id] }, 
-                      { include_blank: "Select an account", selected: account_mapping.create_when_empty? ? "internal_new" : account_mapping.mappable_id }, 
+            <%= form.select :value, 
+                      Accountable::TYPES.map { |type| [type.titleize, type] }, 
+                      { selected: account_mapping.value, include_blank: "Select an account type" },
                       "data-auto-submit-form-target": "auto" %>
 
-            <%= form.hidden_field :key, value: csv_account %>
-            <%= form.hidden_field :type, value: Import::AccountMapping %>
+            <%= form.hidden_field :key, value: csv_account_type %>
+            <%= form.hidden_field :type, value: Import::AccountTypeMapping %>
 
             <span class="justify-self-end">
-              <%= import.csv_accounts.select { |csv_account| csv_account == account_mapping.key }.count %>
+              <%= import.csv_account_types.select { |csv_account_type| csv_account_type == account_mapping.key }.count %>
             </span>
           <% end %>
         </div>

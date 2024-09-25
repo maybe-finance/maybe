@@ -1,6 +1,6 @@
 class Import::TransactionRow < Import::Row
   validates :date, :amount, presence: true
-  validates :amount, numericality: { other_than: 0 }
+  validates :amount, numericality: true
   validate :date_matches_user_format
 
   private
@@ -8,7 +8,7 @@ class Import::TransactionRow < Import::Row
       return if date.blank?
 
       parsed_date = Date.strptime(date, import.date_format) rescue nil
-      if parsed_date.nil? || parsed_date.strftime(import.date_format) != date
+      if parsed_date.nil?
         errors.add(:date, "must exactly match the format: #{import.date_format}")
       end
     end

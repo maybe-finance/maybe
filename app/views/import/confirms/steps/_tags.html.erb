@@ -9,10 +9,10 @@
     </div>
 
     <div class="border border-alpha-black-25 rounded-md shadow-xs divide-y divide-alpha-black-100 text-sm">
-      <% [*@import.csv_tags, "_internal_unassigned"].each do |csv_tag| %>
+      <% import.csv_tags.each do |csv_tag| %>
         <% tag_mapping = import.mappings
                            .of_type(Import::TagMapping)
-                           .find_or_initialize_by(key: csv_tag) %>
+                           .find_or_create_by(key: csv_tag) %>
 
         <div class="px-5 py-3 bg-white first:rounded-tl-xl first:rounded-tr-xl last:rounded-bl-xl last:rounded-br-xl">
           <%= styled_form_with model: tag_mapping, 
@@ -20,7 +20,7 @@
                          url: tag_mapping.new_record? ? import_mappings_path(@import) : import_mapping_path(@import, tag_mapping),
                          class: "grid grid-cols-3 gap-2 items-center", 
                          data: { controller: "auto-submit-form" } do |form| %>
-            <span><%= tag_mapping.key == "_internal_unassigned" ? "Untagged" : tag_mapping.key %></span>
+            <span><%= tag_mapping.key %></span>
 
             <%= form.hidden_field :mappable_type, value: Tag %>
             <%= form.select :mappable_id, 
@@ -33,11 +33,7 @@
             <%= form.hidden_field :type, value: Import::TagMapping %>
 
             <span class="justify-self-end">
-              <% if tag_mapping.key == "_internal_unassigned" %>
-                <%= import.rows.where(tags: nil).count %>
-              <% else %>
-                <%= @import.csv_tags.select { |csv_tag| csv_tag == tag_mapping.key }.count %>
-              <% end %>
+              <%= @import.csv_tags.select { |csv_tag| csv_tag == tag_mapping.key }.count %>
             </span>
           <% end %>
         </div>

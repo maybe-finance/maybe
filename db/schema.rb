@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_25_004729) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_25_112218) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -120,7 +120,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_25_004729) do
     t.boolean "is_active", default: true, null: false
     t.date "last_sync_date"
     t.uuid "institution_id"
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Loan'::character varying)::text, ('CreditCard'::character varying)::text, ('OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Loan'::character varying, 'CreditCard'::character varying, 'OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.uuid "import_id"
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id"], name: "index_accounts_on_family_id"
@@ -306,8 +306,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_25_004729) do
 
   create_table "import_mappings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "key"
+    t.string "value"
     t.string "type"
-    t.boolean "create_when_empty", default: false
+    t.boolean "create_when_empty", default: true
     t.uuid "import_id", null: false
     t.string "mappable_type"
     t.uuid "mappable_id"
@@ -320,18 +321,20 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_25_004729) do
   create_table "import_rows", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "import_id", null: false
     t.string "type", null: false
+    t.string "account"
     t.string "date"
     t.string "qty"
+    t.string "ticker"
     t.string "price"
     t.string "amount"
+    t.string "currency"
     t.string "name"
     t.string "category"
     t.string "tags"
-    t.string "trade_type"
+    t.string "entity_type"
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "account"
     t.index ["import_id"], name: "index_import_rows_on_import_id"
   end
 
@@ -345,19 +348,21 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_25_004729) do
     t.string "col_sep", default: ","
     t.uuid "family_id", null: false
     t.uuid "original_account_id"
-    t.string "type"
-    t.string "date_col_label"
-    t.string "amount_col_label"
-    t.string "name_col_label"
-    t.string "category_col_label"
-    t.string "tags_col_label"
-    t.string "account_col_label"
-    t.string "qty_col_label"
-    t.string "price_col_label"
-    t.string "type_col_label"
-    t.string "date_format", default: "YYYY-MM-DD"
-    t.string "amount_sign_format", default: "incomes_are_negative"
-    t.string "notes_col_label"
+    t.string "type", null: false
+    t.string "date_col_label", default: "date"
+    t.string "amount_col_label", default: "amount"
+    t.string "name_col_label", default: "name"
+    t.string "category_col_label", default: "category"
+    t.string "tags_col_label", default: "tags"
+    t.string "account_col_label", default: "account"
+    t.string "qty_col_label", default: "qty"
+    t.string "ticker_col_label", default: "ticker"
+    t.string "price_col_label", default: "price"
+    t.string "entity_type_col_label", default: "type"
+    t.string "notes_col_label", default: "notes"
+    t.string "currency_col_label", default: "currency"
+    t.string "date_format", default: "%m/%d/%Y"
+    t.string "amount_sign_format", default: "incomes_are_positive"
     t.index ["family_id"], name: "index_imports_on_family_id"
   end
 

@@ -13,7 +13,7 @@ class Import::RowsController < ApplicationController
 
   private
     def row_params
-      params.require(:import_row).permit(:date, :name, :amount, :category, :tags, :notes)
+      params.require(:import_row).permit(:date, :name, :amount, :category, :tags, :notes, :currency)
     end
 
     def set_import_row

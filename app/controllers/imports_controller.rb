@@ -3,7 +3,12 @@ class ImportsController < ApplicationController
 
   def publish
     @import.update! status: :importing
-    @import.publish
+    begin
+      @import.publish
+    rescue => error
+      puts "Import failed: #{error.message}"
+      @import.update! status: :failed
+    end
     redirect_to import_path(@import), notice: "Import published."
   end
 
@@ -24,6 +29,7 @@ class ImportsController < ApplicationController
   end
 
   def show
+    redirect_to import_confirm_path(@import), alert: "Please finalize your mappings before proceeding." unless @import.publishable?
   end
 
   def update

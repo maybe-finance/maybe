@@ -8,5 +8,38 @@
     <p class="text-gray-500 text-sm"><%= t(".description") %></p>
   </div>
 
-  <%= render "import/cleans/#{@import.type.underscore}", import: @import %>
+  <% if @import.cleaned?%>
+    <div class="bg-white border border-alpha-black-100 rounded-lg p-3 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <%= lucide_icon "check-circle", class: "w-4 h-4 text-green-500" %>
+        <p class="text-green-500">Your data has been cleaned</p>
+      </div>
+
+      <%= link_to "Next step", import_confirm_path(@import), class: "btn btn--primary" %>
+    </div>
+  <% else %>
+    <div class="bg-white border border-alpha-black-100 rounded-lg p-3 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <%= lucide_icon "alert-triangle", class: "w-4 h-4 text-red-500" %>
+        <p class="text-red-500">You have errors in your data</p>
+      </div>
+
+      <div class="flex justify-center">
+        <div class="bg-gray-50 rounded-lg inline-flex p-1 space-x-2 text-sm text-gray-900 font-medium">
+          <%= link_to "All rows", import_clean_path(@import, per_page: params[:per_page], view: "all"), class: "p-2 rounded-lg #{params[:view] != 'errors' ? 'bg-white' : ''}" %>
+          <%= link_to "Error rows", import_clean_path(@import, per_page: params[:per_page], view: "errors"), class: "p-2 rounded-lg #{params[:view] == 'errors' ? 'bg-white' : ''}" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="pb-12">
+    <%= render "import/cleans/#{@import.type.underscore}", rows: @rows %>
+  </div>
+
+  <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full p-12">
+    <div class="border border-alpha-black-100 rounded-lg p-3 max-w-screen-sm mx-auto bg-white shadow-xs">
+      <%= render "application/pagination", pagy: @pagy %>
+    </div>
+  </div>
 </div>

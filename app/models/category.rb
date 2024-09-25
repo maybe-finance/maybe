@@ -1,6 +1,6 @@
 class Category < ApplicationRecord
   has_many :transactions, dependent: :nullify, class_name: "Account::Transaction"
-  has_many :import_mappings, as: :mappable, dependent: :destroy
+  has_many :import_mappings, as: :mappable, dependent: :destroy, class_name: "Import::Mapping"
   belongs_to :family
 
   validates :name, :color, :family, presence: true

@@ -9,10 +9,10 @@
     </div>
 
     <div class="border border-alpha-black-25 rounded-md shadow-xs divide-y divide-alpha-black-100 text-sm">
-      <% [*@import.csv_categories, "_internal_unassigned"].each do |csv_category| %>
+      <% import.csv_categories.each do |csv_category| %>
         <% category_mapping = import.mappings
                                 .of_type(Import::CategoryMapping)
-                                .find_or_initialize_by(key: csv_category) %>
+                                .find_or_create_by(key: csv_category) %>
 
         <div class="px-5 py-3 bg-white first:rounded-tl-xl first:rounded-tr-xl last:rounded-bl-xl last:rounded-br-xl">
           <%= styled_form_with model: category_mapping, 
@@ -20,7 +20,7 @@
                          url: category_mapping.new_record? ? import_mappings_path(@import) : import_mapping_path(@import, category_mapping),
                          class: "grid grid-cols-3 gap-2 items-center", 
                          data: { controller: "auto-submit-form" } do |form| %>
-            <span><%= category_mapping.key == "_internal_unassigned" ? "Uncategorized" : category_mapping.key %></span>
+            <span><%= category_mapping.key %></span>
 
             <%= form.hidden_field :mappable_type, value: Category %>
             <%= form.select :mappable_id, 
@@ -33,11 +33,7 @@
             <%= form.hidden_field :type, value: Import::CategoryMapping %>
 
             <span class="justify-self-end">
-              <% if category_mapping.key == "_internal_unassigned" %>
-                <%= import.rows.where(category: nil).count %>
-              <% else %>
-                <%= @import.csv_categories.select { |csv_category| csv_category == category_mapping.key }.count %>
-              <% end %>
+              <%= import.csv_categories.select { |csv_category| csv_category == category_mapping.key }.count %>
             </span>
           <% end %>
         </div>

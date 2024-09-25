@@ -22,6 +22,10 @@
       <%= lucide_icon "alert-triangle", class: "mr-2 h-5 w-5" %>
       Import failed
     </p>
+
+    <p class="mt-4">
+      <%= button_to "Retry Import", publish_import_path(@import), method: :post, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+    </p>
   </div>
 <% else %>
   <div class="text-center space-y-2 mb-4 mx-auto max-w-md">

@@ -1,4 +1,11 @@
 module ImportTestHelper
+  def trade_import
+    <<-ROWS
+      date,ticker,qty,price,amount,account,name
+      2024-09-23,AAPL,10,100,1000,Brokerage,Purchase AAPL
+    ROWS
+  end
+
   def valid_csv_str
     <<~ROWS
       date,name,category,tags,amount
