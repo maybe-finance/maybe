@@ -8,7 +8,7 @@
     <p class="text-gray-500 text-sm"><%= t(".description") %></p>
   </div>
 
-  <% if @import.cleaned?%>
+  <% if @import.cleaned? %>
     <div class="bg-white border border-alpha-black-100 rounded-lg p-3 flex items-center justify-between">
       <div class="flex items-center gap-2">
         <%= lucide_icon "check-circle", class: "w-4 h-4 text-green-500" %>
@@ -34,7 +34,7 @@
   <% end %>
 
   <div class="pb-12">
-    <%= render "import/cleans/#{@import.type.underscore}", rows: @rows %>
+    <%= render partial: permitted_import_clean_path(@import), locals: { rows: @rows } %>
   </div>
 
   <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full p-12">

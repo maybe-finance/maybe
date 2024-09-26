@@ -10,12 +10,11 @@
     </div>
 
     <div class="mx-auto max-w-lg">
-      <%= render "import/configurations/#{@import.type.underscore}", import: @import %>
+      <%= render partial: permitted_import_configuration_path(@import), locals: { import: @import } %>
     </div>
   </div>
 
   <div class="mx-auto max-w-screen-md my-12">
-    <%= render "imports/table", headers: @import.csv_headers, rows: @import.csv_sample %>
-    <p class="text-gray-500 text-sm mt-4 text-center">Above is a sample of your uploaded CSV for reference.</p>
+    <%= render "imports/table", headers: @import.csv_headers, rows: @import.csv_sample, caption: "Sample data from your uploaded CSV" %>
   </div>
 </div>

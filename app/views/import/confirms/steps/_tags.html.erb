@@ -15,18 +15,18 @@
                            .find_or_create_by(key: csv_tag) %>
 
         <div class="px-5 py-3 bg-white first:rounded-tl-xl first:rounded-tr-xl last:rounded-bl-xl last:rounded-br-xl">
-          <%= styled_form_with model: tag_mapping, 
+          <%= styled_form_with model: tag_mapping,
                          scope: :import_mapping,
                          url: tag_mapping.new_record? ? import_mappings_path(@import) : import_mapping_path(@import, tag_mapping),
-                         class: "grid grid-cols-3 gap-2 items-center", 
+                         class: "grid grid-cols-3 gap-2 items-center",
                          data: { controller: "auto-submit-form" } do |form| %>
             <span><%= tag_mapping.key %></span>
 
             <%= form.hidden_field :mappable_type, value: Tag %>
-            <%= form.select :mappable_id, 
-                      [["Add as new tag", "internal_new"]] + 
-                      Current.family.tags.map { |tag| [tag.name, tag.id] }, 
-                      { include_blank: "Leave untagged", selected: tag_mapping.create_when_empty? ? "internal_new" : tag_mapping.mappable_id }, 
+            <%= form.select :mappable_id,
+                      [["Add as new tag", "internal_new"]] +
+                      Current.family.tags.map { |tag| [tag.name, tag.id] },
+                      { include_blank: "Leave untagged", selected: tag_mapping.create_when_empty? ? "internal_new" : tag_mapping.mappable_id },
                       "data-auto-submit-form-target": "auto" %>
 
             <%= form.hidden_field :key, value: csv_tag %>
@@ -42,7 +42,7 @@
   </div>
 
   <div class="flex justify-center">
-    <%= link_to import_confirm_path(import, step: 3), class: "btn btn--primary w-36 flex items-center justify-between gap-2" do  %>
+    <%= link_to import_confirm_path(import, step: 3), class: "btn btn--primary w-36 flex items-center justify-between gap-2" do %>
       <span>Next</span>
       <%= lucide_icon "arrow-right", class: "w-5 h-5" %>
     <% end %>

@@ -1,1 +1,1 @@
-<%= render "import/rows/#{@import.type.underscore}/form", row: @row %>
+<%= render partial: permitted_import_row_form_path(@import), locals: { row: @row } %>

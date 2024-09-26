@@ -19,5 +19,5 @@
 </div>
 
 <div class="max-w-screen-md mx-auto flex justify-center">
-  <%= render "import/confirms/steps/#{@import.mapping_steps[(params[:step] || "1").to_i - 1]}", import: @import %>
+  <%= render partial: permitted_import_step_path(@import, (params[:step] || "1").to_i - 1), locals: { import: @import } %>
 </div>

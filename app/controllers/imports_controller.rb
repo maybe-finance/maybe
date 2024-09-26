@@ -1,15 +1,10 @@
 class ImportsController < ApplicationController
-  before_action :set_import, only: %i[show update destroy publish]
+  before_action :set_import, only: %i[show publish]
 
   def publish
-    @import.update! status: :importing
-    begin
-      @import.publish
-    rescue => error
-      puts "Import failed: #{error.message}"
-      @import.update! status: :failed
-    end
-    redirect_to import_path(@import), notice: "Import published."
+    @import.publish_later
+
+    redirect_to import_path(@import), notice: "Your import has started in the background."
   end
 
   def index
@@ -30,21 +25,6 @@ class ImportsController < ApplicationController
 
   def show
     redirect_to import_confirm_path(@import), alert: "Please finalize your mappings before proceeding." unless @import.publishable?
-  end
-
-  def update
-    @import.update! import_params
-
-    redirect_to import_path(@import)
-  end
-
-  def destroy
-    if @import.complete?
-      redirect_to imports_path, alert: "You cannot delete completed imports."
-    else
-      @import.destroy
-      redirect_to imports_path, notice: "Import deleted."
-    end
   end
 
   private

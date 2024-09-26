@@ -24,6 +24,108 @@
       "note": ""
     },
     {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "1962c8faac45217a9de00371e0f7328df058769ae9d6913adcf7068bbcc550fe",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/import/rows/show.html.erb",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(partial => permitted_import_row_form_path(Current.family.imports.find(params[:import_id])), { :locals => ({ :row => Current.family.imports.find(params[:import_id]).rows.find(params[:id]) }) })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Import::RowsController",
+          "method": "show",
+          "line": 12,
+          "file": "app/controllers/import/rows_controller.rb",
+          "rendered": {
+            "name": "import/rows/show",
+            "file": "app/views/import/rows/show.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "import/rows/show"
+      },
+      "user_input": "params[:import_id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "3d68f102b0f72b410d2beba14ba804d6b97520a9257e1a75c8b7cad624497f60",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/import/cleans/show.html.erb",
+      "line": 37,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(partial => permitted_import_clean_path(Current.family.imports.find(params[:import_id])), { :locals => ({ :rows => (@rows) }) })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Import::CleansController",
+          "method": "show",
+          "line": 16,
+          "file": "app/controllers/import/cleans_controller.rb",
+          "rendered": {
+            "name": "import/cleans/show",
+            "file": "app/views/import/cleans/show.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "import/cleans/show"
+      },
+      "user_input": "params[:import_id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "89ff2bf6f8b37700e2d8c9a6a667b57c920859b36efaad22973af6d11057e6a0",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/import/confirms/show.html.erb",
+      "line": 22,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(partial => permitted_import_step_path(Current.family.imports.find(params[:import_id]), ((params[:step] or \"1\").to_i - 1)), { :locals => ({ :import => Current.family.imports.find(params[:import_id]) }) })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Import::ConfirmsController",
+          "method": "show",
+          "line": 8,
+          "file": "app/controllers/import/confirms_controller.rb",
+          "rendered": {
+            "name": "import/confirms/show",
+            "file": "app/views/import/confirms/show.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "import/confirms/show"
+      },
+      "user_input": "params[:step]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
       "fingerprint": "b1f821a5c03b8aa348fb21b9297081a3bf9e954244290e7e511c67213d35f3dc",
@@ -90,8 +192,42 @@
         22
       ],
       "note": ""
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "fb6f7abeabc405d6882ffd41dbe8016403ef39307a5c6b4cd7b18adfaf0c24bf",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/import/configurations/show.html.erb",
+      "line": 13,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(partial => permitted_import_configuration_path(Current.family.imports.find(params[:import_id])), { :locals => ({ :import => Current.family.imports.find(params[:import_id]) }) })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Import::ConfigurationsController",
+          "method": "show",
+          "line": 7,
+          "file": "app/controllers/import/configurations_controller.rb",
+          "rendered": {
+            "name": "import/configurations/show",
+            "file": "app/views/import/configurations/show.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "import/configurations/show"
+      },
+      "user_input": "params[:import_id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
     }
   ],
-  "updated": "2024-09-09 14:56:48 -0400",
+  "updated": "2024-09-26 11:20:46 -0400",
   "brakeman_version": "6.2.1"
 }

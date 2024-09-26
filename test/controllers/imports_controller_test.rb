@@ -23,37 +23,26 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     assert_select "turbo-frame#modal"
   end
 
-  test "creates import with template" do
+  test "creates import" do
     assert_difference "Import.count", 1 do
       post imports_url, params: {
         import: {
-          template: "transaction"
+          type: "TransactionImport"
         }
       }
     end
 
-    assert_redirected_to import_url(Import.all.ordered.first)
+    assert_redirected_to import_upload_url(Import.all.ordered.first)
   end
 
-  test "can delete import if not completed" do
-    import = imports(:pending)
+  test "publishes import" do
+    import = imports(:transaction)
 
-    assert_difference "Import.count", -1 do
-      delete import_url(import)
-    end
+    TransactionImport.any_instance.expects(:publish_later).once
 
-    assert_equal "Import deleted.", flash[:notice]
-    assert_redirected_to imports_url
-  end
+    post publish_import_url(import)
 
-  test "cannot delete import if completed" do
-    import = imports(:completed)
-
-    assert_difference "Import.count", 0 do
-      delete import_url(import)
-    end
-
-    assert_equal "You cannot delete completed imports.", flash[:alert]
-    assert_redirected_to imports_url
+    assert_equal "Your import has started in the background.", flash[:notice]
+    assert_redirected_to import_path(import)
   end
 end

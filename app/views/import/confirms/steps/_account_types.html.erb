@@ -13,15 +13,15 @@
                                 .find_or_initialize_by(key: csv_account_type) %>
 
         <div class="px-5 py-3 bg-white first:rounded-tl-xl first:rounded-tr-xl last:rounded-bl-xl last:rounded-br-xl">
-          <%= styled_form_with model: account_mapping, 
+          <%= styled_form_with model: account_mapping,
                          scope: :import_mapping,
                          url: account_mapping.new_record? ? import_mappings_path(import) : import_mapping_path(import, account_mapping),
-                         class: "grid grid-cols-3 gap-2 items-center", 
+                         class: "grid grid-cols-3 gap-2 items-center",
                          data: { controller: "auto-submit-form" } do |form| %>
             <span><%= account_mapping.key %></span>
 
-            <%= form.select :value, 
-                      Accountable::TYPES.map { |type| [type.titleize, type] }, 
+            <%= form.select :value,
+                      Accountable::TYPES.map { |type| [type.titleize, type] },
                       { selected: account_mapping.value, include_blank: "Select an account type" },
                       "data-auto-submit-form-target": "auto" %>
 
@@ -38,7 +38,7 @@
   </div>
 
   <div class="flex justify-center">
-    <%= link_to import_path(import), class: "btn btn--primary w-36 flex items-center justify-between gap-2" do  %>
+    <%= link_to import_path(import), class: "btn btn--primary w-36 flex items-center justify-between gap-2" do %>
       <span>Next</span>
       <%= lucide_icon "arrow-right", class: "w-5 h-5" %>
     <% end %>

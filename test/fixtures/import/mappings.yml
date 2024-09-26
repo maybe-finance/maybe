@@ -1,13 +1,6 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  key: MyString
-  type: 
-  mappable: one
-  mappable_type: Mappable
-
-two:
-  key: MyString
-  type: 
-  mappable: two
-  mappable_type: Mappable
+  import: transaction 
+  key: Food 
+  type: Import::CategoryMapping 
+  mappable: food_and_drink 
+  mappable_type: Category 

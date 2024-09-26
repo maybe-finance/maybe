@@ -15,6 +15,18 @@ class Import < ApplicationRecord
   has_many :accounts, dependent: :destroy
   has_many :entries, dependent: :destroy, class_name: "Account::Entry"
 
+  def publish_later
+    raise "Import is not publishable" unless publishable?
+
+    update! status: :importing
+
+    ImportJob.perform_later(self)
+  end
+
+  def publish
+    raise NotImplementedError, "Subclass must implement publish"
+  end
+
   def csv_rows
     @csv_rows ||= parsed_csv
   end
@@ -40,7 +52,7 @@ class Import < ApplicationRecord
   end
 
   def publishable?
-    raise NotImplementedError, "Subclass must implement publishable?"
+    cleaned? && mappings.all?(&:valid?)
   end
 
   private
