@@ -4,9 +4,9 @@
       <%= lucide_icon "chevron-left", class: "w-5 h-5 text-gray-500" %>
       <span>Back</span>
     <% end %>
-    <span data-controller="hotkey" data-hotkey="Escape" data-action="hotkey#navigateBack" class="uppercase bg-gray-100 rounded-sm px-1 py-0.5 text-xs text-gray-500 shadow-sm ml-1">
+    <button data-controller="hotkey" data-hotkey="Escape" data-action="hotkey#navigateBack" class="uppercase bg-gray-100 rounded-sm px-1 py-0.5 text-xs text-gray-500 shadow-sm ml-1 pointer-events-none">
       esc
-    </span>
+    </button>
   </div>
   <nav class="space-y-4">
     <section class="space-y-2">
