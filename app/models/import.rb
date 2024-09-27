@@ -24,7 +24,11 @@ class Import < ApplicationRecord
   end
 
   def publish
-    raise NotImplementedError, "Subclass must implement publish"
+    import!
+
+    update! status: :complete
+  rescue => error
+    update! status: :failed, error: error.message
   end
 
   def csv_rows
@@ -39,12 +43,54 @@ class Import < ApplicationRecord
     @csv_sample ||= parsed_csv.first(2)
   end
 
+  def dry_run
+    {
+      transactions: rows.count,
+      accounts: Import::AccountMapping.for_import(self).creational.count,
+      categories: Import::CategoryMapping.for_import(self).creational.count,
+      tags: Import::TagMapping.for_import(self).creational.count
+    }
+  end
+
+  def generate_rows_from_csv
+    rows.destroy_all
+
+    mapped_rows = csv_rows.map do |row|
+      {
+        account: row[account_col_label] || default_empty_key,
+        date: row[date_col_label],
+        qty: row[qty_col_label],
+        ticker: row[ticker_col_label],
+        price: row[price_col_label],
+        amount: row[amount_col_label],
+        currency: row[currency_col_label] || default_currency,
+        name: row[name_col_label] || default_row_name,
+        category: row[category_col_label] || default_empty_key,
+        tags: row[tags_col_label] || default_empty_key,
+        entity_type: row[entity_type_col_label],
+        notes: row[notes_col_label]
+      }
+    end
+
+    inserted_rows = rows.insert_all!(mapped_rows)
+  end
+
+  def sync_mappings
+    mapping_steps.each do |step|
+      step.sync_rows(self.rows)
+    end
+  end
+
+  def mapping_steps
+    []
+  end
+
   def uploaded?
     raw_file_str.present?
   end
 
   def configured?
-    raise NotImplementedError, "Subclass must implement configured?"
+    uploaded? && rows.any?
   end
 
   def cleaned?
@@ -56,6 +102,22 @@ class Import < ApplicationRecord
   end
 
   private
+    def import!
+      # no-op, subclasses can implement for customization of algorithm
+    end
+
+    def default_row_name
+      "Imported item"
+    end
+
+    def default_currency
+      family.currency
+    end
+
+    def default_empty_key
+      Import::Row::EMPTY_KEY
+    end
+
     def normalize_date_str(date_str)
       Date.strptime(date_str, date_format).iso8601
     end

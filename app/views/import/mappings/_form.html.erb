@@ -1,0 +1,28 @@
+<%# locals: (mapping:) %>
+
+<%= styled_form_with model: mapping,
+                         scope: :import_mapping,
+                         url: mapping.new_record? ? import_mappings_path(mapping.import) : import_mapping_path(mapping.import, mapping),
+                         class: "grid grid-cols-3 gap-2 items-center",
+                         data: { controller: "auto-submit-form" } do |form| %>
+  <span><%= mapping.key %></span>
+
+  <% if mapping.mappable_class.present? %>
+    <%= form.hidden_field :mappable_type, value: mapping.mappable_class %>
+    <%= form.select :mappable_id,
+                      mapping.selectable_values,
+                      { include_blank: mapping.requires_selection? ? "Select an option" : "Leave unassigned", selected: mapping.create_when_empty? ? "internal_new" : mapping.mappable_id },
+                      "data-auto-submit-form-target": "auto", disabled: mapping.import.complete? %>
+  <% else %>
+    <%= form.select :value, mapping.selectable_values,
+                      { include_blank: mapping.requires_selection? ? "Select an option" : "Leave unassigned" },
+                      "data-auto-submit-form-target": "auto", disabled: mapping.import.complete? %>
+  <% end %>
+
+  <%= form.hidden_field :key, value: mapping.key %>
+  <%= form.hidden_field :type, value: mapping.type %>
+
+  <span class="justify-self-end">
+    <%= mapping.values_count %>
+  </span>
+<% end %>

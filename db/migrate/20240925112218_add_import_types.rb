@@ -16,6 +16,7 @@ class AddImportTypes < ActiveRecord::Migration[7.2]
       t.string :currency_col_label, default: "currency"
       t.string :date_format, default: "%m/%d/%Y"
       t.string :amount_sign_format, default: "incomes_are_positive"
+      t.string :error
     end
 
     # Add import references so we can associate imported resources after the import
@@ -24,7 +25,6 @@ class AddImportTypes < ActiveRecord::Migration[7.2]
 
     create_table :import_rows, id: :uuid do |t|
       t.references :import, null: false, foreign_key: true, type: :uuid
-      t.string :type, null: false
       t.string :account
       t.string :date
       t.string :qty
@@ -42,9 +42,9 @@ class AddImportTypes < ActiveRecord::Migration[7.2]
     end
 
     create_table :import_mappings, id: :uuid do |t|
+      t.string :type, null: false
       t.string :key
       t.string :value
-      t.string :type
       t.boolean :create_when_empty, default: true
       t.references :import, null: false, type: :uuid
       t.references :mappable, polymorphic: true, type: :uuid

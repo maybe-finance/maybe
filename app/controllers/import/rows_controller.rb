@@ -4,6 +4,7 @@ class Import::RowsController < ApplicationController
   def update
     @row.assign_attributes(row_params)
     @row.save!(validate: false)
+    @row.sync_mappings
 
     redirect_to import_row_path(@row.import, @row)
   end

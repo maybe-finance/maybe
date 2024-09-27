@@ -1,3 +1,4 @@
 one:
   import: transaction
-  type: Import::TransactionRow
+  date: 01/01/2024
+  amount: 100

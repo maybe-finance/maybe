@@ -1,25 +1,31 @@
 class Import::AccountMapping < Import::Mapping
-  after_create :set_defaults
+  class << self
+    def sync_rows(rows)
+      accounts = rows.map(&:account).reject(&:blank?).uniq
 
-  def account
-    mappable.nil? && create_when_empty ? create_new_account : mappable
+      accounts.each do |account|
+        find_or_create_by(key: account)
+      end
+    end
   end
 
-  private
-    def set_defaults
-      self.create_when_empty = true
-      save!
-    end
+  def selectable_values
+    import.family.accounts.alphabetically.map { |account| [ account.name, account.id ] }
+  end
 
-    def family
-      import.family
-      end
+  def requires_selection?
+    true
+  end
 
-    def create_new_account
-      if import.type == "TradeImport"
-        family.accounts.new(name: key, balance: 0, currency: import.family.currency, accountable: Investment.new)
-      else
-        family.accounts.new(name: key, balance: 0, currency: import.family.currency, accountable: Depository.new)
-      end
-    end
+  def values_count
+    import.rows.where(account: key).count
+  end
+
+  def mappable_class
+    Account
+  end
+
+  def create_mappable!
+    import.family.accounts.create!(name: key, balance: 0, currency: import.family.currency, accountable: Depository.new, import: import)
+  end
 end

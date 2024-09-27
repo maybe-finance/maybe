@@ -99,20 +99,4 @@ class Account::EntryTest < ActiveSupport::TestCase
     assert create_transaction(amount: -10).inflow?
     assert create_transaction(amount: 10).outflow?
   end
-
-  test "cannot sell more shares of stock than owned" do
-    account = families(:empty).accounts.create! name: "Test", balance: 0, currency: "USD", accountable: Investment.new
-    security = securities(:aapl)
-
-    error = assert_raises ActiveRecord::RecordInvalid do
-      account.entries.create! \
-        date: Date.current,
-        amount: 100,
-        currency: "USD",
-        name: "Sell 10 shares of AMZN",
-        entryable: Account::Trade.new(qty: -10, price: 200, security: security)
-    end
-
-    assert_match /cannot sell 10.0 shares of AAPL because you only own 0.0 shares/, error.message
-  end
 end

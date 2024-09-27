@@ -2,28 +2,30 @@
   <%= render "imports/nav", import: @import %>
 <% end %>
 
+<% step_idx = (params[:step] || "1").to_i - 1 %>
+<% step_mapping_class = @import.mapping_steps[step_idx] %>
+
 <div class="space-y-12 mx-auto max-w-md mb-6">
   <div class="flex justify-center items-center gap-2">
-    <% @import.mapping_steps.each_with_index do |step, index| %>
-      <% is_active = (params[:step] || "1").to_i == index + 1 %>
-      <%= link_to import_confirm_path(@import, step: index + 1), class: "w-5 h-[3px] #{is_active ? 'bg-gray-900' : 'bg-gray-100'} rounded-xl hover:bg-gray-300 transition-colors duration-200" do %>
-        <span class="sr-only">Step <%= index + 1 %></span>
+    <% @import.mapping_steps.each_with_index do |step_mapping_class, idx| %>
+      <% is_active = step_idx == idx %>
+
+      <%= link_to url_for(step: idx + 1), class: "w-5 h-[3px] #{is_active ? 'bg-gray-900' : 'bg-gray-100'} rounded-xl hover:bg-gray-300 transition-colors duration-200" do %>
+        <span class="sr-only">Step <%= idx + 1 %></span>
       <% end %>
     <% end %>
   </div>
 
   <div class="text-center space-y-2">
-    <% current_step = (params[:step] || "1").to_i - 1 %>
-    <% step_name = @import.mapping_steps[current_step] %>
     <h1 class="text-3xl text-gray-900 font-medium">
-      <%= t(".#{step_name}_title", import_type: @import.type.underscore.humanize) %>
+      <%= t(".#{step_mapping_class.name.demodulize.underscore}_title", import_type: @import.type.underscore.humanize) %>
     </h1>
     <p class="text-gray-500 text-sm">
-      <%= t(".#{step_name}_description", import_type: @import.type.underscore.humanize) %>
+      <%= t(".#{step_mapping_class.name.demodulize.underscore}_description", import_type: @import.type.underscore.humanize) %>
     </p>
   </div>
 </div>
 
 <div class="max-w-screen-md mx-auto flex justify-center">
-  <%= render partial: permitted_import_step_path(@import, (params[:step] || "1").to_i - 1), locals: { import: @import } %>
+  <%= render partial: "import/confirms/mappings", locals: { import: @import, mapping_class: step_mapping_class, step_idx: step_idx } %>
 </div>

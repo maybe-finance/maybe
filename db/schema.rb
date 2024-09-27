@@ -305,9 +305,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_25_112218) do
   end
 
   create_table "import_mappings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "type", null: false
     t.string "key"
     t.string "value"
-    t.string "type"
     t.boolean "create_when_empty", default: true
     t.uuid "import_id", null: false
     t.string "mappable_type"
@@ -320,7 +320,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_25_112218) do
 
   create_table "import_rows", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "import_id", null: false
-    t.string "type", null: false
     t.string "account"
     t.string "date"
     t.string "qty"
@@ -363,6 +362,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_25_112218) do
     t.string "currency_col_label", default: "currency"
     t.string "date_format", default: "%m/%d/%Y"
     t.string "amount_sign_format", default: "incomes_are_positive"
+    t.string "error"
     t.index ["family_id"], name: "index_imports_on_family_id"
   end
 

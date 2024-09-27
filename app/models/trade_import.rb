@@ -1,24 +1,5 @@
 class TradeImport < Import
-  def generate_rows_from_csv
-    rows.destroy_all
-
-    mapped_rows = csv_rows.map do |row|
-      {
-        type: "Import::TradeRow",
-        account: row[account_col_label] || "Default Import Account",
-        date: row[date_col_label],
-        ticker: row[ticker_col_label],
-        qty: row[qty_col_label],
-        price: row[price_col_label],
-        currency: row[currency_col_label] || family.currency,
-        name: row[name_col_label] || "Imported trade"
-      }
-    end
-
-    rows.insert_all!(mapped_rows)
-  end
-
-  def publish
+  def import!
     transaction do
       rows.each do |row|
         account = family.accounts.find_by(name: row[:account]) || mappings.of_type(Import::AccountMapping).find_by(key: row[:account])&.account
@@ -50,30 +31,22 @@ class TradeImport < Import
   end
 
   def mapping_steps
-    %w[accounts]
+    [ Import::AccountMapping ]
   end
 
-  def csv_accounts
-    rows.map(&:account).reject(&:blank?).uniq
-  end
-
-  def csv_valid?
-    rows.any? && rows.map(&:valid?).all?
-  end
-
-  def configured?
-    uploaded? && rows.any?
-  end
-
-  def publishable?
-    cleaned?
+  def dry_run
+    {
+      transactions: rows.count,
+      accounts: Import::AccountMapping.for_import(self).creational.count
+    }
   end
 
   def csv_template
     template = <<-CSV
-      Date*,Qty*,Account,Name,Category,Tags
-      2024-01-01,-8.55,Checking,Starbucks,Food & Drink,Tag1|Tag2
-      2024-04-15,2000,Savings,Paycheck,Income,
+      date*,ticker*,qty*,price*,currency,account,name
+      05/15/2024,AAPL,10,150.00,USD,Trading Account,Apple Inc. Purchase
+      05/16/2024,GOOGL,-5,2500.00,USD,Investment Account,Alphabet Inc. Sale
+      05/17/2024,TSLA,2,700.50,USD,Retirement Account,Tesla Inc. Purchase
     CSV
 
     CSV.parse(template, headers: true)

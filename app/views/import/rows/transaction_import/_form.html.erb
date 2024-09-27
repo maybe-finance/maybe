@@ -9,15 +9,15 @@
     <% end %>
   <% end %>
 
-  <%= turbo_frame_tag dom_id(row, :name) do %>
-    <%= form_with **form_options do |form| %>
-      <%= form.text_field :name, "data-auto-submit-form-target": "auto", class: cell_class(row, :name), disabled: row.import.complete? %>
-    <% end %>
-  <% end %>
-
   <%= turbo_frame_tag dom_id(row, :amount) do %>
     <%= form_with **form_options do |form| %>
       <%= form.text_field :amount, "data-auto-submit-form-target": "auto", class: cell_class(row, :amount), disabled: row.import.complete? %>
+    <% end %>
+  <% end %>
+
+  <%= turbo_frame_tag dom_id(row, :name) do %>
+    <%= form_with **form_options do |form| %>
+      <%= form.text_field :name, "data-auto-submit-form-target": "auto", class: cell_class(row, :name), disabled: row.import.complete? %>
     <% end %>
   <% end %>
 

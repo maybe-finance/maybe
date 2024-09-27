@@ -1,0 +1,29 @@
+<%# locals: (import:, mapping_class:, step_idx:) %>
+
+<% mappings = mapping_class.for_import(import) %>
+<% is_last_step = step_idx == import.mapping_steps.count - 1 %>
+
+<div class="space-y-4">
+  <div class="bg-gray-25 rounded-xl p-1 space-y-1 w-[650px]">
+    <div class="grid grid-cols-3 gap-2 text-xs font-medium text-gray-500 uppercase px-5 py-3">
+      <p>CSV <%= mapping_label(mapping_class) %></p>
+      <p>Maybe <%= mapping_label(mapping_class) %></p>
+      <p class="justify-self-end">Rows</p>
+    </div>
+
+    <div class="border border-alpha-black-25 rounded-md shadow-xs divide-y divide-alpha-black-100 text-sm">
+      <% mappings.each do |mapping| %>
+        <div class="px-5 py-3 bg-white first:rounded-tl-xl first:rounded-tr-xl last:rounded-bl-xl last:rounded-br-xl">
+          <%= render partial: "import/mappings/form", locals: { mapping: mapping } %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="flex justify-center">
+    <%= link_to is_last_step ? import_path(import) : url_for(step: step_idx + 2), class: "btn btn--primary w-36 flex items-center justify-between gap-2" do %>
+      <span>Next</span>
+      <%= lucide_icon "arrow-right", class: "w-5 h-5" %>
+    <% end %>
+  </div>
+</div>
