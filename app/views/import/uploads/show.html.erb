@@ -28,7 +28,7 @@
                        placeholder: "Paste your CSV file contents here",
                        "data-auto-submit-form-target": "auto" %>
 
-          <%= form.submit %>
+          <%= form.submit "Upload CSV", disabled: @import.complete? %>
         <% end %>
 
       </div>
@@ -43,7 +43,7 @@
             </div>
           </label>
 
-          <%= form.submit %>
+          <%= form.submit "Upload CSV", disabled: @import.complete? %>
         <% end %>
       </div>
     </div>

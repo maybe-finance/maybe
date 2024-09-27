@@ -13,7 +13,6 @@ class Account::Entry < ApplicationRecord
   validates :date, :amount, :currency, presence: true
   validates :date, uniqueness: { scope: [ :account_id, :entryable_type ] }, if: -> { account_valuation? }
   validates :date, comparison: { greater_than: -> { min_supported_date } }
-  validate :trade_valid?, if: -> { account_trade? }
 
   scope :chronological, -> { order(:date, :created_at) }
   scope :reverse_chronological, -> { order(date: :desc, created_at: :desc) }
@@ -219,21 +218,5 @@ class Account::Entry < ApplicationRecord
         current: amount_money,
         previous: previous_entry&.amount_money,
         favorable_direction: account.favorable_direction
-    end
-
-    def trade_valid?
-      if account_trade.sell?
-        current_qty = account.holding_qty(account_trade.security)
-
-        if current_qty < account_trade.qty.abs
-          errors.add(
-            :base,
-            :invalid_sell_quantity,
-            sell_qty: account_trade.qty.abs,
-            ticker: account_trade.security.ticker,
-            current_qty: current_qty
-          )
-        end
-      end
     end
 end

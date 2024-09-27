@@ -45,4 +45,14 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Your import has started in the background.", flash[:notice]
     assert_redirected_to import_path(import)
   end
+
+  test "destroys import" do
+    import = imports(:transaction)
+
+    assert_difference "Import.count", -1 do
+      delete import_url(import)
+    end
+
+    assert_redirected_to imports_path
+  end
 end

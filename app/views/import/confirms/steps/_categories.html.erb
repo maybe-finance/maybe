@@ -27,7 +27,7 @@
                       [["Add as new category", "internal_new"]] +
                       Current.family.categories.map { |category| [category.name, category.id] },
                       { include_blank: "Leave uncategorized", selected: category_mapping.create_when_empty? ? "internal_new" : category_mapping.mappable_id },
-                      "data-auto-submit-form-target": "auto" %>
+                      "data-auto-submit-form-target": "auto", disabled: import.complete? %>
 
             <%= form.hidden_field :key, value: csv_category %>
             <%= form.hidden_field :type, value: Import::CategoryMapping %>

@@ -1,0 +1,73 @@
+<%# locals: (import:) %>
+
+<div class="text-center space-y-2 mb-4 mx-auto max-w-md">
+  <h1 class="text-3xl text-gray-900 font-medium"><%= t(".title") %></h1>
+  <p class="text-gray-500 text-sm"><%= t(".description") %></p>
+</div>
+
+<div class="mx-auto max-w-screen-sm space-y-4">
+  <div class="bg-gray-25 rounded-xl p-1 space-y-1">
+    <div class="flex justify-between items-center text-xs font-medium text-gray-500 uppercase px-5 py-3">
+      <p>item</p>
+      <p class="justify-self-end">count</p>
+    </div>
+
+    <div class="bg-white border border-alpha-black-25 rounded-lg shadow-xs text-sm">
+      <div class="flex items-center justify-between gap-2 bg-white px-5 py-3 rounded-tl-lg rounded-tr-lg">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-cyan-500/5 flex justify-center items-center">
+            <%= lucide_icon "credit-card", class: "text-cyan-500 w-5 h-5 shrink-0" %>
+          </div>
+
+          <p>Transactions</p>
+        </div>
+
+        <p class="justify-self-end"><%= import.rows.count %></p>
+      </div>
+
+      <div class="h-px bg-alpha-black-50 ml-14 mr-5"></div>
+
+      <div class="flex items-center justify-between gap-2 bg-white px-5 py-3">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-blue-500/5 flex justify-center items-center">
+            <%= lucide_icon "shapes", class: "text-blue-500 w-5 h-5 shrink-0" %>
+          </div>
+
+          <p>Categories</p>
+        </div>
+
+        <p class="justify-self-end"><%= import.mappings.of_type(Import::CategoryMapping).count %></p>
+      </div>
+
+      <div class="h-px bg-alpha-black-50 ml-14 mr-5"></div>
+
+      <div class="flex items-center justify-between gap-2 bg-white px-5 py-3">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-violet-500/5 flex justify-center items-center">
+            <%= lucide_icon "tags", class: "text-violet-500 w-5 h-5 shrink-0" %>
+          </div>
+
+          <p>Tags</p>
+        </div>
+
+        <p class="justify-self-end"><%= import.mappings.of_type(Import::TagMapping).count %></p>
+      </div>
+
+      <div class="h-px bg-alpha-black-50 ml-14 mr-5"></div>
+
+      <div class="flex items-center justify-between gap-2 bg-white px-5 py-3 rounded-bl-lg rounded-br-lg">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-orange-500/5 flex justify-center items-center">
+            <%= lucide_icon "layers", class: "text-orange-500 w-5 h-5 shrink-0" %>
+          </div>
+
+          <p>Accounts</p>
+        </div>
+
+        <p class="justify-self-end"><%= import.mappings.of_type(Import::AccountMapping).count %></p>
+      </div>
+    </div>
+  </div>
+
+  <%= button_to "Publish import", publish_import_path(import), class: "btn btn--primary w-full" %>
+</div>

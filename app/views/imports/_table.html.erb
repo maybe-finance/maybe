@@ -1,10 +1,10 @@
 <%# locals: (headers: [], rows: [], caption: nil) %>
 <div class="overflow-x-auto">
   <div class="border border-alpha-black-200 rounded-md shadow-xs text-sm bg-white w-full">
-    <div class="grid border-b border-b-alpha-black-200" style="grid-template-columns: repeat(<%= headers.length %>, minmax(max-content, 1fr))">
+    <div class="grid border-b border-b-alpha-black-200" style="grid-template-columns: repeat(<%= headers.length %>, minmax(0, 1fr))">
       <% headers.each_with_index do |header, index| %>
         <div class="
-          bg-gray-25 px-3 py-2.5 font-medium whitespace-nowrap
+          bg-gray-25 px-3 py-2.5 font-medium whitespace-nowrap overflow-x-auto
           first:rounded-tl-md last:rounded-tr-md
           <%= "border-r border-r-alpha-black-200" unless index == headers.length - 1 %>
         ">
@@ -14,10 +14,10 @@
     </div>
 
     <% rows.each_with_index do |row, row_index| %>
-      <div class="grid <%= "border-b border-b-alpha-black-200" if row_index < rows.length - 1 || caption %>" style="grid-template-columns: repeat(<%= headers.length %>, minmax(max-content, 1fr))">
+      <div class="grid <%= "border-b border-b-alpha-black-200" if row_index < rows.length - 1 || caption %>" style="grid-template-columns: repeat(<%= headers.length %>, minmax(0, 1fr))">
         <% row.each_with_index do |(header, value), col_index| %>
           <div class="
-            px-3 py-2.5 whitespace-nowrap
+            px-3 py-2.5 whitespace-nowrap overflow-x-auto flex items-start
             <%= "border-r border-r-alpha-black-200" unless col_index == row.length - 1 %>
             <%= "rounded-bl-md" if !caption && row_index == rows.length - 1 && col_index == 0 %>
             <%= "rounded-br-md" if !caption && row_index == rows.length - 1 && col_index == row.length - 1 %>
@@ -29,7 +29,7 @@
     <% end %>
 
     <% if caption %>
-      <div class="px-3 py-2.5 text-center text-xs text-gray-900 rounded-b-md italic bg-gray-25">
+      <div class="px-3 py-2.5 text-center text-xs text-gray-900 rounded-b-md italic bg-gray-25 overflow-x-auto">
         <%= caption %>
       </div>
     <% end %>

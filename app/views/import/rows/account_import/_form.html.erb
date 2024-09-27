@@ -5,25 +5,25 @@
 <div class="grid grid-cols-4 divide-x divide-alpha-black-200 group">
   <%= turbo_frame_tag dom_id(row, :entity_type) do %>
     <%= form_with **form_options do |form| %>
-      <%= form.text_field :entity_type, "data-auto-submit-form-target": "auto", class: ["group-first:rounded-tl-xl group-last:rounded-bl-xl", cell_class(row, :entity_type)].join(" ") %>
+      <%= form.text_field :entity_type, "data-auto-submit-form-target": "auto", class: ["group-first:rounded-tl-xl group-last:rounded-bl-xl", cell_class(row, :entity_type)].join(" "), disabled: row.import.complete? %>
     <% end %>
   <% end %>
 
   <%= turbo_frame_tag dom_id(row, :name) do %>
     <%= form_with **form_options do |form| %>
-      <%= form.text_field :name, "data-auto-submit-form-target": "auto", class: cell_class(row, :name) %>
+      <%= form.text_field :name, "data-auto-submit-form-target": "auto", class: cell_class(row, :name), disabled: row.import.complete? %>
     <% end %>
   <% end %>
 
   <%= turbo_frame_tag dom_id(row, :amount) do %>
     <%= form_with **form_options do |form| %>
-      <%= form.text_field :amount, "data-auto-submit-form-target": "auto", class: cell_class(row, :amount) %>
+      <%= form.text_field :amount, "data-auto-submit-form-target": "auto", class: cell_class(row, :amount), disabled: row.import.complete? %>
     <% end %>
   <% end %>
 
   <%= turbo_frame_tag dom_id(row, :currency) do %>
     <%= form_with **form_options do |form| %>
-      <%= form.text_field :currency, "data-auto-submit-form-target": "auto", class: cell_class(row, :currency) %>
+      <%= form.text_field :currency, "data-auto-submit-form-target": "auto", class: cell_class(row, :currency), disabled: row.import.complete? %>
     <% end %>
   <% end %>
 </div>

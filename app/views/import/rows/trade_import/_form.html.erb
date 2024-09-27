@@ -5,43 +5,43 @@
 <div class="grid grid-cols-7 divide-x divide-alpha-black-200 group">
   <%= turbo_frame_tag dom_id(row, :date) do %>
     <%= form_with **form_options do |form| %>
-      <%= form.text_field :date, "data-auto-submit-form-target": "auto", title: "Must be in the format: #{row.import.date_format}", class: ["group-first:rounded-tl-xl group-last:rounded-bl-xl", cell_class(row, :date)].join(" ") %>
+      <%= form.text_field :date, "data-auto-submit-form-target": "auto", title: "Must be in the format: #{row.import.date_format}", class: ["group-first:rounded-tl-xl group-last:rounded-bl-xl", cell_class(row, :date)].join(" "), disabled: row.import.complete? %>
     <% end %>
   <% end %>
 
   <%= turbo_frame_tag dom_id(row, :ticker) do %>
     <%= form_with **form_options do |form| %>
-      <%= form.text_field :ticker, "data-auto-submit-form-target": "auto", class: cell_class(row, :ticker) %>
+      <%= form.text_field :ticker, "data-auto-submit-form-target": "auto", class: cell_class(row, :ticker), disabled: row.import.complete? %>
     <% end %>
   <% end %>
 
   <%= turbo_frame_tag dom_id(row, :qty) do %>
     <%= form_with **form_options do |form| %>
-      <%= form.text_field :qty, "data-auto-submit-form-target": "auto", class: cell_class(row, :qty) %>
+      <%= form.text_field :qty, "data-auto-submit-form-target": "auto", class: cell_class(row, :qty), disabled: row.import.complete? %>
     <% end %>
   <% end %>
 
   <%= turbo_frame_tag dom_id(row, :price) do %>
     <%= form_with **form_options do |form| %>
-      <%= form.text_field :price, "data-auto-submit-form-target": "auto", class: cell_class(row, :price) %>
+      <%= form.text_field :price, "data-auto-submit-form-target": "auto", class: cell_class(row, :price), disabled: row.import.complete? %>
     <% end %>
   <% end %>
 
   <%= turbo_frame_tag dom_id(row, :currency) do %>
     <%= form_with **form_options do |form| %>
-      <%= form.text_field :currency, "data-auto-submit-form-target": "auto", class: cell_class(row, :currency) %>
+      <%= form.text_field :currency, "data-auto-submit-form-target": "auto", class: cell_class(row, :currency), disabled: row.import.complete? %>
     <% end %>
   <% end %>
 
   <%= turbo_frame_tag dom_id(row, :account) do %>
     <%= form_with **form_options do |form| %>
-      <%= form.text_field :account, "data-auto-submit-form-target": "auto", class: cell_class(row, :account) %>
+      <%= form.text_field :account, "data-auto-submit-form-target": "auto", class: cell_class(row, :account), disabled: row.import.complete? %>
     <% end %>
   <% end %>
 
   <%= turbo_frame_tag dom_id(row, :name) do %>
     <%= form_with **form_options do |form| %>
-      <%= form.text_field :name, "data-auto-submit-form-target": "auto", class: cell_class(row, :name) %>
+      <%= form.text_field :name, "data-auto-submit-form-target": "auto", class: cell_class(row, :name), disabled: row.import.complete? %>
     <% end %>
   <% end %>
 </div>

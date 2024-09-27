@@ -1,5 +1,5 @@
 class ImportsController < ApplicationController
-  before_action :set_import, only: %i[show publish]
+  before_action :set_import, only: %i[show publish destroy]
 
   def publish
     @import.publish_later
@@ -25,6 +25,12 @@ class ImportsController < ApplicationController
 
   def show
     redirect_to import_confirm_path(@import), alert: "Please finalize your mappings before proceeding." unless @import.publishable?
+  end
+
+  def destroy
+    @import.destroy
+
+    redirect_to imports_path, notice: "Your import has been deleted."
   end
 
   private

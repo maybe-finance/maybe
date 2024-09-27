@@ -26,7 +26,7 @@
                       [["Add as new account", "internal_new"]] +
                       Current.family.accounts.map { |account| [account.name, account.id] },
                       { include_blank: "Select an account", selected: account_mapping.create_when_empty? ? "internal_new" : account_mapping.mappable_id },
-                      "data-auto-submit-form-target": "auto" %>
+                      "data-auto-submit-form-target": "auto", disabled: import.complete? %>
 
             <%= form.hidden_field :key, value: csv_account %>
             <%= form.hidden_field :type, value: Import::AccountMapping %>

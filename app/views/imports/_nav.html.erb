@@ -4,8 +4,8 @@
   { name: "Upload", path: import_upload_path(import), is_complete: import.uploaded?, step_number: 1 },
   { name: "Configure", path: import_configuration_path(import), is_complete: import.configured?, step_number: 2 },
   { name: "Clean", path: import_clean_path(import), is_complete: import.cleaned?, step_number: 3 },
-  { name: "Mappings", path: import_confirm_path(import), is_complete: import.complete?, step_number: 4 },
-  { name: "Publish", path: import_path(import), is_complete: import.complete?, step_number: 5 }
+  { name: "Map", path: import_confirm_path(import), is_complete: import.complete?, step_number: 4 },
+  { name: "Confirm", path: import_path(import), is_complete: import.complete?, step_number: 5 }
 ] %>
 
 <ul class="flex items-center gap-2">

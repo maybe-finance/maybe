@@ -11,15 +11,18 @@ en:
         title: Configure your import
     confirms:
       show:
-        step1_description: Assign all of your imported file's categories to Maybe's
-          existing categories.  You can also add new categories or leave them uncategorized.
-        step1_title: Assign your categories
-        step2_description: Assign all of your imported file's tags to Maybe's existing
-          tags.  You can also add new tags or leave them uncategorized.
-        step2_title: Assign your tags
-        step3_description: Assign all of your imported file's accounts to Maybe's
+        account_types_description: Assign all of your imported file's account types
+          to Maybe's
+        account_types_title: Assign your account types
+        accounts_description: Assign all of your imported file's accounts to Maybe's
           existing accounts.  You can also add new accounts or leave them uncategorized.
-        step3_title: Assign your accounts
+        accounts_title: Assign your accounts
+        categories_description: Assign all of your imported file's categories to Maybe's
+          existing categories.  You can also add new categories or leave them uncategorized.
+        categories_title: Assign your categories
+        tags_description: Assign all of your imported file's tags to Maybe's existing
+          tags.  You can also add new tags or leave them uncategorized.
+        tags_title: Assign your tags
     uploads:
       show:
         description: Paste or upload your CSV file below.
@@ -55,7 +58,7 @@ en:
       resume: Resume latest import
       sources: Sources
       title: New CSV Import
-    show:
+    ready:
       description: Here's a summary of the new items that will be added to your account
         once you publish this import.
       title: Confirm your import data

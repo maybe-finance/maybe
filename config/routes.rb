@@ -39,7 +39,7 @@ Rails.application.routes.draw do
     resources :transfers, only: %i[new create destroy]
   end
 
-  resources :imports, only: %i[index new show create] do
+  resources :imports, only: %i[index new show create destroy] do
     post :publish, on: :member
 
     resource :upload, only: %i[show update], module: :import

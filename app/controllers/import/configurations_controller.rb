@@ -19,6 +19,6 @@ class Import::ConfigurationsController < ApplicationController
     end
 
     def import_params
-      params.require(:import).permit(:date_col_label, :date_format, :name_col_label, :category_col_label, :tags_col_label, :amount_col_label, :amount_sign_format, :account_col_label)
+      params.require(:import).permit(:date_col_label, :date_format, :name_col_label, :category_col_label, :tags_col_label, :amount_col_label, :amount_sign_format, :account_col_label, :notes_col_label, :entity_type_col_label)
     end
 end

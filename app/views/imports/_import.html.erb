@@ -1,7 +1,9 @@
 <div id="<%= dom_id import %>" class="flex items-center justify-between mx-4 py-4 border-b last:border-b-0 border-alpha-black-50">
 
   <div class="flex items-center gap-2 mb-1">
-    <p class="text-sm text-gray-900"><%= t(".label", type: import.type.titleize, datetime: import.updated_at.strftime("%b %-d, %Y at %l:%M %p")) %></p>
+    <%= link_to import_path(import), class: "text-sm text-gray-900 hover:underline" do %>
+      <%= t(".label", type: import.type.titleize, datetime: import.updated_at.strftime("%b %-d, %Y at %l:%M %p")) %>
+    <% end %>
 
     <% if import.pending? %>
       <span class="px-1 py text-xs rounded-full bg-gray-500/5 text-gray-500 border border-alpha-black-50">
@@ -31,15 +33,16 @@
         <span><%= t(".view") %></span>
       <% end %>
 
-      <%= button_to import_path(import),
+      <% unless import.complete? %>
+        <%= button_to import_path(import),
                       method: :delete,
                       class: "block w-full py-2 px-3 space-x-2 text-red-600 hover:bg-red-50 flex items-center rounded-lg",
                       data: { turbo_confirm: true } do %>
-        <%= lucide_icon "trash-2", class: "w-5 h-5" %>
+          <%= lucide_icon "trash-2", class: "w-5 h-5" %>
 
-        <span><%= t(".delete") %></span>
+          <span><%= t(".delete") %></span>
+        <% end %>
       <% end %>
     </div>
   <% end %>
-
 </div>

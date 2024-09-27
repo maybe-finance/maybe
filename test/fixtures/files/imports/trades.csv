@@ -1,0 +1,11 @@
+date,ticker,qty,price,amount,account,name
+2023-01-15,AAPL,10,150.25,1502.50,Brokerage Account,Buy Apple Inc
+2023-02-03,GOOGL,5,2100.75,10503.75,Retirement Account,Buy Alphabet Inc
+2023-03-10,MSFT,15,245.50,3682.50,Brokerage Account,Buy Microsoft Corp
+2023-04-05,AMZN,8,3200.00,25600.00,Brokerage Account,Buy Amazon.com Inc
+2023-05-20,TSLA,20,180.75,3615.00,Retirement Account,Buy Tesla Inc
+2023-06-15,AAPL,-5,170.50,-852.50,Brokerage Account,Sell Apple Inc
+2023-07-02,GOOGL,-2,2250.00,-4500.00,Retirement Account,Sell Alphabet Inc
+2023-08-18,NVDA,12,450.25,5403.00,Brokerage Account,Buy NVIDIA Corp
+2023-09-07,MSFT,-7,300.75,-2105.25,Brokerage Account,Sell Microsoft Corp
+2023-10-01,META,25,310.50,7762.50,Retirement Account,Buy Meta Platforms Inc

@@ -23,7 +23,7 @@
             <%= form.select :value,
                       Accountable::TYPES.map { |type| [type.titleize, type] },
                       { selected: account_mapping.value, include_blank: "Select an account type" },
-                      "data-auto-submit-form-target": "auto" %>
+                      "data-auto-submit-form-target": "auto", disabled: import.complete? %>
 
             <%= form.hidden_field :key, value: csv_account_type %>
             <%= form.hidden_field :type, value: Import::AccountTypeMapping %>
@@ -38,7 +38,7 @@
   </div>
 
   <div class="flex justify-center">
-    <%= link_to import_path(import), class: "btn btn--primary w-36 flex items-center justify-between gap-2" do %>
+    <%= link_to import_path(import), class: "btn btn--primary w-36 flex items-center justify-between gap-2", data: { test_id: "next-step" } do %>
       <span>Next</span>
       <%= lucide_icon "arrow-right", class: "w-5 h-5" %>
     <% end %>

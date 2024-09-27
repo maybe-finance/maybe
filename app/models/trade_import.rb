@@ -21,8 +21,9 @@ class TradeImport < Import
   def publish
     transaction do
       rows.each do |row|
-        account = mappings.of_type(Import::AccountMapping).find_by(key: row[:account])&.account
+        account = family.accounts.find_by(name: row[:account]) || mappings.of_type(Import::AccountMapping).find_by(key: row[:account])&.account
 
+        account.import = self if account.new_record?
         account.save! if account.new_record?
 
         security = Security.find_or_create_by(ticker: row[:ticker])
@@ -41,6 +42,11 @@ class TradeImport < Import
       self.status = :complete
       save!
     end
+  rescue => error
+    self.status = :failed
+    save!
+
+    raise error
   end
 
   def mapping_steps

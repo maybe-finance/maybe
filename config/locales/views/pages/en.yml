@@ -8,6 +8,7 @@ en:
         assets: Assets
         debts: Debts
       greeting: Welcome back, %{name}
+      import: Import
       income: Income
       investing: Investing (coming soon...)
       net_worth: Net Worth

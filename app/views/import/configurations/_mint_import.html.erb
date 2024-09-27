@@ -23,5 +23,5 @@
 
   <%= form.hidden_field :type, value: "MintImport" %>
 
-  <%= form.submit "Apply configuration", class: "w-full btn btn--primary" %>
+  <%= form.submit "Apply configuration", class: "w-full btn btn--primary", disabled: import.complete? %>
 <% end %>
