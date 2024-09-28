@@ -10,6 +10,7 @@ export default class extends Controller {
 
   connect() {
     this.autoTargets.forEach((element) => {
+      console.log(element.dataset.autosubmitTriggerEvent);
       const event =
         element.dataset.autosubmitTriggerEvent || this.triggerEventValue;
       element.addEventListener(event, this.handleInput);
@@ -25,6 +26,7 @@ export default class extends Controller {
   }
 
   handleInput = () => {
+    console.log("auto submit form controller handle input");
     clearTimeout(this.timeout);
     this.timeout = setTimeout(() => {
       this.element.requestSubmit();

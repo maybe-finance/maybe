@@ -1,11 +1,9 @@
 class Import::AccountTypeMapping < Import::Mapping
-  class << self
-    def sync_rows(rows)
-      account_types = rows.map(&:entity_type).reject(&:blank?).uniq
+  validates :value, presence: true
 
-      account_types.each do |account_type|
-        find_or_create_by(key: account_type)
-      end
+  class << self
+    def mapping_values(import)
+      import.rows.map(&:entity_type).uniq
     end
   end
 
@@ -18,10 +16,10 @@ class Import::AccountTypeMapping < Import::Mapping
   end
 
   def values_count
-    import.rows.where(account_type: key).count
+    import.rows.where(entity_type: key).count
   end
 
   def create_mappable!
-    Accountable.from_type(value).create! balance: 0, currency: import.family.currency, name: key
+    # no-op
   end
 end

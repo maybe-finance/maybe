@@ -1,16 +1,20 @@
 class Import::AccountMapping < Import::Mapping
-  class << self
-    def sync_rows(rows)
-      accounts = rows.map(&:account).reject(&:blank?).uniq
+  validates :mappable, presence: true, if: -> { key.blank? || !create_when_empty }
 
-      accounts.each do |account|
-        find_or_create_by(key: account)
-      end
+  class << self
+    def mapping_values(import)
+      import.rows.map(&:account).uniq
     end
   end
 
   def selectable_values
-    import.family.accounts.alphabetically.map { |account| [ account.name, account.id ] }
+    family_accounts = import.family.accounts.alphabetically.map { |account| [ account.name, account.id ] }
+
+    unless key.blank?
+      family_accounts.unshift [ "Add as new account", CREATE_NEW_KEY ]
+    end
+
+    family_accounts
   end
 
   def requires_selection?
@@ -26,6 +30,16 @@ class Import::AccountMapping < Import::Mapping
   end
 
   def create_mappable!
-    import.family.accounts.create!(name: key, balance: 0, currency: import.family.currency, accountable: Depository.new, import: import)
+    return unless creatable?
+
+    account = import.family.accounts.create_or_find_by!(name: key) do |new_account|
+      new_account.balance = 0
+      new_account.import = import
+      new_account.currency = import.family.currency
+      new_account.accountable = Depository.new
+    end
+
+    self.mappable = account
+    save!
   end
 end

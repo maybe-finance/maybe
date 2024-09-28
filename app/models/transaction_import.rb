@@ -1,19 +1,17 @@
 class TransactionImport < Import
   def import!
     transaction do
-      categories = Import::CategoryMapping.for_import(self).map { |mapping| mapping.find_or_create_mappable! }.compact.uniq
-      tags = Import::TagMapping.for_import(self).map { |mapping| mapping.find_or_create_mappable! }.compact.uniq
-      accounts = Import::AccountMapping.for_import(self).map { |mapping| mapping.find_or_create_mappable! }.compact.uniq
+      mappings.each(&:create_mappable!)
 
       rows.each do |row|
-        account = accounts.find { |account| account.name == row.account }
-        category = categories.find { |category| category.name == row.category }
-        tags = row.tags_list.map { |tag| tags.find { |tag| tag.name == tag } }.compact
+        account = mappings.accounts.mappable_for(row.account)
+        category = mappings.categories.mappable_for(row.category)
+        tags = row.tags_list.map { |tag| mappings.tags.mappable_for(tag) }.compact
 
         entry = account.entries.build \
           date: normalize_date_str(row.date),
           amount: row.amount.to_d,
-          name: row.name || "Imported transaction",
+          name: row.name,
           currency: account.currency,
           entryable: Account::Transaction.new(category: category, tags: tags, notes: row.notes),
           import: self
@@ -21,6 +19,10 @@ class TransactionImport < Import
         entry.save!
       end
     end
+  end
+
+  def column_keys
+    %i[date amount name currency category tags account notes]
   end
 
   def mapping_steps

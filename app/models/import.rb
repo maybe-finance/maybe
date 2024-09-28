@@ -52,23 +52,27 @@ class Import < ApplicationRecord
     }
   end
 
+  def column_keys
+    raise NotImplementedError, "Subclass must implement column_keys"
+  end
+
   def generate_rows_from_csv
     rows.destroy_all
 
     mapped_rows = csv_rows.map do |row|
       {
-        account: row[account_col_label] || default_empty_key,
-        date: row[date_col_label],
-        qty: row[qty_col_label],
-        ticker: row[ticker_col_label],
-        price: row[price_col_label],
-        amount: row[amount_col_label],
-        currency: row[currency_col_label] || default_currency,
-        name: row[name_col_label] || default_row_name,
-        category: row[category_col_label] || default_empty_key,
-        tags: row[tags_col_label] || default_empty_key,
-        entity_type: row[entity_type_col_label],
-        notes: row[notes_col_label]
+        account: row[account_col_label].to_s,
+        date: row[date_col_label].to_s,
+        qty: row[qty_col_label].to_s,
+        ticker: row[ticker_col_label].to_s,
+        price: row[price_col_label].to_s,
+        amount: row[amount_col_label].to_s,
+        currency: (row[currency_col_label] || default_currency).to_s,
+        name: (row[name_col_label] || default_row_name).to_s,
+        category: row[category_col_label].to_s,
+        tags: row[tags_col_label].to_s,
+        entity_type: row[entity_type_col_label].to_s,
+        notes: row[notes_col_label].to_s
       }
     end
 
@@ -76,8 +80,8 @@ class Import < ApplicationRecord
   end
 
   def sync_mappings
-    mapping_steps.each do |step|
-      step.sync_rows(self.rows)
+    mapping_steps.each do |mapping|
+      mapping.sync(self)
     end
   end
 
@@ -112,10 +116,6 @@ class Import < ApplicationRecord
 
     def default_currency
       family.currency
-    end
-
-    def default_empty_key
-      Import::Row::EMPTY_KEY
     end
 
     def normalize_date_str(date_str)

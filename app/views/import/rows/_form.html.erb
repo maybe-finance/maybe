@@ -1,0 +1,23 @@
+<%# locals: (row:) %>
+
+<div style="grid-template-columns: repeat(<%= row.import.column_keys.count %>, 1fr)" class="grid divide-x divide-alpha-black-200 group">
+  <% row.import.column_keys.each do |key| %>
+    <%= turbo_frame_tag dom_id(row, key) do %>
+      <%= form_with(
+            model: [row.import, row],
+            scope: :import_row,
+            url: import_row_path(row.import, row),
+            method: :patch,
+            data: {
+              controller: "auto-submit-form",
+              auto_submit_form_trigger_event_value: "blur"
+            }
+          ) do |form| %>
+        <%= form.text_field key,
+              "data-auto-submit-form-target": "auto",
+              class: cell_class(row, key),
+              disabled: row.import.complete? %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

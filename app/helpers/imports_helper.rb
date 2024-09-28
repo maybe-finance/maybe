@@ -8,6 +8,23 @@ module ImportsHelper
     }.fetch(mapping_class.name)
   end
 
+  def import_col_label(key)
+    {
+      date: "Date",
+      amount: "Amount",
+      name: "Name",
+      currency: "Currency",
+      category: "Category",
+      tags: "Tags",
+      account: "Account",
+      notes: "Notes",
+      qty: "Quantity",
+      ticker: "Ticker",
+      price: "Price",
+      entity_type: "Type"
+    }[key]
+  end
+
   def dry_run_resource(key)
     map = {
       transactions: DryRunResource.new(label: "Transactions", icon: "credit-card", text_class: "text-cyan-500", bg_class: "bg-cyan-500/5"),
@@ -19,37 +36,9 @@ module ImportsHelper
     map[key]
   end
 
-  def permitted_import_clean_path(import)
-    if permitted_import_types.include?(import.type.underscore)
-      "import/cleans/#{import.type.underscore}"
-    else
-      raise "Unknown import type: #{import.type}"
-    end
-  end
-
   def permitted_import_configuration_path(import)
     if permitted_import_types.include?(import.type.underscore)
       "import/configurations/#{import.type.underscore}"
-    else
-      raise "Unknown import type: #{import.type}"
-    end
-  end
-
-  def permitted_import_step_path(import, step_idx)
-    permitted_steps = %w[account_types accounts categories tags]
-
-    step = import.mapping_steps[step_idx]
-
-    if permitted_steps.include?(step)
-      "import/confirms/steps/#{step}"
-    else
-      raise "Unknown import step type: #{step}"
-    end
-  end
-
-  def permitted_import_row_form_path(import)
-    if permitted_import_types.include?(import.type.underscore)
-      "import/rows/#{import.type.underscore}/form"
     else
       raise "Unknown import type: #{import.type}"
     end

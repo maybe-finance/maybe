@@ -96,6 +96,15 @@ class ImportsTest < ApplicationSystemTestCase
     click_on "Next step"
 
     assert_selector "h1", text: "Assign your account types"
+
+    all("form").each do |form|
+      within(form) do
+        select = form.find("select")
+        select "Depository", from: select["id"]
+        sleep 1
+      end
+    end
+
     click_on "Next"
 
     click_on "Publish import"

@@ -34,7 +34,19 @@
   <% end %>
 
   <div class="pb-12">
-    <%= render partial: permitted_import_clean_path(@import), locals: { rows: @rows } %>
+    <div class="bg-gray-25 rounded-xl p-1 mb-6">
+      <div style="grid-template-columns: repeat(<%= @import.column_keys.count %>, 1fr)" class="grid items-center uppercase text-xs font-medium text-gray-500 py-3">
+        <% @import.column_keys.each do |key| %>
+          <div class="px-5"><%= import_col_label(key) %></div>
+        <% end %>
+      </div>
+
+      <div class="bg-white border border-alpha-black-200 rounded-xl shadow-xs divide-y divide-alpha-black-200">
+        <% @rows.each do |row| %>
+          <%= render "import/rows/form", row: row %>
+        <% end %>
+      </div>
+    </div>
   </div>
 
   <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full p-12">

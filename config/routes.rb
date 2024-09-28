@@ -48,7 +48,7 @@ Rails.application.routes.draw do
     resource :confirm, only: :show, module: :import
 
     resources :rows, only: %i[show update], module: :import
-    resources :mappings, only: %i[create update], module: :import
+    resources :mappings, only: :update, module: :import
   end
 
   resources :accounts do

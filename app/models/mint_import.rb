@@ -3,36 +3,32 @@ class MintImport < Import
 
   def import!
     transaction do
+      mappings.each(&:create_mappable!)
+
       rows.each do |row|
-        account = family.accounts.find_by(name: row[:account]) || mappings.of_type(Import::AccountMapping).find_by(key: row[:account])&.account
-
-        account.import = self if account.new_record?
-        account.save! if account.new_record?
-
-        category = family.categories.find_by(name: row[:category]) || mappings.of_type(Import::CategoryMapping).find_by(key: row[:category])&.category
-
-        tag_keys = row[:tags]&.split("|") || []
-        tags = tag_keys.map { |key| family.tags.find_by(name: key) || mappings.of_type(Import::TagMapping).find_by(key: key)&.tag }.compact
+        account = mappings.accounts.mappable_for(row.account)
+        category = mappings.categories.mappable_for(row.category)
+        tags = row.tags_list.map { |tag| mappings.tags.mappable_for(tag) }.compact
 
         entry = account.entries.build \
-          date: normalize_date_str(row[:date]),
-          amount: row[:amount].to_d,
-          name: row[:name] || "Imported transaction",
+          date: normalize_date_str(row.date),
+          amount: row.amount.to_d,
+          name: row.name,
           currency: account.currency,
-          entryable: Account::Transaction.new(category: category, tags: tags, notes: row[:notes]),
+          entryable: Account::Transaction.new(category: category, tags: tags, notes: row.notes),
           import: self
 
         entry.save!
       end
-
-      self.status = :complete
-      save!
     end
   end
 
-
   def mapping_steps
     [ Import::CategoryMapping, Import::TagMapping, Import::AccountMapping ]
+  end
+
+  def column_keys
+    %i[date amount name currency category tags account notes]
   end
 
   def csv_template

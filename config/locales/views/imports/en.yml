@@ -11,17 +11,19 @@ en:
         title: Configure your import
     confirms:
       show:
-        account_type_mapping_description: Assign all of your imported file's account types
-          to Maybe's
-        account_type_mapping_title: Assign your account types
-        account_mapping_description: Assign all of your imported file's accounts to Maybe's
-          existing accounts.  You can also add new accounts or leave them uncategorized.
+        account_mapping_description: Assign all of your imported file's accounts to
+          Maybe's existing accounts.  You can also add new accounts or leave them
+          uncategorized.
         account_mapping_title: Assign your accounts
-        category_mapping_description: Assign all of your imported file's categories to Maybe's
-          existing categories.  You can also add new categories or leave them uncategorized.
+        account_type_mapping_description: Assign all of your imported file's account
+          types to Maybe's
+        account_type_mapping_title: Assign your account types
+        category_mapping_description: Assign all of your imported file's categories
+          to Maybe's existing categories.  You can also add new categories or leave
+          them uncategorized.
         category_mapping_title: Assign your categories
-        tag_mapping_description: Assign all of your imported file's tags to Maybe's existing
-          tags.  You can also add new tags or leave them uncategorized.
+        tag_mapping_description: Assign all of your imported file's tags to Maybe's
+          existing tags.  You can also add new tags or leave them uncategorized.
         tag_mapping_title: Assign your tags
     uploads:
       show:

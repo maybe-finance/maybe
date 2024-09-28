@@ -1,17 +1,6 @@
 class Import::MappingsController < ApplicationController
   before_action :set_import
 
-  def create
-    @import.mappings.create! \
-      type: mapping_params[:type],
-      key: mapping_params[:key],
-      create_when_empty: create_when_empty,
-      mappable: mappable,
-      value: mapping_params[:value]
-
-    redirect_back_or_to import_confirm_path(@import)
-  end
-
   def update
     mapping = @import.mappings.find(params[:id])
 
@@ -33,14 +22,22 @@ class Import::MappingsController < ApplicationController
     end
 
     def mappable
-      return nil unless mapping_params[:mappable_type].present?
-
-      mappable_class = mapping_params[:mappable_type].constantize
+      return nil unless mappable_class.present?
 
       @mappable ||= mappable_class.find_by(id: mapping_params[:mappable_id], family: Current.family)
     end
 
     def create_when_empty
-      mapping_params[:mappable_id] == "internal_new"
+      return false unless mapping_class.present?
+
+      mapping_params[:mappable_id] == mapping_class::CREATE_NEW_KEY
+    end
+
+    def mappable_class
+      mapping_params[:mappable_type]&.constantize
+    end
+
+    def mapping_class
+      mapping_params[:type]&.constantize
     end
 end

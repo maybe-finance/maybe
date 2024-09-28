@@ -1,20 +1,22 @@
 class Import::CategoryMapping < Import::Mapping
   class << self
-    def sync_rows(rows)
-      categories = rows.map(&:category).reject(&:blank?).uniq
-
-      categories.each do |category|
-        find_or_create_by(key: category)
-      end
+    def mapping_values(import)
+      import.rows.map(&:category).uniq
     end
   end
 
   def selectable_values
-    import.family.categories.alphabetically.map { |category| [ category.name, category.id ] }
+    family_categories = import.family.categories.alphabetically.map { |category| [ category.name, category.id ] }
+
+    unless key.blank?
+      family_categories.unshift [ "Add as new category", CREATE_NEW_KEY ]
+    end
+
+    family_categories
   end
 
   def requires_selection?
-    true
+    false
   end
 
   def values_count
@@ -26,6 +28,9 @@ class Import::CategoryMapping < Import::Mapping
   end
 
   def create_mappable!
-    import.family.categories.create!(name: key)
+    return unless creatable?
+
+    self.mappable = import.family.categories.find_or_create_by!(name: key)
+    save!
   end
 end

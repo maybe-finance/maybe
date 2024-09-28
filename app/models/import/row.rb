@@ -1,18 +1,20 @@
 class Import::Row < ApplicationRecord
-  EMPTY_KEY = "[empty]".freeze
-
   belongs_to :import
 
-  scope :ordered, -> { order(created_at: :desc) }
+  scope :ordered, -> { order(:id) }
 
   def tags_list
-    tags.split("|").map(&:strip)
+    if tags.blank?
+      [ "" ]
+    else
+      tags.split("|").map(&:strip)
+    end
   end
 
   def sync_mappings
-    Import::CategoryMapping.sync_rows([ self ])
-    Import::TagMapping.sync_rows([ self ])
-    Import::AccountMapping.sync_rows([ self ])
-    Import::AccountTypeMapping.sync_rows([ self ])
+    Import::CategoryMapping.sync(import)
+    Import::TagMapping.sync(import)
+    Import::AccountMapping.sync(import)
+    Import::AccountTypeMapping.sync(import)
   end
 end

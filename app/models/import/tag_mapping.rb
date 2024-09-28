@@ -1,20 +1,22 @@
 class Import::TagMapping < Import::Mapping
   class << self
-    def sync_rows(rows)
-      tags = rows.map(&:tags_list).flatten.reject(&:blank?).uniq
-
-      tags.each do |tag|
-        find_or_create_by(key: tag)
-      end
+    def mapping_values(import)
+      import.rows.map(&:tags_list).flatten.uniq
     end
   end
 
   def selectable_values
-    import.family.tags.alphabetically.map { |tag| [ tag.name, tag.id ] }
+    family_tags = import.family.tags.alphabetically.map { |tag| [ tag.name, tag.id ] }
+
+    unless key.blank?
+      family_tags.unshift [ "Add as new tag", CREATE_NEW_KEY ]
+    end
+
+    family_tags
   end
 
   def requires_selection?
-    true
+    false
   end
 
   def values_count
@@ -26,6 +28,9 @@ class Import::TagMapping < Import::Mapping
   end
 
   def create_mappable!
-    import.family.tags.create!(name: key)
+    return unless creatable?
+
+    self.mappable = import.family.tags.find_or_create_by!(name: key)
+    save!
   end
 end

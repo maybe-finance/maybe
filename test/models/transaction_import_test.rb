@@ -41,15 +41,15 @@ class TransactionImportTest < ActiveSupport::TestCase
 
     @import.mappings.create! key: "TestCategory1", create_when_empty: true, type: "Import::CategoryMapping"
     @import.mappings.create! key: "TestCategory2", mappable: categories(:food_and_drink), type: "Import::CategoryMapping"
-    @import.mappings.create! key: "[empty]", create_when_empty: false, mappable: nil, type: "Import::CategoryMapping" # Leaves uncategorized
+    @import.mappings.create! key: "", create_when_empty: false, mappable: nil, type: "Import::CategoryMapping" # Leaves uncategorized
 
     @import.mappings.create! key: "TestTag1", create_when_empty: true, type: "Import::TagMapping"
     @import.mappings.create! key: "TestTag2", mappable: tags(:one), type: "Import::TagMapping"
-    @import.mappings.create! key: "[empty]", create_when_empty: false, mappable: nil, type: "Import::TagMapping" # Leaves untagged
+    @import.mappings.create! key: "", create_when_empty: false, mappable: nil, type: "Import::TagMapping" # Leaves untagged
 
     @import.mappings.create! key: "TestAccount1", create_when_empty: true, type: "Import::AccountMapping"
     @import.mappings.create! key: "TestAccount2", mappable: accounts(:depository), type: "Import::AccountMapping"
-    @import.mappings.create! key: "[empty]", mappable: accounts(:depository), type: "Import::AccountMapping" # Leaves unmapped
+    @import.mappings.create! key: "", mappable: accounts(:depository), type: "Import::AccountMapping"
 
     @import.reload
 

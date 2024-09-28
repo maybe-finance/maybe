@@ -2,26 +2,28 @@ class AccountImport < Import
   def import!
     transaction do
       rows.each do |row|
-        accountable = mappings.of_type(Import::AccountTypeMapping).find_by(key: row.entity_type)&.accountable
+        mapping = mappings.account_types.find_by(key: row.entity_type)
+        accountable_class = mapping.value.constantize
 
         account = family.accounts.build(
           name: row.name,
           balance: row.amount,
           currency: row.currency,
-          accountable: accountable,
+          accountable: accountable_class.new,
           import: self
         )
 
         account.save!
       end
-
-      self.status = :complete
-      save!
     end
   end
 
   def mapping_steps
     [ Import::AccountTypeMapping ]
+  end
+
+  def column_keys
+    %i[entity_type name amount currency]
   end
 
   def dry_run

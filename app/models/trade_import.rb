@@ -1,37 +1,31 @@
 class TradeImport < Import
   def import!
     transaction do
+      mappings.each(&:create_mappable!)
+
       rows.each do |row|
-        account = family.accounts.find_by(name: row[:account]) || mappings.of_type(Import::AccountMapping).find_by(key: row[:account])&.account
-
-        account.import = self if account.new_record?
-        account.save! if account.new_record?
-
-        security = Security.find_or_create_by(ticker: row[:ticker])
+        account = mappings.accounts.mappable_for(row.account)
+        security = Security.find_or_create_by(ticker: row.ticker)
 
         entry = account.entries.build \
-          date: normalize_date_str(row[:date]),
-          amount: row[:qty].to_d * row[:price].to_d,
-          name: row[:name],
+          date: normalize_date_str(row.date),
+          amount: row.qty.to_d * row.price.to_d,
+          name: row.name,
           currency: account.currency,
-          entryable: Account::Trade.new(security: security, qty: row[:qty], currency: account.currency, price: row[:price]),
+          entryable: Account::Trade.new(security: security, qty: row.qty, currency: account.currency, price: row.price),
           import: self
 
         entry.save!
       end
-
-      self.status = :complete
-      save!
     end
-  rescue => error
-    self.status = :failed
-    save!
-
-    raise error
   end
 
   def mapping_steps
     [ Import::AccountMapping ]
+  end
+
+  def column_keys
+    %i[date ticker qty price currency account name]
   end
 
   def dry_run
