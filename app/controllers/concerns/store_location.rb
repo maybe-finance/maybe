@@ -26,6 +26,6 @@ private
   end
 
   def fallback_path
-      root_path
+    root_path
   end
 end
