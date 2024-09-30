@@ -1,9 +1,10 @@
 require "test_helper"
 
 class ImportJobTest < ActiveJob::TestCase
-  include ImportTestHelper
-
   test "import is published" do
-    skip
+    import = imports(:transaction)
+    import.expects(:publish).once
+
+    ImportJob.perform_now(import)
   end
 end
