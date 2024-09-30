@@ -30,7 +30,7 @@
         </div>
       </div>
       <div class="border-t border-b border-alpha-black-100 p-1">
-        <%= link_to settings_profile_path, class: "flex gap-2 items-center hover:bg-gray-50 rounded-lg px-3 py-2" do %>
+        <%= link_to settings_profile_path(return_to: request.fullpath), class: "flex gap-2 items-center hover:bg-gray-50 rounded-lg px-3 py-2" do %>
           <%= lucide_icon("settings", class: "w-5 h-5 text-gray-500 shrink-0") %>
           <span class="text-gray-900 text-sm">Settings</span>
         <% end %>
