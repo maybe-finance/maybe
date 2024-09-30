@@ -9,16 +9,20 @@ class TransactionImport < Import
         tags = row.tags_list.map { |tag| mappings.tags.mappable_for(tag) }.compact
 
         entry = account.entries.build \
-          date: normalize_date_str(row.date),
-          amount: row.amount.to_d,
+          date: row.date_iso,
+          amount: row.signed_amount,
           name: row.name,
-          currency: account.currency,
+          currency: row.currency,
           entryable: Account::Transaction.new(category: category, tags: tags, notes: row.notes),
           import: self
 
         entry.save!
       end
     end
+  end
+
+  def required_column_keys
+    %i[date amount]
   end
 
   def column_keys

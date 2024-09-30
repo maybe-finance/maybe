@@ -15,7 +15,7 @@ class AddImportTypes < ActiveRecord::Migration[7.2]
       t.string :notes_col_label, default: "notes"
       t.string :currency_col_label, default: "currency"
       t.string :date_format, default: "%m/%d/%Y"
-      t.string :amount_sign_format, default: "incomes_are_positive"
+      t.string :signage_convention, default: "inflows_positive"
       t.string :error
     end
 

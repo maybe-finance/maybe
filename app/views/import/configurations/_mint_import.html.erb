@@ -13,7 +13,7 @@
 
   <div class="flex items-center gap-2">
     <%= form.select :amount_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Amount" }, required: true, disabled: true %>
-    <%= form.select :amount_sign_format, [["Incomes are negative", "incomes_are_negative"], ["Incomes are positive", "incomes_are_positive"]], { label: true }, disabled: true %>
+    <%= form.select :signage_convention, [["Incomes are negative", "inflows_negative"], ["Incomes are positive", "inflows_positive"]], { label: true }, disabled: true %>
   </div>
 
   <%= form.select :account_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Account (optional)" }, disabled: true %>

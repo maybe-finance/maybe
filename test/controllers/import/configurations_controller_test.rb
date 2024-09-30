@@ -22,7 +22,7 @@ class Import::ConfigurationsControllerTest < ActionDispatch::IntegrationTest
         category_col_label: "Category",
         tags_col_label: "Tags",
         amount_col_label: "Amount",
-        amount_sign_format: "income_is_positive",
+        signage_convention: "inflows_positive",
         account_col_label: "Account"
       }
     }

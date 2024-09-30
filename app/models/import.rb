@@ -1,5 +1,6 @@
 class Import < ApplicationRecord
   TYPES = %w[TransactionImport TradeImport AccountImport MintImport].freeze
+  SIGNAGE_CONVENTIONS = %w[inflows_positive inflows_negative]
 
   belongs_to :family
 
@@ -9,6 +10,7 @@ class Import < ApplicationRecord
 
   validates :type, inclusion: { in: TYPES }
   validates :col_sep, inclusion: { in: [ ",", ";" ] }
+  validates :signage_convention, inclusion: { in: SIGNAGE_CONVENTIONS }
 
   has_many :rows, dependent: :destroy
   has_many :mappings, dependent: :destroy
@@ -25,6 +27,8 @@ class Import < ApplicationRecord
 
   def publish
     import!
+
+    family.sync
 
     update! status: :complete
   rescue => error
@@ -52,6 +56,10 @@ class Import < ApplicationRecord
     }
   end
 
+  def required_column_keys
+    []
+  end
+
   def column_keys
     raise NotImplementedError, "Subclass must implement column_keys"
   end
@@ -76,7 +84,7 @@ class Import < ApplicationRecord
       }
     end
 
-    inserted_rows = rows.insert_all!(mapped_rows)
+    rows.insert_all!(mapped_rows)
   end
 
   def sync_mappings
@@ -116,10 +124,6 @@ class Import < ApplicationRecord
 
     def default_currency
       family.currency
-    end
-
-    def normalize_date_str(date_str)
-      Date.strptime(date_str, date_format).iso8601
     end
 
     def parsed_csv

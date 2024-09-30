@@ -7,7 +7,7 @@ class AccountImport < Import
 
         account = family.accounts.build(
           name: row.name,
-          balance: row.amount,
+          balance: row.amount.to_d,
           currency: row.currency,
           accountable: accountable_class.new,
           import: self
@@ -20,6 +20,10 @@ class AccountImport < Import
 
   def mapping_steps
     [ Import::AccountTypeMapping ]
+  end
+
+  def required_column_keys
+    %i[name amount]
   end
 
   def column_keys

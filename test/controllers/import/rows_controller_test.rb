@@ -18,7 +18,7 @@ class Import::RowsControllerTest < ActionDispatch::IntegrationTest
 
   test "show trade row" do
     import = @user.family.imports.create!(type: "TradeImport")
-    row = import.rows.create!
+    row = import.rows.create!(date: "01/01/2024", currency: "USD", qty: 10, price: 100, ticker: "AAPL")
 
     get import_row_path(import, row)
 
@@ -29,7 +29,7 @@ class Import::RowsControllerTest < ActionDispatch::IntegrationTest
 
   test "show account row" do
     import = @user.family.imports.create!(type: "AccountImport")
-    row = import.rows.create!
+    row = import.rows.create!(name: "Test Account", amount: 10000, currency: "USD")
 
     get import_row_path(import, row)
 
@@ -40,7 +40,7 @@ class Import::RowsControllerTest < ActionDispatch::IntegrationTest
 
   test "show mint row" do
     import = @user.family.imports.create!(type: "MintImport")
-    row = import.rows.create!
+    row = import.rows.create!(date: "01/01/2024", amount: 100, currency: "USD")
 
     get import_row_path(import, row)
 

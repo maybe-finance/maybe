@@ -8,11 +8,11 @@ class TradeImport < Import
         security = Security.find_or_create_by(ticker: row.ticker)
 
         entry = account.entries.build \
-          date: normalize_date_str(row.date),
-          amount: row.qty.to_d * row.price.to_d,
+          date: row.date_iso,
+          amount: row.signed_amount,
           name: row.name,
-          currency: account.currency,
-          entryable: Account::Trade.new(security: security, qty: row.qty, currency: account.currency, price: row.price),
+          currency: row.currency,
+          entryable: Account::Trade.new(security: security, qty: row.qty, currency: row.currency, price: row.price),
           import: self
 
         entry.save!
@@ -22,6 +22,10 @@ class TradeImport < Import
 
   def mapping_steps
     [ Import::AccountMapping ]
+  end
+
+  def required_column_keys
+    %i[date ticker qty price]
   end
 
   def column_keys
