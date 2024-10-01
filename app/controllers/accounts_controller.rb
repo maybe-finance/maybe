@@ -23,7 +23,10 @@ class AccountsController < ApplicationController
   end
 
   def new
-    @account = Account.new(accountable: Accountable.from_type(params[:type])&.new)
+    @account = Account.new(
+      accountable: Accountable.from_type(params[:type])&.new,
+      currency: Current.family.currency
+    )
 
     @account.accountable.address = Address.new if @account.accountable.is_a?(Property)
 
