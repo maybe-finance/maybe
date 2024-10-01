@@ -5,8 +5,8 @@ zh-HK:
       messages:
         record_invalid: 驗證失敗：%{errors}
         restrict_dependent_destroy:
-          has_one: 由於%{record}依賴此記錄，無法移除
           has_many: 由於%{record}依賴此記錄，無法移除
+          has_one: 由於%{record}依賴此記錄，無法移除
   date:
     abbr_day_names:
     - 週日
@@ -17,7 +17,7 @@ zh-HK:
     - 週五
     - 週六
     abbr_month_names:
-    - 
+    -
     - 1月
     - 2月
     - 3月
@@ -43,7 +43,7 @@ zh-HK:
       long: "%Y年%m月%d日"
       short: "%m月%d日"
     month_names:
-    - 
+    -
     - 一月
     - 二月
     - 三月
@@ -67,20 +67,20 @@ zh-HK:
       about_x_years: 約%{count}年
       almost_x_years: 接近%{count}年
       half_a_minute: 半分鐘
-      less_than_x_seconds: 不到%{count}秒
       less_than_x_minutes: 不到%{count}分鐘
+      less_than_x_seconds: 不到%{count}秒
       over_x_years: 超過%{count}年
-      x_seconds: "%{count}秒"
-      x_minutes: "%{count}分鐘"
       x_days: "%{count}天"
+      x_minutes: "%{count}分鐘"
       x_months: "%{count}個月"
+      x_seconds: "%{count}秒"
       x_years: "%{count}年"
     prompts:
-      second: 秒
-      minute: 分
-      hour: 時
       day: 日
+      hour: 時
+      minute: 分
       month: 月
+      second: 秒
       year: 年
   errors:
     format: "%{attribute}%{message}"

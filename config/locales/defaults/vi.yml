@@ -5,8 +5,8 @@ vi:
       messages:
         record_invalid: 'Có các lỗi sau: %{errors}'
         restrict_dependent_destroy:
-          has_one: Không thể xóa do tồn tại đối tượng phụ thuộc %{record}
           has_many: Không thể xóa do tồn tại một số đối tượng phụ thuộc %{record}
+          has_one: Không thể xóa do tồn tại đối tượng phụ thuộc %{record}
   date:
     abbr_day_names:
     - CN
@@ -17,7 +17,7 @@ vi:
     - Thứ 6
     - Thứ 7
     abbr_month_names:
-    - 
+    -
     - Thg 1
     - Thg 2
     - Thg 3
@@ -43,7 +43,7 @@ vi:
       long: "%d %B, %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - Tháng một
     - Tháng hai
     - Tháng ba
@@ -67,19 +67,19 @@ vi:
       about_x_years: khoảng %{count} năm
       almost_x_years: gần %{count} năm
       half_a_minute: 30 giây
-      less_than_x_seconds: chưa tới %{count} giây
       less_than_x_minutes: chưa tới %{count} phút
+      less_than_x_seconds: chưa tới %{count} giây
       over_x_years: hơn %{count} năm
-      x_seconds: "%{count} giây"
-      x_minutes: "%{count} phút"
       x_days: "%{count} ngày"
+      x_minutes: "%{count} phút"
       x_months: "%{count} tháng"
+      x_seconds: "%{count} giây"
     prompts:
-      second: Giây
-      minute: Phút
-      hour: Giờ
       day: Ngày
+      hour: Giờ
+      minute: Phút
       month: Tháng
+      second: Giây
       year: Năm
   errors:
     format: "%{attribute} %{message}"
@@ -102,11 +102,11 @@ vi:
       odd: phải là số lẻ
       other_than: cần phải khác %{count}
       present: cần phải để trắng
+      required: phải có
       taken: đã tồn tại
       too_long: quá dài (tối đa %{count} ký tự)
       too_short: quá ngắn (tối thiểu %{count} ký tự)
       wrong_length: độ dài không đúng (phải là %{count} ký tự)
-      required: "phải có"
     template:
       body: 'Có lỗi với các mục sau:'
       header: "%{count} lỗi ngăn không cho lưu %{model} này"

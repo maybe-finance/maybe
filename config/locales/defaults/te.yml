@@ -5,8 +5,8 @@ te:
       messages:
         record_invalid: 'ధ్రువీకరన విఫలమైనది: %{errors}'
         restrict_dependent_destroy:
-          has_one: రికార్డ్ను తొలగించలేరు, ఎందుకంటే ఒక ఆధారపడిన %{record} ఉంది
           has_many: రికార్డ్ను తొలగించలేరు, ఎందుకంటే ఆధారపడిన %{record} ఉంది
+          has_one: రికార్డ్ను తొలగించలేరు, ఎందుకంటే ఒక ఆధారపడిన %{record} ఉంది
   date:
     abbr_day_names:
     - ఆది
@@ -17,7 +17,7 @@ te:
     - శుక్ర
     - శని
     abbr_month_names:
-    - 
+    -
     - Jan
     - Feb
     - Mar
@@ -43,7 +43,7 @@ te:
       long: "%d %B %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - జనవరి
     - ఫిబ్రవరి
     - మార్చి
@@ -75,36 +75,36 @@ te:
         one: దాదాపు ఒక సంవత్సరం
         other: దాదాపు %{count} సంవత్సరాలు
       half_a_minute: అర నిమిషం
-      less_than_x_seconds:
-        one: ఒక క్షణం కన్నా తక్కువ
-        other: "%{count} క్షణాలు కన్నా తక్కువ"
       less_than_x_minutes:
         one: ఒక నిమిషం కన్నా తక్కువ
         other: "%{count} నిమిషాల కన్నా తక్కువ"
+      less_than_x_seconds:
+        one: ఒక క్షణం కన్నా తక్కువ
+        other: "%{count} క్షణాలు కన్నా తక్కువ"
       over_x_years:
         one: ఒక సంవత్సరం పైగా
         other: "%{count} సంవత్సరాల పైగా"
-      x_seconds:
-        one: ఒక క్షణం
-        other: "%{count} క్షణాలు"
-      x_minutes:
-        one: ఒక నిమిషం
-        other: "%{count} నిమిషాలు"
       x_days:
         one: ఒక రోజు
         other: "%{count} రోజులు"
+      x_minutes:
+        one: ఒక నిమిషం
+        other: "%{count} నిమిషాలు"
       x_months:
         one: ఒక నెల
         other: "%{count} నెలలు"
+      x_seconds:
+        one: ఒక క్షణం
+        other: "%{count} క్షణాలు"
       x_years:
         one: ఒక సంవత్సరం
         other: "%{count} సంవత్సరాలు"
     prompts:
-      second: క్షణాలు
-      minute: నిమిషం
-      hour: గంట
       day: రోజు
+      hour: గంట
+      minute: నిమిషం
       month: నెల
+      second: క్షణాలు
       year: సంవత్సరం
   errors:
     format: "%{attribute} %{message}"

@@ -14,7 +14,7 @@ hi:
     - शुक्र
     - शनि
     abbr_month_names:
-    - 
+    -
     - जन
     - फर
     - मार्च
@@ -40,7 +40,7 @@ hi:
       long: "%d %B %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - जनवरी
     - फरवरी
     - मार्च
@@ -72,33 +72,33 @@ hi:
         one: लगभग एक साल
         other: लगभग %{count} साल
       half_a_minute: एक आधा मिनट
-      less_than_x_seconds:
-        one: एक सेकेंड से कम
-        other: "%{count}  सेकेंड से कम"
       less_than_x_minutes:
         one: एक मिनट से कम
         other: "%{count} मिनट से कम"
+      less_than_x_seconds:
+        one: एक सेकेंड से कम
+        other: "%{count}  सेकेंड से कम"
       over_x_years:
         one: एक साल के ऊपर
         other: "%{count} साल से अधिक"
-      x_seconds:
-        one: एक सेकेंड
-        other: "%{count} सेकेंड"
-      x_minutes:
-        one: एक मिनट
-        other: "%{count} मिनट"
       x_days:
         one: एक दिन
         other: "%{count} दिन"
+      x_minutes:
+        one: एक मिनट
+        other: "%{count} मिनट"
       x_months:
         one: एक महीना
         other: "%{count} महीना"
+      x_seconds:
+        one: एक सेकेंड
+        other: "%{count} सेकेंड"
     prompts:
-      second: सेकेंड
-      minute: मिनट
-      hour: घंटा
       day: दिन
+      hour: घंटा
+      minute: मिनट
       month: माह
+      second: सेकेंड
       year: वर्ष
   errors:
     format: "%{attribute} %{message}"

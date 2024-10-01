@@ -5,8 +5,8 @@ eu:
       messages:
         record_invalid: 'Balioztatze arazoa: %{errors}'
         restrict_dependent_destroy:
-          has_one: Ezin da erregistroa ezabatu menpeko %{record} bat dagoelako
           has_many: Ezin da erregistroa ezabat menpeko %{record}ak daudelako
+          has_one: Ezin da erregistroa ezabatu menpeko %{record} bat dagoelako
   date:
     abbr_day_names:
     - Igan
@@ -17,7 +17,7 @@ eu:
     - Osti
     - Lar
     abbr_month_names:
-    - 
+    -
     - Urt
     - Ots
     - Mar
@@ -43,7 +43,7 @@ eu:
       long: "%Y(e)ko %Bk %e"
       short: "%b %e"
     month_names:
-    - 
+    -
     - Urtarrila
     - Otsaila
     - Martxoa
@@ -75,33 +75,33 @@ eu:
         one: ia urte bat
         other: ia %{count} urte
       half_a_minute: minutu erdi
-      less_than_x_seconds:
-        one: segundu bat baino gutxiago
-        other: "%{count} segundu baino gutxiago"
       less_than_x_minutes:
         one: "%{count} minutu bat baino gutxiago"
         other: "%{count} minutu baino gutxiago"
+      less_than_x_seconds:
+        one: segundu bat baino gutxiago
+        other: "%{count} segundu baino gutxiago"
       over_x_years:
         one: urte bat baino gehiago
         other: "%{count} urte baino gehiago"
-      x_seconds:
-        one: segundu bat
-        other: "%{count} segundu"
-      x_minutes:
-        one: minutu bat
-        other: "%{count} minutu"
       x_days:
         one: egun bat
         other: "%{count} egun"
+      x_minutes:
+        one: minutu bat
+        other: "%{count} minutu"
       x_months:
         one: hilabete bat
         other: "%{count} hilabete"
+      x_seconds:
+        one: segundu bat
+        other: "%{count} segundu"
     prompts:
-      second: Segundu
-      minute: Minutu
-      hour: Ordu
       day: Egun
+      hour: Ordu
+      minute: Minutu
       month: Hilabete
+      second: Segundu
       year: Urte
   errors:
     format: "%{attribute} %{message}"

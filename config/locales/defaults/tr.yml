@@ -5,8 +5,8 @@ tr:
       messages:
         record_invalid: 'Doğrulama başarısız oldu: %{errors}'
         restrict_dependent_destroy:
-          has_one: Bağlı bir kayıt %{record} bulunduğu için kayıt silinemedi
           has_many: Bağlı kayıtlar %{record} bulunduğu için kayıt silinemedi
+          has_one: Bağlı bir kayıt %{record} bulunduğu için kayıt silinemedi
   date:
     abbr_day_names:
     - Pzr
@@ -17,7 +17,7 @@ tr:
     - Cum
     - Cts
     abbr_month_names:
-    - 
+    -
     - Oca
     - Şub
     - Mar
@@ -43,7 +43,7 @@ tr:
       long: "%e %B %Y %A"
       short: "%e %b"
     month_names:
-    - 
+    -
     - Ocak
     - Şubat
     - Mart
@@ -75,36 +75,36 @@ tr:
         one: neredeyse %{count} yıl
         other: neredeyse %{count} yıl
       half_a_minute: yarım dakika
-      less_than_x_seconds:
-        one: "%{count} saniyeden az"
-        other: "%{count} saniyeden az"
       less_than_x_minutes:
         one: "%{count} dakikadan az"
         other: "%{count} dakikadan az"
+      less_than_x_seconds:
+        one: "%{count} saniyeden az"
+        other: "%{count} saniyeden az"
       over_x_years:
         one: "%{count} yıldan fazla"
         other: "%{count} yıldan fazla"
-      x_seconds:
-        one: "%{count} saniye"
-        other: "%{count} saniye"
-      x_minutes:
-        one: "%{count} dakika"
-        other: "%{count} dakika"
       x_days:
         one: "%{count} gün"
         other: "%{count} gün"
+      x_minutes:
+        one: "%{count} dakika"
+        other: "%{count} dakika"
       x_months:
         one: "%{count} ay"
         other: "%{count} ay"
+      x_seconds:
+        one: "%{count} saniye"
+        other: "%{count} saniye"
       x_years:
         one: "%{count} yıl"
         other: "%{count} yıl"
     prompts:
-      second: Saniye
-      minute: Dakika
-      hour: Saat
       day: Gün
+      hour: Saat
+      minute: Dakika
       month: Ay
+      second: Saniye
       year: Yıl
   errors:
     format: "%{attribute} %{message}"

@@ -14,7 +14,7 @@ uz:
     - Ju
     - Sh
     abbr_month_names:
-    - 
+    -
     - yan.
     - fev.
     - mart
@@ -40,7 +40,7 @@ uz:
       long: "%d %B %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - yanvar
     - fevral
     - mart
@@ -60,67 +60,67 @@ uz:
   datetime:
     distance_in_words:
       about_x_hours:
-        one: chamasi %{count} soat
         few: chamasi %{count} soat
         many: chamasi %{count} soat
+        one: chamasi %{count} soat
         other: chamasi %{count} soat
       about_x_months:
-        one: chamasi %{count} oy
         few: chamasi %{count} oy
         many: chamasi %{count} oy
+        one: chamasi %{count} oy
         other: chamasi %{count} oy
       about_x_years:
-        one: chamasi %{count} yil
         few: chamasi %{count} yil
         many: chamasi %{count} yil
+        one: chamasi %{count} yil
         other: chamasi %{count} yil
       almost_x_years:
-        one: deyarli %{count} yil
         few: deyarli %{count} yil
         many: deyarli %{count} yil
+        one: deyarli %{count} yil
         other: deyarli %{count} yil
       half_a_minute: bir daqiqadan kam
-      less_than_x_seconds:
-        one: "%{count} soniyadan kam"
-        few: "%{count} soniyadan kam"
-        many: "%{count} soniyadan kam"
-        other: "%{count} soniyadan kam"
       less_than_x_minutes:
-        one: "%{count} daqiqadan kam"
         few: "%{count} daqiqadan kam"
         many: "%{count} daqiqadan kam"
+        one: "%{count} daqiqadan kam"
         other: "%{count} daqiqadan kam"
+      less_than_x_seconds:
+        few: "%{count} soniyadan kam"
+        many: "%{count} soniyadan kam"
+        one: "%{count} soniyadan kam"
+        other: "%{count} soniyadan kam"
       over_x_years:
-        one: "%{count} yildan ziyod"
         few: "%{count} yildan ziyod"
         many: "%{count} yildan ziyod"
+        one: "%{count} yildan ziyod"
         other: "%{count} yildan ziyod"
-      x_seconds:
-        one: "%{count} soniya"
-        few: "%{count} soniya"
-        many: "%{count} soniya"
-        other: "%{count} soniya"
-      x_minutes:
-        one: "%{count} daqiqa"
-        few: "%{count} daqiqa"
-        many: "%{count} daqiqa"
-        other: "%{count} daqiqa"
       x_days:
-        one: "%{count} kun"
         few: "%{count} kun"
         many: "%{count} kun"
+        one: "%{count} kun"
         other: "%{count} kun"
+      x_minutes:
+        few: "%{count} daqiqa"
+        many: "%{count} daqiqa"
+        one: "%{count} daqiqa"
+        other: "%{count} daqiqa"
       x_months:
-        one: "%{count} oy"
         few: "%{count} oy"
         many: "%{count} oy"
+        one: "%{count} oy"
         other: "%{count} oy"
+      x_seconds:
+        few: "%{count} soniya"
+        many: "%{count} soniya"
+        one: "%{count} soniya"
+        other: "%{count} soniya"
     prompts:
-      second: soniya
-      minute: daqiqa
-      hour: soat
       day: kun
+      hour: soat
+      minute: daqiqa
       month: oy
+      second: soniya
       year: yil
   errors:
     format: "%{attribute} %{message}"
@@ -143,26 +143,26 @@ uz:
       odd: toq sonlar mumkin
       taken: band
       too_long:
-        one: uzunligi yetarligidan ortiq (%{count} ta simvoldan yuqori mumkin emas)
         few: uzunligi yetarligidan ortiq (%{count} ta simvoldan yuqori mumkin emas)
         many: uzunligi yetarligidan ortiq (%{count} ta simvoldan yuqori mumkin emas)
+        one: uzunligi yetarligidan ortiq (%{count} ta simvoldan yuqori mumkin emas)
         other: uzunligi yetarligidan ortiq (%{count} ta simvoldan yuqori mumkin emas)
       too_short:
-        one: uzunligi yetarli emas (%{count} ta simvoldan kam mumkin emas)
         few: uzunligi yetarli emas (%{count} ta simvoldan kam mumkin emas)
         many: uzunligi yetarli emas (%{count} ta simvoldan kam mumkin emas)
+        one: uzunligi yetarli emas (%{count} ta simvoldan kam mumkin emas)
         other: uzunligi yetarli emas (%{count} ta simvoldan kam mumkin emas)
       wrong_length:
-        one: uzunligi noto'gri (uzunligi %{count} simvolga teng bulishi kerak)
         few: uzunligi noto'gri (uzunligi %{count} simvolga teng bulishi kerak)
         many: uzunligi noto'gri (uzunligi %{count} simvolga teng bulishi kerak)
+        one: uzunligi noto'gri (uzunligi %{count} simvolga teng bulishi kerak)
         other: uzunligi noto'gri (uzunligi %{count} simvolga teng bulishi kerak)
     template:
       body: 'Quyidagilarda hatolar mavjud:'
       header:
-        one: "%{count} ta hato sababli %{model}:ni saqlab bulmadi"
         few: "%{count} ta hatolar sababli %{model}:ni saqlab bulmadi"
         many: "%{count} ta hatolar sababli %{model}:ni saqlab bulmadi"
+        one: "%{count} ta hato sababli %{model}:ni saqlab bulmadi"
         other: "%{count} ta hatolar sababli %{model}:ni saqlab bulmadi"
   helpers:
     select:
@@ -192,29 +192,29 @@ uz:
         format: "%n %u"
         units:
           billion:
-            one: milliard
             few: milliard
             many: milliard
+            one: milliard
             other: milliard
           million:
-            one: million
             few: million
             many: million
+            one: million
             other: million
           quadrillion:
-            one: kvadrillion
             few: kvadrillion
             many: kvadrillion
+            one: kvadrillion
             other: kvadrillion
           thousand:
-            one: ming
             few: ming
             many: ming
+            one: ming
             other: ming
           trillion:
-            one: trillion
             few: trillion
             many: trillion
+            one: trillion
             other: trillion
           unit: ''
       format:
@@ -226,9 +226,9 @@ uz:
         format: "%n %u"
         units:
           byte:
-            one: bayt
             few: bayt
             many: bayt
+            one: bayt
             other: bayt
           gb: GB
           kb: KB

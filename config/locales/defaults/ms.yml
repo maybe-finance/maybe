@@ -14,7 +14,7 @@ ms:
     - Jum
     - Sab
     abbr_month_names:
-    - 
+    -
     - Jan
     - Feb
     - Mac
@@ -40,7 +40,7 @@ ms:
       long: "%d %B, %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - Januari
     - Febuari
     - Mac
@@ -72,33 +72,33 @@ ms:
         one: hampir %{count} tahun
         other: hampir %{count} tahun
       half_a_minute: setengah minit
-      less_than_x_seconds:
-        one: kurang dari satu saat
-        other: kurang dari %{count} saat
       less_than_x_minutes:
         one: kurang dari satu minit
         other: kurang dari %{count} minit
+      less_than_x_seconds:
+        one: kurang dari satu saat
+        other: kurang dari %{count} saat
       over_x_years:
         one: lebih %{count} tahun
         other: lebih %{count} tahun
-      x_seconds:
-        one: "%{count} saat"
-        other: "%{count} saat"
-      x_minutes:
-        one: "%{count} minit"
-        other: "%{count} minit"
       x_days:
         one: "%{count} hari"
         other: "%{count} hari"
+      x_minutes:
+        one: "%{count} minit"
+        other: "%{count} minit"
       x_months:
         one: "%{count} bulan"
         other: "%{count} bulan"
+      x_seconds:
+        one: "%{count} saat"
+        other: "%{count} saat"
     prompts:
-      second: Saat
-      minute: Minit
-      hour: Jam
       day: Hari
+      hour: Jam
+      minute: Minit
       month: Bulan
+      second: Saat
       year: Tahun
   errors:
     format: "%{attribute} %{message}"

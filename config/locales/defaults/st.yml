@@ -5,8 +5,8 @@ st:
       messages:
         record_invalid: 'Netefatso e fosahetse: %{errors}'
         restrict_dependent_destroy:
-          has_one: E ka se hlakolehe hobane kamano e le ٰngoe teng le %{record}
           has_many: E ka se hlakolehe hobane kamano tse ngata li teng le %{record}
+          has_one: E ka se hlakolehe hobane kamano e le ٰngoe teng le %{record}
   date:
     abbr_day_names:
     - Son
@@ -17,7 +17,7 @@ st:
     - Laboh
     - Moq
     abbr_month_names:
-    - 
+    -
     - Phe
     - Hlako
     - Tlha
@@ -43,7 +43,7 @@ st:
       long: "%d %B %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - Pherekhong
     - Hlakola
     - Hlakubele
@@ -75,36 +75,36 @@ st:
         one: e tlo ba selemo se le seng
         other: e tlo ba lilemo tse %{count}
       half_a_minute: halofo ea motsotso
-      less_than_x_seconds:
-        one: ka tlase ho motsotsoana
-        other: ka tlase ho metsotsoana e %{count}
       less_than_x_minutes:
         one: ka tlase ho motsotso
         other: ka tlase ho metsotso e %{count}
+      less_than_x_seconds:
+        one: ka tlase ho motsotsoana
+        other: ka tlase ho metsotsoana e %{count}
       over_x_years:
         one: ka holimo ho selemo
         other: ka holimo ho lilemo tse %{count}
-      x_seconds:
-        one: motsotsoana o le mong
-        other: metsotsoana e %{count}
-      x_minutes:
-        one: motsotso o le mong
-        other: metsotso e %{count}
       x_days:
         one: letsatsi le le leng
         other: matsatsi a %{count}
+      x_minutes:
+        one: motsotso o le mong
+        other: metsotso e %{count}
       x_months:
         one: khoeli e le \'ngoe
         other: likhoeli tse %{count}
+      x_seconds:
+        one: motsotsoana o le mong
+        other: metsotsoana e %{count}
       x_years:
         one: selemo se le seng
         other: lilemo tse %{count}
     prompts:
-      second: Motsotsoana
-      minute: Motsotso
-      hour: Hora
       day: Letsatsi
+      hour: Hora
+      minute: Motsotso
       month: Khoeli
+      second: Motsotsoana
       year: Selemo
   errors:
     format: "%{attribute} %{message}"

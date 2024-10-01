@@ -5,8 +5,8 @@ ca:
       messages:
         record_invalid: 'La validació ha fallat: %{errors}'
         restrict_dependent_destroy:
-          has_one: No es pot eliminar el registre perquè existeix un %{record} dependent
           has_many: No es pot eliminar el registre perquè existeixen %{record} dependents
+          has_one: No es pot eliminar el registre perquè existeix un %{record} dependent
   date:
     abbr_day_names:
     - Dg
@@ -17,7 +17,7 @@ ca:
     - Dv
     - Ds
     abbr_month_names:
-    - 
+    -
     - Gen
     - Feb
     - Mar
@@ -43,7 +43,7 @@ ca:
       long: "%d de %B de %Y"
       short: "%d de %b"
     month_names:
-    - 
+    -
     - Gener
     - Febrer
     - Març
@@ -75,36 +75,36 @@ ca:
         one: quasi %{count} any
         other: quasi %{count} anys
       half_a_minute: mig minut
-      less_than_x_seconds:
-        one: menys d'%{count} segon
-        other: menys de %{count} segons
       less_than_x_minutes:
         one: menys d'%{count} minut
         other: menys de %{count} minuts
+      less_than_x_seconds:
+        one: menys d'%{count} segon
+        other: menys de %{count} segons
       over_x_years:
         one: més d'%{count} any
         other: més de %{count} anys
-      x_seconds:
-        one: "%{count} segon"
-        other: "%{count} segons"
-      x_minutes:
-        one: "%{count} minut"
-        other: "%{count} minuts"
       x_days:
         one: "%{count} dia"
         other: "%{count} dies"
+      x_minutes:
+        one: "%{count} minut"
+        other: "%{count} minuts"
       x_months:
         one: "%{count} mes"
         other: "%{count} mesos"
+      x_seconds:
+        one: "%{count} segon"
+        other: "%{count} segons"
       x_years:
         one: "%{count} year"
         other: "%{count} years"
     prompts:
-      second: segon
-      minute: minut
-      hour: hora
       day: dia
+      hour: hora
+      minute: minut
       month: mes
+      second: segon
       year: any
   errors:
     format: "%{attribute} %{message}"

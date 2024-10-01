@@ -5,8 +5,8 @@ nn:
       messages:
         record_invalid: 'Valideringa mislukka: %{errors}'
         restrict_dependent_destroy:
-          has_one: Kan ikkje sletta registreringa, fordi 1 avhengig %{record} finst.
           has_many: Kan ikkje sletta registreringa, fordi avhengige %{record} finst.
+          has_one: Kan ikkje sletta registreringa, fordi 1 avhengig %{record} finst.
   date:
     abbr_day_names:
     - sun
@@ -17,7 +17,7 @@ nn:
     - fre
     - lau
     abbr_month_names:
-    - 
+    -
     - jan
     - feb
     - mar
@@ -43,7 +43,7 @@ nn:
       long: "%e. %B %Y"
       short: "%e. %b"
     month_names:
-    - 
+    -
     - januar
     - februar
     - mars
@@ -73,33 +73,33 @@ nn:
         other: rundt %{count} år
       almost_x_years: nesten %{count} år
       half_a_minute: eit halvt minutt
-      less_than_x_seconds:
-        one: mindre enn %{count} sekund
-        other: mindre enn %{count} sekund
       less_than_x_minutes:
         one: mindre enn %{count} minutt
         other: mindre enn %{count} minutt
+      less_than_x_seconds:
+        one: mindre enn %{count} sekund
+        other: mindre enn %{count} sekund
       over_x_years:
         one: over %{count} år
         other: over %{count} år
-      x_seconds:
-        one: "%{count} sekund"
-        other: "%{count} sekund"
-      x_minutes:
-        one: "%{count} minutt"
-        other: "%{count} minutt"
       x_days:
         one: "%{count} dag"
         other: "%{count} dagar"
+      x_minutes:
+        one: "%{count} minutt"
+        other: "%{count} minutt"
       x_months:
         one: "%{count} månad"
         other: "%{count} månader"
+      x_seconds:
+        one: "%{count} sekund"
+        other: "%{count} sekund"
     prompts:
-      second: Sekund
-      minute: Minutt
-      hour: Time
       day: Dag
+      hour: Time
+      minute: Minutt
       month: Månad
+      second: Sekund
       year: År
   errors:
     format: "%{attribute} %{message}"

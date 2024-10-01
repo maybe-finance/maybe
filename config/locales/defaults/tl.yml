@@ -14,7 +14,7 @@ tl:
     - Biy
     - Sab
     abbr_month_names:
-    - 
+    -
     - Ene
     - Peb
     - Mar
@@ -40,7 +40,7 @@ tl:
       long: ika-%d ng %B, %Y
       short: ika-%d ng %b
     month_names:
-    - 
+    -
     - Enero
     - Pebrero
     - Marso
@@ -72,33 +72,33 @@ tl:
         one: halos isang taon
         other: halos %{count} taon
       half_a_minute: kalahating minuto
-      less_than_x_seconds:
-        one: mas mababa sa isang segundo
-        other: mas mababa sa %{count} segundo
       less_than_x_minutes:
         one: mas mababa sa isang minuto
         other: mas mababa sa %{count} minuto
+      less_than_x_seconds:
+        one: mas mababa sa isang segundo
+        other: mas mababa sa %{count} segundo
       over_x_years:
         one: higit sa isang taon
         other: higit %{count} taon
-      x_seconds:
-        one: isang segundo
-        other: "%{count} segundo"
-      x_minutes:
-        one: isang minuto
-        other: "%{count} minuto"
       x_days:
         one: isang araw
         other: "%{count} araw"
+      x_minutes:
+        one: isang minuto
+        other: "%{count} minuto"
       x_months:
         one: isang buwan
         other: "%{count} buwan"
+      x_seconds:
+        one: isang segundo
+        other: "%{count} segundo"
     prompts:
-      second: segundo
-      minute: minuto
-      hour: oras
       day: araw
+      hour: oras
+      minute: minuto
       month: buwan
+      second: segundo
       year: taon
   errors:
     format: "%{attribute} ay %{message}"

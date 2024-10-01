@@ -5,10 +5,10 @@ fr:
       messages:
         record_invalid: 'La validation a échoué : %{errors}'
         restrict_dependent_destroy:
-          has_one: Vous ne pouvez pas supprimer l'enregistrement car un(e) %{record}
-            dépendant(e) existe
           has_many: Vous ne pouvez pas supprimer l'enregistrement parce que les %{record}
             dépendants existent
+          has_one: Vous ne pouvez pas supprimer l'enregistrement car un(e) %{record}
+            dépendant(e) existe
   date:
     abbr_day_names:
     - dim
@@ -77,38 +77,38 @@ fr:
         one: presque un an
         other: presque %{count} ans
       half_a_minute: une demi‑minute
-      less_than_x_seconds:
-        zero: moins d'une seconde
-        one: moins d'une seconde
-        other: moins de %{count} secondes
       less_than_x_minutes:
-        zero: moins d'une minute
         one: moins d'une minute
         other: moins de %{count} minutes
+        zero: moins d'une minute
+      less_than_x_seconds:
+        one: moins d'une seconde
+        other: moins de %{count} secondes
+        zero: moins d'une seconde
       over_x_years:
         one: plus d'un an
         other: plus de %{count} ans
-      x_seconds:
-        one: "%{count} seconde"
-        other: "%{count} secondes"
-      x_minutes:
-        one: "%{count} minute"
-        other: "%{count} minutes"
       x_days:
         one: "%{count} jour"
         other: "%{count} jours"
+      x_minutes:
+        one: "%{count} minute"
+        other: "%{count} minutes"
       x_months:
         one: "%{count} mois"
         other: "%{count} mois"
+      x_seconds:
+        one: "%{count} seconde"
+        other: "%{count} secondes"
       x_years:
         one: "%{count} an"
         other: "%{count} ans"
     prompts:
-      second: Seconde
-      minute: Minute
-      hour: Heure
       day: Jour
+      hour: Heure
+      minute: Minute
       month: Mois
+      second: Seconde
       year: Année
   errors:
     format: "%{attribute} %{message}"

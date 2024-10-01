@@ -5,10 +5,10 @@ ur:
       messages:
         record_invalid: 'توثیق میں نا کا می: %{errors}'
         restrict_dependent_destroy:
-          has_one: ایک منحصر %{record} کی موجودگی کے باعث اس ریکارڈ کو حذف نہیں کیا
-            جا سکتا
           has_many: چند منحصر %{record}  کی موجودگی کے باعث اس ریکارڈ کو حذف نہیں
             کیا جا سکتا
+          has_one: ایک منحصر %{record} کی موجودگی کے باعث اس ریکارڈ کو حذف نہیں کیا
+            جا سکتا
   date:
     abbr_day_names:
     - اتوار
@@ -19,7 +19,7 @@ ur:
     - جمعہ
     - ہفتہ
     abbr_month_names:
-    - 
+    -
     - جنوری
     - فروری
     - مارچ
@@ -45,7 +45,7 @@ ur:
       long: "%d %B، %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - جنوری
     - فروری
     - مارچ
@@ -77,33 +77,33 @@ ur:
         one: تقریبا ایک سال
         other: تقریبا %{count} سال
       half_a_minute: آدھا منٹ
-      less_than_x_seconds:
-        one: ایک سیکنڈ سے کم
-        other: "%{count} سیکنڈوں سے کم"
       less_than_x_minutes:
         one: ایک مںٹ سے کم
         other: "%{count} مںٹوں سے کم"
+      less_than_x_seconds:
+        one: ایک سیکنڈ سے کم
+        other: "%{count} سیکنڈوں سے کم"
       over_x_years:
         one: ایک سال سے زیادہ
         other: "%{count} سالوں سے زیادہ"
-      x_seconds:
-        one: ایک سیکنڈ
-        other: "%{count} سیکنڈ"
-      x_minutes:
-        one: ایک منٹ
-        other: "%{count} منٹ"
       x_days:
         one: ایک دن
         other: "%{count} دن"
+      x_minutes:
+        one: ایک منٹ
+        other: "%{count} منٹ"
       x_months:
         one: ایک ماہ
         other: "%{count} ماہ"
+      x_seconds:
+        one: ایک سیکنڈ
+        other: "%{count} سیکنڈ"
     prompts:
-      second: سیکنڈ
-      minute: منٹ
-      hour: گھنٹہ
       day: دن
+      hour: گھنٹہ
+      minute: منٹ
       month: ماہ
+      second: سیکنڈ
       year: سال
   errors:
     format: "%{attribute} %{message}"

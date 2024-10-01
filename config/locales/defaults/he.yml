@@ -14,7 +14,7 @@ he:
     - ו
     - ש
     abbr_month_names:
-    - 
+    -
     - ינו
     - פבר
     - מרץ
@@ -40,7 +40,7 @@ he:
       long: "%e ב%B, %Y"
       short: "%e %b"
     month_names:
-    - 
+    -
     - ינואר
     - פברואר
     - מרץ
@@ -72,35 +72,35 @@ he:
         one: כמעט שנה
         other: כמעט %{count} שנים
       half_a_minute: חצי דקה
-      less_than_x_seconds:
-        zero: פחות משניה אחת
-        one: פחות משניה אחת
-        other: פחות מ- %{count} שניות
       less_than_x_minutes:
-        zero: פחות מדקה אחת
         one: פחות מדקה אחת
         other: פחות מ- %{count} דקות
+        zero: פחות מדקה אחת
+      less_than_x_seconds:
+        one: פחות משניה אחת
+        other: פחות מ- %{count} שניות
+        zero: פחות משניה אחת
       over_x_years:
         one: מעל שנה אחת
         other: מעל %{count} שנים
-      x_seconds:
-        one: שניה אחת
-        other: "%{count} שניות"
-      x_minutes:
-        one: דקה אחת
-        other: "%{count} דקות"
       x_days:
         one: יום אחד
         other: "%{count} ימים"
+      x_minutes:
+        one: דקה אחת
+        other: "%{count} דקות"
       x_months:
         one: חודש אחד
         other: "%{count} חודשים"
+      x_seconds:
+        one: שניה אחת
+        other: "%{count} שניות"
     prompts:
-      second: שניות
-      minute: דקה
-      hour: שעה
       day: יום
+      hour: שעה
+      minute: דקה
       month: חודש
+      second: שניות
       year: שנה
   errors:
     format: "%{attribute} %{message}"

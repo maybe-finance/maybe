@@ -14,7 +14,7 @@ sw:
     - Ij
     - J1
     abbr_month_names:
-    - 
+    -
     - Jan
     - Feb
     - Mac
@@ -40,7 +40,7 @@ sw:
       long: "%e %B, %Y"
       short: "%e %b"
     month_names:
-    - 
+    -
     - Mwezi wa kwanza
     - Mwezi wa pili
     - Mwezi wa tatu
@@ -72,33 +72,33 @@ sw:
         one: karibia mwaka
         other: karibia miaka %{count}
       half_a_minute: nusu dakika
-      less_than_x_seconds:
-        one: chini ya sekunde %{count}
-        other: chini ya sekunde %{count}
       less_than_x_minutes:
         one: chini ya dakika %{count}
         other: chini ya dakika %{count}
+      less_than_x_seconds:
+        one: chini ya sekunde %{count}
+        other: chini ya sekunde %{count}
       over_x_years:
         one: zaidi ya mwaka %{count}
         other: zaidi ya miaka %{count}
-      x_seconds:
-        one: sekunde %{count}
-        other: sekunde %{count}
-      x_minutes:
-        one: dakika %{count}
-        other: dakika %{count}
       x_days:
         one: siku %{count}
         other: siku %{count}
+      x_minutes:
+        one: dakika %{count}
+        other: dakika %{count}
       x_months:
         one: mwezi %{count}
         other: miezi %{count}
+      x_seconds:
+        one: sekunde %{count}
+        other: sekunde %{count}
     prompts:
-      second: Sekunde
-      minute: Dakika
-      hour: Saa
       day: Siku
+      hour: Saa
+      minute: Dakika
       month: Mwezi
+      second: Sekunde
       year: Mwaka
   errors:
     format: "%{attribute} %{message}"

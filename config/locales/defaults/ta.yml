@@ -5,8 +5,8 @@ ta:
       messages:
         record_invalid: 'சரிபார்த்தல் தோல்வியுற்றது: %{errors}'
         restrict_dependent_destroy:
-          has_one: பதிவை நீக்க முடியாது, ஏனெனில் ஒரு சார்பு %{record} உள்ளது
           has_many: பதிவை நீக்க முடியாது, ஏனெனில் சார்புகள் %{record} உள்ளது
+          has_one: பதிவை நீக்க முடியாது, ஏனெனில் ஒரு சார்பு %{record} உள்ளது
   date:
     abbr_day_names:
     - ஞாயிறு
@@ -17,7 +17,7 @@ ta:
     - வெள்ளி
     - சனி
     abbr_month_names:
-    - 
+    -
     - ஜன
     - பிப்
     - மார்ச்
@@ -43,7 +43,7 @@ ta:
       long: "%d %B %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - ஜனவரி
     - பிப்ரவரி
     - மார்ச்
@@ -75,33 +75,33 @@ ta:
         one: கிட்டத்தட்ட %{count}  ஆண்டு
         other: கிட்டத்தட்ட %{count}  ஆண்டுகள்
       half_a_minute: அரை நிமிடம்
-      less_than_x_seconds:
-        one: ஒரு வினாடிக்கும் குறைவாக
-        other: குறைவாக %{count} வினாடிகள்
       less_than_x_minutes:
         one: ஒரு நிமிடத்திற்கும் குறைவாக
         other: குறைவாக %{count} நிமிடங்கள்
+      less_than_x_seconds:
+        one: ஒரு வினாடிக்கும் குறைவாக
+        other: குறைவாக %{count} வினாடிகள்
       over_x_years:
         one: ஒரு  ஆண்டிற்கு மேலாக
         other: "%{count}  ஆண்டிற்கு மேலாக"
-      x_seconds:
-        one: "%{count} வினாடி"
-        other: "%{count} விநாடிகள்"
-      x_minutes:
-        one: "%{count} நிமிடம்"
-        other: "%{count} நிமிடங்கள்"
       x_days:
         one: "%{count} நாள்"
         other: "%{count} நாட்கள்"
+      x_minutes:
+        one: "%{count} நிமிடம்"
+        other: "%{count} நிமிடங்கள்"
       x_months:
         one: "%{count} மாதம்"
         other: "%{count} மாதங்கள்"
+      x_seconds:
+        one: "%{count} வினாடி"
+        other: "%{count} விநாடிகள்"
     prompts:
-      second: விநாடிகள்
-      minute: நிமிடம்
-      hour: மணி
       day: நாள்
+      hour: மணி
+      minute: நிமிடம்
       month: மாதம்
+      second: விநாடிகள்
       year: ஆண்டு
   errors:
     format: "%{attribute} %{message}"

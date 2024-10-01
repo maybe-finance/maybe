@@ -5,8 +5,8 @@ ne:
       messages:
         record_invalid: 'मान्य भएन: %{errors}'
         restrict_dependent_destroy:
-          has_one: रेकर्ड मेटाउन सक्दैन किनभने एउटा निर्भर %{record} अवस्थित छ
           has_many: रेकर्ड मेटाउन सक्दैन किनभने धेरै निर्भर %{record} अवस्थित छन
+          has_one: रेकर्ड मेटाउन सक्दैन किनभने एउटा निर्भर %{record} अवस्थित छ
   date:
     abbr_day_names:
     - आईत
@@ -17,7 +17,7 @@ ne:
     - शुक्र
     - शनि
     abbr_month_names:
-    - 
+    -
     - जन.
     - फेब्रु.
     - मार्च
@@ -43,7 +43,7 @@ ne:
       long: "%d %B %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - जनवरी
     - फेब्रुवरी
     - मार्च
@@ -75,33 +75,33 @@ ne:
         one: झण्डै %{count} बर्ष
         other: झण्डै %{count} बर्ष
       half_a_minute: आधा मिनेट
-      less_than_x_seconds:
-        one: "%{count} सेकेण्डभन्दा कम्ति"
-        other: "%{count} सेकेण्डभन्दा कम्ति"
       less_than_x_minutes:
         one: "%{count} मिनेटभन्दा कम्ति"
         other: "%{count} मिनेटभन्दा कम्ति"
+      less_than_x_seconds:
+        one: "%{count} सेकेण्डभन्दा कम्ति"
+        other: "%{count} सेकेण्डभन्दा कम्ति"
       over_x_years:
         one: "%{count} बर्षभन्दा बढी"
         other: "%{count} बर्षभन्दा बेसी"
-      x_seconds:
-        one: "%{count} सेकेण्ड"
-        other: "%{count} सेकेण्ड"
-      x_minutes:
-        one: "%{count} मिनेट"
-        other: "%{count} मिनेट"
       x_days:
         one: "%{count} दिन"
         other: "%{count} दिन"
+      x_minutes:
+        one: "%{count} मिनेट"
+        other: "%{count} मिनेट"
       x_months:
         one: "%{count} महिना"
         other: "%{count} महिना"
+      x_seconds:
+        one: "%{count} सेकेण्ड"
+        other: "%{count} सेकेण्ड"
     prompts:
-      second: सेकेण्ड
-      minute: मिनेट
-      hour: घण्टा
       day: दिन
+      hour: घण्टा
+      minute: मिनेट
       month: महिना
+      second: सेकेण्ड
       year: बर्ष
   errors:
     format: "%{attribute} %{message}"

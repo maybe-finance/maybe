@@ -14,7 +14,7 @@ eo:
     - ven
     - sab
     abbr_month_names:
-    - 
+    -
     - jan.
     - feb.
     - mar.
@@ -40,7 +40,7 @@ eo:
       long: "%e %B %Y"
       short: "%e %b"
     month_names:
-    - 
+    -
     - januaro
     - februaro
     - marto
@@ -72,35 +72,35 @@ eo:
         one: preskaŭ unu jaro
         other: preskaŭ %{count} jaroj
       half_a_minute: duona minuto
-      less_than_x_seconds:
-        zero: malpli ol unu sekundo
-        one: malpli ol unu sekundo
-        other: malpli ol %{count} sekundoj
       less_than_x_minutes:
-        zero: malpli ol unu minuto
         one: malpli ol unu minuto
         other: malpli ol %{count} minutoj
+        zero: malpli ol unu minuto
+      less_than_x_seconds:
+        one: malpli ol unu sekundo
+        other: malpli ol %{count} sekundoj
+        zero: malpli ol unu sekundo
       over_x_years:
         one: pli ol unu jaro
         other: pli ol %{count} jaroj
-      x_seconds:
-        one: "%{count} sekundo"
-        other: "%{count} sekundoj"
-      x_minutes:
-        one: "%{count} minuto"
-        other: "%{count} minutoj"
       x_days:
         one: "%{count} tago"
         other: "%{count} tagoj"
+      x_minutes:
+        one: "%{count} minuto"
+        other: "%{count} minutoj"
       x_months:
         one: "%{count} monato"
         other: "%{count} monatoj"
+      x_seconds:
+        one: "%{count} sekundo"
+        other: "%{count} sekundoj"
     prompts:
-      second: Sekundo
-      minute: Minuto
-      hour: Horo
       day: Tago
+      hour: Horo
+      minute: Minuto
       month: Monato
+      second: Sekundo
       year: Jaro
   errors:
     format: "%{attribute} %{message}"

@@ -5,8 +5,8 @@ sr:
       messages:
         record_invalid: 'Валидација није успела: %{errors}'
         restrict_dependent_destroy:
-          has_one: Није могуће обрисати запис јер постоји зависан %{record}
           has_many: Није могуће обрисати запис јер постоје зависни %{record}
+          has_one: Није могуће обрисати запис јер постоји зависан %{record}
   date:
     abbr_day_names:
     - Нед
@@ -17,7 +17,7 @@ sr:
     - Пет
     - Суб
     abbr_month_names:
-    - 
+    -
     - Јан
     - Феб
     - Мар
@@ -43,7 +43,7 @@ sr:
       long: "%B %e, %Y"
       short: "%e %b"
     month_names:
-    - 
+    -
     - Јануар
     - Фабруар
     - Март
@@ -63,70 +63,70 @@ sr:
   datetime:
     distance_in_words:
       about_x_hours:
-        one: око %{count} сат
         few: око %{count} сата
         many: око %{count} сати
+        one: око %{count} сат
         other: око %{count} сати
       about_x_months:
-        one: око %{count} месец
         few: око %{count} месеца
         many: око %{count} месеци
+        one: око %{count} месец
         other: око %{count} месеци
       about_x_years:
-        one: око %{count} године
         few: око %{count} године
         many: око %{count} година
+        one: око %{count} године
         other: око %{count} година
       almost_x_years:
-        one: скоро %{count} година
         few: скоро %{count} године
         many: скоро %{count} година
+        one: скоро %{count} година
         other: скоро %{count} година
       half_a_minute: пола минуте
-      less_than_x_seconds:
-        one: мање од %{count} секунд
-        few: мање од %{count} секунде
-        many: мање од %{count} секунди
-        other: мање од %{count} секунди
       less_than_x_minutes:
-        one: мање од %{count} минут
         few: мање од %{count} минута
         many: мање од %{count} минута
+        one: мање од %{count} минут
         other: мање од %{count} минута
+      less_than_x_seconds:
+        few: мање од %{count} секунде
+        many: мање од %{count} секунди
+        one: мање од %{count} секунд
+        other: мање од %{count} секунди
       over_x_years:
-        one: преко %{count} године
         few: преко %{count} године
         many: преко %{count} година
+        one: преко %{count} године
         other: преко %{count} година
-      x_seconds:
-        one: "%{count} секунда"
-        few: "%{count} секунде"
-        many: "%{count} секунди"
-        other: "%{count} секунди"
-      x_minutes:
-        one: "%{count} минут"
-        few: "%{count} минута"
-        many: "%{count} минута"
-        other: "%{count} минута"
       x_days:
-        one: "%{count} дан"
         few: "%{count} дана"
         many: "%{count} дана"
+        one: "%{count} дан"
         other: "%{count} дана"
+      x_minutes:
+        few: "%{count} минута"
+        many: "%{count} минута"
+        one: "%{count} минут"
+        other: "%{count} минута"
       x_months:
-        one: "%{count} месец"
         few: "%{count} месеца"
         many: "%{count} месеци"
+        one: "%{count} месец"
         other: "%{count} месеци"
+      x_seconds:
+        few: "%{count} секунде"
+        many: "%{count} секунди"
+        one: "%{count} секунда"
+        other: "%{count} секунди"
     prompts:
-      second: Секунд
-      minute: Минут
-      hour: Сат
       day: Дан
+      hour: Сат
+      minute: Минут
       month: Месец
+      second: Секунд
       year: Година
   errors:
-    format: "Поље %{attribute} %{message}"
+    format: Поље %{attribute} %{message}
     messages:
       accepted: мора бити прихваћено
       blank: не сме бити празано
@@ -150,26 +150,26 @@ sr:
       required: мора постојати
       taken: је већ заузето
       too_long:
-        one: је предугачко (максимум је %{count} знак)
         few: је предугачко (максимум је %{count} знака)
         many: је предугачко (максимум је %{count} знакова)
+        one: је предугачко (максимум је %{count} знак)
         other: је предугачко (максимум је %{count} знакова)
       too_short:
-        one: је прекратко (минимум је %{count} знак)
         few: је прекратко (минимум је %{count} знака)
         many: је прекратко (минимум је %{count} знакова)
+        one: је прекратко (минимум је %{count} знак)
         other: је прекратко (минимум је %{count} знакова)
       wrong_length:
-        one: није одговарајуће дужине (треба бити %{count} знак)
         few: није одговарајуће дужине (треба бити %{count} знака)
         many: није одговарајуће дужине (треба бити %{count} знакова)
+        one: није одговарајуће дужине (треба бити %{count} знак)
         other: није одговарајуће дужине (треба бити %{count} знакова)
     template:
       body: 'Молим Вас да проверите следећа поља:'
       header:
-        one: 'Нисам успео сачувати %{model}: %{count} грешка.'
         few: 'Нисам успео сачувати %{model}: %{count} грешке.'
         many: 'Нисам успео сачувати %{model}: %{count} грешки.'
+        one: 'Нисам успео сачувати %{model}: %{count} грешка.'
         other: 'Нисам успео сачувати %{model}: %{count} грешки.'
   helpers:
     select:
@@ -213,9 +213,9 @@ sr:
         format: "%n %u"
         units:
           byte:
-            one: бајт
             few: бајта
             many: бајтова
+            one: бајт
             other: бајтова
           gb: ГБ
           kb: КБ

@@ -5,8 +5,8 @@ az:
       messages:
         record_invalid: 'Yoxlama uğursuz oldu: %{errors}'
         restrict_dependent_destroy:
-          has_one: Əlaqəli %{record} yazı olduğundan bu yazını silmək mümkün deyil
           has_many: Əlaqəli %{record} yazılar olduğundan bu yazını silmək mümkün deyil
+          has_one: Əlaqəli %{record} yazı olduğundan bu yazını silmək mümkün deyil
   date:
     abbr_day_names:
     - B.
@@ -17,7 +17,7 @@ az:
     - C.
     - Ş.
     abbr_month_names:
-    - 
+    -
     - Yan
     - Fev
     - Mar
@@ -43,7 +43,7 @@ az:
       long: "%d %B %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - Yanvar
     - Fevral
     - Mart
@@ -75,33 +75,33 @@ az:
         one: təqribən %{count} il
         other: təqribən %{count} il
       half_a_minute: yarım dəqiqə
-      less_than_x_seconds:
-        one: "%{count} saniyədən az"
-        other: "%{count} saniyədən az"
       less_than_x_minutes:
         one: "%{count} dəqiqədən az"
         other: "%{count} dəqiqədən az"
+      less_than_x_seconds:
+        one: "%{count} saniyədən az"
+        other: "%{count} saniyədən az"
       over_x_years:
         one: "%{count} ildən çox"
         other: "%{count} ildən çox"
-      x_seconds:
-        one: "%{count} saniyə"
-        other: "%{count} saniyə"
-      x_minutes:
-        one: "%{count} dəqiqə"
-        other: "%{count} dəqiqə"
       x_days:
         one: "%{count} gün"
         other: "%{count} gün"
+      x_minutes:
+        one: "%{count} dəqiqə"
+        other: "%{count} dəqiqə"
       x_months:
         one: "%{count} ay"
         other: "%{count} ay"
+      x_seconds:
+        one: "%{count} saniyə"
+        other: "%{count} saniyə"
     prompts:
-      second: Saniyə
-      minute: Dəqiqə
-      hour: Saat
       day: Gün
+      hour: Saat
+      minute: Dəqiqə
       month: Ay
+      second: Saniyə
       year: İl
   errors:
     format: "%{attribute} %{message}"

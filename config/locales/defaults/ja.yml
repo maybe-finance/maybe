@@ -5,8 +5,8 @@ ja:
       messages:
         record_invalid: 'バリデーションに失敗しました: %{errors}'
         restrict_dependent_destroy:
-          has_one: "%{record}が存在しているので削除できません"
           has_many: "%{record}が存在しているので削除できません"
+          has_one: "%{record}が存在しているので削除できません"
   date:
     abbr_day_names:
     - 日
@@ -17,7 +17,7 @@ ja:
     - 金
     - 土
     abbr_month_names:
-    - 
+    -
     - 1月
     - 2月
     - 3月
@@ -43,7 +43,7 @@ ja:
       long: "%Y年%m月%d日(%a)"
       short: "%m/%d"
     month_names:
-    - 
+    -
     - 1月
     - 2月
     - 3月
@@ -67,20 +67,20 @@ ja:
       about_x_years: 約%{count}年
       almost_x_years: "%{count}年弱"
       half_a_minute: 30秒前後
-      less_than_x_seconds: "%{count}秒未満"
       less_than_x_minutes: "%{count}分未満"
+      less_than_x_seconds: "%{count}秒未満"
       over_x_years: "%{count}年以上"
-      x_seconds: "%{count}秒"
-      x_minutes: "%{count}分"
       x_days: "%{count}日"
+      x_minutes: "%{count}分"
       x_months: "%{count}ヶ月"
+      x_seconds: "%{count}秒"
       x_years: "%{count}年"
     prompts:
-      second: 秒
-      minute: 分
-      hour: 時
       day: 日
+      hour: 時
+      minute: 分
       month: 月
+      second: 秒
       year: 年
   errors:
     format: "%{attribute}%{message}"

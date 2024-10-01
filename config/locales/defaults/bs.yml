@@ -5,8 +5,8 @@ bs:
       messages:
         record_invalid: 'Validacija nije uspjela: %{errors}'
         restrict_dependent_destroy:
-          has_one: Nije moguće izbrisati zapis jer postoji ovisan %{record}
           has_many: Nije moguće izbrisati zapis jer postoje ovisni %{record}
+          has_one: Nije moguće izbrisati zapis jer postoji ovisan %{record}
   date:
     abbr_day_names:
     - ned
@@ -17,7 +17,7 @@ bs:
     - pet
     - sub
     abbr_month_names:
-    - 
+    -
     - jan
     - feb
     - mar
@@ -43,7 +43,7 @@ bs:
       long: "%e. %B %Y."
       short: "%e. %b. %Y."
     month_names:
-    - 
+    -
     - januar
     - februar
     - mart
@@ -63,67 +63,67 @@ bs:
   datetime:
     distance_in_words:
       about_x_hours:
-        one: oko sat
         few: oko %{count} sata
         many: oko %{count} sati
+        one: oko sat
         other: oko %{count} sati
       about_x_months:
-        one: oko mjesec
         few: oko %{count} mjeseca
         many: oko %{count} mjeseci
+        one: oko mjesec
         other: oko %{count} mjeseci
       about_x_years:
-        one: oko godine
         few: oko %{count} godine
         many: oko %{count} godina
+        one: oko godine
         other: oko %{count} godina
       almost_x_years:
-        one: skoro %{count} godina
         few: skoro %{count} godine
         many: skoro %{count} godina
+        one: skoro %{count} godina
         other: skoro %{count} godina
       half_a_minute: pola minute
-      less_than_x_seconds:
-        one: manje od sekunde
-        few: manje od %{count} sekunde
-        many: manje od %{count} sekundi
-        other: manje od %{count} sekundi
       less_than_x_minutes:
-        one: manje od minute
         few: manje od %{count} minute
         many: manje od %{count} minuta
+        one: manje od minute
         other: manje od %{count} minuta
+      less_than_x_seconds:
+        few: manje od %{count} sekunde
+        many: manje od %{count} sekundi
+        one: manje od sekunde
+        other: manje od %{count} sekundi
       over_x_years:
-        one: preko godine
         few: preko %{count} godine
         many: preko %{count} godina
+        one: preko godine
         other: preko %{count} godina
-      x_seconds:
-        one: "%{count} sekund"
-        few: "%{count} sekunde"
-        many: "%{count} sekundi"
-        other: "%{count} sekundi"
-      x_minutes:
-        one: "%{count} minut"
-        few: "%{count} minute"
-        many: "%{count} minuta"
-        other: "%{count} minuta"
       x_days:
-        one: "%{count} dan"
         few: "%{count} dana"
         many: "%{count} dana"
+        one: "%{count} dan"
         other: "%{count} dana"
+      x_minutes:
+        few: "%{count} minute"
+        many: "%{count} minuta"
+        one: "%{count} minut"
+        other: "%{count} minuta"
       x_months:
-        one: "%{count} mjesec"
         few: "%{count} mjeseca"
         many: "%{count} mjeseci"
+        one: "%{count} mjesec"
         other: "%{count} mjeseci"
+      x_seconds:
+        few: "%{count} sekunde"
+        many: "%{count} sekundi"
+        one: "%{count} sekund"
+        other: "%{count} sekundi"
     prompts:
-      second: sekundi
-      minute: minut
-      hour: sat
       day: dan
+      hour: sat
+      minute: minut
       month: mjesec
+      second: sekundi
       year: godina
   errors:
     format: "%{attribute} %{message}"
@@ -153,9 +153,9 @@ bs:
     template:
       body: 'Desili su se problemi sa sljedećim poljima:'
       header:
-        one: "%{count} greška je spriječila da se ovaj %{model} spremi"
         few: "%{count} greške su spriječile da se ovaj %{model} spremi"
         many: "%{count} grešaka je spriječilo da se ovaj %{model} spremi"
+        one: "%{count} greška je spriječila da se ovaj %{model} spremi"
         other: "%{count} grešaka je spriječilo da se ovaj %{model} spremi"
   helpers:
     select:
@@ -185,29 +185,29 @@ bs:
         format: "%n %u"
         units:
           billion:
-            one: milijarda
             few: milijarde
             many: milijardi
+            one: milijarda
             other: milijardi
           million:
-            one: milion
             few: miliona
             many: miliona
+            one: milion
             other: miliona
           quadrillion:
-            one: bilijarda
             few: bilijarde
             many: bilijardi
+            one: bilijarda
             other: bilijardi
           thousand:
-            one: hiljada
             few: hiljade
             many: hiljada
+            one: hiljada
             other: hiljada
           trillion:
-            one: bilion
             few: biliona
             many: biliona
+            one: bilion
             other: biliona
           unit: ''
       format:
@@ -219,9 +219,9 @@ bs:
         format: "%n %u"
         units:
           byte:
-            one: bajt
             few: bajta
             many: bajtova
+            one: bajt
             other: bajtova
           gb: GB
           kb: KB

@@ -14,7 +14,7 @@ or:
     - ଶୁକ୍ର
     - ଶନି
     abbr_month_names:
-    - 
+    -
     - ଜାନୁ
     - ଫେବରୁ
     - ମାର
@@ -40,7 +40,7 @@ or:
       long: "%B %d, %Y"
       short: "%b %d"
     month_names:
-    - 
+    -
     - ଜାନୁୟାରୀ
     - ଫେବୃୟାରୀ
     - ମାର୍ଚ଼
@@ -72,33 +72,33 @@ or:
         one: ଅଳ୍ପ ଉଣ %{count} ବର୍ଷ
         other: ଅଳ୍ପ ଉଣ %{count} ବର୍ଷ
       half_a_minute: ଦେଢ ମିନଟ୍
-      less_than_x_seconds:
-        one: "%{count} ସେକଣ୍ଢ ବାକ"
-        other: "%{count} ସେକଣ୍ଢ ବାକ"
       less_than_x_minutes:
         one: "%{count} ମିନଟ ବାକ"
         other: "%{count} ମିନଟ ବାକ"
+      less_than_x_seconds:
+        one: "%{count} ସେକଣ୍ଢ ବାକ"
+        other: "%{count} ସେକଣ୍ଢ ବାକ"
       over_x_years:
         one: "%{count} ବର୍ଷରୁ ଅଧିକ"
         other: "%{count} ବର୍ଷରୁ ଅଧିକ"
-      x_seconds:
-        one: "%{count} ସେକଣ୍ଢ"
-        other: "%{count} ସେକଣ୍ଢ"
-      x_minutes:
-        one: "%{count} ମିନଟ"
-        other: "%{count} ମିନଟ"
       x_days:
         one: "%{count}  ଦିନ"
         other: "%{count} ଦିନ"
+      x_minutes:
+        one: "%{count} ମିନଟ"
+        other: "%{count} ମିନଟ"
       x_months:
         one: "%{count} ମାସ"
         other: "%{count} ମାସ"
+      x_seconds:
+        one: "%{count} ସେକଣ୍ଢ"
+        other: "%{count} ସେକଣ୍ଢ"
     prompts:
-      second: ସେକଣ୍ଢ
-      minute: ମିନଟ
-      hour: ଘଣ୍ତ
       day: ଦିନ
+      hour: ଘଣ୍ତ
+      minute: ମିନଟ
       month: ମାସ
+      second: ସେକଣ୍ଢ
       year: ବର୍ଷ
   errors:
     format: "%{attribute} %{message}"

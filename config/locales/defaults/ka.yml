@@ -14,7 +14,7 @@ ka:
     - პარ
     - შაბ
     abbr_month_names:
-    - 
+    -
     - იანვ
     - თებ
     - მარტი
@@ -40,7 +40,7 @@ ka:
       long: "%d %B %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - იანვარი
     - თებერვალი
     - მარტი
@@ -72,36 +72,36 @@ ka:
         one: თითქმის %{count} წელი
         other: თითქმის %{count} წელი
       half_a_minute: ნახევარი წუთი
-      less_than_x_seconds:
-        one: "%{count} წამზე ნაკლები"
-        other: "%{count} წამზე ნაკლები"
       less_than_x_minutes:
         one: "%{count} წუთზე ნაკლები"
         other: "%{count} წუთზე ნაკლები"
+      less_than_x_seconds:
+        one: "%{count} წამზე ნაკლები"
+        other: "%{count} წამზე ნაკლები"
       over_x_years:
         one: "%{count} წელზე მეტი"
         other: "%{count} წელზე მეტი"
-      x_seconds:
-        one: "%{count} წამი"
-        other: "%{count} წამი"
-      x_minutes:
-        one: "%{count} წუთი"
-        other: "%{count} წუთი"
       x_days:
         one: "%{count} დღე"
         other: "%{count} დღე"
+      x_minutes:
+        one: "%{count} წუთი"
+        other: "%{count} წუთი"
       x_months:
         one: "%{count} თვე"
         other: "%{count} თვე"
+      x_seconds:
+        one: "%{count} წამი"
+        other: "%{count} წამი"
       x_years:
         one: "%{count} წელი"
         other: "%{count} წელი"
     prompts:
-      second: წამი
-      minute: წუთი
-      hour: საათი
       day: დღე
+      hour: საათი
+      minute: წუთი
       month: თვე
+      second: წამი
       year: წელი
   errors:
     format: "%{attribute} %{message}"

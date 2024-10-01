@@ -5,8 +5,10 @@ it-CH:
       messages:
         record_invalid: 'Validazione fallita: %{errors}'
         restrict_dependent_destroy:
-          has_one: Il record non può essere cancellato perchè esiste un %{record} dipendente
-          has_many: Il record non può essere cancellato perchè esistono %{record} dipendenti
+          has_many: Il record non può essere cancellato perchè esistono %{record}
+            dipendenti
+          has_one: Il record non può essere cancellato perchè esiste un %{record}
+            dipendente
   date:
     abbr_day_names:
     - Dom
@@ -17,7 +19,7 @@ it-CH:
     - Ven
     - Sab
     abbr_month_names:
-    - 
+    -
     - Gen
     - Feb
     - Mar
@@ -43,7 +45,7 @@ it-CH:
       long: "%d %B %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - Gennaio
     - Febbraio
     - Marzo
@@ -75,36 +77,36 @@ it-CH:
         one: circa %{count} anno
         other: circa %{count} anni
       half_a_minute: mezzo minuto
-      less_than_x_seconds:
-        one: meno di un secondo
-        other: meno di %{count} secondi
       less_than_x_minutes:
         one: meno di un minuto
         other: meno di %{count} minuti
+      less_than_x_seconds:
+        one: meno di un secondo
+        other: meno di %{count} secondi
       over_x_years:
         one: oltre un anno
         other: oltre %{count} anni
-      x_seconds:
-        one: "%{count} secondo"
-        other: "%{count} secondi"
-      x_minutes:
-        one: "%{count} minuto"
-        other: "%{count} minuti"
       x_days:
         one: "%{count} giorno"
         other: "%{count} giorni"
+      x_minutes:
+        one: "%{count} minuto"
+        other: "%{count} minuti"
       x_months:
         one: "%{count} mese"
         other: "%{count} mesi"
+      x_seconds:
+        one: "%{count} secondo"
+        other: "%{count} secondi"
       x_years:
         one: "%{count} anno"
         other: "%{count} anni"
     prompts:
-      second: Secondi
-      minute: Minuto
-      hour: Ora
       day: Giorno
+      hour: Ora
+      minute: Minuto
       month: Mese
+      second: Secondi
       year: Anno
   errors:
     format: "%{attribute} %{message}"

@@ -5,9 +5,9 @@ de-CH:
       messages:
         record_invalid: 'Gültigkeitsprüfung ist fehlgeschlagen: %{errors}'
         restrict_dependent_destroy:
+          has_many: Datensatz kann nicht gelöscht werden, da abhängige %{record} existieren.
           has_one: Datensatz kann nicht gelöscht werden, da ein abhängiger %{record}-Datensatz
             existiert.
-          has_many: Datensatz kann nicht gelöscht werden, da abhängige %{record} existieren.
   date:
     abbr_day_names:
     - So
@@ -18,7 +18,7 @@ de-CH:
     - Fr
     - Sa
     abbr_month_names:
-    - 
+    -
     - Jan
     - Feb
     - Mär
@@ -44,7 +44,7 @@ de-CH:
       long: "%e. %B %Y"
       short: "%e. %b"
     month_names:
-    - 
+    -
     - Januar
     - Februar
     - März
@@ -76,33 +76,33 @@ de-CH:
         one: fast ein Jahr
         other: fast %{count} Jahre
       half_a_minute: eine halbe Minute
-      less_than_x_seconds:
-        one: weniger als eine Sekunde
-        other: weniger als %{count} Sekunden
       less_than_x_minutes:
         one: weniger als eine Minute
         other: weniger als %{count} Minuten
+      less_than_x_seconds:
+        one: weniger als eine Sekunde
+        other: weniger als %{count} Sekunden
       over_x_years:
         one: mehr als ein Jahr
         other: mehr als %{count} Jahre
-      x_seconds:
-        one: eine Sekunde
-        other: "%{count} Sekunden"
-      x_minutes:
-        one: eine Minute
-        other: "%{count} Minuten"
       x_days:
         one: ein Tag
         other: "%{count} Tage"
+      x_minutes:
+        one: eine Minute
+        other: "%{count} Minuten"
       x_months:
         one: ein Monat
         other: "%{count} Monate"
+      x_seconds:
+        one: eine Sekunde
+        other: "%{count} Sekunden"
     prompts:
-      second: Sekunde
-      minute: Minute
-      hour: Stunde
       day: Tag
+      hour: Stunde
+      minute: Minute
       month: Monat
+      second: Sekunde
       year: Jahr
   errors:
     format: "%{attribute} %{message}"

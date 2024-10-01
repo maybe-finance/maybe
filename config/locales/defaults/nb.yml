@@ -5,8 +5,8 @@ nb:
       messages:
         record_invalid: 'Det oppstod feil: %{errors}'
         restrict_dependent_destroy:
-          has_one: Kan ikke slette registreringen, fordi %{record} avhenger av denne.
           has_many: Kan ikke slette registreringen, fordi %{record} avhenger av denne.
+          has_one: Kan ikke slette registreringen, fordi %{record} avhenger av denne.
   date:
     abbr_day_names:
     - søn
@@ -75,36 +75,36 @@ nb:
         one: nesten %{count} år
         other: nesten %{count} år
       half_a_minute: et halvt minutt
-      less_than_x_seconds:
-        one: mindre enn %{count} sekund
-        other: mindre enn %{count} sekunder
       less_than_x_minutes:
         one: mindre enn %{count} minutt
         other: mindre enn %{count} minutter
+      less_than_x_seconds:
+        one: mindre enn %{count} sekund
+        other: mindre enn %{count} sekunder
       over_x_years:
         one: over %{count} år
         other: over %{count} år
-      x_seconds:
-        one: "%{count} sekund"
-        other: "%{count} sekunder"
-      x_minutes:
-        one: "%{count} minutt"
-        other: "%{count} minutter"
       x_days:
         one: "%{count} dag"
         other: "%{count} dager"
+      x_minutes:
+        one: "%{count} minutt"
+        other: "%{count} minutter"
       x_months:
         one: "%{count} måned"
         other: "%{count} måneder"
+      x_seconds:
+        one: "%{count} sekund"
+        other: "%{count} sekunder"
       x_years:
         one: "%{count} år"
         other: "%{count} år"
     prompts:
-      second: sekund
-      minute: minutt
-      hour: time
       day: dag
+      hour: time
+      minute: minutt
       month: måned
+      second: sekund
       year: år
   errors:
     format: "%{attribute} %{message}"

@@ -5,8 +5,8 @@ lv:
       messages:
         record_invalid: 'Pārbaude neizdevās: %{errors}'
         restrict_dependent_destroy:
-          has_one: Nevar dzēst ierakstu, jo ir atkarīgs %{record}
           has_many: Nevar dzēst ierakstu, jo ir atkarīgi %{record}
+          has_one: Nevar dzēst ierakstu, jo ir atkarīgs %{record}
   date:
     abbr_day_names:
     - Sv.
@@ -63,56 +63,56 @@ lv:
   datetime:
     distance_in_words:
       about_x_hours:
-        zero: apmēram %{count} stundas
         one: apmēram %{count} stunda
         other: apmēram %{count} stundas
+        zero: apmēram %{count} stundas
       about_x_months:
-        zero: apmēram %{count} mēneši
         one: apmēram %{count} mēnesis
         other: apmēram %{count} mēneši
+        zero: apmēram %{count} mēneši
       about_x_years:
-        zero: apmēram %{count} gadi
         one: apmēram %{count} gads
         other: apmēram %{count} gadi
+        zero: apmēram %{count} gadi
       almost_x_years:
-        zero: gandrīz %{count} gadi
         one: gandrīz %{count} gads
         other: gandrīz %{count} gadi
+        zero: gandrīz %{count} gadi
       half_a_minute: pusminūte
-      less_than_x_seconds:
-        zero: mazāk par %{count} sekundēm
-        one: mazāk par %{count} sekundi
-        other: mazāk par %{count} sekundēm
       less_than_x_minutes:
-        zero: mazāk par %{count} minūtēm
         one: mazāk par %{count} minūti
         other: mazāk par %{count} minūtēm
+        zero: mazāk par %{count} minūtēm
+      less_than_x_seconds:
+        one: mazāk par %{count} sekundi
+        other: mazāk par %{count} sekundēm
+        zero: mazāk par %{count} sekundēm
       over_x_years:
-        zero: vairāk kā %{count} gadi
         one: vairāk kā %{count} gads
         other: vairāk kā %{count} gadi
-      x_seconds:
-        zero: "%{count} sekundes"
-        one: "%{count} sekunde"
-        other: "%{count} sekundes"
-      x_minutes:
-        zero: "%{count} minūtes"
-        one: "%{count} minūte"
-        other: "%{count} minūtes"
+        zero: vairāk kā %{count} gadi
       x_days:
-        zero: "%{count} dienas"
         one: "%{count} diena"
         other: "%{count} dienas"
+        zero: "%{count} dienas"
+      x_minutes:
+        one: "%{count} minūte"
+        other: "%{count} minūtes"
+        zero: "%{count} minūtes"
       x_months:
-        zero: "%{count} mēneši"
         one: "%{count} mēnesis"
         other: "%{count} mēneši"
+        zero: "%{count} mēneši"
+      x_seconds:
+        one: "%{count} sekunde"
+        other: "%{count} sekundes"
+        zero: "%{count} sekundes"
     prompts:
-      second: sekunde
-      minute: minūte
-      hour: stunda
       day: diena
+      hour: stunda
+      minute: minūte
       month: mēnesis
+      second: sekunde
       year: gads
   errors:
     format: "%{attribute} %{message}"
@@ -139,23 +139,23 @@ lv:
       required: ir jābūt
       taken: ir jau aizņemts
       too_long:
-        zero: ir par garu (maksimums ir %{count} simboli)
         one: ir par garu (maksimums ir %{count} simbols)
         other: ir par garu (maksimums ir %{count} simboli)
+        zero: ir par garu (maksimums ir %{count} simboli)
       too_short:
-        zero: ir par īsu (minimums ir %{count} simboli)
         one: ir par īsu (minimums ir %{count} simbols)
         other: ir par īsu (minimums ir %{count} simboli)
+        zero: ir par īsu (minimums ir %{count} simboli)
       wrong_length:
-        zero: ir nepareizs garums (jābūt %{count} simboliem)
         one: ir nepareizs garums (jābūt %{count} simbolam)
         other: ir nepareizs garums (jābūt %{count} simboliem)
+        zero: ir nepareizs garums (jābūt %{count} simboliem)
     template:
       body: 'Problēmas ir šajos ievades laukos:'
       header:
-        zero: Dēļ %{count} kļūdām šis %{model} netika saglabāts
         one: Dēļ %{count} kļūdas šis %{model} netika saglabāts
         other: Dēļ %{count} kļūdām šis %{model} netika saglabāts
+        zero: Dēļ %{count} kļūdām šis %{model} netika saglabāts
   helpers:
     select:
       prompt: Lūdzu izvēlies
@@ -184,25 +184,25 @@ lv:
         format: "%n %u"
         units:
           billion:
-            zero: miljardi
             one: miljards
             other: miljardi
+            zero: miljardi
           million:
-            zero: miljoni
             one: miljons
             other: miljoni
+            zero: miljoni
           quadrillion:
-            zero: kvadriljoni
             one: kvadriljons
             other: kvadriljoni
+            zero: kvadriljoni
           thousand:
-            zero: tūkstoši
             one: tūkstotis
             other: tūkstoši
+            zero: tūkstoši
           trillion:
-            zero: triljoni
             one: triljons
             other: triljoni
+            zero: triljoni
           unit: ''
       format:
         delimiter: ''
@@ -213,9 +213,9 @@ lv:
         format: "%n %u"
         units:
           byte:
-            zero: baiti
             one: baits
             other: baiti
+            zero: baiti
           eb: EB
           gb: GB
           kb: KB

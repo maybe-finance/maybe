@@ -5,8 +5,8 @@ ko:
       messages:
         record_invalid: 데이터 검증에 실패하였습니다. %{errors}
         restrict_dependent_destroy:
-          has_one: "%{record}(이)가 존재하기 때문에 삭제할 수 없습니다"
           has_many: "%{record}(이)가 존재하기 때문에 삭제할 수 없습니다"
+          has_one: "%{record}(이)가 존재하기 때문에 삭제할 수 없습니다"
   date:
     abbr_day_names:
     - 일
@@ -67,20 +67,20 @@ ko:
       about_x_years: 대략 %{count}년
       almost_x_years: 거의 %{count}년
       half_a_minute: 30초
-      less_than_x_seconds: "%{count}초 미만"
       less_than_x_minutes: "%{count}분 미만"
+      less_than_x_seconds: "%{count}초 미만"
       over_x_years: "%{count}년 초과"
-      x_seconds: "%{count}초"
-      x_minutes: "%{count}분"
       x_days: "%{count}일"
+      x_minutes: "%{count}분"
       x_months: "%{count}개월"
+      x_seconds: "%{count}초"
       x_years: "%{count}년"
     prompts:
-      second: 초
-      minute: 분
-      hour: 시
       day: 일
+      hour: 시
+      minute: 분
       month: 월
+      second: 초
       year: 년
   errors:
     format: "%{message}"
@@ -172,7 +172,7 @@ ko:
   support:
     array:
       last_word_connector: ", "
-      two_words_connector: ', '
+      two_words_connector: ", "
       words_connector: ", "
   time:
     am: 오전

@@ -5,8 +5,8 @@ cs:
       messages:
         record_invalid: 'Validace je neúspešná: %{errors}'
         restrict_dependent_destroy:
-          has_one: Nemůžu smazat položku protože existuje závislá/ý/é %{record}
           has_many: Nemůžu smazat položku protože existuje závislé/ý %{record}
+          has_one: Nemůžu smazat položku protože existuje závislá/ý/é %{record}
   date:
     abbr_day_names:
     - Ne
@@ -17,7 +17,7 @@ cs:
     - Pá
     - So
     abbr_month_names:
-    - 
+    -
     - Led
     - Úno
     - Bře
@@ -43,7 +43,7 @@ cs:
       long: "%d. %B %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - Leden
     - Únor
     - Březen
@@ -63,56 +63,56 @@ cs:
   datetime:
     distance_in_words:
       about_x_hours:
-        one: asi hodinou
         few: asi %{count} hodinami
+        one: asi hodinou
         other: asi %{count} hodinami
       about_x_months:
-        one: asi měsícem
         few: asi %{count} měsíci
+        one: asi měsícem
         other: asi %{count} měsíci
       about_x_years:
-        one: asi rokem
         few: asi %{count} roky
+        one: asi rokem
         other: asi %{count} roky
       almost_x_years:
-        one: téměř rokem
         few: téměř %{count} roky
+        one: téměř rokem
         other: téměř %{count} roky
       half_a_minute: půl minutou
-      less_than_x_seconds:
-        one: necelou sekundou
-        few: ani ne %{count} sekundami
-        other: ani ne %{count} sekundami
       less_than_x_minutes:
-        one: necelou minutou
         few: ani ne %{count} minutami
+        one: necelou minutou
         other: ani ne %{count} minutami
+      less_than_x_seconds:
+        few: ani ne %{count} sekundami
+        one: necelou sekundou
+        other: ani ne %{count} sekundami
       over_x_years:
-        one: více než rokem
         few: více než %{count} roky
+        one: více než rokem
         other: více než %{count} roky
-      x_seconds:
-        one: sekundou
-        few: "%{count} sekundami"
-        other: "%{count} sekundami"
-      x_minutes:
-        one: minutou
-        few: "%{count} minutami"
-        other: "%{count} minutami"
       x_days:
-        one: 24 hodinami
         few: "%{count} dny"
+        one: 24 hodinami
         other: "%{count} dny"
+      x_minutes:
+        few: "%{count} minutami"
+        one: minutou
+        other: "%{count} minutami"
       x_months:
-        one: měsícem
         few: "%{count} měsíci"
+        one: měsícem
         other: "%{count} měsíci"
+      x_seconds:
+        few: "%{count} sekundami"
+        one: sekundou
+        other: "%{count} sekundami"
     prompts:
-      second: Sekunda
-      minute: Minuta
-      hour: Hodina
       day: Den
+      hour: Hodina
+      minute: Minuta
       month: Měsíc
+      second: Sekunda
       year: Rok
   errors:
     format: "%{attribute} %{message}"
@@ -143,9 +143,9 @@ cs:
     template:
       body: 'Následující pole obsahují chybně vyplněné údaje: '
       header:
-        one: Při ukládání objektu %{model} došlo k chybám a nebylo jej možné uložit
         few: Při ukládání objektu %{model} došlo ke %{count} chybám a nebylo možné
           jej uložit
+        one: Při ukládání objektu %{model} došlo k chybám a nebylo jej možné uložit
         other: Při ukládání objektu %{model} došlo ke %{count} chybám a nebylo možné
           jej uložit
   helpers:
@@ -190,8 +190,8 @@ cs:
         format: "%n %u"
         units:
           byte:
-            one: B
             few: B
+            one: B
             other: B
           gb: GB
           kb: KB

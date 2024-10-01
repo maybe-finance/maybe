@@ -5,8 +5,8 @@ el-CY:
       messages:
         record_invalid: 'Η επικύρωση απέτυχε: %{errors}'
         restrict_dependent_destroy:
-          has_one: Η εγγραφή δεν μπορεί να διαγραφεί γιατί υπάρχει εξαρτημένο %{record}
           has_many: Η εγγραφή δεν μπορεί να διαγραφεί γιατί υπάρχουν εξαρτημένα %{record}
+          has_one: Η εγγραφή δεν μπορεί να διαγραφεί γιατί υπάρχει εξαρτημένο %{record}
   date:
     abbr_day_names:
     - Κυρ
@@ -75,36 +75,36 @@ el-CY:
         one: σχεδόν ένα χρόνο
         other: σχεδόν %{count} χρόνια
       half_a_minute: μισό λεπτό
-      less_than_x_seconds:
-        one: λιγότερο από ένα δευτερόλεπτο
-        other: λιγότερο από %{count} δευτερόλεπτα
       less_than_x_minutes:
         one: λιγότερο από ένα λεπτό
         other: λιγότερο από %{count} λεπτά
+      less_than_x_seconds:
+        one: λιγότερο από ένα δευτερόλεπτο
+        other: λιγότερο από %{count} δευτερόλεπτα
       over_x_years:
         one: πάνω από ένα χρόνο
         other: πάνω από %{count} χρόνια
-      x_seconds:
-        one: "%{count} δευτερόλεπτο"
-        other: "%{count} δευτερόλεπτα"
-      x_minutes:
-        one: "%{count} λεπτό"
-        other: "%{count} λεπτά"
       x_days:
         one: "%{count} μέρα"
         other: "%{count} ημέρες"
+      x_minutes:
+        one: "%{count} λεπτό"
+        other: "%{count} λεπτά"
       x_months:
         one: "%{count} μήνα"
         other: "%{count} μήνες"
+      x_seconds:
+        one: "%{count} δευτερόλεπτο"
+        other: "%{count} δευτερόλεπτα"
       x_years:
         one: "%{count} χρόνος"
         other: "%{count} χρόνια"
     prompts:
-      second: Δευτερόλεπτο
-      minute: Λεπτό
-      hour: Ώρα
       day: Ημέρα
+      hour: Ώρα
+      minute: Λεπτό
       month: Μήνας
+      second: Δευτερόλεπτο
       year: Έτος
   errors:
     format: "%{attribute} %{message}"

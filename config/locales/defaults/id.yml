@@ -5,9 +5,9 @@ id:
       messages:
         record_invalid: 'Validasi gagal: %{errors}'
         restrict_dependent_destroy:
+          has_many: Tidak bisa menghapus record karena terdapat %{record} yang bergantung
           has_one: Tidak bisa menghapus record karena terdapat satu %{record} yang
             bergantung
-          has_many: Tidak bisa menghapus record karena terdapat %{record} yang bergantung
   date:
     abbr_day_names:
     - Min
@@ -18,7 +18,7 @@ id:
     - Jum
     - Sab
     abbr_month_names:
-    - 
+    -
     - Jan
     - Feb
     - Mar
@@ -44,7 +44,7 @@ id:
       long: "%A, %d %B %Y"
       short: "%d.%m.%Y"
     month_names:
-    - 
+    -
     - Januari
     - Februari
     - Maret
@@ -76,35 +76,35 @@ id:
         one: hampir setahun
         other: hampir %{count} tahun
       half_a_minute: setengah menit
-      less_than_x_seconds:
-        zero: kurang dari 1 detik
-        one: kurang dari %{count} detik
-        other: kurang dari %{count} detik
       less_than_x_minutes:
-        zero: kurang dari 1 menit
         one: kurang dari %{count} menit
         other: kurang dari %{count} menit
+        zero: kurang dari 1 menit
+      less_than_x_seconds:
+        one: kurang dari %{count} detik
+        other: kurang dari %{count} detik
+        zero: kurang dari 1 detik
       over_x_years:
         one: lebih dari setahun
         other: lebih dari %{count} tahun
-      x_seconds:
-        one: satu detik
-        other: "%{count} detik"
-      x_minutes:
-        one: satu menit
-        other: "%{count} menit"
       x_days:
         one: sehari
         other: "%{count} hari"
+      x_minutes:
+        one: satu menit
+        other: "%{count} menit"
       x_months:
         one: sebulan
         other: "%{count} bulan"
+      x_seconds:
+        one: satu detik
+        other: "%{count} detik"
     prompts:
-      second: Detik
-      minute: Menit
-      hour: Jam
       day: Hari
+      hour: Jam
+      minute: Menit
       month: Bulan
+      second: Detik
       year: Tahun
   errors:
     format: "%{attribute} %{message}"

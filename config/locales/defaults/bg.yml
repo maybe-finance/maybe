@@ -14,7 +14,7 @@ bg:
     - пет
     - съб
     abbr_month_names:
-    - 
+    -
     - ян.
     - фев.
     - март
@@ -40,7 +40,7 @@ bg:
       long: "%d %B %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - януари
     - февруари
     - март
@@ -72,33 +72,33 @@ bg:
         one: почти %{count} година
         other: почти %{count} години
       half_a_minute: половин минута
-      less_than_x_seconds:
-        one: по-малко от %{count} секунда
-        other: по-малко от %{count} секунди
       less_than_x_minutes:
         one: по-малко от %{count} минута
         other: по-малко от %{count} минути
+      less_than_x_seconds:
+        one: по-малко от %{count} секунда
+        other: по-малко от %{count} секунди
       over_x_years:
         one: над %{count} година
         other: над %{count} години
-      x_seconds:
-        one: "%{count} секунда"
-        other: "%{count} секунди"
-      x_minutes:
-        one: "%{count} минута"
-        other: "%{count} минути"
       x_days:
         one: "%{count} ден"
         other: "%{count} дни"
+      x_minutes:
+        one: "%{count} минута"
+        other: "%{count} минути"
       x_months:
         one: "%{count} месец"
         other: "%{count} месеца"
+      x_seconds:
+        one: "%{count} секунда"
+        other: "%{count} секунди"
     prompts:
-      second: Секунда
-      minute: Минута
-      hour: Час
       day: Ден
+      hour: Час
+      minute: Минута
       month: Месец
+      second: Секунда
       year: Година
   errors:
     format: "%{attribute} %{message}"

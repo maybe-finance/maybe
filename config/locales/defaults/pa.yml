@@ -5,8 +5,8 @@ pa:
       messages:
         record_invalid: 'ਪਰਮਾਣ ਫ਼ੇਲ ਹੋਇਆ: %{errors}'
         restrict_dependent_destroy:
-          has_one: ਮਿਟਾ ਨਹੀਂ ਸਕਦੇ ਕਿਉਂਕਿ ਇੱਕ ਨਿਰਭਰ %{record} ਮੌਜੂਦ ਹੈ
           has_many: ਮਿਟਾ ਨਹੀਂ ਸਕਦੇ ਕਿਉਂਕਿ ਨਿਰਭਰ %{record} ਮੌਜੂਦ ਹਨ
+          has_one: ਮਿਟਾ ਨਹੀਂ ਸਕਦੇ ਕਿਉਂਕਿ ਇੱਕ ਨਿਰਭਰ %{record} ਮੌਜੂਦ ਹੈ
   date:
     abbr_day_names:
     - ਅੈਤ
@@ -17,7 +17,7 @@ pa:
     - ਸ਼ੁੱਕਰ
     - ਸ਼ਨਿੱਚਰ
     abbr_month_names:
-    - 
+    -
     - ਜਨ
     - ਫ਼ਰ
     - ਮਾਰਚ
@@ -43,7 +43,7 @@ pa:
       long: "%d %B %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - ਜਨਵਰੀ
     - ਫ਼ਰਵਰੀ
     - ਮਾਰਚ
@@ -75,33 +75,33 @@ pa:
         one: ਤਕਰੀਬਨ %{count} ਸਾਲ
         other: ਤਕਰੀਬਨ %{count} ਸਾਲ
       half_a_minute: ਅੱਧਾ ਮਿੰਟ
-      less_than_x_seconds:
-        one: "%{count} ਸਕਿੰਟ ਤੋਂ ਘੱਟ"
-        other: "%{count} ਸਕਿੰਟਾਂ ਤੋਂ ਘੱਟ"
       less_than_x_minutes:
         one: "%{count} ਮਿੰਟ ਤੋਂ ਘੱਟ"
         other: "%{count} ਮਿੰਟਾਂ ਤੋਂ ਘੱਟ"
+      less_than_x_seconds:
+        one: "%{count} ਸਕਿੰਟ ਤੋਂ ਘੱਟ"
+        other: "%{count} ਸਕਿੰਟਾਂ ਤੋਂ ਘੱਟ"
       over_x_years:
         one: "%{count} ਸਾਲ ਤੋਂ ਵੱਧ"
         other: "%{count} ਸਾਲਾਂ ਤੋਂ ਵੱਧ"
-      x_seconds:
-        one: "%{count} ਸਕਿੰਟ"
-        other: "%{count} ਸਕਿੰਟ"
-      x_minutes:
-        one: "%{count} ਮਿੰਟ"
-        other: "%{count} ਮਿੰਟ"
       x_days:
         one: "%{count} ਦਿਨ"
         other: "%{count} ਦਿਨ"
+      x_minutes:
+        one: "%{count} ਮਿੰਟ"
+        other: "%{count} ਮਿੰਟ"
       x_months:
         one: "%{count} ਮਹੀਨਾ"
         other: "%{count} ਮਹੀਨੇ"
+      x_seconds:
+        one: "%{count} ਸਕਿੰਟ"
+        other: "%{count} ਸਕਿੰਟ"
     prompts:
-      second: ਸਕਿੰਟ
-      minute: ਮਿੰਟ
-      hour: ਘੰਟਾ
       day: ਦਿਨ
+      hour: ਘੰਟਾ
+      minute: ਮਿੰਟ
       month: ਮਹੀਨਾ
+      second: ਸਕਿੰਟ
       year: ਸਾਲ
   errors:
     format: "%{attribute} %{message}"

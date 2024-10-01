@@ -10,7 +10,7 @@ rm:
     - ve
     - so
     abbr_month_names:
-    - 
+    -
     - schan
     - favr
     - mars
@@ -36,7 +36,7 @@ rm:
       long: "%e. %B %Y"
       short: "%e. %b"
     month_names:
-    - 
+    -
     - schaner
     - favrer
     - mars
@@ -56,82 +56,82 @@ rm:
   datetime:
     distance_in_words:
       about_x_hours:
-        zero: circa %{count} uras
-        one: circa in'ura
-        two: circa %{count} uras
         few: circa %{count} uras
         many: circa %{count} uras
+        one: circa in'ura
         other: circa %{count} uras
+        two: circa %{count} uras
+        zero: circa %{count} uras
       about_x_months:
-        zero: circa %{count} mais
-        one: circa in mais
-        two: circa %{count} mais
         few: circa %{count} mais
         many: circa %{count} mais
+        one: circa in mais
         other: circa %{count} mais
+        two: circa %{count} mais
+        zero: circa %{count} mais
       about_x_years:
-        zero: circa %{count} onns
-        one: circa in onn
-        two: circa %{count} onns
         few: circa %{count} onns
         many: circa %{count} onns
+        one: circa in onn
         other: circa %{count} onns
+        two: circa %{count} onns
+        zero: circa %{count} onns
       half_a_minute: ina mesa minuta
-      less_than_x_seconds:
-        zero: main che %{count} secundas
-        one: main ch’ina secunda
-        two: main che %{count} secundas
-        few: main che %{count} secundas
-        many: main che %{count} secundas
-        other: main che %{count} secundas
       less_than_x_minutes:
-        zero: main che %{count} minutas
-        one: main ch’ina minuta
-        two: main che %{count} minutas
         few: main che %{count} minutas
         many: main che %{count} minutas
+        one: main ch’ina minuta
         other: main che %{count} minutas
+        two: main che %{count} minutas
+        zero: main che %{count} minutas
+      less_than_x_seconds:
+        few: main che %{count} secundas
+        many: main che %{count} secundas
+        one: main ch’ina secunda
+        other: main che %{count} secundas
+        two: main che %{count} secundas
+        zero: main che %{count} secundas
       over_x_years:
-        zero: dapli che %{count} onns
-        one: dapli ch'in onn
-        two: dapli che %{count} onns
         few: dapli che %{count} onns
         many: dapli che %{count} onns
+        one: dapli ch'in onn
         other: dapli che %{count} onns
-      x_seconds:
-        zero: "%{count} secundas"
-        one: ina secunda
-        two: "%{count} secundas"
-        few: "%{count} secundas"
-        many: "%{count} secundas"
-        other: "%{count} secundas"
-      x_minutes:
-        zero: "%{count} minutas"
-        one: "%{count} minuta"
-        two: "%{count} minutas"
-        few: "%{count} minutas"
-        many: "%{count} minutas"
-        other: "%{count} minutas"
+        two: dapli che %{count} onns
+        zero: dapli che %{count} onns
       x_days:
-        zero: "%{count} dis"
-        one: in di
-        two: "%{count} dis"
         few: "%{count} dis"
         many: "%{count} dis"
+        one: in di
         other: "%{count} dis"
+        two: "%{count} dis"
+        zero: "%{count} dis"
+      x_minutes:
+        few: "%{count} minutas"
+        many: "%{count} minutas"
+        one: "%{count} minuta"
+        other: "%{count} minutas"
+        two: "%{count} minutas"
+        zero: "%{count} minutas"
       x_months:
-        zero: "%{count} mais"
-        one: in mais
-        two: "%{count} mais"
         few: "%{count} mais"
         many: "%{count} mais"
+        one: in mais
         other: "%{count} mais"
+        two: "%{count} mais"
+        zero: "%{count} mais"
+      x_seconds:
+        few: "%{count} secundas"
+        many: "%{count} secundas"
+        one: ina secunda
+        other: "%{count} secundas"
+        two: "%{count} secundas"
+        zero: "%{count} secundas"
     prompts:
-      second: secundas
-      minute: minutas
-      hour: uras
       day: dis
+      hour: uras
+      minute: minutas
       month: mais
+      second: secundas
       year: onns
   errors:
     format: "%{attribute} %{message}"
@@ -158,12 +158,12 @@ rm:
     template:
       body: 'Faschai uschè bain e controllai ils suandants champs:'
       header:
-        zero: 'Betg pussaivel da memorisar quest %{model}: %{count} errurs.'
-        one: 'Betg pussaivel da memorisar quest %{model}: %{count} errur.'
-        two: 'Betg pussaivel da memorisar quest %{model}: %{count} errurs.'
         few: 'Betg pussaivel da memorisar quest %{model}: %{count} errurs.'
         many: 'Betg pussaivel da memorisar quest %{model}: %{count} errurs.'
+        one: 'Betg pussaivel da memorisar quest %{model}: %{count} errur.'
         other: 'Betg pussaivel da memorisar quest %{model}: %{count} errurs.'
+        two: 'Betg pussaivel da memorisar quest %{model}: %{count} errurs.'
+        zero: 'Betg pussaivel da memorisar quest %{model}: %{count} errurs.'
   number:
     currency:
       format:
@@ -194,12 +194,12 @@ rm:
         format: "%n %u"
         units:
           byte:
-            zero: bytes
-            one: byte
-            two: bytes
             few: bytes
             many: bytes
+            one: byte
             other: bytes
+            two: bytes
+            zero: bytes
           gb: GB
           kb: KB
           mb: MB

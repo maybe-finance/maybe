@@ -3,63 +3,63 @@ sv-FI:
   activerecord:
     errors:
       messages:
-        record_invalid: "Ett fel uppstod: %{errors}"
+        record_invalid: 'Ett fel uppstod: %{errors}'
         restrict_dependent_destroy:
-          has_one: Kan inte ta bort post då beroende %{record} finns
           has_many: Kan inte ta bort poster då beroende %{record} finns
+          has_one: Kan inte ta bort post då beroende %{record} finns
   date:
     abbr_day_names:
-      - sön
-      - mån
-      - tis
-      - ons
-      - tor
-      - fre
-      - lör
+    - sön
+    - mån
+    - tis
+    - ons
+    - tor
+    - fre
+    - lör
     abbr_month_names:
-      -
-      - jan
-      - feb
-      - mar
-      - apr
-      - maj
-      - jun
-      - jul
-      - aug
-      - sep
-      - okt
-      - nov
-      - dec
+    -
+    - jan
+    - feb
+    - mar
+    - apr
+    - maj
+    - jun
+    - jul
+    - aug
+    - sep
+    - okt
+    - nov
+    - dec
     day_names:
-      - söndag
-      - måndag
-      - tisdag
-      - onsdag
-      - torsdag
-      - fredag
-      - lördag
+    - söndag
+    - måndag
+    - tisdag
+    - onsdag
+    - torsdag
+    - fredag
+    - lördag
     formats:
       default: "%-d.%-m.%Y"
       long: "%e %B %Y"
       short: "%e %b"
     month_names:
-      -
-      - januari
-      - februari
-      - mars
-      - april
-      - maj
-      - juni
-      - juli
-      - augusti
-      - september
-      - oktober
-      - november
-      - december
+    -
+    - januari
+    - februari
+    - mars
+    - april
+    - maj
+    - juni
+    - juli
+    - augusti
+    - september
+    - oktober
+    - november
+    - december
     order:
-      - :day
-      - :month
-      - :year
+    - :day
+    - :month
+    - :year
   datetime:
     distance_in_words:
       about_x_hours:
@@ -75,33 +75,33 @@ sv-FI:
         one: nästan ett år
         other: nästan %{count} år
       half_a_minute: en halv minut
-      less_than_x_seconds:
-        one: mindre än en sekund
-        other: mindre än %{count} sekunder
       less_than_x_minutes:
         one: mindre än en minut
         other: mindre än %{count} minuter
+      less_than_x_seconds:
+        one: mindre än en sekund
+        other: mindre än %{count} sekunder
       over_x_years:
         one: mer än ett år
         other: mer än %{count} år
-      x_seconds:
-        one: en sekund
-        other: "%{count} sekunder"
-      x_minutes:
-        one: en minut
-        other: "%{count} minuter"
       x_days:
         one: en dag
         other: "%{count} dagar"
+      x_minutes:
+        one: en minut
+        other: "%{count} minuter"
       x_months:
         one: en månad
         other: "%{count} månader"
+      x_seconds:
+        one: en sekund
+        other: "%{count} sekunder"
     prompts:
-      second: Sekund
-      minute: Minut
-      hour: Timme
       day: Dag
+      hour: Timme
+      minute: Minut
       month: Månad
+      second: Sekund
       year: År
   errors:
     format: "%{attribute} %{message}"
@@ -119,7 +119,7 @@ sv-FI:
       invalid: har fel format
       less_than: måste vara mindre än %{count}
       less_than_or_equal_to: måste vara mindre än eller lika med %{count}
-      model_invalid: "Validering misslyckades: %{errors}"
+      model_invalid: 'Validering misslyckades: %{errors}'
       not_a_number: är inte ett nummer
       not_an_integer: måste vara ett heltal
       odd: måste vara udda
@@ -131,7 +131,7 @@ sv-FI:
       too_short: är för kort (minimum är %{count} tecken)
       wrong_length: har fel längd (ska vara %{count} tecken)
     template:
-      body: "Det var problem med följande fält:"
+      body: 'Det var problem med följande fält:'
       header:
         one: Ett fel förhindrade ifrågavarande %{model} från att sparas
         other: "%{count} fel förhindrade ifrågavarande %{model} från att sparas"
@@ -168,9 +168,9 @@ sv-FI:
           quadrillion: Biljard
           thousand: Tusen
           trillion: Biljon
-          unit: ""
+          unit: ''
       format:
-        delimiter: ""
+        delimiter: ''
         precision: 3
         significant: true
         strip_insignificant_zeros: true
@@ -192,7 +192,7 @@ sv-FI:
         format: "%n %"
     precision:
       format:
-        delimiter: ""
+        delimiter: ''
   support:
     array:
       last_word_connector: " och "

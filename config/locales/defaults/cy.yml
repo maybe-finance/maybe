@@ -9,150 +9,150 @@ cy:
           has_one: Methu dileu cofnod oherwydd bod %{record} yn bodoli
   date:
     abbr_day_names:
-      - Sul
-      - Llun
-      - Maw
-      - Mer
-      - Iau
-      - Gwe
-      - Sad
+    - Sul
+    - Llun
+    - Maw
+    - Mer
+    - Iau
+    - Gwe
+    - Sad
     abbr_month_names:
-      -
-      - Ion
-      - Chw
-      - Maw
-      - Ebr
-      - Mai
-      - Meh
-      - Gor
-      - Awst
-      - Med
-      - Hyd
-      - Tach
-      - Rha
+    -
+    - Ion
+    - Chw
+    - Maw
+    - Ebr
+    - Mai
+    - Meh
+    - Gor
+    - Awst
+    - Med
+    - Hyd
+    - Tach
+    - Rha
     day_names:
-      - Dydd Sul
-      - Dydd Llun
-      - Dydd Mawrth
-      - Dydd Mercher
-      - Dydd Iau
-      - Dydd Gwener
-      - Dydd Sadwrn
+    - Dydd Sul
+    - Dydd Llun
+    - Dydd Mawrth
+    - Dydd Mercher
+    - Dydd Iau
+    - Dydd Gwener
+    - Dydd Sadwrn
     formats:
       default: "%d-%m-%Y"
       long: "%d %B %Y"
       short: "%d %b"
     month_names:
-      -
-      - Ionawr
-      - Chwefror
-      - Mawrth
-      - Ebrill
-      - Mai
-      - Mehefin
-      - Gorffennaf
-      - Awst
-      - Medi
-      - Hydref
-      - Tachwedd
-      - Rhagfyr
+    -
+    - Ionawr
+    - Chwefror
+    - Mawrth
+    - Ebrill
+    - Mai
+    - Mehefin
+    - Gorffennaf
+    - Awst
+    - Medi
+    - Hydref
+    - Tachwedd
+    - Rhagfyr
     order:
-      - :year
-      - :month
-      - :day
+    - :year
+    - :month
+    - :day
   datetime:
     distance_in_words:
       about_x_hours:
-        zero: tua %{count} awr
-        one: tuag awr
-        two: tua %{count} awr
         few: tua %{count} awr
         many: tua %{count} awr
+        one: tuag awr
         other: tua %{count} awr
+        two: tua %{count} awr
+        zero: tua %{count} awr
       about_x_months:
-        zero: tua %{count} mis
-        one: tua mis
-        two: tua %{count} mis
         few: tua %{count} mis
         many: tua %{count} mis
+        one: tua mis
         other: tua %{count} mis
+        two: tua %{count} mis
+        zero: tua %{count} mis
       about_x_years:
-        zero: tua %{count} blynedd
-        one: tua blwyddyn
-        two: tua %{count} blynedd
         few: tua %{count} blynedd
         many: tua %{count} blynedd
+        one: tua blwyddyn
         other: tua %{count} blynedd
+        two: tua %{count} blynedd
+        zero: tua %{count} blynedd
       almost_x_years:
-        zero: bron yn %{count} blynedd
-        one: bron yn flwyddyn
-        two: bron yn %{count} blynedd
         few: bron yn %{count} blynedd
         many: bron yn %{count} blynedd
+        one: bron yn flwyddyn
         other: bron yn %{count} blynedd
+        two: bron yn %{count} blynedd
+        zero: bron yn %{count} blynedd
       half_a_minute: hanner munud
-      less_than_x_seconds:
-        zero: llai na %{count} eiliad
-        one: llai nag eiliad
-        two: llai na %{count} eiliad
-        few: llai na %{count} eiliad
-        many: llai na %{count} eiliad
-        other: llai na %{count} eiliad
       less_than_x_minutes:
-        zero: llai na %{count} munud
-        one: llai na munud
-        two: llai na %{count} munud
         few: llai na %{count} munud
         many: llai na %{count} munud
+        one: llai na munud
         other: llai na %{count} munud
+        two: llai na %{count} munud
+        zero: llai na %{count} munud
+      less_than_x_seconds:
+        few: llai na %{count} eiliad
+        many: llai na %{count} eiliad
+        one: llai nag eiliad
+        other: llai na %{count} eiliad
+        two: llai na %{count} eiliad
+        zero: llai na %{count} eiliad
       over_x_years:
-        zero: dros %{count} blynedd
-        one: dros flwyddyn
-        two: dros %{count} blynedd
         few: dros %{count} blynedd
         many: dros %{count} blynedd
+        one: dros flwyddyn
         other: dros %{count} blynedd
-      x_seconds:
-        zero: "%{count} o eiliadau"
-        one: 1 eiliad
-        two: "%{count} o eiliadau"
-        few: "%{count} o eiliadau"
-        many: "%{count} o eiliadau"
-        other: "%{count} o eiliadau"
-      x_minutes:
-        zero: "%{count} o funudau"
-        one: 1 munud
-        two: "%{count} o funudau"
-        few: "%{count} o funudau"
-        many: "%{count} o funudau"
-        other: "%{count} o funudau"
+        two: dros %{count} blynedd
+        zero: dros %{count} blynedd
       x_days:
-        zero: "%{count} diwrnod"
-        one: 1 diwrnod
-        two: "%{count} diwrnod"
         few: "%{count} diwrnod"
         many: "%{count} diwrnod"
+        one: 1 diwrnod
         other: "%{count} diwrnod"
+        two: "%{count} diwrnod"
+        zero: "%{count} diwrnod"
+      x_minutes:
+        few: "%{count} o funudau"
+        many: "%{count} o funudau"
+        one: 1 munud
+        other: "%{count} o funudau"
+        two: "%{count} o funudau"
+        zero: "%{count} o funudau"
       x_months:
-        zero: "%{count} mis"
-        one: 1 mis
-        two: "%{count} mis"
         few: "%{count} mis"
         many: "%{count} mis"
+        one: 1 mis
         other: "%{count} mis"
+        two: "%{count} mis"
+        zero: "%{count} mis"
+      x_seconds:
+        few: "%{count} o eiliadau"
+        many: "%{count} o eiliadau"
+        one: 1 eiliad
+        other: "%{count} o eiliadau"
+        two: "%{count} o eiliadau"
+        zero: "%{count} o eiliadau"
       x_years:
-        zero: "%{count} blwyddyn"
-        one: 1 flwyddyn
-        two: "%{count} blwyddyn"
         few: "%{count} blwyddyn"
         many: "%{count} blwyddyn"
+        one: 1 flwyddyn
         other: "%{count} blwyddyn"
+        two: "%{count} blwyddyn"
+        zero: "%{count} blwyddyn"
     prompts:
-      second: Eiliad
-      minute: Munud
-      hour: Awr
       day: Diwrnod
+      hour: Awr
+      minute: Munud
       month: Mis
+      second: Eiliad
       year: Blwyddyn
   errors:
     format: "%{attribute} %{message}"
@@ -185,12 +185,12 @@ cy:
     template:
       body: 'Cafwyd broblemau gyda''r meysydd canlynol:'
       header:
-        zero: Atalwyd y %{model} hwn rhag ei gadw gan 0 nam
-        one: Atalwyd y %{model} hwn rhag ei gadw gan 1 nam
-        two: Atalwyd y %{model} hwn rhag ei gadw gan %{count} nam
         few: Atalwyd y %{model} hwn rhag ei gadw gan %{count} nam
         many: Atalwyd y %{model} hwn rhag ei gadw gan %{count} nam
+        one: Atalwyd y %{model} hwn rhag ei gadw gan 1 nam
         other: Atalwyd y %{model} hwn rhag ei gadw gan %{count} nam
+        two: Atalwyd y %{model} hwn rhag ei gadw gan %{count} nam
+        zero: Atalwyd y %{model} hwn rhag ei gadw gan 0 nam
   helpers:
     select:
       prompt: Dewiswch
@@ -233,18 +233,18 @@ cy:
         format: "%n %u"
         units:
           byte:
-            zero: Bytes
-            one: Byte
-            two: Bytes
             few: Bytes
             many: Bytes
+            one: Byte
             other: Bytes
+            two: Bytes
+            zero: Bytes
+          eb: EB
           gb: GB
           kb: KB
           mb: MB
-          tb: TB
-          eb: EB
           pb: PB
+          tb: TB
     percentage:
       format:
         delimiter: ''

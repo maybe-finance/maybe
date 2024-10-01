@@ -14,7 +14,7 @@ kn:
     - ಶುಕ್ರ
     - ಶನಿ
     abbr_month_names:
-    - 
+    -
     - Jan
     - Feb
     - Mar
@@ -40,7 +40,7 @@ kn:
       long: "%d %B %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - ಜನವರಿ
     - ಫೆಬ್ರವರಿ
     - ಮಾರ್ಚ್
@@ -72,33 +72,33 @@ kn:
         one: ಸರಿಸುಮಾರು ಒಂದು ವರುಷ
         other: ಸರಿಸುಮಾರು %{count} ವರುಷಗಳು
       half_a_minute: ಒಂದು ಅರ್ಧ ನಿಮಿಷ
-      less_than_x_seconds:
-        one: ಒಂದು ಸೆಕೆಂಡಿಗೂ ಕಡಿಮೆ
-        other: "%{count} ಸೆಕೆಂಡಿಗಿಂತ ಕಡಿಮೆ"
       less_than_x_minutes:
         one: ಒಂದು ನಿಮಿಷಕ್ಕೂ ಕಡಿಮೆ
         other: "%{count} ನಿಮಿಷಕ್ಕಿಂತ ಕಡಿಮೆ"
+      less_than_x_seconds:
+        one: ಒಂದು ಸೆಕೆಂಡಿಗೂ ಕಡಿಮೆ
+        other: "%{count} ಸೆಕೆಂಡಿಗಿಂತ ಕಡಿಮೆ"
       over_x_years:
         one: ಒಂದು ವರುಷಕ್ಕಿಂತ ಹೆಚ್ಚು
         other: "%{count} ವರುಷಗಳಿಗಿಂತ ಹೆಚ್ಚು"
-      x_seconds:
-        one: "%{count} ಸೆಕೆಂಡ್"
-        other: "%{count} ಸೆಕೆಂಡುಗಳು"
-      x_minutes:
-        one: "%{count} ನಿಮಿಷ"
-        other: "%{count} ನಿಮಿಷಗಳು"
       x_days:
         one: "%{count} ದಿನ"
         other: "%{count} ದಿನಗಳು"
+      x_minutes:
+        one: "%{count} ನಿಮಿಷ"
+        other: "%{count} ನಿಮಿಷಗಳು"
       x_months:
         one: "%{count} ತಿಂಗಳು"
         other: "%{count} ತಿಂಗಳುಗಳು"
+      x_seconds:
+        one: "%{count} ಸೆಕೆಂಡ್"
+        other: "%{count} ಸೆಕೆಂಡುಗಳು"
     prompts:
-      second: ಸೆಕೆಂಡು
-      minute: ನಿಮಿಷ
-      hour: ಗಂಟೆ
       day: ದಿನ
+      hour: ಗಂಟೆ
+      minute: ನಿಮಿಷ
       month: ತಿಂಗಳು
+      second: ಸೆಕೆಂಡು
       year: ವರುಷ
   errors:
     format: "%{attribute} %{message}"

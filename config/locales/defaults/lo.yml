@@ -14,7 +14,7 @@ lo:
     - ສຸກ
     - ເສົາ
     abbr_month_names:
-    - 
+    -
     - ມ.ກ
     - ກ.ພ
     - ມ.ນ
@@ -40,7 +40,7 @@ lo:
       long: "%e %B %Y"
       short: "%e %b"
     month_names:
-    - 
+    -
     - ມັງກອນ
     - ກຸມພາ
     - ມີນາ
@@ -61,22 +61,22 @@ lo:
     distance_in_words:
       about_x_hours: ປະມານ %{count} ຊົ່ວໂມງ
       about_x_months: ປະມານ %{count} ເດືອນ
-      about_x_years: 'ປະມານ %{count} ປີ'
-      almost_x_years: 'ເກືອບ %{count} ປີ'
-      half_a_minute: 'ເຄິ່ງນາທີ'
-      less_than_x_seconds: 'ນ້ອຍກວ່າ %{count} ວິນາທີ'
-      less_than_x_minutes: 'ນ້ອຍກວ່າ %{count} ນາທີ'
-      over_x_years: 'ຫຼາຍກວ່າ %{count} ປີ'
-      x_seconds: "%{count} ວິນາທີ"
-      x_minutes: "%{count} ນາທີ"
+      about_x_years: ປະມານ %{count} ປີ
+      almost_x_years: ເກືອບ %{count} ປີ
+      half_a_minute: ເຄິ່ງນາທີ
+      less_than_x_minutes: ນ້ອຍກວ່າ %{count} ນາທີ
+      less_than_x_seconds: ນ້ອຍກວ່າ %{count} ວິນາທີ
+      over_x_years: ຫຼາຍກວ່າ %{count} ປີ
       x_days: "%{count} ມື້"
+      x_minutes: "%{count} ນາທີ"
       x_months: "%{count} ເດືອນ"
+      x_seconds: "%{count} ວິນາທີ"
     prompts:
-      second: ວິນາທີ
-      minute: ນາທີ
-      hour: ຊົ່ວໂມງ
       day: ວັນ
+      hour: ຊົ່ວໂມງ
+      minute: ນາທີ
       month: ເດືອນ
+      second: ວິນາທີ
       year: ປີ
   errors:
     format: "%{attribute} %{message}"
@@ -136,12 +136,12 @@ lo:
         format: "%n %u"
         units:
           byte:
-            zero: Bytes
-            one: Byte
-            two: Bytes
             few: Bytes
             many: Bytes
+            one: Byte
             other: Bytes
+            two: Bytes
+            zero: Bytes
           gb: GB
           kb: KB
           mb: MB

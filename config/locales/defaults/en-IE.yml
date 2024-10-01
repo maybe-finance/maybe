@@ -5,8 +5,8 @@ en-IE:
       messages:
         record_invalid: 'Validation failed: %{errors}'
         restrict_dependent_destroy:
-          has_one: Cannot delete record because a dependent %{record} exists
           has_many: Cannot delete record because dependent %{record} exist
+          has_one: Cannot delete record because a dependent %{record} exists
   date:
     abbr_day_names:
     - Sun
@@ -17,7 +17,7 @@ en-IE:
     - Fri
     - Sat
     abbr_month_names:
-    - 
+    -
     - Jan
     - Feb
     - Mar
@@ -43,7 +43,7 @@ en-IE:
       long: "%d %B, %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - January
     - February
     - March
@@ -75,36 +75,36 @@ en-IE:
         one: almost %{count} year
         other: almost %{count} years
       half_a_minute: half a minute
-      less_than_x_seconds:
-        one: less than %{count} second
-        other: less than %{count} seconds
       less_than_x_minutes:
         one: less than a minute
         other: less than %{count} minutes
+      less_than_x_seconds:
+        one: less than %{count} second
+        other: less than %{count} seconds
       over_x_years:
         one: over %{count} year
         other: over %{count} years
-      x_seconds:
-        one: "%{count} second"
-        other: "%{count} seconds"
-      x_minutes:
-        one: "%{count} minute"
-        other: "%{count} minutes"
       x_days:
         one: "%{count} day"
         other: "%{count} days"
+      x_minutes:
+        one: "%{count} minute"
+        other: "%{count} minutes"
       x_months:
         one: "%{count} month"
         other: "%{count} months"
+      x_seconds:
+        one: "%{count} second"
+        other: "%{count} seconds"
       x_years:
         one: "%{count} year"
         other: "%{count} years"
     prompts:
-      second: Second
-      minute: Minute
-      hour: Hour
       day: Day
+      hour: Hour
+      minute: Minute
       month: Month
+      second: Second
       year: Year
   errors:
     format: "%{attribute} %{message}"

@@ -5,8 +5,9 @@ fy:
       messages:
         record_invalid: 'Falidaasje mislearre: %{errors}'
         restrict_dependent_destroy:
-          has_one: Kin de registraasje net wiskje om't der in %{record} ôfhinklik is
           has_many: Kin de registraasje net wiskje om't der %{record} ôfhinklik binne
+          has_one: Kin de registraasje net wiskje om't der in %{record} ôfhinklik
+            is
   date:
     abbr_day_names:
     - si
@@ -17,7 +18,7 @@ fy:
     - fr
     - so
     abbr_month_names:
-    - 
+    -
     - jan
     - feb
     - mrt
@@ -43,7 +44,7 @@ fy:
       long: "%e %B %Y"
       short: "%e %b"
     month_names:
-    - 
+    -
     - jannewaris
     - febrewaris
     - maart
@@ -75,36 +76,36 @@ fy:
         one: hast 1 jier
         other: hast %{count} jier
       half_a_minute: in heale minút
-      less_than_x_seconds:
-        one: minder as 1 sekonde
-        other: minder as %{count} sekonden
       less_than_x_minutes:
         one: minder as in minút
         other: minder as %{count} minuten
+      less_than_x_seconds:
+        one: minder as 1 sekonde
+        other: minder as %{count} sekonden
       over_x_years:
         one: mear as 1 jier
         other: mear as %{count} jier
-      x_seconds:
-        one: 1 sekonde
-        other: "%{count} sekonden"
-      x_minutes:
-        one: 1 minút
-        other: "%{count} minuten"
       x_days:
         one: 1 dei
         other: "%{count} dagen"
+      x_minutes:
+        one: 1 minút
+        other: "%{count} minuten"
       x_months:
         one: 1 moanne
         other: "%{count} moannen"
+      x_seconds:
+        one: 1 sekonde
+        other: "%{count} sekonden"
       x_years:
         one: 1 jier
         other: "%{count} jier"
     prompts:
-      second: sekonde
-      minute: minút
-      hour: oere
       day: dei
+      hour: oere
+      minute: minút
       month: moanne
+      second: sekonde
       year: jier
   errors:
     format: "%{attribute} %{message}"

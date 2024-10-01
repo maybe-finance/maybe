@@ -5,8 +5,8 @@ ar:
       messages:
         record_invalid: 'فشل التحقّق من: %{errors}'
         restrict_dependent_destroy:
-          has_one: لا يمكن حذف السجل لوجود سجل يعتمد عليه %{record}
           has_many: لا يمكن حذف السجل لوجود سجلات تعتمد عليه %{record}
+          has_one: لا يمكن حذف السجل لوجود سجل يعتمد عليه %{record}
   date:
     abbr_day_names:
     - الأحد
@@ -43,7 +43,7 @@ ar:
       long: "%e %B، %Y"
       short: "%e %b"
     month_names:
-    - 
+    -
     - يناير
     - فبراير
     - مارس
@@ -63,89 +63,89 @@ ar:
   datetime:
     distance_in_words:
       about_x_hours:
-        zero: حوالي صفر ساعات
-        one: حوالي ساعة واحدة
-        two: حوالي ساعتان
         few: حوالي %{count} ساعات
         many: حوالي %{count} ساعة
+        one: حوالي ساعة واحدة
         other: حوالي %{count} ساعة
+        two: حوالي ساعتان
+        zero: حوالي صفر ساعات
       about_x_months:
-        zero: حوالي صفر أشهر
-        one: حوالي شهر واحد
-        two: حوالي شهران
         few: حوالي %{count} أشهر
         many: حوالي %{count} شهر
+        one: حوالي شهر واحد
         other: حوالي %{count} شهر
+        two: حوالي شهران
+        zero: حوالي صفر أشهر
       about_x_years:
-        zero: حوالي صفر سنوات
-        one: حوالي سنة
-        two: حوالي سنتان
         few: حوالي %{count} سنوات
         many: حوالي %{count} سنة
+        one: حوالي سنة
         other: حوالي %{count} سنة
+        two: حوالي سنتان
+        zero: حوالي صفر سنوات
       almost_x_years:
-        zero: ما يقرب من صفر سنوات
-        one: تقريبا سنة واحدة
-        two: ما يقرب من سنتين
         few: ما يقرب من %{count} سنوات
         many: ما يقرب من %{count} سنة
+        one: تقريبا سنة واحدة
         other: ما يقرب من %{count} سنة
+        two: ما يقرب من سنتين
+        zero: ما يقرب من صفر سنوات
       half_a_minute: نصف دقيقة
-      less_than_x_seconds:
-        zero: أقل من صفر ثواني
-        one: أقل من ثانية
-        two: أقل من ثانيتان
-        few: أقل من %{count} ثوان
-        many: أقل من %{count} ثانية
-        other: أقل من %{count} ثانية
       less_than_x_minutes:
-        zero: أقل من صفر دقائق
-        one: أقل من دقيقة
-        two: أقل من دقيقتان
         few: أقل من %{count} دقائق
         many: أقل من %{count} دقيقة
+        one: أقل من دقيقة
         other: أقل من %{count} دقيقة
+        two: أقل من دقيقتان
+        zero: أقل من صفر دقائق
+      less_than_x_seconds:
+        few: أقل من %{count} ثوان
+        many: أقل من %{count} ثانية
+        one: أقل من ثانية
+        other: أقل من %{count} ثانية
+        two: أقل من ثانيتان
+        zero: أقل من صفر ثواني
       over_x_years:
-        zero: أكثر من صفر سنوات
-        one: أكثر من سنة
-        two: أكثر من سنتين
         few: أكثر من %{count} سنوات
         many: أكثر من %{count} سنة
+        one: أكثر من سنة
         other: أكثر من %{count} سنة
-      x_seconds:
-        zero: صفر ثواني
-        one: ثانية واحدة
-        two: ثانيتان
-        few: "%{count} ثوان"
-        many: "%{count} ثانية"
-        other: "%{count} ثانية"
-      x_minutes:
-        zero: صفر دقائق
-        one: دقيقة واحدة
-        two: دقيقتان
-        few: "%{count} دقائق"
-        many: "%{count} دقيقة"
-        other: "%{count} دقيقة"
+        two: أكثر من سنتين
+        zero: أكثر من صفر سنوات
       x_days:
-        zero: صفر أيام
-        one: يوم واحد
-        two: يومان
         few: "%{count} أيام"
         many: "%{count} يوم"
+        one: يوم واحد
         other: "%{count} يوم"
+        two: يومان
+        zero: صفر أيام
+      x_minutes:
+        few: "%{count} دقائق"
+        many: "%{count} دقيقة"
+        one: دقيقة واحدة
+        other: "%{count} دقيقة"
+        two: دقيقتان
+        zero: صفر دقائق
       x_months:
-        zero: صفر أشهر
-        one: شهر واحد
-        two: شهران
         few: "%{count} أشهر"
         many: "%{count} شهر"
+        one: شهر واحد
         other: "%{count} شهر"
+        two: شهران
+        zero: صفر أشهر
+      x_seconds:
+        few: "%{count} ثوان"
+        many: "%{count} ثانية"
+        one: ثانية واحدة
+        other: "%{count} ثانية"
+        two: ثانيتان
+        zero: صفر ثواني
     prompts:
-      second: ثانية
-      minute: دقيقة
-      hour: ساعة
       day: اليوم
+      hour: ساعة
+      minute: دقيقة
       month: الشهر
+      second: ثانية
       year: السنة
   errors:
     format: "%{message}"
@@ -167,44 +167,44 @@ ar:
       not_an_integer: يجب أن يكون عدد %{attribute} عدد صحيحاً
       odd: يجب أن يكون عدد %{attribute} عدداً فردياً
       other_than:
-        zero: طول %{attribute} يجب ألاّ يكون صفر حرف
-        one: طول %{attribute} يجب ألاّ يكون حرفاً واحداً
-        two: طول %{attribute} يجب ألاّ يكون حرفان
         few: طول %{attribute} يجب ألاّ يكون %{count} أحرف
         many: طول %{attribute} يجب ألاّ يكون %{count} حرفاً
+        one: طول %{attribute} يجب ألاّ يكون حرفاً واحداً
         other: طول %{attribute} يجب ألاّ يكون %{count} حرفاً
+        two: طول %{attribute} يجب ألاّ يكون حرفان
+        zero: طول %{attribute} يجب ألاّ يكون صفر حرف
       present: يجب ترك حقل %{attribute} فارغاً
       taken: حقل %{attribute} محجوز مسبقاً
       too_long:
-        zero: محتوى %{attribute} أطول من اللّازم (الحد الأقصى هو ولا حرف)
-        one: محتوى %{attribute} أطول من اللّازم (الحد الأقصى هو حرف واحد)
-        two: محتوى %{attribute} أطول من اللّازم (الحد الأقصى هو حرفان)
         few: محتوى %{attribute} أطول من اللّازم (الحد الأقصى هو %{count} حروف)
         many: محتوى %{attribute} أطول من اللّازم (الحد الأقصى هو %{count} حرف)
+        one: محتوى %{attribute} أطول من اللّازم (الحد الأقصى هو حرف واحد)
         other: محتوى %{attribute} أطول من اللّازم (الحد الأقصى هو %{count} حرف)
+        two: محتوى %{attribute} أطول من اللّازم (الحد الأقصى هو حرفان)
+        zero: محتوى %{attribute} أطول من اللّازم (الحد الأقصى هو ولا حرف)
       too_short:
-        zero: محتوى %{attribute} أقصر من اللّازم (الحد الأدنى هو ولا حرف)
-        one: محتوى %{attribute} أقصر من اللّازم (الحد الأدنى هو حرف واحد)
-        two: محتوى %{attribute} أقصر من اللّازم (الحد الأدنى هو حرفان)
         few: محتوى %{attribute} أقصر من اللّازم (الحد الأدنى هو %{count} حروف)
         many: محتوى %{attribute} أقصر من اللّازم (الحد الأدنى هو %{count} حرف)
+        one: محتوى %{attribute} أقصر من اللّازم (الحد الأدنى هو حرف واحد)
         other: محتوى %{attribute} أقصر من اللّازم (الحد الأدنى هو %{count} حرف)
+        two: محتوى %{attribute} أقصر من اللّازم (الحد الأدنى هو حرفان)
+        zero: محتوى %{attribute} أقصر من اللّازم (الحد الأدنى هو ولا حرف)
       wrong_length:
-        zero: طول %{attribute} غير مطابق للحد المطلوب (يجب أن يكون ولا حرف)
-        one: طول %{attribute} غير مطابق للحد المطلوب (يجب أن يكون حرف واحد)
-        two: طول %{attribute} غير مطابق للحد المطلوب (يجب أن يكون حرفان)
         few: طول %{attribute} غير مطابق للحد المطلوب (يجب أن يكون %{count} أحرف)
         many: طول %{attribute} غير مطابق للحد المطلوب (يجب أن يكون %{count} حرف)
+        one: طول %{attribute} غير مطابق للحد المطلوب (يجب أن يكون حرف واحد)
         other: طول %{attribute} غير مطابق للحد المطلوب (يجب أن يكون %{count} حرف)
+        two: طول %{attribute} غير مطابق للحد المطلوب (يجب أن يكون حرفان)
+        zero: طول %{attribute} غير مطابق للحد المطلوب (يجب أن يكون ولا حرف)
     template:
       body: يُرجى التحقّق من الحقول التّالية:%{attribute}
       header:
-        zero: ليس بالامكان حفظ %{model} لسبب ولا خطأ.
-        one: ليس بالامكان حفظ %{model} لسبب وجود خطأ واحد.
-        two: ليس بالامكان حفظ %{model} لسبب وجود خطئان.
         few: ليس بالامكان حفظ %{model} لسبب وجود %{count} أخطاء.
         many: ليس بالامكان حفظ %{model} لسبب وجود %{count} خطأ.
+        one: ليس بالامكان حفظ %{model} لسبب وجود خطأ واحد.
         other: ليس بالامكان حفظ %{model} لسبب وجود %{count} خطأ.
+        two: ليس بالامكان حفظ %{model} لسبب وجود خطئان.
+        zero: ليس بالامكان حفظ %{model} لسبب ولا خطأ.
   helpers:
     select:
       prompt: يُرجى الاختيار
@@ -221,7 +221,7 @@ ar:
         separator: "."
         significant: false
         strip_insignificant_zeros: false
-        unit: "KWD"
+        unit: KWD
     format:
       delimiter: ","
       precision: 3
@@ -247,12 +247,12 @@ ar:
         format: "%n %u"
         units:
           byte:
-            zero: Bytes
-            one: Byte
-            two: Bytes
             few: Bytes
             many: Bytes
+            one: Byte
             other: Bytes
+            two: Bytes
+            zero: Bytes
           gb: GB
           kb: KB
           mb: MB

@@ -5,8 +5,8 @@ is:
       messages:
         record_invalid: 'Villur: %{errors}'
         restrict_dependent_destroy:
-          has_one: Ekki hægt að eyða færslu því %{record} sem hún er háð er til
           has_many: Ekki hægt að eyða færslur því %{record} sem hún er háð er til
+          has_one: Ekki hægt að eyða færslu því %{record} sem hún er háð er til
   date:
     abbr_day_names:
     - sun
@@ -17,7 +17,7 @@ is:
     - fös
     - lau
     abbr_month_names:
-    - 
+    -
     - jan
     - feb
     - mar
@@ -43,7 +43,7 @@ is:
       long: "%e. %B %Y"
       short: "%e. %b"
     month_names:
-    - 
+    -
     - janúar
     - febrúar
     - mars
@@ -75,33 +75,33 @@ is:
         one: næstum %{count} ár
         other: næstum %{count} ár
       half_a_minute: hálf mínúta
-      less_than_x_seconds:
-        one: minna en %{count} sekúnda
-        other: minna en %{count} sekúndur
       less_than_x_minutes:
         one: minna en %{count} mínúta
         other: minna en %{count} mínútur
+      less_than_x_seconds:
+        one: minna en %{count} sekúnda
+        other: minna en %{count} sekúndur
       over_x_years:
         one: meira en %{count} ár
         other: meira en %{count} ár
-      x_seconds:
-        one: "%{count} sekúnda"
-        other: "%{count} sekúndur"
-      x_minutes:
-        one: "%{count} mínúta"
-        other: "%{count} mínútur"
       x_days:
         one: "%{count} dagur"
         other: "%{count} dagar"
+      x_minutes:
+        one: "%{count} mínúta"
+        other: "%{count} mínútur"
       x_months:
         one: "%{count} mánuður"
         other: "%{count} mánuðir"
+      x_seconds:
+        one: "%{count} sekúnda"
+        other: "%{count} sekúndur"
     prompts:
-      second: Sekúnda
-      minute: Mínúta
-      hour: Klukkustund
       day: Dagur
+      hour: Klukkustund
+      minute: Mínúta
       month: Mánuður
+      second: Sekúnda
       year: Ár
   errors:
     format: "%{attribute} %{message}"

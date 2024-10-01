@@ -5,8 +5,8 @@ da:
       messages:
         record_invalid: 'Godkendelse gik galt: %{errors}'
         restrict_dependent_destroy:
-          has_one: Kunne ikke slette posten fordi en afhængig %{record} findes
           has_many: Kunne ikke slette posten fordi afhængige %{record} findes
+          has_one: Kunne ikke slette posten fordi en afhængig %{record} findes
   date:
     abbr_day_names:
     - søn
@@ -17,7 +17,7 @@ da:
     - fre
     - lør
     abbr_month_names:
-    - 
+    -
     - jan
     - feb
     - mar
@@ -43,7 +43,7 @@ da:
       long: "%e. %B %Y"
       short: "%e. %b %Y"
     month_names:
-    - 
+    -
     - januar
     - februar
     - marts
@@ -75,36 +75,36 @@ da:
         one: næsten et år
         other: næsten %{count} år
       half_a_minute: et halvt minut
-      less_than_x_seconds:
-        one: mindre end et sekund
-        other: mindre end %{count} sekunder
       less_than_x_minutes:
         one: mindre end et minut
         other: mindre end %{count} minutter
+      less_than_x_seconds:
+        one: mindre end et sekund
+        other: mindre end %{count} sekunder
       over_x_years:
         one: mere end et år
         other: mere end %{count} år
-      x_seconds:
-        one: et sekund
-        other: "%{count} sekunder"
-      x_minutes:
-        one: et minut
-        other: "%{count} minutter"
       x_days:
         one: en dag
         other: "%{count} dage"
+      x_minutes:
+        one: et minut
+        other: "%{count} minutter"
       x_months:
         one: en måned
         other: "%{count} måneder"
+      x_seconds:
+        one: et sekund
+        other: "%{count} sekunder"
       x_years:
         one: et år
         other: "%{count} år"
     prompts:
-      second: Sekund
-      minute: Minut
-      hour: Time
       day: Dag
+      hour: Time
+      minute: Minut
       month: Måned
+      second: Sekund
       year: År
   errors:
     format: "%{attribute} %{message}"

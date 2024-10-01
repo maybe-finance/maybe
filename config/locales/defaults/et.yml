@@ -5,8 +5,8 @@ et:
       messages:
         record_invalid: 'Valideerimine ebaõnnestus: %{errors}'
         restrict_dependent_destroy:
-          has_one: Ei saa kirjet kustutada kuna sõltuv %{record} on olemas
           has_many: Ei saa kirjet kustutada kuna sõltuvad %{record} on olemas
+          has_one: Ei saa kirjet kustutada kuna sõltuv %{record} on olemas
   date:
     abbr_day_names:
     - P
@@ -17,7 +17,7 @@ et:
     - R
     - L
     abbr_month_names:
-    - 
+    -
     - jaan.
     - veebr.
     - märts
@@ -43,7 +43,7 @@ et:
       long: "%d. %B %Y"
       short: "%d.%m.%y"
     month_names:
-    - 
+    -
     - jaanuar
     - veebruar
     - märts
@@ -75,36 +75,36 @@ et:
         one: peaaegu üks aasta
         other: peaaegu %{count} aastat
       half_a_minute: pool minutit
-      less_than_x_seconds:
-        one: vähem kui %{count} sekund
-        other: vähem kui %{count} sekundit
       less_than_x_minutes:
         one: vähem kui %{count} minut
         other: vähem kui %{count} minutit
+      less_than_x_seconds:
+        one: vähem kui %{count} sekund
+        other: vähem kui %{count} sekundit
       over_x_years:
         one: üle %{count} aasta
         other: üle %{count} aasta
-      x_seconds:
-        one: "%{count} sekund"
-        other: "%{count} sekundit"
-      x_minutes:
-        one: "%{count} minut"
-        other: "%{count} minutit"
       x_days:
         one: "%{count} päev"
         other: "%{count} päeva"
+      x_minutes:
+        one: "%{count} minut"
+        other: "%{count} minutit"
       x_months:
         one: "%{count} kuu"
         other: "%{count} kuud"
+      x_seconds:
+        one: "%{count} sekund"
+        other: "%{count} sekundit"
       x_years:
         one: "%{count} aasta"
         other: "%{count} aastat"
     prompts:
-      second: Sekundit
-      minute: Minutit
-      hour: Tunde
       day: Päev
+      hour: Tunde
+      minute: Minutit
       month: Kuu
+      second: Sekundit
       year: Aasta
   errors:
     format: "%{attribute} %{message}"

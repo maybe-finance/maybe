@@ -5,8 +5,8 @@ oc:
       messages:
         record_invalid: La validacion a fracassat : %{errors}
         restrict_dependent_destroy:
-          has_one: Podètz pas suprimir l’enregistrament perque i a una dependéncia
           has_many: Podètz pas suprimir l’enregistrament perque i a %{record} dependéncias
+          has_one: Podètz pas suprimir l’enregistrament perque i a una dependéncia
   date:
     abbr_day_names:
     - dg
@@ -17,7 +17,7 @@ oc:
     - dv
     - ds
     abbr_month_names:
-    - 
+    -
     - gen
     - feb
     - març
@@ -43,7 +43,7 @@ oc:
       long: Lo %e %B de %Y
       short: "%e %b"
     month_names:
-    - 
+    -
     - de genièr
     - de febrièr
     - de març
@@ -75,36 +75,36 @@ oc:
         one: quasi un an
         other: quasi %{count} ans
       half_a_minute: mièja minuta
-      less_than_x_seconds:
-        one: mens d’una segonda
-        other: mens de %{count} segondas
       less_than_x_minutes:
         one: mens d’una minuta
         other: mens de %{count} minutas
+      less_than_x_seconds:
+        one: mens d’una segonda
+        other: mens de %{count} segondas
       over_x_years:
         one: mai d’un an
         other: mai de %{count} ans
-      x_seconds:
-        one: una segonda
-        other: "%{count} segondas"
-      x_minutes:
-        one: una minuta
-        other: "%{count} minutas"
       x_days:
         one: un jorn
         other: "%{count} jorns"
+      x_minutes:
+        one: una minuta
+        other: "%{count} minutas"
       x_months:
         one: un mes
         other: "%{count} meses"
+      x_seconds:
+        one: una segonda
+        other: "%{count} segondas"
       x_years:
         one: un an
         other: "%{count} ans"
     prompts:
-      second: segonda
-      minute: minuta
-      hour: ora
       day: jorn
+      hour: ora
+      minute: minuta
       month: mes
+      second: segonda
       year: an
   errors:
     format: "%{attribute} %{message}"

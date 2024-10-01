@@ -5,8 +5,10 @@ sc:
       messages:
         record_invalid: 'Validatzione fallida: %{errors}'
         restrict_dependent_destroy:
-          has_one: Su registru non si podet iscantzellare ca esitit unu %{record} chi nde dipendet
-          has_many: Su registru non si podet iscantzellare ca esitint %{record} chi nde dipendent
+          has_many: Su registru non si podet iscantzellare ca esitint %{record} chi
+            nde dipendent
+          has_one: Su registru non si podet iscantzellare ca esitit unu %{record}
+            chi nde dipendet
   date:
     abbr_day_names:
     - dom
@@ -17,7 +19,7 @@ sc:
     - che
     - sàb
     abbr_month_names:
-    - 
+    -
     - ghe
     - fre
     - mar
@@ -43,7 +45,7 @@ sc:
       long: "%d %B %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - ghennàrgiu
     - freàrgiu
     - martzu
@@ -75,36 +77,36 @@ sc:
         one: belle un'annu
         other: belle %{count} annos
       half_a_minute: mesu minutu
-      less_than_x_seconds:
-        one: prus pagu de unu segundu
-        other: prus pagu de %{count} segundos
       less_than_x_minutes:
         one: prus pagu de unu minutu
         other: prus pagu de %{count} minutos
+      less_than_x_seconds:
+        one: prus pagu de unu segundu
+        other: prus pagu de %{count} segundos
       over_x_years:
         one: prus de un'annu
         other: prus de %{count} annos
-      x_seconds:
-        one: 1 segundu
-        other: "%{count} segundos"
-      x_minutes:
-        one: 1 minutu
-        other: "%{count} minutos"
       x_days:
         one: 1 die
         other: "%{count} dies"
+      x_minutes:
+        one: 1 minutu
+        other: "%{count} minutos"
       x_months:
         one: 1 mese
         other: "%{count} meses"
+      x_seconds:
+        one: 1 segundu
+        other: "%{count} segundos"
       x_years:
         one: 1 annu
         other: "%{count} annos"
     prompts:
-      second: Segundu
-      minute: Minutu
-      hour: Ora
       day: Die
+      hour: Ora
+      minute: Minutu
       month: Mese
+      second: Segundu
       year: Annu
   errors:
     format: "%{attribute} %{message}"
@@ -118,6 +120,7 @@ sc:
       exclusion: est riservadu
       greater_than: depet èssere prus mannu de %{count}
       greater_than_or_equal_to: depet èssere prus mannu o uguale a %{count}
+      in: depet istare intre %{count}
       inclusion: no est inclùdidu in sa lista
       invalid: no est vàlidu
       less_than: depet èssere prus minore de %{count}
@@ -127,7 +130,6 @@ sc:
       not_an_integer: no est unu nùmeru intreu
       odd: depet èssere dìspari
       other_than: depet èssere unu nùmeru chi non siat %{count}
-      in: "depet istare intre %{count}"
       present: depet èssere lassadu in biancu
       required: depet esìstere
       taken: est giai presente

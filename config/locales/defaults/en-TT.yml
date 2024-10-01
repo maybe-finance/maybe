@@ -3,10 +3,10 @@ en-TT:
   activerecord:
     errors:
       messages:
-        record_invalid: "Validation failed: %{errors}"
+        record_invalid: 'Validation failed: %{errors}'
         restrict_dependent_destroy:
-          has_one: "Cannot delete record because a dependent %{record} exists"
-          has_many: "Cannot delete record because dependent %{record} exist"
+          has_many: Cannot delete record because dependent %{record} exist
+          has_one: Cannot delete record because a dependent %{record} exists
   date:
     abbr_day_names:
     - Sun
@@ -93,12 +93,12 @@ en-TT:
       x_months:
         one: "%{count} month"
         other: "%{count} months"
-      x_years:
-        one: "%{count} year"
-        other: "%{count} years"
       x_seconds:
         one: "%{count} second"
         other: "%{count} seconds"
+      x_years:
+        one: "%{count} year"
+        other: "%{count} years"
     prompts:
       day: Day
       hour: Hour
@@ -111,7 +111,6 @@ en-TT:
     messages:
       accepted: must be accepted
       blank: can't be blank
-      present: must be blank
       confirmation: doesn't match %{attribute}
       empty: can't be empty
       equal_to: must be equal to %{count}
@@ -123,10 +122,12 @@ en-TT:
       invalid: is invalid
       less_than: must be less than %{count}
       less_than_or_equal_to: must be less than or equal to %{count}
-      model_invalid: "Validation failed: %{errors}"
+      model_invalid: 'Validation failed: %{errors}'
       not_a_number: is not a number
       not_an_integer: must be an integer
       odd: must be odd
+      other_than: must be other than %{count}
+      present: must be blank
       required: must exist
       taken: has already been taken
       too_long:
@@ -138,7 +139,6 @@ en-TT:
       wrong_length:
         one: is the wrong length (should be %{count} character)
         other: is the wrong length (should be %{count} characters)
-      other_than: must be other than %{count}
     template:
       body: 'There were problems with the following fields:'
       header:
@@ -160,7 +160,7 @@ en-TT:
         separator: "."
         significant: false
         strip_insignificant_zeros: false
-        unit: "TT$"
+        unit: TT$
     format:
       delimiter: ","
       precision: 3

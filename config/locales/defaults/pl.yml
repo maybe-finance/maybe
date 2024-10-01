@@ -5,8 +5,8 @@ pl:
       messages:
         record_invalid: 'Znaleziono błędy: %{errors}'
         restrict_dependent_destroy:
-          has_one: Nie można usunąć, gdyż istnieje zależny od niego %{record}
           has_many: Nie można usunąć, gdyż istnieją zależne od niego %{record}
+          has_one: Nie można usunąć, gdyż istnieje zależny od niego %{record}
   date:
     abbr_day_names:
     - nie
@@ -17,7 +17,7 @@ pl:
     - pią
     - sob
     abbr_month_names:
-    - 
+    -
     - sty
     - lut
     - mar
@@ -43,7 +43,7 @@ pl:
       long: "%-d %B %Y"
       short: "%-d %b"
     month_names:
-    - 
+    -
     - stycznia
     - lutego
     - marca
@@ -63,67 +63,67 @@ pl:
   datetime:
     distance_in_words:
       about_x_hours:
-        one: około godziny
         few: około %{count} godziny
         many: około %{count} godzin
+        one: około godziny
         other: około %{count} godzin
       about_x_months:
-        one: około miesiąca
         few: około %{count} miesiące
         many: około %{count} miesięcy
+        one: około miesiąca
         other: około %{count} miesięcy
       about_x_years:
-        one: około rok
         few: około %{count} lata
         many: około %{count} lat
+        one: około rok
         other: około %{count} lat
       almost_x_years:
-        one: prawie rok
         few: prawie %{count} lata
         many: prawie %{count} lat
+        one: prawie rok
         other: prawie %{count} lat
       half_a_minute: pół minuty
-      less_than_x_seconds:
-        one: mniej niż sekundę
-        few: mniej niż %{count} sekundy
-        many: mniej niż %{count} sekund
-        other: mniej niż %{count} sekund
       less_than_x_minutes:
-        one: mniej niż minutę
         few: mniej niż %{count} minuty
         many: mniej niż %{count} minut
+        one: mniej niż minutę
         other: mniej niż %{count} minut
+      less_than_x_seconds:
+        few: mniej niż %{count} sekundy
+        many: mniej niż %{count} sekund
+        one: mniej niż sekundę
+        other: mniej niż %{count} sekund
       over_x_years:
-        one: ponad rok
         few: ponad %{count} lata
         many: ponad %{count} lat
+        one: ponad rok
         other: ponad %{count} lat
-      x_seconds:
-        one: "%{count} sekunda"
-        few: "%{count} sekundy"
-        many: "%{count} sekund"
-        other: "%{count} sekund"
-      x_minutes:
-        one: "%{count} minuta"
-        few: "%{count} minuty"
-        many: "%{count} minut"
-        other: "%{count} minut"
       x_days:
-        one: "%{count} dzień"
         few: "%{count} dni"
         many: "%{count} dni"
+        one: "%{count} dzień"
         other: "%{count} dni"
+      x_minutes:
+        few: "%{count} minuty"
+        many: "%{count} minut"
+        one: "%{count} minuta"
+        other: "%{count} minut"
       x_months:
-        one: "%{count} miesiąc"
         few: "%{count} miesiące"
         many: "%{count} miesięcy"
+        one: "%{count} miesiąc"
         other: "%{count} miesięcy"
+      x_seconds:
+        few: "%{count} sekundy"
+        many: "%{count} sekund"
+        one: "%{count} sekunda"
+        other: "%{count} sekund"
     prompts:
-      second: Sekundy
-      minute: Minuta
-      hour: Godzina
       day: Dzień
+      hour: Godzina
+      minute: Minuta
       month: Miesiąc
+      second: Sekundy
       year: Rok
   errors:
     format: "%{attribute} %{message}"
@@ -149,26 +149,26 @@ pl:
       required: musi istnieć
       taken: zostało już zajęte
       too_long:
-        one: jest za długie (maksymalnie jeden znak)
         few: jest za długie (maksymalnie %{count} znaki)
         many: jest za długie (maksymalnie %{count} znaków)
+        one: jest za długie (maksymalnie jeden znak)
         other: jest za długie (maksymalnie %{count} znaków)
       too_short:
-        one: jest za krótkie (przynajmniej jeden znak)
         few: jest za krótkie (przynajmniej %{count} znaki)
         many: jest za krótkie (przynajmniej %{count} znaków)
+        one: jest za krótkie (przynajmniej jeden znak)
         other: jest za krótkie (przynajmniej %{count} znaków)
       wrong_length:
-        one: ma nieprawidłową długość (powinna wynosić jeden znak)
         few: ma nieprawidłową długość (powinna wynosić %{count} znaki)
         many: ma nieprawidłową długość (powinna wynosić %{count} znaków)
+        one: ma nieprawidłową długość (powinna wynosić jeden znak)
         other: ma nieprawidłową długość (powinna wynosić %{count} znaków)
     template:
       body: 'Błędy dotyczą następujących pól:'
       header:
-        one: "%{model} nie został zachowany z powodu jednego błędu"
         few: "%{model} nie został zachowany z powodu %{count} błędów"
         many: "%{model} nie został zachowany z powodu %{count} błędów"
+        one: "%{model} nie został zachowany z powodu jednego błędu"
         other: "%{model} nie został zachowany z powodu %{count} błędów"
   helpers:
     select:
@@ -212,9 +212,9 @@ pl:
         format: "%n %u"
         units:
           byte:
-            one: bajt
             few: bajty
             many: bajtów
+            one: bajt
             other: bajty
           gb: GB
           kb: KB

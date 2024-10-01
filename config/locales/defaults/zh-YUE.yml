@@ -5,8 +5,8 @@ zh-YUE:
       messages:
         record_invalid: 驗證失敗：%{errors}
         restrict_dependent_destroy:
-          has_one: 唔可以刪除，因為%{record}要用佢
           has_many: 唔可以刪除，因為%{record}要用佢
+          has_one: 唔可以刪除，因為%{record}要用佢
   date:
     abbr_day_names:
     - 週日
@@ -17,7 +17,7 @@ zh-YUE:
     - 週五
     - 週六
     abbr_month_names:
-    - 
+    -
     - 1月
     - 2月
     - 3月
@@ -43,7 +43,7 @@ zh-YUE:
       long: "%Y年%b%d日"
       short: "%b%d日"
     month_names:
-    - 
+    -
     - 一月
     - 二月
     - 三月
@@ -67,20 +67,20 @@ zh-YUE:
       about_x_years: 大概%{count}年
       almost_x_years: 差唔多%{count}年
       half_a_minute: 半分鐘
-      less_than_x_seconds: 唔夠%{count}秒
       less_than_x_minutes: 唔夠%{count}分鐘
+      less_than_x_seconds: 唔夠%{count}秒
       over_x_years: 超過%{count}年
-      x_seconds: "%{count}秒"
-      x_minutes: "%{count}分鐘"
       x_days: "%{count}日"
+      x_minutes: "%{count}分鐘"
       x_months: "%{count}個月"
+      x_seconds: "%{count}秒"
       x_years: "%{count}年"
     prompts:
-      second: 秒
-      minute: 分
-      hour: 點
       day: 日
+      hour: 點
+      minute: 分
       month: 月
+      second: 秒
       year: 年
   errors:
     format: "%{attribute}%{message}"

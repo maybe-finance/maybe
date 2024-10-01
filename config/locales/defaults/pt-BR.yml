@@ -5,8 +5,8 @@ pt-BR:
       messages:
         record_invalid: 'A validação falhou: %{errors}'
         restrict_dependent_destroy:
-          has_one: Não é possível excluir o registro pois existe um %{record} dependente
           has_many: Não é possível excluir o registro pois existem %{record} dependentes
+          has_one: Não é possível excluir o registro pois existe um %{record} dependente
   date:
     abbr_day_names:
     - dom
@@ -75,36 +75,36 @@ pt-BR:
         one: quase %{count} ano
         other: quase %{count} anos
       half_a_minute: meio minuto
-      less_than_x_seconds:
-        one: menos de %{count} segundo
-        other: menos de %{count} segundos
       less_than_x_minutes:
         one: menos de um minuto
         other: menos de %{count} minutos
+      less_than_x_seconds:
+        one: menos de %{count} segundo
+        other: menos de %{count} segundos
       over_x_years:
         one: mais de %{count} ano
         other: mais de %{count} anos
-      x_seconds:
-        one: "%{count} segundo"
-        other: "%{count} segundos"
-      x_minutes:
-        one: "%{count} minuto"
-        other: "%{count} minutos"
       x_days:
         one: "%{count} dia"
         other: "%{count} dias"
+      x_minutes:
+        one: "%{count} minuto"
+        other: "%{count} minutos"
       x_months:
         one: "%{count} mês"
         other: "%{count} meses"
+      x_seconds:
+        one: "%{count} segundo"
+        other: "%{count} segundos"
       x_years:
         one: "%{count} ano"
         other: "%{count} anos"
     prompts:
-      second: Segundo
-      minute: Minuto
-      hour: Hora
       day: Dia
+      hour: Hora
+      minute: Minuto
       month: Mês
+      second: Segundo
       year: Ano
   errors:
     format: "%{attribute} %{message}"

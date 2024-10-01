@@ -10,7 +10,7 @@ gl:
     - Ven
     - Sab
     abbr_month_names:
-    - 
+    -
     - Xan
     - Feb
     - Mar
@@ -36,7 +36,7 @@ gl:
       long: "%A %e de %B de %Y"
       short: "%e %b"
     month_names:
-    - 
+    -
     - Xaneiro
     - Febreiro
     - Marzo
@@ -65,30 +65,30 @@ gl:
         one: aproximadamente %{count} ano
         other: "%{count} anos"
       half_a_minute: medio minuto
-      less_than_x_seconds:
-        zero: menos dun segundo
-        one: "%{count} segundo"
-        few: poucos segundos
-        other: "%{count} segundos"
       less_than_x_minutes:
-        zero: menos dun minuto
         one: "%{count} minuto"
         other: "%{count} minutos"
+        zero: menos dun minuto
+      less_than_x_seconds:
+        few: poucos segundos
+        one: "%{count} segundo"
+        other: "%{count} segundos"
+        zero: menos dun segundo
       over_x_years:
         one: máis dun ano
         other: "%{count} anos"
-      x_seconds:
-        one: "%{count} segundo"
-        other: "%{count} segundos"
-      x_minutes:
-        one: "%{count} minuto"
-        other: "%{count} minuto"
       x_days:
         one: "%{count} día"
         other: "%{count} días"
+      x_minutes:
+        one: "%{count} minuto"
+        other: "%{count} minuto"
       x_months:
         one: "%{count} mes"
         other: "%{count} meses"
+      x_seconds:
+        one: "%{count} segundo"
+        other: "%{count} segundos"
   errors:
     format: "%{attribute} %{message}"
     messages:

@@ -5,8 +5,8 @@ tt:
       messages:
         record_invalid: 'Хаталар чыкты: %{errors}'
         restrict_dependent_destroy:
-          has_one: 'Язмышны бетереп булмады, чөнки бәйлелек табылды: %{record}'
           has_many: 'Язмышны бетереп булмады, чөнки бәйлелекләр табылды: %{record}'
+          has_one: 'Язмышны бетереп булмады, чөнки бәйлелек табылды: %{record}'
   date:
     abbr_day_names:
     - Якш
@@ -17,7 +17,7 @@ tt:
     - Җом
     - Шим
     abbr_month_names:
-    - 
+    -
     - гыйн.
     - февр.
     - март
@@ -43,7 +43,7 @@ tt:
       long: "%-d %B %Y"
       short: "%-d %b"
     month_names:
-    - 
+    -
     - гыйнвар
     - февраль
     - март
@@ -75,33 +75,33 @@ tt:
         one: бер ел диярлек
         other: "%{count} ел диярлек"
       half_a_minute: минуттан азрак
-      less_than_x_seconds:
-        one: бер секундтан азрак
-        other: "%{count} секундтан азрак"
       less_than_x_minutes:
         one: бер минуттан азрак
         other: "%{count} минуттан азрак"
+      less_than_x_seconds:
+        one: бер секундтан азрак
+        other: "%{count} секундтан азрак"
       over_x_years:
         one: бер ел артык
         other: "%{count} ел артык"
-      x_seconds:
-        one: бер секунд
-        other: "%{count} секунд"
-      x_minutes:
-        one: бер минут
-        other: "%{count} минут"
       x_days:
         one: бер көн
         other: "%{count} көн"
+      x_minutes:
+        one: бер минут
+        other: "%{count} минут"
       x_months:
         one: бер ай
         other: "%{count} ай"
+      x_seconds:
+        one: бер секунд
+        other: "%{count} секунд"
     prompts:
-      second: Секунд
-      minute: Минут
-      hour: Сәгать
       day: Көн
+      hour: Сәгать
+      minute: Минут
       month: Ай
+      second: Секунд
       year: Ел
   errors:
     format: "%{attribute} %{message}"

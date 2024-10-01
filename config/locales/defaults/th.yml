@@ -14,7 +14,7 @@ th:
     - ศ
     - ส
     abbr_month_names:
-    - 
+    -
     - ม.ค.
     - ก.พ.
     - มี.ค.
@@ -40,7 +40,7 @@ th:
       long: "%d %B %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - มกราคม
     - กุมภาพันธ์
     - มีนาคม
@@ -64,19 +64,19 @@ th:
       about_x_years: ประมาณ %{count} ปี
       almost_x_years: เกือบ %{count} ปี
       half_a_minute: ครึ่งนาที
-      less_than_x_seconds: น้อยกว่า %{count} วินาที
       less_than_x_minutes: น้อยกว่า %{count} นาที
+      less_than_x_seconds: น้อยกว่า %{count} วินาที
       over_x_years: มากกว่า %{count} ปี
-      x_seconds: "%{count} วินาที"
-      x_minutes: "%{count} นาที"
       x_days: "%{count} วัน"
+      x_minutes: "%{count} นาที"
       x_months: "%{count} เดือน"
+      x_seconds: "%{count} วินาที"
     prompts:
-      second: วินาที
-      minute: นาที
-      hour: ชั่วโมง
       day: วัน
+      hour: ชั่วโมง
+      minute: นาที
       month: เดือน
+      second: วินาที
       year: ปี
   errors:
     format: "%{attribute} %{message}"

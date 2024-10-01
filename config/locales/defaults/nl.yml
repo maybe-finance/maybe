@@ -5,8 +5,8 @@ nl:
       messages:
         record_invalid: 'Validatie mislukt: %{errors}'
         restrict_dependent_destroy:
-          has_one: Kan item niet verwijderen omdat %{record} afhankelijk is
           has_many: Kan item niet verwijderen omdat afhankelijke %{record} bestaan
+          has_one: Kan item niet verwijderen omdat %{record} afhankelijk is
   date:
     abbr_day_names:
     - zo
@@ -17,7 +17,7 @@ nl:
     - vr
     - za
     abbr_month_names:
-    - 
+    -
     - jan
     - feb
     - mrt
@@ -43,7 +43,7 @@ nl:
       long: "%e %B %Y"
       short: "%e %b"
     month_names:
-    - 
+    -
     - januari
     - februari
     - maart
@@ -75,36 +75,36 @@ nl:
         one: bijna een jaar
         other: bijna %{count} jaar
       half_a_minute: een halve minuut
-      less_than_x_seconds:
-        one: minder dan een seconde
-        other: minder dan %{count} seconden
       less_than_x_minutes:
         one: minder dan een minuut
         other: minder dan %{count} minuten
+      less_than_x_seconds:
+        one: minder dan een seconde
+        other: minder dan %{count} seconden
       over_x_years:
         one: meer dan een jaar
         other: meer dan %{count} jaar
-      x_seconds:
-        one: "%{count} seconde"
-        other: "%{count} seconden"
-      x_minutes:
-        one: "%{count} minuut"
-        other: "%{count} minuten"
       x_days:
         one: "%{count} dag"
         other: "%{count} dagen"
+      x_minutes:
+        one: "%{count} minuut"
+        other: "%{count} minuten"
       x_months:
         one: "%{count} maand"
         other: "%{count} maanden"
+      x_seconds:
+        one: "%{count} seconde"
+        other: "%{count} seconden"
       x_years:
         one: "%{count} jaar"
         other: "%{count} jaar"
     prompts:
-      second: seconde
-      minute: minuut
-      hour: uur
       day: dag
+      hour: uur
+      minute: minuut
       month: maand
+      second: seconde
       year: jaar
   errors:
     format: "%{attribute} %{message}"

@@ -5,8 +5,8 @@ dz:
       messages:
         record_invalid: 'ཆ་འཇོག་འཐུས་ཤོར་ཡི་: %{errors}'
         restrict_dependent_destroy:
-          has_one: ཡིག་ཐོ་ %{record} བརྟེན་ཏེ་ཡོད་པ་ལས་བཏོན་གཏང་མི་བཏུབ་
           has_many: ཡིག་ཐོ་ %{record} བརྟེན་ཏེ་ཡོད་པ་ལས་བཏོན་གཏང་མི་བཏུབ་
+          has_one: ཡིག་ཐོ་ %{record} བརྟེན་ཏེ་ཡོད་པ་ལས་བཏོན་གཏང་མི་བཏུབ་
   date:
     abbr_day_names:
     - གཟའ་ཟླཝ
@@ -73,36 +73,36 @@ dz:
         other: ལོ་ %{count} དེ་ཅིག
       almost_x_years: ལོ %{count} མ་ལྷགཔ་ཅིག
       half_a_minute: སྐར་མ་ཕྱེད་ཀ
-      less_than_x_seconds:
-        one: སྐར་ཆ་ ༡ ་ལས་ཉུངམ
-        other: སྐར་ཆ %{count} ལས་ཉུངམ
       less_than_x_minutes:
         one: སྐར་མ་ ༡ ་ལས་ཉུངམ
         other: སྐར་མ %{count} ལས་ཉུངམ
+      less_than_x_seconds:
+        one: སྐར་ཆ་ ༡ ་ལས་ཉུངམ
+        other: སྐར་ཆ %{count} ལས་ཉུངམ
       over_x_years:
         one: ལོ་ ༡ ་ལྷག
         other: ལོ་%{count}ལས་ལྷག
-      x_seconds:
-        one: སྐར་ཆ་གཅིག
-        other: སྐར་ཆ %{count}
-      x_minutes:
-        one: སྐར་མ་གཅིག
-        other: སྐར་མ %{count}
       x_days:
         one: ཉིནམ་གཅིག
         other: ཉིནམ %{count}
+      x_minutes:
+        one: སྐར་མ་གཅིག
+        other: སྐར་མ %{count}
       x_months:
         one: ཟླཝ་གཅིག
         other: ཟླཝ %{count}
+      x_seconds:
+        one: སྐར་ཆ་གཅིག
+        other: སྐར་ཆ %{count}
       x_years:
         one: ལོ་གཅིག
         other: ལོ %{count}
     prompts:
-      second: སྐར་ཆ
-      minute: སྐར་མ
-      hour: ཆུ་ཚོད
       day: ཉིནམ
+      hour: ཆུ་ཚོད
+      minute: སྐར་མ
       month: ཟླཝ
+      second: སྐར་ཆ
       year: ལོ
   errors:
     format: "%{attribute} %{message}"

@@ -5,8 +5,8 @@ fi:
       messages:
         record_invalid: 'Validointi epäonnistui: %{errors}'
         restrict_dependent_destroy:
-          has_one: Ei voida poistaa mallia koska tästä riippuvainen %{record} löytyy
           has_many: Ei voida poistaa mallia koska tästä riippuvaisia %{record} löytyy
+          has_one: Ei voida poistaa mallia koska tästä riippuvainen %{record} löytyy
   date:
     abbr_day_names:
     - su
@@ -75,36 +75,36 @@ fi:
         one: melkein yksi vuosi
         other: melkein %{count} vuotta
       half_a_minute: puoli minuuttia
-      less_than_x_seconds:
-        one: alle sekunti
-        other: alle %{count} sekuntia
       less_than_x_minutes:
         one: alle minuutti
         other: alle %{count} minuuttia
+      less_than_x_seconds:
+        one: alle sekunti
+        other: alle %{count} sekuntia
       over_x_years:
         one: yli vuosi
         other: yli %{count} vuotta
-      x_seconds:
-        one: sekunti
-        other: "%{count} sekuntia"
-      x_minutes:
-        one: minuutti
-        other: "%{count} minuuttia"
       x_days:
         one: päivä
         other: "%{count} päivää"
+      x_minutes:
+        one: minuutti
+        other: "%{count} minuuttia"
       x_months:
         one: kuukausi
         other: "%{count} kuukautta"
+      x_seconds:
+        one: sekunti
+        other: "%{count} sekuntia"
       x_years:
         one: vuosi
         other: "%{count} vuotta"
     prompts:
-      second: Sekunti
-      minute: Minuutti
-      hour: Tunti
       day: Päivä
+      hour: Tunti
+      minute: Minuutti
       month: Kuukausi
+      second: Sekunti
       year: Vuosi
   errors:
     format: "%{attribute} %{message}"

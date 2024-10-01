@@ -5,8 +5,8 @@ km:
       messages:
         record_invalid: មិនមានសុពលភាព៖ %{errors}
         restrict_dependent_destroy:
-          has_one: មិនអាចលុបបានទេពីព្រោះមាន %{record} នៅឡើយ
           has_many: មិនអាចលុបបានទេពីព្រោះមាន %{record} នៅឡើយ
+          has_one: មិនអាចលុបបានទេពីព្រោះមាន %{record} នៅឡើយ
   date:
     abbr_day_names:
     - អា
@@ -17,7 +17,7 @@ km:
     - សុ
     - ស
     abbr_month_names:
-    - 
+    -
     - មករា
     - កុម្ភៈ
     - មិនា
@@ -43,7 +43,7 @@ km:
       long: ថ្ងៃ%A ទី%e ខែ%B ឆ្នាំ%Y
       short: "%d %b"
     month_names:
-    - 
+    -
     - មករា
     - កុម្ភៈ
     - មិនា
@@ -67,19 +67,19 @@ km:
       about_x_years: ប្រមាណ %{count} ឆ្នាំ
       almost_x_years: ជិត %{count} ឆ្នាំ
       half_a_minute: កន្លះនាទី
-      less_than_x_seconds: តិចជាង %{count} វិនាទី
       less_than_x_minutes: តិចជាង %{count} នាទី
+      less_than_x_seconds: តិចជាង %{count} វិនាទី
       over_x_years: លើសពី %{count} ឆ្នាំ
-      x_seconds: "%{count} វិនាទី"
-      x_minutes: "%{count} នាទី"
       x_days: "%{count} ថ្ងៃ"
+      x_minutes: "%{count} នាទី"
       x_months: "%{count} ខែ"
+      x_seconds: "%{count} វិនាទី"
     prompts:
-      second: វិនាទី
-      minute: នាទី
-      hour: ម៉ោង
       day: ថ្ងៃ
+      hour: ម៉ោង
+      minute: នាទី
       month: ខែ
+      second: វិនាទី
       year: ឆ្នាំ
   errors:
     format: "%{attribute} %{message}"

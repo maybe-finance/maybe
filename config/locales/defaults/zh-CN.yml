@@ -5,8 +5,8 @@ zh-CN:
       messages:
         record_invalid: 验证失败：%{errors}
         restrict_dependent_destroy:
-          has_one: 由于%{record}需要此记录，所以无法移除记录
           has_many: 由于%{record}需要此记录，所以无法移除记录
+          has_one: 由于%{record}需要此记录，所以无法移除记录
   date:
     abbr_day_names:
     - 周日
@@ -17,7 +17,7 @@ zh-CN:
     - 周五
     - 周六
     abbr_month_names:
-    - 
+    -
     - 1月
     - 2月
     - 3月
@@ -43,7 +43,7 @@ zh-CN:
       long: "%Y年%m月%d日"
       short: "%m月%d日"
     month_names:
-    - 
+    -
     - 一月
     - 二月
     - 三月
@@ -67,20 +67,20 @@ zh-CN:
       about_x_years: 大约%{count}年
       almost_x_years: 接近%{count}年
       half_a_minute: 半分钟
-      less_than_x_seconds: 不到%{count}秒
       less_than_x_minutes: 不到%{count}分钟
+      less_than_x_seconds: 不到%{count}秒
       over_x_years: "%{count}年多"
-      x_seconds: "%{count}秒"
-      x_minutes: "%{count}分钟"
       x_days: "%{count}天"
+      x_minutes: "%{count}分钟"
       x_months: "%{count}个月"
+      x_seconds: "%{count}秒"
       x_years: "%{count}年"
     prompts:
-      second: 秒
-      minute: 分
-      hour: 时
       day: 日
+      hour: 时
+      minute: 分
       month: 月
+      second: 秒
       year: 年
   errors:
     format: "%{attribute}%{message}"

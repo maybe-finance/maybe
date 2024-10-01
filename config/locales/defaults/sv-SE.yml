@@ -5,8 +5,8 @@ sv-SE:
       messages:
         record_invalid: 'Ett fel uppstod: %{errors}'
         restrict_dependent_destroy:
-          has_one: Kan inte ta bort post då beroende %{record} finns
           has_many: Kan inte ta bort poster då beroende %{record} finns
+          has_one: Kan inte ta bort post då beroende %{record} finns
   date:
     abbr_day_names:
     - sön
@@ -17,7 +17,7 @@ sv-SE:
     - fre
     - lör
     abbr_month_names:
-    - 
+    -
     - jan
     - feb
     - mar
@@ -43,7 +43,7 @@ sv-SE:
       long: "%e %B %Y"
       short: "%e %b"
     month_names:
-    - 
+    -
     - januari
     - februari
     - mars
@@ -75,36 +75,36 @@ sv-SE:
         one: nästan ett år
         other: nästan %{count} år
       half_a_minute: en halv minut
-      less_than_x_seconds:
-        one: mindre än en sekund
-        other: mindre än %{count} sekunder
       less_than_x_minutes:
         one: mindre än en minut
         other: mindre än %{count} minuter
+      less_than_x_seconds:
+        one: mindre än en sekund
+        other: mindre än %{count} sekunder
       over_x_years:
         one: mer än ett år
         other: mer än %{count} år
-      x_seconds:
-        one: en sekund
-        other: "%{count} sekunder"
-      x_minutes:
-        one: en minut
-        other: "%{count} minuter"
       x_days:
         one: en dag
         other: "%{count} dagar"
+      x_minutes:
+        one: en minut
+        other: "%{count} minuter"
       x_months:
         one: en månad
         other: "%{count} månader"
+      x_seconds:
+        one: en sekund
+        other: "%{count} sekunder"
       x_years:
         one: ett år
         other: "%{count} år"
     prompts:
-      second: Sekund
-      minute: Minut
-      hour: Timme
       day: Dag
+      hour: Timme
+      minute: Minut
       month: Månad
+      second: Sekund
       year: År
   errors:
     format: "%{attribute} %{message}"

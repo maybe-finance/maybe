@@ -5,8 +5,8 @@ ml:
       messages:
         record_invalid: 'Validation failed: %{errors}'
         restrict_dependent_destroy:
-          has_one: "%{record} ആയി ബന്ദം ഉള്ളതിനാൽ നീക്കം ചെയ്യാൻ പറ്റില്ല"
           has_many: "%{record} ആയി ബന്ദം ഉള്ളതിനാൽ നീക്കം ചെയ്യാൻ പറ്റില്ല"
+          has_one: "%{record} ആയി ബന്ദം ഉള്ളതിനാൽ നീക്കം ചെയ്യാൻ പറ്റില്ല"
   date:
     abbr_day_names:
     - ഞാ.
@@ -17,7 +17,7 @@ ml:
     - വെ.
     - ശ.
     abbr_month_names:
-    - 
+    -
     - ജനു.
     - ഫെബ്ര.
     - മാർ.
@@ -43,7 +43,7 @@ ml:
       long: "%d %B, %Y"
       short: "%d %b"
     month_names:
-    - 
+    -
     - ജനുവരി
     - ഫെബ്രുവരി
     - മാർച്ച്
@@ -75,33 +75,33 @@ ml:
         one: ഏതാണ്ട്  %{count} വർഷം
         other: ഏതാണ്ട്  %{count} വർഷം
       half_a_minute: അര സൂക്ഷ്മ
-      less_than_x_seconds:
-        one: ഒരു നിമിഷത്തിനു ഉള്ളിൽ
-        other: "%{count} നിമിഷത്തിനു ഉള്ളിൽ"
       less_than_x_minutes:
         one: ഒരു മിനുറ്റിനു ഉള്ളിൽ
         other: "%{count} മിനുറ്റിനു ഉള്ളിൽ"
+      less_than_x_seconds:
+        one: ഒരു നിമിഷത്തിനു ഉള്ളിൽ
+        other: "%{count} നിമിഷത്തിനു ഉള്ളിൽ"
       over_x_years:
         one: ഒരു വര്ഷത്തിനു മേലെ
         other: "%{count} വര്ഷത്തിനു മേലെ"
-      x_seconds:
-        one: "%{count} നിമിഷം"
-        other: "%{count} നിമിഷം"
-      x_minutes:
-        one: "%{count} മിനിറ്റ്"
-        other: "%{count} മിനിറ്റ്"
       x_days:
         one: "%{count} ദിവസം"
         other: "%{count} ദിവസങ്ങൾ"
+      x_minutes:
+        one: "%{count} മിനിറ്റ്"
+        other: "%{count} മിനിറ്റ്"
       x_months:
         one: "%{count} മാസം"
         other: "%{count} മാസം"
+      x_seconds:
+        one: "%{count} നിമിഷം"
+        other: "%{count} നിമിഷം"
     prompts:
-      second: നിമിഷം
-      minute: സുക്ഷ്മ
-      hour: മണിക്കൂർ
       day: ദിവസം
+      hour: മണിക്കൂർ
+      minute: സുക്ഷ്മ
       month: സുക്ഷ്മ
+      second: നിമിഷം
       year: വർഷം
   errors:
     format: "%{attribute} %{message}"

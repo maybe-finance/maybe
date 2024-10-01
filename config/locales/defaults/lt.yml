@@ -5,8 +5,8 @@ lt:
       messages:
         record_invalid: 'Nepraeitos patikros: %{errors}'
         restrict_dependent_destroy:
-          has_one: Negalima ištrinti įrašo nes priklausomas %{record} egzistuoja
           has_many: Negalima ištrinti įrašų nes priklausomi %{record} egzistuoja
+          has_one: Negalima ištrinti įrašo nes priklausomas %{record} egzistuoja
   date:
     abbr_day_names:
     - Sek
@@ -63,60 +63,60 @@ lt:
   datetime:
     distance_in_words:
       about_x_hours:
-        one: apie %{count} valandą
         few: apie %{count} valandas
+        one: apie %{count} valandą
         other: apie %{count} valandų
       about_x_months:
-        one: apie %{count} mėnesį
         few: apie %{count} mėnesius
+        one: apie %{count} mėnesį
         other: apie %{count} mėnesių
       about_x_years:
-        one: apie %{count} metus
         few: apie %{count} metus
+        one: apie %{count} metus
         other: apie %{count} metų
       almost_x_years:
-        one: beveik %{count} metai
         few: beveik %{count} metai
+        one: beveik %{count} metai
         other: beveik %{count} metų
       half_a_minute: pusė minutės
-      less_than_x_seconds:
-        one: mažiau nei %{count} sekundė
-        few: mažiau nei %{count} sekundės
-        other: mažiau nei %{count} sekundžių
       less_than_x_minutes:
-        one: mažiau nei %{count} minutė
         few: mažiau nei %{count} minutės
+        one: mažiau nei %{count} minutė
         other: mažiau nei %{count} minučių
+      less_than_x_seconds:
+        few: mažiau nei %{count} sekundės
+        one: mažiau nei %{count} sekundė
+        other: mažiau nei %{count} sekundžių
       over_x_years:
-        one: virš %{count} metų
         few: virš %{count} metų
+        one: virš %{count} metų
         other: virš %{count} metų
-      x_seconds:
-        one: "%{count} sekundė"
-        few: "%{count} sekundės"
-        other: "%{count} sekundžių"
-      x_minutes:
-        one: "%{count} minutė"
-        few: "%{count} minutės"
-        other: "%{count} minučių"
       x_days:
-        one: "%{count} diena"
         few: "%{count} dienos"
+        one: "%{count} diena"
         other: "%{count} dienų"
+      x_minutes:
+        few: "%{count} minutės"
+        one: "%{count} minutė"
+        other: "%{count} minučių"
       x_months:
-        one: "%{count} mėnesis"
         few: "%{count} mėnesiai"
+        one: "%{count} mėnesis"
         other: "%{count} mėnesių"
+      x_seconds:
+        few: "%{count} sekundės"
+        one: "%{count} sekundė"
+        other: "%{count} sekundžių"
       x_years:
-        one: "%{count} metai"
         few: "%{count} metai"
+        one: "%{count} metai"
         other: "%{count} metai"
     prompts:
-      second: Sekundės
-      minute: Minutė
-      hour: Valanda
       day: Diena
+      hour: Valanda
+      minute: Minutė
       month: Mėnuo
+      second: Sekundės
       year: Metai
   errors:
     format: "%{attribute} %{message}"
@@ -144,19 +144,19 @@ lt:
       required: turi egzistuoti
       taken: jau užimtas
       too_long:
-        one: per ilgas (daugiausiai %{count} simbolis)
         few: per ilgas (daugiausiai %{count} simboliai)
+        one: per ilgas (daugiausiai %{count} simbolis)
         other: per ilgas (daugiausiai %{count} simbolių)
       too_short:
-        one: per trumpas (mažiausiai %{count} simbolis)
         few: per trumpas (mažiausiai %{count} simboliai)
+        one: per trumpas (mažiausiai %{count} simbolis)
         other: per trumpas (mažiausiai %{count} simbolių)
       wrong_length: neteisingo ilgio (turi būti %{count} simboliai)
     template:
       body: 'Šiuose laukuose yra klaidų:'
       header:
-        one: Išsaugant objektą %{model} rasta %{count} klaida
         few: Išsaugant objektą %{model} rastos %{count} klaidos
+        one: Išsaugant objektą %{model} rasta %{count} klaida
         other: Išsaugant objektą %{model} rasta %{count} klaidų
   helpers:
     select:
@@ -201,8 +201,8 @@ lt:
         format: "%n %u"
         units:
           byte:
-            one: Baitas
             few: Baitai
+            one: Baitas
             other: Baitų
           eb: EB
           gb: GB

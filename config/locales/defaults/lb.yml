@@ -5,9 +5,9 @@ lb:
       messages:
         record_invalid: 'Validatioun feelgeschlo: %{errors}'
         restrict_dependent_destroy:
-          has_one: Den Enregistrement kann net geläscht gi wëll et en dovun ofhängegt
-            %{record} gëtt
           has_many: Den Enregistrement kann net geläscht gi wëll et dovun ofhängegt
+            %{record} gëtt
+          has_one: Den Enregistrement kann net geläscht gi wëll et en dovun ofhängegt
             %{record} gëtt
   date:
     abbr_day_names:
@@ -19,7 +19,7 @@ lb:
     - Fre
     - Sam
     abbr_month_names:
-    - 
+    -
     - Jan
     - Feb
     - Mäe
@@ -45,7 +45,7 @@ lb:
       long: "%e. %B %Y"
       short: "%e %b"
     month_names:
-    - 
+    -
     - Januar
     - Februar
     - Mäerz
@@ -77,33 +77,33 @@ lb:
         one: bal ee Joer
         other: bal %{count} Joer
       half_a_minute: eng hallef Minutt
-      less_than_x_seconds:
-        one: manner wéi eng Sekonn
-        other: manner wéi %{count} Sekonnen
       less_than_x_minutes:
         one: manner wéi eng Minutt
         other: manner wéi %{count} Minutten
+      less_than_x_seconds:
+        one: manner wéi eng Sekonn
+        other: manner wéi %{count} Sekonnen
       over_x_years:
         one: méi wéi ee Joer
         other: méi wéi %{count} Joer
-      x_seconds:
-        one: "%{count} Sekonn"
-        other: "%{count} Sekonnen"
-      x_minutes:
-        one: "%{count} Minutt"
-        other: "%{count} Minutten"
       x_days:
         one: "%{count} Dag"
         other: "%{count} Deeg"
+      x_minutes:
+        one: "%{count} Minutt"
+        other: "%{count} Minutten"
       x_months:
         one: "%{count} Mount"
         other: "%{count} Méint"
+      x_seconds:
+        one: "%{count} Sekonn"
+        other: "%{count} Sekonnen"
     prompts:
-      second: Sekonnen
-      minute: Minutt
-      hour: Stonn
       day: Dag
+      hour: Stonn
+      minute: Minutt
       month: Mount
+      second: Sekonnen
       year: Joer
   errors:
     format: "%{attribute} %{message}"

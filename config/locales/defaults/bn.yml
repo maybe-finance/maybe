@@ -10,7 +10,7 @@ bn:
     - শুক্রবার
     - শনিবার
     abbr_month_names:
-    - 
+    -
     - জানুয়ারি
     - ফেব্রুয়ারি
     - মার্চ
@@ -36,7 +36,7 @@ bn:
       long: "%e %B %Y"
       short: "%e %b"
     month_names:
-    - 
+    -
     - জানুয়ারি
     - ফেব্রুয়ারি
     - মার্চ
@@ -68,33 +68,33 @@ bn:
         one: প্রায় ১ বছর
         other: প্রায় %{count} বছর
       half_a_minute: অর্ধ মিনিট
-      less_than_x_seconds:
-        one: '১ সেকেন্ডর কম'
-        other: "%{count} সেকেন্ডের কম"
       less_than_x_minutes:
         one: ১ মিনিটের কম
         other: "%{count} মিনিটের কম"
+      less_than_x_seconds:
+        one: ১ সেকেন্ডর কম
+        other: "%{count} সেকেন্ডের কম"
       over_x_years:
         one: ১ বছরের বেশি
         other: "%{count} বছরের বেশি"
-      x_seconds:
-        one: ১ সেকেন্ড
-        other: "%{count} সেকেন্ড"
-      x_minutes:
-        one: ১ মিনিট
-        other: "%{count} মিনিট"
       x_days:
         one: ১ দিন
         other: "%{count} দিন"
+      x_minutes:
+        one: ১ মিনিট
+        other: "%{count} মিনিট"
       x_months:
         one: ১ মাস
         other: "%{count} মাস"
+      x_seconds:
+        one: ১ সেকেন্ড
+        other: "%{count} সেকেন্ড"
     prompts:
-      second: সেকেন্ড
-      minute: মিনিট
-      hour: ঘণ্টা
       day: দিন
+      hour: ঘণ্টা
+      minute: মিনিট
       month: মাস
+      second: সেকেন্ড
       year: বছর
   errors:
     format: "%{attribute} %{message}"
