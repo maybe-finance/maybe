@@ -1,0 +1,6 @@
+one:
+  import: transaction 
+  key: Food 
+  type: Import::CategoryMapping 
+  mappable: food_and_drink 
+  mappable_type: Category 

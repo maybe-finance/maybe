@@ -1,0 +1,11 @@
+Date,Description,Original Description,Amount,Transaction Type,Category,Account Name,Labels,Notes
+05/01/2023,Grocery Store,SAFEWAY #1234,78.32,debit,Groceries,Checking Account,,
+05/02/2023,Gas Station,SHELL OIL 57442893,-45.67,credit,Gas & Fuel,Credit Card,,
+05/03/2023,Monthly Rent,AUTOPAY MORTGAGE,1500.00,debit,Mortgage & Rent,Checking Account,,
+05/04/2023,Paycheck,ACME CORP PAYROLL,-2500.00,credit,Paycheck,Checking Account,Income,
+05/05/2023,Restaurant,CHIPOTLE MEX GRILL,15.75,debit,Restaurants,Credit Card,,
+05/06/2023,Online Shopping,AMAZON.COM,32.99,debit,Shopping,Credit Card,,
+05/07/2023,Utility Bill,CITY POWER & LIGHT,89.50,debit,Utilities,Checking Account,,
+05/08/2023,Coffee Shop,STARBUCKS,4.25,debit,Coffee Shops,Credit Card,,
+05/09/2023,Gym Membership,FITNESS WORLD,49.99,debit,Gym,Checking Account,Health,Monthly membership
+05/10/2023,Movie Theater,AMC THEATERS #123,24.50,debit,Movies & DVDs,Credit Card,Entertainment,

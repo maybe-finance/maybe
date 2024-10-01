@@ -1,0 +1,18 @@
+<%# locals: (import:) %>
+
+<div class="h-full flex flex-col justify-center items-center">
+  <div class="space-y-6 max-w-sm">
+    <div class="mx-auto bg-green-500/5 h-8 w-8 rounded-full flex items-center justify-center">
+      <%= lucide_icon "check", class: "w-5 h-5 text-green-500" %>
+    </div>
+
+    <div class="text-center space-y-2">
+      <h1 class="font-medium text-gray-900 text-center text-3xl">Import successful</h1>
+      <p class="text-sm text-gray-500">Your imported data has been successfully added to the app and is now ready for use.</p>
+    </div>
+
+    <div>
+      <%= link_to "Back to dashboard", root_path, class: "block btn btn--primary text-center w-full" %>
+    </div>
+  </div>
+</div>

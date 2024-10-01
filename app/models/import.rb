@@ -1,185 +1,137 @@
 class Import < ApplicationRecord
-  belongs_to :account
+  TYPES = %w[TransactionImport TradeImport AccountImport MintImport].freeze
+  SIGNAGE_CONVENTIONS = %w[inflows_positive inflows_negative]
 
-  validate :raw_file_must_be_parsable
-  validates :col_sep, inclusion: { in: Csv::COL_SEP_LIST }
-
-  before_save :initialize_csv, if: :should_initialize_csv?
-
-  enum :status, { pending: "pending", complete: "complete", importing: "importing", failed: "failed" }, validate: true
-
-  store_accessor :column_mappings, :define_column_mapping_keys
+  belongs_to :family
 
   scope :ordered, -> { order(created_at: :desc) }
 
-  FALLBACK_TRANSACTION_NAME = "Imported transaction"
+  enum :status, { pending: "pending", complete: "complete", importing: "importing", failed: "failed" }, validate: true
+
+  validates :type, inclusion: { in: TYPES }
+  validates :col_sep, inclusion: { in: [ ",", ";" ] }
+  validates :signage_convention, inclusion: { in: SIGNAGE_CONVENTIONS }
+
+  has_many :rows, dependent: :destroy
+  has_many :mappings, dependent: :destroy
+  has_many :accounts, dependent: :destroy
+  has_many :entries, dependent: :destroy, class_name: "Account::Entry"
 
   def publish_later
+    raise "Import is not publishable" unless publishable?
+
+    update! status: :importing
+
     ImportJob.perform_later(self)
   end
 
-  def loaded?
+  def publish
+    import!
+
+    family.sync
+
+    update! status: :complete
+  rescue => error
+    update! status: :failed, error: error.message
+  end
+
+  def csv_rows
+    @csv_rows ||= parsed_csv
+  end
+
+  def csv_headers
+    parsed_csv.headers
+  end
+
+  def csv_sample
+    @csv_sample ||= parsed_csv.first(2)
+  end
+
+  def dry_run
+    {
+      transactions: rows.count,
+      accounts: Import::AccountMapping.for_import(self).creational.count,
+      categories: Import::CategoryMapping.for_import(self).creational.count,
+      tags: Import::TagMapping.for_import(self).creational.count
+    }
+  end
+
+  def required_column_keys
+    []
+  end
+
+  def column_keys
+    raise NotImplementedError, "Subclass must implement column_keys"
+  end
+
+  def generate_rows_from_csv
+    rows.destroy_all
+
+    mapped_rows = csv_rows.map do |row|
+      {
+        account: row[account_col_label].to_s,
+        date: row[date_col_label].to_s,
+        qty: row[qty_col_label].to_s,
+        ticker: row[ticker_col_label].to_s,
+        price: row[price_col_label].to_s,
+        amount: row[amount_col_label].to_s,
+        currency: (row[currency_col_label] || default_currency).to_s,
+        name: (row[name_col_label] || default_row_name).to_s,
+        category: row[category_col_label].to_s,
+        tags: row[tags_col_label].to_s,
+        entity_type: row[entity_type_col_label].to_s,
+        notes: row[notes_col_label].to_s
+      }
+    end
+
+    rows.insert_all!(mapped_rows)
+  end
+
+  def sync_mappings
+    mapping_steps.each do |mapping|
+      mapping.sync(self)
+    end
+  end
+
+  def mapping_steps
+    []
+  end
+
+  def uploaded?
     raw_file_str.present?
   end
 
   def configured?
-    csv.present?
+    uploaded? && rows.any?
   end
 
   def cleaned?
-    loaded? && configured? && csv.valid?
+    configured? && rows.all?(&:valid?)
   end
 
-  def csv
-    get_normalized_csv_with_validation
-  end
-
-  def available_headers
-    get_raw_csv.table.headers
-  end
-
-  def get_selected_header_for_field(field)
-    column_mappings&.dig(field.key) || field.key
-  end
-
-  def update_csv!(row_idx:, col_idx:, value:)
-    updated_csv = csv.update_cell(row_idx.to_i, col_idx.to_i, value)
-    update! normalized_csv_str: updated_csv.to_s
-  end
-
-  # Type-specific methods (potential STI inheritance in future when more import types added)
-  def publish
-    update!(status: "importing")
-
-    transaction do
-      generate_transactions.each do |txn|
-        txn.save!
-      end
-    end
-
-    self.account.sync
-
-    update!(status: "complete")
-  rescue => e
-    update!(status: "failed")
-    Rails.logger.error("Import with id #{id} failed: #{e}")
-  end
-
-  def dry_run
-    generate_transactions
-  end
-
-  def expected_fields
-    @expected_fields ||= create_expected_fields
+  def publishable?
+    cleaned? && mappings.all?(&:valid?)
   end
 
   private
-
-    def get_normalized_csv_with_validation
-      return nil if normalized_csv_str.nil?
-
-      csv = Import::Csv.new(normalized_csv_str)
-
-      expected_fields.each do |field|
-        csv.define_validator(field.key, field.validator) if field.validator
-      end
-
-      csv
+    def import!
+      # no-op, subclasses can implement for customization of algorithm
     end
 
-    def get_raw_csv
-      return nil if raw_file_str.nil?
-      Import::Csv.new(raw_file_str, col_sep:)
+    def default_row_name
+      "Imported item"
     end
 
-    def should_initialize_csv?
-      raw_file_str_changed? || column_mappings_changed?
+    def default_currency
+      family.currency
     end
 
-    def initialize_csv
-      generated_csv = generate_normalized_csv(raw_file_str)
-      self.normalized_csv_str = generated_csv.table.to_s
-    end
-
-    # Uses the user-provided raw CSV + mappings to generate a normalized CSV for the import
-    def generate_normalized_csv(csv_str)
-      Import::Csv.create_with_field_mappings(csv_str, expected_fields, column_mappings, col_sep)
-    end
-
-    def update_csv(row_idx, col_idx, value)
-      updated_csv = csv.update_cell(row_idx.to_i, col_idx.to_i, value)
-      update! normalized_csv_str: updated_csv.to_s
-    end
-
-    def generate_transactions
-      transaction_entries = []
-      category_cache = {}
-      tag_cache = {}
-
-      csv.table.each do |row|
-        category_name = row["category"].presence
-        tag_strings = row["tags"].presence&.split("|") || []
-        tags = []
-
-        tag_strings.each do |tag_string|
-          tags << tag_cache[tag_string] ||= account.family.tags.find_or_initialize_by(name: tag_string)
-        end
-
-        category = category_cache[category_name] ||= account.family.categories.find_or_initialize_by(name: category_name) if category_name.present?
-
-        entry = account.entries.build \
-          name: row["name"].presence || FALLBACK_TRANSACTION_NAME,
-          date: Date.iso8601(row["date"]),
-          currency: account.currency,
-          amount: BigDecimal(row["amount"]) * -1,
-          entryable: Account::Transaction.new(category: category, tags: tags)
-
-        transaction_entries << entry
-      end
-
-      transaction_entries
-    end
-
-    def create_expected_fields
-      date_field = Import::Field.new \
-        key: "date",
-        label: "Date",
-        validator: ->(value) { Import::Field.iso_date_validator(value) }
-
-      name_field = Import::Field.new \
-        key: "name",
-        label: "Name",
-        is_optional: true
-
-      category_field = Import::Field.new \
-        key: "category",
-        label: "Category",
-        is_optional: true
-
-      tags_field = Import::Field.new \
-        key: "tags",
-        label: "Tags",
-        is_optional: true
-
-      amount_field = Import::Field.new \
-        key: "amount",
-        label: "Amount",
-        validator: ->(value) { Import::Field.bigdecimal_validator(value) }
-
-      [ date_field, name_field, category_field, tags_field, amount_field ]
-    end
-
-    def define_column_mapping_keys
-      expected_fields.each do |field|
-        field.key.to_sym
-      end
-    end
-
-    def raw_file_must_be_parsable
-      begin
-        CSV.parse(raw_file_str || "", col_sep:)
-      rescue CSV::MalformedCSVError
-        errors.add(:raw_file_str, :invalid_csv_format)
-      end
+    def parsed_csv
+      @parsed_csv ||= CSV.parse(
+        (raw_file_str || "").strip,
+        headers: true,
+        col_sep: col_sep,
+        converters: [ ->(str) { str&.strip } ]
+      )
     end
 end

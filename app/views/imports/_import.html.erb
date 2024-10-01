@@ -1,51 +1,39 @@
-<div id="<%= dom_id import %>" class="flex items-center justify-between mx-4 py-5 border-b last:border-b-0 border-alpha-black-50">
-  <div>
+<div id="<%= dom_id import %>" class="flex items-center justify-between mx-4 py-4 border-b last:border-b-0 border-alpha-black-50">
 
-    <div class="flex items-center gap-1 mb-1">
-      <p class="text-sm text-gray-900">
-        <%= t(".label", account: import.account.name) %>
-      </p>
+  <div class="flex items-center gap-2 mb-1">
+    <%= link_to import_path(import), class: "text-sm text-gray-900 hover:underline" do %>
+      <%= t(".label", type: import.type.titleize, datetime: import.updated_at.strftime("%b %-d, %Y at %l:%M %p")) %>
+    <% end %>
 
-      <% if import.pending? %>
-        <span class="px-1 py text-xs rounded-full bg-gray-500/5 text-gray-500 border border-alpha-black-50">
-          <%= t(".in_progress") %>
-        </span>
-      <% elsif import.importing? %>
-       <span class="px-1 py text-xs animate-pulse rounded-full bg-orange-500/5 text-orange-500 border border-alpha-black-50">
-          <%= t(".uploading") %>
-       </span>
-      <% elsif import.failed? %>
-       <span class="px-1 py text-xs rounded-full bg-red-500/5 text-red-500 border border-alpha-black-50">
-          <%= t(".failed") %>
-       </span>
-      <% elsif import.complete? %>
-       <span class="px-1 py text-xs rounded-full bg-green-500/5 text-green-500 border border-alpha-black-50">
-          <%= t(".complete") %>
-       </span>
-      <% end %>
-    </div>
-
-    <% if import.complete? %>
-      <p class="text-xs text-gray-500"><%= t(".completed_on", datetime: import.updated_at.strftime("%Y-%m-%d")) %></p>
-    <% else %>
-      <p class="text-xs text-gray-500"><%= t(".started_on", datetime: import.created_at.strftime("%Y-%m-%d")) %></p>
+    <% if import.pending? %>
+      <span class="px-1 py text-xs rounded-full bg-gray-500/5 text-gray-500 border border-alpha-black-50">
+        <%= t(".in_progress") %>
+      </span>
+    <% elsif import.importing? %>
+      <span class="px-1 py text-xs animate-pulse rounded-full bg-orange-500/5 text-orange-500 border border-alpha-black-50">
+        <%= t(".uploading") %>
+      </span>
+    <% elsif import.failed? %>
+      <span class="px-1 py text-xs rounded-full bg-red-500/5 text-red-500 border border-alpha-black-50">
+        <%= t(".failed") %>
+      </span>
+    <% elsif import.complete? %>
+      <span class="px-1 py text-xs rounded-full bg-green-500/5 text-green-500 border border-alpha-black-50">
+        <%= t(".complete") %>
+      </span>
     <% end %>
   </div>
 
-  <% if import.complete? %>
-    <div class="w-7 h-7 bg-green-500/5 flex items-center justify-center rounded-full">
-      <%= lucide_icon("check", class: "text-green-500 w-4 h-4") %>
-    </div>
-  <% else %>
-    <%= contextual_menu do %>
-      <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-        <%= link_to edit_import_path(import),
+  <%= contextual_menu do %>
+    <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+      <%= link_to import_path(import),
                     class: "block w-full py-2 px-3 space-x-2 text-gray-900 hover:bg-gray-50 flex items-center rounded-lg" do %>
-          <%= lucide_icon "pencil-line", class: "w-5 h-5 text-gray-500" %>
+        <%= lucide_icon "eye", class: "w-5 h-5 text-gray-500" %>
 
-          <span><%= t(".edit") %></span>
-        <% end %>
+        <span><%= t(".view") %></span>
+      <% end %>
 
+      <% unless import.complete? %>
         <%= button_to import_path(import),
                       method: :delete,
                       class: "block w-full py-2 px-3 space-x-2 text-red-600 hover:bg-red-50 flex items-center rounded-lg",
@@ -54,8 +42,7 @@
 
           <span><%= t(".delete") %></span>
         <% end %>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
   <% end %>
-
 </div>

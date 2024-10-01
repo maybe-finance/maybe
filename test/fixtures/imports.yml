@@ -1,20 +1,3 @@
-empty_import:
-  account: depository
-  created_at: <%= 1.minute.ago %>
-
-completed_import:
-  account: depository
-  column_mappings:
-    date: date
-    name: name
-    category: category
-    amount: amount
-  raw_file_str: |
-    date,name,category,tags,amount
-    2024-01-01,Starbucks drink,Food & Drink,Test Tag,-20
-  normalized_csv_str: |
-    date,name,category,tags,amount
-    2024-01-01,Starbucks drink,Food & Drink,Test Tag,-20
-  created_at: <%= 2.days.ago %>
-
-
+transaction:
+  family: dylan_family
+  type: TransactionImport

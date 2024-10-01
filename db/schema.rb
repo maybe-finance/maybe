@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_11_143158) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_25_112218) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -44,7 +44,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_11_143158) do
     t.datetime "updated_at", null: false
     t.uuid "transfer_id"
     t.boolean "marked_as_transfer", default: false, null: false
+    t.uuid "import_id"
     t.index ["account_id"], name: "index_account_entries_on_account_id"
+    t.index ["import_id"], name: "index_account_entries_on_import_id"
     t.index ["transfer_id"], name: "index_account_entries_on_transfer_id"
   end
 
@@ -118,9 +120,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_11_143158) do
     t.boolean "is_active", default: true, null: false
     t.date "last_sync_date"
     t.uuid "institution_id"
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Loan'::character varying)::text, ('CreditCard'::character varying)::text, ('OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Loan'::character varying, 'CreditCard'::character varying, 'OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.uuid "import_id"
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id"], name: "index_accounts_on_family_id"
+    t.index ["import_id"], name: "index_accounts_on_import_id"
     t.index ["institution_id"], name: "index_accounts_on_institution_id"
   end
 
@@ -300,8 +304,40 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_11_143158) do
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
 
+  create_table "import_mappings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "type", null: false
+    t.string "key"
+    t.string "value"
+    t.boolean "create_when_empty", default: true
+    t.uuid "import_id", null: false
+    t.string "mappable_type"
+    t.uuid "mappable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["import_id"], name: "index_import_mappings_on_import_id"
+    t.index ["mappable_type", "mappable_id"], name: "index_import_mappings_on_mappable"
+  end
+
+  create_table "import_rows", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "import_id", null: false
+    t.string "account"
+    t.string "date"
+    t.string "qty"
+    t.string "ticker"
+    t.string "price"
+    t.string "amount"
+    t.string "currency"
+    t.string "name"
+    t.string "category"
+    t.string "tags"
+    t.string "entity_type"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["import_id"], name: "index_import_rows_on_import_id"
+  end
+
   create_table "imports", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "account_id", null: false
     t.jsonb "column_mappings"
     t.enum "status", default: "pending", enum_type: "import_status"
     t.string "raw_file_str"
@@ -309,7 +345,25 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_11_143158) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "col_sep", default: ","
-    t.index ["account_id"], name: "index_imports_on_account_id"
+    t.uuid "family_id", null: false
+    t.uuid "original_account_id"
+    t.string "type", null: false
+    t.string "date_col_label", default: "date"
+    t.string "amount_col_label", default: "amount"
+    t.string "name_col_label", default: "name"
+    t.string "category_col_label", default: "category"
+    t.string "tags_col_label", default: "tags"
+    t.string "account_col_label", default: "account"
+    t.string "qty_col_label", default: "qty"
+    t.string "ticker_col_label", default: "ticker"
+    t.string "price_col_label", default: "price"
+    t.string "entity_type_col_label", default: "type"
+    t.string "notes_col_label", default: "notes"
+    t.string "currency_col_label", default: "currency"
+    t.string "date_format", default: "%m/%d/%Y"
+    t.string "signage_convention", default: "inflows_positive"
+    t.string "error"
+    t.index ["family_id"], name: "index_imports_on_family_id"
   end
 
   create_table "institutions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -452,6 +506,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_11_143158) do
   add_foreign_key "account_balances", "accounts", on_delete: :cascade
   add_foreign_key "account_entries", "account_transfers", column: "transfer_id"
   add_foreign_key "account_entries", "accounts"
+  add_foreign_key "account_entries", "imports"
   add_foreign_key "account_holdings", "accounts"
   add_foreign_key "account_holdings", "securities"
   add_foreign_key "account_syncs", "accounts"
@@ -459,11 +514,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_11_143158) do
   add_foreign_key "account_transactions", "categories", on_delete: :nullify
   add_foreign_key "account_transactions", "merchants"
   add_foreign_key "accounts", "families"
+  add_foreign_key "accounts", "imports"
   add_foreign_key "accounts", "institutions"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "categories", "families"
-  add_foreign_key "imports", "accounts"
+  add_foreign_key "import_rows", "imports"
+  add_foreign_key "imports", "families"
   add_foreign_key "institutions", "families"
   add_foreign_key "merchants", "families"
   add_foreign_key "taggings", "tags"

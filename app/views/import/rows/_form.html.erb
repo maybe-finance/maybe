@@ -1,0 +1,27 @@
+<%# locals: (row:) %>
+
+<div style="grid-template-columns: repeat(<%= row.import.column_keys.count %>, 1fr)" class="first:rounded-tl-lg first:rounded-tr-lg last:rounded-bl-lg last:rounded-br-lg grid divide-x divide-alpha-black-200 group">
+  <% row.import.column_keys.each_with_index do |key, idx| %>
+    <%= turbo_frame_tag dom_id(row, key), title: row.valid? ? nil : row.errors.full_messages.join(", ") do %>
+      <%= form_with(
+            model: [row.import, row],
+            scope: :import_row,
+            url: import_row_path(row.import, row),
+            method: :patch,
+            data: {
+              controller: "auto-submit-form",
+              auto_submit_form_trigger_event_value: "blur"
+            }
+          ) do |form| %>
+        <%= form.text_field key,
+              "data-auto-submit-form-target": "auto",
+              class: [
+                cell_class(row, key),
+                idx == 0 ? "group-first:rounded-tl-lg group-last:rounded-bl-lg" : "",
+                idx == row.import.column_keys.count - 1 ? "group-first:rounded-tr-lg group-last:rounded-br-lg" : "",
+              ],
+              disabled: row.import.complete? %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

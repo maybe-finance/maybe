@@ -35,7 +35,7 @@
   }
 
   .form-field__submit {
-    @apply w-full cursor-pointer rounded-lg bg-black p-3 text-center text-white hover:bg-gray-700;
+    @apply cursor-pointer rounded-lg bg-black p-3 text-center text-white hover:bg-gray-700;
   }
 
   input:checked+label+.toggle-switch-dot {
@@ -100,11 +100,15 @@
   }
 
   .btn {
-    @apply px-3 py-2 rounded-lg text-sm font-medium;
+    @apply px-3 py-2 rounded-lg text-sm font-medium cursor-pointer;
   }
 
   .btn--primary {
-    @apply bg-gray-900 text-white hover:bg-gray-700;
+    @apply bg-gray-900 text-white hover:bg-gray-700 disabled:bg-gray-50 disabled:hover:bg-gray-50 disabled:text-gray-400;
+  }
+
+  .btn--secondary {
+    @apply bg-gray-50 hover:bg-gray-100 text-gray-900;
   }
 
   .btn--outline {

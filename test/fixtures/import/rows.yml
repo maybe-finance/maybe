@@ -1,0 +1,5 @@
+one:
+  import: transaction
+  date: 01/01/2024
+  amount: 100
+  currency: USD

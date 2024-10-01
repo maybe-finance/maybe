@@ -1,0 +1,39 @@
+<%# locals: (import:) %>
+
+<div class="text-center space-y-2 mb-4 mx-auto max-w-md">
+  <h1 class="text-3xl text-gray-900 font-medium"><%= t(".title") %></h1>
+  <p class="text-gray-500 text-sm"><%= t(".description") %></p>
+</div>
+
+<div class="mx-auto max-w-screen-sm space-y-4">
+  <div class="bg-gray-25 rounded-xl p-1 space-y-1">
+    <div class="flex justify-between items-center text-xs font-medium text-gray-500 uppercase px-5 py-3">
+      <p>item</p>
+      <p class="justify-self-end">count</p>
+    </div>
+
+    <div class="bg-white border border-alpha-black-25 rounded-lg shadow-xs text-sm">
+      <% import.dry_run.each do |key, count| %>
+        <% resource = dry_run_resource(key) %>
+
+        <div class="flex items-center justify-between gap-2 bg-white px-5 py-3 rounded-tl-lg rounded-tr-lg">
+          <div class="flex items-center gap-3">
+            <div class="<%= resource.bg_class %> w-8 h-8 rounded-full flex justify-center items-center">
+              <%= lucide_icon resource.icon, class: "#{resource.text_class} w-5 h-5 shrink-0" %>
+            </div>
+
+            <p><%= resource.label %></p>
+          </div>
+
+          <p class="justify-self-end"><%= count %></p>
+        </div>
+
+        <% if key != import.dry_run.keys.last %>
+          <div class="h-px bg-alpha-black-50 ml-14 mr-5"></div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <%= button_to "Publish import", publish_import_path(import), class: "btn btn--primary w-full" %>
+</div>

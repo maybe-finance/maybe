@@ -5,14 +5,15 @@ class Account < ApplicationRecord
 
   belongs_to :family
   belongs_to :institution, optional: true
+  belongs_to :import, optional: true
 
+  has_many :import_mappings, as: :mappable, dependent: :destroy, class_name: "Import::Mapping"
   has_many :entries, dependent: :destroy, class_name: "Account::Entry"
   has_many :transactions, through: :entries, source: :entryable, source_type: "Account::Transaction"
   has_many :valuations, through: :entries, source: :entryable, source_type: "Account::Valuation"
   has_many :trades, through: :entries, source: :entryable, source_type: "Account::Trade"
   has_many :holdings, dependent: :destroy
   has_many :balances, dependent: :destroy
-  has_many :imports, dependent: :destroy
   has_many :syncs, dependent: :destroy
   has_many :issues, as: :issuable, dependent: :destroy
 

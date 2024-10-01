@@ -1,0 +1,20 @@
+<%# locals: (import:) %>
+
+<%= styled_form_with model: @import, url: import_configuration_path(@import), scope: :import, method: :patch, class: "space-y-2" do |form| %>
+  <div class="flex items-center gap-2">
+    <%= form.select :date_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Date" }, required: true %>
+    <%= form.select :date_format, [["DD-MM-YYYY", "%d-%m-%Y"], ["MM-DD-YYYY", "%m-%d-%Y"], ["YYYY-MM-DD", "%Y-%m-%d"], ["DD/MM/YYYY", "%d/%m/%Y"], ["YYYY/MM/DD", "%Y/%m/%d"], ["MM/DD/YYYY", "%m/%d/%Y"]], label: true, required: true %>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <%= form.select :qty_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Quantity" } %>
+    <%= form.select :signage_convention, [["Buys are positive qty", "inflows_positive"], ["Buys are negative qty", "inflows_negative"]], label: true %>
+  </div>
+
+  <%= form.select :ticker_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Ticker" } %>
+  <%= form.select :price_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Price" } %>
+  <%= form.select :account_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Account (optional)" } %>
+  <%= form.select :name_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Name (optional)" } %>
+
+  <%= form.submit "Apply configuration", class: "w-full btn btn--primary", disabled: import.complete? %>
+<% end %>
