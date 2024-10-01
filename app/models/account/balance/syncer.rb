@@ -14,7 +14,8 @@ class Account::Balance::Syncer
 
       if daily_balances.any?
         account.reload
-        account.update! balance: daily_balances.select { |db| db.currency == account.currency }.last&.balance
+        last_balance = daily_balances.select { |db| db.currency == account.currency }.last&.balance
+        account.update! balance: last_balance
       end
     end
   rescue Money::ConversionError => e
@@ -102,7 +103,7 @@ class Account::Balance::Syncer
     end
 
     def find_prior_balance
-      account.balances.where("date < ?", sync_start_date).order(date: :desc).first&.balance
+      account.balances.where(currency: account.currency).where("date < ?", sync_start_date).order(date: :desc).first&.balance
     end
 
     def net_entry_flows(entries, target_currency = account.currency)
