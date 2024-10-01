@@ -23,7 +23,7 @@ module FormsHelper
   end
 
   def currencies_for_select
-    Money::Currency.all_instances.sort_by(&:priority)
+    Money::Currency.all_instances.sort_by { |currency| [ currency.priority, currency.name ] }
   end
 
   private
