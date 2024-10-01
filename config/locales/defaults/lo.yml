@@ -1,0 +1,166 @@
+---
+lo:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'ການຢືນຢັນບໍ່ສຳເລັດ : %{errors}'
+  date:
+    abbr_day_names:
+    - ອາທິດ
+    - ຈັນ
+    - ອັງຄານ
+    - ພຸດ
+    - ພະຫັດ
+    - ສຸກ
+    - ເສົາ
+    abbr_month_names:
+    - 
+    - ມ.ກ
+    - ກ.ພ
+    - ມ.ນ
+    - ມ.ສ
+    - ພ.ພ
+    - ມິ.ຖ
+    - ກ.ລ
+    - ສ.ຫ
+    - ກ.ຍ
+    - ຕ.ລ
+    - ພ.ຈ
+    - ທ.ວ
+    day_names:
+    - ອາທິດ
+    - ຈັນ
+    - ອັງຄານ
+    - ພຸດ
+    - ພະຫັດ
+    - ສຸກ
+    - ເສົາ
+    formats:
+      default: "%d-%m-%Y"
+      long: "%e %B %Y"
+      short: "%e %b"
+    month_names:
+    - 
+    - ມັງກອນ
+    - ກຸມພາ
+    - ມີນາ
+    - ເມສາ
+    - ພຶດສະພາ
+    - ມິຖຸນາ
+    - ກໍລະກົດ
+    - ສິງຫາ
+    - ກັນຍາ
+    - ຕຸລາ
+    - ພະຈິກ
+    - ທັນວາ
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours: ປະມານ %{count} ຊົ່ວໂມງ
+      about_x_months: ປະມານ %{count} ເດືອນ
+      about_x_years: 'ປະມານ %{count} ປີ'
+      almost_x_years: 'ເກືອບ %{count} ປີ'
+      half_a_minute: 'ເຄິ່ງນາທີ'
+      less_than_x_seconds: 'ນ້ອຍກວ່າ %{count} ວິນາທີ'
+      less_than_x_minutes: 'ນ້ອຍກວ່າ %{count} ນາທີ'
+      over_x_years: 'ຫຼາຍກວ່າ %{count} ປີ'
+      x_seconds: "%{count} ວິນາທີ"
+      x_minutes: "%{count} ນາທີ"
+      x_days: "%{count} ມື້"
+      x_months: "%{count} ເດືອນ"
+    prompts:
+      second: ວິນາທີ
+      minute: ນາທີ
+      hour: ຊົ່ວໂມງ
+      day: ວັນ
+      month: ເດືອນ
+      year: ປີ
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: ຕ້ອງຍອມຮັບ
+      blank: ເປົ່າບໍ່ໄດ້
+      confirmation: ບໍ່ຖືກກັບການຢືນຢັນ
+      empty: ວ່າງໄວ້ບໍ່ໄດ້
+      equal_to: ຕ້ອງເທົ່າກັບ %{count}
+      even: ຕ້ອງເປັນເລກຄູ່
+      exclusion: ມີການຈອງໄວ້ແລ້ວ
+      greater_than: ຕ້ອງສູງກວ່າ %{count}
+      greater_than_or_equal_to: ຕ້ອງສູງກວ່າ ຫຼື ເທົ່າກັບ %{count}
+      inclusion: ບໍ່ໄດ້ຮວມຢູ່ໃນບັນຊີລາຍການ
+      invalid: ບໍ່ຖືກ
+      less_than: ຕ້ອງຕຳ່ກວ່າ %{count}
+      less_than_or_equal_to: ຕ້ອງຕຳ່ກວ່າ ຫຼື ເທົ່າກັບ %{count}
+      not_a_number: ບໍ່ແມ່ນຕົວເລກ
+      odd: ຕ້ອງເປັນເລກຄີກ
+      taken: ຮັບເອົາໄປແລ້ວ
+      too_long: ຍາວໂພດ (ສູງສຸດຄື %{count} ຕົວອັກສອນ)
+      too_short: ສັ້ນໂພດ (ຕຳ່ສຸດຄື %{count} ຕົວອັກສອນ)
+      wrong_length: ຄວາມຍາວຜິດ (ຄວນຈະເປັນ %{count} ຕົວອັກສອນ)
+    template:
+      body: 'ກະລຸນາກວດສອບຂໍ້ມູນໃນຫ້ອງຕໍ່ໄປນີ້ :'
+      header: ບໍ່ສາມາດບັນທຶກ %{model} ໄດ້ເນື່ອງຈາກ ເກີດ %{count} ຂໍ້ຜິດພາດ
+  helpers:
+    select:
+      prompt: โปรดเลือก
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%n %u"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: Kip
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            zero: Bytes
+            one: Byte
+            two: Bytes
+            few: Bytes
+            many: Bytes
+            other: Bytes
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", ແລະ "
+      two_words_connector: 'ແລະ '
+      words_connector: ", "
+  time:
+    am: ເຊົ້າ
+    formats:
+      default: "%a %d %b %Y %H:%M:%S %z"
+      long: "%d %B %Y %H:%M น."
+      short: "%d %b %H:%M น."
+    pm: ແລງ

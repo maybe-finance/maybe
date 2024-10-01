@@ -1,0 +1,221 @@
+---
+nb:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Det oppstod feil: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Kan ikke slette registreringen, fordi %{record} avhenger av denne.
+          has_many: Kan ikke slette registreringen, fordi %{record} avhenger av denne.
+  date:
+    abbr_day_names:
+    - søn
+    - man
+    - tir
+    - ons
+    - tor
+    - fre
+    - lør
+    abbr_month_names:
+    -
+    - jan
+    - feb
+    - mar
+    - apr
+    - mai
+    - jun
+    - jul
+    - aug
+    - sep
+    - okt
+    - nov
+    - des
+    day_names:
+    - søndag
+    - mandag
+    - tirsdag
+    - onsdag
+    - torsdag
+    - fredag
+    - lørdag
+    formats:
+      default: "%d.%m.%Y"
+      long: "%e. %B %Y"
+      short: "%e. %b"
+    month_names:
+    -
+    - januar
+    - februar
+    - mars
+    - april
+    - mai
+    - juni
+    - juli
+    - august
+    - september
+    - oktober
+    - november
+    - desember
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: rundt %{count} time
+        other: rundt %{count} timer
+      about_x_months:
+        one: rundt %{count} måned
+        other: rundt %{count} måneder
+      about_x_years:
+        one: rundt %{count} år
+        other: rundt %{count} år
+      almost_x_years:
+        one: nesten %{count} år
+        other: nesten %{count} år
+      half_a_minute: et halvt minutt
+      less_than_x_seconds:
+        one: mindre enn %{count} sekund
+        other: mindre enn %{count} sekunder
+      less_than_x_minutes:
+        one: mindre enn %{count} minutt
+        other: mindre enn %{count} minutter
+      over_x_years:
+        one: over %{count} år
+        other: over %{count} år
+      x_seconds:
+        one: "%{count} sekund"
+        other: "%{count} sekunder"
+      x_minutes:
+        one: "%{count} minutt"
+        other: "%{count} minutter"
+      x_days:
+        one: "%{count} dag"
+        other: "%{count} dager"
+      x_months:
+        one: "%{count} måned"
+        other: "%{count} måneder"
+      x_years:
+        one: "%{count} år"
+        other: "%{count} år"
+    prompts:
+      second: sekund
+      minute: minutt
+      hour: time
+      day: dag
+      month: måned
+      year: år
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: må være akseptert
+      blank: kan ikke være tom
+      confirmation: er ikke lik %{attribute}
+      empty: kan ikke være tom
+      equal_to: må være lik %{count}
+      even: må være partall
+      exclusion: er reservert
+      greater_than: må være større enn %{count}
+      greater_than_or_equal_to: må være større enn eller lik %{count}
+      inclusion: er ikke inkludert i listen
+      invalid: er ugyldig
+      less_than: må være mindre enn %{count}
+      less_than_or_equal_to: må være mindre enn eller lik %{count}
+      model_invalid: 'Det oppstod feil: %{errors}'
+      not_a_number: er ikke et tall
+      not_an_integer: er ikke et heltall
+      odd: må være oddetall
+      other_than: kan ikke være nøyaktig %{count}
+      present: må være tom
+      required: må eksistere
+      taken: er allerede i bruk
+      too_long:
+        one: er for lang (maksimalt %{count} tegn)
+        other: er for lang (maksimalt %{count} tegn)
+      too_short:
+        one: er for kort (minst %{count} tegn)
+        other: er for kort (minst %{count} tegn)
+      wrong_length:
+        one: har feil lengde (må være %{count} tegn)
+        other: har feil lengde (må være %{count} tegn)
+    template:
+      body: 'Det oppstod problemer med følgende felt:'
+      header:
+        one: Kunne ikke lagre %{model} på grunn av én feil.
+        other: Kunne ikke lagre %{model} på grunn av %{count} feil.
+  helpers:
+    select:
+      prompt: Vennligst velg
+    submit:
+      create: Lag %{model}
+      submit: Lagre %{model}
+      update: Oppdater %{model}
+  number:
+    currency:
+      format:
+        delimiter: " "
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: kr
+    format:
+      delimiter: " "
+      precision: 2
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: true
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion:
+            one: milliard
+            other: milliarder
+          million:
+            one: million
+            other: millioner
+          quadrillion:
+            one: billiard
+            other: billiarder
+          thousand: tusen
+          trillion:
+            one: billion
+            other: billioner
+          unit: ''
+      format:
+        delimiter: " "
+        precision: 1
+        significant: false
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          gb: GB
+          kb: kB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " og "
+      two_words_connector: " og "
+      words_connector: ", "
+  time:
+    am: am
+    formats:
+      default: "%A, %e. %B %Y, %H:%M"
+      long: "%A, %e. %B %Y, %H:%M"
+      short: "%e. %B, %H:%M"
+    pm: pm

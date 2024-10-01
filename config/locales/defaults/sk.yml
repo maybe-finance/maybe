@@ -1,0 +1,212 @@
+---
+sk:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Validácia neúspešná: %{errors}'
+  date:
+    abbr_day_names:
+    - Ne
+    - Po
+    - Ut
+    - St
+    - Št
+    - Pi
+    - So
+    abbr_month_names:
+    - 
+    - Jan
+    - Feb
+    - Mar
+    - Apr
+    - Máj
+    - Jún
+    - Júl
+    - Aug
+    - Sep
+    - Okt
+    - Nov
+    - Dec
+    day_names:
+    - Nedeľa
+    - Pondelok
+    - Utorok
+    - Streda
+    - Štvrtok
+    - Piatok
+    - Sobota
+    formats:
+      default: "%d.%m.%Y"
+      long: "%d. %B %Y"
+      short: "%d %b"
+    month_names:
+    - 
+    - Január
+    - Február
+    - Marec
+    - Apríl
+    - Máj
+    - Jún
+    - Júl
+    - August
+    - September
+    - Október
+    - November
+    - December
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: asi hodinou
+        few: asi %{count} hodinami
+        other: asi %{count} hodinami
+      about_x_months:
+        one: asi mesiacom
+        few: asi %{count} mesiacmi
+        other: asi %{count} mesiacmi
+      about_x_years:
+        one: asi rokom
+        few: asi %{count} rokmi
+        other: asi %{count} rokmi
+      almost_x_years:
+        one: takmer rokom
+        few: takmer %{count} rokmi
+        other: takmer %{count} rokmi
+      half_a_minute: pol minútou
+      less_than_x_seconds:
+        one: necelou sekundou
+        few: necelými %{count} sekundami
+        other: necelými %{count} sekundami
+      less_than_x_minutes:
+        one: necelou minútou
+        few: necelými %{count} minútami
+        other: necelými %{count} minútami
+      over_x_years:
+        one: viac ako rokom
+        few: viac ako %{count} rokmi
+        other: viac ako %{count} rokmi
+      x_seconds:
+        one: sekundou
+        few: "%{count} sekundami"
+        other: "%{count} sekundami"
+      x_minutes:
+        one: minútou
+        few: "%{count} minútami"
+        other: "%{count} minútami"
+      x_days:
+        one: dňom
+        few: "%{count} dňami"
+        other: "%{count} dňami"
+      x_months:
+        one: mesiacom
+        few: "%{count} mesiacmi"
+        other: "%{count} mesiacmi"
+    prompts:
+      second: Sekunda
+      minute: Minúta
+      hour: Hodina
+      day: Deň
+      month: Mesiac
+      year: Rok
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: musí byť potvrdené
+      blank: je povinná položka
+      confirmation: nebolo potvrdené
+      empty: nesmie byť prázdny/e
+      equal_to: sa musí rovnať %{count}
+      even: musí byť párne číslo
+      exclusion: je vyhradené pre iný účel
+      greater_than: musí byť väčšie ako %{count}
+      greater_than_or_equal_to: musí byť väčšie alebo rovné %{count}
+      inclusion: nie je v zozname povolených hodnôt
+      invalid: nie je platná hodnota
+      less_than: musí byť menšie ako %{count}
+      less_than_or_equal_to: musí byť menšie alebo rovné %{count}
+      not_a_number: nie je číslo
+      not_an_integer: musí byť celé číslo
+      odd: musí byť nepárne číslo
+      required: musí existovať
+      taken: ste už použili
+      too_long: je príliš dlhá/ý (max. %{count} znakov)
+      too_short: je príliš krátky/a (min. %{count} znakov)
+      wrong_length: nemá správnu dĺžku (očakáva sa %{count} znakov)
+    template:
+      body: 'Nasledujúce polia obsahujú chybne vyplnené údaje:'
+      header:
+        one: Pri ukladaní objektu %{model} došlo k chybám a nebolo ho možné uložiť
+        few: Pri ukladaní objektu %{model} došlo k %{count} chybám a nebolo ho možné
+          uložiť
+        other: Pri ukladaní objektu %{model} došlo k %{count} chybám a nebolo ho možné
+          uložiť
+  helpers:
+    select:
+      prompt: Prosím vyberte si
+    submit:
+      create: Vytvoriť %{model}
+      submit: Uložiť %{model}
+      update: Aktualizovať %{model}
+  number:
+    currency:
+      format:
+        delimiter: " "
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "€"
+    format:
+      delimiter: " "
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: Miliarda
+          million: Milión
+          quadrillion: Biliarda
+          thousand: Tisíc
+          trillion: Bilión
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: false
+        strip_insignificant_zeros: false
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: B
+            few: B
+            other: B
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: " "
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " a "
+      two_words_connector: " a "
+      words_connector: ", "
+  time:
+    am: dopoludnia
+    formats:
+      default: "%a %e. %B %Y %H:%M %z"
+      long: "%A %e. %B %Y %H:%M"
+      short: "%e. %-m. %H:%M"
+    pm: popoludní

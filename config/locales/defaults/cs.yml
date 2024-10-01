@@ -1,0 +1,218 @@
+---
+cs:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Validace je neúspešná: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Nemůžu smazat položku protože existuje závislá/ý/é %{record}
+          has_many: Nemůžu smazat položku protože existuje závislé/ý %{record}
+  date:
+    abbr_day_names:
+    - Ne
+    - Po
+    - Út
+    - St
+    - Čt
+    - Pá
+    - So
+    abbr_month_names:
+    - 
+    - Led
+    - Úno
+    - Bře
+    - Dub
+    - Kvě
+    - Čvn
+    - Čvc
+    - Srp
+    - Zář
+    - Říj
+    - Lis
+    - Pro
+    day_names:
+    - Neděle
+    - Pondělí
+    - Úterý
+    - Středa
+    - Čtvrtek
+    - Pátek
+    - Sobota
+    formats:
+      default: "%d. %m. %Y"
+      long: "%d. %B %Y"
+      short: "%d %b"
+    month_names:
+    - 
+    - Leden
+    - Únor
+    - Březen
+    - Duben
+    - Květen
+    - Červen
+    - Červenec
+    - Srpen
+    - Září
+    - Říjen
+    - Listopad
+    - Prosinec
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: asi hodinou
+        few: asi %{count} hodinami
+        other: asi %{count} hodinami
+      about_x_months:
+        one: asi měsícem
+        few: asi %{count} měsíci
+        other: asi %{count} měsíci
+      about_x_years:
+        one: asi rokem
+        few: asi %{count} roky
+        other: asi %{count} roky
+      almost_x_years:
+        one: téměř rokem
+        few: téměř %{count} roky
+        other: téměř %{count} roky
+      half_a_minute: půl minutou
+      less_than_x_seconds:
+        one: necelou sekundou
+        few: ani ne %{count} sekundami
+        other: ani ne %{count} sekundami
+      less_than_x_minutes:
+        one: necelou minutou
+        few: ani ne %{count} minutami
+        other: ani ne %{count} minutami
+      over_x_years:
+        one: více než rokem
+        few: více než %{count} roky
+        other: více než %{count} roky
+      x_seconds:
+        one: sekundou
+        few: "%{count} sekundami"
+        other: "%{count} sekundami"
+      x_minutes:
+        one: minutou
+        few: "%{count} minutami"
+        other: "%{count} minutami"
+      x_days:
+        one: 24 hodinami
+        few: "%{count} dny"
+        other: "%{count} dny"
+      x_months:
+        one: měsícem
+        few: "%{count} měsíci"
+        other: "%{count} měsíci"
+    prompts:
+      second: Sekunda
+      minute: Minuta
+      hour: Hodina
+      day: Den
+      month: Měsíc
+      year: Rok
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: musí být potvrzeno
+      blank: je povinná položka
+      confirmation: nebylo potvrzeno
+      empty: nesmí být prázdný/á/é
+      equal_to: musí být rovno %{count}
+      even: musí být sudé číslo
+      exclusion: je vyhrazeno pro jiný účel
+      greater_than: musí být větší než %{count}
+      greater_than_or_equal_to: musí být větší nebo rovno %{count}
+      inclusion: není v seznamu povolených hodnot
+      invalid: není platná hodnota
+      less_than: musí být méně než %{count}
+      less_than_or_equal_to: musí být méně nebo rovno %{count}
+      not_a_number: není číslo
+      not_an_integer: musí být celé číslo
+      odd: musí být liché číslo
+      other_than: musí být rozdílný/á/é od %{count}
+      present: musí být prázdný/á/é
+      required: musí existovat
+      taken: již databáze obsahuje
+      too_long: je příliš dlouhý/á/é (max. %{count} znaků)
+      too_short: je příliš krátký/á/é (min. %{count} znaků)
+      wrong_length: nemá správnou délku (očekáváno %{count} znaků)
+    template:
+      body: 'Následující pole obsahují chybně vyplněné údaje: '
+      header:
+        one: Při ukládání objektu %{model} došlo k chybám a nebylo jej možné uložit
+        few: Při ukládání objektu %{model} došlo ke %{count} chybám a nebylo možné
+          jej uložit
+        other: Při ukládání objektu %{model} došlo ke %{count} chybám a nebylo možné
+          jej uložit
+  helpers:
+    select:
+      prompt: Prosím vyberte si
+    submit:
+      create: Vytvořit %{model}
+      submit: Uložit %{model}
+      update: Aktualizovat %{model}
+  number:
+    currency:
+      format:
+        delimiter: " "
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: Kč
+    format:
+      delimiter: "."
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: Miliarda
+          million: Milion
+          quadrillion: Biliarda
+          thousand: Tisíc
+          trillion: Bilion
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: false
+        strip_insignificant_zeros: false
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: B
+            few: B
+            other: B
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " a "
+      two_words_connector: " a "
+      words_connector: ", "
+  time:
+    am: dopoledne
+    formats:
+      default: "%a %e. %B %Y %H:%M %z"
+      long: "%A %e. %B %Y %H:%M"
+      short: "%e. %-m. %H:%M"
+    pm: odpoledne

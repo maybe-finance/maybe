@@ -1,0 +1,179 @@
+---
+bn:
+  date:
+    abbr_day_names:
+    - রবিবার
+    - সোমবার
+    - মঙ্গলবার
+    - বুধবার
+    - বৃহস্পতিবার
+    - শুক্রবার
+    - শনিবার
+    abbr_month_names:
+    - 
+    - জানুয়ারি
+    - ফেব্রুয়ারি
+    - মার্চ
+    - এপ্রিল
+    - মে
+    - জুন
+    - জুলাই
+    - আগস্ট
+    - সেপ্টেম্বর
+    - অক্টোবর
+    - নভেম্বর
+    - ডিসেম্বর
+    day_names:
+    - রবিবার
+    - সোমবার
+    - মঙ্গলবার
+    - বুধবার
+    - বৃহস্পতিবার
+    - শুক্রবার
+    - শনিবার
+    formats:
+      default: "%e/%m/%Y"
+      long: "%e %B %Y"
+      short: "%e %b"
+    month_names:
+    - 
+    - জানুয়ারি
+    - ফেব্রুয়ারি
+    - মার্চ
+    - এপ্রিল
+    - মে
+    - জুন
+    - জুলাই
+    - আগস্ট
+    - সেপ্টেম্বর
+    - অক্টোবর
+    - নভেম্বর
+    - ডিসেম্বর
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: প্রায় ১ ঘণ্টা
+        other: প্রায় %{count} ঘণ্টা
+      about_x_months:
+        one: প্রায় ১ মাস
+        other: প্রায় %{count} মাস
+      about_x_years:
+        one: প্রায় ১ বছর
+        other: প্রায় %{count} বছর
+      almost_x_years:
+        one: প্রায় ১ বছর
+        other: প্রায় %{count} বছর
+      half_a_minute: অর্ধ মিনিট
+      less_than_x_seconds:
+        one: '১ সেকেন্ডর কম'
+        other: "%{count} সেকেন্ডের কম"
+      less_than_x_minutes:
+        one: ১ মিনিটের কম
+        other: "%{count} মিনিটের কম"
+      over_x_years:
+        one: ১ বছরের বেশি
+        other: "%{count} বছরের বেশি"
+      x_seconds:
+        one: ১ সেকেন্ড
+        other: "%{count} সেকেন্ড"
+      x_minutes:
+        one: ১ মিনিট
+        other: "%{count} মিনিট"
+      x_days:
+        one: ১ দিন
+        other: "%{count} দিন"
+      x_months:
+        one: ১ মাস
+        other: "%{count} মাস"
+    prompts:
+      second: সেকেন্ড
+      minute: মিনিট
+      hour: ঘণ্টা
+      day: দিন
+      month: মাস
+      year: বছর
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: গ্রাহ্য করতে হবে
+      blank: ফাঁকা রাখা যাবে না
+      confirmation: অনুমোদনের সঙ্গে মিলছে না
+      empty: খালি রাখা যাবে না
+      equal_to: "%{count} এর সঙ্গে সমান হতে হবে"
+      even: জোড় হতে হবে
+      exclusion: রিসার্ভ করা আছে
+      greater_than: "%{count} থেকে বড় হতে হবে"
+      greater_than_or_equal_to: "%{count} থেকে বড় অথবা তার সমান হতে হবে"
+      inclusion: তালিকায় অন্তর্ভুক্ত নয়
+      invalid: সঠিক নয়
+      less_than: "%{count} থেকে ছোটো হতে হবে"
+      less_than_or_equal_to: "%{count} থেকে ছোটো অথবা তার সমান হতে হবে"
+      not_a_number: নম্বর নয়
+      odd: বেজোড় হতে হবে
+      taken: আগেই নিয়ে নেওয়া হয়েছে
+      too_long: খুব বড়ো (সর্বোচ্চ %{count} অক্ষর)
+      too_short: খুব ছোটো (সর্বনিম্ন %{count} অক্ষর)
+      wrong_length: দৈর্ঘ্যটি সঠিক নয় (%{count} অক্ষর হতে হবে)
+    template:
+      body: 'এই ফিল্ডগুলোতে কিছু সমস্যা দেখা দিয়েছে:'
+      header:
+        one: ১টি ত্রুটির কারণে %{model} সংরক্ষণ করা সম্ভব হয়নি
+        other: "%{count}টি ত্রুটির কারণে %{model} সংরক্ষণ করা সম্ভব হয়নি"
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u %n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "৳"
+    format:
+      delimiter: ","
+      precision: 2
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: বাইট
+            other: বাইট
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", এবং "
+      two_words_connector: " এবং "
+      words_connector: ", "
+  time:
+    am: am
+    formats:
+      default: "%A, %e %B %Y %H:%M:%S %z"
+      long: "%e %B %Y %H:%M"
+      short: "%e %b %H:%M"
+    pm: pm

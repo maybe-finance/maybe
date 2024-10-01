@@ -1,0 +1,172 @@
+---
+gl:
+  date:
+    abbr_day_names:
+    - Dom
+    - Lun
+    - Mar
+    - Mer
+    - Xov
+    - Ven
+    - Sab
+    abbr_month_names:
+    - 
+    - Xan
+    - Feb
+    - Mar
+    - Abr
+    - Mai
+    - Xuñ
+    - Xul
+    - Ago
+    - Set
+    - Out
+    - Nov
+    - Dec
+    day_names:
+    - Domingo
+    - Luns
+    - Martes
+    - Mércores
+    - Xoves
+    - Venres
+    - Sábado
+    formats:
+      default: "%e/%m/%Y"
+      long: "%A %e de %B de %Y"
+      short: "%e %b"
+    month_names:
+    - 
+    - Xaneiro
+    - Febreiro
+    - Marzo
+    - Abril
+    - Maio
+    - Xuño
+    - Xullo
+    - Agosto
+    - Setembro
+    - Outubro
+    - Novembro
+    - Decembro
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: aproximadamente unha hora
+        other: "%{count} horas"
+      about_x_months:
+        one: aproximadamente %{count} mes
+        other: "%{count} meses"
+      about_x_years:
+        one: aproximadamente %{count} ano
+        other: "%{count} anos"
+      half_a_minute: medio minuto
+      less_than_x_seconds:
+        zero: menos dun segundo
+        one: "%{count} segundo"
+        few: poucos segundos
+        other: "%{count} segundos"
+      less_than_x_minutes:
+        zero: menos dun minuto
+        one: "%{count} minuto"
+        other: "%{count} minutos"
+      over_x_years:
+        one: máis dun ano
+        other: "%{count} anos"
+      x_seconds:
+        one: "%{count} segundo"
+        other: "%{count} segundos"
+      x_minutes:
+        one: "%{count} minuto"
+        other: "%{count} minuto"
+      x_days:
+        one: "%{count} día"
+        other: "%{count} días"
+      x_months:
+        one: "%{count} mes"
+        other: "%{count} meses"
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: debe ser aceptado
+      blank: non pode estar en branco
+      confirmation: non coincide coa confirmación
+      empty: non pode estar baleiro
+      equal_to: debe ser igual a %{count}
+      even: debe ser impar
+      exclusion: xa existe
+      greater_than: debe ser maior que %{count}
+      greater_than_or_equal_to: debe ser maior ou igual que %{count}
+      inclusion: non está incluído na lista
+      invalid: non é válido
+      less_than: debe ser menor que %{count}
+      less_than_or_equal_to: debe ser menor ou igual que %{count}
+      not_a_number: non é un número
+      odd: debe ser par
+      taken: non está dispoñible
+      too_long: é demasiado longo (non máis de %{count} carácteres)
+      too_short: é demasiado curto (non menos de %{count} carácteres)
+      wrong_length: non ten a lonxitude correcta (debe ser de %{count} carácteres)
+    template:
+      body: 'Atopáronse os seguintes problemas:'
+      header:
+        one: "%{count} erro evitou que se puidese gardar o %{model}"
+        other: "%{count} erros evitaron que se puidese gardar o %{model}"
+  number:
+    currency:
+      format:
+        delimiter: "."
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "€"
+    format:
+      delimiter: "."
+      precision: 2
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " e "
+      two_words_connector: " e "
+      words_connector: ", "
+  time:
+    am: am
+    formats:
+      default: "%A, %e de %B de %Y ás %H:%M"
+      long: "%A %e de %B de %Y ás %H:%M"
+      short: "%e/%m, %H:%M"
+    pm: pm

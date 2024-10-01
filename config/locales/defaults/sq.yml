@@ -1,0 +1,212 @@
+---
+sq:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: "Vlerësimi dështoi: %{errors}"
+        restrict_dependent_destroy:
+          has_one: "S’fshihet dot zëri, ngaqë ekziston një %{record} që varet prej tij"
+          has_many: "S’fshihet dot zëri, ngaqë ekzistojnë %{record} që varen prej tij"
+  date:
+    abbr_day_names:
+    - Die
+    - Hën
+    - Mar
+    - Mër
+    - Enj
+    - Pre
+    - Sht
+    abbr_month_names:
+    -
+    - Jan
+    - Shk
+    - Mar
+    - Pri
+    - Maj
+    - Qer
+    - Kor
+    - Gus
+    - Sht
+    - Tet
+    - Nën
+    - Dhj
+    day_names:
+    - E dielë
+    - E hënë
+    - E martë
+    - E mërkurë
+    - E enjte
+    - E premte
+    - E shtunë
+    formats:
+      default: "%d-%m-%Y"
+      long: "%d %B, %Y"
+      short: "%d %b"
+    month_names:
+    -
+    - Janar
+    - Shkurt
+    - Mars
+    - Prill
+    - Maj
+    - Qershor
+    - Korrik
+    - Gusht
+    - Shtator
+    - Tetor
+    - Nëntor
+    - Dhjetor
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: rreth %{count} orë
+        other: rreth %{count} orë
+      about_x_months:
+        one: rreth %{count} muaj
+        other: rreth %{count} muaj
+      about_x_years:
+        one: rreth %{count} vit
+        other: rreth %{count} vjet
+      almost_x_years:
+        one: gati %{count} vit
+        other: gati %{count} vjet
+      half_a_minute: gjysmë minute
+      less_than_x_seconds:
+        one: më pak se %{count} sekondë
+        other: më pak se %{count} sekonda
+      less_than_x_minutes:
+        one: më pak se një minutë
+        other: më pak se %{count} minuta
+      over_x_years:
+        one: mbi %{count} vit
+        other: mbi %{count} vjet
+      x_minutes:
+        one: "%{count} minutë"
+        other: "%{count} minuta"
+      x_days:
+        one: "%{count} ditë"
+        other: "%{count} ditë"
+      x_months:
+        one: "%{count} muaj"
+        other: "%{count} muaj"
+      x_years:
+        one: "%{count} vit"
+        other: "%{count} vjet"
+    prompts:
+      second: Sekondë
+      minute: Minutë
+      hour: Orë
+      day: Ditë
+      month: Muaj
+      year: Vit
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: duhet pranuar
+      blank: s’mund të jetë i zbrazët
+      confirmation: s’përputhet me %{attribute}
+      empty: s’mund të jetë i zbrazët
+      equal_to: duhet të jetë baras me %{count}
+      even: duhet të jetë çift
+      exclusion: është i rezervuar
+      greater_than: duhet të jetë më i madh se %{count}
+      greater_than_or_equal_to: duhet të jetë më i madh ose i barabartë me %{count}
+      inclusion: s’përfshihet te lista
+      invalid: është i pavlefshëm
+      less_than: duhet të jetë më i vogël se %{count}
+      less_than_or_equal_to: duhet të jetë më i vogël ose i barabartë me %{count}
+      model_invalid: "Vlerësimi dështoi: %{errors}"
+      not_a_number: s’është numër
+      not_an_integer: duhet të jetë numër i plotë
+      odd: duhet të jetë tek
+      other_than: duhet të jetë më shumë se %{count}
+      present: duhet të jetë e zbrazët
+      required: duhet të ekzistojë
+      taken: është zënë tashmë
+      too_long:
+        one: është shumë i gjatë (maksimumi është %{count} shenjë)
+        other: është shumë i gjatë (maksimumi është %{count} shenja)
+      too_short:
+        one: është shumë i shkurtër (minimumi është %{count} shenjë)
+        other: është shumë i shkurtër (minimumi është %{count} shenja)
+      wrong_length:
+        one: ka gjatësi të gabuar (duhet të jetë %{count} shenjë)
+        other: ka gjatësi të gabuar (duhet të jetë %{count} shenja)
+    template:
+      body: 'Pati probleme me fushat vijuese:'
+      header:
+        one: Ruajtja e këtij %{model} u pengua nga %{count} gabim
+        other: "Ruajtja e këtij %{model} u pengua nga %{count} gabime"
+  helpers:
+    select:
+      prompt: Ju lutemi, përzgjidhni
+    submit:
+      create: Krijoje %{model}
+      submit: Ruaje %{model}
+      update: Përditësoje %{model}
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u%n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "$"
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: Miliard
+          million: Milion
+          quadrillion: Kuadrilion
+          thousand: Mijë
+          trillion: Trilion
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Bajt
+            other: Bajte
+          eb: EB
+          gb: GB
+          kb: KB
+          mb: MB
+          pb: PB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", dhe "
+      two_words_connector: " dhe "
+      words_connector: ", "
+  time:
+    am: am
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      long: "%d %B, %Y %H:%M"
+      short: "%d %b %H:%M"
+    pm: pm

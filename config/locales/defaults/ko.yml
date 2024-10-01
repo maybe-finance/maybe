@@ -1,0 +1,183 @@
+---
+ko:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 데이터 검증에 실패하였습니다. %{errors}
+        restrict_dependent_destroy:
+          has_one: "%{record}(이)가 존재하기 때문에 삭제할 수 없습니다"
+          has_many: "%{record}(이)가 존재하기 때문에 삭제할 수 없습니다"
+  date:
+    abbr_day_names:
+    - 일
+    - 월
+    - 화
+    - 수
+    - 목
+    - 금
+    - 토
+    abbr_month_names:
+    -
+    - 1월
+    - 2월
+    - 3월
+    - 4월
+    - 5월
+    - 6월
+    - 7월
+    - 8월
+    - 9월
+    - 10월
+    - 11월
+    - 12월
+    day_names:
+    - 일요일
+    - 월요일
+    - 화요일
+    - 수요일
+    - 목요일
+    - 금요일
+    - 토요일
+    formats:
+      default: "%Y-%m-%d"
+      long: "%Y년 %m월 %d일"
+      short: "%m월 %d일"
+    month_names:
+    -
+    - 1월
+    - 2월
+    - 3월
+    - 4월
+    - 5월
+    - 6월
+    - 7월
+    - 8월
+    - 9월
+    - 10월
+    - 11월
+    - 12월
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours: 대략 %{count}시간
+      about_x_months: 대략 %{count}개월
+      about_x_years: 대략 %{count}년
+      almost_x_years: 거의 %{count}년
+      half_a_minute: 30초
+      less_than_x_seconds: "%{count}초 미만"
+      less_than_x_minutes: "%{count}분 미만"
+      over_x_years: "%{count}년 초과"
+      x_seconds: "%{count}초"
+      x_minutes: "%{count}분"
+      x_days: "%{count}일"
+      x_months: "%{count}개월"
+      x_years: "%{count}년"
+    prompts:
+      second: 초
+      minute: 분
+      hour: 시
+      day: 일
+      month: 월
+      year: 년
+  errors:
+    format: "%{message}"
+    messages:
+      accepted: "%{attribute}을(를) 반드시 확인해야 합니다"
+      blank: "%{attribute}에 내용을 입력해 주세요"
+      confirmation: "%{attribute}은(는) 서로 일치해야 합니다"
+      empty: "%{attribute}에 내용을 입력해 주세요"
+      equal_to: "%{attribute}은(는) %{count}와(과) 같아야 합니다"
+      even: "%{attribute}에 짝수를 입력해 주세요"
+      exclusion: "%{attribute}은(는) 이미 예약되어 있는 값입니다"
+      greater_than: "%{attribute}은(는) %{count}보다 커야 합니다"
+      greater_than_or_equal_to: "%{attribute}은(는) %{count}보다 크거나 같아야 합니다"
+      in: "%{attribute}은(는) %{count}범위 안에 있어야 합니다"
+      inclusion: "%{attribute}은(는) 목록에 포함되어 있는 값이 아닙니다"
+      invalid: "%{attribute}은(는) 올바르지 않은 값입니다"
+      less_than: "%{attribute}은(는) %{count}보다 작아야 합니다"
+      less_than_or_equal_to: "%{attribute}은(는) %{count}와(과) 작거나 같아야 합니다"
+      model_invalid: "%{attribute}에 대한 데이터 검증에 실패하였습니다: %{errors}"
+      not_a_number: "%{attribute}에 숫자를 입력해 주세요"
+      not_an_integer: "%{attribute}에 정수를 입력해 주세요"
+      odd: "%{attribute}에 홀수를 입력해 주세요"
+      other_than: "%{attribute}은(는) %{count}와(과) 달라야 합니다"
+      present: "%{attribute}은(는) 비어있어야 합니다"
+      required: "%{attribute}은(는) 반드시 있어야 합니다"
+      taken: "%{attribute}은(는) 이미 존재합니다"
+      too_long: "%{attribute}은(는) %{count}자를 넘을 수 없습니다"
+      too_short: "%{attribute}은(는) 적어도 %{count}자를 넘어야 합니다"
+      wrong_length: "%{attribute}은(는) %{count}자여야 합니다"
+    template:
+      body: 아래 문제를 확인해 주세요.
+      header: "%{count}개의 오류로 인해 %{model}을(를) 저장할 수 없습니다"
+  helpers:
+    select:
+      prompt: 선택해주세요
+    submit:
+      create: 등록
+      submit: 제출
+      update: 수정
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%n%u"
+        precision: 0
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: 원
+    format:
+      delimiter: ","
+      precision: 3
+      round_mode: default
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n%u"
+        units:
+          billion: 십억
+          million: 백만
+          quadrillion: 천조
+          thousand: 천
+          trillion: 조
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n%u"
+        units:
+          byte: 바이트
+          eb: EB
+          gb: GB
+          kb: KB
+          mb: MB
+          pb: PB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", "
+      two_words_connector: ', '
+      words_connector: ", "
+  time:
+    am: 오전
+    formats:
+      default: "%Y년 %m월 %d일 %A %H시 %M분 %S초 %z"
+      long: "%Y년 %m월 %d일 %H시 %M분"
+      short: "%m월 %d일 %H:%M"
+    pm: 오후

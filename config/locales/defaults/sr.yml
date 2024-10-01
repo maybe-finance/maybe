@@ -1,0 +1,242 @@
+---
+sr:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Валидација није успела: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Није могуће обрисати запис јер постоји зависан %{record}
+          has_many: Није могуће обрисати запис јер постоје зависни %{record}
+  date:
+    abbr_day_names:
+    - Нед
+    - Пон
+    - Уто
+    - Сре
+    - Чет
+    - Пет
+    - Суб
+    abbr_month_names:
+    - 
+    - Јан
+    - Феб
+    - Мар
+    - Апр
+    - Мај
+    - Јун
+    - Јул
+    - Авг
+    - Сеп
+    - Окт
+    - Нов
+    - Дец
+    day_names:
+    - Недеља
+    - Понедељак
+    - Уторак
+    - Среда
+    - Четвртак
+    - Петак
+    - Субота
+    formats:
+      default: "%d/%m/%Y"
+      long: "%B %e, %Y"
+      short: "%e %b"
+    month_names:
+    - 
+    - Јануар
+    - Фабруар
+    - Март
+    - Април
+    - Мај
+    - Јун
+    - Јул
+    - Август
+    - Септембар
+    - Октобар
+    - Новембар
+    - Децембар
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: око %{count} сат
+        few: око %{count} сата
+        many: око %{count} сати
+        other: око %{count} сати
+      about_x_months:
+        one: око %{count} месец
+        few: око %{count} месеца
+        many: око %{count} месеци
+        other: око %{count} месеци
+      about_x_years:
+        one: око %{count} године
+        few: око %{count} године
+        many: око %{count} година
+        other: око %{count} година
+      almost_x_years:
+        one: скоро %{count} година
+        few: скоро %{count} године
+        many: скоро %{count} година
+        other: скоро %{count} година
+      half_a_minute: пола минуте
+      less_than_x_seconds:
+        one: мање од %{count} секунд
+        few: мање од %{count} секунде
+        many: мање од %{count} секунди
+        other: мање од %{count} секунди
+      less_than_x_minutes:
+        one: мање од %{count} минут
+        few: мање од %{count} минута
+        many: мање од %{count} минута
+        other: мање од %{count} минута
+      over_x_years:
+        one: преко %{count} године
+        few: преко %{count} године
+        many: преко %{count} година
+        other: преко %{count} година
+      x_seconds:
+        one: "%{count} секунда"
+        few: "%{count} секунде"
+        many: "%{count} секунди"
+        other: "%{count} секунди"
+      x_minutes:
+        one: "%{count} минут"
+        few: "%{count} минута"
+        many: "%{count} минута"
+        other: "%{count} минута"
+      x_days:
+        one: "%{count} дан"
+        few: "%{count} дана"
+        many: "%{count} дана"
+        other: "%{count} дана"
+      x_months:
+        one: "%{count} месец"
+        few: "%{count} месеца"
+        many: "%{count} месеци"
+        other: "%{count} месеци"
+    prompts:
+      second: Секунд
+      minute: Минут
+      hour: Сат
+      day: Дан
+      month: Месец
+      year: Година
+  errors:
+    format: "Поље %{attribute} %{message}"
+    messages:
+      accepted: мора бити прихваћено
+      blank: не сме бити празано
+      confirmation: се не слаже са потврдом
+      empty: не сме бити празано
+      equal_to: мора бити једнако %{count}
+      even: мора бити парно
+      exclusion: је резервисано
+      greater_than: мора бити веће од %{count}
+      greater_than_or_equal_to: мора бити веће или једнако %{count}
+      inclusion: није у листи
+      invalid: није исправно
+      less_than: мора бити мање од %{count}
+      less_than_or_equal_to: мора бити мање или једнако %{count}
+      model_invalid: 'Валидација није успела: %{errors}'
+      not_a_number: није број
+      not_an_integer: није цео број
+      odd: мора бити непарно
+      other_than: мора бити различито од %{count}
+      present: мора бити празно
+      required: мора постојати
+      taken: је већ заузето
+      too_long:
+        one: је предугачко (максимум је %{count} знак)
+        few: је предугачко (максимум је %{count} знака)
+        many: је предугачко (максимум је %{count} знакова)
+        other: је предугачко (максимум је %{count} знакова)
+      too_short:
+        one: је прекратко (минимум је %{count} знак)
+        few: је прекратко (минимум је %{count} знака)
+        many: је прекратко (минимум је %{count} знакова)
+        other: је прекратко (минимум је %{count} знакова)
+      wrong_length:
+        one: није одговарајуће дужине (треба бити %{count} знак)
+        few: није одговарајуће дужине (треба бити %{count} знака)
+        many: није одговарајуће дужине (треба бити %{count} знакова)
+        other: није одговарајуће дужине (треба бити %{count} знакова)
+    template:
+      body: 'Молим Вас да проверите следећа поља:'
+      header:
+        one: 'Нисам успео сачувати %{model}: %{count} грешка.'
+        few: 'Нисам успео сачувати %{model}: %{count} грешке.'
+        many: 'Нисам успео сачувати %{model}: %{count} грешки.'
+        other: 'Нисам успео сачувати %{model}: %{count} грешки.'
+  helpers:
+    select:
+      prompt: Изаберите
+    submit:
+      create: Направи %{model}
+      submit: Сачувај %{model}
+      update: Измени %{model}
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%n %u"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: ДИН
+    format:
+      delimiter: "."
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: Милијарда
+          million: Милион
+          quadrillion: Квадрилион
+          thousand: Хиљаду
+          trillion: Трилион
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: бајт
+            few: бајта
+            many: бајтова
+            other: бајтова
+          gb: ГБ
+          kb: КБ
+          mb: МБ
+          tb: ТБ
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", и "
+      two_words_connector: " и "
+      words_connector: ", "
+  time:
+    am: АМ
+    formats:
+      default: "%a %d %b %Y %H:%M:%S %Z"
+      long: "%d %B %Y %H:%M"
+      short: "%d %b %H:%M"
+    pm: ПМ

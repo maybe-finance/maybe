@@ -1,0 +1,211 @@
+---
+fi:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Validointi epäonnistui: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Ei voida poistaa mallia koska tästä riippuvainen %{record} löytyy
+          has_many: Ei voida poistaa mallia koska tästä riippuvaisia %{record} löytyy
+  date:
+    abbr_day_names:
+    - su
+    - ma
+    - ti
+    - ke
+    - to
+    - pe
+    - la
+    abbr_month_names:
+    -
+    - tammi
+    - helmi
+    - maalis
+    - huhti
+    - touko
+    - kesä
+    - heinä
+    - elo
+    - syys
+    - loka
+    - marras
+    - joulu
+    day_names:
+    - sunnuntai
+    - maanantai
+    - tiistai
+    - keskiviikko
+    - torstai
+    - perjantai
+    - lauantai
+    formats:
+      default: "%-d.%-m.%Y"
+      long: "%d. %Bta %Y"
+      short: "%d. %b"
+    month_names:
+    -
+    - tammikuu
+    - helmikuu
+    - maaliskuu
+    - huhtikuu
+    - toukokuu
+    - kesäkuu
+    - heinäkuu
+    - elokuu
+    - syyskuu
+    - lokakuu
+    - marraskuu
+    - joulukuu
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: noin tunti
+        other: noin %{count} tuntia
+      about_x_months:
+        one: noin kuukausi
+        other: noin %{count} kuukautta
+      about_x_years:
+        one: vuosi
+        other: noin %{count} vuotta
+      almost_x_years:
+        one: melkein yksi vuosi
+        other: melkein %{count} vuotta
+      half_a_minute: puoli minuuttia
+      less_than_x_seconds:
+        one: alle sekunti
+        other: alle %{count} sekuntia
+      less_than_x_minutes:
+        one: alle minuutti
+        other: alle %{count} minuuttia
+      over_x_years:
+        one: yli vuosi
+        other: yli %{count} vuotta
+      x_seconds:
+        one: sekunti
+        other: "%{count} sekuntia"
+      x_minutes:
+        one: minuutti
+        other: "%{count} minuuttia"
+      x_days:
+        one: päivä
+        other: "%{count} päivää"
+      x_months:
+        one: kuukausi
+        other: "%{count} kuukautta"
+      x_years:
+        one: vuosi
+        other: "%{count} vuotta"
+    prompts:
+      second: Sekunti
+      minute: Minuutti
+      hour: Tunti
+      day: Päivä
+      month: Kuukausi
+      year: Vuosi
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: täytyy olla hyväksytty
+      blank: ei voi olla tyhjä
+      confirmation: ei vastaa varmennusta
+      empty: ei voi olla tyhjä
+      equal_to: täytyy olla yhtä suuri kuin %{count}
+      even: täytyy olla parillinen
+      exclusion: on varattu
+      greater_than: täytyy olla suurempi kuin %{count}
+      greater_than_or_equal_to: täytyy olla suurempi tai yhtä suuri kuin %{count}
+      inclusion: ei löydy listasta
+      invalid: on virheellinen
+      less_than: täytyy olla pienempi kuin %{count}
+      less_than_or_equal_to: täytyy olla pienempi tai yhtä suuri kuin %{count}
+      model_invalid: 'Validointi epäonnistui: %{errors}'
+      not_a_number: ei ole luku
+      not_an_integer: täytyy olla kokonaisluku
+      odd: täytyy olla pariton
+      present: täytyy olla sisällötön
+      required: täytyy olla
+      taken: on jo käytössä
+      too_long:
+        one: on liian pitkä (saa olla enintään %{count} merkki)
+        other: on liian pitkä (saa olla enintään %{count} merkkiä)
+      too_short:
+        one: on liian lyhyt (oltava vähintään %{count} merkki)
+        other: on liian lyhyt (oltava vähintään %{count} merkkiä)
+      wrong_length:
+        one: on väärän pituinen (täytyy olla täsmälleen %{count} merkki)
+        other: on väärän pituinen (täytyy olla täsmälleen %{count} merkkiä)
+    template:
+      body: 'Seuraavat kentät aiheuttivat ongelmia:'
+      header:
+        one: Virhe syötteessä esti mallin %{model} tallentamisen
+        other: "%{count} virhettä esti mallin %{model} tallentamisen"
+  helpers:
+    select:
+      prompt: Valitse
+    submit:
+      create: Luo %{model}
+      submit: Tallenna %{model}
+      update: Päivitä %{model}
+  number:
+    currency:
+      format:
+        delimiter: " "
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "€"
+    format:
+      delimiter: " "
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: miljardia
+          million: miljoonaa
+          quadrillion: tuhatta biljoonaa
+          thousand: tuhatta
+          trillion: biljoonaa
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: tavu
+            other: tavua
+          gb: Gt
+          kb: kt
+          mb: Mt
+          tb: Tt
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " ja "
+      two_words_connector: " ja "
+      words_connector: ", "
+  time:
+    am: aamupäivä
+    formats:
+      default: "%A %e. %Bta %Y %H:%M:%S %z"
+      long: "%e. %Bta %Y %H.%M"
+      short: "%e.%m. %H.%M"
+    pm: iltapäivä

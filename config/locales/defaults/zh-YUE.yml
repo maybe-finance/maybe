@@ -1,0 +1,181 @@
+---
+zh-YUE:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 驗證失敗：%{errors}
+        restrict_dependent_destroy:
+          has_one: 唔可以刪除，因為%{record}要用佢
+          has_many: 唔可以刪除，因為%{record}要用佢
+  date:
+    abbr_day_names:
+    - 週日
+    - 週一
+    - 週二
+    - 週三
+    - 週四
+    - 週五
+    - 週六
+    abbr_month_names:
+    - 
+    - 1月
+    - 2月
+    - 3月
+    - 4月
+    - 5月
+    - 6月
+    - 7月
+    - 8月
+    - 9月
+    - 10月
+    - 11月
+    - 12月
+    day_names:
+    - 星期日
+    - 星期一
+    - 星期二
+    - 星期三
+    - 星期四
+    - 星期五
+    - 星期六
+    formats:
+      default: "%Y-%m-%d"
+      long: "%Y年%b%d日"
+      short: "%b%d日"
+    month_names:
+    - 
+    - 一月
+    - 二月
+    - 三月
+    - 四月
+    - 五月
+    - 六月
+    - 七月
+    - 八月
+    - 九月
+    - 十月
+    - 十一月
+    - 十二月
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours: 大概%{count}個鐘
+      about_x_months: 大概%{count}個月
+      about_x_years: 大概%{count}年
+      almost_x_years: 差唔多%{count}年
+      half_a_minute: 半分鐘
+      less_than_x_seconds: 唔夠%{count}秒
+      less_than_x_minutes: 唔夠%{count}分鐘
+      over_x_years: 超過%{count}年
+      x_seconds: "%{count}秒"
+      x_minutes: "%{count}分鐘"
+      x_days: "%{count}日"
+      x_months: "%{count}個月"
+      x_years: "%{count}年"
+    prompts:
+      second: 秒
+      minute: 分
+      hour: 點
+      day: 日
+      month: 月
+      year: 年
+  errors:
+    format: "%{attribute}%{message}"
+    messages:
+      accepted: 一定要被接受
+      blank: 唔可以空白
+      confirmation: 與%{attribute}唔夾
+      empty: 唔可以漏空
+      equal_to: 要等於%{count}
+      even: 要係雙數
+      exclusion: 唔用得
+      greater_than: 要大過%{count}
+      greater_than_or_equal_to: 要大過或者等於%{count}
+      inclusion: 唔係可被接受嘅內容
+      invalid: 無效
+      less_than: 要細過%{count}
+      less_than_or_equal_to: 要細過或者等於%{count}
+      model_invalid: 驗證失敗：%{errors}
+      not_a_number: 唔係一個數字
+      not_an_integer: 要係整數
+      odd: 要係單數
+      other_than: 唔可以係%{count} 個字
+      present: 一定要空白
+      required: 必須存在
+      taken: 已經用緊
+      too_long: 太長（最多%{count}個字）
+      too_short: 太短（最少%{count}個字）
+      wrong_length: 唔啱字數（要係%{count}個字）
+    template:
+      body: 呢啲有問題：
+      header: 有%{count}個問題，%{model}儲存唔到。
+  helpers:
+    select:
+      prompt: 請喺度揀
+    submit:
+      create: 新增%{model}
+      submit: 儲存%{model}
+      update: 更新%{model}
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u %n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: HK$
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: 十億
+          million: 百萬
+          quadrillion: 千兆
+          thousand: 千
+          trillion: 兆
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: false
+        strip_insignificant_zeros: false
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: "、"
+      two_words_connector: 同
+      words_connector: "、"
+  time:
+    am: 上晝
+    formats:
+      default: "%Y年%m月%d號 %A %H:%M:%S %Z"
+      long: "%Y年%m月%d號 %H:%M"
+      short: "%m月%d號 %H:%M"
+    pm: 下晝

@@ -1,0 +1,215 @@
+---
+fy:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Falidaasje mislearre: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Kin de registraasje net wiskje om't der in %{record} ôfhinklik is
+          has_many: Kin de registraasje net wiskje om't der %{record} ôfhinklik binne
+  date:
+    abbr_day_names:
+    - si
+    - mo
+    - ti
+    - wo
+    - to
+    - fr
+    - so
+    abbr_month_names:
+    - 
+    - jan
+    - feb
+    - mrt
+    - apr
+    - mai
+    - jun
+    - jul
+    - aug
+    - sep
+    - okt
+    - nov
+    - des
+    day_names:
+    - snein
+    - moandei
+    - tiisdei
+    - woansdei
+    - tongersdei
+    - freed
+    - sneon
+    formats:
+      default: "%d-%m-%Y"
+      long: "%e %B %Y"
+      short: "%e %b"
+    month_names:
+    - 
+    - jannewaris
+    - febrewaris
+    - maart
+    - april
+    - maaie
+    - juny
+    - july
+    - augustus
+    - septimber
+    - oktober
+    - novimber
+    - desimber
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: likernôch 1 oere
+        other: likernôch %{count} oeren
+      about_x_months:
+        one: likernôch 1 moanne
+        other: likernôch %{count} moannen
+      about_x_years:
+        one: likernôch 1 jier
+        other: likernôch %{count} jier
+      almost_x_years:
+        one: hast 1 jier
+        other: hast %{count} jier
+      half_a_minute: in heale minút
+      less_than_x_seconds:
+        one: minder as 1 sekonde
+        other: minder as %{count} sekonden
+      less_than_x_minutes:
+        one: minder as in minút
+        other: minder as %{count} minuten
+      over_x_years:
+        one: mear as 1 jier
+        other: mear as %{count} jier
+      x_seconds:
+        one: 1 sekonde
+        other: "%{count} sekonden"
+      x_minutes:
+        one: 1 minút
+        other: "%{count} minuten"
+      x_days:
+        one: 1 dei
+        other: "%{count} dagen"
+      x_months:
+        one: 1 moanne
+        other: "%{count} moannen"
+      x_years:
+        one: 1 jier
+        other: "%{count} jier"
+    prompts:
+      second: sekonde
+      minute: minút
+      hour: oere
+      day: dei
+      month: moanne
+      year: jier
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: moat akseptearre wurde
+      blank: kin net blanko wêze
+      confirmation: komt net oerien mei %{attribute}
+      empty: kin net leech wêze
+      equal_to: moat lyk wêze oan %{count}
+      even: moat even wêze
+      exclusion: is reservearre
+      greater_than: moat grutter wêze as %{count}
+      greater_than_or_equal_to: moat grutter wêze as, of lyk oan %{count}
+      inclusion: stiet net yn 'e list
+      invalid: is ûnjildich
+      less_than: moat lytser wêze as %{count}
+      less_than_or_equal_to: moat lytser wêze as, of lyk oan %{count}
+      model_invalid: 'Falidaasje mislearre: %{errors}'
+      not_a_number: is gjin getal
+      not_an_integer: moat in hiel getal wêze
+      odd: moat ûneven wêze
+      other_than: moat oars wêze as %{count}
+      present: moat blanko wêze
+      required: moat der wêze
+      taken: is al ynnommen
+      too_long:
+        one: is te lang (maksimum is 1 teken)
+        other: is te lang (maksimum is %{count} tekens)
+      too_short:
+        one: is te koart (minimum is 1 teken)
+        other: is te koart (minimum is %{count} tekens)
+      wrong_length:
+        one: hat de ferkearde lingte (moat 1 teken wêze)
+        other: hat de ferkearde lingte (moat %{count} tekens wêze)
+    template:
+      body: 'Der binne problemen mei de neikommende fjilden:'
+      header:
+        one: 1 flater behinderet it fêstlizzen fan %{model}
+        other: "%{count} flaters behinderje it fêstlizzen fan %{model}"
+  helpers:
+    select:
+      prompt: Meitsje in kar
+    submit:
+      create: "%{model} oanmeitsje"
+      submit: "%{model} fêstlizze"
+      update: "%{model} bywurkje"
+  number:
+    currency:
+      format:
+        delimiter: "."
+        format: "%u %n"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "€"
+    format:
+      delimiter: "."
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: miljard
+          million: miljoen
+          quadrillion: biljard
+          thousand: tûzen
+          trillion: biljoen
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: byte
+            other: bytes
+          eb: EB
+          gb: GB
+          kb: KB
+          mb: MB
+          pb: PB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " en "
+      two_words_connector: " en "
+      words_connector: ", "
+  time:
+    am: fm.
+    formats:
+      default: "%a %e %b %Y %H.%M:%S %z"
+      long: "%e %B %Y om %H.%M oere"
+      short: "%e %b, %H.%M o."
+    pm: nm.

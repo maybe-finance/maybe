@@ -1,0 +1,213 @@
+---
+nl:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Validatie mislukt: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Kan item niet verwijderen omdat %{record} afhankelijk is
+          has_many: Kan item niet verwijderen omdat afhankelijke %{record} bestaan
+  date:
+    abbr_day_names:
+    - zo
+    - ma
+    - di
+    - wo
+    - do
+    - vr
+    - za
+    abbr_month_names:
+    - 
+    - jan
+    - feb
+    - mrt
+    - apr
+    - mei
+    - jun
+    - jul
+    - aug
+    - sep
+    - okt
+    - nov
+    - dec
+    day_names:
+    - zondag
+    - maandag
+    - dinsdag
+    - woensdag
+    - donderdag
+    - vrijdag
+    - zaterdag
+    formats:
+      default: "%d-%m-%Y"
+      long: "%e %B %Y"
+      short: "%e %b"
+    month_names:
+    - 
+    - januari
+    - februari
+    - maart
+    - april
+    - mei
+    - juni
+    - juli
+    - augustus
+    - september
+    - oktober
+    - november
+    - december
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: ongeveer een uur
+        other: ongeveer %{count} uur
+      about_x_months:
+        one: ongeveer een maand
+        other: ongeveer %{count} maanden
+      about_x_years:
+        one: ongeveer een jaar
+        other: ongeveer %{count} jaar
+      almost_x_years:
+        one: bijna een jaar
+        other: bijna %{count} jaar
+      half_a_minute: een halve minuut
+      less_than_x_seconds:
+        one: minder dan een seconde
+        other: minder dan %{count} seconden
+      less_than_x_minutes:
+        one: minder dan een minuut
+        other: minder dan %{count} minuten
+      over_x_years:
+        one: meer dan een jaar
+        other: meer dan %{count} jaar
+      x_seconds:
+        one: "%{count} seconde"
+        other: "%{count} seconden"
+      x_minutes:
+        one: "%{count} minuut"
+        other: "%{count} minuten"
+      x_days:
+        one: "%{count} dag"
+        other: "%{count} dagen"
+      x_months:
+        one: "%{count} maand"
+        other: "%{count} maanden"
+      x_years:
+        one: "%{count} jaar"
+        other: "%{count} jaar"
+    prompts:
+      second: seconde
+      minute: minuut
+      hour: uur
+      day: dag
+      month: maand
+      year: jaar
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: moet worden geaccepteerd
+      blank: moet opgegeven zijn
+      confirmation: komt niet overeen met %{attribute}
+      empty: moet opgegeven zijn
+      equal_to: moet gelijk zijn aan %{count}
+      even: moet even zijn
+      exclusion: is gereserveerd
+      greater_than: moet groter zijn dan %{count}
+      greater_than_or_equal_to: moet groter dan of gelijk zijn aan %{count}
+      inclusion: is niet in de lijst opgenomen
+      invalid: is ongeldig
+      less_than: moet minder zijn dan %{count}
+      less_than_or_equal_to: moet minder dan of gelijk zijn aan %{count}
+      model_invalid: 'Validatie mislukt: %{errors}'
+      not_a_number: is geen getal
+      not_an_integer: moet een geheel getal zijn
+      odd: moet oneven zijn
+      other_than: moet anders zijn dan %{count}
+      present: moet leeg zijn
+      required: moet bestaan
+      taken: is al in gebruik
+      too_long:
+        one: is te lang (maximaal %{count} teken)
+        other: is te lang (maximaal %{count} tekens)
+      too_short:
+        one: is te kort (minimaal %{count} teken)
+        other: is te kort (minimaal %{count} tekens)
+      wrong_length:
+        one: heeft onjuiste lengte (moet %{count} teken lang zijn)
+        other: heeft onjuiste lengte (moet %{count} tekens lang zijn)
+    template:
+      body: 'Er zijn problemen met de volgende velden:'
+      header:
+        one: "%{model} niet opgeslagen: %{count} fout gevonden"
+        other: "%{model} niet opgeslagen: %{count} fouten gevonden"
+  helpers:
+    select:
+      prompt: Maak een keuze
+    submit:
+      create: "%{model} toevoegen"
+      submit: "%{model} opslaan"
+      update: "%{model} bijwerken"
+  number:
+    currency:
+      format:
+        delimiter: "."
+        format: "%u %n"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "€"
+    format:
+      delimiter: "."
+      precision: 2
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: miljard
+          million: miljoen
+          quadrillion: biljard
+          thousand: duizend
+          trillion: biljoen
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: byte
+            other: bytes
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " en "
+      two_words_connector: " en "
+      words_connector: ", "
+  time:
+    am: "'s ochtends"
+    formats:
+      default: "%a %d %b %Y %H:%M:%S %Z"
+      long: "%d %B %Y %H:%M"
+      short: "%d %b %H:%M"
+    pm: "'s middags"

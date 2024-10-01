@@ -1,0 +1,213 @@
+---
+dz:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'ཆ་འཇོག་འཐུས་ཤོར་ཡི་: %{errors}'
+        restrict_dependent_destroy:
+          has_one: ཡིག་ཐོ་ %{record} བརྟེན་ཏེ་ཡོད་པ་ལས་བཏོན་གཏང་མི་བཏུབ་
+          has_many: ཡིག་ཐོ་ %{record} བརྟེན་ཏེ་ཡོད་པ་ལས་བཏོན་གཏང་མི་བཏུབ་
+  date:
+    abbr_day_names:
+    - གཟའ་ཟླཝ
+    - གཟའ་མིག་དམར
+    - གཟའ་ལྷགཔ
+    - གཟའ་ཕུརཔ
+    - གཟའ་པ་སངས
+    - གཟའ་སྤེན་པ
+    - གཟའ་ཉིམ
+    abbr_month_names:
+    -
+    - ཟླཝ་དང་པ
+    - ཟླཝ་གཉིས་པ
+    - ཟླཝ་གསུམ་པ
+    - ཟླཝ་བཞི་པ
+    - ཟླཝ་ལྔ་པ
+    - ཟླཝ་དྲུག་པ
+    - ཟླཝ་བདུན་པ
+    - ཟླཝ་བརྒྱད་པ
+    - ཟླཝ་དགུ་པ
+    - ཟླཝ་བཅུ་པ
+    - ཟླཝ་བཅུ་གཅིག་པ
+    - ཟླཝ་བཅུ་གཉིས་པ
+    day_names:
+    - གཟའ་ཟླཝ
+    - གཟའ་མིག་དམར
+    - གཟའ་ལྷག་པ
+    - གཟའ་ཕུརཔ
+    - གཟའ་པ་སངས
+    - གཟའ་སྤེན་པ
+    - གཟའ་ཉི་མ
+    formats:
+      default: "%Y-%m-%d"
+      long: "%d %B %Y"
+      short: "%d %b"
+    month_names:
+    -
+    - ཟླཝ་དང་པ
+    - ཟླཝ་གཉིས་པ
+    - ཟླཝ་གསུམ་པ
+    - ཟླཝ་བཞི་པ
+    - ཟླཝ་ལྔ་པ
+    - ཟླཝ་དྲུག་པ
+    - ཟླཝ་བདུན་པ
+    - ཟླཝ་བརྒྱད་པ
+    - ཟླཝ་དགུ་པ
+    - ཟླཝ་བཅུ་པ
+    - ཟླཝ་བཅུ་གཅིག་པ
+    - ཟླཝ་བཅུ་གཉིས་པ
+    order:
+    - :ལོ
+    - :ཟླཝ
+    - :ཉིནམ
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: ཆུ་ཚོད་ ༡ ་དེ་ཅིག
+        other: ཆུ་ཚོད་ %{count} དེ་ཅིག
+      about_x_months:
+        one: ཟླཝ་ ༡ ་དེ་ཅིག
+        other: ཟླཝ་ %{count} དེ་ཅིག
+      about_x_years:
+        one: ལོ་ ༡ ་དེ་ཅིག
+        other: ལོ་ %{count} དེ་ཅིག
+      almost_x_years: ལོ %{count} མ་ལྷགཔ་ཅིག
+      half_a_minute: སྐར་མ་ཕྱེད་ཀ
+      less_than_x_seconds:
+        one: སྐར་ཆ་ ༡ ་ལས་ཉུངམ
+        other: སྐར་ཆ %{count} ལས་ཉུངམ
+      less_than_x_minutes:
+        one: སྐར་མ་ ༡ ་ལས་ཉུངམ
+        other: སྐར་མ %{count} ལས་ཉུངམ
+      over_x_years:
+        one: ལོ་ ༡ ་ལྷག
+        other: ལོ་%{count}ལས་ལྷག
+      x_seconds:
+        one: སྐར་ཆ་གཅིག
+        other: སྐར་ཆ %{count}
+      x_minutes:
+        one: སྐར་མ་གཅིག
+        other: སྐར་མ %{count}
+      x_days:
+        one: ཉིནམ་གཅིག
+        other: ཉིནམ %{count}
+      x_months:
+        one: ཟླཝ་གཅིག
+        other: ཟླཝ %{count}
+      x_years:
+        one: ལོ་གཅིག
+        other: ལོ %{count}
+    prompts:
+      second: སྐར་ཆ
+      minute: སྐར་མ
+      hour: ཆུ་ཚོད
+      day: ཉིནམ
+      month: ཟླཝ
+      year: ལོ
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: ངོས་ལན་འབད་དགོ
+      blank: སྟོང་པ་མི་བཏུབ
+      confirmation: "%{attribute} དང་ཅོག་འཐོད་མིན་འདུག"
+      empty: སྟོངམ་མི་བཏུབ
+      equal_to: "%{count} དང་འདྲ་མཉམ་དགོ"
+      even: འདྲན་འདྲ་དགོ
+      exclusion: ཟུར་གསོག
+      greater_than: "%{count} ལས་སྦོམ་དགོ"
+      greater_than_or_equal_to: "%{count} ལས་མང་སུ་ཡང་ན་འདྲན་འདྲ་དགོ"
+      inclusion: ཐོ་ཡིག་གི་གྲངས་སུ་མིན་འདུག
+      invalid: ཆ་མེད་ཨིན
+      less_than: "%{count} ལས་ཉུང་སུ་ཅིག་དགོ"
+      less_than_or_equal_to: "%{count} ལས་ཉུང་སུ་ཡང་ན་འདྲན་འདྲ་དགོ"
+      model_invalid: 'ཆ་འཇོག་འཐུས་ཤོར་ཡི: %{errors}'
+      not_a_number: ཨང་གྲངས་མེན
+      not_an_integer: ཧྲིལ་གྲངས་དགོ
+      odd: ཡ་ཨང་དགོ
+      other_than: "%{count} ལས་སོ་སོ་ཅིག་དགོ"
+      present: ས་སྟོང་བཞག་དགོ
+      required: དགོ་རང་དགོ
+      taken: ཧེ་མ་ལས་འབག་ཚར་ཡི
+      too_long:
+        one: ཡིག་འབྲུ་གནམ་མེད་ས་མེད་རིངམ་ཨིན་མེ་(ཡིག་འབྲུ་མཐོ་ཚད་གཅིག་་ཨིན)
+        other: ཡིག་འབྲུ་གནམ་མེད་ས་མེད་རིངམ་ཨིན་མེ་(ཡིག་འབྲུ་མཐོ་ཚད་ %{count} ཨིན)
+      too_short:
+        one: ཡིག་འབྲུ་གནམ་མེད་ས་མེད་ཐུང་སུ་ནུག་(ཡིག་འབྲུ་ཉུང་མཐའ་གཅིག་ཨིན)
+        other: ཡིག་འབྲུ་གནམ་མེད་ས་མེད་ཐུང་སུ་ནུག་(ཡིག་འབྲུ་ཉུང་མཐའ་ %{count} ཨིན)
+      wrong_length:
+        one: ཡིག་འབྲུ་འཛུལ་ནུག་(ཡིག་འབྲུ་གཅིག་ངེས་པར་དུ་དགོ)
+        other: ཡིག་འབྲུ་འཛུལ་ནུག་(ཡིག་འབྲུ་ %{count} ངེས་པར་དུ་དགོ)
+    template:
+      body: འོག་གི་ས་ཁོངས་ཚུ་ན་བཀའ་ངལ་འདུག
+      header:
+        one: འཛོལ་བ་ཅིག་གིས་ %{model} བསྡུ་བཞག་འབད་ནི་ལུ་བཀག་རྐྱབ་ཅིག
+        other: འཛོལ་བ་ %{count} ་གིས་ %{model} འདི་བསྡུ་བཞག་འབད་ནི་ལུ་བཀག་རྐྱབ་ཅིག
+  helpers:
+    select:
+      prompt: གདམ་ཁ་རྐྱབ
+    submit:
+      create: "%{model} གསར་སྤྲིན་འབད"
+      submit: "%{model} བསྡུ་བཞག་འབད"
+      update: "%{model} དུས་མཐུན་ཁ་གསོ་འབད"
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u%n"
+        precision: ༢
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "$"
+    format:
+      delimiter: ","
+      precision: ༣
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: ཐེར་འབུམ
+          million: ས་ཡ
+          quadrillion: Quadrillion
+          thousand: སྟོང་ཕྲག
+          trillion: ཁྲག་ཁྲིག་ཆེན་པོ
+          unit: ''
+      format:
+        delimiter: ''
+        precision: ༣
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          eb: EB
+          gb: GB
+          kb: KB
+          mb: MB
+          pb: PB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", དང "
+      two_words_connector: " དང "
+      words_connector: ", "
+  time:
+    am: དྲོ་པ་གི་ཆུ་ཚོད་་
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      long: "%d %B %Y %H:%M"
+      short: "%d %b %H:%M"
+    pm: ཕྱི་རུ་གི་ཆུ་ཚོད་

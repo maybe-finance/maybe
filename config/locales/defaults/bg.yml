@@ -1,0 +1,196 @@
+---
+bg:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'имаше грешки: %{errors}'
+  date:
+    abbr_day_names:
+    - нед
+    - пон
+    - вт
+    - ср
+    - чет
+    - пет
+    - съб
+    abbr_month_names:
+    - 
+    - ян.
+    - фев.
+    - март
+    - апр.
+    - май
+    - юни
+    - юли
+    - авг.
+    - сеп.
+    - окт.
+    - ноем.
+    - дек.
+    day_names:
+    - неделя
+    - понеделник
+    - вторник
+    - сряда
+    - четвъртък
+    - петък
+    - събота
+    formats:
+      default: "%d.%m.%Y"
+      long: "%d %B %Y"
+      short: "%d %b"
+    month_names:
+    - 
+    - януари
+    - февруари
+    - март
+    - април
+    - май
+    - юни
+    - юли
+    - август
+    - септември
+    - октомври
+    - ноември
+    - декември
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: около %{count} час
+        other: около %{count} часа
+      about_x_months:
+        one: около %{count} месец
+        other: около %{count} месеца
+      about_x_years:
+        one: около %{count} година
+        other: около %{count} години
+      almost_x_years:
+        one: почти %{count} година
+        other: почти %{count} години
+      half_a_minute: половин минута
+      less_than_x_seconds:
+        one: по-малко от %{count} секунда
+        other: по-малко от %{count} секунди
+      less_than_x_minutes:
+        one: по-малко от %{count} минута
+        other: по-малко от %{count} минути
+      over_x_years:
+        one: над %{count} година
+        other: над %{count} години
+      x_seconds:
+        one: "%{count} секунда"
+        other: "%{count} секунди"
+      x_minutes:
+        one: "%{count} минута"
+        other: "%{count} минути"
+      x_days:
+        one: "%{count} ден"
+        other: "%{count} дни"
+      x_months:
+        one: "%{count} месец"
+        other: "%{count} месеца"
+    prompts:
+      second: Секунда
+      minute: Минута
+      hour: Час
+      day: Ден
+      month: Месец
+      year: Година
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: трябва да се потвърди
+      blank: не може да е без стойност
+      confirmation: не съответства на потвърждението
+      empty: не може да е празно
+      equal_to: трябва да има стойност, равна на %{count}
+      even: трябва да е нечетно
+      exclusion: съдържа предварително зададена стойност
+      greater_than: трябва да има стойност, по-голяма от %{count}
+      greater_than_or_equal_to: трябва да има стойност, по-голяма или равна на %{count}
+      inclusion: съдържа непредвидена стойност
+      invalid: съдържа невярна стойност
+      less_than: трябва да има стойност, по-малка от %{count}
+      less_than_or_equal_to: трябва да има стойност, по-малка или равна на %{count}
+      not_a_number: не е число
+      not_an_integer: не е цяло число
+      odd: трябва да е четно
+      taken: вече съществува
+      too_long: е прекаленo дълго (не може да е повече от %{count} символа)
+      too_short: е прекалено късо (не може да бъде по-малко от %{count} символа)
+      wrong_length: е с грешна дължина (трябва да е с дължина, равна на %{count} символа)
+    template:
+      body: 'Възникнаха проблеми със следните полета:'
+      header:
+        one: "%{model}: записът е неуспешен заради %{count} грешка"
+        other: "%{model}: записът е неуспешен заради %{count} грешки"
+  helpers:
+    select:
+      prompt: Моля отбележете
+    submit:
+      create: Създай %{model}
+      submit: Запази %{model}
+      update: Обнови %{model}
+  number:
+    currency:
+      format:
+        delimiter: " "
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: лв.
+    format:
+      delimiter: " "
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: милиарда
+          million: милиона
+          quadrillion: квадрилиона
+          thousand: хиляди
+          trillion: трилиона
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Байт
+            other: Байта
+          gb: ГБ
+          kb: КБ
+          mb: МБ
+          tb: ТБ
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " и "
+      two_words_connector: " и "
+      words_connector: ", "
+  time:
+    am: преди обяд
+    formats:
+      default: "%a, %d %b %Y, %H:%M:%S %z"
+      long: "%d %B %Y, %H:%M"
+      short: "%d %b, %H:%M"
+    pm: следобед

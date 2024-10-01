@@ -1,0 +1,207 @@
+---
+fa:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: رکورد نامعتبر است %{errors}
+        restrict_dependent_destroy:
+          has_one: نمی توان رکورد را حذف کرد بخاطر اینکه یک %{record} وابسته وجود
+            دارد
+          has_many: نمی توان رکورد را حذف کرد بخاطر اینکه %{record} وابسته وجود دارد
+  date:
+    abbr_day_names:
+    - ی
+    - د
+    - س
+    - چ
+    - پ
+    - ج
+    - ش
+    abbr_month_names:
+    - 
+    - ژانویه
+    - فوریه
+    - مارس
+    - آوریل
+    - مه
+    - ژوئن
+    - ژوئیه
+    - اوت
+    - سپتامبر
+    - اکتبر
+    - نوامبر
+    - دسامبر
+    day_names:
+    - یکشنبه
+    - دوشنبه
+    - سه‌شنبه
+    - چهارشنبه
+    - پنج‌شنبه
+    - جمعه
+    - شنبه
+    formats:
+      default: "%Y/%m/%d"
+      long: "%e %B %Y"
+      short: "%m/%d"
+    month_names:
+    - 
+    - ژانویه
+    - فوریه
+    - مارس
+    - آوریل
+    - مه
+    - ژوئن
+    - ژوئیه
+    - اوت
+    - سپتامبر
+    - اکتبر
+    - نوامبر
+    - دسامبر
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: حدود یک ساعت
+        other: حدود %{count} ساعت
+      about_x_months:
+        one: حدود یک ماه
+        other: حدود %{count} ماه
+      about_x_years:
+        one: حدود یک سال
+        other: حدود %{count} سال
+      almost_x_years:
+        one: حدود یک سال
+        other: حدود %{count} سال
+      half_a_minute: نیم دقیقه
+      less_than_x_seconds:
+        one: یک ثانیه
+        other: کمتر  از %{count} ثانیه
+      less_than_x_minutes:
+        one: کمتر از یک دقیقه
+        other: کمتر از %{count} دقیقه
+      over_x_years:
+        one: بیش از یک سال
+        other: بیش از %{count} سال
+      x_seconds:
+        one: یک ثانیه
+        other: "%{count} ثانیه"
+      x_minutes:
+        one: یک دقیقه
+        other: "%{count} دقیقه"
+      x_days:
+        one: یک روز
+        other: "%{count} روز"
+      x_months:
+        one: یک ماه
+        other: "%{count} ماه"
+      x_years:
+        one: "%{count} سال"
+        other: "%{count} سال"
+    prompts:
+      second: ثانیه
+      minute: دقیقه
+      hour: ساعت
+      day: روز
+      month: ماه
+      year: سال
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: باید پذیرفته شود
+      blank: نباید خالی باشد
+      confirmation: با تایید نمی‌خواند
+      empty: نمی‌تواند خالی باشد
+      equal_to: باید برابر %{count} باشد
+      even: باید زوج باشد
+      exclusion: رزرو است
+      greater_than: باید بزرگتر از %{count} باشد
+      greater_than_or_equal_to: باید بزرگتر یا برابر %{count} باشد
+      inclusion: در لیست موجود نیست
+      invalid: نامعتبر است
+      less_than: باید کمتر از %{count} باشد
+      less_than_or_equal_to: باید کمتر یا برابر %{count} باشد
+      model_invalid: رکورد نامعتبر است %{errors}
+      not_a_number: عدد نیست
+      not_an_integer: عدد صحیح نیست
+      odd: باید فرد باشد
+      other_than: باید غیر از %{count} باشد
+      present: باید خالی باشد
+      required: باید وجود داشته باشد
+      taken: پیشتر گرفته شده
+      too_long: بلند است (حداکثر %{count} کاراکتر)
+      too_short: کوتاه است (حداقل %{count} کاراکتر)
+      wrong_length: نااندازه است (باید %{count} کاراکتر باشد)
+    template:
+      body: 'موارد زیر مشکل داشت:'
+      header:
+        one: "%{count} خطا جلوی ذخیره این %{model} را گرفت"
+        other: "%{count} خطا جلوی ذخیره این %{model} را گرفت"
+  helpers:
+    select:
+      prompt: لطفا انتخاب کنید
+    submit:
+      create: ایجاد %{model}
+      submit: ذخیره‌ی %{model}
+      update: بروز رسانی %{model}
+  number:
+    currency:
+      format:
+        delimiter: "٬"
+        format: "%n %u"
+        precision: 0
+        separator: "٫"
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "﷼"
+    format:
+      delimiter: "٬"
+      precision: 2
+      separator: "٫"
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: میلیارد
+          million: میلیون
+          quadrillion: کادریلیون
+          thousand: هزار
+          trillion: تریلیون
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: بایت
+            other: بایت
+          gb: گیگابایت
+          kb: کیلوبایت
+          mb: مگابایت
+          tb: ترابایت
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " و "
+      two_words_connector: " و "
+      words_connector: "، "
+  time:
+    am: قبل از ظهر
+    formats:
+      default: "%A، %e %B %Y، ساعت %H:%M:%S (%Z)"
+      long: "%e %B %Y، ساعت %H:%M"
+      short: "%e %B، ساعت %H:%M"
+    pm: بعد از ظهر

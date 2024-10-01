@@ -1,0 +1,167 @@
+---
+km:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: មិនមានសុពលភាព៖ %{errors}
+        restrict_dependent_destroy:
+          has_one: មិនអាចលុបបានទេពីព្រោះមាន %{record} នៅឡើយ
+          has_many: មិនអាចលុបបានទេពីព្រោះមាន %{record} នៅឡើយ
+  date:
+    abbr_day_names:
+    - អា
+    - ច
+    - អ
+    - ពុ
+    - ព្រហ
+    - សុ
+    - ស
+    abbr_month_names:
+    - 
+    - មករា
+    - កុម្ភៈ
+    - មិនា
+    - មេសា
+    - ឧសភា
+    - មិថុនា
+    - កក្កដា
+    - សីហា
+    - កញ្ញា
+    - តុលា
+    - វិច្ឆិកា
+    - ធ្នូ
+    day_names:
+    - អាទិត្យ
+    - ចន្ទ
+    - អង្គារ
+    - ពុធ
+    - ព្រហស្បតិ៍
+    - សុក្រ
+    - សៅរ៍
+    formats:
+      default: "%d %B %Y"
+      long: ថ្ងៃ%A ទី%e ខែ%B ឆ្នាំ%Y
+      short: "%d %b"
+    month_names:
+    - 
+    - មករា
+    - កុម្ភៈ
+    - មិនា
+    - មេសា
+    - ឧសភា
+    - មិថុនា
+    - កក្កដា
+    - សីហា
+    - កញ្ញា
+    - តុលា
+    - វិច្ឆិកា
+    - ធ្នូ
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours: ប្រមាណ %{count} ម៉ោង
+      about_x_months: ប្រមាណ %{count} ខែ
+      about_x_years: ប្រមាណ %{count} ឆ្នាំ
+      almost_x_years: ជិត %{count} ឆ្នាំ
+      half_a_minute: កន្លះនាទី
+      less_than_x_seconds: តិចជាង %{count} វិនាទី
+      less_than_x_minutes: តិចជាង %{count} នាទី
+      over_x_years: លើសពី %{count} ឆ្នាំ
+      x_seconds: "%{count} វិនាទី"
+      x_minutes: "%{count} នាទី"
+      x_days: "%{count} ថ្ងៃ"
+      x_months: "%{count} ខែ"
+    prompts:
+      second: វិនាទី
+      minute: នាទី
+      hour: ម៉ោង
+      day: ថ្ងៃ
+      month: ខែ
+      year: ឆ្នាំ
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: ត្រូវតែយល់ព្រម
+      blank: មិនអាចរំលង
+      confirmation: ផ្ទៀងផ្ទាត់មិនត្រូវនឹង %{attribute}
+      empty: មិនអាចរំលង
+      equal_to: ត្រូវតែស្មើ %{count}
+      even: ត្រូវតែជាចំនួនគត់
+      exclusion: មិនអនុញ្ញាតឱ្យប្រើ
+      greater_than: ត្រូវតែច្រើនជាង %{count}
+      greater_than_or_equal_to: ត្រូវតែច្រើនជាងឬស្មើ %{count}
+      inclusion: មិនមាននៅក្នុងបញ្ជី
+      invalid: មិនត្រឹមត្រូវ
+      less_than: ត្រូវតែតិចជាង %{count}
+      less_than_or_equal_to: ត្រូវតែតិចជាងឬស្មើ %{count}
+      not_a_number: មិនមែនជាលេខទេ
+      not_an_integer: ត្រូវតែជាចំនួនគត់
+      odd: ត្រូវតែជាចំនួនសេស
+      other_than: ត្រូវតែខុសពី %{count}
+      present: ត្រូវតែរំលង
+      taken: មានរួចហើយ
+      too_long: វែងពេក (យ៉ាងច្រើន %{count} តួ)
+      too_short: ខ្លីពេក (យ៉ាងតិច %{count} តួ)
+      wrong_length: ប្រវែងមិនត្រូវ (គួរតែមាន %{count} តួ)
+    template:
+      body: 'សូមពិនិត្យមើលកំហុសនៅខាងក្រោម:'
+      header: មានកំហុស %{count} ដែលបានបញ្ឈប់ការរក្សាទុក %{model}នេះ
+  helpers:
+    select:
+      prompt: សូមជ្រើសរើស
+    submit:
+      create: បង្កើត%{model}
+      submit: រក្សាទុក%{model}
+      update: ប្តូរ%{model}
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%n %u"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "៛"
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: ប៊ីលាន
+          million: លាន
+          quadrillion: ក្វាទ្រីលាន
+          thousand: ពាន់
+          trillion: ទ្រីលាន
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", និង "
+      two_words_connector: " និង "
+      words_connector: ", "
+  time:
+    am: ព្រឹក
+    formats:
+      default: "%a %d %b %Y %H:%M:%S %z"
+      long: "%d %B %Y %H:%M"
+      short: "%d %b %H:%M"
+    pm: "​ល្ងាច"

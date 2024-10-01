@@ -1,0 +1,202 @@
+---
+ms:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Pengesahan gagal: %{errors}'
+  date:
+    abbr_day_names:
+    - Ahd
+    - Isn
+    - Sel
+    - Rab
+    - Kha
+    - Jum
+    - Sab
+    abbr_month_names:
+    - 
+    - Jan
+    - Feb
+    - Mac
+    - Apr
+    - Mei
+    - Jun
+    - Jul
+    - Ogo
+    - Sep
+    - Okt
+    - Nov
+    - Dis
+    day_names:
+    - Ahad
+    - Isnin
+    - Selasa
+    - Rabu
+    - Khamis
+    - Jumaat
+    - Sabtu
+    formats:
+      default: "%d-%m-%Y"
+      long: "%d %B, %Y"
+      short: "%d %b"
+    month_names:
+    - 
+    - Januari
+    - Febuari
+    - Mac
+    - April
+    - Mei
+    - Jun
+    - Julai
+    - Ogos
+    - September
+    - Oktober
+    - November
+    - Disember
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: lebih kurang %{count} jam
+        other: lebih kurang %{count} jam
+      about_x_months:
+        one: lebih kurang %{count} bulan
+        other: lebih kurang %{count} bulan
+      about_x_years:
+        one: lebih kurang %{count} tahun
+        other: lebih kurang %{count} tahun
+      almost_x_years:
+        one: hampir %{count} tahun
+        other: hampir %{count} tahun
+      half_a_minute: setengah minit
+      less_than_x_seconds:
+        one: kurang dari satu saat
+        other: kurang dari %{count} saat
+      less_than_x_minutes:
+        one: kurang dari satu minit
+        other: kurang dari %{count} minit
+      over_x_years:
+        one: lebih %{count} tahun
+        other: lebih %{count} tahun
+      x_seconds:
+        one: "%{count} saat"
+        other: "%{count} saat"
+      x_minutes:
+        one: "%{count} minit"
+        other: "%{count} minit"
+      x_days:
+        one: "%{count} hari"
+        other: "%{count} hari"
+      x_months:
+        one: "%{count} bulan"
+        other: "%{count} bulan"
+    prompts:
+      second: Saat
+      minute: Minit
+      hour: Jam
+      day: Hari
+      month: Bulan
+      year: Tahun
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: wajib diterima
+      blank: tidak boleh dikosongkan
+      confirmation: tidak sama dengan penegasan
+      empty: tidak boleh dikosongkan
+      equal_to: mesti sama dengan %{count}
+      even: mesti genap
+      exclusion: telah terpelihara
+      greater_than: mesti lebih dari %{count}
+      greater_than_or_equal_to: mesti melibihi atau sama dengan %{count}
+      inclusion: tidak termasuk dalam senarai
+      invalid: adalah tidak laku
+      less_than: mesti kurang daripada %{count}
+      less_than_or_equal_to: mesti kurang daripada atat sama dengan %{count}
+      not_a_number: bukan nombor
+      not_an_integer: mestilah integer
+      odd: mesti ganjil
+      taken: telah digunakan
+      too_long:
+        one: terlalu panjang (maksima adalah %{count} karakter)
+        other: terlalu panjang (maksima adalah %{count} karakter)
+      too_short:
+        one: terlalu pendek (minima adalah %{count} karakter)
+        other: terlalu pendek (minima adalah %{count} karakter)
+      wrong_length:
+        one: mempunyai panjang yang salah (sepatutnya %{count} karakter sahaja)
+        other: mempunyai panjang yang salah(sepatutnya %{count} karakter sahaja)
+    template:
+      body: 'Terdapat masalah dengan medan data tersebut:'
+      header:
+        one: "%{count} ralat menhalang  %{model} ini dari disimpan"
+        other: "%{count} ralat menhalang %{model} ini dari disimpan"
+  helpers:
+    select:
+      prompt: Sila pilih
+    submit:
+      create: Cipta %{model}
+      submit: Simpan %{model}
+      update: Kemaskini %{model}
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u%n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: RM
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: Ribu Juta
+          million: Juta
+          quadrillion: Juta-juta
+          thousand: Ribu
+          trillion: Trilion
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Bait
+            other: Bait
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", dan "
+      two_words_connector: " dan "
+      words_connector: ", "
+  time:
+    am: am
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      long: "%d %B, %Y %H:%M"
+      short: "%d %b %H:%M"
+    pm: pm

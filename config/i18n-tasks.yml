@@ -1,4 +1,6 @@
 base_locale: en
+fallbacks:
+  - default
 data:
   read:
     - config/locales/**/*%{locale}.yml
@@ -32,3 +34,7 @@ ignore_unused:
   - 'helpers.label.*' # i18n-tasks does not detect used at forms
   - 'accounts.show.sync_message_*' # messages generated in the sync ActiveJob
   - 'address.attributes.*'
+  - 'date.*'
+  - 'time.*'
+  - 'datetime.*'
+  - 'number.*'

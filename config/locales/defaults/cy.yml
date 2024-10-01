@@ -1,0 +1,265 @@
+---
+cy:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Wedi methu dilysu: %{errors}'
+        restrict_dependent_destroy:
+          has_many: Methu dileu cofnod oherwydd bod %{record} yn bodoli
+          has_one: Methu dileu cofnod oherwydd bod %{record} yn bodoli
+  date:
+    abbr_day_names:
+      - Sul
+      - Llun
+      - Maw
+      - Mer
+      - Iau
+      - Gwe
+      - Sad
+    abbr_month_names:
+      -
+      - Ion
+      - Chw
+      - Maw
+      - Ebr
+      - Mai
+      - Meh
+      - Gor
+      - Awst
+      - Med
+      - Hyd
+      - Tach
+      - Rha
+    day_names:
+      - Dydd Sul
+      - Dydd Llun
+      - Dydd Mawrth
+      - Dydd Mercher
+      - Dydd Iau
+      - Dydd Gwener
+      - Dydd Sadwrn
+    formats:
+      default: "%d-%m-%Y"
+      long: "%d %B %Y"
+      short: "%d %b"
+    month_names:
+      -
+      - Ionawr
+      - Chwefror
+      - Mawrth
+      - Ebrill
+      - Mai
+      - Mehefin
+      - Gorffennaf
+      - Awst
+      - Medi
+      - Hydref
+      - Tachwedd
+      - Rhagfyr
+    order:
+      - :year
+      - :month
+      - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        zero: tua %{count} awr
+        one: tuag awr
+        two: tua %{count} awr
+        few: tua %{count} awr
+        many: tua %{count} awr
+        other: tua %{count} awr
+      about_x_months:
+        zero: tua %{count} mis
+        one: tua mis
+        two: tua %{count} mis
+        few: tua %{count} mis
+        many: tua %{count} mis
+        other: tua %{count} mis
+      about_x_years:
+        zero: tua %{count} blynedd
+        one: tua blwyddyn
+        two: tua %{count} blynedd
+        few: tua %{count} blynedd
+        many: tua %{count} blynedd
+        other: tua %{count} blynedd
+      almost_x_years:
+        zero: bron yn %{count} blynedd
+        one: bron yn flwyddyn
+        two: bron yn %{count} blynedd
+        few: bron yn %{count} blynedd
+        many: bron yn %{count} blynedd
+        other: bron yn %{count} blynedd
+      half_a_minute: hanner munud
+      less_than_x_seconds:
+        zero: llai na %{count} eiliad
+        one: llai nag eiliad
+        two: llai na %{count} eiliad
+        few: llai na %{count} eiliad
+        many: llai na %{count} eiliad
+        other: llai na %{count} eiliad
+      less_than_x_minutes:
+        zero: llai na %{count} munud
+        one: llai na munud
+        two: llai na %{count} munud
+        few: llai na %{count} munud
+        many: llai na %{count} munud
+        other: llai na %{count} munud
+      over_x_years:
+        zero: dros %{count} blynedd
+        one: dros flwyddyn
+        two: dros %{count} blynedd
+        few: dros %{count} blynedd
+        many: dros %{count} blynedd
+        other: dros %{count} blynedd
+      x_seconds:
+        zero: "%{count} o eiliadau"
+        one: 1 eiliad
+        two: "%{count} o eiliadau"
+        few: "%{count} o eiliadau"
+        many: "%{count} o eiliadau"
+        other: "%{count} o eiliadau"
+      x_minutes:
+        zero: "%{count} o funudau"
+        one: 1 munud
+        two: "%{count} o funudau"
+        few: "%{count} o funudau"
+        many: "%{count} o funudau"
+        other: "%{count} o funudau"
+      x_days:
+        zero: "%{count} diwrnod"
+        one: 1 diwrnod
+        two: "%{count} diwrnod"
+        few: "%{count} diwrnod"
+        many: "%{count} diwrnod"
+        other: "%{count} diwrnod"
+      x_months:
+        zero: "%{count} mis"
+        one: 1 mis
+        two: "%{count} mis"
+        few: "%{count} mis"
+        many: "%{count} mis"
+        other: "%{count} mis"
+      x_years:
+        zero: "%{count} blwyddyn"
+        one: 1 flwyddyn
+        two: "%{count} blwyddyn"
+        few: "%{count} blwyddyn"
+        many: "%{count} blwyddyn"
+        other: "%{count} blwyddyn"
+    prompts:
+      second: Eiliad
+      minute: Munud
+      hour: Awr
+      day: Diwrnod
+      month: Mis
+      year: Blwyddyn
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: angen ei dderbyn
+      blank: methu bod yn wag
+      confirmation: heb fod yn gyfateb
+      empty: methu bod yn wag
+      equal_to: angen bod yn %{count}
+      even: rhaid bod yn eilrif
+      exclusion: wedi cadw
+      greater_than: angen bod yn fwy na %{count}
+      greater_than_or_equal_to: angen bod yr un maint neu fwy na %{count}
+      in: rhaid bod mewn %{count}
+      inclusion: heb fod yn y rhestr
+      invalid: heb fod yn nheilwng
+      less_than: angen bod yn llai na %{count}
+      less_than_or_equal_to: angen bod yr un maint neu lai na %{count}
+      model_invalid: 'Methodd y dilysu: %{errors}'
+      not_a_number: heb fod yn rhif
+      not_an_integer: heb fod yn rhif llawn
+      odd: rhaid bod yn odrif
+      other_than: rhaid bod yn wahanol na %{count}
+      present: rhaid bod yn wag
+      required: rhaid bodoli
+      taken: wedi'i gymryd yn barod
+      too_long: yn rhy hir (cewch %{count} llythyren ar y fwyaf)
+      too_short: yn rhy fyr (rhaid am o leiaf %{count} llythyren)
+      wrong_length: gyda maint anghywir o lythrennau (dylai fod yn %{count} llythyren)
+    template:
+      body: 'Cafwyd broblemau gyda''r meysydd canlynol:'
+      header:
+        zero: Atalwyd y %{model} hwn rhag ei gadw gan 0 nam
+        one: Atalwyd y %{model} hwn rhag ei gadw gan 1 nam
+        two: Atalwyd y %{model} hwn rhag ei gadw gan %{count} nam
+        few: Atalwyd y %{model} hwn rhag ei gadw gan %{count} nam
+        many: Atalwyd y %{model} hwn rhag ei gadw gan %{count} nam
+        other: Atalwyd y %{model} hwn rhag ei gadw gan %{count} nam
+  helpers:
+    select:
+      prompt: Dewiswch
+    submit:
+      create: Creu %{model}
+      submit: Cadw %{model}
+      update: Diweddaru %{model}
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u%n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "£"
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: Biliwn
+          million: Miliwn
+          quadrillion: Cwadriliwn
+          thousand: Mil
+          trillion: Triliwn
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            zero: Bytes
+            one: Byte
+            two: Bytes
+            few: Bytes
+            many: Bytes
+            other: Bytes
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+          eb: EB
+          pb: PB
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", a "
+      two_words_connector: " a "
+      words_connector: ", "
+  time:
+    am: yb
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      long: "%d %B %Y %H:%M"
+      short: "%d %b %H:%M"
+    pm: yh

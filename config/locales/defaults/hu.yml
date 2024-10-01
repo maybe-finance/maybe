@@ -1,0 +1,196 @@
+---
+hu:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: Sikertelen validálás %{errors}
+  date:
+    abbr_day_names:
+    - v.
+    - h.
+    - k.
+    - sze.
+    - cs.
+    - p.
+    - szo.
+    abbr_month_names:
+    - 
+    - jan.
+    - febr.
+    - márc.
+    - ápr.
+    - máj.
+    - jún.
+    - júl.
+    - aug.
+    - szept.
+    - okt.
+    - nov.
+    - dec.
+    day_names:
+    - vasárnap
+    - hétfő
+    - kedd
+    - szerda
+    - csütörtök
+    - péntek
+    - szombat
+    formats:
+      default: "%Y.%m.%d."
+      long: "%Y. %B %e."
+      short: "%b %e."
+    month_names:
+    - 
+    - január
+    - február
+    - március
+    - április
+    - május
+    - június
+    - július
+    - augusztus
+    - szeptember
+    - október
+    - november
+    - december
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: kb. %{count} órája
+        other: kb. %{count} órája
+      about_x_months:
+        one: kb. %{count} hónapja
+        other: kb. %{count} hónapja
+      about_x_years:
+        one: kb. %{count} éve
+        other: kb. %{count} éve
+      almost_x_years:
+        one: majdnem %{count} éve
+        other: majdnem %{count} éve
+      half_a_minute: fél perce
+      less_than_x_seconds:
+        one: kevesebb, mint %{count} másodperce
+        other: kevesebb, mint %{count} másodperce
+      less_than_x_minutes:
+        one: kevesebb, mint %{count} perce
+        other: kevesebb, mint %{count} perce
+      over_x_years:
+        one: több, mint %{count} éve
+        other: több, mint %{count} éve
+      x_seconds:
+        one: "%{count} másodperce"
+        other: "%{count} másodperce"
+      x_minutes:
+        one: "%{count} perce"
+        other: "%{count} perce"
+      x_days:
+        one: "%{count} napja"
+        other: "%{count} napja"
+      x_months:
+        one: "%{count} hónapja"
+        other: "%{count} hónapja"
+    prompts:
+      second: Másodperc
+      minute: Perc
+      hour: Óra
+      day: Nap
+      month: Hónap
+      year: Év
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: nincs elfogadva
+      blank: nincs megadva
+      confirmation: nem egyezik
+      empty: nincs megadva
+      equal_to: pontosan %{count} kell legyen
+      even: páros kell legyen
+      exclusion: nem elérhető
+      greater_than: nagyobb kell legyen, mint %{count}
+      greater_than_or_equal_to: legalább %{count} kell legyen
+      inclusion: nincs a listában
+      invalid: nem megfelelő
+      less_than: kevesebb, mint %{count} kell legyen
+      less_than_or_equal_to: legfeljebb %{count} lehet
+      not_a_number: nem szám
+      not_an_integer: egész számnak kell lennie
+      odd: páratlan kell legyen
+      taken: már foglalt
+      too_long: túl hosszú (nem lehet több %{count} karakternél)
+      too_short: túl rövid (legalább %{count} karakter kell legyen)
+      wrong_length: nem megfelelő hosszúságú (%{count} karakter szükséges)
+    template:
+      body: 'Problémás mezők:'
+      header:
+        one: '%{count} hiba miatt nem menthető a következő: %{model}'
+        other: "%{count} hiba miatt nem menthető a következő: %{model}"
+  helpers:
+    select:
+      prompt: Válasszon
+    submit:
+      create: Új %{model}
+      submit: "%{model} mentése"
+      update: "%{model} módosítása"
+  number:
+    currency:
+      format:
+        delimiter: ''
+        format: "%n %u"
+        precision: 0
+        separator: ","
+        significant: true
+        strip_insignificant_zeros: true
+        unit: Ft
+    format:
+      delimiter: " "
+      precision: 2
+      separator: ","
+      significant: true
+      strip_insignificant_zeros: true
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: milliárd
+          million: millió
+          quadrillion: billiárd
+          thousand: ezer
+          trillion: billió
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: bájt
+            other: bájt
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " és "
+      two_words_connector: " és "
+      words_connector: ", "
+  time:
+    am: de.
+    formats:
+      default: "%Y. %b %e., %H:%M"
+      long: "%Y. %B %e., %A, %H:%M"
+      short: "%b %e., %H:%M"
+    pm: du.

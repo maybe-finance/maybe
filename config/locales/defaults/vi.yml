@@ -1,0 +1,179 @@
+---
+vi:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Có các lỗi sau: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Không thể xóa do tồn tại đối tượng phụ thuộc %{record}
+          has_many: Không thể xóa do tồn tại một số đối tượng phụ thuộc %{record}
+  date:
+    abbr_day_names:
+    - CN
+    - Thứ 2
+    - Thứ 3
+    - Thứ 4
+    - Thứ 5
+    - Thứ 6
+    - Thứ 7
+    abbr_month_names:
+    - 
+    - Thg 1
+    - Thg 2
+    - Thg 3
+    - Thg 4
+    - Thg 5
+    - Thg 6
+    - Thg 7
+    - Thg 8
+    - Thg 9
+    - Thg 10
+    - Thg 11
+    - Thg 12
+    day_names:
+    - Chủ nhật
+    - Thứ hai
+    - Thứ ba
+    - Thứ tư
+    - Thứ năm
+    - Thứ sáu
+    - Thứ bảy
+    formats:
+      default: "%d-%m-%Y"
+      long: "%d %B, %Y"
+      short: "%d %b"
+    month_names:
+    - 
+    - Tháng một
+    - Tháng hai
+    - Tháng ba
+    - Tháng tư
+    - Tháng năm
+    - Tháng sáu
+    - Tháng bảy
+    - Tháng tám
+    - Tháng chín
+    - Tháng mười
+    - Tháng mười một
+    - Tháng mười hai
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours: khoảng %{count} giờ
+      about_x_months: khoảng %{count} tháng
+      about_x_years: khoảng %{count} năm
+      almost_x_years: gần %{count} năm
+      half_a_minute: 30 giây
+      less_than_x_seconds: chưa tới %{count} giây
+      less_than_x_minutes: chưa tới %{count} phút
+      over_x_years: hơn %{count} năm
+      x_seconds: "%{count} giây"
+      x_minutes: "%{count} phút"
+      x_days: "%{count} ngày"
+      x_months: "%{count} tháng"
+    prompts:
+      second: Giây
+      minute: Phút
+      hour: Giờ
+      day: Ngày
+      month: Tháng
+      year: Năm
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: phải được đồng ý
+      blank: không thể để trắng
+      confirmation: không khớp với xác nhận
+      empty: không thể rỗng
+      equal_to: phải bằng %{count}
+      even: phải là số chẵn
+      exclusion: đã được giành trước
+      greater_than: phải lớn hơn %{count}
+      greater_than_or_equal_to: phải lớn hơn hoặc bằng %{count}
+      inclusion: không có trong danh sách
+      invalid: không hợp lệ
+      less_than: phải nhỏ hơn %{count}
+      less_than_or_equal_to: phải nhỏ hơn hoặc bằng %{count}
+      not_a_number: không phải là số
+      not_an_integer: phải là một số nguyên
+      odd: phải là số lẻ
+      other_than: cần phải khác %{count}
+      present: cần phải để trắng
+      taken: đã tồn tại
+      too_long: quá dài (tối đa %{count} ký tự)
+      too_short: quá ngắn (tối thiểu %{count} ký tự)
+      wrong_length: độ dài không đúng (phải là %{count} ký tự)
+      required: "phải có"
+    template:
+      body: 'Có lỗi với các mục sau:'
+      header: "%{count} lỗi ngăn không cho lưu %{model} này"
+  helpers:
+    select:
+      prompt: Vui lòng chọn
+    submit:
+      create: Tạo %{model}
+      submit: Lưu %{model}
+      update: Cập nhật %{model}
+  number:
+    currency:
+      format:
+        delimiter: "."
+        format: "%n %u"
+        precision: 0
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: VNĐ
+    format:
+      delimiter: "."
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: Tỷ
+          million: Triệu
+          quadrillion: Triệu tỷ
+          thousand: Nghìn
+          trillion: Nghìn tỷ
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Byte
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", và "
+      two_words_connector: " và "
+      words_connector: ", "
+  time:
+    am: sáng
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      long: "%d %B, %Y %H:%M"
+      short: "%d %b %H:%M"
+    pm: chiều

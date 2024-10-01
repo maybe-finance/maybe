@@ -1,0 +1,207 @@
+---
+et:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Valideerimine ebaõnnestus: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Ei saa kirjet kustutada kuna sõltuv %{record} on olemas
+          has_many: Ei saa kirjet kustutada kuna sõltuvad %{record} on olemas
+  date:
+    abbr_day_names:
+    - P
+    - E
+    - T
+    - K
+    - N
+    - R
+    - L
+    abbr_month_names:
+    - 
+    - jaan.
+    - veebr.
+    - märts
+    - apr.
+    - mai
+    - juuni
+    - juuli
+    - aug.
+    - sept.
+    - okt.
+    - nov.
+    - dets.
+    day_names:
+    - pühapäev
+    - esmaspäev
+    - teisipäev
+    - kolmapäev
+    - neljapäev
+    - reede
+    - laupäev
+    formats:
+      default: "%d.%m.%Y"
+      long: "%d. %B %Y"
+      short: "%d.%m.%y"
+    month_names:
+    - 
+    - jaanuar
+    - veebruar
+    - märts
+    - aprill
+    - mai
+    - juuni
+    - juuli
+    - august
+    - september
+    - oktoober
+    - november
+    - detsember
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: umbes %{count} tund
+        other: umbes %{count} tundi
+      about_x_months:
+        one: umbes %{count} kuu
+        other: umbes %{count} kuud
+      about_x_years:
+        one: umbes %{count} aasta
+        other: umbes %{count} aastat
+      almost_x_years:
+        one: peaaegu üks aasta
+        other: peaaegu %{count} aastat
+      half_a_minute: pool minutit
+      less_than_x_seconds:
+        one: vähem kui %{count} sekund
+        other: vähem kui %{count} sekundit
+      less_than_x_minutes:
+        one: vähem kui %{count} minut
+        other: vähem kui %{count} minutit
+      over_x_years:
+        one: üle %{count} aasta
+        other: üle %{count} aasta
+      x_seconds:
+        one: "%{count} sekund"
+        other: "%{count} sekundit"
+      x_minutes:
+        one: "%{count} minut"
+        other: "%{count} minutit"
+      x_days:
+        one: "%{count} päev"
+        other: "%{count} päeva"
+      x_months:
+        one: "%{count} kuu"
+        other: "%{count} kuud"
+      x_years:
+        one: "%{count} aasta"
+        other: "%{count} aastat"
+    prompts:
+      second: Sekundit
+      minute: Minutit
+      hour: Tunde
+      day: Päev
+      month: Kuu
+      year: Aasta
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: peab olema heaks kiidetud
+      blank: on täitmata
+      confirmation: ei vasta kinnitusele
+      empty: on tühi
+      equal_to: peab olema võrdne arvuga %{count}
+      even: peab olema paarisarv
+      exclusion: on reserveeritud
+      greater_than: peab olema suurem kui %{count}
+      greater_than_or_equal_to: peab olema suurem või võrdne arvuga %{count}
+      inclusion: ei leidu nimekirjas
+      invalid: ei ole korrektne
+      less_than: peab olema vähem kui %{count}
+      less_than_or_equal_to: peab olema vähem või võrdne arvuga %{count}
+      model_invalid: 'Valideerimine ebaõnnestus: %{errors}'
+      not_a_number: ei ole number
+      not_an_integer: peab olema täisarv
+      odd: peab olema paaritu arv
+      other_than: peab olema midagi muud kui %{count}
+      present: peab olema täitmata
+      required: peab olemas olema
+      taken: on juba võetud
+      too_long: on liiga pikk (maksimum on %{count} tähemärki)
+      too_short: on liiga lühike (miinimum on %{count} tähemärki)
+      wrong_length: on vale pikkusega (peab olema %{count} tähemärki)
+    template:
+      body: 'Probleeme ilmnes järgmiste väljadega:'
+      header:
+        one: Üks viga takistas objekti %{model} salvestamist
+        other: "%{count} viga takistasid objekti %{model} salvestamist"
+  helpers:
+    select:
+      prompt: Palun vali
+    submit:
+      create: Loo uus %{model}
+      submit: Salvesta %{model}
+      update: Uuenda objekti %{model}
+  number:
+    currency:
+      format:
+        delimiter: " "
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "€"
+    format:
+      delimiter: " "
+      precision: 2
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: miljard
+          million: miljon
+          quadrillion: kvadriljon
+          thousand: tuhat
+          trillion: triljon
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: bait
+            other: baiti
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " ja "
+      two_words_connector: " ja "
+      words_connector: ", "
+  time:
+    am: enne lõunat
+    formats:
+      default: "%d. %B %Y, %H:%M"
+      long: "%a, %d. %b %Y, %H:%M:%S %z"
+      short: "%d.%m.%y, %H:%M"
+    pm: pärast lõunat

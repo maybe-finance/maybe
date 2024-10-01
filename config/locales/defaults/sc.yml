@@ -1,0 +1,223 @@
+---
+sc:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Validatzione fallida: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Su registru non si podet iscantzellare ca esitit unu %{record} chi nde dipendet
+          has_many: Su registru non si podet iscantzellare ca esitint %{record} chi nde dipendent
+  date:
+    abbr_day_names:
+    - dom
+    - lun
+    - mar
+    - mèr
+    - giò
+    - che
+    - sàb
+    abbr_month_names:
+    - 
+    - ghe
+    - fre
+    - mar
+    - abr
+    - maj
+    - làm
+    - trì
+    - aus
+    - cab
+    - stG
+    - stA
+    - nad
+    day_names:
+    - domìniga
+    - lunis
+    - martis
+    - mèrcuris
+    - giòbia
+    - chenàbura
+    - sàbadu
+    formats:
+      default: "%d/%m/%Y"
+      long: "%d %B %Y"
+      short: "%d %b"
+    month_names:
+    - 
+    - ghennàrgiu
+    - freàrgiu
+    - martzu
+    - abrile
+    - maju
+    - làmpadas
+    - trìulas
+    - austu
+    - cabudanni
+    - santugaine
+    - santandria
+    - nadale
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: pagu prus o mancu un'ora
+        other: pagu prus o mancu %{count} oras
+      about_x_months:
+        one: pagu prus o mancu unu mese
+        other: pagu prus o mancu %{count} meses
+      about_x_years:
+        one: pagu prus o mancu un'annu
+        other: pagu prus o mancu %{count} annos
+      almost_x_years:
+        one: belle un'annu
+        other: belle %{count} annos
+      half_a_minute: mesu minutu
+      less_than_x_seconds:
+        one: prus pagu de unu segundu
+        other: prus pagu de %{count} segundos
+      less_than_x_minutes:
+        one: prus pagu de unu minutu
+        other: prus pagu de %{count} minutos
+      over_x_years:
+        one: prus de un'annu
+        other: prus de %{count} annos
+      x_seconds:
+        one: 1 segundu
+        other: "%{count} segundos"
+      x_minutes:
+        one: 1 minutu
+        other: "%{count} minutos"
+      x_days:
+        one: 1 die
+        other: "%{count} dies"
+      x_months:
+        one: 1 mese
+        other: "%{count} meses"
+      x_years:
+        one: 1 annu
+        other: "%{count} annos"
+    prompts:
+      second: Segundu
+      minute: Minutu
+      hour: Ora
+      day: Die
+      month: Mese
+      year: Annu
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: depet èssere atzetadu
+      blank: non podet èssere lassadu in biancu
+      confirmation: non currispondet cun %{attribute}
+      empty: non pòdet èsser bòidu
+      equal_to: depet èssere uguale a %{count}
+      even: depet èssere pari
+      exclusion: est riservadu
+      greater_than: depet èssere prus mannu de %{count}
+      greater_than_or_equal_to: depet èssere prus mannu o uguale a %{count}
+      inclusion: no est inclùdidu in sa lista
+      invalid: no est vàlidu
+      less_than: depet èssere prus minore de %{count}
+      less_than_or_equal_to: depet èssere prus minore o uguale a %{count}
+      model_invalid: 'Validatzione fallida: %{errors}'
+      not_a_number: no est unu nùmeru
+      not_an_integer: no est unu nùmeru intreu
+      odd: depet èssere dìspari
+      other_than: depet èssere unu nùmeru chi non siat %{count}
+      in: "depet istare intre %{count}"
+      present: depet èssere lassadu in biancu
+      required: depet esìstere
+      taken: est giai presente
+      too_long:
+        one: est tropu longu (su màssimu est de 1 caràtere)
+        other: est tropu longu (su màssimu est de %{count} caràteres)
+      too_short:
+        one: est tropu curtzu (su mìnimu est de 1 caràtere)
+        other: est tropu curtzu (su mìnimu est de %{count} caràteres)
+      wrong_length:
+        one: est de sa longària isballiada (depet tènnere 1 caràtere)
+        other: est de sa longària isballiada (depet tènnere %{count} caràteres)
+    template:
+      body: 'Bi sunt istados problemas cun sos campos chi sighint:'
+      header:
+        one: 'Non potzo sarvare custu %{model}: 1 errore'
+        other: 'Non potzo sarvare custu %{model}: %{count} errores.'
+  helpers:
+    select:
+      prompt: Seletziona...
+    submit:
+      create: Crea %{model}
+      submit: Imbia %{model}
+      update: Atualiza %{model}
+  number:
+    currency:
+      format:
+        delimiter: "."
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "€"
+    format:
+      delimiter: "."
+      precision: 2
+      round_mode: default
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion:
+            one: milliardu
+            other: milliardos
+          million:
+            one: millione
+            other: milliones
+          quadrillion:
+            one: cuadrillione
+            other: cuadrilliones
+          thousand: mìgia
+          trillion: mìgia milliardos
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Byte
+          eb: EB
+          gb: GB
+          kb: KB
+          mb: MB
+          pb: PB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " e "
+      two_words_connector: " e "
+      words_connector: ", "
+  time:
+    am: am
+    formats:
+      default: "%a, %d de %b de su %Y, %H:%M:%S %z"
+      long: "%d de %B de su %Y %H:%M"
+      short: "%d de %b %H:%M"
+    pm: pm

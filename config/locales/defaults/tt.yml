@@ -1,0 +1,218 @@
+---
+tt:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Хаталар чыкты: %{errors}'
+        restrict_dependent_destroy:
+          has_one: 'Язмышны бетереп булмады, чөнки бәйлелек табылды: %{record}'
+          has_many: 'Язмышны бетереп булмады, чөнки бәйлелекләр табылды: %{record}'
+  date:
+    abbr_day_names:
+    - Якш
+    - Дүш
+    - Сиш
+    - Чәр
+    - Пән
+    - Җом
+    - Шим
+    abbr_month_names:
+    - 
+    - гыйн.
+    - февр.
+    - март
+    - апр.
+    - май
+    - июнь
+    - июль
+    - авг.
+    - сент.
+    - окт.
+    - нояб.
+    - дек.
+    day_names:
+    - якшәмбе
+    - дүшәмбе
+    - сишәмбе
+    - чәршәмбе
+    - пәнҗешәмбе
+    - җомга
+    - шимбә
+    formats:
+      default: "%d.%m.%Y"
+      long: "%-d %B %Y"
+      short: "%-d %b"
+    month_names:
+    - 
+    - гыйнвар
+    - февраль
+    - март
+    - апрель
+    - май
+    - июнь
+    - июль
+    - август
+    - сентябрь
+    - октябрь
+    - ноябрь
+    - декабрь
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: бер сәгать чамасы
+        other: "%{count} сәгать чамасы"
+      about_x_months:
+        one: бер ай чамасы
+        other: "%{count} ай чамасы"
+      about_x_years:
+        one: бер ел чамасы
+        other: "%{count} ел чамасы"
+      almost_x_years:
+        one: бер ел диярлек
+        other: "%{count} ел диярлек"
+      half_a_minute: минуттан азрак
+      less_than_x_seconds:
+        one: бер секундтан азрак
+        other: "%{count} секундтан азрак"
+      less_than_x_minutes:
+        one: бер минуттан азрак
+        other: "%{count} минуттан азрак"
+      over_x_years:
+        one: бер ел артык
+        other: "%{count} ел артык"
+      x_seconds:
+        one: бер секунд
+        other: "%{count} секунд"
+      x_minutes:
+        one: бер минут
+        other: "%{count} минут"
+      x_days:
+        one: бер көн
+        other: "%{count} көн"
+      x_months:
+        one: бер ай
+        other: "%{count} ай"
+    prompts:
+      second: Секунд
+      minute: Минут
+      hour: Сәгать
+      day: Көн
+      month: Ай
+      year: Ел
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: раслау кирәк
+      blank: буш була алмый
+      confirmation: "%{attribute} читнең мәгнәсе белән тигез түгел"
+      empty: буш була алмый
+      equal_to: мәгнәсе %{count} була гына ала
+      even: так кына була ала
+      exclusion: резервта саклау дигән әһәмияте бар
+      greater_than: "%{count} мәгнәсеннән зур була ала"
+      greater_than_or_equal_to: "%{count} мәгнәсеннән зур яки тигез була ала"
+      inclusion: мәгнәсе алдан исәпкә алынган түгел
+      invalid: мәгнәсе ялгыш
+      less_than: "%{count} мәгнәсеннән азрак була ала"
+      less_than_or_equal_to: "%{count} мәгнәсеннән азрак яки тигез була ала"
+      not_a_number: сан тугел
+      not_an_integer: бөтен сан түгел
+      odd: җөп кенә була ала
+      other_than: "%{count} мәгнәсеннән икенче булырга тиеш"
+      present: буш булырга тиеш
+      taken: бар инде
+      too_long:
+        one: бигрәк озын (озынлыгы бердән озынрак була алмый)
+        other: бигрәк озын (озынлыгы %{count} мәгнәсеннән озынрак була алмый)
+      too_short:
+        one: бигрәк кыска (озынлыгы бердән кыскарак була алмый)
+        other: бигрәк кыска (озынлыгы %{count} мәгнәсеннән кыскарак була алмый)
+      wrong_length:
+        one: озынлыгы ялгыш (озынлыгы бергә тигез булырга тиеш)
+        other: озынлыгы ялгыш (озынлыгы %{count} мәгнәгә тигез булырга тиеш)
+    template:
+      body: ":"
+      header:
+        one: "%{model}: %{count} хата аркасында саклау чыкмады"
+        other: "%{model}: %{count} хата аркасында саклау чыкмады"
+  helpers:
+    select:
+      prompt: 'Сайлагыз: '
+    submit:
+      create: "%{model} иҗат итергә"
+      submit: "%{model} саклап калырга"
+      update: "%{model} саклап калырга"
+  number:
+    currency:
+      format:
+        delimiter: " "
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: сум
+    format:
+      delimiter: " "
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion:
+            one: миллиард
+            other: миллиард
+          million:
+            one: миллион
+            other: миллион
+          quadrillion:
+            one: квадриллион
+            other: квадриллион
+          thousand:
+            one: мең
+            other: мең
+          trillion:
+            one: триллион
+            other: триллион
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: false
+        strip_insignificant_zeros: false
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: байт
+            other: байт
+          gb: ГБ
+          kb: КБ
+          mb: МБ
+          tb: ТБ
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " һәм "
+      two_words_connector: " һәм "
+      words_connector: ", "
+  time:
+    am: иртәнге
+    formats:
+      default: "%a, %d %b %Y, %H:%M:%S %z"
+      long: "%d %B %Y, %H:%M"
+      short: "%d %b, %H:%M"
+    pm: кичке

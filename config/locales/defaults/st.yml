@@ -1,0 +1,215 @@
+---
+st:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Netefatso e fosahetse: %{errors}'
+        restrict_dependent_destroy:
+          has_one: E ka se hlakolehe hobane kamano e le ٰngoe teng le %{record}
+          has_many: E ka se hlakolehe hobane kamano tse ngata li teng le %{record}
+  date:
+    abbr_day_names:
+    - Son
+    - ٰMan
+    - Labob
+    - Labor
+    - Labon
+    - Laboh
+    - Moq
+    abbr_month_names:
+    - 
+    - Phe
+    - Hlako
+    - Tlha
+    - ٰMes
+    - Motš
+    - Phupt
+    - Phup
+    - Pha
+    - Loe
+    - Mph
+    - Pul
+    - Tši
+    day_names:
+    - Sontaha
+    - ٰMantaha
+    - Labobeli
+    - Laboraro
+    - Labone
+    - Labohlano
+    - Moqebelo
+    formats:
+      default: "%Y-%m-%d"
+      long: "%d %B %Y"
+      short: "%d %b"
+    month_names:
+    - 
+    - Pherekhong
+    - Hlakola
+    - Hlakubele
+    - ٰMesa
+    - Motšeanong
+    - Phuptjane
+    - Phupu
+    - Phato
+    - Loetse
+    - Mphalane
+    - Pulungoana
+    - Tšitoe
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: ekaba hora e le ٰngoe
+        other: ekaba hora tse %{count}
+      about_x_months:
+        one: ekaba khoeli e le ٰngoe
+        other: ekaba likhoeli tse %{count}
+      about_x_years:
+        one: ekaba selemo se le seng
+        other: ekaba lilemo tse %{count}
+      almost_x_years:
+        one: e tlo ba selemo se le seng
+        other: e tlo ba lilemo tse %{count}
+      half_a_minute: halofo ea motsotso
+      less_than_x_seconds:
+        one: ka tlase ho motsotsoana
+        other: ka tlase ho metsotsoana e %{count}
+      less_than_x_minutes:
+        one: ka tlase ho motsotso
+        other: ka tlase ho metsotso e %{count}
+      over_x_years:
+        one: ka holimo ho selemo
+        other: ka holimo ho lilemo tse %{count}
+      x_seconds:
+        one: motsotsoana o le mong
+        other: metsotsoana e %{count}
+      x_minutes:
+        one: motsotso o le mong
+        other: metsotso e %{count}
+      x_days:
+        one: letsatsi le le leng
+        other: matsatsi a %{count}
+      x_months:
+        one: khoeli e le \'ngoe
+        other: likhoeli tse %{count}
+      x_years:
+        one: selemo se le seng
+        other: lilemo tse %{count}
+    prompts:
+      second: Motsotsoana
+      minute: Motsotso
+      hour: Hora
+      day: Letsatsi
+      month: Khoeli
+      year: Selemo
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: e tlameha ho amoheloa
+      blank: e ka se be letho
+      confirmation: ha e lumellane le %{attribute}
+      empty: e ka se be letho
+      equal_to: e tlameha ho lekana le %{count}
+      even: e tlameha ho lekana
+      exclusion: e bolokiloe
+      greater_than: e tlameha e be kholo ho %{count}
+      greater_than_or_equal_to: e tlameha e be kholo kapa e lekane le %{count}
+      inclusion: ha ea kenyelletsoa lenaneng
+      invalid: ha e sebetse
+      less_than: e tlameha e be nyane ho %{count}
+      less_than_or_equal_to: e tlameha e be nyane kapa e lekane le %{count}
+      model_invalid: 'Liphoso tsa netefatso: %{errors}'
+      not_a_number: ha se palo
+      not_an_integer: e tšoanetse e be palo e felletseng
+      odd: e tlameha ho makatsa
+      other_than: e tlameha e be kholo ho %{count}
+      present: e tlameha ebe ha e na letho
+      required: e tlameha ho ba teng
+      taken: e sentse e nkuoe
+      too_long:
+        one: e telele haholo (boholo ke semelo se le seng)
+        other: e telele haholo (boholo ke limelo tse %{count})
+      too_short:
+        one: e khutšoane haholo (bonyane ke semelo se le seng)
+        other: e khutšoane haholo (bonyane ke limelo tse %{count})
+      wrong_length:
+        one: ke bolelele bo fosahetseng (e tšoanetse e be semelo se le seng)
+        other: ke bolelele bo fosahetseng (e tšoanetse e be limelo tse %{count})
+    template:
+      body: 'Ho bile le mathata ka a itseng makaleng a latelang:'
+      header:
+        one: phoso e le ٰngoe e thibetse  %{model} ho bolokeha
+        other: liphoso tse %{count} li thibetse %{model} ho bolokeha
+  helpers:
+    select:
+      prompt: Khetha ka kopo
+    submit:
+      create: Bopa %{model}
+      submit: Boloka %{model}
+      update: Ntjhafatsa %{model}
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u%n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: M
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: Bilione
+          million: Milione
+          quadrillion: Libilione tse likete
+          thousand: Sekete
+          trillion: Trilione
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          eb: EB
+          gb: GB
+          kb: KB
+          mb: MB
+          pb: PB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", le "
+      two_words_connector: " le "
+      words_connector: ", "
+  time:
+    am: am
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      long: "%d %B %Y %H:%M"
+      short: "%d %b %H:%M"
+    pm: pm

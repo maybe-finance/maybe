@@ -1,0 +1,210 @@
+---
+ml:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Validation failed: %{errors}'
+        restrict_dependent_destroy:
+          has_one: "%{record} ആയി ബന്ദം ഉള്ളതിനാൽ നീക്കം ചെയ്യാൻ പറ്റില്ല"
+          has_many: "%{record} ആയി ബന്ദം ഉള്ളതിനാൽ നീക്കം ചെയ്യാൻ പറ്റില്ല"
+  date:
+    abbr_day_names:
+    - ഞാ.
+    - തി.
+    - ചൊ.
+    - ബു.
+    - വ്യാ.
+    - വെ.
+    - ശ.
+    abbr_month_names:
+    - 
+    - ജനു.
+    - ഫെബ്ര.
+    - മാർ.
+    - എപ്രി.
+    - മെയ്.
+    - ജൂണ്‍.
+    - ജൂലൈ.
+    - ആഗ.
+    - സെപ്തം.
+    - ഒക്ടോ.
+    - നവം.
+    - ഡിസം.
+    day_names:
+    - ഞായര്‍
+    - തിങ്കള്‍
+    - ചൊവ്വ
+    - ബുധൻ
+    - വ്യാഴം
+    - വെള്ളി
+    - ശനി
+    formats:
+      default: "%d-%m-%Y"
+      long: "%d %B, %Y"
+      short: "%d %b"
+    month_names:
+    - 
+    - ജനുവരി
+    - ഫെബ്രുവരി
+    - മാർച്ച്
+    - ഏപ്രിൽ
+    - മെയ്
+    - ജൂണ്‍
+    - ജൂലൈ
+    - ഓഗസ്റ്റ്‌
+    - സെപ്റ്റംബർ
+    - ഒക്ടോബർ
+    - നവംബർ
+    - ഡിസംബർ
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: എകദേശം %{count} മണിക്കൂർ
+        other: എകദേശം %{count} മണിക്കൂർ
+      about_x_months:
+        one: എകദേശം %{count} മാസം
+        other: എകദേശം %{count} മാസം
+      about_x_years:
+        one: എകദേശം %{count} വർഷം
+        other: എകദേശം %{count} വർഷം
+      almost_x_years:
+        one: ഏതാണ്ട്  %{count} വർഷം
+        other: ഏതാണ്ട്  %{count} വർഷം
+      half_a_minute: അര സൂക്ഷ്മ
+      less_than_x_seconds:
+        one: ഒരു നിമിഷത്തിനു ഉള്ളിൽ
+        other: "%{count} നിമിഷത്തിനു ഉള്ളിൽ"
+      less_than_x_minutes:
+        one: ഒരു മിനുറ്റിനു ഉള്ളിൽ
+        other: "%{count} മിനുറ്റിനു ഉള്ളിൽ"
+      over_x_years:
+        one: ഒരു വര്ഷത്തിനു മേലെ
+        other: "%{count} വര്ഷത്തിനു മേലെ"
+      x_seconds:
+        one: "%{count} നിമിഷം"
+        other: "%{count} നിമിഷം"
+      x_minutes:
+        one: "%{count} മിനിറ്റ്"
+        other: "%{count} മിനിറ്റ്"
+      x_days:
+        one: "%{count} ദിവസം"
+        other: "%{count} ദിവസങ്ങൾ"
+      x_months:
+        one: "%{count} മാസം"
+        other: "%{count} മാസം"
+    prompts:
+      second: നിമിഷം
+      minute: സുക്ഷ്മ
+      hour: മണിക്കൂർ
+      day: ദിവസം
+      month: സുക്ഷ്മ
+      year: വർഷം
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: സ്വീകരികേണ്ടത്  അത്യാവശ്യം ആണ്
+      blank: ഒഴിവായി കിടക്കുവാൻ പാടുള്ളതല്ല
+      confirmation: "%{attribute} ആയി സാമ്യം ഇല്ല"
+      empty: ഒഴിവായി കിടക്കുവാൻ പാടുള്ളതല്ല
+      equal_to: "%{count} ആയി സാമ്യം വേണം"
+      even: ഇരട്ട സംഖ്യ ആയിരിക്കണം
+      exclusion: കരുതിവെച്ചിരികുന്നതാണ്
+      greater_than: "%{count} നേകാൾ വലുതായിരിക്കണം"
+      greater_than_or_equal_to: "%{count} നു തുല്യമോ അല്ലെങ്കിൽ വലുതോ ആയിരിക്കണം"
+      inclusion: ഇതിൽ ഉള്ട്പെട്ടിട്ടില്ല
+      invalid: അസാധുവാണ്
+      less_than: "%{count} നേകാൾ ചെറുതായിരിക്കണം"
+      less_than_or_equal_to: "%{count} നു തുല്യമോ അല്ലെങ്കിൽ ചെറുതോ ആയിരിക്കണം"
+      model_invalid: 'മൂല്യനിർണ്ണയം പരാജയപ്പെട്ടു: %{errors}'
+      not_a_number: ഒരു അക്കം അല്ല
+      not_an_integer: ഒരു അക്കം ആയിരിക്കണം
+      odd: ഒട്ടസന്ഘ്യ ആയിരിക്കണം
+      other_than: must be other than %{count}
+      present: ഒഴിവായി ഇരിക്കണം
+      required: എന്തായാലും ഉണ്ടായിരിക്കണം
+      taken: ഇതിനു മുൻപേ ഉപയോഗിച്ചിരിക്കുന്നു
+      too_long:
+        one: വളരെ വലുതാണ് (പരമാവധി %{count} പ്രതീകം)
+        other: വളരെ വലുതാണ് (പരമാവധി %{count} പ്രതീകങ്ങൾ)
+      too_short:
+        one: വളരെ ചെറുതാണ് (ഏറ്റവും കുറഞ്ഞത്‌  %{count} പ്രതീകം)
+        other: വളരെ ചെറുതാണ് (ഏറ്റവും കുറഞ്ഞത്‌ %{count} പ്രതീകങ്ങൾ)
+      wrong_length:
+        one: തെറ്റായ നീളം ആണ്  (%{count} പ്രതീകം ആയിരിക്കണം)
+        other: തെറ്റായ നീളം ആണ്  (%{count} പ്രതീകങ്ങൾ ആയിരിക്കണം)
+    template:
+      body: 'താഴെ പറഞ്ഞവയിൽ തെറ്റുകൾ ഉണ്ട്:'
+      header:
+        one: "%{model} സേവ് ചെയ്യുനത്തിൽ നിന്നും ഒരു തെറ്റ് വിലക്കിയിരിക്കുന്നു"
+        other: "%{model} സേവ് ചെയ്യുനത്തിൽ നിന്നും %{count} തെറ്റുകൾ വിലക്കിയിരിക്കുന്നു"
+  helpers:
+    select:
+      prompt: ദയവായി തിരഞ്ഞെടുക്കുക
+    submit:
+      create: "%{model} സൃഷ്ടിക്കുക"
+      submit: "%{model} സേവ് ചെയ്യുക"
+      update: "%{model} തിരുത്തുക്ക"
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u%n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "$"
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: നൂറുകോടി
+          million: ദശലക്ഷം
+          quadrillion: ക്വാഡ്രില്യൺ
+          thousand: ആയിരം
+          trillion: ട്രില്യൺ
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: ബൈറ്റ്
+            other: ബൈറ്റുകൾ
+          gb: ജി.ബി
+          kb: കെ.ബി.
+          mb: എം.ബി.
+          tb: ടി.ബി
+    percentage:
+      format:
+        delimiter: ''
+        format: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", ഒപ്പം "
+      two_words_connector: " ഒപ്പം "
+      words_connector: ", "
+  time:
+    am: രാവിലെ
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      long: "%Y, %B %d %H:%M"
+      short: "%d %b %H:%M"
+    pm: വൈകിട്ട്

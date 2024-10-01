@@ -1,0 +1,212 @@
+---
+lb:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Validatioun feelgeschlo: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Den Enregistrement kann net geläscht gi wëll et en dovun ofhängegt
+            %{record} gëtt
+          has_many: Den Enregistrement kann net geläscht gi wëll et dovun ofhängegt
+            %{record} gëtt
+  date:
+    abbr_day_names:
+    - Son
+    - Méi
+    - Dën
+    - Mët
+    - Don
+    - Fre
+    - Sam
+    abbr_month_names:
+    - 
+    - Jan
+    - Feb
+    - Mäe
+    - Abr
+    - Mee
+    - Jun
+    - Jul
+    - Aug
+    - Sep
+    - Okt
+    - Nov
+    - Dez
+    day_names:
+    - Sonndeg
+    - Méindeg
+    - Dënschdeg
+    - Mëttwoch
+    - Donneschdeg
+    - Freideg
+    - Samschdeg
+    formats:
+      default: "%d.%m.%Y"
+      long: "%e. %B %Y"
+      short: "%e %b"
+    month_names:
+    - 
+    - Januar
+    - Februar
+    - Mäerz
+    - Abrëll
+    - Mee
+    - Juni
+    - Juli
+    - August
+    - September
+    - Oktober
+    - November
+    - Dezember
+    order:
+    - :Joer
+    - :Mount
+    - :Dag
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: ongeféier eng Stonn
+        other: ongeféier %{count} Stonnen
+      about_x_months:
+        one: ongeféier ee Mount
+        other: ongeféier %{count} Méint
+      about_x_years:
+        one: ongeféier ee Joer
+        other: ongeféier %{count} Joer
+      almost_x_years:
+        one: bal ee Joer
+        other: bal %{count} Joer
+      half_a_minute: eng hallef Minutt
+      less_than_x_seconds:
+        one: manner wéi eng Sekonn
+        other: manner wéi %{count} Sekonnen
+      less_than_x_minutes:
+        one: manner wéi eng Minutt
+        other: manner wéi %{count} Minutten
+      over_x_years:
+        one: méi wéi ee Joer
+        other: méi wéi %{count} Joer
+      x_seconds:
+        one: "%{count} Sekonn"
+        other: "%{count} Sekonnen"
+      x_minutes:
+        one: "%{count} Minutt"
+        other: "%{count} Minutten"
+      x_days:
+        one: "%{count} Dag"
+        other: "%{count} Deeg"
+      x_months:
+        one: "%{count} Mount"
+        other: "%{count} Méint"
+    prompts:
+      second: Sekonnen
+      minute: Minutt
+      hour: Stonn
+      day: Dag
+      month: Mount
+      year: Joer
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: muss akzeptéiert ginn
+      blank: däerf net eidel sinn
+      confirmation: stëmmt net mat %{attribute} iwwerenee
+      empty: däerf net eidel sinn
+      equal_to: muss d'selwecht si wéi %{count}
+      even: muss gerued sinn
+      exclusion: ass reservéiert
+      greater_than: muss méi grouss wéi %{count} sinn
+      greater_than_or_equal_to: muss méi grouss oder gläich si wéi %{count}
+      inclusion: ass net an der Lëscht dran
+      invalid: ass net valabel
+      less_than: muss méi kleng wéi %{count} sinn
+      less_than_or_equal_to: muss méi kleng oder gläich si wéi %{count}
+      not_a_number: ass keng Zuel
+      not_an_integer: muss eng ganz Zuel sinn
+      odd: muss ongerued sinn
+      other_than: muss anescht si wéi %{count}
+      present: muss eidel sinn
+      taken: gouf scho geholl
+      too_long:
+        one: ass ze laang (Maximal %{count} Zeechen)
+        other: ass ze laang (net méi wéi %{count} Zeechen)
+      too_short:
+        one: ass ze kuerz (Mniimal %{count} Zeechen)
+        other: ass ze kuerz (mindestens %{count} Zeechen)
+      wrong_length:
+        one: huet déi falsch Längt (muss genee een Zeeche sinn)
+        other: huet déi falsch Längt (musse genee %{count} Zeeche sinn)
+    template:
+      body: 'Et gouf Problemer mat dëse Felder:'
+      header:
+        one: "%{count} Feeler verhënnert d'Späichere vu(n) %{model}"
+        other: "%{count} Feeler verhënneren d'Späichere vu(n) %{model}"
+  helpers:
+    select:
+      prompt: Sicht w.e.g. eraus
+    submit:
+      create: uleeën %{model}
+      submit: späicheren %{model}
+      update: aktualiséieren %{model}
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%n %u"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "€"
+    format:
+      delimiter: ","
+      precision: 2
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: Milliard
+          million: Millioun
+          quadrillion:
+            one: Billiard
+            other: Billiarden
+          thousand: Dausend
+          trillion: Billioun
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Byten
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", an "
+      two_words_connector: " an "
+      words_connector: ", "
+  time:
+    am: moies
+    formats:
+      default: "%A, %d. %B %Y, %H:%M Auer"
+      long: "%A, %d. %B %Y, %H:%M Auer"
+      short: "%d. %b %H:%M"
+    pm: mëttes

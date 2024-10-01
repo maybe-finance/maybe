@@ -1,0 +1,213 @@
+---
+te:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'ధ్రువీకరన విఫలమైనది: %{errors}'
+        restrict_dependent_destroy:
+          has_one: రికార్డ్ను తొలగించలేరు, ఎందుకంటే ఒక ఆధారపడిన %{record} ఉంది
+          has_many: రికార్డ్ను తొలగించలేరు, ఎందుకంటే ఆధారపడిన %{record} ఉంది
+  date:
+    abbr_day_names:
+    - ఆది
+    - సోమ
+    - మంగళ
+    - బుధ
+    - గురు
+    - శుక్ర
+    - శని
+    abbr_month_names:
+    - 
+    - Jan
+    - Feb
+    - Mar
+    - Apr
+    - May
+    - Jun
+    - Jul
+    - Aug
+    - Sep
+    - Oct
+    - Nov
+    - Dec
+    day_names:
+    - ఆదివారం
+    - సోమవారం
+    - మంగళవారం
+    - బుధవారం
+    - గురువారం
+    - శుక్రవారం
+    - శనివారం
+    formats:
+      default: "%d-%m-%Y"
+      long: "%d %B %Y"
+      short: "%d %b"
+    month_names:
+    - 
+    - జనవరి
+    - ఫిబ్రవరి
+    - మార్చి
+    - ఏప్రిల్
+    - మే
+    - జూన్
+    - జూలై
+    - ఆగస్టు
+    - సెప్టెంబరు
+    - అక్టోబరు
+    - నవంబరు
+    - డిసెంబరు
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: సుమారు ఒక గంట
+        other: సుమారు %{count} గంటలు
+      about_x_months:
+        one: సుమారు ఒక నెల
+        other: సుమారు %{count} నెలలు
+      about_x_years:
+        one: సుమారు ఒక సంవత్సరం
+        other: సుమారు %{count} సంవత్సరాలు
+      almost_x_years:
+        one: దాదాపు ఒక సంవత్సరం
+        other: దాదాపు %{count} సంవత్సరాలు
+      half_a_minute: అర నిమిషం
+      less_than_x_seconds:
+        one: ఒక క్షణం కన్నా తక్కువ
+        other: "%{count} క్షణాలు కన్నా తక్కువ"
+      less_than_x_minutes:
+        one: ఒక నిమిషం కన్నా తక్కువ
+        other: "%{count} నిమిషాల కన్నా తక్కువ"
+      over_x_years:
+        one: ఒక సంవత్సరం పైగా
+        other: "%{count} సంవత్సరాల పైగా"
+      x_seconds:
+        one: ఒక క్షణం
+        other: "%{count} క్షణాలు"
+      x_minutes:
+        one: ఒక నిమిషం
+        other: "%{count} నిమిషాలు"
+      x_days:
+        one: ఒక రోజు
+        other: "%{count} రోజులు"
+      x_months:
+        one: ఒక నెల
+        other: "%{count} నెలలు"
+      x_years:
+        one: ఒక సంవత్సరం
+        other: "%{count} సంవత్సరాలు"
+    prompts:
+      second: క్షణాలు
+      minute: నిమిషం
+      hour: గంట
+      day: రోజు
+      month: నెల
+      year: సంవత్సరం
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: అంగీకరించి ఉండాలి
+      blank: ఖాళీగా ఉండకూడదు
+      confirmation: "%{attribute} సరిపోలడం లేదు"
+      empty: శూన్యంగా ఉండకూడదు
+      equal_to: "%{count}కు సమానంగా ఉండాలి"
+      even: సరి సంఖ్య అయి ఉండాలి
+      exclusion: ప్రత్యేకించబడింది
+      greater_than: "%{count} కంటే ఎక్కువ ఉండాలి"
+      greater_than_or_equal_to: "%{count} కంటే ఎక్కువ లేదా సమానంగా ఉండాలి"
+      inclusion: జాబితాలో చేర్చబడలేదు
+      invalid: చెల్లనిది
+      less_than: "%{count} కంటే తక్కువ ఉండాలి"
+      less_than_or_equal_to: "%{count} నాలుగు కంటే తక్కువగా లేదా సమానంగా ఉండాలి"
+      model_invalid: 'ధృవీకరణ విఫలమైంది: %{errors}'
+      not_a_number: సంఖ్య కాదు
+      not_an_integer: పూర్ణాంకంగా ఉండాలి
+      odd: బేసి సంఖ్య అయి ఉండాలి
+      other_than: "%{count} కన్నా వేరు ఉండాలి"
+      present: ఖాళీగా ఉండాలి
+      required: ఉనికిలో ఉండాలి
+      taken: ఇప్పటికే తీసుకోబడింది
+      too_long:
+        one: చాలా పొడవుగా ఉంది (గరిష్టంగా ఒక అక్షరం)
+        other: చాలా పొడవుగా ఉంది (గరిష్టంగా %{count} అక్షరాలు)
+      too_short:
+        one: చాలా తక్కువగా ఉంది (కనీసం ఒక అక్షరం)
+        other: చాలా చిన్నది (కనీసం %{count} అక్షరాలు)
+      wrong_length:
+        one: తప్పు పొడవు (ఒక అక్షరం ఉండాలి)
+        other: తప్పు పొడవు (%{count} అక్షరాలు ఉండాలి)
+    template:
+      body: 'కింది రంగాలలో సమస్యలు ఉన్నాయి:'
+      header:
+        one: ఒక తప్పు ఈ %{model} ను ఆదా చెయ్యకుండా నిషేదించింది
+        other: "%{count} తప్పులు ఈ %{model} ను ఆదా చెయ్యకుండా నిషేదించింది"
+  helpers:
+    select:
+      prompt: దయచేసి ఎంచుకోండి
+    submit:
+      create: "%{model} ను సృష్టించండి"
+      submit: "%{model} ను ఆదా చెయ్యండి"
+      update: "%{model} ను నవీకరించండి"
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u%n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "₹"
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: బిలియన్
+          million: మిలియన్
+          quadrillion: క్వాడ్రిలియన్
+          thousand: వెయ్యి
+          trillion: ట్రిలియన్
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: బైట్
+            other: బైట్లు
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", మరియు "
+      two_words_connector: " మరియు "
+      words_connector: ", "
+  time:
+    am: am
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      long: "%d %B %Y %H:%M"
+      short: "%d %b %H:%M"
+    pm: pm

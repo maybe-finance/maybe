@@ -1,0 +1,208 @@
+---
+pa:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'ਪਰਮਾਣ ਫ਼ੇਲ ਹੋਇਆ: %{errors}'
+        restrict_dependent_destroy:
+          has_one: ਮਿਟਾ ਨਹੀਂ ਸਕਦੇ ਕਿਉਂਕਿ ਇੱਕ ਨਿਰਭਰ %{record} ਮੌਜੂਦ ਹੈ
+          has_many: ਮਿਟਾ ਨਹੀਂ ਸਕਦੇ ਕਿਉਂਕਿ ਨਿਰਭਰ %{record} ਮੌਜੂਦ ਹਨ
+  date:
+    abbr_day_names:
+    - ਅੈਤ
+    - ਸੋਮ
+    - ਮੰਗਲ
+    - ਬੱੁਧ
+    - ਵੀਰ
+    - ਸ਼ੁੱਕਰ
+    - ਸ਼ਨਿੱਚਰ
+    abbr_month_names:
+    - 
+    - ਜਨ
+    - ਫ਼ਰ
+    - ਮਾਰਚ
+    - ਅਪ੍ਰੈ
+    - ਮਈ
+    - ਜੂਨ
+    - ਜੁਲਾ
+    - ਅਗ
+    - ਸਤੰ
+    - ਅਕਤੂ
+    - ਨਵੰ
+    - ਦਸੰ
+    day_names:
+    - ਐਤਵਾਰ
+    - ਸੋਮਵਾਰ
+    - ਮੰਗਲਵਾਰ
+    - ਬੁੱਧਵਾਰ
+    - ਵੀਰਵਾਰ
+    - ਸ਼ੁੱਕਰਵਾਰ
+    - ਸ਼ਨਿੱਚਰਵਾਰ
+    formats:
+      default: "%Y-%m-%d"
+      long: "%d %B %Y"
+      short: "%d %b"
+    month_names:
+    - 
+    - ਜਨਵਰੀ
+    - ਫ਼ਰਵਰੀ
+    - ਮਾਰਚ
+    - ਅਪ੍ਰੈਲ
+    - ਮਈ
+    - ਜੂਨ
+    - ਜੁਲਾਈ
+    - ਅਗਸਤ
+    - ਸਤੰਬਰ
+    - ਅਕਤੂਬਰ
+    - ਨਵੰਬਰ
+    - ਦਸੰਬਰ
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: ਲਗਭਗ %{count} ਘੰਟਾ
+        other: ਲਗਭਗ %{count} ਘੰਟੇ
+      about_x_months:
+        one: ਲਗਭਗ %{count} ਮਹੀਨਾ
+        other: ਲਗਭਗ %{count} ਮਹੀਨੇ
+      about_x_years:
+        one: ਲਗਭਗ %{count} ਸਾਲ
+        other: ਲਗਭਗ %{count} ਸਾਲ
+      almost_x_years:
+        one: ਤਕਰੀਬਨ %{count} ਸਾਲ
+        other: ਤਕਰੀਬਨ %{count} ਸਾਲ
+      half_a_minute: ਅੱਧਾ ਮਿੰਟ
+      less_than_x_seconds:
+        one: "%{count} ਸਕਿੰਟ ਤੋਂ ਘੱਟ"
+        other: "%{count} ਸਕਿੰਟਾਂ ਤੋਂ ਘੱਟ"
+      less_than_x_minutes:
+        one: "%{count} ਮਿੰਟ ਤੋਂ ਘੱਟ"
+        other: "%{count} ਮਿੰਟਾਂ ਤੋਂ ਘੱਟ"
+      over_x_years:
+        one: "%{count} ਸਾਲ ਤੋਂ ਵੱਧ"
+        other: "%{count} ਸਾਲਾਂ ਤੋਂ ਵੱਧ"
+      x_seconds:
+        one: "%{count} ਸਕਿੰਟ"
+        other: "%{count} ਸਕਿੰਟ"
+      x_minutes:
+        one: "%{count} ਮਿੰਟ"
+        other: "%{count} ਮਿੰਟ"
+      x_days:
+        one: "%{count} ਦਿਨ"
+        other: "%{count} ਦਿਨ"
+      x_months:
+        one: "%{count} ਮਹੀਨਾ"
+        other: "%{count} ਮਹੀਨੇ"
+    prompts:
+      second: ਸਕਿੰਟ
+      minute: ਮਿੰਟ
+      hour: ਘੰਟਾ
+      day: ਦਿਨ
+      month: ਮਹੀਨਾ
+      year: ਸਾਲ
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: ਜਰੂਰ ਮੰਜੂਰ ਹੋਵੇ
+      blank: ਖਾਲੀ ਨਹੀਂ ਹੋ ਸਕਦਾ
+      confirmation: "%{attribute} ਨਹੀਂ ਰਲਦੇ"
+      empty: ਖਾਲੀ ਨਹੀਂ ਹੋ ਸਕਦਾ
+      equal_to: "%{count} ਦੇ ਬਰਾਬਰ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ"
+      even: ਜਰੂਰੀ ਹੈ ਕੇ ਜੋਟਾ ਹੋਵੇ
+      exclusion: ਮੱਲਿਆ ਹੋਇਆ ਹੈ
+      greater_than: "%{count} ਤੋਂ ਵਧੇਰੇ ਹੋਣਾ ਜਰੂਰੀ ਹੈ"
+      greater_than_or_equal_to: "%{count} ਤੋਂ ਵਧੇਰੇ ਜਾਂ ਬਰਾਬਰ ਹੋਣਾ ਜਰੂਰੀ ਹੈ"
+      inclusion: ਇਸ ਲਿਸਟ ਵਿੱਚ ਸ਼ਾਮਿਲ ਨਹੀਂ ਹੈ
+      invalid: ਨਾ-ਮੰਜੂਰਸ਼ੁਦਾ ਹੈ
+      less_than: "%{count} ਤੋਂ ਘੱਟ ਹੋਣਾ ਜਰੂਰੀ ਹੈ"
+      less_than_or_equal_to: "%{count} ਤੋਂ ਘੱਟ ਜਾਂ ਬਰਾਬਰ ਹੋਣਾ ਜਰੂਰੀ ਹੈ"
+      not_a_number: ਸੰਖਿਆ ਨਹੀਂ ਹੈ
+      not_an_integer: ਜਰੂਰੀ ਹੈ ਕੇ ਪੂਰਨ ਅੰਕ ਹੋਵੇ
+      odd: ਜਰੂਰੀ ਹੈ ਕੇ ਕਲ਼ੀ ਹੋਵੇ
+      other_than: "%{count} ਦੀ ਜਗ੍ਹਾ ਹੋਰ ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ"
+      present: ਜਰੂਰ ਖਾਲੀ ਹੋਵੇ
+      taken: ਪਹਿਲਾਂ ਹੀ ਮੱਲਿਆ ਹੋਇਆ ਹੈ
+      too_long:
+        one: ਲੰਬਾਈ ਜ਼ਿਆਦਾ ਹੈ (ਵੱਧ ਤੋਂ ਵੱਧ %{count} ਅੱਖਰ)
+        other: ਲੰਬਾਈ ਜ਼ਿਆਦਾ ਹੈ (ਵੱਧ ਤੋਂ ਵੱਧ %{count} ਅੱਖਰ)
+      too_short:
+        one: ਲੰਬਾਈ ਘੱਟ ਹੈ (ਘੱਟ ਤੋਂ ਘੱਟ %{count} ਅੱਖਰ)
+        other: ਲੰਬਾਈ ਘੱਟ ਹੈ (ਘੱਟ ਤੋਂ ਘੱਟ %{count} ਅੱਖਰ)
+      wrong_length:
+        one: ਲੰਬਾਈ ਗਲਤ ਹੈ (%{count} ਅੱਖਰ ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ)
+        other: ਲੰਬਾਈ ਗਲਤ ਹੈ (%{count} ਅੱਖਰ ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ)
+    template:
+      body: 'ਹੇਠਲੇ ਖੇਤਰਾਂ ਵਿੱਚ ਗਲਤੀਆਂ ਹਨ:'
+      header:
+        one: "%{count} ਗਲਤੀ ਕਰਕੇ ਇਹ %{model} ਸੰਭਾਲਿ਼ਆ ਨਹੀਂ ਗਿਆ"
+        other: "%{count} ਗਲਤੀਆਂ ਕਰਕੇ ਇਹ %{model} ਸੰਭਾਲਿ਼ਆ ਨਹੀਂ ਗਿਆ"
+  helpers:
+    select:
+      prompt: ਕਿਰਪਾ ਕਰਕੇ ਚੁਣੋ
+    submit:
+      create: "%{model} ਬਣਾਓ"
+      submit: "%{model} ਬਚਾਓ"
+      update: "%{model} ਬਦਲੋ"
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u%n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "$"
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: ਬਿਲੀਅਨ
+          million: ਮਿਲੀਅਨ
+          quadrillion: ਕ੍ਵਾਡਰਿਲੀਅਨ
+          thousand: ਹਜ਼ਾਰ
+          trillion: ਟ੍ਰਿਲੀਅਨ
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: ਬਾਈਟ
+            other: ਬਾਈਟ
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", ਅਤੇ "
+      two_words_connector: " ਅਤੇ "
+      words_connector: ", "
+  time:
+    am: ਸਵੇਰ
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      long: "%d %B %Y %H:%M"
+      short: "%d %b %H:%M"
+    pm: ਸ਼ਾਮ

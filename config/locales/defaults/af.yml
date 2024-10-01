@@ -1,0 +1,213 @@
+---
+af:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Validering het misluk: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Kan rekord nie skrap nie omdat 'n afhanklike %{record} bestaan
+          has_many: Kan rekord nie skrap nie omdat afhanklike %{record} bestaan
+  date:
+    abbr_day_names:
+    - Son
+    - Maan
+    - Dins
+    - Woe
+    - Don
+    - Vry
+    - Sat
+    abbr_month_names:
+    - 
+    - Jan
+    - Feb
+    - Mar
+    - Apr
+    - Mei
+    - Jun
+    - Jul
+    - Aug
+    - Sep
+    - Okt
+    - Nov
+    - Des
+    day_names:
+    - Sondag
+    - Maandag
+    - Dinsdag
+    - Woensdag
+    - Donderdag
+    - Vrydag
+    - Saterdag
+    formats:
+      default: "%Y-%m-%d"
+      long: "%d %B %Y"
+      short: "%d %b"
+    month_names:
+    - 
+    - Januarie
+    - Februarie
+    - Maart
+    - April
+    - Mei
+    - Junie
+    - Julie
+    - Augustus
+    - September
+    - Oktober
+    - November
+    - Desember
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: ongeveer %{count} uur
+        other: ongeveer %{count} ure
+      about_x_months:
+        one: ongeveer %{count} maand
+        other: ongeveer %{count} maande
+      about_x_years:
+        one: ongeveer %{count} jaar
+        other: ongeveer %{count} jaar
+      almost_x_years:
+        one: sowat %{count} jaar
+        other: sowat %{count} jaar
+      half_a_minute: halfminuut
+      less_than_x_seconds:
+        one: minder as %{count} sekonde
+        other: minder as %{count} sekondes
+      less_than_x_minutes:
+        one: minder as %{count} minuut
+        other: minder as %{count} minute
+      over_x_years:
+        one: meer as %{count} jaar
+        other: meer as %{count} jaar
+      x_seconds:
+        one: "%{count} sekonde"
+        other: "%{count} sekondes"
+      x_minutes:
+        one: "%{count} minuut"
+        other: "%{count} minute"
+      x_days:
+        one: "%{count} dag"
+        other: "%{count} days"
+      x_months:
+        one: "%{count} maand"
+        other: "%{count} maande"
+      x_years:
+        one: "%{count} jaar"
+        other: "%{count} jare"
+    prompts:
+      second: Sekondes
+      minute: Minuut
+      hour: Uur
+      day: Dag
+      month: Maand
+      year: Jaar
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: moet aanvaar word
+      blank: mag nie leeg wees nie
+      confirmation: pas nie by bevestiging nie
+      empty: mag nie leeg wees nie
+      equal_to: moet gelyk wees aan %{count}
+      even: moet ewe wees
+      exclusion: is bespreek
+      greater_than: moet meer wees as %{count}
+      greater_than_or_equal_to: moet meer of gelykstaande wees aan %{count}
+      inclusion: is nie by die lys ingesluit nie
+      invalid: is ongeldig
+      less_than: moet minder wees as %{count}
+      less_than_or_equal_to: moet minder of gelykstaande wees aan %{count}
+      model_invalid: 'Validering het misluk: %{errors}'
+      not_a_number: is nie 'n getal nie
+      not_an_integer: moet 'n heelgetal wees
+      odd: moet onewe wees
+      other_than: moet anders wees as %{count}
+      present: moet leeg wees
+      required: moet bestaan
+      taken: is reeds geneem
+      too_long:
+        one: is te lank (maksimum is %{count} karakter)
+        other: is te lank (maksimum is %{count} karakters)
+      too_short:
+        one: is te kort (minimum is %{count} karakter)
+        other: is te kort (minimum is %{count} karakters)
+      wrong_length:
+        one: is die verkeerde lengte (moet %{count} karakter wees)
+        other: is die verkeerde lengte (moet %{count} karakters wees)
+    template:
+      body: 'There were problems with the following fields:'
+      header:
+        one: "%{count} fout het verhoed dat hierdie %{model} gestoor kon word"
+        other: "%{count} foute het verhoed dat hierdie %{model} gestoor kon word"
+  helpers:
+    select:
+      prompt: Kies asseblief
+    submit:
+      create: Skep %{model}
+      submit: Stoor %{model}
+      update: Dateer %{model} op
+  number:
+    currency:
+      format:
+        delimiter: " "
+        format: "%u %n"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: R
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: miljard
+          million: miljoen
+          quadrillion: biljard
+          thousand: duisend
+          trillion: biljoen
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Greep
+            other: Grepe
+          gb: GG
+          kb: kG
+          mb: MG
+          tb: TG
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", en "
+      two_words_connector: " en "
+      words_connector: ", "
+  time:
+    am: vm
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      long: "%d %B %Y %H:%M"
+      short: "%d %b %H:%M"
+    pm: nm

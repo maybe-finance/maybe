@@ -1,0 +1,196 @@
+---
+or:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'ସଠିକ୍ ନୁହ: %{errors}'
+  date:
+    abbr_day_names:
+    - ରବି
+    - ସୋମ
+    - ମଂଗଳ
+    - ବୁଧ
+    - ଗୁରୁ
+    - ଶୁକ୍ର
+    - ଶନି
+    abbr_month_names:
+    - 
+    - ଜାନୁ
+    - ଫେବରୁ
+    - ମାର
+    - ଏପ୍ର
+    - ମାଈ
+    - ଜୁନ୍
+    - ଜୁଲ୍
+    - ଅଗସ୍ଟ
+    - ସେପ୍ଟ
+    - ଅକ୍ଟ
+    - ନୋଭ
+    - ଡିସ୍
+    day_names:
+    - ରବିବାର
+    - ସୋମବାର
+    - ମଗଂଳବାର
+    - ବୁଧବାର
+    - ଗୁରୁବାର
+    - ଶୁକ୍ରବାର
+    - ଶନିବାର
+    formats:
+      default: "%Y-%m-%d"
+      long: "%B %d, %Y"
+      short: "%b %d"
+    month_names:
+    - 
+    - ଜାନୁୟାରୀ
+    - ଫେବୃୟାରୀ
+    - ମାର୍ଚ଼
+    - ଏପ୍ରଲ
+    - ମାଈ
+    - ଜୁନ୍
+    - ଜୁଲାୟ
+    - ଅଗଷ୍ତ
+    - ସେପ୍ଟମ୍ବର୍
+    - ଅକ୍ଟୋବର୍
+    - ନୋଭେମ୍ବର
+    - ଡିସମ୍ବର
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: ପାଖାପାଖି %{count} ଘଣ୍ତ
+        other: ପାଖାପାଖି %{count} ଘଣ୍ତ
+      about_x_months:
+        one: ପାଖାପାଖି %{count} ମାସ
+        other: ପାଖାପାଖି %{count} ମାସ
+      about_x_years:
+        one: ପାଖାପାଖି %{count} year
+        other: ପାଖାପାଖି %{count} years
+      almost_x_years:
+        one: ଅଳ୍ପ ଉଣ %{count} ବର୍ଷ
+        other: ଅଳ୍ପ ଉଣ %{count} ବର୍ଷ
+      half_a_minute: ଦେଢ ମିନଟ୍
+      less_than_x_seconds:
+        one: "%{count} ସେକଣ୍ଢ ବାକ"
+        other: "%{count} ସେକଣ୍ଢ ବାକ"
+      less_than_x_minutes:
+        one: "%{count} ମିନଟ ବାକ"
+        other: "%{count} ମିନଟ ବାକ"
+      over_x_years:
+        one: "%{count} ବର୍ଷରୁ ଅଧିକ"
+        other: "%{count} ବର୍ଷରୁ ଅଧିକ"
+      x_seconds:
+        one: "%{count} ସେକଣ୍ଢ"
+        other: "%{count} ସେକଣ୍ଢ"
+      x_minutes:
+        one: "%{count} ମିନଟ"
+        other: "%{count} ମିନଟ"
+      x_days:
+        one: "%{count}  ଦିନ"
+        other: "%{count} ଦିନ"
+      x_months:
+        one: "%{count} ମାସ"
+        other: "%{count} ମାସ"
+    prompts:
+      second: ସେକଣ୍ଢ
+      minute: ମିନଟ
+      hour: ଘଣ୍ତ
+      day: ଦିନ
+      month: ମାସ
+      year: ବର୍ଷ
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: ଗ୍ରହଣ କରିବାର ଅଛି
+      blank: ଖାଲି ହେଇ ପାରୀବନ
+      confirmation: ପ୍ରମାଣ ହେଇନି
+      empty: ଖାଲି ହେଇପାରିବନି
+      equal_to: "%{count} କୁ ସମାନ"
+      even: ଯୁଗ୍ମ ହେବାର ଅଛି
+      exclusion: ସୁରଖିତ ଅଟେ
+      greater_than: "%{count} ରୁ ବଡ ହେବାର ଅଛି"
+      greater_than_or_equal_to: "%{count} ରୁ ବଡ କିମ୍ବା ସମାନ ହେବାର ଅଛି"
+      inclusion: ସୁଚୀ ରେ ଅନ୍ତର୍ଭୁକ୍ତ ନୁହେଁ
+      invalid: ଠିକ୍ ନୁହେଁ
+      less_than: "%{count} ରୁ ଛୋଟ"
+      less_than_or_equal_to: "%{count} ରୁ ଛୋଟ କିମ୍ବା ସମାନ ହେବାର ଅଛି"
+      not_a_number: ସଂଖ୍ଯ ନୁହେଁ
+      not_an_integer: ଗଣନ ସଂଖ୍ଯା ହେବାର ଅଛି
+      odd: ଅଯୁଗ୍ମ ହେବାର ଅଛି
+      taken: ଗ୍ରହଣ  କରା ଯାଇଛି
+      too_long: ଦିର୍ଘତମ ଅଟେ(ଅତ୍ୟଧୀକ %{count} ଅଖ୍ଯର)
+      too_short: ଅତି ସଂଖିପ୍ତ ଅଟେ (ଅତ୍ଯଳ୍ପ %{count} ଅଖ୍ଯର ଅଟେ)
+      wrong_length: ଲମ୍ବା ଭୁଲ ଅଟେ (%{count} ଅଖ୍ଯର ହେବା ଉଚିତ୍)
+    template:
+      body: 'ନିମ୍ନ ଜାଗା ରେ ଅସୁବିଧା ହେଇଛି:'
+      header:
+        one: "%{count} ଭୁଲ ଯଗୁଁ ନିମ୍ନ %{model} ସୁରଖିତ ହେଇପାରି ନଥିଲା"
+        other: "%{count} ଭୁଲ ଯଗୁଁ ଏହି %{model} ସୁରଖିତ ହେଇପାରି ନଥିଲା"
+  helpers:
+    select:
+      prompt: ପସନ୍ଦ କର
+    submit:
+      create: "%{model} ବନାଅ"
+      submit: "%{model} ସୁରଖିତ କର"
+      update: "%{model} ଅାଧୂନିକରଣ କର"
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u%n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "₹"
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: ମିଥ୍ଯା
+      strip_insignificant_zeros: ମିଥ୍ଯା
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: ବିଲିୟନ୍
+          million: ମିଲିୟନ୍
+          quadrillion: ହଜାର ବିଲିୟନ୍
+          thousand: ହଜାର
+          trillion: ଟ୍ରିଲିୟନ୍
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", ଏବଂ "
+      two_words_connector: " ଏବଂ "
+      words_connector: ", "
+  time:
+    am: ପୁର୍ଵାହ୍ନ
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      long: "%B %d, %Y %H:%M"
+      short: "%d %b %H:%M"
+    pm: ଅପରାହ୍ନ

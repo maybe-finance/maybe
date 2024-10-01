@@ -1,0 +1,215 @@
+---
+el:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Η επικύρωση απέτυχε: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Η εγγραφή δεν μπορεί να διαγραφεί γιατί υπάρχει εξαρτημένο %{record}
+          has_many: Η εγγραφή δεν μπορεί να διαγραφεί γιατί υπάρχουν εξαρτημένα %{record}
+  date:
+    abbr_day_names:
+    - Κυρ
+    - Δευ
+    - Τρί
+    - Τετ
+    - Πέμ
+    - Παρ
+    - Σάβ
+    abbr_month_names:
+    - 
+    - Ιαν
+    - Φεβ
+    - Μαρ
+    - Απρ
+    - Μαϊ
+    - Ιουν
+    - Ιουλ
+    - Αυγ
+    - Σεπ
+    - Οκτ
+    - Νοε
+    - Δεκ
+    day_names:
+    - Κυριακή
+    - Δευτέρα
+    - Τρίτη
+    - Τετάρτη
+    - Πέμπτη
+    - Παρασκευή
+    - Σάββατο
+    formats:
+      default: "%d/%m/%Y"
+      long: "%e %B %Y"
+      short: "%d %b"
+    month_names:
+    - 
+    - Ιανουάριος
+    - Φεβρουάριος
+    - Μάρτιος
+    - Απρίλιος
+    - Μάιος
+    - Ιούνιος
+    - Ιούλιος
+    - Αύγουστος
+    - Σεπτέμβριος
+    - Οκτώβριος
+    - Νοέμβριος
+    - Δεκέμβριος
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: περίπου μία ώρα
+        other: περίπου %{count} ώρες
+      about_x_months:
+        one: περίπου ένα μήνα
+        other: περίπου %{count} μήνες
+      about_x_years:
+        one: περίπου ένα χρόνο
+        other: περίπου %{count} χρόνια
+      almost_x_years:
+        one: σχεδόν ένα χρόνο
+        other: σχεδόν %{count} χρόνια
+      half_a_minute: μισό λεπτό
+      less_than_x_seconds:
+        one: λιγότερο από ένα δευτερόλεπτο
+        other: λιγότερο από %{count} δευτερόλεπτα
+      less_than_x_minutes:
+        one: λιγότερο από ένα λεπτό
+        other: λιγότερο από %{count} λεπτά
+      over_x_years:
+        one: πάνω από ένα χρόνο
+        other: πάνω από %{count} χρόνια
+      x_seconds:
+        one: "%{count} δευτερόλεπτο"
+        other: "%{count} δευτερόλεπτα"
+      x_minutes:
+        one: "%{count} λεπτό"
+        other: "%{count} λεπτά"
+      x_days:
+        one: "%{count} μέρα"
+        other: "%{count} ημέρες"
+      x_months:
+        one: "%{count} μήνα"
+        other: "%{count} μήνες"
+      x_years:
+        one: "%{count} χρόνος"
+        other: "%{count} χρόνια"
+    prompts:
+      second: Δευτερόλεπτο
+      minute: Λεπτό
+      hour: Ώρα
+      day: Ημέρα
+      month: Μήνας
+      year: Έτος
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: πρέπει να είναι αποδεκτό
+      blank: δεν πρέπει να είναι κενό
+      confirmation: δεν ταιριάζει με την επικύρωση
+      empty: δεν πρέπει να είναι άδειο
+      equal_to: πρέπει να είναι ίσο με %{count}
+      even: πρέπει να είναι άρτιος
+      exclusion: είναι δεσμευμένο
+      greater_than: πρέπει να είναι μεγαλύτερο από %{count}
+      greater_than_or_equal_to: πρέπει να είναι μεγαλύτερο ή ίσο με %{count}
+      inclusion: δεν συμπεριλαμβάνεται στη λίστα
+      invalid: είναι άκυρο
+      less_than: πρέπει να είναι λιγότερο από %{count}
+      less_than_or_equal_to: πρέπει να είναι λιγότερο ή ίσο με %{count}
+      model_invalid: 'Η επικύρωση απέτυχε: %{errors}'
+      not_a_number: δεν είναι αριθμός
+      not_an_integer: πρέπει να είναι ακέραιος αριθμός
+      odd: πρέπει να είναι περιττός
+      other_than: πρέπει να είναι διάφορο του %{count}
+      present: πρέπει να είναι κενό
+      required: πρέπει να υπάρχει
+      taken: το έχουν ήδη χρησιμοποιήσει
+      too_long:
+        one: είναι πολύ μεγάλο (το μέγιστο μήκος είναι %{count} χαρακτήρας)
+        other: είναι πολύ μεγάλο (το μέγιστο μήκος είναι %{count} χαρακτήρες)
+      too_short:
+        one: είναι πολύ μικρό (το ελάχιστο μήκος είναι %{count} χαρακτήρας)
+        other: είναι πολύ μικρό (το ελάχιστο μήκος είναι %{count} χαρακτήρες)
+      wrong_length:
+        one: έχει λανθασμένο μήκος (πρέπει να είναι %{count} χαρακτήρας)
+        other: έχει λανθασμένο μήκος (πρέπει να είναι %{count} χαρακτήρες)
+    template:
+      body: 'Υπήρξαν προβλήματα με τα ακόλουθα πεδία:'
+      header:
+        one: "%{count} λάθος εμπόδισε αυτό το %{model} να αποθηκευτεί."
+        other: "%{count} λάθη εμπόδισαν αυτό το %{model} να αποθηκευτεί."
+  helpers:
+    select:
+      prompt: Παρακαλώ επιλέξτε
+    submit:
+      create: Δημιουργήστε %{model}
+      submit: Αποθηκεύστε %{model}
+      update: Ενημερώστε %{model}
+  number:
+    currency:
+      format:
+        delimiter: "."
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "€"
+    format:
+      delimiter: "."
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: δισεκατομμύριο
+          million: εκατομμύριο
+          quadrillion: τετράκις εκατομμύριο
+          thousand: χίλια
+          trillion: τρισεκατομμύριο
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          eb: EB
+          gb: GB
+          kb: KB
+          mb: MB
+          pb: PB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " και "
+      two_words_connector: " και "
+      words_connector: ", "
+  time:
+    am: π.μ.
+    formats:
+      default: "%d %B %Y %H:%M"
+      long: "%A %d %B %Y %H:%M:%S %Z"
+      short: "%d %b %H:%M"
+    pm: μ.μ.

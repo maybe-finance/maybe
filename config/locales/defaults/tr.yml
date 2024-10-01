@@ -1,0 +1,213 @@
+---
+tr:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Doğrulama başarısız oldu: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Bağlı bir kayıt %{record} bulunduğu için kayıt silinemedi
+          has_many: Bağlı kayıtlar %{record} bulunduğu için kayıt silinemedi
+  date:
+    abbr_day_names:
+    - Pzr
+    - Pzt
+    - Sal
+    - Çrş
+    - Prş
+    - Cum
+    - Cts
+    abbr_month_names:
+    - 
+    - Oca
+    - Şub
+    - Mar
+    - Nis
+    - May
+    - Haz
+    - Tem
+    - Ağu
+    - Eyl
+    - Eki
+    - Kas
+    - Ara
+    day_names:
+    - Pazar
+    - Pazartesi
+    - Salı
+    - Çarşamba
+    - Perşembe
+    - Cuma
+    - Cumartesi
+    formats:
+      default: "%d.%m.%Y"
+      long: "%e %B %Y %A"
+      short: "%e %b"
+    month_names:
+    - 
+    - Ocak
+    - Şubat
+    - Mart
+    - Nisan
+    - Mayıs
+    - Haziran
+    - Temmuz
+    - Ağustos
+    - Eylül
+    - Ekim
+    - Kasım
+    - Aralık
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: yaklaşık %{count} saat
+        other: yaklaşık %{count} saat
+      about_x_months:
+        one: yaklaşık %{count} ay
+        other: yaklaşık %{count} ay
+      about_x_years:
+        one: yaklaşık %{count} yıl
+        other: yaklaşık %{count} yıl
+      almost_x_years:
+        one: neredeyse %{count} yıl
+        other: neredeyse %{count} yıl
+      half_a_minute: yarım dakika
+      less_than_x_seconds:
+        one: "%{count} saniyeden az"
+        other: "%{count} saniyeden az"
+      less_than_x_minutes:
+        one: "%{count} dakikadan az"
+        other: "%{count} dakikadan az"
+      over_x_years:
+        one: "%{count} yıldan fazla"
+        other: "%{count} yıldan fazla"
+      x_seconds:
+        one: "%{count} saniye"
+        other: "%{count} saniye"
+      x_minutes:
+        one: "%{count} dakika"
+        other: "%{count} dakika"
+      x_days:
+        one: "%{count} gün"
+        other: "%{count} gün"
+      x_months:
+        one: "%{count} ay"
+        other: "%{count} ay"
+      x_years:
+        one: "%{count} yıl"
+        other: "%{count} yıl"
+    prompts:
+      second: Saniye
+      minute: Dakika
+      hour: Saat
+      day: Gün
+      month: Ay
+      year: Yıl
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: kabul edilmeli
+      blank: doldurulmalı
+      confirmation: "%{attribute} teyidiyle uyuşmuyor"
+      empty: doldurulmalı
+      equal_to: tam olarak %{count} olmalı
+      even: çift olmalı
+      exclusion: kullanılamaz
+      greater_than: "%{count} sayısından büyük olmalı"
+      greater_than_or_equal_to: "%{count} sayısına eşit veya büyük olmalı"
+      inclusion: kabul edilen bir kelime değil
+      invalid: geçersiz
+      less_than: "%{count} sayısından küçük olmalı"
+      less_than_or_equal_to: "%{count} sayısına eşit veya küçük olmalı"
+      model_invalid: 'Doğrulama başarısız oldu: %{errors}'
+      not_a_number: geçerli bir sayı değil
+      not_an_integer: tam sayı olmalı
+      odd: tek olmalı
+      other_than: "%{count} karakterden oluşamaz"
+      present: boş bırakılmalı
+      required: doldurulmalı
+      taken: hali hazırda kullanılmakta
+      too_long:
+        one: çok uzun (en fazla %{count} karakter)
+        other: çok uzun (en fazla %{count} karakter)
+      too_short:
+        one: çok kısa (en az %{count} karakter)
+        other: çok kısa (en az %{count} karakter)
+      wrong_length:
+        one: hatalı uzunlukta (%{count} karakter olmalı)
+        other: hatalı uzunlukta (%{count} karakter olmalı)
+    template:
+      body: 'Lütfen aşağıdaki hataları düzeltiniz:'
+      header:
+        one: "%{count} hata oluştuğu için %{model} kaydedilemedi"
+        other: "%{count} hata oluştuğu için %{model} kaydedilemedi"
+  helpers:
+    select:
+      prompt: Lütfen seçiniz
+    submit:
+      create: "%{model} Ekle"
+      submit: "%{model} Kaydet"
+      update: "%{model} Güncelle"
+  number:
+    currency:
+      format:
+        delimiter: "."
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "₺"
+    format:
+      delimiter: "."
+      precision: 2
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: Milyar
+          million: Milyon
+          quadrillion: Katrilyon
+          thousand: Bin
+          trillion: Trilyon
+          unit: ''
+      format:
+        delimiter: "."
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Bayt
+            other: Bayt
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%%n"
+    precision:
+      format:
+        delimiter: "."
+  support:
+    array:
+      last_word_connector: " ve "
+      two_words_connector: " ve "
+      words_connector: ", "
+  time:
+    am: öğleden önce
+    formats:
+      default: "%a %d.%b.%y %H:%M"
+      long: "%e %B %Y, %A, %H:%M"
+      short: "%e %B, %H:%M"
+    pm: öğleden sonra

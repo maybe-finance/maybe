@@ -1,0 +1,266 @@
+---
+uk:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Виникли помилки: %{errors}'
+        restrict_dependent_destroy:
+          has_one: 'Неможливо видалити запис, так як існує залежність: %{record}'
+          has_many: 'Неможливо видалити запис, так як існують залежності: %{record}'
+  date:
+    abbr_day_names:
+    - нд.
+    - пн.
+    - вт.
+    - ср.
+    - чт.
+    - пт.
+    - сб.
+    abbr_month_names:
+    -
+    - січ.
+    - лют.
+    - бер.
+    - квіт.
+    - трав.
+    - черв.
+    - лип.
+    - серп.
+    - вер.
+    - жовт.
+    - лист.
+    - груд.
+    day_names:
+    - неділя
+    - понеділок
+    - вівторок
+    - середа
+    - четвер
+    - п'ятниця
+    - субота
+    formats:
+      default: "%d.%m.%Y"
+      long: "%d %B %Y"
+      short: "%d %b"
+    month_names:
+    -
+    - Січня
+    - Лютого
+    - Березня
+    - Квітня
+    - Травня
+    - Червня
+    - Липня
+    - Серпня
+    - Вересня
+    - Жовтня
+    - Листопада
+    - Грудня
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: близько %{count} години
+        few: близько %{count} годин
+        many: близько %{count} годин
+        other: близько %{count} години
+      about_x_months:
+        one: близько %{count} місяця
+        few: близько %{count} місяців
+        many: близько %{count} місяців
+        other: близько %{count} місяця
+      about_x_years:
+        one: близько %{count} року
+        few: близько %{count} років
+        many: близько %{count} років
+        other: близько %{count} року
+      almost_x_years:
+        one: майже %{count} рік
+        few: майже %{count} роки
+        many: майже %{count} років
+        other: майже %{count} років
+      half_a_minute: пів хвилини
+      less_than_x_seconds:
+        one: менше %{count} секунди
+        few: менше %{count} секунд
+        many: менше %{count} секунд
+        other: менше %{count} секунди
+      less_than_x_minutes:
+        one: менше %{count} хвилини
+        few: менше %{count} хвилин
+        many: менше %{count} хвилин
+        other: менше %{count} хвилини
+      over_x_years:
+        one: більше %{count} року
+        few: більше %{count} років
+        many: більше %{count} років
+        other: більше %{count} року
+      x_seconds:
+        one: "%{count} секунда"
+        few: "%{count} секунди"
+        many: "%{count} секунд"
+        other: "%{count} секунди"
+      x_minutes:
+        one: "%{count} хвилина"
+        few: "%{count} хвилини"
+        many: "%{count} хвилин"
+        other: "%{count} хвилини"
+      x_days:
+        one: "%{count} день"
+        few: "%{count} дні"
+        many: "%{count} днів"
+        other: "%{count} дня"
+      x_months:
+        one: "%{count} місяць"
+        few: "%{count} місяці"
+        many: "%{count} місяців"
+        other: "%{count} місяця"
+      x_years:
+        one: "%{count} рік"
+        few: "%{count} роки"
+        many: "%{count} років"
+        other: "%{count} року"
+    prompts:
+      second: Секунда
+      minute: Хвилина
+      hour: Година
+      day: День
+      month: Місяць
+      year: Рік
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: має бути прийнятий
+      blank: не може бути пустим
+      confirmation: не збігається з підтвердженням
+      empty: не може бути порожнім
+      equal_to: має дорівнювати %{count}
+      even: має бути парним
+      exclusion: зарезервовано
+      greater_than: має бути більше ніж %{count}
+      greater_than_or_equal_to: має бути більше ніж або дорівнювати %{count}
+      inclusion: не включено до переліку
+      invalid: недійсний
+      less_than: має бути менше ніж %{count}
+      less_than_or_equal_to: має бути менше ніж або дорівнювати %{count}
+      model_invalid: 'Виникли помилки: %{errors}'
+      not_a_number: не число
+      not_an_integer: не є цілим числом
+      odd: має бути непарним
+      other_than: має відрізнятись від %{count}
+      present: має бути пустим
+      required: не може бути порожнім
+      taken: вже зайнятий
+      too_long:
+        one: занадто довгий (максимум %{count} знак)
+        few: занадто довгий (максимум %{count} знаки)
+        many: занадто довгий (максимум %{count} знаків)
+        other: занадто довгий (максимум %{count} знаку)
+      too_short:
+        one: занадто короткий (мінімум %{count} знак)
+        few: занадто короткий (мінімум %{count} знаки)
+        many: занадто короткий (мінімум %{count} знаків)
+        other: занадто короткий (мінімум %{count} знаку)
+      wrong_length:
+        one: неправильна довжина (має бути %{count} знак)
+        few: неправильна довжина (має бути %{count} знаки)
+        many: неправильна довжина (має бути %{count} знаків)
+        other: неправильна довжина (має бути %{count} знаку)
+    template:
+      body: 'Помилки виявлено в таких полях:'
+      header:
+        one: "%{model} не збережено через %{count} помилку"
+        few: "%{model} не збережено через %{count} помилки"
+        many: "%{model} не збережено через %{count} помилок"
+        other: "%{model} не збережено через %{count} помилки"
+  helpers:
+    select:
+      prompt: 'Оберіть: '
+    submit:
+      create: Створити %{model}
+      submit: Зберегти %{model}
+      update: Зберегти %{model}
+  number:
+    currency:
+      format:
+        delimiter: " "
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: ₴
+    format:
+      delimiter: " "
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion:
+            one: Мільярд
+            few: Мільярдів
+            many: Мільярдів
+            other: Мільярдів
+          million:
+            one: Мільйон
+            few: Мільйонів
+            many: Мільйонів
+            other: Мільйонів
+          quadrillion:
+            one: Квадрильйон
+            few: Квадрильйонів
+            many: Квадрильйонів
+            other: Квадрильйонів
+          thousand:
+            one: Тисяча
+            few: Тисяч
+            many: Тисяч
+            other: Тисяч
+          trillion:
+            one: Трильйон
+            few: Трильйонів
+            many: Трильйонів
+            other: Трильйонів
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: false
+        strip_insignificant_zeros: false
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: байт
+            few: байти
+            many: байтів
+            other: байту
+          gb: ГБ
+          kb: кБ
+          mb: МБ
+          tb: ТБ
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " та "
+      two_words_connector: " і "
+      words_connector: ", "
+  time:
+    am: до полудня
+    formats:
+      default: "%a, %d %b %Y, %H:%M:%S %z"
+      long: "%d %B %Y, %H:%M"
+      short: "%d %b, %H:%M"
+    pm: по полудні

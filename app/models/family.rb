@@ -10,6 +10,8 @@ class Family < ApplicationRecord
   has_many :merchants, dependent: :destroy
   has_many :issues, through: :accounts
 
+  validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }
+
   def snapshot(period = Period.all)
     query = accounts.active.joins(:balances)
               .where("account_balances.currency = ?", self.currency)

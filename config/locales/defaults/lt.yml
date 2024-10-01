@@ -1,0 +1,231 @@
+---
+lt:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Nepraeitos patikros: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Negalima ištrinti įrašo nes priklausomas %{record} egzistuoja
+          has_many: Negalima ištrinti įrašų nes priklausomi %{record} egzistuoja
+  date:
+    abbr_day_names:
+    - Sek
+    - Pir
+    - Ant
+    - Tre
+    - Ket
+    - Pen
+    - Šeš
+    abbr_month_names:
+    -
+    - Sau
+    - Vas
+    - Kov
+    - Bal
+    - Geg
+    - Bir
+    - Lie
+    - Rgp
+    - Rgs
+    - Spa
+    - Lap
+    - Grd
+    day_names:
+    - sekmadienis
+    - pirmadienis
+    - antradienis
+    - trečiadienis
+    - ketvirtadienis
+    - penktadienis
+    - šeštadienis
+    formats:
+      default: "%Y-%m-%d"
+      long: "%Y m. %B %d d."
+      short: "%b %d"
+    month_names:
+    -
+    - sausio
+    - vasario
+    - kovo
+    - balandžio
+    - gegužės
+    - birželio
+    - liepos
+    - rugpjūčio
+    - rugsėjo
+    - spalio
+    - lapkričio
+    - gruodžio
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: apie %{count} valandą
+        few: apie %{count} valandas
+        other: apie %{count} valandų
+      about_x_months:
+        one: apie %{count} mėnesį
+        few: apie %{count} mėnesius
+        other: apie %{count} mėnesių
+      about_x_years:
+        one: apie %{count} metus
+        few: apie %{count} metus
+        other: apie %{count} metų
+      almost_x_years:
+        one: beveik %{count} metai
+        few: beveik %{count} metai
+        other: beveik %{count} metų
+      half_a_minute: pusė minutės
+      less_than_x_seconds:
+        one: mažiau nei %{count} sekundė
+        few: mažiau nei %{count} sekundės
+        other: mažiau nei %{count} sekundžių
+      less_than_x_minutes:
+        one: mažiau nei %{count} minutė
+        few: mažiau nei %{count} minutės
+        other: mažiau nei %{count} minučių
+      over_x_years:
+        one: virš %{count} metų
+        few: virš %{count} metų
+        other: virš %{count} metų
+      x_seconds:
+        one: "%{count} sekundė"
+        few: "%{count} sekundės"
+        other: "%{count} sekundžių"
+      x_minutes:
+        one: "%{count} minutė"
+        few: "%{count} minutės"
+        other: "%{count} minučių"
+      x_days:
+        one: "%{count} diena"
+        few: "%{count} dienos"
+        other: "%{count} dienų"
+      x_months:
+        one: "%{count} mėnesis"
+        few: "%{count} mėnesiai"
+        other: "%{count} mėnesių"
+      x_years:
+        one: "%{count} metai"
+        few: "%{count} metai"
+        other: "%{count} metai"
+    prompts:
+      second: Sekundės
+      minute: Minutė
+      hour: Valanda
+      day: Diena
+      month: Mėnuo
+      year: Metai
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: turi būti patvirtintas
+      blank: negali būti tuščias
+      confirmation: neteisingai pakartotas
+      empty: negali būti tuščias
+      equal_to: turi būti lygus %{count}
+      even: turi būti lyginis skaičius
+      exclusion: yra rezervuotas
+      greater_than: turi būti didesnis už %{count}
+      greater_than_or_equal_to: turi būti didesnis arba lygus %{count}
+      in: turi būti skaičiuje %{count}
+      inclusion: nenumatyta reikšmė
+      invalid: neteisingas
+      less_than: turi būti mažesnis už %{count}
+      less_than_or_equal_to: turi būti mažesnis arba lygus %{count}
+      model_invalid: 'Tikrinimo klaida: %{errors}'
+      not_a_number: ne skaičius
+      not_an_integer: privalo būti sveikas skaičius
+      odd: turi būti nelyginis skaičius
+      other_than: privalo būti kitoks nei %{count}
+      present: turi būti tuščias
+      required: turi egzistuoti
+      taken: jau užimtas
+      too_long:
+        one: per ilgas (daugiausiai %{count} simbolis)
+        few: per ilgas (daugiausiai %{count} simboliai)
+        other: per ilgas (daugiausiai %{count} simbolių)
+      too_short:
+        one: per trumpas (mažiausiai %{count} simbolis)
+        few: per trumpas (mažiausiai %{count} simboliai)
+        other: per trumpas (mažiausiai %{count} simbolių)
+      wrong_length: neteisingo ilgio (turi būti %{count} simboliai)
+    template:
+      body: 'Šiuose laukuose yra klaidų:'
+      header:
+        one: Išsaugant objektą %{model} rasta %{count} klaida
+        few: Išsaugant objektą %{model} rastos %{count} klaidos
+        other: Išsaugant objektą %{model} rasta %{count} klaidų
+  helpers:
+    select:
+      prompt: Prašom pasirinkti
+    submit:
+      create: Sukurti %{model}
+      submit: Išsaugoti %{model}
+      update: Atnaujinti %{model}
+  number:
+    currency:
+      format:
+        delimiter: " "
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "€"
+    format:
+      delimiter: " "
+      precision: 3
+      round_mode: default
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: Milijardas
+          million: Milijonas
+          quadrillion: Kvadrilijonas
+          thousand: Tūkstantis
+          trillion: Trilijonas
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Baitas
+            few: Baitai
+            other: Baitų
+          eb: EB
+          gb: GB
+          kb: KB
+          mb: MB
+          pb: PB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " ir "
+      two_words_connector: " ir "
+      words_connector: ", "
+  time:
+    am: am
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      long: "%Y %B %d %H:%M"
+      short: "%d %b %H:%M"
+    pm: pm

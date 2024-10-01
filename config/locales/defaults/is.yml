@@ -1,0 +1,216 @@
+---
+is:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Villur: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Ekki hægt að eyða færslu því %{record} sem hún er háð er til
+          has_many: Ekki hægt að eyða færslur því %{record} sem hún er háð er til
+  date:
+    abbr_day_names:
+    - sun
+    - mán
+    - þri
+    - mið
+    - fim
+    - fös
+    - lau
+    abbr_month_names:
+    - 
+    - jan
+    - feb
+    - mar
+    - apr
+    - maí
+    - jún
+    - júl
+    - ágú
+    - sep
+    - okt
+    - nóv
+    - des
+    day_names:
+    - sunnudaginn
+    - mánudaginn
+    - þriðjudaginn
+    - miðvikudaginn
+    - fimmtudaginn
+    - föstudaginn
+    - laugardaginn
+    formats:
+      default: "%d.%m.%Y"
+      long: "%e. %B %Y"
+      short: "%e. %b"
+    month_names:
+    - 
+    - janúar
+    - febrúar
+    - mars
+    - apríl
+    - maí
+    - júní
+    - júlí
+    - ágúst
+    - september
+    - október
+    - nóvember
+    - desember
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: u.þ.b. %{count} klukkustund
+        other: u.þ.b. %{count} klukkustundir
+      about_x_months:
+        one: u.þ.b. %{count} mánuður
+        other: u.þ.b. %{count} mánuðir
+      about_x_years:
+        one: u.þ.b. %{count} ár
+        other: u.þ.b. %{count} ár
+      almost_x_years:
+        one: næstum %{count} ár
+        other: næstum %{count} ár
+      half_a_minute: hálf mínúta
+      less_than_x_seconds:
+        one: minna en %{count} sekúnda
+        other: minna en %{count} sekúndur
+      less_than_x_minutes:
+        one: minna en %{count} mínúta
+        other: minna en %{count} mínútur
+      over_x_years:
+        one: meira en %{count} ár
+        other: meira en %{count} ár
+      x_seconds:
+        one: "%{count} sekúnda"
+        other: "%{count} sekúndur"
+      x_minutes:
+        one: "%{count} mínúta"
+        other: "%{count} mínútur"
+      x_days:
+        one: "%{count} dagur"
+        other: "%{count} dagar"
+      x_months:
+        one: "%{count} mánuður"
+        other: "%{count} mánuðir"
+    prompts:
+      second: Sekúnda
+      minute: Mínúta
+      hour: Klukkustund
+      day: Dagur
+      month: Mánuður
+      year: Ár
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: þarf að vera tekið gilt
+      blank: má ekki vera autt
+      confirmation: er ekki jafngilt staðfestingunni
+      empty: má ekki vera tómt
+      equal_to: þarf að vera jafngilt %{count}
+      even: þarf að vera slétt tala
+      exclusion: er frátekið
+      greater_than: þarf að vera stærri en %{count}
+      greater_than_or_equal_to: þarf að vera stærri en eða jafngilt %{count}
+      inclusion: er ekki í listanum
+      invalid: er ógilt
+      less_than: þarf að vera minna en %{count}
+      less_than_or_equal_to: þarf að vera minna en eða jafngilt %{count}
+      not_a_number: er ekki tala
+      not_an_integer: þarf að vera heiltala
+      odd: þarf að vera oddatala
+      other_than: verður að vera annað en %{count}
+      present: verður að vera autt
+      taken: er þegar í notkun
+      too_long:
+        one: er of langt (má mest vera %{count} stafur)
+        other: er of langt (má mest vera %{count} stafir)
+      too_short:
+        one: er of stutt (má minnst vera %{count} stafur)
+        other: er of stutt (má minnst vera %{count} stafir)
+      wrong_length:
+        one: er af rangri lengd (má mest vera %{count} stafur)
+        other: er af rangri lengd (má mest vera %{count} stafir)
+    template:
+      body: 'Villur fundust í eftirfarandi dálkum:'
+      header:
+        one: Ekki var hægt að vista %{model} vegna einnar villu.
+        other: Ekki var hægt að vista %{model} vegna %{count} villna.
+  helpers:
+    select:
+      prompt: Veldu
+    submit:
+      create: Búa til %{model}
+      submit: Vista %{model}
+      update: Uppfæra %{model}
+  number:
+    currency:
+      format:
+        delimiter: "."
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: kr.
+    format:
+      delimiter: "."
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion:
+            one: milljarður
+            other: milljarðar
+          million:
+            one: milljón
+            other: milljónir
+          quadrillion:
+            one: billjarður
+            other: billjarðar
+          thousand: þúsund
+          trillion:
+            one: billjón
+            other: billjónir
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: bæti
+            other: bæti
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " og "
+      two_words_connector: " og "
+      words_connector: ", "
+  time:
+    am: am
+    formats:
+      default: "%A %e. %B %Y kl. %H:%M"
+      long: "%A %e. %B %Y kl. %H:%M"
+      short: "%e. %B kl. %H:%M"
+    pm: pm

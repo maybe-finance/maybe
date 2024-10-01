@@ -1,0 +1,207 @@
+---
+ug:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: "%{errors} دا خاتالىق بار"
+        restrict_dependent_destroy:
+          has_one: "%{record} بۇ مەلۇماتنى ئىشلىتىدۇ، شۇڭا ئۆچۈرگىلى بولمايدۇ"
+          has_many: "%{record} بۇ مەلۇماتنى ئىشلىتىدۇ، شۇڭا ئۆچۈرگىلى بولمايدۇ"
+  date:
+    abbr_day_names:
+    - يەكشەنبە
+    - دۈشەنبە
+    - سەيشەنبە
+    - چارشەنبە
+    - پەيشەنبە
+    - جۈمە
+    - شەنبە
+    abbr_month_names:
+    - 
+    - يانۋار
+    - فېۋرال
+    - مارت
+    - ئاپرېل
+    - ماي
+    - ئىيۇن
+    - ئىيۇل
+    - ئاۋغۇست
+    - سېنتەبىر
+    - ئۆكتەبىر
+    - نويابىر
+    - دېكابىر
+    day_names:
+    - يەكشەنبە
+    - دۈشەنبە
+    - سەيشەنبە
+    - چارشەنبە
+    - پەيشەنبە
+    - جۈمە
+    - شەنبە
+    formats:
+      default: "%Y-%m-%d"
+      long: "%Y-%m-%d"
+      short: "%b%d"
+    month_names:
+    - 
+    - يانۋار
+    - فېۋرال
+    - مارت
+    - ئاپرېل
+    - ماي
+    - ئىيۇن
+    - ئىيۇل
+    - ئاۋغۇست
+    - سېنتەبىر
+    - ئۆكتەبىر
+    - نويابىر
+    - دېكابىر
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: تەخمىنەن بىر سائەت
+        other: تەخمىنەن %{count} سائەت
+      about_x_months:
+        one: تەخمىنەن بىر ئاي
+        other: تەخمىنەن %{count} ئاي
+      about_x_years:
+        one: تەخمىنەن بىر يىل
+        other: تەخمىنەن %{count} يىل
+      almost_x_years:
+        one: بىر يىلغا يېقىن
+        other: "%{count} يىلغا يېقىن"
+      half_a_minute: يېرىم مىنۇت
+      less_than_x_seconds:
+        one: بىر سىكۇنتقا يەتمىگەن
+        other: "%{count} سىكنۇتقا"
+      less_than_x_minutes:
+        one: بىر مىنۇتقا يەتمىگەن
+        other: "%{count} مىنۇتقا يەتمىگەن"
+      over_x_years:
+        one: بىر يىلدىن ئارتۇق
+        other: "%{count} يىلدىن ئارتۇق"
+      x_seconds:
+        one: بىر سىكنۇت
+        other: "%{count} سىكنۇت"
+      x_minutes:
+        one: بىر مىنۇت
+        other: "%{count} مىنۇت"
+      x_days:
+        one: بىر كۈن
+        other: "%{count} كۈن"
+      x_months:
+        one: بىر ئاي
+        other: "%{count} ئاي"
+    prompts:
+      second: سىكنۇت
+      minute: مىنۇت
+      hour: سائەت
+      day: كۈن
+      month: ئاي
+      year: يىل
+  errors:
+    format: "%{attribute}%{message}"
+    messages:
+      accepted: تەستىقلاش كېرەك
+      blank: بوش بولماسلىقى كېرەك
+      confirmation: تەستىق بىلەن ماس ئەمەس
+      empty: بوش بولماسلىقى كېرەك
+      equal_to: "%{count} غا تەڭ"
+      even: جۈپ سان
+      exclusion: مۇمكىن ئەمەس
+      greater_than: "%{count} دىن چوڭ"
+      greater_than_or_equal_to: "%{count} دىن چوڭ ياكى تەڭ"
+      inclusion: كۈتىلمىگەن نەتىجە
+      invalid: ئىناۋەتسىز
+      less_than: "%{count} دىن كىچىك"
+      less_than_or_equal_to: "%{count} دىن كىچىك ياكى تەڭ"
+      not_a_number: سان ئەمەس
+      not_an_integer: پۈتۈن سان ئەمەس
+      odd: تاق سان
+      other_than: ئىناۋەتسىز ئۇزۇنلۇق (%{count} ھەرىپ بولماسلىقى كېرەك)
+      present: بوش بولىشى كېرەك
+      taken: ئىشلىتىپ بولۇنغان
+      too_long:
+        one: بەك ئۇزۇن (بىر ھەرىپ)
+        other: بەك ئۇزۇن (ئەڭ ئۇزۇن بولغاندا %{count} ھەرىپ)
+      too_short:
+        one: بەك قىسقا (بىر ھەرىپ)
+        other: بەك قىسقا (ئەڭ قىسقا بولغاندا %{count} ھەرىپ)
+      wrong_length:
+        one: ئىناۋەتسىز ئۇزۇنلۇق (بىر ھەرىپ)
+        other: ئىناۋەتسىز ئۇزۇنلۇق (چوقۇم %{count} ھەرىپ)
+    template:
+      body: تۆۋەندىكى سۆز بۆلەكلىرىدە خاتالىق بار
+      header:
+        one: بىر خاتالىق تۈپەيلىدىن 「%{model}」 ساقلاش مەغلۇب بولدى
+        other: "%{count} خاتالىق تۈپەيلىدىن 「%{model}」ساقلاش مەغلۇب بولدى"
+  helpers:
+    select:
+      prompt: تاللاڭ
+    submit:
+      create: "%{model} قوشۇش"
+      submit: "%{model} ساقلاش"
+      update: "%{model} يېڭىلاش"
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u %n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: CN¥
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: مىليارد
+          million: مىليون
+          quadrillion: گېگابايت
+          thousand: مىڭ
+          trillion: مېگا
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: false
+        strip_insignificant_zeros: false
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: بايت
+            other: بايت
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " ۋە "
+      two_words_connector: " ۋە "
+      words_connector: ", "
+  time:
+    am: چۈشتىن بۇرۇن
+    formats:
+      default: "%Y %b %d %A %H:%M:%S %Z"
+      long: "%Y %b %d %H:%M"
+      short: "%b %d %H:%M"
+    pm: چۈشتىن كېيىن

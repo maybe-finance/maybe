@@ -1,0 +1,196 @@
+---
+kn:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'ತಪ್ಪು ಆಧಾರ: %{errors}'
+  date:
+    abbr_day_names:
+    - ರವಿ
+    - ಸೋಮ
+    - ಮಂಗಳ
+    - ಬುಧ
+    - ಗುರು
+    - ಶುಕ್ರ
+    - ಶನಿ
+    abbr_month_names:
+    - 
+    - Jan
+    - Feb
+    - Mar
+    - Apr
+    - May
+    - Jun
+    - Jul
+    - Aug
+    - Sep
+    - Oct
+    - Nov
+    - Dec
+    day_names:
+    - ರವಿವಾರ
+    - ಸೋಮವಾರ
+    - ಮಂಗಳವಾರ
+    - ಬುಧವಾರ
+    - ಗುರುವಾರ
+    - ಶುಕ್ರವಾರ
+    - ಶನಿವಾರ
+    formats:
+      default: "%Y-%m-%d"
+      long: "%d %B %Y"
+      short: "%d %b"
+    month_names:
+    - 
+    - ಜನವರಿ
+    - ಫೆಬ್ರವರಿ
+    - ಮಾರ್ಚ್
+    - ಏಪ್ರಿಲ್
+    - ಮೇ
+    - ಜೂನ್
+    - ಜುಲೈ
+    - ಆಗಸ್ಟ್
+    - ಸೆಪ್ಟೆಂಬರ್
+    - ಅಕ್ಟೋಬರ್
+    - ನವಂಬರ್
+    - ಡಿಸೆಂಬರ್
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: ಸುಮಾರು ಒಂದು ಗಂಟೆ
+        other: ಸುಮಾರು %{count} ಗಂಟೆಗಳು
+      about_x_months:
+        one: ಸುಮಾರು ಒಂದು ತಿಂಗಳು
+        other: ಸುಮಾರು %{count} ತಿಂಗಳುಗಳು
+      about_x_years:
+        one: ಸುಮಾರು ಒಂದು ವರುಷ
+        other: ಸುಮಾರು %{count} ವರುಷಗಳು
+      almost_x_years:
+        one: ಸರಿಸುಮಾರು ಒಂದು ವರುಷ
+        other: ಸರಿಸುಮಾರು %{count} ವರುಷಗಳು
+      half_a_minute: ಒಂದು ಅರ್ಧ ನಿಮಿಷ
+      less_than_x_seconds:
+        one: ಒಂದು ಸೆಕೆಂಡಿಗೂ ಕಡಿಮೆ
+        other: "%{count} ಸೆಕೆಂಡಿಗಿಂತ ಕಡಿಮೆ"
+      less_than_x_minutes:
+        one: ಒಂದು ನಿಮಿಷಕ್ಕೂ ಕಡಿಮೆ
+        other: "%{count} ನಿಮಿಷಕ್ಕಿಂತ ಕಡಿಮೆ"
+      over_x_years:
+        one: ಒಂದು ವರುಷಕ್ಕಿಂತ ಹೆಚ್ಚು
+        other: "%{count} ವರುಷಗಳಿಗಿಂತ ಹೆಚ್ಚು"
+      x_seconds:
+        one: "%{count} ಸೆಕೆಂಡ್"
+        other: "%{count} ಸೆಕೆಂಡುಗಳು"
+      x_minutes:
+        one: "%{count} ನಿಮಿಷ"
+        other: "%{count} ನಿಮಿಷಗಳು"
+      x_days:
+        one: "%{count} ದಿನ"
+        other: "%{count} ದಿನಗಳು"
+      x_months:
+        one: "%{count} ತಿಂಗಳು"
+        other: "%{count} ತಿಂಗಳುಗಳು"
+    prompts:
+      second: ಸೆಕೆಂಡು
+      minute: ನಿಮಿಷ
+      hour: ಗಂಟೆ
+      day: ದಿನ
+      month: ತಿಂಗಳು
+      year: ವರುಷ
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: ಒಪ್ಪಿಕೊಳ್ಳಬೇಕು
+      blank: ಖಾಲಿ ಬಿಡಲು ಸಧ್ಯವಿಲ್ಲ
+      confirmation: ಸಮರ್ಥನೆ ಸರಿಬರಲ್ಲಿಲ್ಲ
+      empty: ಖಾಲಿ ಬಿಡಲು ಸಧ್ಯವಿಲ್ಲ
+      equal_to: "%{count} ಕ್ಕೆ ಸಮಾನವಾಗಿರಬೇಕು"
+      even: ಸಮ ಆಗಿರಬೇಕು
+      exclusion: ಕಾಯ್ದಿರಿಸಲಾಗಿದೆ
+      greater_than: "%{count} ಕ್ಕಿಂತ ಹೆಚ್ಚಿರಬೇಕು"
+      greater_than_or_equal_to: "%{count} ಕಿಂತ ಹೆಚ್ಚು ಅಥವಾ ಸಮಾನವಾಗಿರ ಇರಬೇಕು"
+      inclusion: ಪಟ್ಟಿಯಲ್ಲಿ ಶಾಮೀಲು ಆಗಿಲ್ಲ
+      invalid: ನಿರರ್ಥಕವಾಗಿದೆ
+      less_than: "%{count} ಕ್ಕಿಂತ ಕಡಿಮೆ ಆಗಿರಬೇಕು"
+      less_than_or_equal_to: "%{count} ಕಿಂತ ಕಡಿಮೆ ಅಥವಾ ಸಮಾನವಾಗಿರ ಇರಬೇಕು"
+      not_a_number: ಸಂಖೆ ಆಗಿಲ್ಲ
+      not_an_integer: ಸಂಖೆ ಆಗಿರಬೇಕು
+      odd: ಬೆಸ ಆಗಿರಬೇಕು
+      taken: ತೆಗೆದುಕೊಂಡಾಗಿದೆ
+      too_long: ಬಹಳ ದೊಡ್ಡದಾಗಿದೆ (ಗರಿಷ್ಟ %{count} ಅಕ್ಷರಗಳು)
+      too_short: ಬಹಳ ಚಿಕ್ಕದಾಗಿದೆ (ಕನಿಷ್ಠ %{count} ಅಕ್ಷರಗಳು)
+      wrong_length: ತಪ್ಪು ಉದ್ದವಿದೆ (%{count} ಅಕ್ಷರಗಳಿರಬೇಕು)
+    template:
+      body: 'ಸಮಸ್ಯೆಗಳಿರುವ ಜಾಗಗಳು:'
+      header:
+        one: "%{count} ಧೋಷದ ಪರಿಣಾಮ %{model} ಅನ್ನು ರಚಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ"
+        other: "%{count} ಧೋಷಗಳ ಪರಿಣಾಮ %{model} ಅನ್ನು ರಚಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ"
+  helpers:
+    select:
+      prompt: ದಯವಿಟ್ಟು ಆರಿಸಿ
+    submit:
+      create: "%{model} ರಚಿಸಿ"
+      submit: "%{model} ಕಳುಹಿಸು"
+      update: "%{model} ರಚಿಸಿ"
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u%n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "$"
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: ಲಕ್ಷಕೋಟಿ
+          million: ದಶಲಕ್ಷ
+          quadrillion: ಪದ್ಮ
+          thousand: ಸಾವಿರ
+          trillion: ನೀಲ್
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", ಮತ್ತು  "
+      two_words_connector: " ಮತ್ತು  "
+      words_connector: ", "
+  time:
+    am: ಪ್ರಾತಃಕಾಲ
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      long: "%d %B %Y %H:%M"
+      short: "%d %b %H:%M"
+    pm: ಅಪರನ್ನಃ

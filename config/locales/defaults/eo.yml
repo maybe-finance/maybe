@@ -1,0 +1,198 @@
+---
+eo:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Validado malsukcesis: %{errors}'
+  date:
+    abbr_day_names:
+    - dim
+    - lun
+    - mar
+    - mer
+    - ĵaŭ
+    - ven
+    - sab
+    abbr_month_names:
+    - 
+    - jan.
+    - feb.
+    - mar.
+    - apr.
+    - majo
+    - jun.
+    - jul.
+    - aŭg.
+    - sep.
+    - okt.
+    - nov.
+    - dec.
+    day_names:
+    - dimanĉo
+    - lundo
+    - mardo
+    - merkredo
+    - ĵaŭdo
+    - vendredo
+    - sabato
+    formats:
+      default: "%Y/%m/%d"
+      long: "%e %B %Y"
+      short: "%e %b"
+    month_names:
+    - 
+    - januaro
+    - februaro
+    - marto
+    - aprilo
+    - majo
+    - junio
+    - julio
+    - aŭgusto
+    - septembro
+    - oktobro
+    - novembro
+    - decembro
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: ĉirkaŭ unu horo
+        other: ĉirkaŭ %{count} horoj
+      about_x_months:
+        one: ĉirkaŭ unu monato
+        other: ĉirkaŭ %{count} monatoj
+      about_x_years:
+        one: ĉirkaŭ uno jaro
+        other: ĉirkaŭ %{count} jaroj
+      almost_x_years:
+        one: preskaŭ unu jaro
+        other: preskaŭ %{count} jaroj
+      half_a_minute: duona minuto
+      less_than_x_seconds:
+        zero: malpli ol unu sekundo
+        one: malpli ol unu sekundo
+        other: malpli ol %{count} sekundoj
+      less_than_x_minutes:
+        zero: malpli ol unu minuto
+        one: malpli ol unu minuto
+        other: malpli ol %{count} minutoj
+      over_x_years:
+        one: pli ol unu jaro
+        other: pli ol %{count} jaroj
+      x_seconds:
+        one: "%{count} sekundo"
+        other: "%{count} sekundoj"
+      x_minutes:
+        one: "%{count} minuto"
+        other: "%{count} minutoj"
+      x_days:
+        one: "%{count} tago"
+        other: "%{count} tagoj"
+      x_months:
+        one: "%{count} monato"
+        other: "%{count} monatoj"
+    prompts:
+      second: Sekundo
+      minute: Minuto
+      hour: Horo
+      day: Tago
+      month: Monato
+      year: Jaro
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: devas esti akceptita
+      blank: devas esti kompletigita
+      confirmation: ne kongruas kun la konfirmo
+      empty: devas esti kompletigita
+      equal_to: devas egali %{count}
+      even: devas esti para
+      exclusion: ne estas disponebla
+      greater_than: devas superi %{count}
+      greater_than_or_equal_to: devas superi aŭ egali %{count}
+      inclusion: ne estas inkluzivita de la listo
+      invalid: estas nevalida
+      less_than: devas malsuperi %{count}
+      less_than_or_equal_to: devas malsuperi aŭ egali %{count}
+      not_a_number: ne estas nombro
+      not_an_integer: devas esti entjero
+      odd: devas esti nepara
+      taken: ne estas disponebla
+      too_long: estas tro longa (maksimume %{count} karekteroj)
+      too_short: estas tro mallonga (minimume %{count} karakteroj)
+      wrong_length: ne estas je ĝusta longo (devas enhavi %{count} karakterojn)
+    template:
+      body: 'Kontrolu la jenajn kampojn: '
+      header:
+        one: 'Ne eblas registri tiun %{model}: %{count} eraro'
+        other: 'Ne eblas registri tiun %{model}: %{count} eraroj'
+  helpers:
+    select:
+      prompt: Bonvolu elekti
+    submit:
+      create: Krei %{model}
+      submit: Registri tiun %{model}
+      update: Modifi tiun %{model}
+  number:
+    currency:
+      format:
+        delimiter: " "
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "€"
+    format:
+      delimiter: " "
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: miliardo
+          million: miliono
+          quadrillion: miliono da miliardoj
+          thousand: mil
+          trillion: mil miliardoj
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: bitoko
+            other: bitokoj
+          gb: Gb
+          kb: kb
+          mb: Mb
+          tb: Tb
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " kaj "
+      two_words_connector: " kaj "
+      words_connector: ", "
+  time:
+    am: am
+    formats:
+      default: "%d %B %Y %H:%M:%S"
+      long: "%A %d %B %Y %H:%M"
+      short: "%d %b %H:%M"
+    pm: pm

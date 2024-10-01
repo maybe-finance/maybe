@@ -1,0 +1,219 @@
+---
+mg:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Tsy tontosa ny fankatoavana : %{errors}'
+        restrict_dependent_destroy:
+          has_one: Tsy afaka mamafa io andalana io ianao satria misy %{record} iray
+            miankina amin'io
+          has_many: Tsy afaka mamafa io andalana io ianao satria misy %{record}
+            betsaka miankina aminy
+  date:
+    abbr_day_names:
+    - Alah
+    - Alats
+    - Tal
+    - Alar
+    - Alak
+    - Zom
+    - Asab
+    abbr_month_names:
+    - 
+    - jan.
+    - feb.
+    - mar.
+    - apr.
+    - may
+    - jona
+    - jolay.
+    - aog
+    - sept.
+    - okt.
+    - nov.
+    - des.
+    day_names:
+    - Alahady
+    - Alatsinainy
+    - Talata
+    - Alarobia
+    - Alakamisy
+    - Zoma
+    - Asabotsy
+    formats:
+      default: "%d/%m/%Y"
+      long: "%e %B %Y"
+      short: "%e %b"
+    month_names:
+    - 
+    - janoary
+    - febroary
+    - martsa
+    - aprily
+    - may
+    - jona
+    - jolay
+    - aogositra
+    - septambra
+    - aktobra
+    - novambra
+    - desambra
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: adiny iray eo ho eo
+        other: adiny %{count} eo ho eo
+      about_x_months:
+        one: iray volana eo ho eo
+        other: volana %{count} eo ho eo
+      about_x_years:
+        one: herintaona eo ho eo
+        other: taona %{count} eo ho eo
+      almost_x_years:
+        one: saika herintaona
+        other: saika %{count} taona
+      half_a_minute: antsasak'adiny
+      less_than_x_seconds:
+        zero: latsaky ny iray segondra
+        one: latsaky ny iray segondra
+        other: latsaky ny %{count} segondra
+      less_than_x_minutes:
+        zero: latsaky ny iray minitra
+        one: latsaky ny iray segondra
+        other: latsaky ny %{count} minitra
+      over_x_years:
+        one: Herintaona mahery
+        other:  maherin'ny %{count} taona
+      x_seconds:
+        one: "%{count} segondra"
+        other: "%{count} segondra"
+      x_minutes:
+        one: "%{count} minitra"
+        other: "%{count} minitra"
+      x_days:
+        one: "%{count} andro"
+        other: "%{count} andro"
+      x_months:
+        one: "%{count} volana"
+        other: "%{count} volana"
+      x_years:
+        one: "%{count} taona"
+        other: "%{count} taona"
+    prompts:
+      second: Segondra
+      minute: Minitra
+      hour: Ora
+      day: Andro
+      month: Volana
+      year: Taona
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: tsy maintsy ekena
+      blank: tsy maintsy fenoina
+      confirmation: tsy mifanaraka amin'ny %{attribute}
+      empty: tsy maintsy fenoina
+      equal_to: tsy maintsy mitovy amin'ny %{count}
+      even: tsy maintsy miankin-droa
+      exclusion: Tsy misy
+      greater_than: Tsy mihoatra ny %{count}
+      greater_than_or_equal_to: tsy maintsy mihoatra na mitovy amin'ny à %{count}
+      inclusion: tsy ao anaty lisitra
+      invalid: tsy ekena
+      less_than: tsy maintsy kely noho ny %{count}
+      less_than_or_equal_to: tsy kely na mitovy nohon'ny %{count}
+      model_invalid: 'Fangatahana tsy tontosa: %{errors}'
+      not_a_number: tsy isa io
+      not_an_integer: tsy maintsy isa tsotra
+      odd: tsy maintsy impair
+      other_than: tsy maintsy hafa noho ny %{count}
+      present: tsy maintsy banga
+      required: tsy maintsy misy
+      taken: tsy misy
+      too_long:
+        one: dia lava loatra (tsy mihoatra ny litera iray)
+        other: dia lava loatra (tsy mihoatra ny litera %{count})
+      too_short:
+        one: dia fohy loatra (farafahakeliny litera iray)
+        other: dia fohy loatra (farafahakeliny litera %{count})
+      wrong_length:
+        one: tsy amin'ny halavany (tokony ho litera iray)
+        other: tsy amin'ny halavany (tokony ho litera %{count})
+    template:
+      body: 'Hamarino ireo saha manaraka azafady : '
+      header:
+        one: 'Tsy azo tadidiana ity %{model} : olana %{count}'
+        other: 'Tsy azo tadidiana ity %{model} : olana %{count}'
+  helpers:
+    select:
+      prompt: Misafidiana azafady
+    submit:
+      create: Mamorona %{model} iray
+      submit: Tadidiana ity %{model}
+      update: Ovaina ity %{model}
+  number:
+    currency:
+      format:
+        delimiter: " "
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "Ar"
+    format:
+      delimiter: " "
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: tapitrisa
+          million: hetsy
+          quadrillion: hetsy tapitrisa
+          thousand: Arivo
+          trillion: arivo tapitrisa
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: octet
+            other: octets
+          eb: Eo
+          gb: Go
+          kb: ko
+          mb: Mo
+          pb: Po
+          tb: To
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " et "
+      two_words_connector: " et "
+      words_connector: ", "
+  time:
+    am: am
+    formats:
+      default: "%d %B %Y %Hh %Mmin %Ss"
+      long: "%A %d %B %Y %Hh%M"
+      short: "%d %b %Hh%M"
+    pm: pm

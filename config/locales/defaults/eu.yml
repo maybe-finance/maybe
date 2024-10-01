@@ -1,0 +1,210 @@
+---
+eu:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Balioztatze arazoa: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Ezin da erregistroa ezabatu menpeko %{record} bat dagoelako
+          has_many: Ezin da erregistroa ezabat menpeko %{record}ak daudelako
+  date:
+    abbr_day_names:
+    - Igan
+    - Astel
+    - Astear
+    - Asteaz
+    - Oste
+    - Osti
+    - Lar
+    abbr_month_names:
+    - 
+    - Urt
+    - Ots
+    - Mar
+    - Api
+    - Mai
+    - Eka
+    - Uzt
+    - Abu
+    - Ira
+    - Urr
+    - Aza
+    - Aben
+    day_names:
+    - Igandea
+    - Astelehena
+    - Asteartea
+    - Asteazkena
+    - Osteguna
+    - Ostirala
+    - Larunbata
+    formats:
+      default: "%Y/%m/%e"
+      long: "%Y(e)ko %Bk %e"
+      short: "%b %e"
+    month_names:
+    - 
+    - Urtarrila
+    - Otsaila
+    - Martxoa
+    - Apirila
+    - Maiatza
+    - Ekaina
+    - Uztaila
+    - Abuztua
+    - Iraila
+    - Urria
+    - Azaroa
+    - Abendua
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: ordu bat inguru
+        other: "%{count} ordu inguru"
+      about_x_months:
+        one: hilabete bat inguru
+        other: "%{count} hilabete inguru"
+      about_x_years:
+        one: urte bat inguru
+        other: "%{count} urte inguru"
+      almost_x_years:
+        one: ia urte bat
+        other: ia %{count} urte
+      half_a_minute: minutu erdi
+      less_than_x_seconds:
+        one: segundu bat baino gutxiago
+        other: "%{count} segundu baino gutxiago"
+      less_than_x_minutes:
+        one: "%{count} minutu bat baino gutxiago"
+        other: "%{count} minutu baino gutxiago"
+      over_x_years:
+        one: urte bat baino gehiago
+        other: "%{count} urte baino gehiago"
+      x_seconds:
+        one: segundu bat
+        other: "%{count} segundu"
+      x_minutes:
+        one: minutu bat
+        other: "%{count} minutu"
+      x_days:
+        one: egun bat
+        other: "%{count} egun"
+      x_months:
+        one: hilabete bat
+        other: "%{count} hilabete"
+    prompts:
+      second: Segundu
+      minute: Minutu
+      hour: Ordu
+      day: Egun
+      month: Hilabete
+      year: Urte
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: onartuta izan behar da
+      blank: ezin da zuriz utzi
+      confirmation: ez dator bat konfirmazioarekin
+      empty: ezin da hutsik egon
+      equal_to: "%{count} izan behar da"
+      even: bikoitia izan behar du
+      exclusion: erreserbatuta dago
+      greater_than: "%{count} baino handiagoa izan behar da"
+      greater_than_or_equal_to: "%{count} baino handiago edo berdin izan behar da"
+      inclusion: ez da zerrendako aukera bat
+      invalid: ez da zuzena
+      less_than: "%{count} baino txikiago izan behar da"
+      less_than_or_equal_to: "%{count} baino txikiago edo berdin izan behar da"
+      model_invalid: 'Baieztatzeak huts egin du: %{errors}'
+      not_a_number: ez da zenbaki bat
+      not_an_integer: zenbaki osoa izan behar da
+      odd: bakoitia izan behar du
+      other_than: "%{count}ren ezberdina izan behar du"
+      present: zuriz egon behar da
+      required: egon behar du
+      taken: hartuta dago
+      too_long:
+        one: luzeegia da (karaktere %{count} gehienez)
+        other: luzeegia da (%{count} karaktere gehienez)
+      too_short:
+        one: laburregia da (karaktere %{count} gutxienez)
+        other: laburregia da (%{count} karaktere gutxienez)
+      wrong_length:
+        one: ez du luzeera zuzena (karaktere %{count} izan behar ditu)
+        other: ez du luzeera zuzena (%{count} karaktere izan behar ditu)
+    template:
+      body: 'Arazoak egon dira ondoko eremuekin:'
+      header:
+        one: Errore batek ezinezkoa egin du %{model} hau gordetzea
+        other: "%{count} errorek ezinezkoa egiten dute %{model} hau gordetzea"
+  helpers:
+    select:
+      prompt: Mesedez, aukeratu
+    submit:
+      create: "%{model}a eratu"
+      submit: "%{model}a gorde"
+      update: "%{model}a eguneratu"
+  number:
+    currency:
+      format:
+        delimiter: "."
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "€"
+    format:
+      delimiter: "."
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: Mila milioi
+          million: Milioi
+          quadrillion: Kuatrilioi
+          thousand: Mila
+          trillion: Trilioi
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Byte
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n %"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " eta "
+      two_words_connector: " eta "
+      words_connector: ", "
+  time:
+    am: am
+    formats:
+      default: "%A, %Y(e)ko %Bren %e %H:%M:%S %z"
+      long: "%Y(e)ko %Bren %e,  %H:%M"
+      short: "%b %e, %H:%M"
+    pm: pm

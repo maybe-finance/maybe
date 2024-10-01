@@ -1,0 +1,181 @@
+---
+zh-CN:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 验证失败：%{errors}
+        restrict_dependent_destroy:
+          has_one: 由于%{record}需要此记录，所以无法移除记录
+          has_many: 由于%{record}需要此记录，所以无法移除记录
+  date:
+    abbr_day_names:
+    - 周日
+    - 周一
+    - 周二
+    - 周三
+    - 周四
+    - 周五
+    - 周六
+    abbr_month_names:
+    - 
+    - 1月
+    - 2月
+    - 3月
+    - 4月
+    - 5月
+    - 6月
+    - 7月
+    - 8月
+    - 9月
+    - 10月
+    - 11月
+    - 12月
+    day_names:
+    - 星期日
+    - 星期一
+    - 星期二
+    - 星期三
+    - 星期四
+    - 星期五
+    - 星期六
+    formats:
+      default: "%Y-%m-%d"
+      long: "%Y年%m月%d日"
+      short: "%m月%d日"
+    month_names:
+    - 
+    - 一月
+    - 二月
+    - 三月
+    - 四月
+    - 五月
+    - 六月
+    - 七月
+    - 八月
+    - 九月
+    - 十月
+    - 十一月
+    - 十二月
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours: 大约%{count}小时
+      about_x_months: 大约%{count}个月
+      about_x_years: 大约%{count}年
+      almost_x_years: 接近%{count}年
+      half_a_minute: 半分钟
+      less_than_x_seconds: 不到%{count}秒
+      less_than_x_minutes: 不到%{count}分钟
+      over_x_years: "%{count}年多"
+      x_seconds: "%{count}秒"
+      x_minutes: "%{count}分钟"
+      x_days: "%{count}天"
+      x_months: "%{count}个月"
+      x_years: "%{count}年"
+    prompts:
+      second: 秒
+      minute: 分
+      hour: 时
+      day: 日
+      month: 月
+      year: 年
+  errors:
+    format: "%{attribute}%{message}"
+    messages:
+      accepted: 必须是可被接受的
+      blank: 不能为空字符
+      confirmation: 与%{attribute}不匹配
+      empty: 不能留空
+      equal_to: 必须等于%{count}
+      even: 必须为双数
+      exclusion: 是保留关键字
+      greater_than: 必须大于%{count}
+      greater_than_or_equal_to: 必须大于或等于%{count}
+      inclusion: 不包含于列表中
+      invalid: 是无效的
+      less_than: 必须小于%{count}
+      less_than_or_equal_to: 必须小于或等于%{count}
+      model_invalid: 验证失败：%{errors}
+      not_a_number: 不是数字
+      not_an_integer: 必须是整数
+      odd: 必须为单数
+      other_than: 长度非法（不可为%{count}个字符）
+      present: 必须是空白
+      required: 必须存在
+      taken: 已经被使用
+      too_long: 过长（最长为%{count}个字符）
+      too_short: 过短（最短为%{count}个字符）
+      wrong_length: 长度非法（必须为%{count}个字符）
+    template:
+      body: 如下字段出现错误：
+      header: 有%{count}个错误发生导致“%{model}”无法被保存。
+  helpers:
+    select:
+      prompt: 请选择
+    submit:
+      create: 新增%{model}
+      submit: 储存%{model}
+      update: 更新%{model}
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u %n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: CN¥
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: 十亿
+          million: 百万
+          quadrillion: 千兆
+          thousand: 千
+          trillion: 兆
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: false
+        strip_insignificant_zeros: false
+      storage_units:
+        format: "%n %u"
+        units:
+          byte: 字节
+          eb: EB
+          gb: GB
+          kb: KB
+          mb: MB
+          pb: PB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: "、"
+      two_words_connector: 和
+      words_connector: "、"
+  time:
+    am: 上午
+    formats:
+      default: "%Y年%m月%d日 %A %H:%M:%S %Z"
+      long: "%Y年%m月%d日 %H:%M"
+      short: "%m月%d日 %H:%M"
+    pm: 下午

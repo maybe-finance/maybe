@@ -1,0 +1,222 @@
+---
+de-CH:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Gültigkeitsprüfung ist fehlgeschlagen: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Datensatz kann nicht gelöscht werden, da ein abhängiger %{record}-Datensatz
+            existiert.
+          has_many: Datensatz kann nicht gelöscht werden, da abhängige %{record} existieren.
+  date:
+    abbr_day_names:
+    - So
+    - Mo
+    - Di
+    - Mi
+    - Do
+    - Fr
+    - Sa
+    abbr_month_names:
+    - 
+    - Jan
+    - Feb
+    - Mär
+    - Apr
+    - Mai
+    - Jun
+    - Jul
+    - Aug
+    - Sep
+    - Okt
+    - Nov
+    - Dez
+    day_names:
+    - Sonntag
+    - Montag
+    - Dienstag
+    - Mittwoch
+    - Donnerstag
+    - Freitag
+    - Samstag
+    formats:
+      default: "%d.%m.%Y"
+      long: "%e. %B %Y"
+      short: "%e. %b"
+    month_names:
+    - 
+    - Januar
+    - Februar
+    - März
+    - April
+    - Mai
+    - Juni
+    - Juli
+    - August
+    - September
+    - Oktober
+    - November
+    - Dezember
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: etwa eine Stunde
+        other: etwa %{count} Stunden
+      about_x_months:
+        one: etwa ein Monat
+        other: etwa %{count} Monate
+      about_x_years:
+        one: etwa ein Jahr
+        other: etwa %{count} Jahre
+      almost_x_years:
+        one: fast ein Jahr
+        other: fast %{count} Jahre
+      half_a_minute: eine halbe Minute
+      less_than_x_seconds:
+        one: weniger als eine Sekunde
+        other: weniger als %{count} Sekunden
+      less_than_x_minutes:
+        one: weniger als eine Minute
+        other: weniger als %{count} Minuten
+      over_x_years:
+        one: mehr als ein Jahr
+        other: mehr als %{count} Jahre
+      x_seconds:
+        one: eine Sekunde
+        other: "%{count} Sekunden"
+      x_minutes:
+        one: eine Minute
+        other: "%{count} Minuten"
+      x_days:
+        one: ein Tag
+        other: "%{count} Tage"
+      x_months:
+        one: ein Monat
+        other: "%{count} Monate"
+    prompts:
+      second: Sekunde
+      minute: Minute
+      hour: Stunde
+      day: Tag
+      month: Monat
+      year: Jahr
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: muss akzeptiert werden
+      blank: muss ausgefüllt werden
+      confirmation: stimmt nicht mit %{attribute} überein
+      empty: muss ausgefüllt werden
+      equal_to: muss genau %{count} sein
+      even: muss gerade sein
+      exclusion: ist nicht verfügbar
+      greater_than: muss grösser als %{count} sein
+      greater_than_or_equal_to: muss grösser oder gleich %{count} sein
+      inclusion: ist kein gültiger Wert
+      invalid: ist nicht gültig
+      less_than: muss kleiner als %{count} sein
+      less_than_or_equal_to: muss kleiner oder gleich %{count} sein
+      model_invalid: 'Gültigkeitsprüfung ist fehlgeschlagen: %{errors}'
+      not_a_number: ist keine Zahl
+      not_an_integer: muss ganzzahlig sein
+      odd: muss ungerade sein
+      other_than: darf nicht gleich %{count} sein
+      present: darf nicht ausgefüllt werden
+      required: muss ausgefüllt werden
+      taken: ist bereits vergeben
+      too_long:
+        one: ist zu lang (mehr als %{count} Zeichen)
+        other: ist zu lang (mehr als %{count} Zeichen)
+      too_short:
+        one: ist zu kurz (weniger als %{count} Zeichen)
+        other: ist zu kurz (weniger als %{count} Zeichen)
+      wrong_length:
+        one: hat die falsche Länge (muss genau %{count} Zeichen haben)
+        other: hat die falsche Länge (muss genau %{count} Zeichen haben)
+    template:
+      body: 'Bitte überprüfen Sie die folgenden Felder:'
+      header:
+        one: 'Konnte %{model} nicht speichern: ein Fehler.'
+        other: 'Konnte %{model} nicht speichern: %{count} Fehler.'
+  helpers:
+    select:
+      prompt: Bitte wählen
+    submit:
+      create: "%{model} erstellen"
+      submit: "%{model} speichern"
+      update: "%{model} aktualisieren"
+  number:
+    currency:
+      format:
+        delimiter: "'"
+        format: "%u %n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: CHF
+    format:
+      delimiter: "'"
+      precision: 2
+      round_mode: default
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion:
+            one: Milliarde
+            other: Milliarden
+          million:
+            one: Million
+            other: Millionen
+          quadrillion:
+            one: Billiarde
+            other: Billiarden
+          thousand: Tausend
+          trillion:
+            one: Billion
+            other: Billionen
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          eb: EB
+          gb: GB
+          kb: KB
+          mb: MB
+          pb: PB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " und "
+      two_words_connector: " und "
+      words_connector: ", "
+  time:
+    am: vormittags
+    formats:
+      default: "%A, %d. %B %Y, %H:%M Uhr"
+      long: "%A, %d. %B %Y, %H:%M Uhr"
+      short: "%d. %b, %H:%M Uhr"
+    pm: nachmittags

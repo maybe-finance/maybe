@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_25_112218) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_01_181256) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -214,6 +214,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_25_112218) do
     t.datetime "updated_at", null: false
     t.string "currency", default: "USD"
     t.datetime "last_synced_at"
+    t.string "locale", default: "en"
   end
 
   create_table "good_job_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

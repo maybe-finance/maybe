@@ -1,0 +1,223 @@
+---
+ca:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'La validació ha fallat: %{errors}'
+        restrict_dependent_destroy:
+          has_one: No es pot eliminar el registre perquè existeix un %{record} dependent
+          has_many: No es pot eliminar el registre perquè existeixen %{record} dependents
+  date:
+    abbr_day_names:
+    - Dg
+    - Dl
+    - Dm
+    - Dc
+    - Dj
+    - Dv
+    - Ds
+    abbr_month_names:
+    - 
+    - Gen
+    - Feb
+    - Mar
+    - Abr
+    - Mai
+    - Jun
+    - Jul
+    - Ago
+    - Set
+    - Oct
+    - Nov
+    - Des
+    day_names:
+    - Diumenge
+    - Dilluns
+    - Dimarts
+    - Dimecres
+    - Dijous
+    - Divendres
+    - Dissabte
+    formats:
+      default: "%d-%m-%Y"
+      long: "%d de %B de %Y"
+      short: "%d de %b"
+    month_names:
+    - 
+    - Gener
+    - Febrer
+    - Març
+    - Abril
+    - Maig
+    - Juny
+    - Juliol
+    - Agost
+    - Setembre
+    - Octubre
+    - Novembre
+    - Desembre
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: aproximadament %{count} hora
+        other: aproximadament %{count} hores
+      about_x_months:
+        one: aproximadament %{count} mes
+        other: aproximadament %{count} mesos
+      about_x_years:
+        one: aproximadament %{count} any
+        other: aproximadament %{count} anys
+      almost_x_years:
+        one: quasi %{count} any
+        other: quasi %{count} anys
+      half_a_minute: mig minut
+      less_than_x_seconds:
+        one: menys d'%{count} segon
+        other: menys de %{count} segons
+      less_than_x_minutes:
+        one: menys d'%{count} minut
+        other: menys de %{count} minuts
+      over_x_years:
+        one: més d'%{count} any
+        other: més de %{count} anys
+      x_seconds:
+        one: "%{count} segon"
+        other: "%{count} segons"
+      x_minutes:
+        one: "%{count} minut"
+        other: "%{count} minuts"
+      x_days:
+        one: "%{count} dia"
+        other: "%{count} dies"
+      x_months:
+        one: "%{count} mes"
+        other: "%{count} mesos"
+      x_years:
+        one: "%{count} year"
+        other: "%{count} years"
+    prompts:
+      second: segon
+      minute: minut
+      hour: hora
+      day: dia
+      month: mes
+      year: any
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: ha de ser acceptat
+      blank: no pot estar en blanc
+      confirmation: no coincideix
+      empty: no pot estar buit
+      equal_to: ha de ser igual a %{count}
+      even: ha de ser parell
+      exclusion: està reservat
+      greater_than: ha de ser més gran que %{count}
+      greater_than_or_equal_to: ha de ser més gran o igual a %{count}
+      inclusion: no està inclós a la llista
+      invalid: no és vàlid
+      less_than: ha de ser menor que %{count}
+      less_than_or_equal_to: ha de ser menor o igual a %{count}
+      model_invalid: 'La validació ha fallat: %{errors}'
+      not_a_number: no és un número
+      not_an_integer: ha de ser un enter
+      odd: ha de ser senar
+      other_than: ha de ser diferent de %{count}
+      present: ha d'estar en blanc
+      required: ha d'existir
+      taken: no està disponible
+      too_long:
+        one: és massa llarg (%{count} caràcter màxim)
+        other: és massa llarg (%{count} caràcters màxim)
+      too_short:
+        one: és massa curt (%{count} caràcter mínim)
+        other: és massa curt (%{count} caràcters mínim)
+      wrong_length:
+        one: no té la longitud correcta (%{count} caràcter exactament)
+        other: no té la longitud correcta (%{count} caràcters exactament)
+    template:
+      body: 'Hi ha hagut problemes amb els següents camps:'
+      header:
+        one: No s'ha pogut desar aquest/a %{model} perquè hi ha %{count} error
+        other: No s'ha pogut desar aquest/a %{model} perquè hi ha hagut %{count} errors
+  helpers:
+    select:
+      prompt: Si us plau tria
+    submit:
+      create: Crear %{model}
+      submit: Guardar %{model}
+      update: Actualitzar %{model}
+  number:
+    currency:
+      format:
+        delimiter: "."
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "€"
+    format:
+      delimiter: "."
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: mil milions
+          million:
+            one: milió
+            other: milions
+          quadrillion:
+            one: quadrilió
+            other: quadrilions
+          thousand:
+            one: miler
+            other: milers
+          trillion:
+            one: bilió
+            other: bilions
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          eb: EB
+          gb: GB
+          kb: KB
+          mb: MB
+          pb: PB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n %"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", i "
+      two_words_connector: " i "
+      words_connector: ", "
+  time:
+    am: am
+    formats:
+      default: "%A, %d de %B de %Y %H:%M:%S %z"
+      long: "%d de %B de %Y %H:%M"
+      short: "%d de %b %H:%M"
+    pm: pm

@@ -1,0 +1,241 @@
+---
+pl:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Znaleziono błędy: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Nie można usunąć, gdyż istnieje zależny od niego %{record}
+          has_many: Nie można usunąć, gdyż istnieją zależne od niego %{record}
+  date:
+    abbr_day_names:
+    - nie
+    - pon
+    - wto
+    - śro
+    - czw
+    - pią
+    - sob
+    abbr_month_names:
+    - 
+    - sty
+    - lut
+    - mar
+    - kwi
+    - maj
+    - cze
+    - lip
+    - sie
+    - wrz
+    - paź
+    - lis
+    - gru
+    day_names:
+    - niedziela
+    - poniedziałek
+    - wtorek
+    - środa
+    - czwartek
+    - piątek
+    - sobota
+    formats:
+      default: "%d-%m-%Y"
+      long: "%-d %B %Y"
+      short: "%-d %b"
+    month_names:
+    - 
+    - stycznia
+    - lutego
+    - marca
+    - kwietnia
+    - maja
+    - czerwca
+    - lipca
+    - sierpnia
+    - września
+    - października
+    - listopada
+    - grudnia
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: około godziny
+        few: około %{count} godziny
+        many: około %{count} godzin
+        other: około %{count} godzin
+      about_x_months:
+        one: około miesiąca
+        few: około %{count} miesiące
+        many: około %{count} miesięcy
+        other: około %{count} miesięcy
+      about_x_years:
+        one: około rok
+        few: około %{count} lata
+        many: około %{count} lat
+        other: około %{count} lat
+      almost_x_years:
+        one: prawie rok
+        few: prawie %{count} lata
+        many: prawie %{count} lat
+        other: prawie %{count} lat
+      half_a_minute: pół minuty
+      less_than_x_seconds:
+        one: mniej niż sekundę
+        few: mniej niż %{count} sekundy
+        many: mniej niż %{count} sekund
+        other: mniej niż %{count} sekund
+      less_than_x_minutes:
+        one: mniej niż minutę
+        few: mniej niż %{count} minuty
+        many: mniej niż %{count} minut
+        other: mniej niż %{count} minut
+      over_x_years:
+        one: ponad rok
+        few: ponad %{count} lata
+        many: ponad %{count} lat
+        other: ponad %{count} lat
+      x_seconds:
+        one: "%{count} sekunda"
+        few: "%{count} sekundy"
+        many: "%{count} sekund"
+        other: "%{count} sekund"
+      x_minutes:
+        one: "%{count} minuta"
+        few: "%{count} minuty"
+        many: "%{count} minut"
+        other: "%{count} minut"
+      x_days:
+        one: "%{count} dzień"
+        few: "%{count} dni"
+        many: "%{count} dni"
+        other: "%{count} dni"
+      x_months:
+        one: "%{count} miesiąc"
+        few: "%{count} miesiące"
+        many: "%{count} miesięcy"
+        other: "%{count} miesięcy"
+    prompts:
+      second: Sekundy
+      minute: Minuta
+      hour: Godzina
+      day: Dzień
+      month: Miesiąc
+      year: Rok
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: musi zostać zaakceptowane
+      blank: nie może być puste
+      confirmation: musi być taki sam jak w %{attribute}
+      empty: nie może być puste
+      equal_to: musi być równe %{count}
+      even: musi być parzyste
+      exclusion: jest zarezerwowane
+      greater_than: musi być większe od %{count}
+      greater_than_or_equal_to: musi być większe lub równe %{count}
+      inclusion: nie znajduje się na liście dopuszczalnych wartości
+      invalid: jest nieprawidłowe
+      less_than: musi być mniejsze od %{count}
+      less_than_or_equal_to: musi być mniejsze lub równe %{count}
+      not_a_number: nie jest liczbą
+      not_an_integer: musi być liczbą całkowitą
+      odd: musi być nieparzyste
+      other_than: musi być inne niż %{count}
+      present: musi być puste
+      required: musi istnieć
+      taken: zostało już zajęte
+      too_long:
+        one: jest za długie (maksymalnie jeden znak)
+        few: jest za długie (maksymalnie %{count} znaki)
+        many: jest za długie (maksymalnie %{count} znaków)
+        other: jest za długie (maksymalnie %{count} znaków)
+      too_short:
+        one: jest za krótkie (przynajmniej jeden znak)
+        few: jest za krótkie (przynajmniej %{count} znaki)
+        many: jest za krótkie (przynajmniej %{count} znaków)
+        other: jest za krótkie (przynajmniej %{count} znaków)
+      wrong_length:
+        one: ma nieprawidłową długość (powinna wynosić jeden znak)
+        few: ma nieprawidłową długość (powinna wynosić %{count} znaki)
+        many: ma nieprawidłową długość (powinna wynosić %{count} znaków)
+        other: ma nieprawidłową długość (powinna wynosić %{count} znaków)
+    template:
+      body: 'Błędy dotyczą następujących pól:'
+      header:
+        one: "%{model} nie został zachowany z powodu jednego błędu"
+        few: "%{model} nie został zachowany z powodu %{count} błędów"
+        many: "%{model} nie został zachowany z powodu %{count} błędów"
+        other: "%{model} nie został zachowany z powodu %{count} błędów"
+  helpers:
+    select:
+      prompt: Proszę wybrać
+    submit:
+      create: Utwórz %{model}
+      submit: Wyślij %{model}
+      update: Aktualizuj %{model}
+  number:
+    currency:
+      format:
+        delimiter: " "
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: true
+        unit: zł
+    format:
+      delimiter: " "
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: Miliard
+          million: Milion
+          quadrillion: Biliard
+          thousand: Tysiąc
+          trillion: Bilion
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: bajt
+            few: bajty
+            many: bajtów
+            other: bajty
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " oraz "
+      two_words_connector: " i "
+      words_connector: ", "
+  time:
+    am: przed południem
+    formats:
+      default: "%a, %-d %b %Y %H:%M:%S %z"
+      long: "%-d %B %Y %H:%M"
+      short: "%-d %b %H:%M"
+    pm: po południu

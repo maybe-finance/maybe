@@ -1,0 +1,202 @@
+---
+mn:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Шалгалт амжилтгүй: %{errors}'
+  date:
+    abbr_day_names:
+    - Ня
+    - Да
+    - Мя
+    - Лх
+    - Пү
+    - Ба
+    - Бя
+    abbr_month_names:
+    - 
+    - 1 сар
+    - 2 сар
+    - 3 сар
+    - 4 сар
+    - 5 сар
+    - 6 сар
+    - 7 сар
+    - 8 сар
+    - 9 сар
+    - 10 сар
+    - 11 сар
+    - 12 сар
+    day_names:
+    - Ням
+    - Даваа
+    - Мягмар
+    - Лхагва
+    - Пүрэв
+    - Баасан
+    - Бямба
+    formats:
+      default: "%Y-%m-%d"
+      long: "%Y %B %d"
+      short: "%y-%m-%d"
+    month_names:
+    - 
+    - 1 сар
+    - 2 сар
+    - 3 сар
+    - 4 сар
+    - 5 сар
+    - 6 сар
+    - 7 сар
+    - 8 сар
+    - 9 сар
+    - 10 сар
+    - 11 сар
+    - 12 сар
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: "%{count} цаг орчим"
+        other: "%{count} цаг орчим"
+      about_x_months:
+        one: "%{count} сар орчим"
+        other: "%{count} сар орчим"
+      about_x_years:
+        one: "%{count} жил орчим"
+        other: "%{count} жил орчим"
+      almost_x_years:
+        one: бараг %{count} жил
+        other: бараг %{count} жил
+      half_a_minute: хагас минут
+      less_than_x_seconds:
+        one: "%{count} секундээс бага"
+        other: "%{count} секундээс бага"
+      less_than_x_minutes:
+        one: "%{count} минутаас бага"
+        other: "%{count} минутаас бага"
+      over_x_years:
+        one: "%{count} жилээс илүү"
+        other: "%{count} жилээс илүү"
+      x_seconds:
+        one: "%{count} секунд"
+        other: "%{count} секунд"
+      x_minutes:
+        one: "%{count} минут"
+        other: "%{count} минут"
+      x_days:
+        one: "%{count} өдөр"
+        other: "%{count} өдөр"
+      x_months:
+        one: "%{count} сар"
+        other: "%{count} сар"
+    prompts:
+      second: Секунд
+      minute: Минут
+      hour: Цаг
+      day: Өдөр
+      month: Сар
+      year: Жил
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: хүлээн зөвшөөрөгдсөн байх ёстой
+      blank: хоосон байж болохгүй
+      confirmation: адилгүй байна
+      empty: байхгүй байж болохгүй
+      equal_to: "%{count}-тэй тэнцүү байх ёстой"
+      even: тэгш байх ёстой
+      exclusion: бол ашиглахад хориотой
+      greater_than: "%{count}-с их байх ёстой"
+      greater_than_or_equal_to: "%{count}-с их юмуу эсвэл тэнцүү байх ёстой"
+      inclusion: жагсаалтанд алга байна
+      invalid: буруу байна
+      less_than: "%{count}-с бага байх ёстой"
+      less_than_or_equal_to: "%{count}-с бага юмуу эсвэл тэнцүү байх ёстой"
+      not_a_number: тоо биш байна
+      not_an_integer: бүхэл тоо байх ёстой
+      odd: сонгой байх ёстой
+      taken: аль хэдийн авчихсан байна
+      too_long:
+        one: урт байна (хамгийн уртдаа %{count} тэмдэгт)
+        other: урт байна (хамгийн уртдаа %{count} тэмдэгт)
+      too_short:
+        one: богино байна (хамгийн багадаа %{count} тэмдэгт)
+        other: богино байна (хамгийн багадаа %{count} тэмдэгт)
+      wrong_length:
+        one: урт нь буруу байна (%{count} тэмдэгт байх ёстой)
+        other: урт нь буруу байна (%{count} тэмдэгт байх ёстой)
+    template:
+      body: 'Дараах талбарууд дээр алдаа гарлаа:'
+      header:
+        one: "%{count} алдаа гарсан тул %{model} хадгалагдахгүй байна"
+        other: "%{count} алдаа гарсан тул %{model} хадгалагдахгүй байна"
+  helpers:
+    select:
+      prompt: Сонгоно уу
+    submit:
+      create: Үүсгэх
+      submit: Хадгалах
+      update: Шинэчлэх
+  number:
+    currency:
+      format:
+        delimiter: " "
+        format: "%n %u"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: төг.
+    format:
+      delimiter: " "
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: Тэрбум
+          million: Сая
+          quadrillion: Тунамал
+          thousand: Мянга
+          trillion: Их наяд
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Байт
+            other: Байт
+          gb: ГБ
+          kb: КБ
+          mb: МБ
+          tb: ТБ
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " болон "
+      two_words_connector: " болон "
+      words_connector: ", "
+  time:
+    am: өглөө
+    formats:
+      default: "%Y-%m-%d %H:%M"
+      long: "%Y %B %d, %H:%M:%S"
+      short: "%y-%m-%d"
+    pm: орой

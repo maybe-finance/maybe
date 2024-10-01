@@ -1,0 +1,205 @@
+---
+ne:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'मान्य भएन: %{errors}'
+        restrict_dependent_destroy:
+          has_one: रेकर्ड मेटाउन सक्दैन किनभने एउटा निर्भर %{record} अवस्थित छ
+          has_many: रेकर्ड मेटाउन सक्दैन किनभने धेरै निर्भर %{record} अवस्थित छन
+  date:
+    abbr_day_names:
+    - आईत
+    - सोम
+    - मंगल
+    - बुध
+    - बिही
+    - शुक्र
+    - शनि
+    abbr_month_names:
+    - 
+    - जन.
+    - फेब्रु.
+    - मार्च
+    - अप्रिल
+    - मई
+    - जुन
+    - जुलाई
+    - अगष्ट
+    - सेप्ट.
+    - अक्टो.
+    - नोभ.
+    - डिसे.
+    day_names:
+    - आईतबार
+    - सोमबार
+    - मंगलबार
+    - बुधबार
+    - बिहीबार
+    - शुक्रबार
+    - शनिबार
+    formats:
+      default: "%Y-%m-%d"
+      long: "%d %B %Y"
+      short: "%d %b"
+    month_names:
+    - 
+    - जनवरी
+    - फेब्रुवरी
+    - मार्च
+    - अप्रिल
+    - मई
+    - जुन
+    - जुलाई
+    - अगष्ट
+    - सेप्टेम्बार
+    - अक्टोबर
+    - नोभेम्बर
+    - डिसेम्बर
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: लगभग %{count} घण्टा
+        other: लगभग %{count} घण्टा
+      about_x_months:
+        one: लगभग %{count} महिना
+        other: लगभग %{count} महिना
+      about_x_years:
+        one: लगभग %{count} बर्ष
+        other: लगभग %{count} बर्ष
+      almost_x_years:
+        one: झण्डै %{count} बर्ष
+        other: झण्डै %{count} बर्ष
+      half_a_minute: आधा मिनेट
+      less_than_x_seconds:
+        one: "%{count} सेकेण्डभन्दा कम्ति"
+        other: "%{count} सेकेण्डभन्दा कम्ति"
+      less_than_x_minutes:
+        one: "%{count} मिनेटभन्दा कम्ति"
+        other: "%{count} मिनेटभन्दा कम्ति"
+      over_x_years:
+        one: "%{count} बर्षभन्दा बढी"
+        other: "%{count} बर्षभन्दा बेसी"
+      x_seconds:
+        one: "%{count} सेकेण्ड"
+        other: "%{count} सेकेण्ड"
+      x_minutes:
+        one: "%{count} मिनेट"
+        other: "%{count} मिनेट"
+      x_days:
+        one: "%{count} दिन"
+        other: "%{count} दिन"
+      x_months:
+        one: "%{count} महिना"
+        other: "%{count} महिना"
+    prompts:
+      second: सेकेण्ड
+      minute: मिनेट
+      hour: घण्टा
+      day: दिन
+      month: महिना
+      year: बर्ष
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: स्वीकार गरिनुपर्नेछ
+      blank: खाली हुन सक्दैन
+      confirmation: पुष्टिकरणसँग मेल खाँदैन
+      empty: रित्तो हुन सक्दैन
+      equal_to: "%{count} सँग बराबर हुनुपर्नेछ"
+      even: जोर संख्या हुनुपर्नेछ
+      exclusion: प्रयोगको लागी संरक्षित छ
+      greater_than: "%{count} भन्दा बेसी हुनुपर्नेछ"
+      greater_than_or_equal_to: "%{count} सँग बराबर अथवा बेसी हुनुपर्नेछ"
+      inclusion: सुचीमा सामेल गरिएको छैन
+      invalid: अमान्य छ
+      less_than: "%{count} भन्दा कम हुनुपर्नेछ"
+      less_than_or_equal_to: "%{count} सँग बराबर अथवा कम हुनुपर्नेछ"
+      not_a_number: अंक होईन
+      not_an_integer: पुर्णाकं हुनुपर्नेछ
+      odd: बिजोर संख्या हुनुपर्नेछ
+      taken: पहिल्यै प्रयोग गरीएको छ
+      too_long:
+        one: धेरै लामो छ (अधिक्तम %{count} character हो)
+        other: धेरै लामो छ (अधिक्तम %{count} characters हो)
+      too_short:
+        one: धेरै छोटो छ (न्युनत्तम %{count} character हो)
+        other: धेरै छोटो छ (न्युनत्तम %{count} characters हो)
+      wrong_length:
+        one: गलत लम्बाई हो (%{count} character हुनुपर्नेछ)
+        other: गलत लम्बाई हो (%{count} characters हुनुपर्नेछ)
+    template:
+      body: 'त्यहाँ निम्न क्षेत्रहरुमा समस्या देखियो:'
+      header:
+        one: "%{count} गल्तीले यस %{model} लाई सुरक्षित गर्नबाट रोक्यो"
+        other: "%{count} गल्तीले यस %{model} लाई सुरक्षित गर्नबाट रोक्यो"
+  helpers:
+    select:
+      prompt: कृपया छान्नुहोस्
+    submit:
+      create: नयाँ %{model} बनाउ
+      submit: "%{model} सुरक्षित गर"
+      update: "%{model} सामयिक बनाउ"
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u%n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: रू
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: अर्ब
+          million: Million
+          quadrillion: Quadrillion
+          thousand: हजार
+          trillion: Trillion
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          gb: जि.बी.
+          kb: के.बी.
+          mb: एम.बी
+          tb: टि.बी
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", र "
+      two_words_connector: " र "
+      words_connector: ", "
+  time:
+    am: बिहान
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      long: "%d %B %Y %H:%M"
+      short: "%d %b %H:%M"
+    pm: बेलुका

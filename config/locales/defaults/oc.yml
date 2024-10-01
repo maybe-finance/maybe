@@ -1,0 +1,212 @@
+---
+oc:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: La validacion a fracassat : %{errors}
+        restrict_dependent_destroy:
+          has_one: Podètz pas suprimir l’enregistrament perque i a una dependéncia
+          has_many: Podètz pas suprimir l’enregistrament perque i a %{record} dependéncias
+  date:
+    abbr_day_names:
+    - dg
+    - dl
+    - dm
+    - dc
+    - dj
+    - dv
+    - ds
+    abbr_month_names:
+    - 
+    - gen
+    - feb
+    - març
+    - abr
+    - mai
+    - junh
+    - jul
+    - ago
+    - set
+    - oct
+    - nov
+    - dec
+    day_names:
+    - dimenge
+    - diluns
+    - dimars
+    - dimècres
+    - dijòus
+    - divendres
+    - dissabte
+    formats:
+      default: "%e/%m/%Y"
+      long: Lo %e %B de %Y
+      short: "%e %b"
+    month_names:
+    - 
+    - de genièr
+    - de febrièr
+    - de març
+    - d’abrial
+    - de mai
+    - de junh
+    - de julhet
+    - d’agost
+    - de setembre
+    - d’octòbre
+    - de novembre
+    - de decembre
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: Fa una ora
+        other: Fa %{count} oras
+      about_x_months:
+        one: Fa un mes
+        other: Fa %{count} meses
+      about_x_years:
+        one: Fa un an
+        other: Fa %{count} ans
+      almost_x_years:
+        one: quasi un an
+        other: quasi %{count} ans
+      half_a_minute: mièja minuta
+      less_than_x_seconds:
+        one: mens d’una segonda
+        other: mens de %{count} segondas
+      less_than_x_minutes:
+        one: mens d’una minuta
+        other: mens de %{count} minutas
+      over_x_years:
+        one: mai d’un an
+        other: mai de %{count} ans
+      x_seconds:
+        one: una segonda
+        other: "%{count} segondas"
+      x_minutes:
+        one: una minuta
+        other: "%{count} minutas"
+      x_days:
+        one: un jorn
+        other: "%{count} jorns"
+      x_months:
+        one: un mes
+        other: "%{count} meses"
+      x_years:
+        one: un an
+        other: "%{count} ans"
+    prompts:
+      second: segonda
+      minute: minuta
+      hour: ora
+      day: jorn
+      month: mes
+      year: an
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: deu èsser acceptat
+      blank: deu èsser garnit
+      confirmation: correspond pas a %{attribute}
+      empty: pòt pas èsser void
+      equal_to: deu èsser egal a %{count}
+      even: deu èsser parelh
+      exclusion: es reservat
+      greater_than: deu èsser superior a %{count}
+      greater_than_or_equal_to: deu èsser mai grand o egal a %{count}
+      inclusion: es pas inclús dins la lista
+      invalid: es pas valid
+      less_than: deu èsser inferior a %{count}
+      less_than_or_equal_to: deu èsser inferior o egal a %{count}
+      model_invalid: Validacion fracassada : %{errors}
+      not_a_number: es pas un nombre
+      not_an_integer: deu èsser un nombre entièr
+      odd: deu èsser un nombre impar
+      other_than: deu èsser diferent de %{count}
+      present: deu èsser void
+      required: deu existir
+      taken: es pas disponible
+      too_long:
+        one: es tròp long (pas mai d’un caractèr)
+        other: es tròp long (%{count} caractèrs al maximum)
+      too_short:
+        one: es tròp cort (almens un caractèr)
+        other: es tròp cort (almens %{count} caractèrs)
+      wrong_length:
+        one: a pas la bona longor (un caractèr solament)
+        other: a pas la bona longor (%{count} caractèrs exactament)
+    template:
+      body: I a agut de problèmas amb los camps seguents : 
+      header:
+        one: Impossible d’enregistrar aqueste/a %{model} perque i a %{count} error
+        other: Impossible d’enregistrar aqueste/a %{model} perque i a %{count} errors
+  helpers:
+    select:
+      prompt: Mercés de seleccionar
+    submit:
+      create: Crear %{model}
+      submit: Salvar %{model}
+      update: Actualizar %{model}
+  number:
+    currency:
+      format:
+        delimiter: "."
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "€"
+    format:
+      delimiter: "."
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: miliard
+          million: milion
+          quadrillion: milion de miliards
+          thousand: mila
+          trillion: bilion
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: octet
+            other: octets
+          gb: Go
+          kb: ko
+          mb: Mo
+          tb: To
+    percentage:
+      format:
+        delimiter: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", e "
+      two_words_connector: " e "
+      words_connector: ", "
+  time:
+    am: am
+    formats:
+      default: Lo %e %b de %Y a %Ho%M %Ss
+      long: Lo %a %e %b de %Y a %Ho%M
+      short: "%e %b %Ho%M"
+    pm: pm

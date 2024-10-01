@@ -1,0 +1,208 @@
+---
+ta:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'சரிபார்த்தல் தோல்வியுற்றது: %{errors}'
+        restrict_dependent_destroy:
+          has_one: பதிவை நீக்க முடியாது, ஏனெனில் ஒரு சார்பு %{record} உள்ளது
+          has_many: பதிவை நீக்க முடியாது, ஏனெனில் சார்புகள் %{record} உள்ளது
+  date:
+    abbr_day_names:
+    - ஞாயிறு
+    - திங்கள்
+    - செவ்வாய்
+    - புதன்
+    - வியாழன்
+    - வெள்ளி
+    - சனி
+    abbr_month_names:
+    - 
+    - ஜன
+    - பிப்
+    - மார்ச்
+    - ஏப்
+    - மே
+    - ஜூன்
+    - ஜூலை
+    - ஆக
+    - செப்
+    - அக்
+    - நவ
+    - டிச
+    day_names:
+    - ஞாயிற்றுக்கிழமை
+    - திங்கட்கிழமை
+    - செவ்வாய்க்கிழமை
+    - புதன்கிழமை
+    - வியாழக்கிழமை
+    - வெள்ளிக்கிழமை
+    - சனிக்கிழமை
+    formats:
+      default: "%d-%m-%Y"
+      long: "%d %B %Y"
+      short: "%d %b"
+    month_names:
+    - 
+    - ஜனவரி
+    - பிப்ரவரி
+    - மார்ச்
+    - ஏப்ரல்
+    - மே
+    - ஜூன்
+    - ஜூலை
+    - ஆகஸ்ட்
+    - செப்டம்பர்
+    - அக்டோபர்
+    - நவம்பர்
+    - டிசம்பர்
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: சுமார் %{count} மணி நேரம்
+        other: சுமார் %{count} மணி
+      about_x_months:
+        one: சுமார் %{count} மாதம்
+        other: சுமார் %{count} மாதங்களுக்கு
+      about_x_years:
+        one: சுமார் %{count}  ஆண்டு
+        other: சுமார் %{count}  ஆண்டுகள்
+      almost_x_years:
+        one: கிட்டத்தட்ட %{count}  ஆண்டு
+        other: கிட்டத்தட்ட %{count}  ஆண்டுகள்
+      half_a_minute: அரை நிமிடம்
+      less_than_x_seconds:
+        one: ஒரு வினாடிக்கும் குறைவாக
+        other: குறைவாக %{count} வினாடிகள்
+      less_than_x_minutes:
+        one: ஒரு நிமிடத்திற்கும் குறைவாக
+        other: குறைவாக %{count} நிமிடங்கள்
+      over_x_years:
+        one: ஒரு  ஆண்டிற்கு மேலாக
+        other: "%{count}  ஆண்டிற்கு மேலாக"
+      x_seconds:
+        one: "%{count} வினாடி"
+        other: "%{count} விநாடிகள்"
+      x_minutes:
+        one: "%{count} நிமிடம்"
+        other: "%{count} நிமிடங்கள்"
+      x_days:
+        one: "%{count} நாள்"
+        other: "%{count} நாட்கள்"
+      x_months:
+        one: "%{count} மாதம்"
+        other: "%{count} மாதங்கள்"
+    prompts:
+      second: விநாடிகள்
+      minute: நிமிடம்
+      hour: மணி
+      day: நாள்
+      month: மாதம்
+      year: ஆண்டு
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: ஏற்கப்பட வேண்டும்
+      blank: காலியாக இருக்க முடியாது
+      confirmation: "%{attribute}  பொருந்தவில்லை"
+      empty: வெறுமையாக இருக்க முடியாது
+      equal_to: "%{count} சமமாக இருக்க வேண்டும்"
+      even: இரட்டைப்படை இருக்க வேண்டும்
+      exclusion: ஒதுக்கப்பட்டுள்ளது
+      greater_than: "%{count} ஐ விட அதிகமாக இருக்க வேண்டும்"
+      greater_than_or_equal_to: "%{count}  அதிகமாக அல்லது சமமாக இருக்க வேண்டும்"
+      inclusion: பட்டியலில் சேர்க்கப்படவில்லை
+      invalid: செல்லுபடியானதல்ல
+      less_than: "%{count} ஐ விட குறைவாக இருக்க வேண்டும்"
+      less_than_or_equal_to: "%{count} குறைவாக அல்லது சமமாக இருக்க வேண்டும்"
+      not_a_number: ஒரு எண் அல்ல
+      not_an_integer: ஒரு முழு எண்ணாக இருக்க வேண்டும்
+      odd: ஒற்றைப்படை இருக்க வேண்டும்
+      other_than: "%{count} தவிர வேறு இருக்க வேண்டும்"
+      present: காலியாக இருக்க வேண்டும்
+      taken: ஏற்கனவே எடுத்துகொள்ள பட்டது
+      too_long:
+        one: மிக நீளமாக உள்ளது (அதிகபட்சமாக ஒரு எழுத்து)
+        other: மிக நீளமாக உள்ளது (அதிகபட்சமாக %{count} எழுத்துக்கள்)
+      too_short:
+        one: மிகவும் குறுகியதாக உள்ளது (குறைந்தபட்சம் ஒரு எழுத்து)
+        other: மிகவும் குறுகியதாக உள்ளது (குறைந்தபட்சம் %{count} எழுத்துக்கள்)
+      wrong_length:
+        one: தவறான நீளம் (%{count} எழுத்து இருக்கவேண்டும்)
+        other: தவறான நீளம் (%{count} எழுத்துக்கள் இருக்கவேண்டும்)
+    template:
+      body: 'பின்வரும் புலங்களில் பிரச்சினைகள் உள்ளது:'
+      header:
+        one: "%{count} பிழை இந்த %{model} ஐ சேமிக்க தடையாக உள்ளது"
+        other: "%{count} பிழைகள் இந்த %{model} ஐ சேமிக்க தடையாக உள்ளது"
+  helpers:
+    select:
+      prompt: தேர்வு செய்க
+    submit:
+      create: "%{model} ஐ  உருவாக்கு"
+      submit: "%{model} ஐ சேமி"
+      update: "%{model} ஐ புதுப்பி"
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u%n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "₹"
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: பில்லியன்
+          million: மில்லியன்
+          quadrillion: குவாட்ரில்லியன்
+          thousand: ஆயிரம்
+          trillion: டிரில்லியன்
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", மற்றும் "
+      two_words_connector: " மற்றும் "
+      words_connector: ", "
+  time:
+    am: மு.ப.
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      long: "%d %B %Y %H:%M"
+      short: "%d %b %H:%M"
+    pm: பி.ப.

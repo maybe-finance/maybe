@@ -1,0 +1,243 @@
+---
+lv:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Pārbaude neizdevās: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Nevar dzēst ierakstu, jo ir atkarīgs %{record}
+          has_many: Nevar dzēst ierakstu, jo ir atkarīgi %{record}
+  date:
+    abbr_day_names:
+    - Sv.
+    - P.
+    - O.
+    - T.
+    - C.
+    - Pk.
+    - S.
+    abbr_month_names:
+    -
+    - Janv
+    - Febr
+    - Marts
+    - Apr
+    - Maijs
+    - Jūn
+    - Jūl
+    - Aug
+    - Sept
+    - Okt
+    - Nov
+    - Dec
+    day_names:
+    - svētdiena
+    - pirmdiena
+    - otrdiena
+    - trešdiena
+    - ceturtdiena
+    - piektdiena
+    - sestdiena
+    formats:
+      default: "%d.%m.%Y."
+      long: "%Y. gada %e. %B"
+      short: "%e. %B"
+    month_names:
+    -
+    - janvārī
+    - februārī
+    - martā
+    - aprīlī
+    - maijā
+    - jūnijā
+    - jūlijā
+    - augustā
+    - septembrī
+    - oktobrī
+    - novembrī
+    - decembrī
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        zero: apmēram %{count} stundas
+        one: apmēram %{count} stunda
+        other: apmēram %{count} stundas
+      about_x_months:
+        zero: apmēram %{count} mēneši
+        one: apmēram %{count} mēnesis
+        other: apmēram %{count} mēneši
+      about_x_years:
+        zero: apmēram %{count} gadi
+        one: apmēram %{count} gads
+        other: apmēram %{count} gadi
+      almost_x_years:
+        zero: gandrīz %{count} gadi
+        one: gandrīz %{count} gads
+        other: gandrīz %{count} gadi
+      half_a_minute: pusminūte
+      less_than_x_seconds:
+        zero: mazāk par %{count} sekundēm
+        one: mazāk par %{count} sekundi
+        other: mazāk par %{count} sekundēm
+      less_than_x_minutes:
+        zero: mazāk par %{count} minūtēm
+        one: mazāk par %{count} minūti
+        other: mazāk par %{count} minūtēm
+      over_x_years:
+        zero: vairāk kā %{count} gadi
+        one: vairāk kā %{count} gads
+        other: vairāk kā %{count} gadi
+      x_seconds:
+        zero: "%{count} sekundes"
+        one: "%{count} sekunde"
+        other: "%{count} sekundes"
+      x_minutes:
+        zero: "%{count} minūtes"
+        one: "%{count} minūte"
+        other: "%{count} minūtes"
+      x_days:
+        zero: "%{count} dienas"
+        one: "%{count} diena"
+        other: "%{count} dienas"
+      x_months:
+        zero: "%{count} mēneši"
+        one: "%{count} mēnesis"
+        other: "%{count} mēneši"
+    prompts:
+      second: sekunde
+      minute: minūte
+      hour: stunda
+      day: diena
+      month: mēnesis
+      year: gads
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: ir jāpiekrīt
+      blank: ir jābūt aizpildītam
+      confirmation: nesakrīt ar apstiprinājumu
+      empty: ir jābūt aizpildītam
+      equal_to: ir jābūt vienādam ar %{count}
+      even: ir jābūt pāra skaitlim
+      exclusion: nav pieejams
+      greater_than: ir jābūt lielākam par %{count}
+      greater_than_or_equal_to: ir jābūt lielākam vai vienādam ar %{count}
+      inclusion: nav iekļauts sarakstā
+      invalid: nav derīgs
+      less_than: ir jābūt mazākam par %{count}
+      less_than_or_equal_to: ir jābūt mazākam vai vienādam ar %{count}
+      model_invalid: 'Validācija neizdevās: %{errors}'
+      not_a_number: nav skaitlis
+      not_an_integer: ir jābūt veselam skaitlim
+      odd: ir jābūt nepāra skaitlim
+      other_than: jābūt citam nekā %{count}
+      present: jābūt tukšam
+      required: ir jābūt
+      taken: ir jau aizņemts
+      too_long:
+        zero: ir par garu (maksimums ir %{count} simboli)
+        one: ir par garu (maksimums ir %{count} simbols)
+        other: ir par garu (maksimums ir %{count} simboli)
+      too_short:
+        zero: ir par īsu (minimums ir %{count} simboli)
+        one: ir par īsu (minimums ir %{count} simbols)
+        other: ir par īsu (minimums ir %{count} simboli)
+      wrong_length:
+        zero: ir nepareizs garums (jābūt %{count} simboliem)
+        one: ir nepareizs garums (jābūt %{count} simbolam)
+        other: ir nepareizs garums (jābūt %{count} simboliem)
+    template:
+      body: 'Problēmas ir šajos ievades laukos:'
+      header:
+        zero: Dēļ %{count} kļūdām šis %{model} netika saglabāts
+        one: Dēļ %{count} kļūdas šis %{model} netika saglabāts
+        other: Dēļ %{count} kļūdām šis %{model} netika saglabāts
+  helpers:
+    select:
+      prompt: Lūdzu izvēlies
+    submit:
+      create: Izveidot %{model}
+      submit: Saglabāt %{model}
+      update: Atjaunināt %{model}
+  number:
+    currency:
+      format:
+        delimiter: "."
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "€"
+    format:
+      delimiter: "."
+      precision: 2
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion:
+            zero: miljardi
+            one: miljards
+            other: miljardi
+          million:
+            zero: miljoni
+            one: miljons
+            other: miljoni
+          quadrillion:
+            zero: kvadriljoni
+            one: kvadriljons
+            other: kvadriljoni
+          thousand:
+            zero: tūkstoši
+            one: tūkstotis
+            other: tūkstoši
+          trillion:
+            zero: triljoni
+            one: triljons
+            other: triljoni
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: false
+        strip_insignificant_zeros: false
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            zero: baiti
+            one: baits
+            other: baiti
+          eb: EB
+          gb: GB
+          kb: KB
+          mb: MB
+          pb: PB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " un "
+      two_words_connector: " un "
+      words_connector: ", "
+  time:
+    am: priekšpusdiena
+    formats:
+      default: "%Y. gada %e. %B, %H:%M"
+      long: "%Y. gada %e. %B, %H:%M:%S"
+      short: "%d.%m.%Y., %H:%M"
+    pm: pēcpusdiena

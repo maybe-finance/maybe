@@ -28,6 +28,9 @@ module Maybe
 
     config.active_job.queue_adapter = :good_job
 
+    # TODO: This is here for incremental adoption of localization.  This can be removed when all translations are implemented.
+    config.i18n.fallbacks = true
+
     config.app_mode = (ENV["SELF_HOSTING_ENABLED"] == "true" ? "self_hosted" : "managed").inquiry
   end
 end

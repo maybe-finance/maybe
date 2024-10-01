@@ -1,0 +1,210 @@
+---
+ur:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'توثیق میں نا کا می: %{errors}'
+        restrict_dependent_destroy:
+          has_one: ایک منحصر %{record} کی موجودگی کے باعث اس ریکارڈ کو حذف نہیں کیا
+            جا سکتا
+          has_many: چند منحصر %{record}  کی موجودگی کے باعث اس ریکارڈ کو حذف نہیں
+            کیا جا سکتا
+  date:
+    abbr_day_names:
+    - اتوار
+    - سوموار
+    - منگل
+    - بدھ
+    - جمعرات
+    - جمعہ
+    - ہفتہ
+    abbr_month_names:
+    - 
+    - جنوری
+    - فروری
+    - مارچ
+    - اپریل
+    - مئی
+    - جون
+    - جولائی
+    - اگست
+    - ستمبر
+    - اکتوبر
+    - نومبر
+    - دسمبر
+    day_names:
+    - اتوار
+    - سوموار
+    - منگل
+    - بدھ
+    - جمعرات
+    - جمعہ
+    - ہفتہ
+    formats:
+      default: "%d %B %Y"
+      long: "%d %B، %Y"
+      short: "%d %b"
+    month_names:
+    - 
+    - جنوری
+    - فروری
+    - مارچ
+    - اپریل
+    - مئی
+    - جون
+    - جولائی
+    - اگست
+    - ستمبر
+    - اکتوبر
+    - نومبر
+    - دسمبر
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: تقریبا ایک گھنٹہ
+        other: تقریبا %{count} گھنٹے
+      about_x_months:
+        one: تقریبا ایک مہینہ
+        other: تقریبا %{count} مہینہ
+      about_x_years:
+        one: تقریبا ایک سال
+        other: تقریبا %{count} سال
+      almost_x_years:
+        one: تقریبا ایک سال
+        other: تقریبا %{count} سال
+      half_a_minute: آدھا منٹ
+      less_than_x_seconds:
+        one: ایک سیکنڈ سے کم
+        other: "%{count} سیکنڈوں سے کم"
+      less_than_x_minutes:
+        one: ایک مںٹ سے کم
+        other: "%{count} مںٹوں سے کم"
+      over_x_years:
+        one: ایک سال سے زیادہ
+        other: "%{count} سالوں سے زیادہ"
+      x_seconds:
+        one: ایک سیکنڈ
+        other: "%{count} سیکنڈ"
+      x_minutes:
+        one: ایک منٹ
+        other: "%{count} منٹ"
+      x_days:
+        one: ایک دن
+        other: "%{count} دن"
+      x_months:
+        one: ایک ماہ
+        other: "%{count} ماہ"
+    prompts:
+      second: سیکنڈ
+      minute: منٹ
+      hour: گھنٹہ
+      day: دن
+      month: ماہ
+      year: سال
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: قبول ہونا ضروری ہے
+      blank: لازم ہے
+      confirmation: "%{attribute} میل نہیں رکھتا"
+      empty: لازم ہے
+      equal_to: "%{count} کے برابر ہونا چاہیے"
+      even: جفت ہونا ضروری ہے
+      exclusion: مخصوص ہے
+      greater_than: "%{count} سے زیادہ ہونا چاہیے"
+      greater_than_or_equal_to: "%{count} سے بڑا یا برابر ہونا چاہیے"
+      inclusion: فہرست میں شامل نہیں ہے
+      invalid: باطل ہے
+      less_than: "%{count} سے کم ہونا چاہیے"
+      less_than_or_equal_to: "%{count} سے کم یا اس کے برابر ہونا چاہیے"
+      not_a_number: ایک نمبر نہیں ہے
+      not_an_integer: ایک عدد صحیح ہونا ضروری ہے
+      odd: طاق ہونا ضروری ہے
+      other_than: "%{count} کے علاوہ کسی اور کا ہونا لازمی ہے"
+      present: خالی ہونا ضروری ہے
+      taken: پہلے سے ہی استعمال میں ہے
+      too_long:
+        one: بہت طویل ہے (زیادہ سے زیادہ ایک حرف)
+        other: iبہت طویل ہے (زیادہ سے زیادہ %{count} حروف)
+      too_short:
+        one: بہت چھوٹا ہے (کم از کم اکی حرف)
+        other: بہت چھوٹا ہے (کم از کم %{count} حروف)
+      wrong_length:
+        one: غلط طوالت (ایک حرف ہونا چاہئے)
+        other: غلط طوالت (%{count} حروف ہونے چاہئے)
+    template:
+      body: 'مندرجہ ذیل متن کے ساتھ مسائل ہیں:'
+      header:
+        one: ایک خرابی کے باعث یہ %{model} محفوظ نہیں کیا جا سکا
+        other: "%{count} خرابیوں کے باعث یہ %{model} محفوظ نہیں کیا جا سکا"
+  helpers:
+    select:
+      prompt: منتخب کیجیے
+    submit:
+      create: "%{model} تشکیل دیں"
+      submit: "%{model} محفوظ کریں"
+      update: اپ ڈیٹ %{model}
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%n %u"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: Rs
+    format:
+      delimiter: ","
+      precision: 0
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: بلین
+          million: ملین
+          quadrillion: کواڈریلن
+          thousand: ہزار
+          trillion: ٹریلن
+          unit: Rs
+      format:
+        delimiter: ''
+        precision: 0
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n فیصد"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: "، اور "
+      two_words_connector: " اور "
+      words_connector: "، "
+  time:
+    am: صبح
+    formats:
+      default: "%a، %d %b %Y، %p %l:%M %Z"
+      long: "%d %B، %Y %p %H:%M"
+      short: "%d %b، %H:%M"
+    pm: شام

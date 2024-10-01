@@ -1,0 +1,252 @@
+---
+gd:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Dh’fhàillig leis an dearbhadh: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Cha b’ urrainn dhuinn an reacord a sguabadh às on a tha %{record} ann a tha an eisimeil air
+          has_many: Cha b’ urrainn dhuinn an reacord a sguabadh às on a tha %{record} ann a tha an eisimeil air
+  date:
+    abbr_day_names:
+    - DiD
+    - DiL
+    - DiM
+    - DiC
+    - Dia
+    - Dih
+    - DiS
+    abbr_month_names:
+    -
+    - Faoi
+    - Gearr
+    - Màrt
+    - Gibl
+    - Cèit
+    - Ògmh
+    - Iuch
+    - Lùna
+    - Sult
+    - Dàmh
+    - Samh
+    - Dùbh
+    day_names:
+    - DiDòmhnaich
+    - DiLuain
+    - DiMàirt
+    - DiCiadain
+    - DiarDaoin
+    - DihAoine
+    - DiSathairne
+    formats:
+      default: "%Y-%m-%d"
+      long: "%d %B %Y"
+      short: "%d %b"
+    month_names:
+    -
+    - Am Faoilleach
+    - An Gearran
+    - Am Màrt
+    - An Giblean
+    - An Cèitean
+    - An t-Ògmhios
+    - An t-Iuchar
+    - An Lùnastal
+    - An t-Sultain
+    - An Dàmhair
+    - An t-Samhain
+    - An Dùbhlachd
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: mu %{count} uair a thìde
+        two: mu %{count} uair a thìde
+        few: mu %{count} uairean a thìde
+        other: mu %{count} uair a thìde
+      about_x_months:
+        one: mu %{count} mhìos
+        two: mu %{count} mhìos
+        few: mu %{count} mìosan
+        other: mu %{count} mìos
+      about_x_years:
+        one: mu %{count} bhliadhna
+        two: mu %{count} bhliadhna
+        few: mu %{count} bliadhnaichean
+        other: mu %{count} bliadhna
+      almost_x_years:
+        one: cha mhòr %{count} bhliadhna
+        two: cha mhòr %{count} bhliadhna
+        few: cha mhòr %{count} bliadhnaichean
+        other: cha mhòr %{count} bliadhna
+      half_a_minute: leth-mhionaid
+      less_than_x_seconds:
+        one: nas lugha na %{count} diog
+        two: nas lugha na %{count} dhiog
+        few: nas lugha na %{count} diogan
+        other: nas lugha na %{count} diog
+      less_than_x_minutes:
+        one: nas lugha na %{count} mhionaid
+        two: nas lugha na %{count} mhionaid
+        few: nas lugha na %{count} mionaidean
+        other: nas lugha na %{count} mionaid
+        one: nas lugha na mionaid
+      over_x_years:
+        one: còrr is %{count} bhliadhna
+        two: còrr is %{count} bhliadhna
+        few: còrr is %{count} bliadhnaichean
+        other: còrr is %{count} bliadhna
+      x_seconds:
+        one: "%{count} diog"
+        two: "%{count} dhiog"
+        few: "%{count} diogan"
+        other: "%{count} diog"
+      x_minutes:
+        one: "%{count} mhionaid"
+        two: "%{count} mhionaid"
+        few: "%{count} mionaidean"
+        other: "%{count} mionaid"
+      x_days:
+        one: "%{count} latha"
+        two: "%{count} latha"
+        few: "%{count} làithean"
+        other: "%{count} latha"
+      x_months:
+        one: "%{count} mhìos"
+        two: "%{count} mhìos"
+        few: "%{count} mìosan"
+        other: "%{count} mìos"
+      x_years:
+        one: "%{count} bhliadhna"
+        two: "%{count} bhliadhna"
+        few: "%{count} bliadhnaichean"
+        other: "%{count} bliadhna"
+    prompts:
+      second: Diog
+      minute: Mionaid
+      hour: Uair a thìde
+      day: Latha
+      month: Mìos
+      year: Bliadhna
+  errors:
+    format: "%{attribute}: %{message}"
+    messages:
+      accepted: feumach air aontachadh
+      blank: chan fhaod seo a bhith bàn
+      confirmation: chan eil e ’na mhaids dha %{attribute}
+      empty: chan fhaod seo a bhith falamh
+      equal_to: feumaidh seo a bhith co-ionnan ri %{count}
+      even: feumaidh seo a bhith ’na àireamh chothrom
+      exclusion: tha seo glèidhte
+      greater_than: feumaidh seo a bhith nas motha na %{count}
+      greater_than_or_equal_to: feumaidh seo a bhith nas motha na no co-ionann ri %{count}
+      in: feumaidh seo a bhith am broinn %{count}
+      inclusion: chan eil seo am broinn na liosta
+      invalid: chan eil seo dligheach
+      less_than: feumaidh seo a bhith nas lugha na %{count}
+      less_than_or_equal_to: feumaidh seo a bhith nas lugha na no co-ionann ri %{count}
+      model_invalid: 'Dh’fhàillig leis an dearbhadh: %{errors}'
+      not_a_number: chan eil seo ’na àireamh
+      not_an_integer: feumaidh seo a bhith ’na àireamh shlàn
+      odd: feumaidh seo a bhith ’na àireamh chòrr
+      other_than: chan fhaod seo a bhith %{count}
+      present: feumaidh seo a bhith bàn
+      required: feumaidh seo a bhith ann
+      taken: tha seo aig rud eile mu thràth
+      too_long:
+        one: tha seo ro fhada (tha %{count} charactar ceadaichte air a char as motha)
+        two: tha seo ro fhada (tha %{count} charactar ceadaichte air a char as motha)
+        few: tha seo ro fhada (tha %{count} caractaran ceadaichte air a char as motha)
+        other: tha seo ro fhada (tha %{count} caractar ceadaichte air a char as motha)
+      too_short:
+        one: tha seo ro ghoirid (tha %{count} charactar ceadaichte air a char as lugha)
+        two: tha seo ro ghoirid (tha %{count} charactar ceadaichte air a char as lugha)
+        few: tha seo ro ghoirid (tha %{count} caractaran ceadaichte air a char as lugha)
+        other: tha seo ro ghoirid (tha %{count} caractar ceadaichte air a char as lugha)
+      wrong_length:
+        one: chan eil an fhaide mar bu chòir (bu chòir dha a bhith %{count} charactar)
+        two: chan eil an fhaide mar bu chòir (bu chòir dha a bhith %{count} charactar)
+        few: chan eil an fhaide mar bu chòir (bu chòir dha a bhith %{count} caractaran)
+        other: chan eil an fhaide mar bu chòir (bu chòir dha a bhith %{count} caractar)
+    template:
+      body: 'Bha duilgheadasan ann leis na raointean seo:'
+      header:
+        one: "Dh’adhbharaich %{count} mhearachd nach gabh a’ %{model} seo a shàbhaladh"
+        two: "Dh’adhbharaich %{count} mhearachd nach gabh a’ %{model} seo a shàbhaladh"
+        few: "Dh’adhbharaich %{count} mearachdan nach gabh a’ %{model} seo a shàbhaladh"
+        other: "Dh’adhbharaich %{count} mearachd nach gabh a’ %{model} seo a shàbhaladh"
+  helpers:
+    select:
+      prompt: Tagh
+    submit:
+      create: Cruthaich %{model}
+      submit: Sàbhail %{model}
+      update: Ùraich %{model}
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u%n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "£"
+    format:
+      delimiter: ","
+      precision: 3
+      round_mode: default
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: billean
+          million: millean
+          quadrillion: quadrillean
+          thousand: mìle
+          trillion: trillean
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: bhaidht
+            two: bhaidht
+            few: baidhtean
+            other: baidht
+          eb: EB
+          gb: GB
+          kb: KB
+          mb: MB
+          pb: PB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " agus "
+      two_words_connector: " agus "
+      words_connector: ", "
+  time:
+    am: m
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      long: "%d %b %Y, %H:%M"
+      short: "%d %b %H:%M"
+    pm: f

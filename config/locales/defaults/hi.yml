@@ -1,0 +1,196 @@
+---
+hi:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'सत्यापन विफल: %{errors}'
+  date:
+    abbr_day_names:
+    - रवि
+    - सोम
+    - मंगल
+    - बुध
+    - गुरु
+    - शुक्र
+    - शनि
+    abbr_month_names:
+    - 
+    - जन
+    - फर
+    - मार्च
+    - अप्रै
+    - मई
+    - जून
+    - जुला
+    - अग
+    - सितं
+    - अक्टू
+    - नवं
+    - दिस
+    day_names:
+    - रविवार
+    - सोमवार
+    - मंगलवार
+    - बुधवार
+    - गुरुवार
+    - शुक्रवार
+    - शनिवार
+    formats:
+      default: "%d-%m-%Y"
+      long: "%d %B %Y"
+      short: "%d %b"
+    month_names:
+    - 
+    - जनवरी
+    - फरवरी
+    - मार्च
+    - अप्रैल
+    - मई
+    - जून
+    - जुलाई
+    - अगस्त
+    - सितंबर
+    - अक्टूबर
+    - नवंबर
+    - दिसंबर
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: लगभग एक घंटा
+        other: लगभग %{count} घंटा
+      about_x_months:
+        one: लगभग %{count} महीना
+        other: लगभग %{count} महीना
+      about_x_years:
+        one: लगभग %{count} साल
+        other: लगभग %{count} साल
+      almost_x_years:
+        one: लगभग एक साल
+        other: लगभग %{count} साल
+      half_a_minute: एक आधा मिनट
+      less_than_x_seconds:
+        one: एक सेकेंड से कम
+        other: "%{count}  सेकेंड से कम"
+      less_than_x_minutes:
+        one: एक मिनट से कम
+        other: "%{count} मिनट से कम"
+      over_x_years:
+        one: एक साल के ऊपर
+        other: "%{count} साल से अधिक"
+      x_seconds:
+        one: एक सेकेंड
+        other: "%{count} सेकेंड"
+      x_minutes:
+        one: एक मिनट
+        other: "%{count} मिनट"
+      x_days:
+        one: एक दिन
+        other: "%{count} दिन"
+      x_months:
+        one: एक महीना
+        other: "%{count} महीना"
+    prompts:
+      second: सेकेंड
+      minute: मिनट
+      hour: घंटा
+      day: दिन
+      month: माह
+      year: वर्ष
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: स्वीकार किया जाना जरूरी
+      blank: खाली नहीं रह सकता है
+      confirmation: पुष्टिकरण मेल नहीं खाता
+      empty: रिक्त नहीं रह सकता है
+      equal_to: "%{count} के लिए बराबर होना चाहिए"
+      even: सम होना चाहिए
+      exclusion: आरक्षित है
+      greater_than: "%{count} से अधिक होना चाहिए"
+      greater_than_or_equal_to: "%{count} से बड़ा या बराबर होना आवश्यक है"
+      inclusion: सूची में शामिल नहीं है
+      invalid: अवैध है
+      less_than: "%{count} से कम होना चाहिए"
+      less_than_or_equal_to: "%{count} से कम या बराबर होना आवश्यक है"
+      not_a_number: कोई संख्या नहीं है
+      not_an_integer: एक पूर्णांक होना चाहिए
+      odd: विसम होना चाहिए
+      taken: पहले ही ले लिया गया है
+      too_long: अत्यधिक लंबा है (अधिकतम %{count} वर्ण हैं)
+      too_short: अत्यधिक छोटा है (न्यूनतम %{count} वर्ण हैं)
+      wrong_length: गलत लंबाई है (%{count} वर्ण युक्त होना चाहिए)
+    template:
+      body: 'निम्नलिखित क्षेत्रों के साथ समस्या थी:'
+      header:
+        one: इस %{model} को सहेजे जाना एक त्रुटि के कारण नहीं हुआ
+        other: इस %{model} को सहेजे जाना %{count} त्रुटि के कारण नहीं हुआ
+  helpers:
+    select:
+      prompt: कृपया चुनें
+    submit:
+      create: "%{model} बनाएँ"
+      submit: "%{model} सौंपें"
+      update: "%{model} अद्यतन"
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u%n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "₹"
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: अरब
+          million: दस करोड़
+          quadrillion: करोड़ शंख
+          thousand: हज़ार
+          trillion: खरब
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", और "
+      two_words_connector: " और "
+      words_connector: ", "
+  time:
+    am: पूर्वाह्न
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      long: "%d %B %Y %H:%M"
+      short: "%d %b %H:%M"
+    pm: अपराह्न

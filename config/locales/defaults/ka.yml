@@ -1,0 +1,210 @@
+---
+ka:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'დადასტურება წარუმატებელია: %{errors}'
+  date:
+    abbr_day_names:
+    - კვ
+    - ორშ
+    - სამშ
+    - ოთხშ
+    - ხუთშ
+    - პარ
+    - შაბ
+    abbr_month_names:
+    - 
+    - იანვ
+    - თებ
+    - მარტი
+    - აპრ
+    - მაისი
+    - ივნ
+    - ივლ
+    - აგვ
+    - სექტ
+    - ოქტ
+    - ნოემბ
+    - დეკ
+    day_names:
+    - კვირა
+    - ორშაბათი
+    - სამშაბათი
+    - ოთხშაბათი
+    - ხუთშაბათი
+    - პარასკევი
+    - შაბათი
+    formats:
+      default: "%d.%m.%Y"
+      long: "%d %B %Y"
+      short: "%d %b"
+    month_names:
+    - 
+    - იანვარი
+    - თებერვალი
+    - მარტი
+    - აპრილი
+    - მაისი
+    - ივნისი
+    - ივლისი
+    - აგვისტო
+    - სექტემბერი
+    - ოქტომბერი
+    - ნოემბერი
+    - დეკემბერი
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: დაახლოებით %{count} საათი
+        other: დაახლოებით %{count} საათი
+      about_x_months:
+        one: დაახლოებით %{count} თვე
+        other: დაახლოებით %{count} თვე
+      about_x_years:
+        one: დაახლოებით %{count} წელი
+        other: დაახლოებით %{count} წელი
+      almost_x_years:
+        one: თითქმის %{count} წელი
+        other: თითქმის %{count} წელი
+      half_a_minute: ნახევარი წუთი
+      less_than_x_seconds:
+        one: "%{count} წამზე ნაკლები"
+        other: "%{count} წამზე ნაკლები"
+      less_than_x_minutes:
+        one: "%{count} წუთზე ნაკლები"
+        other: "%{count} წუთზე ნაკლები"
+      over_x_years:
+        one: "%{count} წელზე მეტი"
+        other: "%{count} წელზე მეტი"
+      x_seconds:
+        one: "%{count} წამი"
+        other: "%{count} წამი"
+      x_minutes:
+        one: "%{count} წუთი"
+        other: "%{count} წუთი"
+      x_days:
+        one: "%{count} დღე"
+        other: "%{count} დღე"
+      x_months:
+        one: "%{count} თვე"
+        other: "%{count} თვე"
+      x_years:
+        one: "%{count} წელი"
+        other: "%{count} წელი"
+    prompts:
+      second: წამი
+      minute: წუთი
+      hour: საათი
+      day: დღე
+      month: თვე
+      year: წელი
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: უნდა იყოს დადასტურებული
+      blank: არ შეიძლება იყოს ცარიელი
+      confirmation: ველი %{attribute}-ს არ ემთხვევა
+      empty: არ შეიძლება იყოს ცარიელი
+      equal_to: უნდა უდრიდეს %{count}-ს
+      even: უნდა იყოს ლუწი
+      exclusion: რეზერვირებულია
+      greater_than: უნდა იყოს %{count}-ზე მეტი
+      greater_than_or_equal_to: უნდა იყოს %{count}-ზე მეტი ან ტოლი
+      inclusion: არ არის სიაში
+      invalid: არასწორია
+      less_than: უნდა იყოს %{count}-ზე ნაკლები
+      less_than_or_equal_to: უნდა იყოს %{count}-ზე ნაკლები ან ტოლი
+      model_invalid: 'დადასტურება წარუმატებელია: %{errors}'
+      not_a_number: არ არის რიცხვი
+      not_an_integer: არ არის მთელი რიცხვი
+      odd: უნდა იყოს კენტი
+      other_than: უნდა განსხვავდებოდეს %{count}-გან
+      present: უნდა იყოს ცარიელი
+      required: უნდა არსებობდეს
+      taken: უკვე დაკავებულია
+      too_long:
+        one: არის ძალიან გრძელი (მაქსიმუმია %{count} სიმბოლო)
+        other: არის მეტისმეტად დიდი სიგრძის (მაქსიმუმია %{count} სიმბოლო)
+      too_short:
+        one: არის ძალიან მოკლე (მინიმუმია %{count} სიმბოლო)
+        other: არის ძალიან მოკლე (მინიმუმია %{count} სიმბოლო)
+      wrong_length:
+        one: არის არასწორი სიგრძის (უნდა იყოს ზუსტად %{count} სიბმოლო)
+        other: არის არასწორი სიგრძის (უნდა იყოს ზუსტად %{count} სიბმოლო)
+    template:
+      body: 'შეიქმნა პრობლემები შემდეგ ველებთან დაკავშირებით:'
+      header:
+        one: "%{model}-ს შენახვა ვერ განხორციელდა %{count} შეცდომის გამო"
+        other: "%{model}-ს შენახვა ვერ განხორციელდა %{count} შეცდომის გამო"
+  helpers:
+    select:
+      prompt: გთხოვთ აირჩიოთ
+    submit:
+      create: "%{model}-ს შექმნა"
+      submit: "%{model}-ს დამახსოვრება"
+      update: "%{model}-ს განახლება"
+  number:
+    currency:
+      format:
+        delimiter: " "
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: ლ
+    format:
+      delimiter: " "
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: მილიარდი
+          million: მილიონი
+          quadrillion: კვადრილიონი
+          thousand: ათასი
+          trillion: ტრილიონი
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: ბაიტი
+            other: ბაიტები
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", და "
+      two_words_connector: " და "
+      words_connector: ", "
+  time:
+    am: დილის
+    formats:
+      default: "%a, %d %b %Y, %H:%M:%S %z"
+      long: "%d %B %Y, %H:%M"
+      short: "%d %b, %H:%M"
+    pm: საღამოს
