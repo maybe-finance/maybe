@@ -2,6 +2,8 @@
   <%= render "imports/nav", import: @import %>
 <% end %>
 
+<%= content_for :previous_path, import_configuration_path(@import) %>
+
 <div class="space-y-4 mx-auto max-w-screen-lg">
   <div class="text-center space-y-2 max-w-[400px] mx-auto mb-4">
     <h2 class="text-3xl text-gray-900 font-medium"><%= t(".title") %></h2>

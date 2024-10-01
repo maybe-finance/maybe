@@ -2,7 +2,7 @@
 
 <div class="flex flex-col items-center gap-2 py-4">
   <%= lucide_icon("check-circle", class: "w-5 h-5 text-green-500") %>
-  <p class="text-sm text-gray-900 italic text-center">We have pre-configured your Mint import for you.  Please proceed to the next step.</p>
+  <p class="text-sm text-gray-900 italic text-center">We have pre-configured your Mint import for you. Please proceed to the next step.</p>
 </div>
 
 <%= styled_form_with model: @import, url: import_configuration_path(@import), scope: :import, method: :patch, class: "space-y-2" do |form| %>
@@ -20,8 +20,6 @@
   <%= form.select :name_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Name (optional)" }, disabled: true %>
   <%= form.select :category_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Category (optional)" }, disabled: true %>
   <%= form.select :tags_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Tags (optional)" }, disabled: true %>
-
-  <%= form.hidden_field :type, value: "MintImport" %>
 
   <%= form.submit "Apply configuration", class: "w-full btn btn--primary", disabled: import.complete? %>
 <% end %>

@@ -2,6 +2,8 @@
   <%= render "imports/nav", import: @import %>
 <% end %>
 
+<%= content_for :previous_path, import_confirm_path(@import) %>
+
 <% if @import.importing? %>
   <%= render "imports/importing", import: @import %>
 <% elsif @import.complete? %>

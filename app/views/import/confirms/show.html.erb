@@ -2,6 +2,8 @@
   <%= render "imports/nav", import: @import %>
 <% end %>
 
+<%= content_for :previous_path, import_clean_path(@import) %>
+
 <% step_idx = (params[:step] || "1").to_i - 1 %>
 <% step_mapping_class = @import.mapping_steps[step_idx] %>
 

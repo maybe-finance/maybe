@@ -2,6 +2,8 @@
   <%= render "imports/nav", import: @import %>
 <% end %>
 
+<%= content_for :previous_path, import_upload_path(@import) %>
+
 <div>
   <div class="space-y-4">
     <div class="text-center space-y-2">
