@@ -1,0 +1,248 @@
+---
+bs:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'Validacija nije uspjela: %{errors}'
+        restrict_dependent_destroy:
+          has_many: Nije moguće izbrisati zapis jer postoje ovisni %{record}
+          has_one: Nije moguće izbrisati zapis jer postoji ovisan %{record}
+  date:
+    abbr_day_names:
+    - ned
+    - pon
+    - uto
+    - sri
+    - čet
+    - pet
+    - sub
+    abbr_month_names:
+    -
+    - jan
+    - feb
+    - mar
+    - apr
+    - maj
+    - jun
+    - jul
+    - aug
+    - sep
+    - okt
+    - nov
+    - dec
+    day_names:
+    - nedjelja
+    - ponedjeljak
+    - utorak
+    - srijeda
+    - četvrtak
+    - petak
+    - subota
+    formats:
+      default: "%d.%m.%Y."
+      long: "%e. %B %Y."
+      short: "%e. %b. %Y."
+    month_names:
+    -
+    - januar
+    - februar
+    - mart
+    - april
+    - maj
+    - juni
+    - juli
+    - august
+    - septembar
+    - oktobar
+    - novembar
+    - decembar
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        few: oko %{count} sata
+        many: oko %{count} sati
+        one: oko sat
+        other: oko %{count} sati
+      about_x_months:
+        few: oko %{count} mjeseca
+        many: oko %{count} mjeseci
+        one: oko mjesec
+        other: oko %{count} mjeseci
+      about_x_years:
+        few: oko %{count} godine
+        many: oko %{count} godina
+        one: oko godine
+        other: oko %{count} godina
+      almost_x_years:
+        few: skoro %{count} godine
+        many: skoro %{count} godina
+        one: skoro %{count} godina
+        other: skoro %{count} godina
+      half_a_minute: pola minute
+      less_than_x_minutes:
+        few: manje od %{count} minute
+        many: manje od %{count} minuta
+        one: manje od minute
+        other: manje od %{count} minuta
+      less_than_x_seconds:
+        few: manje od %{count} sekunde
+        many: manje od %{count} sekundi
+        one: manje od sekunde
+        other: manje od %{count} sekundi
+      over_x_years:
+        few: preko %{count} godine
+        many: preko %{count} godina
+        one: preko godine
+        other: preko %{count} godina
+      x_days:
+        few: "%{count} dana"
+        many: "%{count} dana"
+        one: "%{count} dan"
+        other: "%{count} dana"
+      x_minutes:
+        few: "%{count} minute"
+        many: "%{count} minuta"
+        one: "%{count} minut"
+        other: "%{count} minuta"
+      x_months:
+        few: "%{count} mjeseca"
+        many: "%{count} mjeseci"
+        one: "%{count} mjesec"
+        other: "%{count} mjeseci"
+      x_seconds:
+        few: "%{count} sekunde"
+        many: "%{count} sekundi"
+        one: "%{count} sekund"
+        other: "%{count} sekundi"
+    prompts:
+      day: dan
+      hour: sat
+      minute: minut
+      month: mjesec
+      second: sekundi
+      year: godina
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: mora biti prihvaćeno
+      blank: ne smije biti prazno
+      confirmation: se ne poklapa sa potvrdom
+      empty: ne smije biti prazno
+      equal_to: mora biti %{count}
+      even: mora biti parno
+      exclusion: je rezervisano
+      greater_than: mora biti veće od %{count}
+      greater_than_or_equal_to: mora biti veće ili jednako %{count}
+      inclusion: nije uključeno u listu
+      invalid: nije validno
+      less_than: mora biti manje od %{count}
+      less_than_or_equal_to: mora biti manje ili jednako %{count}
+      not_a_number: nije broj
+      not_an_integer: mora biti cijeli broj
+      odd: mora biti neparno
+      other_than: mora biti različito od %{count}
+      present: mora biti prazno
+      taken: je već zauzet
+      too_long: je predugo (maksimalno je dozvoljeno %{count} znakova)
+      too_short: je prekratko (predviđeno je minimalno %{count} znakova)
+      wrong_length: je pogrešne dužine (trebalo bi biti tačno %{count} znakova)
+    template:
+      body: 'Desili su se problemi sa sljedećim poljima:'
+      header:
+        few: "%{count} greške su spriječile da se ovaj %{model} spremi"
+        many: "%{count} grešaka je spriječilo da se ovaj %{model} spremi"
+        one: "%{count} greška je spriječila da se ovaj %{model} spremi"
+        other: "%{count} grešaka je spriječilo da se ovaj %{model} spremi"
+  helpers:
+    select:
+      prompt: Molimo odaberite
+    submit:
+      create: Kreiraj %{model}
+      submit: Sačuvaj %{model}
+      update: Osvježi %{model}
+  number:
+    currency:
+      format:
+        delimiter: "."
+        format: "%n%u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: true
+        unit: KM
+    format:
+      delimiter: "."
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: true
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion:
+            few: milijarde
+            many: milijardi
+            one: milijarda
+            other: milijardi
+          million:
+            few: miliona
+            many: miliona
+            one: milion
+            other: miliona
+          quadrillion:
+            few: bilijarde
+            many: bilijardi
+            one: bilijarda
+            other: bilijardi
+          thousand:
+            few: hiljade
+            many: hiljada
+            one: hiljada
+            other: hiljada
+          trillion:
+            few: biliona
+            many: biliona
+            one: bilion
+            other: biliona
+          unit: ''
+      format:
+        delimiter: ","
+        precision: 0
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            few: bajta
+            many: bajtova
+            one: bajt
+            other: bajtova
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ","
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " i "
+      two_words_connector: " i "
+      words_connector: ", "
+  time:
+    am: am
+    formats:
+      default: "%d.%m.%Y. %H:%M:%S"
+      long: "%d. %B %Y. - %H:%M:%S"
+      short: "%d. %b %Y. %H:%M"
+    pm: pm

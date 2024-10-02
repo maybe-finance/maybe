@@ -1,0 +1,224 @@
+---
+rm:
+  date:
+    abbr_day_names:
+    - du
+    - gli
+    - ma
+    - me
+    - gie
+    - ve
+    - so
+    abbr_month_names:
+    -
+    - schan
+    - favr
+    - mars
+    - avr
+    - matg
+    - zercl
+    - fan
+    - avust
+    - sett
+    - oct
+    - nov
+    - dec
+    day_names:
+    - dumengia
+    - glindesdi
+    - mardi
+    - mesemna
+    - gievgia
+    - venderdi
+    - sonda
+    formats:
+      default: "%d.%m.%Y"
+      long: "%e. %B %Y"
+      short: "%e. %b"
+    month_names:
+    -
+    - schaner
+    - favrer
+    - mars
+    - avrigl
+    - matg
+    - zercladur
+    - fanadur
+    - avust
+    - settember
+    - october
+    - november
+    - december
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        few: circa %{count} uras
+        many: circa %{count} uras
+        one: circa in'ura
+        other: circa %{count} uras
+        two: circa %{count} uras
+        zero: circa %{count} uras
+      about_x_months:
+        few: circa %{count} mais
+        many: circa %{count} mais
+        one: circa in mais
+        other: circa %{count} mais
+        two: circa %{count} mais
+        zero: circa %{count} mais
+      about_x_years:
+        few: circa %{count} onns
+        many: circa %{count} onns
+        one: circa in onn
+        other: circa %{count} onns
+        two: circa %{count} onns
+        zero: circa %{count} onns
+      half_a_minute: ina mesa minuta
+      less_than_x_minutes:
+        few: main che %{count} minutas
+        many: main che %{count} minutas
+        one: main ch’ina minuta
+        other: main che %{count} minutas
+        two: main che %{count} minutas
+        zero: main che %{count} minutas
+      less_than_x_seconds:
+        few: main che %{count} secundas
+        many: main che %{count} secundas
+        one: main ch’ina secunda
+        other: main che %{count} secundas
+        two: main che %{count} secundas
+        zero: main che %{count} secundas
+      over_x_years:
+        few: dapli che %{count} onns
+        many: dapli che %{count} onns
+        one: dapli ch'in onn
+        other: dapli che %{count} onns
+        two: dapli che %{count} onns
+        zero: dapli che %{count} onns
+      x_days:
+        few: "%{count} dis"
+        many: "%{count} dis"
+        one: in di
+        other: "%{count} dis"
+        two: "%{count} dis"
+        zero: "%{count} dis"
+      x_minutes:
+        few: "%{count} minutas"
+        many: "%{count} minutas"
+        one: "%{count} minuta"
+        other: "%{count} minutas"
+        two: "%{count} minutas"
+        zero: "%{count} minutas"
+      x_months:
+        few: "%{count} mais"
+        many: "%{count} mais"
+        one: in mais
+        other: "%{count} mais"
+        two: "%{count} mais"
+        zero: "%{count} mais"
+      x_seconds:
+        few: "%{count} secundas"
+        many: "%{count} secundas"
+        one: ina secunda
+        other: "%{count} secundas"
+        two: "%{count} secundas"
+        zero: "%{count} secundas"
+    prompts:
+      day: dis
+      hour: uras
+      minute: minutas
+      month: mais
+      second: secundas
+      year: onns
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: sto vegnir acceptà
+      blank: sto vegnir emplenì ora
+      confirmation: na correspunda betg al champ da conferma
+      empty: sto vegnir emplenì ora
+      equal_to: sto esser exact %{count}
+      even: sto esser pèr
+      exclusion: na stat betg a disposiziun
+      greater_than: sto esser pli grond che %{count}
+      greater_than_or_equal_to: sto esser pli grond u medem sco %{count}
+      inclusion: n'è betg sin la glista
+      invalid: n'è betg valid
+      less_than: sto esser pli pitschen che %{count}
+      less_than_or_equal_to: sto esser pli pitschen u medem sco %{count}
+      not_a_number: è betg in dumber
+      odd: sto esser spèr
+      taken: è gia occupà
+      too_long: è memia lung (betg dapli che %{count} caracters)
+      too_short: è memia curt (betg pli pauc che %{count} caracters)
+      wrong_length: ha la fallida lunghezza (sto avair %{count} caracters)
+    template:
+      body: 'Faschai uschè bain e controllai ils suandants champs:'
+      header:
+        few: 'Betg pussaivel da memorisar quest %{model}: %{count} errurs.'
+        many: 'Betg pussaivel da memorisar quest %{model}: %{count} errurs.'
+        one: 'Betg pussaivel da memorisar quest %{model}: %{count} errur.'
+        other: 'Betg pussaivel da memorisar quest %{model}: %{count} errurs.'
+        two: 'Betg pussaivel da memorisar quest %{model}: %{count} errurs.'
+        zero: 'Betg pussaivel da memorisar quest %{model}: %{count} errurs.'
+  number:
+    currency:
+      format:
+        delimiter: "'"
+        format: "%n %u"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: CHF
+    format:
+      delimiter: "'"
+      precision: 2
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            few: bytes
+            many: bytes
+            one: byte
+            other: bytes
+            two: bytes
+            zero: bytes
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " e "
+      two_words_connector: " e "
+      words_connector: ", "
+  time:
+    am: avantmezdi
+    formats:
+      default: "%A, %d. %B %Y, %H:%M Uhr"
+      long: "%A, %d. %B %Y, %H:%M Uhr"
+      short: "%d. %B, %H:%M Uhr"
+    pm: suentermezdi

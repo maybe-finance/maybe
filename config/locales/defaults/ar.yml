@@ -1,0 +1,278 @@
+---
+ar:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: 'فشل التحقّق من: %{errors}'
+        restrict_dependent_destroy:
+          has_many: لا يمكن حذف السجل لوجود سجلات تعتمد عليه %{record}
+          has_one: لا يمكن حذف السجل لوجود سجل يعتمد عليه %{record}
+  date:
+    abbr_day_names:
+    - الأحد
+    - الإثنين
+    - الثّلاثاء
+    - الأربعاء
+    - الخميس
+    - الجمعة
+    - السّبت
+    abbr_month_names:
+    -
+    - يناير
+    - فبراير
+    - مارس
+    - أبريل
+    - مايو
+    - يونيو
+    - يوليو
+    - أغسطس
+    - سبتمبر
+    - أكتوبر
+    - نوفمبر
+    - ديسمبر
+    day_names:
+    - الأحد
+    - الإثنين
+    - الثّلاثاء
+    - الأربعاء
+    - الخميس
+    - الجمعة
+    - السّبت
+    formats:
+      default: "%d-%m-%Y"
+      long: "%e %B، %Y"
+      short: "%e %b"
+    month_names:
+    -
+    - يناير
+    - فبراير
+    - مارس
+    - أبريل
+    - مايو
+    - يونيو
+    - يوليو
+    - أغسطس
+    - سبتمبر
+    - أكتوبر
+    - نوفمبر
+    - ديسمبر
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        few: حوالي %{count} ساعات
+        many: حوالي %{count} ساعة
+        one: حوالي ساعة واحدة
+        other: حوالي %{count} ساعة
+        two: حوالي ساعتان
+        zero: حوالي صفر ساعات
+      about_x_months:
+        few: حوالي %{count} أشهر
+        many: حوالي %{count} شهر
+        one: حوالي شهر واحد
+        other: حوالي %{count} شهر
+        two: حوالي شهران
+        zero: حوالي صفر أشهر
+      about_x_years:
+        few: حوالي %{count} سنوات
+        many: حوالي %{count} سنة
+        one: حوالي سنة
+        other: حوالي %{count} سنة
+        two: حوالي سنتان
+        zero: حوالي صفر سنوات
+      almost_x_years:
+        few: ما يقرب من %{count} سنوات
+        many: ما يقرب من %{count} سنة
+        one: تقريبا سنة واحدة
+        other: ما يقرب من %{count} سنة
+        two: ما يقرب من سنتين
+        zero: ما يقرب من صفر سنوات
+      half_a_minute: نصف دقيقة
+      less_than_x_minutes:
+        few: أقل من %{count} دقائق
+        many: أقل من %{count} دقيقة
+        one: أقل من دقيقة
+        other: أقل من %{count} دقيقة
+        two: أقل من دقيقتان
+        zero: أقل من صفر دقائق
+      less_than_x_seconds:
+        few: أقل من %{count} ثوان
+        many: أقل من %{count} ثانية
+        one: أقل من ثانية
+        other: أقل من %{count} ثانية
+        two: أقل من ثانيتان
+        zero: أقل من صفر ثواني
+      over_x_years:
+        few: أكثر من %{count} سنوات
+        many: أكثر من %{count} سنة
+        one: أكثر من سنة
+        other: أكثر من %{count} سنة
+        two: أكثر من سنتين
+        zero: أكثر من صفر سنوات
+      x_days:
+        few: "%{count} أيام"
+        many: "%{count} يوم"
+        one: يوم واحد
+        other: "%{count} يوم"
+        two: يومان
+        zero: صفر أيام
+      x_minutes:
+        few: "%{count} دقائق"
+        many: "%{count} دقيقة"
+        one: دقيقة واحدة
+        other: "%{count} دقيقة"
+        two: دقيقتان
+        zero: صفر دقائق
+      x_months:
+        few: "%{count} أشهر"
+        many: "%{count} شهر"
+        one: شهر واحد
+        other: "%{count} شهر"
+        two: شهران
+        zero: صفر أشهر
+      x_seconds:
+        few: "%{count} ثوان"
+        many: "%{count} ثانية"
+        one: ثانية واحدة
+        other: "%{count} ثانية"
+        two: ثانيتان
+        zero: صفر ثواني
+    prompts:
+      day: اليوم
+      hour: ساعة
+      minute: دقيقة
+      month: الشهر
+      second: ثانية
+      year: السنة
+  errors:
+    format: "%{message}"
+    messages:
+      accepted: يجب أن تقبل %{attribute}
+      blank: لا يمكن أن يكون محتوى %{attribute} فارغاً
+      confirmation: محتوى %{attribute} لا يتوافق مع %{attribute}
+      empty: لا يمكن أن يكون محتوى %{attribute} فارغاً
+      equal_to: يجب أن يساوي طول %{attribute} %{count}
+      even: يجب أن يكون عدد %{attribute} زوجياً
+      exclusion: حقل %{attribute} محجوز
+      greater_than: يجب أن يكون عدد %{attribute} أكبر من %{count}
+      greater_than_or_equal_to: يجب أن يكون عدد %{attribute} أكبر أو يساوي %{count}
+      inclusion: "%{attribute} غير وارد في القائمة"
+      invalid: محتوى %{attribute} غير صالح
+      less_than: يجب أن يكون عدد %{attribute} أصغر من %{count}
+      less_than_or_equal_to: يجب أن يكون عدد %{attribute} أصغر أو  يساوي %{count}
+      not_a_number: يجب أن يكون محتوى %{attribute} رقماً
+      not_an_integer: يجب أن يكون عدد %{attribute} عدد صحيحاً
+      odd: يجب أن يكون عدد %{attribute} عدداً فردياً
+      other_than:
+        few: طول %{attribute} يجب ألاّ يكون %{count} أحرف
+        many: طول %{attribute} يجب ألاّ يكون %{count} حرفاً
+        one: طول %{attribute} يجب ألاّ يكون حرفاً واحداً
+        other: طول %{attribute} يجب ألاّ يكون %{count} حرفاً
+        two: طول %{attribute} يجب ألاّ يكون حرفان
+        zero: طول %{attribute} يجب ألاّ يكون صفر حرف
+      present: يجب ترك حقل %{attribute} فارغاً
+      taken: حقل %{attribute} محجوز مسبقاً
+      too_long:
+        few: محتوى %{attribute} أطول من اللّازم (الحد الأقصى هو %{count} حروف)
+        many: محتوى %{attribute} أطول من اللّازم (الحد الأقصى هو %{count} حرف)
+        one: محتوى %{attribute} أطول من اللّازم (الحد الأقصى هو حرف واحد)
+        other: محتوى %{attribute} أطول من اللّازم (الحد الأقصى هو %{count} حرف)
+        two: محتوى %{attribute} أطول من اللّازم (الحد الأقصى هو حرفان)
+        zero: محتوى %{attribute} أطول من اللّازم (الحد الأقصى هو ولا حرف)
+      too_short:
+        few: محتوى %{attribute} أقصر من اللّازم (الحد الأدنى هو %{count} حروف)
+        many: محتوى %{attribute} أقصر من اللّازم (الحد الأدنى هو %{count} حرف)
+        one: محتوى %{attribute} أقصر من اللّازم (الحد الأدنى هو حرف واحد)
+        other: محتوى %{attribute} أقصر من اللّازم (الحد الأدنى هو %{count} حرف)
+        two: محتوى %{attribute} أقصر من اللّازم (الحد الأدنى هو حرفان)
+        zero: محتوى %{attribute} أقصر من اللّازم (الحد الأدنى هو ولا حرف)
+      wrong_length:
+        few: طول %{attribute} غير مطابق للحد المطلوب (يجب أن يكون %{count} أحرف)
+        many: طول %{attribute} غير مطابق للحد المطلوب (يجب أن يكون %{count} حرف)
+        one: طول %{attribute} غير مطابق للحد المطلوب (يجب أن يكون حرف واحد)
+        other: طول %{attribute} غير مطابق للحد المطلوب (يجب أن يكون %{count} حرف)
+        two: طول %{attribute} غير مطابق للحد المطلوب (يجب أن يكون حرفان)
+        zero: طول %{attribute} غير مطابق للحد المطلوب (يجب أن يكون ولا حرف)
+    template:
+      body: يُرجى التحقّق من الحقول التّالية:%{attribute}
+      header:
+        few: ليس بالامكان حفظ %{model} لسبب وجود %{count} أخطاء.
+        many: ليس بالامكان حفظ %{model} لسبب وجود %{count} خطأ.
+        one: ليس بالامكان حفظ %{model} لسبب وجود خطأ واحد.
+        other: ليس بالامكان حفظ %{model} لسبب وجود %{count} خطأ.
+        two: ليس بالامكان حفظ %{model} لسبب وجود خطئان.
+        zero: ليس بالامكان حفظ %{model} لسبب ولا خطأ.
+  helpers:
+    select:
+      prompt: يُرجى الاختيار
+    submit:
+      create: "%{model} إنشاء"
+      submit: "%{model} حِفظ"
+      update: "%{model} تحديث"
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u %n"
+        precision: 3
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: KWD
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: مليار
+          million: مليون
+          quadrillion: كدريليون
+          thousand: ألفّ
+          trillion: تريليون
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            few: Bytes
+            many: Bytes
+            one: Byte
+            other: Bytes
+            two: Bytes
+            zero: Bytes
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " و "
+      two_words_connector: " و "
+      words_connector: " ، "
+  time:
+    am: صباحًا
+    formats:
+      default: "%a %d %b %Y %H:%M:%S %Z"
+      long: "%d %B %Y %H:%M"
+      short: "%d %b %H:%M"
+    pm: مساءً

@@ -12,6 +12,13 @@
             currencies_for_select.map { |currency| [ "#{currency.name} (#{currency.iso_code})", currency.iso_code ] },
             { label: "Currency", selected: Current.family.currency },
             { data: { auto_submit_form_target: "auto" } } %>
+
+          <%= family_form.select :locale,
+            I18n.available_locales,
+            { label: "Locale", selected: Current.family.locale },
+            { data: { auto_submit_form_target: "auto" } } %>
+
+          <p class="text-xs italic pl-2 text-gray-500">Please note, we are still working on translations for various languages.  Please see the <%= link_to "I18n issue", "https://github.com/maybe-finance/maybe/issues/1225", target: "_blank", class: "underline" %> for more information.</p>
         <% end %>
       <% end %>
     </div>

@@ -21,6 +21,6 @@ class Settings::PreferencesController < SettingsController
   private
 
     def preference_params
-      params.require(:user).permit(family_attributes: [ :id, :currency ])
+      params.require(:user).permit(family_attributes: [ :id, :currency, :locale ])
     end
 end

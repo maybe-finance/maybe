@@ -1,0 +1,254 @@
+---
+uz:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: "%{errors}ta hato bor."
+  date:
+    abbr_day_names:
+    - Ya
+    - Du
+    - Sh
+    - Ch
+    - Pa
+    - Ju
+    - Sh
+    abbr_month_names:
+    -
+    - yan.
+    - fev.
+    - mart
+    - apr.
+    - may
+    - iyun
+    - iyul
+    - avg.
+    - sen.
+    - okt.
+    - noy.
+    - dek.
+    day_names:
+    - yakshanba
+    - dushanba
+    - seshanba
+    - chorshanba
+    - payshanba
+    - juma
+    - shanba
+    formats:
+      default: "%d.%m.%Y"
+      long: "%d %B %Y"
+      short: "%d %b"
+    month_names:
+    -
+    - yanvar
+    - fevral
+    - mart
+    - aprel
+    - may
+    - iyun
+    - iyul
+    - avgust
+    - sentyabr
+    - oktyabr
+    - noyabr
+    - dekabr
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        few: chamasi %{count} soat
+        many: chamasi %{count} soat
+        one: chamasi %{count} soat
+        other: chamasi %{count} soat
+      about_x_months:
+        few: chamasi %{count} oy
+        many: chamasi %{count} oy
+        one: chamasi %{count} oy
+        other: chamasi %{count} oy
+      about_x_years:
+        few: chamasi %{count} yil
+        many: chamasi %{count} yil
+        one: chamasi %{count} yil
+        other: chamasi %{count} yil
+      almost_x_years:
+        few: deyarli %{count} yil
+        many: deyarli %{count} yil
+        one: deyarli %{count} yil
+        other: deyarli %{count} yil
+      half_a_minute: bir daqiqadan kam
+      less_than_x_minutes:
+        few: "%{count} daqiqadan kam"
+        many: "%{count} daqiqadan kam"
+        one: "%{count} daqiqadan kam"
+        other: "%{count} daqiqadan kam"
+      less_than_x_seconds:
+        few: "%{count} soniyadan kam"
+        many: "%{count} soniyadan kam"
+        one: "%{count} soniyadan kam"
+        other: "%{count} soniyadan kam"
+      over_x_years:
+        few: "%{count} yildan ziyod"
+        many: "%{count} yildan ziyod"
+        one: "%{count} yildan ziyod"
+        other: "%{count} yildan ziyod"
+      x_days:
+        few: "%{count} kun"
+        many: "%{count} kun"
+        one: "%{count} kun"
+        other: "%{count} kun"
+      x_minutes:
+        few: "%{count} daqiqa"
+        many: "%{count} daqiqa"
+        one: "%{count} daqiqa"
+        other: "%{count} daqiqa"
+      x_months:
+        few: "%{count} oy"
+        many: "%{count} oy"
+        one: "%{count} oy"
+        other: "%{count} oy"
+      x_seconds:
+        few: "%{count} soniya"
+        many: "%{count} soniya"
+        one: "%{count} soniya"
+        other: "%{count} soniya"
+    prompts:
+      day: kun
+      hour: soat
+      minute: daqiqa
+      month: oy
+      second: soniya
+      year: yil
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: tasdiqlash kerak
+      blank: bosh bo'lishi mumkin emas
+      confirmation: tasdiq bilan mos emas
+      empty: bosh bo'lishi mumkin emas
+      equal_to: "%{count} ga teng"
+      even: juft sonlar mumkin
+      exclusion: mumkin emas
+      greater_than: "%{count} dan yuqori"
+      greater_than_or_equal_to: "%{count} ga teng yoki yuqori"
+      inclusion: kutilmagan natija
+      invalid: noto'gri
+      less_than: "%{count} dan kam"
+      less_than_or_equal_to: "%{count} ga teng yoki kam"
+      not_a_number: son emas
+      not_an_integer: butun son emas
+      odd: toq sonlar mumkin
+      taken: band
+      too_long:
+        few: uzunligi yetarligidan ortiq (%{count} ta simvoldan yuqori mumkin emas)
+        many: uzunligi yetarligidan ortiq (%{count} ta simvoldan yuqori mumkin emas)
+        one: uzunligi yetarligidan ortiq (%{count} ta simvoldan yuqori mumkin emas)
+        other: uzunligi yetarligidan ortiq (%{count} ta simvoldan yuqori mumkin emas)
+      too_short:
+        few: uzunligi yetarli emas (%{count} ta simvoldan kam mumkin emas)
+        many: uzunligi yetarli emas (%{count} ta simvoldan kam mumkin emas)
+        one: uzunligi yetarli emas (%{count} ta simvoldan kam mumkin emas)
+        other: uzunligi yetarli emas (%{count} ta simvoldan kam mumkin emas)
+      wrong_length:
+        few: uzunligi noto'gri (uzunligi %{count} simvolga teng bulishi kerak)
+        many: uzunligi noto'gri (uzunligi %{count} simvolga teng bulishi kerak)
+        one: uzunligi noto'gri (uzunligi %{count} simvolga teng bulishi kerak)
+        other: uzunligi noto'gri (uzunligi %{count} simvolga teng bulishi kerak)
+    template:
+      body: 'Quyidagilarda hatolar mavjud:'
+      header:
+        few: "%{count} ta hatolar sababli %{model}:ni saqlab bulmadi"
+        many: "%{count} ta hatolar sababli %{model}:ni saqlab bulmadi"
+        one: "%{count} ta hato sababli %{model}:ni saqlab bulmadi"
+        other: "%{count} ta hatolar sababli %{model}:ni saqlab bulmadi"
+  helpers:
+    select:
+      prompt: 'Tanlang: '
+    submit:
+      create: Yarat %{model}
+      submit: Saqla %{model}
+      update: Saqla %{model}
+  number:
+    currency:
+      format:
+        delimiter: " "
+        format: "%n %u"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: so'm.
+    format:
+      delimiter: " "
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion:
+            few: milliard
+            many: milliard
+            one: milliard
+            other: milliard
+          million:
+            few: million
+            many: million
+            one: million
+            other: million
+          quadrillion:
+            few: kvadrillion
+            many: kvadrillion
+            one: kvadrillion
+            other: kvadrillion
+          thousand:
+            few: ming
+            many: ming
+            one: ming
+            other: ming
+          trillion:
+            few: trillion
+            many: trillion
+            one: trillion
+            other: trillion
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: false
+        strip_insignificant_zeros: false
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            few: bayt
+            many: bayt
+            one: bayt
+            other: bayt
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " va "
+      two_words_connector: " va "
+      words_connector: ", "
+  time:
+    am: ertalab
+    formats:
+      default: "%a, %d %b %Y, %H:%M:%S %z"
+      long: "%d %B %Y, %H:%M"
+      short: "%d %b, %H:%M"
+    pm: kechasi
