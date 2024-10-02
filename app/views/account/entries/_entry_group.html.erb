@@ -9,7 +9,11 @@
                           data: { action: "bulk-select#toggleGroupSelection" } %>
       <% end %>
 
-      <%= tag.span "#{date.strftime('%b %d, %Y')} · #{entries.size}" %>
+      <p class="uppercase space-x-1.5">
+        <%= tag.span I18n.l(date, format: :long) %>
+        <span>·</span>
+        <%= tag.span entries.size %>
+      </p>
     </div>
 
     <%= totals_by_currency(collection: entries, money_method: :amount_money, negate: true) %>

@@ -19,7 +19,7 @@
     </div>
 
     <span class="text-sm text-gray-500">
-      <%= entry.date.strftime("%A %d %B") %>
+      <%= I18n.l(entry.date, format: :long) %>
     </span>
   </header>
 
