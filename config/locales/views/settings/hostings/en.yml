@@ -1,0 +1,39 @@
+---
+en:
+  settings:
+    hostings:
+      invite_code_settings:
+        description: Every new user that joins your instance if Maybe can only do
+          so via an invite code
+        generate_tokens: Generate new code
+        generated_tokens: Generated codes
+        title: Require invite code for new sign ups
+      provider_settings:
+        description: Configure settings for your hosting provider
+        render_deploy_hook_label: Render Deploy Hook URL
+        render_deploy_hook_placeholder: https://api.render.com/deploy/srv-xyz...
+        title: Provider Settings
+      show:
+        general: General Settings
+        invites: Invite Codes
+        title: Self-Hosting
+      synth_settings:
+        api_calls_used: "%{used} / %{limit} API calls used (%{percentage})"
+        description: Input the API key provided by Synth
+        label: API Key
+        placeholder: Enter your API key here
+        plan: "%{plan} plan"
+        title: Synth Settings
+      update:
+        failure: Invalid setting value
+        success: Settings updated
+      upgrade_settings:
+        description: Configure how your application receives updates
+        latest_commit_description: Automatically update to the latest commit (unstable)
+        latest_commit_title: Latest Commit
+        latest_release_description: Automatically update to the most recent release
+          (stable)
+        latest_release_title: Latest Release
+        manual_description: You control when to download and install updates
+        manual_title: Manual
+        title: Auto Upgrade

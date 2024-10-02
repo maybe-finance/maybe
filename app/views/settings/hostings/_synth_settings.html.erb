@@ -1,0 +1,44 @@
+<div class="space-y-4">
+  <div>
+    <h2 class="font-medium mb-1"><%= t(".title") %></h2>
+    <p class="text-gray-500 text-sm mb-4"><%= t(".description") %></p>
+  </div>
+
+  <%= styled_form_with model: Setting.new,
+                       url: settings_hosting_path,
+                       method: :patch,
+                       data: {
+                         controller: "auto-submit-form",
+                         "auto-submit-form-trigger-event-value": "blur"
+                       } do |form| %>
+    <%= form.text_field :synth_api_key,
+                        label: t(".label"),
+                        type: "password",
+                        placeholder: t(".placeholder"),
+                        value: Setting.synth_api_key,
+                        container_class: @synth_usage.present? && !@synth_usage.success? ? "border-red-500" : "",
+                        data: { "auto-submit-form-target": "auto" } %>
+  <% end %>
+
+  <% if @synth_usage.present? && @synth_usage.success? %>
+    <div class="space-y-4">
+      <div class="space-y-2">
+        <p class="text-sm text-gray-500">
+          <%= t(".api_calls_used",
+                used: number_with_delimiter(@synth_usage.used),
+                limit: number_with_delimiter(@synth_usage.limit),
+                percentage: number_to_percentage(@synth_usage.utilization, precision: 1)) %>
+        </p>
+        <div class="w-52 h-1.5 bg-gray-100 rounded-2xl">
+          <div class="h-full bg-green-500 rounded-2xl"
+               style="width: <%= [@synth_usage.utilization, 2].max %>%;"></div>
+        </div>
+      </div>
+      <div class="bg-gray-100 rounded-md px-1.5 py-0.5 w-fit">
+        <p class="text-xs font-medium text-gray-500 uppercase">
+          <%= t(".plan", plan: @synth_usage.plan) %>
+        </p>
+      </div>
+    </div>
+  <% end %>
+</div>

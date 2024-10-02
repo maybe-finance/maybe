@@ -9,6 +9,38 @@ class Provider::Synth
     response = client.get("#{base_url}/user")
     JSON.parse(response.body).dig("id").present?
   end
+  def usage
+    response = client.get("#{base_url}/user")
+
+    if response.status == 401
+      return UsageResponse.new(
+        success?: false,
+        error: "Unauthorized: Invalid API key",
+        raw_response: response
+      )
+    end
+
+    parsed = JSON.parse(response.body)
+
+    remaining = parsed.dig("api_calls_remaining")
+    limit = parsed.dig("api_limit")
+    used = limit - remaining
+
+    UsageResponse.new(
+      used: used,
+      limit: limit,
+      utilization: used.to_f / limit * 100,
+      plan: parsed.dig("plan"),
+      success?: true,
+      raw_response: response
+    )
+  rescue StandardError => error
+    UsageResponse.new(
+      success?: false,
+      error: error,
+      raw_response: error
+    )
+  end
 
   def fetch_security_prices(ticker:, start_date:, end_date:)
     prices = paginate(
@@ -96,6 +128,7 @@ class Provider::Synth
     ExchangeRateResponse = Struct.new :rate, :success?, :error, :raw_response, keyword_init: true
     SecurityPriceResponse = Struct.new :prices, :success?, :error, :raw_response, keyword_init: true
     ExchangeRatesResponse = Struct.new :rates, :success?, :error, :raw_response, keyword_init: true
+    UsageResponse = Struct.new :used, :limit, :utilization, :plan, :success?, :error, :raw_response, keyword_init: true
 
     def base_url
       "https://api.synthfinance.com"
