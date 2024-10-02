@@ -40,18 +40,6 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.delivery_method = :letter_opener
 
-  # Uncomment to send emails in development
-  # config.action_mailer.raise_delivery_errors = true
-  # config.action_mailer.delivery_method = :smtp
-  # config.action_mailer.smtp_settings = {
-  #   address: ENV["SMTP_ADDRESS"],
-  #   port: ENV["SMTP_PORT"],
-  #   user_name: ENV["SMTP_USERNAME"],
-  #   password: ENV["SMTP_PASSWORD"],
-  #   tls: ENV.fetch("SMTP_TLS_ENABLED", "true") == "true"
-  # }
-
-
   config.action_mailer.perform_caching = false
 
   config.action_mailer.perform_deliveries = true

@@ -1,7 +1,7 @@
 class AddImportTypes < ActiveRecord::Migration[7.2]
   def change
     change_table :imports do |t|
-      t.string :type, null: false
+      t.string :type
       t.string :date_col_label, default: "date"
       t.string :amount_col_label, default: "amount"
       t.string :name_col_label, default: "name"
@@ -18,6 +18,10 @@ class AddImportTypes < ActiveRecord::Migration[7.2]
       t.string :signage_convention, default: "inflows_positive"
       t.string :error
     end
+
+    Import.update_all(type: "TransactionImport")
+
+    change_column_null :imports, :type, false
 
     # Add import references so we can associate imported resources after the import
     add_reference :account_entries, :import, foreign_key: true, type: :uuid

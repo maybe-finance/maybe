@@ -16,9 +16,7 @@ Rails.application.routes.draw do
   namespace :settings do
     resource :profile, only: %i[show update destroy]
     resource :preferences, only: %i[show update]
-    resource :hosting, only: %i[show update] do
-      post :send_test_email, on: :collection
-    end
+    resource :hosting, only: %i[show update]
   end
 
   resources :tags, except: %i[show destroy] do

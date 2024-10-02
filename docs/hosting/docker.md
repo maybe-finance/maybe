@@ -174,6 +174,19 @@ docker compose up --no-deps -d app # This restarts the app using the newest vers
 
 ## Troubleshooting
 
-This section will provide troubleshooting tips and solutions for common issues
-encountered during deployment. Check back later for updates!
+### ActiveRecord::DatabaseConnectionError
 
+If you are trying to get Maybe started for the **first time** and run into database connection issues, it is likely because Docker has already initialized the Postgres database with a _different_ default role (usually from a previous attempt to start the app).
+
+If you run into this issue, you can optionally **reset the database**.
+
+**PLEASE NOTE: this will delete any existing data that you have in your Maybe database, so proceed with caution.**  For first-time users of the app just trying to get started, you're generally safe to run the commands below.
+
+By running the commands below, you will delete your existing Maybe database and "reset" it.
+
+```
+docker compose down
+docker volume rm maybe_postgres-data # this is the name of the volume the DB is mounted to
+docker compose up
+docker exec -it maybe-postgres-1 psql -U maybe -d maybe_production -c "SELECT 1;" # This will verify that the issue is fixed
+```

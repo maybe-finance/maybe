@@ -1,4 +1,6 @@
 class Family < ApplicationRecord
+  include Providable
+
   has_many :users, dependent: :destroy
   has_many :tags, dependent: :destroy
   has_many :accounts, dependent: :destroy
@@ -120,5 +122,9 @@ class Family < ApplicationRecord
 
   def needs_sync?
     last_synced_at.nil? || last_synced_at.to_date < Date.current
+  end
+
+  def synth_usage
+    self.class.synth_provider&.usage
   end
 end
