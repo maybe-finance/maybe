@@ -6,6 +6,7 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :family
 
   validates :email, presence: true, uniqueness: true
+  validate :ensure_valid_profile_image
   normalizes :email, with: ->(email) { email.strip.downcase }
 
   normalizes :first_name, :last_name, with: ->(value) { value.strip.presence }
@@ -73,6 +74,14 @@ class User < ApplicationRecord
   end
 
   private
+    def ensure_valid_profile_image
+      return unless profile_image.attached?
+
+      unless profile_image.content_type.in?(%w[image/jpeg image/png])
+        errors.add(:profile_image, "must be a JPEG or PNG")
+        profile_image.purge
+      end
+    end
 
     def last_user_in_family?
       family.users.count == 1
