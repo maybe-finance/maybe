@@ -2,9 +2,7 @@
   header_title t(".title")
 %>
 
-<%= styled_form_with url: session_path, class: "space-y-4" do |form| %>
-  <%= auth_messages form %>
-
+<%= styled_form_with url: sessions_path, class: "space-y-4" do |form| %>
   <%= form.email_field :email, label: t(".email"), autofocus: false, autocomplete: "email", required: "required", placeholder: t(".email_placeholder") %>
 
   <%= form.password_field :password, label: t(".password"), required: "required" %>

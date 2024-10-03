@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_01_181256) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_03_163448) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -450,6 +450,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_01_181256) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "sessions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.string "user_agent"
+    t.string "ip_address"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
   create_table "settings", force: :cascade do |t|
     t.string "var", null: false
     t.text "value"
@@ -485,7 +494,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_01_181256) do
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "last_login_at"
     t.string "last_prompted_upgrade_commit_sha"
     t.string "last_alerted_upgrade_commit_sha"
     t.enum "role", default: "member", null: false, enum_type: "user_role"
@@ -524,6 +532,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_01_181256) do
   add_foreign_key "imports", "families"
   add_foreign_key "institutions", "families"
   add_foreign_key "merchants", "families"
+  add_foreign_key "sessions", "users"
   add_foreign_key "taggings", "tags"
   add_foreign_key "tags", "families"
   add_foreign_key "users", "families"

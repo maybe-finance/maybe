@@ -25,14 +25,14 @@
   </head>
 
   <body class="h-full">
-  <div class="fixed z-50 space-y-1 top-6 right-10">
-    <div id="notification-tray">
-      <%= render_flash_notifications %>
+    <div class="fixed z-50 space-y-1 top-6 right-10">
+      <div id="notification-tray">
+        <%= render_flash_notifications %>
+      </div>
     </div>
-  </div>
 
-  <%= family_notifications_stream %>
-  <%= family_stream %>
+    <%= family_notifications_stream %>
+    <%= family_stream %>
 
     <%= content_for?(:content) ? yield(:content) : yield %>
 
@@ -42,7 +42,7 @@
     <%= render "shared/confirm_modal" %>
 
     <% if self_hosted? %>
-    <%= render "shared/app_version" %>
+      <%= render "shared/app_version" %>
     <% end %>
   </body>
 </html>

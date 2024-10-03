@@ -10,7 +10,6 @@
 <% end %>
 
 <%= styled_form_with model: @user, url: registration_path, class: "space-y-4" do |form| %>
-  <%= auth_messages form %>
   <%= form.email_field :email, autofocus: false, autocomplete: "email", required: "required", placeholder: "you@example.com", label: true %>
   <%= form.password_field :password, autocomplete: "new-password", required: "required", label: true %>
   <%= form.password_field :password_confirmation, autocomplete: "new-password", required: "required", label: true %>

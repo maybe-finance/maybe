@@ -3,8 +3,6 @@
 %>
 
 <%= styled_form_with model: @user, url: password_reset_path(token: params[:token]), method: :patch, class: "space-y-4" do |form| %>
-  <%= auth_messages form %>
-
   <div class="relative border border-gray-100 bg-gray-25 rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
     <%= form.label :password, class: "p-4 pb-0 block text-sm font-medium text-gray-700" %>
     <%= form.password_field :password, required: "required", class: "p-4 pt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full" %>

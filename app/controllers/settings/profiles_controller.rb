@@ -23,7 +23,7 @@ class Settings::ProfilesController < SettingsController
 
   def destroy
     if Current.user.deactivate
-      logout
+      Current.session.destroy
       redirect_to root_path, notice: t(".success")
     else
       redirect_to settings_profile_path, alert: Current.user.errors.full_messages.to_sentence
@@ -31,7 +31,6 @@ class Settings::ProfilesController < SettingsController
   end
 
   private
-
     def user_params
       params.require(:user).permit(:first_name, :last_name, :profile_image,
                                    family_attributes: [ :name, :id ])

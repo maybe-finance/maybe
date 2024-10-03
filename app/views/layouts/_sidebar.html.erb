@@ -63,7 +63,7 @@
         <% end %>
       </div>
       <div class="p-1">
-        <%= button_to session_path, method: :delete, class: "w-full text-red-400 flex gap-1 items-center hover:bg-gray-50 rounded-lg px-3 py-2" do %>
+        <%= button_to session_path(Current.session), method: :delete, class: "w-full text-red-400 flex gap-1 items-center hover:bg-gray-50 rounded-lg px-3 py-2" do %>
           <%= lucide_icon("log-out", class: "w-5 h-5 shrink-0") %>
           <span class="text-sm">Logout</span>
         <% end %>
