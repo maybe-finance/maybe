@@ -17,7 +17,7 @@ class RegistrationsController < ApplicationController
 
     if @user.save
       Category.create_default_categories(@user.family)
-      login @user
+      @session = create_session_for(@user)
       flash[:notice] = t(".success")
       redirect_to root_path
     else

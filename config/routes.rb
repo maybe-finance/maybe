@@ -1,17 +1,13 @@
 Rails.application.routes.draw do
   mount GoodJob::Engine => "jobs"
 
-  get "changelog" => "pages#changelog", as: :changelog
-  get "feedback" => "pages#feedback", as: :feedback
+  get "changelog", to: "pages#changelog"
+  get "feedback", to: "pages#feedback"
 
   resource :registration
-  resource :session
+  resources :sessions, only: %i[new create destroy]
   resource :password_reset
   resource :password
-
-  namespace :help do
-    resources :articles, only: :show
-  end
 
   namespace :settings do
     resource :profile, only: %i[show update destroy]
