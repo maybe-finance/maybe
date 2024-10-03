@@ -24,9 +24,9 @@ class Import::Row < ApplicationRecord
 
   def signed_amount
     if import.type == "TradeImport"
-      price.to_d * apply_signage_convention(qty.to_d)
+      price.to_d * apply_trade_signage_convention(qty.to_d)
     else
-      apply_signage_convention(amount.to_d)
+      apply_transaction_signage_convention(amount.to_d)
     end
   end
 
@@ -38,8 +38,14 @@ class Import::Row < ApplicationRecord
   end
 
   private
-    def apply_signage_convention(value)
+    # In the Maybe system, positive quantities == "inflows"
+    def apply_trade_signage_convention(value)
       value * (import.signage_convention == "inflows_positive" ? 1 : -1)
+    end
+
+    # In the Maybe system, positive amounts == "outflows", so we must reverse signage
+    def apply_transaction_signage_convention(value)
+      value * (import.signage_convention == "inflows_positive" ? -1 : 1)
     end
 
     def required_columns
