@@ -85,8 +85,8 @@ class MoneyTest < ActiveSupport::TestCase
   end
 
   test "can cast to string with basic formatting" do
-    assert_equal "$1,000.90", Money.new(1000.899).format
-    assert_equal "€1.000,12", Money.new(1000.12, :eur).format
+    assert_equal "$1,000.90", Money.new(1000.899).to_s
+    assert_equal "€1.000,12", Money.new(1000.12, :eur).to_s
   end
 
   test "converts currency when rate available" do

@@ -28,25 +28,6 @@ class Money::CurrencyTest < ActiveSupport::TestCase
     assert_equal 2, @currency.default_precision
   end
 
-  test "can extract cents string from amount" do
-    value1 = Money.new(100)
-    value2 = Money.new(100.1)
-    value3 = Money.new(100.12)
-    value4 = Money.new(100.123)
-    value5 = Money.new(200, :jpy)
-
-    assert_equal "00", value1.cents_str
-    assert_equal "10", value2.cents_str
-    assert_equal "12", value3.cents_str
-    assert_equal "12", value4.cents_str
-    assert_equal "", value5.cents_str
-
-    assert_equal "", value4.cents_str(0)
-    assert_equal "1", value4.cents_str(1)
-    assert_equal "12", value4.cents_str(2)
-    assert_equal "123", value4.cents_str(3)
-  end
-
   test "step returns the smallest value of the currency" do
     assert_equal 0.01, @currency.step
   end

@@ -138,13 +138,13 @@ module ApplicationHelper
 
   def format_money(number_or_money, options = {})
     money = Money.new(number_or_money)
-    options.reverse_merge!(money.default_format_options)
+    options.reverse_merge!(money.format_options(I18n.locale))
     number_to_currency(money.amount, options)
   end
 
   def format_money_without_symbol(number_or_money, options = {})
     money = Money.new(number_or_money)
-    options.reverse_merge!(money.default_format_options)
+    options.reverse_merge!(money.format_options(I18n.locale))
     ActiveSupport::NumberHelper.number_to_delimited(money.amount.round(options[:precision] || 0), { delimiter: options[:delimiter], separator: options[:separator] })
   end
 
