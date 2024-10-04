@@ -94,7 +94,7 @@ class TransactionsController < ApplicationController
 
     def search_params
       params.fetch(:q, {})
-            .permit(:start_date, :end_date, :search, :amount, :amount_operator, accounts: [], account_ids: [], categories: [], merchants: [], types: [])
+            .permit(:start_date, :end_date, :search, :amount, :amount_operator, accounts: [], account_ids: [], categories: [], merchants: [], types: [], tags: [])
     end
 
     def transaction_entry_params

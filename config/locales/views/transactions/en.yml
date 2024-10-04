@@ -70,6 +70,7 @@ en:
         clear_filters: Clear filters
         date_filter: Date
         merchant_filter: Merchant
+        tag_filter: Tag
         type_filter: Type
       search:
         equal_to: equal to

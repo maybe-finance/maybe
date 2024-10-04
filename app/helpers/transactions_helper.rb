@@ -3,9 +3,10 @@ module TransactionsHelper
     [
       { key: "account_filter", icon: "layers" },
       { key: "date_filter", icon: "calendar" },
-      { key: "type_filter", icon: "shapes" },
+      { key: "type_filter", icon: "tag" },
       { key: "amount_filter", icon: "hash" },
-      { key: "category_filter", icon: "tag" },
+      { key: "category_filter", icon: "shapes" },
+      { key: "tag_filter", icon: "tags" },
       { key: "merchant_filter", icon: "store" }
     ]
   end
