@@ -13,8 +13,15 @@ class Account::Transaction < ApplicationRecord
   class << self
     def search(params)
       query = all
-      query = query.joins("LEFT JOIN categories ON categories.id = account_transactions.category_id").where(categories: { name: params[:categories] }) if params[:categories].present?
-      query = query.joins("LEFT JOIN merchants ON merchants.id = account_transactions.merchant_id").where(merchants: { name: params[:merchants] }) if params[:merchants].present?
+      query = query.joins(:category).where(categories: { name: params[:categories] }) if params[:categories].present?
+      query = query.joins(:merchant).where(merchants: { name: params[:merchants] }) if params[:merchants].present?
+
+      if params[:tags].present?
+        query = query.joins(:tags)
+                     .where(tags: { name: params[:tags] })
+                     .distinct
+      end
+
       query
     end
 
@@ -25,7 +32,7 @@ class Account::Transaction < ApplicationRecord
     private
 
       def searchable_keys
-        %i[categories merchants]
+        %i[categories merchants tags]
       end
   end
 
