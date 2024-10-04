@@ -95,29 +95,4 @@ class Security::PriceTest < ActiveSupport::TestCase
       assert_equal [], Security::Price.find_prices(ticker: "NVDA", start_date: 10.days.ago.to_date, end_date: Date.current)
     end
   end
-
-  test "uses locf gapfilling for weekends when price is missing" do
-    friday = Date.new(2024, 10, 4) # A known Friday
-    saturday = friday + 1.day # weekend
-    sunday = saturday + 1.day # weekend
-    monday = sunday + 1.day # known Monday
-
-    Security::Price.create!(ticker: "TM", date: friday, price: 100)
-    Security::Price.create!(ticker: "TM", date: monday, price: 110)
-
-    # Data provider doesn't return weekend prices
-    @provider.expects(:fetch_security_prices)
-             .with(ticker: "TM", start_date: saturday, end_date: sunday)
-             .returns(OpenStruct.new(success?: false))
-             .once
-
-    expected_prices = [
-      Security::Price.new(ticker: "TM", date: friday, price: 100).price,
-      Security::Price.new(ticker: "TM", date: saturday, price: 100).price,
-      Security::Price.new(ticker: "TM", date: sunday, price: 100).price,
-      Security::Price.new(ticker: "TM", date: monday, price: 110).price
-    ]
-
-    assert_equal expected_prices, Security::Price.find_prices(ticker: "TM", start_date: friday, end_date: monday).map(&:price)
-  end
 end

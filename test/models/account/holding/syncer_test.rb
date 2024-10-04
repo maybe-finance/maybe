@@ -77,14 +77,37 @@ class Account::Holding::SyncerTest < ActiveSupport::TestCase
       { ticker: "AMZN", qty: 10, price: nil, amount: nil, date: Date.current }
     ]
 
+    fetched_prices = [ Security::Price.new(ticker: "AMZN", date: 1.day.ago.to_date, price: 215) ]
+
+    Gapfiller.any_instance.expects(:run).returns(fetched_prices)
     Security::Price.expects(:find_prices)
                    .with(start_date: 2.days.ago.to_date, end_date: Date.current, ticker: "AMZN")
                    .once
-                   .returns([
-                              Security::Price.new(ticker: "AMZN", date: 1.day.ago.to_date, price: 215)
-                            ])
+                   .returns(fetched_prices)
 
     @account.expects(:observe_missing_price).with(ticker: "AMZN", date: Date.current).once
+
+    run_sync_for(@account)
+
+    assert_holdings(expected)
+  end
+
+  # It is common for data providers to not provide prices for weekends, so we need to carry the last observation forward
+  test "uses locf gapfilling when price is missing" do
+    # Prices should be gapfilled like this: 210, 210, 210, 220
+    amzn = create_security("AMZN", prices: [
+      { date: 3.days.ago.to_date, price: 210 },
+      { date: Date.current, price: 220 }
+    ])
+
+    create_trade(amzn, account: @account, qty: 10, date: 3.days.ago.to_date)
+
+    expected = [
+      { ticker: "AMZN", qty: 10, price: 210, amount: 10 * 210, date: 3.days.ago.to_date },
+      { ticker: "AMZN", qty: 10, price: 210, amount: 10 * 210, date: 2.days.ago.to_date },
+      { ticker: "AMZN", qty: 10, price: 210, amount: 10 * 210, date: 1.day.ago.to_date },
+      { ticker: "AMZN", qty: 10, price: 220, amount: 10 * 220, date: Date.current }
+    ]
 
     run_sync_for(@account)
 
