@@ -11,10 +11,10 @@ class Gapfiller
     gapfilled_records = []
 
     date_range.each do |date|
-      record = @series.find { |r| r.date == date }
+      record = series.find { |r| r.date == date }
 
       if should_gapfill?(date, record)
-        prev_record = gapfilled_records.last || @series.find { |r| r.date < date }&.last
+        prev_record = gapfilled_records.find { |r| r.date == date - 1.day }
 
         if prev_record
           new_record = create_gapfilled_record(prev_record, date)
@@ -32,7 +32,7 @@ class Gapfiller
     attr_reader :date_range, :cache
 
     def should_gapfill?(date, record)
-      record.nil? || date.on_weekend?
+      date.on_weekend? && record.nil?
     end
 
     def create_gapfilled_record(prev_record, date)
