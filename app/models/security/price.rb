@@ -27,7 +27,6 @@ class Security::Price < ApplicationRecord
   end
 
   private
-
     def upcase_ticker
       self.ticker = ticker.upcase
     end

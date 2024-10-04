@@ -48,7 +48,9 @@ class Account::Holding::Syncer
                              end
 
                              ticker_start_dates.each do |ticker, date|
-                               prices[ticker] = Security::Price.find_prices(ticker: ticker, start_date: date, end_date: Date.current)
+                               fetched_prices = Security::Price.find_prices(ticker: ticker, start_date: date, end_date: Date.current)
+                               gapfilled_prices = Gapfiller.new(fetched_prices, start_date: date, end_date: Date.current, cache: false).run
+                               prices[ticker] = gapfilled_prices
                              end
 
                              prices

@@ -3,11 +3,11 @@ class Issue::PricesMissing < Issue
 
   after_initialize :initialize_missing_prices
 
-  validates :missing_prices, presence: true
+  validates :missing_prices, presence: true, allow_blank: true
 
   def append_missing_price(ticker, date)
     missing_prices[ticker] ||= []
-    missing_prices[ticker] << date
+    missing_prices[ticker] << date unless missing_prices[ticker].include?(date.to_s)
   end
 
   def stale?
