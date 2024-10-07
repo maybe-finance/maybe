@@ -2,7 +2,7 @@
   <header class="flex items-center justify-between">
     <div>
       <h1 class="sr-only"><%= t(".title") %></h1>
-      <p class="text-xl font-medium text-gray-900 mb-1"><%= t(".greeting", name: Current.user.first_name ) %></p>
+      <p class="text-xl font-medium text-gray-900 mb-1"><%= t(".greeting", name: Current.user.first_name.presence || 'friend') %></p>
       <% unless @accounts.blank? %>
         <p class="text-gray-500 text-sm"><%= t(".subtitle") %></p>
       <% end %>
