@@ -7,7 +7,7 @@ end
 
 require_relative "../config/environment"
 
-ENV["SELF_HOSTING_ENABLED"] = "false"
+ENV["SELF_HOSTED"] = "false"
 ENV["UPGRADES_ENABLED"] = "false"
 ENV["RAILS_ENV"] ||= "test"
 
