@@ -11,7 +11,7 @@ en:
         date: date
         new_entry: New entry
         no_valuations: No valuations for this account yet
-        valuations: Value history
+        valuations: Value
         value: value
       valuation:
         confirm_accept: Delete entry
