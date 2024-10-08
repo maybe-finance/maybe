@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_07_211438) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_08_122449) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -184,6 +184,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_07_211438) do
   create_table "credit_cards", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "available_credit", precision: 10, scale: 2
+    t.decimal "minimum_payment", precision: 10, scale: 2
+    t.decimal "apr", precision: 10, scale: 2
+    t.date "expiration_date"
+    t.decimal "annual_fee", precision: 10, scale: 2
   end
 
   create_table "cryptos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -408,6 +413,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_07_211438) do
   create_table "loans", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "rate_type"
+    t.decimal "interest_rate", precision: 10, scale: 2
+    t.integer "term_months"
   end
 
   create_table "merchants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

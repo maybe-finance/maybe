@@ -1,4 +1,4 @@
-class PropertiesController < ApplicationController
+class LoansController < ApplicationController
   before_action :set_account, only: :update
 
   def create
@@ -30,10 +30,9 @@ class PropertiesController < ApplicationController
           :name, :balance, :start_date, :start_balance, :currency, :accountable_type,
           accountable_attributes: [
             :id,
-            :year_built,
-            :area_unit,
-            :area_value,
-            address_attributes: [ :line1, :line2, :locality, :region, :country, :postal_code ]
+            :rate_type,
+            :interest_rate,
+            :term_months
           ]
         )
     end

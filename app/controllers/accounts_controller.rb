@@ -41,14 +41,11 @@ class AccountsController < ApplicationController
   end
 
   def edit
+    @account.accountable.build_address if @account.accountable.is_a?(Property) && @account.accountable.address.blank?
   end
 
   def update
-    Account.transaction do
-      @account.update! account_params.except(:accountable_type, :balance)
-      @account.update_balance!(account_params[:balance]) if account_params[:balance]
-    end
-    @account.sync_later
+    @account.update_with_sync!(account_params)
     redirect_back_or_to account_path(@account), notice: t(".success")
   end
 

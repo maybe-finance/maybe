@@ -75,6 +75,8 @@ Rails.application.routes.draw do
 
   resources :properties, only: %i[create update]
   resources :vehicles, only: %i[create update]
+  resources :credit_cards, only: %i[create update]
+  resources :loans, only: %i[create update]
 
   resources :transactions, only: %i[index new create] do
     collection do

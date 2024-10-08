@@ -1,1 +1,7 @@
-one: { }
+one:
+  available_credit: 5000.00
+  minimum_payment: 100.00
+  apr: 18.99
+  expiration_date: <%= 4.years.from_now.to_date %>
+  annual_fee: 95.00
+  
