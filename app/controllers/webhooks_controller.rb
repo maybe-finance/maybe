@@ -4,14 +4,18 @@ class WebhooksController < ApplicationController
 
   def stripe
     payload = request.body.read
+    sig_header = request.env["HTTP_STRIPE_SIGNATURE"]
     event = nil
 
     begin
-      event = Stripe::Event.construct_from(
-        JSON.parse(payload, symbolize_names: true)
+      event = Stripe::Webhook.construct_event(
+        payload, sig_header, ENV["STRIPE_WEBHOOK_SECRET"]
       )
     rescue JSON::ParserError
       render json: { error: "Invalid payload" }, status: :bad_request
+      return
+    rescue Stripe::SignatureVerificationError => e
+      render json: { error: "Invalid signature" }, status: :bad_request
       return
     end
 
