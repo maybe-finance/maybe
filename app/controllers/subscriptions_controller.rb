@@ -17,6 +17,7 @@ class SubscriptionsController < ApplicationController
         quantity: 1
       } ],
       mode: "subscription",
+      allow_promotion_codes: true,
       success_url: settings_billing_url,
       cancel_url: settings_billing_url
     })
