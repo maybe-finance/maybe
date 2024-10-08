@@ -12,7 +12,7 @@
         <%= image_tag "github-icon.svg", class: "w-8 h-8 mb-2" %>
         <span class="text-sm font-medium text-gray-900">Write a feature request</span>
       <% end %>
-      <% if ENV["SELF_HOSTED"] == "true" %>
+      <% if self_hosted? %>
         <%= link_to "https://github.com/maybe-finance/maybe/issues/new?assignees=&labels=bug&template=bug_report.md&title=", target: "_blank", rel: "noopener noreferrer", class: "w-1/3 flex flex-col items-center p-4 border border-alpha-black-25 rounded-xl hover:bg-gray-50" do %>
           <%= image_tag "github-icon.svg", class: "w-8 h-8 mb-2" %>
           <span class="text-sm font-medium text-gray-900">File a bug report</span>
