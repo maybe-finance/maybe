@@ -45,6 +45,7 @@ gem "rails-settings-cached"
 gem "tzinfo-data", platforms: %i[windows jruby]
 gem "csv"
 gem "redcarpet"
+gem "stripe"
 gem "intercom-rails"
 
 group :development, :test do
