@@ -38,7 +38,6 @@ gem "image_processing", ">= 1.2"
 gem "bcrypt", "~> 3.1"
 gem "faraday"
 gem "faraday-retry"
-gem "faraday-multipart"
 gem "inline_svg"
 gem "octokit"
 gem "pagy"
@@ -46,7 +45,7 @@ gem "rails-settings-cached"
 gem "tzinfo-data", platforms: %i[windows jruby]
 gem "csv"
 gem "redcarpet"
-gem "stripe"
+gem "intercom-rails"
 
 group :development, :test do
   gem "debug", platforms: %i[mri windows]
