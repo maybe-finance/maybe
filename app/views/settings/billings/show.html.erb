@@ -8,7 +8,7 @@
     <% if Current.family.stripe_plan_id.blank? %>
       <%= button_to t(".subscribe_button"), subscribe_settings_billing_path, method: :post, class: "w-fit flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2", data: { turbo: false } %>
     <% else %>
-      <%= button_to t(".manage_subscription_button"), subscribe_settings_billing_path, method: :post, class: "btn btn-primary", data: { turbo: false } %>
+      <%= button_to t(".manage_subscription_button"), portal_settings_billing_path, method: :post, class: "w-fit flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2", data: { turbo: false } %>
     <% end %>
   <% end %>
 

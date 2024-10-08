@@ -27,6 +27,6 @@ class Settings::BillingsController < SettingsController
       customer: Current.family.stripe_customer_id,
       return_url: settings_billing_url
     )
-    redirect_to portal_session.url
+    redirect_to portal_session.url, allow_other_host: true, status: :see_other
   end
 end
