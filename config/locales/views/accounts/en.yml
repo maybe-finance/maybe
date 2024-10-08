@@ -107,7 +107,13 @@ en:
       transactions: Transactions
       value: Value
     summary:
-      new: New account
+      new: New
+      no_assets: No assets found
+      no_assets_description: Add an asset either via connection, importing or entering
+        manually.
+      no_liabilities: No liabilities found
+      no_liabilities_description: Add a liability either via connection, importing
+        or entering manually.
     sync_all:
       button_text: Sync all
       success: Successfully queued accounts for syncing.

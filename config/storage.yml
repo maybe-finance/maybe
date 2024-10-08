@@ -13,6 +13,14 @@ amazon:
   region: <%= ENV["S3_REGION"] || "us-east-1" %>
   bucket: <%= ENV["S3_BUCKET"] %>
 
+cloudflare:
+  service: S3
+  endpoint: https://<%= ENV['CLOUDFLARE_ACCOUNT_ID'] %>.r2.cloudflarestorage.com
+  access_key_id: <%= ENV['CLOUDFLARE_ACCESS_KEY_ID'] %>
+  secret_access_key: <%= ENV['CLOUDFLARE_SECRET_ACCESS_KEY'] %>
+  region: auto
+  bucket: <%= ENV['CLOUDFLARE_BUCKET'] %>
+
 # Removed in #702.  Uncomment, add gems, update .env.example to enable.
 #google:
 #  service: GCS
