@@ -128,6 +128,10 @@ class Family < ApplicationRecord
     self.class.synth_provider&.usage
   end
 
+  def subscribed?
+    stripe_subscription_status.present? && stripe_subscription_status == "active"
+  end
+
   def primary_user
     users.order(:created_at).first
   end

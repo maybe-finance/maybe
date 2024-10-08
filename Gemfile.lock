@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/maybe-finance/lucide-rails.git
-  revision: 79d989593ee4ac6c50106ec5e4d2bd4ec8f5af87
+  revision: 272e5fb8418ea458da3995d6abe0ba0ceee9c9f0
   specs:
     lucide-rails (0.2.0)
       railties (>= 4.1.0)
