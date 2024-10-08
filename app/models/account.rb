@@ -39,13 +39,16 @@ class Account < ApplicationRecord
 
       Accountable.by_classification.each do |classification, types|
         types.each do |type|
-          group = grouped_accounts[classification.to_sym].add_child_group(type, currency)
-          self.where(accountable_type: type).each do |account|
-            group.add_value_node(
-              account,
-              account.balance_money.exchange_to(currency, fallback_rate: 0),
-              account.series(period: period, currency: currency)
-            )
+          accounts = self.where(accountable_type: type)
+          if accounts.any?
+            group = grouped_accounts[classification.to_sym].add_child_group(type, currency)
+            accounts.each do |account|
+              group.add_value_node(
+                account,
+                account.balance_money.exchange_to(currency, fallback_rate: 0),
+                account.series(period: period, currency: currency)
+              )
+            end
           end
         end
       end
