@@ -13,8 +13,6 @@
 
     <% end %>
 
-    <%= render "sync_all_button" %>
-
     <%= link_to new_account_path, class: "rounded-lg bg-gray-900 text-white flex items-center gap-1 justify-center hover:bg-gray-700 px-3 py-2", data: { turbo_frame: :modal } do %>
       <%= lucide_icon("plus", class: "w-5 h-5") %>
       <p class="text-sm font-medium"><%= t(".new") %></p>

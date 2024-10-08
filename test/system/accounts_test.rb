@@ -58,10 +58,8 @@ class AccountsTest < ApplicationSystemTestCase
     assert_account_created("OtherLiability")
   end
 
-  test "can sync all acounts on accounts page and account summary page" do
+  test "can sync all acounts on accounts page" do
     visit accounts_url
-    assert_button "Sync all"
-    visit summary_accounts_url
     assert_button "Sync all"
   end
 
