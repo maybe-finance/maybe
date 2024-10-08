@@ -41,6 +41,7 @@ class AccountsController < ApplicationController
   end
 
   def edit
+    @account.accountable.build_address if @account.accountable.is_a?(Property) && @account.accountable.address.blank?
   end
 
   def update

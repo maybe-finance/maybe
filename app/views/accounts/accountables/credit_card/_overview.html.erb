@@ -1,45 +1,27 @@
 <%# locals: (account:) %>
 
 <div class="grid grid-cols-3 gap-2">
-  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
-    <h4 class="text-gray-500 text-sm"><%= t(".amount_owed") %></h4>
-    <p class="text-xl font-medium text-gray-900">
-      <%= format_money(account.balance) %>
-    </p>
-  </div>
+  <%= summary_card title: t(".amount_owed") do %>
+    <%= format_money(account.balance) %>
+  <% end %>
 
-  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
-    <h4 class="text-gray-500 text-sm"><%= t(".available_credit") %></h4>
-    <p class="text-xl font-medium text-gray-900">
-      <%= format_money(account.credit_card.available_credit) || t(".unknown") %>
-    </p>
-  </div>
+  <%= summary_card title: t(".available_credit") do %>
+    <%= format_money(account.credit_card.available_credit) || t(".unknown") %>
+  <% end %>
 
-  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
-    <h4 class="text-gray-500 text-sm"><%= t(".minimum_payment") %></h4>
-    <p class="text-xl font-medium text-gray-900">
-      <%= format_money(account.credit_card.minimum_payment) || t(".unknown") %>
-    </p>
-  </div>
+  <%= summary_card title: t(".minimum_payment") do %>
+    <%= format_money(account.credit_card.minimum_payment) || t(".unknown") %>
+  <% end %>
 
-  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
-    <h4 class="text-gray-500 text-sm"><%= t(".apr") %></h4>
-    <p class="text-xl font-medium text-gray-900">
-      <%= account.credit_card.apr ? number_to_percentage(account.credit_card.apr, precision: 2) : t(".unknown") %>
-    </p>
-  </div>
+  <%= summary_card title: t(".apr") do %>
+    <%= account.credit_card.apr ? number_to_percentage(account.credit_card.apr, precision: 2) : t(".unknown") %>
+  <% end %>
 
-  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
-    <h4 class="text-gray-500 text-sm"><%= t(".expiration_date") %></h4>
-    <p class="text-xl font-medium text-gray-900">
-      <%= account.credit_card.expiration_date ? l(account.credit_card.expiration_date, format: :long) : t(".unknown") %>
-    </p>
-  </div>
+  <%= summary_card title: t(".expiration_date") do %>
+    <%= account.credit_card.expiration_date ? l(account.credit_card.expiration_date, format: :long) : t(".unknown") %>
+  <% end %>
 
-  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
-    <h4 class="text-gray-500 text-sm"><%= t(".annual_fee") %></h4>
-    <p class="text-xl font-medium text-gray-900">
-      <%= format_money(account.credit_card.annual_fee) || t(".unknown") %>
-    </p>
-  </div>
+  <%= summary_card title: t(".annual_fee") do %>
+    <%= format_money(account.credit_card.annual_fee) || t(".unknown") %>
+  <% end %>
 </div>

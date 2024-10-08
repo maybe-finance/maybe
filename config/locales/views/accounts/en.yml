@@ -39,12 +39,14 @@ en:
         term_months: Term (months)
         term_months_placeholder: '360'
       property:
+        additional_info: Additional info
         area_unit: Area unit
-        area_value: Area value (optional)
+        area_value: Area value
         city: City
         country: Country
         line1: Address line 1
-        line2: Address line 2 (optional)
+        line2: Address line 2
+        optional: optional
         overview:
           living_area: Living Area
           market_value: Market Value
@@ -52,9 +54,9 @@ en:
           trend: Trend
           unknown: Unknown
           year_built: Year Built
-        postal_code: Postal code (optional)
+        postal_code: Postal code
         state: State
-        year_built: Year built (optional)
+        year_built: Year built
       vehicle:
         make: Make
         make_placeholder: Toyota
