@@ -27,6 +27,9 @@
           </li>
         <% end %>
         <li>
+          <%= sidebar_link_to t(".billing_label"), settings_billing_path, icon: "circle-dollar-sign" %>
+        </li>
+        <li>
           <%= sidebar_link_to t(".accounts_label"), accounts_path, icon: "layers" %>
         </li>
 

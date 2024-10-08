@@ -127,4 +127,8 @@ class Family < ApplicationRecord
   def synth_usage
     self.class.synth_provider&.usage
   end
+
+  def primary_user
+    users.order(:created_at).first
+  end
 end

@@ -13,6 +13,7 @@ en:
       preferences_label: Preferences
       profile_label: Account
       self_hosting_label: Self hosting
+      billing_label: Billing
       tags_label: Tags
       transactions_section_title: Transactions
       whats_new_label: What's new
@@ -56,3 +57,10 @@ en:
         save: Save
       update:
         success: Profile updated successfully.
+    billings:
+      show:
+        page_title: Billing
+        subscription_title: Manage subscription
+        subscription_subtitle: Manage your subscription and billing details
+        subscribe_button: Subscribe
+        manage_subscription_button: Manage subscription
