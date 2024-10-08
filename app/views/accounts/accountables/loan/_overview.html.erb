@@ -43,7 +43,7 @@
     <h4 class="text-gray-500 text-sm"><%= t(".term") %></h4>
     <p class="text-xl font-medium text-gray-900">
       <% if account.loan.term_months.present? %>
-        <%= pluralize(account.loan.term_months / 12, 'year') %>
+        <%= pluralize(account.loan.term_months / 12, "year") %>
       <% else %>
         <%= t(".unknown") %>
       <% end %>
