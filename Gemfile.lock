@@ -157,6 +157,8 @@ GEM
       faraday-net_http (>= 2.0, < 3.4)
       json
       logger
+    faraday-multipart (1.0.4)
+      multipart-post (~> 2)
     faraday-net_http (3.3.0)
       net-http
     faraday-retry (2.2.1)
@@ -241,6 +243,7 @@ GEM
     mocha (2.4.5)
       ruby2_keywords (>= 0.0.5)
     msgpack (1.7.2)
+    multipart-post (2.4.1)
     net-http (0.4.1)
       uri
     net-imap (0.4.14)
@@ -480,6 +483,7 @@ DEPENDENCIES
   erb_lint
   faker
   faraday
+  faraday-multipart
   faraday-retry
   good_job
   hotwire-livereload
