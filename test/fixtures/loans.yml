@@ -1,1 +1,4 @@
-one: { }
+one:
+  interest_rate: 3.5
+  term_months: 360
+  rate_type: fixed

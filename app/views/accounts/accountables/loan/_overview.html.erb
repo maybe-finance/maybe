@@ -1,0 +1,59 @@
+<%# locals: (account:) %>
+
+<div class="grid grid-cols-3 gap-2">
+  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
+    <h4 class="text-gray-500 text-sm"><%= t(".original_principal") %></h4>
+    <p class="text-xl font-medium text-gray-900">
+      <%= format_money account.original_balance %>
+    </p>
+  </div>
+
+  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
+    <h4 class="text-gray-500 text-sm"><%= t(".remaining_principal") %></h4>
+    <p class="text-xl font-medium text-gray-900">
+      <%= format_money account.balance %>
+    </p>
+  </div>
+
+  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
+    <h4 class="text-gray-500 text-sm"><%= t(".interest_rate") %></h4>
+    <p class="text-xl font-medium text-gray-900">
+      <% if account.loan.interest_rate.present? %>
+        <%= number_to_percentage(account.loan.interest_rate, precision: 2) %>
+      <% else %>
+        <%= t(".unknown") %>
+      <% end %>
+    </p>
+  </div>
+
+  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
+    <h4 class="text-gray-500 text-sm"><%= t(".monthly_payment") %></h4>
+    <p class="text-xl font-medium text-gray-900">
+      <% if account.loan.rate_type.present? && account.loan.rate_type != 'fixed' %>
+        <%= t(".not_applicable") %>
+      <% elsif account.loan.rate_type == 'fixed' && account.loan.monthly_payment.present? %>
+        <%= format_money(account.loan.monthly_payment) %>
+      <% else %>
+        <%= t(".unknown") %>
+      <% end %>
+    </p>
+  </div>
+
+  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
+    <h4 class="text-gray-500 text-sm"><%= t(".term") %></h4>
+    <p class="text-xl font-medium text-gray-900">
+      <% if account.loan.term_months.present? %>
+        <%= pluralize(account.loan.term_months / 12, 'year') %>
+      <% else %>
+        <%= t(".unknown") %>
+      <% end %>
+    </p>
+  </div>
+
+  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
+    <h4 class="text-gray-500 text-sm"><%= t(".type") %></h4>
+    <p class="text-xl font-medium text-gray-900">
+      <%= account.loan.rate_type&.titleize || t(".unknown") %>
+    </p>
+  </div>
+</div>

@@ -14,8 +14,7 @@ class VehiclesController < ApplicationController
   end
 
   def update
-    @account.update!(account_params)
-    @account.sync_later
+    @account.update_with_sync!(account_params)
     redirect_to @account, notice: t(".success")
   end
 

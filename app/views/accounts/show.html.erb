@@ -60,7 +60,11 @@
       <div class="space-y-2">
         <div class="flex items-center gap-1">
           <div>
-            <%= tag.p t(".total_value"), class: "text-sm font-medium text-gray-500" %>
+            <% if @account.asset? %>
+              <%= tag.p t(".total_value"), class: "text-sm font-medium text-gray-500" %>
+            <% else %>
+              <%= tag.p t(".total_owed"), class: "text-sm font-medium text-gray-500" %>
+            <% end %>
           </div>
           <%= render "tooltip", account: @account if @account.investment? %>
         </div>

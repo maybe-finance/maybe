@@ -79,6 +79,10 @@ class Account < ApplicationRecord
     end
   end
 
+  def original_balance
+    balances.chronological.first&.balance || balance
+  end
+
   def owns_ticker?(ticker)
     security_id = Security.find_by(ticker: ticker)&.id
     entries.account_trades
@@ -88,6 +92,15 @@ class Account < ApplicationRecord
 
   def favorable_direction
     classification == "asset" ? "up" : "down"
+  end
+
+  def update_with_sync!(attributes)
+    transaction do
+      update!(attributes)
+      update_balance!(attributes[:balance]) if attributes[:balance]
+    end
+
+    sync_later
   end
 
   def update_balance!(balance)
