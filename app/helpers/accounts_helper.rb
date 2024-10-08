@@ -55,6 +55,7 @@ module AccountsHelper
     transactions_tab = { key: "transactions", label: t("accounts.show.transactions"), path: account_path(account, tab: "transactions"), route: account_transactions_path(account) }
     trades_tab       = { key: "trades", label: t("accounts.show.trades"), path: account_path(account, tab: "trades"), route: account_trades_path(account) }
 
+    return [ value_tab ] if account.other_asset? || account.other_liability?
     return [ overview_tab, value_tab ] if account.property? || account.vehicle?
     return [ holdings_tab, cash_tab, trades_tab ] if account.investment?
 
