@@ -61,7 +61,7 @@ if ENV["INTERCOM_APP_ID"].present? && ENV["INTERCOM_IDENTITY_VERIFICATION_KEY"].
     # in your controllers. 'Companies' are generic groupings of users, so this
     # could be a company, app or group.
     #
-    # config.company.current = Proc.new { current_company }
+    config.company.current = Proc.new { Current.family }
     #
     # Or if you are using devise you can just use the following config
     #
