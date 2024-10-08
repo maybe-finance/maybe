@@ -22,13 +22,13 @@ class AccountsTest < ApplicationSystemTestCase
 
   test "can create property account" do
     assert_account_created "Property" do
-      fill_in "Year built (optional)", with: 2005
-      fill_in "Area value (optional)", with: 2250
+      fill_in "Year built", with: 2005
+      fill_in "Area value", with: 2250
       fill_in "Address line 1", with: "123 Main St"
       fill_in "Address line 2", with: "Apt 4B"
       fill_in "City", with: "San Francisco"
       fill_in "State", with: "CA"
-      fill_in "Postal code (optional)", with: "94101"
+      fill_in "Postal code", with: "94101"
       fill_in "Country", with: "US"
     end
   end
