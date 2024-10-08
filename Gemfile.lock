@@ -207,6 +207,8 @@ GEM
     inline_svg (1.10.0)
       activesupport (>= 3.0)
       nokogiri (>= 1.6)
+    intercom-rails (1.0.1)
+      activesupport (> 4.0)
     io-console (0.7.2)
     irb (1.14.1)
       rdoc (>= 4.0.0)
@@ -484,6 +486,7 @@ DEPENDENCIES
   image_processing (>= 1.2)
   importmap-rails
   inline_svg
+  intercom-rails
   letter_opener
   lucide-rails!
   mocha
