@@ -13,11 +13,10 @@ Rails.application.routes.draw do
     resource :profile, only: %i[show update destroy]
     resource :preferences, only: %i[show update]
     resource :hosting, only: %i[show update]
-    resource :billing, only: %i[show update] do
-      post :subscribe, on: :collection
-      post :portal, on: :collection
-    end
+    resource :billing, only: :show
   end
+
+  resource :subscription, only: %i[new show]
 
   resources :tags, except: %i[show destroy] do
     resources :deletions, only: %i[new create], module: :tag

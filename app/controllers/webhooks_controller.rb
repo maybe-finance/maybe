@@ -3,29 +3,34 @@ class WebhooksController < ApplicationController
   skip_authentication
 
   def stripe
-    payload = request.body.read
+    webhook_body = request.body.read
     sig_header = request.env["HTTP_STRIPE_SIGNATURE"]
-    event = nil
+    client = Stripe::StripeClient.new(ENV["STRIPE_SECRET_KEY"])
 
     begin
-      event = Stripe::Webhook.construct_event(
-        payload, sig_header, ENV["STRIPE_WEBHOOK_SECRET"]
-      )
+      thin_event = client.parse_thin_event(webhook_body, sig_header, ENV["STRIPE_WEBHOOK_SECRET"])
+
+      event = client.v1.events.retrieve(thin_event.id)
+
+      case event.type
+      when /^customer\.subscription\./
+        handle_subscription_event(event)
+      when "customer.created", "customer.updated", "customer.deleted"
+        handle_customer_event(event)
+      else
+        Rails.logger.info "Unhandled event type: #{event.type}"
+      end
+
     rescue JSON::ParserError
       render json: { error: "Invalid payload" }, status: :bad_request
       return
-    rescue Stripe::SignatureVerificationError => e
+    rescue Stripe::SignatureVerificationError
       render json: { error: "Invalid signature" }, status: :bad_request
       return
-    end
-
-    case event.type
-    when /^customer\.subscription\./
-      handle_subscription_event(event)
-    when "customer.created", "customer.updated", "customer.deleted"
-      handle_customer_event(event)
-    else
-      Rails.logger.info "Unhandled event type: #{event.type}"
+    rescue => e
+      Rails.logger.error "Error processing Stripe webhook: #{e.message}"
+      render json: { error: "Internal server error" }, status: :internal_server_error
+      return
     end
 
     render json: { received: true }, status: :ok
