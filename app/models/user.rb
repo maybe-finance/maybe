@@ -14,7 +14,7 @@ class User < ApplicationRecord
   enum :role, { member: "member", admin: "admin" }, validate: true
 
   has_one_attached :profile_image do |attachable|
-    attachable.variant :thumbnail, resize_to_limit: [ 150, 150 ], preprocessed: true
+    attachable.variant :thumbnail, resize_to_fill: [ 300, 300 ]
   end
 
   validate :profile_image_size
