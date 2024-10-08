@@ -27,10 +27,6 @@ class WebhooksController < ApplicationController
     rescue Stripe::SignatureVerificationError
       render json: { error: "Invalid signature" }, status: :bad_request
       return
-    rescue => e
-      Rails.logger.error "Error processing Stripe webhook: #{e.message}"
-      render json: { error: "Internal server error" }, status: :internal_server_error
-      return
     end
 
     render json: { received: true }, status: :ok
