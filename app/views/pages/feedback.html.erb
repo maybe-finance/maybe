@@ -9,17 +9,23 @@
     <p class="text-sm text-gray-500 mb-4">Let us know if you have any specific feedback. Feel free to include links to videos or screenshots.</p>
     <div class="flex gap-2">
       <%= link_to "https://github.com/maybe-finance/maybe/discussions/categories/feature-requests", target: "_blank", rel: "noopener noreferrer", class: "w-1/3 flex flex-col items-center p-4 border border-alpha-black-25 rounded-xl hover:bg-gray-50" do %>
-        <%= image_tag "github-icon.png", class: "w-8 h-8 mb-2" %>
+        <%= image_tag "github-icon.svg", class: "w-8 h-8 mb-2" %>
         <span class="text-sm font-medium text-gray-900">Write a feature request</span>
       <% end %>
-
-      <%= link_to "https://github.com/maybe-finance/maybe/issues/new?assignees=&labels=bug&template=bug_report.md&title=", target: "_blank", rel: "noopener noreferrer", class: "w-1/3 flex flex-col items-center p-4 border border-alpha-black-25 rounded-xl hover:bg-gray-50" do %>
-        <%= image_tag "github-icon.png", class: "w-8 h-8 mb-2" %>
-        <span class="text-sm font-medium text-gray-900">File a bug report</span>
+      <% if self_hosted? %>
+        <%= link_to "https://github.com/maybe-finance/maybe/issues/new?assignees=&labels=bug&template=bug_report.md&title=", target: "_blank", rel: "noopener noreferrer", class: "w-1/3 flex flex-col items-center p-4 border border-alpha-black-25 rounded-xl hover:bg-gray-50" do %>
+          <%= image_tag "github-icon.svg", class: "w-8 h-8 mb-2" %>
+          <span class="text-sm font-medium text-gray-900">File a bug report</span>
+        <% end %>
+      <% else %>
+        <%= link_to "mailto:hello@maybe.co", class: "w-1/3 flex flex-col items-center p-4 border border-alpha-black-25 rounded-xl hover:bg-gray-50", onclick: "Intercom('showNewMessage'); return false;" do %>
+          <%= lucide_icon "bug", class: "w-8 h-8 mb-2" %>
+          <span class="text-sm font-medium text-gray-900">File a bug report</span>
+        <% end %>
       <% end %>
 
       <%= link_to "https://link.maybe.co/discord", target: "_blank", rel: "noopener noreferrer", class: "w-1/3 flex flex-col items-center p-4 border border-alpha-black-25 rounded-xl hover:bg-gray-50" do %>
-        <%= image_tag "discord-icon.png", class: "w-8 h-8 mb-2" %>
+        <%= image_tag "discord-icon.svg", class: "w-8 h-8 mb-2" %>
         <span class="text-sm font-medium text-gray-900">Discuss Maybe with others</span>
       <% end %>
     </div>
