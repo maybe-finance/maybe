@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/maybe-finance/lucide-rails.git
-  revision: 79d989593ee4ac6c50106ec5e4d2bd4ec8f5af87
+  revision: 272e5fb8418ea458da3995d6abe0ba0ceee9c9f0
   specs:
     lucide-rails (0.2.0)
       railties (>= 4.1.0)
@@ -414,6 +414,7 @@ GEM
     stimulus-rails (1.3.4)
       railties (>= 6.0.0)
     stringio (3.1.1)
+    stripe (13.0.0)
     tailwindcss-rails (2.7.7)
       railties (>= 7.0.0)
     tailwindcss-rails (2.7.7-aarch64-linux)
@@ -506,6 +507,7 @@ DEPENDENCIES
   simplecov
   stackprof
   stimulus-rails
+  stripe
   tailwindcss-rails
   turbo-rails
   tzinfo-data
