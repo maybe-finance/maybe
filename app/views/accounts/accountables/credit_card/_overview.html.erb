@@ -10,7 +10,7 @@
   <% end %>
 
   <%= summary_card title: t(".minimum_payment") do %>
-    <%= format_money(account.credit_card.minimum_payment) || t(".unknown") %>
+    <%= format_money(account.credit_card.minimum_payment) || Money.new(0, account.currency) %>
   <% end %>
 
   <%= summary_card title: t(".apr") do %>
@@ -22,6 +22,6 @@
   <% end %>
 
   <%= summary_card title: t(".annual_fee") do %>
-    <%= format_money(account.credit_card.annual_fee) || t(".unknown") %>
+    <%= format_money(account.credit_card.annual_fee) || Money.new(0, account.currency) %>
   <% end %>
 </div>
