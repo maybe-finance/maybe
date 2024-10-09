@@ -83,7 +83,8 @@ class Account < ApplicationRecord
   end
 
   def original_balance
-    balances.chronological.first&.balance || balance
+    balance_amount = balances.chronological.first&.balance || balance
+    Money.new(balance_amount, currency)
   end
 
   def owns_ticker?(ticker)
