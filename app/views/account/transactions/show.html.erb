@@ -47,7 +47,7 @@
                     { container_class: "w-1/3", label: t(".nature"), selected: entry.amount.negative? ? "income" : "expense" },
                     { data: { "auto-submit-form-target": "auto" } } %>
 
-              <%= f.money_field :amount, :currency, label: t(".amount"),
+              <%= f.money_field :amount, label: t(".amount"),
                     container_class: "w-2/3",
                     auto_submit: true,
                     min: 0,
@@ -104,7 +104,13 @@
                   },
                   { "data-auto-submit-form-target": "auto" } %>
 
-            <%= ef.text_area :notes,
+          <% end %>
+
+          <%= styled_form_with model: [account, entry],
+              url: account_transaction_path(account, entry),
+              class: "space-y-2",
+              data: { controller: "auto-submit-form" } do |f| %>
+            <%= f.text_area :notes,
                   label: t(".note_label"),
                   placeholder: t(".note_placeholder"),
                   rows: 5,
@@ -122,22 +128,20 @@
               url: account_transaction_path(account, entry),
               class: "p-3",
               data: { controller: "auto-submit-form" } do |f| %>
-          <%= f.fields_for :entryable do |ef| %>
-            <div class="flex cursor-pointer items-center gap-2 justify-between">
-              <div class="text-sm space-y-1">
-                <h4 class="text-gray-900"><%= t(".exclude_title") %></h4>
-                <p class="text-gray-500"><%= t(".exclude_subtitle") %></p>
-              </div>
+          <div class="flex cursor-pointer items-center gap-2 justify-between">
+            <div class="text-sm space-y-1">
+              <h4 class="text-gray-900"><%= t(".exclude_title") %></h4>
+              <p class="text-gray-500"><%= t(".exclude_subtitle") %></p>
+            </div>
 
-              <div class="relative inline-block select-none">
-                <%= ef.check_box :excluded,
+            <div class="relative inline-block select-none">
+              <%= f.check_box :excluded,
                       class: "sr-only peer",
                       "data-auto-submit-form-target": "auto" %>
-                <label for="account_entry_entryable_attributes_excluded"
+              <label for="account_entry_entryable_attributes_excluded"
                          class="maybe-switch"></label>
-              </div>
             </div>
-          <% end %>
+          </div>
         <% end %>
 
         <!-- Delete Transaction Form -->

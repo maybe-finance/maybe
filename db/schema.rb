@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_08_122449) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_09_132959) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -45,6 +45,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_08_122449) do
     t.uuid "transfer_id"
     t.boolean "marked_as_transfer", default: false, null: false
     t.uuid "import_id"
+    t.text "notes"
+    t.boolean "excluded", default: false
     t.index ["account_id"], name: "index_account_entries_on_account_id"
     t.index ["import_id"], name: "index_account_entries_on_import_id"
     t.index ["transfer_id"], name: "index_account_entries_on_transfer_id"
@@ -90,8 +92,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_08_122449) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "category_id"
-    t.boolean "excluded", default: false
-    t.text "notes"
     t.uuid "merchant_id"
     t.index ["category_id"], name: "index_account_transactions_on_category_id"
     t.index ["merchant_id"], name: "index_account_transactions_on_merchant_id"
@@ -120,7 +120,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_08_122449) do
     t.boolean "is_active", default: true, null: false
     t.date "last_sync_date"
     t.uuid "institution_id"
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Loan'::character varying)::text, ('CreditCard'::character varying)::text, ('OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Loan'::character varying, 'CreditCard'::character varying, 'OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.uuid "import_id"
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id"], name: "index_accounts_on_family_id"

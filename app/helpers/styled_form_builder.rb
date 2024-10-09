@@ -39,11 +39,11 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
     build_styled_field(label, field, options, remove_padding_right: true)
   end
 
-  def money_field(amount_method, currency_method, options = {})
+  def money_field(amount_method, options = {})
     @template.render partial: "shared/money_field", locals: {
       form: self,
       amount_method:,
-      currency_method:,
+      currency_method: options[:currency_method] || :currency,
       **options
     }
   end

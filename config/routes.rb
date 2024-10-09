@@ -67,7 +67,7 @@ Rails.application.routes.draw do
 
       resources :transactions, only: %i[index update]
       resources :valuations, only: %i[index new create]
-      resources :trades, only: %i[index new create]
+      resources :trades, only: %i[index new create update]
 
       resources :entries, only: %i[edit update show destroy]
     end
