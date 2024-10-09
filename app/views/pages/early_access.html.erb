@@ -30,9 +30,9 @@
         <h1 class="text-2xl font-normal my-4">Maybe Early Access</h1>
         <% if @invite_codes_count > 0 %>
           <p class="text-base text-gray-400">There <%= @invite_codes_count == 1 ? "is" : "are" %> <span class="text-white"><%= @invite_codes_count %> invite <%= "code".pluralize(@invite_codes_count) %></span> remaining.</p>
-          <div class="bg-gray-900 border border-gray-800 p-3 sm:p-4 rounded-lg my-4">
+          <div class="bg-gray-900 border border-gray-800 p-2 rounded-xl my-4">
             <p class="text-sm text-gray-400 mt-1 mb-3 sm:mb-4">Your invite code is <span class="font-mono text-white"><%= @invite_code.token %></span></p>
-            <p><%= link_to "Sign up with this code", new_registration_path(invite: @invite_code.token), class: "block w-full bg-white text-black py-2 px-3 rounded-md no-underline text-sm sm:text-base hover:bg-gray-200 transition duration-150" %></p>
+            <p><%= link_to "Sign up with this code", new_registration_path(invite: @invite_code.token), class: "block w-full bg-white text-black py-2 px-3 rounded-lg no-underline text-sm sm:text-base hover:bg-gray-200 transition duration-150" %></p>
           </div>
 
           <p class="text-sm text-gray-400">You may need to refresh the page to get a new invite code if someone else claimed it before you.</p>
