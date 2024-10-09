@@ -25,7 +25,7 @@ class Account::EntriesController < ApplicationController
   def destroy
     @entry.destroy!
     @entry.sync_account_later
-    redirect_back_or_to account_url(@entry.account), notice: t(".success")
+    redirect_to account_url(@entry.account), notice: t(".success")
   end
 
   private

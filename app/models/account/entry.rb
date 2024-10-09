@@ -109,8 +109,8 @@ class Account::Entry < ApplicationRecord
     def bulk_update!(bulk_update_params)
       bulk_attributes = {
         date: bulk_update_params[:date],
+        notes: bulk_update_params[:notes],
         entryable_attributes: {
-          notes: bulk_update_params[:notes],
           category_id: bulk_update_params[:category_id],
           merchant_id: bulk_update_params[:merchant_id]
         }.compact_blank

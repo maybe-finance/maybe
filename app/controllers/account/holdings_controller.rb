@@ -2,13 +2,18 @@ class Account::HoldingsController < ApplicationController
   layout :with_sidebar
 
   before_action :set_account
-  before_action :set_holding, only: :show
+  before_action :set_holding, only: %i[show destroy]
 
   def index
     @holdings = @account.holdings.current
   end
 
   def show
+  end
+
+  def destroy
+    @holding.destroy_holding_and_entries!
+    redirect_back_or_to account_holdings_path(@account)
   end
 
   private

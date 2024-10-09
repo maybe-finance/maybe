@@ -13,7 +13,8 @@ class TransactionImport < Import
           amount: row.signed_amount,
           name: row.name,
           currency: row.currency,
-          entryable: Account::Transaction.new(category: category, tags: tags, notes: row.notes),
+          notes: row.notes,
+          entryable: Account::Transaction.new(category: category, tags: tags),
           import: self
 
         entry.save!

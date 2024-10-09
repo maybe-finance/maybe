@@ -9,36 +9,103 @@
       <%= render "shared/circle_logo", name: @holding.name %>
     </header>
 
-    <details class="group space-y-2">
+    <details class="group space-y-2" open>
       <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2 text-xs font-medium uppercase text-gray-500 bg-gray-25 focus-visible:outline-none">
         <h4><%= t(".overview") %></h4>
         <%= lucide_icon "chevron-down", class: "group-open:transform group-open:rotate-180 text-gray-500 w-5" %>
       </summary>
 
-      <div>
-        <p class="pl-4 text-gray-500">Coming soon...</p>
+      <div class="pb-4">
+        <dl class="space-y-3 px-3 py-2">
+          <div class="flex items-center justify-between text-sm">
+            <dt class="text-gray-500"><%= t(".ticker_label") %></dt>
+            <dd class="text-gray-900"><%= @holding.ticker %></dd>
+          </div>
+
+          <div class="flex items-center justify-between text-sm">
+            <dt class="text-gray-500"><%= t(".current_market_price_label") %></dt>
+            <dd class="text-gray-900"><%= @holding.security.current_price ? format_money(@holding.security.current_price) : t(".unknown") %></dd>
+          </div>
+
+          <div class="flex items-center justify-between text-sm">
+            <dt class="text-gray-500"><%= t(".portfolio_weight_label") %></dt>
+            <dd class="text-gray-900"><%= @holding.weight ? number_to_percentage(@holding.weight, precision: 2) : t(".unknown") %></dd>
+          </div>
+
+          <div class="flex items-center justify-between text-sm">
+            <dt class="text-gray-500"><%= t(".avg_cost_label") %></dt>
+            <dd class="text-gray-900"><%= @holding.avg_cost ? format_money(@holding.avg_cost) : t(".unknown") %></dd>
+          </div>
+
+          <div class="flex items-center justify-between text-sm">
+            <dt class="text-gray-500"><%= t(".trend_label") %></dt>
+            <dd style="color: <%= @holding.trend&.color %>;">
+              <%= @holding.trend ? render("shared/trend_change", trend: @holding.trend) : t(".unknown") %>
+            </dd>
+          </div>
+        </dl>
       </div>
     </details>
 
-    <details class="group space-y-2">
+    <details class="group space-y-2" open>
       <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2 text-xs font-medium uppercase text-gray-500 bg-gray-25 focus-visible:outline-none">
         <h4><%= t(".history") %></h4>
         <%= lucide_icon "chevron-down", class: "group-open:transform group-open:rotate-180 text-gray-500 w-5" %>
       </summary>
 
-      <div>
-        <p class="pl-4 text-gray-500">Coming soon...</p>
+      <div class="space-y-2">
+        <div class="px-3 py-4">
+          <% if @holding.trades.any? %>
+            <ul class="space-y-2">
+              <% @holding.trades.each_with_index do |trade_entry, index| %>
+                <li class="flex gap-4 text-sm space-y-1">
+                  <div class="flex flex-col items-center gap-1.5 pt-2">
+                    <div class="rounded-full h-1.5 w-1.5 bg-gray-300"></div>
+                    <% unless index == @holding.trades.length - 1 %>
+                      <div class="h-12 w-px bg-alpha-black-200"></div>
+                    <% end %>
+                  </div>
+
+                  <div>
+                    <p class="text-gray-500 text-xs uppercase"><%= l(trade_entry.date, format: :long) %></p>
+
+                    <p><%= t(
+                      ".trade_history_entry",
+                      qty: trade_entry.account_trade.qty,
+                      security: trade_entry.account_trade.security.ticker,
+                      price: format_money(trade_entry.account_trade.price)
+                    ) %></p>
+                  </div>
+                </li>
+              <% end %>
+            </ul>
+
+          <% else %>
+            <p class="text-gray-500">No trade history available for this holding.</p>
+          <% end %>
+        </div>
       </div>
     </details>
 
-    <details class="group space-y-2">
+    <details class="group space-y-2" open>
       <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2 text-xs font-medium uppercase text-gray-500 bg-gray-25 focus-visible:outline-none">
         <h4><%= t(".settings") %></h4>
         <%= lucide_icon "chevron-down", class: "group-open:transform group-open:rotate-180 text-gray-500 w-5" %>
       </summary>
 
-      <div>
-        <p class="pl-4 text-gray-500">Coming soon...</p>
+      <div class="pb-4">
+        <div class="flex items-center justify-between gap-2 p-3">
+          <div class="text-sm space-y-1">
+            <h4 class="text-gray-900"><%= t(".delete_title") %></h4>
+            <p class="text-gray-500"><%= t(".delete_subtitle") %></p>
+          </div>
+
+          <%= button_to t(".delete"),
+                account_holding_path(@holding.account, @holding),
+                method: :delete,
+                class: "rounded-lg px-3 py-2 text-red-500 text-sm font-medium border border-alpha-black-200",
+                data: { turbo_confirm: true, turbo_frame: "_top" } %>
+        </div>
       </div>
     </details>
   </div>

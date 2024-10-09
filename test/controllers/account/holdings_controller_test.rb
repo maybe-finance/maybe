@@ -17,4 +17,14 @@ class Account::HoldingsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
   end
+
+  test "destroys holding and associated entries" do
+    assert_difference -> { Account::Holding.count } => -1,
+                      -> { Account::Entry.count } => -1 do
+      delete account_holding_path(@account, @holding)
+    end
+
+    assert_redirected_to account_holdings_path(@account)
+    assert_empty @account.entries.where(entryable: @account.trades.where(security: @holding.security))
+  end
 end

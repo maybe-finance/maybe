@@ -13,7 +13,7 @@
       <%= form.date_field :date, label: true %>
 
       <div data-trade-form-target="amountInput" hidden>
-        <%= form.money_field :amount, :currency, label: t(".amount"), disable_currency: true %>
+        <%= form.money_field :amount, label: t(".amount"), disable_currency: true %>
       </div>
 
       <div data-trade-form-target="transferAccountInput" hidden>
@@ -25,7 +25,7 @@
       </div>
 
       <div data-trade-form-target="priceInput">
-        <%= form.money_field :price, :currency, label: t(".price"), disable_currency: true %>
+        <%= form.money_field :price, label: t(".price"), disable_currency: true %>
       </div>
     </div>
 

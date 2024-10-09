@@ -25,7 +25,25 @@ en:
       new:
         title: New transaction
       show:
+        additional: Additional
+        cost_per_share_label: Cost per Share
+        current_market_price_label: Current Market Price
+        date_label: Date
+        delete: Delete
+        delete_subtitle: This action cannot be undone
+        delete_title: Delete Trade
+        details: Details
+        exclude_subtitle: This trade will not be included in reports and calculations
+        exclude_title: Exclude from analytics
+        note_label: Note
+        note_placeholder: Add any additional notes here...
         overview: Overview
+        purchase_price_label: Purchase Price
+        purchase_qty_label: Purchase Quantity
+        quantity_label: Quantity
+        settings: Settings
+        symbol_label: Symbol
+        total_return_label: Unrealized gain/loss
       trade:
         buy: Buy
         deposit: Deposit
@@ -33,3 +51,5 @@ en:
         outflow: Outflow
         sell: Sell
         withdrawal: Withdrawal
+      update:
+        success: Trade updated successfully.

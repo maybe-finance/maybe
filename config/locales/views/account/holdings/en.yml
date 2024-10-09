@@ -20,6 +20,17 @@ en:
           its returns or value.
         missing_data: Missing data
       show:
+        avg_cost_label: Average Cost
+        current_market_price_label: Current Market Price
+        delete: Delete
+        delete_subtitle: This will delete the holding and all your associated trades
+          on this account.  This action cannot be undone.
+        delete_title: Delete holding
         history: History
         overview: Overview
+        portfolio_weight_label: Portfolio Weight
         settings: Settings
+        ticker_label: Ticker
+        trade_history_entry: "%{qty} shares of %{security} at %{price}"
+        trend_label: Trend
+        unknown: Unknown

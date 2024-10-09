@@ -63,12 +63,12 @@ Rails.application.routes.draw do
     scope module: :account do
       resource :logo, only: :show
 
-      resources :holdings, only: %i[index new show]
+      resources :holdings, only: %i[index new show destroy]
       resources :cashes, only: :index
 
       resources :transactions, only: %i[index update]
       resources :valuations, only: %i[index new create]
-      resources :trades, only: %i[index new create]
+      resources :trades, only: %i[index new create update]
 
       resources :entries, only: %i[edit update show destroy]
     end
