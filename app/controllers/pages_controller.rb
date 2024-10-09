@@ -1,5 +1,6 @@
 class PagesController < ApplicationController
-  layout :with_sidebar
+  skip_before_action :authenticate_user!, only: %i[early_access]
+  layout :with_sidebar, except: %i[early_access]
 
   include Filterable
 
@@ -37,6 +38,11 @@ class PagesController < ApplicationController
   def feedback
   end
 
-  def invites
+  def early_access
+    redirect_to root_path if self_hosted?
+
+    @invite_codes_count = InviteCode.count
+    @invite_code = InviteCode.order("RANDOM()").limit(1).first
+    render layout: false
   end
 end
