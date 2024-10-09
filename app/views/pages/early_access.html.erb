@@ -23,19 +23,34 @@
     <%= yield :head %>
   </head>
 
-  <body class="h-full bg-black text-white prose prose-invert">
-    <div class="max-w-md mx-auto my-12">
-      <h1 class="text-2xl font-bold">Maybe Early Access</h1>
-      <% if @invite_codes_count > 0 %>
-        <p>There are <%= @invite_codes_count %> invite codes remaining.</p>
-        <p>Your invite code is <span class="font-mono"><%= @invite_code.token %></span>.</p>
-        <p><%= link_to "Sign up with this invite code", new_registration_path(invite: @invite_code.token), class: "bg-white text-black p-2 rounded-md no-underline" %></p>
-        <p>Refresh the page to get a new invite code...as someone may have been faster than you!</p>
-      <% else %>
-        <p>There are no invite codes remaining.</p>
-        <p>Join our Discord server to get notified when new invite codes are available.</p>
-        <p><%= link_to "Join our Discord server", "https://link.maybe.co/discord", target: "_blank", class: "bg-white text-black p-2 rounded-md no-underline" %></p>
-      <% end %>
+  <body class="h-full bg-black text-white flex flex-col">
+    <div class="flex-grow flex items-center justify-center p-4 sm:p-6 md:p-8">
+      <div class="w-full max-w-sm mx-auto text-center">
+        <%= image_tag "logo-squircle.svg", alt: "Maybe Logo", class: "w-16 h-16 sm:w-18 sm:h-18 mx-auto mb-6 sm:mb-8" %>
+        <h1 class="text-2xl font-medium my-4">Maybe Early Access</h1>
+        <% if @invite_codes_count > 0 %>
+          <p class="text-base text-gray-400">There <%= @invite_codes_count == 1 ? 'is' : 'are' %> <span class="text-white"><%= @invite_codes_count %> invite <%= 'code'.pluralize(@invite_codes_count) %></span> remaining.</p>
+          <div class="bg-gray-900 border border-gray-800 p-3 sm:p-4 rounded-lg my-4">
+            <p class="text-sm text-gray-400 mt-1 mb-3 sm:mb-4">Your invite code is <span class="font-mono text-white"><%= @invite_code.token %></span></p>
+            <p><%= link_to "Sign up with this code", new_registration_path(invite: @invite_code.token), class: "block w-full bg-white text-black py-2 px-3 rounded-md no-underline text-sm sm:text-base hover:bg-gray-200 transition duration-150" %></p>
+          </div>
+
+          <p class="text-sm text-gray-400">You may need to refresh the page to get a new invite code if someone else claimed it before you.</p>
+
+          <p class="mt-4 sm:mt-6">
+            <%= link_to early_access_path, class: "w-full block text-center justify-center inline-flex items-center text-white hover:bg-gray-800 p-2 rounded-md text-base transition duration-150", data: { turbo_method: :get } do %>
+              <%= lucide_icon 'refresh-cw', class: 'w-4 h-4 sm:w-5 sm:h-5 mr-2 text-gray-400' %>
+              <span>Refresh page</span>
+            <% end %>
+          </p>
+        <% else %>
+          <p class="text-base text-gray-400 mb-6 sm:mb-8">Sorry, there are <span class="text-white">no invite codes</span> remaining. Join our <%= link_to "Discord server", "https://link.maybe.co/discord", target: "_blank", class: "text-white hover:text-gray-300" %> to get notified when new invite codes are available.</p>
+          <p><%= link_to "Join Discord server", "https://link.maybe.co/discord", target: "_blank", class: "bg-white text-black px-3 py-2 rounded-md no-underline text-base hover:bg-gray-200 transition duration-150" %></p>
+        <% end %>
+      </div>
     </div>
+    <footer class="pb-6 sm:pb-10 text-center text-gray-400 text-sm">
+      ©2024 Maybe Finance, Inc.
+    </footer>
   </body>
 </html>
