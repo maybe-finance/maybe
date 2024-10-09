@@ -23,11 +23,11 @@
     <%= yield :head %>
   </head>
 
-  <body class="h-full bg-black text-white flex flex-col">
+  <body class="subpixel-antialiased h-full bg-black text-white flex flex-col bg-top bg-no-repeat bg-cover" style="background-image: url('<%= asset_path('bg-grid.png') %>');">
     <div class="flex-grow flex items-center justify-center p-4 sm:p-6 md:p-8">
-      <div class="w-full max-w-sm mx-auto text-center">
+      <div class="w-full max-w-sm mx-auto text-center rounded-lg p-6">
         <%= image_tag "logo-squircle.svg", alt: "Maybe Logo", class: "w-16 h-16 sm:w-18 sm:h-18 mx-auto mb-6 sm:mb-8" %>
-        <h1 class="text-2xl font-medium my-4">Maybe Early Access</h1>
+        <h1 class="text-2xl font-normal my-4">Maybe Early Access</h1>
         <% if @invite_codes_count > 0 %>
           <p class="text-base text-gray-400">There <%= @invite_codes_count == 1 ? 'is' : 'are' %> <span class="text-white"><%= @invite_codes_count %> invite <%= 'code'.pluralize(@invite_codes_count) %></span> remaining.</p>
           <div class="bg-gray-900 border border-gray-800 p-3 sm:p-4 rounded-lg my-4">
