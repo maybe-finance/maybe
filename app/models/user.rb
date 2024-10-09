@@ -73,6 +73,10 @@ class User < ApplicationRecord
     end
   end
 
+  def super_admin?
+    super_admin
+  end
+
   private
     def ensure_valid_profile_image
       return unless profile_image.attached?

@@ -1,0 +1,21 @@
+<div class="sticky top-0 left-0 w-full bg-black flex items-center justify-between font-mono">
+  <div class="flex items-center bg-red-600 px-6 py-4">
+    <%= lucide_icon "alert-triangle", class: "w-6 h-6 text-white mr-2" %>
+    <span class="text-white font-semibold uppercase">Super Admin</span>
+  </div>
+  <div class="flex items-center space-x-2 px-2 py-2 text-white">
+  <% if impersonating? %>
+    <div class="flex items-center space-x-3 bg-gray-800 border border-gray-700 rounded-md pl-3">
+      <div class="text-sm">
+        Impersonating: <span class="font-semibold text-red-400"><%= Current.impersonated_user.email %></span>
+      </div>
+      <%= button_to "Stop impersonating", impersonate_path, method: :delete, class: "items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
+    </div>
+  <% else %>
+    <%= form_with url: impersonate_path, method: :post, class: "flex items-center space-x-2" do |f| %>
+      <%= f.text_field :user_id, class: "rounded-md text-sm border-0 focus:ring-0 ring-0 text-black font-mono w-96", placeholder: "UUID", autocomplete: "off" %>
+      <%= f.submit "Impersonate", class: "inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
+    <% end %>
+  <% end %>
+  </div>
+</div>

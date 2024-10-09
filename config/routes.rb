@@ -110,6 +110,8 @@ Rails.application.routes.draw do
 
   resources :currencies, only: %i[show]
 
+  resource :impersonate
+
   # Stripe webhook endpoint
   post "webhooks/stripe", to: "webhooks#stripe"
 
