@@ -29,7 +29,11 @@
 
   <%= summary_card title: t(".term") do %>
     <% if account.loan.term_months.present? %>
-      <%= pluralize(account.loan.term_months / 12, "year") %>
+      <% if account.loan.term_months < 12 %>
+        <%= pluralize(account.loan.term_months, "month") %>
+      <% else %>
+        <%= pluralize(account.loan.term_months / 12, "year") %>
+      <% end %>
     <% else %>
       <%= t(".unknown") %>
     <% end %>
