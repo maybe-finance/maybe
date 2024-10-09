@@ -37,6 +37,19 @@ class Account::Holding < ApplicationRecord
     @trend ||= calculate_trend
   end
 
+  def trades
+    account.entries.where(entryable: account.trades.where(security: security)).reverse_chronological
+  end
+
+  def destroy_holding_and_entries!
+    transaction do
+      account.entries.where(entryable: account.trades.where(security: security)).destroy_all
+      destroy
+    end
+
+    account.sync_later
+  end
+
   private
 
     def calculate_trend

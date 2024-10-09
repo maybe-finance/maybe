@@ -38,12 +38,12 @@ en:
         note_label: Note
         note_placeholder: Add any additional notes here...
         overview: Overview
+        purchase_price_label: Purchase Price
+        purchase_qty_label: Purchase Quantity
         quantity_label: Quantity
         settings: Settings
         symbol_label: Symbol
         total_return_label: Unrealized gain/loss
-        purchase_qty_label: Purchase Quantity
-        purchase_price_label: Purchase Price
       trade:
         buy: Buy
         deposit: Deposit

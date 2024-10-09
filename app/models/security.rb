@@ -7,6 +7,7 @@ class Security < ApplicationRecord
 
   def current_price
     @current_price ||= Security::Price.find_price(ticker:, date: Date.current)
+    return nil if @current_price.nil?
     Money.new(@current_price.price, @current_price.currency)
   end
 
