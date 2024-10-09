@@ -6,7 +6,7 @@
   <% end %>
 
   <%= summary_card title: t(".remaining_principal") do %>
-    <%= format_money account.balance %>
+    <%= format_money account.balance_money %>
   <% end %>
 
   <%= summary_card title: t(".interest_rate") do %>

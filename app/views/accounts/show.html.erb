@@ -7,7 +7,7 @@
       <div>
         <h2 class="font-medium text-xl"><%= @account.name %></h2>
 
-        <% if @account.property? && @account.property.address %>
+        <% if @account.property? && @account.property.address&.line1.present? %>
           <p class="text-gray-500"><%= @account.property.address %></p>
         <% end %>
       </div>
