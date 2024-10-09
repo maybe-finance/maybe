@@ -30,9 +30,11 @@
         end
       end
 
+      first_child = children.first
+
       summed_series = summed_by_date.map { |date, value| { date: date, value: value } }
 
-      TimeSeries.new(summed_series)
+      TimeSeries.new(summed_series, favorable_direction: first_child&.series&.favorable_direction || "up")
     end
 
     def series=(series)
