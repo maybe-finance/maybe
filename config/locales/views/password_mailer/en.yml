@@ -2,4 +2,7 @@
 en:
   password_mailer:
     password_reset:
+      request_made: A request was made to reset your Maybe password. Click the link to reset it.
       cta: Reset your password
+      ignore_if_not_requested: If you didn't make this request, you can ignore this email.
+      subject: "Maybe: Reset your password"
