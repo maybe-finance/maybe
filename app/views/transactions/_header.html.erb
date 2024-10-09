@@ -11,7 +11,7 @@
         </div>
       <% end %>
 
-      <%= link_to new_import_path(enable_type_selector: true), class: "btn btn--outline flex items-center gap-2", data: { turbo_frame: "modal" } do %>
+      <%= link_to new_import_path, class: "btn btn--outline flex items-center gap-2", data: { turbo_frame: "modal" } do %>
         <%= lucide_icon("download", class: "text-gray-500 w-4 h-4") %>
         <p class="text-sm font-medium text-gray-900"><%= t(".import") %></p>
       <% end %>
