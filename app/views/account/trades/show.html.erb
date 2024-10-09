@@ -49,7 +49,7 @@
           <% if trade.buy? %>
             <div class="flex items-center justify-between text-sm">
               <dt class="text-gray-500"><%= t(".total_return_label") %></dt>
-              <dd class="<%= total_return.negative? ? 'text-red-500' : 'text-green-500' %>">
+              <dd class="<%= total_return.negative? ? "text-red-500" : "text-green-500" %>">
                 <%= render "shared/trend_change", trend: trade.unrealized_gain_loss %>
               </dd>
             </div>
