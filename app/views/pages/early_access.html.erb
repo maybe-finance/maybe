@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html class="h-full" lang="en">
+  <head>
+    <title><%= content_for(:title) || "🔒 Maybe: Invites" %></title>
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+
+    <%= javascript_importmap_tags %>
+    <%= hotwire_livereload_tags if Rails.env.development? %>
+    <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Maybe">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
+
+    <%= yield :head %>
+  </head>
+
+  <body class="h-full bg-black text-white prose prose-invert">
+    <div class="max-w-md mx-auto my-12">
+      <h1 class="text-2xl font-bold">Maybe Early Access</h1>
+      <% if @invite_codes_count > 0 %>
+        <p>There are <%= @invite_codes_count %> invite codes remaining.</p>
+        <p>Your invite code is <span class="font-mono"><%= @invite_code.token %></span>.</p>
+        <p><%= link_to "Sign up with this invite code", new_registration_path(invite: @invite_code.token), class: "bg-white text-black p-2 rounded-md no-underline" %></p>
+        <p>Refresh the page to get a new invite code...as someone may have been faster than you!</p>
+      <% else %>
+        <p>There are no invite codes remaining.</p>
+        <p>Join our Discord server to get notified when new invite codes are available.</p>
+        <p><%= link_to "Join our Discord server", "https://link.maybe.co/discord", target: "_blank", class: "bg-white text-black p-2 rounded-md no-underline" %></p>
+      <% end %>
+    </div>
+  </body>
+</html>

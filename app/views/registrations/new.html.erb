@@ -14,7 +14,7 @@
   <%= form.password_field :password, autocomplete: "new-password", required: "required", label: true %>
   <%= form.password_field :password_confirmation, autocomplete: "new-password", required: "required", label: true %>
   <% if invite_code_required? %>
-    <%= form.password_field :invite_code, required: "required", label: true %>
+    <%= form.text_field :invite_code, required: "required", label: true, value: params[:invite] %>
   <% end %>
   <%= form.submit %>
 <% end %>
