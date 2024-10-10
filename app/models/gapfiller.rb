@@ -36,7 +36,7 @@ class Gapfiller
     end
 
     def holiday?(date)
-      Holidays.on(date, :federalreserve, :us, :informal).any?
+      Holidays.on(date, :federalreserve, :us, :observed, :informal).any?
     end
 
     def create_gapfilled_record(prev_record, date)
