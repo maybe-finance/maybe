@@ -7,7 +7,7 @@ class Investment < ApplicationRecord
     [ "Pension", "pension" ],
     [ "Retirement", "retirement" ],
     [ "401(k)", "401k" ],
-    [ "Roth 401k", "roth_401k" ],
+    [ "Roth 401(k)", "roth_401k" ],
     [ "529 Plan", "529_plan" ],
     [ "Health Savings Account", "hsa" ],
     [ "Mutual Fund", "mutual_fund" ],
