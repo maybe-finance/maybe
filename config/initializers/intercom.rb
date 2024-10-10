@@ -53,7 +53,8 @@ if ENV["INTERCOM_APP_ID"].present? && ENV["INTERCOM_IDENTITY_VERIFICATION_KEY"].
     # user object, or a Proc which will be passed the current user.
     #
     config.user.custom_data = {
-      family_id: Proc.new { |current_user| current_user.family.id }
+      family_id: Proc.new { Current.family.id },
+      name: Proc.new { Current.user.display_name if Current.user.display_name != Current.user.email }
     }
 
     # == Current company method/variable
