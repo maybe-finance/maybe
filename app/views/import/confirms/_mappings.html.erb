@@ -3,12 +3,20 @@
 <% mappings = mapping_class.for_import(import) %>
 <% is_last_step = step_idx == import.mapping_steps.count - 1 %>
 
-<% if import.requires_account? && mapping_class == Import::AccountMapping %>
-  <div class="flex items-center justify-between p-4 mb-4 gap-4 text-gray-500 bg-red-100 border border-red-200 rounded-lg w-[650px]">
-    <%= tag.p t(".no_accounts"), class: "text-sm" %>
+<% if mapping_class == Import::AccountMapping %>
+  <% if import.requires_account? %>
+    <div class="flex items-center justify-between p-4 mb-4 gap-4 text-gray-500 bg-red-100 border border-red-200 rounded-lg w-[650px]">
+      <%= tag.p t(".no_accounts"), class: "text-sm" %>
 
-    <%= link_to t(".create_account"), new_account_path, class: "btn btn--primary whitespace-nowrap", data: { turbo_frame: :modal } %>
-  </div>
+      <%= link_to t(".create_account"), new_account_path, class: "btn btn--primary whitespace-nowrap", data: { turbo_frame: :modal } %>
+    </div>
+  <% elsif import.has_unassigned_account? %>
+    <div class="flex items-center justify-between p-4 mb-4 gap-4 text-gray-500 bg-yellow-100 border border-yellow-200 rounded-lg w-[650px]">
+      <%= tag.p t(".unassigned_account"), class: "text-sm" %>
+
+      <%= link_to t(".create_account"), new_account_path, class: "btn btn--primary whitespace-nowrap", data: { turbo_frame: :modal } %>
+    </div>
+  <% end %>
 <% end %>
 
 <div class="space-y-4">

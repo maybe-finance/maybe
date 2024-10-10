@@ -113,8 +113,12 @@ class Import < ApplicationRecord
     cleaned? && mappings.all?(&:valid?)
   end
 
+  def has_unassigned_account?
+    mappings.accounts.where(key: "").any?
+  end
+
   def requires_account?
-    family.accounts.empty? && mappings.accounts.where(key: "").any?
+    family.accounts.empty? && has_unassigned_account?
   end
 
   private

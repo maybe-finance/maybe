@@ -18,6 +18,7 @@ en:
         no_accounts: You don't have any accounts yet. Please create an account that
           we can use for (unassigned) rows in your CSV or go back to the Clean step
           and provide an account name we can use.
+        unassigned_account: Need to create a new account for unassigned rows?
         rows_label: Rows
       show:
         account_mapping_description: Assign all of your imported file's accounts to
