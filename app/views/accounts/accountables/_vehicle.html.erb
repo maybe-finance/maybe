@@ -12,8 +12,8 @@
       </div>
 
       <div class="flex items-center gap-2">
-        <%= vehicle_form.text_field :year, label: t(".year"), placeholder: t(".year_placeholder") %>
-        <%= vehicle_form.text_field :mileage_value, label: t(".mileage"), placeholder: t(".mileage_placeholder") %>
+        <%= vehicle_form.number_field :year, label: t(".year"), placeholder: t(".year_placeholder"), min: 1900, max: Time.current.year %>
+        <%= vehicle_form.number_field :mileage_value, label: t(".mileage"), placeholder: t(".mileage_placeholder"), min: 0 %>
         <%= vehicle_form.select :mileage_unit,
                   [["Miles", "mi"], ["Kilometers", "km"]],
                   { label: t(".mileage_unit") } %>
