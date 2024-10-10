@@ -4,7 +4,7 @@ class Import::Row < ApplicationRecord
   validates :amount, numericality: true, allow_blank: true
   validates :currency, presence: true
 
-  validate :date_matches_user_format
+  validate :date_valid
   validate :required_columns
   validate :currency_is_valid
 
@@ -54,13 +54,21 @@ class Import::Row < ApplicationRecord
       end
     end
 
-    def date_matches_user_format
+    def date_valid
       return if date.blank?
 
       parsed_date = Date.strptime(date, import.date_format) rescue nil
 
       if parsed_date.nil?
         errors.add(:date, "must exactly match the format: #{import.date_format}")
+        return
+      end
+
+      min_date = Account::Entry.min_supported_date
+      max_date = Date.current
+
+      if parsed_date < min_date || parsed_date > max_date
+        errors.add(:date, "must be between #{min_date} and #{max_date}")
       end
     end
 

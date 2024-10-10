@@ -4,6 +4,7 @@ en:
     cleans:
       show:
         description: Edit your data in the table below.  Red cells are invalid.
+        errors_notice: You have errors in your data.  Hover over the error to see details.
         title: Clean your data
     configurations:
       show:
