@@ -38,13 +38,15 @@ module Security::Price::Provided
 
         if response.success?
           response.prices.map do |price|
-            new_price = Security::Price.new \
+            new_price = Security::Price.find_or_initialize_by(
               ticker: ticker,
-              date: price[:date],
-              price: price[:price],
-              currency: price[:currency]
+              date: price[:date]
+            ) do |p|
+              p.price = price[:price]
+              p.currency = price[:currency]
+            end
 
-            new_price.save! if cache
+            new_price.save! if cache && new_price.new_record?
             new_price
           end
         else
