@@ -2,16 +2,19 @@ class Investment < ApplicationRecord
   include Accountable
 
   SUBTYPES = [
+    [ "None", nil ],
     [ "Brokerage", "brokerage" ],
     [ "Pension", "pension" ],
     [ "Retirement", "retirement" ],
     [ "401(k)", "401k" ],
-    [ "529 plan", "529_plan" ],
+    [ "Roth 401k", "roth_401k" ],
+    [ "529 Plan", "529_plan" ],
     [ "Health Savings Account", "hsa" ],
     [ "Mutual Fund", "mutual_fund" ],
+    [ "Traditional IRA", "traditional_ira" ],
     [ "Roth IRA", "roth_ira" ],
-    [ "Roth 401k", "roth_401k" ],
-    [ "Angel", "angel" ]
+    [ "Angel", "angel" ],
+    [ "Cryptocurrency", "cryptocurrency" ]
   ].freeze
 
   def value
