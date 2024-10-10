@@ -1,1 +1,1 @@
-<%= f.select :subtype, options_for_select(Investment::SUBTYPES, selected: f.object.subtype), { label: true, prompt: t(".prompt"), include_blank: t(".none") } %>
+<%= f.select :subtype, options_for_select(Investment::SUBTYPES, selected: f.object.subtype), { label: true, prompt: t(".prompt"), include_blank: f.object.subtype.present? ? t(".none") : nil } %>

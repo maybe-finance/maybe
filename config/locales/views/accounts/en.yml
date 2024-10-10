@@ -6,7 +6,7 @@ en:
       troubleshoot: Troubleshoot
     accountables:
       investment:
-        prompt: Select investment subtype
+        prompt: Select subtype
         none: None
       credit_card:
         annual_fee: Annual fee
