@@ -27,7 +27,8 @@ en:
         tag_mapping_title: Assign your tags
     uploads:
       show:
-        description: Paste or upload your CSV file below.  Please review the instructions in the table below before beginning.
+        description: Paste or upload your CSV file below.  Please review the instructions
+          in the table below before beginning.
         instructions_1: Below is an example CSV with columns available for import.
         instructions_2: Your CSV must have a header row
         instructions_3: You may name your columns anything you like.  You will map
