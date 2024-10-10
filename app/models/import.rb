@@ -113,6 +113,10 @@ class Import < ApplicationRecord
     cleaned? && mappings.all?(&:valid?)
   end
 
+  def requires_account?
+    family.accounts.empty? && mappings.accounts.where(key: "").any?
+  end
+
   private
     def import!
       # no-op, subclasses can implement for customization of algorithm
