@@ -4,6 +4,7 @@
   <div class="grow space-y-2">
     <%= f.hidden_field :accountable_type %>
     <%= f.text_field :name, placeholder: t(".name_placeholder"), required: "required", label: t(".name_label"), autofocus: true %>
+    <%= f.hidden_field :institution_id %>
     <%= f.money_field :balance, label: t(".balance"), required: true, default_currency: Current.family.currency %>
 
     <% if account.new_record? %>
