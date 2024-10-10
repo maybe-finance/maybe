@@ -8,8 +8,8 @@
   <div class="space-y-2">
     <%= f.fields_for :accountable do |af| %>
       <div class="flex gap-2">
-        <%= af.number_field :year_built, label: t(".year_built"), placeholder: 2005 %>
-        <%= af.number_field :area_value, label: t(".area_value"), placeholder: 2000 %>
+        <%= af.number_field :year_built, label: t(".year_built"), placeholder: 2005, min: 1700, max: Time.current.year %>
+        <%= af.number_field :area_value, label: t(".area_value"), placeholder: 2000, min: 1 %>
         <%= af.select :area_unit,
                   [["Square feet", "sqft"], ["Square meters", "sqm"]],
                   { label: t(".area_unit") } %>
