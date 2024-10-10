@@ -7,6 +7,7 @@ en:
     accountables:
       investment:
         prompt: Select investment subtype
+        none: None
       credit_card:
         annual_fee: Annual fee
         annual_fee_placeholder: '99'
