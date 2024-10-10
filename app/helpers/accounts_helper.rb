@@ -70,7 +70,7 @@ module AccountsHelper
 
     return [ value_tab ] if account.other_asset? || account.other_liability?
     return [ overview_tab, value_tab ] if account.property? || account.vehicle?
-    return [ holdings_tab, cash_tab, trades_tab ] if account.investment?
+    return [ holdings_tab, cash_tab, trades_tab, value_tab ] if account.investment?
     return [ overview_tab, value_tab, transactions_tab ] if account.loan? || account.credit_card?
 
     [ value_tab, transactions_tab ]

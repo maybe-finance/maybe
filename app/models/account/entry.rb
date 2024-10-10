@@ -129,17 +129,21 @@ class Account::Entry < ApplicationRecord
     end
 
     def income_total(currency = "USD")
-      without_transfers.account_transactions.includes(:entryable)
+      total = without_transfers.account_transactions.includes(:entryable)
         .where("account_entries.amount <= 0")
                        .map { |e| e.amount_money.exchange_to(currency, date: e.date, fallback_rate: 0) }
                        .sum
+
+      Money.new(total, currency)
     end
 
     def expense_total(currency = "USD")
-      without_transfers.account_transactions.includes(:entryable)
+      total = without_transfers.account_transactions.includes(:entryable)
                        .where("account_entries.amount > 0")
                        .map { |e| e.amount_money.exchange_to(currency, date: e.date, fallback_rate: 0) }
                        .sum
+
+      Money.new(total, currency)
     end
 
     def search(params)
