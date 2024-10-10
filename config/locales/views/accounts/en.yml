@@ -87,12 +87,10 @@ en:
       no_accounts: No accounts yet
     form:
       balance: Current balance
-      institution: Financial institution
       name_label: Account name
       name_placeholder: Example account name
       start_balance: Start balance (optional)
       start_date: Start date (optional)
-      ungrouped: "(none)"
     header:
       accounts: Accounts
       manage: Manage accounts

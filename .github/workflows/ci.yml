@@ -52,9 +52,6 @@ jobs:
       - name: Lint code for consistent style
         run: bin/rubocop -f github
 
-      - name: Lint templates for consistent style
-        run: ./bin/erblint ./app/**/*.erb
-
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
