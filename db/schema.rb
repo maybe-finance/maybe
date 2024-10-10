@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_03_163448) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_09_132959) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -45,6 +45,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_03_163448) do
     t.uuid "transfer_id"
     t.boolean "marked_as_transfer", default: false, null: false
     t.uuid "import_id"
+    t.text "notes"
+    t.boolean "excluded", default: false
     t.index ["account_id"], name: "index_account_entries_on_account_id"
     t.index ["import_id"], name: "index_account_entries_on_import_id"
     t.index ["transfer_id"], name: "index_account_entries_on_transfer_id"
@@ -90,8 +92,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_03_163448) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "category_id"
-    t.boolean "excluded", default: false
-    t.text "notes"
     t.uuid "merchant_id"
     t.index ["category_id"], name: "index_account_transactions_on_category_id"
     t.index ["merchant_id"], name: "index_account_transactions_on_merchant_id"
@@ -184,6 +184,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_03_163448) do
   create_table "credit_cards", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "available_credit", precision: 10, scale: 2
+    t.decimal "minimum_payment", precision: 10, scale: 2
+    t.decimal "apr", precision: 10, scale: 2
+    t.date "expiration_date"
+    t.decimal "annual_fee", precision: 10, scale: 2
   end
 
   create_table "cryptos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -215,6 +220,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_03_163448) do
     t.string "currency", default: "USD"
     t.datetime "last_synced_at"
     t.string "locale", default: "en"
+    t.string "stripe_plan_id"
+    t.string "stripe_customer_id"
+    t.string "stripe_subscription_status", default: "incomplete"
   end
 
   create_table "good_job_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -405,6 +413,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_03_163448) do
   create_table "loans", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "rate_type"
+    t.decimal "interest_rate", precision: 10, scale: 2
+    t.integer "term_months"
   end
 
   create_table "merchants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

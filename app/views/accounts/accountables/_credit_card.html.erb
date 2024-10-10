@@ -1,0 +1,21 @@
+<div>
+  <hr class="my-4">
+
+  <div class="space-y-2">
+    <%= f.fields_for :accountable do |credit_card_form| %>
+      <div class="flex items-center gap-2">
+        <%= credit_card_form.number_field :available_credit, label: t(".available_credit"), placeholder: t(".available_credit_placeholder"), min: 0 %>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <%= credit_card_form.number_field :minimum_payment, label: t(".minimum_payment"), placeholder: t(".minimum_payment_placeholder"), min: 0 %>
+        <%= credit_card_form.number_field :apr, label: t(".apr"), placeholder: t(".apr_placeholder"), min: 0, step: 0.01 %>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <%= credit_card_form.date_field :expiration_date, label: t(".expiration_date") %>
+        <%= credit_card_form.number_field :annual_fee, label: t(".annual_fee"), placeholder: t(".annual_fee_placeholder"), min: 0 %>
+      </div>
+    <% end %>
+  </div>
+</div>

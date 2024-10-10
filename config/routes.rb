@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   get "changelog", to: "pages#changelog"
   get "feedback", to: "pages#feedback"
+  get "early-access", to: "pages#early_access"
 
   resource :registration
   resources :sessions, only: %i[new create destroy]
@@ -13,7 +14,10 @@ Rails.application.routes.draw do
     resource :profile, only: %i[show update destroy]
     resource :preferences, only: %i[show update]
     resource :hosting, only: %i[show update]
+    resource :billing, only: :show
   end
+
+  resource :subscription, only: %i[new show]
 
   resources :tags, except: %i[show destroy] do
     resources :deletions, only: %i[new create], module: :tag
@@ -59,12 +63,12 @@ Rails.application.routes.draw do
     scope module: :account do
       resource :logo, only: :show
 
-      resources :holdings, only: %i[index new show]
+      resources :holdings, only: %i[index new show destroy]
       resources :cashes, only: :index
 
       resources :transactions, only: %i[index update]
       resources :valuations, only: %i[index new create]
-      resources :trades, only: %i[index new create]
+      resources :trades, only: %i[index new create update]
 
       resources :entries, only: %i[edit update show destroy]
     end
@@ -72,6 +76,8 @@ Rails.application.routes.draw do
 
   resources :properties, only: %i[create update]
   resources :vehicles, only: %i[create update]
+  resources :credit_cards, only: %i[create update]
+  resources :loans, only: %i[create update]
 
   resources :transactions, only: %i[index new create] do
     collection do
@@ -103,6 +109,9 @@ Rails.application.routes.draw do
   end
 
   resources :currencies, only: %i[show]
+
+  # Stripe webhook endpoint
+  post "webhooks/stripe", to: "webhooks#stripe"
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

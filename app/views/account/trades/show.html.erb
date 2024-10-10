@@ -1,29 +1,146 @@
-<% entry = @entry %>
+<% entry, trade, account = @entry, @entry.account_trade, @entry.account %>
 
 <%= drawer do %>
-  <div>
-    <header class="mb-4 space-y-1">
-      <div class="flex items-center gap-4">
-        <h3 class="font-medium">
-          <span class="text-2xl"><%= format_money -entry.amount_money %></span>
-          <span class="text-lg text-gray-500"><%= entry.currency %></span>
-        </h3>
-      </div>
+  <header class="mb-4 space-y-1">
+    <div class="flex items-center gap-4">
+      <h3 class="font-medium">
+        <span class="text-2xl">
+          <%= format_money -entry.amount_money %>
+        </span>
 
-      <span class="text-sm text-gray-500"><%= entry.date.strftime("%A %d %B") %></span>
-    </header>
-
-    <div class="space-y-2">
-      <details class="group space-y-2" open>
-        <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2 text-xs font-medium uppercase text-gray-500 bg-gray-25 focus-visible:outline-none">
-          <h4><%= t(".overview") %></h4>
-          <%= lucide_icon "chevron-down", class: "group-open:transform group-open:rotate-180 text-gray-500 w-5" %>
-        </summary>
-
-        <div class="pb-6 pl-4 text-gray-500">
-          <p>Details coming soon...</p>
-        </div>
-      </details>
+        <span class="text-lg text-gray-500">
+          <%= entry.currency %>
+        </span>
+      </h3>
     </div>
+
+    <span class="text-sm text-gray-500">
+      <%= I18n.l(entry.date, format: :long) %>
+    </span>
+  </header>
+
+  <div class="space-y-2">
+    <!-- Overview Section -->
+    <%= disclosure t(".overview") do %>
+      <div class="pb-4">
+        <dl class="space-y-3 px-3 py-2">
+          <div class="flex items-center justify-between text-sm">
+            <dt class="text-gray-500"><%= t(".symbol_label") %></dt>
+            <dd class="text-gray-900"><%= trade.security.ticker %></dd>
+          </div>
+
+          <% if trade.buy? %>
+            <div class="flex items-center justify-between text-sm">
+              <dt class="text-gray-500"><%= t(".purchase_qty_label") %></dt>
+              <dd class="text-gray-900"><%= trade.qty.abs %></dd>
+            </div>
+
+            <div class="flex items-center justify-between text-sm">
+              <dt class="text-gray-500"><%= t(".purchase_price_label") %></dt>
+              <dd class="text-gray-900"><%= format_money trade.price_money %></dd>
+            </div>
+          <% end %>
+
+          <div class="flex items-center justify-between text-sm">
+            <dt class="text-gray-500"><%= t(".current_market_price_label") %></dt>
+            <dd class="text-gray-900"><%= format_money trade.security.current_price %></dd>
+          </div>
+
+          <% if trade.buy? %>
+            <div class="flex items-center justify-between text-sm">
+              <dt class="text-gray-500"><%= t(".total_return_label") %></dt>
+              <dd style="color: <%= trade.unrealized_gain_loss.color %>;">
+                <%= render "shared/trend_change", trend: trade.unrealized_gain_loss %>
+              </dd>
+            </div>
+          <% end %>
+        </dl>
+      </div>
+    <% end %>
+
+    <!-- Details Section -->
+    <%= disclosure t(".details") do %>
+      <div class="pb-4">
+        <%= styled_form_with model: [account, entry],
+              url: account_trade_path(account, entry),
+              class: "space-y-2",
+              data: { controller: "auto-submit-form" } do |f| %>
+          <%= f.date_field :date,
+                label: t(".date_label"),
+                max: Date.current,
+                "data-auto-submit-form-target": "auto" %>
+
+          <%= f.fields_for :entryable do |ef| %>
+            <%= ef.number_field :qty,
+                  label: t(".quantity_label"),
+                  step: "any",
+                  "data-auto-submit-form-target": "auto" %>
+
+            <%= ef.money_field :price,
+                  label: t(".cost_per_share_label"),
+                  disable_currency: true,
+                  auto_submit: true,
+                  min: 0 %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <!-- Additional Section -->
+    <%= disclosure t(".additional") do %>
+      <div class="pb-4">
+        <%= styled_form_with model: [account, entry],
+              url: account_trade_path(account, entry),
+              class: "space-y-2",
+              data: { controller: "auto-submit-form" } do |f| %>
+          <%= f.text_area :notes,
+                label: t(".note_label"),
+                placeholder: t(".note_placeholder"),
+                rows: 5,
+                "data-auto-submit-form-target": "auto" %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <!-- Settings Section -->
+    <%= disclosure t(".settings") do %>
+      <div class="pb-4">
+        <!-- Exclude Trade Form -->
+        <%= styled_form_with model: [account, entry],
+              url: account_trade_path(account, entry),
+              class: "p-3",
+              data: { controller: "auto-submit-form" } do |f| %>
+          <div class="flex cursor-pointer items-center gap-2 justify-between">
+            <div class="text-sm space-y-1">
+              <h4 class="text-gray-900"><%= t(".exclude_title") %></h4>
+              <p class="text-gray-500"><%= t(".exclude_subtitle") %></p>
+            </div>
+
+            <div class="relative inline-block select-none">
+              <%= f.check_box :excluded,
+                      class: "sr-only peer",
+                      "data-auto-submit-form-target": "auto" %>
+              <label for="account_entry_excluded"
+                         class="maybe-switch"></label>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- Delete Trade Form -->
+        <div class="flex items-center justify-between gap-2 p-3">
+          <div class="text-sm space-y-1">
+            <h4 class="text-gray-900"><%= t(".delete_title") %></h4>
+            <p class="text-gray-500"><%= t(".delete_subtitle") %></p>
+          </div>
+
+          <%= button_to t(".delete"),
+                account_entry_path(account, entry),
+                method: :delete,
+                class:  "rounded-lg px-3 py-2 text-red-500 text-sm
+                         font-medium border border-alpha-black-200",
+                data:   { turbo_confirm: true, turbo_frame: "_top" } %>
+        </div>
+      </div>
+    <% end %>
   </div>
 <% end %>

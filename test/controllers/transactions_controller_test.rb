@@ -174,7 +174,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
       assert_equal 1.day.ago.to_date, transaction.date
       assert_equal Category.second, transaction.account_transaction.category
       assert_equal Merchant.second, transaction.account_transaction.merchant
-      assert_equal "Updated note", transaction.account_transaction.notes
+      assert_equal "Updated note", transaction.notes
     end
   end
 end

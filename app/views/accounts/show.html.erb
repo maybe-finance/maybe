@@ -7,14 +7,14 @@
       <div>
         <h2 class="font-medium text-xl"><%= @account.name %></h2>
 
-        <% if @account.property? && @account.property.address %>
+        <% if @account.property? && @account.property.address&.line1.present? %>
           <p class="text-gray-500"><%= @account.property.address %></p>
         <% end %>
       </div>
     </div>
     <div class="flex items-center gap-3">
       <%= button_to sync_account_path(@account), method: :post, class: "flex items-center gap-2", title: "Sync Account" do %>
-        <%= lucide_icon "refresh-cw", class: "w-4 h-4 text-gray-900 hover:text-gray-500" %>
+        <%= lucide_icon "refresh-cw", class: "w-4 h-4 text-gray-500 hover:text-gray-400" %>
       <% end %>
 
       <%= contextual_menu do %>
@@ -27,7 +27,7 @@
             <span><%= t(".edit") %></span>
           <% end %>
 
-          <%= link_to new_import_path(account_id: @account.id),
+          <%= link_to new_import_path,
                       class: "block w-full py-2 px-3 space-x-2 text-gray-900 hover:bg-gray-50 flex items-center rounded-lg" do %>
             <%= lucide_icon "download", class: "w-5 h-5 text-gray-500" %>
 
@@ -60,7 +60,11 @@
       <div class="space-y-2">
         <div class="flex items-center gap-1">
           <div>
-            <%= tag.p t(".total_value"), class: "text-sm font-medium text-gray-500" %>
+            <% if @account.asset? %>
+              <%= tag.p t(".total_value"), class: "text-sm font-medium text-gray-500" %>
+            <% else %>
+              <%= tag.p t(".total_owed"), class: "text-sm font-medium text-gray-500" %>
+            <% end %>
           </div>
           <%= render "tooltip", account: @account if @account.investment? %>
         </div>

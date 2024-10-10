@@ -1,0 +1,16 @@
+<div class="flex justify-center items-center h-[800px]">
+  <div class="text-center flex flex-col gap-4 items-center max-w-[300px]">
+    <%= lucide_icon "circle-fading-arrow-up", class: "w-8 h-8 text-green-500" %>
+
+    <div class="space-y-1 text-sm">
+      <p class="text-gray-900 font-medium"><%= t(".title") %></p>
+      <p class="text-gray-500"><%= t(".subtitle") %></p>
+      <p class="text-gray-400 text-xs"><%= t(".guarantee") %></p>
+    </div>
+
+    <%= link_to new_subscription_path, class: "btn btn--primary flex items-center gap-1" do %>
+      <%= lucide_icon("credit-card", class: "w-5 h-5") %>
+      <span><%= t(".subscribe") %></span>
+    <% end %>
+  </div>
+</div>

@@ -24,7 +24,9 @@
     </div>
   </header>
 
-  <% if @accounts.empty? %>
+  <% if !Current.family.subscribed? && !self_hosted? %>
+    <%= render "shared/subscribe_prompt" %>
+  <% elsif @accounts.empty? %>
     <%= render "shared/no_account_empty_state" %>
   <% else %>
     <section class="flex gap-4">
@@ -135,9 +137,9 @@
           </div>
           <div class="flex gap-1.5">
             <% @top_savers.first(3).each do |account| %>
-              <%= link_to account, class: "border border-alpha-black-25 rounded-full p-1 pr-2 flex items-center gap-1 text-xs text-gray-900 font-medium hover:bg-gray-25" do %>
-                <%= image_tag account_logo_url(account), class: "w-5 h-5" %>
-                <% unless account.savings_rate.infinite? %>
+              <% unless account.savings_rate.infinite? %>
+                <%= link_to account, class: "border border-alpha-black-25 rounded-full p-1 pr-2 flex items-center gap-1 text-xs text-gray-900 font-medium hover:bg-gray-25" do %>
+                  <%= image_tag account_logo_url(account), class: "w-5 h-5" %>
                   <span><%= account.savings_rate > 0 ? "+" : "-" %><%= number_to_percentage(account.savings_rate.abs * 100, precision: 2) %></span>
                 <% end %>
               <% end %>

@@ -1,20 +1,15 @@
 <%# locals: (account:) %>
 
 <div class="grid grid-cols-3 gap-2">
-  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
-    <h4 class="text-gray-500 text-sm"><%= t(".market_value") %></h4>
-    <p class="text-xl font-medium text-gray-900"><%= format_money(account.balance_money) %></p>
-  </div>
+  <%= summary_card title: t(".market_value") do %>
+    <%= format_money(account.balance_money) %>
+  <% end %>
 
-  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
-    <h4 class="text-gray-500 text-sm"><%= t(".purchase_price") %></h4>
-    <p class="text-xl font-medium text-gray-900">
-      <%= account.property.purchase_price ? format_money(account.property.purchase_price) : t(".unknown") %>
-    </p>
-  </div>
+  <%= summary_card title: t(".purchase_price") do %>
+    <%= account.property.purchase_price ? format_money(account.property.purchase_price) : t(".unknown") %>
+  <% end %>
 
-  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
-    <h4 class="text-gray-500 text-sm flex items-center gap-1"><%= t(".trend") %></h4>
+  <%= summary_card title: t(".trend") do %>
     <div class="flex items-center gap-1" style="color: <%= account.property.trend.color %>">
       <p class="text-xl font-medium">
         <%= account.property.trend.value %>
@@ -22,19 +17,13 @@
 
       <p>(<%= account.property.trend.percent %>%)</p>
     </div>
-  </div>
+  <% end %>
 
-  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
-    <h4 class="text-gray-500 text-sm"><%= t(".year_built") %></h4>
-    <p class="text-xl font-medium text-gray-900">
-      <%= account.property.year_built || t(".unknown") %>
-    </p>
-  </div>
+  <%= summary_card title: t(".year_built") do %>
+    <%= account.property.year_built || t(".unknown") %>
+  <% end %>
 
-  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
-    <h4 class="text-gray-500 text-sm"><%= t(".living_area") %></h4>
-    <p class="text-xl font-medium text-gray-900">
-      <%= account.property.area || t(".unknown") %>
-    </p>
-  </div>
+  <%= summary_card title: t(".living_area") do %>
+    <%= account.property.area || t(".unknown") %>
+  <% end %>
 </div>

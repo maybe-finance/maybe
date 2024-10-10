@@ -9,7 +9,7 @@
         <%= lucide_icon("pencil-line", class: "w-4 h-4 text-gray-500") %>
       </div>
       <div class="w-full flex items-center justify-between gap-2">
-        <%= f.date_field :date, required: "required", min: Account::Entry.min_supported_date, max: Date.current, class: "border border-alpha-black-200 bg-white rounded-lg shadow-xs min-w-[200px] px-3 py-1.5 text-gray-900 text-sm" %>
+        <%= f.date_field :date, required: "required", min: Account::Entry.min_supported_date, max: Date.current, value: Date.current, class: "border border-alpha-black-200 bg-white rounded-lg shadow-xs min-w-[200px] px-3 py-1.5 text-gray-900 text-sm" %>
         <%= f.number_field :amount, required: "required", placeholder: "0.00", step: "0.01", class: "bg-white border border-alpha-black-200 rounded-lg shadow-xs text-gray-900 text-sm px-3 py-1.5 text-right" %>
         <%= f.hidden_field :currency, value: entry.account.currency %>
       </div>

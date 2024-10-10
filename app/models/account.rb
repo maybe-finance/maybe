@@ -39,13 +39,16 @@ class Account < ApplicationRecord
 
       Accountable.by_classification.each do |classification, types|
         types.each do |type|
-          group = grouped_accounts[classification.to_sym].add_child_group(type, currency)
-          self.where(accountable_type: type).each do |account|
-            group.add_value_node(
-              account,
-              account.balance_money.exchange_to(currency, fallback_rate: 0),
-              account.series(period: period, currency: currency)
-            )
+          accounts = self.where(accountable_type: type)
+          if accounts.any?
+            group = grouped_accounts[classification.to_sym].add_child_group(type, currency)
+            accounts.each do |account|
+              group.add_value_node(
+                account,
+                account.balance_money.exchange_to(currency, fallback_rate: 0),
+                account.series(period: period, currency: currency)
+              )
+            end
           end
         end
       end
@@ -79,6 +82,11 @@ class Account < ApplicationRecord
     end
   end
 
+  def original_balance
+    balance_amount = balances.chronological.first&.balance || balance
+    Money.new(balance_amount, currency)
+  end
+
   def owns_ticker?(ticker)
     security_id = Security.find_by(ticker: ticker)&.id
     entries.account_trades
@@ -88,6 +96,15 @@ class Account < ApplicationRecord
 
   def favorable_direction
     classification == "asset" ? "up" : "down"
+  end
+
+  def update_with_sync!(attributes)
+    transaction do
+      update!(attributes)
+      update_balance!(attributes[:balance]) if attributes[:balance]
+    end
+
+    sync_later
   end
 
   def update_balance!(balance)

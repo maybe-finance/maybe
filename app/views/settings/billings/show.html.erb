@@ -1,0 +1,16 @@
+<% content_for :sidebar do %>
+  <%= render "settings/nav" %>
+<% end %>
+
+<div class="space-y-4">
+  <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
+  <%= settings_section title: t(".subscription_title"), subtitle: t(".subscription_subtitle") do %>
+    <% if Current.family.stripe_plan_id.blank? %>
+      <%= link_to t(".subscribe_button"), new_subscription_path, class: "w-fit flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2", data: { turbo: false } %>
+    <% else %>
+      <%= link_to t(".manage_subscription_button"), subscription_path, class: "w-fit flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2", data: { turbo: false } %>
+    <% end %>
+  <% end %>
+
+  <%= settings_nav_footer %>
+</div>

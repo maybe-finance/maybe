@@ -1,43 +1,27 @@
 <%# locals: (account:) %>
 
 <div class="grid grid-cols-3 gap-2">
-  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
-    <h4 class="text-gray-500 text-sm"><%= t(".make_model") %></h4>
-    <p class="text-xl font-medium text-gray-900">
-      <%= [account.vehicle.make, account.vehicle.model].compact.join(" ").presence || t(".unknown") %>
-    </p>
-  </div>
+  <%= summary_card title: t(".make_model") do %>
+    <%= [account.vehicle.make, account.vehicle.model].compact.join(" ").presence || t(".unknown") %>
+  <% end %>
 
-  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
-    <h4 class="text-gray-500 text-sm"><%= t(".year") %></h4>
-    <p class="text-xl font-medium text-gray-900">
-      <%= account.vehicle.year || t(".unknown") %>
-    </p>
-  </div>
+  <%= summary_card title: t(".year") do %>
+    <%= account.vehicle.year || t(".unknown") %>
+  <% end %>
 
-  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
-    <h4 class="text-gray-500 text-sm flex items-center gap-1"><%= t(".mileage") %></h4>
-    <p class="text-xl font-medium text-gray-900">
-      <%= account.vehicle.mileage || t(".unknown") %>
-    </p>
-  </div>
+  <%= summary_card title: t(".mileage") do %>
+    <%= account.vehicle.mileage || t(".unknown") %>
+  <% end %>
 
-  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
-    <h4 class="text-gray-500 text-sm"><%= t(".purchase_price") %></h4>
-    <p class="text-xl font-medium text-gray-900">
-      <%= format_money account.vehicle.purchase_price %>
-    </p>
-  </div>
+  <%= summary_card title: t(".purchase_price") do %>
+    <%= format_money account.vehicle.purchase_price %>
+  <% end %>
 
-  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
-    <h4 class="text-gray-500 text-sm"><%= t(".current_price") %></h4>
-    <p class="text-xl font-medium text-gray-900">
-      <%= format_money account.balance_money %>
-    </p>
-  </div>
+  <%= summary_card title: t(".current_price") do %>
+    <%= format_money account.balance_money %>
+  <% end %>
 
-  <div class="rounded-xl bg-white shadow-xs border border-alpha-black-25 p-4">
-    <h4 class="text-gray-500 text-sm"><%= t(".trend") %></h4>
+  <%= summary_card title: t(".trend") do %>
     <div class="flex items-center gap-1" style="color: <%= account.vehicle.trend.color %>">
       <p class="text-xl font-medium">
         <%= account.vehicle.trend.value %>
@@ -45,5 +29,5 @@
 
       <p>(<%= account.vehicle.trend.percent %>%)</p>
     </div>
-  </div>
+  <% end %>
 </div>

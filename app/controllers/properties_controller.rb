@@ -14,8 +14,7 @@ class PropertiesController < ApplicationController
   end
 
   def update
-    @account.update!(account_params)
-    @account.sync_later
+    @account.update_with_sync!(account_params)
     redirect_to @account, notice: t(".success")
   end
 
@@ -28,7 +27,7 @@ class PropertiesController < ApplicationController
     def account_params
       params.require(:account)
         .permit(
-          :name, :balance, :start_date, :start_balance, :currency, :accountable_type,
+          :name, :balance, :institution_id, :start_date, :start_balance, :currency, :accountable_type,
           accountable_attributes: [
             :id,
             :year_built,

@@ -44,7 +44,7 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "updates vehicle" do
-    assert_no_difference [ "Account.count", "Vehicle.count", "Account::Valuation.count", "Account::Entry.count" ] do
+    assert_no_difference [ "Account.count", "Vehicle.count" ] do
       patch vehicle_path(@account), params: {
         account: {
           name: "Updated Vehicle",

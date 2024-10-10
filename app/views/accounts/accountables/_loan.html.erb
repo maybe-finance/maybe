@@ -1,0 +1,16 @@
+<div>
+  <hr class="my-4">
+
+  <div class="space-y-2">
+    <%= f.fields_for :accountable do |loan_form| %>
+      <div class="flex items-center gap-2">
+        <%= loan_form.number_field :interest_rate, label: t(".interest_rate"), placeholder: t(".interest_rate_placeholder"), min: 0, step: 0.01 %>
+        <%= loan_form.select :rate_type, options_for_select([["Fixed", "fixed"], ["Variable", "variable"], ["Adjustable", "adjustable"]]), { label: t(".rate_type") } %>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <%= loan_form.number_field :term_months, label: t(".term_months"), placeholder: t(".term_months_placeholder") %>
+      </div>
+    <% end %>
+  </div>
+</div>

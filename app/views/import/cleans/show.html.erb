@@ -23,7 +23,7 @@
     <div class="bg-white border border-alpha-black-100 rounded-lg p-3 flex items-center justify-between">
       <div class="flex items-center gap-2">
         <%= lucide_icon "alert-triangle", class: "w-4 h-4 text-red-500" %>
-        <p class="text-red-500">You have errors in your data</p>
+        <p class="text-red-500 text-sm"><%= t(".errors_notice") %></p>
       </div>
 
       <div class="flex justify-center">

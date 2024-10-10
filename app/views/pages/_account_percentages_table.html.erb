@@ -15,6 +15,6 @@
     </div>
   </div>
   <div class="bg-white border border-alpha-black-25 shadow-xs rounded-lg divide-y divide-alpha-black-50">
-    <%= render partial: "pages/account_group_disclosure", collection: account_groups, as: :accountable_group %>
+    <%= render partial: "pages/account_group_disclosure", collection: account_groups.sort_by(&:percent_of_total).reverse, as: :accountable_group %>
   </div>
 </div>

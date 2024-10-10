@@ -25,4 +25,15 @@ class Account::Trade < ApplicationRecord
   def buy?
     qty > 0
   end
+
+  def unrealized_gain_loss
+    return nil if sell?
+    current_price = security.current_price
+    return nil if current_price.nil?
+
+    current_value = current_price * qty.abs
+    cost_basis = price_money * qty.abs
+
+    TimeSeries::Trend.new(current: current_value, previous: cost_basis)
+  end
 end

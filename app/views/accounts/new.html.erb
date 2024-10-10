@@ -8,15 +8,15 @@
       <div class="flex flex-col p-2 text-sm grow">
         <button hidden data-controller="hotkey" data-hotkey="k,K,ArrowUp,ArrowLeft" data-action="list-keyboard-navigation#focusPrevious">Previous</button>
         <button hidden data-controller="hotkey" data-hotkey="j,J,ArrowDown,ArrowRight" data-action="list-keyboard-navigation#focusNext">Next</button>
-        <%= render "account_type", type: Depository.new, bg_color: "bg-blue-50", text_color: "text-blue-500", icon: "landmark" %>
-        <%= render "account_type", type: Investment.new, bg_color: "bg-green-50", text_color: "text-green-500", icon: "line-chart" %>
-        <%= render "account_type", type: Crypto.new, bg_color: "bg-green-50", text_color: "text-green-500", icon: "bitcoin" %>
-        <%= render "account_type", type: Property.new, bg_color: "bg-pink-50", text_color: "text-pink-500", icon: "home" %>
-        <%= render "account_type", type: Vehicle.new, bg_color: "bg-indigo-50", text_color: "text-indigo-500", icon: "car-front" %>
-        <%= render "account_type", type: CreditCard.new, bg_color: "bg-violet-50", text_color: "text-violet-500", icon: "credit-card" %>
-        <%= render "account_type", type: Loan.new, bg_color: "bg-yellow-50", text_color: "text-yellow-500", icon: "hand-coins" %>
-        <%= render "account_type", type: OtherAsset.new, bg_color: "bg-green-50", text_color: "text-green-500", icon: "plus" %>
-        <%= render "account_type", type: OtherLiability.new, bg_color: "bg-red-50", text_color: "text-red-500", icon: "minus" %>
+        <%= render "account_type", type: Depository.new, bg_color: "bg-blue-500/5", text_color: "text-blue-500", icon: "landmark" %>
+        <%= render "account_type", type: Investment.new, bg_color: "bg-green-500/5", text_color: "text-green-500", icon: "line-chart" %>
+        <%= render "account_type", type: Crypto.new, bg_color: "bg-orange-500/5", text_color: "text-orange-500", icon: "bitcoin" %>
+        <%= render "account_type", type: Property.new, bg_color: "bg-pink-500/5", text_color: "text-pink-500", icon: "home" %>
+        <%= render "account_type", type: Vehicle.new, bg_color: "bg-cyan-500/5", text_color: "text-cyan-500", icon: "car-front" %>
+        <%= render "account_type", type: CreditCard.new, bg_color: "bg-violet-500/5", text_color: "text-violet-500", icon: "credit-card" %>
+        <%= render "account_type", type: Loan.new, bg_color: "bg-yellow-500/5", text_color: "text-yellow-500", icon: "hand-coins" %>
+        <%= render "account_type", type: OtherAsset.new, bg_color: "bg-green-500/5", text_color: "text-green-500", icon: "plus" %>
+        <%= render "account_type", type: OtherLiability.new, bg_color: "bg-red-500/5", text_color: "text-red-500", icon: "minus" %>
       </div>
       <div class="border-t border-alpha-black-25 p-4 text-gray-500 text-sm flex justify-between">
         <div class="flex space-x-5">
@@ -46,8 +46,13 @@
         <button hidden data-controller="hotkey" data-hotkey="k,K,ArrowUp,ArrowLeft" data-action="list-keyboard-navigation#focusPrevious">Previous</button>
         <button hidden data-controller="hotkey" data-hotkey="j,J,ArrowDown,ArrowRight" data-action="list-keyboard-navigation#focusNext">Next</button>
         <%= render "entry_method", type: @account.accountable, text: "Enter account balance manually", icon: "keyboard" %>
+        <%= link_to new_import_path, class: "flex items-center gap-4 w-full text-center focus:outline-none focus:bg-gray-50 border border-transparent focus:border focus:border-gray-200 px-2 hover:bg-gray-50 rounded-lg p-2" do %>
+          <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-alpha-black-50 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.02)]">
+            <%= lucide_icon("sheet", class: "text-gray-500 w-5 h-5") %>
+          </span>
+          Upload CSV
+        <% end %>
         <%= render "entry_method", type: @account.accountable, text: "Securely link bank account with data provider (coming soon)", icon: "link-2", disabled: true %>
-        <%= render "entry_method", type: @account.accountable, text: "Upload spreadsheet (coming soon)", icon: "sheet", disabled: true %>
       </div>
       <div class="border-t border-alpha-black-25 p-4 text-gray-500 text-sm flex justify-between">
         <div class="flex space-x-5">

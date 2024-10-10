@@ -109,8 +109,8 @@ class Account::Entry < ApplicationRecord
     def bulk_update!(bulk_update_params)
       bulk_attributes = {
         date: bulk_update_params[:date],
+        notes: bulk_update_params[:notes],
         entryable_attributes: {
-          notes: bulk_update_params[:notes],
           category_id: bulk_update_params[:category_id],
           merchant_id: bulk_update_params[:merchant_id]
         }.compact_blank
@@ -129,17 +129,21 @@ class Account::Entry < ApplicationRecord
     end
 
     def income_total(currency = "USD")
-      without_transfers.account_transactions.includes(:entryable)
+      total = without_transfers.account_transactions.includes(:entryable)
         .where("account_entries.amount <= 0")
                        .map { |e| e.amount_money.exchange_to(currency, date: e.date, fallback_rate: 0) }
                        .sum
+
+      Money.new(total, currency)
     end
 
     def expense_total(currency = "USD")
-      without_transfers.account_transactions.includes(:entryable)
+      total = without_transfers.account_transactions.includes(:entryable)
                        .where("account_entries.amount > 0")
                        .map { |e| e.amount_money.exchange_to(currency, date: e.date, fallback_rate: 0) }
                        .sum
+
+      Money.new(total, currency)
     end
 
     def search(params)

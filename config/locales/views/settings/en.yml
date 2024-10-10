@@ -1,8 +1,16 @@
 ---
 en:
   settings:
+    billings:
+      show:
+        manage_subscription_button: Manage subscription
+        page_title: Billing
+        subscribe_button: Subscribe
+        subscription_subtitle: Manage your subscription and billing details
+        subscription_title: Manage subscription
     nav:
       accounts_label: Accounts
+      billing_label: Billing
       categories_label: Categories
       feedback_label: Feedback
       general_section_title: General

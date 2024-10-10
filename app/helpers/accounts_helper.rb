@@ -1,4 +1,9 @@
 module AccountsHelper
+  def summary_card(title:, &block)
+    content = capture(&block)
+    render "accounts/summary_card", title: title, content: content
+  end
+
   def to_accountable_title(accountable)
     accountable.model_name.human
   end
@@ -31,6 +36,10 @@ module AccountsHelper
       properties_path
     when "Vehicle"
       vehicles_path
+    when "Loan"
+      loans_path
+    when "CreditCard"
+      credit_cards_path
     else
       accounts_path
     end
@@ -42,6 +51,10 @@ module AccountsHelper
       property_path(account)
     when "Vehicle"
       vehicle_path(account)
+    when "Loan"
+      loan_path(account)
+    when "CreditCard"
+      credit_card_path(account)
     else
       account_path(account)
     end
@@ -55,8 +68,10 @@ module AccountsHelper
     transactions_tab = { key: "transactions", label: t("accounts.show.transactions"), path: account_path(account, tab: "transactions"), route: account_transactions_path(account) }
     trades_tab       = { key: "trades", label: t("accounts.show.trades"), path: account_path(account, tab: "trades"), route: account_trades_path(account) }
 
+    return [ value_tab ] if account.other_asset? || account.other_liability?
     return [ overview_tab, value_tab ] if account.property? || account.vehicle?
-    return [ holdings_tab, cash_tab, trades_tab ] if account.investment?
+    return [ holdings_tab, cash_tab, trades_tab, value_tab ] if account.investment?
+    return [ overview_tab, value_tab, transactions_tab ] if account.loan? || account.credit_card?
 
     [ value_tab, transactions_tab ]
   end

@@ -5,13 +5,48 @@ en:
       has_issues: Issue detected.
       troubleshoot: Troubleshoot
     accountables:
+      credit_card:
+        annual_fee: Annual fee
+        annual_fee_placeholder: '99'
+        apr: APR
+        apr_placeholder: '15.99'
+        available_credit: Available credit
+        available_credit_placeholder: '10000'
+        expiration_date: Expiration date
+        minimum_payment: Minimum payment
+        minimum_payment_placeholder: '100'
+        overview:
+          amount_owed: Amount Owed
+          annual_fee: Annual Fee
+          apr: APR
+          available_credit: Available Credit
+          expiration_date: Expiration Date
+          minimum_payment: Minimum Payment
+          unknown: Unknown
+      loan:
+        interest_rate: Interest rate
+        interest_rate_placeholder: '5.25'
+        overview:
+          interest_rate: Interest Rate
+          monthly_payment: Monthly Payment
+          not_applicable: N/A
+          original_principal: Original Principal
+          remaining_principal: Remaining Principal
+          term: Term
+          type: Type
+          unknown: Unknown
+        rate_type: Rate type
+        term_months: Term (months)
+        term_months_placeholder: '360'
       property:
+        additional_info: Additional info
         area_unit: Area unit
-        area_value: Area value (optional)
+        area_value: Area value
         city: City
         country: Country
         line1: Address line 1
-        line2: Address line 2 (optional)
+        line2: Address line 2
+        optional: optional
         overview:
           living_area: Living Area
           market_value: Market Value
@@ -19,9 +54,9 @@ en:
           trend: Trend
           unknown: Unknown
           year_built: Year Built
-        postal_code: Postal code (optional)
+        postal_code: Postal code
         state: State
-        year_built: Year built (optional)
+        year_built: Year built
       vehicle:
         make: Make
         make_placeholder: Toyota
@@ -51,13 +86,13 @@ en:
       new_account: New account
       no_accounts: No accounts yet
     form:
-      balance: Current balance
       institution: Financial institution
+      ungrouped: "(none)"
+      balance: Current balance
       name_label: Account name
       name_placeholder: Example account name
       start_balance: Start balance (optional)
       start_date: Start date (optional)
-      ungrouped: "(none)"
     header:
       accounts: Accounts
       manage: Manage accounts
@@ -102,12 +137,19 @@ en:
       sync_message_missing_rates: Since exchange rates haven't been synced, balance
         graphs may not reflect accurate values.
       sync_message_unknown_error: An error has occurred during the sync.
+      total_owed: Total Owed
       total_value: Total Value
       trades: Transactions
       transactions: Transactions
       value: Value
     summary:
-      new: New account
+      new: New
+      no_assets: No assets found
+      no_assets_description: Add an asset either via connection, importing or entering
+        manually.
+      no_liabilities: No liabilities found
+      no_liabilities_description: Add a liability either via connection, importing
+        or entering manually.
     sync_all:
       button_text: Sync all
       success: Successfully queued accounts for syncing.
@@ -118,3 +160,13 @@ en:
         value, minus margin loans.
     update:
       success: Account updated
+  credit_cards:
+    create:
+      success: Credit card created successfully
+    update:
+      success: Credit card updated successfully
+  loans:
+    create:
+      success: Loan created successfully
+    update:
+      success: Loan updated successfully

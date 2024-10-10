@@ -47,7 +47,7 @@ class PropertiesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "updates property" do
-    assert_no_difference [ "Account.count", "Property.count", "Account::Valuation.count", "Account::Entry.count" ] do
+    assert_no_difference [ "Account.count", "Property.count" ] do
       patch property_path(@account), params: {
         account: {
           name: "Updated Property",

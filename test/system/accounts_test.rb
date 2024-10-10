@@ -22,13 +22,13 @@ class AccountsTest < ApplicationSystemTestCase
 
   test "can create property account" do
     assert_account_created "Property" do
-      fill_in "Year built (optional)", with: 2005
-      fill_in "Area value (optional)", with: 2250
+      fill_in "Year built", with: 2005
+      fill_in "Area value", with: 2250
       fill_in "Address line 1", with: "123 Main St"
       fill_in "Address line 2", with: "Apt 4B"
       fill_in "City", with: "San Francisco"
       fill_in "State", with: "CA"
-      fill_in "Postal code (optional)", with: "94101"
+      fill_in "Postal code", with: "94101"
       fill_in "Country", with: "US"
     end
   end
@@ -47,21 +47,29 @@ class AccountsTest < ApplicationSystemTestCase
   end
 
   test "can create credit card account" do
-    assert_account_created("CreditCard")
+    assert_account_created "CreditCard" do
+      fill_in "Available credit", with: 1000
+      fill_in "Minimum payment", with: 25
+      fill_in "APR", with: 15.25
+      fill_in "Expiration date", with: 1.year.from_now.to_date
+      fill_in "Annual fee", with: 100
+    end
   end
 
   test "can create loan account" do
-    assert_account_created("Loan")
+    assert_account_created "Loan" do
+      fill_in "Interest rate", with: 5.25
+      select "Fixed", from: "Rate type"
+      fill_in "Term (months)", with: 360
+    end
   end
 
   test "can create other liability account" do
     assert_account_created("OtherLiability")
   end
 
-  test "can sync all acounts on accounts page and account summary page" do
+  test "can sync all acounts on accounts page" do
     visit accounts_url
-    assert_button "Sync all"
-    visit summary_accounts_url
     assert_button "Sync all"
   end
 
@@ -78,7 +86,6 @@ class AccountsTest < ApplicationSystemTestCase
       account_name = "[system test] #{accountable_type} Account"
 
       fill_in "Account name", with: account_name
-      select "Chase", from: "Financial institution"
       fill_in "account[balance]", with: 100.99
       fill_in "Start date (optional)", with: 10.days.ago.to_date
       fill_in "Start balance (optional)", with: 95

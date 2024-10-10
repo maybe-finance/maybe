@@ -1,12 +1,12 @@
 <%# locals: (account_groups:) %>
 <div class="space-y-4">
   <div class="flex gap-1">
-    <% account_groups.each do |group| %>
+    <% account_groups.sort_by(&:percent_of_total).reverse.each do |group| %>
       <div class="h-1.5 rounded-sm w-12 <%= accountable_bg_class(group.name) %>" style="width: <%= group.percent_of_total %>%;"></div>
     <% end %>
   </div>
   <div class="flex gap-4">
-    <% account_groups.each do |group| %>
+    <% account_groups.sort_by(&:percent_of_total).reverse.each do |group| %>
       <div class="flex items-center gap-2 text-sm">
         <div class="h-2.5 w-2.5 rounded-full <%= accountable_bg_class(group.name) %>"></div>
         <p class="text-gray-500"><%= to_accountable_title(Accountable.from_type(group.name)) %></p>

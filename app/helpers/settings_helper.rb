@@ -3,6 +3,7 @@ module SettingsHelper
     { name: I18n.t("settings.nav.profile_label"), path: :settings_profile_path },
     { name: I18n.t("settings.nav.preferences_label"), path: :settings_preferences_path },
     { name: I18n.t("settings.nav.self_hosting_label"), path: :settings_hosting_path, condition: :self_hosted? },
+    { name: I18n.t("settings.nav.billing_label"), path: :settings_billing_path },
     { name: I18n.t("settings.nav.accounts_label"), path: :accounts_path },
     { name: I18n.t("settings.nav.tags_label"), path: :tags_path },
     { name: I18n.t("settings.nav.categories_label"), path: :categories_path },

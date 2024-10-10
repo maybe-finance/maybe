@@ -1,0 +1,27 @@
+<%# locals: (account:) %>
+
+<div class="grid grid-cols-3 gap-2">
+  <%= summary_card title: t(".amount_owed") do %>
+    <%= format_money(account.balance_money) %>
+  <% end %>
+
+  <%= summary_card title: t(".available_credit") do %>
+    <%= format_money(account.credit_card.available_credit_money) || t(".unknown") %>
+  <% end %>
+
+  <%= summary_card title: t(".minimum_payment") do %>
+    <%= format_money(account.credit_card.minimum_payment_money || Money.new(0, account.currency)) %>
+  <% end %>
+
+  <%= summary_card title: t(".apr") do %>
+    <%= account.credit_card.apr ? number_to_percentage(account.credit_card.apr, precision: 2) : t(".unknown") %>
+  <% end %>
+
+  <%= summary_card title: t(".expiration_date") do %>
+    <%= account.credit_card.expiration_date ? l(account.credit_card.expiration_date, format: :long) : t(".unknown") %>
+  <% end %>
+
+  <%= summary_card title: t(".annual_fee") do %>
+    <%= format_money(account.credit_card.annual_fee_money || Money.new(0, account.currency)) %>
+  <% end %>
+</div>

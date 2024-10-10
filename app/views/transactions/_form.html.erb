@@ -13,12 +13,12 @@
   <section class="space-y-2">
     <%= f.text_field :name, label: t(".description"), placeholder: t(".description_placeholder"), required: true %>
     <%= f.collection_select :account_id, Current.family.accounts.alphabetically, :id, :name, { prompt: t(".account_prompt"), label: t(".account") }, required: true %>
-    <%= f.money_field :amount, :currency, label: t(".amount"), required: true %>
+    <%= f.money_field :amount, label: t(".amount"), required: true %>
     <%= f.hidden_field :entryable_type, value: "Account::Transaction" %>
     <%= f.fields_for :entryable do |ef| %>
       <%= ef.collection_select :category_id, Current.family.categories.alphabetically, :id, :name, { prompt: t(".category_prompt"), label: t(".category") } %>
     <% end %>
-    <%= f.date_field :date, label: t(".date"), required: true, min: Account::Entry.min_supported_date, max: Date.today %>
+    <%= f.date_field :date, label: t(".date"), required: true, min: Account::Entry.min_supported_date, max: Date.current, value: Date.current %>
   </section>
 
   <section>

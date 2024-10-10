@@ -40,7 +40,7 @@ services:
     restart: unless-stopped
 
     environment:
-      SELF_HOSTING_ENABLED: "true"
+      SELF_HOSTED: "true"
       RAILS_FORCE_SSL: "false"
       RAILS_ASSUME_SSL: "false"
       GOOD_JOB_EXECUTION_MODE: async
