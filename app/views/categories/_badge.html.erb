@@ -2,9 +2,10 @@
 <% category ||= null_category %>
 
 <div>
-  <span class="flex items-center gap-1 text-sm font-medium rounded-full px-1.5 py-1 border border-alpha-black-25"
+  <span class="flex items-center gap-1 text-sm font-medium rounded-full px-1.5 py-1 border"
         style="
           background-color: color-mix(in srgb, <%= category.color %> 5%, white);
+          border-color: color-mix(in srgb, <%= category.color %> 30%, white);
           color: <%= category.color %>;">
     <%= category.name %>
   </span>
