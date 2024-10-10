@@ -2,7 +2,6 @@ class Investment < ApplicationRecord
   include Accountable
 
   SUBTYPES = [
-    [ "None", nil ],
     [ "Brokerage", "brokerage" ],
     [ "Pension", "pension" ],
     [ "Retirement", "retirement" ],
