@@ -1,0 +1,8 @@
+# Market Holiday Overrides (for those not covered by the :federalreserve region)
+months:
+  3:
+    - name: Good Friday 
+      regions: [market_overrides]
+      mday: 29
+      year_ranges:
+        limited: [2024]
