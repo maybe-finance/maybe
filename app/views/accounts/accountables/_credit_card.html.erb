@@ -9,7 +9,7 @@
 
       <div class="flex items-center gap-2">
         <%= credit_card_form.number_field :minimum_payment, label: t(".minimum_payment"), placeholder: t(".minimum_payment_placeholder"), min: 0 %>
-        <%= credit_card_form.number_field :apr, label: t(".apr"), placeholder: t(".apr_placeholder"), min: 0, step: 0.1 %>
+        <%= credit_card_form.number_field :apr, label: t(".apr"), placeholder: t(".apr_placeholder"), min: 0, step: 0.01 %>
       </div>
 
       <div class="flex items-center gap-2">
