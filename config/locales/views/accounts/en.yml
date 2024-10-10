@@ -5,6 +5,8 @@ en:
       has_issues: Issue detected.
       troubleshoot: Troubleshoot
     accountables:
+      investment:
+        prompt: Select investment subtype
       credit_card:
         annual_fee: Annual fee
         annual_fee_placeholder: '99'
