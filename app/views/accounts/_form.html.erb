@@ -16,7 +16,7 @@
     <% if account.new_record? %>
       <div class="flex items-center gap-2 mt-3 mb-6">
         <div class="w-1/2"><%= f.date_field :start_date, label: t(".start_date"), max: Date.yesterday, min: Account::Entry.min_supported_date %></div>
-        <div class="w-1/2"><%= f.number_field :start_balance, label: t(".start_balance"), placeholder: 90 %></div>
+        <div class="w-1/2"><%= f.money_field :start_balance, label: t(".start_balance"), placeholder: 90, hide_currency: true, default_currency: Current.family.currency %></div>
       </div>
     <% end %>
 
