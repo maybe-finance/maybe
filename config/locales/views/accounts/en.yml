@@ -5,6 +5,9 @@ en:
       has_issues: Issue detected.
       troubleshoot: Troubleshoot
     accountables:
+      investment:
+        prompt: Select a subtype
+        none: None
       credit_card:
         annual_fee: Annual fee
         annual_fee_placeholder: '99'
@@ -23,6 +26,9 @@ en:
           expiration_date: Expiration Date
           minimum_payment: Minimum Payment
           unknown: Unknown
+      depository:
+        prompt: Select a subtype
+        none: None
       loan:
         interest_rate: Interest rate
         interest_rate_placeholder: '5.25'

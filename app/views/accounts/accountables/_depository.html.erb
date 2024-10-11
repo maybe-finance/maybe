@@ -1,1 +1,1 @@
-<%= f.select :subtype, options_for_select([["Checking", "checking"], ["Savings", "savings"]], selected: ""), { label: "Type" } %>
+<%= f.select :subtype, [["Checking", "checking"], ["Savings", "savings"]], { label: true, prompt: t(".prompt"), include_blank: t(".none") } %>
