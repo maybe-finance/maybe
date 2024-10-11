@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 
 // Connects to data-controller="bulk-select"
 export default class extends Controller {
-  static targets = ["row", "group", "selectionBar", "selectionBarText", "bulkEditDrawerTitle"]
+  static targets = ["row", "group", "selectionBar", "selectionBarText", "bulkEditDrawerTitle"];
   static values = {
     resource: String,
     selectedIds: { type: Array, default: [] }
@@ -64,7 +64,7 @@ export default class extends Controller {
 
   selectedIdsValueChanged() {
     this.#updateView()
-  }
+  };
 
   #addHiddenFormInputsForSelectedIds(form, paramName, transactionIds) {
     this.#resetFormInputs(form, paramName);
@@ -76,47 +76,47 @@ export default class extends Controller {
       input.value = id
       form.appendChild(input)
     })
-  }
+  };
 
   #resetFormInputs(form, paramName) {
     const existingInputs = form.querySelectorAll(`input[name='${paramName}']`);
     existingInputs.forEach((input) => input.remove());
-  }
+  };
 
   #rowsForGroup(group) {
     return this.rowTargets.filter(row => group.contains(row))
-  }
+  };
 
   #addToSelection(idToAdd) {
     this.selectedIdsValue = Array.from(
       new Set([...this.selectedIdsValue, idToAdd])
     )
-  }
+  };
 
   #removeFromSelection(idToRemove) {
     this.selectedIdsValue = this.selectedIdsValue.filter(id => id !== idToRemove)
-  }
+  };
 
   #selectAll() {
     this.selectedIdsValue = this.rowTargets.map(t => t.dataset.id)
-  }
+  };
 
   #updateView = () => {
     this.#updateSelectionBar()
     this.#updateGroups()
     this.#updateRows()
-  }
+  };
 
   #updateSelectionBar() {
     const count = this.selectedIdsValue.length
     this.selectionBarTextTarget.innerText = `${count} ${this.#pluralizedResourceName()} selected`
     this.selectionBarTarget.hidden = count === 0
     this.selectionBarTarget.querySelector("input[type='checkbox']").checked = count > 0
-  }
+  };
 
   #pluralizedResourceName() {
     return `${this.resourceValue}${this.selectedIdsValue.length === 1 ? "" : "s"}`
-  }
+  };
 
   #updateGroups() {
     this.groupTargets.forEach(group => {
@@ -124,11 +124,11 @@ export default class extends Controller {
       const groupSelected = rows.length > 0 && rows.every(row => this.selectedIdsValue.includes(row.dataset.id))
       group.querySelector("input[type='checkbox']").checked = groupSelected
     })
-  }
+  };
 
   #updateRows() {
     this.rowTargets.forEach(row => {
       row.checked = this.selectedIdsValue.includes(row.dataset.id)
     })
-  }
+  };
 }
