@@ -68,7 +68,7 @@
           </div>
           <%= render "tooltip", account: @account if @account.investment? %>
         </div>
-        <%= tag.p format_money(@account.value, precision: 0), class: "text-gray-900 text-3xl font-medium" %>
+        <%= tag.p format_money(@account.value), class: "text-gray-900 text-3xl font-medium" %>
         <div>
           <% if @series.trend.direction.flat? %>
             <%= tag.span t(".no_change"), class: "text-gray-500" %>
