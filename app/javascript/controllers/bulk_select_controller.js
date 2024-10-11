@@ -1,21 +1,21 @@
-import {Controller} from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="bulk-select"
 export default class extends Controller {
   static targets = ["row", "group", "selectionBar", "selectionBarText", "bulkEditDrawerTitle"]
   static values = {
     resource: String,
-    selectedIds: {type: Array, default: []}
+    selectedIds: { type: Array, default: [] }
   }
 
   connect() {
-    document.addEventListener("turbo:load", this.#updateView)
+    document.addEventListener("turbo:load", this._updateView)
 
-    this.#updateView()
+    this._updateView()
   }
 
   disconnect() {
-    document.removeEventListener("turbo:load", this.#updateView)
+    document.removeEventListener("turbo:load", this._updateView)
   }
 
   bulkEditDrawerTitleTargetConnected(element) {
@@ -63,7 +63,7 @@ export default class extends Controller {
   }
 
   selectedIdsValueChanged() {
-    this.#updateView()
+    this._updateView()
   }
 
   #addHiddenFormInputsForSelectedIds(form, paramName, transactionIds) {
@@ -101,7 +101,7 @@ export default class extends Controller {
     this.selectedIdsValue = this.rowTargets.map(t => t.dataset.id)
   }
 
-  #updateView = () => {
+  _updateView = () => {
     this.#updateSelectionBar()
     this.#updateGroups()
     this.#updateRows()
