@@ -11,12 +11,12 @@ export default class extends Controller {
     usePercentSign: Boolean
   }
 
-  #d3SvgMemo = null
-  #d3GroupMemo = null
-  #d3Tooltip = null
-  #d3InitialContainerWidth = 0
-  #d3InitialContainerHeight = 0
-  #normalDataPoints = []
+  #d3SvgMemo = null;
+  #d3GroupMemo = null;
+  #d3Tooltip = null;
+  #d3InitialContainerWidth = 0;
+  #d3InitialContainerHeight = 0;
+  #normalDataPoints = [];
 
   connect() {
     this.#install()
@@ -181,7 +181,7 @@ export default class extends Controller {
       .call(
         d3
           .axisBottom(this.#d3XScale)
-          .tickValues([ this.#normalDataPoints[0].date, this.#normalDataPoints[this.#normalDataPoints.length - 1].date ])
+          .tickValues([this.#normalDataPoints[0].date, this.#normalDataPoints[this.#normalDataPoints.length - 1].date])
           .tickSize(0)
           .tickFormat(d3.timeFormat("%d %b %Y"))
       )
@@ -246,7 +246,6 @@ export default class extends Controller {
       .attr("clip-path", `url(#${this.element.id}-clip-below-trendline)`)
       .style("fill", `url(#${this.element.id}-trendline-gradient)`)
   }
-
 
   #drawTooltip() {
     this.#d3Tooltip = d3
@@ -345,7 +344,7 @@ export default class extends Controller {
   }
 
   #tooltipTemplate(datum) {
-    return(`
+    return (`
       <div style="margin-bottom: 4px; color: ${tailwindColors.gray[500]};">
         ${d3.timeFormat("%b %d, %Y")(datum.date)}
       </div>
@@ -428,7 +427,7 @@ export default class extends Controller {
       .append("svg")
       .attr("width", this.#d3InitialContainerWidth)
       .attr("height", this.#d3InitialContainerHeight)
-      .attr("viewBox", [ 0, 0, this.#d3InitialContainerWidth, this.#d3InitialContainerHeight ])
+      .attr("viewBox", [0, 0, this.#d3InitialContainerWidth, this.#d3InitialContainerHeight])
   }
 
   #createMainGroup() {
@@ -502,7 +501,7 @@ export default class extends Controller {
   get #d3XScale() {
     return d3
       .scaleTime()
-      .rangeRound([ 0, this.#d3ContainerWidth ])
+      .rangeRound([0, this.#d3ContainerWidth])
       .domain(d3.extent(this.#normalDataPoints, d => d.date))
   }
 
@@ -514,7 +513,7 @@ export default class extends Controller {
 
     return d3
       .scaleLinear()
-      .rangeRound([ this.#d3ContainerHeight, 0 ])
-      .domain([ dataMin - padding, dataMax + padding ])
+      .rangeRound([this.#d3ContainerHeight, 0])
+      .domain([dataMin - padding, dataMax + padding])
   }
 }
