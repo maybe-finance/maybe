@@ -17,4 +17,8 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 RUN gem install bundler
 RUN gem install foreman
 
+# Install Node.js 20
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+&& apt-get install -y nodejs
+
 WORKDIR /workspace
