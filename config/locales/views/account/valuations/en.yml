@@ -18,7 +18,7 @@ en:
         confirm_body_html: "<p>Deleting this entry will remove it from the account’s
           history which will impact different parts of your account. This includes
           the net worth and account graphs.</p></br><p>The only way you’ll be able
-          to add this entry back is by re-entering it manually via a new entry</p>"
+          to add this entry back is by re-entering it manually via a new entry.</p>"
         confirm_title: Delete Entry?
         delete_entry: Delete entry
         edit_entry: Edit entry
