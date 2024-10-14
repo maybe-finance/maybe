@@ -115,7 +115,7 @@ export default class extends Controller {
       this.#d3GroupMemo = this.#createMainGroup();
     }
 
-    return this.#d3ContentMemo;
+    return this.#d3GroupMemo;
   }
 
   get #d3Content() {
