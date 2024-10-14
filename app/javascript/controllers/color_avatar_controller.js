@@ -3,10 +3,7 @@ import { Controller } from "@hotwired/stimulus";
 // Connects to data-controller="color-avatar"
 // Used by the transaction merchant form to show a preview of what the avatar will look like
 export default class extends Controller {
-  static targets = [
-    "name",
-    "avatar"
-  ];
+  static targets = ["name", "avatar"];
 
   connect() {
     this.nameTarget.addEventListener("input", this.handleNameChange);
@@ -17,8 +14,10 @@ export default class extends Controller {
   }
 
   handleNameChange = (e) => {
-    this.avatarTarget.textContent = (e.currentTarget.value?.[0] || "?").toUpperCase();
-  }
+    this.avatarTarget.textContent = (
+      e.currentTarget.value?.[0] || "?"
+    ).toUpperCase();
+  };
 
   handleColorChange(e) {
     const color = e.currentTarget.value;

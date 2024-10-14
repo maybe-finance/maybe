@@ -12,11 +12,13 @@ export default class extends Controller {
   }
 
   updateAmount(currency) {
-    (new CurrenciesService).get(currency).then((currency) => {
+    new CurrenciesService().get(currency).then((currency) => {
       this.amountTarget.step = currency.step;
 
-      if (isFinite(this.amountTarget.value)) {
-        this.amountTarget.value = parseFloat(this.amountTarget.value).toFixed(currency.default_precision)
+      if (Number.isFinite(this.amountTarget.value)) {
+        this.amountTarget.value = Number.parseFloat(
+          this.amountTarget.value,
+        ).toFixed(currency.default_precision);
       }
 
       this.symbolTarget.innerText = currency.symbol;

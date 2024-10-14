@@ -52,6 +52,26 @@ jobs:
       - name: Lint code for consistent style
         run: bin/rubocop -f github
 
+  lint_js:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+        shell: bash
+
+      - name: Lint/Format js code
+        run: npm run lint
+
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 10

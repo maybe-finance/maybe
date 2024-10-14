@@ -28,7 +28,7 @@ export default class extends Controller {
 
   updateClasses = (selectedId) => {
     this.btnTargets.forEach((btn) =>
-      btn.classList.remove(...this.activeClasses)
+      btn.classList.remove(...this.activeClasses),
     );
     this.tabTargets.forEach((tab) => tab.classList.add("hidden"));
 

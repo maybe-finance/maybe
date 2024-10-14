@@ -1,5 +1,5 @@
-import { Controller } from "@hotwired/stimulus";
 import { install, uninstall } from "@github/hotkey";
+import { Controller } from "@hotwired/stimulus";
 
 // Connects to data-controller="hotkey"
 export default class extends Controller {

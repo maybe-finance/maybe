@@ -10,5 +10,13 @@
   "remoteEnv": {
     "PATH": "/workspace/bin:${containerEnv:PATH}"
   },
-  "postCreateCommand": "bundle install"
+  "postCreateCommand": "bundle install && npm install",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "biomejs.biome",
+        "EditorConfig.EditorConfig"
+      ]
+    }
+  }
 }

@@ -1,5 +1,11 @@
+import {
+  autoUpdate,
+  computePosition,
+  flip,
+  offset,
+  shift,
+} from "@floating-ui/dom";
 import { Controller } from "@hotwired/stimulus";
-import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 
 /**
  * A "menu" can contain arbitrary content including non-clickable items, links, buttons, and forms.
@@ -70,8 +76,10 @@ export default class extends Controller {
   }
 
   focusFirstElement() {
-    const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-    const firstFocusableElement = this.contentTarget.querySelectorAll(focusableElements)[0];
+    const focusableElements =
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const firstFocusableElement =
+      this.contentTarget.querySelectorAll(focusableElements)[0];
     if (firstFocusableElement) {
       firstFocusableElement.focus();
     }
@@ -79,7 +87,11 @@ export default class extends Controller {
 
   startAutoUpdate() {
     if (!this._cleanup) {
-      this._cleanup = autoUpdate(this.buttonTarget, this.contentTarget, this.boundUpdate);
+      this._cleanup = autoUpdate(
+        this.buttonTarget,
+        this.contentTarget,
+        this.boundUpdate,
+      );
     }
   }
 
@@ -93,14 +105,10 @@ export default class extends Controller {
   update() {
     computePosition(this.buttonTarget, this.contentTarget, {
       placement: this.placementValue,
-      middleware: [
-        offset(this.offsetValue),
-        flip(),
-        shift({ padding: 5 })
-      ],
+      middleware: [offset(this.offsetValue), flip(), shift({ padding: 5 })],
     }).then(({ x, y }) => {
       Object.assign(this.contentTarget.style, {
-        position: 'fixed',
+        position: "fixed",
         left: `${x}px`,
         top: `${y}px`,
       });

@@ -1,10 +1,10 @@
-import { Application } from "@hotwired/stimulus"
+import { Application } from "@hotwired/stimulus";
 
-const application = Application.start()
+const application = Application.start();
 
 // Configure Stimulus development experience
-application.debug = false
-window.Stimulus   = application
+application.debug = false;
+window.Stimulus = application;
 
 Turbo.setConfirmMethod((message) => {
   const dialog = document.getElementById("turbo-confirm");
@@ -34,10 +34,14 @@ Turbo.setConfirmMethod((message) => {
   dialog.showModal();
 
   return new Promise((resolve) => {
-    dialog.addEventListener("close", () => {
-        resolve(dialog.returnValue == "confirm")
-    }, { once: true })
-  })
-})
+    dialog.addEventListener(
+      "close",
+      () => {
+        resolve(dialog.returnValue === "confirm");
+      },
+      { once: true },
+    );
+  });
+});
 
-export { application }
+export { application };
