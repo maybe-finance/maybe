@@ -43,7 +43,12 @@
 .idea
 
 # Ignore VS Code
-.vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
 
 # Ignore macOS specific files
 */.DS_Store
