@@ -86,7 +86,7 @@ module AccountsHelper
 
   def account_groups(period: nil)
     assets, liabilities = Current.family.accounts.by_group(currency: Current.family.currency, period: period || Period.last_30_days).values_at(:assets, :liabilities)
-    [ assets.children, liabilities.children ].flatten
+    [ assets.children.sort_by(&:name), liabilities.children.sort_by(&:name) ].flatten
   end
 
   private
