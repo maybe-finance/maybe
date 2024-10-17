@@ -23,6 +23,17 @@ class User < ApplicationRecord
     password_salt&.last(10)
   end
 
+  def request_impersonation_for(user)
+    raise "Only super admins can impersonate others" unless super_admin?
+    raise "Cannot impersonate yourself" if user == self
+
+    user = User.find(user)
+
+    unless ImpersonationSession.exists?(impersonator: self, impersonated: user, status: [ :pending, :in_progress ])
+      ImpersonationSession.create!(impersonator: self, impersonated: user)
+    end
+  end
+
   def display_name
     [ first_name, last_name ].compact.join(" ").presence || email
   end
@@ -71,6 +82,10 @@ class User < ApplicationRecord
     else
       destroy
     end
+  end
+
+  def super_admin?
+    super_admin
   end
 
   private
