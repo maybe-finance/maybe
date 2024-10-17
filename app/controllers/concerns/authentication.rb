@@ -64,10 +64,6 @@ module Authentication
         session[:impersonated_user_id] = impersonation_session.impersonated_id
         Current.impersonated_user = impersonation_session.impersonated
         Current.impersonation_session = impersonation_session
-
-        Rails.logger.warn "====================== Impersonating user #{user.id}"
-        Rails.logger.warn "====================== Current.impersonated_user: #{Current.impersonated_user.inspect}"
-        Rails.logger.warn "====================== Current.impersonation_session: #{Current.impersonation_session.inspect}"
       end
     end
 
@@ -84,7 +80,6 @@ module Authentication
     end
 
     def stop_impersonating
-      Rails.logger.warn "====================== Stopping impersonation"
       Current.impersonated_user = nil
       session.delete(:impersonated_user_id)
     end
