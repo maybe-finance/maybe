@@ -161,7 +161,7 @@ en:
     destroy:
       success: Account deleted successfully
     update:
-      success: Account updated successfully
+      success: Account updated
     sync_all:
       success: Successfully queued accounts for syncing.
   credit_cards:
