@@ -46,4 +46,8 @@ class Investment < ApplicationRecord
   rescue Money::ConversionError
     TimeSeries.new([])
   end
+
+  def color
+    "#1570EF"
+  end
 end

@@ -27,6 +27,8 @@ class Account < ApplicationRecord
   scope :alphabetically, -> { order(:name) }
   scope :ungrouped, -> { where(institution_id: nil) }
 
+  has_one_attached :logo
+
   delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
 
   accepts_nested_attributes_for :accountable

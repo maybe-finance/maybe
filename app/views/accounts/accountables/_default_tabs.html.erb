@@ -1,0 +1,7 @@
+<%# locals: (account:) %>
+
+<% if account.transactions.any? %>
+  <%= render "accounts/accountables/transactions", account: account %>
+<% else %>
+  <%= render "accounts/accountables/valuations", account: account %>
+<% end %>

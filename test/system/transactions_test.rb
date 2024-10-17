@@ -156,6 +156,7 @@ class TransactionsTest < ApplicationSystemTestCase
 
   test "can create deposit transaction for investment account" do
     investment_account = accounts(:investment)
+    investment_account.entries.create!(name: "Investment account", date: Date.current, amount: 1000, currency: "USD", entryable: Account::Transaction.new)
     transfer_date = Date.current
     visit account_path(investment_account)
     click_on "New transaction"

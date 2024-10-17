@@ -20,7 +20,7 @@
       </div>
     <% end %>
 
-    <%= render "accounts/accountables/#{permitted_accountable_partial(account.accountable_type)}", f: f %>
+    <%= render permitted_accountable_partial(account, "form"), f: f %>
   </div>
 
   <%= f.submit "#{account.new_record? ? "Add" : "Update"} #{account.accountable.model_name.human.downcase}" %>

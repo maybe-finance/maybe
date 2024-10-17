@@ -11,12 +11,6 @@ class ApplicationHelperTest < ActionView::TestCase
     assert_equal "Test Header Title", content_for(:header_title)
   end
 
-  test "#permitted_accountable_partial(accountable_type)" do
-    assert_equal "account", permitted_accountable_partial("Account")
-    assert_equal "user", permitted_accountable_partial("User")
-    assert_equal "admin_user", permitted_accountable_partial("AdminUser")
-  end
-
   def setup
     @account1 = Account.new(currency: "USD", balance: 1)
     @account2 = Account.new(currency: "USD", balance: 2)

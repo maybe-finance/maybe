@@ -16,4 +16,8 @@ class Loan < ApplicationRecord
 
     Money.new(payment.round, account.currency)
   end
+
+  def color
+    "#D444F1"
+  end
 end
