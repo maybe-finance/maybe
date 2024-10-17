@@ -110,8 +110,6 @@ Rails.application.routes.draw do
 
   resources :currencies, only: %i[show]
 
-  resource :impersonate
-
   resources :impersonation_sessions, only: [ :create ] do
     collection do
       post :start
