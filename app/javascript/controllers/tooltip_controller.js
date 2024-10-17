@@ -1,11 +1,11 @@
-import { Controller } from '@hotwired/stimulus'
 import {
+  autoUpdate,
   computePosition,
   flip,
-  shift,
   offset,
-  autoUpdate
-} from '@floating-ui/dom';
+  shift,
+} from "@floating-ui/dom";
+import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = ["tooltip"];
@@ -39,20 +39,20 @@ export default class extends Controller {
   }
 
   show = () => {
-    this.tooltipTarget.style.display = 'block';
+    this.tooltipTarget.style.display = "block";
     this.update(); // Ensure immediate update when shown
-  }
+  };
 
   hide = () => {
-    this.tooltipTarget.style.display = 'none';
-  }
+    this.tooltipTarget.style.display = "none";
+  };
 
   startAutoUpdate() {
     if (!this._cleanup) {
       this._cleanup = autoUpdate(
         this.element,
         this.tooltipTarget,
-        this.boundUpdate
+        this.boundUpdate,
       );
     }
   }
@@ -69,9 +69,13 @@ export default class extends Controller {
     computePosition(this.element, this.tooltipTarget, {
       placement: this.placementValue,
       middleware: [
-        offset({ mainAxis: this.offsetValue, crossAxis: this.crossAxisValue, alignmentAxis: this.alignmentAxisValue }),
+        offset({
+          mainAxis: this.offsetValue,
+          crossAxis: this.crossAxisValue,
+          alignmentAxis: this.alignmentAxisValue,
+        }),
         flip(),
-        shift({ padding: 5 })
+        shift({ padding: 5 }),
       ],
     }).then(({ x, y, placement, middlewareData }) => {
       Object.assign(this.tooltipTarget.style, {

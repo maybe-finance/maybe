@@ -48,6 +48,7 @@ gem "csv"
 gem "redcarpet"
 gem "stripe"
 gem "intercom-rails"
+gem "holidays"
 
 group :development, :test do
   gem "debug", platforms: %i[mri windows]

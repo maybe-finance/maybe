@@ -1,1 +1,1 @@
-<%= f.select :subtype, options_for_select(Investment::SUBTYPES, selected: ""), { label: true } %>
+<%= f.select :subtype, Investment::SUBTYPES, { label: true, prompt: t(".prompt"), include_blank: t(".none") } %>

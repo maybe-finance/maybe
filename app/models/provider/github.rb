@@ -47,6 +47,8 @@ class Provider::Github
         if release
           {
             avatar: release.author.avatar_url,
+            # this is the username, it would be nice to get the full name
+            username: release.author.login,
             name: release.name,
             published_at: release.published_at,
             body: Octokit.markdown(release.body, mode: "gfm", context: repo)

@@ -1,7 +1,13 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["imagePreview", "fileField", "deleteField", "clearBtn", "template"]
+  static targets = [
+    "imagePreview",
+    "fileField",
+    "deleteField",
+    "clearBtn",
+    "template",
+  ];
 
   preview(event) {
     const file = event.target.files[0];

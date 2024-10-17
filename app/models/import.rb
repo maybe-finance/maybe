@@ -71,10 +71,10 @@ class Import < ApplicationRecord
       {
         account: row[account_col_label].to_s,
         date: row[date_col_label].to_s,
-        qty: row[qty_col_label].to_s,
+        qty: sanitize_number(row[qty_col_label]).to_s,
         ticker: row[ticker_col_label].to_s,
-        price: row[price_col_label].to_s,
-        amount: row[amount_col_label].to_s,
+        price: sanitize_number(row[price_col_label]).to_s,
+        amount: sanitize_number(row[amount_col_label]).to_s,
         currency: (row[currency_col_label] || default_currency).to_s,
         name: (row[name_col_label] || default_row_name).to_s,
         category: row[category_col_label].to_s,
@@ -113,6 +113,14 @@ class Import < ApplicationRecord
     cleaned? && mappings.all?(&:valid?)
   end
 
+  def has_unassigned_account?
+    mappings.accounts.where(key: "").any?
+  end
+
+  def requires_account?
+    family.accounts.empty? && has_unassigned_account?
+  end
+
   private
     def import!
       # no-op, subclasses can implement for customization of algorithm
@@ -133,5 +141,10 @@ class Import < ApplicationRecord
         col_sep: col_sep,
         converters: [ ->(str) { str&.strip } ]
       )
+    end
+
+    def sanitize_number(value)
+      return "" if value.nil?
+      value.gsub(/[^\d.\-]/, "")
     end
 end

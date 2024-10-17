@@ -32,7 +32,11 @@ class Gapfiller
     attr_reader :date_range, :cache
 
     def should_gapfill?(date, record)
-      date.on_weekend? && record.nil?
+      (date.on_weekend? || holiday?(date)) && record.nil?
+    end
+
+    def holiday?(date)
+      Holidays.on(date, :federalreserve, :us, :observed, :informal).any?
     end
 
     def create_gapfilled_record(prev_record, date)

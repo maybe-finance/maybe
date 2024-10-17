@@ -27,7 +27,7 @@ class LoansController < ApplicationController
     def account_params
       params.require(:account)
         .permit(
-          :name, :balance, :start_date, :start_balance, :currency, :accountable_type,
+          :name, :balance, :institution_id, :start_date, :start_balance, :currency, :accountable_type,
           accountable_attributes: [
             :id,
             :rate_type,

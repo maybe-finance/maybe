@@ -12,7 +12,7 @@
             <%= image_tag @release_notes[:avatar], class: "rounded-full w-full h-full object-cover" %>
           </div>
           <div>
-            <div class="text-gray-900 font-medium text-sm"><%= @release_notes[:name] %></div>
+            <a class="text-gray-900 font-medium text-sm" href="https://github.com/<%= @release_notes[:username] %>"><%= "@#{@release_notes[:username]}" %></a>
             <div class="text-gray-500 text-sm"><%= @release_notes[:published_at].strftime("%B %d, %Y") %></div>
           </div>
         </div>

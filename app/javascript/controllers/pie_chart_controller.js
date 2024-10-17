@@ -104,27 +104,25 @@ export default class extends Controller {
   }
 
   get #d3Svg() {
-    if (this.#d3SvgMemo) {
-      return this.#d3SvgMemo;
-    } else {
-      return (this.#d3SvgMemo = this.#createMainSvg());
+    if (!this.#d3SvgMemo) {
+      this.#d3SvgMemo = this.#createMainSvg();
     }
+    return this.#d3SvgMemo;
   }
 
   get #d3Group() {
-    if (this.#d3GroupMemo) {
-      return this.#d3GroupMemo;
-    } else {
-      return (this.#d3GroupMemo = this.#createMainGroup());
+    if (!this.#d3GroupMemo) {
+      this.#d3GroupMemo = this.#createMainGroup();
     }
+
+    return this.#d3GroupMemo;
   }
 
   get #d3Content() {
-    if (this.#d3ContentMemo) {
-      return this.#d3ContentMemo;
-    } else {
-      return (this.#d3ContentMemo = this.#createContent());
+    if (!this.#d3ContentMemo) {
+      this.#d3ContentMemo = this.#createContent();
     }
+    return this.#d3ContentMemo;
   }
 
   #createMainSvg() {

@@ -52,7 +52,9 @@ module ExchangeRate::Provided
             rate: response.rate,
             date: date
 
-          rate.save! if cache
+          if cache
+            rate.save! rescue ActiveRecord::RecordNotUnique
+          end
           rate
         else
           nil

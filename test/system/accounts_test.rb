@@ -86,10 +86,9 @@ class AccountsTest < ApplicationSystemTestCase
       account_name = "[system test] #{accountable_type} Account"
 
       fill_in "Account name", with: account_name
-      select "Chase", from: "Financial institution"
       fill_in "account[balance]", with: 100.99
       fill_in "Start date (optional)", with: 10.days.ago.to_date
-      fill_in "Start balance (optional)", with: 95
+      fill_in "account[start_balance]", with: 95.25
 
       yield if block_given?
 

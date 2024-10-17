@@ -8,6 +8,7 @@ en:
         assets: Assets
         debts: Debts
       greeting: Welcome back, %{name}
+      fallback_greeting: Welcome back, friend
       import: Import
       income: Income
       investing: Investing (coming soon...)

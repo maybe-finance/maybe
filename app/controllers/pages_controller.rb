@@ -26,7 +26,7 @@ class PagesController < ApplicationController
 
     # TODO: Placeholders for trendlines
     placeholder_series_data = 10.times.map do |i|
-      { date: Date.current - i.days, value: Money.new(0) }
+      { date: Date.current - i.days, value: Money.new(0, Current.family.currency) }
     end
     @investing_series = TimeSeries.new(placeholder_series_data)
   end

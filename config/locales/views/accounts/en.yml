@@ -5,6 +5,9 @@ en:
       has_issues: Issue detected.
       troubleshoot: Troubleshoot
     accountables:
+      investment:
+        prompt: Select a subtype
+        none: None
       credit_card:
         annual_fee: Annual fee
         annual_fee_placeholder: '99'
@@ -23,6 +26,9 @@ en:
           expiration_date: Expiration Date
           minimum_payment: Minimum Payment
           unknown: Unknown
+      depository:
+        prompt: Select a subtype
+        none: None
       loan:
         interest_rate: Interest rate
         interest_rate_placeholder: '5.25'
@@ -86,13 +92,13 @@ en:
       new_account: New account
       no_accounts: No accounts yet
     form:
-      balance: Current balance
       institution: Financial institution
+      ungrouped: "(none)"
+      balance: Current balance
       name_label: Account name
       name_placeholder: Example account name
       start_balance: Start balance (optional)
       start_date: Start date (optional)
-      ungrouped: "(none)"
     header:
       accounts: Accounts
       manage: Manage accounts
