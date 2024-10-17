@@ -24,7 +24,7 @@ class ImportsController < ApplicationController
   end
 
   def show
-    redirect_to import_confirm_path(@import), alert: "Please finalize your mappings before proceeding." unless @import.publishable?
+    redirect_to import_upload_path(@import), alert: "Please finalize your mappings before proceeding." unless @import.publishable?
   end
 
   def destroy
