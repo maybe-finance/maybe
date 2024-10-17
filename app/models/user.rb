@@ -11,7 +11,7 @@ class User < ApplicationRecord
 
   normalizes :first_name, :last_name, with: ->(value) { value.strip.presence }
 
-  enum :role, { member: "member", admin: "admin", super_admin: "super_admin" }, validate: true
+  enum :role, { member: "member", admin: "admin" }, validate: true
 
   has_one_attached :profile_image do |attachable|
     attachable.variant :thumbnail, resize_to_fill: [ 300, 300 ]
@@ -85,7 +85,7 @@ class User < ApplicationRecord
   end
 
   def super_admin?
-    super_admin || role == "super_admin"
+    super_admin
   end
 
   private
