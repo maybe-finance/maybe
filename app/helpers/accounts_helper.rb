@@ -1,4 +1,11 @@
 module AccountsHelper
+  def permitted_accountable_partial(account, name = nil)
+    folder = account.accountable_type.underscore
+    name ||= account.accountable_type.underscore
+
+    "accounts/accountables/#{folder}/#{name}"
+  end
+
   def summary_card(title:, &block)
     content = capture(&block)
     render "accounts/summary_card", title: title, content: content

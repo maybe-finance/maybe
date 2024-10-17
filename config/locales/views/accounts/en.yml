@@ -6,18 +6,20 @@ en:
       troubleshoot: Troubleshoot
     accountables:
       investment:
-        prompt: Select a subtype
-        none: None
+        form: 
+          prompt: Select a subtype
+          none: None
       credit_card:
-        annual_fee: Annual fee
-        annual_fee_placeholder: '99'
-        apr: APR
-        apr_placeholder: '15.99'
-        available_credit: Available credit
-        available_credit_placeholder: '10000'
-        expiration_date: Expiration date
-        minimum_payment: Minimum payment
-        minimum_payment_placeholder: '100'
+        form:
+          annual_fee: Annual fee
+          annual_fee_placeholder: '99'
+          apr: APR
+          apr_placeholder: '15.99'
+          available_credit: Available credit
+          available_credit_placeholder: '10000'
+          expiration_date: Expiration date
+          minimum_payment: Minimum payment
+          minimum_payment_placeholder: '100'
         overview:
           amount_owed: Amount Owed
           annual_fee: Annual Fee
@@ -27,11 +29,16 @@ en:
           minimum_payment: Minimum Payment
           unknown: Unknown
       depository:
-        prompt: Select a subtype
-        none: None
+        form:
+          prompt: Select a subtype
+          none: None
       loan:
-        interest_rate: Interest rate
-        interest_rate_placeholder: '5.25'
+        form:
+          interest_rate: Interest rate
+          interest_rate_placeholder: '5.25'
+          rate_type: Rate type
+          term_months: Term (months)
+          term_months_placeholder: '360'
         overview:
           interest_rate: Interest Rate
           monthly_payment: Monthly Payment
@@ -41,18 +48,19 @@ en:
           term: Term
           type: Type
           unknown: Unknown
-        rate_type: Rate type
-        term_months: Term (months)
-        term_months_placeholder: '360'
       property:
-        additional_info: Additional info
-        area_unit: Area unit
-        area_value: Area value
-        city: City
-        country: Country
-        line1: Address line 1
-        line2: Address line 2
-        optional: optional
+        form: 
+          additional_info: Additional info
+          area_unit: Area unit
+          area_value: Area value
+          city: City
+          country: Country
+          postal_code: Postal code
+          state: State
+          year_built: Year built
+          line1: Address line 1
+          line2: Address line 2
+          optional: optional
         overview:
           living_area: Living Area
           market_value: Market Value
@@ -60,17 +68,17 @@ en:
           trend: Trend
           unknown: Unknown
           year_built: Year Built
-        postal_code: Postal code
-        state: State
-        year_built: Year built
       vehicle:
-        make: Make
-        make_placeholder: Toyota
-        mileage: Mileage
-        mileage_placeholder: '15000'
-        mileage_unit: Unit
-        model: Model
-        model_placeholder: Camry
+        form:
+          make: Make
+          make_placeholder: Toyota
+          mileage: Mileage
+          mileage_placeholder: '15000'
+          mileage_unit: Unit
+          model: Model
+          model_placeholder: Camry
+          year: Year
+          year_placeholder: '2023'
         overview:
           current_price: Current Price
           make_model: Make & Model
@@ -79,8 +87,6 @@ en:
           trend: Trend
           unknown: Unknown
           year: Year
-        year: Year
-        year_placeholder: '2023'
     create:
       success: New account created successfully
     destroy:

@@ -9,10 +9,6 @@ module ApplicationHelper
     content_for(:header_title) { page_title }
   end
 
-  def permitted_accountable_partial(name)
-    name.underscore
-  end
-
   def family_notifications_stream
     turbo_stream_from [ Current.family, :notifications ] if Current.family
   end
