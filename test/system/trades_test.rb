@@ -62,6 +62,6 @@ class TradesTest < ApplicationSystemTestCase
     end
 
     def visit_account_trades
-      visit account_url(@account, tab: "trades")
+      visit account_url(@account, tab: "transactions")
     end
 end
