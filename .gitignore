@@ -44,7 +44,6 @@
 
 # Ignore VS Code
 .vscode/*
-!.vscode/settings.json
 !.vscode/extensions.json
 !.vscode/*.code-snippets
 
