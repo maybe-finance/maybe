@@ -36,8 +36,6 @@ class AccountsController < ApplicationController
   end
 
   def show
-    @series = @account.series(period: @period)
-    @trend = @series.trend
   end
 
   def edit
@@ -57,7 +55,7 @@ class AccountsController < ApplicationController
                         start_date: account_params[:start_date],
                         start_balance: account_params[:start_balance]
     @account.sync_later
-    redirect_back_or_to account_path(@account), notice: t(".success")
+    redirect_to account_path(@account), notice: t(".success")
   end
 
   def destroy

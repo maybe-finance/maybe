@@ -1,7 +1,10 @@
 module AccountsHelper
   def permitted_accountable_partial(account, name = nil)
+    permitted_names = %w[tooltip header tabs]
     folder = account.accountable_type.underscore
     name ||= account.accountable_type.underscore
+
+    raise "Unpermitted accountable partial: #{name}" unless permitted_names.include?(name)
 
     "accounts/accountables/#{folder}/#{name}"
   end

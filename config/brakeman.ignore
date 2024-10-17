@@ -24,6 +24,74 @@
       "note": ""
     },
     {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "42595161ffdc9ce9a10c4ba2a75fd2bb668e273bc4e683880b0ea906d0bd28f8",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/accounts/show.html.erb",
+      "line": 8,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => permitted_accountable_partial(Current.family.accounts.find(params[:id]), \"header\"), { :account => Current.family.accounts.find(params[:id]) })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "AccountsController",
+          "method": "show",
+          "line": 39,
+          "file": "app/controllers/accounts_controller.rb",
+          "rendered": {
+            "name": "accounts/show",
+            "file": "app/views/accounts/show.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "accounts/show"
+      },
+      "user_input": "params[:id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "a35b18785608dbdf35607501363573576ed8c304039f8387997acd1408ca1025",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/accounts/show.html.erb",
+      "line": 35,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => permitted_accountable_partial(Current.family.accounts.find(params[:id]), \"tooltip\"), { :account => Current.family.accounts.find(params[:id]) })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "AccountsController",
+          "method": "show",
+          "line": 39,
+          "file": "app/controllers/accounts_controller.rb",
+          "rendered": {
+            "name": "accounts/show",
+            "file": "app/views/accounts/show.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "accounts/show"
+      },
+      "user_input": "params[:id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
       "fingerprint": "b1f821a5c03b8aa348fb21b9297081a3bf9e954244290e7e511c67213d35f3dc",
@@ -38,7 +106,7 @@
           "type": "controller",
           "class": "PagesController",
           "method": "changelog",
-          "line": 35,
+          "line": 36,
           "file": "app/controllers/pages_controller.rb",
           "rendered": {
             "name": "pages/changelog",
@@ -60,19 +128,19 @@
     {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
-      "fingerprint": "b7a59d6dd91f4d30873b271659636c7975e25b47f436b4f03900a08809af2e92",
+      "fingerprint": "c5c512a13c34c9696024bd4e2367a657a5c140b5b6a0f5c352e9b69965f63e1b",
       "check_name": "Render",
       "message": "Render path contains parameter value",
       "file": "app/views/accounts/show.html.erb",
-      "line": 105,
+      "line": 63,
       "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
-      "code": "render(action => selected_account_tab(Current.family.accounts.find(params[:id]))[:partial_path], { :account => Current.family.accounts.find(params[:id]) })",
+      "code": "render(action => permitted_accountable_partial(Current.family.accounts.find(params[:id]), \"tabs\"), { :account => Current.family.accounts.find(params[:id]), :selected_tab => params[:tab] })",
       "render_path": [
         {
           "type": "controller",
           "class": "AccountsController",
           "method": "show",
-          "line": 38,
+          "line": 39,
           "file": "app/controllers/accounts_controller.rb",
           "rendered": {
             "name": "accounts/show",
@@ -98,7 +166,7 @@
       "check_name": "Render",
       "message": "Render path contains parameter value",
       "file": "app/views/import/configurations/show.html.erb",
-      "line": 13,
+      "line": 15,
       "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
       "code": "render(partial => permitted_import_configuration_path(Current.family.imports.find(params[:import_id])), { :locals => ({ :import => Current.family.imports.find(params[:import_id]) }) })",
       "render_path": [
@@ -126,6 +194,6 @@
       "note": ""
     }
   ],
-  "updated": "2024-09-28 13:27:09 -0400",
+  "updated": "2024-10-17 11:30:15 -0400",
   "brakeman_version": "6.2.1"
 }

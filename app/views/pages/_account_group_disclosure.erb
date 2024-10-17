@@ -25,7 +25,7 @@
     <% accountable_group.children.map do |account_value_node| %>
       <div class="flex items-center justify-between text-sm font-medium text-gray-900">
         <div class="flex items-center gap-4">
-          <%= image_tag account_logo_url(account_value_node.original), class: "w-8 h-8" %>
+          <%= render "accounts/logo", account: account_value_node.original, size: "sm" %>
           <div>
             <p><%= account_value_node.name %></p>
           </div>

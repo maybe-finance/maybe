@@ -76,8 +76,8 @@ module ApplicationHelper
     color = hex || "#1570EF" # blue-600
 
     <<-STYLE.strip
-      background-color: color-mix(in srgb, #{color} 5%, white);
-      border-color: color-mix(in srgb, #{color} 10%, white);
+      background-color: color-mix(in srgb, #{color} 10%, white);
+      border-color: color-mix(in srgb, #{color} 30%, white);
       color: #{color};
     STYLE
   end
