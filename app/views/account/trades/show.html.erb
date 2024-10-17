@@ -41,12 +41,14 @@
             </div>
           <% end %>
 
-          <div class="flex items-center justify-between text-sm">
-            <dt class="text-gray-500"><%= t(".current_market_price_label") %></dt>
-            <dd class="text-gray-900"><%= format_money trade.security.current_price %></dd>
-          </div>
+          <% if trade.security.current_price.present? %>
+            <div class="flex items-center justify-between text-sm">
+              <dt class="text-gray-500"><%= t(".current_market_price_label") %></dt>
+              <dd class="text-gray-900"><%= format_money trade.security.current_price %></dd>
+            </div>
+          <% end %>
 
-          <% if trade.buy? %>
+          <% if trade.buy? && trade.unrealized_gain_loss.present? %>
             <div class="flex items-center justify-between text-sm">
               <dt class="text-gray-500"><%= t(".total_return_label") %></dt>
               <dd style="color: <%= trade.unrealized_gain_loss.color %>;">
