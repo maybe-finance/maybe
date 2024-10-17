@@ -26,6 +26,7 @@
 
   <body class="h-full">
     <%= render "shared/super_admin_bar" if Current.user && (Current.user.super_admin? || impersonating?) %>
+    <%= render "shared/impersonation_approval" if Current.user && ImpersonationSession.where(status: [:pending, :in_progress]).exists?(impersonated_id: Current.user.id) && !impersonating? %>
 
     <div class="fixed z-50 space-y-1 top-6 right-10">
       <div id="notification-tray">

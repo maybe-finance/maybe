@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_09_214601) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_17_162536) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -313,6 +313,29 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_09_214601) do
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
 
+  create_table "impersonation_session_logs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "impersonation_session_id", null: false
+    t.string "controller"
+    t.string "action"
+    t.text "path"
+    t.string "method"
+    t.string "ip_address"
+    t.text "user_agent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["impersonation_session_id"], name: "index_impersonation_session_logs_on_impersonation_session_id"
+  end
+
+  create_table "impersonation_sessions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "impersonator_id", null: false
+    t.uuid "impersonated_id", null: false
+    t.string "status", default: "pending", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["impersonated_id"], name: "index_impersonation_sessions_on_impersonated_id"
+    t.index ["impersonator_id"], name: "index_impersonation_sessions_on_impersonator_id"
+  end
+
   create_table "import_mappings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "type", null: false
     t.string "key"
@@ -540,6 +563,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_09_214601) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "categories", "families"
+  add_foreign_key "impersonation_session_logs", "impersonation_sessions"
+  add_foreign_key "impersonation_sessions", "users", column: "impersonated_id"
+  add_foreign_key "impersonation_sessions", "users", column: "impersonator_id"
   add_foreign_key "import_rows", "imports"
   add_foreign_key "imports", "families"
   add_foreign_key "institutions", "families"

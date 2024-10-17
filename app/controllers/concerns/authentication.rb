@@ -20,6 +20,7 @@ module Authentication
 
     def resume_session
       Current.impersonated_user = find_impersonated_user
+      Current.impersonation_session = find_impersonation_session
       Current.session = find_session_by_cookie
     end
 
@@ -55,12 +56,19 @@ module Authentication
     end
 
     def impersonating?
-      Current.impersonated_user.present?
+      Current.impersonated_user.present?## && Current.impersonation_session.present?
     end
 
     def impersonate(user)
-      Current.impersonated_user = user
-      session[:impersonated_user_id] = user.id
+      if impersonation_session = ImpersonationSession.find_by(impersonator: Current.user, impersonated: user, status: :in_progress)
+        session[:impersonated_user_id] = impersonation_session.impersonated_id
+        Current.impersonated_user = impersonation_session.impersonated
+        Current.impersonation_session = impersonation_session
+
+        Rails.logger.warn "====================== Impersonating user #{user.id}"
+        Rails.logger.warn "====================== Current.impersonated_user: #{Current.impersonated_user.inspect}"
+        Rails.logger.warn "====================== Current.impersonation_session: #{Current.impersonation_session.inspect}"
+      end
     end
 
     def find_impersonated_user
@@ -69,7 +77,14 @@ module Authentication
       end
     end
 
+    def find_impersonation_session
+      if (id = session[:impersonated_user_id])
+        ImpersonationSession.find_by(impersonated_id: id, status: :in_progress)
+      end
+    end
+
     def stop_impersonating
+      Rails.logger.warn "====================== Stopping impersonation"
       Current.impersonated_user = nil
       session.delete(:impersonated_user_id)
     end

@@ -1,0 +1,15 @@
+<div class="sticky top-0 left-0 w-full bg-black flex items-center justify-between font-mono">
+  <div class="flex items-center bg-red-600 px-6 py-4">
+    <%= lucide_icon "alert-triangle", class: "w-6 h-6 text-white mr-2" %>
+    <span class="text-white font-semibold uppercase">Access Request</span>
+  </div>
+  <div class="flex items-center space-x-2 px-2 py-2 text-white">
+    <span class="text-xs max-w-3xl text-right">Maybe support staff has requested access to your account (likely to help you with a support request). If you approve the request, all activity they take will be logged for security and audit purposes.</span>
+    <% if ImpersonationSession.where(impersonated: Current.user, status: :pending).any? %>
+      <%= button_to "Approve", approve_impersonation_session_path(Current.user), method: :post, class: "inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" %>
+      <%= button_to "Reject", reject_impersonation_session_path(Current.user), method: :delete, class: "inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
+    <% else %>
+      <%= button_to "End Session", complete_impersonation_session_path(Current.user), method: :post, class: "inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+    <% end %>
+  </div>
+</div>

@@ -11,7 +11,7 @@ class User < ApplicationRecord
 
   normalizes :first_name, :last_name, with: ->(value) { value.strip.presence }
 
-  enum :role, { member: "member", admin: "admin" }, validate: true
+  enum :role, { member: "member", admin: "admin", super_admin: "super_admin" }, validate: true
 
   has_one_attached :profile_image do |attachable|
     attachable.variant :thumbnail, resize_to_fill: [ 300, 300 ]
@@ -21,6 +21,17 @@ class User < ApplicationRecord
 
   generates_token_for :password_reset, expires_in: 15.minutes do
     password_salt&.last(10)
+  end
+
+  def request_impersonation_for(user)
+    raise "Only super admins can impersonate others" unless super_admin?
+    raise "Cannot impersonate yourself" if user == self
+
+    user = User.find(user)
+
+    unless ImpersonationSession.exists?(impersonator: self, impersonated: user, status: [ :pending, :in_progress ])
+      ImpersonationSession.create!(impersonator: self, impersonated: user)
+    end
   end
 
   def display_name
@@ -74,7 +85,7 @@ class User < ApplicationRecord
   end
 
   def super_admin?
-    super_admin
+    super_admin || role == "super_admin"
   end
 
   private

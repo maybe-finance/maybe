@@ -112,6 +112,20 @@ Rails.application.routes.draw do
 
   resource :impersonate
 
+  resources :impersonation_sessions, only: [ :create ] do
+    collection do
+      post :start
+      delete :end
+      delete :remove
+    end
+
+    member do
+      post :approve
+      delete :reject
+      post :complete
+    end
+  end
+
   # Stripe webhook endpoint
   post "webhooks/stripe", to: "webhooks#stripe"
 
