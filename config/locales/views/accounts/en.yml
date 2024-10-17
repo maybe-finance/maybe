@@ -17,9 +17,9 @@ en:
       name_placeholder: Example account name
       institution: Financial institution
       ungrouped: "(none)"
-      balance: Current balance
-      start_date: Start date (optional)
-      start_balance: Start balance (optional)
+      balance: Initial balance 
+      accountable_type: Account type
+      type_prompt: Select a type
     header:
       accounts: Accounts
       manage: Manage accounts
@@ -140,6 +140,9 @@ en:
     new:
       select_accountable_type: What would you like to add?
       title: Add an account
+      manual_entry: Enter account manually
+      csv_entry: Import accounts CSV
+      connected_entry: Securely link account with Plaid (coming soon)
     show:
       cash: Cash
       holdings: Holdings

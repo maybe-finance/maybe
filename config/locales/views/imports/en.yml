@@ -69,7 +69,7 @@ en:
       import_mint: Import from Mint
       import_portfolio: Import investments
       import_transactions: Import transactions
-      resume: Resume latest import
+      resume: Resume %{type}
       sources: Sources
       title: New CSV Import
     ready:
