@@ -1,6 +1,6 @@
 module AccountsHelper
   def permitted_accountable_partial(account, name = nil)
-    permitted_names = %w[tooltip header tabs]
+    permitted_names = %w[tooltip header tabs form]
     folder = account.accountable_type.underscore
     name ||= account.accountable_type.underscore
 
