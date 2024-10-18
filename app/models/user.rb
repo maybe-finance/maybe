@@ -3,6 +3,8 @@ class User < ApplicationRecord
 
   belongs_to :family
   has_many :sessions, dependent: :destroy
+  has_many :impersonator_support_sessions, class_name: "ImpersonationSession", foreign_key: :impersonator_id, dependent: :destroy
+  has_many :impersonated_support_sessions, class_name: "ImpersonationSession", foreign_key: :impersonated_id, dependent: :destroy
   accepts_nested_attributes_for :family
 
   validates :email, presence: true, uniqueness: true
@@ -11,7 +13,7 @@ class User < ApplicationRecord
 
   normalizes :first_name, :last_name, with: ->(value) { value.strip.presence }
 
-  enum :role, { member: "member", admin: "admin" }, validate: true
+  enum :role, { member: "member", admin: "admin", super_admin: "super_admin" }, validate: true
 
   has_one_attached :profile_image do |attachable|
     attachable.variant :thumbnail, resize_to_fill: [ 300, 300 ]
@@ -23,15 +25,9 @@ class User < ApplicationRecord
     password_salt&.last(10)
   end
 
-  def request_impersonation_for(user)
-    raise "Only super admins can impersonate others" unless super_admin?
-    raise "Cannot impersonate yourself" if user == self
-
-    user = User.find(user)
-
-    unless ImpersonationSession.exists?(impersonator: self, impersonated: user, status: [ :pending, :in_progress ])
-      ImpersonationSession.create!(impersonator: self, impersonated: user)
-    end
+  def request_impersonation_for(user_id)
+    impersonated = User.find(user_id)
+    impersonator_support_sessions.create!(impersonated: impersonated)
   end
 
   def display_name
@@ -82,10 +78,6 @@ class User < ApplicationRecord
     else
       destroy
     end
-  end
-
-  def super_admin?
-    super_admin
   end
 
   private

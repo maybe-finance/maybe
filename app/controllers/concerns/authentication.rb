@@ -4,7 +4,6 @@ module Authentication
   included do
     before_action :set_request_details
     before_action :authenticate_user!
-    helper_method :impersonating?
   end
 
   class_methods do
@@ -15,16 +14,6 @@ module Authentication
 
   private
     def authenticate_user!
-      resume_session || request_authentication
-    end
-
-    def resume_session
-      Current.impersonated_user = find_impersonated_user
-      Current.impersonation_session = find_impersonation_session
-      Current.session = find_session_by_cookie
-    end
-
-    def request_authentication
       if session_record = find_session_by_cookie
         Current.session = session_record
       else
@@ -53,34 +42,5 @@ module Authentication
     def set_request_details
       Current.user_agent = request.user_agent
       Current.ip_address = request.ip
-    end
-
-    def impersonating?
-      Current.impersonated_user.present?## && Current.impersonation_session.present?
-    end
-
-    def impersonate(user)
-      if impersonation_session = ImpersonationSession.find_by(impersonator: Current.user, impersonated: user, status: :in_progress)
-        session[:impersonated_user_id] = impersonation_session.impersonated_id
-        Current.impersonated_user = impersonation_session.impersonated
-        Current.impersonation_session = impersonation_session
-      end
-    end
-
-    def find_impersonated_user
-      if (id = session[:impersonated_user_id])
-        User.find_by(id: id)
-      end
-    end
-
-    def find_impersonation_session
-      if (id = session[:impersonated_user_id])
-        ImpersonationSession.find_by(impersonated_id: id, status: :in_progress)
-      end
-    end
-
-    def stop_impersonating
-      Current.impersonated_user = nil
-      session.delete(:impersonated_user_id)
     end
 end

@@ -1,0 +1,35 @@
+<div class="sticky top-0 left-0 w-full bg-black flex items-center justify-between font-mono">
+  <div class="flex items-center bg-red-600 px-6 py-4">
+    <%= lucide_icon "alert-triangle", class: "w-6 h-6 text-white mr-2" %>
+    <span class="text-white font-semibold uppercase">Super Admin</span>
+  </div>
+  <div class="flex items-center space-x-2 px-2 py-2 text-white">
+    <% if Current.session.active_impersonator_session.present? %>
+      <div class="flex items-center space-x-3 bg-gray-800 border border-gray-700 rounded-md pl-3">
+        <div class="text-sm">
+          Impersonating: <span class="font-semibold text-red-400"><%= Current.impersonated_user.email %></span>
+        </div>
+        <%= button_to "Leave", leave_impersonation_sessions_path, method: :delete, class: "items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
+        <%= button_to "Terminate", complete_impersonation_session_path(Current.session.active_impersonator_session), method: :put, class: "items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
+      </div>
+    <% else %>
+      <% if Current.true_user.impersonator_support_sessions.in_progress.any? %>
+        <%= form_with url: join_impersonation_sessions_path, class: "flex items-center space-x-2 mr-4" do |f| %>
+          <%= f.select :impersonation_session_id,
+            Current.true_user.impersonator_support_sessions.in_progress.map { |session|
+              ["#{session.impersonated.email} (#{session.status})", session.id]
+            },
+            { prompt: "Join a session" },
+            { class: "rounded-md text-sm border-0 focus:ring-0 ring-0 text-black font-mono" } %>
+          <%= f.submit "Join",
+            class: "inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
+        <% end %>
+      <% end %>
+
+      <%= form_with model: ImpersonationSession.new, class: "flex items-center space-x-2" do |f| %>
+        <%= f.text_field :impersonated_id, class: "rounded-md text-sm border-0 focus:ring-0 ring-0 text-black font-mono w-96", placeholder: "UUID", autocomplete: "off" %>
+        <%= f.submit "Request Impersonation", class: "inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
