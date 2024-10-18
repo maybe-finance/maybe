@@ -27,26 +27,17 @@ class Account::Balance::Calculator
     end
 
     def find_start_balance_for_full_sync(cached_entries)
-      return account.user_provided_start_balance if account.user_provided_start_balance.present?
-
-      calculate_balance_for_date(sync_start_date, entries: cached_entries, prior_balance: account.balance)
+      account.balance + net_entry_flows(cached_entries)
     end
 
     def calculate_balance_for_date(date, entries:, prior_balance:)
       valuation = entries.find { |e| e.date == date && e.account_valuation? }
 
       return valuation.amount if valuation
-      return derived_sync_start_balance(entries) unless prior_balance
 
       entries = entries.select { |e| e.date == date }
 
       prior_balance - net_entry_flows(entries)
-    end
-
-    def derived_sync_start_balance(entries)
-      transactions_and_trades = entries.reject { |e| e.account_valuation? }.select { |e| e.date > sync_start_date }
-
-      account.balance + net_entry_flows(transactions_and_trades)
     end
 
     def net_entry_flows(entries, target_currency = account.currency)

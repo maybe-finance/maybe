@@ -2,7 +2,6 @@ other_asset:
   family: dylan_family
   name: Collectable Account
   balance: 550
-  user_provided_start_balance: 550
   currency: USD
   accountable_type: OtherAsset
   accountable: one
@@ -11,7 +10,6 @@ other_liability:
   family: dylan_family
   name: IOU (personal debt to friend)
   balance: 200
-  user_provided_start_balance: 200
   currency: USD
   accountable_type: OtherLiability
   accountable: one
@@ -20,7 +18,6 @@ depository:
   family: dylan_family
   name: Checking Account
   balance: 5000
-  user_provided_start_balance: 5000
   currency: USD
   accountable_type: Depository
   accountable: one
@@ -30,7 +27,6 @@ credit_card:
   family: dylan_family
   name: Credit Card
   balance: 1000
-  user_provided_start_balance: 1000
   currency: USD
   accountable_type: CreditCard
   accountable: one
@@ -40,7 +36,6 @@ investment:
   family: dylan_family
   name: Robinhood Brokerage Account
   balance: 10000
-  user_provided_start_balance: 10000
   currency: USD
   accountable_type: Investment
   accountable: one
@@ -49,7 +44,6 @@ loan:
   family: dylan_family
   name: Mortgage Loan
   balance: 500000
-  user_provided_start_balance: 500000
   currency: USD
   accountable_type: Loan
   accountable: one
@@ -58,7 +52,6 @@ property:
   family: dylan_family
   name: 123 Maybe Court
   balance: 550000
-  user_provided_start_balance: 550000
   currency: USD
   accountable_type: Property
   accountable: one
@@ -67,7 +60,6 @@ vehicle:
   family: dylan_family
   name: Honda Accord
   balance: 18000
-  user_provided_start_balance: 18000
   currency: USD
   accountable_type: Vehicle
   accountable: one

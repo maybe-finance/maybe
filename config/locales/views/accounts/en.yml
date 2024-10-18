@@ -17,7 +17,7 @@ en:
       name_placeholder: Example account name
       institution: Financial institution
       ungrouped: "(none)"
-      balance: Initial balance 
+      balance: Today's balance
       accountable_type: Account type
       type_prompt: Select a type
     header:
