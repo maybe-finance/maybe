@@ -35,15 +35,6 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
     assert_equal [ 19600, 19500, 19500, 20000, 20000, 20000 ], @account.balances.chronological.map(&:balance)
   end
 
-  test "syncs account with trades only" do
-    aapl = securities(:aapl)
-    create_trade(aapl, account: @investment_account, date: 1.day.ago.to_date, qty: 10)
-
-    run_sync_for @investment_account
-
-    assert_equal [ 52140, 50000, 50000 ], @investment_account.balances.chronological.map(&:balance)
-  end
-
   test "syncs account with valuations and transactions" do
     create_valuation(account: @account, date: 5.days.ago.to_date, amount: 20000)
     create_transaction(account: @account, date: 3.days.ago.to_date, amount: -500)

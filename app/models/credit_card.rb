@@ -12,4 +12,8 @@ class CreditCard < ApplicationRecord
   def annual_fee_money
     annual_fee ? Money.new(annual_fee, account.currency) : nil
   end
+
+  def color
+    "#F13636"
+  end
 end

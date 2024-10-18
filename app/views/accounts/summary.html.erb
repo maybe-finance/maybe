@@ -41,7 +41,7 @@
     <div class="flex justify-between items-center mb-5">
       <h2 class="text-lg font-medium text-gray-900">Assets</h2>
       <div class="flex items-center gap-2">
-        <%= link_to new_account_path, class: "btn btn--secondary flex items-center gap-1", data: { turbo_frame: "modal" } do %>
+        <%= link_to new_account_path(step: "method"), class: "btn btn--secondary flex items-center gap-1", data: { turbo_frame: "modal" } do %>
           <%= lucide_icon("plus", class: "w-5 h-5 text-gray-500") %>
           <p><%= t(".new") %></p>
         <% end %>
@@ -66,7 +66,7 @@
     <div class="flex justify-between items-center mb-5">
       <h2 class="text-lg font-medium text-gray-900">Liabilities</h2>
       <div class="flex items-center gap-2">
-        <%= link_to new_account_path, class: "btn btn--secondary flex items-center gap-1", data: { turbo_frame: "modal" } do %>
+        <%= link_to new_account_path(step: "method"), class: "btn btn--secondary flex items-center gap-1", data: { turbo_frame: "modal" } do %>
           <%= lucide_icon("plus", class: "w-5 h-5 text-gray-500") %>
           <p><%= t(".new") %></p>
         <% end %>

@@ -1,0 +1,8 @@
+<div class="flex items-center gap-2 rounded-xl justify-between shadow-xs bg-white p-4 border border-alpha-black-25">
+  <p class="text-lg font-medium text-gray-900">Setup your new account</p>
+
+  <div class="flex items-center gap-2">
+    <%= link_to "Track balances only", new_account_valuation_path(@account), class: "btn btn--ghost", data: { turbo_frame: dom_id(@account.entries.account_valuations.new) } %>
+    <%= link_to "Add your first transaction", new_transaction_path(account_id: @account.id), class: "btn btn--primary", data: { turbo_frame: :modal } %>
+  </div>
+</div>

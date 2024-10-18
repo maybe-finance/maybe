@@ -17,7 +17,7 @@
         </div>
       <% end %>
 
-      <%= link_to new_account_path, class: "flex items-center gap-1 btn btn--primary", data: { turbo_frame: "modal" } do %>
+      <%= link_to new_account_path(step: "method"), class: "flex items-center gap-1 btn btn--primary", data: { turbo_frame: "modal" } do %>
         <%= lucide_icon("plus", class: "w-5 h-5") %>
         <span><%= t(".new") %></span>
       <% end %>
@@ -70,10 +70,10 @@
             data-time-series-chart-use-labels-value="false"
             data-time-series-chart-use-tooltip-value="false"></div>
           </div>
-          <div class="flex gap-1.5">
+          <div class="flex gap-1.5 mt-auto">
             <% @top_earners.first(3).each do |account| %>
               <%= link_to account, class: "border border-alpha-black-25 rounded-full p-1 pr-2 flex items-center gap-1 text-xs text-gray-900 font-medium hover:bg-gray-25", data: { controller: "tooltip" } do %>
-                <%= image_tag account_logo_url(account), class: "w-5 h-5" %>
+                <%= render "accounts/logo", account: account, size: "sm" %>
                 <span>+<%= Money.new(account.income, account.currency) %></span>
                 <%= render partial: "shared/text_tooltip", locals: { tooltip_text: account.name } %>
               <% end %>
@@ -103,12 +103,12 @@
             data-time-series-chart-use-labels-value="false"
             data-time-series-chart-use-tooltip-value="false"></div>
           </div>
-          <div class="flex gap-1.5">
+          <div class="mt-auto flex gap-1.5">
             <% @top_spenders.first(3).each do |account| %>
               <%= link_to account, class: "border border-alpha-black-25 rounded-full p-1 pr-2 flex items-center gap-1 text-xs text-gray-900 font-medium hover:bg-gray-25", data: { controller: "tooltip" } do %>
-                <%= image_tag account_logo_url(account), class: "w-5 h-5" %>
+                <%= render "accounts/logo", account: account, size: "sm" %>
                 -<%= Money.new(account.spending, account.currency) %>
-                 <%= render partial: "shared/text_tooltip", locals: { tooltip_text: account.name } %>
+                <%= render partial: "shared/text_tooltip", locals: { tooltip_text: account.name } %>
               <% end %>
             <% end %>
             <% if @top_spenders.count > 3 %>
@@ -141,9 +141,9 @@
             <% @top_savers.first(3).each do |account| %>
               <% unless account.savings_rate.infinite? %>
                 <%= link_to account, class: "border border-alpha-black-25 rounded-full p-1 pr-2 flex items-center gap-1 text-xs text-gray-900 font-medium hover:bg-gray-25", data: { controller: "tooltip" } do %>
-                  <%= image_tag account_logo_url(account), class: "w-5 h-5" %>
+                  <%= render "accounts/logo", account: account, size: "sm" %>
                   <span><%= account.savings_rate > 0 ? "+" : "-" %><%= number_to_percentage(account.savings_rate.abs * 100, precision: 2) %></span>
-                   <%= render partial: "shared/text_tooltip", locals: { tooltip_text: account.name } %>
+                  <%= render partial: "shared/text_tooltip", locals: { tooltip_text: account.name } %>
                 <% end %>
               <% end %>
             <% end %>

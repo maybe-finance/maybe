@@ -9,10 +9,6 @@ module ApplicationHelper
     content_for(:header_title) { page_title }
   end
 
-  def permitted_accountable_partial(name)
-    name.underscore
-  end
-
   def family_notifications_stream
     turbo_stream_from [ Current.family, :notifications ] if Current.family
   end
@@ -80,8 +76,8 @@ module ApplicationHelper
     color = hex || "#1570EF" # blue-600
 
     <<-STYLE.strip
-      background-color: color-mix(in srgb, #{color} 5%, white);
-      border-color: color-mix(in srgb, #{color} 10%, white);
+      background-color: color-mix(in srgb, #{color} 10%, white);
+      border-color: color-mix(in srgb, #{color} 30%, white);
       color: #{color};
     STYLE
   end

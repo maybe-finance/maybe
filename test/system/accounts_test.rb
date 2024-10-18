@@ -80,19 +80,15 @@ class AccountsTest < ApplicationSystemTestCase
     end
 
     def assert_account_created(accountable_type, &block)
-      click_link humanized_accountable(accountable_type)
-      click_link "Enter account balance manually"
+      click_link "Enter account manually"
 
       account_name = "[system test] #{accountable_type} Account"
 
+      select accountable_type.titleize, from: "Account type"
       fill_in "Account name", with: account_name
       fill_in "account[balance]", with: 100.99
-      fill_in "Start date (optional)", with: 10.days.ago.to_date
-      fill_in "account[start_balance]", with: 95.25
 
-      yield if block_given?
-
-      click_button "Add #{humanized_accountable(accountable_type).downcase}"
+      click_button "Create Account"
 
       find("details", text: humanized_accountable(accountable_type)).click
       assert_text account_name
@@ -107,8 +103,10 @@ class AccountsTest < ApplicationSystemTestCase
         click_on "Edit"
       end
 
+      yield if block_given?
+
       fill_in "Account name", with: "Updated account name"
-      click_button "Update #{humanized_accountable(accountable_type).downcase}"
+      click_button "Update Account"
       assert_selector "h2", text: "Updated account name"
     end
 
