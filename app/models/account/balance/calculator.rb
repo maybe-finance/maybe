@@ -23,11 +23,11 @@ class Account::Balance::Calculator
     attr_reader :account, :sync_start_date
 
     def find_start_balance_for_partial_sync
-      account.balances.find_by(currency: account.currency, date: sync_start_date - 1.day).balance
+      account.balances.find_by(currency: account.currency, date: sync_start_date - 1.day)&.balance
     end
 
     def find_start_balance_for_full_sync(cached_entries)
-      account.balance + net_entry_flows(cached_entries)
+      account.balance + net_entry_flows(cached_entries.select { |e| e.account_transaction? })
     end
 
     def calculate_balance_for_date(date, entries:, prior_balance:)

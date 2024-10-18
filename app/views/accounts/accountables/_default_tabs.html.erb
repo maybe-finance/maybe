@@ -1,7 +1,13 @@
-<%# locals: (account:) %>
+<%# locals: (account:, selected_tab:) %>
 
-<% if account.transactions.any? %>
-  <%= render "accounts/accountables/transactions", account: account %>
+<% if account.mode.nil? %>
+  <%= render "accounts/accountables/value_onboarding", account: account %>
 <% else %>
-  <%= render "accounts/accountables/valuations", account: account %>
+  <div class="min-h-[800px]">
+    <% if account.mode == "transactions" %>
+      <%= render "accounts/accountables/transactions", account: account %>
+    <% else %>
+      <%= render "accounts/accountables/valuations", account: account %>
+    <% end %>
+  </div>
 <% end %>

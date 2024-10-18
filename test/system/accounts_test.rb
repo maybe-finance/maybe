@@ -96,7 +96,10 @@ class AccountsTest < ApplicationSystemTestCase
       visit accounts_url
       assert_text account_name
 
-      visit account_url(Account.order(:created_at).last)
+      created_account = Account.order(:created_at).last
+      created_account.update!(mode: "transactions")
+
+      visit account_url(created_account)
 
       within "header" do
         find('button[data-menu-target="button"]').click
