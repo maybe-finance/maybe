@@ -101,6 +101,7 @@ class ImportsTest < ApplicationSystemTestCase
       within(form) do
         select = form.find("select")
         select "Depository", from: select["id"]
+        sleep 0.5
       end
     end
 
