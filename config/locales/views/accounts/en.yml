@@ -19,6 +19,8 @@ en:
       ungrouped: "(none)"
       balance: Today's balance
       accountable_type: Account type
+      mode: Value tracking mode
+      mode_prompt: Select a mode
       type_prompt: Select a type
     header:
       accounts: Accounts

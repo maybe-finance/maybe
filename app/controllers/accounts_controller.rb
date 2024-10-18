@@ -79,6 +79,6 @@ class AccountsController < ApplicationController
     end
 
     def account_params
-      params.require(:account).permit(:name, :accountable_type, :balance, :start_date, :start_balance, :currency, :subtype, :is_active, :institution_id)
+      params.require(:account).permit(:name, :accountable_type, :mode, :balance, :start_date, :start_balance, :currency, :subtype, :is_active, :institution_id)
     end
 end

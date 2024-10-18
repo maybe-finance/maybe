@@ -16,10 +16,6 @@
     </div>
   </header>
 
-  <% if @account.entries.empty? && @account.depository? %>
-    <%= render "accounts/new_account_setup_bar", account: @account %>
-  <% end %>
-
   <% if @account.highest_priority_issue %>
     <%= render partial: "issues/issue", locals: { issue: @account.highest_priority_issue } %>
   <% end %>

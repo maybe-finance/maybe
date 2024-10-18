@@ -35,7 +35,7 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
     assert_equal [ 19600, 19500, 19500, 20000, 20000, 20000 ], @account.balances.chronological.map(&:balance)
   end
 
-  test "syncs account with valuations and transactions" do
+  test "syncs account with valuations and transactions when valuation starts" do
     create_valuation(account: @account, date: 5.days.ago.to_date, amount: 20000)
     create_transaction(account: @account, date: 3.days.ago.to_date, amount: -500)
     create_transaction(account: @account, date: 2.days.ago.to_date, amount: 100)
@@ -45,6 +45,17 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
 
     assert_equal 25000, @account.balance
     assert_equal [ 20000, 20000, 20500, 20400, 25000, 25000 ], @account.balances.chronological.map(&:balance)
+  end
+
+  test "syncs account with valuations and transactions when transaction starts" do
+    new_account = families(:empty).accounts.create!(name: "Test Account", balance: 1000, currency: "USD", accountable: Depository.new)
+    create_transaction(account: new_account, date: 2.days.ago.to_date, amount: 250)
+    create_valuation(account: new_account, date: Date.current, amount: 1000)
+
+    run_sync_for(new_account)
+
+    assert_equal 1000, new_account.balance
+    assert_equal [ 1250, 1000, 1000, 1000 ], new_account.balances.chronological.map(&:balance)
   end
 
   test "syncs account with transactions in multiple currencies" do

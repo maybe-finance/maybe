@@ -1,7 +1,10 @@
 class Account < ApplicationRecord
+  VALUE_MODES = %w[balance transactions]
+
   include Syncable, Monetizable, Issuable
 
   validates :name, :balance, :currency, presence: true
+  validates :mode, inclusion: { in: VALUE_MODES }, allow_nil: true
 
   belongs_to :family
   belongs_to :institution, optional: true
