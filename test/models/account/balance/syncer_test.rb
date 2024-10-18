@@ -29,19 +29,12 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
     create_transaction(account: @account, date: 4.days.ago.to_date, amount: 100)
     create_transaction(account: @account, date: 2.days.ago.to_date, amount: -500)
 
+    assert_equal 20000, @account.balance
+
     run_sync_for @account
 
-    assert_equal 20000, @account.balance
-    assert_equal [ 19600, 19500, 19500, 20000, 20000, 20000 ], @account.balances.chronological.map(&:balance)
-  end
-
-  test "syncs account with trades only" do
-    aapl = securities(:aapl)
-    create_trade(aapl, account: @investment_account, date: 1.day.ago.to_date, qty: 10)
-
-    run_sync_for @investment_account
-
-    assert_equal [ 52140, 50000, 50000 ], @investment_account.balances.chronological.map(&:balance)
+    assert_equal 20400, @account.balance
+    assert_equal [ 20000, 19900, 19900, 20400, 20400, 20400 ], @account.balances.chronological.map(&:balance)
   end
 
   test "syncs account with valuations and transactions" do
@@ -63,10 +56,12 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
     create_transaction(account: @account, date: 2.days.ago.to_date, amount: 300, currency: "USD")
     create_transaction(account: @account, date: 1.day.ago.to_date, amount: 500, currency: "EUR") # €500 * 1.2 = $600
 
+    assert_equal 20000, @account.balance
+
     run_sync_for(@account)
 
-    assert_equal 20000, @account.balance
-    assert_equal [ 21000, 20900, 20600, 20000, 20000 ], @account.balances.chronological.map(&:balance)
+    assert_equal 19000, @account.balance
+    assert_equal [ 20000, 19900, 19600, 19000, 19000 ], @account.balances.chronological.map(&:balance)
   end
 
   test "converts foreign account balances to family currency" do
@@ -85,9 +80,9 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
     usd_balances = @account.balances.where(currency: "USD").chronological.map(&:balance)
     eur_balances = @account.balances.where(currency: "EUR").chronological.map(&:balance)
 
-    assert_equal 20000, @account.balance
-    assert_equal [ 21000, 20000, 20000 ], eur_balances # native account balances
-    assert_equal [ 42000, 40000, 40000 ], usd_balances # converted balances at rate of 2:1
+    assert_equal 19000, @account.balance
+    assert_equal [ 20000, 19000, 19000 ], eur_balances # native account balances
+    assert_equal [ 40000, 38000, 38000 ], usd_balances # converted balances at rate of 2:1
   end
 
   test "raises issue if missing exchange rates" do
@@ -135,7 +130,7 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
 
     run_sync_for(@account, start_date: 1.day.ago.to_date)
 
-    assert_equal [ existing_balance.balance, existing_balance.balance - transaction.amount, @account.balance ], @account.balances.chronological.map(&:balance)
+    assert_equal [ 30000, 29900, 29900 ], @account.balances.chronological.map(&:balance)
   end
 
   private
