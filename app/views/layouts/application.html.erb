@@ -25,6 +25,9 @@
   </head>
 
   <body class="h-full">
+    <%= render "impersonation_sessions/super_admin_bar" if Current.true_user&.super_admin? %>
+    <%= render "impersonation_sessions/approval_bar" if Current.true_user&.impersonated_support_sessions&.initiated&.any? %>
+
     <div class="fixed z-50 space-y-1 top-6 right-10">
       <div id="notification-tray">
         <%= render_flash_notifications %>

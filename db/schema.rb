@@ -19,7 +19,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_17_204250) do
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "account_status", ["ok", "syncing", "error"]
   create_enum "import_status", ["pending", "importing", "complete", "failed"]
-  create_enum "user_role", ["admin", "member"]
+  create_enum "user_role", ["admin", "member", "super_admin"]
 
   create_table "account_balances", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "account_id", null: false
@@ -493,6 +493,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_17_204250) do
     t.string "ip_address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "active_impersonator_session_id"
+    t.index ["active_impersonator_session_id"], name: "index_sessions_on_active_impersonator_session_id"
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
@@ -535,7 +537,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_17_204250) do
     t.string "last_alerted_upgrade_commit_sha"
     t.enum "role", default: "member", null: false, enum_type: "user_role"
     t.boolean "active", default: true, null: false
-    t.boolean "super_admin", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["family_id"], name: "index_users_on_family_id"
   end
@@ -573,6 +574,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_17_204250) do
   add_foreign_key "imports", "families"
   add_foreign_key "institutions", "families"
   add_foreign_key "merchants", "families"
+  add_foreign_key "sessions", "impersonation_sessions", column: "active_impersonator_session_id"
   add_foreign_key "sessions", "users"
   add_foreign_key "taggings", "tags"
   add_foreign_key "tags", "families"

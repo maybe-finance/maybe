@@ -1,0 +1,15 @@
+---
+en:
+  impersonation_sessions:
+    create:
+      success: "Request sent to user. Waiting for approval."
+    join:
+      success: "Joined session"
+    leave:
+      success: "Left session"
+    approve:
+      success: "Request approved"
+    reject:
+      success: "Request rejected"
+    complete:
+      success: "Session completed"

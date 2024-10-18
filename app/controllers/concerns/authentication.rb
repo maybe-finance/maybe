@@ -14,7 +14,7 @@ module Authentication
 
   private
     def authenticate_user!
-      if session_record = Session.find_by_id(cookies.signed[:session_token])
+      if session_record = find_session_by_cookie
         Current.session = session_record
       else
         if self_hosted_first_login?
@@ -23,6 +23,10 @@ module Authentication
           redirect_to new_session_url
         end
       end
+    end
+
+    def find_session_by_cookie
+      Session.find_by(id: cookies.signed[:session_token])
     end
 
     def create_session_for(user)

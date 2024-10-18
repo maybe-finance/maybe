@@ -110,6 +110,17 @@ Rails.application.routes.draw do
 
   resources :currencies, only: %i[show]
 
+  resources :impersonation_sessions, only: [ :create ] do
+    post :join, on: :collection
+    delete :leave, on: :collection
+
+    member do
+      put :approve
+      put :reject
+      put :complete
+    end
+  end
+
   # Stripe webhook endpoint
   post "webhooks/stripe", to: "webhooks#stripe"
 

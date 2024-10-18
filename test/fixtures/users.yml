@@ -5,6 +5,14 @@ empty:
   email: user1@email.com
   password_digest: <%= BCrypt::Password.create('password') %>
 
+maybe_support_staff:
+  family: empty
+  first_name: Support
+  last_name: Admin
+  email: support@maybe.co
+  password_digest: <%= BCrypt::Password.create('password') %>
+  role: super_admin
+
 family_admin:
   family: dylan_family
   first_name: Bob
