@@ -51,10 +51,15 @@ export default class extends Controller {
   _normalizeDataPoints() {
     this._normalDataPoints = (this.dataValue.values || []).map((d) => ({
       ...d,
-      date: new Date(d.date),
+      date: this._parseDate(d.date),
       value: d.value.amount ? +d.value.amount : +d.value,
       currency: d.value.currency,
     }));
+  }
+
+  _parseDate(dateString) {
+    const [year, month, day] = dateString.split("-").map(Number);
+    return new Date(year, month - 1, day);
   }
 
   _rememberInitialContainerSize() {
