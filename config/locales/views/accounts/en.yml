@@ -138,7 +138,6 @@ en:
       add_institution: Add institution
       new_account: New account
     new:
-      select_accountable_type: What would you like to add?
       title: Add an account
       manual_entry: Enter account manually
       csv_entry: Import accounts CSV
