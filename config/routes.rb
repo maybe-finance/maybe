@@ -111,16 +111,13 @@ Rails.application.routes.draw do
   resources :currencies, only: %i[show]
 
   resources :impersonation_sessions, only: [ :create ] do
-    collection do
-      post :start
-      delete :end
-      delete :remove
-    end
+    post :join, on: :collection
+    delete :leave, on: :collection
 
     member do
-      post :approve
-      delete :reject
-      post :complete
+      put :approve
+      put :reject
+      put :complete
     end
   end
 

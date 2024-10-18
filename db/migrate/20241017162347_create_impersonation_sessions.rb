@@ -6,5 +6,7 @@ class CreateImpersonationSessions < ActiveRecord::Migration[7.2]
       t.string :status, null: false, default: 'pending'
       t.timestamps
     end
+
+    add_reference :sessions, :active_impersonator_session, type: :uuid, foreign_key: { to_table: :impersonation_sessions }
   end
 end
