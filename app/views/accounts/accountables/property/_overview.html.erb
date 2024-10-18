@@ -27,3 +27,7 @@
     <%= account.property.area || t(".unknown") %>
   <% end %>
 </div>
+
+<div class="flex justify-center py-8">
+  <%= link_to "Edit account details", edit_account_path(account), class: "btn btn--ghost", data: { turbo_frame: :modal } %>
+</div>

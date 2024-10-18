@@ -25,3 +25,7 @@
     <%= format_money(account.credit_card.annual_fee_money || Money.new(0, account.currency)) %>
   <% end %>
 </div>
+
+<div class="flex justify-center py-8">
+  <%= link_to "Edit account details", edit_account_path(account), class: "btn btn--ghost", data: { turbo_frame: :modal } %>
+</div>

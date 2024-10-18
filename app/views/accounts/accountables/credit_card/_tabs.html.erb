@@ -1,1 +1,15 @@
-<%= render "accounts/accountables/default_tabs", account: account %>
+<%# locals: (account:, selected_tab:) %>
+
+<div class="flex gap-2 text-sm text-gray-900 font-medium mb-4">
+  <%= render "accounts/accountables/tab", account: account, key: "overview", is_selected: selected_tab.in?([nil, "overview"]) %>
+  <%= render "accounts/accountables/tab", account: account, key: "transactions", is_selected: selected_tab == "transactions" %>
+</div>
+
+<div class="min-h-[800px]">
+  <% case selected_tab %>
+  <% when nil, "overview" %>
+    <%= render "accounts/accountables/credit_card/overview", account: account %>
+  <% when "transactions" %>
+    <%= render "accounts/accountables/transactions", account: account %>
+  <% end %>
+</div>
