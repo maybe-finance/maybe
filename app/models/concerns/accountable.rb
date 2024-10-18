@@ -33,4 +33,8 @@ module Accountable
   rescue Money::ConversionError
     TimeSeries.new([])
   end
+
+  def mode_required?
+    true
+  end
 end

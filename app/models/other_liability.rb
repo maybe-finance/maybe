@@ -4,4 +4,8 @@ class OtherLiability < ApplicationRecord
   def color
     "#737373"
   end
+
+  def mode_required?
+    false
+  end
 end

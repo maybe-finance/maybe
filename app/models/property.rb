@@ -23,6 +23,10 @@ class Property < ApplicationRecord
     "#06AED4"
   end
 
+  def mode_required?
+    false
+  end
+
   private
     def first_valuation_amount
       account.entries.account_valuations.order(:date).first&.amount_money || account.balance_money

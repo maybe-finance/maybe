@@ -3,7 +3,9 @@
 <%= styled_form_with model: account, url: url, scope: :account, class: "flex flex-col gap-4 justify-between grow", data: { turbo: false } do |f| %>
   <div class="grow space-y-2">
     <% unless account.new_record? %>
-      <%= f.select :mode, Account::VALUE_MODES.map { |mode| [mode.titleize, mode] }, { label: t(".mode"), prompt: t(".mode_prompt") } %>
+      <% if account.accountable.mode_required? %>
+        <%= f.select :mode, Account::VALUE_MODES.map { |mode| [mode.titleize, mode] }, { label: t(".mode"), prompt: t(".mode_prompt") }, required: true %>
+      <% end %>
     <% end %>
 
     <%= f.select :accountable_type, Accountable::TYPES.map { |type| [type.titleize, type] }, { label: t(".accountable_type"), prompt: t(".type_prompt") }, required: true, autofocus: true %>
