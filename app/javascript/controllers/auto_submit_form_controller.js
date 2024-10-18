@@ -24,10 +24,33 @@ export default class extends Controller {
     });
   }
 
-  handleInput = () => {
+  handleInput = (event) => {
+    const target = event.target
+
     clearTimeout(this.timeout);
     this.timeout = setTimeout(() => {
       this.element.requestSubmit();
-    }, 500);
+    }, this.#debounceTimeout(target));
   };
+
+  #debounceTimeout(element) {
+    if(element.dataset.autosubmitDebounceTimeout) {
+      return parseInt(element.dataset.autosubmitDebounceTimeout);
+    }
+
+    const type = element.type || element.tagName;
+
+    switch (type.toLowerCase()) {
+      case 'input':
+      case 'textarea':
+        return 500;
+        break;
+      case 'select-one':
+      case 'select-multiple':
+        return 0;
+        break;
+      default:
+        return 500;
+    }
+  }
 }
