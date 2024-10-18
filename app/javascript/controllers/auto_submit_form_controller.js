@@ -35,7 +35,7 @@ export default class extends Controller {
 
   #debounceTimeout(element) {
     if(element.dataset.autosubmitDebounceTimeout) {
-      return parseInt(element.dataset.autosubmitDebounceTimeout);
+      return Number.parseInt(element.dataset.autosubmitDebounceTimeout);
     }
 
     const type = element.type || element.tagName;
@@ -44,11 +44,9 @@ export default class extends Controller {
       case 'input':
       case 'textarea':
         return 500;
-        break;
       case 'select-one':
       case 'select-multiple':
         return 0;
-        break;
       default:
         return 500;
     }
