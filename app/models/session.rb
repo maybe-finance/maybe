@@ -9,11 +9,4 @@ class Session < ApplicationRecord
     self.user_agent = Current.user_agent
     self.ip_address = Current.ip_address
   end
-
-  def complete_impersonation_session!
-    transaction do
-      active_impersonator_session&.complete!
-      update!(active_impersonator_session: nil)
-    end
-  end
 end
