@@ -82,6 +82,9 @@ if ENV["INTERCOM_APP_ID"].present? && ENV["INTERCOM_IDENTITY_VERIFICATION_KEY"].
     #   :number_of_messages => Proc.new { |app| app.messages.count },
     #   :is_interesting => :is_interesting?
     # }
+    config.company.custom_data = {
+      accounts_count: Proc.new { |family| family.accounts.count }
+    }
 
     # == Company Plan name
     # This is the name of the plan a company is currently paying (or not paying) for.
