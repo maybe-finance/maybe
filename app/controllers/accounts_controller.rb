@@ -1,4 +1,5 @@
 class AccountsController < ApplicationController
+  SUCCESS = ".success".freeze
   layout :with_sidebar
 
   include Filterable
@@ -41,7 +42,7 @@ class AccountsController < ApplicationController
 
   def update
     @account.update_with_sync!(account_params)
-    redirect_back_or_to account_path(@account), notice: t(".success")
+    redirect_back_or_to account_path(@account), notice: t(SUCCESS)
   end
 
   def create
@@ -53,12 +54,12 @@ class AccountsController < ApplicationController
                         start_balance: account_params[:start_balance]
     @account.sync_later
 
-    redirect_back_or_to account_path(@account), notice: t(".success")
+    redirect_back_or_to account_path(@account), notice: t(SUCCESS)
   end
 
   def destroy
     @account.destroy!
-    redirect_to accounts_path, notice: t(".success")
+    redirect_to accounts_path, notice: t(SUCCESS)
   end
 
   def sync
@@ -69,7 +70,7 @@ class AccountsController < ApplicationController
 
   def sync_all
     Current.family.accounts.active.sync
-    redirect_back_or_to accounts_path, notice: t(".success")
+    redirect_back_or_to accounts_path, notice: t(SUCCESS)
   end
 
   private

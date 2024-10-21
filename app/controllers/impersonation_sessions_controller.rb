@@ -1,40 +1,41 @@
 class ImpersonationSessionsController < ApplicationController
+  SUCCESS =".success".freeze
   before_action :require_super_admin!, only: [ :create, :join, :leave ]
   before_action :set_impersonation_session, only: [ :approve, :reject, :complete ]
 
   def create
     Current.true_user.request_impersonation_for(session_params[:impersonated_id])
-    redirect_to root_path, notice: t(".success")
+    redirect_to root_path, notice: t(SUCCESS)
   end
 
   def join
     @impersonation_session = Current.true_user.impersonator_support_sessions.find_by(id: params[:impersonation_session_id])
     Current.session.update!(active_impersonator_session: @impersonation_session)
-    redirect_to root_path, notice: t(".success")
+    redirect_to root_path, notice: t(SUCCESS)
   end
 
   def leave
     Current.session.update!(active_impersonator_session: nil)
-    redirect_to root_path, notice: t(".success")
+    redirect_to root_path, notice: t(SUCCESS)
   end
 
   def approve
     raise_unauthorized! unless @impersonation_session.impersonated == Current.true_user
 
     @impersonation_session.approve!
-    redirect_to root_path, notice: t(".success")
+    redirect_to root_path, notice: t(SUCCESS)
   end
 
   def reject
     raise_unauthorized! unless @impersonation_session.impersonated == Current.true_user
 
     @impersonation_session.reject!
-    redirect_to root_path, notice: t(".success")
+    redirect_to root_path, notice: t(SUCCESS)
   end
 
   def complete
     @impersonation_session.complete!
-    redirect_to root_path, notice: t(".success")
+    redirect_to root_path, notice: t(SUCCESS)
   end
 
   private
