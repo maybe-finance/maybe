@@ -1,6 +1,8 @@
 class TransactionsController < ApplicationController
   layout :with_sidebar
 
+  SUCCESS = ".success".freeze
+
   def index
     @q = search_params
     result = Current.family.entries.account_transactions.search(@q).reverse_chronological
@@ -32,12 +34,12 @@ class TransactionsController < ApplicationController
                     .create!(transaction_entry_params.merge(amount: amount))
 
     @entry.sync_account_later
-    redirect_back_or_to account_path(@entry.account), notice: t(".success")
+    redirect_back_or_to account_path(@entry.account), notice: t(SUCCESS)
   end
 
   def bulk_delete
     destroyed = Current.family.entries.destroy_by(id: bulk_delete_params[:entry_ids])
-    redirect_back_or_to transactions_url, notice: t(".success", count: destroyed.count)
+    redirect_back_or_to transactions_url, notice: t(SUCCESS, count: destroyed.count)
   end
 
   def bulk_edit
@@ -49,7 +51,7 @@ class TransactionsController < ApplicationController
                      .where(id: bulk_update_params[:entry_ids])
                      .bulk_update!(bulk_update_params)
 
-    redirect_back_or_to transactions_url, notice: t(".success", count: updated)
+    redirect_back_or_to transactions_url, notice: t(SUCCESS, count: updated)
   end
 
   def mark_transfers
@@ -58,7 +60,7 @@ class TransactionsController < ApplicationController
       .where(id: bulk_update_params[:entry_ids])
            .mark_transfers!
 
-    redirect_back_or_to transactions_url, notice: t(".success")
+    redirect_back_or_to transactions_url, notice: t(SUCCESS)
   end
 
   def unmark_transfers
@@ -67,7 +69,7 @@ class TransactionsController < ApplicationController
       .where(id: bulk_update_params[:entry_ids])
            .update_all marked_as_transfer: false
 
-    redirect_back_or_to transactions_url, notice: t(".success")
+    redirect_back_or_to transactions_url, notice: t(SUCCESS)
   end
 
   private

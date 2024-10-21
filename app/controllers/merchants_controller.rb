@@ -3,6 +3,8 @@ class MerchantsController < ApplicationController
 
   before_action :set_merchant, only: %i[edit update destroy]
 
+  SUCCESS = ".success".freeze
+
   def index
     @merchants = Current.family.merchants.alphabetically
   end
@@ -13,7 +15,7 @@ class MerchantsController < ApplicationController
 
   def create
     Current.family.merchants.create!(merchant_params)
-    redirect_to merchants_path, notice: t(".success")
+    redirect_to merchants_path, notice: t(SUCCESS)
   end
 
   def edit
@@ -21,12 +23,12 @@ class MerchantsController < ApplicationController
 
   def update
     @merchant.update!(merchant_params)
-    redirect_to merchants_path, notice: t(".success")
+    redirect_to merchants_path, notice: t(SUCCESS)
   end
 
   def destroy
     @merchant.destroy!
-    redirect_to merchants_path, notice: t(".success")
+    redirect_to merchants_path, notice: t(SUCCESS)
   end
 
   private
