@@ -171,9 +171,6 @@ class Account::Entry < ApplicationRecord
         when "greater"
           query = query.where("ABS(account_entries.amount) > ?", params[:amount].to_f.abs)
         end
-        else
-          # Handle unexpected amount_operator values
-          raise ArgumentError, "Invalid amount_operator: #{params[:amount_operator]}"
       end
 
       if params[:accounts].present? || params[:account_ids].present?
