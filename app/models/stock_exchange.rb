@@ -1,0 +1,2 @@
+class StockExchange < ApplicationRecord
+end
