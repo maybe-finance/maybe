@@ -67,7 +67,7 @@ class Account::Entry < ApplicationRecord
   class << self
     # arbitrary cutoff date to avoid expensive sync operations
     def min_supported_date
-      10.years.ago.to_date
+      20.years.ago.to_date
     end
 
     def daily_totals(entries, currency, period: Period.last_30_days)
