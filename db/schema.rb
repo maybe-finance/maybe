@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_22_170439) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_22_192319) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -19,7 +19,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_22_170439) do
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "account_status", ["ok", "syncing", "error"]
   create_enum "import_status", ["pending", "importing", "complete", "failed"]
-  create_enum "user_role", ["admin", "member", "super_admin"]
 
   create_table "account_balances", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "account_id", null: false
@@ -557,7 +556,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_22_170439) do
     t.datetime "updated_at", null: false
     t.string "last_prompted_upgrade_commit_sha"
     t.string "last_alerted_upgrade_commit_sha"
-    t.enum "role", default: "member", null: false, enum_type: "user_role"
+    t.string "role", default: "member", null: false
     t.boolean "active", default: true, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["family_id"], name: "index_users_on_family_id"
