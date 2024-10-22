@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_18_201653) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_22_170439) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -19,6 +19,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_18_201653) do
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "account_status", ["ok", "syncing", "error"]
   create_enum "import_status", ["pending", "importing", "complete", "failed"]
+  create_enum "user_role", ["admin", "member", "super_admin"]
 
   create_table "account_balances", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "account_id", null: false
@@ -506,6 +507,27 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_18_201653) do
     t.index ["var"], name: "index_settings_on_var", unique: true
   end
 
+  create_table "stock_exchanges", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "acronym"
+    t.string "mic", null: false
+    t.string "country", null: false
+    t.string "country_code", null: false
+    t.string "city", null: false
+    t.string "website"
+    t.string "timezone_name", null: false
+    t.string "timezone_abbr", null: false
+    t.string "timezone_abbr_dst"
+    t.string "currency_code", null: false
+    t.string "currency_symbol", null: false
+    t.string "currency_name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["country"], name: "index_stock_exchanges_on_country"
+    t.index ["country_code"], name: "index_stock_exchanges_on_country_code"
+    t.index ["currency_code"], name: "index_stock_exchanges_on_currency_code"
+  end
+
   create_table "taggings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "tag_id", null: false
     t.string "taggable_type"
@@ -535,7 +557,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_18_201653) do
     t.datetime "updated_at", null: false
     t.string "last_prompted_upgrade_commit_sha"
     t.string "last_alerted_upgrade_commit_sha"
-    t.string "role", default: "member", null: false
+    t.enum "role", default: "member", null: false, enum_type: "user_role"
     t.boolean "active", default: true, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["family_id"], name: "index_users_on_family_id"
