@@ -3,6 +3,7 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static targets = [
     "imagePreview",
+    "emptyTemplate",
     "fileField",
     "deleteField",
     "clearBtn",

@@ -1,0 +1,5 @@
+---
+en:
+  users:
+    update:
+      success: "Your profile has been updated."

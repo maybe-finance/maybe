@@ -1,0 +1,30 @@
+<div class="max-w-screen-sm py-20 mx-auto">
+  <h1 class="mb-2 text-3xl font-semibold"><%= t(".title") %></h1>
+  <p class="mb-4 text-gray-500"><%= t(".subtitle") %></p>
+
+  <%= styled_form_with model: @user, class: "space-y-2" do |form| %>
+    <%= form.hidden_field :onboarded, value: true %>
+
+    <div class="flex justify-between items-center gap-2">
+      <%= form.text_field :first_name, placeholder: t(".first_name"), label: true, container_class: "w-1/2", required: true %>
+      <%= form.text_field :last_name, placeholder: t(".last_name"), label: true, container_class: "w-1/2", required: true %>
+    </div>
+
+    <div class="space-y-2">
+      <%= form.fields_for :family do |family_form| %>
+        <%= family_form.select :currency,
+            currencies_for_select.map { |currency| [ "#{currency.name} (#{currency.iso_code})", currency.iso_code ] },
+            { label: t(".currency"), required: true } %>
+
+        <%= family_form.select :locale,
+            I18n.available_locales,
+            { label: t(".locale"), required: true },
+            { data: { auto_submit_form_target: "auto" } } %>
+
+        <%= family_form.text_field :name, placeholder: t(".household_name"), label: t(".household_name"), required: true %>
+      <% end %>
+    </div>
+
+    <%= form.submit t(".submit") %>
+  <% end %>
+</div>

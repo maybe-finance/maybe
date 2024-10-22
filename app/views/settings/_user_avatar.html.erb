@@ -1,0 +1,7 @@
+<%# locals: (user:) %>
+
+<% if user.profile_image.attached? %>
+  <%= image_tag user.profile_image.variant(:thumbnail), class: "rounded-full w-full h-full object-cover" %>
+<% else %>
+  <div class="text-white w-full h-full bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= user.initial %></div>
+<% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_18_201653) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_22_161253) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -537,6 +537,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_18_201653) do
     t.string "last_alerted_upgrade_commit_sha"
     t.string "role", default: "member", null: false
     t.boolean "active", default: true, null: false
+    t.boolean "onboarded", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["family_id"], name: "index_users_on_family_id"
   end

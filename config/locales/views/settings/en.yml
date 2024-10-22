@@ -1,6 +1,9 @@
 ---
 en:
   settings:
+    user_avatar_field:
+      choose: Choose
+      accepted_formats: JPG or PNG. 5MB max.
     billings:
       show:
         manage_subscription_button: Manage subscription
@@ -57,10 +60,8 @@ en:
           can login to your household and access your shared accounts.
         household_title: Household
         page_title: Account
-        profile_image_choose: Choose
-        profile_image_type: JPG, GIF or PNG. 5MB max.
+        save: Save
         profile_subtitle: Customize how you appear on Maybe
         profile_title: Profile
-        save: Save
       update:
         success: Profile updated successfully.

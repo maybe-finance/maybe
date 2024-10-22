@@ -4,6 +4,16 @@ class PagesController < ApplicationController
 
   include Filterable
 
+  def onboarding
+    @user = Current.user
+
+    if @user.onboarded?
+      redirect_to root_path
+    else
+      render layout: "blank"
+    end
+  end
+
   def dashboard
     snapshot = Current.family.snapshot(@period)
     @net_worth_series = snapshot[:net_worth_series]
