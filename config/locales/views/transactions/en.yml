@@ -38,6 +38,8 @@ en:
       edit_merchants: Edit merchants
       edit_tags: Edit tags
       import: Import
+      new: New transaction
+      index: Transactions
     index:
       transaction: transaction
     mark_transfers:
@@ -78,3 +80,7 @@ en:
         less_than: less than
     unmark_transfers:
       success: Transfer removed
+    summary:
+      total_transactions: Total transactions
+      income: Income
+      expenses: Expenses
