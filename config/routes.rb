@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   resource :password_reset
   resource :password
 
-  resources :users, only: :update
+  resources :users, only: %i[update destroy]
 
   resource :onboarding, only: :show do
     collection do
@@ -20,8 +20,8 @@ Rails.application.routes.draw do
   end
 
   namespace :settings do
-    resource :profile, only: %i[show update destroy]
-    resource :preferences, only: %i[show update]
+    resource :profile, only: :show
+    resource :preferences, only: :show
     resource :hosting, only: %i[show update]
     resource :billing, only: :show
   end

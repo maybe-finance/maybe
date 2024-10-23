@@ -44,7 +44,7 @@
 
     <%= render "shared/confirm_modal" %>
 
-    <% if self_hosted? && Current.user&.onboarding&.complete? %>
+    <% if self_hosted? && Current.user&.onboarded_at.present? %>
       <%= render "shared/app_version" %>
     <% end %>
   </body>

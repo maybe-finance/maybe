@@ -145,6 +145,21 @@ module ApplicationHelper
     end
   end
 
+  # Wrapper around I18n.l to support custom date formats
+  def format_date(object, format = :default, options = {})
+    date = object.to_date
+
+    format_code = options[:format_code] || Current.family&.date_format
+
+    puts "format_code: #{format_code}"
+
+    if format_code.present?
+      date.strftime(format_code)
+    else
+      I18n.l(date, format: format, **options)
+    end
+  end
+
   def format_money(number_or_money, options = {})
     return nil unless number_or_money
 

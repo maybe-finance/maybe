@@ -560,7 +560,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_22_221544) do
     t.string "last_alerted_upgrade_commit_sha"
     t.string "role", default: "member", null: false
     t.boolean "active", default: true, null: false
-    t.datetime "onboarding_completed_at"
+    t.datetime "onboarded_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["family_id"], name: "index_users_on_family_id"
   end

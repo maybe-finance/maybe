@@ -1,70 +1,30 @@
 ---
 en:
   accounts:
-    sync_all_button:
-      sync: Sync all
     account:
       has_issues: Issue detected.
       troubleshoot: Troubleshoot
     account_list:
-      new_account: "New %{type}"
-    empty:
-      no_accounts: No accounts yet
-      empty_message: Add an account either via connection, importing or entering manually.
-      new_account: New account
-    form:
-      name_label: Account name
-      name_placeholder: Example account name
-      institution: Financial institution
-      ungrouped: "(none)"
-      balance: Today's balance
-      accountable_type: Account type
-      mode: Value tracking mode
-      mode_prompt: Select a mode
-      type_prompt: Select a type
-    header:
-      accounts: Accounts
-      manage: Manage accounts
-      new: New account
-    institution_accounts:
-      add_account_to_institution: Add new account
-      has_issues: Issue detected, see accounts
-      syncing: Syncing...
-      status: "Last synced %{last_synced_at} ago"
-      status_never: Requires data sync
-      edit: Edit institution
-      delete: Delete institution
-      confirm_title: Delete financial institution?
-      confirm_body: Don't worry, none of the accounts within this institution will be affected by this deletion. Accounts will be ungrouped and all historical data will remain intact.
-      confirm_accept: Delete institution
-      new_account: Add account
-    institutionless_accounts:
-      other_accounts: Other accounts
-    menu:
-      edit: Edit
-      import: Import transactions
-      confirm_title: Delete account?
-      confirm_body_html: "<p>By deleting this account, you will erase its value history, affecting various aspects of your overall account. This action will have a direct impact on your net worth calculations and the account graphs.</p><br /> <p>After deletion, there is no way you'll be able to restore the account information because you'll need to add it as a new account.</p>"
-      confirm_accept: 'Delete "%{name}"'
+      new_account: New %{type}
     accountables:
       credit_card:
         form:
-          available_credit: Available credit
-          available_credit_placeholder: '10000'
-          minimum_payment: Minimum payment
-          minimum_payment_placeholder: '100'
-          apr: APR
-          apr_placeholder: '15.99'
-          expiration_date: Expiration date
           annual_fee: Annual fee
           annual_fee_placeholder: '99'
+          apr: APR
+          apr_placeholder: '15.99'
+          available_credit: Available credit
+          available_credit_placeholder: '10000'
+          expiration_date: Expiration date
+          minimum_payment: Minimum payment
+          minimum_payment_placeholder: '100'
         overview:
           amount_owed: Amount Owed
-          available_credit: Available Credit
-          minimum_payment: Minimum Payment
-          apr: APR
-          expiration_date: Expiration Date
           annual_fee: Annual Fee
+          apr: APR
+          available_credit: Available Credit
+          expiration_date: Expiration Date
+          minimum_payment: Minimum Payment
           unknown: Unknown
       depository:
         form:
@@ -77,7 +37,8 @@ en:
         tooltip:
           cash: Cash
           holdings: Holdings
-          total_value_tooltip: The total value is the sum of cash balance and your holdings value, minus margin loans.
+          total_value_tooltip: The total value is the sum of cash balance and your
+            holdings value, minus margin loans.
       loan:
         form:
           interest_rate: Interest rate
@@ -133,17 +94,65 @@ en:
           trend: Trend
           unknown: Unknown
           year: Year
+    create:
+      success: New account created successfully
+    destroy:
+      success: Account deleted successfully
     edit:
-      edit: "Edit %{account}"
+      edit: Edit %{account}
+    empty:
+      empty_message: Add an account either via connection, importing or entering manually.
+      new_account: New account
+      no_accounts: No accounts yet
+    form:
+      accountable_type: Account type
+      balance: Today's balance
+      institution: Financial institution
+      mode: Value tracking mode
+      mode_prompt: Select a mode
+      name_label: Account name
+      name_placeholder: Example account name
+      type_prompt: Select a type
+      ungrouped: "(none)"
+    header:
+      accounts: Accounts
+      manage: Manage accounts
+      new: New account
     index:
       accounts: Accounts
       add_institution: Add institution
       new_account: New account
+    institution_accounts:
+      add_account_to_institution: Add new account
+      confirm_accept: Delete institution
+      confirm_body: Don't worry, none of the accounts within this institution will
+        be affected by this deletion. Accounts will be ungrouped and all historical
+        data will remain intact.
+      confirm_title: Delete financial institution?
+      delete: Delete institution
+      edit: Edit institution
+      has_issues: Issue detected, see accounts
+      new_account: Add account
+      status: Last synced %{last_synced_at} ago
+      status_never: Requires data sync
+      syncing: Syncing...
+    institutionless_accounts:
+      other_accounts: Other accounts
+    menu:
+      confirm_accept: Delete "%{name}"
+      confirm_body_html: "<p>By deleting this account, you will erase its value history,
+        affecting various aspects of your overall account. This action will have a
+        direct impact on your net worth calculations and the account graphs.</p><br
+        /> <p>After deletion, there is no way you'll be able to restore the account
+        information because you'll need to add it as a new account.</p>"
+      confirm_title: Delete account?
+      edit: Edit
+      import: Import transactions
     new:
-      title: Add an account
-      manual_entry: Enter account manually
-      csv_entry: Import accounts CSV
       connected_entry: Securely link account with Plaid (coming soon)
+      csv_entry: Import accounts CSV
+      manual_entry: Enter account manually
+      title: Add an account
     show:
       cash: Cash
       holdings: Holdings
@@ -157,17 +166,17 @@ en:
     summary:
       new: New
       no_assets: No assets found
-      no_assets_description: Add an asset either via connection, importing or entering manually.
+      no_assets_description: Add an asset either via connection, importing or entering
+        manually.
       no_liabilities: No liabilities found
-      no_liabilities_description: Add a liability either via connection, importing or entering manually.
-    create:
-      success: New account created successfully
-    destroy:
-      success: Account deleted successfully
-    update:
-      success: Account updated
+      no_liabilities_description: Add a liability either via connection, importing
+        or entering manually.
     sync_all:
       success: Successfully queued accounts for syncing.
+    sync_all_button:
+      sync: Sync all
+    update:
+      success: Account updated
   credit_cards:
     create:
       success: Credit card created successfully

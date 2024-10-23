@@ -10,6 +10,5 @@ en:
       email_placeholder: you@example.com
       forgot_password: Forgot your password?
       password: Password
-      reset_password: Reset it
       submit: Log in
       title: Sign in to your account

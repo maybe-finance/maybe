@@ -4,7 +4,8 @@ en:
     cleans:
       show:
         description: Edit your data in the table below.  Red cells are invalid.
-        errors_notice: You have errors in your data.  Hover over the error to see details.
+        errors_notice: You have errors in your data.  Hover over the error to see
+          details.
         title: Clean your data
     configurations:
       show:
@@ -18,8 +19,8 @@ en:
         no_accounts: You don't have any accounts yet. Please create an account that
           we can use for (unassigned) rows in your CSV or go back to the Clean step
           and provide an account name we can use.
-        unassigned_account: Need to create a new account for unassigned rows?
         rows_label: Rows
+        unassigned_account: Need to create a new account for unassigned rows?
       show:
         account_mapping_description: Assign all of your imported file's accounts to
           Maybe's existing accounts.  You can also add new accounts or leave them

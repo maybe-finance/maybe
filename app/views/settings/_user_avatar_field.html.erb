@@ -9,7 +9,7 @@
     </div>
 
     <%# The placeholder image for empty avatar field  %>
-    <div data-profile-image-preview-target="placeholderImage" 
+    <div data-profile-image-preview-target="placeholderImage"
          class="h-full w-full flex justify-center items-center <%= user.profile_image.attached? ? "hidden" : "" %>">
       <div class="h-full w-full flex justify-center items-center">
         <%= lucide_icon "image-plus", class: "w-6 h-6 text-gray-500" %>
@@ -17,7 +17,7 @@
     </div>
 
     <%# The attached image if user has already uploaded one %>
-    <div data-profile-image-preview-target="attachedImage" 
+    <div data-profile-image-preview-target="attachedImage"
          class="h-full w-full flex justify-center items-center <%= user.profile_image.attached? ? "" : "hidden" %>">
       <% if user.profile_image.attached? %>
         <div class="h-full w-full">
@@ -26,9 +26,9 @@
       <% end %>
     </div>
 
-    <button type="button" 
-            data-profile-image-preview-target="clearBtn" 
-            data-action="click->profile-image-preview#clearFileInput" 
+    <button type="button"
+            data-profile-image-preview-target="clearBtn"
+            data-action="click->profile-image-preview#clearFileInput"
       class="<%= user.profile_image.attached? ? "" : "hidden" %> cursor-pointer absolute bottom-0 right-0 w-8 h-8 bg-gray-50 rounded-full flex justify-center items-center border border-white border-2">
       <%= lucide_icon "x", class: "w-4 h-4 text-gray-500" %>
     </button>
@@ -39,13 +39,13 @@
 
     <p class="mb-3"><%= t(".accepted_formats") %></p>
 
-    <%= form.label :profile_image, t(".choose"), 
+    <%= form.label :profile_image, t(".choose"),
         class: "btn btn--outline inline-block" %>
-    <%= form.file_field :profile_image, 
-        accept: "image/png, image/jpeg", 
-        class: "hidden px-3 py-2 bg-gray-50 text-gray-900 rounded-md text-sm font-medium", 
+    <%= form.file_field :profile_image,
+        accept: "image/png, image/jpeg",
+        class: "hidden px-3 py-2 bg-gray-50 text-gray-900 rounded-md text-sm font-medium",
         data: {
-          profile_image_preview_target: "input", 
+          profile_image_preview_target: "input",
           action: "change->profile-image-preview#showFileInputPreview"
         } %>
   </div>

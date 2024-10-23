@@ -5,12 +5,13 @@
   <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
   <div class="space-y-4">
     <%= settings_section title: t(".profile_title"), subtitle: t(".profile_subtitle") do %>
-      <%= styled_form_with model: Current.user, url: settings_profile_path, class: "space-y-4", data: { controller: "profile-image-preview" } do |form| %>
-        <%= render "settings/user_avatar_field", form: form, user: Current.user %>
+      <%= styled_form_with model: @user, class: "space-y-4" do |form| %>
+        <%= render "settings/user_avatar_field", form: form, user: @user %>
+
         <div>
           <div class="grid grid-cols-2 gap-4 mt-4">
-            <%= form.text_field :first_name, placeholder: "First name", value: Current.user.first_name, label: true %>
-            <%= form.text_field :last_name, placeholder: "Last name", value: Current.user.last_name, label: true %>
+            <%= form.text_field :first_name, placeholder: t(".first_name"), label: t(".first_name") %>
+            <%= form.text_field :last_name, placeholder: t(".last_name"), label: t(".last_name") %>
           </div>
           <div class="flex justify-end mt-4">
             <%= form.submit t(".save"), class: "bg-gray-900 hover:bg-gray-700 cursor-pointer text-white rounded-lg px-3 py-2" %>
@@ -20,9 +21,13 @@
     <% end %>
     <%= settings_section title: t(".household_title"), subtitle: t(".household_subtitle") do %>
       <div class="space-y-4">
-        <%= styled_form_with model: Current.user, url: settings_profile_path, class: "space-y-4", data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value": "blur" } do |form| %>
-          <%= form.fields_for :family_attributes do |family_fields| %>
-            <%= family_fields.text_field :name, placeholder: t(".household_form_input_placeholder"), value: Current.family.name, label: t(".household_form_label"), disabled: !Current.user.admin?, "data-auto-submit-form-target": "auto" %>
+        <%= styled_form_with model: Current.user, class: "space-y-4", data: { controller: "auto-submit-form" } do |form| %>
+          <%= form.fields_for :family do |family_fields| %>
+            <%= family_fields.text_field :name,
+              placeholder: t(".household_form_input_placeholder"),
+              label: t(".household_form_label"),
+              disabled: !Current.user.admin?,
+              "data-auto-submit-form-target": "auto" %>
           <% end %>
         <% end %>
         <div class="bg-gray-25 rounded-xl p-1">
@@ -48,7 +53,7 @@
           <p class="text-gray-500 text-sm"><%= t(".delete_account_warning") %></p>
         </div>
         <%=
-          button_to t(".delete_account"), settings_profile_path, method: :delete,
+          button_to t(".delete_account"), user_path(@user), method: :delete,
             class: "bg-red-500 text-white text-sm font-medium rounded-lg px-3 py-2",
             data: { turbo_confirm: {
               title: t(".confirm_delete.title"),

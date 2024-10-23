@@ -11,5 +11,5 @@
 <% end %>
 
 <div class="mt-6 text-center">
-  <p class="text-sm text-gray-600"><%= t(".forgot_password") %> <%= link_to t(".reset_password"), new_password_reset_path, class: "font-medium text-gray-600 hover:text-gray-400 transition" %></p>
+  <%= link_to t(".forgot_password"), new_password_reset_path, class: "font-medium text-sm text-gray-900 hover:underline transition" %>
 </div>

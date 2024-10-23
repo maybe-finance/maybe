@@ -6,16 +6,18 @@
   <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
   <%= settings_section title: t(".general_title"), subtitle: t(".general_subtitle") do %>
     <div>
-      <%= styled_form_with model: Current.user, url: settings_preferences_path, class: "space-y-4", data: { controller: "auto-submit-form" } do |form| %>
-        <%= form.fields_for :family_attributes do |family_form| %>
+      <%= styled_form_with model: @user, class: "space-y-4", data: { controller: "auto-submit-form" } do |form| %>
+        <%= form.hidden_field :redirect_to, value: "preferences" %>
+
+        <%= form.fields_for :family do |family_form| %>
           <%= family_form.select :currency,
             currencies_for_select.map { |currency| [ "#{currency.name} (#{currency.iso_code})", currency.iso_code ] },
-            { label: "Currency", selected: Current.family.currency },
+            { label: t(".currency") },
             { data: { auto_submit_form_target: "auto" } } %>
 
           <%= family_form.select :locale,
-            I18n.available_locales,
-            { label: "Locale", selected: Current.family.locale },
+            language_options,
+            { label: t(".language") },
             { data: { auto_submit_form_target: "auto" } } %>
 
           <p class="text-xs italic pl-2 text-gray-500">Please note, we are still working on translations for various languages.  Please see the <%= link_to "I18n issue", "https://github.com/maybe-finance/maybe/issues/1225", target: "_blank", class: "underline" %> for more information.</p>
@@ -25,7 +27,8 @@
   <% end %>
   <%= settings_section title: t(".theme_title"), subtitle: t(".theme_subtitle") do %>
     <div>
-      <%= styled_form_with model: Current.user, url: settings_preferences_path, local: true, class: "flex justify-between items-center" do |form| %>
+      <%= styled_form_with model: @user, class: "flex justify-between items-center" do |form| %>
+        <%= form.hidden_field :redirect_to, value: "preferences" %>
         <div class="text-center">
           <%= image_tag("light-mode-preview.png", alt: "Light Theme Preview", class: "h-44 mb-4") %>
           <div class="flex justify-center items-center gap-2">

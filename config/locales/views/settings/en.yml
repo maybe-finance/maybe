@@ -1,9 +1,6 @@
 ---
 en:
   settings:
-    user_avatar_field:
-      choose: Choose
-      accepted_formats: JPG or PNG. 5MB max.
     billings:
       show:
         manage_subscription_button: Manage subscription
@@ -32,19 +29,17 @@ en:
       previous: Back
     preferences:
       show:
+        currency: Currency
         general_subtitle: Configure your preferences
         general_title: General
+        language: Language
         page_title: Preferences
         theme_dark: Dark
         theme_light: Light
         theme_subtitle: Choose a preferred theme for the app (coming soon...)
         theme_system: System
         theme_title: Theme
-      update:
-        success: Preferences updated successfully.
     profiles:
-      destroy:
-        success: Account deleted successfully.
       show:
         confirm_delete:
           body: Are you sure you want to permanently delete your account? This action
@@ -54,14 +49,17 @@ en:
         delete_account: Delete account
         delete_account_warning: Deleting your account will permanently remove all
           your data and cannot be undone.
+        first_name: First Name
         household_form_input_placeholder: Enter household name
         household_form_label: Household name
         household_subtitle: Invite family members, partners and other inviduals.  Invitees
           can login to your household and access your shared accounts.
         household_title: Household
+        last_name: Last Name
         page_title: Account
-        save: Save
         profile_subtitle: Customize how you appear on Maybe
         profile_title: Profile
-      update:
-        success: Profile updated successfully.
+        save: Save
+    user_avatar_field:
+      accepted_formats: JPG or PNG. 5MB max.
+      choose: Choose

@@ -1,0 +1,88 @@
+<div class="bg-gray-25 h-screen flex flex-col justify-between">
+  <%= render "onboardings/header" %>
+
+  <div class="grow max-w-lg w-full mx-auto bg-gray-25 flex flex-col justify-center" data-controller="onboarding">
+    <div>
+      <div class="space-y-1 mb-6">
+        <h1 class="text-2xl font-medium"><%= t(".title") %></h1>
+        <p class="text-gray-500 text-sm"><%= t(".subtitle") %></p>
+      </div>
+
+      <div class="p-1 mb-2">
+        <div class="bg-white p-4 rounded-lg flex gap-8" style="box-shadow: 0px 0px 0px 1px rgba(11, 11, 11, 0.05), 0px 1px 2px 0px rgba(11, 11, 11, 0.05);">
+          <div class="space-y-2">
+            <%= tag.p t(".example"), class: "text-gray-500 text-sm" %>
+            <%= tag.p "$2,323.25", class: "text-gray-900 font-medium text-2xl" %>
+            <p class="text-sm">
+              <span class="text-green-500 font-medium">+<%= format_money(Money.new(78.90, params[:currency] || @user.family.currency)) %></span>
+              <span class="text-green-500 font-medium">(+<%= format_money(Money.new(6.39, params[:currency] || @user.family.currency)) %>)</span>
+              <span class="text-gray-500">as of <%= format_date(Date.parse("2024-10-23"), :default, format_code: params[:date_format] || @user.family.date_format) %></span>
+            </p>
+          </div>
+
+          <% placeholder_series_data = [
+            { date: Date.current - 14.days, value: 200 },
+            { date: Date.current - 13.days, value: 200 },
+            { date: Date.current - 12.days, value: 220 },
+            { date: Date.current - 11.days, value: 220 },
+            { date: Date.current - 10.days, value: 220 },
+            { date: Date.current - 9.days, value: 220 },
+            { date: Date.current - 8.days, value: 220 },
+            { date: Date.current - 7.days, value: 220 },
+            { date: Date.current - 6.days, value: 230 },
+            { date: Date.current - 5.days, value: 230 },
+            { date: Date.current - 4.days, value: 250 },
+            { date: Date.current - 3.days, value: 250 },
+            { date: Date.current - 2.days, value: 265 },
+            { date: Date.current - 1.day, value: 265 },
+            { date: Date.current, value: 265 }
+          ] %>
+
+          <div class="flex items-center w-2/5">
+            <div class="h-12 w-full">
+              <div
+                id="previewChart"
+                class="h-full w-full"
+                data-controller="time-series-chart"
+                data-time-series-chart-data-value="<%= TimeSeries.new(placeholder_series_data).to_json %>"
+                data-time-series-chart-use-labels-value="false"
+                data-time-series-chart-use-tooltip-value="false"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-gray-500 text-xs mb-4"><%= t(".preview") %></p>
+
+      <%= styled_form_with model: @user do |form| %>
+        <%= form.hidden_field :onboarded_at, value: Time.current %>
+        <%= form.hidden_field :redirect_to, value: "home" %>
+
+        <div class="space-y-4 mb-4">
+          <%= form.fields_for :family do |family_form| %>
+
+            <%= family_form.select :locale,
+            language_options,
+            { label: t(".locale"), required: true, selected: params[:locale] || @user.family.locale },
+            { data: { action: "onboarding#setLocale" } } %>
+
+            <%= family_form.select :currency,
+            currencies_for_select.map { |currency| [ "#{currency.name} (#{currency.iso_code})", currency.iso_code ] },
+            { label: t(".currency"), required: true, selected: params[:currency] || @user.family.currency },
+            { data: { action: "onboarding#setCurrency" } } %>
+
+            <%= family_form.select :date_format,
+            date_format_options,
+            { label: t(".date_format"), required: true, selected: params[:date_format] || @user.family.date_format },
+            { data: { action: "onboarding#setDateFormat" } } %>
+
+          <% end %>
+        </div>
+
+        <%= form.submit t(".submit") %>
+      <% end %>
+    </div>
+  </div>
+
+  <%= render "layouts/footer" %>
+</div>
