@@ -24,7 +24,7 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
   def select(method, choices, options = {}, html_options = {})
     merged_html_options = { class: "form-field__input" }.merge(html_options)
 
-    label = build_label(method, options)
+    label = build_label(method, options.merge(required: merged_html_options[:required]))
     field = super(method, choices, options, merged_html_options)
 
     build_styled_field(label, field, options, remove_padding_right: true)
@@ -33,7 +33,7 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
   def collection_select(method, collection, value_method, text_method, options = {}, html_options = {})
     merged_html_options = { class: "form-field__input" }.merge(html_options)
 
-    label = build_label(method, options)
+    label = build_label(method, options.merge(required: merged_html_options[:required]))
     field = super(method, collection, value_method, text_method, options, merged_html_options)
 
     build_styled_field(label, field, options, remove_padding_right: true)
@@ -68,7 +68,17 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
 
     def build_label(method, options)
       return "".html_safe unless options[:label]
-      return label(method, class: "form-field__label") if options[:label] == true
-      label(method, options[:label], class: "form-field__label")
+
+      label_text = options[:label]
+
+      if options[:required]
+        label_text = @template.safe_join([
+          label_text == true ? method.to_s.humanize : label_text,
+          @template.tag.span("*", class: "text-red-500 ml-0.5")
+        ])
+      end
+
+      return label(method, class: "form-field__label") if label_text == true
+      label(method, label_text, class: "form-field__label")
     end
 end

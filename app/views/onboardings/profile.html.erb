@@ -1,0 +1,40 @@
+<div class="bg-gray-25 h-screen flex flex-col justify-between">
+  <%= render "onboardings/header" %>
+
+  <div class="grow max-w-lg w-full mx-auto bg-gray-25 flex flex-col justify-center">
+    <div>
+      <div class="space-y-1 mb-6">
+        <h1 class="text-2xl font-medium"><%= t(".title") %></h1>
+        <p class="text-gray-500 text-sm"><%= t(".subtitle") %></p>
+      </div>
+
+      <%= styled_form_with model: @user do |form| %>
+        <%= form.hidden_field :redirect_to, value: "onboarding_preferences" %>
+
+        <div class="space-y-4 mb-4">
+          <p class="text-gray-500 text-xs"><%= t(".profile_image") %></p>
+          <%= render "settings/user_avatar_field", form: form, user: @user %>
+        </div>
+
+        <div class="flex justify-between items-center gap-4 mb-4">
+          <%= form.text_field :first_name, placeholder: t(".first_name"), label: t(".first_name"), container_class: "bg-white w-1/2", required: true %>
+          <%= form.text_field :last_name, placeholder: t(".last_name"), label: t(".last_name"), container_class: "bg-white w-1/2", required: true %>
+        </div>
+
+        <div class="space-y-4 mb-4">
+          <%= form.fields_for :family do |family_form| %>
+            <%= family_form.text_field :name, placeholder: t(".household_name"), label: t(".household_name") %>
+
+            <%= family_form.select :country,
+            country_options,
+            { label: t(".country") }, required: true %>
+          <% end %>
+        </div>
+
+        <%= form.submit t(".submit") %>
+      <% end %>
+    </div>
+  </div>
+
+  <%= render "layouts/footer" %>
+</div>

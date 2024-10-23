@@ -16,5 +16,5 @@
   <% if invite_code_required? %>
     <%= form.text_field :invite_code, required: "required", label: true, value: params[:invite] %>
   <% end %>
-  <%= form.submit %>
+  <%= form.submit t(".submit") %>
 <% end %>

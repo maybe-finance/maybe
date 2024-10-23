@@ -19,7 +19,7 @@ class SessionsController < ApplicationController
 
   def destroy
     @session.destroy
-    redirect_to root_path, notice: t(".logout_successful")
+    redirect_to new_session_path, notice: t(".logout_successful")
   end
 
   private

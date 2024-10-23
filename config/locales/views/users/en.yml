@@ -1,0 +1,7 @@
+---
+en:
+  users:
+    destroy:
+      success: Your account has been deleted.
+    update:
+      success: Your profile has been updated.

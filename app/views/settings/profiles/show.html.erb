@@ -5,35 +5,13 @@
   <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
   <div class="space-y-4">
     <%= settings_section title: t(".profile_title"), subtitle: t(".profile_subtitle") do %>
-      <%= styled_form_with model: Current.user, url: settings_profile_path, class: "space-y-4", data: { controller: "profile-image-preview" } do |form| %>
-        <div class="flex items-center gap-4">
-          <div class="relative flex justify-center items-center bg-gray-50 w-24 h-24 rounded-full border border-alpha-black-25">
-            <div data-profile-image-preview-target="imagePreview" class="h-full w-full flex justify-center items-center">
-              <% profile_image_attached = Current.user.profile_image.attached? %>
-              <% if profile_image_attached %>
-                <div class="h-24 w-24">
-                  <%= render "shared/user_profile_image", user: Current.user %>
-                </div>
-              <% else %>
-                <%= lucide_icon "image-plus", class: "w-6 h-6 text-gray-500" %>
-              <% end %>
-            </div>
-            <%= lucide_icon "image-plus", class: "hidden w-6 h-6 text-gray-500", data: { profile_image_preview_target: "template" } %>
-            <div data-profile-image-preview-target="clearBtn" data-action="click->profile-image-preview#clear" class="<%= profile_image_attached ? "" : "hidden" %> cursor-pointer absolute bottom-0 right-0 w-8 h-8 bg-gray-50 rounded-full flex justify-center items-center border border-white border-2">
-              <%= lucide_icon "x", class: "w-4 h-4 text-gray-500" %>
-            </div>
-          </div>
-          <div class="space-y-3">
-            <p><%= t(".profile_image_type") %></p>
-            <%= form.label :profile_image, t(".profile_image_choose"), class: "inline-block cursor-pointer px-3 py-2 bg-gray-50 text-gray-900 rounded-md text-sm font-medium" %>
-            <%= form.file_field :profile_image, accept: "image/png, image/jpeg", class: "hidden px-3 py-2 bg-gray-50 text-gray-900 rounded-md text-sm font-medium", data: {profile_image_preview_target: "fileField", action: "change->profile-image-preview#preview"} %>
-            <%= form.hidden_field :delete_profile_image, value: false, data: {profile_image_preview_target: "deleteField"} %>
-          </div>
-        </div>
+      <%= styled_form_with model: @user, class: "space-y-4" do |form| %>
+        <%= render "settings/user_avatar_field", form: form, user: @user %>
+
         <div>
           <div class="grid grid-cols-2 gap-4 mt-4">
-            <%= form.text_field :first_name, placeholder: "First name", value: Current.user.first_name, label: true %>
-            <%= form.text_field :last_name, placeholder: "Last name", value: Current.user.last_name, label: true %>
+            <%= form.text_field :first_name, placeholder: t(".first_name"), label: t(".first_name") %>
+            <%= form.text_field :last_name, placeholder: t(".last_name"), label: t(".last_name") %>
           </div>
           <div class="flex justify-end mt-4">
             <%= form.submit t(".save"), class: "bg-gray-900 hover:bg-gray-700 cursor-pointer text-white rounded-lg px-3 py-2" %>
@@ -43,9 +21,13 @@
     <% end %>
     <%= settings_section title: t(".household_title"), subtitle: t(".household_subtitle") do %>
       <div class="space-y-4">
-        <%= styled_form_with model: Current.user, url: settings_profile_path, class: "space-y-4", data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value": "blur" } do |form| %>
-          <%= form.fields_for :family_attributes do |family_fields| %>
-            <%= family_fields.text_field :name, placeholder: t(".household_form_input_placeholder"), value: Current.family.name, label: t(".household_form_label"), disabled: !Current.user.admin?, "data-auto-submit-form-target": "auto" %>
+        <%= styled_form_with model: Current.user, class: "space-y-4", data: { controller: "auto-submit-form" } do |form| %>
+          <%= form.fields_for :family do |family_fields| %>
+            <%= family_fields.text_field :name,
+              placeholder: t(".household_form_input_placeholder"),
+              label: t(".household_form_label"),
+              disabled: !Current.user.admin?,
+              "data-auto-submit-form-target": "auto" %>
           <% end %>
         <% end %>
         <div class="bg-gray-25 rounded-xl p-1">
@@ -71,7 +53,7 @@
           <p class="text-gray-500 text-sm"><%= t(".delete_account_warning") %></p>
         </div>
         <%=
-          button_to t(".delete_account"), settings_profile_path, method: :delete,
+          button_to t(".delete_account"), user_path(@user), method: :delete,
             class: "bg-red-500 text-white text-sm font-medium rounded-lg px-3 py-2",
             data: { turbo_confirm: {
               title: t(".confirm_delete.title"),

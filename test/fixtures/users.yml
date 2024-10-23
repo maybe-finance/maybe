@@ -4,6 +4,7 @@ empty:
   last_name: One
   email: user1@email.com
   password_digest: <%= BCrypt::Password.create('password') %>
+  onboarded_at: <%= 3.days.ago %>
 
 maybe_support_staff:
   family: empty
@@ -12,6 +13,7 @@ maybe_support_staff:
   email: support@maybe.co
   password_digest: <%= BCrypt::Password.create('password') %>
   role: super_admin
+  onboarded_at: <%= 3.days.ago %>
 
 family_admin:
   family: dylan_family
@@ -20,6 +22,7 @@ family_admin:
   email: bob@bobdylan.com
   password_digest: <%= BCrypt::Password.create('password') %>
   role: admin
+  onboarded_at: <%= 3.days.ago %>
 
 family_member:
   family: dylan_family
@@ -27,3 +30,4 @@ family_member:
   last_name: Dylan
   email: jakobdylan@yahoo.com
   password_digest: <%= BCrypt::Password.create('password') %>
+  onboarded_at: <%= 3.days.ago %>

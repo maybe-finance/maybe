@@ -1,0 +1,28 @@
+---
+en:
+  onboardings:
+    header:
+      sign_out: Log out
+    preferences:
+      currency: Currency
+      date_format: Date format
+      example: Example account
+      locale: Language
+      preview: Preview how data displays based on preferences.
+      submit: Complete
+      subtitle: Let's configure your preferences.
+      title: Configure your preferences
+    profile:
+      country: Country
+      first_name: First Name
+      household_name: Household Name
+      last_name: Last Name
+      profile_image: Profile Image
+      submit: Continue
+      subtitle: Let's complete your profile.
+      title: Let's set up the basics
+    show:
+      message: We’re really excited you’re here. In the next step we’ll ask you a
+        few questions to complete your profile and then get you all set up.
+      setup: Set up account
+      title: Meet Maybe

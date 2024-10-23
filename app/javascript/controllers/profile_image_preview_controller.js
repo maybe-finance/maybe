@@ -2,32 +2,34 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = [
-    "imagePreview",
-    "fileField",
-    "deleteField",
+    "attachedImage",
+    "previewImage",
+    "placeholderImage",
+    "deleteProfileImage",
+    "input",
     "clearBtn",
-    "template",
   ];
 
-  preview(event) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.imagePreviewTarget.innerHTML = `<img src="${e.target.result}" alt="Preview" class="w-full h-full rounded-full object-cover" />`;
-        this.templateTarget.classList.add("hidden");
-        this.clearBtnTarget.classList.remove("hidden");
-      };
-      reader.readAsDataURL(file);
-    }
+  clearFileInput() {
+    this.inputTarget.value = null;
+    this.clearBtnTarget.classList.add("hidden");
+    this.placeholderImageTarget.classList.remove("hidden");
+    this.attachedImageTarget.classList.add("hidden");
+    this.previewImageTarget.classList.add("hidden");
+    this.deleteProfileImageTarget.value = "1";
   }
 
-  clear() {
-    this.deleteFieldTarget.value = true;
-    this.fileFieldTarget.value = null;
-    this.templateTarget.classList.remove("hidden");
-    this.imagePreviewTarget.innerHTML = this.templateTarget.innerHTML;
-    this.clearBtnTarget.classList.add("hidden");
-    this.element.submit();
+  showFileInputPreview(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    this.placeholderImageTarget.classList.add("hidden");
+    this.attachedImageTarget.classList.add("hidden");
+    this.previewImageTarget.classList.remove("hidden");
+    this.clearBtnTarget.classList.remove("hidden");
+    this.deleteProfileImageTarget.value = "0";
+
+    this.previewImageTarget.querySelector("img").src =
+      URL.createObjectURL(file);
   }
 }

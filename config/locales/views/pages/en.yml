@@ -7,8 +7,8 @@ en:
       allocation_chart:
         assets: Assets
         debts: Debts
-      greeting: Welcome back, %{name}
       fallback_greeting: Welcome back, friend
+      greeting: Welcome back, %{name}
       import: Import
       income: Income
       investing: Investing (coming soon...)

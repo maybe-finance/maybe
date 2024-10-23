@@ -1,6 +1,19 @@
 module ApplicationHelper
   include Pagy::Frontend
 
+  def date_format_options
+    [
+      [ "DD-MM-YYYY", "%d-%m-%Y" ],
+      [ "MM-DD-YYYY", "%m-%d-%Y" ],
+      [ "YYYY-MM-DD", "%Y-%m-%d" ],
+      [ "DD/MM/YYYY", "%d/%m/%Y" ],
+      [ "YYYY/MM/DD", "%Y/%m/%d" ],
+      [ "MM/DD/YYYY", "%m/%d/%Y" ],
+      [ "D/MM/YYYY", "%e/%m/%Y" ],
+      [ "YYYY.MM.DD", "%Y.%m.%d" ]
+    ]
+  end
+
   def title(page_title)
     content_for(:title) { page_title }
   end
@@ -129,6 +142,19 @@ module ApplicationHelper
       "vs. last year"
     else
       "from #{start_date.strftime('%b %d, %Y')} to #{end_date.strftime('%b %d, %Y')}"
+    end
+  end
+
+  # Wrapper around I18n.l to support custom date formats
+  def format_date(object, format = :default, options = {})
+    date = object.to_date
+
+    format_code = options[:format_code] || Current.family&.date_format
+
+    if format_code.present?
+      date.strftime(format_code)
+    else
+      I18n.l(date, format: format, **options)
     end
   end
 

@@ -28,7 +28,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     delete session_url(@user.sessions.order(:created_at).last)
-    assert_redirected_to root_url
+    assert_redirected_to new_session_path
     assert_equal "You have signed out successfully.", flash[:notice]
   end
 end

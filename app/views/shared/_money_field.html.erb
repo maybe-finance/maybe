@@ -6,7 +6,12 @@
    currency = Money::Currency.new(currency_value || options[:default_currency] || "USD") %>
 
 <div class="form-field pr-0 <%= options[:container_class] %>" data-controller="money-field">
-  <%= form.label options[:label] || t(".label"), class: "form-field__label" %>
+  <%= form.label options[:label] || t(".label"), class: "form-field__label" do %>
+    <%= options[:label] || t(".label") %>
+    <% if options[:required] %>
+      <span class="text-red-500">*</span>
+    <% end %>
+  <% end %>
 
   <div class="flex items-center gap-1">
     <div class="flex items-center grow gap-1">
