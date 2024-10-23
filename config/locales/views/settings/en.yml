@@ -29,7 +29,9 @@ en:
       previous: Back
     preferences:
       show:
+        country: Country
         currency: Currency
+        date_format: Date format
         general_subtitle: Configure your preferences
         general_title: General
         language: Language

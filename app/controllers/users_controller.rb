@@ -41,7 +41,7 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(
         :first_name, :last_name, :profile_image, :redirect_to, :delete_profile_image, :onboarded_at,
-        family_attributes: [ :name, :currency, :country, :locale, :id ]
+        family_attributes: [ :name, :currency, :country, :locale, :date_format, :id ]
       )
     end
 

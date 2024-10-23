@@ -151,8 +151,6 @@ module ApplicationHelper
 
     format_code = options[:format_code] || Current.family&.date_format
 
-    puts "format_code: #{format_code}"
-
     if format_code.present?
       date.strftime(format_code)
     else

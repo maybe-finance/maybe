@@ -5,10 +5,10 @@ Rails.application.routes.draw do
   get "feedback", to: "pages#feedback"
   get "early-access", to: "pages#early_access"
 
-  resource :registration
+  resource :registration, only: %i[new create]
   resources :sessions, only: %i[new create destroy]
-  resource :password_reset
-  resource :password
+  resource :password_reset, only: %i[new create edit update]
+  resource :password, only: %i[edit update]
 
   resources :users, only: %i[update destroy]
 

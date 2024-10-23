@@ -10,6 +10,27 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_url
   end
 
+  test "can update user profile" do
+    patch user_url(@user), params: {
+      user: {
+        first_name: "John",
+        last_name: "Doe",
+        onboarded_at: Time.current,
+        profile_image: file_fixture_upload("profile_image.png", "image/png", :binary),
+        family_attributes: {
+          name: "New Family Name",
+          country: "US",
+          date_format: "%m/%d/%Y",
+          currency: "USD",
+          locale: "en"
+        }
+      }
+    }
+
+    assert_redirected_to settings_profile_url
+    assert_equal "Your profile has been updated.", flash[:notice]
+  end
+
   test "member can deactivate their account" do
     sign_in @member = users(:family_member)
     delete user_url(@member)
