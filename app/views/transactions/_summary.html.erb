@@ -1,17 +1,17 @@
 <%# locals: (totals:) %>
 <div class="grid grid-cols-3 bg-white rounded-xl border border-alpha-black-25 shadow-xs divide-x divide-alpha-black-100">
   <div class="p-4 space-y-2">
-    <p class="text-sm text-gray-500">Total transactions</p>
+    <p class="text-sm text-gray-500"><%= t(".total_transactions") %></p>
     <p class="text-gray-900 font-medium text-xl" id="total-transactions"><%= totals[:count] %></p>
   </div>
   <div class="p-4 space-y-2">
-    <p class="text-sm text-gray-500">Income</p>
+    <p class="text-sm text-gray-500"><%= t(".income") %></p>
     <p class="text-gray-900 font-medium text-xl" id="total-income">
       <%= format_money totals[:income] %>
     </p>
   </div>
   <div class="p-4 space-y-2">
-    <p class="text-sm text-gray-500">Expenses</p>
+    <p class="text-sm text-gray-500"><%= t(".expenses") %></p>
     <p class="text-gray-900 font-medium text-xl" id="total-expense">
       <%= format_money totals[:expense] %>
     </p>

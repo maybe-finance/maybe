@@ -1,5 +1,5 @@
 <header class="flex justify-between items-center text-gray-900 font-medium">
-  <h1 class="text-xl">Transactions</h1>
+  <h1 class="text-xl"><%= t(".index") %></h1>
   <div class="flex items-center gap-5">
     <div class="flex items-center gap-2">
       <%= contextual_menu do %>
@@ -18,7 +18,7 @@
 
       <%= link_to new_transaction_path, class: "rounded-lg bg-gray-900 text-white flex items-center gap-1 justify-center hover:bg-gray-700 px-3 py-2", data: { turbo_frame: :modal } do %>
         <%= lucide_icon("plus", class: "w-5 h-5") %>
-        <p class="text-sm font-medium">New transaction</p>
+        <p class="text-sm font-medium"><%= t(".new") %></p>
       <% end %>
     </div>
   </div>
