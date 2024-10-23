@@ -1,0 +1,43 @@
+---
+en:
+  account:
+    transactions:
+      index:
+        new: Nova transação
+        no_transactions: Ainda não há transações para esta conta.
+        transaction: transação
+        transactions: Transações
+      selection_bar:
+        mark_transfers: Marcar como transferências?
+        mark_transfers_confirm: Marcar como transferências
+        mark_transfers_message: Ao marcar transações como transferências, elas não serão
+          mais incluídas nos cálculos de receitas ou despesas.
+      show:
+        account_label: Conta
+        amount: Valor
+        category_label: Categoria
+        category_placeholder: Selecione uma categoria
+        date_label: Data
+        delete: Excluir
+        delete_subtitle: Isso exclui permanentemente a transação, afeta seus saldos históricos
+          e não pode ser desfeito.
+        delete_title: Excluir transação
+        details: Detalhes
+        exclude_subtitle: Isso exclui a transação de quaisquer recursos ou análises no aplicativo.
+        exclude_title: Excluir transação
+        merchant_label: Estabelecimento
+        merchant_placeholder: Selecione um estabelecimento
+        name_label: Nome
+        nature: Tipo
+        note_label: Observações
+        note_placeholder: Digite uma observação
+        overview: Visão geral
+        settings: Configurações
+        tags_label: Tags
+      transaction:
+        remove_transfer: Remover transferência
+        remove_transfer_body: Isso removerá a transferência desta transação
+        remove_transfer_confirm: Confirmar
+      update:
+        success: Transação atualizada com sucesso.
+

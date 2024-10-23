@@ -1,0 +1,22 @@
+---
+pt-BR:
+  categories:
+    category:
+      delete: Excluir categoria
+      edit: Editar categoria
+    create:
+      success: Nova categoria de transação criada com sucesso
+    edit:
+      edit: Editar categoria
+    form:
+      placeholder: Nome da categoria
+    index:
+      categories: Categorias
+      empty: Nenhuma categoria encontrada
+      new: Nova categoria
+    menu:
+      loading: Carregando...
+    new:
+      new_category: Nova categoria
+    update:
+      success: Categoria de transação atualizada com sucesso

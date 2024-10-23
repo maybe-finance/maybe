@@ -1,0 +1,86 @@
+---
+pt-BR:
+  transactions:
+    bulk_delete:
+      success: "%{count} transações excluídas"
+    bulk_edit:
+      cancel: Cancelar
+      category_label: Categoria
+      category_placeholder: Selecione uma categoria
+      date_label: Data
+      details: Detalhes
+      merchant_label: Estabelecimento
+      merchant_placeholder: Selecione um estabelecimento
+      note_label: Observações
+      note_placeholder: Digite uma observação que será aplicada às transações selecionadas
+      overview: Visão geral
+      save: Salvar
+    bulk_update:
+      success: "%{count} transações atualizadas"
+    create:
+      success: Nova transação criada com sucesso
+    form:
+      account: Conta
+      account_prompt: Selecione uma conta
+      amount: Valor
+      category: Categoria
+      category_prompt: Selecione uma categoria
+      date: Data
+      description: Descrição
+      description_placeholder: Descreva a transação
+      expense: Despesa
+      income: Receita
+      submit: Adicionar transação
+      transfer: Transferência
+    header:
+      edit_categories: Editar categorias
+      edit_imports: Editar importações
+      edit_merchants: Editar estabelecimentos
+      edit_tags: Editar tags
+      import: Importar
+      new: Nova transação
+      index: Transações
+    index:
+      transaction: transação
+    mark_transfers:
+      success: Marcada como transferência
+    new:
+      new_transaction: Nova transação
+    searches:
+      filters:
+        amount_filter:
+          equal_to: Igual a
+          greater_than: Maior que
+          less_than: Menor que
+          placeholder: '0'
+        badge:
+          expense: Despesa
+          income: Receita
+          on_or_after: em ou após %{date}
+          on_or_before: em ou antes de %{date}
+          transfer: Transferência
+        type_filter:
+          expense: Despesa
+          income: Receita
+          transfer: Transferência
+      menu:
+        account_filter: Conta
+        amount_filter: Valor
+        apply: Aplicar
+        cancel: Cancelar
+        category_filter: Categoria
+        clear_filters: Limpar filtros
+        date_filter: Data
+        merchant_filter: Estabelecimento
+        tag_filter: Tag
+        type_filter: Tipo
+      search:
+        equal_to: igual a
+        greater_than: maior que
+        less_than: menor que
+    unmark_transfers:
+      success: Transferência removida
+    summary:
+      total_transactions: Total de transações
+      income: Receita
+      expenses: Despesas

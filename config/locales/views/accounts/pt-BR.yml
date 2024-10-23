@@ -1,0 +1,180 @@
+---
+pt-BR:
+  accounts:
+    account:
+      has_issues: Problema detectado.
+      troubleshoot: Solucionar problema
+    account_list:
+      new_account: Novo %{type}
+    accountables:
+      credit_card:
+        form:
+          annual_fee: Taxa anual
+          annual_fee_placeholder: '99'
+          apr: Taxa de juros
+          apr_placeholder: '15,99'
+          available_credit: Crédito disponível
+          available_credit_placeholder: '10000'
+          expiration_date: Data de validade
+          minimum_payment: Pagamento mínimo
+          minimum_payment_placeholder: '100'
+        overview:
+          amount_owed: Valor devido
+          annual_fee: Taxa anual
+          apr: Taxa de juros
+          available_credit: Crédito disponível
+          expiration_date: Data de validade
+          minimum_payment: Pagamento mínimo
+          unknown: Desconhecido
+      depository:
+        form:
+          none: Nenhum
+          prompt: Selecione um subtipo
+      investment:
+        form:
+          none: Nenhum
+          prompt: Selecione um subtipo
+        tooltip:
+          cash: Dinheiro
+          holdings: Investimentos
+          total_value_tooltip: O valor total é a soma do saldo em dinheiro e o valor dos seus investimentos, menos empréstimos de margem.
+      loan:
+        form:
+          interest_rate: Taxa de juros
+          interest_rate_placeholder: '5,25'
+          rate_type: Tipo de taxa
+          term_months: Prazo (meses)
+          term_months_placeholder: '360'
+        overview:
+          interest_rate: Taxa de juros
+          monthly_payment: Pagamento mensal
+          not_applicable: N/A
+          original_principal: Principal original
+          remaining_principal: Principal restante
+          term: Prazo
+          type: Tipo
+          unknown: Desconhecido
+      property:
+        form:
+          additional_info: Informações adicionais
+          area_unit: Unidade de área
+          area_value: Valor da área
+          city: Cidade
+          country: País
+          line1: Endereço linha 1
+          line2: Endereço linha 2
+          optional: opcional
+          postal_code: CEP
+          state: Estado
+          year_built: Ano de construção
+        overview:
+          living_area: Área útil
+          market_value: Valor de mercado
+          purchase_price: Preço de compra
+          trend: Tendência
+          unknown: Desconhecido
+          year_built: Ano de construção
+      vehicle:
+        form:
+          make: Marca
+          make_placeholder: Toyota
+          mileage: Quilometragem
+          mileage_placeholder: '15000'
+          mileage_unit: Unidade
+          model: Modelo
+          model_placeholder: Camry
+          year: Ano
+          year_placeholder: '2023'
+        overview:
+          current_price: Preço atual
+          make_model: Marca e modelo
+          mileage: Quilometragem
+          purchase_price: Preço de compra
+          trend: Tendência
+          unknown: Desconhecido
+          year: Ano
+    create:
+      success: Nova conta criada com sucesso
+    destroy:
+      success: Conta excluída com sucesso
+    edit:
+      edit: Editar %{account}
+    empty:
+      empty_message: Adicione uma conta via conexão, importação ou inserção manual.
+      new_account: Nova conta
+      no_accounts: Nenhuma conta ainda
+    form:
+      accountable_type: Tipo de conta
+      balance: Saldo atual
+      institution: Instituição financeira
+      mode: Modo de rastreamento de valor
+      mode_prompt: Selecione um modo
+      name_label: Nome da conta
+      name_placeholder: Exemplo de nome da conta
+      type_prompt: Selecione um tipo
+      ungrouped: "(nenhum)"
+    header:
+      accounts: Contas
+      manage: Gerenciar contas
+      new: Nova conta
+    index:
+      accounts: Contas
+      add_institution: Adicionar instituição
+      new_account: Nova conta
+    institution_accounts:
+      add_account_to_institution: Adicionar nova conta
+      confirm_accept: Excluir instituição
+      confirm_body: Não se preocupe, nenhuma das contas dentro desta instituição será afetada por esta exclusão. As contas serão desagrupadas e todos os dados históricos permanecerão intactos.
+      confirm_title: Excluir instituição financeira?
+      delete: Excluir instituição
+      edit: Editar instituição
+      has_issues: Problema detectado, verifique as contas
+      new_account: Adicionar conta
+      status: Última sincronização há %{last_synced_at}
+      status_never: Requer sincronização de dados
+      syncing: Sincronizando...
+    institutionless_accounts:
+      other_accounts: Outras contas
+    menu:
+      confirm_accept: Excluir "%{name}"
+      confirm_body_html: "<p>Ao excluir esta conta, você apagará seu histórico de valores, afetando vários aspectos de sua conta geral. Esta ação terá um impacto direto nos seus cálculos de patrimônio líquido e nos gráficos da conta.</p><br /> <p>Após a exclusão, não será possível restaurar as informações da conta, pois você precisará adicioná-la como uma nova conta.</p>"
+      confirm_title: Excluir conta?
+      edit: Editar
+      import: Importar transações
+    new:
+      connected_entry: Vincular conta com segurança via Plaid (em breve)
+      csv_entry: Importar CSV de contas
+      manual_entry: Inserir conta manualmente
+      title: Adicionar uma conta
+    show:
+      cash: Dinheiro
+      holdings: Investimentos
+      no_change: Sem alteração
+      overview: Visão geral
+      total_owed: Total devido
+      total_value: Valor total
+      trades: Transações
+      transactions: Transações
+      value: Valor
+    summary:
+      new: Novo
+      no_assets: Nenhum ativo encontrado
+      no_assets_description: Adicione um ativo via conexão, importação ou inserção manual.
+      no_liabilities: Nenhum passivo encontrado
+      no_liabilities_description: Adicione um passivo via conexão, importação ou inserção manual.
+    sync_all:
+      success: Contas adicionadas à fila de sincronização com sucesso.
+    sync_all_button:
+      sync: Sincronizar tudo
+    update:
+      success: Conta atualizada
+  credit_cards:
+    create:
+      success: Cartão de crédito criado com sucesso
+    update:
+      success: Cartão de crédito atualizado com sucesso
+  loans:
+    create:
+      success: Empréstimo criado com sucesso
+    update:
+      success: Empréstimo atualizado com sucesso
