@@ -1,0 +1,64 @@
+---
+pt-BR:
+  settings:
+    billings:
+      show:
+        manage_subscription_button: Gerenciar assinatura
+        page_title: Faturamento
+        subscribe_button: Assinar
+        subscription_subtitle: Gerencie sua assinatura e detalhes de faturamento
+        subscription_title: Gerenciar assinatura
+    nav:
+      accounts_label: Contas
+      billing_label: Faturamento
+      categories_label: Categorias
+      feedback_label: Feedback
+      general_section_title: Geral
+      imports_label: Importações
+      logout: Sair
+      merchants_label: Comerciantes
+      other_section_title: Mais
+      preferences_label: Preferências
+      profile_label: Conta
+      self_hosting_label: Auto-hospedagem
+      tags_label: Tags
+      transactions_section_title: Transações
+      whats_new_label: Novidades
+    nav_link_large:
+      next: Próximo
+      previous: Voltar
+    preferences:
+      show:
+        country: País
+        currency: Moeda
+        date_format: Formato de data
+        general_subtitle: Configure suas preferências
+        general_title: Geral
+        language: Idioma
+        page_title: Preferências
+        theme_dark: Escuro
+        theme_light: Claro
+        theme_subtitle: Escolha um tema preferido para o aplicativo (em breve...)
+        theme_system: Sistema
+        theme_title: Tema
+    profiles:
+      show:
+        confirm_delete:
+          body: Tem certeza de que deseja excluir sua conta permanentemente? Esta ação é irreversível.
+          title: Excluir conta?
+        danger_zone_title: Zona de perigo
+        delete_account: Excluir conta
+        delete_account_warning: Excluir sua conta removerá permanentemente todos os seus dados e não poderá ser desfeito.
+        first_name: Primeiro nome
+        household_form_input_placeholder: Insira o nome da família
+        household_form_label: Nome da família
+        household_subtitle: Convide membros da família, parceiros e outras pessoas. Os convidados podem fazer login em sua casa e acessar suas contas compartilhadas.
+        household_title: Família
+        last_name: Último nome
+        page_title: Conta
+        profile_subtitle: Personalize como você aparece no Maybe
+        profile_title: Perfil
+        save: Salvar
+      user_avatar_field:
+        accepted_formats: JPG ou PNG. 5MB max.
+        choose: Escolher

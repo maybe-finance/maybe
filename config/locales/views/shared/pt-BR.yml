@@ -1,0 +1,24 @@
+---
+pt-BR:
+  shared:
+    confirm_modal:
+      accept: Confirmar
+      body_html: "<p>Você não poderá desfazer essa decisão</p>"
+      cancel: Cancelar
+      title: Tem certeza?
+    money_field:
+      label: Quantia
+    no_account_empty_state:
+      new_account: Nova conta
+      no_account_subtitle: Como nenhuma conta foi adicionada, não há dados para exibir. Adicione suas primeiras contas para começar a visualizar os dados do painel.
+      no_account_title: Ainda não há contas
+    subscribe_prompt:
+      guarantee: Somos pessoas razoáveis aqui. Se você não estiver satisfeito ou algo não funcionar, nós o reembolsaremos com prazer.
+      subscribe: Atualizar sua conta
+      subtitle: Para continuar usando o Maybe, assine!
+      title: Atualizar
+    upgrade_notification:
+      app_upgraded: O aplicativo foi atualizado para %{version}.
+      dismiss: Dismiss
+      new_version_available: Uma nova versão do Maybe está disponível para atualização.
+      upgrade_now: Atualizar agora
