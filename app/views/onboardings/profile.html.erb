@@ -1,0 +1,61 @@
+<div class="bg-gray-25 h-screen flex flex-col justify-between">
+  <header class="flex justify-between items-center p-4">
+    <%= image_tag "logo.svg", class: "h-[22px]" %>
+    <div class="flex items-center gap-2">
+      <%= lucide_icon "log-in", class: "w-5 h-5 shrink-0 text-gray-500 gap-2" %>
+      <%= button_to t(".sign_out"), session_path(Current.session), method: :delete, class: "text-sm text-gray-900 font-medium" %>
+    </div>
+  </header>
+
+  <div class="grow max-w-lg w-full mx-auto bg-gray-25 flex flex-col justify-center">
+    <div>
+      <div class="space-y-1 mb-6">
+        <h1 class="text-2xl font-medium"><%= t(".title") %></h1>
+        <p class="text-gray-500 text-sm"><%= t(".subtitle") %></p>
+      </div>
+
+      <%= styled_form_with model: @user do |form| %>
+        <%= form.hidden_field :onboarded, value: true %>
+
+        <div class="space-y-4 mb-4">
+          <p class="text-gray-500 text-xs"><%= t(".profile_image") %></p>
+          <%= render "settings/user_avatar_field", form: form, user: @user %>
+        </div>
+
+        <div class="flex justify-between items-center gap-4 mb-4">
+          <%= form.text_field :first_name, placeholder: t(".first_name"), label: t(".first_name"), container_class: "bg-white w-1/2", required: true %>
+          <%= form.text_field :last_name, placeholder: t(".last_name"), label: t(".last_name"), container_class: "bg-white w-1/2", required: true %>
+        </div>
+
+        <div class="space-y-4 mb-4">
+          <%= form.fields_for :family do |family_form| %>
+            <%= family_form.text_field :name, placeholder: t(".household_name"), label: t(".household_name") %>
+
+            <%= family_form.select :country,
+            country_options,
+            { label: t(".country"), required: true } %>
+
+            <%= family_form.select :currency,
+            currencies_for_select.map { |currency| [ "#{currency.name} (#{currency.iso_code})", currency.iso_code ] },
+            { label: t(".currency"), required: true } %>
+
+            <%= family_form.select :locale,
+            language_options,
+            { label: t(".locale"), required: true },
+            { data: { auto_submit_form_target: "auto" } } %>
+
+          <% end %>
+        </div>
+
+        <%= form.submit t(".submit") %>
+      <% end %>
+    </div>
+  </div>
+
+  <footer class="p-6">
+    <div class="space-y-2 text-center text-xs text-gray-500">
+      <p>&copy; <%= Date.current.year %>, Maybe Finance, Inc.</p>
+      <p><%= link_to t(".privacy_policy"), "https://maybe.co/privacy", class: "underline hover:text-gray-600" %> &bull; <%= link_to t(".terms_of_service"), "https://maybe.co/tos", class: "underline hover:text-gray-600" %></p>
+    </div>
+  </footer>
+</div>

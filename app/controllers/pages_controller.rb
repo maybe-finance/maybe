@@ -7,11 +7,13 @@ class PagesController < ApplicationController
   def onboarding
     @user = Current.user
 
-    if @user.onboarded?
-      redirect_to root_path
-    else
-      render layout: "blank"
-    end
+    # if @user.onboarded?
+    #   redirect_to root_path
+    # else
+    #   render layout: "blank"
+    # end
+
+    render layout: "blank"
   end
 
   def dashboard

@@ -25,6 +25,10 @@ class User < ApplicationRecord
     password_salt&.last(10)
   end
 
+  def onboarding
+    Onboarding.new(self)
+  end
+
   def request_impersonation_for(user_id)
     impersonated = User.find(user_id)
     impersonator_support_sessions.create!(impersonated: impersonated)

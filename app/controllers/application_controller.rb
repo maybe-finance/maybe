@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  include Onboarding, Localize, AutoSync, Authentication, Invitable, SelfHostable, StoreLocation, Impersonatable
+  include Onboardable, Localize, AutoSync, Authentication, Invitable, SelfHostable, StoreLocation, Impersonatable
   include Pagy::Backend
 
   private

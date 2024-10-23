@@ -1,0 +1,17 @@
+---
+en:
+  onboardings:
+    show:
+      title: Meet Maybe
+      message: We’re really excited you’re here. In the next step we’ll ask you a few questions to complete your profile and then get you all set up.
+      setup: Set up account
+    profile:
+      first_name: First Name
+      last_name: Last Name
+      currency: Currency
+      locale: Locale
+      household_name: Household Name
+      title: Let's set up the basics 
+      subtitle: Let's complete your profile and get you all set up.
+      submit: Continue
+      sign_out: Log out

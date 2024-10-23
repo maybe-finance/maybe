@@ -1,15 +1,6 @@
 ---
 en:
   pages:
-    onboarding:
-      first_name: First name
-      last_name: Last name
-      currency: Currency
-      locale: Locale
-      household_name: Household name
-      title: Welcome to Maybe!
-      subtitle: Let's get your household set up.
-      submit: Save Preferences
     changelog:
       title: What's new
     dashboard:

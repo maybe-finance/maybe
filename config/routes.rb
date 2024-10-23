@@ -4,7 +4,6 @@ Rails.application.routes.draw do
   get "changelog", to: "pages#changelog"
   get "feedback", to: "pages#feedback"
   get "early-access", to: "pages#early_access"
-  get "onboarding", to: "pages#onboarding"
 
   resource :registration
   resources :sessions, only: %i[new create destroy]
@@ -12,6 +11,13 @@ Rails.application.routes.draw do
   resource :password
 
   resources :users, only: :update
+
+  resource :onboarding, only: :show do
+    collection do
+      get :profile
+      get :preferences
+    end
+  end
 
   namespace :settings do
     resource :profile, only: %i[show update destroy]

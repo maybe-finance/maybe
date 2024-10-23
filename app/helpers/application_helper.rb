@@ -1,6 +1,19 @@
 module ApplicationHelper
   include Pagy::Frontend
 
+  def date_format_options
+    [
+      [ "DD-MM-YYYY", "%d-%m-%Y" ],
+      [ "MM-DD-YYYY", "%m-%d-%Y" ],
+      [ "YYYY-MM-DD", "%Y-%m-%d" ],
+      [ "DD/MM/YYYY", "%d/%m/%Y" ],
+      [ "YYYY/MM/DD", "%Y/%m/%d" ],
+      [ "MM/DD/YYYY", "%m/%d/%Y" ],
+      [ "D/MM/YYYY", "%e/%m/%Y" ],
+      [ "YYYY.MM.DD", "%Y.%m.%d" ]
+    ]
+  end
+
   def title(page_title)
     content_for(:title) { page_title }
   end
