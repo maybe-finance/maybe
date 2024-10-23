@@ -1,0 +1,26 @@
+---
+pt-BR:
+  merchants:
+    create:
+      success: Novo estabelecimento criado com sucesso
+    destroy:
+      success: Estabelecimento excluído com sucesso
+    edit:
+      title: Editar estabelecimento
+    form:
+      name_placeholder: Nome do estabelecimento
+    index:
+      empty: Nenhum estabelecimento ainda
+      new: Novo estabelecimento
+      title: Estabelecimentos
+    merchant:
+      confirm_accept: Excluir estabelecimento
+      confirm_body: Tem certeza que deseja excluir este estabelecimento? A remoção deste
+        estabelecimento irá desvincular todas as transações associadas e pode afetar seus relatórios.
+      confirm_title: Excluir estabelecimento?
+      delete: Excluir estabelecimento
+      edit: Editar estabelecimento
+    new:
+      title: Novo estabelecimento
+    update:
+      success: Estabelecimento atualizado com sucesso
