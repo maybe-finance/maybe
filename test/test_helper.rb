@@ -7,8 +7,6 @@ end
 
 require_relative "../config/environment"
 
-ENV["SELF_HOSTED"] = "false"
-ENV["UPGRADES_ENABLED"] = "false"
 ENV["RAILS_ENV"] ||= "test"
 
 # Fixes Segfaults on M1 Macs when running tests in parallel (temporary workaround)

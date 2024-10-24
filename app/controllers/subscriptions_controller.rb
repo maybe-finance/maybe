@@ -1,16 +1,14 @@
 class SubscriptionsController < ApplicationController
   def new
-    client = Stripe::StripeClient.new(ENV["STRIPE_SECRET_KEY"])
-
     if Current.family.stripe_customer_id.blank?
-      customer = client.v1.customers.create(
+      customer = stripe_client.v1.customers.create(
         email: Current.family.primary_user.email,
         metadata: { family_id: Current.family.id }
       )
       Current.family.update(stripe_customer_id: customer.id)
     end
 
-    session = client.v1.checkout.sessions.create({
+    session = stripe_client.v1.checkout.sessions.create({
       customer: Current.family.stripe_customer_id,
       line_items: [ {
         price: ENV["STRIPE_PLAN_ID"],
@@ -18,7 +16,7 @@ class SubscriptionsController < ApplicationController
       } ],
       mode: "subscription",
       allow_promotion_codes: true,
-      success_url: settings_billing_url,
+      success_url: success_subscription_url + "?session_id={CHECKOUT_SESSION_ID}",
       cancel_url: settings_billing_url
     })
 
@@ -26,12 +24,24 @@ class SubscriptionsController < ApplicationController
   end
 
   def show
-    client = Stripe::StripeClient.new(ENV["STRIPE_SECRET_KEY"])
-
-    portal_session = client.v1.billing_portal.sessions.create(
+    portal_session = stripe_client.v1.billing_portal.sessions.create(
       customer: Current.family.stripe_customer_id,
       return_url: settings_billing_url
     )
+
     redirect_to portal_session.url, allow_other_host: true, status: :see_other
   end
+
+  def success
+    checkout_session = stripe_client.v1.checkout.sessions.retrieve(params[:session_id])
+    Current.session.update(subscribed_at: Time.at(checkout_session.created))
+    redirect_to root_path, notice: "You have successfully subscribed to Maybe+."
+  rescue Stripe::InvalidRequestError
+    redirect_to settings_billing_path, alert: "Something went wrong processing your subscription. Please contact us to get this fixed."
+  end
+
+  private
+    def stripe_client
+      @stripe_client ||= Stripe::StripeClient.new(ENV["STRIPE_SECRET_KEY"])
+    end
 end

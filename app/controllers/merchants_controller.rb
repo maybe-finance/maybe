@@ -12,8 +12,13 @@ class MerchantsController < ApplicationController
   end
 
   def create
-    Current.family.merchants.create!(merchant_params)
-    redirect_to merchants_path, notice: t(".success")
+    @merchant = Current.family.merchants.new(merchant_params)
+
+    if @merchant.save
+      redirect_to merchants_path, notice: t(".success")
+    else
+      redirect_to merchants_path, alert: t(".error", error: @merchant.errors.full_messages.to_sentence)
+    end
   end
 
   def edit

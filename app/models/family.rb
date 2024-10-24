@@ -132,7 +132,7 @@ class Family < ApplicationRecord
   end
 
   def subscribed?
-    stripe_subscription_status.present? && stripe_subscription_status == "active"
+    stripe_subscription_status == "active"
   end
 
   def primary_user

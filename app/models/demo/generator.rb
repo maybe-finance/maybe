@@ -71,7 +71,8 @@ class Demo::Generator
         first_name: "Demo",
         last_name: "User",
         role: "admin",
-        password: "password"
+        password: "password",
+        onboarded_at: Time.current
     end
 
     def create_tags!

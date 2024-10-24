@@ -14,6 +14,14 @@ class AccountImport < Import
         )
 
         account.save!
+
+        account.entries.create!(
+          amount: row.amount,
+          currency: row.currency,
+          date: Date.current,
+          name: "Imported account value",
+          entryable: Account::Valuation.new
+        )
       end
     end
   end

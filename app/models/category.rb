@@ -4,6 +4,7 @@ class Category < ApplicationRecord
   belongs_to :family
 
   validates :name, :color, :family, presence: true
+  validates :name, uniqueness: { scope: :family_id }
 
   before_update :clear_internal_category, if: :name_changed?
 
