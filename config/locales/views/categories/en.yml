@@ -5,12 +5,12 @@ en:
       delete: Delete category
       edit: Edit category
     create:
+      failure: 'Failed to create category: %{error}'
       success: New transaction category created successfully
-      failure: "Failed to create category: %{error}"
-    edit:
-      edit: Edit category
     destroy:
       success: Category deleted successfully
+    edit:
+      edit: Edit category
     form:
       placeholder: Category name
     index:
