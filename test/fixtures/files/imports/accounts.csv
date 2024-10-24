@@ -1,5 +1,5 @@
 type,name,amount,currency
 Checking,Main Checking Account,5000.00,USD
 Savings,Emergency Fund,10000.00,USD
-Credit Card,Rewards Credit Card,-1500.00,USD
+Credit Card,Rewards Credit Card,1500.00,USD
 Investment,Retirement Portfolio,75000.00,USD
