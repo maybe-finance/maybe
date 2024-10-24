@@ -3,6 +3,10 @@
     <%= lucide_icon "alert-triangle", class: "w-6 h-6 text-white mr-2" %>
     <span class="text-white font-semibold uppercase">Super Admin</span>
   </div>
+  <div>
+    <%= link_to "Jobs", good_job_url, class: "text-white underline hover:text-gray-100" %>
+  </div>
+
   <div class="flex items-center space-x-2 px-2 py-2 text-white">
     <% if Current.session.active_impersonator_session.present? %>
       <div class="flex items-center space-x-3 bg-gray-800 border border-gray-700 rounded-md pl-3">
