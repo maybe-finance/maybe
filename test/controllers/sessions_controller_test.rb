@@ -31,4 +31,15 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_session_path
     assert_equal "You have signed out successfully.", flash[:notice]
   end
+
+  test "super admins can access the jobs page" do
+    sign_in users(:maybe_support_staff)
+    get good_job_url
+    assert_redirected_to "http://www.example.com/good_job/jobs?locale=en"
+  end
+
+  test "non-super admins cannot access the jobs page" do
+    get good_job_url
+    assert_response :not_found
+  end
 end
