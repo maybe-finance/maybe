@@ -7,7 +7,12 @@
         <%= render "layouts/sidebar" %>
       <% end %>
     </div>
-    <main class="grow px-20 py-6 h-full overflow-y-auto">
+
+    <main class="grow px-20 py-6 h-full relative <%= require_upgrade? ? "overflow-hidden" : "overflow-y-auto" %>">
+      <% if require_upgrade? %>
+        <%= render "shared/subscribe_modal" %>
+      <% end %>
+
       <%= yield %>
     </main>
   </div>
