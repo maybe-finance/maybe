@@ -5,37 +5,109 @@ class Provider::Marketstack
     @api_key = api_key
   end
 
-  def fetch_tickers(exchange_mic:)
-    params = {}
-    params[:exchange] = exchange_mic if exchange_mic.present?
-
-    tickers = paginate("/v1/tickers", params) do |body|
-      body.dig("data").map do |ticker|
+  def fetch_security_prices(ticker:, start_date:, end_date:)
+    prices = paginate("#{base_url}/eod", {
+      symbols: ticker,
+      date_from: start_date.to_s,
+      date_to: end_date.to_s
+    }) do |body|
+      body.dig("data").map do |price|
         {
-          ticker: ticker.dig("symbol"),
-          name: ticker.dig("name"),
-          country_code: ticker.dig("country_code"),
-          stock_exchange: StockExchange.find_by(mic: ticker.dig("exchange_mic"))
+          date: price["date"],
+          price: price["close"]&.to_f,
+          currency: "USD"
         }
       end
     end
+
+    SecurityPriceResponse.new(
+      prices: prices,
+      success?: true,
+      raw_response: prices.to_json
+    )
+  rescue StandardError => error
+    SecurityPriceResponse.new(
+      success?: false,
+      error: error,
+      raw_response: error
+    )
+  end
+
+  def fetch_all_tickers
+    response = client.get("#{base_url}/tickers")
+
+    if response.success?
+      tickers = JSON.parse(response.body).dig("data").map do |ticker|
+        {
+          name: ticker["name"],
+          symbol: ticker["symbol"],
+          exchange: ticker.dig("stock_exchange", "mic"),
+          country: ticker.dig("stock_exchange", "country")
+        }
+      end
+
+      TickerResponse.new(
+        tickers: tickers,
+        success?: true,
+        raw_response: response
+      )
+    else
+      TickerResponse.new(
+        success?: false,
+        error: build_error(response),
+        raw_response: response
+      )
+    end
+  rescue StandardError => error
+    TickerResponse.new(
+      success?: false,
+      error: error,
+      raw_response: error
+    )
+  end
+
+  def fetch_exchange_tickers(exchange_mic:)
+    response = client.get("#{base_url}/exchanges/#{exchange_mic}/tickers")
+
+    if response.success?
+      tickers = JSON.parse(response.body).dig("data").map do |ticker|
+        {
+          name: ticker["name"],
+          symbol: ticker["symbol"],
+          exchange: exchange_mic,
+          country: ticker.dig("stock_exchange", "country")
+        }
+      end
+
+      TickerResponse.new(
+        tickers: tickers,
+        success?: true,
+        raw_response: response
+      )
+    else
+      TickerResponse.new(
+        success?: false,
+        error: build_error(response),
+        raw_response: response
+      )
+    end
+  rescue StandardError => error
+    TickerResponse.new(
+      success?: false,
+      error: error,
+      raw_response: error
+    )
   end
 
   private
 
     attr_reader :api_key
 
+    SecurityPriceResponse = Struct.new(:prices, :success?, :error, :raw_response, keyword_init: true)
+    TickerResponse = Struct.new(:tickers, :success?, :error, :raw_response, keyword_init: true)
+
     def base_url
       "https://api.marketstack.com/v1"
-    end
-
-    def fetch_page(url, offset, params = {})
-      client.get(url) do |req|
-        req.params["access_key"] = api_key
-        params.each { |k, v| req.params[k.to_s] = v.to_s }
-        req.params["offset"] = offset
-        req.params["limit"] = 10000
-      end
     end
 
     def client
@@ -52,26 +124,34 @@ class Provider::Marketstack
       ERROR
     end
 
+    def fetch_page(url, page, params = {})
+      client.get(url) do |req|
+        params.each { |k, v| req.params[k.to_s] = v.to_s }
+        req.params["offset"] = (page - 1) * 100 # Marketstack uses offset-based pagination
+        req.params["limit"] = 10000 # Maximum allowed by Marketstack
+      end
+    end
+
     def paginate(url, params = {})
       results = []
-      offset = 0
-      total = nil
+      page = 1
+      total_results = Float::INFINITY
 
-      loop do
-        response = fetch_page(url, offset, params)
+      while results.length < total_results
+        response = fetch_page(url, page, params)
 
         if response.success?
           body = JSON.parse(response.body)
           page_results = yield(body)
           results.concat(page_results)
 
-          total ||= body.dig("pagination", "total")
-          offset += body.dig("pagination", "limit")
-
-          break if offset >= total
+          total_results = body.dig("pagination", "total")
+          page += 1
         else
           raise build_error(response)
         end
+
+        break if results.length >= total_results
       end
 
       results
