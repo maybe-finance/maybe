@@ -5,11 +5,7 @@ class Security::Importer
   end
 
   def import
-    if @stock_exchange
-      securities = @provider.fetch_exchange_tickers(exchange_mic: @stock_exchange)&.tickers
-    else
-      securities = @provider.fetch_all_tickers&.tickers
-    end
+    securities = @provider.fetch_tickers(exchange_mic: @stock_exchange)&.tickers
 
     stock_exchanges = StockExchange.where(mic: securities.map { |s| s[:exchange] }).index_by(&:mic)
     existing_securities = Security.where(ticker: securities.map { |s| s[:symbol] }, stock_exchange_id: stock_exchanges.values.map(&:id)).pluck(:ticker, :stock_exchange_id).to_set

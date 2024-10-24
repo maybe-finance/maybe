@@ -33,38 +33,14 @@ class Provider::Marketstack
     )
   end
 
-  def fetch_all_tickers
-    tickers = paginate("#{base_url}/tickers") do |body|
+  def fetch_tickers(exchange_mic: nil)
+    url = exchange_mic ? "#{base_url}/tickers?exchange=#{exchange_mic}" : "#{base_url}/tickers"
+    tickers = paginate(url) do |body|
       body.dig("data").map do |ticker|
         {
           name: ticker["name"],
           symbol: ticker["symbol"],
-          exchange: ticker.dig("stock_exchange", "mic"),
-          country_code: ticker.dig("stock_exchange", "country_code")
-        }
-      end
-    end
-
-    TickerResponse.new(
-      tickers: tickers,
-      success?: true,
-      raw_response: tickers.to_json
-    )
-  rescue StandardError => error
-    TickerResponse.new(
-      success?: false,
-      error: error,
-      raw_response: error
-    )
-  end
-
-  def fetch_exchange_tickers(exchange_mic:)
-    tickers = paginate("#{base_url}/tickers?exchange=#{exchange_mic}") do |body|
-      body.dig("data").map do |ticker|
-        {
-          name: ticker["name"],
-          symbol: ticker["symbol"],
-          exchange: exchange_mic,
+          exchange: exchange_mic || ticker.dig("stock_exchange", "mic"),
           country_code: ticker.dig("stock_exchange", "country_code")
         }
       end
