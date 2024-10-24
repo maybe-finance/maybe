@@ -119,7 +119,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_24_142537) do
     t.boolean "is_active", default: true, null: false
     t.date "last_sync_date"
     t.uuid "institution_id"
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Loan'::character varying, 'CreditCard'::character varying, 'OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Loan'::character varying)::text, ('CreditCard'::character varying)::text, ('OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.uuid "import_id"
     t.string "mode"
     t.index ["accountable_id", "accountable_type"], name: "index_accounts_on_accountable_id_and_accountable_type"
@@ -478,6 +478,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_24_142537) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "country_code"
+    t.uuid "stock_exchange_id"
+    t.index ["country_code"], name: "index_securities_on_country_code"
+    t.index ["stock_exchange_id"], name: "index_securities_on_stock_exchange_id"
   end
 
   create_table "security_prices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -599,6 +603,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_24_142537) do
   add_foreign_key "imports", "families"
   add_foreign_key "institutions", "families"
   add_foreign_key "merchants", "families"
+  add_foreign_key "securities", "stock_exchanges"
   add_foreign_key "sessions", "impersonation_sessions", column: "active_impersonator_session_id"
   add_foreign_key "sessions", "users"
   add_foreign_key "taggings", "tags"
