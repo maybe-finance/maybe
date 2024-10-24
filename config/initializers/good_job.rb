@@ -10,4 +10,16 @@ Rails.application.configure do
       }
     }
   end
+
+  # Auth for jobs admin dashboard
+  ActiveSupport.on_load(:good_job_application_controller) do
+    before_action do
+      raise ActionController::RoutingError.new("Not Found") unless current_user&.super_admin?
+    end
+
+    def current_user
+      session = Session.find_by(id: cookies.signed[:session_token])
+      session&.user
+    end
+  end
 end
