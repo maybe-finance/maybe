@@ -25,12 +25,12 @@
 
         <% if @user.family.subscribed? || subscription_pending? %>
           <%= link_to subscription_path, class: "btn btn--secondary flex items-center gap-1" do %>
-            <span >Manage</span>
+            <span>Manage</span>
             <%= lucide_icon "external-link", class: "w-5 h-5 shrink-0 text-gray-500" %>
           <% end %>
         <% else %>
           <%= link_to new_subscription_path, class: "btn btn--secondary flex items-center gap-1" do %>
-            <span >Subscribe</span>
+            <span>Subscribe</span>
             <%= lucide_icon "external-link", class: "w-5 h-5 shrink-0 text-gray-500" %>
           <% end %>
         <% end %>
