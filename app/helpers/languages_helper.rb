@@ -138,24 +138,19 @@ module LanguagesHelper
     wo: "Wolof"
   }.freeze
 
-  # Locales that we don't have files for, but which are available in Rails
   EXCLUDED_LOCALES = [
+    # Test locales
     "en-BORK",
     "en-au-ocker",
+    # Duplicate locales
+    "fr-FR",
+    "de-DE",
+    "hi-IN",
+    "sv-SE",
     "ca-CAT",
-    "da-DK",
-    "de-AT",
-    "de-CH",
-    "ee",
-    "en-IND",
-    "en-KE",
-    "en-MS",
-    "en-NEP",
-    "en-NG",
-    "en-PAK",
-    "en-SG",
-    "en-TH",
-    "en-UG"
+    "en-US",
+    "fi-FI",
+    "en-IND"
   ].freeze
 
   COUNTRY_MAPPING = {
@@ -366,5 +361,6 @@ module LanguagesHelper
         label = LANGUAGE_MAPPING[locale.to_sym] || locale.to_s.humanize
         [ "#{label} (#{locale})", locale ]
       end
+      .sort_by { |label, locale| label }
   end
 end
