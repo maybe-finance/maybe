@@ -18,7 +18,7 @@ class SubscriptionsController < ApplicationController
       } ],
       mode: "subscription",
       allow_promotion_codes: true,
-      success_url: settings_billing_url,
+      success_url: settings_billing_url(subscription_in_process: true),
       cancel_url: settings_billing_url
     })
 

@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 
   private
     def require_upgrade?
-      !Current.family&.subscribed? && !self_hosted?
+      Current.family && !Current.family.subscribed? && !self_hosted? && request.path != settings_billing_path
     end
 
     def with_sidebar
