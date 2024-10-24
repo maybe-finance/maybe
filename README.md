@@ -49,7 +49,7 @@ After cloning the repo, the basic setup commands are:
 
 ```sh
 cd maybe
-cp .env.example .env
+cp .env.local.example .env.local
 bin/setup
 bin/dev
 

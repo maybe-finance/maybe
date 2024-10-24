@@ -1,7 +1,7 @@
 class TagsController < ApplicationController
   layout :with_sidebar
 
-  before_action :set_tag, only: %i[edit update]
+  before_action :set_tag, only: %i[edit update destroy]
 
   def index
     @tags = Current.family.tags.alphabetically
@@ -12,8 +12,13 @@ class TagsController < ApplicationController
   end
 
   def create
-    Current.family.tags.create!(tag_params)
-    redirect_to tags_path, notice: t(".created")
+    @tag = Current.family.tags.new(tag_params)
+
+    if @tag.save
+      redirect_to tags_path, notice: t(".created")
+    else
+      redirect_to tags_path, alert: t(".error", error: @tag.errors.full_messages.to_sentence)
+    end
   end
 
   def edit
@@ -22,6 +27,11 @@ class TagsController < ApplicationController
   def update
     @tag.update!(tag_params)
     redirect_to tags_path, notice: t(".updated")
+  end
+
+  def destroy
+    @tag.destroy!
+    redirect_to tags_path, notice: t(".deleted")
   end
 
   private

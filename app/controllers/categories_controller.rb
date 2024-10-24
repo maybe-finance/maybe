@@ -1,7 +1,7 @@
 class CategoriesController < ApplicationController
   layout :with_sidebar
 
-  before_action :set_category, only: %i[edit update]
+  before_action :set_category, only: %i[edit update destroy]
   before_action :set_transaction, only: :create
 
   def index
@@ -13,12 +13,14 @@ class CategoriesController < ApplicationController
   end
 
   def create
-    Category.transaction do
-      category = Current.family.categories.create!(category_params)
-      @transaction.update!(category_id: category.id) if @transaction
-    end
+    @category = Current.family.categories.new(category_params)
 
-    redirect_back_or_to transactions_path, notice: t(".success")
+    if @category.save
+      @transaction.update(category_id: @category.id) if @transaction
+      redirect_back_or_to transactions_path, notice: t(".success")
+    else
+      redirect_back_or_to transactions_path, alert: t(".failure", error: @category.errors.full_messages.to_sentence)
+    end
   end
 
   def edit
@@ -28,6 +30,12 @@ class CategoriesController < ApplicationController
     @category.update! category_params
 
     redirect_back_or_to transactions_path, notice: t(".success")
+  end
+
+  def destroy
+    @category.destroy
+
+    redirect_back_or_to categories_path, notice: t(".success")
   end
 
   private

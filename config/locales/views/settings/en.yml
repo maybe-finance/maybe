@@ -3,9 +3,7 @@ en:
   settings:
     billings:
       show:
-        manage_subscription_button: Manage subscription
         page_title: Billing
-        subscribe_button: Subscribe
         subscription_subtitle: Manage your subscription and billing details
         subscription_title: Manage subscription
     nav:

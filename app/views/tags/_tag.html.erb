@@ -12,11 +12,15 @@
       <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
         <%= contextual_menu_modal_action_item t(".edit"), edit_tag_path(tag) %>
 
-        <%= link_to new_tag_deletion_path(tag),
+        <% if tag.transactions.any? %>
+          <%= link_to new_tag_deletion_path(tag),
                     class: "block w-full py-2 px-3 space-x-2 text-red-600 hover:bg-red-50 flex items-center rounded-lg",
                     data: { turbo_frame: :modal } do %>
-          <%= lucide_icon "trash-2", class: "w-5 h-5" %>
-          <span><%= t(".delete") %></span>
+            <%= lucide_icon "trash-2", class: "w-5 h-5" %>
+            <span><%= t(".delete") %></span>
+          <% end %>
+        <% else %>
+          <%= contextual_menu_destructive_item t(".delete"), tag_path(tag), turbo_confirm: nil %>
         <% end %>
       </div>
     <% end %>

@@ -24,9 +24,7 @@
     </div>
   </header>
 
-  <% if !Current.family.subscribed? && !self_hosted? %>
-    <%= render "shared/subscribe_prompt" %>
-  <% elsif @accounts.empty? %>
+  <% if @accounts.empty? %>
     <%= render "shared/no_account_empty_state" %>
   <% else %>
     <section class="flex gap-4">

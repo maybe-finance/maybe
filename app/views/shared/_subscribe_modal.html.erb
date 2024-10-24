@@ -1,0 +1,25 @@
+<div data-controller="modal" data-modal-open-value="true" class="absolute inset-0 z-50 flex items-center justify-center bg-white/90" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <div class="w-[400px] rounded-xl relative overflow-hidden">
+    <div class="bg-white shadow-xl border border-gray-200 rounded-xl relative z-10">
+      <div class="rounded-xl" style="background-image: url('<%= asset_path("maybe-plus-background.png") %>'); background-size: cover; background-position: center;">
+        <div class="text-center rounded-xl" style="background-image: linear-gradient(to bottom, rgba(197,161,119,0.15) 0%, rgba(255,255,255,0.8) 30%, white 40%);">
+          <div class="p-4 rounded-xl">
+            <div class="flex justify-center">
+              <%= image_tag "maybe-plus-logo.png", class: "w-16" %>
+            </div>
+
+            <h2 class="font-medium text-gray-900 mb-2">Join Maybe+</h2>
+
+            <div class="text-gray-500 text-sm space-y-4 mb-5">
+              <p>Nobody likes paywalls, but we need feedback from users willing to pay for Maybe. </p>
+
+              <p>To continue using the app, please subscribe.  In this early beta testing phase, we require that you upgrade within 1 hour to claim your spot.</p>
+            </div>
+
+            <%= link_to "Upgrade to Maybe+", new_subscription_path, class: "btn btn--primary text-center w-full block" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
