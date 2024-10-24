@@ -26,7 +26,9 @@ Rails.application.routes.draw do
     resource :billing, only: :show
   end
 
-  resource :subscription, only: %i[new show]
+  resource :subscription, only: %i[new show] do
+    get :success, on: :collection
+  end
 
   resources :tags, except: :show do
     resources :deletions, only: %i[new create], module: :tag

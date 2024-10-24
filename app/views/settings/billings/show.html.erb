@@ -13,12 +13,9 @@
           </div>
 
           <div class="text-sm space-y-1">
-            <% if @user.family.subscribed? %>
+            <% if @user.family.subscribed? || subscription_pending? %>
               <p class="text-gray-900">You are currently subscribed to <span class="font-medium">Maybe+</span></p>
               <p class="text-gray-500">Manage your billing settings here.</p>
-            <% elsif params[:subscription_in_process] %>
-              <p class="text-gray-900">You subscription was <span class="font-medium inline-flex items-center gap-1">successful <%= lucide_icon "check-circle", class: "w-4 h-4 shrink-0 text-green-500" %></span> </p>
-              <p class="text-gray-500">Hang tight, we're setting a few things up and then you'll be able to access Maybe+.</p>
             <% else %>
               <p class="text-gray-900">You are currently <span class="font-medium">not subscribed</span></p>
               <p class="text-gray-500">Once you subscribe to Maybe+, you’ll see your billing settings here.</p>
@@ -26,12 +23,12 @@
           </div>
         </div>
 
-        <% if @user.family.subscribed? %>
+        <% if @user.family.subscribed? || subscription_pending? %>
           <%= link_to subscription_path, class: "btn btn--secondary flex items-center gap-1" do %>
             <span >Manage</span>
             <%= lucide_icon "external-link", class: "w-5 h-5 shrink-0 text-gray-500" %>
           <% end %>
-        <% elsif params[:subscription_in_process].nil? %>
+        <% else %>
           <%= link_to new_subscription_path, class: "btn btn--secondary flex items-center gap-1" do %>
             <span >Subscribe</span>
             <%= lucide_icon "external-link", class: "w-5 h-5 shrink-0 text-gray-500" %>
@@ -43,7 +40,6 @@
         <%= image_tag "stripe-logo.svg", class: "w-5 h-5 shrink-0" %>
         <p class="text-gray-500 text-sm">Managed via Stripe</p>
       </div>
-
     </div>
   <% end %>
 
