@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  mount GoodJob::Engine => "jobs"
-
   get "changelog", to: "pages#changelog"
   get "feedback", to: "pages#feedback"
   get "early-access", to: "pages#early_access"
