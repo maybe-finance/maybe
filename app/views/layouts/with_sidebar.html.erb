@@ -8,7 +8,7 @@
       <% end %>
     </div>
 
-    <main class="grow px-20 py-6 h-full relative <%= require_upgrade? ? "overflow-hidden" : "overflow-y-auto" %>">
+    <main class="grow px-20 py-6 h-full <%= require_upgrade? ? "relative overflow-hidden" : "overflow-y-auto" %>">
       <% if require_upgrade? %>
         <%= render "shared/subscribe_modal" %>
       <% end %>
