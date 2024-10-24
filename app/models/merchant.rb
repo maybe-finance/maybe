@@ -3,6 +3,7 @@ class Merchant < ApplicationRecord
   belongs_to :family
 
   validates :name, :color, :family, presence: true
+  validates :name, uniqueness: { scope: :family }
 
   scope :alphabetically, -> { order(:name) }
 

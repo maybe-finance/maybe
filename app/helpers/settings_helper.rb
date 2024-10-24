@@ -5,10 +5,10 @@ module SettingsHelper
     { name: I18n.t("settings.nav.self_hosting_label"), path: :settings_hosting_path, condition: :self_hosted? },
     { name: I18n.t("settings.nav.billing_label"), path: :settings_billing_path },
     { name: I18n.t("settings.nav.accounts_label"), path: :accounts_path },
+    { name: I18n.t("settings.nav.imports_label"), path: :imports_path },
     { name: I18n.t("settings.nav.tags_label"), path: :tags_path },
     { name: I18n.t("settings.nav.categories_label"), path: :categories_path },
     { name: I18n.t("settings.nav.merchants_label"), path: :merchants_path },
-    { name: I18n.t("settings.nav.imports_label"), path: :imports_path },
     { name: I18n.t("settings.nav.whats_new_label"), path: :changelog_path },
     { name: I18n.t("settings.nav.feedback_label"), path: :feedback_path }
   ]

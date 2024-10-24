@@ -1,5 +1,5 @@
 <div data-controller="color-avatar">
-  <%= styled_form_with model: tag, class: "space-y-4", data: { turbo: false } do |f| %>
+  <%= styled_form_with model: tag, class: "space-y-4", data: { turbo_frame: :_top } do |f| %>
     <section class="space-y-4">
       <div class="w-fit m-auto">
         <%= render partial: "shared/color_avatar", locals: { name: tag.name, color: tag.color } %>
@@ -13,7 +13,7 @@
         <% end %>
       </div>
       <div class="relative flex items-center border border-gray-200 rounded-lg">
-        <%= f.text_field :name, placeholder: t(".placeholder"), class: "text-sm font-normal placeholder:text-gray-500 h-10 relative pl-3 w-full border-none rounded-lg", required: true, data: { color_avatar_target: "name" } %>
+        <%= f.text_field :name, placeholder: t(".placeholder"), autofocus: true, required: true, data: { color_avatar_target: "name" } %>
       </div>
     </section>
 

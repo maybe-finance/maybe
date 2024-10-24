@@ -28,7 +28,7 @@ Rails.application.routes.draw do
 
   resource :subscription, only: %i[new show]
 
-  resources :tags, except: %i[show destroy] do
+  resources :tags, except: :show do
     resources :deletions, only: %i[new create], module: :tag
   end
 

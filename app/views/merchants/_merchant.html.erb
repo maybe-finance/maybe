@@ -15,11 +15,11 @@
         <%= contextual_menu_destructive_item t(".delete"),
                                              merchant_path(merchant),
                                              turbo_frame: "_top",
-                                             turbo_confirm: {
+                                             turbo_confirm: merchant.transactions.any? ? {
                                                title: t(".confirm_title"),
                                                body: t(".confirm_body"),
                                                accept: t(".confirm_accept")
-                                             } %>
+                                             } : nil %>
       </div>
     <% end %>
   </div>

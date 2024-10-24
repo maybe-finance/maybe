@@ -3,6 +3,9 @@ en:
   tags:
     create:
       created: Tag created
+      error: "Error creating tag: %{error}"
+    destroy:
+      deleted: Tag deleted
     edit:
       edit: Edit tag
     form:
