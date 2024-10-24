@@ -6,7 +6,7 @@ class TransactionsTest < ApplicationSystemTestCase
 
     Account::Entry.delete_all # clean slate
 
-    create_transaction("one", 12.days.ago.to_date, 100)
+    @uncategorized_transaction = create_transaction("one", 12.days.ago.to_date, 100)
     create_transaction("two", 10.days.ago.to_date, 100)
     create_transaction("three", 9.days.ago.to_date, 100)
     create_transaction("four", 8.days.ago.to_date, 100)
@@ -59,6 +59,30 @@ class TransactionsTest < ApplicationSystemTestCase
       assert_text @transaction.account.name
       assert_text @transaction.account_transaction.category.name
     end
+  end
+
+  test "can filter uncategorized transactions" do
+    find("#transaction-filters-button").click
+
+    within "#transaction-filters-menu" do
+      click_button "Category"
+      check("Uncategorized")
+      click_button "Apply"
+    end
+
+    assert_selector "#" + dom_id(@uncategorized_transaction), count: 1
+    assert_no_selector("#" + dom_id(@transaction))
+
+    find("#transaction-filters-button").click
+
+    within "#transaction-filters-menu" do
+      click_button "Category"
+      check(@transaction.account_transaction.category.name)
+      click_button "Apply"
+    end
+
+    assert_selector "#" + dom_id(@transaction), count: 1
+    assert_selector "#" + dom_id(@uncategorized_transaction), count: 1
   end
 
   test "all filters work and empty state shows if no match" do
