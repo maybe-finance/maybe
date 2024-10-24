@@ -34,30 +34,22 @@ class Provider::Marketstack
   end
 
   def fetch_all_tickers
-    response = client.get("#{base_url}/tickers")
-
-    if response.success?
-      tickers = JSON.parse(response.body).dig("data").map do |ticker|
+    tickers = paginate("#{base_url}/tickers") do |body|
+      body.dig("data").map do |ticker|
         {
           name: ticker["name"],
           symbol: ticker["symbol"],
           exchange: ticker.dig("stock_exchange", "mic"),
-          country: ticker.dig("stock_exchange", "country")
+          country_code: ticker.dig("stock_exchange", "country_code")
         }
       end
-
-      TickerResponse.new(
-        tickers: tickers,
-        success?: true,
-        raw_response: response
-      )
-    else
-      TickerResponse.new(
-        success?: false,
-        error: build_error(response),
-        raw_response: response
-      )
     end
+
+    TickerResponse.new(
+      tickers: tickers,
+      success?: true,
+      raw_response: tickers.to_json
+    )
   rescue StandardError => error
     TickerResponse.new(
       success?: false,
@@ -67,30 +59,22 @@ class Provider::Marketstack
   end
 
   def fetch_exchange_tickers(exchange_mic:)
-    response = client.get("#{base_url}/exchanges/#{exchange_mic}/tickers")
-
-    if response.success?
-      tickers = JSON.parse(response.body).dig("data").map do |ticker|
+    tickers = paginate("#{base_url}/tickers?exchange=#{exchange_mic}") do |body|
+      body.dig("data").map do |ticker|
         {
           name: ticker["name"],
           symbol: ticker["symbol"],
           exchange: exchange_mic,
-          country: ticker.dig("stock_exchange", "country")
+          country_code: ticker.dig("stock_exchange", "country_code")
         }
       end
-
-      TickerResponse.new(
-        tickers: tickers,
-        success?: true,
-        raw_response: response
-      )
-    else
-      TickerResponse.new(
-        success?: false,
-        error: build_error(response),
-        raw_response: response
-      )
     end
+
+    TickerResponse.new(
+      tickers: tickers,
+      success?: true,
+      raw_response: tickers.to_json
+    )
   rescue StandardError => error
     TickerResponse.new(
       success?: false,
