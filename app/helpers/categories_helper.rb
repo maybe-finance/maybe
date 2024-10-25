@@ -6,6 +6,6 @@ module CategoriesHelper
   end
 
   def family_categories
-    [null_category].concat(Current.family.categories.alphabetically)
+    [ null_category ].concat(Current.family.categories.alphabetically)
   end
 end

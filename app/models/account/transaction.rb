@@ -14,7 +14,7 @@ class Account::Transaction < ApplicationRecord
     def search(params)
       query = all
       if params[:categories].present?
-        if params[:categories].exclude?('Uncategorized')
+        if params[:categories].exclude?("Uncategorized")
           query = query
                     .joins(:category)
                     .where(categories: { name: params[:categories] })
