@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_24_142537) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_25_174650) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -479,9 +479,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_24_142537) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "country_code"
-    t.uuid "stock_exchange_id"
+    t.string "exchange_mic"
+    t.string "exchange_acronym"
     t.index ["country_code"], name: "index_securities_on_country_code"
-    t.index ["stock_exchange_id"], name: "index_securities_on_stock_exchange_id"
+    t.index ["ticker", "exchange_mic"], name: "index_securities_on_ticker_and_exchange_mic", unique: true
   end
 
   create_table "security_prices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -603,7 +604,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_24_142537) do
   add_foreign_key "imports", "families"
   add_foreign_key "institutions", "families"
   add_foreign_key "merchants", "families"
-  add_foreign_key "securities", "stock_exchanges"
   add_foreign_key "sessions", "impersonation_sessions", column: "active_impersonator_session_id"
   add_foreign_key "sessions", "users"
   add_foreign_key "taggings", "tags"
