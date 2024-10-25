@@ -14,7 +14,7 @@ Rails.application.configure do
   # Auth for jobs admin dashboard
   ActiveSupport.on_load(:good_job_application_controller) do
     before_action do
-      raise ActionController::RoutingError.new("Not Found") unless current_user&.super_admin?
+      raise ActionController::RoutingError.new("Not Found") unless current_user&.super_admin? || Rails.env.development?
     end
 
     def current_user

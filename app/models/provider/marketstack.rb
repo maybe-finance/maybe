@@ -40,7 +40,8 @@ class Provider::Marketstack
         {
           name: ticker["name"],
           symbol: ticker["symbol"],
-          exchange: exchange_mic || ticker.dig("stock_exchange", "mic"),
+          exchange_mic: exchange_mic || ticker.dig("stock_exchange", "mic"),
+          exchange_acronym: ticker.dig("stock_exchange", "acronym"),
           country_code: ticker.dig("stock_exchange", "country_code")
         }
       end
