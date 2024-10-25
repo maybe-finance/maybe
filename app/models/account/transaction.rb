@@ -13,7 +13,19 @@ class Account::Transaction < ApplicationRecord
   class << self
     def search(params)
       query = all
-      query = query.joins(:category).where(categories: { name: params[:categories] }) if params[:categories].present?
+      if params[:categories].present?
+        if params[:categories].exclude?("Uncategorized")
+          query = query
+                    .joins(:category)
+                    .where(categories: { name: params[:categories] })
+        else
+          query = query
+                    .left_joins(:category)
+                    .where(categories: { name: params[:categories] })
+                    .or(query.where(category_id: nil))
+        end
+      end
+
       query = query.joins(:merchant).where(merchants: { name: params[:merchants] }) if params[:merchants].present?
 
       if params[:tags].present?
