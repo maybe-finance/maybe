@@ -7,21 +7,24 @@ class Security::Importer
   def import
     securities = @provider.fetch_tickers(exchange_mic: @stock_exchange)&.tickers
 
-    stock_exchanges = StockExchange.where(mic: securities.map { |s| s[:exchange] }).index_by(&:mic)
-    existing_securities = Security.where(ticker: securities.map { |s| s[:symbol] }, stock_exchange_id: stock_exchanges.values.map(&:id)).pluck(:ticker, :stock_exchange_id).to_set
+    # Deduplicate securities based on ticker and exchange_mic
+    securities_to_create = securities
+      .map do |security|
+        {
+          name: security[:name],
+          ticker: security[:symbol],
+          country_code: security[:country_code],
+          exchange_mic: security[:exchange_mic],
+          exchange_acronym: security[:exchange_acronym]
+        }
+      end
+      .compact
+      .uniq { |security| [ security[:ticker], security[:exchange_mic] ] }
 
-    securities_to_create = securities.map do |security|
-      stock_exchange_id = stock_exchanges[security[:exchange]]&.id
-      next if existing_securities.include?([ security[:symbol], stock_exchange_id ])
-
-      {
-        name: security[:name],
-        ticker: security[:symbol],
-        stock_exchange_id: stock_exchange_id,
-        country_code: security[:country_code]
-      }
-    end.compact
-
-    Security.insert_all(securities_to_create) unless securities_to_create.empty?
+    Security.upsert_all(
+      securities_to_create,
+      unique_by: [ :ticker, :exchange_mic ],
+      update_only: [ :name, :country_code, :exchange_acronym ]
+    ) unless securities_to_create.empty?
   end
 end

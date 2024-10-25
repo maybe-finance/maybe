@@ -3,7 +3,8 @@ class Security < ApplicationRecord
 
   has_many :trades, dependent: :nullify, class_name: "Account::Trade"
 
-  validates :ticker, presence: true, uniqueness: { case_sensitive: false }
+  validates :ticker, presence: true
+  validates :ticker, uniqueness: { scope: :exchange_mic, case_sensitive: false }
 
   def current_price
     @current_price ||= Security::Price.find_price(ticker:, date: Date.current)
