@@ -1,0 +1,1 @@
+<%= async_combobox_options @securities.map { |stock| ["#{stock.ticker} #{stock.name}", stock.ticker] }, next_page: @pagy.next  %>

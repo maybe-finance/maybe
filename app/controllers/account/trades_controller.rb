@@ -33,6 +33,11 @@ class Account::TradesController < ApplicationController
     end
   end
 
+  def securities
+    @security_query = params[:q]
+    @pagy, @securities = pagy(Security.order(:name).search(@security_query), limit: 20)
+  end
+
   private
 
     def set_account

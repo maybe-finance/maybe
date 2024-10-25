@@ -7,7 +7,9 @@
     <div class="space-y-2">
       <%= form.select :type, options_for_select([%w[Buy buy], %w[Sell sell], %w[Deposit transfer_in], %w[Withdrawal transfer_out], %w[Interest interest]], "buy"), { label: t(".type") }, { data: { "trade-form-target": "typeInput" } } %>
       <div data-trade-form-target="tickerInput">
-        <%= form.text_field :ticker, value: nil, label: t(".holding"), placeholder: t(".ticker_placeholder") %>
+        <div class="form-field combobox">
+          <%= form.combobox :ticker, securities_account_trades_path(entry.account), label: t(".holding"), placeholder: t(".ticker_placeholder") %>
+        </div>
       </div>
 
       <%= form.date_field :date, label: true %>
