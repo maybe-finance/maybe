@@ -10,7 +10,7 @@
     <%= render "transactions/searches/search" %>
 
     <% if @transaction_entries.present? %>
-      <div id="entry-selection-bar"  data-bulk-select-target="selectionBar" class="flex justify-center hidden">
+      <div id="entry-selection-bar" data-bulk-select-target="selectionBar" class="flex justify-center hidden">
         <%= render "account/transactions/selection_bar" %>
       </div>
       <div class="grow overflow-y-auto">
