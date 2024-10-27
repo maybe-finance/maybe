@@ -131,7 +131,7 @@
   }
 
   .hw-combobox__listbox {
-    @apply absolute top-[160%] right-0 w-full border border-black/2 bg-white rounded shadow-xs p-1 z-30;
+    @apply absolute top-[160%] right-0 w-full border border-black/20 bg-white rounded shadow-xs p-1 z-30;
   }
 
   --hw-handle-width: 20px;
