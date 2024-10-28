@@ -71,7 +71,7 @@ class Family < ApplicationRecord
   end
 
   def snapshot_transactions
-    candidate_entries = entries.account_transactions.without_transfers
+    candidate_entries = entries.account_transactions.without_transfers.without_income_transactions_in_liability_accounts
     rolling_totals = Account::Entry.daily_rolling_totals(candidate_entries, self.currency, period: Period.last_30_days)
 
     spending = []
