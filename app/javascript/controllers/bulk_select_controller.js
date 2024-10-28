@@ -126,7 +126,7 @@ export default class extends Controller {
   _updateSelectionBar() {
     const count = this.selectedIdsValue.length;
     this.selectionBarTextTarget.innerText = `${count} ${this._pluralizedResourceName()} selected`;
-    this.selectionBarTarget.hidden = count === 0;
+    this.selectionBarTarget.classList.toggle("hidden", count === 0);
     this.selectionBarTarget.querySelector("input[type='checkbox']").checked =
       count > 0;
   }
