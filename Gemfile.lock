@@ -188,6 +188,10 @@ GEM
       actioncable (>= 6.0.0)
       listen (>= 3.0.0)
       railties (>= 6.0.0)
+    hotwire_combobox (0.3.2)
+      rails (>= 7.0.7.2)
+      stimulus-rails (>= 1.2)
+      turbo-rails (>= 1.2)
     i18n (1.14.6)
       concurrent-ruby (~> 1.0)
     i18n-tasks (1.0.14)
@@ -485,6 +489,7 @@ DEPENDENCIES
   good_job
   holidays
   hotwire-livereload
+  hotwire_combobox
   i18n-tasks
   image_processing (>= 1.2)
   importmap-rails

@@ -9,6 +9,8 @@
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
 
+    <%= combobox_style_tag %>
+
     <%= javascript_importmap_tags %>
     <%= hotwire_livereload_tags if Rails.env.development? %>
     <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
