@@ -1,6 +1,3 @@
-<% if @securities.present? %>
-<%= async_combobox_options @securities, 
-    render_in: { partial: "account/trades/tickers" },
-    next_page: @pagy.next
-  %>
-<% end %>
+<%= async_combobox_options @securities,
+      render_in: { partial: "account/trades/tickers" },
+      next_page: @pagy.next %>

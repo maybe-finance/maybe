@@ -131,9 +131,18 @@
   }
 
   .hw-combobox__listbox {
-    @apply absolute top-[160%] right-0 w-full border border-black/20 bg-white rounded shadow-xs p-1 z-30;
+    @apply absolute top-[160%] right-0 w-full bg-transparent rounded z-30;
   }
 
+  .hw_combobox__pagination__wrapper {
+    @apply h-px;
+
+    &:only-child {
+      @apply bg-transparent;
+    }
+  }
+
+  --hw-border-color: rgba(0, 0, 0, 0.2);
   --hw-handle-width: 20px;
   --hw-handle-height: 20px;
   --hw-handle-offset-right: 0px;
