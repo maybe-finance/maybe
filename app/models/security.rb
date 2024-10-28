@@ -13,21 +13,14 @@ class Security < ApplicationRecord
     sanitized_query = query.split.map do |term|
       cleaned_term = term.gsub(/[^a-zA-Z0-9]/, " ").strip
       next if cleaned_term.blank?
-
-      if cleaned_term.upcase == cleaned_term
-        # For tickers, use exact match
-        cleaned_term
-      else
-        # For company names, use exact word match without any partial matching
-        cleaned_term
-      end
-    end.compact.join(" | ")  # Use OR between terms to match any word
+      cleaned_term
+    end.compact.join(" | ")
 
     return none if sanitized_query.blank?
 
     sanitized_query = ActiveRecord::Base.connection.quote(sanitized_query)
 
-    where("search_vector @@ to_tsquery('simple', #{sanitized_query})")
+    where("search_vector @@ to_tsquery('simple', #{sanitized_query}) AND exchange_mic IS NOT NULL")
       .select("securities.*, ts_rank_cd(search_vector, to_tsquery('simple', #{sanitized_query})) AS rank")
       .reorder("rank DESC")
   }
