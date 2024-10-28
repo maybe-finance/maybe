@@ -1,16 +1,6 @@
-<%= async_combobox_options @securities.map { |stock| 
-  [
-    tag.div(class: "flex items-center") do
-      safe_join([
-        image_tag("https://logo.synthfinance.com/ticker/#{stock.ticker}", class: "rounded-full h-8 w-8 inline-block mr-2"),
-        tag.div(class: "flex flex-col") do
-          safe_join([
-            tag.span(stock.name, class: "text-sm font-medium"),
-            tag.span("#{stock.ticker} (#{stock.exchange_acronym})", class: "text-xs text-gray-500")
-          ])
-        end
-      ])
-    end,
-    stock.ticker
-  ]
-}, next_page: @pagy.next %>
+<% if @securities.present? %>
+<%= async_combobox_options @securities, 
+    render_in: { partial: "account/trades/tickers" },
+    next_page: @pagy.next
+  %>
+<% end %>

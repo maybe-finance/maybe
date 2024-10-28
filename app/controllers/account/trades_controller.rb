@@ -34,6 +34,7 @@ class Account::TradesController < ApplicationController
   end
 
   def securities
+    return unless params[:q].present?
     @security_query = params[:q]
     @pagy, @securities = pagy(Security.order(:name).search(@security_query), limit: 20)
   end

@@ -21,7 +21,7 @@ class Security < ApplicationRecord
   end
 
   def to_combobox_display
-    "#{ticker} - #{name}"
+    "#{ticker} - #{name} (#{exchange_acronym})"
   end
 
 
