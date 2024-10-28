@@ -241,7 +241,7 @@ GEM
     mini_magick (4.13.2)
     mini_mime (1.1.5)
     minitest (5.25.1)
-    mocha (2.4.5)
+    mocha (2.5.0)
       ruby2_keywords (>= 0.0.5)
     msgpack (1.7.2)
     multipart-post (2.4.1)
