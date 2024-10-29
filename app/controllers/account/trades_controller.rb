@@ -39,8 +39,6 @@ class Account::TradesController < ApplicationController
 
     synth_client = Provider::Synth.new(ENV["SYNTH_API_KEY"])
     @securities = synth_client.search_securities(query:, dataset: "limited", country_code: Current.family.country).securities
-
-    Rails.logger.info("SECURITIES: #{@securities.inspect}")
   end
 
   private
