@@ -3,10 +3,6 @@ class Security::Price < ApplicationRecord
 
   belongs_to :security
 
-  before_save :upcase_ticker
-
-  validates :ticker, presence: true, uniqueness: { scope: :date, case_sensitive: false }
-
   class << self
     def find_price(security:, date:, cache: true)
       result = find_by(security:, date:)
@@ -22,8 +18,7 @@ class Security::Price < ApplicationRecord
 
       if missing_dates.any?
         prices += fetch_prices_from_provider(
-          ticker: security.ticker,
-          exchange_mic: security.exchange_mic,
+          security: security,
           start_date: missing_dates.first,
           end_date: missing_dates.last,
           cache: cache
@@ -33,9 +28,4 @@ class Security::Price < ApplicationRecord
       prices
     end
   end
-
-  private
-    def upcase_ticker
-      self.ticker = ticker.upcase
-    end
 end

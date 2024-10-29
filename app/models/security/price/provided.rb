@@ -11,7 +11,7 @@ module Security::Price::Provided
 
         response = security_prices_provider.fetch_security_prices \
           ticker: security.ticker,
-          exchange_mic: security.exchange_mic,
+          mic_code: security.exchange_mic,
           start_date: date,
           end_date: date
 
@@ -35,7 +35,7 @@ module Security::Price::Provided
 
         response = security_prices_provider.fetch_security_prices \
           ticker: security.ticker,
-          exchange_mic: security.exchange_mic,
+          mic_code: security.exchange_mic,
           start_date: start_date,
           end_date: end_date
 

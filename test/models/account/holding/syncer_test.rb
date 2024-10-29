@@ -14,6 +14,7 @@ class Account::Holding::SyncerTest < ActiveSupport::TestCase
   end
 
   test "can buy and sell securities" do
+    # First create securities with their prices
     security1 = create_security("AMZN", prices: [
       { date: 2.days.ago.to_date, price: 214 },
       { date: 1.day.ago.to_date, price: 215 },
@@ -25,19 +26,18 @@ class Account::Holding::SyncerTest < ActiveSupport::TestCase
       { date: Date.current, price: 124 }
     ])
 
+    # Then create trades after prices exist
     create_trade(security1, account: @account, qty: 10, date: 2.days.ago.to_date) # buy 10 shares of AMZN
-
     create_trade(security1, account: @account, qty: 2, date: 1.day.ago.to_date) # buy 2 shares of AMZN
     create_trade(security2, account: @account, qty: 20, date: 1.day.ago.to_date) # buy 20 shares of NVDA
-
     create_trade(security1, account: @account, qty: -10, date: Date.current) # sell 10 shares of AMZN
 
     expected = [
-      { ticker: "AMZN", qty: 10, price: 214, amount: 10 * 214, date: 2.days.ago.to_date },
-      { ticker: "AMZN", qty: 12, price: 215, amount: 12 * 215, date: 1.day.ago.to_date },
-      { ticker: "AMZN", qty: 2, price: 216, amount: 2 * 216, date: Date.current },
-      { ticker: "NVDA", qty: 20, price: 122, amount: 20 * 122, date: 1.day.ago.to_date },
-      { ticker: "NVDA", qty: 20, price: 124, amount: 20 * 124, date: Date.current }
+      { security: security1, qty: 10, price: 214, amount: 10 * 214, date: 2.days.ago.to_date },
+      { security: security1, qty: 12, price: 215, amount: 12 * 215, date: 1.day.ago.to_date },
+      { security: security1, qty: 2, price: 216, amount: 2 * 216, date: Date.current },
+      { security: security2, qty: 20, price: 122, amount: 20 * 122, date: 1.day.ago.to_date },
+      { security: security2, qty: 20, price: 124, amount: 20 * 124, date: Date.current }
     ]
 
     run_sync_for(@account)
@@ -55,7 +55,7 @@ class Account::Holding::SyncerTest < ActiveSupport::TestCase
     create_trade(amzn, account: @account, qty: 10, date: Date.current, price: 215)
 
     expected = [
-      { ticker: "AMZN", qty: 10, price: 215, amount: 10 * 215, date: Date.current }
+      { security: amzn, qty: 10, price: 215, amount: 10 * 215, date: Date.current }
     ]
 
     run_sync_for(@account)
@@ -72,16 +72,16 @@ class Account::Holding::SyncerTest < ActiveSupport::TestCase
     # 1 day ago — finds daily price, uses it
     # Today — no daily price, no entry, so price and amount are `nil`
     expected = [
-      { ticker: "AMZN", qty: 10, price: 210, amount: 10 * 210, date: 2.days.ago.to_date },
-      { ticker: "AMZN", qty: 10, price: 215, amount: 10 * 215, date: 1.day.ago.to_date },
-      { ticker: "AMZN", qty: 10, price: nil, amount: nil, date: Date.current }
+      { security: amzn, qty: 10, price: 210, amount: 10 * 210, date: 2.days.ago.to_date },
+      { security: amzn, qty: 10, price: 215, amount: 10 * 215, date: 1.day.ago.to_date },
+      { security: amzn, qty: 10, price: nil, amount: nil, date: Date.current }
     ]
 
     fetched_prices = [ Security::Price.new(ticker: "AMZN", date: 1.day.ago.to_date, price: 215) ]
 
     Gapfiller.any_instance.expects(:run).returns(fetched_prices)
     Security::Price.expects(:find_prices)
-                   .with(start_date: 2.days.ago.to_date, end_date: Date.current, ticker: "AMZN")
+                   .with(security: amzn, start_date: 2.days.ago.to_date, end_date: Date.current)
                    .once
                    .returns(fetched_prices)
 
@@ -105,13 +105,13 @@ class Account::Holding::SyncerTest < ActiveSupport::TestCase
       { date: monday, price: 220 }
     ])
 
-    create_trade(tm, account: @account, qty: 10, date: friday)
+    create_trade(tm, account: @account, qty: 10, date: friday, price: 210)
 
     expected = [
-      { ticker: "TM", qty: 10, price: 210, amount: 10 * 210, date: friday },
-      { ticker: "TM", qty: 10, price: 210, amount: 10 * 210, date: saturday },
-      { ticker: "TM", qty: 10, price: 210, amount: 10 * 210, date: sunday },
-      { ticker: "TM", qty: 10, price: 220, amount: 10 * 220, date: monday }
+      { security: tm, qty: 10, price: 210, amount: 10 * 210, date: friday },
+      { security: tm, qty: 10, price: 210, amount: 10 * 210, date: saturday },
+      { security: tm, qty: 10, price: 210, amount: 10 * 210, date: sunday },
+      { security: tm, qty: 10, price: 220, amount: 10 * 220, date: monday }
     ]
 
     run_sync_for(@account)
@@ -124,12 +124,15 @@ class Account::Holding::SyncerTest < ActiveSupport::TestCase
     def assert_holdings(expected_holdings)
       holdings = @account.holdings.includes(:security).to_a
       expected_holdings.each do |expected_holding|
-        actual_holding = holdings.find { |holding| holding.security.ticker == expected_holding[:ticker] && holding.date == expected_holding[:date] }
+        actual_holding = holdings.find { |holding|
+          holding.security == expected_holding[:security] &&
+          holding.date == expected_holding[:date]
+        }
         date = expected_holding[:date]
         expected_price = expected_holding[:price]
         expected_qty = expected_holding[:qty]
         expected_amount = expected_holding[:amount]
-        ticker = expected_holding[:ticker]
+        ticker = expected_holding[:security].ticker
 
         assert actual_holding, "expected #{ticker} holding on date: #{date}"
         assert_equal expected_holding[:qty], actual_holding.qty, "expected #{expected_qty} qty for holding #{ticker} on date: #{date}"

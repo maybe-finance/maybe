@@ -58,7 +58,7 @@ class Account::HoldingTest < ActiveSupport::TestCase
     end
 
     def create_holding(security, date, qty)
-      price = Security::Price.find_by(date: date, ticker: security.ticker).price
+      price = Security::Price.find_by(date: date, security: security).price
 
       @account.holdings.create! \
         date: date,
