@@ -176,12 +176,12 @@ class Demo::Generator
 
     def load_securities!
       # Create an unknown security to simulate edge cases
-      Security.create! ticker: "UNKNOWN", name: "Unknown Demo Stock"
+      Security.create! ticker: "UNKNOWN", name: "Unknown Demo Stock", exchange_mic: "UNKNOWN"
 
       securities = [
-        { ticker: "AAPL", name: "Apple Inc.", reference_price: 210 },
-        { ticker: "TM", name: "Toyota Motor Corporation", reference_price: 202 },
-        { ticker: "MSFT", name: "Microsoft Corporation", reference_price: 455 }
+        { ticker: "AAPL", exchange_mic: "NASDAQ", name: "Apple Inc.", reference_price: 210 },
+        { ticker: "TM", exchange_mic: "NYSE", name: "Toyota Motor Corporation", reference_price: 202 },
+        { ticker: "MSFT", exchange_mic: "NASDAQ", name: "Microsoft Corporation", reference_price: 455 }
       ]
 
       securities.each do |security_attributes|
@@ -193,7 +193,7 @@ class Demo::Generator
           low_price = reference - 20
           high_price = reference + 20
           Security::Price.create! \
-            ticker: security.ticker,
+            security: security,
             date: date,
             price: Faker::Number.positive(from: low_price, to: high_price)
         end
