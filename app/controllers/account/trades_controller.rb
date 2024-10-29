@@ -34,7 +34,13 @@ class Account::TradesController < ApplicationController
   end
 
   def securities
-    @pagy, @securities = pagy(Security.order(:name).search(params[:q]), limit: 20)
+    query = params[:q]
+    return render json: [] if query.blank? || query.length < 2
+
+    synth_client = Provider::Synth.new(ENV["SYNTH_API_KEY"])
+    @securities = synth_client.search_securities(query:, dataset: "limited", country_code: Current.family.country).securities
+
+    Rails.logger.info("SECURITIES: #{@securities.inspect}")
   end
 
   private

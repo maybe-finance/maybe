@@ -1,7 +1,1 @@
-<div class="flex items-center">
-  <%= image_tag("https://logo.synthfinance.com/ticker/#{tickers&.ticker}", class: "rounded-full h-8 w-8 inline-block mr-2") %>
-  <div class="flex flex-col">
-    <span class="text-sm font-medium"><%= tickers&.name.presence || tickers&.ticker %></span>
-    <span class="text-xs text-gray-500"><%= "#{tickers&.ticker} (#{tickers&.exchange_acronym})" %></span>
-  </div>
-</div>
+<%= tickers.inspect %>
