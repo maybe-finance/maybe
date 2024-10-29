@@ -35,7 +35,7 @@ class Account::TradesController < ApplicationController
 
   def securities
     query = params[:q]
-    return render json: [] if query.blank? || query.length < 2
+    return render json: [] if query.blank? || query.length < 2 || query.length > 100
 
     synth_client = Provider::Synth.new(ENV["SYNTH_API_KEY"])
     @securities = synth_client.search_securities(query:, dataset: "limited", country_code: Current.family.country).securities
