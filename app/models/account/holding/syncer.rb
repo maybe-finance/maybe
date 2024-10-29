@@ -76,8 +76,6 @@ class Account::Holding::Syncer
 
         price = get_cached_price(ticker, date) || trade_price
 
-        account.observe_missing_price(ticker:, date:) unless price
-
         account.holdings.build \
           date: date,
           security_id: holding[:security_id],

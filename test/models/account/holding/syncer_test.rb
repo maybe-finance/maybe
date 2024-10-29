@@ -85,8 +85,6 @@ class Account::Holding::SyncerTest < ActiveSupport::TestCase
                    .once
                    .returns(fetched_prices)
 
-    @account.expects(:observe_missing_price).with(ticker: "AMZN", date: Date.current).once
-
     run_sync_for(@account)
 
     assert_holdings(expected)
