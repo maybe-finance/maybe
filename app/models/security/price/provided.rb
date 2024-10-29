@@ -10,6 +10,8 @@ module Security::Price::Provided
         return nil unless security_prices_provider.present?
 
         response = security_prices_provider.fetch_security_prices \
+          ticker: security.ticker,
+          exchange_mic: security.exchange_mic,
           start_date: date,
           end_date: date
 
@@ -32,6 +34,8 @@ module Security::Price::Provided
         return [] unless security
 
         response = security_prices_provider.fetch_security_prices \
+          ticker: security.ticker,
+          exchange_mic: security.exchange_mic,
           start_date: start_date,
           end_date: end_date
 
