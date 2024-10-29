@@ -2,6 +2,7 @@ class Security < ApplicationRecord
   before_save :upcase_ticker
 
   has_many :trades, dependent: :nullify, class_name: "Account::Trade"
+  has_many :prices, dependent: :destroy, class_name: "Security::Price"
 
   validates :ticker, presence: true
   validates :ticker, uniqueness: { scope: :exchange_mic, case_sensitive: false }

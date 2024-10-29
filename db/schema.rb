@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_25_182612) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_29_125406) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -494,6 +494,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_182612) do
     t.string "currency", default: "USD"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "security_id"
+    t.index ["security_id"], name: "index_security_prices_on_security_id"
   end
 
   create_table "sessions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -606,6 +608,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_182612) do
   add_foreign_key "imports", "families"
   add_foreign_key "institutions", "families"
   add_foreign_key "merchants", "families"
+  add_foreign_key "security_prices", "securities"
   add_foreign_key "sessions", "impersonation_sessions", column: "active_impersonator_session_id"
   add_foreign_key "sessions", "users"
   add_foreign_key "taggings", "tags"
