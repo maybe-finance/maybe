@@ -31,6 +31,9 @@
               url: account_transaction_path(account, entry),
               class: "space-y-2",
               data: { controller: "auto-submit-form" } do |f| %>
+
+          <%= hidden_field_tag :partial_options_selectable, params[:selectable], name: 'partial_options[selectable]' %>
+
           <%= f.text_field :name,
                 label: t(".name_label"),
                 "data-auto-submit-form-target": "auto" %>

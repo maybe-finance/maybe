@@ -16,7 +16,9 @@ class Account::TransactionsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to account_entry_path(@account, @entry), notice: t(".success") }
-      format.turbo_stream { render turbo_stream: turbo_stream.replace(@entry) }
+      format.turbo_stream {
+        render turbo_stream: turbo_stream.replace(@entry, partial: @entry.to_partial_path, locals: { entry: @entry, **partial_options })
+      }
     end
   end
 
@@ -53,5 +55,15 @@ class Account::TransactionsController < ApplicationController
                 permitted_params[:amount] = amount_value
               end
             end
+    end
+
+    def partial_options
+      params
+        .require(:partial_options)
+        .permit(:selectable)
+        .to_h
+        .each_with_object({}) do |(k, v), acc|
+          acc[k.to_sym] = v
+        end
     end
 end

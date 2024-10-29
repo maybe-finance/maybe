@@ -1,6 +1,8 @@
 <%# locals: (entry:, selectable: true, editable: true, short: false, show_tags: false, **opts) %>
 <% transaction, account = entry.account_transaction, entry.account %>
 
+<% selectable = ActiveModel::Type::Boolean.new.cast(selectable) %>
+
 <div class="grid grid-cols-12 items-center text-gray-900 text-sm font-medium p-4">
   <% name_col_span = unconfirmed_transfer?(entry) ? "col-span-10" : short ? "col-span-6" : "col-span-4" %>
   <div class="pr-10 flex items-center gap-4 <%= name_col_span %>">
@@ -21,7 +23,7 @@
             <%= content_tag :p, entry.name %>
           <% else %>
             <%= link_to entry_name(entry),
-                        account_entry_path(account, entry),
+                        account_entry_path(account, entry, selectable:),
                         data: { turbo_frame: "drawer", turbo_prefetch: false },
                         class: "hover:underline hover:text-gray-800" %>
           <% end %>
