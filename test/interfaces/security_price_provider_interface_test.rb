@@ -10,7 +10,12 @@ module SecurityPriceProviderInterfaceTest
 
   test "security price provider response contract" do
     VCR.use_cassette "synth/security_prices" do
-      response = @subject.fetch_security_prices ticker: "AAPL", start_date: Date.iso8601("2024-01-01"), end_date: Date.iso8601("2024-08-01")
+      response = @subject.fetch_security_prices(
+        ticker: "AAPL",
+        mic_code: "XNAS",
+        start_date: Date.iso8601("2024-01-01"),
+        end_date: Date.iso8601("2024-08-01")
+      )
 
       assert_respond_to response, :prices
       assert_respond_to response, :success?

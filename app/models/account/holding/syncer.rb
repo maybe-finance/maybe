@@ -38,23 +38,31 @@ class Account::Holding::Syncer
 
     def security_prices
       @security_prices ||= begin
-                             prices = {}
-                             ticker_start_dates = {}
+        prices = {}
+        ticker_securities = {}
 
-                             sync_entries.each do |entry|
-                               unless ticker_start_dates[entry.account_trade.security.ticker]
-                                 ticker_start_dates[entry.account_trade.security.ticker] = entry.date
-                               end
-                             end
+        sync_entries.each do |entry|
+          security = entry.account_trade.security
+          unless ticker_securities[security.ticker]
+            ticker_securities[security.ticker] = {
+              security: security,
+              start_date: entry.date
+            }
+          end
+        end
 
-                             ticker_start_dates.each do |ticker, date|
-                               fetched_prices = Security::Price.find_prices(ticker: ticker, start_date: date, end_date: Date.current)
-                               gapfilled_prices = Gapfiller.new(fetched_prices, start_date: date, end_date: Date.current, cache: false).run
-                               prices[ticker] = gapfilled_prices
-                             end
+        ticker_securities.each do |ticker, data|
+          fetched_prices = Security::Price.find_prices(
+            security: data[:security],
+            start_date: data[:start_date],
+            end_date: Date.current
+          )
+          gapfilled_prices = Gapfiller.new(fetched_prices, start_date: data[:start_date], end_date: Date.current, cache: false).run
+          prices[ticker] = gapfilled_prices
+        end
 
-                             prices
-                           end
+        prices
+      end
     end
 
     def build_holdings_for_date(date)

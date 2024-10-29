@@ -29,7 +29,7 @@ module Account::EntriesTestHelper
   end
 
   def create_trade(security, account:, qty:, date:, price: nil)
-    trade_price = price || Security::Price.find_by!(ticker: security.ticker, date: date).price
+    trade_price = price || Security::Price.find_by!(security: security, date: date).price
 
     trade = Account::Trade.new \
       qty: qty,
