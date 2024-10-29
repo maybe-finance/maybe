@@ -32,7 +32,7 @@ class Account::TradeBuilder < Account::EntryBuilder
 
     def security
       exchange_mic = ticker.match(/\((.*?)\)/)&.captures&.first
-      ticker_symbol = ticker.gsub(/\s*\(.*?\)\s*/, '')
+      ticker_symbol = ticker.gsub(/\s*\(.*?\)\s*/, "")
 
       Security.find_or_create_by(ticker: ticker_symbol, exchange_mic: exchange_mic)
     end
