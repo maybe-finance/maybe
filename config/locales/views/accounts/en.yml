@@ -149,7 +149,7 @@ en:
       edit: Edit
       import: Import transactions
     new:
-      connected_entry: Securely link account with Plaid (coming soon)
+      connected_entry: Securely link account with Plaid 
       csv_entry: Import accounts CSV
       manual_entry: Enter account manually
       title: Add an account

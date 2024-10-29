@@ -9,6 +9,13 @@
         <button hidden data-controller="hotkey" data-hotkey="k,K,ArrowUp,ArrowLeft" data-action="list-keyboard-navigation#focusPrevious">Previous</button>
         <button hidden data-controller="hotkey" data-hotkey="j,J,ArrowDown,ArrowRight" data-action="list-keyboard-navigation#focusNext">Next</button>
 
+        <button data-controller="plaid" data-action="plaid#open modal#close" data-plaid-link-token-value="<%= @link_token %>" class="flex items-center gap-4 w-full text-center focus:outline-none focus:bg-gray-50 border border-transparent focus:border focus:border-gray-200 px-2 hover:bg-gray-50 rounded-lg p-2">
+          <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-alpha-black-50 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.02)]">
+            <%= lucide_icon("link-2", class: "text-gray-500 w-5 h-5") %>
+          </span>
+          <%= t(".connected_entry") %>
+        </button>
+
         <%= render "entry_method", text: t(".manual_entry"), icon: "keyboard" %>
 
         <%= link_to new_import_path(import: { type: "AccountImport" }), class: "flex items-center gap-4 w-full text-center focus:outline-none focus:bg-gray-50 border border-transparent focus:border focus:border-gray-200 px-2 hover:bg-gray-50 rounded-lg p-2" do %>
@@ -18,7 +25,6 @@
           <%= t(".csv_entry") %>
         <% end %>
 
-        <%= render "entry_method", text: t(".connected_entry"), icon: "link-2", disabled: true %>
       </div>
       <div class="border-t border-alpha-black-25 p-4 text-gray-500 text-sm flex justify-between">
         <div class="flex space-x-5">

@@ -13,6 +13,7 @@ class Family < ApplicationRecord
   has_many :categories, dependent: :destroy
   has_many :merchants, dependent: :destroy
   has_many :issues, through: :accounts
+  has_many :plaid_items, dependent: :destroy
 
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }
   validates :date_format, inclusion: { in: DATE_FORMATS }

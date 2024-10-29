@@ -2,6 +2,9 @@ class WebhooksController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [ :stripe ]
   skip_authentication
 
+  def plaid
+  end
+
   def stripe
     webhook_body = request.body.read
     sig_header = request.env["HTTP_STRIPE_SIGNATURE"]

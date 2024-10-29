@@ -130,8 +130,12 @@ Rails.application.routes.draw do
     end
   end
 
-  # Stripe webhook endpoint
-  post "webhooks/stripe", to: "webhooks#stripe"
+  resources :plaid_items, only: :create
+
+  namespace :webhooks do
+    post "plaid", to: "webhooks#plaid"
+    post "stripe", to: "webhooks#stripe"
+  end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

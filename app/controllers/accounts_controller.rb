@@ -23,6 +23,7 @@ class AccountsController < ApplicationController
   end
 
   def new
+    @link_token = plaid.link_token_create(plaid_link_token_request).link_token
     @account = Account.new(currency: Current.family.currency)
     @account.accountable = Accountable.from_type(params[:type])&.new if params[:type].present?
     @account.accountable.address = Address.new if @account.accountable.is_a?(Property)
@@ -73,6 +74,16 @@ class AccountsController < ApplicationController
   end
 
   private
+    def plaid_link_token_request
+      Plaid::LinkTokenCreateRequest.new({
+        user: { client_user_id: Current.user.family.id },
+        client_name: "Maybe",
+        products: %w[transactions],
+        country_codes: [ Current.user.family.country ],
+        language: "en",
+        webhook: webhooks_plaid_url
+      })
+    end
 
     def set_account
       @account = Current.family.accounts.find(params[:id])

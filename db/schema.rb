@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_25_174650) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_28_210231) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -465,6 +465,25 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_174650) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "plaid_accounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "plaid_item_id", null: false
+    t.uuid "account_id", null: false
+    t.string "plaid_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_plaid_accounts_on_account_id"
+    t.index ["plaid_item_id"], name: "index_plaid_accounts_on_plaid_item_id"
+  end
+
+  create_table "plaid_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "family_id", null: false
+    t.string "plaid_access_token_digest"
+    t.string "plaid_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["family_id"], name: "index_plaid_items_on_family_id"
+  end
+
   create_table "properties", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -481,7 +500,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_174650) do
     t.string "country_code"
     t.string "exchange_mic"
     t.string "exchange_acronym"
+    t.virtual "search_vector", type: :tsvector, as: "(setweight(to_tsvector('simple'::regconfig, (COALESCE(ticker, ''::character varying))::text), 'B'::\"char\") || to_tsvector('simple'::regconfig, (COALESCE(name, ''::character varying))::text))", stored: true
     t.index ["country_code"], name: "index_securities_on_country_code"
+    t.index ["search_vector"], name: "index_securities_on_search_vector", using: :gin
     t.index ["ticker", "exchange_mic"], name: "index_securities_on_ticker_and_exchange_mic", unique: true
   end
 
@@ -604,6 +625,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_25_174650) do
   add_foreign_key "imports", "families"
   add_foreign_key "institutions", "families"
   add_foreign_key "merchants", "families"
+  add_foreign_key "plaid_accounts", "accounts"
+  add_foreign_key "plaid_accounts", "plaid_items"
+  add_foreign_key "plaid_items", "families"
   add_foreign_key "sessions", "impersonation_sessions", column: "active_impersonator_session_id"
   add_foreign_key "sessions", "users"
   add_foreign_key "taggings", "tags"
