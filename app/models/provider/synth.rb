@@ -42,9 +42,10 @@ class Provider::Synth
     )
   end
 
-  def fetch_security_prices(ticker:, start_date:, end_date:)
+  def fetch_security_prices(ticker:, mic_code:, start_date:, end_date:)
     prices = paginate(
       "#{base_url}/tickers/#{ticker}/open-close",
+      mic_code: mic_code,
       start_date: start_date,
       end_date: end_date
     ) do |body|
