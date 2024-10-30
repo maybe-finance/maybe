@@ -28,6 +28,8 @@ class Account::Entry < ApplicationRecord
       .where("er.rate IS NOT NULL OR account_entries.currency = ?", currency)
   }
 
+  before_save :assign_transfer_name, if: -> { marked_as_transfer && transfer.present? }
+
   def sync_account_later
     if destroyed?
       sync_start_date = previous_entry&.date
@@ -222,5 +224,9 @@ class Account::Entry < ApplicationRecord
         current: amount_money,
         previous: previous_entry&.amount_money,
         favorable_direction: account.favorable_direction
+    end
+
+    def assign_transfer_name
+      self.name = transfer.name
     end
 end
