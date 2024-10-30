@@ -136,7 +136,8 @@ class Provider::Synth
         symbol: security.dig("symbol"),
         name: security.dig("name"),
         logo_url: security.dig("logo_url"),
-        exchange_acronym: security.dig("exchange", "acronym")
+        exchange_acronym: security.dig("exchange", "acronym"),
+        exchange_mic: security.dig("exchange", "mic")
       }
     end
 

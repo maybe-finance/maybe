@@ -1,19 +1,17 @@
 class Security::SynthComboboxOption
   include ActiveModel::Model
+  include Providable
 
-  attr_accessor :symbol, :name, :logo_url, :exchange_acronym
+  attr_accessor :symbol, :name, :logo_url, :exchange_acronym, :exchange_mic
 
   class << self
     def find_in_synth(query)
-      Provider::Synth.new(ENV["SYNTH_API_KEY"])
-        .search_securities(query:, dataset: "limited", country_code: Current.family.country)
-        .securities
-        .map { |attrs| new(**attrs) }
+      security_prices_provider.search_securities(query:, dataset: "limited", country_code: Current.family.country).securities.map { |attrs| new(**attrs) }
     end
   end
 
   def id
-    "#{symbol} (#{exchange_acronym})" # submitted by combobox as value
+    "#{symbol} (#{exchange_mic})" # submitted by combobox as value
   end
 
   def to_combobox_display

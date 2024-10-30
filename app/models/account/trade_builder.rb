@@ -31,12 +31,10 @@ class Account::TradeBuilder < Account::EntryBuilder
     end
 
     def security
-      exchange_acronym = ticker.match(/\((.*?)\)/)&.captures&.first
+      exchange_mic = ticker.match(/\((.*?)\)/)&.captures&.first
       ticker_symbol = ticker.gsub(/\s*\(.*?\)\s*/, "")
 
-      exchange = StockExchange.find_by(acronym: exchange_acronym)
-
-      Security.find_or_create_by(ticker: ticker_symbol, exchange_mic: exchange.mic)
+      Security.find_or_create_by(ticker: ticker_symbol, exchange_mic: exchange_mic)
     end
 
     def amount
