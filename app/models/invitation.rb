@@ -10,6 +10,8 @@ class Invitation < ApplicationRecord
   before_create :set_expiration
 
   scope :pending, -> { where(accepted_at: nil).where('expires_at > ?', Time.current) }
+  scope :accepted, -> { where.not(accepted_at: nil) }
+  scope :most_recent_for_email, ->(email) { where(email: email).order(accepted_at: :desc).first }
 
   private
 

@@ -1,19 +1,15 @@
 class OnboardingsController < ApplicationController
   layout "application"
-
   before_action :set_user
-
-  def show
-  end
-
-  def profile
-  end
-
-  def preferences
-  end
+  before_action :load_invitation
 
   private
-    def set_user
-      @user = Current.user
-    end
+
+  def set_user
+    @user = Current.user
+  end
+
+  def load_invitation
+    @invitation = Invitation.accepted.most_recent_for_email(Current.user.email)
+  end
 end

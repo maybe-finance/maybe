@@ -35,15 +35,16 @@ class RegistrationsController < ApplicationController
   private
 
     def load_invitation
-      @invitation = Invitation.pending.find_by!(token: params.dig(:user, :invitation) || params[:invitation])
+      token = params[:invitation] || params.dig(:user, :invitation)
+      @invitation = Invitation.pending.find_by!(token: token)
     end
 
     def invitation_token?
-      params.dig(:user, :invitation).present?
+      params[:invitation].present? || params.dig(:user, :invitation).present?
     end
 
     def set_user
-      @user = User.new user_params.except(:invite_code)
+      @user = User.new user_params.except(:invite_code, :invitation)
     end
 
     def user_params
