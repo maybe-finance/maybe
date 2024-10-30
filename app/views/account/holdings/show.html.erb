@@ -6,7 +6,7 @@
         <%= tag.p @holding.ticker, class: "text-sm text-gray-500" %>
       </div>
 
-      <%= render "shared/circle_logo", name: @holding.name %>
+      <%= image_tag "https://logo.synthfinance.com/ticker/#{@holding.ticker}", class: "w-9 h-9 rounded-full" %>
     </header>
 
     <details class="group space-y-2" open>
