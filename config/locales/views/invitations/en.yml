@@ -1,0 +1,18 @@
+en:
+  invitations:
+    new:
+      title: "Invite Member"
+      subtitle: "Invite someone to join your household"
+      email_label: "Email"
+      email_placeholder: "Enter their email address"
+      role_label: "Role"
+      role_member: "Member"
+      role_admin: "Admin"
+      submit: "Send Invitation"
+      cancel: "Cancel"
+    create:
+      success: "Invitation sent successfully"
+      failure: "Could not send invitation"
+    accept:
+      success: "Welcome! You've successfully joined the account"
+      failure: "There was a problem accepting the invitation"

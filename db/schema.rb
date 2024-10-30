@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_30_121302) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_30_222235) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -119,7 +119,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_30_121302) do
     t.boolean "is_active", default: true, null: false
     t.date "last_sync_date"
     t.uuid "institution_id"
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Loan'::character varying, 'CreditCard'::character varying, 'OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Loan'::character varying)::text, ('CreditCard'::character varying)::text, ('OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.uuid "import_id"
     t.string "mode"
     t.index ["accountable_id", "accountable_type"], name: "index_accounts_on_accountable_id_and_accountable_type"
@@ -418,6 +418,22 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_30_121302) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "invitations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "email"
+    t.string "role"
+    t.string "token"
+    t.uuid "family_id", null: false
+    t.uuid "inviter_id", null: false
+    t.datetime "accepted_at"
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_invitations_on_email"
+    t.index ["family_id"], name: "index_invitations_on_family_id"
+    t.index ["inviter_id"], name: "index_invitations_on_inviter_id"
+    t.index ["token"], name: "index_invitations_on_token", unique: true
+  end
+
   create_table "invite_codes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "token", null: false
     t.datetime "created_at", null: false
@@ -605,6 +621,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_30_121302) do
   add_foreign_key "import_rows", "imports"
   add_foreign_key "imports", "families"
   add_foreign_key "institutions", "families"
+  add_foreign_key "invitations", "families"
+  add_foreign_key "invitations", "users", column: "inviter_id"
   add_foreign_key "merchants", "families"
   add_foreign_key "security_prices", "securities"
   add_foreign_key "sessions", "impersonation_sessions", column: "active_impersonator_session_id"

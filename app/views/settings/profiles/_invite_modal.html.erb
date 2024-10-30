@@ -1,0 +1,25 @@
+<%= modal_form_wrapper title: t(".title"), subtitle: t(".subtitle") do %>
+  <%= styled_form_with model: Invitation.new, class: "space-y-4 relative" do |form| %>
+    <%= form.email_field :email, 
+      required: true,
+      autofocus: true,
+      autocomplete: "off",
+      placeholder: t(".email_placeholder"),
+      label: t(".email_label") %>
+
+    <%= form.select :role,
+      options_for_select([
+        [t(".role_member"), "member"],
+        [t(".role_admin"), "admin"]
+      ]),
+      {},
+      { label: t(".role_label") } %>
+
+    <div class="flex justify-end gap-2">
+      <button type="button" class="text-gray-500" data-action="click->modal#close">
+        <%= t(".cancel") %>
+      </button>
+      <%= form.submit t(".submit"), class: "bg-gray-900 text-white rounded-lg px-4 py-2" %>
+    </div>
+  <% end %>
+<% end %>

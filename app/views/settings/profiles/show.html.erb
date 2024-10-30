@@ -43,6 +43,11 @@
               <p class="uppercase text-gray-500 font-medium text-xs"><%= Current.user.role %></p>
             </div>
           </div>
+          <%= link_to new_invitation_path,
+              class: "bg-gray-100 text-gray-500 rounded-lg px-4 py-2 w-full text-center",
+              data: { turbo_frame: :modal } do %>
+            <%= t(".invite_member") %>
+          <% end %>
         </div>
       </div>
     <% end %>
