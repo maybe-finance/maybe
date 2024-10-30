@@ -17,7 +17,6 @@ class Account::Entry < ApplicationRecord
   scope :chronological, -> { order(:date, :created_at) }
   scope :reverse_chronological, -> { order(date: :desc, created_at: :desc) }
   scope :without_transfers, -> { where(marked_as_transfer: false) }
-  scope :without_income_transactions_in_liability_accounts, -> { joins(:account).where(amount: 0..).where.not(accounts: { classification: Account.classifications[:liability] }).distinct }
   scope :with_converted_amount, ->(currency) {
     # Join with exchange rates to convert the amount to the given currency
     # If no rate is available, exclude the transaction from the results
