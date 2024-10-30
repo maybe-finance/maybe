@@ -36,7 +36,7 @@ class Security::PriceTest < ActiveSupport::TestCase
             .returns(
               OpenStruct.new(
                 success?: true,
-                prices: [ { date: tomorrow, price: expected_price } ]
+                prices: [ { date: tomorrow, price: expected_price, currency: "USD" } ]
               )
             )
 
@@ -89,7 +89,7 @@ class Security::PriceTest < ActiveSupport::TestCase
                   mic_code: security.exchange_mic,
                   start_date: 2.days.ago.to_date,
                   end_date: 2.days.ago.to_date)
-             .returns(OpenStruct.new(success?: true, prices: [ { date: 2.days.ago.to_date, price: missing_price } ]))
+             .returns(OpenStruct.new(success?: true, prices: [ { date: 2.days.ago.to_date, price: missing_price, currency: "USD" } ]))
              .once
 
     price1 = security_prices(:one) # AAPL today

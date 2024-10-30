@@ -3,6 +3,8 @@ class Security::Price < ApplicationRecord
 
   belongs_to :security
 
+  validates :price, :currency, presence: true
+
   class << self
     def find_price(security:, date:, cache: true)
       result = find_by(security:, date:)
