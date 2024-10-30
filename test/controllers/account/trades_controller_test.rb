@@ -97,7 +97,7 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
         account_entry: {
           type: "buy",
           date: Date.current,
-          ticker: "NVDA",
+          ticker: "NVDA (NASDAQ)",
           qty: 10,
           price: 10
         }
@@ -118,7 +118,7 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
       post account_trades_url(@entry.account), params: {
         account_entry: {
           type: "sell",
-          ticker: "AAPL",
+          ticker: "AAPL (NYSE)",
           date: Date.current,
           currency: "USD",
           qty: 10,
