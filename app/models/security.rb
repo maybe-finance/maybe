@@ -1,4 +1,5 @@
 class Security < ApplicationRecord
+  include Providable
   before_save :upcase_ticker
 
   has_many :trades, dependent: :nullify, class_name: "Account::Trade"
@@ -14,7 +15,7 @@ class Security < ApplicationRecord
   end
 
   def to_combobox_display
-    "#{ticker} - #{name} (#{exchange_acronym})"
+    "#{ticker} (#{exchange_acronym})"
   end
 
 

@@ -1,7 +1,2 @@
-<%= async_combobox_options @securities.map { |security| 
-      { 
-        display: security,
-        value: security[:symbol]
-      }
-    },
-    render_in: { partial: "account/trades/tickers" } %>
+<%= async_combobox_options @securities,
+    render_in: { partial: "account/trades/security" } %>
