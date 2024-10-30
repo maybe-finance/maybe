@@ -6,7 +6,14 @@ class Security::SynthComboboxOption
 
   class << self
     def find_in_synth(query)
-      security_prices_provider.search_securities(query:, dataset: "limited", country_code: Current.family.country).securities.map { |attrs| new(**attrs) }
+      country = Current.family.country
+      country = "#{country},US" unless country == "US"
+
+      security_prices_provider.search_securities(
+        query:,
+        dataset: "limited",
+        country_code: country
+      ).securities.map { |attrs| new(**attrs) }
     end
   end
 
