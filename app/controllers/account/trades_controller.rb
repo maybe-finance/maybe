@@ -37,17 +37,7 @@ class Account::TradesController < ApplicationController
     query = params[:q]
     return render json: [] if query.blank? || query.length < 2 || query.length > 100
 
-    @securities = Security.security_prices_provider.search_securities(query:, dataset: "limited", country_code: Current.family.country).securities.map do |security|
-      new_security = Security.new(
-        ticker: security[:symbol],
-        name: security[:name],
-        exchange_acronym: security[:exchange_acronym]
-      )
-
-      new_security.define_singleton_method(:logo_url) { security[:logo_url] }
-
-      new_security
-    end
+    @securities = Security::SynthComboboxOption.find_in_synth(query)
   end
 
   private
