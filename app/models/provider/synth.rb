@@ -171,7 +171,7 @@ class Provider::Synth
     UsageResponse = Struct.new :used, :limit, :utilization, :plan, :success?, :error, :raw_response, keyword_init: true
     SearchSecuritiesResponse = Struct.new :securities, :success?, :error, :raw_response, keyword_init: true
     SecurityInfoResponse = Struct.new :info, :success?, :error, :raw_response, keyword_init: true
-    
+
     def base_url
       "https://api.synthfinance.com"
     end
