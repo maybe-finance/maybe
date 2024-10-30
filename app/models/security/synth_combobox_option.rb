@@ -11,7 +11,7 @@ class Security::SynthComboboxOption
   end
 
   def id
-    "#{symbol} (#{exchange_mic})" # submitted by combobox as value
+    "#{symbol}|#{exchange_mic}" # submitted by combobox as value
   end
 
   def to_combobox_display
