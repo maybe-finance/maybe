@@ -34,7 +34,10 @@ class Account::TradesController < ApplicationController
   end
 
   def securities
-    @pagy, @securities = pagy(Security.order(:name).search(params[:q]), limit: 20)
+    query = params[:q]
+    return render json: [] if query.blank? || query.length < 2 || query.length > 100
+
+    @securities = Security::SynthComboboxOption.find_in_synth(query)
   end
 
   private

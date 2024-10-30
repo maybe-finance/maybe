@@ -122,6 +122,31 @@ class Provider::Synth
       raw_response: error
   end
 
+  def search_securities(query:, dataset: "limited", country_code:)
+    response = client.get("#{base_url}/tickers/search") do |req|
+      req.params["name"] = query
+      req.params["dataset"] = dataset
+      req.params["country_code"] = country_code
+    end
+
+    parsed = JSON.parse(response.body)
+
+    securities = parsed.dig("data").map do |security|
+      {
+        symbol: security.dig("symbol"),
+        name: security.dig("name"),
+        logo_url: security.dig("logo_url"),
+        exchange_acronym: security.dig("exchange", "acronym"),
+        exchange_mic: security.dig("exchange", "mic_code")
+      }
+    end
+
+    SearchSecuritiesResponse.new \
+      securities: securities,
+      success?: true,
+      raw_response: response
+  end
+
   private
 
     attr_reader :api_key
@@ -130,6 +155,7 @@ class Provider::Synth
     SecurityPriceResponse = Struct.new :prices, :success?, :error, :raw_response, keyword_init: true
     ExchangeRatesResponse = Struct.new :rates, :success?, :error, :raw_response, keyword_init: true
     UsageResponse = Struct.new :used, :limit, :utilization, :plan, :success?, :error, :raw_response, keyword_init: true
+    SearchSecuritiesResponse = Struct.new :securities, :success?, :error, :raw_response, keyword_init: true
 
     def base_url
       "https://api.synthfinance.com"

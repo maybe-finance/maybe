@@ -9,6 +9,16 @@ class TradesTest < ApplicationSystemTestCase
     @account = accounts(:investment)
 
     visit_account_trades
+
+    Security::SynthComboboxOption.stubs(:find_in_synth).returns([
+      Security::SynthComboboxOption.new(
+        symbol: "AAPL",
+        name: "Apple Inc.",
+        logo_url: "https://logo.synthfinance.com/ticker/AAPL",
+        exchange_acronym: "NASDAQ",
+        exchange_mic: "XNAS"
+      )
+    ])
   end
 
   test "can create buy transaction" do
