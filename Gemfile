@@ -21,6 +21,7 @@ gem "lucide-rails", github: "maybe-finance/lucide-rails"
 # Hotwire
 gem "stimulus-rails"
 gem "turbo-rails"
+gem "hotwire_combobox"
 
 # Background Jobs
 gem "good_job"

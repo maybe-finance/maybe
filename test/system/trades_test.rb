@@ -16,7 +16,8 @@ class TradesTest < ApplicationSystemTestCase
 
     open_new_trade_modal
 
-    fill_in "Ticker symbol", with: "NVDA"
+    fill_in "Ticker symbol", with: "AAPL"
+    select_combobox_option("Apple")
     fill_in "Date", with: Date.current
     fill_in "Quantity", with: shares_qty
     fill_in "account_entry[price]", with: 214.23
@@ -27,7 +28,7 @@ class TradesTest < ApplicationSystemTestCase
 
     within_trades do
       assert_text "Purchase 10 shares of AAPL"
-      assert_text "Buy #{shares_qty} shares of NVDA"
+      assert_text "Buy #{shares_qty} shares of AAPL"
     end
   end
 
@@ -38,6 +39,7 @@ class TradesTest < ApplicationSystemTestCase
 
     select "Sell", from: "Type"
     fill_in "Ticker symbol", with: aapl.ticker
+    select_combobox_option(aapl.security.name)
     fill_in "Date", with: Date.current
     fill_in "Quantity", with: aapl.qty
     fill_in "account_entry[price]", with: 215.33
@@ -63,5 +65,11 @@ class TradesTest < ApplicationSystemTestCase
 
     def visit_account_trades
       visit account_url(@account, tab: "transactions")
+    end
+
+    def select_combobox_option(text)
+      within "#account_entry_ticker-hw-listbox" do
+        find("li", text: text).click
+      end
     end
 end

@@ -1,7 +1,9 @@
 aapl:
   ticker: AAPL
   name: Apple
+  exchange_mic: XNAS
 
 msft:
   ticker: MSFT
   name: Microsoft
+  exchange_mic: XNAS

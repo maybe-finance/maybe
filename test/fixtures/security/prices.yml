@@ -1,11 +1,11 @@
 one:
-  ticker: AAPL
+  security: aapl
   date: <%= Date.current %>
   price: 215
   currency: USD
 
 two:
-  ticker: AAPL
+  security: aapl
   date: <%= 1.day.ago.to_date %>
   price: 214
   currency: USD

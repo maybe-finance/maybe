@@ -11,7 +11,7 @@
     </div>
 
     <div id="transactions" data-controller="bulk-select" data-bulk-select-resource-value="<%= t(".transaction") %>">
-      <div hidden id="transaction-selection-bar" data-bulk-select-target="selectionBar">
+      <div id="transaction-selection-bar" data-bulk-select-target="selectionBar" class="flex justify-center hidden">
         <%= render "selection_bar" %>
       </div>
 

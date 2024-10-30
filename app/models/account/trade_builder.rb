@@ -31,6 +31,7 @@ class Account::TradeBuilder < Account::EntryBuilder
     end
 
     def security
+      return Security.find(ticker) if ticker.match?(/\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/i)
       Security.find_or_create_by(ticker: ticker)
     end
 
