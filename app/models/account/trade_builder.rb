@@ -33,7 +33,11 @@ class Account::TradeBuilder < Account::EntryBuilder
     def security
       ticker_symbol, exchange_mic = ticker.split("|")
 
-      Security.find_or_create_by(ticker: ticker_symbol, exchange_mic: exchange_mic)
+      security = Security.find_or_create_by(ticker: ticker_symbol, exchange_mic: exchange_mic)
+
+      FetchSecurityInfoJob.perform_later(security.id)
+
+      security
     end
 
     def amount

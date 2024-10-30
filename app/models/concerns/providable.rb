@@ -10,6 +10,10 @@ module Providable
       synth_provider
     end
 
+    def security_info_provider
+      synth_provider
+    end
+
     def exchange_rates_provider
       synth_provider
     end

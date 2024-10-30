@@ -9,6 +9,7 @@ class Provider::Synth
     response = client.get("#{base_url}/user")
     JSON.parse(response.body).dig("id").present?
   end
+
   def usage
     response = client.get("#{base_url}/user")
 
@@ -147,6 +148,19 @@ class Provider::Synth
       raw_response: response
   end
 
+  def fetch_security_info(ticker:, mic_code:)
+    response = client.get("#{base_url}/tickers/#{ticker}") do |req|
+      req.params["mic_code"] = mic_code
+    end
+
+    parsed = JSON.parse(response.body)
+
+    SecurityInfoResponse.new \
+      info: parsed.dig("data"),
+      success?: true,
+      raw_response: response
+  end
+
   private
 
     attr_reader :api_key
@@ -156,6 +170,7 @@ class Provider::Synth
     ExchangeRatesResponse = Struct.new :rates, :success?, :error, :raw_response, keyword_init: true
     UsageResponse = Struct.new :used, :limit, :utilization, :plan, :success?, :error, :raw_response, keyword_init: true
     SearchSecuritiesResponse = Struct.new :securities, :success?, :error, :raw_response, keyword_init: true
+    SecurityInfoResponse = Struct.new :info, :success?, :error, :raw_response, keyword_init: true
 
     def base_url
       "https://api.synthfinance.com"
