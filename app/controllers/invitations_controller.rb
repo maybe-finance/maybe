@@ -23,21 +23,18 @@ class InvitationsController < ApplicationController
   end
 
   def accept
-    @invitation = Invitation.pending.find_by!(token: params[:id])
-    redirect_to new_registration_path(invitation: @invitation.token)
+    @invitation = Invitation.find_by!(token: params[:id])
+    
+    if @invitation.pending?
+      redirect_to new_registration_path(invitation: @invitation.token)
+    else
+      raise ActiveRecord::RecordNotFound
+    end
   end
 
   private
 
     def invitation_params
-      base_params = params.require(:invitation).permit(:email)
-
-      if params[:invitation][:role].in?(%w[admin member])
-        base_params[:role] = params[:invitation][:role]
-      else
-        base_params[:role] = "member"
-      end
-
-      base_params
+      params.require(:invitation).permit(:email, :role)
     end
 end

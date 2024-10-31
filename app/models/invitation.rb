@@ -13,6 +13,10 @@ class Invitation < ApplicationRecord
   scope :accepted, -> { where.not(accepted_at: nil) }
   scope :most_recent_for_email, ->(email) { where(email: email).order(accepted_at: :desc).first }
 
+  def pending?
+    accepted_at.nil? && expires_at > Time.current
+  end
+
   private
 
     def generate_token
