@@ -19,8 +19,8 @@ class Vehicle < ApplicationRecord
     "#F23E94"
   end
 
-  def mode_required?
-    false
+  def icon
+    "car-front"
   end
 
   private

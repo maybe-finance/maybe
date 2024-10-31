@@ -1,0 +1,36 @@
+<%# locals: (account:) %>
+
+<%= styled_form_with model: account,
+                     url: depositories_path,
+                     scope: :depository,
+                     class: "flex flex-col gap-4 justify-between grow",
+                     data: { turbo: false } do |f| %>
+  <div class="grow space-y-2">
+    <%= f.hidden_field :accountable_type %>
+
+    <%= f.text_field :name,
+                     placeholder: t(".name_placeholder"),
+                     required: "required",
+                     label: t(".name_label") %>
+
+    <% if account.new_record? %>
+      <%= f.hidden_field :institution_id %>
+    <% else %>
+      <%= f.collection_select :institution_id,
+                            Current.family.institutions.alphabetically,
+                            :id, :name,
+                            { include_blank: t(".ungrouped"), label: t(".institution") } %>
+    <% end %>
+
+    <%= f.select :subtype,
+                 [["Checking", "checking"], ["Savings", "savings"]],
+                 { label: true, prompt: t(".subtype_prompt"), include_blank: t(".none") } %>
+
+    <%= f.money_field :balance,
+                      label: t(".balance"),
+                      required: true,
+                      default_currency: Current.family.currency %>
+  </div>
+
+  <%= f.submit %>
+<% end %>

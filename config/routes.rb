@@ -85,6 +85,7 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :depositories, only: %i[new create update]
   resources :properties, only: %i[create update]
   resources :vehicles, only: %i[create update]
   resources :credit_cards, only: %i[create update]

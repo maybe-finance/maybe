@@ -5,7 +5,6 @@ other_asset:
   currency: USD
   accountable_type: OtherAsset
   accountable: one
-  mode: balance
 
 other_liability:
   family: dylan_family
@@ -14,7 +13,6 @@ other_liability:
   currency: USD
   accountable_type: OtherLiability
   accountable: one
-  mode: balance
 
 depository:
   family: dylan_family
@@ -24,7 +22,6 @@ depository:
   accountable_type: Depository
   accountable: one
   institution: chase
-  mode: transactions
 
 credit_card:
   family: dylan_family
@@ -34,7 +31,6 @@ credit_card:
   accountable_type: CreditCard
   accountable: one
   institution: chase
-  mode: transactions
 
 investment:
   family: dylan_family
@@ -43,7 +39,6 @@ investment:
   currency: USD
   accountable_type: Investment
   accountable: one
-  mode: transactions
 
 loan:
   family: dylan_family
@@ -52,7 +47,6 @@ loan:
   currency: USD
   accountable_type: Loan
   accountable: one
-  mode: transactions
 
 property:
   family: dylan_family
@@ -61,7 +55,6 @@ property:
   currency: USD
   accountable_type: Property
   accountable: one
-  mode: transactions
 
 vehicle:
   family: dylan_family
@@ -70,4 +63,3 @@ vehicle:
   currency: USD
   accountable_type: Vehicle
   accountable: one
-  mode: transactions

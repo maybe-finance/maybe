@@ -1,4 +1,8 @@
 module AccountsHelper
+  def new_accountable_path(type)
+    "/#{type.model_name.plural}/new"
+  end
+
   def permitted_accountable_partial(account, name = nil)
     permitted_names = %w[tooltip header tabs form]
     folder = account.accountable_type.underscore

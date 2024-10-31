@@ -1,5 +1,3 @@
-<%# locals: (account:, url:) %>
-
 <%= styled_form_with model: account, url: url, scope: :account, class: "flex flex-col gap-4 justify-between grow", data: { turbo: false } do |f| %>
   <div class="grow space-y-2">
     <%= f.select :accountable_type, Accountable::TYPES.map { |type| [type.titleize, type] }, { label: t(".accountable_type"), prompt: t(".type_prompt") }, required: true, autofocus: true %>

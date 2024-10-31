@@ -1,5 +1,17 @@
 ---
 en:
+  depositories: 
+    create:
+      success: Depository account created
+    update:
+      success: Depository account updated
+    new:
+      title: Enter account balance
+    form:
+      name_placeholder: Chase checking account 
+      name_label: Account name
+      balance: Current balance
+      subtype_prompt: Select account type
   accounts:
     account:
       has_issues: Issue detected.
@@ -149,10 +161,12 @@ en:
       edit: Edit
       import: Import transactions
     new:
-      connected_entry: Securely link account with Plaid (coming soon)
-      csv_entry: Import accounts CSV
-      manual_entry: Enter account manually
-      title: Add an account
+      container:
+        manual_entry: Enter account balance
+        connected_entry: Link account (coming soon)
+      title: What would you like to add?
+      method_selector:
+        title: How would you like to add it?
     show:
       cash: Cash
       holdings: Holdings

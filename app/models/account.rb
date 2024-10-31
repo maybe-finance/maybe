@@ -1,10 +1,7 @@
 class Account < ApplicationRecord
-  VALUE_MODES = %w[balance transactions]
-
   include Syncable, Monetizable, Issuable
 
   validates :name, :balance, :currency, presence: true
-  validates :mode, inclusion: { in: VALUE_MODES }, allow_nil: true
 
   belongs_to :family
   belongs_to :institution, optional: true
@@ -34,7 +31,7 @@ class Account < ApplicationRecord
 
   delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
 
-  accepts_nested_attributes_for :accountable
+  accepts_nested_attributes_for :accountable, update_only: true
 
   delegate :value, :series, to: :accountable
 

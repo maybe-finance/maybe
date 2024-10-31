@@ -23,8 +23,8 @@ class Property < ApplicationRecord
     "#06AED4"
   end
 
-  def mode_required?
-    false
+  def icon
+    "home"
   end
 
   private
