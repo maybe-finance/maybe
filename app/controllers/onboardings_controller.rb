@@ -3,6 +3,15 @@ class OnboardingsController < ApplicationController
   before_action :set_user
   before_action :load_invitation
 
+   def show
+   end
+
+   def profile
+   end
+
+   def preferences
+   end
+
   private
 
     def set_user
