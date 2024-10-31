@@ -11,5 +11,4 @@ en:
       role_member: Member
       role_admin: Administrator
       role_label: Role
-      cancel: Cancel
       submit: Send Invitation
