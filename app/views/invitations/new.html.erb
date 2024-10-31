@@ -13,11 +13,8 @@
       {},
       { label: t(".role_label") } %>
 
-    <div class="flex justify-end gap-2">
-      <button type="button" class="text-gray-500" data-action="click->modal#close">
-        <%= t(".cancel") %>
-      </button>
-      <%= form.submit t(".submit"), class: "bg-gray-900 text-white rounded-lg px-4 py-2" %>
+    <div class="w-full">
+      <%= form.submit t(".submit"), class: "bg-gray-900 text-white rounded-lg px-4 py-2 w-full" %>
     </div>
   <% end %>
 <% end %>

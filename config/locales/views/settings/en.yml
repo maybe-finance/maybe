@@ -61,6 +61,7 @@ en:
         profile_subtitle: Customize how you appear on Maybe
         profile_title: Profile
         save: Save
+        pending: Pending
     user_avatar_field:
       accepted_formats: JPG or PNG. 5MB max.
       choose: Choose

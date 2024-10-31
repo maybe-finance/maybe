@@ -45,6 +45,19 @@
               </div>
             </div>
           <% end %>
+          <% if @pending_invitations.any? %>
+            <% @pending_invitations.each do |invitation| %>
+              <div class="flex gap-2 items-center bg-white p-4 border border-alpha-black-25 rounded-lg">
+                <div class="w-9 h-9 shrink-0">
+                  <div class="text-white w-full h-full bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= invitation.email[0] %></div>
+                </div>
+                <p class="text-gray-900 font-medium text-sm"><%= invitation.email %></p>
+                <div class="rounded-md bg-gray-100 px-1.5 py-0.5">
+                  <p class="uppercase text-gray-500 font-medium text-xs"><%= t(".pending") %></p>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
           <% if Current.user.admin? %>
             <%= link_to new_invitation_path,
                 class: "bg-gray-100 flex items-center justify-center gap-2 text-gray-500 mt-1 hover:bg-gray-200 rounded-lg px-4 py-2 w-full text-center",
