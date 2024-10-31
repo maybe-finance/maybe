@@ -41,6 +41,7 @@ en:
         theme_title: Theme
     profiles:
       show:
+        invite_member: "Add member"
         confirm_delete:
           body: Are you sure you want to permanently delete your account? This action
             is irreversible.

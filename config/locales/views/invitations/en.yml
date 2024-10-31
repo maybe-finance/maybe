@@ -1,7 +1,7 @@
 en:
   invitations:
     new:
-      title: "Invite Member"
+      title: "Add member"
       subtitle: "Invite someone to join your household"
       email_label: "Email"
       email_placeholder: "Enter their email address"
