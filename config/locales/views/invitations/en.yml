@@ -3,3 +3,13 @@ en:
     create:
       success: "Invitation sent successfully"
       failure: "Could not send invitation"
+    new:
+      title: Invite Someone
+      subtitle: Send an invitation to join your family
+      email_placeholder: Enter email address
+      email_label: Email Address
+      role_member: Member
+      role_admin: Administrator
+      role_label: Role
+      cancel: Cancel
+      submit: Send Invitation
