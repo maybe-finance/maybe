@@ -24,7 +24,7 @@ class InvitationsController < ApplicationController
 
   def accept
     @invitation = Invitation.find_by!(token: params[:id])
-    
+
     if @invitation.pending?
       redirect_to new_registration_path(invitation: @invitation.token)
     else
