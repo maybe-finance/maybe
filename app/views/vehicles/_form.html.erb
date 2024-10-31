@@ -1,0 +1,64 @@
+<%# locals: (account:) %>
+
+<%= styled_form_with model: account,
+                     url: vehicles_path,
+                     scope: :vehicle,
+                     class: "flex flex-col gap-4 justify-between grow",
+                     data: { turbo: false } do |f| %>
+  <div class="grow space-y-2">
+    <%= f.hidden_field :accountable_type %>
+
+    <%= f.text_field :name,
+                     placeholder: t(".name_placeholder"),
+                     required: "required",
+                     label: t(".name_label") %>
+
+    <% if account.new_record? %>
+      <%= f.hidden_field :institution_id %>
+    <% else %>
+      <%= f.collection_select :institution_id,
+                            Current.family.institutions.alphabetically,
+                            :id, :name,
+                            { include_blank: t(".ungrouped"), label: t(".institution") } %>
+    <% end %>
+
+    <%= f.money_field :balance,
+                      label: t(".balance"),
+                      required: true,
+                      default_currency: Current.family.currency %>
+
+    <div>
+      <hr class="my-4">
+
+      <div class="space-y-2">
+        <%= f.fields_for :accountable do |vehicle_form| %>
+          <div class="flex items-center gap-2">
+            <%= vehicle_form.text_field :make,
+                                      label: t(".make"),
+                                      placeholder: t(".make_placeholder") %>
+            <%= vehicle_form.text_field :model,
+                                      label: t(".model"),
+                                      placeholder: t(".model_placeholder") %>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <%= vehicle_form.number_field :year,
+                                        label: t(".year"),
+                                        placeholder: t(".year_placeholder"),
+                                        min: 1900,
+                                        max: Time.current.year + 1 %>
+            <%= vehicle_form.number_field :mileage_value,
+                                        label: t(".mileage"),
+                                        placeholder: t(".mileage_placeholder"),
+                                        min: 0 %>
+            <%= vehicle_form.select :mileage_unit,
+                                  [["Miles", "mi"], ["Kilometers", "km"]],
+                                  { label: t(".mileage_unit") } %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <%= f.submit %>
+<% end %> 

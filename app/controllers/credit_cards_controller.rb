@@ -1,33 +1,34 @@
 class CreditCardsController < ApplicationController
-  before_action :set_account, only: :update
+  before_action :set_account, only: [ :update, :show ]
+
+  def new
+    @account = Current.family.accounts.credit_cards.build(
+      currency: Current.family.currency
+    )
+  end
+
+  def show
+  end
 
   def create
-    account = Current.family
-                     .accounts
-                     .create_with_optional_start_balance! \
-                       attributes: account_params.except(:start_date, :start_balance),
-                       start_date: account_params[:start_date],
-                       start_balance: account_params[:start_balance]
-
-    account.sync_later
+    account = Current.family.accounts.create_and_sync(credit_card_params)
     redirect_to account, notice: t(".success")
   end
 
   def update
-    @account.update_with_sync!(account_params)
+    @account.update_with_sync!(credit_card_params)
     redirect_to @account, notice: t(".success")
   end
 
   private
-
     def set_account
-      @account = Current.family.accounts.find(params[:id])
+      @account = Current.family.accounts.credit_cards.find_by(accountable_id: params[:id])
     end
 
-    def account_params
-      params.require(:account)
+    def credit_card_params
+      params.require(:credit_card)
         .permit(
-          :name, :balance, :institution_id, :mode, :start_date, :start_balance, :currency, :accountable_type,
+          :name, :balance, :institution_id, :currency, :accountable_type,
           accountable_attributes: [
             :id,
             :available_credit,

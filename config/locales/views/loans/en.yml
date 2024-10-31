@@ -1,0 +1,18 @@
+---
+en:
+  loans:
+    create:
+      success: Loan account created
+    update:
+      success: Loan account updated
+    new:
+      title: Enter loan details
+    form:
+      name_placeholder: Home mortgage
+      name_label: Loan name
+      balance: Current balance
+      interest_rate: Interest rate
+      interest_rate_placeholder: '5.25'
+      rate_type: Rate type
+      term_months: Term (months)
+      term_months_placeholder: '360' 

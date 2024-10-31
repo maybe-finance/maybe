@@ -3,7 +3,17 @@ require "test_helper"
 class VehiclesControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
-    @account = accounts(:vehicle)
+    @vehicle = vehicles(:one)
+  end
+
+  test "new" do
+    get new_vehicle_path
+    assert_response :success
+  end
+
+  test "show" do
+    get vehicle_url(@vehicle)
+    assert_response :success
   end
 
   test "creates vehicle" do
@@ -17,8 +27,6 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
           balance: 30000,
           currency: "USD",
           accountable_type: "Vehicle",
-          start_date: 1.year.ago.to_date,
-          start_balance: 35000,
           accountable_attributes: {
             make: "Toyota",
             model: "Camry",
@@ -39,20 +47,20 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "mi", created_account.vehicle.mileage_unit
 
     assert_redirected_to account_path(created_account)
-    assert_equal "Vehicle created successfully", flash[:notice]
+    assert_equal "Vehicle account created", flash[:notice]
     assert_enqueued_with(job: AccountSyncJob)
   end
 
   test "updates vehicle" do
     assert_no_difference [ "Account.count", "Vehicle.count" ] do
-      patch vehicle_path(@account), params: {
+      patch vehicle_path(@vehicle), params: {
         account: {
           name: "Updated Vehicle",
           balance: 28000,
           currency: "USD",
           accountable_type: "Vehicle",
           accountable_attributes: {
-            id: @account.accountable_id,
+            id: @vehicle.id,
             make: "Honda",
             model: "Accord",
             year: 2021,
@@ -64,8 +72,8 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    assert_redirected_to account_path(@account)
-    assert_equal "Vehicle updated successfully", flash[:notice]
+    assert_redirected_to account_path(@vehicle.account)
+    assert_equal "Vehicle account updated", flash[:notice]
     assert_enqueued_with(job: AccountSyncJob)
   end
 end

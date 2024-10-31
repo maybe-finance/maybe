@@ -2,6 +2,21 @@
 en:
   vehicles:
     create:
-      success: Vehicle created successfully
+      success: Vehicle account created
     update:
-      success: Vehicle updated successfully
+      success: Vehicle account updated
+    new:
+      title: Enter vehicle details
+    form:
+      name_placeholder: Family car
+      name_label: Vehicle name
+      balance: Current value
+      make: Make
+      make_placeholder: Toyota
+      mileage: Mileage
+      mileage_placeholder: "15000"
+      mileage_unit: Unit
+      model: Model
+      model_placeholder: Camry
+      year: Year
+      year_placeholder: "2023" 

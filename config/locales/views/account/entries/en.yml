@@ -2,6 +2,10 @@
 en:
   account:
     entries:
+      index:
+        title: Activity
+        entry: entry
+        entries: entries
       destroy:
         success: Entry deleted
       empty:

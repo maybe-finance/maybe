@@ -3,7 +3,17 @@ require "test_helper"
 class CreditCardsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
-    @account = accounts(:credit_card)
+    @credit_card = credit_cards(:one)
+  end
+
+  test "new" do
+    get new_credit_card_path
+    assert_response :success
+  end
+
+  test "show" do
+    get credit_card_url(@credit_card)
+    assert_response :success
   end
 
   test "creates credit card" do
@@ -12,13 +22,11 @@ class CreditCardsControllerTest < ActionDispatch::IntegrationTest
       -> { Account::Valuation.count } => 2,
       -> { Account::Entry.count } => 2 do
       post credit_cards_path, params: {
-        account: {
+        credit_card: {
           name: "New Credit Card",
           balance: 1000,
           currency: "USD",
           accountable_type: "CreditCard",
-          start_date: 1.month.ago.to_date,
-          start_balance: 0,
           accountable_attributes: {
             available_credit: 5000,
             minimum_payment: 25,
@@ -42,20 +50,20 @@ class CreditCardsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 99, created_account.credit_card.annual_fee
 
     assert_redirected_to account_path(created_account)
-    assert_equal "Credit card created successfully", flash[:notice]
+    assert_equal "Credit card account created", flash[:notice]
     assert_enqueued_with(job: AccountSyncJob)
   end
 
   test "updates credit card" do
     assert_no_difference [ "Account.count", "CreditCard.count" ] do
-      patch credit_card_path(@account), params: {
-        account: {
+      patch credit_card_path(@credit_card), params: {
+        credit_card: {
           name: "Updated Credit Card",
           balance: 2000,
           currency: "USD",
           accountable_type: "CreditCard",
           accountable_attributes: {
-            id: @account.accountable_id,
+            id: @credit_card.id,
             available_credit: 6000,
             minimum_payment: 50,
             apr: 14.99,
@@ -66,18 +74,18 @@ class CreditCardsControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    @account.reload
+    @credit_card.reload
 
-    assert_equal "Updated Credit Card", @account.name
-    assert_equal 2000, @account.balance
-    assert_equal 6000, @account.credit_card.available_credit
-    assert_equal 50, @account.credit_card.minimum_payment
-    assert_equal 14.99, @account.credit_card.apr
-    assert_equal 3.years.from_now.to_date, @account.credit_card.expiration_date
-    assert_equal 0, @account.credit_card.annual_fee
+    assert_equal "Updated Credit Card", @credit_card.account.name
+    assert_equal 2000, @credit_card.account.balance
+    assert_equal 6000, @credit_card.available_credit
+    assert_equal 50, @credit_card.minimum_payment
+    assert_equal 14.99, @credit_card.apr
+    assert_equal 3.years.from_now.to_date, @credit_card.expiration_date
+    assert_equal 0, @credit_card.annual_fee
 
-    assert_redirected_to account_path(@account)
-    assert_equal "Credit card updated successfully", flash[:notice]
+    assert_redirected_to account_path(@credit_card.account)
+    assert_equal "Credit card account updated", flash[:notice]
     assert_enqueued_with(job: AccountSyncJob)
   end
 end

@@ -1,0 +1,15 @@
+---
+en:
+  other_liabilities:
+    create:
+      success: Other liability account created
+    update:
+      success: Other liability account updated
+    new:
+      title: Enter liability details
+    form:
+      name_placeholder: Personal loan
+      name_label: Liability name
+      balance: Current balance
+      subtype_prompt: Select liability type
+      none: None 

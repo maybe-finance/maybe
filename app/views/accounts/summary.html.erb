@@ -1,3 +1,5 @@
+<% period = Period.from_param(params[:period]) %>
+
 <div class="space-y-4">
 
   <%= render "header" %>
@@ -7,7 +9,7 @@
       <div class="space-y-2 grow">
         <%= render partial: "shared/value_heading", locals: {
             label: "Assets",
-            period: @period,
+            period: period,
             value: Current.family.assets,
             trend: @asset_series.trend
           } %>
@@ -23,7 +25,7 @@
       <div class="space-y-2 grow">
         <%= render partial: "shared/value_heading", locals: {
             label: "Liabilities",
-            period: @period,
+            period: period,
             size: "md",
             value: Current.family.liabilities,
             trend: @liability_series.trend
@@ -46,7 +48,7 @@
           <p><%= t(".new") %></p>
         <% end %>
         <%= form_with url: summary_accounts_path, method: :get, data: { controller: "auto-submit-form" } do |form| %>
-          <%= period_select form: form, selected: @period.name %>
+          <%= period_select form: form, selected: period.name %>
         <% end %>
       </div>
     </div>
@@ -71,7 +73,7 @@
           <p><%= t(".new") %></p>
         <% end %>
         <%= form_with url: summary_accounts_path, method: :get, data: { controller: "auto-submit-form" } do |form| %>
-          <%= period_select form: form, selected: @period.name %>
+          <%= period_select form: form, selected: period.name %>
         <% end %>
       </div>
     </div>

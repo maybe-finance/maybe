@@ -542,7 +542,7 @@ export default class extends Controller {
 
     return d3
       .scaleLinear()
-      .rangeRound([this._d3ContainerHeight, 0])
+      .rangeRound([this._d3ContainerHeight - 30, 0])
       .domain([dataMin - padding, dataMax + padding]);
   }
 }

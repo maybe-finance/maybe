@@ -1,0 +1,15 @@
+---
+en:
+  other_assets:
+    create:
+      success: Other asset account created
+    update:
+      success: Other asset account updated
+    new:
+      title: Enter asset details
+    form:
+      name_placeholder: Art collection
+      name_label: Asset name
+      balance: Current value
+      subtype_prompt: Select asset type
+      none: None 

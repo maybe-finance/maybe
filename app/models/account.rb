@@ -58,29 +58,30 @@ class Account < ApplicationRecord
       grouped_accounts
     end
 
-    def create_with_optional_start_balance!(attributes:, start_date: nil, start_balance: nil)
-      transaction do
-        attributes[:accountable_attributes] ||= {} # Ensure accountable is created
-        account = new(attributes)
+    def create_and_sync(attributes)
+      attributes[:accountable_attributes] ||= {} # Ensure accountable is created, even if empty
+      account = new(attributes)
 
-        # Always initialize an account with a valuation entry to begin tracking value history
-        account.entries.build \
+      transaction do
+        # Create 2 valuations for new accounts to establish a value history for users to see
+        account.entries.build(
           date: Date.current,
           amount: account.balance,
           currency: account.currency,
           entryable: Account::Valuation.new
-
-        if start_date.present? && start_balance.present?
-          account.entries.build \
-            date: start_date,
-            amount: start_balance,
-            currency: account.currency,
-            entryable: Account::Valuation.new
-        end
+        )
+        account.entries.build(
+          date: 1.day.ago.to_date,
+          amount: 0,
+          currency: account.currency,
+          entryable: Account::Valuation.new
+        )
 
         account.save!
-        account
       end
+
+      account.sync_later
+      account
     end
   end
 

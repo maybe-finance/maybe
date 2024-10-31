@@ -63,3 +63,11 @@ vehicle:
   currency: USD
   accountable_type: Vehicle
   accountable: one
+
+crypto:
+  family: dylan_family
+  name: Bitcoin
+  balance: 10000
+  currency: USD
+  accountable_type: Crypto
+  accountable: one

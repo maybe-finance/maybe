@@ -1,0 +1,7 @@
+<%# locals: (account:) %>
+
+<% period = Period.from_param(params[:period]) %>
+
+<div class="h-64 flex items-center justify-center text-2xl font-bold">
+  <%= render "shared/line_chart", series: account.series(period: period) %>
+</div>

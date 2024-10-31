@@ -1,0 +1,15 @@
+---
+en:
+  cryptos:
+    create:
+      success: Crypto account created
+    update:
+      success: Crypto account updated
+    new:
+      title: Enter account balance
+    form:
+      name_placeholder: Bitcoin wallet
+      name_label: Account name
+      balance: Current balance
+      subtype_prompt: Select crypto type
+      none: None 

@@ -1,0 +1,22 @@
+---
+en:
+  credit_cards:
+    create:
+      success: Credit card account created
+    update:
+      success: Credit card account updated
+    new:
+      title: Enter credit card details
+    form:
+      name_placeholder: Chase Sapphire
+      name_label: Card name
+      balance: Current balance
+      annual_fee: Annual fee
+      annual_fee_placeholder: '99'
+      apr: APR
+      apr_placeholder: '15.99'
+      available_credit: Available credit
+      available_credit_placeholder: '10000'
+      expiration_date: Expiration date
+      minimum_payment: Minimum payment
+      minimum_payment_placeholder: '100' 

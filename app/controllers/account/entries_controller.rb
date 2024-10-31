@@ -4,6 +4,11 @@ class Account::EntriesController < ApplicationController
   before_action :set_account
   before_action :set_entry, only: %i[edit update show destroy]
 
+  def index
+    @q = search_params
+    @pagy, @entries = pagy(@account.entries.search(@q).reverse_chronological, limit: params[:per_page] || "10")
+  end
+
   def edit
     render entryable_view_path(:edit)
   end
@@ -44,5 +49,10 @@ class Account::EntriesController < ApplicationController
 
     def entry_params
       params.require(:account_entry).permit(:name, :date, :amount, :currency)
+    end
+
+    def search_params
+      params.fetch(:q, {})
+            .permit(:search)
     end
 end

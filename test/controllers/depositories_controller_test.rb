@@ -11,10 +11,16 @@ class DepositoriesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "show" do
+    get depository_url(@depository)
+    assert_response :success
+  end
+
   test "create" do
     assert_difference [ "Account.count", "Depository.count" ], 1 do
       post depositories_url, params: {
-        depository: {
+        account: {
+          accountable_type: "Depository",
           name: "New depository",
           balance: 10000,
           currency: "USD",
@@ -30,7 +36,7 @@ class DepositoriesControllerTest < ActionDispatch::IntegrationTest
   test "update" do
     assert_no_difference [ "Account.count", "Depository.count" ] do
       patch depository_url(@depository), params: {
-        depository: {
+        account: {
           name: "Updated name",
           balance: 10000,
           currency: "USD",
@@ -39,7 +45,7 @@ class DepositoriesControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    assert_redirected_to @depository
+    assert_redirected_to @depository.account
     assert_equal "Depository account updated", flash[:notice]
   end
 end

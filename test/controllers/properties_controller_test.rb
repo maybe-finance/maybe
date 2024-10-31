@@ -3,7 +3,17 @@ require "test_helper"
 class PropertiesControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
-    @account = accounts(:property)
+    @property = properties(:one)
+  end
+
+  test "new" do
+    get new_property_path
+    assert_response :success
+  end
+
+  test "show" do
+    get property_url(@property)
+    assert_response :success
   end
 
   test "creates property" do
@@ -17,8 +27,6 @@ class PropertiesControllerTest < ActionDispatch::IntegrationTest
           balance: 500000,
           currency: "USD",
           accountable_type: "Property",
-          start_date: 3.years.ago.to_date,
-          start_balance: 450000,
           accountable_attributes: {
             year_built: 2002,
             area_value: 1000,
@@ -42,20 +50,20 @@ class PropertiesControllerTest < ActionDispatch::IntegrationTest
     assert created_account.property.address.line1.present?
 
     assert_redirected_to account_path(created_account)
-    assert_equal "Property created successfully", flash[:notice]
+    assert_equal "Property account created", flash[:notice]
     assert_enqueued_with(job: AccountSyncJob)
   end
 
   test "updates property" do
     assert_no_difference [ "Account.count", "Property.count" ] do
-      patch property_path(@account), params: {
+      patch property_path(@property), params: {
         account: {
           name: "Updated Property",
           balance: 500000,
           currency: "USD",
           accountable_type: "Property",
           accountable_attributes: {
-            id: @account.accountable_id,
+            id: @property.id,
             year_built: 2002,
             area_value: 1000,
             area_unit: "sqft",
@@ -72,8 +80,8 @@ class PropertiesControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    assert_redirected_to account_path(@account)
-    assert_equal "Property updated successfully", flash[:notice]
+    assert_redirected_to account_path(@property.account)
+    assert_equal "Property account updated", flash[:notice]
     assert_enqueued_with(job: AccountSyncJob)
   end
 end

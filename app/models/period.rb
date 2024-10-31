@@ -1,12 +1,18 @@
 class Period
   attr_reader :name, :date_range
 
-  def self.find_by_name(name)
-    INDEX[name]
-  end
+  class << self
+    def from_param(param)
+      find_by_name(param) || self.last_30_days
+    end
 
-  def self.names
-    INDEX.keys.sort
+    def find_by_name(name)
+      INDEX[name]
+    end
+
+    def names
+      INDEX.keys.sort
+    end
   end
 
   def initialize(name: "custom", date_range:)

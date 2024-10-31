@@ -1,0 +1,15 @@
+---
+en:
+  investments:
+    create:
+      success: Investment account created
+    update:
+      success: Investment account updated
+    new:
+      title: Enter account balance
+    form:
+      name_placeholder: Vanguard brokerage account
+      name_label: Account name
+      balance: Current balance
+      subtype_prompt: Select investment type
+      none: None 

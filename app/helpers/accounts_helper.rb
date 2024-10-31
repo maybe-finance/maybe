@@ -3,6 +3,29 @@ module AccountsHelper
     "/#{type.model_name.plural}/new"
   end
 
+  def period_label(period)
+    return "since account creation" if period.date_range.begin.nil?
+    start_date, end_date = period.date_range.first, period.date_range.last
+
+    return "Starting from #{start_date.strftime('%b %d, %Y')}" if end_date.nil?
+    return "Ending at #{end_date.strftime('%b %d, %Y')}" if start_date.nil?
+
+    days_apart = (end_date - start_date).to_i
+
+    case days_apart
+    when 1
+      "vs. yesterday"
+    when 7
+      "vs. last week"
+    when 30, 31
+      "vs. last month"
+    when 365, 366
+      "vs. last year"
+    else
+      "from #{start_date.strftime('%b %d, %Y')} to #{end_date.strftime('%b %d, %Y')}"
+    end
+  end
+
   def permitted_accountable_partial(account, name = nil)
     permitted_names = %w[tooltip header tabs form]
     folder = account.accountable_type.underscore

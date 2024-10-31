@@ -1,0 +1,14 @@
+---
+en:
+  depositories:
+    create:
+      success: Depository account created
+    update:
+      success: Depository account updated
+    new:
+      title: Enter account balance
+    form:
+      name_placeholder: Chase checking account
+      name_label: Account name
+      balance: Current balance
+      subtype_prompt: Select account type 
