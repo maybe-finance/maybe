@@ -1,7 +1,7 @@
 en:
   invitation_mailer:
     invite_email:
-      subject: "%{inviter} has invited you to join their household"
+      subject: "%{inviter} has invited you to join their household on Maybe!"
       greeting: "You've been invited!"
       body: "%{inviter} has invited you to join their household '%{family}' as a %{role}."
       accept_button: "Accept Invitation"
