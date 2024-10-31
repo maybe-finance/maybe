@@ -5,11 +5,11 @@ class OnboardingsController < ApplicationController
 
   private
 
-  def set_user
-    @user = Current.user
-  end
+    def set_user
+      @user = Current.user
+    end
 
-  def load_invitation
-    @invitation = Invitation.accepted.most_recent_for_email(Current.user.email)
-  end
+    def load_invitation
+      @invitation = Invitation.accepted.most_recent_for_email(Current.user.email)
+    end
 end
