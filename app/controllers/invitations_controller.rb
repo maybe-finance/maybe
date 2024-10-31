@@ -31,13 +31,13 @@ class InvitationsController < ApplicationController
 
     def invitation_params
       base_params = params.require(:invitation).permit(:email)
-      
+
       if params[:invitation][:role].in?(%w[admin member])
         base_params[:role] = params[:invitation][:role]
       else
         base_params[:role] = "member"
       end
-      
+
       base_params
     end
 end
