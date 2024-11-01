@@ -38,7 +38,7 @@
           "type": "controller",
           "class": "AccountsController",
           "method": "show",
-          "line": 39,
+          "line": 36,
           "file": "app/controllers/accounts_controller.rb",
           "rendered": {
             "name": "accounts/show",
@@ -72,7 +72,7 @@
           "type": "controller",
           "class": "AccountsController",
           "method": "show",
-          "line": 39,
+          "line": 36,
           "file": "app/controllers/accounts_controller.rb",
           "rendered": {
             "name": "accounts/show",
@@ -88,6 +88,29 @@
       "confidence": "Weak",
       "cwe_id": [
         22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 105,
+      "fingerprint": "aaccd8db0be34afdc88e5af08d91ae2e8b7765dfea2f3fc6e1c37db0adc7b991",
+      "check_name": "PermitAttributes",
+      "message": "Potentially dangerous key allowed for mass assignment",
+      "file": "app/controllers/invitations_controller.rb",
+      "line": 34,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.require(:invitation).permit(:email, :role)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "InvitationsController",
+        "method": "invitation_params"
+      },
+      "user_input": ":role",
+      "confidence": "Medium",
+      "cwe_id": [
+        915
       ],
       "note": ""
     },
@@ -140,7 +163,7 @@
           "type": "controller",
           "class": "AccountsController",
           "method": "show",
-          "line": 39,
+          "line": 36,
           "file": "app/controllers/accounts_controller.rb",
           "rendered": {
             "name": "accounts/show",
@@ -192,28 +215,8 @@
         22
       ],
       "note": ""
-    },
-    {
-      "warning_type": "Mass Assignment",
-      "warning_code": 105,
-      "fingerprint": "YOUR_FINGERPRINT_HERE",
-      "check_name": "PermitAttributes",
-      "message": "Potentially dangerous key allowed for mass assignment",
-      "file": "app/controllers/invitations_controller.rb",
-      "line": 34,
-      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:invitation).permit(:email, :role)",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "InvitationsController",
-        "method": "invitation_params"
-      },
-      "user_input": null,
-      "confidence": "Medium",
-      "note": "Role is protected by model validations and authorization checks. Only admins can create invitations, and roles are restricted to member/admin."
     }
   ],
-  "updated": "2024-10-17 11:30:15 -0400",
-  "brakeman_version": "6.2.1"
+  "updated": "2024-11-01 09:36:40 -0500",
+  "brakeman_version": "6.2.2"
 }
