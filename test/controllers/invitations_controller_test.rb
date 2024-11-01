@@ -31,10 +31,10 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal I18n.t("invitations.create.success"), flash[:notice]
   end
 
-  test "non-admin cannot create admin invitation" do
+  test "non-admin cannot create invitations" do
     sign_in users(:family_member)
 
-    assert_difference("Invitation.count") do
+    assert_no_difference("Invitation.count") do
       post invitations_url, params: {
         invitation: {
           email: "new@example.com",
@@ -43,8 +43,8 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    invitation = Invitation.last
-    assert_equal "member", invitation.role # Role should be downgraded to member
+    assert_redirected_to settings_profile_path
+    assert_equal I18n.t("invitations.create.failure"), flash[:alert]
   end
 
   test "admin can create admin invitation" do

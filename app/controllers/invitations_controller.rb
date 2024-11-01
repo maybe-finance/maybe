@@ -5,6 +5,12 @@ class InvitationsController < ApplicationController
   end
 
   def create
+    unless Current.user.admin?
+      flash[:alert] = t(".failure")
+      redirect_to settings_profile_path
+      return
+    end
+
     @invitation = Current.family.invitations.build(invitation_params)
     @invitation.inviter = Current.user
 
