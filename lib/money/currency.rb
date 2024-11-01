@@ -23,7 +23,12 @@ class Money::Currency
     end
 
     def all
-      @all ||= YAML.load_file(CURRENCIES_FILE_PATH)
+      @all ||= YAML.safe_load(
+        File.read(CURRENCIES_FILE_PATH),
+        permitted_classes: [],
+        permitted_symbols: [],
+        aliases: true
+      )
     end
 
     def all_instances
