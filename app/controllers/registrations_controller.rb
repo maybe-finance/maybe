@@ -35,7 +35,8 @@ class RegistrationsController < ApplicationController
   private
 
     def set_invitation
-      token = params[:invitation] || user_params(:invitation)
+      token = params[:invitation]
+      token ||= params[:user][:invitation] if params[:user].present?
       @invitation = Invitation.pending.find_by(token: token)
     end
 
