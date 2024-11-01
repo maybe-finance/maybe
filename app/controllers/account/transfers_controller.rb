@@ -1,7 +1,7 @@
 class Account::TransfersController < ApplicationController
   layout :with_sidebar
 
-  before_action :set_transfer, only: %i[destroy show]
+  before_action :set_transfer, only: %i[destroy show update]
 
   def new
     @transfer = Account::Transfer.new
@@ -30,8 +30,13 @@ class Account::TransfersController < ApplicationController
     end
   end
 
+  def update
+    @transfer.update_entries!(transfer_update_params)
+    redirect_back_or_to transactions_url, notice: t(".success")
+  end
+
   def destroy
-    @transfer.destroy_and_remove_marks!
+    @transfer.destroy!
     redirect_back_or_to transactions_url, notice: t(".success")
   end
 
@@ -48,6 +53,10 @@ class Account::TransfersController < ApplicationController
     end
 
     def transfer_params
-      params.require(:account_transfer).permit(:from_account_id, :to_account_id, :amount, :date, :name)
+      params.require(:account_transfer).permit(:from_account_id, :to_account_id, :amount, :date, :name, :excluded)
+    end
+
+    def transfer_update_params
+      params.require(:account_transfer).permit(:excluded, :notes)
     end
 end

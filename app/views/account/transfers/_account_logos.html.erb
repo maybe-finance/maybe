@@ -1,0 +1,28 @@
+<%# locals: (transfer:, outflow: false) %>
+
+<% from_account = transfer.outflow_transaction.account %>
+<% to_account = transfer.inflow_transaction.account %>
+
+<div class="flex items-center gap-2">
+  <% if outflow %>
+    <%= link_to account_path(transfer.outflow_transaction.account), class: "hover:opacity-90" do %>
+      <%= circle_logo(transfer.from_name[0].upcase, size: "sm") %>
+    <% end %>
+
+    <%= lucide_icon "arrow-right", class: "text-gray-500 w-4 h-4" %>
+
+    <%= link_to account_path(transfer.inflow_transaction.account), class: "hover:opacity-90" do %>
+      <%= circle_logo(transfer.to_name[0].upcase, size: "sm") %>
+    <% end %>
+  <% else %>
+    <%= link_to account_path(transfer.inflow_transaction.account), class: "hover:opacity-90" do %>
+      <%= circle_logo(transfer.to_name[0].upcase, size: "sm") %>
+    <% end %>
+
+    <%= lucide_icon "arrow-left", class: "text-gray-500 w-4 h-4" %>
+
+    <%= link_to account_path(transfer.outflow_transaction.account), class: "hover:opacity-90" do %>
+      <%= circle_logo(transfer.from_name[0].upcase, size: "sm") %>
+    <% end %>
+  <% end %>
+</div>

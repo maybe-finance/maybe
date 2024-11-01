@@ -1,5 +1,5 @@
 class Account::Transfer < ApplicationRecord
-  has_many :entries, dependent: :nullify
+  has_many :entries, dependent: :destroy
 
   validate :net_zero_flows, if: :single_currency_transfer?
   validate :transaction_count, :from_different_accounts, :all_transactions_marked
@@ -32,13 +32,11 @@ class Account::Transfer < ApplicationRecord
     entries.find { |e| e.outflow? }
   end
 
-  def destroy_and_remove_marks!
+  def update_entries!(params)
     transaction do
-      entries.each do |e|
-        e.update! marked_as_transfer: false
+      entries.each do |entry|
+        entry.update!(params)
       end
-
-      destroy!
     end
   end
 

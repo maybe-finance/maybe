@@ -138,28 +138,26 @@
               <%= f.check_box :excluded,
                       class: "sr-only peer",
                       "data-auto-submit-form-target": "auto" %>
-              <label for="account_entry_entryable_attributes_excluded"
+              <label for="account_entry_excluded"
                          class="maybe-switch"></label>
             </div>
           </div>
         <% end %>
 
         <!-- Delete Transaction Form -->
-        <% unless entry.marked_as_transfer? %>
-          <div class="flex items-center justify-between gap-2 p-3">
-            <div class="text-sm space-y-1">
-              <h4 class="text-gray-900"><%= t(".delete_title") %></h4>
-              <p class="text-gray-500"><%= t(".delete_subtitle") %></p>
-            </div>
+        <div class="flex items-center justify-between gap-2 p-3">
+          <div class="text-sm space-y-1">
+            <h4 class="text-gray-900"><%= t(".delete_title") %></h4>
+            <p class="text-gray-500"><%= t(".delete_subtitle") %></p>
+          </div>
 
-            <%= button_to t(".delete"),
+          <%= button_to t(".delete"),
                   account_entry_path(account, entry),
                   method: :delete,
                   class:  "rounded-lg px-3 py-2 text-red-500 text-sm
                            font-medium border border-alpha-black-200",
                   data:   { turbo_confirm: true, turbo_frame: "_top" } %>
-          </div>
-        <% end %>
+        </div>
       </div>
     <% end %>
   </div>

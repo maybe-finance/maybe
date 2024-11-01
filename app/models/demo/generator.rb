@@ -50,7 +50,7 @@ class Demo::Generator
       family = Family.find_by(id: family_id)
       family.destroy! if family
 
-      Family.create!(id: family_id, name: "Demo Family").tap(&:reload)
+      Family.create!(id: family_id, name: "Demo Family", stripe_subscription_status: "active").tap(&:reload)
     end
 
     def clear_data!
