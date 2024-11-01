@@ -192,6 +192,26 @@
         22
       ],
       "note": ""
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 105,
+      "fingerprint": "YOUR_FINGERPRINT_HERE",
+      "check_name": "PermitAttributes",
+      "message": "Potentially dangerous key allowed for mass assignment",
+      "file": "app/controllers/invitations_controller.rb",
+      "line": 34,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.require(:invitation).permit(:email, :role)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "InvitationsController",
+        "method": "invitation_params"
+      },
+      "user_input": null,
+      "confidence": "Medium",
+      "note": "Role is protected by model validations and authorization checks. Only admins can create invitations, and roles are restricted to member/admin."
     }
   ],
   "updated": "2024-10-17 11:30:15 -0400",
