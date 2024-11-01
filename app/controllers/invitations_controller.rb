@@ -8,10 +8,6 @@ class InvitationsController < ApplicationController
     @invitation = Current.family.invitations.build(invitation_params)
     @invitation.inviter = Current.user
 
-    if @invitation.role == "admin" && !Current.user.admin?
-      @invitation.role = "member"
-    end
-
     if @invitation.save
       InvitationMailer.invite_email(@invitation).deliver_later
       flash[:notice] = t(".success")

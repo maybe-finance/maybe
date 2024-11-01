@@ -4,7 +4,7 @@ class RegistrationsController < ApplicationController
   layout "auth"
 
   before_action :set_user, only: :create
-  before_action :load_invitation, if: :invitation_token?
+  before_action :set_invitation
   before_action :claim_invite_code, only: :create, if: :invite_code_required?
 
   def new
@@ -34,21 +34,18 @@ class RegistrationsController < ApplicationController
 
   private
 
-    def load_invitation
-      token = params[:invitation] || params.dig(:user, :invitation)
-      @invitation = Invitation.pending.find_by!(token: token)
-    end
-
-    def invitation_token?
-      params[:invitation].present? || params.dig(:user, :invitation).present?
+    def set_invitation
+      token = params[:invitation] || user_params(:invitation)
+      @invitation = Invitation.pending.find_by(token: token)
     end
 
     def set_user
       @user = User.new user_params.except(:invite_code, :invitation)
     end
 
-    def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation, :invite_code, :invitation)
+    def user_params(specific_param = nil)
+      params = self.params.require(:user).permit(:name, :email, :password, :password_confirmation, :invite_code, :invitation)
+      specific_param ? params[specific_param] : params
     end
 
     def claim_invite_code
