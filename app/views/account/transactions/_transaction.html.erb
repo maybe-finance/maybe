@@ -1,4 +1,4 @@
-<%# locals: (entry:, selectable: true, editable: true, short: false, show_tags: false, **opts) %>
+<%# locals: (entry:, selectable: true, show_balance: false, origin: nil) %>
 <% transaction, account = entry.account_transaction, entry.account %>
 
 <div class="grid grid-cols-12 items-center <%= entry.excluded ? "text-gray-400 bg-gray-25" : "text-gray-900" %> text-sm font-medium p-4">
@@ -19,8 +19,8 @@
           <% if entry.new_record? %>
             <%= content_tag :p, transaction.name %>
           <% else %>
-            <%= link_to transaction.name, 
-                        entry.transfer.present? ? account_transfer_path(entry.transfer) : account_entry_path(account, entry),
+            <%= link_to transaction.name,
+                        entry.transfer.present? ? account_transfer_path(entry.transfer, origin:) : account_entry_path(account, entry, origin:),
                         data: { turbo_frame: "drawer", turbo_prefetch: false },
                         class: "hover:underline hover:text-gray-800" %>
           <% end %>
@@ -34,27 +34,28 @@
   </div>
 
   <% if entry.transfer.present? %>
-    <div class="col-span-2"></div>
+    <% unless show_balance %>
+      <div class="col-span-2"></div>
+    <% end %>
+
     <div class="col-span-2">
       <%= render "account/transfers/account_logos", transfer: entry.transfer, outflow: entry.outflow? %>
     </div>
   <% else %>
     <div class="flex items-center gap-1 col-span-2">
-      <% if editable %>
-        <%= render "categories/menu", transaction: transaction %>
-      <% else %>
-        <%= render "categories/badge", category: transaction.category %>
-      <% end %>
+      <%= render "categories/menu", transaction: transaction %>
     </div>
 
-    <%= tag.div class: "col-span-2" do %>
-      <% if entry.new_record? %>
-        <%= tag.p account.name %>
-      <% else %>
-        <%= link_to account.name,
+    <% unless show_balance %>
+      <%= tag.div class: "col-span-2" do %>
+        <% if entry.new_record? %>
+          <%= tag.p account.name %>
+        <% else %>
+          <%= link_to account.name,
                       account_path(account, tab: "transactions"),
                       data: { turbo_frame: "_top" },
                       class: "hover:underline" %>
+        <% end %>
       <% end %>
     <% end %>
   <% end %>
@@ -64,4 +65,10 @@
                     format_money(-entry.amount_money),
                     class: ["text-green-600": entry.inflow?] %>
   </div>
+
+  <% if show_balance %>
+    <div class="col-span-2 justify-self-end">
+      <%= tag.p format_money(transaction.eod_balance), class: "font-medium text-sm text-gray-900" %>
+    </div>
+  <% end %>
 </div>

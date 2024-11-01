@@ -52,12 +52,17 @@ class Account::Transaction < ApplicationRecord
     entry.name || "(no description)"
   end
 
+  def eod_balance
+    entry.amount_money
+  end
+
   private
-    def previous_transaction_date
-      self.account
-          .transactions
-          .where("date < ?", date)
-          .order(date: :desc)
-          .first&.date
+    def account
+      entry.account
+    end
+
+
+
+    def daily_transactions
     end
 end

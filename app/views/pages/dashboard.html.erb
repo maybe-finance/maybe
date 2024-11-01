@@ -180,7 +180,7 @@
         <% else %>
           <div class="text-gray-500 p-1 space-y-1 bg-gray-25 rounded-xl">
             <%= entries_by_date(@transaction_entries, selectable: false) do |entries| %>
-              <%= render entries, selectable: false, editable: false %>
+              <%= render entries, selectable: false %>
             <% end %>
 
             <p class="py-2 text-sm text-center"><%= link_to t(".view_all"), transactions_path %></p>

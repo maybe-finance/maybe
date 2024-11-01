@@ -15,12 +15,18 @@ class Account::TransactionsController < ApplicationController
     prev_amount = @entry.amount
     prev_date = @entry.date
 
-    @entry.update!(entry_params)
+    @entry.update!(entry_params.except(:origin))
     @entry.sync_account_later if prev_amount != @entry.amount || prev_date != @entry.date
 
     respond_to do |format|
       format.html { redirect_to account_entry_path(@account, @entry), notice: t(".success") }
-      format.turbo_stream { render turbo_stream: turbo_stream.replace(@entry) }
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          @entry,
+          partial: "account/entries/entry",
+          locals: entry_locals.merge(entry: @entry)
+        )
+      end
     end
   end
 
@@ -33,10 +39,18 @@ class Account::TransactionsController < ApplicationController
       @entry = @account.entries.find(params[:id])
     end
 
+    def entry_locals
+      {
+        selectable: entry_params[:origin].present?,
+        show_balance: entry_params[:origin] == "account",
+        origin: entry_params[:origin]
+      }
+    end
+
     def entry_params
       params.require(:account_entry)
             .permit(
-              :name, :date, :amount, :currency, :excluded, :notes, :entryable_type, :nature,
+              :name, :date, :amount, :currency, :excluded, :notes, :entryable_type, :nature, :origin,
               entryable_attributes: [
                 :id,
                 :category_id,

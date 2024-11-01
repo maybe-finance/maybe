@@ -1,5 +1,7 @@
 <% entry, transaction, account = @entry, @entry.account_transaction, @entry.account %>
 
+<% origin = params[:origin] %>
+
 <%= drawer do %>
   <header class="mb-4 space-y-1">
     <div class="flex items-center gap-4">
@@ -31,6 +33,7 @@
               url: account_transaction_path(account, entry),
               class: "space-y-2",
               data: { controller: "auto-submit-form" } do |f| %>
+          <%= f.hidden_field :origin, value: origin %>
           <%= f.text_field :name,
                 label: t(".name_label"),
                 "data-auto-submit-form-target": "auto" %>
@@ -73,6 +76,7 @@
               url: account_transaction_path(account, entry),
               class: "space-y-2",
               data: { controller: "auto-submit-form" } do |f| %>
+          <%= f.hidden_field :origin, value: origin %>
           <%= f.fields_for :entryable do |ef| %>
             <% unless entry.marked_as_transfer? %>
               <%= ef.collection_select :category_id,
@@ -110,6 +114,7 @@
               url: account_transaction_path(account, entry),
               class: "space-y-2",
               data: { controller: "auto-submit-form" } do |f| %>
+            <%= f.hidden_field :origin, value: origin %>
             <%= f.text_area :notes,
                   label: t(".note_label"),
                   placeholder: t(".note_placeholder"),
@@ -128,6 +133,7 @@
               url: account_transaction_path(account, entry),
               class: "p-3",
               data: { controller: "auto-submit-form" } do |f| %>
+          <%= f.hidden_field :origin, value: origin %>
           <div class="flex cursor-pointer items-center gap-2 justify-between">
             <div class="text-sm space-y-1">
               <h4 class="text-gray-900"><%= t(".exclude_title") %></h4>

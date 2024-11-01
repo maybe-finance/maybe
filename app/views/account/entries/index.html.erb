@@ -68,7 +68,7 @@
           <% if @entries.any? %>
             <div class="space-y-4">
               <%= entries_by_date(@entries) do |entries| %>
-                <%= render entries %>
+                <%= render entries, show_balance: true, origin: "account" %>
               <% end %>
             </div>
           <% else %>
