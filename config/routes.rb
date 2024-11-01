@@ -111,6 +111,10 @@ Rails.application.routes.draw do
     resources :exchange_rate_provider_missings, only: :update
   end
 
+  resources :invitations, only: [ :new, :create ] do
+    get :accept, on: :member
+  end
+
   # For managing self-hosted upgrades and release notifications
   resources :upgrades, only: [] do
     member do

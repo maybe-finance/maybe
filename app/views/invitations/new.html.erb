@@ -1,0 +1,20 @@
+<%= modal_form_wrapper title: t(".title"), subtitle: t(".subtitle") do %>
+  <%= styled_form_with model: @invitation, class: "space-y-4", data: { turbo: false } do |form| %>
+    <%= form.email_field :email, 
+      required: true,
+      placeholder: t(".email_placeholder"),
+      label: t(".email_label") %>
+
+    <%= form.select :role,
+      options_for_select([
+        [t(".role_member"), "member"],
+        [t(".role_admin"), "admin"]
+      ]),
+      {},
+      { label: t(".role_label") } %>
+
+    <div class="w-full">
+      <%= form.submit t(".submit"), class: "bg-gray-900 text-white rounded-lg px-4 py-2 w-full" %>
+    </div>
+  <% end %>
+<% end %>

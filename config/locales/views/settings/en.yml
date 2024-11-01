@@ -41,6 +41,7 @@ en:
         theme_title: Theme
     profiles:
       show:
+        invite_member: "Add member"
         confirm_delete:
           body: Are you sure you want to permanently delete your account? This action
             is irreversible.
@@ -60,6 +61,8 @@ en:
         profile_subtitle: Customize how you appear on Maybe
         profile_title: Profile
         save: Save
+        pending: Pending
+        invitation_link: Invitation link
     user_avatar_field:
       accepted_formats: JPG or PNG. 5MB max.
       choose: Choose

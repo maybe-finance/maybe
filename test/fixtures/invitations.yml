@@ -1,0 +1,19 @@
+one:
+  email: "test@example.com"
+  token: "valid-token-123"
+  role: "member"
+  inviter: family_admin
+  family: dylan_family
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>
+  expires_at: <%= 3.days.from_now %>
+
+two:
+  email: "another@example.com"
+  token: "valid-token-456"
+  role: "admin"
+  inviter: family_admin
+  family: dylan_family
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>
+  expires_at: <%= 3.days.from_now %>

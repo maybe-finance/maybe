@@ -4,6 +4,7 @@ class Family < ApplicationRecord
   include Providable
 
   has_many :users, dependent: :destroy
+  has_many :invitations, dependent: :destroy
   has_many :tags, dependent: :destroy
   has_many :accounts, dependent: :destroy
   has_many :institutions, dependent: :destroy

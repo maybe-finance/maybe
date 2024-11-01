@@ -4,36 +4,49 @@ class RegistrationsController < ApplicationController
   layout "auth"
 
   before_action :set_user, only: :create
+  before_action :set_invitation
   before_action :claim_invite_code, only: :create, if: :invite_code_required?
 
   def new
-    @user = User.new
+    @user = User.new(email: @invitation&.email)
   end
 
   def create
-    family = Family.new
-    @user.family = family
-    @user.role = :admin
+    if @invitation
+      @user.family = @invitation.family
+      @user.role = @invitation.role
+      @user.email = @invitation.email
+    else
+      family = Family.new
+      @user.family = family
+      @user.role = :admin
+    end
 
     if @user.save
-      Category.create_default_categories(@user.family)
+      @invitation&.update!(accepted_at: Time.current)
+      Category.create_default_categories(@user.family) unless @invitation
       @session = create_session_for(@user)
-      flash[:notice] = t(".success")
-      redirect_to root_path
+      redirect_to root_path, notice: t(".success")
     else
-      flash[:alert] = t(".failure")
       render :new, status: :unprocessable_entity
     end
   end
 
   private
 
-    def set_user
-      @user = User.new user_params.except(:invite_code)
+    def set_invitation
+      token = params[:invitation]
+      token ||= params[:user][:invitation] if params[:user].present?
+      @invitation = Invitation.pending.find_by(token: token)
     end
 
-    def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation, :invite_code)
+    def set_user
+      @user = User.new user_params.except(:invite_code, :invitation)
+    end
+
+    def user_params(specific_param = nil)
+      params = self.params.require(:user).permit(:name, :email, :password, :password_confirmation, :invite_code, :invitation)
+      specific_param ? params[specific_param] : params
     end
 
     def claim_invite_code
