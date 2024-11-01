@@ -48,6 +48,10 @@ class Account::Transaction < ApplicationRecord
       end
   end
 
+  def name
+    entry.name || "(no description)"
+  end
+
   private
     def previous_transaction_date
       self.account

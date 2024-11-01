@@ -28,7 +28,10 @@
         </div>
         <div class="space-y-6">
           <%= entries_by_date(@transaction_entries) do |entries| %>
-            <%= render entries.reject { |e| e.transfer_id.present? }, selectable: true %>
+            <%= render partial: "account/transactions/feed_transaction",
+                       collection: entries.reject { |e| e.transfer_id.present? },
+                       as: :entry,
+                       locals: { selectable: true } %>
             <%= render transfer_entries(entries), selectable: false %>
           <% end %>
         </div>

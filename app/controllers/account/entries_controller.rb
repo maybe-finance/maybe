@@ -14,8 +14,11 @@ class Account::EntriesController < ApplicationController
   end
 
   def update
+    prev_amount = @entry.amount
+    prev_date = @entry.date
+
     @entry.update!(entry_params)
-    @entry.sync_account_later
+    @entry.sync_account_later if prev_amount != @entry.amount || prev_date != @entry.date
 
     respond_to do |format|
       format.html { redirect_to account_entry_path(@account, @entry), notice: t(".success") }
@@ -48,7 +51,7 @@ class Account::EntriesController < ApplicationController
     end
 
     def entry_params
-      params.require(:account_entry).permit(:name, :date, :amount, :currency)
+      params.require(:account_entry).permit(:name, :date, :amount, :currency, :notes)
     end
 
     def search_params

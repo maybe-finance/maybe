@@ -2,6 +2,8 @@
 en:
   account:
     valuations:
+      new:
+        title: New balance
       create:
         success: Valuation created successfully.
       form:
@@ -25,3 +27,17 @@ en:
         no_change: No change
         start_balance: Starting balance
         value_update: Value update
+      show:
+        balance: Balance
+        overview: Overview
+        details: Details
+        settings: Settings
+        name_label: Name
+        name_placeholder: Enter a name for this entry
+        date_label: Date
+        amount: Amount
+        note_label: Notes
+        note_placeholder: Add any additional details about this entry
+        delete_title: Delete Entry
+        delete_subtitle: This action cannot be undone
+        delete: Delete

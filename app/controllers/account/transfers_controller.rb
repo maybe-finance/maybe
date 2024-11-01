@@ -1,10 +1,13 @@
 class Account::TransfersController < ApplicationController
   layout :with_sidebar
 
-  before_action :set_transfer, only: :destroy
+  before_action :set_transfer, only: %i[destroy show]
 
   def new
     @transfer = Account::Transfer.new
+  end
+
+  def show
   end
 
   def create
@@ -36,7 +39,13 @@ class Account::TransfersController < ApplicationController
   private
 
     def set_transfer
-      @transfer = Account::Transfer.find(params[:id])
+      record = Account::Transfer.find(params[:id])
+
+      unless record.entries.all? { |entry| Current.family.accounts.include?(entry.account) }
+        raise ActiveRecord::RecordNotFound
+      end
+
+      @transfer = record
     end
 
     def transfer_params

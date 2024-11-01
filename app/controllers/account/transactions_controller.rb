@@ -12,7 +12,11 @@ class Account::TransactionsController < ApplicationController
   end
 
   def update
+    prev_amount = @entry.amount
+    prev_date = @entry.date
+
     @entry.update!(entry_params)
+    @entry.sync_account_later if prev_amount != @entry.amount || prev_date != @entry.date
 
     respond_to do |format|
       format.html { redirect_to account_entry_path(@account, @entry), notice: t(".success") }
@@ -21,7 +25,6 @@ class Account::TransactionsController < ApplicationController
   end
 
   private
-
     def set_account
       @account = Current.family.accounts.find(params[:account_id])
     end
