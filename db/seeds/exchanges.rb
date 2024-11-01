@@ -1,5 +1,10 @@
 # Load exchanges from YAML configuration
-exchanges_config = YAML.load_file(Rails.root.join('config', 'exchanges.yml'))
+exchanges_config = YAML.safe_load(
+  File.read(Rails.root.join('config', 'exchanges.yml')),
+  permitted_classes: [],
+  permitted_symbols: [],
+  aliases: true
+)
 
 exchanges_config.each do |exchange|
   next unless exchange['mic'].present? # Skip any invalid entries

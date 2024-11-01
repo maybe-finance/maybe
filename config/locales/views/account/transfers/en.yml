@@ -9,8 +9,6 @@ en:
       form:
         amount: Amount
         date: Date
-        description: Description
-        description_placeholder: Transfer from Checking to Savings
         expense: Expense
         from: From
         income: Income

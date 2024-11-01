@@ -26,7 +26,6 @@
   </section>
 
   <section class="space-y-2">
-    <%= f.text_field :name, value: transfer.name, label: t(".description"), placeholder: t(".description_placeholder"), required: true %>
     <%= f.collection_select :from_account_id, Current.family.accounts.alphabetically, :id, :name, { prompt: t(".select_account"), label: t(".from") }, required: true %>
     <%= f.collection_select :to_account_id, Current.family.accounts.alphabetically, :id, :name, { prompt: t(".select_account"), label: t(".to") }, required: true %>
     <%= f.money_field :amount, label: t(".amount"), required: true, hide_currency: true %>

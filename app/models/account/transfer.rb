@@ -43,12 +43,12 @@ class Account::Transfer < ApplicationRecord
   end
 
   class << self
-    def build_from_accounts(from_account, to_account, date:, amount:, currency:, name:)
+    def build_from_accounts(from_account, to_account, date:, amount:, currency:)
       outflow = from_account.entries.build \
         amount: amount.abs,
         currency: from_account.currency,
         date: date,
-        name: name,
+        name: "Transfer to #{to_account.name}",
         marked_as_transfer: true,
         entryable: Account::Transaction.new
 
@@ -56,7 +56,7 @@ class Account::Transfer < ApplicationRecord
         amount: amount.abs * -1,
         currency: from_account.currency,
         date: date,
-        name: name,
+        name: "Transfer from #{from_account.name}",
         marked_as_transfer: true,
         entryable: Account::Transaction.new
 
