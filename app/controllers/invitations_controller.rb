@@ -9,7 +9,7 @@ class InvitationsController < ApplicationController
     @invitation.inviter = Current.user
 
     if @invitation.save
-      InvitationMailer.invite_email(@invitation).deliver_later
+      InvitationMailer.invite_email(@invitation).deliver_later unless self_hosted?
       flash[:notice] = t(".success")
     else
       flash[:alert] = t(".failure")

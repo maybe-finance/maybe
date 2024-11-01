@@ -32,6 +32,9 @@ class Invitation < ApplicationRecord
     end
 
     def inviter_is_admin
-      inviter.admin?
+      unless inviter.admin?
+        errors.add(:role, "can only be set to member for non-admin inviters")
+        self.role = "member"
+      end
     end
 end

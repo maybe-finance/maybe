@@ -62,6 +62,7 @@ en:
         profile_title: Profile
         save: Save
         pending: Pending
+        invitation_link: Invitation link
     user_avatar_field:
       accepted_formats: JPG or PNG. 5MB max.
       choose: Choose
