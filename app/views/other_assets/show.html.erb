@@ -1,4 +1,16 @@
-<div id="other-asset-show">
-  Other Asset Show View
-</div>
- 
+<%= turbo_stream_from @account %>
+
+<%= tag.div id: dom_id(@account), class: "space-y-4" do %>
+  <%= render "accounts/show/header", account: @account %>
+
+  <div class="bg-white shadow-xs rounded-xl border border-alpha-black-25 rounded-lg">
+    <%= render "accounts/show/chart_header", account: @account %>
+    <%= render "accounts/show/chart", account: @account %>
+  </div>
+
+  <div class="min-h-[800px]">
+    <%= turbo_frame_tag dom_id(@account, :entries), src: account_entries_path(@account) do %>
+      <%= render "account/entries/loading" %>
+    <% end %>
+  </div>
+<% end %>

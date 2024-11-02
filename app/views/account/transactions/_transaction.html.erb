@@ -68,7 +68,7 @@
 
   <% if show_balance %>
     <div class="col-span-2 justify-self-end">
-      <%= tag.p format_money(transaction.eod_balance), class: "font-medium text-sm text-gray-900" %>
+      <%= tag.p format_money(entry.trend.current), class: "font-medium text-sm text-gray-900" %>
     </div>
   <% end %>
 </div>

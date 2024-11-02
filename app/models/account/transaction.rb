@@ -61,8 +61,7 @@ class Account::Transaction < ApplicationRecord
       entry.account
     end
 
-
-
     def daily_transactions
+      account.entries.account_transactions
     end
 end

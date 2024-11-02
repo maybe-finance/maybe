@@ -20,11 +20,11 @@ class Account::Valuation < ApplicationRecord
   end
 
   def icon
-    oldest? ? "plus" : trend.icon
+    oldest? ? "plus" : entry.trend.icon
   end
 
   def color
-    oldest? ? "#D444F1" : trend.color
+    oldest? ? "#D444F1" : entry.trend.color
   end
 
   private
