@@ -1,6 +1,6 @@
 <%# locals: (account:, url:) %>
 
-<%= styled_form_with model: account, url: url, scope: :account, class: "flex flex-col gap-4 justify-between grow" do |form| %>
+<%= styled_form_with model: account, url: url, scope: :account, data: { turbo: false }, class: "flex flex-col gap-4 justify-between grow" do |form| %>
   <div class="grow space-y-2">
     <%= form.hidden_field :accountable_type %>
 

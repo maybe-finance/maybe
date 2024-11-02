@@ -4,6 +4,8 @@ en:
     create:
       success: Property account created
     form:
+      test1: Test 1 is working 
+      test2: Test 2 is working
       address_line1: Street address
       address_line1_placeholder: 123 Main St
       address_line2: Apartment/Suite

@@ -1,4 +1,12 @@
 module AccountsHelper
+  def edit_account_path(account, options = {})
+    edit_polymorphic_path(account.accountable, options)
+  end
+
+  def account_path(account, options = {})
+    polymorphic_path(account.accountable, options)
+  end
+
   def new_accountable_path(type)
     klass = Accountable.from_type(type)
     "/#{klass.model_name.plural}/new"

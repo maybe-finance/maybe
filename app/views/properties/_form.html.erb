@@ -1,79 +1,54 @@
-<%# locals: (account:) %>
+<%# locals: (account:, url:) %>
 
-<%= styled_form_with model: account,
-                     url: properties_path,
-                     scope: :property,
-                     class: "flex flex-col gap-4 justify-between grow",
-                     data: { turbo: false } do |f| %>
-  <div class="grow space-y-2">
-    <%= f.hidden_field :accountable_type %>
+<%= render "accounts/form", account: account, url: url do |form| %>
+  <%= form.select :subtype,
+                 Depository::SUBTYPES,
+                 { label: true, prompt: t("properties.form.subtype_prompt"), include_blank: t("properties.form.none") } %>
 
-    <%= f.text_field :name,
-                     placeholder: t(".name_placeholder"),
-                     required: "required",
-                     label: t(".name_label") %>
+  <hr class="my-4">
 
-    <% if account.new_record? %>
-      <%= f.hidden_field :institution_id %>
-    <% else %>
-      <%= f.collection_select :institution_id,
-                            Current.family.institutions.alphabetically,
-                            :id, :name,
-                            { include_blank: t(".ungrouped"), label: t(".institution") } %>
-    <% end %>
-
-    <%= f.money_field :balance,
-                      label: t(".balance"),
-                      required: true,
-                      default_currency: Current.family.currency %>
-
-    <div>
-      <hr class="my-4">
-
-      <div class="space-y-2">
-        <%= f.fields_for :accountable do |property_form| %>
-          <div class="flex items-center gap-2">
-            <%= property_form.number_field :year_built,
-                                         label: t(".year_built"),
-                                         placeholder: t(".year_built_placeholder"),
-                                         min: 1800,
-                                         max: Time.current.year %>
-          </div>
-
-          <div class="flex items-center gap-2">
-            <%= property_form.number_field :area_value,
-                                         label: t(".area"),
-                                         placeholder: t(".area_placeholder"),
-                                         min: 0 %>
-            <%= property_form.select :area_unit,
-                                   [["Square Feet", "sqft"], ["Square Meters", "sqm"]],
-                                   { label: t(".area_unit") } %>
-          </div>
-
-          <%= property_form.fields_for :address do |address_form| %>
-            <%= address_form.text_field :line1,
-                                      label: t(".address_line1"),
-                                      placeholder: t(".address_line1_placeholder") %>
-            <%= address_form.text_field :line2,
-                                      label: t(".address_line2"),
-                                      placeholder: t(".address_line2_placeholder") %>
-            <%= address_form.text_field :locality,
-                                      label: t(".locality"),
-                                      placeholder: t(".locality_placeholder") %>
-            <%= address_form.text_field :region,
-                                      label: t(".region"),
-                                      placeholder: t(".region_placeholder") %>
-            <%= address_form.text_field :postal_code,
-                                      label: t(".postal_code"),
-                                      placeholder: t(".postal_code_placeholder") %>
-            <%= address_form.text_field :country,
-                                      label: t(".country"),
-                                      placeholder: t(".country_placeholder") %>
-          <% end %>
-        <% end %>
+  <div class="space-y-2">
+    <%= form.fields_for :accountable do |property_form| %>
+      <div class="flex items-center gap-2">
+        <%= property_form.number_field :year_built,
+                                       label: t("properties.form.year_built"),
+                                       placeholder: t("properties.form.year_built_placeholder"),
+                                       min: 1800,
+                                       max: Time.current.year %>
       </div>
-    </div>
-  </div>
 
-  <%= f.submit %>
+      <div class="flex items-center gap-2">
+        <%= property_form.number_field :area_value,
+                                       label: t("properties.form.area"),
+                                       placeholder: t("properties.form.area_placeholder"),
+                                       min: 0 %>
+        <%= property_form.select :area_unit,
+                                 [["Square Feet", "sqft"], ["Square Meters", "sqm"]],
+                                 { label: t("properties.form.area_unit") } %>
+      </div>
+
+      <%= property_form.fields_for :address do |address_form| %>
+        <%= address_form.text_field :line1,
+                                    label: t("properties.form.address_line1"),
+                                    placeholder: t("properties.form.address_line1_placeholder") %>
+        <div class="flex items-center gap-2">
+          <%= address_form.text_field :locality,
+                                    label: t("properties.form.locality"),
+                                    placeholder: t("properties.form.locality_placeholder") %>
+          <%= address_form.text_field :region,
+                                    label: t("properties.form.region"),
+                                    placeholder: t("properties.form.region_placeholder") %>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <%= address_form.text_field :postal_code,
+                                      label: t("properties.form.postal_code"),
+                                      placeholder: t("properties.form.postal_code_placeholder") %>
+          <%= address_form.text_field :country,
+                                      label: t("properties.form.country"),
+                                      placeholder: t("properties.form.country_placeholder") %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
 <% end %>

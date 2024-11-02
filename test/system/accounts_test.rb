@@ -23,12 +23,11 @@ class AccountsTest < ApplicationSystemTestCase
   test "can create property account" do
     assert_account_created "Property" do
       fill_in "Year built", with: 2005
-      fill_in "Area value", with: 2250
-      fill_in "Address line 1", with: "123 Main St"
-      fill_in "Address line 2", with: "Apt 4B"
+      fill_in "Living area", with: 2250
+      fill_in "Street address", with: "123 Main St"
       fill_in "City", with: "San Francisco"
-      fill_in "State", with: "CA"
-      fill_in "Postal code", with: "94101"
+      fill_in "State/Province", with: "CA"
+      fill_in "ZIP/Postal code", with: "94101"
       fill_in "Country", with: "US"
     end
   end
@@ -80,13 +79,15 @@ class AccountsTest < ApplicationSystemTestCase
     end
 
     def assert_account_created(accountable_type, &block)
-      click_link "Enter account manually"
+      click_link humanized_accountable(accountable_type)
+      click_link "Enter account balance"
 
       account_name = "[system test] #{accountable_type} Account"
 
-      select accountable_type.titleize, from: "Account type"
-      fill_in "Account name", with: account_name
+      fill_in "Account name*", with: account_name
       fill_in "account[balance]", with: 100.99
+
+      yield if block_given?
 
       click_button "Create Account"
 
@@ -97,16 +98,13 @@ class AccountsTest < ApplicationSystemTestCase
       assert_text account_name
 
       created_account = Account.order(:created_at).last
-      created_account.update!(mode: "transactions")
 
-      visit account_url(created_account)
+      visit polymorphic_path(created_account.accountable)
 
       within "header" do
         find('button[data-menu-target="button"]').click
         click_on "Edit"
       end
-
-      yield if block_given?
 
       fill_in "Account name", with: "Updated account name"
       click_button "Update Account"

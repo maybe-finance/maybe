@@ -1,7 +1,7 @@
 class AccountsController < ApplicationController
   layout :with_sidebar
 
-  before_action :set_account, only: %i[edit show destroy sync update]
+  before_action :set_account, only: %i[destroy sync update]
 
   def index
     @institutions = Current.family.institutions
@@ -20,14 +20,6 @@ class AccountsController < ApplicationController
 
   def list
     render layout: false
-  end
-
-  def show
-    render accountable_view_path(:show)
-  end
-
-  def edit
-    render accountable_view_path(:edit)
   end
 
   def update
@@ -52,11 +44,6 @@ class AccountsController < ApplicationController
   end
 
   private
-
-    def accountable_view_path(action)
-      @account.accountable.class.name.underscore.pluralize + "/" + action.to_s
-    end
-
     def set_account
       @account = Current.family.accounts.find(params[:id])
     end

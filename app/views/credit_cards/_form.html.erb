@@ -1,68 +1,37 @@
-<%# locals: (account:) %>
+<%# locals: (account:, url:) %>
 
-<%= styled_form_with model: account,
-                     url: credit_cards_path,
-                     scope: :credit_card,
-                     class: "flex flex-col gap-4 justify-between grow",
-                     data: { turbo: false } do |f| %>
-  <div class="grow space-y-2">
-    <%= f.hidden_field :accountable_type %>
+<%= render "accounts/form", account: account, url: url do |form| %>
+  <hr class="my-4">
 
-    <%= f.text_field :name,
-                     placeholder: t(".name_placeholder"),
-                     required: "required",
-                     label: t(".name_label") %>
-
-    <% if account.new_record? %>
-      <%= f.hidden_field :institution_id %>
-    <% else %>
-      <%= f.collection_select :institution_id,
-                            Current.family.institutions.alphabetically,
-                            :id, :name,
-                            { include_blank: t(".ungrouped"), label: t(".institution") } %>
-    <% end %>
-
-    <%= f.money_field :balance,
-                      label: t(".balance"),
-                      required: true,
-                      default_currency: Current.family.currency %>
-
-    <div>
-      <hr class="my-4">
-
-      <div class="space-y-2">
-        <%= f.fields_for :accountable do |credit_card_form| %>
-          <div class="flex items-center gap-2">
-            <%= credit_card_form.number_field :available_credit,
-                                            label: t(".available_credit"),
-                                            placeholder: t(".available_credit_placeholder"),
-                                            min: 0 %>
-          </div>
-
-          <div class="flex items-center gap-2">
-            <%= credit_card_form.number_field :minimum_payment,
-                                            label: t(".minimum_payment"),
-                                            placeholder: t(".minimum_payment_placeholder"),
-                                            min: 0 %>
-            <%= credit_card_form.number_field :apr,
-                                            label: t(".apr"),
-                                            placeholder: t(".apr_placeholder"),
-                                            min: 0,
-                                            step: 0.01 %>
-          </div>
-
-          <div class="flex items-center gap-2">
-            <%= credit_card_form.date_field :expiration_date,
-                                          label: t(".expiration_date") %>
-            <%= credit_card_form.number_field :annual_fee,
-                                            label: t(".annual_fee"),
-                                            placeholder: t(".annual_fee_placeholder"),
-                                            min: 0 %>
-          </div>
-        <% end %>
+  <div class="space-y-2">
+    <%= form.fields_for :accountable do |credit_card_form| %>
+      <div class="flex items-center gap-2">
+        <%= credit_card_form.number_field :available_credit,
+                                        label: t("credit_cards.form.available_credit"),
+                                        placeholder: t("credit_cards.form.available_credit_placeholder"),
+                                        min: 0 %>
       </div>
-    </div>
-  </div>
 
-  <%= f.submit %>
+      <div class="flex items-center gap-2">
+        <%= credit_card_form.number_field :minimum_payment,
+                                        label: t("credit_cards.form.minimum_payment"),
+                                        placeholder: t("credit_cards.form.minimum_payment_placeholder"),
+                                        min: 0 %>
+        <%= credit_card_form.number_field :apr,
+                                        label: t("credit_cards.form.apr"),
+                                        placeholder: t("credit_cards.form.apr_placeholder"),
+                                        min: 0,
+                                        step: 0.01 %>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <%= credit_card_form.date_field :expiration_date,
+                                      label: t("credit_cards.form.expiration_date") %>
+        <%= credit_card_form.number_field :annual_fee,
+                                        label: t("credit_cards.form.annual_fee"),
+                                        placeholder: t("credit_cards.form.annual_fee_placeholder"),
+                                        min: 0 %>
+      </div>
+    <% end %>
+  </div>
 <% end %>

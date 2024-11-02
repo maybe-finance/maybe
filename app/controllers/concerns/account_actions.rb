@@ -16,21 +16,24 @@ module AccountActions
   def new
     @account = Current.family.accounts.build(
       currency: Current.family.currency,
-      accountable_type: accountable_type,
+      accountable: accountable_type.new,
     )
   end
 
   def show
   end
 
+  def edit
+  end
+
   def create
     @account = Current.family.accounts.create_and_sync(account_params)
-    redirect_to @account, notice: t(".success")
+    redirect_to @account.accountable, notice: t(".success")
   end
 
   def update
     @account.update_with_sync!(account_params)
-    redirect_to @account, notice: t(".success")
+    redirect_to @account.accountable, notice: t(".success")
   end
 
   private

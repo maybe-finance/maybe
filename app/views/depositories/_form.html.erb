@@ -1,6 +1,6 @@
-<%# locals: (account:) %>
+<%# locals: (account:, url:) %>
 
-<%= render "accounts/form", account: account, url: depositories_path do |form| %>
+<%= render "accounts/form", account: account, url: url do |form| %>
   <%= form.select :subtype,
                  Depository::SUBTYPES,
                  { label: true, prompt: t(".subtype_prompt"), include_blank: t(".none") } %>
