@@ -60,7 +60,7 @@ Rails.application.routes.draw do
     resources :mappings, only: :update, module: :import
   end
 
-  resources :accounts, only: %i[index show new edit update destroy] do
+  resources :accounts, only: %i[index new update destroy] do
     collection do
       get :summary
       get :list
@@ -85,15 +85,15 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :depositories, only: %i[new show create update]
-  resources :investments, only: %i[new show create update]
-  resources :properties, only: %i[new show create update]
-  resources :vehicles, only: %i[new show create update]
-  resources :credit_cards, only: %i[new show create update]
-  resources :loans, only: %i[new show create update]
-  resources :cryptos, only: %i[new show create update]
-  resources :other_assets, only: %i[new show create update]
-  resources :other_liabilities, only: %i[new show create update]
+  resources :depositories, only: %i[new show create edit update]
+  resources :investments, only: %i[new show create edit update]
+  resources :properties, only: %i[new show create edit update]
+  resources :vehicles, only: %i[new show create edit update]
+  resources :credit_cards, only: %i[new show create edit update]
+  resources :loans, only: %i[new show create edit update]
+  resources :cryptos, only: %i[new show create edit update]
+  resources :other_assets, only: %i[new show create edit update]
+  resources :other_liabilities, only: %i[new show create edit update]
 
   resources :transactions, only: %i[index new create] do
     collection do

@@ -1,0 +1,5 @@
+<%# locals: (account:) %>
+
+<%= turbo_frame_tag dom_id(account, :cash), src: account_cashes_path(account) do %>
+  <%= render "account/entries/loading" %>
+<% end %>

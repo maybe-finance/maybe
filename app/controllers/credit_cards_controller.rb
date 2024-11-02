@@ -1,4 +1,6 @@
 class CreditCardsController < ApplicationController
+  layout :with_sidebar
+
   before_action :set_account, only: [ :update, :show ]
 
   def new

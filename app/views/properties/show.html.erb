@@ -1,4 +1,6 @@
-<div id="property-show">
-  Property Show View
-</div>
- 
+<%= render "accounts/show/template",
+           account: @account,
+           tabs: render("accounts/show/tabs", account: @account, tabs: [
+            { key: "overview", contents: render("properties/overview", account: @account) },
+            { key: "activity", contents: render("accounts/show/activity", account: @account) }
+           ]) %>

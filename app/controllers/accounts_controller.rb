@@ -1,7 +1,7 @@
 class AccountsController < ApplicationController
   layout :with_sidebar
 
-  before_action :set_account, only: %i[edit show destroy sync update]
+  before_action :set_account, only: %i[edit destroy sync update]
 
   def index
     @institutions = Current.family.institutions
@@ -18,17 +18,13 @@ class AccountsController < ApplicationController
     @account_groups = @accounts.by_group(period: @period, currency: Current.family.currency)
   end
 
-  def show
-    redirect_to @account.accountable
-  end
-
   def list
     render layout: false
   end
 
   def update
     @account.update_with_sync!(account_params)
-    redirect_back_or_to account_path(@account), notice: t(".success")
+    redirect_back_or_to @account.accountable, notice: t(".success")
   end
 
   def destroy

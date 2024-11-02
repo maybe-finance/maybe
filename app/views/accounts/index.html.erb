@@ -35,11 +35,11 @@
   <% else %>
     <div class="space-y-2">
       <% @institutions.each do |institution| %>
-        <%= render "institution_accounts", institution: %>
+        <%= render "accounts/index/institution_accounts", institution: %>
       <% end %>
 
       <% if @accounts.any? %>
-        <%= render "institutionless_accounts", accounts: @accounts %>
+        <%= render "accounts/index/institutionless_accounts", accounts: @accounts %>
       <% end %>
     </div>
   <% end %>

@@ -1,7 +1,38 @@
-<%# locals: (account:) %>
+<%# locals: (account:, title: nil, tooltip: nil) %>
 
 <% period = Period.from_param(params[:period]) %>
+<% series = account.series(period: period) %>
+<% trend = series.trend %>
+<% default_value_title = account.asset? ? t(".balance") : t(".owed") %>
 
-<div class="h-64 flex items-center justify-center text-2xl font-bold">
-  <%= render "shared/line_chart", series: account.series(period: period) %>
+<div class="bg-white shadow-xs rounded-xl border border-alpha-black-25 rounded-lg">
+  <div class="p-4 flex justify-between">
+    <div class="space-y-2">
+      <div class="flex items-center gap-1">
+        <%= tag.p title || default_value_title, class: "text-sm font-medium text-gray-500" %>
+        <%= tooltip %>
+      </div>
+
+      <%= tag.p format_money(account.value), class: "text-gray-900 text-3xl font-medium" %>
+
+      <div>
+        <% if trend.direction.flat? %>
+          <%= tag.span t(".no_change"), class: "text-gray-500" %>
+        <% else %>
+          <%= tag.span format_money(trend.value), style: "color: #{trend.color}" %>
+          <%= tag.span "(#{trend.percent}%)", style: "color: #{trend.color}" %>
+        <% end %>
+
+        <%= tag.span period_label(period), class: "text-gray-500" %>
+      </div>
+    </div>
+
+    <%= form_with url: request.path, method: :get, data: { controller: "auto-submit-form" } do |form| %>
+      <%= period_select form: form, selected: period.name %>
+    <% end %>
+  </div>
+
+  <div class="h-64 flex items-center justify-center text-2xl font-bold">
+    <%= render "shared/line_chart", series: series %>
+  </div>
 </div>
