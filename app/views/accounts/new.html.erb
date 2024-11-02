@@ -1,5 +1,5 @@
 <% if params[:type].present? %>
-  <%= render "accounts/new/method_selector", path: new_accountable_path(params[:type].constantize) %>
+  <%= render "accounts/new/method_selector", path: new_accountable_path(params[:type]) %>
 <% else %>
   <%= render layout: "accounts/new/container", locals: { title: t(".title") } do %>
     <div class="text-sm">

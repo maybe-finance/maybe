@@ -3,13 +3,15 @@ en:
   cryptos:
     create:
       success: Crypto account created
-    update:
-      success: Crypto account updated
+    form:
+      balance: Current balance
+      institution: Institution
+      name_label: Account name
+      name_placeholder: Bitcoin wallet
+      none: None
+      subtype_prompt: Select crypto type
+      ungrouped: "(none)"
     new:
       title: Enter account balance
-    form:
-      name_placeholder: Bitcoin wallet
-      name_label: Account name
-      balance: Current balance
-      subtype_prompt: Select crypto type
-      none: None 
+    update:
+      success: Crypto account updated

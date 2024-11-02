@@ -3,28 +3,37 @@ en:
   properties:
     create:
       success: Property account created
-    update:
-      success: Property account updated
+    form:
+      address_line1: Street address
+      address_line1_placeholder: 123 Main St
+      address_line2: Apartment/Suite
+      address_line2_placeholder: Apt 4B
+      area: Living area
+      area_placeholder: '2000'
+      area_unit: Unit of measurement
+      balance: Current value
+      country: Country
+      country_placeholder: US
+      institution: Institution
+      locality: City
+      locality_placeholder: San Francisco
+      name_label: Property name
+      name_placeholder: Primary residence
+      postal_code: ZIP/Postal code
+      postal_code_placeholder: '94105'
+      region: State/Province
+      region_placeholder: CA
+      ungrouped: "(none)"
+      year_built: Year built
+      year_built_placeholder: '2000'
     new:
       title: Enter property details
-    form:
-      name_placeholder: Primary residence
-      name_label: Property name
-      balance: Current value
-      year_built: Year built
-      year_built_placeholder: "2000"
-      area: Living area
-      area_placeholder: "2000"
-      area_unit: Unit of measurement
-      address_line1: Street address
-      address_line1_placeholder: "123 Main St"
-      address_line2: Apartment/Suite
-      address_line2_placeholder: "Apt 4B"
-      locality: City
-      locality_placeholder: "San Francisco"
-      region: State/Province
-      region_placeholder: "CA"
-      postal_code: ZIP/Postal code
-      postal_code_placeholder: "94105"
-      country: Country
-      country_placeholder: "US" 
+    overview:
+      living_area: Living Area
+      market_value: Market Value
+      purchase_price: Purchase Price
+      trend: Trend
+      unknown: Unknown
+      year_built: Year Built
+    update:
+      success: Property account updated

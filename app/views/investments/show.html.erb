@@ -5,13 +5,12 @@
 
   <%= render "accounts/show/chart",
                account: @account,
-               title: t(".chart"),
+               title: t(".chart_title"),
                tooltip: render(
                  "investments/value_tooltip",
                  value: @account.value,
                  cash: @account.balance_money
-               )
-             %>
+               ) %>
 
   <div class="min-h-[800px]">
     <%= render "accounts/show/tabs", account: @account, tabs: [

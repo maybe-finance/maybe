@@ -3,13 +3,15 @@ en:
   other_liabilities:
     create:
       success: Other liability account created
-    update:
-      success: Other liability account updated
+    form:
+      balance: Current balance
+      institution: Institution
+      name_label: Liability name
+      name_placeholder: Personal loan
+      none: None
+      subtype_prompt: Select liability type
+      ungrouped: "(none)"
     new:
       title: Enter liability details
-    form:
-      name_placeholder: Personal loan
-      name_label: Liability name
-      balance: Current balance
-      subtype_prompt: Select liability type
-      none: None 
+    update:
+      success: Other liability account updated

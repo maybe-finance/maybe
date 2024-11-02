@@ -3,12 +3,15 @@ en:
   depositories:
     create:
       success: Depository account created
-    update:
-      success: Depository account updated
+    form:
+      balance: Current balance
+      institution: Institution
+      name_label: Account name
+      name_placeholder: Chase checking account
+      none: None
+      subtype_prompt: Select account type
+      ungrouped: "(none)"
     new:
       title: Enter account balance
-    form:
-      name_placeholder: Chase checking account
-      name_label: Account name
-      balance: Current balance
-      subtype_prompt: Select account type 
+    update:
+      success: Depository account updated

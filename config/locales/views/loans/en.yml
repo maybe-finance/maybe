@@ -3,16 +3,27 @@ en:
   loans:
     create:
       success: Loan account created
-    update:
-      success: Loan account updated
-    new:
-      title: Enter loan details
     form:
-      name_placeholder: Home mortgage
-      name_label: Loan name
       balance: Current balance
+      institution: Institution
       interest_rate: Interest rate
       interest_rate_placeholder: '5.25'
+      name_label: Loan name
+      name_placeholder: Home mortgage
       rate_type: Rate type
       term_months: Term (months)
-      term_months_placeholder: '360' 
+      term_months_placeholder: '360'
+      ungrouped: "(none)"
+    new:
+      title: Enter loan details
+    overview:
+      interest_rate: Interest Rate
+      monthly_payment: Monthly Payment
+      not_applicable: N/A
+      original_principal: Original Principal
+      remaining_principal: Remaining Principal
+      term: Term
+      type: Type
+      unknown: Unknown
+    update:
+      success: Loan account updated

@@ -1,6 +1,7 @@
 module AccountsHelper
   def new_accountable_path(type)
-    "/#{type.model_name.plural}/new"
+    klass = Accountable.from_type(type)
+    "/#{klass.model_name.plural}/new"
   end
 
   def period_label(period)

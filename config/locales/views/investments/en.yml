@@ -3,13 +3,22 @@ en:
   investments:
     create:
       success: Investment account created
-    update:
-      success: Investment account updated
+    form:
+      balance: Current balance
+      institution: Institution
+      name_label: Account name
+      name_placeholder: Vanguard brokerage account
+      none: None
+      subtype_prompt: Select investment type
+      ungrouped: "(none)"
     new:
       title: Enter account balance
-    form:
-      name_placeholder: Vanguard brokerage account
-      name_label: Account name
-      balance: Current balance
-      subtype_prompt: Select investment type
-      none: None 
+    show:
+      chart_title: Total value
+    update:
+      success: Investment account updated
+    value_tooltip:
+      cash: Cash
+      holdings: Holdings
+      total_value_tooltip: The total value is the sum of cash balance and your holdings
+        value, minus margin loans.

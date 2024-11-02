@@ -3,20 +3,30 @@ en:
   vehicles:
     create:
       success: Vehicle account created
-    update:
-      success: Vehicle account updated
-    new:
-      title: Enter vehicle details
     form:
-      name_placeholder: Family car
-      name_label: Vehicle name
       balance: Current value
+      institution: Institution
       make: Make
       make_placeholder: Toyota
       mileage: Mileage
-      mileage_placeholder: "15000"
+      mileage_placeholder: '15000'
       mileage_unit: Unit
       model: Model
       model_placeholder: Camry
+      name_label: Vehicle name
+      name_placeholder: Family car
+      ungrouped: "(none)"
       year: Year
-      year_placeholder: "2023" 
+      year_placeholder: '2023'
+    new:
+      title: Enter vehicle details
+    overview:
+      current_price: Current Price
+      make_model: Make & Model
+      mileage: Mileage
+      purchase_price: Purchase Price
+      trend: Trend
+      unknown: Unknown
+      year: Year
+    update:
+      success: Vehicle account updated

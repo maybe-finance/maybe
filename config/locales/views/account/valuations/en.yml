@@ -2,8 +2,6 @@
 en:
   account:
     valuations:
-      new:
-        title: New balance
       create:
         success: Valuation created successfully.
       form:
@@ -15,29 +13,19 @@ en:
         no_valuations: No valuations for this account yet
         valuations: Value
         value: value
-      valuation:
-        confirm_accept: Delete entry
-        confirm_body_html: "<p>Deleting this entry will remove it from the account’s
-          history which will impact different parts of your account. This includes
-          the net worth and account graphs.</p></br><p>The only way you’ll be able
-          to add this entry back is by re-entering it manually via a new entry.</p>"
-        confirm_title: Delete Entry?
-        delete_entry: Delete entry
-        edit_entry: Edit entry
-        no_change: No change
-        start_balance: Starting balance
-        value_update: Value update
+      new:
+        title: New balance
       show:
+        amount: Amount
         balance: Balance
-        overview: Overview
+        date_label: Date
+        delete: Delete
+        delete_subtitle: This action cannot be undone
+        delete_title: Delete Entry
         details: Details
-        settings: Settings
         name_label: Name
         name_placeholder: Enter a name for this entry
-        date_label: Date
-        amount: Amount
         note_label: Notes
         note_placeholder: Add any additional details about this entry
-        delete_title: Delete Entry
-        delete_subtitle: This action cannot be undone
-        delete: Delete
+        overview: Overview
+        settings: Settings

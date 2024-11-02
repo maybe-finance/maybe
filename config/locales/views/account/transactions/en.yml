@@ -35,9 +35,5 @@ en:
         overview: Overview
         settings: Settings
         tags_label: Tags
-      transaction:
-        remove_transfer: Remove transfer
-        remove_transfer_body: This will remove the transfer from this transaction
-        remove_transfer_confirm: Confirm
       update:
         success: Transaction updated successfully.

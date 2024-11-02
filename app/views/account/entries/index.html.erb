@@ -42,10 +42,10 @@
       <% end %>
     </div>
 
-    <%= tag.div id: dom_id(@account, "entries_bulk_select"), 
-                data: { 
-                  controller: "bulk-select", 
-                  bulk_select_singular_label_value: t(".entry"), 
+    <%= tag.div id: dom_id(@account, "entries_bulk_select"),
+                data: {
+                  controller: "bulk-select",
+                  bulk_select_singular_label_value: t(".entry"),
                   bulk_select_plural_label_value: t(".entries")
                 } do %>
       <div id="entry-selection-bar" data-bulk-select-target="selectionBar" class="flex justify-center hidden">

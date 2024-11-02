@@ -3,13 +3,15 @@ en:
   other_assets:
     create:
       success: Other asset account created
-    update:
-      success: Other asset account updated
+    form:
+      balance: Current value
+      institution: Institution
+      name_label: Asset name
+      name_placeholder: Art collection
+      none: None
+      subtype_prompt: Select asset type
+      ungrouped: "(none)"
     new:
       title: Enter asset details
-    form:
-      name_placeholder: Art collection
-      name_label: Asset name
-      balance: Current value
-      subtype_prompt: Select asset type
-      none: None 
+    update:
+      success: Other asset account updated
