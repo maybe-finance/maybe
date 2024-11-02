@@ -3,7 +3,7 @@ en:
   settings:
     hostings:
       invite_code_settings:
-        description: Every new user that joins your instance if Maybe can only do
+        description: Every new user that joins your instance of Maybe can only do
           so via an invite code
         generate_tokens: Generate new code
         generated_tokens: Generated codes
