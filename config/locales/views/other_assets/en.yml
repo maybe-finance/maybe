@@ -3,17 +3,9 @@ en:
   other_assets:
     create:
       success: Other asset account created
-    form:
-      balance: Current value
-      institution: Institution
-      name_label: Asset name
-      name_placeholder: Art collection
-      none: None
-      subtype_prompt: Select asset type
-      ungrouped: "(none)"
+    edit:
+      edit: Edit %{account}
     new:
       title: Enter asset details
     update:
       success: Other asset account updated
-    edit:
-      edit: "Edit %{account}"

@@ -3,29 +3,24 @@ en:
   properties:
     create:
       success: Property account created
+    edit:
+      edit: Edit %{account}
     form:
-      test1: Test 1 is working 
-      test2: Test 2 is working
       address_line1: Street address
       address_line1_placeholder: 123 Main St
-      address_line2: Apartment/Suite
-      address_line2_placeholder: Apt 4B
       area: Living area
       area_placeholder: '2000'
       area_unit: Unit of measurement
-      balance: Current value
       country: Country
       country_placeholder: US
-      institution: Institution
       locality: City
       locality_placeholder: San Francisco
-      name_label: Property name
-      name_placeholder: Primary residence
+      none: None
       postal_code: ZIP/Postal code
       postal_code_placeholder: '94105'
       region: State/Province
       region_placeholder: CA
-      ungrouped: "(none)"
+      subtype_prompt: Select property type
       year_built: Year built
       year_built_placeholder: '2000'
     new:
@@ -39,5 +34,3 @@ en:
       year_built: Year Built
     update:
       success: Property account updated
-    edit:
-      edit: "Edit %{account}"

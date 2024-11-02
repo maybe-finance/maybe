@@ -17,6 +17,7 @@ module AccountActions
     @account = Current.family.accounts.build(
       currency: Current.family.currency,
       accountable: accountable_type.new,
+      institution_id: params[:institution_id]
     )
   end
 
@@ -28,12 +29,12 @@ module AccountActions
 
   def create
     @account = Current.family.accounts.create_and_sync(account_params)
-    redirect_to @account.accountable, notice: t(".success")
+    redirect_back_or_to @account.accountable, notice: t(".success")
   end
 
   def update
     @account.update_with_sync!(account_params)
-    redirect_to @account.accountable, notice: t(".success")
+    redirect_back_or_to @account.accountable, notice: t(".success")
   end
 
   private

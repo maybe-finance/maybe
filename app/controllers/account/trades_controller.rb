@@ -17,10 +17,10 @@ class Account::TradesController < ApplicationController
 
     if entry = @builder.save
       entry.sync_account_later
-      redirect_to @account, notice: t(".success")
+      redirect_to @account.accountable, notice: t(".success")
     else
       flash[:alert] = t(".failure")
-      redirect_back_or_to @account
+      redirect_back_or_to @account.accountable
     end
   end
 

@@ -3,17 +3,14 @@ en:
   loans:
     create:
       success: Loan account created
+    edit:
+      edit: Edit %{account}
     form:
-      balance: Current balance
-      institution: Institution
       interest_rate: Interest rate
       interest_rate_placeholder: '5.25'
-      name_label: Loan name
-      name_placeholder: Home mortgage
       rate_type: Rate type
       term_months: Term (months)
       term_months_placeholder: '360'
-      ungrouped: "(none)"
     new:
       title: Enter loan details
     overview:
@@ -27,5 +24,3 @@ en:
       unknown: Unknown
     update:
       success: Loan account updated
-    edit:
-      edit: "Edit %{account}"

@@ -3,6 +3,8 @@ en:
   credit_cards:
     create:
       success: Credit card account created
+    edit:
+      edit: Edit %{account}
     form:
       annual_fee: Annual fee
       annual_fee_placeholder: '99'
@@ -10,14 +12,9 @@ en:
       apr_placeholder: '15.99'
       available_credit: Available credit
       available_credit_placeholder: '10000'
-      balance: Current balance
       expiration_date: Expiration date
-      institution: Institution
       minimum_payment: Minimum payment
       minimum_payment_placeholder: '100'
-      name_label: Card name
-      name_placeholder: Chase Sapphire
-      ungrouped: "(none)"
     new:
       title: Enter credit card details
     overview:
@@ -30,5 +27,3 @@ en:
       unknown: Unknown
     update:
       success: Credit card account updated
-    edit:
-      edit: "Edit %{account}"

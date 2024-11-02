@@ -8,23 +8,16 @@ en:
       new_account: New %{type}
     destroy:
       success: Account deleted successfully
-    edit:
-      edit: Edit %{account}
     empty:
       empty_message: Add an account either via connection, importing or entering manually.
       new_account: New account
       no_accounts: No accounts yet
     form:
-      accountable_type: Account type
       balance: Today's balance
       institution: Financial institution
       name_label: Account name
       name_placeholder: Example account name
-      type_prompt: Select a type
       ungrouped: "(none)"
-      subtype_prompt: Select a subtype
-      none: None
-      subtype: Subtype
     index:
       accounts: Accounts
       add_institution: Add institution
@@ -60,12 +53,10 @@ en:
         title: How would you like to add it?
       title: What would you like to add?
     show:
-      cash: Cash
       chart:
         balance: Balance
         no_change: no change
         owed: Owed
-      holdings: Holdings
       menu:
         confirm_accept: Delete "%{name}"
         confirm_body_html: "<p>By deleting this account, you will erase its value
@@ -76,10 +67,6 @@ en:
         confirm_title: Delete account?
         edit: Edit
         import: Import transactions
-      overview: Overview
-      trades: Transactions
-      transactions: Transactions
-      value: Value
     summary:
       header:
         accounts: Accounts

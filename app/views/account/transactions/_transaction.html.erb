@@ -52,7 +52,7 @@
           <%= tag.p account.name %>
         <% else %>
           <%= link_to account.name,
-                      account_path(account, tab: "transactions"),
+                      polymorphic_path(account.accountable, tab: "transactions"),
                       data: { turbo_frame: "_top" },
                       class: "hover:underline" %>
         <% end %>

@@ -182,15 +182,13 @@ class TransactionsTest < ApplicationSystemTestCase
     investment_account = accounts(:investment)
     investment_account.entries.create!(name: "Investment account", date: Date.current, amount: 1000, currency: "USD", entryable: Account::Transaction.new)
     transfer_date = Date.current
-    visit account_path(investment_account)
+    visit polymorphic_path(investment_account.accountable)
+    click_on "New"
     click_on "New transaction"
     select "Deposit", from: "Type"
     fill_in "Date", with: transfer_date
     fill_in "account_entry[amount]", with: 175.25
     click_button "Add transaction"
-    within "#account_" + investment_account.id do
-      click_on "Transactions"
-    end
     within "#entry-group-" + transfer_date.to_s do
       assert_text "175.25"
     end

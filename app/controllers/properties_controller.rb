@@ -11,7 +11,8 @@ class PropertiesController < ApplicationController
       currency: Current.family.currency,
       accountable: Property.new(
         address: Address.new
-      )
+      ),
+      institution_id: params[:institution_id]
     )
   end
 

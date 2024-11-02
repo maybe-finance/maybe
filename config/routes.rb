@@ -60,7 +60,7 @@ Rails.application.routes.draw do
     resources :mappings, only: :update, module: :import
   end
 
-  resources :accounts, only: %i[index new update destroy] do
+  resources :accounts, only: %i[index new destroy] do
     collection do
       get :summary
       get :list

@@ -61,7 +61,7 @@
         </div>
       <% end %>
     <% end %>
-    <%= link_to new_account_path(step: "method", type: type.name.demodulize), class: "flex items-center min-h-10 gap-4 px-3 py-2 mb-1 text-gray-500 text-sm font-medium rounded-[10px] hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
+    <%= link_to new_account_path(type: type.name.demodulize), class: "flex items-center min-h-10 gap-4 px-3 py-2 mb-1 text-gray-500 text-sm font-medium rounded-[10px] hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
       <%= lucide_icon("plus", class: "w-5 h-5") %>
       <%= t(".new_account", type: type.model_name.human.downcase) %>
     <% end %>

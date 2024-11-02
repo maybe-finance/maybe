@@ -7,9 +7,11 @@ module AccountsHelper
     polymorphic_path(account.accountable, options)
   end
 
-  def new_accountable_path(type)
+  def new_accountable_path(type, institution_id: nil)
     klass = Accountable.from_type(type)
-    "/#{klass.model_name.plural}/new"
+    path = "/#{klass.model_name.plural}/new"
+    path += "?institution_id=#{institution_id}" if institution_id.present?
+    path
   end
 
   def period_label(period)

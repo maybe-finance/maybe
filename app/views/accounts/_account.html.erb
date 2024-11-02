@@ -16,7 +16,7 @@
         <% end %>
       </div>
 
-      <%= link_to edit_account_path(account), data: { turbo_frame: :modal }, class: "group-hover/account:flex hidden hover:opacity-80 items-center justify-center" do %>
+      <%= link_to edit_polymorphic_path(account.accountable), data: { turbo_frame: :modal }, class: "group-hover/account:flex hidden hover:opacity-80 items-center justify-center" do %>
         <%= lucide_icon "pencil-line", class: "w-4 h-4 text-gray-500" %>
       <% end %>
     </div>

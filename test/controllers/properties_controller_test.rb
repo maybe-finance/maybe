@@ -1,27 +1,14 @@
 require "test_helper"
 
 class PropertiesControllerTest < ActionDispatch::IntegrationTest
+  include AccountActionsInterfaceTest
+
   setup do
     sign_in @user = users(:family_admin)
-    @property = properties(:one)
+    @accountable = @property = properties(:one)
   end
 
-  test "new" do
-    get new_property_path
-    assert_response :success
-  end
-
-  test "edit" do
-    get edit_property_url(@property)
-    assert_response :success
-  end
-
-  test "show" do
-    get property_url(@property)
-    assert_response :success
-  end
-
-  test "creates property" do
+  test "creates with property details" do
     assert_difference -> { Account.count } => 1,
       -> { Property.count } => 1,
       -> { Account::Valuation.count } => 2,
@@ -49,17 +36,17 @@ class PropertiesControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    created_account = Account.order(:created_at).last
+    created_property = Property.order(:created_at).last
 
-    assert created_account.property.year_built.present?
-    assert created_account.property.address.line1.present?
+    assert created_property.year_built.present?
+    assert created_property.address.line1.present?
 
-    assert_redirected_to account_path(created_account)
+    assert_redirected_to created_property
     assert_equal "Property account created", flash[:notice]
     assert_enqueued_with(job: AccountSyncJob)
   end
 
-  test "updates property" do
+  test "updates with property details" do
     assert_no_difference [ "Account.count", "Property.count" ] do
       patch property_path(@property), params: {
         account: {
@@ -85,7 +72,7 @@ class PropertiesControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    assert_redirected_to account_path(@property.account)
+    assert_redirected_to @property
     assert_equal "Property account updated", flash[:notice]
     assert_enqueued_with(job: AccountSyncJob)
   end

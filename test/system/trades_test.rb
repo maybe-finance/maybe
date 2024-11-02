@@ -66,15 +66,16 @@ class TradesTest < ApplicationSystemTestCase
   private
 
     def open_new_trade_modal
-      click_link "new_trade_account_#{@account.id}"
+      click_on "New"
+      click_on "New transaction"
     end
 
     def within_trades(&block)
-      within "#" + dom_id(@account, "trades"), &block
+      within "#" + dom_id(@account, "entries"), &block
     end
 
     def visit_account_trades
-      visit account_url(@account, tab: "transactions")
+      visit polymorphic_path(@account.accountable)
     end
 
     def select_combobox_option(text)

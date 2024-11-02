@@ -3,9 +3,9 @@ en:
   vehicles:
     create:
       success: Vehicle account created
+    edit:
+      edit: Edit %{account}
     form:
-      balance: Current value
-      institution: Institution
       make: Make
       make_placeholder: Toyota
       mileage: Mileage
@@ -13,9 +13,6 @@ en:
       mileage_unit: Unit
       model: Model
       model_placeholder: Camry
-      name_label: Vehicle name
-      name_placeholder: Family car
-      ungrouped: "(none)"
       year: Year
       year_placeholder: '2023'
     new:
@@ -30,5 +27,3 @@ en:
       year: Year
     update:
       success: Vehicle account updated
-    edit:
-      edit: "Edit %{account}"

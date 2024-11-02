@@ -5,7 +5,8 @@
 
   <div id="transactions"
        data-controller="bulk-select"
-       data-bulk-select-resource-value="<%= t(".transaction") %>"
+       data-bulk-select-singular-label-value="<%= t(".transaction") %>"
+       data-bulk-select-plural-label-value="<%= t(".transactions") %>"
        class="overflow-y-auto flex flex-col bg-white rounded-xl border border-alpha-black-25 shadow-xs p-4">
     <%= render "transactions/searches/search" %>
 

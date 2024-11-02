@@ -1,27 +1,14 @@
 require "test_helper"
 
 class LoansControllerTest < ActionDispatch::IntegrationTest
+  include AccountActionsInterfaceTest
+
   setup do
     sign_in @user = users(:family_admin)
-    @loan = loans(:one)
+    @accountable = @loan = loans(:one)
   end
 
-  test "new" do
-    get new_loan_path
-    assert_response :success
-  end
-
-  test "edit" do
-    get edit_loan_path(@loan)
-    assert_response :success
-  end
-
-  test "show" do
-    get loan_url(@loan)
-    assert_response :success
-  end
-
-  test "creates loan" do
+  test "creates with loan details" do
     assert_difference -> { Account.count } => 1,
       -> { Loan.count } => 1,
       -> { Account::Valuation.count } => 2,
@@ -41,21 +28,21 @@ class LoansControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    created_account = Account.order(:created_at).last
+    created_loan = Loan.order(:created_at).last
 
-    assert_equal "New Loan", created_account.name
-    assert_equal 50000, created_account.balance
-    assert_equal "USD", created_account.currency
-    assert_equal 5.5, created_account.loan.interest_rate
-    assert_equal 60, created_account.loan.term_months
-    assert_equal "fixed", created_account.loan.rate_type
+    assert_equal "New Loan", created_loan.account.name
+    assert_equal 50000, created_loan.account.balance
+    assert_equal "USD", created_loan.account.currency
+    assert_equal 5.5, created_loan.interest_rate
+    assert_equal 60, created_loan.term_months
+    assert_equal "fixed", created_loan.rate_type
 
-    assert_redirected_to account_path(created_account)
+    assert_redirected_to created_loan
     assert_equal "Loan account created", flash[:notice]
     assert_enqueued_with(job: AccountSyncJob)
   end
 
-  test "updates loan" do
+  test "updates with loan details" do
     assert_no_difference [ "Account.count", "Loan.count" ] do
       patch loan_path(@loan), params: {
         account: {
@@ -81,7 +68,7 @@ class LoansControllerTest < ActionDispatch::IntegrationTest
     assert_equal 48, @loan.term_months
     assert_equal "fixed", @loan.rate_type
 
-    assert_redirected_to account_path(@loan.account)
+    assert_redirected_to @loan
     assert_equal "Loan account updated", flash[:notice]
     assert_enqueued_with(job: AccountSyncJob)
   end

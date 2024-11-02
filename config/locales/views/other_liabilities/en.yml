@@ -3,17 +3,9 @@ en:
   other_liabilities:
     create:
       success: Other liability account created
-    form:
-      balance: Current balance
-      institution: Institution
-      name_label: Liability name
-      name_placeholder: Personal loan
-      none: None
-      subtype_prompt: Select liability type
-      ungrouped: "(none)"
+    edit:
+      edit: Edit %{account}
     new:
       title: Enter liability details
     update:
       success: Other liability account updated
-    edit:
-      edit: "Edit %{account}"
