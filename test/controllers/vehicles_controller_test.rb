@@ -11,6 +11,11 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "edit" do
+    get edit_vehicle_path(@vehicle)
+    assert_response :success
+  end
+
   test "show" do
     get vehicle_url(@vehicle)
     assert_response :success

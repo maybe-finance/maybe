@@ -15,3 +15,5 @@ en:
       title: Enter liability details
     update:
       success: Other liability account updated
+    edit:
+      edit: "Edit %{account}"

@@ -11,6 +11,11 @@ class OtherLiabilitiesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "edit" do
+    get edit_other_liability_url(@other_liability)
+    assert_response :success
+  end
+
   test "show" do
     get other_liability_url(@other_liability)
     assert_response :success

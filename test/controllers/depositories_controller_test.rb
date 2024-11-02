@@ -11,6 +11,11 @@ class DepositoriesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "edit" do
+    get edit_depository_url(@depository)
+    assert_response :success
+  end
+
   test "show" do
     get depository_url(@depository)
     assert_response :success
@@ -21,6 +26,7 @@ class DepositoriesControllerTest < ActionDispatch::IntegrationTest
       post depositories_url, params: {
         account: {
           accountable_type: "Depository",
+          institution_id: institutions(:chase).id,
           name: "New depository",
           balance: 10000,
           currency: "USD",
@@ -37,6 +43,7 @@ class DepositoriesControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference [ "Account.count", "Depository.count" ] do
       patch depository_url(@depository), params: {
         account: {
+          institution_id: institutions(:chase).id,
           name: "Updated name",
           balance: 10000,
           currency: "USD",

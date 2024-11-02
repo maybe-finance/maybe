@@ -1,22 +1,20 @@
 <%# locals: (account:, url:) %>
 
-<%= styled_form_with model: account, url: url, scope: :account, class: "flex flex-col gap-4 justify-between grow", data: { turbo: false } do |f| %>
+<%= styled_form_with model: account, url: url, scope: :account, class: "flex flex-col gap-4 justify-between grow" do |form| %>
   <div class="grow space-y-2">
-    <%= f.select :accountable_type, Accountable::TYPES.map { |type| [type.titleize, type] }, { label: t(".accountable_type"), prompt: t(".type_prompt") }, required: true, autofocus: true %>
-    <%= f.text_field :name, placeholder: t(".name_placeholder"), required: "required", label: t(".name_label") %>
+    <%= form.hidden_field :accountable_type %>
 
     <% if account.new_record? %>
-      <%= f.hidden_field :institution_id %>
+      <%= form.hidden_field :institution_id %>
     <% else %>
-      <%= f.collection_select :institution_id, Current.family.institutions.alphabetically, :id, :name, { include_blank: t(".ungrouped"), label: t(".institution") } %>
+      <%= form.collection_select :institution_id, Current.family.institutions.alphabetically, :id, :name, { include_blank: t(".ungrouped"), label: t(".institution") } %>
     <% end %>
 
-    <%= f.money_field :balance, label: t(".balance"), required: true, default_currency: Current.family.currency %>
+    <%= form.text_field :name, placeholder: t(".name_placeholder"), required: "required", label: t(".name_label") %>
+    <%= form.money_field :balance, label: t(".balance"), required: true, default_currency: Current.family.currency %>
 
-    <% if account.accountable %>
-      <%= render permitted_accountable_partial(account, "form"), f: f %>
-    <% end %>
+    <%= yield form %>
   </div>
 
-  <%= f.submit %>
+  <%= form.submit %>
 <% end %>

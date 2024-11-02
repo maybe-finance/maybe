@@ -30,3 +30,5 @@ en:
       year: Year
     update:
       success: Vehicle account updated
+    edit:
+      edit: "Edit %{account}"

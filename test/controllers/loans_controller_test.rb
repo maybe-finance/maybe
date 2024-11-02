@@ -11,6 +11,11 @@ class LoansControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "edit" do
+    get edit_loan_path(@loan)
+    assert_response :success
+  end
+
   test "show" do
     get loan_url(@loan)
     assert_response :success

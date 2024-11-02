@@ -22,6 +22,9 @@ en:
       name_placeholder: Example account name
       type_prompt: Select a type
       ungrouped: "(none)"
+      subtype_prompt: Select a subtype
+      none: None
+      subtype: Subtype
     index:
       accounts: Accounts
       add_institution: Add institution

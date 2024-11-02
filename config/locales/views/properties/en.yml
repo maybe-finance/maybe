@@ -37,3 +37,5 @@ en:
       year_built: Year Built
     update:
       success: Property account updated
+    edit:
+      edit: "Edit %{account}"

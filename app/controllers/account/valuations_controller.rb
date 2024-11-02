@@ -15,7 +15,7 @@ class Account::ValuationsController < ApplicationController
       redirect_back_or_to account_valuations_path(@account), notice: t(".success")
     else
       flash[:alert] = @entry.errors.full_messages.to_sentence
-      redirect_to account_path(@account)
+      redirect_to @account.accountable
     end
   end
 

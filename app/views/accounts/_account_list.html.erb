@@ -29,7 +29,7 @@
     </summary>
     <% group.children.sort_by(&:name).each do |account_value_node| %>
       <% account = account_value_node.original %>
-      <%= link_to account.accountable, class: "flex items-center w-full gap-3 px-3 py-2 mb-1 hover:bg-gray-100 rounded-[10px]" do %>
+      <%= link_to account, class: "flex items-center w-full gap-3 px-3 py-2 mb-1 hover:bg-gray-100 rounded-[10px]" do %>
         <%= render "accounts/logo", account: account, size: "sm" %>
         <div>
           <p class="font-medium"><%= account_value_node.name %></p>

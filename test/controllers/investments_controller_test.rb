@@ -11,6 +11,11 @@ class InvestmentsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "edit" do
+    get edit_investment_url(@investment)
+    assert_response :success
+  end
+
   test "show" do
     get investment_url(@investment)
     assert_response :success

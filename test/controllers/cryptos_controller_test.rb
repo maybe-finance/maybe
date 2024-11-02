@@ -11,6 +11,11 @@ class CryptosControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "edit" do
+    get edit_crypto_url(@crypto)
+    assert_response :success
+  end
+
   test "show" do
     get crypto_url(@crypto)
     assert_response :success

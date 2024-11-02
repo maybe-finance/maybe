@@ -11,6 +11,11 @@ class PropertiesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "edit" do
+    get edit_property_url(@property)
+    assert_response :success
+  end
+
   test "show" do
     get property_url(@property)
     assert_response :success

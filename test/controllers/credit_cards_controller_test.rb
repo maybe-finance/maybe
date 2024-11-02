@@ -11,6 +11,11 @@ class CreditCardsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "edit" do
+    get edit_credit_card_path(@credit_card)
+    assert_response :success
+  end
+
   test "show" do
     get credit_card_url(@credit_card)
     assert_response :success
@@ -22,7 +27,7 @@ class CreditCardsControllerTest < ActionDispatch::IntegrationTest
       -> { Account::Valuation.count } => 2,
       -> { Account::Entry.count } => 2 do
       post credit_cards_path, params: {
-        credit_card: {
+        account: {
           name: "New Credit Card",
           balance: 1000,
           currency: "USD",
@@ -57,7 +62,7 @@ class CreditCardsControllerTest < ActionDispatch::IntegrationTest
   test "updates credit card" do
     assert_no_difference [ "Account.count", "CreditCard.count" ] do
       patch credit_card_path(@credit_card), params: {
-        credit_card: {
+        account: {
           name: "Updated Credit Card",
           balance: 2000,
           currency: "USD",

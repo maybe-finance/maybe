@@ -2,24 +2,26 @@
 
 <%= turbo_stream_from account %>
 
-<%= tag.div id: dom_id(account), class: "space-y-4" do %>
-  <% if header.present? %>
-    <%= header %>
-  <% else %>
-    <%= render "accounts/show/header", account: account %>
-  <% end %>
-
-  <% if chart.present? %>
-    <%= chart %>
-  <% else %>
-    <%= render "accounts/show/chart", account: account %>
-  <% end %>
-
-  <div class="min-h-[800px]">
-    <% if tabs.present? %>
-      <%= tabs %>
+<%= turbo_frame_tag dom_id(account) do %>
+  <%= tag.div class: "space-y-4" do %>
+    <% if header.present? %>
+      <%= header %>
     <% else %>
-      <%= render "accounts/show/activity", account: account %>
+      <%= render "accounts/show/header", account: account %>
     <% end %>
-  </div>
+
+    <% if chart.present? %>
+      <%= chart %>
+    <% else %>
+      <%= render "accounts/show/chart", account: account %>
+    <% end %>
+
+    <div class="min-h-[800px]">
+      <% if tabs.present? %>
+        <%= tabs %>
+      <% else %>
+        <%= render "accounts/show/activity", account: account %>
+      <% end %>
+    </div>
+  <% end %>
 <% end %>

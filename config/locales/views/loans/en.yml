@@ -27,3 +27,5 @@ en:
       unknown: Unknown
     update:
       success: Loan account updated
+    edit:
+      edit: "Edit %{account}"

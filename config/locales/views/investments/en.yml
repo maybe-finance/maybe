@@ -22,3 +22,5 @@ en:
       holdings: Holdings
       total_value_tooltip: The total value is the sum of cash balance and your holdings
         value, minus margin loans.
+    edit:
+      edit: "Edit %{account}"
