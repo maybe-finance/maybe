@@ -1,5 +1,6 @@
 <%= render "accounts/show/template",
            account: @account,
+           header: render("accounts/show/header", account: @account, subtitle: @account.property.address),
            tabs: render("accounts/show/tabs", account: @account, tabs: [
             { key: "overview", contents: render("properties/overview", account: @account) },
             { key: "activity", contents: render("accounts/show/activity", account: @account) }

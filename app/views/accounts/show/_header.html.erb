@@ -1,4 +1,4 @@
-<%# locals: (account:) %>
+<%# locals: (account:, title: nil, subtitle: nil) %>
 
 <header class="space-y-4">
   <div class="flex items-center gap-4">
@@ -11,7 +11,10 @@
         <%= render "accounts/logo", account: account %>
 
         <div>
-          <h2 class="font-medium text-xl"><%= account.name %></h2>
+          <h2 class="font-medium text-xl"><%= title || account.name %></h2>
+          <% if subtitle.present? %>
+            <p class="text-sm text-gray-500"><%= subtitle %></p>
+          <% end %>
         </div>
       </div>
     <% end %>
