@@ -49,7 +49,7 @@ en:
       chart:
         balance: Balance
         no_change: no change
-        owed: Owed
+        owed: Amount owed
       menu:
         confirm_accept: Delete "%{name}"
         confirm_body_html: "<p>By deleting this account, you will erase its value

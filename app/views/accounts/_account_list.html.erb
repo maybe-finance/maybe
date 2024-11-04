@@ -1,34 +1,37 @@
 <%# locals: (group:) -%>
 <% type = Accountable.from_type(group.name) %>
 <% if group && group.children.any? %>
-  <details class="mb-1 text-sm group" data-controller="account-collapse" data-account-collapse-type-value="<%= type %>">
-    <summary class="flex gap-4 px-3 py-2 items-center w-full rounded-[10px] font-medium hover:bg-gray-100 cursor-pointer">
-      <%= lucide_icon("chevron-down", class: "hidden group-open:block text-gray-500 w-5 h-5") %>
-      <%= lucide_icon("chevron-right", class: "group-open:hidden text-gray-500 w-5 h-5") %>
+  <% group_trend = group.series.trend %>
+
+  <details 
+    class="mb-1 text-sm group" 
+    data-controller="account-collapse" 
+    data-account-collapse-type-value="<%= type %>"
+  >
+    <summary class="flex gap-4 px-3 py-2 items-center w-full rounded-[10px] font-medium 
+                    hover:bg-gray-100 cursor-pointer">
+      <%= lucide_icon("chevron-down", 
+          class: "hidden group-open:block text-gray-500 w-5 h-5") %>
+      <%= lucide_icon("chevron-right", 
+          class: "group-open:hidden text-gray-500 w-5 h-5") %>
+
       <div class="text-left"><%= type.model_name.human %></div>
+
       <div class="ml-auto flex flex-col items-end">
         <p class="text-right"><%= format_money group.sum %></p>
+
         <div class="flex items-center gap-1">
-          <%=
-              tag.div(
-                id: "#{group.name}_sparkline",
-                class: "h-3 w-8 ml-auto",
-                data: {
-                  controller: "time-series-chart",
-                  "time-series-chart-data-value": group.series.to_json,
-                  "time-series-chart-stroke-width-value": 1,
-                  "time-series-chart-use-labels-value": false,
-                  "time-series-chart-use-tooltip-value": false
-                }
-              )
-          %>
-          <% styles = trend_styles(group.series.trend) %>
-          <span class="text-xs <%= styles[:text_class] %>"><%= sprintf("%+.2f", group.series.trend.percent) %>%</span>
+          <div class="h-3 w-8">
+            <%= render "shared/sparkline", series: group.series, id: "#{group.name}_sparkline" %>
+          </div>
+
+          <span class="text-xs" style="color: <%= group_trend.color %>"><%= group_trend.value.positive? ? "+" : "" %><%= group_trend.percent.infinite? ? "∞" : number_to_percentage(group_trend.percent, precision: 0) %></span>
         </div>
       </div>
     </summary>
     <% group.children.sort_by(&:name).each do |account_value_node| %>
       <% account = account_value_node.original %>
+      <% account_trend = account_value_node.series.trend %>
       <%= link_to account, class: "flex items-center w-full gap-3 px-3 py-2 mb-1 hover:bg-gray-100 rounded-[10px]" do %>
         <%= render "accounts/logo", account: account, size: "sm" %>
         <div>
@@ -37,27 +40,17 @@
             <p class="text-xs text-gray-500"><%= account.subtype&.humanize %></p>
           <% end %>
         </div>
-        <div class="flex flex-col ml-auto font-medium text-right">
+        <div class="flex flex-col items-end font-medium text-right ml-auto">
           <p><%= format_money account.balance_money %></p>
-          <% unless account_value_node.series.trend.direction.flat? %>
-            <div class="flex items-center gap-1">
-              <%=
-              tag.div(
-                id: dom_id(account, :list_sparkline),
-                class: "h-3 w-8 ml-auto",
-                data: {
-                  controller: "time-series-chart",
-                  "time-series-chart-data-value": account_value_node.series.to_json,
-                  "time-series-chart-stroke-width-value": 1,
-                  "time-series-chart-use-labels-value": false,
-                  "time-series-chart-use-tooltip-value": false
-                }
-              )
-              %>
-              <% styles = trend_styles(account_value_node.series.trend) %>
-              <span class="text-xs <%= styles[:text_class] %>"><%= sprintf("%+.2f", account_value_node.series.trend.percent) %>%</span>
+          <div class="flex items-center gap-1">
+            <div class="h-3 w-8">
+              <%= render "shared/sparkline", series: account_value_node.series, id: dom_id(account, :list_sparkline) %>
             </div>
-          <% end %>
+
+            <span class="text-xs" style="color: <%= account_trend.color %>">
+              <%= account_trend.value.positive? ? "+" : "" %><%= account_trend.percent.infinite? ? "∞" : number_to_percentage(account_trend.percent, precision: 0) %>
+            </span>
+          </div>
         </div>
       <% end %>
     <% end %>

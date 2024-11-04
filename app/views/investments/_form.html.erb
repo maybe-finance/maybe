@@ -3,5 +3,5 @@
 <%= render "accounts/form", account: account, url: url do |form| %>
   <%= form.select :subtype,
                  Investment::SUBTYPES,
-                 { label: true, prompt: t(".subtype_prompt"), include_blank: t(".none") } %>
+                 { label: true, prompt: t("investments.form.subtype_prompt"), include_blank: t("investments.form.none") } %>
 <% end %>

@@ -1,0 +1,13 @@
+<%# locals: (series:, id:, stroke_width: 1) %>
+
+<%= tag.div(
+  id: id,
+  class: "h-full w-full",
+  data: {
+    controller: "time-series-chart",
+    "time-series-chart-data-value": series.to_json,
+    "time-series-chart-stroke-width-value": stroke_width,
+    "time-series-chart-use-labels-value": false,
+    "time-series-chart-use-tooltip-value": false
+  }
+) %>

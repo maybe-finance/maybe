@@ -19,8 +19,10 @@
         <% if trend.direction.flat? %>
           <%= tag.span t(".no_change"), class: "text-gray-500" %>
         <% else %>
-          <%= tag.span format_money(trend.value), style: "color: #{trend.color}" %>
-          <%= tag.span "(#{trend.percent}%)", style: "color: #{trend.color}" %>
+          <%= tag.span "#{trend.value.positive? ? "+" : ""}#{format_money(trend.value)}", style: "color: #{trend.color}" %>
+          <% unless trend.percent.infinite? %>
+            <%= tag.span "(#{trend.percent}%)", style: "color: #{trend.color}" %>
+          <% end %>
         <% end %>
 
         <%= tag.span period_label(period), class: "text-gray-500" %>

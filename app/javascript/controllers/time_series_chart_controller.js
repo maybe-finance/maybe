@@ -535,14 +535,14 @@ export default class extends Controller {
   }
 
   get _d3YScale() {
-    const reductionPercent = this.useLabelsValue ? 0.15 : 0.05;
+    const reductionPercent = this.useLabelsValue ? 0.3 : 0.05;
     const dataMin = d3.min(this._normalDataPoints, (d) => d.value);
     const dataMax = d3.max(this._normalDataPoints, (d) => d.value);
     const padding = (dataMax - dataMin) * reductionPercent;
 
     return d3
       .scaleLinear()
-      .rangeRound([this._d3ContainerHeight - 30, 0])
+      .rangeRound([this._d3ContainerHeight, 0])
       .domain([dataMin - padding, dataMax + padding]);
   }
 }
