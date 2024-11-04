@@ -13,7 +13,7 @@ en:
       new_account: New account
       no_accounts: No accounts yet
     form:
-      balance: Today's balance
+      balance: Current balance 
       institution: Financial institution
       name_label: Account name
       name_placeholder: Example account name
