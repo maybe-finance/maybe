@@ -43,6 +43,7 @@ en:
         connected_entry: Link account (coming soon)
         manual_entry: Enter account balance
         title: How would you like to add it?
+      import_accounts: Import accounts
       title: What would you like to add?
     show:
       chart:
