@@ -2,7 +2,7 @@
 
 <%= contextual_menu do %>
   <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-    <%= link_to edit_polymorphic_path(account.accountable),
+    <%= link_to edit_account_path(account),
                       data: { turbo_frame: :modal },
                       class: "block w-full py-2 px-3 space-x-2 text-gray-900 hover:bg-gray-50 flex items-center rounded-lg" do %>
       <%= lucide_icon "pencil-line", class: "w-5 h-5 text-gray-500" %>

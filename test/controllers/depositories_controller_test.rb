@@ -1,10 +1,10 @@
 require "test_helper"
 
 class DepositoriesControllerTest < ActionDispatch::IntegrationTest
-  include AccountActionsInterfaceTest
+  include AccountableResourceInterfaceTest
 
   setup do
     sign_in @user = users(:family_admin)
-    @accountable = @depository = depositories(:one)
+    @account = accounts(:depository)
   end
 end

@@ -38,15 +38,7 @@ en:
       institutionless_accounts:
         other_accounts: Other accounts
       new_account: New account
-    new:
-      form:
-        accountable_type: Account type
-        balance: Today's balance
-        institution: Financial institution
-        name_label: Account name
-        name_placeholder: Example account name
-        type_prompt: Select a type
-        ungrouped: "(none)"
+    new: 
       method_selector:
         connected_entry: Link account (coming soon)
         manual_entry: Enter account balance

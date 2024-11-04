@@ -57,7 +57,7 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    invitation = Invitation.last
+    invitation = Invitation.order(created_at: :desc).first
     assert_equal "admin", invitation.role
     assert_equal @user.family, invitation.family
     assert_equal @user, invitation.inviter

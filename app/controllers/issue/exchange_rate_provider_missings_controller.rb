@@ -5,7 +5,7 @@ class Issue::ExchangeRateProviderMissingsController < ApplicationController
     Setting.synth_api_key = exchange_rate_params[:synth_api_key]
     account = @issue.issuable
     account.sync_later
-    redirect_back_or_to account.accountable
+    redirect_back_or_to account
   end
 
   private

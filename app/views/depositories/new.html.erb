@@ -1,3 +1,7 @@
-<%= modal_form_wrapper title: t(".title") do %>
-  <%= render "depositories/form", account: @account, url: depositories_path %>
+<% if params[:step] == "method_select" %>
+  <%= render "accounts/new/method_selector", path: new_depository_path(institution_id: params[:institution_id]) %>
+<% else %>
+  <%= modal_form_wrapper title: t(".title") do %>
+    <%= render "depositories/form", account: @account, url: depositories_path %>
+  <% end %>
 <% end %>

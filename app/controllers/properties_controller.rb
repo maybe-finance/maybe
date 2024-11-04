@@ -1,5 +1,5 @@
 class PropertiesController < ApplicationController
-  include AccountActions
+  include AccountableResource
 
   permitted_accountable_attributes(
     :id, :year_built, :area_unit, :area_value,

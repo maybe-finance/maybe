@@ -43,7 +43,7 @@
     </div>
   <% else %>
     <div class="flex items-center gap-1 col-span-2">
-      <%= render "categories/menu", transaction: transaction %>
+      <%= render "categories/menu", transaction: transaction, origin: origin %>
     </div>
 
     <% unless show_balance %>
@@ -52,7 +52,7 @@
           <%= tag.p account.name %>
         <% else %>
           <%= link_to account.name,
-                      polymorphic_path(account.accountable, tab: "transactions"),
+                      account_path(account, tab: "transactions"),
                       data: { turbo_frame: "_top" },
                       class: "hover:underline" %>
         <% end %>

@@ -1,3 +1,3 @@
 class OtherLiabilitiesController < ApplicationController
-  include AccountActions
+  include AccountableResource
 end

@@ -1,3 +1,3 @@
 class CryptosController < ApplicationController
-  include AccountActions
+  include AccountableResource
 end

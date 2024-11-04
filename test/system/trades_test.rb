@@ -75,7 +75,7 @@ class TradesTest < ApplicationSystemTestCase
     end
 
     def visit_account_trades
-      visit polymorphic_path(@account.accountable)
+      visit account_path(@account)
     end
 
     def select_combobox_option(text)

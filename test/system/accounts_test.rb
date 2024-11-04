@@ -99,7 +99,7 @@ class AccountsTest < ApplicationSystemTestCase
 
       created_account = Account.order(:created_at).last
 
-      visit polymorphic_path(created_account.accountable)
+      visit account_url(created_account)
 
       within "header" do
         find('button[data-menu-target="button"]').click

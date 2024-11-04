@@ -1,11 +1,11 @@
 require "test_helper"
 
 class VehiclesControllerTest < ActionDispatch::IntegrationTest
-  include AccountActionsInterfaceTest
+  include AccountableResourceInterfaceTest
 
   setup do
     sign_in @user = users(:family_admin)
-    @accountable = @vehicle = vehicles(:one)
+    @account = accounts(:vehicle)
   end
 
   test "creates with vehicle details" do
@@ -30,29 +30,29 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    created_vehicle = Vehicle.order(:created_at).last
+    created_account = Account.order(:created_at).last
 
-    assert_equal "Toyota", created_vehicle.make
-    assert_equal "Camry", created_vehicle.model
-    assert_equal 2020, created_vehicle.year
-    assert_equal 15000, created_vehicle.mileage_value
-    assert_equal "mi", created_vehicle.mileage_unit
+    assert_equal "Toyota", created_account.accountable.make
+    assert_equal "Camry", created_account.accountable.model
+    assert_equal 2020, created_account.accountable.year
+    assert_equal 15000, created_account.accountable.mileage_value
+    assert_equal "mi", created_account.accountable.mileage_unit
 
-    assert_redirected_to created_vehicle
+    assert_redirected_to created_account
     assert_equal "Vehicle account created", flash[:notice]
     assert_enqueued_with(job: AccountSyncJob)
   end
 
   test "updates with vehicle details" do
     assert_no_difference [ "Account.count", "Vehicle.count" ] do
-      patch vehicle_path(@vehicle), params: {
+      patch account_path(@account), params: {
         account: {
           name: "Updated Vehicle",
           balance: 28000,
           currency: "USD",
           accountable_type: "Vehicle",
           accountable_attributes: {
-            id: @vehicle.id,
+            id: @account.accountable_id,
             make: "Honda",
             model: "Accord",
             year: 2021,
@@ -64,7 +64,7 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    assert_redirected_to @vehicle
+    assert_redirected_to @account
     assert_equal "Vehicle account updated", flash[:notice]
     assert_enqueued_with(job: AccountSyncJob)
   end

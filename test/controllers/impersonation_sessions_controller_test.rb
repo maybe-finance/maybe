@@ -11,7 +11,7 @@ class ImpersonationSessionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_difference "impersonator_session.logs.count", 2 do
       get root_path
-      get polymorphic_path(impersonated.family.accounts.first.accountable)
+      get account_path(impersonated.family.accounts.first)
     end
   end
 

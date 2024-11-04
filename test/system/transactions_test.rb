@@ -182,7 +182,7 @@ class TransactionsTest < ApplicationSystemTestCase
     investment_account = accounts(:investment)
     investment_account.entries.create!(name: "Investment account", date: Date.current, amount: 1000, currency: "USD", entryable: Account::Transaction.new)
     transfer_date = Date.current
-    visit polymorphic_path(investment_account.accountable)
+    visit account_url(investment_account)
     click_on "New"
     click_on "New transaction"
     select "Deposit", from: "Type"

@@ -1,4 +1,4 @@
-module AccountActions
+module AccountableResource
   extend ActiveSupport::Concern
 
   included do
@@ -29,12 +29,12 @@ module AccountActions
 
   def create
     @account = Current.family.accounts.create_and_sync(account_params)
-    redirect_back_or_to @account.accountable, notice: t(".success")
+    redirect_back_or_to @account, notice: t(".success")
   end
 
   def update
     @account.update_with_sync!(account_params)
-    redirect_back_or_to @account.accountable, notice: t(".success")
+    redirect_back_or_to @account, notice: t(".success")
   end
 
   private
@@ -43,7 +43,7 @@ module AccountActions
     end
 
     def set_account
-      @account = Current.family.accounts.find_by(accountable_type: accountable_type.to_s, accountable_id: params[:id])
+      @account = Current.family.accounts.find(params[:id])
     end
 
     def account_params

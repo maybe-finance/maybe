@@ -1,7 +1,7 @@
 <%# locals: (account:, key:, is_selected:) %>
 
 <%= link_to key.titleize,
-            polymorphic_path(account.accountable, tab: key),
+            account_path(account, tab: key),
             class: [
               "px-2 py-1.5 rounded-md border border-transparent",
               "bg-white shadow-xs border-alpha-black-50": is_selected

@@ -1,3 +1,3 @@
 class DepositoriesController <  ApplicationController
-  include AccountActions
+  include AccountableResource
 end

@@ -1,3 +1,3 @@
 class OtherAssetsController < ApplicationController
-  include AccountActions
+  include AccountableResource
 end

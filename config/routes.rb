@@ -85,6 +85,15 @@ Rails.application.routes.draw do
     end
   end
 
+  # Convenience routes for polymorphic paths
+  # Example: account_path(Account.new(accountable: Depository.new)) => /depositories/123
+  direct :account do |model|
+    route_for model.accountable_name, model
+  end
+  direct :edit_account do |model|
+    route_for "edit_#{model.accountable_name}", model
+  end
+
   resources :depositories, only: %i[new show create edit update]
   resources :investments, only: %i[new show create edit update]
   resources :properties, only: %i[new show create edit update]

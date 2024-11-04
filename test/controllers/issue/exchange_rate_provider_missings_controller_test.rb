@@ -14,6 +14,6 @@ class Issue::ExchangeRateProviderMissingsControllerTest < ActionDispatch::Integr
     }
 
     assert_enqueued_with job: AccountSyncJob
-    assert_redirected_to @issue.issuable.accountable
+    assert_redirected_to @issue.issuable
   end
 end

@@ -1,3 +1,3 @@
 class InvestmentsController < ApplicationController
-  include AccountActions
+  include AccountableResource
 end

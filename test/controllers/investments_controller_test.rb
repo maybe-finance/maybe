@@ -1,10 +1,10 @@
 require "test_helper"
 
 class InvestmentsControllerTest < ActionDispatch::IntegrationTest
-  include AccountActionsInterfaceTest
+  include AccountableResourceInterfaceTest
 
   setup do
     sign_in @user = users(:family_admin)
-    @accountable = @investment = investments(:one)
+    @account = accounts(:investment)
   end
 end

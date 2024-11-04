@@ -1,19 +1,4 @@
 module AccountsHelper
-  def edit_account_path(account, options = {})
-    edit_polymorphic_path(account.accountable, options)
-  end
-
-  def account_path(account, options = {})
-    polymorphic_path(account.accountable, options)
-  end
-
-  def new_accountable_path(type, institution_id: nil)
-    klass = Accountable.from_type(type)
-    path = "/#{klass.model_name.plural}/new"
-    path += "?institution_id=#{institution_id}" if institution_id.present?
-    path
-  end
-
   def period_label(period)
     return "since account creation" if period.date_range.begin.nil?
     start_date, end_date = period.date_range.first, period.date_range.last
@@ -35,16 +20,6 @@ module AccountsHelper
     else
       "from #{start_date.strftime('%b %d, %Y')} to #{end_date.strftime('%b %d, %Y')}"
     end
-  end
-
-  def permitted_accountable_partial(account, name = nil)
-    permitted_names = %w[tooltip header tabs form]
-    folder = account.accountable_type.underscore
-    name ||= account.accountable_type.underscore
-
-    raise "Unpermitted accountable partial: #{name}" unless permitted_names.include?(name)
-
-    "accounts/accountables/#{folder}/#{name}"
   end
 
   def summary_card(title:, &block)

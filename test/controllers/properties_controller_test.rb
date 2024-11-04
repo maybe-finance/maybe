@@ -1,11 +1,11 @@
 require "test_helper"
 
 class PropertiesControllerTest < ActionDispatch::IntegrationTest
-  include AccountActionsInterfaceTest
+  include AccountableResourceInterfaceTest
 
   setup do
     sign_in @user = users(:family_admin)
-    @accountable = @property = properties(:one)
+    @account = accounts(:property)
   end
 
   test "creates with property details" do
@@ -36,26 +36,26 @@ class PropertiesControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    created_property = Property.order(:created_at).last
+    created_account = Account.order(:created_at).last
 
-    assert created_property.year_built.present?
-    assert created_property.address.line1.present?
+    assert created_account.accountable.year_built.present?
+    assert created_account.accountable.address.line1.present?
 
-    assert_redirected_to created_property
+    assert_redirected_to created_account
     assert_equal "Property account created", flash[:notice]
     assert_enqueued_with(job: AccountSyncJob)
   end
 
   test "updates with property details" do
     assert_no_difference [ "Account.count", "Property.count" ] do
-      patch property_path(@property), params: {
+      patch account_path(@account), params: {
         account: {
           name: "Updated Property",
           balance: 500000,
           currency: "USD",
           accountable_type: "Property",
           accountable_attributes: {
-            id: @property.id,
+            id: @account.accountable_id,
             year_built: 2002,
             area_value: 1000,
             area_unit: "sqft",
@@ -72,7 +72,7 @@ class PropertiesControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    assert_redirected_to @property
+    assert_redirected_to @account
     assert_equal "Property account updated", flash[:notice]
     assert_enqueued_with(job: AccountSyncJob)
   end
