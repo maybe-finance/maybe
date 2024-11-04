@@ -2,7 +2,7 @@
   <div class="bg-white p-5 border border-alpha-black-25 rounded-xl shadow-xs">
     <div class="flex items-center justify-between mb-4">
       <%= tag.h2 t(".title"), class: "font-medium text-lg" %>
-      <div data-controller="menu">
+      <div data-controller="menu" data-testid="activity-menu">
         <button class="btn btn--secondary flex items-center gap-2" data-menu-target="button">
           <%= lucide_icon("plus", class: "w-4 h-4") %>
           <%= tag.span t(".new") %>

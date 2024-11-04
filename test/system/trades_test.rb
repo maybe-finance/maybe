@@ -66,8 +66,10 @@ class TradesTest < ApplicationSystemTestCase
   private
 
     def open_new_trade_modal
-      click_on "New"
-      click_on "New transaction"
+      within "[data-testid='activity-menu']" do
+        click_on "New"
+        click_on "New transaction"
+      end
     end
 
     def within_trades(&block)
