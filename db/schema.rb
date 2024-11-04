@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_30_222235) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_04_170221) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -471,6 +471,19 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_30_222235) do
     t.index ["family_id"], name: "index_merchants_on_family_id"
   end
 
+  create_table "metrics", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "family_id", null: false
+    t.uuid "account_id"
+    t.string "kind", null: false
+    t.string "subkind"
+    t.date "date", null: false
+    t.decimal "value", precision: 10, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_metrics_on_account_id"
+    t.index ["family_id"], name: "index_metrics_on_family_id"
+  end
+
   create_table "other_assets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -624,6 +637,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_30_222235) do
   add_foreign_key "invitations", "families"
   add_foreign_key "invitations", "users", column: "inviter_id"
   add_foreign_key "merchants", "families"
+  add_foreign_key "metrics", "accounts"
+  add_foreign_key "metrics", "families"
   add_foreign_key "security_prices", "securities"
   add_foreign_key "sessions", "impersonation_sessions", column: "active_impersonator_session_id"
   add_foreign_key "sessions", "users"

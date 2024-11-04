@@ -14,6 +14,7 @@ class Family < ApplicationRecord
   has_many :categories, dependent: :destroy
   has_many :merchants, dependent: :destroy
   has_many :issues, through: :accounts
+  has_many :metrics, dependent: :destroy
 
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }
   validates :date_format, inclusion: { in: DATE_FORMATS }
@@ -122,6 +123,8 @@ class Family < ApplicationRecord
         account.sync_later(start_date: start_date || account.last_sync_date)
       end
     end
+
+    Family::MetricsCalculator.new(self).calculate
 
     update! last_synced_at: Time.now
   end

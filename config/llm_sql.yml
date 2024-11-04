@@ -1,0 +1,45 @@
+# Create multiple "scope" options based on user intent
+core:
+  - scope: |
+      - Output SQL only with no comments.
+      - Take care to write proper SQL for use in a Postgres database, paying special attention to GROUP BY clauses and aggregate functions, especially around dates and ids.
+      - Include relevant dates, if helpful.
+      - Under no circumstance should you change the accountable_id or family_id variables.
+      - 'date' columns are the most important for determining when something occurred
+      - Limit the output to 500 rows
+      - If no date is provided, assume the current date
+      - If something needs multiple dates (such as growth or change over time), use the current date as the end date and the 30 days prior as the start date
+      - When requesting data over a long period of time, group by month or year
+intent:
+  - name: "metrics"
+    scope: |
+      - The "metrics" table is the primary table to use.
+      - Possible subkind for categorical spending: "Freelance", "Paycheck", "Rideshare and delivery", "Auto lease payment", "Auto loan repayment", "Childcare", "Contribution to reserve fund", "Council tax", "Credit card bill", "Credit card fee", "Credit report", "Debt collection", "Drugstores and pharmacies", "Education", "Fuel", "Funerals and bequests", "Government", "Groceries", "Insurance", "Interest", "Loan repayment", "Medical bill", "Mortgage", "Other transport", "Pets", "Public transport", "Rent and property management fee", "Retirement contributions", "Ridesharing and taxis", "Student loan repayment", "Taxes", "Utilities", "Vehicle maintenance", "Intra account transfer", "Inter account transfer", "App stores", "ATM/bank withdrawal", "Bank fee", "Books, newsletters, newspapers", "Buy now, pay later", "Clothing", "Cafes and coffee shops", "Convenience stores", "Department and discount stores", "Donation", "Electronics", "Entertainment and recreation", "Firearms", "Food and Drink", "Gambling", "Gifts", "Sport and fitness", "Home improvements and maintenance services", "Investment", "Laundry", "Rent to own", "Legal services", "Liquor", "Hotels and lodging", "Media", "Other consumer services", "Other non-essential", "Pawn shops", "Peer to peer transfer", "Recreational goods", "SaaS tools", "Self care", "Toll charge", "Towing companies", "Trading (crypto)", "Trading (non-crypto)", "eCommerce purchase", "ATM/bank deposit", "Cashback", "Ecommerce", "Grants and stipends", "Loans", "Other", "Refund", "Reversal / adjustment", "Tax refund", "Benefits", "Interest / dividend", "Property rental"
+      - You may group similar subkinds/categories together if it makes sense (such as Groceries, Food, Restaurants, etc)
+      - For 'subkind' use ILIKE to match a string and wrap in % to match partial strings.
+  - name: "transactional"
+    scope: |
+      - The "transactions" table is the primary table to use.
+      - Possible categories: "Freelance", "Paycheck", "Rideshare and delivery", "Auto lease payment", "Auto loan repayment", "Childcare", "Contribution to reserve fund", "Council tax", "Credit card bill", "Credit card fee", "Credit report", "Debt collection", "Drugstores and pharmacies", "Education", "Fuel", "Funerals and bequests", "Government", "Groceries", "Insurance", "Interest", "Loan repayment", "Medical bill", "Mortgage", "Other transport", "Pets", "Public transport", "Rent and property management fee", "Retirement contributions", "Ridesharing and taxis", "Student loan repayment", "Taxes", "Utilities", "Vehicle maintenance", "Intra account transfer", "Inter account transfer", "App stores", "ATM/bank withdrawal", "Bank fee", "Books, newsletters, newspapers", "Buy now, pay later", "Clothing", "Cafes and coffee shops", "Convenience stores", "Department and discount stores", "Donation", "Electronics", "Entertainment and recreation", "Firearms", "Food and Drink", "Gambling", "Gifts", "Sport and fitness", "Home improvements and maintenance services", "Investment", "Laundry", "Rent to own", "Legal services", "Liquor", "Hotels and lodging", "Media", "Other consumer services", "Other non-essential", "Pawn shops", "Peer to peer transfer", "Recreational goods", "SaaS tools", "Self care", "Toll charge", "Towing companies", "Trading (crypto)", "Trading (non-crypto)", "eCommerce purchase", "ATM/bank deposit", "Cashback", "Ecommerce", "Grants and stipends", "Loans", "Other", "Refund", "Reversal / adjustment", "Tax refund", "Benefits", "Interest / dividend", "Property rental"
+      - For categories/enrichment_label use ILIKE to match a string and wrap in % to match partial strings.
+      - You may group similar categories together if it makes sense (such as Groceries, Food, Restaurants, etc)
+      - Include encrichment_merchant_name when possible
+  - name: "accounts"
+    scope: |
+      -
+  - name: "education"
+    scope: |
+      -
+  - name: "reply"
+    scope: |
+      -
+  - name: "investing"
+    scope: |
+      - The "balances" table is the primary table to use.
+      - Only do very basic math in the SQL, such as summing up the values.
+      - Leave complex math to future steps. Just focus on getting the parts needed to do the math.
+      - "Performance" refers to the performance of the account, not the performance of the investments (unless that is explicitly requested). 
+      - "Performance" is the change in balance/value of the account between the start and end date.
+      - Explicitly exclude rows where "security_id" is NOT NULL unless a specific security/holding is requested.
+      - Do NOT SUM the balance column.
+      - You need to know security_id to get security_prices.
