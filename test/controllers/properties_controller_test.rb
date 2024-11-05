@@ -1,12 +1,14 @@
 require "test_helper"
 
 class PropertiesControllerTest < ActionDispatch::IntegrationTest
+  include AccountableResourceInterfaceTest
+
   setup do
     sign_in @user = users(:family_admin)
     @account = accounts(:property)
   end
 
-  test "creates property" do
+  test "creates with property details" do
     assert_difference -> { Account.count } => 1,
       -> { Property.count } => 1,
       -> { Account::Valuation.count } => 2,
@@ -17,8 +19,6 @@ class PropertiesControllerTest < ActionDispatch::IntegrationTest
           balance: 500000,
           currency: "USD",
           accountable_type: "Property",
-          start_date: 3.years.ago.to_date,
-          start_balance: 450000,
           accountable_attributes: {
             year_built: 2002,
             area_value: 1000,
@@ -38,17 +38,17 @@ class PropertiesControllerTest < ActionDispatch::IntegrationTest
 
     created_account = Account.order(:created_at).last
 
-    assert created_account.property.year_built.present?
-    assert created_account.property.address.line1.present?
+    assert created_account.accountable.year_built.present?
+    assert created_account.accountable.address.line1.present?
 
-    assert_redirected_to account_path(created_account)
-    assert_equal "Property created successfully", flash[:notice]
+    assert_redirected_to created_account
+    assert_equal "Property account created", flash[:notice]
     assert_enqueued_with(job: AccountSyncJob)
   end
 
-  test "updates property" do
+  test "updates with property details" do
     assert_no_difference [ "Account.count", "Property.count" ] do
-      patch property_path(@account), params: {
+      patch account_path(@account), params: {
         account: {
           name: "Updated Property",
           balance: 500000,
@@ -72,8 +72,8 @@ class PropertiesControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    assert_redirected_to account_path(@account)
-    assert_equal "Property updated successfully", flash[:notice]
+    assert_redirected_to @account
+    assert_equal "Property account updated", flash[:notice]
     assert_enqueued_with(job: AccountSyncJob)
   end
 end

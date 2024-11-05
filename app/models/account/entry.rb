@@ -46,22 +46,40 @@ class Account::Entry < ApplicationRecord
     amount > 0 && account_transaction?
   end
 
-  def first_of_type?
-    first_entry = account
-                    .entries
-                    .where("entryable_type = ?", entryable_type)
-                    .order(:date)
-                    .first
-
-    first_entry&.id == id
-  end
-
   def entryable_name_short
     entryable_type.demodulize.underscore
   end
 
+  def prior_balance
+    account.balances.find_by(date: date - 1)&.balance || 0
+  end
+
+  def balance_after_entry
+    if account_valuation?
+      Money.new(amount, currency)
+    else
+      new_balance = prior_balance
+      entries_on_entry_date.each do |e|
+        change = e.amount
+        change = account.liability? ? change : -change
+        new_balance += change
+        break if e == self
+      end
+
+      Money.new(new_balance, currency)
+    end
+  end
+
   def trend
-    @trend ||= create_trend
+    TimeSeries::Trend.new(
+      current: balance_after_entry,
+      previous: Money.new(prior_balance, currency),
+      favorable_direction: account.favorable_direction
+    )
+  end
+
+  def entries_on_entry_date
+    account.entries.where(date: date).order(created_at: :desc)
   end
 
   class << self
@@ -215,12 +233,5 @@ class Account::Entry < ApplicationRecord
                             .where("entryable_type = ?", entryable_type)
                             .order(date: :desc)
                             .first
-    end
-
-    def create_trend
-      TimeSeries::Trend.new \
-        current: amount_money,
-        previous: previous_entry&.amount_money,
-        favorable_direction: account.favorable_direction
     end
 end

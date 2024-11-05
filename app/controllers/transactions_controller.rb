@@ -32,7 +32,7 @@ class TransactionsController < ApplicationController
                     .create!(transaction_entry_params.merge(amount: amount))
 
     @entry.sync_account_later
-    redirect_back_or_to account_path(@entry.account), notice: t(".success")
+    redirect_back_or_to @entry.account, notice: t(".success")
   end
 
   def bulk_delete

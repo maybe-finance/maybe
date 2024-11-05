@@ -1,4 +1,4 @@
-<%# locals: (date:, entries:, content:, selectable:) %>
+<%# locals: (date:, entries:, content:, selectable:, totals: false) %>
 <div id="entry-group-<%= date %>" class="bg-gray-25 rounded-xl p-1 w-full" data-bulk-select-target="group">
   <div class="py-2 px-4 flex items-center justify-between font-medium text-xs text-gray-500">
     <div class="flex pl-0.5 items-center gap-4">
@@ -16,7 +16,9 @@
       </p>
     </div>
 
-    <%= totals_by_currency(collection: entries, money_method: :amount_money, negate: true) %>
+    <% if totals %>
+      <%= totals_by_currency(collection: entries, money_method: :amount_money, negate: true) %>
+    <% end %>
   </div>
   <div class="bg-white shadow-xs rounded-md border border-alpha-black-25 divide-y divide-alpha-black-50">
     <%= content %>

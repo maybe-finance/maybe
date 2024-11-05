@@ -10,7 +10,7 @@
 <% elsif @invitation %>
   <div class="space-y-1 mb-6 text-center">
     <p class="text-gray-500">
-      <%= t(".invitation_message", 
+      <%= t(".invitation_message",
             inviter: @invitation.inviter.display_name,
             role: t(".role_#{@invitation.role}")) %>
     </p>
@@ -18,8 +18,8 @@
 <% end %>
 
 <%= styled_form_with model: @user, url: registration_path, class: "space-y-4" do |form| %>
-  <%= form.email_field :email, 
-      autofocus: false, 
+  <%= form.email_field :email,
+      autofocus: false,
       autocomplete: "email",
       required: "required",
       placeholder: "you@example.com",

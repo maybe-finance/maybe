@@ -10,7 +10,8 @@ export default class extends Controller {
     "bulkEditDrawerTitle",
   ];
   static values = {
-    resource: String,
+    singularLabel: String,
+    pluralLabel: String,
     selectedIds: { type: Array, default: [] },
   };
 
@@ -132,9 +133,11 @@ export default class extends Controller {
   }
 
   _pluralizedResourceName() {
-    return `${this.resourceValue}${
-      this.selectedIdsValue.length === 1 ? "" : "s"
-    }`;
+    if (this.selectedIdsValue.length === 1) {
+      return this.singularLabelValue;
+    }
+
+    return this.pluralLabelValue;
   }
 
   _updateGroups() {

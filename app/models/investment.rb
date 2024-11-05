@@ -50,4 +50,8 @@ class Investment < ApplicationRecord
   def color
     "#1570EF"
   end
+
+  def icon
+    "line-chart"
+  end
 end

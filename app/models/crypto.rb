@@ -4,4 +4,8 @@ class Crypto < ApplicationRecord
   def color
     "#737373"
   end
+
+  def icon
+    "bitcoin"
+  end
 end

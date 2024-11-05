@@ -2,6 +2,37 @@
 en:
   properties:
     create:
-      success: Property created successfully
+      success: Property account created
+    edit:
+      edit: Edit %{account}
+    destroy:
+      success: Property account deleted
+    form:
+      address_line1: Street address
+      address_line1_placeholder: 123 Main St
+      area: Living area
+      area_placeholder: '2000'
+      area_unit: Unit of measurement
+      country: Country
+      country_placeholder: US
+      locality: City
+      locality_placeholder: San Francisco
+      none: None
+      postal_code: ZIP/Postal code
+      postal_code_placeholder: '94105'
+      region: State/Province
+      region_placeholder: CA
+      subtype_prompt: Select property type
+      year_built: Year built
+      year_built_placeholder: '2000'
+    new:
+      title: Enter property details
+    overview:
+      living_area: Living Area
+      market_value: Market Value
+      purchase_price: Purchase Price
+      trend: Trend
+      unknown: Unknown
+      year_built: Year Built
     update:
-      success: Property updated successfully
+      success: Property account updated

@@ -1,0 +1,28 @@
+---
+en:
+  loans:
+    create:
+      success: Loan account created
+    edit:
+      edit: Edit %{account}
+    destroy:
+      success: Loan account deleted
+    form:
+      interest_rate: Interest rate
+      interest_rate_placeholder: '5.25'
+      rate_type: Rate type
+      term_months: Term (months)
+      term_months_placeholder: '360'
+    new:
+      title: Enter loan details
+    overview:
+      interest_rate: Interest Rate
+      monthly_payment: Monthly Payment
+      not_applicable: N/A
+      original_principal: Original Principal
+      remaining_principal: Remaining Principal
+      term: Term
+      type: Type
+      unknown: Unknown
+    update:
+      success: Loan account updated
