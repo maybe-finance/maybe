@@ -1,0 +1,11 @@
+<%# locals: (account:, tabs:) %>
+
+<% selected_tab = tabs.find { |tab| tab[:key] == params[:tab] } || tabs.first %>
+
+<div class="flex gap-2 text-sm text-gray-900 font-medium mb-4">
+  <% tabs.each do |tab| %>
+    <%= render "accounts/show/tab", account: account, key: tab[:key], is_selected: selected_tab[:key] == tab[:key] %>
+  <% end %>
+</div>
+
+<%= selected_tab[:contents] %>

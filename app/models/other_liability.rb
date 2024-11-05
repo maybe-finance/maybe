@@ -5,7 +5,7 @@ class OtherLiability < ApplicationRecord
     "#737373"
   end
 
-  def mode_required?
-    false
+  def icon
+    "minus"
   end
 end

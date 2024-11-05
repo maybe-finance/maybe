@@ -34,6 +34,7 @@ class Demo::Generator
       create_investment_account!
       create_house_and_mortgage!
       create_car_and_loan!
+      create_other_accounts!
 
       puts "accounts created"
       puts "Demo data loaded successfully!"
@@ -50,7 +51,7 @@ class Demo::Generator
       family = Family.find_by(id: family_id)
       family.destroy! if family
 
-      Family.create!(id: family_id, name: "Demo Family").tap(&:reload)
+      Family.create!(id: family_id, name: "Demo Family", stripe_subscription_status: "active").tap(&:reload)
     end
 
     def clear_data!
@@ -270,6 +271,20 @@ class Demo::Generator
         accountable: Loan.new,
         name: "Car Loan",
         balance: 8000,
+        currency: "USD"
+    end
+
+    def create_other_accounts!
+      family.accounts.create! \
+        accountable: OtherAsset.new,
+        name: "Other Asset",
+        balance: 10000,
+        currency: "USD"
+
+      family.accounts.create! \
+        accountable: OtherLiability.new,
+        name: "Other Liability",
+        balance: 5000,
         currency: "USD"
     end
 

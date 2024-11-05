@@ -20,11 +20,6 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
-  test "show" do
-    get account_path(@account)
-    assert_response :ok
-  end
-
   test "can sync an account" do
     post sync_account_path(@account)
     assert_response :no_content
@@ -34,87 +29,5 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
     post sync_all_accounts_path
     assert_redirected_to accounts_url
     assert_equal "Successfully queued accounts for syncing.", flash[:notice]
-  end
-
-  test "should update account" do
-    patch account_url(@account), params: {
-      account: {
-        name: "Updated name",
-        is_active: "0",
-        institution_id: institutions(:chase).id
-      }
-    }
-
-    assert_redirected_to account_url(@account)
-    assert_enqueued_with job: AccountSyncJob
-    assert_equal "Account updated", flash[:notice]
-  end
-
-  test "updates account balance by creating new valuation" do
-    assert_difference [ "Account::Entry.count", "Account::Valuation.count" ], 1 do
-      patch account_url(@account), params: {
-        account: {
-          balance: 10000
-        }
-      }
-    end
-
-    assert_redirected_to account_url(@account)
-    assert_enqueued_with job: AccountSyncJob
-    assert_equal "Account updated", flash[:notice]
-  end
-
-  test "updates account balance by editing existing valuation for today" do
-    @account.entries.create! date: Date.current, amount: 6000, currency: "USD", entryable: Account::Valuation.new
-
-    assert_no_difference [ "Account::Entry.count", "Account::Valuation.count" ] do
-      patch account_url(@account), params: {
-        account: {
-          balance: 10000
-        }
-      }
-    end
-
-    assert_redirected_to account_url(@account)
-    assert_enqueued_with job: AccountSyncJob
-    assert_equal "Account updated", flash[:notice]
-  end
-
-  test "should create an account" do
-    assert_difference [ "Account.count", "Account::Valuation.count", "Account::Entry.count" ], 1 do
-      post accounts_path, params: {
-        account: {
-          name: "Test",
-          accountable_type: "Depository",
-          balance: 200,
-          currency: "USD",
-          subtype: "checking",
-          institution_id: institutions(:chase).id
-        }
-      }
-
-      assert_equal "New account created successfully", flash[:notice]
-      assert_redirected_to account_url(Account.order(:created_at).last)
-    end
-  end
-
-  test "can add optional start date and balance to an account on create" do
-    assert_difference -> { Account.count } => 1, -> { Account::Valuation.count } => 2 do
-      post accounts_path, params: {
-        account: {
-          name: "Test",
-          accountable_type: "Depository",
-          balance: 200,
-          currency: "USD",
-          subtype: "checking",
-          institution_id: institutions(:chase).id,
-          start_balance: 100,
-          start_date: 10.days.ago
-        }
-      }
-
-      assert_equal "New account created successfully", flash[:notice]
-      assert_redirected_to account_url(Account.order(:created_at).last)
-    end
   end
 end

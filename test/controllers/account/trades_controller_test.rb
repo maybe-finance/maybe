@@ -32,7 +32,7 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    assert_redirected_to account_path(@entry.account)
+    assert_redirected_to @entry.account
   end
 
   test "creates withdrawal entry" do
@@ -51,7 +51,7 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    assert_redirected_to account_path(@entry.account)
+    assert_redirected_to @entry.account
   end
 
   test "deposit and withdrawal has optional transfer account" do
@@ -71,7 +71,7 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
 
     assert created_entry.amount.positive?
     assert created_entry.marked_as_transfer
-    assert_redirected_to account_path(@entry.account)
+    assert_redirected_to @entry.account
   end
 
   test "creates interest entry" do
@@ -88,7 +88,7 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
     created_entry = Account::Entry.order(created_at: :desc).first
 
     assert created_entry.amount.negative?
-    assert_redirected_to account_path(@entry.account)
+    assert_redirected_to @entry.account
   end
 
   test "creates trade buy entry" do
@@ -110,7 +110,7 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
     assert created_entry.account_trade.qty.positive?
     assert_equal "Transaction created successfully.", flash[:notice]
     assert_enqueued_with job: AccountSyncJob
-    assert_redirected_to account_path(@entry.account)
+    assert_redirected_to @entry.account
   end
 
   test "creates trade sell entry" do
@@ -133,6 +133,6 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
     assert created_entry.account_trade.qty.negative?
     assert_equal "Transaction created successfully.", flash[:notice]
     assert_enqueued_with job: AccountSyncJob
-    assert_redirected_to account_path(@entry.account)
+    assert_redirected_to @entry.account
   end
 end

@@ -2,9 +2,8 @@ class PagesController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[early_access]
   layout :with_sidebar, except: %i[early_access]
 
-  include Filterable
-
   def dashboard
+    @period = Period.from_param(params[:period])
     snapshot = Current.family.snapshot(@period)
     @net_worth_series = snapshot[:net_worth_series]
     @asset_series = snapshot[:asset_series]

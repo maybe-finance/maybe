@@ -1,7 +1,7 @@
 <h1><%= t(".greeting") %></h1>
 
 <p>
-  <%= t(".body", 
+  <%= t(".body",
     inviter: @invitation.inviter.display_name,
     family: @invitation.family.name).html_safe %>
 </p>

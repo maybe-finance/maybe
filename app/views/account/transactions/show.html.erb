@@ -1,5 +1,7 @@
 <% entry, transaction, account = @entry, @entry.account_transaction, @entry.account %>
 
+<% origin = params[:origin] %>
+
 <%= drawer do %>
   <header class="mb-4 space-y-1">
     <div class="flex items-center gap-4">
@@ -31,6 +33,7 @@
               url: account_transaction_path(account, entry),
               class: "space-y-2",
               data: { controller: "auto-submit-form" } do |f| %>
+          <%= f.hidden_field :origin, value: origin %>
           <%= f.text_field :name,
                 label: t(".name_label"),
                 "data-auto-submit-form-target": "auto" %>
@@ -73,6 +76,7 @@
               url: account_transaction_path(account, entry),
               class: "space-y-2",
               data: { controller: "auto-submit-form" } do |f| %>
+          <%= f.hidden_field :origin, value: origin %>
           <%= f.fields_for :entryable do |ef| %>
             <% unless entry.marked_as_transfer? %>
               <%= ef.collection_select :category_id,
@@ -110,6 +114,7 @@
               url: account_transaction_path(account, entry),
               class: "space-y-2",
               data: { controller: "auto-submit-form" } do |f| %>
+            <%= f.hidden_field :origin, value: origin %>
             <%= f.text_area :notes,
                   label: t(".note_label"),
                   placeholder: t(".note_placeholder"),
@@ -128,6 +133,7 @@
               url: account_transaction_path(account, entry),
               class: "p-3",
               data: { controller: "auto-submit-form" } do |f| %>
+          <%= f.hidden_field :origin, value: origin %>
           <div class="flex cursor-pointer items-center gap-2 justify-between">
             <div class="text-sm space-y-1">
               <h4 class="text-gray-900"><%= t(".exclude_title") %></h4>
@@ -138,28 +144,26 @@
               <%= f.check_box :excluded,
                       class: "sr-only peer",
                       "data-auto-submit-form-target": "auto" %>
-              <label for="account_entry_entryable_attributes_excluded"
+              <label for="account_entry_excluded"
                          class="maybe-switch"></label>
             </div>
           </div>
         <% end %>
 
         <!-- Delete Transaction Form -->
-        <% unless entry.marked_as_transfer? %>
-          <div class="flex items-center justify-between gap-2 p-3">
-            <div class="text-sm space-y-1">
-              <h4 class="text-gray-900"><%= t(".delete_title") %></h4>
-              <p class="text-gray-500"><%= t(".delete_subtitle") %></p>
-            </div>
+        <div class="flex items-center justify-between gap-2 p-3">
+          <div class="text-sm space-y-1">
+            <h4 class="text-gray-900"><%= t(".delete_title") %></h4>
+            <p class="text-gray-500"><%= t(".delete_subtitle") %></p>
+          </div>
 
-            <%= button_to t(".delete"),
+          <%= button_to t(".delete"),
                   account_entry_path(account, entry),
                   method: :delete,
                   class:  "rounded-lg px-3 py-2 text-red-500 text-sm
                            font-medium border border-alpha-black-200",
                   data:   { turbo_confirm: true, turbo_frame: "_top" } %>
-          </div>
-        <% end %>
+        </div>
       </div>
     <% end %>
   </div>

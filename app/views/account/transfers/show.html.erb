@@ -1,0 +1,121 @@
+<%= drawer do %>
+  <header class="mb-4 space-y-1">
+    <div class="flex items-center gap-4">
+      <h3 class="font-medium">
+        <span class="text-2xl">
+          <%= format_money @transfer.amount_money %>
+        </span>
+
+        <span class="text-lg text-gray-500">
+          <%= @transfer.amount_money.currency.iso_code %>
+        </span>
+      </h3>
+
+      <%= lucide_icon "arrow-left-right", class: "text-gray-500 mt-1 w-5 h-5" %>
+    </div>
+
+    <span class="text-sm text-gray-500">
+      <%= @transfer.name %>
+    </span>
+  </header>
+
+  <div class="space-y-2">
+    <!-- Overview Section -->
+    <%= disclosure t(".overview") do %>
+      <div class="pb-4 px-3 pt-2 text-sm space-y-3 text-gray-900">
+        <div class="space-y-3">
+          <dl class="flex items-center gap-2 justify-between">
+            <dt class="text-gray-500">To</dt>
+            <dd class="flex items-center gap-2 font-medium">
+              <%= render "accounts/logo", account: @transfer.inflow_transaction.account, size: "sm" %>
+              <%= @transfer.to_name %>
+            </dd>
+          </dl>
+
+          <dl class="flex items-center gap-2 justify-between">
+            <dt class="text-gray-500">Date</dt>
+            <dd class="font-medium"><%= l(@transfer.date, format: :long) %></dd>
+          </dl>
+
+          <dl class="flex items-center gap-2 justify-between">
+            <dt class="text-gray-500">Amount</dt>
+            <dd class="font-medium text-red-500"><%= format_money -@transfer.amount_money %></dd>
+          </dl>
+        </div>
+
+        <div class="bg-alpha-black-100 h-px my-2"></div>
+
+        <div class="space-y-3">
+          <dl class="flex items-center gap-2 justify-between">
+            <dt class="text-gray-500">From</dt>
+            <dd class="flex items-center gap-2 font-medium">
+              <%= render "accounts/logo", account: @transfer.outflow_transaction.account, size: "sm" %>
+              <%= @transfer.from_name %>
+            </dd>
+          </dl>
+
+          <dl class="flex items-center gap-2 justify-between">
+            <dt class="text-gray-500">Date</dt>
+            <dd class="font-medium"><%= l(@transfer.date, format: :long) %></dd>
+          </dl>
+
+          <dl class="flex items-center gap-2 justify-between">
+            <dt class="text-gray-500">Amount</dt>
+            <dd class="font-medium text-green-500">+<%= format_money @transfer.amount_money %></dd>
+          </dl>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Details Section -->
+    <%= disclosure t(".details") do %>
+      <%= styled_form_with model: @transfer,
+              data: { controller: "auto-submit-form" } do |f| %>
+        <%= f.text_area :notes,
+                  label: t(".note_label"),
+                  placeholder: t(".note_placeholder"),
+                  value: @transfer.outflow_transaction.notes,
+                  rows: 5,
+                  "data-auto-submit-form-target": "auto" %>
+      <% end %>
+    <% end %>
+
+    <!-- Settings Section -->
+    <%= disclosure t(".settings") do %>
+      <div class="pb-4">
+        <%= styled_form_with model: @transfer,
+              class: "p-3", data: { controller: "auto-submit-form" } do |f| %>
+          <div class="flex cursor-pointer items-center gap-2 justify-between">
+            <div class="text-sm space-y-1">
+              <h4 class="text-gray-900"><%= t(".exclude_title") %></h4>
+              <p class="text-gray-500"><%= t(".exclude_subtitle") %></p>
+            </div>
+
+            <div class="relative inline-block select-none">
+              <%= f.check_box :excluded,
+                      checked: @transfer.inflow_transaction.excluded,
+                      class: "sr-only peer",
+                      "data-auto-submit-form-target": "auto" %>
+              <label for="account_transfer_excluded"
+                         class="maybe-switch"></label>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="flex items-center justify-between gap-2 p-3">
+          <div class="text-sm space-y-1">
+            <h4 class="text-gray-900"><%= t(".delete_title") %></h4>
+            <p class="text-gray-500"><%= t(".delete_subtitle") %></p>
+          </div>
+
+          <%= button_to t(".delete"),
+                account_transfer_path(@transfer),
+                method: :delete,
+                class:  "rounded-lg px-3 py-2 text-red-500 text-sm
+                          font-medium border border-alpha-black-200",
+                data:   { turbo_confirm: true, turbo_frame: "_top" } %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
