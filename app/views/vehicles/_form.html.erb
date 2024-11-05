@@ -1,0 +1,33 @@
+<%# locals: (account:, url:) %>
+
+<%= render "accounts/form", account: account, url: url do |form| %>
+  <hr class="my-4">
+
+  <div class="space-y-2">
+    <%= form.fields_for :accountable do |vehicle_form| %>
+      <div class="flex items-center gap-2">
+        <%= vehicle_form.text_field :make,
+                                  label: t("vehicles.form.make"),
+                                  placeholder: t("vehicles.form.make_placeholder") %>
+        <%= vehicle_form.text_field :model,
+                                  label: t("vehicles.form.model"),
+                                  placeholder: t("vehicles.form.model_placeholder") %>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <%= vehicle_form.number_field :year,
+                                    label: t("vehicles.form.year"),
+                                    placeholder: t("vehicles.form.year_placeholder"),
+                                    min: 1900,
+                                    max: Time.current.year + 1 %>
+        <%= vehicle_form.number_field :mileage_value,
+                                    label: t("vehicles.form.mileage"),
+                                    placeholder: t("vehicles.form.mileage_placeholder"),
+                                    min: 0 %>
+        <%= vehicle_form.select :mileage_unit,
+                              [["Miles", "mi"], ["Kilometers", "km"]],
+                              { label: t("vehicles.form.mileage_unit") } %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

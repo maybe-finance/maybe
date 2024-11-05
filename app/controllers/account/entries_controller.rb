@@ -4,13 +4,21 @@ class Account::EntriesController < ApplicationController
   before_action :set_account
   before_action :set_entry, only: %i[edit update show destroy]
 
+  def index
+    @q = search_params
+    @pagy, @entries = pagy(@account.entries.search(@q).reverse_chronological, limit: params[:per_page] || "10")
+  end
+
   def edit
     render entryable_view_path(:edit)
   end
 
   def update
+    prev_amount = @entry.amount
+    prev_date = @entry.date
+
     @entry.update!(entry_params)
-    @entry.sync_account_later
+    @entry.sync_account_later if prev_amount != @entry.amount || prev_date != @entry.date
 
     respond_to do |format|
       format.html { redirect_to account_entry_path(@account, @entry), notice: t(".success") }
@@ -43,6 +51,11 @@ class Account::EntriesController < ApplicationController
     end
 
     def entry_params
-      params.require(:account_entry).permit(:name, :date, :amount, :currency)
+      params.require(:account_entry).permit(:name, :date, :amount, :currency, :notes)
+    end
+
+    def search_params
+      params.fetch(:q, {})
+            .permit(:search)
     end
 end
