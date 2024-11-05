@@ -3,17 +3,8 @@
 %>
 
 <%= styled_form_with model: @user, url: password_reset_path(token: params[:token]), method: :patch, class: "space-y-4" do |form| %>
-  <div class="relative border border-gray-100 bg-gray-25 rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-    <%= form.label :password, class: "p-4 pb-0 block text-sm font-medium text-gray-700" %>
-    <%= form.password_field :password, required: "required", class: "p-4 pt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full" %>
-  </div>
+  <%= form.password_field :password, required: true, label: true %>
+  <%= form.password_field :password_confirmation, required: true, label: true %>
 
-  <div class="relative border border-gray-100 bg-gray-25 rounded-xl focus-within:bg-white focus-within:shadow focus-within:opacity-100">
-    <%= form.label :password_confirmation, class: "p-4 pb-0 block text-sm font-medium text-gray-700" %>
-    <%= form.password_field :password_confirmation, required: "required", class: "p-4 pt-1 bg-transparent border-none opacity-50 focus:outline-none focus:ring-0 focus-within:opacity-100 w-full" %>
-  </div>
-
-  <div>
-    <%= form.submit t(".submit"), class: "flex justify-center w-full px-4 py-3 text-sm font-medium text-white bg-black rounded-xl hover:bg-black focus:outline-none focus:ring-2 focus:ring-gray-200 shadow" %>
-  </div>
+  <%= form.submit %>
 <% end %>

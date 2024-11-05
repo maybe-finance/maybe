@@ -3,10 +3,10 @@ en:
   properties:
     create:
       success: Property account created
-    edit:
-      edit: Edit %{account}
     destroy:
       success: Property account deleted
+    edit:
+      edit: Edit %{account}
     form:
       address_line1: Street address
       address_line1_placeholder: 123 Main St

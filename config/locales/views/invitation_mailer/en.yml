@@ -1,7 +1,8 @@
+---
 en:
   invitation_mailer:
     invite_email:
-      greeting: "Welcome to Maybe!"
+      accept_button: Accept Invitation
       body: "%{inviter} has invited you to join the %{family} family on Maybe!"
-      accept_button: "Accept Invitation"
-      expiry_notice: "This invitation will expire in %{days} days"
+      expiry_notice: This invitation will expire in %{days} days
+      greeting: Welcome to Maybe!

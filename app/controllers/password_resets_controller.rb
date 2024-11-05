@@ -16,7 +16,7 @@ class PasswordResetsController < ApplicationController
       ).password_reset.deliver_later
     end
 
-    redirect_to root_path, notice: t(".requested")
+    redirect_to new_password_reset_path(step: "pending")
   end
 
   def edit

@@ -3,6 +3,8 @@ en:
   depositories:
     create:
       success: Depository account created
+    destroy:
+      success: Depository account deleted
     edit:
       edit: Edit %{account}
     form:
@@ -12,5 +14,3 @@ en:
       title: Enter account balance
     update:
       success: Depository account updated
-    destroy:
-      success: Depository account deleted
