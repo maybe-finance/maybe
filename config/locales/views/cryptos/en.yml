@@ -1,0 +1,13 @@
+---
+en:
+  cryptos:
+    create:
+      success: Crypto account created
+    edit:
+      edit: Edit %{account}
+    new:
+      title: Enter account balance
+    update:
+      success: Crypto account updated
+    destroy:
+      success: Crypto account deleted

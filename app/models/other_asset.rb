@@ -5,7 +5,7 @@ class OtherAsset < ApplicationRecord
     "#12B76A"
   end
 
-  def mode_required?
-    false
+  def icon
+    "plus"
   end
 end

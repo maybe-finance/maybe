@@ -1,6 +1,6 @@
 <%= modal_form_wrapper title: t(".title"), subtitle: t(".subtitle") do %>
   <%= styled_form_with model: @invitation, class: "space-y-4", data: { turbo: false } do |form| %>
-    <%= form.email_field :email, 
+    <%= form.email_field :email,
       required: true,
       placeholder: t(".email_placeholder"),
       label: t(".email_label") %>

@@ -1,6 +1,14 @@
 class Property < ApplicationRecord
   include Accountable
 
+  SUBTYPES = [
+    [ "Single Family Home", "single_family_home" ],
+    [ "Multi-Family Home", "multi_family_home" ],
+    [ "Condominium", "condominium" ],
+    [ "Townhouse", "townhouse" ],
+    [ "Investment Property", "investment_property" ]
+  ]
+
   has_one :address, as: :addressable, dependent: :destroy
 
   accepts_nested_attributes_for :address
@@ -23,8 +31,8 @@ class Property < ApplicationRecord
     "#06AED4"
   end
 
-  def mode_required?
-    false
+  def icon
+    "home"
   end
 
   private
