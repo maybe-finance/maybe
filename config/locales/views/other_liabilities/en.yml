@@ -1,0 +1,13 @@
+---
+en:
+  other_liabilities:
+    create:
+      success: Other liability account created
+    edit:
+      edit: Edit %{account}
+    destroy:
+      success: Other liability account deleted
+    new:
+      title: Enter liability details
+    update:
+      success: Other liability account updated

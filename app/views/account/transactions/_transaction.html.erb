@@ -1,9 +1,8 @@
-<%# locals: (entry:, selectable: true, editable: true, short: false, show_tags: false, **opts) %>
+<%# locals: (entry:, selectable: true, show_balance: false, origin: nil) %>
 <% transaction, account = entry.account_transaction, entry.account %>
 
-<div class="grid grid-cols-12 items-center text-gray-900 text-sm font-medium p-4">
-  <% name_col_span = unconfirmed_transfer?(entry) ? "col-span-10" : short ? "col-span-6" : "col-span-4" %>
-  <div class="pr-10 flex items-center gap-4 <%= name_col_span %>">
+<div class="grid grid-cols-12 items-center <%= entry.excluded ? "text-gray-400 bg-gray-25" : "text-gray-900" %> text-sm font-medium p-4">
+  <div class="pr-10 flex items-center gap-4 col-span-6">
     <% if selectable %>
       <%= check_box_tag dom_id(entry, "selection"),
                         class: "maybe-checkbox maybe-checkbox--light",
@@ -13,15 +12,15 @@
     <div class="max-w-full">
       <%= content_tag :div, class: ["flex items-center gap-2"] do %>
         <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-600/5 text-gray-600">
-          <%= entry_name(entry).first.upcase %>
+          <%= transaction.name.first.upcase %>
         </div>
 
-        <div class="truncate text-gray-900">
-          <% if entry.new_record? || !editable %>
-            <%= content_tag :p, entry.name %>
+        <div class="truncate">
+          <% if entry.new_record? %>
+            <%= content_tag :p, transaction.name %>
           <% else %>
-            <%= link_to entry_name(entry),
-                        account_entry_path(account, entry),
+            <%= link_to transaction.name,
+                        entry.transfer.present? ? account_transfer_path(entry.transfer, origin:) : account_entry_path(account, entry, origin:),
                         data: { turbo_frame: "drawer", turbo_prefetch: false },
                         class: "hover:underline hover:text-gray-800" %>
           <% end %>
@@ -30,46 +29,25 @@
     </div>
 
     <% if unconfirmed_transfer?(entry) %>
-      <% if editable %>
-        <%= form_with url: unmark_transfers_transactions_path, class: "flex items-center", data: {
-          turbo_confirm: {
-            title: t(".remove_transfer"),
-            body: t(".remove_transfer_body"),
-            accept: t(".remove_transfer_confirm"),
-          },
-          turbo_frame: "_top"
-        } do |f| %>
-          <%= f.hidden_field "bulk_update[entry_ids][]", value: entry.id %>
-          <%= f.button class: "flex items-center justify-center group", title: "Remove transfer" do %>
-            <%= lucide_icon "arrow-left-right", class: "group-hover:hidden text-gray-500 w-4 h-4" %>
-            <%= lucide_icon "unlink", class: "hidden group-hover:inline-block text-gray-900 w-4 h-4" %>
-          <% end %>
-        <% end %>
-      <% else %>
-        <%= lucide_icon "arrow-left-right", class: "text-gray-500 w-4 h-4" %>
-      <% end %>
+      <%= render "account/transfers/transfer_toggle", entry: entry %>
     <% end %>
   </div>
 
-  <% unless entry.marked_as_transfer? %>
-    <% unless short %>
-      <div class="flex items-center gap-1 <%= show_tags ? "col-span-6" : "col-span-3" %>">
-        <% if editable %>
-          <%= render "categories/menu", transaction: transaction %>
-        <% else %>
-          <%= render "categories/badge", category: transaction.category %>
-        <% end %>
-
-        <% if show_tags %>
-          <% transaction.tags.each do |tag| %>
-            <%= render partial: "tags/badge", locals: { tag: tag } %>
-          <% end %>
-        <% end %>
-      </div>
+  <% if entry.transfer.present? %>
+    <% unless show_balance %>
+      <div class="col-span-2"></div>
     <% end %>
 
-    <% unless show_tags %>
-      <%= tag.div class: short ? "col-span-4" : "col-span-3" do %>
+    <div class="col-span-2">
+      <%= render "account/transfers/account_logos", transfer: entry.transfer, outflow: entry.outflow? %>
+    </div>
+  <% else %>
+    <div class="flex items-center gap-1 col-span-2">
+      <%= render "categories/menu", transaction: transaction, origin: origin %>
+    </div>
+
+    <% unless show_balance %>
+      <%= tag.div class: "col-span-2" do %>
         <% if entry.new_record? %>
           <%= tag.p account.name %>
         <% else %>
@@ -87,4 +65,10 @@
                     format_money(-entry.amount_money),
                     class: ["text-green-600": entry.inflow?] %>
   </div>
+
+  <% if show_balance %>
+    <div class="col-span-2 justify-self-end">
+      <%= tag.p format_money(entry.trend.current), class: "font-medium text-sm text-gray-900" %>
+    </div>
+  <% end %>
 </div>

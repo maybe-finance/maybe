@@ -1,12 +1,25 @@
 module AccountsHelper
-  def permitted_accountable_partial(account, name = nil)
-    permitted_names = %w[tooltip header tabs form]
-    folder = account.accountable_type.underscore
-    name ||= account.accountable_type.underscore
+  def period_label(period)
+    return "since account creation" if period.date_range.begin.nil?
+    start_date, end_date = period.date_range.first, period.date_range.last
 
-    raise "Unpermitted accountable partial: #{name}" unless permitted_names.include?(name)
+    return "Starting from #{start_date.strftime('%b %d, %Y')}" if end_date.nil?
+    return "Ending at #{end_date.strftime('%b %d, %Y')}" if start_date.nil?
 
-    "accounts/accountables/#{folder}/#{name}"
+    days_apart = (end_date - start_date).to_i
+
+    case days_apart
+    when 1
+      "vs. yesterday"
+    when 7
+      "vs. last week"
+    when 30, 31
+      "vs. last month"
+    when 365, 366
+      "vs. last year"
+    else
+      "from #{start_date.strftime('%b %d, %Y')} to #{end_date.strftime('%b %d, %Y')}"
+    end
   end
 
   def summary_card(title:, &block)
@@ -36,62 +49,6 @@ module AccountsHelper
 
   def accountable_color(accountable_type)
     class_mapping(accountable_type)[:hex]
-  end
-
-  # Eventually, we'll have an accountable form for each type of accountable, so
-  # this helper is a convenience for now to reuse common logic in the accounts controller
-  def new_account_form_url(account)
-    case account.accountable_type
-    when "Property"
-      properties_path
-    when "Vehicle"
-      vehicles_path
-    when "Loan"
-      loans_path
-    when "CreditCard"
-      credit_cards_path
-    else
-      accounts_path
-    end
-  end
-
-  def edit_account_form_url(account)
-    case account.accountable_type
-    when "Property"
-      property_path(account)
-    when "Vehicle"
-      vehicle_path(account)
-    when "Loan"
-      loan_path(account)
-    when "CreditCard"
-      credit_card_path(account)
-    else
-      account_path(account)
-    end
-  end
-
-  def account_tabs(account)
-    overview_tab = { key: "overview", label: t("accounts.show.overview"), path: account_path(account, tab: "overview"), partial_path: "accounts/overview" }
-    holdings_tab = { key: "holdings", label: t("accounts.show.holdings"), path: account_path(account, tab: "holdings"), route: account_holdings_path(account) }
-    cash_tab = { key: "cash", label: t("accounts.show.cash"), path: account_path(account, tab: "cash"), route: account_cashes_path(account) }
-    value_tab        = { key: "valuations", label: t("accounts.show.value"), path: account_path(account, tab: "valuations"), route: account_valuations_path(account) }
-    transactions_tab = { key: "transactions", label: t("accounts.show.transactions"), path: account_path(account, tab: "transactions"), route: account_transactions_path(account) }
-    trades_tab       = { key: "trades", label: t("accounts.show.trades"), path: account_path(account, tab: "trades"), route: account_trades_path(account) }
-
-    return [ value_tab ] if account.other_asset? || account.other_liability?
-    return [ overview_tab, value_tab ] if account.property? || account.vehicle?
-    return [ holdings_tab, cash_tab, trades_tab, value_tab ] if account.investment?
-    return [ overview_tab, value_tab, transactions_tab ] if account.loan? || account.credit_card?
-
-    [ value_tab, transactions_tab ]
-  end
-
-  def selected_account_tab(account)
-    available_tabs = account_tabs(account)
-
-    tab = available_tabs.find { |tab| tab[:key] == params[:tab] }
-
-    tab || available_tabs.first
   end
 
   def account_groups(period: nil)

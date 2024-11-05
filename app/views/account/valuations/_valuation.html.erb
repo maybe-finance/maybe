@@ -1,50 +1,39 @@
-<%# locals: (entry:, **opts) %>
+<%# locals: (entry:, selectable: true, show_balance: false, origin: nil) %>
 
 <% account = entry.account %>
+<% valuation = entry.account_valuation %>
 
-<%= turbo_frame_tag dom_id(entry) do %>
-  <% is_oldest = entry.first_of_type? %>
+<div class="p-4 grid grid-cols-12 items-center text-gray-900 text-sm font-medium">
+  <div class="col-span-8 flex items-center gap-4">
+    <% if selectable %>
+      <%= check_box_tag dom_id(entry, "selection"),
+                        class: "maybe-checkbox maybe-checkbox--light",
+                        data: { id: entry.id, "bulk-select-target": "row", action: "bulk-select#toggleRowSelection" } %>
+    <% end %>
 
-  <div class="p-4 grid grid-cols-10 items-center">
-    <div class="col-span-5 flex items-center gap-4">
-      <%= tag.div class: "w-8 h-8 rounded-full p-1.5 flex items-center justify-center", style: entry_style(entry, is_oldest:).html_safe do %>
-        <%= lucide_icon entry_icon(entry, is_oldest:), class: "w-4 h-4" %>
+    <div class="flex items-center gap-3">
+      <%= tag.div class: "w-8 h-8 rounded-full p-1.5 flex items-center justify-center", style: mixed_hex_styles(valuation.color) do %>
+        <%= lucide_icon valuation.icon, class: "w-4 h-4" %>
       <% end %>
 
-      <div class="text-sm">
-        <%= tag.p entry.date, class: "text-gray-900 font-medium" %>
-        <%= tag.p is_oldest ? t(".start_balance") : t(".value_update"), class: "text-gray-500" %>
+      <div class="truncate text-gray-900">
+        <% if entry.new_record? %>
+          <%= content_tag :p, entry.name %>
+        <% else %>
+          <%= link_to valuation.name,
+                        account_entry_path(account, entry),
+                        data: { turbo_frame: "drawer", turbo_prefetch: false },
+                        class: "hover:underline hover:text-gray-800" %>
+        <% end %>
       </div>
     </div>
-
-    <div class="col-span-2 justify-self-end">
-      <%= tag.p format_money(entry.amount_money), class: "font-medium text-sm text-gray-900" %>
-    </div>
-
-    <div class="col-span-2 justify-self-end font-medium text-sm" style="color: <%= entry.trend.color %>">
-      <% if entry.trend.direction.flat? %>
-        <%= tag.span t(".no_change"), class: "text-gray-500" %>
-      <% else %>
-        <%= tag.span format_money(entry.trend.value) %>
-        <%= tag.span "(#{entry.trend.percent}%)" %>
-      <% end %>
-    </div>
-
-    <div class="col-span-1 justify-self-end">
-      <%= contextual_menu do %>
-        <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-          <%= contextual_menu_modal_action_item t(".edit_entry"), edit_account_entry_path(account, entry), turbo_frame: dom_id(entry) %>
-
-          <%= contextual_menu_destructive_item t(".delete_entry"),
-                                               account_entry_path(account, entry),
-                                               turbo_frame: "_top",
-                                               turbo_confirm: {
-                                                 title: t(".confirm_title"),
-                                                 body: t(".confirm_body_html"),
-                                                 accept: t(".confirm_accept")
-                                               } %>
-        </div>
-      <% end %>
-    </div>
   </div>
-<% end %>
+
+  <div class="col-span-2 justify-self-end font-medium text-sm" style="color: <%= valuation.color %>">
+    <%= tag.span format_money(entry.trend.value) %>
+  </div>
+
+  <div class="col-span-2 justify-self-end">
+    <%= tag.p format_money(entry.amount_money), class: "font-medium text-sm text-gray-900" %>
+  </div>
+</div>

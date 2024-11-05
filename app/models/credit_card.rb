@@ -16,4 +16,8 @@ class CreditCard < ApplicationRecord
   def color
     "#F13636"
   end
+
+  def icon
+    "credit-card"
+  end
 end

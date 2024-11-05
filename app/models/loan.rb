@@ -20,4 +20,8 @@ class Loan < ApplicationRecord
   def color
     "#D444F1"
   end
+
+  def icon
+    "hand-coins"
+  end
 end
