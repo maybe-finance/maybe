@@ -53,6 +53,7 @@ gem "redcarpet"
 gem "stripe"
 gem "intercom-rails"
 gem "holidays"
+gem "redcarpet"
 
 group :development, :test do
   gem "debug", platforms: %i[mri windows]

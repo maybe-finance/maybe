@@ -14,13 +14,10 @@ intent:
   - name: "metrics"
     scope: |
       - The "metrics" table is the primary table to use.
+      - Be careful to not include account's in your query unless they are explicitly needed to calculate the metric. Some metrics (such as "net worth") do not need account_ids.
   - name: "transactional"
     scope: |
       - The "transactions" table is the primary table to use.
-      - Possible categories: "Freelance", "Paycheck", "Rideshare and delivery", "Auto lease payment", "Auto loan repayment", "Childcare", "Contribution to reserve fund", "Council tax", "Credit card bill", "Credit card fee", "Credit report", "Debt collection", "Drugstores and pharmacies", "Education", "Fuel", "Funerals and bequests", "Government", "Groceries", "Insurance", "Interest", "Loan repayment", "Medical bill", "Mortgage", "Other transport", "Pets", "Public transport", "Rent and property management fee", "Retirement contributions", "Ridesharing and taxis", "Student loan repayment", "Taxes", "Utilities", "Vehicle maintenance", "Intra account transfer", "Inter account transfer", "App stores", "ATM/bank withdrawal", "Bank fee", "Books, newsletters, newspapers", "Buy now, pay later", "Clothing", "Cafes and coffee shops", "Convenience stores", "Department and discount stores", "Donation", "Electronics", "Entertainment and recreation", "Firearms", "Food and Drink", "Gambling", "Gifts", "Sport and fitness", "Home improvements and maintenance services", "Investment", "Laundry", "Rent to own", "Legal services", "Liquor", "Hotels and lodging", "Media", "Other consumer services", "Other non-essential", "Pawn shops", "Peer to peer transfer", "Recreational goods", "SaaS tools", "Self care", "Toll charge", "Towing companies", "Trading (crypto)", "Trading (non-crypto)", "eCommerce purchase", "ATM/bank deposit", "Cashback", "Ecommerce", "Grants and stipends", "Loans", "Other", "Refund", "Reversal / adjustment", "Tax refund", "Benefits", "Interest / dividend", "Property rental"
-      - For categories/enrichment_label use ILIKE to match a string and wrap in % to match partial strings.
-      - You may group similar categories together if it makes sense (such as Groceries, Food, Restaurants, etc)
-      - Include encrichment_merchant_name when possible
   - name: "accounts"
     scope: |
       -

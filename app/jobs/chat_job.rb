@@ -1,14 +1,14 @@
 class ChatJob < ApplicationJob
   queue_as :default
 
-  def perform(chat_id)
+  def perform(chat_id, message_id)
     chat = Chat.find(chat_id)
     nil if chat.nil?
 
-    message = chat.messages.where.not(user_id: nil).order(created_at: :desc).first
+    message = chat.messages.find(message_id)
     openai_client = OpenAI::Client.new
 
-    viability = determine_viabilitiy(openai_client, chat)
+    viability = determine_viability(openai_client, chat)
 
     if !viability["content_contains_answer"]
       handle_non_viable_conversation(openai_client, chat, message, viability)
@@ -121,7 +121,12 @@ class ChatJob < ApplicationJob
     end
 
     def update_conversation(message, chat)
-      chat.broadcast_append_to "conversation_area", partial: "conversations/message", locals: { message: chat }, target: "conversation_area_#{chat.id}"
+      chat.broadcast_append_to(
+        chat,
+        target: "chat_messages",
+        partial: "chats/message",
+        locals: { message: message }
+      )
     end
 
     def build_sql(openai_client, chat, sql_intent)
@@ -202,7 +207,11 @@ class ChatJob < ApplicationJob
       conversation_history = chat.messages.where.not(content: [ nil, "" ]).where.not(content: "...").where.not(role: "log").order(:created_at)
 
       messages = conversation_history.map do |message|
-        { role: message.role, content: message.content }
+        if message.role == "assistant" && message.hidden
+          { role: message.role, content: "HIDDEN: The user does not see this content in their message history, so you'll need to repeat the data if you reference it.\n\n#{message.content}" }
+        else
+          { role: message.role, content: message.content }
+        end
       end
 
       total_content_length = messages.sum { |message| message[:content]&.length.to_i }
@@ -224,11 +233,13 @@ class ChatJob < ApplicationJob
       last_log_json = JSON.parse(last_log.log)
       resolve_value = last_log_json["resolve"]
 
-      answer = openai_client.chat(
+      text_string = ""
+
+      openai_client.chat(
         parameters: {
           model: "gpt-4o",
           messages: [
-            { role: "system", content: "You are a highly intelligent certified financial advisor/teacher/mentor tasked with helping the customer make wise financial decisions based on real data. You generally respond in the Socratic style. Try to ask just the right question to help educate the user and get them thinking critically about their finances. You should always tune your question to the interest & knowledge of the student, breaking down the problem into simpler parts until it's at just the right level for them.\n\nUse only the information in the conversation to construct your response." },
+            { role: "system", content: "You are a highly intelligent certified financial advisor/teacher/mentor tasked with helping the customer make wise financial decisions based on real data. You should always tune your question to the interest & knowledge of the peron, breaking down the problem into simpler parts until it's at just the right level for them.\n\nUse only the information in the conversation to construct your response." },
             { role: "assistant", content: <<-ASSISTANT.strip_heredoc },
             Here is information about the user and their financial situation, so you understand them better:
             - Country: #{chat.user.family.country}
@@ -254,6 +265,7 @@ class ChatJob < ApplicationJob
             - Remember, "accounts" and "transactions" are different things.
             - If you are not absolutely sure what the user is asking, ask them to clarify. Clarity is key.
             - Unless the user explicitly asks for "pending" transactions, you should ignore all transactions where is_pending is true.
+            - Try to add helpful observations/insights to your answer.
 
             According to the last log message, this is what is needed to answer the question: '#{resolve_value}'.
 
@@ -263,12 +275,20 @@ class ChatJob < ApplicationJob
             *messages
           ],
           temperature: 0,
-          max_tokens: 1200
+          max_tokens: 1200,
+          stream: proc do |chunks, _bytesize|
+            chat.broadcast_remove_to "chat_messages", target: "message_content_loader_#{message.id}"
+
+            if chunks.dig("choices")[0]["delta"].present?
+              content = chunks.dig("choices", 0, "delta", "content")
+              text_string += content unless content.nil?
+
+              chat.broadcast_append_to "chat_messages", partial: "chats/stream", locals: { text: content }, target: "message_content_#{message.id}"
+            end
+          end
         }
       )
 
-      answer_content = answer.dig("choices", 0, "message", "content")
-
-      answer_content
+      text_string
     end
 end

@@ -113,7 +113,7 @@ if ENV["INTERCOM_APP_ID"].present? && ENV["INTERCOM_IDENTITY_VERIFICATION_KEY"].
     # config.inbox.custom_activator = '.intercom'
     #
     # If you'd like to hide default launcher button uncomment this line
-    # config.hide_default_launcher = true
+    config.hide_default_launcher = true
     #
     # If you need to route your Messenger requests through a different endpoint than the default, uncomment the below line. Generally speaking, this is not needed.
     # config.api_base = "https://api-iam.intercom.io"

@@ -8,13 +8,19 @@
       <% end %>
     </div>
 
-    <main class="grow px-20 py-6 h-full <%= require_upgrade? ? "relative overflow-hidden" : "overflow-y-auto" %>">
+    <main class="grow py-6 h-full <%= require_upgrade? ? "relative overflow-hidden" : "overflow-y-auto" %>">
       <% if require_upgrade? %>
         <%= render "shared/subscribe_modal" %>
       <% end %>
 
       <%= yield %>
     </main>
+
+    <div class="px-5 py-6 h-full">
+      <div class="w-[300px] h-full shrink-0 overflow-y-auto bg-white border border-alpha-black-25 shadow-xs rounded-xl py-4 px-3">
+        <%= render "chats/chats" %>
+      </div>
+    </div>
   </div>
 
   <% if (upgrade = get_upgrade_for_notification(Current.user, Setting.upgrades_mode)) %>

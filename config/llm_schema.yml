@@ -13,6 +13,9 @@ tables:
       kind:
         type: string
         description: The type of metric being tracked
+        possible_values:
+          - "net_worth"
+          - "spending"
       subkind:
         type: string
         description: Optional sub-classification of the metric kind

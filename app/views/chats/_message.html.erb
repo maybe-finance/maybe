@@ -1,0 +1,28 @@
+<div class="mb-4 <%= message.role == 'user' ? 'text-right' : 'text-left' %>" id="message_<%= message.id %>">
+  <div class="inline-block max-w-[80%] px-4 py-2 rounded-lg <%= message.role == 'user' ? 'bg-blue-50' : 'bg-gray-50' %>">
+    <div class="text-sm prose text-gray-500" id="message_content_<%= message.id %>">
+      <% if message.content == '...' %>
+        <div class="flex items-center rounded-lg bg-opacity-10" id="message_content_loader_<%= message.id %>">
+          <div class="loading-ellipsis">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+          <div class="inline ml-2 text-xs text-gray-400">
+            <% if message.status == 'pending' %>
+              Determing the best route to answer your question.
+            <% elsif message.status == 'data' %>
+              Grabbing the necessary information to answer your question.
+            <% elsif message.status == 'processing' %>
+              Writing the answer to your question.
+            <% else %>
+              Depending on the question, it may take a few minutes to respond.
+            <% end %>
+          </div>
+        </div>
+      <% else %>
+        <%= markdown message.content %>
+      <% end %>
+    </div>
+  </div>
+</div>

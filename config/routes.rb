@@ -121,6 +121,8 @@ Rails.application.routes.draw do
 
   resources :issues, only: :show
 
+  resources :chats
+
   namespace :issue do
     resources :exchange_rate_provider_missings, only: :update
   end

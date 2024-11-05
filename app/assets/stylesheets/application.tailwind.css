@@ -163,3 +163,33 @@
     background: #a6a6a6;
   }
 }
+
+
+.loading-ellipsis {
+  display: inline-flex;
+}
+
+.dot {
+  @apply w-1.5 h-1.5 mx-1 bg-gray-400 rounded-full;
+  animation: ellipsis 1.5s infinite;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+@keyframes ellipsis {
+
+  0%,
+  100% {
+    transform: scale(0.8);
+  }
+
+  50% {
+    transform: scale(1.3);
+  }
+}

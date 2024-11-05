@@ -157,4 +157,10 @@ module ApplicationHelper
               .map { |_currency, money| format_money(money) }
               .join(separator)
   end
+
+  def markdown(text)
+    @@parser ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML, tables: true)
+
+    @@parser.render(text).html_safe
+  end
 end
