@@ -1,5 +1,5 @@
 <% if params[:step] == "method_select" %>
-  <%= render "accounts/new/method_selector", path: new_depository_path(institution_id: params[:institution_id]) %>
+  <%= render "accounts/new/method_selector", path: new_depository_path(institution_id: params[:institution_id], return_to: params[:return_to]) %>
 <% else %>
   <%= modal_form_wrapper title: t(".title") do %>
     <%= render "depositories/form", account: @account, url: depositories_path %>

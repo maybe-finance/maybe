@@ -11,16 +11,18 @@
     <% end %>
 
     <%= link_to new_import_path,
+                      data: { turbo_frame: :modal },
                       class: "block w-full py-2 px-3 space-x-2 text-gray-900 hover:bg-gray-50 flex items-center rounded-lg" do %>
       <%= lucide_icon "download", class: "w-5 h-5 text-gray-500" %>
 
       <span><%= t(".import") %></span>
     <% end %>
 
-    <%= button_to account,
+    <%= button_to account_path(account),
                         method: :delete,
                         class: "block w-full py-2 px-3 space-x-2 text-red-600 hover:bg-red-50 flex items-center rounded-lg",
                         data: {
+                          turbo_frame: :_top,
                           turbo_confirm: {
                             title: t(".confirm_title"),
                             body: t(".confirm_body_html"),

@@ -5,7 +5,8 @@ en:
       create:
         success: Valuation created successfully.
       form:
-        cancel: Cancel
+        amount: Amount
+        submit: Add balance update
       index:
         change: change
         date: date

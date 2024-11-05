@@ -9,3 +9,5 @@ en:
       title: Enter account balance
     update:
       success: Crypto account updated
+    destroy:
+      success: Crypto account deleted

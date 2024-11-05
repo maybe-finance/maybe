@@ -5,6 +5,8 @@ en:
       success: Credit card account created
     edit:
       edit: Edit %{account}
+    destroy:
+      success: Credit card account deleted
     form:
       annual_fee: Annual fee
       annual_fee_placeholder: '99'

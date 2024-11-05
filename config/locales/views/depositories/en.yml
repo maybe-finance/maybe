@@ -12,3 +12,5 @@ en:
       title: Enter account balance
     update:
       success: Depository account updated
+    destroy:
+      success: Depository account deleted

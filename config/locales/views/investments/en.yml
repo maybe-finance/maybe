@@ -14,6 +14,8 @@ en:
       chart_title: Total value
     update:
       success: Investment account updated
+    destroy:
+      success: Investment account deleted
     value_tooltip:
       cash: Cash
       holdings: Holdings

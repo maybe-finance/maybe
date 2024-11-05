@@ -18,6 +18,12 @@ module AccountableResourceInterfaceTest
     assert_response :success
   end
 
+  test "destroys account" do
+    delete account_url(@account)
+    assert_redirected_to accounts_path
+    assert_equal "#{@account.accountable_name.humanize} account deleted", flash[:notice]
+  end
+
   test "updates basic account balances" do
     assert_no_difference [ "Account.count", "@account.accountable_class.count" ] do
       patch account_url(@account), params: {

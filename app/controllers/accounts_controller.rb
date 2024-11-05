@@ -1,7 +1,7 @@
 class AccountsController < ApplicationController
   layout :with_sidebar
 
-  before_action :set_account, only: %i[destroy sync update]
+  before_action :set_account, only: %i[sync]
 
   def index
     @institutions = Current.family.institutions
@@ -22,16 +22,6 @@ class AccountsController < ApplicationController
     render layout: false
   end
 
-  def update
-    @account.update_with_sync!(account_params)
-    redirect_back_or_to @account, notice: t(".success")
-  end
-
-  def destroy
-    @account.destroy!
-    redirect_to accounts_path, notice: t(".success")
-  end
-
   def sync
     unless @account.syncing?
       @account.sync_later
@@ -46,11 +36,5 @@ class AccountsController < ApplicationController
   private
     def set_account
       @account = Current.family.accounts.find(params[:id])
-    end
-
-    def account_params
-      params.require(:account).permit(
-        :name, :balance, :currency, :is_active, :institution_id
-      )
     end
 end

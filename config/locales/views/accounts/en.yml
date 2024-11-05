@@ -6,8 +6,6 @@ en:
       troubleshoot: Troubleshoot
     account_list:
       new_account: New %{type}
-    destroy:
-      success: Account deleted successfully
     empty:
       empty_message: Add an account either via connection, importing or entering manually.
       new_account: New account
@@ -76,5 +74,3 @@ en:
       success: Successfully queued accounts for syncing.
     sync_all_button:
       sync: Sync all
-    update:
-      success: Account updated

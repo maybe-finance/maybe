@@ -5,6 +5,8 @@ en:
       success: Loan account created
     edit:
       edit: Edit %{account}
+    destroy:
+      success: Loan account deleted
     form:
       interest_rate: Interest rate
       interest_rate_placeholder: '5.25'

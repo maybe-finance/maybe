@@ -60,7 +60,7 @@ Rails.application.routes.draw do
     resources :mappings, only: :update, module: :import
   end
 
-  resources :accounts, only: %i[index new destroy] do
+  resources :accounts, only: %i[index new] do
     collection do
       get :summary
       get :list
@@ -94,15 +94,15 @@ Rails.application.routes.draw do
     route_for "edit_#{model.accountable_name}", model, options
   end
 
-  resources :depositories, only: %i[new show create edit update]
-  resources :investments, only: %i[new show create edit update]
-  resources :properties, only: %i[new show create edit update]
-  resources :vehicles, only: %i[new show create edit update]
-  resources :credit_cards, only: %i[new show create edit update]
-  resources :loans, only: %i[new show create edit update]
-  resources :cryptos, only: %i[new show create edit update]
-  resources :other_assets, only: %i[new show create edit update]
-  resources :other_liabilities, only: %i[new show create edit update]
+  resources :depositories, except: :index
+  resources :investments, except: :index
+  resources :properties, except: :index
+  resources :vehicles, except: :index
+  resources :credit_cards, except: :index
+  resources :loans, except: :index
+  resources :cryptos, except: :index
+  resources :other_assets, except: :index
+  resources :other_liabilities, except: :index
 
   resources :transactions, only: %i[index new create] do
     collection do

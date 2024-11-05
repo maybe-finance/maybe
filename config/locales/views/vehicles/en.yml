@@ -5,6 +5,8 @@ en:
       success: Vehicle account created
     edit:
       edit: Edit %{account}
+    destroy:
+      success: Vehicle account deleted
     form:
       make: Make
       make_placeholder: Toyota
