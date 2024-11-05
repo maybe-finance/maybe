@@ -1,0 +1,159 @@
+tables:
+  metrics:
+    columns:
+      id:
+        type: uuid
+        description: Primary key
+      family_id:
+        type: uuid 
+        description: Reference to the family this metric belongs to
+      account_id:
+        type: uuid
+        description: Optional reference to specific account this metric is for
+      kind:
+        type: string
+        description: The type of metric being tracked
+      subkind:
+        type: string
+        description: Optional sub-classification of the metric kind
+      date:
+        type: date
+        description: The date this metric value was recorded
+      value:
+        type: decimal
+        description: The numeric value of the metric
+    foreign_keys:
+      - { column: family_id, references: families }
+      - { column: account_id, references: accounts }
+
+  families:
+    columns:
+      id:
+        type: uuid
+        description: Primary key
+      name:
+        type: string
+        description: Display name for the family
+      currency:
+        type: string
+        description: Base currency used for this family's finances
+      last_synced_at:
+        type: datetime
+        description: When family accounts were last synced with external data
+      locale:
+        type: string
+        description: Language/region settings for the family
+      stripe_plan_id:
+        type: string
+        description: ID of the Stripe subscription plan
+      stripe_customer_id:
+        type: string
+        description: ID of the family in Stripe's system
+      stripe_subscription_status:
+        type: string
+        description: Current status of the family's subscription
+      date_format:
+        type: string
+        description: Preferred date format for display
+      country:
+        type: string
+        description: Country where the family is based
+
+  accounts:
+    columns:
+      id:
+        type: uuid
+        description: Primary key
+      subtype:
+        type: string
+        description: Further classification of the account type
+      family_id:
+        type: uuid
+        description: Reference to the family this account belongs to
+      name:
+        type: string
+        description: Display name for the account
+      accountable_type:
+        type: string
+        description: Polymorphic type for the specific account implementation
+      accountable_id:
+        type: uuid
+        description: Polymorphic ID for the specific account implementation
+      balance:
+        type: decimal
+        description: Current balance of the account
+      currency:
+        type: string
+        description: Currency the account operates in
+      is_active:
+        type: boolean
+        description: Whether the account is currently active
+      last_sync_date:
+        type: date
+        description: When the account was last synced with external data
+      institution_id:
+        type: uuid
+        description: Reference to the financial institution for this account
+      classification:
+        type: string
+        description: Whether account is an asset or liability
+      import_id:
+        type: uuid
+        description: Reference to import that created this account
+      mode:
+        type: string
+        description: Operating mode of the account
+    foreign_keys:
+      - { column: family_id, references: families }
+      - { column: institution_id, references: institutions }
+      - { column: import_id, references: imports }
+
+  account_balances:
+    columns:
+      id:
+        type: uuid
+        description: Primary key
+      account_id:
+        type: uuid
+        description: Reference to the account this balance is for
+      date:
+        type: date
+        description: Date this balance was recorded
+      balance:
+        type: decimal
+        description: The account balance amount
+      currency:
+        type: string
+        description: Currency of the balance amount
+    foreign_keys:
+      - { column: account_id, references: accounts, on_delete: cascade }
+
+  account_holdings:
+    columns:
+      id:
+        type: uuid
+        description: Primary key
+      account_id:
+        type: uuid
+        description: Reference to the investment account holding the security
+      security_id:
+        type: uuid
+        description: Reference to the security being held
+      date:
+        type: date
+        description: Date this holding position was recorded
+      qty:
+        type: decimal
+        description: Quantity of securities held
+      price:
+        type: decimal
+        description: Price per unit of the security
+      amount:
+        type: decimal
+        description: Total value of the holding (qty * price)
+      currency:
+        type: string
+        description: Currency of the price and amount
+    foreign_keys:
+      - { column: account_id, references: accounts }
+      - { column: security_id, references: securities }
