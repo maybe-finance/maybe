@@ -1,53 +1,24 @@
-<h1 class="text-3xl font-semibold font-display"><%= t(".title") %></h1>
-<%= modal do %>
-  <div class="flex flex-col w-screen max-w-xl" data-controller="list-keyboard-navigation">
-    <% if params[:step] == 'method' %>
-      <div class="border-b border-alpha-black-25 p-4 text-gray-400 flex items-center space-x-3">
-        <span>How would you like to add it?</span>
-      </div>
-      <div class="flex flex-col p-2 text-sm grow">
-        <button hidden data-controller="hotkey" data-hotkey="k,K,ArrowUp,ArrowLeft" data-action="list-keyboard-navigation#focusPrevious">Previous</button>
-        <button hidden data-controller="hotkey" data-hotkey="j,J,ArrowDown,ArrowRight" data-action="list-keyboard-navigation#focusNext">Next</button>
+<%= render layout: "accounts/new/container", locals: { title: t(".title") } do %>
+  <div class="text-sm">
+    <%= render "account_type", accountable: Depository.new %>
+    <%= render "account_type", accountable: Investment.new %>
+    <%= render "account_type", accountable: Crypto.new %>
+    <%= render "account_type", accountable: Property.new %>
+    <%= render "account_type", accountable: Vehicle.new %>
+    <%= render "account_type", accountable: CreditCard.new %>
+    <%= render "account_type", accountable: Loan.new %>
+    <%= render "account_type", accountable: OtherAsset.new %>
+    <%= render "account_type", accountable: OtherLiability.new %>
 
-        <%= render "entry_method", text: t(".manual_entry"), icon: "keyboard" %>
-
-        <%= link_to new_import_path(import: { type: "AccountImport" }), class: "flex items-center gap-4 w-full text-center focus:outline-none focus:bg-gray-50 border border-transparent focus:border focus:border-gray-200 px-2 hover:bg-gray-50 rounded-lg p-2" do %>
-          <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-alpha-black-50 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.02)]">
-            <%= lucide_icon("sheet", class: "text-gray-500 w-5 h-5") %>
-          </span>
-          <%= t(".csv_entry") %>
-        <% end %>
-
-        <%= render "entry_method", text: t(".connected_entry"), icon: "link-2", disabled: true %>
-      </div>
-      <div class="border-t border-alpha-black-25 p-4 text-gray-500 text-sm flex justify-between">
-        <div class="flex space-x-5">
-          <div class="flex items-center space-x-2">
-            <span>Select</span>
-            <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon("corner-down-left", class: "inline w-3 h-3") %></kbd>
-          </div>
-          <div class="flex items-center space-x-2">
-            <span>Navigate</span>
-            <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon("arrow-up", class: "inline w-3 h-3") %></kbd>
-            <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon("arrow-down", class: "inline w-3 h-3") %></kbd>
-          </div>
-        </div>
-        <div class="flex items-center space-x-2">
-          <button data-action="modal#close">Close</button>
-          <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-8 h-5 shrink-0 grow-0 items-center justify-center text-xs">ESC</kbd>
-        </div>
-      </div>
-    <% else %>
-      <div class="border-b border-alpha-black-25 p-4 text-gray-800 flex items-center space-x-3">
-        <%= link_to new_account_path(step: "method"), class: "flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-alpha-black-50 focus:outline-gray-300 focus:outline" do %>
-          <%= lucide_icon("arrow-left", class: "text-gray-500 w-5 h-5") %>
-        <% end %>
-        <span>Add account</span>
-      </div>
-
-      <div class="p-4">
-        <%= render "form", account: @account, url: new_account_form_url(@account) %>
-      </div>
+    <% unless params[:return_to].present? %>
+      <%= button_to imports_path(import: { type: "AccountImport" }),
+              data: { turbo_frame: :_top },
+            class: "flex items-center gap-4 w-full text-center focus:outline-none focus:bg-alpha-black-25 hover:bg-alpha-black-25 border border-transparent block px-2 rounded-lg p-2" do %>
+        <span style="background-color: color-mix(in srgb, #F79009 10%, white);" class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg border border-alpha-black-25">
+          <%= lucide_icon("download", style: "color: #F79009", class: "w-5 h-5") %>
+        </span>
+        <%= t("accounts.new.import_accounts") %>
+      <% end %>
     <% end %>
   </div>
 <% end %>

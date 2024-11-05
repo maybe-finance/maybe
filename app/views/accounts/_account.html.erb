@@ -1,3 +1,5 @@
+<%# locals: (account:, return_to: nil) %>
+
 <%= turbo_frame_tag dom_id(account) do %>
   <div class="p-4 flex items-center justify-between gap-3 group/account">
     <div class="flex items-center gap-3">
@@ -16,7 +18,7 @@
         <% end %>
       </div>
 
-      <%= link_to edit_account_path(account), data: { turbo_frame: :modal }, class: "group-hover/account:flex hidden hover:opacity-80 items-center justify-center" do %>
+      <%= link_to edit_account_path(account, return_to: return_to), data: { turbo_frame: :modal }, class: "group-hover/account:flex hidden hover:opacity-80 items-center justify-center" do %>
         <%= lucide_icon "pencil-line", class: "w-4 h-4 text-gray-500" %>
       <% end %>
     </div>

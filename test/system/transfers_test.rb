@@ -55,7 +55,8 @@ class TransfersTest < ApplicationSystemTestCase
     click_on "Mark as transfers"
 
     within "#entry-group-" + transfer_date.to_s do
-      assert_text "Transfer from"
+      assert_text "Outflow"
+      assert_text "Inflow"
     end
   end
 

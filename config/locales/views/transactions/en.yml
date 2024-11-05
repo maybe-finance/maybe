@@ -40,6 +40,7 @@ en:
       import: Import
     index:
       transaction: transaction
+      transactions: transactions
     mark_transfers:
       success: Marked as transfer
     new:

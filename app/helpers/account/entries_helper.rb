@@ -12,43 +12,18 @@ module Account::EntriesHelper
     transfers.map(&:transfer).uniq
   end
 
-  def entry_icon(entry, is_oldest: false)
-    if is_oldest
-      "keyboard"
-    elsif entry.trend.direction.up?
-      "arrow-up"
-    elsif entry.trend.direction.down?
-      "arrow-down"
-    else
-      "minus"
-    end
-  end
-
-  def entry_style(entry, is_oldest: false)
-    color = is_oldest ? "#D444F1" : entry.trend.color
-
-    mixed_hex_styles(color)
-  end
-
-  def entry_name(entry)
-    if entry.account_trade?
-      trade     = entry.account_trade
-      prefix    = trade.sell? ? "Sell " : "Buy "
-      generated = prefix + "#{trade.qty.abs} shares of #{trade.security.ticker}"
-      name      = entry.name || generated
-      name
-    else
-      entry.name || "Transaction"
-    end
-  end
-
-  def entries_by_date(entries, selectable: true)
+  def entries_by_date(entries, selectable: true, totals: false)
     entries.group_by(&:date).map do |date, grouped_entries|
-      content = capture do
-        yield grouped_entries
+      # Valuations always go first, then sort by created_at
+      sorted_entries = grouped_entries.sort_by do |entry|
+        [ entry.account_valuation? ? 0 : 1, entry.created_at ]
       end
 
-      render partial: "account/entries/entry_group", locals: { date:, entries: grouped_entries, content:, selectable: }
+      content = capture do
+        yield sorted_entries
+      end
+
+      render partial: "account/entries/entry_group", locals: { date:, entries: sorted_entries, content:, selectable:, totals: }
     end.join.html_safe
   end
 

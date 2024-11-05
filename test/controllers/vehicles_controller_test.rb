@@ -1,12 +1,14 @@
 require "test_helper"
 
 class VehiclesControllerTest < ActionDispatch::IntegrationTest
+  include AccountableResourceInterfaceTest
+
   setup do
     sign_in @user = users(:family_admin)
     @account = accounts(:vehicle)
   end
 
-  test "creates vehicle" do
+  test "creates with vehicle details" do
     assert_difference -> { Account.count } => 1,
       -> { Vehicle.count } => 1,
       -> { Account::Valuation.count } => 2,
@@ -17,8 +19,6 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
           balance: 30000,
           currency: "USD",
           accountable_type: "Vehicle",
-          start_date: 1.year.ago.to_date,
-          start_balance: 35000,
           accountable_attributes: {
             make: "Toyota",
             model: "Camry",
@@ -32,20 +32,20 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
 
     created_account = Account.order(:created_at).last
 
-    assert_equal "Toyota", created_account.vehicle.make
-    assert_equal "Camry", created_account.vehicle.model
-    assert_equal 2020, created_account.vehicle.year
-    assert_equal 15000, created_account.vehicle.mileage_value
-    assert_equal "mi", created_account.vehicle.mileage_unit
+    assert_equal "Toyota", created_account.accountable.make
+    assert_equal "Camry", created_account.accountable.model
+    assert_equal 2020, created_account.accountable.year
+    assert_equal 15000, created_account.accountable.mileage_value
+    assert_equal "mi", created_account.accountable.mileage_unit
 
-    assert_redirected_to account_path(created_account)
-    assert_equal "Vehicle created successfully", flash[:notice]
+    assert_redirected_to created_account
+    assert_equal "Vehicle account created", flash[:notice]
     assert_enqueued_with(job: AccountSyncJob)
   end
 
-  test "updates vehicle" do
+  test "updates with vehicle details" do
     assert_no_difference [ "Account.count", "Vehicle.count" ] do
-      patch vehicle_path(@account), params: {
+      patch account_path(@account), params: {
         account: {
           name: "Updated Vehicle",
           balance: 28000,
@@ -64,8 +64,8 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    assert_redirected_to account_path(@account)
-    assert_equal "Vehicle updated successfully", flash[:notice]
+    assert_redirected_to @account
+    assert_equal "Vehicle account updated", flash[:notice]
     assert_enqueued_with(job: AccountSyncJob)
   end
 end
