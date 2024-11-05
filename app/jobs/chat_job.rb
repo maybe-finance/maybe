@@ -82,7 +82,7 @@ class ChatJob < ApplicationJob
 
       raw_response = response.dig("choices", 0, "message", "content")
 
-      conversation.messages.create!(
+      chat.messages.create!(
         log: raw_response,
         user: nil,
         role: "log"
@@ -114,6 +114,12 @@ class ChatJob < ApplicationJob
       end
     end
 
+    def generate_response_content(openai_client, chat, message)
+      response_content = build_answer(openai_client, chat, message)
+      message.update(content: response_content, status: "done")
+      update_conversation(message, chat)
+    end
+
     def update_conversation(message, chat)
       chat.broadcast_append_to "conversation_area", partial: "conversations/message", locals: { message: chat }, target: "conversation_area_#{chat.id}"
     end
@@ -136,9 +142,9 @@ class ChatJob < ApplicationJob
       last_log_json = JSON.parse(last_log.log)
       resolve_value = last_log_json["resolve"]
 
-      sql = openai.chat(
+      sql = openai_client.chat(
         parameters: {
-          model: "gpt-4-1106-preview",
+          model: "gpt-4o",
           messages: [
             { role: "system", content: "You are an expert in SQL and Postgres." },
             { role: "assistant", content: <<-ASSISTANT.strip_heredoc }
@@ -169,16 +175,14 @@ class ChatJob < ApplicationJob
 
       sql_content = sql.dig("choices", 0, "message", "content")
 
-      markdown_reply = conversation.messages.new
-      markdown_reply.log = sql_content
-      markdown_reply.user = nil
-      markdown_reply.role = "assistant"
-      markdown_reply.hidden = true
-      markdown_reply.save
+      markdown_reply = chat.messages.create!(
+        log: sql_content,
+        user: nil,
+        role: "assistant",
+        hidden: true
+      )
 
-      Rails.logger.warn sql_content
-
-      results = ReplicaQueryService.execute(sql_content)
+      results = ReplicaQueryService.execute(query: sql_content, family_id: family_id)
 
       # Convert results to markdown
       markdown = "| #{results.fields.join(' | ')} |\n| #{results.fields.map { |f| '-' * f.length }.join(' | ')} |\n"
@@ -192,5 +196,79 @@ class ChatJob < ApplicationJob
       else
         markdown_reply.update(content: markdown)
       end
+    end
+
+    def build_answer(openai_client, chat, message)
+      conversation_history = chat.messages.where.not(content: [ nil, "" ]).where.not(content: "...").where.not(role: "log").order(:created_at)
+
+      messages = conversation_history.map do |message|
+        { role: message.role, content: message.content }
+      end
+
+      total_content_length = messages.sum { |message| message[:content]&.length.to_i }
+
+      while total_content_length > 10000
+        oldest_message = messages.shift
+        total_content_length -= oldest_message[:content]&.length.to_i
+
+        if total_content_length <= 8000
+          messages.unshift(oldest_message) # Put the message back if the total length is within the limit
+          break
+        end
+      end
+
+      message = chat.messages.where(role: "user").order(created_at: :asc).last
+
+      # Get the last log message from the assistant and get the 'resolve' value (log should be converted to a hash from JSON)
+      last_log = chat.messages.where(role: "log").where.not(log: nil).order(created_at: :desc).first
+      last_log_json = JSON.parse(last_log.log)
+      resolve_value = last_log_json["resolve"]
+
+      answer = openai_client.chat(
+        parameters: {
+          model: "gpt-4o",
+          messages: [
+            { role: "system", content: "You are a highly intelligent certified financial advisor/teacher/mentor tasked with helping the customer make wise financial decisions based on real data. You generally respond in the Socratic style. Try to ask just the right question to help educate the user and get them thinking critically about their finances. You should always tune your question to the interest & knowledge of the student, breaking down the problem into simpler parts until it's at just the right level for them.\n\nUse only the information in the conversation to construct your response." },
+            { role: "assistant", content: <<-ASSISTANT.strip_heredoc },
+            Here is information about the user and their financial situation, so you understand them better:
+            - Country: #{chat.user.family.country}
+            - Preferred language: #{chat.user.family.locale}
+            - Preferred currency: #{chat.user.family.currency}
+            - Preferred date format: #{chat.user.family.date_format}
+
+              Follow these rules as you create your answer:
+            - Keep responses very brief and to the point, unless the user asks for more details.
+            - Response should be in markdown format, adding bold or italics as needed.
+            - If you output a formula, wrap it in backticks.
+            - Do not output any SQL, IDs or UUIDs.
+            - Data should be human readable.
+            - Dates should be long form.
+            - If there is no data for the requested date, say there isn't enough data.
+            - Don't include pleasantries.
+            - Favor putting lists in tabular markdown format, especially if they're long.
+            - Currencies should be output with two decimal places and a dollar sign.
+            - Use full names for financial products, not abbreviations.
+            - Answer truthfully and be specific.
+            - If you are doing a calculation, show the formula.
+            - If you don't have certain industry data, use the S&P 500 as a proxy.
+            - Remember, "accounts" and "transactions" are different things.
+            - If you are not absolutely sure what the user is asking, ask them to clarify. Clarity is key.
+            - Unless the user explicitly asks for "pending" transactions, you should ignore all transactions where is_pending is true.
+
+            According to the last log message, this is what is needed to answer the question: '#{resolve_value}'.
+
+            Be sure to output what data you are using to answer the question, and why you are using it.
+
+            ASSISTANT
+            *messages
+          ],
+          temperature: 0,
+          max_tokens: 1200
+        }
+      )
+
+      answer_content = answer.dig("choices", 0, "message", "content")
+
+      answer_content
     end
 end

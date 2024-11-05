@@ -7,6 +7,7 @@ class CreateMessages < ActiveRecord::Migration[7.2]
       t.text :log
       t.string :role
       t.string :status, default: "pending"
+      t.boolean :hidden, default: false
       t.timestamps
     end
   end
