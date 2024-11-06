@@ -52,6 +52,7 @@ class ChatsController < ApplicationController
       format.turbo_stream do
         render turbo_stream: [
           turbo_stream.append("chat_messages", partial: "chats/message", locals: { message: @message }),
+          turbo_stream.append("chat_messages", partial: "chats/message", locals: { message: reply }),
           turbo_stream.replace("chat_form", partial: "chats/form", locals: { chat: @chat })
         ]
       end

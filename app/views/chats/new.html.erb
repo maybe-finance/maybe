@@ -1,24 +1,17 @@
 <%= turbo_frame_tag "new_chat" do %>
 <div class="flex flex-col h-full">
   <div class="grow">
-    <%= form_with model: @chat, class: "flex flex-col h-full" do |form| %>
+    <%= form_with model: @chat, class: "flex flex-col h-full border rounded-lg" do |form| %>
       <div class="grow">
         <%= form.text_area :content, 
-          class: "w-full h-full resize-none border-0 bg-transparent focus:ring-0 text-sm text-gray-900 placeholder:text-gray-500",
+          class: "w-full h-full resize-none border-0 bg-transparent focus:ring-0 text-sm text-gray-900 placeholder:text-gray-500 p-3",
           placeholder: "Ask your AI anything...",
           autofocus: true,
-          data: {
-            controller: "reset-form",
-            action: "turbo:submit-end->reset-form#reset"
-          } %>
+          onkeydown: "if(event.key == 'Enter' && !event.shiftKey) { event.preventDefault(); this.form.requestSubmit(); }" %>
       </div>
       
-      <div class="flex items-center justify-between pt-2 border-t border-alpha-black-100">
-        <div class="text-xs text-gray-500">Press Enter to send</div>
-        <%= form.button class: "btn btn--primary btn--sm" do %>
-          <%= lucide_icon("send", class: "w-4 h-4") %>
-          <span>Send</span>
-        <% end %>
+      <div class="flex items-center justify-end p-3">
+        <%= form.button "Send", class: "btn btn--primary btn--sm" %>
       </div>
     <% end %>
   </div>

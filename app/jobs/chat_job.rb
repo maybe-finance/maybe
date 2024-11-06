@@ -266,6 +266,7 @@ class ChatJob < ApplicationJob
             - If you are not absolutely sure what the user is asking, ask them to clarify. Clarity is key.
             - Unless the user explicitly asks for "pending" transactions, you should ignore all transactions where is_pending is true.
             - Try to add helpful observations/insights to your answer.
+            - Include additional context and tabular data as helpful, especially if the user is seemingly diving deeper.
 
             According to the last log message, this is what is needed to answer the question: '#{resolve_value}'.
 
