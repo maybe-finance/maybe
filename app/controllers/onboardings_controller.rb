@@ -19,6 +19,6 @@ class OnboardingsController < ApplicationController
     end
 
     def load_invitation
-      @invitation = Invitation.accepted.most_recent_for_email(Current.user.email)
+      @invitation = Current.family.invitations.accepted.find_by(email: Current.user.email)
     end
 end
