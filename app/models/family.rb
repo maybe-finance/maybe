@@ -7,7 +7,6 @@ class Family < ApplicationRecord
   has_many :invitations, dependent: :destroy
   has_many :tags, dependent: :destroy
   has_many :accounts, dependent: :destroy
-  has_many :institutions, dependent: :destroy
   has_many :imports, dependent: :destroy
   has_many :transactions, through: :accounts
   has_many :entries, through: :accounts

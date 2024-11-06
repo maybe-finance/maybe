@@ -1,0 +1,5 @@
+---
+en:
+  plaid_items:
+    create:
+      success: Account linked successfully.  Please wait for accounts to sync.

@@ -4,8 +4,8 @@ class Account < ApplicationRecord
   validates :name, :balance, :currency, presence: true
 
   belongs_to :family
-  belongs_to :institution, optional: true
   belongs_to :import, optional: true
+  belongs_to :plaid_account, optional: true
 
   has_many :import_mappings, as: :mappable, dependent: :destroy, class_name: "Import::Mapping"
   has_many :entries, dependent: :destroy, class_name: "Account::Entry"
@@ -25,7 +25,6 @@ class Account < ApplicationRecord
   scope :assets, -> { where(classification: "asset") }
   scope :liabilities, -> { where(classification: "liability") }
   scope :alphabetically, -> { order(:name) }
-  scope :ungrouped, -> { where(institution_id: nil) }
 
   has_one_attached :logo
 

@@ -1,9 +1,11 @@
-class AddPlaidItem < ActiveRecord::Migration[7.2]
+class AddPlaidDomain < ActiveRecord::Migration[7.2]
   def change
     create_table :plaid_items, id: :uuid do |t|
       t.references :family, null: false, type: :uuid, foreign_key: true
       t.string :plaid_access_token_digest
       t.string :plaid_id
+      t.string :name
+      t.datetime :last_synced_at
       t.timestamps
     end
 
@@ -12,6 +14,13 @@ class AddPlaidItem < ActiveRecord::Migration[7.2]
       t.references :account, null: false, type: :uuid, foreign_key: true
       t.string :plaid_id
 
+      t.timestamps
+    end
+
+    add_reference :accounts, :plaid_account, type: :uuid, foreign_key: true
+
+    remove_reference :accounts, :institution
+    drop_table :institutions do |t|
       t.timestamps
     end
   end

@@ -4,6 +4,10 @@ module AccountableResourceInterfaceTest
   extend ActiveSupport::Testing::Declarative
 
   test "shows new form" do
+    Plaid::PlaidApi.any_instance.stubs(:link_token_create).returns(
+      Plaid::LinkTokenCreateResponse.new(link_token: "test-link-token")
+    )
+
     get new_polymorphic_url(@account.accountable)
     assert_response :success
   end
@@ -28,7 +32,6 @@ module AccountableResourceInterfaceTest
     assert_no_difference [ "Account.count", "@account.accountable_class.count" ] do
       patch account_url(@account), params: {
         account: {
-          institution_id: institutions(:chase).id,
           name: "Updated name",
           balance: 10000,
           currency: "USD"
@@ -45,7 +48,6 @@ module AccountableResourceInterfaceTest
       post "/#{@account.accountable_name.pluralize}", params: {
         account: {
           accountable_type: @account.accountable_class,
-          institution_id: institutions(:chase).id,
           name: "New accountable",
           balance: 10000,
           currency: "USD",

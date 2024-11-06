@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_30_222235) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_06_193743) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -118,16 +118,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_30_222235) do
     t.string "currency"
     t.boolean "is_active", default: true, null: false
     t.date "last_sync_date"
-    t.uuid "institution_id"
     t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Loan'::character varying, 'CreditCard'::character varying, 'OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.uuid "import_id"
+    t.uuid "plaid_account_id"
     t.index ["accountable_id", "accountable_type"], name: "index_accounts_on_accountable_id_and_accountable_type"
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id", "accountable_type"], name: "index_accounts_on_family_id_and_accountable_type"
     t.index ["family_id", "id"], name: "index_accounts_on_family_id_and_id"
     t.index ["family_id"], name: "index_accounts_on_family_id"
     t.index ["import_id"], name: "index_accounts_on_import_id"
-    t.index ["institution_id"], name: "index_accounts_on_institution_id"
+    t.index ["plaid_account_id"], name: "index_accounts_on_plaid_account_id"
   end
 
   create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -402,16 +402,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_30_222235) do
     t.index ["family_id"], name: "index_imports_on_family_id"
   end
 
-  create_table "institutions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name", null: false
-    t.string "logo_url"
-    t.uuid "family_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "last_synced_at"
-    t.index ["family_id"], name: "index_institutions_on_family_id"
-  end
-
   create_table "investments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -494,6 +484,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_30_222235) do
     t.uuid "family_id", null: false
     t.string "plaid_access_token_digest"
     t.string "plaid_id"
+    t.string "name"
+    t.datetime "last_synced_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["family_id"], name: "index_plaid_items_on_family_id"
@@ -515,9 +507,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_30_222235) do
     t.string "country_code"
     t.string "exchange_mic"
     t.string "exchange_acronym"
-    t.virtual "search_vector", type: :tsvector, as: "(setweight(to_tsvector('simple'::regconfig, (COALESCE(ticker, ''::character varying))::text), 'B'::\"char\") || to_tsvector('simple'::regconfig, (COALESCE(name, ''::character varying))::text))", stored: true
     t.index ["country_code"], name: "index_securities_on_country_code"
-    t.index ["search_vector"], name: "index_securities_on_search_vector", using: :gin
     t.index ["ticker", "exchange_mic"], name: "index_securities_on_ticker_and_exchange_mic", unique: true
   end
 
@@ -631,7 +621,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_30_222235) do
   add_foreign_key "account_transactions", "merchants"
   add_foreign_key "accounts", "families"
   add_foreign_key "accounts", "imports"
-  add_foreign_key "accounts", "institutions"
+  add_foreign_key "accounts", "plaid_accounts"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "categories", "families"
@@ -640,10 +630,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_30_222235) do
   add_foreign_key "impersonation_sessions", "users", column: "impersonator_id"
   add_foreign_key "import_rows", "imports"
   add_foreign_key "imports", "families"
-  add_foreign_key "institutions", "families"
   add_foreign_key "invitations", "families"
   add_foreign_key "invitations", "users", column: "inviter_id"
   add_foreign_key "merchants", "families"
+  add_foreign_key "plaid_accounts", "accounts"
+  add_foreign_key "plaid_accounts", "plaid_items"
+  add_foreign_key "plaid_items", "families"
   add_foreign_key "security_prices", "securities"
   add_foreign_key "sessions", "impersonation_sessions", column: "active_impersonator_session_id"
   add_foreign_key "sessions", "users"

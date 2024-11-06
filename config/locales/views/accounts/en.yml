@@ -12,34 +12,27 @@ en:
       no_accounts: No accounts yet
     form:
       balance: Current balance
-      institution: Financial institution
       name_label: Account name
       name_placeholder: Example account name
-      ungrouped: "(none)"
     index:
       accounts: Accounts
-      add_institution: Add institution
-      institution_accounts:
-        add_account_to_institution: Add new account
+      manual_accounts:
+        other_accounts: Other accounts
+      new_account: New account
+      plaid_item:
         confirm_accept: Delete institution
-        confirm_body: Don't worry, none of the accounts within this institution will
-          be affected by this deletion. Accounts will be ungrouped and all historical
-          data will remain intact.
-        confirm_title: Delete financial institution?
-        delete: Delete institution
-        edit: Edit institution
+        confirm_body: This will permanently delete all the accounts in this group
+          and all associated data.
+        confirm_title: Delete institution?
+        delete: Delete
         has_issues: Issue detected, see accounts
-        new_account: Add account
         status: Last synced %{last_synced_at} ago
         status_never: Requires data sync
         syncing: Syncing...
-      institutionless_accounts:
-        other_accounts: Other accounts
-      new_account: New account
     new:
       import_accounts: Import accounts
       method_selector:
-        connected_entry: Link account (coming soon)
+        connected_entry: Link account
         manual_entry: Enter account balance
         title: How would you like to add it?
       title: What would you like to add?

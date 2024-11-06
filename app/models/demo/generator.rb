@@ -107,8 +107,7 @@ class Demo::Generator
         accountable: CreditCard.new,
         name: "Chase Credit Card",
         balance: 2300,
-        currency: "USD",
-        institution: family.institutions.find_or_create_by(name: "Chase")
+        currency: "USD"
 
       50.times do
         merchant = random_family_record(Merchant)
@@ -134,8 +133,7 @@ class Demo::Generator
         accountable: Depository.new,
         name: "Chase Checking",
         balance: 15000,
-        currency: "USD",
-        institution: family.institutions.find_or_create_by(name: "Chase")
+        currency: "USD"
 
       10.times do
         create_transaction! \
@@ -159,8 +157,7 @@ class Demo::Generator
         name: "Demo Savings",
         balance: 40000,
         currency: "USD",
-        subtype: "savings",
-        institution: family.institutions.find_or_create_by(name: "Chase")
+        subtype: "savings"
 
       income_category = categories.find { |c| c.name == "Income" }
       income_tag = tags.find { |t| t.name == "Emergency Fund" }
@@ -208,8 +205,7 @@ class Demo::Generator
         accountable: Investment.new,
         name: "Robinhood",
         balance: 100000,
-        currency: "USD",
-        institution: family.institutions.find_or_create_by(name: "Robinhood")
+        currency: "USD"
 
       aapl = Security.find_by(ticker: "AAPL")
       tm = Security.find_by(ticker: "TM")

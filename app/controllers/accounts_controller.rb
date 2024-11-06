@@ -4,8 +4,7 @@ class AccountsController < ApplicationController
   before_action :set_account, only: %i[sync]
 
   def index
-    @institutions = Current.family.institutions
-    @accounts = Current.family.accounts.ungrouped.alphabetically
+    @accounts = Current.family.accounts
   end
 
   def summary

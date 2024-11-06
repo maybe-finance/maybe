@@ -7,17 +7,6 @@
     <h1 class="text-xl"><%= t(".accounts") %></h1>
     <div class="flex items-center gap-5">
       <div class="flex items-center gap-2">
-        <%= contextual_menu do %>
-          <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-            <%= link_to new_institution_path,
-                        class: "block w-full py-2 px-3 space-x-2 text-gray-900 hover:bg-gray-50 flex items-center rounded-lg font-normal",
-                        data: { turbo_frame: "modal" } do %>
-              <%= lucide_icon "building-2", class: "w-5 h-5 text-gray-500" %>
-              <span class="text-black"><%= t(".add_institution") %></span>
-            <% end %>
-          </div>
-        <% end %>
-
         <%= render "sync_all_button" %>
 
         <%= link_to new_account_path(return_to: accounts_path),
@@ -30,16 +19,12 @@
     </div>
   </header>
 
-  <% if @accounts.empty? && @institutions.empty? %>
+  <% if @accounts.empty? %>
     <%= render "empty" %>
   <% else %>
     <div class="space-y-2">
-      <% @institutions.each do |institution| %>
-        <%= render "accounts/index/institution_accounts", institution: %>
-      <% end %>
-
       <% if @accounts.any? %>
-        <%= render "accounts/index/institutionless_accounts", accounts: @accounts %>
+        <%= render "accounts/index/manual_accounts", accounts: @accounts %>
       <% end %>
     </div>
   <% end %>

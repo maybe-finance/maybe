@@ -14,10 +14,10 @@ module AccountableResource
   end
 
   def new
+    @link_token = plaid.link_token_create(plaid_link_token_request).link_token
     @account = Current.family.accounts.build(
       currency: Current.family.currency,
-      accountable: accountable_type.new,
-      institution_id: params[:institution_id]
+      accountable: accountable_type.new
     )
   end
 
@@ -53,8 +53,27 @@ module AccountableResource
 
     def account_params
       params.require(:account).permit(
-        :name, :is_active, :balance, :subtype, :currency, :institution_id, :accountable_type, :return_to,
+        :name, :is_active, :balance, :subtype, :currency, :accountable_type, :return_to,
         accountable_attributes: self.class.permitted_accountable_attributes
       )
+    end
+
+    def plaid_link_token_request
+      {
+        client_id: Rails.application.config.plaid[:client_id],
+        secret: Rails.application.config.plaid[:secret],
+        country_codes: [ "US" ]
+      }
+    end
+
+    def plaid_link_token_request
+      Plaid::LinkTokenCreateRequest.new({
+        user: { client_user_id: Current.user.family.id },
+        client_name: "Maybe",
+        products: %w[transactions],
+        country_codes: [ Current.user.family.country ],
+        language: "en",
+        webhook: webhooks_plaid_url
+      })
     end
 end

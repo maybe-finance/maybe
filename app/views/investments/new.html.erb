@@ -1,5 +1,5 @@
 <% if params[:step] == "method_select" %>
-  <%= render "accounts/new/method_selector", path: new_investment_path(institution_id: params[:institution_id], return_to: params[:return_to]) %>
+  <%= render "accounts/new/method_selector", path: new_investment_path(return_to: params[:return_to]) %>
 <% else %>
   <%= modal_form_wrapper title: t(".title") do %>
     <%= render "investments/form", account: @account, url: investments_path %>
