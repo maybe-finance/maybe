@@ -1,4 +1,8 @@
 class ChatsController < ApplicationController
+  def index
+    @chats = Current.user.chats.order(created_at: :desc)
+  end
+
   def new
     @chat = Current.user.chats.new
   end
@@ -19,10 +23,11 @@ class ChatsController < ApplicationController
     )
 
     ChatJob.perform_later(@chat.id, reply.id)
+    NameChatJob.perform_later(@chat.id)
 
     respond_to do |format|
       format.turbo_stream {
-        render turbo_stream: turbo_stream.update("new_chat", partial: "chats/chat", locals: { chat: @chat })
+        render turbo_stream: turbo_stream.update("chat_content", partial: "chats/chat", locals: { chat: @chat })
       }
     end
   end
@@ -47,6 +52,7 @@ class ChatsController < ApplicationController
     )
 
     ChatJob.perform_later(@chat.id, reply.id)
+    NameChatJob.perform_later(@chat.id)
 
     respond_to do |format|
       format.turbo_stream do
