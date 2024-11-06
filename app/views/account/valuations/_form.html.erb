@@ -5,7 +5,7 @@
                     class: "space-y-4",
                     data: { turbo: false } do |form| %>
   <div class="space-y-3">
-    <%= form.date_field :date, label: true, required: true, value: Date.current, min: Account::Entry.min_supported_date, max: Date.current %>
+    <%= form.date_field :date, label: true, required: true, value: Date.today, min: Account::Entry.min_supported_date, max: Date.today %>
     <%= form.money_field :amount, label: t(".amount"), required: true, default_currency: Current.family.currency %>
   </div>
 
