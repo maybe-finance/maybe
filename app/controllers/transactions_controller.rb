@@ -32,11 +32,12 @@ class TransactionsController < ApplicationController
                     .create!(transaction_entry_params.merge(amount: amount))
 
     @entry.sync_account_later
-    redirect_back_or_to account_path(@entry.account), notice: t(".success")
+    redirect_back_or_to @entry.account, notice: t(".success")
   end
 
   def bulk_delete
     destroyed = Current.family.entries.destroy_by(id: bulk_delete_params[:entry_ids])
+    destroyed.map(&:account).uniq.each(&:sync_later)
     redirect_back_or_to transactions_url, notice: t(".success", count: destroyed.count)
   end
 

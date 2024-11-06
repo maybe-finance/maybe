@@ -35,9 +35,19 @@ class TimeSeries::Trend
     end
   end
 
+  def icon
+    if direction.flat?
+      "minus"
+    elsif direction.up?
+      "arrow-up"
+    else
+      "arrow-down"
+    end
+  end
+
   def value
     if previous.nil?
-      current.is_a?(Money) ? Money.new(0) : 0
+      current.is_a?(Money) ? Money.new(0, current.currency) : 0
     else
       current - previous
     end

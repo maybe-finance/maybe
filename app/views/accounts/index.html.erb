@@ -20,7 +20,7 @@
 
         <%= render "sync_all_button" %>
 
-        <%= link_to new_account_path(step: "method"),
+        <%= link_to new_account_path(return_to: accounts_path),
                     data: { turbo_frame: "modal" },
                     class: "btn btn--primary flex items-center gap-1" do %>
           <%= lucide_icon("plus", class: "w-5 h-5") %>
@@ -35,11 +35,11 @@
   <% else %>
     <div class="space-y-2">
       <% @institutions.each do |institution| %>
-        <%= render "institution_accounts", institution: %>
+        <%= render "accounts/index/institution_accounts", institution: %>
       <% end %>
 
       <% if @accounts.any? %>
-        <%= render "institutionless_accounts", accounts: @accounts %>
+        <%= render "accounts/index/institutionless_accounts", accounts: @accounts %>
       <% end %>
     </div>
   <% end %>

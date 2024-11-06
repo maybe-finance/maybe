@@ -3,7 +3,7 @@ source "https://rubygems.org"
 ruby file: ".ruby-version"
 
 # Rails
-gem "rails", "~> 7.2.1"
+gem "rails", "~> 7.2.2"
 
 # Drivers
 gem "pg", "~> 1.5"
@@ -21,6 +21,7 @@ gem "lucide-rails", github: "maybe-finance/lucide-rails"
 # Hotwire
 gem "stimulus-rails"
 gem "turbo-rails"
+gem "hotwire_combobox"
 
 # Background Jobs
 gem "good_job"

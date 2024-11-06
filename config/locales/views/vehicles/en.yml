@@ -2,6 +2,30 @@
 en:
   vehicles:
     create:
-      success: Vehicle created successfully
+      success: Vehicle account created
+    destroy:
+      success: Vehicle account deleted
+    edit:
+      edit: Edit %{account}
+    form:
+      make: Make
+      make_placeholder: Toyota
+      mileage: Mileage
+      mileage_placeholder: '15000'
+      mileage_unit: Unit
+      model: Model
+      model_placeholder: Camry
+      year: Year
+      year_placeholder: '2023'
+    new:
+      title: Enter vehicle details
+    overview:
+      current_price: Current Price
+      make_model: Make & Model
+      mileage: Mileage
+      purchase_price: Purchase Price
+      trend: Trend
+      unknown: Unknown
+      year: Year
     update:
-      success: Vehicle updated successfully
+      success: Vehicle account updated

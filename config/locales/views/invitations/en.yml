@@ -1,0 +1,15 @@
+---
+en:
+  invitations:
+    create:
+      failure: Could not send invitation
+      success: Invitation sent successfully
+    new:
+      email_label: Email Address
+      email_placeholder: Enter email address
+      role_admin: Administrator
+      role_label: Role
+      role_member: Member
+      submit: Send Invitation
+      subtitle: Send an invitation to join your family account on Maybe
+      title: Invite Someone

@@ -9,7 +9,8 @@
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
 
-    <%= javascript_include_tag "https://cdn.plaid.com/link/v2/stable/link-initialize.js" %>
+    <%= combobox_style_tag %>
+
     <%= javascript_importmap_tags %>
     <%= hotwire_livereload_tags if Rails.env.development? %>
     <%= turbo_refreshes_with method: :morph, scroll: :preserve %>

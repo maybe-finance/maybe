@@ -1,0 +1,31 @@
+---
+en:
+  credit_cards:
+    create:
+      success: Credit card account created
+    destroy:
+      success: Credit card account deleted
+    edit:
+      edit: Edit %{account}
+    form:
+      annual_fee: Annual fee
+      annual_fee_placeholder: '99'
+      apr: APR
+      apr_placeholder: '15.99'
+      available_credit: Available credit
+      available_credit_placeholder: '10000'
+      expiration_date: Expiration date
+      minimum_payment: Minimum payment
+      minimum_payment_placeholder: '100'
+    new:
+      title: Enter credit card details
+    overview:
+      amount_owed: Amount Owed
+      annual_fee: Annual Fee
+      apr: APR
+      available_credit: Available Credit
+      expiration_date: Expiration Date
+      minimum_payment: Minimum Payment
+      unknown: Unknown
+    update:
+      success: Credit card account updated

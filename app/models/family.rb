@@ -4,6 +4,7 @@ class Family < ApplicationRecord
   include Providable
 
   has_many :users, dependent: :destroy
+  has_many :invitations, dependent: :destroy
   has_many :tags, dependent: :destroy
   has_many :accounts, dependent: :destroy
   has_many :institutions, dependent: :destroy
@@ -72,7 +73,9 @@ class Family < ApplicationRecord
   end
 
   def snapshot_transactions
-    candidate_entries = entries.account_transactions.without_transfers
+    candidate_entries = entries.account_transactions.without_transfers.excluding(
+      entries.joins(:account).where(amount: ..0, accounts: { classification: Account.classifications[:liability] })
+    )
     rolling_totals = Account::Entry.daily_rolling_totals(candidate_entries, self.currency, period: Period.last_30_days)
 
     spending = []

@@ -9,7 +9,8 @@
       </div>
 
       <%= styled_form_with model: @user do |form| %>
-        <%= form.hidden_field :redirect_to, value: "onboarding_preferences" %>
+        <%= form.hidden_field :redirect_to, value: @invitation ? "home" : "onboarding_preferences" %>
+        <%= form.hidden_field :onboarded_at, value: Time.current if @invitation %>
 
         <div class="space-y-4 mb-4">
           <p class="text-gray-500 text-xs"><%= t(".profile_image") %></p>
@@ -20,16 +21,17 @@
           <%= form.text_field :first_name, placeholder: t(".first_name"), label: t(".first_name"), container_class: "bg-white w-1/2", required: true %>
           <%= form.text_field :last_name, placeholder: t(".last_name"), label: t(".last_name"), container_class: "bg-white w-1/2", required: true %>
         </div>
+        <% unless @invitation %>
+          <div class="space-y-4 mb-4">
+            <%= form.fields_for :family do |family_form| %>
+              <%= family_form.text_field :name, placeholder: t(".household_name"), label: t(".household_name") %>
 
-        <div class="space-y-4 mb-4">
-          <%= form.fields_for :family do |family_form| %>
-            <%= family_form.text_field :name, placeholder: t(".household_name"), label: t(".household_name") %>
-
-            <%= family_form.select :country,
-            country_options,
-            { label: t(".country") }, required: true %>
-          <% end %>
-        </div>
+              <%= family_form.select :country,
+              country_options,
+              { label: t(".country") }, required: true %>
+            <% end %>
+            </div>
+        <% end %>
 
         <%= form.submit t(".submit") %>
       <% end %>

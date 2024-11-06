@@ -1,8 +1,7 @@
 class AccountsController < ApplicationController
   layout :with_sidebar
 
-  include Filterable
-  before_action :set_account, only: %i[edit show destroy sync update]
+  before_action :set_account, only: %i[sync]
 
   def index
     @institutions = Current.family.institutions
@@ -10,6 +9,7 @@ class AccountsController < ApplicationController
   end
 
   def summary
+    @period = Period.from_param(params[:period])
     snapshot = Current.family.snapshot(@period)
     @net_worth_series = snapshot[:net_worth_series]
     @asset_series = snapshot[:asset_series]
@@ -20,46 +20,6 @@ class AccountsController < ApplicationController
 
   def list
     render layout: false
-  end
-
-  def new
-    @link_token = plaid.link_token_create(plaid_link_token_request).link_token
-    @account = Account.new(currency: Current.family.currency)
-    @account.accountable = Accountable.from_type(params[:type])&.new if params[:type].present?
-    @account.accountable.address = Address.new if @account.accountable.is_a?(Property)
-
-    if params[:institution_id]
-      @account.institution = Current.family.institutions.find_by(id: params[:institution_id])
-    end
-  end
-
-  def show
-  end
-
-  def edit
-    @account.accountable.build_address if @account.accountable.is_a?(Property) && @account.accountable.address.blank?
-  end
-
-  def update
-    @account.update_with_sync!(account_params)
-    redirect_back_or_to account_path(@account), notice: t(".success")
-  end
-
-  def create
-    @account = Current.family
-                      .accounts
-                      .create_with_optional_start_balance! \
-                        attributes: account_params.except(:start_date, :start_balance),
-                        start_date: account_params[:start_date],
-                        start_balance: account_params[:start_balance]
-    @account.sync_later
-
-    redirect_back_or_to account_path(@account), notice: t(".success")
-  end
-
-  def destroy
-    @account.destroy!
-    redirect_to accounts_path, notice: t(".success")
   end
 
   def sync
@@ -74,22 +34,7 @@ class AccountsController < ApplicationController
   end
 
   private
-    def plaid_link_token_request
-      Plaid::LinkTokenCreateRequest.new({
-        user: { client_user_id: Current.user.family.id },
-        client_name: "Maybe",
-        products: %w[transactions],
-        country_codes: [ Current.user.family.country ],
-        language: "en",
-        webhook: webhooks_plaid_url
-      })
-    end
-
     def set_account
       @account = Current.family.accounts.find(params[:id])
-    end
-
-    def account_params
-      params.require(:account).permit(:name, :accountable_type, :mode, :balance, :start_date, :start_balance, :currency, :subtype, :is_active, :institution_id)
     end
 end

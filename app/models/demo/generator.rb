@@ -34,6 +34,7 @@ class Demo::Generator
       create_investment_account!
       create_house_and_mortgage!
       create_car_and_loan!
+      create_other_accounts!
 
       puts "accounts created"
       puts "Demo data loaded successfully!"
@@ -50,7 +51,7 @@ class Demo::Generator
       family = Family.find_by(id: family_id)
       family.destroy! if family
 
-      Family.create!(id: family_id, name: "Demo Family").tap(&:reload)
+      Family.create!(id: family_id, name: "Demo Family", stripe_subscription_status: "active").tap(&:reload)
     end
 
     def clear_data!
@@ -176,12 +177,12 @@ class Demo::Generator
 
     def load_securities!
       # Create an unknown security to simulate edge cases
-      Security.create! ticker: "UNKNOWN", name: "Unknown Demo Stock"
+      Security.create! ticker: "UNKNOWN", name: "Unknown Demo Stock", exchange_mic: "UNKNOWN"
 
       securities = [
-        { ticker: "AAPL", name: "Apple Inc.", reference_price: 210 },
-        { ticker: "TM", name: "Toyota Motor Corporation", reference_price: 202 },
-        { ticker: "MSFT", name: "Microsoft Corporation", reference_price: 455 }
+        { ticker: "AAPL", exchange_mic: "NASDAQ", name: "Apple Inc.", reference_price: 210 },
+        { ticker: "TM", exchange_mic: "NYSE", name: "Toyota Motor Corporation", reference_price: 202 },
+        { ticker: "MSFT", exchange_mic: "NASDAQ", name: "Microsoft Corporation", reference_price: 455 }
       ]
 
       securities.each do |security_attributes|
@@ -193,7 +194,7 @@ class Demo::Generator
           low_price = reference - 20
           high_price = reference + 20
           Security::Price.create! \
-            ticker: security.ticker,
+            security: security,
             date: date,
             price: Faker::Number.positive(from: low_price, to: high_price)
         end
@@ -270,6 +271,20 @@ class Demo::Generator
         accountable: Loan.new,
         name: "Car Loan",
         balance: 8000,
+        currency: "USD"
+    end
+
+    def create_other_accounts!
+      family.accounts.create! \
+        accountable: OtherAsset.new,
+        name: "Other Asset",
+        balance: 10000,
+        currency: "USD"
+
+      family.accounts.create! \
+        accountable: OtherLiability.new,
+        name: "Other Liability",
+        balance: 5000,
         currency: "USD"
     end
 

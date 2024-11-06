@@ -26,6 +26,12 @@ class Account::Trade < ApplicationRecord
     qty > 0
   end
 
+  def name
+    prefix = sell? ? "Sell " : "Buy "
+    generated = prefix + "#{qty.abs} shares of #{security.ticker}"
+    entry.name || generated
+  end
+
   def unrealized_gain_loss
     return nil if sell?
     current_price = security.current_price

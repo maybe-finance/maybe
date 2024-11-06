@@ -30,6 +30,10 @@ class User < ApplicationRecord
     impersonator_support_sessions.create!(impersonated: impersonated)
   end
 
+  def admin?
+    super_admin? || role == "admin"
+  end
+
   def display_name
     [ first_name, last_name ].compact.join(" ").presence || email
   end

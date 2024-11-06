@@ -17,7 +17,6 @@ class TransfersTest < ApplicationSystemTestCase
     click_on "Transfer"
     assert_text "New transfer"
 
-    fill_in "Description", with: "Transfer txn name"
     select checking_name, from: "From"
     select savings_name, from: "To"
     fill_in "account_transfer[amount]", with: 500
@@ -56,7 +55,8 @@ class TransfersTest < ApplicationSystemTestCase
     click_on "Mark as transfers"
 
     within "#entry-group-" + transfer_date.to_s do
-      assert_text "Transfer from"
+      assert_text "Outflow"
+      assert_text "Inflow"
     end
   end
 

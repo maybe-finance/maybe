@@ -1,5 +1,5 @@
 <%
-  header_title t(".title")
+  header_title @invitation ? t(".join_family_title", family: @invitation.family.name) : t(".title")
 %>
 
 <% if self_hosted_first_login? %>
@@ -7,14 +7,29 @@
     <h2 class="font-bold text-xl"><%= t(".welcome_title") %></h2>
     <p class="text-gray-500 text-sm"><%= t(".welcome_body") %></p>
   </div>
+<% elsif @invitation %>
+  <div class="space-y-1 mb-6 text-center">
+    <p class="text-gray-500">
+      <%= t(".invitation_message",
+            inviter: @invitation.inviter.display_name,
+            role: t(".role_#{@invitation.role}")) %>
+    </p>
+  </div>
 <% end %>
 
 <%= styled_form_with model: @user, url: registration_path, class: "space-y-4" do |form| %>
-  <%= form.email_field :email, autofocus: false, autocomplete: "email", required: "required", placeholder: "you@example.com", label: true %>
+  <%= form.email_field :email,
+      autofocus: false,
+      autocomplete: "email",
+      required: "required",
+      placeholder: "you@example.com",
+      label: true,
+      disabled: @invitation.present? %>
   <%= form.password_field :password, autocomplete: "new-password", required: "required", label: true %>
   <%= form.password_field :password_confirmation, autocomplete: "new-password", required: "required", label: true %>
-  <% if invite_code_required? %>
+  <% if invite_code_required? && !@invitation %>
     <%= form.text_field :invite_code, required: "required", label: true, value: params[:invite] %>
   <% end %>
+  <%= form.hidden_field :invitation, value: @invitation&.token %>
   <%= form.submit t(".submit") %>
 <% end %>

@@ -6,165 +6,64 @@ en:
       troubleshoot: Troubleshoot
     account_list:
       new_account: New %{type}
-    accountables:
-      credit_card:
-        form:
-          annual_fee: Annual fee
-          annual_fee_placeholder: '99'
-          apr: APR
-          apr_placeholder: '15.99'
-          available_credit: Available credit
-          available_credit_placeholder: '10000'
-          expiration_date: Expiration date
-          minimum_payment: Minimum payment
-          minimum_payment_placeholder: '100'
-        overview:
-          amount_owed: Amount Owed
-          annual_fee: Annual Fee
-          apr: APR
-          available_credit: Available Credit
-          expiration_date: Expiration Date
-          minimum_payment: Minimum Payment
-          unknown: Unknown
-      depository:
-        form:
-          none: None
-          prompt: Select a subtype
-      investment:
-        form:
-          none: None
-          prompt: Select a subtype
-        tooltip:
-          cash: Cash
-          holdings: Holdings
-          total_value_tooltip: The total value is the sum of cash balance and your
-            holdings value, minus margin loans.
-      loan:
-        form:
-          interest_rate: Interest rate
-          interest_rate_placeholder: '5.25'
-          rate_type: Rate type
-          term_months: Term (months)
-          term_months_placeholder: '360'
-        overview:
-          interest_rate: Interest Rate
-          monthly_payment: Monthly Payment
-          not_applicable: N/A
-          original_principal: Original Principal
-          remaining_principal: Remaining Principal
-          term: Term
-          type: Type
-          unknown: Unknown
-      property:
-        form:
-          additional_info: Additional info
-          area_unit: Area unit
-          area_value: Area value
-          city: City
-          country: Country
-          line1: Address line 1
-          line2: Address line 2
-          optional: optional
-          postal_code: Postal code
-          state: State
-          year_built: Year built
-        overview:
-          living_area: Living Area
-          market_value: Market Value
-          purchase_price: Purchase Price
-          trend: Trend
-          unknown: Unknown
-          year_built: Year Built
-      vehicle:
-        form:
-          make: Make
-          make_placeholder: Toyota
-          mileage: Mileage
-          mileage_placeholder: '15000'
-          mileage_unit: Unit
-          model: Model
-          model_placeholder: Camry
-          year: Year
-          year_placeholder: '2023'
-        overview:
-          current_price: Current Price
-          make_model: Make & Model
-          mileage: Mileage
-          purchase_price: Purchase Price
-          trend: Trend
-          unknown: Unknown
-          year: Year
-    create:
-      success: New account created successfully
-    destroy:
-      success: Account deleted successfully
-    edit:
-      edit: Edit %{account}
     empty:
       empty_message: Add an account either via connection, importing or entering manually.
       new_account: New account
       no_accounts: No accounts yet
     form:
-      accountable_type: Account type
-      balance: Today's balance
+      balance: Current balance
       institution: Financial institution
-      mode: Value tracking mode
-      mode_prompt: Select a mode
       name_label: Account name
       name_placeholder: Example account name
-      type_prompt: Select a type
       ungrouped: "(none)"
-    header:
-      accounts: Accounts
-      manage: Manage accounts
-      new: New account
     index:
       accounts: Accounts
       add_institution: Add institution
+      institution_accounts:
+        add_account_to_institution: Add new account
+        confirm_accept: Delete institution
+        confirm_body: Don't worry, none of the accounts within this institution will
+          be affected by this deletion. Accounts will be ungrouped and all historical
+          data will remain intact.
+        confirm_title: Delete financial institution?
+        delete: Delete institution
+        edit: Edit institution
+        has_issues: Issue detected, see accounts
+        new_account: Add account
+        status: Last synced %{last_synced_at} ago
+        status_never: Requires data sync
+        syncing: Syncing...
+      institutionless_accounts:
+        other_accounts: Other accounts
       new_account: New account
-    institution_accounts:
-      add_account_to_institution: Add new account
-      confirm_accept: Delete institution
-      confirm_body: Don't worry, none of the accounts within this institution will
-        be affected by this deletion. Accounts will be ungrouped and all historical
-        data will remain intact.
-      confirm_title: Delete financial institution?
-      delete: Delete institution
-      edit: Edit institution
-      has_issues: Issue detected, see accounts
-      new_account: Add account
-      status: Last synced %{last_synced_at} ago
-      status_never: Requires data sync
-      syncing: Syncing...
-    institutionless_accounts:
-      other_accounts: Other accounts
-    menu:
-      confirm_accept: Delete "%{name}"
-      confirm_body_html: "<p>By deleting this account, you will erase its value history,
-        affecting various aspects of your overall account. This action will have a
-        direct impact on your net worth calculations and the account graphs.</p><br
-        /> <p>After deletion, there is no way you'll be able to restore the account
-        information because you'll need to add it as a new account.</p>"
-      confirm_title: Delete account?
-      edit: Edit
-      import: Import transactions
     new:
-      connected_entry: Securely link account with Plaid 
-      csv_entry: Import accounts CSV
-      manual_entry: Enter account manually
-      title: Add an account
+      import_accounts: Import accounts
+      method_selector:
+        connected_entry: Link account (coming soon)
+        manual_entry: Enter account balance
+        title: How would you like to add it?
+      title: What would you like to add?
     show:
-      cash: Cash
-      holdings: Holdings
-      no_change: No change
-      overview: Overview
-      total_owed: Total Owed
-      total_value: Total Value
-      trades: Transactions
-      transactions: Transactions
-      value: Value
+      chart:
+        balance: Balance
+        no_change: no change
+        owed: Amount owed
+      menu:
+        confirm_accept: Delete "%{name}"
+        confirm_body_html: "<p>By deleting this account, you will erase its value
+          history, affecting various aspects of your overall account. This action
+          will have a direct impact on your net worth calculations and the account
+          graphs.</p><br /> <p>After deletion, there is no way you'll be able to restore
+          the account information because you'll need to add it as a new account.</p>"
+        confirm_title: Delete account?
+        edit: Edit
+        import: Import transactions
     summary:
-      new: New
+      header:
+        accounts: Accounts
+        manage: Manage accounts
+        new: New account
+      new: New account
       no_assets: No assets found
       no_assets_description: Add an asset either via connection, importing or entering
         manually.
@@ -175,15 +74,3 @@ en:
       success: Successfully queued accounts for syncing.
     sync_all_button:
       sync: Sync all
-    update:
-      success: Account updated
-  credit_cards:
-    create:
-      success: Credit card created successfully
-    update:
-      success: Credit card updated successfully
-  loans:
-    create:
-      success: Loan created successfully
-    update:
-      success: Loan updated successfully

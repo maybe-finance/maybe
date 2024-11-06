@@ -19,7 +19,8 @@
     @apply focus-within:border-gray-900 focus-within:shadow-none focus-within:ring-4 focus-within:ring-gray-100;
   }
 
-  .form-field__label {
+
+  .form-field__label, .hw-combobox__label {
     @apply block text-xs text-gray-500 peer-disabled:text-gray-400;
   }
 
@@ -100,7 +101,7 @@
   }
 
   .btn {
-    @apply px-3 py-2 rounded-lg text-sm font-medium cursor-pointer;
+    @apply px-3 py-2 rounded-lg text-sm font-medium cursor-pointer focus:outline-gray-500;
   }
 
   .btn--primary {
@@ -118,6 +119,33 @@
   .btn--ghost {
     @apply border border-transparent text-gray-900 hover:bg-gray-50;
   }
+}
+
+.combobox {
+  .hw-combobox__main__wrapper, .hw-combobox__input {
+    @apply w-full;
+  }
+
+  .hw-combobox__main__wrapper {
+    @apply border-0 p-0 focus:border-0 ring-0 focus:ring-0 shadow-none focus:shadow-none focus-within:shadow-none;
+  }
+
+  .hw-combobox__listbox {
+    @apply absolute top-[160%] right-0 w-full bg-transparent rounded z-30;
+  }
+
+  .hw_combobox__pagination__wrapper {
+    @apply h-px;
+
+    &:only-child {
+      @apply bg-transparent;
+    }
+  }
+
+  --hw-border-color: rgba(0, 0, 0, 0.2);
+  --hw-handle-width: 20px;
+  --hw-handle-height: 20px;
+  --hw-handle-offset-right: 0px;
 }
 
 /* Small, single purpose classes that should take precedence over other styles */

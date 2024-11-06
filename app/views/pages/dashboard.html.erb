@@ -17,7 +17,7 @@
         </div>
       <% end %>
 
-      <%= link_to new_account_path(step: "method"), class: "flex items-center gap-1 btn btn--primary", data: { turbo_frame: "modal" } do %>
+      <%= link_to new_account_path, class: "flex items-center gap-1 btn btn--primary", data: { turbo_frame: "modal" } do %>
         <%= lucide_icon("plus", class: "w-5 h-5") %>
         <span><%= t(".new") %></span>
       <% end %>
@@ -180,7 +180,7 @@
         <% else %>
           <div class="text-gray-500 p-1 space-y-1 bg-gray-25 rounded-xl">
             <%= entries_by_date(@transaction_entries, selectable: false) do |entries| %>
-              <%= render entries, selectable: false, editable: false %>
+              <%= render entries, selectable: false %>
             <% end %>
 
             <p class="py-2 text-sm text-center"><%= link_to t(".view_all"), transactions_path %></p>

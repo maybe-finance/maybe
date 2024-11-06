@@ -24,70 +24,25 @@
       "note": ""
     },
     {
-      "warning_type": "Dynamic Render Path",
-      "warning_code": 15,
-      "fingerprint": "42595161ffdc9ce9a10c4ba2a75fd2bb668e273bc4e683880b0ea906d0bd28f8",
-      "check_name": "Render",
-      "message": "Render path contains parameter value",
-      "file": "app/views/accounts/show.html.erb",
-      "line": 8,
-      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
-      "code": "render(action => permitted_accountable_partial(Current.family.accounts.find(params[:id]), \"header\"), { :account => Current.family.accounts.find(params[:id]) })",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "AccountsController",
-          "method": "show",
-          "line": 39,
-          "file": "app/controllers/accounts_controller.rb",
-          "rendered": {
-            "name": "accounts/show",
-            "file": "app/views/accounts/show.html.erb"
-          }
-        }
-      ],
+      "warning_type": "Mass Assignment",
+      "warning_code": 105,
+      "fingerprint": "aaccd8db0be34afdc88e5af08d91ae2e8b7765dfea2f3fc6e1c37db0adc7b991",
+      "check_name": "PermitAttributes",
+      "message": "Potentially dangerous key allowed for mass assignment",
+      "file": "app/controllers/invitations_controller.rb",
+      "line": 40,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.require(:invitation).permit(:email, :role)",
+      "render_path": null,
       "location": {
-        "type": "template",
-        "template": "accounts/show"
+        "type": "method",
+        "class": "InvitationsController",
+        "method": "invitation_params"
       },
-      "user_input": "params[:id]",
-      "confidence": "Weak",
+      "user_input": ":role",
+      "confidence": "Medium",
       "cwe_id": [
-        22
-      ],
-      "note": ""
-    },
-    {
-      "warning_type": "Dynamic Render Path",
-      "warning_code": 15,
-      "fingerprint": "a35b18785608dbdf35607501363573576ed8c304039f8387997acd1408ca1025",
-      "check_name": "Render",
-      "message": "Render path contains parameter value",
-      "file": "app/views/accounts/show.html.erb",
-      "line": 35,
-      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
-      "code": "render(action => permitted_accountable_partial(Current.family.accounts.find(params[:id]), \"tooltip\"), { :account => Current.family.accounts.find(params[:id]) })",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "AccountsController",
-          "method": "show",
-          "line": 39,
-          "file": "app/controllers/accounts_controller.rb",
-          "rendered": {
-            "name": "accounts/show",
-            "file": "app/views/accounts/show.html.erb"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "accounts/show"
-      },
-      "user_input": "params[:id]",
-      "confidence": "Weak",
-      "cwe_id": [
-        22
+        915
       ],
       "note": ""
     },
@@ -106,7 +61,7 @@
           "type": "controller",
           "class": "PagesController",
           "method": "changelog",
-          "line": 36,
+          "line": 35,
           "file": "app/controllers/pages_controller.rb",
           "rendered": {
             "name": "pages/changelog",
@@ -122,40 +77,6 @@
       "confidence": "High",
       "cwe_id": [
         79
-      ],
-      "note": ""
-    },
-    {
-      "warning_type": "Dynamic Render Path",
-      "warning_code": 15,
-      "fingerprint": "c5c512a13c34c9696024bd4e2367a657a5c140b5b6a0f5c352e9b69965f63e1b",
-      "check_name": "Render",
-      "message": "Render path contains parameter value",
-      "file": "app/views/accounts/show.html.erb",
-      "line": 63,
-      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
-      "code": "render(action => permitted_accountable_partial(Current.family.accounts.find(params[:id]), \"tabs\"), { :account => Current.family.accounts.find(params[:id]), :selected_tab => params[:tab] })",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "AccountsController",
-          "method": "show",
-          "line": 39,
-          "file": "app/controllers/accounts_controller.rb",
-          "rendered": {
-            "name": "accounts/show",
-            "file": "app/views/accounts/show.html.erb"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "accounts/show"
-      },
-      "user_input": "params[:id]",
-      "confidence": "Weak",
-      "cwe_id": [
-        22
       ],
       "note": ""
     },
@@ -194,6 +115,6 @@
       "note": ""
     }
   ],
-  "updated": "2024-10-17 11:30:15 -0400",
-  "brakeman_version": "6.2.1"
+  "updated": "2024-11-02 15:02:28 -0400",
+  "brakeman_version": "6.2.2"
 }

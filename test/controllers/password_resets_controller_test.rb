@@ -13,7 +13,7 @@ class PasswordResetsControllerTest < ActionDispatch::IntegrationTest
   test "create" do
     assert_enqueued_emails 1 do
       post password_reset_path, params: { email: @user.email }
-      assert_redirected_to root_url
+      assert_redirected_to new_password_reset_url(step: "pending")
     end
   end
 

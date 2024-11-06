@@ -55,8 +55,11 @@ en:
         household_subtitle: Invite family members, partners and other inviduals.  Invitees
           can login to your household and access your shared accounts.
         household_title: Household
+        invitation_link: Invitation link
+        invite_member: Add member
         last_name: Last Name
         page_title: Account
+        pending: Pending
         profile_subtitle: Customize how you appear on Maybe
         profile_title: Profile
         save: Save

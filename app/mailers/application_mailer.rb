@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: ENV["EMAIL_SENDER"] if ENV["EMAIL_SENDER"].present?
+  default from: email_address_with_name(ENV.fetch("EMAIL_SENDER", "sender@maybe.local"), "Maybe Finance")
   layout "mailer"
 end

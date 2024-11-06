@@ -17,10 +17,10 @@ class Account::TradesController < ApplicationController
 
     if entry = @builder.save
       entry.sync_account_later
-      redirect_to account_path(@account), notice: t(".success")
+      redirect_to @account, notice: t(".success")
     else
       flash[:alert] = t(".failure")
-      redirect_back_or_to account_path(@account)
+      redirect_back_or_to @account
     end
   end
 
@@ -31,6 +31,13 @@ class Account::TradesController < ApplicationController
       format.html { redirect_to account_entry_path(@account, @entry), notice: t(".success") }
       format.turbo_stream { render turbo_stream: turbo_stream.replace(@entry) }
     end
+  end
+
+  def securities
+    query = params[:q]
+    return render json: [] if query.blank? || query.length < 2 || query.length > 100
+
+    @securities = Security::SynthComboboxOption.find_in_synth(query)
   end
 
   private

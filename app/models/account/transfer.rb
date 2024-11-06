@@ -1,5 +1,5 @@
 class Account::Transfer < ApplicationRecord
-  has_many :entries, dependent: :nullify
+  has_many :entries, dependent: :destroy
 
   validate :net_zero_flows, if: :single_currency_transfer?
   validate :transaction_count, :from_different_accounts, :all_transactions_marked
@@ -13,15 +13,23 @@ class Account::Transfer < ApplicationRecord
   end
 
   def from_name
-    outflow_transaction&.account&.name || I18n.t("account/transfer.from_fallback_name")
+    from_account&.name || I18n.t("account/transfer.from_fallback_name")
   end
 
   def to_name
-    inflow_transaction&.account&.name || I18n.t("account/transfer.to_fallback_name")
+    to_account&.name || I18n.t("account/transfer.to_fallback_name")
   end
 
   def name
     I18n.t("account/transfer.name", from_account: from_name, to_account: to_name)
+  end
+
+  def from_account
+    outflow_transaction&.account
+  end
+
+  def to_account
+    inflow_transaction&.account
   end
 
   def inflow_transaction
@@ -32,23 +40,21 @@ class Account::Transfer < ApplicationRecord
     entries.find { |e| e.outflow? }
   end
 
-  def destroy_and_remove_marks!
+  def update_entries!(params)
     transaction do
-      entries.each do |e|
-        e.update! marked_as_transfer: false
+      entries.each do |entry|
+        entry.update!(params)
       end
-
-      destroy!
     end
   end
 
   class << self
-    def build_from_accounts(from_account, to_account, date:, amount:, currency:, name:)
+    def build_from_accounts(from_account, to_account, date:, amount:, currency:)
       outflow = from_account.entries.build \
         amount: amount.abs,
         currency: from_account.currency,
         date: date,
-        name: name,
+        name: "Transfer to #{to_account.name}",
         marked_as_transfer: true,
         entryable: Account::Transaction.new
 
@@ -56,7 +62,7 @@ class Account::Transfer < ApplicationRecord
         amount: amount.abs * -1,
         currency: from_account.currency,
         date: date,
-        name: name,
+        name: "Transfer from #{from_account.name}",
         marked_as_transfer: true,
         entryable: Account::Transaction.new
 

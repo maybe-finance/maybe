@@ -45,7 +45,7 @@ Rails.application.routes.draw do
   resources :merchants, only: %i[index new create edit update destroy]
 
   namespace :account do
-    resources :transfers, only: %i[new create destroy]
+    resources :transfers, only: %i[new create destroy show update]
   end
 
   resources :imports, only: %i[index new show create destroy] do
@@ -60,7 +60,7 @@ Rails.application.routes.draw do
     resources :mappings, only: :update, module: :import
   end
 
-  resources :accounts do
+  resources :accounts, only: %i[index new] do
     collection do
       get :summary
       get :list
@@ -77,16 +77,32 @@ Rails.application.routes.draw do
 
       resources :transactions, only: %i[index update]
       resources :valuations, only: %i[index new create]
-      resources :trades, only: %i[index new create update]
+      resources :trades, only: %i[index new create update] do
+        get :securities, on: :collection
+      end
 
-      resources :entries, only: %i[edit update show destroy]
+      resources :entries, only: %i[index edit update show destroy]
     end
   end
 
-  resources :properties, only: %i[create update]
-  resources :vehicles, only: %i[create update]
-  resources :credit_cards, only: %i[create update]
-  resources :loans, only: %i[create update]
+  # Convenience routes for polymorphic paths
+  # Example: account_path(Account.new(accountable: Depository.new)) => /depositories/123
+  direct :account do |model, options|
+    route_for model.accountable_name, model, options
+  end
+  direct :edit_account do |model, options|
+    route_for "edit_#{model.accountable_name}", model, options
+  end
+
+  resources :depositories, except: :index
+  resources :investments, except: :index
+  resources :properties, except: :index
+  resources :vehicles, except: :index
+  resources :credit_cards, except: :index
+  resources :loans, except: :index
+  resources :cryptos, except: :index
+  resources :other_assets, except: :index
+  resources :other_liabilities, except: :index
 
   resources :transactions, only: %i[index new create] do
     collection do
@@ -107,6 +123,10 @@ Rails.application.routes.draw do
 
   namespace :issue do
     resources :exchange_rate_provider_missings, only: :update
+  end
+
+  resources :invitations, only: [ :new, :create ] do
+    get :accept, on: :member
   end
 
   # For managing self-hosted upgrades and release notifications

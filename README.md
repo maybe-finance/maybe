@@ -42,7 +42,7 @@ The instructions below are for developers to get started with contributing to th
 
 ### Requirements
 
-- Ruby 3.3.4
+- See `.ruby-version` file for required Ruby version
 - PostgreSQL >9.3 (ideally, latest stable version)
 
 After cloning the repo, the basic setup commands are:
