@@ -11,7 +11,7 @@ en:
       new_account: New account
       no_accounts: No accounts yet
     form:
-      balance: Current balance 
+      balance: Current balance
       institution: Financial institution
       name_label: Account name
       name_placeholder: Example account name
@@ -36,12 +36,12 @@ en:
       institutionless_accounts:
         other_accounts: Other accounts
       new_account: New account
-    new: 
+    new:
+      import_accounts: Import accounts
       method_selector:
         connected_entry: Link account (coming soon)
         manual_entry: Enter account balance
         title: How would you like to add it?
-      import_accounts: Import accounts
       title: What would you like to add?
     show:
       chart:

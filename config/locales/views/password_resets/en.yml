@@ -1,13 +1,10 @@
 ---
 en:
   password_resets:
-    create:
-      requested: If an account with that email exists, we have sent a link to reset
-        your password.
     edit:
-      submit: Update Password
       title: Reset password
     new:
+      requested: Please check your email for a link to reset your password.
       submit: Reset password
       title: Reset password
     update:

@@ -3,10 +3,10 @@ en:
   vehicles:
     create:
       success: Vehicle account created
-    edit:
-      edit: Edit %{account}
     destroy:
       success: Vehicle account deleted
+    edit:
+      edit: Edit %{account}
     form:
       make: Make
       make_placeholder: Toyota

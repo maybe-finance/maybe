@@ -12,7 +12,7 @@
         </div>
       </div>
 
-      <%= form.date_field :date, label: true, value: Date.current %>
+      <%= form.date_field :date, label: true, value: Date.today %>
 
       <div data-trade-form-target="amountInput" hidden>
         <%= form.money_field :amount, label: t(".amount"), disable_currency: true %>

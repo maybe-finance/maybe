@@ -101,7 +101,7 @@
   }
 
   .btn {
-    @apply px-3 py-2 rounded-lg text-sm font-medium cursor-pointer;
+    @apply px-3 py-2 rounded-lg text-sm font-medium cursor-pointer focus:outline-gray-500;
   }
 
   .btn--primary {

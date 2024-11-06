@@ -37,6 +37,7 @@ class TransactionsController < ApplicationController
 
   def bulk_delete
     destroyed = Current.family.entries.destroy_by(id: bulk_delete_params[:entry_ids])
+    destroyed.map(&:account).uniq.each(&:sync_later)
     redirect_back_or_to transactions_url, notice: t(".success", count: destroyed.count)
   end
 

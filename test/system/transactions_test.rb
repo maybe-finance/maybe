@@ -183,8 +183,10 @@ class TransactionsTest < ApplicationSystemTestCase
     investment_account.entries.create!(name: "Investment account", date: Date.current, amount: 1000, currency: "USD", entryable: Account::Transaction.new)
     transfer_date = Date.current
     visit account_url(investment_account)
-    click_on "New"
-    click_on "New transaction"
+    within "[data-testid='activity-menu']" do
+      click_on "New"
+      click_on "New transaction"
+    end
     select "Deposit", from: "Type"
     fill_in "Date", with: transfer_date
     fill_in "account_entry[amount]", with: 175.25

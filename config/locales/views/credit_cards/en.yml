@@ -3,10 +3,10 @@ en:
   credit_cards:
     create:
       success: Credit card account created
-    edit:
-      edit: Edit %{account}
     destroy:
       success: Credit card account deleted
+    edit:
+      edit: Edit %{account}
     form:
       annual_fee: Annual fee
       annual_fee_placeholder: '99'
