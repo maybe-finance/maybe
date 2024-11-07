@@ -47,7 +47,7 @@
     </div>
 
     <% unless show_balance %>
-      <%= tag.div class: "col-span-2" do %>
+      <%= tag.div class: "col-span-2 overflow-hidden truncate" do %>
         <% if entry.new_record? %>
           <%= tag.p account.name %>
         <% else %>

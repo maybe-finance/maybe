@@ -24,9 +24,9 @@
   <div class="px-4 py-3 space-y-4">
     <% accountable_group.children.map do |account_value_node| %>
       <div class="flex items-center justify-between text-sm font-medium text-gray-900">
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-4 overflow-hidden">
           <%= render "accounts/logo", account: account_value_node.original, size: "sm" %>
-          <div>
+          <div class="truncate">
             <p><%= account_value_node.name %></p>
           </div>
         </div>
