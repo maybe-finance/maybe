@@ -12,7 +12,7 @@ class PlaidItemsController < ApplicationController
 
   def destroy
     @plaid_item.destroy
-    redirect_to accounts_path, notice: "Linked account removed"
+    redirect_to accounts_path, notice: t(".success")
   end
 
   def sync

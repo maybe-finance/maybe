@@ -45,8 +45,15 @@ module AccountableResource
   private
     def set_link_token
       @link_token = Current.family.get_link_token(
-        webhooks_url: webhooks_plaid_url
+        webhooks_url: webhooks_url
       )
+    end
+
+    def webhooks_url
+      return webhooks_plaid_url if Rails.env.production?
+
+      base_url = ENV.fetch("WEBHOOKS_URL", root_url.chomp("/"))
+      base_url + "/webhooks/plaid"
     end
 
     def accountable_type

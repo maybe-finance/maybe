@@ -36,5 +36,8 @@ class PlaidItemsControllerTest < ActionDispatch::IntegrationTest
     assert_difference [ "PlaidItem.count", "PlaidAccount.count", "Account.count" ], -1 do
       delete plaid_item_url(plaid_items(:one))
     end
+
+    assert_equal "Accounts removed successfully", flash[:notice]
+    assert_redirected_to accounts_path
   end
 end
