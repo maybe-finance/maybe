@@ -19,7 +19,7 @@ class PagesController < ApplicationController
     @top_earners = snapshot_account_transactions[:top_earners]
     @top_savers = snapshot_account_transactions[:top_savers]
 
-    @accounts = Current.family.accounts
+    @accounts = Current.family.accounts.active
     @account_groups = @accounts.by_group(period: @period, currency: Current.family.currency)
     @transaction_entries = Current.family.entries.account_transactions.limit(6).reverse_chronological
 
