@@ -14,14 +14,6 @@ class ApplicationController < ActionController::Base
       true
     end
 
-    def plaid
-      api_client = Plaid::ApiClient.new(
-        Rails.application.config.plaid
-      )
-
-      Plaid::PlaidApi.new(api_client)
-    end
-
     def subscription_pending?
       subscribed_at = Current.session.subscribed_at
       subscribed_at.present? && subscribed_at <= Time.current && subscribed_at > 1.hour.ago

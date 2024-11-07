@@ -1,4 +1,6 @@
 class Family < ApplicationRecord
+  include Plaidable
+
   DATE_FORMATS = [ "%m-%d-%Y", "%d-%m-%Y", "%Y-%m-%d", "%d/%m/%Y", "%Y/%m/%d", "%m/%d/%Y", "%e/%m/%Y", "%Y.%m.%d" ]
 
   include Providable
@@ -17,6 +19,14 @@ class Family < ApplicationRecord
 
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }
   validates :date_format, inclusion: { in: DATE_FORMATS }
+
+  def get_link_token(webhooks_url:)
+    plaid_provider.get_link_token(
+      user_id: id,
+      country: country,
+      webhooks_url: webhooks_url
+    ).link_token
+  end
 
   def snapshot(period = Period.all)
     query = accounts.active.joins(:balances)

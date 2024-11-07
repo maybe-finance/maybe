@@ -147,7 +147,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :plaid_items, only: :create
+  resources :plaid_items, only: %i[create destroy] do
+    post :sync, on: :member
+  end
 
   namespace :webhooks do
     post "plaid", to: "webhooks#plaid"

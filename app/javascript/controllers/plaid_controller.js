@@ -28,6 +28,7 @@ export default class extends Controller {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Accept: "text/html",
         "X-CSRF-Token": document.querySelector('[name="csrf-token"]').content,
       },
       body: JSON.stringify({
@@ -36,17 +37,11 @@ export default class extends Controller {
           metadata: metadata,
         },
       }),
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error("Network response was not ok");
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Success:", data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    }).then((response) => {
+      if (response.redirected) {
+        Turbo.visit(response.url);
+      }
+    });
   }
 
   handleExit(err, metadata) {

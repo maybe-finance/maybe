@@ -472,17 +472,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_06_193743) do
 
   create_table "plaid_accounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "plaid_item_id", null: false
-    t.uuid "account_id", null: false
     t.string "plaid_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_plaid_accounts_on_account_id"
     t.index ["plaid_item_id"], name: "index_plaid_accounts_on_plaid_item_id"
   end
 
   create_table "plaid_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "family_id", null: false
-    t.string "plaid_access_token_digest"
+    t.string "access_token"
     t.string "plaid_id"
     t.string "name"
     t.datetime "last_synced_at"
@@ -633,7 +631,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_06_193743) do
   add_foreign_key "invitations", "families"
   add_foreign_key "invitations", "users", column: "inviter_id"
   add_foreign_key "merchants", "families"
-  add_foreign_key "plaid_accounts", "accounts"
   add_foreign_key "plaid_accounts", "plaid_items"
   add_foreign_key "plaid_items", "families"
   add_foreign_key "security_prices", "securities"

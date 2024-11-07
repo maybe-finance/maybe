@@ -22,6 +22,15 @@ depository:
   accountable_type: Depository
   accountable: one
 
+connected:
+  family: dylan_family
+  name: Connected Account
+  balance: 5000
+  currency: USD
+  accountable_type: Depository
+  accountable: two
+  plaid_account: one
+
 credit_card:
   family: dylan_family
   name: Credit Card

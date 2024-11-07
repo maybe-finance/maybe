@@ -1,0 +1,6 @@
+one:
+  family: dylan_family
+  plaid_id: "1234567890"
+  access_token: encrypted_token_1
+  name: "Test Bank"
+  last_synced_at: <%= Time.current %> 

@@ -16,7 +16,7 @@
       </div>
 
       <div class="pl-1 text-sm">
-        <%= link_to plaid_item.name, edit_plaid_item_path(plaid_item), data: { turbo_frame: :modal }, class: "font-medium text-gray-900 hover:underline" %>
+        <%= tag.p plaid_item.name, class: "font-medium text-gray-900" %>
         <% if plaid_item.has_issues? %>
           <div class="flex items-center gap-1 text-error">
             <%= lucide_icon "alert-octagon", class: "shrink-0 w-4 h-4" %>
@@ -62,9 +62,15 @@
   <div class="space-y-4 mt-4">
     <% if plaid_item.accounts.any? %>
       <%= render "accounts/index/account_groups", accounts: plaid_item.accounts %>
+    <% elsif plaid_item.last_synced_at.nil? %>
+      <div class="p-4 flex flex-col gap-3 items-center justify-center">
+        <p class="text-gray-900 font-medium text-sm animate-pulse">Syncing data...</p>
+        <p class="text-gray-500 text-sm">Hang tight, we're syncing your bank data.  This may take a few minutes.</p>
+      </div>
     <% else %>
       <div class="p-4 flex flex-col gap-3 items-center justify-center">
-        <p class="text-gray-500 text-sm">There are no accounts in this financial institution</p>
+        <p class="text-gray-900 font-medium text-sm">No accounts found</p>
+        <p class="text-gray-500 text-sm">We could not load any accounts from this financial institution.</p>
       </div>
     <% end %>
   </div>

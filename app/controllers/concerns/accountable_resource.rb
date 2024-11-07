@@ -4,6 +4,7 @@ module AccountableResource
   included do
     layout :with_sidebar
     before_action :set_account, only: [ :show, :edit, :update, :destroy ]
+    before_action :set_link_token, only: :new, unless: -> { self_hosted? }
   end
 
   class_methods do
@@ -14,7 +15,6 @@ module AccountableResource
   end
 
   def new
-    @link_token = plaid.link_token_create(plaid_link_token_request).link_token
     @account = Current.family.accounts.build(
       currency: Current.family.currency,
       accountable: accountable_type.new
@@ -43,6 +43,12 @@ module AccountableResource
   end
 
   private
+    def set_link_token
+      @link_token = Current.family.get_link_token(
+        webhooks_url: webhooks_plaid_url
+      )
+    end
+
     def accountable_type
       controller_name.classify.constantize
     end
@@ -56,24 +62,5 @@ module AccountableResource
         :name, :is_active, :balance, :subtype, :currency, :accountable_type, :return_to,
         accountable_attributes: self.class.permitted_accountable_attributes
       )
-    end
-
-    def plaid_link_token_request
-      {
-        client_id: Rails.application.config.plaid[:client_id],
-        secret: Rails.application.config.plaid[:secret],
-        country_codes: [ "US" ]
-      }
-    end
-
-    def plaid_link_token_request
-      Plaid::LinkTokenCreateRequest.new({
-        user: { client_user_id: Current.user.family.id },
-        client_name: "Maybe",
-        products: %w[transactions],
-        country_codes: [ Current.user.family.country ],
-        language: "en",
-        webhook: webhooks_plaid_url
-      })
     end
 end

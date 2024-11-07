@@ -4,9 +4,7 @@ class AccountsTest < ApplicationSystemTestCase
   setup do
     sign_in @user = users(:family_admin)
 
-    Plaid::PlaidApi.any_instance.stubs(:link_token_create).returns(
-      Plaid::LinkTokenCreateResponse.new(link_token: "test-link-token")
-    )
+    Family.any_instance.stubs(:get_link_token).returns("test-link-token")
 
     visit root_url
     open_new_account_modal

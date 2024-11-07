@@ -47,7 +47,7 @@ class AccountTest < ActiveSupport::TestCase
     loans = liabilities.children.find { |group| group.name == "Loan" }
     other_liabilities = liabilities.children.find { |group| group.name == "OtherLiability" }
 
-    assert_equal 1, depositories.children.count
+    assert_equal 2, depositories.children.count
     assert_equal 1, properties.children.count
     assert_equal 1, vehicles.children.count
     assert_equal 1, investments.children.count

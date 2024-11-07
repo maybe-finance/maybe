@@ -63,5 +63,7 @@ Rails.application.configure do
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
 
+  config.active_record.encryption.encrypt_fixtures = true
+
   config.autoload_paths += %w[test/support]
 end

@@ -5,6 +5,7 @@ class AccountsController < ApplicationController
 
   def index
     @accounts = Current.family.accounts
+    @plaid_items = Current.family.plaid_items
   end
 
   def summary
