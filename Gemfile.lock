@@ -224,6 +224,8 @@ GEM
       reline (>= 0.4.2)
     jmespath (1.6.2)
     json (2.7.2)
+    jwt (2.9.3)
+      base64
     language_server-protocol (3.17.0.3)
     launchy (3.0.1)
       addressable (~> 2.8)
@@ -498,6 +500,7 @@ DEPENDENCIES
   importmap-rails
   inline_svg
   intercom-rails
+  jwt
   letter_opener
   lucide-rails!
   mocha
