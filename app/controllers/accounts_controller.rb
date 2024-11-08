@@ -19,6 +19,7 @@ class AccountsController < ApplicationController
   end
 
   def list
+    @period = Period.from_param(params[:period])
     render layout: false
   end
 
