@@ -40,7 +40,7 @@
           <% end %>
         </div>
         <div class="flex flex-col items-end font-medium text-right ml-auto">
-          <p><%= format_money account.balance_money %></p>
+          <p><%= format_money account.value %></p>
           <div class="flex items-center gap-1">
             <div class="h-3 w-8">
               <%= render "shared/sparkline", series: account_value_node.series, id: dom_id(account, :list_sparkline) %>
