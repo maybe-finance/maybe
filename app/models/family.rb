@@ -109,7 +109,7 @@ class Family < ApplicationRecord
   end
 
   def assets
-    Money.new(accounts.active.assets.map { |account| account.balance_money.exchange_to(currency, fallback_rate: 0) }.sum, currency)
+    Money.new(accounts.active.assets.map { |account| account.value }.sum, currency)
   end
 
   def liabilities
