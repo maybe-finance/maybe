@@ -12,9 +12,7 @@ class FetchSecurityInfoJob < ApplicationJob
     )
 
     security.update(
-      name: security_info_response.info.dig("name"),
-      exchange_acronym: security_info_response.info.dig("exchange", "acronym"),
-      country_code: security_info_response.info.dig("exchange", "country_code")
+      name: security_info_response.info.dig("name")
     )
   end
 end

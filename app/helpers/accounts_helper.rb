@@ -52,7 +52,7 @@ module AccountsHelper
   end
 
   def account_groups(period: nil)
-    assets, liabilities = Current.family.accounts.by_group(currency: Current.family.currency, period: period || Period.last_30_days).values_at(:assets, :liabilities)
+    assets, liabilities = Current.family.accounts.active.by_group(currency: Current.family.currency, period: period || Period.last_30_days).values_at(:assets, :liabilities)
     [ assets.children.sort_by(&:name), liabilities.children.sort_by(&:name) ].flatten
   end
 

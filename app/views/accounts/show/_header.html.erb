@@ -7,11 +7,11 @@
     <% if content.present? %>
       <%= content %>
     <% else %>
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-3 overflow-hidden">
         <%= render "accounts/logo", account: account %>
 
-        <div>
-          <h2 class="font-medium text-xl"><%= title || account.name %></h2>
+        <div class="truncate">
+          <h2 class="font-medium text-xl truncate"><%= title || account.name %></h2>
           <% if subtitle.present? %>
             <p class="text-sm text-gray-500"><%= subtitle %></p>
           <% end %>
