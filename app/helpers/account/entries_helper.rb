@@ -14,9 +14,9 @@ module Account::EntriesHelper
 
   def entries_by_date(entries, selectable: true, totals: false)
     entries.group_by(&:date).map do |date, grouped_entries|
-      # Valuations always go first, then sort by created_at
+      # Valuations always go first, then sort by created_at desc
       sorted_entries = grouped_entries.sort_by do |entry|
-        [ entry.account_valuation? ? 0 : 1, entry.created_at ]
+        [ entry.account_valuation? ? 0 : 1, -entry.created_at.to_i ]
       end
 
       content = capture do
