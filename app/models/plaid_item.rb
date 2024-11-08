@@ -27,21 +27,26 @@ class PlaidItem < ApplicationRecord
   end
 
   def sync_data(sync_record)
-    fetch_and_load_plaid_data
+    fetch_and_load_plaid_data(start_date: sync_record.start_date)
 
     accounts.each do |account|
       account.sync(start_date: sync_record.start_date, parent_sync: sync_record)
     end
   end
 
-  def fetch_accounts
-    plaid_provider.get_item_accounts(self)
-  end
-
   private
-    def fetch_and_load_plaid_data
-      # TODO
-      puts "fetching and loading plaid data"
+    def fetch_and_load_plaid_data(start_date: nil)
+      accounts_data = fetch_accounts.accounts
+
+      transaction do
+        accounts_data.each do |account_data|
+          plaid_accounts.create_from_plaid_data!(account_data, family)
+        end
+      end
+    end
+
+    def fetch_accounts
+      plaid_provider.get_item_accounts(self)
     end
 
     def remove_plaid_item

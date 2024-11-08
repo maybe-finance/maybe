@@ -22,12 +22,13 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
 
   test "can sync an account" do
     post sync_account_path(@account)
-    assert_response :no_content
+    assert_redirected_to accounts_url
+    assert_equal "Account sync started. This may take a few minutes.", flash[:notice]
   end
 
   test "can sync all accounts" do
     post sync_all_accounts_path
     assert_redirected_to accounts_url
-    assert_equal "Successfully queued accounts for syncing.", flash[:notice]
+    assert_equal "Account sync started. This may take a few minutes.", flash[:notice]
   end
 end
