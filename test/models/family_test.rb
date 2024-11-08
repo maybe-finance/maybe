@@ -3,9 +3,28 @@ require "csv"
 
 class FamilyTest < ActiveSupport::TestCase
   include Account::EntriesTestHelper
+  include SyncableInterfaceTest
 
   def setup
-    @family = families :empty
+    @family = families(:empty)
+    @syncable = families(:dylan_family)
+  end
+
+  test "syncs plaid items and manual accounts" do
+    family_sync = syncs(:family)
+
+    manual_accounts_count = @syncable.accounts.manual.count
+    items_count = @syncable.plaid_items.count
+
+    Account.any_instance.expects(:sync)
+      .with(start_date: nil, parent_sync: family_sync)
+      .times(manual_accounts_count)
+
+    PlaidItem.any_instance.expects(:sync)
+      .with(start_date: nil, parent_sync: family_sync)
+      .times(items_count)
+
+    @syncable.sync_data(family_sync)
   end
 
   test "calculates assets" do
@@ -46,29 +65,6 @@ class FamilyTest < ActiveSupport::TestCase
     cc.update! is_active: false
 
     assert_equal Money.new(50000, @family.currency), @family.net_worth
-  end
-
-  test "needs sync if last family sync was before today" do
-    assert @family.needs_sync?
-
-    @family.update! last_synced_at: Time.now
-
-    assert_not @family.needs_sync?
-  end
-
-  test "syncs active accounts" do
-    account = create_account(balance: 1000, accountable: CreditCard.new, is_active: false)
-
-    Account.any_instance.expects(:sync_later).never
-
-    @family.sync
-
-    account.update! is_active: true
-
-    Account.any_instance.expects(:needs_sync?).once.returns(true)
-    Account.any_instance.expects(:sync_later).with(start_date: nil).once
-
-    @family.sync
   end
 
   test "calculates snapshot" do

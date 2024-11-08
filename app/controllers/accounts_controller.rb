@@ -26,10 +26,12 @@ class AccountsController < ApplicationController
     unless @account.syncing?
       @account.sync_later
     end
+
+    redirect_back_or_to accounts_path, notice: t(".success")
   end
 
   def sync_all
-    Current.family.accounts.active.sync
+    Current.family.sync_later
     redirect_back_or_to accounts_path, notice: t(".success")
   end
 

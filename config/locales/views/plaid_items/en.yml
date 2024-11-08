@@ -6,7 +6,7 @@ en:
       confirm_body: This will permanently delete all the accounts in this group and all associated data.
       confirm_title: Delete institution?
       delete: Delete
-      status: Last synced %{last_synced_at} ago
+      status: Last synced %{timestamp} ago
       status_never: Requires data sync
       syncing: Syncing...
       syncing_message: Syncing data...

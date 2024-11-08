@@ -37,7 +37,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal entry_params[:amount].to_d, Account::Transaction.order(created_at: :desc).first.entry.amount
     assert_equal "New transaction created successfully", flash[:notice]
-    assert_enqueued_with(job: AccountSyncJob)
+    assert_enqueued_with(job: SyncJob)
     assert_redirected_to account_url(account)
   end
 

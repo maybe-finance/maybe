@@ -14,7 +14,6 @@ class Account < ApplicationRecord
   has_many :trades, through: :entries, source: :entryable, source_type: "Account::Trade"
   has_many :holdings, dependent: :destroy
   has_many :balances, dependent: :destroy
-  has_many :syncs, dependent: :destroy
   has_many :issues, as: :issuable, dependent: :destroy
 
   monetize :balance
@@ -85,6 +84,12 @@ class Account < ApplicationRecord
       account.sync_later
       account
     end
+  end
+
+  def sync_data(sync_record)
+    resolve_stale_issues
+    Balance::Syncer.new(self, start_date: sync_record.start_date).run
+    Holding::Syncer.new(self, start_date: sync_record.start_date).run
   end
 
   def original_balance

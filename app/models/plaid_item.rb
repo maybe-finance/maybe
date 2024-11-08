@@ -1,5 +1,5 @@
 class PlaidItem < ApplicationRecord
-  include Plaidable
+  include Plaidable, Syncable
 
   encrypts :access_token, deterministic: true
   validates :name, :access_token, presence: true
@@ -9,7 +9,6 @@ class PlaidItem < ApplicationRecord
   belongs_to :family
   has_one_attached :logo
 
-  has_many :syncs, class_name: "PlaidItemSync", dependent: :destroy
   has_many :plaid_accounts, dependent: :destroy
   has_many :accounts, through: :plaid_accounts
 
@@ -27,20 +26,12 @@ class PlaidItem < ApplicationRecord
     end
   end
 
-  def syncing?
-    syncs.syncing.any?
-  end
+  def sync_data(sync_record)
+    fetch_and_load_plaid_data
 
-  def last_synced_at
-    syncs.order(created_at: :desc).first&.last_ran_at
-  end
-
-  def sync_later
-    PlaidItemSyncJob.perform_later(self)
-  end
-
-  def sync
-    PlaidItemSync.create!(plaid_item: self).run
+    accounts.each do |account|
+      account.sync(start_date: sync_record.start_date, parent_sync: sync_record)
+    end
   end
 
   def fetch_accounts
@@ -48,6 +39,11 @@ class PlaidItem < ApplicationRecord
   end
 
   private
+    def fetch_and_load_plaid_data
+      # TODO
+      puts "fetching and loading plaid data"
+    end
+
     def remove_plaid_item
       plaid_provider.remove_item(access_token)
     end

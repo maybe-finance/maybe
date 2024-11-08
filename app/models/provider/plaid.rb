@@ -2,6 +2,20 @@ class Provider::Plaid
   attr_reader :client
 
   class << self
+    def process_webhook(webhook_body)
+      parsed = JSON.parse(webhook_body)
+      type = parsed["webhook_type"]
+      code = parsed["webhook_code"]
+
+      case [ type, code ]
+      when [ "TRANSACTIONS", "SYNC_UPDATES_AVAILABLE" ]
+        plaid_item = PlaidItem.find_by(plaid_id: parsed["item_id"])
+        plaid_item.sync_later
+      else
+        Rails.logger.warn("Unhandled Plaid webhook type: #{type}:#{code}")
+      end
+    end
+
     def validate_webhook!(verification_header, raw_body)
       jwks_loader = ->(options) do
         key_id = options[:kid]

@@ -7,8 +7,7 @@ class WebhooksController < ApplicationController
     plaid_verification_header = request.headers["Plaid-Verification"]
 
     Provider::Plaid.validate_webhook!(plaid_verification_header, webhook_body)
-
-    ProcessPlaidWebhookJob.perform_later(webhook_body)
+    Provider::Plaid.process_webhook(webhook_body)
 
     render json: { received: true }, status: :ok
   rescue => error

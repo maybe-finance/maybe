@@ -21,7 +21,7 @@ class Account::TransfersControllerTest < ActionDispatch::IntegrationTest
           name: "Test Transfer"
         }
       }
-      assert_enqueued_with job: AccountSyncJob
+      assert_enqueued_with job: SyncJob
     end
   end
 

@@ -43,7 +43,7 @@ class CreditCardsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to created_account
     assert_equal "Credit card account created", flash[:notice]
-    assert_enqueued_with(job: AccountSyncJob)
+    assert_enqueued_with(job: SyncJob)
   end
 
   test "updates with credit card details" do
@@ -78,6 +78,6 @@ class CreditCardsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to @account
     assert_equal "Credit card account updated", flash[:notice]
-    assert_enqueued_with(job: AccountSyncJob)
+    assert_enqueued_with(job: SyncJob)
   end
 end

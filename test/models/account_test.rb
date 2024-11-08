@@ -1,32 +1,11 @@
 require "test_helper"
 
 class AccountTest < ActiveSupport::TestCase
-  include ActiveJob::TestHelper
+  include SyncableInterfaceTest
 
   setup do
-    @account = accounts(:depository)
+    @account = @syncable = accounts(:depository)
     @family = families(:dylan_family)
-  end
-
-  test "can sync later" do
-    assert_enqueued_with(job: AccountSyncJob, args: [ @account, start_date: Date.current ]) do
-      @account.sync_later start_date: Date.current
-    end
-  end
-
-  test "can sync" do
-    start_date = 10.days.ago.to_date
-
-    mock_sync = mock("Account::Sync")
-    mock_sync.expects(:run).once
-
-    Account::Sync.expects(:for).with(@account, start_date: start_date).returns(mock_sync).once
-
-    @account.sync start_date: start_date
-  end
-
-  test "needs sync if account has not synced today" do
-    assert @account.needs_sync?
   end
 
   test "groups accounts by type" do

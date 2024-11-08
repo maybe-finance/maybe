@@ -70,7 +70,7 @@ module AccountableResourceInterfaceTest
     end
 
     assert_redirected_to @account
-    assert_enqueued_with job: AccountSyncJob
+    assert_enqueued_with job: SyncJob
     assert_equal "#{@account.accountable_name.humanize} account updated", flash[:notice]
   end
 
@@ -86,7 +86,7 @@ module AccountableResourceInterfaceTest
     end
 
     assert_redirected_to @account
-    assert_enqueued_with job: AccountSyncJob
+    assert_enqueued_with job: SyncJob
     assert_equal "#{@account.accountable_name.humanize} account updated", flash[:notice]
   end
 end

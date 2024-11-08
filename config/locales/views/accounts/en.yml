@@ -53,7 +53,9 @@ en:
       no_liabilities: No liabilities found
       no_liabilities_description: Add a liability either via connection, importing
         or entering manually.
+    sync:
+      success: Account sync started.  This may take a few minutes.
     sync_all:
-      success: Successfully queued accounts for syncing.
+      success: Account sync started.  This may take a few minutes.
     sync_all_button:
       sync: Sync all

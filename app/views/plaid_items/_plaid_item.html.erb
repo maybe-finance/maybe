@@ -23,7 +23,9 @@
             <%= tag.span t(".syncing") %>
           </div>
         <% else %>
-          <p class="text-gray-500"><%= plaid_item.last_synced_at ? t(".status", last_synced_at: time_ago_in_words(plaid_item.last_synced_at)) : t(".status_never") %></p>
+          <p class="text-gray-500">
+            <%= plaid_item.last_synced_at ? t(".status", timestamp: time_ago_in_words(plaid_item.last_synced_at)) : t(".status_never") %>
+          </p>
         <% end %>
       </div>
     </div>

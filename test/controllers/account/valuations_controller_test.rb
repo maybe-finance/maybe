@@ -29,7 +29,7 @@ class Account::ValuationsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_equal "Valuation created successfully.", flash[:notice]
-    assert_enqueued_with job: AccountSyncJob
+    assert_enqueued_with job: SyncJob
     assert_redirected_to account_valuations_path(@entry.account)
   end
 

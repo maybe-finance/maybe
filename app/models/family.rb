@@ -1,5 +1,5 @@
 class Family < ApplicationRecord
-  include Plaidable
+  include Plaidable, Syncable
 
   DATE_FORMATS = [ "%m-%d-%Y", "%d-%m-%Y", "%Y-%m-%d", "%d/%m/%Y", "%Y/%m/%d", "%m/%d/%Y", "%e/%m/%Y", "%Y.%m.%d" ]
 
@@ -19,6 +19,16 @@ class Family < ApplicationRecord
 
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }
   validates :date_format, inclusion: { in: DATE_FORMATS }
+
+  def sync_data(sync_record)
+    accounts.manual.each do |account|
+      account.sync(start_date: sync_record.start_date, parent_sync: sync_record)
+    end
+
+    plaid_items.each do |plaid_item|
+      plaid_item.sync(start_date: sync_record.start_date, parent_sync: sync_record)
+    end
+  end
 
   def get_link_token(webhooks_url:)
     plaid_provider.get_link_token(
@@ -124,20 +134,6 @@ class Family < ApplicationRecord
 
   def liabilities
     Money.new(accounts.active.liabilities.map { |account| account.balance_money.exchange_to(currency, fallback_rate: 0) }.sum, currency)
-  end
-
-  def sync(start_date: nil)
-    accounts.active.each do |account|
-      if account.needs_sync?
-        account.sync_later(start_date: start_date)
-      end
-    end
-
-    update! last_synced_at: Time.now
-  end
-
-  def needs_sync?
-    last_synced_at.nil? || last_synced_at.to_date < Date.current
   end
 
   def synth_usage

@@ -43,7 +43,7 @@ class PropertiesControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to created_account
     assert_equal "Property account created", flash[:notice]
-    assert_enqueued_with(job: AccountSyncJob)
+    assert_enqueued_with(job: SyncJob)
   end
 
   test "updates with property details" do
@@ -74,6 +74,6 @@ class PropertiesControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to @account
     assert_equal "Property account updated", flash[:notice]
-    assert_enqueued_with(job: AccountSyncJob)
+    assert_enqueued_with(job: SyncJob)
   end
 end
