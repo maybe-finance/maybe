@@ -30,7 +30,6 @@ class Account::SyncTest < ActiveSupport::TestCase
 
     assert_equal "append", streams.first["action"]
     assert_equal "remove", streams.second["action"]
-    assert_equal "append", streams.third["action"]
   end
 
   test "handles sync errors" do

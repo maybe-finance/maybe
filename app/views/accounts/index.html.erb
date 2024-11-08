@@ -24,7 +24,7 @@
   <% else %>
     <div class="space-y-2">
       <% if @plaid_items.any? %>
-        <%= render partial: "accounts/index/plaid_item", collection: @plaid_items %>
+        <%= render @plaid_items %>
       <% end %>
 
       <% if @accounts.manual.any? %>

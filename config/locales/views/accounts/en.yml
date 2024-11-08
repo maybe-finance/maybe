@@ -19,16 +19,6 @@ en:
       manual_accounts:
         other_accounts: Other accounts
       new_account: New account
-      plaid_item:
-        confirm_accept: Delete institution
-        confirm_body: This will permanently delete all the accounts in this group
-          and all associated data.
-        confirm_title: Delete institution?
-        delete: Delete
-        has_issues: Issue detected, see accounts
-        status: Last synced %{last_synced_at} ago
-        status_never: Requires data sync
-        syncing: Syncing...
     new:
       import_accounts: Import accounts
       method_selector:

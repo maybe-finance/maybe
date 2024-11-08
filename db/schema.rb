@@ -117,7 +117,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_06_193743) do
     t.decimal "balance", precision: 19, scale: 4
     t.string "currency"
     t.boolean "is_active", default: true, null: false
-    t.date "last_sync_date"
     t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Loan'::character varying, 'CreditCard'::character varying, 'OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.uuid "import_id"
     t.uuid "plaid_account_id"
@@ -473,9 +472,28 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_06_193743) do
   create_table "plaid_accounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "plaid_item_id", null: false
     t.string "plaid_id"
+    t.string "plaid_type"
+    t.string "plaid_subtype"
+    t.decimal "current_balance", precision: 19, scale: 4
+    t.decimal "available_balance", precision: 19, scale: 4
+    t.string "currency"
+    t.string "name"
+    t.string "mask"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["plaid_item_id"], name: "index_plaid_accounts_on_plaid_item_id"
+  end
+
+  create_table "plaid_item_syncs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "plaid_item_id", null: false
+    t.string "status"
+    t.datetime "last_ran_at"
+    t.string "error"
+    t.jsonb "transactions_data"
+    t.jsonb "accounts_data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plaid_item_id"], name: "index_plaid_item_syncs_on_plaid_item_id"
   end
 
   create_table "plaid_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -632,6 +650,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_06_193743) do
   add_foreign_key "invitations", "users", column: "inviter_id"
   add_foreign_key "merchants", "families"
   add_foreign_key "plaid_accounts", "plaid_items"
+  add_foreign_key "plaid_item_syncs", "plaid_items"
   add_foreign_key "plaid_items", "families"
   add_foreign_key "security_prices", "securities"
   add_foreign_key "sessions", "impersonation_sessions", column: "active_impersonator_session_id"

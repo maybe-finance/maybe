@@ -70,13 +70,6 @@ class Account::Sync < ApplicationRecord
 
     def broadcast_result(type:, message:)
       broadcast_remove_to account.family, :notifications, target: id # Remove persistent syncing notification
-      broadcast_append_to(
-        [ account.family, :notifications ],
-        target: "notification-tray",
-        partial: "shared/notification",
-        locals: { type: type, message: message }
-      )
-
       account.family.broadcast_refresh
     end
 end

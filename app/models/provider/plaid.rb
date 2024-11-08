@@ -73,4 +73,9 @@ class Provider::Plaid
     request = Plaid::ItemRemoveRequest.new(access_token: access_token)
     client.item_remove(request)
   end
+
+  def get_item_accounts(item)
+    request = Plaid::AccountsGetRequest.new(access_token: item.access_token)
+    client.accounts_get(request)
+  end
 end

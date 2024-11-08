@@ -66,8 +66,7 @@ class FamilyTest < ActiveSupport::TestCase
     account.update! is_active: true
 
     Account.any_instance.expects(:needs_sync?).once.returns(true)
-    Account.any_instance.expects(:last_sync_date).once.returns(2.days.ago.to_date)
-    Account.any_instance.expects(:sync_later).with(start_date: 2.days.ago.to_date).once
+    Account.any_instance.expects(:sync_later).with(start_date: nil).once
 
     @family.sync
   end

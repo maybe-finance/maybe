@@ -2,8 +2,6 @@ class ProcessPlaidWebhookJob < ApplicationJob
   queue_as :default
 
   def perform(webhook_body)
-    # TODO
-    puts webhook_body
-    puts "Processing Plaid webhook..."
+    Provider::Plaid::WebhookProcessor.new(webhook_body).process
   end
 end

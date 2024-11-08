@@ -17,12 +17,7 @@
 
       <div class="pl-1 text-sm">
         <%= tag.p plaid_item.name, class: "font-medium text-gray-900" %>
-        <% if plaid_item.has_issues? %>
-          <div class="flex items-center gap-1 text-error">
-            <%= lucide_icon "alert-octagon", class: "shrink-0 w-4 h-4" %>
-            <%= tag.span t(".has_issues") %>
-          </div>
-        <% elsif plaid_item.syncing? %>
+        <% if plaid_item.syncing? %>
           <div class="text-gray-500 flex items-center gap-1">
             <%= lucide_icon "loader", class: "w-4 h-4 animate-pulse" %>
             <%= tag.span t(".syncing") %>
@@ -62,15 +57,15 @@
   <div class="space-y-4 mt-4">
     <% if plaid_item.accounts.any? %>
       <%= render "accounts/index/account_groups", accounts: plaid_item.accounts %>
-    <% elsif plaid_item.last_synced_at.nil? %>
+    <% elsif plaid_item.syncs.empty? %>
       <div class="p-4 flex flex-col gap-3 items-center justify-center">
-        <p class="text-gray-900 font-medium text-sm animate-pulse">Syncing data...</p>
-        <p class="text-gray-500 text-sm">Hang tight, we're syncing your bank data.  This may take a few minutes.</p>
+        <p class="text-gray-900 font-medium text-sm animate-pulse"><%= t(".syncing_message") %></p>
+        <p class="text-gray-500 text-sm"><%= t(".syncing_description") %></p>
       </div>
     <% else %>
       <div class="p-4 flex flex-col gap-3 items-center justify-center">
-        <p class="text-gray-900 font-medium text-sm">No accounts found</p>
-        <p class="text-gray-500 text-sm">We could not load any accounts from this financial institution.</p>
+        <p class="text-gray-900 font-medium text-sm"><%= t(".no_accounts_title") %></p>
+        <p class="text-gray-500 text-sm"><%= t(".no_accounts_description") %></p>
       </div>
     <% end %>
   </div>
