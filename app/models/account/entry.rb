@@ -60,6 +60,8 @@ class Account::Entry < ApplicationRecord
     else
       new_balance = prior_balance
       entries_on_entry_date.each do |e|
+        next if e.account_valuation?
+
         change = e.amount
         change = account.liability? ? change : -change
         new_balance += change
@@ -79,7 +81,7 @@ class Account::Entry < ApplicationRecord
   end
 
   def entries_on_entry_date
-    account.entries.where(date: date).order(created_at: :desc)
+    account.entries.where(date: date).order(created_at: :asc)
   end
 
   class << self

@@ -99,4 +99,15 @@ class Account::EntryTest < ActiveSupport::TestCase
     assert create_transaction(amount: -10).inflow?
     assert create_transaction(amount: 10).outflow?
   end
+
+  test "balance_after_entry skips account valuations" do
+    family = families(:empty)
+    account = family.accounts.create! name: "Test", balance: 0, currency: "USD", accountable: Depository.new
+
+    new_valuation = create_valuation(account: account, amount: 1)
+    transaction = create_transaction(date: new_valuation.date, account: account, amount: -100)
+
+
+    assert_equal Money.new(100), transaction.balance_after_entry
+  end
 end
