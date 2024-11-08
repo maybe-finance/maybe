@@ -38,6 +38,7 @@ gem "image_processing", ">= 1.2"
 # Other
 gem "bcrypt", "~> 3.1"
 gem "jwt"
+gem "ostruct"
 gem "faraday"
 gem "faraday-retry"
 gem "faraday-multipart"
