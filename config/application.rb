@@ -30,5 +30,7 @@ module Maybe
     config.i18n.fallbacks = true
 
     config.app_mode = (ENV["SELF_HOSTED"] == "true" || ENV["SELF_HOSTING_ENABLED"] == "true" ? "self_hosted" : "managed").inquiry
+
+    config.active_record.encryption = Rails.application.credentials.active_record_encryption
   end
 end
