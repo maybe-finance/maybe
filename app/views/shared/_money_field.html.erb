@@ -26,7 +26,8 @@
         value: if options[:value]
           sprintf("%.#{currency.default_precision}f", options[:value])
         elsif form.object && form.object.respond_to?(amount_method)
-          form.object.public_send(amount_method)
+          val = form.object.public_send(amount_method)
+          sprintf("%.#{currency.default_precision}f", val) if val.present?
         end,
         min: options[:min] || -99999999999999,
         max: options[:max] || 99999999999999,
