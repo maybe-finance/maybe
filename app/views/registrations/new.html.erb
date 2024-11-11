@@ -17,6 +17,13 @@
   </div>
 <% end %>
 
+<% if @user.errors.present? %>
+  <div class="text-red-600 flex items-center gap-2">
+    <%= lucide_icon "circle-alert", class: "w-5 h-5" %>
+    <p class="text-sm"><%= @user.errors.full_messages.to_sentence %></p>
+  </div>
+<% end %>
+
 <%= styled_form_with model: @user, url: registration_path, class: "space-y-4" do |form| %>
   <%= form.email_field :email,
       autofocus: false,
