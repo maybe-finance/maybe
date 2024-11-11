@@ -40,7 +40,8 @@
           <%= f.money_field :amount,
                 label: t(".amount"),
                 auto_submit: true,
-                disable_currency: true %>
+                disable_currency: true,
+                value: entry.amount.abs %>
         <% end %>
       </div>
     <% end %>
