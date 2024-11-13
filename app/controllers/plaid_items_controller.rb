@@ -17,7 +17,8 @@ class PlaidItemsController < ApplicationController
 
   def sync
     @plaid_item.sync_later
-    redirect_to accounts_path, notice: t(".success")
+
+    head :ok
   end
 
   private

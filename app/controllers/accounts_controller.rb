@@ -28,12 +28,15 @@ class AccountsController < ApplicationController
       @account.sync_later
     end
 
-    redirect_back_or_to accounts_path, notice: t(".success")
+    head :ok
   end
 
   def sync_all
-    Current.family.sync_later
-    redirect_back_or_to accounts_path, notice: t(".success")
+    unless Current.family.syncing?
+      Current.family.sync_later
+    end
+
+    head :ok
   end
 
   private

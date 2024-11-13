@@ -46,6 +46,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_08_150422) do
     t.uuid "import_id"
     t.text "notes"
     t.boolean "excluded", default: false
+    t.string "plaid_id"
     t.index ["account_id"], name: "index_account_entries_on_account_id"
     t.index ["import_id"], name: "index_account_entries_on_import_id"
     t.index ["transfer_id"], name: "index_account_entries_on_transfer_id"
@@ -478,6 +479,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_08_150422) do
     t.string "access_token"
     t.string "plaid_id"
     t.string "name"
+    t.string "prev_cursor"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["family_id"], name: "index_plaid_items_on_family_id"

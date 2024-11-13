@@ -19,6 +19,7 @@ en:
       manual_accounts:
         other_accounts: Other accounts
       new_account: New account
+      sync: Sync all
     new:
       import_accounts: Import accounts
       method_selector:
@@ -53,9 +54,3 @@ en:
       no_liabilities: No liabilities found
       no_liabilities_description: Add a liability either via connection, importing
         or entering manually.
-    sync:
-      success: Account sync started. This may take a few minutes.
-    sync_all:
-      success: Account sync started. This may take a few minutes.
-    sync_all_button:
-      sync: Sync all

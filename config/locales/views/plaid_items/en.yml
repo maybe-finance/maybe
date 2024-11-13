@@ -17,5 +17,3 @@ en:
       success: Account linked successfully.  Please wait for accounts to sync.
     destroy:
       success: Accounts removed successfully
-    sync:
-      success: Sync started

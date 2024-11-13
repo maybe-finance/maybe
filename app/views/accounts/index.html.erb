@@ -7,7 +7,10 @@
     <h1 class="text-xl"><%= t(".accounts") %></h1>
     <div class="flex items-center gap-5">
       <div class="flex items-center gap-2">
-        <%= render "sync_all_button" %>
+        <%= button_to sync_all_accounts_path, class: "btn btn--outline flex items-center gap-2", title: t(".sync") do %>
+          <%= lucide_icon "refresh-cw", class: "w-5 h-5" %>
+          <span><%= t(".sync") %></span>
+        <% end %>
 
         <%= link_to new_account_path(return_to: accounts_path),
                     data: { turbo_frame: "modal" },

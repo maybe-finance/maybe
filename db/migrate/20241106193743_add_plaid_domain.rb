@@ -5,6 +5,7 @@ class AddPlaidDomain < ActiveRecord::Migration[7.2]
       t.string :access_token
       t.string :plaid_id
       t.string :name
+      t.string :prev_cursor
       t.timestamps
     end
 
@@ -38,6 +39,8 @@ class AddPlaidDomain < ActiveRecord::Migration[7.2]
     remove_column :accounts, :last_sync_date, :date
     remove_reference :accounts, :institution
     add_reference :accounts, :plaid_account, type: :uuid, foreign_key: true
+
+    add_column :account_entries, :plaid_id, :string
 
     drop_table :account_syncs do |t|
       t.timestamps

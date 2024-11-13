@@ -47,7 +47,6 @@ class PlaidItemsControllerTest < ActionDispatch::IntegrationTest
 
     post sync_plaid_item_url(plaid_item)
 
-    assert_equal "Sync started", flash[:notice]
-    assert_redirected_to accounts_path
+    assert_response :ok
   end
 end

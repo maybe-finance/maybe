@@ -36,17 +36,18 @@ class PlaidItem < ApplicationRecord
 
   private
     def fetch_and_load_plaid_data(start_date: nil)
-      accounts_data = fetch_accounts.accounts
+      accounts_data = plaid_provider.get_item_accounts(self).accounts
+      transactions_data = plaid_provider.get_item_transactions(self)
 
       transaction do
         accounts_data.each do |account_data|
-          plaid_accounts.create_from_plaid_data!(account_data, family)
+          plaid_account = plaid_accounts.find_or_create_from_plaid_data!(account_data, family)
+          plaid_account.sync_account_data!(account_data)
+          plaid_account.sync_transactions!(transactions_data)
         end
-      end
-    end
 
-    def fetch_accounts
-      plaid_provider.get_item_accounts(self)
+        update!(prev_cursor: transactions_data.cursor)
+      end
     end
 
     def remove_plaid_item

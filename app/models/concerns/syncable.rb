@@ -6,7 +6,7 @@ module Syncable
   end
 
   def syncing?
-    syncs.syncing.any?
+    syncs.where(status: [ :syncing, :pending ]).any?
   end
 
   def last_synced_at

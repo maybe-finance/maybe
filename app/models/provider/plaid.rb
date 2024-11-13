@@ -92,4 +92,32 @@ class Provider::Plaid
     request = Plaid::AccountsGetRequest.new(access_token: item.access_token)
     client.accounts_get(request)
   end
+
+  def get_item_transactions(item)
+    cursor = item.prev_cursor
+    added = []
+    modified = []
+    removed = []
+    has_more = true
+
+    while has_more
+      request = Plaid::TransactionsSyncRequest.new(
+        access_token: item.access_token,
+        cursor: cursor
+      )
+
+      response = client.transactions_sync(request)
+
+      added += response.added
+      modified += response.modified
+      removed += response.removed
+      has_more = response.has_more
+      cursor = response.next_cursor
+    end
+
+    TransactionSyncResponse.new(added:, modified:, removed:, cursor:)
+  end
+
+  private
+    TransactionSyncResponse = Struct.new :added, :modified, :removed, :cursor, keyword_init: true
 end

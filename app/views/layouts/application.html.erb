@@ -31,8 +31,8 @@
     <%= render "impersonation_sessions/super_admin_bar" if Current.true_user&.super_admin? %>
     <%= render "impersonation_sessions/approval_bar" if Current.true_user&.impersonated_support_sessions&.initiated&.any? %>
 
-    <div class="fixed z-50 space-y-1 top-6 right-10">
-      <div id="notification-tray">
+    <div class="fixed z-50 bottom-6 left-6">
+      <div id="notification-tray" class="space-y-1">
         <%= render_flash_notifications %>
       </div>
     </div>
