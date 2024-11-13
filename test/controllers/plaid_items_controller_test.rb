@@ -31,13 +31,10 @@ class PlaidItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "destroy" do
-    @plaid_provider.expects(:remove_item).once
+    delete plaid_item_url(plaid_items(:one))
 
-    assert_difference [ "PlaidItem.count", "PlaidAccount.count", "Account.count" ], -1 do
-      delete plaid_item_url(plaid_items(:one))
-    end
-
-    assert_equal "Accounts removed successfully", flash[:notice]
+    assert_equal "Accounts scheduled for deletion.", flash[:notice]
+    assert_enqueued_with job: DestroyJob
     assert_redirected_to accounts_path
   end
 
@@ -47,6 +44,6 @@ class PlaidItemsControllerTest < ActionDispatch::IntegrationTest
 
     post sync_plaid_item_url(plaid_item)
 
-    assert_response :ok
+    assert_redirected_to accounts_path
   end
 end

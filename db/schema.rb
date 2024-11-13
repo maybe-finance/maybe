@@ -110,6 +110,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_08_150422) do
     t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Loan'::character varying, 'CreditCard'::character varying, 'OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.uuid "import_id"
     t.uuid "plaid_account_id"
+    t.boolean "scheduled_for_deletion", default: false
     t.index ["accountable_id", "accountable_type"], name: "index_accounts_on_accountable_id_and_accountable_type"
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id", "accountable_type"], name: "index_accounts_on_family_id_and_accountable_type"
@@ -215,6 +216,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_08_150422) do
     t.string "stripe_subscription_status", default: "incomplete"
     t.string "date_format", default: "%m-%d-%Y"
     t.string "country", default: "US"
+    t.datetime "last_auto_synced_at"
   end
 
   create_table "good_job_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -479,7 +481,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_08_150422) do
     t.string "access_token"
     t.string "plaid_id"
     t.string "name"
-    t.string "prev_cursor"
+    t.string "next_cursor"
+    t.boolean "scheduled_for_deletion", default: false
+    t.boolean "historical_update_complete", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["family_id"], name: "index_plaid_items_on_family_id"
@@ -560,7 +564,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_08_150422) do
   create_table "syncs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "syncable_type", null: false
     t.uuid "syncable_id", null: false
-    t.uuid "parent_sync_id"
     t.datetime "last_ran_at"
     t.date "start_date"
     t.string "status", default: "pending"
@@ -568,7 +571,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_08_150422) do
     t.jsonb "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["parent_sync_id"], name: "index_syncs_on_parent_sync_id"
     t.index ["syncable_type", "syncable_id"], name: "index_syncs_on_syncable"
   end
 

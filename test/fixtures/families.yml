@@ -1,8 +1,10 @@
 empty:
   name: Family
   stripe_subscription_status: active
+  last_auto_synced_at: <%= Time.now %>
 
 dylan_family:
   name: The Dylan Family
   stripe_subscription_status: active
+  last_auto_synced_at: <%= Time.now %>
 

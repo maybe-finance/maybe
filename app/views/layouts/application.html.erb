@@ -34,6 +34,10 @@
     <div class="fixed z-50 bottom-6 left-6">
       <div id="notification-tray" class="space-y-1">
         <%= render_flash_notifications %>
+
+        <% if Current.family&.syncing? %>
+          <%= render "shared/notification", id: "syncing-notification", type: :processing, message: t(".syncing") %>
+        <% end %>
       </div>
     </div>
 

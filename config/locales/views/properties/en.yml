@@ -1,10 +1,6 @@
 ---
 en:
   properties:
-    create:
-      success: Property account created
-    destroy:
-      success: Property account deleted
     edit:
       edit: Edit %{account}
     form:
@@ -34,5 +30,3 @@ en:
       trend: Trend
       unknown: Unknown
       year_built: Year Built
-    update:
-      success: Property account updated

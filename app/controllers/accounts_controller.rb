@@ -4,8 +4,8 @@ class AccountsController < ApplicationController
   before_action :set_account, only: %i[sync]
 
   def index
-    @accounts = Current.family.accounts
-    @plaid_items = Current.family.plaid_items
+    @manual_accounts = Current.family.accounts.manual.active
+    @plaid_items = Current.family.plaid_items.active
   end
 
   def summary
@@ -28,7 +28,7 @@ class AccountsController < ApplicationController
       @account.sync_later
     end
 
-    head :ok
+    redirect_to account_path(@account)
   end
 
   def sync_all
@@ -36,7 +36,7 @@ class AccountsController < ApplicationController
       Current.family.sync_later
     end
 
-    head :ok
+    redirect_to accounts_path
   end
 
   private

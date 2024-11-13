@@ -23,11 +23,6 @@
       <div class="rounded-lg bg-white border-alpha-black-25 shadow-xs">
         <% if @holdings.any? %>
           <%= render partial: "account/holdings/holding", collection: @holdings, spacer_template: "ruler" %>
-        <% elsif @account.needs_sync? || true %>
-          <div class="flex flex-col justify-center items-center pt-4 pb-8">
-            <p class="text-gray-500 p-4"><%= t(".needs_sync") %></p>
-            <%= button_to "Sync holding prices", sync_account_path(@account), class: "bg-gray-900 text-white text-sm rounded-lg px-3 py-2" %>
-          </div>
         <% else %>
           <p class="text-gray-500 text-sm p-4"><%= t(".no_holdings") %></p>
         <% end %>

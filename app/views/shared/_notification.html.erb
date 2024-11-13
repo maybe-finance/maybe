@@ -4,7 +4,7 @@
 <% action = "animationend->element-removal#remove" if type == :notice %>
 
 <%= tag.div class: "flex gap-3 rounded-lg border bg-white p-4 group max-w-80 shadow-xs border-alpha-black-25",
-            id: id,
+            id: type == :processing ? "syncing-notification" : id,
             data: {
               controller: "element-removal",
               action: action

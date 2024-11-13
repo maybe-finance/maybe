@@ -101,7 +101,7 @@
   }
 
   .btn {
-    @apply px-3 py-2 rounded-lg text-sm font-medium cursor-pointer focus:outline-gray-500;
+    @apply px-3 py-2 rounded-lg text-sm font-medium cursor-pointer disabled:cursor-not-allowed focus:outline-gray-500;
   }
 
   .btn--primary {
@@ -113,7 +113,7 @@
   }
 
   .btn--outline {
-    @apply border border-alpha-black-200 text-gray-900 hover:bg-gray-50;
+    @apply border border-alpha-black-200 text-gray-900 hover:bg-gray-50 disabled:bg-gray-50 disabled:hover:bg-gray-50 disabled:text-gray-400;
   }
 
   .btn--ghost {

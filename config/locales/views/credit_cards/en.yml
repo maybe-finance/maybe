@@ -1,10 +1,6 @@
 ---
 en:
   credit_cards:
-    create:
-      success: Credit card account created
-    destroy:
-      success: Credit card account deleted
     edit:
       edit: Edit %{account}
     form:
@@ -27,5 +23,3 @@ en:
       expiration_date: Expiration Date
       minimum_payment: Minimum Payment
       unknown: Unknown
-    update:
-      success: Credit card account updated

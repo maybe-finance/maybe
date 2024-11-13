@@ -13,19 +13,16 @@ module Syncable
     syncs.ordered.first&.last_ran_at
   end
 
-  def needs_sync?
-    latest_sync&.last_ran_at.nil? || latest_sync.last_ran_at.to_date < Date.current
-  end
-
   def sync_later(start_date: nil)
-    SyncJob.perform_later(self, start_date: start_date)
+    new_sync = syncs.create!(start_date: start_date)
+    SyncJob.perform_later(new_sync)
   end
 
-  def sync(start_date: nil, parent_sync: nil)
-    syncs.create!(start_date: start_date, parent_sync: parent_sync).perform
+  def sync(start_date: nil)
+    syncs.create!(start_date: start_date).perform
   end
 
-  def sync_data(sync_record)
+  def sync_data(start_date: nil)
     raise NotImplementedError, "Subclasses must implement the `sync_data` method"
   end
 

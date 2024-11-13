@@ -20,21 +20,28 @@ class Family < ApplicationRecord
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }
   validates :date_format, inclusion: { in: DATE_FORMATS }
 
-  def sync_data(sync_record)
+  def sync_data(start_date: nil)
     accounts.manual.each do |account|
-      account.sync(start_date: sync_record.start_date, parent_sync: sync_record)
+      account.sync_data(start_date: start_date)
     end
 
     plaid_items.each do |plaid_item|
-      plaid_item.sync(start_date: sync_record.start_date, parent_sync: sync_record)
+      plaid_item.sync_data(start_date: start_date)
     end
   end
 
-  def get_link_token(webhooks_url:)
+  def syncing?
+    super || accounts.manual.any?(&:syncing?) || plaid_items.any?(&:syncing?)
+  end
+
+  def get_link_token(webhooks_url:, redirect_url:, accountable_type: nil)
     plaid_provider.get_link_token(
       user_id: id,
       country: country,
-      webhooks_url: webhooks_url
+      language: locale,
+      webhooks_url: webhooks_url,
+      redirect_url: redirect_url,
+      accountable_type: accountable_type
     ).link_token
   end
 

@@ -16,15 +16,15 @@ class FamilyTest < ActiveSupport::TestCase
     manual_accounts_count = @syncable.accounts.manual.count
     items_count = @syncable.plaid_items.count
 
-    Account.any_instance.expects(:sync)
-      .with(start_date: nil, parent_sync: family_sync)
+    Account.any_instance.expects(:sync_data)
+      .with(start_date: nil)
       .times(manual_accounts_count)
 
-    PlaidItem.any_instance.expects(:sync)
-      .with(start_date: nil, parent_sync: family_sync)
+    PlaidItem.any_instance.expects(:sync_data)
+      .with(start_date: nil)
       .times(items_count)
 
-    @syncable.sync_data(family_sync)
+    @syncable.sync_data(start_date: family_sync.start_date)
   end
 
   test "calculates assets" do

@@ -28,7 +28,6 @@ export default class extends Controller {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Accept: "text/html",
         "X-CSRF-Token": document.querySelector('[name="csrf-token"]').content,
       },
       body: JSON.stringify({
@@ -39,7 +38,7 @@ export default class extends Controller {
       }),
     }).then((response) => {
       if (response.redirected) {
-        Turbo.visit(response.url);
+        window.location.href = response.url;
       }
     });
   }

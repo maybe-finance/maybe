@@ -20,7 +20,7 @@ class Account < ApplicationRecord
 
   enum :classification, { asset: "asset", liability: "liability" }, validate: { allow_nil: true }
 
-  scope :active, -> { where(is_active: true) }
+  scope :active, -> { where(is_active: true, scheduled_for_deletion: false) }
   scope :assets, -> { where(classification: "asset") }
   scope :liabilities, -> { where(classification: "liability") }
   scope :alphabetically, -> { order(:name) }
@@ -86,10 +86,15 @@ class Account < ApplicationRecord
     end
   end
 
-  def sync_data(sync_record)
+  def destroy_later
+    update!(scheduled_for_deletion: true)
+    DestroyJob.perform_later(self)
+  end
+
+  def sync_data(start_date: nil)
     resolve_stale_issues
-    Balance::Syncer.new(self, start_date: sync_record.start_date).run
-    Holding::Syncer.new(self, start_date: sync_record.start_date).run
+    Balance::Syncer.new(self, start_date: start_date).run
+    Holding::Syncer.new(self, start_date: start_date).run
   end
 
   def original_balance

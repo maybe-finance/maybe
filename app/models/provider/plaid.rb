@@ -1,6 +1,10 @@
 class Provider::Plaid
   attr_reader :client
 
+  PLAID_COUNTRY_CODES = %w[US GB ES NL FR IE CA DE IT PL DK NO SE EE LT LV PT BE].freeze
+  PLAID_LANGUAGES = %w[da nl en et fr de hi it lv lt no pl pt ro es sv vi].freeze
+  PLAID_PRODUCTS = %w[transactions investments liabilities].freeze
+
   class << self
     def process_webhook(webhook_body)
       parsed = JSON.parse(webhook_body)
@@ -10,6 +14,11 @@ class Provider::Plaid
       case [ type, code ]
       when [ "TRANSACTIONS", "SYNC_UPDATES_AVAILABLE" ]
         plaid_item = PlaidItem.find_by(plaid_id: parsed["item_id"])
+
+        if parsed["historical_update_complete"]
+          plaid_item.update!(historical_update_complete: true)
+        end
+
         plaid_item.sync_later
       else
         Rails.logger.warn("Unhandled Plaid webhook type: #{type}:#{code}")
@@ -62,14 +71,16 @@ class Provider::Plaid
     @client = self.class.client
   end
 
-  def get_link_token(user_id:, country:, webhooks_url:)
+  def get_link_token(user_id:, country:, language: "en", webhooks_url:, redirect_url:, accountable_type: nil)
     request = Plaid::LinkTokenCreateRequest.new({
       user: { client_user_id: user_id },
-      client_name: "Maybe",
-      products: %w[transactions],
-      country_codes: [ country ],
-      language: "en",
-      webhook: webhooks_url
+      client_name: "Maybe Finance",
+      products: get_products(accountable_type),
+      country_codes: [ get_plaid_country_code(country) ],
+      language: get_plaid_language(language),
+      webhook: webhooks_url,
+      redirect_uri: redirect_url,
+      transactions: { days_requested: 730 } # max allowed by Plaid
     })
 
     client.link_token_create(request)
@@ -94,7 +105,7 @@ class Provider::Plaid
   end
 
   def get_item_transactions(item)
-    cursor = item.prev_cursor
+    cursor = item.next_cursor
     added = []
     modified = []
     removed = []
@@ -120,4 +131,24 @@ class Provider::Plaid
 
   private
     TransactionSyncResponse = Struct.new :added, :modified, :removed, :cursor, keyword_init: true
+
+    def get_products(accountable_type)
+      case accountable_type
+      when "Investment"
+        %w[investments]
+      when "CreditCard", "Loan"
+        %w[liabilities]
+      else
+        %w[transactions]
+      end
+    end
+
+    def get_plaid_country_code(country_code)
+      PLAID_COUNTRY_CODES.include?(country_code) ? country_code : "US"
+    end
+
+    def get_plaid_language(locale = "en")
+      language = locale.split("-").first
+      PLAID_LANGUAGES.include?(language) ? language : "en"
+    end
 end

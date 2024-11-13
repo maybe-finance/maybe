@@ -6,6 +6,10 @@ en:
       troubleshoot: Troubleshoot
     account_list:
       new_account: New %{type}
+    create:
+      success: "%{type} account created"
+    destroy:
+      success: "%{type} account scheduled for deletion"
     empty:
       empty_message: Add an account either via connection, importing or entering manually.
       new_account: New account
@@ -54,3 +58,5 @@ en:
       no_liabilities: No liabilities found
       no_liabilities_description: Add a liability either via connection, importing
         or entering manually.
+    update:
+      success: "%{type} account updated"

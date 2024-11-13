@@ -11,14 +11,16 @@ class PlaidItemsController < ApplicationController
   end
 
   def destroy
-    @plaid_item.destroy
+    @plaid_item.destroy_later
     redirect_to accounts_path, notice: t(".success")
   end
 
   def sync
-    @plaid_item.sync_later
+    unless @plaid_item.syncing?
+      @plaid_item.sync_later
+    end
 
-    head :ok
+    redirect_to accounts_path
   end
 
   private

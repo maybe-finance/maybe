@@ -25,7 +25,8 @@ module AccountableResourceInterfaceTest
   test "destroys account" do
     delete account_url(@account)
     assert_redirected_to accounts_path
-    assert_equal "#{@account.accountable_name.humanize} account deleted", flash[:notice]
+    assert_enqueued_with job: DestroyJob
+    assert_equal "#{@account.accountable_name.underscore.humanize} account scheduled for deletion", flash[:notice]
   end
 
   test "updates basic account balances" do
@@ -40,7 +41,7 @@ module AccountableResourceInterfaceTest
     end
 
     assert_redirected_to @account
-    assert_equal "#{@account.accountable_name.humanize} account updated", flash[:notice]
+    assert_equal "#{@account.accountable_name.underscore.humanize} account updated", flash[:notice]
   end
 
   test "creates with basic attributes" do

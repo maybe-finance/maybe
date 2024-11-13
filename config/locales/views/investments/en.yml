@@ -1,10 +1,6 @@
 ---
 en:
   investments:
-    create:
-      success: Investment account created
-    destroy:
-      success: Investment account deleted
     edit:
       edit: Edit %{account}
     form:
@@ -14,8 +10,6 @@ en:
       title: Enter account balance
     show:
       chart_title: Total value
-    update:
-      success: Investment account updated
     value_tooltip:
       cash: Cash
       holdings: Holdings
