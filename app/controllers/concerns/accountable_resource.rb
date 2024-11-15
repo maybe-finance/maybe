@@ -4,7 +4,7 @@ module AccountableResource
   included do
     layout :with_sidebar
     before_action :set_account, only: [ :show, :edit, :update, :destroy ]
-    before_action :set_link_token, only: :new, unless: -> { self_hosted? }
+    before_action :set_link_token, only: :new
   end
 
   class_methods do
@@ -54,7 +54,7 @@ module AccountableResource
     def webhooks_url
       return webhooks_plaid_url if Rails.env.production?
 
-      base_url = ENV.fetch("WEBHOOKS_URL", root_url.chomp("/"))
+      base_url = ENV.fetch("DEV_WEBHOOKS_URL", root_url.chomp("/"))
       base_url + "/webhooks/plaid"
     end
 

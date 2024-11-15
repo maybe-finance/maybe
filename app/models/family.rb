@@ -37,6 +37,8 @@ class Family < ApplicationRecord
   end
 
   def get_link_token(webhooks_url:, redirect_url:, accountable_type: nil)
+    return nil unless plaid_provider
+
     plaid_provider.get_link_token(
       user_id: id,
       country: country,

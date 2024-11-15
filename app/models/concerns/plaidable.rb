@@ -3,7 +3,7 @@ module Plaidable
 
   class_methods do
     def plaid_provider
-      Provider::Plaid.new unless Rails.application.config.app_mode.self_hosted?
+      Provider::Plaid.new if Rails.application.config.plaid
     end
   end
 
