@@ -21,6 +21,8 @@ class Family < ApplicationRecord
   validates :date_format, inclusion: { in: DATE_FORMATS }
 
   def sync_data(start_date: nil)
+    update!(last_synced_at: Time.current)
+
     accounts.manual.each do |account|
       account.sync_data(start_date: start_date)
     end

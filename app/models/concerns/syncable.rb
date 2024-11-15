@@ -9,10 +9,6 @@ module Syncable
     syncs.where(status: [ :syncing, :pending ]).any?
   end
 
-  def last_synced_at
-    syncs.ordered.first&.last_ran_at
-  end
-
   def sync_later(start_date: nil)
     new_sync = syncs.create!(start_date: start_date)
     SyncJob.perform_later(new_sync)
@@ -24,6 +20,10 @@ module Syncable
 
   def sync_data(start_date: nil)
     raise NotImplementedError, "Subclasses must implement the `sync_data` method"
+  end
+
+  def sync_error
+    latest_sync.error
   end
 
   private

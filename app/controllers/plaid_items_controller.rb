@@ -4,7 +4,7 @@ class PlaidItemsController < ApplicationController
   def create
     Current.family.plaid_items.create_from_public_token(
       plaid_item_params[:public_token],
-      item_name
+      item_name: item_name,
     )
 
     redirect_to accounts_path, notice: t(".success")

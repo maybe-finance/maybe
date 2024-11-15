@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_08_150422) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_14_164118) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -111,6 +111,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_08_150422) do
     t.uuid "import_id"
     t.uuid "plaid_account_id"
     t.boolean "scheduled_for_deletion", default: false
+    t.datetime "last_synced_at"
     t.index ["accountable_id", "accountable_type"], name: "index_accounts_on_accountable_id_and_accountable_type"
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id", "accountable_type"], name: "index_accounts_on_family_id_and_accountable_type"
@@ -216,7 +217,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_08_150422) do
     t.string "stripe_subscription_status", default: "incomplete"
     t.string "date_format", default: "%m-%d-%Y"
     t.string "country", default: "US"
-    t.datetime "last_auto_synced_at"
+    t.datetime "last_synced_at"
   end
 
   create_table "good_job_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -483,9 +484,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_08_150422) do
     t.string "name"
     t.string "next_cursor"
     t.boolean "scheduled_for_deletion", default: false
-    t.boolean "historical_update_complete", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "available_products", default: [], array: true
+    t.string "billed_products", default: [], array: true
+    t.datetime "last_synced_at"
     t.index ["family_id"], name: "index_plaid_items_on_family_id"
   end
 

@@ -92,6 +92,8 @@ class Account < ApplicationRecord
   end
 
   def sync_data(start_date: nil)
+    update!(last_synced_at: Time.current)
+
     resolve_stale_issues
     Balance::Syncer.new(self, start_date: start_date).run
     Holding::Syncer.new(self, start_date: start_date).run

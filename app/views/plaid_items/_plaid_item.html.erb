@@ -18,10 +18,15 @@
 
         <div class="pl-1 text-sm">
           <%= tag.p plaid_item.name, class: "font-medium text-gray-900" %>
-          <% if plaid_item.syncing? || plaid_item.historical_update_complete == false %>
+          <% if plaid_item.syncing? %>
             <div class="text-gray-500 flex items-center gap-1">
               <%= lucide_icon "loader", class: "w-4 h-4 animate-pulse" %>
               <%= tag.span t(".syncing") %>
+            </div>
+          <% elsif plaid_item.sync_error.present? %>
+            <div class="text-gray-500 flex items-center gap-1">
+              <%= lucide_icon "alert-circle", class: "w-4 h-4 text-red-500" %>
+              <%= tag.span t(".error"), class: "text-red-500" %>
             </div>
           <% else %>
             <p class="text-gray-500">
@@ -58,12 +63,7 @@
     </summary>
 
     <div class="space-y-4 mt-4">
-      <% if plaid_item.historical_update_complete == false %>
-        <div class="p-4 flex flex-col gap-3 items-center justify-center">
-          <p class="text-gray-900 font-medium text-sm animate-pulse"><%= t(".historical_update_message") %></p>
-          <p class="text-gray-500 text-sm"><%= t(".historical_update_description") %></p>
-        </div>
-      <% elsif plaid_item.accounts.any? %>
+      <% if plaid_item.accounts.any? %>
         <%= render "accounts/index/account_groups", accounts: plaid_item.accounts %>
       <% else %>
         <div class="p-4 flex flex-col gap-3 items-center justify-center">

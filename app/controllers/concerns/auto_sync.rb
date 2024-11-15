@@ -7,7 +7,7 @@ module AutoSync
 
   private
     def sync_family
-      Current.family.update!(last_auto_synced_at: Time.current)
+      Current.family.update!(last_synced_at: Time.current)
       Current.family.sync_later
     end
 
@@ -15,7 +15,7 @@ module AutoSync
       return false unless Current.family.present?
       return false unless Current.family.accounts.any?
 
-      Current.family.last_auto_synced_at.blank? ||
-      Current.family.last_auto_synced_at.to_date < Date.current
+      Current.family.last_synced_at.blank? ||
+      Current.family.last_synced_at.to_date < Date.current
     end
 end

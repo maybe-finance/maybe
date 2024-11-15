@@ -17,5 +17,4 @@ en:
       status: Last synced %{timestamp} ago
       status_never: Requires data sync
       syncing: Syncing...
-      historical_update_message: Setting up linked account... 
-      historical_update_description: We're loading your historical transaction data from Plaid.  This may take several minutes.
+      error: Error occurred while syncing data

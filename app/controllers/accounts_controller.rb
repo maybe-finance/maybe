@@ -4,8 +4,8 @@ class AccountsController < ApplicationController
   before_action :set_account, only: %i[sync]
 
   def index
-    @manual_accounts = Current.family.accounts.manual.active
-    @plaid_items = Current.family.plaid_items.active
+    @manual_accounts = Current.family.accounts.manual.active.alphabetically
+    @plaid_items = Current.family.plaid_items.active.ordered
   end
 
   def summary

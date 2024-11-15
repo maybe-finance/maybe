@@ -12,7 +12,7 @@ class Account::Valuation < ApplicationRecord
   end
 
   def name
-    oldest? ? "Initial balance" : entry.name || "Balance update"
+    entry.name || (oldest? ? "Initial balance" : "Balance update")
   end
 
   def trend

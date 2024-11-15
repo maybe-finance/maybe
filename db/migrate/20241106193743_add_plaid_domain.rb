@@ -7,7 +7,7 @@ class AddPlaidDomain < ActiveRecord::Migration[7.2]
       t.string :name
       t.string :next_cursor
       t.boolean :scheduled_for_deletion, default: false
-      t.boolean :historical_update_complete, default: false
+
       t.timestamps
     end
 

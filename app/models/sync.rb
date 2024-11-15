@@ -8,9 +8,7 @@ class Sync < ApplicationRecord
   def perform
     start!
 
-    transaction do
-      syncable.sync_data(start_date: start_date)
-    end
+    syncable.sync_data(start_date: start_date)
 
     complete!
   rescue StandardError => error

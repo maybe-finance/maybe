@@ -4,6 +4,7 @@ class Provider::Plaid
   PLAID_COUNTRY_CODES = %w[US GB ES NL FR IE CA DE IT PL DK NO SE EE LT LV PT BE].freeze
   PLAID_LANGUAGES = %w[da nl en et fr de hi it lv lt no pl pt ro es sv vi].freeze
   PLAID_PRODUCTS = %w[transactions investments liabilities].freeze
+  MAX_HISTORY_DAYS = Rails.env.development? ? 90 : 730
 
   class << self
     def process_webhook(webhook_body)
@@ -14,10 +15,6 @@ class Provider::Plaid
       case [ type, code ]
       when [ "TRANSACTIONS", "SYNC_UPDATES_AVAILABLE" ]
         plaid_item = PlaidItem.find_by(plaid_id: parsed["item_id"])
-
-        if parsed["historical_update_complete"]
-          plaid_item.update!(historical_update_complete: true)
-        end
 
         plaid_item.sync_later
       else
@@ -80,7 +77,7 @@ class Provider::Plaid
       language: get_plaid_language(language),
       webhook: webhooks_url,
       redirect_uri: redirect_url,
-      transactions: { days_requested: 730 } # max allowed by Plaid
+      transactions: { days_requested: MAX_HISTORY_DAYS }
     })
 
     client.link_token_create(request)
@@ -92,6 +89,11 @@ class Provider::Plaid
     )
 
     client.item_public_token_exchange(request)
+  end
+
+  def get_item(access_token)
+    request = Plaid::ItemGetRequest.new(access_token: access_token)
+    client.item_get(request)
   end
 
   def remove_item(access_token)
@@ -129,8 +131,70 @@ class Provider::Plaid
     TransactionSyncResponse.new(added:, modified:, removed:, cursor:)
   end
 
+  def get_item_investments(item, start_date: nil, end_date: Date.current)
+    start_date = start_date || MAX_HISTORY_DAYS.days.ago.to_date
+    holdings = get_item_holdings(item)
+    transactions, securities = get_item_investment_transactions(item, start_date:, end_date:)
+
+    InvestmentsResponse.new(holdings:, transactions:, securities:)
+  end
+
+  def get_item_liabilities(item)
+    request = Plaid::LiabilitiesGetRequest.new({ access_token: item.access_token })
+    response = client.liabilities_get(request)
+    response.liabilities
+  end
+
   private
     TransactionSyncResponse = Struct.new :added, :modified, :removed, :cursor, keyword_init: true
+    InvestmentsResponse = Struct.new :holdings, :transactions, :securities, keyword_init: true
+
+    def get_item_holdings(item)
+      request = Plaid::InvestmentsHoldingsGetRequest.new({ access_token: item.access_token })
+      response = client.investments_holdings_get(request)
+
+      securities_by_id = response.securities.index_by(&:security_id)
+      accounts_by_id = response.accounts.index_by(&:account_id)
+
+      response.holdings.each do |holding|
+        holding.define_singleton_method(:security) { securities_by_id[holding.security_id] }
+        holding.define_singleton_method(:account) { accounts_by_id[holding.account_id] }
+      end
+
+      response.holdings
+    end
+
+    def get_item_investment_transactions(item, start_date:, end_date:)
+      transactions = []
+      securities = []
+      offset = 0
+
+      loop do
+        request = Plaid::InvestmentsTransactionsGetRequest.new(
+          access_token: item.access_token,
+          start_date: start_date.to_s,
+          end_date: end_date.to_s,
+          options: { offset: offset }
+        )
+
+        response = client.investments_transactions_get(request)
+        securities_by_id = response.securities.index_by(&:security_id)
+        accounts_by_id = response.accounts.index_by(&:account_id)
+
+        response.investment_transactions.each do |t|
+          t.define_singleton_method(:security) { securities_by_id[t.security_id] }
+          t.define_singleton_method(:account) { accounts_by_id[t.account_id] }
+          transactions << t
+        end
+
+        securities += response.securities
+
+        break if transactions.length >= response.total_investment_transactions
+        offset = transactions.length
+      end
+
+      [ transactions, securities ]
+    end
 
     def get_products(accountable_type)
       case accountable_type

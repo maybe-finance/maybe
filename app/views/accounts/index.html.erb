@@ -30,7 +30,7 @@
   <% else %>
     <div class="space-y-2">
       <% if @plaid_items.any? %>
-        <%= render @plaid_items %>
+        <%= render @plaid_items.sort_by(&:created_at) %>
       <% end %>
 
       <% if @manual_accounts.any? %>
