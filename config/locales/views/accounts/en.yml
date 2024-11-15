@@ -46,6 +46,7 @@ en:
         confirm_title: Delete account?
         edit: Edit
         import: Import transactions
+        manage: Manage accounts
     summary:
       header:
         accounts: Accounts

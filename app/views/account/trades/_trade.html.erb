@@ -3,7 +3,7 @@
 <% trade, account = entry.account_trade, entry.account %>
 
 <div class="grid grid-cols-12 items-center text-gray-900 text-sm font-medium p-4">
-  <div class="pr-10 flex items-center gap-4 col-span-6">
+  <div class="col-span-8 flex items-center gap-4">
     <% if selectable %>
       <%= check_box_tag dom_id(entry, "selection"),
                         class: "maybe-checkbox maybe-checkbox--light",
@@ -30,21 +30,11 @@
     </div>
   </div>
 
-  <div class="flex items-center justify-end gap-1 col-span-3">
-    <% if entry.account_transaction? && entry.marked_as_transfer? %>
-      <%= tag.p entry.inflow? ? t(".deposit") : t(".withdrawal") %>
-    <% elsif entry.account_transaction? %>
-      <%= tag.p entry.inflow? ? t(".inflow") : t(".outflow") %>
-    <% else %>
-      <%= tag.p trade.buy? ? t(".buy") : t(".sell") %>
-    <% end %>
+  <div class="col-span-2 justify-self-end font-medium text-sm">
+    <%= tag.span format_money(entry.amount_money) %>
   </div>
 
-  <div class="col-span-3 flex items-center justify-end">
-    <% if entry.account_transaction? %>
-      <%= tag.p format_money(entry.amount_money * -1), class: { "text-green-500": entry.inflow? } %>
-    <% else %>
-      <%= tag.p format_money(entry.amount_money * -1), class: { "text-green-500": trade.sell? } %>
-    <% end %>
+  <div class="col-span-2 justify-self-end">
+    <%= tag.p "--", class: "font-medium text-sm text-gray-400" %>
   </div>
 </div>

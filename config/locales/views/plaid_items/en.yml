@@ -11,10 +11,10 @@ en:
         all associated data.
       confirm_title: Delete institution?
       delete: Delete
+      error: Error occurred while syncing data
       no_accounts_description: We could not load any accounts from this financial
         institution.
       no_accounts_title: No accounts found
       status: Last synced %{timestamp} ago
       status_never: Requires data sync
       syncing: Syncing...
-      error: Error occurred while syncing data
