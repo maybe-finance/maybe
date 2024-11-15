@@ -31,6 +31,7 @@ There are 3 primary ways to use the Maybe app:
 
 1. Managed (easiest) - _coming soon..._
 2. [One-click deploy](docs/hosting/one-click-deploy.md)
+3. [One-click deploy with alibaba cloud](docs/hosting/one-click-deploy-alibaba-cloud.md)
 3. [Self-host with Docker](docs/hosting/docker.md)
 
 ## Local Development Setup
