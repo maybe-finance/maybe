@@ -1,9 +1,9 @@
 class Provider::Plaid
   attr_reader :client
 
+  MAYBE_SUPPORTED_PLAID_PRODUCTS = %w[transactions investments liabilities].freeze
   PLAID_COUNTRY_CODES = %w[US GB ES NL FR IE CA DE IT PL DK NO SE EE LT LV PT BE].freeze
   PLAID_LANGUAGES = %w[da nl en et fr de hi it lv lt no pl pt ro es sv vi].freeze
-  PLAID_PRODUCTS = %w[transactions investments liabilities].freeze
   MAX_HISTORY_DAYS = Rails.env.development? ? 90 : 730
 
   class << self
@@ -74,7 +74,8 @@ class Provider::Plaid
     request = Plaid::LinkTokenCreateRequest.new({
       user: { client_user_id: user_id },
       client_name: "Maybe Finance",
-      products: get_products(accountable_type),
+      products: [ get_primary_product(accountable_type) ],
+      additional_consented_products: get_additional_consented_products(accountable_type),
       country_codes: [ get_plaid_country_code(country) ],
       language: get_plaid_language(language),
       webhook: webhooks_url,
@@ -198,15 +199,19 @@ class Provider::Plaid
       [ transactions, securities ]
     end
 
-    def get_products(accountable_type)
+    def get_primary_product(accountable_type)
       case accountable_type
       when "Investment"
-        %w[investments]
+        "investments"
       when "CreditCard", "Loan"
-        %w[liabilities]
+        "liabilities"
       else
-        %w[transactions]
+        "transactions"
       end
+    end
+
+    def get_additional_consented_products(accountable_type)
+      MAYBE_SUPPORTED_PLAID_PRODUCTS - [ get_primary_product(accountable_type) ]
     end
 
     def get_plaid_country_code(country_code)

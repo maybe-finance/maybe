@@ -19,6 +19,8 @@ export default class extends Controller {
   }
 
   handleSuccess(public_token, metadata) {
+    window.location.href = "/accounts";
+
     fetch("/plaid_items", {
       method: "POST",
       headers: {
