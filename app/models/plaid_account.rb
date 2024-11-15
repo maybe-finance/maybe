@@ -58,7 +58,7 @@ class PlaidAccount < ApplicationRecord
         next if security.nil?
         new_transaction = account.entries.find_or_create_by!(plaid_id: transaction.investment_transaction_id) do |t|
           t.name = transaction.name
-          t.amount = transaction.quantity * transaction.price,
+          t.amount = transaction.quantity * transaction.price
           t.currency = transaction.iso_currency_code
           t.date = transaction.date
           t.entryable = Account::Trade.new(
