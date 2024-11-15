@@ -6,11 +6,6 @@ export default class extends Controller {
     linkToken: String,
   };
 
-  connect() {
-    console.log("Plaid connect");
-    console.log(this.linkTokenValue);
-  }
-
   open() {
     const handler = Plaid.create({
       token: this.linkTokenValue,
