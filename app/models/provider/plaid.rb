@@ -12,11 +12,13 @@ class Provider::Plaid
       type = parsed["webhook_type"]
       code = parsed["webhook_code"]
 
+      item = PlaidItem.find_by(plaid_id: parsed["item_id"])
+
       case [ type, code ]
       when [ "TRANSACTIONS", "SYNC_UPDATES_AVAILABLE" ]
-        plaid_item = PlaidItem.find_by(plaid_id: parsed["item_id"])
-
-        plaid_item.sync_later
+        item.sync_later
+      when [ "INVESTMENTS_TRANSACTIONS", "DEFAULT_UPDATE" ]
+        item.sync_later
       else
         Rails.logger.warn("Unhandled Plaid webhook type: #{type}:#{code}")
       end

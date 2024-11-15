@@ -1,7 +1,8 @@
 class Account::Holding::Syncer
   def initialize(account, start_date: nil)
     @account = account
-    @sync_date_range = calculate_sync_start_date(start_date)..Date.current
+    end_date = account.plaid_account.present? ? 1.day.ago.to_date : Date.current
+    @sync_date_range = calculate_sync_start_date(start_date)..end_date
     @portfolio = {}
 
     load_prior_portfolio if start_date

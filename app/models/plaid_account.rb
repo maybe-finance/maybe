@@ -54,20 +54,8 @@ class PlaidAccount < ApplicationRecord
           t.entryable = Account::Transaction.new
         end
       else
-        plaid_security = nil
-
-        if transaction.security.ticker_symbol.present?
-          plaid_security = transaction.security
-        else
-          plaid_security = securities.find { |s| s.security_id == transaction.security.proxy_security_id }
-        end
-
-        security = Security.find_or_create_by!(
-          ticker: plaid_security.ticker_symbol,
-          exchange_mic: plaid_security.market_identifier_code || "XNAS",
-          country_code: "US"
-        )
-
+        security = get_security(transaction.security, securities)
+        next if security.nil?
         new_transaction = account.entries.find_or_create_by!(plaid_id: transaction.investment_transaction_id) do |t|
           t.name = transaction.name
           t.amount = transaction.quantity * transaction.price,
@@ -81,6 +69,23 @@ class PlaidAccount < ApplicationRecord
           )
         end
       end
+    end
+
+    # Update only the current day holdings.  The account sync will populate historical values based on trades.
+    holdings.each do |holding|
+      internal_security = get_security(holding.security, securities)
+      next if internal_security.nil?
+
+      existing_holding = account.holdings.find_or_initialize_by(
+        security: internal_security,
+        date: Date.current,
+        currency: holding.iso_currency_code
+      )
+
+      existing_holding.qty = holding.quantity
+      existing_holding.price = holding.institution_price
+      existing_holding.amount = holding.quantity * holding.institution_price
+      existing_holding.save!
     end
   end
 
@@ -150,6 +155,22 @@ class PlaidAccount < ApplicationRecord
   private
     def family
       plaid_item.family
+    end
+
+    def get_security(plaid_security, securities)
+      security = nil
+
+      if plaid_security.ticker_symbol.present?
+        security = plaid_security
+      else
+        security = securities.find { |s| s.security_id == plaid_security.proxy_security_id }
+      end
+
+      Security.find_or_create_by!(
+        ticker: security.ticker_symbol,
+        exchange_mic: security.market_identifier_code || "XNAS",
+        country_code: "US"
+      ) if security.present?
     end
 
     def transfer?(plaid_txn)
