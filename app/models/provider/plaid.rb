@@ -19,6 +19,8 @@ class Provider::Plaid
         item.sync_later
       when [ "INVESTMENTS_TRANSACTIONS", "DEFAULT_UPDATE" ]
         item.sync_later
+      when [ "HOLDINGS", "DEFAULT_UPDATE" ]
+        item.sync_later
       else
         Rails.logger.warn("Unhandled Plaid webhook type: #{type}:#{code}")
       end
