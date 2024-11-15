@@ -28,8 +28,6 @@ class Provider::Plaid
       jwks_loader = ->(options) do
         key_id = options[:kid]
 
-        # TODO: Cache this
-        # @see https://plaid.com/docs/api/webhooks/webhook-verification/#caching-and-key-rotation
         jwk_response = client.webhook_verification_key_get(
           Plaid::WebhookVerificationKeyGetRequest.new(key_id: key_id)
         )
