@@ -16,7 +16,7 @@ en:
         new: New
         new_balance: New balance
         new_transaction: New transaction
-        no_entries: No entries yet
+        no_entries: No entries found 
         title: Activity
       loading:
         loading: Loading entries...

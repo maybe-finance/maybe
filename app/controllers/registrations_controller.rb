@@ -28,7 +28,7 @@ class RegistrationsController < ApplicationController
       @session = create_session_for(@user)
       redirect_to root_path, notice: t(".success")
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_entity, alert: t(".failure")
     end
   end
 
