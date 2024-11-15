@@ -1,10 +1,6 @@
 ---
 en:
   vehicles:
-    create:
-      success: Vehicle account created
-    destroy:
-      success: Vehicle account deleted
     edit:
       edit: Edit %{account}
     form:
@@ -27,5 +23,3 @@ en:
       trend: Trend
       unknown: Unknown
       year: Year
-    update:
-      success: Vehicle account updated

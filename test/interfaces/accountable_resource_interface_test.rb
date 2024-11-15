@@ -4,6 +4,10 @@ module AccountableResourceInterfaceTest
   extend ActiveSupport::Testing::Declarative
 
   test "shows new form" do
+    Plaid::PlaidApi.any_instance.stubs(:link_token_create).returns(
+      Plaid::LinkTokenCreateResponse.new(link_token: "test-link-token")
+    )
+
     get new_polymorphic_url(@account.accountable)
     assert_response :success
   end
@@ -21,14 +25,14 @@ module AccountableResourceInterfaceTest
   test "destroys account" do
     delete account_url(@account)
     assert_redirected_to accounts_path
-    assert_equal "#{@account.accountable_name.humanize} account deleted", flash[:notice]
+    assert_enqueued_with job: DestroyJob
+    assert_equal "#{@account.accountable_name.underscore.humanize} account scheduled for deletion", flash[:notice]
   end
 
   test "updates basic account balances" do
     assert_no_difference [ "Account.count", "@account.accountable_class.count" ] do
       patch account_url(@account), params: {
         account: {
-          institution_id: institutions(:chase).id,
           name: "Updated name",
           balance: 10000,
           currency: "USD"
@@ -37,7 +41,7 @@ module AccountableResourceInterfaceTest
     end
 
     assert_redirected_to @account
-    assert_equal "#{@account.accountable_name.humanize} account updated", flash[:notice]
+    assert_equal "#{@account.accountable_name.underscore.humanize} account updated", flash[:notice]
   end
 
   test "creates with basic attributes" do
@@ -45,7 +49,6 @@ module AccountableResourceInterfaceTest
       post "/#{@account.accountable_name.pluralize}", params: {
         account: {
           accountable_type: @account.accountable_class,
-          institution_id: institutions(:chase).id,
           name: "New accountable",
           balance: 10000,
           currency: "USD",
@@ -68,7 +71,7 @@ module AccountableResourceInterfaceTest
     end
 
     assert_redirected_to @account
-    assert_enqueued_with job: AccountSyncJob
+    assert_enqueued_with job: SyncJob
     assert_equal "#{@account.accountable_name.humanize} account updated", flash[:notice]
   end
 
@@ -84,7 +87,7 @@ module AccountableResourceInterfaceTest
     end
 
     assert_redirected_to @account
-    assert_enqueued_with job: AccountSyncJob
+    assert_enqueued_with job: SyncJob
     assert_equal "#{@account.accountable_name.humanize} account updated", flash[:notice]
   end
 end

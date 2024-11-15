@@ -1,4 +1,6 @@
 class Family < ApplicationRecord
+  include Plaidable, Syncable
+
   DATE_FORMATS = [ "%m-%d-%Y", "%d-%m-%Y", "%Y-%m-%d", "%d/%m/%Y", "%Y/%m/%d", "%m/%d/%Y", "%e/%m/%Y", "%Y.%m.%d" ]
 
   include Providable
@@ -7,16 +9,45 @@ class Family < ApplicationRecord
   has_many :invitations, dependent: :destroy
   has_many :tags, dependent: :destroy
   has_many :accounts, dependent: :destroy
-  has_many :institutions, dependent: :destroy
   has_many :imports, dependent: :destroy
   has_many :transactions, through: :accounts
   has_many :entries, through: :accounts
   has_many :categories, dependent: :destroy
   has_many :merchants, dependent: :destroy
   has_many :issues, through: :accounts
+  has_many :plaid_items, dependent: :destroy
 
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }
   validates :date_format, inclusion: { in: DATE_FORMATS }
+
+  def sync_data(start_date: nil)
+    update!(last_synced_at: Time.current)
+
+    accounts.manual.each do |account|
+      account.sync_data(start_date: start_date)
+    end
+
+    plaid_items.each do |plaid_item|
+      plaid_item.sync_data(start_date: start_date)
+    end
+  end
+
+  def syncing?
+    super || accounts.manual.any?(&:syncing?) || plaid_items.any?(&:syncing?)
+  end
+
+  def get_link_token(webhooks_url:, redirect_url:, accountable_type: nil)
+    return nil unless plaid_provider
+
+    plaid_provider.get_link_token(
+      user_id: id,
+      country: country,
+      language: locale,
+      webhooks_url: webhooks_url,
+      redirect_url: redirect_url,
+      accountable_type: accountable_type
+    ).link_token
+  end
 
   def snapshot(period = Period.all)
     query = accounts.active.joins(:balances)
@@ -114,20 +145,6 @@ class Family < ApplicationRecord
 
   def liabilities
     Money.new(accounts.active.liabilities.map { |account| account.balance_money.exchange_to(currency, fallback_rate: 0) }.sum, currency)
-  end
-
-  def sync(start_date: nil)
-    accounts.active.each do |account|
-      if account.needs_sync?
-        account.sync_later(start_date: start_date || account.last_sync_date)
-      end
-    end
-
-    update! last_synced_at: Time.now
-  end
-
-  def needs_sync?
-    last_synced_at.nil? || last_synced_at.to_date < Date.current
   end
 
   def synth_usage

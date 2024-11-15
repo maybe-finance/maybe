@@ -2,23 +2,25 @@
   <div class="bg-white p-5 border border-alpha-black-25 rounded-xl shadow-xs">
     <div class="flex items-center justify-between mb-4">
       <%= tag.h2 t(".title"), class: "font-medium text-lg" %>
-      <div data-controller="menu" data-testid="activity-menu">
-        <button class="btn btn--secondary flex items-center gap-2" data-menu-target="button">
-          <%= lucide_icon("plus", class: "w-4 h-4") %>
-          <%= tag.span t(".new") %>
-        </button>
-        <div data-menu-target="content" class="z-10 hidden bg-white rounded-lg border border-alpha-black-25 shadow-xs p-1">
-          <%= link_to new_account_valuation_path(@account), data: { turbo_frame: :modal }, class: "block p-2 rounded-lg hover:bg-gray-50 flex items-center gap-2" do %>
-            <%= lucide_icon("circle-dollar-sign", class: "text-gray-500 w-5 h-5") %>
-            <%= tag.span t(".new_balance"), class: "text-sm" %>
-          <% end %>
+      <% unless @account.plaid_account_id.present? %>
+        <div data-controller="menu" data-testid="activity-menu">
+          <button class="btn btn--secondary flex items-center gap-2" data-menu-target="button">
+            <%= lucide_icon("plus", class: "w-4 h-4") %>
+            <%= tag.span t(".new") %>
+          </button>
+          <div data-menu-target="content" class="z-10 hidden bg-white rounded-lg border border-alpha-black-25 shadow-xs p-1">
+            <%= link_to new_account_valuation_path(@account), data: { turbo_frame: :modal }, class: "block p-2 rounded-lg hover:bg-gray-50 flex items-center gap-2" do %>
+              <%= lucide_icon("circle-dollar-sign", class: "text-gray-500 w-5 h-5") %>
+              <%= tag.span t(".new_balance"), class: "text-sm" %>
+            <% end %>
 
-          <%= link_to @account.investment? ? new_account_trade_path(@account) : new_transaction_path(account_id: @account.id), data: { turbo_frame: :modal }, class: "block p-2 rounded-lg hover:bg-gray-50 flex items-center gap-2" do %>
-            <%= lucide_icon("credit-card", class: "text-gray-500 w-5 h-5") %>
-            <%= tag.span t(".new_transaction"), class: "text-sm" %>
-          <% end %>
+            <%= link_to @account.investment? ? new_account_trade_path(@account) : new_transaction_path(account_id: @account.id), data: { turbo_frame: :modal }, class: "block p-2 rounded-lg hover:bg-gray-50 flex items-center gap-2" do %>
+              <%= lucide_icon("credit-card", class: "text-gray-500 w-5 h-5") %>
+              <%= tag.span t(".new_transaction"), class: "text-sm" %>
+            <% end %>
+          </div>
         </div>
-      </div>
+      <% end %>
     </div>
 
     <div>

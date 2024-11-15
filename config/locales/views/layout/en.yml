@@ -1,6 +1,8 @@
 ---
 en:
   layouts:
+    application:
+      syncing: Syncing account data...
     auth:
       existing_account: Already have an account?
       no_account: New to Maybe?

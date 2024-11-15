@@ -1,1 +1,25 @@
 <%# locals: (account:) %>
+
+<% period = Period.from_param(params[:period]) %>
+<% series = account.series(period: period) %>
+<% trend = series.trend %>
+
+<div class="bg-white shadow-xs rounded-xl border border-alpha-black-25 rounded-lg">
+  <div class="p-4 flex justify-between">
+    <div class="space-y-2">
+      <div class="flex items-center gap-1">
+        <%= tag.p t(".value"), class: "text-sm font-medium text-gray-500" %>
+      </div>
+
+      <%= tag.p format_money(account.value), class: "text-gray-900 text-3xl font-medium" %>
+    </div>
+  </div>
+
+  <div class="relative h-64 flex items-center justify-center">
+    <%= image_tag "placeholder-graph.svg", class: "w-full h-full object-cover rounded-bl-lg rounded-br-lg opacity-50" %>
+    <div class="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center space-y-1">
+      <p class="text-gray-900 text-sm">Historical investment data coming soon.</p>
+      <p class="text-gray-500 text-sm">We're working to bring you the full picture.</p>
+    </div>
+  </div>
+</div>

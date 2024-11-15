@@ -10,8 +10,12 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
     get accounts_url
     assert_response :success
 
-    @user.family.accounts.each do |account|
+    @user.family.accounts.manual.each do |account|
       assert_dom "#" + dom_id(account), count: 1
+    end
+
+    @user.family.plaid_items.each do |item|
+      assert_dom "#" + dom_id(item), count: 1
     end
   end
 
@@ -22,12 +26,11 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
 
   test "can sync an account" do
     post sync_account_path(@account)
-    assert_response :no_content
+    assert_redirected_to account_path(@account)
   end
 
   test "can sync all accounts" do
     post sync_all_accounts_path
-    assert_redirected_to accounts_url
-    assert_equal "Successfully queued accounts for syncing.", flash[:notice]
+    assert_redirected_to accounts_path
   end
 end

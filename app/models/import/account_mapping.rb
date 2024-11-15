@@ -8,7 +8,7 @@ class Import::AccountMapping < Import::Mapping
   end
 
   def selectable_values
-    family_accounts = import.family.accounts.alphabetically.map { |account| [ account.name, account.id ] }
+    family_accounts = import.family.accounts.manual.alphabetically.map { |account| [ account.name, account.id ] }
 
     unless key.blank?
       family_accounts.unshift [ "Add as new account", CREATE_NEW_KEY ]

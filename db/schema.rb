@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_08_150422) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_14_164118) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -46,6 +46,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_08_150422) do
     t.uuid "import_id"
     t.text "notes"
     t.boolean "excluded", default: false
+    t.string "plaid_id"
     t.index ["account_id"], name: "index_account_entries_on_account_id"
     t.index ["import_id"], name: "index_account_entries_on_import_id"
     t.index ["transfer_id"], name: "index_account_entries_on_transfer_id"
@@ -64,17 +65,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_08_150422) do
     t.index ["account_id", "security_id", "date", "currency"], name: "idx_on_account_id_security_id_date_currency_234024c8e3", unique: true
     t.index ["account_id"], name: "index_account_holdings_on_account_id"
     t.index ["security_id"], name: "index_account_holdings_on_security_id"
-  end
-
-  create_table "account_syncs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "account_id", null: false
-    t.string "status", default: "pending", null: false
-    t.date "start_date"
-    t.datetime "last_ran_at"
-    t.string "error"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_account_syncs_on_account_id"
   end
 
   create_table "account_trades", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -117,17 +107,18 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_08_150422) do
     t.decimal "balance", precision: 19, scale: 4
     t.string "currency"
     t.boolean "is_active", default: true, null: false
-    t.date "last_sync_date"
-    t.uuid "institution_id"
     t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Loan'::character varying, 'CreditCard'::character varying, 'OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.uuid "import_id"
+    t.uuid "plaid_account_id"
+    t.boolean "scheduled_for_deletion", default: false
+    t.datetime "last_synced_at"
     t.index ["accountable_id", "accountable_type"], name: "index_accounts_on_accountable_id_and_accountable_type"
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id", "accountable_type"], name: "index_accounts_on_family_id_and_accountable_type"
     t.index ["family_id", "id"], name: "index_accounts_on_family_id_and_id"
     t.index ["family_id"], name: "index_accounts_on_family_id"
     t.index ["import_id"], name: "index_accounts_on_import_id"
-    t.index ["institution_id"], name: "index_accounts_on_institution_id"
+    t.index ["plaid_account_id"], name: "index_accounts_on_plaid_account_id"
   end
 
   create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -220,13 +211,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_08_150422) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "currency", default: "USD"
-    t.datetime "last_synced_at"
     t.string "locale", default: "en"
     t.string "stripe_plan_id"
     t.string "stripe_customer_id"
     t.string "stripe_subscription_status", default: "incomplete"
     t.string "date_format", default: "%m-%d-%Y"
     t.string "country", default: "US"
+    t.datetime "last_synced_at"
   end
 
   create_table "good_job_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -402,16 +393,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_08_150422) do
     t.index ["family_id"], name: "index_imports_on_family_id"
   end
 
-  create_table "institutions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name", null: false
-    t.string "logo_url"
-    t.uuid "family_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "last_synced_at"
-    t.index ["family_id"], name: "index_institutions_on_family_id"
-  end
-
   create_table "investments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -479,6 +460,36 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_08_150422) do
   create_table "other_liabilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "plaid_accounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "plaid_item_id", null: false
+    t.string "plaid_id"
+    t.string "plaid_type"
+    t.string "plaid_subtype"
+    t.decimal "current_balance", precision: 19, scale: 4
+    t.decimal "available_balance", precision: 19, scale: 4
+    t.string "currency"
+    t.string "name"
+    t.string "mask"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plaid_item_id"], name: "index_plaid_accounts_on_plaid_item_id"
+  end
+
+  create_table "plaid_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "family_id", null: false
+    t.string "access_token"
+    t.string "plaid_id"
+    t.string "name"
+    t.string "next_cursor"
+    t.boolean "scheduled_for_deletion", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "available_products", default: [], array: true
+    t.string "billed_products", default: [], array: true
+    t.datetime "last_synced_at"
+    t.index ["family_id"], name: "index_plaid_items_on_family_id"
   end
 
   create_table "properties", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -553,6 +564,19 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_08_150422) do
     t.index ["currency_code"], name: "index_stock_exchanges_on_currency_code"
   end
 
+  create_table "syncs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "syncable_type", null: false
+    t.uuid "syncable_id", null: false
+    t.datetime "last_ran_at"
+    t.date "start_date"
+    t.string "status", default: "pending"
+    t.string "error"
+    t.jsonb "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["syncable_type", "syncable_id"], name: "index_syncs_on_syncable"
+  end
+
   create_table "taggings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "tag_id", null: false
     t.string "taggable_type"
@@ -605,13 +629,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_08_150422) do
   add_foreign_key "account_entries", "imports"
   add_foreign_key "account_holdings", "accounts"
   add_foreign_key "account_holdings", "securities"
-  add_foreign_key "account_syncs", "accounts"
   add_foreign_key "account_trades", "securities"
   add_foreign_key "account_transactions", "categories", on_delete: :nullify
   add_foreign_key "account_transactions", "merchants"
   add_foreign_key "accounts", "families"
   add_foreign_key "accounts", "imports"
-  add_foreign_key "accounts", "institutions"
+  add_foreign_key "accounts", "plaid_accounts"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "categories", "families"
@@ -620,10 +643,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_08_150422) do
   add_foreign_key "impersonation_sessions", "users", column: "impersonator_id"
   add_foreign_key "import_rows", "imports"
   add_foreign_key "imports", "families"
-  add_foreign_key "institutions", "families"
   add_foreign_key "invitations", "families"
   add_foreign_key "invitations", "users", column: "inviter_id"
   add_foreign_key "merchants", "families"
+  add_foreign_key "plaid_accounts", "plaid_items"
+  add_foreign_key "plaid_items", "families"
   add_foreign_key "security_prices", "securities"
   add_foreign_key "sessions", "impersonation_sessions", column: "active_impersonator_session_id"
   add_foreign_key "sessions", "users"

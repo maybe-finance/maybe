@@ -19,7 +19,7 @@ class Account::EntriesControllerTest < ActionDispatch::IntegrationTest
       end
 
       assert_redirected_to account_url(entry.account)
-      assert_enqueued_with(job: AccountSyncJob)
+      assert_enqueued_with(job: SyncJob)
     end
   end
 
@@ -51,7 +51,7 @@ class Account::EntriesControllerTest < ActionDispatch::IntegrationTest
       end
 
       assert_redirected_to account_entry_url(entry.account, entry)
-      assert_enqueued_with(job: AccountSyncJob)
+      assert_enqueued_with(job: SyncJob)
     end
   end
 

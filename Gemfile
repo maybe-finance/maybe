@@ -37,6 +37,7 @@ gem "image_processing", ">= 1.2"
 
 # Other
 gem "bcrypt", "~> 3.1"
+gem "jwt"
 gem "faraday"
 gem "faraday-retry"
 gem "faraday-multipart"
@@ -50,6 +51,7 @@ gem "redcarpet"
 gem "stripe"
 gem "intercom-rails"
 gem "holidays"
+gem "plaid"
 
 group :development, :test do
   gem "debug", platforms: %i[mri windows]

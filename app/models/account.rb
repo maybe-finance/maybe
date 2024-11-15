@@ -4,8 +4,8 @@ class Account < ApplicationRecord
   validates :name, :balance, :currency, presence: true
 
   belongs_to :family
-  belongs_to :institution, optional: true
   belongs_to :import, optional: true
+  belongs_to :plaid_account, optional: true
 
   has_many :import_mappings, as: :mappable, dependent: :destroy, class_name: "Import::Mapping"
   has_many :entries, dependent: :destroy, class_name: "Account::Entry"
@@ -14,18 +14,17 @@ class Account < ApplicationRecord
   has_many :trades, through: :entries, source: :entryable, source_type: "Account::Trade"
   has_many :holdings, dependent: :destroy
   has_many :balances, dependent: :destroy
-  has_many :syncs, dependent: :destroy
   has_many :issues, as: :issuable, dependent: :destroy
 
   monetize :balance
 
   enum :classification, { asset: "asset", liability: "liability" }, validate: { allow_nil: true }
 
-  scope :active, -> { where(is_active: true) }
+  scope :active, -> { where(is_active: true, scheduled_for_deletion: false) }
   scope :assets, -> { where(classification: "asset") }
   scope :liabilities, -> { where(classification: "liability") }
   scope :alphabetically, -> { order(:name) }
-  scope :ungrouped, -> { where(institution_id: nil) }
+  scope :manual, -> { where(plaid_account_id: nil) }
 
   has_one_attached :logo
 
@@ -85,6 +84,19 @@ class Account < ApplicationRecord
       account.sync_later
       account
     end
+  end
+
+  def destroy_later
+    update!(scheduled_for_deletion: true)
+    DestroyJob.perform_later(self)
+  end
+
+  def sync_data(start_date: nil)
+    update!(last_synced_at: Time.current)
+
+    resolve_stale_issues
+    Balance::Syncer.new(self, start_date: start_date).run
+    Holding::Syncer.new(self, start_date: start_date).run
   end
 
   def original_balance

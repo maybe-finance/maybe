@@ -19,7 +19,12 @@ class Account::Balance::Loader
 
     def update_account_balance!(balances)
       last_balance = balances.select { |db| db.currency == account.currency }.last&.balance
-      account.update! balance: last_balance if last_balance.present?
+
+      if account.plaid_account.present?
+        account.update! balance: account.plaid_account.current_balance || last_balance
+      else
+        account.update! balance: last_balance if last_balance.present?
+      end
     end
 
     def upsert_balances!(balances)

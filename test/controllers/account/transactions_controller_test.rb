@@ -35,6 +35,6 @@ class Account::TransactionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal "Transaction updated successfully.", flash[:notice]
     assert_redirected_to account_entry_url(@entry.account, @entry)
-    assert_enqueued_with(job: AccountSyncJob)
+    assert_enqueued_with(job: SyncJob)
   end
 end

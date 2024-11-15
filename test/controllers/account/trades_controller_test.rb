@@ -109,7 +109,7 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
     assert created_entry.amount.positive?
     assert created_entry.account_trade.qty.positive?
     assert_equal "Transaction created successfully.", flash[:notice]
-    assert_enqueued_with job: AccountSyncJob
+    assert_enqueued_with job: SyncJob
     assert_redirected_to @entry.account
   end
 
@@ -132,7 +132,7 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
     assert created_entry.amount.negative?
     assert created_entry.account_trade.qty.negative?
     assert_equal "Transaction created successfully.", flash[:notice]
-    assert_enqueued_with job: AccountSyncJob
+    assert_enqueued_with job: SyncJob
     assert_redirected_to @entry.account
   end
 end

@@ -44,12 +44,5 @@ en:
         settings: Settings
         symbol_label: Symbol
         total_return_label: Unrealized gain/loss
-      trade:
-        buy: Buy
-        deposit: Deposit
-        inflow: Inflow
-        outflow: Outflow
-        sell: Sell
-        withdrawal: Withdrawal
       update:
         success: Trade updated successfully.

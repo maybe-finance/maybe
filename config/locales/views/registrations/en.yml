@@ -9,9 +9,9 @@ en:
         create: Continue
   registrations:
     create:
+      failure: There was a problem signing up.
       invalid_invite_code: Invalid invite code, please try again.
       success: You have signed up successfully.
-      failure: There was a problem signing up.
     new:
       invitation_message: "%{inviter} has invited you to join as a %{role}"
       join_family_title: Join %{family}

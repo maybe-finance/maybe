@@ -26,8 +26,6 @@ search:
     - app/assets/fonts
     - app/assets/videos
     - app/assets/builds
-ignore_missing:
-  - 'accountable_resource.{create,update,destroy}.success'
 ignore_unused:
   - 'activerecord.attributes.*' # i18n-tasks does not detect these on forms, forms validations (https://github.com/glebm/i18n-tasks/blob/0b4b483c82664f26c5696fb0f6aa1297356e4683/templates/config/i18n-tasks.yml#L146)
   - 'activerecord.models.*' # i18n-tasks does not detect use in dynamic model names (e.g. object.model_name.human)

@@ -1,0 +1,20 @@
+---
+en:
+  plaid_items:
+    create:
+      success: Account linked successfully.  Please wait for accounts to sync.
+    destroy:
+      success: Accounts scheduled for deletion.
+    plaid_item:
+      confirm_accept: Delete institution
+      confirm_body: This will permanently delete all the accounts in this group and
+        all associated data.
+      confirm_title: Delete institution?
+      delete: Delete
+      error: Error occurred while syncing data
+      no_accounts_description: We could not load any accounts from this financial
+        institution.
+      no_accounts_title: No accounts found
+      status: Last synced %{timestamp} ago
+      status_never: Requires data sync
+      syncing: Syncing...

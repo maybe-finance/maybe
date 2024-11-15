@@ -18,7 +18,7 @@ module FormsHelper
   end
 
   def period_select(form:, selected:, classes: "border border-alpha-black-100 shadow-xs rounded-lg text-sm pr-7 cursor-pointer text-gray-900 focus:outline-none focus:ring-0")
-    periods_for_select = [ [ "7D", "last_7_days" ], [ "1M", "last_30_days" ], [ "1Y", "last_365_days" ], [ "All", "all" ] ]
+    periods_for_select = [ [ "7D", "last_7_days" ], [ "1M", "last_30_days" ], [ "1Y", "last_365_days" ] ]
     form.select(:period, periods_for_select, { selected: selected }, class: classes, data: { "auto-submit-form-target": "auto" })
   end
 
