@@ -63,23 +63,35 @@ To do this, run the following command:
 touch .env
 ```
 
-#### Generate the app secret key
+#### Generate the app secret key and ActiveRecord encryption keys
 
-The app requires an environment variable called `SECRET_KEY_BASE` to run.
+The app requires an environment variable called `SECRET_KEY_BASE` as well as three ActiveRecord Encryption values to run.
 
-We will first need to generate this in the terminal. If you have `openssl` installed on your computer, you can generate it with the following command:
+We will first need to generate these in the terminal. If you have `openssl` installed on your computer, you can generate them with the following commands:
 
+For `SECRET_KEY_BASE`:
 ```bash
 openssl rand -hex 64
 ```
 
+For the the `ACTIVE_RECORD_ENCRYPTION` keys, generate 3 values with:
+```bash
+openssl rand -hex 32
+```
+
 _Alternatively_, you can generate a key without openssl or any external dependencies by pasting the following bash command in your terminal and running it:
 
+For `SECRET_KEY_BASE`:
 ```bash
 head -c 64 /dev/urandom | od -An -tx1 | tr -d ' \n' && echo
 ```
 
-Once you have generated a key, save it and move on to the next step.
+For the the `ACTIVE_RECORD_ENCRYPTION`:
+```bash
+head -c 32 /dev/urandom | od -An -tx1 | tr -d ' \n' && echo
+```
+
+Once you have generated the keys, save them and move on to the next step.
 
 #### Fill in your environment file
 
@@ -89,6 +101,9 @@ Fill in this file with the following variables:
 
 ```txt
 SECRET_KEY_BASE="replacemewiththegeneratedstringfromthepriorstep"
+ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY="replacemewiththegeneratedstringfromthepriorstep"
+ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY="replacemewiththegeneratedstringfromthepriorstep"
+ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT="replacemewiththegeneratedstringfromthepriorstep"
 POSTGRES_PASSWORD="replacemewithyourdesireddatabasepassword"
 ```
 

@@ -32,6 +32,13 @@ services:
       # To generate this, run: `openssl rand -hex 64` or `rails secret`
       - key: SECRET_KEY_BASE
         sync: false
+      # To generate these, run: `openssl rand -hex 32` for each one.
+      - key: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+        sync: false
+      - key: ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+        sync: false
+      - key: ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
+        sync: false
 
       - key: WEB_CONCURRENCY
         value: 2

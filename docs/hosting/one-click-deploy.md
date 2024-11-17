@@ -36,17 +36,19 @@ your database to a paid Render service._
 3. Give your blueprint a name (we suggest `Maybe`)
 4. Select the `main` branch
 5. You should see a section at the bottom with a "Key:Value" field
-   for `SECRET_KEY_BASE`. Do NOT click "generate".
+   for `SECRET_KEY_BASE`, and three `ACTIVE_RECORD_ENCRYPTION` keys. Do NOT click "generate".
 6. On your computer, open a terminal and make sure you have
    the [openssl](https://github.com/openssl/openssl) utility installed on your
    computer. You can run `openssl --version` to verify it is installed.
 7. Generate your `SECRET_KEY_BASE` by running the following command in your
    terminal: `openssl rand -hex 64` ([docs](https://www.openssl.org/docs/man1.1.1/man1/rand.html)).
-8. Do NOT share this value with anyone.
-9. Go back to your browser and paste this value in the "Value" field
+8. Generate 3 more keys for the `ACTIVE_RECORD_ENCRYPTION` values using `openssl rand -hex 32`.
+9. Do NOT share these values with anyone.
+10. Go back to your browser and paste the first value in the "Value" field
    for `SECRET_KEY_BASE`
-10. Click "Apply". This will take a few minutes.
-11. Once complete, click on the `maybe` "Web Service". You should see a custom
+11. Paste each of the other 3 values in the `ACTIVE_RECORD_ENCRYPTION` "Value" fields.
+12. Click "Apply". This will take a few minutes.
+13. Once complete, click on the `maybe` "Web Service". You should see a custom
     URL in the format `https://maybe-abcd.onrender.com`. Click on it, and you'll
     see your running Maybe app!
 
