@@ -32,7 +32,7 @@ class Import::UploadsController < ApplicationController
       require "csv"
 
       begin
-        csv = CSV.parse(str || "", headers: true)
+        csv = CSV.parse(str || "", headers: true, col_sep: upload_params[:col_sep])
         return false if csv.headers.empty?
         return false if csv.count == 0
         true
