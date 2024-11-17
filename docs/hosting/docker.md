@@ -86,7 +86,7 @@ For `SECRET_KEY_BASE`:
 head -c 64 /dev/urandom | od -An -tx1 | tr -d ' \n' && echo
 ```
 
-For the the `ACTIVE_RECORD_ENCRYPTION`:
+For `ACTIVE_RECORD_ENCRYPTION`:
 ```bash
 head -c 32 /dev/urandom | od -An -tx1 | tr -d ' \n' && echo
 ```
