@@ -14,9 +14,11 @@
               <%= tag.span t(".new_balance"), class: "text-sm" %>
             <% end %>
 
-            <%= link_to @account.investment? ? new_account_trade_path(@account) : new_transaction_path(account_id: @account.id), data: { turbo_frame: :modal }, class: "block p-2 rounded-lg hover:bg-gray-50 flex items-center gap-2" do %>
-              <%= lucide_icon("credit-card", class: "text-gray-500 w-5 h-5") %>
-              <%= tag.span t(".new_transaction"), class: "text-sm" %>
+            <% unless @account.crypto? %>
+              <%= link_to @account.investment? ? new_account_trade_path(@account) : new_transaction_path(account_id: @account.id), data: { turbo_frame: :modal }, class: "block p-2 rounded-lg hover:bg-gray-50 flex items-center gap-2" do %>
+                <%= lucide_icon("credit-card", class: "text-gray-500 w-5 h-5") %>
+                <%= tag.span t(".new_transaction"), class: "text-sm" %>
+              <% end %>
             <% end %>
           </div>
         </div>
