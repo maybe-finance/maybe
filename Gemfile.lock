@@ -155,14 +155,14 @@ GEM
       tzinfo
     faker (3.5.1)
       i18n (>= 1.8.11, < 2)
-    faraday (2.12.0)
-      faraday-net_http (>= 2.0, < 3.4)
+    faraday (2.12.1)
+      faraday-net_http (>= 2.0, < 3.5)
       json
       logger
     faraday-multipart (1.0.4)
       multipart-post (~> 2)
-    faraday-net_http (3.3.0)
-      net-http
+    faraday-net_http (3.4.0)
+      net-http (>= 0.5.0)
     faraday-retry (2.2.1)
       faraday (~> 2.0)
     ffi (1.17.0-aarch64-linux-gnu)
@@ -223,7 +223,7 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jmespath (1.6.2)
-    json (2.7.2)
+    json (2.8.2)
     jwt (2.9.3)
       base64
     language_server-protocol (3.17.0.3)
@@ -253,7 +253,7 @@ GEM
       ruby2_keywords (>= 0.0.5)
     msgpack (1.7.2)
     multipart-post (2.4.1)
-    net-http (0.4.1)
+    net-http (0.5.0)
       uri
     net-imap (0.5.0)
       date
@@ -447,7 +447,7 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.6.0)
-    uri (0.13.1)
+    uri (1.0.2)
     useragent (0.16.10)
     vcr (6.3.1)
       base64
