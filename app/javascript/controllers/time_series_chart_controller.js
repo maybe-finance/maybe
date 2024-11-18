@@ -399,8 +399,14 @@ export default class extends Controller {
 
   _tooltipTrendColor(datum) {
     return {
-      up: tailwindColors.success,
-      down: tailwindColors.error,
+      up:
+        datum.trend.favorable_direction === "up"
+          ? tailwindColors.success
+          : tailwindColors.error,
+      down:
+        datum.trend.favorable_direction === "down"
+          ? tailwindColors.success
+          : tailwindColors.error,
       flat: tailwindColors.gray[500],
     }[datum.trend.direction];
   }
