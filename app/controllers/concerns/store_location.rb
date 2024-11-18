@@ -5,6 +5,8 @@ module StoreLocation
     helper_method :previous_path
     before_action :store_return_to
     after_action :clear_previous_path
+
+    rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
   end
 
   def previous_path
@@ -12,6 +14,12 @@ module StoreLocation
   end
 
 private
+  def handle_not_found
+    if request.fullpath == session[:return_to]
+      session.delete(:return_to)
+      redirect_to fallback_path
+    end
+  end
 
   def store_return_to
     if params[:return_to].present?
