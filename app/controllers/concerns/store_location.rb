@@ -18,6 +18,8 @@ private
     if request.fullpath == session[:return_to]
       session.delete(:return_to)
       redirect_to fallback_path
+    else
+      head :not_found
     end
   end
 
