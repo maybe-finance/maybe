@@ -14,7 +14,8 @@ class Import::UploadsControllerTest < ActionDispatch::IntegrationTest
   test "uploads valid csv by copy and pasting" do
     patch import_upload_url(@import), params: {
       import: {
-        raw_file_str: file_fixture("imports/valid.csv").read
+        raw_file_str: file_fixture("imports/valid.csv").read,
+        col_sep: ","
       }
     }
 
@@ -25,7 +26,8 @@ class Import::UploadsControllerTest < ActionDispatch::IntegrationTest
   test "uploads valid csv by file" do
     patch import_upload_url(@import), params: {
       import: {
-        csv_file: file_fixture_upload("imports/valid.csv")
+        csv_file: file_fixture_upload("imports/valid.csv"),
+        col_sep: ","
       }
     }
 
@@ -36,7 +38,8 @@ class Import::UploadsControllerTest < ActionDispatch::IntegrationTest
   test "invalid csv cannot be uploaded" do
     patch import_upload_url(@import), params: {
       import: {
-        csv_file: file_fixture_upload("imports/invalid.csv")
+        csv_file: file_fixture_upload("imports/invalid.csv"),
+        col_sep: ","
       }
     }
 
