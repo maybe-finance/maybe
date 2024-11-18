@@ -51,15 +51,10 @@ export default class extends Controller {
   _normalizeDataPoints() {
     this._normalDataPoints = (this.dataValue.values || []).map((d) => ({
       ...d,
-      date: this._parseDate(d.date),
+      date: new Date(d.date),
       value: d.value.amount ? +d.value.amount : +d.value,
       currency: d.value.currency,
     }));
-  }
-
-  _parseDate(dateString) {
-    const [year, month, day] = dateString.split("-").map(Number);
-    return new Date(year, month - 1, day);
   }
 
   _rememberInitialContainerSize() {
@@ -188,7 +183,7 @@ export default class extends Controller {
             this._normalDataPoints[this._normalDataPoints.length - 1].date,
           ])
           .tickSize(0)
-          .tickFormat(d3.timeFormat("%d %b %Y")),
+          .tickFormat(d3.utcFormat("%d %b %Y")),
       )
       .select(".domain")
       .remove();
@@ -367,7 +362,7 @@ export default class extends Controller {
   _tooltipTemplate(datum) {
     return `
       <div style="margin-bottom: 4px; color: ${tailwindColors.gray[500]};">
-        ${d3.timeFormat("%b %d, %Y")(datum.date)}
+        ${d3.utcFormat("%b %d, %Y")(datum.date)}
       </div>
 
       <div style="display: flex; align-items: center; gap: 16px;">
