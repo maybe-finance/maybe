@@ -5,7 +5,10 @@ class Account::TradesController < ApplicationController
   before_action :set_entry, only: :update
 
   def new
-    @entry = @account.entries.account_trades.new(entryable_attributes: {})
+    @entry = @account.entries.account_trades.new(
+      currency: @account.currency,
+      entryable_attributes: {}
+    )
   end
 
   def index

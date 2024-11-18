@@ -27,6 +27,7 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
           type: "transfer_in",
           date: Date.current,
           amount: 10,
+          currency: "USD",
           transfer_account_id: from_account.id
         }
       }
@@ -46,6 +47,7 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
           type: "transfer_out",
           date: Date.current,
           amount: 10,
+          currency: "USD",
           transfer_account_id: to_account.id
         }
       }
@@ -62,7 +64,8 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
         account_entry: {
           type: "transfer_out",
           date: Date.current,
-          amount: 10
+          amount: 10,
+          currency: "USD"
         }
       }
     end
@@ -80,7 +83,8 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
         account_entry: {
           type: "interest",
           date: Date.current,
-          amount: 10
+          amount: 10,
+          currency: "USD"
         }
       }
     end

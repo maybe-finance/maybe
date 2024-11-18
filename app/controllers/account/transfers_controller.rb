@@ -16,8 +16,7 @@ class Account::TransfersController < ApplicationController
 
     @transfer = Account::Transfer.build_from_accounts from_account, to_account, \
                                              date: transfer_params[:date],
-                                             amount: transfer_params[:amount].to_d,
-                                             currency: transfer_params[:currency]
+                                             amount: transfer_params[:amount].to_d
 
     if @transfer.save
       @transfer.entries.each(&:sync_account_later)
