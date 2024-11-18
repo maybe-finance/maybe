@@ -3,7 +3,7 @@ class Account::TransactionBuilder
 
   TYPES = %w[income expense interest transfer_in transfer_out].freeze
 
-  attr_accessor :type, :amount, :date, :account, :transfer_account_id
+  attr_accessor :type, :amount, :date, :account, :currency, :transfer_account_id
 
   validates :type, :amount, :date, presence: true
   validates :type, inclusion: { in: TYPES }
@@ -45,8 +45,9 @@ class Account::TransactionBuilder
     def build_entry(account_id, amount, marked_as_transfer: false)
       Account::Entry.new \
         account_id: account_id,
+        name: marked_as_transfer ? (amount < 0 ? "Deposit" : "Withdrawal") : "Interest",
         amount: amount,
-        currency: account.currency,
+        currency: currency,
         date: date,
         marked_as_transfer: marked_as_transfer,
         entryable: Account::Transaction.new

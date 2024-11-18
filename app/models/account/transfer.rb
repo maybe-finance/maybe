@@ -49,7 +49,7 @@ class Account::Transfer < ApplicationRecord
   end
 
   class << self
-    def build_from_accounts(from_account, to_account, date:, amount:, currency:)
+    def build_from_accounts(from_account, to_account, date:, amount:)
       outflow = from_account.entries.build \
         amount: amount.abs,
         currency: from_account.currency,
@@ -58,9 +58,17 @@ class Account::Transfer < ApplicationRecord
         marked_as_transfer: true,
         entryable: Account::Transaction.new
 
+      # Attempt to convert the amount to the to_account's currency. If the conversion fails,
+      # use the original amount.
+      converted_amount = begin
+        Money.new(amount.abs, from_account.currency).exchange_to(to_account.currency)
+      rescue Money::ConversionError
+        Money.new(amount.abs, from_account.currency)
+      end
+
       inflow = to_account.entries.build \
-        amount: amount.abs * -1,
-        currency: from_account.currency,
+        amount: converted_amount.amount * -1,
+        currency: converted_amount.currency.iso_code,
         date: date,
         name: "Transfer from #{from_account.name}",
         marked_as_transfer: true,

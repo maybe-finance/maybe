@@ -1,6 +1,7 @@
 <%# locals: (entry:) %>
 
 <%= styled_form_with data: { turbo_frame: "_top", controller: "trade-form" },
+                     model: entry,
                      scope: :account_entry,
                      url: account_trades_path(entry.account) do |form| %>
   <div class="space-y-4">
@@ -15,7 +16,7 @@
       <%= form.date_field :date, label: true, value: Date.today %>
 
       <div data-trade-form-target="amountInput" hidden>
-        <%= form.money_field :amount, label: t(".amount"), disable_currency: true %>
+        <%= form.money_field :amount, label: t(".amount") %>
       </div>
 
       <div data-trade-form-target="transferAccountInput" hidden>
@@ -27,7 +28,7 @@
       </div>
 
       <div data-trade-form-target="priceInput">
-        <%= form.money_field :price, label: t(".price"), disable_currency: true %>
+        <%= form.money_field :price, label: t(".price"), currency_value_override: "USD", disable_currency: true %>
       </div>
     </div>
 
