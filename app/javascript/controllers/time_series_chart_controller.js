@@ -51,7 +51,7 @@ export default class extends Controller {
   _normalizeDataPoints() {
     this._normalDataPoints = (this.dataValue.values || []).map((d) => ({
       ...d,
-      date: new Date(d.date),
+      date: new Date(`${d.date}T00:00:00Z`),
       value: d.value.amount ? +d.value.amount : +d.value,
       currency: d.value.currency,
     }));
