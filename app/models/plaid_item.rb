@@ -42,6 +42,10 @@ class PlaidItem < ApplicationRecord
     end
   end
 
+  def post_sync
+    family.broadcast_refresh
+  end
+
   def destroy_later
     update!(scheduled_for_deletion: true)
     DestroyJob.perform_later(self)
