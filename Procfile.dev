@@ -1,3 +1,3 @@
-web: ${DEBUG:+rdbg -O -n -c --} bin/rails server -b 0.0.0.0
-css: bin/rails tailwindcss:watch
+web: bundle exec ${DEBUG:+rdbg -O -n -c --} bin/rails server -b 0.0.0.0
+css: bundle exec bin/rails tailwindcss:watch
 worker: bundle exec good_job start

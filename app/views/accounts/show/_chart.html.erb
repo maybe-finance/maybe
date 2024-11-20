@@ -1,11 +1,11 @@
-<%# locals: (account:, title: nil, tooltip: nil) %>
+<%# locals: (account:, title: nil, tooltip: nil, **args) %>
 
 <% period = Period.from_param(params[:period]) %>
 <% series = account.series(period: period) %>
 <% trend = series.trend %>
 <% default_value_title = account.asset? ? t(".balance") : t(".owed") %>
 
-<div class="bg-white shadow-xs rounded-xl border border-alpha-black-25 rounded-lg">
+<div id="<%= dom_id(account, :chart) %>" class="bg-white shadow-xs rounded-xl border border-alpha-black-25 rounded-lg">
   <div class="p-4 flex justify-between">
     <div class="space-y-2">
       <div class="flex items-center gap-1">

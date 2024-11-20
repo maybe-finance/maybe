@@ -99,6 +99,10 @@ class Account < ApplicationRecord
     Holding::Syncer.new(self, start_date: start_date).run
   end
 
+  def post_sync
+    accountable.post_sync
+  end
+
   def original_balance
     balance_amount = balances.chronological.first&.balance || balance
     Money.new(balance_amount, currency)
