@@ -35,13 +35,13 @@ module Accountable
   end
 
   def post_sync
+    broadcast_remove_to(account, target: "syncing-notification")
+
     broadcast_replace_to(
       account,
       target: "chart_account_#{account.id}",
       partial: "accounts/show/chart",
       locals: { account: account }
     )
-
-    broadcast_remove_to(account, target: "syncing-notification")
   end
 end

@@ -1,4 +1,4 @@
-<%# locals: (account:, title: nil, tooltip: nil) %>
+<%# locals: (account:, title: nil, tooltip: nil, **args) %>
 
 <% period = Period.from_param(params[:period]) %>
 <% series = account.series(period: period) %>
