@@ -46,6 +46,6 @@ class Account::Balance::Syncer
     end
 
     def is_partial_sync?
-      sync_start_date == provided_start_date && sync_start_date < Date.current
+      sync_start_date == provided_start_date
     end
 end
