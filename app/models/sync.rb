@@ -8,32 +8,27 @@ class Sync < ApplicationRecord
   def perform
     start!
 
-    syncable.sync_data(start_date: start_date)
-
-    complete!
-  rescue StandardError => error
-    fail! error
-    raise error if Rails.env.development?
+    begin
+      syncable.sync_data(start_date: start_date)
+      complete!
+    rescue StandardError => error
+      fail! error
+      raise error if Rails.env.development?
+    ensure
+      syncable.post_sync
+    end
   end
 
   private
-    def family
-      syncable.is_a?(Family) ? syncable : syncable.family
-    end
-
     def start!
       update! status: :syncing
     end
 
     def complete!
       update! status: :completed, last_ran_at: Time.current
-
-      family.broadcast_refresh
     end
 
     def fail!(error)
       update! status: :failed, error: error.message, last_ran_at: Time.current
-
-      family.broadcast_refresh
     end
 end

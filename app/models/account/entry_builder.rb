@@ -40,6 +40,7 @@ class Account::EntryBuilder
         date: date,
         amount: amount,
         account: account,
+        currency: currency,
         transfer_account_id: transfer_account_id
     end
 end

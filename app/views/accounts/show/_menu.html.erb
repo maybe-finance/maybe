@@ -19,12 +19,14 @@
         <span><%= t(".edit") %></span>
       <% end %>
 
-      <%= link_to new_import_path,
+      <% unless account.crypto? %>
+        <%= link_to new_import_path,
                       data: { turbo_frame: :modal },
                       class: "block w-full py-2 px-3 space-x-2 text-gray-900 hover:bg-gray-50 flex items-center rounded-lg" do %>
-        <%= lucide_icon "download", class: "w-5 h-5 text-gray-500" %>
+          <%= lucide_icon "download", class: "w-5 h-5 text-gray-500" %>
 
-        <span><%= t(".import") %></span>
+          <span><%= t(".import") %></span>
+        <% end %>
       <% end %>
 
       <%= button_to account_path(account),

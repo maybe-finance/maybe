@@ -4,7 +4,10 @@ class Account::ValuationsController < ApplicationController
   before_action :set_account
 
   def new
-    @entry = @account.entries.account_valuations.new(entryable_attributes: {})
+    @entry = @account.entries.account_valuations.new(
+      currency: @account.currency,
+      entryable_attributes: {}
+    )
   end
 
   def create

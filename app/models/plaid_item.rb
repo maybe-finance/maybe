@@ -1,7 +1,10 @@
 class PlaidItem < ApplicationRecord
   include Plaidable, Syncable
 
-  encrypts :access_token, deterministic: true
+  if Rails.application.credentials.active_record_encryption.present?
+    encrypts :access_token, deterministic: true
+  end
+
   validates :name, :access_token, presence: true
 
   before_destroy :remove_plaid_item
@@ -37,6 +40,10 @@ class PlaidItem < ApplicationRecord
     accounts.each do |account|
       account.sync_data(start_date: start_date)
     end
+  end
+
+  def post_sync
+    family.broadcast_refresh
   end
 
   def destroy_later

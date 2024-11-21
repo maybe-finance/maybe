@@ -32,6 +32,10 @@ class Family < ApplicationRecord
     end
   end
 
+  def post_sync
+    broadcast_refresh
+  end
+
   def syncing?
     super || accounts.manual.any?(&:syncing?) || plaid_items.any?(&:syncing?)
   end
