@@ -1,0 +1,55 @@
+name: Ruby CI Workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out the repository code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Ruby environment
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3.5
+          bundler-cache: true
+
+      # Install dependencies
+      - name: Install dependencies
+        run: bundle install
+
+      # Run tests
+      - name: Run tests
+        run: bundle exec rspec
+
+  build:
+    name: Build Project
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out the repository code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Ruby environment
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3.5
+          bundler-cache: true
+
+      # Install dependencies
+      - name: Install dependencies
+        run: bundle install
+
+      # Build the project
+      - name: Build project
+        run: rake build
