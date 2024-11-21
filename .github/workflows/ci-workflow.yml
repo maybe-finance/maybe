@@ -1,0 +1,53 @@
+name: Ruby CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Check out the repository code
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Step 2: Set up Ruby environment
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.0 # Specify the Ruby version used in the project
+        bundler-cache: true # Cache dependencies for faster runs
+
+    # Step 3: Install dependencies
+    - name: Install dependencies
+      run: bundle install
+
+    # Step 4: Run tests
+    - name: Run tests
+      run: bundle exec rspec # Replace with your test framework command if different
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Check out the repository code
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Step 2: Set up Ruby environment
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.0 # Specify the Ruby version used in the project
+        bundler-cache: true # Cache dependencies for faster runs
+
+    # Step 3: Install dependencies
+    - name: Install dependencies
+      run: bundle install
+
+    # Step 4: Build the project
+    - name: Build project
+      run: # Add your build process command here, e.g., rake assets:precompile
