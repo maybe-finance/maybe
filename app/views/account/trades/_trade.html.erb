@@ -1,4 +1,4 @@
-<%# locals: (entry:, selectable: true, show_balance: false, origin: nil) %>
+<%# locals: (entry:, selectable: true, show_balance: false) %>
 
 <% trade, account = entry.account_trade, entry.account %>
 
@@ -21,7 +21,7 @@
             <%= content_tag :p, trade.name %>
           <% else %>
             <%= link_to trade.name,
-                        account_entry_path(account, entry),
+                        account_entry_path(entry),
                         data: { turbo_frame: "drawer", turbo_prefetch: false },
                         class: "hover:underline hover:text-gray-800" %>
           <% end %>

@@ -1,0 +1,19 @@
+<%# locals: (entry:) %>
+
+<%= tag.header class: "mb-4 space-y-1", id: dom_id(entry, :header) do %>
+  <span class="text-gray-500 text-sm">
+    <%= t(".balance") %>
+  </span>
+
+  <div class="flex items-center gap-4">
+    <h3 class="font-medium">
+      <span class="text-2xl">
+        <%= format_money entry.amount_money %>
+      </span>
+    </h3>
+  </div>
+
+  <span class="text-sm text-gray-500">
+    <%= I18n.l(entry.date, format: :long) %>
+  </span>
+<% end %>

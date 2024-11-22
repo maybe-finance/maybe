@@ -1,7 +1,7 @@
 class Account::EntryBuilder
   include ActiveModel::Model
 
-  TYPES = %w[income expense buy sell interest transfer_in transfer_out].freeze
+  TYPES = %w[valuation income expense buy sell interest transfer_in transfer_out].freeze
 
   attr_accessor :type, :date, :qty, :ticker, :price, :amount, :currency, :account, :transfer_account_id
 
@@ -19,6 +19,8 @@ class Account::EntryBuilder
       case type
       when "buy", "sell"
         create_trade_builder
+      when "valuation"
+        create_valuation_builder
       else
         create_transaction_builder
       end

@@ -1,9 +1,6 @@
 <%# locals: (entry:) %>
 
-<%= styled_form_with data: { turbo_frame: "_top", controller: "trade-form" },
-                     model: entry,
-                     scope: :account_entry,
-                     url: account_trades_path(entry.account) do |form| %>
+<%= styled_form_with model: entry, data: { turbo_frame: "_top", controller: "trade-form" }do |form| %>
   <div class="space-y-4">
     <div class="space-y-2">
       <%= form.select :type, options_for_select([%w[Buy buy], %w[Sell sell], %w[Deposit transfer_in], %w[Withdrawal transfer_out], %w[Interest interest]], "buy"), { label: t(".type") }, { data: { "trade-form-target": "typeInput" } } %>

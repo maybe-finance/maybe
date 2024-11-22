@@ -28,8 +28,7 @@ class Account::Trade < ApplicationRecord
 
   def name
     prefix = sell? ? "Sell " : "Buy "
-    generated = prefix + "#{qty.abs} shares of #{security.ticker}"
-    entry.name || generated
+    prefix + "#{qty.abs} shares of #{security.ticker}"
   end
 
   def unrealized_gain_loss

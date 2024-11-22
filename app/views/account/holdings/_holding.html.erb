@@ -6,7 +6,7 @@
       <%= image_tag "https://logo.synthfinance.com/ticker/#{holding.ticker}", class: "w-9 h-9 rounded-full" %>
 
       <div class="space-y-0.5">
-        <%= link_to holding.name, account_holding_path(holding.account, holding), data: { turbo_frame: :drawer }, class: "hover:underline" %>
+        <%= link_to holding.name, account_holding_path(holding), data: { turbo_frame: :drawer }, class: "hover:underline" %>
 
         <% if holding.amount %>
           <%= tag.p holding.ticker, class: "text-gray-500 text-xs uppercase" %>

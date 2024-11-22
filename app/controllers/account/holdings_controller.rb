@@ -1,11 +1,12 @@
 class Account::HoldingsController < ApplicationController
   layout :with_sidebar
 
-  before_action :set_account
   before_action :set_holding, only: %i[show destroy]
 
   def index
-    @holdings = @account.holdings.current
+    @account = Current.family.accounts.find(params[:account_id])
+    @holdings = Current.family.holdings.current
+    @holdings = @holdings.where(account: @account) if @account
   end
 
   def show
@@ -17,12 +18,7 @@ class Account::HoldingsController < ApplicationController
   end
 
   private
-
-    def set_account
-      @account = Current.family.accounts.find(params[:account_id])
-    end
-
     def set_holding
-      @holding = @account.holdings.current.find(params[:id])
+      @holding = Current.family.holdings.current.find(params[:id])
     end
 end
