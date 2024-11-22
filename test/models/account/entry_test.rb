@@ -110,4 +110,15 @@ class Account::EntryTest < ActiveSupport::TestCase
 
     assert_equal Money.new(100), transaction.balance_after_entry
   end
+
+  test "prior_entry_balance returns last transaction entry balance" do
+    family = families(:empty)
+    account = family.accounts.create! name: "Test", balance: 0, currency: "USD", accountable: Depository.new
+
+    new_valuation = create_valuation(account: account, amount: 1)
+    transaction = create_transaction(date: new_valuation.date, account: account, amount: -100)
+
+
+    assert_equal Money.new(100), transaction.prior_entry_balance
+  end
 end

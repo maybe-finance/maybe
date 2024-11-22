@@ -15,6 +15,7 @@ class Account::Entry < ApplicationRecord
   validates :date, comparison: { greater_than: -> { min_supported_date } }
 
   scope :chronological, -> { order(:date, :created_at) }
+  scope :not_account_valuations, -> { where.not(entryable_type: "Account::Valuation") }
   scope :reverse_chronological, -> { order(date: :desc, created_at: :desc) }
   scope :without_transfers, -> { where(marked_as_transfer: false) }
   scope :with_converted_amount, ->(currency) {
@@ -66,6 +67,13 @@ class Account::Entry < ApplicationRecord
     account.balances.find_by(date: date - 1)&.balance || 0
   end
 
+  def prior_entry_balance
+    entries_on_entry_date
+      .not_account_valuations
+      .last
+      &.balance_after_entry || 0
+  end
+
   def balance_after_entry
     if account_valuation?
       Money.new(amount, currency)
@@ -87,7 +95,7 @@ class Account::Entry < ApplicationRecord
   def trend
     TimeSeries::Trend.new(
       current: balance_after_entry,
-      previous: Money.new(prior_balance, currency),
+      previous: Money.new(prior_entry_balance, currency),
       favorable_direction: account.favorable_direction
     )
   end

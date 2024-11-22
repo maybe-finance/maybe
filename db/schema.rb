@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_14_164118) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_22_183828) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -107,7 +107,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_14_164118) do
     t.decimal "balance", precision: 19, scale: 4
     t.string "currency"
     t.boolean "is_active", default: true, null: false
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Loan'::character varying, 'CreditCard'::character varying, 'OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Loan'::character varying)::text, ('CreditCard'::character varying)::text, ('OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.uuid "import_id"
     t.uuid "plaid_account_id"
     t.boolean "scheduled_for_deletion", default: false
@@ -439,7 +439,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_14_164118) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "rate_type"
-    t.decimal "interest_rate", precision: 10, scale: 2
+    t.decimal "interest_rate", precision: 10, scale: 3
     t.integer "term_months"
   end
 
