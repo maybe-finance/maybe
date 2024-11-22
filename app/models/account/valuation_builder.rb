@@ -4,7 +4,7 @@ class Account::ValuationBuilder
   attr_accessor :date, :amount, :currency, :account_id
 
   def create
-    valuation = Account::Entry.new(
+    entry = Account::Entry.new(
       account_id: account_id,
       date: date,
       amount: amount,
@@ -12,16 +12,22 @@ class Account::ValuationBuilder
       entryable: Account::Valuation.new
     )
 
-    valuation.save
+    saved = entry.save
+
+    entry.sync_account_later if saved
+
+    [ saved, entry ]
   end
 
   def update(entry)
-    entry.update(
+    updated = entry.update(
       date: date,
       amount: amount,
       currency: currency
     )
 
-    entry.sync_account_later
+    entry.sync_account_later if updated
+
+    updated
   end
 end

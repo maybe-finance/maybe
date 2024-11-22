@@ -17,21 +17,6 @@ en:
       save: Save
     bulk_update:
       success: "%{count} transactions updated"
-    create:
-      success: New transaction created successfully
-    form:
-      account: Account
-      account_prompt: Select an Account
-      amount: Amount
-      category: Category
-      category_prompt: Select a Category
-      date: Date
-      description: Description
-      description_placeholder: Describe transaction
-      expense: Expense
-      income: Income
-      submit: Add transaction
-      transfer: Transfer
     header:
       edit_categories: Edit categories
       edit_imports: Edit imports

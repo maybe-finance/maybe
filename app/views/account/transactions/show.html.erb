@@ -21,8 +21,8 @@
           <% unless @entry.marked_as_transfer? %>
             <div class="flex items-center gap-2">
               <%= f.select :nature,
-                    [["Expense", "expense"], ["Income", "income"]],
-                    { container_class: "w-1/3", label: t(".nature"), selected: @entry.amount.negative? ? "income" : "expense" },
+                    [["Expense", "outflow"], ["Income", "inflow"]],
+                    { container_class: "w-1/3", label: t(".nature"), selected: @entry.amount.negative? ? "inflow" : "outflow" },
                     { data: { "auto-submit-form-target": "auto" } } %>
 
               <%= f.money_field :amount, label: t(".amount"),
@@ -51,49 +51,41 @@
               url: account_transaction_path(@entry),
               class: "space-y-2",
               data: { controller: "auto-submit-form" } do |f| %>
-          <%= f.fields_for :entryable do |ef| %>
-            <% unless @entry.marked_as_transfer? %>
+          <% unless @entry.marked_as_transfer? %>
+            <%= f.fields_for :entryable do |ef| %>
               <%= ef.collection_select :category_id,
-                    Current.family.categories.alphabetically,
+                      Current.family.categories.alphabetically,
                     :id, :name,
-                    { prompt: t(".category_placeholder"),
-                      label: t(".category_label"),
-                      class: "text-gray-400" },
+                    { label: t(".category_label"),
+                      class: "text-gray-400", include_blank: "(uncategorized)" },
                     "data-auto-submit-form-target": "auto" %>
 
               <%= ef.collection_select :merchant_id,
-                    Current.family.merchants.alphabetically,
+                      Current.family.merchants.alphabetically,
                     :id, :name,
-                    { prompt: t(".merchant_placeholder"),
+                    { include_blank: "(none)",
                       label: t(".merchant_label"),
                       class: "text-gray-400" },
                     "data-auto-submit-form-target": "auto" %>
-            <% end %>
 
-            <%= ef.select :tag_ids,
-                  options_for_select(
+              <%= ef.select :tag_ids,
                     Current.family.tags.alphabetically.pluck(:name, :id),
-                    @entry.account_transaction.tag_ids
-                  ),
-                  {
-                    multiple: true,
-                    label:    t(".tags_label"),
-                    container_class: "h-40"
-                  },
+                    {
+                      include_blank: "(none)",
+                      multiple: true,
+                      label:    t(".tags_label"),
+                      container_class: "h-40"
+                    },
                   { "data-auto-submit-form-target": "auto" } %>
-
+            <% end %>
           <% end %>
 
-          <%= styled_form_with model: @entry,
-              url: account_transaction_path(@entry),
-              class: "space-y-2",
-              data: { controller: "auto-submit-form" } do |f| %>
-            <%= f.text_area :notes,
+          <%= f.text_area :notes,
                   label: t(".note_label"),
                   placeholder: t(".note_placeholder"),
                   rows: 5,
                   "data-auto-submit-form-target": "auto" %>
-          <% end %>
+
         <% end %>
       </div>
     <% end %>

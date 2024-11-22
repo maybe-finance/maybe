@@ -27,8 +27,13 @@ module EntryableResource
   end
 
   def create
-    if builder.create
-      redirect_back_or_to account_path(@entry.account), notice: t(".success")
+    saved, @entry = builder.create
+
+    if saved
+      respond_to do |format|
+        format.html { redirect_back_or_to account_path(@entry.account), notice: t(".success") }
+        format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, account_path(@entry.account)) }
+      end
     else
       render :new, status: :unprocessable_entity
     end
@@ -72,7 +77,7 @@ module EntryableResource
     def entry_params
       params.require(:account_entry).permit(
         :account_id, :name, :date, :amount, :currency, :excluded, :notes, :nature,
-        *self.class.permitted_entryable_attributes
+        entryable_attributes: self.class.permitted_entryable_attributes
       )
     end
 end

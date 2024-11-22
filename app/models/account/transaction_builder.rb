@@ -1,20 +1,64 @@
 class Account::TransactionBuilder
   include ActiveModel::Model
 
-  TYPES = %w[income expense interest transfer_in transfer_out].freeze
+  attr_accessor :account_id, :name, :date, :amount, :currency, :excluded, :nature,
+                :notes, :marked_as_transfer, :entryable_attributes
 
-  attr_accessor :type, :amount, :date, :account, :currency, :transfer_account_id
+  def create
+    entry = Account::Entry.new(
+      account_id: account_id,
+      name: name,
+      date: date,
+      amount: signed_amount,
+      currency: currency,
+      entryable: Account::Transaction.new(
+        category_id: category_id,
+      )
+    )
 
-  validates :type, :amount, :date, presence: true
-  validates :type, inclusion: { in: TYPES }
+    saved = entry.save
 
-  def save
-    if valid?
-      transfer? ? create_transfer : create_transaction
+    entry.sync_account_later if saved
+
+    [ saved, entry ]
+  end
+
+  def update(entry)
+    prev_date = entry.date
+    prev_amount = entry.amount
+    prev_currency = entry.currency
+
+    attributes = {
+      name: name,
+      date: date,
+      amount: signed_amount,
+      currency: currency,
+      notes: notes,
+      excluded: excluded,
+      entryable_type: "Account::Transaction",
+      entryable_attributes: entryable_attributes || {}
+    }.compact
+
+    updated = entry.update(attributes)
+
+    if updated
+      if prev_date != date || prev_amount != amount || prev_currency != currency
+        entry.sync_account_later
+      end
     end
+
+    updated
   end
 
   private
+
+    def signed_amount
+      if nature == "inflow"
+        amount.to_d * -1
+      else
+        amount
+      end
+    end
 
     def transfer?
       %w[transfer_in transfer_out].include?(type)
@@ -51,14 +95,5 @@ class Account::TransactionBuilder
         date: date,
         marked_as_transfer: marked_as_transfer,
         entryable: Account::Transaction.new
-    end
-
-    def signed_amount
-      case type
-      when "expense", "transfer_out"
-        amount.to_d
-      else
-        amount.to_d * -1
-      end
     end
 end

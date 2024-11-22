@@ -2,6 +2,21 @@
 en:
   account:
     transactions:
+      create:
+        success: New transaction created successfully
+      form:
+        account: Account
+        account_prompt: Select an Account
+        amount: Amount
+        category: Category
+        category_prompt: Select a Category
+        date: Date
+        description: Description
+        description_placeholder: Describe transaction
+        expense: Expense
+        income: Income
+        submit: Add transaction
+        transfer: Transfer
       index:
         new: New transaction
         no_transactions: No transactions for this account yet.
