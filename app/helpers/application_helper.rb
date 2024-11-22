@@ -158,4 +158,12 @@ module ApplicationHelper
               .map { |_currency, money| format_money(money) }
               .join(separator)
   end
+
+  def show_super_admin_bar?
+    if params[:admin].present?
+      cookies.permanent[:admin] = params[:admin]
+    end
+
+    cookies[:admin] == "true"
+  end
 end
