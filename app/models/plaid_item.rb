@@ -107,9 +107,9 @@ class PlaidItem < ApplicationRecord
       if fetched_liabilities
         transaction do
           internal_plaid_accounts.each do |internal_plaid_account|
-            credit = fetched_liabilities.credit.find { |l| l.account_id == internal_plaid_account.plaid_id }
-            mortgage = fetched_liabilities.mortgage.find { |l| l.account_id == internal_plaid_account.plaid_id }
-            student = fetched_liabilities.student.find { |l| l.account_id == internal_plaid_account.plaid_id }
+            credit = fetched_liabilities.credit&.find { |l| l.account_id == internal_plaid_account.plaid_id }
+            mortgage = fetched_liabilities.mortgage&.find { |l| l.account_id == internal_plaid_account.plaid_id }
+            student = fetched_liabilities.student&.find { |l| l.account_id == internal_plaid_account.plaid_id }
 
             internal_plaid_account.sync_credit_data!(credit) if credit
             internal_plaid_account.sync_mortgage_data!(mortgage) if mortgage
