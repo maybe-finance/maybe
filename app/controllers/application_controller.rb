@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
 
   helper_method :require_upgrade?, :subscription_pending?
 
+  before_action :detect_os
+
   private
     def require_upgrade?
       return false if self_hosted?
@@ -23,5 +25,17 @@ class ApplicationController < ActionController::Base
       return "turbo_rails/frame" if turbo_frame_request?
 
       "with_sidebar"
+    end
+
+    def detect_os
+      user_agent = request.user_agent
+      @os = case user_agent
+            when /Windows/i then "windows"
+            when /Macintosh/i then "mac"
+            when /Linux/i then "linux"
+            when /Android/i then "android"
+            when /iPhone|iPad/i then "ios"
+            else ""
+            end
     end
 end
