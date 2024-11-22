@@ -10,7 +10,7 @@
                                  label: t("loans.form.interest_rate"),
                                  placeholder: t("loans.form.interest_rate_placeholder"),
                                  min: 0,
-                                 step: 0.001 %>
+                                 step: 0.005 %>
         <%= loan_form.select :rate_type,
                            [["Fixed", "fixed"], ["Variable", "variable"], ["Adjustable", "adjustable"]],
                            { label: t("loans.form.rate_type") } %>
