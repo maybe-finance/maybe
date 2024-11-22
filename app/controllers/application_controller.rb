@@ -30,12 +30,12 @@ class ApplicationController < ActionController::Base
     def detect_os
       user_agent = request.user_agent
       @os = case user_agent
-            when /Windows/i then "windows"
-            when /Macintosh/i then "mac"
-            when /Linux/i then "linux"
-            when /Android/i then "android"
-            when /iPhone|iPad/i then "ios"
-            else ""
-            end
+      when /Windows/i then "windows"
+      when /Macintosh/i then "mac"
+      when /Linux/i then "linux"
+      when /Android/i then "android"
+      when /iPhone|iPad/i then "ios"
+      else ""
+      end
     end
 end
