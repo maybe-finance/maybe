@@ -28,7 +28,7 @@
       </div>
 
       <div data-trade-form-target="priceInput">
-        <%= form.money_field :price, label: t(".price"), currency_value_override: "USD", disable_currency: true %>
+        <%= form.money_field :price, label: t(".price"), currency_value_override: @account.currency, disable_currency: true %>
       </div>
     </div>
 
