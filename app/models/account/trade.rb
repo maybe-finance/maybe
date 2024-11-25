@@ -5,7 +5,7 @@ class Account::Trade < ApplicationRecord
 
   belongs_to :security
 
-  validates :qty, presence: true, numericality: { other_than: 0 }
+  validates :qty, presence: true
   validates :price, :currency, presence: true
 
   class << self
