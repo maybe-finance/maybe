@@ -298,7 +298,7 @@ GEM
     psych (5.1.2)
       stringio
     public_suffix (6.0.1)
-    puma (6.4.3)
+    puma (6.5.0)
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.1)
