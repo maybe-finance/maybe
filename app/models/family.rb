@@ -45,8 +45,6 @@ class Family < ApplicationRecord
 
     plaid_provider.get_link_token(
       user_id: id,
-      country: country,
-      language: locale,
       webhooks_url: webhooks_url,
       redirect_url: redirect_url,
       accountable_type: accountable_type
