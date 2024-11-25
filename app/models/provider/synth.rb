@@ -174,7 +174,7 @@ class Provider::Synth
     SecurityInfoResponse = Struct.new :info, :success?, :error, :raw_response, keyword_init: true
 
     def base_url
-      "https://api.synthfinance.com"
+      ENV["SYNTH_URL"] || "https://api.synthfinance.com"
     end
 
     def app_name
