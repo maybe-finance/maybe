@@ -51,14 +51,6 @@ class PlaidItem < ApplicationRecord
     DestroyJob.perform_later(self)
   end
 
-  def has_investment_accounts?
-    available_products.include?("investments") || billed_products.include?("investments")
-  end
-
-  def has_liability_accounts?
-    available_products.include?("liabilities") || billed_products.include?("liabilities")
-  end
-
   private
     def fetch_and_load_plaid_data
       item = plaid_provider.get_item(access_token).item
@@ -72,7 +64,7 @@ class PlaidItem < ApplicationRecord
         internal_plaid_account
       end
 
-      fetched_transactions = safe_fetch_plaid_data(:get_item_transactions) unless has_investment_accounts?
+      fetched_transactions = safe_fetch_plaid_data(:get_item_transactions)
 
       if fetched_transactions
         transaction do
@@ -88,7 +80,7 @@ class PlaidItem < ApplicationRecord
         end
       end
 
-      fetched_investments = safe_fetch_plaid_data(:get_item_investments) if has_investment_accounts?
+      fetched_investments = safe_fetch_plaid_data(:get_item_investments)
 
       if fetched_investments
         transaction do
@@ -102,7 +94,7 @@ class PlaidItem < ApplicationRecord
         end
       end
 
-      fetched_liabilities = safe_fetch_plaid_data(:get_item_liabilities) if has_liability_accounts?
+      fetched_liabilities = safe_fetch_plaid_data(:get_item_liabilities)
 
       if fetched_liabilities
         transaction do
