@@ -194,11 +194,18 @@ class Provider::Synth
     end
 
     def build_error(response)
-      Provider::Base::ProviderError.new(<<~ERROR)
-        Failed to fetch data from #{self.class}
-          Status: #{response.status}
-          Body: #{response.body.inspect}
-      ERROR
+      if response.status == 402
+        Provider::Base::ProviderError.new(<<~ERROR)
+          Your Synth API credit limit has been exceeded
+          Please visit your Synth billing settings to upgrade your plan or wait for your credits to reset.
+        ERROR
+      else
+        Provider::Base::ProviderError.new(<<~ERROR)
+          Failed to fetch data from #{self.class}
+            Status: #{response.status}
+            Body: #{response.body.inspect}
+        ERROR
+      end
     end
 
     def fetch_page(url, page, params = {})
