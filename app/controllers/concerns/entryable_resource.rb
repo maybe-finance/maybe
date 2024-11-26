@@ -27,11 +27,13 @@ module EntryableResource
   end
 
   def create
-    saved, @entry = builder.create
+    @entry = build_entry
 
-    if saved
+    if @entry.save
+      @entry.sync_account_later
+
       respond_to do |format|
-        format.html { redirect_back_or_to account_path(@entry.account), notice: t(".success") }
+        format.html { redirect_back_or_to account_path(@entry.account), notice: t("account.entries.create.success") }
         format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, account_path(@entry.account)) }
       end
     else
@@ -40,9 +42,11 @@ module EntryableResource
   end
 
   def update
-    if builder.update(@entry)
+    if @entry.update(prepared_entry_params)
+      @entry.sync_account_later
+
       respond_to do |format|
-        format.html { redirect_back_or_to account_path(@entry.account), notice: t(".success") }
+        format.html { redirect_back_or_to account_path(@entry.account), notice: t("account.entries.update.success") }
         format.turbo_stream do
           render turbo_stream: turbo_stream.replace(
             "header_account_entry_#{@entry.id}",
@@ -63,15 +67,34 @@ module EntryableResource
 
   private
     def entryable_type
-      "Account::#{controller_name.classify}".constantize
+      klass = params[:entryable_type] || "Account::#{controller_name.classify}"
+      klass.constantize
     end
 
     def set_entry
       @entry = Current.family.entries.find(params[:id])
     end
 
-    def builder
-      raise NotImplementedError, "#{self.class} must implement a builder"
+    def build_entry
+      Current.family.entries.new(prepared_entry_params)
+    end
+
+    def prepared_entry_params
+      default_params = entry_params.except(:nature)
+                                   .merge(
+                                     entryable_type: entryable_type.name,
+                                     entryable_attributes: entry_params[:entryable_attributes] || {}
+                                   )
+
+      default_params = default_params.merge(amount: signed_amount) if signed_amount
+
+      default_params
+    end
+
+    def signed_amount
+      return nil unless entry_params[:nature].present? && entry_params[:amount].present?
+
+      entry_params[:nature] == "inflow" ? -entry_params[:amount].to_d : entry_params[:amount].to_d
     end
 
     def entry_params

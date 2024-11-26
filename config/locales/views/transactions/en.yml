@@ -1,22 +1,6 @@
 ---
 en:
   transactions:
-    bulk_delete:
-      success: "%{count} transactions deleted"
-    bulk_edit:
-      cancel: Cancel
-      category_label: Category
-      category_placeholder: Select a category
-      date_label: Date
-      details: Details
-      merchant_label: Merchant
-      merchant_placeholder: Select a merchant
-      note_label: Notes
-      note_placeholder: Enter a note that will be applied to selected transactions
-      overview: Overview
-      save: Save
-    bulk_update:
-      success: "%{count} transactions updated"
     header:
       edit_categories: Edit categories
       edit_imports: Edit imports
@@ -26,8 +10,6 @@ en:
     index:
       transaction: transaction
       transactions: transactions
-    mark_transfers:
-      success: Marked as transfer
     new:
       new_transaction: New transaction
     searches:
@@ -62,5 +44,4 @@ en:
         equal_to: equal to
         greater_than: greater than
         less_than: less than
-    unmark_transfers:
-      success: Transfer removed
+

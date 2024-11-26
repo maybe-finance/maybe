@@ -22,3 +22,5 @@ en:
         loading: Loading entries...
       update:
         success: Entry updated
+      create:
+        success: Entry created

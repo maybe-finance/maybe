@@ -40,10 +40,6 @@ class Account::TransactionsController < ApplicationController
   end
 
   private
-    def builder
-      Account::TransactionBuilder.new(entry_params)
-    end
-
     def bulk_delete_params
       params.require(:bulk_delete).permit(entry_ids: [])
     end

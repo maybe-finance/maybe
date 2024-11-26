@@ -91,9 +91,7 @@ Rails.application.routes.draw do
     end
 
     resources :valuations, only: %i[show new create update destroy]
-    resources :trades, only: %i[show new create update destroy] do
-      get :securities, on: :collection
-    end
+    resources :trades, only: %i[show new create update destroy]
   end
 
   direct :account_entry do |entry, options|
@@ -124,6 +122,8 @@ Rails.application.routes.draw do
   resources :cryptos, except: :index
   resources :other_assets, except: :index
   resources :other_liabilities, except: :index
+
+  resources :securities, only: :index
 
   resources :invite_codes, only: %i[index create]
 

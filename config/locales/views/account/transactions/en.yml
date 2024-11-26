@@ -52,3 +52,23 @@ en:
         tags_label: Tags
       update:
         success: Transaction updated successfully.
+      bulk_delete:
+        success: "%{count} transactions deleted"
+      bulk_edit:
+        cancel: Cancel
+        category_label: Category
+        category_placeholder: Select a category
+        date_label: Date
+        details: Details
+        merchant_label: Merchant
+        merchant_placeholder: Select a merchant
+        note_label: Notes
+        note_placeholder: Enter a note that will be applied to selected transactions
+        overview: Overview
+        save: Save
+      bulk_update:
+        success: "%{count} transactions updated"
+      mark_transfers:
+        success: Marked as transfers
+      unmark_transfers:
+        success: Transfer removed

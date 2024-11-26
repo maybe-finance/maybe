@@ -25,7 +25,9 @@
     <% end %>
 
     <%= f.money_field :amount, label: t(".amount"), required: true %>
-    <%= f.collection_select :category_id, Current.family.categories.alphabetically, :id, :name, { prompt: t(".category_prompt"), label: t(".category") } %>
+    <%= f.fields_for :entryable do |ef| %>
+      <%= ef.collection_select :category_id, Current.family.categories.alphabetically, :id, :name, { prompt: t(".category_prompt"), label: t(".category") } %>
+    <% end %>
     <%= f.date_field :date, label: t(".date"), required: true, min: Account::Entry.min_supported_date, max: Date.today, value: Date.today %>
   </section>
 

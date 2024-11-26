@@ -134,12 +134,12 @@ class Provider::Synth
 
     securities = parsed.dig("data").map do |security|
       {
-        symbol: security.dig("symbol"),
+        ticker: security.dig("symbol"),
         name: security.dig("name"),
         logo_url: security.dig("logo_url"),
         exchange_acronym: security.dig("exchange", "acronym"),
         exchange_mic: security.dig("exchange", "mic_code"),
-        exchange_country_code: security.dig("exchange", "country_code")
+        country_code: security.dig("exchange", "country_code")
       }
     end
 
