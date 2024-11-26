@@ -2,8 +2,6 @@ class Provider::Plaid
   attr_reader :client
 
   MAYBE_SUPPORTED_PLAID_PRODUCTS = %w[transactions investments liabilities].freeze
-  PLAID_COUNTRY_CODES = %w[US GB ES NL FR IE CA DE IT PL DK NO SE EE LT LV PT BE].freeze
-  PLAID_LANGUAGES = %w[da nl en et fr de hi it lv lt no pl pt ro es sv vi].freeze
   MAX_HISTORY_DAYS = Rails.env.development? ? 90 : 730
 
   class << self
@@ -70,14 +68,14 @@ class Provider::Plaid
     @client = self.class.client
   end
 
-  def get_link_token(user_id:, country:, language: "en", webhooks_url:, redirect_url:, accountable_type: nil)
+  def get_link_token(user_id:, webhooks_url:, redirect_url:, accountable_type: nil)
     request = Plaid::LinkTokenCreateRequest.new({
       user: { client_user_id: user_id },
       client_name: "Maybe Finance",
       products: [ get_primary_product(accountable_type) ],
       additional_consented_products: get_additional_consented_products(accountable_type),
-      country_codes: [ get_plaid_country_code(country) ],
-      language: get_plaid_language(language),
+      country_codes: [ "US" ],
+      language: "en",
       webhook: webhooks_url,
       redirect_uri: redirect_url,
       transactions: { days_requested: MAX_HISTORY_DAYS }
@@ -212,14 +210,5 @@ class Provider::Plaid
 
     def get_additional_consented_products(accountable_type)
       MAYBE_SUPPORTED_PLAID_PRODUCTS - [ get_primary_product(accountable_type) ]
-    end
-
-    def get_plaid_country_code(country_code)
-      PLAID_COUNTRY_CODES.include?(country_code) ? country_code : "US"
-    end
-
-    def get_plaid_language(locale = "en")
-      language = locale.split("-").first
-      PLAID_LANGUAGES.include?(language) ? language : "en"
     end
 end

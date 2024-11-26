@@ -46,8 +46,6 @@ class Family < ApplicationRecord
 
     plaid_provider.get_link_token(
       user_id: id,
-      country: country,
-      language: locale,
       webhooks_url: webhooks_url,
       redirect_url: redirect_url,
       accountable_type: accountable_type
@@ -154,6 +152,10 @@ class Family < ApplicationRecord
 
   def synth_usage
     self.class.synth_provider&.usage
+  end
+
+  def synth_overage?
+    self.class.synth_provider && self.class.synth_provider.usage.utilization >= 1
   end
 
   def subscribed?

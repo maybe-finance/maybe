@@ -1,4 +1,9 @@
 <div class="space-y-4">
+  <% if self_hosted? && Current.family&.synth_overage? %>
+    <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
+      Your Synth API credit limit has been exceeded. Please visit your <a href="https://dashboard.synthfinance.com/settings" class="font-medium underline hover:text-yellow-900">Synth billing settings</a> to upgrade your plan or wait for your credits to reset.
+    </div>
+  <% end %>
   <header class="flex items-center justify-between">
     <div>
       <h1 class="sr-only"><%= t(".title") %></h1>
