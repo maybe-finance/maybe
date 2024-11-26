@@ -153,6 +153,10 @@ class Family < ApplicationRecord
     self.class.synth_provider&.usage
   end
 
+  def synth_overage?
+    self.class.synth_provider && self.class.synth_provider.usage.utilization >= 1
+  end
+
   def subscribed?
     stripe_subscription_status == "active"
   end
