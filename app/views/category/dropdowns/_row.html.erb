@@ -1,4 +1,4 @@
-<%# locals: (category:, origin: nil) %>
+<%# locals: (category:) %>
 <% is_selected = category.id === @selected_category&.id %>
 
 <%= content_tag :div, class: ["filterable-item flex justify-between items-center border-none rounded-lg px-2 py-1 group w-full", { "bg-gray-25": is_selected }], data: { filter_name: category.name } do %>

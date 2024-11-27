@@ -29,18 +29,6 @@ class Account::Entry < ApplicationRecord
       .where("er.rate IS NOT NULL OR account_entries.currency = ?", currency)
   }
 
-  def update_and_sync!(params)
-    prev_currency = currency
-    prev_amount = amount
-    prev_date = date
-
-    update!(params)
-
-    if prev_amount != amount || prev_date != date || prev_currency != currency
-      sync_account_later
-    end
-  end
-
   def sync_account_later
     sync_start_date = if destroyed?
       previous_entry&.date
