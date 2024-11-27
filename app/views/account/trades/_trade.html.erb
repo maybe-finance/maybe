@@ -1,8 +1,8 @@
-<%# locals: (entry:, selectable: true, show_balance: false, origin: nil) %>
+<%# locals: (entry:, selectable: true, show_balance: false) %>
 
 <% trade, account = entry.account_trade, entry.account %>
 
-<div class="grid grid-cols-12 items-center text-gray-900 text-sm font-medium p-4">
+<div class="grid grid-cols-12 items-center <%= entry.excluded ? "text-gray-400 bg-gray-25" : "text-gray-900" %> text-sm font-medium p-4">
   <div class="col-span-8 flex items-center gap-4">
     <% if selectable %>
       <%= check_box_tag dom_id(entry, "selection"),
@@ -16,12 +16,12 @@
           <%= trade.name.first.upcase %>
         </div>
 
-        <div class="truncate text-gray-900">
+        <div class="truncate">
           <% if entry.new_record? %>
             <%= content_tag :p, trade.name %>
           <% else %>
             <%= link_to trade.name,
-                        account_entry_path(account, entry),
+                        account_entry_path(entry),
                         data: { turbo_frame: "drawer", turbo_prefetch: false },
                         class: "hover:underline hover:text-gray-800" %>
           <% end %>
@@ -31,7 +31,9 @@
   </div>
 
   <div class="col-span-2 justify-self-end font-medium text-sm">
-    <%= tag.span format_money(entry.amount_money) %>
+    <%= content_tag :p,
+                    format_money(-entry.amount_money),
+                    class: ["text-green-600": entry.amount.negative?] %>
   </div>
 
   <div class="col-span-2 justify-self-end">

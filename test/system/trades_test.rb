@@ -10,9 +10,9 @@ class TradesTest < ApplicationSystemTestCase
 
     visit_account_trades
 
-    Security::SynthComboboxOption.stubs(:find_in_synth).returns([
-      Security::SynthComboboxOption.new(
-        symbol: "AAPL",
+    Security.stubs(:search).returns([
+      Security.new(
+        ticker: "AAPL",
         name: "Apple Inc.",
         logo_url: "https://logo.synthfinance.com/ticker/AAPL",
         exchange_acronym: "NASDAQ",
@@ -37,7 +37,7 @@ class TradesTest < ApplicationSystemTestCase
     visit_account_trades
 
     within_trades do
-      assert_text "Purchase 10 shares of AAPL"
+      assert_text "Buy 10.0 shares of AAPL"
       assert_text "Buy #{shares_qty} shares of AAPL"
     end
   end

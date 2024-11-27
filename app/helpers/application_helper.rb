@@ -62,9 +62,9 @@ module ApplicationHelper
   #     <div>Content here</div>
   #   <% end %>
   #
-  def drawer(&block)
+  def drawer(reload_on_close: false, &block)
     content = capture &block
-    render partial: "shared/drawer", locals: { content: content }
+    render partial: "shared/drawer", locals: { content:, reload_on_close: }
   end
 
   def disclosure(title, &block)

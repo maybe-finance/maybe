@@ -6,7 +6,7 @@ const application = Application.start();
 application.debug = false;
 window.Stimulus = application;
 
-Turbo.setConfirmMethod((message) => {
+Turbo.config.forms.confirm = (message) => {
   const dialog = document.getElementById("turbo-confirm");
 
   try {
@@ -52,6 +52,6 @@ Turbo.setConfirmMethod((message) => {
       { once: true },
     );
   });
-});
+};
 
 export { application };

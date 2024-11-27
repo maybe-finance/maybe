@@ -69,21 +69,41 @@ Rails.application.routes.draw do
 
     member do
       post :sync
-    end
-
-    scope module: :account do
-      resources :holdings, only: %i[index new show destroy]
-      resources :cashes, only: :index
-
-      resources :transactions, only: %i[index update]
-      resources :valuations, only: %i[index new create]
-      resources :trades, only: %i[index new create update] do
-        get :securities, on: :collection
-      end
-
-      resources :entries, only: %i[index edit update show destroy]
+      get :chart
     end
   end
+
+  namespace :account do
+    resources :holdings, only: %i[index new show destroy]
+    resources :cashes, only: :index
+
+    resources :entries, only: :index
+
+    resources :transactions, only: %i[show new create update destroy] do
+      resource :category, only: :update, controller: :transaction_categories
+
+      collection do
+        post "bulk_delete"
+        get "bulk_edit"
+        post "bulk_update"
+        post "mark_transfers"
+        post "unmark_transfers"
+      end
+    end
+
+    resources :valuations, only: %i[show new create update destroy]
+    resources :trades, only: %i[show new create update destroy]
+  end
+
+  direct :account_entry do |entry, options|
+    if entry.new_record?
+      route_for "account_#{entry.entryable_name.pluralize}", options
+    else
+      route_for entry.entryable_name, entry, options
+    end
+  end
+
+  resources :transactions, only: :index
 
   # Convenience routes for polymorphic paths
   # Example: account_path(Account.new(accountable: Depository.new)) => /depositories/123
@@ -104,15 +124,7 @@ Rails.application.routes.draw do
   resources :other_assets, except: :index
   resources :other_liabilities, except: :index
 
-  resources :transactions, only: %i[index new create] do
-    collection do
-      post "bulk_delete"
-      get "bulk_edit"
-      post "bulk_update"
-      post "mark_transfers"
-      post "unmark_transfers"
-    end
-  end
+  resources :securities, only: :index
 
   resources :invite_codes, only: %i[index create]
 

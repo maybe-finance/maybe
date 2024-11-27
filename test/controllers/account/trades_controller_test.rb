@@ -1,19 +1,36 @@
 require "test_helper"
 
 class Account::TradesControllerTest < ActionDispatch::IntegrationTest
+  include EntryableResourceInterfaceTest
+
   setup do
     sign_in @user = users(:family_admin)
-    @entry = account_entries :trade
+    @entry = account_entries(:trade)
   end
 
-  test "should get index" do
-    get account_trades_url(@entry.account)
-    assert_response :success
-  end
+  test "updates trade entry" do
+    assert_no_difference [ "Account::Entry.count", "Account::Trade.count" ] do
+      patch account_trade_url(@entry), params: {
+        account_entry: {
+          currency: "USD",
+          entryable_attributes: {
+            id: @entry.entryable_id,
+            qty: 20,
+            price: 20
+          }
+        }
+      }
+    end
 
-  test "should get new" do
-    get new_account_trade_url(@entry.account)
-    assert_response :success
+    @entry.reload
+
+    assert_enqueued_with job: SyncJob
+
+    assert_equal 20, @entry.account_trade.qty
+    assert_equal 20, @entry.account_trade.price
+    assert_equal "USD", @entry.currency
+
+    assert_redirected_to account_url(@entry.account)
   end
 
   test "creates deposit entry" do
@@ -22,9 +39,10 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
     assert_difference -> { Account::Entry.count } => 2,
                       -> { Account::Transaction.count } => 2,
                       -> { Account::Transfer.count } => 1 do
-      post account_trades_url(@entry.account), params: {
+      post account_trades_url, params: {
         account_entry: {
-          type: "transfer_in",
+          account_id: @entry.account_id,
+          type: "deposit",
           date: Date.current,
           amount: 10,
           currency: "USD",
@@ -42,9 +60,10 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
     assert_difference -> { Account::Entry.count } => 2,
                       -> { Account::Transaction.count } => 2,
                       -> { Account::Transfer.count } => 1 do
-      post account_trades_url(@entry.account), params: {
+      post account_trades_url, params: {
         account_entry: {
-          type: "transfer_out",
+          account_id: @entry.account_id,
+          type: "withdrawal",
           date: Date.current,
           amount: 10,
           currency: "USD",
@@ -60,9 +79,10 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
     assert_difference -> { Account::Entry.count } => 1,
                       -> { Account::Transaction.count } => 1,
                       -> { Account::Transfer.count } => 0 do
-      post account_trades_url(@entry.account), params: {
+      post account_trades_url, params: {
         account_entry: {
-          type: "transfer_out",
+          account_id: @entry.account_id,
+          type: "withdrawal",
           date: Date.current,
           amount: 10,
           currency: "USD"
@@ -79,8 +99,9 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
 
   test "creates interest entry" do
     assert_difference [ "Account::Entry.count", "Account::Transaction.count" ], 1 do
-      post account_trades_url(@entry.account), params: {
+      post account_trades_url, params: {
         account_entry: {
+          account_id: @entry.account_id,
           type: "interest",
           date: Date.current,
           amount: 10,
@@ -97,13 +118,15 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
 
   test "creates trade buy entry" do
     assert_difference [ "Account::Entry.count", "Account::Trade.count", "Security.count" ], 1 do
-      post account_trades_url(@entry.account), params: {
+      post account_trades_url, params: {
         account_entry: {
+          account_id: @entry.account_id,
           type: "buy",
           date: Date.current,
           ticker: "NVDA (NASDAQ)",
           qty: 10,
-          price: 10
+          price: 10,
+          currency: "USD"
         }
       }
     end
@@ -112,15 +135,16 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
 
     assert created_entry.amount.positive?
     assert created_entry.account_trade.qty.positive?
-    assert_equal "Transaction created successfully.", flash[:notice]
+    assert_equal "Entry created", flash[:notice]
     assert_enqueued_with job: SyncJob
-    assert_redirected_to @entry.account
+    assert_redirected_to account_url(created_entry.account)
   end
 
   test "creates trade sell entry" do
     assert_difference [ "Account::Entry.count", "Account::Trade.count" ], 1 do
-      post account_trades_url(@entry.account), params: {
+      post account_trades_url, params: {
         account_entry: {
+          account_id: @entry.account_id,
           type: "sell",
           ticker: "AAPL (NYSE)",
           date: Date.current,
@@ -135,8 +159,8 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
 
     assert created_entry.amount.negative?
     assert created_entry.account_trade.qty.negative?
-    assert_equal "Transaction created successfully.", flash[:notice]
+    assert_equal "Entry created", flash[:notice]
     assert_enqueued_with job: SyncJob
-    assert_redirected_to @entry.account
+    assert_redirected_to account_url(created_entry.account)
   end
 end

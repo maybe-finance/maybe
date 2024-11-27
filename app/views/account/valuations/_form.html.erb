@@ -1,9 +1,12 @@
 <%# locals: (entry:) %>
 
-<%= styled_form_with model: [entry.account, entry],
-                    url: entry.new_record? ? account_valuations_path(entry.account) : account_entry_path(entry.account, entry),
-                    class: "space-y-4",
-                    data: { turbo: false } do |form| %>
+<%= styled_form_with model: entry, url: account_valuations_path, class: "space-y-4" do |form| %>
+  <%= form.hidden_field :account_id %>
+
+  <% if entry.errors.any? %>
+    <%= render "shared/form_errors", model: entry %>
+  <% end %>
+
   <div class="space-y-3">
     <%= form.date_field :date, label: true, required: true, value: Date.today, min: Account::Entry.min_supported_date, max: Date.today %>
     <%= form.money_field :amount, label: t(".amount"), required: true %>

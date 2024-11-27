@@ -81,6 +81,29 @@
       "note": ""
     },
     {
+      "warning_type": "Mass Assignment",
+      "warning_code": 105,
+      "fingerprint": "f158202dcc66f2273ddea5e5296bad7146a50ca6667f49c77372b5b234542334",
+      "check_name": "PermitAttributes",
+      "message": "Potentially dangerous key allowed for mass assignment",
+      "file": "app/controllers/concerns/entryable_resource.rb",
+      "line": 122,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.require(:account_entry).permit(:account_id, :name, :date, :amount, :currency, :excluded, :notes, :nature, :entryable_attributes => self.class.permitted_entryable_attributes)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "EntryableResource",
+        "method": "entry_params"
+      },
+      "user_input": ":account_id",
+      "confidence": "High",
+      "cwe_id": [
+        915
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
       "fingerprint": "fb6f7abeabc405d6882ffd41dbe8016403ef39307a5c6b4cd7b18adfaf0c24bf",
@@ -115,6 +138,6 @@
       "note": ""
     }
   ],
-  "updated": "2024-11-02 15:02:28 -0400",
+  "updated": "2024-11-27 15:33:53 -0500",
   "brakeman_version": "6.2.2"
 }

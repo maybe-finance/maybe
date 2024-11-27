@@ -1,74 +1,55 @@
 class Account::TransactionsController < ApplicationController
-  layout :with_sidebar
+  include EntryableResource
 
-  before_action :set_account
-  before_action :set_entry, only: :update
+  permitted_entryable_attributes :id, :category_id, :merchant_id, { tag_ids: [] }
 
-  def index
-    @pagy, @entries = pagy(
-      @account.entries.account_transactions.reverse_chronological,
-      limit: params[:per_page] || "10"
-    )
+  def bulk_delete
+    destroyed = Current.family.entries.destroy_by(id: bulk_delete_params[:entry_ids])
+    destroyed.map(&:account).uniq.each(&:sync_later)
+    redirect_back_or_to transactions_url, notice: t(".success", count: destroyed.count)
   end
 
-  def update
-    prev_amount = @entry.amount
-    prev_date = @entry.date
+  def bulk_edit
+  end
 
-    @entry.update!(entry_params.except(:origin))
-    @entry.sync_account_later if prev_amount != @entry.amount || prev_date != @entry.date
+  def bulk_update
+    updated = Current.family
+                     .entries
+                     .where(id: bulk_update_params[:entry_ids])
+                     .bulk_update!(bulk_update_params)
 
-    respond_to do |format|
-      format.html { redirect_to account_entry_path(@account, @entry), notice: t(".success") }
-      format.turbo_stream do
-        render turbo_stream: turbo_stream.replace(
-          @entry,
-          partial: "account/entries/entry",
-          locals: entry_locals.merge(entry: @entry)
-        )
-      end
-    end
+    redirect_back_or_to transactions_url, notice: t(".success", count: updated)
+  end
+
+  def mark_transfers
+    Current.family
+      .entries
+      .where(id: bulk_update_params[:entry_ids])
+           .mark_transfers!
+
+    redirect_back_or_to transactions_url, notice: t(".success")
+  end
+
+  def unmark_transfers
+    Current.family
+      .entries
+      .where(id: bulk_update_params[:entry_ids])
+           .update_all marked_as_transfer: false
+
+    redirect_back_or_to transactions_url, notice: t(".success")
   end
 
   private
-    def set_account
-      @account = Current.family.accounts.find(params[:account_id])
+    def bulk_delete_params
+      params.require(:bulk_delete).permit(entry_ids: [])
     end
 
-    def set_entry
-      @entry = @account.entries.find(params[:id])
+    def bulk_update_params
+      params.require(:bulk_update).permit(:date, :notes, :category_id, :merchant_id, entry_ids: [])
     end
 
-    def entry_locals
-      {
-        selectable: entry_params[:origin].present?,
-        show_balance: entry_params[:origin] == "account",
-        origin: entry_params[:origin]
-      }
-    end
-
-    def entry_params
-      params.require(:account_entry)
-            .permit(
-              :name, :date, :amount, :currency, :excluded, :notes, :entryable_type, :nature, :origin,
-              entryable_attributes: [
-                :id,
-                :category_id,
-                :merchant_id,
-                { tag_ids: [] }
-              ]
-            ).tap do |permitted_params|
-              nature = permitted_params.delete(:nature)
-
-              if permitted_params[:amount]
-                amount_value = permitted_params[:amount].to_d
-
-                if nature == "income"
-                  amount_value *= -1
-                end
-
-                permitted_params[:amount] = amount_value
-              end
-            end
+    def search_params
+      params.fetch(:q, {})
+            .permit(:start_date, :end_date, :search, :amount, :amount_operator, accounts: [], account_ids: [], categories: [], merchants: [], types: [], tags: [])
     end
 end

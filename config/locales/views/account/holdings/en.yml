@@ -2,6 +2,8 @@
 en:
   account:
     holdings:
+      destroy:
+        success: Holding deleted
       holding:
         per_share: per share
         shares: "%{qty} shares"

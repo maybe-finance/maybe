@@ -48,6 +48,10 @@ class Account::Transfer < ApplicationRecord
     end
   end
 
+  def sync_account_later
+    entries.each(&:sync_account_later)
+  end
+
   class << self
     def build_from_accounts(from_account, to_account, date:, amount:)
       outflow = from_account.entries.build \

@@ -36,7 +36,7 @@
         <%= render_flash_notifications %>
 
         <% if Current.family&.syncing? %>
-          <%= render "shared/notification", id: "syncing-notification", type: :processing, message: t(".syncing") %>
+          <%= render "shared/syncing_notice" %>
         <% end %>
       </div>
     </div>

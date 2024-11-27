@@ -8,12 +8,12 @@ class Account::HoldingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "gets holdings" do
-    get account_holdings_url(@account)
+    get account_holdings_url(account_id: @account.id)
     assert_response :success
   end
 
   test "gets holding" do
-    get account_holding_path(@account, @holding)
+    get account_holding_path(@holding)
 
     assert_response :success
   end
@@ -21,10 +21,10 @@ class Account::HoldingsControllerTest < ActionDispatch::IntegrationTest
   test "destroys holding and associated entries" do
     assert_difference -> { Account::Holding.count } => -1,
                       -> { Account::Entry.count } => -1 do
-      delete account_holding_path(@account, @holding)
+      delete account_holding_path(@holding)
     end
 
-    assert_redirected_to account_holdings_path(@account)
-    assert_empty @account.entries.where(entryable: @account.trades.where(security: @holding.security))
+    assert_redirected_to account_path(@holding.account)
+    assert_empty @holding.account.entries.where(entryable: @holding.account.trades.where(security: @holding.security))
   end
 end

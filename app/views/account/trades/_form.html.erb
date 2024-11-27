@@ -1,35 +1,51 @@
 <%# locals: (entry:) %>
 
-<%= styled_form_with data: { turbo_frame: "_top", controller: "trade-form" },
-                     model: entry,
-                     scope: :account_entry,
-                     url: account_trades_path(entry.account) do |form| %>
+<% type = params[:type] || "buy" %>
+
+<%= styled_form_with model: entry, url: account_trades_path, data: { controller: "trade-form" } do |form| %>
+
+  <%= form.hidden_field :account_id %>
+
   <div class="space-y-4">
+    <% if entry.errors.any? %>
+      <%= render "shared/form_errors", model: entry %>
+    <% end %>
+
     <div class="space-y-2">
-      <%= form.select :type, options_for_select([%w[Buy buy], %w[Sell sell], %w[Deposit transfer_in], %w[Withdrawal transfer_out], %w[Interest interest]], "buy"), { label: t(".type") }, { data: { "trade-form-target": "typeInput" } } %>
-      <div data-trade-form-target="tickerInput">
+      <%= form.select :type, [
+          ["Buy", "buy"],
+          ["Sell", "sell"],
+          ["Deposit", "deposit"],
+          ["Withdrawal", "withdrawal"],
+          ["Interest", "interest"]
+      ],
+      { label: t(".type"), selected: type },
+      { data: {
+          action: "trade-form#changeType",
+          trade_form_url_param: new_account_trade_path(account_id: entry.account_id),
+          trade_form_key_param: "type",
+        }} %>
+
+      <% if %w[buy sell].include?(type) %>
         <div class="form-field combobox">
-          <%= form.combobox :ticker, securities_account_trades_path(entry.account), label: t(".holding"), placeholder: t(".ticker_placeholder") %>
+          <%= form.combobox :ticker, securities_path(country_code: Current.family.country), label: t(".holding"), placeholder: t(".ticker_placeholder"), required: true %>
         </div>
-      </div>
+      <% end %>
 
-      <%= form.date_field :date, label: true, value: Date.today %>
+      <%= form.date_field :date, label: true, value: Date.today, required: true %>
 
-      <div data-trade-form-target="amountInput" hidden>
-        <%= form.money_field :amount, label: t(".amount") %>
-      </div>
+      <% unless %w[buy sell].include?(type) %>
+        <%= form.money_field :amount, label: t(".amount"), required: true %>
+      <% end %>
 
-      <div data-trade-form-target="transferAccountInput" hidden>
+      <% if %w[deposit withdrawal].include?(type) %>
         <%= form.collection_select :transfer_account_id, Current.family.accounts.alphabetically, :id, :name, { prompt: t(".account_prompt"), label: t(".account") } %>
-      </div>
+      <% end %>
 
-      <div data-trade-form-target="qtyInput">
-        <%= form.number_field :qty, label: t(".qty"), placeholder: "10", min: 0.000000000000000001, step: "any" %>
-      </div>
-
-      <div data-trade-form-target="priceInput">
-        <%= form.money_field :price, label: t(".price"), currency_value_override: "USD", disable_currency: true %>
-      </div>
+      <% if %w[buy sell].include?(type) %>
+        <%= form.number_field :qty, label: t(".qty"), placeholder: "10", min: 0.000000000000000001, step: "any", required: true %>
+        <%= form.money_field :price, label: t(".price"), required: true %>
+      <% end %>
     </div>
 
     <%= form.submit t(".submit") %>

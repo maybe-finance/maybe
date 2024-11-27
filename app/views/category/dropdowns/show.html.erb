@@ -11,7 +11,7 @@
         <%= t(".no_categories") %>
       </div>
       <% @categories.each do |category| %>
-        <%= render partial: "category/dropdowns/row", locals: { category:, origin: params[:origin] } %>
+        <%= render partial: "category/dropdowns/row", locals: { category: } %>
       <% end %>
     </div>
     <hr>
