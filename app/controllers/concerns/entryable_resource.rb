@@ -68,13 +68,22 @@ module EntryableResource
     account = @entry.account
     @entry.destroy!
     @entry.sync_account_later
-    redirect_back_or_to account_path(account), notice: t("account.entries.destroy.success")
+
+    flash[:notice] = t("account.entries.destroy.success")
+
+    respond_to do |format|
+      format.html { redirect_back_or_to account_path(account) }
+
+      redirect_target_url = request.referer || account_path(@entry.account)
+      format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, redirect_target_url) }
+    end
   end
 
   private
     def entryable_type
+      permitted_entryable_types = %w[Account::Transaction Account::Valuation Account::Trade]
       klass = params[:entryable_type] || "Account::#{controller_name.classify}"
-      klass.constantize
+      klass.constantize if permitted_entryable_types.include?(klass)
     end
 
     def set_entry

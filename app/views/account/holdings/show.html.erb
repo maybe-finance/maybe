@@ -101,10 +101,10 @@
           </div>
 
           <%= button_to t(".delete"),
-                account_holding_path(@holding.account, @holding),
+                account_holding_path(@holding),
                 method: :delete,
                 class: "rounded-lg px-3 py-2 text-red-500 text-sm font-medium border border-alpha-black-200",
-                data: { turbo_confirm: true, turbo_frame: "_top" } %>
+                data: { turbo_confirm: true } %>
         </div>
       </div>
     </details>

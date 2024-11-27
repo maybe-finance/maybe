@@ -31,10 +31,11 @@ en:
         manual_entry: Enter account balance
         title: How would you like to add it?
       title: What would you like to add?
+    chart:
+      no_change: no change
     show:
       chart:
         balance: Balance
-        no_change: no change
         owed: Amount owed
       menu:
         confirm_accept: Delete "%{name}"

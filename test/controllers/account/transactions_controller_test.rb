@@ -72,4 +72,46 @@ class Account::TransactionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to account_url(@entry.account)
     assert_enqueued_with(job: SyncJob)
   end
+
+  test "can destroy many transactions at once" do
+    transactions = @user.family.entries.account_transactions
+    delete_count = transactions.size
+
+    assert_difference([ "Account::Transaction.count", "Account::Entry.count" ], -delete_count) do
+      post bulk_delete_account_transactions_url, params: {
+        bulk_delete: {
+          entry_ids: transactions.pluck(:id)
+        }
+      }
+    end
+
+    assert_redirected_to transactions_url
+    assert_equal "#{delete_count} transactions deleted", flash[:notice]
+  end
+
+  test "can update many transactions at once" do
+    transactions = @user.family.entries.account_transactions
+
+    assert_difference [ "Account::Entry.count", "Account::Transaction.count" ], 0 do
+      post bulk_update_account_transactions_url, params: {
+        bulk_update: {
+          entry_ids: transactions.map(&:id),
+          date: 1.day.ago.to_date,
+          category_id: Category.second.id,
+          merchant_id: Merchant.second.id,
+          notes: "Updated note"
+        }
+      }
+    end
+
+    assert_redirected_to transactions_url
+    assert_equal "#{transactions.count} transactions updated", flash[:notice]
+
+    transactions.reload.each do |transaction|
+      assert_equal 1.day.ago.to_date, transaction.date
+      assert_equal Category.second, transaction.account_transaction.category
+      assert_equal Merchant.second, transaction.account_transaction.merchant
+      assert_equal "Updated note", transaction.notes
+    end
+  end
 end

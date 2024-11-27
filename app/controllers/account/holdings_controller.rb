@@ -14,7 +14,13 @@ class Account::HoldingsController < ApplicationController
 
   def destroy
     @holding.destroy_holding_and_entries!
-    redirect_back_or_to account_holdings_path(@account)
+
+    flash[:notice] = t(".success")
+
+    respond_to do |format|
+      format.html { redirect_back_or_to account_path(@holding.account) }
+      format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, account_path(@holding.account)) }
+    end
   end
 
   private
