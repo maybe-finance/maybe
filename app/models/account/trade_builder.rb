@@ -31,9 +31,6 @@ class Account::TradeBuilder
     end
 
     def build_trade
-      signed_qty = type == "sell" ? -qty.to_d : qty.to_d
-      signed_amount = signed_qty * price.to_d
-
       account.entries.new(
         date: date,
         amount: signed_amount,
@@ -82,15 +79,10 @@ class Account::TradeBuilder
       )
     end
 
-    def security
-      ticker_symbol, exchange_mic, exchange_acronym, exchange_country_code = ticker.split("|")
+    def signed_qty
+      return nil unless type.in?([ "buy", "sell" ])
 
-      security = Security.find_or_create_by(ticker: ticker_symbol, exchange_mic: exchange_mic, country_code: exchange_country_code)
-      security.update(exchange_acronym: exchange_acronym)
-
-      FetchSecurityInfoJob.perform_later(security.id)
-
-      security
+      type == "sell" ? -qty.to_d : qty.to_d
     end
 
     def signed_amount
@@ -106,5 +98,16 @@ class Account::TradeBuilder
 
     def family
       account.family
+    end
+
+    def security
+      ticker_symbol, exchange_mic, exchange_acronym, exchange_country_code = ticker.split("|")
+
+      security = Security.find_or_create_by(ticker: ticker_symbol, exchange_mic: exchange_mic, country_code: exchange_country_code)
+      security.update(exchange_acronym: exchange_acronym)
+
+      FetchSecurityInfoJob.perform_later(security.id)
+
+      security
     end
 end

@@ -17,9 +17,9 @@
                 "data-auto-submit-form-target": "auto" %>
 
           <div class="flex items-center gap-2">
-            <%= f.select :nature, 
-                          [["Buy", "buy"], ["Sell", "sell"]],
-                          { container_class: "w-1/3", label: "Type", selected: @entry.amount.negative? ? "sell" : "buy" },
+            <%= f.select :nature,
+                          [["Buy", "outflow"], ["Sell", "inflow"]],
+                          { container_class: "w-1/3", label: "Type", selected: @entry.amount.negative? ? "inflow" : "outflow" },
                           { data: { "auto-submit-form-target": "auto" } } %>
 
             <%= f.fields_for :entryable do |ef| %>

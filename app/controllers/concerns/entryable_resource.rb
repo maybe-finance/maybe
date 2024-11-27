@@ -46,7 +46,7 @@ module EntryableResource
   end
 
   def update
-    if @entry.update(prepared_entry_params)
+    if @entry.update(update_entry_params)
       @entry.sync_account_later
 
       respond_to do |format|
@@ -82,25 +82,30 @@ module EntryableResource
     end
 
     def build_entry
-      Current.family.entries.new(prepared_entry_params)
+      Current.family.entries.new(create_entry_params)
+    end
+
+    def update_entry_params
+      prepared_entry_params
+    end
+
+    def create_entry_params
+      prepared_entry_params.merge({
+        entryable_type: entryable_type.name,
+        entryable_attributes: entry_params[:entryable_attributes] || {}
+      })
     end
 
     def prepared_entry_params
       default_params = entry_params.except(:nature)
-                                   .merge(
-                                     entryable_type: entryable_type.name,
-                                     entryable_attributes: entry_params[:entryable_attributes] || {}
-                                   )
+      default_params = default_params.merge(entryable_type: entryable_type.name) if entry_params[:entryable_attributes].present?
 
-      default_params = default_params.merge(amount: signed_amount) if signed_amount
+      if entry_params[:nature].present? && entry_params[:amount].present?
+        signed_amount = entry_params[:nature] == "inflow" ? -entry_params[:amount].to_d : entry_params[:amount].to_d
+        default_params = default_params.merge(amount: signed_amount)
+      end
 
       default_params
-    end
-
-    def signed_amount
-      return nil unless entry_params[:nature].present? && entry_params[:amount].present?
-
-      entry_params[:nature] == "inflow" ? -entry_params[:amount].to_d : entry_params[:amount].to_d
     end
 
     def entry_params
