@@ -57,13 +57,13 @@
                       Current.family.categories.alphabetically,
                     :id, :name,
                     { label: t(".category_label"),
-                      class: "text-gray-400", include_blank: "(uncategorized)" },
+                      class: "text-gray-400", include_blank: t(".uncategorized") },
                     "data-auto-submit-form-target": "auto" %>
 
               <%= ef.collection_select :merchant_id,
                       Current.family.merchants.alphabetically,
                     :id, :name,
-                    { include_blank: "(none)",
+                    { include_blank: t(".none"),
                       label: t(".merchant_label"),
                       class: "text-gray-400" },
                     "data-auto-submit-form-target": "auto" %>
@@ -71,7 +71,7 @@
               <%= ef.select :tag_ids,
                     Current.family.tags.alphabetically.pluck(:name, :id),
                     {
-                      include_blank: "(none)",
+                      include_blank: t(".none"),
                       multiple: true,
                       label:    t(".tags_label"),
                       container_class: "h-40"

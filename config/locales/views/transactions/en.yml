@@ -10,8 +10,6 @@ en:
     index:
       transaction: transaction
       transactions: transactions
-    new:
-      new_transaction: New transaction
     searches:
       filters:
         amount_filter:
@@ -44,4 +42,3 @@ en:
         equal_to: equal to
         greater_than: greater than
         less_than: less than
-

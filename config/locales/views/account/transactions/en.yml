@@ -2,8 +2,22 @@
 en:
   account:
     transactions:
-      create:
-        success: New transaction created successfully
+      bulk_delete:
+        success: "%{count} transactions deleted"
+      bulk_edit:
+        cancel: Cancel
+        category_label: Category
+        category_placeholder: Select a category
+        date_label: Date
+        details: Details
+        merchant_label: Merchant
+        merchant_placeholder: Select a merchant
+        note_label: Notes
+        note_placeholder: Enter a note that will be applied to selected transactions
+        overview: Overview
+        save: Save
+      bulk_update:
+        success: "%{count} transactions updated"
       form:
         account: Account
         account_prompt: Select an Account
@@ -22,6 +36,10 @@ en:
         no_transactions: No transactions for this account yet.
         transaction: transaction
         transactions: Transactions
+      mark_transfers:
+        success: Marked as transfers
+      new:
+        new_transaction: New transaction
       selection_bar:
         mark_transfers: Mark as transfers?
         mark_transfers_confirm: Mark as transfers
@@ -31,7 +49,6 @@ en:
         account_label: Account
         amount: Amount
         category_label: Category
-        category_placeholder: Select a category
         date_label: Date
         delete: Delete
         delete_subtitle: This permanently deletes the transaction, affects your historical
@@ -42,33 +59,14 @@ en:
           analytics.
         exclude_title: Exclude transaction
         merchant_label: Merchant
-        merchant_placeholder: Select a merchant
         name_label: Name
         nature: Type
+        none: "(none)"
         note_label: Notes
         note_placeholder: Enter a note
         overview: Overview
         settings: Settings
         tags_label: Tags
-      update:
-        success: Transaction updated successfully.
-      bulk_delete:
-        success: "%{count} transactions deleted"
-      bulk_edit:
-        cancel: Cancel
-        category_label: Category
-        category_placeholder: Select a category
-        date_label: Date
-        details: Details
-        merchant_label: Merchant
-        merchant_placeholder: Select a merchant
-        note_label: Notes
-        note_placeholder: Enter a note that will be applied to selected transactions
-        overview: Overview
-        save: Save
-      bulk_update:
-        success: "%{count} transactions updated"
-      mark_transfers:
-        success: Marked as transfers
+        uncategorized: "(uncategorized)"
       unmark_transfers:
         success: Transfer removed

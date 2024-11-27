@@ -56,7 +56,7 @@ class Investment < ApplicationRecord
   end
 
   def post_sync
-    broadcast_remove_to(account, target: "syncing-notification")
+    broadcast_remove_to(account, target: "syncing-notice")
 
     broadcast_replace_to(
       account,

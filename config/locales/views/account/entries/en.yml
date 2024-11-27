@@ -2,6 +2,8 @@
 en:
   account:
     entries:
+      create:
+        success: Entry created
       destroy:
         success: Entry deleted
       empty:
@@ -22,5 +24,3 @@ en:
         loading: Loading entries...
       update:
         success: Entry updated
-      create:
-        success: Entry created

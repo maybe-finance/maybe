@@ -32,9 +32,13 @@ module EntryableResource
     if @entry.save
       @entry.sync_account_later
 
+      flash[:notice] = t("account.entries.create.success")
+
       respond_to do |format|
-        format.html { redirect_back_or_to account_path(@entry.account), notice: t("account.entries.create.success") }
-        format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, account_path(@entry.account)) }
+        format.html { redirect_back_or_to account_path(@entry.account) }
+
+        redirect_target_url = request.referer || account_path(@entry.account)
+        format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, redirect_target_url) }
       end
     else
       render :new, status: :unprocessable_entity
@@ -61,8 +65,10 @@ module EntryableResource
   end
 
   def destroy
+    account = @entry.account
     @entry.destroy!
     @entry.sync_account_later
+    redirect_back_or_to account_path(account), notice: t("account.entries.destroy.success")
   end
 
   private

@@ -35,8 +35,9 @@ module Accountable
   end
 
   def post_sync
-    broadcast_remove_to(account, target: "syncing-notification")
+    broadcast_remove_to(account.family, target: "syncing-notice")
 
+    # Broadcast a simple replace event that the controller can handle
     broadcast_replace_to(
       account,
       target: "chart_account_#{account.id}",

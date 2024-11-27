@@ -69,6 +69,7 @@ Rails.application.routes.draw do
 
     member do
       post :sync
+      get :chart
     end
   end
 

@@ -31,6 +31,11 @@ class AccountsController < ApplicationController
     redirect_to account_path(@account)
   end
 
+  def chart
+    @account = Current.family.accounts.find(params[:id])
+    render layout: "application"
+  end
+
   def sync_all
     unless Current.family.syncing?
       Current.family.sync_later

@@ -2,11 +2,11 @@
 en:
   account:
     valuations:
-      create:
-        success: Valuation created successfully.
       form:
         amount: Amount
         submit: Add balance update
+      header:
+        balance: Balance
       index:
         change: change
         date: date
@@ -18,7 +18,6 @@ en:
         title: New balance
       show:
         amount: Amount
-        balance: Balance
         date_label: Date
         delete: Delete
         delete_subtitle: This action cannot be undone
