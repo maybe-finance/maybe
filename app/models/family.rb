@@ -159,7 +159,7 @@ class Family < ApplicationRecord
   end
 
   def synth_overage?
-    self.class.synth_provider && self.class.synth_provider.usage.utilization >= 100
+    self.class.synth_provider&.usage&.utilization.to_i >= 100
   end
 
   def subscribed?
