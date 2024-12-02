@@ -35,11 +35,13 @@ class PlaidItem < ApplicationRecord
   def sync_data(start_date: nil)
     update!(last_synced_at: Time.current)
 
-    fetch_and_load_plaid_data
+    plaid_data = fetch_and_load_plaid_data
 
     accounts.each do |account|
       account.sync_data(start_date: start_date)
     end
+
+    plaid_data
   end
 
   def post_sync
@@ -53,10 +55,12 @@ class PlaidItem < ApplicationRecord
 
   private
     def fetch_and_load_plaid_data
+      data = {}
       item = plaid_provider.get_item(access_token).item
       update!(available_products: item.available_products, billed_products: item.billed_products)
 
       fetched_accounts = plaid_provider.get_item_accounts(self).accounts
+      data[:accounts] = fetched_accounts || []
 
       internal_plaid_accounts = fetched_accounts.map do |account|
         internal_plaid_account = plaid_accounts.find_or_create_from_plaid_data!(account, family)
@@ -65,6 +69,7 @@ class PlaidItem < ApplicationRecord
       end
 
       fetched_transactions = safe_fetch_plaid_data(:get_item_transactions)
+      data[:transactions] = fetched_transactions || []
 
       if fetched_transactions
         transaction do
@@ -81,6 +86,7 @@ class PlaidItem < ApplicationRecord
       end
 
       fetched_investments = safe_fetch_plaid_data(:get_item_investments)
+      data[:investments] = fetched_investments || []
 
       if fetched_investments
         transaction do
@@ -95,6 +101,7 @@ class PlaidItem < ApplicationRecord
       end
 
       fetched_liabilities = safe_fetch_plaid_data(:get_item_liabilities)
+      data[:liabilities] = fetched_liabilities || []
 
       if fetched_liabilities
         transaction do
@@ -109,6 +116,8 @@ class PlaidItem < ApplicationRecord
           end
         end
       end
+
+      data
     end
 
     def safe_fetch_plaid_data(method)

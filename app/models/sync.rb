@@ -9,7 +9,8 @@ class Sync < ApplicationRecord
     start!
 
     begin
-      syncable.sync_data(start_date: start_date)
+      data = syncable.sync_data(start_date: start_date)
+      update!(data: data) if data
       complete!
     rescue StandardError => error
       fail! error
@@ -29,7 +30,10 @@ class Sync < ApplicationRecord
     end
 
     def fail!(error)
-      Sentry.capture_exception(error)
+      Sentry.capture_exception(error) do |scope|
+        scope.set_context("sync", { id: id })
+      end
+
       update! status: :failed, error: error.message, last_ran_at: Time.current
     end
 end

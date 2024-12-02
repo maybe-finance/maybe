@@ -28,9 +28,13 @@ class Family < ApplicationRecord
       account.sync_data(start_date: start_date)
     end
 
+    plaid_data = []
+
     plaid_items.each do |plaid_item|
-      plaid_item.sync_data(start_date: start_date)
+      plaid_data << plaid_item.sync_data(start_date: start_date)
     end
+
+    plaid_data
   end
 
   def post_sync
