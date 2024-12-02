@@ -10,10 +10,11 @@
        class="overflow-y-auto flex flex-col bg-white rounded-xl border border-alpha-black-25 shadow-xs p-4">
     <%= render "transactions/searches/search" %>
 
+    <div id="entry-selection-bar" data-bulk-select-target="selectionBar" class="flex justify-center hidden">
+      <%= render "account/transactions/selection_bar" %>
+    </div>
+
     <% if @transaction_entries.present? %>
-      <div id="entry-selection-bar" data-bulk-select-target="selectionBar" class="flex justify-center hidden">
-        <%= render "account/transactions/selection_bar" %>
-      </div>
       <div class="grow overflow-y-auto">
         <div class="grid grid-cols-12 bg-gray-25 rounded-xl px-5 py-3 text-xs uppercase font-medium text-gray-500 items-center mb-4">
           <div class="pl-0.5 col-span-6 flex items-center gap-4">
