@@ -158,19 +158,21 @@ class PlaidAccount < ApplicationRecord
     end
 
     def get_security(plaid_security, securities)
-      security = nil
+      return nil if plaid_security.nil?
 
-      if plaid_security.ticker_symbol.present?
-        security = plaid_security
+      security = if plaid_security.ticker_symbol.present?
+        plaid_security
       else
-        security = securities.find { |s| s.security_id == plaid_security.proxy_security_id }
+        securities.find { |s| s.security_id == plaid_security.proxy_security_id }
       end
+
+      return nil if security.nil? || security.ticker_symbol.blank?
 
       Security.find_or_create_by!(
         ticker: security.ticker_symbol,
         exchange_mic: security.market_identifier_code || "XNAS",
         country_code: "US"
-      ) if security.present?
+      )
     end
 
     def transfer?(plaid_txn)

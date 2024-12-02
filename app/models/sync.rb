@@ -29,6 +29,7 @@ class Sync < ApplicationRecord
     end
 
     def fail!(error)
+      Sentry.capture_exception(error)
       update! status: :failed, error: error.message, last_ran_at: Time.current
     end
 end
