@@ -1,8 +1,14 @@
 <div class="space-y-4">
-  <% if self_hosted? && Current.family&.synth_overage? %>
-    <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
-      Your Synth API credit limit has been exceeded. Please visit your <a href="https://dashboard.synthfinance.com/settings" class="font-medium underline hover:text-yellow-900">Synth billing settings</a> to upgrade your plan or wait for your credits to reset.
-    </div>
+  <% if self_hosted? %>
+    <% if Current.family&.synth_overage? %>
+      <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
+        Your Synth API credit limit has been exceeded. Please visit your <a href="https://dashboard.synthfinance.com/settings" class="font-medium underline hover:text-yellow-900">Synth billing settings</a> to upgrade your plan or wait for your credits to reset.
+      </div>
+    <% elsif !Current.family&.synth_valid? %>
+      <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
+        Your Synth API Key is invalid. Please visit your <a href="https://dashboard.synthfinance.com/dashboard" class="font-medium underline hover:text-yellow-900">Synth dashboard</a> and verify that your API key is correct.
+      </div>
+    <% end %>
   <% end %>
   <header class="flex items-center justify-between">
     <div>

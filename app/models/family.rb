@@ -162,6 +162,10 @@ class Family < ApplicationRecord
     self.class.synth_provider&.usage&.utilization.to_i >= 100
   end
 
+  def synth_valid?
+    self.class.synth_provider&.healthy?
+  end
+
   def subscribed?
     stripe_subscription_status == "active"
   end
