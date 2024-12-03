@@ -10,7 +10,7 @@ maybe_support_staff:
   family: empty
   first_name: Support
   last_name: Admin
-  email: support@maybe.co
+  email: support@maybefinance.com
   password_digest: <%= BCrypt::Password.create('password') %>
   role: super_admin
   onboarded_at: <%= 3.days.ago %>

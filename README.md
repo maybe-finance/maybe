@@ -4,7 +4,7 @@
 # Maybe: The OS for your personal finances
 
 <b>Get
-involved: [Discord](https://link.maybe.co/discord) • [Website](https://maybe.co) • [Issues](https://github.com/maybe-finance/maybe/issues)</b>
+involved: [Discord](https://link.maybe.co/discord) • [Website](https://maybefinance.com) • [Issues](https://github.com/maybe-finance/maybe/issues)</b>
 
 _If you're looking for the previous React codebase, you can find it
 at [maybe-finance/maybe-archive](https://github.com/maybe-finance/maybe-archive)._

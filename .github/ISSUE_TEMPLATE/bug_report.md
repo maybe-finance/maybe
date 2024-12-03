@@ -21,7 +21,7 @@ Steps to reproduce the behavior:
 A clear and concise description of what you expected to happen.
 
 **What version of Maybe are you using?**
-This could be "Hosted" (i.e. app.maybe.co) or "Self-hosted". If "Self-hosted", please include the version you're currently on.
+This could be "Hosted" (i.e. app.maybefinance.com) or "Self-hosted". If "Self-hosted", please include the version you're currently on.
 
 **What operating system and browser are you using?**
 The more info the better.
