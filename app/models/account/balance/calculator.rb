@@ -4,7 +4,7 @@ class Account::Balance::Calculator
     @sync_start_date = sync_start_date
   end
 
-  def calculate(is_partial_sync: false)
+  def calculate(is_partial_sync: false, strategy: :chronological)
     cached_entries = account.entries.where("date >= ?", sync_start_date).to_a
     sync_starting_balance = is_partial_sync ? find_start_balance_for_partial_sync : find_start_balance_for_full_sync(cached_entries)
 

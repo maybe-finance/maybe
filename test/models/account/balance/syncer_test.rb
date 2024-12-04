@@ -16,7 +16,7 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
     assert_equal [ @account.balance ], @account.balances.chronological.map(&:balance)
   end
 
-  test "syncs account with valuations only" do
+  test "valuations only" do
     create_valuation(account: @account, date: 2.days.ago.to_date, amount: 22000)
 
     run_sync_for @account
@@ -25,7 +25,7 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
     assert_equal [ 22000, 22000, 22000 ], @account.balances.chronological.map(&:balance)
   end
 
-  test "syncs account with transactions only" do
+  test "transactions only" do
     create_transaction(account: @account, date: 4.days.ago.to_date, amount: 100)
     create_transaction(account: @account, date: 2.days.ago.to_date, amount: -500)
 
