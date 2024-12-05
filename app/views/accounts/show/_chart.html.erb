@@ -11,7 +11,7 @@
         <%= tooltip %>
       </div>
 
-      <%= tag.p format_money(account.value), class: "text-gray-900 text-3xl font-medium" %>
+      <%= tag.p format_money(account.balance_money), class: "text-gray-900 text-3xl font-medium" %>
     </div>
 
     <%= form_with url: request.path, method: :get, data: { controller: "auto-submit-form" } do |form| %>

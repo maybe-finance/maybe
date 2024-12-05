@@ -32,8 +32,6 @@ class Account < ApplicationRecord
 
   accepts_nested_attributes_for :accountable, update_only: true
 
-  delegate :value, :series, to: :accountable
-
   class << self
     def by_group(period: Period.all, currency: Money.default_currency.iso_code)
       grouped_accounts = { assets: ValueGroup.new("Assets", currency), liabilities: ValueGroup.new("Liabilities", currency) }
@@ -93,14 +91,25 @@ class Account < ApplicationRecord
 
   def sync_data(start_date: nil)
     update!(last_synced_at: Time.current)
-
-    resolve_stale_issues
-    Balance::Syncer.new(self, start_date: start_date).run
-    Holding::Syncer.new(self, start_date: start_date).run
+    accountable.sync_data(start_date: start_date)
   end
 
   def post_sync
+    broadcast_remove_to(family, target: "syncing-notice")
+    resolve_stale_issues
     accountable.post_sync
+  end
+
+  def series(period: Period.last_30_days, currency: nil)
+    balance_series = balances.in_period(period).where(currency: currency || self.currency)
+
+    if balance_series.empty? && period.date_range.end == Date.current
+      TimeSeries.new([ { date: Date.current, value: balance_money.exchange_to(currency) } ])
+    else
+      TimeSeries.from_collection(balance_series, :balance_money, favorable_direction: asset? ? "up" : "down")
+    end
+  rescue Money::ConversionError
+    TimeSeries.new([])
   end
 
   def original_balance
