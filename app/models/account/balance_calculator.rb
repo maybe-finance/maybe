@@ -1,0 +1,2 @@
+class Account::BalanceCalculator
+end

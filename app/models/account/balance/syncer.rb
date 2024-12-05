@@ -1,7 +1,8 @@
 class Account::Balance::Syncer
-  def initialize(account, start_date: nil)
+  def initialize(account, start_date: nil, is_reverse_sync: false)
     @account = account
     @provided_start_date = start_date
+    @is_reverse_sync = is_reverse_sync
     @sync_start_date = calculate_sync_start_date(start_date)
     @loader = Account::Balance::Loader.new(account)
     @converter = Account::Balance::Converter.new(account, sync_start_date)
@@ -19,7 +20,7 @@ class Account::Balance::Syncer
 
   private
 
-    attr_reader :sync_start_date, :provided_start_date, :account, :loader, :converter, :calculator
+    attr_reader :sync_start_date, :provided_start_date, :account, :is_reverse_sync, :loader, :converter, :calculator
 
     def account_start_date
       @account_start_date ||= begin

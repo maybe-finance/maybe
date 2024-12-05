@@ -91,7 +91,14 @@ class Account < ApplicationRecord
 
   def sync_data(start_date: nil)
     update!(last_synced_at: Time.current)
-    accountable.sync_data(start_date: start_date)
+
+    # Plaid accounts treat the Plaid "current balance" as the source of truth and work backwards, applying entries.
+    # Manual accounts start at 0 and apply entries forwards. 
+    if plaid_account_id.present?
+      accountable.sync_reverse(start_date: start_date)
+    else
+      accountable.sync(start_date: start_date)
+    end
   end
 
   def post_sync
