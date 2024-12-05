@@ -26,7 +26,7 @@
     </div>
 
     <div>
-      <%= form_with url: account_entries_path(@account),
+      <%= form_with url: account_entries_path,
               id: "entries-search",
               scope: :q,
               method: :get,
@@ -35,6 +35,7 @@
           <div class="grow">
             <div class="flex items-center px-3 py-2 gap-2 border border-gray-200 rounded-lg focus-within:ring-gray-100 focus-within:border-gray-900">
               <%= lucide_icon("search", class: "w-5 h-5 text-gray-500") %>
+              <%= hidden_field_tag :account_id, @account.id %>
               <%= form.search_field :search,
                             placeholder: "Search entries by name",
                             value: @q[:search],
