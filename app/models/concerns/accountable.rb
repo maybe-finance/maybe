@@ -18,14 +18,6 @@ module Accountable
     has_one :account, as: :accountable, touch: true
   end 
 
-  def sync(start_date: nil)
-    Balance::Syncer.new(account, start_date: start_date).run
-  end
-
-  def sync_reverse(start_date: nil)
-    Balance::Syncer.new(account, start_date: start_date, is_reverse_sync: true).run
-  end
-
   def post_sync
     broadcast_replace_to(
       account,

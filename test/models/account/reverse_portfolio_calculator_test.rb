@@ -29,6 +29,18 @@ class Account::ReversePortfolioCalculatorTest < ActiveSupport::TestCase
     assert_equal 2, calculated.length
   end
 
+  # Should be able to handle this case, although we should not be reverse-syncing an account without provided current day holdings
+  test "no holdings with trades" do 
+    voo = Security.create!(ticker: "VOO", name: "Vanguard S&P 500 ETF")
+    Security::Price.create!(security: voo, date: Date.current, price: 470) 
+    Security::Price.create!(security: voo, date: 1.day.ago.to_date, price: 470) 
+
+    create_trade(voo, qty: -10, date: Date.current, price: 470, account: @account)
+
+    calculated = Account::ReversePortfolioCalculator.new(@account).calculate
+    assert_equal 2, calculated.length
+  end
+
   test "builds historical portfolio from trades" do 
     load_today_portfolio
 
@@ -45,6 +57,11 @@ class Account::ReversePortfolioCalculatorTest < ActiveSupport::TestCase
     create_trade(@wmt, qty: 100, date: 1.day.ago.to_date, price: 100, account: @account)
 
     expected = [
+      # 4 days ago
+      Account::Holding.new(security: @voo, date: 4.days.ago.to_date, qty: 0, price: 460, amount: 0),
+      Account::Holding.new(security: @wmt, date: 4.days.ago.to_date, qty: 0, price: 100, amount: 0),
+      Account::Holding.new(security: @amzn, date: 4.days.ago.to_date, qty: 0, price: 200, amount: 0),
+
       # 3 days ago
       Account::Holding.new(security: @voo, date: 3.days.ago.to_date, qty: 20, price: 470, amount: 9400),
       Account::Holding.new(security: @wmt, date: 3.days.ago.to_date, qty: 0, price: 100, amount: 0),
@@ -58,10 +75,12 @@ class Account::ReversePortfolioCalculatorTest < ActiveSupport::TestCase
       # 1 day ago
       Account::Holding.new(security: @voo, date: 1.day.ago.to_date, qty: 10, price: 490, amount: 4900),
       Account::Holding.new(security: @wmt, date: 1.day.ago.to_date, qty: 100, price: 100, amount: 10000),
+      Account::Holding.new(security: @amzn, date: 1.day.ago.to_date, qty: 0, price: 200, amount: 0),
 
       # Today
       Account::Holding.new(security: @voo, date: Date.current, qty: 10, price: 500, amount: 5000),
-      Account::Holding.new(security: @wmt, date: Date.current, qty: 100, price: 100, amount: 10000)
+      Account::Holding.new(security: @wmt, date: Date.current, qty: 100, price: 100, amount: 10000),
+      Account::Holding.new(security: @amzn, date: Date.current, qty: 0, price: 200, amount: 0)
     ]
 
     calculated = Account::ReversePortfolioCalculator.new(@account).calculate
@@ -92,18 +111,21 @@ class Account::ReversePortfolioCalculatorTest < ActiveSupport::TestCase
       @account.investment.update!(holdings_balance: 15000, cash_balance: 5000)
 
       @voo = Security.create!(ticker: "VOO", name: "Vanguard S&P 500 ETF")
+      Security::Price.create!(security: @voo, date: 4.days.ago.to_date, price: 460)
       Security::Price.create!(security: @voo, date: 3.days.ago.to_date, price: 470)
       Security::Price.create!(security: @voo, date: 2.days.ago.to_date, price: 480)
       Security::Price.create!(security: @voo, date: 1.day.ago.to_date, price: 490)
       Security::Price.create!(security: @voo, date: Date.current, price: 500)
 
       @wmt = Security.create!(ticker: "WMT", name: "Walmart Inc.")
+      Security::Price.create!(security: @wmt, date: 4.days.ago.to_date, price: 100)
       Security::Price.create!(security: @wmt, date: 3.days.ago.to_date, price: 100)
       Security::Price.create!(security: @wmt, date: 2.days.ago.to_date, price: 100)
       Security::Price.create!(security: @wmt, date: 1.day.ago.to_date, price: 100)
       Security::Price.create!(security: @wmt, date: Date.current, price: 100)
 
       @amzn = Security.create!(ticker: "AMZN", name: "Amazon.com Inc.")
+      Security::Price.create!(security: @amzn, date: 4.days.ago.to_date, price: 200)
       Security::Price.create!(security: @amzn, date: 3.days.ago.to_date, price: 200)
       Security::Price.create!(security: @amzn, date: 2.days.ago.to_date, price: 200)
       Security::Price.create!(security: @amzn, date: 1.day.ago.to_date, price: 200)

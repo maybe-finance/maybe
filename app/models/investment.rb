@@ -1,6 +1,8 @@
 class Investment < ApplicationRecord
   include Accountable
 
+  validates :cash_balance, :holdings_balance, presence: true
+
   SUBTYPES = [
     [ "Brokerage", "brokerage" ],
     [ "Pension", "pension" ],
@@ -22,11 +24,6 @@ class Investment < ApplicationRecord
 
   def icon
     "line-chart"
-  end
-
-  def sync_data(start_date: nil)
-    Balance::Syncer.new(account, start_date: start_date).run
-    Holding::Syncer.new(account, start_date: start_date).run
   end
 
   def post_sync

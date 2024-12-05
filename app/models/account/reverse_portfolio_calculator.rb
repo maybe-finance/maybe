@@ -4,17 +4,16 @@ class Account::ReversePortfolioCalculator
   end
 
   def calculate 
-    return [] if account.holdings.empty?
-    return account.holdings if account.trades.empty?
-
     trades = account.entries.includes(:entryable).account_trades.to_a
 
-    current_holding_quantities = load_current_holding_quantities
+    current_holding_quantities = load_current_holding_quantities(trades)
     prior_holding_quantities = {} 
 
     holdings = []
 
-    Date.current.downto(trades.first&.date || Date.current).map do |date|
+    portfolio_start_date = trades.first ? trades.first.date - 1.day : Date.current
+
+    Date.current.downto(portfolio_start_date).map do |date|
       today_trades = trades.select { |t| t.date == date }
 
       prior_holding_quantities = calculate_prior_quantities(current_holding_quantities, today_trades)
@@ -53,8 +52,12 @@ class Account::ReversePortfolioCalculator
       prior_quantities
     end
 
-    def load_current_holding_quantities
+    def load_current_holding_quantities(trades)
       holding_quantities = {}
+
+      trades.map { |t| t.entryable.security_id }.uniq.each do |security_id|
+        holding_quantities[security_id] = 0
+      end
 
       account.holdings.where(date: Date.current).map do |holding|
         holding_quantities[holding.security_id] = holding.qty

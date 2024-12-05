@@ -92,13 +92,7 @@ class Account < ApplicationRecord
   def sync_data(start_date: nil)
     update!(last_synced_at: Time.current)
 
-    # Plaid accounts treat the Plaid "current balance" as the source of truth and work backwards, applying entries.
-    # Manual accounts start at 0 and apply entries forwards. 
-    if plaid_account_id.present?
-      accountable.sync_reverse(start_date: start_date)
-    else
-      accountable.sync(start_date: start_date)
-    end
+    Syncer.new(self, start_date: start_date).run
   end
 
   def post_sync
@@ -111,7 +105,7 @@ class Account < ApplicationRecord
     balance_series = balances.in_period(period).where(currency: currency || self.currency)
 
     if balance_series.empty? && period.date_range.end == Date.current
-      TimeSeries.new([ { date: Date.current, value: balance_money.exchange_to(currency) } ])
+      TimeSeries.new([ { date: Date.current, value: balance_money.exchange_to(currency || self.currency) } ])
     else
       TimeSeries.from_collection(balance_series, :balance_money, favorable_direction: asset? ? "up" : "down")
     end
