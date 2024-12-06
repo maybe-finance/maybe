@@ -10,12 +10,35 @@ class Account::Syncer
     sync_balances
     account.reload
     purge_stale_account_records
+
+    account.reload
+
+    update_account_info
+
     enrich_transactions
     enrich_holdings
   end
 
   private 
     attr_reader :account
+
+    def update_account_info
+      new_balance = account.balances.chronological.last.balance
+
+      account.update!(
+        balance: new_balance,
+      )
+
+      if account.investment?
+        new_holdings_value = account.holdings.current.sum(:amount)
+        new_cash_balance = new_balance - new_holdings_value
+
+        account.investment.update!(
+          cash_balance: new_cash_balance,
+          holdings_balance: new_holdings_value
+        )
+      end
+    end
 
     def enrich_transactions
       # TODO: implement
@@ -26,7 +49,7 @@ class Account::Syncer
     end
 
     def sync_holdings 
-      holdings = Account::ReversePortfolioCalculator.new(account).calculate
+      holdings = Account::ReversePortfolioCalculator.new(account).calculate(reverse: account.plaid_account_id.present?)
       current_time = Time.now 
       account.holdings.upsert_all(
         holdings.map { |h| h.attributes
@@ -37,7 +60,7 @@ class Account::Syncer
     end
 
     def sync_balances 
-      balances = Account::ReverseBalanceCalculator.new(account).calculate
+      balances = Account::ReverseBalanceCalculator.new(account).calculate(reverse: account.plaid_account_id.present?)
       load_balances(balances)
   
       # If account is in different currency than family, convert balances
