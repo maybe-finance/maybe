@@ -5,23 +5,25 @@ class Account::ReverseBalanceCalculator
 
   def calculate
     entries = account.entries.order(:date).to_a.map do |e|
-      e.amount = e.amount_money.exchange_to(
+      converted_entry = e.dup
+      converted_entry.amount = converted_entry.amount_money.exchange_to(
         account.currency,
         date: e.date,
         fallback_rate: 1
       ).amount
-      e.currency = account.currency
-      e
+      converted_entry.currency = account.currency
+      converted_entry
     end
 
     holdings = account.holdings.to_a.map do |h|
-      h.amount = h.amount_money.exchange_to(
+      converted_holding = h.dup
+      converted_holding.amount = converted_holding.amount_money.exchange_to(
         account.currency,
         date: h.date,
         fallback_rate: 1
       ).amount
-      h.currency = account.currency
-      h
+      converted_holding.currency = account.currency
+      converted_holding
     end
 
     prior_balance = account.investment? ? account.investment.cash_balance : account.balance
@@ -38,7 +40,7 @@ class Account::ReverseBalanceCalculator
         # To get this to a cash valuation, we back out holdings value on day
         valuation.amount - holdings_for_date.sum(&:amount)
       else
-        transactions = entries_for_date.select { |e| e.account_transaction? }
+        transactions = entries_for_date.select { |e| e.account_transaction? || e.account_trade? }
 
         calculate_balance(prior_balance, transactions)
       end
@@ -46,7 +48,7 @@ class Account::ReverseBalanceCalculator
       balance_record = Account::Balance.new(
         account: account,
         date: date,
-        balance: valuation&.amount || prior_balance,
+        balance: valuation ? current_balance : prior_balance,
         currency: account.currency
       )
 

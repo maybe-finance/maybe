@@ -8,7 +8,7 @@
   <% end %>
 
   <div class="space-y-3">
-    <%= form.date_field :date, label: true, required: true, value: Date.today, min: Account::Entry.min_supported_date, max: Date.today %>
+    <%= form.date_field :date, label: true, required: true, value: Date.current, min: Account::Entry.min_supported_date, max: Date.current %>
     <%= form.money_field :amount, label: t(".amount"), required: true %>
   </div>
 

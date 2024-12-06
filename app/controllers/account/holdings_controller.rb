@@ -5,8 +5,6 @@ class Account::HoldingsController < ApplicationController
 
   def index
     @account = Current.family.accounts.find(params[:account_id])
-    @holdings = Current.family.holdings.current
-    @holdings = @holdings.where(account: @account) if @account
   end
 
   def show

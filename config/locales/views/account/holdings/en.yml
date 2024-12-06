@@ -7,6 +7,8 @@ en:
       holding:
         per_share: per share
         shares: "%{qty} shares"
+      cash:
+        brokerage_cash: Brokerage cash
       index:
         cost: cost
         holdings: Holdings

@@ -1,4 +1,4 @@
-<%# locals: (value:, cash:) %>
+<%# locals: (balance:, holdings:, cash:) %>
 
 <div data-controller="tooltip" data-tooltip-placement-value="right" data-tooltip-offset-value=10 data-tooltip-cross-axis-value=50>
   <%= lucide_icon("info", class: "w-4 h-4 shrink-0 text-gray-500") %>
@@ -8,18 +8,29 @@
     </div>
     <div class="flex pt-3">
       <div class="text-gray-300">
-        <%= t(".holdings") %>
-      </div>
-      <div class="text-white ml-auto">
-        <%= tag.p format_money(value, precision: 0) %>
-      </div>
-    </div>
-    <div class="flex">
-      <div class="text-gray-300">
         <%= t(".cash") %>
       </div>
       <div class="text-white ml-auto">
         <%= tag.p format_money(cash, precision: 0) %>
+      </div>
+    </div>
+    <div class="flex">
+      <div class="text-gray-300">
+        <%= t(".holdings") %>
+      </div>
+      <div class="text-white ml-auto">
+        <%= tag.p format_money(holdings, precision: 0) %>
+      </div>
+    </div>
+
+    <hr class="my-2 border-gray-500">
+
+    <div class="flex">
+      <div class="text-gray-300">
+        <%= t(".total") %>
+      </div>
+      <div class="text-white font-bold ml-auto">
+        <%= tag.p format_money(balance, precision: 0) %>
       </div>
     </div>
   </div>

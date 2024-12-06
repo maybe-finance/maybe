@@ -13,7 +13,7 @@
               data: { controller: "auto-submit-form" } do |f| %>
           <%= f.date_field :date,
                 label: t(".date_label"),
-                max: Date.today,
+                max: Date.current,
                 "data-auto-submit-form-target": "auto" %>
 
           <div class="flex items-center gap-2">

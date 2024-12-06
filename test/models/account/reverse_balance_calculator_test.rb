@@ -61,8 +61,12 @@ class Account::ReverseBalanceCalculatorTest < ActiveSupport::TestCase
   test "investment balance sync" do 
     @account.investment.update!(cash_balance: 18000, holdings_balance: 2000)
     
+    # Transactions represent deposits / withdrawals from the brokerage account
     create_transaction(account: @account, date: 4.days.ago.to_date, amount: 100)
     create_transaction(account: @account, date: 2.days.ago.to_date, amount: -500) 
+
+    # Trades either consume cash (buy) or generate cash (sell).  They do NOT change total balance, but do affect composition of cash/holdings.
+    create_trade(securities(:msft), account: @account, date: 4.days.ago.to_date, qty: 1, price: 100)
 
     create_holding(date: Date.current, security: securities(:msft), amount: 2000)
     create_holding(date: 1.day.ago.to_date, security: securities(:msft), amount: 1900)
@@ -71,7 +75,7 @@ class Account::ReverseBalanceCalculatorTest < ActiveSupport::TestCase
     create_holding(date: 4.days.ago.to_date, security: securities(:msft), amount: 1600)
     create_holding(date: 5.days.ago.to_date, security: securities(:msft), amount: 1500)
 
-    expected = [ 19100, 19100, 19200, 19800, 19900, 20000 ]
+    expected = [ 19200, 19100, 19200, 19800, 19900, 20000 ]
     calculated = chronological_balances_for(@account)
 
     assert_equal expected, calculated

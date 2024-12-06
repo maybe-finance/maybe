@@ -6,7 +6,9 @@ class Account::Syncer
 
   def run
     sync_holdings
+    account.reload
     sync_balances
+    account.reload
     purge_stale_account_records
     enrich_transactions
     enrich_holdings
@@ -30,7 +32,7 @@ class Account::Syncer
         holdings.map { |h| h.attributes
                .slice("date", "currency", "qty", "price", "amount", "security_id")
                .merge("updated_at" => current_time) },
-        unique_by: %i[account_id date currency]
+        unique_by: %i[account_id security_id date currency]
       ) if holdings.any?
     end
 

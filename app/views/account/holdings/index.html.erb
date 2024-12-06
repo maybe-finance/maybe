@@ -21,8 +21,10 @@
       </div>
 
       <div class="rounded-lg bg-white border-alpha-black-25 shadow-xs">
-        <% if @holdings.any? %>
-          <%= render partial: "account/holdings/holding", collection: @holdings, spacer_template: "ruler" %>
+        <% if @account.holdings.current.any? %>
+          <%= render "account/holdings/cash", account: @account %>
+          <%= render "account/holdings/ruler" %>
+          <%= render partial: "account/holdings/holding", collection: @account.holdings.current, spacer_template: "ruler" %>
         <% else %>
           <p class="text-gray-500 text-sm p-4"><%= t(".no_holdings") %></p>
         <% end %>

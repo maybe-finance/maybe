@@ -22,7 +22,7 @@ class Account::ReversePortfolioCalculator
         security = Security.find(security_id)
         price = Security::Price.find_price(security:, date:)
 
-        holdings << Account::Holding.new(
+        holdings << account.holdings.build(
           security: security,
           date: date,
           qty: qty,
