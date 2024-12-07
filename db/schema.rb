@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_04_235400) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_07_002408) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -27,6 +27,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_04_235400) do
     t.string "currency", default: "USD", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "cash_balance", precision: 19, scale: 4, default: "0.0"
     t.index ["account_id", "date", "currency"], name: "index_account_balances_on_account_id_date_currency_unique", unique: true
     t.index ["account_id"], name: "index_account_balances_on_account_id"
   end
@@ -112,6 +113,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_04_235400) do
     t.uuid "plaid_account_id"
     t.boolean "scheduled_for_deletion", default: false
     t.datetime "last_synced_at"
+    t.decimal "cash_balance", precision: 19, scale: 4, default: "0.0"
     t.index ["accountable_id", "accountable_type"], name: "index_accounts_on_accountable_id_and_accountable_type"
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id", "accountable_type"], name: "index_accounts_on_family_id_and_accountable_type"
@@ -218,6 +220,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_04_235400) do
     t.string "date_format", default: "%m-%d-%Y"
     t.string "country", default: "US"
     t.datetime "last_synced_at"
+    t.string "timezone"
   end
 
   create_table "good_job_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -396,8 +399,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_04_235400) do
   create_table "investments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal "cash_balance", precision: 19, scale: 4
-    t.decimal "holdings_balance", precision: 19, scale: 4
   end
 
   create_table "invitations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

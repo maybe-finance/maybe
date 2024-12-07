@@ -7,11 +7,9 @@ class Account::ReverseBalanceCalculatorTest < ActiveSupport::TestCase
     @account = families(:empty).accounts.create!(
       name: "Test",
       balance: 20000,
+      cash_balance: 20000,
       currency: "USD",
-      accountable: Investment.new(
-        cash_balance: 20000,
-        holdings_balance: 0 
-      )
+      accountable: Investment.new
     )
   end
 
@@ -104,7 +102,7 @@ class Account::ReverseBalanceCalculatorTest < ActiveSupport::TestCase
   end
 
   test "investment balance sync" do 
-    @account.investment.update!(cash_balance: 18000, holdings_balance: 2000)
+    @account.update!(cash_balance: 18000)
     
     # Transactions represent deposits / withdrawals from the brokerage account
     # Ex: We deposit $20,000 into the brokerage account

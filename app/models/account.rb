@@ -16,7 +16,7 @@ class Account < ApplicationRecord
   has_many :balances, dependent: :destroy
   has_many :issues, as: :issuable, dependent: :destroy
 
-  monetize :balance
+  monetize :balance, :cash_balance
 
   enum :classification, { asset: "asset", liability: "liability" }, validate: { allow_nil: true }
 
@@ -57,7 +57,7 @@ class Account < ApplicationRecord
 
     def create_and_sync(attributes)
       attributes[:accountable_attributes] ||= {} # Ensure accountable is created, even if empty
-      account = new(attributes)
+      account = new(attributes.merge(cash_balance: attributes[:balance]))
 
       transaction do
         # Create 2 valuations for new accounts to establish a value history for users to see
@@ -116,6 +116,18 @@ class Account < ApplicationRecord
   def original_balance
     balance_amount = balances.chronological.first&.balance || balance
     Money.new(balance_amount, currency)
+  end
+
+  def balance_trend_calculator_for(paginated_entries)
+    return nil if paginated_entries.blank?
+
+    date_range = paginated_entries.minmax_by(&:date)
+    min_entry_date, max_entry_date = date_range.map(&:date)
+
+    scoped_entries = self.entries.where(date: min_entry_date..max_entry_date)
+    scoped_balances = self.balances.where(date: (min_entry_date - 1.day)..max_entry_date)
+
+    Account::BalanceTrendCalculator.new(scoped_entries.to_a, scoped_balances.to_a)
   end
 
   def owns_ticker?(ticker)

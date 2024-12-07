@@ -363,4 +363,8 @@ module LanguagesHelper
       end
       .sort_by { |label, locale| label }
   end
+
+  def timezone_options
+    ActiveSupport::TimeZone.all.map { |tz| [ tz.name + " (#{tz.tzinfo.identifier})", tz.tzinfo.identifier ] }
+  end
 end

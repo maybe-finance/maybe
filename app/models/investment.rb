@@ -1,8 +1,6 @@
 class Investment < ApplicationRecord
   include Accountable
 
-  validates :cash_balance, :holdings_balance, presence: true
-
   SUBTYPES = [
     [ "Brokerage", "brokerage" ],
     [ "Pension", "pension" ],

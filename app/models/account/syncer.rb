@@ -24,20 +24,13 @@ class Account::Syncer
 
     def update_account_info
       new_balance = account.balances.chronological.last.balance
+      new_holdings_value = account.holdings.current.sum(:amount)
+        new_cash_balance = new_balance - new_holdings_value
 
       account.update!(
         balance: new_balance,
+        cash_balance: new_cash_balance
       )
-
-      if account.investment?
-        new_holdings_value = account.holdings.current.sum(:amount)
-        new_cash_balance = new_balance - new_holdings_value
-
-        account.investment.update!(
-          cash_balance: new_cash_balance,
-          holdings_balance: new_holdings_value
-        )
-      end
     end
 
     def enrich_transactions
@@ -72,7 +65,7 @@ class Account::Syncer
       current_time = Time.now
       account.balances.upsert_all(
         balances.map { |b| b.attributes
-               .slice("date", "balance", "currency")
+               .slice("date", "balance", "cash_balance", "currency")
                .merge("updated_at" => current_time) },
         unique_by: %i[account_id date currency]
       ) if balances.any?

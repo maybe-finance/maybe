@@ -72,13 +72,14 @@
 
         <div>
           <div class="rounded-tl-lg rounded-tr-lg bg-white border-alpha-black-25 shadow-xs">
-
             <div class="space-y-4">
+              <% calculator = Account::BalanceTrendCalculator.for(@entries) %>
               <%= entries_by_date(@entries) do |entries| %>
-                <%= render entries, show_balance: true %>
+                <% entries.each do |entry| %>
+                  <%= render entry, balance_trend: calculator&.trend_for(entry) %>
+                <% end %>
               <% end %>
             </div>
-
           </div>
 
           <div class="p-4 bg-white rounded-bl-lg rounded-br-lg">

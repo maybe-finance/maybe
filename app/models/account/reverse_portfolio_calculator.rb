@@ -68,7 +68,7 @@ class Account::ReversePortfolioCalculator
           price: price.price,
           currency: price.currency,
           amount: qty * price.price
-        )
+        ) if price.present?
       end
 
       prior_holding_quantities = current_holding_quantities

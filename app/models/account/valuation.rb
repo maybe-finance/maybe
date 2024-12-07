@@ -12,7 +12,8 @@ class Account::Valuation < ApplicationRecord
   end
 
   def name
-    entry.name || (oldest? ? "Initial balance" : "Balance update")
+    "Balance update"
+    # entry.name || (oldest? ? "Initial balance" : "Balance update")
   end
 
   def trend
@@ -20,11 +21,13 @@ class Account::Valuation < ApplicationRecord
   end
 
   def icon
-    oldest? ? "plus" : entry.trend.icon
+    # oldest? ? "plus" : entry.trend.icon
+    "plus"
   end
 
   def color
-    oldest? ? "#D444F1" : entry.trend.color
+    # oldest? ? "#D444F1" : entry.trend.color
+    "#D444F1"
   end
 
   private

@@ -202,7 +202,7 @@ class Demo::Generator
       load_securities!
 
       account = family.accounts.create! \
-        accountable: Investment.new(cash_balance: 20000, holdings_balance: 80000),
+        accountable: Investment.new,
         name: "Robinhood",
         balance: 100000,
         currency: "USD"

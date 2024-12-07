@@ -1,4 +1,4 @@
-<%# locals: (entry:, selectable: true, show_balance: false) %>
+<%# locals: (entry:, selectable: true, balance_trend: nil) %>
 <% transaction, account = entry.account_transaction, entry.account %>
 
 <div class="grid grid-cols-12 items-center <%= entry.excluded ? "text-gray-400 bg-gray-25" : "text-gray-900" %> text-sm font-medium p-4">
@@ -46,7 +46,7 @@
       <%= render "categories/menu", transaction: transaction %>
     </div>
 
-    <% unless show_balance %>
+    <% unless balance_trend %>
       <%= tag.div class: "col-span-2 overflow-hidden truncate" do %>
         <% if entry.new_record? %>
           <%= tag.p account.name %>
@@ -66,12 +66,12 @@
                     class: ["text-green-600": entry.inflow?] %>
   </div>
 
-  <% if show_balance %>
+  <% if balance_trend %>
     <div class="col-span-2 justify-self-end">
-      <% if entry.account.investment? %>
-        <%= tag.p "--", class: "font-medium text-sm text-gray-400" %>
+      <% if balance_trend.trend %>
+        <%= tag.p format_money(balance_trend.trend.current), class: "font-medium text-sm text-gray-900" %>
       <% else %>
-        <%= tag.p format_money(entry.trend.current), class: "font-medium text-sm text-gray-900" %>
+        <%= tag.p "--", class: "font-medium text-sm text-gray-400" %>
       <% end %>
     </div>
   <% end %>

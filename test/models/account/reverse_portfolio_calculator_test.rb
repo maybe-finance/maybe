@@ -7,11 +7,9 @@ class Account::ReversePortfolioCalculatorTest < ActiveSupport::TestCase
     @account = families(:empty).accounts.create!(
       name: "Test",
       balance: 20000,
+      cash_balance: 20000,
       currency: "USD",
-      accountable: Investment.new(
-        cash_balance: 20000,
-        holdings_balance: 0 
-      )
+      accountable: Investment.new
     )
   end
 
@@ -179,7 +177,7 @@ class Account::ReversePortfolioCalculatorTest < ActiveSupport::TestCase
     # Holdings Value: $15,000
     # Total Balance: $20,000
     def load_today_portfolio
-      @account.investment.update!(holdings_balance: 15000, cash_balance: 5000)
+      @account.update!(cash_balance: 5000)
 
       load_prices
 

@@ -34,7 +34,7 @@ class Account::ReverseBalanceCalculator
   end
 
   def reverse_cash_balances
-    prior_balance = account.investment? ? account.investment.cash_balance : account.balance
+    prior_balance = account.cash_balance 
 
     Date.current.downto(oldest_date).map do |date|
       entries_for_date = entries.select { |e| e.date == date }
@@ -55,6 +55,7 @@ class Account::ReverseBalanceCalculator
         account: account,
         date: date,
         balance: valuation ? current_balance : prior_balance,
+        cash_balance: valuation ? current_balance : prior_balance,
         currency: account.currency
       )
 
@@ -87,6 +88,7 @@ class Account::ReverseBalanceCalculator
         account: account,
         date: date,
         balance: current_balance,
+        cash_balance: current_balance,
         currency: account.currency
       )
 
@@ -102,7 +104,6 @@ class Account::ReverseBalanceCalculator
     # Now, apply the daily holding values to the calculated cash balances
     cash_balances.map do |balance|
       holdings_value = holdings.select { |h| h.date == balance.date }.sum(&:amount)
-      authoritative_holdings_value = balance.date == Date.current && account.investment? ? account.investment.holdings_balance : holdings_value
       balance.balance = balance.balance + holdings_value
       balance
     end
