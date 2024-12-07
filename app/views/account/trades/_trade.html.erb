@@ -38,9 +38,8 @@
 
   <div class="col-span-2 justify-self-end">
     <% if balance_trend&.trend %>
-      <div class="text-right">
+      <div class="flex items-center gap-2">
         <%= tag.p format_money(balance_trend.trend.current), class: "font-medium text-sm text-gray-900" %>
-        <%= tag.p "#{format_money(balance_trend.cash)} (Cash)", class: "text-xs text-gray-500" %>
       </div>
     <% else %>
       <%= tag.p "--", class: "font-medium text-sm text-gray-400" %>
