@@ -29,6 +29,20 @@ class Account::Entry < ApplicationRecord
       .where("er.rate IS NOT NULL OR account_entries.currency = ?", currency)
   }
 
+  # Configure optimistic locking for this model
+  self.locking_column = :lock_version
+
+  # Example method to update an entry safely with optimistic locking
+  def update_entry!(new_details)
+    transaction do
+      reload # Reload to ensure the latest version is being updated
+      update!(new_details)
+    end
+  rescue ActiveRecord::StaleObjectError
+    raise "Conflict detected while updating entry. Please retry."
+  end
+
+  # Sync, calculation, and utility methods remain intact
   def sync_account_later
     sync_start_date = if destroyed?
       previous_entry&.date
@@ -93,7 +107,9 @@ class Account::Entry < ApplicationRecord
   end
 
   class << self
+
     # arbitrary cutoff date to avoid expensive sync operations
+
     def min_supported_date
       30.years.ago.to_date
     end
@@ -131,9 +147,11 @@ class Account::Entry < ApplicationRecord
       update_all marked_as_transfer: true
 
       # Attempt to "auto match" and save a transfer if 2 transactions selected
+
       Account::Transfer.new(entries: all).save if all.count == 2
     end
 
+    # Bulk updates with locking example
     def bulk_update!(bulk_update_params)
       bulk_attributes = {
         date: bulk_update_params[:date],

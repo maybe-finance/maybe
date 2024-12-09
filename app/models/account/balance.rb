@@ -1,9 +1,13 @@
 class Account::Balance < ApplicationRecord
-  include Monetizable
+  self.locking_column = :lock_version
 
-  belongs_to :account
-  validates :account, :date, :balance, presence: true
-  monetize :balance
-  scope :in_period, ->(period) { period.date_range.nil? ? all : where(date: period.date_range) }
-  scope :chronological, -> { order(:date) }
+  # Update with optimistic locking
+  def update_balance!(amount)
+    transaction do
+      reload # Reload to ensure the latest version is being updated
+      update!(balance: balance + amount)
+    end
+  rescue ActiveRecord::StaleObjectError
+    raise "Conflict detected while updating balance. Please retry."
+  end
 end

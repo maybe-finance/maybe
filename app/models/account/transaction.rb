@@ -10,6 +10,19 @@ class Account::Transaction < ApplicationRecord
 
   scope :active, -> { where(excluded: false) }
 
+  # Enable optimistic locking
+  self.locking_column = :lock_version
+
+  # Method to process a transaction safely with optimistic locking
+  def process_transaction!(amount)
+    transaction do
+      reload # Reload to ensure the latest version is being updated
+      update!(processed: true, amount: amount)
+    end
+  rescue ActiveRecord::StaleObjectError
+    raise "Conflict detected while processing transaction. Please retry."
+  end
+
   class << self
     def search(params)
       query = all
@@ -54,9 +67,11 @@ class Account::Transaction < ApplicationRecord
 
   def eod_balance
     entry.amount_money
+    
   end
 
   private
+
     def account
       entry.account
     end
