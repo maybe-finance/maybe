@@ -185,7 +185,6 @@ GEM
       thor (>= 1.0.0)
     hashdiff (1.1.1)
     highline (3.0.1)
-    holidays (8.8.0)
     hotwire-livereload (1.4.1)
       actioncable (>= 6.0.0)
       listen (>= 3.0.0)
@@ -492,7 +491,6 @@ DEPENDENCIES
   faraday-multipart
   faraday-retry
   good_job
-  holidays
   hotwire-livereload
   hotwire_combobox
   i18n-tasks
