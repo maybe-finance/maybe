@@ -5,16 +5,15 @@ class Account::HoldingTest < ActiveSupport::TestCase
   include Account::EntriesTestHelper, SecuritiesTestHelper
 
   setup do
-    @account = families(:empty).accounts.create!(name: "Test Brokerage", balance: 20000, currency: "USD", accountable: Investment.new)
+    @account = families(:empty).accounts.create!(name: "Test Brokerage", balance: 20000, cash_balance: 0, currency: "USD", accountable: Investment.new)
 
     # Current day holding instances
     @amzn, @nvda = load_holdings
   end
 
   test "calculates portfolio weight" do
-    expected_portfolio_value = 6960.0
-    expected_amzn_weight = 3240.0 / expected_portfolio_value * 100
-    expected_nvda_weight = 3720.0 / expected_portfolio_value * 100
+    expected_amzn_weight = 3240.0 / @account.balance * 100
+    expected_nvda_weight = 3720.0 / @account.balance * 100
 
     assert_in_delta expected_amzn_weight, @amzn.weight, 0.001
     assert_in_delta expected_nvda_weight, @nvda.weight, 0.001

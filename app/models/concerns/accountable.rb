@@ -16,7 +16,7 @@ module Accountable
 
   included do
     has_one :account, as: :accountable, touch: true
-  end 
+  end
 
   def post_sync
     broadcast_replace_to(
@@ -25,5 +25,5 @@ module Accountable
       partial: "accounts/show/chart",
       locals: { account: account }
     )
-  end 
+  end
 end

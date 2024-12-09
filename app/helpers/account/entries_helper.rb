@@ -13,7 +13,7 @@ module Account::EntriesHelper
   end
 
   def entries_by_date(entries, selectable: true, totals: false)
-    entries.reverse_chronological.group_by(&:date).map do |date, grouped_entries| 
+    entries.reverse_chronological.group_by(&:date).map do |date, grouped_entries|
       content = capture do
         yield grouped_entries
       end

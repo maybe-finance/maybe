@@ -43,12 +43,7 @@ class Account::Entry < ApplicationRecord
   }
 
   def sync_account_later
-    sync_start_date = if destroyed?
-      previous_entry&.date
-    else
-      [ date_previously_was, date ].compact.min
-    end
-
+    sync_start_date = [ date_previously_was, date ].compact.min unless destroyed?
     account.sync_later(start_date: sync_start_date)
   end
 

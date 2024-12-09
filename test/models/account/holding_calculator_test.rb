@@ -1,6 +1,6 @@
 require "test_helper"
 
-class Account::ReversePortfolioCalculatorTest < ActiveSupport::TestCase
+class Account::HoldingCalculatorTest < ActiveSupport::TestCase
   include Account::EntriesTestHelper
 
   setup do
@@ -13,26 +13,26 @@ class Account::ReversePortfolioCalculatorTest < ActiveSupport::TestCase
     )
   end
 
-  test "no holdings" do 
-    forward = Account::ReversePortfolioCalculator.new(@account).calculate
-    reverse = Account::ReversePortfolioCalculator.new(@account).calculate(reverse: true)
+  test "no holdings" do
+    forward = Account::HoldingCalculator.new(@account).calculate
+    reverse = Account::HoldingCalculator.new(@account).calculate(reverse: true)
     assert_equal forward, reverse
     assert_equal [], forward
   end
 
   # Should be able to handle this case, although we should not be reverse-syncing an account without provided current day holdings
-  test "reverse portfolio with trades but without current day holdings" do 
+  test "reverse portfolio with trades but without current day holdings" do
     voo = Security.create!(ticker: "VOO", name: "Vanguard S&P 500 ETF")
-    Security::Price.create!(security: voo, date: Date.current, price: 470) 
-    Security::Price.create!(security: voo, date: 1.day.ago.to_date, price: 470) 
+    Security::Price.create!(security: voo, date: Date.current, price: 470)
+    Security::Price.create!(security: voo, date: 1.day.ago.to_date, price: 470)
 
     create_trade(voo, qty: -10, date: Date.current, price: 470, account: @account)
 
-    calculated = Account::ReversePortfolioCalculator.new(@account).calculate(reverse: true)
+    calculated = Account::HoldingCalculator.new(@account).calculate(reverse: true)
     assert_equal 2, calculated.length
   end
 
-  test "reverse portfolio calculation" do 
+  test "reverse portfolio calculation" do
     load_today_portfolio
 
     # Build up to 10 shares of VOO (current value $5000)
@@ -74,7 +74,7 @@ class Account::ReversePortfolioCalculatorTest < ActiveSupport::TestCase
       Account::Holding.new(security: @amzn, date: Date.current, qty: 0, price: 200, amount: 0)
     ]
 
-    calculated = Account::ReversePortfolioCalculator.new(@account).calculate(reverse: true)
+    calculated = Account::HoldingCalculator.new(@account).calculate(reverse: true)
 
     assert_equal expected.length, calculated.length
 
@@ -87,7 +87,7 @@ class Account::ReversePortfolioCalculatorTest < ActiveSupport::TestCase
     end
   end
 
-  test "forward portfolio calculation" do 
+  test "forward portfolio calculation" do
     load_prices
 
     # Build up to 10 shares of VOO (current value $5000)
@@ -129,21 +129,50 @@ class Account::ReversePortfolioCalculatorTest < ActiveSupport::TestCase
       Account::Holding.new(security: @amzn, date: Date.current, qty: 0, price: 200, amount: 0)
     ]
 
-    calculated = Account::ReversePortfolioCalculator.new(@account).calculate
+    calculated = Account::HoldingCalculator.new(@account).calculate
+
+    assert_equal expected.length, calculated.length
+    assert_holdings(expected, calculated)
+  end
+
+  # Carries the previous record forward if no holding exists for a date
+  # to ensure that net worth historical rollups have a value for every date
+  test "uses locf to fill missing holdings" do
+    load_prices
+
+    create_trade(@wmt, qty: 100, date: 1.day.ago.to_date, price: 100, account: @account)
+
+    expected = [
+      Account::Holding.new(security: @wmt, date: 2.days.ago.to_date, qty: 0, price: 100, amount: 0),
+      Account::Holding.new(security: @wmt, date: 1.day.ago.to_date, qty: 100, price: 100, amount: 10000),
+      Account::Holding.new(security: @wmt, date: Date.current, qty: 100, price: 100, amount: 10000)
+    ]
+
+    # Price missing today, so we should carry forward the holding from 1 day ago
+    Security.stubs(:find).returns(@wmt)
+    Security::Price.stubs(:find_price).with(security: @wmt, date: 2.days.ago.to_date).returns(Security::Price.new(price: 100))
+    Security::Price.stubs(:find_price).with(security: @wmt, date: 1.day.ago.to_date).returns(Security::Price.new(price: 100))
+    Security::Price.stubs(:find_price).with(security: @wmt, date: Date.current).returns(nil)
+
+    calculated = Account::HoldingCalculator.new(@account).calculate
 
     assert_equal expected.length, calculated.length
 
-    expected.each do |expected_entry|
-      calculated_entry = calculated.find { |c| c.security == expected_entry.security && c.date == expected_entry.date }
-
-      assert_equal expected_entry.qty, calculated_entry.qty, "Qty mismatch for #{expected_entry.security.ticker} on #{expected_entry.date}"
-      assert_equal expected_entry.price, calculated_entry.price, "Price mismatch for #{expected_entry.security.ticker} on #{expected_entry.date}"
-      assert_equal expected_entry.amount, calculated_entry.amount, "Amount mismatch for #{expected_entry.security.ticker} on #{expected_entry.date}"
-    end
+    assert_holdings(expected, calculated)
   end
 
   private
-    def load_prices 
+    def assert_holdings(expected, calculated)
+      expected.each do |expected_entry|
+        calculated_entry = calculated.find { |c| c.security == expected_entry.security && c.date == expected_entry.date }
+
+        assert_equal expected_entry.qty, calculated_entry.qty, "Qty mismatch for #{expected_entry.security.ticker} on #{expected_entry.date}"
+        assert_equal expected_entry.price, calculated_entry.price, "Price mismatch for #{expected_entry.security.ticker} on #{expected_entry.date}"
+        assert_equal expected_entry.amount, calculated_entry.amount, "Amount mismatch for #{expected_entry.security.ticker} on #{expected_entry.date}"
+      end
+    end
+
+    def load_prices
       @voo = Security.create!(ticker: "VOO", name: "Vanguard S&P 500 ETF")
       Security::Price.create!(security: @voo, date: 4.days.ago.to_date, price: 460)
       Security::Price.create!(security: @voo, date: 3.days.ago.to_date, price: 470)
@@ -200,4 +229,3 @@ class Account::ReversePortfolioCalculatorTest < ActiveSupport::TestCase
       )
     end
 end
-

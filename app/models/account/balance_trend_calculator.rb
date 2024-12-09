@@ -5,7 +5,7 @@
 class Account::BalanceTrendCalculator
   BalanceTrend = Struct.new(:trend, :cash, keyword_init: true)
 
-  class << self 
+  class << self
     def for(entries)
       return nil if entries.blank?
 
@@ -57,7 +57,7 @@ class Account::BalanceTrendCalculator
 
         current_balance = prior_balance + balance_change
         current_cash_balance = prior_cash_balance + cash_change
-      end 
+      end
 
       if e.id == entry.id
         # Final entry should always match the end-of-day balances
@@ -65,7 +65,7 @@ class Account::BalanceTrendCalculator
           intraday_balance = end_of_day_balance.balance
           intraday_cash_balance = end_of_day_balance.cash_balance
         else
-          intraday_balance = current_balance 
+          intraday_balance = current_balance
           intraday_cash_balance = current_cash_balance
         end
 

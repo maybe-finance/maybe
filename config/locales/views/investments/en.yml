@@ -16,4 +16,5 @@ en:
       cash: Cash
       holdings: Holdings
       total: Portfolio balance
-      total_value_tooltip: The total portfolio balance is the sum of brokerage cash (available for trading) and the current market value of your holdings. 
+      total_value_tooltip: The total portfolio balance is the sum of brokerage cash
+        (available for trading) and the current market value of your holdings.

@@ -8,7 +8,7 @@ class TradesTest < ApplicationSystemTestCase
 
     @account = accounts(:investment)
 
-    visit_account_trades
+    visit_account_portfolio
 
     Security.stubs(:search).returns([
       Security.new(
@@ -66,10 +66,7 @@ class TradesTest < ApplicationSystemTestCase
   private
 
     def open_new_trade_modal
-      within "[data-testid='activity-menu']" do
-        click_on "New"
-        click_on "New transaction"
-      end
+      click_on "New transaction"
     end
 
     def within_trades(&block)
@@ -77,6 +74,10 @@ class TradesTest < ApplicationSystemTestCase
     end
 
     def visit_account_trades
+      visit account_path(@account, tab: "activity")
+    end
+
+    def visit_account_portfolio
       visit account_path(@account)
     end
 

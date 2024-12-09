@@ -19,13 +19,13 @@ class Account::Syncer
     enrich_holdings
   end
 
-  private 
-    attr_reader :account
+  private
+    attr_reader :account, :start_date
 
     def update_account_info
       new_balance = account.balances.chronological.last.balance
       new_holdings_value = account.holdings.current.sum(:amount)
-        new_cash_balance = new_balance - new_holdings_value
+      new_cash_balance = new_balance - new_holdings_value
 
       account.update!(
         balance: new_balance,
@@ -41,9 +41,9 @@ class Account::Syncer
       # TODO: implement
     end
 
-    def sync_holdings 
-      holdings = Account::ReversePortfolioCalculator.new(account).calculate(reverse: account.plaid_account_id.present?)
-      current_time = Time.now 
+    def sync_holdings
+      holdings = Account::HoldingCalculator.new(account).calculate(reverse: account.plaid_account_id.present?)
+      current_time = Time.now
       account.holdings.upsert_all(
         holdings.map { |h| h.attributes
                .slice("date", "currency", "qty", "price", "amount", "security_id")
@@ -52,10 +52,10 @@ class Account::Syncer
       ) if holdings.any?
     end
 
-    def sync_balances 
-      balances = Account::ReverseBalanceCalculator.new(account).calculate(reverse: account.plaid_account_id.present?)
+    def sync_balances
+      balances = Account::BalanceCalculator.new(account).calculate(reverse: account.plaid_account_id.present?, start_date: start_date)
       load_balances(balances)
-  
+
       # If account is in different currency than family, convert balances
       converted_balances = convert_balances(balances)
       load_balances(converted_balances)
@@ -80,15 +80,8 @@ class Account::Syncer
       exchange_rates = ExchangeRate.find_rates(
         from: from_currency,
         to: to_currency,
-        start_date: start_date
+        start_date: balances.first.date
       )
-
-      missing_exchange_rates = balances.map(&:date) - exchange_rates.map(&:date)
-
-      if missing_exchange_rates.any?
-        account.observe_missing_exchange_rates(from: from_currency, to: to_currency, dates: missing_exchange_rates)
-        return []
-      end
 
       balances.map do |balance|
         exchange_rate = exchange_rates.find { |er| er.date == balance.date }
@@ -97,13 +90,15 @@ class Account::Syncer
           date: balance.date,
           balance: exchange_rate.rate * balance.balance,
           currency: to_currency
-        )
+        ) if exchange_rate.present?
       end
     end
 
     def purge_stale_account_records
       cutoff_date = (account.entries.chronological.first&.date || Date.current) - 1.day
-      account.holdings.delete_by("date < ?", cutoff_date)
-      account.balances.delete_by("date < ?", cutoff_date)
+      Account.transaction do
+        account.holdings.delete_by("date < ?", cutoff_date)
+        account.balances.delete_by("date < ?", cutoff_date)
+      end
     end
 end
