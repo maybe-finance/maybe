@@ -43,13 +43,10 @@ class Account::EntryTest < ActiveSupport::TestCase
   end
 
   test "triggers sync with correct start date when transaction deleted" do
-    current_entry = create_transaction(date: 1.day.ago.to_date)
-    prior_entry = create_transaction(date: current_entry.date - 1.day)
+    @entry.destroy!
 
-    current_entry.destroy!
-
-    current_entry.account.expects(:sync_later).with(start_date: prior_entry.date)
-    current_entry.sync_account_later
+    @entry.account.expects(:sync_later).with(start_date: nil)
+    @entry.sync_account_later
   end
 
   test "can search entries" do
@@ -98,27 +95,5 @@ class Account::EntryTest < ActiveSupport::TestCase
   test "transactions with negative amounts are inflows, positive amounts are outflows to an account" do
     assert create_transaction(amount: -10).inflow?
     assert create_transaction(amount: 10).outflow?
-  end
-
-  test "balance_after_entry skips account valuations" do
-    family = families(:empty)
-    account = family.accounts.create! name: "Test", balance: 0, currency: "USD", accountable: Depository.new
-
-    new_valuation = create_valuation(account: account, amount: 1)
-    transaction = create_transaction(date: new_valuation.date, account: account, amount: -100)
-
-
-    assert_equal Money.new(100), transaction.balance_after_entry
-  end
-
-  test "prior_entry_balance returns last transaction entry balance" do
-    family = families(:empty)
-    account = family.accounts.create! name: "Test", balance: 0, currency: "USD", accountable: Depository.new
-
-    new_valuation = create_valuation(account: account, amount: 1)
-    transaction = create_transaction(date: new_valuation.date, account: account, amount: -100)
-
-
-    assert_equal Money.new(100), transaction.prior_entry_balance
   end
 end

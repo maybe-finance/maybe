@@ -22,9 +22,9 @@ class Account::Holding < ApplicationRecord
 
   def weight
     return nil unless amount
+    return 0 if amount.zero?
 
-    portfolio_value = account.holdings.current.known_value.sum(&:amount)
-    portfolio_value.zero? ? 1 : amount / portfolio_value * 100
+    account.balance.zero? ? 1 : amount / account.balance * 100
   end
 
   # Basic approximation of cost-basis

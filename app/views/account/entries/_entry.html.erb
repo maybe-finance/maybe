@@ -1,5 +1,5 @@
-<%# locals: (entry:, selectable: true, show_balance: false) %>
+<%# locals: (entry:, selectable: true, balance_trend: nil) %>
 
 <%= turbo_frame_tag dom_id(entry) do %>
-  <%= render partial: entry.entryable.to_partial_path, locals: { entry:, selectable:, show_balance: } %>
+  <%= render partial: entry.entryable.to_partial_path, locals: { entry:, selectable:, balance_trend: } %>
 <% end %>

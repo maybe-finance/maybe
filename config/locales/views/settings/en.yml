@@ -39,6 +39,7 @@ en:
         theme_subtitle: Choose a preferred theme for the app (coming soon...)
         theme_system: System
         theme_title: Theme
+        timezone: Timezone
     profiles:
       show:
         confirm_delete:

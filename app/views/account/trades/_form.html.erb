@@ -32,7 +32,7 @@
         </div>
       <% end %>
 
-      <%= form.date_field :date, label: true, value: Date.today, required: true %>
+      <%= form.date_field :date, label: true, value: Date.current, required: true %>
 
       <% unless %w[buy sell].include?(type) %>
         <%= form.money_field :amount, label: t(".amount"), required: true %>

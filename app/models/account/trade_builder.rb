@@ -59,7 +59,7 @@ class Account::TradeBuilder
         )
       else
         account.entries.build(
-          name: signed_amount < 0 ? "Deposit from #{account.name}" : "Withdrawal to #{account.name}",
+          name: signed_amount < 0 ? "Deposit to #{account.name}" : "Withdrawal from #{account.name}",
           date: date,
           amount: signed_amount,
           currency: currency,

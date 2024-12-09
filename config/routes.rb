@@ -75,7 +75,6 @@ Rails.application.routes.draw do
 
   namespace :account do
     resources :holdings, only: %i[index new show destroy]
-    resources :cashes, only: :index
 
     resources :entries, only: :index
 

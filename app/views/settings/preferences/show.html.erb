@@ -20,6 +20,11 @@
             { label: t(".language") },
             { data: { auto_submit_form_target: "auto" } } %>
 
+          <%= family_form.select :timezone,
+            timezone_options,
+            { label: t(".timezone") },
+            { data: { auto_submit_form_target: "auto" } } %>
+
           <%= family_form.select :date_format,
             date_format_options,
             { label: t(".date_format") },
