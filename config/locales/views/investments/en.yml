@@ -1,8 +1,6 @@
 ---
 en:
   investments:
-    chart:
-      value: Total value
     edit:
       edit: Edit %{account}
     form:

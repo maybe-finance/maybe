@@ -13,7 +13,7 @@
   </div>
 
   <div class="col-span-2 flex justify-end items-center gap-2">
-    <% cash_weight = account.cash_balance / account.balance * 100 %>
+    <% cash_weight = account.balance.zero? ? 0 : account.cash_balance / account.balance * 100 %>
     <%= render "shared/progress_circle", progress: cash_weight, text_class: "text-blue-500" %>
     <%= tag.p number_to_percentage(cash_weight, precision: 1) %>
   </div>

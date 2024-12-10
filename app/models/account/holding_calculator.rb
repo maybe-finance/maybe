@@ -50,6 +50,8 @@ class Account::HoldingCalculator
         security = securities_cache[security_id]
         price = security.dig(:prices)&.find { |p| p.date == date }
 
+        next if price.blank?
+
         account.holdings.build(
           security: security.dig(:security),
           date: date,
@@ -58,7 +60,7 @@ class Account::HoldingCalculator
           currency: price.currency,
           amount: qty * price.price
         )
-      end
+      end.compact
     end
 
     def gapfill_holdings(holdings)

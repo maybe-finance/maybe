@@ -7,13 +7,16 @@ class Account::Syncer
   def run
     holdings = sync_holdings
     balances = sync_balances(holdings)
-    update_account_info(balances, holdings)
+    update_account_info(balances, holdings) unless account.plaid_account_id.present?
     convert_foreign_records(balances)
-    purge_stale_account_records
   end
 
   private
     attr_reader :account, :start_date
+
+    def account_start_date
+      @account_start_date ||= (account.entries.chronological.first&.date || Date.current) - 1.day
+    end
 
     def update_account_info(balances, holdings)
       new_balance = balances.sort_by(&:date).last.balance
@@ -31,12 +34,18 @@ class Account::Syncer
       calculated_holdings = calculator.calculate(reverse: account.plaid_account_id.present?)
 
       current_time = Time.now
-      account.holdings.upsert_all(
-        calculated_holdings.map { |h| h.attributes
-               .slice("date", "currency", "qty", "price", "amount", "security_id")
-               .merge("updated_at" => current_time) },
-        unique_by: %i[account_id security_id date currency]
-      ) if calculated_holdings.any?
+
+      Account.transaction do
+        account.holdings.upsert_all(
+          calculated_holdings.map { |h| h.attributes
+                 .slice("date", "currency", "qty", "price", "amount", "security_id")
+                 .merge("updated_at" => current_time) },
+          unique_by: %i[account_id security_id date currency]
+        ) if calculated_holdings.any?
+
+        # Purge outdated holdings
+        account.holdings.delete_by("date < ? OR security_id NOT IN (?)", account_start_date, calculated_holdings.map(&:security_id))
+      end
 
       calculated_holdings
     end
@@ -45,7 +54,12 @@ class Account::Syncer
       calculator = Account::BalanceCalculator.new(account, holdings: holdings)
       calculated_balances = calculator.calculate(reverse: account.plaid_account_id.present?, start_date: start_date)
 
-      load_balances(calculated_balances)
+      Account.transaction do
+        load_balances(calculated_balances)
+
+        # Purge outdated balances
+        account.balances.delete_by("date < ?", account_start_date)
+      end
 
       calculated_balances
     end
@@ -85,14 +99,6 @@ class Account::Syncer
           balance: exchange_rate.rate * balance.balance,
           currency: to_currency
         ) if exchange_rate.present?
-      end
-    end
-
-    def purge_stale_account_records
-      cutoff_date = (account.entries.chronological.first&.date || Date.current) - 1.day
-      Account.transaction do
-        account.holdings.delete_by("date < ?", cutoff_date)
-        account.balances.delete_by("date < ?", cutoff_date)
       end
     end
 end
