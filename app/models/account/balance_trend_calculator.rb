@@ -14,26 +14,27 @@ class Account::BalanceTrendCalculator
       date_range = entries.minmax_by(&:date)
       min_entry_date, max_entry_date = date_range.map(&:date)
 
-      entries_scope = account.entries.where(date: min_entry_date..max_entry_date)
-      balances_scope = account.balances.where(date: (min_entry_date - 1.day)..max_entry_date)
-      holdings_scope = account.holdings.where(date: (min_entry_date - 1.day)..max_entry_date)
+      # In case view is filtered and there are entry gaps, refetch all entries in range
+      all_entries = account.entries.where(date: min_entry_date..max_entry_date).chronological.to_a
+      balances = account.balances.where(date: (min_entry_date - 1.day)..max_entry_date).chronological.to_a
+      holdings = account.holdings.where(date: (min_entry_date - 1.day)..max_entry_date).to_a
 
-      new(entries_scope, balances_scope, holdings_scope)
+      new(all_entries, balances, holdings)
     end
   end
 
-  def initialize(entries_scope, balances_scope, holdings_scope)
-    @entries_scope = entries_scope
-    @balances_scope = balances_scope
-    @holdings_scope = holdings_scope
+  def initialize(entries, balances, holdings)
+    @entries = entries
+    @balances = balances
+    @holdings = holdings
   end
 
   def trend_for(entry)
     intraday_balance = nil
     intraday_cash_balance = nil
 
-    start_of_day_balance = ordered_balances.find { |b| b.date == entry.date - 1.day }
-    end_of_day_balance = ordered_balances.find { |b| b.date == entry.date }
+    start_of_day_balance = balances.find { |b| b.date == entry.date - 1.day && b.currency == entry.currency }
+    end_of_day_balance = balances.find { |b| b.date == entry.date && b.currency == entry.currency }
 
     return BalanceTrend.new(trend: nil) if start_of_day_balance.blank? || end_of_day_balance.blank?
 
@@ -44,7 +45,7 @@ class Account::BalanceTrendCalculator
     current_balance = nil
     current_cash_balance = nil
 
-    todays_entries = ordered_entries.select { |e| e.date == entry.date }
+    todays_entries = entries.select { |e| e.date == entry.date }
 
     todays_entries.each_with_index do |e, idx|
       if e.account_valuation?
@@ -89,17 +90,5 @@ class Account::BalanceTrendCalculator
   end
 
   private
-    attr_reader :balances_scope, :entries_scope, :holdings_scope, :entry
-
-    def holdings
-      @holdings ||= holdings_scope.to_a
-    end
-
-    def ordered_entries
-      @ordered_entries ||= entries_scope.chronological.to_a
-    end
-
-    def ordered_balances
-      @ordered_balances ||= balances_scope.chronological.to_a
-    end
+    attr_reader :entries, :balances, :holdings
 end

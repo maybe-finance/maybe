@@ -1,7 +1,7 @@
 <%# locals: (entry:, selectable: true, balance_trend: nil) %>
 
-<% account = entry.account %>
-<% valuation = entry.account_valuation %>
+<% color = balance_trend&.trend&.color || "#D444F1" %>
+<% icon = balance_trend&.trend&.icon || "plus" %>
 
 <div class="p-4 grid grid-cols-12 items-center text-gray-900 text-sm font-medium">
   <div class="col-span-8 flex items-center gap-4">
@@ -12,15 +12,15 @@
     <% end %>
 
     <div class="flex items-center gap-3">
-      <%= tag.div class: "w-8 h-8 rounded-full p-1.5 flex items-center justify-center", style: mixed_hex_styles(valuation.color) do %>
-        <%= lucide_icon valuation.icon, class: "w-4 h-4" %>
+      <%= tag.div class: "w-8 h-8 rounded-full p-1.5 flex items-center justify-center", style: mixed_hex_styles(color) do %>
+        <%= lucide_icon icon, class: "w-4 h-4" %>
       <% end %>
 
       <div class="truncate text-gray-900">
         <% if entry.new_record? %>
           <%= content_tag :p, entry.name %>
         <% else %>
-          <%= link_to valuation.name,
+          <%= link_to entry.name || t(".balance_update"),
                         account_entry_path(entry),
                         data: { turbo_frame: "drawer", turbo_prefetch: false },
                         class: "hover:underline hover:text-gray-800" %>
