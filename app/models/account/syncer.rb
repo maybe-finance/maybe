@@ -5,26 +5,19 @@ class Account::Syncer
   end
 
   def run
-    sync_holdings
-    account.reload
-    sync_balances
-    account.reload
+    holdings = sync_holdings
+    balances = sync_balances(holdings)
+    update_account_info(balances, holdings)
+    convert_foreign_records(balances)
     purge_stale_account_records
-
-    account.reload
-
-    update_account_info
-
-    enrich_transactions
-    enrich_holdings
   end
 
   private
     attr_reader :account, :start_date
 
-    def update_account_info
-      new_balance = account.balances.chronological.last.balance
-      new_holdings_value = account.holdings.current.sum(:amount)
+    def update_account_info(balances, holdings)
+      new_balance = balances.sort_by(&:date).last.balance
+      new_holdings_value = holdings.select { |h| h.date == Date.current }.sum(&:amount)
       new_cash_balance = new_balance - new_holdings_value
 
       account.update!(
@@ -33,30 +26,31 @@ class Account::Syncer
       )
     end
 
-    def enrich_transactions
-      # TODO: implement
-    end
-
-    def enrich_holdings
-      # TODO: implement
-    end
-
     def sync_holdings
-      holdings = Account::HoldingCalculator.new(account).calculate(reverse: account.plaid_account_id.present?)
+      calculator = Account::HoldingCalculator.new(account)
+      calculated_holdings = calculator.calculate(reverse: account.plaid_account_id.present?)
+
       current_time = Time.now
       account.holdings.upsert_all(
-        holdings.map { |h| h.attributes
+        calculated_holdings.map { |h| h.attributes
                .slice("date", "currency", "qty", "price", "amount", "security_id")
                .merge("updated_at" => current_time) },
         unique_by: %i[account_id security_id date currency]
-      ) if holdings.any?
+      ) if calculated_holdings.any?
+
+      calculated_holdings
     end
 
-    def sync_balances
-      balances = Account::BalanceCalculator.new(account).calculate(reverse: account.plaid_account_id.present?, start_date: start_date)
-      load_balances(balances)
+    def sync_balances(holdings)
+      calculator = Account::BalanceCalculator.new(account, holdings: holdings)
+      calculated_balances = calculator.calculate(reverse: account.plaid_account_id.present?, start_date: start_date)
 
-      # If account is in different currency than family, convert balances
+      load_balances(calculated_balances)
+
+      calculated_balances
+    end
+
+    def convert_foreign_records(balances)
       converted_balances = convert_balances(balances)
       load_balances(converted_balances)
     end

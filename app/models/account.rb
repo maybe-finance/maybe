@@ -118,18 +118,6 @@ class Account < ApplicationRecord
     Money.new(balance_amount, currency)
   end
 
-  def balance_trend_calculator_for(paginated_entries)
-    return nil if paginated_entries.blank?
-
-    date_range = paginated_entries.minmax_by(&:date)
-    min_entry_date, max_entry_date = date_range.map(&:date)
-
-    scoped_entries = self.entries.where(date: min_entry_date..max_entry_date)
-    scoped_balances = self.balances.where(date: (min_entry_date - 1.day)..max_entry_date)
-
-    Account::BalanceTrendCalculator.new(scoped_entries.to_a, scoped_balances.to_a)
-  end
-
   def owns_ticker?(ticker)
     security_id = Security.find_by(ticker: ticker)&.id
     entries.account_trades

@@ -112,13 +112,15 @@ class Account::BalanceCalculatorTest < ActiveSupport::TestCase
     # Ex: We buy 20 shares of MSFT at $100 for a total of $2000
     create_trade(securities(:msft), account: @account, date: 1.day.ago.to_date, qty: 20, price: 100)
 
-    create_holding(date: Date.current, security: securities(:msft), amount: 2000)
-    create_holding(date: 1.day.ago.to_date, security: securities(:msft), amount: 2000)
-    create_holding(date: 2.days.ago.to_date, security: securities(:msft), amount: 0)
+    holdings = [
+      Account::Holding.new(date: Date.current, security: securities(:msft), amount: 2000),
+      Account::Holding.new(date: 1.day.ago.to_date, security: securities(:msft), amount: 2000),
+      Account::Holding.new(date: 2.days.ago.to_date, security: securities(:msft), amount: 0)
+    ]
 
     expected = [ 0, 20000, 20000, 20000 ]
-    calculated_backwards = Account::BalanceCalculator.new(@account).calculate(reverse: true).sort_by(&:date).map(&:balance)
-    calculated_forwards = Account::BalanceCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
+    calculated_backwards = Account::BalanceCalculator.new(@account, holdings: holdings).calculate(reverse: true).sort_by(&:date).map(&:balance)
+    calculated_forwards = Account::BalanceCalculator.new(@account, holdings: holdings).calculate.sort_by(&:date).map(&:balance)
 
     assert_equal calculated_forwards, calculated_backwards
     assert_equal expected, calculated_forwards
