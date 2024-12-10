@@ -37,7 +37,9 @@ class PlaidAccount < ApplicationRecord
       plaid_subtype: plaid_account_data.subtype,
       account_attributes: {
         id: account.id,
-        balance: plaid_account_data.balances.current
+        # Plaid guarantees at least 1 of these
+        balance: plaid_account_data.balances.current || plaid_account_data.balances.available,
+        cash_balance: derive_plaid_cash_balance(plaid_account_data.balances)
       }
     )
   end
@@ -207,5 +209,14 @@ class PlaidAccount < ApplicationRecord
       return nil if plaid_merchant_name.blank?
 
       family.merchants.find_or_create_by!(name: plaid_merchant_name)
+    end
+
+    def derive_plaid_cash_balance(plaid_balances)
+      if account.investment?
+        plaid_balances.available || 0
+      else
+        # For now, we will not distinguish between "cash" and "overall" balance for non-investment accounts
+        plaid_balances.current || plaid_balances.available
+      end
     end
 end
