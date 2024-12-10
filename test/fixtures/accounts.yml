@@ -43,6 +43,7 @@ investment:
   family: dylan_family
   name: Robinhood Brokerage Account
   balance: 10000
+  cash_balance: 5000
   currency: USD
   accountable_type: Investment
   accountable: one

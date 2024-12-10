@@ -16,37 +16,6 @@ class Investment < ApplicationRecord
     [ "Angel", "angel" ]
   ].freeze
 
-  def value
-    account.balance_money + holdings_value
-  end
-
-  def holdings_value
-    account.holdings.current.known_value.sum(&:amount) || Money.new(0, account.currency)
-  end
-
-  def series(period: Period.all, currency: account.currency)
-    balance_series = account.balances.in_period(period).where(currency: currency)
-    holding_series = account.holdings.known_value.in_period(period).where(currency: currency)
-
-    holdings_by_date = holding_series.group_by(&:date).transform_values do |holdings|
-      holdings.sum(&:amount)
-    end
-
-    combined_series = balance_series.map do |balance|
-      holding_amount = holdings_by_date[balance.date] || 0
-
-      { date: balance.date, value: Money.new(balance.balance + holding_amount, currency) }
-    end
-
-    if combined_series.empty? && period.date_range.end == Date.current
-      TimeSeries.new([ { date: Date.current, value: self.value.exchange_to(currency) } ])
-    else
-      TimeSeries.new(combined_series)
-    end
-  rescue Money::ConversionError
-    TimeSeries.new([])
-  end
-
   def color
     "#1570EF"
   end
@@ -56,8 +25,6 @@ class Investment < ApplicationRecord
   end
 
   def post_sync
-    broadcast_remove_to(account, target: "syncing-notice")
-
     broadcast_replace_to(
       account,
       target: "chart_account_#{account.id}",

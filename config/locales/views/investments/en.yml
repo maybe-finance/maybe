@@ -1,8 +1,6 @@
 ---
 en:
   investments:
-    chart:
-      value: Total value
     edit:
       edit: Edit %{account}
     form:
@@ -15,5 +13,6 @@ en:
     value_tooltip:
       cash: Cash
       holdings: Holdings
-      total_value_tooltip: The total value is the sum of cash balance and your holdings
-        value, minus margin loans.
+      total: Portfolio balance
+      total_value_tooltip: The total portfolio balance is the sum of brokerage cash
+        (available for trading) and the current market value of your holdings.

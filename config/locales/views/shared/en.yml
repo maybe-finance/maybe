@@ -1,8 +1,6 @@
 ---
 en:
   shared:
-    syncing_notice:
-      syncing: Syncing accounts data...
     confirm_modal:
       accept: Confirm
       body_html: "<p>You will not be able to undo this decision</p>"
@@ -15,6 +13,8 @@ en:
       no_account_subtitle: Since no accounts have been added, there's no data to display.
         Add your first accounts to start viewing dashboard data.
       no_account_title: No accounts yet
+    syncing_notice:
+      syncing: Syncing accounts data...
     upgrade_notification:
       app_upgraded: The app has been upgraded to %{version}.
       dismiss: Dismiss

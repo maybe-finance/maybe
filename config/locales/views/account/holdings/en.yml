@@ -2,6 +2,8 @@
 en:
   account:
     holdings:
+      cash:
+        brokerage_cash: Brokerage cash
       destroy:
         success: Holding deleted
       holding:

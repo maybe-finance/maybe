@@ -16,7 +16,7 @@ class Account < ApplicationRecord
   has_many :balances, dependent: :destroy
   has_many :issues, as: :issuable, dependent: :destroy
 
-  monetize :balance
+  monetize :balance, :cash_balance
 
   enum :classification, { asset: "asset", liability: "liability" }, validate: { allow_nil: true }
 
@@ -31,8 +31,6 @@ class Account < ApplicationRecord
   delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
 
   accepts_nested_attributes_for :accountable, update_only: true
-
-  delegate :value, :series, to: :accountable
 
   class << self
     def by_group(period: Period.all, currency: Money.default_currency.iso_code)
@@ -59,7 +57,7 @@ class Account < ApplicationRecord
 
     def create_and_sync(attributes)
       attributes[:accountable_attributes] ||= {} # Ensure accountable is created, even if empty
-      account = new(attributes)
+      account = new(attributes.merge(cash_balance: attributes[:balance]))
 
       transaction do
         # Create 2 valuations for new accounts to establish a value history for users to see
@@ -94,13 +92,25 @@ class Account < ApplicationRecord
   def sync_data(start_date: nil)
     update!(last_synced_at: Time.current)
 
-    resolve_stale_issues
-    Balance::Syncer.new(self, start_date: start_date).run
-    Holding::Syncer.new(self, start_date: start_date).run
+    Syncer.new(self, start_date: start_date).run
   end
 
   def post_sync
+    broadcast_remove_to(family, target: "syncing-notice")
+    resolve_stale_issues
     accountable.post_sync
+  end
+
+  def series(period: Period.last_30_days, currency: nil)
+    balance_series = balances.in_period(period).where(currency: currency || self.currency)
+
+    if balance_series.empty? && period.date_range.end == Date.current
+      TimeSeries.new([ { date: Date.current, value: balance_money.exchange_to(currency || self.currency) } ])
+    else
+      TimeSeries.from_collection(balance_series, :balance_money, favorable_direction: asset? ? "up" : "down")
+    end
+  rescue Money::ConversionError
+    TimeSeries.new([])
   end
 
   def original_balance

@@ -1,13 +1,13 @@
-module Account::CashesHelper
-  def brokerage_cash(account)
+module Account::HoldingsHelper
+  def brokerage_cash_holding(account)
     currency = Money::Currency.new(account.currency)
 
     account.holdings.build \
       date: Date.current,
-      qty: account.balance,
+      qty: account.cash_balance,
       price: 1,
-      amount: account.balance,
-      currency: account.currency,
+      amount: account.cash_balance,
+      currency: currency.iso_code,
       security: Security.new(ticker: currency.iso_code, name: currency.name)
   end
 end

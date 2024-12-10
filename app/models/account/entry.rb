@@ -14,9 +14,22 @@ class Account::Entry < ApplicationRecord
   validates :date, uniqueness: { scope: [ :account_id, :entryable_type ] }, if: -> { account_valuation? }
   validates :date, comparison: { greater_than: -> { min_supported_date } }
 
-  scope :chronological, -> { order(:date, :created_at) }
-  scope :not_account_valuations, -> { where.not(entryable_type: "Account::Valuation") }
-  scope :reverse_chronological, -> { order(date: :desc, created_at: :desc) }
+  scope :chronological, -> {
+    order(
+      date: :asc,
+      Arel.sql("CASE WHEN entryable_type = 'Account::Valuation' THEN 1 ELSE 0 END") => :asc,
+      created_at: :asc
+    )
+  }
+
+  scope :reverse_chronological, -> {
+    order(
+      date: :desc,
+      Arel.sql("CASE WHEN entryable_type = 'Account::Valuation' THEN 1 ELSE 0 END") => :desc,
+      created_at: :desc
+    )
+  }
+
   scope :without_transfers, -> { where(marked_as_transfer: false) }
   scope :with_converted_amount, ->(currency) {
     # Join with exchange rates to convert the amount to the given currency
@@ -30,12 +43,7 @@ class Account::Entry < ApplicationRecord
   }
 
   def sync_account_later
-    sync_start_date = if destroyed?
-      previous_entry&.date
-    else
-      [ date_previously_was, date ].compact.min
-    end
-
+    sync_start_date = [ date_previously_was, date ].compact.min unless destroyed?
     account.sync_later(start_date: sync_start_date)
   end
 
@@ -51,45 +59,8 @@ class Account::Entry < ApplicationRecord
     entryable_type.demodulize.underscore
   end
 
-  def prior_balance
-    account.balances.find_by(date: date - 1)&.balance || 0
-  end
-
-  def prior_entry_balance
-    entries_on_entry_date
-      .not_account_valuations
-      .last
-      &.balance_after_entry || 0
-  end
-
-  def balance_after_entry
-    if account_valuation?
-      Money.new(amount, currency)
-    else
-      new_balance = prior_balance
-      entries_on_entry_date.each do |e|
-        next if e.account_valuation?
-
-        change = e.amount
-        change = account.liability? ? change : -change
-        new_balance += change
-        break if e == self
-      end
-
-      Money.new(new_balance, currency)
-    end
-  end
-
-  def trend
-    TimeSeries::Trend.new(
-      current: balance_after_entry,
-      previous: Money.new(prior_entry_balance, currency),
-      favorable_direction: account.favorable_direction
-    )
-  end
-
-  def entries_on_entry_date
-    account.entries.where(date: date).order(created_at: :asc)
+  def balance_trend(entries, balances)
+    Account::BalanceTrendCalculator.new(self, entries, balances).trend
   end
 
   class << self
@@ -233,15 +204,4 @@ class Account::Entry < ApplicationRecord
         entryable_ids
       end
   end
-
-  private
-
-    def previous_entry
-      @previous_entry ||= account
-                            .entries
-                            .where("date < ?", date)
-                            .where("entryable_type = ?", entryable_type)
-                            .order(date: :desc)
-                            .first
-    end
 end

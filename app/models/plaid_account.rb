@@ -167,6 +167,7 @@ class PlaidAccount < ApplicationRecord
       end
 
       return nil if security.nil? || security.ticker_symbol.blank?
+      return nil if security.ticker_symbol == "CUR:USD" # Internally, we do not consider cash a "holding" and track it separately
 
       Security.find_or_create_by!(
         ticker: security.ticker_symbol,

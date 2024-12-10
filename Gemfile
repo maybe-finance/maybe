@@ -50,7 +50,6 @@ gem "csv"
 gem "redcarpet"
 gem "stripe"
 gem "intercom-rails"
-gem "holidays"
 gem "plaid"
 
 group :development, :test do
