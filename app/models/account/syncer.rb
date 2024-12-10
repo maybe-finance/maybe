@@ -7,6 +7,7 @@ class Account::Syncer
   def run
     holdings = sync_holdings
     balances = sync_balances(holdings)
+    account.reload
     update_account_info(balances, holdings) unless account.plaid_account_id.present?
     convert_foreign_records(balances)
   end

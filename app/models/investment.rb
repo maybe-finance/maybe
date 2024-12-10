@@ -25,11 +25,6 @@ class Investment < ApplicationRecord
   end
 
   def post_sync
-    broadcast_replace_to(
-      account,
-      target: "chart_account_#{account.id}",
-      partial: account.plaid_account_id.present? ? "investments/chart" : "accounts/show/chart",
-      locals: { account: account }
-    )
+    broadcast_refresh_to account.family
   end
 end
