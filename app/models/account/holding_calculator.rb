@@ -147,7 +147,7 @@ class Account::HoldingCalculator
     def load_current_holding_quantities
       holding_quantities = load_empty_holding_quantities
 
-      account.holdings.where(date: Date.current).map do |holding|
+      account.holdings.where(date: Date.current, currency: account.currency).map do |holding|
         holding_quantities[holding.security_id] = holding.qty
       end
 

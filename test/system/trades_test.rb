@@ -44,7 +44,7 @@ class TradesTest < ApplicationSystemTestCase
   end
 
   test "can create sell transaction" do
-    aapl = @account.holdings.current.find { |h| h.security.ticker == "AAPL" }
+    aapl = @account.holdings.find { |h| h.security.ticker == "AAPL" }
 
     open_new_trade_modal
 

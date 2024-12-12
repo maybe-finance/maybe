@@ -9,9 +9,6 @@ class Account::Holding < ApplicationRecord
   validates :qty, :currency, presence: true
 
   scope :chronological, -> { order(:date) }
-  scope :current, -> { where(date: Date.current).order(amount: :desc) }
-  scope :in_period, ->(period) { period.date_range.nil? ? all : where(date: period.date_range) }
-  scope :known_value, -> { where.not(amount: nil) }
   scope :for, ->(security) { where(security_id: security).order(:date) }
 
   delegate :ticker, to: :security
@@ -29,7 +26,7 @@ class Account::Holding < ApplicationRecord
 
   # Basic approximation of cost-basis
   def avg_cost
-    avg_cost = account.holdings.for(security).where("date <= ?", date).average(:price)
+    avg_cost = account.holdings.for(security).where(currency: currency).where("date <= ?", date).average(:price)
     Money.new(avg_cost, currency)
   end
 

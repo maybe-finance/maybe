@@ -4,7 +4,7 @@ class Account::HoldingsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in users(:family_admin)
     @account = accounts(:investment)
-    @holding = @account.holdings.current.first
+    @holding = @account.holdings.first
   end
 
   test "gets holdings" do
