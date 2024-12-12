@@ -1,5 +1,5 @@
 class Account::Entry < ApplicationRecord
-  include Monetizable
+  include Monetizable, Providable
 
   monetize :amount
 
@@ -57,6 +57,30 @@ class Account::Entry < ApplicationRecord
 
   def entryable_name_short
     entryable_type.demodulize.underscore
+  end
+
+  def display_name
+    enriched_name || name
+  end
+
+  def enrich
+    if account_transaction?
+      info = self.class.synth_provider.enrich_transaction(name).info
+
+      if info.icon_url && info.name && enriched_name.blank?
+        merchant = Merchant.find_or_create_by!(family: account.family, name: info.name) do |merchant|
+          merchant.icon_url = info.icon_url
+        end
+
+        update!(
+          enriched_at: Time.current,
+          enriched_name: info.name,
+          entryable_attributes: {
+            merchant_id: merchant.id
+          }
+        ) if merchant
+      end
+    end
   end
 
   def balance_trend(entries, balances)

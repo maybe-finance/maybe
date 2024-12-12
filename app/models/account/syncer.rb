@@ -10,6 +10,8 @@ class Account::Syncer
     account.reload
     update_account_info(balances, holdings) unless account.plaid_account_id.present?
     convert_records_to_family_currency(balances, holdings) unless account.currency == account.family.currency
+
+    account.enrich_data_later
   end
 
   private

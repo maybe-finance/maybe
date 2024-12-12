@@ -126,6 +126,14 @@ class Account < ApplicationRecord
     classification == "asset" ? "up" : "down"
   end
 
+  def enrich_data
+    DataEnricher.new(self).run
+  end
+
+  def enrich_data_later
+    EnrichDataJob.perform_later(self)
+  end
+
   def update_with_sync!(attributes)
     transaction do
       update!(attributes)
