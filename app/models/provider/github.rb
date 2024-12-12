@@ -8,7 +8,7 @@ class Provider::Github
   end
 
   def fetch_latest_upgrade_candidates
-    Rails.cache.fetch("latest_github_upgrade_candidates", expires_in: 2.minutes) do
+    Rails.cache.fetch("latest_github_upgrade_candidates", expires_in: 30.minutes) do
       Rails.logger.info "Fetching latest GitHub upgrade candidates from #{repo} on branch #{branch}..."
       begin
         latest_release = Octokit.releases(repo).first
