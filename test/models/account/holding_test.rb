@@ -20,11 +20,20 @@ class Account::HoldingTest < ActiveSupport::TestCase
   end
 
   test "calculates simple average cost basis" do
+    create_trade(@amzn.security, account: @account, qty: 10, price: 212.00, date: 1.day.ago.to_date)
+    create_trade(@amzn.security, account: @account, qty: 15, price: 216.00, date: Date.current)
+
+    create_trade(@nvda.security, account: @account, qty: 5, price: 128.00, date: 1.day.ago.to_date)
+    create_trade(@nvda.security, account: @account, qty: 30, price: 124.00, date: Date.current)
+
     assert_equal Money.new((212.0 + 216.0) / 2), @amzn.avg_cost
     assert_equal Money.new((128.0 + 124.0) / 2), @nvda.avg_cost
   end
 
   test "calculates total return trend" do
+    @amzn.stubs(:avg_cost).returns(Money.new(214.00))
+    @nvda.stubs(:avg_cost).returns(Money.new(126.00))
+
     # Gained $30, or 0.93%
     assert_equal Money.new(30), @amzn.trend.value
     assert_in_delta 0.9, @amzn.trend.percent, 0.001

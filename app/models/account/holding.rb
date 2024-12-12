@@ -26,8 +26,12 @@ class Account::Holding < ApplicationRecord
 
   # Basic approximation of cost-basis
   def avg_cost
-    avg_cost = account.holdings.for(security).where(currency: currency).where("date <= ?", date).average(:price)
-    Money.new(avg_cost, currency)
+    avg_cost = account.entries.account_trades
+                  .joins("INNER JOIN account_trades ON account_trades.id = account_entries.entryable_id")
+                  .where("account_trades.security_id = ? AND account_trades.qty > 0 AND account_entries.date <= ?", security.id, date)
+                  .average(:price)
+
+    Money.new(avg_cost || price, currency)
   end
 
   def trend
