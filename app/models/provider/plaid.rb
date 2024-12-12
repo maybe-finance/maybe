@@ -134,10 +134,12 @@ class Provider::Plaid
 
   def get_item_investments(item, start_date: nil, end_date: Date.current)
     start_date = start_date || MAX_HISTORY_DAYS.days.ago.to_date
-    holdings = get_item_holdings(item)
-    transactions, securities = get_item_investment_transactions(item, start_date:, end_date:)
+    holdings, holding_securities = get_item_holdings(item)
+    transactions, transaction_securities = get_item_investment_transactions(item, start_date:, end_date:)
 
-    InvestmentsResponse.new(holdings:, transactions:, securities:)
+    merged_securities = ((holding_securities || []) + (transaction_securities || [])).uniq { |s| s.security_id }
+
+    InvestmentsResponse.new(holdings:, transactions:, securities: merged_securities)
   end
 
   def get_item_liabilities(item)
@@ -154,15 +156,7 @@ class Provider::Plaid
       request = Plaid::InvestmentsHoldingsGetRequest.new({ access_token: item.access_token })
       response = client.investments_holdings_get(request)
 
-      securities_by_id = response.securities.index_by(&:security_id)
-      accounts_by_id = response.accounts.index_by(&:account_id)
-
-      response.holdings.each do |holding|
-        holding.define_singleton_method(:security) { securities_by_id[holding.security_id] }
-        holding.define_singleton_method(:account) { accounts_by_id[holding.account_id] }
-      end
-
-      response.holdings
+      [ response.holdings, response.securities ]
     end
 
     def get_item_investment_transactions(item, start_date:, end_date:)
@@ -179,15 +173,8 @@ class Provider::Plaid
         )
 
         response = client.investments_transactions_get(request)
-        securities_by_id = response.securities.index_by(&:security_id)
-        accounts_by_id = response.accounts.index_by(&:account_id)
 
-        response.investment_transactions.each do |t|
-          t.define_singleton_method(:security) { securities_by_id[t.security_id] }
-          t.define_singleton_method(:account) { accounts_by_id[t.account_id] }
-          transactions << t
-        end
-
+        transactions += response.investment_transactions
         securities += response.securities
 
         break if transactions.length >= response.total_investment_transactions

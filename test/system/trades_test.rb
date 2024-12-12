@@ -16,7 +16,8 @@ class TradesTest < ApplicationSystemTestCase
         name: "Apple Inc.",
         logo_url: "https://logo.synthfinance.com/ticker/AAPL",
         exchange_acronym: "NASDAQ",
-        exchange_mic: "XNAS"
+        exchange_mic: "XNAS",
+        country_code: "US"
       )
     ])
   end
@@ -43,7 +44,7 @@ class TradesTest < ApplicationSystemTestCase
   end
 
   test "can create sell transaction" do
-    aapl = @account.holdings.current.find { |h| h.security.ticker == "AAPL" }
+    aapl = @account.holdings.find { |h| h.security.ticker == "AAPL" }
 
     open_new_trade_modal
 

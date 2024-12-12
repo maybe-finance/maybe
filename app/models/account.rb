@@ -118,11 +118,8 @@ class Account < ApplicationRecord
     Money.new(balance_amount, currency)
   end
 
-  def owns_ticker?(ticker)
-    security_id = Security.find_by(ticker: ticker)&.id
-    entries.account_trades
-           .joins("JOIN account_trades ON account_entries.entryable_id = account_trades.id")
-           .where(account_trades: { security_id: security_id }).any?
+  def current_holdings
+    holdings.where(currency: currency, date: holdings.maximum(:date)).order(amount: :desc)
   end
 
   def favorable_direction
@@ -150,13 +147,5 @@ class Account < ApplicationRecord
         currency: currency,
         entryable: Account::Valuation.new
     end
-  end
-
-  def holding_qty(security, date: Date.current)
-    entries.account_trades
-           .joins("JOIN account_trades ON account_entries.entryable_id = account_trades.id")
-           .where(account_trades: { security_id: security.id })
-           .where("account_entries.date <= ?", date)
-           .sum("account_trades.qty")
   end
 end

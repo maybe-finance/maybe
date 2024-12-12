@@ -52,13 +52,15 @@ class Account::HoldingCalculator
 
         next if price.blank?
 
+        converted_price = Money.new(price.price, price.currency).exchange_to(account.currency, fallback_rate: 1).amount
+
         account.holdings.build(
           security: security.dig(:security),
           date: date,
           qty: qty,
-          price: price.price,
-          currency: price.currency,
-          amount: qty * price.price
+          price: converted_price,
+          currency: account.currency,
+          amount: qty * converted_price
         )
       end.compact
     end
@@ -145,7 +147,7 @@ class Account::HoldingCalculator
     def load_current_holding_quantities
       holding_quantities = load_empty_holding_quantities
 
-      account.holdings.where(date: Date.current).map do |holding|
+      account.holdings.where(date: Date.current, currency: account.currency).map do |holding|
         holding_quantities[holding.security_id] = holding.qty
       end
 

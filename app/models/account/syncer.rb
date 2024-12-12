@@ -9,7 +9,7 @@ class Account::Syncer
     balances = sync_balances(holdings)
     account.reload
     update_account_info(balances, holdings) unless account.plaid_account_id.present?
-    convert_foreign_records(balances)
+    convert_records_to_family_currency(balances, holdings) unless account.currency == account.family.currency
   end
 
   private
@@ -37,12 +37,7 @@ class Account::Syncer
       current_time = Time.now
 
       Account.transaction do
-        account.holdings.upsert_all(
-          calculated_holdings.map { |h| h.attributes
-                 .slice("date", "currency", "qty", "price", "amount", "security_id")
-                 .merge("updated_at" => current_time) },
-          unique_by: %i[account_id security_id date currency]
-        ) if calculated_holdings.any?
+        load_holdings(calculated_holdings)
 
         # Purge outdated holdings
         account.holdings.delete_by("date < ? OR security_id NOT IN (?)", account_start_date, calculated_holdings.map(&:security_id))
@@ -65,24 +60,7 @@ class Account::Syncer
       calculated_balances
     end
 
-    def convert_foreign_records(balances)
-      converted_balances = convert_balances(balances)
-      load_balances(converted_balances)
-    end
-
-    def load_balances(balances)
-      current_time = Time.now
-      account.balances.upsert_all(
-        balances.map { |b| b.attributes
-               .slice("date", "balance", "cash_balance", "currency")
-               .merge("updated_at" => current_time) },
-        unique_by: %i[account_id date currency]
-      ) if balances.any?
-    end
-
-    def convert_balances(balances)
-      return [] if account.currency == account.family.currency
-
+    def convert_records_to_family_currency(balances, holdings)
       from_currency = account.currency
       to_currency = account.family.currency
 
@@ -92,7 +70,7 @@ class Account::Syncer
         start_date: balances.first.date
       )
 
-      balances.map do |balance|
+      converted_balances = balances.map do |balance|
         exchange_rate = exchange_rates.find { |er| er.date == balance.date }
 
         account.balances.build(
@@ -101,5 +79,41 @@ class Account::Syncer
           currency: to_currency
         ) if exchange_rate.present?
       end
+
+      converted_holdings = holdings.map do |holding|
+        exchange_rate = exchange_rates.find { |er| er.date == holding.date }
+
+        account.holdings.build(
+          security: holding.security,
+          date: holding.date,
+          amount: exchange_rate.rate * holding.amount,
+          currency: to_currency
+        ) if exchange_rate.present?
+      end
+
+      Account.transaction do
+        load_balances(converted_balances)
+        load_holdings(converted_holdings)
+      end
+    end
+
+    def load_balances(balances = [])
+      current_time = Time.now
+      account.balances.upsert_all(
+        balances.map { |b| b.attributes
+               .slice("date", "balance", "cash_balance", "currency")
+               .merge("updated_at" => current_time) },
+        unique_by: %i[account_id date currency]
+      )
+    end
+
+    def load_holdings(holdings = [])
+      current_time = Time.now
+      account.holdings.upsert_all(
+        holdings.map { |h| h.attributes
+               .slice("date", "currency", "qty", "price", "amount", "security_id")
+               .merge("updated_at" => current_time) },
+        unique_by: %i[account_id security_id date currency]
+      )
     end
 end
