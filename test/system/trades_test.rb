@@ -16,7 +16,8 @@ class TradesTest < ApplicationSystemTestCase
         name: "Apple Inc.",
         logo_url: "https://logo.synthfinance.com/ticker/AAPL",
         exchange_acronym: "NASDAQ",
-        exchange_mic: "XNAS"
+        exchange_mic: "XNAS",
+        country_code: "US"
       )
     ])
   end
