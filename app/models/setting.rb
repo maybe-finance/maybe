@@ -17,6 +17,10 @@ class Setting < RailsSettings::Base
         default: ENV.fetch("UPGRADES_TARGET", "release"),
         validates: { inclusion: { in: %w[release commit] } }
 
+  field :data_enrichment_enabled,
+        type: :boolean,
+        default: true
+
   field :synth_api_key, type: :string, default: ENV["SYNTH_API_KEY"]
 
   field :require_invite_for_signup, type: :boolean, default: false

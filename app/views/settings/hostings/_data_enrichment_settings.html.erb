@@ -1,0 +1,18 @@
+<div class="space-y-4">
+  <div class="flex items-center justify-between">
+    <div class="space-y-1">
+      <p class="text-sm"><%= t(".title") %></p>
+      <p class="text-gray-500 text-sm"><%= t(".description") %></p>
+    </div>
+
+    <%= styled_form_with model: Setting.new,
+                       url: settings_hosting_path,
+                       method: :patch,
+                       data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value": "blur" } do |form| %>
+      <div class="relative inline-block select-none">
+        <%= form.check_box :data_enrichment_enabled, class: "sr-only peer", "data-auto-submit-form-target": "auto", "data-autosubmit-trigger-event": "input" %>
+        <%= form.label :data_enrichment_enabled, "&nbsp;".html_safe, class: "maybe-switch" %>
+      </div>
+    <% end %>
+  </div>
+</div>

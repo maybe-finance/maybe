@@ -11,6 +11,10 @@ class Account::DataEnricher
 
   private
     def enrich_transactions
-      account.entries.account_transactions.each(&:enrich)
+      candidates = account.entries.account_transactions.where(enriched_at: nil)
+
+      Rails.logger.info("Enriching #{candidates.count} transactions for account #{account.id}")
+
+      candidates.each(&:enrich)
     end
 end
