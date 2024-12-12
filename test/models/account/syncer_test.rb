@@ -13,7 +13,7 @@ class Account::SyncerTest < ActiveSupport::TestCase
     )
   end
 
-  test "converts foreign account balances to family currency" do
+  test "converts foreign account balances and holdings to family currency" do
     @account.family.update! currency: "USD"
     @account.update! currency: "EUR"
 
@@ -27,10 +27,19 @@ class Account::SyncerTest < ActiveSupport::TestCase
       ]
     )
 
+    Account::HoldingCalculator.any_instance.expects(:calculate).returns(
+      [
+        Account::Holding.new(security: securities(:aapl), date: 1.day.ago.to_date, amount: 500, currency: "EUR"),
+        Account::Holding.new(security: securities(:aapl), date: Date.current, amount: 500, currency: "EUR")
+      ]
+    )
+
     Account::Syncer.new(@account).run
 
     assert_equal [ 1000, 1000 ], @account.balances.where(currency: "EUR").chronological.map(&:balance)
     assert_equal [ 1200, 2000 ], @account.balances.where(currency: "USD").chronological.map(&:balance)
+    assert_equal [ 500, 500 ], @account.holdings.where(currency: "EUR").chronological.map(&:amount)
+    assert_equal [ 600, 1000 ], @account.holdings.where(currency: "USD").chronological.map(&:amount)
   end
 
   test "purges stale balances and holdings" do

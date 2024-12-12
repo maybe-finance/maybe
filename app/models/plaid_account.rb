@@ -45,50 +45,7 @@ class PlaidAccount < ApplicationRecord
   end
 
   def sync_investments!(transactions:, holdings:, securities:)
-    transactions.each do |transaction|
-      if transaction.type == "cash"
-        new_transaction = account.entries.find_or_create_by!(plaid_id: transaction.investment_transaction_id) do |t|
-          t.name = transaction.name
-          t.amount = transaction.amount
-          t.currency = transaction.iso_currency_code
-          t.date = transaction.date
-          t.marked_as_transfer = transaction.subtype.in?(%w[deposit withdrawal])
-          t.entryable = Account::Transaction.new
-        end
-      else
-        security = get_security(transaction.security, securities)
-        next if security.nil?
-        new_transaction = account.entries.find_or_create_by!(plaid_id: transaction.investment_transaction_id) do |t|
-          t.name = transaction.name
-          t.amount = transaction.quantity * transaction.price
-          t.currency = transaction.iso_currency_code
-          t.date = transaction.date
-          t.entryable = Account::Trade.new(
-            security: security,
-            qty: transaction.quantity,
-            price: transaction.price,
-            currency: transaction.iso_currency_code
-          )
-        end
-      end
-    end
-
-    # Update only the current day holdings.  The account sync will populate historical values based on trades.
-    holdings.each do |holding|
-      internal_security = get_security(holding.security, securities)
-      next if internal_security.nil?
-
-      existing_holding = account.holdings.find_or_initialize_by(
-        security: internal_security,
-        date: Date.current,
-        currency: holding.iso_currency_code
-      )
-
-      existing_holding.qty = holding.quantity
-      existing_holding.price = holding.institution_price
-      existing_holding.amount = holding.quantity * holding.institution_price
-      existing_holding.save!
-    end
+    PlaidInvestmentSync.new(self).sync!(transactions:, holdings:, securities:)
   end
 
   def sync_credit_data!(plaid_credit_data)
@@ -157,25 +114,6 @@ class PlaidAccount < ApplicationRecord
   private
     def family
       plaid_item.family
-    end
-
-    def get_security(plaid_security, securities)
-      return nil if plaid_security.nil?
-
-      security = if plaid_security.ticker_symbol.present?
-        plaid_security
-      else
-        securities.find { |s| s.security_id == plaid_security.proxy_security_id }
-      end
-
-      return nil if security.nil? || security.ticker_symbol.blank?
-      return nil if security.ticker_symbol == "CUR:USD" # Internally, we do not consider cash a "holding" and track it separately
-
-      Security.find_or_create_by!(
-        ticker: security.ticker_symbol,
-        exchange_mic: security.market_identifier_code || "XNAS",
-        country_code: "US"
-      )
     end
 
     def transfer?(plaid_txn)

@@ -23,8 +23,4 @@ class Investment < ApplicationRecord
   def icon
     "line-chart"
   end
-
-  def post_sync
-    broadcast_refresh_to account.family
-  end
 end
