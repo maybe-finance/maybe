@@ -38,8 +38,8 @@ class Account::DataEnricher
             end
 
             entryable_attributes = { id: entry.entryable_id }
-            entryable_attributes[:merchant_id] = merchant.id if merchant.present?
-            entryable_attributes[:category_id] = category.id if category.present?
+            entryable_attributes[:merchant_id] = merchant.id if merchant.present? && entry.merchant_id.nil?
+            entryable_attributes[:category_id] = category.id if category.present? && entry.category_id.nil?
 
             Account.transaction do
               merchant.save! if merchant.present?
