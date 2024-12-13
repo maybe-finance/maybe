@@ -167,6 +167,35 @@ class Provider::Synth
       raw_response: response
   end
 
+  def enrich_transaction(description, amount: nil, date: nil, city: nil, state: nil, country: nil)
+    params = {
+      description: description,
+      amount: amount,
+      date: date,
+      city: city,
+      state: state,
+      country: country
+    }.compact
+
+    response = client.get("#{base_url}/enrich", params)
+
+    parsed = JSON.parse(response.body)
+
+    EnrichTransactionResponse.new \
+      info: EnrichTransactionInfo.new(
+        name: parsed.dig("merchant"),
+        icon_url: parsed.dig("icon"),
+        category: parsed.dig("category")
+      ),
+      success?: true,
+      raw_response: response
+  rescue StandardError => error
+    EnrichTransactionResponse.new \
+      success?: false,
+      error: error,
+      raw_response: error
+  end
+
   private
 
     attr_reader :api_key
@@ -177,6 +206,8 @@ class Provider::Synth
     UsageResponse = Struct.new :used, :limit, :utilization, :plan, :success?, :error, :raw_response, keyword_init: true
     SearchSecuritiesResponse = Struct.new :securities, :success?, :error, :raw_response, keyword_init: true
     SecurityInfoResponse = Struct.new :info, :success?, :error, :raw_response, keyword_init: true
+    EnrichTransactionResponse = Struct.new :info, :success?, :error, :raw_response, keyword_init: true
+    EnrichTransactionInfo = Struct.new :name, :icon_url, :category, keyword_init: true
 
     def base_url
       ENV["SYNTH_URL"] || "https://api.synthfinance.com"
