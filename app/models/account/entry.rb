@@ -59,10 +59,6 @@ class Account::Entry < ApplicationRecord
     entryable_type.demodulize.underscore
   end
 
-  def display_name
-    enriched_name || name
-  end
-
   def balance_trend(entries, balances)
     Account::BalanceTrendCalculator.new(self, entries, balances).trend
   end
