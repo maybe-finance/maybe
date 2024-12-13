@@ -184,7 +184,8 @@ class Provider::Synth
     EnrichTransactionResponse.new \
       info: EnrichTransactionInfo.new(
         name: parsed.dig("merchant"),
-        icon_url: parsed.dig("icon")
+        icon_url: parsed.dig("icon"),
+        category: parsed.dig("category")
       ),
       success?: true,
       raw_response: response
@@ -206,7 +207,7 @@ class Provider::Synth
     SearchSecuritiesResponse = Struct.new :securities, :success?, :error, :raw_response, keyword_init: true
     SecurityInfoResponse = Struct.new :info, :success?, :error, :raw_response, keyword_init: true
     EnrichTransactionResponse = Struct.new :info, :success?, :error, :raw_response, keyword_init: true
-    EnrichTransactionInfo = Struct.new :name, :icon_url, keyword_init: true
+    EnrichTransactionInfo = Struct.new :name, :icon_url, :category, keyword_init: true
 
     def base_url
       ENV["SYNTH_URL"] || "https://api.synthfinance.com"
