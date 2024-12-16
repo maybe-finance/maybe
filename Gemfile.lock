@@ -155,7 +155,7 @@ GEM
       tzinfo
     faker (3.5.1)
       i18n (>= 1.8.11, < 2)
-    faraday (2.12.1)
+    faraday (2.12.2)
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
@@ -222,7 +222,7 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jmespath (1.6.2)
-    json (2.8.2)
+    json (2.9.0)
     jwt (2.9.3)
       base64
     language_server-protocol (3.17.0.3)
@@ -252,7 +252,7 @@ GEM
       ruby2_keywords (>= 0.0.5)
     msgpack (1.7.2)
     multipart-post (2.4.1)
-    net-http (0.5.0)
+    net-http (0.6.0)
       uri
     net-imap (0.5.1)
       date
