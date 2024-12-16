@@ -4,7 +4,7 @@ module ApplicationHelper
   def date_format_options
     [
       [ "DD-MM-YYYY", "%d-%m-%Y" ],
-      [ "DD.MM.YY", "%d.%m.%Y" ],
+      [ "DD.MM.YYYY", "%d.%m.%Y" ],
       [ "MM-DD-YYYY", "%m-%d-%Y" ],
       [ "YYYY-MM-DD", "%Y-%m-%d" ],
       [ "DD/MM/YYYY", "%d/%m/%Y" ],
