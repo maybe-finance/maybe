@@ -2,8 +2,6 @@
 en:
   account:
     valuations:
-      valuation:
-        balance_update: Balance update
       form:
         amount: Amount
         submit: Add balance update

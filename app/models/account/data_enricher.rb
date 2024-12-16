@@ -23,6 +23,8 @@ class Account::DataEnricher
       candidates.each do |entry|
         if entry.enriched_at.nil? || entry.entryable.merchant_id.nil? || entry.entryable.category_id.nil?
           begin
+            next unless entry.name.present?
+
             info = self.class.synth_provider.enrich_transaction(entry.name).info
 
             next unless info.present?
@@ -48,7 +50,7 @@ class Account::DataEnricher
               category.save! if category.present?
               entry.update!(
                 enriched_at: Time.current,
-                name: entry.enriched_at.nil? ? info.name : entry.name,
+                name: entry.enriched_at.nil? && info.name ? info.name : entry.name,
                 entryable_attributes: entryable_attributes
               )
             end
