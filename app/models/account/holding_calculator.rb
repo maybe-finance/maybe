@@ -98,7 +98,7 @@ class Account::HoldingCalculator
     end
 
     def trades
-      @trades ||= account.entries.includes(entryable: :security).account_trades.to_a
+      @trades ||= account.entries.includes(entryable: :security).account_trades.chronological.to_a
     end
 
     def portfolio_start_date
