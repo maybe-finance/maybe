@@ -49,7 +49,7 @@ class Account::Transaction < ApplicationRecord
   end
 
   def name
-    entry.name || "(no description)"
+    entry.name || (entry.amount.positive? ? "Expense" : "Income")
   end
 
   def eod_balance
