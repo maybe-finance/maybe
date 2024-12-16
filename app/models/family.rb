@@ -1,7 +1,7 @@
 class Family < ApplicationRecord
   include Plaidable, Syncable
 
-  DATE_FORMATS = [ "%m-%d-%Y", "%d-%m-%Y", "%Y-%m-%d", "%d/%m/%Y", "%Y/%m/%d", "%m/%d/%Y", "%e/%m/%Y", "%Y.%m.%d" ]
+  DATE_FORMATS = [ "%m-%d-%Y", "%d.%m.%Y", "%d-%m-%Y", "%Y-%m-%d", "%d/%m/%Y", "%Y/%m/%d", "%m/%d/%Y", "%e/%m/%Y", "%Y.%m.%d" ]
 
   include Providable
 
