@@ -333,7 +333,7 @@ GEM
     rails-i18n (7.0.9)
       i18n (>= 0.7, < 2)
       railties (>= 6.0.0, < 8)
-    rails-settings-cached (2.9.5)
+    rails-settings-cached (2.9.6)
       activerecord (>= 5.0.0)
       railties (>= 5.0.0)
     railties (7.2.2.1)
