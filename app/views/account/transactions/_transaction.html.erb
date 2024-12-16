@@ -19,7 +19,7 @@
 
         <div class="truncate">
           <% if entry.new_record? %>
-            <%= content_tag :p, transaction.name  %>
+            <%= content_tag :p, transaction.name %>
           <% else %>
             <%= link_to transaction.name,
                         entry.transfer.present? ? account_transfer_path(entry.transfer) : account_entry_path(entry),
