@@ -19,7 +19,7 @@ class Setting < RailsSettings::Base
 
   field :data_enrichment_enabled,
         type: :boolean,
-        default: true
+        default: false
 
   field :synth_api_key, type: :string, default: ENV["SYNTH_API_KEY"]
 

@@ -9,5 +9,5 @@
 
 <%= tag.div style: mixed_hex_styles(hex),
             class: [size_classes[size], "flex shrink-0 items-center justify-center rounded-full"] do %>
-  <%= tag.span name[0].upcase, class: ["font-medium", size == "sm" ? "text-xs" : "text-sm"] %>
+  <%= tag.span (name.presence&.first || "T").upcase, class: ["font-medium", size == "sm" ? "text-xs" : "text-sm"] %>
 <% end %>

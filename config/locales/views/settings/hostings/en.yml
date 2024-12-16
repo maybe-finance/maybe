@@ -3,7 +3,8 @@ en:
   settings:
     hostings:
       data_enrichment_settings:
-        description: Enable data enrichment for your accounts such as merchant info, transaction description cleanup, and more
+        description: Enable data enrichment for your account transactions.  This will
+          incur additional Synth credits.
         title: Data Enrichment
       invite_code_settings:
         description: Every new user that joins your instance of Maybe can only do
