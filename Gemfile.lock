@@ -132,7 +132,7 @@ GEM
       bigdecimal
       rexml
     crass (1.0.6)
-    csv (3.3.0)
+    csv (3.3.1)
     date (3.4.1)
     debug (1.9.2)
       irb (~> 1.10)
