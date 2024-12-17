@@ -26,9 +26,16 @@ en:
       next: Next
       previous: Back
     preferences:
+      data_enrichment_settings:
+        description: Let Maybe auto-categorize, name, and add merchant data to your
+          transactions on each sync.  All enrichment is done in English.
+        self_host_disclaimer: This will incur Synth API credits.
+        title: Transaction enrichment (English only)
       show:
         country: Country
         currency: Currency
+        data: Data enrichment
+        data_subtitle: Enable data enrichment for your accounts
         date_format: Date format
         general_subtitle: Configure your preferences
         general_title: General

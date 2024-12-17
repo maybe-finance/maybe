@@ -26,10 +26,6 @@ class Settings::HostingsController < SettingsController
       Setting.synth_api_key = hosting_params[:synth_api_key]
     end
 
-    if hosting_params.key?(:data_enrichment_enabled)
-      Setting.data_enrichment_enabled = hosting_params[:data_enrichment_enabled]
-    end
-
     redirect_to settings_hosting_path, notice: t(".success")
   rescue ActiveRecord::RecordInvalid => error
     flash.now[:alert] = t(".failure")
@@ -38,7 +34,7 @@ class Settings::HostingsController < SettingsController
 
   private
     def hosting_params
-      params.require(:setting).permit(:render_deploy_hook, :upgrades_setting, :require_invite_for_signup, :synth_api_key, :data_enrichment_enabled)
+      params.require(:setting).permit(:render_deploy_hook, :upgrades_setting, :require_invite_for_signup, :synth_api_key)
     end
 
     def raise_if_not_self_hosted
