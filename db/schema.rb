@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_12_141453) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_17_141716) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -222,6 +222,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_12_141453) do
     t.string "country", default: "US"
     t.datetime "last_synced_at"
     t.string "timezone"
+    t.boolean "data_enrichment_enabled", default: false
   end
 
   create_table "good_job_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

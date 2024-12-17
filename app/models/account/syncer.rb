@@ -11,7 +11,7 @@ class Account::Syncer
     update_account_info(balances, holdings) unless account.plaid_account_id.present?
     convert_records_to_family_currency(balances, holdings) unless account.currency == account.family.currency
 
-    if Setting.data_enrichment_enabled || Rails.configuration.app_mode.managed?
+    if account.family.data_enrichment_enabled?
       account.enrich_data_later
     else
       Rails.logger.info("Data enrichment is disabled, skipping enrichment for account #{account.id}")
