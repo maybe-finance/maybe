@@ -303,6 +303,7 @@ class Demo::Generator
         date: date,
         amount: amount,
         currency: "USD",
+        name: "Balance update",
         entryable: Account::Valuation.new
     end
 

@@ -10,7 +10,7 @@ class Account::Entry < ApplicationRecord
   delegated_type :entryable, types: Account::Entryable::TYPES, dependent: :destroy
   accepts_nested_attributes_for :entryable
 
-  validates :date, :amount, :currency, presence: true
+  validates :date, :name, :amount, :currency, presence: true
   validates :date, uniqueness: { scope: [ :account_id, :entryable_type ] }, if: -> { account_valuation? }
   validates :date, comparison: { greater_than: -> { min_supported_date } }
 
@@ -47,20 +47,16 @@ class Account::Entry < ApplicationRecord
     account.sync_later(start_date: sync_start_date)
   end
 
-  def inflow?
-    amount <= 0 && account_transaction?
-  end
-
-  def outflow?
-    amount > 0 && account_transaction?
-  end
-
   def entryable_name_short
     entryable_type.demodulize.underscore
   end
 
   def balance_trend(entries, balances)
     Account::BalanceTrendCalculator.new(self, entries, balances).trend
+  end
+
+  def display_name
+    enriched_name.presence || name || entryable.fallback_name
   end
 
   class << self
