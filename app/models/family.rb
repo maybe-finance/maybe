@@ -45,14 +45,22 @@ class Family < ApplicationRecord
     super || accounts.manual.any?(&:syncing?) || plaid_items.any?(&:syncing?)
   end
 
-  def get_link_token(webhooks_url:, redirect_url:, accountable_type: nil)
-    return nil unless plaid_provider
+  def get_link_token(webhooks_url:, redirect_url:, accountable_type: nil, region: :us)
+    provider = case region
+               when :eu
+                 self.class.plaid_eu_provider
+               else
+                 self.class.plaid_provider
+               end
 
-    plaid_provider.get_link_token(
+    return nil unless provider
+
+    provider.get_link_token(
       user_id: id,
       webhooks_url: webhooks_url,
       redirect_url: redirect_url,
-      accountable_type: accountable_type
+      accountable_type: accountable_type,
+      eu: region == :eu
     ).link_token
   end
 
