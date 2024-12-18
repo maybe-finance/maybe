@@ -56,7 +56,7 @@ class Account::Entry < ApplicationRecord
   end
 
   def display_name
-    enriched_name.presence || name || entryable.fallback_name
+    enriched_name.presence || name
   end
 
   class << self
