@@ -47,11 +47,11 @@ class Family < ApplicationRecord
 
   def get_link_token(webhooks_url:, redirect_url:, accountable_type: nil, region: :us)
     provider = case region
-               when :eu
+    when :eu
                  self.class.plaid_eu_provider
                else
                  self.class.plaid_provider
-               end
+    end
 
     return nil unless provider
 
