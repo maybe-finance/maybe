@@ -171,11 +171,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_174803) do
   create_table "categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "color", default: "#6172F3", null: false
-    t.string "internal_category"
     t.uuid "family_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "parent_category_id"
+    t.uuid "parent_id"
     t.index ["family_id"], name: "index_categories_on_family_id"
   end
 
