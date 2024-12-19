@@ -5,6 +5,7 @@ class PlaidItemsController < ApplicationController
     Current.family.plaid_items.create_from_public_token(
       plaid_item_params[:public_token],
       item_name: item_name,
+      region: plaid_item_params[:region]
     )
 
     redirect_to accounts_path, notice: t(".success")
@@ -29,7 +30,7 @@ class PlaidItemsController < ApplicationController
     end
 
     def plaid_item_params
-      params.require(:plaid_item).permit(:public_token, metadata: {})
+      params.require(:plaid_item).permit(:public_token, :region, metadata: {})
     end
 
     def item_name

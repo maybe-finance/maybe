@@ -1,6 +1,9 @@
 class PlaidItem < ApplicationRecord
   include Plaidable, Syncable
 
+  enum :plaid_region, { us: "us", eu: "eu" }
+  validates :plaid_region, inclusion: { in: plaid_regions.keys }
+
   if Rails.application.credentials.active_record_encryption.present?
     encrypts :access_token, deterministic: true
   end
@@ -56,10 +59,11 @@ class PlaidItem < ApplicationRecord
   private
     def fetch_and_load_plaid_data
       data = {}
-      item = plaid_provider.get_item(access_token).item
+      provider = plaid_provider_for(self)
+      item = provider.get_item(access_token).item
       update!(available_products: item.available_products, billed_products: item.billed_products)
 
-      fetched_accounts = plaid_provider.get_item_accounts(self).accounts
+      fetched_accounts = provider.get_item_accounts(self).accounts
       data[:accounts] = fetched_accounts || []
 
       internal_plaid_accounts = fetched_accounts.map do |account|
