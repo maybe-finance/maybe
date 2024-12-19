@@ -50,7 +50,7 @@ class Account::DataEnricher
               category.save! if category.present?
               entry.update!(
                 enriched_at: Time.current,
-                name: entry.enriched_at.nil? && info.name ? info.name : entry.name,
+                enriched_name: info.name,
                 entryable_attributes: entryable_attributes
               )
             end

@@ -10,8 +10,4 @@ class Account::Valuation < ApplicationRecord
       false
     end
   end
-
-  def name
-    "Balance update"
-  end
 end

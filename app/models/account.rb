@@ -151,6 +151,7 @@ class Account < ApplicationRecord
     else
       entries.create! \
         date: Date.current,
+        name: "Balance update",
         amount: balance,
         currency: currency,
         entryable: Account::Valuation.new
