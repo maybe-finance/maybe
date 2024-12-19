@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_17_141716) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_19_151540) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -532,6 +532,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_17_141716) do
     t.string "available_products", default: [], array: true
     t.string "billed_products", default: [], array: true
     t.datetime "last_synced_at"
+    t.string "plaid_region", default: "us", null: false
     t.index ["family_id"], name: "index_plaid_items_on_family_id"
   end
 
