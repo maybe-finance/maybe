@@ -1,3 +1,4 @@
+# rubocop:disable Layout/ElseAlignment, Layout/IndentationWidth
 class Family < ApplicationRecord
   include Plaidable, Syncable
 
@@ -182,3 +183,4 @@ class Family < ApplicationRecord
     users.order(:created_at).first
   end
 end
+# rubocop:enable Layout/ElseAlignment, Layout/IndentationWidth
