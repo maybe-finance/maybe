@@ -18,9 +18,9 @@
 
       <div class="truncate text-gray-900">
         <% if entry.new_record? %>
-          <%= content_tag :p, entry.entryable.name %>
+          <%= content_tag :p, entry.display_name %>
         <% else %>
-          <%= link_to entry.entryable.name,
+          <%= link_to entry.display_name,
                         account_entry_path(entry),
                         data: { turbo_frame: "drawer", turbo_prefetch: false },
                         class: "hover:underline hover:text-gray-800" %>

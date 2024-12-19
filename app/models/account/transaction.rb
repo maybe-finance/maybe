@@ -48,10 +48,6 @@ class Account::Transaction < ApplicationRecord
       end
   end
 
-  def name
-    entry.name || (entry.amount.positive? ? "Expense" : "Income")
-  end
-
   def eod_balance
     entry.amount_money
   end

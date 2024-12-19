@@ -39,7 +39,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_151540) do
     t.decimal "amount", precision: 19, scale: 4
     t.string "currency"
     t.date "date"
-    t.string "name"
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "transfer_id"
@@ -49,6 +49,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_151540) do
     t.boolean "excluded", default: false
     t.string "plaid_id"
     t.datetime "enriched_at"
+    t.string "enriched_name"
     t.index ["account_id"], name: "index_account_entries_on_account_id"
     t.index ["import_id"], name: "index_account_entries_on_import_id"
     t.index ["transfer_id"], name: "index_account_entries_on_transfer_id"

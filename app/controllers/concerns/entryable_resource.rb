@@ -119,7 +119,7 @@ module EntryableResource
 
     def entry_params
       params.require(:account_entry).permit(
-        :account_id, :name, :date, :amount, :currency, :excluded, :notes, :nature,
+        :account_id, :name, :enriched_name, :date, :amount, :currency, :excluded, :notes, :nature,
         entryable_attributes: self.class.permitted_entryable_attributes
       )
     end

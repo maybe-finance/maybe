@@ -76,7 +76,7 @@ module AccountableResourceInterfaceTest
   end
 
   test "updates account balance by editing existing valuation for today" do
-    @account.entries.create! date: Date.current, amount: 6000, currency: "USD", entryable: Account::Valuation.new
+    @account.entries.create! date: Date.current, amount: 6000, currency: "USD", name: "Balance update", entryable: Account::Valuation.new
 
     assert_no_difference [ "Account::Entry.count", "Account::Valuation.count" ] do
       patch account_url(@account), params: {
