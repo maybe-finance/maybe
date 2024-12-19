@@ -33,11 +33,11 @@ class Account::Transfer < ApplicationRecord
   end
 
   def inflow_transaction
-    entries.find { |e| e.inflow? }
+    entries.find { |e| e.amount.negative? }
   end
 
   def outflow_transaction
-    entries.find { |e| e.outflow? }
+    entries.find { |e| e.amount.positive? }
   end
 
   def update_entries!(params)

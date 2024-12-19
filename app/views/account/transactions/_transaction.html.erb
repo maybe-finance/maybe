@@ -11,17 +11,17 @@
 
     <div class="max-w-full">
       <%= content_tag :div, class: ["flex items-center gap-2"] do %>
-        <% if entry.account_transaction.merchant&.icon_url %>
-          <%= image_tag entry.account_transaction.merchant.icon_url, class: "w-6 h-6 rounded-full" %>
+        <% if transaction.merchant&.icon_url %>
+          <%= image_tag transaction.merchant.icon_url, class: "w-6 h-6 rounded-full" %>
         <% else %>
-          <%= render "shared/circle_logo", name: transaction.name, size: "sm" %>
+          <%= render "shared/circle_logo", name: entry.display_name, size: "sm" %>
         <% end %>
 
         <div class="truncate">
           <% if entry.new_record? %>
-            <%= content_tag :p, transaction.name %>
+            <%= content_tag :p, entry.display_name %>
           <% else %>
-            <%= link_to transaction.name,
+            <%= link_to entry.display_name,
                         entry.transfer.present? ? account_transfer_path(entry.transfer) : account_entry_path(entry),
                         data: { turbo_frame: "drawer", turbo_prefetch: false },
                         class: "hover:underline hover:text-gray-800" %>
@@ -41,7 +41,7 @@
     <% end %>
 
     <div class="col-span-2">
-      <%= render "account/transfers/account_logos", transfer: entry.transfer, outflow: entry.outflow? %>
+      <%= render "account/transfers/account_logos", transfer: entry.transfer, outflow: entry.amount.positive? %>
     </div>
   <% else %>
     <div class="flex items-center gap-1 col-span-2">
@@ -65,7 +65,7 @@
   <div class="col-span-2 ml-auto">
     <%= content_tag :p,
                     format_money(-entry.amount_money),
-                    class: ["text-green-600": entry.inflow?] %>
+                    class: ["text-green-600": entry.amount.negative?] %>
   </div>
 
   <% if balance_trend %>
