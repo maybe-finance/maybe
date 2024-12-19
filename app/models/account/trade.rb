@@ -8,26 +8,8 @@ class Account::Trade < ApplicationRecord
   validates :qty, presence: true
   validates :price, :currency, presence: true
 
-  class << self
-    def search(_params)
-      all
-    end
-
-    def requires_search?(_params)
-      false
-    end
-  end
-
-  def sell?
-    qty < 0
-  end
-
-  def buy?
-    qty > 0
-  end
-
   def unrealized_gain_loss
-    return nil if sell?
+    return nil if qty.negative?
     current_price = security.current_price
     return nil if current_price.nil?
 
