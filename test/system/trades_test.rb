@@ -23,7 +23,7 @@ class TradesTest < ApplicationSystemTestCase
   end
 
   test "can create buy transaction" do
-    shares_qty = 25.0
+    shares_qty = 25
 
     open_new_trade_modal
 
@@ -38,7 +38,7 @@ class TradesTest < ApplicationSystemTestCase
     visit_account_trades
 
     within_trades do
-      assert_text "Buy 10.0 shares of AAPL"
+      assert_text "Purchase 10 shares of AAPL"
       assert_text "Buy #{shares_qty} shares of AAPL"
     end
   end
@@ -60,7 +60,7 @@ class TradesTest < ApplicationSystemTestCase
     visit_account_trades
 
     within_trades do
-      assert_text "Sell #{aapl.qty} shares of AAPL"
+      assert_text "Sell #{aapl.qty.round} shares of AAPL"
     end
   end
 
