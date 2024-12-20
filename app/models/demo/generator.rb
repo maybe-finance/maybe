@@ -90,6 +90,11 @@ class Demo::Generator
       categories.each do |category|
         family.categories.create!(name: category, color: COLORS.sample)
       end
+
+      food = family.categories.find_by(name: "Food & Drink")
+      family.categories.create!(name: "Restaurants", parent_category: food)
+      family.categories.create!(name: "Groceries", parent_category: food)
+      family.categories.create!(name: "Alcohol & Bars", parent_category: food)
     end
 
     def create_merchants!

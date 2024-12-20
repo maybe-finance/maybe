@@ -1,9 +1,12 @@
+<%# locals: (category:, categories:) %>
+
 <div data-controller="color-avatar">
   <%= styled_form_with model: category, class: "space-y-4", data: { turbo_frame: :_top } do |f| %>
     <section class="space-y-4">
       <div class="w-fit m-auto">
         <%= render partial: "shared/color_avatar", locals: { name: category.name, color: category.color } %>
       </div>
+
       <div class="flex gap-2 items-center justify-center">
         <% Category::COLORS.each do |color| %>
           <label class="relative">
@@ -12,8 +15,14 @@
           </label>
         <% end %>
       </div>
-      <div class="relative flex items-center border border-gray-200 rounded-lg">
-        <%= f.text_field :name, placeholder: t(".placeholder"), required: true, autofocus: true, data: { color_avatar_target: "name" } %>
+
+      <% if category.errors.any? %>
+        <%= render "shared/form_errors", model: category %>
+      <% end %>
+
+      <div class="space-y-2">
+        <%= f.text_field :name, placeholder: t(".placeholder"), required: true, autofocus: true, label: "Name", data: { color_avatar_target: "name" } %>
+        <%= f.select :parent_id, categories.pluck(:name, :id), { include_blank: "(unassigned)", label: "Parent category (optional)" } %>
       </div>
     </section>
 

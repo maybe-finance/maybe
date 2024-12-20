@@ -63,10 +63,6 @@ class Account::EntryTest < ActiveSupport::TestCase
 
     assert_equal 2, family.entries.search(params).size
 
-    params = params.merge(categories: [ category.name ], merchants: [ merchant.name ]) # transaction specific search param
-
-    assert_equal 1, family.entries.search(params).size
-
     params = { search: "%" }
     assert_equal 0, family.entries.search(params).size
   end

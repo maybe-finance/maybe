@@ -1,12 +1,16 @@
 ---
 en:
+  category:
+    dropdowns:
+      show:
+        empty: No categories found
+        bootstrap: Generate default categories
   categories:
     category:
       delete: Delete category
       edit: Edit category
     create:
-      failure: 'Failed to create category: %{error}'
-      success: New transaction category created successfully
+      success: Category created successfully
     destroy:
       success: Category deleted successfully
     edit:
@@ -17,9 +21,12 @@ en:
       categories: Categories
       empty: No categories found
       new: New category
+      bootstrap: Use default categories
+    bootstrap:
+      success: Default categories created successfully
     menu:
       loading: Loading...
     new:
       new_category: New category
     update:
-      success: Transaction category updated successfully
+      success: Category updated successfully

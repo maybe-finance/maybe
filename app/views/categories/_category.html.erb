@@ -1,7 +1,11 @@
 <%# locals: (category:) %>
 
-<div id="<%= dom_id(category) %>" class="flex justify-between items-center p-4 bg-white">
+<div id="<%= dom_id(category) %>" class="flex justify-between items-center px-4 pb-4 <%= "pt-4" unless category.subcategory? %> <%= "pb-4" unless category.subcategories.any? %> bg-white">
   <div class="flex w-full items-center gap-2.5">
+    <% if category.subcategory? %>
+      <%= lucide_icon "corner-down-right", class: "shrink-0 w-5 h-5 text-gray-400 ml-2" %>
+    <% end %>
+
     <%= render partial: "categories/badge", locals: { category: category } %>
   </div>
   <div class="justify-self-end">

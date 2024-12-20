@@ -15,6 +15,9 @@
     <span class="w-5 h-5">
       <%= lucide_icon("check", class: "w-5 h-5 text-gray-500") if is_selected %>
     </span>
+    <% if category.subcategory? %>
+      <%= lucide_icon "corner-down-right", class: "shrink-0 w-5 h-5 text-gray-400" %>
+    <% end %>
     <%= render partial: "categories/badge", locals: { category: category } %>
   <% end %>
 

@@ -28,7 +28,7 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
 
     new_category = Category.order(:created_at).last
 
-    assert_redirected_to transactions_url
+    assert_redirected_to categories_url
     assert_equal "New Category", new_category.name
     assert_equal color, new_category.color
   end
@@ -46,7 +46,7 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
 
     new_category = Category.order(:created_at).last
 
-    assert_redirected_to transactions_url
+    assert_redirected_to categories_url
     assert_equal "New Category", new_category.name
     assert_equal color, new_category.color
     assert_equal @transaction.reload.category, new_category
@@ -69,6 +69,14 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
       end
     end
 
-    assert_redirected_to transactions_url
+    assert_redirected_to categories_url
+  end
+
+  test "bootstrap" do
+    assert_difference "Category.count", 16 do
+      post bootstrap_categories_url
+    end
+
+    assert_redirected_to categories_url
   end
 end

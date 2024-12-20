@@ -60,6 +60,10 @@ class Account::Entry < ApplicationRecord
   end
 
   class << self
+    def search(params)
+      Account::EntrySearch.new(params).build_query(all)
+    end
+
     # arbitrary cutoff date to avoid expensive sync operations
     def min_supported_date
       30.years.ago.to_date
@@ -141,49 +145,7 @@ class Account::Entry < ApplicationRecord
       Money.new(total, currency)
     end
 
-    def search(params)
-      query = all
-      query = query.where("account_entries.name ILIKE ?", "%#{sanitize_sql_like(params[:search])}%") if params[:search].present?
-      query = query.where("account_entries.date >= ?", params[:start_date]) if params[:start_date].present?
-      query = query.where("account_entries.date <= ?", params[:end_date]) if params[:end_date].present?
-
-      if params[:types].present?
-        query = query.where(marked_as_transfer: false) unless params[:types].include?("transfer")
-
-        if params[:types].include?("income") && !params[:types].include?("expense")
-          query = query.where("account_entries.amount < 0")
-        elsif params[:types].include?("expense") && !params[:types].include?("income")
-          query = query.where("account_entries.amount >= 0")
-        end
-      end
-
-      if params[:amount].present? && params[:amount_operator].present?
-        case params[:amount_operator]
-        when "equal"
-          query = query.where("ABS(ABS(account_entries.amount) - ?) <= 0.01", params[:amount].to_f.abs)
-        when "less"
-          query = query.where("ABS(account_entries.amount) < ?", params[:amount].to_f.abs)
-        when "greater"
-          query = query.where("ABS(account_entries.amount) > ?", params[:amount].to_f.abs)
-        end
-      end
-
-      if params[:accounts].present? || params[:account_ids].present?
-        query = query.joins(:account)
-      end
-
-      query = query.where(accounts: { name: params[:accounts] }) if params[:accounts].present?
-      query = query.where(accounts: { id: params[:account_ids] }) if params[:account_ids].present?
-
-      # Search attributes on each entryable to further refine results
-      entryable_ids = entryable_search(params)
-      query = query.where(entryable_id: entryable_ids) unless entryable_ids.nil?
-
-      query
-    end
-
     private
-
       def entryable_search(params)
         entryable_ids = []
         entryable_search_performed = false

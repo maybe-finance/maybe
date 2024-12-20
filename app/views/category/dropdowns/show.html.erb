@@ -10,8 +10,21 @@
       <div class="pb-2 pl-4 mr-2 text-gray-500 hidden" data-list-filter-target="emptyMessage">
         <%= t(".no_categories") %>
       </div>
-      <% @categories.each do |category| %>
-        <%= render partial: "category/dropdowns/row", locals: { category: } %>
+      <% if @categories.any? %>
+        <% Category::Group.for(@categories).each do |group| %>
+          <%= render "category/dropdowns/row", category: group.category %>
+
+          <% group.subcategories.each do |category| %>
+            <%= render "category/dropdowns/row", category: category %>
+          <% end %>
+        <% end %>
+      <% else %>
+        <div class="flex justify-center items-center py-12">
+          <div class="text-center flex flex-col items-center max-w-[500px]">
+            <p class="text-sm text-gray-500 font-normal mb-4"><%= t(".empty") %></p>
+            <%= button_to t(".bootstrap"), bootstrap_categories_path, class: "btn btn--outline", data: { turbo_frame: :_top } %>
+          </div>
+        </div>
       <% end %>
     </div>
     <hr>

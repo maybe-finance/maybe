@@ -1,12 +1,16 @@
 class Category < ApplicationRecord
   has_many :transactions, dependent: :nullify, class_name: "Account::Transaction"
   has_many :import_mappings, as: :mappable, dependent: :destroy, class_name: "Import::Mapping"
+
   belongs_to :family
+
+  has_many :subcategories, class_name: "Category", foreign_key: :parent_id
+  belongs_to :parent, class_name: "Category", optional: true
 
   validates :name, :color, :family, presence: true
   validates :name, uniqueness: { scope: :family_id }
 
-  before_update :clear_internal_category, if: :name_changed?
+  validate :category_level_limit
 
   scope :alphabetically, -> { order(:name) }
 
@@ -14,30 +18,55 @@ class Category < ApplicationRecord
 
   UNCATEGORIZED_COLOR = "#737373"
 
-  DEFAULT_CATEGORIES = [
-    { internal_category: "income", color: COLORS[0] },
-    { internal_category: "food_and_drink", color: COLORS[1] },
-    { internal_category: "entertainment", color: COLORS[2] },
-    { internal_category: "personal_care", color: COLORS[3] },
-    { internal_category: "general_services", color: COLORS[4] },
-    { internal_category: "auto_and_transport", color: COLORS[5] },
-    { internal_category: "rent_and_utilities", color: COLORS[6] },
-    { internal_category: "home_improvement", color: COLORS[7] }
-  ]
+  class Group
+    attr_reader :category, :subcategories
 
-  def self.create_default_categories(family)
-    if family.categories.size > 0
-      raise ArgumentError, "Family already has some categories"
+    delegate :name, :color, to: :category
+
+    def self.for(categories)
+      categories.select { |category| category.parent_id.nil? }.map do |category|
+        new(category, category.subcategories)
+      end
     end
 
-    family_id = family.id
-    categories = self::DEFAULT_CATEGORIES.map { |c| {
-      name: I18n.t("transaction.default_category.#{c[:internal_category]}"),
-      internal_category: c[:internal_category],
-      color: c[:color],
-      family_id:
-    } }
-    self.insert_all(categories)
+    def initialize(category, subcategories = nil)
+      @category = category
+      @subcategories = subcategories || []
+    end
+  end
+
+  class << self
+    def bootstrap_defaults
+      default_categories.each do |name, color|
+        find_or_create_by!(name: name) do |category|
+          category.color = color
+        end
+      end
+    end
+
+    private
+      def default_categories
+        [
+          [ "Income", "#e99537" ],
+          [ "Loan Payments", "#6471eb" ],
+          [ "Bank Fees", "#db5a54" ],
+          [ "Entertainment", "#df4e92" ],
+          [ "Food & Drink", "#c44fe9" ],
+          [ "Groceries", "#eb5429" ],
+          [ "Dining Out", "#61c9ea" ],
+          [ "General Merchandise", "#805dee" ],
+          [ "Clothing & Accessories", "#6ad28a" ],
+          [ "Electronics", "#e99537" ],
+          [ "Healthcare", "#4da568" ],
+          [ "Insurance", "#6471eb" ],
+          [ "Utilities", "#db5a54" ],
+          [ "Transportation", "#df4e92" ],
+          [ "Gas & Fuel", "#c44fe9" ],
+          [ "Education", "#eb5429" ],
+          [ "Charitable Donations", "#61c9ea" ],
+          [ "Subscriptions", "#805dee" ]
+        ]
+      end
   end
 
   def replace_and_destroy!(replacement)
@@ -47,9 +76,14 @@ class Category < ApplicationRecord
     end
   end
 
-  private
+  def subcategory?
+    parent.present?
+  end
 
-    def clear_internal_category
-      self.internal_category = nil
+  private
+    def category_level_limit
+      if subcategory? && parent.subcategory?
+        errors.add(:parent, "can't have more than 2 levels of subcategories")
+      end
     end
 end

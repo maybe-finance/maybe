@@ -40,6 +40,8 @@ Rails.application.routes.draw do
 
   resources :categories do
     resources :deletions, only: %i[new create], module: :category
+
+    post :bootstrap, on: :collection
   end
 
   resources :merchants, only: %i[index new create edit update destroy]

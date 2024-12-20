@@ -10,6 +10,7 @@ class CategoriesController < ApplicationController
 
   def new
     @category = Current.family.categories.new color: Category::COLORS.sample
+    @categories = Current.family.categories.alphabetically.where(parent_id: nil).where.not(id: @category.id)
   end
 
   def create
@@ -17,23 +18,31 @@ class CategoriesController < ApplicationController
 
     if @category.save
       @transaction.update(category_id: @category.id) if @transaction
-      redirect_back_or_to transactions_path, notice: t(".success")
+
+      redirect_back_or_to categories_path, notice: t(".success")
     else
-      redirect_back_or_to transactions_path, alert: t(".failure", error: @category.errors.full_messages.to_sentence)
+      render :new, status: :unprocessable_entity
     end
   end
 
   def edit
+    @categories = Current.family.categories.alphabetically.where(parent_id: nil).where.not(id: @category.id)
   end
 
   def update
     @category.update! category_params
 
-    redirect_back_or_to transactions_path, notice: t(".success")
+    redirect_back_or_to categories_path, notice: t(".success")
   end
 
   def destroy
     @category.destroy
+
+    redirect_back_or_to categories_path, notice: t(".success")
+  end
+
+  def bootstrap
+    Current.family.categories.bootstrap_defaults
 
     redirect_back_or_to categories_path, notice: t(".success")
   end
@@ -50,6 +59,6 @@ class CategoriesController < ApplicationController
     end
 
     def category_params
-      params.require(:category).permit(:name, :color)
+      params.require(:category).permit(:name, :color, :parent_id)
     end
 end

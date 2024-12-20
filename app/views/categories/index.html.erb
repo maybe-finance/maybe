@@ -23,18 +23,32 @@
 
         <div class="border border-alpha-black-25 rounded-md bg-white shadow-xs">
           <div class="overflow-hidden rounded-md">
-            <%= render partial: @categories, spacer_template: "categories/ruler" %>
+            <% Category::Group.for(@categories).each_with_index do |group, idx| %>
+              <%= render group.category %>
+
+              <% group.subcategories.each do |subcategory| %>
+                <%= render subcategory %>
+              <% end %>
+
+              <% unless idx == Category::Group.for(@categories).count - 1 %>
+                <%= render "categories/ruler" %>
+              <% end %>
+            <% end %>
           </div>
         </div>
       </div>
     <% else %>
       <div class="flex justify-center items-center py-20">
-        <div class="text-center flex flex-col items-center max-w-[300px]">
-          <p class="text-gray-900 mb-1 font-medium text-sm"><%= t(".empty") %></p>
-          <%= link_to new_category_path, class: "w-fit flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2 pr-3", data: { turbo_frame: "modal" } do %>
-            <%= lucide_icon("plus", class: "w-5 h-5") %>
-            <span><%= t(".new") %></span>
-          <% end %>
+        <div class="text-center flex flex-col items-center max-w-[500px]">
+          <p class="text-sm text-gray-500 mb-4"><%= t(".empty") %></p>
+          <div class="flex items-center gap-2">
+            <%= button_to t(".bootstrap"), bootstrap_categories_path, class: "btn btn--primary" %>
+
+            <%= link_to new_category_path, class: "btn btn--outline flex items-center gap-1", data: { turbo_frame: "modal" } do %>
+              <%= lucide_icon("plus", class: "w-5 h-5") %>
+              <span><%= t(".new") %></span>
+            <% end %>
+          </div>
         </div>
       </div>
     <% end %>
