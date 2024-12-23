@@ -92,9 +92,9 @@ class Demo::Generator
       end
 
       food = family.categories.find_by(name: "Food & Drink")
-      family.categories.create!(name: "Restaurants", parent_category: food)
-      family.categories.create!(name: "Groceries", parent_category: food)
-      family.categories.create!(name: "Alcohol & Bars", parent_category: food)
+      family.categories.create!(name: "Restaurants", parent: food)
+      family.categories.create!(name: "Groceries", parent: food)
+      family.categories.create!(name: "Alcohol & Bars", parent: food)
     end
 
     def create_merchants!
