@@ -150,7 +150,7 @@ GEM
       rainbow
       rubocop (>= 1)
       smart_properties
-    erubi (1.13.0)
+    erubi (1.13.1)
     et-orbi (1.2.11)
       tzinfo
     faker (3.5.1)
@@ -208,7 +208,7 @@ GEM
     image_processing (1.13.0)
       mini_magick (>= 4.9.5, < 5)
       ruby-vips (>= 2.0.17, < 3)
-    importmap-rails (2.0.3)
+    importmap-rails (2.1.0)
       actionpack (>= 6.0.0)
       activesupport (>= 6.0.0)
       railties (>= 6.0.0)
@@ -218,7 +218,7 @@ GEM
     intercom-rails (1.0.1)
       activesupport (> 4.0)
     io-console (0.8.0)
-    irb (1.14.2)
+    irb (1.14.3)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jmespath (1.6.2)
@@ -234,7 +234,7 @@ GEM
     listen (3.9.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    logger (1.6.3)
+    logger (1.6.4)
     loofah (2.23.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -294,7 +294,7 @@ GEM
       activesupport (>= 7.0.0)
       rack
       railties (>= 7.0.0)
-    psych (5.2.1)
+    psych (5.2.2)
       date
       stringio
     public_suffix (6.0.1)
@@ -351,7 +351,7 @@ GEM
       ffi (~> 1.0)
     rbs (3.6.1)
       logger
-    rdoc (6.9.1)
+    rdoc (6.10.0)
       psych (>= 4.0.0)
     redcarpet (3.6.0)
     regexp_parser (2.9.2)
