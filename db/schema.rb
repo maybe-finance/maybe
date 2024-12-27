@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_19_174803) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_27_142333) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -583,6 +583,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_174803) do
     t.jsonb "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "error_backtrace", array: true
     t.index ["syncable_type", "syncable_id"], name: "index_syncs_on_syncable"
   end
 
