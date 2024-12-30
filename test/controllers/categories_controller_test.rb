@@ -33,6 +33,17 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
     assert_equal color, new_category.color
   end
 
+  test "create fails if name is not unique" do
+    assert_no_difference "Category.count" do
+      post categories_url, params: {
+        category: {
+          name: categories(:food_and_drink).name,
+          color: Category::COLORS.sample } }
+    end
+
+    assert_response :unprocessable_entity
+  end
+
   test "create and assign to transaction" do
     color = Category::COLORS.sample
 

@@ -21,6 +21,7 @@ class CategoriesController < ApplicationController
 
       redirect_back_or_to categories_path, notice: t(".success")
     else
+      @categories = Current.family.categories.alphabetically.where(parent_id: nil)
       render :new, status: :unprocessable_entity
     end
   end
