@@ -34,6 +34,11 @@ class Sync < ApplicationRecord
         scope.set_context("sync", { id: id })
       end
 
-      update! status: :failed, error: error.message, last_ran_at: Time.current
+      update!(
+        status: :failed,
+        error: error.message,
+        error_backtrace: error.backtrace&.first(10),
+        last_ran_at: Time.current
+      )
     end
 end
