@@ -22,10 +22,9 @@ class Account::TransactionsController < ApplicationController
   end
 
   def mark_transfers
-    Current.family
-      .entries
-      .where(id: bulk_update_params[:entry_ids])
-           .mark_transfers!
+    selected_entries = Current.family.entries.account_transactions.where(id: bulk_update_params[:entry_ids])
+
+    TransferMatcher.new(Current.family).match!(selected_entries)
 
     redirect_back_or_to transactions_url, notice: t(".success")
   end
@@ -33,8 +32,12 @@ class Account::TransactionsController < ApplicationController
   def unmark_transfers
     Current.family
       .entries
+      .account_transactions
+      .includes(:entryable)
       .where(id: bulk_update_params[:entry_ids])
-           .update_all marked_as_transfer: false
+      .each do |entry|
+        entry.entryable.update!(category_id: nil)
+      end
 
     redirect_back_or_to transactions_url, notice: t(".success")
   end

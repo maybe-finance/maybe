@@ -1,0 +1,6 @@
+one:
+  start_date: <%= 1.month.ago.to_date %>
+  end_date: <%= Date.current %>
+  family: dylan_family
+  budgeted_amount: 5000
+  expected_income: 8000

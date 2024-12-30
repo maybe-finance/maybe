@@ -1,0 +1,8 @@
+saving:
+  name: Vacation savings 
+  type: saving
+  start_date: <%= 1.month.ago.to_date %>
+  target_date: <%= 1.year.from_now.to_date %>
+  target_amount: 10000
+  starting_amount: 2000 
+  family: dylan_family

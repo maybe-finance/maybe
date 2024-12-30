@@ -19,7 +19,7 @@
                 max: Date.current,
                 "data-auto-submit-form-target": "auto" %>
 
-          <% unless @entry.marked_as_transfer? %>
+          <% unless @entry.entryable.category&.transfer? %>
             <div class="flex items-center gap-2">
               <%= f.select :nature,
                     [["Expense", "outflow"], ["Income", "inflow"]],
@@ -52,7 +52,7 @@
               url: account_transaction_path(@entry),
               class: "space-y-2",
               data: { controller: "auto-submit-form" } do |f| %>
-          <% unless @entry.marked_as_transfer? %>
+          <% unless @entry.entryable.category&.transfer? %>
             <%= f.fields_for :entryable do |ef| %>
               <%= ef.collection_select :category_id,
                       Current.family.categories.alphabetically,

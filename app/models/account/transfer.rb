@@ -59,8 +59,9 @@ class Account::Transfer < ApplicationRecord
         currency: from_account.currency,
         date: date,
         name: "Transfer to #{to_account.name}",
-        marked_as_transfer: true,
-        entryable: Account::Transaction.new
+        entryable: Account::Transaction.new(
+          category: from_account.family.default_transfer_category
+        )
 
       # Attempt to convert the amount to the to_account's currency. If the conversion fails,
       # use the original amount.
@@ -75,8 +76,9 @@ class Account::Transfer < ApplicationRecord
         currency: converted_amount.currency.iso_code,
         date: date,
         name: "Transfer from #{from_account.name}",
-        marked_as_transfer: true,
-        entryable: Account::Transaction.new
+        entryable: Account::Transaction.new(
+          category: to_account.family.default_transfer_category
+        )
 
       new entries: [ outflow, inflow ]
     end
@@ -106,8 +108,8 @@ class Account::Transfer < ApplicationRecord
     end
 
     def all_transactions_marked
-      unless entries.all?(&:marked_as_transfer)
-        errors.add :entries, :must_be_marked_as_transfer
+      unless entries.all? { |e| e.entryable.category == from_account.family.default_transfer_category }
+        errors.add :entries, :must_have_transfer_category
       end
     end
 end

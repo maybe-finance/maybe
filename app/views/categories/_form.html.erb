@@ -22,6 +22,7 @@
 
       <div class="space-y-2">
         <%= f.text_field :name, placeholder: t(".placeholder"), required: true, autofocus: true, label: "Name", data: { color_avatar_target: "name" } %>
+        <%= f.select :classification, Category.classifications.keys.map { |c| [c.humanize, c] }, required: true, label: true %>
         <%= f.select :parent_id, categories.pluck(:name, :id), { include_blank: "(unassigned)", label: "Parent category (optional)" } %>
       </div>
     </section>

@@ -12,7 +12,7 @@
       </span>
     </h3>
 
-    <% if entry.marked_as_transfer? %>
+    <% if entry.entryable.category&.transfer? %>
       <%= lucide_icon "arrow-left-right", class: "text-gray-500 mt-1 w-5 h-5" %>
     <% end %>
   </div>

@@ -67,8 +67,9 @@ class Account::TradeBuilder
           date: date,
           amount: signed_amount,
           currency: currency,
-          marked_as_transfer: true,
-          entryable: Account::Transaction.new
+          entryable: Account::Transaction.new(
+            category: account.family.default_transfer_category
+          )
         )
       end
     end

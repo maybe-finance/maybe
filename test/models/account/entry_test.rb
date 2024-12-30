@@ -74,7 +74,7 @@ class Account::EntryTest < ActiveSupport::TestCase
     create_transaction(account: account, amount: 100)
     create_transaction(account: account, amount: -500) # income, will be ignored
 
-    assert_equal Money.new(200), family.entries.expense_total("USD")
+    assert_equal Money.new(200), account.entries.expense_total("USD")
   end
 
   test "can calculate total income for a group of transactions" do
@@ -82,8 +82,8 @@ class Account::EntryTest < ActiveSupport::TestCase
     account = family.accounts.create! name: "Test", balance: 0, currency: "USD", accountable: Depository.new
     create_transaction(account: account, amount: -100)
     create_transaction(account: account, amount: -100)
-    create_transaction(account: account, amount: 500) # income, will be ignored
+    create_transaction(account: account, amount: 500) # expense, will be ignored
 
-    assert_equal Money.new(-200), family.entries.income_total("USD")
+    assert_equal Money.new(-200), account.entries.income_total("USD")
   end
 end

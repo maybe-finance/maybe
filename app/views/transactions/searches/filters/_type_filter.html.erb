@@ -23,15 +23,4 @@
                            nil %>
     <%= form.label :types, t(".expense"), value: "expense", class: "text-sm text-gray-900" %>
   </div>
-  <div class="flex items-center gap-3" data-filter-name="transfer">
-    <%= form.check_box :types,
-                           {
-                             multiple: true,
-                             checked: @q[:types]&.include?("transfer"),
-                             class: "maybe-checkbox maybe-checkbox--light"
-                           },
-                           "transfer",
-                           nil %>
-    <%= form.label :types, t(".transfer"), value: "transfer", class: "text-sm text-gray-900" %>
-  </div>
 </div>

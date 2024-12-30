@@ -26,13 +26,13 @@ class PlaidInvestmentSync
         next if security.nil? && plaid_security.nil?
 
         if transaction.type == "cash" || plaid_security.ticker_symbol == "CUR:USD"
+          category = plaid_account.account.family.default_transfer_category if transaction.subtype.in?(%w[deposit withdrawal])
           new_transaction = plaid_account.account.entries.find_or_create_by!(plaid_id: transaction.investment_transaction_id) do |t|
             t.name = transaction.name
             t.amount = transaction.amount
             t.currency = transaction.iso_currency_code
             t.date = transaction.date
-            t.marked_as_transfer = transaction.subtype.in?(%w[deposit withdrawal])
-            t.entryable = Account::Transaction.new
+            t.entryable = Account::Transaction.new(category: category)
           end
         else
           new_transaction = plaid_account.account.entries.find_or_create_by!(plaid_id: transaction.investment_transaction_id) do |t|

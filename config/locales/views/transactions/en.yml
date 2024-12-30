@@ -26,7 +26,6 @@ en:
         type_filter:
           expense: Expense
           income: Income
-          transfer: Transfer
       menu:
         account_filter: Account
         amount_filter: Amount

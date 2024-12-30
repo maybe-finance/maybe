@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_27_142333) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_30_164615) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -43,7 +43,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_27_142333) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "transfer_id"
-    t.boolean "marked_as_transfer", default: false, null: false
     t.uuid "import_id"
     t.text "notes"
     t.boolean "excluded", default: false
@@ -168,6 +167,27 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_27_142333) do
     t.index ["addressable_type", "addressable_id"], name: "index_addresses_on_addressable"
   end
 
+  create_table "budget_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "budget_id", null: false
+    t.uuid "category_id", null: false
+    t.decimal "budgeted_amount", precision: 19, scale: 4, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["budget_id"], name: "index_budget_categories_on_budget_id"
+    t.index ["category_id"], name: "index_budget_categories_on_category_id"
+  end
+
+  create_table "budgets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "family_id", null: false
+    t.date "start_date", null: false
+    t.date "end_date", null: false
+    t.decimal "budgeted_amount", precision: 19, scale: 4, null: false
+    t.decimal "expected_income", precision: 19, scale: 4, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["family_id"], name: "index_budgets_on_family_id"
+  end
+
   create_table "categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "color", default: "#6172F3", null: false
@@ -175,6 +195,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_27_142333) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "parent_id"
+    t.string "classification", default: "expense", null: false
     t.index ["family_id"], name: "index_categories_on_family_id"
   end
 
@@ -224,6 +245,19 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_27_142333) do
     t.datetime "last_synced_at"
     t.string "timezone"
     t.boolean "data_enrichment_enabled", default: false
+  end
+
+  create_table "goals", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "family_id", null: false
+    t.string "name", null: false
+    t.string "type", null: false
+    t.decimal "target_amount", precision: 19, scale: 4, null: false
+    t.decimal "starting_amount", precision: 19, scale: 4, null: false
+    t.date "start_date", null: false
+    t.date "target_date", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["family_id"], name: "index_goals_on_family_id"
   end
 
   create_table "good_job_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -647,7 +681,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_27_142333) do
   add_foreign_key "accounts", "plaid_accounts"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "budget_categories", "budgets"
+  add_foreign_key "budget_categories", "categories"
+  add_foreign_key "budgets", "families"
   add_foreign_key "categories", "families"
+  add_foreign_key "goals", "families"
   add_foreign_key "impersonation_session_logs", "impersonation_sessions"
   add_foreign_key "impersonation_sessions", "users", column: "impersonated_id"
   add_foreign_key "impersonation_sessions", "users", column: "impersonator_id"

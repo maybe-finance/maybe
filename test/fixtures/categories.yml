@@ -1,17 +1,33 @@
 one:
   name: Test
+  classification: expense
   family: empty
 
 income:
   name: Income
+  classification: income
+  color: "#fd7f6f"
+  family: dylan_family
+
+transfer:
+  name: Transfer
+  classification: transfer
+  color: "#fd7f6f"
+  family: dylan_family
+
+payment:
+  name: Payment
+  classification: payment
   color: "#fd7f6f"
   family: dylan_family
 
 food_and_drink:
   name: Food & Drink
+  classification: expense
   family: dylan_family
 
 subcategory:
   name: Restaurants
+  classification: expense
   parent: food_and_drink
   family: dylan_family

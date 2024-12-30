@@ -1,0 +1,2 @@
+class SavingGoal < Goal
+end

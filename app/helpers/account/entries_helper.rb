@@ -4,7 +4,7 @@ module Account::EntriesHelper
   end
 
   def unconfirmed_transfer?(entry)
-    entry.marked_as_transfer? && entry.transfer.nil?
+    entry.transfer.nil? && entry.entryable.category&.classification == "transfer"
   end
 
   def transfer_entries(entries)

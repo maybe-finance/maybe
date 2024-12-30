@@ -88,7 +88,7 @@ class Demo::Generator
                     "Rent & Utilities", "Home Improvement", "Shopping" ]
 
       categories.each do |category|
-        family.categories.create!(name: category, color: COLORS.sample)
+        family.categories.create!(name: category, color: COLORS.sample, classification: category == "Income" ? "income" : "expense")
       end
 
       food = family.categories.find_by(name: "Food & Drink")

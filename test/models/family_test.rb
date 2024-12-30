@@ -124,7 +124,7 @@ class FamilyTest < ActiveSupport::TestCase
     create_transaction(account: account, date: 2.days.ago.to_date, amount: -500)
     create_transaction(account: account, date: 1.day.ago.to_date, amount: 100)
     create_transaction(account: account, date: Date.current, amount: 20)
-    create_transaction(account: liability_account, date: 2.days.ago.to_date, amount: -333)
+    create_transaction(account: liability_account, date: 2.days.ago.to_date, amount: -333, category: categories(:payment))
 
     snapshot = @family.snapshot_transactions
 

@@ -89,7 +89,6 @@ class PlaidAccount < ApplicationRecord
         t.amount = plaid_txn.amount
         t.currency = plaid_txn.iso_currency_code
         t.date = plaid_txn.date
-        t.marked_as_transfer = transfer?(plaid_txn)
         t.entryable = Account::Transaction.new(
           category: get_category(plaid_txn.personal_finance_category.primary),
           merchant: get_merchant(plaid_txn.merchant_name)
@@ -136,9 +135,9 @@ class PlaidAccount < ApplicationRecord
 
     # See https://plaid.com/documents/transactions-personal-finance-category-taxonomy.csv
     def get_category(plaid_category)
-      ignored_categories = [ "BANK_FEES", "TRANSFER_IN", "TRANSFER_OUT", "LOAN_PAYMENTS", "OTHER" ]
-
-      return nil if ignored_categories.include?(plaid_category)
+      return family.default_transfer_category if [ "TRANSFER_IN", "TRANSFER_OUT" ].include?(plaid_category)
+      return family.default_payment_category if [ "LOAN_PAYMENTS" ].include?(plaid_category)
+      return nil if [ "BANK_FEES", "OTHER" ].include?(plaid_category)
 
       family.categories.find_or_create_by!(name: plaid_category.titleize)
     end

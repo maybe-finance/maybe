@@ -93,7 +93,7 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
     created_entry = Account::Entry.order(created_at: :desc).first
 
     assert created_entry.amount.positive?
-    assert created_entry.marked_as_transfer
+    assert created_entry.entryable.category.transfer?
     assert_redirected_to @entry.account
   end
 

@@ -31,7 +31,6 @@ transfer_out:
   amount: 100
   currency: USD
   account: depository
-  marked_as_transfer: true
   transfer: one
   entryable_type: Account::Transaction
   entryable: transfer_out
@@ -42,7 +41,6 @@ transfer_in:
   amount: -100
   currency: USD
   account: credit_card
-  marked_as_transfer: true
   transfer: one
   entryable_type: Account::Transaction
   entryable: transfer_in

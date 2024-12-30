@@ -21,6 +21,18 @@ class Family < ApplicationRecord
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }
   validates :date_format, inclusion: { in: DATE_FORMATS }
 
+  def default_transfer_category
+    @default_transfer_category ||= categories.find_or_create_by!(classification: "transfer") do |c|
+      c.name = "Transfer"
+    end
+  end
+
+  def default_payment_category
+    @default_payment_category ||= categories.find_or_create_by!(classification: "payment") do |c|
+      c.name = "Payment"
+    end
+  end
+
   def sync_data(start_date: nil)
     update!(last_synced_at: Time.current)
 
@@ -82,7 +94,10 @@ class Family < ApplicationRecord
 
   def snapshot_account_transactions
     period = Period.last_30_days
-    results = accounts.active.joins(:entries)
+    results = accounts.active
+                      .joins("INNER JOIN account_entries ON account_entries.account_id = accounts.id")
+                      .joins("INNER JOIN account_transactions ON account_entries.entryable_id = account_transactions.id AND account_entries.entryable_type = 'Account::Transaction'")
+                      .joins("LEFT JOIN categories ON account_transactions.category_id = categories.id")
                       .select(
                         "accounts.*",
                         "COALESCE(SUM(account_entries.amount) FILTER (WHERE account_entries.amount > 0), 0) AS spending",
@@ -90,8 +105,7 @@ class Family < ApplicationRecord
                       )
                       .where("account_entries.date >= ?", period.date_range.begin)
                       .where("account_entries.date <= ?", period.date_range.end)
-                      .where("account_entries.marked_as_transfer = ?", false)
-                      .where("account_entries.entryable_type = ?", "Account::Transaction")
+                      .where("categories.classification IS NULL OR categories.classification != ?", "transfer")
                       .group("accounts.id")
                       .having("SUM(ABS(account_entries.amount)) > 0")
                       .to_a
@@ -110,9 +124,7 @@ class Family < ApplicationRecord
   end
 
   def snapshot_transactions
-    candidate_entries = entries.account_transactions.without_transfers.excluding(
-      entries.joins(:account).where(amount: ..0, accounts: { classification: Account.classifications[:liability] })
-    )
+    candidate_entries = entries.incomes_and_expenses
     rolling_totals = Account::Entry.daily_rolling_totals(candidate_entries, self.currency, period: Period.last_30_days)
 
     spending = []
