@@ -29,4 +29,3 @@ class TransfersTest < ApplicationSystemTestCase
     end
   end
 end
-
