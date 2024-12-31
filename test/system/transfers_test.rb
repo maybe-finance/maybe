@@ -19,7 +19,7 @@ class TransfersTest < ApplicationSystemTestCase
 
     select checking_name, from: "From"
     select savings_name, from: "To"
-    fill_in "account_transfer[amount]", with: 500
+    fill_in "transfer[amount]", with: 500
     fill_in "Date", with: transfer_date
 
     click_button "Create transfer"
@@ -28,62 +28,5 @@ class TransfersTest < ApplicationSystemTestCase
       assert_text "Transfer from"
     end
   end
-
-  test "can match 2 transactions and create a transfer" do
-    transfer_date = Date.current
-    outflow = accounts(:depository).entries.create! \
-      name: "Outflow from checking account",
-      date: transfer_date,
-      amount: 100,
-      currency: "USD",
-      entryable: Account::Transaction.new
-
-    inflow = accounts(:credit_card).entries.create! \
-      name: "Inflow to cc account",
-      date: transfer_date,
-      amount: -100,
-      currency: "USD",
-      entryable: Account::Transaction.new
-
-    visit transactions_url
-
-    transaction_entry_checkbox(inflow).check
-    transaction_entry_checkbox(outflow).check
-
-    bulk_transfer_action_button.click
-
-    click_on "Mark as transfers"
-
-    within "#entry-group-" + transfer_date.to_s do
-      assert_text "Outflow"
-      assert_text "Inflow"
-    end
-  end
-
-  test "can mark a single transaction as a transfer" do
-    txn = @user.family.entries.account_transactions.reverse_chronological.first
-
-    within "#" + dom_id(txn) do
-      assert_text txn.account_transaction.category.name || "Uncategorized"
-    end
-
-    transaction_entry_checkbox(txn).check
-
-    bulk_transfer_action_button.click
-    click_on "Mark as transfers"
-
-    within "#" + dom_id(txn) do
-      assert_no_text "Uncategorized"
-    end
-  end
-
-  private
-
-    def transaction_entry_checkbox(transaction_entry)
-      find("#" + dom_id(transaction_entry, "selection"))
-    end
-
-    def bulk_transfer_action_button
-      find("#bulk-transfer-btn")
-    end
 end
+

@@ -6,10 +6,13 @@ class TransactionsController < ApplicationController
     search_query = Current.family.transactions.search(@q).includes(:entryable).reverse_chronological
     @pagy, @transaction_entries = pagy(search_query, limit: params[:per_page] || "50")
 
+    totals_query = search_query.incomes_and_expenses
+    family_currency = Current.family.currency
+
     @totals = {
-      count: search_query.select { |t| t.currency == Current.family.currency }.count,
-      income: search_query.income_total(Current.family.currency).abs,
-      expense: search_query.expense_total(Current.family.currency)
+      count: totals_query.select { |t| t.currency == family_currency }.count,
+      income: totals_query.income_total(family_currency).abs,
+      expense: totals_query.expense_total(family_currency)
     }
   end
 

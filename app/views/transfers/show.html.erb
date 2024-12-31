@@ -3,11 +3,11 @@
     <div class="flex items-center gap-4">
       <h3 class="font-medium">
         <span class="text-2xl">
-          <%= format_money @transfer.amount_money %>
+          <%= format_money @transfer.amount_abs %>
         </span>
 
         <span class="text-lg text-gray-500">
-          <%= @transfer.amount_money.currency.iso_code %>
+          <%= @transfer.amount_abs.currency.iso_code %>
         </span>
       </h3>
 
@@ -27,19 +27,19 @@
           <dl class="flex items-center gap-2 justify-between">
             <dt class="text-gray-500">To</dt>
             <dd class="flex items-center gap-2 font-medium">
-              <%= render "accounts/logo", account: @transfer.inflow_transaction.account, size: "sm" %>
-              <%= @transfer.to_name %>
+              <%= render "accounts/logo", account: @transfer.to_account, size: "sm" %>
+              <%= link_to @transfer.to_account.name, account_path(@transfer.to_account), data: { turbo_frame: "_top" } %>
             </dd>
           </dl>
 
           <dl class="flex items-center gap-2 justify-between">
             <dt class="text-gray-500">Date</dt>
-            <dd class="font-medium"><%= l(@transfer.date, format: :long) %></dd>
+            <dd class="font-medium"><%= l(@transfer.inflow_transaction.entry.date, format: :long) %></dd>
           </dl>
 
           <dl class="flex items-center gap-2 justify-between">
             <dt class="text-gray-500">Amount</dt>
-            <dd class="font-medium text-red-500"><%= format_money -@transfer.amount_money %></dd>
+            <dd class="font-medium text-green-500">+<%= format_money @transfer.amount_abs %></dd>
           </dl>
         </div>
 
@@ -49,19 +49,19 @@
           <dl class="flex items-center gap-2 justify-between">
             <dt class="text-gray-500">From</dt>
             <dd class="flex items-center gap-2 font-medium">
-              <%= render "accounts/logo", account: @transfer.outflow_transaction.account, size: "sm" %>
-              <%= @transfer.from_name %>
+              <%= render "accounts/logo", account: @transfer.from_account, size: "sm" %>
+              <%= link_to @transfer.from_account.name, account_path(@transfer.from_account), data: { turbo_frame: "_top" } %>
             </dd>
           </dl>
 
           <dl class="flex items-center gap-2 justify-between">
             <dt class="text-gray-500">Date</dt>
-            <dd class="font-medium"><%= l(@transfer.date, format: :long) %></dd>
+            <dd class="font-medium"><%= l(@transfer.outflow_transaction.entry.date, format: :long) %></dd>
           </dl>
 
           <dl class="flex items-center gap-2 justify-between">
             <dt class="text-gray-500">Amount</dt>
-            <dd class="font-medium text-green-500">+<%= format_money @transfer.amount_money %></dd>
+            <dd class="font-medium text-red-500"><%= format_money -@transfer.amount_abs %></dd>
           </dl>
         </div>
       </div>
@@ -74,7 +74,7 @@
         <%= f.text_area :notes,
                   label: t(".note_label"),
                   placeholder: t(".note_placeholder"),
-                  value: @transfer.outflow_transaction.notes,
+                  value: @transfer.outflow_transaction.entry.notes,
                   rows: 5,
                   "data-auto-submit-form-target": "auto" %>
       <% end %>
@@ -93,10 +93,10 @@
 
             <div class="relative inline-block select-none">
               <%= f.check_box :excluded,
-                      checked: @transfer.inflow_transaction.excluded,
+                      checked: @transfer.inflow_transaction.entry.excluded,
                       class: "sr-only peer",
                       "data-auto-submit-form-target": "auto" %>
-              <label for="account_transfer_excluded"
+              <label for="transfer_excluded"
                          class="maybe-switch"></label>
             </div>
           </div>
@@ -109,9 +109,9 @@
           </div>
 
           <%= button_to t(".delete"),
-                account_transfer_path(@transfer),
+                transfer_path(@transfer),
                 method: :delete,
-                class:  "rounded-lg px-3 py-2 text-red-500 text-sm
+                class:  "rounded-lg px-3 py-2 whitespace-nowrap text-red-500 text-sm
                           font-medium border border-alpha-black-200",
                 data:   { turbo_confirm: true, turbo_frame: "_top" } %>
         </div>

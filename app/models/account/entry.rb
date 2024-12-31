@@ -30,7 +30,13 @@ class Account::Entry < ApplicationRecord
     )
   }
 
-  scope :without_transfers, -> { where(marked_as_transfer: false) }
+  scope :incomes_and_expenses, -> {
+    joins(
+      'LEFT JOIN transfers AS inflow_transfers ON inflow_transfers.inflow_transaction_id = account_entries.entryable_id
+       LEFT JOIN transfers AS outflow_transfers ON outflow_transfers.outflow_transaction_id = account_entries.entryable_id'
+    ).where("inflow_transfers.id IS NULL AND outflow_transfers.id IS NULL")
+  }
+
   scope :with_converted_amount, ->(currency) {
     # Join with exchange rates to convert the amount to the given currency
     # If no rate is available, exclude the transaction from the results
@@ -98,13 +104,6 @@ class Account::Entry < ApplicationRecord
       select("*").from(rolling_totals).where("date >= ?", period.date_range.first)
     end
 
-    def mark_transfers!
-      update_all marked_as_transfer: true
-
-      # Attempt to "auto match" and save a transfer if 2 transactions selected
-      Account::Transfer.new(entries: all).save if all.count == 2
-    end
-
     def bulk_update!(bulk_update_params)
       bulk_attributes = {
         date: bulk_update_params[:date],
@@ -128,7 +127,7 @@ class Account::Entry < ApplicationRecord
     end
 
     def income_total(currency = "USD")
-      total = without_transfers.account_transactions.includes(:entryable)
+      total = account_transactions.includes(:entryable)
         .where("account_entries.amount <= 0")
                        .map { |e| e.amount_money.exchange_to(currency, date: e.date, fallback_rate: 0) }
                        .sum
@@ -137,29 +136,12 @@ class Account::Entry < ApplicationRecord
     end
 
     def expense_total(currency = "USD")
-      total = without_transfers.account_transactions.includes(:entryable)
+      total = account_transactions.includes(:entryable)
                        .where("account_entries.amount > 0")
                        .map { |e| e.amount_money.exchange_to(currency, date: e.date, fallback_rate: 0) }
                        .sum
 
       Money.new(total, currency)
     end
-
-    private
-      def entryable_search(params)
-        entryable_ids = []
-        entryable_search_performed = false
-
-        Account::Entryable::TYPES.map(&:constantize).each do |entryable|
-          next unless entryable.requires_search?(params)
-
-          entryable_search_performed = true
-          entryable_ids += entryable.search(params).pluck(:id)
-        end
-
-        return nil unless entryable_search_performed
-
-        entryable_ids
-      end
   end
 end

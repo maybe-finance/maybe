@@ -46,9 +46,7 @@ Rails.application.routes.draw do
 
   resources :merchants, only: %i[index new create edit update destroy]
 
-  namespace :account do
-    resources :transfers, only: %i[new create destroy show update]
-  end
+  resources :transfers, only: %i[new create destroy show update]
 
   resources :imports, only: %i[index new show create destroy] do
     post :publish, on: :member

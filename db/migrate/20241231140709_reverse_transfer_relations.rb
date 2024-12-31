@@ -5,7 +5,7 @@ class ReverseTransferRelations < ActiveRecord::Migration[7.2]
       t.references :outflow_transaction, null: false, foreign_key: { to_table: :account_transactions }, type: :uuid
       t.string :status, null: false, default: "pending"
 
-      t.index [:inflow_transaction_id, :outflow_transaction_id], unique: true
+      t.index [ :inflow_transaction_id, :outflow_transaction_id ], unique: true
       t.timestamps
     end
 
@@ -14,23 +14,23 @@ class ReverseTransferRelations < ActiveRecord::Migration[7.2]
         execute <<~SQL
           INSERT INTO transfers (inflow_transaction_id, outflow_transaction_id, status, created_at, updated_at)
           SELECT
-            e_in.entryable_id as inflow_transaction_id,
-            e_out.entryable_id as outflow_transaction_id,
+            CASE WHEN e1.amount <= 0 THEN e1.entryable_id ELSE e2.entryable_id END as inflow_transaction_id,
+            CASE WHEN e1.amount <= 0 THEN e2.entryable_id ELSE e1.entryable_id END as outflow_transaction_id,
             'confirmed' as status,
-            e_in.created_at,
-            e_in.updated_at
-          FROM account_entries e_in
-          JOIN account_entries e_out ON 
-            e_in.transfer_id = e_out.transfer_id AND 
-            e_in.id != e_out.id AND
-            e_in.id < e_out.id -- Ensures we don't duplicate transfers from both sides
-          JOIN accounts a_in ON e_in.account_id = a_in.id
-          JOIN accounts a_out ON e_out.account_id = a_out.id
+            e1.created_at,
+            e1.updated_at
+          FROM account_entries e1
+          JOIN account_entries e2 ON#{' '}
+            e1.transfer_id = e2.transfer_id AND#{' '}
+            e1.id != e2.id AND
+            e1.id < e2.id -- Ensures we don't duplicate transfers from both sides
+          JOIN accounts a1 ON e1.account_id = a1.id
+          JOIN accounts a2 ON e2.account_id = a2.id
           WHERE
-            e_in.entryable_type = 'Account::Transaction' AND 
-            e_out.entryable_type = 'Account::Transaction' AND
-            e_in.transfer_id IS NOT NULL AND 
-            a_in.family_id = a_out.family_id; -- extra safeguard, not 100% necessary
+            e1.entryable_type = 'Account::Transaction' AND#{' '}
+            e2.entryable_type = 'Account::Transaction' AND
+            e1.transfer_id IS NOT NULL AND#{' '}
+            a1.family_id = a2.family_id;
         SQL
       end
 
@@ -43,7 +43,7 @@ class ReverseTransferRelations < ActiveRecord::Migration[7.2]
             RETURNING id, created_at
           ),
           transfer_pairs AS (
-            SELECT 
+            SELECT#{' '}
               nt.id as transfer_id,
               ae_in.id as inflow_entry_id,
               ae_out.id as outflow_entry_id
@@ -51,7 +51,7 @@ class ReverseTransferRelations < ActiveRecord::Migration[7.2]
             JOIN new_transfers nt ON nt.created_at = t.created_at
             JOIN account_entries ae_in ON ae_in.entryable_id = t.inflow_transaction_id
             JOIN account_entries ae_out ON ae_out.entryable_id = t.outflow_transaction_id
-            WHERE 
+            WHERE#{' '}
               ae_in.entryable_type = 'Account::Transaction' AND
               ae_out.entryable_type = 'Account::Transaction'
           )
@@ -62,7 +62,7 @@ class ReverseTransferRelations < ActiveRecord::Migration[7.2]
         SQL
       end
     end
-    
+
     remove_foreign_key :account_entries, :account_transfers, column: :transfer_id
     remove_column :account_entries, :transfer_id, :uuid
     remove_column :account_entries, :marked_as_transfer, :boolean

@@ -3,7 +3,7 @@
 <% trade, account = entry.account_trade, entry.account %>
 
 <div class="grid grid-cols-12 items-center <%= entry.excluded ? "text-gray-400 bg-gray-25" : "text-gray-900" %> text-sm font-medium p-4">
-  <div class="col-span-8 flex items-center gap-4">
+  <div class="col-span-6 flex items-center gap-4">
     <% if selectable %>
       <%= check_box_tag dom_id(entry, "selection"),
                         class: "maybe-checkbox maybe-checkbox--light",
@@ -28,6 +28,10 @@
         </div>
       <% end %>
     </div>
+  </div>
+
+  <div class="col-span-2 flex items-center">
+    <%= render "categories/badge", category: trade_category %>
   </div>
 
   <div class="col-span-2 justify-self-end font-medium text-sm">

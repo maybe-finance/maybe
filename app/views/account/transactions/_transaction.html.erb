@@ -2,9 +2,10 @@
 <% transaction, account = entry.account_transaction, entry.account %>
 
 <div class="grid grid-cols-12 items-center <%= entry.excluded ? "text-gray-400 bg-gray-25" : "text-gray-900" %> text-sm font-medium p-4">
-  <div class="pr-10 flex items-center gap-4 col-span-6">
+  <div class="pr-10 flex items-center gap-4 <%= balance_trend ? "col-span-6" : "col-span-8" %>">
     <% if selectable %>
       <%= check_box_tag dom_id(entry, "selection"),
+                        disabled: entry.account_transaction.transfer?,
                         class: "maybe-checkbox maybe-checkbox--light",
                         data: { id: entry.id, "bulk-select-target": "row", action: "bulk-select#toggleRowSelection" } %>
     <% end %>
@@ -18,51 +19,38 @@
         <% end %>
 
         <div class="truncate">
-          <% if entry.new_record? %>
-            <%= content_tag :p, entry.display_name %>
-          <% else %>
-            <%= link_to entry.display_name,
-                        entry.transfer.present? ? account_transfer_path(entry.transfer) : account_entry_path(entry),
+          <div class="space-y-0.5">
+            <% if entry.new_record? %>
+              <%= content_tag :p, entry.display_name %>
+            <% else %>
+              <%= link_to entry.display_name,
+                        entry.account_transaction.transfer.present? ? transfer_path(entry.account_transaction.transfer) : account_entry_path(entry),
                         data: { turbo_frame: "drawer", turbo_prefetch: false },
                         class: "hover:underline hover:text-gray-800" %>
-          <% end %>
+            <% end %>
+
+            <div class="text-gray-500 text-xs font-normal">
+              <% if entry.account_transaction.transfer? %>
+                <%= render "transfers/account_links", transfer: entry.account_transaction.transfer, is_inflow: entry.account_transaction.transfer_as_inflow.present? %>
+              <% else %>
+                <%= link_to entry.account.name, account_path(entry.account, tab: "transactions"), data: { turbo_frame: "_top" }, class: "hover:underline" %>
+              <% end %>
+            </div>
+          </div>
         </div>
       <% end %>
     </div>
+  </div>
 
-    <% if unconfirmed_transfer?(entry) %>
-      <%= render "account/transfers/transfer_toggle", entry: entry %>
+  <div class="flex items-center gap-1 <%= balance_trend ? "col-span-2" : "col-span-2" %>">
+    <% if entry.account_transaction.transfer? %>
+      <%= render "categories/badge", category: transfer_category %>
+    <% else %>
+      <%= render "categories/menu", transaction: transaction %>
     <% end %>
   </div>
 
-  <% if entry.transfer.present? %>
-    <% unless balance_trend %>
-      <div class="col-span-2"></div>
-    <% end %>
-
-    <div class="col-span-2">
-      <%= render "account/transfers/account_logos", transfer: entry.transfer, outflow: entry.amount.positive? %>
-    </div>
-  <% else %>
-    <div class="flex items-center gap-1 col-span-2">
-      <%= render "categories/menu", transaction: transaction %>
-    </div>
-
-    <% unless balance_trend %>
-      <%= tag.div class: "col-span-2 overflow-hidden truncate" do %>
-        <% if entry.new_record? %>
-          <%= tag.p account.name %>
-        <% else %>
-          <%= link_to account.name,
-                      account_path(account, tab: "transactions"),
-                      data: { turbo_frame: "_top" },
-                      class: "hover:underline" %>
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
-
-  <div class="col-span-2 ml-auto">
+  <div class="<%= balance_trend ? "col-span-2" : "col-span-2" %> ml-auto">
     <%= content_tag :p,
                     format_money(-entry.amount_money),
                     class: ["text-green-600": entry.amount.negative?] %>

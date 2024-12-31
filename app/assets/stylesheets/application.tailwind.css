@@ -51,8 +51,16 @@
     @apply border-alpha-black-200 checked:bg-gray-900 checked:ring-gray-900 focus:ring-gray-900 focus-visible:ring-gray-900 checked:hover:bg-gray-500;
   }
 
+  [type='checkbox'].maybe-checkbox--light:disabled {
+    @apply cursor-not-allowed opacity-80 bg-gray-50 border-gray-200 checked:bg-gray-400 checked:ring-gray-400;
+  }
+
   [type='checkbox'].maybe-checkbox--dark {
     @apply ring-gray-900 checked:text-white;
+  }
+
+  [type='checkbox'].maybe-checkbox--dark:disabled {
+    @apply cursor-not-allowed opacity-80 ring-gray-600;
   }
 
   [type='checkbox'].maybe-checkbox--dark:checked {

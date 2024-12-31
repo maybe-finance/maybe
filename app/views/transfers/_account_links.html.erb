@@ -1,0 +1,7 @@
+<%# locals: (transfer:, is_inflow: false) %>
+<div class="flex items-center gap-1">
+  <% first_account, second_account = is_inflow ? [transfer.to_account, transfer.from_account] : [transfer.from_account, transfer.to_account] %>
+  <%= link_to first_account.name, first_account, class: "hover:underline", data: { turbo_frame: "_top" } %>
+  <%= tag.p(is_inflow ? "←" : "→") %>
+  <%= link_to second_account.name, second_account, class: "hover:underline", data: { turbo_frame: "_top" } %>
+</div>
