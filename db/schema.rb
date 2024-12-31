@@ -42,17 +42,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_27_142333) do
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "transfer_id"
-    t.boolean "marked_as_transfer", default: false, null: false
     t.uuid "import_id"
     t.text "notes"
     t.boolean "excluded", default: false
     t.string "plaid_id"
     t.datetime "enriched_at"
     t.string "enriched_name"
+    t.boolean "marked_as_transfer"
+    t.uuid "transfer_id"
     t.index ["account_id"], name: "index_account_entries_on_account_id"
     t.index ["import_id"], name: "index_account_entries_on_import_id"
-    t.index ["transfer_id"], name: "index_account_entries_on_transfer_id"
   end
 
   create_table "account_holdings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
