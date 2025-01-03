@@ -29,6 +29,11 @@
     @apply focus:opacity-100 focus:outline-none focus:ring-0;
     @apply placeholder-shown:opacity-50;
     @apply disabled:text-gray-400;
+    @apply text-ellipsis overflow-hidden whitespace-nowrap;
+  }
+
+  select.form-field__input {
+    @apply pr-8;
   }
 
   .form-field__radio {

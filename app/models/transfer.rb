@@ -2,6 +2,8 @@ class Transfer < ApplicationRecord
   belongs_to :inflow_transaction, class_name: "Account::Transaction"
   belongs_to :outflow_transaction, class_name: "Account::Transaction"
 
+  enum :status, { pending: "pending", confirmed: "confirmed" }
+
   validate :transfer_has_different_accounts
   validate :transfer_has_opposite_amounts
   validate :transfer_within_date_range

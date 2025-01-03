@@ -4,4 +4,6 @@
   <%= link_to first_account.name, first_account, class: "hover:underline", data: { turbo_frame: "_top" } %>
   <%= tag.p(is_inflow ? "←" : "→") %>
   <%= link_to second_account.name, second_account, class: "hover:underline", data: { turbo_frame: "_top" } %>
+
+  <span>(<%= is_inflow ? "incoming" : "outgoing" %>)</span>
 </div>

@@ -83,25 +83,6 @@
     <!-- Settings Section -->
     <%= disclosure t(".settings") do %>
       <div class="pb-4">
-        <%= styled_form_with model: @transfer,
-              class: "p-3", data: { controller: "auto-submit-form" } do |f| %>
-          <div class="flex cursor-pointer items-center gap-2 justify-between">
-            <div class="text-sm space-y-1">
-              <h4 class="text-gray-900"><%= t(".exclude_title") %></h4>
-              <p class="text-gray-500"><%= t(".exclude_subtitle") %></p>
-            </div>
-
-            <div class="relative inline-block select-none">
-              <%= f.check_box :excluded,
-                      checked: @transfer.inflow_transaction.entry.excluded,
-                      class: "sr-only peer",
-                      "data-auto-submit-form-target": "auto" %>
-              <label for="transfer_excluded"
-                         class="maybe-switch"></label>
-            </div>
-          </div>
-        <% end %>
-
         <div class="flex items-center justify-between gap-2 p-3">
           <div class="text-sm space-y-1">
             <h4 class="text-gray-900"><%= t(".delete_title") %></h4>

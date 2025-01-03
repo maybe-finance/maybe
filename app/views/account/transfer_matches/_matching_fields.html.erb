@@ -1,0 +1,44 @@
+<%# locals: (form:, entry:, candidates:, accounts:) %>
+
+<% if candidates.any? %>
+  <div data-controller="transfer-match" class="space-y-2">
+    <p class="text-sm text-gray-500">
+      Select a method for matching your transactions.
+    </p>
+
+    <%= form.select :method,
+              [
+                ["Match existing transaction (recommended)", "existing"],
+                ["Create new transaction", "new"]
+              ],
+              { selected: "existing", label: "Matching method" },
+              data: { action: "change->transfer-match#update" } %>
+
+    <div data-transfer-match-target="existingSelect">
+      <%= form.select :matched_entry_id,
+                candidates.map { |entry|
+                  [entry_name_detailed(entry), entry.id]
+                },
+                { label: "Matching transaction" } %>
+    </div>
+
+    <div data-transfer-match-target="newSelect" class="hidden">
+      <%= form.select :target_account_id,
+                accounts.map { |account| [account.name, account.id] },
+                { label: "Target account" } %>
+    </div>
+  </div>
+<% else %>
+  <p class="text-sm text-gray-500">
+    We couldn't find any transactions to match from your other accounts.
+    Please select an account and we will create a new inflow transaction for you.
+  </p>
+
+  <%= form.hidden_field :method, value: "new" %>
+
+  <div>
+    <%= form.select :target_account_id,
+                accounts.map { |account| [account.name, account.id] },
+                { label: "Target account" } %>
+  </div>
+<% end %>

@@ -7,20 +7,14 @@ module CategoriesHelper
 
   def transfer_category
     Category.new \
-      name: "Transfer",
-      color: Category::UNCATEGORIZED_COLOR
-  end
-
-  def payment_category
-    Category.new \
-      name: "Payment",
-      color: Category::UNCATEGORIZED_COLOR
+      name: "Transfer / Payment",
+      color: Category::TRANSFER_COLOR
   end
 
   def trade_category
     Category.new \
       name: "Trade",
-      color: Category::UNCATEGORIZED_COLOR
+      color: Category::TRADE_COLOR
   end
 
   def family_categories

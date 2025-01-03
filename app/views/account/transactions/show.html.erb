@@ -32,27 +32,7 @@
                     min: 0,
                     value: @entry.amount.abs %>
             </div>
-          <% end %>
 
-          <%= f.select :account,
-                options_for_select(
-                  Current.family.accounts.alphabetically.pluck(:name, :id),
-                  @entry.account_id
-                ),
-                { label: t(".account_label") },
-                { disabled: true } %>
-        <% end %>
-      </div>
-    <% end %>
-
-    <!-- Details Section -->
-    <%= disclosure t(".details") do %>
-      <div class="pb-4">
-        <%= styled_form_with model: @entry,
-              url: account_transaction_path(@entry),
-              class: "space-y-2",
-              data: { controller: "auto-submit-form" } do |f| %>
-          <% unless @entry.account_transaction.transfer? %>
             <%= f.fields_for :entryable do |ef| %>
               <%= ef.collection_select :category_id,
                       Current.family.categories.alphabetically,
@@ -60,6 +40,30 @@
                     { label: t(".category_label"),
                       class: "text-gray-400", include_blank: t(".uncategorized") },
                     "data-auto-submit-form-target": "auto" %>
+            <% end %>
+          <% end %>
+
+        <% end %>
+      </div>
+    <% end %>
+
+    <!-- Details Section -->
+    <%= disclosure t(".details"), default_open: false do %>
+      <div class="pb-4">
+        <%= styled_form_with model: @entry,
+              url: account_transaction_path(@entry),
+              class: "space-y-2",
+              data: { controller: "auto-submit-form" } do |f| %>
+          <% unless @entry.account_transaction.transfer? %>
+            <%= f.select :account,
+                options_for_select(
+                  Current.family.accounts.alphabetically.pluck(:name, :id),
+                  @entry.account_id
+                ),
+                { label: t(".account_label") },
+                { disabled: true } %>
+
+            <%= f.fields_for :entryable do |ef| %>
 
               <%= ef.collection_select :merchant_id,
                       Current.family.merchants.alphabetically,
@@ -94,15 +98,15 @@
     <!-- Settings Section -->
     <%= disclosure t(".settings") do %>
       <div class="pb-4">
-        <!-- Exclude Transaction Form -->
+
         <%= styled_form_with model: @entry,
               url: account_transaction_path(@entry),
               class: "p-3",
               data: { controller: "auto-submit-form" } do |f| %>
-          <div class="flex cursor-pointer items-center gap-2 justify-between">
+          <div class="flex cursor-pointer items-center gap-4 justify-between">
             <div class="text-sm space-y-1">
-              <h4 class="text-gray-900"><%= t(".exclude_title") %></h4>
-              <p class="text-gray-500"><%= t(".exclude_subtitle") %></p>
+              <h4 class="text-gray-900">Irregular <%= @entry.amount.negative? ? "Income" : "Expense" %></h4>
+              <p class="text-gray-500">Irregular transactions will be excluded from certain budgeting calculations and reports to help you see what's really important.</p>
             </div>
 
             <div class="relative inline-block select-none">
@@ -114,6 +118,18 @@
             </div>
           </div>
         <% end %>
+
+        <div class="flex items-center justify-between gap-4 p-3">
+          <div class="text-sm space-y-1">
+            <h4 class="text-gray-900">Transfer or Debt Payment?</h4>
+            <p class="text-gray-500">Transfers and payments are special types of transactions that indicate money movement between 2 accounts.</p>
+          </div>
+
+          <%= link_to new_account_transaction_transfer_match_path(@entry), class: "btn btn--outline flex items-center gap-2", data: { turbo_frame: :modal } do %>
+            <%= lucide_icon "arrow-left-right", class: "w-4 h-4 shrink-0" %>
+            <span class="whitespace-nowrap">Open matcher</span>
+          <% end %>
+        </div>
 
         <!-- Delete Transaction Form -->
         <div class="flex items-center justify-between gap-2 p-3">

@@ -18,6 +18,15 @@ module Account::EntriesHelper
     end.join.html_safe
   end
 
+  def entry_name_detailed(entry)
+    [
+      entry.date,
+      format_money(entry.amount_money),
+      entry.account.name,
+      entry.display_name
+    ].join(" • ")
+  end
+
   private
 
     def permitted_entryable_key(entry)

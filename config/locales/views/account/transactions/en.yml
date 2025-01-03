@@ -1,6 +1,9 @@
 ---
 en:
   account:
+    transfer_matches:
+      create:
+        success: Transfer created
     transactions:
       bulk_delete:
         success: "%{count} transactions deleted"

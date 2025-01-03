@@ -65,6 +65,15 @@ class Account::Entry < ApplicationRecord
     enriched_name.presence || name
   end
 
+  def transfer_match_candidates
+    account.family.entries
+          .where.not(account_id: account_id)
+          .where.not(id: id)
+          .where(amount: -amount)
+          .where(currency: currency)
+          .where(date: (date - 4.days)..(date + 4.days))
+  end
+
   class << self
     def search(params)
       Account::EntrySearch.new(params).build_query(all)
