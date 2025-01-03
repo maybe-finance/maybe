@@ -62,7 +62,7 @@ group :development, :test do
 end
 
 group :development do
-  gem "hotwire-livereload"
+  gem "hotwire-livereload", github: "kirillplatonov/hotwire-livereload"
   gem "letter_opener"
   gem "ruby-lsp-rails"
   gem "web-console"
