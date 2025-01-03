@@ -6,8 +6,8 @@ class Account::EntrySearch
   attribute :amount, :string
   attribute :amount_operator, :string
   attribute :types, :string
-  attribute :accounts, :string
-  attribute :account_ids, :string
+  attribute :accounts, array: true
+  attribute :account_ids, array: true
   attribute :start_date, :string
   attribute :end_date, :string
 
