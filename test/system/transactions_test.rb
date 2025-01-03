@@ -51,8 +51,10 @@ class TransactionsTest < ApplicationSystemTestCase
       click_button "Category"
       check(@transaction.account_transaction.category.name)
       click_button "Apply"
+      sleep 1
     end
 
+    assert_selector "#total-transactions", text: "1"
     assert_selector "#" + dom_id(@transaction), count: 1
 
     within "#transaction-search-filters" do

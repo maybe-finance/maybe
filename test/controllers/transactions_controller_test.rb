@@ -58,4 +58,20 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_dom "#" + dom_id(sorted_transactions.last), count: 1
   end
+
+  test "can filter by account" do
+    family = families(:empty)
+    account1 = family.accounts.create! name: "Test1", balance: 7, currency: "USD", accountable: Depository.new
+    account2 = family.accounts.create! name: "Test2", balance: 5, currency: "USD", accountable: Depository.new
+    3.times do
+      create_transaction(account: account1)
+    end
+    create_transaction(account: account2)
+
+    sign_in family.users.first
+
+    get transactions_url(q: { accounts: [ account1.name ] }, per_page: 10)
+    assert_response :success
+    assert_dom "#total-transactions", count: 1, text: "3"
+  end
 end
