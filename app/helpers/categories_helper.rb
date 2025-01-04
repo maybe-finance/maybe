@@ -7,8 +7,14 @@ module CategoriesHelper
 
   def transfer_category
     Category.new \
-      name: "Transfer / Payment",
+      name: "⇄ Transfer",
       color: Category::TRANSFER_COLOR
+  end
+
+  def payment_category
+    Category.new \
+      name: "→ Payment",
+      color: Category::PAYMENT_COLOR
   end
 
   def trade_category

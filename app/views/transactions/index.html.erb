@@ -29,7 +29,12 @@
         </div>
         <div class="space-y-6">
           <%= entries_by_date(@transaction_entries, totals: true) do |entries| %>
-            <%= render entries %>
+            <%# Render transfers by selecting one side of the transfer (to prevent double-rendering the same transfer across date groups) %>
+            <%= render partial: "transfers/transfer",
+                       collection: entries.select { |e| e.account_transaction.transfer_as_outflow.present? }.map { |e| e.account_transaction.transfer_as_outflow } %>
+
+            <%# Render regular entries %>
+            <%= render partial: "account/entries/entry", collection: entries.reject { |e| e.account_transaction.transfer? } %>
           <% end %>
         </div>
       </div>

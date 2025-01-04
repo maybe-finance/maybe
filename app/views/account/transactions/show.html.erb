@@ -105,8 +105,8 @@
               data: { controller: "auto-submit-form" } do |f| %>
           <div class="flex cursor-pointer items-center gap-4 justify-between">
             <div class="text-sm space-y-1">
-              <h4 class="text-gray-900">Irregular <%= @entry.amount.negative? ? "Income" : "Expense" %></h4>
-              <p class="text-gray-500">Irregular transactions will be excluded from certain budgeting calculations and reports to help you see what's really important.</p>
+              <h4 class="text-gray-900">One-time <%= @entry.amount.negative? ? "Income" : "Expense" %></h4>
+              <p class="text-gray-500">One-time transactions will be excluded from certain budgeting calculations and reports to help you see what's really important.</p>
             </div>
 
             <div class="relative inline-block select-none">

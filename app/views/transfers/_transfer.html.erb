@@ -1,0 +1,45 @@
+<%# locals: (transfer:) %>
+
+<div class="grid grid-cols-12 items-center text-gray-900 text-sm font-medium p-4">
+  <div class="pr-10 flex items-center gap-4 col-span-8">
+    <%= check_box_tag dom_id(transfer),
+                        disabled: true,
+                        class: "maybe-checkbox maybe-checkbox--light" %>
+
+    <div class="max-w-full">
+      <%= content_tag :div, class: ["flex items-center gap-2"] do %>
+        <%= render "shared/circle_logo", name: transfer.name, size: "sm" %>
+
+        <div class="truncate">
+          <div class="space-y-0.5">
+
+            <%= link_to transfer.name,
+                        transfer_path(transfer),
+                        data: { turbo_frame: "drawer", turbo_prefetch: false },
+                        class: "hover:underline hover:text-gray-800" %>
+
+            <div class="text-gray-500 text-xs font-normal">
+              <div class="flex items-center gap-1">
+                <%= link_to transfer.from_account.name, transfer.from_account, class: "hover:underline", data: { turbo_frame: "_top" } %>
+                <%= lucide_icon "arrow-left-right", class: "w-4 h-4" %>
+                <%= link_to transfer.to_account.name, transfer.to_account, class: "hover:underline", data: { turbo_frame: "_top" } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-1 col-span-2">
+    <%= render "categories/badge", category: transfer.payment? ? payment_category : transfer_category %>
+  </div>
+
+  <div class="col-span-2 ml-auto">
+    <p class="flex items-center gap-1">
+      <span>
+        +/- <%= format_money(transfer.amount_abs) %>
+      </span>
+    </p>
+  </div>
+</div>

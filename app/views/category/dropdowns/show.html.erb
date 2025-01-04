@@ -29,22 +29,6 @@
     </div>
     <hr>
     <div class="relative p-1.5 w-full">
-      <%= link_to new_account_transaction_transfer_match_path(@transaction.entry),
-                  class: "flex text-sm font-medium items-center gap-2 text-gray-500 w-full rounded-lg p-2 hover:bg-gray-100",
-                  data: { turbo_frame: "modal" } do %>
-        <%= lucide_icon "refresh-cw", class: "w-5 h-5" %>
-
-        <p>Match transfer/payment</p>
-      <% end %>
-
-      <%= link_to "#",
-                  class: "flex text-sm font-medium items-center gap-2 text-gray-500 w-full rounded-lg p-2 hover:bg-gray-100",
-                  data: { turbo_frame: "modal" } do %>
-        <%= lucide_icon "flag-triangle-right", class: "w-5 h-5" %>
-
-        <p>One-off <%= @transaction.entry.amount.negative? ? "income" : "expense" %></p>
-      <% end %>
-
       <% if @transaction.category %>
         <%= button_to account_transaction_path(@transaction.entry),
                       method: :patch,
@@ -56,6 +40,32 @@
           <%= t(".clear") %>
         <% end %>
       <% end %>
+
+      <%= link_to new_account_transaction_transfer_match_path(@transaction.entry),
+                  class: "flex text-sm font-medium items-center gap-2 text-gray-500 w-full rounded-lg p-2 hover:bg-gray-100",
+                  data: { turbo_frame: "modal" } do %>
+        <%= lucide_icon "refresh-cw", class: "w-5 h-5" %>
+
+        <p>Match transfer/payment</p>
+      <% end %>
+
+      <div class="flex text-sm font-medium items-center gap-2 text-gray-500 w-full rounded-lg p-2">
+        <div class="flex items-center gap-2">
+          <%= form_with url: account_transaction_path(@transaction.entry),
+                        method: :patch,
+                        data: { controller: "auto-submit-form" } do |f| %>
+            <%= f.hidden_field "account_entry[excluded]", value: !@transaction.entry.excluded %>
+            <%= f.check_box "account_entry[excluded]",
+                          checked: @transaction.entry.excluded,
+                          class: "maybe-checkbox maybe-checkbox--light",
+                          data: { auto_submit_form_target: "auto", autosubmit_trigger_event: "change" } %>
+          <% end %>
+        </div>
+
+        <p>One-time <%= @transaction.entry.amount.negative? ? 'income' : 'expense' %></p>
+
+        <%= lucide_icon "asterisk", class: "w-5 h-5 shrink-0 text-orange-500 ml-auto" %>
+      </div>
     </div>
   </div>
 <% end %>

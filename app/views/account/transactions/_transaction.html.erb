@@ -1,7 +1,7 @@
 <%# locals: (entry:, selectable: true, balance_trend: nil) %>
 <% transaction, account = entry.account_transaction, entry.account %>
 
-<div class="grid grid-cols-12 items-center <%= entry.excluded ? "text-gray-400 bg-gray-25" : "text-gray-900" %> text-sm font-medium p-4">
+<div class="grid grid-cols-12 items-center text-gray-900 text-sm font-medium p-4">
   <div class="pr-10 flex items-center gap-4 <%= balance_trend ? "col-span-6" : "col-span-8" %>">
     <% if selectable %>
       <%= check_box_tag dom_id(entry, "selection"),
@@ -20,14 +20,22 @@
 
         <div class="truncate">
           <div class="space-y-0.5">
-            <% if entry.new_record? %>
-              <%= content_tag :p, entry.display_name %>
-            <% else %>
-              <%= link_to entry.display_name,
+            <div class="flex items-center gap-1">
+              <% if entry.new_record? %>
+                <%= content_tag :p, entry.display_name %>
+              <% else %>
+                <%= link_to entry.display_name,
                         entry.account_transaction.transfer.present? ? transfer_path(entry.account_transaction.transfer) : account_entry_path(entry),
                         data: { turbo_frame: "drawer", turbo_prefetch: false },
                         class: "hover:underline hover:text-gray-800" %>
-            <% end %>
+              <% end %>
+
+              <% if entry.excluded %>
+                <span title="One-time <%= entry.amount.negative? ? 'income' : 'expense' %> (excluded from averages)">
+                  <%= lucide_icon "asterisk", class: "w-4 h-4 shrink-0 text-orange-500" %>
+                </span>
+              <% end %>
+            </div>
 
             <div class="text-gray-500 text-xs font-normal">
               <% if entry.account_transaction.transfer? %>
@@ -42,15 +50,15 @@
     </div>
   </div>
 
-  <div class="flex items-center gap-1 <%= balance_trend ? "col-span-2" : "col-span-2" %>">
+  <div class="flex items-center gap-1 col-span-2">
     <% if entry.account_transaction.transfer? %>
-      <%= render "categories/badge", category: transfer_category %>
+      <%= render "categories/badge", category: entry.account_transaction.transfer.payment? ? payment_category : transfer_category %>
     <% else %>
       <%= render "categories/menu", transaction: transaction %>
     <% end %>
   </div>
 
-  <div class="<%= balance_trend ? "col-span-2" : "col-span-2" %> ml-auto">
+  <div class="col-span-2 ml-auto">
     <%= content_tag :p,
                     format_money(-entry.amount_money),
                     class: ["text-green-600": entry.amount.negative?] %>

@@ -25,28 +25,6 @@
       <div class="pb-4 px-3 pt-2 text-sm space-y-3 text-gray-900">
         <div class="space-y-3">
           <dl class="flex items-center gap-2 justify-between">
-            <dt class="text-gray-500">To</dt>
-            <dd class="flex items-center gap-2 font-medium">
-              <%= render "accounts/logo", account: @transfer.to_account, size: "sm" %>
-              <%= link_to @transfer.to_account.name, account_path(@transfer.to_account), data: { turbo_frame: "_top" } %>
-            </dd>
-          </dl>
-
-          <dl class="flex items-center gap-2 justify-between">
-            <dt class="text-gray-500">Date</dt>
-            <dd class="font-medium"><%= l(@transfer.inflow_transaction.entry.date, format: :long) %></dd>
-          </dl>
-
-          <dl class="flex items-center gap-2 justify-between">
-            <dt class="text-gray-500">Amount</dt>
-            <dd class="font-medium text-green-500">+<%= format_money @transfer.amount_abs %></dd>
-          </dl>
-        </div>
-
-        <div class="bg-alpha-black-100 h-px my-2"></div>
-
-        <div class="space-y-3">
-          <dl class="flex items-center gap-2 justify-between">
             <dt class="text-gray-500">From</dt>
             <dd class="flex items-center gap-2 font-medium">
               <%= render "accounts/logo", account: @transfer.from_account, size: "sm" %>
@@ -62,6 +40,28 @@
           <dl class="flex items-center gap-2 justify-between">
             <dt class="text-gray-500">Amount</dt>
             <dd class="font-medium text-red-500"><%= format_money -@transfer.amount_abs %></dd>
+          </dl>
+        </div>
+
+        <div class="bg-alpha-black-100 h-px my-2"></div>
+
+        <div class="space-y-3">
+          <dl class="flex items-center gap-2 justify-between">
+            <dt class="text-gray-500">To</dt>
+            <dd class="flex items-center gap-2 font-medium">
+              <%= render "accounts/logo", account: @transfer.to_account, size: "sm" %>
+              <%= link_to @transfer.to_account.name, account_path(@transfer.to_account), data: { turbo_frame: "_top" } %>
+            </dd>
+          </dl>
+
+          <dl class="flex items-center gap-2 justify-between">
+            <dt class="text-gray-500">Date</dt>
+            <dd class="font-medium"><%= l(@transfer.inflow_transaction.entry.date, format: :long) %></dd>
+          </dl>
+
+          <dl class="flex items-center gap-2 justify-between">
+            <dt class="text-gray-500">Amount</dt>
+            <dd class="font-medium text-green-500">+<%= format_money @transfer.amount_abs %></dd>
           </dl>
         </div>
       </div>

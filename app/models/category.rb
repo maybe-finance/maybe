@@ -18,6 +18,7 @@ class Category < ApplicationRecord
 
   UNCATEGORIZED_COLOR = "#737373"
   TRANSFER_COLOR = "#6471eb"
+  PAYMENT_COLOR = "#db5a54"
   TRADE_COLOR = "#e99537"
 
   class Group

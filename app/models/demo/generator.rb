@@ -55,6 +55,7 @@ class Demo::Generator
     end
 
     def clear_data!
+      Transfer.destroy_all
       InviteCode.destroy_all
       User.find_by_email("user@maybe.local")&.destroy
       ExchangeRate.destroy_all

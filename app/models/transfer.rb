@@ -63,7 +63,15 @@ class Transfer < ApplicationRecord
   end
 
   def name
-    I18n.t("transfer.name", from_account: from_account.name, to_account: to_account.name)
+    if payment?
+      I18n.t("transfer.payment_name", to_account: to_account.name)
+    else
+      I18n.t("transfer.name", to_account: to_account.name)
+    end
+  end
+
+  def payment?
+    to_account.liability?
   end
 
   private

@@ -32,7 +32,7 @@ class Account::TransferMatchesController < ApplicationController
             amount: @entry.amount * -1,
             currency: @entry.currency,
             date: @entry.date,
-            name: "Transfer from #{@entry.account.name}",
+            name: "Transfer to #{@entry.amount.negative? ? @entry.account.name : target_account.name}",
           )
         )
 

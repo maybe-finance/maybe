@@ -13,4 +13,5 @@ en:
                 amounts
               must_have_single_currency: Transfer must have a single currency
   transfer:
-    name: Transfer from %{from_account} to %{to_account}
+    name: Transfer to %{to_account}
+    payment_name: Payment to %{to_account}
