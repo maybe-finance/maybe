@@ -27,8 +27,6 @@ class Account::EntrySearch
     query = query.where("account_entries.date <= ?", end_date) if end_date.present?
 
     if types.present?
-      query = query.where(marked_as_transfer: false) unless types.include?("transfer")
-
       if types.include?("income") && !types.include?("expense")
         query = query.where("account_entries.amount < 0")
       elsif types.include?("expense") && !types.include?("income")

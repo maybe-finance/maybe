@@ -210,7 +210,7 @@ class TransactionsTest < ApplicationSystemTestCase
     end
 
     def number_of_transactions_on_page
-      [ @user.family.entries.without_transfers.count, @page_size ].min
+      [ @user.family.entries.count, @page_size ].min
     end
 
     def all_transactions_checkbox

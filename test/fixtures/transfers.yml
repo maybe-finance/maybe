@@ -1,0 +1,3 @@
+one:
+  inflow_transaction: transfer_in
+  outflow_transaction: transfer_out

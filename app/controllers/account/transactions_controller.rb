@@ -21,24 +21,6 @@ class Account::TransactionsController < ApplicationController
     redirect_back_or_to transactions_url, notice: t(".success", count: updated)
   end
 
-  def mark_transfers
-    Current.family
-      .entries
-      .where(id: bulk_update_params[:entry_ids])
-           .mark_transfers!
-
-    redirect_back_or_to transactions_url, notice: t(".success")
-  end
-
-  def unmark_transfers
-    Current.family
-      .entries
-      .where(id: bulk_update_params[:entry_ids])
-           .update_all marked_as_transfer: false
-
-    redirect_back_or_to transactions_url, notice: t(".success")
-  end
-
   private
     def bulk_delete_params
       params.require(:bulk_delete).permit(entry_ids: [])

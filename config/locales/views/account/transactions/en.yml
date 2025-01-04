@@ -1,6 +1,9 @@
 ---
 en:
   account:
+    transfer_matches:
+      create:
+        success: Transfer created
     transactions:
       bulk_delete:
         success: "%{count} transactions deleted"
@@ -36,15 +39,8 @@ en:
         no_transactions: No transactions for this account yet.
         transaction: transaction
         transactions: Transactions
-      mark_transfers:
-        success: Marked as transfers
       new:
         new_transaction: New transaction
-      selection_bar:
-        mark_transfers: Mark as transfers?
-        mark_transfers_confirm: Mark as transfers
-        mark_transfers_message: By marking transactions as transfers, they will no
-          longer be included in income or spending calculations.
       show:
         account_label: Account
         amount: Amount
@@ -68,5 +64,3 @@ en:
         settings: Settings
         tags_label: Tags
         uncategorized: "(uncategorized)"
-      unmark_transfers:
-        success: Transfer removed

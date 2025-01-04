@@ -1,11 +1,8 @@
 ---
 en:
-  category:
-    dropdowns:
-      show:
-        empty: No categories found
-        bootstrap: Generate default categories
   categories:
+    bootstrap:
+      success: Default categories created successfully
     category:
       delete: Delete category
       edit: Edit category
@@ -18,15 +15,18 @@ en:
     form:
       placeholder: Category name
     index:
+      bootstrap: Use default categories
       categories: Categories
       empty: No categories found
       new: New category
-      bootstrap: Use default categories
-    bootstrap:
-      success: Default categories created successfully
     menu:
       loading: Loading...
     new:
       new_category: New category
     update:
       success: Category updated successfully
+  category:
+    dropdowns:
+      show:
+        bootstrap: Generate default categories
+        empty: No categories found

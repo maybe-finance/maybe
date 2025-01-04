@@ -67,9 +67,9 @@ module ApplicationHelper
     render partial: "shared/drawer", locals: { content:, reload_on_close: }
   end
 
-  def disclosure(title, &block)
+  def disclosure(title, default_open: true, &block)
     content = capture &block
-    render partial: "shared/disclosure", locals: { title: title, content: content }
+    render partial: "shared/disclosure", locals: { title: title, content: content, open: default_open }
   end
 
   def sidebar_link_to(name, path, options = {})

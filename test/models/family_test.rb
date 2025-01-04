@@ -120,11 +120,9 @@ class FamilyTest < ActiveSupport::TestCase
 
   test "calculates rolling transaction totals" do
     account = create_account(balance: 1000, accountable: Depository.new)
-    liability_account = create_account(balance: 1000, accountable: Loan.new)
     create_transaction(account: account, date: 2.days.ago.to_date, amount: -500)
     create_transaction(account: account, date: 1.day.ago.to_date, amount: 100)
     create_transaction(account: account, date: Date.current, amount: 20)
-    create_transaction(account: liability_account, date: 2.days.ago.to_date, amount: -333)
 
     snapshot = @family.snapshot_transactions
 

@@ -18,6 +18,11 @@ class Account::TransactionSearch
   def build_query(scope)
     query = scope
 
+    if types.present? && types.exclude?("transfer")
+      query = query.joins("LEFT JOIN transfers ON transfers.inflow_transaction_id = account_entries.id OR transfers.outflow_transaction_id = account_entries.id")
+        .where("transfers.id IS NULL")
+    end
+
     if categories.present?
       if categories.exclude?("Uncategorized")
         query = query

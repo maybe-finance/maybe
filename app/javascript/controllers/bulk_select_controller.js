@@ -99,7 +99,9 @@ export default class extends Controller {
   }
 
   _rowsForGroup(group) {
-    return this.rowTargets.filter((row) => group.contains(row));
+    return this.rowTargets.filter(
+      (row) => group.contains(row) && !row.disabled,
+    );
   }
 
   _addToSelection(idToAdd) {
@@ -115,7 +117,9 @@ export default class extends Controller {
   }
 
   _selectAll() {
-    this.selectedIdsValue = this.rowTargets.map((t) => t.dataset.id);
+    this.selectedIdsValue = this.rowTargets
+      .filter((t) => !t.disabled)
+      .map((t) => t.dataset.id);
   }
 
   _updateView = () => {
