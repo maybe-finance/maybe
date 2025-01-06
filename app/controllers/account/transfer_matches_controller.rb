@@ -36,19 +36,21 @@ class Account::TransferMatchesController < ApplicationController
           )
         )
 
-        Transfer.new(
+        transfer = Transfer.find_or_initialize_by(
           inflow_transaction: @entry.amount.positive? ? missing_transaction : @entry.account_transaction,
-          outflow_transaction: @entry.amount.positive? ? @entry.account_transaction : missing_transaction,
-          status: "confirmed"
+          outflow_transaction: @entry.amount.positive? ? @entry.account_transaction : missing_transaction
         )
+        transfer.status = "confirmed"
+        transfer
       else
         target_transaction = Current.family.entries.find(transfer_match_params[:matched_entry_id])
 
-        Transfer.new(
+        transfer = Transfer.find_or_initialize_by(
           inflow_transaction: @entry.amount.negative? ? @entry.account_transaction : target_transaction.account_transaction,
-          outflow_transaction: @entry.amount.negative? ? target_transaction.account_transaction : @entry.account_transaction,
-          status: "confirmed"
+          outflow_transaction: @entry.amount.negative? ? target_transaction.account_transaction : @entry.account_transaction
         )
+        transfer.status = "confirmed"
+        transfer
       end
     end
 end
