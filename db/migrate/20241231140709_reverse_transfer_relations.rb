@@ -21,16 +21,16 @@ class ReverseTransferRelations < ActiveRecord::Migration[7.2]
             e1.created_at,
             e1.updated_at
           FROM account_entries e1
-          JOIN account_entries e2 ON#{' '}
-            e1.transfer_id = e2.transfer_id AND#{' '}
+          JOIN account_entries e2 ON
+            e1.transfer_id = e2.transfer_id AND
             e1.id != e2.id AND
             e1.id < e2.id -- Ensures we don't duplicate transfers from both sides
           JOIN accounts a1 ON e1.account_id = a1.id
           JOIN accounts a2 ON e2.account_id = a2.id
           WHERE
-            e1.entryable_type = 'Account::Transaction' AND#{' '}
+            e1.entryable_type = 'Account::Transaction' AND
             e2.entryable_type = 'Account::Transaction' AND
-            e1.transfer_id IS NOT NULL AND#{' '}
+            e1.transfer_id IS NOT NULL AND
             a1.family_id = a2.family_id;
         SQL
       end
@@ -44,7 +44,7 @@ class ReverseTransferRelations < ActiveRecord::Migration[7.2]
             RETURNING id, created_at
           ),
           transfer_pairs AS (
-            SELECT#{' '}
+            SELECT
               nt.id as transfer_id,
               ae_in.id as inflow_entry_id,
               ae_out.id as outflow_entry_id
@@ -52,7 +52,7 @@ class ReverseTransferRelations < ActiveRecord::Migration[7.2]
             JOIN new_transfers nt ON nt.created_at = t.created_at
             JOIN account_entries ae_in ON ae_in.entryable_id = t.inflow_transaction_id
             JOIN account_entries ae_out ON ae_out.entryable_id = t.outflow_transaction_id
-            WHERE#{' '}
+            WHERE
               ae_in.entryable_type = 'Account::Transaction' AND
               ae_out.entryable_type = 'Account::Transaction'
           )
