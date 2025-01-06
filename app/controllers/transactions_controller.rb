@@ -8,9 +8,11 @@ class TransactionsController < ApplicationController
 
     totals_query = search_query.incomes_and_expenses
     family_currency = Current.family.currency
+    count_with_transfers = search_query.count
+    count_without_transfers = totals_query.count
 
     @totals = {
-      count: totals_query.select { |t| t.currency == family_currency }.count,
+      count: ((count_with_transfers - count_without_transfers) / 2) + count_without_transfers,
       income: totals_query.income_total(family_currency).abs,
       expense: totals_query.expense_total(family_currency)
     }

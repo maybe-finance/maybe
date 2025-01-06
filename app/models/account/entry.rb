@@ -35,7 +35,8 @@ class Account::Entry < ApplicationRecord
     joins(
       'LEFT JOIN transfers AS inflow_transfers ON inflow_transfers.inflow_transaction_id = account_entries.entryable_id
        LEFT JOIN transfers AS outflow_transfers ON outflow_transfers.outflow_transaction_id = account_entries.entryable_id'
-    ).where("(inflow_transfers.id IS NULL AND outflow_transfers.id IS NULL) OR inflow_transfers.status = 'rejected' OR outflow_transfers.status = 'rejected'")
+    )
+    .where("(inflow_transfers.id IS NULL AND outflow_transfers.id IS NULL) OR inflow_transfers.status = 'rejected' OR outflow_transfers.status = 'rejected'")
   }
 
   scope :with_converted_amount, ->(currency) {
@@ -137,7 +138,7 @@ class Account::Entry < ApplicationRecord
     end
 
     def income_total(currency = "USD")
-      total = account_transactions.includes(:entryable)
+      total = account_transactions.includes(:entryable).incomes_and_expenses
         .where("account_entries.amount <= 0")
                        .map { |e| e.amount_money.exchange_to(currency, date: e.date, fallback_rate: 0) }
                        .sum
@@ -146,7 +147,7 @@ class Account::Entry < ApplicationRecord
     end
 
     def expense_total(currency = "USD")
-      total = account_transactions.includes(:entryable)
+      total = account_transactions.includes(:entryable).incomes_and_expenses
                        .where("account_entries.amount > 0")
                        .map { |e| e.amount_money.exchange_to(currency, date: e.date, fallback_rate: 0) }
                        .sum
