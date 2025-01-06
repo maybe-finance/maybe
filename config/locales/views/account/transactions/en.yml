@@ -1,9 +1,6 @@
 ---
 en:
   account:
-    transfer_matches:
-      create:
-        success: Transfer created
     transactions:
       bulk_delete:
         success: "%{count} transactions deleted"
@@ -51,9 +48,6 @@ en:
           balances, and cannot be undone.
         delete_title: Delete transaction
         details: Details
-        exclude_subtitle: This excludes the transaction from any in-app features or
-          analytics.
-        exclude_title: Exclude transaction
         merchant_label: Merchant
         name_label: Name
         nature: Type
@@ -64,3 +58,6 @@ en:
         settings: Settings
         tags_label: Tags
         uncategorized: "(uncategorized)"
+    transfer_matches:
+      create:
+        success: Transfer created

@@ -15,14 +15,14 @@
           <%= f.select(
                 :entry_id,
                 [[entry_name_detailed(@entry), @entry.id]],
-                { 
+                {
                   label: "Outflow transaction",
                   selected: @entry.id,
                 },
                 disabled: true
               ) %>
         <% else %>
-          <%= render "account/transfer_matches/matching_fields", 
+          <%= render "account/transfer_matches/matching_fields",
                       form: f, entry: @entry, candidates: @transfer_match_candidates, accounts: @accounts %>
         <% end %>
       </div>
@@ -42,14 +42,14 @@
           <%= f.select(
                 :entry_id,
                 [[entry_name_detailed(@entry), @entry.id]],
-                { 
+                {
                   label: "Inflow transaction",
                   selected: @entry.id,
                 },
                 disabled: true
               ) %>
         <% else %>
-          <%= render "account/transfer_matches/matching_fields", 
+          <%= render "account/transfer_matches/matching_fields",
                       form: f, entry: @entry, candidates: @transfer_match_candidates, accounts: @accounts %>
         <% end %>
       </div>

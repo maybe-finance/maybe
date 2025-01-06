@@ -19,11 +19,10 @@ en:
       title: New transfer
     show:
       delete: Remove transfer
-      delete_subtitle: This removes the transfer.  It will not delete the underlying transactions.
+      delete_subtitle: This removes the transfer.  It will not delete the underlying
+        transactions.
       delete_title: Remove transfer?
       details: Details
-      exclude_subtitle: This excludes the transfer from any in-app features or analytics.
-      exclude_title: Exclude transfer
       note_label: Notes
       note_placeholder: Add a note to this transfer
       overview: Overview

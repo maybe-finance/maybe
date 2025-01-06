@@ -62,7 +62,7 @@
           <% end %>
         </div>
 
-        <p>One-time <%= @transaction.entry.amount.negative? ? 'income' : 'expense' %></p>
+        <p>One-time <%= @transaction.entry.amount.negative? ? "income" : "expense" %></p>
 
         <%= lucide_icon "asterisk", class: "w-5 h-5 shrink-0 text-orange-500 ml-auto" %>
       </div>

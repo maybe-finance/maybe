@@ -2,7 +2,7 @@ class Transfer < ApplicationRecord
   belongs_to :inflow_transaction, class_name: "Account::Transaction"
   belongs_to :outflow_transaction, class_name: "Account::Transaction"
 
-  enum :status, { pending: "pending", confirmed: "confirmed" }
+  enum :status, { pending: "pending", confirmed: "confirmed", rejected: "rejected" }
 
   validate :transfer_has_different_accounts
   validate :transfer_has_opposite_amounts
@@ -38,6 +38,40 @@ class Transfer < ApplicationRecord
           )
         )
       )
+    end
+
+    def auto_match_for_account(account)
+      matches = account.entries.account_transactions.joins("
+        JOIN account_entries ae2 ON
+          account_entries.amount = -ae2.amount AND
+          account_entries.currency = ae2.currency AND
+          account_entries.account_id <> ae2.account_id AND
+          ABS(account_entries.date - ae2.date) <= 4
+      ").select(
+        "account_entries.id",
+        "account_entries.entryable_id AS e1_entryable_id",
+        "ae2.entryable_id AS e2_entryable_id",
+        "account_entries.amount AS e1_amount",
+        "ae2.amount AS e2_amount"
+      )
+
+      Transfer.transaction do
+        matches.each do |match|
+          inflow = match.e1_amount.negative? ? match.e1_entryable_id : match.e2_entryable_id
+          outflow = match.e1_amount.negative? ? match.e2_entryable_id : match.e1_entryable_id
+
+          # Skip all rejected, or already matched transfers
+          next if Transfer.exists?(
+            inflow_transaction_id: inflow,
+            outflow_transaction_id: outflow
+          )
+
+          Transfer.create!(
+            inflow_transaction_id: inflow,
+            outflow_transaction_id: outflow
+          )
+        end
+      end
     end
   end
 

@@ -37,8 +37,11 @@ class TransfersController < ApplicationController
   end
 
   def update
-    @transfer.update_entries!(transfer_update_params)
-    redirect_back_or_to transactions_url, notice: t(".success")
+    @transfer.update!(transfer_update_params)
+    respond_to do |format|
+      format.html { redirect_back_or_to transactions_url, notice: t(".success") }
+      format.turbo_stream
+    end
   end
 
   def destroy
@@ -58,6 +61,6 @@ class TransfersController < ApplicationController
     end
 
     def transfer_update_params
-      params.require(:transfer).permit(:excluded, :notes)
+      params.require(:transfer).permit(:notes, :status)
     end
 end

@@ -6,7 +6,6 @@ en:
         delete: Delete category
         edit: Edit category
       show:
-        add_new: Add new
         clear: Clear category
         no_categories: No categories found
         search_placeholder: Search

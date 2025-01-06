@@ -25,15 +25,19 @@
                 <%= content_tag :p, entry.display_name %>
               <% else %>
                 <%= link_to entry.display_name,
-                        entry.account_transaction.transfer.present? ? transfer_path(entry.account_transaction.transfer) : account_entry_path(entry),
+                        entry.account_transaction.transfer? ? transfer_path(entry.account_transaction.transfer) : account_entry_path(entry),
                         data: { turbo_frame: "drawer", turbo_prefetch: false },
                         class: "hover:underline hover:text-gray-800" %>
               <% end %>
 
               <% if entry.excluded %>
-                <span title="One-time <%= entry.amount.negative? ? 'income' : 'expense' %> (excluded from averages)">
+                <span title="One-time <%= entry.amount.negative? ? "income" : "expense" %> (excluded from averages)">
                   <%= lucide_icon "asterisk", class: "w-4 h-4 shrink-0 text-orange-500" %>
                 </span>
+              <% end %>
+
+              <% if entry.account_transaction.transfer? %>
+                <%= render "account/transactions/transfer_match", entry: entry %>
               <% end %>
             </div>
 
@@ -51,11 +55,7 @@
   </div>
 
   <div class="flex items-center gap-1 col-span-2">
-    <% if entry.account_transaction.transfer? %>
-      <%= render "categories/badge", category: entry.account_transaction.transfer.payment? ? payment_category : transfer_category %>
-    <% else %>
-      <%= render "categories/menu", transaction: transaction %>
-    <% end %>
+    <%= render "account/transactions/transaction_category", entry: entry %>
   </div>
 
   <div class="col-span-2 ml-auto">

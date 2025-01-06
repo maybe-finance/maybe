@@ -4,6 +4,7 @@ class ReverseTransferRelations < ActiveRecord::Migration[7.2]
       t.references :inflow_transaction, null: false, foreign_key: { to_table: :account_transactions }, type: :uuid
       t.references :outflow_transaction, null: false, foreign_key: { to_table: :account_transactions }, type: :uuid
       t.string :status, null: false, default: "pending"
+      t.text :notes
 
       t.index [ :inflow_transaction_id, :outflow_transaction_id ], unique: true
       t.timestamps

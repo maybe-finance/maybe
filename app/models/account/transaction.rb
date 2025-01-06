@@ -24,6 +24,6 @@ class Account::Transaction < ApplicationRecord
   end
 
   def transfer?
-    transfer.present?
+    transfer.present? && transfer.status != "rejected"
   end
 end

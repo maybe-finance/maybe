@@ -602,6 +602,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_31_140709) do
     t.uuid "inflow_transaction_id", null: false
     t.uuid "outflow_transaction_id", null: false
     t.string "status", default: "pending", null: false
+    t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["inflow_transaction_id", "outflow_transaction_id"], name: "idx_on_inflow_transaction_id_outflow_transaction_id_8cd07a28bd", unique: true

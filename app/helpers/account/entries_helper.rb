@@ -14,8 +14,10 @@ module Account::EntriesHelper
         yield grouped_entries
       end
 
+      next if content.blank?
+
       render partial: "account/entries/entry_group", locals: { date:, entries: grouped_entries, content:, selectable:, totals: }
-    end.join.html_safe
+    end.compact.join.html_safe
   end
 
   def entry_name_detailed(entry)
