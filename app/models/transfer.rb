@@ -36,7 +36,8 @@ class Transfer < ApplicationRecord
             name: "Transfer to #{to_account.name}",
             entryable: Account::Transaction.new
           )
-        )
+        ),
+        status: "confirmed"
       )
     end
 

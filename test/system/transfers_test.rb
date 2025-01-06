@@ -25,7 +25,7 @@ class TransfersTest < ApplicationSystemTestCase
     click_button "Create transfer"
 
     within "#entry-group-" + transfer_date.to_s do
-      assert_text "Transfer from"
+      assert_text "Payment to"
     end
   end
 end
