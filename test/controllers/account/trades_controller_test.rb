@@ -38,7 +38,7 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
 
     assert_difference -> { Account::Entry.count } => 2,
                       -> { Account::Transaction.count } => 2,
-                      -> { Account::Transfer.count } => 1 do
+                      -> { Transfer.count } => 1 do
       post account_trades_url, params: {
         account_entry: {
           account_id: @entry.account_id,
@@ -59,7 +59,7 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
 
     assert_difference -> { Account::Entry.count } => 2,
                       -> { Account::Transaction.count } => 2,
-                      -> { Account::Transfer.count } => 1 do
+                      -> { Transfer.count } => 1 do
       post account_trades_url, params: {
         account_entry: {
           account_id: @entry.account_id,
@@ -78,7 +78,7 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
   test "deposit and withdrawal has optional transfer account" do
     assert_difference -> { Account::Entry.count } => 1,
                       -> { Account::Transaction.count } => 1,
-                      -> { Account::Transfer.count } => 0 do
+                      -> { Transfer.count } => 0 do
       post account_trades_url, params: {
         account_entry: {
           account_id: @entry.account_id,
@@ -93,7 +93,6 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
     created_entry = Account::Entry.order(created_at: :desc).first
 
     assert created_entry.amount.positive?
-    assert created_entry.marked_as_transfer
     assert_redirected_to @entry.account
   end
 

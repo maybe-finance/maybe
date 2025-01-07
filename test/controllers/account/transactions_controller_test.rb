@@ -74,7 +74,7 @@ class Account::TransactionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "can destroy many transactions at once" do
-    transactions = @user.family.entries.account_transactions
+    transactions = @user.family.entries.account_transactions.incomes_and_expenses
     delete_count = transactions.size
 
     assert_difference([ "Account::Transaction.count", "Account::Entry.count" ], -delete_count) do
