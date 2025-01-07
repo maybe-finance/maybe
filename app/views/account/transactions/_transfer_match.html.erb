@@ -1,0 +1,27 @@
+<%# locals: (entry:) %>
+
+<div id="<%= dom_id(entry, "transfer_match") %>" class="flex items-center gap-1">
+  <% if entry.account_transaction.transfer.confirmed? %>
+    <span title="<%= entry.account_transaction.transfer.payment? ? "Payment" : "Transfer" %> is confirmed">
+      <%= lucide_icon "link-2", class: "w-4 h-4 text-indigo-600" %>
+    </span>
+  <% elsif entry.account_transaction.transfer.pending? %>
+    <span class="inline-flex items-center rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-700">
+      Auto-matched
+    </span>
+
+    <%= button_to transfer_path(entry.account_transaction.transfer, transfer: { status: "confirmed" }),
+                    method: :patch,
+                    class: "text-gray-500 hover:text-gray-800 flex items-center justify-center",
+                    title: "Confirm match" do %>
+      <%= lucide_icon "check", class: "w-4 h-4 text-indigo-400 hover:text-indigo-600" %>
+    <% end %>
+
+    <%= button_to transfer_path(entry.account_transaction.transfer, transfer: { status: "rejected" }),
+                    method: :patch,
+                    class: "text-gray-500 hover:text-gray-800 flex items-center justify-center",
+                    title: "Reject match" do %>
+      <%= lucide_icon "x", class: "w-4 h-4 text-gray-400 hover:text-gray-600" %>
+    <% end %>
+  <% end %>
+</div>

@@ -104,6 +104,30 @@
       "note": ""
     },
     {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "c193307bb82f931950d3bf2855f82f9a7f50d94c5bd950ee2803cb8a8abe5253",
+      "check_name": "Evaluation",
+      "message": "Dynamic string evaluated as code",
+      "file": "app/helpers/styled_form_builder.rb",
+      "line": 7,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "class_eval(\"      def #{selector}(method, options = {})\\n        merged_options = { class: \\\"form-field__input\\\" }.merge(options)\\n        label = build_label(method, options)\\n        field = super(method, merged_options)\\n\\n        build_styled_field(label, field, merged_options)\\n      end\\n\", \"app/helpers/styled_form_builder.rb\", (7 + 1))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "StyledFormBuilder",
+        "method": null
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
       "fingerprint": "fb6f7abeabc405d6882ffd41dbe8016403ef39307a5c6b4cd7b18adfaf0c24bf",
@@ -138,6 +162,5 @@
       "note": ""
     }
   ],
-  "updated": "2024-12-18 17:46:13 -0500",
-  "brakeman_version": "6.2.2"
+  "brakeman_version": "7.0.0"
 }

@@ -82,7 +82,9 @@ class Family < ApplicationRecord
 
   def snapshot_account_transactions
     period = Period.last_30_days
-    results = accounts.active.joins(:entries)
+    results = accounts.active
+                      .joins(:entries)
+                      .joins("LEFT JOIN transfers ON (transfers.inflow_transaction_id = account_entries.entryable_id OR transfers.outflow_transaction_id = account_entries.entryable_id)")
                       .select(
                         "accounts.*",
                         "COALESCE(SUM(account_entries.amount) FILTER (WHERE account_entries.amount > 0), 0) AS spending",
@@ -90,8 +92,7 @@ class Family < ApplicationRecord
                       )
                       .where("account_entries.date >= ?", period.date_range.begin)
                       .where("account_entries.date <= ?", period.date_range.end)
-                      .where("account_entries.marked_as_transfer = ?", false)
-                      .where("account_entries.entryable_type = ?", "Account::Transaction")
+                      .where("transfers.id IS NULL")
                       .group("accounts.id")
                       .having("SUM(ABS(account_entries.amount)) > 0")
                       .to_a
@@ -110,9 +111,7 @@ class Family < ApplicationRecord
   end
 
   def snapshot_transactions
-    candidate_entries = entries.account_transactions.without_transfers.excluding(
-      entries.joins(:account).where(amount: ..0, accounts: { classification: Account.classifications[:liability] })
-    )
+    candidate_entries = entries.account_transactions.incomes_and_expenses
     rolling_totals = Account::Entry.daily_rolling_totals(candidate_entries, self.currency, period: Period.last_30_days)
 
     spending = []
