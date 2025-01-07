@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_27_142333) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_31_140709) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -42,8 +42,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_27_142333) do
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "transfer_id"
-    t.boolean "marked_as_transfer", default: false, null: false
     t.uuid "import_id"
     t.text "notes"
     t.boolean "excluded", default: false
@@ -52,7 +50,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_27_142333) do
     t.string "enriched_name"
     t.index ["account_id"], name: "index_account_entries_on_account_id"
     t.index ["import_id"], name: "index_account_entries_on_import_id"
-    t.index ["transfer_id"], name: "index_account_entries_on_transfer_id"
   end
 
   create_table "account_holdings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -87,11 +84,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_27_142333) do
     t.uuid "merchant_id"
     t.index ["category_id"], name: "index_account_transactions_on_category_id"
     t.index ["merchant_id"], name: "index_account_transactions_on_merchant_id"
-  end
-
-  create_table "account_transfers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "account_valuations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -606,6 +598,18 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_27_142333) do
     t.index ["family_id"], name: "index_tags_on_family_id"
   end
 
+  create_table "transfers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "inflow_transaction_id", null: false
+    t.uuid "outflow_transaction_id", null: false
+    t.string "status", default: "pending", null: false
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["inflow_transaction_id", "outflow_transaction_id"], name: "idx_on_inflow_transaction_id_outflow_transaction_id_8cd07a28bd", unique: true
+    t.index ["inflow_transaction_id"], name: "index_transfers_on_inflow_transaction_id"
+    t.index ["outflow_transaction_id"], name: "index_transfers_on_outflow_transaction_id"
+  end
+
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "family_id", null: false
     t.string "first_name"
@@ -634,7 +638,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_27_142333) do
   end
 
   add_foreign_key "account_balances", "accounts", on_delete: :cascade
-  add_foreign_key "account_entries", "account_transfers", column: "transfer_id"
   add_foreign_key "account_entries", "accounts"
   add_foreign_key "account_entries", "imports"
   add_foreign_key "account_holdings", "accounts"
@@ -663,5 +666,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_27_142333) do
   add_foreign_key "sessions", "users"
   add_foreign_key "taggings", "tags"
   add_foreign_key "tags", "families"
+  add_foreign_key "transfers", "account_transactions", column: "inflow_transaction_id"
+  add_foreign_key "transfers", "account_transactions", column: "outflow_transaction_id"
   add_foreign_key "users", "families"
 end
