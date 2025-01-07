@@ -28,6 +28,8 @@ class Account::TransactionsController < ApplicationController
            .mark_transfers!
 
     redirect_back_or_to transactions_url, notice: t(".success")
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_back_or_to transactions_url, alert: e.message
   end
 
   def unmark_transfers

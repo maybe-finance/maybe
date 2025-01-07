@@ -102,7 +102,7 @@ class Account::Entry < ApplicationRecord
       update_all marked_as_transfer: true
 
       # Attempt to "auto match" and save a transfer if 2 transactions selected
-      Account::Transfer.new(entries: all).save if all.count == 2
+      Account::Transfer.new(entries: all).save! if all.count == 2
     end
 
     def bulk_update!(bulk_update_params)

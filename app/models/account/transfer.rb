@@ -2,7 +2,7 @@ class Account::Transfer < ApplicationRecord
   has_many :entries, dependent: :destroy
 
   validate :net_zero_flows, if: :single_currency_transfer?
-  validate :transaction_count, :from_different_accounts, :all_transactions_marked
+  validate :transaction_count, :from_different_accounts, :inflow_after_outflow, :all_transactions_marked
 
   def date
     outflow_transaction&.date
@@ -97,6 +97,14 @@ class Account::Transfer < ApplicationRecord
     def from_different_accounts
       accounts = entries.map { |e| e.account_id }.uniq
       errors.add :entries, :must_be_from_different_accounts if accounts.size < entries.size
+    end
+
+    def inflow_after_outflow
+      return unless inflow_transaction && outflow_transaction
+
+      if inflow_transaction.date < outflow_transaction.date
+        errors.add :entries, :inflow_must_be_after_outflow
+      end
     end
 
     def net_zero_flows

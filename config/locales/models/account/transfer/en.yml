@@ -15,3 +15,4 @@ en:
               must_have_an_inflow_and_outflow_that_net_to_zero: must have an inflow
                 and outflow that net to zero
               must_have_exactly_2_entries: must have exactly 2 entries
+              inflow_must_be_after_outflow: inflow must be after outflow

@@ -60,6 +60,38 @@ class TransfersTest < ApplicationSystemTestCase
     end
   end
 
+  test "cannot create transfer where inflow date is before outflow date" do
+    outflow = accounts(:depository).entries.create!(
+      name: "Outflow from checking account",
+      date: Date.current,
+      amount: 100,
+      currency: "USD",
+      entryable: Account::Transaction.new
+    )
+
+    inflow = accounts(:credit_card).entries.create!(
+      name: "Inflow to cc account",
+      date: 1.day.ago.to_date,  # Date before outflow
+      amount: -100,
+      currency: "USD",
+      entryable: Account::Transaction.new
+    )
+
+    visit transactions_url
+
+    transaction_entry_checkbox(inflow).check
+    transaction_entry_checkbox(outflow).check
+
+    bulk_transfer_action_button.click
+    click_on "Mark as transfers"
+
+    assert_text "Validation failed: Entries inflow must be after outflow"
+
+    # Verify the entries weren't linked as a transfer
+    assert_nil outflow.reload.transfer_id
+    assert_nil inflow.reload.transfer_id
+  end
+
   test "can mark a single transaction as a transfer" do
     txn = @user.family.entries.account_transactions.reverse_chronological.first
 
