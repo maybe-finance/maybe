@@ -224,7 +224,7 @@ GEM
       reline (>= 0.4.2)
     jmespath (1.6.2)
     json (2.9.0)
-    jwt (2.9.3)
+    jwt (2.10.1)
       base64
     language_server-protocol (3.17.0.3)
     launchy (3.0.1)
