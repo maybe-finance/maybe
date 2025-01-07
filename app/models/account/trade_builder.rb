@@ -4,6 +4,13 @@ class Account::TradeBuilder
   attr_accessor :account, :date, :amount, :currency, :qty,
                 :price, :ticker, :type, :transfer_account_id
 
+  attr_reader :buildable
+
+  def initialize(attributes = {})
+    super
+    @buildable = set_buildable
+  end
+
   def save
     buildable.save
   end
@@ -17,7 +24,7 @@ class Account::TradeBuilder
   end
 
   private
-    def buildable
+    def set_buildable
       case type
       when "buy", "sell"
         build_trade
@@ -55,9 +62,9 @@ class Account::TradeBuilder
         from_account = type == "withdrawal" ? account : transfer_account
         to_account = type == "withdrawal" ? transfer_account : account
 
-        Account::Transfer.build_from_accounts(
-          from_account,
-          to_account,
+        Transfer.from_accounts(
+          from_account: from_account,
+          to_account: to_account,
           date: date,
           amount: signed_amount
         )
@@ -67,7 +74,6 @@ class Account::TradeBuilder
           date: date,
           amount: signed_amount,
           currency: currency,
-          marked_as_transfer: true,
           entryable: Account::Transaction.new
         )
       end

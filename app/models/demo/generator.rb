@@ -36,6 +36,8 @@ class Demo::Generator
       create_car_and_loan!
       create_other_accounts!
 
+      create_transfer_transactions!
+
       puts "accounts created"
       puts "Demo data loaded successfully!"
     end
@@ -49,12 +51,14 @@ class Demo::Generator
       family_id = "d99e3c6e-d513-4452-8f24-dc263f8528c0" # deterministic demo id
 
       family = Family.find_by(id: family_id)
+      Transfer.destroy_all
       family.destroy! if family
 
       Family.create!(id: family_id, name: "Demo Family", stripe_subscription_status: "active").tap(&:reload)
     end
 
     def clear_data!
+      Transfer.destroy_all
       InviteCode.destroy_all
       User.find_by_email("user@maybe.local")&.destroy
       ExchangeRate.destroy_all
@@ -175,6 +179,40 @@ class Demo::Generator
           category: income_category,
           name: "Income"
       end
+    end
+
+    def create_transfer_transactions!
+      checking = family.accounts.find_by(name: "Chase Checking")
+      credit_card = family.accounts.find_by(name: "Chase Credit Card")
+      investment = family.accounts.find_by(name: "Robinhood")
+
+      create_transaction!(
+        account: checking,
+        date: 1.day.ago.to_date,
+        amount: 100,
+        name: "Credit Card Payment"
+      )
+
+      create_transaction!(
+        account: credit_card,
+        date: 1.day.ago.to_date,
+        amount: -100,
+        name: "Credit Card Payment"
+      )
+
+      create_transaction!(
+        account: checking,
+        date: 3.days.ago.to_date,
+        amount: 500,
+        name: "Transfer to investment"
+      )
+
+      create_transaction!(
+        account: investment,
+        date: 2.days.ago.to_date,
+        amount: -500,
+        name: "Transfer from checking"
+      )
     end
 
     def load_securities!
