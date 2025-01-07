@@ -89,7 +89,6 @@ class PlaidAccount < ApplicationRecord
         t.amount = plaid_txn.amount
         t.currency = plaid_txn.iso_currency_code
         t.date = plaid_txn.date
-        t.marked_as_transfer = transfer?(plaid_txn)
         t.entryable = Account::Transaction.new(
           category: get_category(plaid_txn.personal_finance_category.primary),
           merchant: get_merchant(plaid_txn.merchant_name)
