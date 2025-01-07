@@ -1,13 +1,4 @@
 GIT
-  remote: https://github.com/kirillplatonov/hotwire-livereload.git
-  revision: 4ff247dd3e6b57abe439e240de676a4f48e875e7
-  specs:
-    hotwire-livereload (2.0.0)
-      actioncable (>= 7.0.0)
-      listen (>= 3.0.0)
-      railties (>= 7.0.0)
-
-GIT
   remote: https://github.com/maybe-finance/lucide-rails.git
   revision: 272e5fb8418ea458da3995d6abe0ba0ceee9c9f0
   specs:
@@ -194,6 +185,10 @@ GEM
       thor (>= 1.0.0)
     hashdiff (1.1.1)
     highline (3.0.1)
+    hotwire-livereload (2.0.0)
+      actioncable (>= 7.0.0)
+      listen (>= 3.0.0)
+      railties (>= 7.0.0)
     hotwire_combobox (0.3.2)
       rails (>= 7.0.7.2)
       stimulus-rails (>= 1.2)
@@ -500,7 +495,7 @@ DEPENDENCIES
   faraday-multipart
   faraday-retry
   good_job
-  hotwire-livereload!
+  hotwire-livereload
   hotwire_combobox
   i18n-tasks
   image_processing (>= 1.2)
