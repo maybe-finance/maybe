@@ -1,0 +1,29 @@
+<div>
+  <div class="flex items-center gap-2">
+    <div class="flex items-center gap-2">
+      <% if @budget.previous_budget %>
+        <%= link_to budget_path(@budget.previous_budget) do %>
+          <%= lucide_icon "chevron-left" %>
+        <% end %>
+      <% else %>
+        <%= lucide_icon "chevron-left", class: "text-gray-400" %>
+      <% end %>
+
+      <% if @budget.next_budget %>
+        <%= link_to budget_path(@budget.next_budget) do %>
+          <%= lucide_icon "chevron-right" %>
+        <% end %>
+      <% else %>
+        <%= lucide_icon "chevron-right", class: "text-gray-400" %>
+      <% end %>
+    </div>
+
+    <div data-controller="menu" data-menu-placement-value="bottom-start">
+      <%= tag.button @budget.name, data: { menu_target: "button" } %>
+
+      <div data-menu-target="content" data-controller="budget-picker">
+        <%= render "budgets/picker", family: Current.family, year: Date.current.year %>
+      </div>
+    </div>
+  </div>
+</div>

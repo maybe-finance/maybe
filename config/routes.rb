@@ -44,6 +44,12 @@ Rails.application.routes.draw do
     post :bootstrap, on: :collection
   end
 
+  resources :budgets, only: %i[index show edit update] do
+    get :picker, on: :collection
+
+    resources :budget_categories, only: %i[index show update], as: :categories, path: :categories
+  end
+
   resources :merchants, only: %i[index new create edit update destroy]
 
   resources :transfers, only: %i[new create destroy show update]

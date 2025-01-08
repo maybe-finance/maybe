@@ -17,6 +17,7 @@ class Family < ApplicationRecord
   has_many :issues, through: :accounts
   has_many :holdings, through: :accounts
   has_many :plaid_items, dependent: :destroy
+  has_many :budgets, dependent: :destroy
 
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }
   validates :date_format, inclusion: { in: DATE_FORMATS }
@@ -171,5 +172,9 @@ class Family < ApplicationRecord
 
   def primary_user
     users.order(:created_at).first
+  end
+
+  def oldest_entry_date
+    entries.order(:date).first&.date || Date.current
   end
 end

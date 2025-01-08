@@ -1,0 +1,43 @@
+<%# locals: (family:, year:) %>
+
+<%= turbo_frame_tag "budget_picker" do %>
+  <div class="bg-white shadow-xs">
+    <div class="flex items-center gap-2 justify-between">
+      <% if year > Budget.min_year_for_family(family) %>
+        <%= link_to picker_budgets_path(year: year - 1), data: { turbo_frame: "budget_picker" } do %>
+          <%= lucide_icon "chevron-left" %>
+        <% end %>
+      <% else %>
+        <span class="text-gray-300">
+          <%= lucide_icon "chevron-left" %>
+        </span>
+      <% end %>
+
+      <span class="shadow-xs" data-budget-picker-target="year">
+        <%= year %>
+      </span>
+
+      <% if year < Date.current.year %>
+        <%= link_to picker_budgets_path(year: year + 1), data: { turbo_frame: "budget_picker" } do %>
+          <%= lucide_icon "chevron-right" %>
+        <% end %>
+      <% else %>
+        <span class="text-gray-300">
+          <%= lucide_icon "chevron-right" %>
+        </span>
+      <% end %>
+    </div>
+    <div class="grid grid-cols-3 gap-2 p-2">
+      <% Date::ABBR_MONTHNAMES.compact.each_with_index do |month_name, index| %>
+        <% month_number = index + 1 %>
+        <% budget = family.budgets.for_date(Date.new(year, month_number)) %>
+
+        <% if budget %>
+          <%= link_to month_name, budget_path(budget), data: { turbo_frame: "_top" }, class: "block px-2 py-1 text-sm text-gray-700 hover:bg-gray-100 rounded" %>
+        <% else %>
+          <span class="block px-2 py-1 text-gray-400 rounded"><%= month_name %></span>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

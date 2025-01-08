@@ -37,7 +37,8 @@ class Account::DataEnricher
               end
             end
 
-            if info.category.present?
+            # Don't override category if Plaid account, because Plaid provides it already
+            if info.category.present? && entry.account.plaid_account_id.nil?
               category = categories[info.category] ||= account.family.categories.find_or_create_by(name: info.category)
             end
 
