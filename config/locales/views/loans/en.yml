@@ -9,11 +9,13 @@ en:
       rate_type: Rate type
       term_months: Term (months)
       term_months_placeholder: '360'
+      start_date: Loan start date
     new:
       title: Enter loan details
     overview:
       interest_rate: Interest Rate
       monthly_payment: Monthly Payment
+      start_date: Start Date
       not_applicable: N/A
       original_principal: Original Principal
       remaining_principal: Remaining Principal

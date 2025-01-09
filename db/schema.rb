@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_31_140709) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_09_165633) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -439,6 +439,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_31_140709) do
     t.string "rate_type"
     t.decimal "interest_rate", precision: 10, scale: 3
     t.integer "term_months"
+    t.date "start_date"
   end
 
   create_table "merchants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

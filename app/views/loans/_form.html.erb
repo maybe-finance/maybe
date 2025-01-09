@@ -21,6 +21,11 @@
                                  label: t("loans.form.term_months"),
                                  placeholder: t("loans.form.term_months_placeholder") %>
       </div>
+
+      <div class="flex items-center gap-2">
+        <%= loan_form.date_field :start_date,
+                                 label: t("loans.form.start_date") %>
+      </div>
     <% end %>
   </div>
 <% end %>

@@ -42,6 +42,10 @@
   <%= summary_card title: t(".type") do %>
     <%= account.loan.rate_type&.titleize || t(".unknown") %>
   <% end %>
+
+  <%= summary_card title: t(".start_date") do %>
+    <%= account.loan.start_date&.strftime("%B %d, %Y") || t(".unknown") %>
+  <% end %>
 </div>
 
 <div class="flex justify-center py-8">
