@@ -32,6 +32,14 @@ class Budget < ApplicationRecord
     start_date.strftime("%B %Y")
   end
 
+  def initialized?
+    budgeted_amount.present?
+  end
+
+  def total_spending
+    5000
+  end
+
   def current?
     start_date == Date.today.beginning_of_month && end_date == Date.today.end_of_month
   end

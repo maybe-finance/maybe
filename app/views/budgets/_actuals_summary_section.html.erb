@@ -1,0 +1,22 @@
+<%# locals: (title:, value:, items:) %>
+
+<h3 class="text-sm text-gray-500 mb-2"><%= title %></h3>
+
+<span class="inline-block mb-2 text-xl font-medium text-gray-900"><%= value %></span>
+
+<div>
+  <div class="flex h-1.5 mb-3 gap-1">
+    <% items.each do |item| %>
+      <div class="h-full rounded-xs" style="background-color: <%= item[:color] %>; width: <%= item[:percentage] * 100 %>%"></div>
+    <% end %>
+  </div>
+  <div class="flex flex-wrap gap-x-2.5 gap-y-1 text-sm">
+    <% items.each do |item| %>
+      <div class="flex items-center gap-1.5">
+        <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background-color: <%= item[:color] %>"></div>
+        <span class="text-gray-600"><%= item[:category] %></span>
+        <span class="text-gray-900"><%= number_to_percentage(item[:percentage] * 100, precision: 2) %></span>
+      </div>
+    <% end %>
+  </div>
+</div>
