@@ -18,6 +18,7 @@ class Family < ApplicationRecord
   has_many :holdings, through: :accounts
   has_many :plaid_items, dependent: :destroy
   has_many :budgets, dependent: :destroy
+  has_many :budget_categories, through: :budgets
 
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }
   validates :date_format, inclusion: { in: DATE_FORMATS }
@@ -176,5 +177,9 @@ class Family < ApplicationRecord
 
   def oldest_entry_date
     entries.order(:date).first&.date || Date.current
+  end
+
+  def avg_uncategorized_monthly_spend
+    Money.new(0, currency)
   end
 end

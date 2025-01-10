@@ -137,8 +137,9 @@ class Account::Entry < ApplicationRecord
       all.size
     end
 
-    def income_total(currency = "USD")
+    def income_total(currency = "USD", start_date: nil, end_date: nil)
       total = account_transactions.includes(:entryable).incomes_and_expenses
+        .where(date: start_date..end_date)
         .where("account_entries.amount <= 0")
                        .map { |e| e.amount_money.exchange_to(currency, date: e.date, fallback_rate: 0) }
                        .sum
@@ -146,8 +147,9 @@ class Account::Entry < ApplicationRecord
       Money.new(total, currency)
     end
 
-    def expense_total(currency = "USD")
+    def expense_total(currency = "USD", start_date: nil, end_date: nil)
       total = account_transactions.includes(:entryable).incomes_and_expenses
+                       .where(date: start_date..end_date)
                        .where("account_entries.amount > 0")
                        .map { |e| e.amount_money.exchange_to(currency, date: e.date, fallback_rate: 0) }
                        .sum

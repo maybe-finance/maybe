@@ -18,7 +18,6 @@ class Account::DataEnricher
       Rails.logger.info("Enriching #{candidates.count} transactions for account #{account.id}")
 
       merchants = {}
-      categories = {}
 
       candidates.each do |entry|
         if entry.enriched_at.nil? || entry.entryable.merchant_id.nil? || entry.entryable.category_id.nil?
@@ -37,18 +36,11 @@ class Account::DataEnricher
               end
             end
 
-            # Don't override category if Plaid account, because Plaid provides it already
-            if info.category.present? && entry.account.plaid_account_id.nil?
-              category = categories[info.category] ||= account.family.categories.find_or_create_by(name: info.category)
-            end
-
             entryable_attributes = { id: entry.entryable_id }
             entryable_attributes[:merchant_id] = merchant.id if merchant.present? && entry.entryable.merchant_id.nil?
-            entryable_attributes[:category_id] = category.id if category.present? && entry.entryable.category_id.nil?
 
             Account.transaction do
               merchant.save! if merchant.present?
-              category.save! if category.present?
               entry.update!(
                 enriched_at: Time.current,
                 enriched_name: info.name,

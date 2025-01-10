@@ -1,48 +1,52 @@
 <%# locals: (budget:) %>
 
-<% data_2 = [
-       {"fill_color": "fill-pink-400", "value": 500},
-       {"fill_color": "fill-blue-500", "value": 750},
-       {"fill_color": "fill-cyan-400", "value": 800},
-       {"fill_color": "fill-orange-400", "value": 600},
-       {"fill_color": "fill-yellow-400", "value": 365}
+<% data = [
+       {"fill_color": "#F472B6", "value": 500},
+       {"fill_color": "#818CF8", "value": 750},
+       {"fill_color": "#34D399", "value": 800},
+       {"fill_color": "#F97316", "value": 600},
+       {"fill_color": "#F59E0B", "value": 365}
      ] %>
 
-<% data = [] %>
+<% data_2 = [] %>
 
-<% total_2 = 200 %>
-<% total = nil %>
+<% total = 200 %>
+<% total_2 = nil %>
 
-<div class="relative w-full h-full" data-controller="budget-pie"
-     data-budget-pie-total-value="<%= total %>"
-     data-budget-pie-segments-value='<%= data %>'>
+<div class="relative w-full h-full">
+  <div class="absolute inset-0" data-controller="budget-pie"
+       data-budget-pie-total-value="<%= total %>"
+       data-budget-pie-segments-value='<%= data.to_json %>'></div>
 
-  <svg class="absolute inset-0" data-budget-pie-target="chart"></svg>
-
+  <!-- Content container -->
   <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
     <% if budget.initialized? %>
       <div class="text-gray-600 text-sm">
-        <% if budget.budgeted_amount < budget.total_spending%>
+        <% if budget.budgeted_amount_money < budget.total_spending %>
           <span>Over budget</span>
         <% else %>
           <span>Available</span>
         <% end %>
       </div>
-      <div class="text-2xl text-gray-900 font-medium">$835.01</div>
 
-      <div class="text-xs text-gray-500 mt-1 flex items-center gap-1">
-        of $3,850
-        <%= lucide_icon "pencil", class: "w-3 h-3 text-gray-400 hover:text-gray-600 cursor-pointer" %>
+      <div class="text-2xl text-gray-900 font-medium">
+        <%= format_money(budget.budgeted_amount_money - budget.total_spending) %>
       </div>
+
+      <%= link_to edit_budget_path(budget), class: "rounded-lg p-2 bg-gray-50 text-sm text-gray-500 mt-1 flex items-center gap-1" do %>
+        <span class="text-gray-900 font-medium">
+          of <%= format_money(budget.budgeted_amount_money) %>
+        </span>
+        <%= lucide_icon "pencil", class: "w-4 h-4 text-gray-500 hover:text-gray-600" %>
+      <% end %>
     <% else %>
       <div class="text-gray-400 text-3xl mb-2">
         <span><%= format_money Money.new(0, budget.currency || budget.family.currency) %></span>
       </div>
-      <%= link_to budget_categories_path(budget), class: "flex items-center gap-2 btn btn--primary" do %>
+      <%= link_to edit_budget_path(budget), class: "flex items-center gap-2 btn btn--primary" do %>
         <%= lucide_icon "plus", class: "w-4 h-4 text-white" %>
         New budget
       <% end %>
     <% end %>
-
   </div>
 </div>

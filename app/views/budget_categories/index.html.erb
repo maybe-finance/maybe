@@ -1,1 +1,73 @@
-<h1>Budget Categories</h1>
+<%= content_for :header_nav do %>
+  <%= render "budgets/nav", budget: @budget %>
+<% end %>
+
+<%= content_for :previous_path, edit_budget_path(@budget) %>
+<%= content_for :cancel_path, budget_path(@budget) %>
+
+<div>
+  <div class="space-y-6">
+    <div class="text-center space-y-2">
+      <h1 class="text-3xl text-gray-900 font-medium">Edit your category budgets</h1>
+      <p class="text-gray-500 text-sm max-w-md mx-auto">
+        Adjust category budgets to set spending limits. Unallocated funds will be automatically assigned as uncategorized.
+      </p>
+    </div>
+
+    <div class="mx-auto max-w-lg">
+      <% if @budget.family.categories.empty? %>
+        <div class="bg-white shadow-xs border border-gray-200 rounded-lg p-4">
+          <div class="flex justify-center items-center">
+            <div class="text-center flex flex-col items-center max-w-[500px]">
+              <h2 class="text-lg text-gray-900 font-medium">Oops!</h2>
+              <p class="text-gray-500 text-sm max-w-sm mx-auto mb-4">
+                You have not created or assigned any categories to your transactions yet.
+              </p>
+
+              <div class="flex items-center gap-2">
+                <%= button_to "Use default categories", bootstrap_categories_path, class: "btn btn--primary" %>
+
+                <%= link_to new_category_path, class: "btn btn--outline flex items-center gap-1", data: { turbo_frame: "modal" } do %>
+                  <%= lucide_icon("plus", class: "w-5 h-5") %>
+                  <span>New category</span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% else %>
+        <div class="max-w-md mx-auto">
+          <div class="space-y-2 mb-6">
+            <div class="flex items-center gap-2">
+              <div class="rounded-full w-1.5 h-1.5 bg-gray-100"></div>
+              <p class="text-gray-500 text-sm"><%= number_to_percentage(@budget.allocated_percent, precision: 0) %> set</p>
+
+              <p class="ml-auto text-sm space-x-1">
+                <span class="text-gray-900"><%= format_money(@budget.allocated_amount) %></span>
+                <span class="text-gray-500"> / </span>
+                <span class="text-gray-500"><%= format_money(@budget.budgeted_amount_money) %></span>
+              </p>
+            </div>
+
+            <div class="h-1.5 rounded-2xl bg-gray-100">
+            </div>
+
+            <div class="text-sm">
+              <span class="text-gray-900"><%= format_money(@budget.unallocated_amount) %></span>
+              <span class="text-gray-500">left to allocate</span>
+            </div>
+          </div>
+
+          <div class="space-y-4 mb-4">
+            <% BudgetCategory::Group.for(@budget_categories).each do |group| %>
+              <%= render "budget_categories/group", group: group %>
+            <% end %>
+            <%= render "budget_categories/uncategorized", budget: @budget %>
+          </div>
+
+          <%= link_to "Confirm", budget_path(@budget), class: "block btn btn--primary w-full text-center" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

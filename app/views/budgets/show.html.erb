@@ -1,16 +1,16 @@
 <div class="pb-12">
   <div class="flex items-center gap-2 mb-4">
     <div class="flex items-center gap-2">
-      <% if @budget.previous_budget %>
-        <%= link_to budget_path(@budget.previous_budget) do %>
+      <% if @previous_budget %>
+        <%= link_to budget_path(@previous_budget) do %>
           <%= lucide_icon "chevron-left" %>
         <% end %>
       <% else %>
         <%= lucide_icon "chevron-left", class: "text-gray-400" %>
       <% end %>
 
-      <% if @budget.next_budget %>
-        <%= link_to budget_path(@budget.next_budget) do %>
+      <% if @next_budget %>
+        <%= link_to budget_path(@next_budget) do %>
           <%= lucide_icon "chevron-right" %>
         <% end %>
       <% else %>
@@ -21,7 +21,7 @@
     <div data-controller="menu" data-menu-placement-value="bottom-start">
       <%= tag.button @budget.name, data: { menu_target: "button" } %>
 
-      <div data-menu-target="content" class="hidden">
+      <div data-menu-target="content" class="hidden z-10">
         <%= render "budgets/picker", family: Current.family, year: Date.current.year %>
       </div>
     </div>
@@ -30,7 +30,7 @@
       <% if @budget.current? %>
         <span class="border border-alpha-black-200 text-gray-900 text-sm font-medium px-3 py-2 rounded-lg">Today</span>
       <% else %>
-        <%= link_to "Go to latest budget", budget_path(Current.family.budgets.current), class: "btn btn--outline" %>
+        <%= link_to "Go to latest budget", budget_path(@latest_budget), class: "btn btn--outline" %>
       <% end %>
     </div>
   </div>
@@ -52,30 +52,64 @@
             class_names(base_classes,
               "bg-white shadow-xs text-gray-900" => selected,
               "text-gray-500" => !selected)
-          end %>
+            end %>
 
-            <%= link_to "Actual", budget_path(@budget, tab: "actuals"), class: tab_classes.call("actuals") %>
             <%= link_to "Budgeted", budget_path(@budget, tab: "budgeted"), class: tab_classes.call("budgeted") %>
+            <%= link_to "Actual", budget_path(@budget, tab: "actuals"), class: tab_classes.call("actuals") %>
           </div>
 
           <div class="bg-white rounded-xl shadow-xs border border-gray-100">
             <% if params[:tab] == "actuals" %>
-              <%= render "budgets/actuals_summary" %>
+              <%= render "budgets/actuals_summary", budget: @budget %>
             <% elsif params[:tab] == "budgeted" %>
-              <%= render "budgets/budgeted_summary" %>
+              <%= render "budgets/budgeted_summary", budget: @budget %>
             <% else %>
-              <%= render default_partial[default_tab] %>
+              <%= render default_partial[default_tab], budget: @budget %>
             <% end %>
           </div>
         <% else %>
           <div class="bg-white rounded-xl shadow-xs border border-gray-100">
-            <%= render "budgets/actuals_summary" %>
+            <%= render "budgets/actuals_summary", budget: @budget %>
           </div>
         <% end %>
       </div>
     </div>
-    <div class="grow h-[2000px] bg-white rounded-xl shadow-xs p-4 border border-gray-100">
-      Budget
+    <div class="grow bg-white rounded-xl shadow-xs p-4 border border-gray-100">
+      <h2 class="text-lg font-medium mb-4">Categories</h2>
+
+      <div class="bg-gray-25 rounded-xl p-1">
+        <div class="flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-gray-500 uppercase">
+          <p>Category</p>
+          <span class="text-gray-400">&middot;</span>
+          <p><%= @budget.budget_categories.count %></p>
+
+          <p class="ml-auto">Amount</p>
+        </div>
+
+        <div class="bg-white py-1 shadow-xs border border-gray-100 rounded-md">
+          <% if @budget.allocated? %>
+            <% @budget.budget_categories.each_with_index do |budget_category, index| %>
+              <%= render "budget_categories/budget_category", budget_category: budget_category %>
+
+              <% if index < @budget.budget_categories.count - 1 %>
+                <div class="px-4">
+                  <div class="h-px w-full bg-alpha-black-50"></div>
+                </div>
+              <% end %>
+            <% end %>
+          <% else %>
+            <% @budget.family.categories.each_with_index do |category, index| %>
+              <%= render "budget_categories/unallocated_category", category: category %>
+
+              <% if index < @budget.family.categories.count - 1 %>
+                <div class="px-4">
+                  <div class="h-px w-full bg-alpha-black-50"></div>
+                </div>
+              <% end %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
     </div>
   </div>
 </div>

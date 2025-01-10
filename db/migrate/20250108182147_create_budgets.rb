@@ -6,7 +6,7 @@ class CreateBudgets < ActiveRecord::Migration[7.2]
       t.date :end_date, null: false
       t.decimal :budgeted_amount, precision: 19, scale: 4
       t.decimal :expected_income, precision: 19, scale: 4
-      t.string :currency
+      t.string :currency, null: false
       t.timestamps
     end
 

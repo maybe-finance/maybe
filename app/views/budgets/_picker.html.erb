@@ -30,7 +30,7 @@
     <div class="grid grid-cols-3 gap-2 p-2">
       <% Date::ABBR_MONTHNAMES.compact.each_with_index do |month_name, index| %>
         <% month_number = index + 1 %>
-        <% budget = family.budgets.for_date(Date.new(year, month_number)) %>
+        <% budget = family.budgets.for_date(Date.new(year, month_number), family.currency) %>
 
         <% if budget %>
           <%= link_to month_name, budget_path(budget), data: { turbo_frame: "_top" }, class: "block px-2 py-1 text-sm text-gray-700 hover:bg-gray-100 rounded" %>

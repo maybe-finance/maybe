@@ -16,7 +16,8 @@ en:
       placeholder: Category name
     index:
       bootstrap: Use default categories
-      categories: Categories
+      categories_incomes: Income categories
+      categories_expenses: Expense categories
       empty: No categories found
       new: New category
     menu:

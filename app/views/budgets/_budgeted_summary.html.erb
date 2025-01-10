@@ -1,1 +1,59 @@
-Budgets summary
+<%# locals: (budget:) %>
+
+<div>
+  <div class="p-4 border-b border-gray-100">
+    <h3 class="text-sm text-gray-500 mb-2">Expected income</h3>
+
+    <span class="inline-block mb-2 text-xl font-medium text-gray-900">$2,500</span>
+
+    <div>
+      <div class="flex h-1.5 mb-3 gap-1">
+        <div class="rounded-md h-1.5 bg-green-500" style="width: 25%"></div>
+
+        <% if budget.exceeded_income? %>
+          <div class="rounded-md h-1.5 bg-red-500" style="width: 75%"></div>
+        <% else %>
+          <div class="rounded-md h-1.5 bg-gray-100" style="width: 75%"></div>
+        <% end %>
+      </div>
+      <div class="flex justify-between text-sm">
+        <p class="text-gray-500">$500 earned</p>
+        <p class="font-medium">
+          <% if budget.exceeded_income? %>
+            <span class="text-green-500">$200 over</span>
+          <% else %>
+            <span class="text-gray-900">$2,500 left</span>
+          <% end %>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="p-4">
+    <h3 class="text-sm text-gray-500 mb-2">Budgeted</h3>
+
+    <span class="inline-block mb-2 text-xl font-medium text-gray-900">$2,500</span>
+
+    <div>
+      <div class="flex h-1.5 mb-3 gap-1">
+        <div class="rounded-md h-1.5 bg-green-500" style="width: 25%"></div>
+
+        <% if budget.over_budget? %>
+          <div class="rounded-md h-1.5 bg-green-500" style="width: 75%"></div>
+        <% else %>
+          <div class="rounded-md h-1.5 bg-gray-100" style="width: 75%"></div>
+        <% end %>
+      </div>
+      <div class="flex justify-between text-sm">
+        <p class="text-gray-500">$500 spent</p>
+        <p class="font-medium">
+          <% if budget.over_budget? %>
+            <span class="text-red-500">$200 over</span>
+          <% else %>
+            <span class="text-gray-900">$2,500 left</span>
+          <% end %>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

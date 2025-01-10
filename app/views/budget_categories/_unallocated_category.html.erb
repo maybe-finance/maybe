@@ -1,0 +1,17 @@
+<%# locals: (category:) %>
+
+<%= link_to category_path(category), class: "p-4 flex items-center gap-3 bg-white", data: { turbo_frame: "drawer" } do %>
+  <div class="w-8 h-8 rounded-full flex justify-center items-center" style="<%= mixed_hex_styles(category.color) %>">
+    <% if category.lucide_icon %>
+      <%= lucide_icon category.lucide_icon, class: "w-5 h-5" %>
+    <% else %>
+      <%= render "shared/circle_logo", name: category.name %>
+    <% end %>
+  </div>
+
+  <p class="text-sm font-medium text-gray-900"><%= category.name %></p>
+
+  <div class="ml-auto">
+    <span class="text-sm font-medium text-gray-500"><%= category.expense_total %></span>
+  </div>
+<% end %>
