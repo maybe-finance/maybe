@@ -42,34 +42,34 @@ class Transfer < ApplicationRecord
     end
 
     def auto_match_for_account(account)
-      matches = account.entries.account_transactions.joins("
-        JOIN account_entries ae2 ON
-          account_entries.amount = -ae2.amount AND
-          account_entries.currency = ae2.currency AND
-          account_entries.account_id <> ae2.account_id AND
-          ABS(account_entries.date - ae2.date) <= 4
-      ").select(
-        "account_entries.id",
-        "account_entries.entryable_id AS e1_entryable_id",
-        "ae2.entryable_id AS e2_entryable_id",
-        "account_entries.amount AS e1_amount",
-        "ae2.amount AS e2_amount"
-      )
+      matches = Account::Entry.from("account_entries inflow_candidates")
+        .joins("
+          JOIN account_entries outflow_candidates ON (
+            inflow_candidates.amount < 0 AND
+            outflow_candidates.amount > 0 AND
+            inflow_candidates.amount = -outflow_candidates.amount AND
+            inflow_candidates.currency = outflow_candidates.currency AND
+            inflow_candidates.account_id <> outflow_candidates.account_id AND
+            inflow_candidates.date BETWEEN outflow_candidates.date - 4 AND outflow_candidates.date + 4 AND
+            inflow_candidates.date >= outflow_candidates.date
+          )
+        ").joins("
+          LEFT JOIN transfers existing_transfers ON (
+            (existing_transfers.inflow_transaction_id = inflow_candidates.entryable_id AND
+             existing_transfers.outflow_transaction_id = outflow_candidates.entryable_id) OR
+            (existing_transfers.inflow_transaction_id = inflow_candidates.entryable_id) OR
+            (existing_transfers.outflow_transaction_id = outflow_candidates.entryable_id)
+          )
+        ")
+        .where(existing_transfers: { id: nil })
+        .where("inflow_candidates.account_id = ? AND outflow_candidates.account_id = ?", account.id, account.id)
+        .pluck(:inflow_transaction_id, :outflow_transaction_id)
 
       Transfer.transaction do
-        matches.each do |match|
-          inflow = match.e1_amount.negative? ? match.e1_entryable_id : match.e2_entryable_id
-          outflow = match.e1_amount.negative? ? match.e2_entryable_id : match.e1_entryable_id
-
-          # Skip all rejected, or already matched transfers
-          next if Transfer.exists?(
-            inflow_transaction_id: inflow,
-            outflow_transaction_id: outflow
-          )
-
+        matches.each do |inflow_transaction_id, outflow_transaction_id|
           Transfer.create!(
-            inflow_transaction_id: inflow,
-            outflow_transaction_id: outflow
+            inflow_transaction_id: inflow_transaction_id,
+            outflow_transaction_id: outflow_transaction_id,
           )
         end
       end

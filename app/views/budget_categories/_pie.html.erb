@@ -2,7 +2,7 @@
 
 <% segments = [{ fill_color: budget_category.category.color, value: budget_category.actual_amount.amount }] %>
 
-<div class="relative w-10 h-10 rounded-full flex justify-center items-center">
+<div class="relative w-10 h-10 rounded-full flex justify-center items-center group-hover:scale-105 transition-all duration-300">
   <div class="absolute inset-0 z-10" 
         data-controller="budget-pie" 
         data-budget-pie-segment-height-value="3" 
@@ -10,11 +10,14 @@
         data-budget-pie-show-overages-value="true"
         data-budget-pie-segments-value='<%= segments.to_json %>'></div>
 
-  <div class="absolute inset-0 flex flex-col rounded-full items-center justify-center text-center" style=<%= mixed_hex_styles(budget_category.category.color) %>>
-    <% if budget_category.category.lucide_icon %>
-      <%= lucide_icon budget_category.category.lucide_icon, class: "w-4 h-4 shrink-0", style: "color: #{budget_category.category.color}" %>
-    <% else %>
-      <%= budget_category.category.name.first.upcase %>
-    <% end %>
+  <div class="p-1 absolute inset-0 flex flex-col rounded-full items-center justify-center text-center">
+    <div class="w-full h-full flex items-center justify-center rounded-full" 
+         style="background-color: <%= budget_category.category.color.sub('#', '').then { |hex| "rgba(#{hex.scan(/../).map { |c| c.hex }.join(', ')}, 0.05)" } %>">
+      <% if budget_category.category.lucide_icon %>
+        <%= lucide_icon budget_category.category.lucide_icon, class: "w-4 h-4 shrink-0", style: "color: #{budget_category.category.color}" %>
+      <% else %>
+        <%= budget_category.category.name.first.upcase %>
+      <% end %>
+    </div>
   </div>
 </div>

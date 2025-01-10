@@ -76,14 +76,6 @@ class Category < ApplicationRecord
       end
   end
 
-  def expense_total(start_date: nil, end_date: nil)
-    Money.new(100, family.currency)
-  end
-
-  def avg_monthly_amount
-    Money.new(0, family.currency)
-  end
-
   def replace_and_destroy!(replacement)
     transaction do
       transactions.update_all category_id: replacement&.id
@@ -93,6 +85,18 @@ class Category < ApplicationRecord
 
   def subcategory?
     parent.present?
+  end
+
+  def avg_monthly_total
+    family.category_stats.avg_monthly_total_for(self)
+  end
+
+  def median_monthly_total
+    family.category_stats.median_monthly_total_for(self)
+  end
+
+  def month_total(date: Date.current)
+    family.category_stats.month_total_for(self, date: date)
   end
 
   private

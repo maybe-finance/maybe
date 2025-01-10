@@ -79,7 +79,7 @@
 
       <div class="bg-gray-25 rounded-xl p-1">
         <div class="flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-gray-500 uppercase">
-          <p>Category</p>
+          <p>Categories</p>
           <span class="text-gray-400">&middot;</span>
           <p><%= @budget.budget_categories.count %></p>
 
@@ -87,21 +87,15 @@
         </div>
 
         <div class="bg-white py-1 shadow-xs border border-gray-100 rounded-md">
-          <% if @budget.allocated? %>
+          <% if @budget.family.categories.expenses.empty? %>
+            <div class="py-8">
+              <%= render "budget_categories/no_categories" %>
+            </div>
+          <% else %>
             <% @budget.budget_categories.each_with_index do |budget_category, index| %>
               <%= render "budget_categories/budget_category", budget_category: budget_category %>
 
               <% if index < @budget.budget_categories.count - 1 %>
-                <div class="px-4">
-                  <div class="h-px w-full bg-alpha-black-50"></div>
-                </div>
-              <% end %>
-            <% end %>
-          <% else %>
-            <% @budget.family.categories.each_with_index do |category, index| %>
-              <%= render "budget_categories/unallocated_category", category: category %>
-
-              <% if index < @budget.family.categories.count - 1 %>
                 <div class="px-4">
                   <div class="h-px w-full bg-alpha-black-50"></div>
                 </div>

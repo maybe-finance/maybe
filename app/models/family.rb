@@ -58,6 +58,14 @@ class Family < ApplicationRecord
     ).link_token
   end
 
+  def category_stats
+    CategoryStats.new(self)
+  end
+
+  def budgeting_stats
+    BudgetingStats.new(self)
+  end
+
   def snapshot(period = Period.all)
     query = accounts.active.joins(:balances)
               .where("account_balances.currency = ?", self.currency)

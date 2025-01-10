@@ -2,22 +2,40 @@
 
 <div>
   <div class="p-4 border-b border-gray-100">
-    <% income_data = [{ category: "Salary", amount: 2300, color: "#000000", percentage: 0.23 }, { category: "Interest", amount: 200, color: "#000000", percentage: 0.77 }] %>
+    <% income_data = budget.family.categories.incomes.map { |category| { 
+      category: category.name, 
+      amount: category.month_total(date: budget.start_date).amount * -1, 
+      color: category.color, 
+      percentage: budget.actual_income.zero? ? 0 : (-1 * category.month_total(date: budget.start_date)) / budget.actual_income } 
+      } %>
 
-    <%= render "budgets/actuals_summary_section", title: "Income", value: "$2,500", items: income_data %>
+    <% uncategorized_income_amount = budget.actual_income - income_data.sum { |d| d[:amount] }
+    income_data << {
+      category: "Uncategorized",
+      amount: uncategorized_income_amount,
+      color: Category::UNCATEGORIZED_COLOR,
+      percentage: budget.actual_income.zero? ? 0 : uncategorized_income_amount / budget.actual_income
+    } %>
+
+    <%= render "budgets/actuals_summary_section", title: "Income", value: budget.actual_income, items: income_data %>
   </div>
 
   <div class="p-4">
-    <% expense_data = [
-      { category: "Groceries", amount: 800, color: "#16A34A", percentage: 0.1352 },
-      { category: "Shopping", amount: 200, color: "#6366F1", percentage: 0.0728 },
-      { category: "Subscriptions", amount: 100, color: "#EC4899", percentage: 0.0395 },
-      { category: "Utility", amount: 250, color: "#3B82F6", percentage: 0.0937 },
-      { category: "Gym", amount: 80, color: "#D946EF", percentage: 0.0331 },
-      { category: "Vehicle", amount: 120, color: "#06B6D4", percentage: 0.0457 },
-      { category: "Rent", amount: 1400, color: "#F59E0B", percentage: 0.5796 }
-    ] %>
+    <% expense_data = budget.family.categories.expenses.map { |category| { 
+      category: category.name, 
+      amount: category.month_total(date: budget.start_date).amount, 
+      color: category.color, 
+      percentage: budget.actual_expenses.zero? ? 0 : category.month_total(date: budget.start_date) / budget.actual_expenses } 
+      } %>
 
-    <%= render "budgets/actuals_summary_section", title: "Expenses", value: "$2,500", items: expense_data %>
+    <% uncategorized_expense_amount = budget.actual_expenses - expense_data.sum { |d| d[:amount] }
+    expense_data << {
+      category: "Uncategorized",
+      amount: uncategorized_expense_amount,
+      color: Category::UNCATEGORIZED_COLOR,
+      percentage: budget.actual_expenses.zero? ? 0 : uncategorized_expense_amount / budget.actual_expenses
+    } %>
+
+    <%= render "budgets/actuals_summary_section", title: "Expenses", value: budget.actual_expenses, items: expense_data  %>
   </div>
 </div>

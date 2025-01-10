@@ -29,7 +29,7 @@ class BudgetCategory < ApplicationRecord
   end
 
   def actual_amount
-    Money.new(800, currency)
+    category.month_total(date: budget.start_date)
   end
 
   def over_budget?

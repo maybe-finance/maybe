@@ -1,25 +1,29 @@
 <%# locals: (budget_category:) %>
 
 <%= turbo_frame_tag dom_id(budget_category) do %>
-  <%= link_to budget_budget_category_path(budget_category.budget, budget_category), class: "p-4 flex gap-3 bg-white hover:bg-alpha-black-25", data: { turbo_frame: "drawer" } do %>
+  <%= link_to budget_budget_category_path(budget_category.budget, budget_category), class: "p-4 flex gap-3 bg-white group", data: { turbo_frame: "drawer" } do %>
 
-    <%= render "budget_categories/pie", budget_category: budget_category %>
+    <% if budget_category.budget.initialized? %>
+      <%= render "budget_categories/pie", budget_category: budget_category %>
 
-    <div>
-      <p class="text-sm font-medium text-gray-900"><%= budget_category.category.name %></p>
+      <div>
+        <p class="text-sm font-medium text-gray-900"><%= budget_category.category.name %></p>
 
-      <% if budget_category.overage_amount > 0 %>
-        <p class="text-sm font-medium text-red-500"><%= format_money(budget_category.overage_amount) %> over</p>
-      <% elsif budget_category.overage_amount == 0 %>
-        <p class="text-sm font-medium text-orange-500"><%= format_money(budget_category.overage_amount) %> left</p>
-      <% else %>
-        <p class="text-sm font-medium text-gray-500"><%= format_money(budget_category.overage_amount) %> left</p>
-      <% end %>
-    </div>
+        <% if budget_category.overage_amount > 0 %>
+          <p class="text-sm font-medium text-red-500"><%= format_money(budget_category.overage_amount) %> over</p>
+        <% elsif budget_category.overage_amount == 0 %>
+          <p class="text-sm font-medium text-orange-500"><%= format_money(budget_category.overage_amount) %> left</p>
+        <% else %>
+          <p class="text-sm text-gray-500"><%= format_money(budget_category.overage_amount.abs) %> left</p>
+        <% end %>
+      </div>
 
-    <div class="ml-auto text-right">
-      <p class="text-sm font-medium text-gray-900"><%= format_money(budget_category.actual_amount) %></p>
-      <p class="text-sm text-gray-500">from <%= format_money(budget_category.budgeted_amount) %></p>
-    </div>
+      <div class="ml-auto text-right">
+        <p class="text-sm font-medium text-gray-900"><%= format_money(budget_category.actual_amount) %></p>
+        <p class="text-sm text-gray-500">from <%= format_money(budget_category.budgeted_amount) %></p>
+      </div>
+    <% else %>
+      <%= render "budget_categories/unallocated_category", budget_category: budget_category %>
+    <% end %>
   <% end %>
 <% end %>

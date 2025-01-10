@@ -31,9 +31,10 @@ export default class extends Controller {
       .attr("height", "100%");
 
     const total = this.segmentsValue.reduce(
-      (sum, segment) => sum + segment.value,
+      (sum, segment) => sum + Number(segment.value),
       0,
     );
+
     const overage = Math.max(0, total - this.totalValue);
 
     let dataToRender;
@@ -41,10 +42,26 @@ export default class extends Controller {
     if (this.totalValue === null || this.segmentsValue.length === 0) {
       dataToRender = [
         {
-          fill_color: "#E5E7EB",
+          fill_color: "#F0F0F0",
           value: 100,
         },
       ];
+    } else if (this.totalValue === 0) {
+      if (overage && this.showOveragesValue) {
+        dataToRender = [
+          {
+            fill_color: "#EF4444",
+            value: 100,
+          },
+        ];
+      } else {
+        dataToRender = [
+          {
+            fill_color: "#F0F0F0",
+            value: 100,
+          },
+        ];
+      }
     } else {
       const isOverdrawn = total > this.totalValue;
 
@@ -55,9 +72,11 @@ export default class extends Controller {
         ];
       } else {
         dataToRender = [
-          ...this.segmentsValue,
+          ...this.segmentsValue.filter(
+            (segment) => Math.abs(Number(segment.value)) > 0,
+          ),
           ...(this.totalValue - total > 0
-            ? [{ fill_color: "#E5E7EB", value: this.totalValue - total }]
+            ? [{ fill_color: "#F0F0F0", value: this.totalValue - total }]
             : []),
         ];
       }

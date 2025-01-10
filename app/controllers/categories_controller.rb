@@ -1,7 +1,7 @@
 class CategoriesController < ApplicationController
   layout :with_sidebar
 
-  before_action :set_category, only: %i[show edit update destroy]
+  before_action :set_category, only: %i[edit update destroy]
   before_action :set_transaction, only: :create
 
   def index
@@ -11,9 +11,6 @@ class CategoriesController < ApplicationController
   def new
     @category = Current.family.categories.new color: Category::COLORS.sample
     @categories = Current.family.categories.alphabetically.where(parent_id: nil).where.not(id: @category.id)
-  end
-
-  def show
   end
 
   def create

@@ -1,21 +1,26 @@
 class BudgetCategoriesController < ApplicationController
   def index
     @budget = Current.family.budgets.find(params[:budget_id])
-
-    @budget_categories = Current.family.categories.expenses.map do |category|
-      @budget.budget_categories.find_or_create_by(category: category) do |budget_category|
-        budget_category.budgeted_amount = 0
-        budget_category.currency = @budget.currency
-      end
-    end
-
     render layout: "wizard"
   end
 
   def show
     @budget_category = Current.family.budget_categories.find(params[:id])
+    @transactions = @budget_category.category.transactions.includes(:entry).where(entry: { date: @budget_category.budget.start_date..@budget_category.budget.end_date }).order(date: :desc)
   end
 
   def update
+    @budget_category = Current.family.budget_categories.find(params[:id])
+    @budget_category.update!(budget_category_params)
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to budget_budget_categories_path(@budget_category.budget) }
+    end
   end
+
+  private
+    def budget_category_params
+      params.require(:budget_category).permit(:budgeted_amount)
+    end
 end

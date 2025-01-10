@@ -15,14 +15,14 @@
 
 <div class="relative w-full h-full">
   <div class="absolute inset-0" data-controller="budget-pie"
-       data-budget-pie-total-value="<%= total %>"
-       data-budget-pie-segments-value='<%= data.to_json %>'></div>
+       data-budget-pie-total-value="<%= budget.budgeted_amount_money&.amount %>"
+       data-budget-pie-segments-value='<%= budget.budget_categories.map { |category| { fill_color: category.category.color, value: category.actual_amount.amount } }.to_json %>'></div>
 
   <!-- Content container -->
   <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
     <% if budget.initialized? %>
       <div class="text-gray-600 text-sm">
-        <% if budget.budgeted_amount_money < budget.total_spending %>
+        <% if budget.over_budget? %>
           <span>Over budget</span>
         <% else %>
           <span>Available</span>
@@ -30,7 +30,7 @@
       </div>
 
       <div class="text-2xl text-gray-900 font-medium">
-        <%= format_money(budget.budgeted_amount_money - budget.total_spending) %>
+        <%= format_money(budget.overage * -1) %>
       </div>
 
       <%= link_to edit_budget_path(budget), class: "rounded-lg p-2 bg-gray-50 text-sm text-gray-500 mt-1 flex items-center gap-1" do %>

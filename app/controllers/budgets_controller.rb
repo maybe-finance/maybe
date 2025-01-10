@@ -6,9 +6,9 @@ class BudgetsController < ApplicationController
   end
 
   def show
-    @next_budget = @budget.next_budget(Current.family.currency)
-    @previous_budget = @budget.previous_budget(Current.family.currency)
-    @latest_budget = Current.family.budgets.current(Current.family.currency)
+    @next_budget = @budget.next_budget
+    @previous_budget = @budget.previous_budget
+    @latest_budget = Budget.find_or_bootstrap(Current.family)
     render layout: with_sidebar
   end
 
@@ -21,6 +21,12 @@ class BudgetsController < ApplicationController
     redirect_to budget_budget_categories_path(@budget)
   end
 
+  def create
+    start_date = Date.parse(budget_create_params[:start_date])
+    @budget = Budget.find_or_bootstrap(Current.family, date: start_date)
+    redirect_to budget_path(@budget)
+  end
+
   def picker
     render partial: "budgets/picker", locals: {
       family: Current.family,
@@ -29,16 +35,21 @@ class BudgetsController < ApplicationController
   end
 
   private
+    def budget_create_params
+      params.require(:budget).permit(:start_date)
+    end
+
     def budget_params
       params.require(:budget).permit(:budgeted_amount, :expected_income)
     end
 
     def set_budget
       @budget = Current.family.budgets.find(params[:id])
+      @budget.sync_budget_categories
     end
 
     def redirect_to_current_month_budget
-      current_budget = Current.family.budgets.current(Current.family.currency)
+      current_budget = Budget.find_or_bootstrap(Current.family)
       redirect_to budget_path(current_budget)
     end
 end

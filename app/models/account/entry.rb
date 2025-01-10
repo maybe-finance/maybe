@@ -30,13 +30,22 @@ class Account::Entry < ApplicationRecord
     )
   }
 
+  scope :excluding_transfers, -> {
+    joins("LEFT JOIN transfers ON transfers.inflow_transaction_id = account_entries.entryable_id OR transfers.outflow_transaction_id = account_entries.entryable_id")
+    .where("transfers.id IS NULL OR transfers.status = 'rejected'")
+  }
+
   # All entries that are not part of a pending/approved transfer (rejected transfers count as normal entries, so are included)
   scope :incomes_and_expenses, -> {
-    joins(
-      'LEFT JOIN transfers AS inflow_transfers ON inflow_transfers.inflow_transaction_id = account_entries.entryable_id
-       LEFT JOIN transfers AS outflow_transfers ON outflow_transfers.outflow_transaction_id = account_entries.entryable_id'
-    )
-    .where("(inflow_transfers.id IS NULL AND outflow_transfers.id IS NULL) OR inflow_transfers.status = 'rejected' OR outflow_transfers.status = 'rejected'")
+    account_transactions.excluding_transfers
+  }
+
+  scope :incomes, -> {
+    incomes_and_expenses.where("account_entries.amount <= 0")
+  }
+
+  scope :expenses, -> {
+    incomes_and_expenses.where("account_entries.amount > 0")
   }
 
   scope :with_converted_amount, ->(currency) {
