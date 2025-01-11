@@ -61,13 +61,13 @@ class Transfer < ApplicationRecord
           inflow = match.e1_amount.negative? ? match.e1_entryable_id : match.e2_entryable_id
           outflow = match.e1_amount.negative? ? match.e2_entryable_id : match.e1_entryable_id
 
-          # Skip all rejected, or already matched transfers
-          next if Transfer.exists?(
+          # Skip rejected transfers only
+          next if Transfer.rejected.exists?(
             inflow_transaction_id: inflow,
             outflow_transaction_id: outflow
           )
 
-          Transfer.create!(
+          Transfer.create_or_find_by!(
             inflow_transaction_id: inflow,
             outflow_transaction_id: outflow
           )

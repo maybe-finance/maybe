@@ -97,4 +97,24 @@ class TransferTest < ActiveSupport::TestCase
       transfer.save!
     end
   end
+
+  test "auto_match_for_account handles concurrent creation attempts" do
+    account1 = accounts(:depository)
+    account2 = accounts(:credit_card)
+    
+    t1 = create_transaction(date: Date.current, account: account1, amount: 500)
+    t2 = create_transaction(date: Date.current, account: account2, amount: -500)
+
+    # Simulate concurrent calls
+    assert_difference -> { Transfer.count } => 1 do
+      Thread.new { Transfer.auto_match_for_account(account1) }.join
+      Thread.new { Transfer.auto_match_for_account(account2) }.join
+    end
+
+    # Verify only one transfer exists
+    assert_equal 1, Transfer.where(
+      inflow_transaction_id: t2.account_transaction.id,
+      outflow_transaction_id: t1.account_transaction.id
+    ).count
+  end
 end
