@@ -97,4 +97,20 @@ class TransferTest < ActiveSupport::TestCase
       transfer.save!
     end
   end
+
+  test "deleting a transaction deletes associated transfer" do
+    outflow_entry = create_transaction(date: Date.current, account: accounts(:depository), amount: 500)
+    inflow_entry = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
+    
+    transfer = Transfer.create!(
+      inflow_transaction: inflow_entry.account_transaction,
+      outflow_transaction: outflow_entry.account_transaction
+    )
+    
+    assert_difference 'Transfer.count', -1 do
+      outflow_entry.account_transaction.destroy
+    end
+    
+    assert_nil Transfer.find_by(id: transfer.id)
+  end
 end
