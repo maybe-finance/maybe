@@ -7,6 +7,7 @@ export default class extends Controller {
   static values = {
     segments: { type: Array, default: [] },
     unusedSegmentId: { type: String, default: "unused" },
+    overageSegmentId: { type: String, default: "overage" },
     segmentHeight: { type: Number, default: 3 },
   };
 

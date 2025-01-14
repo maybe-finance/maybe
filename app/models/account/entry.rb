@@ -30,14 +30,14 @@ class Account::Entry < ApplicationRecord
     )
   }
 
-  scope :excluding_transfers, -> {
-    joins("LEFT JOIN transfers ON transfers.inflow_transaction_id = account_entries.entryable_id OR transfers.outflow_transaction_id = account_entries.entryable_id")
-    .where("transfers.id IS NULL OR transfers.status = 'rejected'")
-  }
-
-  # All entries that are not part of a pending/approved transfer (rejected transfers count as normal entries, so are included)
+  # All non-transfer entries, rejected transfers, and the outflow of a loan payment transfer are incomes/expenses
   scope :incomes_and_expenses, -> {
-    account_transactions.excluding_transfers
+    joins("INNER JOIN account_transactions ON account_transactions.id = account_entries.entryable_id AND account_entries.entryable_type = 'Account::Transaction'")
+    .joins("LEFT JOIN transfers ON transfers.inflow_transaction_id = account_transactions.id OR transfers.outflow_transaction_id = account_transactions.id")
+    .joins("LEFT JOIN account_transactions inflow_txns ON inflow_txns.id = transfers.inflow_transaction_id")
+    .joins("LEFT JOIN account_entries inflow_entries ON inflow_entries.entryable_id = inflow_txns.id AND inflow_entries.entryable_type = 'Account::Transaction'")
+    .joins("LEFT JOIN accounts inflow_accounts ON inflow_accounts.id = inflow_entries.account_id")
+    .where("transfers.id IS NULL OR transfers.status = 'rejected' OR (account_entries.amount > 0 AND inflow_accounts.accountable_type = 'Loan')")
   }
 
   scope :incomes, -> {
