@@ -2,7 +2,7 @@ class BudgetCategory < ApplicationRecord
   include Monetizable
 
   belongs_to :budget
-  belongs_to :category
+  belongs_to :category, optional: true
 
   validates :budget_id, uniqueness: { scope: :category_id }
 
@@ -17,7 +17,7 @@ class BudgetCategory < ApplicationRecord
     def self.for(budget_categories)
       top_level_categories = budget_categories.select { |budget_category| budget_category.category.parent_id.nil? }
       top_level_categories.map do |top_level_category|
-        subcategories = budget_categories.select { |bc| bc.category.parent_id == top_level_category.category_id }
+        subcategories = budget_categories.select { |bc| bc.category.parent_id == top_level_category.category_id && top_level_category.category_id.present? }
         new(top_level_category, subcategories)
       end
     end
@@ -26,6 +26,10 @@ class BudgetCategory < ApplicationRecord
       @budget_category = budget_category
       @budget_subcategories = budget_subcategories
     end
+  end
+
+  def category
+    super || budget.family.categories.uncategorized
   end
 
   def actual_amount

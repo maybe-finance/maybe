@@ -109,6 +109,10 @@ class Transfer < ApplicationRecord
     to_account.liability?
   end
 
+  def categorizable?
+    to_account.accountable_type == "Loan"
+  end
+
   private
     def transfer_has_different_accounts
       return unless inflow_transaction.present? && outflow_transaction.present?

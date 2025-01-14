@@ -52,7 +52,11 @@
               <div class="text-gray-500 text-xs font-normal">
                 <div class="flex items-center gap-1">
                   <%= link_to transfer.from_account.name, transfer.from_account, class: "hover:underline", data: { turbo_frame: "_top" } %>
-                  <%= lucide_icon "arrow-left-right", class: "w-4 h-4" %>
+                  <% if transfer.payment?%>
+                    <%= lucide_icon "arrow-right", class: "w-4 h-4" %>
+                  <% else %>
+                    <%= lucide_icon "arrow-left-right", class: "w-4 h-4" %>
+                  <% end %>
                   <%= link_to transfer.to_account.name, transfer.to_account, class: "hover:underline", data: { turbo_frame: "_top" } %>
                 </div>
               </div>
@@ -63,7 +67,11 @@
     </div>
 
     <div class="flex items-center gap-1 col-span-2">
-      <%= render "categories/badge", category: transfer.payment? ? payment_category : transfer_category %>
+      <% if transfer.categorizable? %>
+        <%= render "account/transactions/transaction_category", entry: transfer.outflow_transaction.entry %>
+      <% else %>
+        <%= render "categories/badge", category: transfer.payment? ? payment_category : transfer_category %>
+      <% end %>
     </div>
 
     <div class="col-span-2 ml-auto">

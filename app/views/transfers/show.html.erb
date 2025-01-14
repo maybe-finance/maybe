@@ -70,7 +70,11 @@
     <!-- Details Section -->
     <%= disclosure t(".details") do %>
       <%= styled_form_with model: @transfer,
-              data: { controller: "auto-submit-form" } do |f| %>
+              data: { controller: "auto-submit-form" }, class: "space-y-2" do |f| %>
+        <% if @transfer.categorizable?%>
+          <%= f.collection_select :category_id, @categories.alphabetically, :id, :name, { label: "Category", include_blank: "Uncategorized", selected: @transfer.outflow_transaction.category&.id }, "data-auto-submit-form-target": "auto" %>
+        <% end %>
+
         <%= f.text_area :notes,
                   label: t(".note_label"),
                   placeholder: t(".note_placeholder"),

@@ -57,6 +57,13 @@ class Category < ApplicationRecord
       end
     end
 
+    def uncategorized
+      new(
+        name: "Uncategorized",
+        color: UNCATEGORIZED_COLOR,
+      )
+    end
+
     private
       def default_categories
         [

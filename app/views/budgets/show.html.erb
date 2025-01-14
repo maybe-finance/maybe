@@ -96,10 +96,12 @@
               <%= render "budget_categories/no_categories" %>
             </div>
           <% else %>
-            <% @budget.budget_categories.each_with_index do |budget_category, index| %>
-              <%= render "budget_categories/budget_category", budget_category: budget_category %>
+            <% category_groups = BudgetCategory::Group.for(@budget.budget_categories) %>
 
-              <% if index < @budget.budget_categories.count - 1 %>
+            <% category_groups.each_with_index do |group, index| %>
+              <%= render "budget_categories/group", group: group %>
+
+              <% if index < category_groups.count - 1 %>
                 <div class="px-4">
                   <div class="h-px w-full bg-alpha-black-50"></div>
                 </div>

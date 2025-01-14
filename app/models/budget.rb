@@ -44,6 +44,14 @@ class Budget < ApplicationRecord
         bc.currency = family.currency
       end
     end
+
+    # Uncategorized, "catch-all" bucket
+    budget_categories.find_or_create_by(
+      category: nil
+    ) do |bc|
+      bc.budgeted_amount = 0
+      bc.currency = family.currency
+    end
   end
 
   def name

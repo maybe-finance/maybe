@@ -1,10 +1,10 @@
 <%# locals: (budget_category:) %>
 
-<%= turbo_frame_tag dom_id(budget_category) do %>
-  <%= link_to budget_budget_category_path(budget_category.budget, budget_category), class: "p-4 flex gap-3 bg-white group", data: { turbo_frame: "drawer" } do %>
+<%= turbo_frame_tag dom_id(budget_category), class: "w-full group" do %>
+  <%= link_to budget_budget_category_path(budget_category.budget, budget_category), class: "w-full p-4 flex gap-3 bg-white", data: { turbo_frame: "drawer" } do %>
 
     <% if budget_category.budget.initialized? %>
-      <div class="w-10 h-10">
+      <div class="w-10 h-10 group-hover:scale-105 transition-all duration-300">
         <%= render "budget_categories/budget_category_donut", budget_category: budget_category %>
       </div>
 
