@@ -39,4 +39,29 @@ class BudgetCategory < ApplicationRecord
   def overage_amount
     actual_amount - budgeted_amount_money
   end
+
+  def overage
+    actual_amount - budgeted_amount_money
+  end
+
+  def unspent
+    overage * -1
+  end
+
+  def to_donut_segments_json
+    unused_segment_id = "unused"
+    overage_segment_id = "overage"
+
+    return [ { color: "#F0F0F0", amount: 1, id: unused_segment_id } ] unless actual_amount > 0
+
+    segments = [ { color: category.color, amount: actual_amount.amount, id: id } ]
+
+    if overage >= 0
+      segments.push({ color: "#EF4444", amount: overage.abs.amount, id: overage_segment_id })
+    else
+      segments.push({ color: "#F0F0F0", amount: unspent.amount, id: unused_segment_id })
+    end
+
+    segments
+  end
 end

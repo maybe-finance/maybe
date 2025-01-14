@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
-// Connects to data-controller="budget"
+// Connects to data-controller="budget-form"
 export default class extends Controller {
   toggleAutoFill(e) {
     const expectedIncome = e.params.income;

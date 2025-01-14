@@ -15,7 +15,7 @@
     </div>
 
     <div class="mx-auto max-w-lg">
-      <%= styled_form_with model: @budget, class: "space-y-3", data: { controller: "budget" } do |f| %>
+      <%= styled_form_with model: @budget, class: "space-y-3", data: { controller: "budget-form" } do |f| %>
         <%= f.money_field :budgeted_amount, label: "Budgeted amount", required: true, disable_currency: true %>
         <%= f.money_field :expected_income, label: "Expected income", required: true, disable_currency: true %>
 

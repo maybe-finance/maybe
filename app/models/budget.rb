@@ -99,7 +99,11 @@ class Budget < ApplicationRecord
   end
 
   def overage
-    actual_amount - budgeted_amount_money
+    actual_amount - (budgeted_amount_money || Money.new(0, currency))
+  end
+
+  def unspent
+    overage * -1
   end
 
   def exceeded_income?
@@ -142,5 +146,22 @@ class Budget < ApplicationRecord
     next_start_date = start_date + 1.month
 
     family.budgets.for_date(next_start_date)
+  end
+
+  def to_donut_segments_json
+    unused_segment_id = "unused"
+
+    # Continuous gray segment for empty budgets
+    return [ { color: "#F0F0F0", amount: 1, id: unused_segment_id } ] unless initialized?
+
+    segments = budget_categories.map do |bc|
+      { color: bc.category.color, amount: bc.actual_amount.amount, id: bc.id }
+    end
+
+    if unspent >= 0
+      segments.push({ color: "#F0F0F0", amount: unspent.amount, id: unused_segment_id })
+    end
+
+    segments
   end
 end

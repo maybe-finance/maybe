@@ -1,0 +1,61 @@
+<%= tag.div data: { controller: "donut-chart", donut_chart_segments_value: budget.to_donut_segments_json }, class: "relative h-full" do %>
+  <div data-donut-chart-target="chartContainer" class="absolute inset-0 pointer-events-none"></div>
+
+  <div data-donut-chart-target="contentContainer" class="flex justify-center items-center h-full">
+    <div data-donut-chart-target="defaultContent" class="flex flex-col items-center">
+      <% if budget.initialized? %>
+        <div class="text-gray-600 text-sm mb-2">
+          <span>Spent</span>
+        </div>
+
+        <div class="text-3xl font-medium <%= budget.overage.positive? ? "text-red-500" : "text-gray-900" %>">
+          <%= format_money(budget.actual_amount) %>
+        </div>
+
+        <%= link_to edit_budget_path(budget), class: "btn btn--secondary flex items-center gap-1 mt-2" do %>
+          <span class="text-gray-900 font-medium">
+            of <%= format_money(budget.budgeted_amount_money) %>
+          </span>
+          <%= lucide_icon "pencil", class: "w-4 h-4 text-gray-500 hover:text-gray-600" %>
+        <% end %>
+      <% else %>
+        <div class="text-gray-400 text-3xl mb-2">
+          <span><%= format_money Money.new(0, budget.currency || budget.family.currency) %></span>
+        </div>
+        <%= link_to edit_budget_path(budget), class: "flex items-center gap-2 btn btn--primary" do %>
+          <%= lucide_icon "plus", class: "w-4 h-4 text-white" %>
+          New budget
+        <% end %>
+      <% end %>
+    </div>
+
+    <% budget.budget_categories.each do |bc| %>
+      <div id="segment_<%= bc.id %>" class="hidden">
+        <div class="flex flex-col gap-2 items-center">
+          <div class="flex items-center gap-3">
+            <div class="w-1 h-3 rounded-xl" style="background-color: <%= bc.category.color %>"></div>
+            <p class="text-sm text-gray-500"><%= bc.category.name %></p>
+          </div>
+
+          <p class="text-3xl font-medium <%= bc.overage.positive? ? "text-red-500" : "text-gray-900" %>">
+            <%= format_money(bc.actual_amount) %>
+          </p>
+
+          <%= link_to budget_budget_categories_path(budget), class: "btn btn--secondary flex items-center gap-1" do %>
+            <span>of <%= format_money(bc.budgeted_amount_money, precision: 0) %></span>
+
+            <%= lucide_icon "pencil", class: "w-4 h-4 text-gray-500 shrink-0" %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <div id="segment_unused" class="hidden">
+      <p class="text-sm text-gray-500 text-center mb-2">Unused</p>
+
+      <p class="text-3xl font-medium text-gray-900">
+        <%= format_money(budget.unspent) %>
+      </p>
+    </div>
+  </div>
+<% end %>

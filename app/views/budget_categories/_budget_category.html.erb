@@ -4,7 +4,9 @@
   <%= link_to budget_budget_category_path(budget_category.budget, budget_category), class: "p-4 flex gap-3 bg-white group", data: { turbo_frame: "drawer" } do %>
 
     <% if budget_category.budget.initialized? %>
-      <%= render "budget_categories/pie", budget_category: budget_category %>
+      <div class="w-10 h-10">
+        <%= render "budget_categories/budget_category_donut", budget_category: budget_category %>
+      </div>
 
       <div>
         <p class="text-sm font-medium text-gray-900"><%= budget_category.category.name %></p>

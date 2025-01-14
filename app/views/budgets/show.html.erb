@@ -1,5 +1,5 @@
 <div class="pb-12">
-  <div class="flex items-center gap-2 mb-4">
+  <div class="flex items-center gap-1 mb-4">
     <div class="flex items-center gap-2">
       <% if @previous_budget %>
         <%= link_to budget_path(@previous_budget) do %>
@@ -19,7 +19,10 @@
     </div>
 
     <div data-controller="menu" data-menu-placement-value="bottom-start">
-      <%= tag.button @budget.name, data: { menu_target: "button" } %>
+      <%= tag.button data: { menu_target: "button" }, class: "flex items-center gap-1 hover:bg-gray-50 rounded-md p-2" do %>
+        <span class="text-gray-900 font-medium"><%= @budget.name %></span>
+        <%= lucide_icon "chevron-down", class: "w-5 h-5 shrink-0 text-gray-500" %>
+      <% end %>
 
       <div data-menu-target="content" class="hidden z-10">
         <%= render "budgets/picker", family: Current.family, year: Date.current.year %>
@@ -30,16 +33,17 @@
       <% if @budget.current? %>
         <span class="border border-alpha-black-200 text-gray-900 text-sm font-medium px-3 py-2 rounded-lg">Today</span>
       <% else %>
-        <%= link_to "Go to latest budget", budget_path(@latest_budget), class: "btn btn--outline" %>
+        <%= link_to "Today", budget_path(@latest_budget), class: "btn btn--outline" %>
       <% end %>
     </div>
   </div>
 
   <div class="flex gap-4">
     <div class="w-[300px] space-y-4">
-      <div class="bg-white rounded-xl shadow-xs p-8 border border-gray-100 h-[300px]">
-        <%= render "budgets/pie_chart_summary", budget: @budget %>
+      <div class="w-[300px] h-[300px] bg-white rounded-xl shadow-xs p-8 border border-gray-100">
+        <%= render "budgets/budget_donut", budget: @budget %>
       </div>
+
       <div>
         <% if @budget.initialized? %>
           <% default_tab = @budget.initialized? ? "budgeted" : "actuals" %>

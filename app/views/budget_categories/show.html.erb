@@ -15,8 +15,8 @@
       </div>
 
       <% if @budget_category.budget.initialized? %>
-        <div class="ml-auto">
-          <%= render "budget_categories/pie", budget_category: @budget_category %>
+        <div class="ml-auto w-10 h-10">
+          <%= render "budget_categories/budget_category_donut", budget_category: @budget_category %>
         </div>
       <% end %>
     </header>

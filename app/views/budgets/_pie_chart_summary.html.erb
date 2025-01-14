@@ -1,52 +1,48 @@
 <%# locals: (budget:) %>
 
-<% data = [
-       {"fill_color": "#F472B6", "value": 500},
-       {"fill_color": "#818CF8", "value": 750},
-       {"fill_color": "#34D399", "value": 800},
-       {"fill_color": "#F97316", "value": 600},
-       {"fill_color": "#F59E0B", "value": 365}
-     ] %>
-
-<% data_2 = [] %>
-
-<% total = 200 %>
-<% total_2 = nil %>
-
 <div class="relative w-full h-full">
-  <div class="absolute inset-0" data-controller="budget-pie"
-       data-budget-pie-total-value="<%= budget.budgeted_amount_money&.amount %>"
-       data-budget-pie-segments-value='<%= budget.budget_categories.map { |category| { fill_color: category.category.color, value: category.actual_amount.amount } }.to_json %>'></div>
+  <div class="absolute inset-0" data-controller="pie-chart-v2" data-budget-pie-budget-value='<%= budget.to_json %>'></div>
 
   <!-- Content container -->
-  <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-    <% if budget.initialized? %>
-      <div class="text-gray-600 text-sm">
-        <% if budget.over_budget? %>
-          <span>Over budget</span>
-        <% else %>
-          <span>Available</span>
+  <div data-budget-pie-target="container" class="absolute inset-0 flex flex-col items-center justify-center text-center">
+    <div data-budget-pie-target="defaultContent">
+      <% if budget.initialized? %>
+        <div class="text-gray-600 text-sm">
+          <% if budget.over_budget? %>
+            <span>Over budget</span>
+          <% else %>
+            <span>Available</span>
+          <% end %>
+        </div>
+
+        <div class="text-2xl text-gray-900 font-medium">
+          <%= format_money(budget.overage * -1) %>
+        </div>
+
+        <%= link_to edit_budget_path(budget), class: "rounded-lg p-2 bg-gray-50 text-sm text-gray-500 mt-1 flex items-center gap-1" do %>
+          <span class="text-gray-900 font-medium">
+            of <%= format_money(budget.budgeted_amount_money) %>
+          </span>
+          <%= lucide_icon "pencil", class: "w-4 h-4 text-gray-500 hover:text-gray-600" %>
         <% end %>
-      </div>
-
-      <div class="text-2xl text-gray-900 font-medium">
-        <%= format_money(budget.overage * -1) %>
-      </div>
-
-      <%= link_to edit_budget_path(budget), class: "rounded-lg p-2 bg-gray-50 text-sm text-gray-500 mt-1 flex items-center gap-1" do %>
-        <span class="text-gray-900 font-medium">
-          of <%= format_money(budget.budgeted_amount_money) %>
-        </span>
-        <%= lucide_icon "pencil", class: "w-4 h-4 text-gray-500 hover:text-gray-600" %>
+      <% else %>
+        <div class="text-gray-400 text-3xl mb-2">
+          <span><%= format_money Money.new(0, budget.currency || budget.family.currency) %></span>
+        </div>
+        <%= link_to edit_budget_path(budget), class: "flex items-center gap-2 btn btn--primary" do %>
+          <%= lucide_icon "plus", class: "w-4 h-4 text-white" %>
+          New budget
+        <% end %>
       <% end %>
-    <% else %>
-      <div class="text-gray-400 text-3xl mb-2">
-        <span><%= format_money Money.new(0, budget.currency || budget.family.currency) %></span>
-      </div>
-      <%= link_to edit_budget_path(budget), class: "flex items-center gap-2 btn btn--primary" do %>
-        <%= lucide_icon "plus", class: "w-4 h-4 text-white" %>
-        New budget
-      <% end %>
-    <% end %>
+    </div>
   </div>
+
+  <% budget.budget_categories.each do |category| %>
+    <template id="segment-<%= category.id %>-template">
+      <div class="text-gray-600 text-sm"><%= category.category.name %></div>
+      <div class="text-2xl text-gray-900 font-medium">
+        <%= format_money(category.actual_amount) %>
+      </div>
+    </template>
+  <% end %>
 </div>
