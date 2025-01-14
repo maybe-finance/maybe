@@ -13,10 +13,7 @@ class BudgetCategoriesController < ApplicationController
     @budget_category = Current.family.budget_categories.find(params[:id])
     @budget_category.update!(budget_category_params)
 
-    respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to budget_budget_categories_path(@budget_category.budget) }
-    end
+    redirect_to budget_budget_categories_path(@budget_category.budget)
   end
 
   private

@@ -41,11 +41,25 @@
   <div class="flex gap-4">
     <div class="w-[300px] space-y-4">
       <div class="w-[300px] h-[300px] bg-white rounded-xl shadow-xs p-8 border border-gray-100">
-        <%= render "budgets/budget_donut", budget: @budget %>
+        <% if @budget.over_allocated? %>
+          <div class="flex flex-col gap-4 items-center justify-center h-full">
+            <%= lucide_icon "alert-triangle", class: "w-6 h-6 text-red-500" %>
+            <p class="text-gray-500 text-sm text-center">You have over-allocated your budget.  Please fix your allocations.</p>
+
+            <%= link_to budget_budget_categories_path(@budget), class: "btn btn--secondary flex items-center gap-1" do %>
+              <span class="text-gray-900 font-medium">
+                Fix allocations
+              </span>
+              <%= lucide_icon "pencil", class: "w-4 h-4 text-gray-500 hover:text-gray-600" %>
+            <% end %>
+          </div>
+        <% else %>
+          <%= render "budgets/budget_donut", budget: @budget %>
+        <% end %>
       </div>
 
       <div>
-        <% if @budget.initialized? %>
+        <% if @budget.initialized? && !@budget.over_allocated? %>
           <% default_tab = @budget.initialized? ? "budgeted" : "actuals" %>
           <% default_partial = { "actuals" => "budgets/actuals_summary", "budgeted" => "budgets/budgeted_summary" } %>
 
@@ -101,12 +115,12 @@
             <% category_groups.each_with_index do |group, index| %>
               <%= render "budget_categories/group", group: group %>
 
-              <% if index < category_groups.count - 1 %>
-                <div class="px-4">
-                  <div class="h-px w-full bg-alpha-black-50"></div>
-                </div>
-              <% end %>
+              <div class="px-4">
+                <div class="h-px w-full bg-alpha-black-50"></div>
+              </div>
             <% end %>
+
+            <%= render "budget_categories/budget_category", budget_category: @budget.uncategorized_budget_category %>
           <% end %>
         </div>
       </div>

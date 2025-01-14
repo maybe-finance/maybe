@@ -2,7 +2,7 @@ class BudgetCategory < ApplicationRecord
   include Monetizable
 
   belongs_to :budget
-  belongs_to :category, optional: true
+  belongs_to :category
 
   validates :budget_id, uniqueness: { scope: :category_id }
 
@@ -19,7 +19,7 @@ class BudgetCategory < ApplicationRecord
       top_level_categories.map do |top_level_category|
         subcategories = budget_categories.select { |bc| bc.category.parent_id == top_level_category.category_id && top_level_category.category_id.present? }
         new(top_level_category, subcategories)
-      end
+      end.sort_by { |group| group.category.name }
     end
 
     def initialize(budget_category, budget_subcategories = [])

@@ -44,14 +44,6 @@ class Budget < ApplicationRecord
         bc.currency = family.currency
       end
     end
-
-    # Uncategorized, "catch-all" bucket
-    budget_categories.find_or_create_by(
-      category: nil
-    ) do |bc|
-      bc.budgeted_amount = 0
-      bc.currency = family.currency
-    end
   end
 
   def name
@@ -67,15 +59,21 @@ class Budget < ApplicationRecord
   end
 
   def allocated_amount
-    0
+    budget_categories.sum(:budgeted_amount)
   end
 
   def unallocated_amount
-    budgeted_amount_money - allocated_amount
+    (budgeted_amount_money || Money.new(0, currency)) - allocated_amount
+  end
+
+  def over_allocated?
+    unallocated_amount.amount < 0
   end
 
   def allocated_percent
-    0
+    return 0 unless budgeted_amount > 0
+
+    (allocated_amount / budgeted_amount) * 100
   end
 
   def utilization_percent
@@ -154,6 +152,10 @@ class Budget < ApplicationRecord
     next_start_date = start_date + 1.month
 
     family.budgets.for_date(next_start_date)
+  end
+
+  def uncategorized_budget_category
+    budget_categories.build(category: nil, budgeted_amount: [ unallocated_amount.amount, 0 ].max, currency: family.currency)
   end
 
   def to_donut_segments_json

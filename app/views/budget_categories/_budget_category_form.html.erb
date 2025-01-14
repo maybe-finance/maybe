@@ -12,7 +12,7 @@
   </div>
 
   <div class="ml-auto">
-    <%= form_with model: [budget_category.budget, budget_category], data: { controller: "auto-submit-form"} do |f| %>
+    <%= form_with model: [budget_category.budget, budget_category], data: { controller: "auto-submit-form", turbo_frame: :_top } do |f| %>
       <div class="form-field w-[120px]">
         <div class="flex items-center">
           <span class="text-gray-500 text-sm mr-2"><%= currency.symbol %></span>

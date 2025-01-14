@@ -5,7 +5,7 @@
     <% if budget_category.category.lucide_icon %>
       <%= lucide_icon budget_category.category.lucide_icon, class: "w-5 h-5" %>
     <% else %>
-      <%= render "shared/circle_logo", name: budget_category.category.name %>
+      <%= render "shared/circle_logo", name: budget_category.category.name, hex: budget_category.category.color %>
     <% end %>
   </div>
 

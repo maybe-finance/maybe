@@ -74,7 +74,6 @@ class CategoryStats
             "date_trunc('month', account_entries.date) as date",
             "SUM(account_entries.amount) as total"
           )
-          .joins("LEFT JOIN account_transactions ON account_transactions.id = account_entries.entryable_id")
           .joins("LEFT JOIN categories ON categories.id = account_transactions.category_id")
           .group(Arel.sql("categories.id, date_trunc('month', account_entries.date)"))
           .order(Arel.sql("date_trunc('month', account_entries.date) DESC"))
