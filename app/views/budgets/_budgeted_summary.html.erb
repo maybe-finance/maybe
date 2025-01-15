@@ -40,18 +40,18 @@
 
     <div>
       <div class="flex h-1.5 mb-3 gap-1">
-        <div class="rounded-md h-1.5 bg-green-500" style="width: <%= budget.vs_actual_percent %>%"></div>
-
-        <% if budget.over? %>
-          <div class="rounded-md h-1.5 bg-green-500" style="width: <%= 100 - budget.vs_actual_percent %>%"></div>
+        <% if budget.over_budget? %>
+          <div class="rounded-md h-1.5 bg-gray-900" style="width: <%= budget.budgeted_spending / budget.actual_spending.to_f * 100 %>%"></div>
+          <div class="rounded-md h-1.5 bg-red-500" style="width: <%= budget.vs_actual / budget.actual_spending.to_f * 100 %>%"></div>
         <% else %>
+          <div class="rounded-md h-1.5 bg-gray-900" style="width: <%= budget.vs_actual_percent %>%"></div>
           <div class="rounded-md h-1.5 bg-gray-100" style="width: <%= 100 - budget.vs_actual_percent %>%"></div>
         <% end %>
       </div>
       <div class="flex justify-between text-sm">
         <p class="text-gray-500"><%= format_money(budget.actual_spending_money) %> spent</p>
         <p class="font-medium">
-          <% if budget.over? %>
+          <% if budget.over_budget? %>
             <span class="text-red-500"><%= format_money(budget.vs_actual_money) %> over</span>
           <% else %>
             <span class="text-gray-900"><%= format_money(budget.vs_actual_money * -1) %> left</span>

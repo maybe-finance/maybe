@@ -8,7 +8,7 @@
           <span>Spent</span>
         </div>
 
-        <div class="text-3xl font-medium <%= budget.over? ? "text-red-500" : "text-gray-900" %>">
+        <div class="text-3xl font-medium <%= budget.over_budget? ? "text-red-500" : "text-gray-900" %>">
           <%= format_money(budget.actual_spending) %>
         </div>
 
@@ -37,7 +37,7 @@
             <p class="text-sm text-gray-500"><%= bc.category.name %></p>
           </div>
 
-          <p class="text-3xl font-medium <%= bc.over? ? "text-red-500" : "text-gray-900" %>">
+          <p class="text-3xl font-medium <%= bc.over_budget? ? "text-red-500" : "text-gray-900" %>">
             <%= format_money(bc.actual_spending_money) %>
           </p>
 
@@ -54,7 +54,7 @@
       <p class="text-sm text-gray-500 text-center mb-2">Unused</p>
 
       <p class="text-3xl font-medium text-gray-900">
-        <%= format_money(budget.vs_actual) %>
+        <%= format_money(budget.vs_actual_money * -1) %>
       </p>
     </div>
   </div>

@@ -1,8 +1,9 @@
 <div class="pb-12">
-  <%= render "budgets/budget_header", budget: @budget,
-                                      previous_budget: @previous_budget,
-                                      next_budget: @next_budget,
-                                      latest_budget: @latest_budget %>
+  <%= render "budgets/budget_header",
+            budget: @budget,
+            previous_budget: @previous_budget,
+            next_budget: @next_budget,
+            latest_budget: @latest_budget %>
 
   <div class="flex gap-4">
     <div class="w-[300px] space-y-4">
@@ -20,13 +21,21 @@
             <% base_classes = "rounded-md px-2 py-1 flex-1 text-center" %>
             <% selected_tab = params[:tab].presence || "budgeted" %>
 
-            <%= link_to "Budgeted", budget_path(@budget, tab: "budgeted"), 
-          class: class_names(base_classes, "bg-white shadow-xs text-gray-900": selected_tab == "budgeted", 
-                                         "text-gray-500": selected_tab != "budgeted") %>
+            <%= link_to "Budgeted",
+                        budget_path(@budget, tab: "budgeted"),
+                        class: class_names(
+                          base_classes,
+                          "bg-white shadow-xs text-gray-900": selected_tab == "budgeted",
+                          "text-gray-500": selected_tab != "budgeted"
+                        ) %>
 
-            <%= link_to "Actual", budget_path(@budget, tab: "actuals"), 
-          class: class_names(base_classes, "bg-white shadow-xs text-gray-900": selected_tab == "actuals", 
-                                         "text-gray-500": selected_tab != "actuals") %>
+            <%= link_to "Actual",
+                        budget_path(@budget, tab: "actuals"),
+                        class: class_names(
+                          base_classes,
+                          "bg-white shadow-xs text-gray-900": selected_tab == "actuals",
+                          "text-gray-500": selected_tab != "actuals"
+                        ) %>
           </div>
 
           <div class="bg-white rounded-xl shadow-xs border border-gray-100">

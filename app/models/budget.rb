@@ -94,11 +94,11 @@ class Budget < ApplicationRecord
     budgeted_spending.present? && allocated_spending > budgeted_spending
   end
 
-  def over?
+  def over_budget?
     vs_actual.positive?
   end
 
-  def within?
+  def within_budget?
     vs_actual.negative? || vs_actual.zero?
   end
 
@@ -135,10 +135,10 @@ class Budget < ApplicationRecord
   end
 
   def previous_budget
-    prev_month_start_date = start_date - 1.month
-    return nil if prev_month_start_date < family.oldest_entry_date
+    prev_month_end_date = end_date - 1.month
+    return nil if prev_month_end_date < family.oldest_entry_date
 
-    family.budgets.find_or_bootstrap(family, date: prev_month_start_date)
+    family.budgets.find_or_bootstrap(family, date: prev_month_end_date)
   end
 
   def next_budget
@@ -161,14 +161,14 @@ class Budget < ApplicationRecord
     unused_segment_id = "unused"
 
     # Continuous gray segment for empty budgets
-    return [ { color: "#F0F0F0", amount: 1, id: unused_segment_id } ] unless initialized?
+    return [ { color: "#F0F0F0", amount: 1, id: unused_segment_id } ] unless allocations_valid?
 
     segments = budget_categories.map do |bc|
       { color: bc.category.color, amount: bc.actual_spending, id: bc.id }
     end
 
-    if vs_actual > 0
-      segments.push({ color: "#F0F0F0", amount: vs_actual, id: unused_segment_id })
+    if within_budget?
+      segments.push({ color: "#F0F0F0", amount: vs_actual * -1, id: unused_segment_id })
     end
 
     segments

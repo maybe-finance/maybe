@@ -1,6 +1,11 @@
 <%# locals: (budget_category:) %>
 
-<%= tag.div data: { controller: "donut-chart", donut_chart_segments_value: budget_category.to_donut_segments_json, donut_chart_segment_height_value: 5 }, class: "relative h-full" do %>
+<%= tag.div data: { 
+  controller: "donut-chart", 
+  donut_chart_segments_value: budget_category.to_donut_segments_json, 
+  donut_chart_segment_height_value: 5,
+  donut_chart_segment_opacity_value: 0.2
+}, class: "relative h-full" do %>
   <div data-donut-chart-target="chartContainer" class="absolute inset-0 pointer-events-none"></div>
 
   <div data-donut-chart-target="contentContainer" class="flex justify-center items-center h-full p-1">

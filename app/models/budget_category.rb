@@ -36,11 +36,11 @@ class BudgetCategory < ApplicationRecord
     category.month_total(date: budget.start_date)
   end
 
-  def over?
+  def over_budget?
     vs_actual.positive?
   end
 
-  def within?
+  def within_budget?
     vs_actual.negative? || vs_actual.zero?
   end
 

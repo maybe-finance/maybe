@@ -1,5 +1,5 @@
 <%= content_for :header_nav do %>
-  <%= render "budgets/nav", budget: @budget %>
+  <%= render "budgets/budget_nav", budget: @budget %>
 <% end %>
 
 <%= content_for :previous_path, budget_path(@budget) %>

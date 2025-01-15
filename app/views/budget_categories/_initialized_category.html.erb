@@ -7,9 +7,9 @@
 <div>
   <p class="text-sm font-medium text-gray-900"><%= budget_category.category.name %></p>
 
-  <% if budget_category.over? %>
+  <% if budget_category.over_budget? %>
     <p class="text-sm font-medium text-red-500"><%= format_money(budget_category.vs_actual) %> over</p>
-  <% elsif budget_category.vs_actual == 0 %>
+  <% elsif budget_category.vs_actual == 0 && budget_category.budgeted_spending > 0 %>
     <p class="text-sm font-medium text-orange-500"><%= format_money(budget_category.vs_actual) %> left</p>
   <% else %>
     <p class="text-sm text-gray-500"><%= format_money(budget_category.vs_actual.abs) %> left</p>

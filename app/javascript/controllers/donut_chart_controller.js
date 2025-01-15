@@ -9,6 +9,7 @@ export default class extends Controller {
     unusedSegmentId: { type: String, default: "unused" },
     overageSegmentId: { type: String, default: "overage" },
     segmentHeight: { type: Number, default: 3 },
+    segmentOpacity: { type: Number, default: 1 },
   };
 
   #viewBoxSize = 100;
@@ -32,7 +33,6 @@ export default class extends Controller {
       0,
     );
 
-    // Overage is always first segment, unused is always last segment
     // Overage is always first segment, unused is always last segment
     return this.segmentsValue
       .filter((s) => s.amount > 0)
@@ -94,8 +94,8 @@ export default class extends Controller {
       .attr("class", "arc pointer-events-auto")
       .append("path")
       .attr("data-segment-id", (d) => d.data.id)
-      .attr("data-original-color", (d) => d.data.color)
-      .attr("fill", (d) => d.data.color)
+      .attr("data-original-color", this.#transformRingColor)
+      .attr("fill", this.#transformRingColor)
       .attr("d", mainArc);
 
     // Ensures that user can click on default content without triggering hover on a segment if that is their intent
@@ -112,6 +112,16 @@ export default class extends Controller {
         clearTimeout(hoverTimeout);
       });
   }
+
+  #transformRingColor = ({ data: { id, color } }) => {
+    if (id === this.unusedSegmentIdValue || id === this.overageSegmentIdValue) {
+      return color;
+    }
+
+    const reducedOpacityColor = d3.color(color);
+    reducedOpacityColor.opacity = this.segmentOpacityValue;
+    return reducedOpacityColor;
+  };
 
   // Highlights segment and shows segment specific content (all other segments are grayed out)
   #handleSegmentHover(event) {
