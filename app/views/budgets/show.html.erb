@@ -5,10 +5,10 @@
             next_budget: @next_budget,
             latest_budget: @latest_budget %>
 
-  <div class="flex gap-4">
+  <div class="flex items-start gap-4">
     <div class="w-[300px] space-y-4">
       <div class="h-[300px] bg-white rounded-xl shadow-xs p-8 border border-gray-100">
-        <% if @budget.over_allocated? %>
+        <% if @budget.available_to_allocate.negative? %>
           <%= render "budgets/over_allocation_warning", budget: @budget %>
         <% else %>
           <%= render "budgets/budget_donut", budget: @budget %>
@@ -16,10 +16,11 @@
       </div>
 
       <div>
-        <% if @budget.initialized? && !@budget.over_allocated? %>
+        <% if @budget.initialized? && @budget.available_to_allocate.positive? %>
           <div class="flex gap-2 mb-2 rounded-lg bg-alpha-black-25 p-1">
             <% base_classes = "rounded-md px-2 py-1 flex-1 text-center" %>
             <% selected_tab = params[:tab].presence || "budgeted" %>
+            <% active_partial = selected_tab == "budgeted" ? "budgets/budgeted_summary" : "budgets/actuals_summary" %>
 
             <%= link_to "Budgeted",
                         budget_path(@budget, tab: "budgeted"),
@@ -39,7 +40,7 @@
           </div>
 
           <div class="bg-white rounded-xl shadow-xs border border-gray-100">
-            <%= render "budgets/#{selected_tab}_summary", budget: @budget %>
+            <%= render active_partial, budget: @budget %>
           </div>
         <% else %>
           <div class="bg-white rounded-xl shadow-xs border border-gray-100">

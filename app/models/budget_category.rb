@@ -6,7 +6,7 @@ class BudgetCategory < ApplicationRecord
 
   validates :budget_id, uniqueness: { scope: :category_id }
 
-  monetize :budgeted_spending, :actual_spending, :vs_actual
+  monetize :budgeted_spending, :actual_spending, :available_to_spend
 
   class Group
     attr_reader :budget_category, :budget_subcategories
@@ -36,19 +36,11 @@ class BudgetCategory < ApplicationRecord
     category.month_total(date: budget.start_date)
   end
 
-  def over_budget?
-    vs_actual.positive?
+  def available_to_spend
+    (budgeted_spending || 0) - actual_spending
   end
 
-  def within_budget?
-    vs_actual.negative? || vs_actual.zero?
-  end
-
-  def vs_actual
-    actual_spending - budgeted_spending
-  end
-
-  def vs_actual_percent
+  def percent_of_budget_spent
     return 0 unless budgeted_spending > 0
 
     (actual_spending / budgeted_spending) * 100
@@ -62,10 +54,10 @@ class BudgetCategory < ApplicationRecord
 
     segments = [ { color: category.color, amount: actual_spending, id: id } ]
 
-    if vs_actual > 0
-      segments.push({ color: "#EF4444", amount: vs_actual.abs, id: overage_segment_id })
+    if available_to_spend.negative?
+      segments.push({ color: "#EF4444", amount: available_to_spend.abs, id: overage_segment_id })
     else
-      segments.push({ color: "#F0F0F0", amount: vs_actual, id: unused_segment_id })
+      segments.push({ color: "#F0F0F0", amount: available_to_spend, id: unused_segment_id })
     end
 
     segments

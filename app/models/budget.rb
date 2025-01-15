@@ -9,8 +9,8 @@ class Budget < ApplicationRecord
   validates :start_date, :end_date, uniqueness: { scope: :family_id }
 
   monetize :budgeted_spending, :expected_income, :allocated_spending,
-           :actual_spending, :unallocated_spending, :vs_allocated, :vs_actual,
-           :vs_expected_income, :estimated_spending, :estimated_income, :actual_income
+           :actual_spending, :available_to_spend, :available_to_allocate,
+           :estimated_spending, :estimated_income, :actual_income
 
   class << self
     def for_date(date)
@@ -47,7 +47,7 @@ class Budget < ApplicationRecord
   def uncategorized_budget_category
     budget_categories.build(
       category: nil,
-      budgeted_spending: [ unallocated_spending, 0 ].max,
+      budgeted_spending: [ available_to_allocate, 0 ].max,
       currency: family.currency
     )
   end
@@ -60,74 +60,12 @@ class Budget < ApplicationRecord
     budgeted_spending.present?
   end
 
-  def allocations_valid?
-    initialized? && !over_allocated? && allocated_spending > 0
+  def income_categories_with_totals
+    family.income_categories_with_totals(date: start_date)
   end
 
-  def estimated_spending
-    family.budgeting_stats.avg_monthly_expenses
-  end
-
-  def actual_spending
-    budget_categories.sum(&:actual_spending)
-  end
-
-  def allocated_spending
-    budget_categories.sum(:budgeted_spending)
-  end
-
-  def unallocated_spending
-    (budgeted_spending || 0) - allocated_spending
-  end
-
-  def vs_allocated
-    allocated_spending - budgeted_spending
-  end
-
-  def vs_allocated_percent
-    return 0 unless budgeted_spending > 0
-
-    (allocated_spending / budgeted_spending) * 100
-  end
-
-  def over_allocated?
-    budgeted_spending.present? && allocated_spending > budgeted_spending
-  end
-
-  def over_budget?
-    vs_actual.positive?
-  end
-
-  def within_budget?
-    vs_actual.negative? || vs_actual.zero?
-  end
-
-  def vs_actual
-    actual_spending - (budgeted_spending || 0)
-  end
-
-  def vs_actual_percent
-    return 0 unless budgeted_spending > 0
-
-    (actual_spending / budgeted_spending) * 100
-  end
-
-  def estimated_income
-    family.budgeting_stats.avg_monthly_income.abs
-  end
-
-  def actual_income
-    family.entries.incomes.where(date: start_date..end_date).sum(:amount).abs
-  end
-
-  def vs_expected_income
-    actual_income - expected_income
-  end
-
-  def vs_expected_income_percent
-    return 0 unless expected_income > 0
-
-    (actual_income / expected_income) * 100
+  def expense_categories_with_totals
+    family.expense_categories_with_totals(date: start_date)
   end
 
   def current?
@@ -137,24 +75,13 @@ class Budget < ApplicationRecord
   def previous_budget
     prev_month_end_date = end_date - 1.month
     return nil if prev_month_end_date < family.oldest_entry_date
-
     family.budgets.find_or_bootstrap(family, date: prev_month_end_date)
   end
 
   def next_budget
     return nil if current?
-
     next_start_date = start_date + 1.month
-
     family.budgets.find_or_bootstrap(family, date: next_start_date)
-  end
-
-  def income_categories_with_totals
-    family.income_categories_with_totals(date: start_date)
-  end
-
-  def expense_categories_with_totals
-    family.expense_categories_with_totals(date: start_date)
   end
 
   def to_donut_segments_json
@@ -167,10 +94,85 @@ class Budget < ApplicationRecord
       { color: bc.category.color, amount: bc.actual_spending, id: bc.id }
     end
 
-    if within_budget?
-      segments.push({ color: "#F0F0F0", amount: vs_actual * -1, id: unused_segment_id })
+    if available_to_spend.positive?
+      segments.push({ color: "#F0F0F0", amount: available_to_spend, id: unused_segment_id })
     end
 
     segments
+  end
+
+  # =============================================================================
+  # Actuals: How much user has spent on each budget category
+  # =============================================================================
+  def estimated_spending
+    family.budgeting_stats.avg_monthly_expenses&.abs
+  end
+
+  def actual_spending
+    budget_categories.sum(&:actual_spending)
+  end
+
+  def available_to_spend
+    (budgeted_spending || 0) - actual_spending
+  end
+
+  def percent_of_budget_spent
+    return 0 unless budgeted_spending > 0
+
+    (actual_spending / budgeted_spending.to_f) * 100
+  end
+
+  def overage_percent
+    return 0 unless available_to_spend.negative?
+
+    available_to_spend.abs / actual_spending.to_f * 100
+  end
+
+  # =============================================================================
+  # Budget allocations: How much user has budgeted for all categories combined
+  # =============================================================================
+  def allocated_spending
+    budget_categories.sum(:budgeted_spending)
+  end
+
+  def allocated_percent
+    return 0 unless budgeted_spending > 0
+
+    (allocated_spending / budgeted_spending.to_f) * 100
+  end
+
+  def available_to_allocate
+    budgeted_spending - allocated_spending
+  end
+
+  def allocations_valid?
+    initialized? && available_to_allocate.positive? && allocated_spending > 0
+  end
+
+  # =============================================================================
+  # Income: How much user earned relative to what they expected to earn
+  # =============================================================================
+  def estimated_income
+    family.budgeting_stats.avg_monthly_income&.abs
+  end
+
+  def actual_income
+    family.entries.incomes.where(date: start_date..end_date).sum(:amount).abs
+  end
+
+  def actual_income_percent
+    return 0 unless expected_income > 0
+
+    (actual_income / expected_income.to_f) * 100
+  end
+
+  def remaining_expected_income
+    expected_income - actual_income
+  end
+
+  def surplus_percent
+    return 0 unless remaining_expected_income.negative?
+
+    remaining_expected_income.abs / expected_income.to_f * 100
   end
 end

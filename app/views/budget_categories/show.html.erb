@@ -37,22 +37,22 @@
           <% if @budget_category.budget.initialized? %>
             <div class="flex items-center justify-between text-sm">
               <dt class="text-gray-500">Status</dt>
-              <% if @budget_category.over_budget? %>
+              <% if @budget_category.available_to_spend.negative? %>
                 <dd class="text-red-500 flex items-center gap-1 text-red-500 font-medium">
                   <%= lucide_icon "alert-circle", class: "shrink-0 w-4 h-4 text-red-500" %>
-                  <%= format_money @budget_category.vs_actual_money.abs %>
+                  <%= format_money @budget_category.available_to_spend_money.abs %>
                   <span>overspent</span>
                 </dd>
-              <% elsif @budget_category.vs_actual_money == 0 %>
+              <% elsif @budget_category.available_to_spend.zero? %>
                 <dd class="text-orange-500 flex items-center gap-1 text-orange-500 font-medium">
                   <%= lucide_icon "x-circle", class: "shrink-0 w-4 h-4 text-orange-500" %>
-                  <%= format_money @budget_category.vs_actual_money.abs %>
+                  <%= format_money @budget_category.available_to_spend_money %>
                   <span>left</span>
                 </dd>
               <% else %>
                 <dd class="text-gray-900 flex items-center gap-1 text-green-500 font-medium">
                   <%= lucide_icon "check-circle-2", class: "shrink-0 w-4 h-4 text-green-500" %>
-                  <%= format_money @budget_category.vs_actual_money.abs %>
+                  <%= format_money @budget_category.available_to_spend_money %>
                   <span>left</span>
                 </dd>
               <% end %>
