@@ -5,7 +5,7 @@
     <% if value.is_a?(Money) %>
       <span class="<%= size == "lg" ? "text-xl" : "text-lg" %> font-medium"><%= format_money value %></span>
     <% else %>
-      <span class="<%= size == "lg" ? "text-xl" : "text-lg" %> font-medium"><%= is_percentage ? number_to_percentage(value, precision: 2) : value %></span>
+      <span class="<%= size == "lg" ? "text-xl" : "text-lg" %> font-medium"><%= is_percentage ? number_to_percentage(value*100, precision: 2) : value %></span>
     <% end %>
   </p>
   <% if trend.nil? %>
