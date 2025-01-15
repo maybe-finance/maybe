@@ -16,10 +16,10 @@
       <div class="form-field w-[120px]">
         <div class="flex items-center">
           <span class="text-gray-500 text-sm mr-2"><%= currency.symbol %></span>
-          <%= f.number_field :budgeted_spending, 
-                            class: "form-field__input text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none", 
-                            placeholder: "0", 
-                            step: currency.step, 
+          <%= f.number_field :budgeted_spending,
+                            class: "form-field__input text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
+                            placeholder: "0",
+                            step: currency.step,
                             min: 0,
                             data: { auto_submit_form_target: "auto" } %>
         </div>

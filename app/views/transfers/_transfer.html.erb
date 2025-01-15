@@ -52,7 +52,7 @@
               <div class="text-gray-500 text-xs font-normal">
                 <div class="flex items-center gap-1">
                   <%= link_to transfer.from_account.name, transfer.from_account, class: "hover:underline", data: { turbo_frame: "_top" } %>
-                  <% if transfer.payment?%>
+                  <% if transfer.payment? %>
                     <%= lucide_icon "arrow-right", class: "w-4 h-4" %>
                   <% else %>
                     <%= lucide_icon "arrow-left-right", class: "w-4 h-4" %>

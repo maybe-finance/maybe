@@ -15,6 +15,7 @@ en:
     form:
       placeholder: Category name
     index:
+      categories: Categories
       bootstrap: Use default categories
       categories_incomes: Income categories
       categories_expenses: Expense categories
