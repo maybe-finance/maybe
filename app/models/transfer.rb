@@ -41,6 +41,9 @@ class Transfer < ApplicationRecord
       )
     end
 
+    # Matches transfers between accounts while preventing deadlocks through consistent
+    # transaction ID ordering. This ensures concurrent processes acquire locks in the
+    # same order when creating transfer records.
     def auto_match_for_account(account)
       matches = account.entries.account_transactions.joins("
         JOIN account_entries ae2 ON
@@ -58,18 +61,26 @@ class Transfer < ApplicationRecord
 
       Transfer.transaction do
         matches.each do |match|
-          inflow = match.e1_amount.negative? ? match.e1_entryable_id : match.e2_entryable_id
-          outflow = match.e1_amount.negative? ? match.e2_entryable_id : match.e1_entryable_id
+          t1_id = match.e1_entryable_id
+          t2_id = match.e2_entryable_id
+          
+          # First sort IDs to ensure consistent lock ordering
+          inflow_id, outflow_id = [t1_id, t2_id].sort
+          
+          # Then adjust based on amount direction
+          if match.e1_amount.positive?
+            inflow_id, outflow_id = outflow_id, inflow_id
+          end
 
           # Skip all rejected, or already matched transfers
           next if Transfer.exists?(
-            inflow_transaction_id: inflow,
-            outflow_transaction_id: outflow
+            inflow_transaction_id: inflow_id,
+            outflow_transaction_id: outflow_id
           )
 
           Transfer.create!(
-            inflow_transaction_id: inflow,
-            outflow_transaction_id: outflow
+            inflow_transaction_id: inflow_id,
+            outflow_transaction_id: outflow_id
           )
         end
       end
