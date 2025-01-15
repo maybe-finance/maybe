@@ -17,7 +17,7 @@ class Account::Entry < ApplicationRecord
   scope :chronological, -> {
     order(
       date: :asc,
-      Arel.sql("CASE WHEN entryable_type = 'Account::Valuation' THEN 1 ELSE 0 END") => :asc,
+      Arel.sql("CASE WHEN account_entries.entryable_type = 'Account::Valuation' THEN 1 ELSE 0 END") => :asc,
       created_at: :asc
     )
   }
@@ -25,7 +25,7 @@ class Account::Entry < ApplicationRecord
   scope :reverse_chronological, -> {
     order(
       date: :desc,
-      Arel.sql("CASE WHEN entryable_type = 'Account::Valuation' THEN 1 ELSE 0 END") => :desc,
+      Arel.sql("CASE WHEN account_entries.entryable_type = 'Account::Valuation' THEN 1 ELSE 0 END") => :desc,
       created_at: :desc
     )
   }
@@ -147,9 +147,7 @@ class Account::Entry < ApplicationRecord
     end
 
     def income_total(currency = "USD", start_date: nil, end_date: nil)
-      total = account_transactions.includes(:entryable).incomes_and_expenses
-        .where(date: start_date..end_date)
-        .where("account_entries.amount <= 0")
+      total = incomes.where(date: start_date..end_date)
                        .map { |e| e.amount_money.exchange_to(currency, date: e.date, fallback_rate: 0) }
                        .sum
 
@@ -157,9 +155,7 @@ class Account::Entry < ApplicationRecord
     end
 
     def expense_total(currency = "USD", start_date: nil, end_date: nil)
-      total = account_transactions.includes(:entryable).incomes_and_expenses
-                       .where(date: start_date..end_date)
-                       .where("account_entries.amount > 0")
+      total = expenses.where(date: start_date..end_date)
                        .map { |e| e.amount_money.exchange_to(currency, date: e.date, fallback_rate: 0) }
                        .sum
 

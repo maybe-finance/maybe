@@ -2,40 +2,61 @@
 
 <div>
   <div class="p-4 border-b border-gray-100">
-    <% income_data = budget.family.categories.incomes.map { |category| { 
-      category: category.name, 
-      amount: category.month_total(date: budget.start_date).amount * -1, 
-      color: category.color, 
-      percentage: budget.actual_income.zero? ? 0 : (-1 * category.month_total(date: budget.start_date)) / budget.actual_income } 
-      } %>
+    <h3 class="text-sm text-gray-500 mb-2">Income</h3>
 
-    <% uncategorized_income_amount = budget.actual_income - income_data.sum { |d| d[:amount] }
-    income_data << {
-      category: "Uncategorized",
-      amount: uncategorized_income_amount,
-      color: Category::UNCATEGORIZED_COLOR,
-      percentage: budget.actual_income.zero? ? 0 : uncategorized_income_amount / budget.actual_income
-    } %>
+    <% income_totals = budget.income_categories_with_totals %>
+    <% income_categories = income_totals.category_totals.reject { |ct| ct.amount_money.zero? }.sort_by { |ct| ct.percentage }.reverse %>
+    <span class="inline-block mb-2 text-xl font-medium text-gray-900">
+      <%= format_money(income_totals.total_money) %>
+    </span>
 
-    <%= render "budgets/actuals_summary_section", title: "Income", value: budget.actual_income, items: income_data %>
+    <% if income_categories.any? %>
+      <div>
+        <div class="flex h-1.5 mb-3 gap-1">
+          <% income_categories.each do |item| %>
+            <div class="h-full rounded-xs" style="background-color: <%= item.category.color %>; width: <%= item.percentage %>%"></div>
+          <% end %>
+        </div>
+
+        <div class="flex flex-wrap gap-x-2.5 gap-y-1 text-xs">
+          <% income_categories.each do |item| %>
+            <div class="flex items-center gap-1.5">
+              <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background-color: <%= item.category.color %>"></div>
+              <span class="text-gray-500"><%= item.category.name %></span>
+              <span class="text-gray-900"><%= number_to_percentage(item.percentage, precision: 0) %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
   </div>
 
   <div class="p-4">
-    <% expense_data = budget.family.categories.expenses.map { |category| { 
-      category: category.name, 
-      amount: category.month_total(date: budget.start_date).amount, 
-      color: category.color, 
-      percentage: budget.actual_expenses.zero? ? 0 : category.month_total(date: budget.start_date) / budget.actual_expenses } 
-      } %>
+    <h3 class="text-sm text-gray-500 mb-2">Expenses</h3>
 
-    <% uncategorized_expense_amount = budget.actual_expenses - expense_data.sum { |d| d[:amount] }
-    expense_data << {
-      category: "Uncategorized",
-      amount: uncategorized_expense_amount,
-      color: Category::UNCATEGORIZED_COLOR,
-      percentage: budget.actual_expenses.zero? ? 0 : uncategorized_expense_amount / budget.actual_expenses
-    } %>
+    <% expense_totals = budget.expense_categories_with_totals %>
+    <% expense_categories = expense_totals.category_totals.reject { |ct| ct.amount_money.zero? }.sort_by { |ct| ct.percentage }.reverse %>
 
-    <%= render "budgets/actuals_summary_section", title: "Expenses", value: budget.actual_expenses, items: expense_data  %>
+    <span class="inline-block mb-2 text-xl font-medium text-gray-900"><%= format_money(expense_totals.total_money) %></span>
+
+    <% if expense_categories.any? %>
+      <div>
+        <div class="flex h-1.5 mb-3 gap-1">
+          <% expense_categories.each do |item| %>
+            <div class="h-full rounded-xs" style="background-color: <%= item.category.color %>; width: <%= item.percentage %>%"></div>
+          <% end %>
+        </div>
+
+        <div class="flex flex-wrap gap-x-2.5 gap-y-1 text-xs">
+          <% expense_categories.each do |item| %>
+            <div class="flex items-center gap-1.5">
+              <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background-color: <%= item.category.color %>"></div>
+              <span class="text-gray-500"><%= item.category.name %></span>
+              <span class="text-gray-900"><%= number_to_percentage(item.percentage, precision: 0) %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>

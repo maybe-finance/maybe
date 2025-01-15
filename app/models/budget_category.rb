@@ -6,7 +6,7 @@ class BudgetCategory < ApplicationRecord
 
   validates :budget_id, uniqueness: { scope: :category_id }
 
-  monetize :budgeted_amount
+  monetize :budgeted_spending, :actual_spending, :vs_budgeted_spending
 
   class Group
     attr_reader :budget_category, :budget_subcategories
@@ -32,24 +32,26 @@ class BudgetCategory < ApplicationRecord
     super || budget.family.categories.uncategorized
   end
 
-  def actual_amount
+  def actual_spending
     category.month_total(date: budget.start_date)
   end
 
-  def over_budget?
-    actual_amount > budget.budgeted_amount_money
+  def over?
+    vs_actual.positive?
   end
 
-  def overage_amount
-    actual_amount - budgeted_amount_money
+  def within?
+    vs_actual.negative? || vs_actual.zero?
   end
 
-  def overage
-    actual_amount - budgeted_amount_money
+  def vs_actual
+    actual_spending - budgeted_spending
   end
 
-  def unspent
-    overage * -1
+  def vs_actual_percent
+    return 0 unless budgeted_spending > 0
+
+    (actual_spending / budgeted_spending) * 100
   end
 
   def to_donut_segments_json

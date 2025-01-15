@@ -24,6 +24,6 @@ class BudgetingStats
                      .from(monthly_totals, :mt)
                      .pick("AVG(mt.total)")
 
-      Money.new(result || 0, family.currency)
+      result
     end
 end

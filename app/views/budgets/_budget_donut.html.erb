@@ -8,7 +8,7 @@
           <span>Spent</span>
         </div>
 
-        <div class="text-3xl font-medium <%= budget.overage.positive? ? "text-red-500" : "text-gray-900" %>">
+        <div class="text-3xl font-medium <%= budget.over? ? "text-red-500" : "text-gray-900" %>">
           <%= format_money(budget.actual_amount) %>
         </div>
 
@@ -37,12 +37,12 @@
             <p class="text-sm text-gray-500"><%= bc.category.name %></p>
           </div>
 
-          <p class="text-3xl font-medium <%= bc.overage.positive? ? "text-red-500" : "text-gray-900" %>">
-            <%= format_money(bc.actual_amount) %>
+          <p class="text-3xl font-medium <%= bc.over? ? "text-red-500" : "text-gray-900" %>">
+            <%= format_money(bc.actual_spending_money) %>
           </p>
 
           <%= link_to budget_budget_categories_path(budget), class: "btn btn--secondary flex items-center gap-1" do %>
-            <span>of <%= format_money(bc.budgeted_amount_money, precision: 0) %></span>
+            <span>of <%= format_money(bc.budgeted_spending_money, precision: 0) %></span>
 
             <%= lucide_icon "pencil", class: "w-4 h-4 text-gray-500 shrink-0" %>
           <% end %>
@@ -54,7 +54,7 @@
       <p class="text-sm text-gray-500 text-center mb-2">Unused</p>
 
       <p class="text-3xl font-medium text-gray-900">
-        <%= format_money(budget.unspent) %>
+        <%= format_money(budget.vs_actual) %>
       </p>
     </div>
   </div>
