@@ -10,21 +10,21 @@
 
     <div>
       <div class="flex h-1.5 mb-3 gap-1">
-        <div class="rounded-md h-1.5 bg-green-500" style="width: <%= budget.income_progress_percent %>%"></div>
+        <div class="rounded-md h-1.5 bg-green-500" style="width: <%= budget.vs_expected_income_percent %>%"></div>
 
-        <% if budget.exceeded_income? %>
-          <div class="rounded-md h-1.5 bg-red-500" style="width: <%= 100 - budget.income_progress_percent %>%"></div>
+        <% if budget.vs_expected_income.positive? %>
+          <div class="rounded-md h-1.5 bg-red-500" style="width: <%= 100 - budget.vs_expected_income_percent %>%"></div>
         <% else %>
-          <div class="rounded-md h-1.5 bg-gray-100" style="width: <%= 100 - budget.income_progress_percent %>%"></div>
+          <div class="rounded-md h-1.5 bg-gray-100" style="width: <%= 100 - budget.vs_expected_income_percent %>%"></div>
         <% end %>
       </div>
       <div class="flex justify-between text-sm">
-        <p class="text-gray-500"><%= format_money(budget.actual_income) %> earned</p>
+        <p class="text-gray-500"><%= format_money(budget.actual_income_money) %> earned</p>
         <p class="font-medium">
-          <% if budget.exceeded_income? %>
-            <span class="text-green-500"><%= format_money(budget.remaining_income) %> over</span>
+          <% if budget.vs_expected_income.positive? %>
+            <span class="text-green-500"><%= format_money(budget.vs_expected_income) %> over</span>
           <% else %>
-            <span class="text-gray-900"><%= format_money(budget.remaining_income) %> left</span>
+            <span class="text-gray-900"><%= format_money(budget.vs_expected_income * -1) %> left</span>
           <% end %>
         </p>
       </div>
@@ -35,26 +35,26 @@
     <h3 class="text-sm text-gray-500 mb-2">Budgeted</h3>
 
     <span class="inline-block mb-2 text-xl font-medium text-gray-900">
-      <%= format_money(budget.budgeted_amount_money) %>
+      <%= format_money(budget.budgeted_spending_money) %>
     </span>
 
     <div>
       <div class="flex h-1.5 mb-3 gap-1">
-        <div class="rounded-md h-1.5 bg-green-500" style="width: <%= budget.utilization_percent %>%"></div>
+        <div class="rounded-md h-1.5 bg-green-500" style="width: <%= budget.vs_actual_percent %>%"></div>
 
-        <% if budget.over_budget? %>
-          <div class="rounded-md h-1.5 bg-green-500" style="width: <%= 100 - budget.utilization_percent %>%"></div>
+        <% if budget.over? %>
+          <div class="rounded-md h-1.5 bg-green-500" style="width: <%= 100 - budget.vs_actual_percent %>%"></div>
         <% else %>
-          <div class="rounded-md h-1.5 bg-gray-100" style="width: <%= 100 - budget.utilization_percent %>%"></div>
+          <div class="rounded-md h-1.5 bg-gray-100" style="width: <%= 100 - budget.vs_actual_percent %>%"></div>
         <% end %>
       </div>
       <div class="flex justify-between text-sm">
-        <p class="text-gray-500"><%= format_money(budget.actual_amount) %> spent</p>
+        <p class="text-gray-500"><%= format_money(budget.actual_spending_money) %> spent</p>
         <p class="font-medium">
-          <% if budget.over_budget? %>
-            <span class="text-red-500"><%= format_money(budget.overage) %> over</span>
+          <% if budget.over? %>
+            <span class="text-red-500"><%= format_money(budget.vs_actual_money) %> over</span>
           <% else %>
-            <span class="text-gray-900"><%= format_money(budget.overage * -1) %> left</span>
+            <span class="text-gray-900"><%= format_money(budget.vs_actual_money * -1) %> left</span>
           <% end %>
         </p>
       </div>

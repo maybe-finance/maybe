@@ -2,38 +2,40 @@
 
 <div class="space-y-2 mb-6">
   <div class="flex items-center gap-2">
-    <% if budget.allocated_percent > 100 %>
+    <% if budget.over_allocated? %>
       <div class="rounded-full w-1.5 h-1.5 bg-red-500"></div>
     <% else %>
-      <div class="rounded-full w-1.5 h-1.5 <%= budget.allocated_percent > 0 ? "bg-gray-900" : "bg-gray-100" %>"></div>
+      <div class="rounded-full w-1.5 h-1.5 <%= budget.allocated_spending > 0 ? "bg-gray-900" : "bg-gray-100" %>"></div>
     <% end %>
 
-    <% if budget.allocated_percent > 100 %>
+    <% if budget.over_allocated? %>
       <p class="text-gray-900 text-sm">&gt; 100% set</p>
     <% else %>
-      <p class="<%= budget.allocated_percent > 0 ? "text-gray-900" : "text-gray-500" %> text-sm"><%= number_to_percentage(budget.allocated_percent, precision: 0) %> set</p>
+      <p class="<%= budget.over_allocated? ? "text-gray-900" : "text-gray-500" %> text-sm">
+        <%= number_to_percentage(budget.vs_allocated_percent, precision: 0) %> set
+      </p>
     <% end %>
 
     <p class="ml-auto text-sm space-x-1">
-      <span class="<%= budget.allocated_percent > 100 ? "text-red-500" : "text-gray-900" %>"><%= format_money(budget.allocated_amount) %></span>
+      <span class="<%= budget.over_allocated? ? "text-red-500" : "text-gray-900" %>"><%= format_money(budget.allocated_spending_money) %></span>
       <span class="text-gray-500"> / </span>
-      <span class="text-gray-500"><%= format_money(budget.budgeted_amount_money) %></span>
+      <span class="text-gray-500"><%= format_money(budget.budgeted_spending_money) %></span>
     </p>
   </div>
 
   <div class="relative h-1.5 rounded-2xl bg-gray-100">
-    <% if budget.allocated_percent > 100 %>
+    <% if budget.over_allocated? %>
       <div class="absolute inset-0 bg-red-500 rounded-2xl" style="width: 100%;"></div>
     <% else %>
-      <div class="absolute inset-0 bg-gray-900 rounded-2xl" style="width: <%= budget.allocated_percent %>%;"></div>
+      <div class="absolute inset-0 bg-gray-900 rounded-2xl" style="width: <%= budget.vs_allocated_percent %>%;"></div>
     <% end %>
   </div>
 
   <div class="text-sm">
-    <% if budget.allocated_percent > 100 %>
-      <span class="text-gray-500">Budget exceeded <span class="text-red-500"><%= format_money(budget.unallocated_amount.abs) %></span></span>
+    <% if budget.over_allocated? %>
+      <span class="text-gray-500">Budget exceeded by <span class="text-red-500"><%= format_money(budget.vs_allocated_money) %></span></span>
     <% else %>
-      <span class="text-gray-900"><%= format_money(budget.unallocated_amount) %></span>
+      <span class="text-gray-900"><%= format_money(budget.unallocated_spending_money) %></span>
       <span class="text-gray-500">left to allocate</span>
     <% end %>
   </div>

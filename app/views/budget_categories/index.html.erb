@@ -30,7 +30,15 @@
             <%= render "budget_categories/uncategorized", budget: @budget %>
           </div>
 
-          <%= link_to "Confirm", budget_path(@budget), class: "block btn btn--primary w-full text-center" %>
+          <% if @budget.allocations_valid? %>
+            <%= link_to "Confirm", 
+                budget_path(@budget), 
+                class: "block btn btn--primary w-full text-center" %>
+          <% else %>
+            <span class="block btn btn--secondary w-full text-center text-gray-400 cursor-not-allowed">
+              Confirm
+            </span>
+          <% end %>
         </div>
       <% end %>
     </div>

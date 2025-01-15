@@ -40,7 +40,7 @@ class BudgetsController < ApplicationController
     end
 
     def budget_params
-      params.require(:budget).permit(:budgeted_amount, :expected_income)
+      params.require(:budget).permit(:budgeted_spending, :expected_income)
     end
 
     def set_budget

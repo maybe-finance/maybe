@@ -7,9 +7,9 @@
 
         <% if @budget_category.budget.initialized? %>
           <p class="text-sm text-gray-500">
-            <span class="text-gray-900"><%= format_money(@budget_category.actual_amount) %></span>
+            <span class="text-gray-900"><%= format_money(@budget_category.actual_spending) %></span>
             <span>/</span>
-            <span><%= format_money(@budget_category.budgeted_amount) %></span>
+            <span><%= format_money(@budget_category.budgeted_spending) %></span>
           </p>
         <% end %>
       </div>
@@ -37,22 +37,22 @@
           <% if @budget_category.budget.initialized? %>
             <div class="flex items-center justify-between text-sm">
               <dt class="text-gray-500">Status</dt>
-              <% if @budget_category.overage_amount > 0 %>
+              <% if @budget_category.over? %>
                 <dd class="text-red-500 flex items-center gap-1 text-red-500 font-medium">
                   <%= lucide_icon "alert-circle", class: "shrink-0 w-4 h-4 text-red-500" %>
-                  <%= format_money @budget_category.overage_amount.abs %>
+                  <%= format_money @budget_category.vs_actual_money.abs %>
                   <span>overspent</span>
                 </dd>
-              <% elsif @budget_category.overage_amount == 0 %>
+              <% elsif @budget_category.vs_actual_money == 0 %>
                 <dd class="text-orange-500 flex items-center gap-1 text-orange-500 font-medium">
                   <%= lucide_icon "x-circle", class: "shrink-0 w-4 h-4 text-orange-500" %>
-                  <%= format_money @budget_category.overage_amount.abs %>
+                  <%= format_money @budget_category.vs_actual_money.abs %>
                   <span>left</span>
                 </dd>
               <% else %>
                 <dd class="text-gray-900 flex items-center gap-1 text-green-500 font-medium">
                   <%= lucide_icon "check-circle-2", class: "shrink-0 w-4 h-4 text-green-500" %>
-                  <%= format_money @budget_category.overage_amount.abs %>
+                  <%= format_money @budget_category.vs_actual_money.abs %>
                   <span>left</span>
                 </dd>
               <% end %>
@@ -61,7 +61,7 @@
 
             <div class="flex items-center justify-between text-sm">
               <dt class="text-gray-500">Budgeted</dt>
-              <dd class="text-gray-900 font-medium"><%= format_money @budget_category.budgeted_amount %></dd>
+              <dd class="text-gray-900 font-medium"><%= format_money @budget_category.budgeted_spending %></dd>
             </div>
           <% end %>
 

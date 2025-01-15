@@ -6,7 +6,7 @@ class BudgetCategory < ApplicationRecord
 
   validates :budget_id, uniqueness: { scope: :category_id }
 
-  monetize :budgeted_spending, :actual_spending, :vs_budgeted_spending
+  monetize :budgeted_spending, :actual_spending, :vs_actual
 
   class Group
     attr_reader :budget_category, :budget_subcategories
@@ -58,14 +58,14 @@ class BudgetCategory < ApplicationRecord
     unused_segment_id = "unused"
     overage_segment_id = "overage"
 
-    return [ { color: "#F0F0F0", amount: 1, id: unused_segment_id } ] unless actual_amount > 0
+    return [ { color: "#F0F0F0", amount: 1, id: unused_segment_id } ] unless actual_spending > 0
 
-    segments = [ { color: category.color, amount: actual_amount.amount, id: id } ]
+    segments = [ { color: category.color, amount: actual_spending, id: id } ]
 
-    if overage >= 0
-      segments.push({ color: "#EF4444", amount: overage.abs.amount, id: overage_segment_id })
+    if vs_actual > 0
+      segments.push({ color: "#EF4444", amount: vs_actual.abs, id: overage_segment_id })
     else
-      segments.push({ color: "#F0F0F0", amount: unspent.amount, id: unused_segment_id })
+      segments.push({ color: "#F0F0F0", amount: vs_actual, id: unused_segment_id })
     end
 
     segments

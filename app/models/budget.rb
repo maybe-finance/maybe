@@ -9,7 +9,7 @@ class Budget < ApplicationRecord
   validates :start_date, :end_date, uniqueness: { scope: :family_id }
 
   monetize :budgeted_spending, :expected_income, :allocated_spending,
-           :actual_spending, :unallocated_spending, :vs_budgeted_spending,
+           :actual_spending, :unallocated_spending, :vs_allocated, :vs_actual,
            :vs_expected_income, :estimated_spending, :estimated_income, :actual_income
 
   class << self
@@ -60,6 +60,10 @@ class Budget < ApplicationRecord
     budgeted_spending.present?
   end
 
+  def allocations_valid?
+    initialized? && !over_allocated? && allocated_spending > 0
+  end
+
   def estimated_spending
     family.budgeting_stats.avg_monthly_expenses
   end
@@ -74,6 +78,16 @@ class Budget < ApplicationRecord
 
   def unallocated_spending
     (budgeted_spending || 0) - allocated_spending
+  end
+
+  def vs_allocated
+    allocated_spending - budgeted_spending
+  end
+
+  def vs_allocated_percent
+    return 0 unless budgeted_spending > 0
+
+    (allocated_spending / budgeted_spending) * 100
   end
 
   def over_allocated?
@@ -150,11 +164,11 @@ class Budget < ApplicationRecord
     return [ { color: "#F0F0F0", amount: 1, id: unused_segment_id } ] unless initialized?
 
     segments = budget_categories.map do |bc|
-      { color: bc.category.color, amount: bc.actual_amount.amount, id: bc.id }
+      { color: bc.category.color, amount: bc.actual_spending, id: bc.id }
     end
 
-    if unspent >= 0
-      segments.push({ color: "#F0F0F0", amount: unspent.amount, id: unused_segment_id })
+    if vs_actual > 0
+      segments.push({ color: "#F0F0F0", amount: vs_actual, id: unused_segment_id })
     end
 
     segments

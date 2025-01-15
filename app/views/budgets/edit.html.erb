@@ -16,10 +16,10 @@
 
     <div class="mx-auto max-w-lg">
       <%= styled_form_with model: @budget, class: "space-y-3", data: { controller: "budget-form" } do |f| %>
-        <%= f.money_field :budgeted_amount, label: "Budgeted amount", required: true, disable_currency: true %>
+        <%= f.money_field :budgeted_spending, label: "Budgeted spending", required: true, disable_currency: true %>
         <%= f.money_field :expected_income, label: "Expected income", required: true, disable_currency: true %>
 
-        <% if @budget.expected_income_estimate && @budget.budgeted_amount_estimate %>
+        <% if @budget.estimated_income && @budget.estimated_spending %>
           <div class="border border-alpha-black-100 rounded-lg p-3 flex">
             <%= lucide_icon "sparkles", class: "w-5 h-5 text-gray-500 shrink-0" %>
             <div class="ml-2 space-y-1 text-sm">
@@ -31,9 +31,9 @@
 
             <div class="relative inline-block select-none ml-6">
               <%= check_box_tag :auto_fill, "1", params[:auto_fill].present?, class: "sr-only peer", data: { 
-                  action: "change->budget#toggleAutoFill", 
-                  budget_income_param: { key: "budget_expected_income", value: @budget.expected_income_estimate.amount }, 
-                  budget_amount_param: { key: "budget_budgeted_amount", value: @budget.budgeted_amount_estimate.amount } 
+                  action: "change->budget-form#toggleAutoFill", 
+                  budget_form_income_param: { key: "budget_expected_income", value: @budget.estimated_income }, 
+                  budget_form_spending_param: { key: "budget_budgeted_spending", value: @budget.estimated_spending } 
                 } %>
               <label for="auto_fill" class="maybe-switch"></label>
             </div>

@@ -4,14 +4,14 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   toggleAutoFill(e) {
     const expectedIncome = e.params.income;
-    const budgetedAmount = e.params.amount;
+    const budgetedSpending = e.params.spending;
 
     if (e.target.checked) {
       this.#fillField(expectedIncome.key, expectedIncome.value);
-      this.#fillField(budgetedAmount.key, budgetedAmount.value);
+      this.#fillField(budgetedSpending.key, budgetedSpending.value);
     } else {
       this.#clearField(expectedIncome.key);
-      this.#clearField(budgetedAmount.key);
+      this.#clearField(budgetedSpending.key);
     }
   }
 

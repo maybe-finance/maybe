@@ -7,16 +7,16 @@
 <div>
   <p class="text-sm font-medium text-gray-900"><%= budget_category.category.name %></p>
 
-  <% if budget_category.overage_amount > 0 %>
-    <p class="text-sm font-medium text-red-500"><%= format_money(budget_category.overage_amount) %> over</p>
-  <% elsif budget_category.overage_amount == 0 %>
-    <p class="text-sm font-medium text-orange-500"><%= format_money(budget_category.overage_amount) %> left</p>
+  <% if budget_category.over? %>
+    <p class="text-sm font-medium text-red-500"><%= format_money(budget_category.vs_actual) %> over</p>
+  <% elsif budget_category.vs_actual == 0 %>
+    <p class="text-sm font-medium text-orange-500"><%= format_money(budget_category.vs_actual) %> left</p>
   <% else %>
-    <p class="text-sm text-gray-500"><%= format_money(budget_category.overage_amount.abs) %> left</p>
+    <p class="text-sm text-gray-500"><%= format_money(budget_category.vs_actual.abs) %> left</p>
   <% end %>
 </div>
 
 <div class="ml-auto text-right">
-  <p class="text-sm font-medium text-gray-900"><%= format_money(budget_category.actual_amount) %></p>
-  <p class="text-sm text-gray-500">from <%= format_money(budget_category.budgeted_amount) %></p>
+  <p class="text-sm font-medium text-gray-900"><%= format_money(budget_category.actual_spending) %></p>
+  <p class="text-sm text-gray-500">from <%= format_money(budget_category.budgeted_spending) %></p>
 </div>

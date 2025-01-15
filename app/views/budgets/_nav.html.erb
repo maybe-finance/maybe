@@ -2,7 +2,7 @@
 
 <% steps = [
   { name: "Setup", path: edit_budget_path(budget), is_complete: budget.initialized?, step_number: 1 },
-  { name: "Categories", path: budget_budget_categories_path(budget), is_complete: budget.allocated?, step_number: 2 },
+  { name: "Categories", path: budget_budget_categories_path(budget), is_complete: budget.allocations_valid?, step_number: 2 },
 ] %>
 
 <ul class="flex items-center gap-2">
