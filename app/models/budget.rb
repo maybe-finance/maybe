@@ -8,13 +8,11 @@ class Budget < ApplicationRecord
   validates :start_date, :end_date, presence: true
   validates :start_date, :end_date, uniqueness: { scope: :family_id }
 
-  monetize :budgeted_amount, :expected_income, :allocated_amount
+  monetize :budgeted_spending, :expected_income, :allocated_spending,
+           :actual_spending, :unallocated_spending, :vs_budgeted_spending,
+           :vs_expected_income, :estimated_spending, :estimated_income, :actual_income
 
   class << self
-    def min_year_for_family(family)
-      family.oldest_entry_date.year
-    end
-
     def for_date(date)
       find_by(start_date: date.beginning_of_month, end_date: date.end_of_month)
     end
@@ -40,10 +38,18 @@ class Budget < ApplicationRecord
       budget_categories.find_or_create_by(
         category: category,
       ) do |bc|
-        bc.budgeted_amount = 0
+        bc.budgeted_spending = 0
         bc.currency = family.currency
       end
     end
+  end
+
+  def uncategorized_budget_category
+    budget_categories.build(
+      category: nil,
+      budgeted_spending: [ unallocated_spending, 0 ].max,
+      currency: family.currency
+    )
   end
 
   def name
@@ -51,88 +57,63 @@ class Budget < ApplicationRecord
   end
 
   def initialized?
-    budgeted_amount.present?
+    budgeted_spending.present?
   end
 
-  def allocated?
-    budget_categories.any?
+  def estimated_spending
+    family.budgeting_stats.avg_monthly_expenses
   end
 
-  def allocated_amount
-    budget_categories.sum(:budgeted_amount)
+  def actual_spending
+    budget_categories.sum(&:actual_spending)
   end
 
-  def unallocated_amount
-    (budgeted_amount_money || Money.new(0, currency)) - allocated_amount
+  def allocated_spending
+    budget_categories.sum(:budgeted_spending)
+  end
+
+  def unallocated_spending
+    (budgeted_spending || 0) - allocated_spending
   end
 
   def over_allocated?
-    unallocated_amount.amount < 0
+    budgeted_spending.present? && allocated_spending > budgeted_spending
   end
 
-  def allocated_percent
-    return 0 unless budgeted_amount > 0
-
-    (allocated_amount / budgeted_amount) * 100
+  def over?
+    vs_actual.positive?
   end
 
-  def utilization_percent
-    (actual_amount / budgeted_amount_money) * 100
+  def within?
+    vs_actual.negative? || vs_actual.zero?
   end
 
-  def over_budget?
-    false
+  def vs_actual
+    actual_spending - (budgeted_spending || 0)
   end
 
-  def actual_amount
-    budget_categories.sum(&:actual_amount)
+  def vs_actual_percent
+    return 0 unless budgeted_spending > 0
+
+    (actual_spending / budgeted_spending) * 100
+  end
+
+  def estimated_income
+    family.budgeting_stats.avg_monthly_income.abs
   end
 
   def actual_income
-    Money.new(family.entries.incomes.where(date: start_date..end_date).sum(:amount).abs || 0, currency)
+    family.entries.incomes.where(date: start_date..end_date).sum(:amount).abs
   end
 
-  def actual_expenses
-    Money.new(family.entries.expenses.where(date: start_date..end_date).sum(:amount).abs || 0, currency)
+  def vs_expected_income
+    actual_income - expected_income
   end
 
-  def remaining_income
-    expected_income_money - actual_income
-  end
+  def vs_expected_income_percent
+    return 0 unless expected_income > 0
 
-  def income_progress_percent
-    (actual_income / expected_income_money) * 100
-  end
-
-  def overage
-    actual_amount - (budgeted_amount_money || Money.new(0, currency))
-  end
-
-  def unspent
-    overage * -1
-  end
-
-  def exceeded_income?
-    false
-  end
-
-  def total_spending
-    Money.new(2000, currency)
-  end
-
-  def expected_income_estimate
-    income = family.budgeting_stats.avg_monthly_income.abs
-
-    return nil unless income.amount > 0
-
-    income
-  end
-
-  def budgeted_amount_estimate
-    expenses = family.budgeting_stats.avg_monthly_expenses
-    return nil unless expenses.amount > 0
-
-    expenses
+    (actual_income / expected_income) * 100
   end
 
   def current?
@@ -143,7 +124,7 @@ class Budget < ApplicationRecord
     prev_month_start_date = start_date - 1.month
     return nil if prev_month_start_date < family.oldest_entry_date
 
-    family.budgets.for_date(prev_month_start_date)
+    family.budgets.find_or_bootstrap(family, date: prev_month_start_date)
   end
 
   def next_budget
@@ -151,11 +132,15 @@ class Budget < ApplicationRecord
 
     next_start_date = start_date + 1.month
 
-    family.budgets.for_date(next_start_date)
+    family.budgets.find_or_bootstrap(family, date: next_start_date)
   end
 
-  def uncategorized_budget_category
-    budget_categories.build(category: nil, budgeted_amount: [ unallocated_amount.amount, 0 ].max, currency: family.currency)
+  def income_categories_with_totals
+    family.income_categories_with_totals(date: start_date)
+  end
+
+  def expense_categories_with_totals
+    family.expense_categories_with_totals(date: start_date)
   end
 
   def to_donut_segments_json

@@ -163,7 +163,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_10_012347) do
   create_table "budget_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "budget_id", null: false
     t.uuid "category_id", null: false
-    t.decimal "budgeted_amount", precision: 19, scale: 4, null: false
+    t.decimal "budgeted_spending", precision: 19, scale: 4, null: false
     t.string "currency", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -176,7 +176,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_10_012347) do
     t.uuid "family_id", null: false
     t.date "start_date", null: false
     t.date "end_date", null: false
-    t.decimal "budgeted_amount", precision: 19, scale: 4
+    t.decimal "budgeted_spending", precision: 19, scale: 4
     t.decimal "expected_income", precision: 19, scale: 4
     t.string "currency", null: false
     t.datetime "created_at", null: false

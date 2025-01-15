@@ -4,7 +4,7 @@ class CreateBudgets < ActiveRecord::Migration[7.2]
       t.references :family, null: false, foreign_key: true, type: :uuid
       t.date :start_date, null: false
       t.date :end_date, null: false
-      t.decimal :budgeted_amount, precision: 19, scale: 4
+      t.decimal :budgeted_spending, precision: 19, scale: 4
       t.decimal :expected_income, precision: 19, scale: 4
       t.string :currency, null: false
       t.timestamps
