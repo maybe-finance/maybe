@@ -1,0 +1,47 @@
+<%= content_for :header_nav do %>
+  <%= render "budgets/budget_nav", budget: @budget %>
+<% end %>
+
+<%= content_for :previous_path, budget_path(@budget) %>
+<%= content_for :cancel_path, budget_path(@budget) %>
+
+<div>
+  <div class="space-y-4">
+    <div class="text-center space-y-2">
+      <h1 class="text-3xl text-gray-900 font-medium">Setup your budget</h1>
+      <p class="text-gray-500 text-sm max-w-sm mx-auto">
+        Enter your monthly earnings and planned spending below to setup your budget.
+      </p>
+    </div>
+
+    <div class="mx-auto max-w-lg">
+      <%= styled_form_with model: @budget, class: "space-y-3", data: { controller: "budget-form" } do |f| %>
+        <%= f.money_field :budgeted_spending, label: "Budgeted spending", required: true, disable_currency: true %>
+        <%= f.money_field :expected_income, label: "Expected income", required: true, disable_currency: true %>
+
+        <% if @budget.estimated_income && @budget.estimated_spending %>
+          <div class="border border-alpha-black-100 rounded-lg p-3 flex">
+            <%= lucide_icon "sparkles", class: "w-5 h-5 text-gray-500 shrink-0" %>
+            <div class="ml-2 space-y-1 text-sm">
+              <h4 class="text-gray-900">Autosuggest income & spending budget</h4>
+              <p class="text-gray-500">
+                This will be based on transaction history. AI can make mistakes, verify before continuing.
+              </p>
+            </div>
+
+            <div class="relative inline-block select-none ml-6">
+              <%= check_box_tag :auto_fill, "1", params[:auto_fill].present?, class: "sr-only peer", data: {
+                  action: "change->budget-form#toggleAutoFill",
+                  budget_form_income_param: { key: "budget_expected_income", value: @budget.estimated_income },
+                  budget_form_spending_param: { key: "budget_budgeted_spending", value: @budget.estimated_spending }
+                } %>
+              <label for="auto_fill" class="maybe-switch"></label>
+            </div>
+          </div>
+        <% end %>
+
+        <%= f.submit "Continue", class: "btn btn--primary w-full" %>
+      <% end %>
+    </div>
+  </div>
+</div>

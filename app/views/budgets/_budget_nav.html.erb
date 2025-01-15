@@ -1,0 +1,37 @@
+<%# locals: (budget:) %>
+
+<% steps = [
+  { name: "Setup", path: edit_budget_path(budget), is_complete: budget.initialized?, step_number: 1 },
+  { name: "Categories", path: budget_budget_categories_path(budget), is_complete: budget.allocations_valid?, step_number: 2 },
+] %>
+
+<ul class="flex items-center gap-2">
+  <% steps.each_with_index do |step, idx| %>
+    <li class="flex items-center gap-2 group">
+      <% is_current = request.path == step[:path] %>
+
+      <% text_class = if is_current
+                  "text-gray-900"
+                else
+                  step[:is_complete] ? "text-green-600" : "text-gray-500"
+                end %>
+      <% step_class = if is_current
+                  "bg-gray-900 text-white"
+                else
+                  step[:is_complete] ? "bg-green-600/10 border-alpha-black-25" : "bg-gray-50"
+                end %>
+
+      <%= link_to step[:path], class: "flex items-center gap-3" do %>
+        <div class="flex items-center gap-2 text-sm font-medium <%= text_class %>">
+          <span class="<%= step_class %> w-7 h-7 rounded-full shrink-0 inline-flex items-center justify-center border border-transparent">
+            <%= step[:is_complete] && !is_current ? lucide_icon("check", class: "w-4 h-4") : idx + 1 %>
+          </span>
+
+          <span><%= step[:name] %></span>
+        </div>
+      <% end %>
+
+      <div class="h-px bg-alpha-black-200 w-12 group-last:hidden"></div>
+    </li>
+  <% end %>
+</ul>

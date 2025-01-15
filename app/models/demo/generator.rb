@@ -87,18 +87,12 @@ class Demo::Generator
     end
 
     def create_categories!
-      categories = [ "Income", "Food & Drink", "Entertainment", "Travel",
-                    "Personal Care", "General Services", "Auto & Transport",
-                    "Rent & Utilities", "Home Improvement", "Shopping" ]
-
-      categories.each do |category|
-        family.categories.create!(name: category, color: COLORS.sample)
-      end
+      family.categories.bootstrap_defaults
 
       food = family.categories.find_by(name: "Food & Drink")
-      family.categories.create!(name: "Restaurants", parent: food)
-      family.categories.create!(name: "Groceries", parent: food)
-      family.categories.create!(name: "Alcohol & Bars", parent: food)
+      family.categories.create!(name: "Restaurants", parent: food, color: COLORS.sample, classification: "expense")
+      family.categories.create!(name: "Groceries", parent: food, color: COLORS.sample, classification: "expense")
+      family.categories.create!(name: "Alcohol & Bars", parent: food, color: COLORS.sample, classification: "expense")
     end
 
     def create_merchants!
@@ -362,17 +356,17 @@ class Demo::Generator
         "McDonald's" => "Food & Drink",
         "Target" => "Shopping",
         "Costco" => "Food & Drink",
-        "Home Depot" => "Home Improvement",
-        "Shell" => "Auto & Transport",
+        "Home Depot" => "Housing",
+        "Shell" => "Transportation",
         "Whole Foods" => "Food & Drink",
-        "Walgreens" => "Personal Care",
+        "Walgreens" => "Healthcare",
         "Nike" => "Shopping",
-        "Uber" => "Auto & Transport",
-        "Netflix" => "Entertainment",
-        "Spotify" => "Entertainment",
-        "Delta Airlines" => "Travel",
-        "Airbnb" => "Travel",
-        "Sephora" => "Personal Care"
+        "Uber" => "Transportation",
+        "Netflix" => "Subscriptions",
+        "Spotify" => "Subscriptions",
+        "Delta Airlines" => "Transportation",
+        "Airbnb" => "Housing",
+        "Sephora" => "Shopping"
       }
 
       categories.find { |c| c.name == mapping[merchant.name] }

@@ -8,6 +8,7 @@ class TransfersController < ApplicationController
   end
 
   def show
+    @categories = Current.family.categories.expenses
   end
 
   def create
@@ -37,7 +38,11 @@ class TransfersController < ApplicationController
   end
 
   def update
-    @transfer.update!(transfer_update_params)
+    Transfer.transaction do
+      @transfer.update!(transfer_update_params.except(:category_id))
+      @transfer.outflow_transaction.update!(category_id: transfer_update_params[:category_id])
+    end
+
     respond_to do |format|
       format.html { redirect_back_or_to transactions_url, notice: t(".success") }
       format.turbo_stream
@@ -61,6 +66,6 @@ class TransfersController < ApplicationController
     end
 
     def transfer_update_params
-      params.require(:transfer).permit(:notes, :status)
+      params.require(:transfer).permit(:notes, :status, :category_id)
     end
 end

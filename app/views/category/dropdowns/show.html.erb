@@ -41,12 +41,14 @@
         <% end %>
       <% end %>
 
-      <%= link_to new_account_transaction_transfer_match_path(@transaction.entry),
+      <% unless @transaction.transfer? %>
+        <%= link_to new_account_transaction_transfer_match_path(@transaction.entry),
                   class: "flex text-sm font-medium items-center gap-2 text-gray-500 w-full rounded-lg p-2 hover:bg-gray-100",
                   data: { turbo_frame: "modal" } do %>
-        <%= lucide_icon "refresh-cw", class: "w-5 h-5" %>
+          <%= lucide_icon "refresh-cw", class: "w-5 h-5" %>
 
-        <p>Match transfer/payment</p>
+          <p>Match transfer/payment</p>
+        <% end %>
       <% end %>
 
       <div class="flex text-sm font-medium items-center gap-2 text-gray-500 w-full rounded-lg p-2">
