@@ -74,7 +74,7 @@ class Provider::Plaid
       client_name: "Maybe Finance",
       products: [ get_primary_product(accountable_type) ],
       additional_consented_products: get_additional_consented_products(accountable_type),
-      country_codes: [ "US" ],
+      country_codes: [ "US", "CA" ],
       language: "en",
       webhook: webhooks_url,
       redirect_uri: redirect_url,
