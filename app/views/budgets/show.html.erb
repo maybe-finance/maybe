@@ -1,0 +1,67 @@
+<div class="pb-12">
+  <%= render "budgets/budget_header",
+            budget: @budget,
+            previous_budget: @previous_budget,
+            next_budget: @next_budget,
+            latest_budget: @latest_budget %>
+
+  <div class="flex items-start gap-4">
+    <div class="w-[300px] space-y-4">
+      <div class="h-[300px] bg-white rounded-xl shadow-xs p-8 border border-gray-100">
+        <% if @budget.available_to_allocate.negative? %>
+          <%= render "budgets/over_allocation_warning", budget: @budget %>
+        <% else %>
+          <%= render "budgets/budget_donut", budget: @budget %>
+        <% end %>
+      </div>
+
+      <div>
+        <% if @budget.initialized? && @budget.available_to_allocate.positive? %>
+          <div class="flex gap-2 mb-2 rounded-lg bg-alpha-black-25 p-1">
+            <% base_classes = "rounded-md px-2 py-1 flex-1 text-center" %>
+            <% selected_tab = params[:tab].presence || "budgeted" %>
+
+            <%= link_to "Budgeted",
+                        budget_path(@budget, tab: "budgeted"),
+                        class: class_names(
+                          base_classes,
+                          "bg-white shadow-xs text-gray-900": selected_tab == "budgeted",
+                          "text-gray-500": selected_tab != "budgeted"
+                        ) %>
+
+            <%= link_to "Actual",
+                        budget_path(@budget, tab: "actuals"),
+                        class: class_names(
+                          base_classes,
+                          "bg-white shadow-xs text-gray-900": selected_tab == "actuals",
+                          "text-gray-500": selected_tab != "actuals"
+                        ) %>
+          </div>
+
+          <div class="bg-white rounded-xl shadow-xs border border-gray-100">
+            <%= render selected_tab == "budgeted" ? "budgets/budgeted_summary" : "budgets/actuals_summary", budget: @budget %>
+          </div>
+        <% else %>
+          <div class="bg-white rounded-xl shadow-xs border border-gray-100">
+            <%= render "budgets/actuals_summary", budget: @budget %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="grow bg-white rounded-xl shadow-xs p-4 border border-gray-100">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-medium">Categories</h2>
+
+        <%= link_to budget_budget_categories_path(@budget), class: "btn btn--secondary flex items-center gap-2" do %>
+          <%= icon "settings-2", color: "gray" %>
+          <span>Edit</span>
+        <% end %>
+      </div>
+
+      <div class="bg-gray-25 rounded-xl p-1">
+        <%= render "budgets/budget_categories", budget: @budget %>
+      </div>
+    </div>
+  </div>
+</div>

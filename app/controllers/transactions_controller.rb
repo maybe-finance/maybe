@@ -3,7 +3,7 @@ class TransactionsController < ApplicationController
 
   def index
     @q = search_params
-    search_query = Current.family.transactions.search(@q).includes(:entryable).reverse_chronological
+    search_query = Current.family.transactions.search(@q).reverse_chronological
     @pagy, @transaction_entries = pagy(search_query, limit: params[:per_page] || "50")
 
     totals_query = search_query.incomes_and_expenses

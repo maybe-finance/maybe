@@ -1,0 +1,29 @@
+<%# locals: (budget_category:) %>
+
+<% currency = Money::Currency.new(budget_category.budget.currency) %>
+
+<div class="w-full flex gap-3">
+  <div class="w-1 h-3 rounded-xl mt-1" style="background-color: <%= budget_category.category.color %>"></div>
+
+  <div class="text-sm mr-3">
+    <p class="text-gray-900 font-medium mb-0.5"><%= budget_category.category.name %></p>
+
+    <p class="text-gray-500"><%= format_money(budget_category.category.avg_monthly_total, precision: 0) %>/m average</p>
+  </div>
+
+  <div class="ml-auto">
+    <%= form_with model: [budget_category.budget, budget_category], data: { controller: "auto-submit-form", auto_submit_form_trigger_event_value: "blur", turbo_frame: :_top } do |f| %>
+      <div class="form-field w-[120px]">
+        <div class="flex items-center">
+          <span class="text-gray-500 text-sm mr-2"><%= currency.symbol %></span>
+          <%= f.number_field :budgeted_spending,
+                            class: "form-field__input text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
+                            placeholder: "0",
+                            step: currency.step,
+                            min: 0,
+                            data: { auto_submit_form_target: "auto" } %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+<%# locals: (budget_category:) %>
+
+<%= tag.div data: {
+  controller: "donut-chart",
+  donut_chart_segments_value: budget_category.to_donut_segments_json,
+  donut_chart_segment_height_value: 5,
+  donut_chart_segment_opacity_value: 0.2
+}, class: "relative h-full" do %>
+  <div data-donut-chart-target="chartContainer" class="absolute inset-0 pointer-events-none"></div>
+
+  <div data-donut-chart-target="contentContainer" class="flex justify-center items-center h-full p-1">
+    <div data-donut-chart-target="defaultContent" class="h-full w-full rounded-full flex flex-col items-center justify-center" style="background-color: <%= hex_with_alpha(budget_category.category.color, 0.05) %>">
+      <% if budget_category.category.lucide_icon %>
+        <%= lucide_icon budget_category.category.lucide_icon, class: "w-4 h-4 shrink-0", style: "color: #{budget_category.category.color}" %>
+      <% else %>
+        <span class="text-sm uppercase" style="color: <%= budget_category.category.color %>">
+          <%= budget_category.category.name.first.upcase %>
+        </span>
+      <% end %>
+    </div>
+  </div>
+<% end %>
