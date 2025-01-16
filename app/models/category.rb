@@ -61,6 +61,7 @@ class Category < ApplicationRecord
       new(
         name: "Uncategorized",
         color: UNCATEGORIZED_COLOR,
+        lucide_icon: "circle-dashed"
       )
     end
 

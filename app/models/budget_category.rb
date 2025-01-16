@@ -28,6 +28,19 @@ class BudgetCategory < ApplicationRecord
     end
   end
 
+  class << self
+    def uncategorized
+      new(
+        id: Digest::UUID.uuid_v5(Digest::UUID::URL_NAMESPACE, "uncategorized"),
+        category: nil,
+      )
+    end
+  end
+
+  def initialized?
+    budget.initialized?
+  end
+
   def category
     super || budget.family.categories.uncategorized
   end

@@ -5,8 +5,19 @@ class BudgetCategoriesController < ApplicationController
   end
 
   def show
-    @budget_category = Current.family.budget_categories.find(params[:id])
-    @transactions = @budget_category.category.transactions.includes(:entry).where(entry: { date: @budget_category.budget.start_date..@budget_category.budget.end_date }).order(date: :desc)
+    @budget = Current.family.budgets.find(params[:budget_id])
+
+    @recent_transactions = @budget.entries
+
+    if params[:id] == BudgetCategory.uncategorized.id
+      @budget_category = @budget.uncategorized_budget_category
+      @recent_transactions = @recent_transactions.where(account_transactions: { category_id: nil })
+    else
+      @budget_category = Current.family.budget_categories.find(params[:id])
+      @recent_transactions = @recent_transactions.where(account_transactions: { category_id: @budget_category.category.id })
+    end
+
+    @recent_transactions = @recent_transactions.order("account_entries.date DESC, ABS(account_entries.amount) DESC").take(3)
   end
 
   def update

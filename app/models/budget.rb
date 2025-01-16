@@ -45,11 +45,14 @@ class Budget < ApplicationRecord
   end
 
   def uncategorized_budget_category
-    budget_categories.build(
-      category: nil,
-      budgeted_spending: [ available_to_allocate, 0 ].max,
-      currency: family.currency
-    )
+    budget_categories.uncategorized.tap do |bc|
+      bc.budgeted_spending = [ available_to_allocate, 0 ].max
+      bc.currency = family.currency
+    end
+  end
+
+  def entries
+    family.entries.incomes_and_expenses.where(date: start_date..end_date)
   end
 
   def name
@@ -142,7 +145,7 @@ class Budget < ApplicationRecord
   end
 
   def available_to_allocate
-    budgeted_spending - allocated_spending
+    (budgeted_spending || 0) - allocated_spending
   end
 
   def allocations_valid?

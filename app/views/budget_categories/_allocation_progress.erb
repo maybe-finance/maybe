@@ -1,0 +1,26 @@
+<%# locals: (budget:) %>
+
+<div class="space-y-2 mb-6">
+  <div class="flex items-center gap-2">
+    <div class="rounded-full w-1.5 h-1.5 <%= budget.allocated_spending > 0 ? "bg-gray-900" : "bg-gray-100" %>"></div>
+
+    <p class="text-gray-500 text-sm">
+      <%= number_to_percentage(budget.allocated_percent, precision: 0) %> set
+    </p>
+
+    <p class="ml-auto text-sm space-x-1">
+      <span class="text-gray-900"><%= format_money(budget.allocated_spending_money) %></span>
+      <span class="text-gray-500"> / </span>
+      <span class="text-gray-500"><%= format_money(budget.budgeted_spending_money) %></span>
+    </p>
+  </div>
+
+  <div class="relative h-1.5 rounded-2xl bg-gray-100">
+    <div class="absolute inset-0 bg-gray-900 rounded-2xl" style="width: <%= budget.allocated_percent %>%;"></div>
+  </div>
+
+  <div class="text-sm">
+    <span class="text-gray-900"><%= format_money(budget.available_to_allocate_money) %></span>
+    <span class="text-gray-500">left to allocate</span>
+  </div>
+</div>

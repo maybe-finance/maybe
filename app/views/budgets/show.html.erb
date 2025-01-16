@@ -20,7 +20,6 @@
           <div class="flex gap-2 mb-2 rounded-lg bg-alpha-black-25 p-1">
             <% base_classes = "rounded-md px-2 py-1 flex-1 text-center" %>
             <% selected_tab = params[:tab].presence || "budgeted" %>
-            <% active_partial = selected_tab == "budgeted" ? "budgets/budgeted_summary" : "budgets/actuals_summary" %>
 
             <%= link_to "Budgeted",
                         budget_path(@budget, tab: "budgeted"),
@@ -40,7 +39,7 @@
           </div>
 
           <div class="bg-white rounded-xl shadow-xs border border-gray-100">
-            <%= render active_partial, budget: @budget %>
+            <%= render selected_tab == "budgeted" ? "budgets/budgeted_summary" : "budgets/actuals_summary", budget: @budget %>
           </div>
         <% else %>
           <div class="bg-white rounded-xl shadow-xs border border-gray-100">
@@ -51,7 +50,14 @@
     </div>
 
     <div class="grow bg-white rounded-xl shadow-xs p-4 border border-gray-100">
-      <h2 class="text-lg font-medium mb-4">Categories</h2>
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-medium">Categories</h2>
+
+        <%= link_to budget_budget_categories_path(@budget), class: "btn btn--secondary flex items-center gap-2" do %>
+          <%= icon "settings-2", color: "gray" %>
+          <span>Edit</span>
+        <% end %>
+      </div>
 
       <div class="bg-gray-25 rounded-xl p-1">
         <%= render "budgets/budget_categories", budget: @budget %>

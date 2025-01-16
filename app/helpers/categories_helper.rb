@@ -1,10 +1,4 @@
 module CategoriesHelper
-  def null_category
-    Category.new \
-      name: "Uncategorized",
-      color: Category::UNCATEGORIZED_COLOR
-  end
-
   def transfer_category
     Category.new \
       name: "Transfer",
@@ -26,6 +20,6 @@ module CategoriesHelper
   end
 
   def family_categories
-    [ null_category ].concat(Current.family.categories.alphabetically)
+    [ Category.uncategorized ].concat(Current.family.categories.alphabetically)
   end
 end
