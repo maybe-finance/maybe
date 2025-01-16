@@ -18,7 +18,7 @@ class BudgetCategory < ApplicationRecord
       top_level_categories = budget_categories.select { |budget_category| budget_category.category.parent_id.nil? }
       top_level_categories.map do |top_level_category|
         subcategories = budget_categories.select { |bc| bc.category.parent_id == top_level_category.category_id && top_level_category.category_id.present? }
-        new(top_level_category, subcategories)
+        new(top_level_category, subcategories.sort_by { |subcategory| subcategory.category.name })
       end.sort_by { |group| group.category.name }
     end
 
