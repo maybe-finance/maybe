@@ -45,6 +45,10 @@ class BudgetCategory < ApplicationRecord
     super || budget.family.categories.uncategorized
   end
 
+  def subcategory?
+    category.parent_id.present?
+  end
+
   def actual_spending
     category.month_total(date: budget.start_date)
   end

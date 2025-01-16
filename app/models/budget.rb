@@ -112,7 +112,7 @@ class Budget < ApplicationRecord
   end
 
   def actual_spending
-    budget_categories.sum(&:actual_spending)
+    budget_categories.reject(&:subcategory?).sum(&:actual_spending)
   end
 
   def available_to_spend

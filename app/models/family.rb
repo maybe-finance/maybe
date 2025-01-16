@@ -195,10 +195,6 @@ class Family < ApplicationRecord
     entries.order(:date).first&.date || Date.current
   end
 
-  def avg_uncategorized_monthly_spend
-    Money.new(0, currency)
-  end
-
   private
     CategoriesWithTotals = Struct.new(:total_money, :category_totals, keyword_init: true)
     CategoryWithStats = Struct.new(:category, :amount_money, :percentage, keyword_init: true)

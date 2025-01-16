@@ -35,7 +35,7 @@
     <h3 class="text-sm text-gray-500 mb-2">Expenses</h3>
 
     <% expense_totals = budget.expense_categories_with_totals %>
-    <% expense_categories = expense_totals.category_totals.reject { |ct| ct.amount_money.zero? }.sort_by { |ct| ct.percentage }.reverse %>
+    <% expense_categories = expense_totals.category_totals.reject { |ct| ct.amount_money.zero? || ct.category.subcategory? }.sort_by { |ct| ct.percentage }.reverse %>
 
     <span class="inline-block mb-2 text-xl font-medium text-gray-900"><%= format_money(expense_totals.total_money) %></span>
 

@@ -27,104 +27,153 @@ class CategoryStats
     totals_data.each_with_object(by_classification) do |(category_id, totals), result|
       totals.each do |t|
         next unless t.month == date.month && t.year == date.year
-        result[t.classification][category_id] ||= 0
-        result[t.classification][category_id] += t.amount.abs
+        result[t.classification][category_id] ||= { amount: 0, subcategory: t.subcategory? }
+        result[t.classification][category_id][:amount] += t.amount.abs
       end
     end
-
-    income_totals = by_classification["income"]
-    expense_totals = by_classification["expense"]
 
     # Calculate percentages for each group
     category_totals = []
 
     [ "income", "expense" ].each do |classification|
       totals = by_classification[classification]
-      total_amount = totals.values.sum
+
+      # Only include non-subcategory amounts in the total for percentage calculations
+      total_amount = totals.sum do |_, data|
+        data[:subcategory] ? 0 : data[:amount]
+      end
+
       next if total_amount.zero?
 
-      totals.each do |category_id, amount|
+      totals.each do |category_id, data|
+        percentage = (data[:amount].to_f / total_amount * 100).round(1)
+
         category_totals << CategoryTotal.new(
           category_id: category_id,
-          amount: amount,
-          percentage: (amount.to_f / total_amount * 100).round(1),
+          amount: data[:amount],
+          percentage: percentage,
           classification: classification,
-          currency: family.currency
+          currency: family.currency,
+          subcategory?: data[:subcategory]
         )
       end
     end
 
+    # Calculate totals based on non-subcategory amounts only
+    total_income = category_totals
+      .select { |ct| ct.classification == "income" && !ct.subcategory? }
+      .sum(&:amount)
+
+    total_expense = category_totals
+      .select { |ct| ct.classification == "expense" && !ct.subcategory? }
+      .sum(&:amount)
+
     CategoryTotals.new(
-      total_income: income_totals.values.sum,
-      total_expense: expense_totals.values.sum,
+      total_income: total_income,
+      total_expense: total_expense,
       category_totals: category_totals
     )
   end
 
-  # private
-  Totals = Struct.new(:month, :year, :amount, :classification, :currency, keyword_init: true)
-  Stats = Struct.new(:avg, :median, :currency, keyword_init: true)
-  CategoryTotals = Struct.new(:total_income, :total_expense, :category_totals, keyword_init: true)
-  CategoryTotal = Struct.new(:category_id, :amount, :percentage, :classification, :currency, keyword_init: true)
+  private
+    Totals = Struct.new(:month, :year, :amount, :classification, :currency, :subcategory?, keyword_init: true)
+    Stats = Struct.new(:avg, :median, :currency, keyword_init: true)
+    CategoryTotals = Struct.new(:total_income, :total_expense, :category_totals, keyword_init: true)
+    CategoryTotal = Struct.new(:category_id, :amount, :percentage, :classification, :currency, :subcategory?, keyword_init: true)
 
-  def statistics_data
-    @statistics_data ||= begin
-      stats = Category
-                .select(
-                  "mtq.category_id as id",
-                  "AVG(mtq.total) as avg",
-                  "PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY mtq.total) as median"
-                )
-                .from(monthly_totals_query, :mtq)
-                .group("mtq.category_id")
+    def statistics_data
+      @statistics_data ||= begin
+        stats = totals_data.each_with_object({ nil => Stats.new(avg: 0, median: 0) }) do |(category_id, totals), hash|
+          next if totals.empty?
 
-      stats.each_with_object({ nil => Stats.new(avg: 0, median: 0) }) do |row, hash|
-        hash[row.id] = Stats.new(
-          avg: row.avg.to_i,
-          median: row.median.to_i,
-          currency: family.currency
-        )
-      end
-    end
-  end
-
-  def totals_data
-    @totals_data ||= begin
-      totals = monthly_totals_query.each_with_object({ nil => [] }) do |row, hash|
-        hash[row.category_id] ||= []
-        hash[row.category_id] << Totals.new(
-          month: row.date.month,
-          year: row.date.year,
-          amount: row.total.to_i,
-          classification: row.classification,
-          currency: family.currency
-        )
-      end
-
-      # Ensure we have a default empty array for nil category, which represents "Uncategorized"
-      totals[nil] ||= []
-      totals
-    end
-  end
-
-  def monthly_totals_query
-    income_expense_classification = Arel.sql("
-      CASE WHEN categories.id IS NULL THEN
-        CASE WHEN account_entries.amount < 0 THEN 'income' ELSE 'expense' END
-      ELSE categories.classification
-      END
-    ")
-
-    family.entries
-          .incomes_and_expenses
-          .select(
-            "categories.id as category_id",
-            income_expense_classification,
-            "date_trunc('month', account_entries.date) as date",
-            "SUM(account_entries.amount) as total"
+          amounts = totals.map(&:amount)
+          hash[category_id] = Stats.new(
+            avg: (amounts.sum.to_f / amounts.size).round,
+            median: calculate_median(amounts),
+            currency: family.currency
           )
-          .joins("LEFT JOIN categories ON categories.id = account_transactions.category_id")
-          .group(Arel.sql("categories.id, #{income_expense_classification}, date_trunc('month', account_entries.date)"))
-          .order(Arel.sql("date_trunc('month', account_entries.date) DESC"))
-  end
+        end
+      end
+    end
+
+    def totals_data
+      @totals_data ||= begin
+        totals = monthly_totals_query.each_with_object({ nil => [] }) do |row, hash|
+          hash[row.category_id] ||= []
+          existing_total = hash[row.category_id].find { |t| t.month == row.date.month && t.year == row.date.year }
+
+          if existing_total
+            existing_total.amount += row.total.to_i
+          else
+            hash[row.category_id] << Totals.new(
+              month: row.date.month,
+              year: row.date.year,
+              amount: row.total.to_i,
+              classification: row.classification,
+              currency: family.currency,
+              subcategory?: row.parent_category_id.present?
+            )
+          end
+
+          # If category is a parent, its total includes its own transactions + sum(child category transactions)
+          if row.parent_category_id
+            hash[row.parent_category_id] ||= []
+
+            existing_parent_total = hash[row.parent_category_id].find { |t| t.month == row.date.month && t.year == row.date.year }
+
+            if existing_parent_total
+              existing_parent_total.amount += row.total.to_i
+            else
+              hash[row.parent_category_id] << Totals.new(
+                month: row.date.month,
+                year: row.date.year,
+                amount: row.total.to_i,
+                classification: row.classification,
+                currency: family.currency,
+                subcategory?: false
+              )
+            end
+          end
+        end
+
+        # Ensure we have a default empty array for nil category, which represents "Uncategorized"
+        totals[nil] ||= []
+        totals
+      end
+    end
+
+    def monthly_totals_query
+      income_expense_classification = Arel.sql("
+        CASE WHEN categories.id IS NULL THEN
+          CASE WHEN account_entries.amount < 0 THEN 'income' ELSE 'expense' END
+        ELSE categories.classification
+        END
+      ")
+
+      family.entries
+            .incomes_and_expenses
+            .select(
+              "categories.id as category_id",
+              "categories.parent_id as parent_category_id",
+              income_expense_classification,
+              "date_trunc('month', account_entries.date) as date",
+              "SUM(account_entries.amount) as total"
+            )
+            .joins("LEFT JOIN categories ON categories.id = account_transactions.category_id")
+            .group(Arel.sql("categories.id, categories.parent_id, #{income_expense_classification}, date_trunc('month', account_entries.date)"))
+            .order(Arel.sql("date_trunc('month', account_entries.date) DESC"))
+    end
+
+
+    def calculate_median(numbers)
+      return 0 if numbers.empty?
+
+      sorted = numbers.sort
+      mid = sorted.size / 2
+      if sorted.size.odd?
+        sorted[mid]
+      else
+        ((sorted[mid-1] + sorted[mid]) / 2.0).round
+      end
+    end
 end
