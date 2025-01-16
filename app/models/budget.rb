@@ -139,7 +139,7 @@ class Budget < ApplicationRecord
   end
 
   def allocated_percent
-    return 0 unless budgeted_spending > 0
+    return 0 unless budgeted_spending && budgeted_spending > 0
 
     (allocated_spending / budgeted_spending.to_f) * 100
   end

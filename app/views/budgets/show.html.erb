@@ -53,9 +53,11 @@
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-lg font-medium">Categories</h2>
 
-        <%= link_to budget_budget_categories_path(@budget), class: "btn btn--secondary flex items-center gap-2" do %>
-          <%= icon "settings-2", color: "gray" %>
-          <span>Edit</span>
+        <% if @budget.initialized? %>
+          <%= link_to budget_budget_categories_path(@budget), class: "btn btn--secondary flex items-center gap-2" do %>
+            <%= icon "settings-2", color: "gray" %>
+            <span>Edit</span>
+          <% end %>
         <% end %>
       </div>
 
