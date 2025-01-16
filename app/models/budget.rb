@@ -10,7 +10,7 @@ class Budget < ApplicationRecord
 
   monetize :budgeted_spending, :expected_income, :allocated_spending,
            :actual_spending, :available_to_spend, :available_to_allocate,
-           :estimated_spending, :estimated_income, :actual_income
+           :estimated_spending, :estimated_income, :actual_income, :remaining_expected_income
 
   class << self
     def for_date(date)
@@ -19,12 +19,13 @@ class Budget < ApplicationRecord
 
     def find_or_bootstrap(family, date: Date.current)
       Budget.transaction do
-        budget = Budget.find_or_create_by(
+        budget = Budget.find_or_create_by!(
           family: family,
           start_date: date.beginning_of_month,
-          end_date: date.end_of_month,
-          currency: family.currency
-        )
+          end_date: date.end_of_month
+        ) do |b|
+          b.currency = family.currency
+        end
 
         budget.sync_budget_categories
 

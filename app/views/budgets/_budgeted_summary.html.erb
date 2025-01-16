@@ -22,9 +22,9 @@
         <p class="text-gray-500"><%= format_money(budget.actual_income_money) %> earned</p>
         <p class="font-medium">
           <% if budget.remaining_expected_income.negative? %>
-            <span class="text-green-500"><%= format_money(budget.remaining_expected_income.abs) %> over</span>
+            <span class="text-green-500"><%= format_money(budget.remaining_expected_income_money.abs) %> over</span>
           <% else %>
-            <span class="text-gray-900"><%= format_money(budget.remaining_expected_income) %> left</span>
+            <span class="text-gray-900"><%= format_money(budget.remaining_expected_income_money) %> left</span>
           <% end %>
         </p>
       </div>
