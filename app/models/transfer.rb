@@ -7,6 +7,8 @@ class Transfer < ApplicationRecord
   validate :transfer_has_different_accounts
   validate :transfer_has_opposite_amounts
   validate :transfer_within_date_range
+  validate :transfer_has_same_family
+  validate :inflow_on_or_after_outflow
 
   class << self
     def from_accounts(from_account:, to_account:, date:, amount:)
@@ -42,7 +44,10 @@ class Transfer < ApplicationRecord
     end
 
     def auto_match_for_account(account)
-      matches = Account::Entry.from("account_entries inflow_candidates")
+      matches = Account::Entry.select([
+        "inflow_candidates.entryable_id as inflow_transaction_id",
+        "outflow_candidates.entryable_id as outflow_transaction_id"
+      ]).from("account_entries inflow_candidates")
         .joins("
           JOIN account_entries outflow_candidates ON (
             inflow_candidates.amount < 0 AND
@@ -55,21 +60,21 @@ class Transfer < ApplicationRecord
           )
         ").joins("
           LEFT JOIN transfers existing_transfers ON (
-            (existing_transfers.inflow_transaction_id = inflow_candidates.entryable_id AND
-             existing_transfers.outflow_transaction_id = outflow_candidates.entryable_id) OR
-            (existing_transfers.inflow_transaction_id = inflow_candidates.entryable_id) OR
-            (existing_transfers.outflow_transaction_id = outflow_candidates.entryable_id)
+            existing_transfers.inflow_transaction_id = inflow_candidates.entryable_id OR
+            existing_transfers.outflow_transaction_id = outflow_candidates.entryable_id
           )
         ")
+        .joins("JOIN accounts inflow_accounts ON inflow_accounts.id = inflow_candidates.account_id")
+        .joins("JOIN accounts outflow_accounts ON outflow_accounts.id = outflow_candidates.account_id")
+        .where("inflow_accounts.family_id = ? AND outflow_accounts.family_id = ?", account.family_id, account.family_id)
+        .where("inflow_candidates.entryable_type = 'Account::Transaction' AND outflow_candidates.entryable_type = 'Account::Transaction'")
         .where(existing_transfers: { id: nil })
-        .where("inflow_candidates.account_id = ? AND outflow_candidates.account_id = ?", account.id, account.id)
-        .pluck(:inflow_transaction_id, :outflow_transaction_id)
 
       Transfer.transaction do
-        matches.each do |inflow_transaction_id, outflow_transaction_id|
+        matches.each do |match|
           Transfer.create!(
-            inflow_transaction_id: inflow_transaction_id,
-            outflow_transaction_id: outflow_transaction_id,
+            inflow_transaction_id: match.inflow_transaction_id,
+            outflow_transaction_id: match.outflow_transaction_id,
           )
         end
       end
@@ -114,9 +119,19 @@ class Transfer < ApplicationRecord
   end
 
   private
+    def inflow_on_or_after_outflow
+      return unless inflow_transaction.present? && outflow_transaction.present?
+      errors.add(:base, :inflow_must_be_on_or_after_outflow) if inflow_transaction.entry.date < outflow_transaction.entry.date
+    end
+
     def transfer_has_different_accounts
       return unless inflow_transaction.present? && outflow_transaction.present?
       errors.add(:base, :must_be_from_different_accounts) if inflow_transaction.entry.account == outflow_transaction.entry.account
+    end
+
+    def transfer_has_same_family
+      return unless inflow_transaction.present? && outflow_transaction.present?
+      errors.add(:base, :must_be_from_same_family) unless inflow_transaction.entry.account.family == outflow_transaction.entry.account.family
     end
 
     def transfer_has_opposite_amounts

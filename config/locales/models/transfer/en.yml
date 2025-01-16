@@ -12,6 +12,9 @@ en:
               must_have_opposite_amounts: Transfer transactions must have opposite
                 amounts
               must_have_single_currency: Transfer must have a single currency
+              must_be_from_same_family: Transfer must be from the same family
+              inflow_must_be_on_or_after_outflow: Inflow transaction must be on or after outflow transaction
   transfer:
     name: Transfer to %{to_account}
     payment_name: Payment to %{to_account}
+
