@@ -8,9 +8,18 @@ class TransferTest < ActiveSupport::TestCase
     @inflow = account_transactions(:transfer_in)
   end
 
+  test "auto matches transfers" do 
+    outflow_entry = create_transaction(date: 1.day.ago.to_date, account: accounts(:depository), amount: 500)
+    inflow_entry = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
+
+    assert_difference -> { Transfer.count } => 1 do
+      Transfer.auto_match_for_account(accounts(:depository))
+    end
+  end
+
   test "transfer has different accounts, opposing amounts, and within 4 days of each other" do
-    outflow_entry = create_transaction(date: Date.current, account: accounts(:depository), amount: 500)
-    inflow_entry = create_transaction(date: 1.day.ago.to_date, account: accounts(:credit_card), amount: -500)
+    outflow_entry = create_transaction(date: 1.day.ago.to_date, account: accounts(:depository), amount: 500)
+    inflow_entry = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
 
     assert_difference -> { Transfer.count } => 1 do
       Transfer.create!(
@@ -66,6 +75,25 @@ class TransferTest < ActiveSupport::TestCase
     end
 
     assert_equal "Transfer transaction dates must be within 4 days of each other", transfer.errors.full_messages.first
+  end
+
+  test "transfer must be from the same family" do
+    family1 = families(:empty)
+    family2 = families(:dylan_family)
+
+    family1_account = family1.accounts.create!(name: "Family 1 Account", balance: 5000, currency: "USD", accountable: Depository.new)
+    family2_account = family2.accounts.create!(name: "Family 2 Account", balance: 5000, currency: "USD", accountable: Depository.new)
+
+    outflow_txn = create_transaction(date: Date.current, account: family1_account, amount: 500)
+    inflow_txn = create_transaction(date: Date.current, account: family2_account, amount: -500)
+
+    transfer = Transfer.new(
+      inflow_transaction: inflow_txn.account_transaction,
+      outflow_transaction: outflow_txn.account_transaction,
+    )
+
+    assert transfer.invalid?
+    assert_equal "Transfer must be from the same family", transfer.errors.full_messages.first
   end
 
   test "from_accounts converts amounts to the to_account's currency" do
