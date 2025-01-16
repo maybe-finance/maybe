@@ -20,17 +20,17 @@
 
       <% if @budget_category.budget.initialized? %>
         <div class="ml-auto w-10 h-10">
-          <%= render "budget_categories/budget_category_donut", 
+          <%= render "budget_categories/budget_category_donut",
                     budget_category: @budget_category %>
         </div>
       <% end %>
     </header>
 
     <details class="group space-y-2" open>
-      <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2 
+      <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2
                      text-xs font-medium uppercase text-gray-500 bg-gray-25 focus-visible:outline-none">
         <h4>Overview</h4>
-        <%= lucide_icon "chevron-down", 
+        <%= lucide_icon "chevron-down",
             class: "group-open:transform group-open:rotate-180 text-gray-500 w-5" %>
       </summary>
 
@@ -95,10 +95,10 @@
     </details>
 
     <details class="group space-y-2" open>
-      <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2 
+      <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2
                      text-xs font-medium uppercase text-gray-500 bg-gray-25 focus-visible:outline-none">
         <h4>Recent Transactions</h4>
-        <%= lucide_icon "chevron-down", 
+        <%= lucide_icon "chevron-down",
             class: "group-open:transform group-open:rotate-180 text-gray-500 w-5" %>
       </summary>
 
@@ -131,10 +131,10 @@
             </ul>
 
             <%= link_to "View all category transactions",
-                  transactions_path(q: { 
+                  transactions_path(q: {
                     categories: [@budget_category.category.name],
                     start_date: @budget.start_date,
-                    end_date: @budget.end_date 
+                    end_date: @budget.end_date
                   }),
                   data: { turbo_frame: :_top },
                   class: "block text-center btn btn--outline w-full" %>
