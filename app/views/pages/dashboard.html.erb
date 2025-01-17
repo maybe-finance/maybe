@@ -133,7 +133,7 @@
               <%= render partial: "shared/value_heading", locals: {
             label: t(".savings_rate"),
               period: Period.last_30_days,
-              value: @savings_rate_series.last&.value,
+              value: (@savings_rate_series.last&.value)*100,
               trend: @savings_rate_series.trend,
               is_percentage: true
             } %>
