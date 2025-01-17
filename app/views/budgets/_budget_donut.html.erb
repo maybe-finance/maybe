@@ -9,7 +9,7 @@
         </div>
 
         <div class="text-3xl font-medium <%= budget.available_to_spend.negative? ? "text-red-500" : "text-gray-900" %>">
-          <%= format_money(budget.actual_spending) %>
+          <%= format_money(budget.actual_spending_money) %>
         </div>
 
         <%= link_to edit_budget_path(budget), class: "btn btn--secondary flex items-center gap-1 mt-2" do %>
