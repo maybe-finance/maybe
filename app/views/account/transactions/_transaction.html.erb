@@ -24,7 +24,7 @@
               <% if entry.new_record? %>
                 <%= content_tag :p, entry.display_name %>
               <% else %>
-                <%= link_to entry.display_name,
+                <%= link_to entry.account_transaction.transfer? ? entry.account_transaction.transfer.name : entry.display_name,
                         entry.account_transaction.transfer? ? transfer_path(entry.account_transaction.transfer) : account_entry_path(entry),
                         data: { turbo_frame: "drawer", turbo_prefetch: false },
                         class: "hover:underline hover:text-gray-800" %>

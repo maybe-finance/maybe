@@ -4,6 +4,7 @@ class Category < ApplicationRecord
 
   belongs_to :family
 
+  has_many :budget_categories, dependent: :destroy
   has_many :subcategories, class_name: "Category", foreign_key: :parent_id
   belongs_to :parent, class_name: "Category", optional: true
 
@@ -11,8 +12,11 @@ class Category < ApplicationRecord
   validates :name, uniqueness: { scope: :family_id }
 
   validate :category_level_limit
+  validate :nested_category_matches_parent_classification
 
   scope :alphabetically, -> { order(:name) }
+  scope :incomes, -> { where(classification: "income") }
+  scope :expenses, -> { where(classification: "expense") }
 
   COLORS = %w[#e99537 #4da568 #6471eb #db5a54 #df4e92 #c44fe9 #eb5429 #61c9ea #805dee #6ad28a]
 
@@ -39,35 +43,43 @@ class Category < ApplicationRecord
   end
 
   class << self
+    def icon_codes
+      %w[bus circle-dollar-sign ambulance apple award baby battery lightbulb bed-single beer bluetooth book briefcase building credit-card camera utensils cooking-pot cookie dices drama dog drill drum dumbbell gamepad-2 graduation-cap house hand-helping ice-cream-cone phone piggy-bank pill pizza printer puzzle ribbon shopping-cart shield-plus ticket trees]
+    end
+
     def bootstrap_defaults
-      default_categories.each do |name, color|
+      default_categories.each do |name, color, icon|
         find_or_create_by!(name: name) do |category|
           category.color = color
+          category.classification = "income" if name == "Income"
+          category.lucide_icon = icon
         end
       end
+    end
+
+    def uncategorized
+      new(
+        name: "Uncategorized",
+        color: UNCATEGORIZED_COLOR,
+        lucide_icon: "circle-dashed"
+      )
     end
 
     private
       def default_categories
         [
-          [ "Income", "#e99537" ],
-          [ "Loan Payments", "#6471eb" ],
-          [ "Bank Fees", "#db5a54" ],
-          [ "Entertainment", "#df4e92" ],
-          [ "Food & Drink", "#c44fe9" ],
-          [ "Groceries", "#eb5429" ],
-          [ "Dining Out", "#61c9ea" ],
-          [ "General Merchandise", "#805dee" ],
-          [ "Clothing & Accessories", "#6ad28a" ],
-          [ "Electronics", "#e99537" ],
-          [ "Healthcare", "#4da568" ],
-          [ "Insurance", "#6471eb" ],
-          [ "Utilities", "#db5a54" ],
-          [ "Transportation", "#df4e92" ],
-          [ "Gas & Fuel", "#c44fe9" ],
-          [ "Education", "#eb5429" ],
-          [ "Charitable Donations", "#61c9ea" ],
-          [ "Subscriptions", "#805dee" ]
+          [ "Income", "#e99537", "circle-dollar-sign" ],
+          [ "Housing", "#6471eb", "house" ],
+          [ "Entertainment", "#df4e92", "drama" ],
+          [ "Food & Drink", "#eb5429", "utensils" ],
+          [ "Shopping", "#e99537", "shopping-cart" ],
+          [ "Healthcare", "#4da568", "pill" ],
+          [ "Insurance", "#6471eb", "piggy-bank" ],
+          [ "Utilities", "#db5a54", "lightbulb" ],
+          [ "Transportation", "#df4e92", "bus" ],
+          [ "Education", "#eb5429", "book" ],
+          [ "Gifts & Donations", "#61c9ea", "hand-helping" ],
+          [ "Subscriptions", "#805dee", "credit-card" ]
         ]
       end
   end
@@ -83,10 +95,28 @@ class Category < ApplicationRecord
     parent.present?
   end
 
+  def avg_monthly_total
+    family.category_stats.avg_monthly_total_for(self)
+  end
+
+  def median_monthly_total
+    family.category_stats.median_monthly_total_for(self)
+  end
+
+  def month_total(date: Date.current)
+    family.category_stats.month_total_for(self, date: date)
+  end
+
   private
     def category_level_limit
       if subcategory? && parent.subcategory?
         errors.add(:parent, "can't have more than 2 levels of subcategories")
+      end
+    end
+
+    def nested_category_matches_parent_classification
+      if subcategory? && parent.classification != classification
+        errors.add(:parent, "must have the same classification as its parent")
       end
     end
 end

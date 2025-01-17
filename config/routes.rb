@@ -38,10 +38,16 @@ Rails.application.routes.draw do
     resource :dropdown, only: :show
   end
 
-  resources :categories do
+  resources :categories, except: :show do
     resources :deletions, only: %i[new create], module: :category
 
     post :bootstrap, on: :collection
+  end
+
+  resources :budgets, only: %i[index show edit update create] do
+    get :picker, on: :collection
+
+    resources :budget_categories, only: %i[index show update]
   end
 
   resources :merchants, only: %i[index new create edit update destroy]

@@ -1,0 +1,21 @@
+<%# locals: (budget:) %>
+
+<% budget_category = budget.uncategorized_budget_category %>
+
+<div class="flex gap-3">
+  <div class="w-1 h-3 rounded-xl mt-1" style="background-color: <%= budget_category.category.color %>"></div>
+
+  <div class="text-sm mr-3">
+    <p class="text-gray-900 font-medium mb-0.5"><%= budget_category.category.name %></p>
+    <p class="text-gray-500"><%= format_money(Money.new(budget_category.category.avg_monthly_total, budget_category.category.family.currency), precision: 0) %>/m average</p>
+  </div>
+
+  <div class="ml-auto">
+    <div class="form-field w-[120px]">
+      <div class="flex items-center">
+        <span class="text-gray-400 text-sm mr-2">$</span>
+        <%= text_field_tag :uncategorized, budget_category.budgeted_spending_money, autocomplete: "off", class: "form-field__input text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none", disabled: true %>
+      </div>
+    </div>
+  </div>
+</div>

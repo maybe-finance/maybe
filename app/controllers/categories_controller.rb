@@ -19,9 +19,15 @@ class CategoriesController < ApplicationController
     if @category.save
       @transaction.update(category_id: @category.id) if @transaction
 
-      redirect_back_or_to categories_path, notice: t(".success")
+      flash[:notice] = t(".success")
+
+      redirect_target_url = request.referer || categories_path
+      respond_to do |format|
+        format.html { redirect_back_or_to categories_path, notice: t(".success") }
+        format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, redirect_target_url) }
+      end
     else
-      @categories = Current.family.categories.alphabetically.where(parent_id: nil)
+      @categories = Current.family.categories.alphabetically.where(parent_id: nil).where.not(id: @category.id)
       render :new, status: :unprocessable_entity
     end
   end
@@ -60,6 +66,6 @@ class CategoriesController < ApplicationController
     end
 
     def category_params
-      params.require(:category).permit(:name, :color, :parent_id)
+      params.require(:category).permit(:name, :color, :parent_id, :classification, :lucide_icon)
     end
 end

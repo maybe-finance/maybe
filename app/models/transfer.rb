@@ -7,6 +7,8 @@ class Transfer < ApplicationRecord
   validate :transfer_has_different_accounts
   validate :transfer_has_opposite_amounts
   validate :transfer_within_date_range
+  validate :transfer_has_same_family
+  validate :inflow_on_or_after_outflow
 
   class << self
     def from_accounts(from_account:, to_account:, date:, amount:)
@@ -42,34 +44,37 @@ class Transfer < ApplicationRecord
     end
 
     def auto_match_for_account(account)
-      matches = account.entries.account_transactions.joins("
-        JOIN account_entries ae2 ON
-          account_entries.amount = -ae2.amount AND
-          account_entries.currency = ae2.currency AND
-          account_entries.account_id <> ae2.account_id AND
-          ABS(account_entries.date - ae2.date) <= 4
-      ").select(
-        "account_entries.id",
-        "account_entries.entryable_id AS e1_entryable_id",
-        "ae2.entryable_id AS e2_entryable_id",
-        "account_entries.amount AS e1_amount",
-        "ae2.amount AS e2_amount"
-      )
+      matches = Account::Entry.select([
+        "inflow_candidates.entryable_id as inflow_transaction_id",
+        "outflow_candidates.entryable_id as outflow_transaction_id"
+      ]).from("account_entries inflow_candidates")
+        .joins("
+          JOIN account_entries outflow_candidates ON (
+            inflow_candidates.amount < 0 AND
+            outflow_candidates.amount > 0 AND
+            inflow_candidates.amount = -outflow_candidates.amount AND
+            inflow_candidates.currency = outflow_candidates.currency AND
+            inflow_candidates.account_id <> outflow_candidates.account_id AND
+            inflow_candidates.date BETWEEN outflow_candidates.date - 4 AND outflow_candidates.date + 4 AND
+            inflow_candidates.date >= outflow_candidates.date
+          )
+        ").joins("
+          LEFT JOIN transfers existing_transfers ON (
+            existing_transfers.inflow_transaction_id = inflow_candidates.entryable_id OR
+            existing_transfers.outflow_transaction_id = outflow_candidates.entryable_id
+          )
+        ")
+        .joins("JOIN accounts inflow_accounts ON inflow_accounts.id = inflow_candidates.account_id")
+        .joins("JOIN accounts outflow_accounts ON outflow_accounts.id = outflow_candidates.account_id")
+        .where("inflow_accounts.family_id = ? AND outflow_accounts.family_id = ?", account.family_id, account.family_id)
+        .where("inflow_candidates.entryable_type = 'Account::Transaction' AND outflow_candidates.entryable_type = 'Account::Transaction'")
+        .where(existing_transfers: { id: nil })
 
       Transfer.transaction do
         matches.each do |match|
-          inflow = match.e1_amount.negative? ? match.e1_entryable_id : match.e2_entryable_id
-          outflow = match.e1_amount.negative? ? match.e2_entryable_id : match.e1_entryable_id
-
-          # Skip all rejected, or already matched transfers
-          next if Transfer.exists?(
-            inflow_transaction_id: inflow,
-            outflow_transaction_id: outflow
-          )
-
           Transfer.create!(
-            inflow_transaction_id: inflow,
-            outflow_transaction_id: outflow
+            inflow_transaction_id: match.inflow_transaction_id,
+            outflow_transaction_id: match.outflow_transaction_id,
           )
         end
       end
@@ -109,10 +114,24 @@ class Transfer < ApplicationRecord
     to_account.liability?
   end
 
+  def categorizable?
+    to_account.accountable_type == "Loan"
+  end
+
   private
+    def inflow_on_or_after_outflow
+      return unless inflow_transaction.present? && outflow_transaction.present?
+      errors.add(:base, :inflow_must_be_on_or_after_outflow) if inflow_transaction.entry.date < outflow_transaction.entry.date
+    end
+
     def transfer_has_different_accounts
       return unless inflow_transaction.present? && outflow_transaction.present?
       errors.add(:base, :must_be_from_different_accounts) if inflow_transaction.entry.account == outflow_transaction.entry.account
+    end
+
+    def transfer_has_same_family
+      return unless inflow_transaction.present? && outflow_transaction.present?
+      errors.add(:base, :must_be_from_same_family) unless inflow_transaction.entry.account.family == outflow_transaction.entry.account.family
     end
 
     def transfer_has_opposite_amounts
