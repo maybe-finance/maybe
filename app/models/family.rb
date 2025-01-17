@@ -117,7 +117,7 @@ class Family < ApplicationRecord
 
     results.each do |r|
       r.define_singleton_method(:savings_rate) do
-        (income - spending) / income * 100
+        (income - spending) / income
       end
     end
 
@@ -148,7 +148,7 @@ class Family < ApplicationRecord
 
       savings << {
         date: r.date,
-        value: r.rolling_income != 0 ? ((r.rolling_income - r.rolling_spend) / r.rolling_income * 100) : 0.to_d
+        value: r.rolling_income != 0 ? ((r.rolling_income - r.rolling_spend) / r.rolling_income) : 0.to_d
       }
     end
 
