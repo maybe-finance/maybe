@@ -110,6 +110,7 @@ class Family < ApplicationRecord
                       )
                       .where("account_entries.date >= ?", period.date_range.begin)
                       .where("account_entries.date <= ?", period.date_range.end)
+                      .where("account_entries.entryable_type = 'Account::Transaction'")
                       .where("transfers.id IS NULL")
                       .group("accounts.id")
                       .having("SUM(ABS(account_entries.amount)) > 0")
