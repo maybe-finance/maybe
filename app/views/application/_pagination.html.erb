@@ -48,16 +48,26 @@
     </div>
   </div>
   <div class="flex items-center gap-4">
-    <%= form_with url: custom_pagy_url_for(pagy, pagy.page, current_path: current_path),
-                method: :get,
-                class: "flex items-center gap-4",
-                data: { controller: "auto-submit-form" } do |f| %>
+    <%= form_with url: defined?(@account) ? account_entries_path(account_id: @account.id) : current_path || custom_pagy_url_for(pagy, pagy.page),
+                  method: :get,
+                  class: "flex items-center gap-4",
+                  data: {
+                    controller: "auto-submit-form",
+                    turbo_frame: (defined?(@account) ? dom_id(@account, "entries") : nil)
+                  } do |f| %>
+      <% if defined?(@account) %>
+        <%= f.hidden_field :account_id, value: @account.id %>
+        <%= f.hidden_field :tab, value: params[:tab] if params[:tab].present? %>
+        <% if params.dig(:q, :search).present? %>
+          <%= f.hidden_field "q[search]", value: params.dig(:q, :search) %>
+        <% end %>
+      <% end %>
       <%= f.label :per_page, t(".rows_per_page"), class: "text-sm text-gray-500" %>
       <%= f.select :per_page,
-                 options_for_select(["10", "20", "30", "50"], pagy.limit),
-                 {},
-                 class: "py-1.5 pr-8 text-sm text-gray-900 font-medium border border-gray-200 rounded-lg focus:border-gray-900 focus:ring-gray-900 focus-visible:ring-gray-900",
-                 data: { "auto-submit-form-target": "auto" } %>
+                   options_for_select(["10", "20", "30", "50"], pagy.limit),
+                   {},
+                   class: "py-1.5 pr-8 text-sm text-gray-900 font-medium border border-gray-200 rounded-lg focus:border-gray-900 focus:ring-gray-900 focus-visible:ring-gray-900",
+                   data: { "auto-submit-form-target": "auto" } %>
     <% end %>
   </div>
 </nav>
