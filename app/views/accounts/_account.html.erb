@@ -8,18 +8,31 @@
       </div>
 
       <div>
-        <%= link_to account.name, account, class: [(account.is_active ? "text-gray-900" : "text-gray-400"), "text-sm font-medium hover:underline"], data: { turbo_frame: "_top" } %>
-        <% if account.has_issues? %>
-          <div class="text-sm flex items-center gap-1 text-error">
-            <%= lucide_icon "alert-octagon", class: "shrink-0 w-4 h-4" %>
-            <%= tag.span t(".has_issues") %>
-            <%= link_to t(".troubleshoot"), issue_path(account.issues.first), class: "underline", data: { turbo_frame: :drawer } %>
-          </div>
+        <% if account.scheduled_for_deletion? %>
+          <p class="text-sm font-medium text-gray-900">
+            <span>
+              <%= account.name %>
+            </span>
+            <span class="text-red-500 animate-pulse">
+              (deletion in progress...)
+            </span>
+          </p>
+        <% else %>
+          <%= link_to account.name, account, class: [(account.is_active ? "text-gray-900" : "text-gray-400"), "text-sm font-medium hover:underline"], data: { turbo_frame: "_top" } %>
+          <% if account.has_issues? %>
+            <div class="text-sm flex items-center gap-1 text-error">
+              <%= lucide_icon "alert-octagon", class: "shrink-0 w-4 h-4" %>
+              <%= tag.span t(".has_issues") %>
+              <%= link_to t(".troubleshoot"), issue_path(account.issues.first), class: "underline", data: { turbo_frame: :drawer } %>
+            </div>
+          <% end %>
         <% end %>
       </div>
 
-      <%= link_to edit_account_path(account, return_to: return_to), data: { turbo_frame: :modal }, class: "group-hover/account:flex hidden hover:opacity-80 items-center justify-center" do %>
-        <%= lucide_icon "pencil-line", class: "w-4 h-4 text-gray-500" %>
+      <% unless account.scheduled_for_deletion? %>
+        <%= link_to edit_account_path(account, return_to: return_to), data: { turbo_frame: :modal }, class: "group-hover/account:flex hidden hover:opacity-80 items-center justify-center" do %>
+          <%= lucide_icon "pencil-line", class: "w-4 h-4 text-gray-500" %>
+        <% end %>
       <% end %>
     </div>
     <div class="flex items-center gap-8">
@@ -27,13 +40,15 @@
         <%= format_money account.balance_money %>
       </p>
 
-      <%= form_with model: account,
+      <% unless account.scheduled_for_deletion? %>
+        <%= form_with model: account,
                     namespace: account.id,
                     data: { controller: "auto-submit-form", turbo_frame: "_top" } do |form| %>
-        <div class="relative inline-block select-none">
-          <%= form.check_box :is_active, { class: "sr-only peer", data: { "auto-submit-form-target": "auto" } } %>
-          <%= form.label :is_active, "&nbsp;".html_safe, class: "maybe-switch" %>
-        </div>
+          <div class="relative inline-block select-none">
+            <%= form.check_box :is_active, { class: "sr-only peer", data: { "auto-submit-form-target": "auto" } } %>
+            <%= form.label :is_active, "&nbsp;".html_safe, class: "maybe-switch" %>
+          </div>
+        <% end %>
       <% end %>
     </div>
   </div>
