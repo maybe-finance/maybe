@@ -131,5 +131,7 @@ class PlaidItem < ApplicationRecord
 
     def remove_plaid_item
       plaid_provider.remove_item(access_token)
+    rescue StandardError => e
+      Rails.logger.warn("Failed to remove Plaid item #{id}: #{e.message}")
     end
 end
