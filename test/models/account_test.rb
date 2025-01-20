@@ -8,6 +8,12 @@ class AccountTest < ActiveSupport::TestCase
     @family = families(:dylan_family)
   end
 
+  test "can destroy" do
+    assert_difference "Account.count", -1 do
+      @account.destroy
+    end
+  end
+
   test "groups accounts by type" do
     result = @family.accounts.by_group(period: Period.all)
     assets = result[:assets]
