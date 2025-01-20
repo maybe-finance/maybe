@@ -8,6 +8,12 @@ class TransferTest < ActiveSupport::TestCase
     @inflow = account_transactions(:transfer_in)
   end
 
+  test "transfer destroyed if either transaction is destroyed" do 
+    assert_difference ["Transfer.count", "Account::Transaction.count", "Account::Entry.count"], -1 do
+      @outflow.entry.destroy
+    end
+  end
+
   test "auto matches transfers" do
     outflow_entry = create_transaction(date: 1.day.ago.to_date, account: accounts(:depository), amount: 500)
     inflow_entry = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)

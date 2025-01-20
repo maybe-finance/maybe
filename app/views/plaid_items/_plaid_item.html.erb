@@ -17,7 +17,12 @@
         </div>
 
         <div class="pl-1 text-sm">
-          <%= tag.p plaid_item.name, class: "font-medium text-gray-900" %>
+          <div class="flex items-center gap-2">
+            <%= tag.p plaid_item.name, class: "font-medium text-gray-900" %>
+            <% if plaid_item.scheduled_for_deletion? %>
+              <p class="text-red-500 text-sm animate-pulse">(deletion in progress...)</p>
+            <% end %>
+          </div>
           <% if plaid_item.syncing? %>
             <div class="text-gray-500 flex items-center gap-1">
               <%= lucide_icon "loader", class: "w-4 h-4 animate-pulse" %>
@@ -37,7 +42,7 @@
       </div>
 
       <div class="flex items-center gap-2">
-        <%= button_to sync_plaid_item_path(plaid_item), disabled: plaid_item.syncing?, class: "disabled:text-gray-400 text-gray-900 flex hover:text-gray-800 items-center text-sm font-medium hover:underline" do %>
+        <%= button_to sync_plaid_item_path(plaid_item), disabled: plaid_item.syncing? || plaid_item.scheduled_for_deletion?, class: "disabled:text-gray-400 text-gray-900 flex hover:text-gray-800 items-center text-sm font-medium hover:underline" do %>
           <%= lucide_icon "refresh-cw", class: "w-4 h-4" %>
         <% end %>
 
@@ -46,6 +51,7 @@
             <%= button_to plaid_item_path(plaid_item),
                       method: :delete,
                       class: "block w-full py-2 px-3 space-x-2 text-red-600 hover:bg-red-50 flex items-center rounded-lg",
+                      disabled: plaid_item.syncing? || plaid_item.scheduled_for_deletion?,
                       data: {
                         turbo_confirm: {
                           title: t(".confirm_title"),
@@ -62,15 +68,17 @@
       </div>
     </summary>
 
-    <div class="space-y-4 mt-4">
-      <% if plaid_item.accounts.any? %>
-        <%= render "accounts/index/account_groups", accounts: plaid_item.accounts %>
-      <% else %>
-        <div class="p-4 flex flex-col gap-3 items-center justify-center">
-          <p class="text-gray-900 font-medium text-sm"><%= t(".no_accounts_title") %></p>
-          <p class="text-gray-500 text-sm"><%= t(".no_accounts_description") %></p>
-        </div>
-      <% end %>
-    </div>
+    <% unless plaid_item.scheduled_for_deletion? %>
+      <div class="space-y-4 mt-4">
+        <% if plaid_item.accounts.any? %>
+          <%= render "accounts/index/account_groups", accounts: plaid_item.accounts %>
+        <% else %>
+          <div class="p-4 flex flex-col gap-3 items-center justify-center">
+            <p class="text-gray-900 font-medium text-sm"><%= t(".no_accounts_title") %></p>
+            <p class="text-gray-500 text-sm"><%= t(".no_accounts_description") %></p>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
   </details>
 <% end %>

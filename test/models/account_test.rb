@@ -6,6 +6,12 @@ class AccountTest < ActiveSupport::TestCase
   setup do
     @account = @syncable = accounts(:depository)
     @family = families(:dylan_family)
+  end 
+
+  test "can destroy" do 
+    assert_difference "Account.count", -1 do
+      @account.destroy
+    end
   end
 
   test "groups accounts by type" do
