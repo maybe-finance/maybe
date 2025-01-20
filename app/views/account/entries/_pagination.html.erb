@@ -55,7 +55,7 @@
       <% if params.dig(:q, :search).present? %>
         <%= f.hidden_field "q[search]", value: params.dig(:q, :search) %>
       <% end %>
-      <%= f.label :per_page, t(".rows_per_page"), class: "text-sm text-gray-500" %>
+      <%= f.label :per_page, t("application.pagination.rows_per_page"), class: "text-sm text-gray-500" %>
       <%= f.select :per_page,
                    options_for_select(["10", "20", "30", "50"], pagy.limit),
                    {},
