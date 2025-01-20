@@ -215,7 +215,7 @@ GEM
     inline_svg (1.10.0)
       activesupport (>= 3.0)
       nokogiri (>= 1.6)
-    intercom-rails (1.0.5)
+    intercom-rails (1.0.6)
       activesupport (> 4.0)
       jwt (~> 2.0)
     io-console (0.8.0)
