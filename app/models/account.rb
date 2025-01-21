@@ -116,10 +116,10 @@ class Account < ApplicationRecord
   def original_balance
     first_balance = balances.chronological.first
     balance_amount = if first_balance&.balance.to_f.zero?
-                       balance
-                     else
-                       first_balance&.balance || balance
-                     end
+      balance
+    else
+      first_balance&.balance || balance
+    end
     Money.new(balance_amount, currency)
   end
 
