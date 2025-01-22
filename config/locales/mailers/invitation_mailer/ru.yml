@@ -1,0 +1,5 @@
+---
+ru:
+  invitation_mailer:
+    invite_email:
+      subject: "%{inviter} пригласил вас вступить в семью на Maybe!"
