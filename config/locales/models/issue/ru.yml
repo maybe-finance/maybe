@@ -1,0 +1,8 @@
+---
+ru:
+  activerecord:
+    models:
+      issue/exchange_rate_provider_missing: Провайдер обменного курса отсутствует
+      issue/exchange_rates_missing: Обменный курс отсутствует
+      issue/missing_prices: Цены отсутствуют
+      issue/unknown: Неизвестная ошибка

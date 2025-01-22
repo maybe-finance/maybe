@@ -1,0 +1,17 @@
+---
+ru:
+  activerecord:
+    errors:
+      models:
+        transfer:
+          attributes:
+            base:
+              must_be_from_different_accounts: Перевод должен производится на разные счета
+              must_be_within_date_range: Даты транзакций перевода должны быть в пределах 4 дней друг от друга
+              must_have_opposite_amounts: Транзакции перевода должны иметь противоположные суммы
+              must_have_single_currency: Перевод должен быть в одной валюте
+              must_be_from_same_family: Перевод должен быть из той же семьи
+              inflow_must_be_on_or_after_outflow: Входящая транзакция должна быть совершена во время или после исходящей транзакции
+  transfer:
+    name: Перевод в %{to_account}
+    payment_name: Платеж в %{to_account}

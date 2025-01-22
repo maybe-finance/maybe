@@ -1,0 +1,20 @@
+---
+ru:
+  activerecord:
+    attributes:
+      user:
+        email: Электронная почта
+        family: Семья
+        family_id: Семья
+        first_name: Имя
+        last_name: Фамилия
+        password: Пароль
+        password_confirmation: Подтвердите пароль
+    errors:
+      models:
+        user:
+          attributes:
+            base:
+              cannot_deactivate_admin_with_other_users: Администратор не может удалить аккаунт, пока присутствуют другие пользователи. Пожалуйста, сначала удалите всех участников.
+            profile_image:
+              invalid_file_size: размер файла должен быть меньше %{max_megabytes}MB

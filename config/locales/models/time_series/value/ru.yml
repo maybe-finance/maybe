@@ -1,0 +1,9 @@
+---
+ru:
+  activemodel:
+    errors:
+      models:
+        time_series/value:
+          attributes:
+            value:
+              must_be_a_money_or_numeric: должен быть Money или Numeric
