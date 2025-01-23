@@ -20,8 +20,7 @@ cloudflare:
   secret_access_key: <%= ENV['CLOUDFLARE_SECRET_ACCESS_KEY'] %>
   region: auto
   bucket: <%= ENV['CLOUDFLARE_BUCKET'] %>
-  request_checksum_calculation: "when_required"
-  response_checksum_validation: "when_required"
+  checksum: nil
 
 # Removed in #702.  Uncomment, add gems, update .env.example to enable.
 #google:
