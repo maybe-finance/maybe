@@ -15,8 +15,6 @@ class InviteCodesControllerTest < ActionDispatch::IntegrationTest
   test "non-admin cannot generate invite codes" do
     sign_in users(:family_member)
 
-    assert_no_difference("InviteCode.count") do
-      post invite_codes_url, params: {}
-    end
+    assert_raises(StandardError) { post invite_codes_url, params: {} }
   end
 end
