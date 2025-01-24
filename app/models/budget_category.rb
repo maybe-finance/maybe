@@ -29,10 +29,13 @@ class BudgetCategory < ApplicationRecord
   end
 
   class << self
-    def uncategorized
+    def uncategorized(budget = nil)
       new(
         id: Digest::UUID.uuid_v5(Digest::UUID::URL_NAMESPACE, "uncategorized"),
         category: nil,
+        budgeted_spending: 0,
+        currency: budget&.currency || "USD",
+        budget: budget
       )
     end
   end
