@@ -61,11 +61,11 @@ module AccountableResourceInterfaceTest
     assert_equal "#{@account.accountable_name.humanize} account created", flash[:notice]
   end
 
-  test "updates account balance by creating new valuation" do
+  test "updates account balance by creating new valuation if balance has changed" do
     assert_difference [ "Account::Entry.count", "Account::Valuation.count" ], 1 do
       patch account_url(@account), params: {
         account: {
-          balance: 10000
+          balance: 12000
         }
       }
     end
@@ -81,7 +81,7 @@ module AccountableResourceInterfaceTest
     assert_no_difference [ "Account::Entry.count", "Account::Valuation.count" ] do
       patch account_url(@account), params: {
         account: {
-          balance: 10000
+          balance: 12000
         }
       }
     end
