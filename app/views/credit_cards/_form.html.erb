@@ -16,7 +16,8 @@
         <%= credit_card_form.number_field :minimum_payment,
                                         label: t("credit_cards.form.minimum_payment"),
                                         placeholder: t("credit_cards.form.minimum_payment_placeholder"),
-                                        min: 0 %>
+                                        min: 0,
+                                        step: 0.01 %>
         <%= credit_card_form.number_field :apr,
                                         label: t("credit_cards.form.apr"),
                                         placeholder: t("credit_cards.form.apr_placeholder"),
