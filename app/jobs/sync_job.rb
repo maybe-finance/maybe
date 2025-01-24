@@ -1,5 +1,5 @@
 class SyncJob < ApplicationJob
-  queue_as :default
+  queue_as :latency_medium
 
   def perform(sync)
     sync.perform
