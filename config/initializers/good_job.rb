@@ -11,6 +11,8 @@ Rails.application.configure do
     }
   end
 
+  config.good_job.on_thread_error = ->(exception) { Rails.error.report(exception) }
+
   # 5 queue threads + 3 for job listener, cron, executor = 8 threads allocated
   config.queues = {
     "latency_low" => { max_threads: 1, priority: 10 }, # ~30s jobs
