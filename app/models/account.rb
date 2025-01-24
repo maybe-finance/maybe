@@ -135,9 +135,11 @@ class Account < ApplicationRecord
   end
 
   def update_with_sync!(attributes)
+    should_update_balance = attributes[:balance] && attributes[:balance].to_d != balance
+
     transaction do
       update!(attributes)
-      update_balance!(attributes[:balance]) if attributes[:balance]
+      update_balance!(attributes[:balance]) if should_update_balance
     end
 
     sync_later
