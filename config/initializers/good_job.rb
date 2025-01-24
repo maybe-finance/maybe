@@ -11,6 +11,14 @@ Rails.application.configure do
     }
   end
 
+  # 5 queue threads + 3 for job listener, cron, executor = 8 threads allocated
+  config.queues = {
+    "latency_low" => { max_threads: 1, priority: 10 }, # ~30s jobs
+    "latency_low,latency_medium" => { max_threads: 2, priority: 5 }, # ~1-2 min jobs
+    "latency_low,latency_medium,latency_high" => { max_threads: 1, priority: 1 }, # ~5+ min jobs
+    "*" => { max_threads: 1, priority: 0 } # fallback queue
+  }
+
   # Auth for jobs admin dashboard
   ActiveSupport.on_load(:good_job_application_controller) do
     before_action do
