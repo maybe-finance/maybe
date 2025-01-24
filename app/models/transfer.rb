@@ -60,7 +60,7 @@ class Transfer < ApplicationRecord
           )
         ").joins("
           LEFT JOIN transfers existing_transfers ON (
-            existing_transfers.inflow_transaction_id = inflow_candidates.entryable_id OR
+            existing_transfers.inflow_transaction_id = inflow_candidates.entryable_id AND
             existing_transfers.outflow_transaction_id = outflow_candidates.entryable_id
           )
         ")

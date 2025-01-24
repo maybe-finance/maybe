@@ -23,6 +23,41 @@ class TransferTest < ActiveSupport::TestCase
     end
   end
 
+  test "auto_match_for_account does not create duplicate transfers" do
+    outflow_entry = create_transaction(date: 1.day.ago.to_date, account: accounts(:depository), amount: 500)
+    inflow_entry = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
+
+    # Manually create a transfer between the transactions
+    Transfer.create!(
+      inflow_transaction: inflow_entry.account_transaction,
+      outflow_transaction: outflow_entry.account_transaction,
+    )
+
+    # Assert that no new Transfer record is created
+    assert_no_difference -> { Transfer.count } do
+      Transfer.auto_match_for_account(accounts(:depository))
+    end
+  end
+
+  test "auto_match_for_account handles multiple potential matches" do
+    # Create multiple transactions that could potentially match
+    outflow_entry1 = create_transaction(date: 1.day.ago.to_date, account: accounts(:depository), amount: 500)
+    outflow_entry2 = create_transaction(date: 1.day.ago.to_date, account: accounts(:depository), amount: 500)
+    inflow_entry1 = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
+    inflow_entry2 = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
+
+    # Create one existing transfer
+    Transfer.create!(
+      inflow_transaction: inflow_entry1.account_transaction,
+      outflow_transaction: outflow_entry1.account_transaction,
+    )
+
+    # Should create only one new transfer, not duplicate existing one
+    assert_difference -> { Transfer.count } => 1 do
+      Transfer.auto_match_for_account(accounts(:depository))
+    end
+  end
+
   test "transfer has different accounts, opposing amounts, and within 4 days of each other" do
     outflow_entry = create_transaction(date: 1.day.ago.to_date, account: accounts(:depository), amount: 500)
     inflow_entry = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
