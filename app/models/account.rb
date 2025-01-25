@@ -189,12 +189,13 @@ class Account < ApplicationRecord
       .joins("JOIN accounts outflow_accounts ON outflow_accounts.id = outflow_candidates.account_id")
       .where("inflow_accounts.family_id = ? AND outflow_accounts.family_id = ?", self.family_id, self.family_id)
       .where("inflow_candidates.entryable_type = 'Account::Transaction' AND outflow_candidates.entryable_type = 'Account::Transaction'")
+      .where(existing_transfers: { id: nil })
       .order("date_diff ASC") # Closest matches first
   end
 
   def auto_match_transfers!
     # Exclude already matched transfers
-    candidates_scope = transfer_match_candidates.where(existing_transfers: { id: nil }, rejected_transfers: { id: nil })
+    candidates_scope = transfer_match_candidates.where(rejected_transfers: { id: nil })
 
     # Track which transactions we've already matched to avoid duplicates
     used_transaction_ids = Set.new
@@ -202,17 +203,17 @@ class Account < ApplicationRecord
     candidates = []
 
     Transfer.transaction do
-      candidates_scope.each do |pm|
-        next if used_transaction_ids.include?(pm.inflow_transaction_id) ||
-               used_transaction_ids.include?(pm.outflow_transaction_id)
+      candidates_scope.each do |match|
+        next if used_transaction_ids.include?(match.inflow_transaction_id) ||
+               used_transaction_ids.include?(match.outflow_transaction_id)
 
         Transfer.create!(
-          inflow_transaction_id: pm.inflow_transaction_id,
-          outflow_transaction_id: pm.outflow_transaction_id,
+          inflow_transaction_id: match.inflow_transaction_id,
+          outflow_transaction_id: match.outflow_transaction_id,
         )
 
-        used_transaction_ids << pm.inflow_transaction_id
-        used_transaction_ids << pm.outflow_transaction_id
+        used_transaction_ids << match.inflow_transaction_id
+        used_transaction_ids << match.outflow_transaction_id
       end
     end
   end

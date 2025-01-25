@@ -4,6 +4,9 @@ class Transfer < ApplicationRecord
 
   enum :status, { pending: "pending", confirmed: "confirmed" }
 
+  validates :inflow_transaction_id, uniqueness: true
+  validates :outflow_transaction_id, uniqueness: true
+
   validate :transfer_has_different_accounts
   validate :transfer_has_opposite_amounts
   validate :transfer_within_date_range

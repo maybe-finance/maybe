@@ -122,4 +122,16 @@ class TransferTest < ActiveSupport::TestCase
       transfer.save!
     end
   end
+
+  test "transaction can only belong to one transfer" do
+    outflow_entry = create_transaction(date: Date.current, account: accounts(:depository), amount: 500)
+    inflow_entry1 = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
+    inflow_entry2 = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
+
+    Transfer.create!(inflow_transaction: inflow_entry1.account_transaction, outflow_transaction: outflow_entry.account_transaction)
+
+    assert_raises ActiveRecord::RecordInvalid do
+      Transfer.create!(inflow_transaction: inflow_entry2.account_transaction, outflow_transaction: outflow_entry.account_transaction)
+    end
+  end
 end
