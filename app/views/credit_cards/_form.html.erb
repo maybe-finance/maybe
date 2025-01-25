@@ -13,11 +13,11 @@
       </div>
 
       <div class="flex items-center gap-2">
-        <%= credit_card_form.number_field :minimum_payment,
+        <%= credit_card_form.money_field :minimum_payment,
                                         label: t("credit_cards.form.minimum_payment"),
                                         placeholder: t("credit_cards.form.minimum_payment_placeholder"),
-                                        min: 0,
-                                        step: 0.01 %>
+                                        default_currency: Current.family.currency %>
+
         <%= credit_card_form.number_field :apr,
                                         label: t("credit_cards.form.apr"),
                                         placeholder: t("credit_cards.form.apr_placeholder"),
