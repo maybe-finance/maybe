@@ -113,9 +113,9 @@ class Account::BalanceCalculatorTest < ActiveSupport::TestCase
     create_trade(securities(:msft), account: @account, date: 1.day.ago.to_date, qty: 20, price: 100)
 
     holdings = [
-      Account::Holding.new(date: Date.current, security: securities(:msft), amount: 2000),
-      Account::Holding.new(date: 1.day.ago.to_date, security: securities(:msft), amount: 2000),
-      Account::Holding.new(date: 2.days.ago.to_date, security: securities(:msft), amount: 0)
+      Account::Holding.new(account: @account, date: Date.current, security: securities(:msft), amount: 2000),
+      Account::Holding.new(account: @account, date: 1.day.ago.to_date, security: securities(:msft), amount: 2000),
+      Account::Holding.new(account: @account, date: 2.days.ago.to_date, security: securities(:msft), amount: 0)
     ]
 
     expected = [ 0, 20000, 20000, 20000 ]
