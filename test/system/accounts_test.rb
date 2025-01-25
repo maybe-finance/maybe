@@ -50,7 +50,7 @@ class AccountsTest < ApplicationSystemTestCase
   test "can create credit card account" do
     assert_account_created "CreditCard" do
       fill_in "Available credit", with: 1000
-      fill_in "Minimum payment", with: 25
+      fill_in "account[accountable_attributes][minimum_payment]", with: 25.51
       fill_in "APR", with: 15.25
       fill_in "Expiration date", with: 1.year.from_now.to_date
       fill_in "Annual fee", with: 100
