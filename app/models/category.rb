@@ -107,6 +107,18 @@ class Category < ApplicationRecord
     family.category_stats.month_total_for(self, date: date)
   end
 
+  def avg_monthly_total_money
+    Money.new(avg_monthly_total, family.currency)
+  end
+
+  def median_monthly_total_money
+    Money.new(median_monthly_total, family.currency)
+  end
+
+  def month_total_money(date: Date.current)
+    Money.new(month_total(date: date), family.currency)
+  end
+
   private
     def category_level_limit
       if subcategory? && parent.subcategory?
