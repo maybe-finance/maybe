@@ -1,17 +1,19 @@
-<%= turbo_stream.replace @transfer %>
+<% unless @transfer.destroyed? %>
+  <%= turbo_stream.replace @transfer %>
 
-<%= turbo_stream.replace "category_menu_account_entry_#{@transfer.inflow_transaction.entry.id}",
+  <%= turbo_stream.replace "category_menu_account_entry_#{@transfer.inflow_transaction.entry.id}",
   partial: "account/transactions/transaction_category",
   locals: { entry: @transfer.inflow_transaction.entry } %>
 
-<%= turbo_stream.replace "category_menu_account_entry_#{@transfer.outflow_transaction.entry.id}",
+  <%= turbo_stream.replace "category_menu_account_entry_#{@transfer.outflow_transaction.entry.id}",
   partial: "account/transactions/transaction_category",
   locals: { entry: @transfer.outflow_transaction.entry } %>
 
-<%= turbo_stream.replace "transfer_match_account_entry_#{@transfer.inflow_transaction.entry.id}",
+  <%= turbo_stream.replace "transfer_match_account_entry_#{@transfer.inflow_transaction.entry.id}",
   partial: "account/transactions/transfer_match",
   locals: { entry: @transfer.inflow_transaction.entry } %>
 
-<%= turbo_stream.replace "transfer_match_account_entry_#{@transfer.outflow_transaction.entry.id}",
+  <%= turbo_stream.replace "transfer_match_account_entry_#{@transfer.outflow_transaction.entry.id}",
   partial: "account/transactions/transfer_match",
   locals: { entry: @transfer.outflow_transaction.entry } %>
+<% end %>

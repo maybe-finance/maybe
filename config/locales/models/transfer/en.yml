@@ -13,7 +13,8 @@ en:
                 amounts
               must_have_single_currency: Transfer must have a single currency
               must_be_from_same_family: Transfer must be from the same family
-              inflow_must_be_on_or_after_outflow: Inflow transaction must be on or after outflow transaction
+              inflow_cannot_be_in_multiple_transfers: Inflow transaction cannot be part of multiple transfers
+              outflow_cannot_be_in_multiple_transfers: Outflow transaction cannot be part of multiple transfers
   transfer:
     name: Transfer to %{to_account}
     payment_name: Payment to %{to_account}

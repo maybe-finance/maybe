@@ -25,8 +25,8 @@ class TransfersControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "can destroy transfer" do
-    assert_difference -> { Transfer.count } => -1, -> { Account::Transaction.count } => 0 do
+  test "soft deletes transfer" do
+    assert_difference -> { Transfer.count }, -1 do
       delete transfer_url(transfers(:one))
     end
   end

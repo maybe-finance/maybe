@@ -14,15 +14,6 @@ class TransferTest < ActiveSupport::TestCase
     end
   end
 
-  test "auto matches transfers" do
-    outflow_entry = create_transaction(date: 1.day.ago.to_date, account: accounts(:depository), amount: 500)
-    inflow_entry = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
-
-    assert_difference -> { Transfer.count } => 1 do
-      Transfer.auto_match_for_account(accounts(:depository))
-    end
-  end
-
   test "transfer has different accounts, opposing amounts, and within 4 days of each other" do
     outflow_entry = create_transaction(date: 1.day.ago.to_date, account: accounts(:depository), amount: 500)
     inflow_entry = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)

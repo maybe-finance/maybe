@@ -77,12 +77,20 @@ class Account::Entry < ApplicationRecord
   end
 
   def transfer_match_candidates
-    account.family.entries
-          .where.not(account_id: account_id)
-          .where.not(id: id)
-          .where(amount: -amount)
-          .where(currency: currency)
-          .where(date: (date - 4.days)..(date + 4.days))
+    candidates_scope = account.transfer_match_candidates
+
+    candidates_scope = if amount.negative?
+      candidates_scope.where("inflow_candidates.entryable_id = ?", entryable_id)
+    else
+      candidates_scope.where("outflow_candidates.entryable_id = ?", entryable_id)
+    end
+
+    candidates_scope.map do |pm|
+      Transfer.new(
+        inflow_transaction_id: pm.inflow_transaction_id,
+        outflow_transaction_id: pm.outflow_transaction_id,
+      )
+    end
   end
 
   class << self
