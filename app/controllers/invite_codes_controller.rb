@@ -6,6 +6,7 @@ class InviteCodesController < ApplicationController
   end
 
   def create
+    raise StandardError, "You are not allowed to generate invite codes" unless Current.user.admin?
     InviteCode.generate!
     redirect_back_or_to invite_codes_path, notice: "Code generated"
   end
