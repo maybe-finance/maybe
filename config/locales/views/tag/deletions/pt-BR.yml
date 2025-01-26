@@ -1,0 +1,14 @@
+---
+pt-BR:
+  tag:
+    deletions:
+      create:
+        deleted: Tag excluída
+      new:
+        delete_and_leave_uncategorized: Excluir "%{tag_name}"
+        delete_and_recategorize: Excluir "%{tag_name}" e atribuir uma nova tag
+        delete_tag: Excluir tag?
+        explanation: "%{tag_name} será removida das transações e outras entidades que podem ser marcadas. Em vez de deixá-las sem tag, você também pode atribuir uma nova tag abaixo."
+        replacement_tag_prompt: Selecionar tag
+        tag: Tag
+

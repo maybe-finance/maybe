@@ -1,0 +1,63 @@
+---
+pt-BR:
+  account:
+    transactions:
+      bulk_delete:
+        success: "%{count} transações deletadas"
+      bulk_edit:
+        cancel: Cancelar
+        category_label: Categoria
+        category_placeholder: Selecione uma categoria
+        date_label: Data
+        details: Detalhes
+        merchant_label: Comerciante
+        merchant_placeholder: Selecione um comerciante
+        note_label: Notas
+        note_placeholder: Insira uma nota que será aplicada às transações selecionadas
+        overview: Visão geral
+        save: Salvar
+      bulk_update:
+        success: "%{count} transações atualizadas"
+      form:
+        account: Conta
+        account_prompt: Selecione uma Conta
+        amount: Valor
+        category: Categoria
+        category_prompt: Selecione uma Categoria
+        date: Data
+        description: Descrição
+        description_placeholder: Descreva a transação
+        expense: Despesa
+        income: Receita
+        submit: Adicionar transação
+        transfer: Transferência
+      index:
+        new: Nova transação
+        no_transactions: Nenhuma transação para esta conta ainda.
+        transaction: transação
+        transactions: Transações
+      new:
+        new_transaction: Nova transação
+      show:
+        account_label: Conta
+        amount: Valor
+        category_label: Categoria
+        date_label: Data
+        delete: Deletar
+        delete_subtitle: Isso exclui permanentemente a transação, afeta os saldos históricos
+          e não pode ser desfeito.
+        delete_title: Deletar transação
+        details: Detalhes
+        merchant_label: Comerciante
+        name_label: Nome
+        nature: Tipo
+        none: "(nenhum)"
+        note_label: Notas
+        note_placeholder: Insira uma nota
+        overview: Visão geral
+        settings: Configurações
+        tags_label: Tags
+        uncategorized: "(não categorizado)"
+    transfer_matches:
+      create:
+        success: Transferência criada

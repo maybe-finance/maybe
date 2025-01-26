@@ -1,0 +1,73 @@
+---
+pt-BR:
+  settings:
+    billings:
+      show:
+        page_title: Faturamento
+        subscription_subtitle: Gerencie sua assinatura e detalhes de faturamento
+        subscription_title: Gerenciar assinatura
+    nav:
+      accounts_label: Contas
+      billing_label: Faturamento
+      categories_label: Categorias
+      feedback_label: Feedback
+      general_section_title: Geral
+      imports_label: Importações
+      logout: Sair
+      merchants_label: Comerciantes
+      other_section_title: Mais
+      preferences_label: Preferências
+      profile_label: Conta
+      self_hosting_label: Auto-hospedagem
+      tags_label: Tags
+      transactions_section_title: Transações
+      whats_new_label: Novidades
+    nav_link_large:
+      next: Próximo
+      previous: Voltar
+    preferences:
+      data_enrichment_settings:
+        description: Deixe o Maybe auto-categorizar, nomear e adicionar dados do comerciante às suas transações em cada sincronização. Todos os enriquecimentos são feitos em inglês.
+        self_host_disclaimer: Isso consumirá créditos da API do Synth.
+        title: Enriquecimento de transações (somente em inglês)
+      show:
+        country: País
+        currency: Moeda
+        data: Enriquecimento de dados
+        data_subtitle: Habilite o enriquecimento de dados para suas contas
+        date_format: Formato de data
+        general_subtitle: Configure suas preferências
+        general_title: Geral
+        language: Idioma
+        page_title: Preferências
+        theme_dark: Escuro
+        theme_light: Claro
+        theme_subtitle: Escolha um tema preferido para o app (em breve...)
+        theme_system: Sistema
+        theme_title: Tema
+        timezone: Fuso horário
+    profiles:
+      show:
+        confirm_delete:
+          body: Tem certeza de que deseja excluir permanentemente sua conta? Esta ação é irreversível.
+          title: Excluir conta?
+        danger_zone_title: Zona de Perigo
+        delete_account: Excluir conta
+        delete_account_warning: Excluir sua conta removerá permanentemente todos os seus dados e não poderá ser desfeito.
+        first_name: Nome
+        household_form_input_placeholder: Digite o nome da casa
+        household_form_label: Nome da casa
+        household_subtitle: Convide membros da família, parceiros e outros indivíduos. Os convidados podem fazer login na sua casa e acessar suas contas compartilhadas.
+        household_title: Casa
+        invitation_link: Link de convite
+        invite_member: Adicionar membro
+        last_name: Sobrenome
+        page_title: Conta
+        pending: Pendente
+        profile_subtitle: Personalize como você aparece no Maybe
+        profile_title: Perfil
+        save: Salvar
+    user_avatar_field:
+      accepted_formats: JPG ou PNG. Máximo de 5MB.
+      choose: Escolher
+

@@ -1,0 +1,19 @@
+---
+pt-BR:
+  activerecord:
+    errors:
+      models:
+        transfer:
+          attributes:
+            base:
+              must_be_from_different_accounts: A transferência deve envolver contas diferentes
+              must_be_within_date_range: As datas das transações de transferência devem estar dentro de um intervalo de 4 dias
+              must_have_opposite_amounts: As transações de transferência devem ter valores opostos
+              must_have_single_currency: A transferência deve ter uma única moeda
+              must_be_from_same_family: A transferência deve ser da mesma família
+              inflow_must_be_on_or_after_outflow: A transação de entrada deve ser na mesma data ou após a transação de saída
+  transfer:
+    name: Transferir para %{to_account}
+    payment_name: Pagamento para %{to_account}
+
+

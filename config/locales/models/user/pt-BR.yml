@@ -1,0 +1,21 @@
+---
+pt-BR:
+  activerecord:
+    attributes:
+      user:
+        email: Email
+        family: Família
+        family_id: Família
+        first_name: Primeiro Nome
+        last_name: Sobrenome
+        password: Senha
+        password_confirmation: Confirmação da Senha
+    errors:
+      models:
+        user:
+          attributes:
+            base:
+              cannot_deactivate_admin_with_other_users: O administrador não pode excluir a conta enquanto houver outros usuários. Por favor, exclua todos os membros primeiro.
+            profile_image:
+              invalid_file_size: O tamanho do arquivo deve ser menor que %{max_megabytes}MB
+

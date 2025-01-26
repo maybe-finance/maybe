@@ -1,0 +1,16 @@
+---
+pt-BR:
+  address:
+    attributes:
+      country: País
+      line1: Endereço Linha 1
+      line2: Endereço Linha 2
+      locality: Localidade
+      postal_code: Código Postal
+      region: Região
+    format: |-
+      %{line1}
+      %{line2}
+      %{locality}, %{region} %{postal_code}
+      %{country}
+

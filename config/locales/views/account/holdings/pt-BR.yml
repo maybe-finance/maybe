@@ -1,0 +1,38 @@
+---
+pt-BR:
+  account:
+    holdings:
+      cash:
+        brokerage_cash: Dinheiro em corretora
+      destroy:
+        success: Investimento deletado
+      holding:
+        per_share: por ação
+        shares: "%{qty} ações"
+      index:
+        cost: custo
+        holdings: Investimentos
+        name: nome
+        new_holding: Nova transação
+        no_holdings: Nenhum investimento para mostrar.
+        return: retorno total
+        weight: peso
+      missing_price_tooltip:
+        description: Este investimento está com valores faltando e não conseguimos calcular
+          seus retornos ou valor.
+        missing_data: Dados ausentes
+      show:
+        avg_cost_label: Custo Médio
+        current_market_price_label: Preço de Mercado Atual
+        delete: Deletar
+        delete_subtitle: Isso excluirá o investimento e todas as transações associadas a ele
+          nesta conta. Esta ação não pode ser desfeita.
+        delete_title: Deletar investimento
+        history: Histórico
+        overview: Visão geral
+        portfolio_weight_label: Peso no portfólio
+        settings: Configurações
+        ticker_label: Ticker
+        trade_history_entry: "%{qty} ações de %{security} a %{price}"
+        trend_label: Tendência
+        unknown: Desconhecido

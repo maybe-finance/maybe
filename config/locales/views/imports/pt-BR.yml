@@ -1,0 +1,79 @@
+---
+pt-BR:
+  import:
+    cleans:
+      show:
+        description: Edite seus dados na tabela abaixo. Células vermelhas são inválidas.
+        errors_notice: Você tem erros nos seus dados. Passe o mouse sobre o erro para ver
+          detalhes.
+        title: Limpe seus dados
+    configurations:
+      show:
+        description: Selecione as colunas que correspondem a cada campo no seu CSV.
+        title: Configure sua importação
+    confirms:
+      mappings:
+        create_account: Criar conta
+        csv_mapping_label: "%{mapping} no CSV"
+        maybe_mapping_label: "%{mapping} no Maybe"
+        no_accounts: Você ainda não tem contas. Por favor, crie uma conta que
+          possamos usar para as linhas (não atribuídas) no seu CSV ou volte para a etapa Limpar
+          e forneça um nome de conta que possamos usar.
+        rows_label: Linhas
+        unassigned_account: Precisa criar uma nova conta para as linhas não atribuídas?
+      show:
+        account_mapping_description: Atribua todas as contas do arquivo importado
+          para as contas existentes no Maybe. Você também pode adicionar novas contas ou deixá-las
+          sem categoria.
+        account_mapping_title: Atribua suas contas
+        account_type_mapping_description: Atribua todos os tipos de contas do seu arquivo importado
+          para os tipos de conta do Maybe
+        account_type_mapping_title: Atribua seus tipos de conta
+        category_mapping_description: Atribua todas as categorias do seu arquivo importado
+          para as categorias existentes no Maybe. Você também pode adicionar novas categorias ou deixá-las
+          sem categoria.
+        category_mapping_title: Atribua suas categorias
+        tag_mapping_description: Atribua todas as tags do seu arquivo importado
+          para as tags existentes no Maybe. Você também pode adicionar novas tags ou deixá-las
+          sem categoria.
+        tag_mapping_title: Atribua suas tags
+    uploads:
+      show:
+        description: Cole ou faça o upload do seu arquivo CSV abaixo. Por favor, revise as instruções
+          na tabela abaixo antes de começar.
+        instructions_1: Abaixo está um exemplo de CSV com as colunas disponíveis para importação.
+        instructions_2: Seu CSV deve ter uma linha de cabeçalho
+        instructions_3: Você pode nomear suas colunas como quiser. Você irá mapeá-las em uma etapa posterior.
+        instructions_4: Colunas marcadas com um asterisco (*) são dados obrigatórios.
+        instructions_5: Sem vírgulas, sem símbolos de moeda e sem parênteses em números.
+        title: Importe seus dados
+  imports:
+    empty:
+      message: Nenhuma importação ainda.
+      new: Nova importação
+    import:
+      complete: Completo
+      delete: Deletar
+      failed: Falhou
+      in_progress: Em progresso
+      label: "%{type}: %{datetime}"
+      uploading: Processando linhas
+      view: Visualizar
+    index:
+      imports: Importações
+      new: Nova importação
+      title: Importações
+    new:
+      description: Você pode importar manualmente vários tipos de dados via CSV ou usar um
+        de nossos modelos de importação, como o Mint.
+      import_accounts: Importar contas
+      import_mint: Importar do Mint
+      import_portfolio: Importar investimentos
+      import_transactions: Importar transações
+      resume: Retomar %{type}
+      sources: Fontes
+      title: Nova Importação CSV
+    ready:
+      description: Aqui está um resumo dos novos itens que serão adicionados à sua conta
+        assim que você publicar esta importação.
+      title: Confirme seus dados de importação

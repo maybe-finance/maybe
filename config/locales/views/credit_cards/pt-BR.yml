@@ -1,0 +1,26 @@
+---
+pt-BR:
+  credit_cards:
+    edit:
+      edit: Editar %{account}
+    form:
+      annual_fee: Taxa anual
+      annual_fee_placeholder: '99'
+      apr: APR (Taxa anual de juros)
+      apr_placeholder: '15.99'
+      available_credit: Crédito disponível
+      available_credit_placeholder: '10000'
+      expiration_date: Data de validade
+      minimum_payment: Pagamento mínimo
+      minimum_payment_placeholder: '100'
+    new:
+      title: Inserir dados do cartão de crédito
+    overview:
+      amount_owed: Quantia devida
+      annual_fee: Taxa anual
+      apr: APR (Taxa anual de juros)
+      available_credit: Crédito disponível
+      expiration_date: Data de validade
+      minimum_payment: Pagamento mínimo
+      unknown: Desconhecido
+

@@ -1,0 +1,28 @@
+---
+pt-BR:
+  merchants:
+    create:
+      error: 'Erro ao criar comerciante: %{error}'
+      success: Novo comerciante criado com sucesso
+    destroy:
+      success: Comerciante deletado com sucesso
+    edit:
+      title: Editar comerciante
+    form:
+      name_placeholder: Nome do comerciante
+    index:
+      empty: Nenhum comerciante registrado ainda
+      new: Novo comerciante
+      title: Comerciantes
+    merchant:
+      confirm_accept: Deletar comerciante
+      confirm_body: Tem certeza de que deseja excluir este comerciante? Remover este comerciante
+        desconectará todas as transações associadas e pode afetar seus relatórios.
+      confirm_title: Deletar comerciante?
+      delete: Deletar comerciante
+      edit: Editar comerciante
+    new:
+      title: Novo comerciante
+    update:
+      success: Comerciante atualizado com sucesso
+

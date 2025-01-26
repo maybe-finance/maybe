@@ -1,0 +1,16 @@
+---
+pt-BR:
+  category:
+    deletions:
+      create:
+        success: Categoria de transação deletada com sucesso
+      new:
+        category: Categoria
+        delete_and_leave_uncategorized: Deletar "%{category_name}" e deixar sem categoria
+        delete_and_recategorize: Deletar "%{category_name}" e atribuir nova categoria
+        delete_category: Deletar categoria?
+        explanation: Ao deletar esta categoria, todas as transações que têm a categoria "%{category_name}"
+          serão deixadas sem categoria. Em vez de deixá-las sem categoria, você
+          também pode atribuir uma nova categoria abaixo.
+        replacement_category_prompt: Selecione a categoria
+

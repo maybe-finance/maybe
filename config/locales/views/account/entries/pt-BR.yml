@@ -1,0 +1,27 @@
+---
+pt-BR:
+  account:
+    entries:
+      create:
+        success: Lançamento criado
+      destroy:
+        success: Lançamento deletado
+      empty:
+        description: Tente adicionar um lançamento, editar filtros ou refinar sua busca
+        title: Nenhum lançamento encontrado
+      index:
+        amount: Valor
+        balance: Saldo
+        date: Data
+        entries: lançamentos
+        entry: lançamento
+        new: Novo
+        new_balance: Novo saldo
+        new_transaction: Nova transação
+        no_entries: Nenhum lançamento encontrado
+        title: Atividade
+      loading:
+        loading: Carregando lançamentos...
+      update:
+        success: Lançamento atualizado
+

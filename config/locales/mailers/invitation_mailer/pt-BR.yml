@@ -1,0 +1,6 @@
+---
+pt-BR:
+  invitation_mailer:
+    invite_email:
+      subject: "%{inviter} convidou você para se juntar à sua casa no Maybe!"
+

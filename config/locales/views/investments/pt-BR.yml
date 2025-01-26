@@ -1,0 +1,19 @@
+---
+pt-BR:
+  investments:
+    edit:
+      edit: Editar %{account}
+    form:
+      none: Nenhum
+      subtype_prompt: Selecione o tipo de investimento
+    new:
+      title: Inserir saldo da conta
+    show:
+      chart_title: Valor total
+    value_tooltip:
+      cash: Dinheiro
+      holdings: Investimentos
+      total: Saldo da carteira
+      total_value_tooltip: O saldo total da carteira é a soma do dinheiro em corretora
+        (disponível para negociação) e o valor de mercado atual dos seus investimentos.
+

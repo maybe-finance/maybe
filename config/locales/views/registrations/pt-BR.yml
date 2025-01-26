@@ -1,0 +1,24 @@
+---
+pt-BR:
+  helpers:
+    label:
+      user:
+        invite_code: Código de convite
+    submit:
+      user:
+        create: Continuar
+  registrations:
+    create:
+      failure: Ocorreu um problema ao se inscrever.
+      invalid_invite_code: Código de convite inválido, por favor tente novamente.
+      success: Você se inscreveu com sucesso.
+    new:
+      invitation_message: "%{inviter} convidou você para se juntar como %{role}"
+      join_family_title: Juntar-se ao %{family}
+      role_admin: administrador
+      role_member: membro
+      submit: Criar conta
+      title: Crie sua conta
+      welcome_body: Para começar, você precisa se inscrever para uma nova conta. Depois, poderá
+        configurar ajustes adicionais dentro do aplicativo.
+      welcome_title: Bem-vindo ao Self Hosted Maybe!

@@ -1,0 +1,32 @@
+---
+pt-BR:
+  properties:
+    edit:
+      edit: Editar %{account}
+    form:
+      address_line1: Endereço
+      address_line1_placeholder: Rua Principal, 123
+      area: Área útil
+      area_placeholder: '2000'
+      area_unit: Unidade de medida
+      country: País
+      country_placeholder: Brasil
+      locality: Cidade
+      locality_placeholder: São Paulo
+      none: Nenhum
+      postal_code: CEP
+      postal_code_placeholder: '94105-089'
+      region: Estado
+      region_placeholder: SP
+      subtype_prompt: Selecione o tipo de imóvel
+      year_built: Ano de construção
+      year_built_placeholder: '2000'
+    new:
+      title: Inserir detalhes do imóvel
+    overview:
+      living_area: Área útil
+      market_value: Valor de mercado
+      purchase_price: Preço de compra
+      trend: Tendência
+      unknown: Desconhecido
+      year_built: Ano de construção

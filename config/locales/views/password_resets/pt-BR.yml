@@ -1,0 +1,13 @@
+---
+pt-BR:
+  password_resets:
+    edit:
+      title: Redefinir senha
+    new:
+      requested: Por favor, verifique seu e-mail para um link para redefinir sua senha.
+      submit: Redefinir senha
+      title: Redefinir senha
+    update:
+      invalid_token: Token inválido.
+      success: Sua senha foi redefinida com sucesso.
+

@@ -1,0 +1,9 @@
+---
+pt-BR:
+  activerecord:
+    models:
+      issue/exchange_rate_provider_missing: Provedor de taxa de câmbio ausente
+      issue/exchange_rates_missing: Taxas de câmbio ausentes
+      issue/missing_prices: Preços ausentes
+      issue/unknown: Ocorreu um problema desconhecido
+

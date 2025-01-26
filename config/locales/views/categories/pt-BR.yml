@@ -1,0 +1,35 @@
+---
+pt-BR:
+  categories:
+    bootstrap:
+      success: Categorias padrão criadas com sucesso
+    category:
+      delete: Deletar categoria
+      edit: Editar categoria
+    create:
+      success: Categoria criada com sucesso
+    destroy:
+      success: Categoria deletada com sucesso
+    edit:
+      edit: Editar categoria
+    form:
+      placeholder: Nome da categoria
+    index:
+      categories: Categorias
+      bootstrap: Usar categorias padrão
+      categories_incomes: Categorias de receita
+      categories_expenses: Categorias de despesa
+      empty: Nenhuma categoria encontrada
+      new: Nova categoria
+    menu:
+      loading: Carregando...
+    new:
+      new_category: Nova categoria
+    update:
+      success: Categoria atualizada com sucesso
+  category:
+    dropdowns:
+      show:
+        bootstrap: Gerar categorias padrão
+        empty: Nenhuma categoria encontrada
+

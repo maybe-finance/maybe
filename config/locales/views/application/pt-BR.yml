@@ -1,0 +1,14 @@
+---
+pt-BR:
+  application:
+    pagination:
+      rows_per_page: Linhas por página
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u%n"
+        precision: 2
+        separator: "."
+        unit: "R$"
+

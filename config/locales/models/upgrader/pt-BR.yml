@@ -1,0 +1,14 @@
+---
+pt-BR:
+  upgrader:
+    deployer:
+      null_deployer:
+        success_message: 'Sem ação: o deployer nulo iniciou o deploy com sucesso'
+      render:
+        deploy_log_error: 'Falha ao implantar %{type} %{commit_sha} no Render: %{error_message}'
+        deploy_log_info: Implantando %{type} %{commit_sha} no Render...
+        error_message_failed_deploy: Falha ao implantar no Render
+        error_message_not_set: URL do webhook de deploy do Render não está configurada
+        success_message: 'Implantação disparada para o Render para o commit: %{commit_sha}'
+        troubleshooting_url: https://render.com/docs/deploy-hooks
+

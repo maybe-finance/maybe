@@ -1,0 +1,10 @@
+---
+pt-BR:
+  activemodel:
+    errors:
+      models:
+        time_series/value:
+          attributes:
+            value:
+              must_be_a_money_or_numeric: deve ser um Money ou Numeric
+

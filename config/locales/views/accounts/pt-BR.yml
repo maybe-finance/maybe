@@ -1,0 +1,60 @@
+---
+pt-BR:
+  accounts:
+    account:
+      has_issues: Problema detectado.
+      troubleshoot: Solucionar problemas
+    account_list:
+      new_account: Nova %{type}
+    chart:
+      no_change: Nenhuma alteração
+    create:
+      success: "%{type} conta criada"
+    destroy:
+      success: "%{type} conta agendada para exclusão"
+    empty:
+      empty_message: Adicione uma conta através de conexão, importação ou inserção manual.
+      new_account: Nova conta
+      no_accounts: Nenhuma conta ainda
+    form:
+      balance: Saldo atual
+      name_label: Nome da conta
+      name_placeholder: Exemplo de nome de conta
+    index:
+      accounts: Contas
+      manual_accounts:
+        other_accounts: Outras contas
+      new_account: Nova conta
+      sync: Sincronizar tudo
+    new:
+      import_accounts: Importar contas
+      method_selector:
+        connected_entry: Vincular conta
+        manual_entry: Inserir saldo da conta
+        title: Como você gostaria de adicionar?
+      title: O que você gostaria de adicionar?
+    show:
+      chart:
+        balance: Saldo
+        owed: Quantia devida
+      menu:
+        confirm_accept: Deletar "%{name}"
+        confirm_body_html: "<p>Ao deletar essa conta, você apagará seu histórico de valores,
+          afetando vários aspectos da sua conta geral. Essa ação terá um impacto direto
+          nos cálculos do seu patrimônio líquido e nos gráficos da conta.</p><br /> <p>Após a exclusão, não será possível restaurar as informações da conta, pois será necessário adicioná-la como uma nova conta.</p>"
+        confirm_title: Deletar conta?
+        edit: Editar
+        import: Importar transações
+        manage: Gerenciar contas
+    summary:
+      header:
+        accounts: Contas
+        manage: Gerenciar contas
+        new: Nova conta
+      new: Nova conta
+      no_assets: Nenhum ativo encontrado
+      no_assets_description: Adicione um ativo através de conexão, importação ou inserção manual.
+      no_liabilities: Nenhuma dívida encontrada
+      no_liabilities_description: Adicione uma dívida através de conexão, importação ou inserção manual.
+    update:
+      success: "%{type} conta atualizada"

@@ -1,0 +1,11 @@
+---
+pt-BR:
+  passwords:
+    edit:
+      password: Nova senha
+      password_challenge: Senha atual
+      submit: Redefinir senha
+      title: Atualizar senha
+    update:
+      success: Sua senha foi redefinida com sucesso.
+

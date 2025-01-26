@@ -1,0 +1,8 @@
+---
+pt-BR:
+  cryptos:
+    edit:
+      edit: Editar %{account}
+    new:
+      title: Inserir saldo da conta
+

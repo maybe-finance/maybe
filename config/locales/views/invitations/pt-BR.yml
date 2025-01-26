@@ -1,0 +1,16 @@
+---
+pt-BR:
+  invitations:
+    create:
+      failure: Não foi possível enviar o convite
+      success: Convite enviado com sucesso
+    new:
+      email_label: Endereço de e-mail
+      email_placeholder: Insira o endereço de e-mail
+      role_admin: Administrador
+      role_label: Função
+      role_member: Membro
+      submit: Enviar convite
+      subtitle: Envie um convite para entrar na sua conta familiar no Maybe
+      title: Convidar alguém
+

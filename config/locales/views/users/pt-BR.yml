@@ -1,0 +1,8 @@
+---
+pt-BR:
+  users:
+    destroy:
+      success: Sua conta foi excluída.
+    update:
+      success: Seu perfil foi atualizado.
+

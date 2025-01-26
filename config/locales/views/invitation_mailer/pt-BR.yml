@@ -1,0 +1,9 @@
+---
+pt-BR:
+  invitation_mailer:
+    invite_email:
+      accept_button: Aceitar convite
+      body: "%{inviter} te convidou para entrar na família %{family} no Maybe!"
+      expiry_notice: Este convite expirará em %{days} dias
+      greeting: Bem-vindo ao Maybe!
+
