@@ -642,7 +642,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_24_224316) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["inflow_transaction_id", "outflow_transaction_id"], name: "idx_on_inflow_transaction_id_outflow_transaction_id_8cd07a28bd"
+    t.index ["inflow_transaction_id", "outflow_transaction_id"], name: "idx_on_inflow_transaction_id_outflow_transaction_id_8cd07a28bd", unique: true
     t.index ["inflow_transaction_id"], name: "index_transfers_on_inflow_transaction_id"
     t.index ["outflow_transaction_id"], name: "index_transfers_on_outflow_transaction_id"
   end
