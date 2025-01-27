@@ -94,7 +94,7 @@ class Budget < ApplicationRecord
     # Continuous gray segment for empty budgets
     return [ { color: "#F0F0F0", amount: 1, id: unused_segment_id } ] unless allocations_valid?
 
-    segments = budget_categories.map do |bc|
+    segments = budget_categories.includes(:category).map do |bc|
       { color: bc.category.color, amount: bc.actual_spending, id: bc.id }
     end
 
@@ -113,7 +113,7 @@ class Budget < ApplicationRecord
   end
 
   def actual_spending
-    budget_categories.reject(&:subcategory?).sum(&:actual_spending)
+    expense_categories_with_totals.total_money.amount
   end
 
   def available_to_spend
