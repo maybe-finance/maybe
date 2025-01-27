@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_20_210449) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_24_224316) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -527,6 +527,16 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_20_210449) do
     t.string "area_unit"
   end
 
+  create_table "rejected_transfers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "inflow_transaction_id", null: false
+    t.uuid "outflow_transaction_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["inflow_transaction_id", "outflow_transaction_id"], name: "idx_on_inflow_transaction_id_outflow_transaction_id_412f8e7e26", unique: true
+    t.index ["inflow_transaction_id"], name: "index_rejected_transfers_on_inflow_transaction_id"
+    t.index ["outflow_transaction_id"], name: "index_rejected_transfers_on_outflow_transaction_id"
+  end
+
   create_table "securities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "ticker"
     t.string "name"
@@ -691,6 +701,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_20_210449) do
   add_foreign_key "merchants", "families"
   add_foreign_key "plaid_accounts", "plaid_items"
   add_foreign_key "plaid_items", "families"
+  add_foreign_key "rejected_transfers", "account_transactions", column: "inflow_transaction_id"
+  add_foreign_key "rejected_transfers", "account_transactions", column: "outflow_transaction_id"
   add_foreign_key "security_prices", "securities"
   add_foreign_key "sessions", "impersonation_sessions", column: "active_impersonator_session_id"
   add_foreign_key "sessions", "users"

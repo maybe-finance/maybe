@@ -24,10 +24,6 @@
                   <span title="<%= transfer.payment? ? "Payment" : "Transfer" %> is confirmed">
                     <%= lucide_icon "link-2", class: "w-4 h-4 text-indigo-600" %>
                   </span>
-                <% elsif transfer.status == "rejected" %>
-                  <span class="inline-flex items-center rounded-full bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700">
-                    Rejected
-                  </span>
                 <% else %>
                   <span class="inline-flex items-center rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-700">
                     Auto-matched
@@ -42,6 +38,7 @@
 
                   <%= button_to transfer_path(transfer, transfer: { status: "rejected" }),
                     method: :patch,
+                    data: { turbo: false },
                     class: "text-gray-500 hover:text-gray-800 flex items-center justify-center",
                     title: "Reject match" do %>
                     <%= lucide_icon "x", class: "w-4 h-4 text-gray-400 hover:text-gray-600" %>
