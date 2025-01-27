@@ -7,7 +7,7 @@ class Property < ApplicationRecord
     [ "Condominium", "condominium" ],
     [ "Townhouse", "townhouse" ],
     [ "Investment Property", "investment_property" ],
-    [ "Cabin / Cottage", "cabin" ]
+    [ "Second Home", "second_home" ]
   ]
 
   has_one :address, as: :addressable, dependent: :destroy
