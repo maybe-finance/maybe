@@ -34,9 +34,8 @@
       <div class="space-y-2">
         <%= f.select :classification, [["Income", "income"], ["Expense", "expense"]], { label: "Classification" }, required: true %>
         <%= f.text_field :name, placeholder: t(".placeholder"), required: true, autofocus: true, label: "Name", data: { color_avatar_target: "name" } %>
-        <%= f.select :parent_id, categories.pluck(:name, :id), { include_blank: "(unassigned)", label: "Parent category (optional)" }, disabled: category.parent? %>
-        <% if category.parent? %>
-          <span class="text-xs italic pl-2 text-gray-500">This category couldn’t be assigned as a subcategory because it already has subcategories.</span>
+        <% unless category.parent? %>
+          <%= f.select :parent_id, categories.pluck(:name, :id), { include_blank: "(unassigned)", label: "Parent category (optional)" }, disabled: category.parent? %>
         <% end %>
       </div>
     </section>
