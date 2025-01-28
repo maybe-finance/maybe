@@ -25,9 +25,19 @@ class CategoryTest < ActiveSupport::TestCase
     category = categories(:subcategory)
 
     error = assert_raises(ActiveRecord::RecordInvalid) do
-      category.subcategories.create!(name: "Invalid category", color: "#000", family: @family)
+      category.subcategories.create!(name: "Invalid category", family: @family)
     end
 
     assert_equal "Validation failed: Parent can't have more than 2 levels of subcategories", error.message
+  end
+
+  test "subcategory must have same color as parent" do
+    category = categories(:income)
+
+    error = assert_raises(ActiveRecord::RecordInvalid) do
+      category.subcategories.create!(name: "Invalid category color", color: "#abc123", family: @family)
+    end
+
+    assert_equal "Validation failed: Category must have the same color as its parent", error.message
   end
 end
