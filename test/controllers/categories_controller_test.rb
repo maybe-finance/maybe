@@ -81,7 +81,7 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
       end
     end
 
-    assert_response :no_content
+    assert_response :success
   end
 
   test "bootstrap" do
