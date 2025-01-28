@@ -13,6 +13,7 @@ class Category < ApplicationRecord
 
   validate :category_level_limit
   validate :nested_category_matches_parent_classification
+  validate :nested_category_matches_parent_color
 
   scope :alphabetically, -> { order(:name) }
   scope :incomes, -> { where(classification: "income") }
@@ -131,4 +132,10 @@ class Category < ApplicationRecord
         errors.add(:parent, "must have the same classification as its parent")
       end
     end
+
+    def nested_category_matches_parent_color
+      if subcategory? && parent.color != color
+        errors.add(:category, "must have the same color as its parent")
+      end
+    end    
 end
