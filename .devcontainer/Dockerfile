@@ -1,4 +1,4 @@
-ARG RUBY_VERSION=3.3.5
+ARG RUBY_VERSION=3.4.1
 FROM ruby:${RUBY_VERSION}-slim-bullseye
 
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
