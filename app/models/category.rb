@@ -137,5 +137,5 @@ class Category < ApplicationRecord
       if subcategory? && parent.color != color
         errors.add(:category, "must have the same color as its parent")
       end
-    end    
+    end
 end
