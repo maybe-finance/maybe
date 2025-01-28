@@ -1,5 +1,5 @@
 class FetchSecurityInfoJob < ApplicationJob
-  queue_as :default
+  queue_as :latency_low
 
   def perform(security_id)
     return unless Security.security_info_provider.present?

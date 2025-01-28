@@ -6,7 +6,8 @@ class Property < ApplicationRecord
     [ "Multi-Family Home", "multi_family_home" ],
     [ "Condominium", "condominium" ],
     [ "Townhouse", "townhouse" ],
-    [ "Investment Property", "investment_property" ]
+    [ "Investment Property", "investment_property" ],
+    [ "Second Home", "second_home" ]
   ]
 
   has_one :address, as: :addressable, dependent: :destroy

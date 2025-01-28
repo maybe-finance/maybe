@@ -5,14 +5,7 @@ class SecuritiesController < ApplicationController
 
     @securities = Security.search({
       search: query,
-      country: country_code_filter
+      country: params[:country_code] == "US" ? "US" : nil
     })
   end
-
-  private
-    def country_code_filter
-      filter = params[:country_code]
-      filter = "#{filter},US" unless filter == "US"
-      filter
-    end
 end

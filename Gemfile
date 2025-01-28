@@ -32,7 +32,7 @@ gem "sentry-ruby"
 gem "sentry-rails"
 
 # Active Storage
-gem "aws-sdk-s3", require: false
+gem "aws-sdk-s3", "~> 1.177.0", require: false
 gem "image_processing", ">= 1.2"
 
 # Other

@@ -38,10 +38,13 @@ class TransfersController < ApplicationController
   end
 
   def update
-    Transfer.transaction do
-      @transfer.update!(transfer_update_params.except(:category_id))
-      @transfer.outflow_transaction.update!(category_id: transfer_update_params[:category_id])
+    if transfer_update_params[:status] == "rejected"
+      @transfer.reject!
+    elsif transfer_update_params[:status] == "confirmed"
+      @transfer.confirm!
     end
+
+    @transfer.outflow_transaction.update!(category_id: transfer_update_params[:category_id])
 
     respond_to do |format|
       format.html { redirect_back_or_to transactions_url, notice: t(".success") }
