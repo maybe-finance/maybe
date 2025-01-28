@@ -7,6 +7,10 @@ class Account::Holding < ApplicationRecord
   belongs_to :security
 
   validates :qty, :currency, presence: true
+  validates :date, uniqueness: { 
+    scope: [:account_id, :security_id, :currency],
+    message: "holding already exists for this account, security, date, and currency" 
+  }
 
   scope :chronological, -> { order(:date) }
   scope :for, ->(security) { where(security_id: security).order(:date) }
@@ -27,9 +31,9 @@ class Account::Holding < ApplicationRecord
   # Basic approximation of cost-basis
   def avg_cost
     avg_cost = account.entries.account_trades
-                  .joins("INNER JOIN account_trades ON account_trades.id = account_entries.entryable_id")
-                  .where("account_trades.security_id = ? AND account_trades.qty > 0 AND account_entries.date <= ?", security.id, date)
-                  .average(:price)
+                .joins("INNER JOIN account_trades ON account_trades.id = account_entries.entryable_id")
+                .where("account_trades.security_id = ? AND account_trades.qty > 0 AND account_entries.date <= ?", security.id, date)
+                .average(:price)
 
     Money.new(avg_cost || price, currency)
   end
