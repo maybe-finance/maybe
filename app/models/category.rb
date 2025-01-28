@@ -15,6 +15,7 @@ class Category < ApplicationRecord
   validate :nested_category_matches_parent_classification
 
   scope :alphabetically, -> { order(:name) }
+  scope :roots, -> { where(parent_id: nil) }
   scope :incomes, -> { where(classification: "income") }
   scope :expenses, -> { where(classification: "expense") }
 
