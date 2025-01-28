@@ -20,22 +20,23 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
     color = Category::COLORS.sample
 
     assert_difference "Category.count", +1 do
-      post categories_url, params: {
+      post categories_url(format: :turbo_stream), params: {
         category: {
           name: "New Category",
-          color: color } }
+          color: color }
+        }
     end
 
     new_category = Category.order(:created_at).last
 
-    assert_redirected_to categories_url
+    assert_response :created
     assert_equal "New Category", new_category.name
     assert_equal color, new_category.color
   end
 
   test "create fails if name is not unique" do
     assert_no_difference "Category.count" do
-      post categories_url, params: {
+      post categories_url(format: :turbo_stream), params: {
         category: {
           name: categories(:food_and_drink).name,
           color: Category::COLORS.sample } }
@@ -48,7 +49,7 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
     color = Category::COLORS.sample
 
     assert_difference "Category.count", +1 do
-      post categories_url, params: {
+      post categories_url(format: :turbo_stream), params: {
         transaction_id: @transaction.id,
         category: {
           name: "New Category",
@@ -57,7 +58,7 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
 
     new_category = Category.order(:created_at).last
 
-    assert_redirected_to categories_url
+    assert_response :created
     assert_equal "New Category", new_category.name
     assert_equal color, new_category.color
     assert_equal @transaction.reload.category, new_category
@@ -73,14 +74,14 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
 
     assert_changes -> { categories(:income).name }, to: "New Name" do
       assert_changes -> { categories(:income).reload.color }, to: new_color do
-        patch category_url(categories(:income)), params: {
+        patch category_url(categories(:income), format: :turbo_stream), params: {
           category: {
             name: "New Name",
             color: new_color } }
       end
     end
 
-    assert_redirected_to categories_url
+    assert_response :no_content
   end
 
   test "bootstrap" do
