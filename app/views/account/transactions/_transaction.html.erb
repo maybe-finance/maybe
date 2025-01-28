@@ -13,7 +13,7 @@
     <div class="max-w-full">
       <%= content_tag :div, class: ["flex items-center gap-2"] do %>
         <% if transaction.merchant&.icon_url %>
-          <%= image_tag transaction.merchant.icon_url, class: "w-6 h-6 rounded-full" %>
+          <%= image_tag transaction.merchant.icon_url, class: "w-6 h-6 rounded-full", loading: "lazy" %>
         <% else %>
           <%= render "shared/circle_logo", name: entry.display_name, size: "sm" %>
         <% end %>
