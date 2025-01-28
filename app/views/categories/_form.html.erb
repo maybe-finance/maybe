@@ -1,48 +1,49 @@
 <%# locals: (category:, categories:) %>
+<%= turbo_frame_tag 'form' do %>
+  <div data-controller="color-avatar">
+    <%= styled_form_with model: category, class: "space-y-4" do |f| %>
+      <section class="space-y-4">
+        <div class="w-fit m-auto">
+          <%= render partial: "shared/color_avatar", locals: { name: category.name, color: category.color } %>
+        </div>
 
-<div data-controller="color-avatar">
-  <%= styled_form_with model: category, class: "space-y-4", data: { turbo_frame: :_top } do |f| %>
-    <section class="space-y-4">
-      <div class="w-fit m-auto">
-        <%= render partial: "shared/color_avatar", locals: { name: category.name, color: category.color } %>
-      </div>
+        <div class="flex gap-2 items-center justify-center">
+          <% Category::COLORS.each do |color| %>
+            <label class="relative">
+              <%= f.radio_button :color, color, class: "sr-only peer", data: { action: "change->color-avatar#handleColorChange" } %>
+              <div class="w-6 h-6 rounded-full cursor-pointer peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-blue-500" style="background-color: <%= color %>"></div>
+            </label>
+          <% end %>
+        </div>
 
-      <div class="flex gap-2 items-center justify-center">
-        <% Category::COLORS.each do |color| %>
-          <label class="relative">
-            <%= f.radio_button :color, color, class: "sr-only peer", data: { action: "change->color-avatar#handleColorChange" } %>
-            <div class="w-6 h-6 rounded-full cursor-pointer peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-blue-500" style="background-color: <%= color %>"></div>
-          </label>
+        <% if category.errors.any? %>
+          <%= render "shared/form_errors", model: category %>
         <% end %>
-      </div>
 
-      <% if category.errors.any? %>
-        <%= render "shared/form_errors", model: category %>
-      <% end %>
+        <div class="flex flex-wrap gap-2 justify-center mb-4">
+          <% Category.icon_codes.each do |icon| %>
+            <label class="relative">
+              <%= f.radio_button :lucide_icon, icon, class: "sr-only peer" %>
+              <div class="p-1 rounded cursor-pointer hover:bg-gray-100 peer-checked:bg-gray-100 border-1 border-transparent peer-checked:border-gray-500">
+                <%= lucide_icon icon, class: "w-5 h-5" %>
+              </div>
+            </label>
+          <% end %>
+        </div>
 
-      <div class="flex flex-wrap gap-2 justify-center mb-4">
-        <% Category.icon_codes.each do |icon| %>
-          <label class="relative">
-            <%= f.radio_button :lucide_icon, icon, class: "sr-only peer" %>
-            <div class="p-1 rounded cursor-pointer hover:bg-gray-100 peer-checked:bg-gray-100 border-1 border-transparent peer-checked:border-gray-500">
-              <%= lucide_icon icon, class: "w-5 h-5" %>
-            </div>
-          </label>
-        <% end %>
-      </div>
+        <div class="space-y-2">
+          <%= f.select :classification, [["Income", "income"], ["Expense", "expense"]], { label: "Classification" }, required: true %>
+          <%= f.text_field :name, placeholder: t(".placeholder"), required: true, autofocus: true, label: "Name", data: { color_avatar_target: "name" } %>
+          <% unless category.parent? %>
+            <%= f.select :parent_id, categories.pluck(:name, :id), { include_blank: "(unassigned)", label: "Parent category (optional)" }, disabled: category.parent? %>
+          <% end %>
+        </div>
+      </section>
 
-      <div class="space-y-2">
-        <%= f.select :classification, [["Income", "income"], ["Expense", "expense"]], { label: "Classification" }, required: true %>
-        <%= f.text_field :name, placeholder: t(".placeholder"), required: true, autofocus: true, label: "Name", data: { color_avatar_target: "name" } %>
-        <% unless category.parent? %>
-          <%= f.select :parent_id, categories.pluck(:name, :id), { include_blank: "(unassigned)", label: "Parent category (optional)" }, disabled: category.parent? %>
-        <% end %>
-      </div>
-    </section>
-
-    <section>
-      <%= hidden_field_tag :transaction_id, params[:transaction_id] %>
-      <%= f.submit %>
-    </section>
-  <% end %>
-</div>
+      <section>
+        <%= hidden_field_tag :transaction_id, params[:transaction_id] %>
+        <%= f.submit %>
+      </section>
+    <% end %>
+  </div>
+<% end %>
