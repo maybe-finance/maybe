@@ -1,7 +1,7 @@
 <%# locals: (category:, categories:) %>
 
 <div data-controller="color-avatar">
-  <%= styled_form_with model: category, class: "space-y-4" do |f| %>
+  <%= styled_form_with model: category, class: "space-y-4", data: { turbo_frame: :_top } do |f| %>
     <section class="space-y-4">
       <div class="w-fit m-auto">
         <%= render partial: "shared/color_avatar", locals: { name: category.name, color: category.color } %>
