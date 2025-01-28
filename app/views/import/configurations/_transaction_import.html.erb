@@ -3,7 +3,7 @@
 <%= styled_form_with model: @import, url: import_configuration_path(@import), scope: :import, method: :patch, class: "space-y-2" do |form| %>
   <div class="flex items-center gap-2">
     <%= form.select :date_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Date" }, required: true %>
-    <%= form.select :date_format, [["DD-MM-YYYY", "%d-%m-%Y"], ["DD.MM.YY", "%d.%m.%y"], ["MM-DD-YYYY", "%m-%d-%Y"], ["YYYY-MM-DD", "%Y-%m-%d"], ["DD/MM/YYYY", "%d/%m/%Y"], ["YYYY/MM/DD", "%Y/%m/%d"], ["MM/DD/YYYY", "%m/%d/%Y"]], label: true, required: true %>
+    <%= form.select :date_format, [["DD-MM-YYYY", "%d-%m-%Y"], ["DD.MM.YYYY", "%d.%m.%Y"], ["MM-DD-YYYY", "%m-%d-%Y"], ["YYYY-MM-DD", "%Y-%m-%d"], ["DD/MM/YYYY", "%d/%m/%Y"], ["YYYY/MM/DD", "%Y/%m/%d"], ["MM/DD/YYYY", "%m/%d/%Y"]], label: true, required: true %>
   </div>
 
   <div class="flex items-center gap-2">
