@@ -42,7 +42,7 @@ class CategoriesController < ApplicationController
       flash[:notice] = t(".success")
 
       respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, categories_path) }
+        format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, categories_path), status: :no_content }
       end
     else
       respond_to do |format|
