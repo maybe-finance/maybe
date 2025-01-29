@@ -33,7 +33,7 @@
     <div class="flex justify-between items-center gap-2 bg-white p-3">
       <div>
         <% if @q.present? %>
-          <%= link_to t(".clear_filters"), transactions_path, class: "btn btn--ghost" %>
+          <%= button_to t(".clear_filters"), clear_filters_transactions_path, method: :delete, class: "btn btn--ghost" %>
         <% end %>
       </div>
 

@@ -109,7 +109,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :transactions, only: :index
+  resources :transactions, only: :index do
+    collection do
+      delete :clear_filters
+      delete :clear_filter
+    end
+  end
 
   # Convenience routes for polymorphic paths
   # Example: account_path(Account.new(accountable: Depository.new)) => /depositories/123
