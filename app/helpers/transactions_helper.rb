@@ -17,5 +17,5 @@ module TransactionsHelper
 
   def get_default_transaction_search_filter
     transaction_search_filters[0]
-  end 
+  end
 end

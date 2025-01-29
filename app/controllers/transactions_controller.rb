@@ -10,7 +10,7 @@ class TransactionsController < ApplicationController
     if params[:focused_entry_id].present?
       @focused_entry = search_query.find_by(id: params[:focused_entry_id])
       position = search_query.pluck(:id).index(params[:focused_entry_id])
-      
+
       if position.present?
         focused_page = (position / (params[:per_page] || 10).to_i) + 1
         if params[:page]&.to_i != focused_page
@@ -47,7 +47,7 @@ class TransactionsController < ApplicationController
 
     param_key = params[:param_key]
     param_value = params[:param_value]
-    
+
     if q_params[param_key].is_a?(Array)
       q_params[param_key].delete(param_value)
       q_params.delete(param_key) if q_params[param_key].empty?
@@ -71,7 +71,7 @@ class TransactionsController < ApplicationController
             )
             .to_h
             .compact_blank
-       
+
       cleaned_params.delete(:amount_operator) unless cleaned_params[:amount].present?
 
       cleaned_params
@@ -84,7 +84,7 @@ class TransactionsController < ApplicationController
         params_to_restore[:q] = stored_params["q"].presence || default_params[:q]
         params_to_restore[:page] = stored_params["page"].presence || default_params[:page]
         params_to_restore[:per_page] = stored_params["per_page"].presence || default_params[:per_page]
-  
+
         redirect_to transactions_path(params_to_restore)
       else
         Current.session.update!(
@@ -103,7 +103,7 @@ class TransactionsController < ApplicationController
 
     def stored_params
       Current.session.prev_transaction_page_params
-    end 
+    end
 
     def default_params
       {
