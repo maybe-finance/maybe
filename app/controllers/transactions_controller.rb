@@ -1,17 +1,13 @@
 class TransactionsController < ApplicationController
   layout :with_sidebar
 
-  before_action :restore_params_and_redirect!, only: :index, if: :should_restore_params?
+  # before_action :store_params!, only: :index
 
   def index
-    @q = search_params || {}
-    @page = (params[:page] || 1).to_i
-    @per_page = (params[:per_page] || 50).to_i
-
-    store_params!(@q, @page, @per_page) if @q.present? || @page > 1 || @per_page != 50 
+    @q = search_params
 
     search_query = Current.family.transactions.search(@q).reverse_chronological
-    @pagy, @transaction_entries = pagy(search_query, limit: @per_page)
+    @pagy, @transaction_entries = pagy(search_query, limit: params[:per_page].presence || default_params[:per_page])
 
     totals_query = search_query.incomes_and_expenses
     family_currency = Current.family.currency
@@ -28,10 +24,6 @@ class TransactionsController < ApplicationController
   def clear_filters
     Current.session.update!(prev_transaction_page_params: {})
     redirect_to transactions_path
-  end
-
-  def clear_filter_params
-    params.permit(:param_key, :param_value)
   end
 
   def clear_filter
@@ -71,32 +63,39 @@ class TransactionsController < ApplicationController
       cleaned_params
     end
 
-    def store_params!(q, page, per_page)
-      Current.session.update!(
-        prev_transaction_page_params: {
-          q: q,
-          page: page,
-          per_page: per_page
-        }
-      )
+    def store_params!
+      if should_restore_params?
+        params_to_restore = {}
+
+        params_to_restore[:q] = stored_params["q"].presence || default_params[:q]
+        params_to_restore[:page] = stored_params["page"].presence || default_params[:page]
+        params_to_restore[:per_page] = stored_params["per_page"].presence || default_params[:per_page]
+  
+        redirect_to transactions_path(params_to_restore)
+      else
+        Current.session.update!(
+          prev_transaction_page_params: {
+            q: search_params,
+            page: params[:page],
+            per_page: params[:per_page]
+          }
+        )
+      end
+    end
+
+    def should_restore_params?
+      request.query_parameters.blank? && (stored_params["q"].present? || stored_params["page"].present? || stored_params["per_page"].present?)
     end
 
     def stored_params
       Current.session.prev_transaction_page_params
-    end
+    end 
 
-    def should_restore_params?
-      request.query_parameters.blank? && (stored_params["q"].present? || stored_params["page"].to_i > 1 || stored_params["per_page"].to_i != 50)
-    end
-
-    def restore_params_and_redirect!
-      page_value = stored_params["page"].to_i == 1 ? nil : stored_params["page"]
-      per_page_value = stored_params["per_page"].to_i == 50 ? nil : stored_params["per_page"]
-
-      redirect_to transactions_path(
-        q: stored_params["q"],
-        page: page_value,
-        per_page: per_page_value
-      )
+    def default_params
+      {
+        q: {},
+        page: 1,
+        per_page: 50
+      }
     end
 end
