@@ -26,6 +26,27 @@ class TransferTest < ActiveSupport::TestCase
     end
   end
 
+  test "cannot create duplicate transfer with same inflow and outflow transactions" do
+    outflow_entry = create_transaction(date: Date.current, account: accounts(:depository), amount: 500)
+    inflow_entry = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
+
+    Transfer.create!(
+      inflow_transaction: inflow_entry.account_transaction,
+      outflow_transaction: outflow_entry.account_transaction,
+    )
+
+    duplicate_transfer = Transfer.new(
+      inflow_transaction: inflow_entry.account_transaction,
+      outflow_transaction: outflow_entry.account_transaction,
+    )
+
+    assert_no_difference -> { Transfer.count } do
+      duplicate_transfer.save
+    end
+
+    assert_includes duplicate_transfer.errors.full_messages, "Inflow transaction and outflow transaction combination already exists in another transfer"
+  end
+
   test "transfer cannot have 2 transactions from the same account" do
     outflow_entry = create_transaction(date: Date.current, account: accounts(:depository), amount: 500)
     inflow_entry = create_transaction(date: 1.day.ago.to_date, account: accounts(:depository), amount: -500)
@@ -120,18 +141,6 @@ class TransferTest < ActiveSupport::TestCase
 
     assert_difference -> { Transfer.count } => 1 do
       transfer.save!
-    end
-  end
-
-  test "transaction can only belong to one transfer" do
-    outflow_entry = create_transaction(date: Date.current, account: accounts(:depository), amount: 500)
-    inflow_entry1 = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
-    inflow_entry2 = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
-
-    Transfer.create!(inflow_transaction: inflow_entry1.account_transaction, outflow_transaction: outflow_entry.account_transaction)
-
-    assert_raises ActiveRecord::RecordInvalid do
-      Transfer.create!(inflow_transaction: inflow_entry2.account_transaction, outflow_transaction: outflow_entry.account_transaction)
     end
   end
 end
