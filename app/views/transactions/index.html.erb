@@ -1,4 +1,4 @@
-<div class="space-y-4 h-full flex flex-col overflow-y-auto">
+<div class="space-y-4 h-full flex flex-col overflow-y-auto" data-controller="focus-entry" data-focus-entry-id-value="<%= @focused_entry ? dom_id(@focused_entry) : nil %>">
   <%= render "header" %>
 
   <%= render "summary", totals: @totals %>

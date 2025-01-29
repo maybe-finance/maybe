@@ -82,8 +82,6 @@ Rails.application.routes.draw do
   namespace :account do
     resources :holdings, only: %i[index new show destroy]
 
-    resources :entries, only: :index
-
     resources :transactions, only: %i[show new create update destroy] do
       resource :transfer_match, only: %i[new create]
       resource :category, only: :update, controller: :transaction_categories

@@ -22,6 +22,22 @@ module AccountableResource
   end
 
   def show
+    @q = params.fetch(:q, {}).permit(:search)
+    entries = @account.entries.search(@q).reverse_chronological
+
+    if params[:focused_entry_id].present?
+      @focused_entry = entries.find_by(id: params[:focused_entry_id])
+      position = entries.pluck(:id).index(params[:focused_entry_id])
+      
+      if position.present?
+        focused_page = (position / (params[:per_page] || 10)) + 1
+        if params[:page]&.to_i != focused_page
+          return redirect_to account_path(@account, page: focused_page, focused_entry_id: params[:focused_entry_id]) 
+        end
+      end
+    end
+
+    @pagy, @entries = pagy(entries, limit: params[:per_page] || "10", params: ->(params) { params.except(:focused_entry_id) })
   end
 
   def edit

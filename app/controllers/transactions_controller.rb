@@ -1,13 +1,27 @@
 class TransactionsController < ApplicationController
   layout :with_sidebar
 
-  # before_action :store_params!, only: :index
+  before_action :store_params!, only: :index
 
   def index
     @q = search_params
-
     search_query = Current.family.transactions.search(@q).reverse_chronological
-    @pagy, @transaction_entries = pagy(search_query, limit: params[:per_page].presence || default_params[:per_page])
+
+    if params[:focused_entry_id].present?
+      @focused_entry = search_query.find_by(id: params[:focused_entry_id])
+      position = search_query.pluck(:id).index(params[:focused_entry_id])
+      
+      if position.present?
+        focused_page = (position / (params[:per_page] || 10).to_i) + 1
+        if params[:page]&.to_i != focused_page
+          return redirect_to transactions_path(page: focused_page, focused_entry_id: params[:focused_entry_id])
+        else
+          params.delete(:focused_entry_id)
+        end
+      end
+    end
+
+    @pagy, @transaction_entries = pagy(search_query, limit: params[:per_page].presence || default_params[:per_page], params: ->(params) { params.except(:focused_entry_id) })
 
     totals_query = search_query.incomes_and_expenses
     family_currency = Current.family.currency
