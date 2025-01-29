@@ -24,12 +24,12 @@ class CategoriesController < ApplicationController
 
       redirect_target_url = request.referer || categories_path
       respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, redirect_target_url), status: :created }
+        format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, redirect_target_url) }
       end
     else
       set_categories
       respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.replace("form", partial: "form", locals: { category: @category,  categories: @categories }), status: :unprocessable_entity }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("form", partial: "form", locals: { category: @category,  categories: @categories }) }
       end
     end
   end
@@ -42,11 +42,11 @@ class CategoriesController < ApplicationController
       flash[:notice] = t(".success")
 
       respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, categories_path), status: :no_content }
+        format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, categories_path) }
       end
     else
       respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.replace("form", partial: "form", locals: { category: @category,  categories: @categories }), status: :unprocessable_entity }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("form", partial: "form", locals: { category: @category,  categories: @categories }) }
       end
     end
   end
