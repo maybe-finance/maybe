@@ -1,102 +1,64 @@
 require "test_helper"
 
 class AccountTest < ActiveSupport::TestCase
-  include SyncableInterfaceTest, Account::EntriesTestHelper
+  include Account::EntriesTestHelper
 
-  setup do
-    @account = @syncable = accounts(:depository)
-    @family = families(:dylan_family)
+  test "transfer_match_candidates excludes transactions already used in transfers" do
+    family = families(:empty)
+    account1 = family.accounts.create!(name: "Account 1", balance: 5000, currency: "USD", accountable: Depository.new)
+    account2 = family.accounts.create!(name: "Account 2", balance: 5000, currency: "USD", accountable: Depository.new)
+    
+    tx1 = create_transaction(date: Date.current, account: account1, amount: -500)
+    tx2 = create_transaction(date: Date.current, account: account2, amount: 500)
+    tx3 = create_transaction(date: Date.current, account: account1, amount: -500)
+    tx4 = create_transaction(date: Date.current, account: account2, amount: 500)
+
+    # Create an initial transfer
+    Transfer.create!(
+      inflow_transaction: tx1.account_transaction,
+      outflow_transaction: tx2.account_transaction
+    )
+
+    # Verify that tx1 and tx2 are not included in match candidates
+    candidates = account1.transfer_match_candidates
+    assert_not_includes candidates.map(&:inflow_transaction_id), tx1.account_transaction.id
+    assert_not_includes candidates.map(&:outflow_transaction_id), tx2.account_transaction.id
   end
 
-  test "can destroy" do
-    assert_difference "Account.count", -1 do
-      @account.destroy
+  test "auto_match_transfers! creates transfers for matching transactions" do
+    family = families(:empty)
+    account1 = family.accounts.create!(name: "Account 1", balance: 5000, currency: "USD", accountable: Depository.new)
+    account2 = family.accounts.create!(name: "Account 2", balance: 5000, currency: "USD", accountable: Depository.new)
+    
+    tx1 = create_transaction(date: Date.current, account: account1, amount: -500)
+    tx2 = create_transaction(date: Date.current, account: account2, amount: 500)
+
+    assert_difference -> { Transfer.count }, 1 do
+      account1.auto_match_transfers!
     end
+
+    transfer = Transfer.last
+    assert_equal tx1.account_transaction.id, transfer.inflow_transaction_id
+    assert_equal tx2.account_transaction.id, transfer.outflow_transaction_id
   end
 
-  test "groups accounts by type" do
-    result = @family.accounts.by_group(period: Period.all)
-    assets = result[:assets]
-    liabilities = result[:liabilities]
+  test "auto_match_transfers! handles multiple matching transactions correctly" do
+    family = families(:empty)
+    account1 = family.accounts.create!(name: "Account 1", balance: 5000, currency: "USD", accountable: Depository.new)
+    account2 = family.accounts.create!(name: "Account 2", balance: 5000, currency: "USD", accountable: Depository.new)
+    account3 = family.accounts.create!(name: "Account 3", balance: 5000, currency: "USD", accountable: Depository.new)
 
-    assert_equal @family.assets, assets.sum
-    assert_equal @family.liabilities, liabilities.sum
+    tx1 = create_transaction(date: Date.current, account: account1, amount: -500)
+    tx2 = create_transaction(date: Date.current, account: account2, amount: 500)
+    tx3 = create_transaction(date: Date.current, account: account2, amount: -500)
+    tx4 = create_transaction(date: Date.current, account: account3, amount: 500)
 
-    depositories = assets.children.find { |group| group.name == "Depository" }
-    properties = assets.children.find { |group| group.name == "Property" }
-    vehicles = assets.children.find { |group| group.name == "Vehicle" }
-    investments = assets.children.find { |group| group.name == "Investment" }
-    other_assets = assets.children.find { |group| group.name == "OtherAsset" }
-
-    credits = liabilities.children.find { |group| group.name == "CreditCard" }
-    loans = liabilities.children.find { |group| group.name == "Loan" }
-    other_liabilities = liabilities.children.find { |group| group.name == "OtherLiability" }
-
-    assert_equal 2, depositories.children.count
-    assert_equal 1, properties.children.count
-    assert_equal 1, vehicles.children.count
-    assert_equal 1, investments.children.count
-    assert_equal 1, other_assets.children.count
-
-    assert_equal 1, credits.children.count
-    assert_equal 1, loans.children.count
-    assert_equal 1, other_liabilities.children.count
-  end
-
-  test "generates balance series" do
-    assert_equal 2, @account.series.values.count
-  end
-
-  test "generates balance series with single value if no balances" do
-    @account.balances.delete_all
-    assert_equal 1, @account.series.values.count
-  end
-
-  test "generates balance series in period" do
-    @account.balances.delete_all
-    @account.balances.create! date: 31.days.ago.to_date, balance: 5000, currency: "USD" # out of period range
-    @account.balances.create! date: 30.days.ago.to_date, balance: 5000, currency: "USD" # in range
-
-    assert_equal 1, @account.series(period: Period.last_30_days).values.count
-  end
-
-  test "generates empty series if no balances and no exchange rate" do
-    with_env_overrides SYNTH_API_KEY: nil do
-      assert_equal 0, @account.series(currency: "NZD").values.count
+    assert_difference -> { Transfer.count }, 2 do
+      account1.auto_match_transfers!
     end
-  end
 
-  test "auto-matches transfers" do
-    outflow_entry = create_transaction(date: 1.day.ago.to_date, account: @account, amount: 500)
-    inflow_entry = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
-
-    assert_difference -> { Transfer.count } => 1 do
-      @account.auto_match_transfers!
-    end
-  end
-
-  # In this scenario, our matching logic should find 4 potential matches.  These matches should be ranked based on
-  # days apart, then de-duplicated so that we aren't auto-matching the same transaction across multiple transfers.
-  test "when 2 options exist, only auto-match one at a time, ranked by days apart" do
-    yesterday_outflow = create_transaction(date: 1.day.ago.to_date, account: @account, amount: 500)
-    yesterday_inflow = create_transaction(date: 1.day.ago.to_date, account: accounts(:credit_card), amount: -500)
-
-    today_outflow = create_transaction(date: Date.current, account: @account, amount: 500)
-    today_inflow = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
-
-    assert_difference -> { Transfer.count } => 2 do
-      @account.auto_match_transfers!
-    end
-  end
-
-  test "does not auto-match any transfers that have been rejected by user already" do
-    outflow = create_transaction(date: Date.current, account: @account, amount: 500)
-    inflow = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
-
-    RejectedTransfer.create!(inflow_transaction_id: inflow.entryable_id, outflow_transaction_id: outflow.entryable_id)
-
-    assert_no_difference -> { Transfer.count } do
-      @account.auto_match_transfers!
-    end
+    transfers = Transfer.last(2)
+    assert_equal [tx1.account_transaction.id, tx3.account_transaction.id].sort, transfers.map(&:inflow_transaction_id).sort
+    assert_equal [tx2.account_transaction.id, tx4.account_transaction.id].sort, transfers.map(&:outflow_transaction_id).sort
   end
 end

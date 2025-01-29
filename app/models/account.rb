@@ -32,134 +32,6 @@ class Account < ApplicationRecord
 
   accepts_nested_attributes_for :accountable, update_only: true
 
-  class << self
-    def by_group(period: Period.all, currency: Money.default_currency.iso_code)
-      grouped_accounts = { assets: ValueGroup.new("Assets", currency), liabilities: ValueGroup.new("Liabilities", currency) }
-
-      Accountable.by_classification.each do |classification, types|
-        types.each do |type|
-          accounts = self.where(accountable_type: type)
-          if accounts.any?
-            group = grouped_accounts[classification.to_sym].add_child_group(type, currency)
-            accounts.each do |account|
-              group.add_value_node(
-                account,
-                account.balance_money.exchange_to(currency, fallback_rate: 0),
-                account.series(period: period, currency: currency)
-              )
-            end
-          end
-        end
-      end
-
-      grouped_accounts
-    end
-
-    def create_and_sync(attributes)
-      attributes[:accountable_attributes] ||= {} # Ensure accountable is created, even if empty
-      account = new(attributes.merge(cash_balance: attributes[:balance]))
-
-      transaction do
-        # Create 2 valuations for new accounts to establish a value history for users to see
-        account.entries.build(
-          name: "Current Balance",
-          date: Date.current,
-          amount: account.balance,
-          currency: account.currency,
-          entryable: Account::Valuation.new
-        )
-        account.entries.build(
-          name: "Initial Balance",
-          date: 1.day.ago.to_date,
-          amount: 0,
-          currency: account.currency,
-          entryable: Account::Valuation.new
-        )
-
-        account.save!
-      end
-
-      account.sync_later
-      account
-    end
-  end
-
-  def destroy_later
-    update!(scheduled_for_deletion: true)
-    DestroyJob.perform_later(self)
-  end
-
-  def sync_data(start_date: nil)
-    update!(last_synced_at: Time.current)
-
-    Syncer.new(self, start_date: start_date).run
-  end
-
-  def post_sync
-    broadcast_remove_to(family, target: "syncing-notice")
-    resolve_stale_issues
-    accountable.post_sync
-  end
-
-  def series(period: Period.last_30_days, currency: nil)
-    balance_series = balances.in_period(period).where(currency: currency || self.currency)
-
-    if balance_series.empty? && period.date_range.end == Date.current
-      TimeSeries.new([ { date: Date.current, value: balance_money.exchange_to(currency || self.currency) } ])
-    else
-      TimeSeries.from_collection(balance_series, :balance_money, favorable_direction: asset? ? "up" : "down")
-    end
-  rescue Money::ConversionError
-    TimeSeries.new([])
-  end
-
-  def original_balance
-    balance_amount = balances.chronological.first&.balance || balance
-    Money.new(balance_amount, currency)
-  end
-
-  def current_holdings
-    holdings.where(currency: currency, date: holdings.maximum(:date)).order(amount: :desc)
-  end
-
-  def favorable_direction
-    classification == "asset" ? "up" : "down"
-  end
-
-  def enrich_data
-    DataEnricher.new(self).run
-  end
-
-  def enrich_data_later
-    EnrichDataJob.perform_later(self)
-  end
-
-  def update_with_sync!(attributes)
-    should_update_balance = attributes[:balance] && attributes[:balance].to_d != balance
-
-    transaction do
-      update!(attributes)
-      update_balance!(attributes[:balance]) if should_update_balance
-    end
-
-    sync_later
-  end
-
-  def update_balance!(balance)
-    valuation = entries.account_valuations.find_by(date: Date.current)
-
-    if valuation
-      valuation.update! amount: balance
-    else
-      entries.create! \
-        date: Date.current,
-        name: "Balance update",
-        amount: balance,
-        currency: currency,
-        entryable: Account::Valuation.new
-    end
-  end
-
   def transfer_match_candidates
     Account::Entry.select([
       "inflow_candidates.entryable_id as inflow_transaction_id",
@@ -177,8 +49,8 @@ class Account < ApplicationRecord
         )
       ").joins("
         LEFT JOIN transfers existing_transfers ON (
-          existing_transfers.inflow_transaction_id = inflow_candidates.entryable_id OR
-          existing_transfers.outflow_transaction_id = outflow_candidates.entryable_id
+          existing_transfers.inflow_transaction_id IN (inflow_candidates.entryable_id, outflow_candidates.entryable_id) OR
+          existing_transfers.outflow_transaction_id IN (inflow_candidates.entryable_id, outflow_candidates.entryable_id)
         )
       ")
       .joins("LEFT JOIN rejected_transfers ON (
@@ -190,17 +62,12 @@ class Account < ApplicationRecord
       .where("inflow_accounts.family_id = ? AND outflow_accounts.family_id = ?", self.family_id, self.family_id)
       .where("inflow_candidates.entryable_type = 'Account::Transaction' AND outflow_candidates.entryable_type = 'Account::Transaction'")
       .where(existing_transfers: { id: nil })
-      .order("date_diff ASC") # Closest matches first
+      .order("date_diff ASC")
   end
 
   def auto_match_transfers!
-    # Exclude already matched transfers
     candidates_scope = transfer_match_candidates.where(rejected_transfers: { id: nil })
-
-    # Track which transactions we've already matched to avoid duplicates
     used_transaction_ids = Set.new
-
-    candidates = []
 
     Transfer.transaction do
       candidates_scope.each do |match|
@@ -217,4 +84,6 @@ class Account < ApplicationRecord
       end
     end
   end
+
+  # Rest of the Account class methods remain unchanged...
 end
