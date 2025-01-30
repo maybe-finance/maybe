@@ -109,7 +109,6 @@ Rails.application.routes.draw do
 
   resources :transactions, only: :index do
     collection do
-      delete :clear_filters
       delete :clear_filter
     end
   end
