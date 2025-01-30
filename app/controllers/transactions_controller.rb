@@ -12,8 +12,8 @@ class TransactionsController < ApplicationController
     set_focused_record(search_query, params[:focused_record_id], default_per_page: 50)
 
     @pagy, @transaction_entries = pagy(
-      search_query, 
-      limit: params[:per_page].presence || default_params[:per_page], 
+      search_query,
+      limit: params[:per_page].presence || default_params[:per_page],
       params: ->(params) { params.except(:focused_record_id) }
     )
 
