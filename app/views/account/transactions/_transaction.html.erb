@@ -12,7 +12,11 @@
 
     <div class="max-w-full">
       <%= content_tag :div, class: ["flex items-center gap-2"] do %>
-        <%= render "shared/circle_logo", name: entry.display_name, size: "sm" %>
+        <% if transaction.merchant&.icon_url %>
+          <%= image_tag transaction.merchant.icon_url, class: "w-6 h-6 rounded-full", loading: "lazy" %>
+        <% else %>
+          <%= render "shared/circle_logo", name: entry.display_name, size: "sm" %>
+        <% end %>
 
         <div class="truncate">
           <div class="space-y-0.5">
