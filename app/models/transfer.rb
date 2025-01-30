@@ -4,10 +4,8 @@ class Transfer < ApplicationRecord
 
   enum :status, { pending: "pending", confirmed: "confirmed" }
 
-  validates :inflow_transaction_id, uniqueness: { 
-    scope: :outflow_transaction_id,
-    message: "and outflow transaction combination already exists in another transfer"
-  }
+  validates :inflow_transaction_id, uniqueness: true
+  validates :outflow_transaction_id, uniqueness: true
 
   validate :transfer_has_different_accounts
   validate :transfer_has_opposite_amounts
