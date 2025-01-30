@@ -17,3 +17,13 @@ two:
   created_at: <%= Time.current %>
   updated_at: <%= Time.current %>
   expires_at: <%= 3.days.from_now %>
+
+other_family:
+  email: "other@example.com"
+  token: "valid-token-789"
+  role: "member"
+  inviter: empty
+  family: empty
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>
+  expires_at: <%= 3.days.from_now %>
