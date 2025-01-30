@@ -43,7 +43,6 @@ class User < ApplicationRecord
     else
       if update(
         unconfirmed_email: new_email,
-        email_confirmation_token: generate_token_for(:email_confirmation),
         email_confirmation_sent_at: Time.current
       )
         EmailConfirmationMailer.with(user: self).confirmation_email.deliver_later
@@ -55,13 +54,11 @@ class User < ApplicationRecord
   end
 
   def confirm_email_change(token)
-    return false if token.blank? || token != email_confirmation_token
     return false if email_confirmation_sent_at < 1.day.ago
 
     if update(
       email: unconfirmed_email,
       unconfirmed_email: nil,
-      email_confirmation_token: nil,
       email_confirmation_sent_at: nil
     )
       true

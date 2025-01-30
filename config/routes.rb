@@ -10,7 +10,9 @@ Rails.application.routes.draw do
   resource :password_reset, only: %i[new create edit update]
   resource :password, only: %i[edit update]
   resources :email_confirmations, only: [] do
-    get :confirm, on: :collection
+    collection do
+      get :confirm, as: :confirm_email
+    end
   end
 
   resources :users, only: %i[update destroy]
