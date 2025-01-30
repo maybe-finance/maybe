@@ -6,7 +6,7 @@
         <%= tag.p @holding.ticker, class: "text-sm text-gray-500" %>
       </div>
 
-      <%= image_tag "https://logo.synthfinance.com/ticker/#{@holding.ticker}", class: "w-9 h-9 rounded-full" %>
+      <%= image_tag "https://logo.synthfinance.com/ticker/#{@holding.ticker}", loading: "lazy", class: "w-9 h-9 rounded-full" %>
     </header>
 
     <details class="group space-y-2" open>
