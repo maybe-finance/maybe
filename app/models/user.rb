@@ -37,7 +37,7 @@ class User < ApplicationRecord
   def initiate_email_change(new_email)
     return false if new_email == email
     return false if new_email == unconfirmed_email
-    
+
     if Rails.application.config.app_mode.self_hosted? && !Setting.require_email_confirmation
       update(email: new_email)
     else
