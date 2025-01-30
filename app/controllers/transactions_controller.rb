@@ -33,7 +33,7 @@ class TransactionsController < ApplicationController
       income: totals_query.income_total(family_currency).abs,
       expense: totals_query.expense_total(family_currency)
     }
-  end 
+  end
 
   def clear_filter
     updated_params = stored_params.deep_dup
