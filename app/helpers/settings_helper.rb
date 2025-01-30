@@ -6,6 +6,7 @@ module SettingsHelper
     { name: I18n.t("settings.nav.billing_label"), path: :settings_billing_path },
     { name: I18n.t("settings.nav.accounts_label"), path: :accounts_path },
     { name: I18n.t("settings.nav.imports_label"), path: :imports_path },
+    { name: I18n.t("settings.nav.invitations_label"), path: :invitations_path },
     { name: I18n.t("settings.nav.tags_label"), path: :tags_path },
     { name: I18n.t("settings.nav.categories_label"), path: :categories_path },
     { name: I18n.t("settings.nav.merchants_label"), path: :merchants_path },
