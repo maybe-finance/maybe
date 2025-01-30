@@ -4,4 +4,5 @@ en:
     destroy:
       success: Your account has been deleted.
     update:
-      success: Your profile has been updated.
+      success: "Your profile has been updated."
+      email_change_initiated: "Please check your new email address for confirmation instructions."

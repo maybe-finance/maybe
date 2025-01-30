@@ -5,10 +5,11 @@
   <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
   <div class="space-y-4">
     <%= settings_section title: t(".profile_title"), subtitle: t(".profile_subtitle") do %>
-      <%= styled_form_with model: @user, class: "space-y-4" do |form| %>
+      <%= styled_form_with model: @user, url: user_path(@user), class: "space-y-4" do |form| %>
         <%= render "settings/user_avatar_field", form: form, user: @user %>
 
         <div>
+          <%= form.email_field :email, placeholder: t(".email"), label: t(".email") %>
           <div class="grid grid-cols-2 gap-4 mt-4">
             <%= form.text_field :first_name, placeholder: t(".first_name"), label: t(".first_name") %>
             <%= form.text_field :last_name, placeholder: t(".last_name"), label: t(".last_name") %>
