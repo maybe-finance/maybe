@@ -1,7 +1,7 @@
 <%# locals: (entry:, selectable: true, balance_trend: nil) %>
 <% transaction, account = entry.account_transaction, entry.account %>
 
-<div class="grid grid-cols-12 items-center text-gray-900 text-sm font-medium p-4">
+<div class="grid grid-cols-12 items-center text-gray-900 text-sm font-medium p-4 <%= @focused_record == entry ? "border border-gray-900 rounded-lg" : "" %>">
   <div class="pr-10 flex items-center gap-4 <%= balance_trend ? "col-span-6" : "col-span-8" %>">
     <% if selectable %>
       <%= check_box_tag dom_id(entry, "selection"),
@@ -45,7 +45,7 @@
               <% if entry.account_transaction.transfer? %>
                 <%= render "transfers/account_links", transfer: entry.account_transaction.transfer, is_inflow: entry.account_transaction.transfer_as_inflow.present? %>
               <% else %>
-                <%= link_to entry.account.name, account_path(entry.account, tab: "transactions"), data: { turbo_frame: "_top" }, class: "hover:underline" %>
+                <%= link_to entry.account.name, account_path(entry.account, tab: "transactions", focused_record_id: entry.id), data: { turbo_frame: "_top" }, class: "hover:underline" %>
               <% end %>
             </div>
           </div>
