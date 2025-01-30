@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   end
 
   namespace :settings do
-    resource :profile, only: [:show, :destroy]
+    resource :profile, only: [ :show, :destroy ]
     resource :preferences, only: :show
     resource :hosting, only: %i[show update]
     resource :billing, only: :show
