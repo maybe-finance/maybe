@@ -81,7 +81,6 @@ class Account::HoldingCalculator
             filled_holdings << holding
             previous_holding = holding
           else
-            # Create a new holding based on the previous day's data
             filled_holdings << account.holdings.build(
               security: previous_holding.security,
               date: date,
@@ -106,7 +105,9 @@ class Account::HoldingCalculator
     end
 
     def preload_securities
-      securities = trades.map(&:entryable).map(&:security).uniq
+      securities_from_trades = trades.map(&:entryable).map(&:security).uniq
+      securities_from_holdings = account.holdings.map(&:security).uniq
+      securities = (securities_from_trades + securities_from_holdings).compact.uniq
 
       securities.each do |security|
         prices = Security::Price.find_prices(
