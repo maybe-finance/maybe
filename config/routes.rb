@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   end
 
   namespace :settings do
-    resource :profile, only: :show
+    resource :profile, only: [ :show, :destroy ]
     resource :preferences, only: :show
     resource :hosting, only: %i[show update]
     resource :billing, only: :show
@@ -142,7 +142,7 @@ Rails.application.routes.draw do
     resources :exchange_rate_provider_missings, only: :update
   end
 
-  resources :invitations, only: [ :new, :create ] do
+  resources :invitations, only: [ :new, :create, :destroy ] do
     get :accept, on: :member
   end
 
