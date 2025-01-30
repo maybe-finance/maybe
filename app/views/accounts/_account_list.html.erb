@@ -24,7 +24,12 @@
             <%= render "shared/sparkline", series: group.series, id: "#{group.name}_sparkline" %>
           </div>
 
-          <span class="text-xs" style="color: <%= group_trend.color %>"><%= group_trend.value.positive? ? "+" : "" %><%= group_trend.percent.infinite? ? "∞" : number_to_percentage(group_trend.percent, precision: 0) %></span>
+          <% if group_trend %>
+            <span class="text-xs" style="color: <%= group_trend.color %>">
+              <%= group_trend.value.positive? ? "+" : "" %>
+              <%= group_trend.percent.infinite? ? "∞" : number_to_percentage(group_trend.percent, precision: 0) %>
+            </span>
+          <% end %>
         </div>
       </div>
     </summary>
@@ -46,9 +51,12 @@
               <%= render "shared/sparkline", series: account_value_node.series, id: dom_id(account, :list_sparkline) %>
             </div>
 
-            <span class="text-xs" style="color: <%= account_trend.color %>">
-              <%= account_trend.value.positive? ? "+" : "" %><%= account_trend.percent.infinite? ? "∞" : number_to_percentage(account_trend.percent, precision: 0) %>
-            </span>
+            <% if account_trend %>
+              <span class="text-xs" style="color: <%= account_trend.color %>">
+                <%= account_trend.value.positive? ? "+" : "" %>
+                <%= account_trend.percent.infinite? ? "∞" : number_to_percentage(account_trend.percent, precision: 0) %>
+              </span>
+            <% end %>
           </div>
         </div>
       <% end %>
