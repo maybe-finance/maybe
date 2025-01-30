@@ -34,6 +34,17 @@ en:
         title: How would you like to add it?
       title: What would you like to add?
     show:
+      activity:
+        amount: Amount
+        balance: Balance
+        date: Date
+        entries: entries
+        entry: entry
+        new: New
+        new_balance: New balance
+        new_transaction: New transaction
+        no_entries: No entries found
+        title: Activity
       chart:
         balance: Balance
         owed: Amount owed

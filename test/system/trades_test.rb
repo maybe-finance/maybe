@@ -79,7 +79,7 @@ class TradesTest < ApplicationSystemTestCase
     end
 
     def visit_account_portfolio
-      visit account_path(@account)
+      visit account_path(@account, tab: "holdings")
     end
 
     def select_combobox_option(text)
