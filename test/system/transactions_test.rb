@@ -6,7 +6,7 @@ class TransactionsTest < ApplicationSystemTestCase
 
     Account::Entry.delete_all # clean slate
 
-    @uncategorized_transaction = create_transaction("one", 12.days.ago.to_date, 100)
+    create_transaction("one", 12.days.ago.to_date, 100)
     create_transaction("two", 10.days.ago.to_date, 100)
     create_transaction("three", 9.days.ago.to_date, 100)
     create_transaction("four", 8.days.ago.to_date, 100)
@@ -15,7 +15,7 @@ class TransactionsTest < ApplicationSystemTestCase
     create_transaction("seven", 4.days.ago.to_date, 100)
     create_transaction("eight", 3.days.ago.to_date, 100)
     create_transaction("nine", 1.days.ago.to_date, 100)
-    create_transaction("ten", 1.days.ago.to_date, 100)
+    @uncategorized_transaction = create_transaction("ten", 1.days.ago.to_date, 100)
     create_transaction("eleven", Date.current, 100, category: categories(:food_and_drink), tags: [ tags(:one) ], merchant: merchants(:amazon))
 
     @transactions = @user.family.entries
@@ -124,13 +124,13 @@ class TransactionsTest < ApplicationSystemTestCase
     assert_text "No entries found"
 
     within "ul#transaction-search-filters" do
-      find("li", text: account.name).first("a").click
-      find("li", text: "on or after #{10.days.ago.to_date}").first("a").click
-      find("li", text: "on or before #{1.day.ago.to_date}").first("a").click
-      find("li", text: "Income").first("a").click
-      find("li", text: "less than 200").first("a").click
-      find("li", text: category.name).first("a").click
-      find("li", text: merchant.name).first("a").click
+      find("li", text: account.name).first("button").click
+      find("li", text: "on or after #{10.days.ago.to_date}").first("button").click
+      find("li", text: "on or before #{1.day.ago.to_date}").first("button").click
+      find("li", text: "Income").first("button").click
+      find("li", text: "less than 200").first("button").click
+      find("li", text: category.name).first("button").click
+      find("li", text: merchant.name).first("button").click
     end
 
     assert_selector "#" + dom_id(@transaction), count: 1

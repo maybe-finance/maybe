@@ -34,6 +34,24 @@ class InvitationsController < ApplicationController
     end
   end
 
+  def destroy
+    unless Current.user.admin?
+      flash[:alert] = t("invitations.destroy.not_authorized")
+      redirect_to settings_profile_path
+      return
+    end
+
+    @invitation = Current.family.invitations.find(params[:id])
+
+    if @invitation.destroy
+      flash[:notice] = t("invitations.destroy.success")
+    else
+      flash[:alert] = t("invitations.destroy.failure")
+    end
+
+    redirect_to settings_profile_path
+  end
+
   private
 
     def invitation_params

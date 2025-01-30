@@ -17,6 +17,7 @@ class Category < ApplicationRecord
   before_create :inherit_color_from_parent
 
   scope :alphabetically, -> { order(:name) }
+  scope :roots, -> { where(parent_id: nil) }
   scope :incomes, -> { where(classification: "income") }
   scope :expenses, -> { where(classification: "expense") }
 
@@ -99,6 +100,10 @@ class Category < ApplicationRecord
     end
   end
 
+  def parent?
+    subcategories.any?
+  end
+
   def subcategory?
     parent.present?
   end
@@ -129,7 +134,7 @@ class Category < ApplicationRecord
 
   private
     def category_level_limit
-      if subcategory? && parent.subcategory?
+      if (subcategory? && parent.subcategory?) || (parent? && subcategory?)
         errors.add(:parent, "can't have more than 2 levels of subcategories")
       end
     end
