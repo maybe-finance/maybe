@@ -11,7 +11,7 @@ class Account::BalanceCalculator
       holdings_value = converted_holdings.select { |h| h.date == balance.date }.sum(&:amount)
       balance.balance = balance.balance + holdings_value
       balance
-    end
+    end.compact
   end
 
   private

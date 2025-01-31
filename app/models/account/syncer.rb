@@ -76,29 +76,33 @@ class Account::Syncer
       exchange_rates = ExchangeRate.find_rates(
         from: from_currency,
         to: to_currency,
-        start_date: balances.first.date
+        start_date: balances.min_by(&:date).date
       )
 
       converted_balances = balances.map do |balance|
         exchange_rate = exchange_rates.find { |er| er.date == balance.date }
 
+        next unless exchange_rate.present?
+
         account.balances.build(
           date: balance.date,
           balance: exchange_rate.rate * balance.balance,
           currency: to_currency
-        ) if exchange_rate.present?
-      end
+        )
+      end.compact
 
       converted_holdings = holdings.map do |holding|
         exchange_rate = exchange_rates.find { |er| er.date == holding.date }
+
+        next unless exchange_rate.present?
 
         account.holdings.build(
           security: holding.security,
           date: holding.date,
           amount: exchange_rate.rate * holding.amount,
           currency: to_currency
-        ) if exchange_rate.present?
-      end
+        )
+      end.compact
 
       Account.transaction do
         load_balances(converted_balances)

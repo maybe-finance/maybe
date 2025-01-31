@@ -4,7 +4,7 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static values = {
     linkToken: String,
-    region: { type: String, default: "us" }
+    region: { type: String, default: "us" },
   };
 
   open() {
@@ -19,7 +19,7 @@ export default class extends Controller {
     handler.open();
   }
 
-  handleSuccess(public_token, metadata) {
+  handleSuccess = (public_token, metadata) => {
     window.location.href = "/accounts";
 
     fetch("/plaid_items", {
@@ -32,7 +32,7 @@ export default class extends Controller {
         plaid_item: {
           public_token: public_token,
           metadata: metadata,
-          region: this.regionValue
+          region: this.regionValue,
         },
       }),
     }).then((response) => {
@@ -40,17 +40,17 @@ export default class extends Controller {
         window.location.href = response.url;
       }
     });
-  }
+  };
 
-  handleExit(err, metadata) {
+  handleExit = (err, metadata) => {
     // no-op
-  }
+  };
 
-  handleEvent(eventName, metadata) {
+  handleEvent = (eventName, metadata) => {
     // no-op
-  }
+  };
 
-  handleLoad() {
+  handleLoad = () => {
     // no-op
-  }
+  };
 }
