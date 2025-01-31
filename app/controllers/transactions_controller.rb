@@ -26,7 +26,7 @@ class TransactionsController < ApplicationController
       count: ((count_with_transfers - count_without_transfers) / 2) + count_without_transfers,
       income: totals_query.income_total(family_currency).abs,
       expense: totals_query.expense_total(family_currency)
-    } 
+    }
   end
 
   def clear_filter

@@ -1,5 +1,5 @@
 class Demo::Generator
-  COLORS = %w[#e99537 #4da568 #6471eb #db5a54 #df4e92 #c44fe9 #eb5429 #61c9ea #805dee #6ad28a] 
+  COLORS = %w[#e99537 #4da568 #6471eb #db5a54 #df4e92 #c44fe9 #eb5429 #61c9ea #805dee #6ad28a]
 
   # Builds a semi-realistic mirror of what production data might look like
   def reset_and_clear_data!(family_names)
@@ -19,7 +19,7 @@ class Demo::Generator
   def reset_data!(family_names)
     puts "Clearing existing data..."
 
-    destroy_everything! 
+    destroy_everything!
 
     puts "Data cleared"
 
@@ -40,24 +40,24 @@ class Demo::Generator
         create_tags!(family)
         create_categories!(family)
         create_merchants!(family)
-    
+
         puts "tags, categories, merchants created for #{family_name}"
-    
+
         create_credit_card_account!(family)
         create_checking_account!(family)
         create_savings_account!(family)
-    
+
         create_investment_account!(family)
         create_house_and_mortgage!(family)
         create_car_and_loan!(family)
         create_other_accounts!(family)
-    
+
         create_transfer_transactions!(family)
       end
-  
+
       puts "accounts created for #{family_name}"
     end
-      
+
     puts "Demo data loaded successfully!"
   end
 
@@ -69,16 +69,16 @@ class Demo::Generator
       ExchangeRate.destroy_all
       Security.destroy_all
       Security::Price.destroy_all
-    end 
+    end
 
     def create_family_and_user!(family_name, user_email, data_enrichment_enabled: false)
       base_uuid = "d99e3c6e-d513-4452-8f24-dc263f8528c0"
       id = Digest::UUID.uuid_v5(base_uuid, family_name)
 
       family = Family.create!(
-        id: id, 
-        name: family_name, 
-        stripe_subscription_status: "active", 
+        id: id,
+        name: family_name,
+        stripe_subscription_status: "active",
         data_enrichment_enabled: data_enrichment_enabled,
         locale: "en",
         country: "US",
