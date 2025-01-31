@@ -22,6 +22,7 @@ class PlaidItem < ApplicationRecord
 
   class << self
     def create_from_public_token(token, item_name:, region: "us")
+      region = region.presence || "us"
       response = plaid_provider.exchange_public_token(token)
 
       new_plaid_item = create!(
