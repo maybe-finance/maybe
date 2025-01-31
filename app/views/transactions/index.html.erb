@@ -14,7 +14,7 @@
       <%= render "account/transactions/selection_bar" %>
     </div>
 
-    <% if @transaction_entries.present? %>
+    <% if @pagy.count > 0 %>
       <div class="grow overflow-y-auto">
         <div class="grid grid-cols-12 bg-gray-25 rounded-xl px-5 py-3 text-xs uppercase font-medium text-gray-500 items-center mb-4">
           <div class="pl-0.5 col-span-8 flex items-center gap-4">
@@ -28,13 +28,11 @@
           <p class="col-span-2 justify-self-end">amount</p>
         </div>
         <div class="space-y-6">
-          <%= entries_by_date(@transaction_entries, totals: true) do |entries| %>
-            <%# Render transfers by selecting one side of the transfer (to prevent double-rendering the same transfer across date groups) %>
-            <%= render partial: "transfers/transfer",
-                       collection: entries.select { |e| e.account_transaction.transfer? && e.account_transaction.transfer_as_outflow.present? }.map { |e| e.account_transaction.transfer_as_outflow } %>
+          <%= entries_by_date(@transaction_entries, @transfers, totals: true) do |entries, transfers| %>
+            <%= render partial: "transfers/transfer", collection: transfers %>
 
             <%# Render regular entries %>
-            <%= render partial: "account/entries/entry", collection: entries.reject { |e| e.account_transaction.transfer? } %>
+            <%= render partial: "account/entries/entry", collection: entries.reject { |e| e.entryable.transfer? } %>
           <% end %>
         </div>
       </div>

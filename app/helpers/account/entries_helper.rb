@@ -8,10 +8,10 @@ module Account::EntriesHelper
     transfers.map(&:transfer).uniq
   end
 
-  def entries_by_date(entries, selectable: true, totals: false)
-    entries.reverse_chronological.group_by(&:date).map do |date, grouped_entries|
+  def entries_by_date(entries, transfers, selectable: true, totals: false)
+    entries.group_by(&:date).map do |date, grouped_entries|
       content = capture do
-        yield grouped_entries
+        yield [ grouped_entries, transfers.select { |t| t.outflow_transaction.entry.date == date } ]
       end
 
       next if content.blank?

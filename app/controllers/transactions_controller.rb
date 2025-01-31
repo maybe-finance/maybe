@@ -14,12 +14,20 @@ class TransactionsController < ApplicationController
     @pagy, @transaction_entries = pagy(
       search_query.reverse_chronological.preload(
         :account,
-        entryable: [ :category, :merchant, :tags, :transfer_as_inflow, :transfer_as_outflow ]
+        entryable: [
+          :category, :merchant, :tags,
+          :transfer_as_inflow,
+          transfer_as_outflow: {
+            inflow_transaction: { entry: :account },
+            outflow_transaction: { entry: :account }
+          }
+        ]
       ),
       limit: params[:per_page].presence || default_params[:per_page],
       params: ->(params) { params.except(:focused_record_id) }
     )
 
+    @transfers = @transaction_entries.map { |entry| entry.entryable.transfer_as_outflow }.compact
     @totals = search_query.stats(Current.family.currency)
   end
 
