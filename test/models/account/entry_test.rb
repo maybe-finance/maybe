@@ -67,23 +67,18 @@ class Account::EntryTest < ActiveSupport::TestCase
     assert_equal 0, family.entries.search(params).size
   end
 
-  test "can calculate total spending for a group of transactions" do
+  test "can calculate totals for a group of transactions" do
     family = families(:empty)
     account = family.accounts.create! name: "Test", balance: 0, currency: "USD", accountable: Depository.new
     create_transaction(account: account, amount: 100)
     create_transaction(account: account, amount: 100)
-    create_transaction(account: account, amount: -500) # income, will be ignored
+    create_transaction(account: account, amount: -500)
 
-    assert_equal Money.new(200), family.entries.expense_total("USD")
-  end
+    totals = family.entries.stats("USD")
 
-  test "can calculate total income for a group of transactions" do
-    family = families(:empty)
-    account = family.accounts.create! name: "Test", balance: 0, currency: "USD", accountable: Depository.new
-    create_transaction(account: account, amount: -100)
-    create_transaction(account: account, amount: -100)
-    create_transaction(account: account, amount: 500) # income, will be ignored
-
-    assert_equal Money.new(-200), family.entries.income_total("USD")
+    assert_equal 3, totals.count
+    assert_equal 500, totals.income_total
+    assert_equal 200, totals.expense_total
+    assert_equal "USD", totals.currency
   end
 end

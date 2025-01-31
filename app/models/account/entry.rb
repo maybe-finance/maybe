@@ -32,15 +32,6 @@ class Account::Entry < ApplicationRecord
     )
   }
 
-  # Converts amounts, falls back to 1:1 exchange rate if no rate is available
-  scope :with_converted_amount, ->(currency) {
-    select("*", "account_entries.amount * COALESCE(exchange_rates.rate, 1) AS converted_amount")
-      .joins(sanitize_sql_array([
-          "LEFT JOIN exchange_rates ON account_entries.date = exchange_rates.date AND account_entries.currency = exchange_rates.from_currency AND exchange_rates.to_currency = ?",
-          currency
-      ]))
-  }
-
   # All non-transfer entries, rejected transfers, and the outflow of a loan payment transfer are incomes/expenses
   scope :incomes_and_expenses, -> {
     joins("INNER JOIN account_transactions ON account_transactions.id = account_entries.entryable_id AND account_entries.entryable_type = 'Account::Transaction'")
@@ -57,6 +48,17 @@ class Account::Entry < ApplicationRecord
 
   scope :expenses, -> {
     incomes_and_expenses.where("account_entries.amount > 0")
+  }
+
+  scope :with_converted_amount, ->(currency) {
+    # Join with exchange rates to convert the amount to the given currency
+    # If no rate is available, exclude the transaction from the results
+    select(
+      "account_entries.*",
+      "account_entries.amount * COALESCE(er.rate, 1) AS converted_amount"
+    )
+      .joins(sanitize_sql_array([ "LEFT JOIN exchange_rates er ON account_entries.date = er.date AND account_entries.currency = er.from_currency AND er.to_currency = ?", currency ]))
+      .where("er.rate IS NOT NULL OR account_entries.currency = ?", currency)
   }
 
   def sync_account_later
@@ -156,13 +158,13 @@ class Account::Entry < ApplicationRecord
 
     def stats(currency = "USD")
       result = all
+        .incomes_and_expenses
+        .joins(sanitize_sql_array([ "LEFT JOIN exchange_rates er ON account_entries.date = er.date AND account_entries.currency = er.from_currency AND er.to_currency = ?", currency ]))
         .select(
           "COUNT(*) AS count",
-          "SUM(CASE WHEN account_entries.converted_amount < 0 THEN account_entries.converted_amount ELSE 0 END) AS income_total",
-          "SUM(CASE WHEN account_entries.converted_amount > 0 THEN account_entries.converted_amount ELSE 0 END) AS expense_total"
+          "SUM(CASE WHEN account_entries.amount < 0 THEN (account_entries.amount * COALESCE(er.rate, 1)) ELSE 0 END) AS income_total",
+          "SUM(CASE WHEN account_entries.amount > 0 THEN (account_entries.amount * COALESCE(er.rate, 1)) ELSE 0 END) AS expense_total"
         )
-        .incomes_and_expenses
-        .with_converted_amount(currency)
         .to_a
         .first
 
