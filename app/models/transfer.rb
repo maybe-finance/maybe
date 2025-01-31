@@ -14,16 +14,16 @@ class Transfer < ApplicationRecord
 
   class << self
     def from_accounts(from_account:, to_account:, date:, amount:)
-      # Attempt to convert the amount to the to_account's currency.
-      # If the conversion fails, use the original amount.
-      converted_amount = begin
-        Money.new(amount.abs, from_account.currency).exchange_to(to_account.currency)
-      rescue Money::ConversionError
-        Money.new(amount.abs, from_account.currency)
-      end
+      Transaction.transaction do
+        # Attempt to convert the amount to the to_account's currency.
+        # If the conversion fails, use the original amount.
+        converted_amount = begin
+          Money.new(amount.abs, from_account.currency).exchange_to(to_account.currency)
+        rescue Money::ConversionError
+          Money.new(amount.abs, from_account.currency)
+        end
 
-      new(
-        inflow_transaction: Account::Transaction.new(
+        inflow_transaction = Account::Transaction.new(
           entry: to_account.entries.build(
             amount: converted_amount.amount.abs * -1,
             currency: converted_amount.currency.iso_code,
@@ -31,8 +31,9 @@ class Transfer < ApplicationRecord
             name: "Transfer from #{from_account.name}",
             entryable: Account::Transaction.new
           )
-        ),
-        outflow_transaction: Account::Transaction.new(
+        )
+
+        outflow_transaction = Account::Transaction.new(
           entry: from_account.entries.build(
             amount: amount.abs,
             currency: from_account.currency,
@@ -40,21 +41,50 @@ class Transfer < ApplicationRecord
             name: "Transfer to #{to_account.name}",
             entryable: Account::Transaction.new
           )
-        ),
-        status: "confirmed"
-      )
+        )
+
+        transfer = new(
+          inflow_transaction: inflow_transaction,
+          outflow_transaction: outflow_transaction,
+          status: "confirmed"
+        )
+
+        # Save all records within the transaction
+        inflow_transaction.save!
+        outflow_transaction.save!
+        transfer.save!
+        transfer
+      end
+    end
+
+    def create_transfer!(inflow_transaction_id:, outflow_transaction_id:)
+      transaction do
+        _lock_transactions!(inflow_transaction_id, outflow_transaction_id)
+        create!(
+          inflow_transaction_id: inflow_transaction_id,
+          outflow_transaction_id: outflow_transaction_id,
+          status: 'pending'
+        )
+      end
     end
   end
 
   def reject!
     Transfer.transaction do
-      RejectedTransfer.find_or_create_by!(inflow_transaction_id: inflow_transaction_id, outflow_transaction_id: outflow_transaction_id)
+      _lock_transactions!(inflow_transaction_id, outflow_transaction_id)
+      RejectedTransfer.find_or_create_by!(
+        inflow_transaction_id: inflow_transaction_id,
+        outflow_transaction_id: outflow_transaction_id
+      )
       destroy!
     end
   end
 
   def confirm!
-    update!(status: "confirmed")
+    Transfer.transaction do
+      _lock_transactions!(inflow_transaction_id, outflow_transaction_id)
+      update!(status: "confirmed")
+    end
   end
 
   def sync_account_later
@@ -95,6 +125,12 @@ class Transfer < ApplicationRecord
   end
 
   private
+    def _lock_transactions!(transaction_id1, transaction_id2)
+      [transaction_id1, transaction_id2].sort.each do |transaction_id|
+        Account::Transaction.lock.find(transaction_id)
+      end
+    end
+
     def transfer_has_different_accounts
       return unless inflow_transaction.present? && outflow_transaction.present?
       errors.add(:base, :must_be_from_different_accounts) if inflow_transaction.entry.account == outflow_transaction.entry.account
