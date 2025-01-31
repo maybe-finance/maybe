@@ -20,4 +20,8 @@ module Plaidable
     def plaid_provider_for(plaid_item)
       self.class.plaid_provider_for(plaid_item)
     end
+
+    def plaid_provider
+      self.class.plaid_provider_for(self)
+    end
 end
