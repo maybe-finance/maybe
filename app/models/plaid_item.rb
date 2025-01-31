@@ -126,7 +126,8 @@ class PlaidItem < ApplicationRecord
 
     def safe_fetch_plaid_data(method)
       begin
-        plaid_provider.send(method, self)
+        provider = plaid_provider_for(self)
+        provider.send(method, self)
       rescue Plaid::ApiError => e
         Rails.logger.warn("Error fetching #{method} for item #{id}: #{e.message}")
         nil
@@ -134,7 +135,7 @@ class PlaidItem < ApplicationRecord
     end
 
     def remove_plaid_item
-      plaid_provider.remove_item(access_token)
+      plaid_provider_for(self).remove_item(access_token)
     rescue StandardError => e
       Rails.logger.warn("Failed to remove Plaid item #{id}: #{e.message}")
     end
