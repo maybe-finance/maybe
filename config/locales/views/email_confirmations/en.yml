@@ -1,7 +1,0 @@
----
-en:
-  email_confirmations:
-    new:
-      success: "Your email has been successfully updated."
-      success_login: "Your email has been confirmed. Please log in with your new email address."
-      invalid_token: "Invalid or expired confirmation link." 
