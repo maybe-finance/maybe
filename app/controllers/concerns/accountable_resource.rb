@@ -52,12 +52,21 @@ module AccountableResource
 
   private
     def set_link_token
-      @link_token = Current.family.get_link_token(
+      @us_link_token = Current.family.get_link_token(
         webhooks_url: webhooks_url,
         redirect_url: accounts_url,
         accountable_type: accountable_type.name,
-        region: Current.family.country.to_s.downcase == "us" ? :us : :eu
+        region: :us
       )
+
+      if Current.family.eu?
+        @eu_link_token = Current.family.get_link_token(
+          webhooks_url: webhooks_url,
+          redirect_url: accounts_url,
+          accountable_type: accountable_type.name,
+          region: :eu
+        )
+      end
     end
 
     def webhooks_url

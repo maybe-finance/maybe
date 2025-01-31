@@ -1,4 +1,3 @@
-# rubocop:disable Layout/ElseAlignment, Layout/IndentationWidth
 class Family < ApplicationRecord
   include Plaidable, Syncable
 
@@ -53,22 +52,22 @@ class Family < ApplicationRecord
     ).where(status: [ "pending", "syncing" ]).exists?
   end
 
-  def get_link_token(webhooks_url:, redirect_url:, accountable_type: nil, region: :us)
-    provider = case region
-    when :eu
-                 self.class.plaid_eu_provider
-               else
-                 self.class.plaid_provider
-    end
+  def eu?
+    country != "US" && country != "CA"
+  end
 
-    return nil unless provider
+  def get_link_token(webhooks_url:, redirect_url:, accountable_type: nil, region: :us)
+    provider = if region.to_sym == :eu
+      self.class.plaid_eu_provider
+    else
+      self.class.plaid_us_provider
+    end
 
     provider.get_link_token(
       user_id: id,
       webhooks_url: webhooks_url,
       redirect_url: redirect_url,
       accountable_type: accountable_type,
-      eu: region == :eu
     ).link_token
   end
 
@@ -243,4 +242,3 @@ class Family < ApplicationRecord
       )
     end
 end
-# rubocop:enable Layout/ElseAlignment, Layout/IndentationWidth

@@ -21,8 +21,8 @@ class PlaidItem < ApplicationRecord
   scope :ordered, -> { order(created_at: :desc) }
 
   class << self
-    def create_from_public_token(token, item_name:, region: "us")
-      response = plaid_provider.exchange_public_token(token)
+    def create_from_public_token(token, item_name:, region:)
+      response = plaid_provider_for_region(region).exchange_public_token(token)
 
       new_plaid_item = create!(
         name: item_name,
@@ -59,11 +59,10 @@ class PlaidItem < ApplicationRecord
   private
     def fetch_and_load_plaid_data
       data = {}
-      provider = plaid_provider_for(self)
-      item = provider.get_item(access_token).item
+      item = plaid_provider.get_item(access_token).item
       update!(available_products: item.available_products, billed_products: item.billed_products)
 
-      fetched_accounts = provider.get_item_accounts(self).accounts
+      fetched_accounts = plaid_provider.get_item_accounts(self).accounts
       data[:accounts] = fetched_accounts || []
 
       internal_plaid_accounts = fetched_accounts.map do |account|
