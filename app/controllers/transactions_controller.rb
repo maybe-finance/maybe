@@ -3,13 +3,13 @@ class TransactionsController < ApplicationController
 
   layout :with_sidebar
 
-  # before_action :store_params!, only: :index
+  before_action :store_params!, only: :index
 
   def index
     @q = search_params
     search_query = Current.family.transactions.search(@q)
 
-    # set_focused_record(search_query, params[:focused_record_id], default_per_page: 50)
+    set_focused_record(search_query, params[:focused_record_id], default_per_page: 50)
 
     @pagy, @transaction_entries = pagy(
       search_query.reverse_chronological.preload(
@@ -24,7 +24,11 @@ class TransactionsController < ApplicationController
   end
 
   def clear_filter
-    updated_params = params.to_unsafe_h.deep_dup
+    updated_params = {
+      "q" => search_params,
+      "page" => params[:page],
+      "per_page" => params[:per_page]
+    }
 
     q_params = updated_params["q"] || {}
 

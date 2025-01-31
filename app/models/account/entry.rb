@@ -171,8 +171,8 @@ class Account::Entry < ApplicationRecord
       Stats.new(
         currency: currency,
         count: result.count,
-        income_total: result.income_total * -1,
-        expense_total: result.expense_total
+        income_total: result.income_total ? result.income_total * -1 : 0,
+        expense_total: result.expense_total || 0
       )
     end
   end
