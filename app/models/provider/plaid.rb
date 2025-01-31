@@ -3,6 +3,7 @@ class Provider::Plaid
 
   MAYBE_SUPPORTED_PLAID_PRODUCTS = %w[transactions investments liabilities].freeze
   MAX_HISTORY_DAYS = Rails.env.development? ? 90 : 730
+  SUPPORTED_COUNTRY_CODES = %w[US CA GB FR ES IE NL DE IT PL DK NO SE EE LT LV PT BE].freeze
 
   class << self
     def process_webhook(webhook_body)
@@ -68,13 +69,16 @@ class Provider::Plaid
     @client = self.class.client
   end
 
-  def get_link_token(user_id:, webhooks_url:, redirect_url:, accountable_type: nil, eu: false)
+  def get_link_token(user_id:, webhooks_url:, redirect_url:, accountable_type: nil, country_code: "US")
+    country_code = country_code.to_s.upcase
+    country_code = "US" unless SUPPORTED_COUNTRY_CODES.include?(country_code)
+
     request = Plaid::LinkTokenCreateRequest.new({
-      user: { client_user_id: user_id },
+      user: { client_user_id: user_id.to_s },
       client_name: "Maybe Finance",
       products: [ get_primary_product(accountable_type) ],
       additional_consented_products: get_additional_consented_products(accountable_type),
-      country_codes: get_country_codes(eu),
+      country_codes: [country_code],
       language: "en",
       webhook: webhooks_url,
       redirect_uri: redirect_url,
@@ -82,6 +86,9 @@ class Provider::Plaid
     })
 
     client.link_token_create(request)
+  rescue Plaid::ApiError => e
+    Rails.logger.error("Plaid link token creation failed: #{e.message}")
+    raise
   end
 
   def exchange_public_token(token)
@@ -197,13 +204,5 @@ class Provider::Plaid
 
     def get_additional_consented_products(accountable_type)
       MAYBE_SUPPORTED_PLAID_PRODUCTS - [ get_primary_product(accountable_type) ]
-    end
-
-    def get_country_codes(eu)
-      if eu
-        [ "ES", "NL", "FR", "IE", "DE", "IT", "PL", "DK", "NO", "SE", "EE", "LT", "LV", "PT", "BE" ]  # EU supported countries
-      else
-        [ "US", "CA" ] # US + CA only
-      end
     end
 end
