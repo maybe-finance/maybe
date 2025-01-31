@@ -10,6 +10,11 @@
 
         <div>
           <%= form.email_field :email, placeholder: t(".email"), label: t(".email") %>
+          <% if @user.unconfirmed_email.present? %>
+            <p class="mt-2 text-sm text-gray-600">
+              You have requested to change your email to <%= @user.unconfirmed_email %>. Please go to your email and confirm for the change to take effect.
+            </p>
+          <% end %>
           <div class="grid grid-cols-2 gap-4 mt-4">
             <%= form.text_field :first_name, placeholder: t(".first_name"), label: t(".first_name") %>
             <%= form.text_field :last_name, placeholder: t(".last_name"), label: t(".last_name") %>

@@ -41,29 +41,12 @@ class User < ApplicationRecord
     if Rails.application.config.app_mode.self_hosted? && !Setting.require_email_confirmation
       update(email: new_email)
     else
-      if update(
-        unconfirmed_email: new_email,
-        email_confirmation_sent_at: Time.current
-      )
+      if update(unconfirmed_email: new_email)
         EmailConfirmationMailer.with(user: self).confirmation_email.deliver_later
         true
       else
         false
       end
-    end
-  end
-
-  def confirm_email_change(token)
-    return false if email_confirmation_sent_at < 1.day.ago
-
-    if update(
-      email: unconfirmed_email,
-      unconfirmed_email: nil,
-      email_confirmation_sent_at: nil
-    )
-      true
-    else
-      false
     end
   end
 

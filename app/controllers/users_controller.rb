@@ -12,7 +12,8 @@ class UsersController < ApplicationController
           redirect_to settings_profile_path, notice: t(".email_change_initiated")
         end
       else
-        redirect_to settings_profile_path, alert: @user.errors.full_messages.to_sentence
+        error_message = @user.errors.any? ? @user.errors.full_messages.to_sentence : t(".email_change_failed")
+        redirect_to settings_profile_path, alert: error_message
       end
     else
       @user.update!(user_params.except(:redirect_to, :delete_profile_image))

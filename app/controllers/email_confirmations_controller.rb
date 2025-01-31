@@ -1,11 +1,15 @@
 class EmailConfirmationsController < ApplicationController
-  skip_before_action :set_request_details, only: :confirm
-  skip_authentication only: :confirm
+  skip_before_action :set_request_details, only: :new
+  skip_authentication only: :new
 
-  def confirm
+  def new
+    # Returns nil if the token is invalid OR expired
     @user = User.find_by_token_for(:email_confirmation, params[:token])
 
-    if @user&.confirm_email_change(@user.email_confirmation_token)
+    if @user&.unconfirmed_email && @user&.update(
+      email: @user.unconfirmed_email,
+      unconfirmed_email: nil
+    )
       if Current.user == @user
         redirect_to settings_profile_path, notice: t(".success")
       else

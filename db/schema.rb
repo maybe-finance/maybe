@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_30_191533) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_30_214500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -663,7 +663,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_30_191533) do
     t.datetime "onboarded_at"
     t.string "unconfirmed_email"
     t.string "email_confirmation_token"
-    t.datetime "email_confirmation_sent_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["email_confirmation_token"], name: "index_users_on_email_confirmation_token", unique: true
     t.index ["family_id"], name: "index_users_on_family_id"
