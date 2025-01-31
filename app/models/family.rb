@@ -45,7 +45,12 @@ class Family < ApplicationRecord
   end
 
   def syncing?
-    super || accounts.manual.any?(&:syncing?) || plaid_items.any?(&:syncing?)
+    Sync.where(
+      "(syncable_type = 'Family' AND syncable_id = ?) OR
+       (syncable_type = 'Account' AND syncable_id IN (SELECT id FROM accounts WHERE family_id = ? AND plaid_account_id IS NULL)) OR
+       (syncable_type = 'PlaidItem' AND syncable_id IN (SELECT id FROM plaid_items WHERE family_id = ?))",
+      id, id, id
+    ).where(status: [ "pending", "syncing" ]).exists?
   end
 
   def get_link_token(webhooks_url:, redirect_url:, accountable_type: nil, region: :us)
