@@ -55,7 +55,8 @@ module AccountableResource
       @link_token = Current.family.get_link_token(
         webhooks_url: webhooks_url,
         redirect_url: accounts_url,
-        accountable_type: accountable_type.name
+        accountable_type: accountable_type.name,
+        region: Current.family.country.to_s.downcase == "us" ? :us : :eu
       )
     end
 

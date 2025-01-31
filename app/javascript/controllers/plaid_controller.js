@@ -4,6 +4,7 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static values = {
     linkToken: String,
+    region: { type: String, default: "us" }
   };
 
   open() {
@@ -31,6 +32,7 @@ export default class extends Controller {
         plaid_item: {
           public_token: public_token,
           metadata: metadata,
+          region: this.regionValue
         },
       }),
     }).then((response) => {

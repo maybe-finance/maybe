@@ -22,6 +22,10 @@ class Settings::HostingsController < SettingsController
       Setting.require_invite_for_signup = hosting_params[:require_invite_for_signup]
     end
 
+    if hosting_params.key?(:require_email_confirmation)
+      Setting.require_email_confirmation = hosting_params[:require_email_confirmation]
+    end
+
     if hosting_params.key?(:synth_api_key)
       Setting.synth_api_key = hosting_params[:synth_api_key]
     end
@@ -34,7 +38,7 @@ class Settings::HostingsController < SettingsController
 
   private
     def hosting_params
-      params.require(:setting).permit(:render_deploy_hook, :upgrades_setting, :require_invite_for_signup, :synth_api_key)
+      params.require(:setting).permit(:render_deploy_hook, :upgrades_setting, :require_invite_for_signup, :require_email_confirmation, :synth_api_key)
     end
 
     def raise_if_not_self_hosted
