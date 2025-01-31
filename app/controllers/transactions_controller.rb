@@ -12,7 +12,20 @@ class TransactionsController < ApplicationController
     set_focused_record(search_query, params[:focused_record_id], default_per_page: 50)
 
     @pagy, @transaction_entries = pagy(
-      search_query,
+      search_query.preload(
+        :account,
+        transfer: [
+          inflow_transaction: [ entry: :account ],
+          outflow_transaction: [ entry: :account ]
+        ],
+        entryable: [
+          :category, :merchant, :tags,
+          :transfer_as_inflow,
+          :transfer_as_outflow,
+          :rejected_transfer_as_inflow,
+          :rejected_transfer_as_outflow
+        ]
+      ),
       limit: params[:per_page].presence || default_params[:per_page],
       params: ->(params) { params.except(:focused_record_id) }
     )
