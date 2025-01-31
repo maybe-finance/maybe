@@ -3,30 +3,23 @@ class TransactionsController < ApplicationController
 
   layout :with_sidebar
 
-  before_action :store_params!, only: :index
+  # before_action :store_params!, only: :index
 
   def index
     @q = search_params
-    search_query = Current.family.transactions.search(@q).reverse_chronological
+    search_query = Current.family.transactions.search(@q)
 
-    set_focused_record(search_query, params[:focused_record_id], default_per_page: 50)
+    # set_focused_record(search_query, params[:focused_record_id], default_per_page: 50)
 
     @pagy, @transaction_entries = pagy(
-      search_query,
+      search_query.reverse_chronological.includes(:account).preload(
+        entryable: [ :category, :merchant, :tags, :transfer_as_inflow, :transfer_as_outflow ]
+      ),
       limit: params[:per_page].presence || default_params[:per_page],
       params: ->(params) { params.except(:focused_record_id) }
     )
 
-    totals_query = search_query.incomes_and_expenses
-    family_currency = Current.family.currency
-    count_with_transfers = search_query.count
-    count_without_transfers = totals_query.count
-
-    @totals = {
-      count: ((count_with_transfers - count_without_transfers) / 2) + count_without_transfers,
-      income: totals_query.income_total(family_currency).abs,
-      expense: totals_query.expense_total(family_currency)
-    }
+    @totals = search_query.stats(Current.family.currency)
   end
 
   def clear_filter

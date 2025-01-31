@@ -52,9 +52,6 @@ class Account::EntrySearch
     query = query.where(accounts: { name: accounts }) if accounts.present?
     query = query.where(accounts: { id: account_ids }) if account_ids.present?
 
-    query.includes(
-      :account,
-      entryable: [ :transfer_as_inflow, :transfer_as_outflow, :category, :merchant, :tags ]
-    )
+    query
   end
 end

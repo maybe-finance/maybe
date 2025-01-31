@@ -1,6 +1,8 @@
 class Account::Entry < ApplicationRecord
   include Monetizable
 
+  Stats = Struct.new(:currency, :count, :income_total, :expense_total, keyword_init: true)
+
   monetize :amount
 
   belongs_to :account
@@ -30,14 +32,23 @@ class Account::Entry < ApplicationRecord
     )
   }
 
+  # Converts amounts, falls back to 1:1 exchange rate if no rate is available
+  scope :with_converted_amount, ->(currency) {
+    select("*", "account_entries.amount * COALESCE(exchange_rates.rate, 1) AS converted_amount")
+      .joins(sanitize_sql_array([
+          "LEFT JOIN exchange_rates ON account_entries.date = exchange_rates.date AND account_entries.currency = exchange_rates.from_currency AND exchange_rates.to_currency = ?",
+          currency
+      ]))
+  }
+
   # All non-transfer entries, rejected transfers, and the outflow of a loan payment transfer are incomes/expenses
   scope :incomes_and_expenses, -> {
     joins("INNER JOIN account_transactions ON account_transactions.id = account_entries.entryable_id AND account_entries.entryable_type = 'Account::Transaction'")
-    .joins("LEFT JOIN transfers ON transfers.inflow_transaction_id = account_transactions.id OR transfers.outflow_transaction_id = account_transactions.id")
-    .joins("LEFT JOIN account_transactions inflow_txns ON inflow_txns.id = transfers.inflow_transaction_id")
-    .joins("LEFT JOIN account_entries inflow_entries ON inflow_entries.entryable_id = inflow_txns.id AND inflow_entries.entryable_type = 'Account::Transaction'")
-    .joins("LEFT JOIN accounts inflow_accounts ON inflow_accounts.id = inflow_entries.account_id")
-    .where("transfers.id IS NULL OR transfers.status = 'rejected' OR (account_entries.amount > 0 AND inflow_accounts.accountable_type = 'Loan')")
+      .joins("LEFT JOIN transfers ON transfers.inflow_transaction_id = account_transactions.id OR transfers.outflow_transaction_id = account_transactions.id")
+      .joins("LEFT JOIN account_transactions inflow_txns ON inflow_txns.id = transfers.inflow_transaction_id")
+      .joins("LEFT JOIN account_entries inflow_entries ON inflow_entries.entryable_id = inflow_txns.id AND inflow_entries.entryable_type = 'Account::Transaction'")
+      .joins("LEFT JOIN accounts inflow_accounts ON inflow_accounts.id = inflow_entries.account_id")
+      .where("transfers.id IS NULL OR transfers.status = 'rejected' OR (account_entries.amount > 0 AND inflow_accounts.accountable_type = 'Loan')")
   }
 
   scope :incomes, -> {
@@ -46,17 +57,6 @@ class Account::Entry < ApplicationRecord
 
   scope :expenses, -> {
     incomes_and_expenses.where("account_entries.amount > 0")
-  }
-
-  scope :with_converted_amount, ->(currency) {
-    # Join with exchange rates to convert the amount to the given currency
-    # If no rate is available, exclude the transaction from the results
-    select(
-      "account_entries.*",
-      "account_entries.amount * COALESCE(er.rate, 1) AS converted_amount"
-    )
-      .joins(sanitize_sql_array([ "LEFT JOIN exchange_rates er ON account_entries.date = er.date AND account_entries.currency = er.from_currency AND er.to_currency = ?", currency ]))
-      .where("er.rate IS NOT NULL OR account_entries.currency = ?", currency)
   }
 
   def sync_account_later
@@ -154,20 +154,24 @@ class Account::Entry < ApplicationRecord
       all.size
     end
 
-    def income_total(currency = "USD", start_date: nil, end_date: nil)
-      total = incomes.where(date: start_date..end_date)
-                       .map { |e| e.amount_money.exchange_to(currency, date: e.date, fallback_rate: 0) }
-                       .sum
+    def stats(currency = "USD")
+      result = all
+        .select(
+          "COUNT(*) AS count",
+          "SUM(CASE WHEN account_entries.converted_amount < 0 THEN account_entries.converted_amount ELSE 0 END) AS income_total",
+          "SUM(CASE WHEN account_entries.converted_amount > 0 THEN account_entries.converted_amount ELSE 0 END) AS expense_total"
+        )
+        .incomes_and_expenses
+        .with_converted_amount(currency)
+        .to_a
+        .first
 
-      Money.new(total, currency)
-    end
-
-    def expense_total(currency = "USD", start_date: nil, end_date: nil)
-      total = expenses.where(date: start_date..end_date)
-                       .map { |e| e.amount_money.exchange_to(currency, date: e.date, fallback_rate: 0) }
-                       .sum
-
-      Money.new(total, currency)
+      Stats.new(
+        currency: currency,
+        count: result.count,
+        income_total: result.income_total * -1,
+        expense_total: result.expense_total
+      )
     end
   end
 end
