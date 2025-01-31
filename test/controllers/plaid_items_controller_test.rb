@@ -4,13 +4,12 @@ require "ostruct"
 class PlaidItemsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:family_admin)
-
-    @plaid_provider = mock
-
-    PlaidItem.stubs(:plaid_provider).returns(@plaid_provider)
   end
 
   test "create" do
+    @plaid_provider = mock
+    PlaidItem.expects(:plaid_provider_for_region).with("us").returns(@plaid_provider)
+
     public_token = "public-sandbox-1234"
 
     @plaid_provider.expects(:exchange_public_token).with(public_token).returns(

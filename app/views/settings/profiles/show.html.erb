@@ -51,7 +51,7 @@
               </div>
               <% if Current.user.admin? && user != Current.user %>
                 <div class="ml-auto">
-                  <%= button_to settings_profile_path(user_id: user), 
+                  <%= button_to settings_profile_path(user_id: user),
                       method: :delete,
                       class: "text-red-500 hover:text-red-700",
                       data: { turbo_confirm: {
@@ -101,7 +101,7 @@
                     </div>
                   <% end %>
                   <% if Current.user.admin? %>
-                    <%= button_to invitation_path(invitation), 
+                    <%= button_to invitation_path(invitation),
                         method: :delete,
                         class: "text-red-500 hover:text-red-700",
                         data: { turbo_confirm: {
