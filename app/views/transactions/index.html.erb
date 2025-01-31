@@ -28,7 +28,7 @@
           <p class="col-span-2 justify-self-end">amount</p>
         </div>
         <div class="space-y-6">
-          <%= entries_by_date(@transaction_entries, @transfers, totals: true) do |entries, transfers| %>
+          <%= entries_by_date(@transaction_entries, transfers: @transfers, totals: true) do |entries, transfers| %>
             <%= render partial: "transfers/transfer", collection: transfers %>
 
             <%# Render regular entries %>
