@@ -8,6 +8,13 @@ en:
           details.
         title: Clean your data
     configurations:
+      date_format_label: &date_format_label Date format
+      trade_import:
+        date_format_label: *date_format_label
+      mint_import:
+        date_format_label: *date_format_label
+      transaction_import:
+        date_format_label: *date_format_label
       show:
         description: Select the columns that correspond to each field in your CSV.
         title: Configure your import
