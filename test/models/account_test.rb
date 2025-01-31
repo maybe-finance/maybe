@@ -1,11 +1,17 @@
 require "test_helper"
 
 class AccountTest < ActiveSupport::TestCase
-  include SyncableInterfaceTest
+  include SyncableInterfaceTest, Account::EntriesTestHelper
 
   setup do
     @account = @syncable = accounts(:depository)
     @family = families(:dylan_family)
+  end
+
+  test "can destroy" do
+    assert_difference "Account.count", -1 do
+      @account.destroy
+    end
   end
 
   test "groups accounts by type" do
@@ -57,6 +63,40 @@ class AccountTest < ActiveSupport::TestCase
   test "generates empty series if no balances and no exchange rate" do
     with_env_overrides SYNTH_API_KEY: nil do
       assert_equal 0, @account.series(currency: "NZD").values.count
+    end
+  end
+
+  test "auto-matches transfers" do
+    outflow_entry = create_transaction(date: 1.day.ago.to_date, account: @account, amount: 500)
+    inflow_entry = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
+
+    assert_difference -> { Transfer.count } => 1 do
+      @account.auto_match_transfers!
+    end
+  end
+
+  # In this scenario, our matching logic should find 4 potential matches.  These matches should be ranked based on
+  # days apart, then de-duplicated so that we aren't auto-matching the same transaction across multiple transfers.
+  test "when 2 options exist, only auto-match one at a time, ranked by days apart" do
+    yesterday_outflow = create_transaction(date: 1.day.ago.to_date, account: @account, amount: 500)
+    yesterday_inflow = create_transaction(date: 1.day.ago.to_date, account: accounts(:credit_card), amount: -500)
+
+    today_outflow = create_transaction(date: Date.current, account: @account, amount: 500)
+    today_inflow = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
+
+    assert_difference -> { Transfer.count } => 2 do
+      @account.auto_match_transfers!
+    end
+  end
+
+  test "does not auto-match any transfers that have been rejected by user already" do
+    outflow = create_transaction(date: Date.current, account: @account, amount: 500)
+    inflow = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
+
+    RejectedTransfer.create!(inflow_transaction_id: inflow.entryable_id, outflow_transaction_id: outflow.entryable_id)
+
+    assert_no_difference -> { Transfer.count } do
+      @account.auto_match_transfers!
     end
   end
 end

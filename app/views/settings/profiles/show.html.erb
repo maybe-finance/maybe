@@ -43,6 +43,21 @@
               <div class="rounded-md bg-gray-100 px-1.5 py-0.5">
                 <p class="uppercase text-gray-500 font-medium text-xs"><%= user.role %></p>
               </div>
+              <% if Current.user.admin? && user != Current.user %>
+                <div class="ml-auto">
+                  <%= button_to settings_profile_path(user_id: user), 
+                      method: :delete,
+                      class: "text-red-500 hover:text-red-700",
+                      data: { turbo_confirm: {
+                        title: t(".confirm_remove_member.title"),
+                        body: t(".confirm_remove_member.body", name: user.display_name),
+                        accept: t(".remove_member"),
+                        acceptClass: "w-full bg-red-500 text-white rounded-xl text-center p-[10px] border mb-2"
+                      }} do %>
+                    <%= lucide_icon "x", class: "w-5 h-5" %>
+                  <% end %>
+                </div>
+              <% end %>
             </div>
           <% end %>
           <% if @pending_invitations.any? %>
@@ -59,25 +74,40 @@
                     </div>
                   </div>
                 </div>
-                <% if self_hosted? %>
-                  <div class="flex items-center gap-2" data-controller="clipboard">
-                    <p class="text-gray-500 text-sm"><%= t(".invitation_link") %></p>
-                    <span data-clipboard-target="source" class="hidden"><%= accept_invitation_url(invitation.token) %></span>
-                    <input type="text"
-                           readonly
-                           autocomplete="off"
-                           value="<%= accept_invitation_url(invitation.token) %>"
-                           class="text-sm bg-gray-50 px-2 py-1 rounded border border-gray-200 w-72">
-                    <button data-action="clipboard#copy" class="text-gray-500 hover:text-gray-700">
-                      <span data-clipboard-target="iconDefault">
-                        <%= lucide_icon "copy", class: "w-5 h-5" %>
-                      </span>
-                      <span class="hidden" data-clipboard-target="iconSuccess">
-                        <%= lucide_icon "check", class: "w-5 h-5" %>
-                      </span>
-                    </button>
-                  </div>
-                <% end %>
+                <div class="flex items-center gap-4">
+                  <% if self_hosted? %>
+                    <div class="flex items-center gap-2" data-controller="clipboard">
+                      <p class="text-gray-500 text-sm"><%= t(".invitation_link") %></p>
+                      <span data-clipboard-target="source" class="hidden"><%= accept_invitation_url(invitation.token) %></span>
+                      <input type="text"
+                             readonly
+                             autocomplete="off"
+                             value="<%= accept_invitation_url(invitation.token) %>"
+                             class="text-sm bg-gray-50 px-2 py-1 rounded border border-gray-200 w-72">
+                      <button data-action="clipboard#copy" class="text-gray-500 hover:text-gray-700">
+                        <span data-clipboard-target="iconDefault">
+                          <%= lucide_icon "copy", class: "w-5 h-5" %>
+                        </span>
+                        <span class="hidden" data-clipboard-target="iconSuccess">
+                          <%= lucide_icon "check", class: "w-5 h-5" %>
+                        </span>
+                      </button>
+                    </div>
+                  <% end %>
+                  <% if Current.user.admin? %>
+                    <%= button_to invitation_path(invitation), 
+                        method: :delete,
+                        class: "text-red-500 hover:text-red-700",
+                        data: { turbo_confirm: {
+                          title: t(".confirm_remove_invitation.title"),
+                          body: t(".confirm_remove_invitation.body", email: invitation.email),
+                          accept: t(".remove_invitation"),
+                          acceptClass: "w-full bg-red-500 text-white rounded-xl text-center p-[10px] border mb-2"
+                        }} do %>
+                      <%= lucide_icon "x", class: "w-5 h-5" %>
+                    <% end %>
+                  <% end %>
+                </div>
               </div>
             <% end %>
           <% end %>

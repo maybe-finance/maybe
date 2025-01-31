@@ -1,4 +1,4 @@
-<div class="space-y-4 h-full flex flex-col overflow-y-auto">
+<div class="space-y-4 h-full flex flex-col overflow-y-auto" data-controller="focus-record" data-focus-record-id-value="<%= @focused_record ? dom_id(@focused_record) : nil %>">
   <%= render "header" %>
 
   <%= render "summary", totals: @totals %>
@@ -17,20 +17,24 @@
     <% if @transaction_entries.present? %>
       <div class="grow overflow-y-auto">
         <div class="grid grid-cols-12 bg-gray-25 rounded-xl px-5 py-3 text-xs uppercase font-medium text-gray-500 items-center mb-4">
-          <div class="pl-0.5 col-span-6 flex items-center gap-4">
+          <div class="pl-0.5 col-span-8 flex items-center gap-4">
             <%= check_box_tag "selection_entry",
                               class: "maybe-checkbox maybe-checkbox--light",
                               data: { action: "bulk-select#togglePageSelection" } %>
-            <p class="col-span-4">transaction</p>
+            <p>transaction</p>
           </div>
 
           <p class="col-span-2">category</p>
-          <p class="col-span-2">account</p>
           <p class="col-span-2 justify-self-end">amount</p>
         </div>
         <div class="space-y-6">
           <%= entries_by_date(@transaction_entries, totals: true) do |entries| %>
-            <%= render entries %>
+            <%# Render transfers by selecting one side of the transfer (to prevent double-rendering the same transfer across date groups) %>
+            <%= render partial: "transfers/transfer",
+                       collection: entries.select { |e| e.account_transaction.transfer? && e.account_transaction.transfer_as_outflow.present? }.map { |e| e.account_transaction.transfer_as_outflow } %>
+
+            <%# Render regular entries %>
+            <%= render partial: "account/entries/entry", collection: entries.reject { |e| e.account_transaction.transfer? } %>
           <% end %>
         </div>
       </div>

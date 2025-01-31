@@ -1,5 +1,5 @@
 class AutoUpgradeJob < ApplicationJob
-  queue_as :default
+  queue_as :latency_low
 
   def perform(*args)
     raise_if_disabled

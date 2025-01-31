@@ -1,9 +1,12 @@
 <%# locals: (pagy:) %>
+
 <nav class="flex w-full items-center justify-between">
   <div class="flex items-center gap-1">
     <div>
       <% if pagy.prev %>
-        <%= link_to pagy_url_for(pagy, pagy.prev), class: "inline-flex items-center p-2 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700" do %>
+        <%= link_to pagy_url_for(pagy, pagy.prev),
+              data: { turbo_frame: :_top },
+              class: "inline-flex items-center p-2 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700" do %>
           <%= lucide_icon("chevron-left", class: "w-5 h-5 text-gray-500") %>
         <% end %>
       <% else %>
@@ -15,11 +18,15 @@
     <div class="rounded-xl p-1 bg-gray-25">
       <% pagy.series.each do |series_item| %>
         <% if series_item.is_a?(Integer) %>
-          <%= link_to pagy_url_for(pagy, series_item), class: "rounded-md px-2 py-1 inline-flex items-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700" do %>
+          <%= link_to pagy_url_for(pagy, series_item),
+                data: { turbo_frame: :_top },
+                class: "rounded-md px-2 py-1 inline-flex items-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700" do %>
             <%= series_item %>
           <% end %>
         <% elsif series_item.is_a?(String) %>
-          <%= link_to pagy_url_for(pagy, series_item), class: "rounded-md px-2 py-1 bg-white border border-alpha-black-25 shadow-xs inline-flex items-center text-sm font-medium text-gray-900" do %>
+          <%= link_to pagy_url_for(pagy, series_item),
+                data: { turbo_frame: :_top },
+                class: "rounded-md px-2 py-1 bg-white border border-alpha-black-25 shadow-xs inline-flex items-center text-sm font-medium text-gray-900" do %>
             <%= series_item %>
           <% end %>
         <% elsif series_item == :gap %>
@@ -29,7 +36,9 @@
     </div>
     <div>
       <% if pagy.next %>
-        <%= link_to pagy_url_for(pagy, pagy.next), class: "inline-flex items-center p-2 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700" do %>
+        <%= link_to pagy_url_for(pagy, pagy.next),
+              data: { turbo_frame: :_top },
+              class: "inline-flex items-center p-2 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700" do %>
           <%= lucide_icon("chevron-right", class: "w-5 h-5 text-gray-500") %>
         <% end %>
       <% else %>
@@ -40,16 +49,9 @@
     </div>
   </div>
   <div class="flex items-center gap-4">
-    <%= form_with url: url_for,
-                method: :get,
-                class: "flex items-center gap-4",
-                data: { controller: "auto-submit-form" } do |f| %>
-    <%= f.label :per_page, t(".rows_per_page"), class: "text-sm text-gray-500" %>
-    <%= f.select :per_page,
-                 options_for_select(["10", "20", "30", "50"], pagy.limit),
-                 {},
-                 class: "py-1.5 pr-8 text-sm text-gray-900 font-medium border border-gray-200 rounded-lg focus:border-gray-900 focus:ring-gray-900 focus-visible:ring-gray-900",
-                 data: { "auto-submit-form-target": "auto" } %>
-  <% end %>
+    <%= select_tag :per_page,
+                   options_for_select(["10", "20", "30", "50"], pagy.limit),
+                   data: { controller: "selectable-link" },
+                   class: "py-1.5 pr-8 text-sm text-gray-900 font-medium border border-gray-200 rounded-lg focus:border-gray-900 focus:ring-gray-900 focus-visible:ring-gray-900" %>
   </div>
 </nav>

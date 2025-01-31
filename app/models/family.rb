@@ -18,6 +18,8 @@ class Family < ApplicationRecord
   has_many :issues, through: :accounts
   has_many :holdings, through: :accounts
   has_many :plaid_items, dependent: :destroy
+  has_many :budgets, dependent: :destroy
+  has_many :budget_categories, through: :budgets
 
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }
   validates :date_format, inclusion: { in: DATE_FORMATS }
@@ -65,6 +67,22 @@ class Family < ApplicationRecord
     ).link_token
   end
 
+  def income_categories_with_totals(date: Date.current)
+    categories_with_stats(classification: "income", date: date)
+  end
+
+  def expense_categories_with_totals(date: Date.current)
+    categories_with_stats(classification: "expense", date: date)
+  end
+
+  def category_stats
+    CategoryStats.new(self)
+  end
+
+  def budgeting_stats
+    BudgetingStats.new(self)
+  end
+
   def snapshot(period = Period.all)
     query = accounts.active.joins(:balances)
               .where("account_balances.currency = ?", self.currency)
@@ -91,7 +109,9 @@ class Family < ApplicationRecord
 
   def snapshot_account_transactions
     period = Period.last_30_days
-    results = accounts.active.joins(:entries)
+    results = accounts.active
+                      .joins(:entries)
+                      .joins("LEFT JOIN transfers ON (transfers.inflow_transaction_id = account_entries.entryable_id OR transfers.outflow_transaction_id = account_entries.entryable_id)")
                       .select(
                         "accounts.*",
                         "COALESCE(SUM(account_entries.amount) FILTER (WHERE account_entries.amount > 0), 0) AS spending",
@@ -99,8 +119,8 @@ class Family < ApplicationRecord
                       )
                       .where("account_entries.date >= ?", period.date_range.begin)
                       .where("account_entries.date <= ?", period.date_range.end)
-                      .where("account_entries.marked_as_transfer = ?", false)
-                      .where("account_entries.entryable_type = ?", "Account::Transaction")
+                      .where("account_entries.entryable_type = 'Account::Transaction'")
+                      .where("transfers.id IS NULL")
                       .group("accounts.id")
                       .having("SUM(ABS(account_entries.amount)) > 0")
                       .to_a
@@ -119,9 +139,7 @@ class Family < ApplicationRecord
   end
 
   def snapshot_transactions
-    candidate_entries = entries.account_transactions.without_transfers.excluding(
-      entries.joins(:account).where(amount: ..0, accounts: { classification: Account.classifications[:liability] })
-    )
+    candidate_entries = entries.account_transactions.incomes_and_expenses
     rolling_totals = Account::Entry.daily_rolling_totals(candidate_entries, self.currency, period: Period.last_30_days)
 
     spending = []
@@ -140,7 +158,7 @@ class Family < ApplicationRecord
 
       savings << {
         date: r.date,
-        value: r.rolling_income != 0 ? (r.rolling_income - r.rolling_spend) / r.rolling_income : 0.to_d
+        value: r.rolling_income != 0 ? ((r.rolling_income - r.rolling_spend) / r.rolling_income) : 0.to_d
       }
     end
 
@@ -182,5 +200,42 @@ class Family < ApplicationRecord
   def primary_user
     users.order(:created_at).first
   end
+
+  def oldest_entry_date
+    entries.order(:date).first&.date || Date.current
+  end
+
+  private
+    CategoriesWithTotals = Struct.new(:total_money, :category_totals, keyword_init: true)
+    CategoryWithStats = Struct.new(:category, :amount_money, :percentage, keyword_init: true)
+
+    def categories_with_stats(classification:, date: Date.current)
+      totals = category_stats.month_category_totals(date: date)
+
+      classified_totals = totals.category_totals.select { |t| t.classification == classification }
+
+      if classification == "income"
+        total = totals.total_income
+        categories_scope = categories.incomes
+      else
+        total = totals.total_expense
+        categories_scope = categories.expenses
+      end
+
+      categories_with_uncategorized = categories_scope + [ categories_scope.uncategorized ]
+
+      CategoriesWithTotals.new(
+        total_money: Money.new(total, currency),
+        category_totals: categories_with_uncategorized.map do |category|
+          ct = classified_totals.find { |ct| ct.category_id == category&.id }
+
+          CategoryWithStats.new(
+            category: category,
+            amount_money: Money.new(ct&.amount || 0, currency),
+            percentage: ct&.percentage || 0
+          )
+        end
+      )
+    end
 end
 # rubocop:enable Layout/ElseAlignment, Layout/IndentationWidth

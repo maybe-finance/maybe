@@ -31,7 +31,6 @@ class PlaidInvestmentSync
             t.amount = transaction.amount
             t.currency = transaction.iso_currency_code
             t.date = transaction.date
-            t.marked_as_transfer = transaction.subtype.in?(%w[deposit withdrawal])
             t.entryable = Account::Transaction.new
           end
         else

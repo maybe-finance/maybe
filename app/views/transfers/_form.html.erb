@@ -1,0 +1,38 @@
+<%= styled_form_with model: transfer, class: "space-y-4", data: { turbo_frame: "_top", controller: "transfer-form" } do |f| %>
+  <% if transfer.errors.present? %>
+    <div class="text-red-600 flex items-center gap-2">
+      <%= lucide_icon "circle-alert", class: "w-5 h-5" %>
+      <p class="text-sm"><%= @transfer.errors.full_messages.to_sentence %></p>
+    </div>
+  <% end %>
+
+  <section>
+    <fieldset class="bg-gray-50 rounded-lg p-1 grid grid-flow-col justify-stretch gap-x-2">
+      <%= link_to new_account_transaction_path(nature: "expense"), data: { turbo_frame: :modal }, class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-gray-400" do %>
+        <%= lucide_icon "minus-circle", class: "w-5 h-5" %>
+        <%= tag.span t(".expense") %>
+      <% end %>
+
+      <%= link_to new_account_transaction_path(nature: "income"), data: { turbo_frame: :modal }, class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-gray-400" do %>
+        <%= lucide_icon "plus-circle", class: "w-5 h-5" %>
+        <%= tag.span t(".income") %>
+      <% end %>
+
+      <%= tag.div class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-gray-400 bg-white text-gray-800 shadow-sm" do %>
+        <%= lucide_icon "arrow-right-left", class: "w-5 h-5" %>
+        <%= tag.span t(".transfer") %>
+      <% end %>
+    </fieldset>
+  </section>
+
+  <section class="space-y-2">
+    <%= f.collection_select :from_account_id, Current.family.accounts.manual.alphabetically, :id, :name, { prompt: t(".select_account"), label: t(".from") }, required: true %>
+    <%= f.collection_select :to_account_id, Current.family.accounts.manual.alphabetically, :id, :name, { prompt: t(".select_account"), label: t(".to") }, required: true %>
+    <%= f.number_field :amount, label: t(".amount"), required: true, min: 0, placeholder: "100", step: 0.00000001 %>
+    <%= f.date_field :date, value: transfer.inflow_transaction&.entry&.date || Date.current, label: t(".date"), required: true, max: Date.current %>
+  </section>
+
+  <section>
+    <%= f.submit t(".submit") %>
+  </section>
+<% end %>

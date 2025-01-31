@@ -34,7 +34,7 @@
             <dd class="text-gray-900"><%= trade.security.ticker %></dd>
           </div>
 
-          <% if trade.buy? %>
+          <% if trade.qty.positive? %>
             <div class="flex items-center justify-between text-sm">
               <dt class="text-gray-500"><%= t(".purchase_qty_label") %></dt>
               <dd class="text-gray-900"><%= trade.qty.abs %></dd>
@@ -53,7 +53,7 @@
             </div>
           <% end %>
 
-          <% if trade.buy? && trade.unrealized_gain_loss.present? %>
+          <% if trade.qty.positive? && trade.unrealized_gain_loss.present? %>
             <div class="flex items-center justify-between text-sm">
               <dt class="text-gray-500"><%= t(".total_return_label") %></dt>
               <dd style="color: <%= trade.unrealized_gain_loss.color %>;">

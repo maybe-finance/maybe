@@ -15,6 +15,16 @@ module ApplicationHelper
     ]
   end
 
+  def icon(key, size: "md", color: "current")
+    render partial: "shared/icon", locals: { key:, size:, color: }
+  end
+
+  # Convert alpha (0-1) to 8-digit hex (00-FF)
+  def hex_with_alpha(hex, alpha)
+    alpha_hex = (alpha * 255).round.to_s(16).rjust(2, "0")
+    "#{hex}#{alpha_hex}"
+  end
+
   def title(page_title)
     content_for(:title) { page_title }
   end
@@ -67,9 +77,9 @@ module ApplicationHelper
     render partial: "shared/drawer", locals: { content:, reload_on_close: }
   end
 
-  def disclosure(title, &block)
+  def disclosure(title, default_open: true, &block)
     content = capture &block
-    render partial: "shared/disclosure", locals: { title: title, content: content }
+    render partial: "shared/disclosure", locals: { title: title, content: content, open: default_open }
   end
 
   def sidebar_link_to(name, path, options = {})

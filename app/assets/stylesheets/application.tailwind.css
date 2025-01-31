@@ -29,6 +29,11 @@
     @apply focus:opacity-100 focus:outline-none focus:ring-0;
     @apply placeholder-shown:opacity-50;
     @apply disabled:text-gray-400;
+    @apply text-ellipsis overflow-hidden whitespace-nowrap;
+  }
+
+  select.form-field__input {
+    @apply pr-8;
   }
 
   .form-field__radio {
@@ -51,8 +56,16 @@
     @apply border-alpha-black-200 checked:bg-gray-900 checked:ring-gray-900 focus:ring-gray-900 focus-visible:ring-gray-900 checked:hover:bg-gray-500;
   }
 
+  [type='checkbox'].maybe-checkbox--light:disabled {
+    @apply cursor-not-allowed opacity-80 bg-gray-50 border-gray-200 checked:bg-gray-400 checked:ring-gray-400;
+  }
+
   [type='checkbox'].maybe-checkbox--dark {
     @apply ring-gray-900 checked:text-white;
+  }
+
+  [type='checkbox'].maybe-checkbox--dark:disabled {
+    @apply cursor-not-allowed opacity-80 ring-gray-600;
   }
 
   [type='checkbox'].maybe-checkbox--dark:checked {
@@ -60,7 +73,7 @@
   }
 
   select[multiple="multiple"] {
-    @apply py-2 pr-2 space-y-0.5;
+    @apply py-2 pr-2 space-y-0.5 overflow-y-auto;
   }
 
   select[multiple="multiple"] option {

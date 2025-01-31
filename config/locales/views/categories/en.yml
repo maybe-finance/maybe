@@ -1,12 +1,13 @@
 ---
 en:
   categories:
+    bootstrap:
+      success: Default categories created successfully
     category:
       delete: Delete category
       edit: Edit category
     create:
-      failure: 'Failed to create category: %{error}'
-      success: New transaction category created successfully
+      success: Category created successfully
     destroy:
       success: Category deleted successfully
     edit:
@@ -14,7 +15,10 @@ en:
     form:
       placeholder: Category name
     index:
+      bootstrap: Use default categories
       categories: Categories
+      categories_expenses: Expense categories
+      categories_incomes: Income categories
       empty: No categories found
       new: New category
     menu:
@@ -22,4 +26,9 @@ en:
     new:
       new_category: New category
     update:
-      success: Transaction category updated successfully
+      success: Category updated successfully
+  category:
+    dropdowns:
+      show:
+        bootstrap: Generate default categories
+        empty: No categories found

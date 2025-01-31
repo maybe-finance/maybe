@@ -22,7 +22,7 @@
       { label: t(".type"), selected: type },
       { data: {
           action: "trade-form#changeType",
-          trade_form_url_param: new_account_trade_path(account_id: entry.account_id),
+          trade_form_url_param: new_account_trade_path(account_id: entry.account&.id || entry.account_id),
           trade_form_key_param: "type",
         }} %>
 

@@ -1,0 +1,45 @@
+<%# locals: (budget:) %>
+
+<div>
+  <div class="flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-gray-500 uppercase">
+    <p>Categories</p>
+    <span class="text-gray-400">&middot;</span>
+    <p><%= budget.budget_categories.count %></p>
+
+    <p class="ml-auto">Amount</p>
+  </div>
+
+  <div class="bg-white py-1 shadow-xs border border-gray-100 rounded-md">
+    <% if budget.family.categories.expenses.empty? %>
+      <div class="py-8">
+        <%= render "budget_categories/no_categories" %>
+      </div>
+    <% else %>
+      <% category_groups = BudgetCategory::Group.for(budget.budget_categories) %>
+
+      <% category_groups.each_with_index do |group, index| %>
+        <div>
+          <%= render "budget_categories/budget_category", budget_category: group.budget_category %>
+
+          <div>
+            <% group.budget_subcategories.each do |budget_subcategory| %>
+              <div class="w-full flex items-center -mt-4">
+                <div class="ml-8 flex items-center justify-center text-gray-400">
+                  <%= lucide_icon "corner-down-right", class: "w-5 h-5 shrink-0" %>
+                </div>
+
+                <%= render "budget_categories/budget_category", budget_category: budget_subcategory %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="px-4">
+          <div class="h-px w-full bg-alpha-black-50"></div>
+        </div>
+      <% end %>
+
+      <%= render "budget_categories/budget_category", budget_category: budget.uncategorized_budget_category %>
+    <% end %>
+  </div>
+</div>

@@ -4,11 +4,14 @@ one:
 
 income:
   name: Income
-  internal_category: income
   color: "#fd7f6f"
   family: dylan_family
 
 food_and_drink:
   name: Food & Drink
-  internal_category: food_and_drink
+  family: dylan_family
+
+subcategory:
+  name: Restaurants
+  parent: food_and_drink
   family: dylan_family

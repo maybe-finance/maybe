@@ -2,6 +2,7 @@ class CategoriesController < ApplicationController
   layout :with_sidebar
 
   before_action :set_category, only: %i[edit update destroy]
+  before_action :set_categories, only: %i[update edit]
   before_action :set_transaction, only: :create
 
   def index
@@ -10,6 +11,7 @@ class CategoriesController < ApplicationController
 
   def new
     @category = Current.family.categories.new color: Category::COLORS.sample
+    set_categories
   end
 
   def create
@@ -17,9 +19,17 @@ class CategoriesController < ApplicationController
 
     if @category.save
       @transaction.update(category_id: @category.id) if @transaction
-      redirect_back_or_to transactions_path, notice: t(".success")
+
+      flash[:notice] = t(".success")
+
+      redirect_target_url = request.referer || categories_path
+      respond_to do |format|
+        format.html { redirect_back_or_to categories_path, notice: t(".success") }
+        format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, redirect_target_url) }
+      end
     else
-      redirect_back_or_to transactions_path, alert: t(".failure", error: @category.errors.full_messages.to_sentence)
+      set_categories
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -27,13 +37,27 @@ class CategoriesController < ApplicationController
   end
 
   def update
-    @category.update! category_params
+    if @category.update(category_params)
+      flash[:notice] = t(".success")
 
-    redirect_back_or_to transactions_path, notice: t(".success")
+      redirect_target_url = request.referer || categories_path
+      respond_to do |format|
+        format.html { redirect_back_or_to categories_path, notice: t(".success") }
+        format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, redirect_target_url) }
+      end
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   def destroy
     @category.destroy
+
+    redirect_back_or_to categories_path, notice: t(".success")
+  end
+
+  def bootstrap
+    Current.family.categories.bootstrap_defaults
 
     redirect_back_or_to categories_path, notice: t(".success")
   end
@@ -43,6 +67,14 @@ class CategoriesController < ApplicationController
       @category = Current.family.categories.find(params[:id])
     end
 
+    def set_categories
+      @categories = unless @category.parent?
+        Current.family.categories.alphabetically.roots.where.not(id: @category.id)
+      else
+        []
+      end
+    end
+
     def set_transaction
       if params[:transaction_id].present?
         @transaction = Current.family.transactions.find(params[:transaction_id])
@@ -50,6 +82,6 @@ class CategoriesController < ApplicationController
     end
 
     def category_params
-      params.require(:category).permit(:name, :color)
+      params.require(:category).permit(:name, :color, :parent_id, :classification, :lucide_icon)
     end
 end

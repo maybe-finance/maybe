@@ -2,6 +2,8 @@ module AccountableResource
   extend ActiveSupport::Concern
 
   included do
+    include ScrollFocusable
+
     layout :with_sidebar
     before_action :set_account, only: [ :show, :edit, :update, :destroy ]
     before_action :set_link_token, only: :new
@@ -22,6 +24,12 @@ module AccountableResource
   end
 
   def show
+    @q = params.fetch(:q, {}).permit(:search)
+    entries = @account.entries.search(@q).reverse_chronological
+
+    set_focused_record(entries, params[:focused_record_id])
+
+    @pagy, @entries = pagy(entries, limit: params[:per_page] || "10", params: ->(params) { params.except(:focused_record_id) })
   end
 
   def edit

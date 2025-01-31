@@ -15,6 +15,7 @@ en:
       description: Issue Description
     sidebar:
       accounts: Accounts
+      budgeting: Budgeting
       dashboard: Dashboard
       new_account: New account
       portfolio: Portfolio
