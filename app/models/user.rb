@@ -7,9 +7,10 @@ class User < ApplicationRecord
   has_many :impersonated_support_sessions, class_name: "ImpersonationSession", foreign_key: :impersonated_id, dependent: :destroy
   accepts_nested_attributes_for :family, update_only: true
 
-  validates :email, presence: true, uniqueness: true
+  validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validate :ensure_valid_profile_image
   normalizes :email, with: ->(email) { email.strip.downcase }
+  normalizes :unconfirmed_email, with: ->(email) { email&.strip&.downcase }
 
   normalizes :first_name, :last_name, with: ->(value) { value.strip.presence }
 
@@ -23,6 +24,30 @@ class User < ApplicationRecord
 
   generates_token_for :password_reset, expires_in: 15.minutes do
     password_salt&.last(10)
+  end
+
+  generates_token_for :email_confirmation, expires_in: 1.day do
+    unconfirmed_email
+  end
+
+  def pending_email_change?
+    unconfirmed_email.present?
+  end
+
+  def initiate_email_change(new_email)
+    return false if new_email == email
+    return false if new_email == unconfirmed_email
+
+    if Rails.application.config.app_mode.self_hosted? && !Setting.require_email_confirmation
+      update(email: new_email)
+    else
+      if update(unconfirmed_email: new_email)
+        EmailConfirmationMailer.with(user: self).confirmation_email.deliver_later
+        true
+      else
+        false
+      end
+    end
   end
 
   def request_impersonation_for(user_id)
