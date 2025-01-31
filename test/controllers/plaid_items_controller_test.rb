@@ -21,6 +21,7 @@ class PlaidItemsControllerTest < ActionDispatch::IntegrationTest
       post plaid_items_url, params: {
         plaid_item: {
           public_token: public_token,
+          region: "us",
           metadata: { institution: { name: "Plaid Item Name" } }
         }
       }

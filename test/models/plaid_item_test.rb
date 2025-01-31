@@ -9,9 +9,7 @@ class PlaidItemTest < ActiveSupport::TestCase
 
   test "removes plaid item when destroyed" do
     @plaid_provider = mock
-
-    PlaidItem.stubs(:plaid_provider).returns(@plaid_provider)
-
+    @plaid_item.stubs(:plaid_provider).returns(@plaid_provider)
     @plaid_provider.expects(:remove_item).with(@plaid_item.access_token).once
 
     assert_difference "PlaidItem.count", -1 do
@@ -21,9 +19,7 @@ class PlaidItemTest < ActiveSupport::TestCase
 
   test "if plaid item not found, silently continues with deletion" do
     @plaid_provider = mock
-
-    PlaidItem.stubs(:plaid_provider).returns(@plaid_provider)
-
+    @plaid_item.stubs(:plaid_provider).returns(@plaid_provider)
     @plaid_provider.expects(:remove_item).with(@plaid_item.access_token).raises(Plaid::ApiError.new("Item not found"))
 
     assert_difference "PlaidItem.count", -1 do

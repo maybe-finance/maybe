@@ -516,6 +516,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_31_171943) do
     t.string "available_products", default: [], array: true
     t.string "billed_products", default: [], array: true
     t.datetime "last_synced_at"
+    t.string "plaid_region", default: "us", null: false
     t.index ["family_id"], name: "index_plaid_items_on_family_id"
   end
 

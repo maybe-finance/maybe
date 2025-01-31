@@ -68,13 +68,13 @@ class Provider::Plaid
     @client = self.class.client
   end
 
-  def get_link_token(user_id:, webhooks_url:, redirect_url:, accountable_type: nil)
+  def get_link_token(user_id:, webhooks_url:, redirect_url:, accountable_type: nil, eu: false)
     request = Plaid::LinkTokenCreateRequest.new({
       user: { client_user_id: user_id },
       client_name: "Maybe Finance",
       products: [ get_primary_product(accountable_type) ],
       additional_consented_products: get_additional_consented_products(accountable_type),
-      country_codes: [ "US", "CA" ],
+      country_codes: get_country_codes(eu),
       language: "en",
       webhook: webhooks_url,
       redirect_uri: redirect_url,
@@ -197,5 +197,13 @@ class Provider::Plaid
 
     def get_additional_consented_products(accountable_type)
       MAYBE_SUPPORTED_PLAID_PRODUCTS - [ get_primary_product(accountable_type) ]
+    end
+
+    def get_country_codes(eu)
+      if eu
+        [ "ES", "NL", "FR", "IE", "DE", "IT", "PL", "DK", "NO", "SE", "EE", "LT", "LV", "PT", "BE" ]  # EU supported countries
+      else
+        [ "US", "CA" ] # US + CA only
+      end
     end
 end
