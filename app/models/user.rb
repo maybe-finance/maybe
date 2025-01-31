@@ -17,6 +17,7 @@ class User < ApplicationRecord
 
   has_one_attached :profile_image do |attachable|
     attachable.variant :thumbnail, resize_to_fill: [ 300, 300 ]
+    attachable.variant :small, resize_to_fill: [ 36, 36 ], convert: :webp, saver: { quality: 80 }
   end
 
   validate :profile_image_size
