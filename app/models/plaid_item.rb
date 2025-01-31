@@ -2,7 +2,6 @@ class PlaidItem < ApplicationRecord
   include Plaidable, Syncable
 
   enum :plaid_region, { us: "us", eu: "eu" }
-  validates :plaid_region, inclusion: { in: plaid_regions.keys }
 
   if Rails.application.credentials.active_record_encryption.present?
     encrypts :access_token, deterministic: true
@@ -22,13 +21,14 @@ class PlaidItem < ApplicationRecord
   scope :ordered, -> { order(created_at: :desc) }
 
   class << self
-    def create_from_public_token(token, item_name:)
+    def create_from_public_token(token, item_name:, region: "us")
       response = plaid_provider.exchange_public_token(token)
 
       new_plaid_item = create!(
         name: item_name,
         plaid_id: response.item_id,
         access_token: response.access_token,
+        plaid_region: region
       )
 
       new_plaid_item.sync_later
