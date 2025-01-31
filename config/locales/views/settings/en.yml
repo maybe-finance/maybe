@@ -79,6 +79,7 @@ en:
         invitation_link: Invitation link
         invite_member: Add member
         last_name: Last Name
+        email: Email
         page_title: Account
         pending: Pending
         profile_subtitle: Customize how you appear on Maybe
@@ -87,3 +88,6 @@ en:
     user_avatar_field:
       accepted_formats: JPG or PNG. 5MB max.
       choose: Choose
+  users:
+    update:
+      success: Profile updated successfully

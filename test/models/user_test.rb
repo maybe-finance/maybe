@@ -38,8 +38,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "email address is normalized" do
-    @user.update!(email: " User@ExAMPle.CoM ")
-    assert_equal "user@example.com", @user.reload.email
+    @user.update!(email: " UNIQUE-User@ExAMPle.CoM ")
+    assert_equal "unique-user@example.com", @user.reload.email
   end
 
   test "display name" do
