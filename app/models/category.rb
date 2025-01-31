@@ -14,6 +14,8 @@ class Category < ApplicationRecord
   validate :category_level_limit
   validate :nested_category_matches_parent_classification
 
+  before_create :inherit_color_from_parent
+
   scope :alphabetically, -> { order(:name) }
   scope :roots, -> { where(parent_id: nil) }
   scope :incomes, -> { where(classification: "income") }
@@ -83,6 +85,12 @@ class Category < ApplicationRecord
           [ "Subscriptions", "#805dee", "credit-card" ]
         ]
       end
+  end
+
+  def inherit_color_from_parent
+    if subcategory?
+      self.color = parent.color
+    end
   end
 
   def replace_and_destroy!(replacement)
