@@ -12,7 +12,8 @@ class TransactionsController < ApplicationController
     # set_focused_record(search_query, params[:focused_record_id], default_per_page: 50)
 
     @pagy, @transaction_entries = pagy(
-      search_query.reverse_chronological.includes(:account).preload(
+      search_query.reverse_chronological.preload(
+        :account,
         entryable: [ :category, :merchant, :tags, :transfer_as_inflow, :transfer_as_outflow ]
       ),
       limit: params[:per_page].presence || default_params[:per_page],
@@ -23,7 +24,7 @@ class TransactionsController < ApplicationController
   end
 
   def clear_filter
-    updated_params = stored_params.deep_dup
+    updated_params = params.to_unsafe_h.deep_dup
 
     q_params = updated_params["q"] || {}
 
