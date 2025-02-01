@@ -38,7 +38,7 @@ class Account::BalanceTrendCalculator
 
     return BalanceTrend.new(trend: nil) if start_of_day_balance.blank? || end_of_day_balance.blank?
 
-    todays_holdings_value = holdings.select { |h| h.date == entry.date }.sum(&:amount)
+    todays_holdings_value = holdings.select { |h| h.date == entry.date }.map(&:amount).compact.sum
 
     prior_balance = start_of_day_balance.balance
     prior_cash_balance = start_of_day_balance.cash_balance
