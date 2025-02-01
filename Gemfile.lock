@@ -101,6 +101,7 @@ GEM
     base64 (0.2.0)
     bcrypt (3.1.20)
     benchmark (0.4.0)
+    benchmark-ips (2.14.0)
     better_html (2.1.1)
       actionview (>= 6.0)
       activesupport (>= 6.0)
@@ -317,6 +318,8 @@ GEM
     raabro (1.4.0)
     racc (1.8.1)
     rack (3.1.8)
+    rack-mini-profiler (3.3.1)
+      rack (>= 1.2.0)
     rack-session (2.1.0)
       base64 (>= 0.1.0)
       rack (>= 3.0.0)
@@ -501,6 +504,7 @@ PLATFORMS
 DEPENDENCIES
   aws-sdk-s3 (~> 1.177.0)
   bcrypt (~> 3.1)
+  benchmark-ips
   bootsnap
   brakeman
   capybara
@@ -531,6 +535,7 @@ DEPENDENCIES
   plaid
   propshaft
   puma (>= 5.0)
+  rack-mini-profiler
   rails (~> 7.2.2)
   rails-settings-cached
   redcarpet

@@ -7,30 +7,36 @@ class TransactionsController < ApplicationController
 
   def index
     @q = search_params
-    search_query = Current.family.transactions.search(@q).reverse_chronological
+    search_query = Current.family.transactions.search(@q)
 
     set_focused_record(search_query, params[:focused_record_id], default_per_page: 50)
 
     @pagy, @transaction_entries = pagy(
-      search_query,
+      search_query.reverse_chronological.preload(
+        :account,
+        entryable: [
+          :category, :merchant, :tags,
+          :transfer_as_inflow,
+          transfer_as_outflow: {
+            inflow_transaction: { entry: :account },
+            outflow_transaction: { entry: :account }
+          }
+        ]
+      ),
       limit: params[:per_page].presence || default_params[:per_page],
       params: ->(params) { params.except(:focused_record_id) }
     )
 
-    totals_query = search_query.incomes_and_expenses
-    family_currency = Current.family.currency
-    count_with_transfers = search_query.count
-    count_without_transfers = totals_query.count
-
-    @totals = {
-      count: ((count_with_transfers - count_without_transfers) / 2) + count_without_transfers,
-      income: totals_query.income_total(family_currency).abs,
-      expense: totals_query.expense_total(family_currency)
-    }
+    @transfers = @transaction_entries.map { |entry| entry.entryable.transfer_as_outflow }.compact
+    @totals = search_query.stats(Current.family.currency)
   end
 
   def clear_filter
-    updated_params = stored_params.deep_dup
+    updated_params = {
+      "q" => search_params,
+      "page" => params[:page],
+      "per_page" => params[:per_page]
+    }
 
     q_params = updated_params["q"] || {}
 

@@ -28,6 +28,7 @@ gem "good_job"
 
 # Error logging
 gem "stackprof"
+gem "rack-mini-profiler"
 gem "sentry-ruby"
 gem "sentry-rails"
 
@@ -67,6 +68,7 @@ group :development do
   gem "ruby-lsp-rails"
   gem "web-console"
   gem "faker"
+  gem "benchmark-ips"
 end
 
 group :test do

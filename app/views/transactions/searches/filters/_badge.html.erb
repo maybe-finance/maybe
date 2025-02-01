@@ -41,7 +41,10 @@
     </div>
   <% end %>
 
-  <%= button_to clear_filter_transactions_path(param_key: param_key, param_value: param_value), method: :delete, data: { turbo: false }, class: "flex items-center" do %>
+  <%= button_to clear_filter_transactions_path(param_key: param_key, param_value: param_value, **request.query_parameters),
+        method: :delete,
+        data: { turbo: false },
+        class: "flex items-center" do %>
     <%= lucide_icon "x", class: "w-4 h-4 text-gray-500" %>
   <% end %>
 </li>

@@ -5,13 +5,13 @@
   <div id="user-menu" data-controller="menu">
     <button data-menu-target="button">
       <div class="w-9 h-9">
-        <%= render "settings/user_avatar", user: Current.user %>
+        <%= render "settings/user_avatar", user: Current.user, variant: :small %>
       </div>
     </button>
     <div data-menu-target="content" class="hidden absolute w-[240px] z-10 left-[255px] top-[72px] bg-white rounded-sm shadow-xs border border-alpha-black-25">
       <div class="p-3 flex items-center gap-3">
         <div class="w-9 h-9 shrink-0">
-          <%= render "settings/user_avatar", user: Current.user %>
+          <%= render "settings/user_avatar", user: Current.user, variant: :small, lazy: true %>
         </div>
 
         <div class="overflow-hidden text-ellipsis">
