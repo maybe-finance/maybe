@@ -68,7 +68,6 @@ class Provider::Plaid
       user: { client_user_id: user_id },
       client_name: "Maybe Finance",
       products: [ get_primary_product(accountable_type) ],
-      additional_consented_products: get_additional_consented_products(accountable_type),
       country_codes: country_codes,
       language: "en",
       webhook: webhooks_url,
