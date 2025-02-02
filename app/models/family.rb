@@ -63,6 +63,7 @@ class Family < ApplicationRecord
       self.class.plaid_us_provider
     end
 
+    # early return when no provider
     return nil unless provider
 
     provider.get_link_token(
