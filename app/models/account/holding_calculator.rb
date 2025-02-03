@@ -48,8 +48,9 @@ class Account::HoldingCalculator
     def generate_holding_records(portfolio, date)
       portfolio.map do |security_id, qty|
         security = securities_cache[security_id]
-        price = security.dig(:prices)&.find { |p| p.date == date }
+        next if security.nil?
 
+        price = security.dig(:prices)&.find { |p| p.date == date }
         next if price.blank?
 
         converted_price = Money.new(price.price, price.currency).exchange_to(account.currency, fallback_rate: 1).amount
@@ -106,7 +107,10 @@ class Account::HoldingCalculator
     end
 
     def preload_securities
+      # Get securities from trades and current holdings
       securities = trades.map(&:entryable).map(&:security).uniq
+      securities += account.holdings.where(date: Date.current).map(&:security)
+      securities.uniq!
 
       securities.each do |security|
         prices = Security::Price.find_prices(
