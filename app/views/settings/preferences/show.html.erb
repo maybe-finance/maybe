@@ -25,7 +25,7 @@
             { data: { auto_submit_form_target: "auto" } } %>
 
           <%= family_form.select :date_format,
-            date_format_options,
+            Family::DATE_FORMATS,
             { label: t(".date_format") },
             { data: { auto_submit_form_target: "auto" } } %>
 

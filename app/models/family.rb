@@ -1,7 +1,17 @@
 class Family < ApplicationRecord
   include Plaidable, Syncable
 
-  DATE_FORMATS = [ "%m-%d-%Y", "%d.%m.%Y", "%d-%m-%Y", "%Y-%m-%d", "%d/%m/%Y", "%Y/%m/%d", "%m/%d/%Y", "%e/%m/%Y", "%Y.%m.%d" ]
+  DATE_FORMATS = [
+    [ "MM-DD-YYYY", "%m-%d-%Y" ],
+    [ "DD.MM.YYYY", "%d.%m.%Y" ],
+    [ "DD-MM-YYYY", "%d-%m-%Y" ],
+    [ "YYYY-MM-DD", "%Y-%m-%d" ],
+    [ "DD/MM/YYYY", "%d/%m/%Y" ],
+    [ "YYYY/MM/DD", "%Y/%m/%d" ],
+    [ "MM/DD/YYYY", "%m/%d/%Y" ],
+    [ "D/MM/YYYY", "%e/%m/%Y" ],
+    [ "YYYY.MM.DD", "%Y.%m.%d" ]
+  ].freeze
 
   include Providable
 
@@ -21,7 +31,7 @@ class Family < ApplicationRecord
   has_many :budget_categories, through: :budgets
 
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }
-  validates :date_format, inclusion: { in: DATE_FORMATS }
+  validates :date_format, inclusion: { in: DATE_FORMATS.map(&:last) }
 
   def sync_data(start_date: nil)
     update!(last_synced_at: Time.current)
