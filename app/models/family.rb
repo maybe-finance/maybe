@@ -209,6 +209,10 @@ class Family < ApplicationRecord
     entries.order(:date).first&.date || Date.current
   end
 
+  def active_accounts_count
+    accounts.active.count
+  end
+
   private
     CategoriesWithTotals = Struct.new(:total_money, :category_totals, keyword_init: true)
     CategoryWithStats = Struct.new(:category, :amount_money, :percentage, keyword_init: true)
