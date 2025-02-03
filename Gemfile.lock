@@ -297,7 +297,7 @@ GEM
       ast (~> 2.4.1)
       racc
     pg (1.5.9)
-    plaid (35.0.0)
+    plaid (35.1.0)
       faraday (>= 1.0.1, < 3.0)
       faraday-multipart (>= 1.0.1, < 2.0)
     pp (0.6.2)
