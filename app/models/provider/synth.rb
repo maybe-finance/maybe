@@ -59,7 +59,7 @@ class Provider::Synth
         {
           date: price.dig("date"),
           price: price.dig("close")&.to_f || price.dig("open")&.to_f,
-          currency: price.dig("currency") || "USD"
+          currency: body.dig("currency") || "USD"
         }
       end
     end
