@@ -1,6 +1,6 @@
 <%# locals: (budget:) %>
 
-<div class="space-y-2 mb-6">
+<div id="<%= dom_id(budget, :allocation_progress) %>" class="space-y-2 mb-6">
   <div class="flex items-center gap-2">
     <div class="rounded-full w-1.5 h-1.5 <%= budget.allocated_spending > 0 ? "bg-gray-900" : "bg-gray-100" %>"></div>
 

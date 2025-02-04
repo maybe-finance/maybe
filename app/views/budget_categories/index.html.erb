@@ -28,7 +28,7 @@
           <% end %>
 
           <div class="space-y-4 mb-4">
-            <% BudgetCategory::Group.for(@budget.budget_categories).sort_by(&:name).each do |group| %>
+            <% BudgetCategory::Group.for(@budget_categories).sort_by(&:name).each do |group| %>
               <div class="space-y-4">
                 <%= render "budget_categories/budget_category_form", budget_category: group.budget_category %>
 

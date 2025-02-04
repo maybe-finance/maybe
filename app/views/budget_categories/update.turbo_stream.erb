@@ -1,0 +1,5 @@
+<% if @budget_category.budget.available_to_allocate.negative? %>
+  <%= turbo_stream.replace dom_id(@budget_category.budget, :allocation_progress_overage), partial: "budget_categories/allocation_progress_overage", locals: { budget: @budget_category.budget } %>
+<% else %>
+  <%= turbo_stream.replace dom_id(@budget_category.budget, :allocation_progress), partial: "budget_categories/allocation_progress", locals: { budget: @budget_category.budget } %>
+<% end %>
