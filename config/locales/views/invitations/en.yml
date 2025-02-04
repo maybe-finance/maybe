@@ -4,6 +4,10 @@ en:
     create:
       failure: Could not send invitation
       success: Invitation sent successfully
+    destroy:
+      not_authorized: You are not authorized to manage invitations.
+      success: Invitation was successfully removed.
+      failure: There was a problem removing the invitation.
     new:
       email_label: Email Address
       email_placeholder: Enter email address

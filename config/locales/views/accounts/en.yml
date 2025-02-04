@@ -30,10 +30,22 @@ en:
       import_accounts: Import accounts
       method_selector:
         connected_entry: Link account
+        connected_entry_eu: Link EU account
         manual_entry: Enter account balance
         title: How would you like to add it?
       title: What would you like to add?
     show:
+      activity:
+        amount: Amount
+        balance: Balance
+        date: Date
+        entries: entries
+        entry: entry
+        new: New
+        new_balance: New balance
+        new_transaction: New transaction
+        no_entries: No entries found
+        title: Activity
       chart:
         balance: Balance
         owed: Amount owed
@@ -62,3 +74,7 @@ en:
         or entering manually.
     update:
       success: "%{type} account updated"
+  email_confirmations:
+    new:
+      success_login: "Your email has been confirmed. Please log in with your new email address."
+      invalid_token: "Invalid or expired confirmation link."

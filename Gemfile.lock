@@ -1,4 +1,15 @@
 GIT
+  remote: https://github.com/josefarias/hotwire_combobox.git
+  revision: b827048a8305e1115d5f96931ba1c9750d1e59fc
+  ref: b827048a8305e1115d5f96931ba1c9750d1e59fc
+  specs:
+    hotwire_combobox (0.3.2)
+      platform_agent (>= 1.0.1)
+      rails (>= 7.0.7.2)
+      stimulus-rails (>= 1.2)
+      turbo-rails (>= 1.2)
+
+GIT
   remote: https://github.com/maybe-finance/lucide-rails.git
   revision: 272e5fb8418ea458da3995d6abe0ba0ceee9c9f0
   specs:
@@ -101,6 +112,7 @@ GEM
     base64 (0.2.0)
     bcrypt (3.1.20)
     benchmark (0.4.0)
+    benchmark-ips (2.14.0)
     better_html (2.1.1)
       actionview (>= 6.0)
       activesupport (>= 6.0)
@@ -193,10 +205,6 @@ GEM
       actioncable (>= 7.0.0)
       listen (>= 3.0.0)
       railties (>= 7.0.0)
-    hotwire_combobox (0.3.2)
-      rails (>= 7.0.7.2)
-      stimulus-rails (>= 1.2)
-      turbo-rails (>= 1.2)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     i18n-tasks (1.0.14)
@@ -242,6 +250,17 @@ GEM
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     logger (1.6.5)
+    logtail (0.1.13)
+      msgpack (~> 1.0)
+    logtail-rack (0.2.5)
+      logtail (~> 0.1)
+      rack (>= 1.2, < 4.0)
+    logtail-rails (0.2.9)
+      actionpack (>= 5.0.0)
+      activerecord (>= 5.0.0)
+      logtail (~> 0.1)
+      logtail-rack (~> 0.1)
+      railties (>= 5.0.0)
     loofah (2.24.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -296,9 +315,12 @@ GEM
       ast (~> 2.4.1)
       racc
     pg (1.5.9)
-    plaid (35.0.0)
+    plaid (35.1.0)
       faraday (>= 1.0.1, < 3.0)
       faraday-multipart (>= 1.0.1, < 2.0)
+    platform_agent (1.0.1)
+      activesupport (>= 5.2.0)
+      useragent (~> 0.16.3)
     pp (0.6.2)
       prettyprint
     prettyprint (0.2.0)
@@ -312,11 +334,13 @@ GEM
       date
       stringio
     public_suffix (6.0.1)
-    puma (6.5.0)
+    puma (6.6.0)
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (3.1.8)
+    rack (3.1.9)
+    rack-mini-profiler (3.3.1)
+      rack (>= 1.2.0)
     rack-session (2.1.0)
       base64 (>= 0.1.0)
       rack (>= 3.0.0)
@@ -424,10 +448,10 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    sentry-rails (5.22.2)
+    sentry-rails (5.22.3)
       railties (>= 5.0)
-      sentry-ruby (~> 5.22.2)
-    sentry-ruby (5.22.2)
+      sentry-ruby (~> 5.22.3)
+    sentry-ruby (5.22.3)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
     simplecov (0.22.0)
@@ -442,7 +466,7 @@ GEM
     stimulus-rails (1.3.4)
       railties (>= 6.0.0)
     stringio (3.1.2)
-    stripe (13.4.0)
+    stripe (13.4.1)
     tailwindcss-rails (3.3.1)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 3.0)
@@ -501,6 +525,7 @@ PLATFORMS
 DEPENDENCIES
   aws-sdk-s3 (~> 1.177.0)
   bcrypt (~> 3.1)
+  benchmark-ips
   bootsnap
   brakeman
   capybara
@@ -515,7 +540,7 @@ DEPENDENCIES
   faraday-retry
   good_job
   hotwire-livereload
-  hotwire_combobox
+  hotwire_combobox!
   i18n-tasks
   image_processing (>= 1.2)
   importmap-rails
@@ -523,6 +548,7 @@ DEPENDENCIES
   intercom-rails
   jwt
   letter_opener
+  logtail-rails
   lucide-rails!
   mocha
   octokit
@@ -531,6 +557,7 @@ DEPENDENCIES
   plaid
   propshaft
   puma (>= 5.0)
+  rack-mini-profiler
   rails (~> 7.2.2)
   rails-settings-cached
   redcarpet

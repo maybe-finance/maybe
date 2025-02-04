@@ -1,8 +1,5 @@
 ---
 en:
-  application:
-    pagination:
-      rows_per_page: Rows per page
   number:
     currency:
       format:

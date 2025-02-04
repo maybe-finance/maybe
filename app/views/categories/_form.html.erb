@@ -1,13 +1,13 @@
 <%# locals: (category:, categories:) %>
 
 <div data-controller="color-avatar">
-  <%= styled_form_with model: category, class: "space-y-4", data: { turbo_frame: :_top } do |f| %>
+  <%= styled_form_with model: category, class: "space-y-4" do |f| %>
     <section class="space-y-4">
       <div class="w-fit m-auto">
         <%= render partial: "shared/color_avatar", locals: { name: category.name, color: category.color } %>
       </div>
 
-      <div class="flex gap-2 items-center justify-center">
+      <div class="flex gap-2 items-center justify-center" data-color-avatar-target="selection">
         <% Category::COLORS.each do |color| %>
           <label class="relative">
             <%= f.radio_button :color, color, class: "sr-only peer", data: { action: "change->color-avatar#handleColorChange" } %>
@@ -21,6 +21,7 @@
       <% end %>
 
       <div class="flex flex-wrap gap-2 justify-center mb-4">
+
         <% Category.icon_codes.each do |icon| %>
           <label class="relative">
             <%= f.radio_button :lucide_icon, icon, class: "sr-only peer" %>
@@ -34,7 +35,9 @@
       <div class="space-y-2">
         <%= f.select :classification, [["Income", "income"], ["Expense", "expense"]], { label: "Classification" }, required: true %>
         <%= f.text_field :name, placeholder: t(".placeholder"), required: true, autofocus: true, label: "Name", data: { color_avatar_target: "name" } %>
-        <%= f.select :parent_id, categories.pluck(:name, :id), { include_blank: "(unassigned)", label: "Parent category (optional)" } %>
+        <% unless category.parent? %>
+          <%= f.select :parent_id, categories.pluck(:name, :id), { include_blank: "(unassigned)", label: "Parent category (optional)" }, disabled: category.parent?, data: { action: "change->color-avatar#handleParentChange" } %>
+        <% end %>
       </div>
     </section>
 

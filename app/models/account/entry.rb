@@ -1,6 +1,8 @@
 class Account::Entry < ApplicationRecord
   include Monetizable
 
+  Stats = Struct.new(:currency, :count, :income_total, :expense_total, keyword_init: true)
+
   monetize :amount
 
   belongs_to :account
@@ -33,11 +35,11 @@ class Account::Entry < ApplicationRecord
   # All non-transfer entries, rejected transfers, and the outflow of a loan payment transfer are incomes/expenses
   scope :incomes_and_expenses, -> {
     joins("INNER JOIN account_transactions ON account_transactions.id = account_entries.entryable_id AND account_entries.entryable_type = 'Account::Transaction'")
-    .joins("LEFT JOIN transfers ON transfers.inflow_transaction_id = account_transactions.id OR transfers.outflow_transaction_id = account_transactions.id")
-    .joins("LEFT JOIN account_transactions inflow_txns ON inflow_txns.id = transfers.inflow_transaction_id")
-    .joins("LEFT JOIN account_entries inflow_entries ON inflow_entries.entryable_id = inflow_txns.id AND inflow_entries.entryable_type = 'Account::Transaction'")
-    .joins("LEFT JOIN accounts inflow_accounts ON inflow_accounts.id = inflow_entries.account_id")
-    .where("transfers.id IS NULL OR transfers.status = 'rejected' OR (account_entries.amount > 0 AND inflow_accounts.accountable_type = 'Loan')")
+      .joins("LEFT JOIN transfers ON transfers.inflow_transaction_id = account_transactions.id OR transfers.outflow_transaction_id = account_transactions.id")
+      .joins("LEFT JOIN account_transactions inflow_txns ON inflow_txns.id = transfers.inflow_transaction_id")
+      .joins("LEFT JOIN account_entries inflow_entries ON inflow_entries.entryable_id = inflow_txns.id AND inflow_entries.entryable_type = 'Account::Transaction'")
+      .joins("LEFT JOIN accounts inflow_accounts ON inflow_accounts.id = inflow_entries.account_id")
+      .where("transfers.id IS NULL OR transfers.status = 'rejected' OR (account_entries.amount > 0 AND inflow_accounts.accountable_type = 'Loan')")
   }
 
   scope :incomes, -> {
@@ -154,20 +156,24 @@ class Account::Entry < ApplicationRecord
       all.size
     end
 
-    def income_total(currency = "USD", start_date: nil, end_date: nil)
-      total = incomes.where(date: start_date..end_date)
-                       .map { |e| e.amount_money.exchange_to(currency, date: e.date, fallback_rate: 0) }
-                       .sum
+    def stats(currency = "USD")
+      result = all
+        .incomes_and_expenses
+        .joins(sanitize_sql_array([ "LEFT JOIN exchange_rates er ON account_entries.date = er.date AND account_entries.currency = er.from_currency AND er.to_currency = ?", currency ]))
+        .select(
+          "COUNT(*) AS count",
+          "SUM(CASE WHEN account_entries.amount < 0 THEN (account_entries.amount * COALESCE(er.rate, 1)) ELSE 0 END) AS income_total",
+          "SUM(CASE WHEN account_entries.amount > 0 THEN (account_entries.amount * COALESCE(er.rate, 1)) ELSE 0 END) AS expense_total"
+        )
+        .to_a
+        .first
 
-      Money.new(total, currency)
-    end
-
-    def expense_total(currency = "USD", start_date: nil, end_date: nil)
-      total = expenses.where(date: start_date..end_date)
-                       .map { |e| e.amount_money.exchange_to(currency, date: e.date, fallback_rate: 0) }
-                       .sum
-
-      Money.new(total, currency)
+      Stats.new(
+        currency: currency,
+        count: result.count,
+        income_total: result.income_total ? result.income_total * -1 : 0,
+        expense_total: result.expense_total || 0
+      )
     end
   end
 end

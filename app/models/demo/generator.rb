@@ -1,92 +1,115 @@
 class Demo::Generator
   COLORS = %w[#e99537 #4da568 #6471eb #db5a54 #df4e92 #c44fe9 #eb5429 #61c9ea #805dee #6ad28a]
 
-  def initialize
-    @family = reset_family!
-  end
+  # Builds a semi-realistic mirror of what production data might look like
+  def reset_and_clear_data!(family_names)
+    puts "Clearing existing data..."
 
-  def reset_and_clear_data!
-    reset_settings!
-    clear_data!
-    create_user!
+    destroy_everything!
 
-    puts "user reset"
-  end
+    puts "Data cleared"
 
-  def reset_data!
-    Family.transaction do
-      reset_settings!
-      clear_data!
-      create_user!
-
-      puts "user reset"
-
-      create_tags!
-      create_categories!
-      create_merchants!
-
-      puts "tags, categories, merchants created"
-
-      create_credit_card_account!
-      create_checking_account!
-      create_savings_account!
-
-      create_investment_account!
-      create_house_and_mortgage!
-      create_car_and_loan!
-      create_other_accounts!
-
-      create_transfer_transactions!
-
-      puts "accounts created"
-      puts "Demo data loaded successfully!"
+    family_names.each_with_index do |family_name, index|
+      create_family_and_user!(family_name, "user#{index == 0 ? "" : index + 1}@maybe.local")
     end
+
+    puts "Users reset"
+  end
+
+  def reset_data!(family_names)
+    puts "Clearing existing data..."
+
+    destroy_everything!
+
+    puts "Data cleared"
+
+    family_names.each_with_index do |family_name, index|
+      create_family_and_user!(family_name, "user#{index == 0 ? "" : index + 1}@maybe.local", data_enrichment_enabled: index == 0)
+    end
+
+    puts "Users reset"
+
+    load_securities!
+
+    puts "Securities loaded"
+
+    family_names.each do |family_name|
+      family = Family.find_by(name: family_name)
+
+      ActiveRecord::Base.transaction do
+        create_tags!(family)
+        create_categories!(family)
+        create_merchants!(family)
+
+        puts "tags, categories, merchants created for #{family_name}"
+
+        create_credit_card_account!(family)
+        create_checking_account!(family)
+        create_savings_account!(family)
+
+        create_investment_account!(family)
+        create_house_and_mortgage!(family)
+        create_car_and_loan!(family)
+        create_other_accounts!(family)
+
+        create_transfer_transactions!(family)
+      end
+
+      puts "accounts created for #{family_name}"
+    end
+
+    puts "Demo data loaded successfully!"
   end
 
   private
-
-    attr_reader :family
-
-    def reset_family!
-      family_id = "d99e3c6e-d513-4452-8f24-dc263f8528c0" # deterministic demo id
-
-      family = Family.find_by(id: family_id)
-      Transfer.destroy_all
-      family.destroy! if family
-
-      Family.create!(id: family_id, name: "Demo Family", stripe_subscription_status: "active").tap(&:reload)
-    end
-
-    def clear_data!
-      Transfer.destroy_all
+    def destroy_everything!
+      Family.destroy_all
+      Setting.destroy_all
       InviteCode.destroy_all
-      User.find_by_email("user@maybe.local")&.destroy
       ExchangeRate.destroy_all
       Security.destroy_all
       Security::Price.destroy_all
     end
 
-    def reset_settings!
-      Setting.destroy_all
-    end
+    def create_family_and_user!(family_name, user_email, data_enrichment_enabled: false)
+      base_uuid = "d99e3c6e-d513-4452-8f24-dc263f8528c0"
+      id = Digest::UUID.uuid_v5(base_uuid, family_name)
 
-    def create_user!
+      family = Family.create!(
+        id: id,
+        name: family_name,
+        stripe_subscription_status: "active",
+        data_enrichment_enabled: data_enrichment_enabled,
+        locale: "en",
+        country: "US",
+        timezone: "America/New_York",
+        date_format: "%m-%d-%Y"
+      )
+
       family.users.create! \
-        email: "user@maybe.local",
+        email: user_email,
         first_name: "Demo",
         last_name: "User",
         role: "admin",
         password: "password",
         onboarded_at: Time.current
+
+      family.users.create! \
+        email: "member_#{user_email}",
+        first_name: "Demo (member user)",
+        last_name: "User",
+        role: "member",
+        password: "password",
+        onboarded_at: Time.current
     end
 
-    def create_tags!
+    def create_tags!(family)
       [ "Trips", "Emergency Fund", "Demo Tag" ].each do |tag|
         family.tags.create!(name: tag)
       end
     end
 
-    def create_categories!
+    def create_categories!(family)
       family.categories.bootstrap_defaults
 
       food = family.categories.find_by(name: "Food & Drink")
@@ -95,7 +118,7 @@ class Demo::Generator
       family.categories.create!(name: "Alcohol & Bars", parent: food, color: COLORS.sample, classification: "expense")
     end
 
-    def create_merchants!
+    def create_merchants!(family)
       merchants = [ "Amazon", "Starbucks", "McDonald's", "Target", "Costco",
                    "Home Depot", "Shell", "Whole Foods", "Walgreens", "Nike",
                    "Uber", "Netflix", "Spotify", "Delta Airlines", "Airbnb", "Sephora" ]
@@ -105,25 +128,25 @@ class Demo::Generator
       end
     end
 
-    def create_credit_card_account!
+    def create_credit_card_account!(family)
       cc = family.accounts.create! \
         accountable: CreditCard.new,
         name: "Chase Credit Card",
         balance: 2300,
         currency: "USD"
 
-      50.times do
-        merchant = random_family_record(Merchant)
+      800.times do
+        merchant = random_family_record(Merchant, family)
         create_transaction! \
           account: cc,
           name: merchant.name,
           amount: Faker::Number.positive(to: 200),
-          tags: [ tag_for_merchant(merchant) ],
-          category: category_for_merchant(merchant),
+          tags: [ tag_for_merchant(merchant, family) ],
+          category: category_for_merchant(merchant, family),
           merchant: merchant
       end
 
-      5.times do
+      24.times do
         create_transaction! \
           account: cc,
           amount: Faker::Number.negative(from: -1000),
@@ -131,30 +154,30 @@ class Demo::Generator
       end
     end
 
-    def create_checking_account!
+    def create_checking_account!(family)
       checking = family.accounts.create! \
         accountable: Depository.new,
         name: "Chase Checking",
         balance: 15000,
         currency: "USD"
 
-      10.times do
+      200.times do
         create_transaction! \
           account: checking,
           name: "Expense",
           amount: Faker::Number.positive(from: 100, to: 1000)
       end
 
-      10.times do
+      50.times do
         create_transaction! \
           account: checking,
           amount: Faker::Number.negative(from: -2000),
           name: "Income",
-          category: income_category
+          category: family.categories.find_by(name: "Income")
       end
     end
 
-    def create_savings_account!
+    def create_savings_account!(family)
       savings = family.accounts.create! \
         accountable: Depository.new,
         name: "Demo Savings",
@@ -162,20 +185,17 @@ class Demo::Generator
         currency: "USD",
         subtype: "savings"
 
-      income_category = categories.find { |c| c.name == "Income" }
-      income_tag = tags.find { |t| t.name == "Emergency Fund" }
-
-      20.times do
+      100.times do
         create_transaction! \
           account: savings,
           amount: Faker::Number.negative(from: -2000),
-          tags: [ income_tag ],
-          category: income_category,
+          tags: [ family.tags.find_by(name: "Emergency Fund") ],
+          category: family.categories.find_by(name: "Income"),
           name: "Income"
       end
     end
 
-    def create_transfer_transactions!
+    def create_transfer_transactions!(family)
       checking = family.accounts.find_by(name: "Chase Checking")
       credit_card = family.accounts.find_by(name: "Chase Credit Card")
       investment = family.accounts.find_by(name: "Robinhood")
@@ -235,9 +255,7 @@ class Demo::Generator
       end
     end
 
-    def create_investment_account!
-      load_securities!
-
+    def create_investment_account!(family)
       account = family.accounts.create! \
         accountable: Investment.new,
         name: "Robinhood",
@@ -275,7 +293,7 @@ class Demo::Generator
       end
     end
 
-    def create_house_and_mortgage!
+    def create_house_and_mortgage!(family)
       house = family.accounts.create! \
         accountable: Property.new,
         name: "123 Maybe Way",
@@ -293,7 +311,7 @@ class Demo::Generator
         currency: "USD"
     end
 
-    def create_car_and_loan!
+    def create_car_and_loan!(family)
       family.accounts.create! \
         accountable: Vehicle.new,
         name: "Honda Accord",
@@ -307,7 +325,7 @@ class Demo::Generator
         currency: "USD"
     end
 
-    def create_other_accounts!
+    def create_other_accounts!(family)
       family.accounts.create! \
         accountable: OtherAsset.new,
         name: "Other Asset",
@@ -326,7 +344,7 @@ class Demo::Generator
       transaction_attributes = attributes.slice(:category, :tags, :merchant)
 
       entry_defaults = {
-        date: Faker::Number.between(from: 0, to: 90).days.ago.to_date,
+        date: Faker::Number.between(from: 0, to: 730).days.ago.to_date,
         currency: "USD",
         entryable: Account::Transaction.new(transaction_attributes)
       }
@@ -344,12 +362,12 @@ class Demo::Generator
         entryable: Account::Valuation.new
     end
 
-    def random_family_record(model)
+    def random_family_record(model, family)
       family_records = model.where(family_id: family.id)
       model.offset(rand(family_records.count)).first
     end
 
-    def category_for_merchant(merchant)
+    def category_for_merchant(merchant, family)
       mapping = {
         "Amazon" => "Shopping",
         "Starbucks" => "Food & Drink",
@@ -369,41 +387,20 @@ class Demo::Generator
         "Sephora" => "Shopping"
       }
 
-      categories.find { |c| c.name == mapping[merchant.name] }
+      family.categories.find_by(name: mapping[merchant.name])
     end
 
-    def tag_for_merchant(merchant)
+    def tag_for_merchant(merchant, family)
       mapping = {
         "Delta Airlines" => "Trips",
         "Airbnb" => "Trips"
       }
 
-      tag_from_merchant = tags.find { |t| t.name == mapping[merchant.name] }
-
-      tag_from_merchant || tags.find { |t| t.name == "Demo Tag" }
+      tag_from_merchant = family.tags.find_by(name: mapping[merchant.name])
+      tag_from_merchant || family.tags.find_by(name: "Demo Tag")
     end
 
     def securities
       @securities ||= Security.all.to_a
-    end
-
-    def merchants
-      @merchants ||= family.merchants
-    end
-
-    def categories
-      @categories ||= family.categories
-    end
-
-    def tags
-      @tags ||= family.tags
-    end
-
-    def income_tag
-      @income_tag ||= tags.find { |t| t.name == "Emergency Fund" }
-    end
-
-    def income_category
-      @income_category ||= categories.find { |c| c.name == "Income" }
     end
 end

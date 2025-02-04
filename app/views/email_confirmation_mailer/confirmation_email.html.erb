@@ -1,0 +1,7 @@
+<h1><%= t(".greeting") %></h1>
+
+<p><%= t(".body") %></p>
+
+<%= link_to @cta, @confirmation_url, class: "button" %>
+
+<p class="footer"><%= t(".expiry_notice", hours: 24) %></p>

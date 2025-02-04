@@ -2,6 +2,8 @@ module AccountableResource
   extend ActiveSupport::Concern
 
   included do
+    include ScrollFocusable
+
     layout :with_sidebar
     before_action :set_account, only: [ :show, :edit, :update, :destroy ]
     before_action :set_link_token, only: :new
@@ -22,6 +24,12 @@ module AccountableResource
   end
 
   def show
+    @q = params.fetch(:q, {}).permit(:search)
+    entries = @account.entries.search(@q).reverse_chronological
+
+    set_focused_record(entries, params[:focused_record_id])
+
+    @pagy, @entries = pagy(entries, limit: params[:per_page] || "10", params: ->(params) { params.except(:focused_record_id) })
   end
 
   def edit
@@ -44,11 +52,21 @@ module AccountableResource
 
   private
     def set_link_token
-      @link_token = Current.family.get_link_token(
+      @us_link_token = Current.family.get_link_token(
         webhooks_url: webhooks_url,
         redirect_url: accounts_url,
-        accountable_type: accountable_type.name
+        accountable_type: accountable_type.name,
+        region: :us
       )
+
+      if Current.family.eu?
+        @eu_link_token = Current.family.get_link_token(
+          webhooks_url: webhooks_url,
+          redirect_url: accounts_url,
+          accountable_type: accountable_type.name,
+          region: :eu
+        )
+      end
     end
 
     def webhooks_url

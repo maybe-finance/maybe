@@ -9,17 +9,6 @@ en:
       empty:
         description: Try adding an entry, editing filters or refining your search
         title: No entries found
-      index:
-        amount: Amount
-        balance: Balance
-        date: Date
-        entries: entries
-        entry: entry
-        new: New
-        new_balance: New balance
-        new_transaction: New transaction
-        no_entries: No entries found
-        title: Activity
       loading:
         loading: Loading entries...
       update:

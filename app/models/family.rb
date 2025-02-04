@@ -1,7 +1,17 @@
 class Family < ApplicationRecord
   include Plaidable, Syncable
 
-  DATE_FORMATS = [ "%m-%d-%Y", "%d.%m.%Y", "%d-%m-%Y", "%Y-%m-%d", "%d/%m/%Y", "%Y/%m/%d", "%m/%d/%Y", "%e/%m/%Y", "%Y.%m.%d" ]
+  DATE_FORMATS = [
+    [ "MM-DD-YYYY", "%m-%d-%Y" ],
+    [ "DD.MM.YYYY", "%d.%m.%Y" ],
+    [ "DD-MM-YYYY", "%d-%m-%Y" ],
+    [ "YYYY-MM-DD", "%Y-%m-%d" ],
+    [ "DD/MM/YYYY", "%d/%m/%Y" ],
+    [ "YYYY/MM/DD", "%Y/%m/%d" ],
+    [ "MM/DD/YYYY", "%m/%d/%Y" ],
+    [ "D/MM/YYYY", "%e/%m/%Y" ],
+    [ "YYYY.MM.DD", "%Y.%m.%d" ]
+  ].freeze
 
   include Providable
 
@@ -21,7 +31,7 @@ class Family < ApplicationRecord
   has_many :budget_categories, through: :budgets
 
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }
-  validates :date_format, inclusion: { in: DATE_FORMATS }
+  validates :date_format, inclusion: { in: DATE_FORMATS.map(&:last) }
 
   def sync_data(start_date: nil)
     update!(last_synced_at: Time.current)
@@ -44,17 +54,33 @@ class Family < ApplicationRecord
   end
 
   def syncing?
-    super || accounts.manual.any?(&:syncing?) || plaid_items.any?(&:syncing?)
+    Sync.where(
+      "(syncable_type = 'Family' AND syncable_id = ?) OR
+       (syncable_type = 'Account' AND syncable_id IN (SELECT id FROM accounts WHERE family_id = ? AND plaid_account_id IS NULL)) OR
+       (syncable_type = 'PlaidItem' AND syncable_id IN (SELECT id FROM plaid_items WHERE family_id = ?))",
+      id, id, id
+    ).where(status: [ "pending", "syncing" ]).exists?
   end
 
-  def get_link_token(webhooks_url:, redirect_url:, accountable_type: nil)
-    return nil unless plaid_provider
+  def eu?
+    country != "US" && country != "CA"
+  end
 
-    plaid_provider.get_link_token(
+  def get_link_token(webhooks_url:, redirect_url:, accountable_type: nil, region: :us)
+    provider = if region.to_sym == :eu
+      self.class.plaid_eu_provider
+    else
+      self.class.plaid_us_provider
+    end
+
+    # early return when no provider
+    return nil unless provider
+
+    provider.get_link_token(
       user_id: id,
       webhooks_url: webhooks_url,
       redirect_url: redirect_url,
-      accountable_type: accountable_type
+      accountable_type: accountable_type,
     ).link_token
   end
 
@@ -194,6 +220,10 @@ class Family < ApplicationRecord
 
   def oldest_entry_date
     entries.order(:date).first&.date || Date.current
+  end
+
+  def active_accounts_count
+    accounts.active.count
   end
 
   private

@@ -1,5 +1,5 @@
 class Provider::Plaid
-  attr_reader :client
+  attr_reader :client, :region
 
   MAYBE_SUPPORTED_PLAID_PRODUCTS = %w[transactions investments liabilities].freeze
   MAX_HISTORY_DAYS = Rails.env.development? ? 90 : 730
@@ -54,18 +54,13 @@ class Provider::Plaid
       actual_hash = Digest::SHA256.hexdigest(raw_body)
       raise JWT::VerificationError, "Invalid webhook body hash" unless ActiveSupport::SecurityUtils.secure_compare(expected_hash, actual_hash)
     end
-
-    def client
-      api_client = Plaid::ApiClient.new(
-        Rails.application.config.plaid
-      )
-
-      Plaid::PlaidApi.new(api_client)
-    end
   end
 
-  def initialize
-    @client = self.class.client
+  def initialize(config, region)
+    @client = Plaid::PlaidApi.new(
+      Plaid::ApiClient.new(config)
+    )
+    @region = region
   end
 
   def get_link_token(user_id:, webhooks_url:, redirect_url:, accountable_type: nil)
@@ -74,7 +69,7 @@ class Provider::Plaid
       client_name: "Maybe Finance",
       products: [ get_primary_product(accountable_type) ],
       additional_consented_products: get_additional_consented_products(accountable_type),
-      country_codes: [ "US", "CA" ],
+      country_codes: country_codes,
       language: "en",
       webhook: webhooks_url,
       redirect_uri: redirect_url,
@@ -185,6 +180,8 @@ class Provider::Plaid
     end
 
     def get_primary_product(accountable_type)
+      return "transactions" if eu?
+
       case accountable_type
       when "Investment"
         "investments"
@@ -196,6 +193,20 @@ class Provider::Plaid
     end
 
     def get_additional_consented_products(accountable_type)
+      return [] if eu?
+
       MAYBE_SUPPORTED_PLAID_PRODUCTS - [ get_primary_product(accountable_type) ]
+    end
+
+    def eu?
+      region.to_sym == :eu
+    end
+
+    def country_codes
+      if eu?
+        [ "ES", "NL", "FR", "IE", "DE", "IT", "PL", "DK", "NO", "SE", "EE", "LT", "LV", "PT", "BE" ]  # EU supported countries
+      else
+        [ "US", "CA" ] # US + CA only
+      end
     end
 end

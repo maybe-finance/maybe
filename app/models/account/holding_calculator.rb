@@ -46,11 +46,22 @@ class Account::HoldingCalculator
     end
 
     def generate_holding_records(portfolio, date)
+      Rails.logger.info "[HoldingCalculator] Generating holdings for #{portfolio.size} securities on #{date}"
+
       portfolio.map do |security_id, qty|
         security = securities_cache[security_id]
+
+        if security.blank?
+          Rails.logger.error "[HoldingCalculator] Security #{security_id} not found in cache for account #{account.id}"
+          next
+        end
+
         price = security.dig(:prices)&.find { |p| p.date == date }
 
-        next if price.blank?
+        if price.blank?
+          Rails.logger.info "[HoldingCalculator] No price found for security #{security_id} on #{date}"
+          next
+        end
 
         converted_price = Money.new(price.price, price.currency).exchange_to(account.currency, fallback_rate: 1).amount
 
@@ -106,19 +117,35 @@ class Account::HoldingCalculator
     end
 
     def preload_securities
+      # Get securities from trades and current holdings
       securities = trades.map(&:entryable).map(&:security).uniq
+      securities += account.holdings.where(date: Date.current).map(&:security)
+      securities.uniq!
+
+      Rails.logger.info "[HoldingCalculator] Preloading #{securities.size} securities for account #{account.id}"
 
       securities.each do |security|
-        prices = Security::Price.find_prices(
-          security: security,
-          start_date: portfolio_start_date,
-          end_date: Date.current
-        )
+        begin
+          Rails.logger.info "[HoldingCalculator] Loading security: ID=#{security.id} Ticker=#{security.ticker}"
 
-        @securities_cache[security.id] = {
-          security: security,
-          prices: prices
-        }
+          prices = Security::Price.find_prices(
+            security: security,
+            start_date: portfolio_start_date,
+            end_date: Date.current
+          )
+
+          Rails.logger.info "[HoldingCalculator] Found #{prices.size} prices for security #{security.id}"
+
+          @securities_cache[security.id] = {
+            security: security,
+            prices: prices
+          }
+        rescue => e
+          Rails.logger.error "[HoldingCalculator] Error processing security #{security.id}: #{e.message}"
+          Rails.logger.error "[HoldingCalculator] Security details: #{security.attributes}"
+          Rails.logger.error e.backtrace.join("\n")
+          next # Skip this security and continue with others
+        end
       end
     end
 

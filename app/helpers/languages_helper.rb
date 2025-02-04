@@ -365,6 +365,11 @@ module LanguagesHelper
   end
 
   def timezone_options
-    ActiveSupport::TimeZone.all.map { |tz| [ tz.name + " (#{tz.tzinfo.identifier})", tz.tzinfo.identifier ] }
+    ActiveSupport::TimeZone.all
+      .sort_by { |tz| [ tz.utc_offset, tz.name ] }
+      .map do |tz|
+        name = tz.name.split(" - ").first.gsub(" (US & Canada)", "")
+        [ "(#{tz.formatted_offset}) #{name}", tz.tzinfo.identifier ]
+      end
   end
 end

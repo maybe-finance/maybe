@@ -31,3 +31,12 @@ family_member:
   email: jakobdylan@yahoo.com
   password_digest: <%= BCrypt::Password.create('password') %>
   onboarded_at: <%= 3.days.ago %>
+
+new_email:
+  family: empty
+  first_name: Test
+  last_name: User
+  email: user@example.com
+  unconfirmed_email: new@example.com
+  password_digest: <%= BCrypt::Password.create('password123') %>
+  onboarded_at: <%= Time.current %>

@@ -72,7 +72,7 @@
             { data: { action: "onboarding#setCurrency" } } %>
 
             <%= family_form.select :date_format,
-            date_format_options,
+            Family::DATE_FORMATS,
             { label: t(".date_format"), required: true, selected: params[:date_format] || @user.family.date_format },
             { data: { action: "onboarding#setDateFormat" } } %>
 

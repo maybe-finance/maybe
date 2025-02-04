@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resources :sessions, only: %i[new create destroy]
   resource :password_reset, only: %i[new create edit update]
   resource :password, only: %i[edit update]
+  resource :email_confirmation, only: :new
 
   resources :users, only: %i[update destroy]
 
@@ -20,7 +21,7 @@ Rails.application.routes.draw do
   end
 
   namespace :settings do
-    resource :profile, only: :show
+    resource :profile, only: [ :show, :destroy ]
     resource :preferences, only: :show
     resource :hosting, only: %i[show update]
     resource :billing, only: :show
@@ -82,8 +83,6 @@ Rails.application.routes.draw do
   namespace :account do
     resources :holdings, only: %i[index new show destroy]
 
-    resources :entries, only: :index
-
     resources :transactions, only: %i[show new create update destroy] do
       resource :transfer_match, only: %i[new create]
       resource :category, only: :update, controller: :transaction_categories
@@ -109,7 +108,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :transactions, only: :index
+  resources :transactions, only: :index do
+    collection do
+      delete :clear_filter
+    end
+  end
 
   # Convenience routes for polymorphic paths
   # Example: account_path(Account.new(accountable: Depository.new)) => /depositories/123
@@ -140,7 +143,7 @@ Rails.application.routes.draw do
     resources :exchange_rate_provider_missings, only: :update
   end
 
-  resources :invitations, only: [ :new, :create ] do
+  resources :invitations, only: [ :new, :create, :destroy ] do
     get :accept, on: :member
   end
 

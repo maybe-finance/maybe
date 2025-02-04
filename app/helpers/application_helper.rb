@@ -1,20 +1,6 @@
 module ApplicationHelper
   include Pagy::Frontend
 
-  def date_format_options
-    [
-      [ "DD-MM-YYYY", "%d-%m-%Y" ],
-      [ "DD.MM.YYYY", "%d.%m.%Y" ],
-      [ "MM-DD-YYYY", "%m-%d-%Y" ],
-      [ "YYYY-MM-DD", "%Y-%m-%d" ],
-      [ "DD/MM/YYYY", "%d/%m/%Y" ],
-      [ "YYYY/MM/DD", "%Y/%m/%d" ],
-      [ "MM/DD/YYYY", "%m/%d/%Y" ],
-      [ "D/MM/YYYY", "%e/%m/%Y" ],
-      [ "YYYY.MM.DD", "%Y.%m.%d" ]
-    ]
-  end
-
   def icon(key, size: "md", color: "current")
     render partial: "shared/icon", locals: { key:, size:, color: }
   end
@@ -175,25 +161,5 @@ module ApplicationHelper
     end
 
     cookies[:admin] == "true"
-  end
-
-  def custom_pagy_url_for(pagy, page, current_path: nil)
-    if current_path.blank?
-      pagy_url_for(pagy, page)
-    else
-      uri = URI.parse(current_path)
-      params = URI.decode_www_form(uri.query || "").to_h
-
-      # Delete existing page param if it exists
-      params.delete("page")
-      # Add new page param unless it's page 1
-      params["page"] = page unless page == 1
-
-      if params.empty?
-        uri.path
-      else
-        "#{uri.path}?#{URI.encode_www_form(params)}"
-      end
-    end
   end
 end
