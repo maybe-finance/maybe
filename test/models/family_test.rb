@@ -16,11 +16,11 @@ class FamilyTest < ActiveSupport::TestCase
     manual_accounts_count = @syncable.accounts.manual.count
     items_count = @syncable.plaid_items.count
 
-    Account.any_instance.expects(:sync_data)
+    Account.any_instance.expects(:sync_later)
       .with(start_date: nil)
       .times(manual_accounts_count)
 
-    PlaidItem.any_instance.expects(:sync_data)
+    PlaidItem.any_instance.expects(:sync_later)
       .with(start_date: nil)
       .times(items_count)
 
