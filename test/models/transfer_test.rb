@@ -123,15 +123,42 @@ class TransferTest < ActiveSupport::TestCase
     end
   end
 
-  test "transaction can only belong to one transfer" do
+  test "should not allow duplicate transfers with same inflow and outflow transactions" do
     outflow_entry = create_transaction(date: Date.current, account: accounts(:depository), amount: 500)
-    inflow_entry1 = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
-    inflow_entry2 = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
+    inflow_entry = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
 
-    Transfer.create!(inflow_transaction: inflow_entry1.account_transaction, outflow_transaction: outflow_entry.account_transaction)
+    Transfer.create!(
+      inflow_transaction: inflow_entry.account_transaction,
+      outflow_transaction: outflow_entry.account_transaction,
+    )
 
-    assert_raises ActiveRecord::RecordInvalid do
-      Transfer.create!(inflow_transaction: inflow_entry2.account_transaction, outflow_transaction: outflow_entry.account_transaction)
+    duplicate_transfer = Transfer.new(
+      inflow_transaction: inflow_entry.account_transaction,
+      outflow_transaction: outflow_entry.account_transaction,
+    )
+
+    assert_no_difference -> { Transfer.count } do
+      duplicate_transfer.save
+    end
+
+    assert_equal "Inflow transaction has already been taken", duplicate_transfer.errors.full_messages.first
+  end
+
+  test "allows same transactions to be used in different transfer combinations" do
+    outflow_entry1 = create_transaction(date: Date.current, account: accounts(:depository), amount: 500)
+    outflow_entry2 = create_transaction(date: Date.current, account: accounts(:depository), amount: 500)
+    inflow_entry = create_transaction(date: Date.current, account: accounts(:credit_card), amount: -500)
+
+    Transfer.create!(
+      inflow_transaction: inflow_entry.account_transaction,
+      outflow_transaction: outflow_entry1.account_transaction,
+    )
+
+    assert_difference -> { Transfer.count } => 1 do
+      Transfer.create!(
+        inflow_transaction: inflow_entry.account_transaction,
+        outflow_transaction: outflow_entry2.account_transaction,
+      )
     end
   end
 end
