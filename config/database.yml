@@ -1,7 +1,7 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  # 3 connections for Puma, 8 for GoodJob (in async mode, the default for self-hosters) = 11 connections
+  # 3 connections for Puma, 13 for GoodJob (in async mode, the default for self-hosters) = 16 connections
   pool: <%= ENV.fetch("DB_POOL_SIZE") { 16 } %>
   host: <%= ENV.fetch("DB_HOST") { "127.0.0.1" } %>
   port: <%= ENV.fetch("DB_PORT") { "5432" } %>
