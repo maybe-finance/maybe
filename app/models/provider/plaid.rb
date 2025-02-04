@@ -180,6 +180,8 @@ class Provider::Plaid
     end
 
     def get_primary_product(accountable_type)
+      return "transactions" if eu?
+
       case accountable_type
       when "Investment"
         "investments"
@@ -191,11 +193,17 @@ class Provider::Plaid
     end
 
     def get_additional_consented_products(accountable_type)
+      return [] if eu?
+
       MAYBE_SUPPORTED_PLAID_PRODUCTS - [ get_primary_product(accountable_type) ]
     end
 
+    def eu?
+      region.to_sym == :eu
+    end
+
     def country_codes
-      if region.to_sym == :eu
+      if eu?
         [ "ES", "NL", "FR", "IE", "DE", "IT", "PL", "DK", "NO", "SE", "EE", "LT", "LV", "PT", "BE" ]  # EU supported countries
       else
         [ "US", "CA" ] # US + CA only
