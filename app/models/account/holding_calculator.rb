@@ -121,20 +121,27 @@ class Account::HoldingCalculator
       Rails.logger.info "[HoldingCalculator] Preloading #{securities.size} securities for account #{account.id}"
 
       securities.each do |security|
-        Rails.logger.info "[HoldingCalculator] Loading prices for security #{security.id} (#{security.symbol})"
+        begin
+          Rails.logger.info "[HoldingCalculator] Loading security: ID=#{security.id} Ticker=#{security.ticker}"
 
-        prices = Security::Price.find_prices(
-          security: security,
-          start_date: portfolio_start_date,
-          end_date: Date.current
-        )
+          prices = Security::Price.find_prices(
+            security: security,
+            start_date: portfolio_start_date,
+            end_date: Date.current
+          )
 
-        Rails.logger.info "[HoldingCalculator] Found #{prices.size} prices for security #{security.id}"
+          Rails.logger.info "[HoldingCalculator] Found #{prices.size} prices for security #{security.id}"
 
-        @securities_cache[security.id] = {
-          security: security,
-          prices: prices
-        }
+          @securities_cache[security.id] = {
+            security: security,
+            prices: prices
+          }
+        rescue => e
+          Rails.logger.error "[HoldingCalculator] Error processing security #{security.id}: #{e.message}"
+          Rails.logger.error "[HoldingCalculator] Security details: #{security.attributes}"
+          Rails.logger.error e.backtrace.join("\n")
+          next # Skip this security and continue with others
+        end
       end
     end
 
