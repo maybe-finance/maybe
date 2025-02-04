@@ -117,7 +117,11 @@ class Account::HoldingCalculator
     end
 
     def preload_securities
+      # Get securities from trades and current holdings
       securities = trades.map(&:entryable).map(&:security).uniq
+      securities += account.holdings.where(date: Date.current).map(&:security)
+      securities.uniq!
+
       Rails.logger.info "[HoldingCalculator] Preloading #{securities.size} securities for account #{account.id}"
 
       securities.each do |security|
