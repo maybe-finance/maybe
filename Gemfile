@@ -31,6 +31,7 @@ gem "stackprof"
 gem "rack-mini-profiler"
 gem "sentry-ruby"
 gem "sentry-rails"
+gem "logtail-rails"
 
 # Active Storage
 gem "aws-sdk-s3", "~> 1.177.0", require: false

@@ -243,6 +243,17 @@ GEM
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     logger (1.6.5)
+    logtail (0.1.13)
+      msgpack (~> 1.0)
+    logtail-rack (0.2.5)
+      logtail (~> 0.1)
+      rack (>= 1.2, < 4.0)
+    logtail-rails (0.2.9)
+      actionpack (>= 5.0.0)
+      activerecord (>= 5.0.0)
+      logtail (~> 0.1)
+      logtail-rack (~> 0.1)
+      railties (>= 5.0.0)
     loofah (2.24.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -527,6 +538,7 @@ DEPENDENCIES
   intercom-rails
   jwt
   letter_opener
+  logtail-rails
   lucide-rails!
   mocha
   octokit
