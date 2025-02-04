@@ -21,11 +21,7 @@
         </div>
       <% else %>
         <div class="max-w-md mx-auto">
-          <% if @budget.available_to_allocate.negative? %>
-            <%= render "budget_categories/allocation_progress_overage", budget: @budget %>
-          <% else %>
-            <%= render "budget_categories/allocation_progress", budget: @budget %>
-          <% end %>
+          <%= render "budget_categories/allocation_progress", budget: @budget %>
 
           <div class="space-y-4 mb-4">
             <% BudgetCategory::Group.for(@budget_categories).sort_by(&:name).each do |group| %>
