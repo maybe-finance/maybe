@@ -15,7 +15,7 @@ class BudgetCategoriesController < ApplicationController
     else
       @budget_category = Current.family.budget_categories.find(params[:id])
       @recent_transactions = @recent_transactions.joins("LEFT JOIN categories ON categories.id = account_transactions.category_id")
-                                                 .where("categories.id = ? OR categories.parent_id = ?", @budget_category.category.id, @budget_category.category.id)
+                                               .where("categories.id = ? OR categories.parent_id = ?", @budget_category.category.id, @budget_category.category.id)
     end
 
     @recent_transactions = @recent_transactions.order("account_entries.date DESC, ABS(account_entries.amount) DESC").take(3)
@@ -26,10 +26,14 @@ class BudgetCategoriesController < ApplicationController
     @budget_category.update!(budget_category_params)
 
     redirect_to budget_budget_categories_path(@budget_category.budget)
+  rescue ActiveRecord::RecordInvalid
+    render :show, status: :unprocessable_entity
   end
 
   private
     def budget_category_params
-      params.require(:budget_category).permit(:budgeted_spending)
+      params.require(:budget_category).permit(:budgeted_spending).tap do |bc_params|
+        bc_params[:budgeted_spending] = 0.0 if bc_params[:budgeted_spending].blank?
+      end
     end
 end
