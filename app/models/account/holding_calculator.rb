@@ -121,7 +121,7 @@ class Account::HoldingCalculator
       Rails.logger.info "[HoldingCalculator] Preloading #{securities.size} securities for account #{account.id}"
 
       securities.each do |security|
-        Rails.logger.info "[HoldingCalculator] Loading prices for security #{security.id} (#{security.symbol})"
+        Rails.logger.info "[HoldingCalculator] Loading prices for security #{security.id} (#{security.ticker})"
 
         prices = Security::Price.find_prices(
           security: security,
