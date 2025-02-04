@@ -37,6 +37,8 @@ class BudgetCategoriesController < ApplicationController
 
   private
     def budget_category_params
-      params.require(:budget_category).permit(:budgeted_spending)
+      params.require(:budget_category).permit(:budgeted_spending).tap do |params|
+        params[:budgeted_spending] = params[:budgeted_spending].presence || 0
+      end
     end
 end
