@@ -13,11 +13,11 @@ Rails.application.configure do
 
   config.good_job.on_thread_error = ->(exception) { Rails.error.report(exception) }
 
-  # 5 queue threads + 3 for job listener, cron, executor = 8 threads allocated
+  # 10 queue threads + 3 for job listener, cron, executor = 13 threads allocated
   config.queues = {
-    "latency_low" => { max_threads: 1, priority: 10 }, # ~30s jobs
-    "latency_low,latency_medium" => { max_threads: 2, priority: 5 }, # ~1-2 min jobs
-    "latency_low,latency_medium,latency_high" => { max_threads: 1, priority: 1 }, # ~5+ min jobs
+    "latency_low" => { max_threads: 3, priority: 10 }, # ~30s jobs
+    "latency_low,latency_medium" => { max_threads: 4, priority: 5 }, # ~1-2 min jobs
+    "latency_low,latency_medium,latency_high" => { max_threads: 2, priority: 1 }, # ~5+ min jobs
     "*" => { max_threads: 1, priority: 0 } # fallback queue
   }
 
