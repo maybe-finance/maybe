@@ -26,8 +26,6 @@ class BudgetCategoriesController < ApplicationController
     @budget_category.update!(budget_category_params)
 
     redirect_to budget_budget_categories_path(@budget_category.budget)
-  rescue ActiveRecord::RecordInvalid
-    render :show, status: :unprocessable_entity
   end
 
   private
