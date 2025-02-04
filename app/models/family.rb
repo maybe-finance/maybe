@@ -37,16 +37,12 @@ class Family < ApplicationRecord
     update!(last_synced_at: Time.current)
 
     accounts.manual.each do |account|
-      account.sync_data(start_date: start_date)
+      account.sync_later(start_date: start_date)
     end
-
-    plaid_data = []
 
     plaid_items.each do |plaid_item|
-      plaid_data << plaid_item.sync_data(start_date: start_date)
+      plaid_item.sync_later(start_date: start_date)
     end
-
-    plaid_data
   end
 
   def post_sync

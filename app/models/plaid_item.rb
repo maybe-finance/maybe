@@ -41,7 +41,7 @@ class PlaidItem < ApplicationRecord
     plaid_data = fetch_and_load_plaid_data
 
     accounts.each do |account|
-      account.sync_data(start_date: start_date)
+      account.sync_later(start_date: start_date)
     end
 
     plaid_data
