@@ -290,6 +290,27 @@ class ChatJob < ApplicationJob
                - Use ARRAY constructor for array values
                - Avoid nested quotes within quotes
                - Use dollar quoting ($$) for complex string literals
+               - When writing CTEs, start with WITH and list all CTEs separated by commas:
+                 WITH#{' '}
+                   first_cte AS (
+                     SELECT ...
+                   ),
+                   second_cte AS (
+                     SELECT ...
+                   )
+                 SELECT ...
+               - Your query will be wrapped in a metrics CTE by the system. If you need additional CTEs,
+                 write your query as:
+                 WITH
+                   your_cte AS (
+                     SELECT ...
+                   ),
+                   another_cte AS (
+                     SELECT ...
+                   )
+                 SELECT ...
+               - The metrics CTE provides: id, date, account_id, family_id, kind, subkind, value
+                 from metrics, account_balances, and account_holdings tables
           ASSISTANT
         ],
         max_completion_tokens: 10000
@@ -328,28 +349,55 @@ class ChatJob < ApplicationJob
       # Basic SQL validation
       raise "Invalid SQL: Empty query" if sql.blank?
       raise "Invalid SQL: Missing semicolon" unless sql.strip.end_with?(";")
-      raise "Invalid SQL: Not a SELECT query" unless sql.strip.upcase.start_with?("SELECT")
 
-      # Check for common syntax issues
+      # Check if query is either a direct SELECT or starts with WITH for CTEs
+      normalized_sql = sql.strip.upcase
+      is_valid_query = normalized_sql.start_with?("SELECT") || normalized_sql.start_with?("WITH")
+      raise "Invalid SQL: Must be a SELECT query or CTE" unless is_valid_query
+
+      # Check for multiple WITH clauses (not allowed in Postgres)
+      with_count = normalized_sql.scan(/\bWITH\b/).count
+      if with_count > 1
+        error_message = <<~ERROR
+          Invalid SQL: Multiple WITH clauses found (#{with_count} found).
+
+          PostgreSQL requires all CTEs to be combined into a single WITH clause using commas.
+
+          Instead of:
+            WITH metrics AS (...)
+            WITH income_cte AS (...)
+            SELECT ...
+          #{'  '}
+          Use:
+            WITH#{' '}
+              metrics AS (...),
+              income_cte AS (...),
+              other_cte AS (...)
+            SELECT ...
+        ERROR
+        raise error_message
+      end
+
+      # Ensure WITH statements are followed by SELECT
+      if normalized_sql.start_with?("WITH")
+        raise "Invalid SQL: WITH statement must contain SELECT" unless normalized_sql.include?("SELECT")
+      end
+
+      # Check for dangerous SQL patterns
       dangerous_patterns = [
-        /\'\'/,                    # Empty quotes
-        /\s+'''/,                 # Triple quotes
-        /\s+"/,                   # Double quotes without proper escaping
-        /\s+\\/,                  # Backslashes without proper escaping
-        /\-\-(?![a-zA-Z0-9])/,    # Inline comments
-        /\/\*/,                   # Block comments
         /;\s*SELECT/i,            # Multiple statements
         /COPY\s+/i,              # COPY command
         /INTO\s+OUTFILE/i,       # INTO OUTFILE
         /INTO\s+DUMPFILE/i,      # INTO DUMPFILE
-        /UNION(?!\s+ALL)/i,      # UNION without ALL
         /DROP\s+/i,              # DROP statements
         /DELETE\s+/i,            # DELETE statements
         /UPDATE\s+/i,            # UPDATE statements
         /INSERT\s+/i,            # INSERT statements
         /ALTER\s+/i,             # ALTER statements
         /CREATE\s+/i,            # CREATE statements
-        /TRUNCATE\s+/i          # TRUNCATE statements
+        /TRUNCATE\s+/i,          # TRUNCATE statements
+        /GRANT\s+/i,             # GRANT statements
+        /REVOKE\s+/i             # REVOKE statements
       ]
 
       dangerous_patterns.each do |pattern|
