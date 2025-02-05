@@ -15,8 +15,7 @@ class Account::Syncer
 
     # Enrich if user opted in or if we're syncing transactions from a Plaid account on the hosted app
     if account.family.data_enrichment_enabled? || (account.plaid_account_id.present? && Rails.application.config.app_mode.hosted?)
-      # Temporarily disable until optimizations complete
-      # account.enrich_data_later
+      account.enrich_data
     else
       Rails.logger.info("Data enrichment is disabled, skipping enrichment for account #{account.id}")
     end

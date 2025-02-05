@@ -130,10 +130,6 @@ class Account < ApplicationRecord
     DataEnricher.new(self).run
   end
 
-  def enrich_data_later
-    EnrichDataJob.perform_later(self)
-  end
-
   def update_with_sync!(attributes)
     should_update_balance = attributes[:balance] && attributes[:balance].to_d != balance
 
