@@ -184,6 +184,8 @@ class Account < ApplicationRecord
       .joins("JOIN accounts inflow_accounts ON inflow_accounts.id = inflow_candidates.account_id")
       .joins("JOIN accounts outflow_accounts ON outflow_accounts.id = outflow_candidates.account_id")
       .where("inflow_accounts.family_id = ? AND outflow_accounts.family_id = ?", self.family_id, self.family_id)
+      .where("inflow_accounts.is_active = true AND inflow_accounts.scheduled_for_deletion = false")
+      .where("outflow_accounts.is_active = true AND outflow_accounts.scheduled_for_deletion = false")
       .where("inflow_candidates.entryable_type = 'Account::Transaction' AND outflow_candidates.entryable_type = 'Account::Transaction'")
       .where(existing_transfers: { id: nil })
       .order("date_diff ASC") # Closest matches first
