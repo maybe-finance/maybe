@@ -202,8 +202,6 @@ class Family < ApplicationRecord
       end
     end
 
-    Family::MetricsCalculator.new(self).calculate
-
     update! last_synced_at: Time.now
   end
 

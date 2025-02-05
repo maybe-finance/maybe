@@ -10,9 +10,9 @@ class Account::MetricsCalculator
   private
 
     def calculate_spending
+      Rails.logger.info("Calculating spending for account #{@account.id}")
       entries = @account.entries
                       .account_transactions
-                      .without_transfers
                       .where(amount: ..0)
                       .where("date >= ?", 30.days.ago)
 

@@ -73,6 +73,7 @@ class Account::Syncer
 
     def calculate_metrics
       Account::MetricsCalculator.new(account).calculate
+      Family::MetricsCalculator.new(account.family).calculate
     end
 
     def convert_records_to_family_currency(balances, holdings)

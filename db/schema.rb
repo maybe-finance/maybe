@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_31_171943) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_05_021900) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -512,6 +512,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_31_171943) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_metrics_on_account_id"
+    t.index ["family_id", "kind", "date"], name: "index_metrics_on_family_kind_date_unique", unique: true
     t.index ["family_id"], name: "index_metrics_on_family_id"
   end
 
