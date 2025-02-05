@@ -6,62 +6,28 @@ class Account::Transaction < ApplicationRecord
   has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings
 
+  has_one :transfer_as_inflow, class_name: "Transfer", foreign_key: "inflow_transaction_id", dependent: :destroy
+  has_one :transfer_as_outflow, class_name: "Transfer", foreign_key: "outflow_transaction_id", dependent: :destroy
+
+  # We keep track of rejected transfers to avoid auto-matching them again
+  has_one :rejected_transfer_as_inflow, class_name: "RejectedTransfer", foreign_key: "inflow_transaction_id", dependent: :destroy
+  has_one :rejected_transfer_as_outflow, class_name: "RejectedTransfer", foreign_key: "outflow_transaction_id", dependent: :destroy
+
   accepts_nested_attributes_for :taggings, allow_destroy: true
 
   scope :active, -> { where(excluded: false) }
 
   class << self
     def search(params)
-      query = all
-      if params[:categories].present?
-        if params[:categories].exclude?("Uncategorized")
-          query = query
-                    .joins(:category)
-                    .where(categories: { name: params[:categories] })
-        else
-          query = query
-                    .left_joins(:category)
-                    .where(categories: { name: params[:categories] })
-                    .or(query.where(category_id: nil))
-        end
-      end
-
-      query = query.joins(:merchant).where(merchants: { name: params[:merchants] }) if params[:merchants].present?
-
-      if params[:tags].present?
-        query = query.joins(:tags)
-                     .where(tags: { name: params[:tags] })
-                     .distinct
-      end
-
-      query
+      Account::TransactionSearch.new(params).build_query(all)
     end
-
-    def requires_search?(params)
-      searchable_keys.any? { |key| params.key?(key) }
-    end
-
-    private
-
-      def searchable_keys
-        %i[categories merchants tags]
-      end
   end
 
-  def name
-    entry.name || "(no description)"
+  def transfer
+    transfer_as_inflow || transfer_as_outflow
   end
 
-  def eod_balance
-    entry.amount_money
+  def transfer?
+    transfer.present?
   end
-
-  private
-    def account
-      entry.account
-    end
-
-    def daily_transactions
-      account.entries.account_transactions
-    end
 end

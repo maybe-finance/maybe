@@ -1,106 +1,110 @@
 class TransactionsController < ApplicationController
+  include ScrollFocusable
+
   layout :with_sidebar
+
+  before_action :store_params!, only: :index
 
   def index
     @q = search_params
-    result = Current.family.entries.account_transactions.search(@q).reverse_chronological
-    @pagy, @transaction_entries = pagy(result, limit: params[:per_page] || "50")
+    search_query = Current.family.transactions.search(@q)
 
-    @totals = {
-      count: result.select { |t| t.currency == Current.family.currency }.count,
-      income: result.income_total(Current.family.currency).abs,
-      expense: result.expense_total(Current.family.currency)
+    set_focused_record(search_query, params[:focused_record_id], default_per_page: 50)
+
+    @pagy, @transaction_entries = pagy(
+      search_query.reverse_chronological.preload(
+        :account,
+        entryable: [
+          :category, :merchant, :tags,
+          :transfer_as_inflow,
+          transfer_as_outflow: {
+            inflow_transaction: { entry: :account },
+            outflow_transaction: { entry: :account }
+          }
+        ]
+      ),
+      limit: params[:per_page].presence || default_params[:per_page],
+      params: ->(params) { params.except(:focused_record_id) }
+    )
+
+    @transfers = @transaction_entries.map { |entry| entry.entryable.transfer_as_outflow }.compact
+    @totals = search_query.stats(Current.family.currency)
+  end
+
+  def clear_filter
+    updated_params = {
+      "q" => search_params,
+      "page" => params[:page],
+      "per_page" => params[:per_page]
     }
-  end
 
-  def new
-    @entry = Current.family.entries.new(entryable: Account::Transaction.new).tap do |e|
-      if params[:account_id]
-        e.account = Current.family.accounts.find(params[:account_id])
-        e.currency = e.account.currency
-      else
-        e.currency = Current.family.currency
-      end
+    q_params = updated_params["q"] || {}
+
+    param_key = params[:param_key]
+    param_value = params[:param_value]
+
+    if q_params[param_key].is_a?(Array)
+      q_params[param_key].delete(param_value)
+      q_params.delete(param_key) if q_params[param_key].empty?
+    else
+      q_params.delete(param_key)
     end
-  end
 
-  def create
-    @entry = Current.family
-                    .accounts
-                    .find(params[:account_entry][:account_id])
-                    .entries
-                    .create!(transaction_entry_params.merge(amount: amount))
+    updated_params["q"] = q_params.presence
+    Current.session.update!(prev_transaction_page_params: updated_params)
 
-    @entry.sync_account_later
-    redirect_back_or_to @entry.account, notice: t(".success")
-  end
-
-  def bulk_delete
-    destroyed = Current.family.entries.destroy_by(id: bulk_delete_params[:entry_ids])
-    destroyed.map(&:account).uniq.each(&:sync_later)
-    redirect_back_or_to transactions_url, notice: t(".success", count: destroyed.count)
-  end
-
-  def bulk_edit
-  end
-
-  def bulk_update
-    updated = Current.family
-                     .entries
-                     .where(id: bulk_update_params[:entry_ids])
-                     .bulk_update!(bulk_update_params)
-
-    redirect_back_or_to transactions_url, notice: t(".success", count: updated)
-  end
-
-  def mark_transfers
-    Current.family
-      .entries
-      .where(id: bulk_update_params[:entry_ids])
-           .mark_transfers!
-
-    redirect_back_or_to transactions_url, notice: t(".success")
-  end
-
-  def unmark_transfers
-    Current.family
-      .entries
-      .where(id: bulk_update_params[:entry_ids])
-           .update_all marked_as_transfer: false
-
-    redirect_back_or_to transactions_url, notice: t(".success")
+    redirect_to transactions_path(updated_params)
   end
 
   private
+    def search_params
+      cleaned_params = params.fetch(:q, {})
+            .permit(
+              :start_date, :end_date, :search, :amount,
+              :amount_operator, accounts: [], account_ids: [],
+              categories: [], merchants: [], types: [], tags: []
+            )
+            .to_h
+            .compact_blank
 
-    def amount
-      if nature.income?
-        transaction_entry_params[:amount].to_d * -1
+      cleaned_params.delete(:amount_operator) unless cleaned_params[:amount].present?
+
+      cleaned_params
+    end
+
+    def store_params!
+      if should_restore_params?
+        params_to_restore = {}
+
+        params_to_restore[:q] = stored_params["q"].presence || default_params[:q]
+        params_to_restore[:page] = stored_params["page"].presence || default_params[:page]
+        params_to_restore[:per_page] = stored_params["per_page"].presence || default_params[:per_page]
+
+        redirect_to transactions_path(params_to_restore)
       else
-        transaction_entry_params[:amount].to_d
+        Current.session.update!(
+          prev_transaction_page_params: {
+            q: search_params,
+            page: params[:page],
+            per_page: params[:per_page]
+          }
+        )
       end
     end
 
-    def nature
-      params[:account_entry][:nature].to_s.inquiry
+    def should_restore_params?
+      request.query_parameters.blank? && (stored_params["q"].present? || stored_params["page"].present? || stored_params["per_page"].present?)
     end
 
-    def bulk_delete_params
-      params.require(:bulk_delete).permit(entry_ids: [])
+    def stored_params
+      Current.session.prev_transaction_page_params
     end
 
-    def bulk_update_params
-      params.require(:bulk_update).permit(:date, :notes, :category_id, :merchant_id, entry_ids: [])
-    end
-
-    def search_params
-      params.fetch(:q, {})
-            .permit(:start_date, :end_date, :search, :amount, :amount_operator, accounts: [], account_ids: [], categories: [], merchants: [], types: [], tags: [])
-    end
-
-    def transaction_entry_params
-      params.require(:account_entry)
-            .permit(:name, :date, :amount, :currency, :entryable_type, entryable_attributes: [ :category_id ])
-            .with_defaults(entryable_type: "Account::Transaction", entryable_attributes: {})
+    def default_params
+      {
+        q: {},
+        page: 1,
+        per_page: 50
+      }
     end
 end

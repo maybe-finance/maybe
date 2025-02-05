@@ -13,7 +13,10 @@ services:
     branch: main
     healthCheckPath: /up
     buildCommand: "./bin/render-build.sh"
-    preDeployCommand: "bundle exec rails db:migrate"
+
+    # Uncomment if you are on a paid plan, and remove RUN_DB_MIGRATIONS_IN_BUILD_STEP from below
+    # preDeployCommand: "bundle exec rails db:migrate"
+    
     startCommand: "bundle exec rails server"
     envVars:
       - key: DATABASE_URL

@@ -43,18 +43,23 @@ class Provider::Synth
     )
   end
 
-  def fetch_security_prices(ticker:, mic_code:, start_date:, end_date:)
-    prices = paginate(
-      "#{base_url}/tickers/#{ticker}/open-close",
-      mic_code: mic_code,
+  def fetch_security_prices(ticker:, start_date:, end_date:, mic_code: nil)
+    params = {
       start_date: start_date,
       end_date: end_date
+    }
+
+    params[:mic_code] = mic_code if mic_code.present?
+
+    prices = paginate(
+      "#{base_url}/tickers/#{ticker}/open-close",
+      params
     ) do |body|
       body.dig("prices").map do |price|
         {
           date: price.dig("date"),
           price: price.dig("close")&.to_f || price.dig("open")&.to_f,
-          currency: "USD"
+          currency: body.dig("currency") || "USD"
         }
       end
     end
@@ -134,11 +139,12 @@ class Provider::Synth
 
     securities = parsed.dig("data").map do |security|
       {
-        symbol: security.dig("symbol"),
+        ticker: security.dig("symbol"),
         name: security.dig("name"),
         logo_url: security.dig("logo_url"),
         exchange_acronym: security.dig("exchange", "acronym"),
-        exchange_mic: security.dig("exchange", "mic_code")
+        exchange_mic: security.dig("exchange", "mic_code"),
+        country_code: security.dig("exchange", "country_code")
       }
     end
 
@@ -161,6 +167,35 @@ class Provider::Synth
       raw_response: response
   end
 
+  def enrich_transaction(description, amount: nil, date: nil, city: nil, state: nil, country: nil)
+    params = {
+      description: description,
+      amount: amount,
+      date: date,
+      city: city,
+      state: state,
+      country: country
+    }.compact
+
+    response = client.get("#{base_url}/enrich", params)
+
+    parsed = JSON.parse(response.body)
+
+    EnrichTransactionResponse.new \
+      info: EnrichTransactionInfo.new(
+        name: parsed.dig("merchant"),
+        icon_url: parsed.dig("icon"),
+        category: parsed.dig("category")
+      ),
+      success?: true,
+      raw_response: response
+  rescue StandardError => error
+    EnrichTransactionResponse.new \
+      success?: false,
+      error: error,
+      raw_response: error
+  end
+
   private
 
     attr_reader :api_key
@@ -171,9 +206,11 @@ class Provider::Synth
     UsageResponse = Struct.new :used, :limit, :utilization, :plan, :success?, :error, :raw_response, keyword_init: true
     SearchSecuritiesResponse = Struct.new :securities, :success?, :error, :raw_response, keyword_init: true
     SecurityInfoResponse = Struct.new :info, :success?, :error, :raw_response, keyword_init: true
+    EnrichTransactionResponse = Struct.new :info, :success?, :error, :raw_response, keyword_init: true
+    EnrichTransactionInfo = Struct.new :name, :icon_url, :category, keyword_init: true
 
     def base_url
-      "https://api.synthfinance.com"
+      ENV["SYNTH_URL"] || "https://api.synthfinance.com"
     end
 
     def app_name

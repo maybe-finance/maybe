@@ -1,52 +1,123 @@
-class Account::TradeBuilder < Account::EntryBuilder
+class Account::TradeBuilder
   include ActiveModel::Model
 
-  TYPES = %w[buy sell].freeze
+  attr_accessor :account, :date, :amount, :currency, :qty,
+                :price, :ticker, :type, :transfer_account_id
 
-  attr_accessor :type, :qty, :price, :ticker, :date, :account
+  attr_reader :buildable
 
-  validates :type, :qty, :price, :ticker, :date, presence: true
-  validates :price, numericality: { greater_than: 0 }
-  validates :type, inclusion: { in: TYPES }
+  def initialize(attributes = {})
+    super
+    @buildable = set_buildable
+  end
 
   def save
-    if valid?
-      create_entry
-    end
+    buildable.save
+  end
+
+  def errors
+    buildable.errors
+  end
+
+  def sync_account_later
+    buildable.sync_account_later
   end
 
   private
+    def set_buildable
+      case type
+      when "buy", "sell"
+        build_trade
+      when "deposit", "withdrawal"
+        build_transfer
+      when "interest"
+        build_interest
+      else
+        raise "Unknown trade type: #{type}"
+      end
+    end
 
-    def create_entry
-      account.entries.account_trades.create! \
+    def build_trade
+      prefix = type == "sell" ? "Sell " : "Buy "
+      trade_name = prefix + "#{qty.to_i.abs} shares of #{security.ticker}"
+
+      account.entries.new(
+        name: trade_name,
         date: date,
-        amount: amount,
-        currency: account.currency,
+        amount: signed_amount,
+        currency: currency,
         entryable: Account::Trade.new(
-          security: security,
           qty: signed_qty,
-          price: price.to_d,
-          currency: account.currency
+          price: price,
+          currency: currency,
+          security: security
         )
+      )
+    end
+
+    def build_transfer
+      transfer_account = family.accounts.find(transfer_account_id) if transfer_account_id.present?
+
+      if transfer_account
+        from_account = type == "withdrawal" ? account : transfer_account
+        to_account = type == "withdrawal" ? transfer_account : account
+
+        Transfer.from_accounts(
+          from_account: from_account,
+          to_account: to_account,
+          date: date,
+          amount: signed_amount
+        )
+      else
+        account.entries.build(
+          name: signed_amount < 0 ? "Deposit to #{account.name}" : "Withdrawal from #{account.name}",
+          date: date,
+          amount: signed_amount,
+          currency: currency,
+          entryable: Account::Transaction.new
+        )
+      end
+    end
+
+    def build_interest
+      account.entries.build(
+        name: "Interest payment",
+        date: date,
+        amount: signed_amount,
+        currency: currency,
+        entryable: Account::Transaction.new
+      )
+    end
+
+    def signed_qty
+      return nil unless type.in?([ "buy", "sell" ])
+
+      type == "sell" ? -qty.to_d : qty.to_d
+    end
+
+    def signed_amount
+      case type
+      when "buy", "sell"
+        signed_qty * price.to_d
+      when "deposit", "withdrawal"
+        type == "deposit" ? -amount.to_d : amount.to_d
+      when "interest"
+        amount.to_d * -1
+      end
+    end
+
+    def family
+      account.family
     end
 
     def security
-      ticker_symbol, exchange_mic = ticker.split("|")
+      ticker_symbol, exchange_mic, exchange_acronym, exchange_country_code = ticker.split("|")
 
-      security = Security.find_or_create_by(ticker: ticker_symbol, exchange_mic: exchange_mic)
+      security = Security.find_or_create_by(ticker: ticker_symbol, exchange_mic: exchange_mic, country_code: exchange_country_code)
+      security.update(exchange_acronym: exchange_acronym)
 
       FetchSecurityInfoJob.perform_later(security.id)
 
       security
-    end
-
-    def amount
-      price.to_d * signed_qty
-    end
-
-    def signed_qty
-      _qty = qty.to_d
-      _qty = _qty * -1 if type == "sell"
-      _qty
     end
 end

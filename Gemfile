@@ -21,18 +21,22 @@ gem "lucide-rails", github: "maybe-finance/lucide-rails"
 # Hotwire
 gem "stimulus-rails"
 gem "turbo-rails"
-gem "hotwire_combobox"
+
+# Temporary pin to commit to fix crypto.randomUUID() errors.  Revert this when the change has been released.
+gem "hotwire_combobox", github: "josefarias/hotwire_combobox", ref: "b827048a8305e1115d5f96931ba1c9750d1e59fc"
 
 # Background Jobs
 gem "good_job"
 
 # Error logging
 gem "stackprof"
+gem "rack-mini-profiler"
 gem "sentry-ruby"
 gem "sentry-rails"
+gem "logtail-rails"
 
 # Active Storage
-gem "aws-sdk-s3", require: false
+gem "aws-sdk-s3", "~> 1.177.0", require: false
 gem "image_processing", ">= 1.2"
 
 # AI
@@ -40,6 +44,7 @@ gem "ruby-openai"
 
 # Other
 gem "bcrypt", "~> 3.1"
+gem "jwt"
 gem "faraday"
 gem "faraday-retry"
 gem "faraday-multipart"
@@ -54,6 +59,7 @@ gem "stripe"
 gem "intercom-rails"
 gem "holidays"
 gem "redcarpet"
+gem "plaid"
 
 group :development, :test do
   gem "debug", platforms: %i[mri windows]
@@ -70,6 +76,7 @@ group :development do
   gem "ruby-lsp-rails"
   gem "web-console"
   gem "faker"
+  gem "benchmark-ips"
 end
 
 group :test do

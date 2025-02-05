@@ -2,7 +2,14 @@
 
 <div class="flex justify-between items-center p-4 bg-white">
   <div class="flex w-full items-center gap-2.5">
-    <%= render partial: "shared/color_avatar", locals: { name: merchant.name, color: merchant.color } %>
+    <% if merchant.icon_url %>
+      <div class="w-8 h-8 rounded-full flex justify-center items-center">
+        <%= image_tag merchant.icon_url, class: "w-8 h-8 rounded-full" %>
+      </div>
+    <% else %>
+      <%= render partial: "shared/color_avatar", locals: { name: merchant.name, color: merchant.color } %>
+    <% end %>
+
     <p class="text-gray-900 text-sm truncate">
       <%= merchant.name %>
     </p>

@@ -40,7 +40,7 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to created_account
     assert_equal "Vehicle account created", flash[:notice]
-    assert_enqueued_with(job: AccountSyncJob)
+    assert_enqueued_with(job: SyncJob)
   end
 
   test "updates with vehicle details" do
@@ -66,6 +66,6 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to @account
     assert_equal "Vehicle account updated", flash[:notice]
-    assert_enqueued_with(job: AccountSyncJob)
+    assert_enqueued_with(job: SyncJob)
   end
 end

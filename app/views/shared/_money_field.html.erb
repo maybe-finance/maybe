@@ -1,6 +1,8 @@
 <%# locals: (form:, amount_method:, currency_method:, **options) %>
 
-<% currency_value = if form.object && form.object.respond_to?(currency_method)
+<% currency_value = if options[:currency_value_override].present?
+                      options[:currency_value_override]
+                    elsif form.object && form.object.respond_to?(currency_method)
                       form.object.public_send(currency_method)
                     end
    currency = Money::Currency.new(currency_value || options[:default_currency] || "USD") %>
@@ -26,14 +28,14 @@
         value: if options[:value]
           sprintf("%.#{currency.default_precision}f", options[:value])
         elsif form.object && form.object.respond_to?(amount_method)
-          form.object.public_send(amount_method)
+          val = form.object.public_send(amount_method)
+          sprintf("%.#{currency.default_precision}f", val) if val.present?
         end,
         min: options[:min] || -99999999999999,
         max: options[:max] || 99999999999999,
         step: currency.step,
         data: {
           "money-field-target": "amount",
-          action: "change->money-field#handleAmountChange",
           "auto-submit-form-target": ("auto" if options[:auto_submit])
         }.compact,
         required: options[:required] %>
@@ -43,7 +45,7 @@
       <div>
         <%= form.select currency_method,
                       currencies_for_select.map(&:iso_code),
-                      { inline: true },
+                      { inline: true, selected: currency_value },
                       {
                         class: "w-fit pr-5 disabled:text-gray-400 form-field__input",
                         disabled: options[:disable_currency],

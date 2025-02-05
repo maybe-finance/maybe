@@ -9,9 +9,6 @@ class Account::Holding < ApplicationRecord
   validates :qty, :currency, presence: true
 
   scope :chronological, -> { order(:date) }
-  scope :current, -> { where(date: Date.current).order(amount: :desc) }
-  scope :in_period, ->(period) { period.date_range.nil? ? all : where(date: period.date_range) }
-  scope :known_value, -> { where.not(amount: nil) }
   scope :for, ->(security) { where(security_id: security).order(:date) }
 
   delegate :ticker, to: :security
@@ -22,15 +19,19 @@ class Account::Holding < ApplicationRecord
 
   def weight
     return nil unless amount
+    return 0 if amount.zero?
 
-    portfolio_value = account.holdings.current.known_value.sum(&:amount)
-    portfolio_value.zero? ? 1 : amount / portfolio_value * 100
+    account.balance.zero? ? 1 : amount / account.balance * 100
   end
 
   # Basic approximation of cost-basis
   def avg_cost
-    avg_cost = account.holdings.for(security).where("date <= ?", date).average(:price)
-    Money.new(avg_cost, currency)
+    avg_cost = account.entries.account_trades
+                  .joins("INNER JOIN account_trades ON account_trades.id = account_entries.entryable_id")
+                  .where("account_trades.security_id = ? AND account_trades.qty > 0 AND account_entries.date <= ?", security.id, date)
+                  .average(:price)
+
+    Money.new(avg_cost || price, currency)
   end
 
   def trend

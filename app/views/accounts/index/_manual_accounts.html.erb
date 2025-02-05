@@ -1,0 +1,17 @@
+<%# locals: (accounts:) %>
+
+<details open class="group bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">
+  <summary class="flex items-center gap-2 focus-visible:outline-none">
+    <%= lucide_icon "chevron-right", class: "group-open:transform group-open:rotate-90 text-gray-500 w-5" %>
+
+    <div class="flex items-center justify-center h-8 w-8 rounded-full bg-black/5">
+      <%= lucide_icon("folder-pen", class: "w-5 h-5 text-gray-500") %>
+    </div>
+
+    <span class="mr-auto text-sm font-medium text-gray-900"><%= t(".other_accounts") %></span>
+  </summary>
+
+  <div class="space-y-4 mt-4">
+    <%= render "accounts/index/account_groups", accounts: accounts %>
+  </div>
+</details>

@@ -33,8 +33,8 @@
       <% account_trend = account_value_node.series.trend %>
       <%= link_to account, class: "flex items-center w-full gap-3 px-3 py-2 mb-1 hover:bg-gray-100 rounded-[10px]" do %>
         <%= render "accounts/logo", account: account, size: "sm" %>
-        <div>
-          <p class="font-medium"><%= account_value_node.name %></p>
+        <div class="overflow-hidden">
+          <p class="font-medium truncate"><%= account_value_node.name %></p>
           <% if account.subtype %>
             <p class="text-xs text-gray-500"><%= account.subtype&.humanize %></p>
           <% end %>

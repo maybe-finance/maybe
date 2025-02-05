@@ -1,13 +1,7 @@
 ---
 en:
   other_assets:
-    create:
-      success: Other asset account created
-    destroy:
-      success: Other asset account deleted
     edit:
       edit: Edit %{account}
     new:
       title: Enter asset details
-    update:
-      success: Other asset account updated

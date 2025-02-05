@@ -1,17 +1,14 @@
 module ApplicationHelper
   include Pagy::Frontend
 
-  def date_format_options
-    [
-      [ "DD-MM-YYYY", "%d-%m-%Y" ],
-      [ "MM-DD-YYYY", "%m-%d-%Y" ],
-      [ "YYYY-MM-DD", "%Y-%m-%d" ],
-      [ "DD/MM/YYYY", "%d/%m/%Y" ],
-      [ "YYYY/MM/DD", "%Y/%m/%d" ],
-      [ "MM/DD/YYYY", "%m/%d/%Y" ],
-      [ "D/MM/YYYY", "%e/%m/%Y" ],
-      [ "YYYY.MM.DD", "%Y.%m.%d" ]
-    ]
+  def icon(key, size: "md", color: "current")
+    render partial: "shared/icon", locals: { key:, size:, color: }
+  end
+
+  # Convert alpha (0-1) to 8-digit hex (00-FF)
+  def hex_with_alpha(hex, alpha)
+    alpha_hex = (alpha * 255).round.to_s(16).rjust(2, "0")
+    "#{hex}#{alpha_hex}"
   end
 
   def title(page_title)
@@ -61,14 +58,14 @@ module ApplicationHelper
   #     <div>Content here</div>
   #   <% end %>
   #
-  def drawer(&block)
+  def drawer(reload_on_close: false, &block)
     content = capture &block
-    render partial: "shared/drawer", locals: { content: content }
+    render partial: "shared/drawer", locals: { content:, reload_on_close: }
   end
 
-  def disclosure(title, &block)
+  def disclosure(title, default_open: true, &block)
     content = capture &block
-    render partial: "shared/disclosure", locals: { title: title, content: content }
+    render partial: "shared/disclosure", locals: { title: title, content: content, open: default_open }
   end
 
   def sidebar_link_to(name, path, options = {})
@@ -162,5 +159,13 @@ module ApplicationHelper
     @@parser ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML, tables: true)
 
     @@parser.render(text).html_safe
+  end
+
+  def show_super_admin_bar?
+    if params[:admin].present?
+      cookies.permanent[:admin] = params[:admin]
+    end
+
+    cookies[:admin] == "true"
   end
 end

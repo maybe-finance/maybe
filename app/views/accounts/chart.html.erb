@@ -1,0 +1,36 @@
+<% period = Period.from_param(params[:period]) %>
+<% series = @account.series(period: period) %>
+<% trend = series.trend %>
+
+<%= turbo_frame_tag dom_id(@account, :chart_details) do %>
+  <div class="px-4">
+    <% if trend.direction.flat? %>
+      <%= tag.span t(".no_change"), class: "text-gray-500" %>
+    <% else %>
+      <%= tag.span "#{trend.value.positive? ? "+" : ""}#{format_money(trend.value)}", style: "color: #{trend.color}" %>
+      <% unless trend.percent.infinite? %>
+        <%= tag.span "(#{trend.percent}%)", style: "color: #{trend.color}" %>
+      <% end %>
+    <% end %>
+
+    <%= tag.span period_label(period), class: "text-gray-500" %>
+  </div>
+
+  <div class="h-64">
+    <% if series.has_current_day_value? %>
+      <div
+        id="lineChart"
+        class="w-full h-full"
+        data-controller="time-series-chart"
+        data-time-series-chart-data-value="<%= series.to_json %>"></div>
+    <% elsif series.empty? %>
+      <div class="w-full h-full flex items-center justify-center">
+        <p class="text-gray-500 text-sm">No data available for the selected period.</p>
+      </div>
+    <% else %>
+      <div class="w-full h-full flex items-center justify-center">
+        <p class="text-gray-500 text-sm animate-pulse">Calculating latest balance data...</p>
+      </div>
+    <% end %>
+  </div>
+<% end %>

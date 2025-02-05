@@ -6,47 +6,48 @@ en:
       troubleshoot: Troubleshoot
     account_list:
       new_account: New %{type}
+    chart:
+      no_change: no change
+    create:
+      success: "%{type} account created"
+    destroy:
+      success: "%{type} account scheduled for deletion"
     empty:
       empty_message: Add an account either via connection, importing or entering manually.
       new_account: New account
       no_accounts: No accounts yet
     form:
       balance: Current balance
-      institution: Financial institution
       name_label: Account name
       name_placeholder: Example account name
-      ungrouped: "(none)"
     index:
       accounts: Accounts
-      add_institution: Add institution
-      institution_accounts:
-        add_account_to_institution: Add new account
-        confirm_accept: Delete institution
-        confirm_body: Don't worry, none of the accounts within this institution will
-          be affected by this deletion. Accounts will be ungrouped and all historical
-          data will remain intact.
-        confirm_title: Delete financial institution?
-        delete: Delete institution
-        edit: Edit institution
-        has_issues: Issue detected, see accounts
-        new_account: Add account
-        status: Last synced %{last_synced_at} ago
-        status_never: Requires data sync
-        syncing: Syncing...
-      institutionless_accounts:
+      manual_accounts:
         other_accounts: Other accounts
       new_account: New account
+      sync: Sync all
     new:
       import_accounts: Import accounts
       method_selector:
-        connected_entry: Link account (coming soon)
+        connected_entry: Link account
+        connected_entry_eu: Link EU account
         manual_entry: Enter account balance
         title: How would you like to add it?
       title: What would you like to add?
     show:
+      activity:
+        amount: Amount
+        balance: Balance
+        date: Date
+        entries: entries
+        entry: entry
+        new: New
+        new_balance: New balance
+        new_transaction: New transaction
+        no_entries: No entries found
+        title: Activity
       chart:
         balance: Balance
-        no_change: no change
         owed: Amount owed
       menu:
         confirm_accept: Delete "%{name}"
@@ -58,6 +59,7 @@ en:
         confirm_title: Delete account?
         edit: Edit
         import: Import transactions
+        manage: Manage accounts
     summary:
       header:
         accounts: Accounts
@@ -70,7 +72,9 @@ en:
       no_liabilities: No liabilities found
       no_liabilities_description: Add a liability either via connection, importing
         or entering manually.
-    sync_all:
-      success: Successfully queued accounts for syncing.
-    sync_all_button:
-      sync: Sync all
+    update:
+      success: "%{type} account updated"
+  email_confirmations:
+    new:
+      success_login: "Your email has been confirmed. Please log in with your new email address."
+      invalid_token: "Invalid or expired confirmation link."

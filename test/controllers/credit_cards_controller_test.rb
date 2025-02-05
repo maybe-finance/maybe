@@ -21,7 +21,7 @@ class CreditCardsControllerTest < ActionDispatch::IntegrationTest
           accountable_type: "CreditCard",
           accountable_attributes: {
             available_credit: 5000,
-            minimum_payment: 25,
+            minimum_payment: 25.51,
             apr: 15.99,
             expiration_date: 2.years.from_now.to_date,
             annual_fee: 99
@@ -36,14 +36,14 @@ class CreditCardsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1000, created_account.balance
     assert_equal "USD", created_account.currency
     assert_equal 5000, created_account.accountable.available_credit
-    assert_equal 25, created_account.accountable.minimum_payment
+    assert_equal 25.51, created_account.accountable.minimum_payment
     assert_equal 15.99, created_account.accountable.apr
     assert_equal 2.years.from_now.to_date, created_account.accountable.expiration_date
     assert_equal 99, created_account.accountable.annual_fee
 
     assert_redirected_to created_account
     assert_equal "Credit card account created", flash[:notice]
-    assert_enqueued_with(job: AccountSyncJob)
+    assert_enqueued_with(job: SyncJob)
   end
 
   test "updates with credit card details" do
@@ -78,6 +78,6 @@ class CreditCardsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to @account
     assert_equal "Credit card account updated", flash[:notice]
-    assert_enqueued_with(job: AccountSyncJob)
+    assert_enqueued_with(job: SyncJob)
   end
 end

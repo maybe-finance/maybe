@@ -24,11 +24,10 @@ class RegistrationsController < ApplicationController
 
     if @user.save
       @invitation&.update!(accepted_at: Time.current)
-      Category.create_default_categories(@user.family) unless @invitation
       @session = create_session_for(@user)
       redirect_to root_path, notice: t(".success")
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_entity, alert: t(".failure")
     end
   end
 

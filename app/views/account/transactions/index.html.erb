@@ -2,7 +2,7 @@
   <div class="bg-white space-y-4 p-5 border border-alpha-black-25 rounded-xl shadow-xs">
     <div class="flex justify-between items-center">
       <h3 class="font-medium text-lg"><%= t(".transactions") %></h3>
-      <%= link_to new_transaction_path(account_id: @account),
+      <%= link_to new_account_transaction_path(account_id: @account),
                   class: "flex gap-1 font-medium items-center bg-gray-50 text-gray-900 p-2 rounded-lg",
                   data:  { turbo_frame: :modal } do %>
         <%= lucide_icon("plus", class: "w-5 h-5 text-gray-900") %>
@@ -19,7 +19,7 @@
         <p class="text-gray-500 py-4"><%= t(".no_transactions") %></p>
       <% else %>
         <div class="space-y-6">
-          <%= entries_by_date(@entries) do |entries| %>
+          <%= entries_by_date(@entries) do |entries, _transfers| %>
             <%= render entries %>
           <% end %>
         </div>

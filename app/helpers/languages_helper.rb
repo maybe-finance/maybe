@@ -363,4 +363,13 @@ module LanguagesHelper
       end
       .sort_by { |label, locale| label }
   end
+
+  def timezone_options
+    ActiveSupport::TimeZone.all
+      .sort_by { |tz| [ tz.utc_offset, tz.name ] }
+      .map do |tz|
+        name = tz.name.split(" - ").first.gsub(" (US & Canada)", "")
+        [ "(#{tz.formatted_offset}) #{name}", tz.tzinfo.identifier ]
+      end
+  end
 end

@@ -7,11 +7,11 @@
     <% if content.present? %>
       <%= content %>
     <% else %>
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-3 overflow-hidden">
         <%= render "accounts/logo", account: account %>
 
-        <div>
-          <h2 class="font-medium text-xl"><%= title || account.name %></h2>
+        <div class="truncate">
+          <h2 class="font-medium text-xl truncate"><%= title || account.name %></h2>
           <% if subtitle.present? %>
             <p class="text-sm text-gray-500"><%= subtitle %></p>
           <% end %>
@@ -20,8 +20,16 @@
     <% end %>
 
     <div class="flex items-center gap-3 ml-auto">
-      <%= button_to sync_account_path(account), method: :post, class: "flex items-center gap-2", title: "Sync Account" do %>
-        <%= lucide_icon "refresh-cw", class: "w-4 h-4 text-gray-500 hover:text-gray-400" %>
+      <% if account.plaid_account_id.present? %>
+        <% if Rails.env.development? %>
+          <%= button_to sync_plaid_item_path(account.plaid_account.plaid_item), disabled: account.syncing?, data: { turbo: false }, class: "flex items-center gap-2", title: "Sync Account" do %>
+            <%= lucide_icon "refresh-cw", class: "w-4 h-4 text-gray-500 hover:text-gray-400" %>
+          <% end %>
+        <% end %>
+      <% else %>
+        <%= button_to sync_account_path(account), disabled: account.syncing?, data: { turbo: false }, class: "flex items-center gap-2", title: "Sync Account" do %>
+          <%= lucide_icon "refresh-cw", class: "w-4 h-4 text-gray-500 hover:text-gray-400" %>
+        <% end %>
       <% end %>
 
       <%= render "accounts/show/menu", account: account %>

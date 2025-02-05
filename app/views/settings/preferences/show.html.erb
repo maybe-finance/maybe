@@ -12,16 +12,20 @@
         <%= form.fields_for :family do |family_form| %>
           <%= family_form.select :currency,
             currencies_for_select.map { |currency| [ "#{currency.name} (#{currency.iso_code})", currency.iso_code ] },
-            { label: t(".currency") },
-            { data: { auto_submit_form_target: "auto" } } %>
+            { label: t(".currency") }, disabled: true %>
 
           <%= family_form.select :locale,
             language_options,
             { label: t(".language") },
             { data: { auto_submit_form_target: "auto" } } %>
 
+          <%= family_form.select :timezone,
+            timezone_options,
+            { label: t(".timezone") },
+            { data: { auto_submit_form_target: "auto" } } %>
+
           <%= family_form.select :date_format,
-            date_format_options,
+            Family::DATE_FORMATS,
             { label: t(".date_format") },
             { data: { auto_submit_form_target: "auto" } } %>
 
@@ -35,6 +39,11 @@
       <% end %>
     </div>
   <% end %>
+
+  <%= settings_section title: t(".data"), subtitle: t(".data_subtitle") do %>
+    <%= render "settings/preferences/data_enrichment_settings", user: @user %>
+  <% end %>
+
   <%= settings_section title: t(".theme_title"), subtitle: t(".theme_subtitle") do %>
     <div>
       <%= styled_form_with model: @user, class: "flex justify-between items-center" do |form| %>

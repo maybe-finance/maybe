@@ -4,6 +4,8 @@ class AccountsTest < ApplicationSystemTestCase
   setup do
     sign_in @user = users(:family_admin)
 
+    Family.any_instance.stubs(:get_link_token).returns("test-link-token")
+
     visit root_url
     open_new_account_modal
   end
@@ -48,7 +50,7 @@ class AccountsTest < ApplicationSystemTestCase
   test "can create credit card account" do
     assert_account_created "CreditCard" do
       fill_in "Available credit", with: 1000
-      fill_in "Minimum payment", with: 25
+      fill_in "account[accountable_attributes][minimum_payment]", with: 25.51
       fill_in "APR", with: 15.25
       fill_in "Expiration date", with: 1.year.from_now.to_date
       fill_in "Annual fee", with: 100
@@ -65,11 +67,6 @@ class AccountsTest < ApplicationSystemTestCase
 
   test "can create other liability account" do
     assert_account_created("OtherLiability")
-  end
-
-  test "can sync all acounts on accounts page" do
-    visit accounts_url
-    assert_button "Sync all"
   end
 
   private

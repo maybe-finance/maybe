@@ -2,9 +2,6 @@
 en:
   account:
     trades:
-      create:
-        failure: Something went wrong
-        success: Transaction created successfully.
       form:
         account: Transfer account (optional)
         account_prompt: Search account
@@ -15,6 +12,15 @@ en:
         submit: Add transaction
         ticker_placeholder: AAPL
         type: Type
+      header:
+        buy: Buy
+        current_market_price_label: Current Market Price
+        overview: Overview
+        purchase_price_label: Purchase Price
+        purchase_qty_label: Purchase Quantity
+        sell: Sell
+        symbol_label: Symbol
+        total_return_label: Unrealized gain/loss
       index:
         amount: Amount
         new: New transaction
@@ -27,7 +33,6 @@ en:
       show:
         additional: Additional
         cost_per_share_label: Cost per Share
-        current_market_price_label: Current Market Price
         date_label: Date
         delete: Delete
         delete_subtitle: This action cannot be undone
@@ -37,19 +42,5 @@ en:
         exclude_title: Exclude from analytics
         note_label: Note
         note_placeholder: Add any additional notes here...
-        overview: Overview
-        purchase_price_label: Purchase Price
-        purchase_qty_label: Purchase Quantity
         quantity_label: Quantity
         settings: Settings
-        symbol_label: Symbol
-        total_return_label: Unrealized gain/loss
-      trade:
-        buy: Buy
-        deposit: Deposit
-        inflow: Inflow
-        outflow: Outflow
-        sell: Sell
-        withdrawal: Withdrawal
-      update:
-        success: Trade updated successfully.

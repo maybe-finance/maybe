@@ -1,40 +1,16 @@
-<% entry, transaction, account = @entry, @entry.account_transaction, @entry.account %>
-
-<% origin = params[:origin] %>
-
-<%= drawer do %>
-  <header class="mb-4 space-y-1">
-    <div class="flex items-center gap-4">
-      <h3 class="font-medium">
-        <span class="text-2xl">
-          <%= format_money -entry.amount_money %>
-        </span>
-
-        <span class="text-lg text-gray-500">
-          <%= entry.currency %>
-        </span>
-      </h3>
-
-      <% if entry.marked_as_transfer? %>
-        <%= lucide_icon "arrow-left-right", class: "text-gray-500 mt-1 w-5 h-5" %>
-      <% end %>
-    </div>
-
-    <span class="text-sm text-gray-500">
-      <%= I18n.l(entry.date, format: :long) %>
-    </span>
-  </header>
+<%= drawer(reload_on_close: true) do %>
+  <%= render "account/transactions/header", entry: @entry %>
 
   <div class="space-y-2">
     <!-- Overview Section -->
     <%= disclosure t(".overview") do %>
       <div class="pb-4">
-        <%= styled_form_with model: [account, entry],
-              url: account_transaction_path(account, entry),
+        <%= styled_form_with model: @entry,
+              url: account_transaction_path(@entry),
               class: "space-y-2",
               data: { controller: "auto-submit-form" } do |f| %>
-          <%= f.hidden_field :origin, value: origin %>
-          <%= f.text_field :name,
+
+          <%= f.text_field @entry.enriched_at.present? ? :enriched_name : :name,
                 label: t(".name_label"),
                 "data-auto-submit-form-target": "auto" %>
 
@@ -43,84 +19,78 @@
                 max: Date.current,
                 "data-auto-submit-form-target": "auto" %>
 
-          <% unless entry.marked_as_transfer? %>
+          <% unless @entry.account_transaction.transfer? %>
             <div class="flex items-center gap-2">
               <%= f.select :nature,
-                    [["Expense", "expense"], ["Income", "income"]],
-                    { container_class: "w-1/3", label: t(".nature"), selected: entry.amount.negative? ? "income" : "expense" },
+                    [["Expense", "outflow"], ["Income", "inflow"]],
+                    { container_class: "w-1/3", label: t(".nature"), selected: @entry.amount.negative? ? "inflow" : "outflow" },
                     { data: { "auto-submit-form-target": "auto" } } %>
 
               <%= f.money_field :amount, label: t(".amount"),
                     container_class: "w-2/3",
                     auto_submit: true,
                     min: 0,
-                    value: entry.amount.abs %>
+                    value: @entry.amount.abs %>
             </div>
+
+            <%= f.fields_for :entryable do |ef| %>
+              <%= ef.collection_select :category_id,
+                      Current.family.categories.alphabetically,
+                    :id, :name,
+                    { label: t(".category_label"),
+                      class: "text-gray-400", include_blank: t(".uncategorized") },
+                    "data-auto-submit-form-target": "auto" %>
+            <% end %>
           <% end %>
 
-          <%= f.select :account,
-                options_for_select(
-                  Current.family.accounts.alphabetically.pluck(:name, :id),
-                  entry.account_id
-                ),
-                { label: t(".account_label") },
-                { disabled: true } %>
         <% end %>
       </div>
     <% end %>
 
     <!-- Details Section -->
-    <%= disclosure t(".details") do %>
+    <%= disclosure t(".details"), default_open: false do %>
       <div class="pb-4">
-        <%= styled_form_with model: [account, entry],
-              url: account_transaction_path(account, entry),
+        <%= styled_form_with model: @entry,
+              url: account_transaction_path(@entry),
               class: "space-y-2",
               data: { controller: "auto-submit-form" } do |f| %>
-          <%= f.hidden_field :origin, value: origin %>
-          <%= f.fields_for :entryable do |ef| %>
-            <% unless entry.marked_as_transfer? %>
-              <%= ef.collection_select :category_id,
-                    Current.family.categories.alphabetically,
-                    :id, :name,
-                    { prompt: t(".category_placeholder"),
-                      label: t(".category_label"),
-                      class: "text-gray-400" },
-                    "data-auto-submit-form-target": "auto" %>
+          <% unless @entry.account_transaction.transfer? %>
+            <%= f.select :account,
+                options_for_select(
+                  Current.family.accounts.alphabetically.pluck(:name, :id),
+                  @entry.account_id
+                ),
+                { label: t(".account_label") },
+                { disabled: true } %>
+
+            <%= f.fields_for :entryable do |ef| %>
 
               <%= ef.collection_select :merchant_id,
-                    Current.family.merchants.alphabetically,
+                      Current.family.merchants.alphabetically,
                     :id, :name,
-                    { prompt: t(".merchant_placeholder"),
+                    { include_blank: t(".none"),
                       label: t(".merchant_label"),
                       class: "text-gray-400" },
                     "data-auto-submit-form-target": "auto" %>
-            <% end %>
 
-            <%= ef.select :tag_ids,
-                  options_for_select(
+              <%= ef.select :tag_ids,
                     Current.family.tags.alphabetically.pluck(:name, :id),
-                    transaction.tag_ids
-                  ),
-                  {
-                    multiple: true,
-                    label:    t(".tags_label"),
-                    container_class: "h-40"
-                  },
+                    {
+                      include_blank: t(".none"),
+                      multiple: true,
+                      label:    t(".tags_label"),
+                      container_class: "h-40"
+                    },
                   { "data-auto-submit-form-target": "auto" } %>
-
+            <% end %>
           <% end %>
 
-          <%= styled_form_with model: [account, entry],
-              url: account_transaction_path(account, entry),
-              class: "space-y-2",
-              data: { controller: "auto-submit-form" } do |f| %>
-            <%= f.hidden_field :origin, value: origin %>
-            <%= f.text_area :notes,
+          <%= f.text_area :notes,
                   label: t(".note_label"),
                   placeholder: t(".note_placeholder"),
                   rows: 5,
                   "data-auto-submit-form-target": "auto" %>
-          <% end %>
+
         <% end %>
       </div>
     <% end %>
@@ -128,16 +98,15 @@
     <!-- Settings Section -->
     <%= disclosure t(".settings") do %>
       <div class="pb-4">
-        <!-- Exclude Transaction Form -->
-        <%= styled_form_with model: [account, entry],
-              url: account_transaction_path(account, entry),
+
+        <%= styled_form_with model: @entry,
+              url: account_transaction_path(@entry),
               class: "p-3",
               data: { controller: "auto-submit-form" } do |f| %>
-          <%= f.hidden_field :origin, value: origin %>
-          <div class="flex cursor-pointer items-center gap-2 justify-between">
+          <div class="flex cursor-pointer items-center gap-4 justify-between">
             <div class="text-sm space-y-1">
-              <h4 class="text-gray-900"><%= t(".exclude_title") %></h4>
-              <p class="text-gray-500"><%= t(".exclude_subtitle") %></p>
+              <h4 class="text-gray-900">One-time <%= @entry.amount.negative? ? "Income" : "Expense" %></h4>
+              <p class="text-gray-500">One-time transactions will be excluded from certain budgeting calculations and reports to help you see what's really important.</p>
             </div>
 
             <div class="relative inline-block select-none">
@@ -150,6 +119,18 @@
           </div>
         <% end %>
 
+        <div class="flex items-center justify-between gap-4 p-3">
+          <div class="text-sm space-y-1">
+            <h4 class="text-gray-900">Transfer or Debt Payment?</h4>
+            <p class="text-gray-500">Transfers and payments are special types of transactions that indicate money movement between 2 accounts.</p>
+          </div>
+
+          <%= link_to new_account_transaction_transfer_match_path(@entry), class: "btn btn--outline flex items-center gap-2", data: { turbo_frame: :modal } do %>
+            <%= lucide_icon "arrow-left-right", class: "w-4 h-4 shrink-0" %>
+            <span class="whitespace-nowrap">Open matcher</span>
+          <% end %>
+        </div>
+
         <!-- Delete Transaction Form -->
         <div class="flex items-center justify-between gap-2 p-3">
           <div class="text-sm space-y-1">
@@ -158,7 +139,7 @@
           </div>
 
           <%= button_to t(".delete"),
-                  account_entry_path(account, entry),
+                  account_entry_path(@entry),
                   method: :delete,
                   class:  "rounded-lg px-3 py-2 text-red-500 text-sm
                            font-medium border border-alpha-black-200",

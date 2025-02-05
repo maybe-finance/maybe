@@ -26,9 +26,16 @@ en:
       next: Next
       previous: Back
     preferences:
+      data_enrichment_settings:
+        description: Let Maybe auto-categorize, name, and add merchant data to your
+          transactions on each sync.  All enrichment is done in English.
+        self_host_disclaimer: This will incur Synth API credits.
+        title: Transaction enrichment (English only)
       show:
         country: Country
         currency: Currency
+        data: Data enrichment
+        data_subtitle: Enable data enrichment for your accounts
         date_format: Date format
         general_subtitle: Configure your preferences
         general_title: General
@@ -39,12 +46,26 @@ en:
         theme_subtitle: Choose a preferred theme for the app (coming soon...)
         theme_system: System
         theme_title: Theme
+        timezone: Timezone
     profiles:
+      destroy:
+        not_authorized: You are not authorized to remove members.
+        cannot_remove_self: You cannot remove yourself from the account.
+        member_removed: Member was successfully removed.
+        member_removal_failed: There was a problem removing the member.
       show:
         confirm_delete:
           body: Are you sure you want to permanently delete your account? This action
             is irreversible.
           title: Delete account?
+        confirm_remove_member:
+          title: Remove Member
+          body: Are you sure you want to remove %{name} from your account?
+        remove_member: Remove Member
+        confirm_remove_invitation:
+          title: Remove Invitation
+          body: Are you sure you want to remove the invitation for %{email}?
+        remove_invitation: Remove Invitation
         danger_zone_title: Danger Zone
         delete_account: Delete account
         delete_account_warning: Deleting your account will permanently remove all
@@ -58,6 +79,7 @@ en:
         invitation_link: Invitation link
         invite_member: Add member
         last_name: Last Name
+        email: Email
         page_title: Account
         pending: Pending
         profile_subtitle: Customize how you appear on Maybe
@@ -66,3 +88,6 @@ en:
     user_avatar_field:
       accepted_formats: JPG or PNG. 5MB max.
       choose: Choose
+  users:
+    update:
+      success: Profile updated successfully

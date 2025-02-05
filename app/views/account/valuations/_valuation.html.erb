@@ -1,7 +1,7 @@
-<%# locals: (entry:, selectable: true, show_balance: false, origin: nil) %>
+<%# locals: (entry:, selectable: true, balance_trend: nil) %>
 
-<% account = entry.account %>
-<% valuation = entry.account_valuation %>
+<% color = balance_trend&.trend&.color || "#D444F1" %>
+<% icon = balance_trend&.trend&.icon || "plus" %>
 
 <div class="p-4 grid grid-cols-12 items-center text-gray-900 text-sm font-medium">
   <div class="col-span-8 flex items-center gap-4">
@@ -12,16 +12,16 @@
     <% end %>
 
     <div class="flex items-center gap-3">
-      <%= tag.div class: "w-8 h-8 rounded-full p-1.5 flex items-center justify-center", style: mixed_hex_styles(valuation.color) do %>
-        <%= lucide_icon valuation.icon, class: "w-4 h-4" %>
+      <%= tag.div class: "w-6 h-6 rounded-full p-1.5 flex items-center justify-center", style: mixed_hex_styles(color) do %>
+        <%= lucide_icon icon, class: "w-4 h-4 shrink-0" %>
       <% end %>
 
       <div class="truncate text-gray-900">
         <% if entry.new_record? %>
-          <%= content_tag :p, entry.name %>
+          <%= content_tag :p, entry.display_name %>
         <% else %>
-          <%= link_to valuation.name,
-                        account_entry_path(account, entry),
+          <%= link_to entry.display_name,
+                        account_entry_path(entry),
                         data: { turbo_frame: "drawer", turbo_prefetch: false },
                         class: "hover:underline hover:text-gray-800" %>
         <% end %>
@@ -29,8 +29,12 @@
     </div>
   </div>
 
-  <div class="col-span-2 justify-self-end font-medium text-sm" style="color: <%= valuation.color %>">
-    <%= tag.span format_money(entry.trend.value) %>
+  <div class="col-span-2 justify-self-end font-medium text-sm">
+    <% if balance_trend&.trend %>
+      <%= tag.span format_money(balance_trend.trend.value), style: "color: #{balance_trend.trend.color}" %>
+    <% else %>
+      <%= tag.span "--", class: "text-gray-400" %>
+    <% end %>
   </div>
 
   <div class="col-span-2 justify-self-end">

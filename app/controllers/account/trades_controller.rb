@@ -1,66 +1,37 @@
 class Account::TradesController < ApplicationController
-  layout :with_sidebar
+  include EntryableResource
 
-  before_action :set_account
-  before_action :set_entry, only: :update
-
-  def new
-    @entry = @account.entries.account_trades.new(entryable_attributes: {})
-  end
-
-  def index
-    @entries = @account.entries.reverse_chronological.where(entryable_type: %w[Account::Trade Account::Transaction])
-  end
-
-  def create
-    @builder = Account::EntryBuilder.new(entry_params)
-
-    if entry = @builder.save
-      entry.sync_account_later
-      redirect_to @account, notice: t(".success")
-    else
-      flash[:alert] = t(".failure")
-      redirect_back_or_to @account
-    end
-  end
-
-  def update
-    @entry.update!(entry_params)
-
-    respond_to do |format|
-      format.html { redirect_to account_entry_path(@account, @entry), notice: t(".success") }
-      format.turbo_stream { render turbo_stream: turbo_stream.replace(@entry) }
-    end
-  end
-
-  def securities
-    query = params[:q]
-    return render json: [] if query.blank? || query.length < 2 || query.length > 100
-
-    @securities = Security::SynthComboboxOption.find_in_synth(query)
-  end
+  permitted_entryable_attributes :id, :qty, :price
 
   private
-
-    def set_account
-      @account = Current.family.accounts.find(params[:account_id])
+    def build_entry
+      Account::TradeBuilder.new(create_entry_params)
     end
 
-    def set_entry
-      @entry = @account.entries.find(params[:id])
+    def create_entry_params
+      params.require(:account_entry).permit(
+        :account_id, :date, :amount, :currency, :qty, :price, :ticker, :type, :transfer_account_id
+      ).tap do |params|
+        account_id = params.delete(:account_id)
+        params[:account] = Current.family.accounts.find(account_id)
+      end
     end
 
-    def entry_params
-      params.require(:account_entry)
-            .permit(
-              :type, :date, :qty, :ticker, :price, :amount, :notes, :excluded, :currency, :transfer_account_id, :entryable_type,
-              entryable_attributes: [
-                :id,
-                :qty,
-                :ticker,
-                :price
-              ]
-            )
-            .merge(account: @account)
+    def update_entry_params
+      return entry_params unless entry_params[:entryable_attributes].present?
+
+      update_params = entry_params
+      update_params = update_params.merge(entryable_type: "Account::Trade")
+
+      qty = update_params[:entryable_attributes][:qty]
+      price = update_params[:entryable_attributes][:price]
+
+      if qty.present? && price.present?
+        qty = update_params[:nature] == "inflow" ? -qty.to_d : qty.to_d
+        update_params[:entryable_attributes][:qty] = qty
+        update_params[:amount] = qty * price.to_d
+      end
+
+      update_params.except(:nature)
     end
 end

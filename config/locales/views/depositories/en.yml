@@ -1,10 +1,6 @@
 ---
 en:
   depositories:
-    create:
-      success: Depository account created
-    destroy:
-      success: Depository account deleted
     edit:
       edit: Edit %{account}
     form:
@@ -12,5 +8,3 @@ en:
       subtype_prompt: Select account type
     new:
       title: Enter account balance
-    update:
-      success: Depository account updated

@@ -4,7 +4,7 @@
 # Maybe: The OS for your personal finances
 
 <b>Get
-involved: [Discord](https://link.maybe.co/discord) • [Website](https://maybe.co) • [Issues](https://github.com/maybe-finance/maybe/issues)</b>
+involved: [Discord](https://link.maybe.co/discord) • [Website](https://maybefinance.com) • [Issues](https://github.com/maybe-finance/maybe/issues)</b>
 
 _If you're looking for the previous React codebase, you can find it
 at [maybe-finance/maybe-archive](https://github.com/maybe-finance/maybe-archive)._
@@ -32,6 +32,15 @@ There are 3 primary ways to use the Maybe app:
 1. Managed (easiest) - _coming soon..._
 2. [One-click deploy](docs/hosting/one-click-deploy.md)
 3. [Self-host with Docker](docs/hosting/docker.md)
+
+## Contributing
+
+Before contributing, you'll likely find it helpful
+to [understand context and general vision/direction](https://github.com/maybe-finance/maybe/wiki).
+
+Once you've done that, please visit
+our [contributing guide](https://github.com/maybe-finance/maybe/blob/main/CONTRIBUTING.md)
+to get started!
 
 ## Local Development Setup
 
@@ -106,15 +115,6 @@ our [Windows dev setup guide](https://github.com/maybe-finance/maybe/wiki/Window
 In development, we use `letter_opener` to automatically open emails in your
 browser. When an email sends locally, a new browser tab will open with a
 preview.
-
-## Contributing
-
-Before contributing, you'll likely find it helpful
-to [understand context and general vision/direction](https://github.com/maybe-finance/maybe/wiki).
-
-Once you've done that, please visit
-our [contributing guide](https://github.com/maybe-finance/maybe/blob/main/CONTRIBUTING.md)
-to get started!
 
 ## Repo Activity
 

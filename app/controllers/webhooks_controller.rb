@@ -1,6 +1,18 @@
 class WebhooksController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [ :stripe ]
+  skip_before_action :verify_authenticity_token
   skip_authentication
+
+  def plaid
+    webhook_body = request.body.read
+    plaid_verification_header = request.headers["Plaid-Verification"]
+
+    Provider::Plaid.validate_webhook!(plaid_verification_header, webhook_body)
+    Provider::Plaid.process_webhook(webhook_body)
+
+    render json: { received: true }, status: :ok
+  rescue => error
+    render json: { error: "Invalid webhook: #{error.message}" }, status: :bad_request
+  end
 
   def stripe
     webhook_body = request.body.read

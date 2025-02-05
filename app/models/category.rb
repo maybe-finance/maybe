@@ -1,43 +1,96 @@
 class Category < ApplicationRecord
   has_many :transactions, dependent: :nullify, class_name: "Account::Transaction"
   has_many :import_mappings, as: :mappable, dependent: :destroy, class_name: "Import::Mapping"
+
   belongs_to :family
+
+  has_many :budget_categories, dependent: :destroy
+  has_many :subcategories, class_name: "Category", foreign_key: :parent_id
+  belongs_to :parent, class_name: "Category", optional: true
 
   validates :name, :color, :family, presence: true
   validates :name, uniqueness: { scope: :family_id }
 
-  before_update :clear_internal_category, if: :name_changed?
+  validate :category_level_limit
+  validate :nested_category_matches_parent_classification
+
+  before_create :inherit_color_from_parent
 
   scope :alphabetically, -> { order(:name) }
+  scope :roots, -> { where(parent_id: nil) }
+  scope :incomes, -> { where(classification: "income") }
+  scope :expenses, -> { where(classification: "expense") }
 
   COLORS = %w[#e99537 #4da568 #6471eb #db5a54 #df4e92 #c44fe9 #eb5429 #61c9ea #805dee #6ad28a]
 
   UNCATEGORIZED_COLOR = "#737373"
+  TRANSFER_COLOR = "#444CE7"
+  PAYMENT_COLOR = "#db5a54"
+  TRADE_COLOR = "#e99537"
 
-  DEFAULT_CATEGORIES = [
-    { internal_category: "income", color: COLORS[0] },
-    { internal_category: "food_and_drink", color: COLORS[1] },
-    { internal_category: "entertainment", color: COLORS[2] },
-    { internal_category: "personal_care", color: COLORS[3] },
-    { internal_category: "general_services", color: COLORS[4] },
-    { internal_category: "auto_and_transport", color: COLORS[5] },
-    { internal_category: "rent_and_utilities", color: COLORS[6] },
-    { internal_category: "home_improvement", color: COLORS[7] }
-  ]
+  class Group
+    attr_reader :category, :subcategories
 
-  def self.create_default_categories(family)
-    if family.categories.size > 0
-      raise ArgumentError, "Family already has some categories"
+    delegate :name, :color, to: :category
+
+    def self.for(categories)
+      categories.select { |category| category.parent_id.nil? }.map do |category|
+        new(category, category.subcategories)
+      end
     end
 
-    family_id = family.id
-    categories = self::DEFAULT_CATEGORIES.map { |c| {
-      name: I18n.t("transaction.default_category.#{c[:internal_category]}"),
-      internal_category: c[:internal_category],
-      color: c[:color],
-      family_id:
-    } }
-    self.insert_all(categories)
+    def initialize(category, subcategories = nil)
+      @category = category
+      @subcategories = subcategories || []
+    end
+  end
+
+  class << self
+    def icon_codes
+      %w[bus circle-dollar-sign ambulance apple award baby battery lightbulb bed-single beer bluetooth book briefcase building credit-card camera utensils cooking-pot cookie dices drama dog drill drum dumbbell gamepad-2 graduation-cap house hand-helping ice-cream-cone phone piggy-bank pill pizza printer puzzle ribbon shopping-cart shield-plus ticket trees]
+    end
+
+    def bootstrap_defaults
+      default_categories.each do |name, color, icon|
+        find_or_create_by!(name: name) do |category|
+          category.color = color
+          category.classification = "income" if name == "Income"
+          category.lucide_icon = icon
+        end
+      end
+    end
+
+    def uncategorized
+      new(
+        name: "Uncategorized",
+        color: UNCATEGORIZED_COLOR,
+        lucide_icon: "circle-dashed"
+      )
+    end
+
+    private
+      def default_categories
+        [
+          [ "Income", "#e99537", "circle-dollar-sign" ],
+          [ "Housing", "#6471eb", "house" ],
+          [ "Entertainment", "#df4e92", "drama" ],
+          [ "Food & Drink", "#eb5429", "utensils" ],
+          [ "Shopping", "#e99537", "shopping-cart" ],
+          [ "Healthcare", "#4da568", "pill" ],
+          [ "Insurance", "#6471eb", "piggy-bank" ],
+          [ "Utilities", "#db5a54", "lightbulb" ],
+          [ "Transportation", "#df4e92", "bus" ],
+          [ "Education", "#eb5429", "book" ],
+          [ "Gifts & Donations", "#61c9ea", "hand-helping" ],
+          [ "Subscriptions", "#805dee", "credit-card" ]
+        ]
+      end
+  end
+
+  def inherit_color_from_parent
+    if subcategory?
+      self.color = parent.color
+    end
   end
 
   def replace_and_destroy!(replacement)
@@ -47,9 +100,48 @@ class Category < ApplicationRecord
     end
   end
 
-  private
+  def parent?
+    subcategories.any?
+  end
 
-    def clear_internal_category
-      self.internal_category = nil
+  def subcategory?
+    parent.present?
+  end
+
+  def avg_monthly_total
+    family.category_stats.avg_monthly_total_for(self)
+  end
+
+  def median_monthly_total
+    family.category_stats.median_monthly_total_for(self)
+  end
+
+  def month_total(date: Date.current)
+    family.category_stats.month_total_for(self, date: date)
+  end
+
+  def avg_monthly_total_money
+    Money.new(avg_monthly_total, family.currency)
+  end
+
+  def median_monthly_total_money
+    Money.new(median_monthly_total, family.currency)
+  end
+
+  def month_total_money(date: Date.current)
+    Money.new(month_total(date: date), family.currency)
+  end
+
+  private
+    def category_level_limit
+      if (subcategory? && parent.subcategory?) || (parent? && subcategory?)
+        errors.add(:parent, "can't have more than 2 levels of subcategories")
+      end
+    end
+
+    def nested_category_matches_parent_classification
+      if subcategory? && parent.classification != classification
+        errors.add(:parent, "must have the same classification as its parent")
+      end
     end
 end

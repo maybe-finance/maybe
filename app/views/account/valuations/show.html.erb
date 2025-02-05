@@ -1,30 +1,14 @@
 <% entry, account = @entry, @entry.account %>
 
-<%= drawer do %>
-  <header class="mb-4 space-y-1">
-    <span class="text-gray-500 text-sm">
-      <%= t(".balance") %>
-    </span>
-
-    <div class="flex items-center gap-4">
-      <h3 class="font-medium">
-        <span class="text-2xl">
-          <%= format_money entry.amount_money %>
-        </span>
-      </h3>
-    </div>
-
-    <span class="text-sm text-gray-500">
-      <%= I18n.l(entry.date, format: :long) %>
-    </span>
-  </header>
+<%= drawer(reload_on_close: true) do %>
+  <%= render "account/valuations/header", entry: %>
 
   <div class="space-y-2">
     <!-- Overview Section -->
     <%= disclosure t(".overview") do %>
       <div class="pb-4">
-        <%= styled_form_with model: [account, entry],
-              url: account_entry_path(account, entry),
+        <%= styled_form_with model: entry,
+              url: account_entry_path(entry),
               class: "space-y-2",
               data: { controller: "auto-submit-form" } do |f| %>
           <%= f.text_field :name,
@@ -48,8 +32,8 @@
     <!-- Details Section -->
     <%= disclosure t(".details") do %>
       <div class="pb-4">
-        <%= styled_form_with model: [account, entry],
-              url: account_entry_path(account, entry),
+        <%= styled_form_with model: entry,
+              url: account_entry_path(entry),
               class: "space-y-2",
               data: { controller: "auto-submit-form" } do |f| %>
           <%= f.text_area :notes,
@@ -72,7 +56,7 @@
           </div>
 
           <%= button_to t(".delete"),
-                account_entry_path(account, entry),
+                account_entry_path(entry),
                 method: :delete,
                 class: "rounded-lg px-3 py-2 text-red-500 text-sm font-medium border border-alpha-black-200",
                 data: { turbo_confirm: true, turbo_frame: "_top" } %>

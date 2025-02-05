@@ -4,8 +4,8 @@ class AccountsController < ApplicationController
   before_action :set_account, only: %i[sync]
 
   def index
-    @institutions = Current.family.institutions
-    @accounts = Current.family.accounts.ungrouped.alphabetically
+    @manual_accounts = Current.family.accounts.manual.alphabetically
+    @plaid_items = Current.family.plaid_items.ordered
   end
 
   def summary
@@ -14,11 +14,12 @@ class AccountsController < ApplicationController
     @net_worth_series = snapshot[:net_worth_series]
     @asset_series = snapshot[:asset_series]
     @liability_series = snapshot[:liability_series]
-    @accounts = Current.family.accounts
+    @accounts = Current.family.accounts.active
     @account_groups = @accounts.by_group(period: @period, currency: Current.family.currency)
   end
 
   def list
+    @period = Period.from_param(params[:period])
     render layout: false
   end
 
@@ -26,11 +27,21 @@ class AccountsController < ApplicationController
     unless @account.syncing?
       @account.sync_later
     end
+
+    redirect_to account_path(@account)
+  end
+
+  def chart
+    @account = Current.family.accounts.find(params[:id])
+    render layout: "application"
   end
 
   def sync_all
-    Current.family.accounts.active.sync
-    redirect_back_or_to accounts_path, notice: t(".success")
+    unless Current.family.syncing?
+      Current.family.sync_later
+    end
+
+    redirect_to accounts_path
   end
 
   private

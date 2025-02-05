@@ -3,28 +3,30 @@ module Account::EntriesHelper
     "account/entries/entryables/#{permitted_entryable_key(entry)}/#{relative_partial_path}"
   end
 
-  def unconfirmed_transfer?(entry)
-    entry.marked_as_transfer? && entry.transfer.nil?
-  end
-
   def transfer_entries(entries)
     transfers = entries.select { |e| e.transfer_id.present? }
     transfers.map(&:transfer).uniq
   end
 
-  def entries_by_date(entries, selectable: true, totals: false)
+  def entries_by_date(entries, transfers: [], selectable: true, totals: false)
     entries.group_by(&:date).map do |date, grouped_entries|
-      # Valuations always go first, then sort by created_at
-      sorted_entries = grouped_entries.sort_by do |entry|
-        [ entry.account_valuation? ? 0 : 1, entry.created_at ]
-      end
-
       content = capture do
-        yield sorted_entries
+        yield [ grouped_entries, transfers.select { |t| t.outflow_transaction.entry.date == date } ]
       end
 
-      render partial: "account/entries/entry_group", locals: { date:, entries: sorted_entries, content:, selectable:, totals: }
-    end.join.html_safe
+      next if content.blank?
+
+      render partial: "account/entries/entry_group", locals: { date:, entries: grouped_entries, content:, selectable:, totals: }
+    end.compact.join.html_safe
+  end
+
+  def entry_name_detailed(entry)
+    [
+      entry.date,
+      format_money(entry.amount_money),
+      entry.account.name,
+      entry.display_name
+    ].join(" • ")
   end
 
   private

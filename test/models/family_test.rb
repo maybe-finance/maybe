@@ -3,9 +3,28 @@ require "csv"
 
 class FamilyTest < ActiveSupport::TestCase
   include Account::EntriesTestHelper
+  include SyncableInterfaceTest
 
   def setup
-    @family = families :empty
+    @family = families(:empty)
+    @syncable = families(:dylan_family)
+  end
+
+  test "syncs plaid items and manual accounts" do
+    family_sync = syncs(:family)
+
+    manual_accounts_count = @syncable.accounts.manual.count
+    items_count = @syncable.plaid_items.count
+
+    Account.any_instance.expects(:sync_later)
+      .with(start_date: nil)
+      .times(manual_accounts_count)
+
+    PlaidItem.any_instance.expects(:sync_later)
+      .with(start_date: nil)
+      .times(items_count)
+
+    @syncable.sync_data(start_date: family_sync.start_date)
   end
 
   test "calculates assets" do
@@ -46,30 +65,6 @@ class FamilyTest < ActiveSupport::TestCase
     cc.update! is_active: false
 
     assert_equal Money.new(50000, @family.currency), @family.net_worth
-  end
-
-  test "needs sync if last family sync was before today" do
-    assert @family.needs_sync?
-
-    @family.update! last_synced_at: Time.now
-
-    assert_not @family.needs_sync?
-  end
-
-  test "syncs active accounts" do
-    account = create_account(balance: 1000, accountable: CreditCard.new, is_active: false)
-
-    Account.any_instance.expects(:sync_later).never
-
-    @family.sync
-
-    account.update! is_active: true
-
-    Account.any_instance.expects(:needs_sync?).once.returns(true)
-    Account.any_instance.expects(:last_sync_date).once.returns(2.days.ago.to_date)
-    Account.any_instance.expects(:sync_later).with(start_date: 2.days.ago.to_date).once
-
-    @family.sync
   end
 
   test "calculates snapshot" do
@@ -125,11 +120,9 @@ class FamilyTest < ActiveSupport::TestCase
 
   test "calculates rolling transaction totals" do
     account = create_account(balance: 1000, accountable: Depository.new)
-    liability_account = create_account(balance: 1000, accountable: Loan.new)
     create_transaction(account: account, date: 2.days.ago.to_date, amount: -500)
     create_transaction(account: account, date: 1.day.ago.to_date, amount: 100)
     create_transaction(account: account, date: Date.current, amount: 20)
-    create_transaction(account: liability_account, date: 2.days.ago.to_date, amount: -333)
 
     snapshot = @family.snapshot_transactions
 

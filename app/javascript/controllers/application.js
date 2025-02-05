@@ -6,7 +6,7 @@ const application = Application.start();
 application.debug = false;
 window.Stimulus = application;
 
-Turbo.setConfirmMethod((message) => {
+Turbo.config.forms.confirm = (message) => {
   const dialog = document.getElementById("turbo-confirm");
 
   try {
@@ -37,11 +37,21 @@ Turbo.setConfirmMethod((message) => {
     dialog.addEventListener(
       "close",
       () => {
-        resolve(dialog.returnValue === "confirm");
+        const confirmed = dialog.returnValue === "confirm";
+
+        if (!confirmed) {
+          document.getElementById("turbo-confirm-title").innerHTML =
+            "Are you sure?";
+          document.getElementById("turbo-confirm-body").innerHTML =
+            "You will not be able to undo this decision";
+          document.getElementById("turbo-confirm-accept").innerHTML = "Confirm";
+        }
+
+        resolve(confirmed);
       },
       { once: true },
     );
   });
-});
+};
 
 export { application };

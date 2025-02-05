@@ -21,7 +21,15 @@ depository:
   currency: USD
   accountable_type: Depository
   accountable: one
-  institution: chase
+
+connected:
+  family: dylan_family
+  name: Connected Account
+  balance: 5000
+  currency: USD
+  accountable_type: Depository
+  accountable: two
+  plaid_account: one
 
 credit_card:
   family: dylan_family
@@ -30,12 +38,12 @@ credit_card:
   currency: USD
   accountable_type: CreditCard
   accountable: one
-  institution: chase
 
 investment:
   family: dylan_family
   name: Robinhood Brokerage Account
   balance: 10000
+  cash_balance: 5000
   currency: USD
   accountable_type: Investment
   accountable: one

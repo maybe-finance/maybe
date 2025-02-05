@@ -9,22 +9,48 @@ class User < ApplicationRecord
   has_many :messages, dependent: :destroy
   accepts_nested_attributes_for :family, update_only: true
 
-  validates :email, presence: true, uniqueness: true
+  validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validate :ensure_valid_profile_image
   normalizes :email, with: ->(email) { email.strip.downcase }
+  normalizes :unconfirmed_email, with: ->(email) { email&.strip&.downcase }
 
   normalizes :first_name, :last_name, with: ->(value) { value.strip.presence }
 
   enum :role, { member: "member", admin: "admin", super_admin: "super_admin" }, validate: true
 
   has_one_attached :profile_image do |attachable|
-    attachable.variant :thumbnail, resize_to_fill: [ 300, 300 ]
+    attachable.variant :thumbnail, resize_to_fill: [ 300, 300 ], convert: :webp, saver: { quality: 80 }
+    attachable.variant :small, resize_to_fill: [ 72, 72 ], convert: :webp, saver: { quality: 80 }
   end
 
   validate :profile_image_size
 
   generates_token_for :password_reset, expires_in: 15.minutes do
     password_salt&.last(10)
+  end
+
+  generates_token_for :email_confirmation, expires_in: 1.day do
+    unconfirmed_email
+  end
+
+  def pending_email_change?
+    unconfirmed_email.present?
+  end
+
+  def initiate_email_change(new_email)
+    return false if new_email == email
+    return false if new_email == unconfirmed_email
+
+    if Rails.application.config.app_mode.self_hosted? && !Setting.require_email_confirmation
+      update(email: new_email)
+    else
+      if update(unconfirmed_email: new_email)
+        EmailConfirmationMailer.with(user: self).confirmation_email.deliver_later
+        true
+      else
+        false
+      end
+    end
   end
 
   def request_impersonation_for(user_id)

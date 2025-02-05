@@ -18,19 +18,12 @@ module Accountable
     has_one :account, as: :accountable, touch: true
   end
 
-  def value
-    account.balance_money
-  end
-
-  def series(period: Period.all, currency: account.currency)
-    balance_series = account.balances.in_period(period).where(currency: currency)
-
-    if balance_series.empty? && period.date_range.end == Date.current
-      TimeSeries.new([ { date: Date.current, value: account.balance_money.exchange_to(currency) } ])
-    else
-      TimeSeries.from_collection(balance_series, :balance_money, favorable_direction: account.asset? ? "up" : "down")
-    end
-  rescue Money::ConversionError
-    TimeSeries.new([])
+  def post_sync
+    broadcast_replace_to(
+      account,
+      target: "chart_account_#{account.id}",
+      partial: "accounts/show/chart",
+      locals: { account: account }
+    )
   end
 end

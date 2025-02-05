@@ -1,11 +1,10 @@
 class Account::HoldingsController < ApplicationController
   layout :with_sidebar
 
-  before_action :set_account
   before_action :set_holding, only: %i[show destroy]
 
   def index
-    @holdings = @account.holdings.current
+    @account = Current.family.accounts.find(params[:account_id])
   end
 
   def show
@@ -13,16 +12,17 @@ class Account::HoldingsController < ApplicationController
 
   def destroy
     @holding.destroy_holding_and_entries!
-    redirect_back_or_to account_holdings_path(@account)
+
+    flash[:notice] = t(".success")
+
+    respond_to do |format|
+      format.html { redirect_back_or_to account_path(@holding.account) }
+      format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, account_path(@holding.account)) }
+    end
   end
 
   private
-
-    def set_account
-      @account = Current.family.accounts.find(params[:account_id])
-    end
-
     def set_holding
-      @holding = @account.holdings.current.find(params[:id])
+      @holding = Current.family.holdings.find(params[:id])
     end
 end

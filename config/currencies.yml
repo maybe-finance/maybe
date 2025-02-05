@@ -866,20 +866,6 @@ zmw:
   delimiter: ","
   default_format: "%u%n"
   default_precision: 2
-bch:
-  name: Bitcoin Cash
-  priority: 100
-  iso_code: BCH
-  iso_numeric: ""
-  html_code: "&#x20bf;"
-  symbol: "₿"
-  minor_unit: Satoshi
-  minor_unit_conversion: 100000000
-  smallest_denomination: 1
-  separator: "."
-  delimiter: ","
-  default_format: "%n %u"
-  default_precision: 8
 btc:
   name: Bitcoin
   priority: 100

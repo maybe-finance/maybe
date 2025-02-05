@@ -8,6 +8,18 @@ module AccountsHelper
 
     days_apart = (end_date - start_date).to_i
 
+    # Handle specific cases
+    if start_date == Date.current.beginning_of_week && end_date == Date.current
+      return "Current Week to Date (CWD)"
+    elsif start_date == Date.current.beginning_of_month && end_date == Date.current
+      return "Current Month to Date (MTD)"
+    elsif start_date == Date.current.beginning_of_quarter && end_date == Date.current
+      return "Current Quarter to Date (CQD)"
+    elsif start_date == Date.current.beginning_of_year && end_date == Date.current
+      return "Current Year to Date (YTD)"
+    end
+
+    # Default cases
     case days_apart
     when 1
       "vs. yesterday"
@@ -15,6 +27,8 @@ module AccountsHelper
       "vs. last week"
     when 30, 31
       "vs. last month"
+    when 90
+      "vs. last 3 months"
     when 365, 366
       "vs. last year"
     else
@@ -52,7 +66,7 @@ module AccountsHelper
   end
 
   def account_groups(period: nil)
-    assets, liabilities = Current.family.accounts.by_group(currency: Current.family.currency, period: period || Period.last_30_days).values_at(:assets, :liabilities)
+    assets, liabilities = Current.family.accounts.active.by_group(currency: Current.family.currency, period: period || Period.last_30_days).values_at(:assets, :liabilities)
     [ assets.children.sort_by(&:name), liabilities.children.sort_by(&:name) ].flatten
   end
 

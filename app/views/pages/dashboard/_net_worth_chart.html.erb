@@ -1,12 +1,16 @@
 <%# locals: (series:) %>
-<% if series %>
+<% if series.has_current_day_value? %>
   <div
     id="netWorthChart"
     class="w-full flex-1 min-h-52"
     data-controller="time-series-chart"
     data-time-series-chart-data-value="<%= series.to_json %>"></div>
+<% elsif series.empty? %>
+  <div class="w-full h-full flex items-center justify-center">
+    <p class="text-gray-500 text-sm">No data available for the selected period.</p>
+  </div>
 <% else %>
   <div class="w-full h-full flex items-center justify-center">
-    <p class="text-gray-500">No data available for the selected period.</p>
+    <p class="text-gray-500 text-sm animate-pulse">Calculating latest balance data...</p>
   </div>
 <% end %>

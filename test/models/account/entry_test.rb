@@ -43,13 +43,10 @@ class Account::EntryTest < ActiveSupport::TestCase
   end
 
   test "triggers sync with correct start date when transaction deleted" do
-    current_entry = create_transaction(date: 1.day.ago.to_date)
-    prior_entry = create_transaction(date: current_entry.date - 1.day)
+    @entry.destroy!
 
-    current_entry.destroy!
-
-    current_entry.account.expects(:sync_later).with(start_date: prior_entry.date)
-    current_entry.sync_account_later
+    @entry.account.expects(:sync_later).with(start_date: nil)
+    @entry.sync_account_later
   end
 
   test "can search entries" do
@@ -66,37 +63,22 @@ class Account::EntryTest < ActiveSupport::TestCase
 
     assert_equal 2, family.entries.search(params).size
 
-    params = params.merge(categories: [ category.name ], merchants: [ merchant.name ]) # transaction specific search param
-
-    assert_equal 1, family.entries.search(params).size
-
     params = { search: "%" }
     assert_equal 0, family.entries.search(params).size
   end
 
-  test "can calculate total spending for a group of transactions" do
+  test "can calculate totals for a group of transactions" do
     family = families(:empty)
     account = family.accounts.create! name: "Test", balance: 0, currency: "USD", accountable: Depository.new
     create_transaction(account: account, amount: 100)
     create_transaction(account: account, amount: 100)
-    create_transaction(account: account, amount: -500) # income, will be ignored
+    create_transaction(account: account, amount: -500)
 
-    assert_equal Money.new(200), family.entries.expense_total("USD")
-  end
+    totals = family.entries.stats("USD")
 
-  test "can calculate total income for a group of transactions" do
-    family = families(:empty)
-    account = family.accounts.create! name: "Test", balance: 0, currency: "USD", accountable: Depository.new
-    create_transaction(account: account, amount: -100)
-    create_transaction(account: account, amount: -100)
-    create_transaction(account: account, amount: 500) # income, will be ignored
-
-    assert_equal Money.new(-200), family.entries.income_total("USD")
-  end
-
-  # See: https://github.com/maybe-finance/maybe/wiki/vision#signage-of-money
-  test "transactions with negative amounts are inflows, positive amounts are outflows to an account" do
-    assert create_transaction(amount: -10).inflow?
-    assert create_transaction(amount: 10).outflow?
+    assert_equal 3, totals.count
+    assert_equal 500, totals.income_total
+    assert_equal 200, totals.expense_total
+    assert_equal "USD", totals.currency
   end
 end

@@ -1,9 +1,9 @@
-<%# locals: (entry:, selectable: true, show_balance: false, origin: nil) %>
+<%# locals: (entry:, selectable: true, balance_trend: nil) %>
 
 <% trade, account = entry.account_trade, entry.account %>
 
-<div class="grid grid-cols-12 items-center text-gray-900 text-sm font-medium p-4">
-  <div class="pr-10 flex items-center gap-4 col-span-6">
+<div class="grid grid-cols-12 items-center <%= entry.excluded ? "text-gray-400 bg-gray-25" : "text-gray-900" %> text-sm font-medium p-4">
+  <div class="col-span-6 flex items-center gap-4">
     <% if selectable %>
       <%= check_box_tag dom_id(entry, "selection"),
                         class: "maybe-checkbox maybe-checkbox--light",
@@ -13,15 +13,15 @@
     <div class="max-w-full">
       <%= tag.div class: ["flex items-center gap-2"] do %>
         <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-600/5 text-gray-600">
-          <%= trade.name.first.upcase %>
+          <%= entry.display_name.first.upcase %>
         </div>
 
-        <div class="truncate text-gray-900">
+        <div class="truncate">
           <% if entry.new_record? %>
-            <%= content_tag :p, trade.name %>
+            <%= content_tag :p, entry.display_name %>
           <% else %>
-            <%= link_to trade.name,
-                        account_entry_path(account, entry),
+            <%= link_to entry.display_name,
+                        account_entry_path(entry),
                         data: { turbo_frame: "drawer", turbo_prefetch: false },
                         class: "hover:underline hover:text-gray-800" %>
           <% end %>
@@ -30,21 +30,23 @@
     </div>
   </div>
 
-  <div class="flex items-center justify-end gap-1 col-span-3">
-    <% if entry.account_transaction? && entry.marked_as_transfer? %>
-      <%= tag.p entry.inflow? ? t(".deposit") : t(".withdrawal") %>
-    <% elsif entry.account_transaction? %>
-      <%= tag.p entry.inflow? ? t(".inflow") : t(".outflow") %>
-    <% else %>
-      <%= tag.p trade.buy? ? t(".buy") : t(".sell") %>
-    <% end %>
+  <div class="col-span-2 flex items-center">
+    <%= render "categories/badge", category: trade_category %>
   </div>
 
-  <div class="col-span-3 flex items-center justify-end">
-    <% if entry.account_transaction? %>
-      <%= tag.p format_money(entry.amount_money * -1), class: { "text-green-500": entry.inflow? } %>
+  <div class="col-span-2 justify-self-end font-medium text-sm">
+    <%= content_tag :p,
+                    format_money(-entry.amount_money),
+                    class: ["text-green-600": entry.amount.negative?] %>
+  </div>
+
+  <div class="col-span-2 justify-self-end">
+    <% if balance_trend&.trend %>
+      <div class="flex items-center gap-2">
+        <%= tag.p format_money(balance_trend.trend.current), class: "font-medium text-sm text-gray-900" %>
+      </div>
     <% else %>
-      <%= tag.p format_money(entry.amount_money * -1), class: { "text-green-500": trade.sell? } %>
+      <%= tag.p "--", class: "font-medium text-sm text-gray-400" %>
     <% end %>
   </div>
 </div>

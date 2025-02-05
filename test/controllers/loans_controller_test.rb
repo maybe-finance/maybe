@@ -39,7 +39,7 @@ class LoansControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to created_account
     assert_equal "Loan account created", flash[:notice]
-    assert_enqueued_with(job: AccountSyncJob)
+    assert_enqueued_with(job: SyncJob)
   end
 
   test "updates with loan details" do
@@ -70,6 +70,6 @@ class LoansControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to @account
     assert_equal "Loan account updated", flash[:notice]
-    assert_enqueued_with(job: AccountSyncJob)
+    assert_enqueued_with(job: SyncJob)
   end
 end

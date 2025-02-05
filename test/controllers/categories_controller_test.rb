@@ -28,9 +28,20 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
 
     new_category = Category.order(:created_at).last
 
-    assert_redirected_to transactions_url
+    assert_redirected_to categories_url
     assert_equal "New Category", new_category.name
     assert_equal color, new_category.color
+  end
+
+  test "create fails if name is not unique" do
+    assert_no_difference "Category.count" do
+      post categories_url, params: {
+        category: {
+          name: categories(:food_and_drink).name,
+          color: Category::COLORS.sample } }
+    end
+
+    assert_response :unprocessable_entity
   end
 
   test "create and assign to transaction" do
@@ -46,7 +57,7 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
 
     new_category = Category.order(:created_at).last
 
-    assert_redirected_to transactions_url
+    assert_redirected_to categories_url
     assert_equal "New Category", new_category.name
     assert_equal color, new_category.color
     assert_equal @transaction.reload.category, new_category
@@ -69,6 +80,14 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
       end
     end
 
-    assert_redirected_to transactions_url
+    assert_redirected_to categories_url
+  end
+
+  test "bootstrap" do
+    assert_difference "Category.count", 10 do
+      post bootstrap_categories_url
+    end
+
+    assert_redirected_to categories_url
   end
 end

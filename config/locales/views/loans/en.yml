@@ -1,10 +1,6 @@
 ---
 en:
   loans:
-    create:
-      success: Loan account created
-    destroy:
-      success: Loan account deleted
     edit:
       edit: Edit %{account}
     form:
@@ -24,5 +20,3 @@ en:
       term: Term
       type: Type
       unknown: Unknown
-    update:
-      success: Loan account updated

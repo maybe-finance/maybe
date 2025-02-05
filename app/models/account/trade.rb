@@ -5,35 +5,11 @@ class Account::Trade < ApplicationRecord
 
   belongs_to :security
 
-  validates :qty, presence: true, numericality: { other_than: 0 }
+  validates :qty, presence: true
   validates :price, :currency, presence: true
 
-  class << self
-    def search(_params)
-      all
-    end
-
-    def requires_search?(_params)
-      false
-    end
-  end
-
-  def sell?
-    qty < 0
-  end
-
-  def buy?
-    qty > 0
-  end
-
-  def name
-    prefix = sell? ? "Sell " : "Buy "
-    generated = prefix + "#{qty.abs} shares of #{security.ticker}"
-    entry.name || generated
-  end
-
   def unrealized_gain_loss
-    return nil if sell?
+    return nil if qty.negative?
     current_price = security.current_price
     return nil if current_price.nil?
 

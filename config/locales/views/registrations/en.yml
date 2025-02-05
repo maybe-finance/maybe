@@ -9,6 +9,7 @@ en:
         create: Continue
   registrations:
     create:
+      failure: There was a problem signing up.
       invalid_invite_code: Invalid invite code, please try again.
       success: You have signed up successfully.
     new:

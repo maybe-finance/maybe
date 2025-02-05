@@ -4,10 +4,23 @@ class UsersController < ApplicationController
   def update
     @user = Current.user
 
-    @user.update!(user_params.except(:redirect_to, :delete_profile_image))
-    @user.profile_image.purge if should_purge_profile_image?
+    if email_changed?
+      if @user.initiate_email_change(user_params[:email])
+        if Rails.application.config.app_mode.self_hosted? && !Setting.require_email_confirmation
+          handle_redirect(t(".success"))
+        else
+          redirect_to settings_profile_path, notice: t(".email_change_initiated")
+        end
+      else
+        error_message = @user.errors.any? ? @user.errors.full_messages.to_sentence : t(".email_change_failed")
+        redirect_to settings_profile_path, alert: error_message
+      end
+    else
+      @user.update!(user_params.except(:redirect_to, :delete_profile_image))
+      @user.profile_image.purge if should_purge_profile_image?
 
-    handle_redirect(t(".success"))
+      handle_redirect(t(".success"))
+    end
   end
 
   def destroy
@@ -38,10 +51,14 @@ class UsersController < ApplicationController
         user_params[:profile_image].blank?
     end
 
+    def email_changed?
+      user_params[:email].present? && user_params[:email] != @user.email
+    end
+
     def user_params
       params.require(:user).permit(
-        :first_name, :last_name, :profile_image, :redirect_to, :delete_profile_image, :onboarded_at,
-        family_attributes: [ :name, :currency, :country, :locale, :date_format, :id ]
+        :first_name, :last_name, :email, :profile_image, :redirect_to, :delete_profile_image, :onboarded_at,
+        family_attributes: [ :name, :currency, :country, :locale, :date_format, :timezone, :id, :data_enrichment_enabled ]
       )
     end
 

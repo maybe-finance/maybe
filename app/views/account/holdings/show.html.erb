@@ -6,7 +6,7 @@
         <%= tag.p @holding.ticker, class: "text-sm text-gray-500" %>
       </div>
 
-      <%= image_tag "https://logo.synthfinance.com/ticker/#{@holding.ticker}", class: "w-9 h-9 rounded-full" %>
+      <%= image_tag "https://logo.synthfinance.com/ticker/#{@holding.ticker}", loading: "lazy", class: "w-9 h-9 rounded-full" %>
     </header>
 
     <details class="group space-y-2" open>
@@ -101,10 +101,10 @@
           </div>
 
           <%= button_to t(".delete"),
-                account_holding_path(@holding.account, @holding),
+                account_holding_path(@holding),
                 method: :delete,
                 class: "rounded-lg px-3 py-2 text-red-500 text-sm font-medium border border-alpha-black-200",
-                data: { turbo_confirm: true, turbo_frame: "_top" } %>
+                data: { turbo_confirm: true } %>
         </div>
       </div>
     </details>

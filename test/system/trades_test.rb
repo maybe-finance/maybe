@@ -8,21 +8,22 @@ class TradesTest < ApplicationSystemTestCase
 
     @account = accounts(:investment)
 
-    visit_account_trades
+    visit_account_portfolio
 
-    Security::SynthComboboxOption.stubs(:find_in_synth).returns([
-      Security::SynthComboboxOption.new(
-        symbol: "AAPL",
+    Security.stubs(:search).returns([
+      Security.new(
+        ticker: "AAPL",
         name: "Apple Inc.",
         logo_url: "https://logo.synthfinance.com/ticker/AAPL",
         exchange_acronym: "NASDAQ",
-        exchange_mic: "XNAS"
+        exchange_mic: "XNAS",
+        country_code: "US"
       )
     ])
   end
 
   test "can create buy transaction" do
-    shares_qty = 25.0
+    shares_qty = 25
 
     open_new_trade_modal
 
@@ -43,7 +44,7 @@ class TradesTest < ApplicationSystemTestCase
   end
 
   test "can create sell transaction" do
-    aapl = @account.holdings.current.find { |h| h.security.ticker == "AAPL" }
+    aapl = @account.holdings.find { |h| h.security.ticker == "AAPL" }
 
     open_new_trade_modal
 
@@ -59,17 +60,14 @@ class TradesTest < ApplicationSystemTestCase
     visit_account_trades
 
     within_trades do
-      assert_text "Sell #{aapl.qty} shares of AAPL"
+      assert_text "Sell #{aapl.qty.round} shares of AAPL"
     end
   end
 
   private
 
     def open_new_trade_modal
-      within "[data-testid='activity-menu']" do
-        click_on "New"
-        click_on "New transaction"
-      end
+      click_on "New transaction"
     end
 
     def within_trades(&block)
@@ -77,7 +75,11 @@ class TradesTest < ApplicationSystemTestCase
     end
 
     def visit_account_trades
-      visit account_path(@account)
+      visit account_path(@account, tab: "activity")
+    end
+
+    def visit_account_portfolio
+      visit account_path(@account, tab: "holdings")
     end
 
     def select_combobox_option(text)

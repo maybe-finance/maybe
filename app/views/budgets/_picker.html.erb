@@ -1,0 +1,49 @@
+<%# locals: (family:, year:) %>
+
+<%= turbo_frame_tag "budget_picker" do %>
+  <div class="bg-white shadow-md border border-alpha-black-25 p-3 rounded-xl space-y-4">
+    <div class="flex items-center gap-2 justify-between">
+      <% if year > family.oldest_entry_date.year %>
+        <%= link_to picker_budgets_path(year: year - 1), data: { turbo_frame: "budget_picker" }, class: "p-2 flex items-center justify-center hover:bg-alpha-black-25 rounded-md" do %>
+          <%= lucide_icon "chevron-left", class: "w-5 h-5 shrink-0 text-gray-500" %>
+        <% end %>
+      <% else %>
+        <span class="p-2 flex items-center justify-center text-gray-300 rounded-md">
+          <%= lucide_icon "chevron-left", class: "w-5 h-5 shrink-0 text-gray-400" %>
+        </span>
+      <% end %>
+
+      <span class="w-40 text-center px-3 py-2 border border-alpha-black-100 rounded-md" data-budget-picker-target="year">
+        <%= year %>
+      </span>
+
+      <% if year < Date.current.year %>
+        <%= link_to picker_budgets_path(year: year + 1), data: { turbo_frame: "budget_picker" }, class: "p-2 flex items-center justify-center hover:bg-alpha-black-25 rounded-md" do %>
+          <%= lucide_icon "chevron-right", class: "w-5 h-5 shrink-0 text-gray-500" %>
+        <% end %>
+      <% else %>
+        <span class="p-2 flex items-center justify-center text-gray-300 rounded-md">
+          <%= lucide_icon "chevron-right", class: "w-5 h-5 shrink-0 text-gray-400" %>
+        </span>
+      <% end %>
+    </div>
+
+    <div class="grid grid-cols-3 gap-2 text-sm text-center font-medium">
+      <% Date::ABBR_MONTHNAMES.compact.each_with_index do |month_name, index| %>
+        <% month_number = index + 1 %>
+        <% start_date = Date.new(year, month_number) %>
+        <% budget = family.budgets.for_date(start_date) %>
+
+        <% if budget %>
+          <%= link_to month_name, budget_path(budget), data: { turbo_frame: "_top" }, class: "block px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 rounded-md" %>
+        <% elsif start_date >= family.oldest_entry_date.beginning_of_month && start_date <= Date.current %>
+          <%= button_to budgets_path(budget: { start_date: start_date }), data: { turbo_frame: "_top" }, class: "block w-full px-3 py-2 text-gray-900 hover:bg-gray-100 rounded-md" do %>
+            <%= month_name %>
+          <% end %>
+        <% else %>
+          <span class="px-3 py-2 text-gray-400 rounded-md"><%= month_name %></span>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

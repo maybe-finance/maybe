@@ -2,10 +2,17 @@
 name: Bug report
 about: Create a report to help us improve
 title: 'Bug: '
-labels: ":bug: Bug"
+labels: ''
 assignees: ''
 
 ---
+
+**Where did this bug occur? (required)**
+
+- [ ] I am a self-hosted user reporting a bug from my self hosted app
+- [ ] I am a user of Maybe's paid app
+
+_Please note, if you are reporting a bug with sensitive data, please open an Intercom chat from within the app for help_
 
 **Describe the bug**
 A clear and concise description of what the bug is.
@@ -20,14 +27,5 @@ Steps to reproduce the behavior:
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
-**What version of Maybe are you using?**
-This could be "Hosted" (i.e. app.maybe.co) or "Self-hosted". If "Self-hosted", please include the version you're currently on.
-
-**What operating system and browser are you using?**
-The more info the better.
-
 **Screenshots / Recordings**
 If applicable, add screenshots or short video recordings to help show the bug in more detail.
-
-**Additional context**
-Add any other context about the problem here.
