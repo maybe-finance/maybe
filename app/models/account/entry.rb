@@ -24,6 +24,10 @@ class Account::Entry < ApplicationRecord
     )
   }
 
+  scope :active, -> {
+    joins(:account).where(accounts: { is_active: true, scheduled_for_deletion: false })
+  }
+
   scope :reverse_chronological, -> {
     order(
       date: :desc,
