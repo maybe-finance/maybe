@@ -155,6 +155,12 @@ module ApplicationHelper
               .join(separator)
   end
 
+  def markdown(text)
+    @@parser ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML, tables: true)
+
+    @@parser.render(text).html_safe
+  end
+
   def show_super_admin_bar?
     if params[:admin].present?
       cookies.permanent[:admin] = params[:admin]

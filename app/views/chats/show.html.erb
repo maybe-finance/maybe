@@ -1,0 +1,15 @@
+<%= turbo_frame_tag "chat_content" do %>
+  <div class="flex flex-col h-full">
+    <div id="chat_messages" class="grow overflow-y-auto">
+      <% @chat.messages.where.not(content: nil).where.not(content: "...").where.not(hidden: true).order(created_at: :asc).each do |message| %>
+        <%= render "chats/message", message: message %>
+      <% end %>
+    </div>
+    
+    <div class="mt-4">
+      <%= render "chats/form", chat: @chat %>
+    </div>
+  </div>
+
+  <%= turbo_stream_from @chat %>
+<% end %>

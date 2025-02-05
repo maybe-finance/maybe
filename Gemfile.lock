@@ -166,6 +166,7 @@ GEM
     erubi (1.13.1)
     et-orbi (1.2.11)
       tzinfo
+    event_stream_parser (1.0.0)
     faker (3.5.1)
       i18n (>= 1.8.11, < 2)
     faraday (2.12.2)
@@ -201,6 +202,7 @@ GEM
     hashdiff (1.1.2)
     highline (3.1.2)
       reline
+    holidays (8.8.0)
     hotwire-livereload (2.0.0)
       actioncable (>= 7.0.0)
       listen (>= 3.0.0)
@@ -432,6 +434,10 @@ GEM
       sorbet-runtime (>= 0.5.10782)
     ruby-lsp-rails (0.3.31)
       ruby-lsp (>= 0.23.0, < 0.24.0)
+    ruby-openai (7.3.1)
+      event_stream_parser (>= 0.3.0, < 2.0.0)
+      faraday (>= 1)
+      faraday-multipart (>= 1)
     ruby-progressbar (1.13.0)
     ruby-vips (2.2.2)
       ffi (~> 1.12)
@@ -539,6 +545,7 @@ DEPENDENCIES
   faraday-multipart
   faraday-retry
   good_job
+  holidays
   hotwire-livereload
   hotwire_combobox!
   i18n-tasks
@@ -563,6 +570,7 @@ DEPENDENCIES
   redcarpet
   rubocop-rails-omakase
   ruby-lsp-rails
+  ruby-openai
   selenium-webdriver
   sentry-rails
   sentry-ruby

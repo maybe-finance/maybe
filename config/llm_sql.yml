@@ -1,0 +1,39 @@
+# Create multiple "scope" options based on user intent
+core:
+  - scope: |
+      - Output SQL only with no comments.
+      - Take care to write proper SQL for use in a Postgres database, paying special attention to GROUP BY clauses and aggregate functions, especially around dates and ids.
+      - Include relevant dates, if helpful.
+      - Under no circumstance should you change the accountable_id or family_id variables.
+      - 'date' columns are the most important for determining when something occurred
+      - Limit the output to 500 rows
+      - If no date is provided, assume the current date
+      - If something needs multiple dates (such as growth or change over time), use the current date as the end date and the 30 days prior as the start date
+      - When requesting data over a long period of time, group by month or year
+intent:
+  - name: "metrics"
+    scope: |
+      - The "metrics" table is the primary table to use.
+      - Be careful to not include account's in your query unless they are explicitly needed to calculate the metric. Some metrics (such as "net worth") do not need account_ids.
+  - name: "transactional"
+    scope: |
+      - The "transactions" table is the primary table to use.
+  - name: "accounts"
+    scope: |
+      -
+  - name: "education"
+    scope: |
+      -
+  - name: "reply"
+    scope: |
+      -
+  - name: "investing"
+    scope: |
+      - The "balances" table is the primary table to use.
+      - Only do very basic math in the SQL, such as summing up the values.
+      - Leave complex math to future steps. Just focus on getting the parts needed to do the math.
+      - "Performance" refers to the performance of the account, not the performance of the investments (unless that is explicitly requested). 
+      - "Performance" is the change in balance/value of the account between the start and end date.
+      - Explicitly exclude rows where "security_id" is NOT NULL unless a specific security/holding is requested.
+      - Do NOT SUM the balance column.
+      - You need to know security_id to get security_prices.

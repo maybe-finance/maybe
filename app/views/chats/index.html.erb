@@ -1,0 +1,8 @@
+<%= turbo_frame_tag "chat_content" do %>
+  <% @chats.each do |chat| %>
+    <%= link_to chat_path(chat), class: "flex items-center gap-2 w-full shadow-xs border border-alpha-black-300 rounded-md px-4 py-2 mb-2 bg-white text-sm text-gray-500 font-light hover:bg-gray-50" do %>
+      <%= lucide_icon("message-circle", class: "w-4 h-4") %>
+      <span><%= chat.title || "New Chat" %></span>
+    <% end %>
+  <% end %>
+<% end %>

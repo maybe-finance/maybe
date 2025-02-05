@@ -15,6 +15,7 @@ class Account < ApplicationRecord
   has_many :holdings, dependent: :destroy, class_name: "Account::Holding"
   has_many :balances, dependent: :destroy
   has_many :issues, as: :issuable, dependent: :destroy
+  has_many :metrics, dependent: :destroy
 
   monetize :balance, :cash_balance
 

@@ -39,6 +39,9 @@ gem "logtail-rails"
 gem "aws-sdk-s3", "~> 1.177.0", require: false
 gem "image_processing", ">= 1.2"
 
+# AI
+gem "ruby-openai"
+
 # Other
 gem "bcrypt", "~> 3.1"
 gem "jwt"
@@ -54,6 +57,7 @@ gem "csv"
 gem "redcarpet"
 gem "stripe"
 gem "intercom-rails"
+gem "holidays"
 gem "plaid"
 
 group :development, :test do

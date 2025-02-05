@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_31_171943) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_05_021900) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -195,6 +195,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_31_171943) do
     t.string "classification", default: "expense", null: false
     t.string "lucide_icon"
     t.index ["family_id"], name: "index_categories_on_family_id"
+  end
+
+  create_table "chats", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.string "title"
+    t.text "summary"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_chats_on_user_id"
   end
 
   create_table "credit_cards", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -479,6 +488,34 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_31_171943) do
     t.index ["family_id"], name: "index_merchants_on_family_id"
   end
 
+  create_table "messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "chat_id", null: false
+    t.uuid "user_id"
+    t.text "content"
+    t.text "log"
+    t.string "role"
+    t.string "status", default: "pending"
+    t.boolean "hidden", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_id"], name: "index_messages_on_chat_id"
+    t.index ["user_id"], name: "index_messages_on_user_id"
+  end
+
+  create_table "metrics", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "family_id", null: false
+    t.uuid "account_id"
+    t.string "kind", null: false
+    t.string "subkind"
+    t.date "date", null: false
+    t.decimal "value", precision: 10, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_metrics_on_account_id"
+    t.index ["family_id", "kind", "date"], name: "index_metrics_on_family_kind_date_unique", unique: true
+    t.index ["family_id"], name: "index_metrics_on_family_id"
+  end
+
   create_table "other_assets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -694,6 +731,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_31_171943) do
   add_foreign_key "budget_categories", "categories"
   add_foreign_key "budgets", "families"
   add_foreign_key "categories", "families"
+  add_foreign_key "chats", "users"
   add_foreign_key "impersonation_session_logs", "impersonation_sessions"
   add_foreign_key "impersonation_sessions", "users", column: "impersonated_id"
   add_foreign_key "impersonation_sessions", "users", column: "impersonator_id"
@@ -702,6 +740,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_31_171943) do
   add_foreign_key "invitations", "families"
   add_foreign_key "invitations", "users", column: "inviter_id"
   add_foreign_key "merchants", "families"
+  add_foreign_key "messages", "chats"
+  add_foreign_key "messages", "users"
+  add_foreign_key "metrics", "accounts"
+  add_foreign_key "metrics", "families"
   add_foreign_key "plaid_accounts", "plaid_items"
   add_foreign_key "plaid_items", "families"
   add_foreign_key "rejected_transfers", "account_transactions", column: "inflow_transaction_id"

@@ -12,6 +12,7 @@ class Account::Syncer
     account.reload
     update_account_info(balances, holdings) unless account.plaid_account_id.present?
     convert_records_to_family_currency(balances, holdings) unless account.currency == account.family.currency
+    calculate_metrics
 
     # Enrich if user opted in or if we're syncing transactions from a Plaid account on the hosted app
     if account.family.data_enrichment_enabled? || (account.plaid_account_id.present? && Rails.application.config.app_mode.hosted?)
@@ -67,6 +68,11 @@ class Account::Syncer
       end
 
       calculated_balances
+    end
+
+    def calculate_metrics
+      Account::MetricsCalculator.new(account).calculate
+      Family::MetricsCalculator.new(account.family).calculate
     end
 
     def convert_records_to_family_currency(balances, holdings)

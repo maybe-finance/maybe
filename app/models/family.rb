@@ -25,6 +25,7 @@ class Family < ApplicationRecord
   has_many :categories, dependent: :destroy
   has_many :merchants, dependent: :destroy
   has_many :issues, through: :accounts
+  has_many :metrics, dependent: :destroy
   has_many :holdings, through: :accounts
   has_many :plaid_items, dependent: :destroy
   has_many :budgets, dependent: :destroy
@@ -192,6 +193,20 @@ class Family < ApplicationRecord
 
   def liabilities
     Money.new(accounts.active.liabilities.map { |account| account.balance_money.exchange_to(currency, fallback_rate: 0) }.sum, currency)
+  end
+
+  def sync(start_date: nil)
+    accounts.active.each do |account|
+      if account.needs_sync?
+        account.sync_later(start_date: start_date || account.last_sync_date)
+      end
+    end
+
+    update! last_synced_at: Time.now
+  end
+
+  def needs_sync?
+    last_synced_at.nil? || last_synced_at.to_date < Date.current
   end
 
   def synth_usage
