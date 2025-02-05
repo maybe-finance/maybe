@@ -2,8 +2,8 @@ class ChatJob < ApplicationJob
   queue_as :latency_low
 
   def perform(chat_id, message_id)
-    chat = Chat.find(chat_id)
-    nil if chat.nil?
+    chat = Chat.find_by(id: chat_id)
+    return if chat.nil?
 
     message = chat.messages.find(message_id)
     openai_client = OpenAI::Client.new
