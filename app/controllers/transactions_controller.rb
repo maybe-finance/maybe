@@ -7,7 +7,7 @@ class TransactionsController < ApplicationController
 
   def index
     @q = search_params
-    search_query = Current.family.transactions.from_active_accounts.search(@q)
+    search_query = Current.family.transactions.search(@q).active
 
     set_focused_record(search_query, params[:focused_record_id], default_per_page: 50)
 

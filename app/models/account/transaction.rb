@@ -16,12 +16,6 @@ class Account::Transaction < ApplicationRecord
   accepts_nested_attributes_for :taggings, allow_destroy: true
 
   scope :active, -> { where(excluded: false) }
-  # Transactions are associated with accounts through entries
-  scope :from_active_accounts, -> {
-    joins("INNER JOIN account_entries active_entries ON active_entries.entryable_id = account_transactions.id AND active_entries.entryable_type = 'Account::Transaction'")
-    .joins("INNER JOIN accounts active_accounts ON active_accounts.id = active_entries.account_id")
-    .where(active_accounts: { is_active: true, scheduled_for_deletion: false })
-  }
 
   class << self
     def search(params)
