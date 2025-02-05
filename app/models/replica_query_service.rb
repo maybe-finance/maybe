@@ -8,15 +8,15 @@ class ReplicaQueryService
 
     scoped_query = "
       WITH metrics AS (
-        SELECT date, account_id, family_id, kind, value
+        SELECT id, date, account_id, family_id, kind, subkind, value
         FROM metrics
         WHERE family_id = '#{family_id}'
         UNION ALL
-        SELECT date, account_id, '#{family_id}' as family_id, 'balance_metric' as kind, balance as value
+        SELECT NULL as id, date, account_id, '#{family_id}' as family_id, 'balance_metric' as kind, NULL as subkind, balance as value
         FROM account_balances
         WHERE account_id IN (SELECT id FROM accounts WHERE family_id = '#{family_id}')
         UNION ALL
-        SELECT date, account_id, '#{family_id}' as family_id, 'holding_metric' as kind, amount as value
+        SELECT NULL as id, date, account_id, '#{family_id}' as family_id, 'holding_metric' as kind, NULL as subkind, amount as value
         FROM account_holdings
         WHERE account_id IN (SELECT id FROM accounts WHERE family_id = '#{family_id}')
       )

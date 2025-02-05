@@ -8,16 +8,47 @@ class ChatJob < ApplicationJob
     message = chat.messages.find(message_id)
     openai_client = OpenAI::Client.new
 
-    viability = determine_viability(openai_client, chat)
+    begin
+      viability = determine_viability(openai_client, chat)
 
-    if !viability["content_contains_answer"]
-      handle_non_viable_conversation(openai_client, chat, message, viability)
-    else
-      generate_response_content(openai_client, chat, message)
+      if !viability["content_contains_answer"]
+        handle_non_viable_conversation(openai_client, chat, message, viability)
+      else
+        generate_response_content(openai_client, chat, message)
+      end
+    rescue => e
+      Rails.logger.error "ChatJob Error: #{e.class} - #{e.message}"
+      Rails.logger.error "Backtrace: #{e.backtrace.join("\n")}"
+      message.update(content: "I encountered an error processing your request. Please try again.")
+      update_conversation(message, chat)
     end
   end
 
   private
+    def make_openai_request(openai_client, parameters, chat, context = "")
+      begin
+        Rails.logger.info "Making OpenAI request - Context: #{context}"
+        Rails.logger.debug "Request parameters: #{parameters.inspect}"
+
+        response = openai_client.chat(parameters: parameters)
+
+        Rails.logger.debug "OpenAI Response: #{response.inspect}"
+
+        if response["error"].present?
+          Rails.logger.error "OpenAI API Error - Context: #{context}"
+          Rails.logger.error "Error details: #{response["error"].inspect}"
+          raise "OpenAI API Error: #{response["error"]["message"]}"
+        end
+
+        response
+      rescue => e
+        Rails.logger.error "OpenAI Request Failed - Context: #{context}"
+        Rails.logger.error "Error: #{e.class} - #{e.message}"
+        Rails.logger.error "Backtrace: #{e.backtrace.join("\n")}"
+        raise e
+      end
+    end
+
     def determine_viability(openai_client, chat)
       chat_history = chat.messages.where.not(content: [ nil, "" ]).where.not(content: "...").where.not(role: "log").order(:created_at)
 
@@ -42,43 +73,73 @@ class ChatJob < ApplicationJob
 
       message = chat.messages.where(role: "user").order(created_at: :asc).last
 
-      response = openai_client.chat(
-        parameters: {
-          model: "gpt-4o",
-          messages: [
-            { role: "system", content: "You are a highly intelligent certified financial advisor tasked with helping the customer make wise financial decisions based on real data.\n\nHere's some contextual information:\n#{messages}" },
-            { role: "assistant", content: <<-ASSISTANT.strip_heredoc },
-              Instructions: First, determine the user's intent from the following prioritized list:
-              1. reply: the user is replying to a previous message
-              2. education: the user is trying to learn more about personal finance, but is not asking specific questions about their own finances
-              3. metrics: the user wants to know the value of specific financial metrics (we already have metrics for net worth, depository balance, investment balance, total assets, total debts, and categorical spending). does NOT include merchant-specific metrics. if asking about a specific merchant, then the intent is transactional.
-              4. transactional: the user wants to know about a specific transactions. this includes reccurring and subscription transactions.
-              5. investing: the user has a specific question about investing and needs real-time data
-              6. accounts: the user has a specific question about their accounts
-              7. system: the user wants to know how to do something within the product
+      parameters = {
+        model: "o3-mini",
+        messages: [
+          { role: "developer", content: "You are a highly intelligent certified financial advisor tasked with helping the customer make wise financial decisions based on real data.\n\nHere's some contextual information:\n#{messages}" },
+          { role: "assistant", content: <<-ASSISTANT.strip_heredoc },
+            Instructions: First, determine the user's intent from the following prioritized list:
+            1. reply: the user is replying to a previous message
+            2. education: the user is trying to learn more about personal finance
+            3. metrics: the user wants to know specific financial metrics
+            4. transactional: the user wants to know about specific transactions
+            5. investing: the user has a specific question about investing
+            6. accounts: the user has a specific question about their accounts
+            7. system: the user wants to know how to do something within the product
 
-              Second, remember to keep these things in mind regarding how to resolve:
-              - We have access to both historical and real-time data we can query, so we can answer questions about the user's accounts. But if we need to get that data, then content_contains_answer should be false.
-              - If the user is asking for metrics, then resolution should be to query the metrics table.
-              - If the user asks about a specific stock/security, always make sure data for that specific security is available, otherwise content_contains_answer should be false.
+            Remember:
+            - If we need to query data, content_contains_answer should be false
+            - For metrics queries, resolution should be to query metrics table
+            - For stock/security questions, verify data availability
 
-              Third, respond exclusively with in JSON format:
-              {
-              "user_intent": string, // The user's intent
-              "intent_reasoning": string, // Why you think the user's intent is what you think it is.
-              "metric_name": lowercase string, // The human name of the metric the user is asking about. Only include if intent is 'metrics'.
-              "content_contains_answer": boolean, // true or false. Whether the information in the content is sufficient to resolve the issue. If intent is 'education' there's a high chance this should be true. If the intent is 'reply' this should be true.
-              "justification": string, // Why the content you found is or is not sufficient to resolve the issue.
-              "resolve": string, // The specific data needed to resolve the issue, succinctly. Focus on actionable, exact information.
-              }
-            ASSISTANT
-            { role: "user", content: "User inquiry: #{message.content}" }
-          ],
-          temperature: 0,
-          max_tokens: 500,
-          response_format: { type: "json_object" }
+            Respond in JSON format with these fields:
+            - user_intent: string (the intent from above list)
+            - intent_reasoning: string (brief reason for intent)
+            - metric_name: string (only for metrics intent)
+            - content_contains_answer: boolean
+            - justification: string (why content is/isn't sufficient)
+            - resolve: string (data needed to resolve)
+          ASSISTANT
+          { role: "user", content: "User inquiry: #{message.content}" }
+        ],
+        max_completion_tokens: 2000,
+        response_format: {
+          type: "json_schema",
+          json_schema: {
+            name: "intent_analysis",
+            schema: {
+              type: "object",
+              properties: {
+                user_intent: {
+                  type: "string",
+                  enum: [ "reply", "education", "metrics", "transactional", "investing", "accounts", "system" ]
+                },
+                intent_reasoning: {
+                  type: "string",
+                  maxLength: 100
+                },
+                metric_name: {
+                  type: "string"
+                },
+                content_contains_answer: {
+                  type: "boolean"
+                },
+                justification: {
+                  type: "string",
+                  maxLength: 150
+                },
+                resolve: {
+                  type: "string",
+                  maxLength: 150
+                }
+              },
+              required: [ "user_intent", "intent_reasoning", "content_contains_answer", "justification", "resolve" ]
+            }
+          }
         }
-      )
+      }
+
+      response = make_openai_request(openai_client, parameters, chat, "Determining viability")
 
       raw_response = response.dig("choices", 0, "message", "content")
 
@@ -88,11 +149,18 @@ class ChatJob < ApplicationJob
         role: "log"
       )
 
-      JSON.parse(raw_response)
+      begin
+        JSON.parse(raw_response)
+      rescue JSON::ParserError => e
+        Rails.logger.error "Failed to parse OpenAI response as JSON"
+        Rails.logger.error "Raw response: #{raw_response.inspect}"
+        Rails.logger.error "Error: #{e.message}"
+        raise e
+      end
     end
 
     def handle_non_viable_conversation(openai_client, chat, message, viability)
-      if viability["user_intent"] == "system"
+      if viability["user_intent"] == "developer"
         message.update(content: "I'm sorry, I'm not able to help with that right now.")
         update_conversation(message, chat)
       else
@@ -147,38 +215,50 @@ class ChatJob < ApplicationJob
       last_log_json = JSON.parse(last_log.log)
       resolve_value = last_log_json["resolve"]
 
-      sql = openai_client.chat(
-        parameters: {
-          model: "gpt-4o",
-          messages: [
-            { role: "system", content: "You are an expert in SQL and Postgres." },
-            { role: "assistant", content: <<-ASSISTANT.strip_heredoc }
-              #{schema}
+      parameters = {
+        model: "o3-mini",
+        messages: [
+          { role: "developer", content: "You are an expert in SQL and Postgres." },
+          { role: "assistant", content: <<-ASSISTANT.strip_heredoc }
+            #{schema}
 
-              family_id = #{family_id}
-              account_ids = #{accounts_ids}
+            family_id = #{family_id}
+            account_ids = #{accounts_ids}
 
-              Given the preceding Postgres database schemas and variables, write an SQL query that answers the question '#{message.content}'.
+            Given the preceding Postgres database schemas and variables, write an SQL query that answers the question '#{message.content}'.
 
-              According to the last log message, this is what is needed to answer the question: '#{resolve_value}'.
+            According to the last log message, this is what is needed to answer the question: '#{resolve_value}'.
 
-              Scope:
-              #{core}
-              #{scope}
+            Scope:
+            #{core}
+            #{scope}
 
-              Respond exclusively with the SQL query, no preamble or explanation, beginning with 'SELECT' and ending with a semicolon.
+            Important query writing rules:
+            1. When dealing with dates:
+               - Use "date <= CURRENT_DATE" instead of "date = CURRENT_DATE" to get more data
+               - Order by date DESC and use LIMIT to get the most recent data
+               - For date ranges, use inclusive bounds (BETWEEN or <= and >=)
+            2. For metrics/balances/holdings:
+               - Always order by date DESC to get most recent data first
+               - Use appropriate LIMIT clauses to get enough data for context
+               - Consider using window functions for time-based analysis
+            3. Security:
+               - Always cast UUIDs explicitly in WHERE clauses
+               - Use the provided family_id and account_ids variables
+            4. Performance:
+               - Add appropriate LIMIT clauses (usually 500 for historical data, 1 for current values)
+               - Use indexes effectively (date, family_id, and kind are indexed)
 
-              Do NOT include "```sql" or "```" in your response.
+            Respond exclusively with the SQL query, no preamble or explanation, beginning with 'SELECT' and ending with a semicolon.
 
-              When UUIDs are referenced in the WHERE clause, they must be explicitly cast to UUIDs.
-            ASSISTANT
-          ],
-          temperature: 0,
-          max_tokens: 2048
-        }
-      )
+            Do NOT include "```sql" or "```" in your response.
+          ASSISTANT
+        ],
+        max_completion_tokens: 2048
+      }
 
-      sql_content = sql.dig("choices", 0, "message", "content")
+      response = make_openai_request(openai_client, parameters, chat, "Building SQL query")
+      sql_content = response.dig("choices", 0, "message", "content")
 
       markdown_reply = chat.messages.create!(
         log: sql_content,
@@ -235,61 +315,66 @@ class ChatJob < ApplicationJob
 
       text_string = ""
 
-      openai_client.chat(
-        parameters: {
-          model: "gpt-4o",
-          messages: [
-            { role: "system", content: "You are a highly intelligent certified financial advisor/teacher/mentor tasked with helping the customer make wise financial decisions based on real data. You should always tune your question to the interest & knowledge of the peron, breaking down the problem into simpler parts until it's at just the right level for them.\n\nUse only the information in the conversation to construct your response." },
-            { role: "assistant", content: <<-ASSISTANT.strip_heredoc },
-            Here is information about the user and their financial situation, so you understand them better:
-            - Country: #{chat.user.family.country}
-            - Preferred language: #{chat.user.family.locale}
-            - Preferred currency: #{chat.user.family.currency}
-            - Preferred date format: #{chat.user.family.date_format}
+      parameters = {
+        model: "o3-mini",
+        messages: [
+          { role: "developer", content: "You are a highly intelligent certified financial advisor/teacher/mentor tasked with helping the customer make wise financial decisions based on real data. You should always tune your question to the interest & knowledge of the peron, breaking down the problem into simpler parts until it's at just the right level for them.\n\nUse only the information in the conversation to construct your response." },
+          { role: "assistant", content: <<-ASSISTANT.strip_heredoc },
+          Here is information about the user and their financial situation, so you understand them better:
+          - Country: #{chat.user.family.country}
+          - Preferred language: #{chat.user.family.locale}
+          - Preferred currency: #{chat.user.family.currency}
+          - Preferred date format: #{chat.user.family.date_format}
 
-              Follow these rules as you create your answer:
-            - Keep responses very brief and to the point, unless the user asks for more details.
-            - Response should be in markdown format, adding bold or italics as needed.
-            - If you output a formula, wrap it in backticks.
-            - Do not output any SQL, IDs or UUIDs.
-            - Data should be human readable.
-            - Dates should be long form.
-            - If there is no data for the requested date, say there isn't enough data.
-            - Don't include pleasantries.
-            - Favor putting lists in tabular markdown format, especially if they're long.
-            - Currencies should be output with two decimal places and a dollar sign.
-            - Use full names for financial products, not abbreviations.
-            - Answer truthfully and be specific.
-            - If you are doing a calculation, show the formula.
-            - If you don't have certain industry data, use the S&P 500 as a proxy.
-            - Remember, "accounts" and "transactions" are different things.
-            - If you are not absolutely sure what the user is asking, ask them to clarify. Clarity is key.
-            - Unless the user explicitly asks for "pending" transactions, you should ignore all transactions where is_pending is true.
-            - Try to add helpful observations/insights to your answer.
-            - Include additional context and tabular data as helpful, especially if the user is seemingly diving deeper.
+            Follow these rules as you create your answer:
+          - Keep responses very brief and to the point, unless the user asks for more details.
+          - Response should be in markdown format, adding bold or italics as needed.
+          - If you output a formula, wrap it in backticks.
+          - Do not output any SQL, IDs or UUIDs.
+          - Data should be human readable.
+          - Dates should be long form.
+          - If there is no data for the requested date, say there isn't enough data.
+          - Don't include pleasantries.
+          - Favor putting lists in tabular markdown format, especially if they're long.
+          - Currencies should be output with two decimal places and a dollar sign.
+          - Use full names for financial products, not abbreviations.
+          - Answer truthfully and be specific.
+          - If you are doing a calculation, show the formula.
+          - If you don't have certain industry data, use the S&P 500 as a proxy.
+          - Remember, "accounts" and "transactions" are different things.
+          - If you are not absolutely sure what the user is asking, ask them to clarify. Clarity is key.
+          - Unless the user explicitly asks for "pending" transactions, you should ignore all transactions where is_pending is true.
+          - Try to add helpful observations/insights to your answer.
+          - Include additional context and tabular data as helpful, especially if the user is seemingly diving deeper, but never include "ID" columns of any type.
+          - Never include any SQL, IDs or UUIDs in your response.
 
-            According to the last log message, this is what is needed to answer the question: '#{resolve_value}'.
+          According to the last log message, this is what is needed to answer the question: '#{resolve_value}'.
 
-            Be sure to output what data you are using to answer the question, and why you are using it.
+          Be sure to output what data you are using to answer the question, and why you are using it.
 
-            ASSISTANT
-            *messages
-          ],
-          temperature: 0,
-          max_tokens: 1200,
-          stream: proc do |chunks, _bytesize|
-            chat.broadcast_remove_to "chat_messages", target: "message_content_loader_#{message.id}"
+          ASSISTANT
+          *messages
+        ],
+        max_completion_tokens: 1200,
+        stream: proc do |chunks, _bytesize|
+          chat.broadcast_remove_to "chat_messages", target: "message_content_loader_#{message.id}"
 
-            if chunks.dig("choices")[0]["delta"].present?
-              content = chunks.dig("choices", 0, "delta", "content")
-              text_string += content unless content.nil?
+          if chunks.dig("choices")[0]["delta"].present?
+            content = chunks.dig("choices", 0, "delta", "content")
+            text_string += content unless content.nil?
 
-              chat.broadcast_append_to "chat_messages", partial: "chats/stream", locals: { text: content }, target: "message_content_#{message.id}"
-            end
+            chat.broadcast_append_to "chat_messages", partial: "chats/stream", locals: { text: content }, target: "message_content_#{message.id}"
           end
-        }
-      )
+        end
+      }
 
-      text_string
+      begin
+        make_openai_request(openai_client, parameters, chat, "Building final answer")
+        text_string
+      rescue => e
+        Rails.logger.error "Failed to build answer"
+        Rails.logger.error "Error: #{e.message}"
+        raise e
+      end
     end
 end
