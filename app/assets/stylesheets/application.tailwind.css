@@ -174,9 +174,8 @@
 
   .scrollbar::-webkit-scrollbar-thumb:hover {
     background: #a6a6a6;
-  }  
+  }
 }
-
 
 .loading-ellipsis {
   display: inline-flex;
@@ -205,4 +204,20 @@
   50% {
     transform: scale(1.3);
   }
+}
+
+/* Custom scrollbar implementation for Windows browsers */
+.windows {
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #d6d6d6;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a6a6a6;
+  }  
 }

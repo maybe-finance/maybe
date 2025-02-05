@@ -64,6 +64,9 @@ bin/dev
 
 # Optionally, load demo data
 rake demo_data:reset
+
+# Optionally, setup AI user
+rake ai:setup
 ```
 
 And visit http://localhost:3000 to see the app. You can use the following

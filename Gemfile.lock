@@ -202,6 +202,7 @@ GEM
     hashdiff (1.1.2)
     highline (3.1.2)
       reline
+    holidays (8.8.0)
     hotwire-livereload (2.0.0)
       actioncable (>= 7.0.0)
       listen (>= 3.0.0)
@@ -544,6 +545,7 @@ DEPENDENCIES
   faraday-multipart
   faraday-retry
   good_job
+  holidays
   hotwire-livereload
   hotwire_combobox!
   i18n-tasks

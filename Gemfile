@@ -58,7 +58,6 @@ gem "redcarpet"
 gem "stripe"
 gem "intercom-rails"
 gem "holidays"
-gem "redcarpet"
 gem "plaid"
 
 group :development, :test do
