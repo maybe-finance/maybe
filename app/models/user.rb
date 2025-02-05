@@ -131,8 +131,8 @@ class User < ApplicationRecord
     end
 
     def profile_image_size
-      if profile_image.attached? && profile_image.byte_size > 5.megabytes
-        errors.add(:profile_image, :invalid_file_size, max_megabytes: 5)
+      if profile_image.attached? && profile_image.byte_size > 10.megabytes
+        errors.add(:profile_image, :invalid_file_size, max_megabytes: 10)
       end
     end
 end

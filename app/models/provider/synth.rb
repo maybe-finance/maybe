@@ -133,6 +133,7 @@ class Provider::Synth
       req.params["name"] = query
       req.params["dataset"] = dataset
       req.params["country_code"] = country_code
+      req.params["limit"] = 25
     end
 
     parsed = JSON.parse(response.body)

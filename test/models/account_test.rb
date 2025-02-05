@@ -99,4 +99,43 @@ class AccountTest < ActiveSupport::TestCase
       @account.auto_match_transfers!
     end
   end
+
+  test "transfer_match_candidates only matches between active accounts" do
+    active_account = accounts(:depository)
+    another_active_account = accounts(:credit_card)
+    inactive_account = accounts(:investment)
+    inactive_account.update!(is_active: false)
+
+    # Create matching transactions
+    active_inflow = active_account.entries.create!(
+      date: Date.current,
+      amount: -100,
+      currency: "USD",
+      name: "Test transfer",
+      entryable: Account::Transaction.new
+    )
+
+    active_outflow = another_active_account.entries.create!(
+      date: Date.current,
+      amount: 100,
+      currency: "USD",
+      name: "Test transfer",
+      entryable: Account::Transaction.new
+    )
+
+    inactive_outflow = inactive_account.entries.create!(
+      date: Date.current,
+      amount: 100,
+      currency: "USD",
+      name: "Test transfer",
+      entryable: Account::Transaction.new
+    )
+
+    # Should find matches between active accounts
+    candidates = active_account.transfer_match_candidates
+    assert_includes candidates.map(&:outflow_transaction_id), active_outflow.entryable_id
+
+    # Should not match with inactive account
+    assert_not_includes candidates.map(&:outflow_transaction_id), inactive_outflow.entryable_id
+  end
 end
