@@ -25,7 +25,7 @@ export default class extends Controller {
   }
 
   handleInput = (event) => {
-    const target = event.target
+    const target = event.target;
 
     clearTimeout(this.timeout);
     this.timeout = setTimeout(() => {
@@ -34,18 +34,18 @@ export default class extends Controller {
   };
 
   #debounceTimeout(element) {
-    if(element.dataset.autosubmitDebounceTimeout) {
+    if (element.dataset.autosubmitDebounceTimeout) {
       return Number.parseInt(element.dataset.autosubmitDebounceTimeout);
     }
 
     const type = element.type || element.tagName;
 
     switch (type.toLowerCase()) {
-      case 'input':
-      case 'textarea':
+      case "input":
+      case "textarea":
         return 500;
-      case 'select-one':
-      case 'select-multiple':
+      case "select-one":
+      case "select-multiple":
         return 0;
       default:
         return 500;
