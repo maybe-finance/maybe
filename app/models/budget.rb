@@ -150,7 +150,7 @@ class Budget < ApplicationRecord
   end
 
   def allocations_valid?
-    initialized? && available_to_allocate.positive? && allocated_spending > 0
+    initialized? && available_to_allocate >= 0 && allocated_spending > 0
   end
 
   # =============================================================================
