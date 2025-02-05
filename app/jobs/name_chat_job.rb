@@ -1,5 +1,5 @@
 class NameChatJob < ApplicationJob
-  queue_as :default
+  queue_as :latency_low
 
   def perform(chat_id)
     chat = Chat.find(chat_id)

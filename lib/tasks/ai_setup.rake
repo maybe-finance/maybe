@@ -25,6 +25,12 @@ namespace :ai do
         GRANT SELECT ON accounts TO ai_user;
         GRANT SELECT ON account_balances TO ai_user;
         GRANT SELECT ON account_holdings TO ai_user;
+        GRANT SELECT ON account_entries TO ai_user;
+        GRANT SELECT ON account_transactions TO ai_user;
+        GRANT SELECT ON categories TO ai_user;
+        GRANT SELECT ON merchants TO ai_user;
+        GRANT SELECT ON tags TO ai_user;
+        GRANT SELECT ON taggings TO ai_user;
       SQL
 
       # Output the configuration information

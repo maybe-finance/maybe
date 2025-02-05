@@ -1,5 +1,5 @@
 class ChatJob < ApplicationJob
-  queue_as :default
+  queue_as :latency_low
 
   def perform(chat_id, message_id)
     chat = Chat.find(chat_id)
@@ -40,12 +40,39 @@ class ChatJob < ApplicationJob
           raise "OpenAI API Error: #{response["error"]["message"]}"
         end
 
+        # Validate response has expected structure and content
+        if response.nil? || !response.is_a?(Hash)
+          raise "Invalid response format: Expected Hash but got #{response.class}"
+        end
+
+        if !response["choices"].is_a?(Array) || response["choices"].empty?
+          raise "Invalid response: No choices returned"
+        end
+
+        message_content = response.dig("choices", 0, "message", "content")
+        if message_content.nil? || message_content.empty?
+          raise "Invalid response: Empty content returned"
+        end
+
         response
       rescue => e
         Rails.logger.error "OpenAI Request Failed - Context: #{context}"
         Rails.logger.error "Error: #{e.class} - #{e.message}"
         Rails.logger.error "Backtrace: #{e.backtrace.join("\n")}"
-        raise e
+
+        # For build_answer context, provide a fallback response
+        if context == "Building final answer"
+          message = chat.messages.where(role: "user").order(created_at: :asc).last
+          {
+            "choices" => [ {
+              "message" => {
+                "content" => "I apologize, but I encountered an error processing your request. Please try asking your question again in a different way."
+              }
+            } ]
+          }
+        else
+          raise e
+        end
       end
     end
 
@@ -215,6 +242,12 @@ class ChatJob < ApplicationJob
       last_log_json = JSON.parse(last_log.log)
       resolve_value = last_log_json["resolve"]
 
+      # Sanitize inputs to prevent SQL injection and syntax errors
+      sanitized_message = ActiveRecord::Base.connection.quote(message.content)
+      sanitized_resolve = ActiveRecord::Base.connection.quote(resolve_value)
+      sanitized_family_id = ActiveRecord::Base.connection.quote(family_id)
+      sanitized_account_ids = accounts_ids.map { |id| ActiveRecord::Base.connection.quote(id) }.join(", ")
+
       parameters = {
         model: "o3-mini",
         messages: [
@@ -222,12 +255,12 @@ class ChatJob < ApplicationJob
           { role: "assistant", content: <<-ASSISTANT.strip_heredoc }
             #{schema}
 
-            family_id = #{family_id}
-            account_ids = #{accounts_ids}
+            family_id = #{sanitized_family_id}
+            account_ids = ARRAY[#{sanitized_account_ids}]
 
-            Given the preceding Postgres database schemas and variables, write an SQL query that answers the question '#{message.content}'.
+            Given the preceding Postgres database schemas and variables, write an SQL query that answers the question #{sanitized_message}.
 
-            According to the last log message, this is what is needed to answer the question: '#{resolve_value}'.
+            According to the last log message, this is what is needed to answer the question: #{sanitized_resolve}.
 
             Scope:
             #{core}
@@ -243,22 +276,30 @@ class ChatJob < ApplicationJob
                - Use appropriate LIMIT clauses to get enough data for context
                - Consider using window functions for time-based analysis
             3. Security:
-               - Always cast UUIDs explicitly in WHERE clauses
+               - Always cast UUIDs explicitly using ::uuid
                - Use the provided family_id and account_ids variables
+               - Never use string concatenation for values
+               - Always use proper quoting for string literals
+               - Use $$ for dollar-quoted string literals when needed
             4. Performance:
                - Add appropriate LIMIT clauses (usually 500 for historical data, 1 for current values)
                - Use indexes effectively (date, family_id, and kind are indexed)
-
-            Respond exclusively with the SQL query, no preamble or explanation, beginning with 'SELECT' and ending with a semicolon.
-
-            Do NOT include "```sql" or "```" in your response.
+            5. Syntax:
+               - Always terminate SQL statements with a semicolon
+               - Use proper quoting for identifiers with special characters
+               - Use ARRAY constructor for array values
+               - Avoid nested quotes within quotes
+               - Use dollar quoting ($$) for complex string literals
           ASSISTANT
         ],
-        max_completion_tokens: 2048
+        max_completion_tokens: 10000
       }
 
       response = make_openai_request(openai_client, parameters, chat, "Building SQL query")
       sql_content = response.dig("choices", 0, "message", "content")
+
+      # Basic SQL validation before execution
+      validate_sql(sql_content)
 
       markdown_reply = chat.messages.create!(
         log: sql_content,
@@ -283,6 +324,39 @@ class ChatJob < ApplicationJob
       end
     end
 
+    def validate_sql(sql)
+      # Basic SQL validation
+      raise "Invalid SQL: Empty query" if sql.blank?
+      raise "Invalid SQL: Missing semicolon" unless sql.strip.end_with?(";")
+      raise "Invalid SQL: Not a SELECT query" unless sql.strip.upcase.start_with?("SELECT")
+
+      # Check for common syntax issues
+      dangerous_patterns = [
+        /\'\'/,                    # Empty quotes
+        /\s+'''/,                 # Triple quotes
+        /\s+"/,                   # Double quotes without proper escaping
+        /\s+\\/,                  # Backslashes without proper escaping
+        /\-\-(?![a-zA-Z0-9])/,    # Inline comments
+        /\/\*/,                   # Block comments
+        /;\s*SELECT/i,            # Multiple statements
+        /COPY\s+/i,              # COPY command
+        /INTO\s+OUTFILE/i,       # INTO OUTFILE
+        /INTO\s+DUMPFILE/i,      # INTO DUMPFILE
+        /UNION(?!\s+ALL)/i,      # UNION without ALL
+        /DROP\s+/i,              # DROP statements
+        /DELETE\s+/i,            # DELETE statements
+        /UPDATE\s+/i,            # UPDATE statements
+        /INSERT\s+/i,            # INSERT statements
+        /ALTER\s+/i,             # ALTER statements
+        /CREATE\s+/i,            # CREATE statements
+        /TRUNCATE\s+/i          # TRUNCATE statements
+      ]
+
+      dangerous_patterns.each do |pattern|
+        raise "Invalid SQL: Contains potentially dangerous pattern: #{pattern}" if sql =~ pattern
+      end
+    end
+
     def build_answer(openai_client, chat, message)
       conversation_history = chat.messages.where.not(content: [ nil, "" ]).where.not(content: "...").where.not(role: "log").order(:created_at)
 
@@ -296,11 +370,11 @@ class ChatJob < ApplicationJob
 
       total_content_length = messages.sum { |message| message[:content]&.length.to_i }
 
-      while total_content_length > 10000
+      while total_content_length > 100000
         oldest_message = messages.shift
         total_content_length -= oldest_message[:content]&.length.to_i
 
-        if total_content_length <= 8000
+        if total_content_length <= 80000
           messages.unshift(oldest_message) # Put the message back if the total length is within the limit
           break
         end
@@ -326,7 +400,7 @@ class ChatJob < ApplicationJob
           - Preferred currency: #{chat.user.family.currency}
           - Preferred date format: #{chat.user.family.date_format}
 
-            Follow these rules as you create your answer:
+          Follow these rules as you create your answer:
           - Keep responses very brief and to the point, unless the user asks for more details.
           - Response should be in markdown format, adding bold or italics as needed.
           - If you output a formula, wrap it in backticks.
@@ -348,14 +422,13 @@ class ChatJob < ApplicationJob
           - Include additional context and tabular data as helpful, especially if the user is seemingly diving deeper, but never include "ID" columns of any type.
           - Never include any SQL, IDs or UUIDs in your response.
 
-          According to the last log message, this is what is needed to answer the question: '#{resolve_value}'.
+          According to the last log message, this is what is needed to answer the question: #{resolve_value}.
 
           Be sure to output what data you are using to answer the question, and why you are using it.
-
           ASSISTANT
           *messages
         ],
-        max_completion_tokens: 1200,
+        max_completion_tokens: 10000,
         stream: proc do |chunks, _bytesize|
           chat.broadcast_remove_to "chat_messages", target: "message_content_loader_#{message.id}"
 
@@ -370,7 +443,7 @@ class ChatJob < ApplicationJob
 
       begin
         make_openai_request(openai_client, parameters, chat, "Building final answer")
-        text_string
+        text_string.presence || "I apologize, but I wasn't able to generate a proper response. Please try asking your question in a different way."
       rescue => e
         Rails.logger.error "Failed to build answer"
         Rails.logger.error "Error: #{e.message}"

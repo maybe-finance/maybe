@@ -128,35 +128,149 @@ tables:
       currency:
         type: string
         description: Currency of the balance amount
+      cash_balance:
+        type: decimal
+        description: Optional cash balance for investment accounts
     foreign_keys:
       - { column: account_id, references: accounts, on_delete: cascade }
 
-  account_holdings:
+  account_entries:
     columns:
       id:
         type: uuid
         description: Primary key
       account_id:
         type: uuid
-        description: Reference to the investment account holding the security
-      security_id:
+        description: Reference to the account this entry belongs to
+      entryable_type:
+        type: string
+        description: Type of entry (Account::Transaction, Account::Valuation, Account::Trade)
+      entryable_id:
         type: uuid
-        description: Reference to the security being held
+        description: ID of the specific entry record
       date:
         type: date
-        description: Date this holding position was recorded
-      qty:
-        type: decimal
-        description: Quantity of securities held
-      price:
-        type: decimal
-        description: Price per unit of the security
+        description: Date of the entry
+      name:
+        type: string
+        description: Original name/description of the entry
+      enriched_name:
+        type: string
+        description: Enhanced/cleaned name of the entry
       amount:
         type: decimal
-        description: Total value of the holding (qty * price)
+        description: Amount of the entry (negative for inflows, positive for outflows)
       currency:
         type: string
-        description: Currency of the price and amount
+        description: Currency of the entry
+      notes:
+        type: text
+        description: Additional notes about the entry
+      import_id:
+        type: uuid
+        description: Optional reference to import that created this entry
+      plaid_id:
+        type: string
+        description: Optional reference to external Plaid transaction ID
     foreign_keys:
       - { column: account_id, references: accounts }
-      - { column: security_id, references: securities }
+      - { column: import_id, references: imports }
+
+  account_transactions:
+    columns:
+      id:
+        type: uuid
+        description: Primary key
+      category_id:
+        type: uuid
+        description: Optional reference to transaction category
+      merchant_id:
+        type: uuid
+        description: Optional reference to merchant
+      excluded:
+        type: boolean
+        description: Whether this transaction is excluded from calculations
+    foreign_keys:
+      - { column: category_id, references: categories }
+      - { column: merchant_id, references: merchants }
+
+  categories:
+    columns:
+      id:
+        type: uuid
+        description: Primary key
+      family_id:
+        type: uuid
+        description: Reference to the family this category belongs to
+      name:
+        type: string
+        description: Display name of the category
+      color:
+        type: string
+        description: Color code for the category
+      classification:
+        type: string
+        description: Type of category (expense, income)
+      parent_id:
+        type: uuid
+        description: Optional reference to parent category
+    foreign_keys:
+      - { column: family_id, references: families }
+      - { column: parent_id, references: categories }
+
+  merchants:
+    columns:
+      id:
+        type: uuid
+        description: Primary key
+      family_id:
+        type: uuid
+        description: Reference to the family this merchant belongs to
+      name:
+        type: string
+        description: Display name of the merchant
+      color:
+        type: string
+        description: Color code for the merchant
+      icon_url:
+        type: string
+        description: URL to merchant's icon/logo
+      enriched_at:
+        type: datetime
+        description: When merchant data was last enriched
+    foreign_keys:
+      - { column: family_id, references: families }
+
+  tags:
+    columns:
+      id:
+        type: uuid
+        description: Primary key
+      family_id:
+        type: uuid
+        description: Reference to the family this tag belongs to
+      name:
+        type: string
+        description: Display name of the tag
+      color:
+        type: string
+        description: Color code for the tag
+    foreign_keys:
+      - { column: family_id, references: families }
+
+  taggings:
+    columns:
+      id:
+        type: uuid
+        description: Primary key
+      tag_id:
+        type: uuid
+        description: Reference to the tag
+      taggable_type:
+        type: string
+        description: Type of record being tagged
+      taggable_id:
+        type: uuid
+        description: ID of record being tagged
+    foreign_keys:
+      - { column: tag_id, references: tags }
