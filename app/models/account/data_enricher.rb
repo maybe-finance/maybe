@@ -9,7 +9,8 @@ class Account::DataEnricher
 
   def run
     total_unenriched = account.entries.account_transactions
-      .where("enriched_at IS NULL OR merchant_id IS NULL OR category_id IS NULL")
+      .joins(:entryable)
+      .where("account_entries.enriched_at IS NULL OR account_transactions.merchant_id IS NULL OR account_transactions.category_id IS NULL")
       .count
 
     if total_unenriched > 0
@@ -25,7 +26,8 @@ class Account::DataEnricher
   def enrich_transaction_batch(batch_size = 50, offset = 0)
     candidates = account.entries.account_transactions
       .includes(entryable: [ :merchant, :category ])
-      .where("enriched_at IS NULL OR merchant_id IS NULL OR category_id IS NULL")
+      .joins(:entryable)
+      .where("account_entries.enriched_at IS NULL OR account_transactions.merchant_id IS NULL OR account_transactions.category_id IS NULL")
       .offset(offset)
       .limit(batch_size)
 
@@ -35,8 +37,6 @@ class Account::DataEnricher
 
     candidates.each do |entry|
       begin
-        next unless entry.name.present?
-
         info = self.class.synth_provider.enrich_transaction(entry.name).info
 
         next unless info.present?
