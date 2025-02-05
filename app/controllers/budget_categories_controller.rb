@@ -1,12 +1,12 @@
 class BudgetCategoriesController < ApplicationController
+  before_action :set_budget
+
   def index
-    @budget = Current.family.budgets.find(params[:budget_id])
+    @budget_categories = @budget.budget_categories.includes(:category)
     render layout: "wizard"
   end
 
   def show
-    @budget = Current.family.budgets.find(params[:budget_id])
-
     @recent_transactions = @budget.entries
 
     if params[:id] == BudgetCategory.uncategorized.id
@@ -23,13 +23,25 @@ class BudgetCategoriesController < ApplicationController
 
   def update
     @budget_category = Current.family.budget_categories.find(params[:id])
-    @budget_category.update!(budget_category_params)
 
-    redirect_to budget_budget_categories_path(@budget_category.budget)
+    if @budget_category.update(budget_category_params)
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to budget_budget_categories_path(@budget) }
+      end
+    else
+      render :index, status: :unprocessable_entity
+    end
   end
 
   private
     def budget_category_params
-      params.require(:budget_category).permit(:budgeted_spending)
+      params.require(:budget_category).permit(:budgeted_spending).tap do |params|
+        params[:budgeted_spending] = params[:budgeted_spending].presence || 0
+      end
+    end
+
+    def set_budget
+      @budget = Current.family.budgets.find(params[:budget_id])
     end
 end

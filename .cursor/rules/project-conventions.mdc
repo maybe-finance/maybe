@@ -8,6 +8,7 @@ This rule serves as high-level documentation for how the Maybe codebase is struc
 
 - Use this file to understand how the codebase works
 - Treat this rule/file as your "source of truth" when making code recommendations
+- When creating migrations, always use `rails g migration` instead of creating the file yourself
 
 ## Project Tech Stack
 
