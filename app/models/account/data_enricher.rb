@@ -9,8 +9,8 @@ class Account::DataEnricher
 
   def run
     total_unenriched = account.entries.account_transactions
-      .joins(:entryable)
-      .where("account_entries.enriched_at IS NULL OR account_transactions.merchant_id IS NULL OR account_transactions.category_id IS NULL")
+      .joins("JOIN account_transactions at ON at.id = account_entries.entryable_id AND account_entries.entryable_type = 'Account::Transaction'")
+      .where("account_entries.enriched_at IS NULL OR at.merchant_id IS NULL OR at.category_id IS NULL")
       .count
 
     if total_unenriched > 0
@@ -26,8 +26,8 @@ class Account::DataEnricher
   def enrich_transaction_batch(batch_size = 50, offset = 0)
     candidates = account.entries.account_transactions
       .includes(entryable: [ :merchant, :category ])
-      .joins(:entryable)
-      .where("account_entries.enriched_at IS NULL OR account_transactions.merchant_id IS NULL OR account_transactions.category_id IS NULL")
+      .joins("JOIN account_transactions at ON at.id = account_entries.entryable_id AND account_entries.entryable_type = 'Account::Transaction'")
+      .where("account_entries.enriched_at IS NULL OR at.merchant_id IS NULL OR at.category_id IS NULL")
       .offset(offset)
       .limit(batch_size)
 
