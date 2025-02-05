@@ -8,7 +8,7 @@
       <% end %>
     </div>
 
-    <main class="grow py-6 h-full <%= require_upgrade? ? "relative overflow-hidden" : "overflow-y-auto" %>">
+    <main class="<%= class_names("grow py-6 h-full", {"relative overflow-hidden" => require_upgrade?, "overflow-y-auto" => !require_upgrade?}) %>">
       <% if require_upgrade? %>
         <%= render "shared/subscribe_modal" %>
       <% end %>
