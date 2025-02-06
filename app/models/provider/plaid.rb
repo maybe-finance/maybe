@@ -143,6 +143,17 @@ class Provider::Plaid
     response.liabilities
   end
 
+  def get_institution(institution_id)
+    request = Plaid::InstitutionsGetByIdRequest.new({
+      institution_id: institution_id,
+      country_codes: country_codes,
+      options: {
+        include_optional_metadata: true
+      }
+    })
+    client.institutions_get_by_id(request)
+  end
+
   private
     TransactionSyncResponse = Struct.new :added, :modified, :removed, :cursor, keyword_init: true
     InvestmentsResponse = Struct.new :holdings, :transactions, :securities, keyword_init: true

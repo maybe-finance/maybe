@@ -7,8 +7,11 @@
   "full" => "w-full h-full"
 } %>
 
-<% if account.logo.attached? %>
-  <%= image_tag account.logo, class: size_classes[size] %>
+<% if account.plaid_account_id? %>
+  <% domain = URI.parse(account.plaid_account.plaid_item.institution_url).host.gsub(/^www\./, '') %>
+  <%= image_tag "https://logo.synthfinance.com/#{domain}", class: "rounded-full #{size_classes[size]}" %>
+<% elsif account.logo.attached? %>
+  <%= image_tag account.logo, class: "rounded-full #{size_classes[size]}" %>
 <% else %>
   <%= circle_logo(account.name, hex: account.accountable.color, size: size) %>
 <% end %>
