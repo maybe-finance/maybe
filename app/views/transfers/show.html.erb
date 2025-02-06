@@ -39,7 +39,7 @@
 
           <dl class="flex items-center gap-2 justify-between">
             <dt class="text-gray-500">Amount</dt>
-            <dd class="font-medium text-red-500"><%= format_money -@transfer.amount_abs %></dd>
+            <dd class="font-medium text-red-500"><%= format_money @transfer.outflow_transaction.entry.amount_money * -1 %></dd>
           </dl>
         </div>
 
@@ -61,7 +61,7 @@
 
           <dl class="flex items-center gap-2 justify-between">
             <dt class="text-gray-500">Amount</dt>
-            <dd class="font-medium text-green-500">+<%= format_money @transfer.amount_abs %></dd>
+            <dd class="font-medium text-green-500">+<%= format_money @transfer.inflow_transaction.entry.amount_money * -1 %></dd>
           </dl>
         </div>
       </div>

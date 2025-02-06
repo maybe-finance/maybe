@@ -1,5 +1,6 @@
 class Family < ApplicationRecord
-  include Plaidable, Syncable
+  include Plaidable, Syncable, AutoTransferMatchable
+  include Providable
 
   DATE_FORMATS = [
     [ "MM-DD-YYYY", "%m-%d-%Y" ],
@@ -12,8 +13,6 @@ class Family < ApplicationRecord
     [ "D/MM/YYYY", "%e/%m/%Y" ],
     [ "YYYY.MM.DD", "%Y.%m.%d" ]
   ].freeze
-
-  include Providable
 
   has_many :users, dependent: :destroy
   has_many :invitations, dependent: :destroy

@@ -5,7 +5,7 @@ class Account::Syncer
   end
 
   def run
-    account.auto_match_transfers!
+    account.family.auto_match_transfers!
 
     holdings = sync_holdings
     balances = sync_balances(holdings)

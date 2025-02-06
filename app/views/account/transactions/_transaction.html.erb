@@ -51,7 +51,7 @@
                   <% end %>
 
                   <% if transaction.transfer? %>
-                    <%= render "account/transactions/transfer_match", entry: entry %>
+                    <%= render "account/transactions/transfer_match", transaction: transaction %>
                   <% end %>
                 </div>
 
