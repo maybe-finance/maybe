@@ -26,10 +26,14 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   test "can sign out" do
     sign_in @user
+    session_record = @user.sessions.last
 
-    delete session_url(@user.sessions.order(:created_at).last)
+    delete session_url(session_record)
     assert_redirected_to new_session_path
     assert_equal "You have signed out successfully.", flash[:notice]
+
+    # Verify session is destroyed
+    assert_nil Session.find_by(id: session_record.id)
   end
 
   test "super admins can access the jobs page" do
@@ -41,5 +45,43 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   test "non-super admins cannot access the jobs page" do
     get good_job_url
     assert_response :not_found
+  end
+
+  test "creates session without MFA" do
+    post sessions_path, params: { email: @user.email, password: "password" }
+
+    assert_redirected_to root_path
+    assert Session.exists?(user_id: @user.id)
+  end
+
+  test "redirects to MFA verification when MFA enabled" do
+    @user.setup_mfa!
+    @user.enable_mfa!
+    @user.sessions.destroy_all # Clean up any existing sessions
+
+    post sessions_path, params: { email: @user.email, password: "password" }
+
+    assert_redirected_to verify_mfa_path
+    assert_equal @user.id, session[:mfa_user_id]
+    assert_not Session.exists?(user_id: @user.id)
+  end
+
+  test "rejects invalid credentials" do
+    @user.sessions.destroy_all # Clean up any existing sessions
+
+    post sessions_path, params: { email: @user.email, password: "wrong" }
+
+    assert_response :unprocessable_entity
+    assert_not Session.exists?(user_id: @user.id)
+  end
+
+  test "destroys session" do
+    sign_in @user
+    session_record = @user.sessions.last
+
+    delete session_path(session_record)
+
+    assert_redirected_to new_session_path
+    assert_nil Session.find_by(id: session_record.id)
   end
 end
