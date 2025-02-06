@@ -1,5 +1,5 @@
 class ImportsController < ApplicationController
-  before_action :set_import, only: %i[show publish destroy]
+  before_action :set_import, only: %i[show publish destroy revert]
 
   def publish
     @import.publish_later
@@ -29,6 +29,11 @@ class ImportsController < ApplicationController
     elsif !@import.publishable?
       redirect_to import_confirm_path(@import), alert: "Please finalize your mappings before proceeding."
     end
+  end
+
+  def revert
+    @import.revert_later
+    redirect_to imports_path, notice: "Import is reverting in the background."
   end
 
   def destroy

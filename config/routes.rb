@@ -57,6 +57,7 @@ Rails.application.routes.draw do
 
   resources :imports, only: %i[index new show create destroy] do
     post :publish, on: :member
+    put :revert, on: :member
 
     resource :upload, only: %i[show update], module: :import
     resource :configuration, only: %i[show update], module: :import

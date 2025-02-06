@@ -63,6 +63,8 @@ en:
       failed: Failed
       in_progress: In progress
       label: "%{type}: %{datetime}"
+      reverting: Reverting
+      revert_failed: Revert failed
       uploading: Processing rows
       view: View
     index:
