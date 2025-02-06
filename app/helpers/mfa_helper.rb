@@ -6,9 +6,9 @@ module MfaHelper
       standalone: true,
       use_path: true,
       svg_attributes: {
-        width: "228",
-        height: "228",
-        viewBox: "0 0 57 57"
+        width: "240",
+        height: "240",
+        viewBox: "0 0 65 65"
       }
     )
 
