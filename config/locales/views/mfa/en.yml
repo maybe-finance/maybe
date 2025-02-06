@@ -1,0 +1,35 @@
+---
+en:
+  mfa:
+    backup_codes:
+      backup_codes_description: Each code can only be used once. Keep these codes
+        safe and secure.
+      backup_codes_title: Your Backup Codes
+      continue: Continue to Security Settings
+      description: Store these backup codes in a safe place - you'll need them if
+        you lose access to your authenticator app
+      page_title: Backup Codes
+      title: Save Your Backup Codes
+    create:
+      invalid_code: Invalid verification code. Please try again.
+    disable:
+      success: Two-factor authentication has been disabled
+    new:
+      code_label: Verification Code
+      code_placeholder: Enter 6-digit code
+      description: Enhance your account security by setting up two-factor authentication
+      page_title: Two-Factor Authentication Setup
+      scan_description: Use an authenticator app like Google Authenticator or 1Password
+        to scan this QR code
+      scan_title: 1. Scan QR Code
+      title: Set Up Two-Factor Authentication
+      verify_button: Verify and Enable 2FA
+      verify_description: Enter the 6-digit code from your authenticator app
+      verify_title: 2. Enter Verification Code
+    verify:
+      description: Enter the code from your authenticator app to continue
+      page_title: Verify Two-Factor Authentication
+      title: Two-Factor Authentication
+      verify_button: Verify
+    verify_code:
+      invalid_code: Invalid authentication code. Please try again.

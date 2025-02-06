@@ -18,6 +18,7 @@ en:
       other_section_title: More
       preferences_label: Preferences
       profile_label: Account
+      security_label: Security
       self_hosting_label: Self hosting
       tags_label: Tags
       transactions_section_title: Transactions
@@ -49,27 +50,26 @@ en:
         timezone: Timezone
     profiles:
       destroy:
-        not_authorized: You are not authorized to remove members.
         cannot_remove_self: You cannot remove yourself from the account.
-        member_removed: Member was successfully removed.
         member_removal_failed: There was a problem removing the member.
+        member_removed: Member was successfully removed.
+        not_authorized: You are not authorized to remove members.
       show:
         confirm_delete:
           body: Are you sure you want to permanently delete your account? This action
             is irreversible.
           title: Delete account?
-        confirm_remove_member:
-          title: Remove Member
-          body: Are you sure you want to remove %{name} from your account?
-        remove_member: Remove Member
         confirm_remove_invitation:
-          title: Remove Invitation
           body: Are you sure you want to remove the invitation for %{email}?
-        remove_invitation: Remove Invitation
+          title: Remove Invitation
+        confirm_remove_member:
+          body: Are you sure you want to remove %{name} from your account?
+          title: Remove Member
         danger_zone_title: Danger Zone
         delete_account: Delete account
         delete_account_warning: Deleting your account will permanently remove all
           your data and cannot be undone.
+        email: Email
         first_name: First Name
         household_form_input_placeholder: Enter household name
         household_form_label: Household name
@@ -79,15 +79,16 @@ en:
         invitation_link: Invitation link
         invite_member: Add member
         last_name: Last Name
-        email: Email
         page_title: Account
         pending: Pending
         profile_subtitle: Customize how you appear on Maybe
         profile_title: Profile
+        remove_invitation: Remove Invitation
+        remove_member: Remove Member
         save: Save
+    securities:
+      show:
+        page_title: Security
     user_avatar_field:
       accepted_formats: JPG or PNG. 5MB max.
       choose: Choose
-  users:
-    update:
-      success: Profile updated successfully
