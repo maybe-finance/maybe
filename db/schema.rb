@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_06_151825) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_06_204404) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -55,16 +55,18 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_06_151825) do
   create_table "account_holdings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "account_id", null: false
     t.uuid "security_id", null: false
-    t.date "date"
-    t.decimal "qty", precision: 19, scale: 4
-    t.decimal "price", precision: 19, scale: 4
-    t.decimal "amount", precision: 19, scale: 4
-    t.string "currency"
+    t.date "date", null: false
+    t.decimal "qty", precision: 19, scale: 4, null: false
+    t.decimal "price", precision: 19, scale: 4, null: false
+    t.decimal "amount", precision: 19, scale: 4, null: false
+    t.string "currency", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id", "security_id", "date", "currency"], name: "idx_on_account_id_security_id_date_currency_234024c8e3", unique: true
     t.index ["account_id"], name: "index_account_holdings_on_account_id"
     t.index ["security_id"], name: "index_account_holdings_on_security_id"
+    t.check_constraint "qty >= 0::numeric AND price >= 0::numeric AND amount >= 0::numeric", name: "check_positive_values"
+    t.check_constraint "round(qty * price, 4) = round(amount, 4)", name: "check_amount_matches"
   end
 
   create_table "account_trades", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
