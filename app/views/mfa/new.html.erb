@@ -12,7 +12,7 @@
   <%= settings_section title: t(".scan_title"), subtitle: t(".scan_description") do %>
     <div class="space-y-6">
       <div>
-        <%= @qr_code.html_safe %>
+        <%= generate_mfa_qr_code(Current.user.provisioning_uri) %>
       </div>
 
       <div>

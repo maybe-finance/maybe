@@ -5,12 +5,6 @@ class MfaController < ApplicationController
   def new
     redirect_to root_path if Current.user.otp_required?
     Current.user.setup_mfa! unless Current.user.otp_secret.present?
-    @qr_code = RQRCode::QRCode.new(Current.user.provisioning_uri).as_svg(
-      color: "141414",
-      module_size: 4,
-      standalone: true,
-      use_path: true
-    )
   end
 
   def create
