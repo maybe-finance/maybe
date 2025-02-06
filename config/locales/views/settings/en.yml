@@ -6,9 +6,17 @@ en:
         page_title: Billing
         subscription_subtitle: Manage your subscription and billing details
         subscription_title: Manage subscription
+    securities:
+      show:
+        page_title: Security
+        mfa_title: Multi-factor authentication
+        mfa_description: Add an extra layer of security by setting up multi-factor authentication. 
+        mfa_enabled: Enabled
+        mfa_disabled: Disabled
     nav:
       accounts_label: Accounts
       billing_label: Billing
+      cancel: Cancel
       categories_label: Categories
       feedback_label: Feedback
       general_section_title: General
@@ -18,6 +26,7 @@ en:
       other_section_title: More
       preferences_label: Preferences
       profile_label: Account
+      security_label: Security
       self_hosting_label: Self hosting
       tags_label: Tags
       transactions_section_title: Transactions

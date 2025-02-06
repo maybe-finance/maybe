@@ -21,6 +21,9 @@
         <li>
           <%= sidebar_link_to t(".preferences_label"), settings_preferences_path, icon: "bolt" %>
         </li>
+        <li>
+          <%= sidebar_link_to t(".security_label"), settings_security_path, icon: "shield-check" %>
+        </li>
         <% if self_hosted? %>
           <li>
             <%= sidebar_link_to t(".self_hosting_label"), settings_hosting_path, icon: "database" %>

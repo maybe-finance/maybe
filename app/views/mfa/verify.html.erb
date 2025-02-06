@@ -1,0 +1,14 @@
+<%
+  header_title t(".title")
+  header_description t(".description")
+%>
+
+<%= styled_form_with url: verify_mfa_path, method: :post, class: "space-y-4" do |form| %>
+  <%= form.text_field :code,
+    required: true,
+    autofocus: true,
+    autocomplete: "one-time-code",
+    label: t(".page_title") %>
+
+  <%= form.submit t(".verify_button") %>
+<% end %>

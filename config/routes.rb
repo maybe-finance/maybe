@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  # MFA routes
+  resource :mfa, controller: "mfa", only: [ :new, :create ] do
+    get :verify
+    post :verify, to: "mfa#verify_code"
+    delete :disable
+  end
+
   mount GoodJob::Engine => "good_job"
 
   get "changelog", to: "pages#changelog"
@@ -25,6 +32,7 @@ Rails.application.routes.draw do
     resource :preferences, only: :show
     resource :hosting, only: %i[show update]
     resource :billing, only: :show
+    resource :security, only: :show
   end
 
   resource :subscription, only: %i[new show] do
