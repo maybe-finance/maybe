@@ -9,5 +9,15 @@ module Account::Entryable
 
   included do
     has_one :entry, as: :entryable, touch: true
+
+    scope :with_entry, -> { joins(:entry) }
+
+    scope :reverse_chronological, -> {
+      with_entry.merge(Account::Entry.reverse_chronological)
+    }
+
+    scope :chronological, -> {
+      with_entry.merge(Account::Entry.chronological)
+    }
   end
 end

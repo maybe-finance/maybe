@@ -1,43 +1,43 @@
-<%# locals: (entry:, selectable: true, balance_trend: nil) %>
+<%# locals: (entry:, balance_trend: nil, **) %>
+
+<% valuation = entry.entryable %>
 
 <% color = balance_trend&.trend&.color || "#D444F1" %>
 <% icon = balance_trend&.trend&.icon || "plus" %>
 
-<div class="p-4 grid grid-cols-12 items-center text-gray-900 text-sm font-medium">
-  <div class="col-span-8 flex items-center gap-4">
-    <% if selectable %>
-      <%= check_box_tag dom_id(entry, "selection"),
+<%= turbo_frame_tag dom_id(entry) do %>
+  <%= turbo_frame_tag dom_id(valuation) do %>
+    <div class="p-4 grid grid-cols-12 items-center text-gray-900 text-sm font-medium">
+      <div class="col-span-8 flex items-center gap-4">
+        <%= check_box_tag dom_id(entry, "selection"),
                         class: "maybe-checkbox maybe-checkbox--light",
                         data: { id: entry.id, "bulk-select-target": "row", action: "bulk-select#toggleRowSelection" } %>
-    <% end %>
 
-    <div class="flex items-center gap-3">
-      <%= tag.div class: "w-6 h-6 rounded-full p-1.5 flex items-center justify-center", style: mixed_hex_styles(color) do %>
-        <%= lucide_icon icon, class: "w-4 h-4 shrink-0" %>
-      <% end %>
+        <div class="flex items-center gap-3">
+          <%= tag.div class: "w-6 h-6 rounded-full p-1.5 flex items-center justify-center", style: mixed_hex_styles(color) do %>
+            <%= lucide_icon icon, class: "w-4 h-4 shrink-0" %>
+          <% end %>
 
-      <div class="truncate text-gray-900">
-        <% if entry.new_record? %>
-          <%= content_tag :p, entry.display_name %>
-        <% else %>
-          <%= link_to entry.display_name,
+          <div class="truncate text-gray-900">
+            <%= link_to entry.display_name,
                         account_entry_path(entry),
                         data: { turbo_frame: "drawer", turbo_prefetch: false },
                         class: "hover:underline hover:text-gray-800" %>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-span-2 justify-self-end font-medium text-sm">
+        <% if balance_trend&.trend %>
+          <%= tag.span format_money(balance_trend.trend.value), style: "color: #{balance_trend.trend.color}" %>
+        <% else %>
+          <%= tag.span "--", class: "text-gray-400" %>
         <% end %>
       </div>
+
+      <div class="col-span-2 justify-self-end">
+        <%= tag.p format_money(entry.amount_money), class: "font-medium text-sm text-gray-900" %>
+      </div>
     </div>
-  </div>
-
-  <div class="col-span-2 justify-self-end font-medium text-sm">
-    <% if balance_trend&.trend %>
-      <%= tag.span format_money(balance_trend.trend.value), style: "color: #{balance_trend.trend.color}" %>
-    <% else %>
-      <%= tag.span "--", class: "text-gray-400" %>
-    <% end %>
-  </div>
-
-  <div class="col-span-2 justify-self-end">
-    <%= tag.p format_money(entry.amount_money), class: "font-medium text-sm text-gray-900" %>
-  </div>
-</div>
+  <% end %>
+<% end %>

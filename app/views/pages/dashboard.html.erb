@@ -184,14 +184,14 @@
     <section class="w-full">
       <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl space-y-4">
         <h2 class="text-lg font-medium text-gray-900"><%= t(".transactions") %></h2>
-        <% if @transaction_entries.empty? %>
+        <% if @transactions.empty? %>
           <div class="text-gray-500 flex items-center justify-center py-12">
             <p><%= t(".no_transactions") %></p>
           </div>
         <% else %>
           <div class="text-gray-500 p-1 space-y-1 bg-gray-25 rounded-xl">
-            <%= entries_by_date(@transaction_entries, selectable: false) do |entries, _transfers| %>
-              <%= render entries, selectable: false %>
+            <%= entries_by_date(@transactions.map(&:entry)) do |entries| %>
+              <%= render entries %>
             <% end %>
 
             <p class="py-2 text-sm text-center"><%= link_to t(".view_all"), transactions_path %></p>

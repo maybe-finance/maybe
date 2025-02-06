@@ -159,25 +159,5 @@ class Account::Entry < ApplicationRecord
 
       all.size
     end
-
-    def stats(currency = "USD")
-      result = all
-        .incomes_and_expenses
-        .joins(sanitize_sql_array([ "LEFT JOIN exchange_rates er ON account_entries.date = er.date AND account_entries.currency = er.from_currency AND er.to_currency = ?", currency ]))
-        .select(
-          "COUNT(*) AS count",
-          "SUM(CASE WHEN account_entries.amount < 0 THEN (account_entries.amount * COALESCE(er.rate, 1)) ELSE 0 END) AS income_total",
-          "SUM(CASE WHEN account_entries.amount > 0 THEN (account_entries.amount * COALESCE(er.rate, 1)) ELSE 0 END) AS expense_total"
-        )
-        .to_a
-        .first
-
-      Stats.new(
-        currency: currency,
-        count: result.count,
-        income_total: result.income_total ? result.income_total * -1 : 0,
-        expense_total: result.expense_total || 0
-      )
-    end
   end
 end

@@ -28,11 +28,9 @@
           <p class="col-span-2 justify-self-end">amount</p>
         </div>
         <div class="space-y-6">
-          <%= entries_by_date(@transaction_entries, transfers: @transfers, totals: true) do |entries, transfers| %>
-            <%= render partial: "transfers/transfer", collection: transfers %>
-
-            <%# Render regular entries %>
-            <%= render partial: "account/entries/entry", collection: entries.reject { |e| e.entryable.transfer? } %>
+          <%= entries_by_date(@transactions.map(&:entry), totals: true) do |entries| %>
+            <%# Only render the outflow side of transfers to avoid duplicate entries %>
+            <%= render partial: "account/entries/entry", collection: entries.reject { |e| e.entryable.transfer_as_inflow.present? } %>
           <% end %>
         </div>
       </div>
