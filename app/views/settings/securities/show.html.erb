@@ -14,10 +14,10 @@
 
           <div class="text-sm space-y-1">
             <% if Current.user.otp_required? %>
-              <p class="text-gray-900">Two-factor authentication is <span class="font-medium">enabled</span></p>
+              <p class="text-gray-900">Two-factor authentication is <span class="font-medium text-green-600">enabled</span></p>
               <p class="text-gray-500">Your account is protected with an additional layer of security.</p>
             <% else %>
-              <p class="text-gray-900">Two-factor authentication is <span class="font-medium">disabled</span></p>
+              <p class="text-gray-900">Two-factor authentication is <span class="font-medium text-red-600">disabled</span></p>
               <p class="text-gray-500">Enable 2FA to add an extra layer of security to your account.</p>
             <% end %>
           </div>
