@@ -19,12 +19,8 @@ class MfaController < ApplicationController
   end
 
   def verify
-    if Current.session
-      redirect_to root_path
-    else
-      @user = User.find_by(id: session[:mfa_user_id])
-      redirect_to new_session_path unless @user
-    end
+    @user = User.find_by(id: session[:mfa_user_id])
+    redirect_to new_session_path unless @user
   end
 
   def verify_code

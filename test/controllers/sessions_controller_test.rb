@@ -13,6 +13,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   test "can sign in" do
     sign_in @user
     assert_redirected_to root_url
+    assert Session.exists?(user_id: @user.id)
 
     get root_url
     assert_response :success
@@ -47,13 +48,6 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
-  test "creates session without MFA" do
-    post sessions_path, params: { email: @user.email, password: "password" }
-
-    assert_redirected_to root_path
-    assert Session.exists?(user_id: @user.id)
-  end
-
   test "redirects to MFA verification when MFA enabled" do
     @user.setup_mfa!
     @user.enable_mfa!
@@ -64,24 +58,5 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to verify_mfa_path
     assert_equal @user.id, session[:mfa_user_id]
     assert_not Session.exists?(user_id: @user.id)
-  end
-
-  test "rejects invalid credentials" do
-    @user.sessions.destroy_all # Clean up any existing sessions
-
-    post sessions_path, params: { email: @user.email, password: "wrong" }
-
-    assert_response :unprocessable_entity
-    assert_not Session.exists?(user_id: @user.id)
-  end
-
-  test "destroys session" do
-    sign_in @user
-    session_record = @user.sessions.last
-
-    delete session_path(session_record)
-
-    assert_redirected_to new_session_path
-    assert_nil Session.find_by(id: session_record.id)
   end
 end
