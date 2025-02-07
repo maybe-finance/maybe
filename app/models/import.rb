@@ -27,7 +27,6 @@ class Import < ApplicationRecord
   validates :type, inclusion: { in: TYPES }
   validates :col_sep, inclusion: { in: [ ",", ";" ] }
   validates :signage_convention, inclusion: { in: SIGNAGE_CONVENTIONS }
-  validates :currency, presence: true
   validates :number_format, presence: true, inclusion: { in: NUMBER_FORMATS.keys }
 
   has_many :rows, dependent: :destroy
