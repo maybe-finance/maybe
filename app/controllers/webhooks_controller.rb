@@ -11,6 +11,7 @@ class WebhooksController < ApplicationController
 
     render json: { received: true }, status: :ok
   rescue => error
+    Sentry.capture_exception(error)
     render json: { error: "Invalid webhook: #{error.message}" }, status: :bad_request
   end
 
@@ -33,10 +34,12 @@ class WebhooksController < ApplicationController
         Rails.logger.info "Unhandled event type: #{event.type}"
       end
 
-    rescue JSON::ParserError
+    rescue JSON::ParserError => error
+      Sentry.capture_exception(error)
       render json: { error: "Invalid payload" }, status: :bad_request
       return
-    rescue Stripe::SignatureVerificationError
+    rescue Stripe::SignatureVerificationError => error
+      Sentry.capture_exception(error)
       render json: { error: "Invalid signature" }, status: :bad_request
       return
     end
