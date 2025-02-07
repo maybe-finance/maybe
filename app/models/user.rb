@@ -110,6 +110,41 @@ class User < ApplicationRecord
     end
   end
 
+  # MFA
+  def setup_mfa!
+    update!(
+      otp_secret: ROTP::Base32.random(32),
+      otp_required: false,
+      otp_backup_codes: []
+    )
+  end
+
+  def enable_mfa!
+    update!(
+      otp_required: true,
+      otp_backup_codes: generate_backup_codes
+    )
+  end
+
+  def disable_mfa!
+    update!(
+      otp_secret: nil,
+      otp_required: false,
+      otp_backup_codes: []
+    )
+  end
+
+  def verify_otp?(code)
+    return false if otp_secret.blank?
+    return true if verify_backup_code?(code)
+    totp.verify(code, drift_behind: 15)
+  end
+
+  def provisioning_uri
+    return nil unless otp_secret.present?
+    totp.provisioning_uri(email)
+  end
+
   private
     def ensure_valid_profile_image
       return unless profile_image.attached?
@@ -132,5 +167,27 @@ class User < ApplicationRecord
       if profile_image.attached? && profile_image.byte_size > 10.megabytes
         errors.add(:profile_image, :invalid_file_size, max_megabytes: 10)
       end
+    end
+
+    def totp
+      ROTP::TOTP.new(otp_secret, issuer: "Maybe Finance")
+    end
+
+    def verify_backup_code?(code)
+      return false if otp_backup_codes.blank?
+
+      # Find and remove the used backup code
+      if (index = otp_backup_codes.index(code))
+        remaining_codes = otp_backup_codes.dup
+        remaining_codes.delete_at(index)
+        update_column(:otp_backup_codes, remaining_codes)
+        true
+      else
+        false
+      end
+    end
+
+    def generate_backup_codes
+      8.times.map { SecureRandom.hex(4) }
     end
 end

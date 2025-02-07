@@ -54,11 +54,11 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_06_003115) do
   create_table "account_holdings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "account_id", null: false
     t.uuid "security_id", null: false
-    t.date "date"
-    t.decimal "qty", precision: 19, scale: 4
-    t.decimal "price", precision: 19, scale: 4
-    t.decimal "amount", precision: 19, scale: 4
-    t.string "currency"
+    t.date "date", null: false
+    t.decimal "qty", precision: 19, scale: 4, null: false
+    t.decimal "price", precision: 19, scale: 4, null: false
+    t.decimal "amount", precision: 19, scale: 4, null: false
+    t.string "currency", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id", "security_id", "date", "currency"], name: "idx_on_account_id_security_id_date_currency_234024c8e3", unique: true
@@ -516,6 +516,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_06_003115) do
     t.string "billed_products", default: [], array: true
     t.datetime "last_synced_at"
     t.string "plaid_region", default: "us", null: false
+    t.string "institution_url"
+    t.string "institution_id"
+    t.string "institution_color"
     t.index ["family_id"], name: "index_plaid_items_on_family_id"
   end
 
@@ -662,8 +665,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_06_003115) do
     t.boolean "active", default: true, null: false
     t.datetime "onboarded_at"
     t.string "unconfirmed_email"
+    t.string "otp_secret"
+    t.boolean "otp_required", default: false, null: false
+    t.string "otp_backup_codes", default: [], array: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["family_id"], name: "index_users_on_family_id"
+    t.index ["otp_secret"], name: "index_users_on_otp_secret", unique: true, where: "(otp_secret IS NOT NULL)"
   end
 
   create_table "vehicles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

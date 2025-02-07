@@ -62,6 +62,20 @@ class PlaidItem < ApplicationRecord
       item = plaid_provider.get_item(access_token).item
       update!(available_products: item.available_products, billed_products: item.billed_products)
 
+      # Fetch and store institution details
+      if item.institution_id.present?
+        begin
+          institution = plaid_provider.get_institution(item.institution_id)
+          update!(
+            institution_id: item.institution_id,
+            institution_url: institution.institution.url,
+            institution_color: institution.institution.primary_color
+          )
+        rescue Plaid::ApiError => e
+          Rails.logger.warn("Error fetching institution details for item #{id}: #{e.message}")
+        end
+      end
+
       fetched_accounts = plaid_provider.get_item_accounts(self).accounts
       data[:accounts] = fetched_accounts || []
 

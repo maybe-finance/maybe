@@ -3,9 +3,7 @@
 <%= turbo_frame_tag dom_id(account) do %>
   <div class="p-4 flex items-center justify-between gap-3 group/account">
     <div class="flex items-center gap-3">
-      <div class="w-8 h-8 flex items-center justify-center rounded-full text-xs font-medium <%= account.is_active ? "bg-blue-500/10 text-blue-500" : "bg-gray-500/10 text-gray-500" %>">
-        <%= account.name[0].upcase %>
-      </div>
+      <%= render "accounts/logo", account: account, size: "md" %>
 
       <div>
         <% if account.scheduled_for_deletion? %>

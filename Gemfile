@@ -55,6 +55,8 @@ gem "redcarpet"
 gem "stripe"
 gem "intercom-rails"
 gem "plaid"
+gem "rotp", "~> 6.3"
+gem "rqrcode", "~> 2.2"
 
 group :development, :test do
   gem "debug", platforms: %i[mri windows]

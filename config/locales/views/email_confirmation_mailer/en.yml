@@ -2,8 +2,9 @@
 en:
   email_confirmation_mailer:
     confirmation_email:
-      subject: "Maybe: Confirm your email change"
-      greeting: "Hello!"
-      body: "You recently requested to change your email address. Click the button below to confirm this change."
-      cta: "Confirm email change"
-      expiry_notice: "This link will expire in %{hours} hours." 
+      body: You recently requested to change your email address. Click the button
+        below to confirm this change.
+      cta: Confirm email change
+      expiry_notice: This link will expire in %{hours} hours.
+      greeting: Hello!
+      subject: 'Maybe: Confirm your email change'

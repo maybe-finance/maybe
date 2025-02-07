@@ -19,6 +19,10 @@ module ApplicationHelper
     content_for(:header_title) { page_title }
   end
 
+  def header_description(page_description)
+    content_for(:header_description) { page_description }
+  end
+
   def family_notifications_stream
     turbo_stream_from [ Current.family, :notifications ] if Current.family
   end

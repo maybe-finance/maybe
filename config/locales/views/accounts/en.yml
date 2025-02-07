@@ -76,5 +76,6 @@ en:
       success: "%{type} account updated"
   email_confirmations:
     new:
-      success_login: "Your email has been confirmed. Please log in with your new email address."
-      invalid_token: "Invalid or expired confirmation link."
+      invalid_token: Invalid or expired confirmation link.
+      success_login: Your email has been confirmed. Please log in with your new email
+        address.
