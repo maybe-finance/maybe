@@ -6,8 +6,25 @@ class WebhooksController < ApplicationController
     webhook_body = request.body.read
     plaid_verification_header = request.headers["Plaid-Verification"]
 
-    Provider::Plaid.validate_webhook!(plaid_verification_header, webhook_body)
-    Provider::Plaid.process_webhook(webhook_body)
+    client = Provider::Plaid.new(Rails.application.config.plaid, :us)
+
+    client.validate_webhook!(plaid_verification_header, webhook_body)
+    client.process_webhook(webhook_body)
+
+    render json: { received: true }, status: :ok
+  rescue => error
+    Sentry.capture_exception(error)
+    render json: { error: "Invalid webhook: #{error.message}" }, status: :bad_request
+  end
+
+  def plaid_eu
+    webhook_body = request.body.read
+    plaid_verification_header = request.headers["Plaid-Verification"]
+
+    client = Provider::Plaid.new(Rails.application.config.plaid_eu, :eu)
+
+    client.validate_webhook!(plaid_verification_header, webhook_body)
+    client.process_webhook(webhook_body)
 
     render json: { received: true }, status: :ok
   rescue => error

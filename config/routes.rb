@@ -182,6 +182,7 @@ Rails.application.routes.draw do
 
   namespace :webhooks do
     post "plaid"
+    post "plaid_eu"
     post "stripe"
   end
 
