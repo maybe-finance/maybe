@@ -1,0 +1,29 @@
+<%
+  header_title t(".title")
+  header_description t(".description")
+%>
+
+<% content_for :sidebar do %>
+  <%= render "settings/nav" %>
+<% end %>
+
+<div class="space-y-4">
+  <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
+  <%= settings_section title: t(".backup_codes_title"), subtitle: t(".backup_codes_description") do %>
+    <div class="space-y-6">
+      <div class="grid grid-cols-2 gap-4">
+        <% @backup_codes.each do |code| %>
+          <div class="p-3 bg-gray-100 rounded-lg font-mono text-lg">
+            <%= code %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="mt-6">
+        <%= link_to t(".continue"), settings_security_path, class: "w-full btn btn--primary" %>
+      </div>
+    </div>
+  <% end %>
+
+  <%= settings_nav_footer %>
+</div> 

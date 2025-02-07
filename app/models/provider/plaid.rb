@@ -4,63 +4,65 @@ class Provider::Plaid
   MAYBE_SUPPORTED_PLAID_PRODUCTS = %w[transactions investments liabilities].freeze
   MAX_HISTORY_DAYS = Rails.env.development? ? 90 : 730
 
-  class << self
-    def process_webhook(webhook_body)
-      parsed = JSON.parse(webhook_body)
-      type = parsed["webhook_type"]
-      code = parsed["webhook_code"]
-
-      item = PlaidItem.find_by(plaid_id: parsed["item_id"])
-
-      case [ type, code ]
-      when [ "TRANSACTIONS", "SYNC_UPDATES_AVAILABLE" ]
-        item.sync_later
-      when [ "INVESTMENTS_TRANSACTIONS", "DEFAULT_UPDATE" ]
-        item.sync_later
-      when [ "HOLDINGS", "DEFAULT_UPDATE" ]
-        item.sync_later
-      else
-        Rails.logger.warn("Unhandled Plaid webhook type: #{type}:#{code}")
-      end
-    end
-
-    def validate_webhook!(verification_header, raw_body)
-      jwks_loader = ->(options) do
-        key_id = options[:kid]
-
-        jwk_response = client.webhook_verification_key_get(
-          Plaid::WebhookVerificationKeyGetRequest.new(key_id: key_id)
-        )
-
-        jwks = JWT::JWK::Set.new([ jwk_response.key.to_hash ])
-
-        jwks.filter! { |key| key[:use] == "sig" }
-        jwks
-      end
-
-      payload, _header = JWT.decode(
-        verification_header, nil, true,
-        {
-          algorithms: [ "ES256" ],
-          jwks: jwks_loader,
-          verify_expiration: false
-        }
-      )
-
-      issued_at = Time.at(payload["iat"])
-      raise JWT::VerificationError, "Webhook is too old" if Time.now - issued_at > 5.minutes
-
-      expected_hash = payload["request_body_sha256"]
-      actual_hash = Digest::SHA256.hexdigest(raw_body)
-      raise JWT::VerificationError, "Invalid webhook body hash" unless ActiveSupport::SecurityUtils.secure_compare(expected_hash, actual_hash)
-    end
-  end
-
-  def initialize(config, region)
+  def initialize(config, region: :us)
     @client = Plaid::PlaidApi.new(
       Plaid::ApiClient.new(config)
     )
     @region = region
+  end
+
+  def process_webhook(webhook_body)
+    parsed = JSON.parse(webhook_body)
+
+    type = parsed["webhook_type"]
+    code = parsed["webhook_code"]
+
+    item = PlaidItem.find_by(plaid_id: parsed["item_id"])
+
+    case [ type, code ]
+    when [ "TRANSACTIONS", "SYNC_UPDATES_AVAILABLE" ]
+      item.sync_later
+    when [ "INVESTMENTS_TRANSACTIONS", "DEFAULT_UPDATE" ]
+      item.sync_later
+    when [ "HOLDINGS", "DEFAULT_UPDATE" ]
+      item.sync_later
+    else
+      Rails.logger.warn("Unhandled Plaid webhook type: #{type}:#{code}")
+    end
+  rescue => error
+    # Processing errors shouldn't return a 400 to Plaid since they are internal, so capture silently
+    Sentry.capture_exception(error)
+  end
+
+  def validate_webhook!(verification_header, raw_body)
+    jwks_loader = ->(options) do
+      key_id = options[:kid]
+
+      jwk_response = client.webhook_verification_key_get(
+        Plaid::WebhookVerificationKeyGetRequest.new(key_id: key_id)
+      )
+
+      jwks = JWT::JWK::Set.new([ jwk_response.key.to_hash ])
+
+      jwks.filter! { |key| key[:use] == "sig" }
+      jwks
+    end
+
+    payload, _header = JWT.decode(
+      verification_header, nil, true,
+      {
+        algorithms: [ "ES256" ],
+        jwks: jwks_loader,
+        verify_expiration: false
+      }
+    )
+
+    issued_at = Time.at(payload["iat"])
+    raise JWT::VerificationError, "Webhook is too old" if Time.now - issued_at > 5.minutes
+
+    expected_hash = payload["request_body_sha256"]
+    actual_hash = Digest::SHA256.hexdigest(raw_body)
+    raise JWT::VerificationError, "Invalid webhook body hash" unless ActiveSupport::SecurityUtils.secure_compare(expected_hash, actual_hash)
   end
 
   def get_link_token(user_id:, webhooks_url:, redirect_url:, accountable_type: nil)
@@ -141,6 +143,17 @@ class Provider::Plaid
     request = Plaid::LiabilitiesGetRequest.new({ access_token: item.access_token })
     response = client.liabilities_get(request)
     response.liabilities
+  end
+
+  def get_institution(institution_id)
+    request = Plaid::InstitutionsGetByIdRequest.new({
+      institution_id: institution_id,
+      country_codes: country_codes,
+      options: {
+        include_optional_metadata: true
+      }
+    })
+    client.institutions_get_by_id(request)
   end
 
   private

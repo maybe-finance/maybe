@@ -5,11 +5,12 @@ en:
       invite_code_settings:
         description: Every new user that joins your instance of Maybe can only do
           so via an invite code
+        email_confirmation_description: When enabled, users must confirm their email
+          address when changing it.
+        email_confirmation_title: Require email confirmation
         generate_tokens: Generate new code
         generated_tokens: Generated codes
         title: Require invite code for signup
-        email_confirmation_title: Require email confirmation
-        email_confirmation_description: When enabled, users must confirm their email address when changing it.
       provider_settings:
         description: Configure settings for your hosting provider
         render_deploy_hook_label: Render Deploy Hook URL

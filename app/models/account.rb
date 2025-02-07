@@ -32,6 +32,11 @@ class Account < ApplicationRecord
 
   accepts_nested_attributes_for :accountable, update_only: true
 
+  def institution_domain
+    return nil unless plaid_account&.plaid_item&.institution_url.present?
+    URI.parse(plaid_account.plaid_item.institution_url).host.gsub(/^www\./, "")
+  end
+
   class << self
     def by_group(period: Period.all, currency: Money.default_currency.iso_code)
       grouped_accounts = { assets: ValueGroup.new("Assets", currency), liabilities: ValueGroup.new("Liabilities", currency) }

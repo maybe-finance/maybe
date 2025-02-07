@@ -6,11 +6,29 @@ class WebhooksController < ApplicationController
     webhook_body = request.body.read
     plaid_verification_header = request.headers["Plaid-Verification"]
 
-    Provider::Plaid.validate_webhook!(plaid_verification_header, webhook_body)
-    Provider::Plaid.process_webhook(webhook_body)
+    client = Provider::Plaid.new(Rails.application.config.plaid, region: :us)
+
+    client.validate_webhook!(plaid_verification_header, webhook_body)
+    client.process_webhook(webhook_body)
 
     render json: { received: true }, status: :ok
   rescue => error
+    Sentry.capture_exception(error)
+    render json: { error: "Invalid webhook: #{error.message}" }, status: :bad_request
+  end
+
+  def plaid_eu
+    webhook_body = request.body.read
+    plaid_verification_header = request.headers["Plaid-Verification"]
+
+    client = Provider::Plaid.new(Rails.application.config.plaid_eu, region: :eu)
+
+    client.validate_webhook!(plaid_verification_header, webhook_body)
+    client.process_webhook(webhook_body)
+
+    render json: { received: true }, status: :ok
+  rescue => error
+    Sentry.capture_exception(error)
     render json: { error: "Invalid webhook: #{error.message}" }, status: :bad_request
   end
 
@@ -33,10 +51,12 @@ class WebhooksController < ApplicationController
         Rails.logger.info "Unhandled event type: #{event.type}"
       end
 
-    rescue JSON::ParserError
+    rescue JSON::ParserError => error
+      Sentry.capture_exception(error)
       render json: { error: "Invalid payload" }, status: :bad_request
       return
-    rescue Stripe::SignatureVerificationError
+    rescue Stripe::SignatureVerificationError => error
+      Sentry.capture_exception(error)
       render json: { error: "Invalid signature" }, status: :bad_request
       return
     end

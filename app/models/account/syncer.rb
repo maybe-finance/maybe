@@ -99,6 +99,8 @@ class Account::Syncer
         account.holdings.build(
           security: holding.security,
           date: holding.date,
+          qty: holding.qty,
+          price: exchange_rate.rate * holding.price,
           amount: exchange_rate.rate * holding.amount,
           currency: to_currency
         )

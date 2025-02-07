@@ -1,0 +1,45 @@
+<%
+  header_title t(".title")
+  header_description t(".description")
+%>
+
+<% content_for :sidebar do %>
+  <%= render "settings/nav" %>
+<% end %>
+
+<div class="space-y-4">
+  <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
+  <%= settings_section title: t(".scan_title"), subtitle: t(".scan_description") do %>
+    <div class="space-y-6">
+      <div>
+        <%= generate_mfa_qr_code(Current.user.provisioning_uri) %>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-medium leading-6 text-gray-900"><%= t(".verify_title") %></h3>
+        <div class="mt-2 text-sm text-gray-500">
+          <p><%= t(".verify_description") %></p>
+        </div>
+      </div>
+
+      <%= styled_form_with url: mfa_path, method: :post, class: "mt-5", data: { turbo: false } do |f| %>
+        <div>
+          <%= f.text_field :code,
+            required: true,
+            autofocus: true,
+            autocomplete: "one-time-code",
+            inputmode: "numeric",
+            pattern: "[0-9]*",
+            label: t(".code_label"),
+            placeholder: t(".code_placeholder") %>
+
+          <div class="flex justify-end mt-4">
+            <%= f.submit t(".verify_button"), class: "bg-gray-900 hover:bg-gray-700 cursor-pointer text-white rounded-lg px-3 py-2" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%= settings_nav_footer %>
+</div>

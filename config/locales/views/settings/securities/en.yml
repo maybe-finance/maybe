@@ -1,0 +1,12 @@
+---
+en:
+  settings:
+    securities:
+      show:
+        disable_mfa: Disable 2FA
+        disable_mfa_confirm: Are you sure you want to disable two-factor authentication?
+          This will make your account less secure.
+        enable_mfa: Enable 2FA
+        mfa_description: Add an extra layer of security to your account by requiring
+          a code from your authenticator app when signing in
+        mfa_title: Two-Factor Authentication
