@@ -6,7 +6,7 @@ class Security < ApplicationRecord
   has_many :prices, dependent: :destroy
 
   validates :ticker, presence: true
-  validates :ticker, uniqueness: { scope: :exchange_mic, case_sensitive: false }
+  validates :ticker, uniqueness: { scope: [ :exchange_mic, :exchange_operating_mic, :unknown ], case_sensitive: false, conditions: -> { where("exchange_mic IS NOT NULL OR exchange_operating_mic IS NOT NULL OR unknown = true") } }
 
   class << self
     def search(query)
@@ -31,6 +31,7 @@ class Security < ApplicationRecord
       logo_url: logo_url,
       exchange_acronym: exchange_acronym,
       exchange_mic: exchange_mic,
+      exchange_operating_mic: exchange_operating_mic,
       exchange_country_code: country_code
     )
   end

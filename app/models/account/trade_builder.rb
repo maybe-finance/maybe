@@ -111,9 +111,9 @@ class Account::TradeBuilder
     end
 
     def security
-      ticker_symbol, exchange_mic, exchange_acronym, exchange_country_code = ticker.split("|")
+      ticker_symbol, exchange_mic, exchange_acronym, exchange_country_code, exchange_operating_mic = ticker.split("|")
 
-      security = Security.find_or_create_by(ticker: ticker_symbol, exchange_mic: exchange_mic, country_code: exchange_country_code)
+      security = Security.find_or_create_by(ticker: ticker_symbol, exchange_mic: exchange_mic, country_code: exchange_country_code, exchange_operating_mic: exchange_operating_mic)
       security.update(exchange_acronym: exchange_acronym)
 
       FetchSecurityInfoJob.perform_later(security.id)
