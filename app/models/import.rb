@@ -1,6 +1,12 @@
 class Import < ApplicationRecord
   TYPES = %w[TransactionImport TradeImport AccountImport MintImport].freeze
   SIGNAGE_CONVENTIONS = %w[inflows_positive inflows_negative]
+  NUMBER_FORMATS = {
+    "1,234.56" => { separator: ".", delimiter: "," },  # US/UK/Asia
+    "1.234,56" => { separator: ",", delimiter: "." },  # Most of Europe
+    "1 234,56" => { separator: ",", delimiter: " " },  # French/Scandinavian
+    "1,234"    => { separator: "",  delimiter: "," }   # Zero-decimal currencies like JPY
+  }.freeze
 
   belongs_to :family
 
@@ -11,6 +17,8 @@ class Import < ApplicationRecord
   validates :type, inclusion: { in: TYPES }
   validates :col_sep, inclusion: { in: [ ",", ";" ] }
   validates :signage_convention, inclusion: { in: SIGNAGE_CONVENTIONS }
+  validates :currency, presence: true
+  validates :number_format, inclusion: { in: NUMBER_FORMATS.keys }
 
   has_many :rows, dependent: :destroy
   has_many :mappings, dependent: :destroy
@@ -144,7 +152,56 @@ class Import < ApplicationRecord
     end
 
     def sanitize_number(value)
-      return "" if value.nil?
-      value.gsub(/[^\d.\-]/, "")
+      # Special case: nil or empty values remain empty strings
+      return "" if value.nil? || value.to_s.strip.empty?
+
+      format = NUMBER_FORMATS[number_format] || NUMBER_FORMATS["1,234.56"]
+      value = value.to_s.strip
+
+      # Remove any currency symbols or other non-numeric characters except the format's delimiter and separator
+      allowed_chars = [ format[:delimiter], format[:separator], "-" ].compact
+      sanitized = value.gsub(/[^#{Regexp.escape(allowed_chars.join)}0-9]/, "")
+
+      # Return empty string if no digits present (non-numeric input)
+      return "" unless sanitized.match?(/[0-9]/)
+
+      # Convert to standard format (period as decimal separator, no thousands delimiter)
+      if format[:separator].present?
+        # Replace delimiter with nothing first, then replace separator with period
+        sanitized = sanitized.gsub(format[:delimiter], "").gsub(format[:separator], ".")
+      else
+        # For zero-decimal currencies, just remove the delimiter
+        sanitized = sanitized.gsub(format[:delimiter], "")
+      end
+
+      # Extract sign for later
+      is_negative = sanitized.count("-") > 0
+      sanitized = sanitized.delete("-")
+
+      # Handle decimal points
+      case sanitized.count(".")
+      when 0
+        # No decimal point, nothing to do
+      when 1
+        # Single decimal point - handle edge cases
+        if sanitized == "."
+          return ""  # Just a decimal point, treat as non-numeric
+        end
+        # Add leading/trailing zeros if needed
+        sanitized = "0" + sanitized if sanitized.start_with?(".")
+        sanitized += "0" if sanitized.end_with?(".")
+      else
+        # Multiple decimal points - take everything before first decimal and first decimal place only
+        parts = sanitized.split(".")
+        sanitized = parts[0] + "." + (parts[1] || "")
+      end
+
+      # Reapply negative sign if present
+      sanitized = "-" + sanitized if is_negative
+
+      # Final validation - should look like a valid number now
+      return "" unless sanitized.match?(/\A-?\d+\.?\d*\z/)
+
+      sanitized
     end
 end
