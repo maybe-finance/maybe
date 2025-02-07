@@ -18,7 +18,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_07_194638) do
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "account_status", ["ok", "syncing", "error"]
-  create_enum "import_status", ["pending", "importing", "complete", "failed"]
 
   create_table "account_balances", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "account_id", null: false
@@ -391,7 +390,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_07_194638) do
 
   create_table "imports", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.jsonb "column_mappings"
-    t.enum "status", default: "pending", enum_type: "import_status"
+    t.string "status"
     t.string "raw_file_str"
     t.string "normalized_csv_str"
     t.datetime "created_at", null: false

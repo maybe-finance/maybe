@@ -24,7 +24,7 @@ class Demo::Generator
     puts "Data cleared"
 
     family_names.each_with_index do |family_name, index|
-      create_family_and_user!(family_name, "user#{index == 0 ? "" : index + 1}@maybe.local", data_enrichment_enabled: index == 0)
+      create_family_and_user!(family_name, "user#{index == 0 ? "" : index + 1}@maybe.local")
     end
 
     puts "Users reset"
