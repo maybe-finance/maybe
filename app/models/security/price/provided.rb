@@ -8,6 +8,7 @@ module Security::Price::Provided
 
       def fetch_price_from_provider(security:, date:, cache: false)
         return nil unless security_prices_provider.present?
+        return nil unless security.has_prices?
 
         response = security_prices_provider.fetch_security_prices \
           ticker: security.ticker,
@@ -32,6 +33,7 @@ module Security::Price::Provided
       def fetch_prices_from_provider(security:, start_date:, end_date:, cache: false)
         return [] unless security_prices_provider.present?
         return [] unless security
+        return [] unless security.has_prices?
 
         response = security_prices_provider.fetch_security_prices \
           ticker: security.ticker,
