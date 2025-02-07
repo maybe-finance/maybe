@@ -205,7 +205,6 @@ class Import < ApplicationRecord
     end
 
     def set_default_currency_and_format
-      self.currency ||= family&.currency
       self.number_format ||= "1,234.56" # Default to US/UK format
     end
 end
