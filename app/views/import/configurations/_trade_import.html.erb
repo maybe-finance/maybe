@@ -12,7 +12,7 @@
   </div>
 
   <div class="flex items-center gap-2">
-    <%= form.select :currency, currencies_for_select.map { |currency| [ "#{currency.name} (#{currency.iso_code})", currency.iso_code ] }, { label: "Currency", prompt: "Select currency" }, required: true %>
+    <%= form.select :currency_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Currency" } %>
     <%= form.select :number_format, Import::NUMBER_FORMATS.keys, { label: "Format", prompt: "Select format" }, required: true %>
   </div>
 

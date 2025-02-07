@@ -53,7 +53,7 @@ module AccountableResource
   private
     def set_link_token
       @us_link_token = Current.family.get_link_token(
-        webhooks_url: webhooks_url,
+        webhooks_url: plaid_us_webhooks_url,
         redirect_url: accounts_url,
         accountable_type: accountable_type.name,
         region: :us
@@ -61,7 +61,7 @@ module AccountableResource
 
       if Current.family.eu?
         @eu_link_token = Current.family.get_link_token(
-          webhooks_url: webhooks_url,
+          webhooks_url: plaid_eu_webhooks_url,
           redirect_url: accounts_url,
           accountable_type: accountable_type.name,
           region: :eu
@@ -69,11 +69,16 @@ module AccountableResource
       end
     end
 
-    def webhooks_url
+    def plaid_us_webhooks_url
       return webhooks_plaid_url if Rails.env.production?
 
-      base_url = ENV.fetch("DEV_WEBHOOKS_URL", root_url.chomp("/"))
-      base_url + "/webhooks/plaid"
+      ENV.fetch("DEV_WEBHOOKS_URL", root_url.chomp("/")) + "/webhooks/plaid"
+    end
+
+    def plaid_eu_webhooks_url
+      return webhooks_plaid_eu_url if Rails.env.production?
+
+      ENV.fetch("DEV_WEBHOOKS_URL", root_url.chomp("/")) + "/webhooks/plaid_eu"
     end
 
     def accountable_type

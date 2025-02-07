@@ -29,8 +29,8 @@ class Account::SyncerTest < ActiveSupport::TestCase
 
     Account::HoldingCalculator.any_instance.expects(:calculate).returns(
       [
-        Account::Holding.new(security: securities(:aapl), date: 1.day.ago.to_date, amount: 500, currency: "EUR"),
-        Account::Holding.new(security: securities(:aapl), date: Date.current, amount: 500, currency: "EUR")
+        Account::Holding.new(security: securities(:aapl), date: 1.day.ago.to_date, qty: 10, price: 50, amount: 500, currency: "EUR"),
+        Account::Holding.new(security: securities(:aapl), date: Date.current, qty: 10, price: 50, amount: 500, currency: "EUR")
       ]
     )
 

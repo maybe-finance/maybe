@@ -15,7 +15,14 @@ class Import < ApplicationRecord
 
   scope :ordered, -> { order(created_at: :desc) }
 
-  enum :status, { pending: "pending", complete: "complete", importing: "importing", failed: "failed" }, validate: true
+  enum :status, {
+    pending: "pending",
+    complete: "complete",
+    importing: "importing",
+    reverting: "reverting",
+    revert_failed: "revert_failed",
+    failed: "failed"
+  }, validate: true, default: "pending"
 
   validates :type, inclusion: { in: TYPES }
   validates :col_sep, inclusion: { in: [ ",", ";" ] }
@@ -44,6 +51,27 @@ class Import < ApplicationRecord
     update! status: :complete
   rescue => error
     update! status: :failed, error: error.message
+  end
+
+  def revert_later
+    raise "Import is not revertable" unless revertable?
+
+    update! status: :reverting
+
+    RevertImportJob.perform_later(self)
+  end
+
+  def revert
+    Import.transaction do
+      accounts.destroy_all
+      entries.destroy_all
+    end
+
+    family.sync
+
+    update! status: :pending
+  rescue => error
+    update! status: :revert_failed, error: error.message
   end
 
   def csv_rows
@@ -122,6 +150,10 @@ class Import < ApplicationRecord
 
   def publishable?
     cleaned? && mappings.all?(&:valid?)
+  end
+
+  def revertable?
+    complete? || revert_failed?
   end
 
   def has_unassigned_account?
