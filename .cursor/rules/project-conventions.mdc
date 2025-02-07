@@ -76,3 +76,8 @@ Due to the open-source nature of this project, we have chosen Minitest + Fixture
 - Keep fixtures to a minimum.  Most models should have 2-3 fixtures maximum that represent the "base cases" for that model.  "Edge cases" should be created on the fly, within the context of the test which it is needed.
 - For tests that require a large number of fixture records to be created, use Rails helpers such as [entries_test_helper.rb](mdc:test/support/account/entries_test_helper.rb) to act as a "factory" for creating these.  For a great example of this, check out [balance_calculator_test.rb](mdc:test/models/account/balance_calculator_test.rb)
 
+### Convention 7: Use ActiveRecord for complex validations, DB for simple ones, keep business logic out of DB
+
+- Enforce `null` checks, unique indexes, and other simple validations in the DB
+- ActiveRecord validations _may_ mirror the DB level ones, but not 100% necessary.  These are for convenience when error handling in forms.  Always prefer client-side form validation when possible.
+- Complex validations and business logic should remain in ActiveRecord

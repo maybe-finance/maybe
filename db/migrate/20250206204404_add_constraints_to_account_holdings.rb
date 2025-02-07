@@ -28,25 +28,9 @@ class AddConstraintsToAccountHoldings < ActiveRecord::Migration[7.2]
     change_column_null :account_holdings, :price, false
     change_column_null :account_holdings, :amount, false
     change_column_null :account_holdings, :currency, false
-
-    # Add check constraints
-    execute <<-SQL
-      ALTER TABLE account_holdings
-      ADD CONSTRAINT check_positive_values#{' '}
-      CHECK (qty >= 0 AND price >= 0 AND amount >= 0);
-    SQL
-
-    execute <<-SQL
-      ALTER TABLE account_holdings
-      ADD CONSTRAINT check_amount_matches
-      CHECK (ROUND(qty * price, 4) = ROUND(amount, 4));
-    SQL
   end
 
   def down
-    execute "ALTER TABLE account_holdings DROP CONSTRAINT IF EXISTS check_positive_values;"
-    execute "ALTER TABLE account_holdings DROP CONSTRAINT IF EXISTS check_amount_matches;"
-
     change_column_null :account_holdings, :date, true
     change_column_null :account_holdings, :qty, true
     change_column_null :account_holdings, :price, true
