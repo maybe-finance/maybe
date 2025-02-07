@@ -10,6 +10,8 @@
   <%= render "imports/success", import: @import %>
 <% elsif @import.failed? %>
   <%= render "imports/failure", import: @import %>
+<% elsif @import.revert_failed? %>
+  <%= render "imports/revert_failure", import: @import %>
 <% else %>
   <%= render "imports/ready", import: @import %>
 <% end %>

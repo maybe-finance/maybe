@@ -17,6 +17,14 @@
       <span class="px-1 py text-xs rounded-full bg-red-500/5 text-red-500 border border-alpha-black-50">
         <%= t(".failed") %>
       </span>
+    <% elsif import.reverting? %>
+      <span class="px-1 py text-xs rounded-full bg-orange-500/5 text-orange-500 border border-alpha-black-50">
+        <%= t(".reverting") %>
+      </span>
+    <% elsif import.revert_failed? %>
+      <span class="px-1 py text-xs rounded-full bg-red-500/5 text-red-500 border border-alpha-black-50">
+        <%= t(".revert_failed") %>
+      </span>
     <% elsif import.complete? %>
       <span class="px-1 py text-xs rounded-full bg-green-500/5 text-green-500 border border-alpha-black-50">
         <%= t(".complete") %>
@@ -33,7 +41,16 @@
         <span><%= t(".view") %></span>
       <% end %>
 
-      <% unless import.complete? %>
+      <% if import.complete? || import.revert_failed? %>
+        <%= button_to revert_import_path(import), 
+                      method: :put,
+                      class: "block w-full py-2 px-3 space-x-2 text-orange-600 hover:bg-orange-50 flex items-center rounded-lg",
+                      data: { turbo_confirm: true } do %>
+          <%= lucide_icon "rotate-ccw", class: "w-5 h-5" %>
+
+          <span>Revert</span>
+        <% end %>
+      <% else %>
         <%= button_to import_path(import),
                       method: :delete,
                       class: "block w-full py-2 px-3 space-x-2 text-red-600 hover:bg-red-50 flex items-center rounded-lg",

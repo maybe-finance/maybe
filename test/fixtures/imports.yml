@@ -1,3 +1,4 @@
 transaction:
   family: dylan_family
   type: TransactionImport
+  status: pending
