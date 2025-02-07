@@ -84,53 +84,13 @@ class PlaidInvestmentSync
       return [ nil, nil ] if plaid_security.nil? || plaid_security.ticker_symbol.blank?
       return [ nil, nil ] if plaid_security.ticker_symbol == "CUR:USD" # internally, we do not consider cash a security and track it separately
 
-      operating_mic = plaid_security.market_identifier_code || "XNAS"
+      operating_mic = plaid_security.market_identifier_code
 
-      # Find any matching security - since uniqueness validation is disabled, there could be duplicates
-      security = Security.where(
+      # Find any matching security
+      security = Security.find_or_create_by!(
         ticker: plaid_security.ticker_symbol,
-        exchange_operating_mic: operating_mic,
-        country_code: "US"
-      ).first
-
-      if security && security.exchange_mic.blank?
-        response = Security.security_info_provider.fetch_security_info(
-          ticker: plaid_security.ticker_symbol,
-          operating_mic: operating_mic
-        )
-
-        if response.success? && response.info.present?
-          security.update!(
-            exchange_mic: response.info.dig("exchange", "mic_code"),
-            exchange_operating_mic: response.info.dig("exchange", "operating_mic_code")
-          )
-        end
-      end
-
-      unless security
-        response = Security.security_info_provider.fetch_security_info(
-          ticker: plaid_security.ticker_symbol,
-          operating_mic: operating_mic
-        )
-
-        if response.success? && response.info.present?
-          # Try to find again in case another process created it
-          security = Security.where(
-            ticker: plaid_security.ticker_symbol,
-            exchange_operating_mic: operating_mic,
-            country_code: "US"
-          ).first_or_create! do |s|
-            s.exchange_mic = response.info.dig("exchange", "mic_code")
-          end
-        else
-          Rails.logger.warn("Failed to fetch security info for #{plaid_security.ticker_symbol}: #{response.error}")
-          # Try to find an existing unknown security for this ticker
-          security = Security.where(
-            ticker: plaid_security.ticker_symbol,
-            unknown: true
-          ).first_or_create!
-        end
-      end
+        exchange_operating_mic: operating_mic
+      )
 
       [ security, plaid_security ]
     end

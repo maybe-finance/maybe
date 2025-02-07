@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_07_152544) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_07_194638) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -551,10 +551,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_07_152544) do
     t.string "exchange_acronym"
     t.string "logo_url"
     t.string "exchange_operating_mic"
-    t.boolean "unknown", default: false
     t.index ["country_code"], name: "index_securities_on_country_code"
     t.index ["exchange_operating_mic"], name: "index_securities_on_exchange_operating_mic"
-    t.index ["ticker", "exchange_mic"], name: "index_securities_on_ticker_and_exchange_mic", unique: true
+    t.index ["ticker", "exchange_operating_mic"], name: "index_securities_on_ticker_and_exchange_operating_mic", unique: true
   end
 
   create_table "security_prices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
