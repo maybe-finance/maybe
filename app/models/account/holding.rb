@@ -8,7 +8,6 @@ class Account::Holding < ApplicationRecord
 
   validates :qty, :currency, :date, :price, :amount, presence: true
   validates :qty, :price, :amount, numericality: { greater_than_or_equal_to: 0 }
-  validate :amount_matches_qty_and_price
 
   scope :chronological, -> { order(:date) }
   scope :for, ->(security) { where(security_id: security).order(:date) }
@@ -63,14 +62,5 @@ class Account::Holding < ApplicationRecord
       TimeSeries::Trend.new \
         current: amount_money,
         previous: start_amount
-    end
-
-    def amount_matches_qty_and_price
-      return if qty.blank? || price.blank? || amount.blank?
-
-      expected_amount = qty * price
-      return if amount == expected_amount
-
-      errors.add(:amount, "must equal qty * price (expected: #{expected_amount})")
     end
 end
