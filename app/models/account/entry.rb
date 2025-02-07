@@ -72,9 +72,8 @@ class Account::Entry < ApplicationRecord
       30.years.ago.to_date
     end
 
-    def daily_totals(entries, currency, period: Period.last_30_days)
-      # Sum spending and income for each day in the period with the given currency
-      select(
+    def daily_rolling_totals(entries, currency, period: Period.last_30_days)
+      daily_totals = select(
         "gs.date",
         "COALESCE(SUM(converted_amount) FILTER (WHERE converted_amount > 0), 0) AS spending",
         "COALESCE(SUM(-converted_amount) FILTER (WHERE converted_amount < 0), 0) AS income"
@@ -82,14 +81,12 @@ class Account::Entry < ApplicationRecord
         .from(entries.with_converted_amount(currency), :e)
         .joins(sanitize_sql([ "RIGHT JOIN generate_series(?, ?, interval '1 day') AS gs(date) ON e.date = gs.date", period.date_range.first, period.date_range.last ]))
         .group("gs.date")
-    end
 
-    def daily_rolling_totals(entries, currency, period: Period.last_30_days)
       # Extend the period to include the rolling window
       period_with_rolling = period.extend_backward(period.date_range.count.days)
 
       # Aggregate the rolling sum of spending and income based on daily totals
-      rolling_totals = from(daily_totals(entries, currency, period: period_with_rolling))
+      rolling_totals = from(daily_totals)
                          .select(
                            "*",
                            sanitize_sql_array([ "SUM(spending) OVER (ORDER BY date RANGE BETWEEN INTERVAL ? PRECEDING AND CURRENT ROW) as rolling_spend", "#{period.date_range.count} days" ]),
