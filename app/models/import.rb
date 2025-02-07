@@ -73,6 +73,7 @@ class Import < ApplicationRecord
         date: row[date_col_label].to_s,
         qty: sanitize_number(row[qty_col_label]).to_s,
         ticker: row[ticker_col_label].to_s,
+        exchange: row[exchange_col_label]&.strip.to_s,
         price: sanitize_number(row[price_col_label]).to_s,
         amount: sanitize_number(row[amount_col_label]).to_s,
         currency: (row[currency_col_label] || default_currency).to_s,

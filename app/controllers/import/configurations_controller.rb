@@ -29,6 +29,7 @@ class Import::ConfigurationsController < ApplicationController
         :account_col_label,
         :qty_col_label,
         :ticker_col_label,
+        :exchange_col_label,
         :price_col_label,
         :entity_type_col_label,
         :notes_col_label,
