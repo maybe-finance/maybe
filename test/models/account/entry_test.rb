@@ -67,15 +67,13 @@ class Account::EntryTest < ActiveSupport::TestCase
     assert_equal 0, family.entries.search(params).size
   end
 
-  test "active scope only returns entries from active, non-scheduled-for-deletion accounts" do
+  test "active scope only returns entries from active accounts" do
     # Create transactions for all account types
     active_transaction = create_transaction(account: accounts(:depository), name: "Active transaction")
     inactive_transaction = create_transaction(account: accounts(:credit_card), name: "Inactive transaction")
-    deletion_transaction = create_transaction(account: accounts(:investment), name: "Scheduled for deletion transaction")
 
     # Update account statuses
     accounts(:credit_card).update!(is_active: false)
-    accounts(:investment).update!(scheduled_for_deletion: true)
 
     # Test the scope
     active_entries = Account::Entry.active
@@ -85,8 +83,5 @@ class Account::EntryTest < ActiveSupport::TestCase
 
     # Should not include entry from inactive account
     assert_not_includes active_entries, inactive_transaction
-
-    # Should not include entry from account scheduled for deletion
-    assert_not_includes active_entries, deletion_transaction
   end
 end

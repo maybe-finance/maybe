@@ -20,7 +20,7 @@ class Account < ApplicationRecord
 
   enum :classification, { asset: "asset", liability: "liability" }, validate: { allow_nil: true }
 
-  scope :active, -> { where(is_active: true, scheduled_for_deletion: false) }
+  scope :active, -> { where(is_active: true) }
   scope :assets, -> { where(classification: "asset") }
   scope :liabilities, -> { where(classification: "liability") }
   scope :alphabetically, -> { order(:name) }
@@ -90,7 +90,7 @@ class Account < ApplicationRecord
   end
 
   def destroy_later
-    update!(scheduled_for_deletion: true)
+    update!(scheduled_for_deletion: true, is_active: false)
     DestroyJob.perform_later(self)
   end
 

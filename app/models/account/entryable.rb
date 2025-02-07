@@ -12,6 +12,8 @@ module Account::Entryable
 
     scope :with_entry, -> { joins(:entry) }
 
+    scope :active, -> { with_entry.merge(Account::Entry.active) }
+
     scope :reverse_chronological, -> {
       with_entry.merge(Account::Entry.reverse_chronological)
     }

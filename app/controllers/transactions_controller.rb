@@ -7,7 +7,7 @@ class TransactionsController < ApplicationController
 
   def index
     @q = search_params
-    transactions_query = Current.family.transactions.search(@q.merge(active: true))
+    transactions_query = Current.family.transactions.active.search(@q)
 
     set_focused_record(transactions_query, params[:focused_record_id], default_per_page: 50)
 

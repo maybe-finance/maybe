@@ -2,7 +2,6 @@ class Account::EntrySearch
   include ActiveModel::Model
   include ActiveModel::Attributes
 
-  attribute :active, :boolean, default: false
   attribute :search, :string
   attribute :amount, :string
   attribute :amount_operator, :string
@@ -13,12 +12,6 @@ class Account::EntrySearch
   attribute :end_date, :string
 
   class << self
-    def apply_active_filter(scope, active)
-      return scope unless active
-
-      scope.where(accounts: { is_active: true })
-    end
-
     def apply_search_filter(scope, search)
       return scope if search.blank?
 

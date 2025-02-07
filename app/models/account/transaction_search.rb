@@ -2,7 +2,6 @@ class Account::TransactionSearch
   include ActiveModel::Model
   include ActiveModel::Attributes
 
-  attribute :active, :boolean, default: false
   attribute :search, :string
   attribute :amount, :string
   attribute :amount_operator, :string
@@ -42,7 +41,6 @@ class Account::TransactionSearch
     query = query.joins(:tags).where(tags: { name: tags }) if tags.present?
 
     # Apply common entry search filters
-    query = Account::EntrySearch.apply_active_filter(query, active)
     query = Account::EntrySearch.apply_search_filter(query, search)
     query = Account::EntrySearch.apply_date_filters(query, start_date, end_date)
     query = Account::EntrySearch.apply_type_filter(query, types)
