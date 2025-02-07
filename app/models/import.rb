@@ -2,7 +2,16 @@ class Import < ApplicationRecord
   TYPES = %w[TransactionImport TradeImport AccountImport MintImport].freeze
   SIGNAGE_CONVENTIONS = %w[inflows_positive inflows_negative]
 
+  NUMBER_FORMATS = {
+    "1,234.56" => { separator: ".", delimiter: "," },  # US/UK/Asia
+    "1.234,56" => { separator: ",", delimiter: "." },  # Most of Europe
+    "1 234,56" => { separator: ",", delimiter: " " },  # French/Scandinavian
+    "1,234"    => { separator: "",  delimiter: "," }   # Zero-decimal currencies like JPY
+  }.freeze
+
   belongs_to :family
+
+  before_validation :set_default_currency_and_format
 
   scope :ordered, -> { order(created_at: :desc) }
 
@@ -11,6 +20,8 @@ class Import < ApplicationRecord
   validates :type, inclusion: { in: TYPES }
   validates :col_sep, inclusion: { in: [ ",", ";" ] }
   validates :signage_convention, inclusion: { in: SIGNAGE_CONVENTIONS }
+  validates :currency, presence: true
+  validates :number_format, presence: true, inclusion: { in: NUMBER_FORMATS.keys }
 
   has_many :rows, dependent: :destroy
   has_many :mappings, dependent: :destroy
@@ -145,6 +156,24 @@ class Import < ApplicationRecord
 
     def sanitize_number(value)
       return "" if value.nil?
-      value.gsub(/[^\d.\-]/, "")
+
+      format = NUMBER_FORMATS[number_format]
+      return "" unless format
+
+      # First, remove any characters that aren't numbers, delimiters, or separators
+      sanitized = value.gsub(/[^\d#{format[:delimiter]}#{format[:separator]}\-]/, "")
+
+      # Replace delimiter with empty string
+      sanitized = sanitized.gsub(format[:delimiter], "") if format[:delimiter].present?
+
+      # Replace separator with period for proper float parsing
+      sanitized = sanitized.gsub(format[:separator], ".") if format[:separator].present?
+
+      sanitized
+    end
+
+    def set_default_currency_and_format
+      self.currency ||= family&.currency
+      self.number_format ||= "1,234.56" # Default to US/UK format
     end
 end
