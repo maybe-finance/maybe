@@ -3,7 +3,7 @@ namespace :data_migration do
   # 2025-02-07: EU Plaid items need to be moved over to a new webhook URL so that we can
   # instantiate the correct Plaid client for verification based on which Plaid instance it comes from
   task eu_plaid_webhooks: :environment do
-    client = Provider::Plaid.new(Rails.application.config.plaid_eu, region: :eu)
+    provider = Provider::Plaid.new(Rails.application.config.plaid_eu, region: :eu)
 
     eu_items = PlaidItem.where(plaid_region: "eu")
 
