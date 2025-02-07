@@ -65,8 +65,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_07_152544) do
     t.index ["account_id", "security_id", "date", "currency"], name: "idx_on_account_id_security_id_date_currency_234024c8e3", unique: true
     t.index ["account_id"], name: "index_account_holdings_on_account_id"
     t.index ["security_id"], name: "index_account_holdings_on_security_id"
-    t.check_constraint "qty >= 0::numeric AND price >= 0::numeric AND amount >= 0::numeric", name: "check_positive_values"
-    t.check_constraint "round(qty * price, 4) = round(amount, 4)", name: "check_amount_matches"
   end
 
   create_table "account_trades", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
