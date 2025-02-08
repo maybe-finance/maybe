@@ -54,4 +54,136 @@ module ImportInterfaceTest
     assert_equal "Failed to publish", import.error
     assert_equal "failed", import.status
   end
+
+  test "parses US/UK number format correctly" do
+    import = imports(:transaction)
+    import.update!(
+      number_format: "1,234.56",
+      amount_col_label: "amount",
+      date_col_label: "date",
+      name_col_label: "name",
+      date_format: "%m/%d/%Y"
+    )
+
+    csv_data = "date,amount,name\n01/01/2024,\"1,234.56\",Test"
+    import.update!(raw_file_str: csv_data)
+    import.generate_rows_from_csv
+
+    row = import.rows.first
+    assert_equal "1234.56", row.amount
+  end
+
+  test "parses European number format correctly" do
+    import = imports(:transaction)
+    import.update!(
+      number_format: "1.234,56",
+      amount_col_label: "amount",
+      date_col_label: "date",
+      name_col_label: "name",
+      date_format: "%m/%d/%Y"
+    )
+
+    csv_data = "date,amount,name\n01/01/2024,\"1.234,56\",Test"
+    import.update!(raw_file_str: csv_data)
+    import.generate_rows_from_csv
+
+    row = import.rows.first
+    assert_equal "1234.56", row.amount
+  end
+
+  test "parses French/Scandinavian number format correctly" do
+    import = imports(:transaction)
+    import.update!(
+      number_format: "1 234,56",
+      amount_col_label: "amount",
+      date_col_label: "date",
+      name_col_label: "name",
+      date_format: "%m/%d/%Y"
+    )
+
+    # Quote the amount field to ensure proper CSV parsing
+    csv_data = "date,amount,name\n01/01/2024,\"1 234,56\",Test"
+    import.update!(raw_file_str: csv_data)
+    import.generate_rows_from_csv
+
+    row = import.rows.first
+    assert_equal "1234.56", row.amount
+  end
+
+  test "parses zero-decimal currency format correctly" do
+    import = imports(:transaction)
+    import.update!(
+      number_format: "1,234",
+      amount_col_label: "amount",
+      date_col_label: "date",
+      name_col_label: "name",
+      date_format: "%m/%d/%Y"
+    )
+
+    csv_data = "date,amount,name\n01/01/2024,1234,Test"
+    import.update!(raw_file_str: csv_data)
+    import.generate_rows_from_csv
+
+    row = import.rows.first
+    assert_equal "1234", row.amount
+  end
+
+  test "currency from CSV takes precedence over default" do
+    import = imports(:transaction)
+    import.update!(
+      amount_col_label: "amount",
+      date_col_label: "date",
+      name_col_label: "name",
+      currency_col_label: "currency",
+      number_format: "1,234.56",
+      date_format: "%m/%d/%Y"
+    )
+    import.family.update!(currency: "USD")
+
+    csv_data = "date,amount,name,currency\n01/01/2024,123.45,Test,EUR"
+    import.update!(raw_file_str: csv_data)
+    import.generate_rows_from_csv
+
+    row = import.rows.first
+    assert_equal "EUR", row.currency
+  end
+
+  test "uses default currency when CSV currency column is empty" do
+    import = imports(:transaction)
+    import.update!(
+      amount_col_label: "amount",
+      date_col_label: "date",
+      name_col_label: "name",
+      currency_col_label: "currency",
+      number_format: "1,234.56",
+      date_format: "%m/%d/%Y"
+    )
+    import.family.update!(currency: "USD")
+
+    csv_data = "date,amount,name,currency\n01/01/2024,123.45,Test,"
+    import.update!(raw_file_str: csv_data)
+    import.generate_rows_from_csv
+
+    row = import.rows.first
+    assert_equal "USD", row.currency
+  end
+
+  test "uses default currency when CSV has no currency column" do
+    import = imports(:transaction)
+    import.update!(
+      amount_col_label: "amount",
+      date_col_label: "date",
+      name_col_label: "name",
+      number_format: "1,234.56",
+      date_format: "%m/%d/%Y"
+    )
+    import.family.update!(currency: "USD")
+
+    csv_data = "date,amount,name\n01/01/2024,123.45,Test"
+    import.update!(raw_file_str: csv_data)
+    import.generate_rows_from_csv
+
+    row = import.rows.first
+    assert_equal "USD", row.currency
+  end
 end

@@ -105,8 +105,8 @@ class Import < ApplicationRecord
   def generate_rows_from_csv
     rows.destroy_all
 
-    mapped_rows = csv_rows.map do |row|
-      {
+    csv_rows.each do |row|
+      rows.create!(
         account: row[account_col_label].to_s,
         date: row[date_col_label].to_s,
         qty: sanitize_number(row[qty_col_label]).to_s,
@@ -119,10 +119,8 @@ class Import < ApplicationRecord
         tags: row[tags_col_label].to_s,
         entity_type: row[entity_type_col_label].to_s,
         notes: row[notes_col_label].to_s
-      }
+      )
     end
-
-    rows.insert_all!(mapped_rows)
   end
 
   def sync_mappings
@@ -191,14 +189,30 @@ class Import < ApplicationRecord
       format = NUMBER_FORMATS[number_format]
       return "" unless format
 
-      # First, remove any characters that aren't numbers, delimiters, or separators
-      sanitized = value.gsub(/[^\d#{format[:delimiter]}#{format[:separator]}\-]/, "")
+      # First, normalize spaces and remove any characters that aren't numbers, delimiters, separators, or minus signs
+      sanitized = value.to_s.strip
 
-      # Replace delimiter with empty string
-      sanitized = sanitized.gsub(format[:delimiter], "") if format[:delimiter].present?
+      # Handle French/Scandinavian format specially
+      if format[:delimiter] == " "
+        sanitized = sanitized.gsub(/\s+/, "") # Remove all spaces first
+      else
+        sanitized = sanitized.gsub(/[^\d#{Regexp.escape(format[:delimiter])}#{Regexp.escape(format[:separator])}\-]/, "")
+
+        # Replace delimiter with empty string
+        if format[:delimiter].present?
+          sanitized = sanitized.gsub(format[:delimiter], "")
+        end
+      end
 
       # Replace separator with period for proper float parsing
-      sanitized = sanitized.gsub(format[:separator], ".") if format[:separator].present?
+      if format[:separator].present?
+        sanitized = sanitized.gsub(format[:separator], ".")
+      end
+
+      # Return empty string if not a valid number
+      unless sanitized =~ /\A-?\d+\.?\d*\z/
+        return ""
+      end
 
       sanitized
     end
