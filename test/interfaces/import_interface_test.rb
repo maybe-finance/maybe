@@ -186,4 +186,101 @@ module ImportInterfaceTest
     row = import.rows.first
     assert_equal "USD", row.currency
   end
+
+  test "generates rows with all optional fields" do
+    import = imports(:transaction)
+    import.update!(
+      amount_col_label: "amount",
+      date_col_label: "date",
+      name_col_label: "name",
+      account_col_label: "account",
+      category_col_label: "category",
+      tags_col_label: "tags",
+      notes_col_label: "notes",
+      currency_col_label: "currency",
+      number_format: "1,234.56",
+      date_format: "%m/%d/%Y"
+    )
+
+    csv_data = "date,amount,name,account,category,tags,notes,currency\n" \
+               "01/01/2024,1234.56,Salary,Bank Account,Income,\"monthly,salary\",Salary payment,EUR"
+    import.update!(raw_file_str: csv_data)
+    import.generate_rows_from_csv
+
+    row = import.rows.first
+    assert_equal "01/01/2024", row.date
+    assert_equal "1234.56", row.amount
+    assert_equal "Salary", row.name
+    assert_equal "Bank Account", row.account
+    assert_equal "Income", row.category
+    assert_equal "monthly,salary", row.tags
+    assert_equal "Salary payment", row.notes
+    assert_equal "EUR", row.currency
+  end
+
+  test "generates rows with minimal required fields" do
+    import = imports(:transaction)
+    import.update!(
+      amount_col_label: "amount",
+      date_col_label: "date",
+      number_format: "1,234.56",
+      date_format: "%m/%d/%Y"
+    )
+
+    csv_data = "date,amount\n01/01/2024,1234.56"
+    import.update!(raw_file_str: csv_data)
+    import.generate_rows_from_csv
+
+    row = import.rows.first
+    assert_equal "01/01/2024", row.date
+    assert_equal "1234.56", row.amount
+    assert_equal "Imported item", row.name # Default name
+    assert_equal import.family.currency, row.currency # Default currency
+  end
+
+  test "handles empty values in optional fields" do
+    import = imports(:transaction)
+    import.update!(
+      amount_col_label: "amount",
+      date_col_label: "date",
+      name_col_label: "name",
+      category_col_label: "category",
+      tags_col_label: "tags",
+      number_format: "1,234.56",
+      date_format: "%m/%d/%Y"
+    )
+
+    csv_data = "date,amount,name,category,tags\n01/01/2024,1234.56,,,"
+    import.update!(raw_file_str: csv_data)
+    import.generate_rows_from_csv
+
+    row = import.rows.first
+    assert_equal "01/01/2024", row.date
+    assert_equal "1234.56", row.amount
+    assert_equal "Imported item", row.name # Falls back to default
+    assert_equal "", row.category
+    assert_equal "", row.tags
+  end
+
+  test "handles trade-specific fields" do
+    import = imports(:transaction)
+    import.update!(
+      amount_col_label: "amount",
+      date_col_label: "date",
+      qty_col_label: "quantity",
+      ticker_col_label: "symbol",
+      price_col_label: "price",
+      number_format: "1,234.56",
+      date_format: "%m/%d/%Y"
+    )
+
+    csv_data = "date,amount,quantity,symbol,price\n01/01/2024,1234.56,10,AAPL,123.456"
+    import.update!(raw_file_str: csv_data)
+    import.generate_rows_from_csv
+
+    row = import.rows.first
+    assert_equal "10", row.qty
+    assert_equal "AAPL", row.ticker
+    assert_equal "123.456", row.price
+  end
 end
