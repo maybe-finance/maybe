@@ -1,0 +1,23 @@
+---
+es-ES:
+  pages:
+    changelog:
+      title: Lo nuevo
+    dashboard:
+      allocation_chart:
+        assets: Activos
+        debts: Deudas
+      fallback_greeting: Que bueno verte de nuevo
+      greeting: Que bueno verte de nuevo, %{name}
+      import: Importar
+      income: Ingresos
+      investing: Inversión (próximamente...)
+      net_worth: Patrimonio neto
+      new: Nueva cuenta
+      no_transactions: No hay transacciones recientes
+      savings_rate: Tasa de ahorro
+      spending: Gastos
+      subtitle: Esto es lo que está sucediendo hoy
+      title: Tablero
+      transactions: Transacciones recientes
+      view_all: Ver todo

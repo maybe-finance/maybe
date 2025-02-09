@@ -1,0 +1,62 @@
+---
+es:
+  account:
+    transactions:
+      bulk_delete:
+        success: "%{count} transacciones eliminadas"
+      bulk_edit:
+        cancel: Cancelar
+        category_label: Categoría
+        category_placeholder: Seleccionar una categoría
+        date_label: Fecha
+        details: Detalles
+        merchant_label: Comercio
+        merchant_placeholder: Seleccionar un comercio
+        note_label: Notas
+        note_placeholder: Introduce una nota que se aplicará a las transacciones seleccionadas
+        overview: Resumen
+        save: Guardar
+      bulk_update:
+        success: "%{count} transacciones actualizadas"
+      form:
+        account: Cuenta
+        account_prompt: Seleccionar una cuenta
+        amount: Cantidad
+        category: Categoría
+        category_prompt: Seleccionar una categoría
+        date: Fecha
+        description: Descripción
+        description_placeholder: Describir transacción
+        expense: Gasto
+        income: Ingreso
+        submit: Añadir transacción
+        transfer: Transferencia
+      index:
+        new: Nueva transacción
+        no_transactions: No hay transacciones para esta cuenta todavía.
+        transaction: transacción
+        transactions: Transacciones
+      new:
+        new_transaction: Nueva transacción
+      show:
+        account_label: Cuenta
+        amount: Cantidad
+        category_label: Categoría
+        date_label: Fecha
+        delete: Eliminar
+        delete_subtitle: Esto elimina permanentemente la transacción, afecta a tus saldos históricos y no se puede deshacer.
+        delete_title: Eliminar transacción
+        details: Detalles
+        merchant_label: Comercio
+        name_label: Nombre
+        nature: Tipo
+        none: "(ninguno)"
+        note_label: Notas
+        note_placeholder: Introducir una nota
+        overview: Resumen
+        settings: Ajustes
+        tags_label: Etiquetas
+        uncategorized: "(sin categorizar)"
+    transfer_matches:
+      create:
+        success: Transferencia creada 

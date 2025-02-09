@@ -1,0 +1,22 @@
+---
+es:
+  layouts:
+    auth:
+      existing_account: ¿Ya tienes una cuenta?
+      no_account: ¿Nuevo en Maybe?
+      sign_in: Iniciar sesión
+      sign_up: Crear cuenta
+      your_account: Tu cuenta
+    footer:
+      privacy_policy: Política de privacidad
+      terms_of_service: Términos de servicio
+    issues:
+      action: Cómo solucionar este problema
+      description: Descripción del problema
+    sidebar:
+      accounts: Cuentas
+      budgeting: Presupuesto
+      dashboard: Panel
+      new_account: Nueva cuenta
+      portfolio: Cartera
+      transactions: Transacciones 

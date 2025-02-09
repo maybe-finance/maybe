@@ -1,0 +1,10 @@
+---
+es-ES:
+  depositories:
+    edit:
+      edit: Editar %{account}
+    form:
+      none: Ninguno
+      subtype_prompt: Seleccionar tipo de cuenta
+    new:
+      title: Introducir saldo de cuenta 

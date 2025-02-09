@@ -1,0 +1,13 @@
+---
+es:
+  category:
+    deletions:
+      create:
+        success: Categoría de transacción eliminada correctamente
+      new:
+        category: Categoría
+        delete_and_leave_uncategorized: Eliminar "%{category_name}" y dejar sin categorizar
+        delete_and_recategorize: Eliminar "%{category_name}" y asignar nueva categoría
+        delete_category: ¿Eliminar categoría?
+        explanation: Al eliminar esta categoría, todas las transacciones que tienen la categoría "%{category_name}" quedarán sin categorizar. En lugar de dejarlas sin categorizar, también puedes asignar una nueva categoría a continuación.
+        replacement_category_prompt: Seleccionar categoría 

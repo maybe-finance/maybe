@@ -1,0 +1,25 @@
+---
+es-ES:
+  credit_cards:
+    edit:
+      edit: Editar %{account}
+    form:
+      annual_fee: Cuota anual
+      annual_fee_placeholder: '99'
+      apr: TAE
+      apr_placeholder: '15.99'
+      available_credit: Crédito disponible
+      available_credit_placeholder: '10000'
+      expiration_date: Fecha de vencimiento
+      minimum_payment: Pago mínimo
+      minimum_payment_placeholder: '100'
+    new:
+      title: Introducir detalles de tarjeta de crédito
+    overview:
+      amount_owed: Cantidad adeudada
+      annual_fee: Cuota anual
+      apr: TAE
+      available_credit: Crédito disponible
+      expiration_date: Fecha de vencimiento
+      minimum_payment: Pago mínimo
+      unknown: Desconocido 

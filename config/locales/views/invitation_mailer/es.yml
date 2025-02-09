@@ -1,0 +1,8 @@
+---
+es:
+  invitation_mailer:
+    invite_email:
+      accept_button: "Aceptar invitación"
+      body: "%{inviter} te ha invitado a unirte a la familia %{family} en Maybe!"
+      expiry_notice: "Esta invitación caducará en %{days} días" 
+      greeting: "¡Le damos la bienvenida a Maybe!"

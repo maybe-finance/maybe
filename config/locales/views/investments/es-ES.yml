@@ -1,0 +1,17 @@
+---
+es-ES:
+  investments:
+    edit:
+      edit: Editar %{account}
+    form:
+      none: Ninguno
+      subtype_prompt: Seleccionar tipo de inversión
+    new:
+      title: Introducir saldo de cuenta
+    show:
+      chart_title: Valor total
+    value_tooltip:
+      cash: Efectivo
+      holdings: Posiciones
+      total: Saldo en la cartera
+      total_value_tooltip: El saldo total de la cartera es la suma del efectivo disponible (disponible para operar) y el valor actual de mercado de tus posiciones. 

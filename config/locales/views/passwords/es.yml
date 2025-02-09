@@ -1,0 +1,10 @@
+---
+es:
+  passwords:
+    edit:
+      password: Nueva contraseña
+      password_challenge: Contraseña actual
+      submit: Cambiar contraseña
+      title: Actualizar contraseña
+    update:
+      success: Tu contraseña ha sido cambiada.

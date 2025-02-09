@@ -1,0 +1,19 @@
+---
+es:
+  plaid_items:
+    create:
+      success: Cuenta enlazada con éxito. Por favor, espere a que las cuentas se sincronicen.
+    destroy:
+      success: Cuentas programadas para eliminación.
+    plaid_item:
+      confirm_accept: Eliminar institución
+      confirm_body: Esto eliminará permanentemente todas las cuentas en este grupo y
+        todos los datos asociados.
+      confirm_title: ¿Eliminar institución?
+      delete: Eliminar
+      error: Ocurrió un error mientras se sincronizaban los datos
+      no_accounts_description: No pudimos cargar ninguna cuenta de esta institución financiera.
+      no_accounts_title: No se encontraron cuentas
+      status: Última sincronización hace %{timestamp}
+      status_never: Requiere sincronización de datos
+      syncing: Sincronizando...

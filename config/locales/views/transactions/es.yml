@@ -1,0 +1,44 @@
+---
+es:
+  transactions:
+    header:
+      edit_categories: Editar categorías
+      edit_imports: Editar importaciones
+      edit_merchants: Editar comercios
+      edit_tags: Editar etiquetas
+      import: Importar
+    index:
+      transaction: transacción
+      transactions: transacciones
+    searches:
+      filters:
+        amount_filter:
+          equal_to: Igual a
+          greater_than: Mayor que
+          less_than: Menor que
+          placeholder: '0'
+        badge:
+          expense: Gasto
+          income: Ingreso
+          on_or_after: el o después de %{date}
+          on_or_before: el o antes de %{date}
+          transfer: Transferencia
+        type_filter:
+          expense: Gasto
+          income: Ingreso
+          transfer: Transferencia
+      menu:
+        account_filter: Cuenta
+        amount_filter: Cantidad
+        apply: Aplicar
+        cancel: Cancelar
+        category_filter: Categoría
+        clear_filters: Limpiar filtros
+        date_filter: Fecha
+        merchant_filter: Comerciante
+        tag_filter: Etiqueta
+        type_filter: Tipo
+      search:
+        equal_to: igual a
+        greater_than: mayor que
+        less_than: menor que

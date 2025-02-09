@@ -1,0 +1,9 @@
+---
+es-ES:
+  email_confirmation_mailer:
+    confirmation_email:
+      subject: "Maybe: Confirma el cambio de tu correo electrónico"
+      greeting: "¡Hola!"
+      body: "Has solicitado cambiar tu dirección de correo electrónico. Haz clic en el botón de abajo para confirmar este cambio."
+      cta: "Confirmar cambio de correo"
+      expiry_notice: "Este enlace caducará en %{hours} horas." 

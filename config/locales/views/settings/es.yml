@@ -1,0 +1,89 @@
+---
+es:
+  settings:
+    billings:
+      show:
+        page_title: Facturación
+        subscription_subtitle: Gestiona tu suscripción y detalles de facturación
+        subscription_title: Gestionar suscripción
+    nav:
+      accounts_label: Cuentas
+      billing_label: Facturación
+      categories_label: Categorías
+      feedback_label: Comentarios
+      general_section_title: General
+      imports_label: Importaciones
+      logout: Cerrar sesión
+      merchants_label: Comercios
+      other_section_title: Más
+      preferences_label: Preferencias
+      profile_label: Cuenta
+      self_hosting_label: Autoalojamiento
+      tags_label: Etiquetas
+      transactions_section_title: Transacciones
+      whats_new_label: Novedades
+    nav_link_large:
+      next: Siguiente
+      previous: Atrás
+    preferences:
+      data_enrichment_settings:
+        description: Permite que Maybe auto-categorice, nombre y añada datos de comercios a tus transacciones en cada sincronización. Todo el enriquecimiento se realiza en inglés.
+        self_host_disclaimer: Esto consumirá créditos de la API Synth.
+        title: Enriquecimiento de transacciones (solo en inglés)
+      show:
+        country: País
+        currency: Moneda
+        data: Enriquecimiento de datos
+        data_subtitle: Habilitar el enriquecimiento de datos para tus cuentas
+        date_format: Formato de fecha
+        general_subtitle: Configura tus preferencias
+        general_title: General
+        language: Idioma
+        page_title: Preferencias
+        theme_dark: Oscuro
+        theme_light: Claro
+        theme_subtitle: Elige un tema preferido para la aplicación (próximamente...)
+        theme_system: Sistema
+        theme_title: Tema
+        timezone: Zona horaria
+    profiles:
+      destroy:
+        not_authorized: No estás autorizado para eliminar miembros.
+        cannot_remove_self: No puedes eliminarte a ti mismo de la cuenta.
+        member_removed: El miembro fue eliminado correctamente.
+        member_removal_failed: Hubo un problema al eliminar al miembro.
+      show:
+        confirm_delete:
+          body: ¿Estás seguro de que quieres eliminar permanentemente tu cuenta? Esta acción es irreversible.
+          title: ¿Eliminar cuenta?
+        confirm_remove_member:
+          title: Eliminar miembro
+          body: ¿Estás seguro de que quieres eliminar a %{name} de tu cuenta?
+        remove_member: Eliminar miembro
+        confirm_remove_invitation:
+          title: Eliminar invitación
+          body: ¿Estás seguro de que quieres eliminar la invitación para %{email}?
+        remove_invitation: Eliminar invitación
+        danger_zone_title: Zona de peligro
+        delete_account: Eliminar cuenta
+        delete_account_warning: Eliminar tu cuenta eliminará permanentemente todos tus datos y no se puede deshacer.
+        first_name: Nombre
+        household_form_input_placeholder: Introduce nombre del hogar
+        household_form_label: Nombre del hogar
+        household_subtitle: Invita a familiares, parejas y otras personas. Los invitados pueden iniciar sesión en tu hogar y acceder a tus cuentas compartidas.
+        household_title: Hogar
+        invitation_link: Enlace de invitación
+        invite_member: Añadir miembro
+        last_name: Apellidos
+        email: Correo electrónico
+        page_title: Cuenta
+        pending: Pendiente
+        profile_subtitle: Personaliza cómo apareces en Maybe
+        profile_title: Perfil
+        save: Guardar
+    user_avatar_field:
+      accepted_formats: JPG o PNG. 5MB máx.
+      choose: Elegir
+  users:
+    update:
+      success: Perfil actualizado correctamente 

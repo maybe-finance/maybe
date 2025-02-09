@@ -1,0 +1,12 @@
+---
+es:
+  password_resets:
+    edit:
+      title: Cambia contraseña
+    new:
+      requested: Por favor, revisa tu correo electrónico para obtener un enlace para cambiar tu contraseña.
+      submit: Cambiar contraseña
+      title: Cambiar contraseña
+    update:
+      invalid_token: Token inválido.
+      success: Tu contraseña ha sido cambiada.

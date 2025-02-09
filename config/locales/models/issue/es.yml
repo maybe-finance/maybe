@@ -1,0 +1,8 @@
+---
+es:
+  activerecord:
+    models:
+      issue/exchange_rate_provider_missing: Proveedor de tipo de cambio no disponible
+      issue/exchange_rates_missing: Tipos de cambio no disponibles
+      issue/missing_prices: Precios no disponibles
+      issue/unknown: Ha ocurrido un error desconocido 

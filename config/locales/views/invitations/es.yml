@@ -1,0 +1,19 @@
+---
+es:
+  invitations:
+    create:
+      failure: No se pudo enviar la invitación
+      success: Invitación enviada correctamente
+    destroy:
+      not_authorized: No estás autorizado para gestionar invitaciones.
+      success: La invitación fue eliminada correctamente.
+      failure: Hubo un problema al eliminar la invitación.
+    new:
+      email_label: Dirección de correo electrónico
+      email_placeholder: Introduce dirección de correo electrónico
+      role_admin: Administrador
+      role_label: Rol
+      role_member: Miembro
+      submit: Enviar invitación
+      subtitle: Envía una invitación para unirse a tu cuenta familiar en Maybe
+      title: Invitar a alguien 

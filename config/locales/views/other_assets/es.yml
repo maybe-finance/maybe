@@ -1,0 +1,7 @@
+---
+es:
+  other_assets:
+    edit:
+      edit: Editar %{account}
+    new:
+      title: Introducir detalles del activo 

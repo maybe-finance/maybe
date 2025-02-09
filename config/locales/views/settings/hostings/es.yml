@@ -1,0 +1,41 @@
+---
+es:
+  settings:
+    hostings:
+      invite_code_settings:
+        description: Cada nuevo usuario que se une a tu instancia de Maybe solo puede hacerlo
+          mediante un código de invitación
+        generate_tokens: Generar nuevo código
+        generated_tokens: Códigos generados
+        title: Requerir código de invitación para la inscripción
+        email_confirmation_title: Requerir confirmación por email
+        email_confirmation_description: Cuando está habilitado, los usuarios deben confirmar su dirección de email al cambiarla.
+      provider_settings:
+        description: Configura los ajustes para tu proveedor de hosting
+        render_deploy_hook_label: URL del hook de despliegue de Render
+        render_deploy_hook_placeholder: https://api.render.com/deploy/srv-xyz...
+        title: Ajustes del proveedor
+      show:
+        general: Ajustes generales
+        invites: Códigos de invitación
+        title: Autoalojamiento
+      synth_settings:
+        api_calls_used: "%{used} / %{limit} llamadas API usadas (%{percentage})"
+        description: Ingresa la clave API proporcionada por Synth
+        label: Clave API
+        placeholder: Ingresa tu clave API aquí
+        plan: "%{plan} plan"
+        title: Ajustes de Synth
+      update:
+        failure: Valor de ajuste inválido
+        success: Ajustes actualizados
+      upgrade_settings:
+        description: Configura cómo tu aplicación recibe actualizaciones
+        latest_commit_description: Actualiza automáticamente al último commit (inestable)
+        latest_commit_title: Último commit
+        latest_release_description: Actualiza automáticamente a la versión más reciente
+          (estable)
+        latest_release_title: Última versión
+        manual_description: Tú controlas cuándo descargar e instalar actualizaciones
+        manual_title: Manual
+        title: Actualización automática

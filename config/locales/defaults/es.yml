@@ -117,12 +117,12 @@ es:
       even: debe ser par
       exclusion: está reservado
       greater_than: debe ser mayor que %{count}
-      greater_than_or_equal_to: debe ser mayor que o igual a %{count}
+      greater_than_or_equal_to: debe ser mayor o igual que %{count}
       in: debe estar en %{count}
       inclusion: no está incluido en la lista
       invalid: no es válido
       less_than: debe ser menor que %{count}
-      less_than_or_equal_to: debe ser menor que o igual a %{count}
+      less_than_or_equal_to: debe ser menor o igual que %{count}
       model_invalid: 'La validación falló: %{errors}'
       not_a_number: no es un número
       not_an_integer: debe ser un entero

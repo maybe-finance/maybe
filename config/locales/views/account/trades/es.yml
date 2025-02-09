@@ -1,0 +1,46 @@
+---
+es:
+  account:
+    trades:
+      form:
+        account: Cuenta de transferencia (opcional)
+        account_prompt: Buscar cuenta
+        amount: Cantidad
+        holding: Símbolo del valor
+        price: Precio por acción
+        qty: Cantidad
+        submit: Añadir transacción
+        ticker_placeholder: AAPL
+        type: Tipo
+      header:
+        buy: Comprar
+        current_market_price_label: Precio actual de mercado
+        overview: Resumen
+        purchase_price_label: Precio de compra
+        purchase_qty_label: Cantidad comprada
+        sell: Vender
+        symbol_label: Símbolo
+        total_return_label: Ganancia/pérdida no realizada
+      index:
+        amount: Cantidad
+        new: Nueva transacción
+        no_trades: No hay transacciones para esta cuenta todavía.
+        trade: transacción
+        trades: Transacciones
+        type: Tipo
+      new:
+        title: Nueva transacción
+      show:
+        additional: Adicional
+        cost_per_share_label: Coste por acción
+        date_label: Fecha
+        delete: Eliminar
+        delete_subtitle: Esta acción no se puede deshacer
+        delete_title: Eliminar operación
+        details: Detalles
+        exclude_subtitle: Esta operación no se incluirá en informes y cálculos
+        exclude_title: Excluir de análisis
+        note_label: Nota
+        note_placeholder: Añade notas adicionales aquí...
+        quantity_label: Cantidad
+        settings: Ajustes 

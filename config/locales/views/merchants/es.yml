@@ -1,0 +1,26 @@
+---
+es:
+  merchants:
+    create:
+      error: 'Error al crear el comercio: %{error}'
+      success: Nuevo comercio creado correctamente
+    destroy:
+      success: Comercio eliminado correctamente
+    edit:
+      title: Editar comercio
+    form:
+      name_placeholder: Nombre del comercio
+    index:
+      empty: No hay comercios todavía
+      new: Nuevo comercio
+      title: Comercios
+    merchant:
+      confirm_accept: Eliminar comercio
+      confirm_body: ¿Estás seguro de que quieres eliminar este comercio? Eliminar este comercio desvinculará todas las transacciones asociadas y puede afectar a tus informes.
+      confirm_title: ¿Eliminar comercio?
+      delete: Eliminar comercio
+      edit: Editar comercio
+    new:
+      title: Nuevo comercio
+    update:
+      success: Comercio actualizado correctamente

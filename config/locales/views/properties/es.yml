@@ -1,0 +1,32 @@
+---
+es:
+  properties:
+    edit:
+      edit: Editar %{account}
+    form:
+      address_line1: Dirección
+      address_line1_placeholder: Calle Principal 123
+      area: Área habitable
+      area_placeholder: '2000'
+      area_unit: Unidad de medida
+      country: País
+      country_placeholder: ES
+      locality: Ciudad
+      locality_placeholder: Madrid
+      none: Ninguno
+      postal_code: Código postal
+      postal_code_placeholder: '28001'
+      region: Provincia/Comunidad Autónoma
+      region_placeholder: Madrid
+      subtype_prompt: Seleccionar tipo de propiedad
+      year_built: Año de construcción
+      year_built_placeholder: '2000'
+    new:
+      title: Introducir detalles de la propiedad
+    overview:
+      living_area: Área habitable
+      market_value: Valor de mercado
+      purchase_price: Precio de compra
+      trend: Tendencia
+      unknown: Desconocido
+      year_built: Año de construcción

@@ -1,0 +1,13 @@
+---
+es:
+  upgrader:
+    deployer:
+      null_deployer:
+        success_message: 'No-op: despliegue nulo iniciado correctamente'
+      render:
+        deploy_log_error: 'Error al desplegar %{type} %{commit_sha} en Render: %{error_message}'
+        deploy_log_info: Desplegando %{type} %{commit_sha} en Render...
+        error_message_failed_deploy: Error al desplegar en Render
+        error_message_not_set: URL del hook de despliegue de Render no configurada
+        success_message: 'Despliegue activado en Render para el commit: %{commit_sha}'
+        troubleshooting_url: https://render.com/docs/deploy-hooks

@@ -1,0 +1,10 @@
+---
+es-ES:
+  password_mailer:
+    password_reset:
+      cta: Cambia tu contraseña
+      ignore_if_not_requested: Si no hiciste esta solicitud, puedes ignorar este
+        email.
+      request_made: Se hizo una solicitud para cambiar tu contraseña de Maybe. Haz clic en el enlace
+        para cambiarla.
+      subject: 'Maybe: Cambia tu contraseña'

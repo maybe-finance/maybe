@@ -1,0 +1,31 @@
+---
+es:
+  account:
+    valuations:
+      form:
+        amount: Cantidad
+        submit: Añadir actualización de saldo
+      header:
+        balance: Saldo
+      index:
+        change: cambio
+        date: fecha
+        new_entry: Nueva entrada
+        no_valuations: No hay valoraciones para esta cuenta todavía
+        valuations: Valor
+        value: valor
+      new:
+        title: Nuevo saldo
+      show:
+        amount: Cantidad
+        date_label: Fecha
+        delete: Eliminar
+        delete_subtitle: Esta acción no se puede deshacer
+        delete_title: Eliminar entrada
+        details: Detalles
+        name_label: Nombre
+        name_placeholder: Introduce un nombre para esta entrada
+        note_label: Notas
+        note_placeholder: Añade detalles adicionales sobre esta entrada
+        overview: Resumen
+        settings: Ajustes 

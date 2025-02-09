@@ -1,0 +1,70 @@
+---
+es-ES:
+  accounts:
+    account:
+      has_issues: Problema detectado.
+      troubleshoot: Solucionar problema
+    account_list:
+      new_account: Nueva %{type}
+    chart:
+      no_change: sin cambios
+    create:
+      success: "Cuenta %{type} creada"
+    destroy:
+      success: "Cuenta %{type} programada para eliminación"
+    empty:
+      empty_message: Añade una cuenta mediante conexión, importación o entrada manual.
+      new_account: Nueva cuenta
+      no_accounts: No hay cuentas todavía
+    form:
+      balance: Saldo actual
+      name_label: Nombre de la cuenta
+      name_placeholder: Ejemplo de nombre de cuenta
+    index:
+      accounts: Cuentas
+      manual_accounts:
+        other_accounts: Otras cuentas
+      new_account: Nueva cuenta
+      sync: Sincronizar todo
+    new:
+      import_accounts: Importar cuentas
+      method_selector:
+        connected_entry: Vincular cuenta
+        connected_entry_eu: Vincular cuenta UE
+        manual_entry: Introducir saldo de cuenta
+        title: ¿Cómo quieres añadirla?
+      title: ¿Qué quieres añadir?
+    show:
+      activity:
+        amount: Cantidad
+        balance: Saldo
+        date: Fecha
+        entries: entradas
+        entry: entrada
+        new: Nueva
+        new_balance: Nuevo saldo
+        new_transaction: Nueva transacción
+        no_entries: No se encontraron entradas
+        title: Actividad
+      chart:
+        balance: Saldo
+        owed: Cantidad adeudada
+      menu:
+        confirm_accept: Eliminar "%{name}"
+        confirm_body_html: "<p>Al eliminar esta cuenta, borrarás su historial de valores, afectando varios aspectos de tu cuenta general. Esta acción tendrá un impacto directo en tus cálculos de patrimonio neto y en los gráficos de la cuenta.</p><br /> <p>Después de la eliminación, no podrás restaurar la información de la cuenta porque necesitarás añadirla como una cuenta nueva.</p>"
+        confirm_title: ¿Eliminar cuenta?
+        edit: Editar
+        import: Importar transacciones
+        manage: Gestionar cuentas
+    summary:
+      header:
+        accounts: Cuentas
+        manage: Gestionar cuentas
+        new: Nueva cuenta
+      new: Nueva cuenta
+      no_assets: No se encontraron activos
+      no_assets_description: Añade un activo mediante conexión, importación o entrada manual.
+      no_liabilities: No se encontraron pasivos
+      no_liabilities_description: Añade un pasivo mediante conexión, importación o entrada manual.
+    update:
+      success: "Cuenta %{type} actualizada" 

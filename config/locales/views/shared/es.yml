@@ -1,0 +1,22 @@
+---
+es:
+  shared:
+    confirm_modal:
+      accept: Confirmar
+      body_html: "<p>No podrás deshacer esta decisión</p>"
+      cancel: Cancelar
+      title: ¿Quieres confirmar?
+    money_field:
+      label: Cantidad
+    no_account_empty_state:
+      new_account: Nueva cuenta
+      no_account_subtitle: Dado que no se han agregado cuentas, no hay datos para mostrar.
+        Agrega tus primeras cuentas para empezar a ver los datos del dashboard.
+      no_account_title: Todavía no hay cuentas
+    syncing_notice:
+      syncing: Sincronizando datos de cuentas...
+    upgrade_notification:
+      app_upgraded: La app ha sido actualizada a la versión %{version}.
+      dismiss: Descartar
+      new_version_available: Hay una nueva versión de Maybe disponible para actualizar.
+      upgrade_now: Actualizar ahora

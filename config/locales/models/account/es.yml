@@ -1,0 +1,21 @@
+---
+es:
+  activerecord:
+    attributes:
+      account:
+        balance: Saldo
+        currency: Moneda
+        family: Familia
+        family_id: Familia
+        name: Nombre
+        subtype: Subtipo
+    models:
+      account: Cuenta
+      account/credit: Tarjeta de crédito
+      account/depository: Cuenta bancaria
+      account/investment: Inversión
+      account/loan: Préstamo
+      account/other_asset: Otro activo
+      account/other_liability: Otro pasivo
+      account/property: Propiedades
+      account/vehicle: Vehículo

@@ -1,0 +1,15 @@
+---
+es-ES:
+  account:
+    entries:
+      create:
+        success: Entrada creada
+      destroy:
+        success: Entrada eliminada
+      empty:
+        description: Intenta añadir una entrada, editar los filtros o refinar tu búsqueda
+        title: No se encontraron entradas
+      loading:
+        loading: Cargando entradas...
+      update:
+        success: Entrada actualizada 

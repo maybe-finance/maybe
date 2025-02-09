@@ -1,0 +1,9 @@
+---
+es:
+  users:
+    destroy:
+      success: Tu cuenta ha sido eliminada.
+    update:
+      success: "Tu perfil ha sido actualizado."
+      email_change_initiated: "Por favor, revisa tu nueva dirección de email para instrucciones de confirmación."
+      email_change_failed: "Error al cambiar la dirección de email."
