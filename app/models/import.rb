@@ -217,7 +217,7 @@ class Import < ApplicationRecord
       sanitized
     end
 
-    def set_default_currency_and_format
+    def set_default_number_format
       self.number_format ||= "1,234.56" # Default to US/UK format
     end
 end
