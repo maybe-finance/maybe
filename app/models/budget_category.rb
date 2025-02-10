@@ -93,4 +93,16 @@ class BudgetCategory < ApplicationRecord
     [ parent_budget - siblings_budget, 0 ].max
   end
 
+  def subcategories
+    return BudgetCategory.none unless category.parent_id.nil?
+    
+    budget.budget_categories
+      .joins(:category)
+      .where(categories: { parent_id: category.id })
+  end
+  
+  def subcategory?
+    category.parent_id.present?
+  end
+
 end
