@@ -136,7 +136,7 @@ class Budget < ApplicationRecord
   # Budget allocations: How much user has budgeted for all categories combined
   # =============================================================================
   def allocated_spending
-    budget_categories.sum(:budgeted_spending)
+    budget_categories.joins(:category).where(categories: { parent_id: nil }).sum(:budgeted_spending)
   end
 
   def allocated_percent
