@@ -2,7 +2,7 @@
 
 <% currency = Money::Currency.new(budget_category.budget.currency) %>
 
-<div class="w-full flex gap-3">
+<div id=<%= dom_id(budget_category, :form) %> class="w-full flex gap-3">
   <div class="w-1 h-3 rounded-xl mt-1" style="background-color: <%= budget_category.category.color %>"></div>
 
   <div class="text-sm mr-3">

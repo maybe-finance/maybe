@@ -1,1 +1,7 @@
 <%= turbo_stream.replace dom_id(@budget, :allocation_progress), partial: "budget_categories/allocation_progress", locals: { budget: @budget } %>
+
+<% if @budget_category.subcategory? %>
+  <% @budget_category.siblings.each do |sibling| %>
+    <%= turbo_stream.update dom_id(sibling, :form), partial: "budget_categories/budget_category_form", locals: { budget_category: sibling } %>
+  <% end %>
+<% end %>
