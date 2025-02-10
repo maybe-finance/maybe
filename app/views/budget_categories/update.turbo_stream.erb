@@ -5,3 +5,7 @@
     <%= turbo_stream.update dom_id(sibling, :form), partial: "budget_categories/budget_category_form", locals: { budget_category: sibling } %>
   <% end %>
 <% end %>
+
+<%= turbo_stream.replace dom_id(@budget, :uncategorized_budget_category_form), partial: "budget_categories/uncategorized_budget_category_form", locals: { budget: @budget } %>
+
+<%= turbo_stream.replace dom_id(@budget, :confirm_button), partial: "budget_categories/confirm_button", locals: { budget: @budget } %>
