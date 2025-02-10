@@ -11,7 +11,10 @@
     <%= form.select :signage_convention, [["Incomes are positive", "inflows_positive"], ["Incomes are negative", "inflows_negative"]], label: true %>
   </div>
 
-  <%= form.select :currency_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Currency" } %>
+  <div class="flex items-center gap-2">
+    <%= form.select :currency_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Currency" } %>
+    <%= form.select :number_format, Import::NUMBER_FORMATS.keys, { label: "Format", prompt: "Select format" }, required: true %>
+  </div>
 
   <%= form.select :account_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Account (optional)" } %>
   <%= form.select :name_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Name (optional)" } %>
