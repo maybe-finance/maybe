@@ -2,16 +2,6 @@
 
 <% currency = Money::Currency.new(budget_category.budget.currency) %>
 
-<% max_amount = if budget_category.category.parent_id?
-    parent_budget_category = budget_category.category.parent.budget_categories.find_by(budget: budget_category.budget)
-    sibling_total = budget_category.category.parent.subcategories
-      .joins(:budget_categories)
-      .where(budget_categories: { budget_id: budget_category.budget_id })
-      .where.not(budget_categories: { id: budget_category.id })
-      .sum('budget_categories.budgeted_spending')
-    parent_budget_category&.budgeted_spending.to_i - sibling_total
-  end %>
-
 <div class="w-full flex gap-3">
   <div class="w-1 h-3 rounded-xl mt-1" style="background-color: <%= budget_category.category.color %>"></div>
 
@@ -32,7 +22,7 @@
                             step: currency.step,
                             id: dom_id(budget_category, :budgeted_spending),
                             min: 0,
-                            max: max_amount,
+                            max: budget_category.max_allocation,
                             data: { auto_submit_form_target: "auto" } %>
         </div>
       </div>
