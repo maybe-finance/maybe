@@ -11,7 +11,7 @@ class Import < ApplicationRecord
 
   belongs_to :family
 
-  before_validation :set_default_currency_and_format
+  before_validation :set_default_number_format
 
   scope :ordered, -> { order(created_at: :desc) }
 
