@@ -61,19 +61,55 @@ namespace :securities do
 
   desc "De-duplicate securities based on ticker + exchange_operating_mic"
   task :deduplicate, [ :dry_run ] => :environment do |_t, args|
-    # First check if we have any securities without exchange_operating_mic
-    missing_mic_count = Security.where(exchange_operating_mic: nil).where.not(ticker: nil).count
-
-    if missing_mic_count > 0
-      puts "ERROR: Found #{missing_mic_count} securities without exchange_operating_mic."
-      puts "Please run 'rails securities:backfill_exchange_mic' first to ensure all securities have exchange_operating_mic values."
-      exit 1
-    end
-
     dry_run = args[:dry_run].present?
     puts "Starting securities de-duplication... #{dry_run ? '(DRY RUN)' : ''}"
 
-    # Find all duplicate securities (same ticker + exchange_operating_mic)
+    # First handle securities without exchange_operating_mic
+    securities_without_mic = Security.where(exchange_operating_mic: nil).where.not(ticker: nil)
+    puts "\nFound #{securities_without_mic.count} securities without exchange_operating_mic"
+
+    securities_without_mic.find_each do |security|
+      # Find if there's a security with the same ticker that has an exchange_operating_mic
+      canonical = Security.where.not(exchange_operating_mic: nil)
+                        .where(ticker: security.ticker)
+                        .order(created_at: :asc)
+                        .first
+
+      if canonical
+        puts "\nProcessing #{security.ticker} (no MIC):"
+        puts "  Canonical: #{canonical.id} (created: #{canonical.created_at}, MIC: #{canonical.exchange_operating_mic})"
+        puts "  Duplicate without MIC: #{security.id}"
+
+        # Count affected records
+        holdings_count = Account::Holding.where(security_id: security.id).count
+        trades_count = Account::Trade.where(security_id: security.id).count
+        prices_count = Security::Price.where(security_id: security.id).count
+
+        puts "  Would update:"
+        puts "    - #{holdings_count} holdings"
+        puts "    - #{trades_count} trades"
+        puts "    - #{prices_count} prices"
+
+        unless dry_run
+          begin
+            ActiveRecord::Base.transaction do
+              # Update all references to point to the canonical security
+              Account::Holding.where(security_id: security.id).update_all(security_id: canonical.id)
+              Account::Trade.where(security_id: security.id).update_all(security_id: canonical.id)
+              Security::Price.where(security_id: security.id).update_all(security_id: canonical.id)
+
+              # Delete the duplicate
+              security.destroy!
+            end
+            puts "  ✓ Successfully merged and removed duplicate"
+          rescue => e
+            puts "  ✗ Error processing #{security.ticker}: #{e.message}"
+          end
+        end
+      end
+    end
+
+    # Now handle duplicates with same ticker + exchange_operating_mic
     duplicates = Security
       .where.not(ticker: nil)
       .where.not(exchange_operating_mic: nil)
@@ -81,7 +117,7 @@ namespace :securities do
       .having("COUNT(*) > 1")
       .pluck(:ticker, :exchange_operating_mic)
 
-    puts "Found #{duplicates.length} sets of duplicate securities"
+    puts "\nFound #{duplicates.length} sets of duplicate securities with same ticker + MIC"
     total_holdings = 0
     total_trades = 0
     total_prices = 0
