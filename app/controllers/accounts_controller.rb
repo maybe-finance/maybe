@@ -1,6 +1,4 @@
 class AccountsController < ApplicationController
-  layout :with_sidebar
-
   before_action :set_account, only: %i[sync]
 
   def index

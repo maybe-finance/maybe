@@ -9,7 +9,6 @@ class BudgetsController < ApplicationController
     @next_budget = @budget.next_budget
     @previous_budget = @budget.previous_budget
     @latest_budget = Budget.find_or_bootstrap(Current.family)
-    render layout: with_sidebar
   end
 
   def edit

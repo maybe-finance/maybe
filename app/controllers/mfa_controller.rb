@@ -47,7 +47,7 @@ class MfaController < ApplicationController
       if action_name.in?(%w[verify verify_code])
         "auth"
       else
-        "with_sidebar"
+        "application"
       end
     end
 end

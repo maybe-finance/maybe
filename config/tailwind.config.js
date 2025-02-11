@@ -12,8 +12,8 @@ module.exports = {
     colors,
     boxShadow: {
       none: "0 0 #0000",
-      inner: "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)",
-      xs: "0px 1px 2px 0px rgba(11, 11, 11, 0.05)",
+      inner: "inset 0 2px 4px 0 rgb(0 0 0 / 0.06)",
+      xs: "0px 1px 2px 0px rgba(11, 11, 11, 0.06)",
       sm: "0px 1px 2px 0px rgba(11, 11, 11, 0.06), 0px 1px 3px 0px rgba(11, 11, 11, 0.10)",
       md: "0px 2px 4px -2px rgba(11, 11, 11, 0.06), 0px 4px 8px -2px rgba(11, 11, 11, 0.10)",
       lg: "0px 4px 6px -2px rgba(11, 11, 11, 0.03), 0px 12px 16px -4px rgba(11, 11, 11, 0.08)",

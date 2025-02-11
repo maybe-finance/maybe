@@ -2,7 +2,6 @@ module EntryableResource
   extend ActiveSupport::Concern
 
   included do
-    layout :with_sidebar
     before_action :set_entry, only: %i[show update destroy]
   end
 

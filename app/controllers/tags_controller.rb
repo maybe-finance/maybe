@@ -1,6 +1,4 @@
 class TagsController < ApplicationController
-  layout :with_sidebar
-
   before_action :set_tag, only: %i[edit update destroy]
 
   def index

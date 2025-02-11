@@ -8,7 +8,7 @@
         <%= render "settings/user_avatar", user: Current.user, variant: :small %>
       </div>
     </button>
-    <div data-menu-target="content" class="hidden absolute w-[240px] z-10 left-[255px] top-[72px] bg-white rounded-sm shadow-xs border border-alpha-black-25">
+    <div data-menu-target="content" class="hidden absolute w-[240px] z-10 left-[255px] top-[72px] divide-y divide-alpha-black-100 bg-white rounded-sm shadow-xs border border-alpha-black-25">
       <div class="p-3 flex items-center gap-3">
         <div class="w-9 h-9 shrink-0">
           <%= render "settings/user_avatar", user: Current.user, variant: :small, lazy: true %>
@@ -21,7 +21,18 @@
           <% end %>
         </div>
       </div>
-      <div class="border-t border-b border-alpha-black-100 p-1">
+
+      <% if self_hosted? %>
+        <div class="p-3">
+          <p class="text-sm">
+            <span class="font-medium text-gray-900">Version:</span>
+            <%= link_to Maybe.version.to_release_tag, "https://github.com/maybe-finance/maybe/releases/tag/#{Maybe.version.to_release_tag}", target: "_blank", class: "hover:underline" %>
+            (<%= link_to Maybe.commit_sha.first(7), "https://github.com/maybe-finance/maybe/commit/#{Maybe.commit_sha}", target: "_blank", class: "hover:underline" %>)
+          </p>
+        </div>
+      <% end %>
+
+      <div class="p-1">
         <%= link_to settings_profile_path(return_to: request.fullpath), class: "flex gap-2 items-center hover:bg-gray-50 rounded-lg px-3 py-2" do %>
           <%= lucide_icon("settings", class: "w-5 h-5 text-gray-500 shrink-0") %>
           <span class="text-gray-900 text-sm">Settings</span>
@@ -40,7 +51,8 @@
           </div>
         </div>
       </div>
-      <div class="border-t border-b border-alpha-black-100 p-1">
+
+      <div class="p-1">
         <%= link_to changelog_path, class: "flex gap-2 items-center hover:bg-gray-50 rounded-lg px-3 py-2" do %>
           <%= lucide_icon("box", class: "w-5 h-5 text-gray-500 shrink-0") %>
           <span class="text-gray-900 text-sm">Changelog</span>
@@ -61,6 +73,7 @@
           <% end %>
         <% end %>
       </div>
+
       <div class="p-1">
         <%= button_to session_path(Current.session), method: :delete, class: "w-full text-red-400 flex gap-1 items-center hover:bg-gray-50 rounded-lg px-3 py-2" do %>
           <%= lucide_icon("log-out", class: "w-5 h-5 shrink-0") %>

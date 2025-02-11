@@ -1,6 +1,4 @@
 class Tag::DeletionsController < ApplicationController
-  layout :with_sidebar
-
   before_action :set_tag
   before_action :set_replacement_tag, only: :create
 

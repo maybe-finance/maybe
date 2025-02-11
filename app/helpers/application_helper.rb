@@ -72,18 +72,8 @@ module ApplicationHelper
     render partial: "shared/disclosure", locals: { title: title, content: content, open: default_open }
   end
 
-  def sidebar_link_to(name, path, options = {})
-    is_current = current_page?(path) || (request.path.start_with?(path) && path != "/")
-
-    classes = [
-      "flex items-center gap-2 px-3 py-2 rounded-xl border text-sm font-medium text-gray-500",
-      (is_current ? "bg-white text-gray-900 shadow-xs border-alpha-black-50" : "hover:bg-gray-100 border-transparent")
-    ].compact.join(" ")
-
-    link_to path, **options.merge(class: classes), aria: { current: ("page" if current_page?(path)) } do
-      concat(lucide_icon(options[:icon], class: "w-5 h-5")) if options[:icon]
-      concat(name)
-    end
+  def page_active?(path)
+    current_page?(path) || (request.path.start_with?(path) && path != "/")
   end
 
   def mixed_hex_styles(hex)

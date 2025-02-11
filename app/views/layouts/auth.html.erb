@@ -1,35 +1,41 @@
-<%= content_for :content do %>
-  <div class="flex flex-col h-screen px-6 py-12 bg-gray-25">
-    <div class="grow flex flex-col justify-center">
-      <div class="sm:mx-auto sm:w-full sm:max-w-md">
-        <div class="flex justify-center mb-6">
-          <%= image_tag "logo-color.png", class: "w-16 mb-6" %>
+<!DOCTYPE html>
+<html class="h-full <%= @os %>" lang="en">
+  <%= render "layouts/shared/head" %>
+
+  <body class="h-full">
+    <%= render "layouts/shared/notifications" %>
+    <%= render "layouts/shared/fixed_content" %>
+
+    <div class="flex flex-col h-screen px-6 py-12 bg-gray-25">
+      <div class="grow flex flex-col justify-center">
+        <div class="sm:mx-auto sm:w-full sm:max-w-md">
+          <div class="flex justify-center mb-6">
+            <%= image_tag "logo-color.png", class: "w-16 mb-6" %>
+          </div>
+
+          <div class="space-y-2">
+            <h2 class="text-3xl font-medium text-gray-900 text-center">
+              <%= content_for?(:header_title) ? yield(:header_title).html_safe : t(".your_account") %>
+            </h2>
+
+            <% if controller_name == "sessions" %>
+              <p class="text-sm text-center">
+                <%= tag.span t(".no_account"), class: "text-gray-500" %> <%= link_to t(".sign_up"), new_registration_path, class: "font-medium text-gray-900 hover:underline transition" %>
+              </p>
+            <% elsif controller_name == "registrations" %>
+              <p class="text-sm text-center text-gray-600">
+                <%= t(".existing_account") %> <%= link_to t(".sign_in"), new_session_path, class: "font-medium text-gray-900 hover:underline transition" %>
+              </p>
+            <% end %>
+          </div>
         </div>
 
-        <div class="space-y-2">
-          <h2 class="text-3xl font-medium text-gray-900 text-center">
-            <%= content_for?(:header_title) ? yield(:header_title).html_safe : t(".your_account") %>
-          </h2>
-
-          <% if controller_name == "sessions" %>
-            <p class="text-sm text-center">
-              <%= tag.span t(".no_account"), class: "text-gray-500" %> <%= link_to t(".sign_up"), new_registration_path, class: "font-medium text-gray-900 hover:underline transition" %>
-            </p>
-          <% elsif controller_name == "registrations" %>
-            <p class="text-sm text-center text-gray-600">
-              <%= t(".existing_account") %> <%= link_to t(".sign_in"), new_session_path, class: "font-medium text-gray-900 hover:underline transition" %>
-            </p>
-          <% end %>
+        <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-lg">
+          <%= yield %>
         </div>
       </div>
 
-      <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-lg">
-        <%= yield %>
-      </div>
+      <%= render "layouts/shared/footer" %>
     </div>
-
-    <%= render "layouts/footer" %>
-  </div>
-<% end %>
-
-<%= render template: "layouts/application" %>
+  </body>
+</html>

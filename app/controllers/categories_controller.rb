@@ -1,6 +1,4 @@
 class CategoriesController < ApplicationController
-  layout :with_sidebar
-
   before_action :set_category, only: %i[edit update destroy]
   before_action :set_categories, only: %i[update edit]
   before_action :set_transaction, only: :create

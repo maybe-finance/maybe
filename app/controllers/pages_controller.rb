@@ -1,6 +1,5 @@
 class PagesController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[early_access]
-  layout :with_sidebar, except: %i[early_access]
 
   def dashboard
     @period = Period.from_param(params[:period])

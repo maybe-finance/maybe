@@ -126,60 +126,6 @@
           </div>
         </div>
       </div>
-      <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">
-        <div class="flex flex-col gap-4 h-full">
-          <div class="flex gap-4">
-            <div class="grow">
-              <%= render partial: "shared/value_heading", locals: {
-            label: t(".savings_rate"),
-              period: Period.last_30_days,
-              value: (@savings_rate_series.last&.value)*100,
-              trend: @savings_rate_series.trend,
-              is_percentage: true
-            } %>
-            </div>
-            <div
-            id="savingsRateChart"
-            class="h-full w-2/5"
-            data-controller="time-series-chart"
-            data-time-series-chart-data-value="<%= @savings_rate_series.to_json %>"
-            data-time-series-chart-use-labels-value="false"
-            data-time-series-chart-use-tooltip-value="false"></div>
-          </div>
-          <div class="flex gap-1.5">
-            <% @top_savers.first(3).each do |account| %>
-              <% unless account.savings_rate.infinite? %>
-                <%= link_to account, class: "border border-alpha-black-25 rounded-full p-1 pr-2 flex items-center gap-1 text-xs text-gray-900 font-medium hover:bg-gray-25", data: { controller: "tooltip" } do %>
-                  <%= render "accounts/logo", account: account, size: "sm" %>
-                  <span><%= account.savings_rate > 0 ? "+" : "-" %><%= number_to_percentage(account.savings_rate.abs * 100, precision: 2) %></span>
-                  <%= render partial: "shared/text_tooltip", locals: { tooltip_text: account.name } %>
-                <% end %>
-              <% end %>
-            <% end %>
-            <% if @top_savers.count > 3 %>
-              <div class="bg-gray-25 rounded-full flex h-full aspect-1 items-center justify-center text-xs font-medium text-gray-500">+<%= @top_savers.count - 3 %></div>
-            <% end %>
-          </div>
-        </div>
-      </div>
-      <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">
-        <div class="flex gap-4 h-full">
-          <div class="grow">
-            <%= render partial: "shared/value_heading", locals: {
-          label: t(".investing"),
-            period: @period,
-            value: @investing_series.last.value,
-            trend: @investing_series.trend
-          } %>
-          </div>
-          <div
-          id="investingChart"
-          class="h-full w-2/5"
-          data-controller="time-series-chart"
-          data-time-series-chart-data-value="<%= @investing_series.to_json %>"
-          data-time-series-chart-use-labels-value="false"></div>
-        </div>
-      </div>
     </section>
     <section class="w-full">
       <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl space-y-4">

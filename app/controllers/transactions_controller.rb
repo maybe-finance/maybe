@@ -1,8 +1,6 @@
 class TransactionsController < ApplicationController
   include ScrollFocusable
 
-  layout :with_sidebar
-
   before_action :store_params!, only: :index
 
   def index
