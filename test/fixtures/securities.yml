@@ -1,12 +1,12 @@
 aapl:
   ticker: AAPL
   name: Apple
-  exchange_mic: XNAS
+  exchange_operating_mic: XNAS
   country_code: US
 
 msft:
   ticker: MSFT
   name: Microsoft
-  exchange_mic: XNAS
+  exchange_operating_mic: XNAS
   country_code: US
 

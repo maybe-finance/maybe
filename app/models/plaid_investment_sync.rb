@@ -82,7 +82,7 @@ class PlaidInvestmentSync
       end
 
       return [ nil, nil ] if plaid_security.nil? || plaid_security.ticker_symbol.blank?
-      return [ nil, nil ] if plaid_security.ticker_symbol == "CUR:USD" # internally, we do not consider cash a security and track it separately
+      return [ nil, plaid_security ] if plaid_security.ticker_symbol == "CUR:USD" # internally, we do not consider cash a security and track it separately
 
       operating_mic = plaid_security.market_identifier_code
 
