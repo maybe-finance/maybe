@@ -7,7 +7,7 @@ class BudgetCategoriesController < ApplicationController
   end
 
   def show
-    @recent_transactions = @budget.entries
+    @recent_transactions = @budget.transactions
 
     if params[:id] == BudgetCategory.uncategorized.id
       @budget_category = @budget.uncategorized_budget_category

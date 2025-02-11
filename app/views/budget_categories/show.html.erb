@@ -106,7 +106,7 @@
         <div class="px-3 py-4 space-y-2">
           <% if @recent_transactions.any? %>
             <ul class="space-y-2 mb-4">
-              <% @recent_transactions.each_with_index do |entry, index| %>
+              <% @recent_transactions.each_with_index do |transaction, index| %>
                 <li class="flex gap-4 text-sm space-y-1">
                   <div class="flex flex-col items-center gap-1.5 pt-2">
                     <div class="rounded-full h-1.5 w-1.5 bg-gray-300"></div>
@@ -118,12 +118,15 @@
                   <div class="flex justify-between w-full">
                     <div>
                       <p class="text-gray-500 text-xs uppercase">
-                        <%= entry.date.strftime("%b %d") %>
+                        <%= transaction.entry.date.strftime("%b %d") %>
                       </p>
-                      <p class="text-gray-900"><%= entry.name %></p>
+                      <%= link_to transaction.entry.name, 
+                                  transactions_path(focused_record_id: transaction.id), 
+                                  class: "text-gray-900 hover:underline", 
+                                  data: { turbo_frame: :_top } %>
                     </div>
                     <p class="text-gray-900 font-medium">
-                      <%= format_money entry.amount_money %>
+                      <%= format_money transaction.entry.amount_money %>
                     </p>
                   </div>
                 </li>

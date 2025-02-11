@@ -52,8 +52,8 @@ class Budget < ApplicationRecord
     end
   end
 
-  def entries
-    family.entries.incomes_and_expenses.where(date: start_date..end_date)
+  def transactions
+    family.transactions.incomes_and_expenses.search({ start_date:, end_date: })
   end
 
   def name
@@ -161,7 +161,11 @@ class Budget < ApplicationRecord
   end
 
   def actual_income
-    family.entries.incomes.where(date: start_date..end_date).sum(:amount).abs
+    family.transactions
+          .incomes
+          .search({ start_date:, end_date: })
+          .sum("account_entries.amount")
+          .abs
   end
 
   def actual_income_percent
