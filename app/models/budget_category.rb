@@ -79,4 +79,29 @@ class BudgetCategory < ApplicationRecord
 
     segments
   end
+
+  def siblings
+    budget.budget_categories.select { |bc| bc.category.parent_id == category.parent_id && bc.id != id }
+  end
+
+  def max_allocation
+    return nil unless subcategory?
+
+    parent_budget = budget.budget_categories.find { |bc| bc.category.id == category.parent_id }&.budgeted_spending
+    siblings_budget = siblings.sum(&:budgeted_spending)
+
+    [ parent_budget - siblings_budget, 0 ].max
+  end
+
+  def subcategories
+    return BudgetCategory.none unless category.parent_id.nil?
+
+    budget.budget_categories
+      .joins(:category)
+      .where(categories: { parent_id: category.id })
+  end
+
+  def subcategory?
+    category.parent_id.present?
+  end
 end
