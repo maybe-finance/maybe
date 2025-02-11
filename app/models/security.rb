@@ -6,7 +6,7 @@ class Security < ApplicationRecord
   has_many :prices, dependent: :destroy
 
   validates :ticker, presence: true
-  validates :ticker, uniqueness: { scope: :exchange_mic, case_sensitive: false }
+  validates :ticker, uniqueness: { scope: :exchange_operating_mic, case_sensitive: false }
 
   class << self
     def search(query)
@@ -30,9 +30,13 @@ class Security < ApplicationRecord
       name: name,
       logo_url: logo_url,
       exchange_acronym: exchange_acronym,
-      exchange_mic: exchange_mic,
+      exchange_operating_mic: exchange_operating_mic,
       exchange_country_code: country_code
     )
+  end
+
+  def has_prices?
+    exchange_operating_mic.present?
   end
 
   private
