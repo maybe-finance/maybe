@@ -30,7 +30,7 @@ en:
         expense: Expense
         income: Income
         submit: Add transaction
-        transfer: Transfer 
+        transfer: Transfer
       new:
         new_transaction: New transaction
       show:

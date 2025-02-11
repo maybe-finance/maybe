@@ -20,7 +20,7 @@ en:
         purchase_qty_label: Purchase Quantity
         sell: Sell
         symbol_label: Symbol
-        total_return_label: Unrealized gain/loss 
+        total_return_label: Unrealized gain/loss
       new:
         title: New transaction
       show:

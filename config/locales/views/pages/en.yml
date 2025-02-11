@@ -14,6 +14,11 @@ en:
       investing: Investing (coming soon...)
       net_worth: Net Worth
       new: New account
+      no_account_empty_state:
+        new_account: New account
+        no_account_subtitle: Since no accounts have been added, there's no data to
+          display. Add your first accounts to start viewing dashboard data.
+        no_account_title: No accounts yet
       no_transactions: You have no recent transactions
       savings_rate: Savings Rate
       spending: Spending
