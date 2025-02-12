@@ -2,6 +2,7 @@ class PlaidItem < ApplicationRecord
   include Plaidable, Syncable
 
   enum :plaid_region, { us: "us", eu: "eu" }
+  enum :status, { good: "good", requires_update: "requires_update" }, default: :good
 
   if Rails.application.credentials.active_record_encryption.present?
     encrypts :access_token, deterministic: true
@@ -19,6 +20,7 @@ class PlaidItem < ApplicationRecord
 
   scope :active, -> { where(scheduled_for_deletion: false) }
   scope :ordered, -> { order(created_at: :desc) }
+  scope :needs_update, -> { where(status: :requires_update) }
 
   class << self
     def create_from_public_token(token, item_name:, region:)
@@ -38,13 +40,35 @@ class PlaidItem < ApplicationRecord
   def sync_data(start_date: nil)
     update!(last_synced_at: Time.current)
 
-    plaid_data = fetch_and_load_plaid_data
-
-    accounts.each do |account|
-      account.sync_later(start_date: start_date)
+    begin
+      plaid_data = fetch_and_load_plaid_data
+      update!(status: :good) if requires_update?
+      plaid_data
+    rescue Plaid::ApiError => e
+      handle_plaid_error(e)
+      raise e
     end
+  end
 
-    plaid_data
+  def get_update_link_token(webhooks_url:, redirect_url:)
+    begin
+      family.get_link_token(
+        webhooks_url: webhooks_url,
+        redirect_url: redirect_url,
+        region: plaid_region,
+        access_token: access_token
+      )
+    rescue Plaid::ApiError => e
+      error_body = JSON.parse(e.response_body)
+
+      if error_body["error_code"] == "ITEM_NOT_FOUND"
+        # Mark the connection as invalid but don't auto-delete
+        update!(status: :requires_update)
+        raise PlaidConnectionLostError
+      else
+        raise e
+      end
+    end
   end
 
   def post_sync
@@ -151,4 +175,14 @@ class PlaidItem < ApplicationRecord
     rescue StandardError => e
       Rails.logger.warn("Failed to remove Plaid item #{id}: #{e.message}")
     end
+
+    def handle_plaid_error(error)
+      error_body = JSON.parse(error.response_body)
+
+      if error_body["error_code"] == "ITEM_LOGIN_REQUIRED"
+        update!(status: :requires_update)
+      end
+    end
+
+    class PlaidConnectionLostError < StandardError; end
 end

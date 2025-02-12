@@ -5,6 +5,8 @@ export default class extends Controller {
   static values = {
     linkToken: String,
     region: { type: String, default: "us" },
+    isUpdate: { type: Boolean, default: false },
+    itemId: String
   };
 
   open() {
@@ -13,15 +15,30 @@ export default class extends Controller {
       onSuccess: this.handleSuccess,
       onLoad: this.handleLoad,
       onExit: this.handleExit,
-      onEvent: this.handleEvent,
+      onEvent: this.handleEvent
     });
 
     handler.open();
   }
 
   handleSuccess = (public_token, metadata) => {
-    window.location.href = "/accounts";
+    if (this.isUpdateValue) {
+      // Trigger a sync to verify the connection and update status
+      fetch(`/plaid_items/${this.itemIdValue}/sync`, {
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "X-CSRF-Token": document.querySelector('[name="csrf-token"]').content,
+        }
+      }).then(() => {
+        // Refresh the page to show the updated status
+        window.location.href = "/accounts";
+      });
+      return;
+    }
 
+    // For new connections, create a new Plaid item
     fetch("/plaid_items", {
       method: "POST",
       headers: {
@@ -43,7 +60,10 @@ export default class extends Controller {
   };
 
   handleExit = (err, metadata) => {
-    // no-op
+    // If there was an error during update mode, refresh the page to show latest status
+    if (err && metadata.status === "requires_credentials") {
+      window.location.href = "/accounts";
+    }
   };
 
   handleEvent = (eventName, metadata) => {
