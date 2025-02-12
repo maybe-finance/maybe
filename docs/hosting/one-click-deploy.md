@@ -2,6 +2,24 @@
 
 Below are our "one-click deploy" options for running Maybe in the cloud:
 
+## PikaPods
+
+Allows running a large selection of open source apps with just a few clicks.
+New users get $5 free welcome credit. Running Maybe is $1.7/month at the time
+of writing.
+
+You can also use your own domain, like `budget.example.com` or set up encrypted
+backups to your own S3 account.
+
+<a href="https://www.pikapods.com/pods?run=maybe">
+<img src="https://www.pikapods.com/static/run-button.svg" alt="Deploy to PikaPods" />
+</a>
+
+### Instructions
+
+1. [Sign up](https://www.pikapods.com/register) for an account and confirm email
+2. [Run](https://www.pikapods.com/pods?run=maybe) Maybe
+
 ## Render
 
 Welcome to the one-click deploy guide for Maybe on [Render](https://render.com/)!
