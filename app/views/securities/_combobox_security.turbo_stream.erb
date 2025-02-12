@@ -5,7 +5,7 @@
       <%= combobox_security.name.presence || combobox_security.symbol %>
     </span>
     <span class="text-xs text-gray-500">
-      <%= "#{combobox_security.symbol} (#{combobox_security.exchange_acronym})" %>
+      <%= "#{combobox_security.symbol} (#{combobox_security.exchange_acronym.presence || combobox_security.exchange_operating_mic})" %>
     </span>
   </div>
 </div>

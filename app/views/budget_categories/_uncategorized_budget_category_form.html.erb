@@ -2,7 +2,7 @@
 
 <% budget_category = budget.uncategorized_budget_category %>
 
-<div class="flex gap-3">
+<div id="<%= dom_id(budget, :uncategorized_budget_category_form) %>" class="flex gap-3">
   <div class="w-1 h-3 rounded-xl mt-1" style="background-color: <%= budget_category.category.color %>"></div>
 
   <div class="text-sm mr-3">

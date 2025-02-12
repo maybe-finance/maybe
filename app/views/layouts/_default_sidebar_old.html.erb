@@ -108,7 +108,7 @@
       <span class="font-bold tracking-wide">&bull;</span>
 
       <%= form_with url: list_accounts_path, method: :get, data: { controller: Current.family.accounts.any? ? "auto-submit-form" : nil, turbo_frame: "account-list" } do |form| %>
-        <%= period_select form: form, selected: "last_30_days", classes: "w-full border-none pl-2 pr-7 text-xs bg-transparent gap-1 cursor-pointer font-semibold tracking-wide focus:outline-none focus:ring-0" %>
+        <%= period_select form: form, selected: "last_30_days", classes: "w-full border-none pl-2 pr-7 text-xs bg-transparent gap-1 cursor-pointer font-semibold tracking-wide focus:outline-hidden focus:ring-0" %>
       <% end %>
     </div>
     <%= link_to new_account_path, id: "sidebar-new-account", class: "block hover:bg-gray-100 font-semibold text-gray-900 flex items-center rounded p-1", title: t(".new_account"), data: { turbo_frame: "modal" } do %>
