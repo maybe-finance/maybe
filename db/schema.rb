@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_11_161238) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_12_163624) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -520,6 +520,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_11_161238) do
     t.string "institution_url"
     t.string "institution_id"
     t.string "institution_color"
+    t.string "status", default: "good", null: false
     t.index ["family_id"], name: "index_plaid_items_on_family_id"
   end
 
