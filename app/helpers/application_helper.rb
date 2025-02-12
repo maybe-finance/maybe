@@ -161,6 +161,6 @@ module ApplicationHelper
     return "+\u221E" if value.infinite? && value > 0
     return "-\u221E" if value.infinite? && value < 0
 
-    format_percent(value, precision: 1)
+    number_to_percentage(value, precision: 1)
   end
 end

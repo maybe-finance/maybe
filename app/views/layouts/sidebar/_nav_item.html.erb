@@ -1,16 +1,16 @@
-<%# locals: (name:, path:, icon_key:, active: false) %>
+<%# locals: (name:, path:, icon_key:) %>
 
 <%= link_to path, class: "space-y-1 py-1 group block" do %>
   <div class="grow flex gap-1 items-center">
-    <%= tag.div class: class_names("w-1 h-4 rounded-tr-sm rounded-br-sm", "bg-gray-900" => active) %>
+    <%= tag.div class: class_names("w-1 h-4 rounded-tr-sm rounded-br-sm", "bg-gray-900" => page_active?(path)) %>
 
-    <%= tag.div class: class_names("w-8 h-8 flex items-center justify-center mx-auto rounded-lg", active ? "bg-white shadow-xs text-gray-900" : "group-hover:bg-gray-100 text-gray-500") do %>
+    <%= tag.div class: class_names("w-8 h-8 flex items-center justify-center mx-auto rounded-lg", page_active?(path) ? "bg-white shadow-xs text-gray-900" : "group-hover:bg-gray-100 text-gray-500") do %>
       <%= icon(icon_key) %>
     <% end %>
   </div>
 
   <div class="grow pl-2">
-    <%= tag.p class: class_names("text-center font-medium text-[11px]", active ? "text-gray-900" : "text-gray-500") do %>
+    <%= tag.p class: class_names("text-center font-medium text-[11px]", page_active?(path) ? "text-gray-900" : "text-gray-500") do %>
       <%= name %>
     <% end %>
   </div>

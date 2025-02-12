@@ -4,10 +4,14 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static classes = ["active", "inactive"];
   static targets = ["btn", "tab"];
-  static values = { defaultTab: String };
+  static values = { defaultTab: String, localStorageKey: String };
 
   connect() {
-    this.updateClasses(this.defaultTabValue);
+    const selectedTab = this.hasLocalStorageKeyValue
+      ? this.getStoredTab() || this.defaultTabValue
+      : this.defaultTabValue;
+
+    this.updateClasses(selectedTab);
     document.addEventListener("turbo:load", this.onTurboLoad);
   }
 
@@ -18,13 +22,32 @@ export default class extends Controller {
   select(event) {
     const element = event.target.closest("[data-id]");
     if (element) {
-      this.updateClasses(element.dataset.id);
+      const selectedId = element.dataset.id;
+      this.updateClasses(selectedId);
+      if (this.hasLocalStorageKeyValue) {
+        this.storeTab(selectedId);
+      }
     }
   }
 
   onTurboLoad = () => {
-    this.updateClasses(this.defaultTabValue);
+    const selectedTab = this.hasLocalStorageKeyValue
+      ? this.getStoredTab() || this.defaultTabValue
+      : this.defaultTabValue;
+
+    this.updateClasses(selectedTab);
   };
+
+  getStoredTab() {
+    const tabs = JSON.parse(localStorage.getItem("tabs") || "{}");
+    return tabs[this.localStorageKeyValue];
+  }
+
+  storeTab(selectedId) {
+    const tabs = JSON.parse(localStorage.getItem("tabs") || "{}");
+    tabs[this.localStorageKeyValue] = selectedId;
+    localStorage.setItem("tabs", JSON.stringify(tabs));
+  }
 
   updateClasses = (selectedId) => {
     this.btnTargets.forEach((btn) => {

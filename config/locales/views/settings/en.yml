@@ -6,7 +6,7 @@ en:
         page_title: Billing
         subscription_subtitle: Manage your subscription and billing details
         subscription_title: Manage subscription
-    nav:
+    settings_nav:
       accounts_label: Accounts
       billing_label: Billing
       categories_label: Categories
@@ -23,7 +23,7 @@ en:
       tags_label: Tags
       transactions_section_title: Transactions
       whats_new_label: What's new
-    nav_link_large:
+    settings_nav_link_large:
       next: Next
       previous: Back
     preferences:

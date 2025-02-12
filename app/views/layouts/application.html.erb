@@ -9,14 +9,24 @@
     <div class="flex h-full bg-gray-25">
       <nav class="flex flex-col shrink-0 w-[84px] py-4 mr-3">
         <div class="pl-2 mb-3">
-          <%= image_tag "logomark-color.svg", class: "w-9 h-9 mx-auto" %>
+          <%= link_to root_path, class: "block" do %>
+            <%= image_tag "logomark-color.svg", class: "w-9 h-9 mx-auto" %>
+          <% end %>
         </div>
 
-        <div class="space-y-0.5">
-          <%= render "layouts/sidebar/nav_item", name: "Home", path: root_path, icon_key: "pie-chart", active: page_active?(root_path) %>
-          <%= render "layouts/sidebar/nav_item", name: "Transactions", path: transactions_path, icon_key: "credit-card", active: page_active?(transactions_path) %>
-          <%= render "layouts/sidebar/nav_item", name: "Budgets", path: budgets_path, icon_key: "layout-grid", active: page_active?(budgets_path) %>
-        </div>
+        <ul class="space-y-0.5">
+          <li>
+            <%= render "layouts/sidebar/nav_item", name: "Home", path: root_path, icon_key: "pie-chart" %>
+          </li>
+
+          <li>
+            <%= render "layouts/sidebar/nav_item", name: "Transactions", path: transactions_path, icon_key: "credit-card" %>
+          </li>
+
+          <li>
+            <%= render "layouts/sidebar/nav_item", name: "Budgets", path: budgets_path, icon_key: "layout-grid" %>
+          </li>
+        </ul>
 
         <div class="pl-2 mt-auto mx-auto">
           <%= render "users/user_menu", user: Current.user %>
@@ -27,7 +37,9 @@
         <% if content_for?(:sidebar) %>
           <%= yield :sidebar %>
         <% else %>
-          <%= render "accounts/account_sidebar_tabs", accounts: Current.family.accounts.active.to_a %>
+          <div id="account-sidebar-tabs" data-turbo-permanent>
+            <%= render "accounts/account_sidebar_tabs", accounts: Current.family.accounts.active.to_a %>
+          </div>
         <% end %>
       </div>
 

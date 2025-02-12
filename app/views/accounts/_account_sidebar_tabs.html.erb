@@ -3,11 +3,12 @@
 <div 
   class="space-y-3"
   data-controller="tabs" 
+  data-tabs-local-storage-key-value="account-sidebar-tabs"
   data-tabs-active-class="bg-white shadow-sm text-gray-900" 
   data-tabs-inactive-class="text-gray-500"
   data-tabs-default-tab-value="assets-tab">
   <div class="bg-gray-100 rounded-lg p-1 flex">
-    <button type="button" data-id="assets-tab" class="w-1/3 px-2 py-1 rounded-md text-sm bg-white shadow-sm text-gray-900" data-tabs-target="btn" data-action="click->tabs#select">
+    <button type="button" data-id="assets-tab" class="w-1/3 px-2 py-1 rounded-md text-sm text-gray-500" data-tabs-target="btn" data-action="click->tabs#select">
       Assets
     </button>
 

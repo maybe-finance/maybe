@@ -1,4 +1,4 @@
-class Settings::SecuritiesController < SettingsController
+class Settings::SecuritiesController < ApplicationController
   def show
   end
 end

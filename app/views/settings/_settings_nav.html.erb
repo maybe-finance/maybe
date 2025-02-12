@@ -16,28 +16,33 @@
       </div>
       <ul class="space-y-1">
         <li>
-          <%= sidebar_link_to t(".profile_label"), settings_profile_path, icon: "circle-user" %>
-        </li>
-        <li>
-          <%= sidebar_link_to t(".preferences_label"), settings_preferences_path, icon: "bolt" %>
-        </li>
-        <li>
-          <%= sidebar_link_to t(".security_label"), settings_security_path, icon: "shield-check" %>
-        </li>
-        <% if self_hosted? %>
-          <li>
-            <%= sidebar_link_to t(".self_hosting_label"), settings_hosting_path, icon: "database" %>
-          </li>
-        <% end %>
-        <li>
-          <%= sidebar_link_to t(".billing_label"), settings_billing_path, icon: "circle-dollar-sign" %>
-        </li>
-        <li>
-          <%= sidebar_link_to t(".accounts_label"), accounts_path, icon: "layers" %>
+          <%= render "settings/settings_nav_item", name: t(".profile_label"), path: settings_profile_path, icon: "circle-user" %>
         </li>
 
         <li>
-          <%= sidebar_link_to t(".imports_label"), imports_path, icon: "download" %>
+          <%= render "settings/settings_nav_item", name: t(".preferences_label"), path: settings_preferences_path, icon: "bolt" %>
+        </li>
+
+        <li>
+          <%= render "settings/settings_nav_item", name: t(".security_label"), path: settings_security_path, icon: "shield-check" %>
+        </li>
+
+        <% if self_hosted? %>
+          <li>
+            <%= render "settings/settings_nav_item", name: t(".self_hosting_label"), path: settings_hosting_path, icon: "database" %>
+          </li>
+        <% end %>
+
+        <li>
+          <%= render "settings/settings_nav_item", name: t(".billing_label"), path: settings_billing_path, icon: "circle-dollar-sign" %>
+        </li>
+
+        <li>
+          <%= render "settings/settings_nav_item", name: t(".accounts_label"), path: accounts_path, icon: "layers" %>
+        </li>
+
+        <li>
+          <%= render "settings/settings_nav_item", name: t(".imports_label"), path: imports_path, icon: "download" %>
         </li>
       </ul>
     </section>
@@ -49,13 +54,13 @@
       </div>
       <ul class="space-y-1">
         <li>
-          <%= sidebar_link_to t(".tags_label"), tags_path, icon: "tags" %>
+          <%= render "settings/settings_nav_item", name: t(".tags_label"), path: tags_path, icon: "tags" %>
         </li>
         <li>
-          <%= sidebar_link_to t(".categories_label"), categories_path, icon: "shapes" %>
+          <%= render "settings/settings_nav_item", name: t(".categories_label"), path: categories_path, icon: "shapes" %>
         </li>
         <li>
-          <%= sidebar_link_to t(".merchants_label"), merchants_path, icon: "store" %>
+          <%= render "settings/settings_nav_item", name: t(".merchants_label"), path: merchants_path, icon: "store" %>
         </li>
       </ul>
     </section>
@@ -67,8 +72,8 @@
       </div>
       <ul class="space-y-1">
         <li>
-          <%= sidebar_link_to t(".whats_new_label"), changelog_path, icon: "box" %>
-          <%= sidebar_link_to t(".feedback_label"), feedback_path, icon: "megaphone" %>
+          <%= render "settings/settings_nav_item", name: t(".whats_new_label"), path: changelog_path, icon: "box" %>
+          <%= render "settings/settings_nav_item", name: t(".feedback_label"), path: feedback_path, icon: "megaphone" %>
         </li>
       </ul>
     </section>

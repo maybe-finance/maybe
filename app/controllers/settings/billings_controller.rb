@@ -1,4 +1,4 @@
-class Settings::BillingsController < SettingsController
+class Settings::BillingsController < ApplicationController
   def show
     @user = Current.user
   end
