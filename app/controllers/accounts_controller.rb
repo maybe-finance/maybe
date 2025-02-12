@@ -34,6 +34,11 @@ class AccountsController < ApplicationController
     render layout: "application"
   end
 
+  def sparkline
+    @account = Current.family.accounts.find(params[:id])
+    render layout: false
+  end
+
   def sync_all
     unless Current.family.syncing?
       Current.family.sync_later

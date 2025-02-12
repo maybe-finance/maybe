@@ -7,7 +7,7 @@
     <%= render "layouts/shared/fixed_content" %>
 
     <div class="flex h-full bg-gray-25">
-      <nav class="shrink-0 w-[84px] py-4">
+      <nav class="shrink-0 w-[84px] py-4 mr-3">
         <div class="pl-2 mb-3">
           <%= image_tag "logomark-color.svg", class: "w-9 h-9 mx-auto" %>
         </div>
@@ -19,15 +19,15 @@
         </div>
       </nav>
 
-      <div class="p-6 pb-20 w-[368px] shrink-0 h-full overflow-y-auto">
+      <div class="py-4 w-[260px] shrink-0 h-full overflow-y-auto">
         <% if content_for?(:sidebar) %>
           <%= yield :sidebar %>
         <% else %>
-          <%= render "layouts/default_sidebar" %>
+          <%= render "layouts/default_sidebar", accounts: Current.family.accounts.active.to_a %>
         <% end %>
       </div>
 
-      <main class="grow px-20 py-6 h-full <%= require_upgrade? ? "relative overflow-hidden" : "overflow-y-auto" %>">
+      <main class="container mx-auto px-10 py-6 h-full <%= require_upgrade? ? "relative overflow-hidden" : "overflow-y-auto" %>">
         <% if require_upgrade? %>
           <%= render "shared/subscribe_modal" %>
         <% end %>

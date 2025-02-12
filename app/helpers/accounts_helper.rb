@@ -65,6 +65,22 @@ module AccountsHelper
     class_mapping(accountable_type)[:hex]
   end
 
+  def accountable_groups(accounts, classification: nil)
+    filtered_accounts = if classification
+      accounts.select { |a| a.classification == classification }
+    else
+      accounts
+    end
+
+    groups = filtered_accounts.group_by(&:accountable_type)
+
+    group_templates = groups.map do |accountable_type, accounts|
+      render "accounts/accountable_group", accountable: accountable_type.constantize, accounts:
+    end
+
+    safe_join(group_templates)
+  end
+
   def account_groups(period: nil)
     assets, liabilities = Current.family.accounts.active.by_group(currency: Current.family.currency, period: period || Period.last_30_days).values_at(:assets, :liabilities)
     [ assets.children.sort_by(&:name), liabilities.children.sort_by(&:name) ].flatten

@@ -86,8 +86,11 @@ Rails.application.routes.draw do
     member do
       post :sync
       get :chart
+      get :sparkline
     end
   end
+
+  resources :accountable_sparklines, only: :show, param: :accountable_type
 
   namespace :account do
     resources :holdings, only: %i[index new show destroy]

@@ -1,0 +1,11 @@
+<%= turbo_frame_tag dom_id(@account, :sparkline) do %>
+  <div class="flex items-center justify-end gap-1">
+    <div class="w-8 h-3">
+      <%= render "shared/sparkline", id: dom_id(@account, :sparkline_chart), series: @account.series %>
+    </div>
+
+    <%= tag.p trend_percent(@account.series.trend.percent), 
+              style: "color: #{@account.series.trend.color}", 
+              class: "text-right text-sm font-medium text-gray-900" %>
+  </div>
+<% end %>
