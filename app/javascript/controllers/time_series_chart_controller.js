@@ -1,5 +1,4 @@
 import { Controller } from "@hotwired/stimulus";
-import tailwindColors from "@maybe/tailwindcolors";
 import * as d3 from "d3";
 
 export default class extends Controller {
@@ -85,7 +84,7 @@ export default class extends Controller {
       .attr("y1", 0)
       .attr("x2", this._d3InitialContainerWidth / 2)
       .attr("y2", this._d3InitialContainerHeight)
-      .attr("stroke", tailwindColors.gray[300])
+      .attr("stroke", "var(--color-gray-300)")
       .attr("stroke-dasharray", "4, 4");
   }
 
@@ -95,7 +94,7 @@ export default class extends Controller {
       .attr("cx", this._d3InitialContainerWidth / 2)
       .attr("cy", this._d3InitialContainerHeight / 2)
       .attr("r", 4)
-      .style("fill", tailwindColors.gray[400]);
+      .style("fill", "var(--color-gray-400)");
   }
 
   _drawChart() {
@@ -151,7 +150,7 @@ export default class extends Controller {
       .append("stop")
       .attr("class", "end-color")
       .attr("offset", "100%")
-      .attr("stop-color", tailwindColors.gray[300]);
+      .attr("stop-color", "var(--color-gray-300)");
   }
 
   _setTrendlineSplitAt(percent) {
@@ -191,7 +190,7 @@ export default class extends Controller {
     // Style ticks
     this._d3Group
       .selectAll(".tick text")
-      .style("fill", tailwindColors.gray[500])
+      .style("fill", "var(--color-gray-500)")
       .style("font-size", "12px")
       .style("font-weight", "500")
       .attr("text-anchor", "middle")
@@ -261,8 +260,8 @@ export default class extends Controller {
       .style("position", "absolute")
       .style("padding", "8px")
       .style("font", "14px Inter, sans-serif")
-      .style("background", tailwindColors.white)
-      .style("border", `1px solid ${tailwindColors["alpha-black"][100]}`)
+      .style("background", "var(--color-white)")
+      .style("border", "1px solid var(--color-alpha-black-100)")
       .style("border-radius", "10px")
       .style("pointer-events", "none")
       .style("opacity", 0); // Starts as hidden
@@ -313,7 +312,7 @@ export default class extends Controller {
           .attr("y1", 0)
           .attr("x2", this._d3XScale(d.date))
           .attr("y2", this._d3ContainerHeight)
-          .attr("stroke", tailwindColors.gray[300])
+          .attr("stroke", "var(--color-gray-300)")
           .attr("stroke-dasharray", "4, 4");
 
         // Big circle
@@ -361,7 +360,7 @@ export default class extends Controller {
 
   _tooltipTemplate(datum) {
     return `
-      <div style="margin-bottom: 4px; color: ${tailwindColors.gray[500]};">
+      <div style="margin-bottom: 4px; color: var(--color-gray-500);">
         ${d3.utcFormat("%b %d, %Y")(datum.date)}
       </div>
 
@@ -401,13 +400,13 @@ export default class extends Controller {
     return {
       up:
         datum.trend.favorable_direction === "up"
-          ? tailwindColors.success
-          : tailwindColors.error,
+          ? "var(--color-success)"
+          : "var(--color-error)",
       down:
         datum.trend.favorable_direction === "down"
-          ? tailwindColors.success
-          : tailwindColors.error,
-      flat: tailwindColors.gray[500],
+          ? "var(--color-success)"
+          : "var(--color-error)",
+      flat: "var(--color-gray-500)",
     }[datum.trend.direction];
   }
 
@@ -505,12 +504,12 @@ export default class extends Controller {
 
   get _trendColor() {
     if (this._trendDirection === "flat") {
-      return tailwindColors.gray[500];
+      return "var(--color-gray-500)";
     }
     if (this._trendDirection === this._favorableDirection) {
-      return tailwindColors.green[500];
+      return "var(--color-green-500)";
     }
-    return tailwindColors.error;
+    return "var(--color-error)";
   }
 
   get _trendDirection() {

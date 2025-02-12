@@ -5,7 +5,7 @@
       <p class="text-gray-500 text-sm"><%= t(".description") %></p>
     </div>
 
-    <%= styled_form_with model: Setting.new, url: settings_hosting_path, method: :patch, data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
+    <%= styled_form_with model: Setting.new, url: settings_hosting_path, method: :patch, data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur-sm" } do |form| %>
       <div class="relative inline-block select-none">
         <%= form.check_box :require_invite_for_signup, class: "sr-only peer", "data-auto-submit-form-target": "auto", "data-autosubmit-trigger-event": "input", disabled: !Current.user.admin? %>
         <%= form.label :require_invite_for_signup, "&nbsp;".html_safe, class: "maybe-switch" %>
@@ -19,7 +19,7 @@
       <p class="text-gray-500 text-sm"><%= t(".email_confirmation_description") %></p>
     </div>
 
-    <%= styled_form_with model: Setting.new, url: settings_hosting_path, method: :patch, data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
+    <%= styled_form_with model: Setting.new, url: settings_hosting_path, method: :patch, data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur-sm" } do |form| %>
       <div class="relative inline-block select-none">
         <%= form.check_box :require_email_confirmation, class: "sr-only peer", "data-auto-submit-form-target": "auto", "data-autosubmit-trigger-event": "input", disabled: !Current.user.admin? %>
         <%= form.label :require_email_confirmation, "&nbsp;".html_safe, class: "maybe-switch" %>
