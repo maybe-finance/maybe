@@ -15,6 +15,29 @@
         <%= generate_mfa_qr_code(Current.user.provisioning_uri) %>
       </div>
 
+      <div class="mt-6">
+        <h3 class="text-sm font-medium text-gray-900"><%= t(".secret_title") %></h3>
+        <div class="mt-2 text-sm text-gray-500">
+          <p><%= t(".secret_description") %></p>
+        </div>
+        <div class="mt-2 flex items-center gap-2" data-controller="clipboard">
+          <span data-clipboard-target="source" class="hidden"><%= Current.user.otp_secret %></span>
+          <input type="text"
+                 readonly
+                 autocomplete="off"
+                 value="<%= Current.user.otp_secret %>"
+                 class="text-sm bg-gray-50 px-2 py-1 rounded border border-gray-200 w-96 font-mono">
+          <button data-action="clipboard#copy" class="text-gray-500 hover:text-gray-700">
+            <span data-clipboard-target="iconDefault">
+              <%= lucide_icon "copy", class: "w-5 h-5" %>
+            </span>
+            <span class="hidden" data-clipboard-target="iconSuccess">
+              <%= lucide_icon "check", class: "w-5 h-5" %>
+            </span>
+          </button>
+        </div>
+      </div>
+
       <div>
         <h3 class="text-lg font-medium leading-6 text-gray-900"><%= t(".verify_title") %></h3>
         <div class="mt-2 text-sm text-gray-500">
