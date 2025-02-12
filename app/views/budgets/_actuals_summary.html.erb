@@ -21,7 +21,7 @@
         <div class="flex flex-wrap gap-x-2.5 gap-y-1 text-xs">
           <% income_categories.each do |item| %>
             <div class="flex items-center gap-1.5">
-              <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background-color: <%= item.category.color %>"></div>
+              <div class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: <%= item.category.color %>"></div>
               <span class="text-gray-500"><%= item.category.name %></span>
               <span class="text-gray-900"><%= number_to_percentage(item.percentage, precision: 0) %></span>
             </div>
@@ -50,7 +50,7 @@
         <div class="flex flex-wrap gap-x-2.5 gap-y-1 text-xs">
           <% expense_categories.each do |item| %>
             <div class="flex items-center gap-1.5">
-              <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background-color: <%= item.category.color %>"></div>
+              <div class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: <%= item.category.color %>"></div>
               <span class="text-gray-500"><%= item.category.name %></span>
               <span class="text-gray-900"><%= number_to_percentage(item.percentage, precision: 0) %></span>
             </div>
