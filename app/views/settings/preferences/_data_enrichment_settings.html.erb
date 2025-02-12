@@ -11,7 +11,7 @@
     </div>
 
     <%= styled_form_with model: user,
-                         data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value": "blur-sm" } do |form| %>
+                         data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value": "blur" } do |form| %>
       <div class="relative inline-block select-none">
         <%= form.hidden_field :redirect_to, value: "preferences" %>
         <%= form.fields_for :family do |family_form| %>
