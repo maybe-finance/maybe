@@ -320,25 +320,26 @@
   @apply hidden absolute;
 }
 
-.btn {
+@utility btn {
   @apply px-3 py-2 rounded-lg text-sm font-medium cursor-pointer disabled:cursor-not-allowed focus:outline-gray-500;
 }
 
-.btn--primary {
+@utility btn--primary {
   @apply bg-gray-900 text-white hover:bg-gray-700 disabled:bg-gray-50 disabled:hover:bg-gray-50 disabled:text-gray-400;
 }
 
-.btn--secondary {
+@utility btn--secondary {
   @apply bg-gray-50 hover:bg-gray-100 text-gray-900;
 }
 
-.btn--outline {
+@utility btn--outline {
   @apply border border-alpha-black-200 text-gray-900 hover:bg-gray-50 disabled:bg-gray-50 disabled:hover:bg-gray-50 disabled:text-gray-400;
 }
 
-.btn--ghost {
+@utility btn--ghost {
   @apply border border-transparent text-gray-900 hover:bg-gray-50;
 }
+
 .scrollbar {
   &::-webkit-scrollbar {
     width: 4px;

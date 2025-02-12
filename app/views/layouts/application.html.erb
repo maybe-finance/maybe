@@ -7,7 +7,7 @@
     <%= render "layouts/shared/fixed_content" %>
 
     <div class="flex h-full bg-gray-25">
-      <nav class="shrink-0 w-[84px] py-4 mr-3">
+      <nav class="flex flex-col shrink-0 w-[84px] py-4 mr-3">
         <div class="pl-2 mb-3">
           <%= image_tag "logomark-color.svg", class: "w-9 h-9 mx-auto" %>
         </div>
@@ -17,13 +17,17 @@
           <%= render "layouts/sidebar/nav_item", name: "Transactions", path: transactions_path, icon_key: "credit-card", active: page_active?(transactions_path) %>
           <%= render "layouts/sidebar/nav_item", name: "Budgets", path: budgets_path, icon_key: "layout-grid", active: page_active?(budgets_path) %>
         </div>
+
+        <div class="pl-2 mt-auto mx-auto">
+          <%= render "users/user_menu", user: Current.user %>
+        </div>
       </nav>
 
       <div class="py-4 w-[260px] shrink-0 h-full overflow-y-auto">
         <% if content_for?(:sidebar) %>
           <%= yield :sidebar %>
         <% else %>
-          <%= render "layouts/default_sidebar", accounts: Current.family.accounts.active.to_a %>
+          <%= render "accounts/account_sidebar_tabs", accounts: Current.family.accounts.active.to_a %>
         <% end %>
       </div>
 

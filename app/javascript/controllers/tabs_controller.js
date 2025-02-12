@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 
 // Connects to data-controller="tabs"
 export default class extends Controller {
-  static classes = ["active"];
+  static classes = ["active", "inactive"];
   static targets = ["btn", "tab"];
   static values = { defaultTab: String };
 
@@ -27,14 +27,18 @@ export default class extends Controller {
   };
 
   updateClasses = (selectedId) => {
-    this.btnTargets.forEach((btn) =>
-      btn.classList.remove(...this.activeClasses),
-    );
+    this.btnTargets.forEach((btn) => {
+      btn.classList.remove(...this.activeClasses);
+      btn.classList.remove(...this.inactiveClasses);
+    });
+
     this.tabTargets.forEach((tab) => tab.classList.add("hidden"));
 
     this.btnTargets.forEach((btn) => {
       if (btn.dataset.id === selectedId) {
         btn.classList.add(...this.activeClasses);
+      } else {
+        btn.classList.add(...this.inactiveClasses);
       }
     });
 
