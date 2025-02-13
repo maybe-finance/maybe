@@ -206,6 +206,32 @@
   /* Border radius overrides */
   --border-radius-md: 8px;
   --border-radius-lg: 10px;
+
+  --shadow-xs: 0px 1px 2px 0px --alpha(var(--color-black) / 6%);
+  --shadow-sm: 0px 1px 6px 0px --alpha(var(--color-black) / 6%);
+  --shadow-md: 0px 4px 8px -2px --alpha(var(--color-black) / 6%);
+  --shadow-lg: 0px 12px 16px -4px --alpha(var(--color-black) / 6%);
+  --shadow-xl: 0px 20px 24px -4px --alpha(var(--color-black) / 6%);
+}
+
+@utility shadow-border-xs {
+  box-shadow: var(--shadow-xs), 0px 0px 0px 1px var(--color-alpha-black-50);
+}
+
+@utility shadow-border-sm {
+  box-shadow: var(--shadow-sm), 0px 0px 0px 1px var(--color-alpha-black-50);
+}
+
+@utility shadow-border-md {
+  box-shadow: var(--shadow-md), 0px 0px 0px 1px var(--color-alpha-black-50);
+}
+
+@utility shadow-border-lg {
+  box-shadow: var(--shadow-lg), 0px 0px 0px 1px var(--color-alpha-black-50);
+}
+
+@utility shadow-border-xl {
+  box-shadow: var(--shadow-xl), 0px 0px 0px 1px var(--color-alpha-black-50);
 }
 
 /* Design system color utilities */
