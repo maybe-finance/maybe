@@ -59,7 +59,7 @@
             <%= f.hidden_field "account_entry[excluded]", value: !@transaction.entry.excluded %>
             <%= f.check_box "account_entry[excluded]",
                           checked: @transaction.entry.excluded,
-                          class: "maybe-checkbox maybe-checkbox--light",
+                          class: "checkbox checkbox--light",
                           data: { auto_submit_form_target: "auto", autosubmit_trigger_event: "change" } %>
           <% end %>
         </div>

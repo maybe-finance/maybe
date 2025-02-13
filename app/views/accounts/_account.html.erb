@@ -44,7 +44,7 @@
                     data: { controller: "auto-submit-form", turbo_frame: "_top" } do |form| %>
           <div class="relative inline-block select-none">
             <%= form.check_box :is_active, { class: "sr-only peer", data: { "auto-submit-form-target": "auto" } } %>
-            <%= form.label :is_active, "&nbsp;".html_safe, class: "maybe-switch" %>
+            <%= form.label :is_active, "&nbsp;".html_safe, class: "switch" %>
           </div>
         <% end %>
       <% end %>

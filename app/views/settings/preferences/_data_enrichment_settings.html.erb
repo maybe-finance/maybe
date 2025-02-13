@@ -16,7 +16,7 @@
         <%= form.hidden_field :redirect_to, value: "preferences" %>
         <%= form.fields_for :family do |family_form| %>
           <%= family_form.check_box :data_enrichment_enabled, class: "sr-only peer", "data-auto-submit-form-target": "auto", "data-autosubmit-trigger-event": "input" %>
-          <%= family_form.label :data_enrichment_enabled, "&nbsp;".html_safe, class: "maybe-switch" %>
+          <%= family_form.label :data_enrichment_enabled, "&nbsp;".html_safe, class: "switch" %>
         <% end %>
       </div>
     <% end %>

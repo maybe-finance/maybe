@@ -5,7 +5,7 @@
     <% if selectable %>
       <%= check_box_tag dom_id(entry, "selection"),
                         disabled: entry.entryable.transfer?,
-                        class: "maybe-checkbox maybe-checkbox--light",
+                        class: "checkbox checkbox--light",
                         data: { id: entry.id, "bulk-select-target": "row", action: "bulk-select#toggleRowSelection" } %>
     <% end %>
 

@@ -4,7 +4,7 @@
     <div class="flex pl-0.5 items-center gap-4">
       <% if selectable %>
         <%= check_box_tag "#{date}_entries_selection",
-                          class: ["maybe-checkbox maybe-checkbox--light", "hidden": entries.size == 0],
+                          class: ["checkbox checkbox--light", "hidden": entries.size == 0],
                           id: "selection_entry_#{date}",
                           data: { action: "bulk-select#toggleGroupSelection" } %>
       <% end %>
