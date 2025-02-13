@@ -81,12 +81,12 @@ export default class extends Controller {
   }
 
   #contentSummaryTemplate() {
-    return `<span class="text-xl text-gray-900 font-medium">${this.totalValue}</span> <span class="text-xs">${this.labelValue}</span>`;
+    return `<span class="text-xl text-primary font-medium">${this.totalValue}</span> <span class="text-xs">${this.labelValue}</span>`;
   }
 
   #contentDetailTemplate(datum) {
     return `
-      <span class="text-xl text-gray-900 font-medium">${datum.formatted_value}</span>
+      <span class="text-xl text-primary font-medium">${datum.formatted_value}</span>
       <div class="flex flex-row text-xs gap-2 items-center">
       <div class="w-[10px] h-[10px] rounded-full ${datum.bg_color}"></div>
         <span>${datum.label}</span>

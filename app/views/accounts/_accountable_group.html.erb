@@ -3,13 +3,13 @@
 <details class="group" data-controller="account-collapse" data-account-collapse-type-value="<%= accountable %>">
   <summary class="px-3 py-2 flex items-center gap-3 cursor-pointer h-10">
     <%= lucide_icon("chevron-down",
-          class: "hidden group-open:block text-gray-500 w-5 h-5") %>
+          class: "hidden group-open:block text-secondary w-5 h-5") %>
     <%= lucide_icon("chevron-right",
-          class: "group-open:hidden text-gray-500 w-5 h-5") %>
+          class: "group-open:hidden text-secondary w-5 h-5") %>
     <%= tag.p accountable.display_name, class: "text-sm font-medium" %>
 
     <div class="ml-auto text-right grow">
-      <%= tag.p format_money(accountable.balance_money(Current.family)), class: "text-sm font-medium text-gray-900" %>
+      <%= tag.p format_money(accountable.balance_money(Current.family)), class: "text-sm font-medium text-primary" %>
 
       <%= turbo_frame_tag dom_id(accountable, :sparkline), src: accountable_sparkline_path(accountable), loading: "lazy" do %>
         <div class="flex items-center w-8 h-4 ml-auto">
@@ -25,11 +25,11 @@
 
       <div>
         <%= tag.p account.name, class: "text-sm font-medium mb-0.5" %>
-        <%= tag.p account.subtype&.humanize.presence || accountable.display_name, class: "text-sm text-gray-500" %>
+        <%= tag.p account.subtype&.humanize.presence || accountable.display_name, class: "text-sm text-secondary" %>
       </div>
 
       <div class="ml-auto text-right grow h-10">
-        <%= tag.p format_money(account.balance_money), class: "text-sm font-medium text-gray-900" %>
+        <%= tag.p format_money(account.balance_money), class: "text-sm font-medium text-primary" %>
 
         <%= turbo_frame_tag dom_id(account, :sparkline), src: sparkline_account_path(account), loading: "lazy" do %>
           <div class="flex items-center w-8 h-4 ml-auto">
@@ -41,7 +41,7 @@
   <% end %>
 
   <%= link_to new_polymorphic_path(accountable, step: "method_select"), 
-              class: "flex items-center gap-3 btn btn--ghost text-gray-500", 
+              class: "flex items-center gap-3 btn btn--ghost text-secondary", 
               data: { turbo_frame: "modal" } do %>
     <%= icon("plus") %>
     <span>New <%= accountable.display_name.downcase %></span>

@@ -14,17 +14,17 @@
           </div>
 
           <div class="space-y-2">
-            <h2 class="text-3xl font-medium text-gray-900 text-center">
+            <h2 class="text-3xl font-medium text-primary text-center">
               <%= content_for?(:header_title) ? yield(:header_title).html_safe : t(".your_account") %>
             </h2>
 
             <% if controller_name == "sessions" %>
               <p class="text-sm text-center">
-                <%= tag.span t(".no_account"), class: "text-gray-500" %> <%= link_to t(".sign_up"), new_registration_path, class: "font-medium text-gray-900 hover:underline transition" %>
+                <%= tag.span t(".no_account"), class: "text-secondary" %> <%= link_to t(".sign_up"), new_registration_path, class: "font-medium text-primary hover:underline transition" %>
               </p>
             <% elsif controller_name == "registrations" %>
               <p class="text-sm text-center text-gray-600">
-                <%= t(".existing_account") %> <%= link_to t(".sign_in"), new_session_path, class: "font-medium text-gray-900 hover:underline transition" %>
+                <%= t(".existing_account") %> <%= link_to t(".sign_in"), new_session_path, class: "font-medium text-primary hover:underline transition" %>
               </p>
             <% end %>
           </div>

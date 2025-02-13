@@ -13,9 +13,9 @@
       </div>
 
       <div class="overflow-hidden text-ellipsis">
-        <span class="text-gray-900 font-medium text-sm"><%= user.display_name %></span>
+        <span class="text-primary font-medium text-sm"><%= user.display_name %></span>
         <% if user.display_name != user.email %>
-          <span class="text-gray-500 text-sm"><%= user.email %></span>
+          <span class="text-secondary text-sm"><%= user.email %></span>
         <% end %>
       </div>
     </div>
@@ -23,7 +23,7 @@
     <% if self_hosted? %>
       <div class="p-3">
         <p class="text-sm">
-          <span class="font-medium text-gray-900">Version:</span>
+          <span class="font-medium text-primary">Version:</span>
           <%= link_to Maybe.version.to_release_tag, "https://github.com/maybe-finance/maybe/releases/tag/#{Maybe.version.to_release_tag}", target: "_blank", class: "hover:underline" %>
           (<%= link_to Maybe.commit_sha.first(7), "https://github.com/maybe-finance/maybe/commit/#{Maybe.commit_sha}", target: "_blank", class: "hover:underline" %>)
         </p>
@@ -32,29 +32,29 @@
 
     <div class="p-1">
       <%= link_to settings_profile_path(return_to: request.fullpath), class: "flex gap-2 items-center hover:bg-gray-50 rounded-lg px-3 py-2" do %>
-        <%= lucide_icon("settings", class: "w-5 h-5 text-gray-500 shrink-0") %>
-        <span class="text-gray-900 text-sm">Settings</span>
+        <%= lucide_icon("settings", class: "w-5 h-5 text-secondary shrink-0") %>
+        <span class="text-primary text-sm">Settings</span>
       <% end %>
     </div>
 
     <div class="p-1">
       <%= link_to changelog_path, class: "flex gap-2 items-center hover:bg-gray-50 rounded-lg px-3 py-2" do %>
-        <%= lucide_icon("box", class: "w-5 h-5 text-gray-500 shrink-0") %>
-        <span class="text-gray-900 text-sm">Changelog</span>
+        <%= lucide_icon("box", class: "w-5 h-5 text-secondary shrink-0") %>
+        <span class="text-primary text-sm">Changelog</span>
       <% end %>
       <%= link_to feedback_path, class: "flex gap-2 items-center hover:bg-gray-50 rounded-lg px-3 py-2" do %>
-        <%= lucide_icon("megaphone", class: "w-5 h-5 text-gray-500 shrink-0") %>
-        <span class="text-gray-900 text-sm">Feedback</span>
+        <%= lucide_icon("megaphone", class: "w-5 h-5 text-secondary shrink-0") %>
+        <span class="text-primary text-sm">Feedback</span>
       <% end %>
       <% if self_hosted? %>
         <%= link_to "https://link.maybe.co/discord", class: "flex gap-2 items-center hover:bg-gray-50 rounded-lg px-3 py-2" do %>
-          <%= lucide_icon("message-square-more", class: "w-5 h-5 text-gray-500 shrink-0") %>
-          <span class="text-gray-900 text-sm">Contact</span>
+          <%= lucide_icon("message-square-more", class: "w-5 h-5 text-secondary shrink-0") %>
+          <span class="text-primary text-sm">Contact</span>
         <% end %>
       <% else %>
         <%= link_to "mailto:hello@maybefinance.com", class: "flex gap-2 items-center hover:bg-gray-50 rounded-lg px-3 py-2", onclick: "Intercom('showNewMessage'); return false;" do %>
-          <%= lucide_icon("message-square-more", class: "w-5 h-5 text-gray-500 shrink-0") %>
-          <span class="text-gray-900 text-sm">Contact</span>
+          <%= lucide_icon("message-square-more", class: "w-5 h-5 text-secondary shrink-0") %>
+          <span class="text-primary text-sm">Contact</span>
         <% end %>
       <% end %>
     </div>

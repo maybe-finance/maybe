@@ -13,17 +13,17 @@
   <header class="flex items-center justify-between">
     <div>
       <h1 class="sr-only"><%= t(".title") %></h1>
-      <p class="text-xl font-medium text-gray-900 mb-1">
+      <p class="text-xl font-medium text-primary mb-1">
         <%= Current.user.first_name.present? ? t(".greeting", name: Current.user.first_name ) : t(".fallback_greeting") %>
       </p>
       <% unless @accounts.blank? %>
-        <p class="text-gray-500 text-sm"><%= t(".subtitle") %></p>
+        <p class="text-secondary text-sm"><%= t(".subtitle") %></p>
       <% end %>
     </div>
 
     <div class="flex items-center gap-2">
       <%= contextual_menu do %>
-        <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+        <div class="w-48 p-1 text-sm leading-6 text-primary bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
           <%= contextual_menu_modal_action_item t(".import"), new_import_path, icon: "hard-drive-upload" %>
         </div>
       <% end %>
@@ -81,14 +81,14 @@
           </div>
           <div class="flex gap-1.5 mt-auto">
             <% @top_earners.first(3).each do |account| %>
-              <%= link_to account, class: "border border-alpha-black-25 rounded-full p-1 pr-2 flex items-center gap-1 text-xs text-gray-900 font-medium hover:bg-gray-25", data: { controller: "tooltip" } do %>
+              <%= link_to account, class: "border border-alpha-black-25 rounded-full p-1 pr-2 flex items-center gap-1 text-xs text-primary font-medium hover:bg-gray-25", data: { controller: "tooltip" } do %>
                 <%= render "accounts/logo", account: account, size: "sm" %>
                 <span>+<%= Money.new(account.income, account.currency) %></span>
                 <%= render partial: "shared/text_tooltip", locals: { tooltip_text: account.name } %>
               <% end %>
             <% end %>
             <% if @top_earners.count > 3 %>
-              <div class="bg-gray-25 rounded-full flex h-full aspect-1 items-center justify-center text-xs font-medium text-gray-500">+<%= @top_earners.count - 3 %></div>
+              <div class="bg-gray-25 rounded-full flex h-full aspect-1 items-center justify-center text-xs font-medium text-secondary">+<%= @top_earners.count - 3 %></div>
             <% end %>
           </div>
         </div>
@@ -114,14 +114,14 @@
           </div>
           <div class="mt-auto flex gap-1.5">
             <% @top_spenders.first(3).each do |account| %>
-              <%= link_to account, class: "border border-alpha-black-25 rounded-full p-1 pr-2 flex items-center gap-1 text-xs text-gray-900 font-medium hover:bg-gray-25", data: { controller: "tooltip" } do %>
+              <%= link_to account, class: "border border-alpha-black-25 rounded-full p-1 pr-2 flex items-center gap-1 text-xs text-primary font-medium hover:bg-gray-25", data: { controller: "tooltip" } do %>
                 <%= render "accounts/logo", account: account, size: "sm" %>
                 -<%= Money.new(account.spending, account.currency) %>
                 <%= render partial: "shared/text_tooltip", locals: { tooltip_text: account.name } %>
               <% end %>
             <% end %>
             <% if @top_spenders.count > 3 %>
-              <div class="bg-gray-25 rounded-full flex h-full aspect-1 items-center justify-center text-xs font-medium text-gray-500">+<%= @top_spenders.count - 3 %></div>
+              <div class="bg-gray-25 rounded-full flex h-full aspect-1 items-center justify-center text-xs font-medium text-secondary">+<%= @top_spenders.count - 3 %></div>
             <% end %>
           </div>
         </div>
@@ -129,13 +129,13 @@
     </section>
     <section class="w-full">
       <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl space-y-4">
-        <h2 class="text-lg font-medium text-gray-900"><%= t(".transactions") %></h2>
+        <h2 class="text-lg font-medium text-primary"><%= t(".transactions") %></h2>
         <% if @transactions.empty? %>
-          <div class="text-gray-500 flex items-center justify-center py-12">
+          <div class="text-secondary flex items-center justify-center py-12">
             <p><%= t(".no_transactions") %></p>
           </div>
         <% else %>
-          <div class="text-gray-500 p-1 space-y-1 bg-gray-25 rounded-xl">
+          <div class="text-secondary p-1 space-y-1 bg-gray-25 rounded-xl">
             <%= entries_by_date(@transactions.map(&:entry)) do |entries| %>
               <%= render entries %>
             <% end %>
