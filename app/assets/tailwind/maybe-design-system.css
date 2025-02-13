@@ -13,6 +13,9 @@
   /* Base colors */
   --color-white: #ffffff;
   --color-black: #0B0B0B;
+  --color-success: var(--color-green-600);
+  --color-warning: var(--color-yellow-600);
+  --color-destructive: var(--color-red-600);
 
   /* Gray scale */
   --color-gray-25: #FAFAFA;
