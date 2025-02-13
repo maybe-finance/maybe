@@ -1,7 +1,9 @@
+
+
 /* Variable font */
 @font-face {
   font-family: 'Geist';
-  src: url('../fonts/geist/Geist[wght].woff2') format('woff2-variations');
+  src: url('./geist/Geist[wght].woff2') format('woff2-variations');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
@@ -11,7 +13,7 @@
 @supports not (font-variation-settings: normal) {
   @font-face {
     font-family: 'Geist';
-    src: url('../fonts/geist/Geist-Thin.woff2') format('woff2');
+    src: url('./geist/Geist-Thin.woff2') format('woff2');
     font-weight: 100;
     font-style: normal;
     font-display: swap;
@@ -19,7 +21,7 @@
 
   @font-face {
     font-family: 'Geist';
-    src: url('../fonts/geist/Geist-ExtraLight.woff2') format('woff2');
+    src: url('./geist/Geist-ExtraLight.woff2') format('woff2');
     font-weight: 200;
     font-style: normal;
     font-display: swap;
@@ -27,7 +29,7 @@
 
   @font-face {
     font-family: 'Geist';
-    src: url('../fonts/geist/Geist-Light.woff2') format('woff2');
+    src: url('./geist/Geist-Light.woff2') format('woff2');
     font-weight: 300;
     font-style: normal;
     font-display: swap;
@@ -35,7 +37,7 @@
 
   @font-face {
     font-family: 'Geist';
-    src: url('../fonts/geist/Geist-Regular.woff2') format('woff2');
+    src: url('./geist/Geist-Regular.woff2') format('woff2');
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -43,7 +45,7 @@
 
   @font-face {
     font-family: 'Geist';
-    src: url('../fonts/geist/Geist-Medium.woff2') format('woff2');
+    src: url('./geist/Geist-Medium.woff2') format('woff2');
     font-weight: 500;
     font-style: normal;
     font-display: swap;
@@ -51,7 +53,7 @@
 
   @font-face {
     font-family: 'Geist';
-    src: url('../fonts/geist/Geist-SemiBold.woff2') format('woff2');
+    src: url('./geist/Geist-SemiBold.woff2') format('woff2');
     font-weight: 600;
     font-style: normal;
     font-display: swap;
@@ -59,7 +61,7 @@
 
   @font-face {
     font-family: 'Geist';
-    src: url('../fonts/geist/Geist-Bold.woff2') format('woff2');
+    src: url('./geist/Geist-Bold.woff2') format('woff2');
     font-weight: 700;
     font-style: normal;
     font-display: swap;
@@ -67,7 +69,7 @@
 
   @font-face {
     font-family: 'Geist';
-    src: url('../fonts/geist/Geist-ExtraBold.woff2') format('woff2');
+    src: url('./geist/Geist-ExtraBold.woff2') format('woff2');
     font-weight: 800;
     font-style: normal;
     font-display: swap;
@@ -75,7 +77,7 @@
 
   @font-face {
     font-family: 'Geist';
-    src: url('../fonts/geist/Geist-Black.woff2') format('woff2');
+    src: url('./geist/Geist-Black.woff2') format('woff2');
     font-weight: 900;
     font-style: normal;
     font-display: swap;
