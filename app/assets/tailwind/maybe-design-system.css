@@ -256,23 +256,43 @@
 }
 
 @utility bg-surface {
-  @apply bg-gray-50 hover:bg-gray-100;
+  @apply bg-gray-50;
+}
+
+@utility bg-surface-hover {
+  @apply bg-gray-100;
 }
 
 @utility bg-surface-inset {
-  @apply bg-gray-100 hover:bg-gray-200;
+  @apply bg-gray-100;
+}
+
+@utility bg-surface-inset-hover {
+  @apply bg-gray-200;
 }
 
 @utility bg-container {
-  @apply bg-white hover:bg-gray-50;
+  @apply bg-white;
+}
+
+@utility bg-container-hover {
+  @apply bg-gray-50;
 }
 
 @utility bg-container-inset {
-  @apply bg-gray-50 hover:bg-gray-100;
+  @apply bg-gray-50;
+}
+
+@utility bg-container-inset-hover {
+  @apply bg-gray-100;
 }
 
 @utility bg-inverse {
-  @apply bg-gray-800 hover:bg-gray-700;
+  @apply bg-gray-800;
+}
+
+@utility bg-inverse-hover {
+  @apply bg-gray-700;
 }
 
 @utility bg-overlay {
@@ -410,35 +430,6 @@
     @apply block bg-gray-100 w-9 h-5 rounded-full cursor-pointer;
     @apply after:content-[''] after:block after:absolute after:top-0.5 after:left-0.5 after:bg-white after:w-4 after:h-4 after:rounded-full after:transition-transform after:duration-300 after:ease-in-out;
     @apply peer-checked:bg-green-600 peer-checked:after:translate-x-4;
-  }
-
-  /* Typography */
-  .prose {
-    @apply max-w-none;
-  
-    h2 {
-      @apply text-xl font-medium;
-    }
-  
-    h3 {
-      @apply text-lg font-medium;
-    }
-  
-    li {
-      @apply m-0;
-    }
-  
-    details {
-      @apply mb-4 rounded-xl mt-3.5;
-    }
-  
-    summary {
-      @apply flex items-center gap-1;
-    }
-  
-    video {
-      @apply m-0 rounded-b-xl;
-    }
   }
 
   /* Tooltips */

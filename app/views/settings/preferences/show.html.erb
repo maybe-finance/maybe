@@ -1,3 +1,5 @@
+<%= content_for :page_title, t(".page_title") %>
+
 <%= settings_section title: t(".general_title"), subtitle: t(".general_subtitle") do %>
   <div>
     <%= styled_form_with model: @user, class: "space-y-4", data: { controller: "auto-submit-form" } do |form| %>

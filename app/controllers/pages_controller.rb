@@ -31,9 +31,12 @@ class PagesController < ApplicationController
 
   def changelog
     @release_notes = Provider::Github.new.fetch_latest_release_notes
+
+    render layout: "settings"
   end
 
   def feedback
+    render layout: "settings"
   end
 
   def early_access

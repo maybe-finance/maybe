@@ -1,23 +1,15 @@
-<!DOCTYPE html>
-<html class="h-full <%= @os %>" lang="en">
-  <%= render "layouts/shared/head" %>
+<%= render "layouts/shared/htmldoc" do %>
+  <%= drawer do %>
+    <article class="prose">
+      <%= tag.h2 do %>
+        <%= yield :title %>
+      <% end %>
 
-  <body class="h-full">
-    <%= render "layouts/shared/notifications" %>
-    <%= render "layouts/shared/fixed_content" %>
+      <%= tag.h3 t(".description") %>
+      <%= yield :description %>
 
-    <%= drawer do %>
-      <article class="prose">
-        <%= tag.h2 do %>
-          <%= yield :title %>
-        <% end %>
-
-        <%= tag.h3 t(".description") %>
-        <%= yield :description %>
-
-        <%= tag.h3 t(".action") %>
-        <%= yield :action %>
-      </article>
-    <% end %>
-  </body>
-</html>
+      <%= tag.h3 t(".action") %>
+      <%= yield :action %>
+    </article>
+  <% end %>
+<% end %>

@@ -3,6 +3,8 @@ class TagsController < ApplicationController
 
   def index
     @tags = Current.family.tags.alphabetically
+
+    render layout: "settings"
   end
 
   def new

@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html class="h-full <%= @os %>" lang="en">
-  <%= render "layouts/shared/head" %>
-
-  <body class="h-full">
-    <%= render "layouts/shared/notifications" %>
-    <%= render "layouts/shared/fixed_content" %>
-
+<%= render "layouts/shared/htmldoc" do %>
+  <div class="flex flex-col h-dvh">
     <div class="flex flex-col h-screen px-6 py-12 bg-gray-25">
       <div class="grow flex flex-col justify-center">
         <div class="sm:mx-auto sm:w-full sm:max-w-md">
@@ -37,5 +31,5 @@
 
       <%= render "layouts/shared/footer" %>
     </div>
-  </body>
-</html>
+  </div>
+<% end %>

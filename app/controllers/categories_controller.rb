@@ -5,6 +5,8 @@ class CategoriesController < ApplicationController
 
   def index
     @categories = Current.family.categories.alphabetically
+
+    render layout: "settings"
   end
 
   def new

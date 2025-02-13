@@ -26,7 +26,7 @@
       </div>
     </nav>
 
-    <div class="py-4 w-[260px] shrink-0 h-full overflow-y-auto">
+    <div class="py-4 w-[260px] shrink-0 h-full overflow-y-auto transition-all duration-300" data-sidebar-target="panel">
       <% if content_for?(:sidebar) %>
         <%= yield :sidebar %>
       <% else %>
@@ -36,7 +36,7 @@
       <% end %>
     </div>
 
-    <main class="container mx-auto px-10 py-6 h-full <%= require_upgrade? ? "relative overflow-hidden" : "overflow-y-auto" %>">
+    <main class="container mx-auto px-10 py-4 h-full <%= require_upgrade? ? "relative overflow-hidden" : "overflow-y-auto" %>">
       <% if require_upgrade? %>
         <%= render "shared/subscribe_modal" %>
       <% end %>

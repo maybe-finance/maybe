@@ -1,8 +1,8 @@
 <%# locals: (name:, path:, icon:) %>
 
 <%= link_to path, class: class_names(
-  "flex items-center gap-2 px-3 py-2 rounded-xl border text-sm font-medium",
-  page_active?(path) ? "text-primary bg-white shadow-xs border-alpha-black-50" : "text-secondary hover:bg-gray-100 border-transparent"
+  "flex items-center gap-2 btn btn--ghost",
+  page_active?(path) ? "text-primary bg-white shadow-border-xs" : "text-secondary hover:bg-gray-100 border-transparent"
 ), aria: { current: ("page" if page_active?(path)) } do %>
   <%= lucide_icon(icon, class: "w-5 h-5") if icon %>
   <%= name %>

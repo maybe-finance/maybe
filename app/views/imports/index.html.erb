@@ -1,29 +1,22 @@
-<% content_for :sidebar do %>
-  <%= render "settings/settings_nav" %>
-<% end %>
+<div class="flex items-center justify-between">
+  <h1 class="text-xl font-medium text-primary"><%= t(".title") %></h1>
 
-<div class="space-y-4">
-  <div class="flex items-center justify-between">
-    <h1 class="text-xl font-medium text-primary"><%= t(".title") %></h1>
+  <%= link_to new_import_path, class: "btn btn--primary flex items-center gap-2", data: { turbo_frame: :modal } do %>
+    <%= lucide_icon("plus", class: "w-5 h-5") %>
+    <span><%= t(".new") %></span>
+  <% end %>
+</div>
 
-    <%= link_to new_import_path, class: "btn btn--primary flex items-center gap-2", data: { turbo_frame: :modal } do %>
-      <%= lucide_icon("plus", class: "w-5 h-5") %>
-      <span><%= t(".new") %></span>
-    <% end %>
-  </div>
-  <div class="bg-white shadow-xs border border-alpha-black-25 rounded-xl p-4">
-    <% if @imports.empty? %>
-      <%= render partial: "imports/empty" %>
-    <% else %>
-      <div class="rounded-xl bg-gray-25 p-1">
-        <h2 class="uppercase px-4 py-2 text-secondary text-xs"><%= t(".imports") %> · <%= @imports.size %></h2>
+<div class="bg-white shadow-xs border border-alpha-black-25 rounded-xl p-4">
+  <% if @imports.empty? %>
+    <%= render partial: "imports/empty" %>
+  <% else %>
+    <div class="rounded-xl bg-gray-25 p-1">
+      <h2 class="uppercase px-4 py-2 text-secondary text-xs"><%= t(".imports") %> · <%= @imports.size %></h2>
 
-        <div class="border border-alpha-black-100 rounded-lg bg-white shadow-xs">
-          <%= render partial: "imports/import", collection: @imports.ordered %>
-        </div>
+      <div class="border border-alpha-black-100 rounded-lg bg-white shadow-xs">
+        <%= render partial: "imports/import", collection: @imports.ordered %>
       </div>
-    <% end %>
-  </div>
-
-  <%= settings_nav_footer %>
+    </div>
+  <% end %>
 </div>

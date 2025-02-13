@@ -1,29 +1,21 @@
-<!DOCTYPE html>
-<html class="h-full <%= @os %>" lang="en">
-  <%= render "layouts/shared/head" %>
+<%= render "layouts/shared/htmldoc" do %>
+  <div class="flex flex-col h-dvh">
+    <header class="flex items-center justify-between p-8">
+      <%= link_to content_for(:previous_path) || imports_path do %>
+        <%= lucide_icon "arrow-left", class: "w-5 h-5 text-secondary" %>
+      <% end %>
 
-  <body class="h-full">
-    <%= render "layouts/shared/notifications" %>
-    <%= render "layouts/shared/fixed_content" %>
+      <nav>
+        <%= yield :header_nav %>
+      </nav>
 
-    <div class="flex flex-col h-dvh">
-      <header class="flex items-center justify-between p-8">
-        <%= link_to content_for(:previous_path) || imports_path do %>
-          <%= lucide_icon "arrow-left", class: "w-5 h-5 text-secondary" %>
-        <% end %>
+      <%= link_to imports_path do %>
+        <%= lucide_icon "x", class: "text-secondary w-5 h-5" %>
+      <% end %>
+    </header>
 
-        <nav>
-          <%= yield :header_nav %>
-        </nav>
-
-        <%= link_to imports_path do %>
-          <%= lucide_icon "x", class: "text-secondary w-5 h-5" %>
-        <% end %>
-      </header>
-
-      <main class="grow px-8 pt-12 pb-32 overflow-y-auto">
-        <%= yield %>
-      </main>
-    </div>
-  </body>
-</html>
+    <main class="grow px-8 pt-12 pb-32 overflow-y-auto">
+      <%= yield %>
+    </main>
+  </div>
+<% end %>

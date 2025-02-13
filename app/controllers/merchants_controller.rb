@@ -3,6 +3,8 @@ class MerchantsController < ApplicationController
 
   def index
     @merchants = Current.family.merchants.alphabetically
+
+    render layout: "settings"
   end
 
   def new

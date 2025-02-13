@@ -1,43 +1,35 @@
-<% content_for :sidebar do %>
-  <%= render "settings/settings_nav" %>
-<% end %>
-
-<div class="space-y-4">
-  <header class="flex justify-between items-center text-primary font-medium">
-    <h1 class="text-xl"><%= t(".accounts") %></h1>
-    <div class="flex items-center gap-5">
-      <div class="flex items-center gap-2">
-        <%= button_to sync_all_accounts_path,
+<header class="flex justify-between items-center text-primary font-medium">
+  <h1 class="text-xl"><%= t(".accounts") %></h1>
+  <div class="flex items-center gap-5">
+    <div class="flex items-center gap-2">
+      <%= button_to sync_all_accounts_path,
                       disabled: Current.family.syncing?,
                       class: "btn btn--outline flex items-center gap-2",
                       title: t(".sync") do %>
-          <%= lucide_icon "refresh-cw", class: "w-5 h-5" %>
-          <span><%= t(".sync") %></span>
-        <% end %>
+        <%= lucide_icon "refresh-cw", class: "w-5 h-5" %>
+        <span><%= t(".sync") %></span>
+      <% end %>
 
-        <%= link_to new_account_path(return_to: accounts_path),
+      <%= link_to new_account_path(return_to: accounts_path),
                     data: { turbo_frame: "modal" },
                     class: "btn btn--primary flex items-center gap-1" do %>
-          <%= lucide_icon("plus", class: "w-5 h-5") %>
-          <p class="text-sm font-medium"><%= t(".new_account") %></p>
-        <% end %>
-      </div>
-    </div>
-  </header>
-
-  <% if @manual_accounts.empty? && @plaid_items.empty? %>
-    <%= render "empty" %>
-  <% else %>
-    <div class="space-y-2">
-      <% if @plaid_items.any? %>
-        <%= render @plaid_items.sort_by(&:created_at) %>
-      <% end %>
-
-      <% if @manual_accounts.any? %>
-        <%= render "accounts/index/manual_accounts", accounts: @manual_accounts %>
+        <%= lucide_icon("plus", class: "w-5 h-5") %>
+        <p class="text-sm font-medium"><%= t(".new_account") %></p>
       <% end %>
     </div>
-  <% end %>
+  </div>
+</header>
 
-  <%= settings_nav_footer %>
-</div>
+<% if @manual_accounts.empty? && @plaid_items.empty? %>
+  <%= render "empty" %>
+<% else %>
+  <div class="space-y-2">
+    <% if @plaid_items.any? %>
+      <%= render @plaid_items.sort_by(&:created_at) %>
+    <% end %>
+
+    <% if @manual_accounts.any? %>
+      <%= render "accounts/index/manual_accounts", accounts: @manual_accounts %>
+    <% end %>
+  </div>
+<% end %>

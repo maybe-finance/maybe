@@ -2,8 +2,8 @@ module SettingsHelper
   SETTINGS_ORDER = [
     { name: I18n.t("settings.settings_nav.profile_label"), path: :settings_profile_path },
     { name: I18n.t("settings.settings_nav.preferences_label"), path: :settings_preferences_path },
-    { name: I18n.t("settings.settings_nav.self_hosting_label"), path: :settings_hosting_path, condition: :self_hosted? },
     { name: I18n.t("settings.settings_nav.security_label"), path: :settings_security_path },
+    { name: I18n.t("settings.settings_nav.self_hosting_label"), path: :settings_hosting_path, condition: :self_hosted? },
     { name: I18n.t("settings.settings_nav.billing_label"), path: :settings_billing_path },
     { name: I18n.t("settings.settings_nav.accounts_label"), path: :accounts_path },
     { name: I18n.t("settings.settings_nav.imports_label"), path: :imports_path },

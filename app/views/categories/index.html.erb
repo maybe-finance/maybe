@@ -1,44 +1,36 @@
-<% content_for :sidebar do %>
-  <%= render "settings/settings_nav" %>
-<% end %>
+<header class="flex items-center justify-between">
+  <h1 class="text-primary text-xl font-medium"><%= t(".categories") %></h1>
 
-<section class="space-y-4">
-  <header class="flex items-center justify-between">
-    <h1 class="text-primary text-xl font-medium"><%= t(".categories") %></h1>
+  <%= link_to new_category_path, class: "btn btn--primary flex items-center gap-1 justify-center", data: { turbo_frame: :modal } do %>
+    <%= lucide_icon "plus", class: "w-5 h-5" %>
+    <p><%= t(".new") %></p>
+  <% end %>
+</header>
 
-    <%= link_to new_category_path, class: "btn btn--primary flex items-center gap-1 justify-center", data: { turbo_frame: :modal } do %>
-      <%= lucide_icon "plus", class: "w-5 h-5" %>
-      <p><%= t(".new") %></p>
-    <% end %>
-  </header>
+<div class="bg-white shadow-xs border border-alpha-black-25 rounded-xl p-4">
+  <% if @categories.any? %>
+    <div class="space-y-4">
+      <% if @categories.incomes.any? %>
+        <%= render "categories/category_list_group", title: t(".categories_incomes"), categories: @categories.incomes %>
+      <% end %>
 
-  <div class="bg-white shadow-xs border border-alpha-black-25 rounded-xl p-4">
-    <% if @categories.any? %>
-      <div class="space-y-4">
-        <% if @categories.incomes.any? %>
-          <%= render "categories/category_list_group", title: t(".categories_incomes"), categories: @categories.incomes %>
-        <% end %>
+      <% if @categories.expenses.any? %>
+        <%= render "categories/category_list_group", title: t(".categories_expenses"), categories: @categories.expenses %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="flex justify-center items-center py-20">
+      <div class="text-center flex flex-col items-center max-w-[500px]">
+        <p class="text-sm text-secondary mb-4"><%= t(".empty") %></p>
+        <div class="flex items-center gap-2">
+          <%= button_to t(".bootstrap"), bootstrap_categories_path, class: "btn btn--primary" %>
 
-        <% if @categories.expenses.any? %>
-          <%= render "categories/category_list_group", title: t(".categories_expenses"), categories: @categories.expenses %>
-        <% end %>
-      </div>
-    <% else %>
-      <div class="flex justify-center items-center py-20">
-        <div class="text-center flex flex-col items-center max-w-[500px]">
-          <p class="text-sm text-secondary mb-4"><%= t(".empty") %></p>
-          <div class="flex items-center gap-2">
-            <%= button_to t(".bootstrap"), bootstrap_categories_path, class: "btn btn--primary" %>
-
-            <%= link_to new_category_path, class: "btn btn--outline flex items-center gap-1", data: { turbo_frame: "modal" } do %>
-              <%= lucide_icon("plus", class: "w-5 h-5") %>
-              <span><%= t(".new") %></span>
-            <% end %>
-          </div>
+          <%= link_to new_category_path, class: "btn btn--outline flex items-center gap-1", data: { turbo_frame: "modal" } do %>
+            <%= lucide_icon("plus", class: "w-5 h-5") %>
+            <span><%= t(".new") %></span>
+          <% end %>
         </div>
       </div>
-    <% end %>
-  </div>
-
-  <%= settings_nav_footer %>
-</section>
+    </div>
+  <% end %>
+</div>
