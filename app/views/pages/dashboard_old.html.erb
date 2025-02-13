@@ -1,0 +1,149 @@
+<div class="space-y-4">
+  <% if self_hosted? %>
+    <% if Current.family&.synth_overage? %>
+      <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
+        Your Synth API credit limit has been exceeded. Please visit your <a href="https://dashboard.synthfinance.com/settings" class="font-medium underline hover:text-yellow-900">Synth billing settings</a> to upgrade your plan or wait for your credits to reset.
+      </div>
+    <% elsif !Current.family&.synth_valid? %>
+      <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
+        Your Synth API Key is invalid. Please visit your <a href="https://dashboard.synthfinance.com/dashboard" class="font-medium underline hover:text-yellow-900">Synth dashboard</a> and verify that your API key is correct.
+      </div>
+    <% end %>
+  <% end %>
+  <header class="flex items-center justify-between">
+    <div>
+      <h1 class="sr-only"><%= t(".title") %></h1>
+      <p class="text-xl font-medium text-gray-900 mb-1">
+        <%= Current.user.first_name.present? ? t(".greeting", name: Current.user.first_name ) : t(".fallback_greeting") %>
+      </p>
+      <% unless @accounts.blank? %>
+        <p class="text-gray-500 text-sm"><%= t(".subtitle") %></p>
+      <% end %>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <%= contextual_menu do %>
+        <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+          <%= contextual_menu_modal_action_item t(".import"), new_import_path, icon: "hard-drive-upload" %>
+        </div>
+      <% end %>
+
+      <%= link_to new_account_path, class: "flex items-center gap-1 btn btn--primary", data: { turbo_frame: "modal" } do %>
+        <%= lucide_icon("plus", class: "w-5 h-5") %>
+        <span><%= t(".new") %></span>
+      <% end %>
+    </div>
+  </header>
+
+  <% if @accounts.empty? %>
+    <%= render "pages/dashboard/no_account_empty_state" %>
+  <% else %>
+    <section class="flex gap-4">
+      <div class="bg-white border border-alpha-black-25 shadow-xs rounded-xl w-3/4 min-h-48 flex flex-col">
+        <div class="flex justify-between p-4">
+          <div>
+            <%= render partial: "shared/value_heading", locals: {
+            label: t(".net_worth"),
+            period: @period,
+            value: Current.family.net_worth,
+            trend: @net_worth_series.trend
+          } %>
+          </div>
+          <%= form_with url: root_path, method: :get, class: "flex items-center gap-4", data: { controller: "auto-submit-form" } do |form| %>
+            <%= period_select form: form, selected: @period.name %>
+          <% end %>
+        </div>
+        <%= render partial: "pages/dashboard/net_worth_chart", locals: { series: @net_worth_series } %>
+      </div>
+      <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl w-1/4">
+        <%= render partial: "pages/dashboard/allocation_chart", locals: { account_groups: @account_groups } %>
+      </div>
+    </section>
+    <section class="grid grid-cols-2 gap-4">
+      <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">
+        <div class="flex flex-col gap-4 h-full">
+          <div class="flex gap-4">
+            <div class="grow">
+              <%= render partial: "shared/value_heading", locals: {
+            label: t(".income"),
+              period: Period.last_30_days,
+              value: @income_series.last&.value,
+              trend: @income_series.trend
+            } %>
+            </div>
+            <div
+            id="incomeChart"
+            class="h-full w-2/5"
+            data-controller="time-series-chart"
+            data-time-series-chart-data-value="<%= @income_series.to_json %>"
+            data-time-series-chart-use-labels-value="false"
+            data-time-series-chart-use-tooltip-value="false"></div>
+          </div>
+          <div class="flex gap-1.5 mt-auto">
+            <% @top_earners.first(3).each do |account| %>
+              <%= link_to account, class: "border border-alpha-black-25 rounded-full p-1 pr-2 flex items-center gap-1 text-xs text-gray-900 font-medium hover:bg-gray-25", data: { controller: "tooltip" } do %>
+                <%= render "accounts/logo", account: account, size: "sm" %>
+                <span>+<%= Money.new(account.income, account.currency) %></span>
+                <%= render partial: "shared/text_tooltip", locals: { tooltip_text: account.name } %>
+              <% end %>
+            <% end %>
+            <% if @top_earners.count > 3 %>
+              <div class="bg-gray-25 rounded-full flex h-full aspect-1 items-center justify-center text-xs font-medium text-gray-500">+<%= @top_earners.count - 3 %></div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">
+        <div class="flex flex-col gap-4 h-full">
+          <div class="flex gap-4">
+            <div class="grow">
+              <%= render partial: "shared/value_heading", locals: {
+            label: t(".spending"),
+              period: Period.last_30_days,
+              value: @spending_series.last&.value,
+              trend: @spending_series.trend
+            } %>
+            </div>
+            <div
+            id="spendingChart"
+            class="h-full w-2/5"
+            data-controller="time-series-chart"
+            data-time-series-chart-data-value="<%= @spending_series.to_json %>"
+            data-time-series-chart-use-labels-value="false"
+            data-time-series-chart-use-tooltip-value="false"></div>
+          </div>
+          <div class="mt-auto flex gap-1.5">
+            <% @top_spenders.first(3).each do |account| %>
+              <%= link_to account, class: "border border-alpha-black-25 rounded-full p-1 pr-2 flex items-center gap-1 text-xs text-gray-900 font-medium hover:bg-gray-25", data: { controller: "tooltip" } do %>
+                <%= render "accounts/logo", account: account, size: "sm" %>
+                -<%= Money.new(account.spending, account.currency) %>
+                <%= render partial: "shared/text_tooltip", locals: { tooltip_text: account.name } %>
+              <% end %>
+            <% end %>
+            <% if @top_spenders.count > 3 %>
+              <div class="bg-gray-25 rounded-full flex h-full aspect-1 items-center justify-center text-xs font-medium text-gray-500">+<%= @top_spenders.count - 3 %></div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="w-full">
+      <div class="bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl space-y-4">
+        <h2 class="text-lg font-medium text-gray-900"><%= t(".transactions") %></h2>
+        <% if @transactions.empty? %>
+          <div class="text-gray-500 flex items-center justify-center py-12">
+            <p><%= t(".no_transactions") %></p>
+          </div>
+        <% else %>
+          <div class="text-gray-500 p-1 space-y-1 bg-gray-25 rounded-xl">
+            <%= entries_by_date(@transactions.map(&:entry)) do |entries| %>
+              <%= render entries %>
+            <% end %>
+
+            <p class="py-2 text-sm text-center"><%= link_to t(".view_all"), transactions_path %></p>
+          </div>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+</div>
