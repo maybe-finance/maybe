@@ -7,7 +7,7 @@
     <div class="grid grid-cols-12 items-center <%= entry.excluded ? "text-gray-400 bg-gray-25" : "text-primary" %> text-sm font-medium p-4">
       <div class="col-span-6 flex items-center gap-4">
         <%= check_box_tag dom_id(entry, "selection"),
-                        class: "maybe-checkbox maybe-checkbox--light",
+                        class: "checkbox checkbox--light",
                         data: { id: entry.id, "bulk-select-target": "row", action: "bulk-select#toggleRowSelection" } %>
 
         <div class="max-w-full">

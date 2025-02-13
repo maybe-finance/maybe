@@ -12,7 +12,7 @@
                   <%= balance_trend ? "col-span-6" : "col-span-8" %>">
         <%= check_box_tag dom_id(entry, "selection"),
             disabled: transaction.transfer?,
-            class: "maybe-checkbox maybe-checkbox--light",
+            class: "checkbox checkbox--light",
             data: { 
               id: entry.id, 
               "bulk-select-target": "row", 
