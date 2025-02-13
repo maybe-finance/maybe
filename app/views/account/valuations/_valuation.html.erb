@@ -3,7 +3,7 @@
 <% color = balance_trend&.trend&.color || "#D444F1" %>
 <% icon = balance_trend&.trend&.icon || "plus" %>
 
-<div class="p-4 grid grid-cols-12 items-center text-gray-900 text-sm font-medium">
+<div class="p-4 grid grid-cols-12 items-center text-primary text-sm font-medium">
   <div class="col-span-8 flex items-center gap-4">
     <% if selectable %>
       <%= check_box_tag dom_id(entry, "selection"),
@@ -16,7 +16,7 @@
         <%= lucide_icon icon, class: "w-4 h-4 shrink-0" %>
       <% end %>
 
-      <div class="truncate text-gray-900">
+      <div class="truncate text-primary">
         <% if entry.new_record? %>
           <%= content_tag :p, entry.display_name %>
         <% else %>
@@ -33,11 +33,11 @@
     <% if balance_trend&.trend %>
       <%= tag.span format_money(balance_trend.trend.value), style: "color: #{balance_trend.trend.color}" %>
     <% else %>
-      <%= tag.span "--", class: "text-gray-400" %>
+      <%= tag.span "--", class: "text-subdued" %>
     <% end %>
   </div>
 
   <div class="col-span-2 justify-self-end">
-    <%= tag.p format_money(entry.amount_money), class: "font-medium text-sm text-gray-900" %>
+    <%= tag.p format_money(entry.amount_money), class: "font-medium text-sm text-primary" %>
   </div>
 </div>

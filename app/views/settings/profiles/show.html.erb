@@ -2,7 +2,7 @@
   <%= render "settings/nav" %>
 <% end %>
 <div class="space-y-4">
-  <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
+  <h1 class="text-primary text-xl font-medium mb-4"><%= t(".page_title") %></h1>
   <div class="space-y-4">
     <%= settings_section title: t(".profile_title"), subtitle: t(".profile_subtitle") do %>
       <%= styled_form_with model: @user, url: user_path(@user), class: "space-y-4" do |form| %>
@@ -38,16 +38,16 @@
         <% end %>
         <div class="bg-gray-25 rounded-xl p-1">
           <div class="px-4 py-2">
-            <p class="uppercase text-xs text-gray-500 font-medium"><%= Current.family.name %> &middot; <%= Current.family.users.size %></p>
+            <p class="uppercase text-xs text-secondary font-medium"><%= Current.family.name %> &middot; <%= Current.family.users.size %></p>
           </div>
           <% @users.each do |user| %>
             <div class="flex gap-2 items-center bg-white p-4 border border-alpha-black-25 rounded-lg">
               <div class="w-9 h-9 shrink-0">
                 <%= render "settings/user_avatar", user: user %>
               </div>
-              <p class="text-gray-900 font-medium text-sm"><%= user.display_name %></p>
+              <p class="text-primary font-medium text-sm"><%= user.display_name %></p>
               <div class="rounded-md bg-gray-100 px-1.5 py-0.5">
-                <p class="uppercase text-gray-500 font-medium text-xs"><%= user.role %></p>
+                <p class="uppercase text-secondary font-medium text-xs"><%= user.role %></p>
               </div>
               <% if Current.user.admin? && user != Current.user %>
                 <div class="ml-auto">
@@ -74,23 +74,23 @@
                     <div class="text-white w-full h-full bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= invitation.email[0] %></div>
                   </div>
                   <div class="flex">
-                    <p class="text-gray-900 font-medium text-sm"><%= invitation.email %></p>
+                    <p class="text-primary font-medium text-sm"><%= invitation.email %></p>
                     <div class="rounded-md bg-gray-100 px-1.5 py-0.5">
-                      <p class="uppercase text-gray-500 font-medium text-xs"><%= t(".pending") %></p>
+                      <p class="uppercase text-secondary font-medium text-xs"><%= t(".pending") %></p>
                     </div>
                   </div>
                 </div>
                 <div class="flex items-center gap-4">
                   <% if self_hosted? %>
                     <div class="flex items-center gap-2" data-controller="clipboard">
-                      <p class="text-gray-500 text-sm"><%= t(".invitation_link") %></p>
+                      <p class="text-secondary text-sm"><%= t(".invitation_link") %></p>
                       <span data-clipboard-target="source" class="hidden"><%= accept_invitation_url(invitation.token) %></span>
                       <input type="text"
                              readonly
                              autocomplete="off"
                              value="<%= accept_invitation_url(invitation.token) %>"
                              class="text-sm bg-gray-50 px-2 py-1 rounded border border-gray-200 w-72">
-                      <button data-action="clipboard#copy" class="text-gray-500 hover:text-gray-700">
+                      <button data-action="clipboard#copy" class="text-secondary hover:text-gray-700">
                         <span data-clipboard-target="iconDefault">
                           <%= lucide_icon "copy", class: "w-5 h-5" %>
                         </span>
@@ -119,9 +119,9 @@
           <% end %>
           <% if Current.user.admin? %>
             <%= link_to new_invitation_path,
-                class: "bg-gray-100 flex items-center justify-center gap-2 text-gray-500 mt-1 hover:bg-gray-200 rounded-lg px-4 py-2 w-full text-center",
+                class: "bg-gray-100 flex items-center justify-center gap-2 text-secondary mt-1 hover:bg-gray-200 rounded-lg px-4 py-2 w-full text-center",
                 data: { turbo_frame: :modal } do %>
-              <%= lucide_icon("plus", class: "w-5 h-5 text-gray-500") %>
+              <%= lucide_icon("plus", class: "w-5 h-5 text-secondary") %>
               <%= t(".invite_member") %>
             <% end %>
           <% end %>
@@ -131,8 +131,8 @@
     <%= settings_section title: t(".danger_zone_title") do %>
       <div class="flex items-center justify-between">
         <div>
-          <h3 class="font-medium text-gray-900"><%= t(".delete_account") %></h3>
-          <p class="text-gray-500 text-sm"><%= t(".delete_account_warning") %></p>
+          <h3 class="font-medium text-primary"><%= t(".delete_account") %></h3>
+          <p class="text-secondary text-sm"><%= t(".delete_account_warning") %></p>
         </div>
         <%=
           button_to t(".delete_account"), user_path(@user), method: :delete,

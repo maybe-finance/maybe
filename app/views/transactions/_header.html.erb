@@ -1,9 +1,9 @@
-<header class="flex justify-between items-center text-gray-900 font-medium">
+<header class="flex justify-between items-center text-primary font-medium">
   <h1 class="text-xl">Transactions</h1>
   <div class="flex items-center gap-5">
     <div class="flex items-center gap-2">
       <%= contextual_menu do %>
-        <div class="w-48 p-1 text-sm leading-6 text-gray-900 bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+        <div class="w-48 p-1 text-sm leading-6 text-primary bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
           <%= contextual_menu_modal_action_item t(".edit_categories"), categories_path, icon: "shapes", turbo_frame: :_top %>
           <%= contextual_menu_modal_action_item t(".edit_tags"), tags_path, icon: "tags", turbo_frame: :_top %>
           <%= contextual_menu_modal_action_item t(".edit_merchants"), merchants_path, icon: "store", turbo_frame: :_top %>
@@ -12,8 +12,8 @@
       <% end %>
 
       <%= link_to new_import_path, class: "btn btn--outline flex items-center gap-2", data: { turbo_frame: "modal" } do %>
-        <%= lucide_icon("download", class: "text-gray-500 w-4 h-4") %>
-        <p class="text-sm font-medium text-gray-900"><%= t(".import") %></p>
+        <%= lucide_icon("download", class: "text-secondary w-4 h-4") %>
+        <p class="text-sm font-medium text-primary"><%= t(".import") %></p>
       <% end %>
 
       <%= link_to new_account_transaction_path, class: "rounded-lg bg-gray-900 text-white flex items-center gap-1 justify-center hover:bg-gray-700 px-3 py-2", data: { turbo_frame: :modal } do %>

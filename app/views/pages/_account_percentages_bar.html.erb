@@ -9,7 +9,7 @@
     <% account_groups.sort_by(&:percent_of_total).reverse.each do |group| %>
       <div class="flex items-center gap-2 text-sm">
         <div class="h-2.5 w-2.5 rounded-full <%= accountable_bg_class(group.name) %>"></div>
-        <p class="text-gray-500"><%= to_accountable_title(Accountable.from_type(group.name)) %></p>
+        <p class="text-secondary"><%= to_accountable_title(Accountable.from_type(group.name)) %></p>
         <p class="text-black"><%= group.percent_of_total.round(1) %>%</p>
       </div>
     <% end %>

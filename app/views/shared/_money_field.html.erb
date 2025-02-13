@@ -17,7 +17,7 @@
 
   <div class="flex items-center gap-1">
     <div class="flex items-center grow gap-1">
-      <span class="text-gray-500 text-sm" data-money-field-target="symbol">
+      <span class="text-secondary text-sm" data-money-field-target="symbol">
         <%= currency.symbol %>
       </span>
 
@@ -47,7 +47,7 @@
                       currencies_for_select.map(&:iso_code),
                       { inline: true, selected: currency_value },
                       {
-                        class: "w-fit pr-5 disabled:text-gray-400 form-field__input",
+                        class: "w-fit pr-5 disabled:text-subdued form-field__input",
                         disabled: options[:disable_currency],
                         data: {
                           "money-field-target": "currency",

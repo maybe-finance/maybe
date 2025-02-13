@@ -5,13 +5,13 @@
 
 <% if mapping_class == Import::AccountMapping %>
   <% if import.requires_account? %>
-    <div class="flex items-center justify-between p-4 mb-4 gap-4 text-gray-500 bg-red-100 border border-red-200 rounded-lg w-[650px]">
+    <div class="flex items-center justify-between p-4 mb-4 gap-4 text-secondary bg-red-100 border border-red-200 rounded-lg w-[650px]">
       <%= tag.p t(".no_accounts"), class: "text-sm" %>
 
       <%= link_to t(".create_account"), new_account_path(return_to: import_confirm_path(import)), class: "btn btn--primary whitespace-nowrap", data: { turbo_frame: :modal } %>
     </div>
   <% elsif import.has_unassigned_account? %>
-    <div class="flex items-center justify-between p-4 mb-4 gap-4 text-gray-500 bg-yellow-100 border border-yellow-200 rounded-lg w-[650px]">
+    <div class="flex items-center justify-between p-4 mb-4 gap-4 text-secondary bg-yellow-100 border border-yellow-200 rounded-lg w-[650px]">
       <%= tag.p t(".unassigned_account"), class: "text-sm" %>
 
       <%= link_to t(".create_account"), new_account_path(return_to: import_confirm_path(import)), class: "btn btn--primary whitespace-nowrap", data: { turbo_frame: :modal } %>
@@ -21,7 +21,7 @@
 
 <div class="space-y-4">
   <div class="bg-gray-25 rounded-xl p-1 space-y-1 w-[650px]">
-    <div class="grid grid-cols-3 gap-2 text-xs font-medium text-gray-500 uppercase px-5 py-3">
+    <div class="grid grid-cols-3 gap-2 text-xs font-medium text-secondary uppercase px-5 py-3">
       <p><%= t(".csv_mapping_label", mapping: mapping_label(mapping_class)) %></p>
       <p><%= t(".maybe_mapping_label", mapping: mapping_label(mapping_class)) %></p>
       <p class="justify-self-end"><%= t(".rows_label") %></p>

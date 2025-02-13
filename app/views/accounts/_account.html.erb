@@ -7,7 +7,7 @@
 
       <div>
         <% if account.scheduled_for_deletion? %>
-          <p class="text-sm font-medium text-gray-900">
+          <p class="text-sm font-medium text-primary">
             <span>
               <%= account.name %>
             </span>
@@ -16,7 +16,7 @@
             </span>
           </p>
         <% else %>
-          <%= link_to account.name, account, class: [(account.is_active ? "text-gray-900" : "text-gray-400"), "text-sm font-medium hover:underline"], data: { turbo_frame: "_top" } %>
+          <%= link_to account.name, account, class: [(account.is_active ? "text-primary" : "text-subdued"), "text-sm font-medium hover:underline"], data: { turbo_frame: "_top" } %>
           <% if account.has_issues? %>
             <div class="text-sm flex items-center gap-1 text-error">
               <%= lucide_icon "alert-octagon", class: "shrink-0 w-4 h-4" %>
@@ -29,12 +29,12 @@
 
       <% unless account.scheduled_for_deletion? %>
         <%= link_to edit_account_path(account, return_to: return_to), data: { turbo_frame: :modal }, class: "group-hover/account:flex hidden hover:opacity-80 items-center justify-center" do %>
-          <%= lucide_icon "pencil-line", class: "w-4 h-4 text-gray-500" %>
+          <%= lucide_icon "pencil-line", class: "w-4 h-4 text-secondary" %>
         <% end %>
       <% end %>
     </div>
     <div class="flex items-center gap-8">
-      <p class="text-sm font-medium <%= account.is_active ? "text-gray-900" : "text-gray-400" %>">
+      <p class="text-sm font-medium <%= account.is_active ? "text-primary" : "text-subdued" %>">
         <%= format_money account.balance_money %>
       </p>
 

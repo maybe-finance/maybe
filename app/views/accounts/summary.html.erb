@@ -4,7 +4,7 @@
 
   <%= render "accounts/summary/header" %>
 
-  <div class="bg-white rounded-xl shadow-xs border border-alpha-black-100 flex divide-x divide-gray-200">
+  <div class="bg-white rounded-xl shadow-xs border border-tertiary flex divide-x divide-gray-200">
     <div class="w-1/2 p-4 flex items-stretch justify-between">
       <div class="space-y-2 grow">
         <%= render partial: "shared/value_heading", locals: {
@@ -41,10 +41,10 @@
   </div>
   <div class="p-4 bg-white rounded-xl shadow-xs border border-alpha-black-25 space-y-4">
     <div class="flex justify-between items-center mb-5">
-      <h2 class="text-lg font-medium text-gray-900">Assets</h2>
+      <h2 class="text-lg font-medium text-primary">Assets</h2>
       <div class="flex items-center gap-2">
         <%= link_to new_account_path, class: "btn btn--secondary flex items-center gap-1", data: { turbo_frame: "modal" } do %>
-          <%= lucide_icon("plus", class: "w-5 h-5 text-gray-500") %>
+          <%= lucide_icon("plus", class: "w-5 h-5 text-secondary") %>
           <p><%= t(".new") %></p>
         <% end %>
         <%= form_with url: summary_accounts_path, method: :get, data: { controller: "auto-submit-form" } do |form| %>
@@ -58,18 +58,18 @@
       <%= render partial: "pages/account_percentages_table", locals: { account_groups: @account_groups[:assets].children } %>
     <% else %>
       <div class="py-20 flex flex-col items-center">
-        <%= lucide_icon "blocks", class: "w-6 h-6 shrink-0 text-gray-500" %>
-        <p class="text-gray-900 text-sm font-medium mb-1 mt-4"><%= t(".no_assets") %></p>
-        <p class="text-gray-500 text-sm max-w-xs text-center"><%= t(".no_assets_description") %></p>
+        <%= lucide_icon "blocks", class: "w-6 h-6 shrink-0 text-secondary" %>
+        <p class="text-primary text-sm font-medium mb-1 mt-4"><%= t(".no_assets") %></p>
+        <p class="text-secondary text-sm max-w-xs text-center"><%= t(".no_assets_description") %></p>
       </div>
     <% end %>
   </div>
   <div class="p-4 bg-white rounded-xl shadow-xs border border-alpha-black-25 space-y-4">
     <div class="flex justify-between items-center mb-5">
-      <h2 class="text-lg font-medium text-gray-900">Liabilities</h2>
+      <h2 class="text-lg font-medium text-primary">Liabilities</h2>
       <div class="flex items-center gap-2">
         <%= link_to new_account_path, class: "btn btn--secondary flex items-center gap-1", data: { turbo_frame: "modal" } do %>
-          <%= lucide_icon("plus", class: "w-5 h-5 text-gray-500") %>
+          <%= lucide_icon("plus", class: "w-5 h-5 text-secondary") %>
           <p><%= t(".new") %></p>
         <% end %>
         <%= form_with url: summary_accounts_path, method: :get, data: { controller: "auto-submit-form" } do |form| %>
@@ -83,9 +83,9 @@
       <%= render partial: "pages/account_percentages_table", locals: { account_groups: @account_groups[:liabilities].children } %>
     <% else %>
       <div class="py-20 flex flex-col items-center">
-        <%= lucide_icon "scale", class: "w-6 h-6 shrink-0 text-gray-500" %>
-        <p class="text-gray-900 text-sm font-medium mb-1 mt-4"><%= t(".no_liabilities") %></p>
-        <p class="text-gray-500 text-sm max-w-xs text-center"><%= t(".no_liabilities_description") %></p>
+        <%= lucide_icon "scale", class: "w-6 h-6 shrink-0 text-secondary" %>
+        <p class="text-primary text-sm font-medium mb-1 mt-4"><%= t(".no_liabilities") %></p>
+        <p class="text-secondary text-sm max-w-xs text-center"><%= t(".no_liabilities_description") %></p>
       </div>
     <% end %>
   </div>

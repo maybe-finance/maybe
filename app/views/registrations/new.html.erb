@@ -3,13 +3,13 @@
 %>
 
 <% if self_hosted_first_login? %>
-  <div class="fixed inset-0 w-full h-fit bg-gray-25 p-5 border-b border-alpha-black-200 flex flex-col gap-3 items-center text-center mb-12">
+  <div class="fixed inset-0 w-full h-fit bg-gray-25 p-5 border-b border-secondary flex flex-col gap-3 items-center text-center mb-12">
     <h2 class="font-bold text-xl"><%= t(".welcome_title") %></h2>
-    <p class="text-gray-500 text-sm"><%= t(".welcome_body") %></p>
+    <p class="text-secondary text-sm"><%= t(".welcome_body") %></p>
   </div>
 <% elsif @invitation %>
   <div class="space-y-1 mb-6 text-center">
-    <p class="text-gray-500">
+    <p class="text-secondary">
       <%= t(".invitation_message",
             inviter: @invitation.inviter.display_name,
             role: t(".role_#{@invitation.role}")) %>

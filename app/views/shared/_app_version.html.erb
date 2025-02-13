@@ -1,6 +1,6 @@
 <div class="flex items-center py-0.5 px-0.5 gap-1 fixed bottom-2 right-2 shadow-xs border border-alpha-black-50 rounded-md bg-white">
-  <p class="text-xs text-gray-500 pl-2">Version: <%= Maybe.version.to_release_tag %></p>
+  <p class="text-xs text-secondary pl-2">Version: <%= Maybe.version.to_release_tag %></p>
   <%= link_to settings_hosting_path, class: "flex gap-1 items-center hover:bg-gray-50 rounded-md p-2" do %>
-    <%= lucide_icon("settings", class: "w-4 h-4 text-gray-500 shrink-0") %>
+    <%= lucide_icon("settings", class: "w-4 h-4 text-secondary shrink-0") %>
   <% end %>
 </div>

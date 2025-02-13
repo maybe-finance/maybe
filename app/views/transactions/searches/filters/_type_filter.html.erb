@@ -10,7 +10,7 @@
                            },
                            "income",
                            nil %>
-    <%= form.label :types, t(".income"), value: "income", class: "text-sm text-gray-900" %>
+    <%= form.label :types, t(".income"), value: "income", class: "text-sm text-primary" %>
   </div>
   <div class="flex items-center gap-3" data-filter-name="expense">
     <%= form.check_box :types,
@@ -21,7 +21,7 @@
                            },
                            "expense",
                            nil %>
-    <%= form.label :types, t(".expense"), value: "expense", class: "text-sm text-gray-900" %>
+    <%= form.label :types, t(".expense"), value: "expense", class: "text-sm text-primary" %>
   </div>
   <div class="flex items-center gap-3" data-filter-name="transfer">
     <%= form.check_box :types,
@@ -32,6 +32,6 @@
                            },
                            "transfer",
                            nil %>
-    <%= form.label :types, t(".transfer"), value: "transfer", class: "text-sm text-gray-900" %>
+    <%= form.label :types, t(".transfer"), value: "transfer", class: "text-sm text-primary" %>
   </div>
 </div>

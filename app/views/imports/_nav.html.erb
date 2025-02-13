@@ -14,9 +14,9 @@
       <% is_current = request.path == step[:path] %>
 
       <% text_class = if is_current
-                  "text-gray-900"
+                  "text-primary"
                 else
-                  step[:is_complete] ? "text-green-600" : "text-gray-500"
+                  step[:is_complete] ? "text-green-600" : "text-secondary"
                 end %>
       <% step_class = if is_current
                   "bg-gray-900 text-white"

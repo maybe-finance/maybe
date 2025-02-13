@@ -2,7 +2,7 @@
 
 <% trade, account = entry.account_trade, entry.account %>
 
-<div class="grid grid-cols-12 items-center <%= entry.excluded ? "text-gray-400 bg-gray-25" : "text-gray-900" %> text-sm font-medium p-4">
+<div class="grid grid-cols-12 items-center <%= entry.excluded ? "text-subdued bg-gray-25" : "text-primary" %> text-sm font-medium p-4">
   <div class="col-span-6 flex items-center gap-4">
     <% if selectable %>
       <%= check_box_tag dom_id(entry, "selection"),
@@ -43,10 +43,10 @@
   <div class="col-span-2 justify-self-end">
     <% if balance_trend&.trend %>
       <div class="flex items-center gap-2">
-        <%= tag.p format_money(balance_trend.trend.current), class: "font-medium text-sm text-gray-900" %>
+        <%= tag.p format_money(balance_trend.trend.current), class: "font-medium text-sm text-primary" %>
       </div>
     <% else %>
-      <%= tag.p "--", class: "font-medium text-sm text-gray-400" %>
+      <%= tag.p "--", class: "font-medium text-sm text-subdued" %>
     <% end %>
   </div>
 </div>

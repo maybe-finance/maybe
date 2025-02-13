@@ -4,14 +4,14 @@
       <h3 class="font-medium text-lg"><%= t(".trades") %></h3>
       <%= link_to new_account_trade_path(@account),
                   id:    dom_id(@account, "new_trade"),
-                  class: "flex gap-1 font-medium items-center bg-gray-50 text-gray-900 p-2 rounded-lg",
+                  class: "flex gap-1 font-medium items-center bg-gray-50 text-primary p-2 rounded-lg",
                   data:  { turbo_frame: :modal } do %>
-        <%= lucide_icon("plus", class: "w-5 h-5 text-gray-900") %>
+        <%= lucide_icon("plus", class: "w-5 h-5 text-primary") %>
         <span class="text-sm"><%= t(".new") %></span>
       <% end %>
     </div>
 
-    <div class="bg-gray-25 rounded-xl grid grid-cols-12 items-center uppercase text-xs font-medium text-gray-500 px-5 py-3">
+    <div class="bg-gray-25 rounded-xl grid grid-cols-12 items-center uppercase text-xs font-medium text-secondary px-5 py-3">
       <div class="pl-0.5 col-span-6 flex items-center gap-4">
         <%= check_box_tag "selection_entry",
                           class: "maybe-checkbox maybe-checkbox--light",
@@ -29,7 +29,7 @@
       </div>
 
       <% if @entries.empty? %>
-        <p class="text-gray-500 py-4"><%= t(".no_trades") %></p>
+        <p class="text-secondary py-4"><%= t(".no_trades") %></p>
       <% else %>
         <div class="space-y-6">
           <%= entries_by_date(@entries) do |entries, _transfers| %>

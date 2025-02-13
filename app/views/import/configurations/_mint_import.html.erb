@@ -1,8 +1,8 @@
 <%# locals: (import:) %>
 
-<div class="flex items-center justify-between border border-alpha-black-200 rounded-lg bg-green-500/5 p-5 gap-4">
+<div class="flex items-center justify-between border border-secondary rounded-lg bg-green-500/5 p-5 gap-4">
   <%= lucide_icon("check-circle", class: "w-5 h-5 shrink-0 text-green-500") %>
-  <p class="text-sm text-gray-900 italic">We have pre-configured your Mint import for you. Please proceed to the next step.</p>
+  <p class="text-sm text-primary italic">We have pre-configured your Mint import for you. Please proceed to the next step.</p>
 </div>
 
 <%= styled_form_with model: @import, url: import_configuration_path(@import), scope: :import, method: :patch, class: "space-y-2" do |form| %>
