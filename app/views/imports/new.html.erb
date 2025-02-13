@@ -2,17 +2,17 @@
   <div class="p-4 space-y-4 max-w-[420px]">
     <div class="space-y-2">
       <div class="flex justify-between items-center">
-        <h2 class="font-medium text-gray-900"><%= t(".title") %></h2>
+        <h2 class="font-medium text-primary"><%= t(".title") %></h2>
         <button data-action="modal#close" tabindex="-1">
-          <%= lucide_icon("x", class: "w-5 h-5 text-gray-900") %>
+          <%= lucide_icon("x", class: "w-5 h-5 text-primary") %>
         </button>
       </div>
 
-      <p class="text-gray-500 text-sm"><%= t(".description") %></p>
+      <p class="text-secondary text-sm"><%= t(".description") %></p>
     </div>
 
     <div class="rounded-xl bg-gray-25 p-1">
-      <h3 class="uppercase text-gray-500 text-xs font-medium px-3 py-1.5"><%= t(".sources") %></h3>
+      <h3 class="uppercase text-secondary text-xs font-medium px-3 py-1.5"><%= t(".sources") %></h3>
       <ul class="bg-white border border-alpha-black-25 rounded-lg shadow-xs">
         <li>
           <% if @pending_import.present? && (params[:type].nil? || params[:type] == @pending_import.type) %>
@@ -21,11 +21,11 @@
                 <div class="bg-orange-500/5 rounded-md w-8 h-8 flex items-center justify-center">
                   <%= lucide_icon("loader", class: "w-5 h-5 text-orange-500") %>
                 </div>
-                <span class="text-sm text-gray-900 group-hover:text-gray-700">
+                <span class="text-sm text-primary group-hover:text-gray-700">
                   <%= t(".resume", type: @pending_import.type.titleize) %>
                 </span>
               </div>
-              <%= lucide_icon("chevron-right", class: "w-5 h-5 text-gray-500") %>
+              <%= lucide_icon("chevron-right", class: "w-5 h-5 text-secondary") %>
             <% end %>
 
             <div class="pl-14 pr-3">
@@ -41,11 +41,11 @@
                 <div class="bg-indigo-500/5 rounded-md w-8 h-8 flex items-center justify-center">
                   <%= lucide_icon("file-spreadsheet", class: "w-5 h-5 text-indigo-500") %>
                 </div>
-                <span class="text-sm text-gray-900 group-hover:text-gray-700">
+                <span class="text-sm text-primary group-hover:text-gray-700">
                   <%= t(".import_transactions") %>
                 </span>
               </div>
-              <%= lucide_icon("chevron-right", class: "w-5 h-5 text-gray-500") %>
+              <%= lucide_icon("chevron-right", class: "w-5 h-5 text-secondary") %>
             <% end %>
 
             <div class="pl-14 pr-3">
@@ -61,11 +61,11 @@
                 <div class="bg-yellow-500/5 rounded-md w-8 h-8 flex items-center justify-center">
                   <%= lucide_icon("square-percent", class: "w-5 h-5 text-yellow-500") %>
                 </div>
-                <span class="text-sm text-gray-900 group-hover:text-gray-700">
+                <span class="text-sm text-primary group-hover:text-gray-700">
                   <%= t(".import_portfolio") %>
                 </span>
               </div>
-              <%= lucide_icon("chevron-right", class: "w-5 h-5 text-gray-500") %>
+              <%= lucide_icon("chevron-right", class: "w-5 h-5 text-secondary") %>
             <% end %>
 
             <div class="pl-14 pr-3">
@@ -81,11 +81,11 @@
                 <div class="bg-violet-500/5 rounded-md w-8 h-8 flex items-center justify-center">
                   <%= lucide_icon("building", class: "w-5 h-5 text-violet-500") %>
                 </div>
-                <span class="text-sm text-gray-900 group-hover:text-gray-700">
+                <span class="text-sm text-primary group-hover:text-gray-700">
                   <%= t(".import_accounts") %>
                 </span>
               </div>
-              <%= lucide_icon("chevron-right", class: "w-5 h-5 text-gray-500") %>
+              <%= lucide_icon("chevron-right", class: "w-5 h-5 text-secondary") %>
             <% end %>
 
             <div class="pl-14 pr-3">
@@ -99,11 +99,11 @@
             <%= button_to imports_path(import: { type: "MintImport" }), class: "flex items-center justify-between p-4 group w-full", data: { turbo: false } do %>
               <div class="flex items-center gap-2">
                 <%= image_tag("mint-logo.jpeg", alt: "Mint logo", class: "w-8 h-8 rounded-md") %>
-                <span class="text-sm text-gray-900">
+                <span class="text-sm text-primary">
                   <%= t(".import_mint") %>
                 </span>
               </div>
-              <%= lucide_icon("chevron-right", class: "w-5 h-5 text-gray-500") %>
+              <%= lucide_icon("chevron-right", class: "w-5 h-5 text-secondary") %>
             <% end %>
 
             <div class="pl-14 pr-3">

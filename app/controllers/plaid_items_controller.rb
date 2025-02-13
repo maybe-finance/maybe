@@ -21,7 +21,10 @@ class PlaidItemsController < ApplicationController
       @plaid_item.sync_later
     end
 
-    redirect_to accounts_path
+    respond_to do |format|
+      format.html { redirect_to accounts_path }
+      format.json { head :ok }
+    end
   end
 
   private

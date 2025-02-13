@@ -65,18 +65,25 @@ class Provider::Plaid
     raise JWT::VerificationError, "Invalid webhook body hash" unless ActiveSupport::SecurityUtils.secure_compare(expected_hash, actual_hash)
   end
 
-  def get_link_token(user_id:, webhooks_url:, redirect_url:, accountable_type: nil)
-    request = Plaid::LinkTokenCreateRequest.new({
+  def get_link_token(user_id:, webhooks_url:, redirect_url:, accountable_type: nil, access_token: nil)
+    request_params = {
       user: { client_user_id: user_id },
       client_name: "Maybe Finance",
-      products: [ get_primary_product(accountable_type) ],
-      additional_consented_products: get_additional_consented_products(accountable_type),
       country_codes: country_codes,
       language: "en",
       webhook: webhooks_url,
       redirect_uri: redirect_url,
       transactions: { days_requested: MAX_HISTORY_DAYS }
-    })
+    }
+
+    if access_token.present?
+      request_params[:access_token] = access_token
+    else
+      request_params[:products] = [ get_primary_product(accountable_type) ]
+      request_params[:additional_consented_products] = get_additional_consented_products(accountable_type)
+    end
+
+    request = Plaid::LinkTokenCreateRequest.new(request_params)
 
     client.link_token_create(request)
   end

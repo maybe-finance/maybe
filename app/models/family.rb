@@ -65,7 +65,7 @@ class Family < ApplicationRecord
     country != "US" && country != "CA"
   end
 
-  def get_link_token(webhooks_url:, redirect_url:, accountable_type: nil, region: :us)
+  def get_link_token(webhooks_url:, redirect_url:, accountable_type: nil, region: :us, access_token: nil)
     provider = if region.to_sym == :eu
       self.class.plaid_eu_provider
     else
@@ -80,6 +80,7 @@ class Family < ApplicationRecord
       webhooks_url: webhooks_url,
       redirect_url: redirect_url,
       accountable_type: accountable_type,
+      access_token: access_token
     ).link_token
   end
 

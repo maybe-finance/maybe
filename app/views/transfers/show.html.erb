@@ -6,15 +6,15 @@
           <%= format_money @transfer.amount_abs %>
         </span>
 
-        <span class="text-lg text-gray-500">
+        <span class="text-lg text-secondary">
           <%= @transfer.amount_abs.currency.iso_code %>
         </span>
       </h3>
 
-      <%= lucide_icon "arrow-left-right", class: "text-gray-500 mt-1 w-5 h-5" %>
+      <%= lucide_icon "arrow-left-right", class: "text-secondary mt-1 w-5 h-5" %>
     </div>
 
-    <span class="text-sm text-gray-500">
+    <span class="text-sm text-secondary">
       <%= @transfer.name %>
     </span>
   </header>
@@ -22,10 +22,10 @@
   <div class="space-y-2">
     <!-- Overview Section -->
     <%= disclosure t(".overview") do %>
-      <div class="pb-4 px-3 pt-2 text-sm space-y-3 text-gray-900">
+      <div class="pb-4 px-3 pt-2 text-sm space-y-3 text-primary">
         <div class="space-y-3">
           <dl class="flex items-center gap-2 justify-between">
-            <dt class="text-gray-500">From</dt>
+            <dt class="text-secondary">From</dt>
             <dd class="flex items-center gap-2 font-medium">
               <%= render "accounts/logo", account: @transfer.from_account, size: "sm" %>
               <%= link_to @transfer.from_account.name, account_path(@transfer.from_account), data: { turbo_frame: "_top" } %>
@@ -33,7 +33,7 @@
           </dl>
 
           <dl class="flex items-center gap-2 justify-between">
-            <dt class="text-gray-500">Date</dt>
+            <dt class="text-secondary">Date</dt>
             <dd class="font-medium"><%= l(@transfer.outflow_transaction.entry.date, format: :long) %></dd>
           </dl>
 
@@ -47,7 +47,7 @@
 
         <div class="space-y-3">
           <dl class="flex items-center gap-2 justify-between">
-            <dt class="text-gray-500">To</dt>
+            <dt class="text-secondary">To</dt>
             <dd class="flex items-center gap-2 font-medium">
               <%= render "accounts/logo", account: @transfer.to_account, size: "sm" %>
               <%= link_to @transfer.to_account.name, account_path(@transfer.to_account), data: { turbo_frame: "_top" } %>
@@ -55,7 +55,7 @@
           </dl>
 
           <dl class="flex items-center gap-2 justify-between">
-            <dt class="text-gray-500">Date</dt>
+            <dt class="text-secondary">Date</dt>
             <dd class="font-medium"><%= l(@transfer.inflow_transaction.entry.date, format: :long) %></dd>
           </dl>
 
@@ -88,15 +88,15 @@
       <div class="pb-4">
         <div class="flex items-center justify-between gap-2 p-3">
           <div class="text-sm space-y-1">
-            <h4 class="text-gray-900"><%= t(".delete_title") %></h4>
-            <p class="text-gray-500"><%= t(".delete_subtitle") %></p>
+            <h4 class="text-primary"><%= t(".delete_title") %></h4>
+            <p class="text-secondary"><%= t(".delete_subtitle") %></p>
           </div>
 
           <%= button_to t(".delete"),
                 transfer_path(@transfer),
                 method: :delete,
                 class:  "rounded-lg px-3 py-2 whitespace-nowrap text-red-500 text-sm
-                          font-medium border border-alpha-black-200",
+                          font-medium border border-secondary",
                 data:   { turbo_confirm: true, turbo_frame: "_top" } %>
         </div>
       </div>

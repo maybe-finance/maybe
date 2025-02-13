@@ -1,7 +1,7 @@
 <%# locals: (entry:) %>
 
 <%= tag.header class: "mb-4 space-y-1", id: dom_id(entry, :header) do %>
-  <span class="text-gray-500 text-sm">
+  <span class="text-secondary text-sm">
     <%= t(".balance") %>
   </span>
 
@@ -13,7 +13,7 @@
     </h3>
   </div>
 
-  <span class="text-sm text-gray-500">
+  <span class="text-sm text-secondary">
     <%= I18n.l(entry.date, format: :long) %>
   </span>
 <% end %>

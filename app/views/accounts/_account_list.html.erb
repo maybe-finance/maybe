@@ -10,9 +10,9 @@
     <summary class="flex gap-4 px-3 py-2 items-center w-full rounded-[10px] font-medium
                     hover:bg-gray-100 cursor-pointer">
       <%= lucide_icon("chevron-down",
-          class: "hidden group-open:block text-gray-500 w-5 h-5") %>
+          class: "hidden group-open:block text-secondary w-5 h-5") %>
       <%= lucide_icon("chevron-right",
-          class: "group-open:hidden text-gray-500 w-5 h-5") %>
+          class: "group-open:hidden text-secondary w-5 h-5") %>
 
       <div class="text-left"><%= type.model_name.human %></div>
 
@@ -36,7 +36,7 @@
         <div class="overflow-hidden">
           <p class="font-medium truncate"><%= account_value_node.name %></p>
           <% if account.subtype %>
-            <p class="text-xs text-gray-500"><%= account.subtype&.humanize %></p>
+            <p class="text-xs text-secondary"><%= account.subtype&.humanize %></p>
           <% end %>
         </div>
         <div class="flex flex-col items-end font-medium text-right ml-auto">
@@ -53,7 +53,7 @@
         </div>
       <% end %>
     <% end %>
-    <%= link_to new_polymorphic_path(type, step: "method_select"), class: "flex items-center min-h-10 gap-4 px-3 py-2 mb-1 text-gray-500 text-sm font-medium rounded-[10px] hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
+    <%= link_to new_polymorphic_path(type, step: "method_select"), class: "flex items-center min-h-10 gap-4 px-3 py-2 mb-1 text-secondary text-sm font-medium rounded-[10px] hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
       <%= lucide_icon("plus", class: "w-5 h-5") %>
       <%= t(".new_account", type: type.model_name.human.downcase) %>
     <% end %>

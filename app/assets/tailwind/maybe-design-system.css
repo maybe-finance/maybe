@@ -1,0 +1,448 @@
+/* 
+  This file contains all of the Figma design tokens, components, etc. that 
+  are used globally across the app. 
+
+  One-off styling (3rd party overrides, etc.) should be done in the application.css file.
+*/
+
+@theme {
+  /* Font families */
+  --font-sans: 'Geist', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Base colors */
+  --color-white: #ffffff;
+  --color-black: #0B0B0B;
+  --color-success: var(--color-green-600);
+  --color-warning: var(--color-yellow-600);
+  --color-destructive: var(--color-red-600);
+
+  /* Gray scale */
+  --color-gray-25: #FAFAFA;
+  --color-gray-50: #F7F7F7;
+  --color-gray-100: #F0F0F0;
+  --color-gray-200: #E7E7E7;
+  --color-gray-300: #CFCFCF;
+  --color-gray-400: #9E9E9E;
+  --color-gray-500: #737373;
+  --color-gray-600: #5C5C5C;
+  --color-gray-700: #363636;
+  --color-gray-800: #242424;
+  --color-gray-900: #171717;
+  --color-gray: var(--color-gray-500);
+  --color-gray-tint-5: --alpha(var(--color-gray-500) / 5%);
+  --color-gray-tint-10: --alpha(var(--color-gray-500) / 10%);
+
+  /* Alpha colors */
+  --color-alpha-white-25: --alpha(var(--color-white) / 3%);
+  --color-alpha-white-50: --alpha(var(--color-white) / 5%);
+  --color-alpha-white-100: --alpha(var(--color-white) / 8%);
+  --color-alpha-white-200: --alpha(var(--color-white) / 10%);
+  --color-alpha-white-300: --alpha(var(--color-white) / 15%);
+  --color-alpha-white-400: --alpha(var(--color-white) / 20%);
+  --color-alpha-white-500: --alpha(var(--color-white) / 30%);
+  --color-alpha-white-600: --alpha(var(--color-white) / 40%);
+  --color-alpha-white-700: --alpha(var(--color-white) / 50%);
+  --color-alpha-white-800: --alpha(var(--color-white) / 70%);
+  --color-alpha-white-900: --alpha(var(--color-white) / 85%);
+
+  --color-alpha-black-25: --alpha(var(--color-black) / 3%);
+  --color-alpha-black-50: --alpha(var(--color-black) / 5%);
+  --color-alpha-black-100: --alpha(var(--color-black) / 8%);
+  --color-alpha-black-200: --alpha(var(--color-black) / 10%);
+  --color-alpha-black-300: --alpha(var(--color-black) / 15%);
+  --color-alpha-black-400: --alpha(var(--color-black) / 20%);
+  --color-alpha-black-500: --alpha(var(--color-black) / 30%);
+  --color-alpha-black-600: --alpha(var(--color-black) / 40%);
+  --color-alpha-black-700: --alpha(var(--color-black) / 50%);
+  --color-alpha-black-800: --alpha(var(--color-black) / 70%);
+  --color-alpha-black-900: --alpha(var(--color-black) / 85%);
+
+  /* Red scale */
+  --color-red-25: #FFFBFB;
+  --color-red-50: #FFF1F0;
+  --color-red-100: #FFDEDB;
+  --color-red-200: #FEB9B3;
+  --color-red-300: #F88C86;
+  --color-red-400: #ED4E4E;
+  --color-red-500: #F13636;
+  --color-red-600: #EC2222;
+  --color-red-700: #C91313;
+  --color-red-800: #A40E0E;
+  --color-red-900: #7E0707;
+  --color-red-tint-5: --alpha(var(--color-red-500) / 5%);
+  --color-red-tint-10: --alpha(var(--color-red-500) / 10%);
+
+  /* Green scale */
+  --color-green-25: #F6FEF9;
+  --color-green-50: #ECFDF3;
+  --color-green-100: #D1FADF;
+  --color-green-200: #A6F4C5;
+  --color-green-300: #6CE9A6;
+  --color-green-400: #32D583;
+  --color-green-500: #12B76A;
+  --color-green-600: #10A861;
+  --color-green-700: #078C52;
+  --color-green-800: #05603A;
+  --color-green-900: #054F31;
+  --color-green-tint-5: --alpha(var(--color-green-500) / 5%);
+  --color-green-tint-10: --alpha(var(--color-green-500) / 10%);
+
+  /* Yellow scale */
+  --color-yellow-25: #FFFCF5;
+  --color-yellow-50: #FFFAEB;
+  --color-yellow-100: #FEF0C7;
+  --color-yellow-200: #FEDF89;
+  --color-yellow-300: #FEC84B;
+  --color-yellow-400: #FDB022;
+  --color-yellow-500: #F79009;
+  --color-yellow-600: #DC6803;
+  --color-yellow-700: #B54708;
+  --color-yellow-800: #93370D;
+  --color-yellow-900: #7A2E0E;
+  --color-yellow-tint-5: --alpha(var(--color-yellow-500) / 5%);
+  --color-yellow-tint-10: --alpha(var(--color-yellow-500) / 10%);
+
+  /* Cyan scale */
+  --color-cyan-25: #F5FEFF;
+  --color-cyan-50: #ECFDFF;
+  --color-cyan-100: #CFF9FE;
+  --color-cyan-200: #A5F0FC;
+  --color-cyan-300: #67E3F9;
+  --color-cyan-400: #22CCEE;
+  --color-cyan-500: #06AED4;
+  --color-cyan-600: #088AB2;
+  --color-cyan-700: #0E7090;
+  --color-cyan-800: #155B75;
+  --color-cyan-900: #155B75;
+  --color-cyan-tint-5: --alpha(var(--color-cyan-500) / 5%);
+  --color-cyan-tint-10: --alpha(var(--color-cyan-500) / 10%);
+
+  /* Blue scale */
+  --color-blue-25: #F5FAFF;
+  --color-blue-50: #EFF8FF;
+  --color-blue-100: #D1E9FF;
+  --color-blue-200: #B2DDFF;
+  --color-blue-300: #84CAFF;
+  --color-blue-400: #53B1FD;
+  --color-blue-500: #2E90FA;
+  --color-blue-600: #1570EF;
+  --color-blue-700: #175CD3;
+  --color-blue-800: #1849A9;
+  --color-blue-900: #194185;
+  --color-blue-tint-5: --alpha(var(--color-blue-500) / 5%);
+  --color-blue-tint-10: --alpha(var(--color-blue-500) / 10%);
+
+  /* Indigo scale */
+  --color-indigo-25: #F5F8FF;
+  --color-indigo-50: #EFF4FF;
+  --color-indigo-100: #E0EAFF;
+  --color-indigo-200: #C7D7FE;
+  --color-indigo-300: #A4BCFD;
+  --color-indigo-400: #8098F9;
+  --color-indigo-500: #6172F3;
+  --color-indigo-600: #444CE7;
+  --color-indigo-700: #3538CD;
+  --color-indigo-800: #2D31A6;
+  --color-indigo-900: #2D3282;
+  --color-indigo-tint-5: --alpha(var(--color-indigo-500) / 5%);
+  --color-indigo-tint-10: --alpha(var(--color-indigo-500) / 10%);
+
+  /* Violet scale */
+  --color-violet-25: #FBFAFF;
+  --color-violet-50: #F5F3FF;
+  --color-violet-100: #ECE9FE;
+  --color-violet-200: #DDD6FE;
+  --color-violet-300: #C3B5FD;
+  --color-violet-400: #A48AFB;
+  --color-violet-500: #875BF7;
+  --color-violet-600: #7839EE;
+  --color-violet-700: #6927DA;
+  --color-violet-tint-5: --alpha(var(--color-violet-500) / 5%);
+  --color-violet-tint-10: --alpha(var(--color-violet-500) / 10%);
+
+  /* Fuchsia scale */
+  --color-fuchsia-25: #FEFAFF;
+  --color-fuchsia-50: #FDF4FF;
+  --color-fuchsia-100: #FBE8FF;
+  --color-fuchsia-200: #F6D0FE;
+  --color-fuchsia-300: #EEAAFD;
+  --color-fuchsia-400: #E478FA;
+  --color-fuchsia-500: #D444F1;
+  --color-fuchsia-600: #BA24D5;
+  --color-fuchsia-700: #9F1AB1;
+  --color-fuchsia-800: #821890;
+  --color-fuchsia-900: #6F1877;
+  --color-fuchsia-tint-5: --alpha(var(--color-fuchsia-500) / 5%);
+  --color-fuchsia-tint-10: --alpha(var(--color-fuchsia-500) / 10%);
+
+  /* Pink scale */
+  --color-pink-25: #FFFAFC;
+  --color-pink-50: #FEF0F7;
+  --color-pink-100: #FFD1E2;
+  --color-pink-200: #FFB1CE;
+  --color-pink-300: #FD8FBA;
+  --color-pink-400: #F86BA7;
+  --color-pink-500: #F23E94;
+  --color-pink-600: #D5327F;
+  --color-pink-700: #BA256B;
+  --color-pink-800: #9E1958;
+  --color-pink-900: #840B45;
+  --color-pink-tint-5: --alpha(var(--color-pink-500) / 5%);
+  --color-pink-tint-10: --alpha(var(--color-pink-500) / 10%);
+
+  /* Orange scale */
+  --color-orange-25: #FFF9F5;
+  --color-orange-50: #FFF4ED;
+  --color-orange-100: #FFE6D5;
+  --color-orange-200: #FFD6AE;
+  --color-orange-300: #FF9C66;
+  --color-orange-400: #FF692E;
+  --color-orange-500: #FF4405;
+  --color-orange-600: #E62E05;
+  --color-orange-700: #BC1B06;
+  --color-orange-800: #97180C;
+  --color-orange-900: #771A0D;
+  --color-orange-tint-5: --alpha(var(--color-orange-500) / 5%);
+  --color-orange-tint-10: --alpha(var(--color-orange-500) / 10%);
+
+  /* Border radius overrides */
+  --border-radius-md: 8px;
+  --border-radius-lg: 10px;
+
+  --shadow-xs: 0px 1px 2px 0px --alpha(var(--color-black) / 6%);
+  --shadow-sm: 0px 1px 6px 0px --alpha(var(--color-black) / 6%);
+  --shadow-md: 0px 4px 8px -2px --alpha(var(--color-black) / 6%);
+  --shadow-lg: 0px 12px 16px -4px --alpha(var(--color-black) / 6%);
+  --shadow-xl: 0px 20px 24px -4px --alpha(var(--color-black) / 6%);
+}
+
+/* Custom shadow borders used for surfaces / containers  */
+@utility shadow-border-xs {
+  box-shadow: var(--shadow-xs), 0px 0px 0px 1px var(--color-alpha-black-50);
+}
+
+@utility shadow-border-sm {
+  box-shadow: var(--shadow-sm), 0px 0px 0px 1px var(--color-alpha-black-50);
+}
+
+@utility shadow-border-md {
+  box-shadow: var(--shadow-md), 0px 0px 0px 1px var(--color-alpha-black-50);
+}
+
+@utility shadow-border-lg {
+  box-shadow: var(--shadow-lg), 0px 0px 0px 1px var(--color-alpha-black-50);
+}
+
+@utility shadow-border-xl {
+  box-shadow: var(--shadow-xl), 0px 0px 0px 1px var(--color-alpha-black-50);
+}
+
+/* Design system color utilities */
+@utility text-primary {
+  @apply text-gray-900;
+}
+
+@utility text-secondary {
+  @apply text-gray-500;
+}
+
+@utility text-subdued {
+  @apply text-gray-400;
+}
+
+@utility text-link {
+  @apply text-blue-600;
+}
+
+@utility bg-surface {
+  @apply bg-gray-50 hover:bg-gray-100;
+}
+
+@utility bg-surface-inset {
+  @apply bg-gray-100 hover:bg-gray-200;
+}
+
+@utility bg-container {
+  @apply bg-white hover:bg-gray-50;
+}
+
+@utility bg-container-inset {
+  @apply bg-gray-50 hover:bg-gray-100;
+}
+
+@utility bg-inverse {
+  @apply bg-gray-800 hover:bg-gray-700;
+}
+
+@utility bg-overlay {
+  @apply bg-alpha-black-200;
+}
+
+@utility border-primary {
+  @apply border-alpha-black-300;
+}
+
+@utility border-secondary {
+  @apply border-alpha-black-200;
+}
+
+@utility border-tertiary {
+  @apply border-alpha-black-100;
+}
+
+@layer base {
+  details>summary::-webkit-details-marker {
+    @apply hidden;
+  }
+  
+  details>summary {
+    @apply list-none;
+  }
+  
+  select[multiple="multiple"] {
+    @apply py-2 pr-2 space-y-0.5 overflow-y-auto;
+  }
+  
+  select[multiple="multiple"] option {
+    @apply py-2 rounded-md;
+  }
+  
+  select[multiple="multiple"] option:checked {
+    @apply after:content-['\2713'] bg-white after:text-gray-500 after:ml-2;
+  }
+  
+  select[multiple="multiple"] option:active,
+  select[multiple="multiple"] option:focus {
+    @apply bg-white;
+  }
+}
+
+@layer components {
+  /* Buttons */
+  .btn {
+    @apply px-3 py-2 rounded-lg text-sm font-medium cursor-pointer disabled:cursor-not-allowed focus:outline-gray-500;
+  }
+
+  .btn--primary {
+    @apply bg-gray-900 text-white hover:bg-gray-700 disabled:bg-gray-50 disabled:hover:bg-gray-50 disabled:text-gray-400;
+  }
+  
+  .btn--secondary {
+    @apply bg-gray-50 hover:bg-gray-100 text-gray-900;
+  }
+  
+  .btn--outline {
+    @apply border border-alpha-black-200 text-gray-900 hover:bg-gray-50 disabled:bg-gray-50 disabled:hover:bg-gray-50 disabled:text-gray-400;
+  }
+  
+  .btn--ghost {
+    @apply border border-transparent text-gray-900 hover:bg-gray-50;
+  }
+
+  .btn--destructive {
+    @apply bg-red-500 text-white hover:bg-red-600 disabled:bg-red-50 disabled:hover:bg-red-50 disabled:text-red-400;
+  }
+
+  /* Forms */
+  .form-field {
+    @apply flex flex-col gap-1 relative px-3 py-2 rounded-md border bg-white border-alpha-black-100 shadow-xs w-full;
+    @apply focus-within:border-gray-900 focus-within:shadow-none focus-within:ring-4 focus-within:ring-gray-100;
+  }
+  
+  .form-field__label {
+    @apply block text-xs text-gray-500 peer-disabled:text-gray-400;
+  }
+
+  .form-field__input {
+    @apply border-none bg-transparent text-sm opacity-100 w-full p-0;
+    @apply focus:opacity-100 focus:outline-hidden focus:ring-0;
+    @apply placeholder-shown:opacity-50;
+    @apply disabled:text-gray-400;
+    @apply text-ellipsis overflow-hidden whitespace-nowrap;
+  
+    &select {
+      @apply pr-8;
+    }
+  }
+  
+  .form-field__radio {
+    @apply text-gray-900;
+  }
+  
+  .form-field__submit {
+    @apply cursor-pointer rounded-lg bg-black p-3 text-center text-white hover:bg-gray-700;
+  }
+
+  /* Checkboxes */
+  .checkbox {
+    &[type='checkbox'] {
+      @apply rounded-sm;
+    }
+  }
+
+  .checkbox--light {
+    &[type='checkbox'] {
+      @apply border-alpha-black-200 checked:bg-gray-900 checked:ring-gray-900 focus:ring-gray-900 focus-visible:ring-gray-900 checked:hover:bg-gray-500;
+    }
+  
+    &[type='checkbox']:disabled {
+      @apply cursor-not-allowed opacity-80 bg-gray-50 border-gray-200 checked:bg-gray-400 checked:ring-gray-400;
+    }
+  }
+  
+  .checkbox--dark {
+    &[type='checkbox'] {
+      @apply ring-gray-900 checked:text-white;
+    }
+  
+    &[type='checkbox']:disabled {
+      @apply cursor-not-allowed opacity-80 ring-gray-600;
+    }
+  
+    &[type='checkbox']:checked {
+      background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='111827' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+    }
+  }
+
+  /* Switches */
+  .switch {
+    @apply block bg-gray-100 w-9 h-5 rounded-full cursor-pointer;
+    @apply after:content-[''] after:block after:absolute after:top-0.5 after:left-0.5 after:bg-white after:w-4 after:h-4 after:rounded-full after:transition-transform after:duration-300 after:ease-in-out;
+    @apply peer-checked:bg-green-600 peer-checked:after:translate-x-4;
+  }
+
+  /* Typography */
+  .prose {
+    @apply max-w-none;
+  
+    h2 {
+      @apply text-xl font-medium;
+    }
+  
+    h3 {
+      @apply text-lg font-medium;
+    }
+  
+    li {
+      @apply m-0;
+    }
+  
+    details {
+      @apply mb-4 rounded-xl mt-3.5;
+    }
+  
+    summary {
+      @apply flex items-center gap-1;
+    }
+  
+    video {
+      @apply m-0 rounded-b-xl;
+    }
+  }
+
+  /* Tooltips */
+  .tooltip {
+    @apply hidden absolute;
+  }
+}

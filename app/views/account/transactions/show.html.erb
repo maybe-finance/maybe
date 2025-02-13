@@ -38,7 +38,7 @@
                       Current.family.categories.alphabetically,
                     :id, :name,
                     { label: t(".category_label"),
-                      class: "text-gray-400", include_blank: t(".uncategorized") },
+                      class: "text-subdued", include_blank: t(".uncategorized") },
                     "data-auto-submit-form-target": "auto" %>
             <% end %>
           <% end %>
@@ -70,7 +70,7 @@
                     :id, :name,
                     { include_blank: t(".none"),
                       label: t(".merchant_label"),
-                      class: "text-gray-400" },
+                      class: "text-subdued" },
                     "data-auto-submit-form-target": "auto" %>
 
               <%= ef.select :tag_ids,
@@ -105,8 +105,8 @@
               data: { controller: "auto-submit-form" } do |f| %>
           <div class="flex cursor-pointer items-center gap-4 justify-between">
             <div class="text-sm space-y-1">
-              <h4 class="text-gray-900">One-time <%= @entry.amount.negative? ? "Income" : "Expense" %></h4>
-              <p class="text-gray-500">One-time transactions will be excluded from certain budgeting calculations and reports to help you see what's really important.</p>
+              <h4 class="text-primary">One-time <%= @entry.amount.negative? ? "Income" : "Expense" %></h4>
+              <p class="text-secondary">One-time transactions will be excluded from certain budgeting calculations and reports to help you see what's really important.</p>
             </div>
 
             <div class="relative inline-block select-none">
@@ -114,15 +114,15 @@
                       class: "sr-only peer",
                       "data-auto-submit-form-target": "auto" %>
               <label for="account_entry_excluded"
-                         class="maybe-switch"></label>
+                         class="switch"></label>
             </div>
           </div>
         <% end %>
 
         <div class="flex items-center justify-between gap-4 p-3">
           <div class="text-sm space-y-1">
-            <h4 class="text-gray-900">Transfer or Debt Payment?</h4>
-            <p class="text-gray-500">Transfers and payments are special types of transactions that indicate money movement between 2 accounts.</p>
+            <h4 class="text-primary">Transfer or Debt Payment?</h4>
+            <p class="text-secondary">Transfers and payments are special types of transactions that indicate money movement between 2 accounts.</p>
           </div>
 
           <%= link_to new_account_transaction_transfer_match_path(@entry), class: "btn btn--outline flex items-center gap-2", data: { turbo_frame: :modal } do %>
@@ -134,15 +134,15 @@
         <!-- Delete Transaction Form -->
         <div class="flex items-center justify-between gap-2 p-3">
           <div class="text-sm space-y-1">
-            <h4 class="text-gray-900"><%= t(".delete_title") %></h4>
-            <p class="text-gray-500"><%= t(".delete_subtitle") %></p>
+            <h4 class="text-primary"><%= t(".delete_title") %></h4>
+            <p class="text-secondary"><%= t(".delete_subtitle") %></p>
           </div>
 
           <%= button_to t(".delete"),
                   account_entry_path(@entry),
                   method: :delete,
                   class:  "rounded-lg px-3 py-2 text-red-500 text-sm
-                           font-medium border border-alpha-black-200",
+                           font-medium border border-secondary",
                   data:   { turbo_confirm: true, turbo_frame: "_top" } %>
         </div>
       </div>

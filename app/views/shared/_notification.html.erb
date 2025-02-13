@@ -22,7 +22,7 @@
     <% end %>
   </div>
 
-  <%= tag.p message, class: "text-gray-900 text-sm font-medium" %>
+  <%= tag.p message, class: "text-primary text-sm font-medium" %>
 
   <div class="ml-auto">
     <% if type.to_sym == :notice %>
@@ -32,11 +32,11 @@
           <circle class="origin-center -rotate-90 animate-[stroke-fill_2.2s_300ms_forwards]" stroke="#141414" stroke-opacity="0.4" r="7.2" cx="10" cy="10" stroke-dasharray="43.9822971503" stroke-dashoffset="43.9822971503" />
         </svg>
         <div class="absolute -top-2 -right-2">
-          <%= lucide_icon "x", class: "w-5 h-5 p-0.5 hidden group-hover:inline-block border border-alpha-black-50 border-solid rounded-lg bg-white text-gray-400 cursor-pointer", data: { action: "click->element-removal#remove" } %>
+          <%= lucide_icon "x", class: "w-5 h-5 p-0.5 hidden group-hover:inline-block border border-alpha-black-50 border-solid rounded-lg bg-white text-subdued cursor-pointer", data: { action: "click->element-removal#remove" } %>
         </div>
       </div>
     <% elsif type.to_sym == :alert %>
-      <%= lucide_icon "x", data: { action: "click->element-removal#remove" }, class: "w-5 h-5 text-gray-500 hover:text-gray-600 cursor-pointer" %>
+      <%= lucide_icon "x", data: { action: "click->element-removal#remove" }, class: "w-5 h-5 text-secondary hover:text-gray-600 cursor-pointer" %>
     <% end %>
   </div>
 <% end %>

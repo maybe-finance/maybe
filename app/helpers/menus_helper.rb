@@ -7,8 +7,8 @@ module MenusHelper
   end
 
   def contextual_menu_modal_action_item(label, url, icon: "pencil-line", turbo_frame: :modal)
-    link_to url, class: "flex items-center rounded-lg text-gray-900 hover:bg-gray-50 py-2 px-3 gap-2", data: { turbo_frame: } do
-      concat(lucide_icon(icon, class: "shrink-0 w-5 h-5 text-gray-500"))
+    link_to url, class: "flex items-center rounded-lg text-primary hover:bg-gray-50 py-2 px-3 gap-2", data: { turbo_frame: } do
+      concat(lucide_icon(icon, class: "shrink-0 w-5 h-5 text-secondary"))
       concat(tag.span(label, class: "text-sm"))
     end
   end
@@ -26,7 +26,7 @@ module MenusHelper
   private
     def contextual_menu_icon
       tag.button class: "flex hover:bg-gray-100 p-2 rounded cursor-pointer", data: { menu_target: "button" } do
-        lucide_icon "more-horizontal", class: "w-5 h-5 text-gray-500"
+        lucide_icon "more-horizontal", class: "w-5 h-5 text-secondary"
       end
     end
 

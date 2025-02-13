@@ -22,6 +22,8 @@ jobs:
     name: Build docker image
     needs: [ ci ]
 
+    timeout-minutes: 60
+
     runs-on: ubuntu-latest
 
     permissions:

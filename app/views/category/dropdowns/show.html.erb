@@ -2,12 +2,12 @@
   <div class="flex flex-col relative" data-controller="list-filter">
     <div class="grow p-1.5">
       <div class="relative flex items-center bg-white border border-gray-200 rounded-lg">
-        <input placeholder="<%= t(".search_placeholder") %>" autocomplete="nope" type="search" class="placeholder:text-sm placeholder:text-gray-500 font-normal h-10 relative pl-10 w-full border-none rounded-lg" data-list-filter-target="input" data-action="list-filter#filter">
-        <%= lucide_icon("search", class: "w-5 h-5 text-gray-500 ml-2 absolute inset-0 transform top-1/2 -translate-y-1/2") %>
+        <input placeholder="<%= t(".search_placeholder") %>" autocomplete="nope" type="search" class="placeholder:text-sm placeholder:text-secondary font-normal h-10 relative pl-10 w-full border-none rounded-lg" data-list-filter-target="input" data-action="list-filter#filter">
+        <%= lucide_icon("search", class: "w-5 h-5 text-secondary ml-2 absolute inset-0 transform top-1/2 -translate-y-1/2") %>
       </div>
     </div>
     <div data-list-filter-target="list" class="flex flex-col gap-0.5 p-1.5 mt-0.5 mr-2 max-h-64 overflow-y-scroll scrollbar">
-      <div class="pb-2 pl-4 mr-2 text-gray-500 hidden" data-list-filter-target="emptyMessage">
+      <div class="pb-2 pl-4 mr-2 text-secondary hidden" data-list-filter-target="emptyMessage">
         <%= t(".no_categories") %>
       </div>
       <% if @categories.any? %>
@@ -21,7 +21,7 @@
       <% else %>
         <div class="flex justify-center items-center py-12">
           <div class="text-center flex flex-col items-center max-w-[500px]">
-            <p class="text-sm text-gray-500 font-normal mb-4"><%= t(".empty") %></p>
+            <p class="text-sm text-secondary font-normal mb-4"><%= t(".empty") %></p>
             <%= button_to t(".bootstrap"), bootstrap_categories_path, class: "btn btn--outline", data: { turbo_frame: :_top } %>
           </div>
         </div>
@@ -34,7 +34,7 @@
                       method: :patch,
                       data: { turbo_frame: dom_id(@transaction.entry) },
                       params: { account_entry: { entryable_type: "Account::Transaction", entryable_attributes: { id: @transaction.id, category_id: nil } } },
-                      class: "flex text-sm font-medium items-center gap-2 text-gray-500 w-full rounded-lg p-2 hover:bg-gray-100" do %>
+                      class: "flex text-sm font-medium items-center gap-2 text-secondary w-full rounded-lg p-2 hover:bg-gray-100" do %>
           <%= lucide_icon "minus", class: "w-5 h-5" %>
 
           <%= t(".clear") %>
@@ -43,7 +43,7 @@
 
       <% unless @transaction.transfer? %>
         <%= link_to new_account_transaction_transfer_match_path(@transaction.entry),
-                  class: "flex text-sm font-medium items-center gap-2 text-gray-500 w-full rounded-lg p-2 hover:bg-gray-100",
+                  class: "flex text-sm font-medium items-center gap-2 text-secondary w-full rounded-lg p-2 hover:bg-gray-100",
                   data: { turbo_frame: "modal" } do %>
           <%= lucide_icon "refresh-cw", class: "w-5 h-5" %>
 
@@ -51,7 +51,7 @@
         <% end %>
       <% end %>
 
-      <div class="flex text-sm font-medium items-center gap-2 text-gray-500 w-full rounded-lg p-2">
+      <div class="flex text-sm font-medium items-center gap-2 text-secondary w-full rounded-lg p-2">
         <div class="flex items-center gap-2">
           <%= form_with url: account_transaction_path(@transaction.entry),
                         method: :patch,
@@ -59,7 +59,7 @@
             <%= f.hidden_field "account_entry[excluded]", value: !@transaction.entry.excluded %>
             <%= f.check_box "account_entry[excluded]",
                           checked: @transaction.entry.excluded,
-                          class: "maybe-checkbox maybe-checkbox--light",
+                          class: "checkbox checkbox--light",
                           data: { auto_submit_form_target: "auto", autosubmit_trigger_event: "change" } %>
           <% end %>
         </div>

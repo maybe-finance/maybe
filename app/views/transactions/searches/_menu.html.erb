@@ -4,13 +4,13 @@
   id="transaction-filters-menu"
   data-menu-target="content"
   data-controller="tabs"
-  data-tabs-active-class="bg-gray-25 text-gray-900"
+  data-tabs-active-class="bg-gray-25 text-primary"
   data-tabs-default-tab-value="<%= get_default_transaction_search_filter[:key] %>"
-  class="hidden absolute flex z-10 h-80 w-[540px] top-12 right-0 border border-alpha-black-100 bg-white rounded-lg shadow-xs">
-  <div class="flex w-44 flex-col items-start p-3 text-sm font-medium text-gray-500 border-r border-r-alpha-black-100">
+  class="hidden absolute flex z-10 h-80 w-[540px] top-12 right-0 border border-tertiary bg-white rounded-lg shadow-xs">
+  <div class="flex w-44 flex-col items-start p-3 text-sm font-medium text-secondary border-r border-r-alpha-black-100">
     <% transaction_search_filters.each do |filter| %>
       <button
-        class="flex text-gray-500 hover:bg-gray-25 items-center gap-2 px-3 rounded-md py-2 w-full"
+        class="flex text-secondary hover:bg-gray-25 items-center gap-2 px-3 rounded-md py-2 w-full"
         type="button"
         data-id="<%= filter[:key] %>"
         data-tabs-target="btn"
@@ -38,7 +38,7 @@
       </div>
 
       <div>
-        <%= button_tag type: "reset", data: { action: "menu#close" }, class: "py-2 px-3 bg-gray-50 rounded-lg text-sm text-gray-900 font-medium" do %>
+        <%= button_tag type: "reset", data: { action: "menu#close" }, class: "py-2 px-3 bg-gray-50 rounded-lg text-sm text-primary font-medium" do %>
           <%= t(".cancel") %>
         <% end %>
         <%= form.submit t(".apply"), name: nil, class: "py-2 px-3 bg-gray-900 hover:bg-gray-700 rounded-lg text-sm text-white font-medium cursor-pointer" %>

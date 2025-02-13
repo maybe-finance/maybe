@@ -3,7 +3,7 @@
 <% end %>
 
 <div class="space-y-4">
-  <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
+  <h1 class="text-primary text-xl font-medium mb-4"><%= t(".page_title") %></h1>
   <%= settings_section title: t(".general_title"), subtitle: t(".general_subtitle") do %>
     <div>
       <%= styled_form_with model: @user, class: "space-y-4", data: { controller: "auto-submit-form" } do |form| %>
@@ -34,7 +34,7 @@
             { label: t(".country") },
             { data: { auto_submit_form_target: "auto" } } %>
 
-          <p class="text-xs italic pl-2 text-gray-500">Please note, we are still working on translations for various languages.  Please see the <%= link_to "I18n issue", "https://github.com/maybe-finance/maybe/issues/1225", target: "_blank", class: "underline" %> for more information.</p>
+          <p class="text-xs italic pl-2 text-secondary">Please note, we are still working on translations for various languages.  Please see the <%= link_to "I18n issue", "https://github.com/maybe-finance/maybe/issues/1225", target: "_blank", class: "underline" %> for more information.</p>
         <% end %>
       <% end %>
     </div>

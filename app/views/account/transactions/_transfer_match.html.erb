@@ -12,7 +12,7 @@
 
     <%= button_to transfer_path(transaction.transfer, transfer: { status: "confirmed" }),
                     method: :patch,
-                    class: "text-gray-500 hover:text-gray-800 flex items-center justify-center",
+                    class: "text-secondary hover:text-gray-800 flex items-center justify-center",
                     title: "Confirm match" do %>
       <%= lucide_icon "check", class: "w-4 h-4 text-indigo-400 hover:text-indigo-600" %>
     <% end %>
@@ -20,9 +20,9 @@
     <%= button_to transfer_path(transaction.transfer, transfer: { status: "rejected" }),
                     method: :patch,
                     data: { turbo: false },
-                    class: "text-gray-500 hover:text-gray-800 flex items-center justify-center",
+                    class: "text-secondary hover:text-gray-800 flex items-center justify-center",
                     title: "Reject match" do %>
-      <%= lucide_icon "x", class: "w-4 h-4 text-gray-400 hover:text-gray-600" %>
+      <%= lucide_icon "x", class: "w-4 h-4 text-subdued hover:text-gray-600" %>
     <% end %>
   <% end %>
 </div>

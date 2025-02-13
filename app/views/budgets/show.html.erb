@@ -25,16 +25,16 @@
                         budget_path(@budget, tab: "budgeted"),
                         class: class_names(
                           base_classes,
-                          "bg-white shadow-xs text-gray-900": selected_tab == "budgeted",
-                          "text-gray-500": selected_tab != "budgeted"
+                          "bg-white shadow-xs text-primary": selected_tab == "budgeted",
+                          "text-secondary": selected_tab != "budgeted"
                         ) %>
 
             <%= link_to "Actual",
                         budget_path(@budget, tab: "actuals"),
                         class: class_names(
                           base_classes,
-                          "bg-white shadow-xs text-gray-900": selected_tab == "actuals",
-                          "text-gray-500": selected_tab != "actuals"
+                          "bg-white shadow-xs text-primary": selected_tab == "actuals",
+                          "text-secondary": selected_tab != "actuals"
                         ) %>
           </div>
 

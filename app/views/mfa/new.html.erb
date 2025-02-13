@@ -8,7 +8,7 @@
 <% end %>
 
 <div class="space-y-4">
-  <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
+  <h1 class="text-primary text-xl font-medium mb-4"><%= t(".page_title") %></h1>
   <%= settings_section title: t(".scan_title"), subtitle: t(".scan_description") do %>
     <div class="space-y-6">
       <div>
@@ -16,8 +16,8 @@
       </div>
 
       <div class="mt-6">
-        <h3 class="text-sm font-medium text-gray-900"><%= t(".secret_title") %></h3>
-        <div class="mt-2 text-sm text-gray-500">
+        <h3 class="text-sm font-medium text-primary"><%= t(".secret_title") %></h3>
+        <div class="mt-2 text-sm text-secondary">
           <p><%= t(".secret_description") %></p>
         </div>
         <div class="mt-2 flex items-center gap-2" data-controller="clipboard">
@@ -27,7 +27,7 @@
                  autocomplete="off"
                  value="<%= Current.user.otp_secret %>"
                  class="text-sm bg-gray-50 px-2 py-1 rounded border border-gray-200 w-96 font-mono">
-          <button data-action="clipboard#copy" class="text-gray-500 hover:text-gray-700">
+          <button data-action="clipboard#copy" class="text-secondary hover:text-gray-700">
             <span data-clipboard-target="iconDefault">
               <%= lucide_icon "copy", class: "w-5 h-5" %>
             </span>
@@ -39,8 +39,8 @@
       </div>
 
       <div>
-        <h3 class="text-lg font-medium leading-6 text-gray-900"><%= t(".verify_title") %></h3>
-        <div class="mt-2 text-sm text-gray-500">
+        <h3 class="text-lg font-medium leading-6 text-primary"><%= t(".verify_title") %></h3>
+        <div class="mt-2 text-sm text-secondary">
           <p><%= t(".verify_description") %></p>
         </div>
       </div>

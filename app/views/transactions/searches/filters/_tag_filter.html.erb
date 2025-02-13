@@ -2,7 +2,7 @@
 <div data-controller="list-filter">
   <div class="relative">
     <input type="search" autocomplete="off" placeholder="Filter tags" data-list-filter-target="input" data-action="input->list-filter#filter" class="block w-full border border-gray-200 rounded-md py-2 pl-10 pr-3 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-    <%= lucide_icon("search", class: "w-5 h-5 text-gray-500 absolute inset-y-0 left-2 top-1/2 transform -translate-y-1/2") %>
+    <%= lucide_icon("search", class: "w-5 h-5 text-secondary absolute inset-y-0 left-2 top-1/2 transform -translate-y-1/2") %>
   </div>
   <div class="my-2" id="list" data-list-filter-target="list">
     <% Current.family.tags.alphabetically.each do |tag| %>
@@ -11,11 +11,11 @@
                            {
                              multiple: true,
                              checked: @q[:tags]&.include?(tag.name),
-                             class: "maybe-checkbox maybe-checkbox--light"
+                             class: "checkbox checkbox--light"
                            },
                            tag.name,
                            nil %>
-        <%= form.label :tags, value: tag.name, class: "text-sm text-gray-900 flex items-center gap-2" do %>
+        <%= form.label :tags, value: tag.name, class: "text-sm text-primary flex items-center gap-2" do %>
           <%= circle_logo(tag.name, hex: tag.color || Tag::UNCATEGORIZED_COLOR, size: "sm") %>
           <%= tag.name %>
         <% end %>

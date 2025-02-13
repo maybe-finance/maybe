@@ -2,14 +2,14 @@
   <div class="space-y-4">
     <header class="flex justify-between">
       <div>
-        <p class="text-sm text-gray-500">Category</p>
-        <h3 class="text-2xl font-medium text-gray-900">
+        <p class="text-sm text-secondary">Category</p>
+        <h3 class="text-2xl font-medium text-primary">
           <%= @budget_category.category.name %>
         </h3>
 
         <% if @budget_category.budget.initialized? %>
-          <p class="text-sm text-gray-500">
-            <span class="text-gray-900">
+          <p class="text-sm text-secondary">
+            <span class="text-primary">
               <%= format_money(@budget_category.actual_spending_money) %>
             </span>
             <span>/</span>
@@ -28,26 +28,26 @@
 
     <details class="group space-y-2" open>
       <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2
-                     text-xs font-medium uppercase text-gray-500 bg-gray-25 focus-visible:outline-hidden">
+                     text-xs font-medium uppercase text-secondary bg-gray-25 focus-visible:outline-hidden">
         <h4>Overview</h4>
         <%= lucide_icon "chevron-down",
-            class: "group-open:transform group-open:rotate-180 text-gray-500 w-5" %>
+            class: "group-open:transform group-open:rotate-180 text-secondary w-5" %>
       </summary>
 
       <div class="pb-4">
         <dl class="space-y-3 px-3 py-2">
           <div class="flex items-center justify-between text-sm">
-            <dt class="text-gray-500">
+            <dt class="text-secondary">
               <%= @budget_category.budget.start_date.strftime("%b %Y") %> spending
             </dt>
-            <dd class="text-gray-900 font-medium">
+            <dd class="text-primary font-medium">
               <%= format_money @budget_category.actual_spending_money %>
             </dd>
           </div>
 
           <% if @budget_category.budget.initialized? %>
             <div class="flex items-center justify-between text-sm">
-              <dt class="text-gray-500">Status</dt>
+              <dt class="text-secondary">Status</dt>
               <% if @budget_category.available_to_spend.negative? %>
                 <dd class="text-red-500 flex items-center gap-1 text-red-500 font-medium">
                   <%= lucide_icon "alert-circle", class: "shrink-0 w-4 h-4 text-red-500" %>
@@ -61,7 +61,7 @@
                   <span>left</span>
                 </dd>
               <% else %>
-                <dd class="text-gray-900 flex items-center gap-1 text-green-500 font-medium">
+                <dd class="text-primary flex items-center gap-1 text-green-500 font-medium">
                   <%= lucide_icon "check-circle-2", class: "shrink-0 w-4 h-4 text-green-500" %>
                   <%= format_money @budget_category.available_to_spend_money %>
                   <span>left</span>
@@ -70,23 +70,23 @@
             </div>
 
             <div class="flex items-center justify-between text-sm">
-              <dt class="text-gray-500">Budgeted</dt>
-              <dd class="text-gray-900 font-medium">
+              <dt class="text-secondary">Budgeted</dt>
+              <dd class="text-primary font-medium">
                 <%= format_money @budget_category.budgeted_spending_money %>
               </dd>
             </div>
           <% end %>
 
           <div class="flex items-center justify-between text-sm">
-            <dt class="text-gray-500">Monthly average spending</dt>
-            <dd class="text-gray-900 font-medium">
+            <dt class="text-secondary">Monthly average spending</dt>
+            <dd class="text-primary font-medium">
               <%= format_money @budget_category.category.avg_monthly_total_money, precision: 0 %>
             </dd>
           </div>
 
           <div class="flex items-center justify-between text-sm">
-            <dt class="text-gray-500">Monthly median spending</dt>
-            <dd class="text-gray-900 font-medium">
+            <dt class="text-secondary">Monthly median spending</dt>
+            <dd class="text-primary font-medium">
               <%= format_money @budget_category.category.median_monthly_total_money, precision: 0 %>
             </dd>
           </div>
@@ -96,10 +96,10 @@
 
     <details class="group space-y-2" open>
       <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2
-                     text-xs font-medium uppercase text-gray-500 bg-gray-25 focus-visible:outline-hidden">
+                     text-xs font-medium uppercase text-secondary bg-gray-25 focus-visible:outline-hidden">
         <h4>Recent Transactions</h4>
         <%= lucide_icon "chevron-down",
-            class: "group-open:transform group-open:rotate-180 text-gray-500 w-5" %>
+            class: "group-open:transform group-open:rotate-180 text-secondary w-5" %>
       </summary>
 
       <div class="space-y-2">
@@ -142,7 +142,7 @@
                   data: { turbo_frame: :_top },
                   class: "block text-center btn btn--outline w-full" %>
           <% else %>
-            <p class="text-gray-500 text-sm mb-4">
+            <p class="text-secondary text-sm mb-4">
               No transactions found for this budget period.
             </p>
           <% end %>

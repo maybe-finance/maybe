@@ -4,14 +4,14 @@
       <%= tag.h2 t(".valuations"), class: "font-medium text-lg" %>
       <%= link_to new_account_valuation_path(@account),
                   data:  { turbo_frame: dom_id(@account.entries.account_valuations.new) },
-                  class: "flex gap-1 font-medium items-center bg-gray-50 text-gray-900 p-2 rounded-lg" do %>
-        <%= lucide_icon("plus", class: "w-5 h-5 text-gray-900") %>
+                  class: "flex gap-1 font-medium items-center bg-gray-50 text-primary p-2 rounded-lg" do %>
+        <%= lucide_icon("plus", class: "w-5 h-5 text-primary") %>
         <%= tag.span t(".new_entry"), class: "text-sm" %>
       <% end %>
     </div>
 
     <div class="rounded-xl bg-gray-25 p-1">
-      <div class="grid grid-cols-10 items-center uppercase text-xs font-medium text-gray-500 px-4 py-2">
+      <div class="grid grid-cols-10 items-center uppercase text-xs font-medium text-secondary px-4 py-2">
         <%= tag.p t(".date"), class: "col-span-5" %>
         <%= tag.p t(".value"), class: "col-span-2 justify-self-end" %>
         <%= tag.p t(".change"), class: "col-span-2 justify-self-end" %>
@@ -27,7 +27,7 @@
                      as:              :entry,
                      spacer_template: "account/entries/ruler" %>
         <% else %>
-          <p class="text-gray-500 text-sm p-4"><%= t(".no_valuations") %></p>
+          <p class="text-secondary text-sm p-4"><%= t(".no_valuations") %></p>
         <% end %>
       </div>
     </div>
