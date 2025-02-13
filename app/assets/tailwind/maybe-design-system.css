@@ -1,0 +1,262 @@
+/* 
+  This file contains all of the Figma design tokens, components, etc. that 
+  are used globally across the app. 
+
+  One-off styling (3rd party overrides, etc.) should be done in the application.css file.
+*/
+
+@theme {
+  /* Font families */
+  --font-sans: 'Geist', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Base colors */
+  --color-white: #ffffff;
+  --color-black: #0B0B0B;
+
+  /* Gray scale */
+  --color-gray-25: #FAFAFA;
+  --color-gray-50: #F7F7F7;
+  --color-gray-100: #F0F0F0;
+  --color-gray-200: #E7E7E7;
+  --color-gray-300: #CFCFCF;
+  --color-gray-400: #9E9E9E;
+  --color-gray-500: #737373;
+  --color-gray-600: #5C5C5C;
+  --color-gray-700: #363636;
+  --color-gray-800: #242424;
+  --color-gray-900: #171717;
+  --color-gray: var(--color-gray-500);
+  --color-gray-tint-5: --alpha(var(--color-gray-500) / 5%);
+  --color-gray-tint-10: --alpha(var(--color-gray-500) / 10%);
+
+  /* Alpha colors */
+  --color-alpha-white-25: --alpha(var(--color-white) / 3%);
+  --color-alpha-white-50: --alpha(var(--color-white) / 5%);
+  --color-alpha-white-100: --alpha(var(--color-white) / 8%);
+  --color-alpha-white-200: --alpha(var(--color-white) / 10%);
+  --color-alpha-white-300: --alpha(var(--color-white) / 15%);
+  --color-alpha-white-400: --alpha(var(--color-white) / 20%);
+  --color-alpha-white-500: --alpha(var(--color-white) / 30%);
+  --color-alpha-white-600: --alpha(var(--color-white) / 40%);
+  --color-alpha-white-700: --alpha(var(--color-white) / 50%);
+  --color-alpha-white-800: --alpha(var(--color-white) / 70%);
+  --color-alpha-white-900: --alpha(var(--color-white) / 85%);
+
+  --color-alpha-black-25: --alpha(var(--color-black) / 3%);
+  --color-alpha-black-50: --alpha(var(--color-black) / 5%);
+  --color-alpha-black-100: --alpha(var(--color-black) / 8%);
+  --color-alpha-black-200: --alpha(var(--color-black) / 10%);
+  --color-alpha-black-300: --alpha(var(--color-black) / 15%);
+  --color-alpha-black-400: --alpha(var(--color-black) / 20%);
+  --color-alpha-black-500: --alpha(var(--color-black) / 30%);
+  --color-alpha-black-600: --alpha(var(--color-black) / 40%);
+  --color-alpha-black-700: --alpha(var(--color-black) / 50%);
+  --color-alpha-black-800: --alpha(var(--color-black) / 70%);
+  --color-alpha-black-900: --alpha(var(--color-black) / 85%);
+
+  /* Red scale */
+  --color-red-25: #FFFBFB;
+  --color-red-50: #FFF1F0;
+  --color-red-100: #FFDEDB;
+  --color-red-200: #FEB9B3;
+  --color-red-300: #F88C86;
+  --color-red-400: #ED4E4E;
+  --color-red-500: #F13636;
+  --color-red-600: #EC2222;
+  --color-red-700: #C91313;
+  --color-red-800: #A40E0E;
+  --color-red-900: #7E0707;
+  --color-red-tint-5: --alpha(var(--color-red-500) / 5%);
+  --color-red-tint-10: --alpha(var(--color-red-500) / 10%);
+
+  /* Green scale */
+  --color-green-25: #F6FEF9;
+  --color-green-50: #ECFDF3;
+  --color-green-100: #D1FADF;
+  --color-green-200: #A6F4C5;
+  --color-green-300: #6CE9A6;
+  --color-green-400: #32D583;
+  --color-green-500: #12B76A;
+  --color-green-600: #10A861;
+  --color-green-700: #078C52;
+  --color-green-800: #05603A;
+  --color-green-900: #054F31;
+  --color-green-tint-5: --alpha(var(--color-green-500) / 5%);
+  --color-green-tint-10: --alpha(var(--color-green-500) / 10%);
+
+  /* Yellow scale */
+  --color-yellow-25: #FFFCF5;
+  --color-yellow-50: #FFFAEB;
+  --color-yellow-100: #FEF0C7;
+  --color-yellow-200: #FEDF89;
+  --color-yellow-300: #FEC84B;
+  --color-yellow-400: #FDB022;
+  --color-yellow-500: #F79009;
+  --color-yellow-600: #DC6803;
+  --color-yellow-700: #B54708;
+  --color-yellow-800: #93370D;
+  --color-yellow-900: #7A2E0E;
+  --color-yellow-tint-5: --alpha(var(--color-yellow-500) / 5%);
+  --color-yellow-tint-10: --alpha(var(--color-yellow-500) / 10%);
+
+  /* Cyan scale */
+  --color-cyan-25: #F5FEFF;
+  --color-cyan-50: #ECFDFF;
+  --color-cyan-100: #CFF9FE;
+  --color-cyan-200: #A5F0FC;
+  --color-cyan-300: #67E3F9;
+  --color-cyan-400: #22CCEE;
+  --color-cyan-500: #06AED4;
+  --color-cyan-600: #088AB2;
+  --color-cyan-700: #0E7090;
+  --color-cyan-800: #155B75;
+  --color-cyan-900: #155B75;
+  --color-cyan-tint-5: --alpha(var(--color-cyan-500) / 5%);
+  --color-cyan-tint-10: --alpha(var(--color-cyan-500) / 10%);
+
+  /* Blue scale */
+  --color-blue-25: #F5FAFF;
+  --color-blue-50: #EFF8FF;
+  --color-blue-100: #D1E9FF;
+  --color-blue-200: #B2DDFF;
+  --color-blue-300: #84CAFF;
+  --color-blue-400: #53B1FD;
+  --color-blue-500: #2E90FA;
+  --color-blue-600: #1570EF;
+  --color-blue-700: #175CD3;
+  --color-blue-800: #1849A9;
+  --color-blue-900: #194185;
+  --color-blue-tint-5: --alpha(var(--color-blue-500) / 5%);
+  --color-blue-tint-10: --alpha(var(--color-blue-500) / 10%);
+
+  /* Indigo scale */
+  --color-indigo-25: #F5F8FF;
+  --color-indigo-50: #EFF4FF;
+  --color-indigo-100: #E0EAFF;
+  --color-indigo-200: #C7D7FE;
+  --color-indigo-300: #A4BCFD;
+  --color-indigo-400: #8098F9;
+  --color-indigo-500: #6172F3;
+  --color-indigo-600: #444CE7;
+  --color-indigo-700: #3538CD;
+  --color-indigo-800: #2D31A6;
+  --color-indigo-900: #2D3282;
+  --color-indigo-tint-5: --alpha(var(--color-indigo-500) / 5%);
+  --color-indigo-tint-10: --alpha(var(--color-indigo-500) / 10%);
+
+  /* Violet scale */
+  --color-violet-25: #FBFAFF;
+  --color-violet-50: #F5F3FF;
+  --color-violet-100: #ECE9FE;
+  --color-violet-200: #DDD6FE;
+  --color-violet-300: #C3B5FD;
+  --color-violet-400: #A48AFB;
+  --color-violet-500: #875BF7;
+  --color-violet-600: #7839EE;
+  --color-violet-700: #6927DA;
+  --color-violet-tint-5: --alpha(var(--color-violet-500) / 5%);
+  --color-violet-tint-10: --alpha(var(--color-violet-500) / 10%);
+
+  /* Fuchsia scale */
+  --color-fuchsia-25: #FEFAFF;
+  --color-fuchsia-50: #FDF4FF;
+  --color-fuchsia-100: #FBE8FF;
+  --color-fuchsia-200: #F6D0FE;
+  --color-fuchsia-300: #EEAAFD;
+  --color-fuchsia-400: #E478FA;
+  --color-fuchsia-500: #D444F1;
+  --color-fuchsia-600: #BA24D5;
+  --color-fuchsia-700: #9F1AB1;
+  --color-fuchsia-800: #821890;
+  --color-fuchsia-900: #6F1877;
+  --color-fuchsia-tint-5: --alpha(var(--color-fuchsia-500) / 5%);
+  --color-fuchsia-tint-10: --alpha(var(--color-fuchsia-500) / 10%);
+
+  /* Pink scale */
+  --color-pink-25: #FFFAFC;
+  --color-pink-50: #FEF0F7;
+  --color-pink-100: #FFD1E2;
+  --color-pink-200: #FFB1CE;
+  --color-pink-300: #FD8FBA;
+  --color-pink-400: #F86BA7;
+  --color-pink-500: #F23E94;
+  --color-pink-600: #D5327F;
+  --color-pink-700: #BA256B;
+  --color-pink-800: #9E1958;
+  --color-pink-900: #840B45;
+  --color-pink-tint-5: --alpha(var(--color-pink-500) / 5%);
+  --color-pink-tint-10: --alpha(var(--color-pink-500) / 10%);
+
+  /* Orange scale */
+  --color-orange-25: #FFF9F5;
+  --color-orange-50: #FFF4ED;
+  --color-orange-100: #FFE6D5;
+  --color-orange-200: #FFD6AE;
+  --color-orange-300: #FF9C66;
+  --color-orange-400: #FF692E;
+  --color-orange-500: #FF4405;
+  --color-orange-600: #E62E05;
+  --color-orange-700: #BC1B06;
+  --color-orange-800: #97180C;
+  --color-orange-900: #771A0D;
+  --color-orange-tint-5: --alpha(var(--color-orange-500) / 5%);
+  --color-orange-tint-10: --alpha(var(--color-orange-500) / 10%);
+
+  /* Border radius overrides */
+  --border-radius-md: 8px;
+  --border-radius-lg: 10px;
+}
+
+/* Design system color utilities */
+@utility text-primary {
+  @apply text-gray-900;
+}
+
+@utility text-secondary {
+  @apply text-gray-500;
+}
+
+@utility text-subdued {
+  @apply text-gray-400;
+}
+
+@utility text-link {
+  @apply text-blue-600;
+}
+
+@utility bg-surface {
+  @apply bg-gray-50 hover:bg-gray-100;
+}
+
+@utility bg-surface-inset {
+  @apply bg-gray-100 hover:bg-gray-200;
+}
+
+@utility bg-container {
+  @apply bg-white hover:bg-gray-50;
+}
+
+@utility bg-container-inset {
+  @apply bg-gray-50 hover:bg-gray-100;
+}
+
+@utility bg-inverse {
+  @apply bg-gray-800 hover:bg-gray-700;
+}
+
+@utility bg-overlay {
+  @apply bg-alpha-black-200;
+}
+
+@utility border-primary {
+  @apply border-alpha-black-300;
+}
+
+@utility border-secondary {
+  @apply border-alpha-black-200;
+}
+
+@utility border-tertiary {
+  @apply border-alpha-black-100;
+}
