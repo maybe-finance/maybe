@@ -5,11 +5,11 @@
     <div class="space-y-2">
       <header class="flex justify-between items-center">
         <h2 class="font-medium"><%= title %></h2>
-        <%= lucide_icon("x", class: "cursor-pointer w-5 h-5 text-gray-500", data: { action: "click->modal#close" }) %>
+        <%= lucide_icon("x", class: "cursor-pointer w-5 h-5 text-secondary", data: { action: "click->modal#close" }) %>
       </header>
 
       <% if subtitle.present? %>
-        <%= tag.p subtitle, class: "text-gray-500 font-light" %>
+        <%= tag.p subtitle, class: "text-secondary font-light" %>
       <% end %>
     </div>
 

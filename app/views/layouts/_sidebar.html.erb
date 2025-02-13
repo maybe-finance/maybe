@@ -15,23 +15,23 @@
         </div>
 
         <div class="overflow-hidden text-ellipsis">
-          <span class="text-gray-900 font-medium text-sm"><%= Current.user.display_name %></span>
+          <span class="text-primary font-medium text-sm"><%= Current.user.display_name %></span>
           <% if Current.user.display_name != Current.user.email %>
-            <span class="text-gray-500 text-sm"><%= Current.user.email %></span>
+            <span class="text-secondary text-sm"><%= Current.user.email %></span>
           <% end %>
         </div>
       </div>
-      <div class="border-t border-b border-alpha-black-100 p-1">
+      <div class="border-t border-b border-tertiary p-1">
         <%= link_to settings_profile_path(return_to: request.fullpath), class: "flex gap-2 items-center hover:bg-gray-50 rounded-lg px-3 py-2" do %>
-          <%= lucide_icon("settings", class: "w-5 h-5 text-gray-500 shrink-0") %>
-          <span class="text-gray-900 text-sm">Settings</span>
+          <%= lucide_icon("settings", class: "w-5 h-5 text-secondary shrink-0") %>
+          <span class="text-primary text-sm">Settings</span>
         <% end %>
         <div class="flex justify-between items-center gap-2">
           <div class="flex items-center gap-2 rounded-lg px-3 py-2">
-            <%= lucide_icon("app-window", class: "w-5 h-5 text-gray-500 shrink-0") %>
+            <%= lucide_icon("app-window", class: "w-5 h-5 text-secondary shrink-0") %>
             <div>
-              <span class="text-gray-900 text-sm">Demo mode</span>
-              <span class="text-gray-500 text-xs block">Coming soon...</span>
+              <span class="text-primary text-sm">Demo mode</span>
+              <span class="text-secondary text-xs block">Coming soon...</span>
             </div>
           </div>
           <%# TODO: This will be a form toggle when implemented %>
@@ -40,24 +40,24 @@
           </div>
         </div>
       </div>
-      <div class="border-t border-b border-alpha-black-100 p-1">
+      <div class="border-t border-b border-tertiary p-1">
         <%= link_to changelog_path, class: "flex gap-2 items-center hover:bg-gray-50 rounded-lg px-3 py-2" do %>
-          <%= lucide_icon("box", class: "w-5 h-5 text-gray-500 shrink-0") %>
-          <span class="text-gray-900 text-sm">Changelog</span>
+          <%= lucide_icon("box", class: "w-5 h-5 text-secondary shrink-0") %>
+          <span class="text-primary text-sm">Changelog</span>
         <% end %>
         <%= link_to feedback_path, class: "flex gap-2 items-center hover:bg-gray-50 rounded-lg px-3 py-2" do %>
-          <%= lucide_icon("megaphone", class: "w-5 h-5 text-gray-500 shrink-0") %>
-          <span class="text-gray-900 text-sm">Feedback</span>
+          <%= lucide_icon("megaphone", class: "w-5 h-5 text-secondary shrink-0") %>
+          <span class="text-primary text-sm">Feedback</span>
         <% end %>
         <% if self_hosted? %>
           <%= link_to "https://link.maybe.co/discord", class: "flex gap-2 items-center hover:bg-gray-50 rounded-lg px-3 py-2" do %>
-            <%= lucide_icon("message-square-more", class: "w-5 h-5 text-gray-500 shrink-0") %>
-            <span class="text-gray-900 text-sm">Contact</span>
+            <%= lucide_icon("message-square-more", class: "w-5 h-5 text-secondary shrink-0") %>
+            <span class="text-primary text-sm">Contact</span>
           <% end %>
         <% else %>
           <%= link_to "mailto:hello@maybefinance.com", class: "flex gap-2 items-center hover:bg-gray-50 rounded-lg px-3 py-2", onclick: "Intercom('showNewMessage'); return false;" do %>
-            <%= lucide_icon("message-square-more", class: "w-5 h-5 text-gray-500 shrink-0") %>
-            <span class="text-gray-900 text-sm">Contact</span>
+            <%= lucide_icon("message-square-more", class: "w-5 h-5 text-secondary shrink-0") %>
+            <span class="text-primary text-sm">Contact</span>
           <% end %>
         <% end %>
       </div>
@@ -88,8 +88,8 @@
 </nav>
 <div class="flex flex-col mt-6">
   <div class="flex items-center justify-between px-3 py-2 mb-2">
-    <div class="flex items-center gap-2 text-xs uppercase text-gray-500">
-      <%= link_to accounts_path, class: "text-xs uppercase text-gray-500 font-bold tracking-wide" do %>
+    <div class="flex items-center gap-2 text-xs uppercase text-secondary">
+      <%= link_to accounts_path, class: "text-xs uppercase text-secondary font-bold tracking-wide" do %>
         <%= t(".portfolio") %>
       <% end %>
       <span class="font-bold tracking-wide">&bull;</span>
@@ -98,8 +98,8 @@
         <%= period_select form: form, selected: "last_30_days", classes: "w-full border-none pl-2 pr-7 text-xs bg-transparent gap-1 cursor-pointer font-semibold tracking-wide focus:outline-hidden focus:ring-0" %>
       <% end %>
     </div>
-    <%= link_to new_account_path, id: "sidebar-new-account", class: "block hover:bg-gray-100 font-semibold text-gray-900 flex items-center rounded p-1", title: t(".new_account"), data: { turbo_frame: "modal" } do %>
-      <%= lucide_icon("plus", class: "w-5 h-5 text-gray-500") %>
+    <%= link_to new_account_path, id: "sidebar-new-account", class: "block hover:bg-gray-100 font-semibold text-primary flex items-center rounded p-1", title: t(".new_account"), data: { turbo_frame: "modal" } do %>
+      <%= lucide_icon("plus", class: "w-5 h-5 text-secondary") %>
     <% end %>
   </div>
 
@@ -109,7 +109,7 @@
         <%= render "accounts/account_list", group: group %>
       <% end %>
     <% else %>
-      <%= link_to new_account_path, class: "flex items-center min-h-10 gap-4 px-3 py-2 mb-1 text-gray-500 text-sm font-medium rounded-[10px] hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
+      <%= link_to new_account_path, class: "flex items-center min-h-10 gap-4 px-3 py-2 mb-1 text-secondary text-sm font-medium rounded-[10px] hover:bg-gray-100", data: { turbo_frame: "modal" } do %>
         <%= lucide_icon("plus", class: "w-5 h-5") %>
         <%= tag.p t(".new_account") %>
       <% end %>

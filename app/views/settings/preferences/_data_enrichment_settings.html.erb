@@ -4,9 +4,9 @@
   <div class="flex items-center justify-between">
     <div class="space-y-1">
       <p class="text-sm"><%= t(".title") %></p>
-      <p class="text-gray-500 text-sm"><%= t(".description") %></p>
+      <p class="text-secondary text-sm"><%= t(".description") %></p>
       <% if self_hosted? %>
-        <p class="text-xs italic text-gray-500"><%= t(".self_host_disclaimer") %></p>
+        <p class="text-xs italic text-secondary"><%= t(".self_host_disclaimer") %></p>
       <% end %>
     </div>
 
@@ -16,7 +16,7 @@
         <%= form.hidden_field :redirect_to, value: "preferences" %>
         <%= form.fields_for :family do |family_form| %>
           <%= family_form.check_box :data_enrichment_enabled, class: "sr-only peer", "data-auto-submit-form-target": "auto", "data-autosubmit-trigger-event": "input" %>
-          <%= family_form.label :data_enrichment_enabled, "&nbsp;".html_safe, class: "maybe-switch" %>
+          <%= family_form.label :data_enrichment_enabled, "&nbsp;".html_safe, class: "switch" %>
         <% end %>
       </div>
     <% end %>

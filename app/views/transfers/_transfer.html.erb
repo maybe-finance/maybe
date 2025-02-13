@@ -1,11 +1,11 @@
 <%# locals: (transfer:) %>
 
 <%= turbo_frame_tag dom_id(transfer) do %>
-  <div class="grid grid-cols-12 items-center text-gray-900 text-sm font-medium p-4">
+  <div class="grid grid-cols-12 items-center text-primary text-sm font-medium p-4">
     <div class="pr-10 flex items-center gap-4 col-span-8">
       <%= check_box_tag dom_id(transfer),
                         disabled: true,
-                        class: "maybe-checkbox maybe-checkbox--light" %>
+                        class: "checkbox checkbox--light" %>
 
       <div class="max-w-full">
         <%= content_tag :div, class: ["flex items-center gap-2"] do %>
@@ -31,7 +31,7 @@
 
                   <%= button_to transfer_path(transfer, transfer: { status: "confirmed" }),
                     method: :patch,
-                    class: "text-gray-500 hover:text-gray-800 flex items-center justify-center",
+                    class: "text-secondary hover:text-gray-800 flex items-center justify-center",
                     title: "Confirm match" do %>
                     <%= lucide_icon "check", class: "w-4 h-4 text-indigo-400 hover:text-indigo-600" %>
                   <% end %>
@@ -39,14 +39,14 @@
                   <%= button_to transfer_path(transfer, transfer: { status: "rejected" }),
                     method: :patch,
                     data: { turbo: false },
-                    class: "text-gray-500 hover:text-gray-800 flex items-center justify-center",
+                    class: "text-secondary hover:text-gray-800 flex items-center justify-center",
                     title: "Reject match" do %>
-                    <%= lucide_icon "x", class: "w-4 h-4 text-gray-400 hover:text-gray-600" %>
+                    <%= lucide_icon "x", class: "w-4 h-4 text-subdued hover:text-gray-600" %>
                   <% end %>
                 <% end %>
               </div>
 
-              <div class="text-gray-500 text-xs font-normal">
+              <div class="text-secondary text-xs font-normal">
                 <div class="flex items-center gap-1">
                   <%= link_to transfer.from_account.name, transfer.from_account, class: "hover:underline", data: { turbo_frame: "_top" } %>
                   <% if transfer.payment? %>

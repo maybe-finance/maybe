@@ -76,8 +76,8 @@ module ApplicationHelper
     is_current = current_page?(path) || (request.path.start_with?(path) && path != "/")
 
     classes = [
-      "flex items-center gap-2 px-3 py-2 rounded-xl border text-sm font-medium text-gray-500",
-      (is_current ? "bg-white text-gray-900 shadow-xs border-alpha-black-50" : "hover:bg-gray-100 border-transparent")
+      "flex items-center gap-2 px-3 py-2 rounded-xl border text-sm font-medium text-secondary",
+      (is_current ? "bg-white text-primary shadow-xs border-alpha-black-50" : "hover:bg-gray-100 border-transparent")
     ].compact.join(" ")
 
     link_to path, **options.merge(class: classes), aria: { current: ("page" if current_page?(path)) } do
@@ -106,7 +106,7 @@ module ApplicationHelper
   end
 
   def trend_styles(trend)
-    fallback = { bg_class: "bg-gray-500/5", text_class: "text-gray-500", symbol: "", icon: "minus" }
+    fallback = { bg_class: "bg-gray-500/5", text_class: "text-secondary", symbol: "", icon: "minus" }
     return fallback if trend.nil? || trend.direction.flat?
 
     bg_class, text_class, symbol, icon = case trend.direction
@@ -115,7 +115,7 @@ module ApplicationHelper
     when "down"
       trend.favorable_direction.down? ? [ "bg-green-500/5", "text-green-500", "-", "arrow-down" ] : [ "bg-red-500/5", "text-red-500", "-", "arrow-down" ]
     when "flat"
-      [ "bg-gray-500/5", "text-gray-500", "", "minus" ]
+      [ "bg-gray-500/5", "text-secondary", "", "minus" ]
     else
       raise ArgumentError, "Invalid trend direction: #{trend.direction}"
     end

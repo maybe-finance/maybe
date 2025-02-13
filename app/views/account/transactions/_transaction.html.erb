@@ -1,11 +1,11 @@
 <%# locals: (entry:, selectable: true, balance_trend: nil) %>
 
-<div class="grid grid-cols-12 items-center text-gray-900 text-sm font-medium p-4 <%= @focused_record == entry ? "border border-gray-900 rounded-lg" : "" %>">
+<div class="grid grid-cols-12 items-center text-primary text-sm font-medium p-4 <%= @focused_record == entry ? "border border-gray-900 rounded-lg" : "" %>">
   <div class="pr-10 flex items-center gap-4 <%= balance_trend ? "col-span-6" : "col-span-8" %>">
     <% if selectable %>
       <%= check_box_tag dom_id(entry, "selection"),
                         disabled: entry.entryable.transfer?,
-                        class: "maybe-checkbox maybe-checkbox--light",
+                        class: "checkbox checkbox--light",
                         data: { id: entry.id, "bulk-select-target": "row", action: "bulk-select#toggleRowSelection" } %>
     <% end %>
 
@@ -40,7 +40,7 @@
               <% end %>
             </div>
 
-            <div class="text-gray-500 text-xs font-normal">
+            <div class="text-secondary text-xs font-normal">
               <% if entry.entryable.transfer? %>
                 <%= render "transfers/account_links", transfer: entry.entryable.transfer, is_inflow: entry.entryable.transfer_as_inflow.present? %>
               <% else %>
@@ -66,9 +66,9 @@
   <% if balance_trend %>
     <div class="col-span-2 justify-self-end">
       <% if balance_trend.trend %>
-        <%= tag.p format_money(balance_trend.trend.current), class: "font-medium text-sm text-gray-900" %>
+        <%= tag.p format_money(balance_trend.trend.current), class: "font-medium text-sm text-primary" %>
       <% else %>
-        <%= tag.p "--", class: "font-medium text-sm text-gray-400" %>
+        <%= tag.p "--", class: "font-medium text-sm text-subdued" %>
       <% end %>
     </div>
   <% end %>

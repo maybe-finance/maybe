@@ -5,11 +5,11 @@
     <div class="border-b border-alpha-black-25 p-4 text-gray-800 flex items-center space-x-3">
       <% if back_path %>
         <%= link_to back_path, class: "flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-alpha-black-50 focus:outline-gray-300 focus:outline" do %>
-          <%= lucide_icon("arrow-left", class: "text-gray-500 w-5 h-5") %>
+          <%= lucide_icon("arrow-left", class: "text-secondary w-5 h-5") %>
         <% end %>
       <% end %>
 
-      <span class="text-gray-400"><%= title %></span>
+      <span class="text-subdued"><%= title %></span>
     </div>
 
     <div class="p-2">
@@ -19,7 +19,7 @@
       <%= yield %>
     </div>
 
-    <div class="border-t border-alpha-black-25 p-4 text-gray-500 text-sm flex justify-between">
+    <div class="border-t border-alpha-black-25 p-4 text-secondary text-sm flex justify-between">
       <div class="flex space-x-5">
         <div class="flex items-center space-x-2">
           <span>Select</span>

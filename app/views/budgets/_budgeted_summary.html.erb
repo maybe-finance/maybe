@@ -2,9 +2,9 @@
 
 <div>
   <div class="p-4 border-b border-gray-100">
-    <h3 class="text-sm text-gray-500 mb-2">Expected income</h3>
+    <h3 class="text-sm text-secondary mb-2">Expected income</h3>
 
-    <span class="inline-block mb-2 text-xl font-medium text-gray-900">
+    <span class="inline-block mb-2 text-xl font-medium text-primary">
       <%= format_money(budget.expected_income_money) %>
     </span>
 
@@ -19,12 +19,12 @@
         <% end %>
       </div>
       <div class="flex justify-between text-sm">
-        <p class="text-gray-500"><%= format_money(budget.actual_income_money) %> earned</p>
+        <p class="text-secondary"><%= format_money(budget.actual_income_money) %> earned</p>
         <p class="font-medium">
           <% if budget.remaining_expected_income.negative? %>
             <span class="text-green-500"><%= format_money(budget.remaining_expected_income_money.abs) %> over</span>
           <% else %>
-            <span class="text-gray-900"><%= format_money(budget.remaining_expected_income_money) %> left</span>
+            <span class="text-primary"><%= format_money(budget.remaining_expected_income_money) %> left</span>
           <% end %>
         </p>
       </div>
@@ -32,9 +32,9 @@
   </div>
 
   <div class="p-4">
-    <h3 class="text-sm text-gray-500 mb-2">Budgeted</h3>
+    <h3 class="text-sm text-secondary mb-2">Budgeted</h3>
 
-    <span class="inline-block mb-2 text-xl font-medium text-gray-900">
+    <span class="inline-block mb-2 text-xl font-medium text-primary">
       <%= format_money(budget.budgeted_spending_money) %>
     </span>
 
@@ -49,12 +49,12 @@
         <% end %>
       </div>
       <div class="flex justify-between text-sm">
-        <p class="text-gray-500"><%= format_money(budget.actual_spending_money) %> spent</p>
+        <p class="text-secondary"><%= format_money(budget.actual_spending_money) %> spent</p>
         <p class="font-medium">
           <% if budget.available_to_spend.negative? %>
             <span class="text-red-500"><%= format_money(budget.available_to_spend_money.abs) %> over</span>
           <% else %>
-            <span class="text-gray-900"><%= format_money(budget.available_to_spend_money) %> left</span>
+            <span class="text-primary"><%= format_money(budget.available_to_spend_money) %> left</span>
           <% end %>
         </p>
       </div>

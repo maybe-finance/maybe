@@ -401,11 +401,11 @@ export default class extends Controller {
       up:
         datum.trend.favorable_direction === "up"
           ? "var(--color-success)"
-          : "var(--color-error)",
+          : "var(--color-destructive)",
       down:
         datum.trend.favorable_direction === "down"
           ? "var(--color-success)"
-          : "var(--color-error)",
+          : "var(--color-destructive)",
       flat: "var(--color-gray-500)",
     }[datum.trend.direction];
   }
@@ -509,7 +509,7 @@ export default class extends Controller {
     if (this._trendDirection === this._favorableDirection) {
       return "var(--color-green-500)";
     }
-    return "var(--color-error)";
+    return "var(--color-destructive)";
   }
 
   get _trendDirection() {

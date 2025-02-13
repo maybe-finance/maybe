@@ -51,14 +51,14 @@
         <!-- Delete Valuation Form -->
         <div class="flex items-center justify-between gap-2 p-3">
           <div class="text-sm space-y-1">
-            <h4 class="text-gray-900"><%= t(".delete_title") %></h4>
-            <p class="text-gray-500"><%= t(".delete_subtitle") %></p>
+            <h4 class="text-primary"><%= t(".delete_title") %></h4>
+            <p class="text-secondary"><%= t(".delete_subtitle") %></p>
           </div>
 
           <%= button_to t(".delete"),
                 account_entry_path(entry),
                 method: :delete,
-                class: "rounded-lg px-3 py-2 text-red-500 text-sm font-medium border border-alpha-black-200",
+                class: "rounded-lg px-3 py-2 text-red-500 text-sm font-medium border border-secondary",
                 data: { turbo_confirm: true, turbo_frame: "_top" } %>
         </div>
       </div>
