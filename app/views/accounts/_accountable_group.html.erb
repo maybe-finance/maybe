@@ -20,7 +20,7 @@
   </summary>
 
   <% accounts.each do |account| %>
-    <%= link_to account_path(account), class: "block flex items-center gap-2 px-3 py-2 hover:bg-gray-50 rounded-md" do %>
+    <%= link_to account_path(account), class: "block flex items-center gap-2 btn btn--ghost" do %>
       <%= render "accounts/logo", account: account, size: "sm" %>
 
       <div>

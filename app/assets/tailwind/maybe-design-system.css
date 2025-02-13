@@ -337,7 +337,7 @@
   }
   
   .btn--ghost {
-    @apply border border-transparent text-gray-900 hover:bg-gray-50;
+    @apply border border-transparent text-gray-900 hover:bg-gray-100;
   }
 
   .btn--destructive {

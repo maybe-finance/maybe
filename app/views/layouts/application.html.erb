@@ -1,55 +1,47 @@
-<!DOCTYPE html>
-<html class="h-full <%= @os %>" lang="en">
-  <%= render "layouts/shared/head" %>
-
-  <body class="h-full">
-    <%= render "layouts/shared/notifications" %>
-    <%= render "layouts/shared/fixed_content" %>
-
-    <div class="flex h-full bg-gray-25">
-      <nav class="flex flex-col shrink-0 w-[84px] py-4 mr-3">
-        <div class="pl-2 mb-3">
-          <%= link_to root_path, class: "block" do %>
-            <%= image_tag "logomark-color.svg", class: "w-9 h-9 mx-auto" %>
-          <% end %>
-        </div>
-
-        <ul class="space-y-0.5">
-          <li>
-            <%= render "layouts/sidebar/nav_item", name: "Home", path: root_path, icon_key: "pie-chart" %>
-          </li>
-
-          <li>
-            <%= render "layouts/sidebar/nav_item", name: "Transactions", path: transactions_path, icon_key: "credit-card" %>
-          </li>
-
-          <li>
-            <%= render "layouts/sidebar/nav_item", name: "Budgets", path: budgets_path, icon_key: "layout-grid" %>
-          </li>
-        </ul>
-
-        <div class="pl-2 mt-auto mx-auto">
-          <%= render "users/user_menu", user: Current.user %>
-        </div>
-      </nav>
-
-      <div class="py-4 w-[260px] shrink-0 h-full overflow-y-auto">
-        <% if content_for?(:sidebar) %>
-          <%= yield :sidebar %>
-        <% else %>
-          <div id="account-sidebar-tabs" data-turbo-permanent>
-            <%= render "accounts/account_sidebar_tabs", accounts: Current.family.accounts.active.to_a %>
-          </div>
+<%= render "layouts/shared/htmldoc" do %>
+  <div class="flex h-full bg-gray-50">
+    <nav class="flex flex-col shrink-0 w-[84px] py-4 mr-3">
+      <div class="pl-2 mb-3">
+        <%= link_to root_path, class: "block" do %>
+          <%= image_tag "logomark-color.svg", class: "w-9 h-9 mx-auto" %>
         <% end %>
       </div>
 
-      <main class="container mx-auto px-10 py-6 h-full <%= require_upgrade? ? "relative overflow-hidden" : "overflow-y-auto" %>">
-        <% if require_upgrade? %>
-          <%= render "shared/subscribe_modal" %>
-        <% end %>
+      <ul class="space-y-0.5">
+        <li>
+          <%= render "layouts/sidebar/nav_item", name: "Home", path: root_path, icon_key: "pie-chart" %>
+        </li>
 
-        <%= yield %>
-      </main>
+        <li>
+          <%= render "layouts/sidebar/nav_item", name: "Transactions", path: transactions_path, icon_key: "credit-card" %>
+        </li>
+
+        <li>
+          <%= render "layouts/sidebar/nav_item", name: "Budgets", path: budgets_path, icon_key: "layout-grid" %>
+        </li>
+      </ul>
+
+      <div class="pl-2 mt-auto mx-auto">
+        <%= render "users/user_menu", user: Current.user %>
+      </div>
+    </nav>
+
+    <div class="py-4 w-[260px] shrink-0 h-full overflow-y-auto">
+      <% if content_for?(:sidebar) %>
+        <%= yield :sidebar %>
+      <% else %>
+        <div id="account-sidebar-tabs" data-turbo-permanent>
+          <%= render "accounts/account_sidebar_tabs", accounts: Current.family.accounts.active.to_a %>
+        </div>
+      <% end %>
     </div>
-  </body>
-</html>
+
+    <main class="container mx-auto px-10 py-6 h-full <%= require_upgrade? ? "relative overflow-hidden" : "overflow-y-auto" %>">
+      <% if require_upgrade? %>
+        <%= render "shared/subscribe_modal" %>
+      <% end %>
+
+      <%= yield %>
+    </main>
+  </div>
+<% end %>

@@ -1,0 +1,19 @@
+<%= render "layouts/shared/htmldoc" do %>
+  <div class="flex h-full bg-gray-25">
+    <div class="py-4 w-[260px] shrink-0 h-full overflow-y-auto">
+      <%= render "settings/settings_nav" %>
+    </div>
+
+    <main class="container mx-auto px-10 py-6 h-full overflow-y-auto">
+      <div class="space-y-4">
+        <h1 class="text-primary text-xl font-medium mb-4">
+          <%= content_for :page_title %>
+        </h1>
+
+        <%= yield %>
+
+        <%= settings_nav_footer %>
+      </div>
+    </main>
+  </div>
+<% end %>
