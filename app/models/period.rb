@@ -15,7 +15,7 @@ class Period
     },
     "current_week" => {
       date_range: [ Date.current.beginning_of_week, Date.current ],
-      label_short: "1W",
+      label_short: "WTD",
       label: "Current Week",
       comparison_label: "vs. start of week"
     },
@@ -27,7 +27,7 @@ class Period
     },
     "current_month" => {
       date_range: [ Date.current.beginning_of_month, Date.current ],
-      label_short: "1M",
+      label_short: "MTD",
       label: "Current Month",
       comparison_label: "vs. start of month"
     },
@@ -45,7 +45,7 @@ class Period
     },
     "current_year" => {
       date_range: [ Date.current.beginning_of_year, Date.current ],
-      label_short: "1Y",
+      label_short: "YTD",
       label: "Current Year",
       comparison_label: "vs. start of year"
     },

@@ -64,71 +64,31 @@ class BalanceSheet
     end.sort_by(&:weight).reverse
   end
 
+  def series(accounts, period: Period.last_30_days, favorable_direction: "up")
+  end
+
   def net_worth_series(period: Period.last_30_days)
-    query = <<~SQL
-      WITH dates as (
-        SELECT generate_series(DATE :start_date, DATE :end_date, :interval::interval)::date as date
-      ), balances as (
-        SELECT
-          d.date,
-          COALESCE(SUM(ab.balance * COALESCE(er.rate, 1)), 0) as balance,
-          COUNT(CASE WHEN a.currency <> :target_currency AND er.rate IS NULL THEN 1 END) as missing_rates
-        FROM dates d
-        LEFT JOIN accounts a ON a.family_id = :family_id
-        LEFT JOIN account_balances ab ON (
-          ab.date = d.date AND
-          ab.currency = a.currency AND
-          ab.account_id = a.id
-        )
-        LEFT JOIN exchange_rates er ON (
-          er.date = ab.date AND
-          er.from_currency = a.currency AND
-          er.to_currency = :target_currency
-        )
-        GROUP BY d.date
-        ORDER BY d.date
-      )
-      SELECT
-        balances.date,
-        balances.balance,
-        LAG(balances.balance, 1) OVER (ORDER BY date) as prior_balance,
-        balances.missing_rates
-      FROM balances
-    SQL
-
-    balances = Account::Balance.find_by_sql([
-      query,
-      {
-        family_id: family.id,
-        start_date: period.start_date,
-        end_date: period.end_date,
-        interval: period.interval,
-        target_currency: currency
-      }
-    ])
-
-    TimeSeries.from_collection(balances, :balance)
+    family.accounts.active.series(currency: currency, period: period, favorable_direction: "up")
   end
 
   def currency
     family.currency
   end
 
-  # private
+  private
+    ClassificationGroup = Struct.new(:key, :display_name, :icon, :account_groups, keyword_init: true)
+    AccountGroup = Struct.new(:name, :classification, :total, :total_money, :weight, :accounts, :color, :missing_rates?, keyword_init: true)
 
-  ClassificationGroup = Struct.new(:key, :display_name, :icon, :account_groups, keyword_init: true)
-  AccountGroup = Struct.new(:name, :classification, :total, :total_money, :weight, :accounts, :color, :missing_rates?, keyword_init: true)
-
-  def totals_query
-    @totals_query ||= family.accounts
-          .active
-          .joins(ActiveRecord::Base.sanitize_sql_array([ "LEFT JOIN exchange_rates ON exchange_rates.date = CURRENT_DATE AND accounts.currency = exchange_rates.from_currency AND exchange_rates.to_currency = ?", currency ]))
-          .select(
-            "accounts.*",
-            "SUM(accounts.balance * COALESCE(exchange_rates.rate, 1)) as converted_balance",
-            ActiveRecord::Base.sanitize_sql_array([ "COUNT(CASE WHEN accounts.currency <> ? AND exchange_rates.rate IS NULL THEN 1 END) as missing_rates", currency ])
-          )
-          .group(:classification, :accountable_type, :id)
-          .to_a
-  end
+    def totals_query
+      @totals_query ||= family.accounts
+            .active
+            .joins(ActiveRecord::Base.sanitize_sql_array([ "LEFT JOIN exchange_rates ON exchange_rates.date = CURRENT_DATE AND accounts.currency = exchange_rates.from_currency AND exchange_rates.to_currency = ?", currency ]))
+            .select(
+              "accounts.*",
+              "SUM(accounts.balance * COALESCE(exchange_rates.rate, 1)) as converted_balance",
+              ActiveRecord::Base.sanitize_sql_array([ "COUNT(CASE WHEN accounts.currency <> ? AND exchange_rates.rate IS NULL THEN 1 END) as missing_rates", currency ])
+            )
+            .group(:classification, :accountable_type, :id)
+            .to_a
+    end
 end

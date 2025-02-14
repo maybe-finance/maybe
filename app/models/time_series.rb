@@ -38,7 +38,7 @@ class TimeSeries
   end
 
   def has_current_day_value?
-    values.any? { |v| v.date == Date.current }
+    values.any? { |v| v.date.to_date == Date.current }
   end
 
   # `as_json` returns the data shape used by D3 charts

@@ -25,6 +25,10 @@ module Accountable
       raise NotImplementedError, "Accountable must implement #color"
     end
 
+    def favorable_direction
+      classification == "asset" ? "up" : "down"
+    end
+
     def display_name
       self.name.humanize.pluralize
     end
@@ -38,50 +42,6 @@ module Accountable
             ]))
             .where(accountable_type: self.name)
             .sum("accounts.balance * COALESCE(exchange_rates.rate, 1)")
-    end
-
-    def series(family)
-      period = Period.last_30_days
-      start_date = period.start_date
-      end_date = period.end_date
-
-      query = <<~SQL
-        WITH dates as (
-          SELECT generate_series(DATE :start_date, DATE :end_date, '1 day'::interval)::date as date
-        )
-        SELECT
-          d.date,
-          COALESCE(SUM(ab.balance * COALESCE(er.rate, 1)), 0) as balance,
-          COUNT(CASE WHEN a.currency <> 'USD' AND er.rate IS NULL THEN 1 END) as missing_rates
-        FROM dates d
-        LEFT JOIN accounts a ON (
-          a.accountable_type = :accountable_type AND
-          a.family_id = :family_id
-        )
-        LEFT JOIN account_balances ab ON (
-          ab.date = d.date AND
-          ab.currency = a.currency AND
-          ab.account_id = a.id
-        )
-        LEFT JOIN exchange_rates er ON (
-          er.date = ab.date AND
-          er.from_currency = a.currency AND
-          er.to_currency = :family_currency
-        )
-        GROUP BY d.date
-        ORDER BY d.date
-      SQL
-
-      balances = Account::Balance.find_by_sql([
-        query,
-        accountable_type: self.name,
-        family_id: family.id,
-        family_currency: family.currency,
-        start_date: start_date,
-        end_date: end_date
-      ])
-
-      TimeSeries.from_collection(balances, :balance, favorable_direction: self.classification == "asset" ? "up" : "down")
     end
   end
 

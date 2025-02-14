@@ -1,6 +1,10 @@
 class AccountableSparklinesController < ApplicationController
   def show
     @accountable = Accountable.from_type(params[:accountable_type])
-    @series = @accountable.series(Current.family)
+    @series = Current.family
+                     .accounts
+                     .active
+                     .where(accountable: @accountable)
+                     .series(currency: Current.family.currency, favorable_direction: @accountable.favorable_direction)
   end
 end

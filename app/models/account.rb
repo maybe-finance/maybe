@@ -1,5 +1,5 @@
 class Account < ApplicationRecord
-  include Syncable, Monetizable, Issuable
+  include Syncable, Monetizable, Issuable, Seriesable
 
   validates :name, :balance, :currency, presence: true
 
@@ -84,16 +84,8 @@ class Account < ApplicationRecord
     accountable.post_sync
   end
 
-  def series(period: Period.last_30_days, currency: nil)
-    balance_series = balances.in_period(period).where(currency: currency || self.currency)
-
-    if balance_series.empty? && period.end_date = Date.current
-      TimeSeries.new([ { date: Date.current, value: balance_money.exchange_to(currency || self.currency) } ])
-    else
-      TimeSeries.from_collection(balance_series, :balance_money, favorable_direction: asset? ? "up" : "down")
-    end
-  rescue Money::ConversionError
-    TimeSeries.new([])
+  def series(period: Period.last_30_days)
+    self.class.where(id: id).series(currency: currency, period: period, favorable_direction: favorable_direction)
   end
 
   def original_balance
