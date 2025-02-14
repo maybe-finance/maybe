@@ -32,34 +32,7 @@ class Account < ApplicationRecord
 
   accepts_nested_attributes_for :accountable, update_only: true
 
-  def institution_domain
-    return nil unless plaid_account&.plaid_item&.institution_url.present?
-    URI.parse(plaid_account.plaid_item.institution_url).host.gsub(/^www\./, "")
-  end
-
-  class << self
-    def by_group(period: Period.all, currency: Money.default_currency.iso_code)
-      grouped_accounts = { assets: ValueGroup.new("Assets", currency), liabilities: ValueGroup.new("Liabilities", currency) }
-
-      Accountable.by_classification.each do |classification, types|
-        types.each do |type|
-          accounts = self.where(accountable_type: type)
-          if accounts.any?
-            group = grouped_accounts[classification.to_sym].add_child_group(type, currency)
-            accounts.each do |account|
-              group.add_value_node(
-                account,
-                account.balance_money.exchange_to(currency, fallback_rate: 0),
-                account.series(period: period, currency: currency)
-              )
-            end
-          end
-        end
-      end
-
-      grouped_accounts
-    end
-
+  class << self 
     def create_and_sync(attributes)
       attributes[:accountable_attributes] ||= {} # Ensure accountable is created, even if empty
       account = new(attributes.merge(cash_balance: attributes[:balance]))
@@ -87,6 +60,16 @@ class Account < ApplicationRecord
       account.sync_later
       account
     end
+  end
+
+  def institution_domain
+    return nil unless plaid_account&.plaid_item&.institution_url.present?
+    URI.parse(plaid_account.plaid_item.institution_url).host.gsub(/^www\./, "")
+  end
+
+  def weight
+    accountable_total = family.account_stats.totals_by_type.select { |t| t.classification == accountable.classification }.sum { |t| t.total_money.amount }
+    accountable_total.zero? ? 0 : balance / accountable_total.to_f * 100
   end
 
   def destroy_later

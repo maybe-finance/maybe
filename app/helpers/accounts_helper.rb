@@ -65,6 +65,16 @@ module AccountsHelper
     class_mapping(accountable_type)[:hex]
   end
 
+  def accountable_groups_v2(accounts, classification: nil)
+    filtered_accounts = if classification
+      accounts.select { |a| a.classification == classification }
+    else
+      accounts
+    end
+
+    filtered_accounts.group_by(&:accountable_type).transform_keys { |k| Accountable.from_type(k) }
+  end
+
   def accountable_groups(accounts, classification: nil)
     filtered_accounts = if classification
       accounts.select { |a| a.classification == classification }

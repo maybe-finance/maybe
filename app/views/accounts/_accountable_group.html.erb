@@ -2,10 +2,8 @@
 
 <details class="group" data-controller="account-collapse" data-account-collapse-type-value="<%= accountable %>">
   <summary class="px-3 py-2 flex items-center gap-3 cursor-pointer h-10">
-    <%= lucide_icon("chevron-down",
-          class: "hidden group-open:block text-secondary w-5 h-5") %>
-    <%= lucide_icon("chevron-right",
-          class: "group-open:hidden text-secondary w-5 h-5") %>
+    <%= lucide_icon("chevron-right", class: "group-open:rotate-90 text-secondary w-5 h-5") %>
+
     <%= tag.p accountable.display_name, class: "text-sm font-medium" %>
 
     <div class="ml-auto text-right grow">

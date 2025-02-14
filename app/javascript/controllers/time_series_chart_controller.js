@@ -16,15 +16,18 @@ export default class extends Controller {
   _d3InitialContainerWidth = 0;
   _d3InitialContainerHeight = 0;
   _normalDataPoints = [];
+  _resizeObserver = null;
 
   connect() {
     this._install();
     document.addEventListener("turbo:load", this._reinstall);
+    this._setupResizeObserver();
   }
 
   disconnect() {
     this._teardown();
     document.removeEventListener("turbo:load", this._reinstall);
+    this._resizeObserver?.disconnect();
   }
 
   _reinstall = () => {
@@ -544,5 +547,12 @@ export default class extends Controller {
       .scaleLinear()
       .rangeRound([this._d3ContainerHeight, 0])
       .domain([dataMin - padding, dataMax + padding]);
+  }
+
+  _setupResizeObserver() {
+    this._resizeObserver = new ResizeObserver(() => {
+      this._reinstall();
+    });
+    this._resizeObserver.observe(this.element);
   }
 }

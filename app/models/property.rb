@@ -28,8 +28,14 @@ class Property < ApplicationRecord
     TimeSeries::Trend.new(current: account.balance_money, previous: first_valuation_amount)
   end
 
+  class << self
+    def color
+      "#06AED4"
+    end
+  end
+
   def color
-    "#06AED4"
+    self.class.color
   end
 
   def icon

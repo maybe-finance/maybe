@@ -3,13 +3,15 @@ import { Controller } from "@hotwired/stimulus";
 // Connects to data-controller="sidebar"
 export default class extends Controller {
   static values = { userId: String };
-  static targets = ["panel"];
+  static targets = ["panel", "content"];
 
   toggle() {
     this.panelTarget.classList.toggle("w-0");
     this.panelTarget.classList.toggle("opacity-0");
     this.panelTarget.classList.toggle("w-[260px]");
     this.panelTarget.classList.toggle("opacity-100");
+    this.contentTarget.classList.toggle("max-w-4xl");
+    this.contentTarget.classList.toggle("max-w-5xl");
 
     fetch(`/users/${this.userIdValue}`, {
       method: "PATCH",

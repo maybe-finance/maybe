@@ -19,6 +19,10 @@ module Accountable
   end
 
   class_methods do
+    def classification
+      self.name.in?(ASSET_TYPES) ? "asset" : "liability"
+    end
+
     def display_name
       self.name.humanize
     end
@@ -90,5 +94,9 @@ module Accountable
 
   def display_name
     self.class.display_name
+  end
+
+  def classification
+    self.class.classification
   end
 end

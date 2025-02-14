@@ -10,10 +10,14 @@ class Depository < ApplicationRecord
     def display_name
       "Cash"
     end
+
+    def color
+      "#875BF7"
+    end
   end
 
   def color
-    "#875BF7"
+    self.class.color
   end
 
   def icon

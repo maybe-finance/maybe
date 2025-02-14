@@ -19,20 +19,51 @@ module Family::Aggregatable
     Money.new(accounts.active.liabilities.map { |account| account.balance_money.exchange_to(currency, fallback_rate: 0) }.sum, currency)
   end
 
-  def income_categories_with_totals(date: Date.current)
-    categories_with_stats(classification: "income", date: date)
-  end
+  def net_worth_series(period = Period.last_30_days)
+    start_date = period.date_range.first
+    end_date = period.date_range.last
 
-  def expense_categories_with_totals(date: Date.current)
-    categories_with_stats(classification: "expense", date: date)
-  end
+    total_days = (end_date - start_date).to_i
+    date_interval = if total_days > 30 
+      "7 days"
+    else
+      "1 day"
+    end 
 
-  def category_stats
-    CategoryStats.new(self)
-  end
+    query = <<~SQL
+      WITH dates as (
+        SELECT generate_series(DATE :start_date, DATE :end_date, :date_interval::interval)::date as date
+      )
+      SELECT
+        d.date,
+        COALESCE(SUM(ab.balance * COALESCE(er.rate, 1)), 0) as balance,
+        COUNT(CASE WHEN a.currency <> :family_currency AND er.rate IS NULL THEN 1 END) as missing_rates
+      FROM dates d
+      LEFT JOIN accounts a ON (a.family_id = :family_id)
+      LEFT JOIN account_balances ab ON (
+        ab.date = d.date AND
+        ab.currency = a.currency AND
+        ab.account_id = a.id
+      )
+      LEFT JOIN exchange_rates er ON (
+        er.date = ab.date AND
+        er.from_currency = a.currency AND
+        er.to_currency = :family_currency
+      )
+      GROUP BY d.date
+      ORDER BY d.date
+    SQL
 
-  def budgeting_stats
-    BudgetingStats.new(self)
+    balances = Account::Balance.find_by_sql([
+      query,
+      family_id: self.id,
+      family_currency: self.currency,
+      start_date: start_date,
+      end_date: end_date,
+      date_interval: date_interval
+    ])
+
+    TimeSeries.from_collection(balances, :balance)
   end
 
   def snapshot(period = Period.all)
@@ -59,66 +90,24 @@ module Family::Aggregatable
     }
   end
 
-  def snapshot_account_transactions
-    period = Period.last_30_days
-    results = accounts.active
-                      .joins(:entries)
-                      .joins("LEFT JOIN transfers ON (transfers.inflow_transaction_id = account_entries.entryable_id OR transfers.outflow_transaction_id = account_entries.entryable_id)")
-                      .select(
-                        "accounts.*",
-                        "COALESCE(SUM(account_entries.amount) FILTER (WHERE account_entries.amount > 0), 0) AS spending",
-                        "COALESCE(SUM(-account_entries.amount) FILTER (WHERE account_entries.amount < 0), 0) AS income"
-                      )
-                      .where("account_entries.date >= ?", period.date_range.begin)
-                      .where("account_entries.date <= ?", period.date_range.end)
-                      .where("account_entries.entryable_type = 'Account::Transaction'")
-                      .where("transfers.id IS NULL")
-                      .group("accounts.id")
-                      .having("SUM(ABS(account_entries.amount)) > 0")
-                      .to_a
-
-    results.each do |r|
-      r.define_singleton_method(:savings_rate) do
-        (income - spending) / income
-      end
-    end
-
-    {
-      top_spenders: results.sort_by(&:spending).select { |a| a.spending > 0 }.reverse,
-      top_earners: results.sort_by(&:income).select { |a| a.income > 0 }.reverse,
-      top_savers: results.sort_by { |a| a.savings_rate }.reverse
-    }
+  def income_categories_with_totals(date: Date.current)
+    categories_with_stats(classification: "income", date: date)
   end
 
-  def snapshot_transactions
-    candidate_entries = entries.account_transactions
-    rolling_totals = Account::Entry.daily_rolling_totals(candidate_entries, self.currency, period: Period.last_30_days)
+  def expense_categories_with_totals(date: Date.current)
+    categories_with_stats(classification: "expense", date: date)
+  end
 
-    spending = []
-    income = []
-    savings = []
-    rolling_totals.each do |r|
-      spending << {
-        date: r.date,
-        value: Money.new(r.rolling_spend, self.currency)
-      }
+  def category_stats
+    CategoryStats.new(self)
+  end
 
-      income << {
-        date: r.date,
-        value: Money.new(r.rolling_income, self.currency)
-      }
+  def budgeting_stats
+    BudgetingStats.new(self)
+  end
 
-      savings << {
-        date: r.date,
-        value: r.rolling_income != 0 ? ((r.rolling_income - r.rolling_spend) / r.rolling_income) : 0.to_d
-      }
-    end
-
-    {
-      income_series: TimeSeries.new(income, favorable_direction: "up"),
-      spending_series: TimeSeries.new(spending, favorable_direction: "down"),
-      savings_rate_series: TimeSeries.new(savings, favorable_direction: "up")
-    }
+  def account_stats
+    AccountStats.new(self)
   end
 
   private

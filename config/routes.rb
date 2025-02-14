@@ -78,8 +78,6 @@ Rails.application.routes.draw do
 
   resources :accounts, only: %i[index new] do
     collection do
-      get :summary
-      get :list
       post :sync_all
     end
 

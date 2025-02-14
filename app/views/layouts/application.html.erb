@@ -26,7 +26,7 @@
       </div>
     </nav>
 
-    <div class="py-4 w-[260px] shrink-0 h-full overflow-y-auto transition-all duration-300" data-sidebar-target="panel">
+    <%= tag.div class: class_names("py-4 shrink-0 h-full overflow-y-auto transition-all duration-300", Current.user.show_sidebar? ? "w-[260px]" : "w-0"), data: { sidebar_target: "panel" } do %>
       <% if content_for?(:sidebar) %>
         <%= yield :sidebar %>
       <% else %>
@@ -34,14 +34,16 @@
           <%= render "accounts/account_sidebar_tabs", accounts: Current.family.accounts.active.to_a %>
         </div>
       <% end %>
-    </div>
+    <% end %>
 
-    <main class="container mx-auto px-10 py-4 h-full <%= require_upgrade? ? "relative overflow-hidden" : "overflow-y-auto" %>">
+    <%= tag.main class: class_names("py-4 px-10 grow h-full", require_upgrade? ? "relative overflow-hidden" : "overflow-y-auto") do %>
       <% if require_upgrade? %>
         <%= render "shared/subscribe_modal" %>
       <% end %>
 
-      <%= yield %>
-    </main>
+      <%= tag.div class: class_names("mx-auto w-full pb-32", Current.user.show_sidebar? ? "max-w-4xl" : "max-w-5xl"), data: { sidebar_target: "content" } do %>
+        <%= yield %>
+      <% end %>
+    <% end %>
   </div>
 <% end %>

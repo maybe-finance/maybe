@@ -13,8 +13,14 @@ class CreditCard < ApplicationRecord
     annual_fee ? Money.new(annual_fee, account.currency) : nil
   end
 
+  class << self
+    def color
+      "#F13636"
+    end
+  end
+
   def color
-    "#F13636"
+    self.class.color
   end
 
   def icon

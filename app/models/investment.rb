@@ -16,8 +16,14 @@ class Investment < ApplicationRecord
     [ "Angel", "angel" ]
   ].freeze
 
+  class << self
+    def color
+      "#1570EF"
+    end
+  end
+
   def color
-    "#1570EF"
+    self.class.color
   end
 
   def icon
