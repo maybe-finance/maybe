@@ -59,7 +59,7 @@ class Account::Entry < ApplicationRecord
     # arbitrary cutoff date to avoid expensive sync operations
     def min_supported_date
       30.years.ago.to_date
-    end 
+    end
 
     def bulk_update!(bulk_update_params)
       bulk_attributes = {

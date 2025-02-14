@@ -3,7 +3,7 @@ class AccountStats
   def initialize(family)
     @family = family
   end
- 
+
   def totals_by_type
     totals = family.accounts
           .active
