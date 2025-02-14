@@ -67,11 +67,6 @@ class Account < ApplicationRecord
     URI.parse(plaid_account.plaid_item.institution_url).host.gsub(/^www\./, "")
   end
 
-  def weight
-    accountable_total = family.account_stats.totals_by_type.select { |t| t.classification == accountable.classification }.sum { |t| t.total_money.amount }
-    accountable_total.zero? ? 0 : balance / accountable_total.to_f * 100
-  end
-
   def destroy_later
     update!(scheduled_for_deletion: true, is_active: false)
     DestroyJob.perform_later(self)
@@ -92,7 +87,7 @@ class Account < ApplicationRecord
   def series(period: Period.last_30_days, currency: nil)
     balance_series = balances.in_period(period).where(currency: currency || self.currency)
 
-    if balance_series.empty?
+    if balance_series.empty? && period.end_date = Date.current
       TimeSeries.new([ { date: Date.current, value: balance_money.exchange_to(currency || self.currency) } ])
     else
       TimeSeries.from_collection(balance_series, :balance_money, favorable_direction: asset? ? "up" : "down")

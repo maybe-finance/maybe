@@ -1,17 +1,11 @@
 module Accountable
   extend ActiveSupport::Concern
 
-  ASSET_TYPES = %w[Depository Investment Crypto Property Vehicle OtherAsset]
-  LIABILITY_TYPES = %w[CreditCard Loan OtherLiability]
-  TYPES = ASSET_TYPES + LIABILITY_TYPES
+  TYPES = %w[Depository Investment Crypto Property Vehicle OtherAsset CreditCard Loan OtherLiability]
 
   def self.from_type(type)
     return nil unless TYPES.include?(type)
     type.constantize
-  end
-
-  def self.by_classification
-    { assets: ASSET_TYPES, liabilities: LIABILITY_TYPES }
   end
 
   included do
@@ -20,11 +14,19 @@ module Accountable
 
   class_methods do
     def classification
-      self.name.in?(ASSET_TYPES) ? "asset" : "liability"
+      raise NotImplementedError, "Accountable must implement #classification"
+    end
+
+    def icon
+      raise NotImplementedError, "Accountable must implement #icon"
+    end
+
+    def color
+      raise NotImplementedError, "Accountable must implement #color"
     end
 
     def display_name
-      self.name.humanize
+      self.name.humanize.pluralize
     end
 
     def balance_money(family)
@@ -79,7 +81,7 @@ module Accountable
         end_date: end_date
       ])
 
-      TimeSeries.from_collection(balances, :balance, favorable_direction: self.name.in?(ASSET_TYPES) ? "up" : "down")
+      TimeSeries.from_collection(balances, :balance, favorable_direction: self.classification == "asset" ? "up" : "down")
     end
   end
 
@@ -94,6 +96,14 @@ module Accountable
 
   def display_name
     self.class.display_name
+  end
+
+  def icon
+    self.class.icon
+  end
+
+  def color
+    self.class.color
   end
 
   def classification

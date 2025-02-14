@@ -1,6 +1,20 @@
 class CreditCard < ApplicationRecord
   include Accountable
 
+  class << self
+    def color
+      "#F13636"
+    end
+
+    def icon
+      "credit-card"
+    end
+
+    def classification
+      "liability"
+    end
+  end
+
   def available_credit_money
     available_credit ? Money.new(available_credit, account.currency) : nil
   end
@@ -11,19 +25,5 @@ class CreditCard < ApplicationRecord
 
   def annual_fee_money
     annual_fee ? Money.new(annual_fee, account.currency) : nil
-  end
-
-  class << self
-    def color
-      "#F13636"
-    end
-  end
-
-  def color
-    self.class.color
-  end
-
-  def icon
-    "credit-card"
   end
 end

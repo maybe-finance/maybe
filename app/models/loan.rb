@@ -21,13 +21,13 @@ class Loan < ApplicationRecord
     def color
       "#D444F1"
     end
-  end
 
-  def color
-    self.class.color
-  end
+    def icon
+      "hand-coins"
+    end
 
-  def icon
-    "hand-coins"
+    def classification
+      "liability"
+    end
   end
 end

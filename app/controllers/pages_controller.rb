@@ -3,7 +3,7 @@ class PagesController < ApplicationController
 
   def dashboard
     @period = Period.from_key(params[:period], fallback: true)
-    @net_worth_series = Current.family.net_worth_series(@period)
+    @balance_sheet = Current.family.balance_sheet
     @accounts = Current.family.accounts.active
   end
 

@@ -101,6 +101,20 @@ class Period
     start_date..end_date
   end
 
+  def days
+    (end_date - start_date).to_i
+  end
+
+  def interval
+    if days > 365
+      "1 month"
+    elsif days > 90
+      "1 week"
+    else
+      "1 day"
+    end
+  end
+
   def key
     PERIODS.find { |_, period| period.fetch(:date_range) == [ start_date, end_date ] }&.first
   end

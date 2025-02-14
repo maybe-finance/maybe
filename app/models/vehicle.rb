@@ -19,14 +19,14 @@ class Vehicle < ApplicationRecord
     def color
       "#F23E94"
     end
-  end
 
-  def color
-    self.class.color
-  end
+    def icon
+      "car-front"
+    end
 
-  def icon
-    "car-front"
+    def classification
+      "asset"
+    end
   end
 
   private

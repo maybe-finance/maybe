@@ -1,4 +1,29 @@
-<%# locals: (series:) %>
+<%# locals: (series:, period:) %>
+
+<div class="flex justify-between p-4">
+  <div class="space-y-2">
+    <div class="space-y-2">
+      <p class="text-sm text-secondary font-medium">Net Worth</p>
+      <p class="text-primary -space-x-0.5 text-xl font-medium">
+        <%= format_money series.last.value %>
+      </p>
+      <% if series.trend.nil? %>
+        <p class="text-sm text-secondary">Data not available for the selected period</p>
+      <% elsif series.trend.direction.flat? %>
+        <p class="text-sm text-secondary">No change vs. prior period</p>
+      <% else %>
+        <div class="flex items-center gap-2">
+          <%= render partial: "shared/trend_change", locals: { trend: series.trend } %>
+          <span class="text-sm text-secondary"><%= period.comparison_label %></span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <%= form_with url: root_path, method: :get, class: "flex items-center gap-4", data: { controller: "auto-submit-form" } do |form| %>
+    <%= period_select form: form, selected: period %>
+  <% end %>
+</div>
+
 <% if series.has_current_day_value? %>
   <div
     id="netWorthChart"

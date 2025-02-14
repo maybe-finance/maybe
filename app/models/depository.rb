@@ -14,13 +14,13 @@ class Depository < ApplicationRecord
     def color
       "#875BF7"
     end
-  end
 
-  def color
-    self.class.color
-  end
+    def classification
+      "asset"
+    end
 
-  def icon
-    "landmark"
+    def icon
+      "landmark"
+    end
   end
 end

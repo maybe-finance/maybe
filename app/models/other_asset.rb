@@ -5,13 +5,13 @@ class OtherAsset < ApplicationRecord
     def color
       "#12B76A"
     end
-  end
 
-  def color
-    self.class.color
-  end
+    def icon
+      "plus"
+    end
 
-  def icon
-    "plus"
+    def classification
+      "asset"
+    end
   end
 end

@@ -20,13 +20,13 @@ class Investment < ApplicationRecord
     def color
       "#1570EF"
     end
-  end
 
-  def color
-    self.class.color
-  end
+    def classification
+      "asset"
+    end
 
-  def icon
-    "line-chart"
+    def icon
+      "line-chart"
+    end
   end
 end

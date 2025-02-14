@@ -16,6 +16,20 @@ class Property < ApplicationRecord
 
   attribute :area_unit, :string, default: "sqft"
 
+  class << self
+    def icon
+      "home"
+    end
+
+    def color
+      "#06AED4"
+    end
+
+    def classification
+      "asset"
+    end
+  end
+
   def area
     Measurement.new(area_value, area_unit) if area_value.present?
   end
@@ -26,20 +40,6 @@ class Property < ApplicationRecord
 
   def trend
     Trend.new(current: account.balance_money, previous: first_valuation_amount)
-  end
-
-  class << self
-    def color
-      "#06AED4"
-    end
-  end
-
-  def color
-    self.class.color
-  end
-
-  def icon
-    "home"
   end
 
   private

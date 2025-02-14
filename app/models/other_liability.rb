@@ -5,13 +5,13 @@ class OtherLiability < ApplicationRecord
     def color
       "#737373"
     end
-  end
 
-  def color
-    self.class.color
-  end
+    def icon
+      "minus"
+    end
 
-  def icon
-    "minus"
+    def classification
+      "liability"
+    end
   end
 end

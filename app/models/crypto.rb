@@ -5,13 +5,17 @@ class Crypto < ApplicationRecord
     def color
       "#737373"
     end
-  end
 
-  def color
-    self.class.color
-  end
+    def classification
+      "asset"
+    end
 
-  def icon
-    "bitcoin"
+    def icon
+      "bitcoin"
+    end
+
+    def display_name
+      "Crypto"
+    end
   end
 end

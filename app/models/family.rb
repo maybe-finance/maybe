@@ -36,6 +36,10 @@ class Family < ApplicationRecord
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }
   validates :date_format, inclusion: { in: DATE_FORMATS.map(&:last) }
 
+  def balance_sheet
+    @balance_sheet ||= BalanceSheet.new(self)
+  end
+
   def sync_data(start_date: nil)
     update!(last_synced_at: Time.current)
 

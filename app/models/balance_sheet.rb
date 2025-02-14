@@ -1,4 +1,134 @@
 class BalanceSheet
+  include Monetizable
+
+  monetize :total_assets, :total_liabilities, :net_worth
+
+  attr_reader :family
+
   def initialize(family)
+    @family = family
+  end
+
+  def classification_groups
+    [
+      ClassificationGroup.new(
+        key: "asset",
+        display_name: "Assets",
+        icon: "blocks",
+        account_groups: account_groups("asset")
+      ),
+      ClassificationGroup.new(
+        key: "liability",
+        display_name: "Debts",
+        icon: "scale",
+        account_groups: account_groups("liability")
+      )
+    ]
+  end
+
+  def total_assets
+    totals_query.filter { |t| t.classification == "asset" }.sum(&:converted_balance)
+  end
+
+  def total_liabilities
+    totals_query.filter { |t| t.classification == "liability" }.sum(&:converted_balance)
+  end
+
+  def net_worth
+    total_assets - total_liabilities
+  end
+
+  def account_groups(classification)
+    classification_accounts = totals_query.filter { |t| t.classification == classification }
+    classification_total = classification_accounts.sum(&:converted_balance)
+    account_groups = classification_accounts.group_by(&:accountable_type).transform_keys { |k| Accountable.from_type(k) }
+
+    account_groups.map do |accountable, accounts|
+      group_total = accounts.sum(&:converted_balance)
+
+      AccountGroup.new(
+        name: accountable.display_name,
+        classification: accountable.classification,
+        total: group_total,
+        total_money: Money.new(group_total, currency),
+        weight: classification_total.zero? ? 0 : group_total / classification_total.to_d * 100,
+        missing_rates?: accounts.any? { |a| a.missing_rates? },
+        color: accountable.color,
+        accounts: accounts.map do |account|
+          account.define_singleton_method(:weight) do
+            classification_total.zero? ? 0 : account.converted_balance / classification_total.to_d * 100
+          end
+          account
+        end.sort_by(&:weight).reverse
+      )
+    end.sort_by(&:weight).reverse
+  end
+
+  def net_worth_series(period: Period.last_30_days)
+    query = <<~SQL
+      WITH dates as (
+        SELECT generate_series(DATE :start_date, DATE :end_date, :interval::interval)::date as date
+      ), balances as (
+        SELECT
+          d.date,
+          COALESCE(SUM(ab.balance * COALESCE(er.rate, 1)), 0) as balance,
+          COUNT(CASE WHEN a.currency <> :target_currency AND er.rate IS NULL THEN 1 END) as missing_rates
+        FROM dates d
+        LEFT JOIN accounts a ON a.family_id = :family_id
+        LEFT JOIN account_balances ab ON (
+          ab.date = d.date AND
+          ab.currency = a.currency AND
+          ab.account_id = a.id
+        )
+        LEFT JOIN exchange_rates er ON (
+          er.date = ab.date AND
+          er.from_currency = a.currency AND
+          er.to_currency = :target_currency
+        )
+        GROUP BY d.date
+        ORDER BY d.date
+      )
+      SELECT
+        balances.date,
+        balances.balance,
+        LAG(balances.balance, 1) OVER (ORDER BY date) as prior_balance,
+        balances.missing_rates
+      FROM balances
+    SQL
+
+    balances = Account::Balance.find_by_sql([
+      query,
+      {
+        family_id: family.id,
+        start_date: period.start_date,
+        end_date: period.end_date,
+        interval: period.interval,
+        target_currency: currency
+      }
+    ])
+
+    TimeSeries.from_collection(balances, :balance)
+  end
+
+  def currency
+    family.currency
+  end
+
+  # private
+
+  ClassificationGroup = Struct.new(:key, :display_name, :icon, :account_groups, keyword_init: true)
+  AccountGroup = Struct.new(:name, :classification, :total, :total_money, :weight, :accounts, :color, :missing_rates?, keyword_init: true)
+
+  def totals_query
+    @totals_query ||= family.accounts
+          .active
+          .joins(ActiveRecord::Base.sanitize_sql_array([ "LEFT JOIN exchange_rates ON exchange_rates.date = CURRENT_DATE AND accounts.currency = exchange_rates.from_currency AND exchange_rates.to_currency = ?", currency ]))
+          .select(
+            "accounts.*",
+            "SUM(accounts.balance * COALESCE(exchange_rates.rate, 1)) as converted_balance",
+            ActiveRecord::Base.sanitize_sql_array([ "COUNT(CASE WHEN accounts.currency <> ? AND exchange_rates.rate IS NULL THEN 1 END) as missing_rates", currency ])
+          )
+          .group(:classification, :accountable_type, :id)
+          .to_a
   end
 end
