@@ -7,16 +7,10 @@ en:
       sign_in: Sign in
       sign_up: Create account
       your_account: Your account
-    footer:
-      privacy_policy: Privacy Policy
-      terms_of_service: Terms of Service
     issues:
       action: How to fix this issue
       description: Issue Description
-    sidebar:
-      accounts: Accounts
-      budgeting: Budgeting
-      dashboard: Dashboard
-      new_account: New account
-      portfolio: Portfolio
-      transactions: Transactions
+    shared:
+      footer:
+        privacy_policy: Privacy Policy
+        terms_of_service: Terms of Service

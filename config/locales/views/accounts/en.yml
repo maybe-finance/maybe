@@ -4,8 +4,6 @@ en:
     account:
       has_issues: Issue detected.
       troubleshoot: Troubleshoot
-    account_list:
-      new_account: New %{type}
     chart:
       no_change: no change
     create:
@@ -60,18 +58,6 @@ en:
         edit: Edit
         import: Import transactions
         manage: Manage accounts
-    summary:
-      header:
-        accounts: Accounts
-        manage: Manage accounts
-        new: New account
-      new: New account
-      no_assets: No assets found
-      no_assets_description: Add an asset either via connection, importing or entering
-        manually.
-      no_liabilities: No liabilities found
-      no_liabilities_description: Add a liability either via connection, importing
-        or entering manually.
     update:
       success: "%{type} account updated"
   email_confirmations:

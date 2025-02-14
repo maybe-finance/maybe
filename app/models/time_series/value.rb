@@ -32,10 +32,10 @@ class TimeSeries::Value
     attr_reader :series
 
     def create_trend(previous_value)
-      TimeSeries::Trend.new \
+      Trend.new \
         current: value,
         previous: previous_value,
-        series: series
+        favorable_direction: series.favorable_direction
     end
 
     def value_must_be_of_known_type

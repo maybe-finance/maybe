@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_12_163624) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_12_213301) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -64,8 +64,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_12_163624) do
     t.index ["account_id", "security_id", "date", "currency"], name: "idx_on_account_id_security_id_date_currency_234024c8e3", unique: true
     t.index ["account_id"], name: "index_account_holdings_on_account_id"
     t.index ["security_id"], name: "index_account_holdings_on_security_id"
-    t.check_constraint "qty >= 0::numeric AND price >= 0::numeric AND amount >= 0::numeric", name: "check_positive_values"
-    t.check_constraint "round(qty * price, 4) = round(amount, 4)", name: "check_amount_matches"
   end
 
   create_table "account_trades", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -674,6 +672,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_12_163624) do
     t.string "otp_secret"
     t.boolean "otp_required", default: false, null: false
     t.string "otp_backup_codes", default: [], array: true
+    t.boolean "show_sidebar", default: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["family_id"], name: "index_users_on_family_id"
     t.index ["otp_secret"], name: "index_users_on_otp_secret", unique: true, where: "(otp_secret IS NOT NULL)"

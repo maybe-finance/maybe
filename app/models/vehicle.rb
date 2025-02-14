@@ -12,7 +12,7 @@ class Vehicle < ApplicationRecord
   end
 
   def trend
-    TimeSeries::Trend.new(current: account.balance_money, previous: first_valuation_amount)
+    Trend.new(current: account.balance_money, previous: first_valuation_amount)
   end
 
   class << self

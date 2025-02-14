@@ -16,6 +16,6 @@ class Account::Trade < ApplicationRecord
     current_value = current_price * qty.abs
     cost_basis = price_money * qty.abs
 
-    TimeSeries::Trend.new(current: current_value, previous: cost_basis)
+    Trend.new(current: current_value, previous: cost_basis)
   end
 end

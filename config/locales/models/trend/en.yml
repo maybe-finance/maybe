@@ -3,7 +3,7 @@ en:
   activemodel:
     errors:
       models:
-        time_series/trend:
+        trend:
           attributes:
             current:
               must_be_of_the_same_type_as_previous: must be of the same type as previous

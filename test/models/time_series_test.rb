@@ -17,7 +17,6 @@ class TimeSeriesTest < ActiveSupport::TestCase
 
     assert_equal 100, series.first.value
     assert_equal 200, series.last.value
-    assert_equal 100, series.on(1.day.ago.to_date).value
     assert_equal "up", series.favorable_direction
     assert_equal "up", series.trend.direction
     assert_equal 100, series.trend.value
@@ -87,7 +86,7 @@ class TimeSeriesTest < ActiveSupport::TestCase
 
   test "it does not accept invalid values in Time Series Value" do
     # We need to stub trend otherwise an error is raised before TimeSeries::Value validation
-    TimeSeries::Trend.stub(:new, nil) do
+    Trend.stub(:new, nil) do
       error = assert_raises(ActiveModel::ValidationError) do
         TimeSeries.new(
           [

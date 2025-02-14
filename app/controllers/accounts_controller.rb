@@ -9,7 +9,7 @@ class AccountsController < ApplicationController
   end
 
   def summary
-    @period = Period.from_param(params[:period])
+    @period = Period.from_key(params[:period], fallback: true)
     snapshot = Current.family.snapshot(@period)
     @net_worth_series = snapshot[:net_worth_series]
     @asset_series = snapshot[:asset_series]
@@ -19,7 +19,7 @@ class AccountsController < ApplicationController
   end
 
   def list
-    @period = Period.from_param(params[:period])
+    @period = Period.from_key(params[:period], fallback: true)
     render layout: false
   end
 

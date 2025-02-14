@@ -59,7 +59,7 @@ class Account::Holding < ApplicationRecord
 
       start_amount = qty * avg_cost
 
-      TimeSeries::Trend.new \
+      Trend.new \
         current: amount_money,
         previous: start_amount
     end

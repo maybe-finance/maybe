@@ -32,7 +32,7 @@ class Account < ApplicationRecord
 
   accepts_nested_attributes_for :accountable, update_only: true
 
-  class << self 
+  class << self
     def create_and_sync(attributes)
       attributes[:accountable_attributes] ||= {} # Ensure accountable is created, even if empty
       account = new(attributes.merge(cash_balance: attributes[:balance]))
@@ -92,7 +92,7 @@ class Account < ApplicationRecord
   def series(period: Period.last_30_days, currency: nil)
     balance_series = balances.in_period(period).where(currency: currency || self.currency)
 
-    if balance_series.empty? && period.date_range.end == Date.current
+    if balance_series.empty?
       TimeSeries.new([ { date: Date.current, value: balance_money.exchange_to(currency || self.currency) } ])
     else
       TimeSeries.from_collection(balance_series, :balance_money, favorable_direction: asset? ? "up" : "down")

@@ -40,8 +40,8 @@ module Accountable
 
     def series(family)
       period = Period.last_30_days
-      start_date = period.date_range.first
-      end_date = period.date_range.last
+      start_date = period.start_date
+      end_date = period.end_date
 
       query = <<~SQL
         WITH dates as (

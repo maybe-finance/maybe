@@ -20,15 +20,15 @@ module Family::Aggregatable
   end
 
   def net_worth_series(period = Period.last_30_days)
-    start_date = period.date_range.first
-    end_date = period.date_range.last
+    start_date = period.start_date
+    end_date = period.end_date
 
     total_days = (end_date - start_date).to_i
-    date_interval = if total_days > 30 
+    date_interval = if total_days > 30
       "7 days"
     else
       "1 day"
-    end 
+    end
 
     query = <<~SQL
       WITH dates as (
@@ -79,8 +79,8 @@ module Family::Aggregatable
               .group("account_balances.date, account_balances.currency")
               .order("account_balances.date")
 
-    query = query.where("account_balances.date >= ?", period.date_range.begin) if period.date_range.begin
-    query = query.where("account_balances.date <= ?", period.date_range.end) if period.date_range.end
+    query = query.where("account_balances.date >= ?", period.start_date) if period.start_date
+    query = query.where("account_balances.date <= ?", period.end_date) if period.end_date
     result = query.to_a
 
     {

@@ -26,15 +26,11 @@ class TimeSeries
     values.last
   end
 
-  def on(date)
-    values.find { |v| v.date == date }
-  end
-
   def trend
-    TimeSeries::Trend.new \
+    Trend.new \
       current: last&.value,
       previous: first&.value,
-      series: self
+      favorable_direction: favorable_direction
   end
 
   def empty?

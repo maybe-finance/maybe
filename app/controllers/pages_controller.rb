@@ -2,9 +2,9 @@ class PagesController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[early_access]
 
   def dashboard
-    @period = Period.from_param(params[:period])
+    @period = Period.from_key(params[:period], fallback: true)
     @net_worth_series = Current.family.net_worth_series(@period)
-    @accounts = Current.family.accounts.active 
+    @accounts = Current.family.accounts.active
   end
 
   def changelog

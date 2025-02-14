@@ -1,4 +1,4 @@
-<% period = Period.from_param(params[:period]) %>
+<% period = Period.from_key(params[:period], fallback: true) %>
 <% series = @account.series(period: period) %>
 <% trend = series.trend %>
 
@@ -13,7 +13,7 @@
       <% end %>
     <% end %>
 
-    <%= tag.span period_label(period), class: "text-secondary" %>
+    <%= tag.span period.comparison_label, class: "text-secondary" %>
   </div>
 
   <div class="h-64">
