@@ -2,7 +2,7 @@
   <div class="flex flex-col h-dvh">
     <header class="flex items-center justify-between p-8">
       <%= link_to content_for(:previous_path) || imports_path do %>
-        <%= lucide_icon "arrow-left", class: "w-5 h-5 text-gray-500" %>
+        <%= lucide_icon "arrow-left", class: "w-5 h-5 text-secondary" %>
       <% end %>
 
       <nav>
@@ -10,11 +10,11 @@
       </nav>
 
       <%= link_to imports_path do %>
-        <%= lucide_icon "x", class: "text-gray-500 w-5 h-5" %>
+        <%= lucide_icon "x", class: "text-secondary w-5 h-5" %>
       <% end %>
     </header>
 
-    <main class="flex-grow px-8 pt-12 pb-32 overflow-y-auto">
+    <main class="grow px-8 pt-12 pb-32 overflow-y-auto">
       <%= yield %>
     </main>
   </div>

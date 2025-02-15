@@ -6,7 +6,8 @@ class Account::Holding < ApplicationRecord
   belongs_to :account
   belongs_to :security
 
-  validates :qty, :currency, presence: true
+  validates :qty, :currency, :date, :price, :amount, presence: true
+  validates :qty, :price, :amount, numericality: { greater_than_or_equal_to: 0 }
 
   scope :chronological, -> { order(:date) }
   scope :for, ->(security) { where(security_id: security).order(:date) }

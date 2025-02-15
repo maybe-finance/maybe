@@ -1,0 +1,86 @@
+@import 'tailwindcss';
+
+@import "./maybe-design-system.css";
+
+@import "./geist-font.css";
+@import "./geist-mono-font.css";
+
+@plugin "@tailwindcss/typography";
+@plugin "@tailwindcss/forms";
+
+@utility combobox {
+  .hw-combobox__main__wrapper,
+  .hw-combobox__input {
+    @apply w-full;
+  }
+
+  .hw-combobox__main__wrapper {
+    @apply border-0 p-0 focus:border-0 ring-0 focus:ring-0 shadow-none focus:shadow-none focus-within:shadow-none;
+  }
+
+  .hw-combobox__listbox {
+    @apply absolute top-[160%] right-0 w-full bg-transparent rounded z-30;
+  }
+
+  .hw-combobox__label {
+    @apply block text-xs text-gray-500 peer-disabled:text-gray-400;
+  }
+
+  .hw_combobox__pagination__wrapper {
+    @apply h-px;
+
+    &:only-child {
+      @apply bg-transparent;
+    }
+  }
+
+  --hw-border-color: rgba(0, 0, 0, 0.2);
+  --hw-handle-width: 20px;
+  --hw-handle-height: 20px;
+  --hw-handle-offset-right: 0px;
+}
+
+.prose--github-release-notes {
+  .octicon {
+    @apply inline-block overflow-visible align-text-bottom fill-current;
+  }
+
+  .dropdown-caret {
+    @apply content-none border-4 border-b-0 border-transparent border-t-gray-500 size-0 inline-block;
+  }
+
+  .user-mention {
+    @apply font-bold;
+  }
+}
+
+/* Custom scrollbar implementation for Windows browsers */
+.windows {
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #d6d6d6;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a6a6a6;
+  }  
+}
+
+.scrollbar {
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #d6d6d6;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #a6a6a6;
+  }
+}

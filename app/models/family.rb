@@ -62,7 +62,7 @@ class Family < ApplicationRecord
     country != "US" && country != "CA"
   end
 
-  def get_link_token(webhooks_url:, redirect_url:, accountable_type: nil, region: :us)
+  def get_link_token(webhooks_url:, redirect_url:, accountable_type: nil, region: :us, access_token: nil)
     provider = if region.to_sym == :eu
       self.class.plaid_eu_provider
     else
@@ -77,6 +77,7 @@ class Family < ApplicationRecord
       webhooks_url: webhooks_url,
       redirect_url: redirect_url,
       accountable_type: accountable_type,
+      access_token: access_token
     ).link_token
   end
 
@@ -115,7 +116,7 @@ class Family < ApplicationRecord
 
     {
       asset_series: TimeSeries.new(result.map { |r| { date: r.date, value: Money.new(r.assets, r.currency) } }),
-      liability_series: TimeSeries.new(result.map { |r| { date: r.date, value: Money.new(r.liabilities, r.currency) } }),
+      liability_series: TimeSeries.new(result.map { |r| { date: r.date, value: Money.new(r.liabilities, r.currency) } }, favorable_direction: "down"),
       net_worth_series: TimeSeries.new(result.map { |r| { date: r.date, value: Money.new(r.net_worth, r.currency) } })
     }
   end

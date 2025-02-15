@@ -82,12 +82,15 @@ class PlaidInvestmentSync
       end
 
       return [ nil, nil ] if plaid_security.nil? || plaid_security.ticker_symbol.blank?
+      return [ nil, plaid_security ] if plaid_security.ticker_symbol == "CUR:USD" # internally, we do not consider cash a security and track it separately
 
+      operating_mic = plaid_security.market_identifier_code
+
+      # Find any matching security
       security = Security.find_or_create_by!(
         ticker: plaid_security.ticker_symbol,
-        exchange_mic: plaid_security.market_identifier_code || "XNAS",
-        country_code: "US"
-      ) unless plaid_security.ticker_symbol == "CUR:USD" # internally, we do not consider cash a security and track it separately
+        exchange_operating_mic: operating_mic
+      )
 
       [ security, plaid_security ]
     end

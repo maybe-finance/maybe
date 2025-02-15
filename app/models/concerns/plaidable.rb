@@ -3,11 +3,11 @@ module Plaidable
 
   class_methods do
     def plaid_us_provider
-      Provider::Plaid.new(Rails.application.config.plaid, :us) if Rails.application.config.plaid
+      Provider::Plaid.new(Rails.application.config.plaid, region: :us) if Rails.application.config.plaid
     end
 
     def plaid_eu_provider
-      Provider::Plaid.new(Rails.application.config.plaid_eu, :eu) if Rails.application.config.plaid_eu
+      Provider::Plaid.new(Rails.application.config.plaid_eu, region: :eu) if Rails.application.config.plaid_eu
     end
 
     def plaid_provider_for_region(region)

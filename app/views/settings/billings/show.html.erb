@@ -3,22 +3,22 @@
 <% end %>
 
 <div class="space-y-4">
-  <h1 class="text-gray-900 text-xl font-medium mb-4"><%= t(".page_title") %></h1>
+  <h1 class="text-primary text-xl font-medium mb-4"><%= t(".page_title") %></h1>
   <%= settings_section title: t(".subscription_title"), subtitle: t(".subscription_subtitle") do %>
     <div class="space-y-4">
-      <div class="p-3 shadow-xs bg-white border border-alpha-black-200 rounded-lg flex justify-between items-center">
+      <div class="p-3 shadow-xs bg-white border border-secondary rounded-lg flex justify-between items-center">
         <div class="flex items-center gap-3">
           <div class="w-9 h-9 rounded-full bg-gray-25 flex justify-center items-center">
-            <%= lucide_icon "gem", class: "w-5 h-5 text-gray-500" %>
+            <%= lucide_icon "gem", class: "w-5 h-5 text-secondary" %>
           </div>
 
           <div class="text-sm space-y-1">
             <% if @user.family.subscribed? || subscription_pending? %>
-              <p class="text-gray-900">You are currently subscribed to <span class="font-medium">Maybe+</span></p>
-              <p class="text-gray-500">Manage your billing settings here.</p>
+              <p class="text-primary">You are currently subscribed to <span class="font-medium">Maybe+</span></p>
+              <p class="text-secondary">Manage your billing settings here.</p>
             <% else %>
-              <p class="text-gray-900">You are currently <span class="font-medium">not subscribed</span></p>
-              <p class="text-gray-500">Once you subscribe to Maybe+, you’ll see your billing settings here.</p>
+              <p class="text-primary">You are currently <span class="font-medium">not subscribed</span></p>
+              <p class="text-secondary">Once you subscribe to Maybe+, you’ll see your billing settings here.</p>
             <% end %>
           </div>
         </div>
@@ -26,19 +26,19 @@
         <% if @user.family.subscribed? || subscription_pending? %>
           <%= link_to subscription_path, class: "btn btn--secondary flex items-center gap-1" do %>
             <span>Manage</span>
-            <%= lucide_icon "external-link", class: "w-5 h-5 shrink-0 text-gray-500" %>
+            <%= lucide_icon "external-link", class: "w-5 h-5 shrink-0 text-secondary" %>
           <% end %>
         <% else %>
           <%= link_to new_subscription_path, class: "btn btn--secondary flex items-center gap-1" do %>
             <span>Subscribe</span>
-            <%= lucide_icon "external-link", class: "w-5 h-5 shrink-0 text-gray-500" %>
+            <%= lucide_icon "external-link", class: "w-5 h-5 shrink-0 text-secondary" %>
           <% end %>
         <% end %>
       </div>
 
       <div class="flex items-center gap-2">
         <%= image_tag "stripe-logo.svg", class: "w-5 h-5 shrink-0" %>
-        <p class="text-gray-500 text-sm">Managed via Stripe</p>
+        <p class="text-secondary text-sm">Managed via Stripe</p>
       </div>
     </div>
   <% end %>

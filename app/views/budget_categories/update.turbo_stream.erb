@@ -1,1 +1,19 @@
 <%= turbo_stream.replace dom_id(@budget, :allocation_progress), partial: "budget_categories/allocation_progress", locals: { budget: @budget } %>
+
+<%= turbo_stream.replace dom_id(@budget, :uncategorized_budget_category_form), partial: "budget_categories/uncategorized_budget_category_form", locals: { budget: @budget } %>
+
+<%= turbo_stream.replace dom_id(@budget, :confirm_button), partial: "budget_categories/confirm_button", locals: { budget: @budget } %>
+
+
+<% if @budget_category.subcategory? %>
+  <%# Update sibling subcategories when a subcategory changes %>
+  <% @budget_category.siblings.each do |sibling| %>
+    <%= turbo_stream.update dom_id(sibling, :form), partial: "budget_categories/budget_category_form", locals: { budget_category: sibling } %>
+  <% end %>
+  
+<% else %>
+  <%# Update all subcategories when a parent category changes %>
+  <% @budget_category.subcategories.each do |subcategory| %>
+    <%= turbo_stream.update dom_id(subcategory, :form), partial: "budget_categories/budget_category_form", locals: { budget_category: subcategory } %>
+  <% end %>
+<% end %>

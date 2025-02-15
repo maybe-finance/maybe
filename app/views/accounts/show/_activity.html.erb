@@ -12,13 +12,13 @@
           </button>
           <div data-menu-target="content" class="z-10 hidden bg-white rounded-lg border border-alpha-black-25 shadow-xs p-1">
             <%= link_to new_account_valuation_path(account_id: @account.id), data: { turbo_frame: :modal }, class: "block p-2 rounded-lg hover:bg-gray-50 flex items-center gap-2" do %>
-              <%= lucide_icon("circle-dollar-sign", class: "text-gray-500 w-5 h-5") %>
+              <%= lucide_icon("circle-dollar-sign", class: "text-secondary w-5 h-5") %>
               <%= tag.span t(".new_balance"), class: "text-sm" %>
             <% end %>
 
             <% unless @account.crypto? %>
               <%= link_to @account.investment? ? new_account_trade_path(account_id: @account.id) : new_account_transaction_path(account_id: @account.id), data: { turbo_frame: :modal }, class: "block p-2 rounded-lg hover:bg-gray-50 flex items-center gap-2" do %>
-                <%= lucide_icon("credit-card", class: "text-gray-500 w-5 h-5") %>
+                <%= lucide_icon("credit-card", class: "text-secondary w-5 h-5") %>
                 <%= tag.span t(".new_transaction"), class: "text-sm" %>
               <% end %>
             <% end %>
@@ -36,12 +36,12 @@
         <div class="flex gap-2 mb-4">
           <div class="grow">
             <div class="flex items-center px-3 py-2 gap-2 border border-gray-200 rounded-lg focus-within:ring-gray-100 focus-within:border-gray-900">
-              <%= lucide_icon("search", class: "w-5 h-5 text-gray-500") %>
+              <%= lucide_icon("search", class: "w-5 h-5 text-secondary") %>
               <%= hidden_field_tag :account_id, @account.id %>
               <%= form.search_field :search,
                             placeholder: "Search entries by name",
                             value: @q[:search],
-                            class: "form-field__input placeholder:text-sm placeholder:text-gray-500",
+                            class: "form-field__input placeholder:text-sm placeholder:text-secondary",
                             "data-auto-submit-form-target": "auto" %>
             </div>
           </div>
@@ -50,7 +50,7 @@
     </div>
 
     <% if @entries.empty? %>
-      <p class="text-gray-500 text-sm p-4"><%= t(".no_entries") %></p>
+      <p class="text-secondary text-sm p-4"><%= t(".no_entries") %></p>
     <% else %>
       <%= tag.div id: dom_id(@account, "entries_bulk_select"),
                 data: {
@@ -62,10 +62,10 @@
           <%= render "account/entries/selection_bar" %>
         </div>
 
-        <div class="grid bg-gray-25 rounded-xl grid-cols-12 items-center uppercase text-xs font-medium text-gray-500 px-5 py-3 mb-4">
+        <div class="grid bg-gray-25 rounded-xl grid-cols-12 items-center uppercase text-xs font-medium text-secondary px-5 py-3 mb-4">
           <div class="pl-0.5 col-span-8 flex items-center gap-4">
             <%= check_box_tag "selection_entry",
-                              class: "maybe-checkbox maybe-checkbox--light",
+                              class: "checkbox checkbox--light",
                               data: { action: "bulk-select#togglePageSelection" } %>
             <p><%= t(".date") %></p>
           </div>

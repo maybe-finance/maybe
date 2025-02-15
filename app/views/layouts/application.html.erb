@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html class="h-full <%= @os %>" lang="en">
+<html class="font-sans text-primary h-full <%= @os %>" lang="en">
   <head>
     <title><%= content_for(:title) || "Maybe" %></title>
 
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
 
     <%= javascript_include_tag "https://cdn.plaid.com/link/v2/stable/link-initialize.js" %>

@@ -18,3 +18,8 @@ en:
       status: Last synced %{timestamp} ago
       status_never: Requires data sync
       syncing: Syncing...
+      requires_update: Requires re-authentication
+      update: Update connection
+      connection_lost: Connection lost
+      connection_lost_description: This connection is no longer valid. You'll need to delete this connection and add it again to continue syncing data.
+      add_new: Add new connection

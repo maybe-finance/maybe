@@ -6,10 +6,13 @@ class FetchSecurityInfoJob < ApplicationJob
 
     security = Security.find(security_id)
 
-    security_info_response = Security.security_info_provider.fetch_security_info(
-      ticker: security.ticker,
-      mic_code: security.exchange_mic
-    )
+    params = {
+      ticker: security.ticker
+    }
+    params[:mic_code] = security.exchange_mic if security.exchange_mic.present?
+    params[:operating_mic] = security.exchange_operating_mic if security.exchange_operating_mic.present?
+
+    security_info_response = Security.security_info_provider.fetch_security_info(**params)
 
     security.update(
       name: security_info_response.info.dig("name")

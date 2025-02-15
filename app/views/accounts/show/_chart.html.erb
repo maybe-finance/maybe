@@ -7,11 +7,11 @@
   <div class="flex justify-between px-4 pt-4 mb-2">
     <div class="space-y-2">
       <div class="flex items-center gap-1">
-        <%= tag.p title || default_value_title, class: "text-sm font-medium text-gray-500" %>
+        <%= tag.p title || default_value_title, class: "text-sm font-medium text-secondary" %>
         <%= tooltip %>
       </div>
 
-      <%= tag.p format_money(account.balance_money), class: "text-gray-900 text-3xl font-medium" %>
+      <%= tag.p format_money(account.balance_money), class: "text-primary text-3xl font-medium" %>
     </div>
 
     <%= form_with url: request.path, method: :get, data: { controller: "auto-submit-form" } do |form| %>

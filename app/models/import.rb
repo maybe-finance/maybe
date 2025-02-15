@@ -2,15 +2,32 @@ class Import < ApplicationRecord
   TYPES = %w[TransactionImport TradeImport AccountImport MintImport].freeze
   SIGNAGE_CONVENTIONS = %w[inflows_positive inflows_negative]
 
+  NUMBER_FORMATS = {
+    "1,234.56" => { separator: ".", delimiter: "," },  # US/UK/Asia
+    "1.234,56" => { separator: ",", delimiter: "." },  # Most of Europe
+    "1 234,56" => { separator: ",", delimiter: " " },  # French/Scandinavian
+    "1,234"    => { separator: "",  delimiter: "," }   # Zero-decimal currencies like JPY
+  }.freeze
+
   belongs_to :family
+
+  before_validation :set_default_number_format
 
   scope :ordered, -> { order(created_at: :desc) }
 
-  enum :status, { pending: "pending", complete: "complete", importing: "importing", failed: "failed" }, validate: true
+  enum :status, {
+    pending: "pending",
+    complete: "complete",
+    importing: "importing",
+    reverting: "reverting",
+    revert_failed: "revert_failed",
+    failed: "failed"
+  }, validate: true, default: "pending"
 
   validates :type, inclusion: { in: TYPES }
   validates :col_sep, inclusion: { in: [ ",", ";" ] }
   validates :signage_convention, inclusion: { in: SIGNAGE_CONVENTIONS }
+  validates :number_format, presence: true, inclusion: { in: NUMBER_FORMATS.keys }
 
   has_many :rows, dependent: :destroy
   has_many :mappings, dependent: :destroy
@@ -33,6 +50,27 @@ class Import < ApplicationRecord
     update! status: :complete
   rescue => error
     update! status: :failed, error: error.message
+  end
+
+  def revert_later
+    raise "Import is not revertable" unless revertable?
+
+    update! status: :reverting
+
+    RevertImportJob.perform_later(self)
+  end
+
+  def revert
+    Import.transaction do
+      accounts.destroy_all
+      entries.destroy_all
+    end
+
+    family.sync
+
+    update! status: :pending
+  rescue => error
+    update! status: :revert_failed, error: error.message
   end
 
   def csv_rows
@@ -67,8 +105,8 @@ class Import < ApplicationRecord
   def generate_rows_from_csv
     rows.destroy_all
 
-    mapped_rows = csv_rows.map do |row|
-      {
+    csv_rows.each do |row|
+      rows.create!(
         account: row[account_col_label].to_s,
         date: row[date_col_label].to_s,
         qty: sanitize_number(row[qty_col_label]).to_s,
@@ -82,10 +120,8 @@ class Import < ApplicationRecord
         tags: row[tags_col_label].to_s,
         entity_type: row[entity_type_col_label].to_s,
         notes: row[notes_col_label].to_s
-      }
+      )
     end
-
-    rows.insert_all!(mapped_rows)
   end
 
   def sync_mappings
@@ -112,6 +148,10 @@ class Import < ApplicationRecord
 
   def publishable?
     cleaned? && mappings.all?(&:valid?)
+  end
+
+  def revertable?
+    complete? || revert_failed?
   end
 
   def has_unassigned_account?
@@ -146,6 +186,39 @@ class Import < ApplicationRecord
 
     def sanitize_number(value)
       return "" if value.nil?
-      value.gsub(/[^\d.\-]/, "")
+
+      format = NUMBER_FORMATS[number_format]
+      return "" unless format
+
+      # First, normalize spaces and remove any characters that aren't numbers, delimiters, separators, or minus signs
+      sanitized = value.to_s.strip
+
+      # Handle French/Scandinavian format specially
+      if format[:delimiter] == " "
+        sanitized = sanitized.gsub(/\s+/, "") # Remove all spaces first
+      else
+        sanitized = sanitized.gsub(/[^\d#{Regexp.escape(format[:delimiter])}#{Regexp.escape(format[:separator])}\-]/, "")
+
+        # Replace delimiter with empty string
+        if format[:delimiter].present?
+          sanitized = sanitized.gsub(format[:delimiter], "")
+        end
+      end
+
+      # Replace separator with period for proper float parsing
+      if format[:separator].present?
+        sanitized = sanitized.gsub(format[:separator], ".")
+      end
+
+      # Return empty string if not a valid number
+      unless sanitized =~ /\A-?\d+\.?\d*\z/
+        return ""
+      end
+
+      sanitized
+    end
+
+    def set_default_number_format
+      self.number_format ||= "1,234.56" # Default to US/UK format
     end
 end

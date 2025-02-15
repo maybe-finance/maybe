@@ -7,13 +7,13 @@
 <div class="space-y-12">
   <div class="space-y-4 mx-auto max-w-md">
     <div class="text-center space-y-2">
-      <h1 class="text-3xl text-gray-900 font-medium"><%= t(".title") %></h1>
-      <p class="text-gray-500 text-sm"><%= t(".description") %></p>
+      <h1 class="text-3xl text-primary font-medium"><%= t(".title") %></h1>
+      <p class="text-secondary text-sm"><%= t(".description") %></p>
     </div>
 
     <div data-controller="tabs" data-tabs-active-class="bg-white" data-tabs-default-tab-value="csv-paste-tab">
       <div class="flex justify-center mb-4">
-        <div class="bg-gray-50 rounded-lg inline-flex p-1 space-x-2 text-sm text-gray-900 font-medium">
+        <div class="bg-gray-50 rounded-lg inline-flex p-1 space-x-2 text-sm text-primary font-medium">
           <button type="button" data-id="csv-paste-tab" class="p-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Copy & Paste</button>
           <button type="button" data-id="csv-upload-tab" class="p-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Upload CSV</button>
         </div>
@@ -49,8 +49,8 @@
     </div>
   </div>
 
-  <div class="bg-alpha-black-25 rounded-xl p-1 mt-5 mx-auto max-w-screen-xl">
-    <div class="text-gray-500 p-2 mb-2">
+  <div class="bg-alpha-black-25 rounded-xl p-1 mt-5 mx-auto max-w-7xl">
+    <div class="text-secondary p-2 mb-2">
       <div class="flex gap-2 mb-2">
         <%= lucide_icon("info", class: "w-5 h-5 shrink-0") %>
         <p class="text-sm"><%= t(".instructions_1") %></p>

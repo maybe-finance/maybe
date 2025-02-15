@@ -24,7 +24,7 @@ class Demo::Generator
     puts "Data cleared"
 
     family_names.each_with_index do |family_name, index|
-      create_family_and_user!(family_name, "user#{index == 0 ? "" : index + 1}@maybe.local", data_enrichment_enabled: index == 0)
+      create_family_and_user!(family_name, "user#{index == 0 ? "" : index + 1}@maybe.local")
     end
 
     puts "Users reset"
@@ -231,12 +231,12 @@ class Demo::Generator
 
     def load_securities!
       # Create an unknown security to simulate edge cases
-      Security.create! ticker: "UNKNOWN", name: "Unknown Demo Stock", exchange_mic: "UNKNOWN"
+      Security.create! ticker: "UNKNOWN", name: "Unknown Demo Stock"
 
       securities = [
-        { ticker: "AAPL", exchange_mic: "NASDAQ", name: "Apple Inc.", reference_price: 210 },
-        { ticker: "TM", exchange_mic: "NYSE", name: "Toyota Motor Corporation", reference_price: 202 },
-        { ticker: "MSFT", exchange_mic: "NASDAQ", name: "Microsoft Corporation", reference_price: 455 }
+        { ticker: "AAPL", exchange_mic: "XNGS", exchange_operating_mic: "XNAS", name: "Apple Inc.", reference_price: 210 },
+        { ticker: "TM", exchange_mic: "XNYS", exchange_operating_mic: "XNYS", name: "Toyota Motor Corporation", reference_price: 202 },
+        { ticker: "MSFT", exchange_mic: "XNGS", exchange_operating_mic: "XNAS", name: "Microsoft Corporation", reference_price: 455 }
       ]
 
       securities.each do |security_attributes|

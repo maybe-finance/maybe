@@ -65,6 +65,7 @@ Rails.application.routes.draw do
 
   resources :imports, only: %i[index new show create destroy] do
     post :publish, on: :member
+    put :revert, on: :member
 
     resource :upload, only: %i[show update], module: :import
     resource :configuration, only: %i[show update], module: :import
@@ -177,11 +178,14 @@ Rails.application.routes.draw do
   end
 
   resources :plaid_items, only: %i[create destroy] do
-    post :sync, on: :member
+    member do
+      post :sync
+    end
   end
 
   namespace :webhooks do
     post "plaid"
+    post "plaid_eu"
     post "stripe"
   end
 

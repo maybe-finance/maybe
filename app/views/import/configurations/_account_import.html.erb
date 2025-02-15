@@ -4,6 +4,7 @@
   <%= form.select :entity_type_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Entity Type" } %>
   <%= form.select :name_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Name (optional)" } %>
   <%= form.select :amount_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Balance" } %>
+  <%= form.select :currency_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Currency" } %>
 
   <%= form.submit "Apply configuration", class: "w-full btn btn--primary", disabled: import.complete? %>
 <% end %>
