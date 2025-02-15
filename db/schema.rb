@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema[7.2].define(version: 2025_02_12_163624) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_15_160141) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -387,6 +386,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_12_163624) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "exchange"
+    t.string "exchange_operating_mic"
     t.index ["import_id"], name: "index_import_rows_on_import_id"
   end
 
@@ -419,6 +419,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_12_163624) do
     t.string "currency", default: "USD"
     t.string "number_format", default: "1,234.56"
     t.string "exchange_col_label"
+    t.string "exchange_operating_mic_col_label"
     t.index ["family_id"], name: "index_imports_on_family_id"
   end
 
@@ -546,7 +547,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_12_163624) do
     t.index ["outflow_transaction_id"], name: "index_rejected_transfers_on_outflow_transaction_id"
   end
 
-create_table "securities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "securities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "ticker", null: false
     t.string "name"
     t.datetime "created_at", null: false
