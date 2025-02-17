@@ -1,3 +1,8 @@
 class IncomeStatement
-  def initialize(family, start_date:, end_date: Date.current)
+  attr_reader :family, :period
+
+  def initialize(family, period: Period.last_30_days)
+    @family = family
+    @period = period
+  end
 end

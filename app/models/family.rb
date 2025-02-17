@@ -40,6 +40,10 @@ class Family < ApplicationRecord
     @balance_sheet ||= BalanceSheet.new(self)
   end
 
+  def income_statement(period: Period.last_30_days)
+    IncomeStatement.new(self, period: period)
+  end
+
   def sync_data(start_date: nil)
     update!(last_synced_at: Time.current)
 

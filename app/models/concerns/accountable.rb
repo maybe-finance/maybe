@@ -30,7 +30,7 @@ module Accountable
     end
 
     def display_name
-      self.name.humanize.pluralize
+      self.name.pluralize.titleize
     end
 
     def balance_money(family)

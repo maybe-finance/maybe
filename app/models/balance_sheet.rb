@@ -9,6 +9,18 @@ class BalanceSheet
     @family = family
   end
 
+  def total_assets
+    totals_query.filter { |t| t.classification == "asset" }.sum(&:converted_balance)
+  end
+
+  def total_liabilities
+    totals_query.filter { |t| t.classification == "liability" }.sum(&:converted_balance)
+  end
+
+  def net_worth
+    total_assets - total_liabilities
+  end
+
   def classification_groups
     [
       ClassificationGroup.new(
@@ -24,18 +36,6 @@ class BalanceSheet
         account_groups: account_groups("liability")
       )
     ]
-  end
-
-  def total_assets
-    totals_query.filter { |t| t.classification == "asset" }.sum(&:converted_balance)
-  end
-
-  def total_liabilities
-    totals_query.filter { |t| t.classification == "liability" }.sum(&:converted_balance)
-  end
-
-  def net_worth
-    total_assets - total_liabilities
   end
 
   def account_groups(classification)
@@ -62,9 +62,6 @@ class BalanceSheet
         end.sort_by(&:weight).reverse
       )
     end.sort_by(&:weight).reverse
-  end
-
-  def series(accounts, period: Period.last_30_days, favorable_direction: "up")
   end
 
   def net_worth_series(period: Period.last_30_days)

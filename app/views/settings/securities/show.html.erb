@@ -20,7 +20,7 @@
       </div>
 
       <% if Current.user.otp_required? %>
-        <%= button_to t(".disable_mfa"), disable_mfa_path, 
+        <%= button_to t(".disable_mfa"), disable_mfa_path,
             method: :delete,
             class: "btn btn--secondary flex items-center gap-1",
             data: { turbo_confirm: {

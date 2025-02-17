@@ -50,7 +50,7 @@ module Account::Chartable
           )
           SELECT
             d.date,
-            SUM(ab.balance * COALESCE(er.rate, 1)) as balance,
+            SUM(CASE WHEN accounts.classification = 'asset' THEN ab.balance ELSE -ab.balance END * COALESCE(er.rate, 1)) as balance,
             COUNT(CASE WHEN accounts.currency <> :target_currency AND er.rate IS NULL THEN 1 END) as missing_rates
           FROM dates d
           LEFT JOIN accounts ON accounts.id IN (#{all.select(:id).to_sql})
