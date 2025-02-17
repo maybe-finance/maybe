@@ -102,14 +102,12 @@ class Period
   end
 
   def days
-    (end_date - start_date).to_i
+    (end_date - start_date).to_i + 1
   end
 
   def interval
-    if days > 365
+    if days > 90
       "1 month"
-    elsif days > 90
-      "1 week"
     else
       "1 day"
     end

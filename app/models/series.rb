@@ -47,6 +47,10 @@ class Series
     @values = values
   end
 
+  def current
+    values.last.trend.current
+  end
+
   def any?
     values.any?
   end

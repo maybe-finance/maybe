@@ -7,9 +7,6 @@ en:
       sign_in: Sign in
       sign_up: Create account
       your_account: Your account
-    issues:
-      action: How to fix this issue
-      description: Issue Description
     shared:
       footer:
         privacy_policy: Privacy Policy

@@ -5,10 +5,10 @@
         <%= yield :title %>
       <% end %>
 
-      <%= tag.h3 t(".description") %>
+      <%= tag.h3 "Issue Description" %>
       <%= yield :description %>
 
-      <%= tag.h3 t(".action") %>
+      <%= tag.h3 "How to fix this issue" %>
       <%= yield :action %>
     </article>
   <% end %>

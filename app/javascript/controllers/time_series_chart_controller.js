@@ -55,6 +55,8 @@ export default class extends Controller {
       date_formatted: d.date_formatted,
       trend: d.trend,
     }));
+
+    console.log(this._normalDataPoints);
   }
 
   _rememberInitialContainerSize() {

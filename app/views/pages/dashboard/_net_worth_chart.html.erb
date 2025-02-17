@@ -5,7 +5,7 @@
     <div class="space-y-2">
       <p class="text-sm text-secondary font-medium">Net Worth</p>
       <p class="text-primary -space-x-0.5 text-xl font-medium">
-        <%= format_money series.last.value %>
+        <%= series.current.format %>
       </p>
       <% if series.trend.nil? %>
         <p class="text-sm text-secondary">Data not available for the selected period</p>
@@ -24,18 +24,14 @@
   <% end %>
 </div>
 
-<% if series.has_current_day_value? %>
+<% if series.any? %>
   <div
     id="netWorthChart"
     class="w-full flex-1 min-h-52"
     data-controller="time-series-chart"
     data-time-series-chart-data-value="<%= series.to_json %>"></div>
-<% elsif series.empty? %>
-  <div class="w-full h-full flex items-center justify-center">
-    <p class="text-secondary text-sm">No data available for the selected period.</p>
-  </div>
 <% else %>
   <div class="w-full h-full flex items-center justify-center">
-    <p class="text-secondary text-sm animate-pulse">Calculating latest balance data...</p>
+    <p class="text-secondary text-sm">No data available for the selected period.</p>
   </div>
 <% end %>

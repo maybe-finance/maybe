@@ -53,7 +53,6 @@ class Account::Holding < ApplicationRecord
   end
 
   private
-
     def calculate_trend
       return nil unless amount_money
 

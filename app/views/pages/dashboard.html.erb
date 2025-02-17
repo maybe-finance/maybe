@@ -19,7 +19,7 @@
   </header>
 
   <section class="bg-white py-4 rounded-xl shadow-border-xs">
-    <%= render partial: "pages/dashboard/net_worth_chart", locals: { series: @balance_sheet.net_worth_series, period: @period } %>
+    <%= render partial: "pages/dashboard/net_worth_chart", locals: { series: @balance_sheet.net_worth_series(period: @period), period: @period } %>
   </section>
 
   <section>

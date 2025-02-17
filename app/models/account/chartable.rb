@@ -13,6 +13,20 @@ module Account::Chartable
         }
       ])
 
+      balances = gapfill_balances(balances)
+
+      values = [ nil, *balances ].each_cons(2).map do |prev, curr|
+        Series::Value.new(
+          date: curr.date,
+          date_formatted: I18n.l(curr.date, format: :short),
+          trend: Trend.new(
+            current: Money.new(curr.balance, currency),
+            previous: prev.nil? ? nil : Money.new(prev.balance, currency),
+            favorable_direction: favorable_direction
+          )
+        )
+      end
+
       Series.new(
         start_date: period.start_date,
         end_date: period.end_date,
@@ -22,17 +36,7 @@ module Account::Chartable
           previous: Money.new(balances.first&.balance || 0, currency),
           favorable_direction: favorable_direction
         ),
-        values: balances.map do |balance|
-          Series::Value.new(
-            date: balance.date,
-            date_formatted: I18n.l(balance.date, format: :short),
-            trend: Trend.new(
-              current: Money.new(balance.balance, currency),
-              previous: Money.new(balance.prior_balance, currency),
-              favorable_direction: favorable_direction
-            )
-          )
-        end
+        values: values
       )
     end
 
@@ -41,34 +45,46 @@ module Account::Chartable
         <<~SQL
           WITH dates as (
             SELECT generate_series(DATE :start_date, DATE :end_date, :interval::interval)::date as date
-          ), balances as (
-            SELECT
-              d.date,
-              COALESCE(SUM(ab.balance * COALESCE(er.rate, 1)), 0) as balance,
-              COUNT(CASE WHEN accounts.currency <> :target_currency AND er.rate IS NULL THEN 1 END) as missing_rates
-            FROM dates d
-            LEFT JOIN accounts ON accounts.id IN (#{all.select(:id).to_sql})
-            LEFT JOIN account_balances ab ON (
-              ab.date = d.date AND
-              ab.currency = accounts.currency AND
-              ab.account_id = accounts.id
-            )
-            LEFT JOIN exchange_rates er ON (
-              er.date = ab.date AND
-              er.from_currency = accounts.currency AND
-              er.to_currency = :target_currency
-            )
-            GROUP BY d.date
-            ORDER BY d.date
+            UNION DISTINCT
+            SELECT CURRENT_DATE -- Ensures we always end on current date, regardless of interval
           )
           SELECT
-            balances.date,
-            COALESCE(balances.balance, 0) as balance,
-            COALESCE(LAG(balances.balance, 1) OVER (ORDER BY date), 0) as prior_balance,
-            balances.missing_rates
-          FROM balances
-          ORDER BY date
+            d.date,
+            SUM(ab.balance * COALESCE(er.rate, 1)) as balance,
+            COUNT(CASE WHEN accounts.currency <> :target_currency AND er.rate IS NULL THEN 1 END) as missing_rates
+          FROM dates d
+          LEFT JOIN accounts ON accounts.id IN (#{all.select(:id).to_sql})
+          LEFT JOIN account_balances ab ON (
+            ab.date = d.date AND
+            ab.currency = accounts.currency AND
+            ab.account_id = accounts.id
+          )
+          LEFT JOIN exchange_rates er ON (
+            er.date = ab.date AND
+            er.from_currency = accounts.currency AND
+            er.to_currency = :target_currency
+          )
+          GROUP BY d.date
+          ORDER BY d.date
         SQL
+      end
+
+      def gapfill_balances(balances)
+        gapfilled = []
+
+        prev_balance = nil
+
+        [ nil, *balances ].each_cons(2).each_with_index do |(prev, curr), index|
+          if index == 0 && curr.balance.nil?
+            curr.balance = 0 # Ensure all series start with a non-nil balance
+          elsif curr.balance.nil?
+            curr.balance = prev.balance
+          end
+
+          gapfilled << curr
+        end
+
+        gapfilled
       end
   end
 
