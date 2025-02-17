@@ -63,7 +63,7 @@ class Trend
     {
       value: value,
       percent: percent,
-      percent_formatted: percent.finite? ? "#{percent}%" : "∞",
+      percent_formatted: percent.finite? ? "#{percent}%" : (percent > 0 ? "＋∞" : "-∞"),
       current: current,
       previous: previous,
       color: color,

@@ -377,7 +377,7 @@ export default class extends Controller {
               stroke-width="1"></circle>
           </svg>
 
-          ${datum.trend.percent_formatted}
+          ${this._extractFormattedValue(datum.trend.current)}
         </div>
 
         ${
@@ -399,9 +399,9 @@ export default class extends Controller {
 
   _extractNumericValue = (numeric) => {
     if (typeof numeric === "object" && "amount" in numeric) {
-      return numeric.amount;
+      return Number(numeric.amount);
     }
-    return numeric;
+    return Number(numeric);
   };
 
   _extractFormattedValue = (numeric) => {
@@ -469,14 +469,6 @@ export default class extends Controller {
 
   get _trendColor() {
     return this.dataValue.trend.color;
-  }
-
-  get _trendDirection() {
-    return this.dataValue.trend.direction;
-  }
-
-  get _favorableDirection() {
-    return this.dataValue.trend.favorable_direction;
   }
 
   get _d3Line() {
