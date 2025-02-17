@@ -1,5 +1,5 @@
 class Account < ApplicationRecord
-  include Syncable, Monetizable, Issuable, Seriesable
+  include Syncable, Monetizable, Issuable, Chartable
 
   validates :name, :balance, :currency, presence: true
 
@@ -84,10 +84,6 @@ class Account < ApplicationRecord
     accountable.post_sync
   end
 
-  def series(period: Period.last_30_days)
-    self.class.where(id: id).series(currency: currency, period: period, favorable_direction: favorable_direction)
-  end
-
   def original_balance
     balance_amount = balances.chronological.first&.balance || balance
     Money.new(balance_amount, currency)
@@ -95,10 +91,6 @@ class Account < ApplicationRecord
 
   def current_holdings
     holdings.where(currency: currency, date: holdings.maximum(:date)).order(amount: :desc)
-  end
-
-  def favorable_direction
-    classification == "asset" ? "up" : "down"
   end
 
   def enrich_data

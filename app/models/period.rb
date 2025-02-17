@@ -156,6 +156,6 @@ class Period
         return
       end
 
-      errors.add(:start_date, "must be before end date") if start_date >= end_date
+      errors.add(:start_date, "must be before end date") if start_date > end_date
     end
 end

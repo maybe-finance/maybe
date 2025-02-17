@@ -5,6 +5,6 @@ class AccountableSparklinesController < ApplicationController
                      .accounts
                      .active
                      .where(accountable: @accountable)
-                     .series(currency: Current.family.currency, favorable_direction: @accountable.favorable_direction)
+                     .balance_series(currency: Current.family.currency, favorable_direction: @accountable.favorable_direction)
   end
 end

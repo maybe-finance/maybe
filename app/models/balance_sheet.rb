@@ -68,7 +68,7 @@ class BalanceSheet
   end
 
   def net_worth_series(period: Period.last_30_days)
-    family.accounts.active.series(currency: currency, period: period, favorable_direction: "up")
+    family.accounts.active.balance_series(currency: currency, period: period, favorable_direction: "up")
   end
 
   def currency
@@ -78,6 +78,10 @@ class BalanceSheet
   private
     ClassificationGroup = Struct.new(:key, :display_name, :icon, :account_groups, keyword_init: true)
     AccountGroup = Struct.new(:name, :classification, :total, :total_money, :weight, :accounts, :color, :missing_rates?, keyword_init: true)
+
+    def active_accounts
+      family.accounts.active
+    end
 
     def totals_query
       @totals_query ||= family.accounts

@@ -7,7 +7,6 @@ export default class extends Controller {
     strokeWidth: { type: Number, default: 2 },
     useLabels: { type: Boolean, default: true },
     useTooltip: { type: Boolean, default: true },
-    usePercentSign: Boolean,
   };
 
   _d3SvgMemo = null;
@@ -52,10 +51,9 @@ export default class extends Controller {
 
   _normalizeDataPoints() {
     this._normalDataPoints = (this.dataValue.values || []).map((d) => ({
-      ...d,
       date: new Date(`${d.date}T00:00:00Z`),
-      value: d.value.amount ? +d.value.amount : +d.value,
-      currency: d.value.currency,
+      date_formatted: d.date_formatted,
+      trend: d.trend,
     }));
   }
 
@@ -141,13 +139,13 @@ export default class extends Controller {
       .append("stop")
       .attr("class", "start-color")
       .attr("offset", "0%")
-      .attr("stop-color", this._trendColor);
+      .attr("stop-color", this.dataValue.trend.color);
 
     gradient
       .append("stop")
       .attr("class", "middle-color")
       .attr("offset", "100%")
-      .attr("stop-color", this._trendColor);
+      .attr("stop-color", this.dataValue.trend.color);
 
     gradient
       .append("stop")
@@ -215,7 +213,7 @@ export default class extends Controller {
       .attr("x2", 0)
       .attr(
         "y1",
-        this._d3YScale(d3.max(this._normalDataPoints, (d) => d.value)),
+        this._d3YScale(d3.max(this._normalDataPoints, this._getDatumValue)),
       )
       .attr("y2", this._d3ContainerHeight);
 
@@ -243,7 +241,7 @@ export default class extends Controller {
           .area()
           .x((d) => this._d3XScale(d.date))
           .y0(this._d3ContainerHeight)
-          .y1((d) => this._d3YScale(d.value)),
+          .y1((d) => this._d3YScale(this._getDatumValue(d))),
       );
 
     // Apply the gradient + clip path
@@ -323,7 +321,7 @@ export default class extends Controller {
           .append("circle")
           .attr("class", "data-point-circle")
           .attr("cx", this._d3XScale(d.date))
-          .attr("cy", this._d3YScale(d.value))
+          .attr("cy", this._d3YScale(this._getDatumValue(d)))
           .attr("r", 8)
           .attr("fill", this._trendColor)
           .attr("fill-opacity", "0.1")
@@ -334,7 +332,7 @@ export default class extends Controller {
           .append("circle")
           .attr("class", "data-point-circle")
           .attr("cx", this._d3XScale(d.date))
-          .attr("cy", this._d3YScale(d.value))
+          .attr("cy", this._d3YScale(this._getDatumValue(d)))
           .attr("r", 3)
           .attr("fill", this._trendColor)
           .attr("pointer-events", "none");
@@ -374,24 +372,20 @@ export default class extends Controller {
               cx="5"
               cy="5"
               r="4"
-              stroke="${this._tooltipTrendColor(datum)}"
+              stroke="${datum.trend.color}"
               fill="transparent"
               stroke-width="1"></circle>
           </svg>
 
-          ${this._tooltipValue(datum)}${this.usePercentSignValue ? "%" : ""}
+          ${datum.trend.percent_formatted}
         </div>
 
         ${
-          this.usePercentSignValue ||
-          datum.trend.value === 0 ||
-          datum.trend.value.amount === 0
-            ? `
-          <span style="width: 80px;"></span>
-        `
+          datum.trend.value === 0
+            ? `<span style="width: 80px;"></span>`
             : `
-          <span style="color: ${this._tooltipTrendColor(datum)};">
-            ${this._tooltipChange(datum)} (${datum.trend.percent}%)
+          <span style="color: ${datum.trend.color};">
+            ${this._extractFormattedValue(datum.trend.value)} (${datum.trend.percent_formatted})
           </span>
         `
         }
@@ -399,55 +393,23 @@ export default class extends Controller {
     `;
   }
 
-  _tooltipTrendColor(datum) {
-    return {
-      up:
-        datum.trend.favorable_direction === "up"
-          ? "var(--color-success)"
-          : "var(--color-destructive)",
-      down:
-        datum.trend.favorable_direction === "down"
-          ? "var(--color-success)"
-          : "var(--color-destructive)",
-      flat: "var(--color-gray-500)",
-    }[datum.trend.direction];
-  }
+  _getDatumValue = (datum) => {
+    return this._extractNumericValue(datum.trend.current);
+  };
 
-  _tooltipValue(datum) {
-    if (datum.currency) {
-      return this._currencyValue(datum);
+  _extractNumericValue = (numeric) => {
+    if (typeof numeric === "object" && "amount" in numeric) {
+      return numeric.amount;
     }
-    return datum.value;
-  }
+    return numeric;
+  };
 
-  _tooltipChange(datum) {
-    if (datum.currency) {
-      return this._currencyChange(datum);
+  _extractFormattedValue = (numeric) => {
+    if (typeof numeric === "object" && "formatted" in numeric) {
+      return numeric.formatted;
     }
-    return this._decimalChange(datum);
-  }
-
-  _currencyValue(datum) {
-    return Intl.NumberFormat(undefined, {
-      style: "currency",
-      currency: datum.currency,
-    }).format(datum.value);
-  }
-
-  _currencyChange(datum) {
-    return Intl.NumberFormat(undefined, {
-      style: "currency",
-      currency: datum.currency,
-      signDisplay: "always",
-    }).format(datum.trend.value.amount);
-  }
-
-  _decimalChange(datum) {
-    return Intl.NumberFormat(undefined, {
-      style: "decimal",
-      signDisplay: "always",
-    }).format(datum.trend.value);
-  }
+    return numeric;
+  };
 
   _createMainSvg() {
     return this._d3Container
@@ -506,13 +468,7 @@ export default class extends Controller {
   }
 
   get _trendColor() {
-    if (this._trendDirection === "flat") {
-      return "var(--color-gray-500)";
-    }
-    if (this._trendDirection === this._favorableDirection) {
-      return "var(--color-green-500)";
-    }
-    return "var(--color-destructive)";
+    return this.dataValue.trend.color;
   }
 
   get _trendDirection() {
@@ -527,7 +483,7 @@ export default class extends Controller {
     return d3
       .line()
       .x((d) => this._d3XScale(d.date))
-      .y((d) => this._d3YScale(d.value));
+      .y((d) => this._d3YScale(this._getDatumValue(d)));
   }
 
   get _d3XScale() {
@@ -539,8 +495,8 @@ export default class extends Controller {
 
   get _d3YScale() {
     const reductionPercent = this.useLabelsValue ? 0.3 : 0.05;
-    const dataMin = d3.min(this._normalDataPoints, (d) => d.value);
-    const dataMax = d3.max(this._normalDataPoints, (d) => d.value);
+    const dataMin = d3.min(this._normalDataPoints, this._getDatumValue);
+    const dataMax = d3.max(this._normalDataPoints, this._getDatumValue);
     const padding = (dataMax - dataMin) * reductionPercent;
 
     return d3

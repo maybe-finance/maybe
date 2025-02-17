@@ -44,7 +44,7 @@ This codebase adopts a "skinny controller, fat models" convention.  Furthermore,
 - Organize large pieces of business logic into Rails concerns and POROs (Plain ole' Ruby Objects)
 - While a Rails concern _may_ offer shared functionality (i.e. "duck types"), it can also be a "one-off" concern that is only included in one place for better organization and readability.
 - When concerns are used for code organization, they should be organized around the "traits" of a model; not for simply moving code to another spot in the codebase.
-- When possible, models should answer questions about themselves—for example, we might have a method, `account.series` that returns a time-series of the account's most recent balances.  We prefer this over something more service-like such as `AccountSeries.new(account).call`.
+- When possible, models should answer questions about themselves—for example, we might have a method, `account.balance_series` that returns a time-series of the account's most recent balances.  We prefer this over something more service-like such as `AccountSeries.new(account).call`.
 
 ### Convention 3: Prefer server-side solutions over client-side solutions
 

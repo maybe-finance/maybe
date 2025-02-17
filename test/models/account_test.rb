@@ -15,12 +15,12 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test "generates balance series" do
-    assert_equal 2, @account.series.values.count
+    assert_equal 2, @account.balance_series.values.count
   end
 
   test "generates balance series with single value if no balances" do
     @account.balances.delete_all
-    assert_equal 1, @account.series.values.count
+    assert_equal 1, @account.balance_series.values.count
   end
 
   test "generates balance series in period" do
@@ -28,12 +28,12 @@ class AccountTest < ActiveSupport::TestCase
     @account.balances.create! date: 31.days.ago.to_date, balance: 5000, currency: "USD" # out of period range
     @account.balances.create! date: 30.days.ago.to_date, balance: 5000, currency: "USD" # in range
 
-    assert_equal 1, @account.series(period: Period.last_30_days).values.count
+    assert_equal 1, @account.balance_series(period: Period.last_30_days).values.count
   end
 
   test "generates empty series if no balances and no exchange rate" do
     with_env_overrides SYNTH_API_KEY: nil do
-      assert_equal 0, @account.series(currency: "NZD").values.count
+      assert_equal 0, @account.balance_series(currency: "NZD").values.count
     end
   end
 end

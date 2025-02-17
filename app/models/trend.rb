@@ -5,20 +5,20 @@ class Trend
 
   attr_reader :current, :previous, :favorable_direction
 
-  validate :values_must_be_of_same_type, :values_must_be_of_known_type
+  validates :current, presence: true
 
   def initialize(current:, previous:, favorable_direction: nil)
     @current = current
-    @previous = previous
+    @previous = previous || 0
     @favorable_direction = (favorable_direction.presence_in(DIRECTIONS) || "up").inquiry
 
     validate!
   end
 
   def direction
-    if previous.nil? || current == previous
+    if current == previous
       "flat"
-    elsif current && current > previous
+    elsif current > previous
       "up"
     else
       "down"
@@ -47,78 +47,40 @@ class Trend
   end
 
   def value
-    if previous.nil?
-      current.is_a?(Money) ? Money.new(0, current.currency) : 0
-    else
-      current - previous
-    end
+    current - previous
   end
 
   def percent
-    if previous.nil? || (previous.zero? && current.zero?)
-      0.0
-    elsif previous.zero?
-      Float::INFINITY
-    else
-      change = (current_amount - previous_amount)
-      base = previous_amount.to_f
+    return 0.0 if previous.zero? && current.zero?
+    return Float::INFINITY if previous.zero?
 
-      (change / base * 100).round(1).to_f
-    end
+    change = (current - previous).to_f
+
+    (change / previous.to_f * 100).round(1)
   end
 
   def as_json
     {
-      favorable_direction: favorable_direction,
-      direction: direction,
       value: value,
-      percent: percent
-    }.as_json
+      percent: percent,
+      percent_formatted: percent.finite? ? "#{percent}%" : "∞",
+      current: current,
+      previous: previous,
+      color: color,
+      icon: icon
+    }
   end
 
   private
     def red_hex
-      "#F13636" # red-500
+      "var(--color-destructive)"
     end
 
     def green_hex
-      "#10A861" # green-600
+      "var(--color-success)"
     end
 
     def gray_hex
-      "#737373" # gray-500
-    end
-
-    def values_must_be_of_same_type
-      unless current.class == previous.class || [ previous, current ].any?(&:nil?)
-        errors.add :current, :must_be_of_the_same_type_as_previous
-        errors.add :previous, :must_be_of_the_same_type_as_current
-      end
-    end
-
-    def values_must_be_of_known_type
-      unless current.is_a?(Money) || current.is_a?(Numeric) || current.nil?
-        errors.add :current, :must_be_of_type_money_numeric_or_nil
-      end
-
-      unless previous.is_a?(Money) || previous.is_a?(Numeric) || previous.nil?
-        errors.add :previous, :must_be_of_type_money_numeric_or_nil
-      end
-    end
-
-    def current_amount
-      extract_numeric current
-    end
-
-    def previous_amount
-      extract_numeric previous
-    end
-
-    def extract_numeric(obj)
-      if obj.is_a? Money
-        obj.amount
-      else
-        obj
-      end
+      "var(--color-gray)"
     end
 end

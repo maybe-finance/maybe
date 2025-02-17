@@ -38,13 +38,15 @@
             { date: Date.current, value: 265 }
           ] %>
 
+          <% placeholder_series = Series.from_raw_values(placeholder_series_data) %>
+
           <div class="flex items-center w-2/5">
             <div class="h-12 w-full">
               <div
                 id="previewChart"
                 class="h-full w-full"
                 data-controller="time-series-chart"
-                data-time-series-chart-data-value="<%= TimeSeries.new(placeholder_series_data).to_json %>"
+                data-time-series-chart-data-value="<%= placeholder_series.to_json %>"
                 data-time-series-chart-use-labels-value="false"
                 data-time-series-chart-use-tooltip-value="false"></div>
             </div>

@@ -1,5 +1,4 @@
 class OnboardingsController < ApplicationController
-  layout "application"
   before_action :set_user
   before_action :load_invitation
 
