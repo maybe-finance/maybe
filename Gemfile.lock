@@ -218,8 +218,8 @@ GEM
       rails-i18n
       rainbow (>= 2.2.2, < 4.0)
       terminal-table (>= 1.5.1)
-    image_processing (1.13.0)
-      mini_magick (>= 4.9.5, < 5)
+    image_processing (1.14.0)
+      mini_magick (>= 4.9.5, < 6)
       ruby-vips (>= 2.0.17, < 3)
     importmap-rails (2.1.0)
       actionpack (>= 6.0.0)
@@ -272,7 +272,9 @@ GEM
       net-smtp
     marcel (1.0.4)
     matrix (0.4.2)
-    mini_magick (4.13.2)
+    mini_magick (5.1.2)
+      benchmark
+      logger
     mini_mime (1.1.5)
     minitest (5.25.4)
     mocha (2.7.1)
@@ -439,7 +441,7 @@ GEM
     ruby-lsp-rails (0.4.0)
       ruby-lsp (>= 0.23.0, < 0.24.0)
     ruby-progressbar (1.13.0)
-    ruby-vips (2.2.2)
+    ruby-vips (2.2.3)
       ffi (~> 1.12)
       logger
     ruby2_keywords (0.0.5)
