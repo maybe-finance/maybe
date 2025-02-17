@@ -134,7 +134,7 @@ module ApplicationHelper
 
   def totals_by_currency(collection:, money_method:, separator: " | ", negate: false)
     collection.group_by(&:currency)
-              .transform_values { |item| negate ? item.sum(&money_method) * -1 : item.sum(&money_method) }
+              .transform_values { |item| calculate_total(item, money_method, negate) }
               .map { |_currency, money| format_money(money) }
               .join(separator)
   end
@@ -147,10 +147,18 @@ module ApplicationHelper
     cookies[:admin] == "true"
   end
 
-  def trend_percent(value)
-    return "+\u221E" if value.infinite? && value > 0
-    return "-\u221E" if value.infinite? && value < 0
+  private
 
-    number_to_percentage(value, precision: 1)
-  end
+    def calculate_total(item, money_method, negate)
+      items = item.reject { |i| i.respond_to?(:entryable) && i.entryable.transfer? }
+      total = items.sum(&money_method)
+      negate ? -total : total
+    end
+
+    def trend_percent(value)
+      return "+\u221E" if value.infinite? && value > 0
+      return "-\u221E" if value.infinite? && value < 0
+
+      number_to_percentage(value, precision: 1)
+    end
 end

@@ -16,7 +16,9 @@
     </div>
 
     <% if totals %>
-      <%= totals_by_currency(collection: entries, money_method: :amount_money, negate: true) %>
+      <div id="entry-group-<%= date %>-totals">
+        <%= totals_by_currency(collection: entries, money_method: :amount_money, negate: true) %>
+      </div>
     <% end %>
   </div>
   <div class="bg-white shadow-xs rounded-md border border-alpha-black-25 divide-y divide-alpha-black-50">
