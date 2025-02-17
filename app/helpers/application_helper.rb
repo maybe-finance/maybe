@@ -147,18 +147,17 @@ module ApplicationHelper
     cookies[:admin] == "true"
   end
 
-  private
+  def trend_percent(value)
+    return "+\u221E" if value.infinite? && value > 0
+    return "-\u221E" if value.infinite? && value < 0
 
+    number_to_percentage(value, precision: 1)
+  end
+
+  private
     def calculate_total(item, money_method, negate)
       items = item.reject { |i| i.respond_to?(:entryable) && i.entryable.transfer? }
       total = items.sum(&money_method)
       negate ? -total : total
-    end
-
-    def trend_percent(value)
-      return "+\u221E" if value.infinite? && value > 0
-      return "-\u221E" if value.infinite? && value < 0
-
-      number_to_percentage(value, precision: 1)
     end
 end
