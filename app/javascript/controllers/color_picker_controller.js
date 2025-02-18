@@ -55,6 +55,7 @@ export default class extends Controller {
 
         const span = document.createElement("span");
         span.style.color = "var(--color-destructive)"
+        span.classList.add("text-sm")
         span.textContent = "Choose a darker color";
         this.paletteSectionTarget.prepend(span);
       } else{
