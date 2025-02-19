@@ -9,8 +9,7 @@ class TradeImport < Import
         # Try to find or create security with exchange validation
         security = find_or_create_security(
           ticker: row.ticker,
-          exchange_operating_mic: row.exchange_operating_mic,
-          currency: row.currency.presence || account.currency
+          exchange_operating_mic: row.exchange_operating_mic
         )
 
         entry = account.entries.build \
@@ -62,38 +61,44 @@ class TradeImport < Import
   end
 
   private
+    def find_or_create_security(ticker:, exchange_operating_mic:)
+      # Cache provider responses so that when we're looping through rows and importing,
+      # we only hit our provider for the unique combinations of ticker / exchange_operating_mic
+      cache_key = [ ticker, exchange_operating_mic ]
+      @provider_securities_cache ||= {}
 
-    def find_or_create_security(ticker:, exchange_operating_mic:, currency:)
-      # First try to find an existing security
-      security = Security.find_by(
-        ticker: ticker,
-        exchange_operating_mic: exchange_operating_mic
-      )
-
-      return security if security.present?
-
-      # Create new security
-      security = Security.new(
-        ticker: ticker,
-        exchange_operating_mic: exchange_operating_mic
-      )
-
-      # Only validate with Synth if exchange_operating_mic is provided and Synth is configured
-      if exchange_operating_mic.present? && Security.security_prices_provider.present?
-        response = Security.security_prices_provider.fetch_security_prices(
-          ticker: ticker,
-          mic_code: exchange_operating_mic,
-          start_date: Date.current,
-          end_date: Date.current
-        )
-
-        if !response.success?
-          raise ImportError, "Unable to validate security #{ticker} on exchange #{exchange_operating_mic}. Prices could not be found."
+      provider_security = @provider_securities_cache[cache_key] ||= begin
+        if Security.security_prices_provider.present?
+          begin
+            response = Security.security_prices_provider.search_securities(
+              query: ticker,
+              exchange_operating_mic: exchange_operating_mic
+            )
+            response.success? ? response.securities.first : nil
+          rescue StandardError => e
+            Rails.logger.error "Failed to fetch security data: #{e.message}"
+            nil
+          end
         end
       end
 
-      # If we get here, either no exchange was provided or validation passed
-      security.save!
-      security
+      if provider_security&.[](:ticker) && provider_security&.[](:exchange_operating_mic)
+        Security.find_or_create_by!(
+          ticker: provider_security[:ticker],
+          exchange_operating_mic: provider_security[:exchange_operating_mic]
+        ) do |security|
+          security.name = provider_security[:name]
+          security.country_code = provider_security[:country_code]
+          security.logo_url = provider_security[:logo_url]
+          security.exchange_acronym = provider_security[:exchange_acronym]
+          security.exchange_mic = provider_security[:exchange_mic]
+        end
+      else
+        # If provider data is not available, create security with just the ticker and exchange
+        Security.find_or_create_by!(
+          ticker: ticker,
+          exchange_operating_mic: exchange_operating_mic
+        )
+      end
     end
 end

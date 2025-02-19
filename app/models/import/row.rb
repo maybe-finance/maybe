@@ -3,13 +3,11 @@ class Import::Row < ApplicationRecord
 
   validates :amount, numericality: true, allow_blank: true
   validates :currency, presence: true
-  validates :exchange, presence: true, if: -> { import.type == "TradeImport" && import.exchange_col_label.present? }
   validates :exchange_operating_mic, presence: true, if: -> { import.type == "TradeImport" && import.exchange_operating_mic_col_label.present? }
 
   validate :date_valid
   validate :required_columns
   validate :currency_is_valid
-  validate :exchange_operating_mic_is_valid, if: -> { import.type == "TradeImport" && exchange_operating_mic.present? }
 
   scope :ordered, -> { order(:id) }
 
@@ -82,22 +80,6 @@ class Import::Row < ApplicationRecord
         Money::Currency.new(currency)
       rescue Money::Currency::UnknownCurrencyError
         errors.add(:currency, "is not a valid currency code")
-      end
-    end
-
-    def exchange_operating_mic_is_valid
-      return true if exchange_operating_mic.blank?
-      return true unless Security.security_prices_provider.present?
-
-      response = Security.security_prices_provider.fetch_security_prices(
-        ticker: ticker,
-        mic_code: exchange_operating_mic,
-        start_date: Date.current,
-        end_date: Date.current
-      )
-
-      unless response.success?
-        errors.add(:exchange_operating_mic, "is not valid for ticker #{ticker}. No prices found for this combination.")
       end
     end
 end

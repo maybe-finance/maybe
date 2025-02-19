@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_15_160141) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_19_085043) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -385,7 +385,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_15_160141) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "exchange"
     t.string "exchange_operating_mic"
     t.index ["import_id"], name: "index_import_rows_on_import_id"
   end
@@ -418,7 +417,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_15_160141) do
     t.string "error"
     t.string "currency", default: "USD"
     t.string "number_format", default: "1,234.56"
-    t.string "exchange_col_label"
     t.string "exchange_operating_mic_col_label"
     t.index ["family_id"], name: "index_imports_on_family_id"
   end
@@ -556,10 +554,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_15_160141) do
     t.string "exchange_mic"
     t.string "exchange_acronym"
     t.string "logo_url"
-    t.string "currency"
     t.string "exchange_operating_mic"
     t.index ["country_code"], name: "index_securities_on_country_code"
-    t.index ["currency"], name: "index_securities_on_currency"
     t.index ["exchange_operating_mic"], name: "index_securities_on_exchange_operating_mic"
     t.index ["ticker", "exchange_operating_mic"], name: "index_securities_on_ticker_and_exchange_operating_mic", unique: true
   end
