@@ -4,8 +4,8 @@ module Monetizable
   class_methods do
     def monetize(*fields)
       fields.each do |field|
-        define_method("#{field}_money") do
-          value = self.send(field)
+        define_method("#{field}_money") do |**args|
+          value = self.send(field, **args)
 
           return nil if value.nil? || monetizable_currency.nil?
 

@@ -34,6 +34,10 @@ class Budget < ApplicationRecord
     end
   end
 
+  def period
+    Period.new(start_date: start_date, end_date: end_date)
+  end
+
   def sync_budget_categories
     family.categories.expenses.each do |category|
       budget_categories.find_or_create_by(
@@ -53,7 +57,7 @@ class Budget < ApplicationRecord
   end
 
   def transactions
-    family.transactions.incomes_and_expenses.search({ start_date:, end_date: })
+    family.transactions.active.in_period(period)
   end
 
   def name
@@ -64,12 +68,12 @@ class Budget < ApplicationRecord
     budgeted_spending.present?
   end
 
-  def income_categories_with_totals
-    family.income_categories_with_totals(date: start_date)
+  def income_category_totals
+    family.income_statement.income(period: period).category_totals.reject { |ct| ct.category.subcategory? }.sort_by(&:weight).reverse
   end
 
-  def expense_categories_with_totals
-    family.expense_categories_with_totals(date: start_date)
+  def expense_category_totals
+    family.income_statement.expense(period: period).category_totals.reject { |ct| ct.category.subcategory? }.sort_by(&:weight).reverse
   end
 
   def current?
@@ -109,11 +113,11 @@ class Budget < ApplicationRecord
   # Actuals: How much user has spent on each budget category
   # =============================================================================
   def estimated_spending
-    family.budgeting_stats.avg_monthly_expenses&.abs
+    family.income_statement.median_expense(interval: "month")
   end
 
   def actual_spending
-    expense_categories_with_totals.total_money.amount
+    family.income_statement.expense(period: self.period).total
   end
 
   def available_to_spend
@@ -157,15 +161,11 @@ class Budget < ApplicationRecord
   # Income: How much user earned relative to what they expected to earn
   # =============================================================================
   def estimated_income
-    family.budgeting_stats.avg_monthly_income&.abs
+    family.income_statement.median_income(interval: "month")
   end
 
   def actual_income
-    family.transactions
-          .incomes
-          .search({ start_date:, end_date: })
-          .sum("account_entries.amount")
-          .abs
+    family.income_statement.income(period: self.period).total
   end
 
   def actual_income_percent

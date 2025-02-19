@@ -1,5 +1,5 @@
 class Period
-  include ActiveModel::Validations
+  include ActiveModel::Validations, Comparable
 
   attr_reader :start_date, :end_date
 
@@ -97,12 +97,20 @@ class Period
     validate!
   end
 
+  def <=>(other)
+    [ start_date, end_date ] <=> [ other.start_date, other.end_date ]
+  end
+
   def date_range
     start_date..end_date
   end
 
   def days
     (end_date - start_date).to_i + 1
+  end
+
+  def within?(other)
+    start_date >= other.start_date && end_date <= other.end_date
   end
 
   def interval

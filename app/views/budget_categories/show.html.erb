@@ -4,7 +4,7 @@
       <div>
         <p class="text-sm text-secondary">Category</p>
         <h3 class="text-2xl font-medium text-primary">
-          <%= @budget_category.category.name %>
+          <%= @budget_category.name %>
         </h3>
 
         <% if @budget_category.budget.initialized? %>
@@ -80,14 +80,14 @@
           <div class="flex items-center justify-between text-sm">
             <dt class="text-secondary">Monthly average spending</dt>
             <dd class="text-primary font-medium">
-              <%= format_money @budget_category.category.avg_monthly_total_money, precision: 0 %>
+              <%= @budget_category.avg_monthly_expense_money.format %>
             </dd>
           </div>
 
           <div class="flex items-center justify-between text-sm">
             <dt class="text-secondary">Monthly median spending</dt>
             <dd class="text-primary font-medium">
-              <%= format_money @budget_category.category.median_monthly_total_money, precision: 0 %>
+              <%= @budget_category.median_monthly_expense_money.format %>
             </dd>
           </div>
         </dl>
@@ -135,7 +135,7 @@
 
             <%= link_to "View all category transactions",
                   transactions_path(q: {
-                    categories: [@budget_category.category.name],
+                    categories: [@budget_category.name],
                     start_date: @budget.start_date,
                     end_date: @budget.end_date
                   }),

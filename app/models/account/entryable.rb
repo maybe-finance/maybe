@@ -14,6 +14,10 @@ module Account::Entryable
 
     scope :active, -> { with_entry.merge(Account::Entry.active) }
 
+    scope :in_period, ->(period) {
+      with_entry.where(account_entries: { date: period.start_date..period.end_date })
+    }
+
     scope :reverse_chronological, -> {
       with_entry.merge(Account::Entry.reverse_chronological)
     }

@@ -6,7 +6,7 @@ class BudgetCategory < ApplicationRecord
 
   validates :budget_id, uniqueness: { scope: :category_id }
 
-  monetize :budgeted_spending, :actual_spending, :available_to_spend
+  monetize :budgeted_spending, :actual_spending, :available_to_spend, :avg_monthly_expense, :median_monthly_expense
 
   class Group
     attr_reader :budget_category, :budget_subcategories
@@ -45,12 +45,24 @@ class BudgetCategory < ApplicationRecord
     super || budget.family.categories.uncategorized
   end
 
+  def name
+    category.name
+  end
+
+  def avg_monthly_expense
+    category.avg_monthly_expense
+  end
+
+  def median_monthly_expense
+    category.median_monthly_expense
+  end
+
   def subcategory?
     category.parent_id.present?
   end
 
   def actual_spending
-    category.month_total(date: budget.start_date)
+    category.period_expense(period: budget.period)
   end
 
   def available_to_spend

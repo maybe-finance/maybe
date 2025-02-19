@@ -1,5 +1,5 @@
 class Family < ApplicationRecord
-  include Providable, Plaidable, Syncable, AutoTransferMatchable, Aggregatable
+  include Providable, Plaidable, Syncable, AutoTransferMatchable
 
   DATE_FORMATS = [
     [ "MM-DD-YYYY", "%m-%d-%Y" ],
@@ -40,8 +40,8 @@ class Family < ApplicationRecord
     @balance_sheet ||= BalanceSheet.new(self)
   end
 
-  def income_statement(period: Period.last_30_days)
-    IncomeStatement.new(self, period: period)
+  def income_statement
+    @income_statement ||= IncomeStatement.new(self)
   end
 
   def sync_data(start_date: nil)

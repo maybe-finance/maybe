@@ -15,7 +15,7 @@ class TransactionsController < ApplicationController
       params: ->(params) { params.except(:focused_record_id) }
     )
 
-    @totals = transactions_query.stats(Current.family.currency)
+    @totals = Current.family.income_statement.totals(transactions_scope: transactions_query)
   end
 
   def clear_filter

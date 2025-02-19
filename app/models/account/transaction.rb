@@ -1,8 +1,9 @@
 class Account::Transaction < ApplicationRecord
-  include Account::Entryable, Transferable, Aggregatable
+  include Account::Entryable, Transferable
 
   belongs_to :category, optional: true
   belongs_to :merchant, optional: true
+
   has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings
 

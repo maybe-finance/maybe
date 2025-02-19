@@ -161,19 +161,21 @@ class Demo::Generator
         balance: 15000,
         currency: "USD"
 
+      # First create income transactions to ensure positive balance
+      50.times do
+        create_transaction! \
+          account: checking,
+          amount: Faker::Number.negative(from: -2000, to: -500),
+          name: "Income",
+          category: family.categories.find_by(name: "Income")
+      end
+
+      # Then create expenses that won't exceed the income
       200.times do
         create_transaction! \
           account: checking,
           name: "Expense",
-          amount: Faker::Number.positive(from: 100, to: 1000)
-      end
-
-      50.times do
-        create_transaction! \
-          account: checking,
-          amount: Faker::Number.negative(from: -2000),
-          name: "Income",
-          category: family.categories.find_by(name: "Income")
+          amount: Faker::Number.positive(from: 8, to: 500)
       end
     end
 
@@ -185,13 +187,22 @@ class Demo::Generator
         currency: "USD",
         subtype: "savings"
 
+      # Create larger income deposits first
       100.times do
         create_transaction! \
           account: savings,
-          amount: Faker::Number.negative(from: -2000),
+          amount: Faker::Number.negative(from: -3000, to: -1000),
           tags: [ family.tags.find_by(name: "Emergency Fund") ],
           category: family.categories.find_by(name: "Income"),
           name: "Income"
+      end
+
+      # Add some smaller withdrawals that won't exceed the deposits
+      50.times do
+        create_transaction! \
+          account: savings,
+          amount: Faker::Number.positive(from: 100, to: 1000),
+          name: "Savings Withdrawal"
       end
     end
 
@@ -304,39 +315,50 @@ class Demo::Generator
       create_valuation!(house, 2.years.ago.to_date, 540000)
       create_valuation!(house, 1.years.ago.to_date, 550000)
 
-      family.accounts.create! \
+      mortgage = family.accounts.create! \
         accountable: Loan.new,
         name: "Mortgage",
         balance: 495000,
         currency: "USD"
+
+      create_valuation!(mortgage, 3.years.ago.to_date, 495000)
+      create_valuation!(mortgage, 2.years.ago.to_date, 490000)
+      create_valuation!(mortgage, 1.years.ago.to_date, 485000)
     end
 
     def create_car_and_loan!(family)
-      family.accounts.create! \
+      vehicle = family.accounts.create! \
         accountable: Vehicle.new,
         name: "Honda Accord",
         balance: 18000,
         currency: "USD"
 
-      family.accounts.create! \
+      create_valuation!(vehicle, 1.year.ago.to_date, 18000)
+
+      loan = family.accounts.create! \
         accountable: Loan.new,
         name: "Car Loan",
         balance: 8000,
         currency: "USD"
+
+      create_valuation!(loan, 1.year.ago.to_date, 8000)
     end
 
     def create_other_accounts!(family)
-      family.accounts.create! \
+      other_asset = family.accounts.create! \
         accountable: OtherAsset.new,
         name: "Other Asset",
         balance: 10000,
         currency: "USD"
 
-      family.accounts.create! \
+      other_liability = family.accounts.create! \
         accountable: OtherLiability.new,
         name: "Other Liability",
         balance: 5000,
         currency: "USD"
+
+      create_valuation!(other_asset, 1.year.ago.to_date, 10000)
+      create_valuation!(other_liability, 1.year.ago.to_date, 5000)
     end
 
     def create_transaction!(attributes = {})

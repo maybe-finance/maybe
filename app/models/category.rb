@@ -1,4 +1,8 @@
 class Category < ApplicationRecord
+  include Monetizable
+
+  monetize :period_expense, :median_monthly_expense, :avg_monthly_expense
+
   has_many :transactions, dependent: :nullify, class_name: "Account::Transaction"
   has_many :import_mappings, as: :mappable, dependent: :destroy, class_name: "Import::Mapping"
 
@@ -108,28 +112,18 @@ class Category < ApplicationRecord
     parent.present?
   end
 
-  def avg_monthly_total
-    family.category_stats.avg_monthly_total_for(self)
+  def period_expense(period: Period.current_month)
+    totals = family.income_statement.expense(period: period)
+
+    totals.category_totals.find { |ct| ct.category.id == id }&.total || 0
   end
 
-  def median_monthly_total
-    family.category_stats.median_monthly_total_for(self)
+  def median_monthly_expense
+    family.income_statement.median_expense(category: self)
   end
 
-  def month_total(date: Date.current)
-    family.category_stats.month_total_for(self, date: date)
-  end
-
-  def avg_monthly_total_money
-    Money.new(avg_monthly_total, family.currency)
-  end
-
-  def median_monthly_total_money
-    Money.new(median_monthly_total, family.currency)
-  end
-
-  def month_total_money(date: Date.current)
-    Money.new(month_total(date: date), family.currency)
+  def avg_monthly_expense
+    family.income_statement.avg_expense(category: self)
   end
 
   private
@@ -143,5 +137,9 @@ class Category < ApplicationRecord
       if subcategory? && parent.classification != classification
         errors.add(:parent, "must have the same classification as its parent")
       end
+    end
+
+    def monetizable_currency
+      family.currency
     end
 end
