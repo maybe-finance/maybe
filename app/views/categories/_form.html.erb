@@ -11,7 +11,7 @@
           <%= icon("pen", size: "sm") %>
         </summary>
 
-        <div class=" absolute z-50 bg-white p-4 border border-alpha-black-25 rounded-2xl shadow-xs h-fit left-62">
+        <div class=" absolute z-50 bg-white p-4 border border-alpha-black-25 rounded-2xl shadow-xs h-fit left-64 top-24">
           <div class="flex gap-2 flex-col mb-4" data-color-avatar-target="selection">
             <div data-color-picker-target="pickerSection"></div>
             <h4 class="text-gray-500 text-sm">Color</h4>
@@ -35,7 +35,7 @@
 
           <div class="flex flex-wrap gap-2 justify-center flex-col w-87">
             <h4 class="text-gray-500 text-sm">Icon</h4>
-            <div class="flex flex-wrap gap-0.5  mb-4">
+            <div class="flex flex-wrap gap-0.5">
               <% Category.icon_codes.each do |icon| %>
                 <label class="relative">
                   <%= f.radio_button :lucide_icon, icon, class: "sr-only peer", data: { action: "change->color-picker#handleIconChange change->color-picker#handleIconColorChange", color_picker_target:"icon" } %>
