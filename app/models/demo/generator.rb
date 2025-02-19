@@ -61,6 +61,34 @@ class Demo::Generator
     puts "Demo data loaded successfully!"
   end
 
+  def generate_multi_currency_data!
+    puts "Clearing existing data..."
+
+    destroy_everything!
+
+    puts "Data cleared"
+
+    create_family_and_user!("Demo Family 1", "user@maybe.local", currency: "EUR")
+
+    family = Family.find_by(name: "Demo Family 1")
+
+    puts "Users reset"
+
+    usd_checking = family.accounts.create!(name: "USD Checking", currency: "USD", balance: 10000, accountable: Depository.new)
+    eur_checking = family.accounts.create!(name: "EUR Checking", currency: "EUR", balance: 4900, accountable: Depository.new)
+
+    puts "Accounts created"
+
+    create_transaction!(account: usd_checking, amount: -11000, currency: "USD", name: "USD income Transaction")
+    create_transaction!(account: usd_checking, amount: 1000, currency: "USD", name: "USD expense Transaction")
+    create_transaction!(account: eur_checking, amount: -5000, currency: "EUR", name: "EUR income Transaction")
+    create_transaction!(account: eur_checking, amount: 100, currency: "EUR", name: "EUR expense Transaction")
+
+    puts "Transactions created"
+
+    puts "Demo data loaded successfully!"
+  end
+
   private
     def destroy_everything!
       Family.destroy_all
@@ -71,13 +99,14 @@ class Demo::Generator
       Security::Price.destroy_all
     end
 
-    def create_family_and_user!(family_name, user_email, data_enrichment_enabled: false)
+    def create_family_and_user!(family_name, user_email, data_enrichment_enabled: false, currency: "USD")
       base_uuid = "d99e3c6e-d513-4452-8f24-dc263f8528c0"
       id = Digest::UUID.uuid_v5(base_uuid, family_name)
 
       family = Family.create!(
         id: id,
         name: family_name,
+        currency: currency,
         stripe_subscription_status: "active",
         data_enrichment_enabled: data_enrichment_enabled,
         locale: "en",

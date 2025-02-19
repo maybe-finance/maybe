@@ -38,8 +38,8 @@ class BalanceSheet
     ]
   end
 
-  def account_groups(classification)
-    classification_accounts = totals_query.filter { |t| t.classification == classification }
+  def account_groups(classification = nil)
+    classification_accounts = classification ? totals_query.filter { |t| t.classification == classification } : totals_query
     classification_total = classification_accounts.sum(&:converted_balance)
     account_groups = classification_accounts.group_by(&:accountable_type).transform_keys { |k| Accountable.from_type(k) }
 
@@ -48,6 +48,7 @@ class BalanceSheet
 
       AccountGroup.new(
         name: accountable.display_name,
+        accountable: accountable,
         classification: accountable.classification,
         total: group_total,
         total_money: Money.new(group_total, currency),
@@ -74,7 +75,7 @@ class BalanceSheet
 
   private
     ClassificationGroup = Struct.new(:key, :display_name, :icon, :account_groups, keyword_init: true)
-    AccountGroup = Struct.new(:name, :classification, :total, :total_money, :weight, :accounts, :color, :missing_rates?, keyword_init: true)
+    AccountGroup = Struct.new(:name, :accountable, :classification, :total, :total_money, :weight, :accounts, :color, :missing_rates?, keyword_init: true)
 
     def active_accounts
       family.accounts.active

@@ -9,4 +9,8 @@ namespace :demo_data do
     families = [ "Demo Family 1", "Demo Family 2", "Demo Family 3", "Demo Family 4", "Demo Family 5" ]
     Demo::Generator.new.reset_data!(families)
   end
+
+  task multi_currency: :environment do
+    Demo::Generator.new.generate_multi_currency_data!
+  end
 end

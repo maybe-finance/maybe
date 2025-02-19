@@ -1,4 +1,4 @@
-<%# locals: (accounts:) %>
+<%# locals: (family:) %>
 
 <div
   class="space-y-3"
@@ -29,7 +29,9 @@
       <span>New asset</span>
     <% end %>
 
-    <%= accountable_groups(accounts, classification: "asset") %>
+    <% family.balance_sheet.account_groups("asset").each do |group| %>
+      <%= render "accounts/accountable_group", account_group: group %>
+    <% end %>
   </div>
 
   <div data-tabs-target="tab" id="debts-tab" class="hidden">
@@ -40,7 +42,9 @@
       <span>New debt</span>
     <% end %>
 
-    <%= accountable_groups(accounts, classification: "liability") %>
+    <% family.balance_sheet.account_groups("liability").each do |group| %>
+      <%= render "accounts/accountable_group", account_group: group %>
+    <% end %>
   </div>
 
   <div data-tabs-target="tab" id="all-tab" class="hidden">
@@ -51,6 +55,8 @@
       <span>New account</span>
     <% end %>
 
-    <%= accountable_groups(accounts) %>
+    <% family.balance_sheet.account_groups.each do |group| %>
+      <%= render "accounts/accountable_group", account_group: group %>
+    <% end %>
   </div>
 </div>

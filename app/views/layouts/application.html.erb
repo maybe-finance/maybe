@@ -31,7 +31,7 @@
         <%= yield :sidebar %>
       <% else %>
         <div id="account-sidebar-tabs" data-turbo-permanent>
-          <%= render "accounts/account_sidebar_tabs", accounts: Current.family.accounts.active.to_a %>
+          <%= render "accounts/account_sidebar_tabs", family: Current.family %>
         </div>
       <% end %>
     <% end %>
