@@ -1,4 +1,4 @@
-<div class="space-y-4 h-full flex flex-col overflow-y-auto" data-controller="focus-record" data-focus-record-id-value="<%= @focused_record ? dom_id(@focused_record) : nil %>">
+<div class="space-y-4 h-fit max-h-full flex flex-col" data-controller="focus-record" data-focus-record-id-value="<%= @focused_record ? dom_id(@focused_record) : nil %>">
   <%= render "header" %>
 
   <%= render "summary", totals: @totals %>
@@ -7,7 +7,7 @@
        data-controller="bulk-select"
        data-bulk-select-singular-label-value="<%= t(".transaction") %>"
        data-bulk-select-plural-label-value="<%= t(".transactions") %>"
-       class="overflow-y-auto flex flex-col bg-white rounded-xl border border-alpha-black-25 shadow-xs p-4">
+       class="overflow-y-auto flex flex-col bg-white rounded-xl shadow-border-xs p-4">
     <%= render "transactions/searches/search" %>
 
     <div id="entry-selection-bar" data-bulk-select-target="selectionBar" class="flex justify-center hidden">

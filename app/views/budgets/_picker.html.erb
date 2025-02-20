@@ -1,7 +1,7 @@
 <%# locals: (family:, year:) %>
 
 <%= turbo_frame_tag "budget_picker" do %>
-  <div class="bg-white shadow-md border border-alpha-black-25 p-3 rounded-xl space-y-4">
+  <div class="bg-white shadow-border-xs p-3 rounded-xl space-y-4">
     <div class="flex items-center gap-2 justify-between">
       <% if year > family.oldest_entry_date.year %>
         <%= link_to picker_budgets_path(year: year - 1), data: { turbo_frame: "budget_picker" }, class: "p-2 flex items-center justify-center hover:bg-alpha-black-25 rounded-md" do %>

@@ -4,17 +4,19 @@
       <%= render "settings/settings_nav" %>
     </div>
 
-    <main class="max-w-4xl w-full mx-auto px-10 py-6 flex h-full">
-      <div class="flex flex-col w-full">
-        <h1 class="text-primary text-xl font-medium flex-none">
-          <%= content_for :page_title %>
-        </h1>
+    <main class="py-4 px-10 grow flex h-full overflow-y-auto">
+      <div class="relative max-w-4xl mx-auto flex flex-col w-full h-full">
+        <div class="grow space-y-4 overflow-y-auto -mx-1 px-1 pb-12">
+          <% if content_for?(:page_title) %>
+            <h1 class="text-primary text-xl font-medium">
+              <%= content_for :page_title %>
+            </h1>
+          <% end %>
 
-        <div class="flex-1 overflow-y-auto min-h-0 py-4 space-y-4">
           <%= yield %>
         </div>
 
-        <div class="flex-none mt-4">
+        <div class="mt-4">
           <%= settings_nav_footer %>
         </div>
       </div>

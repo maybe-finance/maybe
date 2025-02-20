@@ -36,12 +36,14 @@
       <% end %>
     <% end %>
 
-    <%= tag.main class: class_names("py-4 px-10 grow h-full", require_upgrade? ? "relative overflow-hidden" : "overflow-y-auto") do %>
+    <%= tag.main class: class_names("px-10 py-4 grow h-full", require_upgrade? ? "relative overflow-hidden" : "overflow-y-auto") do %>
       <% if require_upgrade? %>
-        <%= render "shared/subscribe_modal" %>
+        <div class="absolute inset-0 px-10 h-full w-full z-50">
+          <%= render "shared/subscribe_modal" %>
+        </div>
       <% end %>
 
-      <%= tag.div class: class_names("mx-auto w-full pb-32", Current.user.show_sidebar? ? "max-w-4xl" : "max-w-5xl"), data: { sidebar_target: "content" } do %>
+      <%= tag.div class: class_names("mx-auto w-full h-full", Current.user.show_sidebar? ? "max-w-4xl" : "max-w-5xl"), data: { sidebar_target: "content" } do %>
         <%= yield %>
       <% end %>
     <% end %>
