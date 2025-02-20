@@ -8,13 +8,13 @@ class Category < ApplicationRecord
   has_many :subcategories, class_name: "Category", foreign_key: :parent_id
   belongs_to :parent, class_name: "Category", optional: true
 
-  validates :name, :color, :family, presence: true
+  validates :name, :color, :lucide_icon, :family, presence: true
   validates :name, uniqueness: { scope: :family_id }
 
   validate :category_level_limit
   validate :nested_category_matches_parent_classification
 
-  before_create :inherit_color_from_parent
+  before_save :inherit_color_from_parent
 
   scope :alphabetically, -> { order(:name) }
   scope :roots, -> { where(parent_id: nil) }

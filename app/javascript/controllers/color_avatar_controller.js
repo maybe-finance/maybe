@@ -18,10 +18,4 @@ export default class extends Controller {
       e.currentTarget.value?.[0] || "?"
     ).toUpperCase();
   };
-
-  handleParentChange(e) {
-    const parent = e.currentTarget.value;
-    const display = typeof parent === "string" && parent !== "" ? "none" : "flex";
-    this.selectionTarget.style.display = display;
-  }
 }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_12_163624) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_20_200735) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -18,6 +18,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_12_163624) do
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "account_status", ["ok", "syncing", "error"]
+  create_enum "import_status", ["pending", "importing", "complete", "failed"]
 
   create_table "account_balances", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "account_id", null: false
@@ -101,7 +102,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_12_163624) do
     t.decimal "balance", precision: 19, scale: 4
     t.string "currency"
     t.boolean "is_active", default: true, null: false
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Loan'::character varying, 'CreditCard'::character varying, 'OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Loan'::character varying)::text, ('CreditCard'::character varying)::text, ('OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.uuid "import_id"
     t.uuid "plaid_account_id"
     t.boolean "scheduled_for_deletion", default: false
@@ -192,7 +193,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_12_163624) do
     t.datetime "updated_at", null: false
     t.uuid "parent_id"
     t.string "classification", default: "expense", null: false
-    t.string "lucide_icon"
+    t.string "lucide_icon", default: "shapes", null: false
     t.index ["family_id"], name: "index_categories_on_family_id"
   end
 

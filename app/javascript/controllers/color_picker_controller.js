@@ -2,7 +2,9 @@ import { Controller } from "@hotwired/stimulus"
 import Pickr from '@simonwep/pickr'
 
 export default class extends Controller {
-  static targets = ["pickerBtn", "colorInput", "colorsSection", "paletteSection", "pickerSection", "colorPreview", "avatar", "details", "icon"];
+  static targets = ["pickerBtn", "colorInput", "colorsSection", "paletteSection", "pickerSection", "colorPreview", "avatar", "details", "icon","validationMessage","selection","colorPickerRadioBtn"];
+
+  _predefined_colors = ["#e99537", "#4da568", "#6471eb", "#db5a54", "#df4e92", "#c44fe9", "#eb5429", "#61c9ea", "#805dee", "#6ad28a"];
 
   initialize() {
     this.pickerBtnTarget.addEventListener('click', () => {
@@ -22,6 +24,10 @@ export default class extends Controller {
     });
 
     this.selectedIcon = null;
+
+    if (!this._predefined_colors.includes(this.colorInputTarget.value)) {
+      this.colorPickerRadioBtnTarget.checked = true;
+    }
   }
 
   initPicker() {
@@ -47,21 +53,20 @@ export default class extends Controller {
 
       this.updateAvatarColors(hexColor);
       this.updateSelectedIconColor(hexColor);
-      
-      const backgroundColor = this.backgroundColor(rgbacolor, 5);
+
+      const backgroundColor = this.backgroundColor(rgbacolor, 10);
       const contrastRatio = this.contrast(rgbacolor, backgroundColor);
 
       this.colorInputTarget.value = hexColor;
       this.colorInputTarget.dataset.colorPickerColorValue = hexColor;
       this.colorPreviewTarget.style.backgroundColor = hexColor;
 
-      this.handleContrastValidation(contrastRatio, rgbacolor);
+      this.handleContrastValidation(contrastRatio);
     });
   }
 
   updateAvatarColors(color) {
-    this.avatarTarget.style.backgroundColor = `color-mix(in srgb, ${color} 5%, white)`;
-    this.avatarTarget.style.borderColor = `color-mix(in srgb, ${color} 10%, white)`;
+    this.avatarTarget.style.backgroundColor = `${this.#backgroundColor(color)}`;
     this.avatarTarget.style.color = color;
   }
 
@@ -75,7 +80,6 @@ export default class extends Controller {
       const iconWrapper = icon.nextElementSibling;
       iconWrapper.style.removeProperty("background-color")
       iconWrapper.style.color = "black";
-      iconWrapper.classList.add(`hover:bg-[${currentColor}]`)
     });
 
     this.updateSelectedIconColor(currentColor);
@@ -91,7 +95,7 @@ export default class extends Controller {
   updateSelectedIconColor(color) {
     if (this.selectedIcon) {
       const iconWrapper = this.selectedIcon.nextElementSibling;
-      iconWrapper.style.backgroundColor = `color-mix(in srgb, ${color} 15%, white)`;
+      iconWrapper.style.backgroundColor = `${this.#backgroundColor(color)}`;
       iconWrapper.style.color = color;
     }
   }
@@ -104,44 +108,35 @@ export default class extends Controller {
     this.updateSelectedIconColor(color);
   }
 
-  handleContrastValidation(contrastRatio, rgbacolor) {
+  handleContrastValidation(contrastRatio) {
     if (contrastRatio < 4.5) {
       this.colorInputTarget.setCustomValidity("Poor contrast, choose darker color or auto-adjust.");
 
-      if (this.paletteSectionTarget.querySelector("span")) return;
-
-      const darkColor = this.darkenColor(rgbacolor).toString();
-      
-      const span = document.createElement("span");
-      span.style.color = "var(--color-destructive)";
-      span.style.alignSelf = "start";
-      span.classList.add("text-sm");
-      span.innerHTML = "Poor contrast, choose darker color or ";
-
-      const button = document.createElement("button");
-      button.textContent = "auto-adjust.";
-      button.type = "button";
-      button.style.textDecoration = "underline";
-      button.style.cursor = "pointer";
-
-      button.addEventListener("click", () => {
-        this.colorInputTarget.value = darkColor;
-        this.colorInputTarget.dataset.colorPickerColorValue = darkColor;
-        this.colorPreviewTarget.style.backgroundColor = darkColor;
-        this.picker.setColor(darkColor);
-        this.colorInputTarget.setCustomValidity("");
-
-        const span = this.paletteSectionTarget.querySelector("span");
-        if (span) span.remove();
-      });
-
-      span.appendChild(button);
-      this.paletteSectionTarget.append(span);
+      this.validationMessageTarget.classList.remove("hidden");
     } else {
       this.colorInputTarget.setCustomValidity("");
-      const span = this.paletteSectionTarget.querySelector("span");
-      if (span) span.remove();
+      this.validationMessageTarget.classList.add("hidden");
     }
+  }
+
+  autoAdjust(e){
+    const currentRGBA = this.picker.getColor().toRGBA();
+    let adjustedRGBA = currentRGBA;
+
+    adjustedRGBA = this.darkenColor(currentRGBA).toString();
+
+    this.colorInputTarget.value = adjustedRGBA;
+    this.colorInputTarget.dataset.colorPickerColorValue = adjustedRGBA;
+    this.colorPreviewTarget.style.backgroundColor = adjustedRGBA;
+    this.colorInputTarget.setCustomValidity("");
+
+    this.picker.setColor(adjustedRGBA);
+  }
+
+  handleParentChange(e) {
+    const parent = e.currentTarget.value;
+    const display = typeof parent === "string" && parent !== "" ? "none" : "flex";
+    this.selectionTarget.style.display = display;
   }
 
   backgroundColor([r,g,b,a], percentage) {
@@ -170,14 +165,14 @@ export default class extends Controller {
 
   darkenColor([r, g, b, a]) {
     let darkened = [r, g, b, a];
-    let backgroundColor = this.backgroundColor(darkened, 5);
+    let backgroundColor = this.backgroundColor(darkened, 10);
     let contrastRatio = this.contrast(darkened, backgroundColor);
 
-    while (contrastRatio < 4.5 && (darkened[0] > 0 || darkened[1] > 0 || darkened[2] > 0)) {
+    while (contrastRatio < 4.6 && (darkened[0] > 0 || darkened[1] > 0 || darkened[2] > 0)) {
       darkened = [
-        Math.max(0, darkened[0] - 5),
-        Math.max(0, darkened[1] - 5),
-        Math.max(0, darkened[2] - 5),
+        Math.max(0, darkened[0] - 10),
+        Math.max(0, darkened[1] - 10),
+        Math.max(0, darkened[2] - 10),
         darkened[3]
       ];
       contrastRatio = this.contrast(darkened, backgroundColor);
@@ -214,5 +209,9 @@ export default class extends Controller {
     } else {
       this.showPaletteSection();
     }
+  }
+
+  #backgroundColor(color) {
+    return `color-mix(in oklab, ${color} 10%, transparent)`;
   }
 }

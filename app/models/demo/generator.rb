@@ -113,9 +113,9 @@ class Demo::Generator
       family.categories.bootstrap_defaults
 
       food = family.categories.find_by(name: "Food & Drink")
-      family.categories.create!(name: "Restaurants", parent: food, color: COLORS.sample, classification: "expense")
-      family.categories.create!(name: "Groceries", parent: food, color: COLORS.sample, classification: "expense")
-      family.categories.create!(name: "Alcohol & Bars", parent: food, color: COLORS.sample, classification: "expense")
+      family.categories.create!(name: "Restaurants", parent: food, color: COLORS.sample, lucide_icon: "utensils", classification: "expense")
+      family.categories.create!(name: "Groceries", parent: food, color: COLORS.sample, lucide_icon: "shopping-cart", classification: "expense")
+      family.categories.create!(name: "Alcohol & Bars", parent: food, color: COLORS.sample, lucide_icon: "beer", classification: "expense")
     end
 
     def create_merchants!(family)

@@ -1,10 +1,10 @@
 <%# locals: (category:, categories:) %>
 
-<div data-controller="color-avatar">
+<div data-controller="color-picker">
   <%= styled_form_with model: category, class: "space-y-4" do |f| %>
-    <section class="space-y-4" data-controller="color-picker">
+    <section class="space-y-4">
       <div class="w-fit m-auto">
-        <%= render partial: "color_avatar", locals: { color: category.color } %>
+        <%= render partial: "color_avatar", locals: { category: category } %>
       </div>
       <details data-color-picker-target="details">
         <summary class="cursor-pointer absolute top-23 left-57 flex justify-center items-center bg-gray-50 border-2 w-7 h-7 border-white rounded-full text-gray-500">
@@ -12,7 +12,7 @@
         </summary>
 
         <div class=" absolute z-50 bg-white p-4 border border-alpha-black-25 rounded-2xl shadow-xs h-fit left-64 top-24">
-          <div class="flex gap-2 flex-col mb-4" data-color-avatar-target="selection">
+          <div class="flex gap-2 flex-col mb-4" data-color-picker-target="selection" style="<%= "display:none;" if @category.subcategory? %>">
             <div data-color-picker-target="pickerSection"></div>
             <h4 class="text-gray-500 text-sm">Color</h4>
             <div class="flex gap-2 items-center" data-color-picker-target="colorsSection">
@@ -22,13 +22,20 @@
                   <div class="w-6 h-6 rounded-full cursor-pointer peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-blue-500" style="background-color: <%= color %>"></div>
                 </label>
               <% end %>
-              <div class="w-6 h-6 rounded-full cursor-pointer" data-color-picker-target="pickerBtn" style="background: conic-gradient(red,orange,yellow,lime,green,teal,cyan,blue,indigo,purple,magenta,pink,red)" ></div>
+              <label class="relative">
+                <%= f.radio_button :color, "custom-color", class: "sr-only peer", data: { color_picker_target: "colorPickerRadioBtn"} %>
+                <div class="w-6 h-6 rounded-full cursor-pointer peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-blue-500" data-color-picker-target="pickerBtn" style="background: conic-gradient(red,orange,yellow,lime,green,teal,cyan,blue,indigo,purple,magenta,pink,red)" ></div>
+              </label>
             </div>
             <div class="flex gap-2 items-center hidden flex-col" data-color-picker-target="paletteSection">
               <div class="flex gap-2 items-center w-full">
                 <div class="w-6 h-6 p-4 rounded-full cursor-pointer" style="background-color: <%= category.color %>" data-color-picker-target="colorPreview"></div>
                 <%= f.text_field :color , data: { color_picker_target: "colorInput"}, class: "form-field__input blah", inline: true %>
                 <%= lucide_icon "palette", class: "w-8 h-8 cursor-pointer hover:bg-gray-100 p-1", data: { action: "click->color-picker#toggleSections" } %>
+              </div>
+              <div data-color-picker-target="validationMessage" class="hidden self-start flex gap-1 items-center text-xs text-destructive ">
+                <span>Poor contrast, choose darker color or</span>
+                <button type="button" class="underline cursor-pointer" data-action="color-picker#autoAdjust">auto-adjust.</button>
               </div>
             </div>
           </div>
@@ -57,7 +64,7 @@
         <%= f.select :classification, [["Income", "income"], ["Expense", "expense"]], { label: "Classification" }, required: true %>
         <%= f.text_field :name, placeholder: t(".placeholder"), required: true, autofocus: true, label: "Name", data: { color_avatar_target: "name" } %>
         <% unless category.parent? %>
-          <%= f.select :parent_id, categories.pluck(:name, :id), { include_blank: "(unassigned)", label: "Parent category (optional)" }, disabled: category.parent?, data: { action: "change->color-avatar#handleParentChange" } %>
+          <%= f.select :parent_id, categories.pluck(:name, :id), { include_blank: "(unassigned)", label: "Parent category (optional)" }, disabled: category.parent?, data: { action: "change->color-picker#handleParentChange" } %>
         <% end %>
       </div>
     </section>

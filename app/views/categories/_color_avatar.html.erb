@@ -1,10 +1,9 @@
-<%# locals: (color: "#000") %>
+<%# locals: (category:) %>
 
-<% background_color = "color-mix(in srgb, #{color} 5%, white)" %>
-<% border_color = "color-mix(in srgb, #{color} 10%, white)" %>
+<% background_color = "color-mix(in srgb, #{category.color} 10%, white)" %>
 <span 
       data-color-picker-target="avatar"
       class="w-14 h-14 flex items-center justify-center rounded-full"
-      style="background-color: <%= background_color %>; border-color: <%= border_color %>; color: <%= color %>">
-  <%= lucide_icon "shapes" %>
+      style="background-color: <%= background_color %>; color: <%= category.color %>">
+  <%= lucide_icon(category.lucide_icon, class: "w-6 h-6") %>
 </span>
