@@ -316,6 +316,10 @@
 }
 
 @layer base {
+  hr {
+    @apply text-gray-200;
+  }
+
   details>summary::-webkit-details-marker {
     @apply hidden;
   }
