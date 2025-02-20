@@ -8,7 +8,7 @@
 @plugin "@tailwindcss/typography";
 @plugin "@tailwindcss/forms";
 
-@utility combobox {
+.combobox {
   .hw-combobox__main__wrapper,
   .hw-combobox__input {
     @apply w-full;
