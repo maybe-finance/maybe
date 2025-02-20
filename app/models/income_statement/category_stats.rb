@@ -22,7 +22,7 @@ class IncomeStatement::CategoryStats
     StatRow = Data.define(:category_id, :classification, :median, :avg, :missing_exchange_rates?)
 
     def query_sql
-      base_sql = base_query_sql(family: @family, interval: @interval)
+      base_sql = base_query_sql(family: @family, interval: @interval, transactions_scope: @family.transactions.active)
 
       <<~SQL
         WITH base_totals AS (
