@@ -57,13 +57,31 @@ class Budget < ApplicationRecord
   end
 
   def sync_budget_categories
-    family.categories.expenses.each do |category|
-      budget_categories.find_or_create_by(
-        category: category,
-      ) do |bc|
-        bc.budgeted_spending = 0
-        bc.currency = family.currency
+    # Get current expense category IDs from family
+    current_category_ids = family.categories.expenses.pluck(:id).to_set
+
+    # Get existing budget category IDs
+    existing_budget_category_ids = budget_categories.pluck(:category_id).to_set
+
+    # Find categories to add and remove
+    categories_to_add = current_category_ids - existing_budget_category_ids
+    categories_to_remove = existing_budget_category_ids - current_category_ids
+
+    # Bulk create new budget categories
+    if categories_to_add.any?
+      new_budget_categories = categories_to_add.map do |category_id|
+        budget_categories.new(
+          category_id: category_id,
+          budgeted_spending: 0,
+          currency: family.currency
+        )
       end
+      BudgetCategory.import(new_budget_categories)
+    end
+
+    # Bulk delete removed categories
+    if categories_to_remove.any?
+      budget_categories.where(category_id: categories_to_remove).delete_all
     end
   end
 
