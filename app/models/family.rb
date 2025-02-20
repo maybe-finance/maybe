@@ -119,4 +119,14 @@ class Family < ApplicationRecord
   def active_accounts_count
     accounts.active.count
   end
+
+  # Cache key that is invalidated when any of the family's entries are updated (which affect rollups and other calculations)
+  def build_cache_key(key)
+    [
+      "family",
+      id,
+      key,
+      entries.maximum(:updated_at)
+    ].compact.join("_")
+  end
 end

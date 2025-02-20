@@ -13,12 +13,5 @@ class Account::Transaction < ApplicationRecord
     def search(params)
       Account::TransactionSearch.new(params).build_query(all)
     end
-
-    def with_default_inclusions
-      includes(
-        { entry: :account },
-        :category, :merchant, :tags, :transfer_as_outflow, :transfer_as_inflow
-      )
-    end
   end
 end

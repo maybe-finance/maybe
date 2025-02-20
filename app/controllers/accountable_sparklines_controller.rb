@@ -1,10 +1,21 @@
 class AccountableSparklinesController < ApplicationController
   def show
-    @accountable = Accountable.from_type(params[:accountable_type])
-    @series = Current.family
-                     .accounts
-                     .active
-                     .where(accountable: @accountable)
-                     .balance_series(currency: Current.family.currency, favorable_direction: @accountable.favorable_direction)
+    @accountable = Accountable.from_type(params[:accountable_type]&.classify)
+
+    @series = Rails.cache.fetch(family.build_cache_key("#{@accountable.name}_sparkline")) do
+      family.accounts.active
+              .where(accountable_type: @accountable.name)
+              .balance_series(
+                currency: family.currency,
+                favorable_direction: @accountable.favorable_direction
+              )
+    end
+
+    render layout: false
   end
+
+  private
+    def family
+      Current.family
+    end
 end

@@ -1,4 +1,4 @@
-<%= turbo_frame_tag dom_id(@accountable, :sparkline) do %>
+<%= turbo_frame_tag "#{@accountable.model_name.param_key}_sparkline" do %>
   <div class="flex items-center justify-end gap-1">
     <div class="w-8 h-3">
       <%= render "shared/sparkline", id: dom_id(@accountable, :sparkline_chart), series: @series %>

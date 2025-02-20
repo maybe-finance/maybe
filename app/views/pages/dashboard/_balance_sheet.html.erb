@@ -62,7 +62,7 @@
                   <% account_group.accounts.each_with_index do |account, idx| %>
                     <div class="pl-12 pr-4 py-3 flex items-center justify-between text-sm font-medium">
                       <div class="flex items-center gap-3">
-                        <%= render "accounts/logo", account: account, size: "sm" %>
+                        <%= render "accounts/logo", account: account, size: "sm", color: account_group.color %>
                         <p><%= account.name %></p>
                       </div>
 

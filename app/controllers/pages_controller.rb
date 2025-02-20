@@ -4,7 +4,7 @@ class PagesController < ApplicationController
   def dashboard
     @period = Period.from_key(params[:period], fallback: true)
     @balance_sheet = Current.family.balance_sheet
-    @accounts = Current.family.accounts.active
+    @accounts = Current.family.accounts.active.with_attached_logo
   end
 
   def changelog

@@ -47,8 +47,8 @@ class BalanceSheet
       group_total = accounts.sum(&:converted_balance)
 
       AccountGroup.new(
+        key: accountable.model_name.param_key,
         name: accountable.display_name,
-        accountable: accountable,
         classification: accountable.classification,
         total: group_total,
         total_money: Money.new(group_total, currency),
@@ -66,7 +66,7 @@ class BalanceSheet
   end
 
   def net_worth_series(period: Period.last_30_days)
-    family.accounts.active.balance_series(currency: currency, period: period, favorable_direction: "up")
+    active_accounts.balance_series(currency: currency, period: period, favorable_direction: "up")
   end
 
   def currency
@@ -75,15 +75,14 @@ class BalanceSheet
 
   private
     ClassificationGroup = Struct.new(:key, :display_name, :icon, :account_groups, keyword_init: true)
-    AccountGroup = Struct.new(:name, :accountable, :classification, :total, :total_money, :weight, :accounts, :color, :missing_rates?, keyword_init: true)
+    AccountGroup = Struct.new(:key, :name, :accountable_type, :classification, :total, :total_money, :weight, :accounts, :color, :missing_rates?, keyword_init: true)
 
     def active_accounts
-      family.accounts.active
+      family.accounts.active.with_attached_logo
     end
 
     def totals_query
-      @totals_query ||= family.accounts
-            .active
+      @totals_query ||= active_accounts
             .joins(ActiveRecord::Base.sanitize_sql_array([ "LEFT JOIN exchange_rates ON exchange_rates.date = CURRENT_DATE AND accounts.currency = exchange_rates.from_currency AND exchange_rates.to_currency = ?", currency ]))
             .select(
               "accounts.*",

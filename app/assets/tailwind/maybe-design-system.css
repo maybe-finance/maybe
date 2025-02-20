@@ -316,6 +316,10 @@
 }
 
 @layer base {
+  form>button {
+    @apply cursor-pointer;
+  }
+
   hr {
     @apply text-gray-200;
   }
