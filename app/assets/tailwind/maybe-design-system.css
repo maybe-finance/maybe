@@ -311,6 +311,10 @@
   @apply border-alpha-black-100;
 }
 
+@utility border-subdued {
+  @apply border-alpha-black-50;
+}
+
 @layer base {
   details>summary::-webkit-details-marker {
     @apply hidden;
