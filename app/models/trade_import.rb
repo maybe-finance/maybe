@@ -6,10 +6,9 @@ class TradeImport < Import
       rows.each do |row|
         account = mappings.accounts.mappable_for(row.account)
 
-        # Try to find or create security with exchange validation
+        # Try to find or create security with ticker only
         security = find_or_create_security(
-          ticker: row.ticker,
-          exchange_operating_mic: row.exchange_operating_mic
+          ticker: row.ticker
         )
 
         entry = account.entries.build \
@@ -39,7 +38,7 @@ class TradeImport < Import
   end
 
   def column_keys
-    %i[date ticker exchange_operating_mic currency qty price account name]
+    %i[date ticker currency qty price account name]
   end
 
   def dry_run
@@ -61,18 +60,17 @@ class TradeImport < Import
   end
 
   private
-    def find_or_create_security(ticker:, exchange_operating_mic:)
+    def find_or_create_security(ticker:)
       # Cache provider responses so that when we're looping through rows and importing,
-      # we only hit our provider for the unique combinations of ticker / exchange_operating_mic
-      cache_key = [ ticker, exchange_operating_mic ]
+      # we only hit our provider for the unique combinations of ticker
+      cache_key = ticker
       @provider_securities_cache ||= {}
 
       provider_security = @provider_securities_cache[cache_key] ||= begin
         if Security.security_prices_provider.present?
           begin
             response = Security.security_prices_provider.search_securities(
-              query: ticker,
-              exchange_operating_mic: exchange_operating_mic
+              query: ticker
             )
             response.success? ? response.securities.first : nil
           rescue StandardError => e
@@ -82,22 +80,21 @@ class TradeImport < Import
         end
       end
 
-      if provider_security&.[](:ticker) && provider_security&.[](:exchange_operating_mic)
+      if provider_security&.[](:ticker)
         Security.find_or_create_by!(
-          ticker: provider_security[:ticker],
-          exchange_operating_mic: provider_security[:exchange_operating_mic]
+          ticker: provider_security[:ticker]
         ) do |security|
           security.name = provider_security[:name]
           security.country_code = provider_security[:country_code]
           security.logo_url = provider_security[:logo_url]
           security.exchange_acronym = provider_security[:exchange_acronym]
           security.exchange_mic = provider_security[:exchange_mic]
+          security.exchange_operating_mic = provider_security[:exchange_operating_mic]
         end
       else
-        # If provider data is not available, create security with just the ticker and exchange
+        # If provider data is not available, create security with just the ticker
         Security.find_or_create_by!(
-          ticker: ticker,
-          exchange_operating_mic: exchange_operating_mic
+          ticker: ticker
         )
       end
     end

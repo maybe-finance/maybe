@@ -3,7 +3,6 @@ class Import::Row < ApplicationRecord
 
   validates :amount, numericality: true, allow_blank: true
   validates :currency, presence: true
-  validates :exchange_operating_mic, presence: true, if: -> { import.type == "TradeImport" && import.exchange_operating_mic_col_label.present? }
 
   validate :date_valid
   validate :required_columns
