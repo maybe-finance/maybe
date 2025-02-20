@@ -42,6 +42,7 @@ class BudgetCategoriesController < ApplicationController
     end
 
     def set_budget
-      @budget = Current.family.budgets.find(params[:budget_id])
+      start_date = Budget.param_to_date(params[:budget_month_year])
+      @budget = Current.family.budgets.find_by(start_date: start_date)
     end
 end

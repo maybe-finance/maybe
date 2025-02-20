@@ -6,9 +6,6 @@ class BudgetsController < ApplicationController
   end
 
   def show
-    @next_budget = @budget.next_budget
-    @previous_budget = @budget.previous_budget
-    @latest_budget = Budget.find_or_bootstrap(Current.family)
   end
 
   def edit
@@ -18,12 +15,6 @@ class BudgetsController < ApplicationController
   def update
     @budget.update!(budget_params)
     redirect_to budget_budget_categories_path(@budget)
-  end
-
-  def create
-    start_date = Date.parse(budget_create_params[:start_date])
-    @budget = Budget.find_or_bootstrap(Current.family, date: start_date)
-    redirect_to budget_path(@budget)
   end
 
   def picker
@@ -43,8 +34,9 @@ class BudgetsController < ApplicationController
     end
 
     def set_budget
-      @budget = Current.family.budgets.find(params[:id])
-      @budget.sync_budget_categories
+      start_date = Budget.param_to_date(params[:month_year])
+      @budget = Budget.find_or_bootstrap(Current.family, start_date: start_date)
+      raise ActiveRecord::RecordNotFound unless @budget
     end
 
     def redirect_to_current_month_budget
