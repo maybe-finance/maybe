@@ -1,6 +1,6 @@
 <%= turbo_frame_tag dom_id(@account, :sparkline) do %>
   <div class="flex items-center justify-end gap-1">
-    <div class="w-8 h-3">
+    <div class="w-8 h-5">
       <%= render "shared/sparkline", id: dom_id(@account, :sparkline_chart), series: @account.balance_series %>
     </div>
 

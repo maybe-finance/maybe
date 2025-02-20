@@ -1,7 +1,7 @@
 <%# locals: (account_group:) %>
 
 <details class="group" data-controller="account-collapse" data-account-collapse-type-value="<%= account_group.accountable %>">
-  <summary class="px-3 py-2 flex items-center gap-3 cursor-pointer h-10">
+  <summary class="px-3 py-2 flex items-center gap-3 cursor-pointer h-10 mb-1">
     <%= lucide_icon("chevron-right", class: "group-open:rotate-90 text-secondary w-5 h-5") %>
 
     <%= tag.p account_group.name, class: "text-sm font-medium" %>
@@ -17,26 +17,28 @@
     </div>
   </summary>
 
-  <% account_group.accounts.each do |account| %>
-    <%= link_to account_path(account), class: "block flex items-center gap-2 btn btn--ghost" do %>
-      <%= render "accounts/logo", account: account, size: "sm" %>
+  <div class="space-y-1">
+    <% account_group.accounts.each do |account| %>
+      <%= link_to account_path(account), class: "block flex items-center gap-2 btn btn--ghost" do %>
+        <%= render "accounts/logo", account: account, size: "sm" %>
 
-      <div>
-        <%= tag.p account.name, class: "text-sm font-medium mb-0.5" %>
-        <%= tag.p account.subtype&.humanize.presence || account_group.accountable.display_name, class: "text-sm text-secondary" %>
-      </div>
+        <div>
+          <%= tag.p account.name, class: "text-sm font-medium mb-0.5" %>
+          <%= tag.p account.subtype&.humanize.presence || account_group.accountable.display_name, class: "text-sm text-secondary" %>
+        </div>
 
-      <div class="ml-auto text-right grow h-10">
-        <%= tag.p format_money(account.balance_money), class: "text-sm font-medium text-primary" %>
+        <div class="ml-auto text-right grow h-10">
+          <%= tag.p format_money(account.balance_money), class: "text-sm font-medium text-primary" %>
 
-        <%= turbo_frame_tag dom_id(account, :sparkline), src: sparkline_account_path(account), loading: "lazy" do %>
-          <div class="flex items-center w-8 h-4 ml-auto">
-            <div class="w-6 h-px bg-gray-200"></div>
-          </div>
-        <% end %>
-      </div>
+          <%= turbo_frame_tag dom_id(account, :sparkline), src: sparkline_account_path(account), loading: "lazy" do %>
+            <div class="flex items-center w-8 h-5 ml-auto">
+              <div class="w-6 h-px bg-gray-200"></div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
     <% end %>
-  <% end %>
+  </div>
 
   <%= link_to new_polymorphic_path(account_group.accountable, step: "method_select"),
               class: "flex items-center gap-3 btn btn--ghost text-secondary",
