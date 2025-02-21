@@ -8,11 +8,6 @@ en:
       title: Are you sure?
     money_field:
       label: Amount
-    no_account_empty_state:
-      new_account: New account
-      no_account_subtitle: Since no accounts have been added, there's no data to display.
-        Add your first accounts to start viewing dashboard data.
-      no_account_title: No accounts yet
     syncing_notice:
       syncing: Syncing accounts data...
     upgrade_notification:

@@ -1,11 +1,17 @@
 class OtherLiability < ApplicationRecord
   include Accountable
 
-  def color
-    "#737373"
-  end
+  class << self
+    def color
+      "#737373"
+    end
 
-  def icon
-    "minus"
+    def icon
+      "minus"
+    end
+
+    def classification
+      "liability"
+    end
   end
 end

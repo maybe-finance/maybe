@@ -22,12 +22,6 @@ class ApplicationController < ActionController::Base
       subscribed_at.present? && subscribed_at <= Time.current && subscribed_at > 1.hour.ago
     end
 
-    def with_sidebar
-      return "turbo_rails/frame" if turbo_frame_request?
-
-      "with_sidebar"
-    end
-
     def detect_os
       user_agent = request.user_agent
       @os = case user_agent

@@ -6,11 +6,21 @@ class Depository < ApplicationRecord
     [ "Savings", "savings" ]
   ].freeze
 
-  def color
-    "#875BF7"
-  end
+  class << self
+    def display_name
+      "Cash"
+    end
 
-  def icon
-    "landmark"
+    def color
+      "#875BF7"
+    end
+
+    def classification
+      "asset"
+    end
+
+    def icon
+      "landmark"
+    end
   end
 end

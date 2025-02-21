@@ -1,19 +1,19 @@
 <%# locals: (totals:) %>
-<div class="grid grid-cols-3 bg-white rounded-xl border border-alpha-black-25 shadow-xs divide-x divide-alpha-black-100">
+<div class="grid grid-cols-3 bg-white rounded-xl shadow-border-xs divide-x divide-alpha-black-100">
   <div class="p-4 space-y-2">
     <p class="text-sm text-secondary">Total transactions</p>
-    <p class="text-primary font-medium text-xl" id="total-transactions"><%= totals.count %></p>
+    <p class="text-primary font-medium text-xl" id="total-transactions"><%= totals.transactions_count %></p>
   </div>
   <div class="p-4 space-y-2">
     <p class="text-sm text-secondary">Income</p>
     <p class="text-primary font-medium text-xl" id="total-income">
-      <%= format_money Money.new(totals.income_total, totals.currency) %>
+      <%= totals.income_money.format %>
     </p>
   </div>
   <div class="p-4 space-y-2">
     <p class="text-sm text-secondary">Expenses</p>
     <p class="text-primary font-medium text-xl" id="total-expense">
-      <%= format_money Money.new(totals.expense_total, totals.currency) %>
+      <%= totals.expense_money.format %>
     </p>
   </div>
 </div>

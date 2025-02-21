@@ -1,11 +1,11 @@
 module Money::Formatting
-  # Fallback formatting.  For advanced formatting, use Rails number_to_currency helper.
-  def format
-    whole_part, fractional_part = sprintf("%.#{currency.default_precision}f", amount).split(".")
-    whole_with_delimiters = whole_part.chars.to_a.reverse.each_slice(3).map(&:join).join(currency.delimiter).reverse
-    formatted_amount = "#{whole_with_delimiters}#{currency.separator}#{fractional_part}"
+  include ActiveSupport::NumberHelper
 
-    currency.default_format.gsub("%n", formatted_amount).gsub("%u", currency.symbol)
+  def format(options = {})
+    locale = options[:locale] || I18n.locale
+    default_opts = format_options(locale)
+
+    number_to_currency(amount, default_opts.merge(options))
   end
   alias_method :to_s, :format
 

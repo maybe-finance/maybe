@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html class="h-full text-primary font-sans <%= @os %>" lang="en">
+  <head>
+    <%= render "layouts/shared/head" %>
+    <%= yield :head %>
+  </head>
+
+  <body class="h-full antialiased" data-controller="sidebar" data-sidebar-user-id-value="<%= Current.user&.id %>">
+    <div class="fixed z-50 bottom-6 left-6">
+      <div id="notification-tray" class="space-y-1">
+        <%= render_flash_notifications %>
+
+        <% if Current.family&.syncing? %>
+          <%= render "shared/syncing_notice" %>
+        <% end %>
+      </div>
+    </div>
+
+    <%= family_notifications_stream %>
+    <%= family_stream %>
+
+    <% if self_hosted? && (upgrade = get_upgrade_for_notification(Current.user, Setting.upgrades_mode)) %>
+      <%= render partial: "shared/upgrade_notification", locals: { upgrade: upgrade } %>
+    <% end %>
+
+    <%= turbo_frame_tag "modal" %>
+    <%= turbo_frame_tag "drawer" %>
+    <%= render "shared/confirm_modal" %>
+
+    <%= render "impersonation_sessions/super_admin_bar" if Current.true_user&.super_admin? && show_super_admin_bar? %>
+    <%= render "impersonation_sessions/approval_bar" if Current.true_user&.impersonated_support_sessions&.initiated&.any? %>
+
+    <%= yield %>
+  </body>
+</html>

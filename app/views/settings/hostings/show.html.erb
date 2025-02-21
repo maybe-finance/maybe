@@ -1,21 +1,13 @@
-<% content_for :sidebar do %>
-  <%= render "settings/nav" %>
+<%= content_for :page_title, t(".title") %>
+
+<%= settings_section title: t(".general") do %>
+  <div class="space-y-6">
+    <%= render "settings/hostings/upgrade_settings" %>
+    <%= render "settings/hostings/provider_settings" %>
+    <%= render "settings/hostings/synth_settings" %>
+  </div>
 <% end %>
 
-<div class="space-y-4 pb-32">
-  <h1 class="text-primary text-xl font-medium mb-4"><%= t(".title") %></h1>
-
-  <%= settings_section title: t(".general") do %>
-    <div class="space-y-6">
-      <%= render "settings/hostings/upgrade_settings" %>
-      <%= render "settings/hostings/provider_settings" %>
-      <%= render "settings/hostings/synth_settings" %>
-    </div>
-  <% end %>
-
-  <%= settings_section title: t(".invites") do %>
-    <%= render "settings/hostings/invite_code_settings" %>
-  <% end %>
-
-  <%= settings_nav_footer %>
-</div>
+<%= settings_section title: t(".invites") do %>
+  <%= render "settings/hostings/invite_code_settings" %>
+<% end %>

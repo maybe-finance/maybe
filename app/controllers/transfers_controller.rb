@@ -1,6 +1,4 @@
 class TransfersController < ApplicationController
-  layout :with_sidebar
-
   before_action :set_transfer, only: %i[destroy show update]
 
   def new

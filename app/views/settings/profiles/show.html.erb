@@ -1,57 +1,54 @@
-<% content_for :sidebar do %>
-  <%= render "settings/nav" %>
-<% end %>
-<div class="space-y-4">
-  <h1 class="text-primary text-xl font-medium mb-4"><%= t(".page_title") %></h1>
-  <div class="space-y-4">
-    <%= settings_section title: t(".profile_title"), subtitle: t(".profile_subtitle") do %>
-      <%= styled_form_with model: @user, url: user_path(@user), class: "space-y-4" do |form| %>
-        <%= render "settings/user_avatar_field", form: form, user: @user %>
+<%= content_for :page_title, t(".page_title") %>
 
-        <div>
-          <%= form.email_field :email, placeholder: t(".email"), label: t(".email") %>
-          <% if @user.unconfirmed_email.present? %>
-            <p class="mt-2 text-sm text-gray-600">
-              You have requested to change your email to <%= @user.unconfirmed_email %>. Please go to your email and confirm for the change to take effect.
-            </p>
-          <% end %>
-          <div class="grid grid-cols-2 gap-4 mt-4">
-            <%= form.text_field :first_name, placeholder: t(".first_name"), label: t(".first_name") %>
-            <%= form.text_field :last_name, placeholder: t(".last_name"), label: t(".last_name") %>
-          </div>
-          <div class="flex justify-end mt-4">
-            <%= form.submit t(".save"), class: "bg-gray-900 hover:bg-gray-700 cursor-pointer text-white rounded-lg px-3 py-2" %>
-          </div>
-        </div>
+<%= settings_section title: t(".profile_title"), subtitle: t(".profile_subtitle") do %>
+  <%= styled_form_with model: @user, url: user_path(@user), class: "space-y-4" do |form| %>
+    <%= render "settings/user_avatar_field", form: form, user: @user %>
+
+    <div>
+      <%= form.email_field :email, placeholder: t(".email"), label: t(".email") %>
+      <% if @user.unconfirmed_email.present? %>
+        <p class="mt-2 text-sm text-gray-600">
+          You have requested to change your email to <%= @user.unconfirmed_email %>. Please go to your email and confirm for the change to take effect.
+        </p>
       <% end %>
-    <% end %>
-    <%= settings_section title: t(".household_title"), subtitle: t(".household_subtitle") do %>
-      <div class="space-y-4">
-        <%= styled_form_with model: Current.user, class: "space-y-4", data: { controller: "auto-submit-form" } do |form| %>
-          <%= form.fields_for :family do |family_fields| %>
-            <%= family_fields.text_field :name,
+      <div class="grid grid-cols-2 gap-4 mt-4">
+        <%= form.text_field :first_name, placeholder: t(".first_name"), label: t(".first_name") %>
+        <%= form.text_field :last_name, placeholder: t(".last_name"), label: t(".last_name") %>
+      </div>
+      <div class="flex justify-end mt-4">
+        <%= form.submit t(".save"), class: "bg-gray-900 hover:bg-gray-700 cursor-pointer text-white rounded-lg px-3 py-2" %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+
+<%= settings_section title: t(".household_title"), subtitle: t(".household_subtitle") do %>
+  <div class="space-y-4">
+    <%= styled_form_with model: Current.user, class: "space-y-4", data: { controller: "auto-submit-form" } do |form| %>
+      <%= form.fields_for :family do |family_fields| %>
+        <%= family_fields.text_field :name,
               placeholder: t(".household_form_input_placeholder"),
               label: t(".household_form_label"),
               disabled: !Current.user.admin?,
               "data-auto-submit-form-target": "auto" %>
-          <% end %>
-        <% end %>
-        <div class="bg-gray-25 rounded-xl p-1">
-          <div class="px-4 py-2">
-            <p class="uppercase text-xs text-secondary font-medium"><%= Current.family.name %> &middot; <%= Current.family.users.size %></p>
+      <% end %>
+    <% end %>
+    <div class="bg-gray-25 rounded-xl p-1">
+      <div class="px-4 py-2">
+        <p class="uppercase text-xs text-secondary font-medium"><%= Current.family.name %> &middot; <%= Current.family.users.size %></p>
+      </div>
+      <% @users.each do |user| %>
+        <div class="flex gap-2 items-center bg-white p-4 border border-alpha-black-25 rounded-lg">
+          <div class="w-9 h-9 shrink-0">
+            <%= render "settings/user_avatar", user: user %>
           </div>
-          <% @users.each do |user| %>
-            <div class="flex gap-2 items-center bg-white p-4 border border-alpha-black-25 rounded-lg">
-              <div class="w-9 h-9 shrink-0">
-                <%= render "settings/user_avatar", user: user %>
-              </div>
-              <p class="text-primary font-medium text-sm"><%= user.display_name %></p>
-              <div class="rounded-md bg-gray-100 px-1.5 py-0.5">
-                <p class="uppercase text-secondary font-medium text-xs"><%= user.role %></p>
-              </div>
-              <% if Current.user.admin? && user != Current.user %>
-                <div class="ml-auto">
-                  <%= button_to settings_profile_path(user_id: user),
+          <p class="text-primary font-medium text-sm"><%= user.display_name %></p>
+          <div class="rounded-md bg-gray-100 px-1.5 py-0.5">
+            <p class="uppercase text-secondary font-medium text-xs"><%= user.role %></p>
+          </div>
+          <% if Current.user.admin? && user != Current.user %>
+            <div class="ml-auto">
+              <%= button_to settings_profile_path(user_id: user),
                       method: :delete,
                       class: "text-red-500 hover:text-red-700",
                       data: { turbo_confirm: {
@@ -60,48 +57,48 @@
                         accept: t(".remove_member"),
                         acceptClass: "w-full bg-red-500 text-white rounded-xl text-center p-[10px] border mb-2"
                       }} do %>
-                    <%= lucide_icon "x", class: "w-5 h-5" %>
-                  <% end %>
-                </div>
+                <%= lucide_icon "x", class: "w-5 h-5" %>
               <% end %>
             </div>
           <% end %>
-          <% if @pending_invitations.any? %>
-            <% @pending_invitations.each do |invitation| %>
-              <div class="flex gap-2 items-center justify-between bg-white p-4 border border-alpha-black-25 rounded-lg">
-                <div class="flex gap-2 items-center">
-                  <div class="w-9 h-9 shrink-0">
-                    <div class="text-white w-full h-full bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= invitation.email[0] %></div>
-                  </div>
-                  <div class="flex">
-                    <p class="text-primary font-medium text-sm"><%= invitation.email %></p>
-                    <div class="rounded-md bg-gray-100 px-1.5 py-0.5">
-                      <p class="uppercase text-secondary font-medium text-xs"><%= t(".pending") %></p>
-                    </div>
-                  </div>
+        </div>
+      <% end %>
+      <% if @pending_invitations.any? %>
+        <% @pending_invitations.each do |invitation| %>
+          <div class="flex gap-2 items-center justify-between bg-white p-4 border border-alpha-black-25 rounded-lg">
+            <div class="flex gap-2 items-center">
+              <div class="w-9 h-9 shrink-0">
+                <div class="text-white w-full h-full bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= invitation.email[0] %></div>
+              </div>
+              <div class="flex">
+                <p class="text-primary font-medium text-sm"><%= invitation.email %></p>
+                <div class="rounded-md bg-gray-100 px-1.5 py-0.5">
+                  <p class="uppercase text-secondary font-medium text-xs"><%= t(".pending") %></p>
                 </div>
-                <div class="flex items-center gap-4">
-                  <% if self_hosted? %>
-                    <div class="flex items-center gap-2" data-controller="clipboard">
-                      <p class="text-secondary text-sm"><%= t(".invitation_link") %></p>
-                      <span data-clipboard-target="source" class="hidden"><%= accept_invitation_url(invitation.token) %></span>
-                      <input type="text"
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <% if self_hosted? %>
+                <div class="flex items-center gap-2" data-controller="clipboard">
+                  <p class="text-secondary text-sm"><%= t(".invitation_link") %></p>
+                  <span data-clipboard-target="source" class="hidden"><%= accept_invitation_url(invitation.token) %></span>
+                  <input type="text"
                              readonly
                              autocomplete="off"
                              value="<%= accept_invitation_url(invitation.token) %>"
                              class="text-sm bg-gray-50 px-2 py-1 rounded border border-gray-200 w-72">
-                      <button data-action="clipboard#copy" class="text-secondary hover:text-gray-700">
-                        <span data-clipboard-target="iconDefault">
-                          <%= lucide_icon "copy", class: "w-5 h-5" %>
-                        </span>
-                        <span class="hidden" data-clipboard-target="iconSuccess">
-                          <%= lucide_icon "check", class: "w-5 h-5" %>
-                        </span>
-                      </button>
-                    </div>
-                  <% end %>
-                  <% if Current.user.admin? %>
-                    <%= button_to invitation_path(invitation),
+                  <button data-action="clipboard#copy" class="text-secondary hover:text-gray-700">
+                    <span data-clipboard-target="iconDefault">
+                      <%= lucide_icon "copy", class: "w-5 h-5" %>
+                    </span>
+                    <span class="hidden" data-clipboard-target="iconSuccess">
+                      <%= lucide_icon "check", class: "w-5 h-5" %>
+                    </span>
+                  </button>
+                </div>
+              <% end %>
+              <% if Current.user.admin? %>
+                <%= button_to invitation_path(invitation),
                         method: :delete,
                         class: "text-red-500 hover:text-red-700",
                         data: { turbo_confirm: {
@@ -110,31 +107,32 @@
                           accept: t(".remove_invitation"),
                           acceptClass: "w-full bg-red-500 text-white rounded-xl text-center p-[10px] border mb-2"
                         }} do %>
-                      <%= lucide_icon "x", class: "w-5 h-5" %>
-                    <% end %>
-                  <% end %>
-                </div>
-              </div>
-            <% end %>
-          <% end %>
-          <% if Current.user.admin? %>
-            <%= link_to new_invitation_path,
+                  <%= lucide_icon "x", class: "w-5 h-5" %>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+      <% if Current.user.admin? %>
+        <%= link_to new_invitation_path,
                 class: "bg-gray-100 flex items-center justify-center gap-2 text-secondary mt-1 hover:bg-gray-200 rounded-lg px-4 py-2 w-full text-center",
                 data: { turbo_frame: :modal } do %>
-              <%= lucide_icon("plus", class: "w-5 h-5 text-secondary") %>
-              <%= t(".invite_member") %>
-            <% end %>
-          <% end %>
-        </div>
-      </div>
-    <% end %>
-    <%= settings_section title: t(".danger_zone_title") do %>
-      <div class="flex items-center justify-between">
-        <div>
-          <h3 class="font-medium text-primary"><%= t(".delete_account") %></h3>
-          <p class="text-secondary text-sm"><%= t(".delete_account_warning") %></p>
-        </div>
-        <%=
+          <%= lucide_icon("plus", class: "w-5 h-5 text-secondary") %>
+          <%= t(".invite_member") %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<%= settings_section title: t(".danger_zone_title") do %>
+  <div class="flex items-center justify-between">
+    <div>
+      <h3 class="font-medium text-primary"><%= t(".delete_account") %></h3>
+      <p class="text-secondary text-sm"><%= t(".delete_account_warning") %></p>
+    </div>
+    <%=
           button_to t(".delete_account"), user_path(@user), method: :delete,
             class: "bg-red-500 text-white text-sm font-medium rounded-lg px-3 py-2",
             data: { turbo_confirm: {
@@ -143,10 +141,6 @@
               accept: t(".delete_account"),
               acceptClass: "w-full bg-red-500 text-white rounded-xl text-center p-[10px] border mb-2"
             }}
-        %>
-      </div>
-    <% end %>
+    %>
   </div>
-
-  <%= settings_nav_footer %>
-</div>
+<% end %>

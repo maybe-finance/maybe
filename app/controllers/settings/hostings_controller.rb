@@ -1,4 +1,6 @@
-class Settings::HostingsController < SettingsController
+class Settings::HostingsController < ApplicationController
+  layout "settings"
+
   before_action :raise_if_not_self_hosted
 
   def show

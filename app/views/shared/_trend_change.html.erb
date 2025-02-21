@@ -1,14 +1,14 @@
 <%# locals: { trend: } %>
 
-<% styles = trend_styles(trend) %>
-
-<p class="text-sm <%= styles[:text_class] %>">
+<p class="text-sm" style="color: <%= trend.color %>">
   <% if trend.direction.flat? %>
     <span>No change</span>
   <% else %>
-    <span><%= styles[:symbol] %><%= trend.value.is_a?(Money) ? format_money(trend.value.abs) : trend.value.abs.round(2) %></span>
+    <span>
+      <%= trend.value.is_a?(Money) ? format_money(trend.value) : trend.value.round(2) %>
+    </span>
     <% unless trend.percent.infinite? %>
-      <span>(<%= lucide_icon(styles[:icon], class: "w-4 h-4 align-text-bottom inline") %><%= trend.percent.abs %>%)</span>
+      <span>(<%= lucide_icon(trend.icon, class: "w-4 h-4 align-text-bottom inline") %><%= trend.percent_formatted %>)</span>
     <% end %>
   <% end %>
 </p>

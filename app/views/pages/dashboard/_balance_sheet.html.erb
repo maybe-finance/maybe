@@ -1,0 +1,103 @@
+<%# locals: (balance_sheet:) %>
+
+<div class="space-y-4">
+  <% balance_sheet.classification_groups.each do |classification_group| %>
+    <div class="bg-white shadow-border-xs rounded-xl space-y-4 p-4">
+      <h2 class="text-lg font-medium"><%= classification_group.display_name %></h2>
+
+      <% if classification_group.account_groups.any? %>
+        <div class="space-y-4">
+          <div class="flex gap-1">
+            <% classification_group.account_groups.each do |account_group| %>
+              <div class="h-1.5 rounded-sm" style="width: <%= account_group.weight %>%; background-color: <%= account_group.color %>;"></div>
+            <% end %>
+          </div>
+          <div class="flex gap-4">
+            <% classification_group.account_groups.each do |account_group| %>
+              <div class="flex items-center gap-2 text-sm">
+                <div class="h-2.5 w-2.5 rounded-full" style="background-color: <%= account_group.color %>;"></div>
+                <p class="text-secondary"><%= account_group.name %></p>
+                <p class="text-black"><%= number_to_percentage(account_group.weight, precision: 0) %></p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="bg-surface rounded-xl p-1 space-y-1">
+          <div class="px-4 py-2 flex items-center uppercase text-xs font-medium text-secondary">
+            <div>Name</div>
+            <div class="ml-auto text-right flex items-center gap-6">
+              <div class="w-24">
+                <p>Weight</p>
+              </div>
+              <div class="w-40">
+                <p>Value</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="shadow-border-xs rounded-lg bg-white">
+            <% classification_group.account_groups.each do |account_group| %>
+              <details class="group rounded-lg open:bg-surface font-medium text-sm">
+                <summary class="cursor-pointer p-4 group-open:bg-surface bg-white rounded-lg flex items-center justify-between">
+                  <div class="flex items-center gap-4">
+                    <%= lucide_icon("chevron-right", class: "group-open:rotate-90 text-secondary w-5 h-5") %>
+
+                    <p><%= account_group.name %></p>
+                  </div>
+
+                  <div class="ml-auto flex items-center text-right gap-6">
+                    <div class="w-24 flex items-center justify-end gap-2">
+                      <%= render partial: "shared/progress_circle", locals: { progress: account_group.weight, color: account_group.color } %>
+                      <p><%= number_to_percentage(account_group.weight, precision: 0) %></p>
+                    </div>
+
+                    <div class="w-40">
+                      <p><%= format_money(account_group.total_money) %></p>
+                    </div>
+                  </div>
+                </summary>
+
+                <div>
+                  <% account_group.accounts.each_with_index do |account, idx| %>
+                    <div class="pl-12 pr-4 py-3 flex items-center justify-between text-sm font-medium">
+                      <div class="flex items-center gap-3">
+                        <%= render "accounts/logo", account: account, size: "sm", color: account_group.color %>
+                        <%= link_to account.name, account_path(account) %>
+                      </div>
+
+                      <div class="ml-auto flex items-center text-right gap-6">
+                        <div class="w-24 flex items-center justify-end gap-2">
+                          <%= render partial: "shared/progress_circle", locals: { progress: account.weight, color: account_group.color } %>
+                          <p><%= number_to_percentage(account.weight, precision: 0) %></p>
+                        </div>
+
+                        <div class="w-40">
+                          <p><%= format_money(account.balance_money) %></p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <% if idx < account_group.accounts.size - 1 %>
+
+                      <div class="pl-[84px] pr-40">
+                        <div class="w-full border-subdued border-b"></div>
+                      </div>
+                    <% end %>
+                  <% end %>
+                </div>
+              </details>
+            <% end %>
+          </div>
+        </div>
+
+      <% else %>
+        <div class="py-20 flex flex-col items-center">
+          <%= lucide_icon classification_group.icon, class: "w-6 h-6 shrink-0 text-secondary" %>
+          <p class="text-primary text-sm font-medium mb-1 mt-4">No <%= classification_group.display_name %></p>
+          <p class="text-secondary text-sm max-w-xs text-center"><%= "You have no #{classification_group.display_name}" %></p>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

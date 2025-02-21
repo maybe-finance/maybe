@@ -1,5 +1,5 @@
-<% period = Period.from_param(params[:period]) %>
-<% series = @account.series(period: period) %>
+<% period = Period.from_key(params[:period], fallback: true) %>
+<% series = @account.balance_series(period: period) %>
 <% trend = series.trend %>
 
 <%= turbo_frame_tag dom_id(@account, :chart_details) do %>
@@ -13,23 +13,19 @@
       <% end %>
     <% end %>
 
-    <%= tag.span period_label(period), class: "text-secondary" %>
+    <%= tag.span period.comparison_label, class: "text-secondary" %>
   </div>
 
   <div class="h-64">
-    <% if series.has_current_day_value? %>
+    <% if series.any? %>
       <div
         id="lineChart"
         class="w-full h-full"
         data-controller="time-series-chart"
         data-time-series-chart-data-value="<%= series.to_json %>"></div>
-    <% elsif series.empty? %>
-      <div class="w-full h-full flex items-center justify-center">
-        <p class="text-secondary text-sm">No data available for the selected period.</p>
-      </div>
     <% else %>
       <div class="w-full h-full flex items-center justify-center">
-        <p class="text-secondary text-sm animate-pulse">Calculating latest balance data...</p>
+        <p class="text-secondary text-sm">No data available for the selected period.</p>
       </div>
     <% end %>
   </div>

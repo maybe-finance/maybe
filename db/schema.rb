@@ -674,6 +674,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_20_153958) do
     t.string "otp_secret"
     t.boolean "otp_required", default: false, null: false
     t.string "otp_backup_codes", default: [], array: true
+    t.boolean "show_sidebar", default: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["family_id"], name: "index_users_on_family_id"
     t.index ["otp_secret"], name: "index_users_on_otp_secret", unique: true, where: "(otp_secret IS NOT NULL)"

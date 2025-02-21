@@ -4,20 +4,8 @@ en:
     changelog:
       title: What's new
     dashboard:
-      allocation_chart:
-        assets: Assets
-        debts: Debts
-      fallback_greeting: Welcome back, friend
-      greeting: Welcome back, %{name}
-      import: Import
-      income: Income
-      investing: Investing (coming soon...)
-      net_worth: Net Worth
-      new: New account
-      no_transactions: You have no recent transactions
-      savings_rate: Savings Rate
-      spending: Spending
-      subtitle: Here's what's happening today
-      title: Dashboard
-      transactions: Recent transactions
-      view_all: View all
+      no_account_empty_state:
+        new_account: New account
+        no_account_subtitle: Since no accounts have been added, there's no data to
+          display. Add your first accounts to start viewing dashboard data.
+        no_account_title: No accounts yet

@@ -10,7 +10,7 @@ class ImportsController < ApplicationController
   def index
     @imports = Current.family.imports
 
-    render layout: with_sidebar
+    render layout: "settings"
   end
 
   def new

@@ -1,6 +1,4 @@
 class Account::HoldingsController < ApplicationController
-  layout :with_sidebar
-
   before_action :set_holding, only: %i[show destroy]
 
   def index

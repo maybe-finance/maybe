@@ -1,10 +1,10 @@
 class MerchantsController < ApplicationController
-  layout :with_sidebar
-
   before_action :set_merchant, only: %i[edit update destroy]
 
   def index
     @merchants = Current.family.merchants.alphabetically
+
+    render layout: "settings"
   end
 
   def new

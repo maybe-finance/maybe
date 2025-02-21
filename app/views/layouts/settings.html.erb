@@ -1,0 +1,25 @@
+<%= render "layouts/shared/htmldoc" do %>
+  <div class="flex h-full bg-gray-25">
+    <div class="p-4 w-[260px] shrink-0 h-full overflow-y-auto">
+      <%= render "settings/settings_nav" %>
+    </div>
+
+    <main class="py-4 px-10 grow flex h-full overflow-y-auto">
+      <div class="relative max-w-4xl mx-auto flex flex-col w-full h-full">
+        <div class="grow space-y-4 overflow-y-auto -mx-1 px-1 pb-12">
+          <% if content_for?(:page_title) %>
+            <h1 class="text-primary text-xl font-medium">
+              <%= content_for :page_title %>
+            </h1>
+          <% end %>
+
+          <%= yield %>
+        </div>
+
+        <div class="mt-4">
+          <%= settings_nav_footer %>
+        </div>
+      </div>
+    </main>
+  </div>
+<% end %>

@@ -1,4 +1,4 @@
-<%= content_for :content do %>
+<%= render "layouts/shared/htmldoc" do %>
   <div class="flex flex-col h-dvh">
     <header class="flex items-center justify-between p-8">
       <%= link_to content_for(:previous_path) || root_path do %>
@@ -19,5 +19,3 @@
     </main>
   </div>
 <% end %>
-
-<%= render template: "layouts/application" %>
