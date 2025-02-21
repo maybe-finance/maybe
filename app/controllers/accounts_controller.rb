@@ -1,9 +1,9 @@
 class AccountsController < ApplicationController
-  before_action :set_account, only: %i[sync]
+  before_action :set_account, only: %i[sync chart sparkline]
 
   def index
-    @manual_accounts = Current.family.accounts.manual.alphabetically
-    @plaid_items = Current.family.plaid_items.ordered
+    @manual_accounts = family.accounts.manual.alphabetically
+    @plaid_items = family.plaid_items.ordered
 
     render layout: "settings"
   end
@@ -17,25 +17,27 @@ class AccountsController < ApplicationController
   end
 
   def chart
-    @account = Current.family.accounts.find(params[:id])
     render layout: "application"
   end
 
   def sparkline
-    @account = Current.family.accounts.find(params[:id])
     render layout: false
   end
 
   def sync_all
-    unless Current.family.syncing?
-      Current.family.sync_later
+    unless family.syncing?
+      family.sync_later
     end
 
     redirect_to accounts_path
   end
 
   private
+    def family
+      Current.family
+    end
+
     def set_account
-      @account = Current.family.accounts.find(params[:id])
+      @account = family.accounts.find(params[:id])
     end
 end
