@@ -40,7 +40,7 @@ class BudgetsController < ApplicationController
     end
 
     def redirect_to_current_month_budget
-      current_budget = Budget.find_or_bootstrap(Current.family)
+      current_budget = Budget.find_or_bootstrap(Current.family, start_date: Date.current)
       redirect_to budget_path(current_budget)
     end
 end

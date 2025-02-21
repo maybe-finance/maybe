@@ -28,21 +28,21 @@ class IncomeStatementTest < ActiveSupport::TestCase
 
   test "calculates expenses for a period" do
     income_statement = IncomeStatement.new(@family)
-    assert_equal 200 + 300 + 400, income_statement.expense(period: Period.last_30_days).total
+    assert_equal 200 + 300 + 400, income_statement.expense_totals(period: Period.last_30_days).total
   end
 
   test "calculates income for a period" do
     income_statement = IncomeStatement.new(@family)
-    assert_equal 1000, income_statement.income(period: Period.last_30_days).total
+    assert_equal 1000, income_statement.income_totals(period: Period.last_30_days).total
   end
 
   test "calculates median expense" do
     income_statement = IncomeStatement.new(@family)
-    assert_equal 200 + 300 + 400, income_statement.expense(period: Period.last_30_days).total
+    assert_equal 200 + 300 + 400, income_statement.expense_totals(period: Period.last_30_days).total
   end
 
   test "calculates median income" do
     income_statement = IncomeStatement.new(@family)
-    assert_equal 1000, income_statement.income(period: Period.last_30_days).total
+    assert_equal 1000, income_statement.income_totals(period: Period.last_30_days).total
   end
 end

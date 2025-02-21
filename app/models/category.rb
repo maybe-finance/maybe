@@ -1,8 +1,6 @@
 class Category < ApplicationRecord
   include Monetizable
 
-  monetize :period_expense, :median_monthly_expense, :avg_monthly_expense
-
   has_many :transactions, dependent: :nullify, class_name: "Account::Transaction"
   has_many :import_mappings, as: :mappable, dependent: :destroy, class_name: "Import::Mapping"
 
@@ -110,20 +108,6 @@ class Category < ApplicationRecord
 
   def subcategory?
     parent.present?
-  end
-
-  def period_expense(period: Period.current_month)
-    totals = family.income_statement.expense(period: period)
-
-    totals.category_totals.find { |ct| ct.category.id == id }&.total || 0
-  end
-
-  def median_monthly_expense
-    family.income_statement.median_expense(category: self)
-  end
-
-  def avg_monthly_expense
-    family.income_statement.avg_expense(category: self)
   end
 
   private
