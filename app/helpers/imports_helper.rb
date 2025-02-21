@@ -55,23 +55,6 @@ module ImportsHelper
     [ base, border ].join(" ")
   end
 
-  def import_col_labels
-    {
-      date: "Date",
-      ticker: "Ticker",
-      exchange_operating_mic: "Exchange Operating MIC",
-      currency: "Currency",
-      qty: "Quantity",
-      price: "Price",
-      account: "Account",
-      name: "Name",
-      category: "Category",
-      tags: "Tags",
-      entity_type: "Entity Type",
-      notes: "Notes"
-    }
-  end
-
   private
     def permitted_import_types
       %w[transaction_import trade_import account_import mint_import]
