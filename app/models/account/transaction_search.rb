@@ -16,7 +16,7 @@ class Account::TransactionSearch
 
   # Returns array of Account::Entry objects to stay consistent with partials, which only deal with Account::Entry
   def build_query(scope)
-    query = scope
+    query = scope.joins(entry: :account)
 
     if types.present? && types.exclude?("transfer")
       query = query.joins("LEFT JOIN transfers ON transfers.inflow_transaction_id = account_entries.id OR transfers.outflow_transaction_id = account_entries.id")
@@ -40,8 +40,13 @@ class Account::TransactionSearch
 
     query = query.joins(:tags).where(tags: { name: tags }) if tags.present?
 
-    entries_scope = Account::Entry.account_transactions.where(entryable_id: query.select(:id))
+    # Apply common entry search filters
+    query = Account::EntrySearch.apply_search_filter(query, search)
+    query = Account::EntrySearch.apply_date_filters(query, start_date, end_date)
+    query = Account::EntrySearch.apply_type_filter(query, types)
+    query = Account::EntrySearch.apply_amount_filter(query, amount, amount_operator)
+    query = Account::EntrySearch.apply_accounts_filter(query, accounts, account_ids)
 
-    Account::EntrySearch.from_entryable_search(self).build_query(entries_scope)
+    query
   end
 end

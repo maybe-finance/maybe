@@ -53,13 +53,12 @@ class Account::Holding < ApplicationRecord
   end
 
   private
-
     def calculate_trend
       return nil unless amount_money
 
       start_amount = qty * avg_cost
 
-      TimeSeries::Trend.new \
+      Trend.new \
         current: amount_money,
         previous: start_amount
     end

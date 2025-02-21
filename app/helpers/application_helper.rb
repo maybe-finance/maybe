@@ -72,18 +72,8 @@ module ApplicationHelper
     render partial: "shared/disclosure", locals: { title: title, content: content, open: default_open }
   end
 
-  def sidebar_link_to(name, path, options = {})
-    is_current = current_page?(path) || (request.path.start_with?(path) && path != "/")
-
-    classes = [
-      "flex items-center gap-2 px-3 py-2 rounded-xl border text-sm font-medium text-secondary",
-      (is_current ? "bg-white text-primary shadow-xs border-alpha-black-50" : "hover:bg-gray-100 border-transparent")
-    ].compact.join(" ")
-
-    link_to path, **options.merge(class: classes), aria: { current: ("page" if current_page?(path)) } do
-      concat(lucide_icon(options[:icon], class: "w-5 h-5")) if options[:icon]
-      concat(name)
-    end
+  def page_active?(path)
+    current_page?(path) || (request.path.start_with?(path) && path != "/")
   end
 
   def mixed_hex_styles(hex)
@@ -105,24 +95,6 @@ module ApplicationHelper
     uri.relative? ? uri.path : root_path
   end
 
-  def trend_styles(trend)
-    fallback = { bg_class: "bg-gray-500/5", text_class: "text-secondary", symbol: "", icon: "minus" }
-    return fallback if trend.nil? || trend.direction.flat?
-
-    bg_class, text_class, symbol, icon = case trend.direction
-    when "up"
-      trend.favorable_direction.down? ? [ "bg-red-500/5", "text-red-500", "+", "arrow-up" ] : [ "bg-green-500/5", "text-green-500", "+", "arrow-up" ]
-    when "down"
-      trend.favorable_direction.down? ? [ "bg-green-500/5", "text-green-500", "-", "arrow-down" ] : [ "bg-red-500/5", "text-red-500", "-", "arrow-down" ]
-    when "flat"
-      [ "bg-gray-500/5", "text-secondary", "", "minus" ]
-    else
-      raise ArgumentError, "Invalid trend direction: #{trend.direction}"
-    end
-
-    { bg_class: bg_class, text_class: text_class, symbol: symbol, icon: icon }
-  end
-
   # Wrapper around I18n.l to support custom date formats
   def format_date(object, format = :default, options = {})
     date = object.to_date
@@ -139,17 +111,7 @@ module ApplicationHelper
   def format_money(number_or_money, options = {})
     return nil unless number_or_money
 
-    money = Money.new(number_or_money)
-    options.reverse_merge!(money.format_options(I18n.locale))
-    number_to_currency(money.amount, options)
-  end
-
-  def format_money_without_symbol(number_or_money, options = {})
-    return nil unless number_or_money
-
-    money = Money.new(number_or_money)
-    options.reverse_merge!(money.format_options(I18n.locale))
-    ActiveSupport::NumberHelper.number_to_delimited(money.amount.round(options[:precision] || 0), { delimiter: options[:delimiter], separator: options[:separator] })
+    Money.new(number_or_money).format(options)
   end
 
   def totals_by_currency(collection:, money_method:, separator: " | ", negate: false)
@@ -168,7 +130,6 @@ module ApplicationHelper
   end
 
   private
-
     def calculate_total(item, money_method, negate)
       items = item.reject { |i| i.respond_to?(:entryable) && i.entryable.transfer? }
       total = items.sum(&money_method)

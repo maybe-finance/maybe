@@ -1,5 +1,0 @@
-<%= turbo_frame_tag "account-list" do %>
-  <% account_groups(period: @period).each do |group| %>
-    <%= render "accounts/account_list", group: group %>
-  <% end %>
-<% end %>

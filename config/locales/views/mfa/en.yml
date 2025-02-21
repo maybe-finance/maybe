@@ -22,7 +22,8 @@ en:
       scan_description: Use an authenticator app like Google Authenticator or 1Password
         to scan this QR code
       scan_title: 1. Scan QR Code
-      secret_description: If you can't scan the QR code, enter this secret key manually in your authenticator app
+      secret_description: If you can't scan the QR code, enter this secret key manually
+        in your authenticator app
       secret_title: Manual Entry Code
       title: Set Up Two-Factor Authentication
       verify_button: Verify and Enable 2FA

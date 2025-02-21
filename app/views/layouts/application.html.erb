@@ -1,57 +1,51 @@
-<!DOCTYPE html>
-<html class="font-sans text-primary h-full <%= @os %>" lang="en">
-  <head>
-    <title><%= content_for(:title) || "Maybe" %></title>
-
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-
-    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-
-    <%= javascript_include_tag "https://cdn.plaid.com/link/v2/stable/link-initialize.js" %>
-    <%= combobox_style_tag %>
-
-    <%= javascript_importmap_tags %>
-    <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
-
-    <meta name="viewport"
-          content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Maybe">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="theme-color" content="#ffffff">
-
-    <%= yield :head %>
-  </head>
-
-  <body class="h-full">
-    <%= render "impersonation_sessions/super_admin_bar" if Current.true_user&.super_admin? && show_super_admin_bar? %>
-    <%= render "impersonation_sessions/approval_bar" if Current.true_user&.impersonated_support_sessions&.initiated&.any? %>
-
-    <div class="fixed z-50 bottom-6 left-6">
-      <div id="notification-tray" class="space-y-1">
-        <%= render_flash_notifications %>
-
-        <% if Current.family&.syncing? %>
-          <%= render "shared/syncing_notice" %>
+<%= render "layouts/shared/htmldoc" do %>
+  <div class="flex h-full bg-gray-50">
+    <nav class="flex flex-col shrink-0 w-[84px] py-4 mr-3">
+      <div class="pl-2 mb-3">
+        <%= link_to root_path, class: "block" do %>
+          <%= image_tag "logomark-color.svg", class: "w-9 h-9 mx-auto" %>
         <% end %>
       </div>
-    </div>
 
-    <%= family_notifications_stream %>
-    <%= family_stream %>
+      <ul class="space-y-0.5">
+        <li>
+          <%= render "layouts/sidebar/nav_item", name: "Home", path: root_path, icon_key: "pie-chart" %>
+        </li>
 
-    <%= content_for?(:content) ? yield(:content) : yield %>
+        <li>
+          <%= render "layouts/sidebar/nav_item", name: "Transactions", path: transactions_path, icon_key: "credit-card" %>
+        </li>
 
-    <%= turbo_frame_tag "modal" %>
-    <%= turbo_frame_tag "drawer" %>
+        <li>
+          <%= render "layouts/sidebar/nav_item", name: "Budgets", path: budgets_path, icon_key: "layout-grid" %>
+        </li>
+      </ul>
 
-    <%= render "shared/confirm_modal" %>
+      <div class="pl-2 mt-auto mx-auto">
+        <%= render "users/user_menu", user: Current.user %>
+      </div>
+    </nav>
 
-    <% if self_hosted? && Current.user&.onboarded_at.present? %>
-      <%= render "shared/app_version" %>
+    <%= tag.div class: class_names("py-4 shrink-0 h-full overflow-y-auto transition-all duration-300", Current.user.show_sidebar? ? "w-[260px]" : "w-0"), data: { sidebar_target: "panel" } do %>
+      <% if content_for?(:sidebar) %>
+        <%= yield :sidebar %>
+      <% else %>
+        <div id="account-sidebar-tabs" data-turbo-permanent>
+          <%= render "accounts/account_sidebar_tabs", family: Current.family %>
+        </div>
+      <% end %>
     <% end %>
-  </body>
-</html>
+
+    <%= tag.main class: class_names("px-10 py-4 grow h-full", require_upgrade? ? "relative overflow-hidden" : "overflow-y-auto") do %>
+      <% if require_upgrade? %>
+        <div class="absolute inset-0 px-10 h-full w-full z-50">
+          <%= render "shared/subscribe_modal" %>
+        </div>
+      <% end %>
+
+      <%= tag.div class: class_names("mx-auto w-full h-full", Current.user.show_sidebar? ? "max-w-4xl" : "max-w-5xl"), data: { sidebar_target: "content" } do %>
+        <%= yield %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

@@ -9,7 +9,7 @@
       </div>
 
       <div class="p-1 bg-alpha-black-25 mb-2 rounded-lg">
-        <div class="bg-white p-4 rounded-lg flex gap-8 shadow-xs">
+        <div class="bg-white p-4 rounded-lg flex gap-8 shadow-border-xs">
           <div class="space-y-2">
             <%= tag.p t(".example"), class: "text-secondary text-sm" %>
             <%= tag.p "$2,323.25", class: "text-primary font-medium text-2xl" %>
@@ -38,13 +38,15 @@
             { date: Date.current, value: 265 }
           ] %>
 
+          <% placeholder_series = Series.from_raw_values(placeholder_series_data) %>
+
           <div class="flex items-center w-2/5">
             <div class="h-12 w-full">
               <div
                 id="previewChart"
                 class="h-full w-full"
                 data-controller="time-series-chart"
-                data-time-series-chart-data-value="<%= TimeSeries.new(placeholder_series_data).to_json %>"
+                data-time-series-chart-data-value="<%= placeholder_series.to_json %>"
                 data-time-series-chart-use-labels-value="false"
                 data-time-series-chart-use-tooltip-value="false"></div>
             </div>
@@ -84,5 +86,5 @@
     </div>
   </div>
 
-  <%= render "layouts/footer" %>
+  <%= render "layouts/shared/footer" %>
 </div>

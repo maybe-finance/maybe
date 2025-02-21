@@ -1,11 +1,17 @@
 class OtherAsset < ApplicationRecord
   include Accountable
 
-  def color
-    "#12B76A"
-  end
+  class << self
+    def color
+      "#12B76A"
+    end
 
-  def icon
-    "plus"
+    def icon
+      "plus"
+    end
+
+    def classification
+      "asset"
+    end
   end
 end

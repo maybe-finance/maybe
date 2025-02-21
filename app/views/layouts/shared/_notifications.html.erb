@@ -1,0 +1,16 @@
+<div class="fixed z-50 bottom-6 left-6">
+  <div id="notification-tray" class="space-y-1">
+    <%= render_flash_notifications %>
+
+    <% if Current.family&.syncing? %>
+      <%= render "shared/syncing_notice" %>
+    <% end %>
+  </div>
+</div>
+
+<%= family_notifications_stream %>
+<%= family_stream %>
+
+<% if self_hosted? && (upgrade = get_upgrade_for_notification(Current.user, Setting.upgrades_mode)) %>
+  <%= render partial: "shared/upgrade_notification", locals: { upgrade: upgrade } %>
+<% end %>

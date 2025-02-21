@@ -6,20 +6,21 @@ en:
     destroy:
       success: Accounts scheduled for deletion.
     plaid_item:
+      add_new: Add new connection
       confirm_accept: Delete institution
       confirm_body: This will permanently delete all the accounts in this group and
         all associated data.
       confirm_title: Delete institution?
+      connection_lost: Connection lost
+      connection_lost_description: This connection is no longer valid. You'll need
+        to delete this connection and add it again to continue syncing data.
       delete: Delete
       error: Error occurred while syncing data
       no_accounts_description: We could not load any accounts from this financial
         institution.
       no_accounts_title: No accounts found
+      requires_update: Requires re-authentication
       status: Last synced %{timestamp} ago
       status_never: Requires data sync
       syncing: Syncing...
-      requires_update: Requires re-authentication
       update: Update connection
-      connection_lost: Connection lost
-      connection_lost_description: This connection is no longer valid. You'll need to delete this connection and add it again to continue syncing data.
-      add_new: Add new connection

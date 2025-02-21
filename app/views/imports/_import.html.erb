@@ -42,7 +42,7 @@
       <% end %>
 
       <% if import.complete? || import.revert_failed? %>
-        <%= button_to revert_import_path(import), 
+        <%= button_to revert_import_path(import),
                       method: :put,
                       class: "block w-full py-2 px-3 space-x-2 text-orange-600 hover:bg-orange-50 flex items-center rounded-lg",
                       data: { turbo_confirm: true } do %>

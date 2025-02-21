@@ -1,4 +1,4 @@
-<div class="space-y-4 h-full flex flex-col overflow-y-auto" data-controller="focus-record" data-focus-record-id-value="<%= @focused_record ? dom_id(@focused_record) : nil %>">
+<div class="space-y-4 h-fit max-h-full flex flex-col" data-controller="focus-record" data-focus-record-id-value="<%= @focused_record ? dom_id(@focused_record) : nil %>">
   <%= render "header" %>
 
   <%= render "summary", totals: @totals %>
@@ -7,7 +7,7 @@
        data-controller="bulk-select"
        data-bulk-select-singular-label-value="<%= t(".transaction") %>"
        data-bulk-select-plural-label-value="<%= t(".transactions") %>"
-       class="overflow-y-auto flex flex-col bg-white rounded-xl border border-alpha-black-25 shadow-xs p-4">
+       class="overflow-y-auto flex flex-col bg-white rounded-xl shadow-border-xs p-4">
     <%= render "transactions/searches/search" %>
 
     <div id="entry-selection-bar" data-bulk-select-target="selectionBar" class="flex justify-center hidden">
@@ -28,11 +28,9 @@
           <p class="col-span-2 justify-self-end">amount</p>
         </div>
         <div class="space-y-6">
-          <%= entries_by_date(@transaction_entries, transfers: @transfers, totals: true) do |entries, transfers| %>
-            <%= render partial: "transfers/transfer", collection: transfers %>
-
-            <%# Render regular entries %>
-            <%= render partial: "account/entries/entry", collection: entries.reject { |e| e.entryable.transfer? } %>
+          <%= entries_by_date(@transactions.map(&:entry), totals: true) do |entries| %>
+            <%# Only render the outflow side of transfers to avoid duplicate entries %>
+            <%= render partial: "account/entries/entry", collection: entries.reject { |e| e.entryable.transfer_as_inflow.present? } %>
           <% end %>
         </div>
       </div>
@@ -41,7 +39,7 @@
     <% end %>
 
     <div class="pt-4">
-      <%= render "pagination", pagy: @pagy %>
+      <%= render "shared/pagination", pagy: @pagy %>
     </div>
   </div>
 </div>

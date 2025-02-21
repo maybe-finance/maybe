@@ -1,16 +1,37 @@
-<%# locals: (series:) %>
-<% if series.has_current_day_value? %>
+<%# locals: (series:, period:) %>
+
+<div class="flex justify-between p-4">
+  <div class="space-y-2">
+    <div class="space-y-2">
+      <p class="text-sm text-secondary font-medium">Net Worth</p>
+      <p class="text-primary -space-x-0.5 text-xl font-medium">
+        <%= series.current.format %>
+      </p>
+      <% if series.trend.nil? %>
+        <p class="text-sm text-secondary">Data not available for the selected period</p>
+      <% elsif series.trend.direction.flat? %>
+        <p class="text-sm text-secondary">No change vs. prior period</p>
+      <% else %>
+        <div class="flex items-center gap-2">
+          <%= render partial: "shared/trend_change", locals: { trend: series.trend } %>
+          <span class="text-sm text-secondary"><%= period.comparison_label %></span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <%= form_with url: root_path, method: :get, class: "flex items-center gap-4", data: { controller: "auto-submit-form" } do |form| %>
+    <%= period_select form: form, selected: period %>
+  <% end %>
+</div>
+
+<% if series.any? %>
   <div
     id="netWorthChart"
     class="w-full flex-1 min-h-52"
     data-controller="time-series-chart"
     data-time-series-chart-data-value="<%= series.to_json %>"></div>
-<% elsif series.empty? %>
-  <div class="w-full h-full flex items-center justify-center">
-    <p class="text-secondary text-sm">No data available for the selected period.</p>
-  </div>
 <% else %>
   <div class="w-full h-full flex items-center justify-center">
-    <p class="text-secondary text-sm animate-pulse">Calculating latest balance data...</p>
+    <p class="text-secondary text-sm">No data available for the selected period.</p>
   </div>
 <% end %>

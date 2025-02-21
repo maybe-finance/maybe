@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_12_163624) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_12_213301) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -672,6 +672,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_12_163624) do
     t.string "otp_secret"
     t.boolean "otp_required", default: false, null: false
     t.string "otp_backup_codes", default: [], array: true
+    t.boolean "show_sidebar", default: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["family_id"], name: "index_users_on_family_id"
     t.index ["otp_secret"], name: "index_users_on_otp_secret", unique: true, where: "(otp_secret IS NOT NULL)"

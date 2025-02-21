@@ -32,7 +32,7 @@
         <% end %>
       <% else %>
         <p class="text-sm text-secondary font-medium">
-          <%= format_money(budget_category.category.avg_monthly_total_money, precision: 0) %> avg
+          <%= budget_category.median_monthly_expense_money.format %> avg
         </p>
       <% end %>
     </div>

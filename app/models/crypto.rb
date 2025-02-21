@@ -1,11 +1,21 @@
 class Crypto < ApplicationRecord
   include Accountable
 
-  def color
-    "#737373"
-  end
+  class << self
+    def color
+      "#737373"
+    end
 
-  def icon
-    "bitcoin"
+    def classification
+      "asset"
+    end
+
+    def icon
+      "bitcoin"
+    end
+
+    def display_name
+      "Crypto"
+    end
   end
 end

@@ -1,7 +1,7 @@
 <%# locals: (plaid_item:) %>
 
 <%= tag.div id: dom_id(plaid_item) do %>
-  <details open class="group bg-white p-4 border border-alpha-black-25 shadow-xs rounded-xl">
+  <details open class="group bg-white p-4 shadow-border-xs rounded-xl">
     <summary class="flex items-center justify-between gap-2 focus-visible:outline-hidden">
       <div class="flex items-center gap-2">
         <%= lucide_icon "chevron-right", class: "group-open:transform group-open:rotate-90 text-secondary w-5" %>
@@ -50,15 +50,14 @@
         <% if plaid_item.requires_update? %>
           <% begin %>
             <% link_token = plaid_item.get_update_link_token(webhooks_url: plaid_webhooks_url(plaid_item.plaid_region), redirect_url: accounts_url) %>
-            <button 
-              data-controller="plaid" 
-              data-action="plaid#open" 
+            <button
+              data-controller="plaid"
+              data-action="plaid#open"
               data-plaid-region-value="<%= plaid_item.plaid_region %>"
               data-plaid-link-token-value="<%= link_token %>"
               data-plaid-is-update-value="true"
               data-plaid-item-id-value="<%= plaid_item.id %>"
-              class="btn btn--secondary flex items-center gap-2"
-            >
+              class="btn btn--secondary flex items-center gap-2">
               <%= lucide_icon "refresh-cw", class: "w-4 h-4" %>
               <%= tag.span t(".update") %>
             </button>

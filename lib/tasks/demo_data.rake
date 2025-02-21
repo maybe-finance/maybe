@@ -5,8 +5,13 @@ namespace :demo_data do
     Demo::Generator.new.reset_and_clear_data!(families)
   end
 
-  task reset: :environment do
-    families = [ "Demo Family 1", "Demo Family 2", "Demo Family 3", "Demo Family 4", "Demo Family 5" ]
+  task :reset, [ :count ] => :environment do |t, args|
+    count = (args[:count] || 1).to_i
+    families = count.times.map { |i| "Demo Family #{i + 1}" }
     Demo::Generator.new.reset_data!(families)
+  end
+
+  task multi_currency: :environment do
+    Demo::Generator.new.generate_multi_currency_data!
   end
 end

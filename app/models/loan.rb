@@ -17,11 +17,17 @@ class Loan < ApplicationRecord
     Money.new(payment.round, account.currency)
   end
 
-  def color
-    "#D444F1"
-  end
+  class << self
+    def color
+      "#D444F1"
+    end
 
-  def icon
-    "hand-coins"
+    def icon
+      "hand-coins"
+    end
+
+    def classification
+      "liability"
+    end
   end
 end

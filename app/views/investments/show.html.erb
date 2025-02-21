@@ -10,8 +10,8 @@
                tooltip: render(
                  "investments/value_tooltip",
                  balance: @account.balance_money,
-                 holdings: @account.balance - @account.cash_balance,
-                 cash: @account.cash_balance
+                 holdings: @account.balance_money - @account.cash_balance_money,
+                 cash: @account.cash_balance_money
                ) %>
 
     <div class="min-h-[800px]">

@@ -19,7 +19,10 @@ class UsersController < ApplicationController
       @user.update!(user_params.except(:redirect_to, :delete_profile_image))
       @user.profile_image.purge if should_purge_profile_image?
 
-      handle_redirect(t(".success"))
+      respond_to do |format|
+        format.html { handle_redirect(t(".success")) }
+        format.json { head :ok }
+      end
     end
   end
 
@@ -57,7 +60,7 @@ class UsersController < ApplicationController
 
     def user_params
       params.require(:user).permit(
-        :first_name, :last_name, :email, :profile_image, :redirect_to, :delete_profile_image, :onboarded_at,
+        :first_name, :last_name, :email, :profile_image, :redirect_to, :delete_profile_image, :onboarded_at, :show_sidebar,
         family_attributes: [ :name, :currency, :country, :locale, :date_format, :timezone, :id, :data_enrichment_enabled ]
       )
     end

@@ -1,26 +1,26 @@
-<%# locals: (entry:) %>
+<%# locals: (transaction:) %>
 
-<div id="<%= dom_id(entry, "transfer_match") %>" class="flex items-center gap-1">
-  <% if entry.account_transaction.transfer.confirmed? %>
-    <span title="<%= entry.account_transaction.transfer.payment? ? "Payment" : "Transfer" %> is confirmed">
+<div id="<%= dom_id(transaction, "transfer_match") %>" class="flex items-center gap-1">
+  <% if transaction.transfer.confirmed? %>
+    <span title="<%= transaction.transfer.payment? ? "Payment" : "Transfer" %> is confirmed">
       <%= lucide_icon "link-2", class: "w-4 h-4 text-indigo-600" %>
     </span>
-  <% elsif entry.account_transaction.transfer.pending? %>
+  <% elsif transaction.transfer.pending? %>
     <span class="inline-flex items-center rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-700">
       Auto-matched
     </span>
 
-    <%= button_to transfer_path(entry.account_transaction.transfer, transfer: { status: "confirmed" }),
+    <%= button_to transfer_path(transaction.transfer, transfer: { status: "confirmed" }),
                     method: :patch,
-                    class: "text-secondary hover:text-gray-800 flex items-center justify-center",
+                    class: "text-secondary hover:text-gray-800 flex items-center justify-center cursor-pointer",
                     title: "Confirm match" do %>
       <%= lucide_icon "check", class: "w-4 h-4 text-indigo-400 hover:text-indigo-600" %>
     <% end %>
 
-    <%= button_to transfer_path(entry.account_transaction.transfer, transfer: { status: "rejected" }),
+    <%= button_to transfer_path(transaction.transfer, transfer: { status: "rejected" }),
                     method: :patch,
                     data: { turbo: false },
-                    class: "text-secondary hover:text-gray-800 flex items-center justify-center",
+                    class: "text-secondary hover:text-gray-800 flex items-center justify-center cursor-pointer",
                     title: "Reject match" do %>
       <%= lucide_icon "x", class: "w-4 h-4 text-subdued hover:text-gray-600" %>
     <% end %>

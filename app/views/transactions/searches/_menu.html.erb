@@ -6,7 +6,7 @@
   data-controller="tabs"
   data-tabs-active-class="bg-gray-25 text-primary"
   data-tabs-default-tab-value="<%= get_default_transaction_search_filter[:key] %>"
-  class="hidden absolute flex z-10 h-80 w-[540px] top-12 right-0 border border-tertiary bg-white rounded-lg shadow-xs">
+  class="hidden absolute flex z-10 h-80 w-[540px] top-12 right-0 shadow-border-xs bg-white rounded-lg">
   <div class="flex w-44 flex-col items-start p-3 text-sm font-medium text-secondary border-r border-r-alpha-black-100">
     <% transaction_search_filters.each do |filter| %>
       <button
