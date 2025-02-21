@@ -66,33 +66,48 @@ class TradeImport < Import
       exchange_operating_mic = nil if exchange_operating_mic.blank?
 
       # First try to find an exact match in our DB, or if no exchange_operating_mic is provided, find by ticker only
-      internal_security = exchange_operating_mic.present? ? Security.find_by(ticker:, exchange_operating_mic:) : Security.find_by(ticker:)
+      internal_security = if exchange_operating_mic.present?
+        Security.find_by(ticker:, exchange_operating_mic:)
+      else
+        Security.find_by(ticker:)
+      end
+
       return internal_security if internal_security.present?
 
-      # Cache provider responses so that when we're looping through rows and importing, we only hit our provider for the unique combinations of ticker / exchange_operating_mic
-      cache_key = [ ticker, exchange_operating_mic ]
+      # If security prices provider isn't properly configured or available, create with nil exchange_operating_mic
+      provider = Security.security_prices_provider
+      unless provider.present? && provider.respond_to?(:search_securities)
+        return Security.find_or_create_by!(ticker: ticker, exchange_operating_mic: nil)
+      end
 
+      # Cache provider responses so that when we're looping through rows and importing,
+      # we only hit our provider for the unique combinations of ticker / exchange_operating_mic
+      cache_key = [ ticker, exchange_operating_mic ]
       @provider_securities_cache ||= {}
 
       provider_security = @provider_securities_cache[cache_key] ||= begin
-        response = Security.security_prices_provider.search_securities(
+        response = provider.search_securities(
           query: ticker,
           exchange_operating_mic: exchange_operating_mic
         )
 
-        return nil unless response.success?
-
-        response.securities.first
+        if !response || !response.success? || !response.securities || response.securities.empty?
+          nil
+        else
+          response.securities.first
+        end
+      rescue => e
+        nil
       end
 
       return Security.find_or_create_by!(ticker: ticker, exchange_operating_mic: nil) if provider_security.nil?
 
-      Security.find_or_create_by!(ticker: provider_security.dig(:ticker), exchange_operating_mic: provider_security.dig(:exchange_operating_mic)) do |security|
-        security.name = provider_security.dig(:name)
-        security.country_code = provider_security.dig(:country_code)
-        security.logo_url = provider_security.dig(:logo_url)
-        security.exchange_acronym = provider_security.dig(:exchange_acronym)
-        security.exchange_mic = provider_security.dig(:exchange_mic)
+      Security.find_or_create_by!(ticker: provider_security[:ticker], exchange_operating_mic: provider_security[:exchange_operating_mic]) do |security|
+        security.name = provider_security[:name]
+        security.country_code = provider_security[:country_code]
+        security.logo_url = provider_security[:logo_url]
+        security.exchange_acronym = provider_security[:exchange_acronym]
+        security.exchange_mic = provider_security[:exchange_mic]
       end
     end
 end
