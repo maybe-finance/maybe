@@ -9,7 +9,7 @@ WORKDIR /rails
 
 # Install base packages
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libvips postgresql-client
+    apt-get install --no-install-recommends -y curl libvips postgresql-client git
 
 # Set production environment
 ENV RAILS_ENV="production" \
@@ -21,7 +21,7 @@ ENV RAILS_ENV="production" \
 FROM base AS build
 
 # Install packages needed to build gems
-RUN apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config
+RUN apt-get install --no-install-recommends -y build-essential libpq-dev pkg-config
 
 # Install application gems
 COPY .ruby-version Gemfile Gemfile.lock ./
