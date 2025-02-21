@@ -65,21 +65,9 @@ class TradeImport < Import
       # Normalize empty string to nil for consistency
       exchange_operating_mic = nil if exchange_operating_mic.blank?
 
-      # First try to find an exact match in our DB
-      internal_security = Security.find_by(ticker:, exchange_operating_mic:)
+      # First try to find an exact match in our DB, or if no exchange_operating_mic is provided, find by ticker only
+      internal_security = exchange_operating_mic.present? ? Security.find_by(ticker:, exchange_operating_mic:) : Security.find_by(ticker:)
       return internal_security if internal_security.present?
-
-      # If no exact match and no exchange_operating_mic was provided, try to find any security with the same ticker
-      if exchange_operating_mic.nil?
-        internal_security = Security.where(ticker:).first
-        if internal_security.present?
-          internal_security.update!(exchange_operating_mic: nil)
-          return internal_security
-        end
-      end
-
-      # If we couldn't find the security locally and the provider isn't available, create with provided info
-      return Security.create!(ticker: ticker, exchange_operating_mic: exchange_operating_mic) unless Security.security_prices_provider.present?
 
       # Cache provider responses so that when we're looping through rows and importing, we only hit our provider for the unique combinations of ticker / exchange_operating_mic
       cache_key = [ ticker, exchange_operating_mic ]
@@ -97,17 +85,14 @@ class TradeImport < Import
         response.securities.first
       end
 
-      return Security.create!(ticker: ticker, exchange_operating_mic: exchange_operating_mic) if provider_security.nil?
+      return Security.find_or_create_by!(ticker: ticker, exchange_operating_mic: nil) if provider_security.nil?
 
-      # Create a new security with the provider's data and our exchange_operating_mic
-      Security.create!(
-        ticker: ticker,
-        name: provider_security.dig(:name),
-        country_code: provider_security.dig(:country_code),
-        logo_url: provider_security.dig(:logo_url),
-        exchange_acronym: provider_security.dig(:exchange_acronym),
-        exchange_mic: provider_security.dig(:exchange_mic),
-        exchange_operating_mic: exchange_operating_mic
-      )
+      Security.find_or_create_by!(ticker: provider_security.dig(:ticker), exchange_operating_mic: provider_security.dig(:exchange_operating_mic)) do |security|
+        security.name = provider_security.dig(:name)
+        security.country_code = provider_security.dig(:country_code)
+        security.logo_url = provider_security.dig(:logo_url)
+        security.exchange_acronym = provider_security.dig(:exchange_acronym)
+        security.exchange_mic = provider_security.dig(:exchange_mic)
+      end
     end
 end
