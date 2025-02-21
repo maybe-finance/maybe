@@ -183,7 +183,7 @@ export default class extends Controller {
             this._normalDataPoints[this._normalDataPoints.length - 1].date,
           ])
           .tickSize(0)
-          .tickFormat(d3.utcFormat("%d %b %Y")),
+          .tickFormat(d3.utcFormat("%b %d, %Y")),
       )
       .select(".domain")
       .remove();
@@ -362,7 +362,7 @@ export default class extends Controller {
   _tooltipTemplate(datum) {
     return `
       <div style="margin-bottom: 4px; color: var(--color-gray-500);">
-        ${d3.utcFormat("%b %d, %Y")(datum.date)}
+        ${datum.date_formatted}
       </div>
 
       <div style="display: flex; align-items: center; gap: 16px;">

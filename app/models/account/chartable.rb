@@ -18,7 +18,7 @@ module Account::Chartable
       values = [ nil, *balances ].each_cons(2).map do |prev, curr|
         Series::Value.new(
           date: curr.date,
-          date_formatted: I18n.l(curr.date, format: :short),
+          date_formatted: I18n.l(curr.date, format: :long),
           trend: Trend.new(
             current: Money.new(curr.balance, currency),
             previous: prev.nil? ? nil : Money.new(prev.balance, currency),
