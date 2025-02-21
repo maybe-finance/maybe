@@ -2,7 +2,7 @@
 
 <% background_color = "color-mix(in srgb, #{category.color} 10%, white)" %>
 <span 
-      data-color-picker-target="avatar"
+      data-category-target="avatar"
       class="w-14 h-14 flex items-center justify-center rounded-full"
       style="background-color: <%= background_color %>; color: <%= category.color %>">
   <%= lucide_icon(category.lucide_icon, class: "w-6 h-6") %>

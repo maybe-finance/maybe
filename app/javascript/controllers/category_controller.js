@@ -3,6 +3,9 @@ import Pickr from '@simonwep/pickr'
 
 export default class extends Controller {
   static targets = ["pickerBtn", "colorInput", "colorsSection", "paletteSection", "pickerSection", "colorPreview", "avatar", "details", "icon","validationMessage","selection","colorPickerRadioBtn"];
+  static values = {
+    presetColors: Array,
+  };
 
   _predefined_colors = ["#e99537", "#4da568", "#6471eb", "#db5a54", "#df4e92", "#c44fe9", "#eb5429", "#61c9ea", "#805dee", "#6ad28a"];
 
@@ -25,7 +28,7 @@ export default class extends Controller {
 
     this.selectedIcon = null;
 
-    if (!this._predefined_colors.includes(this.colorInputTarget.value)) {
+    if (!this.presetColorsValue.includes(this.colorInputTarget.value)) {
       this.colorPickerRadioBtnTarget.checked = true;
     }
   }
@@ -120,16 +123,8 @@ export default class extends Controller {
   }
 
   autoAdjust(e){
-    const currentRGBA = this.picker.getColor().toRGBA();
-    let adjustedRGBA = currentRGBA;
-
-    adjustedRGBA = this.darkenColor(currentRGBA).toString();
-
-    this.colorInputTarget.value = adjustedRGBA;
-    this.colorInputTarget.dataset.colorPickerColorValue = adjustedRGBA;
-    this.colorPreviewTarget.style.backgroundColor = adjustedRGBA;
-    this.colorInputTarget.setCustomValidity("");
-
+    const currentRGBA = this.picker.getColor();
+    const adjustedRGBA = this.darkenColor(currentRGBA).toString();
     this.picker.setColor(adjustedRGBA);
   }
 
@@ -163,8 +158,8 @@ export default class extends Controller {
     return (l1 + 0.05) / (l2 + 0.05);
   }
 
-  darkenColor([r, g, b, a]) {
-    let darkened = [r, g, b, a];
+  darkenColor(color) {
+    let darkened = color.toRGBA();
     let backgroundColor = this.backgroundColor(darkened, 10);
     let contrastRatio = this.contrast(darkened, backgroundColor);
 
@@ -178,12 +173,7 @@ export default class extends Controller {
       contrastRatio = this.contrast(darkened, backgroundColor);
     }
 
-    const toHex = (n) => {
-      const hex = Math.round(n).toString(16);
-      return hex.length === 1 ? '0' + hex : hex;
-    };
-
-    return `#${toHex(darkened[0])}${toHex(darkened[1])}${toHex(darkened[2])}`;
+    return `rgba(${darkened.join(", ")})`;
   }
 
   showPaletteSection() {

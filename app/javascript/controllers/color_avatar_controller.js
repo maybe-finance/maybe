@@ -18,4 +18,11 @@ export default class extends Controller {
       e.currentTarget.value?.[0] || "?"
     ).toUpperCase();
   };
+
+  handleColorChange(e) {
+    const color = e.currentTarget.value;
+    this.avatarTarget.style.backgroundColor = `color-mix(in srgb, ${color} 10%, white)`;
+    this.avatarTarget.style.borderColor = `color-mix(in srgb, ${color} 10%, white)`;
+    this.avatarTarget.style.color = color;
+  }
 }
