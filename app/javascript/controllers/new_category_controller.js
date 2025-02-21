@@ -168,7 +168,7 @@ export default class extends Controller {
     let backgroundColor = this.backgroundColor(darkened, 10);
     let contrastRatio = this.contrast(darkened, backgroundColor);
 
-    while (contrastRatio < 4.6 && (darkened[0] > 0 || darkened[1] > 0 || darkened[2] > 0)) {
+    while (contrastRatio < 4.5 && (darkened[0] > 0 || darkened[1] > 0 || darkened[2] > 0)) {
       darkened = [
         Math.max(0, darkened[0] - 10),
         Math.max(0, darkened[1] - 10),
