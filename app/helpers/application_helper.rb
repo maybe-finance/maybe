@@ -95,24 +95,6 @@ module ApplicationHelper
     uri.relative? ? uri.path : root_path
   end
 
-  def trend_styles(trend)
-    fallback = { bg_class: "bg-gray-500/5", text_class: "text-secondary", symbol: "", icon: "minus" }
-    return fallback if trend.nil? || trend.direction.flat?
-
-    bg_class, text_class, symbol, icon = case trend.direction
-    when "up"
-      trend.favorable_direction.down? ? [ "bg-red-500/5", "text-red-500", "+", "arrow-up" ] : [ "bg-green-500/5", "text-green-500", "+", "arrow-up" ]
-    when "down"
-      trend.favorable_direction.down? ? [ "bg-green-500/5", "text-green-500", "-", "arrow-down" ] : [ "bg-red-500/5", "text-red-500", "-", "arrow-down" ]
-    when "flat"
-      [ "bg-gray-500/5", "text-secondary", "", "minus" ]
-    else
-      raise ArgumentError, "Invalid trend direction: #{trend.direction}"
-    end
-
-    { bg_class: bg_class, text_class: text_class, symbol: symbol, icon: icon }
-  end
-
   # Wrapper around I18n.l to support custom date formats
   def format_date(object, format = :default, options = {})
     date = object.to_date
@@ -145,13 +127,6 @@ module ApplicationHelper
     end
 
     cookies[:admin] == "true"
-  end
-
-  def trend_percent(value)
-    return "+\u221E" if value.infinite? && value > 0
-    return "-\u221E" if value.infinite? && value < 0
-
-    number_to_percentage(value, precision: 1)
   end
 
   private

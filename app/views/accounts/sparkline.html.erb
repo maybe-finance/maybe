@@ -4,7 +4,7 @@
       <%= render "shared/sparkline", id: dom_id(@account, :sparkline_chart), series: @account.sparkline_series %>
     </div>
 
-    <%= tag.p trend_percent(@account.sparkline_series.trend.percent),
+    <%= tag.p @account.sparkline_series.trend.percent_formatted,
               style: "color: #{@account.sparkline_series.trend.color}",
               class: "text-right text-xs font-medium text-primary" %>
   </div>

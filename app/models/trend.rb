@@ -59,11 +59,19 @@ class Trend
     (change / previous.to_f * 100).round(1)
   end
 
+  def percent_formatted
+    if percent.finite?
+      "#{percent.round(1)}%"
+    else
+      percent > 0 ? "＋∞" : "-∞"
+    end
+  end
+
   def as_json
     {
       value: value,
       percent: percent,
-      percent_formatted: percent.finite? ? "#{percent}%" : (percent > 0 ? "＋∞" : "-∞"),
+      percent_formatted: percent_formatted,
       current: current,
       previous: previous,
       color: color,
