@@ -1,6 +1,4 @@
 class Category < ApplicationRecord
-  include Monetizable
-
   has_many :transactions, dependent: :nullify, class_name: "Account::Transaction"
   has_many :import_mappings, as: :mappable, dependent: :destroy, class_name: "Import::Mapping"
 
