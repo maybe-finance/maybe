@@ -105,8 +105,8 @@ class Import < ApplicationRecord
   def generate_rows_from_csv
     rows.destroy_all
 
-    csv_rows.each do |row|
-      rows.create!(
+    mapped_rows = csv_rows.map do |row|
+      {
         account: row[account_col_label].to_s,
         date: row[date_col_label].to_s,
         qty: sanitize_number(row[qty_col_label]).to_s,
@@ -119,8 +119,10 @@ class Import < ApplicationRecord
         tags: row[tags_col_label].to_s,
         entity_type: row[entity_type_col_label].to_s,
         notes: row[notes_col_label].to_s
-      )
+      }
     end
+
+    rows.insert_all!(mapped_rows)
   end
 
   def sync_mappings
