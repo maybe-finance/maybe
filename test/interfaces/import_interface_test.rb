@@ -68,7 +68,7 @@ module ImportInterfaceTest
     csv_data = "date,amount,name\n01/01/2024,\"1,234.56\",Test"
     import.update!(raw_file_str: csv_data)
     import.generate_rows_from_csv
-
+    import.reload
     row = import.rows.first
     assert_equal "1234.56", row.amount
   end
@@ -86,6 +86,7 @@ module ImportInterfaceTest
     csv_data = "date,amount,name\n01/01/2024,\"1.234,56\",Test"
     import.update!(raw_file_str: csv_data)
     import.generate_rows_from_csv
+    import.reload
 
     row = import.rows.first
     assert_equal "1234.56", row.amount
@@ -105,6 +106,7 @@ module ImportInterfaceTest
     csv_data = "date,amount,name\n01/01/2024,\"1 234,56\",Test"
     import.update!(raw_file_str: csv_data)
     import.generate_rows_from_csv
+    import.reload
 
     row = import.rows.first
     assert_equal "1234.56", row.amount
@@ -123,6 +125,7 @@ module ImportInterfaceTest
     csv_data = "date,amount,name\n01/01/2024,1234,Test"
     import.update!(raw_file_str: csv_data)
     import.generate_rows_from_csv
+    import.reload
 
     row = import.rows.first
     assert_equal "1234", row.amount
@@ -143,6 +146,7 @@ module ImportInterfaceTest
     csv_data = "date,amount,name,currency\n01/01/2024,123.45,Test,EUR"
     import.update!(raw_file_str: csv_data)
     import.generate_rows_from_csv
+    import.reload
 
     row = import.rows.first
     assert_equal "EUR", row.currency
@@ -163,6 +167,7 @@ module ImportInterfaceTest
     csv_data = "date,amount,name,currency\n01/01/2024,123.45,Test,"
     import.update!(raw_file_str: csv_data)
     import.generate_rows_from_csv
+    import.reload
 
     row = import.rows.first
     assert_equal "USD", row.currency
@@ -182,6 +187,7 @@ module ImportInterfaceTest
     csv_data = "date,amount,name\n01/01/2024,123.45,Test"
     import.update!(raw_file_str: csv_data)
     import.generate_rows_from_csv
+    import.reload
 
     row = import.rows.first
     assert_equal "USD", row.currency
@@ -206,6 +212,7 @@ module ImportInterfaceTest
                "01/01/2024,1234.56,Salary,Bank Account,Income,\"monthly,salary\",Salary payment,EUR"
     import.update!(raw_file_str: csv_data)
     import.generate_rows_from_csv
+    import.reload
 
     row = import.rows.first
     assert_equal "01/01/2024", row.date
@@ -230,6 +237,7 @@ module ImportInterfaceTest
     csv_data = "date,amount\n01/01/2024,1234.56"
     import.update!(raw_file_str: csv_data)
     import.generate_rows_from_csv
+    import.reload
 
     row = import.rows.first
     assert_equal "01/01/2024", row.date
@@ -253,6 +261,7 @@ module ImportInterfaceTest
     csv_data = "date,amount,name,category,tags\n01/01/2024,1234.56,,,"
     import.update!(raw_file_str: csv_data)
     import.generate_rows_from_csv
+    import.reload
 
     row = import.rows.first
     assert_equal "01/01/2024", row.date
@@ -260,6 +269,22 @@ module ImportInterfaceTest
     assert_equal "Imported item", row.name # Falls back to default
     assert_equal "", row.category
     assert_equal "", row.tags
+  end
+
+  test "can submit configuration that results in invalid rows for user to fix later" do
+    import = imports(:transaction)
+
+    csv_data = "date,amount,name\n01/01/2024,1234.56,Test"
+    import.update!(raw_file_str: csv_data)
+    import.update!(
+      date_format: "%Y-%m-%d" # Does not match the raw CSV date, so rows will be invalid, but still generated
+    )
+
+    import.generate_rows_from_csv
+    import.reload
+
+    assert_equal "01/01/2024", import.rows.first.date
+    assert import.rows.first.invalid?
   end
 
   test "handles trade-specific fields" do
@@ -277,6 +302,7 @@ module ImportInterfaceTest
     csv_data = "date,amount,quantity,symbol,price\n01/01/2024,1234.56,10,AAPL,123.456"
     import.update!(raw_file_str: csv_data)
     import.generate_rows_from_csv
+    import.reload
 
     row = import.rows.first
     assert_equal "10", row.qty
