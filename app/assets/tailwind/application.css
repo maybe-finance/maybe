@@ -37,7 +37,7 @@
   }
 }
 
-@utility combobox {
+.combobox {
   .hw-combobox__main__wrapper,
   .hw-combobox__input {
     @apply w-full;
@@ -67,6 +67,35 @@
   --hw-handle-width: 20px;
   --hw-handle-height: 20px;
   --hw-handle-offset-right: 0px;
+}
+
+/* Typography */
+.prose {
+  @apply max-w-none;
+
+  h2 {
+    @apply text-xl font-medium;
+  }
+
+  h3 {
+    @apply text-lg font-medium;
+  }
+
+  li {
+    @apply m-0;
+  }
+
+  details {
+    @apply mb-4 rounded-xl mt-3.5;
+  }
+
+  summary {
+    @apply flex items-center gap-1;
+  }
+
+  video {
+    @apply m-0 rounded-b-xl;
+  }
 }
 
 .prose--github-release-notes {

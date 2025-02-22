@@ -61,6 +61,34 @@ class Demo::Generator
     puts "Demo data loaded successfully!"
   end
 
+  def generate_multi_currency_data!
+    puts "Clearing existing data..."
+
+    destroy_everything!
+
+    puts "Data cleared"
+
+    create_family_and_user!("Demo Family 1", "user@maybe.local", currency: "EUR")
+
+    family = Family.find_by(name: "Demo Family 1")
+
+    puts "Users reset"
+
+    usd_checking = family.accounts.create!(name: "USD Checking", currency: "USD", balance: 10000, accountable: Depository.new)
+    eur_checking = family.accounts.create!(name: "EUR Checking", currency: "EUR", balance: 4900, accountable: Depository.new)
+
+    puts "Accounts created"
+
+    create_transaction!(account: usd_checking, amount: -11000, currency: "USD", name: "USD income Transaction")
+    create_transaction!(account: usd_checking, amount: 1000, currency: "USD", name: "USD expense Transaction")
+    create_transaction!(account: eur_checking, amount: -5000, currency: "EUR", name: "EUR income Transaction")
+    create_transaction!(account: eur_checking, amount: 100, currency: "EUR", name: "EUR expense Transaction")
+
+    puts "Transactions created"
+
+    puts "Demo data loaded successfully!"
+  end
+
   private
     def destroy_everything!
       Family.destroy_all
@@ -71,13 +99,14 @@ class Demo::Generator
       Security::Price.destroy_all
     end
 
-    def create_family_and_user!(family_name, user_email, data_enrichment_enabled: false)
+    def create_family_and_user!(family_name, user_email, data_enrichment_enabled: false, currency: "USD")
       base_uuid = "d99e3c6e-d513-4452-8f24-dc263f8528c0"
       id = Digest::UUID.uuid_v5(base_uuid, family_name)
 
       family = Family.create!(
         id: id,
         name: family_name,
+        currency: currency,
         stripe_subscription_status: "active",
         data_enrichment_enabled: data_enrichment_enabled,
         locale: "en",
@@ -161,19 +190,21 @@ class Demo::Generator
         balance: 15000,
         currency: "USD"
 
+      # First create income transactions to ensure positive balance
+      50.times do
+        create_transaction! \
+          account: checking,
+          amount: Faker::Number.negative(from: -2000, to: -500),
+          name: "Income",
+          category: family.categories.find_by(name: "Income")
+      end
+
+      # Then create expenses that won't exceed the income
       200.times do
         create_transaction! \
           account: checking,
           name: "Expense",
-          amount: Faker::Number.positive(from: 100, to: 1000)
-      end
-
-      50.times do
-        create_transaction! \
-          account: checking,
-          amount: Faker::Number.negative(from: -2000),
-          name: "Income",
-          category: family.categories.find_by(name: "Income")
+          amount: Faker::Number.positive(from: 8, to: 500)
       end
     end
 
@@ -185,13 +216,22 @@ class Demo::Generator
         currency: "USD",
         subtype: "savings"
 
+      # Create larger income deposits first
       100.times do
         create_transaction! \
           account: savings,
-          amount: Faker::Number.negative(from: -2000),
+          amount: Faker::Number.negative(from: -3000, to: -1000),
           tags: [ family.tags.find_by(name: "Emergency Fund") ],
           category: family.categories.find_by(name: "Income"),
           name: "Income"
+      end
+
+      # Add some smaller withdrawals that won't exceed the deposits
+      50.times do
+        create_transaction! \
+          account: savings,
+          amount: Faker::Number.positive(from: 100, to: 1000),
+          name: "Savings Withdrawal"
       end
     end
 
@@ -304,39 +344,50 @@ class Demo::Generator
       create_valuation!(house, 2.years.ago.to_date, 540000)
       create_valuation!(house, 1.years.ago.to_date, 550000)
 
-      family.accounts.create! \
+      mortgage = family.accounts.create! \
         accountable: Loan.new,
         name: "Mortgage",
         balance: 495000,
         currency: "USD"
+
+      create_valuation!(mortgage, 3.years.ago.to_date, 495000)
+      create_valuation!(mortgage, 2.years.ago.to_date, 490000)
+      create_valuation!(mortgage, 1.years.ago.to_date, 485000)
     end
 
     def create_car_and_loan!(family)
-      family.accounts.create! \
+      vehicle = family.accounts.create! \
         accountable: Vehicle.new,
         name: "Honda Accord",
         balance: 18000,
         currency: "USD"
 
-      family.accounts.create! \
+      create_valuation!(vehicle, 1.year.ago.to_date, 18000)
+
+      loan = family.accounts.create! \
         accountable: Loan.new,
         name: "Car Loan",
         balance: 8000,
         currency: "USD"
+
+      create_valuation!(loan, 1.year.ago.to_date, 8000)
     end
 
     def create_other_accounts!(family)
-      family.accounts.create! \
+      other_asset = family.accounts.create! \
         accountable: OtherAsset.new,
         name: "Other Asset",
         balance: 10000,
         currency: "USD"
 
-      family.accounts.create! \
+      other_liability = family.accounts.create! \
         accountable: OtherLiability.new,
         name: "Other Liability",
         balance: 5000,
         currency: "USD"
+
+      create_valuation!(other_asset, 1.year.ago.to_date, 10000)
+      create_valuation!(other_liability, 1.year.ago.to_date, 5000)
     end
 
     def create_transaction!(attributes = {})

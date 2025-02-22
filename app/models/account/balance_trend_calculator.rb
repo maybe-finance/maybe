@@ -80,7 +80,7 @@ class Account::BalanceTrendCalculator
     return BalanceTrend.new(trend: nil) unless intraday_balance.present?
 
     BalanceTrend.new(
-      trend: TimeSeries::Trend.new(
+      trend: Trend.new(
         current: Money.new(intraday_balance, entry.currency),
         previous: Money.new(prior_balance, entry.currency),
         favorable_direction: entry.account.favorable_direction

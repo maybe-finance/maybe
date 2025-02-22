@@ -43,7 +43,7 @@
         <% end %>
       </div>
 
-      <div class="bg-white border border-secondary rounded-xl shadow-xs divide-y divide-alpha-black-200">
+      <div class="bg-white shadow-border-xs rounded-xl divide-y divide-alpha-black-200">
         <% @rows.each do |row| %>
           <%= render "import/rows/form", row: row %>
         <% end %>
@@ -52,8 +52,8 @@
   </div>
 
   <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full p-12">
-    <div class="border border-tertiary rounded-lg p-3 max-w-2xl mx-auto bg-white shadow-xs">
-      <%= render "application/pagination", pagy: @pagy %>
+    <div class="shadow-border-xs rounded-lg p-3 max-w-2xl mx-auto bg-white">
+      <%= render "shared/pagination", pagy: @pagy %>
     </div>
   </div>
 </div>

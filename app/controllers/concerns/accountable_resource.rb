@@ -4,7 +4,6 @@ module AccountableResource
   included do
     include ScrollFocusable
 
-    layout :with_sidebar
     before_action :set_account, only: [ :show, :edit, :update, :destroy ]
     before_action :set_link_token, only: :new
   end

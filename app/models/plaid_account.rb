@@ -115,12 +115,6 @@ class PlaidAccount < ApplicationRecord
       plaid_item.family
     end
 
-    def transfer?(plaid_txn)
-      transfer_categories = [ "TRANSFER_IN", "TRANSFER_OUT", "LOAN_PAYMENTS" ]
-
-      transfer_categories.include?(plaid_txn.personal_finance_category.primary)
-    end
-
     def create_initial_loan_balance(loan_data)
       if loan_data.origination_principal_amount.present? && loan_data.origination_date.present?
         account.entries.find_or_create_by!(plaid_id: loan_data.account_id) do |e|

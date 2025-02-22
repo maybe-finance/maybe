@@ -7,7 +7,7 @@
   "full" => "w-full h-full"
 } %>
 
-<%= tag.div style: mixed_hex_styles(hex),
+<%= tag.div style: mixed_hex_styles(hex || "#1570EF"),
             class: [size_classes[size], "flex shrink-0 items-center justify-center rounded-full"] do %>
   <%= tag.span (name.presence&.first || "T").upcase, class: ["font-medium", size == "sm" ? "text-xs" : "text-sm"] %>
 <% end %>

@@ -53,7 +53,7 @@ Rails.application.routes.draw do
     post :bootstrap, on: :collection
   end
 
-  resources :budgets, only: %i[index show edit update create] do
+  resources :budgets, only: %i[index show edit update], param: :month_year do
     get :picker, on: :collection
 
     resources :budget_categories, only: %i[index show update]
@@ -78,16 +78,17 @@ Rails.application.routes.draw do
 
   resources :accounts, only: %i[index new] do
     collection do
-      get :summary
-      get :list
       post :sync_all
     end
 
     member do
       post :sync
       get :chart
+      get :sparkline
     end
   end
+
+  resources :accountable_sparklines, only: :show, param: :accountable_type
 
   namespace :account do
     resources :holdings, only: %i[index new show destroy]

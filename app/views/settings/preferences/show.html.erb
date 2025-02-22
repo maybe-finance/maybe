@@ -1,77 +1,70 @@
-<% content_for :sidebar do %>
-  <%= render "settings/nav" %>
-<% end %>
+<%= content_for :page_title, t(".page_title") %>
 
-<div class="space-y-4">
-  <h1 class="text-primary text-xl font-medium mb-4"><%= t(".page_title") %></h1>
-  <%= settings_section title: t(".general_title"), subtitle: t(".general_subtitle") do %>
-    <div>
-      <%= styled_form_with model: @user, class: "space-y-4", data: { controller: "auto-submit-form" } do |form| %>
-        <%= form.hidden_field :redirect_to, value: "preferences" %>
+<%= settings_section title: t(".general_title"), subtitle: t(".general_subtitle") do %>
+  <div>
+    <%= styled_form_with model: @user, class: "space-y-4", data: { controller: "auto-submit-form" } do |form| %>
+      <%= form.hidden_field :redirect_to, value: "preferences" %>
 
-        <%= form.fields_for :family do |family_form| %>
-          <%= family_form.select :currency,
+      <%= form.fields_for :family do |family_form| %>
+        <%= family_form.select :currency,
             currencies_for_select.map { |currency| [ "#{currency.name} (#{currency.iso_code})", currency.iso_code ] },
             { label: t(".currency") }, disabled: true %>
 
-          <%= family_form.select :locale,
+        <%= family_form.select :locale,
             language_options,
             { label: t(".language") },
             { data: { auto_submit_form_target: "auto" } } %>
 
-          <%= family_form.select :timezone,
+        <%= family_form.select :timezone,
             timezone_options,
             { label: t(".timezone") },
             { data: { auto_submit_form_target: "auto" } } %>
 
-          <%= family_form.select :date_format,
+        <%= family_form.select :date_format,
             Family::DATE_FORMATS,
             { label: t(".date_format") },
             { data: { auto_submit_form_target: "auto" } } %>
 
-          <%= family_form.select :country,
+        <%= family_form.select :country,
             country_options,
             { label: t(".country") },
             { data: { auto_submit_form_target: "auto" } } %>
 
-          <p class="text-xs italic pl-2 text-secondary">Please note, we are still working on translations for various languages.  Please see the <%= link_to "I18n issue", "https://github.com/maybe-finance/maybe/issues/1225", target: "_blank", class: "underline" %> for more information.</p>
-        <% end %>
+        <p class="text-xs italic pl-2 text-secondary">Please note, we are still working on translations for various languages.  Please see the <%= link_to "I18n issue", "https://github.com/maybe-finance/maybe/issues/1225", target: "_blank", class: "underline" %> for more information.</p>
       <% end %>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
+<% end %>
 
-  <%= settings_section title: t(".data"), subtitle: t(".data_subtitle") do %>
-    <%= render "settings/preferences/data_enrichment_settings", user: @user %>
-  <% end %>
+<%= settings_section title: t(".data"), subtitle: t(".data_subtitle") do %>
+  <%= render "settings/preferences/data_enrichment_settings", user: @user %>
+<% end %>
 
-  <%= settings_section title: t(".theme_title"), subtitle: t(".theme_subtitle") do %>
-    <div>
-      <%= styled_form_with model: @user, class: "flex justify-between items-center" do |form| %>
-        <%= form.hidden_field :redirect_to, value: "preferences" %>
-        <div class="text-center">
-          <%= image_tag("light-mode-preview.png", alt: "Light Theme Preview", class: "h-44 mb-4") %>
-          <div class="flex justify-center items-center gap-2">
-            <%= form.radio_button :theme, t(".theme_light"), checked: true %>
-            <%= form.label :theme_light, t(".theme_light"), value: "light" %>
-          </div>
+<%= settings_section title: t(".theme_title"), subtitle: t(".theme_subtitle") do %>
+  <div>
+    <%= styled_form_with model: @user, class: "flex justify-between items-center" do |form| %>
+      <%= form.hidden_field :redirect_to, value: "preferences" %>
+      <div class="text-center">
+        <%= image_tag("light-mode-preview.png", alt: "Light Theme Preview", class: "h-44 mb-4") %>
+        <div class="flex justify-center items-center gap-2">
+          <%= form.radio_button :theme, t(".theme_light"), checked: true %>
+          <%= form.label :theme_light, t(".theme_light"), value: "light" %>
         </div>
-        <div class="text-center">
-          <%= image_tag("dark-mode-preview.png", alt: "Dark Theme Preview", class: "h-44 mb-4") %>
-          <div class="flex justify-center items-center gap-2">
-            <%= form.radio_button :theme, t(".theme_dark"), disabled: true, class: "cursor-not-allowed" %>
-            <%= form.label :theme_dark, t(".theme_dark"), value: "dark" %>
-          </div>
+      </div>
+      <div class="text-center">
+        <%= image_tag("dark-mode-preview.png", alt: "Dark Theme Preview", class: "h-44 mb-4") %>
+        <div class="flex justify-center items-center gap-2">
+          <%= form.radio_button :theme, t(".theme_dark"), disabled: true, class: "cursor-not-allowed" %>
+          <%= form.label :theme_dark, t(".theme_dark"), value: "dark" %>
         </div>
-        <div class="text-center">
-          <%= image_tag("system-mode-preview.png", alt: "System Theme Preview", class: "h-44 mb-4") %>
-          <div class="flex items-center gap-2 justify-center">
-            <%= form.radio_button :theme, t(".theme_system"), disabled: true, class: "cursor-not-allowed" %>
-            <%= form.label :theme_system, t(".theme_system"), value: "system" %>
-          </div>
+      </div>
+      <div class="text-center">
+        <%= image_tag("system-mode-preview.png", alt: "System Theme Preview", class: "h-44 mb-4") %>
+        <div class="flex items-center gap-2 justify-center">
+          <%= form.radio_button :theme, t(".theme_system"), disabled: true, class: "cursor-not-allowed" %>
+          <%= form.label :theme_system, t(".theme_system"), value: "system" %>
         </div>
-      <% end %>
-    </div>
-  <% end %>
-
-  <%= settings_nav_footer %>
-</div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

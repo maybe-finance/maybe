@@ -7,7 +7,7 @@
 
   <div class="text-sm mr-3">
     <p class="text-primary font-medium mb-0.5"><%= budget_category.category.name %></p>
-    <p class="text-secondary"><%= format_money(Money.new(budget_category.category.avg_monthly_total, budget_category.category.family.currency), precision: 0) %>/m average</p>
+    <p class="text-secondary"><%= budget_category.avg_monthly_expense_money.format(precision: 0) %>/m avg</p>
   </div>
 
   <div class="ml-auto">

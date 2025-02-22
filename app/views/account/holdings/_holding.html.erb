@@ -18,7 +18,7 @@
 
     <div class="col-span-2 flex justify-end items-center gap-2">
       <% if holding.weight %>
-        <%= render "shared/progress_circle", progress: holding.weight, text_class: "text-blue-500" %>
+        <%= render "shared/progress_circle", progress: holding.weight %>
         <%= tag.p number_to_percentage(holding.weight, precision: 1) %>
       <% else %>
         <%= tag.p "--", class: "text-secondary mb-5" %>

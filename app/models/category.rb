@@ -5,7 +5,7 @@ class Category < ApplicationRecord
   belongs_to :family
 
   has_many :budget_categories, dependent: :destroy
-  has_many :subcategories, class_name: "Category", foreign_key: :parent_id
+  has_many :subcategories, class_name: "Category", foreign_key: :parent_id, dependent: :nullify
   belongs_to :parent, class_name: "Category", optional: true
 
   validates :name, :color, :lucide_icon, :family, presence: true
@@ -108,30 +108,6 @@ class Category < ApplicationRecord
     parent.present?
   end
 
-  def avg_monthly_total
-    family.category_stats.avg_monthly_total_for(self)
-  end
-
-  def median_monthly_total
-    family.category_stats.median_monthly_total_for(self)
-  end
-
-  def month_total(date: Date.current)
-    family.category_stats.month_total_for(self, date: date)
-  end
-
-  def avg_monthly_total_money
-    Money.new(avg_monthly_total, family.currency)
-  end
-
-  def median_monthly_total_money
-    Money.new(median_monthly_total, family.currency)
-  end
-
-  def month_total_money(date: Date.current)
-    Money.new(month_total(date: date), family.currency)
-  end
-
   private
     def category_level_limit
       if (subcategory? && parent.subcategory?) || (parent? && subcategory?)
@@ -143,5 +119,9 @@ class Category < ApplicationRecord
       if subcategory? && parent.classification != classification
         errors.add(:parent, "must have the same classification as its parent")
       end
+    end
+
+    def monetizable_currency
+      family.currency
     end
 end

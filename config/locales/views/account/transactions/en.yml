@@ -31,11 +31,6 @@ en:
         income: Income
         submit: Add transaction
         transfer: Transfer
-      index:
-        new: New transaction
-        no_transactions: No transactions for this account yet.
-        transaction: transaction
-        transactions: Transactions
       new:
         new_transaction: New transaction
       show:

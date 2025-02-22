@@ -18,7 +18,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
       end
 
       # Trigger Capybara's wait mechanism to avoid timing issues with logins
-      find("h1", text: "Dashboard")
+      find("h1", text: "Welcome back, #{user.first_name}")
     end
 
     def sign_out

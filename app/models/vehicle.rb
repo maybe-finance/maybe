@@ -12,15 +12,21 @@ class Vehicle < ApplicationRecord
   end
 
   def trend
-    TimeSeries::Trend.new(current: account.balance_money, previous: first_valuation_amount)
+    Trend.new(current: account.balance_money, previous: first_valuation_amount)
   end
 
-  def color
-    "#F23E94"
-  end
+  class << self
+    def color
+      "#F23E94"
+    end
 
-  def icon
-    "car-front"
+    def icon
+      "car-front"
+    end
+
+    def classification
+      "asset"
+    end
   end
 
   private

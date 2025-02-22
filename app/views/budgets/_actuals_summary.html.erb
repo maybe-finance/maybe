@@ -4,26 +4,24 @@
   <div class="p-4 border-b border-gray-100">
     <h3 class="text-sm text-secondary mb-2">Income</h3>
 
-    <% income_totals = budget.income_categories_with_totals %>
-    <% income_categories = income_totals.category_totals.reject { |ct| ct.amount_money.zero? }.sort_by { |ct| ct.percentage }.reverse %>
     <span class="inline-block mb-2 text-xl font-medium text-primary">
-      <%= format_money(income_totals.total_money) %>
+      <%= budget.actual_income_money.format %>
     </span>
 
-    <% if income_categories.any? %>
+    <% if budget.income_category_totals.any? %>
       <div>
         <div class="flex h-1.5 mb-3 gap-1">
-          <% income_categories.each do |item| %>
-            <div class="h-full rounded-xs" style="background-color: <%= item.category.color %>; width: <%= item.percentage %>%"></div>
+          <% budget.income_category_totals.each do |category_total| %>
+            <div class="h-full rounded-xs" style="background-color: <%= category_total.category.color %>; width: <%= category_total.weight %>%"></div>
           <% end %>
         </div>
 
         <div class="flex flex-wrap gap-x-2.5 gap-y-1 text-xs">
-          <% income_categories.each do |item| %>
+          <% budget.income_category_totals.each do |category_total| %>
             <div class="flex items-center gap-1.5">
-              <div class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: <%= item.category.color %>"></div>
-              <span class="text-secondary"><%= item.category.name %></span>
-              <span class="text-primary"><%= number_to_percentage(item.percentage, precision: 0) %></span>
+              <div class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: <%= category_total.category.color %>"></div>
+              <span class="text-secondary"><%= category_total.category.name %></span>
+              <span class="text-primary"><%= number_to_percentage(category_total.weight, precision: 0) %></span>
             </div>
           <% end %>
         </div>
@@ -34,25 +32,22 @@
   <div class="p-4">
     <h3 class="text-sm text-secondary mb-2">Expenses</h3>
 
-    <% expense_totals = budget.expense_categories_with_totals %>
-    <% expense_categories = expense_totals.category_totals.reject { |ct| ct.amount_money.zero? || ct.category.subcategory? }.sort_by { |ct| ct.percentage }.reverse %>
+    <span class="inline-block mb-2 text-xl font-medium text-primary"><%= budget.actual_spending_money.format %></span>
 
-    <span class="inline-block mb-2 text-xl font-medium text-primary"><%= format_money(expense_totals.total_money) %></span>
-
-    <% if expense_categories.any? %>
+    <% if budget.expense_category_totals.any? %>
       <div>
         <div class="flex h-1.5 mb-3 gap-1">
-          <% expense_categories.each do |item| %>
-            <div class="h-full rounded-xs" style="background-color: <%= item.category.color %>; width: <%= item.percentage %>%"></div>
+          <% budget.expense_category_totals.each do |category_total| %>
+            <div class="h-full rounded-xs" style="background-color: <%= category_total.category.color %>; width: <%= category_total.weight %>%"></div>
           <% end %>
         </div>
 
         <div class="flex flex-wrap gap-x-2.5 gap-y-1 text-xs">
-          <% expense_categories.each do |item| %>
+          <% budget.expense_category_totals.each do |category_total| %>
             <div class="flex items-center gap-1.5">
-              <div class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: <%= item.category.color %>"></div>
-              <span class="text-secondary"><%= item.category.name %></span>
-              <span class="text-primary"><%= number_to_percentage(item.percentage, precision: 0) %></span>
+              <div class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: <%= category_total.category.color %>"></div>
+              <span class="text-secondary"><%= category_total.category.name %></span>
+              <span class="text-primary"><%= number_to_percentage(category_total.weight, precision: 0) %></span>
             </div>
           <% end %>
         </div>

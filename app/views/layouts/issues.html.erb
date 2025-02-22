@@ -1,15 +1,15 @@
-<%= drawer do %>
-  <article class="prose">
-    <%= tag.h2 do %>
-      <%= yield :title %>
-    <% end %>
+<%= render "layouts/shared/htmldoc" do %>
+  <%= drawer do %>
+    <article class="prose">
+      <%= tag.h2 do %>
+        <%= yield :title %>
+      <% end %>
 
-    <%= tag.h3 t(".description") %>
-    <%= yield :description %>
+      <%= tag.h3 "Issue Description" %>
+      <%= yield :description %>
 
-    <%= tag.h3 t(".action") %>
-    <%= yield :action %>
-  </article>
+      <%= tag.h3 "How to fix this issue" %>
+      <%= yield :action %>
+    </article>
+  <% end %>
 <% end %>
-
-<%= render template: "layouts/application" %>

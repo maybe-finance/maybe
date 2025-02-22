@@ -55,7 +55,7 @@ class Money
   end
 
   def as_json
-    { amount: amount, currency: currency.iso_code }.as_json
+    { amount: amount, currency: currency.iso_code, formatted: format }.as_json
   end
 
   def <=>(other)

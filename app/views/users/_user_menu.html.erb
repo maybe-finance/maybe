@@ -1,0 +1,70 @@
+<%# locals: (user:) %>
+
+<div id="user-menu" data-controller="menu" data-menu-placement-value="right-start" data-menu-offset-value="16">
+  <button data-menu-target="button">
+    <div class="w-9 h-9 cursor-pointer">
+      <%= render "settings/user_avatar", user: user, variant: :small %>
+    </div>
+  </button>
+
+  <div data-menu-target="content" class="hidden absolute w-[276px] z-10 divide-y divide-alpha-black-100 bg-white rounded-xl shadow-border-sm">
+    <div class="px-4 py-3 flex items-center gap-3">
+      <div class="w-9 h-9 shrink-0">
+        <%= render "settings/user_avatar", user: user, variant: :small, lazy: true %>
+      </div>
+
+      <div class="overflow-hidden text-ellipsis text-sm">
+        <p class="font-medium"><%= user.display_name %></p>
+        <% if user.display_name != user.email %>
+          <p class="text-secondary"><%= user.email %></p>
+        <% end %>
+      </div>
+    </div>
+
+    <% if self_hosted? %>
+      <div class="p-3">
+        <p class="text-sm">
+          <span class="font-medium text-primary">Version:</span>
+          <%= link_to Maybe.version.to_release_tag, "https://github.com/maybe-finance/maybe/releases/tag/#{Maybe.version.to_release_tag}", target: "_blank", class: "hover:underline" %>
+          (<%= link_to Maybe.commit_sha.first(7), "https://github.com/maybe-finance/maybe/commit/#{Maybe.commit_sha}", target: "_blank", class: "hover:underline" %>)
+        </p>
+      </div>
+    <% end %>
+
+    <div class="p-1">
+      <%= link_to settings_profile_path(return_to: request.fullpath), class: "btn btn--ghost flex gap-2 items-center" do %>
+        <%= lucide_icon("settings", class: "w-5 h-5 text-secondary shrink-0") %>
+        <span class="text-primary text-sm">Settings</span>
+      <% end %>
+
+      <%= link_to changelog_path, class: "btn btn--ghost flex gap-2 items-center" do %>
+        <%= lucide_icon("box", class: "w-5 h-5 text-secondary shrink-0") %>
+        <span class="text-primary text-sm">Changelog</span>
+      <% end %>
+
+      <%= link_to feedback_path, class: "btn btn--ghost flex gap-2 items-center" do %>
+        <%= lucide_icon("megaphone", class: "w-5 h-5 text-secondary shrink-0") %>
+        <span class="text-primary text-sm">Feedback</span>
+      <% end %>
+
+      <% if self_hosted? %>
+        <%= link_to "https://link.maybe.co/discord", class: "btn btn--ghost flex gap-2 items-center" do %>
+          <%= lucide_icon("message-square-more", class: "w-5 h-5 text-secondary shrink-0") %>
+          <span class="text-primary text-sm">Contact</span>
+        <% end %>
+      <% else %>
+        <%= link_to "mailto:hello@maybefinance.com", class: "btn btn--ghost flex gap-2 items-center", onclick: "Intercom('showNewMessage'); return false;" do %>
+          <%= lucide_icon("message-square-more", class: "w-5 h-5 text-secondary shrink-0") %>
+          <span class="text-primary text-sm">Contact</span>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="p-1">
+      <%= button_to session_path(Current.session), method: :delete, class: "btn btn--ghost text-destructive w-full flex gap-2 items-center" do %>
+        <%= lucide_icon("log-out", class: "w-5 h-5 shrink-0") %>
+        <span class="text-sm">Logout</span>
+      <% end %>
+    </div>
+  </div>
+</div>

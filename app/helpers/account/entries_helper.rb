@@ -1,22 +1,13 @@
 module Account::EntriesHelper
-  def permitted_entryable_partial_path(entry, relative_partial_path)
-    "account/entries/entryables/#{permitted_entryable_key(entry)}/#{relative_partial_path}"
-  end
-
-  def transfer_entries(entries)
-    transfers = entries.select { |e| e.transfer_id.present? }
-    transfers.map(&:transfer).uniq
-  end
-
-  def entries_by_date(entries, transfers: [], selectable: true, totals: false)
+  def entries_by_date(entries, totals: false)
     entries.group_by(&:date).map do |date, grouped_entries|
       content = capture do
-        yield [ grouped_entries, transfers.select { |t| t.outflow_transaction.entry.date == date } ]
+        yield grouped_entries
       end
 
       next if content.blank?
 
-      render partial: "account/entries/entry_group", locals: { date:, entries: grouped_entries, content:, selectable:, totals: }
+      render partial: "account/entries/entry_group", locals: { date:, entries: grouped_entries, content:, totals: }
     end.compact.join.html_safe
   end
 
@@ -28,11 +19,4 @@ module Account::EntriesHelper
       entry.display_name
     ].join(" • ")
   end
-
-  private
-
-    def permitted_entryable_key(entry)
-      permitted_entryable_paths = %w[transaction valuation trade]
-      entry.entryable_name_short.presence_in(permitted_entryable_paths)
-    end
 end

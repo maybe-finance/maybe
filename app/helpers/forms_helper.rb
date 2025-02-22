@@ -18,18 +18,9 @@ module FormsHelper
   end
 
   def period_select(form:, selected:, classes: "border border-tertiary shadow-xs rounded-lg text-sm pr-7 cursor-pointer text-primary focus:outline-hidden focus:ring-0")
-    periods_for_select = [
-      %w[CWD current_week], # Current Week to Date
-      %w[7D last_7_days],
-      %w[MTD current_month], # Month to Date
-      %w[1M last_30_days],
-      %w[CQD current_quarter], # Quarter to Date
-      %w[3M last_90_days],
-      %w[YTD current_year], # Year to Date
-      %w[1Y last_365_days]
-    ]
+    periods_for_select = Period.all.map { |period| [ period.label_short, period.key ] }
 
-    form.select(:period, periods_for_select, { selected: selected }, class: classes, data: { "auto-submit-form-target": "auto" })
+    form.select(:period, periods_for_select, { selected: selected.key }, class: classes, data: { "auto-submit-form-target": "auto" })
 end
 
 

@@ -1,4 +1,4 @@
-<%# locals: (progress:, radius: 7, stroke: 2, text_class: "text-green-500") %>
+<%# locals: (progress:, radius: 7, stroke: 2, color: nil) %>
 
 <%
   circumference = Math::PI * 2 * radius
@@ -18,7 +18,8 @@
 
   <!-- Foreground Circle -->
   <circle
-    class="fill-transparent stroke-current <%= text_class %>"
+    class="fill-transparent"
+    style="stroke: <%= color || "var(--color-blue-500)" %>"
     r="<%= radius %>"
     cx="<%= center %>"
     cy="<%= center %>"

@@ -146,7 +146,9 @@ export default class extends Controller {
 
   _updateGroups() {
     this.groupTargets.forEach((group) => {
-      const rows = this.rowTargets.filter((row) => group.contains(row));
+      const rows = this.rowTargets.filter(
+        (row) => group.contains(row) && !row.disabled,
+      );
       const groupSelected =
         rows.length > 0 &&
         rows.every((row) => this.selectedIdsValue.includes(row.dataset.id));
