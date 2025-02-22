@@ -90,6 +90,7 @@ export default class extends Controller {
     const iconSVG = e.currentTarget.closest('label').querySelector('svg').cloneNode(true);
     this.avatarTarget.innerHTML = '';
     iconSVG.style.padding = "0px"
+    iconSVG.classList.add("w-8","h-8")
     this.avatarTarget.appendChild(iconSVG);
   }
 
