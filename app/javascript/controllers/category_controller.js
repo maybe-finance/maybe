@@ -7,8 +7,6 @@ export default class extends Controller {
     presetColors: Array,
   };
 
-  _predefined_colors = ["#e99537", "#4da568", "#6471eb", "#db5a54", "#df4e92", "#c44fe9", "#eb5429", "#61c9ea", "#805dee", "#6ad28a"];
-
   initialize() {
     this.pickerBtnTarget.addEventListener('click', () => {
       this.showPaletteSection();
