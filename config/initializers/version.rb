@@ -5,7 +5,7 @@ module Maybe
     end
 
     def commit_sha
-      `git rev-parse HEAD`.chomp
+      `git rev-parse HEAD`.chomp rescue 'Unknown (missing git)'
     end
 
     private
