@@ -21,14 +21,8 @@ export default class extends Controller {
 
   handleColorChange(e) {
     const color = e.currentTarget.value;
-    this.avatarTarget.style.backgroundColor = `color-mix(in srgb, ${color} 5%, white)`;
+    this.avatarTarget.style.backgroundColor = `color-mix(in srgb, ${color} 10%, white)`;
     this.avatarTarget.style.borderColor = `color-mix(in srgb, ${color} 10%, white)`;
     this.avatarTarget.style.color = color;
-  }
-
-  handleParentChange(e) {
-    const parent = e.currentTarget.value;
-    const visibility = typeof parent === "string" && parent !== "" ? "hidden" : "visible"
-    this.selectionTarget.style.visibility = visibility
   }
 }
