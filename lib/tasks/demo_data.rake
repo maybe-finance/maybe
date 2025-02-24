@@ -12,6 +12,12 @@ namespace :demo_data do
   end
 
   task multi_currency: :environment do
-    Demo::Generator.new.generate_multi_currency_data!
+    families = [ "Demo Family 1", "Demo Family 2" ]
+    Demo::Generator.new.generate_multi_currency_data!(families)
+  end
+
+  task basic_budget: :environment do
+    families = [ "Demo Family 1" ]
+    Demo::Generator.new.generate_basic_budget_data!(families)
   end
 end
