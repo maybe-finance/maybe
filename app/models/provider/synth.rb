@@ -128,11 +128,12 @@ class Provider::Synth
       raw_response: error
   end
 
-  def search_securities(query:, dataset: "limited", country_code:)
+  def search_securities(query:, dataset: "limited", country_code: nil, exchange_operating_mic: nil)
     response = client.get("#{base_url}/tickers/search") do |req|
       req.params["name"] = query
       req.params["dataset"] = dataset
-      req.params["country_code"] = country_code
+      req.params["country_code"] = country_code if country_code.present?
+      req.params["exchange_operating_mic"] = exchange_operating_mic if exchange_operating_mic.present?
       req.params["limit"] = 25
     end
 
