@@ -61,30 +61,83 @@ class Demo::Generator
     puts "Demo data loaded successfully!"
   end
 
-  def generate_multi_currency_data!
+  def generate_basic_budget_data!(family_names)
     puts "Clearing existing data..."
 
     destroy_everything!
 
     puts "Data cleared"
 
-    create_family_and_user!("Demo Family 1", "user@maybe.local", currency: "EUR")
-
-    family = Family.find_by(name: "Demo Family 1")
+    family_names.each_with_index do |family_name, index|
+      create_family_and_user!(family_name, "user#{index == 0 ? "" : index + 1}@maybe.local")
+    end
 
     puts "Users reset"
 
-    usd_checking = family.accounts.create!(name: "USD Checking", currency: "USD", balance: 10000, accountable: Depository.new)
-    eur_checking = family.accounts.create!(name: "EUR Checking", currency: "EUR", balance: 4900, accountable: Depository.new)
+    family_names.each do |family_name|
+      family = Family.find_by(name: family_name)
 
-    puts "Accounts created"
+      ActiveRecord::Base.transaction do
+        # Create parent categories
+        food = family.categories.create!(name: "Food & Drink", color: COLORS.sample, classification: "expense")
+        transport = family.categories.create!(name: "Transportation", color: COLORS.sample, classification: "expense")
 
-    create_transaction!(account: usd_checking, amount: -11000, currency: "USD", name: "USD income Transaction")
-    create_transaction!(account: usd_checking, amount: 1000, currency: "USD", name: "USD expense Transaction")
-    create_transaction!(account: eur_checking, amount: -5000, currency: "EUR", name: "EUR income Transaction")
-    create_transaction!(account: eur_checking, amount: 100, currency: "EUR", name: "EUR expense Transaction")
+        # Create subcategory
+        restaurants = family.categories.create!(name: "Restaurants", parent: food, color: COLORS.sample, classification: "expense")
 
-    puts "Transactions created"
+        # Create checking account
+        checking = family.accounts.create!(
+          accountable: Depository.new,
+          name: "Demo Checking",
+          balance: 3000,
+          currency: "USD"
+        )
+
+        # Create one transaction for each category
+        create_transaction!(account: checking, amount: 100, name: "Grocery Store", category: food, date: 2.days.ago)
+        create_transaction!(account: checking, amount: 50, name: "Restaurant Meal", category: restaurants, date: 1.day.ago)
+        create_transaction!(account: checking, amount: 20, name: "Gas Station", category: transport, date: Date.current)
+      end
+
+      puts "Basic budget data created for #{family_name}"
+    end
+
+    puts "Demo data loaded successfully!"
+  end
+
+  def generate_multi_currency_data!(family_names)
+    puts "Clearing existing data..."
+
+    destroy_everything!
+
+    puts "Data cleared"
+
+    family_names.each_with_index do |family_name, index|
+      create_family_and_user!(family_name, "user#{index == 0 ? "" : index + 1}@maybe.local", currency: "EUR")
+    end
+
+    puts "Users reset"
+
+    family_names.each do |family_name|
+      puts "Generating demo data for #{family_name}"
+      family = Family.find_by(name: family_name)
+
+      usd_checking = family.accounts.create!(name: "USD Checking", currency: "USD", balance: 10000, accountable: Depository.new)
+      eur_checking = family.accounts.create!(name: "EUR Checking", currency: "EUR", balance: 4900, accountable: Depository.new)
+      eur_credit_card = family.accounts.create!(name: "EUR Credit Card", currency: "EUR", balance: 2300, accountable: CreditCard.new)
+
+      create_transaction!(account: eur_credit_card, amount: 1000, currency: "EUR", name: "EUR cc expense 1")
+      create_transaction!(account: eur_credit_card, amount: 1000, currency: "EUR", name: "EUR cc expense 2")
+      create_transaction!(account: eur_credit_card, amount: 300, currency: "EUR", name: "EUR cc expense 3")
+
+      create_transaction!(account: usd_checking, amount: -11000, currency: "USD", name: "USD income Transaction")
+      create_transaction!(account: usd_checking, amount: 1000, currency: "USD", name: "USD expense Transaction")
+      create_transaction!(account: usd_checking, amount: 1000, currency: "USD", name: "USD expense Transaction")
+      create_transaction!(account: eur_checking, amount: -5000, currency: "EUR", name: "EUR income Transaction")
+      create_transaction!(account: eur_checking, amount: 100, currency: "EUR", name: "EUR expense Transaction")
+
+      puts "Transactions created for #{family_name}"
+    end
 
     puts "Demo data loaded successfully!"
   end

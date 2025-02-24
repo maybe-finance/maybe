@@ -66,21 +66,25 @@ class IncomeStatement
       totals = totals_query(transactions_scope: family.transactions.active.in_period(period)).select { |t| t.classification == classification }
       classification_total = totals.sum(&:total)
 
-      category_totals = totals.map do |ct|
-        # If parent category is nil, it's a top-level category.  This means we need to
-        # sum itself + SUM(children) to get the overall category total
-        children_totals = if ct.parent_category_id.nil? && ct.category_id.present?
-          totals.select { |t| t.parent_category_id == ct.category_id }.sum(&:total)
-        else
+      uncategorized_category = family.categories.uncategorized
+
+      category_totals = [ *categories, uncategorized_category ].map do |category|
+        subcategory = categories.find { |c| c.id == category.parent_id }
+
+        parent_category_total = totals.select { |t| t.category_id == category.id }&.sum(&:total) || 0
+
+        children_totals = if category == uncategorized_category
           0
+        else
+          totals.select { |t| t.parent_category_id == category.id }&.sum(&:total) || 0
         end
 
-        category_total = ct.total + children_totals
+        category_total = parent_category_total + children_totals
 
         weight = (category_total.zero? ? 0 : category_total.to_f / classification_total) * 100
 
         CategoryTotal.new(
-          category: categories.find { |c| c.id == ct.category_id } || family.categories.uncategorized,
+          category: category,
           total: category_total,
           currency: family.currency,
           weight: weight,
