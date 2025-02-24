@@ -20,6 +20,7 @@ module ImportsHelper
       notes: "Notes",
       qty: "Quantity",
       ticker: "Ticker",
+      exchange: "Exchange",
       price: "Price",
       entity_type: "Type"
     }[key]
