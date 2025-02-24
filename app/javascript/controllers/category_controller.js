@@ -50,7 +50,7 @@ export default class extends Controller {
 
     this.picker.on('change', (color) => {
       const hexColor = color.toHEXA().toString();
-      let rgbacolor = color.toRGBA();
+      const rgbacolor = color.toRGBA();
 
       this.updateAvatarColors(hexColor);
       this.updateSelectedIconColor(hexColor);
@@ -145,7 +145,7 @@ export default class extends Controller {
       const scaled = c / 255;
       return scaled <= 0.04045 
         ? scaled / 12.92 
-        : Math.pow((scaled + 0.055) / 1.055, 2.4);
+        : ((scaled + 0.055) / 1.055) ** 2.4;
     };
     return 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
   }
@@ -159,7 +159,7 @@ export default class extends Controller {
 
   darkenColor(color) {
     let darkened = color.toRGBA();
-    let backgroundColor = this.backgroundColor(darkened, 10);
+    const backgroundColor = this.backgroundColor(darkened, 10);
     let contrastRatio = this.contrast(darkened, backgroundColor);
 
     while (contrastRatio < 4.5 && (darkened[0] > 0 || darkened[1] > 0 || darkened[2] > 0)) {
