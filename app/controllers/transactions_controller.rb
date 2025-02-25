@@ -49,6 +49,7 @@ class TransactionsController < ApplicationController
   end
 
   private
+
     def search_params
       cleaned_params = params.fetch(:q, {})
             .permit(

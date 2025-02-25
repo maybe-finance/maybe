@@ -25,6 +25,7 @@ class BudgetsController < ApplicationController
   end
 
   private
+
     def budget_create_params
       params.require(:budget).permit(:start_date)
     end
