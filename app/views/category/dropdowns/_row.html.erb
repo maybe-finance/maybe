@@ -1,7 +1,10 @@
 <%# locals: (category:) %>
 <% is_selected = category.id === @selected_category&.id %>
 
-<%= content_tag :div, class: ["filterable-item flex justify-between items-center border-none rounded-lg px-2 py-1 group w-full", { "bg-gray-25": is_selected }], data: { filter_name: category.name } do %>
+<%= content_tag :div,
+      class: ["filterable-item flex justify-between items-center border-none rounded-lg px-2 py-1 group w-full hover:bg-gray-25 focus-within:bg-gray-25",
+              { "bg-gray-25": is_selected }],
+      data: { filter_name: category.name } do %>
   <%= button_to account_transaction_category_path(
         @transaction.entry,
         account_entry: {
@@ -10,7 +13,7 @@
         }
       ),
       method: :patch,
-      class: "flex w-full items-center gap-1.5 cursor-pointer" do %>
+      class: "flex w-full items-center gap-1.5 cursor-pointer focus:outline-none" do %>
 
     <span class="w-5 h-5">
       <%= lucide_icon("check", class: "w-5 h-5 text-secondary") if is_selected %>

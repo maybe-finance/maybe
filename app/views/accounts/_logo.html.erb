@@ -8,9 +8,9 @@
 } %>
 
 <% if account.plaid_account_id? && account.institution_domain.present? %>
-  <%= image_tag "https://logo.synthfinance.com/#{account.institution_domain}", class: "rounded-full #{size_classes[size]}" %>
+  <%= image_tag "https://logo.synthfinance.com/#{account.institution_domain}", class: "shrink-0 rounded-full #{size_classes[size]}" %>
 <% elsif account.logo.attached? %>
-  <%= image_tag account.logo, class: "rounded-full #{size_classes[size]}" %>
+  <%= image_tag account.logo, class: "shrink-0 rounded-full #{size_classes[size]}" %>
 <% else %>
   <%= circle_logo(account.name, hex: color || account.accountable.color, size: size) %>
 <% end %>

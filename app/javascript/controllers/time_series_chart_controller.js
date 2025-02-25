@@ -446,7 +446,7 @@ export default class extends Controller {
 
   get _margin() {
     if (this.useLabelsValue) {
-      return { top: 20, right: 0, bottom: 30, left: 0 };
+      return { top: 20, right: 0, bottom: 10, left: 0 };
     }
     return { top: 0, right: 0, bottom: 0, left: 0 };
   }
