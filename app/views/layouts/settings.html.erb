@@ -10,9 +10,9 @@
           <% if content_for?(:breadcrumbs) %>
             <%= yield :breadcrumbs %>
           <% else %>
-            <%= render "layouts/shared/breadcrumbs", breadcrumbs: @breadcrumbs %>
+            <%= render "layouts/shared/breadcrumbs", breadcrumbs: @breadcrumbs, sidebar_toggle_enabled: false %>
           <% end %>
-          
+
           <% if content_for?(:page_title) %>
             <h1 class="text-primary text-xl font-medium">
               <%= content_for :page_title %>
