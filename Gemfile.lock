@@ -470,7 +470,6 @@ GEM
     simplecov_json_formatter (0.1.4)
     smart_properties (1.17.0)
     sorbet-runtime (0.5.11813)
-    stackprof (0.2.27)
     stimulus-rails (1.3.4)
       railties (>= 6.0.0)
     stringio (3.1.3)
@@ -501,6 +500,7 @@ GEM
     useragent (0.16.11)
     vcr (6.3.1)
       base64
+    vernier (1.5.0)
     web-console (4.2.1)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -579,13 +579,13 @@ DEPENDENCIES
   sentry-rails
   sentry-ruby
   simplecov
-  stackprof
   stimulus-rails
   stripe
   tailwindcss-rails
   turbo-rails
   tzinfo-data
   vcr
+  vernier
   web-console
   webmock
 

@@ -7,6 +7,12 @@
     <main class="py-4 px-10 grow flex h-full overflow-y-auto">
       <div class="relative max-w-4xl mx-auto flex flex-col w-full h-full">
         <div class="grow space-y-4 overflow-y-auto -mx-1 px-1 pb-12">
+          <% if content_for?(:breadcrumbs) %>
+            <%= yield :breadcrumbs %>
+          <% else %>
+            <%= render "layouts/shared/breadcrumbs", breadcrumbs: @breadcrumbs %>
+          <% end %>
+          
           <% if content_for?(:page_title) %>
             <h1 class="text-primary text-xl font-medium">
               <%= content_for :page_title %>
