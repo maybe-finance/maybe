@@ -8,7 +8,7 @@ export default class extends Controller {
   toggle() {
     this.panelTarget.classList.toggle("w-0");
     this.panelTarget.classList.toggle("opacity-0");
-    this.panelTarget.classList.toggle("w-[260px]");
+    this.panelTarget.classList.toggle("w-80");
     this.panelTarget.classList.toggle("opacity-100");
     this.contentTarget.classList.toggle("max-w-4xl");
     this.contentTarget.classList.toggle("max-w-5xl");

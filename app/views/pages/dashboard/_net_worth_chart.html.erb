@@ -1,10 +1,10 @@
 <%# locals: (series:, period:) %>
 
-<div class="flex justify-between p-4">
+<div class="flex justify-between gap-4 px-4">
   <div class="space-y-2">
     <div class="space-y-2">
       <p class="text-sm text-secondary font-medium">Net Worth</p>
-      <p class="text-primary -space-x-0.5 text-xl font-medium">
+      <p class="text-primary -space-x-0.5 text-3xl font-medium">
         <%= series.current.format %>
       </p>
       <% if series.trend.nil? %>

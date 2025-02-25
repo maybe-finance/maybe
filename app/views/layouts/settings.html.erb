@@ -1,6 +1,6 @@
 <%= render "layouts/shared/htmldoc" do %>
   <div class="flex h-full bg-gray-25">
-    <div class="p-4 w-[260px] shrink-0 h-full overflow-y-auto">
+    <div class="p-4 w-96 shrink-0 h-full overflow-y-auto">
       <%= render "settings/settings_nav" %>
     </div>
 
@@ -10,9 +10,9 @@
           <% if content_for?(:breadcrumbs) %>
             <%= yield :breadcrumbs %>
           <% else %>
-            <%= render "layouts/shared/breadcrumbs", breadcrumbs: @breadcrumbs %>
+            <%= render "layouts/shared/breadcrumbs", breadcrumbs: @breadcrumbs, sidebar_toggle_enabled: false %>
           <% end %>
-          
+
           <% if content_for?(:page_title) %>
             <h1 class="text-primary text-xl font-medium">
               <%= content_for :page_title %>

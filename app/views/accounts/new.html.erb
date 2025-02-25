@@ -1,14 +1,25 @@
 <%= render layout: "accounts/new/container", locals: { title: t(".title") } do %>
   <div class="text-sm">
-    <%= render "account_type", accountable: Depository.new %>
-    <%= render "account_type", accountable: Investment.new %>
-    <%= render "account_type", accountable: Crypto.new %>
-    <%= render "account_type", accountable: Property.new %>
-    <%= render "account_type", accountable: Vehicle.new %>
-    <%= render "account_type", accountable: CreditCard.new %>
-    <%= render "account_type", accountable: Loan.new %>
-    <%= render "account_type", accountable: OtherAsset.new %>
-    <%= render "account_type", accountable: OtherLiability.new %>
+    <% unless params[:classification] == "liability" %>
+      <%= render "account_type", accountable: Depository.new %>
+      <%= render "account_type", accountable: Investment.new %>
+      <%= render "account_type", accountable: Crypto.new %>
+      <%= render "account_type", accountable: Property.new %>
+      <%= render "account_type", accountable: Vehicle.new %>
+    <% end %>
+
+    <% unless params[:classification] == "asset" %>
+      <%= render "account_type", accountable: CreditCard.new %>
+      <%= render "account_type", accountable: Loan.new %>
+    <% end %>
+
+    <% unless params[:classification] == "liability" %>
+      <%= render "account_type", accountable: OtherAsset.new %>
+    <% end %>
+
+    <% unless params[:classification] == "asset" %>
+      <%= render "account_type", accountable: OtherLiability.new %>
+    <% end %>
 
     <% unless params[:return_to].present? %>
       <%= button_to imports_path(import: { type: "AccountImport" }),

@@ -24,7 +24,7 @@
               <% end %>
               <label class="relative">
                 <%= f.radio_button :color, "custom-color", class: "sr-only peer", data: { category_target: "colorPickerRadioBtn"} %>
-                <div class="w-6 h-6 rounded-full cursor-pointer peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-blue-500" data-category-target="pickerBtn" style="background: conic-gradient(red,orange,yellow,lime,green,teal,cyan,blue,indigo,purple,magenta,pink,red)" ></div>
+                <div class="w-6 h-6 rounded-full cursor-pointer peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-blue-500" data-category-target="pickerBtn" style="background: conic-gradient(red,orange,yellow,lime,green,teal,cyan,blue,indigo,purple,magenta,pink,red)"></div>
               </label>
             </div>
             <div class="flex gap-2 items-center hidden flex-col" data-category-target="paletteSection">
@@ -46,7 +46,7 @@
               <% Category.icon_codes.each do |icon| %>
                 <label class="relative">
                   <%= f.radio_button :lucide_icon, icon, class: "sr-only peer", data: { action: "change->category#handleIconChange change->category#handleIconColorChange", category_target:"icon" } %>
-                  <div class="w-7 h-7 flex m-0.5 items-center justify-center rounded-full cursor-pointer hover:bg-gray-100 peer-checked:bg-gray-100 border-1 border-transparent" >
+                  <div class="w-7 h-7 flex m-0.5 items-center justify-center rounded-full cursor-pointer hover:bg-gray-100 peer-checked:bg-gray-100 border-1 border-transparent">
                     <%= lucide_icon icon, class: "w-6 h-6 p-1" %>
                   </div>
                 </label>

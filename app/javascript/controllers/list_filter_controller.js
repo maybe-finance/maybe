@@ -4,6 +4,10 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static targets = ["input", "list", "emptyMessage"];
 
+  connect() {
+    this.inputTarget.focus();
+  }
+
   filter() {
     const filterValue = this.inputTarget.value.toLowerCase();
     const items = this.listTarget.querySelectorAll(".filterable-item");
