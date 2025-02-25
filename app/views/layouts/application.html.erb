@@ -45,10 +45,14 @@
 
       <%= tag.div class: class_names("mx-auto w-full h-full", Current.user.show_sidebar? ? "max-w-4xl" : "max-w-5xl"), data: { sidebar_target: "content" } do %>
         <% unless controller_path.start_with?('settings/') %>
+          <% if content_for?(:breadcrumbs) %>
+            <%= yield :breadcrumbs %>
+          <% else %>
+            <%= render "layouts/shared/breadcrumbs", breadcrumbs: @breadcrumbs %>
+          <% end %>
+          
           <% if content_for?(:page_header) %>
             <%= yield :page_header %>
-          <% else %>
-            <%= render "layouts/shared/page_header", breadcrumbs: current_breadcrumbs %>
           <% end %>
         <% end %>
         <%= yield %>

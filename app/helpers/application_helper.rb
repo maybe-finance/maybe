@@ -129,32 +129,6 @@ module ApplicationHelper
     cookies[:admin] == "true"
   end
 
-  # Helper method to get the current breadcrumbs
-  # @return [Array<Array<String, String>>] The breadcrumbs array
-  def current_breadcrumbs
-    return @breadcrumbs if @breadcrumbs.present?
-
-    # Default breadcrumbs based on controller name
-    case controller_name
-    when "pages"
-      [ [ "Home", root_path ] ]
-    when "transactions"
-      [ [ "Transactions", transactions_path ] ]
-    when "budgets"
-      [ [ "Budgets", budgets_path ] ]
-    else
-      # For other controllers, try to determine the parent section
-      if controller_path.start_with?("transactions/") || controller_name.include?("transaction")
-        [ [ "Transactions", transactions_path ], [ controller_name.titleize, nil ] ]
-      elsif controller_path.start_with?("budgets/") || controller_name.include?("budget")
-        [ [ "Budgets", budgets_path ], [ controller_name.titleize, nil ] ]
-      else
-        # Default to Home for anything else
-        [ [ "Home", root_path ], [ controller_name.titleize, nil ] ]
-      end
-    end
-  end
-
   private
     def calculate_total(item, money_method, negate)
       items = item.reject { |i| i.respond_to?(:entryable) && i.entryable.transfer? }

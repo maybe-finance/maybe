@@ -1,27 +1,5 @@
-<%# This partial renders the page header with sidebar toggle and breadcrumb navigation %>
+<%# This partial renders the page header with title and optional subtitle %>
 <header class="space-y-6">
-  <nav class="flex items-center gap-2">
-    <button data-action="sidebar#toggle" class="w-9 h-9 inline-flex rounded-lg items-center justify-center hover:bg-gray-100 cursor-pointer">
-      <%= icon("panel-left", color: "gray") %>
-    </button>
-
-    <% if local_assigns[:breadcrumbs].present? %>
-      <% breadcrumbs.each_with_index do |(name, path), index| %>
-        <% if index > 0 %>
-          <%= icon("chevron-right", color: "gray", size: "sm") %>
-        <% end %>
-        
-        <% if path.present? && index < breadcrumbs.size - 1 %>
-          <%= link_to name, path, class: "text-sm text-gray-500 font-medium" %>
-        <% elsif index == breadcrumbs.size - 1 %>
-          <span class="text-gray-900 font-medium text-sm"><%= name %></span>
-        <% else %>
-          <span class="text-sm text-gray-500 font-medium"><%= name %></span>
-        <% end %>
-      <% end %>
-    <% end %>
-  </nav>
-
   <% if local_assigns[:title].present? %>
     <div class="space-y-1">
       <h1 class="text-3xl font-medium text-gray-900"><%= title %></h1>

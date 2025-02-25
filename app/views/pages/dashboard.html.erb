@@ -1,8 +1,8 @@
 <% content_for :page_header do %>
-  <%= render "layouts/shared/page_header", 
-            breadcrumbs: current_breadcrumbs,
-            title: "Welcome back, #{Current.user.first_name}",
-            subtitle: "Here's what's happening with your money this week" %>
+  <div class="space-y-1 mb-6">
+    <h1 class="text-3xl font-medium text-gray-900">Welcome back, <%= Current.user.first_name %></h1>
+    <p class="text-gray-500">Here's what's happening with your money this week</p>
+  </div>
 <% end %>
 
 <div class="w-full space-y-6 pb-24">
