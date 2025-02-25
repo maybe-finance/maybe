@@ -5,6 +5,8 @@ class PagesController < ApplicationController
     @period = Period.from_key(params[:period], fallback: true)
     @balance_sheet = Current.family.balance_sheet
     @accounts = Current.family.accounts.active.with_attached_logo
+
+    set_breadcrumbs([ [ "Home", root_path ], [ "Dashboard", nil ] ])
   end
 
   def changelog
