@@ -103,7 +103,7 @@ class AccountsTest < ApplicationSystemTestCase
 
       visit account_url(created_account)
 
-      within "header" do
+      within "header:has(button[data-menu-target='button'])" do
         find('button[data-menu-target="button"]').click
         click_on "Edit"
       end
