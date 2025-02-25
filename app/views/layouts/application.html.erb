@@ -17,7 +17,7 @@
         </li>
 
         <li>
-          <%= render "layouts/sidebar/nav_item", name: "Budgets", path: budgets_path, icon_key: "layout-grid" %>
+          <%= render "layouts/sidebar/nav_item", name: "Budgets", path: budgets_path, icon_key: "map" %>
         </li>
       </ul>
 
@@ -26,7 +26,7 @@
       </div>
     </nav>
 
-    <%= tag.div class: class_names("py-4 shrink-0 h-full overflow-y-auto transition-all duration-300", Current.user.show_sidebar? ? "w-[260px]" : "w-0"), data: { sidebar_target: "panel" } do %>
+    <%= tag.div class: class_names("py-4 shrink-0 h-full overflow-y-auto transition-all duration-300", Current.user.show_sidebar? ? "w-80" : "w-0"), data: { sidebar_target: "panel" } do %>
       <% if content_for?(:sidebar) %>
         <%= yield :sidebar %>
       <% else %>

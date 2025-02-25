@@ -4,11 +4,11 @@
   <% if trend.direction.flat? %>
     <span>No change</span>
   <% else %>
-    <span>
+    <span class="font-mono">
       <%= trend.value.is_a?(Money) ? format_money(trend.value) : trend.value.round(2) %>
     </span>
     <% unless trend.percent.infinite? %>
-      <span>(<%= lucide_icon(trend.icon, class: "w-4 h-4 align-text-bottom inline") %><%= trend.percent_formatted %>)</span>
+      <span class="font-mono">(<%= lucide_icon(trend.icon, class: "w-4 h-4 align-text-bottom inline") %><%= trend.percent_formatted %>)</span>
     <% end %>
   <% end %>
 </p>
