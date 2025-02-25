@@ -143,6 +143,11 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :rules do
+    resources :triggers, only: %i[create update destroy]
+    resources :actions, only: %i[create update destroy]
+  end
+
   # Convenience routes for polymorphic paths
   # Example: account_path(Account.new(accountable: Depository.new)) => /depositories/123
   direct :account do |model, options|
