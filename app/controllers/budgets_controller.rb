@@ -1,6 +1,5 @@
 class BudgetsController < ApplicationController
   before_action :set_budget, only: %i[show edit update]
-  before_action :set_budget_breadcrumbs, only: %i[show]
 
   def index
     redirect_to_current_month_budget
@@ -26,10 +25,6 @@ class BudgetsController < ApplicationController
   end
 
   private
-    def set_budget_breadcrumbs
-      budget_name = @budget.start_date.strftime("%B %Y")
-      set_breadcrumbs([ [ "Budgets", budgets_path ], [ budget_name, nil ] ])
-    end
 
     def budget_create_params
       params.require(:budget).permit(:start_date)

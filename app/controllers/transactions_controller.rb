@@ -2,7 +2,6 @@ class TransactionsController < ApplicationController
   include ScrollFocusable
 
   before_action :store_params!, only: :index
-  before_action :set_transaction_breadcrumbs
 
   def index
     @q = search_params
@@ -50,9 +49,6 @@ class TransactionsController < ApplicationController
   end
 
   private
-    def set_transaction_breadcrumbs
-      set_breadcrumbs([ [ "Transactions", transactions_path ] ])
-    end
 
     def search_params
       cleaned_params = params.fetch(:q, {})
