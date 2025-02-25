@@ -29,7 +29,7 @@ gem "hotwire_combobox", github: "josefarias/hotwire_combobox", ref: "b827048a830
 gem "good_job"
 
 # Error logging
-gem "stackprof"
+gem "vernier"
 gem "rack-mini-profiler"
 gem "sentry-ruby"
 gem "sentry-rails"

@@ -14,5 +14,7 @@ if ENV["SENTRY_DSN"].present?
     # of sampled transactions.
     # We recommend adjusting this value in production.
     config.profiles_sample_rate = 0.5
+
+    config.profiler_class = Sentry::Vernier::Profiler
   end
 end
