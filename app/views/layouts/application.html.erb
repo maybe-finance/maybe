@@ -70,7 +70,7 @@
       <% end %>
     <% end %>
 
-    <%= tag.div class: class_names("py-4 shrink-0 h-full overflow-y-auto transition-all duration-300 border-l border-gray-200", right_sidebar_open ? "w-80" : "w-0"), data: { sidebar_target: "rightPanel" } do %>
+    <%= tag.div class: class_names("py-4 shrink-0 h-full overflow-y-auto transition-all duration-300", right_sidebar_open ? "w-[375px]" : "w-0"), data: { sidebar_target: "rightPanel" } do %>
       <%= render "layouts/shared/ai_sidebar" %>
     <% end %>
   </div>
