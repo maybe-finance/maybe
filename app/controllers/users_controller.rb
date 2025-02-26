@@ -60,7 +60,7 @@ class UsersController < ApplicationController
 
     def user_params
       params.require(:user).permit(
-        :first_name, :last_name, :email, :profile_image, :redirect_to, :delete_profile_image, :onboarded_at, :show_sidebar,
+        :first_name, :last_name, :email, :profile_image, :redirect_to, :delete_profile_image, :onboarded_at, :show_sidebar, :show_ai_sidebar,
         family_attributes: [ :name, :currency, :country, :locale, :date_format, :timezone, :id, :data_enrichment_enabled ]
       )
     end

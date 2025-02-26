@@ -84,6 +84,10 @@ class User < ApplicationRecord
     last_alerted_upgrade_commit_sha == upgrade.commit_sha
   end
 
+  def show_ai_sidebar?
+    show_ai_sidebar
+  end
+
   # Deactivation
   validate :can_deactivate, if: -> { active_changed? && !active }
   after_update_commit :purge_later, if: -> { saved_change_to_active?(from: true, to: false) }

@@ -1,5 +1,5 @@
 <%= render "layouts/shared/htmldoc" do %>
-  <div class="flex h-full bg-gray-50">
+  <div class="flex h-full bg-gray-50" data-controller="sidebar" data-sidebar-user-id-value="<%= Current.user.id %>">
     <nav class="flex flex-col shrink-0 w-[84px] py-4 mr-3">
       <div class="pl-2 mb-3">
         <%= link_to root_path, class: "block" do %>
@@ -26,7 +26,7 @@
       </div>
     </nav>
 
-    <%= tag.div class: class_names("py-4 shrink-0 h-full overflow-y-auto transition-all duration-300", Current.user.show_sidebar? ? "w-80" : "w-0"), data: { sidebar_target: "panel" } do %>
+    <%= tag.div class: class_names("py-4 shrink-0 h-full overflow-y-auto transition-all duration-300", Current.user.show_sidebar? ? "w-80" : "w-0"), data: { sidebar_target: "leftPanel" } do %>
       <% if content_for?(:sidebar) %>
         <%= yield :sidebar %>
       <% else %>
@@ -36,6 +36,18 @@
       <% end %>
     <% end %>
 
+    <% 
+      left_sidebar_open = Current.user.show_sidebar?
+      right_sidebar_open = Current.user.respond_to?(:show_ai_sidebar?) && Current.user.show_ai_sidebar?
+      content_width_class = if left_sidebar_open && right_sidebar_open
+                              "max-w-3xl"
+                            elsif left_sidebar_open || right_sidebar_open
+                              "max-w-4xl"
+                            else
+                              "max-w-5xl"
+                            end
+    %>
+
     <%= tag.main class: class_names("px-10 py-4 grow h-full", require_upgrade? ? "relative overflow-hidden" : "overflow-y-auto") do %>
       <% if require_upgrade? %>
         <div class="absolute inset-0 px-10 h-full w-full z-50">
@@ -43,7 +55,7 @@
         </div>
       <% end %>
 
-      <%= tag.div class: class_names("mx-auto w-full h-full", Current.user.show_sidebar? ? "max-w-4xl" : "max-w-5xl"), data: { sidebar_target: "content" } do %>
+      <%= tag.div class: class_names("mx-auto w-full h-full", content_width_class), data: { sidebar_target: "content" } do %>
         <% if content_for?(:breadcrumbs) %>
           <%= yield :breadcrumbs %>
         <% else %>
@@ -56,6 +68,10 @@
 
         <%= yield %>
       <% end %>
+    <% end %>
+
+    <%= tag.div class: class_names("py-4 shrink-0 h-full overflow-y-auto transition-all duration-300 border-l border-gray-200", right_sidebar_open ? "w-80" : "w-0"), data: { sidebar_target: "rightPanel" } do %>
+      <%= render "layouts/shared/ai_sidebar" %>
     <% end %>
   </div>
 <% end %>
