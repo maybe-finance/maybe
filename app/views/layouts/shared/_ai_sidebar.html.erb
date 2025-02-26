@@ -32,7 +32,7 @@
     </div>
   </div>
   
-  <div id="chat-messages" class="flex-grow overflow-y-auto px-4 py-3 space-y-4">
+  <div id="chat-messages" class="flex-grow overflow-y-auto px-4 py-3 space-y-4 flex flex-col" data-controller="chat-scroll" data-chat-scroll-target="container">
     <div data-chat-menu-target="content" class="hidden">
       <div class="mb-6">
         <div class="flex items-center justify-between mb-4">
@@ -81,43 +81,40 @@
       </div>
     </div>
     
-    <div data-chat-menu-target="defaultContent">
+    <div data-chat-menu-target="defaultContent" class="flex flex-col justify-end min-h-full mt-auto" data-chat-scroll-target="messages">
       <% if Current.user && @chat.present? %>
         <div id="messages" data-turbo-cache="false">
           <% messages = @messages&.where(internal: [false, nil]) %>
           <% if messages.any? %>
             <% messages.each do |message| %>
-              <div class="flex items-start gap-3 <%= message.user? ? 'justify-end' : '' %> mb-4" id="message_<%= message.id %>">
+              <div class="flex items-start gap-3 <%= message.user? ? 'justify-end' : '' %> mb-4 w-full" id="message_<%= message.id %>">
                 <% unless message.user? %>
                   <%= render "layouts/shared/ai_avatar" %>
-                <% end %>
-                
-                <div class="<%= message.user? ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800' %> rounded-lg p-4 max-w-[85%]">
-                  <p><%= message.content %></p>
-                </div>
-                
-                <% if message.user? %>
-                  <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0 text-gray-700">
-                    <%= Current.user.initials %>
+                  <div class="pr-2 max-w-[85%] text-gray-800">
+                    <p><%= message.content %></p>
+                  </div>
+                <% else %>
+                  <div class="bg-gray-100 rounded-lg px-3 py-2 max-w-[85%] text-gray-800">
+                    <p><%= message.content %></p>
                   </div>
                 <% end %>
               </div>
             <% end %>
           <% else %>
-            <div class="flex items-start gap-1 mt-4">
+            <div class="flex items-start gap-1 mt-4 w-full">
               <%= render "layouts/shared/ai_avatar" %>
-              <div class="bg-gray-100 rounded-lg p-4 max-w-[85%]">
-                <p class="text-gray-800">Hey <%= Current.user&.first_name || 'there' %>! I'm an AI built by Maybe to help with your finances. How can I assist you today?</p>
+              <div class="pr-1 max-w-[85%] text-gray-800">
+                <p>Hey <%= Current.user&.first_name || 'there' %>! I'm an AI built by Maybe to help with your finances. How can I assist you today?</p>
               </div>
             </div>
           <% end %>
         </div>
       <% else %>
         <% if Current.user %>
-          <div class="flex items-start gap-1 mt-4">
+          <div class="flex items-start gap-1 mt-4 w-full">
             <%= render "layouts/shared/ai_avatar" %>
-            <div class="bg-gray-100 rounded-lg p-4 max-w-[85%]">
-              <p class="text-gray-800">Hey <%= Current.user&.first_name || 'there' %>! I'm an AI built by Maybe to help with your finances. I have access to the web and your account data.</p>
+            <div class="pr-1 max-w-[85%] text-gray-800">
+              <p>Hey <%= Current.user&.first_name || 'there' %>! I'm an AI built by Maybe to help with your finances. I have access to the web and your account data.</p>
               
               <div class="mt-4 text-gray-600">
                 You can use <span class="bg-gray-200 px-2 py-1 rounded">/ </span> to access commands
@@ -143,10 +140,10 @@
             </div>
           </div>
         <% else %>
-          <div class="flex items-start gap-1 mt-4">
+          <div class="flex items-start gap-1 mt-4 w-full">
             <%= render "layouts/shared/ai_avatar" %>
-            <div class="bg-gray-100 rounded-lg p-4 max-w-[85%]">
-              <p class="text-gray-800">Hey there! I'm an AI built by Maybe to help with your finances. I have access to the web and your account data.</p>
+            <div class="p-4 max-w-[85%] text-gray-800">
+              <p>Hey there! I'm an AI built by Maybe to help with your finances. I have access to the web and your account data.</p>
               
               <div class="mt-4 text-gray-600">
                 You can use <span class="bg-gray-200 px-2 py-1 rounded">/ </span> to access commands
@@ -175,9 +172,9 @@
       <% end %>
     </div>
     
-    <div id="thinking" class="hidden flex items-start gap-1">
+    <div id="thinking" class="hidden flex items-start gap-1 w-full">
       <%= render "layouts/shared/ai_avatar" %>
-      <div class="bg-gray-100 rounded-lg p-4 max-w-[85%] flex items-center">
+      <div class="p-4 max-w-[85%] flex items-center text-gray-800">
         <div class="flex gap-1">
           <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
           <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
@@ -190,7 +187,7 @@
   
   <div class="px-4 py-3">
     <% if Current.user && @chat.present? %>
-      <%= form_with model: [@chat, @message], class: "relative", data: { controller: "message-form", action: "turbo:submit-end->message-form#reset" } do |f| %>
+      <%= form_with model: [@chat, @message], class: "relative", data: { controller: "message-form", action: "turbo:submit-end->message-form#reset turbo:submit-end->chat-scroll#scrollToBottom" } do |f| %>
         <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
           <div class="px-3 py-2">
             <%= f.text_area :content, 
@@ -224,7 +221,7 @@
         </div>
       <% end %>
     <% else %>
-      <%= form_with url: chats_path, method: :post, class: "relative", data: { controller: "message-form", action: "turbo:submit-end->message-form#reset" } do |f| %>
+      <%= form_with url: chats_path, method: :post, class: "relative", data: { controller: "message-form", action: "turbo:submit-end->message-form#reset turbo:submit-end->chat-scroll#scrollToBottom" } do |f| %>
         <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
           <div class="px-3 py-2">
             <%= f.text_area :content, 

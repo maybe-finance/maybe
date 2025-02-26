@@ -16,9 +16,9 @@
   </div>
 </div>
 
-<div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
-  <div class="h-[500px] overflow-y-auto" id="chat-container">
-    <div id="messages" class="space-y-4 p-4">
+<div class="bg-white border border-gray-200 rounded-lg overflow-hidden" data-controller="chat-scroll">
+  <div class="h-[500px] overflow-y-auto flex flex-col" id="chat-container" data-chat-scroll-target="container">
+    <div id="messages" class="flex flex-col justify-end min-h-full p-4 space-y-4 mt-auto" data-chat-scroll-target="messages">
       <% messages = @messages.where(internal: [false, nil]) %>
       <% if messages.any? %>
         <% messages.each do |message| %>
@@ -26,11 +26,11 @@
         <% end %>
       <% else %>
         <!-- Show welcome message when chat has no messages -->
-        <div class="flex items-start gap-3 mb-4">
+        <div class="flex items-start gap-3 mb-4 w-full">
           <div class="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0 text-white">
             <%= icon("bot") %>
           </div>
-          <div class="bg-gray-100 text-gray-800 rounded-lg p-4 max-w-[85%]">
+          <div class="p-4 max-w-[85%] text-gray-800">
             <p>Hey <%= Current.user&.first_name || 'there' %>! I'm an AI built by Maybe to help with your finances. How can I assist you today?</p>
           </div>
         </div>
@@ -39,7 +39,7 @@
   </div>
 
   <div class="border-t border-gray-200 p-4">
-    <%= form_with model: [@chat, @message], class: "relative", data: { controller: "message-form", action: "turbo:submit-end->message-form#reset" } do |f| %>
+    <%= form_with model: [@chat, @message], class: "relative", data: { controller: "message-form", action: "turbo:submit-end->message-form#reset turbo:submit-end->chat-scroll#scrollToBottom" } do |f| %>
       <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
         <div class="px-3 py-2">
           <%= f.text_area :content, 
@@ -73,13 +73,4 @@
       </div>
     <% end %>
   </div>
-</div>
-
-<script>
-  document.addEventListener('turbo:load', function() {
-    const chatContainer = document.getElementById('chat-container');
-    if (chatContainer) {
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-  });
-</script> 
+</div> 

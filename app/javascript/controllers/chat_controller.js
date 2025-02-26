@@ -11,7 +11,10 @@ export default class extends Controller {
 
   scrollToBottom() {
     if (this.hasMessagesTarget) {
-      this.messagesTarget.scrollTop = this.messagesTarget.scrollHeight
+      const messagesContainer = this.messagesTarget.closest('#chat-container')
+      if (messagesContainer) {
+        messagesContainer.scrollTop = messagesContainer.scrollHeight
+      }
     }
   }
 
@@ -27,11 +30,17 @@ export default class extends Controller {
     if (this.hasMessagesTarget) {
       // Create a mutation observer to watch for new messages
       this.observer = new MutationObserver((mutations) => {
+        let shouldScroll = false
         mutations.forEach((mutation) => {
           if (mutation.addedNodes.length) {
-            this.scrollToBottom()
+            shouldScroll = true
           }
         })
+
+        if (shouldScroll) {
+          // Use setTimeout to ensure DOM is fully updated before scrolling
+          setTimeout(() => this.scrollToBottom(), 0)
+        }
       })
 
       // Start observing
