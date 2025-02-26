@@ -27,9 +27,7 @@
       <% else %>
         <!-- Show welcome message when chat has no messages -->
         <div class="flex items-start gap-3 mb-4 w-full">
-          <div class="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0 text-white">
-            <%= icon("bot") %>
-          </div>
+          <%= render "layouts/shared/ai_avatar" %>
           <div class="p-4 max-w-[85%] text-gray-800">
             <p>Hey <%= Current.user&.first_name || 'there' %>! I'm an AI built by Maybe to help with your finances. How can I assist you today?</p>
           </div>

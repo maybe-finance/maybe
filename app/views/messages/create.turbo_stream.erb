@@ -5,9 +5,7 @@
 <% if @message.user? %>
   <%= turbo_stream.update "thinking" do %>
     <div id="thinking" class="flex items-start gap-3">
-      <div class="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0 text-white">
-        <%= icon("bot") %>
-      </div>
+      <%= render "layouts/shared/ai_avatar" %>
       <div class="bg-gray-100 rounded-lg p-4 max-w-[85%] flex items-center">
         <div class="flex gap-1">
           <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
