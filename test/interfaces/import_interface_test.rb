@@ -131,6 +131,74 @@ module ImportInterfaceTest
     assert_equal "1234", row.amount
   end
 
+  test "parses European format without thousands delimiter correctly" do
+    import = imports(:transaction)
+    import.update!(
+      number_format: "1234,48",
+      amount_col_label: "amount",
+      date_col_label: "date",
+      name_col_label: "name",
+      date_format: "%m/%d/%Y"
+    )
+
+    csv_data = "date,amount,name\n01/01/2024,13,48,Test"
+    import.update!(raw_file_str: csv_data)
+    import.generate_rows_from_csv
+    import.reload
+
+    row = import.rows.first
+    assert_equal "1234.48", row.amount
+  end
+
+  test "parses European format without thousands delimiter with semicolon separator correctly" do
+    import = imports(:transaction)
+    import.update!(
+      number_format: "1234,48",
+      amount_col_label: "amount",
+      date_col_label: "date",
+      name_col_label: "name",
+      date_format: "%m/%d/%Y",
+      col_sep: ";"
+    )
+
+    csv_data = "date;amount;name\n01/01/2024;-13,48;Test"
+    import.update!(raw_file_str: csv_data)
+    import.generate_rows_from_csv
+    import.reload
+
+    row = import.rows.first
+    assert_equal "-1234.48", row.amount
+  end
+
+  test "parses real-world McDonald's transaction with European format correctly" do
+    import = imports(:transaction)
+    import.update!(
+      number_format: "13,48",
+      amount_col_label: "amount",
+      date_col_label: "date",
+      name_col_label: "name",
+      category_col_label: "category",
+      currency_col_label: "currency",
+      date_format: "%d.%m.%Y",
+      col_sep: ";"
+    )
+
+    # Format based on the user's example
+    csv_data = "date;date;type;name;amount;currency;account;category\n" +
+               "28.01.2025;28.01.2025;Debit;MCDONALDS RESTAURANT  TELTOW DE Karte Virtual Debit Card MCDONALDS RESTAURANT     TELTOW    DEU 2025-01-25T19:26:35 Kartenzahlung;-13,48;EUR;;Restaurants & Bars"
+    
+    import.update!(raw_file_str: csv_data)
+    import.generate_rows_from_csv
+    import.reload
+
+    row = import.rows.first
+    assert_equal "28.01.2025", row.date
+    assert_equal "-13.48", row.amount
+    assert_equal "MCDONALDS RESTAURANT  TELTOW DE Karte Virtual Debit Card MCDONALDS RESTAURANT     TELTOW    DEU 2025-01-25T19:26:35 Kartenzahlung", row.name
+    assert_equal "EUR", row.currency
+    assert_equal "Restaurants & Bars", row.category
+  end
+
   test "currency from CSV takes precedence over default" do
     import = imports(:transaction)
     import.update!(

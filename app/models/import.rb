@@ -6,7 +6,8 @@ class Import < ApplicationRecord
     "1,234.56" => { separator: ".", delimiter: "," },  # US/UK/Asia
     "1.234,56" => { separator: ",", delimiter: "." },  # Most of Europe
     "1 234,56" => { separator: ",", delimiter: " " },  # French/Scandinavian
-    "1,234"    => { separator: "",  delimiter: "," }   # Zero-decimal currencies like JPY
+    "1,234"    => { separator: "",  delimiter: "," },  # Zero-decimal currencies like JPY
+    "1234,48"    => { separator: ",", delimiter: "" }    # European format without thousands delimiter
   }.freeze
 
   belongs_to :family
@@ -198,6 +199,9 @@ class Import < ApplicationRecord
       # Handle French/Scandinavian format specially
       if format[:delimiter] == " "
         sanitized = sanitized.gsub(/\s+/, "") # Remove all spaces first
+      elsif format[:delimiter].blank? && format[:separator] == ","
+        # Handle European format without thousands delimiter (like 13,48)
+        sanitized = sanitized.gsub(/[^\d,\-]/, "")
       else
         sanitized = sanitized.gsub(/[^\d#{Regexp.escape(format[:delimiter])}#{Regexp.escape(format[:separator])}\-]/, "")
 
