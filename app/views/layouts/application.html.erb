@@ -38,7 +38,7 @@
 
     <% 
       left_sidebar_open = Current.user.show_sidebar?
-      right_sidebar_open = Current.user.respond_to?(:show_ai_sidebar?) && Current.user.show_ai_sidebar?
+      right_sidebar_open = (Current.user.respond_to?(:show_ai_sidebar?) && Current.user.show_ai_sidebar?) || @chat.present?
       content_width_class = if left_sidebar_open && right_sidebar_open
                               "max-w-3xl"
                             elsif left_sidebar_open || right_sidebar_open

@@ -1,0 +1,21 @@
+<%= turbo_stream.update "chat_messages" do %>
+  <% @messages.each do |message| %>
+    <div class="flex items-start gap-3 <%= message.user? ? 'justify-end' : '' %> mb-4">
+      <% unless message.user? %>
+        <div class="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0 text-white">
+          <%= icon("bot") %>
+        </div>
+      <% end %>
+      
+      <div class="<%= message.user? ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800' %> rounded-lg p-4 max-w-[85%]">
+        <p><%= message.content %></p>
+      </div>
+      
+      <% if message.user? %>
+        <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0 text-gray-700">
+          <%= Current.user.initials %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% end %> 

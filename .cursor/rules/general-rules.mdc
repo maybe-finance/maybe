@@ -1,0 +1,10 @@
+---
+description: Miscellaneous rules to get the AI to behave
+globs: *
+alwaysApply: true
+---
+### Additional project-specific rules
+
+- Use `Current.user` for the current user. Do NOT use `current_user`.
+- Do not run `rails server` in your responses.
+- Do not run `touch tmp/restart.txt`

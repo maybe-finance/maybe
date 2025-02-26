@@ -69,6 +69,14 @@ class User < ApplicationRecord
     (display_name&.first || email.first).upcase
   end
 
+  def initials
+    if first_name.present? && last_name.present?
+      "#{first_name.first}#{last_name.first}".upcase
+    else
+      initial
+    end
+  end
+
   def acknowledge_upgrade_prompt(commit_sha)
     update!(last_prompted_upgrade_commit_sha: commit_sha)
   end

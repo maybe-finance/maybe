@@ -1,0 +1,34 @@
+<% content_for :title, "All Chats" %>
+
+<div class="mb-6 flex items-center justify-between">
+  <h1 class="text-2xl font-semibold">All Chats</h1>
+  
+  <%= link_to "New Chat", chats_path, data: { turbo_method: :post }, class: "py-2 px-4 bg-gray-800 text-white rounded-lg text-sm font-medium" %>
+</div>
+
+<% if @chats.any? %>
+  <div class="space-y-2">
+    <% @chats.each do |chat| %>
+      <%= link_to chat_path(chat), class: "block p-4 bg-white border border-gray-200 rounded-lg hover:bg-gray-50" do %>
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="font-medium text-gray-900"><%= chat.title %></h3>
+            <p class="text-sm text-gray-500">
+              <%= chat.messages.where(internal: [false, nil]).where.not(role: "system").order(created_at: :desc).first&.content&.truncate(60) || "No messages" %>
+            </p>
+          </div>
+          <span class="text-xs text-gray-500"><%= time_ago_in_words(chat.updated_at) %> ago</span>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% else %>
+  <div class="text-center py-12 bg-white rounded-lg border border-gray-200">
+    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      <%= icon("message-square", size: "lg") %>
+    </div>
+    <h3 class="text-lg font-medium text-gray-900 mb-1">No chats yet</h3>
+    <p class="text-gray-500 mb-4">Start a new conversation with the AI assistant</p>
+    <%= link_to "Start a chat", chats_path, data: { turbo_method: :post }, class: "inline-flex items-center gap-2 py-2 px-4 bg-gray-800 text-white rounded-lg text-sm font-medium" %>
+  </div>
+<% end %> 

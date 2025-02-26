@@ -127,6 +127,8 @@
 │   │   ├── category
 │   │   │   ├── deletions_controller.rb
 │   │   │   └── dropdowns_controller.rb
+│   │   ├── chat_controller.js
+│   │   ├── chats_controller.rb
 │   │   ├── concerns
 │   │   │   ├── accountable_resource.rb
 │   │   │   ├── authentication.rb
@@ -162,6 +164,7 @@
 │   │   ├── issues_controller.rb
 │   │   ├── loans_controller.rb
 │   │   ├── merchants_controller.rb
+│   │   ├── messages_controller.rb
 │   │   ├── mfa_controller.rb
 │   │   ├── onboardings_controller.rb
 │   │   ├── other_assets_controller.rb
@@ -215,6 +218,7 @@
 │   │   │   ├── budget_form_controller.js
 │   │   │   ├── bulk_select_controller.js
 │   │   │   ├── category_controller.js
+│   │   │   ├── chat_controller.js
 │   │   │   ├── clipboard_controller.js
 │   │   │   ├── color_avatar_controller.js
 │   │   │   ├── color_select_controller.js
@@ -242,6 +246,7 @@
 │   │   └── services
 │   │       └── currencies_service.js
 │   ├── jobs
+│   │   ├── ai_response_job.rb
 │   │   ├── application_job.rb
 │   │   ├── auto_upgrade_job.rb
 │   │   ├── destroy_job.rb
@@ -488,6 +493,9 @@
 │       │   └── dropdowns
 │       │       ├── _row.html.erb
 │       │       └── show.html.erb
+│       ├── chats
+│       │   ├── index.html.erb
+│       │   └── show.html.erb
 │       ├── credit_cards
 │       │   ├── _form.html.erb
 │       │   ├── _overview.html.erb
@@ -602,6 +610,8 @@
 │       │   ├── edit.html.erb
 │       │   ├── index.html.erb
 │       │   └── new.html.erb
+│       ├── messages
+│       │   └── _message.html.erb
 │       ├── mfa
 │       │   ├── backup_codes.html.erb
 │       │   ├── new.html.erb
@@ -1495,5 +1505,5 @@
         ├── internmap.js
         └── robust-predicates.js
 
-250 directories, 1243 files
+252 directories, 1251 files
 ```
