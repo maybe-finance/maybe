@@ -12,7 +12,7 @@
         <div class="bg-white p-4 rounded-lg flex gap-8 shadow-border-xs">
           <div class="space-y-2">
             <%= tag.p t(".example"), class: "text-secondary text-sm" %>
-            <%= tag.p "$2,323.25", class: "text-primary font-medium text-2xl" %>
+            <%= tag.p format_money(Money.new(2325.25, params[:currency] || @user.family.currency)), class: "text-primary font-medium text-2xl" %>
             <p class="text-sm">
               <span class="text-green-500 font-medium">+<%= format_money(Money.new(78.90, params[:currency] || @user.family.currency)) %></span>
               <span class="text-green-500 font-medium">(+<%= format_money(Money.new(6.39, params[:currency] || @user.family.currency)) %>)</span>
