@@ -1,6 +1,7 @@
 ---
 description: This file describes Maybe's design system and how views should be styled
 globs: app/views/**,app/helpers/**,app/javascript/controllers/**
+alwaysApply: true
 ---
 Use this rule whenever you are writing html, css, or even styles in Stimulus controllers that use D3.js.
 

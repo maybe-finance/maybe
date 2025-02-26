@@ -1,0 +1,1499 @@
+# Project Structure
+
+```
+.
+├── .cursor
+│   └── rules
+│       ├── agent.mdc
+│       ├── project-conventions.mdc
+│       ├── project-design.mdc
+│       ├── structure.mdc
+│       └── ui-ux-design-guidelines.mdc
+├── .devcontainer
+│   ├── Dockerfile
+│   ├── devcontainer.json
+│   └── docker-compose.yml
+├── .dockerignore
+├── .editorconfig
+├── .env.example
+├── .env.local.example
+├── .env.test
+├── .env.test.example
+├── .erb_lint.yml
+├── .gitattributes
+├── .github
+│   ├── DISCUSSION_TEMPLATE
+│   │   └── feature-requests.yml
+│   ├── ISSUE_TEMPLATE
+│   │   ├── bug_report.md
+│   │   └── other.md
+│   ├── dependabot.yml
+│   └── workflows
+│       ├── ci.yml
+│       ├── pr.yml
+│       └── publish.yml
+├── .gitignore
+├── .rubocop.yml
+├── .ruby-version
+├── CONTRIBUTING.md
+├── Dockerfile
+├── Gemfile
+├── Gemfile.lock
+├── LICENSE
+├── Procfile.dev
+├── README.md
+├── Rakefile
+├── app
+│   ├── assets
+│   │   ├── builds
+│   │   │   └── .keep
+│   │   ├── fonts
+│   │   │   ├── geist
+│   │   │   │   ├── Geist-Black.woff2
+│   │   │   │   ├── Geist-Bold.woff2
+│   │   │   │   ├── Geist-ExtraBold.woff2
+│   │   │   │   ├── Geist-ExtraLight.woff2
+│   │   │   │   ├── Geist-Light.woff2
+│   │   │   │   ├── Geist-Medium.woff2
+│   │   │   │   ├── Geist-Regular.woff2
+│   │   │   │   ├── Geist-SemiBold.woff2
+│   │   │   │   ├── Geist-Thin.woff2
+│   │   │   │   └── Geist[wght].woff2
+│   │   │   └── geist_mono
+│   │   │       ├── GeistMono-Black.woff2
+│   │   │       ├── GeistMono-Bold.woff2
+│   │   │       ├── GeistMono-Light.woff2
+│   │   │       ├── GeistMono-Medium.woff2
+│   │   │       ├── GeistMono-Regular.woff2
+│   │   │       ├── GeistMono-SemiBold.woff2
+│   │   │       ├── GeistMono-Thin.woff2
+│   │   │       ├── GeistMono-UltraBlack.woff2
+│   │   │       ├── GeistMono-UltraLight.woff2
+│   │   │       └── GeistMono[wght].woff2
+│   │   ├── images
+│   │   │   ├── apple-logo.png
+│   │   │   ├── bg-grid.png
+│   │   │   ├── dark-mode-preview.png
+│   │   │   ├── discord-icon.svg
+│   │   │   ├── empower-logo.jpeg
+│   │   │   ├── github-icon.svg
+│   │   │   ├── icn-check.svg
+│   │   │   ├── icon-add.svg
+│   │   │   ├── icon-arrow-left.svg
+│   │   │   ├── icon-bank-accounts.svg
+│   │   │   ├── icon-credit-card.svg
+│   │   │   ├── icon-dashboard.svg
+│   │   │   ├── icon-investments.svg
+│   │   │   ├── icon-real-estate.svg
+│   │   │   ├── light-mode-preview.png
+│   │   │   ├── logo-color.png
+│   │   │   ├── logo-squircle.svg
+│   │   │   ├── logo.svg
+│   │   │   ├── logomark-color.svg
+│   │   │   ├── logomark.svg
+│   │   │   ├── maybe-plus-background.png
+│   │   │   ├── maybe-plus-background.svg
+│   │   │   ├── maybe-plus-logo.png
+│   │   │   ├── mint-logo.jpeg
+│   │   │   ├── placeholder-graph.svg
+│   │   │   ├── stripe-logo.svg
+│   │   │   └── system-mode-preview.png
+│   │   ├── stylesheets
+│   │   │   ├── application.css
+│   │   │   └── simonweb_pickr.css
+│   │   └── tailwind
+│   │       ├── application.css
+│   │       ├── geist-font.css
+│   │       ├── geist-mono-font.css
+│   │       └── maybe-design-system.css
+│   ├── channels
+│   │   └── application_cable
+│   │       ├── channel.rb
+│   │       └── connection.rb
+│   ├── controllers
+│   │   ├── account
+│   │   │   ├── holdings_controller.rb
+│   │   │   ├── trades_controller.rb
+│   │   │   ├── transaction_categories_controller.rb
+│   │   │   ├── transactions_controller.rb
+│   │   │   ├── transfer_matches_controller.rb
+│   │   │   └── valuations_controller.rb
+│   │   ├── accountable_sparklines_controller.rb
+│   │   ├── accounts_controller.rb
+│   │   ├── application_controller.rb
+│   │   ├── budget_categories_controller.rb
+│   │   ├── budgets_controller.rb
+│   │   ├── categories_controller.rb
+│   │   ├── category
+│   │   │   ├── deletions_controller.rb
+│   │   │   └── dropdowns_controller.rb
+│   │   ├── concerns
+│   │   │   ├── accountable_resource.rb
+│   │   │   ├── authentication.rb
+│   │   │   ├── auto_sync.rb
+│   │   │   ├── breadcrumbable.rb
+│   │   │   ├── entryable_resource.rb
+│   │   │   ├── impersonatable.rb
+│   │   │   ├── invitable.rb
+│   │   │   ├── localize.rb
+│   │   │   ├── onboardable.rb
+│   │   │   ├── scroll_focusable.rb
+│   │   │   ├── self_hostable.rb
+│   │   │   └── store_location.rb
+│   │   ├── credit_cards_controller.rb
+│   │   ├── cryptos_controller.rb
+│   │   ├── currencies_controller.rb
+│   │   ├── depositories_controller.rb
+│   │   ├── email_confirmations_controller.rb
+│   │   ├── impersonation_sessions_controller.rb
+│   │   ├── import
+│   │   │   ├── cleans_controller.rb
+│   │   │   ├── configurations_controller.rb
+│   │   │   ├── confirms_controller.rb
+│   │   │   ├── mappings_controller.rb
+│   │   │   ├── rows_controller.rb
+│   │   │   └── uploads_controller.rb
+│   │   ├── imports_controller.rb
+│   │   ├── investments_controller.rb
+│   │   ├── invitations_controller.rb
+│   │   ├── invite_codes_controller.rb
+│   │   ├── issue
+│   │   │   └── exchange_rate_provider_missings_controller.rb
+│   │   ├── issues_controller.rb
+│   │   ├── loans_controller.rb
+│   │   ├── merchants_controller.rb
+│   │   ├── mfa_controller.rb
+│   │   ├── onboardings_controller.rb
+│   │   ├── other_assets_controller.rb
+│   │   ├── other_liabilities_controller.rb
+│   │   ├── pages_controller.rb
+│   │   ├── password_resets_controller.rb
+│   │   ├── passwords_controller.rb
+│   │   ├── plaid_items_controller.rb
+│   │   ├── properties_controller.rb
+│   │   ├── registrations_controller.rb
+│   │   ├── securities_controller.rb
+│   │   ├── sessions_controller.rb
+│   │   ├── settings
+│   │   │   ├── billings_controller.rb
+│   │   │   ├── hostings_controller.rb
+│   │   │   ├── preferences_controller.rb
+│   │   │   ├── profiles_controller.rb
+│   │   │   └── securities_controller.rb
+│   │   ├── subscriptions_controller.rb
+│   │   ├── tag
+│   │   │   └── deletions_controller.rb
+│   │   ├── tags_controller.rb
+│   │   ├── transactions_controller.rb
+│   │   ├── transfers_controller.rb
+│   │   ├── upgrades_controller.rb
+│   │   ├── users_controller.rb
+│   │   ├── vehicles_controller.rb
+│   │   └── webhooks_controller.rb
+│   ├── helpers
+│   │   ├── account
+│   │   │   └── entries_helper.rb
+│   │   ├── accounts_helper.rb
+│   │   ├── application_helper.rb
+│   │   ├── categories_helper.rb
+│   │   ├── forms_helper.rb
+│   │   ├── imports_helper.rb
+│   │   ├── languages_helper.rb
+│   │   ├── menus_helper.rb
+│   │   ├── mfa_helper.rb
+│   │   ├── plaid_helper.rb
+│   │   ├── settings_helper.rb
+│   │   ├── styled_form_builder.rb
+│   │   ├── transactions_helper.rb
+│   │   └── upgrades_helper.rb
+│   ├── javascript
+│   │   ├── application.js
+│   │   ├── controllers
+│   │   │   ├── account_collapse_controller.js
+│   │   │   ├── application.js
+│   │   │   ├── auto_submit_form_controller.js
+│   │   │   ├── budget_form_controller.js
+│   │   │   ├── bulk_select_controller.js
+│   │   │   ├── category_controller.js
+│   │   │   ├── clipboard_controller.js
+│   │   │   ├── color_avatar_controller.js
+│   │   │   ├── color_select_controller.js
+│   │   │   ├── deletion_controller.js
+│   │   │   ├── donut_chart_controller.js
+│   │   │   ├── element_removal_controller.js
+│   │   │   ├── focus_record_controller.js
+│   │   │   ├── hotkey_controller.js
+│   │   │   ├── index.js
+│   │   │   ├── list_filter_controller.js
+│   │   │   ├── list_keyboard_navigation_controller.js
+│   │   │   ├── menu_controller.js
+│   │   │   ├── modal_controller.js
+│   │   │   ├── money_field_controller.js
+│   │   │   ├── onboarding_controller.js
+│   │   │   ├── plaid_controller.js
+│   │   │   ├── profile_image_preview_controller.js
+│   │   │   ├── selectable_link_controller.js
+│   │   │   ├── sidebar_controller.js
+│   │   │   ├── tabs_controller.js
+│   │   │   ├── time_series_chart_controller.js
+│   │   │   ├── tooltip_controller.js
+│   │   │   ├── trade_form_controller.js
+│   │   │   └── transfer_match_controller.js
+│   │   └── services
+│   │       └── currencies_service.js
+│   ├── jobs
+│   │   ├── application_job.rb
+│   │   ├── auto_upgrade_job.rb
+│   │   ├── destroy_job.rb
+│   │   ├── enrich_transaction_batch_job.rb
+│   │   ├── fetch_security_info_job.rb
+│   │   ├── import_job.rb
+│   │   ├── revert_import_job.rb
+│   │   ├── sync_job.rb
+│   │   └── user_purge_job.rb
+│   ├── mailers
+│   │   ├── application_mailer.rb
+│   │   ├── email_confirmation_mailer.rb
+│   │   ├── invitation_mailer.rb
+│   │   └── password_mailer.rb
+│   ├── models
+│   │   ├── account
+│   │   │   ├── balance.rb
+│   │   │   ├── balance_calculator.rb
+│   │   │   ├── balance_trend_calculator.rb
+│   │   │   ├── chartable.rb
+│   │   │   ├── data_enricher.rb
+│   │   │   ├── entry.rb
+│   │   │   ├── entry_search.rb
+│   │   │   ├── entryable.rb
+│   │   │   ├── holding.rb
+│   │   │   ├── holding_calculator.rb
+│   │   │   ├── syncer.rb
+│   │   │   ├── trade.rb
+│   │   │   ├── trade_builder.rb
+│   │   │   ├── transaction
+│   │   │   │   └── transferable.rb
+│   │   │   ├── transaction.rb
+│   │   │   ├── transaction_search.rb
+│   │   │   └── valuation.rb
+│   │   ├── account.rb
+│   │   ├── account_import.rb
+│   │   ├── address.rb
+│   │   ├── application_record.rb
+│   │   ├── balance_sheet.rb
+│   │   ├── budget.rb
+│   │   ├── budget_category.rb
+│   │   ├── category.rb
+│   │   ├── chat.rb
+│   │   ├── concerns
+│   │   │   ├── accountable.rb
+│   │   │   ├── issuable.rb
+│   │   │   ├── monetizable.rb
+│   │   │   ├── plaidable.rb
+│   │   │   ├── providable.rb
+│   │   │   └── syncable.rb
+│   │   ├── credit_card.rb
+│   │   ├── crypto.rb
+│   │   ├── current.rb
+│   │   ├── demo
+│   │   │   └── generator.rb
+│   │   ├── depository.rb
+│   │   ├── exchange_rate
+│   │   │   └── provided.rb
+│   │   ├── exchange_rate.rb
+│   │   ├── family
+│   │   │   └── auto_transfer_matchable.rb
+│   │   ├── family.rb
+│   │   ├── impersonation_session.rb
+│   │   ├── impersonation_session_log.rb
+│   │   ├── import
+│   │   │   ├── account_mapping.rb
+│   │   │   ├── account_type_mapping.rb
+│   │   │   ├── category_mapping.rb
+│   │   │   ├── mapping.rb
+│   │   │   ├── row.rb
+│   │   │   └── tag_mapping.rb
+│   │   ├── import.rb
+│   │   ├── income_statement
+│   │   │   ├── base_query.rb
+│   │   │   ├── category_stats.rb
+│   │   │   ├── family_stats.rb
+│   │   │   └── totals.rb
+│   │   ├── income_statement.rb
+│   │   ├── investment.rb
+│   │   ├── invitation.rb
+│   │   ├── invite_code.rb
+│   │   ├── issue
+│   │   │   ├── exchange_rate_provider_missing.rb
+│   │   │   ├── exchange_rates_missing.rb
+│   │   │   └── unknown.rb
+│   │   ├── issue.rb
+│   │   ├── loan.rb
+│   │   ├── measurement.rb
+│   │   ├── merchant.rb
+│   │   ├── message.rb
+│   │   ├── mint_import.rb
+│   │   ├── other_asset.rb
+│   │   ├── other_liability.rb
+│   │   ├── period.rb
+│   │   ├── plaid_account.rb
+│   │   ├── plaid_investment_sync.rb
+│   │   ├── plaid_item.rb
+│   │   ├── property.rb
+│   │   ├── provider
+│   │   │   ├── base.rb
+│   │   │   ├── github.rb
+│   │   │   ├── plaid.rb
+│   │   │   ├── plaid_sandbox.rb
+│   │   │   └── synth.rb
+│   │   ├── rejected_transfer.rb
+│   │   ├── security
+│   │   │   ├── price
+│   │   │   │   └── provided.rb
+│   │   │   ├── price.rb
+│   │   │   └── synth_combobox_option.rb
+│   │   ├── security.rb
+│   │   ├── series.rb
+│   │   ├── session.rb
+│   │   ├── setting.rb
+│   │   ├── stock_exchange.rb
+│   │   ├── sync.rb
+│   │   ├── tag.rb
+│   │   ├── tagging.rb
+│   │   ├── trade_import.rb
+│   │   ├── transaction_import.rb
+│   │   ├── transfer.rb
+│   │   ├── trend.rb
+│   │   ├── upgrader
+│   │   │   ├── config.rb
+│   │   │   ├── deployer
+│   │   │   │   ├── null.rb
+│   │   │   │   └── render.rb
+│   │   │   ├── deployer.rb
+│   │   │   ├── provided.rb
+│   │   │   └── upgrade.rb
+│   │   ├── upgrader.rb
+│   │   ├── user.rb
+│   │   └── vehicle.rb
+│   └── views
+│       ├── account
+│       │   ├── entries
+│       │   │   ├── _empty.html.erb
+│       │   │   ├── _entry.html.erb
+│       │   │   ├── _entry_group.html.erb
+│       │   │   ├── _loading.html.erb
+│       │   │   ├── _ruler.html.erb
+│       │   │   └── _selection_bar.html.erb
+│       │   ├── holdings
+│       │   │   ├── _cash.html.erb
+│       │   │   ├── _holding.html.erb
+│       │   │   ├── _missing_price_tooltip.html.erb
+│       │   │   ├── _ruler.html.erb
+│       │   │   ├── index.html.erb
+│       │   │   ├── new.html.erb
+│       │   │   └── show.html.erb
+│       │   ├── trades
+│       │   │   ├── _form.html.erb
+│       │   │   ├── _header.html.erb
+│       │   │   ├── _trade.html.erb
+│       │   │   ├── new.html.erb
+│       │   │   └── show.html.erb
+│       │   ├── transactions
+│       │   │   ├── _form.html.erb
+│       │   │   ├── _header.html.erb
+│       │   │   ├── _selection_bar.html.erb
+│       │   │   ├── _transaction.html.erb
+│       │   │   ├── _transaction_category.html.erb
+│       │   │   ├── _transfer_match.html.erb
+│       │   │   ├── bulk_edit.html.erb
+│       │   │   ├── new.html.erb
+│       │   │   └── show.html.erb
+│       │   ├── transfer_matches
+│       │   │   ├── _matching_fields.html.erb
+│       │   │   └── new.html.erb
+│       │   └── valuations
+│       │       ├── _form.html.erb
+│       │       ├── _header.html.erb
+│       │       ├── _valuation.html.erb
+│       │       ├── index.html.erb
+│       │       ├── new.html.erb
+│       │       └── show.html.erb
+│       ├── accountable_sparklines
+│       │   └── show.html.erb
+│       ├── accounts
+│       │   ├── _account.html.erb
+│       │   ├── _account_sidebar_tabs.html.erb
+│       │   ├── _account_type.html.erb
+│       │   ├── _accountable_group.html.erb
+│       │   ├── _chart_loader.html.erb
+│       │   ├── _empty.html.erb
+│       │   ├── _form.html.erb
+│       │   ├── _logo.html.erb
+│       │   ├── _summary_card.html.erb
+│       │   ├── chart.html.erb
+│       │   ├── index
+│       │   │   ├── _account_groups.erb
+│       │   │   └── _manual_accounts.html.erb
+│       │   ├── index.html.erb
+│       │   ├── new
+│       │   │   ├── _container.html.erb
+│       │   │   └── _method_selector.html.erb
+│       │   ├── new.html.erb
+│       │   ├── show
+│       │   │   ├── _activity.html.erb
+│       │   │   ├── _chart.html.erb
+│       │   │   ├── _header.html.erb
+│       │   │   ├── _loading.html.erb
+│       │   │   ├── _menu.html.erb
+│       │   │   ├── _tab.html.erb
+│       │   │   ├── _tabs.html.erb
+│       │   │   └── _template.html.erb
+│       │   └── sparkline.html.erb
+│       ├── budget_categories
+│       │   ├── _allocation_progress.erb
+│       │   ├── _budget_category.html.erb
+│       │   ├── _budget_category_donut.html.erb
+│       │   ├── _budget_category_form.html.erb
+│       │   ├── _confirm_button.html.erb
+│       │   ├── _no_categories.html.erb
+│       │   ├── _uncategorized_budget_category_form.html.erb
+│       │   ├── index.html.erb
+│       │   ├── show.html.erb
+│       │   └── update.turbo_stream.erb
+│       ├── budgets
+│       │   ├── _actuals_summary.html.erb
+│       │   ├── _budget_categories.html.erb
+│       │   ├── _budget_donut.html.erb
+│       │   ├── _budget_header.html.erb
+│       │   ├── _budget_nav.html.erb
+│       │   ├── _budgeted_summary.html.erb
+│       │   ├── _over_allocation_warning.html.erb
+│       │   ├── _picker.html.erb
+│       │   ├── edit.html.erb
+│       │   └── show.html.erb
+│       ├── categories
+│       │   ├── _badge.html.erb
+│       │   ├── _category.html.erb
+│       │   ├── _category_list_group.html.erb
+│       │   ├── _color_avatar.html.erb
+│       │   ├── _form.html.erb
+│       │   ├── _menu.html.erb
+│       │   ├── _ruler.html.erb
+│       │   ├── edit.html.erb
+│       │   ├── index.html.erb
+│       │   └── new.html.erb
+│       ├── category
+│       │   ├── deletions
+│       │   │   └── new.html.erb
+│       │   └── dropdowns
+│       │       ├── _row.html.erb
+│       │       └── show.html.erb
+│       ├── credit_cards
+│       │   ├── _form.html.erb
+│       │   ├── _overview.html.erb
+│       │   ├── edit.html.erb
+│       │   ├── new.html.erb
+│       │   └── show.html.erb
+│       ├── cryptos
+│       │   ├── _form.html.erb
+│       │   ├── edit.html.erb
+│       │   ├── new.html.erb
+│       │   └── show.html.erb
+│       ├── depositories
+│       │   ├── _form.html.erb
+│       │   ├── edit.html.erb
+│       │   ├── new.html.erb
+│       │   └── show.html.erb
+│       ├── email_confirmation_mailer
+│       │   ├── confirmation_email.html.erb
+│       │   └── confirmation_email.text.erb
+│       ├── impersonation_sessions
+│       │   ├── _approval_bar.html.erb
+│       │   └── _super_admin_bar.html.erb
+│       ├── import
+│       │   ├── cleans
+│       │   │   └── show.html.erb
+│       │   ├── configurations
+│       │   │   ├── _account_import.html.erb
+│       │   │   ├── _mint_import.html.erb
+│       │   │   ├── _trade_import.html.erb
+│       │   │   ├── _transaction_import.html.erb
+│       │   │   └── show.html.erb
+│       │   ├── confirms
+│       │   │   ├── _mappings.html.erb
+│       │   │   └── show.html.erb
+│       │   ├── mappings
+│       │   │   └── _form.html.erb
+│       │   ├── rows
+│       │   │   ├── _form.html.erb
+│       │   │   └── show.html.erb
+│       │   └── uploads
+│       │       └── show.html.erb
+│       ├── imports
+│       │   ├── _empty.html.erb
+│       │   ├── _failure.html.erb
+│       │   ├── _import.html.erb
+│       │   ├── _importing.html.erb
+│       │   ├── _nav.html.erb
+│       │   ├── _ready.html.erb
+│       │   ├── _revert_failure.html.erb
+│       │   ├── _success.html.erb
+│       │   ├── _table.html.erb
+│       │   ├── index.html.erb
+│       │   ├── new.html.erb
+│       │   └── show.html.erb
+│       ├── investments
+│       │   ├── _form.html.erb
+│       │   ├── _holdings_tab.html.erb
+│       │   ├── _value_tooltip.html.erb
+│       │   ├── edit.html.erb
+│       │   ├── new.html.erb
+│       │   └── show.html.erb
+│       ├── invitation_mailer
+│       │   └── invite_email.html.erb
+│       ├── invitations
+│       │   └── new.html.erb
+│       ├── invite_codes
+│       │   ├── _invite_code.html.erb
+│       │   └── index.html.erb
+│       ├── issue
+│       │   ├── _request_synth_data_action.html.erb
+│       │   ├── exchange_rate_provider_missings
+│       │   │   └── show.html.erb
+│       │   ├── exchange_rates_missings
+│       │   │   └── show.html.erb
+│       │   ├── prices_missings
+│       │   │   └── show.html.erb
+│       │   └── unknowns
+│       │       └── show.html.erb
+│       ├── issues
+│       │   └── _issue.html.erb
+│       ├── layouts
+│       │   ├── application.html.erb
+│       │   ├── auth.html.erb
+│       │   ├── imports.html.erb
+│       │   ├── issues.html.erb
+│       │   ├── mailer.html.erb
+│       │   ├── mailer.text.erb
+│       │   ├── onboardings.html.erb
+│       │   ├── settings.html.erb
+│       │   ├── shared
+│       │   │   ├── _ai_sidebar.html.erb
+│       │   │   ├── _breadcrumbs.html.erb
+│       │   │   ├── _fixed_content.html.erb
+│       │   │   ├── _footer.html.erb
+│       │   │   ├── _head.html.erb
+│       │   │   ├── _htmldoc.html.erb
+│       │   │   ├── _notifications.html.erb
+│       │   │   └── _page_header.html.erb
+│       │   ├── sidebar
+│       │   │   └── _nav_item.html.erb
+│       │   └── wizard.html.erb
+│       ├── loans
+│       │   ├── _form.html.erb
+│       │   ├── _overview.html.erb
+│       │   ├── edit.html.erb
+│       │   ├── new.html.erb
+│       │   └── show.html.erb
+│       ├── merchants
+│       │   ├── _form.html.erb
+│       │   ├── _merchant.html.erb
+│       │   ├── _ruler.html.erb
+│       │   ├── edit.html.erb
+│       │   ├── index.html.erb
+│       │   └── new.html.erb
+│       ├── mfa
+│       │   ├── backup_codes.html.erb
+│       │   ├── new.html.erb
+│       │   └── verify.html.erb
+│       ├── onboardings
+│       │   ├── _header.html.erb
+│       │   ├── preferences.html.erb
+│       │   ├── profile.html.erb
+│       │   └── show.html.erb
+│       ├── other_assets
+│       │   ├── _form.html.erb
+│       │   ├── edit.html.erb
+│       │   ├── new.html.erb
+│       │   └── show.html.erb
+│       ├── other_liabilities
+│       │   ├── _form.html.erb
+│       │   ├── edit.html.erb
+│       │   ├── new.html.erb
+│       │   └── show.html.erb
+│       ├── pages
+│       │   ├── changelog.html.erb
+│       │   ├── dashboard
+│       │   │   ├── _balance_sheet.html.erb
+│       │   │   ├── _net_worth_chart.html.erb
+│       │   │   └── _no_account_empty_state.html.erb
+│       │   ├── dashboard.html.erb
+│       │   ├── early_access.html.erb
+│       │   └── feedback.html.erb
+│       ├── password_mailer
+│       │   └── password_reset.html.erb
+│       ├── password_resets
+│       │   ├── edit.html.erb
+│       │   └── new.html.erb
+│       ├── passwords
+│       │   └── edit.html.erb
+│       ├── plaid_items
+│       │   └── _plaid_item.html.erb
+│       ├── properties
+│       │   ├── _form.html.erb
+│       │   ├── _overview.html.erb
+│       │   ├── edit.html.erb
+│       │   ├── new.html.erb
+│       │   └── show.html.erb
+│       ├── pwa
+│       │   ├── manifest.json.erb
+│       │   └── service-worker.js
+│       ├── registrations
+│       │   └── new.html.erb
+│       ├── securities
+│       │   ├── _combobox_security.turbo_stream.erb
+│       │   └── index.turbo_stream.erb
+│       ├── sessions
+│       │   └── new.html.erb
+│       ├── settings
+│       │   ├── _section.html.erb
+│       │   ├── _settings_nav.html.erb
+│       │   ├── _settings_nav_item.html.erb
+│       │   ├── _settings_nav_link_large.html.erb
+│       │   ├── _user_avatar.html.erb
+│       │   ├── _user_avatar_field.html.erb
+│       │   ├── billings
+│       │   │   └── show.html.erb
+│       │   ├── hostings
+│       │   │   ├── _invite_code_settings.html.erb
+│       │   │   ├── _provider_settings.html.erb
+│       │   │   ├── _synth_settings.html.erb
+│       │   │   ├── _upgrade_settings.html.erb
+│       │   │   └── show.html.erb
+│       │   ├── preferences
+│       │   │   ├── _data_enrichment_settings.html.erb
+│       │   │   └── show.html.erb
+│       │   ├── profiles
+│       │   │   └── show.html.erb
+│       │   └── securities
+│       │       └── show.html.erb
+│       ├── shared
+│       │   ├── _app_version.html.erb
+│       │   ├── _circle_logo.html.erb
+│       │   ├── _color_avatar.html.erb
+│       │   ├── _confirm_modal.html.erb
+│       │   ├── _disclosure.html.erb
+│       │   ├── _drawer.html.erb
+│       │   ├── _form_errors.html.erb
+│       │   ├── _icon.html.erb
+│       │   ├── _logo.html.erb
+│       │   ├── _modal.html.erb
+│       │   ├── _modal_form.html.erb
+│       │   ├── _money_field.html.erb
+│       │   ├── _notification.html.erb
+│       │   ├── _pagination.html.erb
+│       │   ├── _progress_circle.html.erb
+│       │   ├── _sparkline.html.erb
+│       │   ├── _subscribe_modal.html.erb
+│       │   ├── _syncing_notice.html.erb
+│       │   ├── _text_tooltip.erb
+│       │   ├── _trend_change.html.erb
+│       │   └── _upgrade_notification.html.erb
+│       ├── tag
+│       │   └── deletions
+│       │       └── new.html.erb
+│       ├── tags
+│       │   ├── _badge.html.erb
+│       │   ├── _form.html.erb
+│       │   ├── _ruler.html.erb
+│       │   ├── _tag.html.erb
+│       │   ├── edit.html.erb
+│       │   ├── index.html.erb
+│       │   └── new.html.erb
+│       ├── transactions
+│       │   ├── _header.html.erb
+│       │   ├── _summary.html.erb
+│       │   ├── index.html.erb
+│       │   └── searches
+│       │       ├── _form.html.erb
+│       │       ├── _menu.html.erb
+│       │       ├── _search.html.erb
+│       │       └── filters
+│       │           ├── _account_filter.html.erb
+│       │           ├── _amount_filter.html.erb
+│       │           ├── _badge.html.erb
+│       │           ├── _category_filter.html.erb
+│       │           ├── _date_filter.html.erb
+│       │           ├── _merchant_filter.html.erb
+│       │           ├── _tag_filter.html.erb
+│       │           └── _type_filter.html.erb
+│       ├── transfers
+│       │   ├── _account_links.html.erb
+│       │   ├── _form.html.erb
+│       │   ├── new.html.erb
+│       │   ├── show.html.erb
+│       │   └── update.turbo_stream.erb
+│       ├── users
+│       │   └── _user_menu.html.erb
+│       └── vehicles
+│           ├── _form.html.erb
+│           ├── _overview.html.erb
+│           ├── edit.html.erb
+│           ├── new.html.erb
+│           └── show.html.erb
+├── bin
+│   ├── brakeman
+│   ├── bundle
+│   ├── dev
+│   ├── docker-entrypoint
+│   ├── importmap
+│   ├── rails
+│   ├── rake
+│   ├── render-build.sh
+│   ├── rubocop
+│   ├── setup
+│   └── update_structure.sh
+├── biome.json
+├── config
+│   ├── application.rb
+│   ├── boot.rb
+│   ├── brakeman.ignore
+│   ├── cable.yml
+│   ├── credentials.yml.enc
+│   ├── currencies.yml
+│   ├── database.yml
+│   ├── environment.rb
+│   ├── environments
+│   │   ├── development.rb
+│   │   ├── production.rb
+│   │   └── test.rb
+│   ├── exchanges.yml
+│   ├── i18n-tasks.yml
+│   ├── importmap.rb
+│   ├── initializers
+│   │   ├── assets.rb
+│   │   ├── content_security_policy.rb
+│   │   ├── enable_yjit.rb
+│   │   ├── filter_parameter_logging.rb
+│   │   ├── generator.rb
+│   │   ├── good_job.rb
+│   │   ├── inflections.rb
+│   │   ├── intercom.rb
+│   │   ├── pagy.rb
+│   │   ├── permissions_policy.rb
+│   │   ├── plaid.rb
+│   │   ├── sentry.rb
+│   │   └── version.rb
+│   ├── locales
+│   │   ├── defaults
+│   │   │   ├── af.yml
+│   │   │   ├── ar.yml
+│   │   │   ├── az.yml
+│   │   │   ├── be.yml
+│   │   │   ├── bg.yml
+│   │   │   ├── bn.yml
+│   │   │   ├── bs.yml
+│   │   │   ├── ca.yml
+│   │   │   ├── cs.yml
+│   │   │   ├── cy.yml
+│   │   │   ├── da.yml
+│   │   │   ├── de-AT.yml
+│   │   │   ├── de-CH.yml
+│   │   │   ├── de-DE.yml
+│   │   │   ├── de.yml
+│   │   │   ├── dz.yml
+│   │   │   ├── el-CY.yml
+│   │   │   ├── el.yml
+│   │   │   ├── en-AU.yml
+│   │   │   ├── en-CA.yml
+│   │   │   ├── en-CY.yml
+│   │   │   ├── en-GB.yml
+│   │   │   ├── en-IE.yml
+│   │   │   ├── en-IN.yml
+│   │   │   ├── en-NZ.yml
+│   │   │   ├── en-TT.yml
+│   │   │   ├── en-US.yml
+│   │   │   ├── en-ZA.yml
+│   │   │   ├── en.yml
+│   │   │   ├── eo.yml
+│   │   │   ├── es-419.yml
+│   │   │   ├── es-AR.yml
+│   │   │   ├── es-CL.yml
+│   │   │   ├── es-CO.yml
+│   │   │   ├── es-CR.yml
+│   │   │   ├── es-EC.yml
+│   │   │   ├── es-ES.yml
+│   │   │   ├── es-MX.yml
+│   │   │   ├── es-NI.yml
+│   │   │   ├── es-PA.yml
+│   │   │   ├── es-PE.yml
+│   │   │   ├── es-US.yml
+│   │   │   ├── es-VE.yml
+│   │   │   ├── es.yml
+│   │   │   ├── et.yml
+│   │   │   ├── eu.yml
+│   │   │   ├── fa.yml
+│   │   │   ├── fi.yml
+│   │   │   ├── fr-CA.yml
+│   │   │   ├── fr-CH.yml
+│   │   │   ├── fr-FR.yml
+│   │   │   ├── fr.yml
+│   │   │   ├── fy.yml
+│   │   │   ├── gd.yml
+│   │   │   ├── gl.yml
+│   │   │   ├── he.yml
+│   │   │   ├── hi-IN.yml
+│   │   │   ├── hi.yml
+│   │   │   ├── hr.yml
+│   │   │   ├── hu.yml
+│   │   │   ├── id.yml
+│   │   │   ├── is.yml
+│   │   │   ├── it-CH.yml
+│   │   │   ├── it.yml
+│   │   │   ├── ja.yml
+│   │   │   ├── ka.yml
+│   │   │   ├── kk.yml
+│   │   │   ├── km.yml
+│   │   │   ├── kn.yml
+│   │   │   ├── ko.yml
+│   │   │   ├── lb.yml
+│   │   │   ├── lo.yml
+│   │   │   ├── lt.yml
+│   │   │   ├── lv.yml
+│   │   │   ├── mg.yml
+│   │   │   ├── mk.yml
+│   │   │   ├── ml.yml
+│   │   │   ├── mn.yml
+│   │   │   ├── mr-IN.yml
+│   │   │   ├── ms.yml
+│   │   │   ├── nb.yml
+│   │   │   ├── ne.yml
+│   │   │   ├── nl.yml
+│   │   │   ├── nn.yml
+│   │   │   ├── oc.yml
+│   │   │   ├── or.yml
+│   │   │   ├── pa.yml
+│   │   │   ├── pl.yml
+│   │   │   ├── pt-BR.yml
+│   │   │   ├── pt.yml
+│   │   │   ├── rm.yml
+│   │   │   ├── ro.yml
+│   │   │   ├── ru.yml
+│   │   │   ├── sc.yml
+│   │   │   ├── sk.yml
+│   │   │   ├── sl.yml
+│   │   │   ├── sq.yml
+│   │   │   ├── sr.yml
+│   │   │   ├── st.yml
+│   │   │   ├── sv-FI.yml
+│   │   │   ├── sv-SE.yml
+│   │   │   ├── sv.yml
+│   │   │   ├── sw.yml
+│   │   │   ├── ta.yml
+│   │   │   ├── te.yml
+│   │   │   ├── th.yml
+│   │   │   ├── tl.yml
+│   │   │   ├── tr.yml
+│   │   │   ├── tt.yml
+│   │   │   ├── ug.yml
+│   │   │   ├── uk.yml
+│   │   │   ├── ur.yml
+│   │   │   ├── uz.yml
+│   │   │   ├── vi.yml
+│   │   │   ├── wo.yml
+│   │   │   ├── zh-CN.yml
+│   │   │   └── zh-TW.yml
+│   │   ├── mailers
+│   │   │   └── invitation_mailer
+│   │   │       └── en.yml
+│   │   ├── models
+│   │   │   ├── account
+│   │   │   │   ├── en.yml
+│   │   │   │   └── entry
+│   │   │   │       └── en.yml
+│   │   │   ├── address
+│   │   │   │   └── en.yml
+│   │   │   ├── import
+│   │   │   │   └── en.yml
+│   │   │   ├── issue
+│   │   │   │   └── en.yml
+│   │   │   ├── time_series
+│   │   │   │   └── value
+│   │   │   │       └── en.yml
+│   │   │   ├── transfer
+│   │   │   │   └── en.yml
+│   │   │   ├── trend
+│   │   │   │   └── en.yml
+│   │   │   ├── upgrader
+│   │   │   │   └── en.yml
+│   │   │   └── user
+│   │   │       └── en.yml
+│   │   └── views
+│   │       ├── account
+│   │       │   ├── entries
+│   │       │   │   └── en.yml
+│   │       │   ├── holdings
+│   │       │   │   └── en.yml
+│   │       │   ├── trades
+│   │       │   │   └── en.yml
+│   │       │   ├── transactions
+│   │       │   │   └── en.yml
+│   │       │   └── valuations
+│   │       │       └── en.yml
+│   │       ├── accounts
+│   │       │   └── en.yml
+│   │       ├── application
+│   │       │   └── en.yml
+│   │       ├── categories
+│   │       │   └── en.yml
+│   │       ├── category
+│   │       │   ├── deletions
+│   │       │   │   └── en.yml
+│   │       │   └── dropdowns
+│   │       │       └── en.yml
+│   │       ├── credit_cards
+│   │       │   └── en.yml
+│   │       ├── cryptos
+│   │       │   └── en.yml
+│   │       ├── depositories
+│   │       │   └── en.yml
+│   │       ├── email_confirmation_mailer
+│   │       │   └── en.yml
+│   │       ├── impersonation_sessions
+│   │       │   └── en.yml
+│   │       ├── imports
+│   │       │   └── en.yml
+│   │       ├── investments
+│   │       │   └── en.yml
+│   │       ├── invitation_mailer
+│   │       │   └── en.yml
+│   │       ├── invitations
+│   │       │   └── en.yml
+│   │       ├── invite_codes
+│   │       │   └── en.yml
+│   │       ├── layout
+│   │       │   └── en.yml
+│   │       ├── loans
+│   │       │   └── en.yml
+│   │       ├── merchants
+│   │       │   └── en.yml
+│   │       ├── mfa
+│   │       │   └── en.yml
+│   │       ├── onboardings
+│   │       │   └── en.yml
+│   │       ├── other_assets
+│   │       │   └── en.yml
+│   │       ├── other_liabilities
+│   │       │   └── en.yml
+│   │       ├── pages
+│   │       │   └── en.yml
+│   │       ├── password_mailer
+│   │       │   └── en.yml
+│   │       ├── password_resets
+│   │       │   └── en.yml
+│   │       ├── passwords
+│   │       │   └── en.yml
+│   │       ├── plaid_items
+│   │       │   └── en.yml
+│   │       ├── properties
+│   │       │   └── en.yml
+│   │       ├── registrations
+│   │       │   └── en.yml
+│   │       ├── sessions
+│   │       │   └── en.yml
+│   │       ├── settings
+│   │       │   ├── en.yml
+│   │       │   ├── hostings
+│   │       │   │   └── en.yml
+│   │       │   └── securities
+│   │       │       └── en.yml
+│   │       ├── shared
+│   │       │   └── en.yml
+│   │       ├── tag
+│   │       │   └── deletions
+│   │       │       └── en.yml
+│   │       ├── tags
+│   │       │   └── en.yml
+│   │       ├── transactions
+│   │       │   └── en.yml
+│   │       ├── transfers
+│   │       │   └── en.yml
+│   │       ├── upgrades
+│   │       │   └── en.yml
+│   │       ├── users
+│   │       │   └── en.yml
+│   │       └── vehicles
+│   │           └── en.yml
+│   ├── puma.rb
+│   ├── routes.rb
+│   └── storage.yml
+├── config.ru
+├── db
+│   ├── migrate
+│   │   ├── 20240201183314_enable_uuid.rb
+│   │   ├── 20240201184038_create_families.rb
+│   │   ├── 20240201184212_create_users.rb
+│   │   ├── 20240202015428_create_accounts.rb
+│   │   ├── 20240202191425_create_account_loans.rb
+│   │   ├── 20240202191746_add_accountable_to_account.rb
+│   │   ├── 20240202192214_create_account_depositories.rb
+│   │   ├── 20240202192231_create_account_credits.rb
+│   │   ├── 20240202192238_create_account_investments.rb
+│   │   ├── 20240202192312_create_account_properties.rb
+│   │   ├── 20240202192319_create_account_vehicles.rb
+│   │   ├── 20240202192327_create_account_other_assets.rb
+│   │   ├── 20240202192333_create_account_other_liabilities.rb
+│   │   ├── 20240202230325_create_invite_codes.rb
+│   │   ├── 20240203030754_remove_type_from_accounts.rb
+│   │   ├── 20240203050018_add_token_index_to_invite_codes.rb
+│   │   ├── 20240206031739_replace_money_field.rb
+│   │   ├── 20240209153232_add_currency_to_families.rb
+│   │   ├── 20240209174912_redo_money_storage.rb
+│   │   ├── 20240209200519_create_currencies.rb
+│   │   ├── 20240209200924_create_exchange_rates.rb
+│   │   ├── 20240210155058_create_good_jobs.rb
+│   │   ├── 20240212150110_create_account_balances.rb
+│   │   ├── 20240215201527_create_valuations.rb
+│   │   ├── 20240221004818_remove_valuation_type.rb
+│   │   ├── 20240222144849_add_status_to_account.rb
+│   │   ├── 20240223162105_create_transactions.rb
+│   │   ├── 20240227142457_rename_account_balance.rb
+│   │   ├── 20240302145715_add_classification_to_accounts.rb
+│   │   ├── 20240306193345_add_is_active_to_account.rb
+│   │   ├── 20240307082827_create_transaction_categories.rb
+│   │   ├── 20240308121431_remove_currency_table.rb
+│   │   ├── 20240308214956_add_notes_and_excluded_to_transaction.rb
+│   │   ├── 20240309180636_add_sync_status_fields_to_account.rb
+│   │   ├── 20240313141813_update_unique_indexes_for_account_balance_and_exchange_rate.rb
+│   │   ├── 20240313203622_remove_converted_balance_from_account.rb
+│   │   ├── 20240319154732_create_account_cryptos.rb
+│   │   ├── 20240325064211_add_uniq_index_to_users_email.rb
+│   │   ├── 20240401213443_add_last_sync_date_to_accounts.rb
+│   │   ├── 20240403192649_add_last_login_at_to_users.rb
+│   │   ├── 20240404112829_change_transaction_category_delete_behavior.rb
+│   │   ├── 20240410183531_create_settings.rb
+│   │   ├── 20240411102931_add_last_seen_upgrade_to_user.rb
+│   │   ├── 20240425000110_add_role_to_users.rb
+│   │   ├── 20240426162500_create_active_storage_tables.active_storage.rb
+│   │   ├── 20240426191312_add_transaction_merchants.rb
+│   │   ├── 20240430111641_add_active_to_users.rb
+│   │   ├── 20240502205006_create_imports.rb
+│   │   ├── 20240520074309_add_admin_role_to_current_users.rb
+│   │   ├── 20240522133147_create_tags.rb
+│   │   ├── 20240522151453_create_taggings.rb
+│   │   ├── 20240524203959_change_account_error_columns_default.rb
+│   │   ├── 20240612164751_create_institutions.rb
+│   │   ├── 20240612164944_add_institution_to_accounts.rb
+│   │   ├── 20240614120946_create_transfers.rb
+│   │   ├── 20240614121110_add_transfer_fields_to_transaction.rb
+│   │   ├── 20240619125949_rename_accountable_tables.rb
+│   │   ├── 20240620114307_rename_categories_table.rb
+│   │   ├── 20240620122201_rename_merchants_table.rb
+│   │   ├── 20240620125026_rename_transfer_table.rb
+│   │   ├── 20240620221801_rename_valuation_table.rb
+│   │   ├── 20240621212528_rename_transactions_table.rb
+│   │   ├── 20240624160611_create_account_entries.rb
+│   │   ├── 20240624161153_migrate_entryables.rb
+│   │   ├── 20240624164119_remove_old_columns_from_entryables.rb
+│   │   ├── 20240628104551_move_transfers_association_from_transactions_to_entries.rb
+│   │   ├── 20240706151026_rename_rate_fields.rb
+│   │   ├── 20240707130331_create_account_syncs.rb
+│   │   ├── 20240709113713_create_good_job_execution_error_backtrace.rb
+│   │   ├── 20240709113714_create_good_job_process_lock_ids.rb
+│   │   ├── 20240709113715_create_good_job_process_lock_indexes.rb
+│   │   ├── 20240709152243_create_good_job_execution_duration.rb
+│   │   ├── 20240710182529_create_securities.rb
+│   │   ├── 20240710182728_create_security_prices.rb
+│   │   ├── 20240710184048_create_account_trades.rb
+│   │   ├── 20240710184249_create_account_holdings.rb
+│   │   ├── 20240717113535_remove_default_from_account_balance.rb
+│   │   ├── 20240725163339_add_last_synced_at_to_family.rb
+│   │   ├── 20240731191344_change_primary_identifier_for_security.rb
+│   │   ├── 20240807153618_add_currency_field_to_trade.rb
+│   │   ├── 20240813170608_fix_invalid_accountable_data.rb
+│   │   ├── 20240815125404_create_issues.rb
+│   │   ├── 20240815190722_remove_warnings_from_sync.rb
+│   │   ├── 20240816071555_add_col_sep_to_imports.rb
+│   │   ├── 20240817144454_rename_import_raw_csv_str_to_raw_file_str.rb
+│   │   ├── 20240822174006_create_addresses.rb
+│   │   ├── 20240822180845_add_property_attributes.rb
+│   │   ├── 20240823125526_add_details_to_vehicle.rb
+│   │   ├── 20240911143158_add_last_synced_at_institution.rb
+│   │   ├── 20240921170426_change_import_owner.rb
+│   │   ├── 20240925112218_add_import_types.rb
+│   │   ├── 20241001181256_add_locale_preference.rb
+│   │   ├── 20241003163448_create_sessions.rb
+│   │   ├── 20241007211438_add_billing_to_families.rb
+│   │   ├── 20241008122449_add_debt_account_views.rb
+│   │   ├── 20241009132959_add_notes_to_entry.rb
+│   │   ├── 20241009214601_add_super_admin_to_users.rb
+│   │   ├── 20241017162347_create_impersonation_sessions.rb
+│   │   ├── 20241017162536_create_impersonation_session_logs.rb
+│   │   ├── 20241017204250_add_accounts_indexes.rb
+│   │   ├── 20241018201653_add_account_mode.rb
+│   │   ├── 20241022170439_create_stock_exchanges.rb
+│   │   ├── 20241022192319_fix_user_role_column_type.rb
+│   │   ├── 20241022221544_add_onboarding_fields.rb
+│   │   ├── 20241023195438_add_stock_exchange_reference.rb
+│   │   ├── 20241024142537_add_subscription_timestamp_to_session.rb
+│   │   ├── 20241025174650_add_mic_to_securities.rb
+│   │   ├── 20241025182612_add_search_vector_to_securities.rb
+│   │   ├── 20241029125406_add_reference_to_security_prices.rb
+│   │   ├── 20241029184115_remove_prices_missing_issue.rb
+│   │   ├── 20241029234028_remove_search_vector.rb
+│   │   ├── 20241030121302_fix_not_null_stock_exchange_data.rb
+│   │   ├── 20241030151105_remove_account_mode.rb
+│   │   ├── 20241030222235_create_invitations.rb
+│   │   ├── 20241106193743_add_plaid_domain.rb
+│   │   ├── 20241108150422_add_unique_email_index_to_invitations.rb
+│   │   ├── 20241114164118_add_products_to_plaid_item.rb
+│   │   ├── 20241122183828_change_loan_interest_rate_precision.rb.rb
+│   │   ├── 20241126211249_add_logo_url_to_security.rb
+│   │   ├── 20241204235400_add_balance_components.rb
+│   │   ├── 20241207002408_add_family_timezone.rb
+│   │   ├── 20241212141453_add_merchant_logo.rb
+│   │   ├── 20241217141716_add_enrichment_setting.rb
+│   │   ├── 20241218132503_add_enriched_name_field.rb
+│   │   ├── 20241219151540_add_region_to_plaid_item.rb
+│   │   ├── 20241219174803_add_parent_category.rb
+│   │   ├── 20241227142333_add_error_trace_to_syncs.rb
+│   │   ├── 20241231140709_reverse_transfer_relations.rb
+│   │   ├── 20250108182147_create_budgets.rb
+│   │   ├── 20250108200055_create_budget_categories.rb
+│   │   ├── 20250110012347_category_classification.rb
+│   │   ├── 20250120210449_align_transfer_cascade_behavior.rb
+│   │   ├── 20250124224316_create_rejected_transfers.rb
+│   │   ├── 20250128203303_store_transaction_filters_in_session.rb
+│   │   ├── 20250130191533_add_email_confirmation_to_users.rb
+│   │   ├── 20250130214500_remove_email_confirmation_sent_at_from_users.rb
+│   │   ├── 20250131171943_remove_email_confirmation_token_from_users.rb
+│   │   ├── 20250206003115_remove_import_status_enum.rb
+│   │   ├── 20250206141452_add_institution_details_to_plaid_items.rb
+│   │   ├── 20250206151825_add_mfa_fields_to_users.rb
+│   │   ├── 20250206204404_add_constraints_to_account_holdings.rb
+│   │   ├── 20250207011850_add_exchange_operating_mic_to_securities.rb
+│   │   ├── 20250207014022_add_number_format_to_imports.rb
+│   │   ├── 20250207194638_adjust_securities_indexes.rb
+│   │   ├── 20250211161238_make_ticker_not_null.rb
+│   │   ├── 20250212163624_add_status_to_plaid_items.rb
+│   │   ├── 20250212213301_add_user_sidebar_preference.rb
+│   │   ├── 20250220153958_update_imports_for_operating_mic_v2.rb
+│   │   ├── 20250220200735_add_default_lucide_icon_to_categories.rb
+│   │   ├── 20250226022326_add_show_ai_sidebar_to_users.rb
+│   │   ├── 20250226171506_create_chats.rb
+│   │   └── 20250226171512_create_messages.rb
+│   ├── schema.rb
+│   ├── seeds
+│   │   └── exchanges.rb
+│   └── seeds.rb
+├── docker-compose.example.yml
+├── docs
+│   └── hosting
+│       ├── docker.md
+│       └── one-click-deploy.md
+├── lib
+│   ├── assets
+│   │   └── .keep
+│   ├── money
+│   │   ├── arithmetic.rb
+│   │   ├── currency.rb
+│   │   └── formatting.rb
+│   ├── money.rb
+│   ├── retryable.rb
+│   ├── semver.rb
+│   └── tasks
+│       ├── data_migration.rake
+│       ├── demo_data.rake
+│       ├── invites.rake
+│       └── securities.rake
+├── log
+│   └── .keep
+├── package-lock.json
+├── package.json
+├── public
+│   ├── 404.html
+│   ├── 406-unsupported-browser.html
+│   ├── 422.html
+│   ├── 426.html
+│   ├── 500.html
+│   ├── android-chrome-192x192.png
+│   ├── android-chrome-512x512.png
+│   ├── apple-touch-icon.png
+│   ├── browserconfig.xml
+│   ├── favicon-16x16.png
+│   ├── favicon-32x32.png
+│   ├── favicon.ico
+│   ├── mstile-150x150.png
+│   ├── robots.txt
+│   ├── safari-pinned-tab.svg
+│   └── site.webmanifest
+├── render.yaml
+├── storage
+│   └── .keep
+├── test
+│   ├── application_system_test_case.rb
+│   ├── channels
+│   │   └── application_cable
+│   │       └── connection_test.rb
+│   ├── controllers
+│   │   ├── account
+│   │   │   ├── holdings_controller_test.rb
+│   │   │   ├── trades_controller_test.rb
+│   │   │   ├── transactions_controller_test.rb
+│   │   │   ├── transfer_matches_controller_test.rb
+│   │   │   └── valuations_controller_test.rb
+│   │   ├── accounts_controller_test.rb
+│   │   ├── categories_controller_test.rb
+│   │   ├── category
+│   │   │   └── deletions_controller_test.rb
+│   │   ├── credit_cards_controller_test.rb
+│   │   ├── cryptos_controller_test.rb
+│   │   ├── currencies_controller_test.rb
+│   │   ├── depositories_controller_test.rb
+│   │   ├── email_confirmations_controller_test.rb
+│   │   ├── impersonation_sessions_controller_test.rb
+│   │   ├── import
+│   │   │   ├── cleans_controller_test.rb
+│   │   │   ├── configurations_controller_test.rb
+│   │   │   ├── confirms_controller_test.rb
+│   │   │   ├── mappings_controller_test.rb
+│   │   │   ├── rows_controller_test.rb
+│   │   │   └── uploads_controller_test.rb
+│   │   ├── imports_controller_test.rb
+│   │   ├── investments_controller_test.rb
+│   │   ├── invitations_controller_test.rb
+│   │   ├── invite_codes_controller_test.rb
+│   │   ├── issue
+│   │   │   └── exchange_rate_provider_missings_controller_test.rb
+│   │   ├── issues_controller_test.rb
+│   │   ├── loans_controller_test.rb
+│   │   ├── merchants_controller_test.rb
+│   │   ├── mfa_controller_test.rb
+│   │   ├── other_assets_controller_test.rb
+│   │   ├── other_liabilities_controller_test.rb
+│   │   ├── pages_controller_test.rb
+│   │   ├── password_resets_controller_test.rb
+│   │   ├── plaid_items_controller_test.rb
+│   │   ├── properties_controller_test.rb
+│   │   ├── registrations_controller_test.rb
+│   │   ├── sessions_controller_test.rb
+│   │   ├── settings
+│   │   │   ├── billings_controller_test.rb
+│   │   │   ├── hostings_controller_test.rb
+│   │   │   ├── preferences_controller_test.rb
+│   │   │   └── profiles_controller_test.rb
+│   │   ├── subscriptions_controller_test.rb
+│   │   ├── tag
+│   │   │   └── deletions_controller_test.rb
+│   │   ├── tags_controller_test.rb
+│   │   ├── transactions_controller_test.rb
+│   │   ├── transfers_controller_test.rb
+│   │   ├── upgrades_controller_test.rb
+│   │   ├── users_controller_test.rb
+│   │   ├── vehicles_controller_test.rb
+│   │   └── webhooks_controller_test.rb
+│   ├── fixtures
+│   │   ├── account
+│   │   │   ├── balances.yml
+│   │   │   ├── entries.yml
+│   │   │   ├── holdings.yml
+│   │   │   ├── trades.yml
+│   │   │   ├── transactions.yml
+│   │   │   └── valuations.yml
+│   │   ├── accounts.yml
+│   │   ├── active_storage
+│   │   │   ├── attachments.yml
+│   │   │   └── blobs.yml
+│   │   ├── addresses.yml
+│   │   ├── budgets.yml
+│   │   ├── categories.yml
+│   │   ├── chats.yml
+│   │   ├── credit_cards.yml
+│   │   ├── cryptos.yml
+│   │   ├── depositories.yml
+│   │   ├── exchange_rates.yml
+│   │   ├── families.yml
+│   │   ├── files
+│   │   │   ├── imports
+│   │   │   │   ├── accounts.csv
+│   │   │   │   ├── invalid.csv
+│   │   │   │   ├── mint.csv
+│   │   │   │   ├── trades.csv
+│   │   │   │   ├── transactions.csv
+│   │   │   │   └── valid.csv
+│   │   │   ├── profile_image.png
+│   │   │   └── square-placeholder.png
+│   │   ├── impersonation_session_logs.yml
+│   │   ├── impersonation_sessions.yml
+│   │   ├── import
+│   │   │   ├── mappings.yml
+│   │   │   └── rows.yml
+│   │   ├── imports.yml
+│   │   ├── investments.yml
+│   │   ├── invitations.yml
+│   │   ├── issues.yml
+│   │   ├── loans.yml
+│   │   ├── merchants.yml
+│   │   ├── messages.yml
+│   │   ├── other_assets.yml
+│   │   ├── other_liabilities.yml
+│   │   ├── plaid_accounts.yml
+│   │   ├── plaid_items.yml
+│   │   ├── properties.yml
+│   │   ├── securities.yml
+│   │   ├── security
+│   │   │   └── prices.yml
+│   │   ├── sessions.yml
+│   │   ├── stock_exchanges.yml
+│   │   ├── syncs.yml
+│   │   ├── taggings.yml
+│   │   ├── tags.yml
+│   │   ├── transfers.yml
+│   │   ├── users.yml
+│   │   └── vehicles.yml
+│   ├── helpers
+│   │   ├── .keep
+│   │   └── application_helper_test.rb
+│   ├── i18n_test.rb
+│   ├── interfaces
+│   │   ├── accountable_resource_interface_test.rb
+│   │   ├── entryable_resource_interface_test.rb
+│   │   ├── exchange_rate_provider_interface_test.rb
+│   │   ├── git_repository_provider_interface_test.rb
+│   │   ├── import_interface_test.rb
+│   │   ├── security_price_provider_interface_test.rb
+│   │   └── syncable_interface_test.rb
+│   ├── jobs
+│   │   ├── auto_upgrade_job_test.rb
+│   │   ├── enrich_data_job_test.rb
+│   │   ├── import_job_test.rb
+│   │   ├── revert_import_job_test.rb
+│   │   ├── sync_job_test.rb
+│   │   └── user_purge_job_test.rb
+│   ├── lib
+│   │   ├── money
+│   │   │   └── currency_test.rb
+│   │   └── money_test.rb
+│   ├── mailers
+│   │   ├── email_confirmation_mailer_test.rb
+│   │   ├── password_mailer_test.rb
+│   │   └── previews
+│   │       ├── email_confirmation_mailer_preview.rb
+│   │       └── password_mailer_preview.rb
+│   ├── models
+│   │   ├── account
+│   │   │   ├── balance_calculator_test.rb
+│   │   │   ├── chartable_test.rb
+│   │   │   ├── entry_test.rb
+│   │   │   ├── holding_calculator_test.rb
+│   │   │   ├── holding_test.rb
+│   │   │   ├── syncer_test.rb
+│   │   │   └── transaction_test.rb
+│   │   ├── account_test.rb
+│   │   ├── address_test.rb
+│   │   ├── balance_sheet_test.rb
+│   │   ├── category_test.rb
+│   │   ├── chat_test.rb
+│   │   ├── current_test.rb
+│   │   ├── exchange_rate_test.rb
+│   │   ├── family
+│   │   │   └── auto_transfer_matchable_test.rb
+│   │   ├── family_test.rb
+│   │   ├── impersonation_session_test.rb
+│   │   ├── income_statement_test.rb
+│   │   ├── invite_code_test.rb
+│   │   ├── loan_test.rb
+│   │   ├── message_test.rb
+│   │   ├── period_test.rb
+│   │   ├── plaid_investment_sync_test.rb
+│   │   ├── plaid_item_test.rb
+│   │   ├── provider
+│   │   │   ├── github_test.rb
+│   │   │   └── synth_test.rb
+│   │   ├── security
+│   │   │   └── price_test.rb
+│   │   ├── sync_test.rb
+│   │   ├── tag_test.rb
+│   │   ├── trade_import_test.rb
+│   │   ├── transaction_import_test.rb
+│   │   ├── transfer_test.rb
+│   │   ├── trend_test.rb
+│   │   ├── upgrader
+│   │   │   └── upgrade_test.rb
+│   │   ├── upgrader_test.rb
+│   │   └── user_test.rb
+│   ├── support
+│   │   ├── account
+│   │   │   └── entries_test_helper.rb
+│   │   ├── plaid_test_helper.rb
+│   │   └── securities_test_helper.rb
+│   ├── system
+│   │   ├── accounts_test.rb
+│   │   ├── categories_test.rb
+│   │   ├── imports_test.rb
+│   │   ├── settings_test.rb
+│   │   ├── trades_test.rb
+│   │   ├── transactions_test.rb
+│   │   └── transfers_test.rb
+│   ├── test_helper.rb
+│   └── vcr_cassettes
+│       ├── git_repository_provider
+│       │   ├── fetch_latest_release_notes.yml
+│       │   └── fetch_latest_upgrade_candidates.yml
+│       └── synth
+│           ├── exchange_rate.yml
+│           ├── exchange_rate_historical.yml
+│           └── security_prices.yml
+├── tmp
+│   ├── .keep
+│   ├── pids
+│   │   └── .keep
+│   └── storage
+│       └── .keep
+└── vendor
+    ├── .keep
+    └── javascript
+        ├── .keep
+        ├── @floating-ui--core.js
+        ├── @floating-ui--dom.js
+        ├── @floating-ui--utils--dom.js
+        ├── @floating-ui--utils.js
+        ├── @github--hotkey.js
+        ├── @simonwep--pickr.js
+        ├── d3-array.js
+        ├── d3-axis.js
+        ├── d3-brush.js
+        ├── d3-chord.js
+        ├── d3-color.js
+        ├── d3-contour.js
+        ├── d3-delaunay.js
+        ├── d3-dispatch.js
+        ├── d3-drag.js
+        ├── d3-dsv.js
+        ├── d3-ease.js
+        ├── d3-fetch.js
+        ├── d3-force.js
+        ├── d3-format.js
+        ├── d3-geo.js
+        ├── d3-hierarchy.js
+        ├── d3-interpolate.js
+        ├── d3-path.js
+        ├── d3-polygon.js
+        ├── d3-quadtree.js
+        ├── d3-random.js
+        ├── d3-scale-chromatic.js
+        ├── d3-scale.js
+        ├── d3-selection.js
+        ├── d3-shape.js
+        ├── d3-time-format.js
+        ├── d3-time.js
+        ├── d3-timer.js
+        ├── d3-transition.js
+        ├── d3-zoom.js
+        ├── d3.js
+        ├── delaunator.js
+        ├── internmap.js
+        └── robust-predicates.js
+
+250 directories, 1243 files
+```
