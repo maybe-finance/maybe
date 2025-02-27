@@ -31,6 +31,25 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Your profile has been updated.", flash[:notice]
   end
 
+  test "admin can reset family data" do
+    assert_enqueued_with(job: FamilyResetJob) do
+      delete reset_user_url(@user)
+    end
+
+    assert_redirected_to settings_profile_url
+    assert_equal I18n.t("users.reset.success"), flash[:notice]
+  end
+
+  test "non-admin cannot reset family data" do
+    sign_in @member = users(:family_member)
+
+    delete reset_user_url(@member)
+
+    assert_redirected_to settings_profile_url
+    assert_equal I18n.t("users.reset.unauthorized"), flash[:alert]
+    assert_no_enqueued_jobs only: FamilyResetJob
+  end
+
   test "member can deactivate their account" do
     sign_in @member = users(:family_member)
     delete user_url(@member)

@@ -31,6 +31,36 @@ class SettingsTest < ApplicationSystemTestCase
     end
   end
 
+  test "admin can see and use reset account button" do
+    open_settings_from_sidebar
+
+    assert_selector "h3", text: I18n.t("settings.profiles.show.reset_account")
+    assert_selector "p", text: I18n.t("settings.profiles.show.reset_account_warning")
+
+    reset_button = find_button I18n.t("settings.profiles.show.reset_account")
+
+    reset_button.click
+
+    within("#turbo-confirm") do
+      assert_text I18n.t("settings.profiles.show.confirm_reset.title")
+      assert_text I18n.t("settings.profiles.show.confirm_reset.body")
+      click_button I18n.t("settings.profiles.show.reset_account")
+    end
+
+    assert_current_path settings_profile_path
+    assert_text I18n.t("users.reset.success")
+  end
+
+  test "non-admin cannot see reset account button" do
+    sign_out
+    sign_in users(:family_member)
+
+    open_settings_from_sidebar
+
+    assert_no_selector "h3", text: I18n.t("settings.profiles.show.reset_account")
+    assert_no_selector "button", text: I18n.t("settings.profiles.show.reset_account")
+  end
+
   test "can update self hosting settings" do
     Rails.application.config.app_mode.stubs(:self_hosted?).returns(true)
     open_settings_from_sidebar

@@ -18,7 +18,9 @@ Rails.application.routes.draw do
   resource :password, only: %i[edit update]
   resource :email_confirmation, only: :new
 
-  resources :users, only: %i[update destroy]
+  resources :users, only: %i[update destroy] do
+    delete :reset, on: :member
+  end
 
   resource :onboarding, only: :show do
     collection do
