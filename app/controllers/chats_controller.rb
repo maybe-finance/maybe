@@ -1,5 +1,5 @@
 class ChatsController < ApplicationController
-  before_action :set_chat, only: [ :show, :destroy ]
+  before_action :set_chat, only: [ :show, :destroy, :clear ]
 
   def index
     @chats = Current.user.chats.order(created_at: :desc)
@@ -55,6 +55,25 @@ class ChatsController < ApplicationController
   def destroy
     @chat.destroy
     redirect_to chats_path, notice: "Chat was successfully deleted"
+  end
+
+  def clear
+    # Delete all non-system messages
+    @chat.messages.where.not(role: "system").destroy_all
+
+    # Re-add the system message if it doesn't exist
+    unless @chat.messages.where(role: "system").exists?
+      @chat.messages.create(
+        content: "You are a helpful financial assistant. You can help with budgeting, investments, and financial planning.",
+        role: "system",
+        internal: true
+      )
+    end
+
+    respond_to do |format|
+      format.html { redirect_to root_path(chat_id: @chat.id), notice: "Chat was successfully cleared" }
+      format.turbo_stream
+    end
   end
 
   private

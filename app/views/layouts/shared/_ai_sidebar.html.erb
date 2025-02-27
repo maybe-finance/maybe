@@ -16,18 +16,35 @@
     <% end %>
     
     <div class="flex items-center justify-between flex-grow ml-2">
-      <h2 class="text-lg font-medium" data-chat-menu-target="header">Chat</h2>
+      <h2 class="text-lg font-medium" data-chat-menu-target="header"></h2>
       <h2 class="text-lg font-medium hidden" data-chat-menu-target="listHeader">Recent Chats</h2>
       
       <div class="flex items-center gap-2">
-        <% if Current.user && @chat.present? %>
-          <%= button_to chat_path(@chat), method: :delete, class: "p-2 rounded-lg hover:bg-gray-100", data: { turbo_confirm: "Are you sure you want to delete this chat?" } do %>
-            <%= icon("trash-2") %>
-          <% end %>
-        <% end %>
-        <button class="p-2 rounded-lg hover:bg-gray-100">
-          <%= icon("more-vertical") %>
-        </button>
+        <div class="relative" data-controller="menu" data-menu-placement-value="bottom-end" data-menu-offset-value="6">
+          <button data-menu-target="button" class="p-2 rounded-lg hover:bg-gray-100">
+            <%= icon("more-vertical") %>
+          </button>
+          <div data-menu-target="content" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
+            <div class="py-1">
+              <%= link_to chats_path, data: { turbo_method: :post }, class: "flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50" do %>
+                <div class="mr-2"><%= icon("plus") %></div>
+                <span>Start new chat</span>
+              <% end %>
+              
+              <% if Current.user && @chat.present? %>
+                <%= button_to clear_chat_path(@chat), method: :post, class: "w-full flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50", data: { turbo_confirm: "Are you sure you want to clear all messages from this chat?" } do %>
+                  <div class="mr-2"><%= icon("x") %></div>
+                  <span>Clear chat</span>
+                <% end %>
+                
+                <%= button_to chat_path(@chat), method: :delete, class: "w-full flex items-center px-4 py-3 text-sm text-red-600 hover:bg-gray-50", data: { turbo_confirm: "Are you sure you want to delete this chat?" } do %>
+                  <div class="mr-2"><%= icon("trash-2") %></div>
+                  <span>Delete chat</span>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

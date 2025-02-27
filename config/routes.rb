@@ -11,6 +11,9 @@ Rails.application.routes.draw do
   # AI Chat routes
   resources :chats, only: [ :index, :show, :create, :destroy ] do
     resources :messages, only: [ :create ]
+    member do
+      post :clear
+    end
   end
 
   get "changelog", to: "pages#changelog"

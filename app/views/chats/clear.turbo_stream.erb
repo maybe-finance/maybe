@@ -1,0 +1,5 @@
+<%= turbo_stream.replace "messages" do %>
+  <div id="messages" data-turbo-cache="false">
+    <%= render "layouts/shared/ai_greeting", context: 'chat' %>
+  </div>
+<% end %> 
