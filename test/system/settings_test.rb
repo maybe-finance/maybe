@@ -76,6 +76,28 @@ class SettingsTest < ApplicationSystemTestCase
     assert_selector 'span[data-clipboard-target="iconSuccess"]', visible: true, count: 1 # text copied and icon changed to checkmark
   end
 
+  test "can clear data cache in self hosting settings" do
+    Rails.application.config.app_mode.stubs(:self_hosted?).returns(true)
+    open_settings_from_sidebar
+    click_link I18n.t("settings.settings_nav.self_hosting_label")
+
+    assert_selector "h3", text: I18n.t("settings.hostings.show.clear_cache")
+    assert_selector "p", text: I18n.t("settings.hostings.show.clear_cache_warning")
+
+    clear_cache_button = find_button I18n.t("settings.hostings.show.clear_cache")
+
+    clear_cache_button.click
+
+    within("#turbo-confirm") do
+      assert_text I18n.t("settings.hostings.show.confirm_clear_cache.title")
+      assert_text I18n.t("settings.hostings.show.confirm_clear_cache.body")
+      click_button I18n.t("settings.hostings.show.clear_cache")
+    end
+
+    assert_current_path settings_hosting_path
+    assert_text I18n.t("settings.hostings.clear_cache.cache_cleared")
+  end
+
   private
 
     def open_settings_from_sidebar

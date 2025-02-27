@@ -38,6 +38,11 @@ class Settings::HostingsController < ApplicationController
     render :show, status: :unprocessable_entity
   end
 
+  def clear_cache
+    DataCacheClearJob.perform_later
+    redirect_to settings_hosting_path, notice: t(".cache_cleared")
+  end
+
   private
     def hosting_params
       params.require(:setting).permit(:render_deploy_hook, :upgrades_setting, :require_invite_for_signup, :require_email_confirmation, :synth_api_key)

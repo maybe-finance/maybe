@@ -45,4 +45,15 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
       assert_equal NEW_RENDER_DEPLOY_HOOK, Setting.render_deploy_hook
     end
   end
+
+  test "can clear data cache when self hosting is enabled" do
+    with_self_hosting do
+      assert_enqueued_with(job: DataCacheClearJob) do
+        delete clear_cache_settings_hosting_url
+      end
+
+      assert_redirected_to settings_hosting_url
+      assert_equal I18n.t("settings.hostings.clear_cache.cache_cleared"), flash[:notice]
+    end
+  end
 end
