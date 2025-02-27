@@ -16,10 +16,18 @@ export default class extends Controller {
     const panel = side === "left" ? this.leftPanelTarget : this.rightPanelTarget;
 
     // Toggle the sidebar visibility
-    panel.classList.toggle("w-0");
-    panel.classList.toggle("opacity-0");
-    panel.classList.toggle("w-80");
-    panel.classList.toggle("opacity-100");
+    if (side === "left") {
+      panel.classList.toggle("w-0");
+      panel.classList.toggle("opacity-0");
+      panel.classList.toggle("w-80");
+      panel.classList.toggle("opacity-100");
+    } else {
+      // For right panel, use the correct width class
+      panel.classList.toggle("w-0");
+      panel.classList.toggle("opacity-0");
+      panel.classList.toggle("w-[375px]");
+      panel.classList.toggle("opacity-100");
+    }
 
     // Determine sidebar states
     const leftSidebarOpen = !this.leftPanelTarget.classList.contains("w-0");
