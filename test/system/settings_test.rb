@@ -49,7 +49,7 @@ class SettingsTest < ApplicationSystemTestCase
   test "does not show billing link if self hosting" do
     Rails.application.config.app_mode.stubs(:self_hosted?).returns(true)
     open_settings_from_sidebar
-    assert_no_selector "li", text: "Billing"
+    assert_no_selector "li", text: I18n.t("settings.settings_nav.billing_label")
   end
 
   private
