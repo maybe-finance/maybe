@@ -1,6 +1,41 @@
-<%= form_with model: [chat, message], class: "relative", data: { controller: "message-form", action: "turbo:submit-end->message-form#reset" } do |f| %>
+<%
+# This partial can be used in multiple contexts:
+# - In a chat show page: form_with model: [chat, message]
+# - In a new chat context: form_with url: chats_path, method: :post
+# - In a sidebar: with additional scroll behavior
+#
+# Parameters:
+# - chat: The chat object (optional, if creating a new chat)
+# - message: The message object (optional, if creating a new chat)
+# - form_options: Additional options for the form (default: {})
+# - scroll_behavior: Whether to include scroll behavior (default: false)
+%>
+
+<% 
+  # Set up default values
+  form_options ||= {}
+  scroll_behavior ||= false
+  
+  # Determine form parameters based on context
+  if defined?(chat) && chat.present? && defined?(message) && message.present?
+    form_params = { model: [chat, message] }
+  else
+    form_params = { url: chats_path, method: :post }
+  end
+  
+  # Merge form options
+  form_params.merge!(form_options)
+  
+  # Set up controller and actions
+  controller_data = { controller: "message-form", action: "turbo:submit-end->message-form#reset" }
+  if scroll_behavior
+    controller_data[:action] += " turbo:submit-end->chat-scroll#scrollToBottom"
+  end
+%>
+
+<%= form_with **form_params, class: "relative", data: controller_data do |f| %>
   <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
-    <div class="px-3 py-2">
+    <div class="px-3 pt-2">
       <%= f.text_area :content, 
           placeholder: "Ask anything...", 
           class: "w-full border-0 focus:ring-0 resize-none text-sm",
@@ -11,7 +46,7 @@
           } %>
     </div>
     
-    <div class="flex items-center px-2 py-2 border-t border-gray-200">
+    <div class="flex items-center px-2 pb-2">
       <button type="button" class="p-1.5 text-gray-500 hover:text-gray-700 rounded-md">
         <%= icon("plus") %>
       </button>

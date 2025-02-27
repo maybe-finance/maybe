@@ -26,49 +26,12 @@
         <% end %>
       <% else %>
         <!-- Show welcome message when chat has no messages -->
-        <div class="flex items-start gap-3 mb-4 w-full">
-          <%= render "layouts/shared/ai_avatar" %>
-          <div class="p-4 max-w-[85%] text-gray-800">
-            <p>Hey <%= Current.user&.first_name || 'there' %>! I'm an AI built by Maybe to help with your finances. How can I assist you today?</p>
-          </div>
-        </div>
+        <%= render "layouts/shared/ai_greeting", context: 'chat' %>
       <% end %>
     </div>
   </div>
 
   <div class="border-t border-gray-200 p-4">
-    <%= form_with model: [@chat, @message], class: "relative", data: { controller: "message-form", action: "turbo:submit-end->message-form#reset turbo:submit-end->chat-scroll#scrollToBottom" } do |f| %>
-      <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
-        <div class="px-3 py-2">
-          <%= f.text_area :content, 
-              placeholder: "Ask anything...", 
-              class: "w-full border-0 focus:ring-0 resize-none text-sm",
-              rows: 1,
-              data: { 
-                controller: "textarea-autogrow",
-                action: "input->textarea-autogrow#resize keydown->message-form#checkSubmit"
-              } %>
-        </div>
-        
-        <div class="flex items-center px-2 py-2 border-t border-gray-200">
-          <button type="button" class="p-1.5 text-gray-500 hover:text-gray-700 rounded-md">
-            <%= icon("plus") %>
-          </button>
-          <button type="button" class="p-1.5 text-gray-500 hover:text-gray-700 rounded-md">
-            <%= icon("command") %>
-          </button>
-          <button type="button" class="p-1.5 text-gray-500 hover:text-gray-700 rounded-md">
-            <%= icon("at-sign") %>
-          </button>
-          <button type="button" class="p-1.5 text-gray-500 hover:text-gray-700 rounded-md">
-            <%= icon("sparkles") %>
-          </button>
-          
-          <button type="submit" class="ml-auto p-1.5 text-gray-500 hover:text-gray-700 rounded-md" data-message-form-target="submit">
-            <%= icon("arrow-up") %>
-          </button>
-        </div>
-      </div>
-    <% end %>
+    <%= render "messages/form", chat: @chat, message: @message, scroll_behavior: true %>
   </div>
 </div> 
