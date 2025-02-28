@@ -29,10 +29,8 @@ class Import::UploadsController < ApplicationController
     end
 
     def csv_valid?(str)
-      require "csv"
-
       begin
-        csv = CSV.parse(str || "", headers: true, col_sep: upload_params[:col_sep])
+        csv = Import.parse_csv_str(str, col_sep: upload_params[:col_sep])
         return false if csv.headers.empty?
         return false if csv.count == 0
         true

@@ -34,6 +34,18 @@ class Import < ApplicationRecord
   has_many :accounts, dependent: :destroy
   has_many :entries, dependent: :destroy, class_name: "Account::Entry"
 
+  class << self
+    def parse_csv_str(csv_str, col_sep: ",")
+      CSV.parse(
+        (csv_str || "").strip,
+        headers: true,
+        col_sep: col_sep,
+        converters: [ ->(str) { str&.strip } ],
+        liberal_parsing: true
+      )
+    end
+  end
+
   def publish_later
     raise "Import is not publishable" unless publishable?
 
@@ -178,12 +190,7 @@ class Import < ApplicationRecord
     end
 
     def parsed_csv
-      @parsed_csv ||= CSV.parse(
-        (raw_file_str || "").strip,
-        headers: true,
-        col_sep: col_sep,
-        converters: [ ->(str) { str&.strip } ]
-      )
+      @parsed_csv ||= self.class.parse_csv_str(raw_file_str, col_sep: col_sep)
     end
 
     def sanitize_number(value)
