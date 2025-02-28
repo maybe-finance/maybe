@@ -127,20 +127,40 @@
 <% end %>
 
 <%= settings_section title: t(".danger_zone_title") do %>
-  <div class="flex items-center justify-between">
-    <div>
-      <h3 class="font-medium text-primary"><%= t(".delete_account") %></h3>
-      <p class="text-secondary text-sm"><%= t(".delete_account_warning") %></p>
+  <div class="space-y-4">
+    <% if Current.user.admin? %>
+      <div class="flex items-center justify-between">
+        <div class="w-2/3">
+          <h3 class="font-medium text-primary"><%= t(".reset_account") %></h3>
+          <p class="text-secondary text-sm"><%= t(".reset_account_warning") %></p>
+        </div>
+        <%=
+              button_to t(".reset_account"), reset_user_path(@user), method: :delete,
+                class: "bg-orange-500 text-white text-sm font-medium rounded-lg px-4 py-2",
+                data: { turbo_confirm: {
+                  title: t(".confirm_reset.title"),
+                  body: t(".confirm_reset.body"),
+                  accept: t(".reset_account"),
+                  acceptClass: "w-full bg-orange-500 text-white rounded-xl text-center p-[10px] border mb-2"
+                }}
+        %>
+      </div>
+    <% end %>
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="font-medium text-primary"><%= t(".delete_account") %></h3>
+        <p class="text-secondary text-sm"><%= t(".delete_account_warning") %></p>
+      </div>
+      <%=
+            button_to t(".delete_account"), user_path(@user), method: :delete,
+              class: "bg-red-500 text-white text-sm font-medium rounded-lg px-3 py-2",
+              data: { turbo_confirm: {
+                title: t(".confirm_delete.title"),
+                body: t(".confirm_delete.body"),
+                accept: t(".delete_account"),
+                acceptClass: "w-full bg-red-500 text-white rounded-xl text-center p-[10px] border mb-2"
+              }}
+      %>
     </div>
-    <%=
-          button_to t(".delete_account"), user_path(@user), method: :delete,
-            class: "bg-red-500 text-white text-sm font-medium rounded-lg px-3 py-2",
-            data: { turbo_confirm: {
-              title: t(".confirm_delete.title"),
-              body: t(".confirm_delete.body"),
-              accept: t(".delete_account"),
-              acceptClass: "w-full bg-red-500 text-white rounded-xl text-center p-[10px] border mb-2"
-            }}
-    %>
   </div>
 <% end %>

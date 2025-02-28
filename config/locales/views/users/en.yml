@@ -8,3 +8,6 @@ en:
       email_change_initiated: Please check your new email address for confirmation
         instructions.
       success: Your profile has been updated.
+    reset:
+      success: Your account has been reset. Data will be deleted in the background in some time.
+      unauthorized: You are not authorized to perform this action

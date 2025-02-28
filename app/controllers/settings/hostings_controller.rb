@@ -2,6 +2,7 @@ class Settings::HostingsController < ApplicationController
   layout "settings"
 
   before_action :raise_if_not_self_hosted
+  before_action :ensure_admin, only: :clear_cache
 
   def show
     @synth_usage = Current.family.synth_usage
@@ -38,6 +39,11 @@ class Settings::HostingsController < ApplicationController
     render :show, status: :unprocessable_entity
   end
 
+  def clear_cache
+    DataCacheClearJob.perform_later(Current.family)
+    redirect_to settings_hosting_path, notice: t(".cache_cleared")
+  end
+
   private
     def hosting_params
       params.require(:setting).permit(:render_deploy_hook, :upgrades_setting, :require_invite_for_signup, :require_email_confirmation, :synth_api_key)
@@ -45,5 +51,9 @@ class Settings::HostingsController < ApplicationController
 
     def raise_if_not_self_hosted
       raise "Settings not available on non-self-hosted instance" unless self_hosted?
+    end
+
+    def ensure_admin
+      redirect_to settings_hosting_path, alert: t(".not_authorized") unless Current.user.admin?
     end
 end

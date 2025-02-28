@@ -18,7 +18,9 @@ Rails.application.routes.draw do
   resource :password, only: %i[edit update]
   resource :email_confirmation, only: :new
 
-  resources :users, only: %i[update destroy]
+  resources :users, only: %i[update destroy] do
+    delete :reset, on: :member
+  end
 
   resource :onboarding, only: :show do
     collection do
@@ -30,7 +32,9 @@ Rails.application.routes.draw do
   namespace :settings do
     resource :profile, only: [ :show, :destroy ]
     resource :preferences, only: :show
-    resource :hosting, only: %i[show update]
+    resource :hosting, only: %i[show update] do
+      delete :clear_cache, on: :collection
+    end
     resource :billing, only: :show
     resource :security, only: :show
   end
