@@ -14,6 +14,7 @@ module Account::Chartable
       ])
 
       balances = gapfill_balances(balances)
+      balances = invert_balances(balances) if favorable_direction == "down"
 
       values = [ nil, *balances ].each_cons(2).map do |prev, curr|
         Series::Value.new(
@@ -67,6 +68,13 @@ module Account::Chartable
           GROUP BY d.date
           ORDER BY d.date
         SQL
+      end
+
+      def invert_balances(balances)
+        balances.map do |balance|
+          balance.balance = -balance.balance
+          balance
+        end
       end
 
       def gapfill_balances(balances)
