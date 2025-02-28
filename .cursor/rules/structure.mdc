@@ -1,8 +1,3 @@
----
-description: 
-globs: 
-alwaysApply: false
----
 # Project Structure
 
 ```
@@ -10,6 +5,7 @@ alwaysApply: false
 ├── .cursor
 │   └── rules
 │       ├── agent.mdc
+│       ├── general-rules.mdc
 │       ├── project-conventions.mdc
 │       ├── project-design.mdc
 │       ├── structure.mdc
@@ -76,6 +72,7 @@ alwaysApply: false
 │   │   │       ├── GeistMono-UltraLight.woff2
 │   │   │       └── GeistMono[wght].woff2
 │   │   ├── images
+│   │   │   ├── ai.svg
 │   │   │   ├── apple-logo.png
 │   │   │   ├── bg-grid.png
 │   │   │   ├── dark-mode-preview.png
@@ -125,6 +122,8 @@ alwaysApply: false
 │   │   │   └── valuations_controller.rb
 │   │   ├── accountable_sparklines_controller.rb
 │   │   ├── accounts_controller.rb
+│   │   ├── ai
+│   │   │   └── queries_controller.rb
 │   │   ├── application_controller.rb
 │   │   ├── budget_categories_controller.rb
 │   │   ├── budgets_controller.rb
@@ -218,24 +217,29 @@ alwaysApply: false
 │   │   ├── application.js
 │   │   ├── controllers
 │   │   │   ├── account_collapse_controller.js
+│   │   │   ├── ai_query_controller.js
 │   │   │   ├── application.js
 │   │   │   ├── auto_submit_form_controller.js
 │   │   │   ├── budget_form_controller.js
 │   │   │   ├── bulk_select_controller.js
 │   │   │   ├── category_controller.js
 │   │   │   ├── chat_controller.js
+│   │   │   ├── chat_menu_controller.js
+│   │   │   ├── chat_scroll_controller.js
 │   │   │   ├── clipboard_controller.js
 │   │   │   ├── color_avatar_controller.js
 │   │   │   ├── color_select_controller.js
 │   │   │   ├── deletion_controller.js
 │   │   │   ├── donut_chart_controller.js
 │   │   │   ├── element_removal_controller.js
+│   │   │   ├── example_question_controller.js
 │   │   │   ├── focus_record_controller.js
 │   │   │   ├── hotkey_controller.js
 │   │   │   ├── index.js
 │   │   │   ├── list_filter_controller.js
 │   │   │   ├── list_keyboard_navigation_controller.js
 │   │   │   ├── menu_controller.js
+│   │   │   ├── message_form_controller.js
 │   │   │   ├── modal_controller.js
 │   │   │   ├── money_field_controller.js
 │   │   │   ├── onboarding_controller.js
@@ -244,6 +248,7 @@ alwaysApply: false
 │   │   │   ├── selectable_link_controller.js
 │   │   │   ├── sidebar_controller.js
 │   │   │   ├── tabs_controller.js
+│   │   │   ├── textarea_autogrow_controller.js
 │   │   │   ├── time_series_chart_controller.js
 │   │   │   ├── tooltip_controller.js
 │   │   │   ├── trade_form_controller.js
@@ -258,6 +263,7 @@ alwaysApply: false
 │   │   ├── enrich_transaction_batch_job.rb
 │   │   ├── fetch_security_info_job.rb
 │   │   ├── import_job.rb
+│   │   ├── process_ai_response_job.rb
 │   │   ├── revert_import_job.rb
 │   │   ├── sync_job.rb
 │   │   └── user_purge_job.rb
@@ -289,6 +295,9 @@ alwaysApply: false
 │   │   ├── account.rb
 │   │   ├── account_import.rb
 │   │   ├── address.rb
+│   │   ├── ai
+│   │   │   ├── debug_mode.rb
+│   │   │   └── financial_assistant.rb
 │   │   ├── application_record.rb
 │   │   ├── balance_sheet.rb
 │   │   ├── budget.rb
@@ -300,6 +309,7 @@ alwaysApply: false
 │   │   │   ├── issuable.rb
 │   │   │   ├── monetizable.rb
 │   │   │   ├── plaidable.rb
+│   │   │   ├── promptable.rb
 │   │   │   ├── providable.rb
 │   │   │   └── syncable.rb
 │   │   ├── credit_card.rb
@@ -499,8 +509,10 @@ alwaysApply: false
 │       │       ├── _row.html.erb
 │       │       └── show.html.erb
 │       ├── chats
+│       │   ├── clear.turbo_stream.erb
 │       │   ├── index.html.erb
-│       │   └── show.html.erb
+│       │   ├── show.html.erb
+│       │   └── show.turbo_stream.erb
 │       ├── credit_cards
 │       │   ├── _form.html.erb
 │       │   ├── _overview.html.erb
@@ -591,6 +603,8 @@ alwaysApply: false
 │       │   ├── onboardings.html.erb
 │       │   ├── settings.html.erb
 │       │   ├── shared
+│       │   │   ├── _ai_avatar.html.erb
+│       │   │   ├── _ai_greeting.html.erb
 │       │   │   ├── _ai_sidebar.html.erb
 │       │   │   ├── _breadcrumbs.html.erb
 │       │   │   ├── _fixed_content.html.erb
@@ -616,7 +630,9 @@ alwaysApply: false
 │       │   ├── index.html.erb
 │       │   └── new.html.erb
 │       ├── messages
-│       │   └── _message.html.erb
+│       │   ├── _form.html.erb
+│       │   ├── _message.html.erb
+│       │   └── create.turbo_stream.erb
 │       ├── mfa
 │       │   ├── backup_codes.html.erb
 │       │   ├── new.html.erb
@@ -637,6 +653,7 @@ alwaysApply: false
 │       │   ├── new.html.erb
 │       │   └── show.html.erb
 │       ├── pages
+│       │   ├── _ai_assistant.html.erb
 │       │   ├── changelog.html.erb
 │       │   ├── dashboard
 │       │   │   ├── _balance_sheet.html.erb
@@ -1196,7 +1213,8 @@ alwaysApply: false
 │   │   ├── 20250220200735_add_default_lucide_icon_to_categories.rb
 │   │   ├── 20250226022326_add_show_ai_sidebar_to_users.rb
 │   │   ├── 20250226171506_create_chats.rb
-│   │   └── 20250226171512_create_messages.rb
+│   │   ├── 20250226171512_create_messages.rb
+│   │   └── 20250228151454_add_family_id_to_chats.rb
 │   ├── schema.rb
 │   ├── seeds
 │   │   └── exchanges.rb
@@ -1258,9 +1276,12 @@ alwaysApply: false
 │   │   │   ├── transfer_matches_controller_test.rb
 │   │   │   └── valuations_controller_test.rb
 │   │   ├── accounts_controller_test.rb
+│   │   ├── ai
+│   │   │   └── queries_controller_test.rb
 │   │   ├── categories_controller_test.rb
 │   │   ├── category
 │   │   │   └── deletions_controller_test.rb
+│   │   ├── chats_controller_test.rb
 │   │   ├── credit_cards_controller_test.rb
 │   │   ├── cryptos_controller_test.rb
 │   │   ├── currencies_controller_test.rb
@@ -1382,6 +1403,7 @@ alwaysApply: false
 │   │   ├── auto_upgrade_job_test.rb
 │   │   ├── enrich_data_job_test.rb
 │   │   ├── import_job_test.rb
+│   │   ├── process_ai_response_job_test.rb
 │   │   ├── revert_import_job_test.rb
 │   │   ├── sync_job_test.rb
 │   │   └── user_purge_job_test.rb
@@ -1406,9 +1428,13 @@ alwaysApply: false
 │   │   │   └── transaction_test.rb
 │   │   ├── account_test.rb
 │   │   ├── address_test.rb
+│   │   ├── ai
+│   │   │   └── financial_assistant_test.rb
 │   │   ├── balance_sheet_test.rb
 │   │   ├── category_test.rb
 │   │   ├── chat_test.rb
+│   │   ├── concerns
+│   │   │   └── promptable_test.rb
 │   │   ├── current_test.rb
 │   │   ├── exchange_rate_test.rb
 │   │   ├── family
@@ -1445,6 +1471,7 @@ alwaysApply: false
 │   ├── system
 │   │   ├── accounts_test.rb
 │   │   ├── categories_test.rb
+│   │   ├── chats_test.rb
 │   │   ├── imports_test.rb
 │   │   ├── settings_test.rb
 │   │   ├── trades_test.rb
@@ -1510,5 +1537,5 @@ alwaysApply: false
         ├── internmap.js
         └── robust-predicates.js
 
-252 directories, 1251 files
+257 directories, 1278 files
 ```

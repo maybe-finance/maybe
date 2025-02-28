@@ -129,6 +129,31 @@ module ApplicationHelper
     cookies[:admin] == "true"
   end
 
+  # Renders Markdown text using Redcarpet
+  def markdown(text)
+    return "" if text.blank?
+
+    renderer = Redcarpet::Render::HTML.new(
+      hard_wrap: true,
+      link_attributes: { target: "_blank", rel: "noopener noreferrer" }
+    )
+
+    markdown = Redcarpet::Markdown.new(
+      renderer,
+      autolink: true,
+      tables: true,
+      fenced_code_blocks: true,
+      strikethrough: true,
+      superscript: true,
+      underline: true,
+      highlight: true,
+      quote: true,
+      footnotes: true
+    )
+
+    markdown.render(text).html_safe
+  end
+
   private
     def calculate_total(item, money_method, negate)
       items = item.reject { |i| i.respond_to?(:entryable) && i.entryable.transfer? }

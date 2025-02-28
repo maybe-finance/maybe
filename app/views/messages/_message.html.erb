@@ -37,7 +37,7 @@
     <% else %>
       <%= render "layouts/shared/ai_avatar" %>
       <div class="pr-2 max-w-[85%] text-gray-800">
-        <p class="whitespace-pre-wrap break-words"><%= message.content %></p>
+        <div class="prose prose-sm prose-gray break-words"><%= markdown(message.content) %></div>
       </div>
     <% end %>
   </div>

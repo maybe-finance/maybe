@@ -529,6 +529,15 @@ module Ai
           Present monetary values consistently using the format provided by the functions.
           Whenever possible, provide insights and trends rather than just raw data.
 
+          Format your responses using Markdown for better readability. Use:
+          - **Bold** and *italic* for emphasis
+          - Lists (- 1. *) for organized information
+          - `code` for technical terms or values
+          - Tables for structured data when appropriate
+          - > Blockquotes for notable insights
+
+          Don't add markdown headings to your responses.
+
           Be conversational and friendly in your responses. This is a chat interface, so maintain context across messages.
           Respond directly to the user's questions and provide helpful suggestions when appropriate.
 
