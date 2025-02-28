@@ -83,18 +83,10 @@ class TradeImport < Import
       @provider_securities_cache ||= {}
 
       provider_security = @provider_securities_cache[cache_key] ||= begin
-        response = provider.search_securities(
+        Security.search_provider(
           query: ticker,
           exchange_operating_mic: exchange_operating_mic
-        )
-
-        if !response || !response.success? || !response.securities || response.securities.empty?
-          nil
-        else
-          response.securities.first
-        end
-      rescue => e
-        nil
+        ).first
       end
 
       return Security.find_or_create_by!(ticker: ticker, exchange_operating_mic: nil) if provider_security.nil?

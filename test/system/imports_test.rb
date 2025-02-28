@@ -52,6 +52,8 @@ class ImportsTest < ApplicationSystemTestCase
   end
 
   test "trade import" do
+    Security.stubs(:search_provider).returns([])
+
     visit new_import_path
 
     click_on "Import investments"

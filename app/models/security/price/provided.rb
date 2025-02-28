@@ -5,7 +5,7 @@ module Security::Price::Provided
 
   class_methods do
     def provider
-      synth_provider
+      synth_client
     end
 
     private

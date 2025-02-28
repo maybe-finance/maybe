@@ -5,16 +5,22 @@ module Security::Provided
 
   class_methods do
     def provider
-      synth_provider
+      synth_client
     end
 
-    def search(query)
-      provider.search_securities(
+    def search_provider(query)
+      response = provider.search_securities(
         query: query[:search],
         dataset: "limited",
         country_code: query[:country],
         exchange_operating_mic: query[:exchange_operating_mic]
-      ).securities.map { |attrs| new(**attrs) }
+      )
+
+      if response.success?
+        response.securities.map { |attrs| new(**attrs) }
+      else
+        []
+      end
     end
   end
 end

@@ -26,4 +26,12 @@ module Synthable
   def synth_client
     self.class.synth_client
   end
+
+  def synth_usage
+    self.class.synth_usage
+  end
+
+  def synth_overage?
+    self.class.synth_overage?
+  end
 end
