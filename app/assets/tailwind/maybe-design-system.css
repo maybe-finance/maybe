@@ -331,29 +331,13 @@
   details>summary {
     @apply list-none;
   }
-  
-  select[multiple="multiple"] {
-    @apply py-2 pr-2 space-y-0.5 overflow-y-auto;
-  }
-  
-  select[multiple="multiple"] option {
-    @apply py-2 rounded-md;
-  }
-  
-  select[multiple="multiple"] option:checked {
-    @apply after:content-['\2713'] bg-white after:text-gray-500 after:ml-2;
-  }
-  
-  select[multiple="multiple"] option:active,
-  select[multiple="multiple"] option:focus {
-    @apply bg-white;
-  }
 }
 
 @layer components {
   /* Buttons */
   .btn {
     @apply px-3 py-2 rounded-lg text-sm font-medium cursor-pointer disabled:cursor-not-allowed focus:outline-gray-500;
+    @apply transition-all duration-300;
   }
 
   .btn--primary {
@@ -380,6 +364,25 @@
   .form-field {
     @apply flex flex-col gap-1 relative px-3 py-2 rounded-md border bg-white border-alpha-black-100 shadow-xs w-full;
     @apply focus-within:border-gray-900 focus-within:shadow-none focus-within:ring-4 focus-within:ring-gray-100;
+    @apply transition-all duration-300;
+    
+    /* Add styles for multiple select within form fields */
+    select[multiple] {
+      @apply py-2 pr-2 space-y-0.5 overflow-y-auto;
+      
+      option {
+        @apply py-2 rounded-md;
+      }
+      
+      option:checked {
+        @apply after:content-['\2713'] bg-white after:text-gray-500 after:ml-2;
+      }
+      
+      option:active,
+      option:focus {
+        @apply bg-white;
+      }
+    }
   }
   
   .form-field__label {
@@ -392,6 +395,7 @@
     @apply placeholder-shown:opacity-50;
     @apply disabled:text-gray-400;
     @apply text-ellipsis overflow-hidden whitespace-nowrap;
+    @apply transition-opacity duration-300;
   
     &select {
       @apply pr-8;
@@ -410,6 +414,7 @@
   .checkbox {
     &[type='checkbox'] {
       @apply rounded-sm;
+      @apply transition-colors duration-300;
     }
   }
 
@@ -440,8 +445,10 @@
   /* Switches */
   .switch {
     @apply block bg-gray-100 w-9 h-5 rounded-full cursor-pointer;
-    @apply after:content-[''] after:block after:absolute after:top-0.5 after:left-0.5 after:bg-white after:w-4 after:h-4 after:rounded-full after:transition-transform after:duration-300 after:ease-in-out;
+    @apply after:content-[''] after:block after:absolute after:top-0.5 after:left-0.5 after:bg-white after:w-4 after:h-4 after:rounded-full;
+    @apply after:transition-transform after:duration-300 after:ease-in-out;
     @apply peer-checked:bg-green-600 peer-checked:after:translate-x-4;
+    @apply transition-colors duration-300;
   }
 
   /* Tooltips */
