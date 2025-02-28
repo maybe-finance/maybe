@@ -49,12 +49,12 @@
         </div>
 
         <div class="flex justify-end items-center gap-2">
-          <%= link_to t(".cancel"), transactions_path, class: "text-sm font-medium text-primary px-3 py-2" %>
+          <%= link_to t(".cancel"), transactions_path, class: "btn btn--ghost" %>
 
           <%= tag.button t(".save"),
                          type: "button",
                          data: { "bulk-select-scope-param": "bulk_update", action: "bulk-select#submitBulkRequest" },
-                         class: "px-3 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg" %>
+                         class: "btn btn--primary" %>
         </div>
       </div>
     <% end %>

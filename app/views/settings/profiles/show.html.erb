@@ -16,7 +16,7 @@
         <%= form.text_field :last_name, placeholder: t(".last_name"), label: t(".last_name") %>
       </div>
       <div class="flex justify-end mt-4">
-        <%= form.submit t(".save"), class: "bg-gray-900 hover:bg-gray-700 cursor-pointer text-white rounded-lg px-3 py-2" %>
+        <%= form.submit t(".save"), class: "btn btn--primary" %>
       </div>
     </div>
   <% end %>
@@ -136,7 +136,7 @@
         </div>
         <%=
               button_to t(".reset_account"), reset_user_path(@user), method: :delete,
-                class: "bg-orange-500 text-white text-sm font-medium rounded-lg px-4 py-2",
+                class: "btn btn--destructive",
                 data: { turbo_confirm: {
                   title: t(".confirm_reset.title"),
                   body: t(".confirm_reset.body"),
@@ -153,7 +153,7 @@
       </div>
       <%=
             button_to t(".delete_account"), user_path(@user), method: :delete,
-              class: "bg-red-500 text-white text-sm font-medium rounded-lg px-3 py-2",
+              class: "btn btn--destructive",
               data: { turbo_confirm: {
                 title: t(".confirm_delete.title"),
                 body: t(".confirm_delete.body"),
