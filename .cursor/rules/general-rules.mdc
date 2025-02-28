@@ -6,5 +6,10 @@ alwaysApply: true
 ### Additional project-specific rules
 
 - Use `Current.user` for the current user. Do NOT use `current_user`.
+- Use `Current.family` for the current family. Do NOT use `current_family`.
 - Do not run `rails server` in your responses.
 - Do not run `touch tmp/restart.txt`
+- Do not run `rails credentials`
+- Do not create new API routes
+- Write and run tests as you go to verify functionality in small pieces
+- Focus on simple solutions
