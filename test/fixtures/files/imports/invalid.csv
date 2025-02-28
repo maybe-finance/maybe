@@ -1,3 +1,1 @@
-name,age
-"John Doe,23
-"Jane Doe",25
+name,description,amount,currency
