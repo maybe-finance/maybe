@@ -1,5 +1,9 @@
 class SubscriptionsController < ApplicationController
   before_action :redirect_to_root_if_self_hosted
+  rescue_from Stripe::AuthenticationError do
+    redirect_to settings_billing_path, alert: "Invalid Stripe secret key."
+  end
+
   def new
     if Current.family.stripe_customer_id.blank?
       customer = stripe_client.v1.customers.create(
