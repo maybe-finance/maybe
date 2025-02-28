@@ -1,5 +1,6 @@
 class IncomeStatement
   include Monetizable
+  include Promptable
 
   monetize :median_expense, :median_income
 
@@ -51,6 +52,24 @@ class IncomeStatement
 
   def median_income(interval: "month")
     family_stats(interval: interval).find { |stat| stat.classification == "income" }&.median || 0
+  end
+
+  # AI-friendly representation of income statement data
+  def to_ai_readable_hash(period: Period.current_month)
+    expense_data = expense_totals(period: period)
+    income_data = income_totals(period: period)
+
+    {
+      period: {
+        start_date: period.start_date.to_s,
+        end_date: period.end_date.to_s
+      },
+      total_income: format_currency(income_data.total),
+      total_expenses: format_currency(expense_data.total),
+      net_income: format_currency(income_data.total - expense_data.total),
+      savings_rate: calculate_savings_rate(income_data.total, expense_data.total),
+      currency: family.currency
+    }
   end
 
   private
@@ -118,5 +137,12 @@ class IncomeStatement
 
     def monetizable_currency
       family.currency
+    end
+
+    def calculate_savings_rate(total_income, total_expenses)
+      return 0 if total_income.zero?
+      savings = total_income - total_expenses
+      rate = (savings / total_income.to_f) * 100
+      rate.round(2)
     end
 end

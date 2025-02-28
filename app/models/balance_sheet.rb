@@ -1,5 +1,6 @@
 class BalanceSheet
   include Monetizable
+  include Promptable
 
   monetize :total_assets, :total_liabilities, :net_worth
 
@@ -71,6 +72,17 @@ class BalanceSheet
 
   def currency
     family.currency
+  end
+
+  # AI-friendly representation of balance sheet data
+  def to_ai_readable_hash
+    {
+      net_worth: format_currency(net_worth),
+      total_assets: format_currency(total_assets),
+      total_liabilities: format_currency(total_liabilities),
+      as_of_date: Date.today.to_s,
+      currency: currency
+    }
   end
 
   private
