@@ -1,4 +1,6 @@
 class SubscriptionsController < ApplicationController
+  before_action :redirect_to_root_if_self_hosted
+
   def new
     if Current.family.stripe_customer_id.blank?
       customer = stripe_client.v1.customers.create(
@@ -43,5 +45,9 @@ class SubscriptionsController < ApplicationController
   private
     def stripe_client
       @stripe_client ||= Stripe::StripeClient.new(ENV["STRIPE_SECRET_KEY"])
+    end
+
+    def redirect_to_root_if_self_hosted
+      redirect_to root_path, alert: I18n.t("subscriptions.self_hosted_alert") if self_hosted?
     end
 end
