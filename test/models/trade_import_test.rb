@@ -12,30 +12,20 @@ class TradeImportTest < ActiveSupport::TestCase
     # Create an existing AAPL security with no exchange_operating_mic
     aapl = Security.create!(ticker: "AAPL", exchange_operating_mic: nil)
 
-    provider = mock
-
     # We should only hit the provider for GOOGL since AAPL already exists
-    provider.expects(:search_securities).with(
+    Security.expects(:search_provider).with(
       query: "GOOGL",
       exchange_operating_mic: "XNAS"
-    ).returns(
-      OpenStruct.new(
-        securities: [
-          {
-            ticker: "GOOGL",
-            name: "Google Inc.",
-            country_code: "US",
-            exchange_mic: "XNGS",
-            exchange_operating_mic: "XNAS",
-            exchange_acronym: "NGS"
-          }
-        ],
-        success?: true,
-        raw_response: nil
+    ).returns([
+      Security.new(
+        ticker: "GOOGL",
+        name: "Google Inc.",
+        country_code: "US",
+        exchange_mic: "XNGS",
+        exchange_operating_mic: "XNAS",
+        exchange_acronym: "NGS"
       )
-    ).once
-
-    Security.stubs(:security_prices_provider).returns(provider)
+    ]).once
 
     import = <<~CSV
       date,ticker,qty,price,currency,account,name,exchange_operating_mic

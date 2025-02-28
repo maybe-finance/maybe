@@ -23,11 +23,10 @@
     <%= form.select :account_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Account (optional)" } %>
     <%= form.select :name_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Name (optional)" } %>
 
-    <% if Security.security_prices_provider.nil? %>
+    <% unless Security.provider %>
       <div class="alert alert-warning">
         <p>
-          <strong>Note:</strong> The Synth provider is not configured. Exchange validation is disabled.
-          Securities will be created without exchange validation, and price history will not be available.
+          <strong>Note:</strong> The security prices provider is not configured.  Your trade imports will work, but Maybe will not backfill price history.  Please go to your settings to configure this.
         </p>
       </div>
     <% end %>

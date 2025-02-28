@@ -1,5 +1,5 @@
 class Security < ApplicationRecord
-  include Providable
+  include Provided
 
   before_save :upcase_ticker
 
@@ -8,21 +8,6 @@ class Security < ApplicationRecord
 
   validates :ticker, presence: true
   validates :ticker, uniqueness: { scope: :exchange_operating_mic, case_sensitive: false }
-
-  class << self
-    def provider
-      security_prices_provider
-    end
-
-    def search(query)
-      security_prices_provider.search_securities(
-        query: query[:search],
-        dataset: "limited",
-        country_code: query[:country],
-        exchange_operating_mic: query[:exchange_operating_mic]
-      ).securities.map { |attrs| new(**attrs) }
-    end
-  end
 
   def current_price
     @current_price ||= Security::Price.find_price(security: self, date: Date.current)

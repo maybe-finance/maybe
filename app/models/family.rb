@@ -1,5 +1,5 @@
 class Family < ApplicationRecord
-  include Providable, Plaidable, Syncable, AutoTransferMatchable
+  include Synthable, Plaidable, Syncable, AutoTransferMatchable
 
   DATE_FORMATS = [
     [ "MM-DD-YYYY", "%m-%d-%Y" ],
@@ -92,20 +92,23 @@ class Family < ApplicationRecord
     ).link_token
   end
 
-  def synth_usage
-    self.class.synth_provider&.usage
-  end
-
-  def synth_overage?
-    self.class.synth_provider&.usage&.utilization.to_i >= 100
-  end
-
-  def synth_valid?
-    self.class.synth_provider&.healthy?
-  end
-
   def subscribed?
     stripe_subscription_status == "active"
+  end
+
+  def requires_data_provider?
+    # If family has any trades, they need a provider for historical prices
+    return true if trades.any?
+
+    # If family has any accounts not denominated in the family's currency, they need a provider for historical exchange rates
+    return true if accounts.where.not(currency: self.currency).any?
+
+    # If family has any entries in different currencies, they need a provider for historical exchange rates
+    uniq_currencies = entries.pluck(:currency).uniq
+    return true if uniq_currencies.count > 1
+    return true if uniq_currencies.first != self.currency
+
+    false
   end
 
   def primary_user
