@@ -5,14 +5,14 @@ class ExchangeRateTest < ActiveSupport::TestCase
   setup do
     @provider = mock
 
-    ExchangeRate.stubs(:exchange_rates_provider).returns(@provider)
+    ExchangeRate.stubs(:provider).returns(@provider)
   end
 
   test "exchange rate provider nil if no api key configured" do
-    ExchangeRate.unstub(:exchange_rates_provider)
+    ExchangeRate.unstub(:provider)
 
     with_env_overrides SYNTH_API_KEY: nil do
-      assert_not ExchangeRate.exchange_rates_provider
+      assert_not ExchangeRate.provider
     end
   end
 
@@ -42,7 +42,7 @@ class ExchangeRateTest < ActiveSupport::TestCase
   end
 
   test "nil if rate is not found in DB and provider is disabled" do
-    ExchangeRate.unstub(:exchange_rates_provider)
+    ExchangeRate.unstub(:provider)
 
     with_env_overrides SYNTH_API_KEY: nil do
       assert_not ExchangeRate.find_rate(from: "USD", to: "EUR", date: Date.current)
@@ -102,7 +102,7 @@ class ExchangeRateTest < ActiveSupport::TestCase
   end
 
   test "returns empty array if no rates found in DB or provider" do
-    ExchangeRate.unstub(:exchange_rates_provider)
+    ExchangeRate.unstub(:provider)
 
     with_env_overrides SYNTH_API_KEY: nil do
       assert_equal [], ExchangeRate.find_rates(from: "USD", to: "JPY", start_date: 10.days.ago.to_date)

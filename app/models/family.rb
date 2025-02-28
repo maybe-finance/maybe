@@ -1,5 +1,5 @@
 class Family < ApplicationRecord
-  include Providable, Plaidable, Syncable, AutoTransferMatchable
+  include Synthable, Plaidable, Syncable, AutoTransferMatchable
 
   DATE_FORMATS = [
     [ "MM-DD-YYYY", "%m-%d-%Y" ],
@@ -90,18 +90,6 @@ class Family < ApplicationRecord
       accountable_type: accountable_type,
       access_token: access_token
     ).link_token
-  end
-
-  def synth_usage
-    self.class.synth_provider&.usage
-  end
-
-  def synth_overage?
-    self.class.synth_provider&.usage&.utilization.to_i >= 100
-  end
-
-  def synth_valid?
-    self.class.synth_provider&.healthy?
   end
 
   def subscribed?
