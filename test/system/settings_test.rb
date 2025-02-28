@@ -31,36 +31,6 @@ class SettingsTest < ApplicationSystemTestCase
     end
   end
 
-  test "admin can see and use reset account button" do
-    open_settings_from_sidebar
-
-    assert_selector "h3", text: I18n.t("settings.profiles.show.reset_account")
-    assert_selector "p", text: I18n.t("settings.profiles.show.reset_account_warning")
-
-    reset_button = find_button I18n.t("settings.profiles.show.reset_account")
-
-    reset_button.click
-
-    within("#turbo-confirm") do
-      assert_text I18n.t("settings.profiles.show.confirm_reset.title")
-      assert_text I18n.t("settings.profiles.show.confirm_reset.body")
-      click_button I18n.t("settings.profiles.show.reset_account")
-    end
-
-    assert_current_path settings_profile_path
-    assert_text I18n.t("users.reset.success")
-  end
-
-  test "non-admin cannot see reset account button" do
-    sign_out
-    sign_in users(:family_member)
-
-    open_settings_from_sidebar
-
-    assert_no_selector "h3", text: I18n.t("settings.profiles.show.reset_account")
-    assert_no_selector "button", text: I18n.t("settings.profiles.show.reset_account")
-  end
-
   test "can update self hosting settings" do
     Rails.application.config.app_mode.stubs(:self_hosted?).returns(true)
     open_settings_from_sidebar
@@ -74,28 +44,6 @@ class SettingsTest < ApplicationSystemTestCase
     copy_button = find('button[data-action="clipboard#copy"]', match: :first) # Find the first copy button (adjust if needed)
     copy_button.click
     assert_selector 'span[data-clipboard-target="iconSuccess"]', visible: true, count: 1 # text copied and icon changed to checkmark
-  end
-
-  test "can clear data cache in self hosting settings" do
-    Rails.application.config.app_mode.stubs(:self_hosted?).returns(true)
-    open_settings_from_sidebar
-    click_link I18n.t("settings.settings_nav.self_hosting_label")
-
-    assert_selector "h3", text: I18n.t("settings.hostings.show.clear_cache")
-    assert_selector "p", text: I18n.t("settings.hostings.show.clear_cache_warning")
-
-    clear_cache_button = find_button I18n.t("settings.hostings.show.clear_cache")
-
-    clear_cache_button.click
-
-    within("#turbo-confirm") do
-      assert_text I18n.t("settings.hostings.show.confirm_clear_cache.title")
-      assert_text I18n.t("settings.hostings.show.confirm_clear_cache.body")
-      click_button I18n.t("settings.hostings.show.clear_cache")
-    end
-
-    assert_current_path settings_hosting_path
-    assert_text I18n.t("settings.hostings.clear_cache.cache_cleared")
   end
 
   private

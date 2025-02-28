@@ -32,12 +32,28 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "admin can reset family data" do
-    assert_enqueued_with(job: FamilyResetJob) do
+    account = accounts(:investment)
+    category = categories(:income)
+    tag = tags(:one)
+    merchant = merchants(:netflix)
+    import = imports(:transaction)
+    budget = budgets(:one)
+    plaid_item = plaid_items(:one)
+
+    perform_enqueued_jobs(only: FamilyResetJob) do
       delete reset_user_url(@user)
     end
 
     assert_redirected_to settings_profile_url
     assert_equal I18n.t("users.reset.success"), flash[:notice]
+
+    assert_not Account.exists?(account.id)
+    assert_not Category.exists?(category.id)
+    assert_not Tag.exists?(tag.id)
+    assert_not Merchant.exists?(merchant.id)
+    assert_not Import.exists?(import.id)
+    assert_not Budget.exists?(budget.id)
+    assert_not PlaidItem.exists?(plaid_item.id)
   end
 
   test "non-admin cannot reset family data" do

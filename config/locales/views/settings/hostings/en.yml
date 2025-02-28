@@ -48,3 +48,4 @@ en:
         manual_description: You control when to download and install updates
         manual_title: Manual
         title: Auto Upgrade
+      not_authorized: You are not authorized to perform this action
