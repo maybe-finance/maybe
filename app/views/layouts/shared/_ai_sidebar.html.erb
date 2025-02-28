@@ -50,6 +50,7 @@
   </div>
   
   <div id="chat-messages" class="flex-grow overflow-y-auto px-4 py-3" data-controller="chat-scroll" data-chat-scroll-target="container">
+    <%# Chat List Menu (hidden by default) %>
     <div data-chat-menu-target="content" class="hidden">
       <div class="mb-6">
         <div class="flex items-center justify-between mb-4">
@@ -98,9 +99,11 @@
       </div>
     </div>
     
-    <div data-chat-menu-target="defaultContent" data-chat-scroll-target="messages">
+    <%# Default Content - Chat Messages or Initial Greeting %>
+    <div data-chat-menu-target="defaultContent" data-chat-scroll-target="messages" class="flex flex-col h-full">
       <% if Current.user && @chat.present? %>
-        <div id="messages" data-turbo-cache="false">
+        <%# Existing Chat: Show messages or greeting if empty %>
+        <div id="messages" data-turbo-cache="false" class="flex-grow">
           <% messages = @messages&.where(internal: [false, nil]) %>
           <% if messages.any? %>
             <% messages.each do |message| %>
@@ -111,27 +114,34 @@
           <% end %>
         </div>
       <% else %>
-        <%= render "layouts/shared/ai_greeting", context: 'default' %>
-      <% end %>
-    </div>
-    
-    <div id="thinking" class="hidden flex items-start gap-1 w-full">
-      <%= render "layouts/shared/ai_avatar" %>
-      <div class="p-4 max-w-[85%] flex items-center text-gray-800">
-        <div class="flex gap-1">
-          <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-          <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
-          <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+        <%# New Chat: Show greeting in the top section %>
+        <div class="flex-grow">
+          <%= render "layouts/shared/ai_greeting", context: 'default' %>
         </div>
-        <span class="ml-2 text-gray-600">Thinking...</span>
+      <% end %>
+      
+      <%# Thinking indicator %>
+      <div id="thinking" class="hidden flex items-start gap-1 w-full">
+        <%= render "layouts/shared/ai_avatar" %>
+        <div class="p-4 max-w-[85%] flex items-center text-gray-800">
+          <div class="flex gap-1">
+            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+          </div>
+          <span class="ml-2 text-gray-600">Thinking...</span>
+        </div>
       </div>
     </div>
   </div>
   
+  <%# Message Input Form Section %>
   <div class="px-4 py-3 border-t border-gray-100">
     <% if Current.user && @chat.present? %>
+      <%# For existing chats %>
       <%= render "messages/form", chat: @chat, message: @message, scroll_behavior: true %>
     <% else %>
+      <%# For new chats %>
       <%= render "messages/form", scroll_behavior: true %>
     <% end %>
     <p class="text-xs text-gray-500 text-center mt-2">AI may make mistakes. Make sure to double check responses.</p>

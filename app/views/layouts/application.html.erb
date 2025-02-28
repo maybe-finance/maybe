@@ -72,35 +72,6 @@
 
     <%= tag.div class: class_names("py-4 shrink-0 h-full overflow-y-auto transition-all duration-300", right_sidebar_open ? "w-[375px]" : "w-0"), data: { sidebar_target: "rightPanel" } do %>
       <%= render "layouts/shared/ai_sidebar" %>
-
-      <% if Current.user.show_ai_sidebar? %>
-        <div data-controller="ai-chat" class="my-4 flex flex-col h-full max-h-[calc(100vh-128px)]">
-          <div id="thinking" class="hidden"></div>
-          <div data-ai-chat-target="chatWindow" class="flex-1 overflow-y-auto overflow-x-hidden min-h-24 px-4 pb-8">
-            <%= render "layouts/shared/ai_greeting" %>
-          </div>
-          <div class="pt-2 border-t border-gray-100 dark:border-gray-800 max-w-full px-4">
-            <form data-action="ai-chat#sendMessage" class="relative">
-              <textarea 
-                data-ai-chat-target="input" 
-                data-action="keydown->ai-chat#handleKeyDown" 
-                class="resize-none rounded-md w-full px-3 py-2 border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800" 
-                placeholder="Ask about your finances..." 
-                rows="1"
-              ></textarea>
-              <button 
-                type="submit" 
-                class="absolute right-3 bottom-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300" 
-                data-ai-chat-target="submitButton"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-5 w-5 transform rotate-90">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                </svg>
-              </button>
-            </form>
-          </div>
-        </div>
-      <% end %>
     <% end %>
   </div>
 <% end %>
