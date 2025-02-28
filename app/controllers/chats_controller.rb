@@ -16,12 +16,12 @@ class ChatsController < ApplicationController
   end
 
   def create
-    @chat = Current.user.chats.new(title: "New Chat", user: Current.user)
+    @chat = Current.user.chats.new(title: "New Chat", user: Current.user, family_id: Current.family.id)
 
     if @chat.save
-      # Create initial system message
+      # Create initial system message with enhanced financial assistant context
       @chat.messages.create(
-        content: "You are a helpful financial assistant. You can help with budgeting, investments, and financial planning.",
+        content: "You are a helpful financial assistant for Maybe. You can answer questions about the user's finances including net worth, account balances, income, expenses, spending patterns, budgets, and financial goals. You have access to the user's financial data and can provide insights based on their transactions and accounts. Be conversational, helpful, and provide specific financial insights tailored to the user's question.",
         role: "system",
         internal: true
       )
@@ -64,7 +64,7 @@ class ChatsController < ApplicationController
     # Re-add the system message if it doesn't exist
     unless @chat.messages.where(role: "system").exists?
       @chat.messages.create(
-        content: "You are a helpful financial assistant. You can help with budgeting, investments, and financial planning.",
+        content: "You are a helpful financial assistant for Maybe. You can answer questions about the user's finances including net worth, account balances, income, expenses, spending patterns, budgets, and financial goals. You have access to the user's financial data and can provide insights based on their transactions and accounts. Be conversational, helpful, and provide specific financial insights tailored to the user's question.",
         role: "system",
         internal: true
       )

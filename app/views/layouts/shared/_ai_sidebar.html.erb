@@ -49,7 +49,7 @@
     </div>
   </div>
   
-  <div id="chat-messages" class="flex-grow overflow-y-auto px-4 py-3 space-y-4 flex flex-col" data-controller="chat-scroll" data-chat-scroll-target="container">
+  <div id="chat-messages" class="flex-grow overflow-y-auto px-4 py-3" data-controller="chat-scroll" data-chat-scroll-target="container">
     <div data-chat-menu-target="content" class="hidden">
       <div class="mb-6">
         <div class="flex items-center justify-between mb-4">
@@ -98,24 +98,13 @@
       </div>
     </div>
     
-    <div data-chat-menu-target="defaultContent" class="flex flex-col justify-end min-h-full mt-auto" data-chat-scroll-target="messages">
+    <div data-chat-menu-target="defaultContent" data-chat-scroll-target="messages">
       <% if Current.user && @chat.present? %>
         <div id="messages" data-turbo-cache="false">
           <% messages = @messages&.where(internal: [false, nil]) %>
           <% if messages.any? %>
             <% messages.each do |message| %>
-              <div class="flex items-start gap-3 <%= message.user? ? 'justify-end' : '' %> mb-4 w-full" id="message_<%= message.id %>">
-                <% unless message.user? %>
-                  <%= render "layouts/shared/ai_avatar" %>
-                  <div class="pr-2 max-w-[85%] text-gray-800">
-                    <p><%= message.content %></p>
-                  </div>
-                <% else %>
-                  <div class="bg-gray-100 rounded-lg px-3 py-2 max-w-[85%] text-gray-800">
-                    <p><%= message.content %></p>
-                  </div>
-                <% end %>
-              </div>
+              <%= render "messages/message", message: message %>
             <% end %>
           <% else %>
             <%= render "layouts/shared/ai_greeting", context: 'chat' %>
@@ -139,7 +128,7 @@
     </div>
   </div>
   
-  <div class="px-4 py-3">
+  <div class="px-4 py-3 border-t border-gray-100">
     <% if Current.user && @chat.present? %>
       <%= render "messages/form", chat: @chat, message: @message, scroll_behavior: true %>
     <% else %>
