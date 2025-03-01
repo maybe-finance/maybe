@@ -2,7 +2,7 @@ class PagesController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[early_access]
 
   def dashboard
-    @period = Period.from_key(params[:period], fallback: true)
+    @period = Period.from_key(params[:period], family: Current.family, fallback: true)
     @balance_sheet = Current.family.balance_sheet
     @accounts = Current.family.accounts.active.with_attached_logo
 

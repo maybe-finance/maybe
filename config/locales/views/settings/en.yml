@@ -20,6 +20,7 @@ en:
         date_format: Date format
         general_subtitle: Configure your preferences
         general_title: General
+        default_period: Default Period
         language: Language
         page_title: Preferences
         theme_dark: Dark
