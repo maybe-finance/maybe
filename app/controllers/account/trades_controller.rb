@@ -10,7 +10,7 @@ class Account::TradesController < ApplicationController
 
     def create_entry_params
       params.require(:account_entry).permit(
-        :account_id, :date, :amount, :currency, :qty, :price, :ticker, :type, :transfer_account_id
+        :account_id, :date, :amount, :currency, :qty, :price, :ticker, :manual_ticker, :type, :transfer_account_id
       ).tap do |params|
         account_id = params.delete(:account_id)
         params[:account] = Current.family.accounts.find(account_id)

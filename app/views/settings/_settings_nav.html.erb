@@ -32,10 +32,11 @@
             <%= render "settings/settings_nav_item", name: t(".self_hosting_label"), path: settings_hosting_path, icon: "database" %>
           </li>
         <% end %>
-
-        <li>
-          <%= render "settings/settings_nav_item", name: t(".billing_label"), path: settings_billing_path, icon: "circle-dollar-sign" %>
-        </li>
+        <% unless self_hosted? %>
+          <li>
+            <%= render "settings/settings_nav_item", name: t(".billing_label"), path: settings_billing_path, icon: "circle-dollar-sign" %>
+          </li>
+        <% end %>
 
         <li>
           <%= render "settings/settings_nav_item", name: t(".accounts_label"), path: accounts_path, icon: "layers" %>

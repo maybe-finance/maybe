@@ -4,7 +4,7 @@ module SettingsHelper
     { name: I18n.t("settings.settings_nav.preferences_label"), path: :settings_preferences_path },
     { name: I18n.t("settings.settings_nav.security_label"), path: :settings_security_path },
     { name: I18n.t("settings.settings_nav.self_hosting_label"), path: :settings_hosting_path, condition: :self_hosted? },
-    { name: I18n.t("settings.settings_nav.billing_label"), path: :settings_billing_path },
+    { name: I18n.t("settings.settings_nav.billing_label"), path: :settings_billing_path, condition: :not_self_hosted? },
     { name: I18n.t("settings.settings_nav.accounts_label"), path: :accounts_path },
     { name: I18n.t("settings.settings_nav.imports_label"), path: :imports_path },
     { name: I18n.t("settings.settings_nav.tags_label"), path: :tags_path },
@@ -45,4 +45,9 @@ module SettingsHelper
       concat(next_setting)
     end
   end
+
+  private
+    def not_self_hosted?
+      !self_hosted?
+    end
 end

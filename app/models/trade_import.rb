@@ -75,10 +75,7 @@ class TradeImport < Import
       return internal_security if internal_security.present?
 
       # If security prices provider isn't properly configured or available, create with nil exchange_operating_mic
-      provider = Security.security_prices_provider
-      unless provider.present? && provider.respond_to?(:search_securities)
-        return Security.find_or_create_by!(ticker: ticker, exchange_operating_mic: nil)
-      end
+      return Security.find_or_create_by!(ticker: ticker, exchange_operating_mic: nil) unless Security.provider.present?
 
       # Cache provider responses so that when we're looping through rows and importing,
       # we only hit our provider for the unique combinations of ticker / exchange_operating_mic
@@ -86,18 +83,10 @@ class TradeImport < Import
       @provider_securities_cache ||= {}
 
       provider_security = @provider_securities_cache[cache_key] ||= begin
-        response = provider.search_securities(
+        Security.search_provider(
           query: ticker,
           exchange_operating_mic: exchange_operating_mic
-        )
-
-        if !response || !response.success? || !response.securities || response.securities.empty?
-          nil
-        else
-          response.securities.first
-        end
-      rescue => e
-        nil
+        ).first
       end
 
       return Security.find_or_create_by!(ticker: ticker, exchange_operating_mic: nil) if provider_security.nil?

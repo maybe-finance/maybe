@@ -10,6 +10,7 @@ assignees: ''
 **Where did this bug occur? (required)**
 
 - [ ] I am a self-hosted user reporting a bug from my self hosted app
+  - [ ] I have verified that I am running the **latest** version of the Maybe app (your app should be running [this version](https://github.com/maybe-finance/maybe/pkgs/container/maybe) before opening a bug)
 - [ ] I am a user of Maybe's paid app
 
 _Please note, if you are reporting a bug with sensitive data, please open an Intercom chat from within the app for help_

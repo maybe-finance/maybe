@@ -10,7 +10,7 @@ class TradesTest < ApplicationSystemTestCase
 
     visit_account_portfolio
 
-    Security.stubs(:search).returns([
+    Security.stubs(:search_provider).returns([
       Security.new(
         ticker: "AAPL",
         name: "Apple Inc.",

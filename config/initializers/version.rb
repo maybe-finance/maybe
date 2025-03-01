@@ -10,7 +10,7 @@ module Maybe
 
     private
       def semver
-        "0.4.1"
+        "0.4.3"
       end
   end
 end

@@ -1,5 +1,25 @@
 <%# locals: (family:) %>
 
+<% if family.requires_data_provider? && family.synth_client.nil? %>
+  <details class="group bg-yellow-tint-10 rounded-lg p-2 text-yellow-600 mb-3 text-xs">
+    <summary class="flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <%= icon "triangle-alert", size: "sm" %>
+        <p class="font-medium">Missing historical data</p>
+      </div>
+
+      <%= lucide_icon "chevron-down", class: "text-yellow-600 group-open:transform group-open:rotate-180 w-5" %>
+    </summary>
+    <div class="text-xs py-2 space-y-2">
+      <p>Maybe uses Synth API to fetch historical exchange rates, security prices, and more.  This data is required to calculate accurate historical account balances.</p>
+
+      <p>
+        <%= link_to "Add your Synth API key here.", settings_hosting_path, class: "text-yellow-600 underline" %>
+      </p>
+    </div>
+  </details>
+<% end %>
+
 <div
   class="space-y-3"
   data-controller="tabs"

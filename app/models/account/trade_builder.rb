@@ -2,7 +2,7 @@ class Account::TradeBuilder
   include ActiveModel::Model
 
   attr_accessor :account, :date, :amount, :currency, :qty,
-                :price, :ticker, :type, :transfer_account_id
+                :price, :ticker, :manual_ticker, :type, :transfer_account_id
 
   attr_reader :buildable
 
@@ -110,8 +110,9 @@ class Account::TradeBuilder
       account.family
     end
 
+    # Users can either look up a ticker from our provider (Synth) or enter a manual, "offline" ticker (that we won't fetch prices for)
     def security
-      ticker_symbol, exchange_operating_mic = ticker.split("|")
+      ticker_symbol, exchange_operating_mic = ticker.present? ? ticker.split("|") : [ manual_ticker, nil ]
 
       Security.find_or_create_by(ticker: ticker_symbol, exchange_operating_mic: exchange_operating_mic) do |s|
         FetchSecurityInfoJob.perform_later(s.id)
