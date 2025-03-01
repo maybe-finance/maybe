@@ -67,14 +67,19 @@ class Period
     def default
       from_key("last_30_days")
     end
+    def from_key(key, family: nil, fallback: false)
+      # Fetch family preference if available
+      preferred_period = family&.default_period
 
-    def from_key(key, fallback: false)
-      if PERIODS[key].present?
-        start_date, end_date = PERIODS[key].fetch(:date_range)
+      # Determine the final period key to use
+      key_to_use = key.presence || preferred_period || "last_30_days"
+
+      if PERIODS[key_to_use].present?
+        start_date, end_date = PERIODS[key_to_use].fetch(:date_range)
         new(start_date: start_date, end_date: end_date)
       else
         return default if fallback
-        raise ArgumentError, "Invalid period key: #{key}"
+        raise ArgumentError, "Invalid period key: #{key_to_use}"
       end
     end
 

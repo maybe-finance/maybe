@@ -7,6 +7,7 @@ class AccountableSparklinesController < ApplicationController
               .where(accountable_type: @accountable.name)
               .balance_series(
                 currency: family.currency,
+                period: Period.from_key(nil, family: family, fallback: true),
                 favorable_direction: @accountable.favorable_direction
               )
     end

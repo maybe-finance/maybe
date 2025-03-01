@@ -35,6 +35,7 @@ class Family < ApplicationRecord
 
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }
   validates :date_format, inclusion: { in: DATE_FORMATS.map(&:last) }
+  validates :default_period, inclusion: { in: Period::PERIODS.keys }, allow_nil: true
 
   def balance_sheet
     @balance_sheet ||= BalanceSheet.new(self)
