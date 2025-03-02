@@ -3,7 +3,7 @@ class Account::TransferMatchesController < ApplicationController
 
   def new
     @accounts = Current.family.accounts.alphabetically.where.not(id: @entry.account_id)
-    @transfer_match_candidates = @entry.transfer_match_candidates
+    @transfer_match_candidates = @entry.account_transaction.transfer_match_candidates
   end
 
   def create
