@@ -22,7 +22,7 @@ class Import::RowsControllerTest < ActionDispatch::IntegrationTest
 
     get import_row_path(import, row)
 
-    assert_row_fields(row, [ :date, :ticker, :qty, :price, :currency, :account, :name ])
+    assert_row_fields(row, [ :date, :ticker, :qty, :price, :currency, :account, :name, :account ])
 
     assert_response :success
   end

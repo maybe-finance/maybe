@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_20_200735) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_03_141007) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -398,7 +398,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_20_200735) do
     t.datetime "updated_at", null: false
     t.string "col_sep", default: ","
     t.uuid "family_id", null: false
-    t.uuid "original_account_id"
+    t.uuid "account_id"
     t.string "type", null: false
     t.string "date_col_label", default: "date"
     t.string "amount_col_label", default: "amount"
@@ -542,6 +542,31 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_20_200735) do
     t.index ["inflow_transaction_id", "outflow_transaction_id"], name: "idx_on_inflow_transaction_id_outflow_transaction_id_412f8e7e26", unique: true
     t.index ["inflow_transaction_id"], name: "index_rejected_transfers_on_inflow_transaction_id"
     t.index ["outflow_transaction_id"], name: "index_rejected_transfers_on_outflow_transaction_id"
+  end
+
+  create_table "rule_actions", force: :cascade do |t|
+    t.uuid "rule_id", null: false
+    t.string "action_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["rule_id"], name: "index_rule_actions_on_rule_id"
+  end
+
+  create_table "rule_triggers", force: :cascade do |t|
+    t.uuid "rule_id", null: false
+    t.string "trigger_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["rule_id"], name: "index_rule_triggers_on_rule_id"
+  end
+
+  create_table "rules", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "family_id", null: false
+    t.date "effective_date", null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["family_id"], name: "index_rules_on_family_id"
   end
 
   create_table "securities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -719,6 +744,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_20_200735) do
   add_foreign_key "plaid_items", "families"
   add_foreign_key "rejected_transfers", "account_transactions", column: "inflow_transaction_id"
   add_foreign_key "rejected_transfers", "account_transactions", column: "outflow_transaction_id"
+  add_foreign_key "rule_actions", "rules"
+  add_foreign_key "rule_triggers", "rules"
+  add_foreign_key "rules", "families"
   add_foreign_key "security_prices", "securities"
   add_foreign_key "sessions", "impersonation_sessions", column: "active_impersonator_session_id"
   add_foreign_key "sessions", "users"

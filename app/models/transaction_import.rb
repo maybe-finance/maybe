@@ -4,11 +4,16 @@ class TransactionImport < Import
       mappings.each(&:create_mappable!)
 
       rows.each do |row|
-        account = mappings.accounts.mappable_for(row.account)
+        mapped_account = if account
+          account
+        else
+          mappings.accounts.mappable_for(row.account)
+        end
+
         category = mappings.categories.mappable_for(row.category)
         tags = row.tags_list.map { |tag| mappings.tags.mappable_for(tag) }.compact
 
-        entry = account.entries.build \
+        entry = mapped_account.entries.build \
           date: row.date_iso,
           amount: row.signed_amount,
           name: row.name,
@@ -27,11 +32,15 @@ class TransactionImport < Import
   end
 
   def column_keys
-    %i[date amount name currency category tags account notes]
+    base = %i[date amount name currency category tags notes]
+    base.unshift(:account) if account.nil?
+    base
   end
 
   def mapping_steps
-    [ Import::CategoryMapping, Import::TagMapping, Import::AccountMapping ]
+    base = [ Import::CategoryMapping, Import::TagMapping ]
+    base << Import::AccountMapping if account.nil?
+    base
   end
 
   def csv_template
@@ -42,6 +51,8 @@ class TransactionImport < Import
       05/17/2024,-12.50,Coffee Shop,,,coffee,,
     CSV
 
-    CSV.parse(template, headers: true)
+    csv = CSV.parse(template, headers: true)
+    csv.delete("account") if account.present?
+    csv
   end
 end

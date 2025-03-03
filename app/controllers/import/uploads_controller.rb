@@ -8,7 +8,8 @@ class Import::UploadsController < ApplicationController
 
   def update
     if csv_valid?(csv_str)
-      @import.assign_attributes(raw_file_str: csv_str, col_sep: upload_params[:col_sep])
+      account = Current.family.accounts.find_by(id: upload_params[:account_id])
+      @import.assign_attributes(raw_file_str: csv_str, col_sep: upload_params[:col_sep], account: account)
       @import.save!(validate: false)
 
       redirect_to import_configuration_path(@import), notice: "CSV uploaded successfully."
@@ -40,6 +41,6 @@ class Import::UploadsController < ApplicationController
     end
 
     def upload_params
-      params.require(:import).permit(:raw_file_str, :csv_file, :col_sep)
+      params.require(:import).permit(:raw_file_str, :csv_file, :col_sep, :account_id)
     end
 end

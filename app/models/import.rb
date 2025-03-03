@@ -1,6 +1,7 @@
 class Import < ApplicationRecord
   TYPES = %w[TransactionImport TradeImport AccountImport MintImport].freeze
   SIGNAGE_CONVENTIONS = %w[inflows_positive inflows_negative]
+  SEPARATORS = [ [ "Comma (,)", "," ], [ "Semicolon (;)", ";" ] ].freeze
 
   NUMBER_FORMATS = {
     "1,234.56" => { separator: ".", delimiter: "," },  # US/UK/Asia
@@ -10,6 +11,7 @@ class Import < ApplicationRecord
   }.freeze
 
   belongs_to :family
+  belongs_to :account, optional: true
 
   before_validation :set_default_number_format
 
@@ -25,7 +27,7 @@ class Import < ApplicationRecord
   }, validate: true, default: "pending"
 
   validates :type, inclusion: { in: TYPES }
-  validates :col_sep, inclusion: { in: [ ",", ";" ] }
+  validates :col_sep, inclusion: { in: SEPARATORS.map(&:last) }
   validates :signage_convention, inclusion: { in: SIGNAGE_CONVENTIONS }
   validates :number_format, presence: true, inclusion: { in: NUMBER_FORMATS.keys }
 
@@ -98,12 +100,17 @@ class Import < ApplicationRecord
   end
 
   def dry_run
-    {
+    mappings = {
       transactions: rows.count,
-      accounts: Import::AccountMapping.for_import(self).creational.count,
       categories: Import::CategoryMapping.for_import(self).creational.count,
       tags: Import::TagMapping.for_import(self).creational.count
     }
+
+    mappings.merge(
+      accounts: Import::AccountMapping.for_import(self).creational.count,
+    ) if account.nil?
+
+    mappings
   end
 
   def required_column_keys
