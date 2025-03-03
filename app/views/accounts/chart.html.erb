@@ -1,4 +1,4 @@
-<% period = Period.from_key(params[:period], fallback: true) %>
+<% period = params[:period] ? Period.from_key(params[:period]) : Period.last_30_days %>
 <% series = @account.balance_series(period: period) %>
 <% trend = series.trend %>
 

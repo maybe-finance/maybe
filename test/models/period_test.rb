@@ -18,20 +18,19 @@ class PeriodTest < ActiveSupport::TestCase
     assert_includes error.message, "Start date must be before end date"
   end
 
+  test "can create custom period" do
+    period = Period.new(start_date: Date.current - 15.days, end_date: Date.current)
+    assert_equal "Custom Period", period.label
+  end
+
   test "from_key returns period for valid key" do
     period = Period.from_key("last_30_days")
     assert_equal 30.days.ago.to_date, period.start_date
     assert_equal Date.current, period.end_date
   end
 
-  test "from_key with invalid key and fallback returns default period" do
-    period = Period.from_key("invalid_key", fallback: true)
-    assert_equal 30.days.ago.to_date, period.start_date
-    assert_equal Date.current, period.end_date
-  end
-
   test "from_key with invalid key and no fallback raises error" do
-    assert_raises ArgumentError do
+    error = assert_raises(Period::InvalidKeyError) do
       Period.from_key("invalid_key")
     end
   end

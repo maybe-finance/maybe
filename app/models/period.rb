@@ -1,9 +1,12 @@
 class Period
   include ActiveModel::Validations, Comparable
 
-  attr_reader :start_date, :end_date
+  class InvalidKeyError < StandardError; end
 
-  validates :start_date, :end_date, presence: true
+  attr_reader :key, :start_date, :end_date
+
+  validates :start_date, :end_date, presence: true, if: -> { PERIODS[key].nil? }
+  validates :key, presence: true, if: -> { start_date.nil? || end_date.nil? }
   validate :must_be_valid_date_range
 
   PERIODS = {
@@ -64,18 +67,18 @@ class Period
   }
 
   class << self
-    def default
-      from_key("last_30_days")
+    def from_key(key)
+      unless PERIODS.key?(key)
+        raise InvalidKeyError, "Invalid period key: #{key}"
+      end
+
+      start_date, end_date = PERIODS[key].fetch(:date_range)
+
+      new(key: key, start_date: start_date, end_date: end_date)
     end
 
-    def from_key(key, fallback: false)
-      if PERIODS[key].present?
-        start_date, end_date = PERIODS[key].fetch(:date_range)
-        new(start_date: start_date, end_date: end_date)
-      else
-        return default if fallback
-        raise ArgumentError, "Invalid period key: #{key}"
-      end
+    def custom(start_date:, end_date:)
+      new(start_date: start_date, end_date: end_date)
     end
 
     def all
@@ -85,12 +88,12 @@ class Period
 
   PERIODS.each do |key, period|
     define_singleton_method(key) do
-      start_date, end_date = period.fetch(:date_range)
-      new(start_date: start_date, end_date: end_date)
+      from_key(key)
     end
   end
 
-  def initialize(start_date:, end_date:, date_format: "%b %d, %Y")
+  def initialize(start_date: nil, end_date: nil, key: nil, date_format: "%b %d, %Y")
+    @key = key
     @start_date = start_date
     @end_date = end_date
     @date_format = date_format
@@ -121,37 +124,33 @@ class Period
     end
   end
 
-  def key
-    PERIODS.find { |_, period| period.fetch(:date_range) == [ start_date, end_date ] }&.first
-  end
-
   def label
-    if known?
-      PERIODS[key].fetch(:label)
+    if key_metadata
+      key_metadata.fetch(:label)
     else
       "Custom Period"
     end
   end
 
   def label_short
-    if known?
-      PERIODS[key].fetch(:label_short)
+    if key_metadata
+      key_metadata.fetch(:label_short)
     else
-      "CP"
+      "Custom"
     end
   end
 
   def comparison_label
-    if known?
-      PERIODS[key].fetch(:comparison_label)
+    if key_metadata
+      key_metadata.fetch(:comparison_label)
     else
       "#{start_date.strftime(@date_format)} to #{end_date.strftime(@date_format)}"
     end
   end
 
   private
-    def known?
-      key.present?
+    def key_metadata
+      @key_metadata ||= PERIODS[key]
     end
 
     def must_be_valid_date_range

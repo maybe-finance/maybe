@@ -1,6 +1,6 @@
 <%# locals: (account:, title: nil, tooltip: nil, **args) %>
 
-<% period = Period.from_key(params[:period], fallback: true) %>
+<% period = params[:period] ? Period.from_key(params[:period]) : Period.last_30_days %>
 <% default_value_title = account.asset? ? t(".balance") : t(".owed") %>
 
 <div id="<%= dom_id(account, :chart) %>" class="bg-white shadow-xs rounded-xl border border-alpha-black-25 rounded-lg space-y-2">
