@@ -1,12 +1,12 @@
 <%= turbo_frame_tag "bulk_transaction_edit_drawer" do %>
   <dialog data-controller="modal"
-          data-action="click->modal#clickOutside"
+          data-action="mousedown->modal#clickOutside"
     class="bg-white shadow-border-xs rounded-2xl max-h-[calc(100vh-32px)] h-full max-w-[480px] w-full mt-4 mr-4 ml-auto">
     <%= styled_form_with url: bulk_update_account_transactions_path, scope: "bulk_update", class: "h-full", data: { turbo_frame: "_top" } do |form| %>
       <div class="flex h-full flex-col justify-between p-4 gap-4">
         <div>
           <div class="flex h-9 items-center justify-end">
-            <div data-action="click->modal#close" class="cursor-pointer">
+            <div data-action="mousedown->modal#close" class="cursor-pointer">
               <%= lucide_icon("x", class: "w-5 h-5 shrink-0") %>
             </div>
           </div>
