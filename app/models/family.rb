@@ -106,7 +106,7 @@ class Family < ApplicationRecord
     # If family has any entries in different currencies, they need a provider for historical exchange rates
     uniq_currencies = entries.pluck(:currency).uniq
     return true if uniq_currencies.count > 1
-    return true if uniq_currencies.first != self.currency
+    return true if uniq_currencies.count > 0 && uniq_currencies.first != self.currency
 
     false
   end
