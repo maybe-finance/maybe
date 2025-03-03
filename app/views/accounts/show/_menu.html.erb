@@ -20,7 +20,7 @@
       <% end %>
 
       <% unless account.crypto? %>
-        <%= button_to imports_path({ import: { type: account.investment? ? "TradeImport" : "TransactionImport", account_id: account.id } }), 
+        <%= button_to imports_path({ import: { type: account.investment? ? "TradeImport" : "TransactionImport", account_id: account.id } }),
                       data: { turbo_frame: :_top },
                       class: "block w-full py-2 px-3 space-x-2 text-primary hover:bg-gray-50 flex items-center rounded-lg" do %>
           <%= lucide_icon "download", class: "w-5 h-5 text-secondary" %>
