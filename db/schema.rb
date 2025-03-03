@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_20_200735) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_03_141007) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -398,7 +398,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_20_200735) do
     t.datetime "updated_at", null: false
     t.string "col_sep", default: ","
     t.uuid "family_id", null: false
-    t.uuid "original_account_id"
+    t.uuid "account_id"
     t.string "type", null: false
     t.string "date_col_label", default: "date"
     t.string "amount_col_label", default: "amount"

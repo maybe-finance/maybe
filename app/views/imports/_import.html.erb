@@ -2,6 +2,10 @@
 
   <div class="flex items-center gap-2 mb-1">
     <%= link_to import_path(import), class: "text-sm text-primary hover:underline" do %>
+      <% if import.account.present? %>
+        <%= import.account.name + " " %>
+      <% end %>
+
       <%= t(".label", type: import.type.titleize, datetime: import.updated_at.strftime("%b %-d, %Y at %l:%M %p")) %>
     <% end %>
 

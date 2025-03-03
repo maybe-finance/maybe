@@ -1,5 +1,5 @@
 class Import::AccountMapping < Import::Mapping
-  validates :mappable, presence: true, if: -> { key.blank? || !create_when_empty }
+  validates :mappable, presence: true, if: :requires_mapping?
 
   class << self
     def mapping_values(import)
@@ -42,4 +42,9 @@ class Import::AccountMapping < Import::Mapping
     self.mappable = account
     save!
   end
+
+  private
+    def requires_mapping?
+      (key.blank? || !create_when_empty) && import.account.nil?
+    end
 end

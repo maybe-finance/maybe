@@ -18,7 +18,8 @@ class ImportsController < ApplicationController
   end
 
   def create
-    import = Current.family.imports.create! import_params
+    account = Current.family.accounts.find_by(id: params.dig(:import, :account_id))
+    import = Current.family.imports.create!(type: import_params[:type], account: account)
 
     redirect_to import_upload_path(import)
   end

@@ -29,11 +29,11 @@
       <% if %w[buy sell].include?(type) %>
         <% if Security.provider.present? %>
           <div class="form-field combobox">
-            <%= form.combobox :ticker, 
-                            securities_path(country_code: Current.family.country), 
+            <%= form.combobox :ticker,
+                            securities_path(country_code: Current.family.country),
                             name_when_new: "account_entry[manual_ticker]",
-                            label: t(".holding"), 
-                            placeholder: t(".ticker_placeholder"), 
+                            label: t(".holding"),
+                            placeholder: t(".ticker_placeholder"),
                             required: true %>
           </div>
         <% else %>

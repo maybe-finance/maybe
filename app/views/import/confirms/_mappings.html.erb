@@ -3,7 +3,7 @@
 <% mappings = mapping_class.for_import(import) %>
 <% is_last_step = step_idx == import.mapping_steps.count - 1 %>
 
-<% if mapping_class == Import::AccountMapping %>
+<% if mapping_class == Import::AccountMapping && import.account.nil? %>
   <% if import.requires_account? %>
     <div class="flex items-center justify-between p-4 mb-4 gap-4 text-secondary bg-red-100 border border-red-200 rounded-lg w-[650px]">
       <%= tag.p t(".no_accounts"), class: "text-sm" %>
