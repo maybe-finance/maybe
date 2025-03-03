@@ -2,7 +2,7 @@ module AccountableResource
   extend ActiveSupport::Concern
 
   included do
-    include ScrollFocusable
+    include ScrollFocusable, Periodable
 
     before_action :set_account, only: [ :show, :edit, :update, :destroy ]
     before_action :set_link_token, only: :new
