@@ -25,7 +25,7 @@
             <%= form.select :col_sep, Import::SEPARATORS, label: true %>
 
             <% unless @import.type == "MintImport" %>
-              <%= form.select :account_id, @import.family.accounts.pluck(:name, :id), { label: "Account (optional)", include_blank: "Multi-account import" } %>
+              <%= form.select :account_id, @import.family.accounts.pluck(:name, :id), { label: "Account (optional)", include_blank: "Multi-account import", selected: @import.account_id } %>
             <% end %>
 
             <% if tab == "csv-paste-tab" %>
