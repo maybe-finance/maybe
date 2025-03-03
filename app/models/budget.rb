@@ -54,7 +54,7 @@ class Budget < ApplicationRecord
   end
 
   def period
-    Period.new(start_date: start_date, end_date: end_date)
+    Period.custom(start_date: start_date, end_date: end_date)
   end
 
   def to_param
