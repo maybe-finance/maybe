@@ -1,5 +1,5 @@
 class ImportsController < ApplicationController
-  before_action :set_import, only: %i[show publish destroy revert]
+  before_action :set_import, only: %i[show publish destroy revert apply_template]
 
   def publish
     @import.publish_later
@@ -35,6 +35,15 @@ class ImportsController < ApplicationController
   def revert
     @import.revert_later
     redirect_to imports_path, notice: "Import is reverting in the background."
+  end
+
+  def apply_template
+    if @import.suggested_template
+      @import.apply_template!(@import.suggested_template)
+      redirect_to import_configuration_path(@import), notice: "Template applied."
+    else
+      redirect_to import_configuration_path(@import), alert: "No template found, please manually configure your import."
+    end
   end
 
   def destroy

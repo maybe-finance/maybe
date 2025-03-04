@@ -1,7 +1,11 @@
 class Import::TagMapping < Import::Mapping
   class << self
-    def mapping_values(import)
-      import.rows.map(&:tags_list).flatten.uniq
+    def mappables_by_key(import)
+      unique_values = import.rows.map(&:tags_list).flatten.uniq
+
+      tags = import.family.tags.where(name: unique_values).index_by(&:name)
+
+      unique_values.index_with { |value| tags[value] }
     end
   end
 

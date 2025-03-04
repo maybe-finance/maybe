@@ -68,8 +68,11 @@ Rails.application.routes.draw do
   resources :transfers, only: %i[new create destroy show update]
 
   resources :imports, only: %i[index new show create destroy] do
-    post :publish, on: :member
-    put :revert, on: :member
+    member do
+      post :publish
+      put :revert
+      put :apply_template
+    end
 
     resource :upload, only: %i[show update], module: :import
     resource :configuration, only: %i[show update], module: :import

@@ -146,8 +146,20 @@ class Import < ApplicationRecord
   end
 
   def sync_mappings
-    mapping_steps.each do |mapping|
-      mapping.sync(self)
+    transaction do
+      mapping_steps.each do |mapping_class|
+        mappables_by_key = mapping_class.mappables_by_key(self)
+
+        updated_mappings = mappables_by_key.map do |key, mappable|
+          mapping = mappings.find_or_initialize_by(key: key, import: self, type: mapping_class.name)
+          mapping.mappable = mappable
+          mapping.create_when_empty = key.present? && mappable.nil?
+          mapping
+        end
+
+        updated_mappings.each { |m| m.save(validate: false) }
+        mapping_class.where.not(id: updated_mappings.map(&:id)).destroy_all
+      end
     end
   end
 
@@ -181,6 +193,28 @@ class Import < ApplicationRecord
 
   def requires_account?
     family.accounts.empty? && has_unassigned_account?
+  end
+
+  # Used to optionally pre-fill the configuration for the current import
+  def suggested_template
+    family.imports
+          .complete
+          .where(account: account, type: type)
+          .order(created_at: :desc)
+          .first
+  end
+
+  def apply_template!(import_template)
+    update!(
+      import_template.attributes.slice(
+        "date_col_label", "amount_col_label", "name_col_label",
+        "category_col_label", "tags_col_label", "account_col_label",
+        "qty_col_label", "ticker_col_label", "price_col_label",
+        "entity_type_col_label", "notes_col_label", "currency_col_label",
+        "date_format", "signage_convention", "number_format",
+        "exchange_operating_mic_col_label"
+      )
+    )
   end
 
   private

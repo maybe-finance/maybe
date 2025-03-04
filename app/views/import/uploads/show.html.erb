@@ -24,7 +24,7 @@
           <%= styled_form_with model: @import, scope: :import, url: import_upload_path(@import), multipart: true, class: "space-y-2" do |form| %>
             <%= form.select :col_sep, Import::SEPARATORS, label: true %>
 
-            <% unless @import.type == "MintImport" %>
+            <% if @import.type == "TransactionImport" || @import.type == "TradeImport" %>
               <%= form.select :account_id, @import.family.accounts.pluck(:name, :id), { label: "Account (optional)", include_blank: "Multi-account import", selected: @import.account_id } %>
             <% end %>
 

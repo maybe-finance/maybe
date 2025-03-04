@@ -4,14 +4,33 @@
 
 <%= content_for :previous_path, import_upload_path(@import) %>
 
-<div>
+<% if @import.suggested_template.present? && params[:template_hint] == "true" %>
+  <div class="py-12">
+    <div class="shadow-border-xs rounded-lg p-4 max-w-lg mx-auto">
+      <h3 class="text-sm font-medium mb-2 flex items-center gap-2">
+        <span class="text-success">
+          <%= icon "sparkles" %>
+        </span>
+
+        Template configuration found
+      </h3>
+
+      <p class="text-sm text-secondary">We found a configuration from a previous import for this account.  Would you like to apply it to this import?</p>
+
+      <div class="mt-4 flex gap-2 items-center">
+        <%= link_to "Manually configure", import_configuration_path(@import), class: "btn btn--outline" %>
+        <%= button_to "Apply template", apply_template_import_path(@import), class: "btn btn--primary", method: :put, data: { turbo_frame: :_top } %>
+      </div>
+    </div>
+  </div>
+<% else %>
   <div class="space-y-4">
     <div class="text-center space-y-2">
       <h1 class="text-3xl text-primary font-medium"><%= t(".title") %></h1>
       <p class="text-secondary text-sm"><%= t(".description") %></p>
     </div>
 
-    <div class="mx-auto max-w-lg">
+    <div class="mx-auto max-w-lg space-y-3">
       <%= render partial: permitted_import_configuration_path(@import), locals: { import: @import } %>
     </div>
   </div>
@@ -19,4 +38,4 @@
   <div class="mx-auto max-w-5xl my-12">
     <%= render "imports/table", headers: @import.csv_headers, rows: @import.csv_sample, caption: "Sample data from your uploaded CSV" %>
   </div>
-</div>
+<% end %>
