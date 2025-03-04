@@ -2,9 +2,7 @@ class Import::RowsController < ApplicationController
   before_action :set_import_row
 
   def update
-    @row.assign_attributes(row_params)
-    @row.save!(validate: false)
-    @row.sync_mappings
+    @row.update_and_sync(row_params)
 
     redirect_to import_row_path(@row.import, @row)
   end

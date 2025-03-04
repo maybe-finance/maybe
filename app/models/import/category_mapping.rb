@@ -1,7 +1,10 @@
 class Import::CategoryMapping < Import::Mapping
   class << self
-    def mapping_values(import)
-      import.rows.map(&:category).uniq
+    def mappables_by_key(import)
+      unique_values = import.rows.map(&:category).uniq
+      categories = import.family.categories.where(name: unique_values).index_by(&:name)
+
+      unique_values.index_with { |value| categories[value] }
     end
   end
 

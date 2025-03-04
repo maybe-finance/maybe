@@ -30,11 +30,10 @@ class Import::Row < ApplicationRecord
     end
   end
 
-  def sync_mappings
-    Import::CategoryMapping.sync(import) if import.column_keys.include?(:category)
-    Import::TagMapping.sync(import) if import.column_keys.include?(:tags)
-    Import::AccountMapping.sync(import) if import.column_keys.include?(:account)
-    Import::AccountTypeMapping.sync(import) if import.column_keys.include?(:entity_type)
+  def update_and_sync(params)
+    assign_attributes(params)
+    save!(validate: false)
+    import.sync_mappings
   end
 
   private

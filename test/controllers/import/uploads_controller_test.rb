@@ -19,7 +19,7 @@ class Import::UploadsControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
-    assert_redirected_to import_configuration_url(@import)
+    assert_redirected_to import_configuration_url(@import, template_hint: true)
     assert_equal "CSV uploaded successfully.", flash[:notice]
   end
 
@@ -31,7 +31,7 @@ class Import::UploadsControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
-    assert_redirected_to import_configuration_url(@import)
+    assert_redirected_to import_configuration_url(@import, template_hint: true)
     assert_equal "CSV uploaded successfully.", flash[:notice]
   end
 

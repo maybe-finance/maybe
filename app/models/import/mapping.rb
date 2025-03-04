@@ -18,19 +18,8 @@ class Import::Mapping < ApplicationRecord
       find_by(key: key)&.mappable
     end
 
-    def sync(import)
-      unique_values = mapping_values(import).uniq
-
-      unique_values.each do |value|
-        mapping = find_or_initialize_by(key: value, import: import, create_when_empty: value.present?)
-        mapping.save(validate: false) if mapping.new_record?
-      end
-
-      where(import: import).where.not(key: unique_values).destroy_all
-    end
-
-    def mapping_values(import)
-      raise NotImplementedError, "Subclass must implement mapping_values"
+    def mappables_by_key(import)
+      raise NotImplementedError, "Subclass must implement mappables_by_key"
     end
   end
 

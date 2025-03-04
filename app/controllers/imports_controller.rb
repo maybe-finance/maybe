@@ -1,5 +1,5 @@
 class ImportsController < ApplicationController
-  before_action :set_import, only: %i[show publish destroy revert]
+  before_action :set_import, only: %i[show publish destroy revert apply_template]
 
   def publish
     @import.publish_later
@@ -19,7 +19,11 @@ class ImportsController < ApplicationController
 
   def create
     account = Current.family.accounts.find_by(id: params.dig(:import, :account_id))
-    import = Current.family.imports.create!(type: import_params[:type], account: account)
+    import = Current.family.imports.create!(
+      type: import_params[:type],
+      account: account,
+      date_format: Current.family.date_format,
+    )
 
     redirect_to import_upload_path(import)
   end
@@ -35,6 +39,15 @@ class ImportsController < ApplicationController
   def revert
     @import.revert_later
     redirect_to imports_path, notice: "Import is reverting in the background."
+  end
+
+  def apply_template
+    if @import.suggested_template
+      @import.apply_template!(@import.suggested_template)
+      redirect_to import_configuration_path(@import), notice: "Template applied."
+    else
+      redirect_to import_configuration_path(@import), alert: "No template found, please manually configure your import."
+    end
   end
 
   def destroy
