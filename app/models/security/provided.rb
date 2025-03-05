@@ -9,6 +9,8 @@ module Security::Provided
     end
 
     def search_provider(query)
+      return [] if query[:search].blank? || query[:search].length < 2
+
       response = provider.search_securities(
         query: query[:search],
         dataset: "limited",
