@@ -1,6 +1,7 @@
 ---
 name: Bug report
-about: Open a bug report when you experience broken functionality within the latest version of the Maybe app
+about: Open a bug report when you experience broken functionality within the latest
+  version of the Maybe app
 title: 'Bug: [Add descriptive title here]'
 labels: ''
 assignees: ''
@@ -17,6 +18,7 @@ assignees: ''
 ### How are you using Maybe?
 
 - [ ] I am a paying Maybe customer (hosted version)
+  - Paying Maybe users can also open requests in Intercom (if there is sensitive info involved)
 - [ ] I am a self-hosted user
 
 ### Self hoster checklist
