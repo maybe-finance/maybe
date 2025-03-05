@@ -18,12 +18,11 @@ class Account::Syncer
       account.reload
 
       unless plaid_sync?
-        Rails.logger.info("Updating account balances (balance: #{balances.last&.balance}, cash: #{balances.last&.cash_balance})")
         update_account_info(balances, holdings)
       end
 
       unless account.currency == account.family.currency
-        Rails.logger.info("Converting records from #{account.currency} to #{account.family.currency}")
+        Rails.logger.info("Converting #{balances.size} balances and #{holdings.size} holdings from #{account.currency} to #{account.family.currency}")
         convert_records_to_family_currency(balances, holdings)
       end
 
@@ -61,12 +60,7 @@ class Account::Syncer
 
       Account.transaction do
         load_holdings(calculated_holdings)
-        if plaid_sync?
-          Rails.logger.info("Loaded #{calculated_holdings.size} holdings")
-        else
-          Rails.logger.info("Loaded #{calculated_holdings.size} holdings and purged outdated records")
-          purge_outdated_holdings
-        end
+        purge_outdated_holdings if plaid_sync?
       end
 
       calculated_holdings
@@ -78,7 +72,6 @@ class Account::Syncer
 
       Account.transaction do
         load_balances(calculated_balances)
-        Rails.logger.info("Loaded #{calculated_balances.size} balances and purged outdated records")
         purge_outdated_balances
       end
 
