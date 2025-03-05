@@ -28,12 +28,22 @@ module Authentication
     end
 
     def find_session_by_cookie
-      Session.find_by(id: cookies.signed[:session_token])
+      cookie_value = cookies.signed[:session_token]
+      Rails.logger.info "Looking for session with cookie value: #{cookie_value.present? ? 'present' : 'missing'}"
+      session = Session.find_by(id: cookie_value)
+      Rails.logger.info "Session found: #{session.present? ? 'yes' : 'no'}"
+      session
     end
 
     def create_session_for(user)
       session = user.sessions.create!
-      cookies.signed.permanent[:session_token] = { value: session.id, httponly: true }
+      Rails.logger.info "Setting session cookie with value: #{session.id}"
+      # Explicitly set SameSite attribute and ensure cookie is set properly
+      cookies.signed.permanent[:session_token] = {
+        value: session.id,
+        httponly: true,
+        same_site: :lax
+      }
       session
     end
 

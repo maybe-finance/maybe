@@ -30,6 +30,15 @@ class MfaController < ApplicationController
       session.delete(:mfa_user_id)
       @session = create_session_for(@user)
       Rails.logger.info "MFA verification successful for user #{@user.id}. Session created: #{@session.id}"
+
+      # Explicitly set the cookie again to ensure it's properly set
+      cookies.signed.permanent[:session_token] = {
+        value: @session.id,
+        httponly: true,
+        same_site: :lax
+      }
+
+      # Use turbo: false to ensure a full page reload
       redirect_to root_path, turbo: false
     else
       flash.now[:alert] = t(".invalid_code")
