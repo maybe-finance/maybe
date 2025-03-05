@@ -10,7 +10,7 @@ class Account::Syncer
     holdings = sync_holdings
     balances = sync_balances(holdings)
     account.reload
-    update_account_info(balances, holdings) unless
+    update_account_info(balances, holdings) unless plaid_sync?
     convert_records_to_family_currency(balances, holdings) unless account.currency == account.family.currency
 
     # Enrich if user opted in or if we're syncing transactions from a Plaid account on the hosted app
