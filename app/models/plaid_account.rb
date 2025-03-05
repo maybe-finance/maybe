@@ -20,7 +20,7 @@ class PlaidAccount < ApplicationRecord
       find_or_create_by!(plaid_id: plaid_data.account_id) do |a|
         a.account = family.accounts.new(
           name: plaid_data.name,
-          balance: plaid_data.balances.current,
+          balance: plaid_data.balances.current || plaid_data.balances.available,
           currency: plaid_data.balances.iso_currency_code,
           accountable: TYPE_MAPPING[plaid_data.type].new
         )

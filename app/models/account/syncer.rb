@@ -5,19 +5,34 @@ class Account::Syncer
   end
 
   def run
-    account.family.auto_match_transfers!
+    Rails.logger.tagged("Account::Syncer") do
+      Rails.logger.info("Finding potential transfers to auto-match")
+      account.family.auto_match_transfers!
 
-    holdings = sync_holdings
-    balances = sync_balances(holdings)
-    account.reload
-    update_account_info(balances, holdings) unless plaid_sync?
-    convert_records_to_family_currency(balances, holdings) unless account.currency == account.family.currency
+      holdings = sync_holdings
+      Rails.logger.info("Calculated #{holdings.size} holdings")
 
-    # Enrich if user opted in or if we're syncing transactions from a Plaid account on the hosted app
-    if account.family.data_enrichment_enabled? || (plaid_sync? && Rails.application.config.app_mode.hosted?)
-      account.enrich_data
-    else
-      Rails.logger.info("Data enrichment is disabled, skipping enrichment for account #{account.id}")
+      balances = sync_balances(holdings)
+      Rails.logger.info("Calculated #{balances.size} balances")
+
+      account.reload
+
+      unless plaid_sync?
+        update_account_info(balances, holdings)
+      end
+
+      unless account.currency == account.family.currency
+        Rails.logger.info("Converting #{balances.size} balances and #{holdings.size} holdings from #{account.currency} to #{account.family.currency}")
+        convert_records_to_family_currency(balances, holdings)
+      end
+
+      # Enrich if user opted in or if we're syncing transactions from a Plaid account on the hosted app
+      if account.family.data_enrichment_enabled? || (plaid_sync? && Rails.application.config.app_mode.hosted?)
+        Rails.logger.info("Enriching transaction data for account #{account.name}")
+        account.enrich_data
+      else
+        Rails.logger.info("Data enrichment disabled for account #{account.name}")
+      end
     end
   end
 
@@ -42,8 +57,6 @@ class Account::Syncer
     def sync_holdings
       calculator = Account::HoldingCalculator.new(account)
       calculated_holdings = calculator.calculate(reverse: plaid_sync?)
-
-      current_time = Time.now
 
       Account.transaction do
         load_holdings(calculated_holdings)

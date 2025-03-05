@@ -5,13 +5,16 @@ class Account::BalanceCalculator
   end
 
   def calculate(reverse: false, start_date: nil)
-    cash_balances = reverse ? reverse_cash_balances : forward_cash_balances
+    Rails.logger.tagged("Account::BalanceCalculator") do
+      Rails.logger.info("Calculating cash balances with strategy: #{reverse ? "reverse sync" : "forward sync"}")
+      cash_balances = reverse ? reverse_cash_balances : forward_cash_balances
 
-    cash_balances.map do |balance|
-      holdings_value = converted_holdings.select { |h| h.date == balance.date }.sum(&:amount)
-      balance.balance = balance.balance + holdings_value
-      balance
-    end.compact
+      cash_balances.map do |balance|
+        holdings_value = converted_holdings.select { |h| h.date == balance.date }.sum(&:amount)
+        balance.balance = balance.balance + holdings_value
+        balance
+      end.compact
+    end
   end
 
   private

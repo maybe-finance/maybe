@@ -5,9 +5,14 @@ class Account::HoldingCalculator
   end
 
   def calculate(reverse: false)
-    preload_securities
-    calculated_holdings = reverse ? reverse_holdings : forward_holdings
-    gapfill_holdings(calculated_holdings)
+    Rails.logger.tagged("Account::HoldingCalculator") do
+      preload_securities
+
+      Rails.logger.info("Calculating holdings with strategy: #{reverse ? "reverse sync" : "forward sync"}")
+      calculated_holdings = reverse ? reverse_holdings : forward_holdings
+
+      gapfill_holdings(calculated_holdings)
+    end
   end
 
   private
