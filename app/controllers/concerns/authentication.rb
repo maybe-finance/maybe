@@ -16,12 +16,19 @@ module Authentication
 
   private
     def authenticate_user!
+      Rails.logger.info "Authentication#authenticate_user! - Checking for session cookie"
+
       if session_record = find_session_by_cookie
+        Rails.logger.info "Authentication#authenticate_user! - Found valid session: #{session_record.id} for user: #{session_record.user_id}"
         Current.session = session_record
       else
+        Rails.logger.info "Authentication#authenticate_user! - No valid session found"
+
         if self_hosted_first_login?
+          Rails.logger.info "Authentication#authenticate_user! - Self-hosted first login detected, redirecting to registration"
           redirect_to new_registration_url
         else
+          Rails.logger.info "Authentication#authenticate_user! - Redirecting to login page"
           redirect_to new_session_url
         end
       end
@@ -29,21 +36,35 @@ module Authentication
 
     def find_session_by_cookie
       cookie_value = cookies.signed[:session_token]
-      Rails.logger.info "Looking for session with cookie value: #{cookie_value.present? ? 'present' : 'missing'}"
-      session = Session.find_by(id: cookie_value)
-      Rails.logger.info "Session found: #{session.present? ? 'yes' : 'no'}"
-      session
+      Rails.logger.info "Authentication#find_session_by_cookie - Looking for session with cookie value: #{cookie_value.present? ? 'present' : 'missing'}"
+
+      if cookie_value.present?
+        session = Session.find_by(id: cookie_value)
+        Rails.logger.info "Authentication#find_session_by_cookie - Session found: #{session.present? ? 'yes' : 'no'}"
+
+        if session.present?
+          Rails.logger.info "Authentication#find_session_by_cookie - Session belongs to user: #{session.user_id}"
+        end
+
+        session
+      else
+        Rails.logger.info "Authentication#find_session_by_cookie - No session cookie found"
+        nil
+      end
     end
 
     def create_session_for(user)
+      Rails.logger.info "Authentication#create_session_for - Creating session for user: #{user.id}"
       session = user.sessions.create!
-      Rails.logger.info "Setting session cookie with value: #{session.id}"
-      # Explicitly set SameSite attribute and ensure cookie is set properly
-      cookies.signed.permanent[:session_token] = {
-        value: session.id,
-        httponly: true,
-        same_site: :lax
-      }
+      Rails.logger.info "Authentication#create_session_for - Session created with ID: #{session.id}"
+
+      Rails.logger.info "Authentication#create_session_for - Setting session cookie"
+      cookies.signed.permanent[:session_token] = { value: session.id, httponly: true }
+
+      Rails.logger.info "Authentication#create_session_for - Cookie set, verifying..."
+      cookie_value = cookies.signed[:session_token]
+      Rails.logger.info "Authentication#create_session_for - Cookie verification: #{cookie_value == session.id ? 'successful' : 'failed'}"
+
       session
     end
 
