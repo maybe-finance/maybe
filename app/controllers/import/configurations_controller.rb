@@ -36,7 +36,9 @@ class Import::ConfigurationsController < ApplicationController
         :currency_col_label,
         :date_format,
         :number_format,
-        :signage_convention
+        :signage_convention,
+        :amount_type_strategy,
+        :amount_type_inflow_value,
       )
     end
 end

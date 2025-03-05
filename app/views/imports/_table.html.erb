@@ -1,37 +1,32 @@
 <%# locals: (headers: [], rows: [], caption: nil) %>
-<div class="overflow-x-auto">
-  <div class="border border-secondary rounded-md shadow-border-xs text-sm bg-white w-full">
-    <div class="grid border-b border-b-alpha-black-200" style="grid-template-columns: repeat(<%= headers.length %>, minmax(0, 1fr))">
-      <% headers.each_with_index do |header, index| %>
-        <div class="
-          bg-gray-25 px-3 py-2.5 font-medium whitespace-nowrap overflow-x-auto
-          first:rounded-tl-md last:rounded-tr-md
-          <%= "border-r border-r-alpha-black-200" unless index == headers.length - 1 %>
-        ">
-          <%= header %>
-        </div>
-      <% end %>
-    </div>
 
-    <% rows.each_with_index do |row, row_index| %>
-      <div class="grid <%= "border-b border-b-alpha-black-200" if row_index < rows.length - 1 || caption %>" style="grid-template-columns: repeat(<%= headers.length %>, minmax(0, 1fr))">
-        <% row.each_with_index do |(header, value), col_index| %>
-          <div class="
-            px-3 py-2.5 whitespace-nowrap overflow-x-auto flex items-start
-            <%= "border-r border-r-alpha-black-200" unless col_index == row.length - 1 %>
-            <%= "rounded-bl-md" if !caption && row_index == rows.length - 1 && col_index == 0 %>
-            <%= "rounded-br-md" if !caption && row_index == rows.length - 1 && col_index == row.length - 1 %>
-          ">
-            <%= value %>
+<div class="p-1 rounded-xl bg-gray-25 space-y-2">
+  <div class="flex items-center gap-2 p-2 text-sm text-secondary">
+    <%= icon("sheet") %>
+    <p>Sample data from your imported CSV file</p>
+  </div>
+
+  <div class="overflow-x-scroll border border-secondary rounded-md shadow-xs">
+    <div class="bg-white rounded-md w-fit min-w-full">
+      <div class="bg-gray-25 flex rounded-t-md">
+        <% headers.each do |header| %>
+          <div class="flex-1 min-w-32 border-b border-r border-secondary last:border-r-0 first:rounded-tl-md last:rounded-tr-md truncate px-3 py-2.5 font-medium text-secondary text-xs whitespace-nowrap">
+            <%= header %>
           </div>
         <% end %>
       </div>
-    <% end %>
 
-    <% if caption %>
-      <div class="px-3 py-2.5 text-center text-xs text-primary rounded-b-md italic bg-gray-25 overflow-x-auto">
-        <%= caption %>
+      <div class="rounded-b-md">
+        <% rows.each do |row| %>
+          <div class="bg-white flex last:rounded-b-md">
+            <% row.each do |(header, value)| %>
+              <div class="flex-1 min-w-32 border-b border-r border-secondary last:border-r-0 first:rounded-tl-md last:rounded-tr-md truncate px-3 py-2.5 text-sm whitespace-nowrap">
+                <%= value %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
       </div>
-    <% end %>
+    </div>
   </div>
 </div>

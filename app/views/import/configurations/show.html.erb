@@ -24,18 +24,15 @@
     </div>
   </div>
 <% else %>
-  <div class="space-y-4">
+  <div class="space-y-6">
     <div class="text-center space-y-2">
       <h1 class="text-3xl text-primary font-medium"><%= t(".title") %></h1>
       <p class="text-secondary text-sm"><%= t(".description") %></p>
     </div>
 
-    <div class="mx-auto max-w-lg space-y-3">
+    <div class="mx-auto max-w-lg space-y-4">
       <%= render partial: permitted_import_configuration_path(@import), locals: { import: @import } %>
+      <%= render "imports/table", headers: @import.csv_headers, rows: @import.csv_sample, caption: "Sample data from your uploaded CSV" %>
     </div>
-  </div>
-
-  <div class="mx-auto max-w-5xl my-12">
-    <%= render "imports/table", headers: @import.csv_headers, rows: @import.csv_sample, caption: "Sample data from your uploaded CSV" %>
   </div>
 <% end %>
