@@ -117,8 +117,8 @@ class Period
   end
 
   def interval
-    if days > 90
-      "1 month"
+    if days > 366
+      "1 week"
     else
       "1 day"
     end
