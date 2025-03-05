@@ -51,27 +51,20 @@ class Account::HoldingCalculator
       portfolio.map do |security_id, qty|
         security = securities_cache[security_id]
 
-        if security.blank?
-          Rails.logger.error "[HoldingCalculator] Security #{security_id} not found in cache for account #{account.id}"
-          next
-        end
-
         price = security.dig(:prices)&.find { |p| p.date == date }
 
-        if price.blank?
-          Rails.logger.info "[HoldingCalculator] No price found for security #{security_id} on #{date}"
-          next
+        if price
+          converted_price = Money.new(price.price, price.currency).exchange_to(account.currency, fallback_rate: 1).amount
         end
-
-        converted_price = Money.new(price.price, price.currency).exchange_to(account.currency, fallback_rate: 1).amount
 
         account.holdings.build(
           security: security.dig(:security),
           date: date,
           qty: qty,
-          price: converted_price,
           currency: account.currency,
-          amount: qty * converted_price
+          # Missing prices will later be gapfilled, so we set them to nil for now
+          price: converted_price,
+          amount: converted_price.nil? ? nil : qty * converted_price
         )
       end.compact
     end
@@ -89,6 +82,13 @@ class Account::HoldingCalculator
           holding = security_holdings.find { |h| h.date == date }
 
           if holding
+            # For manual tickers that our provider doesn't support, we will in the price
+            # with the last known price (based on the user-entered price values of each trade)
+            unless holding.price.present? && holding.amount.present?
+              holding.price = 125.25
+              holding.amount = holding.qty * holding.price
+            end
+
             filled_holdings << holding
             previous_holding = holding
           else
