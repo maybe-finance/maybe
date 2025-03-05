@@ -51,14 +51,20 @@ class Account::HoldingCalculator
     end
 
     def generate_holding_records(portfolio, date)
-      Rails.logger.info "[HoldingCalculator] Generating holdings for #{portfolio.size} securities on #{date}"
+      Rails.logger.info "Generating holdings for #{portfolio.size} securities on #{date}"
 
       portfolio.map do |security_id, qty|
         security = securities_cache[security_id]
 
         price = security.dig(:prices)&.find { |p| p.date == date }
 
-        if price
+        # We prefer to use prices from our data provider.  But if the provider doesn't have an EOD price
+        # for this security, we search through the account's trades and use the "spot" price at the time of
+        # the most recent trade for that day's holding.  This is not as accurate, but it allows users to define
+        # what we call "offline" securities (which is essential given we cannot get prices for all securities globally)
+        if price.blank?
+          converted_price = most_recent_trade_price(security_id, date)
+        else
           converted_price = Money.new(price.price, price.currency).exchange_to(account.currency, fallback_rate: 1).amount
         end
 
@@ -66,10 +72,9 @@ class Account::HoldingCalculator
           security: security.dig(:security),
           date: date,
           qty: qty,
-          currency: account.currency,
-          # Missing prices will later be gapfilled, so we set them to nil for now
           price: converted_price,
-          amount: converted_price.nil? ? nil : qty * converted_price
+          currency: account.currency,
+          amount: qty * converted_price
         )
       end.compact
     end
@@ -87,13 +92,6 @@ class Account::HoldingCalculator
           holding = security_holdings.find { |h| h.date == date }
 
           if holding
-            # For manual tickers that our provider doesn't support, we will in the price
-            # with the last known price (based on the user-entered price values of each trade)
-            unless holding.price.present? && holding.amount.present?
-              holding.price = 125.25
-              holding.amount = holding.qty * holding.price
-            end
-
             filled_holdings << holding
             previous_holding = holding
           else
@@ -127,30 +125,23 @@ class Account::HoldingCalculator
       securities += account.holdings.where(date: Date.current).map(&:security)
       securities.uniq!
 
-      Rails.logger.info "[HoldingCalculator] Preloading #{securities.size} securities for account #{account.id}"
+      Rails.logger.info "Preloading #{securities.size} securities for account #{account.id}"
 
       securities.each do |security|
-        begin
-          Rails.logger.info "[HoldingCalculator] Loading security: ID=#{security.id} Ticker=#{security.ticker}"
+        Rails.logger.info "Loading security: ID=#{security.id} Ticker=#{security.ticker}"
 
-          prices = Security::Price.find_prices(
-            security: security,
-            start_date: portfolio_start_date,
-            end_date: Date.current
-          )
+        prices = Security::Price.find_prices(
+          security: security,
+          start_date: portfolio_start_date,
+          end_date: Date.current
+        )
 
-          Rails.logger.info "[HoldingCalculator] Found #{prices.size} prices for security #{security.id}"
+        Rails.logger.info "Found #{prices.size} prices for security #{security.id}"
 
-          @securities_cache[security.id] = {
-            security: security,
-            prices: prices
-          }
-        rescue => e
-          Rails.logger.error "[HoldingCalculator] Error processing security #{security.id}: #{e.message}"
-          Rails.logger.error "[HoldingCalculator] Security details: #{security.attributes}"
-          Rails.logger.error e.backtrace.join("\n")
-          next # Skip this security and continue with others
-        end
+        @securities_cache[security.id] = {
+          security: security,
+          prices: prices
+        }
       end
     end
 
@@ -184,5 +175,16 @@ class Account::HoldingCalculator
       end
 
       holding_quantities
+    end
+
+    def most_recent_trade_price(security_id, date)
+      first_trade = trades.select { |t| t.entryable.security_id == security_id }.min_by(&:date)
+      most_recent_trade = trades.select { |t| t.entryable.security_id == security_id && t.date <= date }.max_by(&:date)
+
+      if most_recent_trade
+        most_recent_trade.entryable.price
+      else
+        first_trade.entryable.price
+      end
     end
 end
