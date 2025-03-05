@@ -47,7 +47,7 @@ class Account::Syncer
 
       Account.transaction do
         load_holdings(calculated_holdings)
-        purge_outdated_holdings
+        purge_outdated_holdings unless plaid_sync?
       end
 
       calculated_holdings
@@ -139,8 +139,8 @@ class Account::Syncer
     def purge_outdated_holdings
       portfolio_security_ids = account.entries.account_trades.map { |entry| entry.entryable.security_id }.uniq
 
-      if portfolio_security_ids.empty? && !plaid_sync?
-        # If there are no securities in the portfolio and it's not a plaid sync, delete all holdings
+      # If there are no securities in the portfolio, delete all holdings
+      if portfolio_security_ids.empty?
         account.holdings.delete_all
       else
         account.holdings.delete_by("date < ? OR security_id NOT IN (?)", account_start_date, portfolio_security_ids)
