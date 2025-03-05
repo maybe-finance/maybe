@@ -60,7 +60,7 @@ class Account::Syncer
 
       Account.transaction do
         load_holdings(calculated_holdings)
-        purge_outdated_holdings if plaid_sync?
+        purge_outdated_holdings unless plaid_sync?
       end
 
       calculated_holdings
