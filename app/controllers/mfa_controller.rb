@@ -29,7 +29,8 @@ class MfaController < ApplicationController
     if @user&.verify_otp?(params[:code])
       session.delete(:mfa_user_id)
       @session = create_session_for(@user)
-      redirect_to root_path
+      Rails.logger.info "MFA verification successful for user #{@user.id}. Session created: #{@session.id}"
+      redirect_to root_path, turbo: false
     else
       flash.now[:alert] = t(".invalid_code")
       render :verify, status: :unprocessable_entity
