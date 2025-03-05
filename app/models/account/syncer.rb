@@ -10,11 +10,11 @@ class Account::Syncer
     holdings = sync_holdings
     balances = sync_balances(holdings)
     account.reload
-    update_account_info(balances, holdings) unless account.plaid_account_id.present?
+    update_account_info(balances, holdings) unless
     convert_records_to_family_currency(balances, holdings) unless account.currency == account.family.currency
 
     # Enrich if user opted in or if we're syncing transactions from a Plaid account on the hosted app
-    if account.family.data_enrichment_enabled? || (account.plaid_account_id.present? && Rails.application.config.app_mode.hosted?)
+    if account.family.data_enrichment_enabled? || (plaid_sync? && Rails.application.config.app_mode.hosted?)
       account.enrich_data
     else
       Rails.logger.info("Data enrichment is disabled, skipping enrichment for account #{account.id}")
@@ -41,15 +41,13 @@ class Account::Syncer
 
     def sync_holdings
       calculator = Account::HoldingCalculator.new(account)
-      calculated_holdings = calculator.calculate(reverse: account.plaid_account_id.present?)
+      calculated_holdings = calculator.calculate(reverse: plaid_sync?)
 
       current_time = Time.now
 
       Account.transaction do
         load_holdings(calculated_holdings)
-
-        # Purge outdated holdings
-        account.holdings.delete_by("date < ? OR security_id NOT IN (?)", account_start_date, calculated_holdings.map(&:security_id))
+        purge_outdated_holdings
       end
 
       calculated_holdings
@@ -57,13 +55,11 @@ class Account::Syncer
 
     def sync_balances(holdings)
       calculator = Account::BalanceCalculator.new(account, holdings: holdings)
-      calculated_balances = calculator.calculate(reverse: account.plaid_account_id.present?, start_date: start_date)
+      calculated_balances = calculator.calculate(reverse: plaid_sync?, start_date: start_date)
 
       Account.transaction do
         load_balances(calculated_balances)
-
-        # Purge outdated balances
-        account.balances.delete_by("date < ?", account_start_date)
+        purge_outdated_balances
       end
 
       calculated_balances
@@ -130,5 +126,24 @@ class Account::Syncer
                .merge("updated_at" => current_time) },
         unique_by: %i[account_id security_id date currency]
       )
+    end
+
+    def purge_outdated_balances
+      account.balances.delete_by("date < ?", account_start_date)
+    end
+
+    def plaid_sync?
+      account.plaid_account_id.present?
+    end
+
+    def purge_outdated_holdings
+      portfolio_security_ids = account.entries.account_trades.map { |entry| entry.entryable.security_id }.uniq
+
+      if portfolio_security_ids.empty? && !plaid_sync?
+        # If there are no securities in the portfolio and it's not a plaid sync, delete all holdings
+        account.holdings.delete_all
+      else
+        account.holdings.delete_by("date < ? OR security_id NOT IN (?)", account_start_date, portfolio_security_ids)
+      end
     end
 end

@@ -17,6 +17,8 @@ class Account::SyncerTest < ActiveSupport::TestCase
     @account.family.update! currency: "USD"
     @account.update! currency: "EUR"
 
+    @account.entries.create!(date: 1.day.ago.to_date, currency: "EUR", amount: 500, name: "Buy AAPL", entryable: Account::Trade.new(security: securities(:aapl), qty: 10, price: 50, currency: "EUR"))
+
     ExchangeRate.create!(date: 1.day.ago.to_date, from_currency: "EUR", to_currency: "USD", rate: 1.2)
     ExchangeRate.create!(date: Date.current, from_currency: "EUR", to_currency: "USD", rate: 2)
 
