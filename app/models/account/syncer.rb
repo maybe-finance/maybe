@@ -55,8 +55,8 @@ class Account::Syncer
     end
 
     def sync_holdings
-      calculator = Account::HoldingCalculator.new(account)
-      calculated_holdings = calculator.calculate(reverse: plaid_sync?)
+      calculator = plaid_sync? ? Account::Holding::ReverseCalculator.new(account) : Account::Holding::ForwardCalculator.new(account)
+      calculated_holdings = calculator.calculate
 
       Account.transaction do
         load_holdings(calculated_holdings)
@@ -67,8 +67,8 @@ class Account::Syncer
     end
 
     def sync_balances(holdings)
-      calculator = Account::BalanceCalculator.new(account, holdings: holdings)
-      calculated_balances = calculator.calculate(reverse: plaid_sync?, start_date: start_date)
+      calculator = plaid_sync? ? Account::ReverseSeriesCalculator.new(account, holdings: holdings) : Account::ForwardSeriesCalculator.new(account, holdings: holdings)
+      calculated_balances = calculator.calculate
 
       Account.transaction do
         load_balances(calculated_balances)

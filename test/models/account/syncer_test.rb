@@ -22,14 +22,14 @@ class Account::SyncerTest < ActiveSupport::TestCase
     ExchangeRate.create!(date: 1.day.ago.to_date, from_currency: "EUR", to_currency: "USD", rate: 1.2)
     ExchangeRate.create!(date: Date.current, from_currency: "EUR", to_currency: "USD", rate: 2)
 
-    Account::BalanceCalculator.any_instance.expects(:calculate).returns(
+    Account::ForwardSeriesCalculator.any_instance.expects(:calculate).returns(
       [
         Account::Balance.new(date: 1.day.ago.to_date, balance: 1000, cash_balance: 1000, currency: "EUR"),
         Account::Balance.new(date: Date.current, balance: 1000, cash_balance: 1000, currency: "EUR")
       ]
     )
 
-    Account::HoldingCalculator.any_instance.expects(:calculate).returns(
+    Account::Holding::ForwardCalculator.any_instance.expects(:calculate).returns(
       [
         Account::Holding.new(security: securities(:aapl), date: 1.day.ago.to_date, qty: 10, price: 50, amount: 500, currency: "EUR"),
         Account::Holding.new(security: securities(:aapl), date: Date.current, qty: 10, price: 50, amount: 500, currency: "EUR")

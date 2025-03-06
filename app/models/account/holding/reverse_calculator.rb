@@ -1,24 +1,17 @@
-class Account::HoldingCalculator
-  def initialize(account)
-    @account = account
-    @securities_cache = {}
-  end
-
-  def calculate(reverse: false)
+class Account::Holding::ReverseCalculator < Account::Holding::Calculator
+  def calculate
     Rails.logger.tagged("Account::HoldingCalculator") do
       preload_securities
 
-      Rails.logger.info("Calculating holdings with strategy: #{reverse ? "reverse sync" : "forward sync"}")
-      calculated_holdings = reverse ? reverse_holdings : forward_holdings
+      Rails.logger.info("Calculating holdings with strategy: reverse sync")
+      calculated_holdings = calculate_holdings
 
       gapfill_holdings(calculated_holdings)
     end
   end
 
   private
-    attr_reader :account, :securities_cache
-
-    def reverse_holdings
+    def calculate_holdings
       current_holding_quantities = load_current_holding_quantities
       prior_holding_quantities = {}
 
@@ -29,22 +22,6 @@ class Account::HoldingCalculator
         prior_holding_quantities = calculate_portfolio(current_holding_quantities, today_trades)
         holdings += generate_holding_records(current_holding_quantities, date)
         current_holding_quantities = prior_holding_quantities
-      end
-
-      holdings
-    end
-
-    def forward_holdings
-      prior_holding_quantities = load_empty_holding_quantities
-      current_holding_quantities = {}
-
-      holdings = []
-
-      portfolio_start_date.upto(Date.current).map do |date|
-        today_trades = trades.select { |t| t.date == date }
-        current_holding_quantities = calculate_portfolio(prior_holding_quantities, today_trades, inverse: true)
-        holdings += generate_holding_records(current_holding_quantities, date)
-        prior_holding_quantities = current_holding_quantities
       end
 
       holdings

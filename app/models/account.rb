@@ -122,12 +122,4 @@ class Account < ApplicationRecord
         entryable: Account::Valuation.new
     end
   end
-
-  def sparkline_series
-    cache_key = family.build_cache_key("#{id}_sparkline")
-
-    Rails.cache.fetch(cache_key) do
-      balance_series
-    end
-  end
 end

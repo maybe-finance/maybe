@@ -1,13 +1,8 @@
-class Account::BalanceCalculator
-  def initialize(account, holdings: nil)
-    @account = account
-    @holdings = holdings || []
-  end
-
-  def calculate(reverse: false, start_date: nil)
+class Account::ForwardSeriesCalculator < Account::SeriesCalculator
+  def calculate
     Rails.logger.tagged("Account::BalanceCalculator") do
-      Rails.logger.info("Calculating cash balances with strategy: #{reverse ? "reverse sync" : "forward sync"}")
-      cash_balances = reverse ? reverse_cash_balances : forward_cash_balances
+      Rails.logger.info("Calculating cash balances with strategy: forward sync")
+      cash_balances = calculate_balances
 
       cash_balances.map do |balance|
         holdings_value = converted_holdings.select { |h| h.date == balance.date }.sum(&:amount)
@@ -18,45 +13,7 @@ class Account::BalanceCalculator
   end
 
   private
-    attr_reader :account, :holdings
-
-    def oldest_date
-      converted_entries.first ? converted_entries.first.date - 1.day : Date.current
-    end
-
-    def reverse_cash_balances
-      prior_balance = account.cash_balance
-
-      Date.current.downto(oldest_date).map do |date|
-        entries_for_date = converted_entries.select { |e| e.date == date }
-        holdings_for_date = converted_holdings.select { |h| h.date == date }
-
-        valuation = entries_for_date.find { |e| e.account_valuation? }
-
-        current_balance = if valuation
-          # To get this to a cash valuation, we back out holdings value on day
-          valuation.amount - holdings_for_date.sum(&:amount)
-        else
-          transactions = entries_for_date.select { |e| e.account_transaction? || e.account_trade? }
-
-          calculate_balance(prior_balance, transactions)
-        end
-
-        balance_record = Account::Balance.new(
-          account: account,
-          date: date,
-          balance: valuation ? current_balance : prior_balance,
-          cash_balance: valuation ? current_balance : prior_balance,
-          currency: account.currency
-        )
-
-        prior_balance = current_balance
-
-        balance_record
-      end
-    end
-
-    def forward_cash_balances
+    def calculate_balances
       prior_balance = 0
       current_balance = nil
 
@@ -87,6 +44,10 @@ class Account::BalanceCalculator
 
         balance_record
       end
+    end
+
+    def oldest_date
+      converted_entries.first ? converted_entries.first.date - 1.day : Date.current
     end
 
     def converted_entries
