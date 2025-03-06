@@ -1,6 +1,8 @@
 class TransactionImport < Import
   def import!
     transaction do
+      transactions = []
+      entries = []
       mappings.each(&:create_mappable!)
 
       rows.each do |row|
@@ -13,17 +15,38 @@ class TransactionImport < Import
         category = mappings.categories.mappable_for(row.category)
         tags = row.tags_list.map { |tag| mappings.tags.mappable_for(tag) }.compact
 
-        entry = mapped_account.entries.build \
+        transaction = Account::Transaction.new(category: category, tags: tags)
+        transactions.push(transaction)
+
+        entries.push({
+          account: mapped_account,
           date: row.date_iso,
           amount: row.signed_amount,
           name: row.name,
           currency: row.currency,
           notes: row.notes,
-          entryable: Account::Transaction.new(category: category, tags: tags),
+          entryable: transaction,
           import: self
-
-        entry.save!
+        })
       end
+
+      Account::Transaction.import!(transactions)
+
+      # Build the entries for importing
+      entries = entries.map do |entry|
+        Account::Entry.new(
+          account: entry[:account],
+          date: entry[:date],
+          amount: entry[:amount],
+          name: entry[:name],
+          currency: entry[:currency],
+          notes: entry[:notes],
+          entryable: entry[:entryable],
+          import: entry[:import]
+        )
+      end
+
+      Account::Entry.import!(entries)
     end
   end
 
