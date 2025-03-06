@@ -13,35 +13,27 @@ class Account::SyncerTest < ActiveSupport::TestCase
     )
   end
 
-  test "converts foreign account balances and holdings to family currency" do
-    @account.family.update! currency: "USD"
-    @account.update! currency: "EUR"
-
-    @account.entries.create!(date: 1.day.ago.to_date, currency: "EUR", amount: 500, name: "Buy AAPL", entryable: Account::Trade.new(security: securities(:aapl), qty: 10, price: 50, currency: "EUR"))
-
-    ExchangeRate.create!(date: 1.day.ago.to_date, from_currency: "EUR", to_currency: "USD", rate: 1.2)
-    ExchangeRate.create!(date: Date.current, from_currency: "EUR", to_currency: "USD", rate: 2)
+  test "persists holdings and balances" do
+    @account.entries.create!(date: 1.day.ago.to_date, currency: "USD", amount: 1000, name: "Buy AAPL", entryable: Account::Trade.new(security: securities(:aapl), qty: 10, price: 50, currency: "USD"))
 
     Account::ForwardSeriesCalculator.any_instance.expects(:calculate).returns(
       [
-        Account::Balance.new(date: 1.day.ago.to_date, balance: 1000, cash_balance: 1000, currency: "EUR"),
-        Account::Balance.new(date: Date.current, balance: 1000, cash_balance: 1000, currency: "EUR")
+        Account::Balance.new(date: 1.day.ago.to_date, balance: 1000, cash_balance: 1000, currency: "USD"),
+        Account::Balance.new(date: Date.current, balance: 1000, cash_balance: 1000, currency: "USD")
       ]
     )
 
     Account::Holding::ForwardCalculator.any_instance.expects(:calculate).returns(
       [
-        Account::Holding.new(security: securities(:aapl), date: 1.day.ago.to_date, qty: 10, price: 50, amount: 500, currency: "EUR"),
-        Account::Holding.new(security: securities(:aapl), date: Date.current, qty: 10, price: 50, amount: 500, currency: "EUR")
+        Account::Holding.new(security: securities(:aapl), date: 1.day.ago.to_date, qty: 10, price: 50, amount: 500, currency: "USD"),
+        Account::Holding.new(security: securities(:aapl), date: Date.current, qty: 10, price: 50, amount: 500, currency: "USD")
       ]
     )
 
     Account::Syncer.new(@account).run
 
-    assert_equal [ 1000, 1000 ], @account.balances.where(currency: "EUR").chronological.map(&:balance)
-    assert_equal [ 1200, 2000 ], @account.balances.where(currency: "USD").chronological.map(&:balance)
-    assert_equal [ 500, 500 ], @account.holdings.where(currency: "EUR").chronological.map(&:amount)
-    assert_equal [ 600, 1000 ], @account.holdings.where(currency: "USD").chronological.map(&:amount)
+    assert_equal [ 1000, 1000 ], @account.balances.where(currency: "USD").chronological.map(&:balance)
+    assert_equal [ 500, 500 ], @account.holdings.where(currency: "USD").chronological.map(&:amount)
   end
 
   test "purges stale balances and holdings" do

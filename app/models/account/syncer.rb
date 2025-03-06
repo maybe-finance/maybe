@@ -21,11 +21,6 @@ class Account::Syncer
         update_account_info(balances, holdings)
       end
 
-      unless account.currency == account.family.currency
-        Rails.logger.info("Converting #{balances.size} balances and #{holdings.size} holdings from #{account.currency} to #{account.family.currency}")
-        convert_records_to_family_currency(balances, holdings)
-      end
-
       # Enrich if user opted in or if we're syncing transactions from a Plaid account on the hosted app
       if account.family.data_enrichment_enabled? || (plaid_sync? && Rails.application.config.app_mode.hosted?)
         Rails.logger.info("Enriching transaction data for account #{account.name}")
@@ -76,49 +71,6 @@ class Account::Syncer
       end
 
       calculated_balances
-    end
-
-    def convert_records_to_family_currency(balances, holdings)
-      from_currency = account.currency
-      to_currency = account.family.currency
-
-      exchange_rates = ExchangeRate.find_rates(
-        from: from_currency,
-        to: to_currency,
-        start_date: balances.min_by(&:date).date
-      )
-
-      converted_balances = balances.map do |balance|
-        exchange_rate = exchange_rates.find { |er| er.date == balance.date }
-
-        next unless exchange_rate.present?
-
-        account.balances.build(
-          date: balance.date,
-          balance: exchange_rate.rate * balance.balance,
-          currency: to_currency
-        )
-      end.compact
-
-      converted_holdings = holdings.map do |holding|
-        exchange_rate = exchange_rates.find { |er| er.date == holding.date }
-
-        next unless exchange_rate.present?
-
-        account.holdings.build(
-          security: holding.security,
-          date: holding.date,
-          qty: holding.qty,
-          price: exchange_rate.rate * holding.price,
-          amount: exchange_rate.rate * holding.amount,
-          currency: to_currency
-        )
-      end.compact
-
-      Account.transaction do
-        load_balances(converted_balances)
-        load_holdings(converted_holdings)
-      end
     end
 
     def load_balances(balances = [])
