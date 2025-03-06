@@ -1,7 +1,13 @@
-class Account::Holding::ForwardCalculator < Account::Holding::Calculator
+class Account::Holding::ForwardCalculator
+  attr_reader :account, :securities_cache
+
+  def initialize(account)
+    @account = account
+    @securities_cache = {}
+  end
+
   def calculate
     Rails.logger.tagged("Account::HoldingCalculator") do
-      @securities_cache = {}
       preload_securities
 
       Rails.logger.info("Calculating holdings with strategy: forward sync")

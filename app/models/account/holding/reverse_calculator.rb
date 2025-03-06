@@ -1,4 +1,11 @@
-class Account::Holding::ReverseCalculator < Account::Holding::Calculator
+class Account::Holding::ReverseCalculator
+  attr_reader :account, :securities_cache
+
+  def initialize(account)
+    @account = account
+    @securities_cache = {}
+  end
+
   def calculate
     Rails.logger.tagged("Account::HoldingCalculator") do
       preload_securities

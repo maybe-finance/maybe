@@ -1,11 +1,10 @@
 class Account < ApplicationRecord
-  include Syncable, Monetizable, Issuable, Chartable
+  include Syncable, Monetizable, Issuable, Chartable, Enrichable, Linkable
 
   validates :name, :balance, :currency, presence: true
 
   belongs_to :family
   belongs_to :import, optional: true
-  belongs_to :plaid_account, optional: true
 
   has_many :import_mappings, as: :mappable, dependent: :destroy, class_name: "Import::Mapping"
   has_many :entries, dependent: :destroy, class_name: "Account::Entry"
@@ -75,7 +74,11 @@ class Account < ApplicationRecord
   def sync_data(start_date: nil)
     update!(last_synced_at: Time.current)
 
-    Syncer.new(self, start_date: start_date).run
+    family.auto_match_transfers!
+
+    BalanceSyncer.new(self, strategy: linked? ? :reverse : :forward).sync_balances
+
+    enrich_data if enrichable?
   end
 
   def post_sync
@@ -91,10 +94,6 @@ class Account < ApplicationRecord
 
   def current_holdings
     holdings.where(currency: currency, date: holdings.maximum(:date)).order(amount: :desc)
-  end
-
-  def enrich_data
-    DataEnricher.new(self).run
   end
 
   def update_with_sync!(attributes)
@@ -121,5 +120,10 @@ class Account < ApplicationRecord
         currency: currency,
         entryable: Account::Valuation.new
     end
+  end
+
+  def start_date
+    first_entry_date = entries.minimum(:date) || Date.current
+    first_entry_date - 1.day
   end
 end

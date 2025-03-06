@@ -1,4 +1,11 @@
-class Account::ReverseSeriesCalculator < Account::SeriesCalculator
+class Account::Balance::ReverseCalculator
+  attr_reader :account, :holdings
+
+  def initialize(account, holdings: nil)
+    @account = account
+    @holdings = holdings || []
+  end
+
   def calculate
     Rails.logger.tagged("Account::BalanceCalculator") do
       Rails.logger.info("Calculating cash balances with strategy: reverse sync")

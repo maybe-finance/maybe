@@ -1,4 +1,11 @@
-class Account::ForwardSeriesCalculator < Account::SeriesCalculator
+class Account::Balance::ForwardCalculator
+  attr_reader :account, :holdings
+
+  def initialize(account, holdings: nil)
+    @account = account
+    @holdings = holdings || []
+  end
+
   def calculate
     Rails.logger.tagged("Account::BalanceCalculator") do
       Rails.logger.info("Calculating cash balances with strategy: forward sync")

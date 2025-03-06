@@ -115,14 +115,4 @@ module Account::Chartable
       balance_series
     end
   end
-
-  # Plaid accounts provide us current-day data, so we start there and work backwards
-  # Manual, "offline" accounts must be calculated from the origin, forwards based on entries entirely
-  def series_calculator
-    if plaid_account_id.present?
-      Account::ReverseSeriesCalculator.new(self)
-    else
-      Account::ForwardSeriesCalculator.new(self)
-    end
-  end
 end
