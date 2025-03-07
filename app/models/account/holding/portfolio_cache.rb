@@ -37,7 +37,7 @@ class Account::Holding::PortfolioCache
       security_id: security_id,
       date: price.date,
       price: converted_amount,
-      currency: price.currency
+      currency: account.currency
     )
   end
 
