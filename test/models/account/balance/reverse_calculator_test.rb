@@ -17,7 +17,7 @@ class Account::Balance::ReverseCalculatorTest < ActiveSupport::TestCase
   test "no entries sync" do
     assert_equal 0, @account.balances.count
 
-    expected = [ @account.balance ]
+    expected = [ @account.balance, @account.balance ]
     calculated = Account::Balance::ReverseCalculator.new(@account).calculate
 
     assert_equal expected, calculated.map(&:balance)

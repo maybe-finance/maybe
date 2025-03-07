@@ -5,6 +5,12 @@ class Account::Balance::BaseCalculator
     @account = account
   end
 
+  def calculate
+    Rails.logger.tagged(self.class.name) do
+      calculate_balances
+    end
+  end
+
   private
     CashBalance = Data.define(:date, :balance)
 
@@ -12,12 +18,12 @@ class Account::Balance::BaseCalculator
       @sync_cache ||= Account::Balance::SyncCache.new(account)
     end
 
-    def build_balance(amount, date)
+    def build_balance(date, cash_balance, holdings_value)
       Account::Balance.new(
         account: account,
         date: date,
-        balance: amount,
-        cash_balance: amount,
+        balance: holdings_value + cash_balance,
+        cash_balance: cash_balance,
         currency: account.currency
       )
     end
