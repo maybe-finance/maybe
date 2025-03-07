@@ -73,9 +73,17 @@ class Account < ApplicationRecord
 
   def sync_data(start_date: nil)
     update!(last_synced_at: Time.current)
+
+    Rails.logger.info("Auto-matching transfers")
     family.auto_match_transfers!
+
+    Rails.logger.info("Processing balances (#{linked? ? 'reverse' : 'forward'})")
     sync_balances
-    enrich_data if enrichable?
+
+    if enrichable?
+      Rails.logger.info("Enriching transaction data")
+      enrich_data
+    end
   end
 
   def post_sync

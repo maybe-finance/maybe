@@ -7,13 +7,17 @@ class Account::Balance::Syncer
   end
 
   def sync_balances
-    Rails.logger.tagged("Account::Balance::Syncer") do
-      Account::Balance.transaction do
-        sync_holdings
-        calculate_balances
-        persist_balances
-        purge_stale_balances
-        update_account_info unless strategy == :reverse
+    Account::Balance.transaction do
+      sync_holdings
+      calculate_balances
+
+      Rails.logger.info("Persisting #{@balances.size} balances")
+      persist_balances
+
+      purge_stale_balances
+
+      unless strategy == :reverse
+        update_account_info
       end
     end
   end
@@ -28,7 +32,7 @@ class Account::Balance::Syncer
       calculated_holdings_value = @holdings.select { |h| h.date == Date.current }.sum(&:amount) || 0
       calculated_cash_balance = calculated_balance - calculated_holdings_value
 
-      Rails.logger.info("Updating account balances: cash=#{calculated_cash_balance}, total=#{calculated_balance}")
+      Rails.logger.info("Balance update: cash=#{calculated_cash_balance}, total=#{calculated_balance}")
 
       account.update!(
         balance: calculated_balance,
@@ -42,9 +46,6 @@ class Account::Balance::Syncer
 
     def persist_balances
       current_time = Time.now
-
-      Rails.logger.info("Upserting #{@balances.size} balances")
-
       account.balances.upsert_all(
         @balances.map { |b| b.attributes
                .slice("date", "balance", "cash_balance", "currency")
@@ -55,7 +56,7 @@ class Account::Balance::Syncer
 
     def purge_stale_balances
       deleted_count = account.balances.delete_by("date < ?", account.start_date)
-      Rails.logger.info("Deleted #{deleted_count} stale balances") if deleted_count > 0
+      Rails.logger.info("Purged #{deleted_count} stale balances") if deleted_count > 0
     end
 
     def calculator

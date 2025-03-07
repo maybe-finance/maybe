@@ -6,10 +6,12 @@ class Account::Holding::Syncer
   end
 
   def sync_holdings
-    Rails.logger.tagged("Account::Holding::Syncer") do
-      calculate_holdings
-      persist_holdings
-      purge_stale_holdings unless strategy == :reverse
+    calculate_holdings
+    Rails.logger.info("Persisting #{@holdings.size} holdings")
+    persist_holdings
+
+    unless strategy == :reverse
+      purge_stale_holdings
     end
 
     @holdings
@@ -38,9 +40,11 @@ class Account::Holding::Syncer
 
       # If there are no securities in the portfolio, delete all holdings
       if portfolio_security_ids.empty?
+        Rails.logger.info("Clearing all holdings (no securities)")
         account.holdings.delete_all
       else
-        account.holdings.delete_by("date < ? OR security_id NOT IN (?)", account.start_date, portfolio_security_ids)
+        deleted_count = account.holdings.delete_by("date < ? OR security_id NOT IN (?)", account.start_date, portfolio_security_ids)
+        Rails.logger.info("Purged #{deleted_count} stale holdings") if deleted_count > 0
       end
     end
 
