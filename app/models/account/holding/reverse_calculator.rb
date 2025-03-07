@@ -1,16 +1,16 @@
 class Account::Holding::ReverseCalculator < Account::Holding::BaseCalculator
   private
     def calculate_holdings
-      todays_portfolio = generate_starting_portfolio
-      yesterdays_portfolio = {}
+      current_portfolio = generate_starting_portfolio
+      previous_portfolio = {}
 
       @holdings = []
 
       Date.current.downto(account.start_date).map do |date|
         today_trades = portfolio_cache.get_trades(date: date)
-        yesterdays_portfolio = transform_portfolio(todays_portfolio, today_trades, direction: :reverse)
-        @holdings += build_holdings(todays_portfolio, date)
-        todays_portfolio = yesterdays_portfolio
+        previous_portfolio = transform_portfolio(current_portfolio, today_trades, direction: :reverse)
+        @holdings += build_holdings(current_portfolio, date)
+        current_portfolio = previous_portfolio
       end
     end
 
