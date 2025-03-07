@@ -45,6 +45,11 @@ class PlaidItem < ApplicationRecord
       plaid_data = fetch_and_load_plaid_data
       update!(status: :good) if requires_update?
 
+      # Schedule account syncs
+      accounts.each do |account|
+        account.sync_later(start_date: start_date)
+      end
+
       Rails.logger.info("Plaid data fetched and loaded")
       plaid_data
     rescue Plaid::ApiError => e
