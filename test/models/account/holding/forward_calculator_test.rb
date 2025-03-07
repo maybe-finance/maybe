@@ -98,7 +98,6 @@ class Account::Holding::ForwardCalculatorTest < ActiveSupport::TestCase
     create_trade(offline_security, qty: 1, date: 1.day.ago.to_date, price: 100, account: @account)
 
     expected = [
-      Account::Holding.new(security: offline_security, date: 4.days.ago.to_date, qty: 0, price: 90, amount: 0),
       Account::Holding.new(security: offline_security, date: 3.days.ago.to_date, qty: 1, price: 90, amount: 90),
       Account::Holding.new(security: offline_security, date: 2.days.ago.to_date, qty: 1, price: 90, amount: 90),
       Account::Holding.new(security: offline_security, date: 1.day.ago.to_date, qty: 2, price: 100, amount: 200),

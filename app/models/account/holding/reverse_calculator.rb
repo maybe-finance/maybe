@@ -1,17 +1,26 @@
 class Account::Holding::ReverseCalculator < Account::Holding::BaseCalculator
   private
+    # Reverse calculators will use the existing holdings as a source of security ids and prices
+    # since it is common for a provider to supply "current day" holdings but not all the historical
+    # trades that make up those holdings.
+    def portfolio_cache
+      @portfolio_cache ||= Account::Holding::PortfolioCache.new(account, use_holdings: true)
+    end
+
     def calculate_holdings
       current_portfolio = generate_starting_portfolio
       previous_portfolio = {}
 
-      @holdings = []
+      holdings = []
 
-      Date.current.downto(account.start_date).map do |date|
+      Date.current.downto(account.start_date).each do |date|
         today_trades = portfolio_cache.get_trades(date: date)
         previous_portfolio = transform_portfolio(current_portfolio, today_trades, direction: :reverse)
-        @holdings += build_holdings(current_portfolio, date)
+        holdings += build_holdings(current_portfolio, date)
         current_portfolio = previous_portfolio
       end
+
+      holdings
     end
 
     # Since this is a reverse sync, we start with today's holdings

@@ -16,7 +16,7 @@ class Account::Balance::Syncer
 
       purge_stale_balances
 
-      unless strategy == :reverse
+      if strategy == :forward
         update_account_info
       end
     end

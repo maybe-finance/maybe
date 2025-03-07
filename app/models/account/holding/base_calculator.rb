@@ -7,8 +7,8 @@ class Account::Holding::BaseCalculator
 
   def calculate
     Rails.logger.tagged(self.class.name) do
-      calculate_holdings
-      Account::Holding.gapfill(@holdings)
+      holdings = calculate_holdings
+      Account::Holding.gapfill(holdings)
     end
   end
 
@@ -41,18 +41,22 @@ class Account::Holding::BaseCalculator
     end
 
     def build_holdings(portfolio, date)
-      Rails.logger.info "Generating holdings for #{portfolio.size} securities on #{date}"
-
       portfolio.map do |security_id, qty|
         price = portfolio_cache.get_price(security_id, date)
 
-        account.holdings.build(
+        if price.nil?
+          Rails.logger.warn "No price found for security #{security_id} on #{date}"
+          next
+        end
+
+        Account::Holding.new(
+          account_id: account.id,
           security_id: security_id,
           date: date,
           qty: qty,
-          price: price,
-          currency: account.currency,
-          amount: qty * price
+          price: price.price,
+          currency: price.currency,
+          amount: qty * price.price
         )
       end.compact
     end

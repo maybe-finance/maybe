@@ -2,15 +2,15 @@ class Account::Holding::Syncer
   def initialize(account, strategy:)
     @account = account
     @strategy = strategy
-    @securities_cache = {}
   end
 
   def sync_holdings
     calculate_holdings
+
     Rails.logger.info("Persisting #{@holdings.size} holdings")
     persist_holdings
 
-    unless strategy == :reverse
+    if strategy == :forward
       purge_stale_holdings
     end
 
@@ -18,7 +18,7 @@ class Account::Holding::Syncer
   end
 
   private
-    attr_reader :account, :securities_cache, :strategy
+    attr_reader :account, :strategy
 
     def calculate_holdings
       @holdings = calculator.calculate
@@ -30,7 +30,7 @@ class Account::Holding::Syncer
       account.holdings.upsert_all(
         @holdings.map { |h| h.attributes
                .slice("date", "currency", "qty", "price", "amount", "security_id")
-               .merge("updated_at" => current_time) },
+               .merge("account_id" => account.id, "updated_at" => current_time) },
         unique_by: %i[account_id security_id date currency]
       )
     end

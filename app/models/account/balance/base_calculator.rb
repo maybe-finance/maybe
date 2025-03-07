@@ -18,7 +18,7 @@ class Account::Balance::BaseCalculator
 
     def build_balance(date, cash_balance, holdings_value)
       Account::Balance.new(
-        account: account,
+        account_id: account.id,
         date: date,
         balance: holdings_value + cash_balance,
         cash_balance: cash_balance,

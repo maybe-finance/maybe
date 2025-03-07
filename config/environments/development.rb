@@ -84,4 +84,7 @@ Rails.application.configure do
 
   # Allow connection from any host in development
   config.hosts = nil
+
+  # Set log level
+  config.log_level = :info
 end
