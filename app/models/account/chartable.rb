@@ -2,46 +2,81 @@ module Account::Chartable
   extend ActiveSupport::Concern
 
   class_methods do
+    def cash_balance_series(currency:, period: Period.last_30_days, favorable_direction: "up")
+      generate_series(
+        balances: fetch_balances(currency: currency, period: period),
+        period: period,
+        currency: currency,
+        favorable_direction: favorable_direction,
+        balance_type: :cash_balance
+      )
+    end
+
+    def holdings_series(currency:, period: Period.last_30_days, favorable_direction: "up")
+      generate_series(
+        balances: fetch_balances(currency: currency, period: period),
+        period: period,
+        currency: currency,
+        favorable_direction: favorable_direction,
+        balance_type: :holdings_balance
+      )
+    end
+
     def balance_series(currency:, period: Period.last_30_days, favorable_direction: "up")
-      balances = Account::Balance.find_by_sql([
-        balance_series_query,
-        {
-          start_date: period.start_date,
-          end_date: period.end_date,
-          interval: period.interval,
-          target_currency: currency
-        }
-      ])
-
-      balances = gapfill_balances(balances)
-      balances = invert_balances(balances) if favorable_direction == "down"
-
-      values = [ nil, *balances ].each_cons(2).map do |prev, curr|
-        Series::Value.new(
-          date: curr.date,
-          date_formatted: I18n.l(curr.date, format: :long),
-          trend: Trend.new(
-            current: Money.new(curr.balance, currency),
-            previous: prev.nil? ? nil : Money.new(prev.balance, currency),
-            favorable_direction: favorable_direction
-          )
-        )
-      end
-
-      Series.new(
-        start_date: period.start_date,
-        end_date: period.end_date,
-        interval: period.interval,
-        trend: Trend.new(
-          current: Money.new(balances.last&.balance || 0, currency),
-          previous: Money.new(balances.first&.balance || 0, currency),
-          favorable_direction: favorable_direction
-        ),
-        values: values
+      generate_series(
+        balances: fetch_balances(currency: currency, period: period),
+        period: period,
+        currency: currency,
+        favorable_direction: favorable_direction,
+        balance_type: :balance
       )
     end
 
     private
+      def fetch_balances(currency:, period:)
+        @_memoized_balances ||= {}
+        cache_key = "#{currency}_#{period.start_date}_#{period.end_date}_#{period.interval}"
+
+        @_memoized_balances[cache_key] ||= Account::Balance.find_by_sql([
+          balance_series_query,
+          {
+            start_date: period.start_date,
+            end_date: period.end_date,
+            interval: period.interval,
+            target_currency: currency
+          }
+        ])
+      end
+
+      def generate_series(balances:, period:, currency:, favorable_direction:, balance_type:)
+        balances = gapfill_balances(balances, balance_type)
+        balances = invert_balances(balances, balance_type) if favorable_direction == "down"
+
+        values = [ nil, *balances ].each_cons(2).map do |prev, curr|
+          Series::Value.new(
+            date: curr.date,
+            date_formatted: I18n.l(curr.date, format: :long),
+            trend: Trend.new(
+              current: Money.new(curr.send(balance_type), currency),
+              previous: prev.nil? ? nil : Money.new(prev.send(balance_type), currency),
+              favorable_direction: favorable_direction
+            )
+          )
+        end
+
+        Series.new(
+          start_date: period.start_date,
+          end_date: period.end_date,
+          interval: period.interval,
+          trend: Trend.new(
+            current: Money.new(balances.last&.send(balance_type) || 0, currency),
+            previous: Money.new(balances.first&.send(balance_type) || 0, currency),
+            favorable_direction: favorable_direction
+          ),
+          values: values
+        )
+      end
+
       def balance_series_query
         <<~SQL
           WITH dates as (
@@ -52,6 +87,8 @@ module Account::Chartable
           SELECT
             d.date,
             SUM(CASE WHEN accounts.classification = 'asset' THEN ab.balance ELSE -ab.balance END * COALESCE(er.rate, 1)) as balance,
+            SUM(CASE WHEN accounts.classification = 'asset' THEN ab.cash_balance ELSE -ab.cash_balance END * COALESCE(er.rate, 1)) as cash_balance,
+            SUM(CASE WHEN accounts.classification = 'asset' THEN ab.balance - ab.cash_balance ELSE 0 END * COALESCE(er.rate, 1)) as holdings_balance,
             COUNT(CASE WHEN accounts.currency <> :target_currency AND er.rate IS NULL THEN 1 END) as missing_rates
           FROM dates d
           LEFT JOIN accounts ON accounts.id IN (#{all.select(:id).to_sql})
@@ -70,23 +107,21 @@ module Account::Chartable
         SQL
       end
 
-      def invert_balances(balances)
+      def invert_balances(balances, balance_type)
         balances.map do |balance|
-          balance.balance = -balance.balance
+          balance.send("#{balance_type}=", -balance.send(balance_type))
           balance
         end
       end
 
-      def gapfill_balances(balances)
+      def gapfill_balances(balances, balance_type)
         gapfilled = []
 
-        prev_balance = nil
-
         [ nil, *balances ].each_cons(2).each_with_index do |(prev, curr), index|
-          if index == 0 && curr.balance.nil?
-            curr.balance = 0 # Ensure all series start with a non-nil balance
-          elsif curr.balance.nil?
-            curr.balance = prev.balance
+          if index == 0 && curr.send(balance_type).nil?
+            curr.send("#{balance_type}=", 0) # Ensure all series start with a non-nil balance
+          elsif curr.send(balance_type).nil?
+            curr.send("#{balance_type}=", prev.send(balance_type))
           end
 
           gapfilled << curr
