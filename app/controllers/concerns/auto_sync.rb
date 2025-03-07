@@ -13,6 +13,7 @@ module AutoSync
 
     def family_needs_auto_sync?
       return false unless Current.family.present?
+      return false unless Current.family.accounts.active.any?
 
       (Current.family.last_synced_at&.to_date || 1.day.ago) < Date.current
     end
