@@ -17,7 +17,7 @@ class Account::Balance::ForwardCalculatorTest < ActiveSupport::TestCase
   test "no entries sync" do
     assert_equal 0, @account.balances.count
 
-    expected = [ 0 ]
+    expected = [ 0, 0 ]
     calculated = Account::Balance::ForwardCalculator.new(@account).calculate
 
     assert_equal expected, calculated.map(&:balance)
