@@ -40,6 +40,10 @@ class Account::Holding::PortfolioCache
     converted_price
   end
 
+  def get_securities
+    @security_cache.map { |_, v| v[:security] }
+  end
+
   private
     def trades
       @trades ||= account.entries.includes(entryable: :security).account_trades.chronological.to_a
@@ -59,7 +63,9 @@ class Account::Holding::PortfolioCache
     def load_prices
       @security_cache = {}
 
-      # Get securities from trades and current holdings
+      # Get securities from trades and current holdings.  We need them from holdings
+      # because for linked accounts, our provider gives us holding data that may not
+      # exist solely in the trades history.
       securities = trades.map(&:entryable).map(&:security).uniq
       securities += account.holdings.where(date: Date.current).map(&:security)
       securities.uniq!

@@ -32,7 +32,7 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
 
   test "purges stale balances and holdings" do
     # Balance before start date is stale
-    @account.expects(:start_date).returns(2.days.ago.to_date)
+    @account.expects(:start_date).returns(2.days.ago.to_date).twice
     stale_balance = Account::Balance.new(date: 3.days.ago.to_date, balance: 10000, cash_balance: 10000, currency: "USD")
 
     Account::Balance::ForwardCalculator.any_instance.expects(:calculate).returns(
