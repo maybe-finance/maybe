@@ -12,8 +12,6 @@ class Account::Balance::BaseCalculator
   end
 
   private
-    CashBalance = Data.define(:date, :balance)
-
     def sync_cache
       @sync_cache ||= Account::Balance::SyncCache.new(account)
     end
