@@ -7,6 +7,7 @@
     <%= render "accounts/show/chart",
                account: @account,
                title: t(".chart_title"),
+               chart_view: @chart_view,
                tooltip: render(
                  "investments/value_tooltip",
                  balance: @account.balance_money,

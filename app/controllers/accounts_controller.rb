@@ -18,6 +18,7 @@ class AccountsController < ApplicationController
   end
 
   def chart
+    @chart_view = params[:chart_view] || "balance"
     render layout: "application"
   end
 

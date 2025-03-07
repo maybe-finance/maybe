@@ -1,4 +1,4 @@
-<% series = @account.balance_series(period: @period) %>
+<% series = @account.balance_series(period: @period, view: @chart_view) %>
 <% trend = series.trend %>
 
 <%= turbo_frame_tag dom_id(@account, :chart_details) do %>
