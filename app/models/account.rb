@@ -73,11 +73,8 @@ class Account < ApplicationRecord
 
   def sync_data(start_date: nil)
     update!(last_synced_at: Time.current)
-
     family.auto_match_transfers!
-
-    BalanceSyncer.new(self, strategy: linked? ? :reverse : :forward).sync_balances
-
+    sync_balances
     enrich_data if enrichable?
   end
 
@@ -126,4 +123,10 @@ class Account < ApplicationRecord
     first_entry_date = entries.minimum(:date) || Date.current
     first_entry_date - 1.day
   end
+
+  private
+    def sync_balances
+      strategy = linked? ? :reverse : :forward
+      Balance::Syncer.new(self, strategy: strategy).sync_balances
+    end
 end
