@@ -33,7 +33,7 @@ class Security::PriceTest < ActiveSupport::TestCase
     tomorrow = Date.current + 1.day
 
     @provider.expects(:fetch_security_prices)
-            .with(ticker: security.ticker, mic_code: security.exchange_mic, start_date: tomorrow, end_date: tomorrow)
+            .with(ticker: security.ticker, mic_code: security.exchange_operating_mic, start_date: tomorrow, end_date: tomorrow)
             .once
             .returns(
               OpenStruct.new(
@@ -54,7 +54,7 @@ class Security::PriceTest < ActiveSupport::TestCase
     Security::Price.delete_all # Clear any existing prices
 
     @provider.expects(:fetch_security_prices)
-             .with(ticker: security.ticker, mic_code: security.exchange_mic, start_date: Date.current, end_date: Date.current)
+             .with(ticker: security.ticker, mic_code: security.exchange_operating_mic, start_date: Date.current, end_date: Date.current)
              .once
              .returns(OpenStruct.new(success?: false))
 
@@ -91,7 +91,7 @@ class Security::PriceTest < ActiveSupport::TestCase
 
     @provider.expects(:fetch_security_prices)
              .with(ticker: security.ticker,
-                  mic_code: security.exchange_mic,
+                  mic_code: security.exchange_operating_mic,
                   start_date: 2.days.ago.to_date,
                   end_date: 2.days.ago.to_date)
              .returns(OpenStruct.new(success?: true, prices: [ { date: 2.days.ago.to_date, price: missing_price, currency: "USD" } ]))

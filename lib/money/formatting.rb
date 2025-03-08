@@ -13,7 +13,7 @@ module Money::Formatting
     local_option_overrides = locale_options(locale)
 
     {
-      unit: currency.symbol,
+      unit: get_symbol,
       precision: currency.default_precision,
       delimiter: currency.delimiter,
       separator: currency.separator,
@@ -22,6 +22,14 @@ module Money::Formatting
   end
 
   private
+    def get_symbol
+      if currency.symbol == "$" && currency.iso_code != "USD"
+        [ currency.iso_code.first(2), currency.symbol ].join
+      else
+        currency.symbol
+      end
+    end
+
     def locale_options(locale)
       case [ currency.iso_code, locale.to_sym ]
       when [ "EUR", :nl ], [ "EUR", :pt ]
