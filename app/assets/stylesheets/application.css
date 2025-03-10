@@ -31,3 +31,26 @@
   max-width: 100%;
   height: auto;
 }
+
+/* Thinking indicator styles */
+#thinking {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+  z-index: 10; /* Ensure it's above other elements */
+  position: relative; /* Needed for z-index to work */
+}
+
+#thinking.hidden {
+  display: none !important;
+  opacity: 0;
+}
+
+#thinking .animate-bounce {
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
+/* Ensure the thinking indicator is always visible */
+#thinking.flex {
+  display: flex !important;
+}

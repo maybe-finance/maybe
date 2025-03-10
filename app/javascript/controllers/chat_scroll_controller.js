@@ -4,8 +4,10 @@ export default class extends Controller {
   static targets = ["container", "messages"]
 
   connect() {
+    console.log("ChatScrollController connected")
     this.scrollToBottom()
     this.setupMessageObserver()
+    this.setupThinkingObserver()
 
     // Add event listener for manual scrolling (to detect if user has scrolled up)
     if (this.hasContainerTarget) {
@@ -20,10 +22,12 @@ export default class extends Controller {
   }
 
   disconnect() {
-    if (this.observer) {
-      this.observer.disconnect()
+    if (this.messageObserver) {
+      this.messageObserver.disconnect()
     }
-
+    if (this.thinkingObserver) {
+      this.thinkingObserver.disconnect()
+    }
     if (this.resizeObserver) {
       this.resizeObserver.disconnect()
     }
@@ -34,62 +38,84 @@ export default class extends Controller {
   }
 
   scrollToBottom() {
+    console.log("Scrolling to bottom")
     if (this.hasContainerTarget) {
-      const container = this.containerTarget
-      container.scrollTop = container.scrollHeight
+      this.containerTarget.scrollTop = this.containerTarget.scrollHeight
     }
   }
 
   handleScroll() {
     if (this.hasContainerTarget) {
       const container = this.containerTarget
-      const scrollPosition = container.scrollTop + container.clientHeight
-      const scrollThreshold = container.scrollHeight - 50
+      const isScrolledToBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 50
 
-      // If user has scrolled up significantly, we'll track that
-      if (scrollPosition < scrollThreshold) {
-        this.userHasScrolled = true
-      } else {
-        this.userHasScrolled = false
-      }
+      // Update userHasScrolled state based on scroll position
+      this.userHasScrolled = !isScrolledToBottom
+
+      console.log("User has scrolled:", this.userHasScrolled)
     }
   }
 
   setupResizeObserver() {
     if (this.hasContainerTarget) {
       this.resizeObserver = new ResizeObserver(() => {
-        // Only auto-scroll to bottom if the user hasn't manually scrolled up
         if (!this.userHasScrolled) {
           this.scrollToBottom()
         }
       })
-
       this.resizeObserver.observe(this.containerTarget)
     }
   }
 
   setupMessageObserver() {
-    // Create a mutation observer to watch for new messages
-    this.observer = new MutationObserver((mutations) => {
-      let shouldScroll = false
+    if (this.hasMessagesTarget) {
+      console.log("Setting up message observer")
+      // Create a mutation observer to watch for new messages
+      this.messageObserver = new MutationObserver((mutations) => {
+        let shouldScroll = false
+        mutations.forEach((mutation) => {
+          if (mutation.addedNodes.length) {
+            shouldScroll = true
+          }
+        })
 
-      mutations.forEach((mutation) => {
-        if (mutation.addedNodes.length) {
-          shouldScroll = true
+        if (shouldScroll && !this.userHasScrolled) {
+          // Use setTimeout to ensure DOM is fully updated before scrolling
+          setTimeout(() => this.scrollToBottom(), 0)
         }
       })
 
-      if (shouldScroll && !this.userHasScrolled) {
-        // Use setTimeout to ensure DOM is fully updated before scrolling
-        setTimeout(() => this.scrollToBottom(), 50)
-      }
-    })
+      // Start observing
+      this.messageObserver.observe(this.messagesTarget, {
+        childList: true,
+        subtree: true
+      })
+    }
+  }
 
-    // Start observing the messages container and its children
-    const targetNode = this.hasMessagesTarget ? this.messagesTarget : this.containerTarget
-    this.observer.observe(targetNode, {
-      childList: true,
-      subtree: true
-    })
+  setupThinkingObserver() {
+    // Watch for changes to the thinking indicator
+    const thinkingElement = document.getElementById('thinking')
+    if (thinkingElement) {
+      console.log("Setting up thinking observer")
+      this.thinkingObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            const isHidden = thinkingElement.classList.contains('hidden')
+            console.log("Thinking visibility changed:", isHidden ? "hidden" : "visible")
+
+            if (!isHidden && !this.userHasScrolled) {
+              // Scroll to bottom when thinking indicator becomes visible
+              setTimeout(() => this.scrollToBottom(), 0)
+            }
+          }
+        })
+      })
+
+      // Start observing
+      this.thinkingObserver.observe(thinkingElement, {
+        attributes: true
+      })
+    }
   }
 } 

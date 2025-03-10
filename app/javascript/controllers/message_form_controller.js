@@ -14,10 +14,8 @@ export default class extends Controller {
     this.element.reset()
     this.element.querySelector("textarea").style.height = "auto"
 
-    // Hide the thinking indicator if it's visible
-    if (this.thinkingElement) {
-      this.thinkingElement.classList.add("hidden")
-    }
+    // We don't hide the thinking indicator here anymore
+    // It will be hidden by the ProcessAiResponseJob when the AI response is ready
   }
 
   checkSubmit(event) {
@@ -41,13 +39,18 @@ export default class extends Controller {
       console.log("Showing thinking indicator")
       this.thinkingElement.classList.remove("hidden")
 
-      // Scroll to the bottom of the chat
-      const chatMessages = document.getElementById("chat-messages")
+      // Force a redraw to ensure the indicator is visible
+      void this.thinkingElement.offsetHeight;
+
+      // Scroll to the bottom of the chat to show the thinking indicator
+      const chatMessages = document.querySelector("[data-chat-scroll-target='messages']")
       if (chatMessages) {
         setTimeout(() => {
           chatMessages.scrollTop = chatMessages.scrollHeight
         }, 100)
       }
+    } else {
+      console.warn("Thinking element not found")
     }
 
     console.log("Submit target:", this.submitTarget)

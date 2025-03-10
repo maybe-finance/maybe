@@ -3,8 +3,8 @@
 <% end %>
 
 <% if @message.user? %>
-  <%= turbo_stream.update "thinking" do %>
-    <div id="thinking" class="flex items-start gap-3">
+  <%= turbo_stream.replace "thinking" do %>
+    <div id="thinking" class="flex items-start gap-3 mb-4">
       <%= render "layouts/shared/ai_avatar" %>
       <div class="bg-gray-100 rounded-lg p-4 max-w-[85%] flex items-center">
         <div class="flex gap-1">
@@ -15,5 +15,9 @@
         <span class="ml-2 text-gray-600">Thinking...</span>
       </div>
     </div>
+  <% end %>
+  
+  <%= turbo_stream.replace "message_form" do %>
+    <%= render "messages/form", chat: @chat, message: Message.new, scroll_behavior: true, form_options: { data: { controller: "message-form", action: "turbo:submit-end->chat-scroll#scrollToBottom" } } %>
   <% end %>
 <% end %> 

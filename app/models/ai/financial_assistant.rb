@@ -45,7 +45,8 @@ module Ai
           model: "gpt-4o",
           messages: messages,
           tools: financial_function_definitions.map { |func| { type: "function", function: func } },
-          tool_choice: "auto"
+          tool_choice: "auto",
+          temperature: 0.5
         }
       )
 
@@ -185,6 +186,7 @@ module Ai
           })
         end
 
+        # If there are no function calls, ensure the direct response is concise
         return message["content"] unless message["tool_calls"]
 
         # Handle function calls
@@ -232,6 +234,12 @@ module Ai
           }
         end
 
+        # Add a reminder to be concise
+        follow_up_messages << {
+          role: "system",
+          content: "CRITICAL: Eliminate all unnecessary words."
+        }
+
         # Log the follow-up request in debug mode
         if Ai::DebugMode.enabled? && @chat
           Ai::DebugMode.log_to_chat(@chat, "🐞 DEBUG: Follow-up request", { messages: follow_up_messages })
@@ -239,8 +247,9 @@ module Ai
 
         follow_up_response = client.chat(
           parameters: {
-            model: "gpt-4-turbo",
-            messages: follow_up_messages
+            model: "gpt-4o",
+            messages: follow_up_messages,
+            temperature: 0.5
           }
         )
 
@@ -545,36 +554,47 @@ module Ai
           You are a helpful financial assistant for Maybe, a personal finance app.
           You help users understand their financial data by answering questions about their accounts, transactions, income, expenses, and net worth.
 
-          When users ask financial questions, use the provided functions to retrieve the relevant data.
-          Always provide thoughtful analysis of the data, not just raw numbers.
+          When users ask financial questions:
+          1. Use the provided functions to retrieve the relevant data
+          2. Provide ONLY the most important numbers and insights
+          3. Eliminate all unnecessary words and context
+          4. Use simple markdown for formatting
+          5. Ask follow-up questions to keep the conversation going. Help educate the user about their own data and entice them to ask more questions.
 
-          The user's financial data is available through various function calls, and you should use these functions
-          to provide accurate, data-driven responses.
+          DO NOT:
+          - Add introductions or conclusions
+          - Apologize or explain limitations
 
-          Present monetary values consistently using the format provided by the functions.
-          Whenever possible, provide insights and trends rather than just raw data.
-
-          Format your responses using Markdown for better readability. Use:
-          - **Bold** and *italic* for emphasis
-          - Lists (- 1. *) for organized information
-          - `code` for technical terms or values
-          - Tables for structured data when appropriate
-
-          Don't add markdown headings to your responses.
-
-          Be conversational and friendly in your responses. This is a chat interface, so maintain context across messages.
-          Respond directly to the user's questions and provide helpful suggestions when appropriate.
-
-          Encourage the user to ask specific questions about their finances, such as:
-          - "What's my net worth?"
-          - "How much did I spend on groceries last month?"
-          - "How has my spending changed compared to last month?"
-          - "What's my savings rate this year?"
-          - "Which category did I spend the most on?"
-          - "How are my investments performing?"
-
-          Remember that financial information is sensitive, so maintain a professional, private, and secure approach.
+          Present monetary values using the format provided by the functions.
         PROMPT
+      end
+
+      # Ensure the response is concise by truncating if necessary
+      def ensure_concise_response(content)
+        return "" if content.nil? || content.empty?
+
+        # Split the content into sentences
+        sentences = content.split(/(?<=[.!?])\s+/)
+
+        # Handle case where regex doesn't match (e.g., single sentence without ending punctuation)
+        sentences = [ content ] if sentences.empty?
+
+        # Take only the first 3 sentences maximum
+        sentences = sentences[0..2]
+
+        # Join the sentences back together
+        truncated = sentences.join(" ")
+
+        # Further limit by word count (75 words maximum)
+        words = truncated.split(/\s+/)
+        if words.length > 75
+          truncated = words[0...75].join(" ")
+          # Ensure the truncated content ends with proper punctuation
+          truncated = truncated.strip
+          truncated += "." unless truncated.end_with?(".", "!", "?")
+        end
+
+        truncated
       end
   end
 end

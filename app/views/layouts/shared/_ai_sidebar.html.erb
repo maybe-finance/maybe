@@ -103,7 +103,7 @@
     <div data-chat-menu-target="defaultContent" data-chat-scroll-target="messages" class="flex flex-col h-full">
       <% if Current.user && @chat.present? %>
         <%# Existing Chat: Show messages or greeting if empty %>
-        <div id="messages" data-turbo-cache="false" class="flex-grow">
+        <div id="messages" data-turbo-cache="false" class="flex-grow" data-controller="chat-progress">
           <% messages = @messages&.where(internal: [false, nil]) %>
           <% if messages.any? %>
             <% messages.each do |message| %>
@@ -113,25 +113,38 @@
             <%= render "layouts/shared/ai_greeting", context: 'chat' %>
           <% end %>
         </div>
+        
+        <%# Thinking indicator - moved outside of messages div to prevent it from being replaced %>
+        <div id="thinking" class="hidden flex items-start gap-3 mb-4 w-full" data-chat-progress-target="thinking">
+          <%= render "layouts/shared/ai_avatar" %>
+          <div class="bg-gray-100 rounded-lg p-4 max-w-[85%] flex items-center text-gray-800">
+            <div class="flex gap-1">
+              <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+              <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+              <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+            </div>
+            <span class="ml-2 text-gray-600">Thinking...</span>
+          </div>
+        </div>
       <% else %>
         <%# New Chat: Show greeting in the top section %>
-        <div class="flex-grow">
+        <div class="flex-grow" data-controller="chat-progress">
           <%= render "layouts/shared/ai_greeting", context: 'default' %>
         </div>
-      <% end %>
-      
-      <%# Thinking indicator %>
-      <div id="thinking" class="hidden flex items-start gap-1 w-full">
-        <%= render "layouts/shared/ai_avatar" %>
-        <div class="p-4 max-w-[85%] flex items-center text-gray-800">
-          <div class="flex gap-1">
-            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
-            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+        
+        <%# Thinking indicator - moved outside of messages div to prevent it from being replaced %>
+        <div id="thinking" class="hidden flex items-start gap-3 mb-4 w-full" data-chat-progress-target="thinking">
+          <%= render "layouts/shared/ai_avatar" %>
+          <div class="bg-gray-100 rounded-lg p-4 max-w-[85%] flex items-center text-gray-800">
+            <div class="flex gap-1">
+              <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+              <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+              <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+            </div>
+            <span class="ml-2 text-gray-600">Thinking...</span>
           </div>
-          <span class="ml-2 text-gray-600">Thinking...</span>
         </div>
-      </div>
+      <% end %>
     </div>
   </div>
   

@@ -14,39 +14,101 @@ class ProcessAiResponseJob < ApplicationJob
       chat.update(title: new_title)
     end
 
-    # Create "thinking" indicator
-    Turbo::StreamsChannel.broadcast_replace_to(
-      chat,
-      target: "thinking",
-      html: '<div id="thinking" class="py-2 px-4"><div class="flex items-center"><div class="typing-indicator"></div></div></div>'
-    )
+    # Show initial thinking indicator - use replace instead of update to ensure it works for follow-up messages
+    update_thinking_indicator(chat, "Thinking...")
 
-    # Create AI response
-    ai_response = chat.messages.create!(
-      role: "assistant",
-      content: generate_response(chat, user_message.content)
-    )
+    # Processing steps with progress updates
+    begin
+      # Step 1: Preparing request
+      update_thinking_indicator(chat, "Preparing request...")
+      sleep(0.5) # Small delay to show the progress
 
-    # Broadcast the response to the chat channel
-    Turbo::StreamsChannel.broadcast_append_to(
-      chat,
-      target: "messages",
-      partial: "messages/message",
-      locals: { message: ai_response }
-    )
+      # Step 2: Analyzing query
+      update_thinking_indicator(chat, "Analyzing your question...")
+      sleep(0.5) # Small delay to show the progress
 
-    # Hide the thinking indicator
-    Turbo::StreamsChannel.broadcast_replace_to(
-      chat,
-      target: "thinking",
-      html: '<div id="thinking" class="hidden"></div>'
-    )
+      # Step 3: Generating response
+      update_thinking_indicator(chat, "Generating response...")
+
+      # Generate the actual response
+      response_content = generate_response(chat, user_message.content)
+
+      # Step 4: Finalizing
+      update_thinking_indicator(chat, "Finalizing response...")
+      sleep(0.5) # Small delay to show the progress
+
+      # Create AI response
+      ai_response = chat.messages.create!(
+        role: "assistant",
+        content: response_content
+      )
+
+      # Broadcast the response to the chat channel
+      Turbo::StreamsChannel.broadcast_append_to(
+        chat,
+        target: "messages",
+        partial: "messages/message",
+        locals: { message: ai_response }
+      )
+    rescue => e
+      Rails.logger.error("Error in ProcessAiResponseJob: #{e.message}")
+      Rails.logger.error(e.backtrace.join("\n"))
+
+      # Create an error message if something went wrong
+      error_message = chat.messages.create!(
+        role: "assistant",
+        content: "I'm sorry, I encountered an error while processing your request. Please try again later."
+      )
+
+      # Broadcast the error message
+      Turbo::StreamsChannel.broadcast_append_to(
+        chat,
+        target: "messages",
+        partial: "messages/message",
+        locals: { message: error_message }
+      )
+    ensure
+      # Hide the thinking indicator - use replace instead of update
+      Turbo::StreamsChannel.broadcast_replace_to(
+        chat,
+        target: "thinking",
+        html: '<div id="thinking" class="hidden"></div>'
+      )
+
+      # Reset the form
+      Turbo::StreamsChannel.broadcast_replace_to(
+        chat,
+        target: "message_form",
+        partial: "messages/form",
+        locals: { chat: chat, message: Message.new, scroll_behavior: true }
+      )
+    end
 
     # Debug mode: Log completion
     Ai::DebugMode.log_to_chat(chat, "🐞 DEBUG: Processing completed")
   end
 
   private
+    # Helper method to update the thinking indicator with progress
+    def update_thinking_indicator(chat, message)
+      Turbo::StreamsChannel.broadcast_replace_to(
+        chat,
+        target: "thinking",
+        html: <<~HTML
+          <div id="thinking" class="flex items-start gap-3">
+            #{ApplicationController.render(partial: "layouts/shared/ai_avatar")}
+            <div class="bg-gray-100 rounded-lg p-4 max-w-[85%] flex items-center">
+              <div class="flex gap-1">
+                <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+              </div>
+              <span class="ml-2 text-gray-600">#{message}</span>
+            </div>
+          </div>
+        HTML
+      )
+    end
 
     def generate_response(chat, user_message)
       # Use our financial assistant for responses
