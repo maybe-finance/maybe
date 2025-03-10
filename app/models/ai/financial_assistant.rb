@@ -7,25 +7,49 @@ module Ai
       @client = client || OpenAI::Client.new(access_token: ENV["OPENAI_ACCESS_TOKEN"])
     end
 
-    def query(question)
+    def query(question, chat_history = nil)
       # Log the system prompt in debug mode
       if Ai::DebugMode.enabled? && @chat
         Ai::DebugMode.log_to_chat(@chat, "🐞 DEBUG: System prompt", { prompt: system_prompt })
       end
 
+      # Build messages array with chat history if provided
+      messages = [ { role: "system", content: system_prompt } ]
+
+      if chat_history.present?
+        # Add previous messages from chat history, excluding system messages
+        messages.concat(
+          chat_history
+            .where.not(role: "system")
+            .where(internal: [ false, nil ])
+            .order(created_at: :asc)
+            .map { |msg| { role: msg.role, content: msg.content } }
+        )
+
+        # If the last message is not the current question, add it
+        if messages.last[:content] != question
+          messages << { role: "user", content: question }
+        end
+      else
+        # Just add the current question if no history
+        messages << { role: "user", content: question }
+      end
+
+      # Log the messages being sent in debug mode
+      if Ai::DebugMode.enabled? && @chat
+        Ai::DebugMode.log_to_chat(@chat, "🐞 DEBUG: Messages being sent to AI", { messages: messages })
+      end
+
       response = client.chat(
         parameters: {
           model: "gpt-4o",
-          messages: [
-            { role: "system", content: system_prompt },
-            { role: "user", content: question }
-          ],
+          messages: messages,
           tools: financial_function_definitions.map { |func| { type: "function", function: func } },
           tool_choice: "auto"
         }
       )
 
-      process_response(response, question)
+      process_response(response, question, messages)
     end
 
     # Set the chat for debug logging
@@ -150,7 +174,7 @@ module Ai
 
     private
 
-      def process_response(response, original_question)
+      def process_response(response, original_question, messages)
         message = response.dig("choices", 0, "message")
 
         # Log the raw response in debug mode
@@ -193,19 +217,20 @@ module Ai
         end
 
         # Continue the conversation with function results
-        follow_up_messages = [
-          { role: "system", content: system_prompt },
-          { role: "user", content: original_question },
-          message,
-          *function_results.map.with_index do |result, index|
-            {
-              role: "tool",
-              tool_call_id: function_calls[index]["id"],
-              name: function_calls[index]["function"]["name"],
-              content: result.to_json
-            }
-          end
-        ]
+        follow_up_messages = messages.dup
+
+        # Add the assistant's response with function calls
+        follow_up_messages << message
+
+        # Add the function results
+        function_results.each_with_index do |result, index|
+          follow_up_messages << {
+            role: "tool",
+            tool_call_id: function_calls[index]["id"],
+            name: function_calls[index]["function"]["name"],
+            content: result.to_json
+          }
+        end
 
         # Log the follow-up request in debug mode
         if Ai::DebugMode.enabled? && @chat
@@ -534,7 +559,6 @@ module Ai
           - Lists (- 1. *) for organized information
           - `code` for technical terms or values
           - Tables for structured data when appropriate
-          - > Blockquotes for notable insights
 
           Don't add markdown headings to your responses.
 

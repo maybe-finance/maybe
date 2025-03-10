@@ -68,8 +68,8 @@ class ProcessAiResponseJob < ApplicationJob
           }
         )
 
-        # Process the query and get a response
-        response = financial_assistant.query(user_message)
+        # Process the query and get a response, passing the chat messages for context
+        response = financial_assistant.query(user_message, chat.messages)
 
         response
       rescue => e
