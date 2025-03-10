@@ -1,5 +1,5 @@
 class Account::Holding < ApplicationRecord
-  include Monetizable
+  include Monetizable, Gapfillable
 
   monetize :amount
 

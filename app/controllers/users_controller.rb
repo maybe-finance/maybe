@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user
+  before_action :ensure_admin, only: :reset
 
   def update
     @user = Current.user
@@ -24,6 +25,11 @@ class UsersController < ApplicationController
         format.json { head :ok }
       end
     end
+  end
+
+  def reset
+    FamilyResetJob.perform_later(Current.family)
+    redirect_to settings_profile_path, notice: t(".success")
   end
 
   def destroy
@@ -60,12 +66,16 @@ class UsersController < ApplicationController
 
     def user_params
       params.require(:user).permit(
-        :first_name, :last_name, :email, :profile_image, :redirect_to, :delete_profile_image, :onboarded_at, :show_sidebar, :show_ai_sidebar,
+        :first_name, :last_name, :email, :profile_image, :redirect_to, :delete_profile_image, :onboarded_at, :show_sidebar, :default_period, :show_ai_sidebar
         family_attributes: [ :name, :currency, :country, :locale, :date_format, :timezone, :id, :data_enrichment_enabled ]
       )
     end
 
     def set_user
       @user = Current.user
+    end
+
+    def ensure_admin
+      redirect_to settings_profile_path, alert: I18n.t("users.reset.unauthorized") unless Current.user.admin?
     end
 end

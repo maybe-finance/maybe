@@ -20,6 +20,12 @@ en:
         general: General Settings
         invites: Invite Codes
         title: Self-Hosting
+        danger_zone: Danger Zone
+        clear_cache: Clear data cache
+        clear_cache_warning: Clearing the data cache will remove all exchange rates, security prices, account balances, and other data. This will not delete accounts, transactions, categories, or other user-owned data.
+        confirm_clear_cache:
+          title: Clear data cache?
+          body: Are you sure you want to clear the data cache? This will remove all exchange rates, security prices, account balances, and other data. This action cannot be undone.
       synth_settings:
         api_calls_used: "%{used} / %{limit} API calls used (%{percentage})"
         description: Input the API key provided by Synth
@@ -30,6 +36,8 @@ en:
       update:
         failure: Invalid setting value
         success: Settings updated
+      clear_cache:
+        cache_cleared: Data cache has been cleared. This may take a few moments to complete.
       upgrade_settings:
         description: Configure how your application receives updates
         latest_commit_description: Automatically update to the latest commit (unstable)
@@ -40,3 +48,4 @@ en:
         manual_description: You control when to download and install updates
         manual_title: Manual
         title: Auto Upgrade
+      not_authorized: You are not authorized to perform this action

@@ -73,7 +73,7 @@
                       ".trade_history_entry",
                       qty: trade_entry.account_trade.qty,
                       security: trade_entry.account_trade.security.ticker,
-                      price: format_money(trade_entry.account_trade.price)
+                      price: trade_entry.account_trade.price_money.format
                     ) %></p>
                   </div>
                 </li>
@@ -87,26 +87,28 @@
       </div>
     </details>
 
-    <details class="group space-y-2" open>
-      <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2 text-xs font-medium uppercase text-secondary bg-gray-25 focus-visible:outline-hidden">
-        <h4><%= t(".settings") %></h4>
-        <%= lucide_icon "chevron-down", class: "group-open:transform group-open:rotate-180 text-secondary w-5" %>
-      </summary>
+    <% unless @holding.account.plaid_account_id.present? %>
+      <details class="group space-y-2" open>
+        <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2 text-xs font-medium uppercase text-secondary bg-gray-25 focus-visible:outline-hidden">
+          <h4><%= t(".settings") %></h4>
+          <%= lucide_icon "chevron-down", class: "group-open:transform group-open:rotate-180 text-secondary w-5" %>
+        </summary>
 
-      <div class="pb-4">
-        <div class="flex items-center justify-between gap-2 p-3">
-          <div class="text-sm space-y-1">
-            <h4 class="text-primary"><%= t(".delete_title") %></h4>
-            <p class="text-secondary"><%= t(".delete_subtitle") %></p>
-          </div>
+        <div class="pb-4">
+          <div class="flex items-center justify-between gap-2 p-3">
+            <div class="text-sm space-y-1">
+              <h4 class="text-primary"><%= t(".delete_title") %></h4>
+              <p class="text-secondary"><%= t(".delete_subtitle") %></p>
+            </div>
 
-          <%= button_to t(".delete"),
+            <%= button_to t(".delete"),
                 account_holding_path(@holding),
                 method: :delete,
                 class: "rounded-lg px-3 py-2 text-red-500 text-sm font-medium border border-secondary",
                 data: { turbo_confirm: true } %>
+          </div>
         </div>
-      </div>
-    </details>
+      </details>
+    <% end %>
   </div>
 <% end %>

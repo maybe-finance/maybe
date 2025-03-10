@@ -2,8 +2,8 @@ class Import::AccountTypeMapping < Import::Mapping
   validates :value, presence: true
 
   class << self
-    def mapping_values(import)
-      import.rows.map(&:entity_type).uniq
+    def mappables_by_key(import)
+      import.rows.map(&:entity_type).uniq.index_with { nil }
     end
   end
 

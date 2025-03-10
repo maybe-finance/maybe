@@ -25,6 +25,11 @@
             { label: t(".date_format") },
             { data: { auto_submit_form_target: "auto" } } %>
 
+        <%= form.select :default_period,
+            Period.all.map { |period| [ period.label, period.key ] },
+            { label: t(".default_period") },
+            { data: { auto_submit_form_target: "auto" } } %>
+
         <%= family_form.select :country,
             country_options,
             { label: t(".country") },

@@ -5,14 +5,16 @@ class Security::PriceTest < ActiveSupport::TestCase
   setup do
     @provider = mock
 
-    Security::Price.stubs(:security_prices_provider).returns(@provider)
+    Security::Price.stubs(:provider).returns(@provider)
   end
 
   test "security price provider nil if no api key provided" do
-    Security::Price.unstub(:security_prices_provider)
+    Security::Price.unstub(:provider)
+
+    Setting.stubs(:synth_api_key).returns(nil)
 
     with_env_overrides SYNTH_API_KEY: nil do
-      assert_not Security::Price.security_prices_provider
+      assert_not Security::Price.provider
     end
   end
 
@@ -31,7 +33,7 @@ class Security::PriceTest < ActiveSupport::TestCase
     tomorrow = Date.current + 1.day
 
     @provider.expects(:fetch_security_prices)
-            .with(ticker: security.ticker, mic_code: security.exchange_mic, start_date: tomorrow, end_date: tomorrow)
+            .with(ticker: security.ticker, mic_code: security.exchange_operating_mic, start_date: tomorrow, end_date: tomorrow)
             .once
             .returns(
               OpenStruct.new(
@@ -52,7 +54,7 @@ class Security::PriceTest < ActiveSupport::TestCase
     Security::Price.delete_all # Clear any existing prices
 
     @provider.expects(:fetch_security_prices)
-             .with(ticker: security.ticker, mic_code: security.exchange_mic, start_date: Date.current, end_date: Date.current)
+             .with(ticker: security.ticker, mic_code: security.exchange_operating_mic, start_date: Date.current, end_date: Date.current)
              .once
              .returns(OpenStruct.new(success?: false))
 
@@ -60,7 +62,10 @@ class Security::PriceTest < ActiveSupport::TestCase
   end
 
   test "returns nil if price not found in DB and provider disabled" do
-    Security::Price.unstub(:security_prices_provider)
+    Security::Price.unstub(:provider)
+
+    Setting.stubs(:synth_api_key).returns(nil)
+
     security = Security.new(ticker: "NVDA")
 
     with_env_overrides SYNTH_API_KEY: nil do
@@ -86,7 +91,7 @@ class Security::PriceTest < ActiveSupport::TestCase
 
     @provider.expects(:fetch_security_prices)
              .with(ticker: security.ticker,
-                  mic_code: security.exchange_mic,
+                  mic_code: security.exchange_operating_mic,
                   start_date: 2.days.ago.to_date,
                   end_date: 2.days.ago.to_date)
              .returns(OpenStruct.new(success?: true, prices: [ { date: 2.days.ago.to_date, price: missing_price, currency: "USD" } ]))
@@ -105,7 +110,9 @@ class Security::PriceTest < ActiveSupport::TestCase
   end
 
   test "returns empty array if no prices found in DB or from provider" do
-    Security::Price.unstub(:security_prices_provider)
+    Security::Price.unstub(:provider)
+
+    Setting.stubs(:synth_api_key).returns(nil)
 
     with_env_overrides SYNTH_API_KEY: nil do
       assert_equal [], Security::Price.find_prices(security: Security.new(ticker: "NVDA"), start_date: 10.days.ago.to_date, end_date: Date.current)

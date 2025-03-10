@@ -1,7 +1,11 @@
 <div class="space-y-4">
   <div>
     <h2 class="font-medium mb-1"><%= t(".title") %></h2>
-    <p class="text-secondary text-sm mb-4"><%= t(".description") %></p>
+    <% if ENV["SYNTH_API_KEY"].present? %>
+      <p class="text-sm text-secondary">You have successfully configured your Synth API key through the SYNTH_API_KEY environment variable.</p>
+    <% else %>
+      <p class="text-secondary text-sm mb-4"><%= t(".description") %></p>
+    <% end %>
   </div>
 
   <%= styled_form_with model: Setting.new,
@@ -15,7 +19,8 @@
                         label: t(".label"),
                         type: "password",
                         placeholder: t(".placeholder"),
-                        value: Setting.synth_api_key,
+                        value: ENV.fetch("SYNTH_API_KEY", Setting.synth_api_key),
+                        disabled: ENV["SYNTH_API_KEY"].present?,
                         container_class: @synth_usage.present? && !@synth_usage.success? ? "border-red-500" : "",
                         data: { "auto-submit-form-target": "auto" } %>
   <% end %>

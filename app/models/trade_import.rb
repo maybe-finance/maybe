@@ -4,7 +4,11 @@ class TradeImport < Import
       mappings.each(&:create_mappable!)
 
       rows.each do |row|
-        account = mappings.accounts.mappable_for(row.account)
+        mapped_account = if account
+          account
+        else
+          mappings.accounts.mappable_for(row.account)
+        end
 
         # Try to find or create security with ticker only
         security = find_or_create_security(
@@ -12,15 +16,15 @@ class TradeImport < Import
           exchange_operating_mic: row.exchange_operating_mic
         )
 
-        entry = account.entries.build \
+        entry = mapped_account.entries.build \
           date: row.date_iso,
           amount: row.signed_amount,
           name: row.name,
-          currency: row.currency.presence || account.currency,
+          currency: row.currency.presence || mapped_account.currency,
           entryable: Account::Trade.new(
             security: security,
             qty: row.qty,
-            currency: row.currency.presence || account.currency,
+            currency: row.currency.presence || mapped_account.currency,
             price: row.price
           ),
           import: self
@@ -31,7 +35,9 @@ class TradeImport < Import
   end
 
   def mapping_steps
-    [ Import::AccountMapping ]
+    base = []
+    base << Import::AccountMapping if account.nil?
+    base
   end
 
   def required_column_keys
@@ -39,14 +45,19 @@ class TradeImport < Import
   end
 
   def column_keys
-    %i[date ticker exchange_operating_mic currency qty price account name]
+    base = %i[date ticker exchange_operating_mic currency qty price name]
+    base.unshift(:account) if account.nil?
+    base
   end
 
   def dry_run
-    {
-      transactions: rows.count,
+    mappings = { transactions: rows.count }
+
+    mappings.merge(
       accounts: Import::AccountMapping.for_import(self).creational.count
-    }
+    ) if account.nil?
+
+    mappings
   end
 
   def csv_template
@@ -57,7 +68,9 @@ class TradeImport < Import
       05/17/2024,TSLA,XNAS,USD,2,700.50,Retirement Account,Tesla Inc. Purchase
     CSV
 
-    CSV.parse(template, headers: true)
+    csv = CSV.parse(template, headers: true)
+    csv.delete("account") if account.present?
+    csv
   end
 
   private
@@ -75,10 +88,7 @@ class TradeImport < Import
       return internal_security if internal_security.present?
 
       # If security prices provider isn't properly configured or available, create with nil exchange_operating_mic
-      provider = Security.security_prices_provider
-      unless provider.present? && provider.respond_to?(:search_securities)
-        return Security.find_or_create_by!(ticker: ticker, exchange_operating_mic: nil)
-      end
+      return Security.find_or_create_by!(ticker: ticker, exchange_operating_mic: nil) unless Security.provider.present?
 
       # Cache provider responses so that when we're looping through rows and importing,
       # we only hit our provider for the unique combinations of ticker / exchange_operating_mic
@@ -86,18 +96,10 @@ class TradeImport < Import
       @provider_securities_cache ||= {}
 
       provider_security = @provider_securities_cache[cache_key] ||= begin
-        response = provider.search_securities(
+        Security.search_provider(
           query: ticker,
           exchange_operating_mic: exchange_operating_mic
-        )
-
-        if !response || !response.success? || !response.securities || response.securities.empty?
-          nil
-        else
-          response.securities.first
-        end
-      rescue => e
-        nil
+        ).first
       end
 
       return Security.find_or_create_by!(ticker: ticker, exchange_operating_mic: nil) if provider_security.nil?

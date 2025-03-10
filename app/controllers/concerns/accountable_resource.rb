@@ -2,7 +2,7 @@ module AccountableResource
   extend ActiveSupport::Concern
 
   included do
-    include ScrollFocusable
+    include ScrollFocusable, Periodable
 
     before_action :set_account, only: [ :show, :edit, :update, :destroy ]
     before_action :set_link_token, only: :new
@@ -23,6 +23,7 @@ module AccountableResource
   end
 
   def show
+    @chart_view = params[:chart_view] || "balance"
     @q = params.fetch(:q, {}).permit(:search)
     entries = @account.entries.search(@q).reverse_chronological
 

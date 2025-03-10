@@ -1,19 +1,18 @@
 module ExchangeRate::Provided
   extend ActiveSupport::Concern
 
-  include Providable
+  include Synthable
 
   class_methods do
-    def provider_healthy?
-      exchange_rates_provider.present? && exchange_rates_provider.healthy?
+    def provider
+      synth_client
     end
 
     private
-
       def fetch_rates_from_provider(from:, to:, start_date:, end_date: Date.current, cache: false)
-        return [] unless exchange_rates_provider.present?
+        return [] unless provider.present?
 
-        response = exchange_rates_provider.fetch_exchange_rates \
+        response = provider.fetch_exchange_rates \
           from: from,
           to: to,
           start_date: start_date,
@@ -38,9 +37,9 @@ module ExchangeRate::Provided
       end
 
       def fetch_rate_from_provider(from:, to:, date:, cache: false)
-        return nil unless exchange_rates_provider.present?
+        return nil unless provider.present?
 
-        response = exchange_rates_provider.fetch_exchange_rate \
+        response = provider.fetch_exchange_rate \
           from: from,
           to: to,
           date: date

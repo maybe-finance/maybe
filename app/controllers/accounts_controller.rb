@@ -1,5 +1,6 @@
 class AccountsController < ApplicationController
   before_action :set_account, only: %i[sync chart sparkline]
+  include Periodable
 
   def index
     @manual_accounts = family.accounts.manual.alphabetically
@@ -17,6 +18,7 @@ class AccountsController < ApplicationController
   end
 
   def chart
+    @chart_view = params[:chart_view] || "balance"
     render layout: "application"
   end
 

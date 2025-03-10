@@ -1,18 +1,21 @@
 module Security::Price::Provided
   extend ActiveSupport::Concern
 
-  include Providable
+  include Synthable
 
   class_methods do
-    private
+    def provider
+      synth_client
+    end
 
+    private
       def fetch_price_from_provider(security:, date:, cache: false)
-        return nil unless security_prices_provider.present?
+        return nil unless provider.present?
         return nil unless security.has_prices?
 
-        response = security_prices_provider.fetch_security_prices \
+        response = provider.fetch_security_prices \
           ticker: security.ticker,
-          mic_code: security.exchange_mic,
+          mic_code: security.exchange_operating_mic,
           start_date: date,
           end_date: date
 
@@ -31,13 +34,13 @@ module Security::Price::Provided
       end
 
       def fetch_prices_from_provider(security:, start_date:, end_date:, cache: false)
-        return [] unless security_prices_provider.present?
+        return [] unless provider.present?
         return [] unless security
         return [] unless security.has_prices?
 
-        response = security_prices_provider.fetch_security_prices \
+        response = provider.fetch_security_prices \
           ticker: security.ticker,
-          mic_code: security.exchange_mic,
+          mic_code: security.exchange_operating_mic,
           start_date: start_date,
           end_date: end_date
 

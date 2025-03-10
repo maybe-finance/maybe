@@ -1,8 +1,8 @@
 class PagesController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[early_access]
+  include Periodable
 
   def dashboard
-    @period = Period.from_key(params[:period], fallback: true)
     @balance_sheet = Current.family.balance_sheet
     @accounts = Current.family.accounts.active.with_attached_logo
 

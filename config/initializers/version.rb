@@ -5,12 +5,16 @@ module Maybe
     end
 
     def commit_sha
-      `git rev-parse HEAD`.chomp
+      if Rails.env.production?
+        ENV["BUILD_COMMIT_SHA"]
+      else
+        `git rev-parse HEAD`.chomp
+      end
     end
 
     private
       def semver
-        "0.4.1"
+        "0.4.3"
       end
   end
 end

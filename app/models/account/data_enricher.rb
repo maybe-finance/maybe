@@ -1,6 +1,4 @@
 class Account::DataEnricher
-  include Providable
-
   attr_reader :account
 
   def initialize(account)
@@ -37,7 +35,7 @@ class Account::DataEnricher
 
     candidates.each do |entry|
       begin
-        info = self.class.synth_provider.enrich_transaction(entry.name).info
+        info = entry.fetch_enrichment_info
 
         next unless info.present?
 

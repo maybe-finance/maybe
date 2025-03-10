@@ -1,11 +1,10 @@
 class Account < ApplicationRecord
-  include Syncable, Monetizable, Issuable, Chartable
+  include Syncable, Monetizable, Issuable, Chartable, Enrichable, Linkable
 
   validates :name, :balance, :currency, presence: true
 
   belongs_to :family
   belongs_to :import, optional: true
-  belongs_to :plaid_account, optional: true
 
   has_many :import_mappings, as: :mappable, dependent: :destroy, class_name: "Import::Mapping"
   has_many :entries, dependent: :destroy, class_name: "Account::Entry"
@@ -75,7 +74,16 @@ class Account < ApplicationRecord
   def sync_data(start_date: nil)
     update!(last_synced_at: Time.current)
 
-    Syncer.new(self, start_date: start_date).run
+    Rails.logger.info("Auto-matching transfers")
+    family.auto_match_transfers!
+
+    Rails.logger.info("Processing balances (#{linked? ? 'reverse' : 'forward'})")
+    sync_balances
+
+    if enrichable?
+      Rails.logger.info("Enriching transaction data")
+      enrich_data
+    end
   end
 
   def post_sync
@@ -91,10 +99,6 @@ class Account < ApplicationRecord
 
   def current_holdings
     holdings.where(currency: currency, date: holdings.maximum(:date)).order(amount: :desc)
-  end
-
-  def enrich_data
-    DataEnricher.new(self).run
   end
 
   def update_with_sync!(attributes)
@@ -123,11 +127,14 @@ class Account < ApplicationRecord
     end
   end
 
-  def sparkline_series
-    cache_key = family.build_cache_key("#{id}_sparkline")
-
-    Rails.cache.fetch(cache_key) do
-      balance_series
-    end
+  def start_date
+    first_entry_date = entries.minimum(:date) || Date.current
+    first_entry_date - 1.day
   end
+
+  private
+    def sync_balances
+      strategy = linked? ? :reverse : :forward
+      Balance::Syncer.new(self, strategy: strategy).sync_balances
+    end
 end

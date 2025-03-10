@@ -1,12 +1,12 @@
 <%= turbo_frame_tag "bulk_transaction_edit_drawer" do %>
   <dialog data-controller="modal"
-          data-action="click->modal#clickOutside"
+          data-action="mousedown->modal#clickOutside"
     class="bg-white shadow-border-xs rounded-2xl max-h-[calc(100vh-32px)] h-full max-w-[480px] w-full mt-4 mr-4 ml-auto">
     <%= styled_form_with url: bulk_update_account_transactions_path, scope: "bulk_update", class: "h-full", data: { turbo_frame: "_top" } do |form| %>
       <div class="flex h-full flex-col justify-between p-4 gap-4">
         <div>
           <div class="flex h-9 items-center justify-end">
-            <div data-action="click->modal#close" class="cursor-pointer">
+            <div data-action="mousedown->modal#close" class="cursor-pointer">
               <%= lucide_icon("x", class: "w-5 h-5 shrink-0") %>
             </div>
           </div>
@@ -49,12 +49,12 @@
         </div>
 
         <div class="flex justify-end items-center gap-2">
-          <%= link_to t(".cancel"), transactions_path, class: "text-sm font-medium text-primary px-3 py-2" %>
+          <%= link_to t(".cancel"), transactions_path, class: "btn btn--ghost" %>
 
           <%= tag.button t(".save"),
                          type: "button",
                          data: { "bulk-select-scope-param": "bulk_update", action: "bulk-select#submitBulkRequest" },
-                         class: "px-3 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg" %>
+                         class: "btn btn--primary" %>
         </div>
       </div>
     <% end %>
