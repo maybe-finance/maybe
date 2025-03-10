@@ -11,6 +11,7 @@
     "PATH": "/workspace/bin:${containerEnv:PATH}"
   },
   "postCreateCommand": "bundle install && npm install",
+  "postStartCommand": "bin/setup && bin/dev",
   "customizations": {
     "vscode": {
       "extensions": [
