@@ -78,12 +78,16 @@ class ProcessAiResponseJob < ApplicationJob
         Rails.logger.error(e.backtrace.join("\n"))
 
         # Debug mode: Log error details
+        # Limit the error message and backtrace to prevent payload size issues
+        truncated_message = e.message.to_s[0...1000]
+        truncated_backtrace = e.backtrace.first(5)
+
         Ai::DebugMode.log_to_chat(
           chat,
           "🐞 DEBUG: Error encountered",
           {
-            error: e.message,
-            backtrace: e.backtrace.first(5)
+            error: truncated_message,
+            backtrace: truncated_backtrace
           }
         )
 
