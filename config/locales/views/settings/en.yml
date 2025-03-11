@@ -4,7 +4,7 @@ en:
     billings:
       show:
         page_title: Billing
-        subscription_subtitle: Manage your subscription and billing details
+        subscription_subtitle: Update your subscription and billing details
         subscription_title: Manage subscription
     preferences:
       data_enrichment_settings:
