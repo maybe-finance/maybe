@@ -19,10 +19,16 @@ class Account::Balance::Syncer
       if strategy == :forward
         update_account_info
       end
+
+      sync_exchange_rates
     end
   end
 
   private
+    def sync_exchange_rates
+      Account::ExchangeRateSync.new(account).sync_rates
+    end
+
     def sync_holdings
       @holdings = Account::Holding::Syncer.new(account, strategy: strategy).sync_holdings
     end
