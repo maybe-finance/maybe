@@ -15,6 +15,10 @@
       environment variable in your self-hosted instance.
     <% end %>
   </p>
+
+  <p class="text-gray-600 mb-6 text-sm">
+    NOTE: During beta testing, we'll be monitoring usage and AI conversations to improve the assistant.
+  </p>
   
   <% if Current.user.ai_available? %>
     <%= form_with url: user_path(Current.user), method: :patch, class: "w-full" do |form| %>
