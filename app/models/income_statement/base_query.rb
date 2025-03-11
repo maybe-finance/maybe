@@ -8,6 +8,7 @@ module IncomeStatement::BaseQuery
           date_trunc(:interval, ae.date) as date,
           CASE WHEN ae.amount < 0 THEN 'income' ELSE 'expense' END as classification,
           SUM(ae.amount * COALESCE(er.rate, 1)) as total,
+          COUNT(ae.id) as transactions_count,
           BOOL_OR(ae.currency <> :target_currency AND er.rate IS NULL) as missing_exchange_rates
         FROM (#{transactions_scope.to_sql}) at
         JOIN account_entries ae ON ae.entryable_id = at.id AND ae.entryable_type = 'Account::Transaction'
