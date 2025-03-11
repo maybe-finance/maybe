@@ -3,6 +3,7 @@ require "test_helper"
 class ChatsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @user = users(:family_admin)
+    @family = families(:dylan_family)
     sign_in @user
   end
 
@@ -31,14 +32,14 @@ class ChatsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should show chat" do
-    chat = Chat.create!(user: @user, title: "Test Chat")
+    chat = Chat.create!(user: @user, title: "Test Chat", family: @family)
 
     get chat_url(chat)
     assert_response :success
   end
 
   test "should destroy chat" do
-    chat = Chat.create!(user: @user, title: "Test Chat")
+    chat = Chat.create!(user: @user, title: "Test Chat", family: @family)
 
     assert_difference("Chat.count", -1) do
       delete chat_url(chat)
@@ -49,7 +50,7 @@ class ChatsControllerTest < ActionDispatch::IntegrationTest
 
   test "should not allow access to other user's chats" do
     other_user = users(:family_member)
-    other_chat = Chat.create!(user: other_user, title: "Other User's Chat")
+    other_chat = Chat.create!(user: other_user, title: "Other User's Chat", family: @family)
 
     get chat_url(other_chat)
     assert_response :not_found
@@ -59,7 +60,7 @@ class ChatsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should clear chat" do
-    chat = Chat.create!(user: @user, title: "Test Chat")
+    chat = Chat.create!(user: @user, title: "Test Chat", family: @family)
     system_message = chat.messages.create!(role: "system", content: "System prompt", internal: true)
     user_message = chat.messages.create!(role: "user", content: "User message", user: @user)
 

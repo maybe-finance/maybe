@@ -55,7 +55,8 @@ class Ai::FinancialAssistantTest < ActiveSupport::TestCase
       ]
     }
 
-    result = @financial_assistant.send(:process_response, response, "Test question")
+    messages = []
+    result = @financial_assistant.send(:process_response, response, "Test question", messages)
     assert_equal "This is a direct response.", result
   end
 
