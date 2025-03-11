@@ -143,6 +143,7 @@
 │   │   │   ├── invitable.rb
 │   │   │   ├── localize.rb
 │   │   │   ├── onboardable.rb
+│   │   │   ├── periodable.rb
 │   │   │   ├── scroll_focusable.rb
 │   │   │   ├── self_hostable.rb
 │   │   │   └── store_location.rb
@@ -225,6 +226,7 @@
 │   │   │   ├── category_controller.js
 │   │   │   ├── chat_controller.js
 │   │   │   ├── chat_menu_controller.js
+│   │   │   ├── chat_progress_controller.js
 │   │   │   ├── chat_scroll_controller.js
 │   │   │   ├── clipboard_controller.js
 │   │   │   ├── color_avatar_controller.js
@@ -259,8 +261,10 @@
 │   │   ├── ai_response_job.rb
 │   │   ├── application_job.rb
 │   │   ├── auto_upgrade_job.rb
+│   │   ├── data_cache_clear_job.rb
 │   │   ├── destroy_job.rb
 │   │   ├── enrich_transaction_batch_job.rb
+│   │   ├── family_reset_job.rb
 │   │   ├── fetch_security_info_job.rb
 │   │   ├── import_job.rb
 │   │   ├── process_ai_response_job.rb
@@ -274,17 +278,31 @@
 │   │   └── password_mailer.rb
 │   ├── models
 │   │   ├── account
+│   │   │   ├── balance
+│   │   │   │   ├── base_calculator.rb
+│   │   │   │   ├── forward_calculator.rb
+│   │   │   │   ├── reverse_calculator.rb
+│   │   │   │   ├── sync_cache.rb
+│   │   │   │   └── syncer.rb
 │   │   │   ├── balance.rb
-│   │   │   ├── balance_calculator.rb
 │   │   │   ├── balance_trend_calculator.rb
 │   │   │   ├── chartable.rb
 │   │   │   ├── data_enricher.rb
+│   │   │   ├── enrichable.rb
+│   │   │   ├── entry
+│   │   │   │   └── provided.rb
 │   │   │   ├── entry.rb
 │   │   │   ├── entry_search.rb
 │   │   │   ├── entryable.rb
+│   │   │   ├── holding
+│   │   │   │   ├── base_calculator.rb
+│   │   │   │   ├── forward_calculator.rb
+│   │   │   │   ├── gapfillable.rb
+│   │   │   │   ├── portfolio_cache.rb
+│   │   │   │   ├── reverse_calculator.rb
+│   │   │   │   └── syncer.rb
 │   │   │   ├── holding.rb
-│   │   │   ├── holding_calculator.rb
-│   │   │   ├── syncer.rb
+│   │   │   ├── linkable.rb
 │   │   │   ├── trade.rb
 │   │   │   ├── trade_builder.rb
 │   │   │   ├── transaction
@@ -310,8 +328,8 @@
 │   │   │   ├── monetizable.rb
 │   │   │   ├── plaidable.rb
 │   │   │   ├── promptable.rb
-│   │   │   ├── providable.rb
-│   │   │   └── syncable.rb
+│   │   │   ├── syncable.rb
+│   │   │   └── synthable.rb
 │   │   ├── credit_card.rb
 │   │   ├── crypto.rb
 │   │   ├── current.rb
@@ -371,6 +389,7 @@
 │   │   │   ├── price
 │   │   │   │   └── provided.rb
 │   │   │   ├── price.rb
+│   │   │   ├── provided.rb
 │   │   │   └── synth_combobox_option.rb
 │   │   ├── security.rb
 │   │   ├── series.rb
@@ -604,6 +623,7 @@
 │       │   ├── settings.html.erb
 │       │   ├── shared
 │       │   │   ├── _ai_avatar.html.erb
+│       │   │   ├── _ai_consent.html.erb
 │       │   │   ├── _ai_greeting.html.erb
 │       │   │   ├── _ai_sidebar.html.erb
 │       │   │   ├── _breadcrumbs.html.erb
@@ -697,6 +717,7 @@
 │       │   ├── billings
 │       │   │   └── show.html.erb
 │       │   ├── hostings
+│       │   │   ├── _danger_zone_settings.html.erb
 │       │   │   ├── _invite_code_settings.html.erb
 │       │   │   ├── _provider_settings.html.erb
 │       │   │   ├── _synth_settings.html.erb
@@ -1041,6 +1062,8 @@
 │   │       │       └── en.yml
 │   │       ├── shared
 │   │       │   └── en.yml
+│   │       ├── subscriptions
+│   │       │   └── en.yml
 │   │       ├── tag
 │   │       │   └── deletions
 │   │       │       └── en.yml
@@ -1214,7 +1237,11 @@
 │   │   ├── 20250226022326_add_show_ai_sidebar_to_users.rb
 │   │   ├── 20250226171506_create_chats.rb
 │   │   ├── 20250226171512_create_messages.rb
-│   │   └── 20250228151454_add_family_id_to_chats.rb
+│   │   ├── 20250228151454_add_family_id_to_chats.rb
+│   │   ├── 20250303141007_add_optional_account_for_import.rb
+│   │   ├── 20250304140435_add_default_period_to_users.rb
+│   │   ├── 20250311020152_change_show_ai_sidebar_default_to_true.rb
+│   │   └── 20250311163710_add_ai_enabled_to_users.rb
 │   ├── schema.rb
 │   ├── seeds
 │   │   └── exchanges.rb
@@ -1419,12 +1446,18 @@
 │   │       └── password_mailer_preview.rb
 │   ├── models
 │   │   ├── account
-│   │   │   ├── balance_calculator_test.rb
+│   │   │   ├── balance
+│   │   │   │   ├── forward_calculator_test.rb
+│   │   │   │   ├── reverse_calculator_test.rb
+│   │   │   │   └── syncer_test.rb
 │   │   │   ├── chartable_test.rb
 │   │   │   ├── entry_test.rb
-│   │   │   ├── holding_calculator_test.rb
+│   │   │   ├── holding
+│   │   │   │   ├── forward_calculator_test.rb
+│   │   │   │   ├── portfolio_cache_test.rb
+│   │   │   │   ├── reverse_calculator_test.rb
+│   │   │   │   └── syncer_test.rb
 │   │   │   ├── holding_test.rb
-│   │   │   ├── syncer_test.rb
 │   │   │   └── transaction_test.rb
 │   │   ├── account_test.rb
 │   │   ├── address_test.rb
@@ -1537,5 +1570,5 @@
         ├── internmap.js
         └── robust-predicates.js
 
-257 directories, 1278 files
+263 directories, 1305 files
 ```

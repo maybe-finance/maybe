@@ -98,6 +98,14 @@ class User < ApplicationRecord
     show_ai_sidebar
   end
 
+  def ai_available?
+    !Rails.application.config.app_mode.self_hosted? || ENV["OPENAI_ACCESS_TOKEN"].present?
+  end
+
+  def ai_enabled?
+    ai_enabled && ai_available?
+  end
+
   # Deactivation
   validate :can_deactivate, if: -> { active_changed? && !active }
   after_update_commit :purge_later, if: -> { saved_change_to_active?(from: true, to: false) }

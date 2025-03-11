@@ -1,5 +1,6 @@
 class ChatsController < ApplicationController
   before_action :set_chat, only: [ :show, :destroy, :clear ]
+  before_action :ensure_ai_enabled, only: [ :create, :show ]
 
   def index
     @chats = Current.user.chats.order(created_at: :desc)
@@ -80,5 +81,11 @@ class ChatsController < ApplicationController
 
     def set_chat
       @chat = Current.user.chats.find(params[:id])
+    end
+
+    def ensure_ai_enabled
+      unless Current.user.ai_enabled?
+        redirect_to root_path, alert: "AI chat is not enabled. Please enable it in your settings."
+      end
     end
 end
