@@ -1,6 +1,7 @@
 module UpgradesHelper
   def get_upgrade_for_notification(user, upgrades_mode)
     return nil unless ENV["UPGRADES_ENABLED"] == "true"
+    return nil unless user.present?
 
     completed_upgrade = Upgrader.completed_upgrade
     return completed_upgrade if completed_upgrade && user.last_alerted_upgrade_commit_sha != completed_upgrade.commit_sha
