@@ -57,6 +57,7 @@ gem "intercom-rails"
 gem "plaid"
 gem "rotp", "~> 6.3"
 gem "rqrcode", "~> 2.2"
+gem "activerecord-import"
 
 group :development, :test do
   gem "debug", platforms: %i[mri windows]
