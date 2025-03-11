@@ -63,7 +63,7 @@ export default class extends Controller {
     // Reset height to calculate proper scrollHeight
     input.style.height = 'auto'
     // Set new height based on content
-    input.style.height = (input.scrollHeight) + 'px'
+    input.style.height = `${input.scrollHeight}px`
     // Cap at 150px max height
     if (input.scrollHeight > 150) {
       input.style.height = '150px'

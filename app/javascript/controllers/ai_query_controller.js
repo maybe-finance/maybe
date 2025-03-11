@@ -33,7 +33,7 @@ export default class extends Controller {
       if (data.success) {
         this.outputTarget.textContent = data.response
       } else {
-        this.outputTarget.textContent = "Error: " + (data.response || "Something went wrong. Please try again.")
+        this.outputTarget.textContent = `Error: ${data.response || "Something went wrong. Please try again."}`
       }
     } catch (error) {
       console.error("AI Query error:", error)
