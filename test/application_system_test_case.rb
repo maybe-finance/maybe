@@ -21,6 +21,10 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
       find("h1", text: "Welcome back, #{user.first_name}")
     end
 
+    def login_as(user)
+      sign_in(user)
+    end
+
     def sign_out
       find("#user-menu").click
       click_button "Logout"

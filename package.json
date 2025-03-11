@@ -1,17 +1,17 @@
 {
 	"devDependencies": {
-		"@biomejs/biome": "1.9.3"
+		"@biomejs/biome": "^1.9.3"
 	},
 	"name": "maybe",
 	"version": "1.0.0",
 	"description": "The OS for your personal finances",
 	"scripts": {
 		"style:check": "biome check",
-    "style:fix":"biome check --write",
-    "lint": "biome lint",
-    "lint:fix" : "biome lint --write",
-    "format:check" : "biome format",
-    "format" : "biome format --write"
+		"style:fix": "biome check --write",
+		"lint": "biome lint",
+		"lint:fix": "biome lint --write",
+		"format:check": "biome format",
+		"format": "biome format --write"
 	},
 	"author": "",
 	"license": "ISC"

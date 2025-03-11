@@ -8,6 +8,19 @@ Rails.application.routes.draw do
 
   mount GoodJob::Engine => "good_job"
 
+  # AI Chat routes
+  resources :chats, only: [ :index, :show, :create, :destroy ] do
+    resources :messages, only: [ :create ]
+    member do
+      post :clear
+    end
+  end
+
+  # AI Financial queries
+  namespace :ai do
+    resources :queries, only: [ :create ]
+  end
+
   get "changelog", to: "pages#changelog"
   get "feedback", to: "pages#feedback"
   get "early-access", to: "pages#early_access"

@@ -3,6 +3,7 @@ class User < ApplicationRecord
 
   belongs_to :family
   has_many :sessions, dependent: :destroy
+  has_many :chats, dependent: :destroy
   has_many :impersonator_support_sessions, class_name: "ImpersonationSession", foreign_key: :impersonator_id, dependent: :destroy
   has_many :impersonated_support_sessions, class_name: "ImpersonationSession", foreign_key: :impersonated_id, dependent: :destroy
   accepts_nested_attributes_for :family, update_only: true
@@ -69,6 +70,14 @@ class User < ApplicationRecord
     (display_name&.first || email.first).upcase
   end
 
+  def initials
+    if first_name.present? && last_name.present?
+      "#{first_name.first}#{last_name.first}".upcase
+    else
+      initial
+    end
+  end
+
   def acknowledge_upgrade_prompt(commit_sha)
     update!(last_prompted_upgrade_commit_sha: commit_sha)
   end
@@ -83,6 +92,18 @@ class User < ApplicationRecord
 
   def has_seen_upgrade_alert?(upgrade)
     last_alerted_upgrade_commit_sha == upgrade.commit_sha
+  end
+
+  def show_ai_sidebar?
+    show_ai_sidebar
+  end
+
+  def ai_available?
+    !Rails.application.config.app_mode.self_hosted? || ENV["OPENAI_ACCESS_TOKEN"].present?
+  end
+
+  def ai_enabled?
+    ai_enabled && ai_available?
   end
 
   # Deactivation

@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   helper_method :require_upgrade?, :subscription_pending?
 
   before_action :detect_os
+  before_action :set_chat_for_sidebar
 
   private
     def require_upgrade?
@@ -31,6 +32,17 @@ class ApplicationController < ActionController::Base
       when /Android/i then "android"
       when /iPhone|iPad/i then "ios"
       else ""
+      end
+    end
+
+    def set_chat_for_sidebar
+      return unless Current.user
+      return unless params[:chat_id].present?
+
+      @chat = Current.user.chats.find_by(id: params[:chat_id])
+      if @chat
+        @messages = @chat.messages.where(internal: [ false, nil ]).order(created_at: :asc)
+        @message = Message.new
       end
     end
 end
