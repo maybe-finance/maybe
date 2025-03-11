@@ -19,6 +19,8 @@ class Account::Balance::Syncer
       if strategy == :forward
         update_account_info
       end
+
+      account.sync_required_exchange_rates
     end
   end
 
