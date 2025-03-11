@@ -29,7 +29,7 @@ module IncomeStatement::BaseQuery
         )
         WHERE (
           transfer_info.transfer_id IS NULL OR
-          (ae.amount < 0 AND transfer_info.accountable_type = 'Loan')
+          (ae.amount > 0 AND transfer_info.accountable_type = 'Loan')
         )
         GROUP BY 1, 2, 3, 4
       SQL
