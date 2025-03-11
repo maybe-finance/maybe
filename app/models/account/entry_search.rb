@@ -31,20 +31,6 @@ class Account::EntrySearch
       query
     end
 
-    def apply_type_filter(scope, types)
-      return scope if types.blank?
-
-      query = scope
-
-      if types.include?("income") && !types.include?("expense")
-        query = query.where("account_entries.amount < 0")
-      elsif types.include?("expense") && !types.include?("income")
-        query = query.where("account_entries.amount >= 0")
-      end
-
-      query
-    end
-
     def apply_amount_filter(scope, amount, amount_operator)
       return scope if amount.blank? || amount_operator.blank?
 
@@ -76,7 +62,6 @@ class Account::EntrySearch
     query = scope.joins(:account)
     query = self.class.apply_search_filter(query, search)
     query = self.class.apply_date_filters(query, start_date, end_date)
-    query = self.class.apply_type_filter(query, types)
     query = self.class.apply_amount_filter(query, amount, amount_operator)
     query = self.class.apply_accounts_filter(query, accounts, account_ids)
     query
