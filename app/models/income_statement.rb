@@ -18,7 +18,7 @@ class IncomeStatement
     total_expense = result.select { |t| t.classification == "expense" }.sum(&:total)
 
     ScopeTotals.new(
-      transactions_count: transactions_scope.count,
+      transactions_count: result.sum(&:transactions_count),
       income_money: Money.new(total_income, family.currency),
       expense_money: Money.new(total_expense, family.currency),
       missing_exchange_rates?: result.any?(&:missing_exchange_rates?)
