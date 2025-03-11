@@ -14,25 +14,33 @@ class Account::TransactionSearch
   attribute :merchants, array: true
   attribute :tags, array: true
 
-  # Returns array of Account::Entry objects to stay consistent with partials, which only deal with Account::Entry
   def build_query(scope)
     query = scope.joins(entry: :account)
-
-    if types.present? && types.exclude?("transfer")
-      query = query.joins("LEFT JOIN transfers ON transfers.inflow_transaction_id = account_entries.id OR transfers.outflow_transaction_id = account_entries.id")
-        .where("transfers.id IS NULL")
-    end
+                 .joins(
+                    "LEFT JOIN (
+                      SELECT t.*, t.id as transfer_id, a.accountable_type
+                      FROM transfers t
+                      JOIN account_entries ae ON ae.entryable_id = t.inflow_transaction_id
+                        AND ae.entryable_type = 'Account::Transaction'
+                      JOIN accounts a ON a.id = ae.account_id
+                    ) transfer_info ON (
+                      transfer_info.inflow_transaction_id = account_transactions.id OR
+                      transfer_info.outflow_transaction_id = account_transactions.id
+                    )"
+                  )
 
     if categories.present?
+      # If uncategorized is selected, we only show "categorizable" transfers (loan payments) or regular incomes/expenses
+      query = query.left_joins(:category).where(
+        "categories.name IN (?) OR (
+          categories.id IS NULL AND (transfer_info.transfer_id IS NULL OR transfer_info.accountable_type = 'Loan')
+        )",
+        categories
+      )
+
+      # If uncategorized is not selected, exclude transactions with nil category
       if categories.exclude?("Uncategorized")
-        query = query
-                  .joins(:category)
-                  .where(categories: { name: categories })
-      else
-        query = query
-                  .left_joins(:category)
-                  .where(categories: { name: categories })
-                  .or(query.where(category_id: nil))
+        query = query.where.not(category_id: nil)
       end
     end
 
