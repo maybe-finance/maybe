@@ -1,7 +1,7 @@
 require "test_helper"
 require "ostruct"
 
-class Account::ExchangeRateSyncTest < ActiveSupport::TestCase
+class Account::ConvertibleTest < ActiveSupport::TestCase
   include Account::EntriesTestHelper
 
   setup do
@@ -43,7 +43,7 @@ class Account::ExchangeRateSyncTest < ActiveSupport::TestCase
               )
 
     assert_difference "ExchangeRate.count", 7 do
-      Account::ExchangeRateSync.new(@account).sync_rates
+      @account.sync_required_exchange_rates
     end
   end
 
@@ -53,7 +53,7 @@ class Account::ExchangeRateSyncTest < ActiveSupport::TestCase
     @provider.expects(:fetch_exchange_rates).never
 
     assert_no_difference "ExchangeRate.count" do
-      Account::ExchangeRateSync.new(@account).sync_rates
+      @account.sync_required_exchange_rates
     end
   end
 end
