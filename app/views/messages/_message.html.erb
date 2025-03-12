@@ -1,8 +1,6 @@
-<div>
+<div id="<%= dom_id(message) %>">
   <p class="text-sm text-gray-500">
     role: <%= message.role %>
   </p>
-  <p class="text-gray-900">
-    <%= message.content %>
-  </p>
+  <p class="text-primary whitespace-pre-wrap"><%= message.content %></p>
 </div>

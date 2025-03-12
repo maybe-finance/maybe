@@ -4,7 +4,12 @@ class MessagesController < ApplicationController
   def create
     @message = @chat.messages.create!(message_params.merge(role: "user"))
 
-    redirect_to chat_path(@chat)
+    AiResponseJob.perform_later(@message)
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to chat_path(@chat) }
+    end
   end
 
   private
