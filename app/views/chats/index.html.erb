@@ -1,0 +1,9 @@
+<%= turbo_frame_tag "chat_content" do %>
+  <% if @chats.empty? %>
+    <p>No chats</p>
+  <% else %>
+    <div class="flex flex-col gap-2">
+      <%= render @chats %>
+    </div>
+  <% end %>
+<% end %>

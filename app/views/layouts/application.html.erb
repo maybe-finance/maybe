@@ -57,5 +57,23 @@
         <%= yield %>
       <% end %>
     <% end %>
+
+    <%= tag.div class: class_names("py-4 shrink-0 flex flex-col justify-between gap-6 h-full overflow-y-auto transition-all duration-300 w-[375px]") do %>
+      <div class="bg-white p-4">
+        <%= render "chats/chat_nav" %>
+      </div>
+
+      <div id="chat-content" class="grow p-4 bg-white" data-turbo-permanent>
+        <% if Current.user.current_chat.present? %>
+          <%= turbo_frame_tag "chat_content", src: chat_path(Current.user.current_chat), loading: "lazy" do %>
+            <p>Loading chat...</p>
+          <% end %>
+        <% else %>
+          <%= turbo_frame_tag "chat_content", src: chats_path, loading: "lazy" do %>
+            <p>Loading chats...</p>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
   </div>
 <% end %>

@@ -22,6 +22,10 @@ Rails.application.routes.draw do
     delete :reset, on: :member
   end
 
+  resources :chats, only: %i[index show create destroy] do
+    resources :messages, only: %i[create]
+  end
+
   resource :onboarding, only: :show do
     collection do
       get :profile

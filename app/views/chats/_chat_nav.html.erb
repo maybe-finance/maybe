@@ -1,0 +1,6 @@
+<div>
+  <p>Chat nav</p>
+
+  <%= button_to "New chat", chats_path, method: :post, class: "btn btn-primary", data: { turbo_frame: "chat_content" } %>
+  <%= link_to "All chats", chats_path, data: { turbo_frame: "chat_content" } %>
+</div>

@@ -1,10 +1,12 @@
 class User < ApplicationRecord
   has_secure_password
 
+  belongs_to :current_chat, class_name: "Chat", optional: true
   belongs_to :family
   has_many :sessions, dependent: :destroy
   has_many :impersonator_support_sessions, class_name: "ImpersonationSession", foreign_key: :impersonator_id, dependent: :destroy
   has_many :impersonated_support_sessions, class_name: "ImpersonationSession", foreign_key: :impersonated_id, dependent: :destroy
+  has_many :chats, dependent: :destroy
   accepts_nested_attributes_for :family, update_only: true
 
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }

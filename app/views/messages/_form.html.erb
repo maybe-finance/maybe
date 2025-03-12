@@ -1,0 +1,6 @@
+<%# locals: (chat:) %>
+
+<%= styled_form_with model: chat.messages.build, url: chat_messages_path(chat), method: :post, class: "space-y-4" do |f| %>
+  <%= f.text_area :content, size: "50x5" %>
+  <%= f.submit "Send message" %>
+<% end %>
