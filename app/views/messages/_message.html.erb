@@ -4,7 +4,7 @@
 %>
 
 <% if show_message %>
-  <div id="message_<%= message.id %>" class="flex items-start gap-3 <%= message.user? ? 'justify-end' : (is_debug_message ? 'justify-start debug-message' : '') %> mb-4 w-full">
+  <div id="<%= dom_id(message) %>" class="flex items-start gap-3 <%= message.user? ? 'justify-end' : (is_debug_message ? 'justify-start debug-message' : '') %> mb-4 w-full">
     <% if is_debug_message %>
       <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 w-full text-gray-700 text-xs font-mono">
         <div class="flex items-center mb-1">

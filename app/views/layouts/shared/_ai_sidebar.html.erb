@@ -49,7 +49,7 @@
   <% if !Current.user.ai_enabled? %>
     <%= render "layouts/shared/ai_consent" %>
   <% else %>
-    <div id="chat-messages" class="flex-grow overflow-y-auto px-4 py-3" data-controller="chat-scroll" data-chat-scroll-target="container">
+    <div id="chat-messages" class="prose prose--ai flex-grow overflow-y-auto px-4 py-3" data-controller="chat-scroll" data-chat-scroll-target="container">
       <%# Chat List Menu (hidden by default) %>
       <div data-chat-menu-target="content" class="hidden">
         <div class="mb-6">
