@@ -63,6 +63,7 @@ gcp-storage-keyfile.json
 
 coverage
 .cursorrules
+.cursor/rules/structure.mdc
 
 # Ignore node related files
 node_modules
