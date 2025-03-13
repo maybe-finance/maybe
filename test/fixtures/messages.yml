@@ -1,36 +1,14 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  content: MyText
-  role: user
-  internal: false
-  chat: one
-  user: family_admin
-
-two:
-  content: MyText
-  role: user
-  internal: false
-  chat: two
-  user: family_member
-
-user_message:
+user:
   content: Hello AI!
   role: user
-  internal: false
   chat: one
-  user: family_admin
 
-assistant_message:
+assistant:
   content: Hello! How can I help you today?
   role: assistant
-  internal: false
   chat: one
-  user: 
 
-system_message:
+developer:
   content: You are a helpful assistant.
-  role: system
-  internal: true
+  role: developer
   chat: one
-  user: 

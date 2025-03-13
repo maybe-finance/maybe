@@ -2,7 +2,7 @@
 
 <div class="mb-6 flex items-center justify-between">
   <h1 class="text-2xl font-semibold">All Chats</h1>
-  
+
   <%= link_to "New Chat", chats_path, data: { turbo_method: :post }, class: "py-2 px-4 bg-gray-800 text-white rounded-lg text-sm font-medium" %>
 </div>
 
@@ -14,7 +14,7 @@
           <div>
             <h3 class="font-medium text-gray-900"><%= chat.title %></h3>
             <p class="text-sm text-gray-500">
-              <%= chat.messages.where(internal: [false, nil]).where.not(role: "system").order(created_at: :desc).first&.content&.truncate(60) || "No messages" %>
+              <%= chat.messages.conversation.order(created_at: :desc).first&.content&.truncate(60) || "No messages" %>
             </p>
           </div>
           <span class="text-xs text-gray-500"><%= time_ago_in_words(chat.updated_at) %> ago</span>

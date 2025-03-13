@@ -29,11 +29,9 @@ module Ai
         content += "\n\n```json\n#{json_data}\n```"
       end
 
-      # Create the message with internal flag set to true so it's not displayed in the chat UI
       chat.messages.create!(
-        role: "system",
+        role: "developer",
         content: content,
-        internal: true
       )
     end
   end

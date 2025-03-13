@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
 
       @chat = Current.user.chats.find_by(id: params[:chat_id])
       if @chat
-        @messages = @chat.messages.where(internal: [ false, nil ]).order(created_at: :asc)
+        @messages = @chat.messages.conversation.ordered
         @message = Message.new
       end
     end

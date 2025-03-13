@@ -7,7 +7,7 @@ class ChatsController < ApplicationController
   end
 
   def show
-    @messages = @chat.messages.where(internal: [ false, nil ]).order(created_at: :asc)
+    @messages = @chat.messages.conversation.ordered
     @message = Message.new
 
     respond_to do |format|
@@ -17,14 +17,13 @@ class ChatsController < ApplicationController
   end
 
   def create
-    @chat = Current.user.chats.new(title: "New Chat", user: Current.user, family_id: Current.family.id)
+    @chat = Current.user.chats.new(title: "New Chat", user: Current.user)
 
     if @chat.save
       # Create initial system message with enhanced financial assistant context
       @chat.messages.create(
         content: "You are a helpful financial assistant for Maybe. You can answer questions about the user's finances including net worth, account balances, income, expenses, spending patterns, budgets, and financial goals. You have access to the user's financial data and can provide insights based on their transactions and accounts. Be conversational, helpful, and provide specific financial insights tailored to the user's question.",
-        role: "system",
-        internal: true
+        role: "developer",
       )
 
       # Create user message if content is provided
@@ -56,25 +55,6 @@ class ChatsController < ApplicationController
   def destroy
     @chat.destroy
     redirect_to chats_path, notice: "Chat was successfully deleted"
-  end
-
-  def clear
-    # Delete all non-system messages
-    @chat.messages.where.not(role: "system").destroy_all
-
-    # Re-add the system message if it doesn't exist
-    unless @chat.messages.where(role: "system").exists?
-      @chat.messages.create(
-        content: "You are a helpful financial assistant for Maybe. You can answer questions about the user's finances including net worth, account balances, income, expenses, spending patterns, budgets, and financial goals. You have access to the user's financial data and can provide insights based on their transactions and accounts. Be conversational, helpful, and provide specific financial insights tailored to the user's question.",
-        role: "system",
-        internal: true
-      )
-    end
-
-    respond_to do |format|
-      format.html { redirect_to root_path(chat_id: @chat.id), notice: "Chat was successfully cleared" }
-      format.turbo_stream
-    end
   end
 
   private

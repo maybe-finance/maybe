@@ -1,23 +1,19 @@
 require "test_helper"
 
 class MessageTest < ActiveSupport::TestCase
-  test "should not save message without content" do
-    message = Message.new(role: "user", chat: chats(:one), user: users(:family_admin))
-    assert_not message.save, "Saved the message without content"
+  setup do
+    @chat = chats(:one)
   end
 
-  test "should not save message without role" do
-    message = Message.new(content: "Test message", chat: chats(:one), user: users(:family_admin))
-    assert_not message.save, "Saved the message without role"
-  end
+  test "broadcasts update and fetches open ai response after creation" do
+    message = Message.create!(role: "user", chat: @chat, content: "Hello AI")
 
-  test "should save valid user message" do
-    message = Message.new(content: "Test message", role: "user", chat: chats(:one), user: users(:family_admin))
-    assert message.save, "Could not save valid user message"
-  end
+    # TODO: assert OpenAI call
 
-  test "should save valid assistant message without user" do
-    message = Message.new(content: "Test response", role: "assistant", chat: chats(:one))
-    assert message.save, "Could not save valid assistant message"
+    streams = capture_turbo_stream_broadcasts(@chat)
+
+    assert_equal streams.size, 1
+    assert_equal streams.first["action"], "append"
+    assert_equal streams.first["target"], "messages"
   end
 end

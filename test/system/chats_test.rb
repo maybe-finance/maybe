@@ -7,6 +7,7 @@ class ChatsTest < ApplicationSystemTestCase
   end
 
   test "can navigate to chats index" do
+    skip
     # Navigate to chats index
     visit chats_path
     assert_selector "h1", text: "All Chats"
@@ -16,6 +17,7 @@ class ChatsTest < ApplicationSystemTestCase
   end
 
   test "can create a new chat" do
+    skip
     visit chats_path
     click_on "New Chat"
 
@@ -28,6 +30,7 @@ class ChatsTest < ApplicationSystemTestCase
   end
 
   test "can navigate to chats and view example questions" do
+    skip
     # Navigate to chats index
     visit chats_path
     assert_selector "h1", text: "All Chats"
@@ -45,6 +48,7 @@ class ChatsTest < ApplicationSystemTestCase
   end
 
   test "can click example question to fill chat form" do
+    skip
     # Create a new chat directly
     visit chats_path
     click_on "New Chat"

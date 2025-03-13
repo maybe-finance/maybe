@@ -1,16 +1,49 @@
 class Message < ApplicationRecord
+  include OpenAI
+
   belongs_to :chat
-  belongs_to :user, optional: true
 
-  enum :role, { user: "user", assistant: "assistant", system: "system" }
+  # Matches OpenAI model spec "roles" from "Chain of command"
+  # https://model-spec.openai.com/2025-02-12.html#definitions
+  enum :role, {
+    developer: "developer",
+    user: "user",
+    assistant: "assistant"
+  }
 
-  validates :content, presence: true
-  validates :role, presence: true
+  enum :message_type, {
+    text: "text",
+    function: "function_call",
+    debug: "debug" # internal only, never sent to OpenAI
+  }
 
-  after_create_commit -> { broadcast_append_to chat }
+  validates :content, presence: true, allow_blank: true
 
-  # Check if the message is from a user
-  def user?
-    role == "user"
-  end
+  after_create_commit :broadcast_and_fetch
+  after_update_commit -> { broadcast_update_to chat }
+
+  scope :conversation, -> { where(message_type: [ :text ], role: [ :user, :assistant ]) }
+  scope :ordered, -> { order(created_at: :asc) }
+
+  private
+    def broadcast_and_fetch
+      broadcast_append_to chat
+
+      if user?
+        stream_openai_response
+      end
+    end
+
+    def stream_openai_response
+      # TODO
+      Rails.logger.info "Streaming OpenAI response"
+    end
+
+    def streamer
+      # TODO
+
+      proc do |chunk, _bytesize|
+        Rails.logger.info "OpenAI response chunk: #{chunk}"
+      end
+    end
 end

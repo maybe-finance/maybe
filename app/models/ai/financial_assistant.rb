@@ -20,9 +20,8 @@ module Ai
         # Add previous messages from chat history, excluding system messages
         messages.concat(
           chat_history
-            .where.not(role: "system")
-            .where(internal: [ false, nil ])
-            .order(created_at: :asc)
+            .conversation
+            .ordered
             .map { |msg| { role: msg.role, content: msg.content } }
         )
 

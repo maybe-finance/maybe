@@ -1,6 +1,6 @@
 <% 
   is_debug_message = message.role == "system" && message.content.start_with?("🐞 DEBUG:") 
-  show_message = (!is_debug_message || ENV["AI_DEBUG_MODE"] == "true") && !message.internal
+  show_message = (!is_debug_message || ENV["AI_DEBUG_MODE"] == "true") 
 %>
 
 <% if show_message %>

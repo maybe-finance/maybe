@@ -1,11 +1,7 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
   title: First Chat
   user: family_admin
-  family: dylan_family
 
 two:
   title: Second Chat
   user: family_member
-  family: dylan_family

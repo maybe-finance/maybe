@@ -8,21 +8,20 @@ class ProcessAiResponseJobTest < ActiveJob::TestCase
 
     # Create a system message
     system_message = chat.messages.create!(
-      role: "system",
+      role: "developer",
       content: "You are a helpful financial assistant.",
-      internal: true
     )
 
     # Create a user message
     user_message = chat.messages.create!(
       role: "user",
       content: "What is my net worth?",
-      user: user
     )
 
     # Mock the FinancialAssistant class
     mock_assistant = mock
-    mock_assistant.expects(:query).with("What is my net worth?").returns("Your net worth is $100,000.")
+    mock_assistant.expects(:with_chat).with(chat).returns(mock_assistant)
+    mock_assistant.expects(:query).with("What is my net worth?", chat.messages).returns("Your net worth is $100,000.")
     Ai::FinancialAssistant.expects(:new).with(user.family).returns(mock_assistant)
 
     # Run the job
@@ -47,11 +46,11 @@ class ProcessAiResponseJobTest < ActiveJob::TestCase
     user_message = chat.messages.create!(
       role: "user",
       content: "What is my net worth?",
-      user: user
     )
 
     # Mock the FinancialAssistant to raise an error
     mock_assistant = mock
+    mock_assistant.expects(:with_chat).with(chat).returns(mock_assistant)
     mock_assistant.expects(:query).raises(StandardError.new("Test error"))
     Ai::FinancialAssistant.expects(:new).with(user.family).returns(mock_assistant)
 
