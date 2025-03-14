@@ -71,19 +71,16 @@
     <% end %>
 
     <%# AI chat sidebar %>
-    <%= tag.div id: "sidebar-chat-container", class: class_names("flex flex-col p-4 pl-0 justify-between shrink-0 transition-all duration-300", right_sidebar_open ? "w-[375px]" : "w-0"), data: { sidebar_target: "rightPanel", turbo_permanent: true } do %>
-      <div class="grow overflow-y-auto">
-        <%= turbo_frame_tag "sidebar-chat-content", src: chat_view_path(@chat), loading: "lazy", class: "h-full" do %>
-          <div class="flex justify-center items-center h-full">
-            <%= lucide_icon("loader-circle", class: "w-5 h-5 text-secondary animate-spin") %>
-          </div>
-        <% end %>
-      </div>
-
-      <div class="space-y-2 shrink-0">
-        <%= render "messages/form" %>
-        <p class="text-xs text-secondary">AI responses are informational only and are not financial advice.</p>
-      </div>
+    <%= tag.div id: "chat-container", 
+                class: class_names("flex flex-col justify-between shrink-0 transition-all duration-300", right_sidebar_open ? "w-[400px]" : "w-0"), 
+                data: { controller: "chat hotkey", sidebar_target: "rightPanel", turbo_permanent: true } do %>
+      <%# All chat broadcasts are sent to this centralized user-level stream %>
+      <%= turbo_stream_from Current.user, "chat" %>
+      <%= turbo_frame_tag chat_frame, src: chat_view_path(@chat), loading: "lazy", class: "h-full" do %>
+        <div class="flex justify-center items-center h-full">
+          <%= lucide_icon("loader-circle", class: "w-5 h-5 text-secondary animate-spin") %>
+        </div>
+      <% end %>
     <% end %>
   </div>
 <% end %>

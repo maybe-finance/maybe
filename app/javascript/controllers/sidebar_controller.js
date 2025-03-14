@@ -4,7 +4,7 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static values = {
     userId: String,
-    side: { type: String, default: "left" } // "left" or "right"
+    side: { type: String, default: "left" }, // "left" or "right"
   };
   static targets = ["leftPanel", "rightPanel", "content"];
 
@@ -13,7 +13,8 @@ export default class extends Controller {
     const side = event.currentTarget.dataset.side || this.sideValue;
 
     // Get the appropriate panel based on the side
-    const panel = side === "left" ? this.leftPanelTarget : this.rightPanelTarget;
+    const panel =
+      side === "left" ? this.leftPanelTarget : this.rightPanelTarget;
 
     // Toggle the sidebar visibility
     if (side === "left") {
@@ -25,7 +26,7 @@ export default class extends Controller {
       // For right panel, use the correct width class
       panel.classList.toggle("w-0");
       panel.classList.toggle("opacity-0");
-      panel.classList.toggle("w-[375px]");
+      panel.classList.toggle("w-[400px]");
       panel.classList.toggle("opacity-100");
     }
 
@@ -37,7 +38,10 @@ export default class extends Controller {
     this.adjustContentWidth(leftSidebarOpen, rightSidebarOpen);
 
     // Save user preference
-    this.saveUserPreference(side, side === "left" ? leftSidebarOpen : rightSidebarOpen);
+    this.saveUserPreference(
+      side,
+      side === "left" ? leftSidebarOpen : rightSidebarOpen,
+    );
   }
 
   adjustContentWidth(leftSidebarOpen, rightSidebarOpen) {
@@ -55,7 +59,8 @@ export default class extends Controller {
   }
 
   saveUserPreference(side, isOpen) {
-    const preferenceField = side === "left" ? "show_sidebar" : "show_ai_sidebar";
+    const preferenceField =
+      side === "left" ? "show_sidebar" : "show_ai_sidebar";
 
     fetch(`/users/${this.userIdValue}`, {
       method: "PATCH",

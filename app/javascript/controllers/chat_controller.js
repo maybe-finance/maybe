@@ -1,96 +1,61 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["messages", "form", "input"]
+  static targets = ["messages", "form", "input"];
 
   connect() {
-    this.scrollToBottom()
-    this.setupAutoResize()
-    this.setupMessageObserver()
-  }
-
-  scrollToBottom() {
-    if (this.hasMessagesTarget) {
-      const messagesContainer = this.messagesTarget.closest('#chat-container')
-      if (messagesContainer) {
-        messagesContainer.scrollTop = messagesContainer.scrollHeight
-      }
-    }
-  }
-
-  setupAutoResize() {
-    if (this.hasInputTarget) {
-      this.inputTarget.addEventListener('input', this.autoResize.bind(this))
-      // Initialize height
-      this.autoResize()
-    }
-  }
-
-  setupMessageObserver() {
-    if (this.hasMessagesTarget) {
-      // Create a mutation observer to watch for new messages
-      this.observer = new MutationObserver((mutations) => {
-        let shouldScroll = false
-        mutations.forEach((mutation) => {
-          if (mutation.addedNodes.length) {
-            shouldScroll = true
-          }
-        })
-
-        if (shouldScroll) {
-          // Use setTimeout to ensure DOM is fully updated before scrolling
-          setTimeout(() => this.scrollToBottom(), 0)
-        }
-      })
-
-      // Start observing
-      this.observer.observe(this.messagesTarget, {
-        childList: true,
-        subtree: true
-      })
-    }
+    this.#configureAutoScroll();
   }
 
   disconnect() {
-    // Clean up observer when controller is disconnected
-    if (this.observer) {
-      this.observer.disconnect()
+    if (this.messagesObserver) {
+      this.messagesObserver.disconnect();
     }
   }
 
   autoResize() {
-    const input = this.inputTarget
-    // Reset height to calculate proper scrollHeight
-    input.style.height = 'auto'
-    // Set new height based on content
-    input.style.height = `${input.scrollHeight}px`
-    // Cap at 150px max height
-    if (input.scrollHeight > 150) {
-      input.style.height = '150px'
-      input.style.overflowY = 'auto'
-    } else {
-      input.style.overflowY = 'hidden'
+    const input = this.inputTarget;
+    const lineHeight = 20; // text-sm line-height (14px * 1.429 ≈ 20px)
+    const maxLines = 3; // 3 lines = 60px total
+
+    input.style.height = "auto";
+    input.style.height = `${Math.min(input.scrollHeight, lineHeight * maxLines)}px`;
+    input.style.overflowY =
+      input.scrollHeight > lineHeight * maxLines ? "auto" : "hidden";
+  }
+
+  submitSampleQuestion(e) {
+    this.inputTarget.value = e.target.dataset.chatQuestionParam;
+
+    setTimeout(() => {
+      this.formTarget.requestSubmit();
+    }, 200);
+  }
+
+  // Newlines require shift+enter, otherwise submit the form (same functionality as ChatGPT and others)
+  handleInputKeyDown(e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      this.formTarget.requestSubmit();
     }
   }
 
-  submit(event) {
-    // Let the form submit normally, but prepare for the response
-    this.startLoadingState()
+  #configureAutoScroll() {
+    this.messagesObserver = new MutationObserver((_mutations) => {
+      if (this.hasMessagesTarget) {
+        this.#scrollToBottom();
+      }
+    });
+
+    // Listen to entire sidebar for changes, always try to scroll to the bottom
+    this.messagesObserver.observe(this.element, {
+      childList: true,
+      subtree: true,
+    });
   }
 
-  startLoadingState() {
-    if (this.hasFormTarget) {
-      this.formTarget.classList.add('opacity-50')
-      this.formTarget.querySelector('button[type="submit"]').disabled = true
-    }
-  }
-
-  endLoadingState() {
-    if (this.hasFormTarget) {
-      this.formTarget.classList.remove('opacity-50')
-      this.formTarget.querySelector('button[type="submit"]').disabled = false
-      this.formTarget.reset()
-      this.autoResize()
-    }
-  }
-} 
+  #scrollToBottom = () => {
+    console.log("scrolling to bottom");
+    this.messagesTarget.scrollTop = this.messagesTarget.scrollHeight;
+  };
+}

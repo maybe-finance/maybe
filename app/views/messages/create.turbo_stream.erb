@@ -1,23 +1,11 @@
-<%= turbo_stream.append "messages" do %>
+<%= turbo_stream.append dom_id(@chat, :messages) do %>
   <%= render "messages/message", message: @message %>
 <% end %>
 
-<% if @message.user? %>
-  <%= turbo_stream.replace "thinking" do %>
-    <div id="thinking" class="flex items-start gap-3 mb-4">
-      <%= render "chats/ai_avatar" %>
-      <div class="bg-gray-100 rounded-lg p-4 max-w-[85%] flex items-center">
-        <div class="flex gap-1">
-          <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-          <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
-          <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
-        </div>
-        <span class="ml-2 text-gray-600">Thinking...</span>
-      </div>
-    </div>
-  <% end %>
+<%= turbo_stream.append dom_id(@chat, :messages) do %>
+  <%= render "messages/thinking_message" %>
+<% end %>
 
-  <%= turbo_stream.replace "message_form" do %>
-    <%= render "messages/form", chat: @chat, message: Message.new, scroll_behavior: true, form_options: { data: { controller: "message-form", action: "turbo:submit-end->chat-scroll#scrollToBottom" } } %>
-  <% end %>
-<% end %> 
+<%= turbo_stream.replace "chat-form" do %>
+  <%= render "messages/chat_form", chat: @chat %>
+<% end %>

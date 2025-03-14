@@ -13,6 +13,13 @@ module MenusHelper
     end
   end
 
+  def contextual_menu_item(label, url:, icon:, turbo_frame: nil)
+    link_to url, class: "flex items-center rounded-md text-primary hover:bg-container-hover p-2 gap-2", data: { action: "click->menu#close", turbo_frame: turbo_frame } do
+      concat(lucide_icon(icon, class: "shrink-0 w-5 h-5 text-secondary"))
+      concat(tag.span(label, class: "text-sm"))
+    end
+  end
+
   def contextual_menu_destructive_item(label, url, turbo_confirm: true, turbo_frame: nil)
     button_to url,
               method: :delete,

@@ -1,9 +1,9 @@
 class ProcessAiResponseJob < ApplicationJob
   queue_as :default
 
-  def perform(chat_id, message_id)
-    chat = Chat.find(chat_id)
-    user_message = Message.find(message_id)
+  def perform(message)
+    chat = message.chat
+    user_message = message
 
     # Debug mode: Log the start of processing
     Ai::DebugMode.log_to_chat(chat, "🐞 DEBUG: Starting to process user query")

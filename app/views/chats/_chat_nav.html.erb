@@ -4,7 +4,7 @@
   <% path = chat.new_record? ? chats_path : chats_path(previous_chat_id: chat.id) %>
 
   <div class="flex items-center gap-2 grow">
-    <%= link_to path, class: "w-9 h-9 flex items-center justify-center rounded-lg hover:bg-surface-hover", data: { turbo_frame: "chat" } do %>
+    <%= link_to path, class: "w-9 h-9 flex items-center justify-center rounded-lg hover:bg-surface-hover" do %>
       <%= icon("menu", color: "gray" ) %>
     <% end %>
 
@@ -14,10 +14,10 @@
   </div>
 
   <%= contextual_menu icon: "more-vertical" do %>
-    <%= contextual_menu_modal_action_item "Start new chat", new_chat_path, icon: "plus", turbo_frame: "sidebar-chat-content" %>
+    <%= contextual_menu_item "Start new chat", url: new_chat_path, icon: "plus" %>
 
     <% unless chat.new_record? %>
-      <%= contextual_menu_modal_action_item "Edit chat title", edit_chat_path(chat, ctx: "chat"), icon: "pencil", turbo_frame: dom_id(chat, "title") %>
+      <%= contextual_menu_item "Edit chat title", url: edit_chat_path(chat, ctx: "chat"), icon: "pencil", turbo_frame: dom_id(chat, "title") %>
       <%= contextual_menu_destructive_item "Delete chat", chat_path(chat), turbo_confirm: "Are you sure you want to delete this chat?" %>
     <% end %>
   <% end %>

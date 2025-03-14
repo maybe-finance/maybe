@@ -17,7 +17,7 @@ class Message < ApplicationRecord
     debug: "debug" # internal only, never sent to OpenAI
   }
 
-  validates :content, presence: true, allow_blank: true
+  validates :content, presence: true
 
   after_create_commit :broadcast_and_fetch
   after_update_commit -> { broadcast_update_to chat }

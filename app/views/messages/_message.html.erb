@@ -1,44 +1,18 @@
-<% 
-  is_debug_message = message.role == "system" && message.content.start_with?("🐞 DEBUG:") 
-  show_message = (!is_debug_message || ENV["AI_DEBUG_MODE"] == "true") 
-%>
+<%# locals: (message:) %>
 
-<% if show_message %>
-  <div id="<%= dom_id(message) %>" class="flex items-start gap-3 <%= message.user? ? 'justify-end' : (is_debug_message ? 'justify-start debug-message' : '') %> mb-4 w-full">
-    <% if is_debug_message %>
-      <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 w-full text-gray-700 text-xs font-mono">
-        <div class="flex items-center mb-1">
-          <div class="mr-1"><%= icon("terminal", size: 14) %></div>
-          <div class="font-semibold"><%= message.content.split("\n").first %></div>
-        </div>
-        <% if message.content.include?("```json") %>
-          <% 
-            json_start = message.content.index("```json")
-            json_end = message.content.index("```", json_start + 7)
-            if json_start && json_end
-              json_content = message.content[(json_start + 7)...json_end].strip
-              begin
-                parsed_json = JSON.parse(json_content)
-                formatted_json = JSON.pretty_generate(parsed_json)
-              rescue
-                formatted_json = json_content
-              end
-            end
-          %>
-          <div class="mt-2 overflow-x-auto">
-            <pre class="text-xs"><%= formatted_json %></pre>
-          </div>
-        <% end %>
-      </div>
-    <% elsif message.user? %>
-      <div class="bg-gray-100 rounded-lg px-3 py-2 max-w-[85%] text-gray-800">
-        <p class="whitespace-pre-wrap break-words"><%= message.content %></p>
-      </div>
-    <% else %>
+<div id="<%= dom_id(message) %>">
+  <% if message.debug? %>
+    <%= render "messages/debug_message", content: message.content %>
+  <% elsif message.user? %>
+    <div class="ml-auto text-sm text-primary bg-gray-100 rounded-lg px-3 py-2 max-w-[85%]">
+      <div class="whitespace-pre-wrap break-words"><%= message.content %></div>
+    </div>
+  <% elsif message.assistant? %>
+    <div class="flex items-start">
       <%= render "chats/ai_avatar" %>
-      <div class="pr-2 max-w-[85%] text-gray-800">
+      <div class="pr-2 max-w-[85%] text-primary">
         <div class="prose prose-sm prose-gray break-words"><%= markdown(message.content) %></div>
       </div>
-    <% end %>
-  </div>
-<% end %> 
+    </div>
+  <% end %>
+</div>
