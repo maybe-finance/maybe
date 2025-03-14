@@ -1,0 +1,9 @@
+<%= turbo_frame_tag "sidebar-chat-content" do %>
+  <div class="flex flex-col h-full">
+    <%= render "chats/chat_nav", chat: @chat %>
+
+    <div class="mt-auto py-8">
+      <%= render "chats/ai_greeting" %>
+    </div>
+  </div>
+<% end %>

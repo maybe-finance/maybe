@@ -3,12 +3,10 @@
   <div class="flex items-center gap-5">
     <div class="flex items-center gap-2">
       <%= contextual_menu do %>
-        <div class="w-48 p-1 text-sm leading-6 text-primary bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-          <%= contextual_menu_modal_action_item t(".edit_categories"), categories_path, icon: "shapes", turbo_frame: :_top %>
-          <%= contextual_menu_modal_action_item t(".edit_tags"), tags_path, icon: "tags", turbo_frame: :_top %>
-          <%= contextual_menu_modal_action_item t(".edit_merchants"), merchants_path, icon: "store", turbo_frame: :_top %>
-          <%= contextual_menu_modal_action_item t(".edit_imports"), imports_path, icon: "hard-drive-upload", turbo_frame: :_top %>
-        </div>
+        <%= contextual_menu_modal_action_item t(".edit_categories"), categories_path, icon: "shapes", turbo_frame: :_top %>
+        <%= contextual_menu_modal_action_item t(".edit_tags"), tags_path, icon: "tags", turbo_frame: :_top %>
+        <%= contextual_menu_modal_action_item t(".edit_merchants"), merchants_path, icon: "store", turbo_frame: :_top %>
+        <%= contextual_menu_modal_action_item t(".edit_imports"), imports_path, icon: "hard-drive-upload", turbo_frame: :_top %>
       <% end %>
 
       <%= link_to new_import_path, class: "btn btn--outline flex items-center gap-2", data: { turbo_frame: "modal" } do %>

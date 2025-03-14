@@ -96,7 +96,7 @@ class ProcessAiResponseJob < ApplicationJob
         target: "thinking",
         html: <<~HTML
           <div id="thinking" class="flex items-start gap-3">
-            #{ApplicationController.render(partial: "layouts/shared/ai_avatar")}
+            #{ApplicationController.render(partial: "chats/ai_avatar")}
             <div class="bg-gray-100 rounded-lg p-4 max-w-[85%] flex items-center">
               <div class="flex gap-1">
                 <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>

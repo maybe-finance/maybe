@@ -154,6 +154,13 @@ module ApplicationHelper
     markdown.render(text).html_safe
   end
 
+  def chat_view_path(chat)
+    return new_chat_path if params[:chat_view] == "new"
+    return chats_path if chat.nil? || params[:chat_view] == "all"
+
+    chat.persisted? ? chat_path(chat) : new_chat_path
+  end
+
   private
     def calculate_total(item, money_method, negate)
       items = item.reject { |i| i.respond_to?(:entryable) && i.entryable.transfer? }

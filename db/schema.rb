@@ -696,12 +696,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_13_112556) do
     t.string "otp_backup_codes", default: [], array: true
     t.boolean "show_sidebar", default: true
     t.string "default_period", default: "last_30_days", null: false
-    t.uuid "current_chat_id"
+    t.uuid "last_viewed_chat_id"
     t.boolean "show_ai_sidebar", default: true
     t.boolean "ai_enabled", default: false, null: false
-    t.index ["current_chat_id"], name: "index_users_on_current_chat_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["family_id"], name: "index_users_on_family_id"
+    t.index ["last_viewed_chat_id"], name: "index_users_on_last_viewed_chat_id"
     t.index ["otp_secret"], name: "index_users_on_otp_secret", unique: true, where: "(otp_secret IS NOT NULL)"
   end
 
@@ -753,6 +753,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_13_112556) do
   add_foreign_key "tags", "families"
   add_foreign_key "transfers", "account_transactions", column: "inflow_transaction_id", on_delete: :cascade
   add_foreign_key "transfers", "account_transactions", column: "outflow_transaction_id", on_delete: :cascade
-  add_foreign_key "users", "chats", column: "current_chat_id"
+  add_foreign_key "users", "chats", column: "last_viewed_chat_id"
   add_foreign_key "users", "families"
 end

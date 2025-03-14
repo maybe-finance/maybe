@@ -1,5 +1,5 @@
 class Message < ApplicationRecord
-  include OpenAI
+  include Promptable
 
   belongs_to :chat
 

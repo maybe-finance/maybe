@@ -19,6 +19,7 @@ This rule serves as high-level documentation for how the Maybe codebase is struc
   - Hotwire Turbo/Stimulus for SPA-like UI/UX
   - TailwindCSS for styles
   - Lucide Icons for icons
+  - OpenAI for AI chat
 - Database: PostgreSQL
 - Jobs: GoodJob
 - External
@@ -50,6 +51,7 @@ This codebase adopts a "skinny controller, fat models" convention.  Furthermore,
 ### Convention 3: Prefer server-side solutions over client-side solutions
 
 - When possible, leverage Turbo frames over complex, JS-driven client-side solutions
+- Prefer query params for state over JS based solutions
 - When writing a client-side solution, use Stimulus controllers and keep it simple!
 - Especially when dealing with money and currencies, calculate + format server-side and then pass that to the client to display
 - Keep client-side code for where it truly shines.  For example, [bulk_select_controller.js](mdc:app/javascript/controllers/bulk_select_controller.js) is a case where server-side solutions would degrade the user experience significantly.  When bulk-selecting entries, client-side solutions are the way to go and Stimulus provides the right toolset to achieve this.
@@ -77,6 +79,7 @@ Due to the open-source nature of this project, we have chosen Minitest + Fixture
 - Always use Minitest and fixtures for testing.
 - Keep fixtures to a minimum.  Most models should have 2-3 fixtures maximum that represent the "base cases" for that model.  "Edge cases" should be created on the fly, within the context of the test which it is needed.
 - For tests that require a large number of fixture records to be created, use Rails helpers such as [entries_test_helper.rb](mdc:test/support/account/entries_test_helper.rb) to act as a "factory" for creating these.  For a great example of this, check out [balance_calculator_test.rb](mdc:test/models/account/balance_calculator_test.rb)
+- Take a minimal approach to testing—only test the absolutely critical code paths that will significantly increase developer confidence
 
 ### Convention 7: Use ActiveRecord for complex validations, DB for simple ones, keep business logic out of DB
 

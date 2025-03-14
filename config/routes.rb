@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   mount GoodJob::Engine => "good_job"
 
   # AI Chat routes
-  resources :chats, only: [ :index, :show, :create, :destroy ] do
+  resources :chats do
     resources :messages, only: [ :create ]
   end
 

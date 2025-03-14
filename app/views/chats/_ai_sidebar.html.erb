@@ -47,7 +47,7 @@
   <% end %>
 
   <% if !Current.user.ai_enabled? %>
-    <%= render "layouts/shared/ai_consent" %>
+    <%= render "chats/ai_consent" %>
   <% else %>
     <div id="chat-messages" class="prose prose--ai flex-grow overflow-y-auto px-4 py-3" data-controller="chat-scroll" data-chat-scroll-target="container">
       <%# Chat List Menu (hidden by default) %>
@@ -110,13 +110,13 @@
                 <%= render "messages/message", message: message %>
               <% end %>
             <% else %>
-              <%= render "layouts/shared/ai_greeting", context: 'chat' %>
+              <%= render "chats/ai_greeting", context: 'chat' %>
             <% end %>
           </div>
 
           <%# Thinking indicator - moved outside of messages div to prevent it from being replaced %>
           <div id="thinking" class="hidden flex items-start gap-3 mb-4 w-full" data-chat-progress-target="thinking">
-            <%= render "layouts/shared/ai_avatar" %>
+            <%= render "chats/ai_avatar" %>
             <div class="bg-gray-100 rounded-lg p-4 max-w-[85%] flex items-center text-gray-800">
               <div class="flex gap-1">
                 <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
@@ -129,12 +129,12 @@
         <% else %>
           <%# New Chat: Show greeting in the top section %>
           <div class="flex-grow" data-controller="chat-progress">
-            <%= render "layouts/shared/ai_greeting", context: 'default' %>
+            <%= render "chats/ai_greeting", context: 'default' %>
           </div>
 
           <%# Thinking indicator - moved outside of messages div to prevent it from being replaced %>
           <div id="thinking" class="hidden flex items-start gap-3 mb-4 w-full" data-chat-progress-target="thinking">
-            <%= render "layouts/shared/ai_avatar" %>
+            <%= render "chats/ai_avatar" %>
             <div class="bg-gray-100 rounded-lg p-4 max-w-[85%] flex items-center text-gray-800">
               <div class="flex gap-1">
                 <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
@@ -154,7 +154,6 @@
         <%# For existing chats %>
         <%= render "messages/form", chat: @chat, message: @message, scroll_behavior: true %>
       <% else %>
-        <%# For new chats %>
         <%= render "messages/form", scroll_behavior: true %>
       <% end %>
       <p class="text-xs text-gray-500 text-center mt-2">AI may make mistakes. Make sure to double check responses.</p>

@@ -2,6 +2,7 @@ class User < ApplicationRecord
   has_secure_password
 
   belongs_to :family
+  belongs_to :last_viewed_chat, class_name: "Chat", optional: true
   has_many :sessions, dependent: :destroy
   has_many :chats, dependent: :destroy
   has_many :impersonator_support_sessions, class_name: "ImpersonationSession", foreign_key: :impersonator_id, dependent: :destroy

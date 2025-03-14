@@ -18,6 +18,7 @@ class Setting < RailsSettings::Base
         validates: { inclusion: { in: %w[release commit] } }
 
   field :synth_api_key, type: :string, default: ENV["SYNTH_API_KEY"]
+  field :openai_access_token, type: :string, default: ENV["OPENAI_ACCESS_TOKEN"]
 
   field :require_invite_for_signup, type: :boolean, default: false
 

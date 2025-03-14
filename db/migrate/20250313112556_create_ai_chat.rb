@@ -16,7 +16,7 @@ class CreateAiChat < ActiveRecord::Migration[7.2]
       t.text :content, null: false
     end
 
-    add_reference :users, :current_chat, foreign_key: { to_table: :chats }, null: true, type: :uuid
+    add_reference :users, :last_viewed_chat, foreign_key: { to_table: :chats }, null: true, type: :uuid
     add_column :users, :show_ai_sidebar, :boolean, default: true
     add_column :users, :ai_enabled, :boolean, default: false, null: false
   end

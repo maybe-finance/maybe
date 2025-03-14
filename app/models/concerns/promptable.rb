@@ -1,6 +1,24 @@
 module Promptable
   extend ActiveSupport::Concern
 
+  # The openai ruby gem hasn't yet added support for the responses endpoint.
+  # TODO: Remove this once the gem implements it.
+  class CustomOpenAI < OpenAI::Client
+    def responses(parameters: {})
+      json_post(path: "/responses", parameters: parameters)
+    end
+  end
+
+  class_methods do
+    def openai_client
+      api_key = ENV.fetch("OPENAI_ACCESS_TOKEN", Setting.openai_access_token)
+
+      return nil unless api_key.present?
+
+      CustomOpenAI.new(access_token: api_key)
+    end
+  end
+
   # Convert model data to a format that's readable by AI
   def to_ai_readable_hash
     raise NotImplementedError, "#{self.class} must implement to_ai_readable_hash"
@@ -28,6 +46,10 @@ module Promptable
   end
 
   private
+
+    def openai_client
+      self.class.openai_client
+    end
 
     # Format currency values consistently for AI display
     def format_currency(amount, currency = family.currency)

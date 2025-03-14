@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   helper_method :require_upgrade?, :subscription_pending?
 
   before_action :detect_os
-  before_action :set_chat_for_sidebar
+  before_action :set_default_chat
 
   private
     def require_upgrade?
@@ -35,14 +35,9 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    def set_chat_for_sidebar
-      return unless Current.user
-      return unless params[:chat_id].present?
-
-      @chat = Current.user.chats.find_by(id: params[:chat_id])
-      if @chat
-        @messages = @chat.messages.conversation.ordered
-        @message = Message.new
-      end
+    # By default, we show the user the last chat they interacted with
+    def set_default_chat
+      @last_viewed_chat = Current.user&.last_viewed_chat
+      @chat = @last_viewed_chat
     end
 end
