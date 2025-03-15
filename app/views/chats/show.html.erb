@@ -1,18 +1,16 @@
 <%= turbo_frame_tag chat_frame do %>
+  <%= turbo_stream_from @chat %>
+
   <div class="flex flex-col h-full">
     <div class="p-4">
       <%= render "chats/chat_nav", chat: @chat %>
     </div>
 
-    <div id="<%= dom_id(@chat, :messages) %>" class="grow py-8 overflow-y-auto" data-chat-target="messages">
+    <div id="messages" class="grow py-8 overflow-y-auto" data-chat-target="messages">
       <div class="p-4 space-y-6">
         <% if @chat.messages.conversation.any? %>
           <% @chat.messages.conversation.ordered.each do |message| %>
             <%= render "messages/message", message: message %>
-          <% end %>
-
-          <% if params[:thinking] %>
-            <%= render "messages/thinking_message" %>
           <% end %>
         <% else %>
           <div class="mt-auto">

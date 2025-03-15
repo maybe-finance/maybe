@@ -1,11 +1,3 @@
-<%= turbo_stream.append dom_id(@chat, :messages) do %>
-  <%= render "messages/message", message: @message %>
-<% end %>
-
-<%= turbo_stream.append dom_id(@chat, :messages) do %>
-  <%= render "messages/thinking_message" %>
-<% end %>
-
 <%= turbo_stream.replace "chat-form" do %>
   <%= render "messages/chat_form", chat: @chat %>
 <% end %>

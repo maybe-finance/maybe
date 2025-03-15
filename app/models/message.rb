@@ -26,10 +26,17 @@ class Message < ApplicationRecord
   scope :ordered, -> { order(created_at: :asc) }
 
   private
+    def requires_response?
+      user? && text?
+    end
+
     def broadcast_and_fetch
       broadcast_append_to chat
+      sleep 2
+      # broadcast_append_to chat, target: "messages", partial: "messages/thinking_message"
+      # sleep 2
 
-      if user?
+      if requires_response?
         stream_openai_response
       end
     end
@@ -37,6 +44,14 @@ class Message < ApplicationRecord
     def stream_openai_response
       # TODO
       Rails.logger.info "Streaming OpenAI response"
+
+      # broadcast_remove_to chat, target: "thinking-message"
+
+      self.class.create!(
+        chat: chat,
+        role: "assistant",
+        content: "Mock OpenAI response message"
+      )
     end
 
     def streamer

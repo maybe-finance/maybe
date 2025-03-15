@@ -23,10 +23,7 @@ class ChatsController < ApplicationController
 
     set_last_viewed_chat(@chat)
 
-    # TODO: Enable again
-    # ProcessAiResponseJob.perform_later(@message)
-
-    redirect_to chat_path(@chat, thinking: true)
+    redirect_to chat_path(@chat)
   end
 
   def edit

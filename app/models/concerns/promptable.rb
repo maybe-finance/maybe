@@ -1,21 +1,13 @@
 module Promptable
   extend ActiveSupport::Concern
 
-  # The openai ruby gem hasn't yet added support for the responses endpoint.
-  # TODO: Remove this once the gem implements it.
-  class CustomOpenAI < OpenAI::Client
-    def responses(parameters: {})
-      json_post(path: "/responses", parameters: parameters)
-    end
-  end
-
   class_methods do
     def openai_client
       api_key = ENV.fetch("OPENAI_ACCESS_TOKEN", Setting.openai_access_token)
 
       return nil unless api_key.present?
 
-      CustomOpenAI.new(access_token: api_key)
+      OpenAI::Client.new(access_token: api_key)
     end
   end
 

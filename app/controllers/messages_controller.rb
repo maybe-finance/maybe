@@ -5,9 +5,6 @@ class MessagesController < ApplicationController
   def create
     @message = @chat.messages.create!(message_params)
 
-    # TODO: Enable again
-    # ProcessAiResponseJob.perform_later(@message)
-
     respond_to do |format|
       format.html { redirect_to chat_path(@chat) }
       format.turbo_stream

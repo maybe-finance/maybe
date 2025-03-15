@@ -1,4 +1,6 @@
+<%# locals: (message: "Thinking ...") -%>
+
 <div id="thinking-message" class="flex items-start">
   <%= render "chats/ai_avatar" %>
-  <p class="text-sm text-secondary animate-pulse">Thinking...</p>
+  <p class="text-sm text-secondary animate-pulse"><%= message %></p>
 </div>

@@ -14,9 +14,6 @@ class ProcessAiResponseJob < ApplicationJob
       chat.update(title: new_title)
     end
 
-    # Show initial thinking indicator - use replace instead of update to ensure it works for follow-up messages
-    update_thinking_indicator(chat, "Thinking...")
-
     # Processing steps with progress updates
     begin
       # Step 1: Preparing request
@@ -93,20 +90,9 @@ class ProcessAiResponseJob < ApplicationJob
     def update_thinking_indicator(chat, message)
       Turbo::StreamsChannel.broadcast_replace_to(
         chat,
-        target: "thinking",
-        html: <<~HTML
-          <div id="thinking" class="flex items-start gap-3">
-            #{ApplicationController.render(partial: "chats/ai_avatar")}
-            <div class="bg-gray-100 rounded-lg p-4 max-w-[85%] flex items-center">
-              <div class="flex gap-1">
-                <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
-                <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
-              </div>
-              <span class="ml-2 text-gray-600">#{message}</span>
-            </div>
-          </div>
-        HTML
+        target: "thinking-message",
+        partial: "messages/thinking_message",
+        locals: { message: message }
       )
     end
 
