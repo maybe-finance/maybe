@@ -54,7 +54,7 @@ class Provider::Synth < Provider
       exchange_mic = data.first_page.dig("exchange", "mic_code")
       exchange_operating_mic = data.first_page.dig("exchange", "operating_mic_code")
 
-      Security::Price::Provideable::PricesData.new(
+      Security::Provideable::PricesData.new(
         prices: data.paginated.map do |price|
           Security::Price.new(
             security: Security.new(

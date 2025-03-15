@@ -2,6 +2,7 @@ class Provider
   include Retryable
 
   ProviderError = Class.new(StandardError)
+  ProviderResponse = Data.define(:success?, :data, :error)
 
   def healthy?
     raise NotImplementedError, "Subclasses must implement #healthy?"
@@ -16,11 +17,7 @@ class Provider
   end
 
   private
-    # Generic response formats
-    Response = Data.define(:success?, :data, :error)
     PaginatedData = Data.define(:paginated, :first_page, :total_pages)
-
-    # Specific data payload formats
     UsageData = Data.define(:used, :limit, :utilization, :plan)
 
     # Subclasses can specify errors that can be retried
@@ -35,13 +32,13 @@ class Provider
         yield
       end
 
-      Response.new(
+      ProviderResponse.new(
         success?: true,
         data: data,
         error: nil,
       )
     rescue StandardError => error
-      Response.new(
+      ProviderResponse.new(
         success?: false,
         data: nil,
         error: error,

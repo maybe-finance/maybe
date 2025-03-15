@@ -1,0 +1,82 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.synthfinance.com/enrich?amount=25.5&city=San%20Francisco&country=US&date=2025-03-15&description=UBER%20EATS&state=CA
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Authorization:
+      - Bearer <SYNTH_API_KEY>
+      X-Source:
+      - maybe_app
+      X-Source-Type:
+      - managed
+      User-Agent:
+      - Faraday v2.12.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sat, 15 Mar 2025 22:18:46 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Etag:
+      - W/"1db909926620ba097a4a150be27740e4"
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Rndr-Id:
+      - 58ab5340-1bd7-4d53
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Render-Origin-Server:
+      - Render
+      X-Request-Id:
+      - '008d26b5-f9e2-4ea6-bf0b-30e02cafac01'
+      X-Runtime:
+      - '1.148648'
+      X-Xss-Protection:
+      - '0'
+      Cf-Cache-Status:
+      - DYNAMIC
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=Eq98WTRmuxpGKmjEufUY5yMHuojtlgeeOpORSOT42JAeV36tGCl6y3XGKJjz5ZZrA9t3yV6QNWiLR2bSUzWQh2GbHKgMT2Ze%2BCT4dnEApiOrqIw3FUCG3cC0AM%2FU%2BIYcq%2FuH30OJ"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Speculation-Rules:
+      - '"/cdn-cgi/speculation"'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 920f636f7e942a12-ORD
+      Alt-Svc:
+      - h3=":443"; ma=86400
+      Server-Timing:
+      - cfL4;desc="?proto=TCP&rtt=27114&min_rtt=26324&rtt_var=11453&sent=4&recv=6&lost=0&retrans=0&sent_bytes=2828&recv_bytes=969&delivery_rate=88695&cwnd=213&unsent_bytes=0&cid=20ad3ba4a51c6fd3&ts=1308&x=0"
+    body:
+      encoding: ASCII-8BIT
+      string: '{"merchant":"Uber Eats","merchant_id":"mer_aea41e7f29ce47b5873f3caf49d5972d","category":"Dining
+        Out","website":"ubereats.com","icon":"https://logo.synthfinance.com/ubereats.com","meta":{"credits_used":1,"credits_remaining":249830}}'
+  recorded_at: Sat, 15 Mar 2025 22:18:46 GMT
+recorded_with: VCR 6.3.1
