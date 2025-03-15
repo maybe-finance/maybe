@@ -1,5 +1,5 @@
 class Account::Entry < ApplicationRecord
-  include Monetizable, Provided
+  include Monetizable
 
   monetize :amount
 

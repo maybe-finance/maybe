@@ -1,6 +1,4 @@
 class PlaidAccount < ApplicationRecord
-  include Plaidable
-
   TYPE_MAPPING = {
     "depository" => Depository,
     "credit" => CreditCard,

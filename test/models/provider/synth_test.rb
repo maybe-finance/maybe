@@ -17,7 +17,9 @@ class Provider::SynthTest < ActiveSupport::TestCase
         end_date: Date.iso8601("2024-08-01")
       )
 
-      assert 213, response.size
+      puts response
+
+      assert 213, response
     end
   end
 

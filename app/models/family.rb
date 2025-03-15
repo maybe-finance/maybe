@@ -1,5 +1,5 @@
 class Family < ApplicationRecord
-  include Synthable, Plaidable, Syncable, AutoTransferMatchable
+  include Syncable, AutoTransferMatchable
 
   DATE_FORMATS = [
     [ "MM-DD-YYYY", "%m-%d-%Y" ],
@@ -75,9 +75,9 @@ class Family < ApplicationRecord
 
   def get_link_token(webhooks_url:, redirect_url:, accountable_type: nil, region: :us, access_token: nil)
     provider = if region.to_sym == :eu
-      self.class.plaid_eu_provider
+      Providers.plaid_eu
     else
-      self.class.plaid_us_provider
+      Providers.plaid_us
     end
 
     # early return when no provider

@@ -35,7 +35,7 @@ class Account::DataEnricher
 
     candidates.each do |entry|
       begin
-        info = entry.fetch_enrichment_info
+        info = entry.account_transaction.fetch_enrichment_info
 
         next unless info.present?
 

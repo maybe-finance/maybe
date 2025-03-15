@@ -1,5 +1,5 @@
 class Account::Transaction < ApplicationRecord
-  include Account::Entryable, Transferable
+  include Account::Entryable, Transferable, Provided
 
   belongs_to :category, optional: true
   belongs_to :merchant, optional: true
