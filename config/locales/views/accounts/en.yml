@@ -2,7 +2,6 @@
 en:
   accounts:
     account:
-      has_issues: Issue detected.
       troubleshoot: Troubleshoot
     chart:
       no_change: no change
