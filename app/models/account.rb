@@ -13,7 +13,6 @@ class Account < ApplicationRecord
   has_many :trades, through: :entries, source: :entryable, source_type: "Account::Trade"
   has_many :holdings, dependent: :destroy, class_name: "Account::Holding"
   has_many :balances, dependent: :destroy
-  has_many :issues, as: :issuable, dependent: :destroy
 
   monetize :balance, :cash_balance
 
@@ -88,7 +87,6 @@ class Account < ApplicationRecord
 
   def post_sync
     broadcast_remove_to(family, target: "syncing-notice")
-    resolve_stale_issues
     accountable.post_sync
   end
 
