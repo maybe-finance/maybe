@@ -17,13 +17,6 @@
           </p>
         <% else %>
           <%= link_to account.name, account, class: [(account.is_active ? "text-primary" : "text-subdued"), "text-sm font-medium hover:underline"], data: { turbo_frame: "_top" } %>
-          <% if account.has_issues? %>
-            <div class="text-sm flex items-center gap-1 text-error">
-              <%= lucide_icon "alert-octagon", class: "shrink-0 w-4 h-4" %>
-              <%= tag.span t(".has_issues") %>
-              <%= link_to t(".troubleshoot"), issue_path(account.issues.first), class: "underline", data: { turbo_frame: :drawer } %>
-            </div>
-          <% end %>
         <% end %>
       </div>
 

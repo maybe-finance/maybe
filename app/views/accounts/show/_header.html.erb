@@ -35,8 +35,4 @@
       <%= render "accounts/show/menu", account: account %>
     </div>
   </div>
-
-  <% if account.highest_priority_issue %>
-    <%= render partial: "issues/issue", locals: { issue: account.highest_priority_issue } %>
-  <% end %>
 </header>

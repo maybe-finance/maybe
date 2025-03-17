@@ -22,8 +22,7 @@ gem "lucide-rails", github: "maybe-finance/lucide-rails"
 gem "stimulus-rails"
 gem "turbo-rails"
 
-# Temporary pin to commit to fix crypto.randomUUID() errors.  Revert this when the change has been released.
-gem "hotwire_combobox", github: "josefarias/hotwire_combobox", ref: "b827048a8305e1115d5f96931ba1c9750d1e59fc"
+gem "hotwire_combobox"
 
 # Background Jobs
 gem "good_job"

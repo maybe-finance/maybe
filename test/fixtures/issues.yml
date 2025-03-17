@@ -1,5 +1,0 @@
-one:
-  issuable: depository
-  issuable_type: Account
-  type: Issue::Unknown
-  last_observed_at: 2024-08-15 08:54:04

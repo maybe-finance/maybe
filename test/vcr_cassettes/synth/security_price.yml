@@ -1,0 +1,83 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.synthfinance.com/tickers/AAPL/open-close?end_date=2024-08-01&operating_mic_code=XNAS&page=1&start_date=2024-08-01
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Authorization:
+      - Bearer <SYNTH_API_KEY>
+      X-Source:
+      - maybe_app
+      X-Source-Type:
+      - managed
+      User-Agent:
+      - Faraday v2.12.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sun, 16 Mar 2025 12:08:00 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Etag:
+      - W/"cdf04c2cd77e230c03117dd13d0921f9"
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Rndr-Id:
+      - e74b3425-0b7c-447d
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Render-Origin-Server:
+      - Render
+      X-Request-Id:
+      - b906c5e1-18cc-44cc-9085-313ff066a6ce
+      X-Runtime:
+      - '0.544708'
+      X-Xss-Protection:
+      - '0'
+      Cf-Cache-Status:
+      - DYNAMIC
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=dZNe6qCGGI2XGXgByLr69%2FYrDQdy2FLtnXafxJnlsvyVjrRFiCvmbbIzgF5CDgtj9HZ8RC5Rh9jbuEI6hPokpa3Al4FEIAZB5AbfZ9toP%2Bc5muG%2FuBgHR%2FnIZpsWG%2BQKmBPu9MBa"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Speculation-Rules:
+      - '"/cdn-cgi/speculation"'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 921422292d0feacc-ORD
+      Alt-Svc:
+      - h3=":443"; ma=86400
+      Server-Timing:
+      - cfL4;desc="?proto=TCP&rtt=30826&min_rtt=26727&rtt_var=12950&sent=5&recv=6&lost=0&retrans=0&sent_bytes=2827&recv_bytes=970&delivery_rate=108354&cwnd=219&unsent_bytes=0&cid=43c717161effdc57&ts=695&x=0"
+    body:
+      encoding: ASCII-8BIT
+      string: '{"ticker":"AAPL","currency":"USD","exchange":{"name":"Nasdaq/Ngs (Global
+        Select Market)","mic_code":"XNGS","operating_mic_code":"XNAS","acronym":"NGS","country":"United
+        States","country_code":"US","timezone":"America/New_York"},"prices":[{"date":"2024-08-01","open":224.37,"close":218.36,"high":224.48,"low":217.02,"volume":62501000}],"paging":{"prev":"/tickers/AAPL/open-close?end_date=2024-08-01\u0026operating_mic_code=XNAS\u0026page=\u0026start_date=2024-08-01","next":"/tickers/AAPL/open-close?end_date=2024-08-01\u0026operating_mic_code=XNAS\u0026page=\u0026start_date=2024-08-01","total_records":1,"current_page":1,"per_page":100,"total_pages":1},"meta":{"credits_used":1,"credits_remaining":249807}}'
+  recorded_at: Sun, 16 Mar 2025 12:08:00 GMT
+recorded_with: VCR 6.3.1

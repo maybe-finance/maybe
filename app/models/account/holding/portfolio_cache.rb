@@ -79,12 +79,11 @@ class Account::Holding::PortfolioCache
       securities.each do |security|
         Rails.logger.info "Loading security: ID=#{security.id} Ticker=#{security.ticker}"
 
-        # Highest priority prices
-        db_or_provider_prices = Security::Price.find_prices(
-          security: security,
-          start_date: account.start_date,
-          end_date: Date.current
-        ).map do |price|
+        # Load prices from provider to DB
+        security.sync_provider_prices(start_date: account.start_date)
+
+        # High priority prices from DB (synced from provider)
+        db_prices = security.prices.where(date: account.start_date..Date.current).map do |price|
           PriceWithPriority.new(
             price: price,
             priority: 1
@@ -125,7 +124,7 @@ class Account::Holding::PortfolioCache
 
         @security_cache[security.id] = {
           security: security,
-          prices: db_or_provider_prices + trade_prices + holding_prices
+          prices: db_prices + trade_prices + holding_prices
         }
       end
     end
