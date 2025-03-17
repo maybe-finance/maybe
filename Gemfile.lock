@@ -1,15 +1,4 @@
 GIT
-  remote: https://github.com/josefarias/hotwire_combobox.git
-  revision: b827048a8305e1115d5f96931ba1c9750d1e59fc
-  ref: b827048a8305e1115d5f96931ba1c9750d1e59fc
-  specs:
-    hotwire_combobox (0.3.2)
-      platform_agent (>= 1.0.1)
-      rails (>= 7.0.7.2)
-      stimulus-rails (>= 1.2)
-      turbo-rails (>= 1.2)
-
-GIT
   remote: https://github.com/maybe-finance/lucide-rails.git
   revision: 272e5fb8418ea458da3995d6abe0ba0ceee9c9f0
   specs:
@@ -93,14 +82,15 @@ GEM
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
     ast (2.4.2)
-    aws-eventstream (1.3.0)
-    aws-partitions (1.1043.0)
-    aws-sdk-core (3.217.0)
+    aws-eventstream (1.3.2)
+    aws-partitions (1.1067.0)
+    aws-sdk-core (3.220.1)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
+      base64
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-kms (1.97.0)
+    aws-sdk-kms (1.99.0)
       aws-sdk-core (~> 3, >= 3.216.0)
       aws-sigv4 (~> 1.5)
     aws-sdk-s3 (1.177.0)
@@ -206,6 +196,11 @@ GEM
       actioncable (>= 7.0.0)
       listen (>= 3.0.0)
       railties (>= 7.0.0)
+    hotwire_combobox (0.4.0)
+      platform_agent (>= 1.0.1)
+      rails (>= 7.0.7.2)
+      stimulus-rails (>= 1.2)
+      turbo-rails (>= 1.2)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     i18n-tasks (1.0.15)
@@ -238,11 +233,11 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jmespath (1.6.2)
-    json (2.10.1)
+    json (2.10.2)
     jwt (2.10.1)
       base64
     language_server-protocol (3.17.0.4)
-    launchy (3.1.0)
+    launchy (3.1.1)
       addressable (~> 2.8)
       childprocess (~> 5.0)
       logger (~> 1.6)
@@ -253,7 +248,7 @@ GEM
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     logger (1.6.6)
-    logtail (0.1.15)
+    logtail (0.1.17)
       msgpack (~> 1.0)
     logtail-rack (0.2.6)
       logtail (~> 0.1)
@@ -274,7 +269,7 @@ GEM
       net-smtp
     marcel (1.0.4)
     matrix (0.4.2)
-    mini_magick (5.1.2)
+    mini_magick (5.2.0)
       benchmark
       logger
     mini_mime (1.1.5)
@@ -285,14 +280,14 @@ GEM
     multipart-post (2.4.1)
     net-http (0.6.0)
       uri
-    net-imap (0.5.5)
+    net-imap (0.5.6)
       date
       net-protocol
     net-pop (0.1.2)
       net-protocol
     net-protocol (0.2.2)
       timeout
-    net-smtp (0.5.0)
+    net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.4)
     nokogiri (1.18.4-aarch64-linux-gnu)
@@ -314,7 +309,7 @@ GEM
     octokit (9.2.0)
       faraday (>= 1, < 3)
       sawyer (~> 0.9)
-    pagy (9.3.3)
+    pagy (9.3.4)
     parallel (1.26.3)
     parser (3.3.7.1)
       ast (~> 2.4.1)
@@ -407,7 +402,7 @@ GEM
       chunky_png (~> 1.0)
       rqrcode_core (~> 1.0)
     rqrcode_core (1.2.0)
-    rubocop (1.73.2)
+    rubocop (1.74.0)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -418,7 +413,7 @@ GEM
       rubocop-ast (>= 1.38.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 4.0)
-    rubocop-ast (1.38.1)
+    rubocop-ast (1.39.0)
       parser (>= 3.3.1.0)
     rubocop-performance (1.24.0)
       lint_roller (~> 1.1)
@@ -434,7 +429,7 @@ GEM
       rubocop (>= 1.72)
       rubocop-performance (>= 1.24)
       rubocop-rails (>= 2.30)
-    ruby-lsp (0.23.9)
+    ruby-lsp (0.23.11)
       language_server-protocol (~> 3.17.0)
       prism (>= 1.2, < 2.0)
       rbs (>= 3, < 4)
@@ -470,21 +465,21 @@ GEM
     simplecov-html (0.13.1)
     simplecov_json_formatter (0.1.4)
     smart_properties (1.17.0)
-    sorbet-runtime (0.5.11813)
+    sorbet-runtime (0.5.11934)
     stimulus-rails (1.3.4)
       railties (>= 6.0.0)
     stringio (3.1.5)
     stripe (13.5.0)
-    tailwindcss-rails (4.0.0)
+    tailwindcss-rails (4.2.0)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 4.0)
-    tailwindcss-ruby (4.0.6)
-    tailwindcss-ruby (4.0.6-aarch64-linux-gnu)
-    tailwindcss-ruby (4.0.6-aarch64-linux-musl)
-    tailwindcss-ruby (4.0.6-arm64-darwin)
-    tailwindcss-ruby (4.0.6-x86_64-darwin)
-    tailwindcss-ruby (4.0.6-x86_64-linux-gnu)
-    tailwindcss-ruby (4.0.6-x86_64-linux-musl)
+    tailwindcss-ruby (4.0.14)
+    tailwindcss-ruby (4.0.14-aarch64-linux-gnu)
+    tailwindcss-ruby (4.0.14-aarch64-linux-musl)
+    tailwindcss-ruby (4.0.14-arm64-darwin)
+    tailwindcss-ruby (4.0.14-x86_64-darwin)
+    tailwindcss-ruby (4.0.14-x86_64-linux-gnu)
+    tailwindcss-ruby (4.0.14-x86_64-linux-musl)
     terminal-table (4.0.0)
       unicode-display_width (>= 1.1.1, < 4)
     thor (1.3.2)
@@ -497,7 +492,7 @@ GEM
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
-    uri (1.0.2)
+    uri (1.0.3)
     useragent (0.16.11)
     vcr (6.3.1)
       base64
@@ -551,7 +546,7 @@ DEPENDENCIES
   faraday-retry
   good_job
   hotwire-livereload
-  hotwire_combobox!
+  hotwire_combobox
   i18n-tasks
   image_processing (>= 1.2)
   importmap-rails
