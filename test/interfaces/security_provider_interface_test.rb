@@ -3,15 +3,27 @@ require "test_helper"
 module SecurityProviderInterfaceTest
   extend ActiveSupport::Testing::Declarative
 
+  test "fetches security price" do
+    aapl = securities(:aapl)
+
+    VCR.use_cassette("#{vcr_key_prefix}/security_price") do
+      response = @subject.fetch_security_price(aapl, date: Date.iso8601("2024-08-01"))
+      assert response.success?
+      assert response.data.price.present?
+    end
+  end
+
   test "fetches paginated securities prices" do
+    aapl = securities(:aapl)
+
     VCR.use_cassette("#{vcr_key_prefix}/security_prices") do
       response = @subject.fetch_security_prices(
-        ticker: "AAPL",
-        operating_mic_code: "XNAS",
+        aapl,
         start_date: Date.iso8601("2024-01-01"),
         end_date: Date.iso8601("2024-08-01")
       )
 
+      assert response.success?
       assert 213, response.data.prices.count
     end
   end
@@ -29,8 +41,10 @@ module SecurityProviderInterfaceTest
   end
 
   test "fetches security info" do
+    aapl = securities(:aapl)
+
     VCR.use_cassette("#{vcr_key_prefix}/security_info") do
-      response = @subject.fetch_security_info(ticker: "AAPL", operating_mic: "XNAS")
+      response = @subject.fetch_security_info(aapl)
       info = response.data
 
       assert_equal "AAPL", info.ticker

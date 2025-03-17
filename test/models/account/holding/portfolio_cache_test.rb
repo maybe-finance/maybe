@@ -1,63 +1,93 @@
 require "test_helper"
 
 class Account::Holding::PortfolioCacheTest < ActiveSupport::TestCase
-  include Account::EntriesTestHelper
+  include Account::EntriesTestHelper, ProviderTestHelper
 
   setup do
-    # Prices, highest to lowest priority
-    @db_price = 210
-    @provider_price = 220
-    @trade_price = 200
-    @holding_price = 250
+    @provider = mock
+    Security.stubs(:provider).returns(@provider)
 
-    @account = families(:empty).accounts.create!(name: "Test Brokerage", balance: 10000, currency: "USD", accountable: Investment.new)
-    @test_security = Security.create!(name: "Test Security", ticker: "TEST")
+    @account = families(:empty).accounts.create!(
+      name: "Test Brokerage",
+      balance: 10000,
+      currency: "USD",
+      accountable: Investment.new
+    )
 
-    @trade = create_trade(@test_security, account: @account, qty: 1, date: Date.current, price: @trade_price)
-    @holding = Account::Holding.create!(security: @test_security, account: @account, date: Date.current, qty: 1, price: @holding_price, amount: @holding_price, currency: "USD")
-    Security::Price.create!(security: @test_security, date: Date.current, price: @db_price)
+    @security = Security.create!(name: "Test Security", ticker: "TEST", exchange_operating_mic: "TEST")
+
+    @trade = create_trade(@security, account: @account, qty: 1, date: 2.days.ago.to_date, price: 210.23).account_trade
   end
 
   test "gets price from DB if available" do
-    cache = Account::Holding::PortfolioCache.new(@account)
+    db_price = 210
 
-    assert_equal @db_price, cache.get_price(@test_security.id, Date.current).price
+    Security::Price.create!(
+      security: @security,
+      date: Date.current,
+      price: db_price
+    )
+
+    expect_provider_prices([], start_date: @account.start_date)
+
+    cache = Account::Holding::PortfolioCache.new(@account)
+    assert_equal db_price, cache.get_price(@security.id, Date.current).price
   end
 
   test "if no price in DB, try fetching from provider" do
-    Security::Price.destroy_all
-    Security::Price.expects(:find_prices)
-                   .with(security: @test_security, start_date: @account.start_date, end_date: Date.current)
-                   .returns([
-                     Security::Price.new(security: @test_security, date: Date.current, price: @provider_price, currency: "USD")
-                   ])
+    Security::Price.delete_all
+
+    provider_price = Security::Price.new(
+      security: @security,
+      date: Date.current,
+      price: 220,
+      currency: "USD"
+    )
+
+    expect_provider_prices([ provider_price ], start_date: @account.start_date)
 
     cache = Account::Holding::PortfolioCache.new(@account)
-
-    assert_equal @provider_price, cache.get_price(@test_security.id, Date.current).price
+    assert_equal provider_price.price, cache.get_price(@security.id, Date.current).price
   end
 
   test "if no price from db or provider, try getting the price from trades" do
-    Security::Price.destroy_all # No DB prices
-    Security::Price.expects(:find_prices)
-                   .with(security: @test_security, start_date: @account.start_date, end_date: Date.current)
-                   .returns([]) # No provider prices
+    Security::Price.destroy_all
+    expect_provider_prices([], start_date: @account.start_date)
 
     cache = Account::Holding::PortfolioCache.new(@account)
-
-    assert_equal @trade_price, cache.get_price(@test_security.id, Date.current).price
+    assert_equal @trade.price, cache.get_price(@security.id, @trade.entry.date).price
   end
 
   test "if no price from db, provider, or trades, search holdings" do
-    Security::Price.destroy_all # No DB prices
-    Security::Price.expects(:find_prices)
-                   .with(security: @test_security, start_date: @account.start_date, end_date: Date.current)
-                   .returns([]) # No provider prices
+    Security::Price.delete_all
+    Account::Entry.delete_all
 
-    @account.entries.destroy_all # No prices from trades
+    holding = Account::Holding.create!(
+      security: @security,
+      account: @account,
+      date: Date.current,
+      qty: 1,
+      price: 250,
+      amount: 250 * 1,
+      currency: "USD"
+    )
+
+    expect_provider_prices([], start_date: @account.start_date)
 
     cache = Account::Holding::PortfolioCache.new(@account, use_holdings: true)
-
-    assert_equal @holding_price, cache.get_price(@test_security.id, Date.current).price
+    assert_equal holding.price, cache.get_price(@security.id, holding.date).price
   end
+
+  private
+    def expect_provider_prices(prices, start_date:, end_date: Date.current)
+      @provider.expects(:fetch_security_prices)
+               .with(@security, start_date: start_date, end_date: end_date)
+               .returns(
+                 provider_success_response(
+                   Security::Provideable::PricesData.new(
+                     prices: prices
+                   )
+                 )
+               )
+    end
 end

@@ -7,14 +7,13 @@ module Account::Convertible
       return
     end
 
-    rates = ExchangeRate.find_rates(
+    affected_row_count = ExchangeRate.sync_provider_rates(
       from: currency,
       to: target_currency,
       start_date: start_date,
-      cache: true # caches from provider to DB
     )
 
-    Rails.logger.info("Synced #{rates.count} exchange rates for account #{id}")
+    Rails.logger.info("Synced #{affected_row_count} exchange rates for account #{id}")
   end
 
   private

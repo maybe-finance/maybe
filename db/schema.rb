@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_15_191233) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_16_122019) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -228,8 +228,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_15_191233) do
   create_table "exchange_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "from_currency", null: false
     t.string "to_currency", null: false
-    t.decimal "rate"
-    t.date "date"
+    t.decimal "rate", null: false
+    t.date "date", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["from_currency", "to_currency", "date"], name: "index_exchange_rates_on_base_converted_date_unique", unique: true
@@ -458,19 +458,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_15_191233) do
     t.index ["token"], name: "index_invite_codes_on_token", unique: true
   end
 
-  create_table "issues", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "issuable_type"
-    t.uuid "issuable_id"
-    t.string "type"
-    t.integer "severity"
-    t.datetime "last_observed_at"
-    t.datetime "resolved_at"
-    t.jsonb "data"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["issuable_type", "issuable_id"], name: "index_issues_on_issuable"
-  end
-
   create_table "loans", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -580,12 +567,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_15_191233) do
   end
 
   create_table "security_prices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.date "date"
-    t.decimal "price", precision: 19, scale: 4
-    t.string "currency", default: "USD"
+    t.date "date", null: false
+    t.decimal "price", precision: 19, scale: 4, null: false
+    t.string "currency", default: "USD", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "security_id"
+    t.index ["security_id", "date", "currency"], name: "index_security_prices_on_security_id_and_date_and_currency", unique: true
     t.index ["security_id"], name: "index_security_prices_on_security_id"
   end
 

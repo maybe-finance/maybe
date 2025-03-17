@@ -91,13 +91,13 @@ class MoneyTest < ActiveSupport::TestCase
   end
 
   test "converts currency when rate available" do
-    ExchangeRate.expects(:find_rate).returns(OpenStruct.new(rate: 1.2))
+    ExchangeRate.expects(:find_or_fetch_rate).returns(OpenStruct.new(rate: 1.2))
 
     assert_equal Money.new(1000).exchange_to(:eur), Money.new(1000 * 1.2, :eur)
   end
 
   test "raises when no conversion rate available and no fallback rate provided" do
-    ExchangeRate.expects(:find_rate).returns(nil)
+    ExchangeRate.expects(:find_or_fetch_rate).returns(nil)
 
     assert_raises Money::ConversionError do
       Money.new(1000).exchange_to(:jpy)
@@ -105,7 +105,7 @@ class MoneyTest < ActiveSupport::TestCase
   end
 
   test "converts currency with a fallback rate" do
-    ExchangeRate.expects(:find_rate).returns(nil).twice
+    ExchangeRate.expects(:find_or_fetch_rate).returns(nil).twice
 
     assert_equal 0, Money.new(1000).exchange_to(:jpy, fallback_rate: 0)
     assert_equal Money.new(1000, :jpy), Money.new(1000, :usd).exchange_to(:jpy, fallback_rate: 1)

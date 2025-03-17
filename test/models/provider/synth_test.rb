@@ -29,14 +29,13 @@ class Provider::SynthTest < ActiveSupport::TestCase
       response = @synth.enrich_transaction(
         "UBER EATS",
         amount: 25.50,
-        date: Date.today,
+        date: Date.iso8601("2025-03-16"),
         city: "San Francisco",
         state: "CA",
         country: "US"
       )
 
       data = response.data
-
       assert data.name.present?
       assert data.category.present?
     end

@@ -1,7 +1,6 @@
 class Provider::Synth < Provider
   include ExchangeRate::Provideable
   include Security::Provideable
-  include Account::Transaction::Provideable
 
   def initialize(api_key)
     @api_key = api_key
@@ -33,44 +32,9 @@ class Provider::Synth < Provider
     end
   end
 
-  def fetch_security_prices(ticker:, start_date:, end_date:, operating_mic_code: nil)
-    provider_response retries: 1 do
-      params = {
-        start_date: start_date,
-        end_date: end_date
-      }
-
-      params[:operating_mic_code] = operating_mic_code if operating_mic_code.present?
-
-      data = paginate(
-        "#{base_url}/tickers/#{ticker}/open-close",
-        params
-      ) do |body|
-        body.dig("prices")
-      end
-
-      currency = data.first_page.dig("currency")
-      country_code = data.first_page.dig("exchange", "country_code")
-      exchange_mic = data.first_page.dig("exchange", "mic_code")
-      exchange_operating_mic = data.first_page.dig("exchange", "operating_mic_code")
-
-      Security::Provideable::PricesData.new(
-        prices: data.paginated.map do |price|
-          Security::Price.new(
-            security: Security.new(
-              ticker: ticker,
-              country_code: country_code,
-              exchange_mic: exchange_mic,
-              exchange_operating_mic: exchange_operating_mic
-            ),
-            date: price.dig("date"),
-            price: price.dig("close") || price.dig("open"),
-            currency: currency
-          )
-        end
-      )
-    end
-  end
+  # ================================
+  #          Exchange Rates
+  # ================================
 
   def fetch_exchange_rate(from:, to:, date:)
     provider_response retries: 2 do
@@ -118,6 +82,10 @@ class Provider::Synth < Provider
     end
   end
 
+  # ================================
+  #           Securities
+  # ================================
+
   def search_securities(symbol, country_code: nil, exchange_operating_mic: nil)
     return Security::Provideable::Search.new(securities: []) if symbol.blank? || symbol.length < 2
 
@@ -148,17 +116,17 @@ class Provider::Synth < Provider
     end
   end
 
-  def fetch_security_info(ticker:, mic_code: nil, operating_mic: nil)
+  def fetch_security_info(security)
     provider_response do
-      response = client.get("#{base_url}/tickers/#{ticker}") do |req|
-        req.params["mic_code"] = mic_code if mic_code.present?
-        req.params["operating_mic"] = operating_mic if operating_mic.present?
+      response = client.get("#{base_url}/tickers/#{security.ticker}") do |req|
+        req.params["mic_code"] = security.exchange_mic if security.exchange_mic.present?
+        req.params["operating_mic"] = security.exchange_operating_mic if security.exchange_operating_mic.present?
       end
 
       data = JSON.parse(response.body).dig("data")
 
       Security::Provideable::SecurityInfo.new(
-        ticker: ticker,
+        ticker: security.ticker,
         name: data.dig("name"),
         links: data.dig("links"),
         logo_url: data.dig("logo_url"),
@@ -167,6 +135,56 @@ class Provider::Synth < Provider
       )
     end
   end
+
+  def fetch_security_price(security, date:)
+    provider_response do
+      historical_data = fetch_security_prices(security, start_date: date, end_date: date)
+
+      raise ProviderError, "No prices found for security #{security.ticker} on date #{date}" if historical_data.data.prices.empty?
+
+      Security::Provideable::PriceData.new(
+        price: historical_data.data.prices.first
+      )
+    end
+  end
+
+  def fetch_security_prices(security, start_date:, end_date:)
+    provider_response retries: 1 do
+      params = {
+        start_date: start_date,
+        end_date: end_date
+      }
+
+      params[:operating_mic_code] = security.exchange_operating_mic if security.exchange_operating_mic.present?
+
+      data = paginate(
+        "#{base_url}/tickers/#{security.ticker}/open-close",
+        params
+      ) do |body|
+        body.dig("prices")
+      end
+
+      currency = data.first_page.dig("currency")
+      country_code = data.first_page.dig("exchange", "country_code")
+      exchange_mic = data.first_page.dig("exchange", "mic_code")
+      exchange_operating_mic = data.first_page.dig("exchange", "operating_mic_code")
+
+      Security::Provideable::PricesData.new(
+        prices: data.paginated.map do |price|
+          Security::Price.new(
+            security: security,
+            date: price.dig("date"),
+            price: price.dig("close") || price.dig("open"),
+            currency: currency
+          )
+        end
+      )
+    end
+  end
+
+  # ================================
+  #           Transactions
+  # ================================
 
   def enrich_transaction(description, amount: nil, date: nil, city: nil, state: nil, country: nil)
     provider_response do
