@@ -1,6 +1,7 @@
 ---
 description: This rule explains the system architecture and data flow of the Rails app
 globs: *
+alwaysApply: false
 ---
 
 This file outlines how the codebase is structured and how data flows through the app.
@@ -130,5 +131,178 @@ A Plaid Item sync is an ETL (extract, transform, load) operation:
 ### Family Syncs
 
 A family sync happens once daily via [auto_sync.rb](mdc:app/controllers/concerns/auto_sync.rb).  A family sync is an "orchestrator" of Account and Plaid Item syncs.
+
+## Data Providers
+
+The Maybe app utilizes several 3rd party data services to calculate historical account balances, enrich data, and more.  Since the app can be run in both "hosted" and "self hosted" mode, this means that data providers are _optional_ for self hosted users and must be configured.
+
+Because of this optionality, data providers must be configured at _runtime_ through the [providers.rb](mdc:app/models/providers.rb) module, utilizing [setting.rb](mdc:app/models/setting.rb) for runtime parameters like API keys:
+
+```rb
+module Providers
+  module_function
+
+  def synth
+    api_key = ENV.fetch("SYNTH_API_KEY", Setting.synth_api_key)
+
+    return nil unless api_key.present?
+
+    Provider::Synth.new(api_key)
+  end
+end
+```
+
+There are two types of 3rd party data in the Maybe app:
+
+1. "Concept" data
+2. One-off data
+
+### "Concept" data
+
+Since the app is self hostable, users may prefer using different providers for generic data like exchange rates and security prices.  When data is generic enough where we can easily swap out different providers, we call it a data "concept".
+
+Each "concept" _must_ have a `Provideable` concern that defines the methods that must be implemented along with the data shapes that are returned.  For example, an "exchange rates concept" might look like this:
+
+```
+app/models/
+  exchange_rate.rb # <- ActiveRecord model and "concept"
+  exchange_rate/
+    provided.rb # <- Chooses the provider for this concept based on user settings / config
+    provideable.rb # <- Defines interface for providing exchange rates
+  provider.rb # <- Base provider class
+  provider/
+    synth.rb # <- Concrete provider implementation
+```
+
+Where the `Provideable` and concrete provider implementations would be something like:
+
+```rb
+# Defines the interface an exchange rate provider must implement
+module ExchangeRate::Provideable
+  extend ActiveSupport::Concern
+
+  FetchRateData = Data.define(:rate)
+  FetchRatesData = Data.define(:rates)
+
+  def fetch_exchange_rate(from:, to:, date:)
+    raise NotImplementedError, "Subclasses must implement #fetch_exchange_rate"
+  end
+
+  def fetch_exchange_rates(from:, to:, start_date:, end_date:)
+    raise NotImplementedError, "Subclasses must implement #fetch_exchange_rates"
+  end
+end
+```
+
+Any provider that is a valid exchange rate provider must implement this interface:
+
+```rb
+class ConcreteProvider < Provider 
+  include ExchangeRate::Provideable
+
+  def fetch_exchange_rate(from:, to:, date:)
+    provider_response do 
+      ExchangeRate::Provideable::FetchRateData.new(
+        rate: ExchangeRate.new # build response
+      )
+    end
+  end
+
+  def fetch_exchange_rates(from:, to:, start_date:, end_date:)
+    # Implementation
+  end
+end
+```
+
+### One-off data
+
+For data that does not fit neatly into a "concept", a `Provideable` is not required and the concrete provider may implement ad-hoc methods called directly in code.  For example, the [synth.rb](mdc:app/models/provider/synth.rb) provider has a `usage` method that is only applicable to this specific provider.  This should be called directly without any abstractions:
+
+```rb
+class SomeModel < Application
+  def synth_usage
+    Providers.synth.usage
+  end
+end
+```
+
+## "Provided" Concerns
+
+In general, domain models should not be calling [providers.rb](mdc:app/models/providers.rb) (`Providers.some_provider`) directly.  When 3rd party data is required for a domain model, we use the `Provided` concern within that model's namespace.  This concern is primarily responsible for:
+
+- Choosing the provider to use for this "concept"
+- Providing convenience methods on the model for accessing data
+
+For example, [exchange_rate.rb](mdc:app/models/exchange_rate.rb) has a [provided.rb](mdc:app/models/exchange_rate/provided.rb) concern with the following convenience methods:
+
+```rb
+module ExchangeRate::Provided
+  extend ActiveSupport::Concern
+
+  class_methods do
+    def provider
+      Providers.synth
+    end
+
+    def find_or_fetch_rate(from:, to:, date: Date.current, cache: true)
+      # Implementation 
+    end
+
+    def sync_provider_rates(from:, to:, start_date:, end_date: Date.current)
+      # Implementation 
+    end
+  end
+end
+```
+
+This exposes a generic access pattern where the caller does not care _which_ provider has been chosen for the concept of exchange rates and can get a predictable response:
+
+```rb
+def access_patterns_example
+  # Call exchange rate provider directly
+  ExchangeRate.provider.fetch_exchange_rate(from: "USD", to: "CAD", date: Date.current)
+
+  # Call convenience method
+  ExchangeRate.sync_provider_rates(from: "USD", to: "CAD", start_date: 2.days.ago.to_date)
+end
+```
+
+## Concrete provider implementations
+
+Each 3rd party data provider should have a class under the `Provider::` namespace that inherits from `Provider` and returns `provider_response`, which will return a `Provider::ProviderResponse` object:
+
+```rb
+class ConcreteProvider < Provider
+  def fetch_some_data
+    provider_response do
+      ExampleData.new(
+        example: "data"
+      )
+    end
+  end
+end
+```
+
+The `provider_response` automatically catches provider errors, so concrete provider classes should raise when valid data is not possible:
+
+```rb
+class ConcreteProvider < Provider
+  def fetch_some_data
+    provider_response do
+      data = nil
+
+      # Raise an error if data cannot be returned
+      raise ProviderError.new("Could not find the data you need") if data.nil?
+
+      data
+    end
+  end
+end
+```
+
+
+
+
+
 
 

@@ -4,18 +4,6 @@ class Provider
   ProviderError = Class.new(StandardError)
   ProviderResponse = Data.define(:success?, :data, :error)
 
-  def healthy?
-    raise NotImplementedError, "Subclasses must implement #healthy?"
-  end
-
-  def usage_percentage
-    raise NotImplementedError, "Subclasses must implement #usage"
-  end
-
-  def overage?
-    usage_percentage >= 100
-  end
-
   private
     PaginatedData = Data.define(:paginated, :first_page, :total_pages)
     UsageData = Data.define(:used, :limit, :utilization, :plan)
