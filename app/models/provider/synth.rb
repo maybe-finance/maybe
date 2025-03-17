@@ -87,8 +87,6 @@ class Provider::Synth < Provider
   # ================================
 
   def search_securities(symbol, country_code: nil, exchange_operating_mic: nil)
-    return Security::Provideable::Search.new(securities: []) if symbol.blank? || symbol.length < 2
-
     provider_response do
       response = client.get("#{base_url}/tickers/search") do |req|
         req.params["name"] = symbol

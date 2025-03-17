@@ -6,6 +6,8 @@ class TradeImportTest < ActiveSupport::TestCase
 
   setup do
     @subject = @import = imports(:trade)
+    @provider = mock
+    Security.stubs(:provider).returns(@provider)
   end
 
   test "imports trades and accounts" do
@@ -14,7 +16,7 @@ class TradeImportTest < ActiveSupport::TestCase
 
     # We should only hit the provider for GOOGL since AAPL already exists
     Security.expects(:search_provider).with(
-      query: "GOOGL",
+      "GOOGL",
       exchange_operating_mic: "XNAS"
     ).returns([
       Security.new(

@@ -97,7 +97,7 @@ class TradeImport < Import
 
       provider_security = @provider_securities_cache[cache_key] ||= begin
         Security.search_provider(
-          query: ticker,
+          ticker,
           exchange_operating_mic: exchange_operating_mic
         ).first
       end

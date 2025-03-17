@@ -5,6 +5,18 @@ module Security::Provided
     def provider
       Providers.synth
     end
+
+    def search_provider(symbol, country_code: nil, exchange_operating_mic: nil)
+      return [] if symbol.blank? || symbol.length < 2
+
+      response = provider.search_securities(symbol, country_code: country_code, exchange_operating_mic: exchange_operating_mic)
+
+      if response.success?
+        response.data.securities
+      else
+        []
+      end
+    end
   end
 
   def sync_provider_prices(start_date:, end_date: Date.current)
