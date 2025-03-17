@@ -2,7 +2,7 @@ require "test_helper"
 require "ostruct"
 
 class Account::ConvertibleTest < ActiveSupport::TestCase
-  include Account::EntriesTestHelper
+  include Account::EntriesTestHelper, ProviderTestHelper
 
   setup do
     @family = families(:empty)
@@ -16,33 +16,28 @@ class Account::ConvertibleTest < ActiveSupport::TestCase
   end
 
   test "syncs required exchange rates for an account" do
-    create_valuation(account: @account, date: 5.days.ago.to_date, amount: 9500, currency: "EUR")
+    create_valuation(account: @account, date: 1.day.ago.to_date, amount: 9500, currency: "EUR")
 
-    # Since we had a valuation 5 days ago, this account starts 6 days ago and needs daily exchange rates looking forward
-    assert_equal 6.days.ago.to_date, @account.start_date
+    # Since we had a valuation 1 day ago, this account starts 2 days ago and needs daily exchange rates looking forward
+    assert_equal 2.days.ago.to_date, @account.start_date
+
+    ExchangeRate.delete_all
+
+    provider_response = provider_success_response(
+      ExchangeRate::Provideable::FetchRatesData.new(
+        rates: [
+          ExchangeRate.new(from_currency: "EUR", to_currency: "USD", date: 2.days.ago.to_date, rate: 1.1),
+          ExchangeRate.new(from_currency: "EUR", to_currency: "USD", date: 1.day.ago.to_date, rate: 1.2),
+          ExchangeRate.new(from_currency: "EUR", to_currency: "USD", date: Date.current, rate: 1.3)
+        ]
+      )
+    )
 
     @provider.expects(:fetch_exchange_rates)
-             .with(
-                from: "EUR",
-                to: "USD",
-                start_date: 6.days.ago.to_date,
-                end_date: Date.current
-              ).returns(
-                OpenStruct.new(
-                  success?: true,
-                  rates: [
-                    OpenStruct.new(date: 6.days.ago.to_date, rate: 1.1),
-                    OpenStruct.new(date: 5.days.ago.to_date, rate: 1.2),
-                    OpenStruct.new(date: 4.days.ago.to_date, rate: 1.3),
-                    OpenStruct.new(date: 3.days.ago.to_date, rate: 1.4),
-                    OpenStruct.new(date: 2.days.ago.to_date, rate: 1.5),
-                    OpenStruct.new(date: 1.day.ago.to_date, rate: 1.6),
-                    OpenStruct.new(date: Date.current, rate: 1.7)
-                  ]
-                )
-              )
+             .with(from: "EUR", to: "USD", start_date: 2.days.ago.to_date, end_date: Date.current)
+             .returns(provider_response)
 
-    assert_difference "ExchangeRate.count", 7 do
+    assert_difference "ExchangeRate.count", 3 do
       @account.sync_required_exchange_rates
     end
   end

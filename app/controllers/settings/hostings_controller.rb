@@ -5,7 +5,7 @@ class Settings::HostingsController < ApplicationController
   before_action :ensure_admin, only: :clear_cache
 
   def show
-    @synth_usage = Current.family.synth_usage
+    @synth_usage = Providers.synth&.usage
   end
 
   def update

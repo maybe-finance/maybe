@@ -1,13 +1,13 @@
-module Plaidable
+module PlaidItem::Provided
   extend ActiveSupport::Concern
 
   class_methods do
     def plaid_us_provider
-      Provider::Plaid.new(Rails.application.config.plaid, region: :us) if Rails.application.config.plaid
+      Providers.plaid_us
     end
 
     def plaid_eu_provider
-      Provider::Plaid.new(Rails.application.config.plaid_eu, region: :eu) if Rails.application.config.plaid_eu
+      Providers.plaid_eu
     end
 
     def plaid_provider_for_region(region)

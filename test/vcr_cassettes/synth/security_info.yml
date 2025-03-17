@@ -1,0 +1,105 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.synthfinance.com/tickers/AAPL?operating_mic=XNAS
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Authorization:
+      - Bearer <SYNTH_API_KEY>
+      X-Source:
+      - maybe_app
+      X-Source-Type:
+      - managed
+      User-Agent:
+      - Faraday v2.12.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sun, 16 Mar 2025 12:04:12 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Etag:
+      - W/"a9deeb6437d359f080be449b9b2c547b"
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Rndr-Id:
+      - 1e77ae49-050a-45fc
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Render-Origin-Server:
+      - Render
+      X-Request-Id:
+      - 222dacf1-37f3-4eb8-91d5-edf13d732d46
+      X-Runtime:
+      - '0.059222'
+      X-Xss-Protection:
+      - '0'
+      Cf-Cache-Status:
+      - DYNAMIC
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=%2BLW%2Fd%2BbcNg4%2FleO6ECyB4RJBMbm6vWG3%2FX4oKQXfn1ROSPVrISc3ZFVlXfITGW4XYJSPyUDF%2FXrrRF6p3Wzow07QamOrsux7sxBMvtWmcubgpCMFI4zgnhESklW6KcmAefwrgj9i"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Speculation-Rules:
+      - '"/cdn-cgi/speculation"'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 92141c97bfd9124c-ORD
+      Alt-Svc:
+      - h3=":443"; ma=86400
+      Server-Timing:
+      - cfL4;desc="?proto=TCP&rtt=27459&min_rtt=26850&rtt_var=11288&sent=4&recv=6&lost=0&retrans=0&sent_bytes=2828&recv_bytes=905&delivery_rate=91272&cwnd=104&unsent_bytes=0&cid=ccd6aa7e48e4b0eb&ts=287&x=0"
+    body:
+      encoding: ASCII-8BIT
+      string: '{"data":{"ticker":"AAPL","name":"Apple Inc.","links":{"homepage_url":"https://www.apple.com"},"logo_url":"https://logo.synthfinance.com/ticker/AAPL","description":"Apple
+        Inc. designs, manufactures, and markets smartphones, personal computers, tablets,
+        wearables, and accessories worldwide. The company offers iPhone, a line of
+        smartphones; Mac, a line of personal computers; iPad, a line of multi-purpose
+        tablets; and wearables, home, and accessories comprising AirPods, Apple TV,
+        Apple Watch, Beats products, and HomePod. It also provides AppleCare support
+        and cloud services; and operates various platforms, including the App Store
+        that allow customers to discover and download applications and digital content,
+        such as books, music, video, games, and podcasts. In addition, the company
+        offers various services, such as Apple Arcade, a game subscription service;
+        Apple Fitness+, a personalized fitness service; Apple Music, which offers
+        users a curated listening experience with on-demand radio stations; Apple
+        News+, a subscription news and magazine service; Apple TV+, which offers exclusive
+        original content; Apple Card, a co-branded credit card; and Apple Pay, a cashless
+        payment service, as well as licenses its intellectual property. The company
+        serves consumers, and small and mid-sized businesses; and the education, enterprise,
+        and government markets. It distributes third-party applications for its products
+        through the App Store. The company also sells its products through its retail
+        and online stores, and direct sales force; and third-party cellular network
+        carriers, wholesalers, retailers, and resellers. Apple Inc. was founded in
+        1976 and is headquartered in Cupertino, California.","kind":"common stock","cik":"0000320193","currency":"USD","address":{"country":"USA","address_line1":"One
+        Apple Park Way","city":"Cupertino","state":"CA","postal_code":"95014"},"exchange":{"name":"Nasdaq/Ngs
+        (Global Select Market)","mic_code":"XNGS","operating_mic_code":"XNAS","acronym":"NGS","country":"United
+        States","country_code":"US","timezone":"America/New_York"},"ceo":"Mr. Timothy
+        D. Cook","founding_year":1976,"industry":"Consumer Electronics","sector":"Technology","phone":"408-996-1010","total_employees":161000,"composite_figi":"BBG000B9Y5X2","market_data":{"high_today":213.95,"low_today":209.58,"open_today":211.25,"close_today":213.49,"volume_today":60060200.0,"fifty_two_week_high":260.1,"fifty_two_week_low":164.08,"average_volume":62848099.37313433,"price_change":0.0,"percent_change":0.0}},"meta":{"credits_used":1,"credits_remaining":249808}}'
+  recorded_at: Sun, 16 Mar 2025 12:04:12 GMT
+recorded_with: VCR 6.3.1

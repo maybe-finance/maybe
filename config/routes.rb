@@ -154,12 +154,6 @@ Rails.application.routes.draw do
 
   resources :invite_codes, only: %i[index create]
 
-  resources :issues, only: :show
-
-  namespace :issue do
-    resources :exchange_rate_provider_missings, only: :update
-  end
-
   resources :invitations, only: [ :new, :create, :destroy ] do
     get :accept, on: :member
   end

@@ -33,6 +33,7 @@ class SettingsTest < ApplicationSystemTestCase
 
   test "can update self hosting settings" do
     Rails.application.config.app_mode.stubs(:self_hosted?).returns(true)
+    Providers.stubs(:synth).returns(nil)
     open_settings_from_sidebar
     assert_selector "li", text: "Self hosting"
     click_link "Self hosting"

@@ -1,8 +1,22 @@
 require "test_helper"
+require "ostruct"
 
 class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
+  include ProviderTestHelper
+
   setup do
     sign_in users(:family_admin)
+
+    @provider = mock
+    Providers.stubs(:synth).returns(@provider)
+    @usage_response = provider_success_response(
+      OpenStruct.new(
+        used: 10,
+        limit: 100,
+        utilization: 10,
+        plan: "free",
+      )
+    )
   end
 
   test "cannot edit when self hosting is disabled" do
@@ -16,6 +30,8 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get edit when self hosting is enabled" do
+    @provider.expects(:usage).returns(@usage_response)
+
     with_self_hosting do
       get settings_hosting_url
       assert_response :success
