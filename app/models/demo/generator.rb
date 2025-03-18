@@ -374,7 +374,7 @@ class Demo::Generator
         date = Faker::Number.positive(to: 730).days.ago.to_date
         security = trade[:security]
         qty = trade[:qty]
-        price = Security::Price.find_by(ticker: security.ticker, date: date)&.price || 1
+        price = Security::Price.find_by(security: security, date: date)&.price || 1
         name_prefix = qty < 0 ? "Sell " : "Buy "
 
         account.entries.create! \
