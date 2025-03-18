@@ -1,8 +1,22 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  # 3 connections for Puma, 15 for GoodJob (in async mode, the default for self-hosters) = 18 connections
-  pool: <%= ENV.fetch("DB_POOL_SIZE") { 18 } %>
+  # Note on DB_POOL_SIZE:
+  # -------------------------------------------------------------------------------------------------------------
+  # To optimize for the simplest self-hosting setup, we run ActionCable, GoodJob, and Rails in the same process.
+  # 
+  # This requires DB connections for each:
+  #
+  #   Puma: Requires 3 connections (Rails default)
+  #   ActionCable: 5 connections (Rails defaults to 4 workers + 1 listener for Postgres adapter)
+  #   GoodJob: 15 connections to run in "async" mode.  See `good_job.rb` for the breakdown.
+  #   --------------------------------------------------------------------------------------------
+  #   Total: 23 connections
+  #
+  # We default to this value so that self-hosters don't need to configure anything.  Hosted mode will require
+  # a different pool size, as we run ActionCable, GoodJob, and Rails in separate processes.
+  #
+  pool: <%= ENV.fetch("DB_POOL_SIZE") { 23 } %>
   host: <%= ENV.fetch("DB_HOST") { "127.0.0.1" } %>
   port: <%= ENV.fetch("DB_PORT") { "5432" } %>
   user: <%= ENV.fetch("POSTGRES_USER") { nil } %>
