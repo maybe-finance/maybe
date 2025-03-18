@@ -60,6 +60,9 @@ en-US:
     - :month
     - :day
     - :year
+  dashboard:
+    welcome: "Welcome back, %{name}"
+    finances_info: "Here's what's happening with your finances"
   datetime:
     distance_in_words:
       about_x_hours:

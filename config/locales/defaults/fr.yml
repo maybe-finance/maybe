@@ -62,6 +62,9 @@ fr:
     - :day
     - :month
     - :year
+  dashboard:
+    welcome: "Bienvenue, %{name}"
+    finances_info: "Voici ce qui se passe avec vos finances"
   datetime:
     distance_in_words:
       about_x_hours:

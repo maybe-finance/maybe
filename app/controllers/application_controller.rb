@@ -4,9 +4,14 @@ class ApplicationController < ActionController::Base
 
   helper_method :require_upgrade?, :subscription_pending?
 
-  before_action :detect_os
+  before_action :detect_os, :set_locale
 
   private
+
+    def set_locale
+      I18n.locale = params[:locale] || I18n.default_locale
+    end
+
     def require_upgrade?
       return false if self_hosted?
       return false unless Current.session

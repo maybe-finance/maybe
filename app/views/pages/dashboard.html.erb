@@ -1,7 +1,7 @@
 <% content_for :page_header do %>
   <div class="space-y-1 mb-6">
-    <h1 class="text-3xl font-medium text-gray-900">Welcome back, <%= Current.user.first_name %></h1>
-    <p class="text-gray-500">Here's what's happening with your finances</p>
+    <h1 class="text-3xl font-medium text-gray-900"><%= t('dashboard.welcome', name: Current.user.first_name) %></h1>
+    <p class="text-gray-500"><%= t('dashboard.finances_info') %></p>
   </div>
 <% end %>
 
