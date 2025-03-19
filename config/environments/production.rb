@@ -74,7 +74,7 @@ Rails.application.configure do
   end
 
   config.action_mailer.perform_caching = false
-  config.action_mailer.deliver_later_queue_name = "high_priority"
+  config.action_mailer.deliver_later_queue_name = :high_priority
   config.action_mailer.default_url_options = { host: ENV["APP_DOMAIN"] }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
