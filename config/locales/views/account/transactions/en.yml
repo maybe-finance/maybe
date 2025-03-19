@@ -29,6 +29,8 @@ en:
         description_placeholder: Describe transaction
         expense: Expense
         income: Income
+        note_label: Notes
+        note_placeholder: Enter a note
         submit: Add transaction
         transfer: Transfer
       new:
