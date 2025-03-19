@@ -40,6 +40,7 @@ x-rails-env: &rails_env
   RAILS_ASSUME_SSL: "false"
   DB_HOST: db
   DB_PORT: 5432
+  REDIS_URL: redis://redis:6379/1
 
 services:
   web:
@@ -66,7 +67,6 @@ services:
         condition: service_healthy
     environment:
       <<: *rails_env
-      REDIS_URL: redis://redis:6379/1
 
   db:
     image: postgres:16
