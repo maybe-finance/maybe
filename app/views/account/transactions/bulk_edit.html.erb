@@ -40,6 +40,7 @@
                   <div class="space-y-2">
                     <%= form.collection_select :category_id, Current.family.categories.alphabetically, :id, :name, { prompt: t(".category_placeholder"), label: t(".category_label"), class: "text-subdued" } %>
                     <%= form.collection_select :merchant_id, Current.family.merchants.alphabetically, :id, :name, { prompt: t(".merchant_placeholder"), label: t(".merchant_label"), class: "text-subdued" } %>
+                    <%= form.select :tag_ids, Current.family.tags.alphabetically.pluck(:name, :id), { include_blank: t(".none"), multiple: true, label: t(".tag_label"), container_class: "h-40" } %>
                     <%= form.text_area :notes, label: t(".note_label"), placeholder: t(".note_placeholder"), rows: 5 %>
                   </div>
                 </details>
