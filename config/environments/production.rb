@@ -69,11 +69,12 @@ Rails.application.configure do
   # want to log everything, set the level to "debug".
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
-  # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
+  if ENV["CACHE_REDIS_URL"].present?
+    config.cache_store = :redis_cache_store, { url: ENV["CACHE_REDIS_URL"] }
+  end
 
   config.action_mailer.perform_caching = false
-
+  config.action_mailer.deliver_later_queue_name = :high_priority
   config.action_mailer.default_url_options = { host: ENV["APP_DOMAIN"] }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
@@ -105,4 +106,7 @@ Rails.application.configure do
   # ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+  # set REDIS_URL for Sidekiq to use Redis
+  config.active_job.queue_adapter = :sidekiq
 end

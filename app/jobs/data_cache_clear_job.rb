@@ -1,5 +1,5 @@
 class DataCacheClearJob < ApplicationJob
-  queue_as :default
+  queue_as :low_priority
 
   def perform(family)
     ActiveRecord::Base.transaction do

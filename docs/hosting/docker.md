@@ -2,10 +2,6 @@
 
 This guide will help you setup, update, and maintain your self-hosted Maybe application with Docker Compose. Docker Compose is the most popular and recommended way to self-host the Maybe app.
 
-If you want a _less
-technical_ way to host the Maybe app, you can [host on Render](/docs/hosting/one-click-deploy.md) as an
-_**alternative** to Docker Compose_.
-
 ## Setup Guide
 
 Follow the guide below to get your app running.
@@ -30,7 +26,7 @@ docker run hello-world
 Open your terminal and create a directory where your app will run. Below is an example command with a recommended directory:
 
 ```bash
-# Create a directory on your computer for Docker files
+# Create a directory on your computer for Docker files (name whatever you'd like)
 mkdir -p ~/docker-apps/maybe
 
 # Once created, navigate your current working directory to the new folder
@@ -42,8 +38,8 @@ cd ~/docker-apps/maybe
 Make sure you are in the directory you just created and run the following command:
 
 ```bash
-# Download the sample docker-compose.yml file from the Maybe Github repository
-curl -o compose.yml https://raw.githubusercontent.com/maybe-finance/maybe/main/docker-compose.example.yml
+# Download the sample compose.yml file from the Maybe Github repository
+curl -o compose.yml https://raw.githubusercontent.com/maybe-finance/maybe/main/compose.example.yml
 ```
 
 This command will do the following:
@@ -52,6 +48,12 @@ This command will do the following:
 2. Creates a file in your current directory called `compose.yml` with the contents of the example file
 
 At this point, the only file in your current working directory should be `compose.yml`.
+
+### Step 3 (optional): Configure your environment
+
+By default, our `compose.example.yml` file runs without any configuration.  That said, if you would like extra security (important if you're running outside of a local network), you can follow the steps below to set things up.
+
+If you're running the app locally and don't care much about security, you can skip this step.
 
 #### Create your environment file
 
@@ -92,7 +94,7 @@ SECRET_KEY_BASE="replacemewiththegeneratedstringfromthepriorstep"
 POSTGRES_PASSWORD="replacemewithyourdesireddatabasepassword"
 ```
 
-### Step 3: Test your app
+### Step 4: Run the app
 
 You are now ready to run the app. Start with the following command to make sure everything is working:
 
@@ -106,14 +108,14 @@ Open your browser, and navigate to `http://localhost:3000`.
 
 If everything is working, you will see the Maybe login screen.
 
-### Step 4: Create your account
+### Step 5: Create your account
 
 The first time you run the app, you will need to register a new account by hitting "create your account" on the login page.
 
 1. Enter your email
 2. Enter a password
 
-### Step 5: Run the app in the background
+### Step 6: Run the app in the background
 
 Most self-hosting users will want the Maybe app to run in the background on their computer so they can access it at all times. To do this, hit `Ctrl+C` to stop the running process, and then run the following command:
 
@@ -127,7 +129,7 @@ The `-d` flag will run Docker Compose in "detached" mode. To verify it is runnin
 docker compose ls
 ```
 
-### Step 6: Enjoy!
+### Step 7: Enjoy!
 
 Your app is now set up. You can visit it at `http://localhost:3000` in your browser.
 
@@ -135,7 +137,7 @@ If you find bugs or have a feature request, be sure to read through our [contrib
 
 ## How to update your app
 
-The mechanism that updates your self-hosted Maybe app is the GHCR (Github Container Registry) Docker image that you see in the `docker-compose.yml` file:
+The mechanism that updates your self-hosted Maybe app is the GHCR (Github Container Registry) Docker image that you see in the `compose.yml` file:
 
 ```yml
 image: ghcr.io/maybe-finance/maybe:latest
@@ -152,13 +154,13 @@ NOT_ automatically update. To update your self-hosted app, run the following com
 ```bash
 cd ~/docker-apps/maybe # Navigate to whatever directory you configured the app in
 docker compose pull # This pulls the "latest" published image from GHCR
-docker compose build app # This rebuilds the app with updates
+docker compose build # This rebuilds the app with updates
 docker compose up --no-deps -d app # This restarts the app using the newest version
 ```
 
 ## How to change which updates your app receives
 
-If you'd like to pin the app to a specific version or tag, all you need to do is edit the `docker-compose.yml` file:
+If you'd like to pin the app to a specific version or tag, all you need to do is edit the `compose.yml` file:
 
 ```yml
 image: ghcr.io/maybe-finance/maybe:stable
@@ -168,7 +170,7 @@ After doing this, make sure and restart the app:
 
 ```bash
 docker compose pull # This pulls the "latest" published image from GHCR
-docker compose build app # This rebuilds the app with updates
+docker compose build # This rebuilds the app with updates
 docker compose up --no-deps -d app # This restarts the app using the newest version
 ```
 

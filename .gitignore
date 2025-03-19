@@ -65,3 +65,5 @@ coverage
 
 # Ignore node related files
 node_modules
+
+compose.yml

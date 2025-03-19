@@ -10,7 +10,3 @@
 
 <%= family_notifications_stream %>
 <%= family_stream %>
-
-<% if self_hosted? && (upgrade = get_upgrade_for_notification(Current.user, Setting.upgrades_mode)) %>
-  <%= render partial: "shared/upgrade_notification", locals: { upgrade: upgrade } %>
-<% end %>
