@@ -2,10 +2,6 @@
 
 This guide will help you setup, update, and maintain your self-hosted Maybe application with Docker Compose. Docker Compose is the most popular and recommended way to self-host the Maybe app.
 
-If you want a _less
-technical_ way to host the Maybe app, you can [host on Render](/docs/hosting/one-click-deploy.md) as an
-_**alternative** to Docker Compose_.
-
 ## Setup Guide
 
 Follow the guide below to get your app running.

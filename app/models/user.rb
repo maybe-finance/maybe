@@ -69,22 +69,6 @@ class User < ApplicationRecord
     (display_name&.first || email.first).upcase
   end
 
-  def acknowledge_upgrade_prompt(commit_sha)
-    update!(last_prompted_upgrade_commit_sha: commit_sha)
-  end
-
-  def acknowledge_upgrade_alert(commit_sha)
-    update!(last_alerted_upgrade_commit_sha: commit_sha)
-  end
-
-  def has_seen_upgrade_prompt?(upgrade)
-    last_prompted_upgrade_commit_sha == upgrade.commit_sha
-  end
-
-  def has_seen_upgrade_alert?(upgrade)
-    last_alerted_upgrade_commit_sha == upgrade.commit_sha
-  end
-
   # Deactivation
   validate :can_deactivate, if: -> { active_changed? && !active }
   after_update_commit :purge_later, if: -> { saved_change_to_active?(from: true, to: false) }
