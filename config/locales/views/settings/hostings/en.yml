@@ -11,11 +11,6 @@ en:
         generate_tokens: Generate new code
         generated_tokens: Generated codes
         title: Require invite code for signup
-      provider_settings:
-        description: Configure settings for your hosting provider
-        render_deploy_hook_label: Render Deploy Hook URL
-        render_deploy_hook_placeholder: https://api.render.com/deploy/srv-xyz...
-        title: Provider Settings
       show:
         general: General Settings
         invites: Invite Codes
@@ -38,14 +33,4 @@ en:
         success: Settings updated
       clear_cache:
         cache_cleared: Data cache has been cleared. This may take a few moments to complete.
-      upgrade_settings:
-        description: Configure how your application receives updates
-        latest_commit_description: Automatically update to the latest commit (unstable)
-        latest_commit_title: Latest Commit
-        latest_release_description: Automatically update to the most recent release
-          (stable)
-        latest_release_title: Latest Release
-        manual_description: You control when to download and install updates
-        manual_title: Manual
-        title: Auto Upgrade
       not_authorized: You are not authorized to perform this action

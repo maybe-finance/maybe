@@ -10,7 +10,7 @@ class PagesController < ApplicationController
   end
 
   def changelog
-    @release_notes = Provider::Github.new.fetch_latest_release_notes
+    @release_notes = Providers.github.fetch_latest_release_notes
 
     render layout: "settings"
   end

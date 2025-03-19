@@ -21,9 +21,7 @@ If you are a _paying_ Maybe user, you can open a support request in Intercom.
 
 A feature request is functionality that you would like that is not already on our [Roadmap](https://github.com/maybe-finance/maybe/wiki/Roadmap).
 
-All feature requests should be opened as Discussions here:
-
-https://github.com/maybe-finance/maybe/discussions/categories/feature-requests
+All feature requests should be opened in a [Feature request Discussion](https://github.com/maybe-finance/maybe/discussions/categories/feature-requests).
 
 Be sure to search existing discussions prior to opening a new feature request.
 
@@ -31,9 +29,8 @@ Be sure to search existing discussions prior to opening a new feature request.
 
 If you are having a Docker configuration issue, please do not open a Github issue unless you've identified a bug in our Dockerfile.  To get help with self hosting, there are several options:
 
-- **First**: Read our [self hosting guides](https://github.com/maybe-finance/maybe/tree/main/docs/hosting) and follow them step-by-step
-- Open a [General Discussion](https://github.com/maybe-finance/maybe/discussions/categories/general)
-- Make a post in the "Self hosted" channel in our [Discord](https://link.maybe.co/discord)
+- **First**: Read our [Docker hosting guide](https://github.com/maybe-finance/maybe/tree/main/docs/hosting/docker.md) and follow it step-by-step
+- Open a [Docker Discussion](https://github.com/maybe-finance/maybe/discussions/categories/docker-compose-hosting)
 
 ---
 

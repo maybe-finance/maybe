@@ -9,18 +9,6 @@ class Settings::HostingsController < ApplicationController
   end
 
   def update
-    if hosting_params[:upgrades_setting].present?
-      mode = hosting_params[:upgrades_setting] == "manual" ? "manual" : "auto"
-      target = hosting_params[:upgrades_setting] == "commit" ? "commit" : "release"
-
-      Setting.upgrades_mode = mode
-      Setting.upgrades_target = target
-    end
-
-    if hosting_params.key?(:render_deploy_hook)
-      Setting.render_deploy_hook = hosting_params[:render_deploy_hook]
-    end
-
     if hosting_params.key?(:require_invite_for_signup)
       Setting.require_invite_for_signup = hosting_params[:require_invite_for_signup]
     end
@@ -46,7 +34,7 @@ class Settings::HostingsController < ApplicationController
 
   private
     def hosting_params
-      params.require(:setting).permit(:render_deploy_hook, :upgrades_setting, :require_invite_for_signup, :require_email_confirmation, :synth_api_key)
+      params.require(:setting).permit(:require_invite_for_signup, :require_email_confirmation, :synth_api_key)
     end
 
     def raise_if_not_self_hosted

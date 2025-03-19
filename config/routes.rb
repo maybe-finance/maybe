@@ -1,3 +1,5 @@
+require "sidekiq/web"
+
 Rails.application.routes.draw do
   # MFA routes
   resource :mfa, controller: "mfa", only: [ :new, :create ] do
@@ -6,7 +8,8 @@ Rails.application.routes.draw do
     delete :disable
   end
 
-  mount GoodJob::Engine => "good_job"
+  # Uses basic auth - see config/initializers/sidekiq.rb
+  mount Sidekiq::Web => "/sidekiq"
 
   # AI Chat routes
   resources :chats do
@@ -166,14 +169,6 @@ Rails.application.routes.draw do
 
   resources :invitations, only: [ :new, :create, :destroy ] do
     get :accept, on: :member
-  end
-
-  # For managing self-hosted upgrades and release notifications
-  resources :upgrades, only: [] do
-    member do
-      post :acknowledge
-      post :deploy
-    end
   end
 
   resources :currencies, only: %i[show]

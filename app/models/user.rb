@@ -79,22 +79,6 @@ class User < ApplicationRecord
     end
   end
 
-  def acknowledge_upgrade_prompt(commit_sha)
-    update!(last_prompted_upgrade_commit_sha: commit_sha)
-  end
-
-  def acknowledge_upgrade_alert(commit_sha)
-    update!(last_alerted_upgrade_commit_sha: commit_sha)
-  end
-
-  def has_seen_upgrade_prompt?(upgrade)
-    last_prompted_upgrade_commit_sha == upgrade.commit_sha
-  end
-
-  def has_seen_upgrade_alert?(upgrade)
-    last_alerted_upgrade_commit_sha == upgrade.commit_sha
-  end
-
   def show_ai_sidebar?
     show_ai_sidebar
   end

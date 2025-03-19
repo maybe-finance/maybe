@@ -1,6 +1,6 @@
 ---
-description: This rule explains the project's tech stack and code conventions
-globs: *
+description: 
+globs: 
 alwaysApply: true
 ---
 This rule serves as high-level documentation for how you should write code for the Maybe codebase. 
@@ -15,7 +15,7 @@ This rule serves as high-level documentation for how you should write code for t
   - Lucide Icons for icons
   - OpenAI for AI chat
 - Database: PostgreSQL
-- Jobs: GoodJob
+- Jobs: Sidekiq + Redis
 - External
   - Payments: Stripe
   - User bank data syncing: Plaid 

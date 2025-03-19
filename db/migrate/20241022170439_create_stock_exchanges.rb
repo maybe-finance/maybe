@@ -20,11 +20,5 @@ class CreateStockExchanges < ActiveRecord::Migration[7.2]
     add_index :stock_exchanges, :country
     add_index :stock_exchanges, :country_code
     add_index :stock_exchanges, :currency_code
-
-    reversible do |dir|
-      dir.up do
-        load Rails.root.join('db/seeds/exchanges.rb')
-      end
-    end
   end
 end
