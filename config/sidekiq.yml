@@ -1,5 +1,5 @@
 concurrency: <%= ENV.fetch("RAILS_MAX_THREADS") { 3 } %>
 queues:
-  - latency_low # <30 seconds
-  - latency_medium # <2 minutes
-  - latency_high # 2+ minutes
+  - [high_priority, 3]
+  - [medium_priority, 2]
+  - [low_priority, 1]
