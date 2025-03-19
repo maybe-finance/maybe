@@ -33,6 +33,7 @@ gem "vernier"
 gem "rack-mini-profiler"
 gem "sentry-ruby"
 gem "sentry-rails"
+gem "sentry-sidekiq"
 gem "logtail-rails"
 
 # Active Storage

@@ -449,6 +449,9 @@ GEM
     sentry-ruby (5.23.0)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
+    sentry-sidekiq (5.23.0)
+      sentry-ruby (~> 5.23.0)
+      sidekiq (>= 3.0)
     sidekiq (8.0.1)
       connection_pool (>= 2.5.0)
       json (>= 2.9.0)
@@ -571,6 +574,7 @@ DEPENDENCIES
   selenium-webdriver
   sentry-rails
   sentry-ruby
+  sentry-sidekiq
   sidekiq
   simplecov
   stimulus-rails
