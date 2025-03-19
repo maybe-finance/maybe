@@ -1,7 +1,7 @@
 ---
-description: This rule explains the project's tech stack and code conventions
-globs: *
-alwaysApply: false
+description: 
+globs: 
+alwaysApply: true
 ---
 This rule serves as high-level documentation for how the Maybe codebase is structured.
 
