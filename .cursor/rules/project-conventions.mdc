@@ -1,6 +1,7 @@
 ---
-description: This rule explains the project's tech stack and code conventions
-globs: *
+description: 
+globs: 
+alwaysApply: true
 ---
 This rule serves as high-level documentation for how the Maybe codebase is structured.
 
@@ -19,7 +20,7 @@ This rule serves as high-level documentation for how the Maybe codebase is struc
   - TailwindCSS for styles
   - Lucide Icons for icons
 - Database: PostgreSQL
-- Jobs: GoodJob
+- Jobs: Sidekiq + Redis
 - External
   - Payments: Stripe
   - User bank data syncing: Plaid 

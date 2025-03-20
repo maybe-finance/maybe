@@ -7,6 +7,7 @@ gem "rails", "~> 7.2.2"
 
 # Drivers
 gem "pg", "~> 1.5"
+gem "redis", "~> 5.4"
 
 # Deployment
 gem "puma", ">= 5.0"
@@ -25,13 +26,14 @@ gem "turbo-rails"
 gem "hotwire_combobox"
 
 # Background Jobs
-gem "good_job"
+gem "sidekiq"
 
 # Error logging
 gem "vernier"
 gem "rack-mini-profiler"
 gem "sentry-ruby"
 gem "sentry-rails"
+gem "sentry-sidekiq"
 gem "logtail-rails"
 
 # Active Storage
