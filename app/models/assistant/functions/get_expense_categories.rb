@@ -1,4 +1,6 @@
-class Assistant::Function::GetExpenseCategories < Assistant::Function
+class Assistant::Functions::GetExpenseCategories
+  include Assistant::Functions::Toolable
+
   class << self
     def name
       "get_expense_categories"

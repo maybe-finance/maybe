@@ -1,0 +1,72 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.openai.com/v1/responses
+    body:
+      encoding: UTF-8
+      string: '{"model":"invalid-model-key","input":[{"role":"user","content":"Error
+        test"}],"tools":[],"instructions":null}'
+    headers:
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer <OPENAI_ACCESS_TOKEN>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Date:
+      - Fri, 21 Mar 2025 18:02:59 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '183'
+      Connection:
+      - keep-alive
+      Openai-Version:
+      - '2020-10-01'
+      Openai-Organization:
+      - "<OPENAI_ORGANIZATION_ID>"
+      X-Request-Id:
+      - req_8b96d2c4a5fd9f6867321a59f2c83871
+      Openai-Processing-Ms:
+      - '114'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Cf-Cache-Status:
+      - DYNAMIC
+      Set-Cookie:
+      - __cf_bm=7QPY9MNmXzC1Cn40g1tf2.vUHSJgLK2H6Qyr6yPu_ag-1742580179-1.0.1.1-i5yiiXqowBLqwvQ6.h3UPAvErH3joLsvg8xOOgP.d6m2KzNfOA8IDSQ95h2qJsQRDuhwtMXlicW2Ua29l7xS4hWFTt4dOV09fotpUz4YKYw;
+        path=/; expires=Fri, 21-Mar-25 18:32:59 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=OiJrpU7qflYudc_3Ur.z0HcymtnD5.UeNdtTm8Ygi9U-1742580179526-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      X-Content-Type-Options:
+      - nosniff
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 923f5d08bf81cf75-CMH
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "error": {
+            "message": "The requested model 'invalid-model-key' does not exist.",
+            "type": "invalid_request_error",
+            "param": "model",
+            "code": "model_not_found"
+          }
+        }
+  recorded_at: Fri, 21 Mar 2025 18:02:59 GMT
+recorded_with: VCR 6.3.1

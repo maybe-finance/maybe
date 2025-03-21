@@ -1,4 +1,6 @@
-class Assistant::Function::GetAccountBalances < Assistant::Function
+class Assistant::Functions::GetAccountBalances
+  include Assistant::Functions::Toolable
+
   class << self
     def name
       "get_account_balances"

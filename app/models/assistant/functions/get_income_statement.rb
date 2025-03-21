@@ -1,4 +1,6 @@
-class Assistant::Function::GetIncomeStatement < Assistant::Function
+class Assistant::Functions::GetIncomeStatement
+  include Assistant::Functions::Toolable
+
   class << self
     def name
       "get_income_statement"

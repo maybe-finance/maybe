@@ -22,12 +22,14 @@ class CreateAiChats < ActiveRecord::Migration[7.2]
 
     create_table :tool_calls, id: :uuid do |t|
       t.references :message, null: false, foreign_key: true, type: :uuid
+      t.string :provider_id, null: false
+      t.string :provider_fn_call_id, null: false
       t.string :type, null: false
-      t.string :status, null: false
 
       # Function specific fields
       t.string :function_name
       t.jsonb :function_arguments
+      t.jsonb :function_result
 
       t.timestamps
     end

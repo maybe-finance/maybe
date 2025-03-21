@@ -569,10 +569,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_212839) do
 
   create_table "tool_calls", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "message_id", null: false
+    t.string "provider_id", null: false
+    t.string "provider_fn_call_id", null: false
     t.string "type", null: false
-    t.string "status", null: false
     t.string "function_name"
     t.jsonb "function_arguments"
+    t.jsonb "function_result"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["message_id"], name: "index_tool_calls_on_message_id"

@@ -1,4 +1,6 @@
-class Assistant::Function::GetTransactions < Assistant::Function
+class Assistant::Functions::GetTransactions
+  include Assistant::Functions::Toolable
+
   class << self
     def name
       "get_transactions"

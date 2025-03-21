@@ -26,7 +26,7 @@ class Message < ApplicationRecord
   }
 
   validates :ai_model, presence: { if: -> { assistant? || user? } }
-  validates :content, presence: true
+  validates :content, presence: true, allow_blank: true
   validate :kind_valid_for_role
   validate :status_valid_for_role
 

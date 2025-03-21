@@ -1,4 +1,6 @@
-class Assistant::Function::ComparePeriods < Assistant::Function
+class Assistant::Functions::ComparePeriods
+  include Assistant::Functions::Toolable
+
   class << self
     def name
       "compare_periods"

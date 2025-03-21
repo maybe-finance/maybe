@@ -1,5 +1,7 @@
-class Assistant::Function
-  class << self
+module Assistant::Functions::Toolable
+  extend ActiveSupport::Concern
+
+  class_methods do
     def name
       raise NotImplementedError, "Subclasses must implement the name class method"
     end

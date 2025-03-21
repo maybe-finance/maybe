@@ -66,15 +66,50 @@ class Assistant
       functions: available_functions
     )
 
-    if response.success?
-      response.data.messages.each do |message|
-        message.chat = chat
-        message.save!
-      end
-    else
+    unless response.success?
       Rails.logger.error("Assistant failed to respond to user: #{response.error}")
       chat.update!(error: response.error)
+      return
     end
+
+    # If no tool calls, create a plain message for the chat
+    unless response.data.tool_calls.any?
+      message = response.data.message
+      message.save!
+      return
+    end
+
+    # Step 1: Saving a "pending" message with incomplete tool call definitions
+    message = response.data.message
+    message.status = "pending"
+    message.save!
+
+    # Step 2: Call the functions, add to message and save
+    tool_calls = message.tool_calls.map do |tool_call|
+      result = call_tool_function(tool_call.function_name, tool_call.function_arguments)
+      tool_call.function_result = result
+      tool_call
+    end
+
+    message.tool_calls = tool_calls
+    message.save!
+
+    # Step 3: Call LLM again with tool call results and update the message with response
+    second_response = provider.chat_response(
+      model: latest_message.ai_model,
+      instructions: instructions,
+      messages: chat_history,
+    )
+
+    unless second_response.success?
+      Rails.logger.error("Assistant failed to process tool call results: #{second_response.error}")
+      chat.update!(error: second_response.error)
+      return
+    end
+
+    second_message = second_response.data.message
+    second_message.status = "complete"
+    second_message.save!
   end
 
   private
@@ -82,10 +117,10 @@ class Assistant
       chat.messages.ordered.where(role: [ :user, :assistant, :developer ], status: "complete", kind: "text")
     end
 
-    def call_function(name, params = {})
-      fn = available_functions.find { |fn| fn.name == name }
-      raise "Assistant does not implement function: #{name}" if fn.nil?
-      fn.call(params)
+    def call_tool_function(fn_name, fn_params = {})
+      fn = available_functions.find { |fn| fn.name == fn_name }
+      raise "Assistant does not implement function: #{fn_name}" if fn.nil?
+      fn.call(fn_params)
     end
 
     def instructions

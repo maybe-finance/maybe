@@ -5,57 +5,83 @@ class Provider::OpenAITest < ActiveSupport::TestCase
 
   setup do
     @subject = @openai = Provider::OpenAI.new(ENV.fetch("OPENAI_ACCESS_TOKEN"))
+    @subject_model = "gpt-4o"
   end
 
-  test "verifies model support" do
-    assert_not @subject.supports_model?("unknown-for-test-that-returns-false")
+  test "openai errors are automatically raised" do
+    VCR.use_cassette("open_ai/chat/error") do
+      response = @openai.chat_response(
+        model: "invalid-model-key",
+        messages: [ Message.new(role: "user", content: "Error test") ]
+      )
+
+      assert_not response.success?
+      assert_kind_of Faraday::BadRequestError, response.error
+
+      # Adheres to openai response schema
+      assert_equal "model_not_found", response.error.response[:body].dig("error", "code")
+    end
   end
 
-  test "provides basic chat response" do
-    VCR.use_cassette("#{vcr_key_prefix}/chat/basic_response") do
-      response = @subject.chat_response(
+  test "handles chat response with tool calls" do
+    VCR.use_cassette("open_ai/chat/tool_calls", record: :all) do
+      class TestFn
+        include Assistant::Functions::Toolable
+
+        class << self
+          def name
+            "get_net_worth"
+          end
+
+          def description
+            "Gets user net worth data"
+          end
+        end
+
+        def call(params = {})
+          "$124,200"
+        end
+      end
+
+      initial_message = Message.new(role: "user", content: "What is my net worth?")
+
+      response = @openai.chat_response(
         model: "gpt-4o",
-        messages: [
-          Message.new(
-            role: "user",
-            content: "This is a chat test.  If it's working, respond with a single word: Yes"
+        instructions: Assistant.instructions,
+        functions: [ TestFn ],
+        messages: [ initial_message ]
+      )
+
+      assert response.success?
+      assert response.data.tool_calls.size == 1
+
+      tool_call = response.data.tool_calls.first
+      tool_call_result = TestFn.new.call(JSON.parse(tool_call.function_arguments))
+
+      message_with_tool_calls = Message.new(
+        role: "assistant",
+        status: "pending",
+        content: "",
+        tool_calls: [
+          ToolCall::Function.new(
+            provider_id: tool_call.provider_id,
+            provider_fn_call_id: tool_call.provider_fn_call_id,
+            function_name: tool_call.function_name,
+            function_arguments: tool_call.function_arguments,
+            function_result: tool_call_result
           )
         ]
       )
 
-      assert response.success?
-      assert response.data.messages.size > 0
-      assert_equal "gpt-4o-2024-08-06", response.data.messages.first.ai_model
-      assert_equal "Yes", response.data.messages.first.content
-    end
-  end
-
-  test "provides response with tool calls" do
-    VCR.use_cassette("#{vcr_key_prefix}/chat/tool_calls") do
-      # A prompt that should use multiple tools
-      prompt = <<~PROMPT
-        Can you show me a breakdown of the following?
-
-        - My net worth over the last 30 days
-        - My income over the last 30 days
-        - My spending over the last 30 days
-      PROMPT
-
-      response = @subject.chat_response(
+      second_response = @openai.chat_response(
         model: "gpt-4o",
         instructions: Assistant.instructions,
-        functions: Assistant.available_functions,
-        messages: [
-          Message.new(role: "user", content: prompt)
-        ]
+        messages: [ initial_message, message_with_tool_calls ]
       )
 
-      assert response.success?
+      assert second_response.success?
+      assert second_response.data.message.complete?
+      assert second_response.data.message.content.include?(tool_call_result) # Somewhere in the response should be the tool call result value
     end
   end
-
-  private
-    def vcr_key_prefix
-      @subject.class.name.demodulize.underscore
-    end
 end
