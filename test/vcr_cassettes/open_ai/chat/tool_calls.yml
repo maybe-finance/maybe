@@ -1,0 +1,320 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.openai.com/v1/responses
+    body:
+      encoding: UTF-8
+      string: '{"model":"gpt-4o","input":[{"role":"user","content":"Can you show me
+        a breakdown of the following?\n\n- My net worth over the last 30 days\n- My
+        income over the last 30 days\n- My spending over the last 30 days\n"}],"tools":[{"type":"function","name":"get_balance_sheet","description":"Get
+        current balance sheet information including net worth, assets, and liabilities","parameters":{"type":"object","properties":{},"required":[],"additionalProperties":false},"strict":true},{"type":"function","name":"get_income_statement","description":"Get
+        income statement data for a specific time period","parameters":{"type":"object","properties":{"period":{"type":"string","enum":["current_month","previous_month","year_to_date","previous_year"],"description":"The
+        time period for the income statement data"}},"required":["period"],"additionalProperties":false},"strict":true},{"type":"function","name":"get_expense_categories","description":"Get
+        top expense categories for a specific time period","parameters":{"type":"object","properties":{"period":{"type":"string","enum":["current_month","previous_month","year_to_date","previous_year"],"description":"The
+        time period for the expense categories data"},"limit":{"type":"integer","description":"Number
+        of top categories to return"}},"required":["period","limit"],"additionalProperties":false},"strict":true},{"type":"function","name":"get_account_balances","description":"Get
+        balances for all accounts or by account type","parameters":{"type":"object","properties":{"account_type":{"type":"string","enum":["asset","liability","all"],"description":"Type
+        of accounts to get balances for"}},"required":["account_type"],"additionalProperties":false},"strict":true},{"type":"function","name":"get_transactions","description":"Get
+        transactions filtered by date range and/or category","parameters":{"type":"object","properties":{"start_date":{"type":"string","description":"Start
+        date for transactions in YYYY-MM-DD format"},"end_date":{"type":"string","description":"End
+        date for transactions in YYYY-MM-DD format"},"category_name":{"type":"string","description":"Filter
+        transactions by category name"},"limit":{"type":"integer","description":"Maximum
+        number of transactions to return (defaults to 10)"}},"required":["start_date","end_date","category_name","limit"],"additionalProperties":false},"strict":true},{"type":"function","name":"compare_periods","description":"Compare
+        financial data between two periods","parameters":{"type":"object","properties":{"period1":{"type":"string","enum":["current_month","previous_month","year_to_date","previous_year"],"description":"First
+        period for comparison"},"period2":{"type":"string","enum":["current_month","previous_month","year_to_date","previous_year"],"description":"Second
+        period for comparison"}},"required":["period1","period2"],"additionalProperties":false},"strict":true}],"instructions":"You
+        are a helpful financial assistant for Maybe, a personal finance app.\nYou
+        help users understand their financial data by answering questions about their
+        accounts, transactions, income, expenses, and net worth.\n\nWhen users ask
+        financial questions:\n1. Use the provided functions to retrieve the relevant
+        data\n2. Provide ONLY the most important numbers and insights\n3. Eliminate
+        all unnecessary words and context\n4. Use simple markdown for formatting\n5.
+        Ask follow-up questions to keep the conversation going. Help educate the user
+        about their own data and entice them to ask more questions.\n\nDO NOT:\n-
+        Add introductions or conclusions\n- Apologize or explain limitations\n\nPresent
+        monetary values using the format provided by the functions.\n"}'
+    headers:
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer <OPENAI_ACCESS_TOKEN>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 21 Mar 2025 14:18:42 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Openai-Version:
+      - '2020-10-01'
+      Openai-Organization:
+      - "<OPENAI_ORGANIZATION_ID>"
+      X-Request-Id:
+      - req_434f08736b7c91b1ea07bf81cef21507
+      Openai-Processing-Ms:
+      - '11758'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Cf-Cache-Status:
+      - DYNAMIC
+      Set-Cookie:
+      - __cf_bm=TDrrkraYJtMJkBDpwTFRHszMh5.44PObkaR_DPTn7bs-1742566722-1.0.1.1-5yNYBgBtwECMJLuLhfogtiDW1.XdsVBSnit.VpOjHitkB4OOfQLLaHO_dLR4d4HDG8zkNL1RNXI07vOirY10o1FxcZ1oR8YR0UMUrNJ2_nw;
+        path=/; expires=Fri, 21-Mar-25 14:48:42 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=OKVFDrnX270p7.zncd1f.vstTBf11_gfDGJVz6qq_lQ-1742566722134-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      X-Content-Type-Options:
+      - nosniff
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 923e14334bbc633e-ORD
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        {
+          "id": "resp_67dd753662dc8192b5b25f9666f06d940cbbaa24c6c80cad",
+          "object": "response",
+          "created_at": 1742566710,
+          "status": "completed",
+          "error": null,
+          "incomplete_details": null,
+          "instructions": "You are a helpful financial assistant for Maybe, a personal finance app.\nYou help users understand their financial data by answering questions about their accounts, transactions, income, expenses, and net worth.\n\nWhen users ask financial questions:\n1. Use the provided functions to retrieve the relevant data\n2. Provide ONLY the most important numbers and insights\n3. Eliminate all unnecessary words and context\n4. Use simple markdown for formatting\n5. Ask follow-up questions to keep the conversation going. Help educate the user about their own data and entice them to ask more questions.\n\nDO NOT:\n- Add introductions or conclusions\n- Apologize or explain limitations\n\nPresent monetary values using the format provided by the functions.\n",
+          "max_output_tokens": null,
+          "model": "gpt-4o-2024-08-06",
+          "output": [
+            {
+              "type": "function_call",
+              "id": "fc_67dd75416cf08192b67279b3c06bb84b0cbbaa24c6c80cad",
+              "call_id": "call_Be2crDZFo1QBcyPpo9SivVVk",
+              "name": "get_balance_sheet",
+              "arguments": "{}",
+              "status": "completed"
+            },
+            {
+              "type": "function_call",
+              "id": "fc_67dd754197b881929875c127b46daea20cbbaa24c6c80cad",
+              "call_id": "call_ncxXWtAIV0lGpgIeiHUcquAS",
+              "name": "get_income_statement",
+              "arguments": "{\"period\":\"current_month\"}",
+              "status": "completed"
+            },
+            {
+              "type": "function_call",
+              "id": "fc_67dd7541b3ec8192bf57bbcf406aeaad0cbbaa24c6c80cad",
+              "call_id": "call_tgWrZssOt6UE2BOoQMkul3lg",
+              "name": "get_expense_categories",
+              "arguments": "{\"period\":\"current_month\",\"limit\":5}",
+              "status": "completed"
+            }
+          ],
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "reasoning": {
+            "effort": null,
+            "generate_summary": null
+          },
+          "store": true,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "text"
+            }
+          },
+          "tool_choice": "auto",
+          "tools": [
+            {
+              "type": "function",
+              "description": "Get current balance sheet information including net worth, assets, and liabilities",
+              "name": "get_balance_sheet",
+              "parameters": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              },
+              "strict": true
+            },
+            {
+              "type": "function",
+              "description": "Get income statement data for a specific time period",
+              "name": "get_income_statement",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "period": {
+                    "type": "string",
+                    "enum": [
+                      "current_month",
+                      "previous_month",
+                      "year_to_date",
+                      "previous_year"
+                    ],
+                    "description": "The time period for the income statement data"
+                  }
+                },
+                "required": [
+                  "period"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            },
+            {
+              "type": "function",
+              "description": "Get top expense categories for a specific time period",
+              "name": "get_expense_categories",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "period": {
+                    "type": "string",
+                    "enum": [
+                      "current_month",
+                      "previous_month",
+                      "year_to_date",
+                      "previous_year"
+                    ],
+                    "description": "The time period for the expense categories data"
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "description": "Number of top categories to return"
+                  }
+                },
+                "required": [
+                  "period",
+                  "limit"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            },
+            {
+              "type": "function",
+              "description": "Get balances for all accounts or by account type",
+              "name": "get_account_balances",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "account_type": {
+                    "type": "string",
+                    "enum": [
+                      "asset",
+                      "liability",
+                      "all"
+                    ],
+                    "description": "Type of accounts to get balances for"
+                  }
+                },
+                "required": [
+                  "account_type"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            },
+            {
+              "type": "function",
+              "description": "Get transactions filtered by date range and/or category",
+              "name": "get_transactions",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "start_date": {
+                    "type": "string",
+                    "description": "Start date for transactions in YYYY-MM-DD format"
+                  },
+                  "end_date": {
+                    "type": "string",
+                    "description": "End date for transactions in YYYY-MM-DD format"
+                  },
+                  "category_name": {
+                    "type": "string",
+                    "description": "Filter transactions by category name"
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "description": "Maximum number of transactions to return (defaults to 10)"
+                  }
+                },
+                "required": [
+                  "start_date",
+                  "end_date",
+                  "category_name",
+                  "limit"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            },
+            {
+              "type": "function",
+              "description": "Compare financial data between two periods",
+              "name": "compare_periods",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "period1": {
+                    "type": "string",
+                    "enum": [
+                      "current_month",
+                      "previous_month",
+                      "year_to_date",
+                      "previous_year"
+                    ],
+                    "description": "First period for comparison"
+                  },
+                  "period2": {
+                    "type": "string",
+                    "enum": [
+                      "current_month",
+                      "previous_month",
+                      "year_to_date",
+                      "previous_year"
+                    ],
+                    "description": "Second period for comparison"
+                  }
+                },
+                "required": [
+                  "period1",
+                  "period2"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            }
+          ],
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 0,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 0,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 0
+          },
+          "user": null,
+          "metadata": {}
+        }
+  recorded_at: Fri, 21 Mar 2025 14:18:42 GMT
+recorded_with: VCR 6.3.1

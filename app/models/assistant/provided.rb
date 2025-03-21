@@ -1,15 +1,8 @@
 module Assistant::Provided
   extend ActiveSupport::Concern
 
-  AiModel = Data.define(:id, :name, :provider)
-
-  def available_models
-    [
-      AiModel.new("openai-gpt-4o", "GPT-4o", Providers.openai)
-    ]
-  end
-
-  def get_model(id)
-    available_models.find { |model| model.id == id }
+  def provider_for_model(model)
+    available_providers = [ Providers.openai ].compact
+    available_providers.find { |provider| provider.supports_model?(model) }
   end
 end

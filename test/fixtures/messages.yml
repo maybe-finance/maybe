@@ -33,4 +33,10 @@ assistant:
   chat: one
   created_at: 2025-03-20 12:02:00
 
-
+chat2_user:
+  kind: text
+  content: Can you help me understand my spending habits?
+  role: user
+  ai_model: gpt-4o
+  chat: two
+  created_at: 2025-03-20 12:00:01

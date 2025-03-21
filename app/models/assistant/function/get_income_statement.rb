@@ -18,7 +18,8 @@ class Assistant::Function::GetIncomeStatement < Assistant::Function
             description: "The time period for the income statement data"
           }
         },
-        required: []
+        required: [ "period" ],
+        additionalProperties: false
       }
     end
   end

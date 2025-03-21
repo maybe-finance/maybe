@@ -1,9 +1,33 @@
 require "test_helper"
 
 class AssistantTest < ActiveSupport::TestCase
+  include ProviderTestHelper
+
   setup do
-    @chat = chats(:one)
+    @chat = chats(:two)
     @assistant = Assistant.for_chat(@chat)
+    @provider = mock
+  end
+
+  test "responds to basic prompt without tools" do
+    @assistant.expects(:provider_for_model).with("gpt-4o").returns(@provider)
+    @provider.expects(:chat_response).returns(
+      provider_success_response(
+        Assistant::Provideable::ChatResponse.new(
+          messages: [
+            Message.new(
+              role: "assistant",
+              content: "Hello from assistant",
+              ai_model: "gpt-4o"
+            )
+          ]
+        )
+      )
+    )
+
+    assert_difference "Message.count", 1 do
+      @assistant.respond_to_user
+    end
   end
 
   test "can execute get_balance_sheet function" do

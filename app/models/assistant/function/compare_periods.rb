@@ -23,7 +23,8 @@ class Assistant::Function::ComparePeriods < Assistant::Function
             description: "Second period for comparison"
           }
         },
-        required: [ "period1", "period2" ]
+        required: [ "period1", "period2" ],
+        additionalProperties: false
       }
     end
   end

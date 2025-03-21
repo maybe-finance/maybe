@@ -34,7 +34,7 @@ class Message < ApplicationRecord
   after_update_commit -> { broadcast_update_to chat }, if: :visible?
 
   scope :ordered, -> { order(created_at: :asc) }
-  scope :conversation, -> { Chat.debug_mode_enabled? ? all : where(role: [ :user, :assistant ], kind: [ "text", "reasoning" ]) }
+  scope :conversation, -> { Chat.debug_mode_enabled? ? ordered : ordered.where(role: [ :user, :assistant ], kind: [ "text", "reasoning" ]) }
 
   private
     def visible?
@@ -44,9 +44,7 @@ class Message < ApplicationRecord
     def handle_create
       broadcast_append_to chat
 
-      if user?
-        chat.assistant.respond_to(self)
-      end
+      chat.assistant.respond_to_user if user?
     end
 
     def status_valid_for_role

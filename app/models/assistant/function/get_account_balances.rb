@@ -18,7 +18,8 @@ class Assistant::Function::GetAccountBalances < Assistant::Function
             description: "Type of accounts to get balances for"
           }
         },
-        required: []
+        required: [ "account_type" ],
+        additionalProperties: false
       }
     end
   end

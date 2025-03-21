@@ -19,11 +19,11 @@ class Assistant::Function::GetExpenseCategories < Assistant::Function
           },
           limit: {
             type: "integer",
-            description: "Number of top categories to return",
-            default: 5
+            description: "Number of top categories to return"
           }
         },
-        required: []
+        required: [ "period", "limit" ],
+        additionalProperties: false
       }
     end
   end

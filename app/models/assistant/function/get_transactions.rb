@@ -14,13 +14,11 @@ class Assistant::Function::GetTransactions < Assistant::Function
         properties: {
           start_date: {
             type: "string",
-            format: "date",
-            description: "Start date for transactions (YYYY-MM-DD)"
+            description: "Start date for transactions in YYYY-MM-DD format"
           },
           end_date: {
             type: "string",
-            format: "date",
-            description: "End date for transactions (YYYY-MM-DD)"
+            description: "End date for transactions in YYYY-MM-DD format"
           },
           category_name: {
             type: "string",
@@ -28,11 +26,11 @@ class Assistant::Function::GetTransactions < Assistant::Function
           },
           limit: {
             type: "integer",
-            description: "Maximum number of transactions to return",
-            default: 10
+            description: "Maximum number of transactions to return (defaults to 10)"
           }
         },
-        required: []
+        required: [ "start_date", "end_date", "category_name", "limit" ],
+        additionalProperties: false
       }
     end
   end

@@ -3,11 +3,11 @@ module Assistant::Provideable
 
   ChatResponse = Data.define(:messages)
 
-  def fetch_chat_response(params = {})
-    raise NotImplementedError, "Subclasses must implement #chat"
+  def supports_model?(model)
+    raise NotImplementedError, "Subclasses must implement #supports_model?"
   end
 
-  def tools_config(assistant_functions = [])
-    raise NotImplementedError, "Subclasses must implement #tools_config"
+  def chat_response(messages:, model: nil, functions: [], instructions: nil)
+    raise NotImplementedError, "Subclasses must implement #chat_response"
   end
 end

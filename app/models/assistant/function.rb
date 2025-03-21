@@ -12,7 +12,8 @@ class Assistant::Function
       {
         type: "object",
         properties: {},
-        required: []
+        required: [],
+        additionalProperties: false
       }
     end
   end

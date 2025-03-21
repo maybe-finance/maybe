@@ -5,8 +5,8 @@ http_interactions:
     uri: https://api.openai.com/v1/responses
     body:
       encoding: UTF-8
-      string: '{"model":"gpt-4o-2024-08-06","input":[{"role":"user","content":"This
-        is a chat test.  Can you confirm it worked?","type":"message"}]}'
+      string: '{"model":"gpt-4o","input":[{"role":"user","content":"This is a chat
+        test.  If it''s working, respond with a single word: Yes"}],"tools":[],"instructions":null}'
     headers:
       Content-Type:
       - application/json
@@ -24,7 +24,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Fri, 21 Mar 2025 01:57:49 GMT
+      - Fri, 21 Mar 2025 13:50:21 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -36,34 +36,34 @@ http_interactions:
       Openai-Organization:
       - "<OPENAI_ORGANIZATION_ID>"
       X-Request-Id:
-      - req_9602335bd3d4fc028e943b73568c744a
+      - req_8a37322ef4257b41a01e525acc01b0ae
       Openai-Processing-Ms:
-      - '498'
+      - '631'
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
       Cf-Cache-Status:
       - DYNAMIC
       Set-Cookie:
-      - __cf_bm=mk53hP2iYq67QLxPffHK7_g20.q7qePE3uhGT5UlZug-1742522269-1.0.1.1-11uFuXhy2XgMCl6eR8T63b4GE.Ze2YKiPzjvBfWdVboNp4vcggYrq9ZALAou5_WSDH0Y.dxQLGSjWYQYLUKSXCUncNUROtV_FpP_NdShmGI;
-        path=/; expires=Fri, 21-Mar-25 02:27:49 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=kh8YdfmY4GGPlJcVDtHeTTmvZa0JKNsma0u22EhS.Ms-1742565021-1.0.1.1-UF_dozBNpIBJpmduXIrqqOt7pRAnlnYc1f2N9Lr0eNcPs7M6nphc6CT87z2t6bIYc4zd2pftWv.qP9.hVvdOKOM79gGAMKkZuis7Apa2bWY;
+        path=/; expires=Fri, 21-Mar-25 14:20:21 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=vgV2Dax5RdtVv7gucgvfTvHMU1dkXLdMjQL5jgoT_DA-1742522269973-0.0.1.1-604800000;
+      - _cfuvid=zDCnrFu7rIUPBocD7Q66kQfH7grNGFM1vgONYpM5nys-1742565021589-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       X-Content-Type-Options:
       - nosniff
       Server:
       - cloudflare
       Cf-Ray:
-      - 9239d73749cecf57-CMH
+      - 923deaf45bcfcf57-CMH
       Alt-Svc:
       - h3=":443"; ma=86400
     body:
       encoding: ASCII-8BIT
       string: |-
         {
-          "id": "resp_67dcc79d66348192bf1ca3c4a0319225048ecd0f5dc17426",
+          "id": "resp_67dd6e9cedfc819280d0ad9bd77b3f730701768d8a4cc0c9",
           "object": "response",
-          "created_at": 1742522269,
+          "created_at": 1742565020,
           "status": "completed",
           "error": null,
           "incomplete_details": null,
@@ -73,13 +73,13 @@ http_interactions:
           "output": [
             {
               "type": "message",
-              "id": "msg_67dcc79db4cc8192ade54805290f6943048ecd0f5dc17426",
+              "id": "msg_67dd6e9d66dc8192a00dedea14b4ab080701768d8a4cc0c9",
               "status": "completed",
               "role": "assistant",
               "content": [
                 {
                   "type": "output_text",
-                  "text": "Yes, it's working! How can I assist you today?",
+                  "text": "Yes",
                   "annotations": []
                 }
               ]
@@ -103,18 +103,18 @@ http_interactions:
           "top_p": 1.0,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 38,
+            "input_tokens": 43,
             "input_tokens_details": {
               "cached_tokens": 0
             },
-            "output_tokens": 13,
+            "output_tokens": 2,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 51
+            "total_tokens": 45
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: Fri, 21 Mar 2025 01:57:49 GMT
+  recorded_at: Fri, 21 Mar 2025 13:50:21 GMT
 recorded_with: VCR 6.3.1

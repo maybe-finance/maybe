@@ -26,6 +26,13 @@ class Provider
         error: nil,
       )
     rescue StandardError => error
+      Sentry.capture_exception(error)
+
+      unless Rails.env.production?
+        Rails.logger.error(error)
+        Rails.logger.error(error.backtrace.join("\n"))
+      end
+
       ProviderResponse.new(
         success?: false,
         data: nil,
