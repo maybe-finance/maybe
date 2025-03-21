@@ -27,7 +27,7 @@ class Account::TransactionsController < ApplicationController
     end
 
     def bulk_update_params
-      params.require(:bulk_update).permit(:date, :notes, :category_id, :merchant_id, entry_ids: [])
+      params.require(:bulk_update).permit(:date, :notes, :category_id, :merchant_id, entry_ids: [], tag_ids: [])
     end
 
     def search_params

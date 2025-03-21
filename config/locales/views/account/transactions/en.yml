@@ -12,10 +12,12 @@ en:
         details: Details
         merchant_label: Merchant
         merchant_placeholder: Select a merchant
+        none: (none)
         note_label: Notes
         note_placeholder: Enter a note that will be applied to selected transactions
         overview: Overview
         save: Save
+        tag_label: Tags
       bulk_update:
         success: "%{count} transactions updated"
       form:
@@ -29,7 +31,11 @@ en:
         description_placeholder: Describe transaction
         expense: Expense
         income: Income
+        none: (none)
+        note_label: Notes
+        note_placeholder: Enter a note
         submit: Add transaction
+        tags_label: Tags
         transfer: Transfer
       new:
         new_transaction: New transaction
