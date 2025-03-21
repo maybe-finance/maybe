@@ -1,14 +1,36 @@
-user:
-  content: Hello AI!
-  role: user
-  chat: one
-
-assistant:
-  content: Hello! How can I help you today?
-  role: assistant
-  chat: one
-
 developer:
-  content: You are a helpful assistant.
+  kind: text
+  content: You are a personal finance assistant.  Be concise and helpful.
   role: developer
   chat: one
+  created_at: 2025-03-20 12:00:00
+
+user:
+  kind: text
+  content: Can you help me understand my spending habits?
+  role: user
+  chat: one
+  created_at: 2025-03-20 12:00:01
+
+internal:
+  kind: debug
+  content: An internal debug message 
+  role: internal
+  chat: one
+  created_at: 2025-03-20 12:00:02
+
+assistant_reasoning:
+  kind: reasoning
+  content: I'm thinking...
+  role: assistant
+  chat: one
+  created_at: 2025-03-20 12:01:00
+
+assistant:
+  kind: text
+  content: Hello! I can help you understand your spending habits.
+  role: assistant
+  chat: one
+  created_at: 2025-03-20 12:02:00
+
+

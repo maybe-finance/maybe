@@ -1,0 +1,6 @@
+one:
+  type: ToolCall::Function
+  function_name: get_user_info
+  function_arguments: {}
+  message: assistant
+  status: complete

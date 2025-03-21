@@ -1,6 +1,6 @@
 module MenusHelper
-  def contextual_menu(icon: "more-horizontal", &block)
-    tag.div data: { controller: "menu" } do
+  def contextual_menu(icon: "more-horizontal", id: nil, &block)
+    tag.div id: id, data: { controller: "menu" } do
       concat contextual_menu_icon(icon)
       concat contextual_menu_content(&block)
     end

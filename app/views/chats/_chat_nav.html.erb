@@ -4,7 +4,7 @@
   <% path = chat.new_record? ? chats_path : chats_path(previous_chat_id: chat.id) %>
 
   <div class="flex items-center gap-2 grow">
-    <%= link_to path, class: "w-9 h-9 flex items-center justify-center rounded-lg hover:bg-surface-hover" do %>
+    <%= link_to path, id: "chat-nav-back", class: "w-9 h-9 flex items-center justify-center rounded-lg hover:bg-surface-hover" do %>
       <%= icon("menu", color: "gray" ) %>
     <% end %>
 
@@ -13,7 +13,7 @@
     </div>
   </div>
 
-  <%= contextual_menu icon: "more-vertical" do %>
+  <%= contextual_menu icon: "more-vertical", id: "chat-menu" do %>
     <%= contextual_menu_item "Start new chat", url: new_chat_path, icon: "plus" %>
 
     <% unless chat.new_record? %>

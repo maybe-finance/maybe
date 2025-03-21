@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_19_145426) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_19_212839) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -197,11 +197,11 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_145426) do
   end
 
   create_table "chats", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.uuid "user_id", null: false
     t.string "title", null: false
     t.string "instructions"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_chats_on_user_id"
   end
 
@@ -390,13 +390,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_145426) do
   end
 
   create_table "messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "chat_id", null: false
+    t.string "provider_id"
+    t.string "ai_model"
+    t.string "role", null: false
+    t.string "kind", default: "text", null: false
+    t.string "status", default: "complete", null: false
+    t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "chat_id", null: false
-    t.text "openai_id"
-    t.string "role", default: "user", null: false
-    t.string "message_type", default: "text", null: false
-    t.text "content", null: false
     t.index ["chat_id"], name: "index_messages_on_chat_id"
   end
 
@@ -564,6 +566,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_145426) do
     t.index ["family_id"], name: "index_tags_on_family_id"
   end
 
+  create_table "tool_calls", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "message_id", null: false
+    t.string "type", null: false
+    t.string "status", null: false
+    t.string "function_name"
+    t.jsonb "function_arguments"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["message_id"], name: "index_tool_calls_on_message_id"
+  end
+
   create_table "transfers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "inflow_transaction_id", null: false
     t.uuid "outflow_transaction_id", null: false
@@ -648,6 +661,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_145426) do
   add_foreign_key "sessions", "users"
   add_foreign_key "taggings", "tags"
   add_foreign_key "tags", "families"
+  add_foreign_key "tool_calls", "messages"
   add_foreign_key "transfers", "account_transactions", column: "inflow_transaction_id", on_delete: :cascade
   add_foreign_key "transfers", "account_transactions", column: "outflow_transaction_id", on_delete: :cascade
   add_foreign_key "users", "chats", column: "last_viewed_chat_id"

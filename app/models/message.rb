@@ -2,63 +2,66 @@ class Message < ApplicationRecord
   include Promptable
 
   belongs_to :chat
+  has_many :tool_calls, dependent: :destroy
 
-  # Matches OpenAI model spec "roles" from "Chain of command"
+  # Loosely follows the OpenAI model spec "roles" from "Chain of command"
   # https://model-spec.openai.com/2025-02-12.html#definitions
   enum :role, {
-    developer: "developer",
-    user: "user",
-    assistant: "assistant"
+    internal: "internal", # Internal use only
+    developer: "developer", # Developer prompts
+    user: "user", # User prompts
+    assistant: "assistant" # Assistant responses
   }
 
-  enum :message_type, {
+  enum :kind, {
     text: "text",
-    function: "function_call",
-    debug: "debug" # internal only, never sent to OpenAI
+    reasoning: "reasoning",
+    debug: "debug"
   }
 
+  enum :status, {
+    pending: "pending",
+    complete: "complete",
+    failed: "failed"
+  }
+
+  validates :ai_model, presence: { if: -> { assistant? || user? } }
   validates :content, presence: true
+  validate :kind_valid_for_role
+  validate :status_valid_for_role
 
-  after_create_commit :broadcast_and_fetch
-  after_update_commit -> { broadcast_update_to chat }
+  after_create_commit :handle_create, if: :visible?
+  after_update_commit -> { broadcast_update_to chat }, if: :visible?
 
-  scope :conversation, -> { where(message_type: [ :text ], role: [ :user, :assistant ]) }
   scope :ordered, -> { order(created_at: :asc) }
+  scope :conversation, -> { Chat.debug_mode_enabled? ? all : where(role: [ :user, :assistant ], kind: [ "text", "reasoning" ]) }
 
   private
-    def requires_response?
-      user? && text?
+    def visible?
+      chat.debug_mode_enabled? || user? || assistant?
     end
 
-    def broadcast_and_fetch
+    def handle_create
       broadcast_append_to chat
-      sleep 2
-      # broadcast_append_to chat, target: "messages", partial: "messages/thinking_message"
-      # sleep 2
 
-      if requires_response?
-        stream_openai_response
+      if user?
+        chat.assistant.respond_to(self)
       end
     end
 
-    def stream_openai_response
-      # TODO
-      Rails.logger.info "Streaming OpenAI response"
-
-      # broadcast_remove_to chat, target: "thinking-message"
-
-      self.class.create!(
-        chat: chat,
-        role: "assistant",
-        content: "Mock OpenAI response message"
-      )
+    def status_valid_for_role
+      if status == "pending" && role != "assistant"
+        errors.add(:status, "All non-assistant messages must be complete on creation")
+      end
     end
 
-    def streamer
-      # TODO
+    def kind_valid_for_role
+      if kind == "debug" && role != "internal"
+        errors.add(:kind, "Debug messages must be internal")
+      end
 
-      proc do |chunk, _bytesize|
-        Rails.logger.info "OpenAI response chunk: #{chunk}"
+      if kind == "reasoning" && role != "assistant"
+        errors.add(:kind, "Reasoning messages must be assistant")
       end
     end
 end

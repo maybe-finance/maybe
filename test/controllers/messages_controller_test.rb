@@ -1,0 +1,22 @@
+require "test_helper"
+
+class MessagesControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    sign_in @user = users(:family_admin)
+    @chat = @user.chats.first
+  end
+
+  test "can create a message" do
+    post chat_messages_url(@chat), params: { message: { content: "Hello" } }
+
+    assert_redirected_to chat_path(@chat)
+  end
+
+  test "cannot create a message if AI is disabled" do
+    @user.update!(ai_enabled: false)
+
+    post chat_messages_url(@chat), params: { message: { content: "Hello" } }
+
+    assert_response :forbidden
+  end
+end

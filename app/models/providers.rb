@@ -30,6 +30,10 @@ module Providers
   end
 
   def openai
-    # TODO: Placeholder for AI chat PR
+    access_token = ENV.fetch("OPENAI_ACCESS_TOKEN", Setting.openai_access_token)
+
+    return nil unless access_token.present?
+
+    Provider::OpenAI.new(access_token)
   end
 end

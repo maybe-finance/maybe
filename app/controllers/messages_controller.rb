@@ -1,9 +1,12 @@
 class MessagesController < ApplicationController
+  guard_feature unless: -> { Current.user.ai_enabled? }
+
   before_action :set_chat
-  before_action :ensure_ai_enabled
 
   def create
-    @message = @chat.messages.create!(message_params)
+    @message = @chat.messages.user.create!(
+      content: message_params[:content]
+    )
 
     respond_to do |format|
       format.html { redirect_to chat_path(@chat) }
@@ -18,11 +21,5 @@ class MessagesController < ApplicationController
 
     def message_params
       params.require(:message).permit(:content)
-    end
-
-    def ensure_ai_enabled
-      unless Current.user.ai_enabled?
-        redirect_to root_path, alert: "AI chat is not enabled. Please enable it in your settings."
-      end
     end
 end

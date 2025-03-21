@@ -1,8 +1,9 @@
 class ChatsController < ApplicationController
   include ActionView::RecordIdentifier
 
+  guard_feature unless: -> { Current.user.ai_enabled? }
+
   before_action :set_chat, only: [ :show, :edit, :update, :destroy ]
-  before_action :ensure_ai_enabled, only: [ :edit, :update, :create, :show ]
 
   def index
     @chat = nil # override application_controller default behavior of setting @chat to last viewed chat
@@ -18,11 +19,8 @@ class ChatsController < ApplicationController
   end
 
   def create
-    @chat = Current.user.chats.create_from_message!(chat_params[:content])
-    @message = @chat.messages.user.first
-
+    @chat = Current.user.chats.create_from_prompt!(chat_params[:content])
     set_last_viewed_chat(@chat)
-
     redirect_to chat_path(@chat)
   end
 
@@ -60,11 +58,5 @@ class ChatsController < ApplicationController
 
     def chat_params
       params.require(:chat).permit(:title, :content)
-    end
-
-    def ensure_ai_enabled
-      unless Current.user.ai_enabled?
-        redirect_to root_path, alert: "AI chat is not enabled. Please enable it in your settings."
-      end
     end
 end

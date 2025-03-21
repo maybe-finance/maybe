@@ -11,14 +11,9 @@ Rails.application.routes.draw do
   # Uses basic auth - see config/initializers/sidekiq.rb
   mount Sidekiq::Web => "/sidekiq"
 
-  # AI Chat routes
-  resources :chats do
-    resources :messages, only: [ :create ]
-  end
-
-  # AI Financial queries
-  namespace :ai do
-    resources :queries, only: [ :create ]
+  # AI chats 
+  resources :chats do 
+    resources :messages, only: :create
   end
 
   get "changelog", to: "pages#changelog"

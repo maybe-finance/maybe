@@ -7,34 +7,31 @@ class ChatsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
   end
 
-  test "should get index" do
+  test "cannot create a chat if AI is disabled" do
+    @user.update!(ai_enabled: false)
+    post chats_url, params: { chat: { content: "Hello" } }
+    assert_response :forbidden
+  end
+
+  test "gets index" do
     get chats_url
     assert_response :success
   end
 
-  test "should create chat with proper system message" do
+  test "creates chat" do
     assert_difference("Chat.count") do
-      post chats_url
+      post chats_url, params: { chat: { content: "Hello" } }
     end
-
-    chat = Chat.last
-
-    # Verify the system message was created
-    assert_equal 1, chat.messages.developer.count
   end
 
-  test "should show chat" do
-    chat = Chat.create!(user: @user, title: "Test Chat")
-
-    get chat_url(chat)
+  test "shows chat" do
+    get chat_url(chats(:one))
     assert_response :success
   end
 
-  test "should destroy chat" do
-    chat = Chat.create!(user: @user, title: "Test Chat")
-
+  test "destroys chat" do
     assert_difference("Chat.count", -1) do
-      delete chat_url(chat)
+      delete chat_url(chats(:one))
     end
 
     assert_redirected_to chats_url

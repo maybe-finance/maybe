@@ -4,61 +4,66 @@ class ChatsTest < ApplicationSystemTestCase
   setup do
     @user = users(:family_admin)
     login_as(@user)
+
+    @assistant = mock
+    Assistant.stubs(:for_chat).returns(@assistant)
   end
 
-  test "can navigate to chats index" do
-    skip
-    # Navigate to chats index
-    visit chats_path
-    assert_selector "h1", text: "All Chats"
+  test "sidebar shows consent if ai is disabled for user" do
+    @user.update!(ai_enabled: false)
 
-    # Verify the New Chat button exists
-    assert_selector "a", text: "New Chat"
-  end
+    visit root_path
 
-  test "can create a new chat" do
-    skip
-    visit chats_path
-    click_on "New Chat"
-
-    # After creating a new chat, we should be redirected to the root path with the chat_id parameter
-    # The format parameter may also be present, so we'll check the path without the query string
-    assert_match(/^\/$/, current_path)
-
-    # Verify we can see the chat title
-    assert_selector "h1", text: "New Chat"
-  end
-
-  test "can navigate to chats and view example questions" do
-    skip
-    # Navigate to chats index
-    visit chats_path
-    assert_selector "h1", text: "All Chats"
-
-    # Create a new chat
-    click_on "New Chat"
-
-    # First chat will be empty and should show example questions
     within "#chat-container" do
-      assert_selector "button", text: "What's my current net worth?"
-      assert_selector "button", text: "How much did I spend on groceries last month?"
-      assert_selector "button", text: "What's my savings rate this year?"
-      assert_selector "button", text: "How has my spending changed compared to last month?"
+      assert_selector "h3", text: "Enable Personal Finance AI"
     end
   end
 
-  test "can click example question to fill chat form" do
-    skip
-    # Create a new chat directly
-    visit chats_path
-    click_on "New Chat"
+  test "sidebar shows index when enabled and chats are empty" do
+    @user.update!(ai_enabled: true)
+    @user.chats.destroy_all
 
-    # Click an example question
+    visit root_url
+
     within "#chat-container" do
-      find("button", text: "What's my current net worth?").click
+      assert_selector "h1", text: "Chats"
+    end
+  end
+
+  test "sidebar shows last viewed chat" do
+    @user.update!(ai_enabled: true)
+
+    click_on @user.chats.first.title
+
+    # Page refresh
+    visit root_url
+
+    # After page refresh, we're still on the last chat we were viewing
+    within "#chat-container" do
+      assert_selector "h1", text: @user.chats.first.title
+    end
+  end
+
+  test "create chat and navigate chats sidebar" do
+    @user.chats.destroy_all
+
+    visit root_url
+
+    @assistant.expects(:respond_to).once
+
+    within "#chat-form" do
+      fill_in "chat[content]", with: "Can you help with my finances?"
+      find("button[type='submit']").click
     end
 
-    # Verify the textarea has been filled with the question
-    assert_field "message[content]", with: "What's my current net worth?"
+    assert_text "Can you help with my finances?"
+
+    find("#chat-nav-back").click
+
+    assert_selector "h1", text: "Chats"
+
+    click_on @user.chats.reload.first.title
+
+    assert_text "Can you help with my finances?"
   end
 end

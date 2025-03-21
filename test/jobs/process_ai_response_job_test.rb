@@ -22,7 +22,7 @@ class ProcessAiResponseJobTest < ActiveJob::TestCase
     mock_assistant = mock
     mock_assistant.expects(:with_chat).with(chat).returns(mock_assistant)
     mock_assistant.expects(:query).with("What is my net worth?", chat.messages).returns("Your net worth is $100,000.")
-    Ai::FinancialAssistant.expects(:new).with(user.family).returns(mock_assistant)
+    FinancialAssistant.expects(:new).with(user.family).returns(mock_assistant)
 
     # Run the job
     assert_difference "Message.count", 1 do
@@ -52,7 +52,7 @@ class ProcessAiResponseJobTest < ActiveJob::TestCase
     mock_assistant = mock
     mock_assistant.expects(:with_chat).with(chat).returns(mock_assistant)
     mock_assistant.expects(:query).raises(StandardError.new("Test error"))
-    Ai::FinancialAssistant.expects(:new).with(user.family).returns(mock_assistant)
+    FinancialAssistant.expects(:new).with(user.family).returns(mock_assistant)
 
     # Run the job
     assert_difference "Message.count", 1 do

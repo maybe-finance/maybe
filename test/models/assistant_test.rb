@@ -1,29 +1,9 @@
 require "test_helper"
 
-class Ai::FinancialAssistantTest < ActiveSupport::TestCase
+class AssistantTest < ActiveSupport::TestCase
   setup do
-    @family = families(:dylan_family)
-    @mock_client = mock
-    @financial_assistant = Ai::FinancialAssistant.new(@family, client: @mock_client)
-  end
-
-  test "initializes with a family" do
-    assert_equal @family, @financial_assistant.family
-  end
-
-  test "defines financial function definitions" do
-    definitions = @financial_assistant.financial_function_definitions
-    assert_kind_of Array, definitions
-
-    # Check for expected functions
-    function_names = definitions.map { |d| d[:name] }
-
-    assert_includes function_names, "get_balance_sheet"
-    assert_includes function_names, "get_income_statement"
-    assert_includes function_names, "get_expense_categories"
-    assert_includes function_names, "get_account_balances"
-    assert_includes function_names, "get_transactions"
-    assert_includes function_names, "compare_periods"
+    @chat = chats(:one)
+    @assistant = Assistant.for_chat(@chat)
   end
 
   test "can execute get_balance_sheet function" do

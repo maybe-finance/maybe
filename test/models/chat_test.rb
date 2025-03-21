@@ -1,10 +1,20 @@
 require "test_helper"
 
 class ChatTest < ActiveSupport::TestCase
-  test "destroys chat" do
-    chat = chats(:one)
-    assert_difference("Message.count", -3) do
-      chat.destroy
+  setup do
+    @user = users(:family_admin)
+    @assistant = mock
+  end
+
+  test "creates with initial message" do
+    prompt = "Test prompt"
+
+    assert_difference "@user.chats.count", 1 do
+      chat = @user.chats.create_from_prompt!(prompt)
+
+      assert_equal 2, chat.messages.count
+      assert_equal 1, chat.messages.user.count
+      assert_equal 1, chat.messages.developer.count
     end
   end
 end

@@ -1,4 +1,6 @@
 class Chat < ApplicationRecord
+  include Debuggable
+
   belongs_to :user
 
   has_one :viewer, class_name: "User", foreign_key: :last_viewed_chat_id, dependent: :nullify # "Last chat user has viewed"
@@ -9,17 +11,17 @@ class Chat < ApplicationRecord
   scope :ordered, -> { order(created_at: :desc) }
 
   class << self
-    def create_from_message!(user_message)
-      new(
-        title: user_message.first(20),
+    def create_from_prompt!(prompt, developer_prompt: nil)
+      create!(
+        title: prompt.first(20),
         messages: [
-          Message.new(role: "developer", content: developer_prompt),
-          Message.new(role: "user", content: user_message)
+          Message.new(kind: "text", role: "developer", content: developer_prompt || default_developer_prompt),
+          Message.new(kind: "text", role: "user", content: prompt)
         ]
       )
     end
 
-    def developer_prompt
+    def default_developer_prompt
       <<~PROMPT
         You are a helpful financial assistant for Maybe, a personal finance app.
         You help users understand their financial data by answering questions about their accounts, transactions, income, expenses, and net worth.
@@ -38,5 +40,9 @@ class Chat < ApplicationRecord
         Present monetary values using the format provided by the functions.
       PROMPT
     end
+  end
+
+  def assistant
+    @assistant ||= Assistant.for_chat(self)
   end
 end
