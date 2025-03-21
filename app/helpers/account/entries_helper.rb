@@ -18,7 +18,7 @@ module Account::EntriesHelper
       end
     end
 
-    deduped_entries.group_by(&:date).map do |date, grouped_entries|
+    deduped_entries.group_by(&:date).sort.reverse_each.map do |date, grouped_entries|
       content = capture do
         yield grouped_entries
       end
