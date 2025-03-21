@@ -25,7 +25,7 @@ class Provider::OpenAITest < ActiveSupport::TestCase
 
   test "handles chat response with tool calls" do
     VCR.use_cassette("open_ai/chat/tool_calls", record: :all) do
-      class TestFn
+      class PredictableToolFunction
         include Assistant::Functions::Toolable
 
         class << self
@@ -48,7 +48,7 @@ class Provider::OpenAITest < ActiveSupport::TestCase
       response = @openai.chat_response(
         model: "gpt-4o",
         instructions: Assistant.instructions,
-        functions: [ TestFn ],
+        functions: [ PredictableToolFunction ],
         messages: [ initial_message ]
       )
 
@@ -56,7 +56,7 @@ class Provider::OpenAITest < ActiveSupport::TestCase
       assert response.data.tool_calls.size == 1
 
       tool_call = response.data.tool_calls.first
-      tool_call_result = TestFn.new.call(JSON.parse(tool_call.function_arguments))
+      tool_call_result = PredictableToolFunction.new.call(JSON.parse(tool_call.function_arguments))
 
       message_with_tool_calls = Message.new(
         role: "assistant",

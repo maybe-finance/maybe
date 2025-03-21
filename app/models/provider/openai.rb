@@ -24,7 +24,6 @@ class Provider::OpenAI < Provider
         message: Message.new(
           ai_model: response.dig("model"),
           provider_id: response.dig("id"),
-          status: normalize_status(response.dig("status")),
           role: "assistant",
           content: extract_content(response),
         ),
@@ -87,18 +86,6 @@ class Provider::OpenAI < Provider
           function_name: item.dig("name"),
           function_arguments: item.dig("arguments"),
         )
-      end
-    end
-
-    # Normalize to our internal message status values
-    def normalize_status(status)
-      case status
-      when "in_progress"
-        "pending"
-      when "completed"
-        "complete"
-      when "incomplete"
-        "failed"
       end
     end
 end

@@ -10,12 +10,12 @@ class Assistant
 
     def available_functions
       [
-        Assistant::Function::GetBalanceSheet,
-        Assistant::Function::GetIncomeStatement,
-        Assistant::Function::GetExpenseCategories,
-        Assistant::Function::GetAccountBalances,
-        Assistant::Function::GetTransactions,
-        Assistant::Function::ComparePeriods
+        Assistant::Functions::GetBalanceSheet,
+        Assistant::Functions::GetIncomeStatement,
+        Assistant::Functions::GetExpenseCategories,
+        Assistant::Functions::GetAccountBalances,
+        Assistant::Functions::GetTransactions,
+        Assistant::Functions::ComparePeriods
       ]
     end
 
@@ -72,19 +72,18 @@ class Assistant
       return
     end
 
+    message = response.data.message
+    message.chat = chat
+    message.status = "pending"
+
     # If no tool calls, create a plain message for the chat
     unless response.data.tool_calls.any?
-      message = response.data.message
+      message.status = "complete"
       message.save!
       return
     end
 
-    # Step 1: Saving a "pending" message with incomplete tool call definitions
-    message = response.data.message
-    message.status = "pending"
-    message.save!
-
-    # Step 2: Call the functions, add to message and save
+    # Step 1: Call the functions, add to message and save
     tool_calls = message.tool_calls.map do |tool_call|
       result = call_tool_function(tool_call.function_name, tool_call.function_arguments)
       tool_call.function_result = result
@@ -94,7 +93,7 @@ class Assistant
     message.tool_calls = tool_calls
     message.save!
 
-    # Step 3: Call LLM again with tool call results and update the message with response
+    # Step 2: Call LLM again with tool call results and update the message with response
     second_response = provider.chat_response(
       model: latest_message.ai_model,
       instructions: instructions,
@@ -107,9 +106,10 @@ class Assistant
       return
     end
 
-    second_message = second_response.data.message
-    second_message.status = "complete"
-    second_message.save!
+    # Step 3: Update the message with the final response
+    message.status = "complete"
+    message.content = second_response.data.message.content
+    message.save!
   end
 
   private
@@ -117,10 +117,10 @@ class Assistant
       chat.messages.ordered.where(role: [ :user, :assistant, :developer ], status: "complete", kind: "text")
     end
 
-    def call_tool_function(fn_name, fn_params = {})
+    def call_tool_function(fn_name, fn_params)
       fn = available_functions.find { |fn| fn.name == fn_name }
       raise "Assistant does not implement function: #{fn_name}" if fn.nil?
-      fn.call(fn_params)
+      fn.call(JSON.parse(fn_params))
     end
 
     def instructions

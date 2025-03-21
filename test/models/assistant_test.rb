@@ -14,13 +14,13 @@ class AssistantTest < ActiveSupport::TestCase
     @provider.expects(:chat_response).returns(
       provider_success_response(
         Assistant::Provideable::ChatResponse.new(
-          messages: [
-            Message.new(
-              role: "assistant",
-              content: "Hello from assistant",
-              ai_model: "gpt-4o"
-            )
-          ]
+          message: Message.new(
+            chat: @chat,
+            role: "assistant",
+            content: "Hello from assistant",
+            ai_model: "gpt-4o"
+          ),
+          tool_calls: []
         )
       )
     )
