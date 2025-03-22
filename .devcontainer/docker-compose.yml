@@ -1,4 +1,15 @@
-version: "3"
+x-db-env: &db_env
+  POSTGRES_USER: postgres
+  POSTGRES_DB: postgres
+  POSTGRES_PASSWORD: postgres
+
+x-rails-env: &rails_env
+  DB_HOST: db
+  HOST: "0.0.0.0"
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  BUNDLE_PATH: /bundle
+  REDIS_URL: redis://redis:6379/1
 
 services:
   app:
@@ -16,32 +27,41 @@ services:
     command: sleep infinity
 
     environment:
-      DB_HOST: db
-      HOST: "0.0.0.0"
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      BUNDLE_PATH: /bundle
+      <<: *rails_env
 
     depends_on:
       - db
+      - redis
+
+  worker:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    command: bundle exec sidekiq
+    restart: unless-stopped
+    environment:
+      <<: *rails_env
+    depends_on:
       - redis
 
   redis:
     image: redis:latest
     ports:
       - "6379:6379"
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
   db:
     image: postgres:latest
     restart: unless-stopped
     volumes:
       - postgres-data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_DB: postgres
-      POSTGRES_PASSWORD: postgres
+      <<: *db_env
     ports:
       - "5432:5432"
 
 volumes:
   postgres-data:
+  redis-data:
   bundle_cache:
