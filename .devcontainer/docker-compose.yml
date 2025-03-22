@@ -1,5 +1,3 @@
-version: "3"
-
 x-db-env: &db_env
   POSTGRES_USER: postgres
   POSTGRES_DB: postgres
