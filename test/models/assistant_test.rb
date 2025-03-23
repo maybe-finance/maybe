@@ -26,7 +26,7 @@ class AssistantTest < ActiveSupport::TestCase
     )
 
     assert_difference "Message.count", 1 do
-      @assistant.respond_to_user
+      @assistant.respond
     end
   end
 end

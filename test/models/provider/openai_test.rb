@@ -8,6 +8,24 @@ class Provider::OpenAITest < ActiveSupport::TestCase
     @subject_model = "gpt-4o"
   end
 
+  test "provides basic chat response 2" do
+    VCR.use_cassette("open_ai/chat/basic_response") do
+      response = @subject.chat_response(
+        model: @subject_model,
+        messages: [
+          Message.new(
+            role: "user",
+            content: "This is a chat test.  If it's working, respond with a single word: Yes"
+          )
+        ]
+      )
+
+      assert response.success?
+      assert_includes response.data.message.ai_model, @subject_model
+      assert_equal "Yes", response.data.message.content
+    end
+  end
+
   test "openai errors are automatically raised" do
     VCR.use_cassette("open_ai/chat/error") do
       response = @openai.chat_response(

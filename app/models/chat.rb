@@ -11,12 +11,20 @@ class Chat < ApplicationRecord
   scope :ordered, -> { order(created_at: :desc) }
 
   class << self
-    def create_from_prompt!(prompt, developer_prompt: nil)
+    def create_from_prompt!(prompt, model: "gpt-4o")
       create!(
         title: prompt.first(20),
-        messages: [ Message.new(kind: "text", role: "user", content: prompt) ]
+        messages: [ Message.new(kind: "text", role: "user", content: prompt, ai_model: model) ]
       )
     end
+  end
+
+  def ask_assistant
+    assistant.respond
+  end
+
+  def ask_assistant_later
+    ProcessAiResponseJob.perform_later(self)
   end
 
   def assistant

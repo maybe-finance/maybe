@@ -44,7 +44,7 @@ class Assistant
     @chat = chat
   end
 
-  def respond_to_user
+  def respond
     latest_message = chat_history.last
 
     if latest_message.nil?

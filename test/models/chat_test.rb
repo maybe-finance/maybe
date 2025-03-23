@@ -12,9 +12,8 @@ class ChatTest < ActiveSupport::TestCase
     assert_difference "@user.chats.count", 1 do
       chat = @user.chats.create_from_prompt!(prompt)
 
-      assert_equal 2, chat.messages.count
+      assert_equal 1, chat.messages.count
       assert_equal 1, chat.messages.user.count
-      assert_equal 1, chat.messages.developer.count
     end
   end
 end

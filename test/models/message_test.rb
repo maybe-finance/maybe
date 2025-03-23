@@ -32,9 +32,9 @@ class MessageTest < ActiveSupport::TestCase
   end
 
   test "broadcasts append after creation and calls assistant to respond" do
-    @chat.assistant.expects(:respond_to).once
+    @chat.expects(:ask_assistant_later).once
 
-    message = Message.create!(role: "user", chat: @chat, content: "Hello AI")
+    message = Message.create!(role: "user", chat: @chat, content: "Hello AI", ai_model: "gpt-4o")
 
     streams = capture_turbo_stream_broadcasts(@chat)
     assert_equal streams.size, 1
@@ -43,14 +43,14 @@ class MessageTest < ActiveSupport::TestCase
   end
 
   test "only user messages trigger assistant responses" do
-    @chat.assistant.expects(:respond_to).never
-    Message.create!(role: "assistant", chat: @chat, content: "Hello from AI")
+    @chat.expects(:ask_assistant_later).never
+    Message.create!(role: "assistant", chat: @chat, content: "Hello from AI", ai_model: "gpt-4o")
   end
 
   test "broadcasts updates to a message" do
     message = messages(:assistant)
 
-    @chat.assistant.expects(:respond_to).never
+    @chat.expects(:ask_assistant_later).never
 
     message.update!(content: "Updated content")
 

@@ -44,7 +44,7 @@ class Message < ApplicationRecord
     def handle_create
       broadcast_append_to chat
 
-      chat.assistant.respond_to_user if user?
+      chat.ask_assistant_later if user?
     end
 
     def status_valid_for_role

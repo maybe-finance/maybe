@@ -10,6 +10,7 @@ user:
   content: Can you help me understand my spending habits?
   role: user
   chat: one
+  ai_model: gpt-4o
   created_at: 2025-03-20 12:00:01
 
 internal:
@@ -23,6 +24,7 @@ assistant_reasoning:
   kind: reasoning
   content: I'm thinking...
   role: assistant
+  ai_model: gpt-4o
   chat: one
   created_at: 2025-03-20 12:01:00
 
@@ -30,6 +32,7 @@ assistant:
   kind: text
   content: Hello! I can help you understand your spending habits.
   role: assistant
+  ai_model: gpt-4o
   chat: one
   created_at: 2025-03-20 12:02:00
 

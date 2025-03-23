@@ -4,6 +4,7 @@ module LLMInterfaceTest
   extend ActiveSupport::Testing::Declarative
 
   test "provides basic chat response" do
+    skip
     VCR.use_cassette("#{vcr_key_prefix}/chat/basic_response") do
       response = @subject.chat_response(
         model: @subject_model,
