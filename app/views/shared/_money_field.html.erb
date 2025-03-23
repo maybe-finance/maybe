@@ -45,7 +45,7 @@
       <div>
         <%= form.select currency_method,
                       currencies_for_select.map(&:iso_code),
-                      { inline: true, selected: currency_value },
+                      { inline: true, selected: currency.iso_code },
                       {
                         class: "w-fit pr-5 disabled:text-subdued form-field__input",
                         disabled: options[:disable_currency],
