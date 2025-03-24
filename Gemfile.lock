@@ -61,6 +61,8 @@ GEM
       activemodel (= 7.2.2.1)
       activesupport (= 7.2.2.1)
       timeout (>= 0.4.0)
+    activerecord-import (2.1.0)
+      activerecord (>= 4.2)
     activestorage (7.2.2.1)
       actionpack (= 7.2.2.1)
       activejob (= 7.2.2.1)
@@ -532,6 +534,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
+  activerecord-import
   aws-sdk-s3 (~> 1.177.0)
   bcrypt (~> 3.1)
   benchmark-ips

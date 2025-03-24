@@ -12,7 +12,7 @@
               <div class="h-1.5 rounded-sm" style="width: <%= account_group.weight %>%; background-color: <%= account_group.color %>;"></div>
             <% end %>
           </div>
-          <div class="flex gap-4">
+          <div class="flex flex-wrap gap-4">
             <% classification_group.account_groups.each do |account_group| %>
               <div class="flex items-center gap-2 text-sm">
                 <div class="h-2.5 w-2.5 rounded-full" style="background-color: <%= account_group.color %>;"></div>
