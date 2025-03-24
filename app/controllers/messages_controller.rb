@@ -4,8 +4,8 @@ class MessagesController < ApplicationController
   before_action :set_chat
 
   def create
-    @message = @chat.messages.create!(
-      role: "user",
+    @message = UserMessage.create!(
+      chat: @chat,
       content: message_params[:content],
       ai_model: message_params[:ai_model]
     )

@@ -20,12 +20,12 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "cannot edit when self hosting is disabled" do
-    assert_raises(RuntimeError, "Settings not available on non-self-hosted instance") do
+    with_env_overrides SELF_HOSTED: "false" do
       get settings_hosting_url
-    end
+      assert_response :forbidden
 
-    assert_raises(RuntimeError, "Settings not available on non-self-hosted instance") do
       patch settings_hosting_url, params: { setting: { require_invite_for_signup: true } }
+      assert_response :forbidden
     end
   end
 
@@ -40,8 +40,6 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
 
   test "can update settings when self hosting is enabled" do
     with_self_hosting do
-      assert_nil Setting.synth_api_key
-
       patch settings_hosting_url, params: { setting: { synth_api_key: "1234567890" } }
 
       assert_equal "1234567890", Setting.synth_api_key

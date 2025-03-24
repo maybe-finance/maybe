@@ -35,16 +35,13 @@ class Assistant
 
   private
     def chat_history
-      chat.history(viewer: "assistant").ordered
+      chat.messages.conversation.ordered
     end
 
     def process_response_artifacts(data)
       messages = data.messages.map do |message|
-        Message.new(
+        AssistantMessage.new(
           chat: chat,
-          role: "assistant",
-          kind: "text",
-          status: "complete",
           content: message.content,
           provider_id: message.id,
           ai_model: data.model,
@@ -58,6 +55,16 @@ class Assistant
             )
           end
         )
+      end
+
+      messages.each do |msg|
+        msg.valid?
+        puts msg.errors.full_messages
+
+        msg.tool_calls.each do |tool_call|
+          tool_call.valid?
+          puts tool_call.errors.full_messages
+        end
       end
 
       messages.each(&:save!)

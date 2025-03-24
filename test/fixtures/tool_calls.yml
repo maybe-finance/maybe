@@ -4,4 +4,4 @@ one:
   provider_id: fc_12345xyz
   provider_call_id: call_12345xyz
   function_arguments: {}
-  message: assistant
+  message: chat1_assistant_response

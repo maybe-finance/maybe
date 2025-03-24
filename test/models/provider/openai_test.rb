@@ -12,7 +12,7 @@ class Provider::OpenAITest < ActiveSupport::TestCase
     VCR.use_cassette("open_ai/chat/error") do
       response = @openai.chat_response(
         model: "invalid-model-key",
-        chat_history: [ Message.new(role: "user", content: "Error test") ]
+        chat_history: [ UserMessage.new(content: "Error test") ]
       )
 
       assert_not response.success?
@@ -47,7 +47,7 @@ class Provider::OpenAITest < ActiveSupport::TestCase
         end
       end
 
-      initial_message = Message.new(role: "user", content: "What is my net worth?")
+      initial_message = UserMessage.new(content: "What is my net worth?")
 
       response = @openai.chat_response(
         model: "gpt-4o",

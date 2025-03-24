@@ -10,14 +10,18 @@ class CreateAiChats < ActiveRecord::Migration[7.2]
 
     create_table :messages, id: :uuid do |t|
       t.references :chat, null: false, foreign_key: true, type: :uuid
-      t.string :provider_id
-      t.string :ai_model
-      t.string :role, null: false
-      t.string :kind, null: false, default: "text"
+      t.string :type, null: false
       t.string :status, null: false, default: "complete"
       t.text :content
-
+      t.string :ai_model
       t.timestamps
+
+      # Developer message fields
+      t.boolean :debug, default: false
+
+      # Assistant message fields
+      t.string :provider_id
+      t.boolean :reasoning, default: false
     end
 
     create_table :tool_calls, id: :uuid do |t|

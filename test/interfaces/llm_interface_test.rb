@@ -8,9 +8,9 @@ module LLMInterfaceTest
       response = @subject.chat_response(
         model: @subject_model,
         chat_history: [
-          Message.new(
-            role: "user",
-            content: "This is a chat test.  If it's working, respond with a single word: Yes"
+          UserMessage.new(
+            content: "This is a chat test.  If it's working, respond with a single word: Yes",
+            ai_model: @subject_model
           )
         ]
       )

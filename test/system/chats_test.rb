@@ -4,9 +4,6 @@ class ChatsTest < ApplicationSystemTestCase
   setup do
     @user = users(:family_admin)
     login_as(@user)
-
-    @assistant = mock
-    Assistant.stubs(:for_chat).returns(@assistant)
   end
 
   test "sidebar shows consent if ai is disabled for user" do
@@ -49,7 +46,7 @@ class ChatsTest < ApplicationSystemTestCase
 
     visit root_url
 
-    @assistant.expects(:respond_to).once
+    Chat.any_instance.expects(:ask_assistant_later).once
 
     within "#chat-form" do
       fill_in "chat[content]", with: "Can you help with my finances?"

@@ -14,7 +14,7 @@ class Chat < ApplicationRecord
     def start!(prompt, model:)
       create!(
         title: generate_title(prompt),
-        messages: [ Message.new(kind: "text", role: "user", content: prompt, ai_model: model) ]
+        messages: [ UserMessage.new(content: prompt, ai_model: model) ]
       )
     end
 
@@ -35,13 +35,7 @@ class Chat < ApplicationRecord
     assistant.respond_to(message)
   end
 
-  def history(viewer: "user")
-    return messages.conversation if viewer == "assistant"
-
-    if debug_mode?
-      messages
-    else
-      messages.conversation.visible
-    end
+  def conversation_messages
+    messages.conversation(debug: debug_mode?)
   end
 end

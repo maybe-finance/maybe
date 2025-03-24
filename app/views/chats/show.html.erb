@@ -10,8 +10,8 @@
 
     <div id="messages" class="grow py-8 overflow-y-auto" data-chat-target="messages">
       <div class="p-4 space-y-6">
-        <% if @chat.history.any? %>
-          <% @chat.history.each do |message| %>
+        <% if @chat.conversation_messages.any? %>
+          <% @chat.conversation_messages.each do |message| %>
             <%= render "messages/message", message: message %>
           <% end %>
         <% else %>

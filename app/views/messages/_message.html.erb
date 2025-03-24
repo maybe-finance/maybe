@@ -1,18 +1,10 @@
 <%# locals: (message:) %>
 
 <div id="<%= dom_id(message) %>">
-  <% if message.debug? %>
-    <%= render "messages/debug_message", content: message.content %>
-  <% elsif message.user? %>
-    <div class="ml-auto text-sm text-primary bg-gray-100 rounded-lg px-3 py-2 max-w-[85%]">
-      <div class="whitespace-pre-wrap break-words"><%= message.content %></div>
+  <div class="flex items-start">
+    <%= render "chats/ai_avatar" %>
+    <div class="pr-2 max-w-[85%] text-primary">
+      <div class="prose prose-sm prose-gray break-words"><%= markdown(message.content) %></div>
     </div>
-  <% elsif message.assistant? %>
-    <div class="flex items-start">
-      <%= render "chats/ai_avatar" %>
-      <div class="pr-2 max-w-[85%] text-primary">
-        <div class="prose prose-sm prose-gray break-words"><%= markdown(message.content) %></div>
-      </div>
-    </div>
-  <% end %>
+  </div>
 </div>

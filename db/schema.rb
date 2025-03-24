@@ -392,14 +392,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_212839) do
 
   create_table "messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "chat_id", null: false
-    t.string "provider_id"
-    t.string "ai_model"
-    t.string "role", null: false
-    t.string "kind", default: "text", null: false
+    t.string "type", null: false
     t.string "status", default: "complete", null: false
     t.text "content"
+    t.string "ai_model"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "debug", default: false
+    t.string "provider_id"
+    t.boolean "reasoning", default: false
     t.index ["chat_id"], name: "index_messages_on_chat_id"
   end
 

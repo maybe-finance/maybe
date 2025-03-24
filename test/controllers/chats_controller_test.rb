@@ -9,7 +9,7 @@ class ChatsControllerTest < ActionDispatch::IntegrationTest
 
   test "cannot create a chat if AI is disabled" do
     @user.update!(ai_enabled: false)
-    post chats_url, params: { chat: { content: "Hello" } }
+    post chats_url, params: { chat: { content: "Hello", ai_model: "gpt-4o" } }
     assert_response :forbidden
   end
 
@@ -20,7 +20,7 @@ class ChatsControllerTest < ActionDispatch::IntegrationTest
 
   test "creates chat" do
     assert_difference("Chat.count") do
-      post chats_url, params: { chat: { content: "Hello" } }
+      post chats_url, params: { chat: { content: "Hello", ai_model: "gpt-4o" } }
     end
   end
 
