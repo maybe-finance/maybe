@@ -13,7 +13,7 @@ class Provider::Openai < Provider
 
   def chat_response(chat_history:, model: nil, instructions: nil, functions: [])
     provider_response do
-      response = ChatResponse.new(
+      processor = ChatResponseProcessor.new(
         client: client,
         model: model,
         chat_history: chat_history,
@@ -21,7 +21,7 @@ class Provider::Openai < Provider
         available_functions: functions
       )
 
-      response.build
+      processor.process
     end
   end
 

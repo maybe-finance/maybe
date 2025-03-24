@@ -1,4 +1,4 @@
-class Provider::Openai::ChatResponse
+class Provider::Openai::ChatResponseProcessor
   def initialize(client:, model:, chat_history:, instructions: nil, available_functions: [])
     @client = client
     @model = model
@@ -7,7 +7,7 @@ class Provider::Openai::ChatResponse
     @input = build_initial_input(chat_history)
   end
 
-  def build
+  def process
     response = client.responses.create(parameters: {
       model: model,
       input: input,
