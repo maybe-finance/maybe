@@ -4,8 +4,10 @@ class MessagesController < ApplicationController
   before_action :set_chat
 
   def create
-    @message = @chat.messages.user.create!(
-      content: message_params[:content]
+    @message = @chat.messages.create!(
+      role: "user",
+      content: message_params[:content],
+      ai_model: message_params[:ai_model]
     )
 
     respond_to do |format|
@@ -20,6 +22,6 @@ class MessagesController < ApplicationController
     end
 
     def message_params
-      params.require(:message).permit(:content)
+      params.require(:message).permit(:content, :ai_model)
     end
 end

@@ -6,7 +6,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"model":"invalid-model-key","input":[{"role":"user","content":"Error
-        test"}],"tools":[],"instructions":null}'
+        test"}],"instructions":null,"tools":[]}'
     headers:
       Content-Type:
       - application/json
@@ -24,7 +24,7 @@ http_interactions:
       message: Bad Request
     headers:
       Date:
-      - Fri, 21 Mar 2025 18:02:59 GMT
+      - Mon, 24 Mar 2025 11:56:05 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -36,25 +36,25 @@ http_interactions:
       Openai-Organization:
       - "<OPENAI_ORGANIZATION_ID>"
       X-Request-Id:
-      - req_8b96d2c4a5fd9f6867321a59f2c83871
+      - req_44e26f4f8965fc30b895479963bd25f6
       Openai-Processing-Ms:
-      - '114'
+      - '142'
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
       Cf-Cache-Status:
       - DYNAMIC
       Set-Cookie:
-      - __cf_bm=7QPY9MNmXzC1Cn40g1tf2.vUHSJgLK2H6Qyr6yPu_ag-1742580179-1.0.1.1-i5yiiXqowBLqwvQ6.h3UPAvErH3joLsvg8xOOgP.d6m2KzNfOA8IDSQ95h2qJsQRDuhwtMXlicW2Ua29l7xS4hWFTt4dOV09fotpUz4YKYw;
-        path=/; expires=Fri, 21-Mar-25 18:32:59 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=pYI_l9yXtR6i72B_gFaBwXvtzu1JwQDbAXy9q_0jmJU-1742817365-1.0.1.1-WxucYTcQpYMX6YtQD2EGsGacpvB0K7BSCc6OaQ4dZ49mRyc6dup0ool5giRCpzPNRhye1UtRdcYwQpHhyKqcEEy0Dw6NfYjL_BntOLrvcM8;
+        path=/; expires=Mon, 24-Mar-25 12:26:05 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=OiJrpU7qflYudc_3Ur.z0HcymtnD5.UeNdtTm8Ygi9U-1742580179526-0.0.1.1-604800000;
+      - _cfuvid=8Og_nd.HyeMTwzXSCuvhAa1bOMXdlStiYmYDaCMsx8M-1742817365319-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       X-Content-Type-Options:
       - nosniff
       Server:
       - cloudflare
       Cf-Ray:
-      - 923f5d08bf81cf75-CMH
+      - 9255fbb049cfe273-ORD
       Alt-Svc:
       - h3=":443"; ma=86400
     body:
@@ -68,5 +68,5 @@ http_interactions:
             "code": "model_not_found"
           }
         }
-  recorded_at: Fri, 21 Mar 2025 18:02:59 GMT
+  recorded_at: Mon, 24 Mar 2025 11:56:05 GMT
 recorded_with: VCR 6.3.1

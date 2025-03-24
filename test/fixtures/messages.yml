@@ -13,10 +13,10 @@ user:
   ai_model: gpt-4o
   created_at: 2025-03-20 12:00:01
 
-internal:
+debug:
   kind: debug
-  content: An internal debug message 
-  role: internal
+  content: An internal debug message
+  role: developer
   chat: one
   created_at: 2025-03-20 12:00:02
 

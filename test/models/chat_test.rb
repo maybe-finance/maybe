@@ -6,11 +6,29 @@ class ChatTest < ActiveSupport::TestCase
     @assistant = mock
   end
 
+  test "user sees all messages in debug mode" do
+    chat = chats(:one)
+    with_env_overrides AI_DEBUG_MODE: "true" do
+      assert_equal chat.messages.count, chat.history(viewer: "user").count
+    end
+  end
+
+  test "user sees assistant and user messages in normal mode" do
+    chat = chats(:one)
+    assert_equal 3, chat.history(viewer: "user").count
+  end
+
+  test "assistant sees all messages except for debug messages" do
+    chat = chats(:one)
+
+    assert_equal chat.messages.count - 1, chat.history(viewer: "assistant").count
+  end
+
   test "creates with initial message" do
     prompt = "Test prompt"
 
     assert_difference "@user.chats.count", 1 do
-      chat = @user.chats.create_from_prompt!(prompt)
+      chat = @user.chats.start!(prompt)
 
       assert_equal 1, chat.messages.count
       assert_equal 1, chat.messages.user.count

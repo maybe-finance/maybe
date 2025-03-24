@@ -6,7 +6,7 @@ class MessageTest < ActiveSupport::TestCase
   end
 
   test "user and assistant messages require an ai model" do
-    message = Message.new(role: "internal", chat: @chat, content: "Hello")
+    message = Message.new(role: "developer", chat: @chat, content: "Hello")
     assert message.valid?
 
     message.role = "user"
@@ -17,18 +17,6 @@ class MessageTest < ActiveSupport::TestCase
 
     message.ai_model = "openai-gpt-4o"
     assert message.valid?
-  end
-
-  test "conversation shows all messages in debug mode" do
-    Chat.stubs(:debug_mode_enabled?).returns(true)
-
-    assert_equal @chat.messages.count, @chat.messages.conversation.count
-  end
-
-  test "conversation shows only user and assistant messages in non-debug mode" do
-    Chat.stubs(:debug_mode_enabled?).returns(false)
-
-    assert_equal 3, @chat.messages.conversation.count
   end
 
   test "broadcasts append after creation and calls assistant to respond" do

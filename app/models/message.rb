@@ -7,7 +7,6 @@ class Message < ApplicationRecord
   # Loosely follows the OpenAI model spec "roles" from "Chain of command"
   # https://model-spec.openai.com/2025-02-12.html#definitions
   enum :role, {
-    internal: "internal", # Internal use only
     developer: "developer", # Developer prompts
     user: "user", # User prompts
     assistant: "assistant" # Assistant responses
@@ -34,7 +33,16 @@ class Message < ApplicationRecord
   after_update_commit -> { broadcast_update_to chat }, if: :visible?
 
   scope :ordered, -> { order(created_at: :asc) }
-  scope :conversation, -> { Chat.debug_mode_enabled? ? ordered : ordered.where(role: [ :user, :assistant ], kind: [ "text", "reasoning" ]) }
+  scope :conversation, -> { where.not(kind: "debug") }
+  scope :visible, -> { where(role: [ :user, :assistant ]) }
+
+  def request_response_later
+    chat.ask_assistant_later(self)
+  end
+
+  def request_response
+    chat.ask_assistant(self)
+  end
 
   private
     def visible?
@@ -44,7 +52,7 @@ class Message < ApplicationRecord
     def handle_create
       broadcast_append_to chat
 
-      chat.ask_assistant_later if user?
+      request_response_later if user?
     end
 
     def status_valid_for_role
@@ -54,8 +62,8 @@ class Message < ApplicationRecord
     end
 
     def kind_valid_for_role
-      if kind == "debug" && role != "internal"
-        errors.add(:kind, "Debug messages must be internal")
+      if kind == "debug" && role != "developer"
+        errors.add(:kind, "Debug messages must be developer")
       end
 
       if kind == "reasoning" && role != "assistant"

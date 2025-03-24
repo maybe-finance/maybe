@@ -16,13 +16,15 @@ class Provider::OpenAI::ChatResponse
     })
 
     output = response.dig("output")
+    response_model = response.dig("model")
     messages = extract_messages(output)
     pending_function_calls = extract_pending_function_calls(output)
 
     if pending_function_calls.empty?
       return Response.new(
         messages: messages,
-        functions: []
+        functions: [],
+        model: response_model
       )
     end
 
@@ -61,7 +63,8 @@ class Provider::OpenAI::ChatResponse
 
     Response.new(
       messages: messages,
-      functions: executed_function_calls
+      functions: executed_function_calls,
+      model: response_model
     )
   end
 
@@ -92,7 +95,7 @@ class Provider::OpenAI::ChatResponse
 
         ResponseMessage.new(
           id: item.dig("id"),
-          content: output_text
+          content: output_text,
         )
       end
     end

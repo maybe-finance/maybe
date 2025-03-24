@@ -40,4 +40,8 @@ module Chat::Debuggable
   def debug_mode_enabled?
     self.class.debug_mode_enabled?
   end
+
+  def debug_mode?
+    ENV["AI_DEBUG_MODE"] == "true"
+  end
 end

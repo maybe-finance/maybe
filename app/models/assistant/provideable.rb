@@ -4,7 +4,7 @@ module Assistant::Provideable
 
   ChatResponseMessage = Data.define(:id, :content)
   ChatResponseFunction = Data.define(:id, :call_id, :name, :arguments, :result)
-  ChatResponse = Data.define(:messages, :functions)
+  ChatResponse = Data.define(:messages, :functions, :model)
 
   def chat_response(messages:, model: nil, functions: [], instructions: nil)
     raise NotImplementedError, "Subclasses must implement #chat_response"
