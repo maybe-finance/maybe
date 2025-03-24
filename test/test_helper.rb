@@ -8,7 +8,6 @@ end
 require_relative "../config/environment"
 
 ENV["RAILS_ENV"] ||= "test"
-ENV["OPENAI_ACCESS_TOKEN"] ||= "test_openai_token"
 
 # Fixes Segfaults on M1 Macs when running tests in parallel (temporary workaround)
 # https://github.com/ged/ruby-pg/issues/538#issuecomment-1591629049

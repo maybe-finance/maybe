@@ -26,7 +26,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Mon, 24 Mar 2025 11:56:06 GMT
+      - Mon, 24 Mar 2025 21:44:00 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -38,34 +38,34 @@ http_interactions:
       Openai-Organization:
       - "<OPENAI_ORGANIZATION_ID>"
       X-Request-Id:
-      - req_d0876a41303fbe6da082c75b785293c3
+      - req_d048963a2f48cfd1f42b92da3c04d89c
       Openai-Processing-Ms:
-      - '905'
+      - '1050'
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
       Cf-Cache-Status:
       - DYNAMIC
       Set-Cookie:
-      - __cf_bm=NgsQOUyxatNioEv6sgOoQsUWmEv34qSIOgqj3IyzeoQ-1742817366-1.0.1.1-7ubcA2eV0yv7uVoul8zqS.u_KiKhtpdQXTJQCsIe0azxKxrkAQ35xpWRrcOQHYj0znSk3CkOS5vsAti5qQlW3Aid2LBDx_uOOTPEjc30vbM;
-        path=/; expires=Mon, 24-Mar-25 12:26:06 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=aHgimIJIQRpqWZvw2fhxWCZlbY40.sBowQXF5R9iUgw-1742852640-1.0.1.1-WM1VBaAniM7JLis1UMAVA.TKOiwegYMF0jiSP7AhtFFpyQNVP.HMsgh5z3PkpvvlJfL7mcy.HfAjJTuUu8q_FAVSoieVkXVHXHUJYTO5pGM;
+        path=/; expires=Mon, 24-Mar-25 22:14:00 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=pfd1rfIvOCMbu67UBHx2YfOR988IoNnEWOqvC910iLA-1742817366572-0.0.1.1-604800000;
+      - _cfuvid=zNAzEPY0B72OssXI2T.Ul0yvKmpJ8LNbvxBNAMfFB3k-1742852640804-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       X-Content-Type-Options:
       - nosniff
       Server:
       - cloudflare
       Cf-Ray:
-      - 9255fbb6bb5fcf81-CMH
+      - 925958e5cee7cf84-CMH
       Alt-Svc:
       - h3=":443"; ma=86400
     body:
       encoding: ASCII-8BIT
       string: |-
         {
-          "id": "resp_67e14855a9988192a411393e44d567cd05ebede25f548fb9",
+          "id": "resp_67e1d21fb23c8192833e882544aad9fb0eccf467b76649e8",
           "object": "response",
-          "created_at": 1742817365,
+          "created_at": 1742852639,
           "status": "completed",
           "error": null,
           "incomplete_details": null,
@@ -75,8 +75,8 @@ http_interactions:
           "output": [
             {
               "type": "function_call",
-              "id": "fc_67e1485661a08192995584746a37273e05ebede25f548fb9",
-              "call_id": "call_qxpPT6DVoIfX5z9PiL9y8LY1",
+              "id": "fc_67e1d22095708192a668fe3e8c63f83c0eccf467b76649e8",
+              "call_id": "call_LRJqOWWq0Ao4oQF38eiohneb",
               "name": "get_net_worth",
               "arguments": "{}",
               "status": "completed"
@@ -126,7 +126,7 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: Mon, 24 Mar 2025 11:56:06 GMT
+  recorded_at: Mon, 24 Mar 2025 21:44:00 GMT
 - request:
     method: post
     uri: https://api.openai.com/v1/responses
@@ -134,7 +134,7 @@ http_interactions:
       encoding: UTF-8
       string: '{"model":"gpt-4o","instructions":"Use the tools available to you to
         answer the user''s question.","input":[{"role":"user","content":"What is my
-        net worth?"},{"type":"function_call","id":"fc_67e1485661a08192995584746a37273e05ebede25f548fb9","call_id":"call_qxpPT6DVoIfX5z9PiL9y8LY1","name":"get_net_worth","arguments":"{}"},{"type":"function_call_output","call_id":"call_qxpPT6DVoIfX5z9PiL9y8LY1","output":"$124,200"}]}'
+        net worth?"},{"type":"function_call","id":"fc_67e1d22095708192a668fe3e8c63f83c0eccf467b76649e8","call_id":"call_LRJqOWWq0Ao4oQF38eiohneb","name":"get_net_worth","arguments":"{}"},{"type":"function_call_output","call_id":"call_LRJqOWWq0Ao4oQF38eiohneb","output":"$124,200"}]}'
     headers:
       Content-Type:
       - application/json
@@ -152,7 +152,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Mon, 24 Mar 2025 11:56:07 GMT
+      - Mon, 24 Mar 2025 21:44:02 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -164,34 +164,34 @@ http_interactions:
       Openai-Organization:
       - "<OPENAI_ORGANIZATION_ID>"
       X-Request-Id:
-      - req_633430fc9215c27cc0a226341decf596
+      - req_e0117a87ad49a43729e4208ac370af1f
       Openai-Processing-Ms:
-      - '734'
+      - '1348'
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
       Cf-Cache-Status:
       - DYNAMIC
       Set-Cookie:
-      - __cf_bm=Yb4JfiKKvDl9H_PyQZXRjNYW5eUYCvSXoqt6Z9A5DTU-1742817367-1.0.1.1-7XJKuhEr6DF2SZkL20X0HADYB5R9L5VkPL4BweI.9CKU7HicgyiC3jrF1vjLw4958jjD6V_gwlI8MPq1hcdvGSxVZOk2MT0NUh2teI81UoQ;
-        path=/; expires=Mon, 24-Mar-25 12:26:07 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=k_kSc87FWSNW47rXiQ0t2UskVDlykLyeAZIZnPfbxqY-1742852642-1.0.1.1-VHB6_jGpcGO4Nnj58pWknxAmmYEoGIoswHlx19NuI0DZ02RZoDXAeZSbGK9VNwQuMWIKdkCJ_EF.3IPaYF.YYd0fFGLuDCYAmFuli7Don0M;
+        path=/; expires=Mon, 24-Mar-25 22:14:02 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=PV9JJMd_2baUGo7BGxGmzaHWv1n7oCuQoVXPc0wimtM-1742817367605-0.0.1.1-604800000;
+      - _cfuvid=9QuOT2KgbvD2t2pleBXg0T1ZrWXS6SlDwUZoNnmas5M-1742852642420-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       X-Content-Type-Options:
       - nosniff
       Server:
       - cloudflare
       Cf-Ray:
-      - 9255fbbe6f9572eb-ORD
+      - 925958edfa00cf5a-CMH
       Alt-Svc:
       - h3=":443"; ma=86400
     body:
       encoding: ASCII-8BIT
       string: |-
         {
-          "id": "resp_67e14856d9d88192a24ad9727155351e05ebede25f548fb9",
+          "id": "resp_67e1d2210c788192bab33010721274920eccf467b76649e8",
           "object": "response",
-          "created_at": 1742817366,
+          "created_at": 1742852641,
           "status": "completed",
           "error": null,
           "incomplete_details": null,
@@ -201,7 +201,7 @@ http_interactions:
           "output": [
             {
               "type": "message",
-              "id": "msg_67e14857620c8192ad258f378b27a9e005ebede25f548fb9",
+              "id": "msg_67e1d221dca881929a8097a57a2f75b40eccf467b76649e8",
               "status": "completed",
               "role": "assistant",
               "content": [
@@ -244,5 +244,5 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: Mon, 24 Mar 2025 11:56:07 GMT
+  recorded_at: Mon, 24 Mar 2025 21:44:02 GMT
 recorded_with: VCR 6.3.1

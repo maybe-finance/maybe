@@ -4,12 +4,12 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
   include LLMInterfaceTest
 
   setup do
-    @subject = @openai = Provider::Openai.new(ENV.fetch("OPENAI_ACCESS_TOKEN"))
+    @subject = @openai = Provider::Openai.new(ENV.fetch("OPENAI_ACCESS_TOKEN", "test-openai-token"))
     @subject_model = "gpt-4o"
   end
 
   test "openai errors are automatically raised" do
-    VCR.use_cassette("open_ai/chat/error") do
+    VCR.use_cassette("openai/chat/error") do
       response = @openai.chat_response(
         model: "invalid-model-key",
         chat_history: [ UserMessage.new(content: "Error test") ]
@@ -24,7 +24,7 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
   end
 
   test "handles chat response with tool calls" do
-    VCR.use_cassette("open_ai/chat/tool_calls") do
+    VCR.use_cassette("openai/chat/tool_calls") do
       class PredictableToolFunction
         include Assistant::Functions::Toolable
 
