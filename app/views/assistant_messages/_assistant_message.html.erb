@@ -1,1 +1,10 @@
-<p>Assistant message</p>
+<%# locals: (assistant_message:) %>
+
+<div id="<%= dom_id(assistant_message) %>">
+  <div class="flex items-start">
+    <%= render "chats/ai_avatar" %>
+    <div class="pr-2 max-w-[85%] text-primary">
+      <div class="prose prose-sm prose-gray break-words"><%= markdown(assistant_message.content) %></div>
+    </div>
+  </div>
+</div>

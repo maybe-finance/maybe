@@ -12,11 +12,11 @@
       <div class="p-4 space-y-6">
         <% if @chat.conversation_messages.any? %>
           <% @chat.conversation_messages.each do |message| %>
-            <%= render "messages/message", message: message %>
+            <%= render message %>
           <% end %>
         <% else %>
           <div class="mt-auto">
-            <%= render "chats/ai_greeting", context: 'chat' %>
+            <%= render "chats/ai_greeting", context: "chat" %>
           </div>
         <% end %>
       </div>

@@ -1,1 +1,9 @@
-<p>Developer message</p>
+<%# locals: (developer_message:) %>
+
+<div id="<%= dom_id(developer_message) %>">
+  <div class="flex items-start">
+    <div class="pr-2 max-w-[85%] text-primary">
+      <div class="prose prose-sm prose-gray break-words"><%= markdown(developer_message.content) %></div>
+    </div>
+  </div>
+</div>

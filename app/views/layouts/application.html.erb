@@ -36,7 +36,7 @@
       <% end %>
     <% end %>
 
-    <% 
+    <%
       left_sidebar_open = Current.user.show_sidebar?
       right_sidebar_open = Current.user.show_ai_sidebar?
       content_width_class = if left_sidebar_open && right_sidebar_open
@@ -71,8 +71,8 @@
     <% end %>
 
     <%# AI chat sidebar %>
-    <%= tag.div id: "chat-container", 
-                class: class_names("flex flex-col justify-between shrink-0 transition-all duration-300", right_sidebar_open ? "w-[400px]" : "w-0"), 
+    <%= tag.div id: "chat-container",
+                class: class_names("flex flex-col justify-between shrink-0 transition-all duration-300", right_sidebar_open ? "w-[400px]" : "w-0"),
                 data: { controller: "chat hotkey", sidebar_target: "rightPanel", turbo_permanent: true } do %>
 
       <% if Current.user.ai_enabled? %>
@@ -83,7 +83,7 @@
         <% end %>
       <% else %>
         <%= render "chats/ai_consent" %>
-      <% end%>
+      <% end %>
     <% end %>
   </div>
 <% end %>

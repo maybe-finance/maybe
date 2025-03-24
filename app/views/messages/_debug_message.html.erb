@@ -6,7 +6,7 @@
     <div class="font-semibold"><%= content.split("\n").first %></div>
   </div>
   <% if content.include?("```json") %>
-    <% 
+    <%
       json_start = content.index("```json")
       json_end = content.index("```", json_start + 7)
       if json_start && json_end
@@ -18,7 +18,7 @@
                 formatted_json = json_content
               end
             end
-          %>
+    %>
     <div class="mt-2 overflow-x-auto">
       <pre class="text-xs"><%= formatted_json %></pre>
     </div>

@@ -34,6 +34,6 @@ module Providers
 
     return nil unless access_token.present?
 
-    Provider::OpenAI.new(access_token)
+    Provider::Openai.new(access_token)
   end
 end

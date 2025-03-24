@@ -1,4 +1,4 @@
-class Provider::OpenAI::ChatResponse
+class Provider::Openai::ChatResponse
   def initialize(client:, model:, chat_history:, instructions: nil, available_functions: [])
     @client = client
     @model = model

@@ -1,10 +1,10 @@
 require "test_helper"
 
-class Provider::OpenAITest < ActiveSupport::TestCase
+class Provider::OpenaiTest < ActiveSupport::TestCase
   include LLMInterfaceTest
 
   setup do
-    @subject = @openai = Provider::OpenAI.new(ENV.fetch("OPENAI_ACCESS_TOKEN"))
+    @subject = @openai = Provider::Openai.new(ENV.fetch("OPENAI_ACCESS_TOKEN"))
     @subject_model = "gpt-4o"
   end
 

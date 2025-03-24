@@ -1,4 +1,4 @@
-class Provider::OpenAI < Provider
+class Provider::Openai < Provider
   include Assistant::Provideable
 
   MODELS = %w[gpt-4o]

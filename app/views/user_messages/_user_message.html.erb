@@ -1,1 +1,9 @@
-<p>User message</p>
+<%# locals: (user_message:) %>
+
+<div id="<%= dom_id(user_message) %>">
+  <div class="flex items-start">
+    <div class="pr-2 max-w-[85%] text-primary">
+      <div class="prose prose-sm prose-gray break-words"><%= markdown(user_message.content) %></div>
+    </div>
+  </div>
+</div>
