@@ -2,6 +2,6 @@ one:
   type: ToolCall::Function
   function_name: get_user_info
   provider_id: fc_12345xyz
-  provider_fn_call_id: call_12345xyz
+  provider_call_id: call_12345xyz
   function_arguments: {}
   message: assistant

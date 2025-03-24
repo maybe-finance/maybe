@@ -10,17 +10,17 @@ class AssistantTest < ActiveSupport::TestCase
   end
 
   test "responds to basic prompt without tools" do
-    @assistant.expects(:provider_for_model).with("gpt-4o").returns(@provider)
+    @assistant.expects(:provider_for_model).with("gpt-4o").returns(@provider).twice
     @provider.expects(:chat_response).returns(
       provider_success_response(
         Assistant::Provideable::ChatResponse.new(
-          message: Message.new(
-            chat: @chat,
-            role: "assistant",
-            content: "Hello from assistant",
-            ai_model: "gpt-4o"
-          ),
-          tool_calls: []
+          messages: [
+            Assistant::Provideable::ChatResponseMessage.new(
+              id: "1",
+              content: "Hello from assistant"
+            )
+          ],
+          functions: []
         )
       )
     )

@@ -23,4 +23,16 @@ module Assistant::Functions::Toolable
   def call(params = {})
     raise NotImplementedError, "Subclasses must implement the call instance method"
   end
+
+  def name
+    self.class.name
+  end
+
+  def description
+    self.class.description
+  end
+
+  def parameters
+    self.class.parameters
+  end
 end

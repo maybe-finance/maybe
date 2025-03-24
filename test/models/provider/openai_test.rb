@@ -8,29 +8,11 @@ class Provider::OpenAITest < ActiveSupport::TestCase
     @subject_model = "gpt-4o"
   end
 
-  test "provides basic chat response 2" do
-    VCR.use_cassette("open_ai/chat/basic_response") do
-      response = @subject.chat_response(
-        model: @subject_model,
-        messages: [
-          Message.new(
-            role: "user",
-            content: "This is a chat test.  If it's working, respond with a single word: Yes"
-          )
-        ]
-      )
-
-      assert response.success?
-      assert_includes response.data.message.ai_model, @subject_model
-      assert_equal "Yes", response.data.message.content
-    end
-  end
-
   test "openai errors are automatically raised" do
     VCR.use_cassette("open_ai/chat/error") do
       response = @openai.chat_response(
         model: "invalid-model-key",
-        messages: [ Message.new(role: "user", content: "Error test") ]
+        chat_history: [ Message.new(role: "user", content: "Error test") ]
       )
 
       assert_not response.success?
@@ -42,11 +24,15 @@ class Provider::OpenAITest < ActiveSupport::TestCase
   end
 
   test "handles chat response with tool calls" do
-    VCR.use_cassette("open_ai/chat/tool_calls", record: :all) do
+    VCR.use_cassette("open_ai/chat/tool_calls") do
       class PredictableToolFunction
         include Assistant::Functions::Toolable
 
         class << self
+          def expected_test_result
+            "$124,200"
+          end
+
           def name
             "get_net_worth"
           end
@@ -57,7 +43,7 @@ class Provider::OpenAITest < ActiveSupport::TestCase
         end
 
         def call(params = {})
-          "$124,200"
+          self.class.expected_test_result
         end
       end
 
@@ -65,41 +51,15 @@ class Provider::OpenAITest < ActiveSupport::TestCase
 
       response = @openai.chat_response(
         model: "gpt-4o",
-        instructions: Assistant.instructions,
-        functions: [ PredictableToolFunction ],
-        messages: [ initial_message ]
+        instructions: "Use the tools available to you to answer the user's question.",
+        functions: [ PredictableToolFunction.new ],
+        chat_history: [ initial_message ]
       )
 
       assert response.success?
-      assert response.data.tool_calls.size == 1
-
-      tool_call = response.data.tool_calls.first
-      tool_call_result = PredictableToolFunction.new.call(JSON.parse(tool_call.function_arguments))
-
-      message_with_tool_calls = Message.new(
-        role: "assistant",
-        status: "pending",
-        content: "",
-        tool_calls: [
-          ToolCall::Function.new(
-            provider_id: tool_call.provider_id,
-            provider_fn_call_id: tool_call.provider_fn_call_id,
-            function_name: tool_call.function_name,
-            function_arguments: tool_call.function_arguments,
-            function_result: tool_call_result
-          )
-        ]
-      )
-
-      second_response = @openai.chat_response(
-        model: "gpt-4o",
-        instructions: Assistant.instructions,
-        messages: [ initial_message, message_with_tool_calls ]
-      )
-
-      assert second_response.success?
-      assert second_response.data.message.complete?
-      assert second_response.data.message.content.include?(tool_call_result) # Somewhere in the response should be the tool call result value
+      assert_equal 1, response.data.functions.size
+      assert_equal 1, response.data.messages.size
+      assert_includes response.data.messages.first.content, PredictableToolFunction.expected_test_result
     end
   end
 end

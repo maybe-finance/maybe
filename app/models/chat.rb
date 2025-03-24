@@ -24,7 +24,7 @@ class Chat < ApplicationRecord
   end
 
   def ask_assistant_later
-    ProcessAiResponseJob.perform_later(self)
+    AssistantResponseJob.perform_later(self)
   end
 
   def assistant
