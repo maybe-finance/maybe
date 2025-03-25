@@ -14,7 +14,6 @@ class Message < ApplicationRecord
   after_update_commit -> { broadcast_update_to chat }, if: :broadcast?
 
   scope :ordered, -> { order(created_at: :asc) }
-  scope :conversation, ->(debug: false) { debug ? all : where(debug: false) }
 
   private
     def broadcast?

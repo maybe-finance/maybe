@@ -1,10 +1,19 @@
 <%# locals: (assistant_message:) %>
 
 <div id="<%= dom_id(assistant_message) %>">
-  <div class="flex items-start">
-    <%= render "chats/ai_avatar" %>
-    <div class="pr-2 max-w-[85%] text-primary">
-      <div class="prose prose-sm prose-gray break-words"><%= markdown(assistant_message.content) %></div>
+  <% if assistant_message.reasoning? %>
+    <details class="group mb-1">
+      <summary class="flex items-center gap-2">
+        <p class="text-secondary text-sm">Assistant reasoning</p>
+        <%= lucide_icon "chevron-down", class: "group-open:transform group-open:rotate-180 text-secondary w-5" %>
+      </summary>
+
+      <div class="prose prose--ai-chat"><%= markdown(assistant_message.content) %></div>
+    </details>
+  <% else %>
+    <div class="flex items-start mb-6">
+      <%= render "chats/ai_avatar" %>
+      <div class="prose prose--ai-chat"><%= markdown(assistant_message.content) %></div>
     </div>
-  </div>
+  <% end %>
 </div>

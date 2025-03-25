@@ -8,18 +8,16 @@
       <%= render "chats/chat_nav", chat: @chat %>
     </div>
 
-    <div id="messages" class="grow py-8 overflow-y-auto" data-chat-target="messages">
-      <div class="p-4 space-y-6">
-        <% if @chat.conversation_messages.any? %>
-          <% @chat.conversation_messages.each do |message| %>
-            <%= render message %>
-          <% end %>
-        <% else %>
-          <div class="mt-auto">
-            <%= render "chats/ai_greeting", context: "chat" %>
-          </div>
+    <div id="messages" class="grow overflow-y-auto p-4" data-chat-target="messages">
+      <% if @chat.conversation_messages.any? %>
+        <% @chat.conversation_messages.each do |message| %>
+          <%= render message %>
         <% end %>
-      </div>
+      <% else %>
+        <div class="mt-auto">
+          <%= render "chats/ai_greeting", context: "chat" %>
+        </div>
+      <% end %>
     </div>
 
     <div class="p-4">

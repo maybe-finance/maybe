@@ -1,6 +1,6 @@
 <%# locals: (chat:) %>
 
-<nav class="flex items-center justify-between mb-6">
+<nav class="flex items-center justify-between">
   <% path = chat.new_record? ? chats_path : chats_path(previous_chat_id: chat.id) %>
 
   <div class="flex items-center gap-2 grow">

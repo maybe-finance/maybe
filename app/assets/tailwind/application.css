@@ -112,7 +112,13 @@
   }
 }
 
-.prose--ai {
+.prose--ai-chat {
+  @apply break-words max-w-[300px];
+
+  p {
+    @apply text-sm text-primary;
+  }
+
   scrollbar-width: thin;
   scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
 

@@ -35,7 +35,7 @@ class Assistant
 
   private
     def chat_history
-      chat.messages.conversation.ordered
+      chat.messages.where.not(debug: true).ordered
     end
 
     def process_response_artifacts(data)
