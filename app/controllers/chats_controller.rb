@@ -21,7 +21,11 @@ class ChatsController < ApplicationController
   def create
     @chat = Current.user.chats.start!(chat_params[:content], model: chat_params[:ai_model])
     set_last_viewed_chat(@chat)
-    redirect_to chat_path(@chat)
+
+    respond_to do |format|
+      format.html { redirect_to chat_path(@chat) }
+      format.turbo_stream
+    end
   end
 
   def edit
@@ -45,7 +49,14 @@ class ChatsController < ApplicationController
 
   def retry
     @chat.retry_last_message!
-    redirect_to chat_path(@chat)
+
+    respond_to do |format|
+      format.html { redirect_to chat_path(@chat) }
+      format.turbo_stream { render turbo_stream: [
+        turbo_stream.append("messages", partial: "chats/thinking_indicator", locals: { chat: @chat }),
+        turbo_stream.remove("chat-error")
+      ] }
+    end
   end
 
   private

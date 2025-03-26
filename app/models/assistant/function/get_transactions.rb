@@ -2,6 +2,10 @@ class Assistant::Function::GetTransactions < Assistant::Function
   include Pagy::Backend
 
   class << self
+    def default_page_size
+      50
+    end
+
     def name
       "get_transactions"
     end
@@ -16,7 +20,7 @@ class Assistant::Function::GetTransactions < Assistant::Function
 
         - `total_pages`: The total number of pages of results
         - `page`: The current page of results
-        - `page_size`: The number of results per page (this will always be 50)
+        - `page_size`: The number of results per page (this will always be #{default_page_size})
         - `total_results`: The total number of results for the given filters
 
         Simple example (transactions from the last 30 days):
@@ -24,7 +28,6 @@ class Assistant::Function::GetTransactions < Assistant::Function
         ```
         get_transactions({
           page: 1,
-          page_size: 50,
           start_date: "#{30.days.ago.to_date}",
           end_date: "#{Date.current}"
         })
@@ -35,7 +38,6 @@ class Assistant::Function::GetTransactions < Assistant::Function
         ```
         get_transactions({
           page: 1,
-          page_size: 50,
           search: "mcdonalds",
           accounts: ["Checking", "Savings"],
           start_date: "#{30.days.ago.to_date}",
@@ -59,10 +61,6 @@ class Assistant::Function::GetTransactions < Assistant::Function
     build_schema(
       required: [ "order", "page", "page_size" ],
       properties: {
-        page_size: {
-          const: 50,
-          description: "Number of transactions per page (always 50)"
-        },
         page: {
           type: "integer",
           description: "Page number"
@@ -125,7 +123,7 @@ class Assistant::Function::GetTransactions < Assistant::Function
   end
 
   def call(params = {})
-    search_params = params.except("order", "page", "page_size")
+    search_params = params.except("order", "page")
 
     transactions = family.transactions.active.search(search_params).includes(
       { entry: :account },
@@ -137,7 +135,7 @@ class Assistant::Function::GetTransactions < Assistant::Function
     ordered_transactions = params["order"] == "asc" ? transactions.chronological : transactions.reverse_chronological
 
     # By default, we give a small page size to force the AI to use filters effectively and save on tokens
-    pagy, transactions = pagy(ordered_transactions, page: params["page"] || 1, limit: 10)
+    pagy, transactions = pagy(ordered_transactions, page: params["page"] || 1, limit: default_page_size)
 
     normalized_transactions = transactions.map do |txn|
       entry = txn.entry
@@ -159,8 +157,13 @@ class Assistant::Function::GetTransactions < Assistant::Function
       transactions: normalized_transactions,
       total_results: pagy.count,
       page: pagy.page,
-      page_size: 10,
+      page_size: default_page_size,
       total_pages: pagy.pages
     }
   end
+
+  private
+    def default_page_size
+      self.class.default_page_size
+    end
 end

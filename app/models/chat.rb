@@ -27,8 +27,19 @@ class Chat < ApplicationRecord
     last_message = conversation_messages.ordered.last
 
     if last_message.present? && last_message.role == "user"
+      update!(error: nil)
       ask_assistant_later(last_message)
     end
+  end
+
+  def add_error(message)
+    update! error: message
+    broadcast_append target: "messages", partial: "chats/error", locals: { chat: self }
+  end
+
+  def clear_error
+    update! error: nil
+    broadcast_remove target: "chat-error"
   end
 
   def assistant

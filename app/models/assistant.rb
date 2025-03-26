@@ -14,30 +14,31 @@ class Assistant
   end
 
   def respond_to(message)
+    sleep artificial_thinking_delay
+
     provider = get_model_provider(message.ai_model)
 
     response = provider.chat_response(message, instructions: instructions, available_functions: functions)
 
-    if response.success?
-      Chat.transaction do
-        process_response_artifacts(response.data)
+    stop_thinking
 
-        chat.update!(
-          error: nil,
-          latest_assistant_response_id: response.data.id
-        )
-      end
-
-      chat.broadcast_remove target: "chat-error"
-    else
-      chat.update!(error: "#{response.error.class}: #{response.error.message}")
-      chat.broadcast_append target: "messages", partial: "chats/error", locals: { chat: chat }
+    unless response.success?
+      chat.add_error("#{response.error.class}: #{response.error.message}")
     end
+
+    Chat.transaction do
+      chat.clear_error
+      process_response_artifacts(response.data)
+      chat.update!(latest_assistant_response_id: response.data.id)
+    end
+  rescue => e
+    chat.add_error("#{e.class}: #{e.message}")
   end
 
   private
-    def chat_history
-      chat.messages.where.not(debug: true).ordered
+    def stop_thinking
+      sleep artificial_thinking_delay
+      chat.broadcast_remove target: "thinking-indicator"
     end
 
     def process_response_artifacts(data)
@@ -123,17 +124,21 @@ class Assistant
 
     def functions
       [
-        Assistant::Function::GetTransactions.new(chat.user)
+        Assistant::Function::GetTransactions.new(chat.user),
+        Assistant::Function::GetAccounts.new(chat.user)
       ]
 
       # Assistant::Function::GetBalanceSheet.new(chat),
       # Assistant::Function::GetIncomeStatement.new(chat),
       # Assistant::Function::GetExpenseCategories.new(chat),
-      # Assistant::Function::GetAccountBalances.new(chat),
       # Assistant::Function::ComparePeriods.new(chat)
     end
 
     def preferred_currency
       Money::Currency.new(chat.user.family.currency)
+    end
+
+    def artificial_thinking_delay
+      1
     end
 end

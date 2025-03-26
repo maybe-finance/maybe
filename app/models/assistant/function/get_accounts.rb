@@ -10,58 +10,33 @@ class Assistant::Function::GetAccounts < Assistant::Function
   end
 
   def call(params = {})
-    account_type = params["account_type"] || "all"
-    balance_sheet = BalanceSheet.new(family)
-
     {
-      as_of_date: Date.today.to_s,
-      currency: family.currency,
-      accounts: get_accounts_data(balance_sheet, account_type)
-    }
-  end
+      as_of_date: Date.current,
+      accounts: family.accounts.includes(:balances).map do |account|
+        series_start_date = [ account.start_date, 5.years.ago.to_date ].max
+        all_dates = Period.custom(start_date: series_start_date, end_date: Date.current)
+        balance_series = account.balance_series(period: all_dates, interval: "1 month")
 
-  def params_schema
-    {
-      type: "object",
-      properties: {
-        account_type: {
-          type: "string",
-          enum: [ "asset", "liability", "all" ],
-          description: "Type of accounts to get balances for"
-        }
-      },
-      required: [ "account_type" ],
-      additionalProperties: false
-    }
-  end
-
-  private
-
-    def get_accounts_data(balance_sheet, account_type)
-      accounts = case account_type
-      when "asset"
-        balance_sheet.account_groups("asset")
-      when "liability"
-        balance_sheet.account_groups("liability")
-      else
-        balance_sheet.account_groups
-      end
-
-      accounts.flat_map { |group| format_accounts(group.accounts) }
-    end
-
-    def format_accounts(accounts)
-      accounts.map do |account|
         {
           name: account.name,
+          balance: account.balance,
+          currency: account.currency,
+          balance_formatted: account.balance_money.format,
+          classification: account.classification,
           type: account.accountable_type,
-          balance: format_currency(account.balance),
-          classification: account.classification
+          start_date: account.start_date,
+          is_plaid_linked: account.plaid_account_id.present?,
+          is_active: account.is_active,
+          historical_balances: {
+            start_date: balance_series.start_date,
+            end_date: balance_series.end_date,
+            currency: account.currency,
+            interval: balance_series.interval,
+            order: "chronological",
+            balances: balance_series.values.map { |value| { date: value.date, balance_formatted: value.trend.current.format } }
+          }
         }
       end
-    end
-
-    def format_currency(amount)
-      Money.new(amount, family.currency).format
-    end
+    }
+  end
 end
