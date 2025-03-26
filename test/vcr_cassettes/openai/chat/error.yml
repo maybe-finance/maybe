@@ -24,7 +24,7 @@ http_interactions:
       message: Bad Request
     headers:
       Date:
-      - Tue, 25 Mar 2025 23:11:06 GMT
+      - Wed, 26 Mar 2025 16:39:37 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -36,25 +36,25 @@ http_interactions:
       Openai-Organization:
       - "<OPENAI_ORGANIZATION_ID>"
       X-Request-Id:
-      - req_ca0b197a2f9a574d5d241ef8b3d09d34
+      - req_fbea740269fd866bf13c8bdc17798de1
       Openai-Processing-Ms:
-      - '55'
+      - '118'
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
       Cf-Cache-Status:
       - DYNAMIC
       Set-Cookie:
-      - __cf_bm=tX5czgHN97MlYwgLpeDbuAUa3S5abXhWACjrI4x8byU-1742944266-1.0.1.1-.FXcYmiTdPNACn4wLXwqdSaYPyrRSV4MeiLdisI1lIegnljoxVQw1y3_WKMwnA7gV5qLr_8EF6jL4ynLcrflbGg8SeMBwCVONJzEaJ2XkZE;
-        path=/; expires=Tue, 25-Mar-25 23:41:06 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=TK4DOS84TE1BBqD6wwFrE92fkTeBLmwOfHxDcTbP0d4-1743007177-1.0.1.1-80iHD_mSYrsI18Be_VOwaYhL8aFPjMP94B5lg3sAbqkkDtfpOP5VVTeVeCC56H_O17klQzRVVY4Tk_GQ3QFUJ280DLY.AKuRDiMnVwFKGt4;
+        path=/; expires=Wed, 26-Mar-25 17:09:37 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=hs4ePI2jjm7VAA7zo4WqOw9uUdAaDbfuplO5byZqNh0-1742944266018-0.0.1.1-604800000;
+      - _cfuvid=z1RZlzcsco0CA7w7LzJoa3ZUt6Amz1p81E5aZN3V7QM-1743007177428-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       X-Content-Type-Options:
       - nosniff
       Server:
       - cloudflare
       Cf-Ray:
-      - 926215d9f9b6cf56-CMH
+      - 926815c6e89a0293-ORD
       Alt-Svc:
       - h3=":443"; ma=86400
     body:
@@ -68,5 +68,5 @@ http_interactions:
             "code": "model_not_found"
           }
         }
-  recorded_at: Tue, 25 Mar 2025 23:11:06 GMT
+  recorded_at: Wed, 26 Mar 2025 16:39:37 GMT
 recorded_with: VCR 6.3.1

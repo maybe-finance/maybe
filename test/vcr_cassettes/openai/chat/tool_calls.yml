@@ -26,7 +26,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Tue, 25 Mar 2025 23:17:31 GMT
+      - Wed, 26 Mar 2025 16:39:37 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -38,34 +38,34 @@ http_interactions:
       Openai-Organization:
       - "<OPENAI_ORGANIZATION_ID>"
       X-Request-Id:
-      - req_d1b4af53171a73fd159d22b1f3bf1553
+      - req_ceb289fde2c231617955a1555a4cd79e
       Openai-Processing-Ms:
-      - '650'
+      - '768'
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
       Cf-Cache-Status:
       - DYNAMIC
       Set-Cookie:
-      - __cf_bm=jjdv39wyPsNKssrZOaL5HqYYvI_PQMuBp2pItjfbyxY-1742944651-1.0.1.1-m8NTKiFHTdAInwX4c8yhQft1Noc09TNiltjFgBurloaH.OXUXAFBGbjlk70yEpNHwNsbKnZqcnPIj33MajVh_HDvmKM6ij3C4kWmRe27IYM;
-        path=/; expires=Tue, 25-Mar-25 23:47:31 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=fQqPxoLXAE3ef6cr1S4DPM2iTPS59q6ZCPlKepx7mug-1743007177-1.0.1.1-_dol0qexmAEgTXHGgO_328asGX25U_pnypZQ1M2Sgs0C99rTu0foM9K95DypgMBhcrSeuOniz3AUC1iA9otoNKfSxZH_LhnNrh27.BOhFKg;
+        path=/; expires=Wed, 26-Mar-25 17:09:37 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=A7iXFLHFFYyjAHnjuIk0v2CDI2tHT.jM1MNOETTsR5E-1742944651782-0.0.1.1-604800000;
+      - _cfuvid=5ONQI6E2u9UonIMtOb2a5j3E.VRss6iDq.sEIyobkpg-1743007177879-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       X-Content-Type-Options:
       - nosniff
       Server:
       - cloudflare
       Cf-Ray:
-      - 92621f44f8232312-ORD
+      - 926815c6ec42fa06-ORD
       Alt-Svc:
       - h3=":443"; ma=86400
     body:
       encoding: ASCII-8BIT
       string: |-
         {
-          "id": "resp_67e3398b1c2c8191854683ca89ba2db80fb218f0e5d9815c",
+          "id": "resp_67e42dc91c508192970794d670e0578e0177b37425b2541e",
           "object": "response",
-          "created_at": 1742944651,
+          "created_at": 1743007177,
           "status": "completed",
           "error": null,
           "incomplete_details": null,
@@ -75,8 +75,8 @@ http_interactions:
           "output": [
             {
               "type": "function_call",
-              "id": "fc_67e3398ba49481919f341d003956ccb30fb218f0e5d9815c",
-              "call_id": "call_cfAqCs5j5GXP1psazANqh5e3",
+              "id": "fc_67e42dc9ba808192b7cd3a9aa23b9e090177b37425b2541e",
+              "call_id": "call_7hAWwco32nLu12yi5NUtdhVp",
               "name": "get_net_worth",
               "arguments": "{}",
               "status": "completed"
@@ -126,15 +126,15 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: Tue, 25 Mar 2025 23:17:31 GMT
+  recorded_at: Wed, 26 Mar 2025 16:39:37 GMT
 - request:
     method: post
     uri: https://api.openai.com/v1/responses
     body:
       encoding: UTF-8
       string: '{"model":"gpt-4o","input":[{"role":"user","content":"What is my net
-        worth?"},{"type":"function_call_output","call_id":"call_cfAqCs5j5GXP1psazANqh5e3","output":"\"$124,200\""}],"instructions":"Use
-        the tools available to you to answer the user''s question.","tools":[],"previous_response_id":"resp_67e3398b1c2c8191854683ca89ba2db80fb218f0e5d9815c"}'
+        worth?"},{"type":"function_call_output","call_id":"call_7hAWwco32nLu12yi5NUtdhVp","output":"\"$124,200\""}],"instructions":"Use
+        the tools available to you to answer the user''s question.","tools":[],"previous_response_id":"resp_67e42dc91c508192970794d670e0578e0177b37425b2541e"}'
     headers:
       Content-Type:
       - application/json
@@ -152,7 +152,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Tue, 25 Mar 2025 23:17:32 GMT
+      - Wed, 26 Mar 2025 16:39:39 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -164,34 +164,34 @@ http_interactions:
       Openai-Organization:
       - "<OPENAI_ORGANIZATION_ID>"
       X-Request-Id:
-      - req_3cfc968c665a8fc2629900b698e17f9c
+      - req_d9c14a951d94d246f53d27a2f68114a1
       Openai-Processing-Ms:
-      - '753'
+      - '1297'
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
       Cf-Cache-Status:
       - DYNAMIC
       Set-Cookie:
-      - __cf_bm=2IVOr9zrdIVSomTZzKbu_zR_uxekzLpVo78egXqMC.M-1742944652-1.0.1.1-ccbU9VXd_6AlLsIM_f9QIVHzJy32HnJ39PCGV14mkjf1lfIj4raFWk_WrhlnLgv.x8j8IJdSXwj4g_dPkDtarzffMAbekvYyxl2nFQLAJQs;
-        path=/; expires=Tue, 25-Mar-25 23:47:32 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=xf4vcPVWTbUItUeVwaSWKuZ1t1iKC6vhUnx3gMXgr0o-1743007179-1.0.1.1-XNh1mngDDGHGDjdN3lqmsUXRLUYrDN7PWhCVFVOICtmjzkVHFzWH2jGcmb5wVCGp_QkniP78ElxT4em1UB15UjOw9zNIs3_XnSERacSreLI;
+        path=/; expires=Wed, 26-Mar-25 17:09:39 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=Sl0zxjNhkP0R8n0vyUb9qT.nZLyfa0ILO6.s3.1oA1s-1742944652832-0.0.1.1-604800000;
+      - _cfuvid=0wWDs.bI2DAGf5YSsnwQy_qPsw8ijrFs3wNf2AfUEjo-1743007179480-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       X-Content-Type-Options:
       - nosniff
       Server:
       - cloudflare
       Cf-Ray:
-      - 92621f4afd802340-ORD
+      - 926815cf190c6193-ORD
       Alt-Svc:
       - h3=":443"; ma=86400
     body:
       encoding: ASCII-8BIT
       string: |-
         {
-          "id": "resp_67e3398c0e688191a5e61a95032513ce0fb218f0e5d9815c",
+          "id": "resp_67e42dca2c0081928305a7b42a0c69620177b37425b2541e",
           "object": "response",
-          "created_at": 1742944652,
+          "created_at": 1743007178,
           "status": "completed",
           "error": null,
           "incomplete_details": null,
@@ -201,7 +201,7 @@ http_interactions:
           "output": [
             {
               "type": "message",
-              "id": "msg_67e3398caa108191a1c6789feb4a4cf00fb218f0e5d9815c",
+              "id": "msg_67e42dcb320c81928ce5dc97145fa2770177b37425b2541e",
               "status": "completed",
               "role": "assistant",
               "content": [
@@ -214,7 +214,7 @@ http_interactions:
             }
           ],
           "parallel_tool_calls": true,
-          "previous_response_id": "resp_67e3398b1c2c8191854683ca89ba2db80fb218f0e5d9815c",
+          "previous_response_id": "resp_67e42dc91c508192970794d670e0578e0177b37425b2541e",
           "reasoning": {
             "effort": null,
             "generate_summary": null
@@ -244,5 +244,5 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: Tue, 25 Mar 2025 23:17:32 GMT
+  recorded_at: Wed, 26 Mar 2025 16:39:39 GMT
 recorded_with: VCR 6.3.1
