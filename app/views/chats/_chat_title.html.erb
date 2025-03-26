@@ -5,7 +5,7 @@
     <h3 class="text-sm font-medium text-primary"><%= chat.title || "New chat" %></h3>
   <% else %>
     <%= link_to chat_path(chat), data: { turbo_frame: chat_frame } do %>
-      <h3 class="text-sm font-medium text-primary"><%= chat.title %></h3>
+      <h3 class="truncate text-sm font-medium text-primary"><%= chat.title %></h3>
     <% end %>
   <% end %>
 <% end %>

@@ -8,39 +8,17 @@ class Assistant::Function::GetBalanceSheet < Assistant::Function
 
     def description
       <<~INSTRUCTIONS
-      Use this to get point-in-time and historical snapshots of the user's aggregate financial position.
+        Use this to get the user's balance sheet with varying amounts of historical data.
 
-      This is great for answering questions like:
-      - What is the user's net worth?  What is it composed of?
-      - How has the user's wealth changed over time?
-
-      You can specify history_years to determine how much historical data to return.  You should always
-      attempt to fetch the minimum amount of required history to answer the question.  If no history is
-      required, you can set history_years to "none" to return only the current balance sheet.
+        This is great for answering questions like:
+        - What is the user's net worth?  What is it composed of?
+        - How has the user's wealth changed over time?
       INSTRUCTIONS
-    end
-
-    def params_schema
-      build_schema(
-        required: [ "history_years" ],
-        properties: {
-          history_years: {
-            enum: [ "max", "none", "1", "2", "3", "4", "5" ],
-            description: "The length of the history to return in years.  Select 'max' will return all available history, up to 5 years.  Select 'none' will return only the current balance sheet."
-          }
-        }
-      )
     end
   end
 
   def call(params = {})
-    observation_start_date = if params["history_years"] == "max"
-      [ 5.years.ago.to_date, family.oldest_entry_date ].max
-    elsif params["history_years"] == "none"
-      Date.current
-    else
-      (params["history_years"].to_i).years.ago.to_date
-    end
+    observation_start_date = [ 5.years.ago.to_date, family.oldest_entry_date ].max
 
     period = Period.custom(start_date: observation_start_date, end_date: Date.current)
 

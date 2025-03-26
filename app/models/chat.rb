@@ -19,7 +19,7 @@ class Chat < ApplicationRecord
     end
 
     def generate_title(prompt)
-      prompt.first(20)
+      prompt.first(80)
     end
   end
 
@@ -32,8 +32,8 @@ class Chat < ApplicationRecord
     end
   end
 
-  def add_error(message)
-    update! error: message
+  def add_error(e)
+    update! error: e.to_json
     broadcast_append target: "messages", partial: "chats/error", locals: { chat: self }
   end
 

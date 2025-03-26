@@ -14,6 +14,13 @@ class Assistant::Function::GetTransactions < Assistant::Function
       <<~INSTRUCTIONS
         Use this to search user's transactions by using various optional filters.
 
+        This function is great for things like:
+        - Finding specific transactions
+        - Getting basic stats about a small group of transactions
+
+        This function is not great for:
+        - Large time periods (use the get_income_statement function for this)
+
         Note on pagination:
 
         This function can be paginated.  You can expect the following properties in the response:
@@ -22,6 +29,8 @@ class Assistant::Function::GetTransactions < Assistant::Function
         - `page`: The current page of results
         - `page_size`: The number of results per page (this will always be #{default_page_size})
         - `total_results`: The total number of results for the given filters
+        - `total_income`: The total income for the given filters
+        - `total_expenses`: The total expenses for the given filters
 
         Simple example (transactions from the last 30 days):
 
@@ -125,19 +134,24 @@ class Assistant::Function::GetTransactions < Assistant::Function
   def call(params = {})
     search_params = params.except("order", "page")
 
-    transactions = family.transactions.active.search(search_params).includes(
-      { entry: :account },
-      :category, :merchant, :tags,
-      transfer_as_outflow: { inflow_transaction: { entry: :account } },
-      transfer_as_inflow: { outflow_transaction: { entry: :account } }
-    )
-
-    ordered_transactions = params["order"] == "asc" ? transactions.chronological : transactions.reverse_chronological
+    transactions_query = family.transactions.active.search(search_params)
+    pagy_query = params["order"] == "asc" ? transactions_query.chronological : transactions_query.reverse_chronological
 
     # By default, we give a small page size to force the AI to use filters effectively and save on tokens
-    pagy, transactions = pagy(ordered_transactions, page: params["page"] || 1, limit: default_page_size)
+    pagy, paginated_transactions = pagy(
+      pagy_query.includes(
+        { entry: :account },
+        :category, :merchant, :tags,
+        transfer_as_outflow: { inflow_transaction: { entry: :account } },
+        transfer_as_inflow: { outflow_transaction: { entry: :account } }
+      ),
+      page: params["page"] || 1,
+      limit: default_page_size
+    )
 
-    normalized_transactions = transactions.map do |txn|
+    totals = family.income_statement.totals(transactions_scope: transactions_query)
+
+    normalized_transactions = paginated_transactions.map do |txn|
       entry = txn.entry
       {
         date: entry.date,
@@ -158,7 +172,9 @@ class Assistant::Function::GetTransactions < Assistant::Function
       total_results: pagy.count,
       page: pagy.page,
       page_size: default_page_size,
-      total_pages: pagy.pages
+      total_pages: pagy.pages,
+      total_income: totals.income_money.format,
+      total_expenses: totals.expense_money.format
     }
   end
 
