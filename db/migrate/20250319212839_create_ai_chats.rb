@@ -4,7 +4,7 @@ class CreateAiChats < ActiveRecord::Migration[7.2]
       t.references :user, null: false, foreign_key: true, type: :uuid
       t.string :title, null: false
       t.string :instructions
-      t.string :error
+      t.jsonb :error
       t.string :latest_assistant_response_id
       t.timestamps
     end

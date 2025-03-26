@@ -118,18 +118,29 @@ class Provider::Openai::ChatResponseProcessor
 
     def execute_pending_functions(pending_functions)
       pending_functions.map do |pending_function|
-        fn = available_functions.find { |f| f.name == pending_function.name }
-        parsed_args = JSON.parse(pending_function.arguments)
-        result = fn.call(parsed_args)
-
-        ExecutedFunction.new(
-          id: pending_function.id,
-          call_id: pending_function.call_id,
-          name: pending_function.name,
-          arguments: parsed_args,
-          result: result
-        )
+        execute_function(pending_function)
       end
+    end
+
+    def execute_function(fn)
+      fn_instance = available_functions.find { |f| f.name == fn.name }
+      parsed_args = JSON.parse(fn.arguments)
+      result = fn_instance.call(parsed_args)
+
+      ExecutedFunction.new(
+        id: fn.id,
+        call_id: fn.call_id,
+        name: fn.name,
+        arguments: parsed_args,
+        result: result
+      )
+    rescue => e
+      fn_execution_details = {
+        fn_name: fn.name,
+        fn_args: parsed_args
+      }
+
+      raise Provider::Openai::Error.new(e, fn_execution_details)
     end
 
     def tools

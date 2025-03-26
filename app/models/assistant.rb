@@ -23,7 +23,7 @@ class Assistant
     stop_thinking
 
     unless response.success?
-      chat.add_error("#{response.error.class}: #{response.error.message}")
+      return chat.add_error(response.error)
     end
 
     Chat.transaction do
@@ -32,7 +32,7 @@ class Assistant
       chat.update!(latest_assistant_response_id: response.data.id)
     end
   rescue => e
-    chat.add_error("#{e.class}: #{e.message}")
+    chat.add_error(e)
   end
 
   private
@@ -126,7 +126,8 @@ class Assistant
       [
         Assistant::Function::GetTransactions.new(chat.user),
         Assistant::Function::GetAccounts.new(chat.user),
-        Assistant::Function::GetBalanceSheet.new(chat.user)
+        Assistant::Function::GetBalanceSheet.new(chat.user),
+        Assistant::Function::GetIncomeStatement.new(chat.user)
       ]
     end
 
