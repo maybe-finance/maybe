@@ -72,4 +72,15 @@ class Assistant::Function
     def family
       user.family
     end
+
+    # To save tokens, we provide the AI metadata about the series and a flat array of
+    # raw, formatted values which it can infer dates from
+    def to_ai_time_series(series)
+      {
+        start_date: series.start_date,
+        end_date: series.end_date,
+        interval: series.interval,
+        values: series.values.map { |v| v.trend.current.format }
+      }
+    end
 end

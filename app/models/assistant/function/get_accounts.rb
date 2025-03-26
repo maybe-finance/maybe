@@ -13,10 +13,6 @@ class Assistant::Function::GetAccounts < Assistant::Function
     {
       as_of_date: Date.current,
       accounts: family.accounts.includes(:balances).map do |account|
-        series_start_date = [ account.start_date, 5.years.ago.to_date ].max
-        all_dates = Period.custom(start_date: series_start_date, end_date: Date.current)
-        balance_series = account.balance_series(period: all_dates, interval: "1 month")
-
         {
           name: account.name,
           balance: account.balance,
@@ -27,16 +23,18 @@ class Assistant::Function::GetAccounts < Assistant::Function
           start_date: account.start_date,
           is_plaid_linked: account.plaid_account_id.present?,
           is_active: account.is_active,
-          historical_balances: {
-            start_date: balance_series.start_date,
-            end_date: balance_series.end_date,
-            currency: account.currency,
-            interval: balance_series.interval,
-            order: "chronological",
-            balances: balance_series.values.map { |value| { date: value.date, balance_formatted: value.trend.current.format } }
-          }
+          historical_balances: historical_balances(account)
         }
       end
     }
   end
+
+  private
+    def historical_balances(account)
+      start_date = [ account.start_date, 5.years.ago.to_date ].max
+      period = Period.custom(start_date: start_date, end_date: Date.current)
+      balance_series = account.balance_series(period: period, interval: "1 month")
+
+      to_ai_time_series(balance_series)
+    end
 end

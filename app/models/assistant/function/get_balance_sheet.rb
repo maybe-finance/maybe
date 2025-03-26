@@ -1,122 +1,95 @@
 class Assistant::Function::GetBalanceSheet < Assistant::Function
+  include ActiveSupport::NumberHelper
+
   class << self
     def name
       "get_balance_sheet"
     end
 
     def description
-      "Use this to get point-in-time snapshots of the user's aggregate financial position, including assets, liabilities, net worth, and more."
+      <<~INSTRUCTIONS
+      Use this to get point-in-time and historical snapshots of the user's aggregate financial position.
+
+      This is great for answering questions like:
+      - What is the user's net worth?  What is it composed of?
+      - How has the user's wealth changed over time?
+
+      You can specify history_years to determine how much historical data to return.  You should always
+      attempt to fetch the minimum amount of required history to answer the question.  If no history is
+      required, you can set history_years to "none" to return only the current balance sheet.
+      INSTRUCTIONS
+    end
+
+    def params_schema
+      build_schema(
+        required: [ "history_years" ],
+        properties: {
+          history_years: {
+            enum: [ "max", "none", "1", "2", "3", "4", "5" ],
+            description: "The length of the history to return in years.  Select 'max' will return all available history, up to 5 years.  Select 'none' will return only the current balance sheet."
+          }
+        }
+      )
     end
   end
 
   def call(params = {})
-    balance_sheet = BalanceSheet.new(family)
-    balance_sheet.to_ai_readable_hash
-  end
-
-  private 
-  # AI-friendly representation of balance sheet data
-  def to_ai_readable_hash
-    {
-      net_worth: format_currency(net_worth),
-      total_assets: format_currency(total_assets),
-      total_liabilities: format_currency(total_liabilities),
-      as_of_date: Date.today.to_s,
-      currency: currency
-    }
-  end
-
-  # Detailed summary of the balance sheet for AI
-  def detailed_summary
-    asset_groups = account_groups("asset")
-    liability_groups = account_groups("liability")
-
-    {
-      asset_breakdown: asset_groups.map do |group|
-        {
-          type: group.name,
-          total: format_currency(group.total),
-          percentage_of_assets: format_percentage(group.weight),
-          accounts: group.accounts.map do |account|
-            {
-              name: account.name,
-              balance: format_currency(account.balance),
-              percentage_of_type: format_percentage(account.weight)
-            }
-          end
-        }
-      end,
-      liability_breakdown: liability_groups.map do |group|
-        {
-          type: group.name,
-          total: format_currency(group.total),
-          percentage_of_liabilities: format_percentage(group.weight),
-          accounts: group.accounts.map do |account|
-            {
-              name: account.name,
-              balance: format_currency(account.balance),
-              percentage_of_type: format_percentage(account.weight)
-            }
-          end
-        }
-      end
-    }
-  end
-
-  # Generate financial insights for the balance sheet
-  def financial_insights
-    prev_month_networth = previous_month_net_worth
-    month_change = net_worth - prev_month_networth
-    month_change_percentage = prev_month_networth.zero? ? 0 : (month_change / prev_month_networth.to_f * 100)
-
-    debt_to_asset_ratio = total_assets.zero? ? 0 : (total_liabilities / total_assets.to_f)
-
-    largest_asset_group = account_groups("asset").max_by(&:total)
-    largest_liability_group = account_groups("liability").max_by(&:total)
-
-    {
-      summary: "Your net worth is #{format_currency(net_worth)} as of #{format_date(Date.today)}.",
-      monthly_change: {
-        amount: format_currency(month_change),
-        percentage: format_percentage(month_change_percentage),
-        trend: month_change > 0 ? "increasing" : (month_change < 0 ? "decreasing" : "stable")
-      },
-      debt_to_asset_ratio: {
-        ratio: debt_to_asset_ratio.round(2),
-        interpretation: interpret_debt_to_asset_ratio(debt_to_asset_ratio)
-      },
-      asset_insights: {
-        largest_type: largest_asset_group&.name || "None",
-        largest_type_amount: format_currency(largest_asset_group&.total || 0),
-        largest_type_percentage: format_percentage(largest_asset_group&.weight || 0)
-      },
-      liability_insights: {
-        largest_type: largest_liability_group&.name || "None",
-        largest_type_amount: format_currency(largest_liability_group&.total || 0),
-        largest_type_percentage: format_percentage(largest_liability_group&.weight || 0)
-      }
-    }
-  end
-
-  # Calculate the net worth from the previous month
-  def previous_month_net_worth
-    # Here we'd ideally fetch historical data
-    # For now, we'll estimate it using the current net worth
-    # In a real implementation, you might use a time series or snapshot
-    net_worth * 0.97  # Assume 3% growth for demo purposes
-  end
-
-  # Provide an interpretation of the debt-to-asset ratio
-  def interpret_debt_to_asset_ratio(ratio)
-    case ratio
-    when 0...0.3
-      "Your debt-to-asset ratio is low, which is generally considered financially healthy."
-    when 0.3...0.5
-      "Your debt-to-asset ratio is moderate, which is generally manageable."
-    when 0.5...0.8
-      "Your debt-to-asset ratio is somewhat high. You might want to focus on reducing debt."
+    observation_start_date = if params["history_years"] == "max"
+      [ 5.years.ago.to_date, family.oldest_entry_date ].max
+    elsif params["history_years"] == "none"
+      Date.current
     else
-      "Your debt-to-asset ratio is high. Consider a debt reduction strategy."
+      (params["history_years"].to_i).years.ago.to_date
     end
+
+    period = Period.custom(start_date: observation_start_date, end_date: Date.current)
+
+    {
+      as_of_date: Date.current,
+      oldest_account_start_date: family.oldest_entry_date,
+      currency: family.currency,
+      net_worth: {
+        current: family.balance_sheet.net_worth_money.format,
+        monthly_history: historical_data(period)
+      },
+      assets: {
+        current: family.balance_sheet.total_assets_money.format,
+        monthly_history: historical_data(period, classification: "asset")
+      },
+      liabilities: {
+        current: family.balance_sheet.total_liabilities_money.format,
+        monthly_history: historical_data(period, classification: "liability")
+      },
+      insights: insights_data
+    }
   end
+
+  private
+    def historical_data(period, classification: nil)
+      scope = family.accounts.active
+      scope = scope.where(classification: classification) if classification.present?
+
+      if period.start_date == Date.current
+        []
+      else
+        balance_series = scope.balance_series(
+          currency: family.currency,
+          period: period,
+          interval: "1 month",
+          favorable_direction: "up",
+        )
+
+        to_ai_time_series(balance_series)
+      end
+    end
+
+    def insights_data
+      assets = family.balance_sheet.total_assets
+      liabilities = family.balance_sheet.total_liabilities
+      ratio = liabilities.zero? ? 0 : (liabilities / assets.to_f)
+
+      {
+        debt_to_asset_ratio: number_to_percentage(ratio * 100, precision: 0)
+      }
+    end
 end

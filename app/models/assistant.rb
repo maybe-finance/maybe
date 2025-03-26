@@ -125,13 +125,9 @@ class Assistant
     def functions
       [
         Assistant::Function::GetTransactions.new(chat.user),
-        Assistant::Function::GetAccounts.new(chat.user)
+        Assistant::Function::GetAccounts.new(chat.user),
+        Assistant::Function::GetBalanceSheet.new(chat.user)
       ]
-
-      # Assistant::Function::GetBalanceSheet.new(chat),
-      # Assistant::Function::GetIncomeStatement.new(chat),
-      # Assistant::Function::GetExpenseCategories.new(chat),
-      # Assistant::Function::ComparePeriods.new(chat)
     end
 
     def preferred_currency
