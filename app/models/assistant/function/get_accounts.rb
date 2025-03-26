@@ -1,28 +1,11 @@
-class Assistant::Functions::GetAccountBalances
-  include Assistant::Functions::Toolable
-
+class Assistant::Function::GetAccounts < Assistant::Function
   class << self
     def name
-      "get_account_balances"
+      "get_accounts"
     end
 
     def description
-      "Get balances for all accounts or by account type"
-    end
-
-    def parameters
-      {
-        type: "object",
-        properties: {
-          account_type: {
-            type: "string",
-            enum: [ "asset", "liability", "all" ],
-            description: "Type of accounts to get balances for"
-          }
-        },
-        required: [ "account_type" ],
-        additionalProperties: false
-      }
+      "Use this to see what accounts the user has along with their current and historical balances"
     end
   end
 
@@ -34,6 +17,21 @@ class Assistant::Functions::GetAccountBalances
       as_of_date: Date.today.to_s,
       currency: family.currency,
       accounts: get_accounts_data(balance_sheet, account_type)
+    }
+  end
+
+  def params_schema
+    {
+      type: "object",
+      properties: {
+        account_type: {
+          type: "string",
+          enum: [ "asset", "liability", "all" ],
+          description: "Type of accounts to get balances for"
+        }
+      },
+      required: [ "account_type" ],
+      additionalProperties: false
     }
   end
 

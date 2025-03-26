@@ -43,6 +43,11 @@ class ChatsController < ApplicationController
     redirect_to chats_path, notice: "Chat was successfully deleted"
   end
 
+  def retry
+    @chat.retry_last_message!
+    redirect_to chat_path(@chat)
+  end
+
   private
     def set_chat
       @chat = Current.user.chats.find(params[:id])

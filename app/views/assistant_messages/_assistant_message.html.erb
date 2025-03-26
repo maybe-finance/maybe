@@ -11,6 +11,10 @@
       <div class="prose prose--ai-chat"><%= markdown(assistant_message.content) %></div>
     </details>
   <% else %>
+    <% if assistant_message.chat.debug_mode? && assistant_message.tool_calls.any? %>
+      <%= render "assistant_messages/tool_calls", message: assistant_message %>
+    <% end %>
+
     <div class="flex items-start mb-6">
       <%= render "chats/ai_avatar" %>
       <div class="prose prose--ai-chat"><%= markdown(assistant_message.content) %></div>
