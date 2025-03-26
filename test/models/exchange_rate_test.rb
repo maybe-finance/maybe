@@ -65,7 +65,7 @@ class ExchangeRateTest < ActiveSupport::TestCase
   end
 
   test "returns nil on provider error" do
-    provider_response = provider_error_response(Provider::ProviderError.new("Test error"))
+    provider_response = provider_error_response(StandardError.new("Test error"))
 
     @provider.expects(:fetch_exchange_rate).returns(provider_response)
 

@@ -1,8 +1,6 @@
 class Assistant
   include Provided
 
-  AssistantError = Class.new(StandardError)
-
   attr_reader :chat
 
   class << self
@@ -18,18 +16,22 @@ class Assistant
   def respond_to(message)
     provider = get_model_provider(message.ai_model)
 
-    response = provider.chat_response(
-      model: message.ai_model,
-      instructions: instructions,
-      chat_history: chat_history,
-      functions: functions
-    )
+    response = provider.chat_response(message, instructions: instructions, available_functions: functions)
 
     if response.success?
-      process_response_artifacts(response.data)
+      Chat.transaction do
+        process_response_artifacts(response.data)
+
+        chat.update!(
+          error: nil,
+          latest_assistant_response_id: response.data.id
+        )
+      end
+
+      chat.broadcast_remove target: "chat-error"
     else
-      chat.update!(error: response.error)
-      raise AssistantError, "Assistant failed to respond to user: #{response.error}"
+      chat.update!(error: "#{response.error.class}: #{response.error.message}")
+      chat.broadcast_append target: "messages", partial: "chats/error", locals: { chat: chat }
     end
   end
 
@@ -57,47 +59,81 @@ class Assistant
         )
       end
 
-      messages.each do |msg|
-        msg.valid?
-        puts msg.errors.full_messages
-
-        msg.tool_calls.each do |tool_call|
-          tool_call.valid?
-          puts tool_call.errors.full_messages
-        end
-      end
-
       messages.each(&:save!)
     end
 
     def instructions
       <<~PROMPT
-        You are a helpful financial assistant for Maybe, a personal finance app.
-        You help users understand their financial data by answering questions about their accounts, transactions, income, expenses, and net worth.
+        ## Your identity
 
-        When users ask financial questions:
-        1. Use the provided functions to retrieve the relevant data
-        2. Provide ONLY the most important numbers and insights
-        3. Eliminate all unnecessary words and context
-        4. Use simple markdown for formatting
-        5. Ask follow-up questions to keep the conversation going. Help educate the user about their own data and entice them to ask more questions.
+        You are a financial assistant for an open source personal finance application called "Maybe", which is short for "Maybe Finance".
 
-        DO NOT:
-        - Add introductions or conclusions
-        - Apologize or explain limitations
+        ## Your purpose
 
-        Present monetary values using the format provided by the functions.
+        You help users understand their financial data by answering questions about their accounts,
+        transactions, income, expenses, net worth, and more.
+
+        ## Your rules
+
+        Follow all rules below at all times.
+
+        ### General rules
+
+        - Provide ONLY the most important numbers and insights
+        - Eliminate all unnecessary words and context
+        - Ask follow-up questions to keep the conversation going. Help educate the user about their own data and entice them to ask more questions.
+        - Do NOT add introductions or conclusions
+        - Do NOT apologize or explain limitations
+
+        ### Formatting rules
+
+        - Format all responses in markdown
+        - Format all monetary values according to the user's preferred currency
+
+        #### User's preferred currency
+
+        Maybe is a multi-currency app where each user has a "preferred currency" setting.
+
+        When no currency is specified, use the user's preferred currency for formatting and displaying monetary values.
+
+        - Symbol: #{preferred_currency.symbol}
+        - ISO code: #{preferred_currency.iso_code}
+        - Default precision: #{preferred_currency.default_precision}
+        - Default format: #{preferred_currency.default_format}
+          - Separator: #{preferred_currency.separator}
+          - Delimiter: #{preferred_currency.delimiter}
+
+        ### Rules about financial advice
+
+        You are NOT a licensed financial advisor and therefore, you should not provide any financial advice.  Instead,
+        you should focus on educating the user about personal finance and their own data so they can make informed decisions.
+
+        - Do not provide financial and/or investment advice
+        - Do not suggest investments or financial products
+        - Do not make assumptions about the user's financial situation.  Use the functions available to get the data you need.
+
+        ### Function calling rules
+
+        - Use the functions available to you to get user financial data and enhance your responses
+          - For functions that require dates, use the current date as your reference point: #{Date.current}
+        - If you suspect that you do not have enough data to 100% accurately answer, be transparent about it and state exactly what
+          the data you're presenting represents and what context it is in (i.e. date range, account, etc.)
       PROMPT
     end
 
     def functions
       [
-        Assistant::Functions::GetBalanceSheet.new,
-        Assistant::Functions::GetIncomeStatement.new,
-        Assistant::Functions::GetExpenseCategories.new,
-        Assistant::Functions::GetAccountBalances.new,
-        Assistant::Functions::GetTransactions.new,
-        Assistant::Functions::ComparePeriods.new
+        Assistant::Function::GetTransactions.new(chat.user)
       ]
+
+      # Assistant::Function::GetBalanceSheet.new(chat),
+      # Assistant::Function::GetIncomeStatement.new(chat),
+      # Assistant::Function::GetExpenseCategories.new(chat),
+      # Assistant::Function::GetAccountBalances.new(chat),
+      # Assistant::Function::ComparePeriods.new(chat)
+    end
+
+    def preferred_currency
+      Money::Currency.new(chat.user.family.currency)
     end
 end

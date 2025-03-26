@@ -51,7 +51,7 @@ class ProviderTest < ActiveSupport::TestCase
 
     client.expects(:get)
           .with("/test")
-          .returns(Provider::ProviderResponse.new(success?: true, data: "success", error: nil))
+          .returns(Provider::Response.new(success?: true, data: "success", error: nil))
           .in_sequence(sequence)
 
     response = @provider.fetch_data

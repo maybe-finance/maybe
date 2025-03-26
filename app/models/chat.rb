@@ -23,6 +23,14 @@ class Chat < ApplicationRecord
     end
   end
 
+  def retry_last_message!
+    last_message = conversation_messages.ordered.last
+
+    if last_message.present? && last_message.role == "user"
+      ask_assistant_later(last_message)
+    end
+  end
+
   def assistant
     @assistant ||= Assistant.for_chat(self)
   end
@@ -39,7 +47,7 @@ class Chat < ApplicationRecord
     if debug_mode?
       messages
     else
-      messages.where(type: ["UserMessage", "AssistantMessage"])
+      messages.where(type: [ "UserMessage", "AssistantMessage" ])
     end
   end
 end

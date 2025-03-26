@@ -5,15 +5,14 @@ module LLMInterfaceTest
 
   test "provides basic chat response" do
     VCR.use_cassette("#{vcr_key_prefix}/chat/basic_response") do
-      response = @subject.chat_response(
-        model: @subject_model,
-        chat_history: [
-          UserMessage.new(
-            content: "This is a chat test.  If it's working, respond with a single word: Yes",
-            ai_model: @subject_model
-          )
-        ]
+      chat = chats(:two)
+      message = chat.messages.create!(
+        type: "UserMessage",
+        content: "This is a chat test.  If it's working, respond with a single word: Yes",
+        ai_model: @subject_model
       )
+
+      response = @subject.chat_response(message)
 
       assert response.success?
       assert_equal 1, response.data.messages.size

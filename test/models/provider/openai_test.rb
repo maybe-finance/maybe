@@ -10,24 +10,22 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
 
   test "openai errors are automatically raised" do
     VCR.use_cassette("openai/chat/error") do
-      response = @openai.chat_response(
-        model: "invalid-model-key",
-        chat_history: [ UserMessage.new(content: "Error test") ]
-      )
+      chat = chats(:two)
+
+      response = @openai.chat_response(UserMessage.new(
+        chat: chat,
+        content: "Error test",
+        ai_model: "invalid-model-that-will-trigger-api-error"
+      ))
 
       assert_not response.success?
-      assert_kind_of Faraday::BadRequestError, response.error
-
-      # Adheres to openai response schema
-      assert_equal "model_not_found", response.error.response[:body].dig("error", "code")
+      assert_kind_of Provider::Openai::Error, response.error
     end
   end
 
   test "handles chat response with tool calls" do
     VCR.use_cassette("openai/chat/tool_calls") do
-      class PredictableToolFunction
-        include Assistant::Functions::Toolable
-
+      class PredictableToolFunction < Assistant::Function
         class << self
           def expected_test_result
             "$124,200"
@@ -47,13 +45,13 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
         end
       end
 
-      initial_message = UserMessage.new(content: "What is my net worth?")
+      chat = chats(:two)
+      initial_message = UserMessage.new(chat: chat, content: "What is my net worth?", ai_model: @subject_model)
 
       response = @openai.chat_response(
-        model: "gpt-4o",
+        initial_message,
         instructions: "Use the tools available to you to answer the user's question.",
-        functions: [ PredictableToolFunction.new ],
-        chat_history: [ initial_message ]
+        available_functions: [ PredictableToolFunction.new(chat) ]
       )
 
       assert response.success?

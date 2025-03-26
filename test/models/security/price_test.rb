@@ -40,7 +40,7 @@ class Security::PriceTest < ActiveSupport::TestCase
     security = securities(:aapl)
     Security::Price.delete_all # Clear any existing prices
 
-    provider_response = provider_error_response(Provider::ProviderError.new("Test error"))
+    provider_response = provider_error_response(StandardError.new("Test error"))
 
     @provider.expects(:fetch_security_price)
              .with(security, date: Date.current)

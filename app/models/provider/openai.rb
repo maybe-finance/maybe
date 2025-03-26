@@ -1,6 +1,8 @@
 class Provider::Openai < Provider
   include Assistant::Provideable
 
+  Error = Class.new(StandardError)
+
   MODELS = %w[gpt-4o]
 
   def initialize(access_token)
@@ -11,14 +13,13 @@ class Provider::Openai < Provider
     MODELS.include?(model)
   end
 
-  def chat_response(chat_history:, model: nil, instructions: nil, functions: [])
+  def chat_response(message, instructions: nil, available_functions: [])
     provider_response do
       processor = ChatResponseProcessor.new(
         client: client,
-        model: model,
-        chat_history: chat_history,
+        message: message,
         instructions: instructions,
-        available_functions: functions
+        available_functions: available_functions
       )
 
       processor.process
@@ -27,4 +28,12 @@ class Provider::Openai < Provider
 
   private
     attr_reader :client
+
+    def transform_error(error)
+      if error.is_a?(Faraday::Error)
+        Error.new(error.response[:body].dig("error", "message"))
+      else
+        error
+      end
+    end
 end

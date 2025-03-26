@@ -5,6 +5,7 @@ class CreateAiChats < ActiveRecord::Migration[7.2]
       t.string :title, null: false
       t.string :instructions
       t.string :error
+      t.string :latest_assistant_response_id
       t.timestamps
     end
 

@@ -6,7 +6,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"model":"gpt-4o","input":[{"role":"user","content":"This is a chat
-        test.  If it''s working, respond with a single word: Yes"}],"instructions":null,"tools":[]}'
+        test.  If it''s working, respond with a single word: Yes"}],"instructions":null,"tools":[],"previous_response_id":null}'
     headers:
       Content-Type:
       - application/json
@@ -24,7 +24,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Mon, 24 Mar 2025 21:44:00 GMT
+      - Tue, 25 Mar 2025 23:17:48 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -36,34 +36,34 @@ http_interactions:
       Openai-Organization:
       - "<OPENAI_ORGANIZATION_ID>"
       X-Request-Id:
-      - req_ed8464cb4c786474752f78361683811f
+      - req_30a4f59c2ebbac19c82c58f74b6989c2
       Openai-Processing-Ms:
-      - '676'
+      - '401'
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
       Cf-Cache-Status:
       - DYNAMIC
       Set-Cookie:
-      - __cf_bm=bCY.suKtipA7n_n4ej.Zaf6.AKa7c5VV8WglOUkJswM-1742852640-1.0.1.1-FY7LbyMoo3XMfSr9MKW06LftuyCXqmyJouamZMkdi4zMbxILT3MVdKFOqPY4vPUdQKi3VrqiaKkAsv8EKFLE0vuw21uyVGoYuf7Nx2HaBvw;
-        path=/; expires=Mon, 24-Mar-25 22:14:00 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=7saFhcYgpq4IKrKEuU4JBKru7TUk.Kg_wPeuiZmZBI8-1742944668-1.0.1.1-sPUG2RPYSgn_3hJpI.kNUEMccFdLnfhKuQiZWkIdc6glXLG4egboIS62y1Iytcy6talbBUye4u08hTAjhgevK9BClKX8lsbCF.pZOYrUoYk;
+        path=/; expires=Tue, 25-Mar-25 23:47:48 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=xwJ0pVW3DQQFf6TZZbKkyqNt2pUsHIS8_EOPSvd0OsI-1742852640451-0.0.1.1-604800000;
+      - _cfuvid=OHypg8AsDJ79T57yPpl92GuD7OYVUHZBNBEvFqj1VHQ-1742944668537-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       X-Content-Type-Options:
       - nosniff
       Server:
       - cloudflare
       Cf-Ray:
-      - 925958e5dde6cf73-CMH
+      - 92621faf2b60cf77-CMH
       Alt-Svc:
       - h3=":443"; ma=86400
     body:
       encoding: ASCII-8BIT
       string: |-
         {
-          "id": "resp_67e1d21fb9cc8192bb416e29e1ce69800b24cca80d3ba0fc",
+          "id": "resp_67e3399c1bac819181247690373de59d0662d268a1ee899a",
           "object": "response",
-          "created_at": 1742852639,
+          "created_at": 1742944668,
           "status": "completed",
           "error": null,
           "incomplete_details": null,
@@ -73,7 +73,7 @@ http_interactions:
           "output": [
             {
               "type": "message",
-              "id": "msg_67e1d22038bc81928134e767ece831a90b24cca80d3ba0fc",
+              "id": "msg_67e3399c663c8191ba784e708181a8bd0662d268a1ee899a",
               "status": "completed",
               "role": "assistant",
               "content": [
@@ -116,5 +116,5 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: Mon, 24 Mar 2025 21:44:00 GMT
+  recorded_at: Tue, 25 Mar 2025 23:17:48 GMT
 recorded_with: VCR 6.3.1

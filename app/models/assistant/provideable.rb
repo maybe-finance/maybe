@@ -3,10 +3,10 @@ module Assistant::Provideable
   extend ActiveSupport::Concern
 
   ChatResponseMessage = Data.define(:id, :content)
-  ChatResponseFunction = Data.define(:id, :call_id, :name, :arguments, :result)
-  ChatResponse = Data.define(:messages, :functions, :model)
+  ChatResponseFunctionExecution = Data.define(:id, :call_id, :name, :arguments, :result)
+  ChatResponse = Data.define(:id, :messages, :functions, :model)
 
-  def chat_response(messages:, model: nil, functions: [], instructions: nil)
+  def chat_response(message, instructions: nil, available_functions: [])
     raise NotImplementedError, "Subclasses must implement #chat_response"
   end
 

@@ -15,6 +15,7 @@ class AssistantTest < ActiveSupport::TestCase
     @provider.expects(:chat_response).returns(
       provider_success_response(
         Assistant::Provideable::ChatResponse.new(
+          id: "1",
           model: "gpt-4o",
           messages: [
             Assistant::Provideable::ChatResponseMessage.new(
@@ -36,6 +37,7 @@ class AssistantTest < ActiveSupport::TestCase
     @provider.expects(:chat_response).returns(
       provider_success_response(
         Assistant::Provideable::ChatResponse.new(
+          id: "1",
           model: "gpt-4o",
           messages: [
             Assistant::Provideable::ChatResponseMessage.new(
@@ -44,7 +46,7 @@ class AssistantTest < ActiveSupport::TestCase
             )
           ],
           functions: [
-            Assistant::Provideable::ChatResponseFunction.new(
+            Assistant::Provideable::ChatResponseFunctionExecution.new(
               id: "1",
               call_id: "1",
               name: "get_net_worth",

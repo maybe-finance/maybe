@@ -1,8 +1,7 @@
 class Provider
   include Retryable
 
-  ProviderError = Class.new(StandardError)
-  ProviderResponse = Data.define(:success?, :data, :error)
+  Response = Data.define(:success?, :data, :error)
 
   private
     PaginatedData = Data.define(:paginated, :first_page, :total_pages)
@@ -13,6 +12,10 @@ class Provider
       []
     end
 
+    def transform_error(error)
+      error
+    end
+
     def provider_response(retries: nil, &block)
       data = if retries
         retrying(retryable_errors, max_retries: retries) { yield }
@@ -20,23 +23,20 @@ class Provider
         yield
       end
 
-      ProviderResponse.new(
+      Response.new(
         success?: true,
         data: data,
         error: nil,
       )
-    rescue StandardError => error
-      Sentry.capture_exception(error)
+    rescue => error
+      transformed_error = transform_error(error)
 
-      unless Rails.env.production?
-        Rails.logger.error(error)
-        Rails.logger.error(error.backtrace.join("\n"))
-      end
+      Sentry.capture_exception(transformed_error)
 
-      ProviderResponse.new(
+      Response.new(
         success?: false,
         data: nil,
-        error: error,
+        error: transformed_error
       )
     end
 end

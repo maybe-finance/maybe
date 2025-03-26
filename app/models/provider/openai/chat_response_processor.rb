@@ -1,89 +1,94 @@
 class Provider::Openai::ChatResponseProcessor
-  def initialize(client:, model:, chat_history:, instructions: nil, available_functions: [])
+  def initialize(message:, client:, instructions: nil, available_functions: [])
     @client = client
-    @model = model
+    @message = message
     @instructions = instructions
     @available_functions = available_functions
-    @input = build_initial_input(chat_history)
   end
 
   def process
-    response = client.responses.create(parameters: {
-      model: model,
-      input: input,
-      instructions: instructions,
-      tools: available_tools
-    })
+    first_response = fetch_response(previous_response_id: previous_openai_response_id)
 
-    output = response.dig("output")
-    response_model = response.dig("model")
-    messages = extract_messages(output)
-    pending_function_calls = extract_pending_function_calls(output)
+    return first_response if first_response.functions.empty?
 
-    if pending_function_calls.empty?
-      return Response.new(
-        messages: messages,
-        functions: [],
-        model: response_model
-      )
-    end
+    executed_functions = execute_pending_functions(first_response.functions)
 
-    executed_function_calls = []
-
-    pending_function_calls.each do |fc|
-      result = execute_function(fc.name, fc.arguments)
-
-      executed_function_calls << ResponseFunction.new(
-        **fc.to_h,
-        result: result
-      )
-
-      input << {
-        type: "function_call",
-        id: fc.id,
-        call_id: fc.call_id,
-        name: fc.name,
-        arguments: fc.arguments
-      }
-
-      input << {
-        type: "function_call_output",
-        call_id: fc.call_id,
-        output: result
-      }
-    end
-
-    follow_up_response = client.responses.create(parameters: {
-      model: model,
-      instructions: instructions,
-      input: input
-    })
-
-    messages = extract_messages(follow_up_response.dig("output"))
-
-    Response.new(
-      messages: messages,
-      functions: executed_function_calls,
-      model: response_model
+    follow_up_response = fetch_response(
+      executed_functions: executed_functions,
+      previous_response_id: first_response.id
     )
+
+    follow_up_response
   end
 
   private
-    attr_reader :client, :model, :instructions, :available_functions, :input
+    attr_reader :client, :message, :instructions, :available_functions
+
+    PendingFunction = Data.define(:id, :call_id, :name, :arguments)
 
     # Expected response interface for an "LLM Provider"
     Response = Assistant::Provideable::ChatResponse
     ResponseMessage = Assistant::Provideable::ChatResponseMessage
-    ResponseFunction = Assistant::Provideable::ChatResponseFunction
+    ExecutedFunction = Assistant::Provideable::ChatResponseFunctionExecution
 
-    def build_initial_input(chat_history)
-      chat_history.map do |item|
-        { role: item.role, content: item.content }
+    def fetch_response(executed_functions: [], previous_response_id: nil)
+      function_results = executed_functions.map do |executed_function|
+        {
+          type: "function_call_output",
+          call_id: executed_function.call_id,
+          output: executed_function.result.to_json
+        }
       end
+
+      prepared_input = input + function_results
+
+      # No need to pass tools for follow-up messages that provide function results
+      prepared_tools = executed_functions.empty? ? tools : []
+
+      raw_response = client.responses.create(parameters: {
+        model: model,
+        input: prepared_input,
+        instructions: instructions,
+        tools: prepared_tools,
+        previous_response_id: previous_response_id
+      })
+
+      response_output = raw_response.dig("output")
+
+      functions_output = if executed_functions.any?
+        executed_functions
+      else
+        extract_pending_functions(response_output)
+      end
+
+      Response.new(
+        id: raw_response.dig("id"),
+        messages: extract_messages(response_output),
+        functions: functions_output,
+        model: raw_response.dig("model")
+      )
     end
 
-    def extract_messages(output)
-      message_items = output.filter { |item| item.dig("type") == "message" }
+    def chat
+      message.chat
+    end
+
+    def model
+      message.ai_model
+    end
+
+    def previous_openai_response_id
+      chat.latest_assistant_response_id
+    end
+
+    # Since we're using OpenAI's conversation state management, all we need to pass
+    # to input is the user message we're currently responding to.
+    def input
+      [ { role: "user", content: message.content } ]
+    end
+
+    def extract_messages(response_output)
+      message_items = response_output.filter { |item| item.dig("type") == "message" }
 
       message_items.map do |item|
         output_text = item.dig("content").map do |content|
@@ -100,31 +105,41 @@ class Provider::Openai::ChatResponseProcessor
       end
     end
 
-    def extract_pending_function_calls(output)
-      output.filter { |item| item.dig("type") == "function_call" }.map do |item|
-        ResponseFunction.new(
+    def extract_pending_functions(response_output)
+      response_output.filter { |item| item.dig("type") == "function_call" }.map do |item|
+        PendingFunction.new(
           id: item.dig("id"),
           call_id: item.dig("call_id"),
           name: item.dig("name"),
           arguments: item.dig("arguments"),
-          result: nil
         )
       end
     end
 
-    def execute_function(name, args)
-      fn = available_functions.find { |af| af.name == name }
-      fn.call(args)
+    def execute_pending_functions(pending_functions)
+      pending_functions.map do |pending_function|
+        fn = available_functions.find { |f| f.name == pending_function.name }
+        parsed_args = JSON.parse(pending_function.arguments)
+        result = fn.call(parsed_args)
+
+        ExecutedFunction.new(
+          id: pending_function.id,
+          call_id: pending_function.call_id,
+          name: pending_function.name,
+          arguments: parsed_args,
+          result: result
+        )
+      end
     end
 
-    def available_tools
+    def tools
       available_functions.map do |fn|
         {
           type: "function",
           name: fn.name,
           description: fn.description,
-          parameters: fn.parameters,
-          strict: true
+          parameters: fn.params_schema,
+          strict: fn.strict_mode?
         }
       end
     end
