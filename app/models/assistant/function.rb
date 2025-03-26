@@ -1,7 +1,4 @@
 class Assistant::Function
-  Error = Class.new(StandardError)
-  Response = Data.define(:success?, :data, :error)
-
   class << self
     def name
       raise NotImplementedError, "Subclasses must implement the name class method"
