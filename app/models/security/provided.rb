@@ -41,7 +41,15 @@ module Security::Provided
       price.attributes.slice("security_id", "date", "price", "currency")
     end
 
-    Security::Price.upsert_all(fetched_prices, unique_by: %i[security_id date currency])
+    valid_prices = fetched_prices.reject do |price|
+      is_invalid = price["date"].nil? || price["price"].nil? || price["currency"].nil?
+      if is_invalid
+        Rails.logger.warn("Invalid price data for security_id=#{id}: Missing required fields in price record: #{price.inspect}")
+      end
+      is_invalid
+    end
+
+    Security::Price.upsert_all(valid_prices, unique_by: %i[security_id date currency])
   end
 
   def find_or_fetch_price(date: Date.current, cache: true)
