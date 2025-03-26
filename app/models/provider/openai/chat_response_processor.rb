@@ -1,9 +1,10 @@
 class Provider::Openai::ChatResponseProcessor
-  def initialize(message:, client:, instructions: nil, available_functions: [])
+  def initialize(message:, client:, instructions: nil, available_functions: [], streamer: nil)
     @client = client
     @message = message
     @instructions = instructions
     @available_functions = available_functions
+    @streamer = streamer
   end
 
   def process
@@ -22,8 +23,9 @@ class Provider::Openai::ChatResponseProcessor
   end
 
   private
-    attr_reader :client, :message, :instructions, :available_functions
+    attr_reader :client, :message, :instructions, :available_functions, :streamer
 
+    StreamChunk = Data.define(:type, :data)
     PendingFunction = Data.define(:id, :call_id, :name, :arguments)
 
     # Expected response interface for an "LLM Provider"
@@ -45,13 +47,56 @@ class Provider::Openai::ChatResponseProcessor
       # No need to pass tools for follow-up messages that provide function results
       prepared_tools = executed_functions.empty? ? tools : []
 
-      raw_response = client.responses.create(parameters: {
+      raw_response = nil
+
+      internal_streamer = proc do |chunk|
+        type = chunk.dig("type")
+
+        if streamer.present?
+          case type
+          when "response.output_text.delta", "response.refusal.delta"
+            # We don't distinguish between text and refusal yet, so stream both the same
+            streamer.call(StreamChunk.new(type: "output_text", data: chunk.dig("delta")))
+          when "response.function_call_arguments.done"
+            streamer.call(StreamChunk.new(type: "function_request", data: chunk.dig("arguments")))
+          when "response.completed"
+            res = chunk.dig("response")
+            res_output = res.dig("output")
+
+            functions_output = if executed_functions.any?
+              executed_functions
+            else
+              extract_pending_functions(res_output)
+            end
+
+            data = Response.new(
+              id: res.dig("id"),
+              messages: extract_messages(res_output),
+              functions: functions_output,
+              model: res.dig("model")
+            )
+
+            streamer.call(StreamChunk.new(type: "response", data: data))
+          end
+        end
+
+        if type == "response.completed"
+          raw_response = chunk.dig("response")
+        end
+      end
+
+      client.responses.create(parameters: {
         model: model,
         input: prepared_input,
         instructions: instructions,
         tools: prepared_tools,
-        previous_response_id: previous_response_id
+        previous_response_id: previous_response_id,
+        stream: internal_streamer
       })
+
+      if raw_response.dig("status") == "failed" || raw_response.dig("status") == "incomplete"
+        raise Provider::Openai::Error.new("OpenAI returned a failed or incomplete response", { chunk: chunk })
+      end
 
       response_output = raw_response.dig("output")
 

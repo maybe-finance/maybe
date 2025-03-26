@@ -23,8 +23,25 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
     end
   end
 
+  test "provides basic chat response 2" do
+    VCR.use_cassette("openai/chat/basic_response", record: :all) do
+      chat = chats(:two)
+      message = chat.messages.create!(
+        type: "UserMessage",
+        content: "This is a chat test.  If it's working, respond with a single word: Yes",
+        ai_model: @subject_model
+      )
+
+      response = @subject.chat_response(message)
+
+      assert response.success?
+      assert_equal 1, response.data.messages.size
+      assert_includes response.data.messages.first.content, "Yes"
+    end
+  end
+
   test "handles chat response with tool calls" do
-    VCR.use_cassette("openai/chat/tool_calls") do
+    VCR.use_cassette("openai/chat/tool_calls", record: :all) do
       class PredictableToolFunction < Assistant::Function
         class << self
           def expected_test_result

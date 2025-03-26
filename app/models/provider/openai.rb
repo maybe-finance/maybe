@@ -24,11 +24,12 @@ class Provider::Openai < Provider
     MODELS.include?(model)
   end
 
-  def chat_response(message, instructions: nil, available_functions: [])
+  def chat_response(message, instructions: nil, available_functions: [], streamer: nil)
     provider_response do
       processor = ChatResponseProcessor.new(
         client: client,
         message: message,
+        streamer: streamer,
         instructions: instructions,
         available_functions: available_functions
       )

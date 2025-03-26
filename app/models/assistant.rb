@@ -18,7 +18,12 @@ class Assistant
 
     provider = get_model_provider(message.ai_model)
 
-    response = provider.chat_response(message, instructions: instructions, available_functions: functions)
+    response = provider.chat_response(
+      message,
+      instructions: instructions,
+      available_functions: functions,
+      streamer: streamer
+    )
 
     stop_thinking
 
@@ -36,6 +41,13 @@ class Assistant
   end
 
   private
+    def streamer
+      proc do |data|
+        puts data
+        # TODO process data
+      end
+    end
+
     def stop_thinking
       sleep artificial_thinking_delay
       chat.broadcast_remove target: "thinking-indicator"
