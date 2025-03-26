@@ -18,12 +18,29 @@ module Authentication
     def authenticate_user!
       if session_record = find_session_by_cookie
         Current.session = session_record
+      elsif session_record = create_session_by_remote_header
+        Current.session = session_record
       else
         if self_hosted_first_login?
           redirect_to new_registration_url
         else
           redirect_to new_session_url
         end
+      end
+    end
+
+    def create_session_by_remote_header
+      if user_email = request.headers[Rails.application.config.remote_login_email_header_name]
+        unless user = User.find_by(email: user_email)
+          user = User.new
+          user.email = user_email
+          user.password = SecureRandom.base58(50)
+          family = Family.new
+          user.family = family
+          user.role = :admin
+          user.save
+        end
+        create_session_for(user)
       end
     end
 

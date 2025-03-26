@@ -29,6 +29,8 @@ module Maybe
 
     config.app_mode = (ENV["SELF_HOSTED"] == "true" || ENV["SELF_HOSTING_ENABLED"] == "true" ? "self_hosted" : "managed").inquiry
 
+    config.remote_login_email_header_name = ENV["REMOTE_LOGIN_EMAIL_HEADER"]
+
     # Self hosters can optionally set their own encryption keys if they want to use ActiveRecord encryption.
     if Rails.application.credentials.active_record_encryption.present?
       config.active_record.encryption = Rails.application.credentials.active_record_encryption
