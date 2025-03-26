@@ -1,5 +1,0 @@
-<%= turbo_stream.replace "chat-form" do %>
-  <%= render "messages/chat_form", chat: @chat %>
-<% end %>
-
-<%= turbo_stream.append "messages", partial: "chats/thinking_indicator", locals: { chat: @chat } %>

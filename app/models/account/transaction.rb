@@ -13,5 +13,5 @@ class Account::Transaction < ApplicationRecord
     def search(params)
       Account::TransactionSearch.new(params).build_query(all)
     end
-  end 
+  end
 end

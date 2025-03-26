@@ -16,7 +16,7 @@ class ChatTest < ActiveSupport::TestCase
   test "user sees assistant and user messages in normal mode" do
     chat = chats(:one)
     assert_equal 3, chat.conversation_messages.count
-  end 
+  end
 
   test "creates with initial message" do
     prompt = "Test prompt"
