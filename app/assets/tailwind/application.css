@@ -113,7 +113,7 @@
 }
 
 .prose--ai-chat {
-  @apply break-words max-w-[300px];
+  @apply break-words;
 
   p, li {
     @apply text-sm text-primary;

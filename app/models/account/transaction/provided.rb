@@ -2,9 +2,9 @@ module Account::Transaction::Provided
   extend ActiveSupport::Concern
 
   def fetch_enrichment_info
-    return nil unless Providers.synth # Only Synth can provide this data
+    return nil unless provider
 
-    response = Providers.synth.enrich_transaction(
+    response = provider.enrich_transaction(
       entry.name,
       amount: entry.amount,
       date: entry.date
@@ -12,4 +12,9 @@ module Account::Transaction::Provided
 
     response.data
   end
+
+  private
+    def provider
+      Provider::Registry.get_provider(:synth)
+    end
 end

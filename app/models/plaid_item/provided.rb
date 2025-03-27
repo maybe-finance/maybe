@@ -3,11 +3,11 @@ module PlaidItem::Provided
 
   class_methods do
     def plaid_us_provider
-      Providers.plaid_us
+      Provider::Registry.get_provider(:plaid_us)
     end
 
     def plaid_eu_provider
-      Providers.plaid_eu
+      Provider::Registry.get_provider(:plaid_eu)
     end
 
     def plaid_provider_for_region(region)

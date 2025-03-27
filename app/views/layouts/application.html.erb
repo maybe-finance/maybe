@@ -1,5 +1,10 @@
 <%= render "layouts/shared/htmldoc" do %>
-  <div class="flex h-full bg-gray-50" data-controller="sidebar" data-sidebar-user-id-value="<%= Current.user.id %>">
+  <% sidebar_config = app_sidebar_config(Current.user) %>
+
+  <div class="flex h-full bg-gray-50" 
+       data-controller="sidebar" 
+       data-sidebar-user-id-value="<%= Current.user.id %>"
+       data-sidebar-config-value="<%= sidebar_config.to_json %>">
     <nav class="flex flex-col shrink-0 w-[84px] py-4 mr-3">
       <div class="pl-2 mb-3">
         <%= link_to root_path, class: "block" do %>
@@ -26,7 +31,9 @@
       </div>
     </nav>
 
-    <%= tag.div class: class_names("py-4 shrink-0 h-full overflow-y-auto transition-all duration-300", Current.user.show_sidebar? ? "w-80" : "w-0"), data: { sidebar_target: "leftPanel" } do %>
+    <%= tag.div class: class_names("py-4 shrink-0 h-full overflow-y-auto transition-all duration-300"), 
+                style: "width: #{sidebar_config.dig(:left_panel, :initial_width)}px",
+                data: { sidebar_target: "leftPanel" } do %>
       <% if content_for?(:sidebar) %>
         <%= yield :sidebar %>
       <% else %>
@@ -36,18 +43,6 @@
       <% end %>
     <% end %>
 
-    <%
-      left_sidebar_open = Current.user.show_sidebar?
-      right_sidebar_open = Current.user.show_ai_sidebar?
-      content_width_class = if left_sidebar_open && right_sidebar_open
-                              "max-w-3xl"
-                            elsif left_sidebar_open || right_sidebar_open
-                              "max-w-4xl"
-                            else
-                              "max-w-5xl"
-                            end
-    %>
-
     <%= tag.main class: class_names("px-10 py-4 grow h-full", require_upgrade? ? "relative overflow-hidden" : "overflow-y-auto") do %>
       <% if require_upgrade? %>
         <div class="absolute inset-0 px-10 h-full w-full z-50">
@@ -55,7 +50,7 @@
         </div>
       <% end %>
 
-      <%= tag.div class: class_names("mx-auto w-full h-full", content_width_class), data: { sidebar_target: "content" } do %>
+      <%= tag.div style: "max-width: #{sidebar_config.dig(:content_max_width)}px", class: class_names("mx-auto w-full h-full"), data: { sidebar_target: "content" } do %>
         <% if content_for?(:breadcrumbs) %>
           <%= yield :breadcrumbs %>
         <% else %>
@@ -72,7 +67,8 @@
 
     <%# AI chat sidebar %>
     <%= tag.div id: "chat-container",
-                class: class_names("flex flex-col justify-between shrink-0 transition-all duration-300", right_sidebar_open ? "w-[400px]" : "w-0"),
+                style: "width: #{sidebar_config.dig(:right_panel, :initial_width)}px",
+                class: class_names("flex flex-col justify-between shrink-0 transition-all duration-300"),
                 data: { controller: "chat hotkey", sidebar_target: "rightPanel", turbo_permanent: true } do %>
 
       <% if Current.user.ai_enabled? %>

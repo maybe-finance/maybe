@@ -18,20 +18,14 @@ class Assistant
     @chat = chat
   end
 
-  def respond_to(message)
-    chat.clear_error
-    sleep artificial_thinking_delay
-
-
-    provider = get_model_provider(message.ai_model)
-
+  def streamer(model)
     assistant_message = AssistantMessage.new(
       chat: chat,
       content: "",
-      ai_model: message.ai_model
+      ai_model: model
     )
 
-    streamer = proc do |chunk|
+    proc do |chunk|
       case chunk.type
       when "output_text"
         stop_thinking
@@ -57,12 +51,19 @@ class Assistant
         chat.update!(latest_assistant_response_id: chunk.data.id)
       end
     end
+  end
+
+  def respond_to(message)
+    chat.clear_error
+    sleep artificial_thinking_delay
+
+    provider = get_model_provider(message.ai_model)
 
     provider.chat_response(
       message,
       instructions: instructions,
       available_functions: functions,
-      streamer: streamer
+      streamer: streamer(message.ai_model)
     )
   rescue => e
     chat.add_error(e)
