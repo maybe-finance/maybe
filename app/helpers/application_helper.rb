@@ -154,6 +154,48 @@ module ApplicationHelper
     markdown.render(text).html_safe
   end
 
+  # Determines the starting widths of each panel depending on the user's sidebar preferences
+  def app_sidebar_config(user)
+    left_sidebar_showing = user.show_sidebar?
+    right_sidebar_showing = user.show_ai_sidebar?
+
+    content_max_width = if !left_sidebar_showing && !right_sidebar_showing
+      1024 # 5xl
+    elsif left_sidebar_showing && !right_sidebar_showing
+      896 # 4xl
+    else
+      768 # 3xl
+    end
+
+    left_panel_min_width = 320
+    left_panel_max_width = 320
+    right_panel_min_width = 400
+    right_panel_max_width = 550
+
+    left_panel_width = left_sidebar_showing ? left_panel_min_width : 0
+    right_panel_width = if right_sidebar_showing
+      left_sidebar_showing ? right_panel_min_width : right_panel_max_width
+    else
+      0
+    end
+
+    {
+      left_panel: {
+        is_open: left_sidebar_showing,
+        initial_width: left_panel_width,
+        min_width: left_panel_min_width,
+        max_width: left_panel_max_width
+      },
+      right_panel: {
+        is_open: right_sidebar_showing,
+        initial_width: right_panel_width,
+        min_width: right_panel_min_width,
+        max_width: right_panel_max_width
+      },
+      content_max_width: content_max_width
+    }
+  end
+
   private
     def calculate_total(item, money_method, negate)
       items = item.reject { |i| i.respond_to?(:entryable) && i.entryable.transfer? }

@@ -55,7 +55,6 @@ export default class extends Controller {
   }
 
   #scrollToBottom = () => {
-    console.log("scrolling to bottom");
     this.messagesTarget.scrollTop = this.messagesTarget.scrollHeight;
   };
 }
