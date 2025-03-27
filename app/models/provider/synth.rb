@@ -1,6 +1,5 @@
 class Provider::Synth < Provider
-  include ExchangeRate::Provideable
-  include Security::Provideable
+  include ExchangeRateProvider, SecurityProvider
 
   def initialize(api_key)
     @api_key = api_key
@@ -46,14 +45,7 @@ class Provider::Synth < Provider
 
       rates = JSON.parse(response.body).dig("data", "rates")
 
-      ExchangeRate::Provideable::FetchRateData.new(
-        rate: ExchangeRate.new(
-          from_currency: from,
-          to_currency: to,
-          date: date,
-          rate: rates.dig(to)
-        )
-      )
+      Rate.new(date:, from:, to:, rate: rates.dig(to))
     end
   end
 
@@ -69,16 +61,9 @@ class Provider::Synth < Provider
         body.dig("data")
       end
 
-      ExchangeRate::Provideable::FetchRatesData.new(
-        rates: data.paginated.map do |exchange_rate|
-          ExchangeRate.new(
-            from_currency: from,
-            to_currency: to,
-            date: exchange_rate.dig("date"),
-            rate: exchange_rate.dig("rates", to)
-          )
-        end
-      )
+      data.paginated.map do |rate|
+        Rate.new(date: rate.dig("date"), from:, to:, rate: rate.dig("rates", to))
+      end
     end
   end
 
@@ -98,19 +83,14 @@ class Provider::Synth < Provider
 
       parsed = JSON.parse(response.body)
 
-      Security::Provideable::Search.new(
-        securities: parsed.dig("data").map do |security|
-          Security.new(
-            ticker: security.dig("symbol"),
-            name: security.dig("name"),
-            logo_url: security.dig("logo_url"),
-            exchange_acronym: security.dig("exchange", "acronym"),
-            exchange_mic: security.dig("exchange", "mic_code"),
-            exchange_operating_mic: security.dig("exchange", "operating_mic_code"),
-            country_code: security.dig("exchange", "country_code")
-          )
-        end
-      )
+      parsed.dig("data").map do |security|
+        Security.new(
+          symbol: security.dig("symbol"),
+          name: security.dig("name"),
+          logo_url: security.dig("logo_url"),
+          exchange_operating_mic: security.dig("exchange", "operating_mic_code"),
+        )
+      end
     end
   end
 
@@ -123,8 +103,8 @@ class Provider::Synth < Provider
 
       data = JSON.parse(response.body).dig("data")
 
-      Security::Provideable::SecurityInfo.new(
-        ticker: security.ticker,
+      SecurityInfo.new(
+        symbol: data.dig("ticker"),
         name: data.dig("name"),
         links: data.dig("links"),
         logo_url: data.dig("logo_url"),
@@ -138,11 +118,9 @@ class Provider::Synth < Provider
     with_provider_response do
       historical_data = fetch_security_prices(security, start_date: date, end_date: date)
 
-      raise ProviderError, "No prices found for security #{security.ticker} on date #{date}" if historical_data.data.prices.empty?
+      raise ProviderError, "No prices found for security #{security.ticker} on date #{date}" if historical_data.data.empty?
 
-      Security::Provideable::PriceData.new(
-        price: historical_data.data.prices.first
-      )
+      historical_data.data.first
     end
   end
 
@@ -167,16 +145,14 @@ class Provider::Synth < Provider
       exchange_mic = data.first_page.dig("exchange", "mic_code")
       exchange_operating_mic = data.first_page.dig("exchange", "operating_mic_code")
 
-      Security::Provideable::PricesData.new(
-        prices: data.paginated.map do |price|
-          Security::Price.new(
-            security: security,
-            date: price.dig("date"),
-            price: price.dig("close") || price.dig("open"),
-            currency: currency
-          )
-        end
-      )
+      data.paginated.map do |price|
+        Price.new(
+          security: security,
+          date: price.dig("date"),
+          price: price.dig("close") || price.dig("open"),
+          currency: currency
+        )
+      end
     end
   end
 
@@ -216,9 +192,7 @@ class Provider::Synth < Provider
       [
         Faraday::TimeoutError,
         Faraday::ConnectionFailed,
-        Faraday::SSLError,
-        Faraday::ClientError,
-        Faraday::ServerError
+        Faraday::SSLError
       ]
     end
 

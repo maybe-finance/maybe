@@ -82,12 +82,6 @@ class Account::Holding::PortfolioCacheTest < ActiveSupport::TestCase
     def expect_provider_prices(prices, start_date:, end_date: Date.current)
       @provider.expects(:fetch_security_prices)
                .with(@security, start_date: start_date, end_date: end_date)
-               .returns(
-                 provider_success_response(
-                   Security::Provideable::PricesData.new(
-                     prices: prices
-                   )
-                 )
-               )
+               .returns(provider_success_response(prices))
     end
 end

@@ -163,7 +163,7 @@ app/models/
 
 ### One-off data
 
-For data that does not fit neatly into a "concept", a `Provideable` is not required and the concrete provider may implement ad-hoc methods called directly in code.  For example, the [synth.rb](mdc:app/models/provider/synth.rb) provider has a `usage` method that is only applicable to this specific provider.  This should be called directly without any abstractions:
+For data that does not fit neatly into a "concept", an interface is not required and the concrete provider may implement ad-hoc methods called directly in code.  For example, the [synth.rb](mdc:app/models/provider/synth.rb) provider has a `usage` method that is only applicable to this specific provider.  This should be called directly without any abstractions:
 
 ```rb
 class SomeModel < Application

@@ -1,4 +1,5 @@
 require "test_helper"
+require "ostruct"
 
 class AssistantTest < ActiveSupport::TestCase
   include ProviderTestHelper
@@ -16,21 +17,21 @@ class AssistantTest < ActiveSupport::TestCase
   end
 
   test "responds to basic prompt" do
-    text_chunk = Provider::Openai::ChatResponseProcessor::StreamChunk.new(type: "output_text", data: "Hello from assistant")
-    response_chunk = Provider::Openai::ChatResponseProcessor::StreamChunk.new(
-      type: "response",
-      data:  Assistant::Provideable::ChatResponse.new(
-        id: "1",
-        model: "gpt-4o",
-        messages: [
-          Assistant::Provideable::ChatResponseMessage.new(
-            id: "1",
-            content: "Hello from assistant",
-          )
-        ],
-        functions: []
-      )
+    text_chunk = OpenStruct.new(type: "output_text", data: "Hello from assistant")
+    response_chunk = OpenStruct.new(
+    type: "response",
+    data: OpenStruct.new(
+      id: "1",
+      model: "gpt-4o",
+      messages: [
+        OpenStruct.new(
+          id: "1",
+          content: "Hello from assistant",
+        )
+      ],
+      functions: []
     )
+  )
 
     @provider.expects(:chat_response).with do |message, **options|
       options[:streamer].call(text_chunk)
@@ -44,21 +45,21 @@ class AssistantTest < ActiveSupport::TestCase
   end
 
   test "responds with tool function calls" do
-    function_request_chunk = Provider::Openai::ChatResponseProcessor::StreamChunk.new(type: "function_request", data: "get_net_worth")
-    text_chunk = Provider::Openai::ChatResponseProcessor::StreamChunk.new(type: "output_text", data: "Your net worth is $124,200")
-    response_chunk = Provider::Openai::ChatResponseProcessor::StreamChunk.new(
+    function_request_chunk = OpenStruct.new(type: "function_request", data: "get_net_worth")
+    text_chunk = OpenStruct.new(type: "output_text", data: "Your net worth is $124,200")
+    response_chunk = OpenStruct.new(
       type: "response",
-      data: Assistant::Provideable::ChatResponse.new(
+      data: OpenStruct.new(
         id: "1",
         model: "gpt-4o",
         messages: [
-          Assistant::Provideable::ChatResponseMessage.new(
+          OpenStruct.new(
             id: "1",
             content: "Your net worth is $124,200",
           )
         ],
         functions: [
-          Assistant::Provideable::ChatResponseFunctionExecution.new(
+          OpenStruct.new(
             id: "1",
             call_id: "1",
             name: "get_net_worth",

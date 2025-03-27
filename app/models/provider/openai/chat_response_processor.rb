@@ -12,7 +12,7 @@ class Provider::Openai::ChatResponseProcessor
 
     if first_response.functions.empty?
       if streamer.present?
-        streamer.call(StreamChunk.new(type: "response", data: first_response))
+        streamer.call(Provider::LlmProvider::StreamChunk.new(type: "response", data: first_response))
       end
 
       return first_response
@@ -26,7 +26,7 @@ class Provider::Openai::ChatResponseProcessor
     )
 
     if streamer.present?
-      streamer.call(StreamChunk.new(type: "response", data: follow_up_response))
+      streamer.call(Provider::LlmProvider::StreamChunk.new(type: "response", data: follow_up_response))
     end
 
     follow_up_response
@@ -35,13 +35,7 @@ class Provider::Openai::ChatResponseProcessor
   private
     attr_reader :client, :message, :instructions, :available_functions, :streamer
 
-    StreamChunk = Data.define(:type, :data)
     PendingFunction = Data.define(:id, :call_id, :name, :arguments)
-
-    # Expected response interface for an "LLM Provider"
-    Response = Assistant::Provideable::ChatResponse
-    ResponseMessage = Assistant::Provideable::ChatResponseMessage
-    ExecutedFunction = Assistant::Provideable::ChatResponseFunctionExecution
 
     def fetch_response(executed_functions: [], previous_response_id: nil)
       function_results = executed_functions.map do |executed_function|
@@ -66,9 +60,9 @@ class Provider::Openai::ChatResponseProcessor
           case type
           when "response.output_text.delta", "response.refusal.delta"
             # We don't distinguish between text and refusal yet, so stream both the same
-            streamer.call(StreamChunk.new(type: "output_text", data: chunk.dig("delta")))
+            streamer.call(Provider::LlmProvider::StreamChunk.new(type: "output_text", data: chunk.dig("delta")))
           when "response.function_call_arguments.done"
-            streamer.call(StreamChunk.new(type: "function_request", data: chunk.dig("arguments")))
+            streamer.call(Provider::LlmProvider::StreamChunk.new(type: "function_request", data: chunk.dig("arguments")))
           end
         end
 
@@ -98,7 +92,7 @@ class Provider::Openai::ChatResponseProcessor
         extract_pending_functions(response_output)
       end
 
-      Response.new(
+      Provider::LlmProvider::ChatResponse.new(
         id: raw_response.dig("id"),
         messages: extract_messages(response_output),
         functions: functions_output,
@@ -135,7 +129,7 @@ class Provider::Openai::ChatResponseProcessor
           text || refusal
         end.flatten.join("\n")
 
-        ResponseMessage.new(
+        Provider::LlmProvider::Message.new(
           id: item.dig("id"),
           content: output_text,
         )
@@ -164,7 +158,7 @@ class Provider::Openai::ChatResponseProcessor
       parsed_args = JSON.parse(fn.arguments)
       result = fn_instance.call(parsed_args)
 
-      ExecutedFunction.new(
+      Provider::LlmProvider::FunctionExecution.new(
         id: fn.id,
         call_id: fn.call_id,
         name: fn.name,

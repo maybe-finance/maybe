@@ -72,12 +72,12 @@ class Security::PriceTest < ActiveSupport::TestCase
     def expect_provider_price(security:, price:, date:)
       @provider.expects(:fetch_security_price)
                .with(security, date: date)
-               .returns(provider_success_response(Security::Provideable::PriceData.new(price: price)))
+               .returns(provider_success_response(price))
     end
 
     def expect_provider_prices(security:, prices:, start_date:, end_date:)
       @provider.expects(:fetch_security_prices)
                .with(security, start_date: start_date, end_date: end_date)
-               .returns(provider_success_response(Security::Provideable::PricesData.new(prices: prices)))
+               .returns(provider_success_response(prices))
     end
 end

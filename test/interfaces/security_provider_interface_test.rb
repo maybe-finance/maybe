@@ -8,8 +8,9 @@ module SecurityProviderInterfaceTest
 
     VCR.use_cassette("#{vcr_key_prefix}/security_price") do
       response = @subject.fetch_security_price(aapl, date: Date.iso8601("2024-08-01"))
+
       assert response.success?
-      assert response.data.price.present?
+      assert response.data.present?
     end
   end
 
@@ -24,19 +25,18 @@ module SecurityProviderInterfaceTest
       )
 
       assert response.success?
-      assert 213, response.data.prices.count
+      assert_equal 147, response.data.count # Synth won't return prices on weekends / holidays, so less than total day count of 213
     end
   end
 
   test "searches securities" do
     VCR.use_cassette("#{vcr_key_prefix}/security_search") do
       response = @subject.search_securities("AAPL", country_code: "US")
-      securities = response.data.securities
+      securities = response.data
 
       assert securities.any?
       security = securities.first
-      assert_kind_of Security, security
-      assert_equal "AAPL", security.ticker
+      assert_equal "AAPL", security.symbol
     end
   end
 
@@ -47,10 +47,10 @@ module SecurityProviderInterfaceTest
       response = @subject.fetch_security_info(aapl)
       info = response.data
 
-      assert_equal "AAPL", info.ticker
+      assert_equal "AAPL", info.symbol
       assert_equal "Apple Inc.", info.name
-      assert info.logo_url.present?
       assert_equal "common stock", info.kind
+      assert info.logo_url.present?
       assert info.description.present?
     end
   end

@@ -25,18 +25,16 @@ class ExchangeRateTest < ActiveSupport::TestCase
   test "fetches rate from provider without cache" do
     ExchangeRate.delete_all
 
-    with_provider_response = provider_success_response(
-      ExchangeRate::Provideable::FetchRateData.new(
-        rate: ExchangeRate.new(
-          from_currency: "USD",
-          to_currency: "EUR",
-          date: Date.current,
-          rate: 1.2
-        )
+    provider_response = provider_success_response(
+      OpenStruct.new(
+        from: "USD",
+        to: "EUR",
+        date: Date.current,
+        rate: 1.2
       )
     )
 
-    @provider.expects(:fetch_exchange_rate).returns(with_provider_response)
+    @provider.expects(:fetch_exchange_rate).returns(provider_response)
 
     assert_no_difference "ExchangeRate.count" do
       assert_equal 1.2, ExchangeRate.find_or_fetch_rate(from: "USD", to: "EUR", date: Date.current, cache: false).rate
@@ -46,18 +44,16 @@ class ExchangeRateTest < ActiveSupport::TestCase
   test "fetches rate from provider with cache" do
     ExchangeRate.delete_all
 
-    with_provider_response = provider_success_response(
-      ExchangeRate::Provideable::FetchRateData.new(
-        rate: ExchangeRate.new(
-          from_currency: "USD",
-          to_currency: "EUR",
-          date: Date.current,
-          rate: 1.2
-        )
+    provider_response = provider_success_response(
+      OpenStruct.new(
+        from: "USD",
+        to: "EUR",
+        date: Date.current,
+        rate: 1.2
       )
     )
 
-    @provider.expects(:fetch_exchange_rate).returns(with_provider_response)
+    @provider.expects(:fetch_exchange_rate).returns(provider_response)
 
     assert_difference "ExchangeRate.count", 1 do
       assert_equal 1.2, ExchangeRate.find_or_fetch_rate(from: "USD", to: "EUR", date: Date.current, cache: true).rate
@@ -65,9 +61,9 @@ class ExchangeRateTest < ActiveSupport::TestCase
   end
 
   test "returns nil on provider error" do
-    with_provider_response = provider_error_response(StandardError.new("Test error"))
+    provider_response = provider_error_response(StandardError.new("Test error"))
 
-    @provider.expects(:fetch_exchange_rate).returns(with_provider_response)
+    @provider.expects(:fetch_exchange_rate).returns(provider_response)
 
     assert_nil ExchangeRate.find_or_fetch_rate(from: "USD", to: "EUR", date: Date.current, cache: true)
   end
@@ -77,19 +73,15 @@ class ExchangeRateTest < ActiveSupport::TestCase
 
     ExchangeRate.create!(date: 1.day.ago.to_date, from_currency: "USD", to_currency: "EUR", rate: 0.9)
 
-    with_provider_response = provider_success_response(
-      ExchangeRate::Provideable::FetchRatesData.new(
-        rates: [
-          ExchangeRate.new(from_currency: "USD", to_currency: "EUR", date: Date.current, rate: 1.3),
-          ExchangeRate.new(from_currency: "USD", to_currency: "EUR", date: 1.day.ago.to_date, rate: 1.4),
-          ExchangeRate.new(from_currency: "USD", to_currency: "EUR", date: 2.days.ago.to_date, rate: 1.5)
-        ]
-      )
-    )
+    provider_response = provider_success_response([
+      OpenStruct.new(from: "USD", to: "EUR", date: Date.current, rate: 1.3),
+      OpenStruct.new(from: "USD", to: "EUR", date: 1.day.ago.to_date, rate: 1.4),
+      OpenStruct.new(from: "USD", to: "EUR", date: 2.days.ago.to_date, rate: 1.5)
+    ])
 
     @provider.expects(:fetch_exchange_rates)
              .with(from: "USD", to: "EUR", start_date: 2.days.ago.to_date, end_date: Date.current)
-             .returns(with_provider_response)
+             .returns(provider_response)
 
     ExchangeRate.sync_provider_rates(from: "USD", to: "EUR", start_date: 2.days.ago.to_date)
 

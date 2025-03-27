@@ -1,5 +1,5 @@
 class Provider::Openai < Provider
-  include Assistant::Provideable
+  include LlmProvider
 
   MODELS = %w[gpt-4o]
 

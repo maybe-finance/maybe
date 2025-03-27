@@ -13,7 +13,7 @@ module Security::Provided
       response = provider.search_securities(symbol, country_code: country_code, exchange_operating_mic: exchange_operating_mic)
 
       if response.success?
-        response.data.securities
+        response.data
       else
         []
       end
@@ -38,12 +38,17 @@ module Security::Provided
       return 0
     end
 
-    fetched_prices = response.data.prices.map do |price|
-      price.attributes.slice("security_id", "date", "price", "currency")
+    fetched_prices = response.data.map do |price|
+      {
+        security_id: price.security.id,
+        date: price.date,
+        price: price.price,
+        currency: price.currency
+      }
     end
 
     valid_prices = fetched_prices.reject do |price|
-      is_invalid = price["date"].nil? || price["price"].nil? || price["currency"].nil?
+      is_invalid = price[:date].nil? || price[:price].nil? || price[:currency].nil?
       if is_invalid
         Rails.logger.warn("Invalid price data for security_id=#{id}: Missing required fields in price record: #{price.inspect}")
       end
@@ -62,8 +67,13 @@ module Security::Provided
 
     return nil unless response.success? # Provider error
 
-    price = response.data.price
-    price.save! if cache
+    price = response.data
+    Security::Price.find_or_create_by!(
+      security_id: price.security.id,
+      date: price.date,
+      price: price.price,
+      currency: price.currency
+    ) if cache
     price
   end
 
