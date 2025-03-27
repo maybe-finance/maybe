@@ -3,7 +3,7 @@ require "ostruct"
 
 class TestProvider < Provider
   def fetch_data
-    provider_response(retries: 3) do
+    with_provider_response(retries: 3) do
       client.get("/test")
     end
   end

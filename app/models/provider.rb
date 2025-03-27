@@ -3,6 +3,24 @@ class Provider
 
   Response = Data.define(:success?, :data, :error)
 
+  class Error < StandardError
+    attr_reader :details, :provider
+
+    def initialize(message, details: nil, provider: nil)
+      super(message)
+      @details = details
+      @provider = provider
+    end
+
+    def as_json
+      {
+        provider: provider,
+        message: message,
+        details: details
+      }
+    end
+  end
+
   private
     PaginatedData = Data.define(:paginated, :first_page, :total_pages)
     UsageData = Data.define(:used, :limit, :utilization, :plan)
@@ -12,12 +30,8 @@ class Provider
       []
     end
 
-    def transform_error(error)
-      error
-    end
-
-    def provider_response(retries: nil, &block)
-      data = if retries
+    def with_provider_response(retries: default_retries, error_transformer: nil, &block)
+      data = if retries > 0
         retrying(retryable_errors, max_retries: retries) { yield }
       else
         yield
@@ -29,7 +43,11 @@ class Provider
         error: nil,
       )
     rescue => error
-      transformed_error = transform_error(error)
+      transformed_error = if error_transformer
+        error_transformer.call(error)
+      else
+        default_error_transformer(error)
+      end
 
       Sentry.capture_exception(transformed_error)
 
@@ -38,5 +56,23 @@ class Provider
         data: nil,
         error: transformed_error
       )
+    end
+
+    # Override to set class-level error transformation for methods using `with_provider_response`
+    def default_error_transformer(error)
+      if error.is_a?(Faraday::Error)
+        Error.new(
+          error.message,
+          details: error.response&.dig(:body),
+          provider: self.class.name
+        )
+      else
+        Error.new(error.message, provider: self.class.name)
+      end
+    end
+
+    # Override to set class-level number of retries for methods using `with_provider_response`
+    def default_retries
+      0
     end
 end

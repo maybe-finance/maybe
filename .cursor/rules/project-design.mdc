@@ -217,12 +217,12 @@ end
 
 ## Concrete provider implementations
 
-Each 3rd party data provider should have a class under the `Provider::` namespace that inherits from `Provider` and returns `provider_response`, which will return a `Provider::ProviderResponse` object:
+Each 3rd party data provider should have a class under the `Provider::` namespace that inherits from `Provider` and returns `with_provider_response`, which will return a `Provider::ProviderResponse` object:
 
 ```rb
 class ConcreteProvider < Provider
   def fetch_some_data
-    provider_response do
+    with_provider_response do
       ExampleData.new(
         example: "data"
       )
@@ -231,12 +231,12 @@ class ConcreteProvider < Provider
 end
 ```
 
-The `provider_response` automatically catches provider errors, so concrete provider classes should raise when valid data is not possible:
+The `with_provider_response` automatically catches provider errors, so concrete provider classes should raise when valid data is not possible:
 
 ```rb
 class ConcreteProvider < Provider
   def fetch_some_data
-    provider_response do
+    with_provider_response do
       data = nil
 
       # Raise an error if data cannot be returned

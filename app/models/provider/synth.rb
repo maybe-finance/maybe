@@ -7,14 +7,14 @@ class Provider::Synth < Provider
   end
 
   def healthy?
-    provider_response do
+    with_provider_response do
       response = client.get("#{base_url}/user")
       JSON.parse(response.body).dig("id").present?
     end
   end
 
   def usage
-    provider_response do
+    with_provider_response do
       response = client.get("#{base_url}/user")
 
       parsed = JSON.parse(response.body)
@@ -37,7 +37,7 @@ class Provider::Synth < Provider
   # ================================
 
   def fetch_exchange_rate(from:, to:, date:)
-    provider_response retries: 2 do
+    with_provider_response retries: 2 do
       response = client.get("#{base_url}/rates/historical") do |req|
         req.params["date"] = date.to_s
         req.params["from"] = from
@@ -58,7 +58,7 @@ class Provider::Synth < Provider
   end
 
   def fetch_exchange_rates(from:, to:, start_date:, end_date:)
-    provider_response retries: 1 do
+    with_provider_response retries: 1 do
       data = paginate(
         "#{base_url}/rates/historical-range",
         from: from,
@@ -87,7 +87,7 @@ class Provider::Synth < Provider
   # ================================
 
   def search_securities(symbol, country_code: nil, exchange_operating_mic: nil)
-    provider_response do
+    with_provider_response do
       response = client.get("#{base_url}/tickers/search") do |req|
         req.params["name"] = symbol
         req.params["dataset"] = "limited"
@@ -115,7 +115,7 @@ class Provider::Synth < Provider
   end
 
   def fetch_security_info(security)
-    provider_response do
+    with_provider_response do
       response = client.get("#{base_url}/tickers/#{security.ticker}") do |req|
         req.params["mic_code"] = security.exchange_mic if security.exchange_mic.present?
         req.params["operating_mic"] = security.exchange_operating_mic if security.exchange_operating_mic.present?
@@ -135,7 +135,7 @@ class Provider::Synth < Provider
   end
 
   def fetch_security_price(security, date:)
-    provider_response do
+    with_provider_response do
       historical_data = fetch_security_prices(security, start_date: date, end_date: date)
 
       raise ProviderError, "No prices found for security #{security.ticker} on date #{date}" if historical_data.data.prices.empty?
@@ -147,7 +147,7 @@ class Provider::Synth < Provider
   end
 
   def fetch_security_prices(security, start_date:, end_date:)
-    provider_response retries: 1 do
+    with_provider_response retries: 1 do
       params = {
         start_date: start_date,
         end_date: end_date
@@ -185,7 +185,7 @@ class Provider::Synth < Provider
   # ================================
 
   def enrich_transaction(description, amount: nil, date: nil, city: nil, state: nil, country: nil)
-    provider_response do
+    with_provider_response do
       params = {
         description: description,
         amount: amount,

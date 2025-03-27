@@ -1,19 +1,6 @@
 class Provider::Openai < Provider
   include Assistant::Provideable
 
-  class Error < StandardError
-    attr_reader :details
-
-    def initialize(message, details = nil)
-      super(message)
-      @details = details
-    end
-
-    def as_json
-      { message: message, details: details }
-    end
-  end
-
   MODELS = %w[gpt-4o]
 
   def initialize(access_token)
@@ -25,7 +12,7 @@ class Provider::Openai < Provider
   end
 
   def chat_response(message, instructions: nil, available_functions: [], streamer: nil)
-    provider_response do
+    with_provider_response do
       processor = ChatResponseProcessor.new(
         client: client,
         message: message,
@@ -40,12 +27,4 @@ class Provider::Openai < Provider
 
   private
     attr_reader :client
-
-    def transform_error(error)
-      if error.is_a?(Faraday::Error)
-        Error.new(error.response[:body].dig("error", "message"))
-      else
-        error
-      end
-    end
 end
