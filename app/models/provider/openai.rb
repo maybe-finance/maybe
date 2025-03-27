@@ -29,9 +29,9 @@ class Provider::Openai < Provider
       processor = ChatResponseProcessor.new(
         client: client,
         message: message,
-        streamer: streamer,
         instructions: instructions,
-        available_functions: available_functions
+        available_functions: available_functions,
+        streamer: streamer
       )
 
       processor.process

@@ -1,3 +1,8 @@
+# Orchestrates LLM interactions for chat conversations by:
+# - Streaming generic provider responses
+# - Persisting messages and tool calls
+# - Broadcasting updates to chat UI
+# - Handling provider errors
 class Assistant
   include Provided
 
@@ -14,42 +19,61 @@ class Assistant
   end
 
   def respond_to(message)
+    chat.clear_error
     sleep artificial_thinking_delay
+
 
     provider = get_model_provider(message.ai_model)
 
-    response = provider.chat_response(
+    assistant_message = AssistantMessage.new(
+      chat: chat,
+      content: "",
+      ai_model: message.ai_model
+    )
+
+    streamer = proc do |chunk|
+      case chunk.type
+      when "output_text"
+        stop_thinking
+        assistant_message.content += chunk.data
+        assistant_message.save!
+      when "function_request"
+        update_thinking("Analyzing your data to assist you with your question...")
+      when "response"
+        stop_thinking
+        assistant_message.ai_model = chunk.data.model
+        combined_tool_calls = chunk.data.functions.map do |tc|
+          ToolCall::Function.new(
+            provider_id: tc.id,
+            provider_call_id: tc.call_id,
+            function_name: tc.name,
+            function_arguments: tc.arguments,
+            function_result: tc.result
+          )
+        end
+
+        assistant_message.tool_calls = combined_tool_calls
+        assistant_message.save!
+        chat.update!(latest_assistant_response_id: chunk.data.id)
+      end
+    end
+
+    provider.chat_response(
       message,
       instructions: instructions,
       available_functions: functions,
       streamer: streamer
     )
-
-    stop_thinking
-
-    unless response.success?
-      return chat.add_error(response.error)
-    end
-
-    Chat.transaction do
-      chat.clear_error
-      process_response_artifacts(response.data)
-      chat.update!(latest_assistant_response_id: response.data.id)
-    end
   rescue => e
     chat.add_error(e)
   end
 
   private
-    def streamer
-      proc do |data|
-        puts data
-        # TODO process data
-      end
+    def update_thinking(thought)
+      chat.broadcast_update target: "thinking-indicator", partial: "chats/thinking_indicator", locals: { chat: chat, message: thought }
     end
 
     def stop_thinking
-      sleep artificial_thinking_delay
       chat.broadcast_remove target: "thinking-indicator"
     end
 

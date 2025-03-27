@@ -12,6 +12,12 @@ class AssistantTest < ActiveSupport::TestCase
   end
 
   test "responds to basic prompt without tools" do
+    collected_chunks = []
+
+    streamer = proc do |chunk|
+      collected_chunks << chunk
+    end
+
     @provider.expects(:chat_response).returns(
       provider_success_response(
         Assistant::Provideable::ChatResponse.new(

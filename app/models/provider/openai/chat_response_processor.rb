@@ -10,7 +10,13 @@ class Provider::Openai::ChatResponseProcessor
   def process
     first_response = fetch_response(previous_response_id: previous_openai_response_id)
 
-    return first_response if first_response.functions.empty?
+    if first_response.functions.empty?
+      if streamer.present?
+        streamer.call(StreamChunk.new(type: "response", data: first_response))
+      end
+
+      return first_response
+    end
 
     executed_functions = execute_pending_functions(first_response.functions)
 
@@ -18,6 +24,10 @@ class Provider::Openai::ChatResponseProcessor
       executed_functions: executed_functions,
       previous_response_id: first_response.id
     )
+
+    if streamer.present?
+      streamer.call(StreamChunk.new(type: "response", data: follow_up_response))
+    end
 
     follow_up_response
   end
@@ -59,24 +69,6 @@ class Provider::Openai::ChatResponseProcessor
             streamer.call(StreamChunk.new(type: "output_text", data: chunk.dig("delta")))
           when "response.function_call_arguments.done"
             streamer.call(StreamChunk.new(type: "function_request", data: chunk.dig("arguments")))
-          when "response.completed"
-            res = chunk.dig("response")
-            res_output = res.dig("output")
-
-            functions_output = if executed_functions.any?
-              executed_functions
-            else
-              extract_pending_functions(res_output)
-            end
-
-            data = Response.new(
-              id: res.dig("id"),
-              messages: extract_messages(res_output),
-              functions: functions_output,
-              model: res.dig("model")
-            )
-
-            streamer.call(StreamChunk.new(type: "response", data: data))
           end
         end
 
