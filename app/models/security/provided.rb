@@ -13,7 +13,15 @@ module Security::Provided
       response = provider.search_securities(symbol, country_code: country_code, exchange_operating_mic: exchange_operating_mic)
 
       if response.success?
-        response.data
+        response.data.map do |provider_security|
+          # Need to map to domain model so Combobox can display via to_combobox_option
+          Security.new(
+            ticker: provider_security.symbol,
+            name: provider_security.name,
+            logo_url: provider_security.logo_url,
+            exchange_operating_mic: provider_security.exchange_operating_mic,
+          )
+        end
       else
         []
       end

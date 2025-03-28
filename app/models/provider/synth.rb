@@ -1,6 +1,9 @@
 class Provider::Synth < Provider
   include ExchangeRateProvider, SecurityProvider
 
+  # Subclass so errors caught in this provider are raised as Provider::Synth::Error
+  Error = Class.new(Provider::Error)
+
   def initialize(api_key)
     @api_key = api_key
   end
