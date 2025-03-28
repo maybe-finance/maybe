@@ -26,13 +26,11 @@ class ExchangeRateTest < ActiveSupport::TestCase
     ExchangeRate.delete_all
 
     provider_response = provider_success_response(
-      ExchangeRate::Provideable::FetchRateData.new(
-        rate: ExchangeRate.new(
-          from_currency: "USD",
-          to_currency: "EUR",
-          date: Date.current,
-          rate: 1.2
-        )
+      OpenStruct.new(
+        from: "USD",
+        to: "EUR",
+        date: Date.current,
+        rate: 1.2
       )
     )
 
@@ -47,13 +45,11 @@ class ExchangeRateTest < ActiveSupport::TestCase
     ExchangeRate.delete_all
 
     provider_response = provider_success_response(
-      ExchangeRate::Provideable::FetchRateData.new(
-        rate: ExchangeRate.new(
-          from_currency: "USD",
-          to_currency: "EUR",
-          date: Date.current,
-          rate: 1.2
-        )
+      OpenStruct.new(
+        from: "USD",
+        to: "EUR",
+        date: Date.current,
+        rate: 1.2
       )
     )
 
@@ -65,7 +61,7 @@ class ExchangeRateTest < ActiveSupport::TestCase
   end
 
   test "returns nil on provider error" do
-    provider_response = provider_error_response(Provider::ProviderError.new("Test error"))
+    provider_response = provider_error_response(StandardError.new("Test error"))
 
     @provider.expects(:fetch_exchange_rate).returns(provider_response)
 
@@ -77,15 +73,11 @@ class ExchangeRateTest < ActiveSupport::TestCase
 
     ExchangeRate.create!(date: 1.day.ago.to_date, from_currency: "USD", to_currency: "EUR", rate: 0.9)
 
-    provider_response = provider_success_response(
-      ExchangeRate::Provideable::FetchRatesData.new(
-        rates: [
-          ExchangeRate.new(from_currency: "USD", to_currency: "EUR", date: Date.current, rate: 1.3),
-          ExchangeRate.new(from_currency: "USD", to_currency: "EUR", date: 1.day.ago.to_date, rate: 1.4),
-          ExchangeRate.new(from_currency: "USD", to_currency: "EUR", date: 2.days.ago.to_date, rate: 1.5)
-        ]
-      )
-    )
+    provider_response = provider_success_response([
+      OpenStruct.new(from: "USD", to: "EUR", date: Date.current, rate: 1.3),
+      OpenStruct.new(from: "USD", to: "EUR", date: 1.day.ago.to_date, rate: 1.4),
+      OpenStruct.new(from: "USD", to: "EUR", date: 2.days.ago.to_date, rate: 1.5)
+    ])
 
     @provider.expects(:fetch_exchange_rates)
              .with(from: "USD", to: "EUR", start_date: 2.days.ago.to_date, end_date: Date.current)

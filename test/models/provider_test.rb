@@ -3,7 +3,7 @@ require "ostruct"
 
 class TestProvider < Provider
   def fetch_data
-    provider_response(retries: 3) do
+    with_provider_response(retries: 3) do
       client.get("/test")
     end
   end
@@ -51,7 +51,7 @@ class ProviderTest < ActiveSupport::TestCase
 
     client.expects(:get)
           .with("/test")
-          .returns(Provider::ProviderResponse.new(success?: true, data: "success", error: nil))
+          .returns(Provider::Response.new(success?: true, data: "success", error: nil))
           .in_sequence(sequence)
 
     response = @provider.fetch_data

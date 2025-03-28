@@ -2,7 +2,9 @@ class User < ApplicationRecord
   has_secure_password
 
   belongs_to :family
+  belongs_to :last_viewed_chat, class_name: "Chat", optional: true
   has_many :sessions, dependent: :destroy
+  has_many :chats, dependent: :destroy
   has_many :impersonator_support_sessions, class_name: "ImpersonationSession", foreign_key: :impersonator_id, dependent: :destroy
   has_many :impersonated_support_sessions, class_name: "ImpersonationSession", foreign_key: :impersonated_id, dependent: :destroy
   accepts_nested_attributes_for :family, update_only: true
@@ -67,6 +69,26 @@ class User < ApplicationRecord
 
   def initial
     (display_name&.first || email.first).upcase
+  end
+
+  def initials
+    if first_name.present? && last_name.present?
+      "#{first_name.first}#{last_name.first}".upcase
+    else
+      initial
+    end
+  end
+
+  def show_ai_sidebar?
+    show_ai_sidebar
+  end
+
+  def ai_available?
+    !Rails.application.config.app_mode.self_hosted? || ENV["OPENAI_ACCESS_TOKEN"].present?
+  end
+
+  def ai_enabled?
+    ai_enabled && ai_available?
   end
 
   # Deactivation

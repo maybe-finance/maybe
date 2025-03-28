@@ -3,7 +3,8 @@ module Security::Provided
 
   class_methods do
     def provider
-      Providers.synth
+      registry = Provider::Registry.for_concept(:securities)
+      registry.get_provider(:synth)
     end
 
     def search_provider(symbol, country_code: nil, exchange_operating_mic: nil)
@@ -12,7 +13,7 @@ module Security::Provided
       response = provider.search_securities(symbol, country_code: country_code, exchange_operating_mic: exchange_operating_mic)
 
       if response.success?
-        response.data.securities
+        response.data
       else
         []
       end
@@ -37,11 +38,24 @@ module Security::Provided
       return 0
     end
 
-    fetched_prices = response.data.prices.map do |price|
-      price.attributes.slice("security_id", "date", "price", "currency")
+    fetched_prices = response.data.map do |price|
+      {
+        security_id: price.security.id,
+        date: price.date,
+        price: price.price,
+        currency: price.currency
+      }
     end
 
-    Security::Price.upsert_all(fetched_prices, unique_by: %i[security_id date currency])
+    valid_prices = fetched_prices.reject do |price|
+      is_invalid = price[:date].nil? || price[:price].nil? || price[:currency].nil?
+      if is_invalid
+        Rails.logger.warn("Invalid price data for security_id=#{id}: Missing required fields in price record: #{price.inspect}")
+      end
+      is_invalid
+    end
+
+    Security::Price.upsert_all(valid_prices, unique_by: %i[security_id date currency])
   end
 
   def find_or_fetch_price(date: Date.current, cache: true)
@@ -53,8 +67,13 @@ module Security::Provided
 
     return nil unless response.success? # Provider error
 
-    price = response.data.price
-    price.save! if cache
+    price = response.data
+    Security::Price.find_or_create_by!(
+      security_id: price.security.id,
+      date: price.date,
+      price: price.price,
+      currency: price.currency
+    ) if cache
     price
   end
 

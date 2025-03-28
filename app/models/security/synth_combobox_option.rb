@@ -8,7 +8,6 @@ class Security::SynthComboboxOption
   end
 
   def to_combobox_display
-    display_code = exchange_acronym.presence || exchange_operating_mic
-    "#{symbol} - #{name} (#{display_code})" # shown in combobox input when selected
+    "#{symbol} - #{name} (#{exchange_operating_mic})" # shown in combobox input when selected
   end
 end

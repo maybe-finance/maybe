@@ -1,0 +1,72 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.openai.com/v1/responses
+    body:
+      encoding: UTF-8
+      string: '{"model":"invalid-model-that-will-trigger-api-error","input":[{"role":"user","content":"Error
+        test"}],"instructions":null,"tools":[],"previous_response_id":null,"stream":true}'
+    headers:
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer <OPENAI_ACCESS_TOKEN>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Date:
+      - Wed, 26 Mar 2025 21:27:19 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '207'
+      Connection:
+      - keep-alive
+      Openai-Version:
+      - '2020-10-01'
+      Openai-Organization:
+      - "<OPENAI_ORGANIZATION_ID>"
+      X-Request-Id:
+      - req_2b86e02f664e790dfa475f111402b722
+      Openai-Processing-Ms:
+      - '146'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Cf-Cache-Status:
+      - DYNAMIC
+      Set-Cookie:
+      - __cf_bm=gAU0gS_ZQBfQmFkc_jKM73dhkNISbBY9FlQjGnZ6CfU-1743024439-1.0.1.1-bWRoC737.SOJPZrP90wTJLVmelTpxFqIsrunq2Lqgy4J3VvLtYBEBrqY0v4d94F5fMcm0Ju.TfQi0etmvqZtUSMRn6rvkMLmXexRcxP.1jE;
+        path=/; expires=Wed, 26-Mar-25 21:57:19 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=XnxX4KU80himuKAUavZYtkQasOjXJDJD.QLyMrfBSUU-1743024439792-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      X-Content-Type-Options:
+      - nosniff
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 9269bb3b2c14cf74-CMH
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "error": {
+            "message": "The requested model 'invalid-model-that-will-trigger-api-error' does not exist.",
+            "type": "invalid_request_error",
+            "param": "model",
+            "code": "model_not_found"
+          }
+        }
+  recorded_at: Wed, 26 Mar 2025 21:27:19 GMT
+recorded_with: VCR 6.3.1

@@ -40,11 +40,11 @@ class Security::PriceTest < ActiveSupport::TestCase
     security = securities(:aapl)
     Security::Price.delete_all # Clear any existing prices
 
-    provider_response = provider_error_response(Provider::ProviderError.new("Test error"))
+    with_provider_response = provider_error_response(StandardError.new("Test error"))
 
     @provider.expects(:fetch_security_price)
              .with(security, date: Date.current)
-             .returns(provider_response)
+             .returns(with_provider_response)
 
     assert_not @security.find_or_fetch_price(date: Date.current)
   end
@@ -72,12 +72,12 @@ class Security::PriceTest < ActiveSupport::TestCase
     def expect_provider_price(security:, price:, date:)
       @provider.expects(:fetch_security_price)
                .with(security, date: date)
-               .returns(provider_success_response(Security::Provideable::PriceData.new(price: price)))
+               .returns(provider_success_response(price))
     end
 
     def expect_provider_prices(security:, prices:, start_date:, end_date:)
       @provider.expects(:fetch_security_prices)
                .with(security, start_date: start_date, end_date: end_date)
-               .returns(provider_success_response(Security::Provideable::PricesData.new(prices: prices)))
+               .returns(provider_success_response(prices))
     end
 end

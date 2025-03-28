@@ -24,6 +24,8 @@ VCR.configure do |config|
   config.ignore_localhost = true
   config.default_cassette_options = { erb: true }
   config.filter_sensitive_data("<SYNTH_API_KEY>") { ENV["SYNTH_API_KEY"] }
+  config.filter_sensitive_data("<OPENAI_ACCESS_TOKEN>") { ENV["OPENAI_ACCESS_TOKEN"] }
+  config.filter_sensitive_data("<OPENAI_ORGANIZATION_ID>") { ENV["OPENAI_ORGANIZATION_ID"] }
 end
 
 module ActiveSupport

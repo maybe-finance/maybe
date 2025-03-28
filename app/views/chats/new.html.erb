@@ -1,0 +1,11 @@
+<%= turbo_frame_tag chat_frame do %>
+  <div class="p-4 flex flex-col h-full">
+    <%= render "chats/chat_nav", chat: @chat %>
+
+    <div class="mt-auto py-8">
+      <%= render "chats/ai_greeting" %>
+    </div>
+
+    <%= render "messages/chat_form", chat: @chat %>
+  </div>
+<% end %>

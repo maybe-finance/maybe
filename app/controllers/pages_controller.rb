@@ -10,7 +10,7 @@ class PagesController < ApplicationController
   end
 
   def changelog
-    @release_notes = Providers.github.fetch_latest_release_notes
+    @release_notes = github_provider.fetch_latest_release_notes
 
     render layout: "settings"
   end
@@ -26,4 +26,9 @@ class PagesController < ApplicationController
     @invite_code = InviteCode.order("RANDOM()").limit(1).first
     render layout: false
   end
+
+  private
+    def github_provider
+      Provider::Registry.get_provider(:github)
+    end
 end

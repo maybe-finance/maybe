@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_19_145426) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_19_212839) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -194,6 +194,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_145426) do
     t.string "classification", default: "expense", null: false
     t.string "lucide_icon", default: "shapes", null: false
     t.index ["family_id"], name: "index_categories_on_family_id"
+  end
+
+  create_table "chats", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.string "title", null: false
+    t.string "instructions"
+    t.jsonb "error"
+    t.string "latest_assistant_response_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_chats_on_user_id"
   end
 
   create_table "credit_cards", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -380,6 +391,20 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_145426) do
     t.index ["family_id"], name: "index_merchants_on_family_id"
   end
 
+  create_table "messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "chat_id", null: false
+    t.string "type", null: false
+    t.string "status", default: "complete", null: false
+    t.text "content"
+    t.string "ai_model"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "debug", default: false
+    t.string "provider_id"
+    t.boolean "reasoning", default: false
+    t.index ["chat_id"], name: "index_messages_on_chat_id"
+  end
+
   create_table "other_assets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -544,6 +569,19 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_145426) do
     t.index ["family_id"], name: "index_tags_on_family_id"
   end
 
+  create_table "tool_calls", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "message_id", null: false
+    t.string "provider_id", null: false
+    t.string "provider_call_id"
+    t.string "type", null: false
+    t.string "function_name"
+    t.jsonb "function_arguments"
+    t.jsonb "function_result"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["message_id"], name: "index_tool_calls_on_message_id"
+  end
+
   create_table "transfers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "inflow_transaction_id", null: false
     t.uuid "outflow_transaction_id", null: false
@@ -573,8 +611,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_145426) do
     t.string "otp_backup_codes", default: [], array: true
     t.boolean "show_sidebar", default: true
     t.string "default_period", default: "last_30_days", null: false
+    t.uuid "last_viewed_chat_id"
+    t.boolean "show_ai_sidebar", default: true
+    t.boolean "ai_enabled", default: false, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["family_id"], name: "index_users_on_family_id"
+    t.index ["last_viewed_chat_id"], name: "index_users_on_last_viewed_chat_id"
     t.index ["otp_secret"], name: "index_users_on_otp_secret", unique: true, where: "(otp_secret IS NOT NULL)"
   end
 
@@ -605,6 +647,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_145426) do
   add_foreign_key "budget_categories", "categories"
   add_foreign_key "budgets", "families"
   add_foreign_key "categories", "families"
+  add_foreign_key "chats", "users"
   add_foreign_key "impersonation_session_logs", "impersonation_sessions"
   add_foreign_key "impersonation_sessions", "users", column: "impersonated_id"
   add_foreign_key "impersonation_sessions", "users", column: "impersonator_id"
@@ -613,6 +656,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_145426) do
   add_foreign_key "invitations", "families"
   add_foreign_key "invitations", "users", column: "inviter_id"
   add_foreign_key "merchants", "families"
+  add_foreign_key "messages", "chats"
   add_foreign_key "plaid_accounts", "plaid_items"
   add_foreign_key "plaid_items", "families"
   add_foreign_key "rejected_transfers", "account_transactions", column: "inflow_transaction_id"
@@ -622,7 +666,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_145426) do
   add_foreign_key "sessions", "users"
   add_foreign_key "taggings", "tags"
   add_foreign_key "tags", "families"
+  add_foreign_key "tool_calls", "messages"
   add_foreign_key "transfers", "account_transactions", column: "inflow_transaction_id", on_delete: :cascade
   add_foreign_key "transfers", "account_transactions", column: "outflow_transaction_id", on_delete: :cascade
+  add_foreign_key "users", "chats", column: "last_viewed_chat_id"
   add_foreign_key "users", "families"
 end

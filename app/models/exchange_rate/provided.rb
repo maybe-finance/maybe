@@ -3,7 +3,8 @@ module ExchangeRate::Provided
 
   class_methods do
     def provider
-      Providers.synth
+      registry = Provider::Registry.for_concept(:exchange_rates)
+      registry.get_provider(:synth)
     end
 
     def find_or_fetch_rate(from:, to:, date: Date.current, cache: true)
@@ -16,8 +17,13 @@ module ExchangeRate::Provided
 
       return nil unless response.success? # Provider error
 
-      rate = response.data.rate
-      rate.save! if cache
+      rate = response.data
+      ExchangeRate.find_or_create_by!(
+        from_currency: rate.from,
+        to_currency: rate.to,
+        date: rate.date,
+        rate: rate.rate
+      ) if cache
       rate
     end
 
@@ -34,8 +40,13 @@ module ExchangeRate::Provided
         return 0
       end
 
-      rates_data = fetched_rates.data.rates.map do |rate|
-        rate.attributes.slice("from_currency", "to_currency", "date", "rate")
+      rates_data = fetched_rates.data.map do |rate|
+        {
+          from_currency: rate.from,
+          to_currency: rate.to,
+          date: rate.date,
+          rate: rate.rate
+        }
       end
 
       ExchangeRate.upsert_all(rates_data, unique_by: %i[from_currency to_currency date])

@@ -24,13 +24,11 @@ class Account::ConvertibleTest < ActiveSupport::TestCase
     ExchangeRate.delete_all
 
     provider_response = provider_success_response(
-      ExchangeRate::Provideable::FetchRatesData.new(
-        rates: [
-          ExchangeRate.new(from_currency: "EUR", to_currency: "USD", date: 2.days.ago.to_date, rate: 1.1),
-          ExchangeRate.new(from_currency: "EUR", to_currency: "USD", date: 1.day.ago.to_date, rate: 1.2),
-          ExchangeRate.new(from_currency: "EUR", to_currency: "USD", date: Date.current, rate: 1.3)
-        ]
-      )
+      [
+        OpenStruct.new(from: "EUR", to: "USD", date: 2.days.ago.to_date, rate: 1.1),
+        OpenStruct.new(from: "EUR", to: "USD", date: 1.day.ago.to_date, rate: 1.2),
+        OpenStruct.new(from: "EUR", to: "USD", date: Date.current, rate: 1.3)
+      ]
     )
 
     @provider.expects(:fetch_exchange_rates)

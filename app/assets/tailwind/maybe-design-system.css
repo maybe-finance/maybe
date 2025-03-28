@@ -316,8 +316,8 @@
 }
 
 @layer base {
-  form>button {
-    @apply cursor-pointer;
+  button {
+    @apply cursor-pointer focus-visible:outline-gray-900;
   }
 
   hr {

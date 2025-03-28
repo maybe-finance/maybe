@@ -74,9 +74,9 @@ class Family < ApplicationRecord
 
   def get_link_token(webhooks_url:, redirect_url:, accountable_type: nil, region: :us, access_token: nil)
     provider = if region.to_sym == :eu
-      Providers.plaid_eu
+      Provider::Registry.get_provider(:plaid_eu)
     else
-      Providers.plaid_us
+      Provider::Registry.get_provider(:plaid_us)
     end
 
     # early return when no provider

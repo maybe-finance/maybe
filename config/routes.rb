@@ -11,6 +11,15 @@ Rails.application.routes.draw do
   # Uses basic auth - see config/initializers/sidekiq.rb
   mount Sidekiq::Web => "/sidekiq"
 
+  # AI chats
+  resources :chats do
+    resources :messages, only: :create
+
+    member do
+      post :retry
+    end
+  end
+
   get "changelog", to: "pages#changelog"
   get "feedback", to: "pages#feedback"
   get "early-access", to: "pages#early_access"

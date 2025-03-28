@@ -1,0 +1,6 @@
+<%# locals: (developer_message:) %>
+
+<div id="<%= dom_id(developer_message) %>" class="my-2 <%= developer_message.debug? ? "bg-yellow-50 border-yellow-200" : "bg-blue-50 border-blue-200" %> px-3 py-2 rounded-lg max-w-[85%] ml-auto border">
+  <span class="text-secondary text-xs"><%= developer_message.debug? ? "Debug message (internal only)" : "System instruction (sent to AI)" %></span>
+  <p class="text-primary text-sm"><%= developer_message.content %></p>
+</div>

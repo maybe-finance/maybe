@@ -11,11 +11,11 @@ module ExchangeRateProviderInterfaceTest
         date: Date.parse("01.01.2024")
       )
 
-      rate = response.data.rate
+      rate = response.data
 
-      assert_kind_of ExchangeRate, rate
-      assert_equal "USD", rate.from_currency
-      assert_equal "GBP", rate.to_currency
+      assert_equal "USD", rate.from
+      assert_equal "GBP", rate.to
+      assert_in_delta 0.78, rate.rate, 0.01
     end
   end
 
@@ -25,7 +25,7 @@ module ExchangeRateProviderInterfaceTest
         from: "USD", to: "GBP", start_date: Date.parse("01.01.2024"), end_date: Date.parse("31.07.2024")
       )
 
-      assert 213, response.data.rates.count # 213 days between 01.01.2024 and 31.07.2024
+      assert_equal 213, response.data.count # 213 days between 01.01.2024 and 31.07.2024
     end
   end
 

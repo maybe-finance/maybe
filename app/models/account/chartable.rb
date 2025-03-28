@@ -2,15 +2,17 @@ module Account::Chartable
   extend ActiveSupport::Concern
 
   class_methods do
-    def balance_series(currency:, period: Period.last_30_days, favorable_direction: "up", view: :balance)
+    def balance_series(currency:, period: Period.last_30_days, favorable_direction: "up", view: :balance, interval: nil)
       raise ArgumentError, "Invalid view type" unless [ :balance, :cash_balance, :holdings_balance ].include?(view.to_sym)
+
+      series_interval = interval || period.interval
 
       balances = Account::Balance.find_by_sql([
         balance_series_query,
         {
           start_date: period.start_date,
           end_date: period.end_date,
-          interval: period.interval,
+          interval: series_interval,
           target_currency: currency
         }
       ])
@@ -33,7 +35,7 @@ module Account::Chartable
       Series.new(
         start_date: period.start_date,
         end_date: period.end_date,
-        interval: period.interval,
+        interval: series_interval,
         trend: Trend.new(
           current: Money.new(balance_value_for(balances.last, view) || 0, currency),
           previous: Money.new(balance_value_for(balances.first, view) || 0, currency),
@@ -124,11 +126,12 @@ module Account::Chartable
     classification == "asset" ? "up" : "down"
   end
 
-  def balance_series(period: Period.last_30_days, view: :balance)
+  def balance_series(period: Period.last_30_days, view: :balance, interval: nil)
     self.class.where(id: self.id).balance_series(
       currency: currency,
       period: period,
       view: view,
+      interval: interval,
       favorable_direction: favorable_direction
     )
   end

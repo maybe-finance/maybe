@@ -60,6 +60,9 @@ gem "rotp", "~> 6.3"
 gem "rqrcode", "~> 2.2"
 gem "activerecord-import"
 
+# AI
+gem "ruby-openai"
+
 group :development, :test do
   gem "debug", platforms: %i[mri windows]
   gem "brakeman", require: false
