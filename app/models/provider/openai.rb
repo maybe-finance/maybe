@@ -1,6 +1,9 @@
 class Provider::Openai < Provider
   include LlmProvider
 
+  # Subclass so errors caught in this provider are raised as Provider::Openai::Error
+  Error = Class.new(Provider::Error)
+
   MODELS = %w[gpt-4o]
 
   def initialize(access_token)
