@@ -6,8 +6,12 @@ module Provider::LlmProvider
   end
 
   private
-    StreamChunk = Data.define(:type, :data)
-    ChatResponse = Data.define(:id, :messages, :functions, :model)
-    Message = Data.define(:id, :content)
-    FunctionExecution = Data.define(:id, :call_id, :name, :arguments, :result)
+    StreamChunk = Data.define(:provider_type, :data)
+    ChatResponse = Data.define(:provider_id, :model, :messages, :function_calls) do
+      def final?
+        function_calls.empty?
+      end
+    end
+    Message = Data.define(:provider_id, :content)
+    FunctionCall = Data.define(:provider_id, :provider_call_id, :name, :arguments, :result)
 end

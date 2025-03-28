@@ -34,6 +34,15 @@ class Assistant::Function
     true
   end
 
+  def to_h
+    {
+      name: name,
+      description: description,
+      parameters: params_schema,
+      strict: strict_mode?
+    }
+  end
+
   private
     attr_reader :user
 

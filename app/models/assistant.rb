@@ -18,52 +18,98 @@ class Assistant
     @chat = chat
   end
 
-  def streamer(model)
-    assistant_message = AssistantMessage.new(
-      chat: chat,
-      content: "",
-      ai_model: model
-    )
-
-    proc do |chunk|
-      case chunk.type
-      when "output_text"
-        stop_thinking
-        assistant_message.content += chunk.data
-        assistant_message.save!
-      when "function_request"
-        update_thinking("Analyzing your data to assist you with your question...")
-      when "response"
-        stop_thinking
-        assistant_message.ai_model = chunk.data.model
-        combined_tool_calls = chunk.data.functions.map do |tc|
-          ToolCall::Function.new(
-            provider_id: tc.id,
-            provider_call_id: tc.call_id,
-            function_name: tc.name,
-            function_arguments: tc.arguments,
-            function_result: tc.result
-          )
-        end
-
-        assistant_message.tool_calls = combined_tool_calls
-        assistant_message.save!
-        chat.update!(latest_assistant_response_id: chunk.data.id)
-      end
+  class ToolCaller
+    def initialize(functions: [])
+      @functions = functions
     end
+
+    def call_function(function_request)
+      name = function_request.function_name
+      args = JSON.parse(function_request.function_arguments)
+      fn = get_function(name)
+      result = fn.call(args)
+
+      ToolCall::Function.new(
+        provider_id: function_request.provider_id,
+        provider_call_id: function_request.provider_call_id,
+        function_name: name,
+        function_arguments: args,
+        function_result: result
+      )
+    rescue => e
+      fn_execution_details = {
+        fn_name: name,
+        fn_args: args
+      }
+
+      message = "Error calling function #{name} with arguments #{args}: #{e.message}"
+
+      raise StandardError.new(message)
+    end
+
+    private
+      attr_reader :functions
+
+      def get_function(name)
+        functions.find { |f| f.name == name }
+      end
   end
 
   def respond_to(message)
     chat.clear_error
+
     sleep artificial_thinking_delay
 
     provider = get_model_provider(message.ai_model)
 
+    tool_caller = ToolCaller.new(functions: functions)
+
+    assistant_response = AssistantMessage.new(
+      chat: chat,
+      content: "",
+      ai_model: message.ai_model
+    )
+
+    streamer = proc do |chunk|
+      case chunk.type
+      when "output_text"
+        stop_thinking
+        assistant_response.content += chunk.data
+        assistant_response.save!
+      when "response"
+        if chunk.data.function_requests.any?
+          update_thinking("Analyzing your data to assist you with your question...")
+
+          tool_calls = chunk.data.function_requests.map do |fn_request|
+            tool_caller.call_function(fn_request)
+          end
+
+          assistant_response.tool_calls = tool_calls
+          assistant_response.save!
+
+          provider.chat_response(
+            message.content,
+            model: message.ai_model,
+            instructions: instructions,
+            functions: functions.map(&:to_h),
+            function_results: tool_calls.map(&:to_h),
+            streamer: streamer
+          )
+        else
+          stop_thinking
+        end
+
+        chat.update!(latest_assistant_response_id: chunk.data.id)
+      end
+    end
+
     provider.chat_response(
-      message,
+      message.content,
+      model: message.ai_model,
       instructions: instructions,
-      available_functions: functions,
-      streamer: streamer(message.ai_model)
+      functions: functions.map(&:to_h),
+      function_results: [],
+      streamer: streamer
     )
   rescue => e
     chat.add_error(e)
@@ -76,28 +122,6 @@ class Assistant
 
     def stop_thinking
       chat.broadcast_remove target: "thinking-indicator"
-    end
-
-    def process_response_artifacts(data)
-      messages = data.messages.map do |message|
-        AssistantMessage.new(
-          chat: chat,
-          content: message.content,
-          provider_id: message.id,
-          ai_model: data.model,
-          tool_calls: data.functions.map do |fn|
-            ToolCall::Function.new(
-              provider_id: fn.id,
-              provider_call_id: fn.call_id,
-              function_name: fn.name,
-              function_arguments: fn.arguments,
-              function_result: fn.result
-            )
-          end
-        )
-      end
-
-      messages.each(&:save!)
     end
 
     def instructions

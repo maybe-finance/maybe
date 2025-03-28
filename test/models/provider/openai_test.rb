@@ -33,16 +33,18 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
       response = @subject.chat_response(message)
 
       assert response.success?
-      assert_equal 1, response.data.messages.size
-      assert_includes response.data.messages.first.content, "Yes"
+      assert_equal 1, response.data.size
+      assert response.data.first.final?
+      assert_equal 1, response.data.first.messages.size
+      assert_includes response.data.first.messages.first.content, "Yes"
     end
   end
 
   test "streams basic chat response" do
-    VCR.use_cassette("openai/chat/basic_response") do
+    VCR.use_cassette("openai/chat/basic_streaming_response") do
       collected_chunks = []
 
-      mock_streamer = proc do |chunk|
+      mock_subscriber = proc do |chunk|
         collected_chunks << chunk
       end
 
@@ -52,11 +54,11 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
         ai_model: @subject_model
       )
 
-      @subject.chat_response(message, streamer: mock_streamer)
+      @subject.chat_response(message, stream_subscriber: mock_subscriber)
 
-      tool_call_chunks = collected_chunks.select { |chunk| chunk.type == "function_request" }
-      text_chunks = collected_chunks.select { |chunk| chunk.type == "output_text" }
-      response_chunks = collected_chunks.select { |chunk| chunk.type == "response" }
+      tool_call_chunks = collected_chunks.select { |chunk| chunk.provider_type == "function_request" }
+      text_chunks = collected_chunks.select { |chunk| chunk.provider_type == "output_text" }
+      response_chunks = collected_chunks.select { |chunk| chunk.provider_type == "response" }
 
       assert_equal 1, text_chunks.size
       assert_equal 1, response_chunks.size
@@ -74,15 +76,24 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
         available_functions: [ PredictableToolFunction.new(@chat) ]
       )
 
+      # Two responses: one for function requests, one follow-up for text output
       assert response.success?
-      assert_equal 1, response.data.functions.size
-      assert_equal 1, response.data.messages.size
-      assert_includes response.data.messages.first.content, PredictableToolFunction.expected_test_result
+      assert_equal 2, response.data.size
+
+      # First response has function requests / results
+      assert_not response.data.first.final?
+      assert_equal 1, response.data.first.function_calls.size
+
+      # Second response has text output that uses the function results
+      assert response.data.last.final?
+      assert_equal 0, response.data.last.function_calls.size
+      assert_equal 1, response.data.last.messages.size
+      assert_includes response.data.last.messages.first.content, PredictableToolFunction.expected_test_result
     end
   end
 
   test "streams chat response with tool calls" do
-    VCR.use_cassette("openai/chat/tool_calls") do
+    VCR.use_cassette("openai/chat/streaming_tool_calls") do
       collected_chunks = []
 
       mock_streamer = proc do |chunk|
@@ -96,16 +107,17 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
         streamer: mock_streamer
       )
 
-      text_chunks = collected_chunks.select { |chunk| chunk.type == "output_text" }
-      text_chunks = collected_chunks.select { |chunk| chunk.type == "output_text" }
-      tool_call_chunks = collected_chunks.select { |chunk| chunk.type == "function_request" }
-      response_chunks = collected_chunks.select { |chunk| chunk.type == "response" }
+      text_chunks = collected_chunks.select { |chunk| chunk.provider_type == "output_text" }
+      tool_call_chunks = collected_chunks.select { |chunk| chunk.provider_type == "function_request" }
+      response_chunks = collected_chunks.select { |chunk| chunk.provider_type == "response" }
 
       assert_equal 1, tool_call_chunks.count
       assert text_chunks.count >= 1
-      assert_equal 1, response_chunks.count
+      assert_equal 2, response_chunks.count
 
-      assert_includes response_chunks.first.data.messages.first.content, PredictableToolFunction.expected_test_result
+      assert_not response_chunks.first.data.final?
+      assert response_chunks.last.data.final?
+      assert_includes response_chunks.last.data.messages.first.content, PredictableToolFunction.expected_test_result
     end
   end
 
