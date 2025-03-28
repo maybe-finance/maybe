@@ -19,19 +19,14 @@ class AssistantTest < ActiveSupport::TestCase
   test "responds to basic prompt" do
     text_chunk = OpenStruct.new(type: "output_text", data: "Hello from assistant")
     response_chunk = OpenStruct.new(
-    type: "response",
-    data: OpenStruct.new(
-      id: "1",
-      model: "gpt-4o",
-      messages: [
-        OpenStruct.new(
-          id: "1",
-          content: "Hello from assistant",
-        )
-      ],
-      functions: []
+      type: "response",
+      data: OpenStruct.new(
+        id: "1",
+        model: "gpt-4o",
+        messages: [ OpenStruct.new(id: "1", output_text: "Hello from assistant") ],
+        function_requests: []
+      )
     )
-  )
 
     @provider.expects(:chat_response).with do |message, **options|
       options[:streamer].call(text_chunk)
@@ -45,37 +40,57 @@ class AssistantTest < ActiveSupport::TestCase
   end
 
   test "responds with tool function calls" do
-    function_request_chunk = OpenStruct.new(type: "function_request", data: "get_net_worth")
-    text_chunk = OpenStruct.new(type: "output_text", data: "Your net worth is $124,200")
-    response_chunk = OpenStruct.new(
+    Assistant::Function::GetAccounts.any_instance.stubs(:call).returns("test value")
+
+    # Call #1: Function requests
+    call1_response_chunk = OpenStruct.new(
       type: "response",
       data: OpenStruct.new(
         id: "1",
         model: "gpt-4o",
-        messages: [
-          OpenStruct.new(
-            id: "1",
-            content: "Your net worth is $124,200",
-          )
-        ],
-        functions: [
+        messages: [],
+        function_requests: [
           OpenStruct.new(
             id: "1",
             call_id: "1",
-            name: "get_net_worth",
-            arguments: "{}",
-            result: "$124,200"
+            function_name: "get_accounts",
+            function_arguments: "{}",
           )
         ]
       )
     )
 
+    # Call #2: Text response (that uses function results)
+    call2_text_chunk = OpenStruct.new(type: "output_text", data: "Your net worth is $124,200")
+    call2_response_chunk = OpenStruct.new(type: "response", data: OpenStruct.new(
+      id: "2",
+      model: "gpt-4o",
+      messages: [ OpenStruct.new(id: "1", output_text: "Your net worth is $124,200") ],
+      function_requests: [],
+      function_results: [
+        OpenStruct.new(
+          provider_id: "1",
+          provider_call_id: "1",
+          name: "get_accounts",
+          arguments: "{}",
+          result: "test value"
+        )
+      ],
+      previous_response_id: "1"
+    ))
+
+    sequence = sequence("provider_chat_response")
+
     @provider.expects(:chat_response).with do |message, **options|
-      options[:streamer].call(function_request_chunk)
-      options[:streamer].call(text_chunk)
-      options[:streamer].call(response_chunk)
+      options[:streamer].call(call2_text_chunk)
+      options[:streamer].call(call2_response_chunk)
       true
-    end
+    end.returns(nil).once.in_sequence(sequence)
+
+    @provider.expects(:chat_response).with do |message, **options|
+      options[:streamer].call(call1_response_chunk)
+      true
+    end.returns(nil).once.in_sequence(sequence)
 
     assert_difference "AssistantMessage.count", 1 do
       @assistant.respond_to(@message)

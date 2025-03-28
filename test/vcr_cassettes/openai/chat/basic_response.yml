@@ -24,7 +24,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Fri, 28 Mar 2025 14:23:22 GMT
+      - Fri, 28 Mar 2025 23:39:00 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -36,34 +36,34 @@ http_interactions:
       Openai-Organization:
       - "<OPENAI_ORGANIZATION_ID>"
       X-Request-Id:
-      - req_13900312235c86dca9983c43f884612f
+      - req_689cf45740d3775a003632347b9a99dd
       Openai-Processing-Ms:
-      - '1103'
+      - '783'
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
       Cf-Cache-Status:
       - DYNAMIC
       Set-Cookie:
-      - __cf_bm=ZxtRGPPVT3H1qcGwlqfVjC13JJboKjEOkFsJoUfcduA-1743171802-1.0.1.1-PKolgwX6T_lqh6cFQXy9f3CPACskAir7Sfyt1ZNEKIHPDz3Ehn7lNILDASLxhBRmYBDKTMQqaUeyvSolvp1U00OhqfgSr51HxKIZNeEDglg;
-        path=/; expires=Fri, 28-Mar-25 14:53:22 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=dxhkvZmDt5CfO7l2sGWpb8NwK.mPMPhQk2s4iFSZ8L4-1743205140-1.0.1.1-KJ6xz1oZ.qGlgSe.OAhABVxRSZDurVEDB4iFjzkrzEPT_cieb1YukIYJ_SK4hd_K6OrU2GgO9cn.1rTOUQLZdmzuS1GqRWn44is2Q8QdzZw;
+        path=/; expires=Sat, 29-Mar-25 00:09:00 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=.uHFzkeaG4pJ9kcwsDW9PIfdKQgoEAz4Voe6QjxyH7E-1743171802602-0.0.1.1-604800000;
+      - _cfuvid=LVN78sd.dSrLtZPVzcO8KZ9oDBKuC3_qGMfcWvwWsbY-1743205140700-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       X-Content-Type-Options:
       - nosniff
       Server:
       - cloudflare
       Cf-Ray:
-      - 9277c8eafdbe10c3-ORD
+      - 927af6dbba55cf77-CMH
       Alt-Svc:
       - h3=":443"; ma=86400
     body:
       encoding: ASCII-8BIT
       string: |-
         {
-          "id": "resp_67e6b0d97d34819296bd4e0d24c6f3db00ff3778b60aa4aa",
+          "id": "resp_67e73313e5ac8192b922490a56ce01e70bdc541b107b1aea",
           "object": "response",
-          "created_at": 1743171801,
+          "created_at": 1743205139,
           "status": "completed",
           "error": null,
           "incomplete_details": null,
@@ -73,7 +73,7 @@ http_interactions:
           "output": [
             {
               "type": "message",
-              "id": "msg_67e6b0da49b48192a610e3f3493f056600ff3778b60aa4aa",
+              "id": "msg_67e73314588881928506df6ae0995e700bdc541b107b1aea",
               "status": "completed",
               "role": "assistant",
               "content": [
@@ -103,7 +103,7 @@ http_interactions:
           "top_p": 1.0,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 43,
+            "input_tokens": 25,
             "input_tokens_details": {
               "cached_tokens": 0
             },
@@ -111,10 +111,10 @@ http_interactions:
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 45
+            "total_tokens": 27
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: Fri, 28 Mar 2025 14:23:22 GMT
+  recorded_at: Fri, 28 Mar 2025 23:39:00 GMT
 recorded_with: VCR 6.3.1

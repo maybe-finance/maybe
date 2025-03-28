@@ -5,8 +5,7 @@ http_interactions:
     uri: https://api.openai.com/v1/responses
     body:
       encoding: UTF-8
-      string: '{"model":"invalid-model-that-will-trigger-api-error","input":[{"role":"user","content":"Error
-        test"}],"instructions":null,"tools":[],"previous_response_id":null,"stream":true}'
+      string: '{"model":"invalid-model-that-will-trigger-api-error","input":[{"role":"user","content":"Test"}],"instructions":null,"tools":[],"previous_response_id":null,"stream":null}'
     headers:
       Content-Type:
       - application/json
@@ -24,7 +23,7 @@ http_interactions:
       message: Bad Request
     headers:
       Date:
-      - Wed, 26 Mar 2025 21:27:19 GMT
+      - Fri, 28 Mar 2025 23:39:02 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -36,25 +35,25 @@ http_interactions:
       Openai-Organization:
       - "<OPENAI_ORGANIZATION_ID>"
       X-Request-Id:
-      - req_2b86e02f664e790dfa475f111402b722
+      - req_9c80c15dd6b50d198b621a05e3dd3c9d
       Openai-Processing-Ms:
-      - '146'
+      - '115'
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
       Cf-Cache-Status:
       - DYNAMIC
       Set-Cookie:
-      - __cf_bm=gAU0gS_ZQBfQmFkc_jKM73dhkNISbBY9FlQjGnZ6CfU-1743024439-1.0.1.1-bWRoC737.SOJPZrP90wTJLVmelTpxFqIsrunq2Lqgy4J3VvLtYBEBrqY0v4d94F5fMcm0Ju.TfQi0etmvqZtUSMRn6rvkMLmXexRcxP.1jE;
-        path=/; expires=Wed, 26-Mar-25 21:57:19 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=w8NWB2SOQcLDDgXm2hVuP3Ik71FMhI28xRfzC9U4SAo-1743205142-1.0.1.1-lDe_WqVCTDI1eF7W2.8tS6ErxBo1kX6lUjoMZh1fnpUzr.fyLJfLsFqiU31FuoYrqX1YOCLF6qUlUttZ5iZbuPSO5wPLkbNIMVVgSFG8flI;
+        path=/; expires=Sat, 29-Mar-25 00:09:02 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=XnxX4KU80himuKAUavZYtkQasOjXJDJD.QLyMrfBSUU-1743024439792-0.0.1.1-604800000;
+      - _cfuvid=VQL2pQzIck2z8GzmzR3ZFHfkya6Cd2TO82aGFDZDOBs-1743205142788-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       X-Content-Type-Options:
       - nosniff
       Server:
       - cloudflare
       Cf-Ray:
-      - 9269bb3b2c14cf74-CMH
+      - 927af6ed3b7f1050-ORD
       Alt-Svc:
       - h3=":443"; ma=86400
     body:
@@ -68,5 +67,5 @@ http_interactions:
             "code": "model_not_found"
           }
         }
-  recorded_at: Wed, 26 Mar 2025 21:27:19 GMT
+  recorded_at: Fri, 28 Mar 2025 23:39:03 GMT
 recorded_with: VCR 6.3.1

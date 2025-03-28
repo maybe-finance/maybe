@@ -26,7 +26,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Fri, 28 Mar 2025 16:00:21 GMT
+      - Fri, 28 Mar 2025 23:39:20 GMT
       Content-Type:
       - text/event-stream; charset=utf-8
       Transfer-Encoding:
@@ -38,51 +38,163 @@ http_interactions:
       Openai-Organization:
       - "<OPENAI_ORGANIZATION_ID>"
       X-Request-Id:
-      - req_ad078d9f7585eeca17c02cefb4c42180
+      - req_416a3bb3593376c1829980cc11557c9e
       Openai-Processing-Ms:
-      - '148'
+      - '171'
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
       Cf-Cache-Status:
       - DYNAMIC
       Set-Cookie:
-      - __cf_bm=DeYZEoQ8_t7.BWV67SmSSxrDr9sFE5nnkoANG7Nlg9E-1743177621-1.0.1.1-ymQrM3gryBLo9KRlSh4lzlyMPwqDX1SeHkwfiWOKaNct.cKs.WBfgURo.mAmK14ZjlbbuwfPOf7FShuzpS2Irud6C3woK9juoi2rOtdcYGo;
-        path=/; expires=Fri, 28-Mar-25 16:30:21 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=2mv3jCpb0SZRXFvlWu28X1mr3Oa6z9QgwtmcclI9J_g-1743205160-1.0.1.1-1P22aYvtQqY_byLJMPyJEYff2m.rYivVXc313sCETck2g4NIg66SHPLTkjOiyqHBYMyifOJ_EVXNFK3QeEDYlPbvB9OzNr_Vo.S.UqPYpJI;
+        path=/; expires=Sat, 29-Mar-25 00:09:20 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=WpIK2gkR1WKCUZWHMZKlTwVW73ibegrhn1ZhIpdswe0-1743177621976-0.0.1.1-604800000;
+      - _cfuvid=KTcsmNHnsQWuGiwS1hyyOm7vtycPv3d6yh6pOLElMAg-1743205160250-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       X-Content-Type-Options:
       - nosniff
       Server:
       - cloudflare
       Cf-Ray:
-      - 92785706590bcf4e-CMH
+      - 927af7582c5ffa19-ORD
       Alt-Svc:
       - h3=":443"; ma=86400
     body:
       encoding: UTF-8
       string: |+
         event: response.created
-        data: {"type":"response.created","response":{"id":"resp_67e6c795ca8c8192b015934c18b8abe602f810c3e60dc7d6","object":"response","created_at":1743177621,"status":"in_progress","error":null,"incomplete_details":null,"instructions":"Use the tools available to you to answer the user's question.","max_output_tokens":null,"model":"gpt-4o-2024-08-06","output":[],"parallel_tool_calls":true,"previous_response_id":null,"reasoning":{"effort":null,"generate_summary":null},"store":true,"temperature":1.0,"text":{"format":{"type":"text"}},"tool_choice":"auto","tools":[{"type":"function","description":"Gets user net worth data","name":"get_net_worth","parameters":{"type":"object","properties":{},"required":[],"additionalProperties":false},"strict":true}],"top_p":1.0,"truncation":"disabled","usage":null,"user":null,"metadata":{}}}
+        data: {"type":"response.created","response":{"id":"resp_67e73328128881928023b1fa925c2bcc0c494b972720dd48","object":"response","created_at":1743205160,"status":"in_progress","error":null,"incomplete_details":null,"instructions":"Use the tools available to you to answer the user's question.","max_output_tokens":null,"model":"gpt-4o-2024-08-06","output":[],"parallel_tool_calls":true,"previous_response_id":null,"reasoning":{"effort":null,"generate_summary":null},"store":true,"temperature":1.0,"text":{"format":{"type":"text"}},"tool_choice":"auto","tools":[{"type":"function","description":"Gets user net worth data","name":"get_net_worth","parameters":{"type":"object","properties":{},"required":[],"additionalProperties":false},"strict":true}],"top_p":1.0,"truncation":"disabled","usage":null,"user":null,"metadata":{}}}
 
         event: response.in_progress
-        data: {"type":"response.in_progress","response":{"id":"resp_67e6c795ca8c8192b015934c18b8abe602f810c3e60dc7d6","object":"response","created_at":1743177621,"status":"in_progress","error":null,"incomplete_details":null,"instructions":"Use the tools available to you to answer the user's question.","max_output_tokens":null,"model":"gpt-4o-2024-08-06","output":[],"parallel_tool_calls":true,"previous_response_id":null,"reasoning":{"effort":null,"generate_summary":null},"store":true,"temperature":1.0,"text":{"format":{"type":"text"}},"tool_choice":"auto","tools":[{"type":"function","description":"Gets user net worth data","name":"get_net_worth","parameters":{"type":"object","properties":{},"required":[],"additionalProperties":false},"strict":true}],"top_p":1.0,"truncation":"disabled","usage":null,"user":null,"metadata":{}}}
+        data: {"type":"response.in_progress","response":{"id":"resp_67e73328128881928023b1fa925c2bcc0c494b972720dd48","object":"response","created_at":1743205160,"status":"in_progress","error":null,"incomplete_details":null,"instructions":"Use the tools available to you to answer the user's question.","max_output_tokens":null,"model":"gpt-4o-2024-08-06","output":[],"parallel_tool_calls":true,"previous_response_id":null,"reasoning":{"effort":null,"generate_summary":null},"store":true,"temperature":1.0,"text":{"format":{"type":"text"}},"tool_choice":"auto","tools":[{"type":"function","description":"Gets user net worth data","name":"get_net_worth","parameters":{"type":"object","properties":{},"required":[],"additionalProperties":false},"strict":true}],"top_p":1.0,"truncation":"disabled","usage":null,"user":null,"metadata":{}}}
 
         event: response.output_item.added
-        data: {"type":"response.output_item.added","output_index":0,"item":{"type":"function_call","id":"fc_67e6c796cbdc81928207d8649a4da80a02f810c3e60dc7d6","call_id":"call_ZpaYGc3RGRfles9vnoFgVQ1m","name":"get_net_worth","arguments":"","status":"in_progress"}}
+        data: {"type":"response.output_item.added","output_index":0,"item":{"type":"function_call","id":"fc_67e73329fa348192b5b5dafb6c2f018e0c494b972720dd48","call_id":"call_vZ9Poyn4ZFtvYwQOeTGFAUSU","name":"get_net_worth","arguments":"","status":"in_progress"}}
 
         event: response.function_call_arguments.delta
-        data: {"type":"response.function_call_arguments.delta","item_id":"fc_67e6c796cbdc81928207d8649a4da80a02f810c3e60dc7d6","output_index":0,"delta":"{}"}
+        data: {"type":"response.function_call_arguments.delta","item_id":"fc_67e73329fa348192b5b5dafb6c2f018e0c494b972720dd48","output_index":0,"delta":"{}"}
 
         event: response.function_call_arguments.done
-        data: {"type":"response.function_call_arguments.done","item_id":"fc_67e6c796cbdc81928207d8649a4da80a02f810c3e60dc7d6","output_index":0,"arguments":"{}"}
+        data: {"type":"response.function_call_arguments.done","item_id":"fc_67e73329fa348192b5b5dafb6c2f018e0c494b972720dd48","output_index":0,"arguments":"{}"}
 
         event: response.output_item.done
-        data: {"type":"response.output_item.done","output_index":0,"item":{"type":"function_call","id":"fc_67e6c796cbdc81928207d8649a4da80a02f810c3e60dc7d6","call_id":"call_ZpaYGc3RGRfles9vnoFgVQ1m","name":"get_net_worth","arguments":"{}","status":"completed"}}
+        data: {"type":"response.output_item.done","output_index":0,"item":{"type":"function_call","id":"fc_67e73329fa348192b5b5dafb6c2f018e0c494b972720dd48","call_id":"call_vZ9Poyn4ZFtvYwQOeTGFAUSU","name":"get_net_worth","arguments":"{}","status":"completed"}}
 
         event: response.completed
-        data: {"type":"response.completed","response":{"id":"resp_67e6c795ca8c8192b015934c18b8abe602f810c3e60dc7d6","object":"response","created_at":1743177621,"status":"completed","error":null,"incomplete_details":null,"instructions":"Use the tools available to you to answer the user's question.","max_output_tokens":null,"model":"gpt-4o-2024-08-06","output":[{"type":"function_call","id":"fc_67e6c796cbdc81928207d8649a4da80a02f810c3e60dc7d6","call_id":"call_ZpaYGc3RGRfles9vnoFgVQ1m","name":"get_net_worth","arguments":"{}","status":"completed"}],"parallel_tool_calls":true,"previous_response_id":null,"reasoning":{"effort":null,"generate_summary":null},"store":true,"temperature":1.0,"text":{"format":{"type":"text"}},"tool_choice":"auto","tools":[{"type":"function","description":"Gets user net worth data","name":"get_net_worth","parameters":{"type":"object","properties":{},"required":[],"additionalProperties":false},"strict":true}],"top_p":1.0,"truncation":"disabled","usage":{"input_tokens":271,"input_tokens_details":{"cached_tokens":0},"output_tokens":13,"output_tokens_details":{"reasoning_tokens":0},"total_tokens":284},"user":null,"metadata":{}}}
+        data: {"type":"response.completed","response":{"id":"resp_67e73328128881928023b1fa925c2bcc0c494b972720dd48","object":"response","created_at":1743205160,"status":"completed","error":null,"incomplete_details":null,"instructions":"Use the tools available to you to answer the user's question.","max_output_tokens":null,"model":"gpt-4o-2024-08-06","output":[{"type":"function_call","id":"fc_67e73329fa348192b5b5dafb6c2f018e0c494b972720dd48","call_id":"call_vZ9Poyn4ZFtvYwQOeTGFAUSU","name":"get_net_worth","arguments":"{}","status":"completed"}],"parallel_tool_calls":true,"previous_response_id":null,"reasoning":{"effort":null,"generate_summary":null},"store":true,"temperature":1.0,"text":{"format":{"type":"text"}},"tool_choice":"auto","tools":[{"type":"function","description":"Gets user net worth data","name":"get_net_worth","parameters":{"type":"object","properties":{},"required":[],"additionalProperties":false},"strict":true}],"top_p":1.0,"truncation":"disabled","usage":{"input_tokens":55,"input_tokens_details":{"cached_tokens":0},"output_tokens":13,"output_tokens_details":{"reasoning_tokens":0},"total_tokens":68},"user":null,"metadata":{}}}
 
-  recorded_at: Fri, 28 Mar 2025 16:00:23 GMT
+  recorded_at: Fri, 28 Mar 2025 23:39:22 GMT
+- request:
+    method: post
+    uri: https://api.openai.com/v1/responses
+    body:
+      encoding: UTF-8
+      string: '{"model":"gpt-4o","input":[{"role":"user","content":"What is my net
+        worth?"},{"type":"function_call_output","call_id":"call_vZ9Poyn4ZFtvYwQOeTGFAUSU","output":"\"$124,200\""}],"instructions":null,"tools":[],"previous_response_id":"resp_67e73328128881928023b1fa925c2bcc0c494b972720dd48","stream":true}'
+    headers:
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer <OPENAI_ACCESS_TOKEN>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 28 Mar 2025 23:39:22 GMT
+      Content-Type:
+      - text/event-stream; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Openai-Version:
+      - '2020-10-01'
+      Openai-Organization:
+      - "<OPENAI_ORGANIZATION_ID>"
+      X-Request-Id:
+      - req_96db0e490c091fd28d3849cb2b7494dd
+      Openai-Processing-Ms:
+      - '127'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Cf-Cache-Status:
+      - DYNAMIC
+      Set-Cookie:
+      - __cf_bm=uCEzdEuc0NlONCs9_aE4Zlk_.gTSlFJ8f1Wih1A8C.4-1743205162-1.0.1.1-3O16QsxbyafPXR1z4aXLAf.s9MlH8j1NF_DLrC.5MvWO3j6c7X2Xao1ro6jiM8QSE62d5TnzfnWaqz.HPmtpaBOdD4l3r3Uf_7vKltr27T4;
+        path=/; expires=Sat, 29-Mar-25 00:09:22 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=Daug1DTioODhGs.oCPbiMGRU8rN4cooGraWTg30zUH4-1743205162681-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      X-Content-Type-Options:
+      - nosniff
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 927af7696faa10ee-ORD
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: |+
+        event: response.created
+        data: {"type":"response.created","response":{"id":"resp_67e7332a89f48192a7c5da3f21bd48940c494b972720dd48","object":"response","created_at":1743205162,"status":"in_progress","error":null,"incomplete_details":null,"instructions":null,"max_output_tokens":null,"model":"gpt-4o-2024-08-06","output":[],"parallel_tool_calls":true,"previous_response_id":"resp_67e73328128881928023b1fa925c2bcc0c494b972720dd48","reasoning":{"effort":null,"generate_summary":null},"store":true,"temperature":1.0,"text":{"format":{"type":"text"}},"tool_choice":"auto","tools":[],"top_p":1.0,"truncation":"disabled","usage":null,"user":null,"metadata":{}}}
+
+        event: response.in_progress
+        data: {"type":"response.in_progress","response":{"id":"resp_67e7332a89f48192a7c5da3f21bd48940c494b972720dd48","object":"response","created_at":1743205162,"status":"in_progress","error":null,"incomplete_details":null,"instructions":null,"max_output_tokens":null,"model":"gpt-4o-2024-08-06","output":[],"parallel_tool_calls":true,"previous_response_id":"resp_67e73328128881928023b1fa925c2bcc0c494b972720dd48","reasoning":{"effort":null,"generate_summary":null},"store":true,"temperature":1.0,"text":{"format":{"type":"text"}},"tool_choice":"auto","tools":[],"top_p":1.0,"truncation":"disabled","usage":null,"user":null,"metadata":{}}}
+
+        event: response.output_item.added
+        data: {"type":"response.output_item.added","output_index":0,"item":{"type":"message","id":"msg_67e7332af2a0819291cf0cebaf49ad960c494b972720dd48","status":"in_progress","role":"assistant","content":[]}}
+
+        event: response.content_part.added
+        data: {"type":"response.content_part.added","item_id":"msg_67e7332af2a0819291cf0cebaf49ad960c494b972720dd48","output_index":0,"content_index":0,"part":{"type":"output_text","text":"","annotations":[]}}
+
+        event: response.output_text.delta
+        data: {"type":"response.output_text.delta","item_id":"msg_67e7332af2a0819291cf0cebaf49ad960c494b972720dd48","output_index":0,"content_index":0,"delta":"Your"}
+
+        event: response.output_text.delta
+        data: {"type":"response.output_text.delta","item_id":"msg_67e7332af2a0819291cf0cebaf49ad960c494b972720dd48","output_index":0,"content_index":0,"delta":" net"}
+
+        event: response.output_text.delta
+        data: {"type":"response.output_text.delta","item_id":"msg_67e7332af2a0819291cf0cebaf49ad960c494b972720dd48","output_index":0,"content_index":0,"delta":" worth"}
+
+        event: response.output_text.delta
+        data: {"type":"response.output_text.delta","item_id":"msg_67e7332af2a0819291cf0cebaf49ad960c494b972720dd48","output_index":0,"content_index":0,"delta":" is"}
+
+        event: response.output_text.delta
+        data: {"type":"response.output_text.delta","item_id":"msg_67e7332af2a0819291cf0cebaf49ad960c494b972720dd48","output_index":0,"content_index":0,"delta":" $"}
+
+        event: response.output_text.delta
+        data: {"type":"response.output_text.delta","item_id":"msg_67e7332af2a0819291cf0cebaf49ad960c494b972720dd48","output_index":0,"content_index":0,"delta":"124"}
+
+        event: response.output_text.delta
+        data: {"type":"response.output_text.delta","item_id":"msg_67e7332af2a0819291cf0cebaf49ad960c494b972720dd48","output_index":0,"content_index":0,"delta":","}
+
+        event: response.output_text.delta
+        data: {"type":"response.output_text.delta","item_id":"msg_67e7332af2a0819291cf0cebaf49ad960c494b972720dd48","output_index":0,"content_index":0,"delta":"200"}
+
+        event: response.output_text.delta
+        data: {"type":"response.output_text.delta","item_id":"msg_67e7332af2a0819291cf0cebaf49ad960c494b972720dd48","output_index":0,"content_index":0,"delta":"."}
+
+        event: response.output_text.done
+        data: {"type":"response.output_text.done","item_id":"msg_67e7332af2a0819291cf0cebaf49ad960c494b972720dd48","output_index":0,"content_index":0,"text":"Your net worth is $124,200."}
+
+        event: response.content_part.done
+        data: {"type":"response.content_part.done","item_id":"msg_67e7332af2a0819291cf0cebaf49ad960c494b972720dd48","output_index":0,"content_index":0,"part":{"type":"output_text","text":"Your net worth is $124,200.","annotations":[]}}
+
+        event: response.output_item.done
+        data: {"type":"response.output_item.done","output_index":0,"item":{"type":"message","id":"msg_67e7332af2a0819291cf0cebaf49ad960c494b972720dd48","status":"completed","role":"assistant","content":[{"type":"output_text","text":"Your net worth is $124,200.","annotations":[]}]}}
+
+        event: response.completed
+        data: {"type":"response.completed","response":{"id":"resp_67e7332a89f48192a7c5da3f21bd48940c494b972720dd48","object":"response","created_at":1743205162,"status":"completed","error":null,"incomplete_details":null,"instructions":null,"max_output_tokens":null,"model":"gpt-4o-2024-08-06","output":[{"type":"message","id":"msg_67e7332af2a0819291cf0cebaf49ad960c494b972720dd48","status":"completed","role":"assistant","content":[{"type":"output_text","text":"Your net worth is $124,200.","annotations":[]}]}],"parallel_tool_calls":true,"previous_response_id":"resp_67e73328128881928023b1fa925c2bcc0c494b972720dd48","reasoning":{"effort":null,"generate_summary":null},"store":true,"temperature":1.0,"text":{"format":{"type":"text"}},"tool_choice":"auto","tools":[],"top_p":1.0,"truncation":"disabled","usage":{"input_tokens":51,"input_tokens_details":{"cached_tokens":0},"output_tokens":10,"output_tokens_details":{"reasoning_tokens":0},"total_tokens":61},"user":null,"metadata":{}}}
+
+  recorded_at: Fri, 28 Mar 2025 23:39:23 GMT
 recorded_with: VCR 6.3.1
 ...

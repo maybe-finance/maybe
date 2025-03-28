@@ -30,8 +30,8 @@ class Assistant
       result = fn.call(args)
 
       ToolCall::Function.new(
-        provider_id: function_request.provider_id,
-        provider_call_id: function_request.provider_call_id,
+        provider_id: function_request.id,
+        provider_call_id: function_request.call_id,
         function_name: name,
         function_arguments: args,
         function_result: result
@@ -70,7 +70,19 @@ class Assistant
       ai_model: message.ai_model
     )
 
-    streamer = proc do |chunk|
+    streamer2 = proc do |chunk|
+      case chunk.type
+      when "output_text"
+        stop_thinking
+        assistant_response.content += chunk.data
+        assistant_response.save!
+      when "response"
+        stop_thinking
+        chat.update!(latest_assistant_response_id: chunk.data.id)
+      end
+    end
+
+    streamer1 = proc do |chunk|
       case chunk.type
       when "output_text"
         stop_thinking
@@ -93,7 +105,7 @@ class Assistant
             instructions: instructions,
             functions: functions.map(&:to_h),
             function_results: tool_calls.map(&:to_h),
-            streamer: streamer
+            streamer: streamer2
           )
         else
           stop_thinking
@@ -109,7 +121,7 @@ class Assistant
       instructions: instructions,
       functions: functions.map(&:to_h),
       function_results: [],
-      streamer: streamer
+      streamer: streamer1
     )
   rescue => e
     chat.add_error(e)
@@ -151,7 +163,7 @@ class Assistant
 
         - Format all responses in markdown
         - Format all monetary values according to the user's preferred currency
-        - Format dates in the user's preferred format
+        - Format dates in the user's preferred format: #{preferred_date_format}
 
         #### User's preferred currency
 
@@ -165,7 +177,6 @@ class Assistant
         - Default format: #{preferred_currency.default_format}
           - Separator: #{preferred_currency.separator}
           - Delimiter: #{preferred_currency.delimiter}
-        - Date format: #{preferred_date_format}
 
         ### Rules about financial advice
 
