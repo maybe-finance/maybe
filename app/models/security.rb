@@ -20,9 +20,7 @@ class Security < ApplicationRecord
       symbol: ticker,
       name: name,
       logo_url: logo_url,
-      exchange_acronym: exchange_acronym,
       exchange_operating_mic: exchange_operating_mic,
-      exchange_country_code: country_code
     )
   end
 
