@@ -67,7 +67,8 @@ class Account::Entry < ApplicationRecord
         notes: bulk_update_params[:notes],
         entryable_attributes: {
           category_id: bulk_update_params[:category_id],
-          merchant_id: bulk_update_params[:merchant_id]
+          merchant_id: bulk_update_params[:merchant_id],
+          tag_ids: bulk_update_params[:tag_ids]
         }.compact_blank
       }.compact_blank
 

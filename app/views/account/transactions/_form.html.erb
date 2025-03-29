@@ -31,6 +31,24 @@
     <%= f.date_field :date, label: t(".date"), required: true, min: Account::Entry.min_supported_date, max: Date.current, value: Date.current %>
   </section>
 
+  <%= disclosure t(".details"), default_open: false do %>
+    <%= f.fields_for :entryable do |ef| %>
+      <%= ef.select :tag_ids,
+            Current.family.tags.alphabetically.pluck(:name, :id),
+            {
+              include_blank: t(".none"),
+              multiple: true,
+              label:    t(".tags_label"),
+              container_class: "h-40"
+            }%>
+    <% end %>
+    <%= f.text_area :notes,
+          label: t(".note_label"),
+          placeholder: t(".note_placeholder"),
+          rows: 5,
+          "data-auto-submit-form-target": "auto" %>
+  <% end %>
+
   <section>
     <%= f.submit t(".submit") %>
   </section>
