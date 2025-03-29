@@ -8,7 +8,7 @@ http_interactions:
       string: '{"model":"gpt-4o","input":[{"role":"user","content":"What is my net
         worth?"}],"instructions":"Use the tools available to you to answer the user''s
         question.","tools":[{"type":"function","name":"get_net_worth","description":"Gets
-        user net worth data","parameters":{"type":"object","properties":{},"required":[],"additionalProperties":false},"strict":true}],"previous_response_id":null,"stream":null}'
+        a user''s net worth","parameters":{"type":"object","properties":{},"required":[],"additionalProperties":false},"strict":true}],"previous_response_id":null,"stream":null}'
     headers:
       Content-Type:
       - application/json
@@ -26,7 +26,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Fri, 28 Mar 2025 23:39:03 GMT
+      - Sat, 29 Mar 2025 14:18:06 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -38,34 +38,34 @@ http_interactions:
       Openai-Organization:
       - "<OPENAI_ORGANIZATION_ID>"
       X-Request-Id:
-      - req_acb002a07726b73124003bc11961db12
+      - req_c49d8a1689abc268c93ee8f78c7acb87
       Openai-Processing-Ms:
-      - '692'
+      - '1309'
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
       Cf-Cache-Status:
       - DYNAMIC
       Set-Cookie:
-      - __cf_bm=yktQTGvoMAowiz7E3sLQgydW3Cy6tmHY_KGgLVGm.iE-1743205143-1.0.1.1-XGhvweZhPNRuqFMRcaIvMOyVb.Z1VOf4AtZmc4gPTArM1sU4T3mya2c0QwixjuCSJYuw2BwmWIKnZrDe_xdx6OtV6HQfwB1xASqg79FI6Bw;
-        path=/; expires=Sat, 29-Mar-25 00:09:03 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=GUFPKHTRTDYiA2pC84rAQH0hVR0FXzsY9LPaFgfMSYE-1743257886-1.0.1.1-2mSXiHXVrPGtsLug0Jnr7hwEZxmY1IKBWLWBoqUfvRseZL.xnPspGn1TGDTtb7bfuld8wj3sYGepLCG4GjmLKpMDisdYf9Na8tQZbjLk8_w;
+        path=/; expires=Sat, 29-Mar-25 14:48:06 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=I23nR.I1jT11eBu6591kDu2RxoXpHGpOn27Syvx7Zr8-1743205143976-0.0.1.1-604800000;
+      - _cfuvid=.VkJixs9hPHWdUSlP_wV3mVUAiuYnwGyL2TSr7b54dc-1743257886530-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       X-Content-Type-Options:
       - nosniff
       Server:
       - cloudflare
       Cf-Ray:
-      - 927af6f0ef5ccf7c-CMH
+      - 927ffe95fdd51098-ORD
       Alt-Svc:
       - h3=":443"; ma=86400
     body:
       encoding: ASCII-8BIT
       string: |-
         {
-          "id": "resp_67e733174818819294a51c6bc4e0814c08d69b77f6076b69",
+          "id": "resp_67e8011d34b48192bc01d309f7d760440cb01d52dee3be7d",
           "object": "response",
-          "created_at": 1743205143,
+          "created_at": 1743257885,
           "status": "completed",
           "error": null,
           "incomplete_details": null,
@@ -75,8 +75,8 @@ http_interactions:
           "output": [
             {
               "type": "function_call",
-              "id": "fc_67e73317d104819287a21542e2484a4708d69b77f6076b69",
-              "call_id": "call_IoG6NAK8MNIoY6x9bzfHnpp6",
+              "id": "fc_67e8011dcddc8192a0cf2a4959a6de630cb01d52dee3be7d",
+              "call_id": "call_yi5avefdxpT7aJfgkyEizzEV",
               "name": "get_net_worth",
               "arguments": "{}",
               "status": "completed"
@@ -99,7 +99,7 @@ http_interactions:
           "tools": [
             {
               "type": "function",
-              "description": "Gets user net worth data",
+              "description": "Gets a user's net worth",
               "name": "get_net_worth",
               "parameters": {
                 "type": "object",
@@ -126,14 +126,14 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: Fri, 28 Mar 2025 23:39:03 GMT
+  recorded_at: Sat, 29 Mar 2025 14:18:06 GMT
 - request:
     method: post
     uri: https://api.openai.com/v1/responses
     body:
       encoding: UTF-8
       string: '{"model":"gpt-4o","input":[{"role":"user","content":"What is my net
-        worth?"},{"type":"function_call_output","call_id":"call_IoG6NAK8MNIoY6x9bzfHnpp6","output":"\"$124,200\""}],"instructions":null,"tools":[],"previous_response_id":"resp_67e733174818819294a51c6bc4e0814c08d69b77f6076b69","stream":null}'
+        worth?"},{"type":"function_call_output","call_id":"call_yi5avefdxpT7aJfgkyEizzEV","output":"{\"amount\":10000,\"currency\":\"USD\"}"}],"instructions":null,"tools":[],"previous_response_id":"resp_67e8011d34b48192bc01d309f7d760440cb01d52dee3be7d","stream":null}'
     headers:
       Content-Type:
       - application/json
@@ -151,7 +151,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Fri, 28 Mar 2025 23:39:04 GMT
+      - Sat, 29 Mar 2025 14:18:07 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -163,34 +163,34 @@ http_interactions:
       Openai-Organization:
       - "<OPENAI_ORGANIZATION_ID>"
       X-Request-Id:
-      - req_107c55eac5d356ea6a092e179644be74
+      - req_0317fcff946ac69acb4d49c06d1926ab
       Openai-Processing-Ms:
-      - '666'
+      - '715'
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
       Cf-Cache-Status:
       - DYNAMIC
       Set-Cookie:
-      - __cf_bm=l1y3jPeCKUdL4YW9VR8SZAYbPJygY.O5iv8GEmHYyo0-1743205144-1.0.1.1-tuO_26bpHCwjp40gloE4Pu.Pi6wN7K9yV5rFTNDF.PhDjBb8N6TW5POC9qEhbSWWLzNV3nYn.U0E8ft3iXTOMX7i3mXGJOVb1t7TK6T5rVo;
-        path=/; expires=Sat, 29-Mar-25 00:09:04 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=47vokVZwKVHuHroz8brhe5plUsMFk5vuHGB4gdVOlMs-1743257887-1.0.1.1-WYhtm8897cu8DUscVo1A17mKMLMeMnRKWsvqhw3xIbH0xKhHsFJcfR7ohbUd0JOQFXAAGUmLqUVQObLdN7HbBKehRDl8n51QAV35gEHb3.w;
+        path=/; expires=Sat, 29-Mar-25 14:48:07 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=Vv42lFdIhJxtY593j4tNCHE5WmPd8d3kwT3Fe.CRYwU-1743205144880-0.0.1.1-604800000;
+      - _cfuvid=p3HVlO1RXOqc3dLedrcBXx0H_7Tub4nZPqAOPciNPP4-1743257887594-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       X-Content-Type-Options:
       - nosniff
       Server:
       - cloudflare
       Cf-Ray:
-      - 927af6f6affe114d-ORD
+      - 927ffea078bcfa21-ORD
       Alt-Svc:
       - h3=":443"; ma=86400
     body:
       encoding: ASCII-8BIT
       string: |-
         {
-          "id": "resp_67e733182f5c8192917aa9ffaf3f26e508d69b77f6076b69",
+          "id": "resp_67e8011edd2881928f71c1a43e0a738d0cb01d52dee3be7d",
           "object": "response",
-          "created_at": 1743205144,
+          "created_at": 1743257886,
           "status": "completed",
           "error": null,
           "incomplete_details": null,
@@ -200,20 +200,20 @@ http_interactions:
           "output": [
             {
               "type": "message",
-              "id": "msg_67e73318a7448192b0cc40fd88d9881408d69b77f6076b69",
+              "id": "msg_67e8011f59b08192bca7846a4988f4140cb01d52dee3be7d",
               "status": "completed",
               "role": "assistant",
               "content": [
                 {
                   "type": "output_text",
-                  "text": "Your net worth is $124,200.",
+                  "text": "Your net worth is $10,000 USD.",
                   "annotations": []
                 }
               ]
             }
           ],
           "parallel_tool_calls": true,
-          "previous_response_id": "resp_67e733174818819294a51c6bc4e0814c08d69b77f6076b69",
+          "previous_response_id": "resp_67e8011d34b48192bc01d309f7d760440cb01d52dee3be7d",
           "reasoning": {
             "effort": null,
             "generate_summary": null
@@ -230,18 +230,18 @@ http_interactions:
           "top_p": 1.0,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 51,
+            "input_tokens": 56,
             "input_tokens_details": {
               "cached_tokens": 0
             },
-            "output_tokens": 10,
+            "output_tokens": 11,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 61
+            "total_tokens": 67
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: Fri, 28 Mar 2025 23:39:04 GMT
+  recorded_at: Sat, 29 Mar 2025 14:18:07 GMT
 recorded_with: VCR 6.3.1

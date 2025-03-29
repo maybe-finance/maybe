@@ -56,11 +56,22 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
 
   test "chat response with function calls" do
     VCR.use_cassette("openai/chat/function_calls") do
+      prompt = "What is my net worth?"
+
+      functions = [
+        {
+          name: "get_net_worth",
+          description: "Gets a user's net worth",
+          params_schema: { type: "object", properties: {}, required: [], additionalProperties: false },
+          strict: true
+        }
+      ]
+
       first_response = @subject.chat_response(
-        "What is my net worth?",
+        prompt,
         model: @subject_model,
         instructions: "Use the tools available to you to answer the user's question.",
-        functions: [ PredictableToolFunction.new.to_h ]
+        functions: functions
       )
 
       assert first_response.success?
@@ -70,7 +81,7 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
       assert function_request.present?
 
       second_response = @subject.chat_response(
-        "What is my net worth?",
+        prompt,
         model: @subject_model,
         function_results: [
           {
@@ -78,7 +89,7 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
             provider_call_id: function_request.call_id,
             name: function_request.function_name,
             arguments: function_request.function_args,
-            result: PredictableToolFunction.expected_test_result
+            result: { amount: 10000, currency: "USD" }
           }
         ],
         previous_response_id: first_response.data.id
@@ -86,24 +97,35 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
 
       assert second_response.success?
       assert_equal 1, second_response.data.messages.size
-      assert_includes second_response.data.messages.first.output_text, PredictableToolFunction.expected_test_result
+      assert_includes second_response.data.messages.first.output_text, "$10,000"
     end
   end
 
   test "streams chat response with tool calls" do
-    VCR.use_cassette("openai/chat/streaming_tool_calls", record: :all) do
+    VCR.use_cassette("openai/chat/streaming_tool_calls") do
       collected_chunks = []
 
       mock_streamer = proc do |chunk|
         collected_chunks << chunk
       end
 
+      prompt = "What is my net worth?"
+
+      functions = [
+        {
+          name: "get_net_worth",
+          description: "Gets a user's net worth",
+          params_schema: { type: "object", properties: {}, required: [], additionalProperties: false },
+          strict: true
+        }
+      ]
+
       # Call #1: First streaming call, will return a function request
       @subject.chat_response(
-        "What is my net worth?",
+        prompt,
         model: @subject_model,
         instructions: "Use the tools available to you to answer the user's question.",
-        functions: [ PredictableToolFunction.new.to_h ],
+        functions: functions,
         streamer: mock_streamer
       )
 
@@ -116,12 +138,12 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
       first_response = response_chunks.first.data
       function_request = first_response.function_requests.first
 
-      # Reset collected chunks
+      # Reset collected chunks for the second call
       collected_chunks = []
 
       # Call #2: Second streaming call, will return a function result
       @subject.chat_response(
-        "What is my net worth?",
+        prompt,
         model: @subject_model,
         function_results: [
           {
@@ -129,7 +151,7 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
             provider_call_id: function_request.call_id,
             name: function_request.function_name,
             arguments: function_request.function_args,
-            result: PredictableToolFunction.expected_test_result
+            result: { amount: 10000, currency: "USD" }
           }
         ],
         previous_response_id: first_response.id,
@@ -142,42 +164,7 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
       assert text_chunks.size >= 1
       assert_equal 1, response_chunks.size
 
-      assert_includes response_chunks.first.data.messages.first.output_text, PredictableToolFunction.expected_test_result
+      assert_includes response_chunks.first.data.messages.first.output_text, "$10,000"
     end
   end
-
-  private
-    class PredictableToolFunction
-      class << self
-        def expected_test_result
-          "$124,200"
-        end
-
-        def name
-          "get_net_worth"
-        end
-
-        def description
-          "Gets user net worth data"
-        end
-      end
-
-      def call(params = {})
-        self.class.expected_test_result
-      end
-
-      def to_h
-        {
-          name: self.class.name,
-          description: self.class.description,
-          params_schema:       {
-            type: "object",
-            properties: {},
-            required: [],
-            additionalProperties: false
-          },
-          strict: true
-        }
-      end
-    end
 end
