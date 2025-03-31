@@ -23,7 +23,7 @@
         <%= render "chats/thinking_indicator", chat: @chat %>
       <% end %>
 
-      <% if @chat.error.present? %>
+      <% if @chat.error.present? && @chat.needs_assistant_response? %>
         <%= render "chats/error", chat: @chat %>
       <% end %>
     </div>

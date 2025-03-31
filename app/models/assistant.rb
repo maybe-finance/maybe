@@ -1,5 +1,5 @@
 class Assistant
-  include Provided, Configurable
+  include Provided, Configurable, Broadcastable
 
   attr_reader :chat, :instructions
 
@@ -17,55 +17,50 @@ class Assistant
   end
 
   def respond_to(message)
-    pause_to_think
-
-    streamer = Assistant::ResponseStreamer.new(
-      prompt: message.content,
-      model: message.ai_model,
-      assistant: self,
+    assistant_message = AssistantMessage.new(
+      chat: chat,
+      content: "",
+      ai_model: message.ai_model
     )
 
-    streamer.stream_response
+    responder = Assistant::Responder.new(
+      message: message,
+      instructions: instructions,
+      function_tool_caller: function_tool_caller,
+      llm: get_model_provider(message.ai_model)
+    )
+
+    responder.on(:output_text) do |text|
+      stop_thinking
+      assistant_message.append_text!(text)
+    end
+
+    responder.on(:response) do |data|
+      update_thinking("Analyzing your data...")
+
+      Chat.transaction do
+        if data[:function_tool_calls].present?
+          assistant_message.append_tool_calls!(data[:function_tool_calls])
+        end
+
+        chat.update_latest_response!(data[:id])
+      end
+    end
+
+    responder.respond(previous_response_id: chat.latest_assistant_response_id)
   rescue => e
+    stop_thinking
     chat.add_error(e)
-  end
-
-  def fulfill_function_requests(function_requests)
-    function_requests.map do |fn_request|
-      result = function_executor.execute(fn_request)
-
-      ToolCall::Function.new(
-        provider_id: fn_request.id,
-        provider_call_id: fn_request.call_id,
-        function_name: fn_request.function_name,
-        function_arguments: fn_request.function_arguments,
-        function_result: result
-      )
-    end
-  end
-
-  def callable_functions
-    functions.map do |fn|
-      fn.new(chat.user)
-    end
-  end
-
-  def update_thinking(thought)
-    chat.broadcast_update target: "thinking-indicator", partial: "chats/thinking_indicator", locals: { chat: chat, message: thought }
-  end
-
-  def stop_thinking
-    chat.broadcast_remove target: "thinking-indicator"
   end
 
   private
     attr_reader :functions
 
-    def function_executor
-      @function_executor ||= FunctionExecutor.new(callable_functions)
-    end
+    def function_tool_caller
+      function_instances = functions.map do |fn|
+        fn.new(chat.user)
+      end
 
-    def pause_to_think
-      sleep 1
+      @function_tool_caller ||= FunctionToolCaller.new(function_instances)
     end
 end

@@ -38,7 +38,7 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
         collected_chunks << chunk
       end
 
-      @subject.chat_response(
+      response = @subject.chat_response(
         "This is a chat test.  If it's working, respond with a single word: Yes",
         model: @subject_model,
         streamer: mock_streamer
@@ -51,6 +51,7 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
       assert_equal 1, response_chunks.size
       assert_equal "Yes", text_chunks.first.data
       assert_equal "Yes", response_chunks.first.data.messages.first.output_text
+      assert_equal response_chunks.first.data, response.data
     end
   end
 
@@ -147,11 +148,8 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
         model: @subject_model,
         function_results: [
           {
-            provider_id: function_request.id,
-            provider_call_id: function_request.call_id,
-            name: function_request.function_name,
-            arguments: function_request.function_args,
-            result: { amount: 10000, currency: "USD" }
+            call_id: function_request.call_id,
+            output: { amount: 10000, currency: "USD" }
           }
         ],
         previous_response_id: first_response.id,

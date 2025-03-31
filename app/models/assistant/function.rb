@@ -34,11 +34,11 @@ class Assistant::Function
     true
   end
 
-  def to_h
+  def to_definition
     {
       name: name,
       description: description,
-      parameters: params_schema,
+      params_schema: params_schema,
       strict: strict_mode?
     }
   end

@@ -14,9 +14,4 @@ class UserMessage < Message
   def request_response
     chat.ask_assistant(self)
   end
-
-  private
-    def broadcast?
-      true
-    end
 end

@@ -4,17 +4,15 @@ class Provider
   Response = Data.define(:success?, :data, :error)
 
   class Error < StandardError
-    attr_reader :details, :provider
+    attr_reader :details
 
-    def initialize(message, details: nil, provider: nil)
+    def initialize(message, details: nil)
       super(message)
       @details = details
-      @provider = provider
     end
 
     def as_json
       {
-        provider: provider,
         message: message,
         details: details
       }

@@ -20,8 +20,8 @@ class Provider::Openai::ChatConfig
     results = function_results.map do |fn_result|
       {
         type: "function_call_output",
-        call_id: fn_result[:provider_call_id],
-        output: fn_result[:result].to_json
+        call_id: fn_result[:call_id],
+        output: fn_result[:output].to_json
       }
     end
 

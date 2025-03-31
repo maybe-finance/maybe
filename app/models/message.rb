@@ -17,6 +17,6 @@ class Message < ApplicationRecord
 
   private
     def broadcast?
-      raise NotImplementedError, "subclasses must set #broadcast?"
+      true
     end
 end

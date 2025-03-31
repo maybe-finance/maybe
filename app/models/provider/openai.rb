@@ -21,11 +21,17 @@ class Provider::Openai < Provider
         function_results: function_results
       )
 
+      collected_chunks = []
+
       # Proxy that converts raw stream to "LLM Provider concept" stream
       stream_proxy = if streamer.present?
         proc do |chunk|
           parsed_chunk = ChatStreamParser.new(chunk).parsed
-          streamer.call(parsed_chunk) unless parsed_chunk.nil?
+
+          unless parsed_chunk.nil?
+            streamer.call(parsed_chunk)
+            collected_chunks << parsed_chunk
+          end
         end
       else
         nil
@@ -40,7 +46,14 @@ class Provider::Openai < Provider
         stream: stream_proxy
       })
 
-      ChatParser.new(raw_response).parsed
+      # If streaming, Ruby OpenAI does not return anything, so to normalize this method's API, we search
+      # for the "response chunk" in the stream and return it (it is already parsed)
+      if stream_proxy.present?
+        response_chunk = collected_chunks.find { |chunk| chunk.type == "response" }
+        response_chunk.data
+      else
+        ChatParser.new(raw_response).parsed
+      end
     end
   end
 
