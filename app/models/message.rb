@@ -8,7 +8,7 @@ class Message < ApplicationRecord
     failed: "failed"
   }
 
-  validates :content, presence: true, allow_blank: true
+  validates :content, presence: true
 
   after_create_commit -> { broadcast_append_to chat, target: "messages" }, if: :broadcast?
   after_update_commit -> { broadcast_update_to chat }, if: :broadcast?

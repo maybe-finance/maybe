@@ -30,24 +30,33 @@ class Assistant
       llm: get_model_provider(message.ai_model)
     )
 
+    latest_response_id = chat.latest_assistant_response_id
+
     responder.on(:output_text) do |text|
-      stop_thinking
-      assistant_message.append_text!(text)
+      if assistant_message.content.blank?
+        stop_thinking
+
+        Chat.transaction do
+          assistant_message.append_text!(text)
+          chat.update_latest_response!(latest_response_id)
+        end
+      else
+        assistant_message.append_text!(text)
+      end
     end
 
     responder.on(:response) do |data|
       update_thinking("Analyzing your data...")
 
-      Chat.transaction do
-        if data[:function_tool_calls].present?
-          assistant_message.append_tool_calls!(data[:function_tool_calls])
-        end
-
+      if data[:function_tool_calls].present?
+        assistant_message.tool_calls = data[:function_tool_calls]
+        latest_response_id = data[:id]
+      else
         chat.update_latest_response!(data[:id])
       end
     end
 
-    responder.respond(previous_response_id: chat.latest_assistant_response_id)
+    responder.respond(previous_response_id: latest_response_id)
   rescue => e
     stop_thinking
     chat.add_error(e)

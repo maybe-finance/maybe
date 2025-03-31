@@ -9,9 +9,4 @@ class AssistantMessage < Message
     self.content += text
     save!
   end
-
-  def append_tool_calls!(tool_calls)
-    self.tool_calls.concat(tool_calls)
-    save!
-  end
 end
