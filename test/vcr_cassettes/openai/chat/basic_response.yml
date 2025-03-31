@@ -24,7 +24,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Fri, 28 Mar 2025 23:39:00 GMT
+      - Mon, 31 Mar 2025 20:38:55 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -36,34 +36,34 @@ http_interactions:
       Openai-Organization:
       - "<OPENAI_ORGANIZATION_ID>"
       X-Request-Id:
-      - req_689cf45740d3775a003632347b9a99dd
+      - req_f99033a5841a7d9357ee08d301ad634e
       Openai-Processing-Ms:
-      - '783'
+      - '713'
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
       Cf-Cache-Status:
       - DYNAMIC
       Set-Cookie:
-      - __cf_bm=dxhkvZmDt5CfO7l2sGWpb8NwK.mPMPhQk2s4iFSZ8L4-1743205140-1.0.1.1-KJ6xz1oZ.qGlgSe.OAhABVxRSZDurVEDB4iFjzkrzEPT_cieb1YukIYJ_SK4hd_K6OrU2GgO9cn.1rTOUQLZdmzuS1GqRWn44is2Q8QdzZw;
-        path=/; expires=Sat, 29-Mar-25 00:09:00 GMT; domain=.api.openai.com; HttpOnly;
+      - __cf_bm=UOaolWyAE3WXhLfg9c3KmO4d_Nq6t9cedTfZ6hznYEE-1743453535-1.0.1.1-GyQq_xeRpsyxxp8QQja5Bvo2XqUGfXHNGehtQoPV.BIgyLbERSIqJAK0IEKcYgpuLCyvQdlMNGqtdBHB6r5XMPHjOSMN1bTQYJHLsvlD5Z4;
+        path=/; expires=Mon, 31-Mar-25 21:08:55 GMT; domain=.api.openai.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=LVN78sd.dSrLtZPVzcO8KZ9oDBKuC3_qGMfcWvwWsbY-1743205140700-0.0.1.1-604800000;
+      - _cfuvid=_zDj2dj75eLeGSzZxpBpzHxYg4gJpEfQpcnT9aCJXqM-1743453535930-0.0.1.1-604800000;
         path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
       X-Content-Type-Options:
       - nosniff
       Server:
       - cloudflare
       Cf-Ray:
-      - 927af6dbba55cf77-CMH
+      - 9292a7325d09cf53-CMH
       Alt-Svc:
       - h3=":443"; ma=86400
     body:
       encoding: ASCII-8BIT
       string: |-
         {
-          "id": "resp_67e73313e5ac8192b922490a56ce01e70bdc541b107b1aea",
+          "id": "resp_67eafd5f2b7c81928d6834e7f4d26deb0bfadc995fda2b45",
           "object": "response",
-          "created_at": 1743205139,
+          "created_at": 1743453535,
           "status": "completed",
           "error": null,
           "incomplete_details": null,
@@ -73,7 +73,7 @@ http_interactions:
           "output": [
             {
               "type": "message",
-              "id": "msg_67e73314588881928506df6ae0995e700bdc541b107b1aea",
+              "id": "msg_67eafd5fba44819287b79107821a818b0bfadc995fda2b45",
               "status": "completed",
               "role": "assistant",
               "content": [
@@ -116,5 +116,5 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: Fri, 28 Mar 2025 23:39:00 GMT
+  recorded_at: Mon, 31 Mar 2025 20:38:55 GMT
 recorded_with: VCR 6.3.1

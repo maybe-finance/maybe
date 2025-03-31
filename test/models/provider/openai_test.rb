@@ -84,15 +84,10 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
       second_response = @subject.chat_response(
         prompt,
         model: @subject_model,
-        function_results: [
-          {
-            provider_id: function_request.id,
-            provider_call_id: function_request.call_id,
-            name: function_request.function_name,
-            arguments: function_request.function_args,
-            result: { amount: 10000, currency: "USD" }
-          }
-        ],
+        function_results: [ {
+          call_id: function_request.call_id,
+          output: { amount: 10000, currency: "USD" }.to_json
+        } ],
         previous_response_id: first_response.data.id
       )
 
@@ -102,8 +97,8 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
     end
   end
 
-  test "streams chat response with tool calls" do
-    VCR.use_cassette("openai/chat/streaming_tool_calls") do
+  test "streams chat response with function calls" do
+    VCR.use_cassette("openai/chat/streaming_function_calls") do
       collected_chunks = []
 
       mock_streamer = proc do |chunk|
