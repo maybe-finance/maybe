@@ -13,10 +13,11 @@ class AssistantTest < ActiveSupport::TestCase
     )
     @assistant = Assistant.for_chat(@chat)
     @provider = mock
-    @assistant.expects(:get_model_provider).with("gpt-4o").returns(@provider)
   end
 
   test "responds to basic prompt" do
+    @assistant.expects(:get_model_provider).with("gpt-4o").returns(@provider)
+
     text_chunk = OpenStruct.new(type: "output_text", data: "Hello from assistant")
     response_chunk = OpenStruct.new(
       type: "response",
@@ -40,6 +41,10 @@ class AssistantTest < ActiveSupport::TestCase
   end
 
   test "responds with tool function calls" do
+    # We expect 2 total instances of ChatStreamer (initial response + follow up with tool call results)
+    @assistant.expects(:get_model_provider).with("gpt-4o").returns(@provider).twice
+
+    # Only first provider call executes function
     Assistant::Function::GetAccounts.any_instance.stubs(:call).returns("test value")
 
     # Call #1: Function requests
@@ -54,7 +59,7 @@ class AssistantTest < ActiveSupport::TestCase
             id: "1",
             call_id: "1",
             function_name: "get_accounts",
-            function_arguments: "{}",
+            function_args: "{}",
           )
         ]
       )
@@ -79,18 +84,12 @@ class AssistantTest < ActiveSupport::TestCase
       previous_response_id: "1"
     ))
 
-    sequence = sequence("provider_chat_response")
-
     @provider.expects(:chat_response).with do |message, **options|
+      options[:streamer].call(call1_response_chunk)
       options[:streamer].call(call2_text_chunk)
       options[:streamer].call(call2_response_chunk)
       true
-    end.returns(nil).once.in_sequence(sequence)
-
-    @provider.expects(:chat_response).with do |message, **options|
-      options[:streamer].call(call1_response_chunk)
-      true
-    end.returns(nil).once.in_sequence(sequence)
+    end.returns(nil)
 
     assert_difference "AssistantMessage.count", 1 do
       @assistant.respond_to(@message)

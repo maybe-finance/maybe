@@ -1,219 +1,71 @@
-# Orchestrates LLM interactions for chat conversations by:
-# - Streaming generic provider responses
-# - Persisting messages and tool calls
-# - Broadcasting updates to chat UI
-# - Handling provider errors
 class Assistant
-  include Provided
+  include Provided, Configurable
 
-  attr_reader :chat
+  attr_reader :chat, :instructions
 
   class << self
     def for_chat(chat)
-      new(chat)
+      config = config_for(chat)
+      new(chat, instructions: config[:instructions], functions: config[:functions])
     end
   end
 
-  def initialize(chat)
+  def initialize(chat, instructions: nil, functions: [])
     @chat = chat
-  end
-
-  class ToolCaller
-    def initialize(functions: [])
-      @functions = functions
-    end
-
-    def call_function(function_request)
-      name = function_request.function_name
-      args = JSON.parse(function_request.function_arguments)
-      fn = get_function(name)
-      result = fn.call(args)
-
-      ToolCall::Function.new(
-        provider_id: function_request.id,
-        provider_call_id: function_request.call_id,
-        function_name: name,
-        function_arguments: args,
-        function_result: result
-      )
-    rescue => e
-      fn_execution_details = {
-        fn_name: name,
-        fn_args: args
-      }
-
-      message = "Error calling function #{name} with arguments #{args}: #{e.message}"
-
-      raise StandardError.new(message)
-    end
-
-    private
-      attr_reader :functions
-
-      def get_function(name)
-        functions.find { |f| f.name == name }
-      end
+    @instructions = instructions
+    @functions = functions
   end
 
   def respond_to(message)
-    chat.clear_error
+    pause_to_think
 
-    sleep artificial_thinking_delay
-
-    provider = get_model_provider(message.ai_model)
-
-    tool_caller = ToolCaller.new(functions: functions)
-
-    assistant_response = AssistantMessage.new(
-      chat: chat,
-      content: "",
-      ai_model: message.ai_model
-    )
-
-    streamer2 = proc do |chunk|
-      case chunk.type
-      when "output_text"
-        stop_thinking
-        assistant_response.content += chunk.data
-        assistant_response.save!
-      when "response"
-        stop_thinking
-        chat.update!(latest_assistant_response_id: chunk.data.id)
-      end
-    end
-
-    streamer1 = proc do |chunk|
-      case chunk.type
-      when "output_text"
-        stop_thinking
-        assistant_response.content += chunk.data
-        assistant_response.save!
-      when "response"
-        if chunk.data.function_requests.any?
-          update_thinking("Analyzing your data to assist you with your question...")
-
-          tool_calls = chunk.data.function_requests.map do |fn_request|
-            tool_caller.call_function(fn_request)
-          end
-
-          assistant_response.tool_calls = tool_calls
-          assistant_response.save!
-
-          provider.chat_response(
-            message.content,
-            model: message.ai_model,
-            instructions: instructions,
-            functions: functions.map(&:to_h),
-            function_results: tool_calls.map(&:to_h),
-            streamer: streamer2
-          )
-        else
-          stop_thinking
-        end
-
-        chat.update!(latest_assistant_response_id: chunk.data.id)
-      end
-    end
-
-    provider.chat_response(
-      message.content,
+    streamer = Assistant::ResponseStreamer.new(
+      prompt: message.content,
       model: message.ai_model,
-      instructions: instructions,
-      functions: functions.map(&:to_h),
-      function_results: [],
-      streamer: streamer1
+      assistant: self,
     )
+
+    streamer.stream_response
   rescue => e
     chat.add_error(e)
   end
 
+  def fulfill_function_requests(function_requests)
+    function_requests.map do |fn_request|
+      result = function_executor.execute(fn_request)
+
+      ToolCall::Function.new(
+        provider_id: fn_request.id,
+        provider_call_id: fn_request.call_id,
+        function_name: fn_request.function_name,
+        function_arguments: fn_request.function_arguments,
+        function_result: result
+      )
+    end
+  end
+
+  def callable_functions
+    functions.map do |fn|
+      fn.new(chat.user)
+    end
+  end
+
+  def update_thinking(thought)
+    chat.broadcast_update target: "thinking-indicator", partial: "chats/thinking_indicator", locals: { chat: chat, message: thought }
+  end
+
+  def stop_thinking
+    chat.broadcast_remove target: "thinking-indicator"
+  end
+
   private
-    def update_thinking(thought)
-      chat.broadcast_update target: "thinking-indicator", partial: "chats/thinking_indicator", locals: { chat: chat, message: thought }
+    attr_reader :functions
+
+    def function_executor
+      @function_executor ||= FunctionExecutor.new(callable_functions)
     end
 
-    def stop_thinking
-      chat.broadcast_remove target: "thinking-indicator"
-    end
-
-    def instructions
-      <<~PROMPT
-        ## Your identity
-
-        You are a friendly financial assistant for an open source personal finance application called "Maybe", which is short for "Maybe Finance".
-
-        ## Your purpose
-
-        You help users understand their financial data by answering questions about their accounts,
-        transactions, income, expenses, net worth, and more.
-
-        ## Your rules
-
-        Follow all rules below at all times.
-
-        ### General rules
-
-        - Provide ONLY the most important numbers and insights
-        - Eliminate all unnecessary words and context
-        - Ask follow-up questions to keep the conversation going. Help educate the user about their own data and entice them to ask more questions.
-        - Do NOT add introductions or conclusions
-        - Do NOT apologize or explain limitations
-
-        ### Formatting rules
-
-        - Format all responses in markdown
-        - Format all monetary values according to the user's preferred currency
-        - Format dates in the user's preferred format: #{preferred_date_format}
-
-        #### User's preferred currency
-
-        Maybe is a multi-currency app where each user has a "preferred currency" setting.
-
-        When no currency is specified, use the user's preferred currency for formatting and displaying monetary values.
-
-        - Symbol: #{preferred_currency.symbol}
-        - ISO code: #{preferred_currency.iso_code}
-        - Default precision: #{preferred_currency.default_precision}
-        - Default format: #{preferred_currency.default_format}
-          - Separator: #{preferred_currency.separator}
-          - Delimiter: #{preferred_currency.delimiter}
-
-        ### Rules about financial advice
-
-        You are NOT a licensed financial advisor and therefore, you should not provide any specific investment advice (such as "buy this stock", "sell that bond", "invest in crypto", etc.).
-
-        Instead, you should focus on educating the user about personal finance using their own data so they can make informed decisions.
-
-        - Do not suggest investments or financial products
-        - Do not make assumptions about the user's financial situation. Use the functions available to get the data you need.
-
-        ### Function calling rules
-
-        - Use the functions available to you to get user financial data and enhance your responses
-        - For functions that require dates, use the current date as your reference point: #{Date.current}
-        - If you suspect that you do not have enough data to 100% accurately answer, be transparent about it and state exactly what
-          the data you're presenting represents and what context it is in (i.e. date range, account, etc.)
-      PROMPT
-    end
-
-    def functions
-      [
-        Assistant::Function::GetTransactions.new(chat.user),
-        Assistant::Function::GetAccounts.new(chat.user),
-        Assistant::Function::GetBalanceSheet.new(chat.user),
-        Assistant::Function::GetIncomeStatement.new(chat.user)
-      ]
-    end
-
-    def preferred_currency
-      Money::Currency.new(chat.user.family.currency)
-    end
-
-    def preferred_date_format
-      chat.user.family.date_format
-    end
-
-    def artificial_thinking_delay
-      1
+    def pause_to_think
+      sleep 1
     end
 end
