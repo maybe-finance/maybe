@@ -30,6 +30,7 @@ export default class extends Controller {
     this.contentTarget.style.maxWidth = `${this.#contentMaxWidth()}px`;
     this.leftPanelTarget.style.width = `${this.#leftPanelWidth()}px`;
     this.rightPanelTarget.style.width = `${this.#rightPanelWidth()}px`;
+    this.rightPanelTarget.style.overflow = this.#rightPanelOverflow();
   }
 
   #leftPanelWidth() {
@@ -50,6 +51,14 @@ export default class extends Controller {
     }
 
     return 0;
+  }
+
+  #rightPanelOverflow() {
+    if (this.rightPanelOpen) {
+      return "auto";
+    }
+
+    return "hidden";
   }
 
   #contentMaxWidth() {

@@ -190,7 +190,8 @@ module ApplicationHelper
         is_open: right_sidebar_showing,
         initial_width: right_panel_width,
         min_width: right_panel_min_width,
-        max_width: right_panel_max_width
+        max_width: right_panel_max_width,
+        overflow: right_sidebar_showing ? "auto" : "hidden"
       },
       content_max_width: content_max_width
     }

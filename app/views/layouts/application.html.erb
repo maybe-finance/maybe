@@ -67,7 +67,7 @@
 
     <%# AI chat sidebar %>
     <%= tag.div id: "chat-container",
-                style: "width: #{sidebar_config.dig(:right_panel, :initial_width)}px",
+                style: "width: #{sidebar_config.dig(:right_panel, :initial_width)}px; overflow: #{sidebar_config.dig(:right_panel, :overflow)}",
                 class: class_names("flex flex-col justify-between shrink-0 transition-all duration-300"),
                 data: { controller: "chat hotkey", sidebar_target: "rightPanel", turbo_permanent: true } do %>
 
