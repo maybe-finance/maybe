@@ -34,6 +34,15 @@ class Assistant::Function
     true
   end
 
+  def to_definition
+    {
+      name: name,
+      description: description,
+      params_schema: params_schema,
+      strict: strict_mode?
+    }
+  end
+
   private
     attr_reader :user
 

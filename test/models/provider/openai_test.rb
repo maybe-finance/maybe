@@ -6,16 +6,11 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
   setup do
     @subject = @openai = Provider::Openai.new(ENV.fetch("OPENAI_ACCESS_TOKEN", "test-openai-token"))
     @subject_model = "gpt-4o"
-    @chat = chats(:two)
   end
 
   test "openai errors are automatically raised" do
     VCR.use_cassette("openai/chat/error") do
-      response = @openai.chat_response(UserMessage.new(
-        chat: @chat,
-        content: "Error test",
-        ai_model: "invalid-model-that-will-trigger-api-error"
-      ))
+      response = @openai.chat_response("Test", model: "invalid-model-that-will-trigger-api-error")
 
       assert_not response.success?
       assert_kind_of Provider::Openai::Error, response.error
@@ -24,113 +19,145 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
 
   test "basic chat response" do
     VCR.use_cassette("openai/chat/basic_response") do
-      message = @chat.messages.create!(
-        type: "UserMessage",
-        content: "This is a chat test.  If it's working, respond with a single word: Yes",
-        ai_model: @subject_model
+      response = @subject.chat_response(
+        "This is a chat test.  If it's working, respond with a single word: Yes",
+        model: @subject_model
       )
-
-      response = @subject.chat_response(message)
 
       assert response.success?
       assert_equal 1, response.data.messages.size
-      assert_includes response.data.messages.first.content, "Yes"
+      assert_includes response.data.messages.first.output_text, "Yes"
     end
   end
 
   test "streams basic chat response" do
-    VCR.use_cassette("openai/chat/basic_response") do
+    VCR.use_cassette("openai/chat/basic_streaming_response") do
       collected_chunks = []
 
       mock_streamer = proc do |chunk|
         collected_chunks << chunk
       end
 
-      message = @chat.messages.create!(
-        type: "UserMessage",
-        content: "This is a chat test.  If it's working, respond with a single word: Yes",
-        ai_model: @subject_model
+      response = @subject.chat_response(
+        "This is a chat test.  If it's working, respond with a single word: Yes",
+        model: @subject_model,
+        streamer: mock_streamer
       )
 
-      @subject.chat_response(message, streamer: mock_streamer)
-
-      tool_call_chunks = collected_chunks.select { |chunk| chunk.type == "function_request" }
       text_chunks = collected_chunks.select { |chunk| chunk.type == "output_text" }
       response_chunks = collected_chunks.select { |chunk| chunk.type == "response" }
 
       assert_equal 1, text_chunks.size
       assert_equal 1, response_chunks.size
-      assert_equal 0, tool_call_chunks.size
       assert_equal "Yes", text_chunks.first.data
-      assert_equal "Yes", response_chunks.first.data.messages.first.content
+      assert_equal "Yes", response_chunks.first.data.messages.first.output_text
+      assert_equal response_chunks.first.data, response.data
     end
   end
 
-  test "chat response with tool calls" do
-    VCR.use_cassette("openai/chat/tool_calls") do
-      response = @subject.chat_response(
-        tool_call_message,
+  test "chat response with function calls" do
+    VCR.use_cassette("openai/chat/function_calls") do
+      prompt = "What is my net worth?"
+
+      functions = [
+        {
+          name: "get_net_worth",
+          description: "Gets a user's net worth",
+          params_schema: { type: "object", properties: {}, required: [], additionalProperties: false },
+          strict: true
+        }
+      ]
+
+      first_response = @subject.chat_response(
+        prompt,
+        model: @subject_model,
         instructions: "Use the tools available to you to answer the user's question.",
-        available_functions: [ PredictableToolFunction.new(@chat) ]
+        functions: functions
       )
 
-      assert response.success?
-      assert_equal 1, response.data.functions.size
-      assert_equal 1, response.data.messages.size
-      assert_includes response.data.messages.first.content, PredictableToolFunction.expected_test_result
+      assert first_response.success?
+
+      function_request = first_response.data.function_requests.first
+
+      assert function_request.present?
+
+      second_response = @subject.chat_response(
+        prompt,
+        model: @subject_model,
+        function_results: [ {
+          call_id: function_request.call_id,
+          output: { amount: 10000, currency: "USD" }.to_json
+        } ],
+        previous_response_id: first_response.data.id
+      )
+
+      assert second_response.success?
+      assert_equal 1, second_response.data.messages.size
+      assert_includes second_response.data.messages.first.output_text, "$10,000"
     end
   end
 
-  test "streams chat response with tool calls" do
-    VCR.use_cassette("openai/chat/tool_calls") do
+  test "streams chat response with function calls" do
+    VCR.use_cassette("openai/chat/streaming_function_calls") do
       collected_chunks = []
 
       mock_streamer = proc do |chunk|
         collected_chunks << chunk
       end
 
+      prompt = "What is my net worth?"
+
+      functions = [
+        {
+          name: "get_net_worth",
+          description: "Gets a user's net worth",
+          params_schema: { type: "object", properties: {}, required: [], additionalProperties: false },
+          strict: true
+        }
+      ]
+
+      # Call #1: First streaming call, will return a function request
       @subject.chat_response(
-        tool_call_message,
+        prompt,
+        model: @subject_model,
         instructions: "Use the tools available to you to answer the user's question.",
-        available_functions: [ PredictableToolFunction.new(@chat) ],
+        functions: functions,
         streamer: mock_streamer
       )
 
       text_chunks = collected_chunks.select { |chunk| chunk.type == "output_text" }
-      text_chunks = collected_chunks.select { |chunk| chunk.type == "output_text" }
-      tool_call_chunks = collected_chunks.select { |chunk| chunk.type == "function_request" }
       response_chunks = collected_chunks.select { |chunk| chunk.type == "response" }
 
-      assert_equal 1, tool_call_chunks.count
-      assert text_chunks.count >= 1
-      assert_equal 1, response_chunks.count
+      assert_equal 0, text_chunks.size
+      assert_equal 1, response_chunks.size
 
-      assert_includes response_chunks.first.data.messages.first.content, PredictableToolFunction.expected_test_result
+      first_response = response_chunks.first.data
+      function_request = first_response.function_requests.first
+
+      # Reset collected chunks for the second call
+      collected_chunks = []
+
+      # Call #2: Second streaming call, will return a function result
+      @subject.chat_response(
+        prompt,
+        model: @subject_model,
+        function_results: [
+          {
+            call_id: function_request.call_id,
+            output: { amount: 10000, currency: "USD" }
+          }
+        ],
+        previous_response_id: first_response.id,
+        streamer: mock_streamer
+      )
+
+      text_chunks = collected_chunks.select { |chunk| chunk.type == "output_text" }
+      response_chunks = collected_chunks.select { |chunk| chunk.type == "response" }
+
+      assert text_chunks.size >= 1
+      assert_equal 1, response_chunks.size
+
+      assert_includes response_chunks.first.data.messages.first.output_text, "$10,000"
     end
   end
-
-  private
-    def tool_call_message
-      UserMessage.new(chat: @chat, content: "What is my net worth?", ai_model: @subject_model)
-    end
-
-    class PredictableToolFunction < Assistant::Function
-      class << self
-        def expected_test_result
-          "$124,200"
-        end
-
-        def name
-          "get_net_worth"
-        end
-
-        def description
-          "Gets user net worth data"
-        end
-      end
-
-      def call(params = {})
-        self.class.expected_test_result
-      end
-    end
 end

@@ -5,7 +5,8 @@ class AssistantMessage < Message
     "assistant"
   end
 
-  def broadcast?
-    true
+  def append_text!(text)
+    self.content += text
+    save!
   end
 end

@@ -1,5 +1,5 @@
 class Provider::Synth < Provider
-  include ExchangeRateProvider, SecurityProvider
+  include ExchangeRateConcept, SecurityConcept
 
   # Subclass so errors caught in this provider are raised as Provider::Synth::Error
   Error = Class.new(Provider::Error)

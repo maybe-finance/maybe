@@ -17,6 +17,7 @@
 
     <div class="flex items-start mb-6">
       <%= render "chats/ai_avatar" %>
+
       <div class="prose prose--ai-chat"><%= markdown(assistant_message.content) %></div>
     </div>
   <% end %>

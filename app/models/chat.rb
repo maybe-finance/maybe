@@ -23,13 +23,23 @@ class Chat < ApplicationRecord
     end
   end
 
+  def needs_assistant_response?
+    conversation_messages.ordered.last.role != "assistant"
+  end
+
   def retry_last_message!
+    update!(error: nil)
+
     last_message = conversation_messages.ordered.last
 
     if last_message.present? && last_message.role == "user"
-      update!(error: nil)
+
       ask_assistant_later(last_message)
     end
+  end
+
+  def update_latest_response!(provider_response_id)
+    update!(latest_assistant_response_id: provider_response_id)
   end
 
   def add_error(e)
@@ -47,6 +57,7 @@ class Chat < ApplicationRecord
   end
 
   def ask_assistant_later(message)
+    clear_error
     AssistantResponseJob.perform_later(message)
   end
 
