@@ -1,6 +1,4 @@
 class Provider
-  include Retryable
-
   Response = Data.define(:success?, :data, :error)
 
   class Error < StandardError
@@ -23,17 +21,8 @@ class Provider
     PaginatedData = Data.define(:paginated, :first_page, :total_pages)
     UsageData = Data.define(:used, :limit, :utilization, :plan)
 
-    # Subclasses can specify errors that can be retried
-    def retryable_errors
-      []
-    end
-
-    def with_provider_response(retries: default_retries, error_transformer: nil, &block)
-      data = if retries > 0
-        retrying(retryable_errors, max_retries: retries) { yield }
-      else
-        yield
-      end
+    def with_provider_response(error_transformer: nil, &block)
+      data = yield
 
       Response.new(
         success?: true,
@@ -66,10 +55,5 @@ class Provider
       else
         self.class::Error.new(error.message)
       end
-    end
-
-    # Override to set class-level number of retries for methods using `with_provider_response`
-    def default_retries
-      0
     end
 end

@@ -39,7 +39,7 @@ class Provider::Synth < Provider
   # ================================
 
   def fetch_exchange_rate(from:, to:, date:)
-    with_provider_response retries: 2 do
+    with_provider_response do
       response = client.get("#{base_url}/rates/historical") do |req|
         req.params["date"] = date.to_s
         req.params["from"] = from
@@ -53,7 +53,7 @@ class Provider::Synth < Provider
   end
 
   def fetch_exchange_rates(from:, to:, start_date:, end_date:)
-    with_provider_response retries: 1 do
+    with_provider_response do
       data = paginate(
         "#{base_url}/rates/historical-range",
         from: from,
@@ -128,7 +128,7 @@ class Provider::Synth < Provider
   end
 
   def fetch_security_prices(security, start_date:, end_date:)
-    with_provider_response retries: 1 do
+    with_provider_response do
       params = {
         start_date: start_date,
         end_date: end_date
@@ -191,14 +191,6 @@ class Provider::Synth < Provider
 
     TransactionEnrichmentData = Data.define(:name, :icon_url, :category)
 
-    def retryable_errors
-      [
-        Faraday::TimeoutError,
-        Faraday::ConnectionFailed,
-        Faraday::SSLError
-      ]
-    end
-
     def base_url
       ENV["SYNTH_URL"] || "https://api.synthfinance.com"
     end
@@ -213,6 +205,13 @@ class Provider::Synth < Provider
 
     def client
       @client ||= Faraday.new(url: base_url) do |faraday|
+        faraday.request(:retry, {
+          max: 2,
+          interval: 0.05,
+          interval_randomness: 0.5,
+          backoff_factor: 2
+        })
+
         faraday.response :raise_error
         faraday.headers["Authorization"] = "Bearer #{api_key}"
         faraday.headers["X-Source"] = app_name
