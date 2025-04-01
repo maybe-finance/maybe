@@ -134,7 +134,7 @@ class Provider::Synth < Provider
         end_date: end_date
       }
 
-      params[:operating_mic_code] = security.exchange_operating_mic if security.exchange_operating_mic.present?
+      params[:mic_code] = security.exchange_operating_mic if security.exchange_operating_mic.present?
 
       data = paginate(
         "#{base_url}/tickers/#{security.ticker}/open-close",
