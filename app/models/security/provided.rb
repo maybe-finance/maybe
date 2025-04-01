@@ -71,6 +71,8 @@ module Security::Provided
 
     return price if price.present?
 
+    # Make sure we have a data provider before fetching
+    return nil unless provider.present?
     response = provider.fetch_security_price(self, date: date)
 
     return nil unless response.success? # Provider error
