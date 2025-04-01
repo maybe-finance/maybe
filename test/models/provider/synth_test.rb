@@ -11,6 +11,9 @@ class Provider::SynthTest < ActiveSupport::TestCase
   test "health check" do
     VCR.use_cassette("synth/health") do
       assert @synth.healthy?
+  test "health check" do
+    VCR.use_cassette("synth/health") do
+      assert @synth.healthy?
     end
   end
 
@@ -21,23 +24,6 @@ class Provider::SynthTest < ActiveSupport::TestCase
       assert usage.limit.present?
       assert usage.utilization.present?
       assert usage.plan.present?
-    end
-  end
-
-  test "enriches transaction" do
-    VCR.use_cassette("synth/transaction_enrich") do
-      response = @synth.enrich_transaction(
-        "UBER EATS",
-        amount: 25.50,
-        date: Date.iso8601("2025-03-16"),
-        city: "San Francisco",
-        state: "CA",
-        country: "US"
-      )
-
-      data = response.data
-      assert data.name.present?
-      assert data.category.present?
     end
   end
 end

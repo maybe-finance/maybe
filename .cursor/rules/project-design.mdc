@@ -116,7 +116,7 @@ The most important type of sync is the account sync.  It is orchestrated by the 
 - Auto-matches transfer records for the account
 - Calculates daily [balance.rb](mdc:app/models/account/balance.rb) records for the account from `account.start_date` to `Date.current` using [base_calculator.rb](mdc:app/models/account/balance/base_calculator.rb)
   - Balances are dependent on the calculation of [holding.rb](mdc:app/models/account/holding.rb), which uses [base_calculator.rb](mdc:app/models/account/holding/base_calculator.rb) 
-- Enriches transaction data if enabled by user
+- Updates data according to rules created by user
 
 An account sync happens every time an [entry.rb](mdc:app/models/account/entry.rb) is updated.
 

@@ -152,7 +152,7 @@ class Demo::Generator
       Security::Price.destroy_all
     end
 
-    def create_family_and_user!(family_name, user_email, data_enrichment_enabled: false, currency: "USD")
+    def create_family_and_user!(family_name, user_email, currency: "USD")
       base_uuid = "d99e3c6e-d513-4452-8f24-dc263f8528c0"
       id = Digest::UUID.uuid_v5(base_uuid, family_name)
 
@@ -161,7 +161,6 @@ class Demo::Generator
         name: family_name,
         currency: currency,
         stripe_subscription_status: "active",
-        data_enrichment_enabled: data_enrichment_enabled,
         locale: "en",
         country: "US",
         timezone: "America/New_York",
