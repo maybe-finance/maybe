@@ -16,13 +16,11 @@ class Rule::Condition < ApplicationRecord
 
     case condition_type
     when "compound"
-      sub_conditions.each do |sub_condition|
-        filtered_scope = sub_condition.apply(filtered_scope)
-      end
+      filtered_scope = build_compound_scope(filtered_scope)
     when "transaction_name"
-      filtered_scope = filtered_scope.with_entry.where("account_entries.name #{Arel.sql(sanitize_operator(operator))} ?", value)
+      filtered_scope = filtered_scope.where("account_entries.name #{Arel.sql(sanitize_operator(operator))} ?", value)
     when "transaction_amount"
-      filtered_scope = filtered_scope.with_entry.where("account_entries.amount #{Arel.sql(sanitize_operator(operator))} ?", value.to_d)
+      filtered_scope = filtered_scope.where("account_entries.amount #{Arel.sql(sanitize_operator(operator))} ?", value.to_d)
     when "transaction_merchant"
       filtered_scope = filtered_scope.left_joins(:merchant).where(merchant: { name: value })
     else
@@ -36,5 +34,29 @@ class Rule::Condition < ApplicationRecord
     def sanitize_operator(operator)
       raise UnsupportedOperatorError, "Unsupported operator: #{operator}" unless OPERATORS.include?(operator)
       operator
+    end
+
+    def build_compound_scope(filtered_scope)
+      if operator == "or"
+        combined_scope = nil
+
+        sub_conditions.each do |sub_condition|
+          sub_scope = sub_condition.apply(filtered_scope)
+
+          if combined_scope.nil?
+            combined_scope = sub_scope
+          else
+            combined_scope = combined_scope.or(sub_scope)
+          end
+        end
+
+        filtered_scope = combined_scope || filtered_scope
+      else
+        sub_conditions.each do |sub_condition|
+          filtered_scope = sub_condition.apply(filtered_scope)
+        end
+      end
+
+      filtered_scope
     end
 end

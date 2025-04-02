@@ -1,12 +1,11 @@
 class Rule < ApplicationRecord
-  RESOURCE_TYPES = %w[transaction].freeze
+  UnsupportedResourceTypeError = Class.new(StandardError)
 
   belongs_to :family
   has_many :conditions, dependent: :destroy
   has_many :actions, dependent: :destroy
 
-  validates :effective_date, presence: true
-  validates :resource_type, inclusion: { in: RESOURCE_TYPES }
+  validates :resource_type, presence: true
 
   def apply
     scope = resource_scope
@@ -20,11 +19,15 @@ class Rule < ApplicationRecord
     end
   end
 
-  private
-    def resource_scope
-      case resource_type
-      when "transaction"
-        family.transactions
-      end
+  def resource_scope
+    case resource_type
+    when "transaction"
+      family.transactions
+            .active
+            .with_entry
+            .where(account_entries: { date: effective_date..nil })
+    else
+      raise UnsupportedResourceTypeError, "Unsupported resource type: #{resource_type}"
     end
+  end
 end

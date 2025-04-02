@@ -8,9 +8,8 @@ class Rule::Action < ApplicationRecord
   def apply(resource_scope)
     case action_type
     when "set_transaction_category"
-      category = rule.family.categories.find_by(name: value)
-      raise "Category not found: #{value}" unless category
-      resource_scope.update_all(category_id: category.id)
+      category = rule.family.categories.find(value)
+      resource_scope.update_all(category_id: category.id, updated_at: Time.current)
     when "set_transaction_tags"
       # TODO
     when "set_transaction_frequency"

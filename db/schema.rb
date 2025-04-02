@@ -492,7 +492,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_01_194500) do
   create_table "rules", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "family_id", null: false
     t.string "resource_type", null: false
-    t.date "effective_date", null: false
+    t.date "effective_date"
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

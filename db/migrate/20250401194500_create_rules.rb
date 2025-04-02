@@ -4,7 +4,7 @@ class CreateRules < ActiveRecord::Migration[7.2]
       t.references :family, null: false, foreign_key: true, type: :uuid
 
       t.string :resource_type, null: false
-      t.date :effective_date, null: false
+      t.date :effective_date
       t.boolean :active, null: false, default: true
       t.timestamps
     end
