@@ -40,7 +40,7 @@ class Demo::Generator
         create_tags!(family)
         create_categories!(family)
         create_merchants!(family)
-
+        create_rules!(family)
         puts "tags, categories, merchants created for #{family_name}"
 
         create_credit_card_account!(family)
@@ -182,6 +182,19 @@ class Demo::Generator
         role: "member",
         password: "password",
         onboarded_at: Time.current
+    end
+
+    def create_rules!(family)
+      family.rules.create!(
+        effective_date: 1.year.ago.to_date,
+        active: true,
+        conditions: [
+          Rule::Condition.new(condition_type: "match_merchant", value: "Whole Foods")
+        ],
+        actions: [
+          Rule::Action.new(action_type: "set_category", value: "Groceries")
+        ]
+      )
     end
 
     def create_tags!(family)

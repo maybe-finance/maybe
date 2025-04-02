@@ -468,24 +468,30 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_212839) do
     t.index ["outflow_transaction_id"], name: "index_rejected_transfers_on_outflow_transaction_id"
   end
 
-  create_table "rule_actions", force: :cascade do |t|
+  create_table "rule_actions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "rule_id", null: false
     t.string "action_type", null: false
+    t.string "value", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["rule_id"], name: "index_rule_actions_on_rule_id"
   end
 
-  create_table "rule_triggers", force: :cascade do |t|
-    t.uuid "rule_id", null: false
-    t.string "trigger_type", null: false
+  create_table "rule_conditions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "rule_id"
+    t.uuid "parent_id"
+    t.string "condition_type", null: false
+    t.string "operator", null: false
+    t.string "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["rule_id"], name: "index_rule_triggers_on_rule_id"
+    t.index ["parent_id"], name: "index_rule_conditions_on_parent_id"
+    t.index ["rule_id"], name: "index_rule_conditions_on_rule_id"
   end
 
   create_table "rules", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "family_id", null: false
+    t.string "resource_type", null: false
     t.date "effective_date", null: false
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
@@ -687,7 +693,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_212839) do
   add_foreign_key "rejected_transfers", "account_transactions", column: "inflow_transaction_id"
   add_foreign_key "rejected_transfers", "account_transactions", column: "outflow_transaction_id"
   add_foreign_key "rule_actions", "rules"
-  add_foreign_key "rule_triggers", "rules"
+  add_foreign_key "rule_conditions", "rule_conditions", column: "parent_id"
+  add_foreign_key "rule_conditions", "rules"
   add_foreign_key "rules", "families"
   add_foreign_key "security_prices", "securities"
   add_foreign_key "sessions", "impersonation_sessions", column: "active_impersonator_session_id"
