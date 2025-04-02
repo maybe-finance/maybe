@@ -188,11 +188,12 @@ class Demo::Generator
       family.rules.create!(
         effective_date: 1.year.ago.to_date,
         active: true,
+        resource_type: "transaction",
         conditions: [
-          Rule::Condition.new(condition_type: "match_merchant", value: "Whole Foods")
+          Rule::Condition.new(condition_type: "transaction_merchant", operator: "=", value: "Whole Foods")
         ],
         actions: [
-          Rule::Action.new(action_type: "set_category", value: "Groceries")
+          Rule::Action.new(action_type: "set_transaction_category", value: "Groceries")
         ]
       )
     end
