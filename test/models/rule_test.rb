@@ -10,15 +10,15 @@ class RuleTest < ActiveSupport::TestCase
     @groceries_category = @family.categories.create!(name: "Groceries")
   end
 
-  test "can apply categories to transactions" do
+  test "basic rule" do
     transaction_entry = create_transaction(date: Date.current, account: @account, merchant: @whole_foods_merchant)
 
     rule = Rule.create!(
       family: @family,
       resource_type: "transaction",
       effective_date: 1.day.ago.to_date,
-      conditions: [ Rule::Condition.new(condition_type: "match_merchant", operator: "eq", value: "Whole Foods") ],
-      actions: [ Rule::Action.new(action_type: "set_category", value: "Groceries") ]
+      conditions: [ Rule::Condition.new(condition_type: "transaction_merchant", operator: "=", value: "Whole Foods") ],
+      actions: [ Rule::Action.new(action_type: "set_transaction_category", value: "Groceries") ]
     )
 
     rule.apply
@@ -28,7 +28,7 @@ class RuleTest < ActiveSupport::TestCase
     assert_equal @groceries_category, transaction_entry.account_transaction.category
   end
 
-  test "can create compound rules" do
+  test "compound rule" do
     transaction_entry1 = create_transaction(date: Date.current, amount: 50, account: @account, merchant: @whole_foods_merchant)
     transaction_entry2 = create_transaction(date: Date.current, amount: 100, account: @account, merchant: @whole_foods_merchant)
 
@@ -38,12 +38,12 @@ class RuleTest < ActiveSupport::TestCase
       resource_type: "transaction",
       effective_date: 1.day.ago.to_date,
       conditions: [
-        Rule::Condition.new(condition_type: "compound", operator: "and", conditions: [
-          Rule::Condition.new(condition_type: "match_merchant", operator: "eq", value: "Whole Foods"),
-          Rule::Condition.new(condition_type: "compare_amount", operator: "gt", value: 60)
+        Rule::Condition.new(condition_type: "compound", operator: "and", sub_conditions: [
+          Rule::Condition.new(condition_type: "transaction_merchant", operator: "=", value: "Whole Foods"),
+          Rule::Condition.new(condition_type: "transaction_amount", operator: ">", value: 60)
         ])
       ],
-      actions: [ Rule::Action.new(action_type: "set_category", value: "Groceries") ]
+      actions: [ Rule::Action.new(action_type: "set_transaction_category", value: "Groceries") ]
     )
 
     rule.apply

@@ -1,11 +1,40 @@
 class Rule::Condition < ApplicationRecord
-  OPERATORS = [ "and", "or", "gt", "lt", "eq" ]
-  TYPES = [ "match_merchant", "compare_amount", "compound" ]
+  UnsupportedOperatorError = Class.new(StandardError)
+  UnsupportedConditionTypeError = Class.new(StandardError)
 
-  belongs_to :rule, optional: true
+  OPERATORS = [ "and", "or", "like", ">", ">=", "<", "<=", "=" ]
+
+  belongs_to :rule, optional: -> { where.not(parent_id: nil) }
   belongs_to :parent, class_name: "Rule::Condition", optional: true
-  has_many :conditions, class_name: "Rule::Condition", foreign_key: :parent_id, dependent: :destroy
+  has_many :sub_conditions, class_name: "Rule::Condition", foreign_key: :parent_id, dependent: :destroy
 
   validates :operator, inclusion: { in: OPERATORS }, allow_nil: true
-  validates :condition_type, presence: true, inclusion: { in: TYPES }
+  validates :condition_type, presence: true
+
+  def apply(resource_scope)
+    filtered_scope = resource_scope
+
+    case condition_type
+    when "compound"
+      sub_conditions.each do |sub_condition|
+        filtered_scope = sub_condition.apply(filtered_scope)
+      end
+    when "transaction_name"
+      filtered_scope = filtered_scope.with_entry.where("account_entries.name #{Arel.sql(sanitize_operator(operator))} ?", value)
+    when "transaction_amount"
+      filtered_scope = filtered_scope.with_entry.where("account_entries.amount #{Arel.sql(sanitize_operator(operator))} ?", value.to_d)
+    when "transaction_merchant"
+      filtered_scope = filtered_scope.left_joins(:merchant).where(merchant: { name: value })
+    else
+      raise UnsupportedConditionTypeError, "Unsupported condition type: #{condition_type}"
+    end
+
+    filtered_scope
+  end
+
+  private
+    def sanitize_operator(operator)
+      raise UnsupportedOperatorError, "Unsupported operator: #{operator}" unless OPERATORS.include?(operator)
+      operator
+    end
 end
