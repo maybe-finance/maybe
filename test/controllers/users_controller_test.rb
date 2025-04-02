@@ -50,7 +50,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_not Account.exists?(account.id)
     assert_not Category.exists?(category.id)
     assert_not Tag.exists?(tag.id)
-    assert_not Merchant.exists?(merchant.id)
     assert_not Import.exists?(import.id)
     assert_not Budget.exists?(budget.id)
     assert_not PlaidItem.exists?(plaid_item.id)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_01_194500) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_02_195137) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -80,8 +80,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_01_194500) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "category_id"
+    t.uuid "legacy_merchant_id"
     t.uuid "merchant_id"
     t.index ["category_id"], name: "index_account_transactions_on_category_id"
+    t.index ["legacy_merchant_id"], name: "index_account_transactions_on_legacy_merchant_id"
     t.index ["merchant_id"], name: "index_account_transactions_on_merchant_id"
   end
 
@@ -372,6 +374,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_01_194500) do
     t.index ["token"], name: "index_invite_codes_on_token", unique: true
   end
 
+  create_table "legacy_merchants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "color", default: "#e99537", null: false
+    t.uuid "family_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "icon_url"
+    t.datetime "enriched_at"
+    t.index ["family_id"], name: "index_legacy_merchants_on_family_id"
+  end
+
   create_table "loans", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -382,13 +395,11 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_01_194500) do
 
   create_table "merchants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
-    t.string "color", default: "#e99537", null: false
-    t.uuid "family_id", null: false
+    t.string "website_url"
+    t.string "icon_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "icon_url"
-    t.datetime "enriched_at"
-    t.index ["family_id"], name: "index_merchants_on_family_id"
+    t.index ["name"], name: "index_merchants_on_name", unique: true
   end
 
   create_table "messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -668,6 +679,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_01_194500) do
   add_foreign_key "account_holdings", "securities"
   add_foreign_key "account_trades", "securities"
   add_foreign_key "account_transactions", "categories", on_delete: :nullify
+  add_foreign_key "account_transactions", "legacy_merchants"
   add_foreign_key "account_transactions", "merchants"
   add_foreign_key "accounts", "families"
   add_foreign_key "accounts", "imports"
@@ -686,7 +698,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_01_194500) do
   add_foreign_key "imports", "families"
   add_foreign_key "invitations", "families"
   add_foreign_key "invitations", "users", column: "inviter_id"
-  add_foreign_key "merchants", "families"
+  add_foreign_key "legacy_merchants", "families"
   add_foreign_key "messages", "chats"
   add_foreign_key "plaid_accounts", "plaid_items"
   add_foreign_key "plaid_items", "families"

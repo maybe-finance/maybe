@@ -34,7 +34,7 @@ en:
             is irreversible.
           title: Delete account?
         confirm_reset:
-          body: Are you sure you want to reset your account? This will delete all your accounts, categories, merchants, tags, and other data. This action cannot be undone.
+          body: Are you sure you want to reset your account? This will delete all your accounts, categories, tags, and other data. This action cannot be undone.
           title: Reset account?
         confirm_remove_invitation:
           body: Are you sure you want to remove the invitation for %{email}?
@@ -47,7 +47,7 @@ en:
         delete_account_warning: Deleting your account will permanently remove all
           your data and cannot be undone.
         reset_account: Reset account
-        reset_account_warning: Resetting your account will delete all your accounts, categories, merchants, tags, and other data, but keep your user account intact.
+        reset_account_warning: Resetting your account will delete all your accounts, categories, tags, and other data, but keep your user account intact.
         email: Email
         first_name: First Name
         household_form_input_placeholder: Enter household name

@@ -5,9 +5,10 @@
     <%= lucide_icon("search", class: "w-5 h-5 text-secondary absolute inset-y-0 left-2 top-1/2 transform -translate-y-1/2") %>
   </div>
   <div class="my-2" id="list" data-list-filter-target="list">
-    <% Current.family.merchants.alphabetically.each do |merchant| %>
-      <div class="filterable-item flex items-center gap-2 p-2" data-filter-name="<%= merchant.name %>">
-        <%= form.check_box :merchants,
+    <% if Current.family.merchants.any? %>
+      <% Current.family.merchants.alphabetically.each do |merchant| %>
+        <div class="filterable-item flex items-center gap-2 p-2" data-filter-name="<%= merchant.name %>">
+          <%= form.check_box :merchants,
                            {
                              multiple: true,
                              checked: @q[:merchants]&.include?(merchant.name),
@@ -15,10 +16,15 @@
                            },
                            merchant.name,
                            nil %>
-        <%= form.label :merchants, value: merchant.name, class: "text-sm text-primary flex items-center gap-2" do %>
-          <%= circle_logo(merchant.name, hex: merchant.color, size: "sm") %>
-          <%= merchant.name %>
-        <% end %>
+          <%= form.label :merchants, value: merchant.name, class: "text-sm text-primary flex items-center gap-2" do %>
+            <%= circle_logo(merchant.name, size: "sm") %>
+            <%= merchant.name %>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="px-3 py-2">
+        <p class="text-sm text-secondary">No merchants associated with your transactions yet</p>
       </div>
     <% end %>
   </div>

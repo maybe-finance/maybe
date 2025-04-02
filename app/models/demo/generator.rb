@@ -39,9 +39,9 @@ class Demo::Generator
       ActiveRecord::Base.transaction do
         create_tags!(family)
         create_categories!(family)
-        create_merchants!(family)
+        create_merchants!
         create_rules!(family)
-        puts "tags, categories, merchants created for #{family_name}"
+        puts "tags, categories, merchants created"
 
         create_credit_card_account!(family)
         create_checking_account!(family)
@@ -213,13 +213,13 @@ class Demo::Generator
       family.categories.create!(name: "Alcohol & Bars", parent: food, color: COLORS.sample, lucide_icon: "beer", classification: "expense")
     end
 
-    def create_merchants!(family)
+    def create_merchants!
       merchants = [ "Amazon", "Starbucks", "McDonald's", "Target", "Costco",
                    "Home Depot", "Shell", "Whole Foods", "Walgreens", "Nike",
                    "Uber", "Netflix", "Spotify", "Delta Airlines", "Airbnb", "Sephora" ]
 
       merchants.each do |merchant|
-        family.merchants.create!(name: merchant, color: COLORS.sample)
+        Merchant.find_or_create_by_normalized_name!(merchant)
       end
     end
 

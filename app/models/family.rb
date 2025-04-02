@@ -28,13 +28,17 @@ class Family < ApplicationRecord
 
   has_many :tags, dependent: :destroy
   has_many :categories, dependent: :destroy
-  has_many :merchants, dependent: :destroy
 
   has_many :budgets, dependent: :destroy
   has_many :budget_categories, through: :budgets
 
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }
   validates :date_format, inclusion: { in: DATE_FORMATS.map(&:last) }
+
+  def merchants
+    transaction_merchant_ids = self.transactions.where.not(merchant_id: nil).pluck(:merchant_id).uniq
+    Merchant.where(id: transaction_merchant_ids)
+  end
 
   def balance_sheet
     @balance_sheet ||= BalanceSheet.new(self)

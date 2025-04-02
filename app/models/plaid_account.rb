@@ -137,7 +137,7 @@ class PlaidAccount < ApplicationRecord
     def get_merchant(plaid_merchant_name)
       return nil if plaid_merchant_name.blank?
 
-      family.merchants.find_or_create_by!(name: plaid_merchant_name)
+      Merchant.find_or_create_by!(name: plaid_merchant_name)
     end
 
     def derive_plaid_cash_balance(plaid_balances)

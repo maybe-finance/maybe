@@ -1,7 +1,7 @@
 class Account::TransactionsController < ApplicationController
   include EntryableResource
 
-  permitted_entryable_attributes :id, :category_id, :merchant_id, { tag_ids: [] }
+  permitted_entryable_attributes :id, :category_id, { tag_ids: [] }
 
   def bulk_delete
     destroyed = Current.family.entries.destroy_by(id: bulk_delete_params[:entry_ids])
@@ -27,11 +27,11 @@ class Account::TransactionsController < ApplicationController
     end
 
     def bulk_update_params
-      params.require(:bulk_update).permit(:date, :notes, :category_id, :merchant_id, entry_ids: [])
+      params.require(:bulk_update).permit(:date, :notes, :category_id, entry_ids: [])
     end
 
     def search_params
       params.fetch(:q, {})
-            .permit(:start_date, :end_date, :search, :amount, :amount_operator, accounts: [], account_ids: [], categories: [], merchants: [], types: [], tags: [])
+            .permit(:start_date, :end_date, :search, :amount, :amount_operator, accounts: [], account_ids: [], categories: [], types: [], tags: [])
     end
 end

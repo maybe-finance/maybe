@@ -1,8 +1,8 @@
 <%= render "layouts/shared/htmldoc" do %>
   <% sidebar_config = app_sidebar_config(Current.user) %>
 
-  <div class="flex h-full bg-gray-50" 
-       data-controller="sidebar" 
+  <div class="flex h-full bg-gray-50"
+       data-controller="sidebar"
        data-sidebar-user-id-value="<%= Current.user.id %>"
        data-sidebar-config-value="<%= sidebar_config.to_json %>">
     <nav class="flex flex-col shrink-0 w-[84px] py-4 mr-3">
@@ -31,7 +31,7 @@
       </div>
     </nav>
 
-    <%= tag.div class: class_names("py-4 shrink-0 h-full overflow-y-auto transition-all duration-300"), 
+    <%= tag.div class: class_names("py-4 shrink-0 h-full overflow-y-auto transition-all duration-300"),
                 style: "width: #{sidebar_config.dig(:left_panel, :initial_width)}px",
                 data: { sidebar_target: "leftPanel" } do %>
       <% if content_for?(:sidebar) %>

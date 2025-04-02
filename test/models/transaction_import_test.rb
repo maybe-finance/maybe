@@ -63,7 +63,7 @@ class TransactionImportTest < ActiveSupport::TestCase
                       -> { Tag.count } => 1,
                       -> { Category.count } => 1,
                       -> { Account.count } => 1 do
-      @import.publish
+      result = @import.publish
     end
 
     assert_equal "complete", @import.status
