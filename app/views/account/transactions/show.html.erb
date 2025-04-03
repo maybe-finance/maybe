@@ -67,8 +67,11 @@
 
               <%= ef.collection_select :merchant_id,
                       Current.family.merchants.alphabetically,
-                      :id, :name,
-                      { label: "Merchant", class: "text-subdued" }, disabled: true %>
+                    :id, :name,
+                    { include_blank: t(".none"),
+                      label: t(".merchant_label"),
+                      class: "text-subdued" },
+                    "data-auto-submit-form-target": "auto" %>
 
               <%= ef.select :tag_ids,
                     Current.family.tags.alphabetically.pluck(:name, :id),

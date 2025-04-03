@@ -4,6 +4,7 @@ en:
     header:
       edit_categories: Edit categories
       edit_imports: Edit imports
+      edit_merchants: Edit merchants
       edit_tags: Edit tags
       import: Import
     index:

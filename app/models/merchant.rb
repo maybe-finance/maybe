@@ -1,24 +1,11 @@
 class Merchant < ApplicationRecord
   has_many :transactions, dependent: :nullify, class_name: "Account::Transaction"
+  belongs_to :family
 
-  validates :name, presence: true, uniqueness: true
+  validates :name, :color, :family, presence: true
+  validates :name, uniqueness: { scope: :family }
 
   scope :alphabetically, -> { order(:name) }
 
-  before_save :normalize_name
-
-  class << self
-    def normalize_name(name)
-      name.downcase.strip.titleize
-    end
-
-    def find_or_create_by_normalized_name!(name)
-      find_or_create_by!(name: normalize_name(name))
-    end
-  end
-
-  private
-    def normalize_name
-      self.name = self.class.normalize_name(name)
-    end
+  COLORS = %w[#e99537 #4da568 #6471eb #db5a54 #df4e92 #c44fe9 #eb5429 #61c9ea #805dee #6ad28a]
 end

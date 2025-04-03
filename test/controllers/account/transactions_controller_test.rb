@@ -49,7 +49,8 @@ class Account::TransactionsControllerTest < ActionDispatch::IntegrationTest
           entryable_attributes: {
             id: @entry.entryable_id,
             tag_ids: [ Tag.first.id, Tag.second.id ],
-            category_id: Category.first.id
+            category_id: Category.first.id,
+            merchant_id: Merchant.first.id
           }
         }
       }
@@ -63,6 +64,7 @@ class Account::TransactionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal -100, @entry.amount
     assert_equal [ Tag.first.id, Tag.second.id ], @entry.entryable.tag_ids.sort
     assert_equal Category.first.id, @entry.entryable.category_id
+    assert_equal Merchant.first.id, @entry.entryable.merchant_id
     assert_equal "test notes", @entry.notes
     assert_equal false, @entry.excluded
 
@@ -96,6 +98,7 @@ class Account::TransactionsControllerTest < ActionDispatch::IntegrationTest
           entry_ids: transactions.map(&:id),
           date: 1.day.ago.to_date,
           category_id: Category.second.id,
+          merchant_id: Merchant.second.id,
           notes: "Updated note"
         }
       }
@@ -107,6 +110,7 @@ class Account::TransactionsControllerTest < ActionDispatch::IntegrationTest
     transactions.reload.each do |transaction|
       assert_equal 1.day.ago.to_date, transaction.date
       assert_equal Category.second, transaction.account_transaction.category
+      assert_equal Merchant.second, transaction.account_transaction.merchant
       assert_equal "Updated note", transaction.notes
     end
   end

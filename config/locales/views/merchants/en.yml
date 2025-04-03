@@ -1,0 +1,27 @@
+---
+en:
+  merchants:
+    create:
+      error: 'Error creating merchant: %{error}'
+      success: New merchant created successfully
+    destroy:
+      success: Merchant deleted successfully
+    edit:
+      title: Edit merchant
+    form:
+      name_placeholder: Merchant name
+    index:
+      empty: No merchants yet
+      new: New merchant
+      title: Merchants
+    merchant:
+      confirm_accept: Delete merchant
+      confirm_body: Are you sure you want to delete this merchant? Removing this merchant
+        will unlink all associated transactions and may effect your reporting.
+      confirm_title: Delete merchant?
+      delete: Delete merchant
+      edit: Edit merchant
+    new:
+      title: New merchant
+    update:
+      success: Merchant updated successfully

@@ -65,7 +65,10 @@ class Account::Entry < ApplicationRecord
       bulk_attributes = {
         date: bulk_update_params[:date],
         notes: bulk_update_params[:notes],
-        entryable_attributes: { category_id: bulk_update_params[:category_id] }.compact_blank
+        entryable_attributes: {
+          category_id: bulk_update_params[:category_id],
+          merchant_id: bulk_update_params[:merchant_id]
+        }.compact_blank
       }.compact_blank
 
       return 0 if bulk_attributes.blank?

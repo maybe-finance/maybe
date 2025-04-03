@@ -11,6 +11,9 @@ class Provider::SynthTest < ActiveSupport::TestCase
   test "health check" do
     VCR.use_cassette("synth/health") do
       assert @synth.healthy?
+  test "health check" do
+    VCR.use_cassette("synth/health") do
+      assert @synth.healthy?
     end
   end
 
