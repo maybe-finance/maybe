@@ -18,7 +18,7 @@ class Rule::ConditionTest < ActiveSupport::TestCase
     create_transaction(date: 1.year.ago.to_date, account: @account, amount: 10, name: "Rule test transaction4", merchant: @whole_foods_merchant)
     create_transaction(date: 1.year.ago.to_date, account: @account, amount: 1000, name: "Rule test transaction5")
 
-    @rule_scope = @account.transactions
+    @rule_scope = @account.transactions.left_joins(:merchant).with_entry
   end
 
   test "applies transaction_name condition" do
@@ -53,7 +53,7 @@ class Rule::ConditionTest < ActiveSupport::TestCase
       rule: @transaction_rule,
       condition_type: "transaction_merchant",
       operator: "=",
-      value: "Whole Foods"
+      value: @whole_foods_merchant.id
     )
 
     filtered = condition.apply(@rule_scope)
@@ -69,7 +69,7 @@ class Rule::ConditionTest < ActiveSupport::TestCase
         Rule::Condition.new(
           condition_type: "transaction_merchant",
           operator: "=",
-          value: "Whole Foods"
+          value: @whole_foods_merchant.id
         ),
         Rule::Condition.new(
           condition_type: "transaction_amount",
@@ -92,7 +92,7 @@ class Rule::ConditionTest < ActiveSupport::TestCase
         Rule::Condition.new(
           condition_type: "transaction_merchant",
           operator: "=",
-          value: "Whole Foods"
+          value: @whole_foods_merchant.id
         ),
         Rule::Condition.new(
           condition_type: "transaction_amount",

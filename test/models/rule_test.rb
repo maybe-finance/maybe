@@ -17,7 +17,7 @@ class RuleTest < ActiveSupport::TestCase
       family: @family,
       resource_type: "transaction",
       effective_date: 1.day.ago.to_date,
-      conditions: [ Rule::Condition.new(condition_type: "transaction_merchant", operator: "=", value: "Whole Foods") ],
+      conditions: [ Rule::Condition.new(condition_type: "transaction_merchant", operator: "=", value: @whole_foods_merchant.id) ],
       actions: [ Rule::Action.new(action_type: "set_transaction_category", value: @groceries_category.id) ]
     )
 
@@ -39,7 +39,7 @@ class RuleTest < ActiveSupport::TestCase
       effective_date: 1.day.ago.to_date,
       conditions: [
         Rule::Condition.new(condition_type: "compound", operator: "and", sub_conditions: [
-          Rule::Condition.new(condition_type: "transaction_merchant", operator: "=", value: "Whole Foods"),
+          Rule::Condition.new(condition_type: "transaction_merchant", operator: "=", value: @whole_foods_merchant.id),
           Rule::Condition.new(condition_type: "transaction_amount", operator: ">", value: 60)
         ])
       ],

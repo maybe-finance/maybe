@@ -7,6 +7,24 @@ class Rule < ApplicationRecord
 
   validates :resource_type, presence: true
 
+  def conditions_registry
+    case resource_type
+    when "transaction"
+      Rule::Condition::TransactionRegistry.new(family)
+    else
+      raise UnsupportedResourceTypeError, "Unsupported resource type: #{resource_type}"
+    end
+  end
+
+  def actions_registry
+    case resource_type
+    when "transaction"
+      Rule::Action::TransactionRegistry.new(family)
+    else
+      raise UnsupportedResourceTypeError, "Unsupported resource type: #{resource_type}"
+    end
+  end
+
   def apply
     scope = resource_scope
 
@@ -19,15 +37,29 @@ class Rule < ApplicationRecord
     end
   end
 
-  def resource_scope
-    case resource_type
-    when "transaction"
-      family.transactions
-            .active
-            .with_entry
-            .where(account_entries: { date: effective_date..nil })
-    else
-      raise UnsupportedResourceTypeError, "Unsupported resource type: #{resource_type}"
+  private
+    def resource_scope
+      scope = base_resource_scope
+
+      conditions.each do |condition|
+        if condition.compound?
+          condition.sub_conditions.each do |sub_condition|
+            scope = sub_condition.prepare(scope)
+          end
+        else
+          scope = condition.prepare(scope)
+        end
+      end
+
+      scope
     end
-  end
+
+    def base_resource_scope
+      case resource_type
+      when "transaction"
+        family.transactions.active
+      else
+        raise UnsupportedResourceTypeError, "Unsupported resource type: #{resource_type}"
+      end
+    end
 end
