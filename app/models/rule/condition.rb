@@ -18,9 +18,9 @@ class Rule::Condition < ApplicationRecord
     when "compound"
       filtered_scope = build_compound_scope(filtered_scope)
     when "transaction_name"
-      filtered_scope = filtered_scope.where("account_entries.name #{Arel.sql(sanitize_operator(operator))} ?", value)
+      filtered_scope = filtered_scope.where(build_sanitized_comparison_sql("account_entries.name", operator), value)
     when "transaction_amount"
-      filtered_scope = filtered_scope.where("account_entries.amount #{Arel.sql(sanitize_operator(operator))} ?", value.to_d)
+      filtered_scope = filtered_scope.where(build_sanitized_comparison_sql("account_entries.amount", operator), value.to_d)
     when "transaction_merchant"
       filtered_scope = filtered_scope.left_joins(:merchant).where(merchant: { name: value })
     else
@@ -31,6 +31,10 @@ class Rule::Condition < ApplicationRecord
   end
 
   private
+    def build_sanitized_comparison_sql(field, operator)
+      "#{field} #{sanitize_operator(operator)} ?"
+    end
+
     def sanitize_operator(operator)
       raise UnsupportedOperatorError, "Unsupported operator: #{operator}" unless OPERATORS.include?(operator)
       operator
