@@ -64,13 +64,9 @@
                 { disabled: true } %>
 
             <%= f.fields_for :entryable do |ef| %>
-
               <%= ef.collection_select :merchant_id,
-                      Current.family.merchants.alphabetically,
-                    :id, :name,
-                    { include_blank: t(".none"),
-                      label: t(".merchant_label"),
-                      class: "text-subdued" },
+                    Current.family.merchants.alphabetically,
+                    :id, :name, { include_blank: "None", label: t(".merchant_label") },
                     "data-auto-submit-form-target": "auto" %>
 
               <%= ef.select :tag_ids,
@@ -96,7 +92,7 @@
     <% end %>
 
     <!-- Settings Section -->
-    <%= disclosure t(".settings") do %>
+    <%= disclosure t(".settings"), default_open: false do %>
       <div class="pb-4">
 
         <%= styled_form_with model: @entry,

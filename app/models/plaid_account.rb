@@ -89,7 +89,7 @@ class PlaidAccount < ApplicationRecord
         t.date = plaid_txn.date
         t.entryable = Account::Transaction.new(
           category: get_category(plaid_txn.personal_finance_category.primary),
-          merchant: get_merchant(plaid_txn.merchant_name)
+          merchant: get_merchant(plaid_txn)
         )
       end
     end
@@ -134,10 +134,23 @@ class PlaidAccount < ApplicationRecord
       family.categories.find_or_create_by!(name: plaid_category.titleize)
     end
 
-    def get_merchant(plaid_merchant_name)
-      return nil if plaid_merchant_name.blank?
+    def get_merchant(plaid_txn)
+      unless plaid_txn.merchant_entity_id.present? && plaid_txn.merchant_name.present?
+        return nil
+      end
 
-      family.merchants.find_or_create_by!(name: plaid_merchant_name)
+      merchant = ProviderMerchant.find_or_initialize_by(
+        source: "plaid",
+        provider_merchant_id: plaid_txn.merchant_entity_id,
+      ).tap do |m|
+        m.name = plaid_txn.merchant_name
+        m.logo_url = plaid_txn.logo_url
+        m.website_url = plaid_txn.website
+      end
+
+      merchant.save!
+
+      merchant
     end
 
     def derive_plaid_cash_balance(plaid_balances)

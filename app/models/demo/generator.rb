@@ -219,7 +219,7 @@ class Demo::Generator
                    "Uber", "Netflix", "Spotify", "Delta Airlines", "Airbnb", "Sephora" ]
 
       merchants.each do |merchant|
-        family.merchants.create!(name: merchant, color: COLORS.sample)
+        UserMerchant.create!(name: merchant, family: family, color: COLORS.sample)
       end
     end
 

@@ -6,7 +6,7 @@ class RuleTest < ActiveSupport::TestCase
   setup do
     @family = families(:empty)
     @account = @family.accounts.create!(name: "Rule test", balance: 1000, currency: "USD", accountable: Depository.new)
-    @whole_foods_merchant = @family.merchants.create!(name: "Whole Foods")
+    @whole_foods_merchant = @family.merchants.create!(name: "Whole Foods", type: "FamilyMerchant")
     @groceries_category = @family.categories.create!(name: "Groceries")
   end
 
@@ -18,7 +18,7 @@ class RuleTest < ActiveSupport::TestCase
       resource_type: "transaction",
       effective_date: 1.day.ago.to_date,
       conditions: [ Rule::Condition.new(condition_type: "transaction_merchant", operator: "=", value: "Whole Foods") ],
-      actions: [ Rule::Action.new(action_type: "set_transaction_category", value: "Groceries") ]
+      actions: [ Rule::Action.new(action_type: "set_transaction_category", value: @groceries_category.id) ]
     )
 
     rule.apply
@@ -43,7 +43,7 @@ class RuleTest < ActiveSupport::TestCase
           Rule::Condition.new(condition_type: "transaction_amount", operator: ">", value: 60)
         ])
       ],
-      actions: [ Rule::Action.new(action_type: "set_transaction_category", value: "Groceries") ]
+      actions: [ Rule::Action.new(action_type: "set_transaction_category", value: @groceries_category.id) ]
     )
 
     rule.apply

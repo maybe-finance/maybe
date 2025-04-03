@@ -9,7 +9,7 @@ class Rule::ConditionTest < ActiveSupport::TestCase
     @account = @family.accounts.create!(name: "Rule test", balance: 1000, currency: "USD", accountable: Depository.new)
 
     @grocery_category = @family.categories.create!(name: "Grocery")
-    @whole_foods_merchant = @family.merchants.create!(name: "Whole Foods")
+    @whole_foods_merchant = @family.merchants.create!(name: "Whole Foods", type: "FamilyMerchant")
 
     # Some sample transactions to work with
     create_transaction(date: Date.current, account: @account, amount: 100, name: "Rule test transaction1", merchant: @whole_foods_merchant)

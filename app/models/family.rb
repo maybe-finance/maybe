@@ -36,6 +36,11 @@ class Family < ApplicationRecord
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }
   validates :date_format, inclusion: { in: DATE_FORMATS.map(&:last) }
 
+  def assigned_merchants
+    merchant_ids = transactions.where.not(merchant_id: nil).pluck(:merchant_id).uniq
+    Merchant.where(id: merchant_ids)
+  end
+
   def balance_sheet
     @balance_sheet ||= BalanceSheet.new(self)
   end

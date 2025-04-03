@@ -5,6 +5,9 @@
        data-controller="sidebar" 
        data-sidebar-user-id-value="<%= Current.user.id %>"
        data-sidebar-config-value="<%= sidebar_config.to_json %>">
+    <button hidden data-controller="hotkey" data-hotkey="b" data-action="sidebar#toggleLeftPanel">Toggle accounts</button>
+    <button hidden data-controller="hotkey" data-hotkey="l" data-action="sidebar#toggleRightPanel">Toggle chat</button>
+
     <nav class="flex flex-col shrink-0 w-[84px] py-4 mr-3">
       <div class="pl-2 mb-3">
         <%= link_to root_path, class: "block" do %>
