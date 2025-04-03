@@ -1018,3 +1018,18 @@
     code: USD
     symbol: $
     name: US Dollar
+- name: Budapest Stock Exchange
+  acronym: BET
+  mic: XBUD
+  country: Hungary
+  country_code: HU
+  city: Budapest
+  website: www.bet.hu
+  timezone:
+    timezone: Europe/Budapest
+    abbr: CET
+    abbr_dst: CEST
+  currency:
+    code: HUF
+    symbol: Ft
+    name: Hungarian Forint
