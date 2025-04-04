@@ -159,37 +159,8 @@ class Provider::Synth < Provider
     end
   end
 
-  # ================================
-  #           Transactions
-  # ================================
-
-  def enrich_transaction(description, amount: nil, date: nil, city: nil, state: nil, country: nil)
-    with_provider_response do
-      params = {
-        description: description,
-        amount: amount,
-        date: date,
-        city: city,
-        state: state,
-        country: country
-      }.compact
-
-      response = client.get("#{base_url}/enrich", params)
-
-      parsed = JSON.parse(response.body)
-
-      TransactionEnrichmentData.new(
-        name: parsed.dig("merchant"),
-        icon_url: parsed.dig("icon"),
-        category: parsed.dig("category")
-      )
-    end
-  end
-
   private
     attr_reader :api_key
-
-    TransactionEnrichmentData = Data.define(:name, :icon_url, :category)
 
     def base_url
       ENV["SYNTH_URL"] || "https://api.synthfinance.com"

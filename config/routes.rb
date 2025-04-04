@@ -75,7 +75,7 @@ Rails.application.routes.draw do
     resources :budget_categories, only: %i[index show update]
   end
 
-  resources :merchants, only: %i[index new create edit update destroy]
+  resources :family_merchants, only: %i[index new create edit update destroy]
 
   resources :transfers, only: %i[new create destroy show update]
 
@@ -141,6 +141,11 @@ Rails.application.routes.draw do
     collection do
       delete :clear_filter
     end
+  end
+
+  resources :rules do
+    resources :triggers, only: :new
+    resources :actions, only: :new
   end
 
   # Convenience routes for polymorphic paths

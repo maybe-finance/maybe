@@ -5,7 +5,7 @@
     <%= lucide_icon("search", class: "w-5 h-5 text-secondary absolute inset-y-0 left-2 top-1/2 transform -translate-y-1/2") %>
   </div>
   <div class="my-2" id="list" data-list-filter-target="list">
-    <% Current.family.merchants.alphabetically.each do |merchant| %>
+    <% Current.family.assigned_merchants.alphabetically.each do |merchant| %>
       <div class="filterable-item flex items-center gap-2 p-2" data-filter-name="<%= merchant.name %>">
         <%= form.check_box :merchants,
                            {

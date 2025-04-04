@@ -47,40 +47,6 @@
       "note": ""
     },
     {
-      "warning_type": "Cross-Site Scripting",
-      "warning_code": 2,
-      "fingerprint": "b1f821a5c03b8aa348fb21b9297081a3bf9e954244290e7e511c67213d35f3dc",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/pages/changelog.html.erb",
-      "line": 18,
-      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "Provider::Github.new.fetch_latest_release_notes[:body]",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "PagesController",
-          "method": "changelog",
-          "line": 15,
-          "file": "app/controllers/pages_controller.rb",
-          "rendered": {
-            "name": "pages/changelog",
-            "file": "app/views/pages/changelog.html.erb"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "pages/changelog"
-      },
-      "user_input": null,
-      "confidence": "High",
-      "cwe_id": [
-        79
-      ],
-      "note": ""
-    },
-    {
       "warning_type": "Dangerous Eval",
       "warning_code": 13,
       "fingerprint": "c193307bb82f931950d3bf2855f82f9a7f50d94c5bd950ee2803cb8a8abe5253",

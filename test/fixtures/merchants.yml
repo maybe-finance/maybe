@@ -1,13 +1,16 @@
 one:
+  type: FamilyMerchant
   name: Test
   family: empty
 
 netflix:
+  type: FamilyMerchant
   name: Netflix
   color: "#fd7f6f"
   family: dylan_family
 
 amazon:
+  type: FamilyMerchant
   name: Amazon
   color: "#fd7f6f"
   family: dylan_family

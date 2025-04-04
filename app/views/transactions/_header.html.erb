@@ -5,7 +5,7 @@
       <%= contextual_menu do %>
         <%= contextual_menu_modal_action_item t(".edit_categories"), categories_path, icon: "shapes", turbo_frame: :_top %>
         <%= contextual_menu_modal_action_item t(".edit_tags"), tags_path, icon: "tags", turbo_frame: :_top %>
-        <%= contextual_menu_modal_action_item t(".edit_merchants"), merchants_path, icon: "store", turbo_frame: :_top %>
+        <%= contextual_menu_modal_action_item t(".edit_merchants"), family_merchants_path, icon: "store", turbo_frame: :_top %>
         <%= contextual_menu_modal_action_item t(".edit_imports"), imports_path, icon: "hard-drive-upload", turbo_frame: :_top %>
       <% end %>
 

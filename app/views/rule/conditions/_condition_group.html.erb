@@ -1,0 +1,27 @@
+<%# locals: (form:) %>
+
+<% if form.object.compound? %>
+  <div>
+    <% if form.object.compound? %>
+      <p class="mb-3">and</p>
+    <% end %>
+
+    <div class="border border-gray-200 p-2">
+      <%= form.fields_for :sub_conditions do |scf| %>
+        <%= render "rule/conditions/condition_group", form: scf %>
+      <% end %>
+    </div>
+  </div>
+<% else %>
+  <div>
+    <% unless form.index.zero? %>
+      <% if form.object.parent.present? %>
+        <span><%= form.object.parent.operator %></span>
+      <% else %>
+        <span>and</span>
+      <% end %>
+    <% end %>
+
+    <%= render "rule/conditions/condition", form: form %>
+  </div>
+<% end %>

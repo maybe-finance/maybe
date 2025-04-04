@@ -1,5 +1,5 @@
 class Account < ApplicationRecord
-  include Syncable, Monetizable, Chartable, Enrichable, Linkable, Convertible
+  include Syncable, Monetizable, Chartable, Linkable, Convertible
 
   validates :name, :balance, :currency, presence: true
 
@@ -79,10 +79,7 @@ class Account < ApplicationRecord
     Rails.logger.info("Processing balances (#{linked? ? 'reverse' : 'forward'})")
     sync_balances
 
-    if enrichable?
-      Rails.logger.info("Enriching transaction data")
-      enrich_data
-    end
+    RuleProcessorJob.perform_later(family)
   end
 
   def post_sync

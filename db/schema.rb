@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_19_212839) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_03_110915) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -382,13 +382,19 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_212839) do
 
   create_table "merchants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
-    t.string "color", default: "#e99537", null: false
-    t.uuid "family_id", null: false
+    t.string "color"
+    t.uuid "family_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "icon_url"
-    t.datetime "enriched_at"
+    t.string "logo_url"
+    t.string "website_url"
+    t.string "type", null: false
+    t.string "source"
+    t.string "provider_merchant_id"
+    t.index ["family_id", "name"], name: "index_merchants_on_family_id_and_name", unique: true, where: "((type)::text = 'FamilyMerchant'::text)"
     t.index ["family_id"], name: "index_merchants_on_family_id"
+    t.index ["source", "name"], name: "index_merchants_on_source_and_name", unique: true, where: "((type)::text = 'ProviderMerchant'::text)"
+    t.index ["type"], name: "index_merchants_on_type"
   end
 
   create_table "messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -466,6 +472,37 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_212839) do
     t.index ["inflow_transaction_id", "outflow_transaction_id"], name: "idx_on_inflow_transaction_id_outflow_transaction_id_412f8e7e26", unique: true
     t.index ["inflow_transaction_id"], name: "index_rejected_transfers_on_inflow_transaction_id"
     t.index ["outflow_transaction_id"], name: "index_rejected_transfers_on_outflow_transaction_id"
+  end
+
+  create_table "rule_actions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "rule_id", null: false
+    t.string "action_type", null: false
+    t.string "value", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["rule_id"], name: "index_rule_actions_on_rule_id"
+  end
+
+  create_table "rule_conditions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "rule_id"
+    t.uuid "parent_id"
+    t.string "condition_type", null: false
+    t.string "operator", null: false
+    t.string "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["parent_id"], name: "index_rule_conditions_on_parent_id"
+    t.index ["rule_id"], name: "index_rule_conditions_on_rule_id"
+  end
+
+  create_table "rules", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "family_id", null: false
+    t.string "resource_type", null: false
+    t.date "effective_date"
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["family_id"], name: "index_rules_on_family_id"
   end
 
   create_table "securities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -661,6 +698,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_212839) do
   add_foreign_key "plaid_items", "families"
   add_foreign_key "rejected_transfers", "account_transactions", column: "inflow_transaction_id"
   add_foreign_key "rejected_transfers", "account_transactions", column: "outflow_transaction_id"
+  add_foreign_key "rule_actions", "rules"
+  add_foreign_key "rule_conditions", "rule_conditions", column: "parent_id"
+  add_foreign_key "rule_conditions", "rules"
+  add_foreign_key "rules", "families"
   add_foreign_key "security_prices", "securities"
   add_foreign_key "sessions", "impersonation_sessions", column: "active_impersonator_session_id"
   add_foreign_key "sessions", "users"
