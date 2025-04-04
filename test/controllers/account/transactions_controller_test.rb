@@ -99,6 +99,7 @@ class Account::TransactionsControllerTest < ActionDispatch::IntegrationTest
           date: 1.day.ago.to_date,
           category_id: Category.second.id,
           merchant_id: Merchant.second.id,
+          tag_ids: [ Tag.first.id, Tag.second.id ],
           notes: "Updated note"
         }
       }
@@ -112,6 +113,7 @@ class Account::TransactionsControllerTest < ActionDispatch::IntegrationTest
       assert_equal Category.second, transaction.account_transaction.category
       assert_equal Merchant.second, transaction.account_transaction.merchant
       assert_equal "Updated note", transaction.notes
+      assert_equal [ Tag.first.id, Tag.second.id ], transaction.entryable.tag_ids.sort
     end
   end
 end
