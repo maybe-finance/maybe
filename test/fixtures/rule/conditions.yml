@@ -1,0 +1,5 @@
+one:
+  rule: one
+  condition_type: transaction_name
+  operator: like
+  value: "starbucks"

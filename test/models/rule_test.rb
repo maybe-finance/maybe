@@ -54,4 +54,23 @@ class RuleTest < ActiveSupport::TestCase
     assert_nil transaction_entry1.account_transaction.category
     assert_equal @groceries_category, transaction_entry2.account_transaction.category
   end
+
+  # Artificial limitation put in place to prevent users from creating overly complex rules
+  # Rules should be shallow and wide
+  test "no nested compound conditions" do
+    rule = Rule.new(
+      family: @family,
+      resource_type: "transaction",
+      conditions: [
+        Rule::Condition.new(condition_type: "compound", operator: "and", sub_conditions: [
+          Rule::Condition.new(condition_type: "compound", operator: "and", sub_conditions: [
+            Rule::Condition.new(condition_type: "transaction_name", operator: "=", value: "Starbucks")
+          ])
+        ])
+      ]
+    )
+
+    assert_not rule.valid?
+    assert_equal [ "Compound conditions cannot be nested" ], rule.errors.full_messages
+  end
 end

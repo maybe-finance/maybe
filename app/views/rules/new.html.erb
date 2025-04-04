@@ -1,1 +1,45 @@
-<p>Placeholder: rules#new</p>
+<%= modal do %>
+  <div class="p-4 min-w-[600px]">
+    <%= fields_for Rule.new(resource_type: "transaction", family: Current.family) do |f| %>
+      <%= f.fields_for :conditions, Rule::Condition.new(condition_type: "transaction_name") do |cf| %>
+        <%= render "rule/conditions/condition_group", form: cf %>
+      <% end %>
+    <% end %>
+
+    <%= form_with model: @rule, class: "space-y-8" do |f|%>
+      <h2>New <%= @rule.resource_type %> rule</h2>
+
+      <section class="space-y-4">
+        <h3 class="mb-4 font-bold">Conditions</h3>
+        <hr>
+
+        <ul>
+          <span>When</span>
+
+          <%= f.fields_for :conditions do |cf| %>
+            <li>
+              <%= render "rule/conditions/condition_group", form: cf %>
+            </li>
+          <% end %>
+        </ul>
+      </section>
+
+      <section class="space-y-4">
+        <h3 class="mb-4 font-bold">Actions</h3>
+        <hr>
+
+        <ul>
+          <%= f.fields_for :actions do |af| %>
+            <li>
+              <%= af.select :action_type, @rule.actions_registry.options %>
+              to
+              <%= af.text_field :value %>
+            </li>
+          <% end %>
+        </ul>
+      </section>
+
+      <%= f.submit %>
+    <% end %>
+  </div>
+<% end %>

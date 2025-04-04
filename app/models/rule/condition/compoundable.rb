@@ -4,6 +4,8 @@ module Rule::Condition::Compoundable
   included do
     belongs_to :parent, class_name: "Rule::Condition", optional: true, inverse_of: :sub_conditions
     has_many :sub_conditions, class_name: "Rule::Condition", foreign_key: :parent_id, dependent: :destroy, inverse_of: :parent
+
+    accepts_nested_attributes_for :sub_conditions, allow_destroy: true
   end
 
   # We don't store rule_id on sub_conditions, so "walk up" to the parent rule

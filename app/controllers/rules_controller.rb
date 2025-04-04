@@ -10,18 +10,29 @@ class RulesController < ApplicationController
   end
 
   def new
+    @rule = Current.family.rules.new(resource_type: params[:resource_type] || "transaction")
   end
 
   def create
+    Current.family.rules.create!(rule_params)
+    redirect_to rules_path
+  rescue => e
+    puts e.inspect
+    puts e.backtrace
   end
 
   def edit
+    @rule = Current.family.rules.find(params[:id])
   end
 
   def update
+    @rule.update!(rule_params)
+    redirect_to rules_path
   end
 
   def destroy
+    @rule.destroy
+    redirect_to rules_path
   end
 
   private
@@ -31,6 +42,15 @@ class RulesController < ApplicationController
     end
 
     def rule_params
-      params.require(:rule).permit(:effective_date, :active)
+      params.require(:rule).permit(
+        :resource_type, :effective_date, :active,
+        conditions_attributes: [
+          :id, :condition_type, :operator, :value,
+          sub_conditions_attributes: [ :id, :condition_type, :operator, :value ]
+        ],
+        actions_attributes: [
+          :id, :action_type, :value
+        ]
+      )
     end
 end

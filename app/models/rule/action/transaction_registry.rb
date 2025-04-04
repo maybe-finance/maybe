@@ -18,6 +18,12 @@ class Rule::Action::TransactionRegistry
     end
   end
 
+  def options
+    definitions.map do |action_type, data|
+      [ data[:label], action_type ]
+    end
+  end
+
   private
     ActionConfig = Data.define(:label, :options, :builder)
 

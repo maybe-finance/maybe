@@ -12,6 +12,12 @@ class Rule::Condition::TransactionRegistry
     ConditionConfig.new(**config)
   end
 
+  def options
+    definitions.map do |condition_type, data|
+      [ data[:label], condition_type ]
+    end
+  end
+
   def as_json
     definitions.map do |condition_type, data|
       {

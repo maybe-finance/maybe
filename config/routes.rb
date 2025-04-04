@@ -144,8 +144,8 @@ Rails.application.routes.draw do
   end
 
   resources :rules do
-    resources :triggers, only: %i[create update destroy]
-    resources :actions, only: %i[create update destroy]
+    resources :triggers, only: :new
+    resources :actions, only: :new
   end
 
   # Convenience routes for polymorphic paths

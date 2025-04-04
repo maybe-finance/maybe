@@ -1,0 +1,7 @@
+<%# locals: (form:) %>
+
+<div>
+  <%= form.select :condition_type, @rule.conditions_registry.options %>
+  <%= form.select :operator, @rule.operators_for(form.object.condition_type) %>
+  <%= form.text_field :value %>
+</div>
