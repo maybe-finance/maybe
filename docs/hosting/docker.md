@@ -192,3 +192,18 @@ docker volume rm maybe_postgres-data # this is the name of the volume the DB is 
 docker compose up
 docker exec -it maybe-postgres-1 psql -U maybe -d maybe_production -c "SELECT 1;" # This will verify that the issue is fixed
 ```
+
+## External Authorization (SSO)
+
+### Remote User (Header-based)
+
+Maybe can be configured to accept a header that acts as an automatic login (passwordless) for the user specified in the header. This is intended to be used in conjunction with separate authorization software.
+
+For more information and examples, see https://doc.traefik.io/traefik/middlewares/http/forwardauth/ or similar documentation for your http proxy and authentication software.
+
+Configure the Maybe environment with:
+```
+REMOTE_USER_HEADER_EMAIL="Remote-Email"
+```
+
+ !! NOTE!! this allows unchallenged (passwordless) login via simple HTTP headers. Only use this method if you have a proxy in front of Maybe that is applying the authentication challenge, *AND THE MAYBE HTTP SERVER IS NOT ACCESSIBLE DIRECTLY*.
