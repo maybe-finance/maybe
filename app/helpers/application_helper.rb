@@ -23,18 +23,22 @@ module ApplicationHelper
     content_for(:header_description) { page_description }
   end
 
-  def family_notifications_stream
-    turbo_stream_from [ Current.family, :notifications ] if Current.family
-  end
-
   def family_stream
     turbo_stream_from Current.family if Current.family
   end
 
   def render_flash_notifications
-    notifications = flash.flat_map do |type, message_or_messages|
-      Array(message_or_messages).map do |message|
-        render partial: "shared/notification", locals: { type: type, message: message }
+    notifications = flash.flat_map do |type, data|
+      case type
+      when "alert"
+        render "shared/notifications/alert", message: data
+      when "cta"
+        render "shared/notifications/cta", cta: data
+      when "loading"
+        render "shared/notifications/loading", message: data
+      when "notice"
+        messages = Array(data)
+        messages.map { |message| render "shared/notifications/notice", message: }
       end
     end
 

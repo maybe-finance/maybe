@@ -11,12 +11,11 @@
         <%= render_flash_notifications %>
 
         <% if Current.family&.syncing? %>
-          <%= render "shared/syncing_notice" %>
+          <% render "shared/notifications/loading", id: "syncing-notice", message: "Syncing accounts data..." %>
         <% end %>
       </div>
     </div>
 
-    <%= family_notifications_stream %>
     <%= family_stream %>
 
     <%= turbo_frame_tag "modal" %>
