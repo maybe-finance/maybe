@@ -30,4 +30,15 @@ class TransfersControllerTest < ActionDispatch::IntegrationTest
       delete transfer_url(transfers(:one))
     end
   end
+
+  test "can add notes to transfer" do
+    transfer = transfers(:one)
+    assert_nil transfer.notes
+
+    patch transfer_url(transfer), params: { transfer: { notes: "Test notes" } }
+
+    assert_redirected_to transactions_url
+    assert_equal "Transfer updated", flash[:notice]
+    assert_equal "Test notes", transfer.reload.notes
+  end
 end
