@@ -22,6 +22,10 @@ class Rule::Condition < ApplicationRecord
     config.preparer.call(scope)
   end
 
+  def available_operators
+    config.operators
+  end
+
   private
     def config
       config ||= rule.conditions_registry.get_config(condition_type)

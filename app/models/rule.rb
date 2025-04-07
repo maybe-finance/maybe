@@ -97,6 +97,10 @@ class Rule < ApplicationRecord
     end
   end
 
+  def available_conditions
+    conditions_registry.options
+  end
+
   def actions_registry
     case resource_type
     when "transaction"
@@ -104,6 +108,10 @@ class Rule < ApplicationRecord
     else
       raise UnsupportedResourceTypeError, "Unsupported resource type: #{resource_type}"
     end
+  end
+
+  def available_actions
+    actions_registry.options
   end
 
   def apply

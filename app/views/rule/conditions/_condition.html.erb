@@ -1,7 +1,13 @@
-<%# locals: (form:) %>
+<%# locals: (condition:, form:, options:) %>
 
-<div>
-  <%= form.select :condition_type, @rule.conditions_registry.options %>
-  <%= form.select :operator, @rule.operators_for(form.object.condition_type) %>
-  <%= form.text_field :value %>
-</div>
+<li data-rule-target="condition">
+  <%= form.hidden_field :_destroy, value: false, data: { rule_target: "destroyInput" } %>
+  <%= form.select :condition_type, options, {}, data: { action: "rule#handleConditionTypeChange" } %>
+  <%= form.select :operator, condition.available_operators, {}, data: { id: "operator-select" } %>
+  <%= form.text_field :value, data: { id: "value-input" } %>
+  <button type="button" 
+          data-action="rule#removeCondition" 
+          data-rule-destroy-param="<%= form.object.persisted? %>">
+    Remove
+  </button>
+</li>

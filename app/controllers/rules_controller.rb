@@ -10,15 +10,24 @@ class RulesController < ApplicationController
   end
 
   def new
-    @rule = Current.family.rules.new(resource_type: params[:resource_type] || "transaction")
+    @rule = Current.family.rules.build(
+      resource_type: params[:resource_type] || "transaction",
+      conditions: [
+        Rule::Condition.new(condition_type: "transaction_name", operator: "like", value: "test")
+      ],
+      actions: [
+        Rule::Action.new(action_type: "set_transaction_category", value: Current.family.categories.first.id)
+      ]
+    )
+
+    @template_condition = Rule::Condition.new(rule: @rule, condition_type: "transaction_name")
+    @template_action = Rule::Action.new(rule: @rule, action_type: "set_transaction_category")
   end
 
   def create
+    puts rule_params.inspect
     Current.family.rules.create!(rule_params)
     redirect_to rules_path
-  rescue => e
-    puts e.inspect
-    puts e.backtrace
   end
 
   def edit

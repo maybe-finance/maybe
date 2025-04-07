@@ -1,3 +1,11 @@
 <% content_for :page_title, "Rules" %>
 
-<p>Placeholder: rules#index</p>
+<div>
+  <ul>
+    <% @rules.each do |rule| %>
+      <li>
+        <%= rule.id %>
+      </li>
+    <% end %>
+  </ul>
+</div>

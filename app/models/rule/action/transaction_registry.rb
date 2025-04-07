@@ -12,8 +12,10 @@ class Rule::Action::TransactionRegistry
   def as_json
     definitions.map do |action_type, data|
       {
+        input_type: data[:input_type],
         label: data[:label],
-        action_type: action_type
+        action_type: action_type,
+        options: data[:options]
       }
     end
   end
@@ -25,11 +27,12 @@ class Rule::Action::TransactionRegistry
   end
 
   private
-    ActionConfig = Data.define(:label, :options, :builder)
+    ActionConfig = Data.define(:input_type, :label, :options, :builder)
 
     def definitions
       {
         set_transaction_category: {
+          input_type: "select",
           label: "Set category",
           options: family.categories.pluck(:name, :id),
           builder: ->(transaction_scope, value) {
@@ -38,6 +41,7 @@ class Rule::Action::TransactionRegistry
           }
         },
         set_transaction_tags: {
+          input_type: "select",
           label: "Set tags",
           options: family.tags.pluck(:name, :id),
           builder: ->(transaction_scope, value) {
@@ -45,6 +49,7 @@ class Rule::Action::TransactionRegistry
           }
         },
         set_transaction_frequency: {
+          input_type: "select",
           label: "Set frequency",
           options: [
             [ "One-time", "one_time" ],
@@ -55,12 +60,14 @@ class Rule::Action::TransactionRegistry
           }
         },
         ai_enhance_transaction_name: {
+          input_type: nil,
           label: "AI enhance name",
           builder: ->(transaction_scope, value) {
             # TODO
           }
         },
         ai_categorize_transaction: {
+          input_type: nil,
           label: "AI categorize",
           builder: ->(transaction_scope, value) {
             # TODO

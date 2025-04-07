@@ -21,6 +21,7 @@ class Rule::Condition::TransactionRegistry
   def as_json
     definitions.map do |condition_type, data|
       {
+        input_type: data[:input_type],
         label: data[:label],
         condition_type: condition_type,
         operators: data[:operators],
@@ -30,11 +31,12 @@ class Rule::Condition::TransactionRegistry
   end
 
   private
-    ConditionConfig = Data.define(:label, :operators, :options, :preparer, :builder)
+    ConditionConfig = Data.define(:input_type, :label, :operators, :options, :preparer, :builder)
 
     def definitions
       {
         transaction_name: {
+          input_type: "text",
           label: "Name",
           operators: [ "like", "=" ],
           options: nil,
@@ -45,6 +47,7 @@ class Rule::Condition::TransactionRegistry
           }
         },
         transaction_amount: {
+          input_type: "number",
           label: "Amount",
           operators: [ ">", ">=", "<", "<=", "=" ],
           options: nil,
@@ -55,6 +58,7 @@ class Rule::Condition::TransactionRegistry
           }
         },
         transaction_merchant: {
+          input_type: "select",
           label: "Merchant",
           operators: [ "=" ],
           options: family.assigned_merchants.pluck(:name, :id),

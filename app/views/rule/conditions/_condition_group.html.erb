@@ -1,27 +1,25 @@
-<%# locals: (form:) %>
+<%# locals: (condition:, form:, options:) %>
 
-<% if form.object.compound? %>
-  <div>
-    <% if form.object.compound? %>
+<li>
+  <% if condition.compound? %>
+    <% if condition.compound? %>
       <p class="mb-3">and</p>
     <% end %>
 
-    <div class="border border-gray-200 p-2">
+    <ul class="border border-gray-200 p-2">
       <%= form.fields_for :sub_conditions do |scf| %>
-        <%= render "rule/conditions/condition_group", form: scf %>
+        <%= render "rule/conditions/condition_group", condition: scf.object, form: scf, options: options %>
       <% end %>
-    </div>
-  </div>
-<% else %>
-  <div>
-    <% unless form.index.zero? %>
-      <% if form.object.parent.present? %>
-        <span><%= form.object.parent.operator %></span>
+    </ul>
+  <% else %>
+    <% if form.index.is_a?(Integer) && form.index > 0 %>
+      <% if condition.parent.present? %>
+        <span><%= condition.parent.operator %></span>
       <% else %>
         <span>and</span>
       <% end %>
     <% end %>
 
-    <%= render "rule/conditions/condition", form: form %>
-  </div>
-<% end %>
+    <%= render "rule/conditions/condition", condition: condition, form: form, options: options %>
+  <% end %>
+</li>

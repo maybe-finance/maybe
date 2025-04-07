@@ -11,6 +11,10 @@ class Rule::Action < ApplicationRecord
     config.builder.call(resource_scope, value)
   end
 
+  def options
+    registry.get_config(action_type).options
+  end
+
   def registry
     @registry ||= rule.actions_registry
   end

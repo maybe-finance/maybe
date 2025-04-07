@@ -1,5 +1,13 @@
-<%= turbo_frame_tag dom_id(action) do %>
-  <div>
-    <%= action.action_type %>
-  </div>
-<% end %>
+<%# locals: (action:, form:, options:) %>
+
+<li data-rule-target="action">
+  <%= form.hidden_field :_destroy, value: false, data: { rule_target: "destroyInput" } %>
+  <%= form.select :action_type, options, {}, data: { action: "rule#handleActionTypeChange" } %>
+  <span>to</span>
+  <%= form.select :value, action.options, {}, data: { id: "value-input" } %>
+  <button type="button" 
+          data-action="rule#removeAction" 
+          data-rule-destroy-param="<%= form.object.persisted? %>">
+    Remove
+  </button>
+</li>
