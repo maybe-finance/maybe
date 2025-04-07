@@ -504,7 +504,7 @@ GEM
     useragent (0.16.11)
     vcr (6.3.1)
       base64
-    vernier (1.6.0)
+    vernier (1.7.0)
     web-console (4.2.1)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
