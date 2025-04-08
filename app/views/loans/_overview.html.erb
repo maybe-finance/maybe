@@ -2,7 +2,7 @@
 
 <div class="grid grid-cols-3 gap-2">
   <%= summary_card title: t(".original_principal") do %>
-    <%= format_money account.original_balance %>
+    <%= format_money account.loan.original_balance %>
   <% end %>
 
   <%= summary_card title: t(".remaining_principal") do %>
