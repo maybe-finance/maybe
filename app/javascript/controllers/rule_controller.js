@@ -3,8 +3,7 @@ import { Controller } from "@hotwired/stimulus";
 // Connects to data-controller="rule"
 export default class extends Controller {
   static values = {
-    conditionsRegistry: Array,
-    actionsRegistry: Array,
+    registry: Object,
   };
 
   static targets = [
@@ -14,12 +13,13 @@ export default class extends Controller {
     "condition",
     "actionsList",
     "action",
-    "destroyInput",
+    "destroyField",
+    "operatorField",
+    "valueField",
   ];
 
   initialize() {
-    console.log(this.conditionsRegistryValue);
-    console.log(this.actionsRegistryValue);
+    console.log(this.registryValue);
   }
 
   addCondition() {
@@ -32,53 +32,18 @@ export default class extends Controller {
   }
 
   handleConditionTypeChange(e) {
-    const definition = this.conditionsRegistryValue.find((def) => {
-      return def.condition_type === e.target.value;
-    });
+    const definition = this.#getConditionFilterDefinition(e.target.value);
+    const conditionEl = this.#getEventConditionEl(e.target);
+    const valueFieldEl = this.#getFieldEl(this.valueFieldTargets, conditionEl);
 
-    const conditionEl = this.conditionTargets.find((t) => {
-      return t.contains(e.target);
-    });
+    this.#updateOperatorsField(definition, conditionEl);
 
-    const operatorSelectEl = conditionEl.querySelector(
-      "select[data-id='operator-select']",
-    );
-
-    operatorSelectEl.innerHTML = definition.operators
-      .map((operator) => {
-        return `<option value="${operator}">${operator}</option>`;
-      })
-      .join("");
-
-    const valueInputEl = conditionEl.querySelector("[data-id='value-input']");
-
-    if (definition.input_type === "select") {
-      // Select input
-      const selectEl = document.createElement("select");
-
-      // Set data-id, name, id
-      selectEl.setAttribute("data-id", "value-input");
-      selectEl.setAttribute("name", valueInputEl.name);
-      selectEl.setAttribute("id", valueInputEl.id);
-
-      // Populate options
-      definition.options.forEach((option) => {
-        const optionEl = document.createElement("option");
-        optionEl.value = option[1];
-        optionEl.textContent = option[0];
-        selectEl.appendChild(optionEl);
-      });
-
-      valueInputEl.replaceWith(selectEl);
+    if (definition.type === "select") {
+      const selectEl = this.#buildSelectInput(definition, valueFieldEl);
+      valueFieldEl.replaceWith(selectEl);
     } else {
-      // Text input
-      const inputEl = document.createElement("input");
-      inputEl.setAttribute("data-id", "value-input");
-      inputEl.setAttribute("name", valueInputEl.name);
-      inputEl.setAttribute("id", valueInputEl.id);
-      inputEl.setAttribute("type", definition.input_type);
-
-      valueInputEl.replaceWith(inputEl);
+      const inputEl = this.#buildTextInput(definition, valueFieldEl);
+      valueFieldEl.replaceWith(inputEl);
     }
   }
 
@@ -92,32 +57,15 @@ export default class extends Controller {
   }
 
   handleActionTypeChange(e) {
-    const definition = this.actionsRegistryValue.find((def) => {
-      return def.action_type === e.target.value;
-    });
+    const definition = this.#getActionExecutorDefinition(e.target.value);
+    const actionEl = this.#getEventActionEl(e.target);
+    const valueFieldEl = this.#getFieldEl(this.valueFieldTargets, actionEl);
 
-    const actionEl = this.actionTargets.find((t) => {
-      return t.contains(e.target);
-    });
-
-    const valueInputEl = actionEl.querySelector("[data-id='value-input']");
-
-    if (definition.input_type === "select") {
-      const selectEl = document.createElement("select");
-      selectEl.setAttribute("data-id", "value-input");
-      selectEl.setAttribute("name", valueInputEl.name);
-      selectEl.setAttribute("id", valueInputEl.id);
-
-      definition.options.forEach((option) => {
-        const optionEl = document.createElement("option");
-        optionEl.value = option[1];
-        optionEl.textContent = option[0];
-        selectEl.appendChild(optionEl);
-      });
-
-      valueInputEl.replaceWith(selectEl);
+    if (definition.type === "select") {
+      const selectEl = this.#buildSelectInput(definition, valueFieldEl);
+      valueFieldEl.replaceWith(selectEl);
     } else {
-      valueInputEl.classList.add("hidden");
+      valueFieldEl.classList.add("hidden");
     }
   }
 
@@ -145,16 +93,77 @@ export default class extends Controller {
     }
   }
 
-  #destroyRuleItem(itemEl) {
-    const destroyInputEl = this.destroyInputTargets.find((el) => {
-      return itemEl.contains(el);
+  #updateOperatorsField(definition, conditionEl) {
+    const operatorFieldEl = this.#getFieldEl(
+      this.operatorFieldTargets,
+      conditionEl,
+    );
+
+    operatorFieldEl.innerHTML = definition.operators
+      .map((operator) => {
+        return `<option value="${operator}">${operator}</option>`;
+      })
+      .join("");
+  }
+
+  #buildTextInput(definition, fieldEl) {
+    const inputEl = document.createElement("input");
+    inputEl.setAttribute("data-rule-target", "valueField");
+    inputEl.setAttribute("name", fieldEl.name);
+    inputEl.setAttribute("id", fieldEl.id);
+    inputEl.setAttribute("type", definition.type);
+
+    return inputEl;
+  }
+
+  #buildSelectInput(definition, fieldEl) {
+    const selectEl = document.createElement("select");
+    selectEl.setAttribute("data-rule-target", "valueField");
+    selectEl.setAttribute("name", fieldEl.name);
+    selectEl.setAttribute("id", fieldEl.id);
+
+    definition.options.forEach((option) => {
+      const optionEl = document.createElement("option");
+      optionEl.textContent = option[0];
+      optionEl.value = option[1];
+      selectEl.appendChild(optionEl);
     });
 
+    return selectEl;
+  }
+
+  #destroyRuleItem(itemEl) {
+    const destroyFieldEl = this.#getFieldEl(this.destroyFieldTargets, itemEl);
+
     itemEl.classList.add("hidden");
-    destroyInputEl.value = true;
+    destroyFieldEl.value = true;
   }
 
   #uniqueKey() {
     return `${Date.now()}_${Math.floor(Math.random() * 100000)}`;
+  }
+
+  #getConditionFilterDefinition(key) {
+    return this.registryValue.filters.find((filter) => {
+      return filter.key === key;
+    });
+  }
+
+  #getActionExecutorDefinition(key) {
+    return this.registryValue.executors.find((executor) => {
+      return executor.key === key;
+    });
+  }
+
+  #getEventConditionEl(childEl) {
+    return this.conditionTargets.find((t) => t.contains(childEl));
+  }
+
+  #getEventActionEl(childEl) {
+    return this.actionTargets.find((t) => t.contains(childEl));
+  }
+
+  #getFieldEl(targets, containerEl) {
+    return targets.find((t) => containerEl.contains(t));
   }
 }

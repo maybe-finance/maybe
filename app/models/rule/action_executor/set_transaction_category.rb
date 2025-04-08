@@ -1,4 +1,8 @@
 class Rule::ActionExecutor::SetTransactionCategory < Rule::ActionExecutor
+  def type
+    "select"
+  end
+
   def options
     family.categories.pluck(:name, :id)
   end

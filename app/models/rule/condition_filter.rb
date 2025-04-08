@@ -47,12 +47,18 @@ class Rule::ConditionFilter
     {
       type: type,
       key: key,
-      label: label
+      label: label,
+      operators: operators,
+      options: options
     }
   end
 
   private
     attr_reader :rule
+
+    def family
+      rule.family
+    end
 
     def build_sanitized_where_condition(field, operator, value)
       sanitized_value = operator == "like" ? ActiveRecord::Base.sanitize_sql_like(value) : value

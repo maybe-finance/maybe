@@ -2,7 +2,7 @@ class RulesController < ApplicationController
   before_action :set_rule, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @rules = Current.family.rules
+    @rules = Current.family.rules.order(created_at: :desc)
     render layout: "settings"
   end
 

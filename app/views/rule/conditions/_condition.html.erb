@@ -4,10 +4,16 @@
 <% rule = condition.rule %>
 
 <li data-rule-target="condition">
-  <%= form.hidden_field :_destroy, value: false, data: { rule_target: "destroyInput" } %>
+  <%= form.hidden_field :_destroy, value: false, data: { rule_target: "destroyField" } %>
   <%= form.select :condition_type, rule.condition_types, {}, data: { action: "rule#handleConditionTypeChange" } %>
-  <%= form.select :operator, condition.operators, {}, data: { id: "operator-select" } %>
-  <%= form.text_field :value, data: { id: "value-input" } %>
+  <%= form.select :operator, condition.operators, {}, data: { rule_target: "operatorField" } %>
+
+  <% if condition.filter.type == "select" %>
+    <%= form.select :value, condition.options, {}, data: { rule_target: "valueField" } %>
+  <% else %>
+    <%= form.text_field :value, data: { rule_target: "valueField" } %>
+  <% end %>
+
   <button type="button"
           data-action="rule#removeCondition"
           data-rule-destroy-param="<%= condition.persisted? %>">

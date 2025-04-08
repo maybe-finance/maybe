@@ -4,10 +4,10 @@
 <% rule = action.rule %>
 
 <li data-rule-target="action">
-  <%= form.hidden_field :_destroy, value: false, data: { rule_target: "destroyInput" } %>
+  <%= form.hidden_field :_destroy, value: false, data: { rule_target: "destroyField" } %>
   <%= form.select :action_type, rule.action_types, {}, data: { action: "rule#handleActionTypeChange" } %>
   <span>to</span>
-  <%= form.select :value, action.options, {}, data: { id: "value-input" } %>
+  <%= form.select :value, action.options, {}, data: { rule_target: "valueField" } %>
   <button type="button"
           data-action="rule#removeAction"
           data-rule-destroy-param="<%= action.persisted? %>">

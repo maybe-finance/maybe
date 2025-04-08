@@ -29,7 +29,8 @@ class Rule::ActionExecutor
     {
       type: type,
       key: key,
-      label: label
+      label: label,
+      options: options
     }
   end
 

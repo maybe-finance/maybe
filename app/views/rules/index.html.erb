@@ -1,6 +1,7 @@
 <% content_for :page_title, "Rules" %>
 
 <div>
+  <%= link_to "New rule", new_rule_path %>
   <ul>
     <% @rules.each do |rule| %>
       <li>
