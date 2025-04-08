@@ -13,8 +13,8 @@
   <div class="ml-auto">
     <div class="form-field w-[120px]">
       <div class="flex items-center">
-        <span class="text-subdued text-sm mr-2">$</span>
-        <%= text_field_tag :uncategorized, budget_category.budgeted_spending_money, autocomplete: "off", class: "form-field__input text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none", disabled: true %>
+        <span class="text-subdued text-sm mr-2"><%= budget_category.budgeted_spending_money.currency.symbol %></span>
+        <%= text_field_tag :uncategorized, budget_category.budgeted_spending_money.amount, autocomplete: "off", class: "form-field__input text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none", disabled: true %>
       </div>
     </div>
   </div>
