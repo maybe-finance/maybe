@@ -1,21 +1,17 @@
 class Rule::Action < ApplicationRecord
-  UnsupportedActionError = Class.new(StandardError)
-
   belongs_to :rule
 
   validates :action_type, presence: true
 
   def apply(resource_scope)
-    config = registry.get_config(action_type)
-    raise UnsupportedActionError, "Unsupported action type: #{action_type}" unless config
-    config.builder.call(resource_scope, value)
+    executor.execute(resource_scope, value)
   end
 
   def options
-    registry.get_config(action_type).options
+    executor.options
   end
 
-  def registry
-    @registry ||= rule.actions_registry
+  def executor
+    rule.registry.get_executor!(action_type)
   end
 end

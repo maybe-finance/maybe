@@ -84,74 +84,50 @@ class Rule < ApplicationRecord
     end
   end
 
-  def operators_for(condition_type)
-    conditions_registry.get_config(condition_type).operators
+  def action_types
+    registry.action_executors.map { |option| [ option.label, option.key ] }
   end
 
-  def conditions_registry
-    case resource_type
+  def condition_types
+    registry.condition_filters.map { |option| [ option.label, option.key ] }
+  end
+
+  def registry
+    @registry ||= case resource_type
     when "transaction"
-      Rule::Condition::TransactionRegistry.new(family)
+      Rule::Registry::TransactionResource.new(self)
     else
       raise UnsupportedResourceTypeError, "Unsupported resource type: #{resource_type}"
     end
-  end
-
-  def available_conditions
-    conditions_registry.options
-  end
-
-  def actions_registry
-    case resource_type
-    when "transaction"
-      Rule::Action::TransactionRegistry.new(family)
-    else
-      raise UnsupportedResourceTypeError, "Unsupported resource type: #{resource_type}"
-    end
-  end
-
-  def available_actions
-    actions_registry.options
   end
 
   def apply
-    scope = resource_scope
+    scope = registry.resource_scope
 
+    # 1. Prepare the query with joins required by conditions
+    conditions.each do |condition|
+      if condition.compound?
+        condition.sub_conditions.each do |sub_condition|
+          scope = sub_condition.prepare(scope)
+        end
+      else
+        scope = condition.prepare(scope)
+      end
+    end
+
+    # 2. Apply the conditions to the query
     conditions.each do |condition|
       scope = condition.apply(scope)
     end
 
+    # 3. Apply the actions to the resources resulting from the query
     actions.each do |action|
       action.apply(scope)
     end
   end
 
   private
-    def resource_scope
-      scope = base_resource_scope
-
-      conditions.each do |condition|
-        if condition.compound?
-          condition.sub_conditions.each do |sub_condition|
-            scope = sub_condition.prepare(scope)
-          end
-        else
-          scope = condition.prepare(scope)
-        end
-      end
-
-      scope
-    end
-
-    def base_resource_scope
-      case resource_type
-      when "transaction"
-        family.transactions.active
-      else
-        raise UnsupportedResourceTypeError, "Unsupported resource type: #{resource_type}"
-      end
-    end
-
+    # Validation: To keep rules simple and easy to understand, we don't allow nested compound conditions.
     def no_nested_compound_conditions
       return true if conditions.none? { |condition| condition.compound? }
 

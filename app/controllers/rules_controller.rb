@@ -25,7 +25,6 @@ class RulesController < ApplicationController
   end
 
   def create
-    puts rule_params.inspect
     Current.family.rules.create!(rule_params)
     redirect_to rules_path
   end

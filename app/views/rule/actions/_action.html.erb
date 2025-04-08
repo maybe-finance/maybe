@@ -1,13 +1,16 @@
-<%# locals: (action:, form:, options:) %>
+<%# locals: (form:) %>
+
+<% action = form.object %>
+<% rule = action.rule %>
 
 <li data-rule-target="action">
   <%= form.hidden_field :_destroy, value: false, data: { rule_target: "destroyInput" } %>
-  <%= form.select :action_type, options, {}, data: { action: "rule#handleActionTypeChange" } %>
+  <%= form.select :action_type, rule.action_types, {}, data: { action: "rule#handleActionTypeChange" } %>
   <span>to</span>
   <%= form.select :value, action.options, {}, data: { id: "value-input" } %>
-  <button type="button" 
-          data-action="rule#removeAction" 
-          data-rule-destroy-param="<%= form.object.persisted? %>">
+  <button type="button"
+          data-action="rule#removeAction"
+          data-rule-destroy-param="<%= action.persisted? %>">
     Remove
   </button>
 </li>

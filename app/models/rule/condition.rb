@@ -1,35 +1,56 @@
 class Rule::Condition < ApplicationRecord
-  include Compoundable
-
-  UnsupportedConditionTypeError = Class.new(StandardError)
-
-  OPERATORS = [ "and", "or", "like", ">", ">=", "<", "<=", "=" ]
-
   belongs_to :rule, optional: -> { where.not(parent_id: nil) }
+  belongs_to :parent, class_name: "Rule::Condition", optional: true, inverse_of: :sub_conditions
 
-  validates :operator, inclusion: { in: OPERATORS }, allow_nil: true
+  has_many :sub_conditions, class_name: "Rule::Condition", foreign_key: :parent_id, dependent: :destroy, inverse_of: :parent
+
   validates :condition_type, presence: true
+
+  accepts_nested_attributes_for :sub_conditions, allow_destroy: true
+
+  # We don't store rule_id on sub_conditions, so "walk up" to the parent rule
+  def rule
+    parent&.rule || super
+  end
+
+  def compound?
+    condition_type == "compound"
+  end
 
   def apply(scope)
     if compound?
       build_compound_scope(scope)
     else
-      config.builder.call(scope, operator, value)
+      filter.apply(scope, operator, value)
     end
   end
 
   def prepare(scope)
-    config.preparer.call(scope)
+    filter.prepare(scope)
   end
 
-  def available_operators
-    config.operators
+  def options
+    filter.options
+  end
+
+  def operators
+    filter.operators
+  end
+
+  def filter
+    rule.registry.get_filter!(condition_type)
   end
 
   private
-    def config
-      config ||= rule.conditions_registry.get_config(condition_type)
-      raise UnsupportedConditionTypeError, "Unsupported condition type: #{condition_type}" unless config
-      config
+    def build_compound_scope(scope)
+      if operator == "or"
+        combined_scope = sub_conditions
+          .map { |sub| sub.apply(scope) }
+          .reduce { |acc, s| acc.or(s) }
+
+        combined_scope || scope
+      else
+        sub_conditions.reduce(scope) { |s, sub| sub.apply(s) }
+      end
     end
 end

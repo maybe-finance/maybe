@@ -4,7 +4,7 @@
   <ul>
     <% @rules.each do |rule| %>
       <li>
-        <%= rule.id %>
+        <%= link_to rule.id, edit_rule_path(rule) %>
       </li>
     <% end %>
   </ul>
