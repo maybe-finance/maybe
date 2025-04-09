@@ -20,6 +20,16 @@ export default class extends Controller {
     this.#persistPreference("show_sidebar", this.leftPanelOpen);
   }
 
+  toggleLeftPanelMobile() {
+    if (this.leftPanelOpen) {
+      this.leftPanelTarget.classList.add("hidden");
+      this.leftPanelOpen = false;
+    } else {
+      this.leftPanelTarget.classList.remove("hidden");
+      this.leftPanelOpen = true;
+    }
+  }
+
   toggleRightPanel() {
     this.rightPanelOpen = !this.rightPanelOpen;
     this.#updatePanelWidths();
@@ -27,7 +37,6 @@ export default class extends Controller {
   }
 
   #updatePanelWidths() {
-    this.contentTarget.style.maxWidth = `${this.#contentMaxWidth()}px`;
     this.leftPanelTarget.style.width = `${this.#leftPanelWidth()}px`;
     this.rightPanelTarget.style.width = `${this.#rightPanelWidth()}px`;
     this.rightPanelTarget.style.overflow = this.#rightPanelOverflow();
@@ -59,18 +68,6 @@ export default class extends Controller {
     }
 
     return "hidden";
-  }
-
-  #contentMaxWidth() {
-    if (!this.leftPanelOpen && !this.rightPanelOpen) {
-      return 1024;
-    }
-
-    if (this.leftPanelOpen && !this.rightPanelOpen) {
-      return 896;
-    }
-
-    return 768;
   }
 
   #persistPreference(field, value) {
