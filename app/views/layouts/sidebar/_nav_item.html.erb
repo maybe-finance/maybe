@@ -1,8 +1,8 @@
 <%# locals: (name:, path:, icon_key:) %>
 
-<%= link_to path, class: "space-y-1 py-1 group block" do %>
-  <div class="grow flex gap-1 items-center">
-    <%= tag.div class: class_names("w-1 h-4 rounded-tr-sm rounded-br-sm", "bg-gray-900" => page_active?(path)) %>
+<%= link_to path, class: "space-y-1 lg:py-1 group block" do %>
+  <div class="grow flex flex-col lg:flex-row gap-1 items-center">
+    <%= tag.div class: class_names("w-4 h-1 lg:w-1 lg:h-4 rounded-bl-sm rounded-br-sm lg:rounded-tr-sm lg:rounded-br-sm lg:rounded-bl-none", "bg-gray-900" => page_active?(path)) %>
 
     <%= tag.div class: class_names("w-8 h-8 flex items-center justify-center mx-auto rounded-lg", page_active?(path) ? "bg-white shadow-xs text-primary" : "group-hover:bg-gray-100 text-secondary") do %>
       <%= icon(icon_key) %>
