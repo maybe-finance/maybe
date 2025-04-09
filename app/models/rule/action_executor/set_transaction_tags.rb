@@ -8,6 +8,10 @@ class Rule::ActionExecutor::SetTransactionTags < Rule::ActionExecutor
   end
 
   def execute(transaction_scope, value = nil)
-    # TODO
+    tag = family.tags.find_by_id(value)
+
+    transaction_scope.each do |transaction|
+      transaction.update(tags: [ tag ])
+    end
   end
 end

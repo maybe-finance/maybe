@@ -27,7 +27,14 @@
 
     <%= contextual_menu icon: "more-vertical", id: "chat-menu" do %>
       <%= contextual_menu_item "Edit", url: edit_rule_path(rule), icon: "pencil", turbo_frame: "modal" %>
-      <%= contextual_menu_destructive_item "Delete", rule_path(rule), turbo_confirm: "Are you sure you want to delete this rule?" %>
+
+      <% turbo_confirm = {
+        title: "Delete rule",
+        body: "Are you sure you want to delete this rule? Data affected by this rule will no longer be automatically updated. This action cannot be undone.",
+        accept: "Delete rule",
+      } %>
+
+      <%= contextual_menu_destructive_item "Delete", rule_path(rule), turbo_confirm: turbo_confirm %>
     <% end %>
   </div>
 </div>

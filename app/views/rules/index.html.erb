@@ -1,10 +1,24 @@
 <header class="flex items-center justify-between">
   <h1 class="text-primary text-xl font-medium">Rules</h1>
 
-  <%= link_to new_rule_path(resource_type: "transaction"), class: "btn btn--primary flex items-center gap-1 justify-center", data: { turbo_frame: :modal } do %>
-    <%= lucide_icon "plus", class: "w-5 h-5" %>
-    <p>New rule</p>
-  <% end %>
+  <% turbo_confirm = {
+    title: "Delete all rules",
+    body: "Are you sure you want to delete all rules? This action cannot be undone.",
+    accept: "Delete all rules",
+  } %>
+
+  <div class="flex items-center gap-2">
+    <% if @rules.any? %>
+      <%= contextual_menu do %>
+        <%= contextual_menu_destructive_item "Delete all rules", destroy_all_rules_path, turbo_confirm: turbo_confirm %>
+      <% end %>
+    <% end %>
+
+    <%= link_to new_rule_path(resource_type: "transaction"), class: "btn btn--primary flex items-center gap-1 justify-center", data: { turbo_frame: :modal } do %>
+      <%= lucide_icon "plus", class: "w-5 h-5" %>
+      <p>New rule</p>
+    <% end %>
+  </div>
 </header>
 
 <div class="bg-white shadow-border-xs rounded-xl p-4">

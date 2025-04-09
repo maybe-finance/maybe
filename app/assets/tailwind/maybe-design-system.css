@@ -368,6 +368,10 @@
     @apply border border-transparent text-gray-900 hover:bg-gray-100;
   }
 
+  .btn--outline-destructive {
+    @apply border border-alpha-black-200 text-red-500 hover:bg-gray-50 disabled:text-red-300;
+  }
+
   .btn--destructive {
     @apply bg-red-500 text-white hover:bg-red-600 disabled:bg-red-50 disabled:hover:bg-red-50 disabled:text-red-400;
   }

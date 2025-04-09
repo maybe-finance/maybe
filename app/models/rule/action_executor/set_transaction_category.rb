@@ -8,8 +8,10 @@ class Rule::ActionExecutor::SetTransactionCategory < Rule::ActionExecutor
   end
 
   def execute(transaction_scope, value = nil)
+    category = family.categories.find_by_id(value)
+
     transaction_scope.update_all(
-      category_id: value,
+      category_id: category.id,
       updated_at: Time.current
     )
   end

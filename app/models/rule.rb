@@ -36,7 +36,7 @@ class Rule < ApplicationRecord
     end
   end
 
-  def apply
+  def matching_resources_scope
     scope = registry.resource_scope
 
     # 1. Prepare the query with joins required by conditions
@@ -55,9 +55,12 @@ class Rule < ApplicationRecord
       scope = condition.apply(scope)
     end
 
-    # 3. Apply the actions to the resources resulting from the query
+    scope
+  end
+
+  def apply
     actions.each do |action|
-      action.apply(scope)
+      action.apply(matching_resources_scope)
     end
   end
 
