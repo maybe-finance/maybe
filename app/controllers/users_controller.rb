@@ -49,6 +49,11 @@ class UsersController < ApplicationController
     end
   end
 
+  def rule_prompt_settings
+    @user.update!(rule_prompt_settings_params)
+    redirect_back_or_to settings_profile_path
+  end
+
   private
     def handle_redirect(notice)
       case user_params[:redirect_to]
@@ -70,6 +75,10 @@ class UsersController < ApplicationController
 
     def email_changed?
       user_params[:email].present? && user_params[:email] != @user.email
+    end
+
+    def rule_prompt_settings_params
+      params.require(:user).permit(:rule_prompt_dismissed_at, :rule_prompts_disabled)
     end
 
     def user_params

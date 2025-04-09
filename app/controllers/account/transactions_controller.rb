@@ -7,14 +7,13 @@ class Account::TransactionsController < ApplicationController
     if @entry.update(update_entry_params)
       @entry.sync_account_later
 
-      if @entry.account_transaction.saved_change_to_category_id? && @entry.account_transaction.eligible_for_category_rule?
+      transaction = @entry.account_transaction
+
+      if needs_rule_notification?(transaction)
         flash[:cta] = {
-          message: "Updated to #{@entry.account_transaction.category.name}",
-          description: "You can create a rule to automatically categorize transactions like this one",
-          accept_label: "Create rule",
-          accept_href: new_rule_path(resource_type: "transaction"),
-          accept_turbo_frame: "modal",
-          decline_label: "Dismiss"
+          type: "category_rule",
+          category_id: transaction.category_id,
+          category_name: transaction.category.name
         }
       else
         flash[:notice] = "Transaction updated"
@@ -23,20 +22,15 @@ class Account::TransactionsController < ApplicationController
       respond_to do |format|
         format.html { redirect_back_or_to account_path(@entry.account), notice: t("account.entries.update.success") }
         format.turbo_stream do
-          items = [
+          render turbo_stream: [
             turbo_stream.replace(
               "header_account_entry_#{@entry.id}",
               partial: "account/transactions/header",
               locals: { entry: @entry }
             ),
-            turbo_stream.replace("account_entry_#{@entry.id}", partial: "account/entries/entry", locals: { entry: @entry })
+            turbo_stream.replace("account_entry_#{@entry.id}", partial: "account/entries/entry", locals: { entry: @entry }),
+            *flash_notification_stream_items
           ]
-
-          if flash[:cta].present?
-            items << turbo_stream.replace("cta", partial: "shared/notifications/cta", locals: { cta: flash[:cta] })
-          end
-
-          render turbo_stream: items
         end
       end
     else
@@ -63,6 +57,18 @@ class Account::TransactionsController < ApplicationController
   end
 
   private
+    def needs_rule_notification?(transaction)
+      return false if Current.user.rule_prompts_disabled
+
+      if Current.user.rule_prompt_dismissed_at.present?
+        time_since_last_rule_prompt = Time.current - Current.user.rule_prompt_dismissed_at
+        return false if time_since_last_rule_prompt < 1.day
+      end
+
+      transaction.saved_change_to_category_id? &&
+      transaction.eligible_for_category_rule?
+    end
+
     def bulk_delete_params
       params.require(:bulk_delete).permit(entry_ids: [])
     end

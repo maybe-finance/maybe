@@ -1,4 +1,4 @@
-<%# locals: (cta:) %>
+<%# locals: (message:, description:) %>
 
 <div id="cta">
   <%= tag.div class: "relative flex gap-3 rounded-lg bg-white p-4 group max-w-80 shadow-border-xs", data: { controller: "element-removal" } do %>
@@ -10,14 +10,11 @@
 
     <div class="space-y-4">
       <div class="space-y-1">
-        <%= tag.p cta[:message], class: "text-primary text-sm font-medium" %>
-        <%= tag.p cta[:description], class: "text-secondary text-sm" %>
+        <%= tag.p message, class: "text-primary text-sm font-medium" %>
+        <%= tag.p description, class: "text-secondary text-sm" %>
       </div>
 
-      <%= tag.div class:"flex gap-2 justify-end" do %>
-        <%= tag.button cta[:decline_label], class: "btn btn--secondary", data: { action: "click->element-removal#remove" } %>
-        <%= tag.a cta[:accept_label], href: cta[:accept_href], class: "btn btn--primary", data: { turbo_frame: cta[:accept_turbo_frame] || "_top" } %>
-      <% end %>
+      <%= yield %>
     </div>
   <% end %>
 </div>

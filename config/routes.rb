@@ -32,6 +32,7 @@ Rails.application.routes.draw do
 
   resources :users, only: %i[update destroy] do
     delete :reset, on: :member
+    patch :rule_prompt_settings, on: :member
   end
 
   resource :onboarding, only: :show do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_03_110915) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_09_121436) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -651,6 +651,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_03_110915) do
     t.uuid "last_viewed_chat_id"
     t.boolean "show_ai_sidebar", default: true
     t.boolean "ai_enabled", default: false, null: false
+    t.boolean "rule_prompts_disabled", default: false
+    t.datetime "rule_prompt_dismissed_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["family_id"], name: "index_users_on_family_id"
     t.index ["last_viewed_chat_id"], name: "index_users_on_last_viewed_chat_id"
