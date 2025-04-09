@@ -1,6 +1,6 @@
-<%# locals: (user:) %>
+<%# locals: (user:, placement: "right-start", offset: 16) %>
 
-<div id="user-menu" data-controller="menu" data-menu-placement-value="right-start" data-menu-offset-value="16">
+<div id="user-menu" data-controller="menu" data-menu-placement-value="<%= placement %>" data-menu-offset-value="<%= offset %>">
   <button data-menu-target="button">
     <div class="w-9 h-9 cursor-pointer">
       <%= render "settings/user_avatar", user: user, variant: :small %>
