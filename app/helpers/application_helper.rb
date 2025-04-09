@@ -27,24 +27,6 @@ module ApplicationHelper
     turbo_stream_from Current.family if Current.family
   end
 
-  def render_flash_notifications
-    notifications = flash.flat_map do |type, data|
-      case type
-      when "alert"
-        render "shared/notifications/alert", message: data
-      when "cta"
-        render "shared/notifications/cta", cta: data
-      when "loading"
-        render "shared/notifications/loading", message: data
-      when "notice"
-        messages = Array(data)
-        messages.map { |message| render "shared/notifications/notice", message: }
-      end
-    end
-
-    safe_join(notifications)
-  end
-
   ##
   # Helper to open a centered and overlayed modal with custom contents
   #
