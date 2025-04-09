@@ -11,85 +11,20 @@ class Rule < ApplicationRecord
   validates :resource_type, presence: true
   validate :no_nested_compound_conditions
 
-  class << self
-    # def transaction_template
-    #   new(
-    #     resource_type: "transaction",
-    #     conditions: [
-    #       Condition.new(
-    #         condition_type: "transaction_name",
-    #         operator: "=",
-    #         value: nil
-    #       )
-    #     ]
-    #   )
-    # end
+  # Every rule must have at least 1 condition + action
+  validate :min_conditions_and_actions
+  validate :no_duplicate_actions
 
-    def transaction_template
-      new(
-        resource_type: "transaction",
-        conditions: [
-          Condition.new(
-            condition_type: "transaction_name",
-            operator: "=",
-            value: nil
-          ),
-          Condition.new(
-            condition_type: "compound",
-            operator: "or",
-            value: nil,
-            sub_conditions: [
-              Condition.new(
-                condition_type: "transaction_name",
-                operator: "like",
-                value: nil
-              ),
-              Condition.new(
-                condition_type: "transaction_name",
-                operator: "like",
-                value: nil
-              ),
-              Condition.new(
-                condition_type: "compound",
-                operator: "and",
-                value: nil,
-                sub_conditions: [
-                  Condition.new(
-                    condition_type: "transaction_amount",
-                    operator: ">",
-                    value: nil
-                  ),
-                  Condition.new(
-                    condition_type: "transaction_amount",
-                    operator: "<",
-                    value: nil
-                  )
-                ]
-              )
-            ]
-          ),
-          Condition.new(
-            condition_type: "transaction_name",
-            operator: "=",
-            value: nil
-          )
-        ],
-        actions: [
-          Action.new(
-            action_type: "set_category",
-            value: nil
-          )
-        ]
-      )
-    end
+  def action_executors
+    registry.action_executors
   end
 
-  def action_types
-    registry.action_executors.map { |option| [ option.label, option.key ] }
+  def condition_filters
+    registry.condition_filters
   end
 
-  def condition_types
-    registry.condition_filters.map { |option| [ option.label, option.key ] }
+  def title
+    "Test title"
   end
 
   def registry
@@ -127,6 +62,22 @@ class Rule < ApplicationRecord
   end
 
   private
+    def min_conditions_and_actions
+      if conditions.reject(&:marked_for_destruction?).empty?
+        errors.add(:conditions, "must have at least one condition")
+      end
+
+      if actions.reject(&:marked_for_destruction?).empty?
+        errors.add(:actions, "must have at least one action")
+      end
+    end
+
+    def no_duplicate_actions
+      action_types = actions.map(&:action_type)
+
+      errors.add(:base, "Rule cannot have duplicate actions #{action_types.inspect}") if action_types.uniq.count != action_types.count
+    end
+
     # Validation: To keep rules simple and easy to understand, we don't allow nested compound conditions.
     def no_nested_compound_conditions
       return true if conditions.none? { |condition| condition.compound? }

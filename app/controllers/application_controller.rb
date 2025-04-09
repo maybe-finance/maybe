@@ -8,6 +8,11 @@ class ApplicationController < ActionController::Base
   before_action :set_default_chat
 
   private
+    def stream_redirect_back_or_to(path)
+      redirect_target_url = request.referer || path
+      render turbo_stream: turbo_stream.action(:redirect, redirect_target_url)
+    end
+
     def require_upgrade?
       return false if self_hosted?
       return false unless Current.session

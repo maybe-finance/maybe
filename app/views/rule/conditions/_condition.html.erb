@@ -5,7 +5,7 @@
 
 <li data-rule-target="condition">
   <%= form.hidden_field :_destroy, value: false, data: { rule_target: "destroyField" } %>
-  <%= form.select :condition_type, rule.condition_types, {}, data: { action: "rule#handleConditionTypeChange" } %>
+  <%= form.select :condition_type, rule.condition_filters.map { |filter| [ filter.label, filter.key ] }, {}, data: { action: "rule#handleConditionTypeChange" } %>
   <%= form.select :operator, condition.operators, {}, data: { rule_target: "operatorField" } %>
 
   <% if condition.filter.type == "select" %>

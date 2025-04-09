@@ -143,7 +143,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :rules do
+  resources :rules, except: :show do
     resources :triggers, only: :new
     resources :actions, only: :new
   end

@@ -1,12 +1,37 @@
-<% content_for :page_title, "Rules" %>
+<header class="flex items-center justify-between">
+  <h1 class="text-primary text-xl font-medium">Rules</h1>
 
-<div>
-  <%= link_to "New rule", new_rule_path %>
-  <ul>
-    <% @rules.each do |rule| %>
-      <li>
-        <%= link_to rule.id, edit_rule_path(rule) %>
-      </li>
-    <% end %>
-  </ul>
+  <%= link_to new_rule_path(resource_type: "transaction"), class: "btn btn--primary flex items-center gap-1 justify-center", data: { turbo_frame: :modal } do %>
+    <%= lucide_icon "plus", class: "w-5 h-5" %>
+    <p>New rule</p>
+  <% end %>
+</header>
+
+<div class="bg-white shadow-border-xs rounded-xl p-4">
+  <% if @rules.any? %>
+    <div class="rounded-xl bg-gray-25 space-y-1">
+      <div class="flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-secondary uppercase">
+        <p>Rules</p>
+        <span class="text-subdued">&middot;</span>
+        <p><%= @rules.count %></p>
+      </div>
+
+      <div class="space-y-1 p-1">
+        <%= render @rules %>
+      </div>
+    </div>
+  <% else %>
+    <div class="flex justify-center items-center py-20">
+      <div class="text-center flex flex-col items-center max-w-[500px]">
+        <p class="text-sm text-primary font-medium mb-1">No rules yet</p>
+        <p class="text-sm text-secondary mb-4">Set up rules to perform actions to your transactions and other data on every account sync.</p>
+        <div class="flex items-center gap-2">
+          <%= link_to new_rule_path(resource_type: "transaction"), class: "btn btn--primary flex items-center gap-1", data: { turbo_frame: "modal" } do %>
+            <%= lucide_icon("plus", class: "w-5 h-5") %>
+            <span>New rule</span>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
 </div>

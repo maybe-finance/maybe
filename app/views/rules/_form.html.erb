@@ -1,20 +1,24 @@
 <%# locals: (rule:) %>
 
 <%= form_with model: rule,
-                class: "p-4 space-y-8 min-w-[600px]",
-                data: {
-                  controller: "rule",
-                  rule_registry_value: rule.registry.to_json
-                } do |f| %>
+              class: "p-4 space-y-8 min-w-[600px]",
+              data: {
+                controller: "rule",
+                rule_registry_value: rule.registry.to_json
+              } do |f| %>
 
   <%= f.hidden_field :resource_type, value: rule.resource_type %>
+
+  <% if @rule.errors.any? %>
+    <%= render "shared/form_errors", model: @rule %>
+  <% end %>
 
   <section class="space-y-4">
     <h3 class="mb-4 font-bold">Conditions</h3>
     <hr>
 
     <template data-rule-target="newConditionTemplate">
-      <%= f.fields_for :conditions, @template_condition, child_index: "IDX_PLACEHOLDER" do |cf| %>
+      <%= f.fields_for :conditions, Rule::Condition.new(rule: rule, condition_type: rule.condition_filters.first.key), child_index: "IDX_PLACEHOLDER" do |cf| %>
         <%= render "rule/conditions/condition_group", form: cf %>
       <% end %>
     </template>
@@ -35,7 +39,7 @@
     <hr>
 
     <template data-rule-target="newActionTemplate">
-      <%= f.fields_for :actions, @template_action, child_index: "IDX_PLACEHOLDER" do |af| %>
+      <%= f.fields_for :actions, Rule::Action.new(rule: rule, action_type: rule.action_executors.first.key), child_index: "IDX_PLACEHOLDER" do |af| %>
         <%= render "rule/actions/action", form: af %>
       <% end %>
     </template>

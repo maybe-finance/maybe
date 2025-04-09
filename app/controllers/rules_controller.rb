@@ -1,41 +1,42 @@
 class RulesController < ApplicationController
-  before_action :set_rule, only: [ :show, :edit, :update, :destroy ]
+  include StreamExtensions
+
+  before_action :set_rule, only: [  :edit, :update, :destroy ]
 
   def index
     @rules = Current.family.rules.order(created_at: :desc)
     render layout: "settings"
   end
 
-  def show
-  end
-
   def new
-    @rule = Current.family.rules.build(
-      resource_type: params[:resource_type] || "transaction",
-      conditions: [
-        Rule::Condition.new(condition_type: "transaction_name", operator: "like", value: "test")
-      ],
-      actions: [
-        Rule::Action.new(action_type: "set_transaction_category", value: Current.family.categories.first.id)
-      ]
-    )
-
-    @template_condition = Rule::Condition.new(rule: @rule, condition_type: "transaction_name")
-    @template_action = Rule::Action.new(rule: @rule, action_type: "set_transaction_category")
+    @rule = Current.family.rules.build(resource_type: params[:resource_type] || "transaction")
   end
 
   def create
-    Current.family.rules.create!(rule_params)
-    redirect_to rules_path
+    @rule = Current.family.rules.build(rule_params)
+
+    if @rule.save
+      respond_to do |format|
+        format.html { redirect_back_or_to rules_path, notice: "Rule created" }
+        format.turbo_stream { stream_redirect_back_or_to rules_path, notice: "Rule created" }
+      end
+    else
+      render :new, status: :unprocessable_entity
+    end
   end
 
   def edit
-    @rule = Current.family.rules.find(params[:id])
   end
 
   def update
-    @rule.update!(rule_params)
-    redirect_to rules_path
+    if @rule.update(rule_params)
+      respond_to do |format|
+        format.html { redirect_back_or_to rules_path, notice: "Rule updated" }
+        format.turbo_stream { stream_redirect_back_or_to rules_path, notice: "Rule updated" }
+      end
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   def destroy
@@ -44,7 +45,6 @@ class RulesController < ApplicationController
   end
 
   private
-
     def set_rule
       @rule = Current.family.rules.find(params[:id])
     end
@@ -53,11 +53,11 @@ class RulesController < ApplicationController
       params.require(:rule).permit(
         :resource_type, :effective_date, :active,
         conditions_attributes: [
-          :id, :condition_type, :operator, :value,
-          sub_conditions_attributes: [ :id, :condition_type, :operator, :value ]
+          :id, :condition_type, :operator, :value, :_destroy,
+          sub_conditions_attributes: [ :id, :condition_type, :operator, :value, :_destroy ]
         ],
         actions_attributes: [
-          :id, :action_type, :value
+          :id, :action_type, :value, :_destroy
         ]
       )
     end

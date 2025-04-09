@@ -1,0 +1,33 @@
+<%# locals: (rule:) %>
+
+<div class="flex justify-between items-center gap-4 bg-white shadow-border-xs rounded-md p-4">
+  <div class="text-sm space-y-1.5">
+
+    <p class="flex items-center flex-wrap gap-1.5">
+      <span class="px-2 py-1 border border-alpha-black-200 rounded-full">
+        <%= rule.actions.first.executor.label %>
+      </span>
+
+      <% if rule.actions.count > 1 %>
+        and <%= rule.actions.count - 1 %> more <%= rule.actions.count - 1 == 1 ? "action" : "actions" %>
+      <% end %>
+    </p>
+
+    <p class="flex items-center flex-wrap gap-1.5">
+      <% if rule.effective_date.nil? %>
+        To all past and future <%= rule.resource_type.pluralize %>
+      <% else %>
+        To all <%= rule.resource_type.pluralize %> on or after <%= rule.effective_date %>
+      <% end %>
+    </p>
+  </div>
+
+  <div class="flex items-center gap-4">
+    <%= render "shared/toggle_form", model: rule, attribute: :active %>
+
+    <%= contextual_menu icon: "more-vertical", id: "chat-menu" do %>
+      <%= contextual_menu_item "Edit", url: edit_rule_path(rule), icon: "pencil", turbo_frame: "modal" %>
+      <%= contextual_menu_destructive_item "Delete", rule_path(rule), turbo_confirm: "Are you sure you want to delete this rule?" %>
+    <% end %>
+  </div>
+</div>

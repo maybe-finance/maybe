@@ -477,7 +477,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_03_110915) do
   create_table "rule_actions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "rule_id", null: false
     t.string "action_type", null: false
-    t.string "value", null: false
+    t.string "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["rule_id"], name: "index_rule_actions_on_rule_id"

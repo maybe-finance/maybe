@@ -2,6 +2,8 @@ module EntryableResource
   extend ActiveSupport::Concern
 
   included do
+    include StreamExtensions
+
     before_action :set_entry, only: %i[show update destroy]
   end
 
@@ -35,9 +37,7 @@ module EntryableResource
 
       respond_to do |format|
         format.html { redirect_back_or_to account_path(@entry.account) }
-
-        redirect_target_url = request.referer || account_path(@entry.account)
-        format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, redirect_target_url) }
+        format.turbo_stream { stream_redirect_back_or_to account_path(@entry.account) }
       end
     else
       render :new, status: :unprocessable_entity

@@ -23,7 +23,7 @@ class CreateRules < ActiveRecord::Migration[7.2]
       t.references :rule, null: false, foreign_key: true, type: :uuid
 
       t.string :action_type, null: false
-      t.string :value, null: false
+      t.string :value
       t.timestamps
     end
   end

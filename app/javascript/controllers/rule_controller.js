@@ -140,7 +140,7 @@ export default class extends Controller {
   }
 
   #uniqueKey() {
-    return `${Date.now()}_${Math.floor(Math.random() * 100000)}`;
+    return Date.now();
   }
 
   #getConditionFilterDefinition(key) {
