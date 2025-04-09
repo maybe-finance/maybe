@@ -7,7 +7,7 @@ export default class extends Controller {
     config: Object,
   };
 
-  static targets = ["leftPanel", "rightPanel", "content"];
+  static targets = ["leftPanel", "leftPanelMobile", "rightPanel", "content"];
 
   initialize() {
     this.leftPanelOpen = this.configValue.left_panel.is_open;
@@ -22,10 +22,10 @@ export default class extends Controller {
 
   toggleLeftPanelMobile() {
     if (this.leftPanelOpen) {
-      this.leftPanelTarget.classList.add("hidden");
+      this.leftPanelMobileTarget.classList.remove("hidden");
       this.leftPanelOpen = false;
     } else {
-      this.leftPanelTarget.classList.remove("hidden");
+      this.leftPanelMobileTarget.classList.add("hidden");
       this.leftPanelOpen = true;
     }
   }
