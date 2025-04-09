@@ -61,6 +61,7 @@ class RuleTest < ActiveSupport::TestCase
     rule = Rule.new(
       family: @family,
       resource_type: "transaction",
+      actions: [ Rule::Action.new(action_type: "set_transaction_category", value: @groceries_category.id) ],
       conditions: [
         Rule::Condition.new(condition_type: "compound", operator: "and", sub_conditions: [
           Rule::Condition.new(condition_type: "compound", operator: "and", sub_conditions: [

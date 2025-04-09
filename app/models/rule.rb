@@ -73,7 +73,7 @@ class Rule < ApplicationRecord
     end
 
     def no_duplicate_actions
-      action_types = actions.map(&:action_type)
+      action_types = actions.reject(&:marked_for_destruction?).map(&:action_type)
 
       errors.add(:base, "Rule cannot have duplicate actions #{action_types.inspect}") if action_types.uniq.count != action_types.count
     end

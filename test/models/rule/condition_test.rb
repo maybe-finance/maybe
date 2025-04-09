@@ -5,7 +5,7 @@ class Rule::ConditionTest < ActiveSupport::TestCase
 
   setup do
     @family = families(:empty)
-    @transaction_rule = @family.rules.create!(resource_type: "transaction")
+    @transaction_rule = rules(:one)
     @account = @family.accounts.create!(name: "Rule test", balance: 1000, currency: "USD", accountable: Depository.new)
 
     @grocery_category = @family.categories.create!(name: "Grocery")

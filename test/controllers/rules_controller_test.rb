@@ -22,35 +22,35 @@ class RulesControllerTest < ActionDispatch::IntegrationTest
         active: true,
         effective_date: 30.days.ago.to_date,
         resource_type: "transaction",
-        conditions_attributes: [
-          {
+        conditions_attributes: {
+          "0" => {
             condition_type: "transaction_name",
             operator: "like",
             value: "starbucks"
           },
-          {
+          "1" => {
             condition_type: "compound",
             operator: "and",
-            sub_conditions_attributes: [
-              {
+            sub_conditions_attributes: {
+              "0" => {
                 condition_type: "transaction_amount",
                 operator: ">",
                 value: 20
               },
-              {
+              "1" => {
                 condition_type: "transaction_amount",
                 operator: "<",
                 value: 40
               }
-            ]
+            }
           }
-        ],
-        actions_attributes: [
-          {
+        },
+        actions_attributes: {
+          "0" => {
             action_type: "set_transaction_category",
             value: categories(:food_and_drink).id
           }
-        ]
+        }
       }
     }
 
@@ -76,22 +76,33 @@ class RulesControllerTest < ActionDispatch::IntegrationTest
   test "can update rule" do
     rule = rules(:one)
 
-    assert_no_difference [ "Rule.count", "Rule::Condition.count", "Rule::Action.count" ] do
+    assert_difference -> { Rule.count } => 0,
+      -> { Rule::Condition.count } => 1,
+      -> { Rule::Action.count } => 1 do
       patch rule_url(rule), params: {
         rule: {
           active: false,
-          conditions_attributes: [
-            {
+          conditions_attributes: {
+            "0" => {
               id: rule.conditions.first.id,
               value: "new_value"
+            },
+            "1" => {
+              condition_type: "transaction_amount",
+              operator: ">",
+              value: 100
             }
-          ],
-          actions_attributes: [
-            {
+          },
+          actions_attributes: {
+            "0" => {
               id: rule.actions.first.id,
               value: "new_value"
+            },
+            "1" => {
+              action_type: "set_transaction_tags",
+              value: tags(:one).id
             }
-          ]
+          }
         }
       }
     end
@@ -99,8 +110,10 @@ class RulesControllerTest < ActionDispatch::IntegrationTest
     rule.reload
 
     assert_not rule.active
-    assert_equal "new_value", rule.conditions.first.value
-    assert_equal "new_value", rule.actions.first.value
+    assert_equal "new_value", rule.conditions.order("created_at ASC").first.value
+    assert_equal "new_value", rule.actions.order("created_at ASC").first.value
+    assert_equal tags(:one).id, rule.actions.order("created_at ASC").last.value
+    assert_equal "100", rule.conditions.order("created_at ASC").last.value
 
     assert_redirected_to rules_url
   end
@@ -113,22 +126,21 @@ class RulesControllerTest < ActionDispatch::IntegrationTest
 
     patch rule_url(rule), params: {
       rule: {
-        conditions_attributes: [
-          { id: rule.conditions.first.id, _destroy: true },
-          {
+        conditions_attributes: {
+          "0" => { id: rule.conditions.first.id, _destroy: true },
+          "1" => {
             condition_type: "transaction_name",
             operator: "like",
             value: "new_condition"
-          },
-          {
-            condition_type: "transaction_amount",
-            operator: ">",
-            value: 100
           }
-        ],
-        actions_attributes: [
-          { id: rule.actions.first.id, _destroy: true }
-        ]
+        },
+        actions_attributes: {
+          "0" => { id: rule.actions.first.id, _destroy: true },
+          "1" => {
+            action_type: "set_transaction_tags",
+            value: tags(:one).id
+          }
+        }
       }
     }
 
@@ -136,7 +148,7 @@ class RulesControllerTest < ActionDispatch::IntegrationTest
 
     rule.reload
 
-    assert_equal 2, rule.conditions.count
+    assert_equal 1, rule.conditions.count
     assert_equal 1, rule.actions.count
   end
 
