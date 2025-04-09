@@ -15,8 +15,6 @@ class Account::TransactionsController < ApplicationController
           category_id: transaction.category_id,
           category_name: transaction.category.name
         }
-      else
-        flash[:notice] = "Transaction updated"
       end
 
       respond_to do |format|

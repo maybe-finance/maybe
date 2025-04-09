@@ -64,11 +64,11 @@ class Rule < ApplicationRecord
   private
     def min_conditions_and_actions
       if conditions.reject(&:marked_for_destruction?).empty?
-        errors.add(:conditions, "must have at least one condition")
+        errors.add(:base, "must have at least one condition")
       end
 
       if actions.reject(&:marked_for_destruction?).empty?
-        errors.add(:actions, "must have at least one action")
+        errors.add(:base, "must have at least one action")
       end
     end
 
