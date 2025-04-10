@@ -5,6 +5,8 @@
   One-off styling (3rd party overrides, etc.) should be done in the application.css file.
 */
 
+@custom-variant theme-dark (&:where([data-theme=dark], [data-theme=dark] *));
+
 @theme {
   /* Font families */
   --font-sans: 'Geist', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -241,18 +243,34 @@
 /* Design system color utilities */
 @utility text-primary {
   @apply text-gray-900;
+
+  @variant theme-dark {
+   @apply text-white;
+  }
 }
 
 @utility text-secondary {
   @apply text-gray-500;
+
+  @variant theme-dark {
+    @apply text-gray-400;
+  }
 }
 
 @utility text-subdued {
   @apply text-gray-400;
+
+  @variant theme-dark {
+    @apply text-gray-600;
+  }
 }
 
 @utility text-link {
   @apply text-blue-600;
+
+  @variant theme-dark {
+    @apply text-blue-500;
+  }
 }
 
 @utility bg-surface {
