@@ -36,7 +36,7 @@ class Rule::ConditionTest < ActiveSupport::TestCase
     assert_equal 1, filtered.count
   end
 
-  test "applies transaction_amount condition" do
+  test "applies transaction_amount condition using absolute values" do
     condition = Rule::Condition.new(
       rule: @transaction_rule,
       condition_type: "transaction_amount",
@@ -45,7 +45,7 @@ class Rule::ConditionTest < ActiveSupport::TestCase
     )
 
     filtered = condition.apply(@rule_scope)
-    assert_equal 2, filtered.count
+    assert_equal 3, filtered.count
   end
 
   test "applies transaction_merchant condition" do
@@ -103,6 +103,6 @@ class Rule::ConditionTest < ActiveSupport::TestCase
     )
 
     filtered = parent_condition.apply(@rule_scope)
-    assert_equal 3, filtered.count
+    assert_equal 2, filtered.count
   end
 end

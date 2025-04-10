@@ -4,7 +4,7 @@ class Rule::ActionTest < ActiveSupport::TestCase
   include Account::EntriesTestHelper
 
   setup do
-    @family = families(:empty)
+    @family = families(:dylan_family)
     @transaction_rule = rules(:one)
     @account = @family.accounts.create!(name: "Rule test", balance: 1000, currency: "USD", accountable: Depository.new)
 
