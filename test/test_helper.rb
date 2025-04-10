@@ -49,7 +49,7 @@ module ActiveSupport
 
     # Add more helper methods to be used by all tests here...
     def sign_in(user)
-      post sessions_path, params: { email: user.email, password: "password" }
+      post sessions_path, params: { email: user.email, password: "maybetestpassword817983172" }
     end
 
     def with_env_overrides(overrides = {}, &block)
