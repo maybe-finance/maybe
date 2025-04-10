@@ -1,11 +1,7 @@
 <%# locals: (rule:) %>
 
-<%= form_with model: rule,
-              class: "p-4 space-y-8 min-w-[600px]",
-              data: {
-                controller: "rule",
-                rule_registry_value: rule.registry.to_json
-              } do |f| %>
+<%= styled_form_with model: rule, class: "space-y-4",
+                     data: { controller: "rules", rule_registry_value: rule.registry.to_json } do |f| %>
 
   <%= f.hidden_field :resource_type, value: rule.resource_type %>
 
@@ -14,37 +10,56 @@
   <% end %>
 
   <section class="space-y-4">
-    <h3 class="mb-4 font-bold">Conditions</h3>
-    <hr>
+    <h3 class="text-sm font-medium">If <%= rule.resource_type %></h3>
 
-    <template data-rule-target="newConditionTemplate">
-      <%= f.fields_for :conditions, Rule::Condition.new(rule: rule, condition_type: rule.condition_filters.first.key), child_index: "IDX_PLACEHOLDER" do |cf| %>
+    <%# Condition template, used by Stimulus controller to add new conditions dynamically %>
+    <template data-rules-target="conditionGroupTemplate">
+      <%= f.fields_for :conditions, Rule::Condition.new(rule: rule, condition_type: "compound", operator: "and"), child_index: "IDX_PLACEHOLDER" do |cf| %>
         <%= render "rule/conditions/condition_group", form: cf %>
       <% end %>
     </template>
 
-    <ul data-rule-target="conditionsList">
-      <span>When</span>
+    <%# Condition template, used by Stimulus controller to add new conditions dynamically %>
+    <template data-rules-target="conditionTemplate">
+      <%= f.fields_for :conditions, Rule::Condition.new(rule: rule, condition_type: rule.condition_filters.first.key), child_index: "IDX_PLACEHOLDER" do |cf| %>
+        <%= render "rule/conditions/condition", form: cf %>
+      <% end %>
+    </template>
 
+    <ul data-rules-target="conditionsList" class="space-y-3 mb-4">
       <%= f.fields_for :conditions do |cf| %>
-        <%= render "rule/conditions/condition_group", form: cf %>
+        <% if cf.object.compound? %>
+          <%= render "rule/conditions/condition_group", form: cf %>
+        <% else %>
+          <%= render "rule/conditions/condition", form: cf %>
+        <% end %>
       <% end %>
     </ul>
 
-    <button type="button" data-action="rule#addCondition">Add condition</button>
+    <div class="flex items-center gap-2">
+      <button type="button" data-action="rules#addCondition" class="btn btn--ghost">
+        <%= icon("plus") %>
+        <span>Add condition</span>
+      </button>
+
+      <button type="button" data-action="rules#addConditionGroup" class="btn btn--ghost">
+        <%= icon("boxes") %>
+        <span>Add condition group</span>
+      </button>
+    </div>
   </section>
 
   <section class="space-y-4">
-    <h3 class="mb-4 font-bold">Actions</h3>
-    <hr>
+    <h3 class="text-sm font-medium">Then</h3>
 
-    <template data-rule-target="newActionTemplate">
+    <%# Action template, used by Stimulus controller to add new actions dynamically %>
+    <template data-rules-target="actionTemplate">
       <%= f.fields_for :actions, Rule::Action.new(rule: rule, action_type: rule.action_executors.first.key), child_index: "IDX_PLACEHOLDER" do |af| %>
         <%= render "rule/actions/action", form: af %>
       <% end %>
     </template>
 
-    <ul data-rule-target="actionsList">
+    <ul data-rules-target="actionsList" class="space-y-3">
       <%= f.fields_for :actions do |af| %>
         <%= render "rule/actions/action", form: af %>
       <% end %>
@@ -52,9 +67,31 @@
 
     <button
         type="button"
-        data-action="rule#addAction">
-      Add action
+        data-action="rules#addAction"
+        class="btn btn--ghost">
+      <%= icon("plus") %>
+      <span>Add action</span>
     </button>
+  </section>
+
+  <section class="space-y-4">
+    <h3 class="text-sm font-medium">Apply this</h3>
+
+    <div class="space-y-2">
+      <div class="flex items-center gap-2">
+        <%= f.radio_button :effective_date_enabled, false, checked: rule.effective_date.nil?, data: { action: "rules#clearEffectiveDate" } %>
+        <%= f.label :effective_date_enabled_false, "To all past and future #{rule.resource_type}s" %>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2">
+          <%= f.radio_button :effective_date_enabled, true, checked: rule.effective_date.present? %>
+          <%= f.label :effective_date_enabled_true, "Starting from" %>
+        </div>
+
+        <%= f.date_field :effective_date, container_class: "w-fit", data: { rules_target: "effectiveDateInput" } %>
+      </div>
+    </div>
   </section>
 
   <%= f.submit %>

@@ -9,13 +9,21 @@ class RulesController < ApplicationController
   end
 
   def new
-    actions = []
-
-    if params[:action_type]
-      actions << Rule::Action.new(action_type: params[:action_type], value: params[:action_value])
-    end
-
-    @rule = Current.family.rules.build(resource_type: params[:resource_type] || "transaction", actions: actions)
+    @rule = Current.family.rules.build(
+      resource_type: params[:resource_type] || "transaction",
+      conditions: [
+        Rule::Condition.new(
+          condition_type: params[:condition_type] || "transaction_amount",
+          value: params[:condition_value]
+        )
+      ],
+      actions: [
+        Rule::Action.new(
+          action_type: params[:action_type] || "set_transaction_category",
+          value: params[:action_value]
+        )
+      ]
+    )
   end
 
   def create

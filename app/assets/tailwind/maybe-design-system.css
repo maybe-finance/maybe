@@ -348,7 +348,7 @@
 @layer components {
   /* Buttons */
   .btn {
-    @apply px-3 py-2 rounded-lg text-sm font-medium cursor-pointer disabled:cursor-not-allowed focus:outline-gray-500;
+    @apply inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium cursor-pointer disabled:cursor-not-allowed focus:outline-gray-500;
     @apply transition-all duration-300;
   }
 
@@ -365,7 +365,7 @@
   }
   
   .btn--ghost {
-    @apply border border-transparent text-gray-900 hover:bg-gray-100;
+    @apply border border-transparent text-secondary hover:border hover:border-alpha-black-200 hover:bg-gray-50;
   }
 
   .btn--outline-destructive {

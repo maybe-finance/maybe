@@ -2,21 +2,24 @@
 
 <% action = form.object %>
 <% rule = action.rule %>
+<% needs_value = action.executor.type == "select" %>
 
-<li data-rule-target="action">
-  <%= form.hidden_field :_destroy, value: false, data: { rule_target: "destroyField" } %>
-  <%= form.select :action_type, rule.action_executors.map { |executor| [ executor.label, executor.key ] }, {}, data: { action: "rule#handleActionTypeChange" } %>
+<li data-controller="rule--actions" data-rule--actions-action-executors-value="<%= rule.action_executors.to_json %>" class="flex items-center gap-3">
+  <%= form.hidden_field :_destroy, value: false, data: { rule__actions_target: "destroyField" } %>
 
-  <% if action.executor.type == "select" %>
-    <span>to</span>
-    <%= form.select :value, action.options, {}, data: { rule_target: "valueField" } %>
-  <% else %>
-    <%= form.hidden_field :value, data: { rule_target: "valueField" } %>
-  <% end %>
+  <div class="grow flex gap-2 items-center h-full">
+    <%= form.select :action_type, rule.action_executors.map { |executor| [ executor.label, executor.key ] }, {}, data: { action: "rule--actions#handleActionTypeChange" } %>
+
+    <%= tag.div class: class_names("flex items-center gap-2", "hidden" => !needs_value), 
+                data: { rule__actions_target: "actionValue" } do %>
+      <span class="font-medium uppercase text-xs">to</span>
+      <%= form.select :value, action.options, {}, disabled: !needs_value %>
+    <% end %>
+  </div>
 
   <button type="button"
-          data-action="rule#removeAction"
-          data-rule-destroy-param="<%= action.persisted? %>">
-    Remove
+          data-action="rule--actions#remove"
+          data-rule--actions-destroy-param="<%= action.persisted? %>">
+    <%= icon("trash-2", color: "gray", size: "sm") %>
   </button>
 </li>

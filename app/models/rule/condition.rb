@@ -5,6 +5,8 @@ class Rule::Condition < ApplicationRecord
   has_many :sub_conditions, class_name: "Rule::Condition", foreign_key: :parent_id, dependent: :destroy, inverse_of: :parent
 
   validates :condition_type, presence: true
+  validates :operator, presence: true
+  validates :value, presence: true, unless: -> { compound? }
 
   accepts_nested_attributes_for :sub_conditions, allow_destroy: true
 
