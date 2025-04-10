@@ -13,7 +13,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
       visit new_session_path
       within "form" do
         fill_in "Email", with: user.email
-        fill_in "Password", with: "password"
+        fill_in "Password", with: "maybetestpassword817983172"
         click_on "Log in"
       end
 
