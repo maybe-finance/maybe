@@ -26,7 +26,7 @@
         <% elsif series_item.is_a?(String) %>
           <%= link_to pagy_url_for(pagy, series_item),
                 data: { turbo_frame: :_top },
-                class: "rounded-md px-2 py-1 bg-white border border-alpha-black-25 shadow-xs inline-flex items-center text-sm font-medium text-primary" do %>
+                class: "rounded-md px-2 py-1 bg-container border border-alpha-black-25 shadow-xs inline-flex items-center text-sm font-medium text-primary" do %>
             <%= series_item %>
           <% end %>
         <% elsif series_item == :gap %>

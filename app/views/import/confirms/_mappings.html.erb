@@ -29,7 +29,7 @@
 
     <div class="shadow-border-xs rounded-md divide-y divide-alpha-black-100 text-sm">
       <% mappings.sort_by(&:key).each do |mapping| %>
-        <div class="px-5 py-3 bg-white first:rounded-tl-xl first:rounded-tr-xl last:rounded-bl-xl last:rounded-br-xl">
+        <div class="px-5 py-3 bg-container first:rounded-tl-xl first:rounded-tr-xl last:rounded-bl-xl last:rounded-br-xl">
           <%= render partial: "import/mappings/form", locals: { mapping: mapping } %>
         </div>
       <% end %>

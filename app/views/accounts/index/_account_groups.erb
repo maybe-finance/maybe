@@ -8,7 +8,7 @@
       <p><%= accounts.count %></p>
       <p class="ml-auto"><%= totals_by_currency(collection: accounts, money_method: :balance_money) %></p>
     </div>
-    <div class="bg-white">
+    <div class="bg-container">
       <% accounts.each do |account| %>
         <%= render account %>
       <% end %>

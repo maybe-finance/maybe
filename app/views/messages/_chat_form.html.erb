@@ -4,7 +4,7 @@
   <% model = chat && chat.persisted? ? [chat, Message.new] : Chat.new %>
 
   <%= form_with model: model,
-                class: "flex flex-col gap-2 bg-white px-2 py-1.5 rounded-lg shadow-border-xs",
+                class: "flex flex-col gap-2 bg-container px-2 py-1.5 rounded-lg shadow-border-xs",
                 data: { chat_target: "form" } do |f| %>
 
     <%# In the future, this will be a dropdown with different AI models %>

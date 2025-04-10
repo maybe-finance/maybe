@@ -7,7 +7,7 @@
     <p><%= categories.count %></p>
   </div>
 
-  <div class="shadow-border-xs rounded-md bg-white">
+  <div class="shadow-border-xs rounded-md bg-container">
     <div class="overflow-hidden rounded-md">
       <% Category::Group.for(categories).each_with_index do |group, idx| %>
         <%= render group.category %>

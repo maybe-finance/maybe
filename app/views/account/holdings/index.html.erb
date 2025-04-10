@@ -1,5 +1,5 @@
 <%= turbo_frame_tag dom_id(@account, "holdings") do %>
-  <div class="bg-white space-y-4 p-5 rounded-xl shadow-border-xs">
+  <div class="bg-container space-y-4 p-5 rounded-xl shadow-border-xs">
     <div class="flex items-center justify-between">
       <%= tag.h2 t(".holdings"), class: "font-medium text-lg" %>
       <%= link_to new_account_trade_path(account_id: @account.id),
@@ -20,7 +20,7 @@
         <%= tag.p t(".return"), class: "col-span-2 justify-self-end" %>
       </div>
 
-      <div class="rounded-lg bg-white shadow-border-xs">
+      <div class="rounded-lg bg-container shadow-border-xs">
         <%= render "account/holdings/cash", account: @account %>
 
         <%= render "account/holdings/ruler" %>

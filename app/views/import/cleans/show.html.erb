@@ -11,7 +11,7 @@
   </div>
 
   <% if @import.cleaned? %>
-    <div class="bg-white border border-tertiary rounded-lg p-3 flex items-center justify-between">
+    <div class="bg-container border border-tertiary rounded-lg p-3 flex items-center justify-between">
       <div class="flex items-center gap-2">
         <%= lucide_icon "check-circle", class: "w-4 h-4 text-green-500" %>
         <p class="text-green-500">Your data has been cleaned</p>
@@ -20,7 +20,7 @@
       <%= link_to "Next step", import_confirm_path(@import), class: "btn btn--primary" %>
     </div>
   <% else %>
-    <div class="bg-white border border-tertiary rounded-lg p-3 flex items-center justify-between">
+    <div class="bg-container border border-tertiary rounded-lg p-3 flex items-center justify-between">
       <div class="flex items-center gap-2">
         <%= lucide_icon "alert-triangle", class: "w-4 h-4 text-red-500" %>
         <p class="text-red-500 text-sm"><%= t(".errors_notice") %></p>
@@ -28,8 +28,8 @@
 
       <div class="flex justify-center">
         <div class="bg-gray-50 rounded-lg inline-flex p-1 space-x-2 text-sm text-primary font-medium">
-          <%= link_to "All rows", import_clean_path(@import, per_page: params[:per_page], view: "all"), class: "p-2 rounded-lg #{params[:view] != 'errors' ? 'bg-white' : ''}" %>
-          <%= link_to "Error rows", import_clean_path(@import, per_page: params[:per_page], view: "errors"), class: "p-2 rounded-lg #{params[:view] == 'errors' ? 'bg-white' : ''}" %>
+          <%= link_to "All rows", import_clean_path(@import, per_page: params[:per_page], view: "all"), class: "p-2 rounded-lg #{params[:view] != 'errors' ? 'bg-container' : ''}" %>
+          <%= link_to "Error rows", import_clean_path(@import, per_page: params[:per_page], view: "errors"), class: "p-2 rounded-lg #{params[:view] == 'errors' ? 'bg-container' : ''}" %>
         </div>
       </div>
     </div>
@@ -43,7 +43,7 @@
         <% end %>
       </div>
 
-      <div class="bg-white shadow-border-xs rounded-xl divide-y divide-alpha-black-200">
+      <div class="bg-container shadow-border-xs rounded-xl divide-y divide-alpha-black-200">
         <% @rows.each do |row| %>
           <%= render "import/rows/form", row: row %>
         <% end %>
@@ -52,7 +52,7 @@
   </div>
 
   <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full p-12">
-    <div class="shadow-border-xs rounded-lg p-3 max-w-2xl mx-auto bg-white">
+    <div class="shadow-border-xs rounded-lg p-3 max-w-2xl mx-auto bg-container">
       <%= render "shared/pagination", pagy: @pagy %>
     </div>
   </div>

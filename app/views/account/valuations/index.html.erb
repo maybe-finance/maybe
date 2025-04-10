@@ -1,5 +1,5 @@
 <%= turbo_frame_tag dom_id(@account, "valuations") do %>
-  <div class="bg-white space-y-4 p-5 shadow-border-xs rounded-xl">
+  <div class="bg-container space-y-4 p-5 shadow-border-xs rounded-xl">
     <div class="flex items-center justify-between">
       <%= tag.h2 t(".valuations"), class: "font-medium text-lg" %>
       <%= link_to new_account_valuation_path(@account),
@@ -18,7 +18,7 @@
         <%= tag.div class: "col-span-1" %>
       </div>
 
-      <div class="rounded-lg bg-white shadow-border-xs">
+      <div class="rounded-lg bg-container shadow-border-xs">
         <%= turbo_frame_tag dom_id(@account.entries.account_valuations.new) %>
 
         <% if @entries.any? %>

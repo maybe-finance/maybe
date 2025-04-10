@@ -18,8 +18,8 @@
         </div>
 
         <div class="flex justify-between items-center gap-4 mb-4">
-          <%= form.text_field :first_name, placeholder: t(".first_name"), label: t(".first_name"), container_class: "bg-white w-1/2", required: true %>
-          <%= form.text_field :last_name, placeholder: t(".last_name"), label: t(".last_name"), container_class: "bg-white w-1/2", required: true %>
+          <%= form.text_field :first_name, placeholder: t(".first_name"), label: t(".first_name"), container_class: "bg-container w-1/2", required: true %>
+          <%= form.text_field :last_name, placeholder: t(".last_name"), label: t(".last_name"), container_class: "bg-container w-1/2", required: true %>
         </div>
         <% unless @invitation %>
           <div class="space-y-4 mb-4">
