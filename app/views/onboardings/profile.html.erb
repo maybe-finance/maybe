@@ -1,9 +1,9 @@
 <div class="bg-gray-25 h-screen flex flex-col justify-between">
   <%= render "onboardings/header" %>
 
-  <div class="grow max-w-lg w-full mx-auto bg-gray-25 flex flex-col justify-center">
+  <div class="grow w-19/20 max-w-lg sm:w-full mx-auto bg-gray-25 flex flex-col justify-center">
     <div>
-      <div class="space-y-1 mb-6">
+      <div class="flex flex-col items-center sm:items-start space-y-1 mb-6">
         <h1 class="text-2xl font-medium"><%= t(".title") %></h1>
         <p class="text-secondary text-sm"><%= t(".subtitle") %></p>
       </div>
@@ -13,13 +13,13 @@
         <%= form.hidden_field :onboarded_at, value: Time.current if @invitation %>
 
         <div class="space-y-4 mb-4">
-          <p class="text-secondary text-xs"><%= t(".profile_image") %></p>
+          <p class="hidden text-secondary text-xs sm:block"><%= t(".profile_image") %></p>
           <%= render "settings/user_avatar_field", form: form, user: @user %>
         </div>
 
-        <div class="flex justify-between items-center gap-4 mb-4">
-          <%= form.text_field :first_name, placeholder: t(".first_name"), label: t(".first_name"), container_class: "bg-white w-1/2", required: true %>
-          <%= form.text_field :last_name, placeholder: t(".last_name"), label: t(".last_name"), container_class: "bg-white w-1/2", required: true %>
+        <div class="flex flex-col justify-between items-center gap-4 mb-4 sm:flex-row">
+          <%= form.text_field :first_name, placeholder: t(".first_name"), label: t(".first_name"), container_class: "bg-white w-full sm:w-1/2", required: true %>
+          <%= form.text_field :last_name, placeholder: t(".last_name"), label: t(".last_name"), container_class: "bg-white w-full sm:w-1/2", required: true %>
         </div>
         <% unless @invitation %>
           <div class="space-y-4 mb-4">

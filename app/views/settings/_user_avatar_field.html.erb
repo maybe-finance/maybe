@@ -1,6 +1,6 @@
 <%# locals: (form:, user:) %>
 
-<div class="flex items-center gap-4" data-controller="profile-image-preview">
+<div class="flex flex-col items-center gap-4 sm:flex-row" data-controller="profile-image-preview">
   <div class="relative flex justify-center items-center bg-gray-50 w-24 h-24 rounded-full border-alpha-black-300 border border-dashed">
 
     <%# The image preview once user has uploaded a new file  %>
@@ -29,18 +29,15 @@
     <button type="button"
             data-profile-image-preview-target="clearBtn"
             data-action="click->profile-image-preview#clearFileInput"
-      class="<%= user.profile_image.attached? ? "" : "hidden" %> cursor-pointer absolute bottom-0 right-0 w-8 h-8 bg-gray-50 rounded-full flex justify-center items-center border border-white border-2">
+      class="<%= user.profile_image.attached? ? "" : "hidden" %> cursor-pointer invisible sm:visible absolute bottom-0 right-0 w-8 h-8 bg-gray-50 rounded-full flex justify-center items-center border border-white border-2">
       <%= lucide_icon "x", class: "w-4 h-4 text-secondary" %>
     </button>
   </div>
 
-  <div>
+  <div class="flex flex-col gap-y-[8] sm:gap-y-[0] items-center sm:items-start">
     <%= form.hidden_field :delete_profile_image, value: "0", data: { profile_image_preview_target: "deleteProfileImage" } %>
-
-    <p class="mb-3"><%= t(".accepted_formats") %></p>
-
     <%= form.label :profile_image, t(".choose"),
-        class: "btn btn--outline inline-block" %>
+        class: "btn btn--outline inline-block sm:order-2 text-center sm:text-start w-fit" %>
     <%= form.file_field :profile_image,
         accept: "image/png, image/jpeg",
         class: "hidden px-3 py-2 bg-gray-50 text-primary rounded-md text-sm font-medium",
@@ -48,5 +45,6 @@
           profile_image_preview_target: "input",
           action: "change->profile-image-preview#showFileInputPreview"
         } %>
+    <p class="text-xs text-gray-500 mb-3 sm:text-base sm:order-1 sm:text-gray-900"><%= t(".accepted_formats") %></p>
   </div>
 </div>
