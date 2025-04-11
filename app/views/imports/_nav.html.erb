@@ -45,7 +45,7 @@
 <div class="sm:hidden flex justify-center items-center gap-2">
   <% current_step = steps.find { |step| request.path == step[:path] } %>
   <% if current_step %>
-      <span>Step <%= request.path %> of <%= steps.length %></span>
+      <span>Step <%= current_step[:step_number] %> of <%= steps.length %></span>
   <% end %>
 </div>
 <% end %>
