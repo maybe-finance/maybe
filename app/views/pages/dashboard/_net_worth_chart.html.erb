@@ -19,7 +19,7 @@
       <% end %>
     </div>
   </div>
-  <%= form_with url: root_path, method: :get, class: "flex items-center gap-4", data: { controller: "auto-submit-form" } do |form| %>
+  <%= form_with url: root_path, method: :get, class: "flex items-start sm:items-center gap-4", data: { controller: "auto-submit-form" } do |form| %>
     <%= period_select form: form, selected: period %>
   <% end %>
 </div>
