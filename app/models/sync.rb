@@ -8,12 +8,16 @@ class Sync < ApplicationRecord
 
   scope :ordered, -> { order(created_at: :desc) }
 
+  def child?
+    parent_id.present?
+  end
+
   def perform
     Rails.logger.tagged("Sync", id, syncable_type, syncable_id) do
       start!
 
       begin
-        data = syncable.sync_data(start_date: start_date)
+        data = syncable.sync_data(self, start_date: start_date)
         update!(data: data) if data
 
         complete! unless has_pending_child_syncs?
@@ -23,9 +27,10 @@ class Sync < ApplicationRecord
       ensure
         Rails.logger.info("Sync completed, starting post-sync")
 
-        if child?
-          syncable.post_sync
+        if has_parent?
           notify_parent_of_completion!
+        else
+          syncable.post_sync(self)
         end
 
         Rails.logger.info("Post-sync completed")
@@ -39,6 +44,7 @@ class Sync < ApplicationRecord
         fail!("One or more child syncs failed")
       else
         complete!
+        syncable.post_sync(self)
       end
     end
   end
@@ -52,7 +58,7 @@ class Sync < ApplicationRecord
       children.where(status: :failed).any?
     end
 
-    def child?
+    def has_parent?
       parent_id.present?
     end
 

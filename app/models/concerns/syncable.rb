@@ -9,8 +9,8 @@ module Syncable
     syncs.where(status: [ :syncing, :pending ]).any?
   end
 
-  def sync_later(start_date: nil)
-    new_sync = syncs.create!(start_date: start_date)
+  def sync_later(start_date: nil, parent_sync: nil)
+    new_sync = syncs.create!(start_date: start_date, parent: parent_sync)
     SyncJob.perform_later(new_sync)
   end
 
@@ -18,11 +18,11 @@ module Syncable
     syncs.create!(start_date: start_date).perform
   end
 
-  def sync_data(start_date: nil)
+  def sync_data(sync, start_date: nil)
     raise NotImplementedError, "Subclasses must implement the `sync_data` method"
   end
 
-  def post_sync
+  def post_sync(sync)
     # no-op, syncable can optionally provide implementation
   end
 

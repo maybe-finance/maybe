@@ -43,29 +43,36 @@ class Family < ApplicationRecord
     @income_statement ||= IncomeStatement.new(self)
   end
 
-  def sync_data(start_date: nil)
+  def sync_data(sync, start_date: nil)
     update!(last_synced_at: Time.current)
 
     accounts.manual.each do |account|
-      account.sync_later(start_date: start_date)
+      account.sync_later(start_date: start_date, parent_sync: sync)
     end
 
     plaid_items.each do |plaid_item|
-      plaid_item.sync_later(start_date: start_date)
+      plaid_item.sync_later(start_date: start_date, parent_sync: sync)
     end
   end
 
-  def post_sync
+  def remove_syncing_notice!
+    broadcast_remove target: "syncing-notice"
+  end
+
+  def post_sync(sync)
+    auto_match_transfers!
     broadcast_refresh
   end
 
+  # If family has any syncs pending/syncing within the last hour, we show a persistent "syncing" notice.
+  # Ignore syncs older than 1 hour as they are considered "stale"
   def syncing?
     Sync.where(
       "(syncable_type = 'Family' AND syncable_id = ?) OR
        (syncable_type = 'Account' AND syncable_id IN (SELECT id FROM accounts WHERE family_id = ? AND plaid_account_id IS NULL)) OR
        (syncable_type = 'PlaidItem' AND syncable_id IN (SELECT id FROM plaid_items WHERE family_id = ?))",
       id, id, id
-    ).where(status: [ "pending", "syncing" ]).exists?
+    ).where(status: [ "pending", "syncing" ], created_at: 1.hour.ago..).exists?
   end
 
   def eu?
