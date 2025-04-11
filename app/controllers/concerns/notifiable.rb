@@ -8,7 +8,7 @@ module Notifiable
 
   private
     def render_flash_notifications
-      notifications = flash.flat_map { |type, data| resolve_notifications(type, data) }
+      notifications = flash.flat_map { |type, data| resolve_notifications(type, data) }.compact
 
       view_context.safe_join(
         notifications.map { |notification| view_context.render(**notification) }
@@ -24,7 +24,7 @@ module Notifiable
         else
           notifications.map { |notification| turbo_stream.append("notification-tray", **notification) }
         end
-      end
+      end.compact
 
       # If rendering flash notifications via stream, we mark them as used to avoid
       # them being rendered again on the next page load
@@ -37,8 +37,6 @@ module Notifiable
       case cta[:type]
       when "category_rule"
         { partial: "rules/category_rule_cta", locals: { cta: } }
-      else
-        raise "Unknown CTA type: #{cta[:type]}"
       end
     end
 
@@ -53,6 +51,8 @@ module Notifiable
       when "notice"
         messages = Array(data)
         messages.map { |message| { partial: "shared/notifications/notice", locals: { message: message } } }
+      else
+        []
       end
     end
 end
