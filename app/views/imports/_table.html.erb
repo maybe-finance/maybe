@@ -4,7 +4,7 @@
     <div class="grid border-b border-b-alpha-black-200" style="grid-template-columns: repeat(<%= headers.length %>, minmax(0, 1fr))">
       <% headers.each_with_index do |header, index| %>
         <div class="
-          bg-gray-25 px-3 py-2.5 font-medium whitespace-nowrap overflow-x-auto
+          bg-container-inset px-3 py-2.5 font-medium whitespace-nowrap overflow-x-auto
           first:rounded-tl-md last:rounded-tr-md
           <%= "border-r border-r-alpha-black-200" unless index == headers.length - 1 %>
         ">
@@ -29,7 +29,7 @@
     <% end %>
 
     <% if caption %>
-      <div class="px-3 py-2.5 text-center text-xs text-primary rounded-b-md italic bg-gray-25 overflow-x-auto">
+      <div class="px-3 py-2.5 text-center text-xs text-primary rounded-b-md italic bg-container-inset overflow-x-auto">
         <%= caption %>
       </div>
     <% end %>

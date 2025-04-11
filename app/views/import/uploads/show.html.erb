@@ -13,7 +13,7 @@
 
     <div data-controller="tabs" data-tabs-active-class="bg-container" data-tabs-default-tab-value="csv-paste-tab">
       <div class="flex justify-center mb-4">
-        <div class="bg-gray-50 rounded-lg inline-flex p-1 space-x-2 text-sm text-primary font-medium">
+        <div class="tab-item-active rounded-lg inline-flex p-1 space-x-2 text-sm text-primary font-medium">
           <button type="button" data-id="csv-paste-tab" class="p-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Copy & Paste</button>
           <button type="button" data-id="csv-upload-tab" class="p-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Upload CSV</button>
         </div>
@@ -35,7 +35,7 @@
                        placeholder: "Paste your CSV file contents here",
                        "data-auto-submit-form-target": "auto" %>
             <% else %>
-              <label for="import_csv_file" class="flex flex-col items-center justify-center w-full h-56 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50">
+              <label for="import_csv_file" class="flex flex-col items-center justify-center w-full h-56 border-2 border-secondary border-dashed rounded-lg cursor-pointer bg-container-inset">
                 <div class="flex flex-col items-center justify-center pt-5 pb-6">
                   <%= form.file_field :csv_file, class: "ml-32", "data-auto-submit-form-target": "auto" %>
                 </div>

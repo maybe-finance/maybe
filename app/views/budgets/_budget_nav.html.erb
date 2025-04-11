@@ -16,9 +16,9 @@
                   step[:is_complete] ? "text-green-600" : "text-secondary"
                 end %>
       <% step_class = if is_current
-                  "bg-gray-900 text-white"
+                  "bg-primary text-white"
                 else
-                  step[:is_complete] ? "bg-green-600/10 border-alpha-black-25" : "bg-gray-50"
+                  step[:is_complete] ? "bg-green-600/10 border-alpha-black-25" : "bg-container-inset"
                 end %>
 
       <%= link_to step[:path], class: "flex items-center gap-3" do %>

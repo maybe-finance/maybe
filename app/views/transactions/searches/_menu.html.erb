@@ -10,7 +10,7 @@
   <div class="flex w-44 flex-col items-start p-3 text-sm font-medium text-secondary border-r border-r-alpha-black-100">
     <% transaction_search_filters.each do |filter| %>
       <button
-        class="flex text-secondary hover:bg-gray-25 items-center gap-2 px-3 rounded-md py-2 w-full"
+        class="flex text-secondary hover:bg-container-inset items-center gap-2 px-3 rounded-md py-2 w-full"
         type="button"
         data-id="<%= filter[:key] %>"
         data-tabs-target="btn"
@@ -38,10 +38,10 @@
       </div>
 
       <div>
-        <%= button_tag type: "reset", data: { action: "menu#close" }, class: "py-2 px-3 bg-gray-50 rounded-lg text-sm text-primary font-medium" do %>
+        <%= button_tag type: "reset", data: { action: "menu#close" }, class: "py-2 px-3 bg-container-inset rounded-lg text-sm text-primary font-medium" do %>
           <%= t(".cancel") %>
         <% end %>
-        <%= form.submit t(".apply"), name: nil, class: "py-2 px-3 bg-gray-900 hover:bg-gray-700 rounded-lg text-sm text-white font-medium cursor-pointer" %>
+        <%= form.submit t(".apply"), name: nil, class: "py-2 px-3 bg-primary hover:bg-primary-dark rounded-lg text-sm text-white font-medium cursor-pointer" %>
       </div>
     </div>
   </div>

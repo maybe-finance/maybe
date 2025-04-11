@@ -11,7 +11,7 @@
     <%= f.hidden_field :ai_model, value: "gpt-4o" %>
 
     <%= f.text_area :content, placeholder: "Ask anything ...", value: message_hint,
-                  class: "w-full border-0 focus:ring-0 text-sm resize-none px-1",
+                  class: "w-full border-0 focus:ring-0 text-sm resize-none px-1 bg-transparent",
                   data: { chat_target: "input", action: "input->chat#autoResize keydown->chat#handleInputKeyDown" },
                   rows: 1 %>
 
