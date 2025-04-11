@@ -13,9 +13,9 @@
 
     <div data-controller="tabs" data-tabs-active-class="bg-white" data-tabs-default-tab-value="csv-paste-tab">
       <div class="flex justify-center mb-4">
-        <div class="bg-gray-50 rounded-lg inline-flex p-1 space-x-2 text-sm text-primary font-medium">
-          <button type="button" data-id="csv-paste-tab" class="p-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Copy & Paste</button>
-          <button type="button" data-id="csv-upload-tab" class="p-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Upload CSV</button>
+        <div class="bg-gray-50 rounded-lg grid grid-cols-2 p-1 gap-2 text-xs text-primary font-medium w-full">
+          <button type="button" data-id="csv-upload-tab" class="py-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Upload CSV</button>
+          <button type="button" data-id="csv-paste-tab" class="py-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Copy & Paste</button>
         </div>
       </div>
 
