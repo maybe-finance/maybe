@@ -70,24 +70,26 @@ class Account < ApplicationRecord
     DestroyJob.perform_later(self)
   end
 
-  def sync_data(start_date: nil)
+  def sync_data(sync, start_date: nil)
     update!(last_synced_at: Time.current)
-
-    Rails.logger.info("Auto-matching transfers")
-    family.auto_match_transfers!
 
     Rails.logger.info("Processing balances (#{linked? ? 'reverse' : 'forward'})")
     sync_balances
+  end
+
+  def post_sync(sync)
+    family.remove_syncing_notice!
+
+    accountable.post_sync(sync)
 
     if enrichable?
       Rails.logger.info("Enriching transaction data")
       enrich_data
     end
-  end
 
-  def post_sync
-    broadcast_remove_to(family, target: "syncing-notice")
-    accountable.post_sync
+    unless sync.child?
+      family.auto_match_transfers!
+    end
   end
 
   def original_balance

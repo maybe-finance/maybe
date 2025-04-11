@@ -45,7 +45,7 @@ module Accountable
     end
   end
 
-  def post_sync
+  def post_sync(sync)
     broadcast_replace_to(
       account,
       target: "chart_account_#{account.id}",
