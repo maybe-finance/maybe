@@ -37,7 +37,7 @@ class PlaidItem < ApplicationRecord
     end
   end
 
-  def sync_data(start_date: nil)
+  def sync_data(sync, start_date: nil)
     update!(last_synced_at: Time.current)
 
     begin
@@ -79,7 +79,7 @@ class PlaidItem < ApplicationRecord
     end
   end
 
-  def post_sync
+  def post_sync(sync)
     family.broadcast_refresh
   end
 
