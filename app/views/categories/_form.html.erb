@@ -7,11 +7,13 @@
         <%= render partial: "color_avatar", locals: { category: category } %>
       </div>
       <details data-category-target="details">
-        <summary class="cursor-pointer absolute top-23 left-58.5 flex justify-center items-center bg-gray-50 border-2 w-7 h-7 border-white rounded-full text-gray-500">
+        <summary class="cursor-pointer absolute top-18 sm:top-23 left-[53%] flex justify-center items-center bg-gray-50 border-2 w-7 h-7 border-white rounded-full text-gray-500">
           <%= icon("pen", size: "sm") %>
         </summary>
 
-        <div class=" absolute z-50 bg-container p-4 border border-alpha-black-25 rounded-2xl shadow-xs h-fit left-66 top-24">
+        <div class="absolute z-50 bg-container p-4 border border-alpha-black-25 rounded-2xl shadow-xs h-fit left-[50%] -translate-x-1/2 top-24
+                    min-[640px]:left-[70%] min-[640px]:-translate-x-1/2 min-[640px]:top-32
+                    min-[860px]:left-66 min-[860px]:translate-x-0 min-[860px]:top-24">
           <div class="flex gap-2 flex-col mb-4" data-category-target="selection" style="<%= "display:none;" if @category.subcategory? %>">
             <div data-category-target="pickerSection"></div>
             <h4 class="text-gray-500 text-sm">Color</h4>

@@ -2,7 +2,7 @@
 
 <%= settings_section title: t(".subscription_title"), subtitle: t(".subscription_subtitle") do %>
   <div class="space-y-4">
-    <div class="p-3 shadow-border-xs bg-container rounded-lg flex justify-between items-center">
+    <div class="p-3 shadow-border-xs bg-container rounded-lg flex flex-col sm:flex-row justify-between items-stretch sm:items-center">
       <div class="flex items-center gap-3">
         <div class="w-9 h-9 rounded-full bg-gray-25 flex justify-center items-center">
           <%= lucide_icon "gem", class: "w-5 h-5 text-secondary" %>
@@ -19,12 +19,12 @@
       </div>
 
       <% if @user.family.subscribed? || subscription_pending? %>
-        <%= link_to subscription_path, class: "btn btn--secondary flex items-center gap-1", target: "_blank", rel: "noopener" do %>
+        <%= link_to subscription_path, class: "btn btn--secondary flex items-center gap-1 w-full sm:w-auto mt-2 sm:mt-0 justify-center", target: "_blank", rel: "noopener" do %>
           <span>Manage</span>
           <%= lucide_icon "external-link", class: "w-5 h-5 shrink-0 text-secondary" %>
         <% end %>
       <% else %>
-        <%= link_to new_subscription_path, class: "btn btn--secondary flex items-center gap-1", target: "_blank", rel: "noopener" do %>
+        <%= link_to new_subscription_path, class: "btn btn--secondary flex items-center gap-1 w-full sm:w-auto mt-2 sm:mt-0 justify-center", target: "_blank", rel: "noopener" do %>
           <span>Subscribe</span>
           <%= lucide_icon "external-link", class: "w-5 h-5 shrink-0 text-secondary" %>
         <% end %>

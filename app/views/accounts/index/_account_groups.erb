@@ -6,7 +6,7 @@
       <p><%= Accountable.from_type(group).display_name %></p>
       <span class="text-subdued mx-2">&middot;</span>
       <p><%= accounts.count %></p>
-      <p class="ml-auto"><%= totals_by_currency(collection: accounts, money_method: :balance_money) %></p>
+      <p class="hidden sm:block ml-auto"><%= totals_by_currency(collection: accounts, money_method: :balance_money) %></p>
     </div>
     <div class="bg-container">
       <% accounts.each do |account| %>

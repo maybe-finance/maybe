@@ -1,9 +1,9 @@
 <header class="flex items-center justify-between">
-  <h1 class="text-primary text-xl font-medium"><%= t(".tags") %></h1>
+  <h1 class="text-primary text-3xl font-medium"><%= t(".tags") %></h1>
 
-  <%= link_to new_tag_path, class: "btn btn--primary flex items-center gap-1 justify-center", data: { turbo_frame: :modal } do %>
+  <%= link_to new_tag_path, class: "btn btn--primary btn--responsive-rounded flex items-center gap-1 justify-center", data: { turbo_frame: :modal } do %>
     <%= lucide_icon "plus", class: "w-5 h-5" %>
-    <p><%= t(".new") %></p>
+    <p class="hidden sm:block"><%= t(".new") %></p>
   <% end %>
 </header>
 
