@@ -1,8 +1,7 @@
 <%# locals: (form:, user:) %>
 
-<div class="flex items-center gap-4" data-controller="profile-image-preview">
+<div class="flex flex-col items-center md:items-start md:flex-row md:gap-4" data-controller="profile-image-preview">
   <div class="relative flex justify-center items-center bg-gray-50 w-24 h-24 rounded-full border-alpha-black-300 border border-dashed">
-
     <%# The image preview once user has uploaded a new file  %>
     <div data-profile-image-preview-target="previewImage" class="h-full w-full flex justify-center items-center hidden">
       <img src="" alt="Preview" class="w-full h-full rounded-full object-cover">
@@ -10,7 +9,7 @@
 
     <%# The placeholder image for empty avatar field  %>
     <div data-profile-image-preview-target="placeholderImage"
-         class="h-full w-full flex justify-center items-center <%= user.profile_image.attached? ? "hidden" : "" %>">
+        class="h-full w-full flex justify-center items-center <%= user.profile_image.attached? ? "hidden" : "" %>">
       <div class="h-full w-full flex justify-center items-center">
         <%= lucide_icon "image-plus", class: "w-6 h-6 text-secondary" %>
       </div>
@@ -18,7 +17,7 @@
 
     <%# The attached image if user has already uploaded one %>
     <div data-profile-image-preview-target="attachedImage"
-         class="h-full w-full flex justify-center items-center <%= user.profile_image.attached? ? "" : "hidden" %>">
+        class="h-full w-full flex justify-center items-center <%= user.profile_image.attached? ? "" : "hidden" %>">
       <% if user.profile_image.attached? %>
         <div class="h-full w-full">
           <%= render "settings/user_avatar", user: user %>
@@ -34,13 +33,18 @@
     </button>
   </div>
 
-  <div>
+  <div class="flex flex-col items-center space-y-2 text-center mt-3 md:block">
     <%= form.hidden_field :delete_profile_image, value: "0", data: { profile_image_preview_target: "deleteProfileImage" } %>
 
-    <p class="mb-3"><%= t(".accepted_formats") %></p>
+    <p class="text-subdued text-xs md:text-sm md:order-1 order-3"><%= t(".accepted_formats") %></p>
 
-    <%= form.label :profile_image, t(".choose"),
-        class: "btn btn--outline inline-block" %>
+    <%= form.label :profile_image, class: "btn btn--outline inline-block" do %>
+      <div class="flex items-center gap-2">
+        <%= lucide_icon "camera", class: "w-5 h-5 text-secondary" %>
+        <span><%= t(".upload") %> <span class="font-normal text-subdued"><%= t(".upload_optional") %></span></span>
+      </div>
+    <% end %>
+
     <%= form.file_field :profile_image,
         accept: "image/png, image/jpeg",
         class: "hidden px-3 py-2 bg-gray-50 text-primary rounded-md text-sm font-medium",
