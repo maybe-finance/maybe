@@ -560,6 +560,14 @@
     }
   }
 
+  .btn--outline-destructive {
+    @apply border border-red-500 text-red-500 hover:bg-gray-50;
+
+    @variant theme-dark {
+      @apply border-red-400 text-red-400 hover:button-bg-destructive-hover;
+    }
+  }
+
   .btn--destructive {
     @apply button-bg-destructive text-white hover:button-bg-destructive-hover disabled:button-bg-disabled disabled:hover:button-bg-disabled disabled:text-red-400;
 

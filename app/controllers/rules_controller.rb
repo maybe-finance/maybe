@@ -13,7 +13,7 @@ class RulesController < ApplicationController
       resource_type: params[:resource_type] || "transaction",
       conditions: [
         Rule::Condition.new(
-          condition_type: params[:condition_type] || "transaction_amount",
+          condition_type: params[:condition_type] || "transaction_name",
           value: params[:condition_value]
         )
       ],
