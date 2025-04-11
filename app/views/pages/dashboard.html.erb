@@ -1,7 +1,16 @@
 <% content_for :page_header do %>
-  <div class="space-y-1 mb-6">
-    <h1 class="text-3xl font-medium text-primary">Welcome back, <%= Current.user.first_name %></h1>
-    <p class="text-gray-500">Here's what's happening with your finances</p>
+  <div class="flex flex-row justify-between items-start gap-2 sm:gap-0">
+    <div class="space-y-1 mb-6">
+      <h1 class="text-3xl font-medium text-primary">Welcome back, <%= Current.user.first_name %></h1>
+      <p class="text-secondary">Here's what's happening with your finances</p>
+    </div>
+    <div class="flex sm:hidden">
+      <%= link_to new_account_path(step: "method_select"),
+              class: "flex items-center rounded-full bg-inverse p-3",
+              data: { turbo_frame: "modal" } do %>
+      <%= icon("plus", color: "white") %>
+    <% end %>
+    </div>
   </div>
 <% end %>
 
