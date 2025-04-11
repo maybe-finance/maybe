@@ -1,6 +1,6 @@
-/* 
-  This file contains all of the Figma design tokens, components, etc. that 
-  are used globally across the app. 
+/*
+  This file contains all of the Figma design tokens, components, etc. that
+  are used globally across the app.
 
   One-off styling (3rd party overrides, etc.) should be done in the application.css file.
 */
@@ -554,6 +554,10 @@
     @variant theme-dark {
       @apply button-bg-destructive text-white hover:button-bg-destructive-hover disabled:button-bg-disabled disabled:hover:button-bg-disabled;
     }
+  }
+
+  .btn--responsive-rounded {
+    @apply rounded-full sm:rounded-lg p-2 sm:px-3 sm:py-2;
   }
 
   /* Forms */

@@ -6,6 +6,7 @@ pin "@hotwired/stimulus", to: "stimulus.min.js"
 pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
 pin_all_from "app/javascript/controllers", under: "controllers"
 pin_all_from "app/javascript/services", under: "services", to: "services"
+pin_all_from "app/javascript/utils", under: "utils", to: "utils"
 pin "@github/hotkey", to: "@github--hotkey.js" # @3.1.0
 pin "@simonwep/pickr", to: "@simonwep--pickr.js" # @1.9.1
 

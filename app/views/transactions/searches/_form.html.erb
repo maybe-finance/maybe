@@ -6,17 +6,31 @@
   <%= hidden_field_tag :per_page, params[:per_page] %>
 
   <div class="flex gap-2 mb-4">
-    <div class="grow">
+    <div class="grow relative" data-controller="menu">
       <div class="flex items-center px-3 py-2 gap-2 border border-secondary rounded-lg focus-within:ring-secondary focus-within:border-secondary">
         <%= lucide_icon("search", class: "w-5 h-5 text-secondary") %>
         <%= form.text_field :search,
-                            placeholder: "Search transactions by name",
+                            class: "form-field__input placeholder:text-sm placeholder:text-secondary w-full",
                             value: @q[:search],
-                            class: "form-field__input placeholder:text-sm placeholder:text-secondary",
-                            "data-auto-submit-form-target": "auto" %>
+                            data: {
+                              controller: "responsive-attribute",
+                              responsive_attribute_mobile_value: t('transactions.searches.search.placeholder_mobile'),
+                              responsive_attribute_desktop_value: t('transactions.searches.search.placeholder_desktop'),
+                              responsive_attribute_attribute_value: "placeholder",
+                              auto_submit_form_target: "auto"
+                            } %>
+
+        <button id="mobile-filter-button" data-menu-target="button" type="button" class="sm:hidden text-secondary">
+          <%= lucide_icon("list-filter", class: "w-5 h-5") %>
+        </button>
+      </div>
+
+      <!-- Mobile-only filter menu -->
+      <div class="sm:hidden">
+        <%= render "transactions/searches/menu", form: form %>
       </div>
     </div>
-    <div data-controller="menu" class="relative">
+    <div data-controller="menu" class="relative hidden sm:block">
       <button id="transaction-filters-button" data-menu-target="button" type="button" class="btn btn--outline flex items-center gap-2">
         <%= lucide_icon("list-filter", class: "w-5 h-5 text-secondary") %>
         <p class="text-sm font-medium text-primary">Filter</p>

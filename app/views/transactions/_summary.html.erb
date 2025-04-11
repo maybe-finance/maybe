@@ -1,5 +1,5 @@
 <%# locals: (totals:) %>
-<div class="grid grid-cols-3 bg-container rounded-xl shadow-border-xs divide-x divide-alpha-black-100">
+<div class="grid grid-cols-1 sm:grid-cols-3 bg-container rounded-xl shadow-border-xs divide-y divide-x divide-alpha-black-100">
   <div class="p-4 space-y-2">
     <p class="text-sm text-secondary">Total transactions</p>
     <p class="text-primary font-medium text-xl" id="total-transactions"><%= totals.transactions_count.round(0) %></p>

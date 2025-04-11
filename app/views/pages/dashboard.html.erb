@@ -6,7 +6,7 @@
     </div>
     <div class="flex sm:hidden">
       <%= link_to new_account_path(step: "method_select"),
-              class: "flex items-center rounded-full bg-inverse p-3",
+              class: "btn btn--primary btn--responsive-rounded p-3",
               data: { turbo_frame: "modal" } do %>
       <%= icon("plus", color: "white") %>
     <% end %>
