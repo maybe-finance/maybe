@@ -1,11 +1,11 @@
 <div class="bg-gray-25">
-  <div class="h-screen flex flex-col items-center py-6">
+  <div class="h-screen flex flex-col items-center py-6 px-4 sm:px-6">
     <div class="grow flex justify-center items-center flex-col max-w-sm w-full text-center">
-      <%= image_tag "logo-color.png", class: "w-16 mb-6" %>
-      <%= tag.h1 t(".title"), class: "text-3xl font-medium mb-2" %>
-      <%= tag.p t(".message"), class: "text-sm text-secondary mb-6" %>
+      <%= image_tag "logo-color.png", class: "w-12 sm:w-16 mb-4 sm:mb-6" %>
+      <%= tag.h1 t(".title"), class: "text-2xl sm:text-3xl font-medium mb-2" %>
+      <%= tag.p t(".message"), class: "text-sm sm:text-base text-secondary mb-4 sm:mb-6" %>
 
-      <%= link_to t(".setup"), profile_onboarding_path, class: "block flex justify-center items-center btn btn--primary w-full" %>
+      <%= link_to t(".setup"), profile_onboarding_path, class: "block flex justify-center items-center btn btn--primary w-full text-sm sm:text-base" %>
     </div>
   </div>
 </div>
