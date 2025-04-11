@@ -1,7 +1,7 @@
 <%# locals: (headers: [], rows: [], caption: nil) %>
 <div class="overflow-x-auto w-full">
   <div class="border border-secondary rounded-md shadow-border-xs text-sm bg-white inline-block min-w-full">
-    <div class="grid border-b border-b-alpha-black-200 " style="grid-template-columns: repeat(<%= headers.length %>, minmax(130px, 1fr))">
+    <div class="grid border-b border-b-alpha-black-200 p-1" style="grid-template-columns: repeat(<%= headers.length %>, minmax(130px, 1fr))">
       <% headers.each_with_index do |header, index| %>
         <div class="
           bg-gray-25 px-3 py-2.5 font-medium whitespace-nowrap sm:overflow-x-auto

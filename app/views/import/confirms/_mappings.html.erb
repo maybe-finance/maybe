@@ -11,7 +11,7 @@
       <%= link_to t(".create_account"), new_account_path(return_to: import_confirm_path(import)), class: "btn btn--primary whitespace-nowrap", data: { turbo_frame: :modal } %>
     </div>
   <% elsif import.has_unassigned_account? %>
-    <div class="flex items-center justify-between p-4 mb-4 gap-4 text-secondary bg-yellow-100 border border-yellow-200 rounded-lg w-[650px]">
+    <div class="flex flex-col sm:flex-row items-center justify-between p-4 mb-4 gap-4 text-secondary bg-yellow-100 border border-yellow-200 rounded-lg sm:w-[650px]">
       <%= tag.p t(".unassigned_account"), class: "text-sm" %>
 
       <%= link_to t(".create_account"), new_account_path(return_to: import_confirm_path(import)), class: "btn btn--primary whitespace-nowrap", data: { turbo_frame: :modal } %>
@@ -19,20 +19,22 @@
   <% end %>
 <% end %>
 
-<div class="space-y-4">
-  <div class="bg-gray-25 rounded-xl p-1 space-y-1 w-[650px]">
-    <div class="grid grid-cols-3 gap-2 text-xs font-medium text-secondary uppercase px-5 py-3">
-      <p><%= t(".csv_mapping_label", mapping: mapping_label(mapping_class)) %></p>
-      <p><%= t(".maybe_mapping_label", mapping: mapping_label(mapping_class)) %></p>
-      <p class="justify-self-end"><%= t(".rows_label") %></p>
-    </div>
+<div class="space-y-4 max-w-full">
+  <div class="w-full overflow-x-auto">
+    <div class="bg-gray-25 rounded-xl p-1 space-y-1 inline-block min-w-full sm:w-[650px]">
+      <div class="grid grid-cols-[repeat(3,_minmax(130px,_1fr))] sm:grid-cols-3 gap-4 sm:gap-2 text-xs font-medium text-secondary uppercase px-5 py-3">
+        <p><%= t(".csv_mapping_label", mapping: mapping_label(mapping_class)) %></p>
+        <p><%= t(".maybe_mapping_label", mapping: mapping_label(mapping_class)) %></p>
+        <p class="justify-self-end"><%= t(".rows_label") %></p>
+      </div>
 
-    <div class="shadow-border-xs rounded-md divide-y divide-alpha-black-100 text-sm">
-      <% mappings.sort_by(&:key).each do |mapping| %>
-        <div class="px-5 py-3 bg-white first:rounded-tl-xl first:rounded-tr-xl last:rounded-bl-xl last:rounded-br-xl">
-          <%= render partial: "import/mappings/form", locals: { mapping: mapping } %>
-        </div>
-      <% end %>
+      <div class="shadow-border-xs rounded-md divide-y divide-alpha-black-100 text-sm">
+        <% mappings.sort_by(&:key).each do |mapping| %>
+          <div class="px-5 py-3 bg-white first:rounded-tl-xl first:rounded-tr-xl last:rounded-bl-xl last:rounded-br-xl">
+            <%= render partial: "import/mappings/form", locals: { mapping: mapping } %>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 

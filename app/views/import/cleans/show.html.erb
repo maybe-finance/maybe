@@ -35,9 +35,9 @@
     </div>
   <% end %>
 
-  <div class="pb-12">
-    <div class="bg-gray-25 rounded-xl p-1 mb-6">
-      <div style="grid-template-columns: repeat(<%= @import.column_keys.count %>, 1fr)" class="grid items-center uppercase text-xs font-medium text-secondary py-3">
+  <div class="sm:pb-12 overflow-x-auto">
+    <div class="bg-gray-25 rounded-xl p-1 sm:mb-6 inline-block min-w-full">
+      <div style="grid-template-columns: repeat(<%= @import.column_keys.count %>, minmax(150px,1fr)" class="grid items-center uppercase text-xs font-medium text-secondary py-3">
         <% @import.column_keys.each do |key| %>
           <div class="px-5"><%= import_col_label(key) %></div>
         <% end %>
