@@ -13,6 +13,7 @@ en:
       show:
         description: Select the columns that correspond to each field in your CSV.
         title: Configure your import
+        instructions_1: Sample data from your imported CSV file
       trade_import:
         date_format_label: Date format
       transaction_import:

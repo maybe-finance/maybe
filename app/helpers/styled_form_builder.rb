@@ -22,7 +22,15 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def select(method, choices, options = {}, html_options = {})
-    merged_html_options = { class: "form-field__input" }.merge(html_options)
+    default_html_options = {
+      class: "form-field__input",
+      data: {
+        controller: "select-styling",
+        select_styling_empty_class_value: "text-secondary",
+        select_styling_value_class_value: "text-primary"
+      }
+    }
+    merged_html_options = default_html_options.merge(html_options)
 
     label = build_label(method, options.merge(required: merged_html_options[:required]))
     field = super(method, choices, options, merged_html_options)
@@ -31,7 +39,15 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def collection_select(method, collection, value_method, text_method, options = {}, html_options = {})
-    merged_html_options = { class: "form-field__input" }.merge(html_options)
+    default_html_options = {
+      class: "form-field__input",
+      data: {
+        controller: "select-styling",
+        select_styling_empty_class_value: "text-secondary",
+        select_styling_value_class_value: "text-primary"
+      }
+    }
+    merged_html_options = default_html_options.merge(html_options)
 
     label = build_label(method, options.merge(required: merged_html_options[:required]))
     field = super(method, collection, value_method, text_method, options, merged_html_options)

@@ -37,16 +37,20 @@
 
   <div class="pb-12">
     <div class="bg-container-inset rounded-xl p-1 mb-6">
-      <div style="grid-template-columns: repeat(<%= @import.column_keys.count %>, 1fr)" class="grid items-center uppercase text-xs font-medium text-secondary py-3">
-        <% @import.column_keys.each do |key| %>
-          <div class="px-5"><%= import_col_label(key) %></div>
-        <% end %>
-      </div>
+      <div class="overflow-x-auto">
+        <div class="min-w-max">
+          <div style="grid-template-columns: repeat(<%= @import.column_keys.count %>, 1fr)" class="grid items-center uppercase text-xs font-medium text-secondary py-3">
+            <% @import.column_keys.each do |key| %>
+              <div class="px-5"><%= import_col_label(key) %></div>
+            <% end %>
+          </div>
 
-      <div class="bg-container shadow-border-xs rounded-xl divide-y divide-alpha-black-200">
-        <% @rows.each do |row| %>
-          <%= render "import/rows/form", row: row %>
-        <% end %>
+          <div class="bg-container shadow-border-xs rounded-xl divide-y divide-alpha-black-200">
+            <% @rows.each do |row| %>
+              <%= render "import/rows/form", row: row %>
+            <% end %>
+          </div>
+        </div>
       </div>
     </div>
   </div>

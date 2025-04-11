@@ -8,10 +8,21 @@
   { name: "Confirm", path: import_path(import), is_complete: import.complete?, step_number: 5 }
 ].reject { |step| step[:name] == "Map" && import.mapping_steps.empty? } %>
 
-<ul class="flex items-center gap-2">
-  <% steps.each_with_index do |step, idx| %>
-    <li class="flex items-center gap-2 group">
-      <% is_current = request.path == step[:path] %>
+<% content_for :mobile_nav do %>
+  <% current_step = steps.find { |step| request.path == step[:path] } %>
+  <% if current_step %>
+    <div class="sm:hidden text-secondary">
+      <span>Step <%= current_step[:step_number] %> of <%= steps.length %></span>
+    </div>
+  <% end %>
+<% end %>
+
+<% content_for :header_nav do %>
+  <%# Desktop Navigation %>
+  <ul class="hidden sm:flex items-center gap-2">
+    <% steps.each_with_index do |step, idx| %>
+      <li class="flex items-center gap-2 group">
+        <% is_current = request.path == step[:path] %>
 
       <% text_class = if is_current
                   "text-primary"
@@ -24,17 +35,18 @@
                   step[:is_complete] ? "bg-green-600/10 border-alpha-black-25" : "bg-container-inset"
                 end %>
 
-      <%= link_to step[:path], class: "flex items-center gap-3" do %>
-        <div class="flex items-center gap-2 text-sm font-medium <%= text_class %>">
-          <span class="<%= step_class %> w-7 h-7 rounded-full shrink-0 inline-flex items-center justify-center border border-transparent">
-            <%= step[:is_complete] && !is_current ? lucide_icon("check", class: "w-4 h-4") : idx + 1 %>
-          </span>
+        <%= link_to step[:path], class: "flex items-center gap-3" do %>
+          <div class="flex items-center gap-2 text-sm font-medium <%= text_class %>">
+            <span class="<%= step_class %> w-7 h-7 rounded-full shrink-0 inline-flex items-center justify-center border border-transparent">
+              <%= step[:is_complete] && !is_current ? lucide_icon("check", class: "w-4 h-4") : idx + 1 %>
+            </span>
 
-          <span><%= step[:name] %></span>
-        </div>
-      <% end %>
+            <span><%= step[:name] %></span>
+          </div>
+        <% end %>
 
-      <div class="h-px bg-alpha-black-200 w-12 group-last:hidden"></div>
-    </li>
-  <% end %>
-</ul>
+        <div class="h-px bg-alpha-black-200 w-4 lg:w-12 group-last:hidden"></div>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

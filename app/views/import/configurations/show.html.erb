@@ -35,7 +35,14 @@
     </div>
   </div>
 
-  <div class="mx-auto max-w-5xl my-12">
-    <%= render "imports/table", headers: @import.csv_headers, rows: @import.csv_sample, caption: "Sample data from your uploaded CSV" %>
+  <div class="bg-alpha-black-25 rounded-xl p-1 mt-5 mx-auto max-w-7xl">
+    <div class="text-secondary p-2 mb-2">
+      <div class="flex gap-2 mb-2">
+        <%= lucide_icon("table", class: "w-5 h-5 shrink-0") %>
+        <p class="text-sm"><%= t(".instructions_1") %></p>
+      </div>
+    </div>
+
+    <%= render "imports/table", headers: @import.csv_headers, rows: @import.csv_sample %>
   </div>
 <% end %>
