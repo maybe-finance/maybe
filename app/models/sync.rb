@@ -1,6 +1,9 @@
 class Sync < ApplicationRecord
   belongs_to :syncable, polymorphic: true
 
+  belongs_to :parent, class_name: "Sync", optional: true
+  has_many :children, class_name: "Sync", foreign_key: :parent_id, dependent: :destroy
+
   enum :status, { pending: "pending", syncing: "syncing", completed: "completed", failed: "failed" }
 
   scope :ordered, -> { order(created_at: :desc) }
@@ -12,21 +15,51 @@ class Sync < ApplicationRecord
       begin
         data = syncable.sync_data(start_date: start_date)
         update!(data: data) if data
-        complete!
+
+        complete! unless has_pending_child_syncs?
       rescue StandardError => error
         fail! error
         raise error if Rails.env.development?
       ensure
         Rails.logger.info("Sync completed, starting post-sync")
 
-        syncable.post_sync
+        if child?
+          syncable.post_sync
+          notify_parent_of_completion!
+        end
 
         Rails.logger.info("Post-sync completed")
       end
     end
   end
 
+  def handle_child_completion_event
+    unless has_pending_child_syncs?
+      if has_failed_child_syncs?
+        fail!("One or more child syncs failed")
+      else
+        complete!
+      end
+    end
+  end
+
   private
+    def has_pending_child_syncs?
+      children.where(status: [ :pending, :syncing ]).any?
+    end
+
+    def has_failed_child_syncs?
+      children.where(status: :failed).any?
+    end
+
+    def child?
+      parent_id.present?
+    end
+
+    def notify_parent_of_completion!
+      parent.handle_child_completion_event
+    end
+
     def start!
       Rails.logger.info("Starting sync")
       update! status: :syncing
