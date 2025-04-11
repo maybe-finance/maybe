@@ -1,7 +1,7 @@
 <%# locals: (content:, reload_on_close: false) %>
 
 <%= turbo_frame_tag "drawer" do %>
-  <dialog class="ml-auto bg-white shadow-border-xs rounded-2xl max-w-[480px] h-full w-full mt-4 mr-4 focus-visible:outline-hidden"
+  <dialog class="ml-auto bg-white shadow-border-xs sm:rounded-2xl max-w-full sm:max-w-[480px] max-h-[100vh] h-full w-full sm:mt-4 sm:mr-4 focus-visible:outline-hidden"
     data-controller="modal"
     data-action="mousedown->modal#clickOutside"
     data-modal-reload-on-close-value="<%= reload_on_close %>">
