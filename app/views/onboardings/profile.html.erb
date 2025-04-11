@@ -1,9 +1,9 @@
 <div class="bg-gray-25 h-screen flex flex-col justify-between">
   <%= render "onboardings/header" %>
 
-  <div class="grow max-w-lg w-full mx-auto bg-gray-25 flex flex-col justify-center">
+  <div class="grow max-w-lg w-full mx-auto bg-gray-25 flex flex-col justify-center py-12 px-4">
     <div>
-      <div class="space-y-1 mb-6">
+      <div class="space-y-1 mb-6 w-full text-center">
         <h1 class="text-2xl font-medium"><%= t(".title") %></h1>
         <p class="text-secondary text-sm"><%= t(".subtitle") %></p>
       </div>
@@ -12,12 +12,12 @@
         <%= form.hidden_field :redirect_to, value: @invitation ? "home" : "onboarding_preferences" %>
         <%= form.hidden_field :onboarded_at, value: Time.current if @invitation %>
 
-        <div class="space-y-4 mb-4">
+        <div class="mb-4 flex justify-center">
           <p class="text-secondary text-xs"><%= t(".profile_image") %></p>
           <%= render "settings/user_avatar_field", form: form, user: @user %>
         </div>
 
-        <div class="flex justify-between items-center gap-4 mb-4">
+        <div class="flex-col md:flex-row md:justify-between md:items-center md:gap-4 mb-4">
           <%= form.text_field :first_name, placeholder: t(".first_name"), label: t(".first_name"), container_class: "bg-white w-1/2", required: true %>
           <%= form.text_field :last_name, placeholder: t(".last_name"), label: t(".last_name"), container_class: "bg-white w-1/2", required: true %>
         </div>
