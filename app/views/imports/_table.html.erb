@@ -12,7 +12,7 @@
         </div>
       <% end %>
     </div>
-    <div class="sm:hidden grid border-b border-b-alpha-black-200 " style="grid-template-columns: repeat(<%= headers.length %>, 200px)">
+    <div class="sm:hidden grid border-b border-b-alpha-black-200 " style="grid-template-columns: repeat(<%= headers.length %>, 130px)">
       <% headers.each_with_index do |header, index| %>
         <div class="
           bg-gray-25 px-3 py-2.5 font-medium whitespace-nowrap overflow-x-auto
@@ -37,15 +37,17 @@
           </div>
         <% end %>
       </div>
-      <div class="grid <%= "border-b border-b-alpha-black-200" if row_index < rows.length - 1 || caption %> sm:hidden" style="grid-template-columns: repeat(<%= headers.length %>, 200px)">
+      <div class="grid <%= "border-b border-b-alpha-black-200" if row_index < rows.length - 1 || caption %> sm:hidden" style="grid-template-columns: repeat(<%= headers.length %>, 130px)">
         <% row.each_with_index do |(header, value), col_index| %>
           <div class="
-            px-3 py-2.5 whitespace-nowrap overflow-x-auto flex items-start
+            px-3 py-2.5 truncate overflow-x-hidden flex items-start
             <%= "border-r border-r-alpha-black-200" unless col_index == row.length - 1 %>
             <%= "rounded-bl-md" if !caption && row_index == rows.length - 1 && col_index == 0 %>
             <%= "rounded-br-md" if !caption && row_index == rows.length - 1 && col_index == row.length - 1 %>
           ">
-            <%= value %>
+            <div class="truncate overflow-hidden">
+              <%= value %>
+            </div>
           </div>
         <% end %>
       </div>
