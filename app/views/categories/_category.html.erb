@@ -1,6 +1,6 @@
 <%# locals: (category:) %>
 
-<div id="<%= dom_id(category) %>" class="flex justify-between items-center px-4 pb-4 <%= "pt-4" unless category.subcategory? %> <%= "pb-4" unless category.subcategories.any? %> bg-white">
+<div id="<%= dom_id(category) %>" class="flex justify-between items-center px-4 pb-4 <%= "pt-4" unless category.subcategory? %> <%= "pb-4" unless category.subcategories.any? %> bg-container">
   <div class="flex w-full items-center gap-2.5">
     <% if category.subcategory? %>
       <%= lucide_icon "corner-down-right", class: "shrink-0 w-5 h-5 text-subdued ml-2" %>
@@ -10,7 +10,7 @@
   </div>
   <div class="justify-self-end">
     <%= contextual_menu do %>
-      <div class="w-48 p-1 text-sm leading-6 text-primary bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+      <div class="w-48 p-1 text-sm leading-6 text-primary bg-container shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
         <%= contextual_menu_modal_action_item t(".edit"), edit_category_path(category) %>
 
         <% if category.transactions.any? %>

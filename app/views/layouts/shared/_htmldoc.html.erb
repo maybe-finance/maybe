@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="h-full text-primary overflow-hidden lg:overflow-auto font-sans <%= @os %>" lang="en">
+<html class="h-full text-primary overflow-hidden lg:overflow-auto font-sans <%= @os %>" lang="en" data-controller="theme" data-theme-user-preference-value="<%= Current.user&.theme || 'system' %>">
   <head>
     <%= render "layouts/shared/head" %>
     <%= yield :head %>

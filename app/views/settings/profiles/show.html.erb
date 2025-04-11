@@ -33,12 +33,12 @@
               "data-auto-submit-form-target": "auto" %>
       <% end %>
     <% end %>
-    <div class="bg-gray-25 rounded-xl p-1">
+    <div class="bg-container-inset rounded-xl p-1">
       <div class="px-4 py-2">
         <p class="uppercase text-xs text-secondary font-medium"><%= Current.family.name %> &middot; <%= Current.family.users.size %></p>
       </div>
       <% @users.each do |user| %>
-        <div class="flex gap-2 items-center bg-white p-4 border border-alpha-black-25 rounded-lg">
+        <div class="flex gap-2 items-center bg-container p-4 border border-alpha-black-25 rounded-lg">
           <div class="w-9 h-9 shrink-0">
             <%= render "settings/user_avatar", user: user %>
           </div>
@@ -65,7 +65,7 @@
       <% end %>
       <% if @pending_invitations.any? %>
         <% @pending_invitations.each do |invitation| %>
-          <div class="flex gap-2 items-center justify-between bg-white p-4 border border-alpha-black-25 rounded-lg">
+          <div class="flex gap-2 items-center justify-between bg-container p-4 border border-alpha-black-25 rounded-lg">
             <div class="flex gap-2 items-center">
               <div class="w-9 h-9 shrink-0">
                 <div class="text-white w-full h-full bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= invitation.email[0] %></div>
@@ -116,7 +116,7 @@
       <% end %>
       <% if Current.user.admin? %>
         <%= link_to new_invitation_path,
-                class: "bg-gray-100 flex items-center justify-center gap-2 text-secondary mt-1 hover:bg-gray-200 rounded-lg px-4 py-2 w-full text-center",
+                class: "bg-container-inset flex items-center justify-center gap-2 text-secondary mt-1 hover:bg-container-inset-hover rounded-lg px-4 py-2 w-full text-center",
                 data: { turbo_frame: :modal } do %>
           <%= lucide_icon("plus", class: "w-5 h-5 text-secondary") %>
           <%= t(".invite_member") %>

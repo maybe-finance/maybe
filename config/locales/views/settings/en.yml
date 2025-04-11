@@ -18,7 +18,7 @@ en:
         page_title: Preferences
         theme_dark: Dark
         theme_light: Light
-        theme_subtitle: Choose a preferred theme for the app (coming soon...)
+        theme_subtitle: Choose a preferred theme for the app
         theme_system: System
         theme_title: Theme
         timezone: Timezone

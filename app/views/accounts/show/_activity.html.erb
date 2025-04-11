@@ -1,7 +1,7 @@
 <%# locals: (account:) %>
 
 <%= turbo_frame_tag dom_id(account, "entries") do %>
-  <div class="bg-white p-5 shadow-border-xs rounded-xl" data-controller="focus-record" data-focus-record-id-value="<%= @focused_record ? dom_id(@focused_record) : nil %>">
+  <div class="bg-container p-5 shadow-border-xs rounded-xl" data-controller="focus-record" data-focus-record-id-value="<%= @focused_record ? dom_id(@focused_record) : nil %>">
     <div class="flex items-center justify-between mb-4">
       <%= tag.h2 t(".title"), class: "font-medium text-lg" %>
       <% unless @account.plaid_account_id.present? %>
@@ -10,7 +10,7 @@
             <%= lucide_icon("plus", class: "w-4 h-4") %>
             <%= tag.span t(".new") %>
           </button>
-          <div data-menu-target="content" class="z-10 hidden bg-white rounded-lg border border-alpha-black-25 shadow-xs p-1">
+          <div data-menu-target="content" class="z-10 hidden bg-container rounded-lg border border-alpha-black-25 shadow-xs p-1">
             <%= link_to new_account_valuation_path(account_id: @account.id), data: { turbo_frame: :modal }, class: "block p-2 rounded-lg hover:bg-gray-50 flex items-center gap-2" do %>
               <%= lucide_icon("circle-dollar-sign", class: "text-secondary w-5 h-5") %>
               <%= tag.span t(".new_balance"), class: "text-sm" %>
@@ -62,7 +62,7 @@
           <%= render "account/entries/selection_bar" %>
         </div>
 
-        <div class="grid bg-gray-25 rounded-xl grid-cols-12 items-center uppercase text-xs font-medium text-secondary px-5 py-3 mb-4">
+        <div class="grid bg-container-inset rounded-xl grid-cols-12 items-center uppercase text-xs font-medium text-secondary px-5 py-3 mb-4">
           <div class="pl-0.5 col-span-8 flex items-center gap-4">
             <%= check_box_tag "selection_entry",
                               class: "checkbox checkbox--light",
@@ -74,7 +74,7 @@
         </div>
 
         <div>
-          <div class="rounded-tl-lg rounded-tr-lg bg-white border-alpha-black-25 shadow-xs">
+          <div class="rounded-tl-lg rounded-tr-lg bg-container border-alpha-black-25 shadow-xs">
             <div class="space-y-4">
               <% calculator = Account::BalanceTrendCalculator.for(@entries) %>
               <%= entries_by_date(@entries) do |entries| %>
@@ -85,7 +85,7 @@
             </div>
           </div>
 
-          <div class="p-4 bg-white rounded-bl-lg rounded-br-lg">
+          <div class="p-4 bg-container rounded-bl-lg rounded-br-lg">
             <%= render "shared/pagination", pagy: @pagy %>
           </div>
         </div>

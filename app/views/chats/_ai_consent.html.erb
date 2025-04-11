@@ -1,17 +1,17 @@
 <div class="flex flex-col items-center justify-start h-full p-6 text-center">
-  <div class="border border-gray-200 rounded-lg p-4 bg-white">
-    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+  <div class="border border-gray-200 rounded-lg p-4 bg-container">
+    <div class="w-16 h-16 bg-surface-inset rounded-full flex items-center justify-center mx-auto mb-4">
       <%= icon("sparkles") %>
     </div>
 
-    <h3 class="text-lg font-medium text-gray-900 mb-2">Enable Personal Finance AI</h3>
+    <h3 class="text-lg font-medium text-primary mb-2">Enable Personal Finance AI</h3>
 
     <p class="text-gray-600 mb-6 text-sm">
       <% if Current.user.ai_available? %>
         Our personal finance AI can help answer questions about your finances and provide insights based on your data.
         To use this feature, you'll need to explicitly enable it.
       <% else %>
-        To use the AI assistant, you need to set the <code class="bg-gray-100 px-1 py-0.5 rounded font-mono text-xs">OPENAI_ACCESS_TOKEN</code>
+        To use the AI assistant, you need to set the <code class="bg-surface-inset px-1 py-0.5 rounded font-mono text-xs">OPENAI_ACCESS_TOKEN</code>
         environment variable in your self-hosted instance.
       <% end %>
     </p>

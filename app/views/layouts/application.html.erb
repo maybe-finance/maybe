@@ -1,7 +1,7 @@
 <%= render "layouts/shared/htmldoc" do %>
   <% sidebar_config = app_sidebar_config(Current.user) %>
 
-  <div class="flex flex-col lg:flex-row h-dvh lg:h-full bg-gray-50"
+  <div class="flex flex-col lg:flex-row h-dvh lg:h-full bg-surface"
        data-controller="sidebar"
        data-sidebar-user-id-value="<%= Current.user.id %>"
        data-sidebar-config-value="<%= sidebar_config.to_json %>">
@@ -14,7 +14,7 @@
       </button>
 
       <%# Mobile only account sidebar groups %>
-      <%= tag.div class: class_names("hidden bg-gray-50 z-20 absolute inset-0 h-dvh w-full p-4 overflow-y-auto transition-all duration-300"),
+      <%= tag.div class: class_names("hidden bg-surface z-20 absolute inset-0 h-dvh w-full p-4 overflow-y-auto transition-all duration-300"),
                   data: { sidebar_target: "leftPanelMobile" } do %>
         <div id="account-sidebar-tabs">
           <div class="mb-4">
@@ -110,7 +110,7 @@
       <% end %>
     </div>
 
-    <nav class="lg:hidden bg-white shrink-0 z-10 pb-2">
+    <nav class="lg:hidden bg-container shrink-0 z-10 pb-2">
       <ul class="flex items-center justify-around gap-1">
         <li>
           <%= render "layouts/sidebar/nav_item", name: "Home", path: root_path, icon_key: "pie-chart" %>

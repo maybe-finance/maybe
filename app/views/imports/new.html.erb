@@ -11,9 +11,9 @@
       <p class="text-secondary text-sm"><%= t(".description") %></p>
     </div>
 
-    <div class="rounded-xl bg-gray-25 p-1">
+    <div class="rounded-xl bg-container-inset p-1">
       <h3 class="uppercase text-secondary text-xs font-medium px-3 py-1.5"><%= t(".sources") %></h3>
-      <ul class="bg-white shadow-border-xs rounded-lg">
+      <ul class="bg-container shadow-border-xs rounded-lg">
         <li>
           <% if @pending_import.present? && (params[:type].nil? || params[:type] == @pending_import.type) %>
             <%= link_to import_path(@pending_import), class: "flex items-center justify-between p-4 group cursor-pointer", data: { turbo: false } do %>

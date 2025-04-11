@@ -1,5 +1,5 @@
 <%# locals: (user_message:) %>
 
-<div id="<%= dom_id(user_message) %>" class="bg-gray-100 px-3 py-2 rounded-lg max-w-[85%] w-fit ml-auto mb-6">
+<div id="<%= dom_id(user_message) %>" class="bg-surface-inset px-3 py-2 rounded-lg max-w-[85%] w-fit ml-auto mb-6">
   <div class="prose prose--ai-chat"><%= markdown(user_message.content) %></div>
 </div>

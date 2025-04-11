@@ -38,7 +38,7 @@ module MenusHelper
     end
 
     def contextual_menu_content(&block)
-      tag.div class: "min-w-[200px] p-1 z-50 shadow-border-xs bg-white rounded-lg hidden",
+      tag.div class: "min-w-[200px] p-1 z-50 shadow-border-xs bg-container rounded-lg hidden",
                data: { menu_target: "content" } do
         capture(&block)
       end
