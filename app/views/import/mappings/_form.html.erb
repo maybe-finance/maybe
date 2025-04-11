@@ -3,10 +3,10 @@
 <%= styled_form_with model: mapping,
                      scope: :import_mapping,
                      url: import_mapping_path(mapping.import, mapping),
-                     class: "grid grid-cols-3 gap-2 items-center",
+                     class: "grid grid-cols-[repeat(3,_minmax(130px,_1fr))] sm:grid-cols-3 gap-4 sm:gap-2 items-center",
                      data: { controller: "auto-submit-form" },
                      html: { id: dom_id(mapping, :form) } do |form| %>
-  <span><%= mapping.key.blank? ? "(unassigned)" : mapping.key %></span>
+  <span class="truncate"><%= mapping.key.blank? ? "(unassigned)" : mapping.key %></span>
 
   <% if mapping.mappable_class.present? %>
     <%= form.hidden_field :mappable_type, value: mapping.mappable_class, id: dom_id(mapping, :mappable_type) %>

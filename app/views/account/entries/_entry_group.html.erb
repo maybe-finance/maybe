@@ -1,6 +1,6 @@
 <%# locals: (date:, entries:, content:, totals: false) %>
 
-<div id="entry-group-<%= date %>" class="bg-container-inset rounded-xl p-1 w-full" data-bulk-select-target="group">
+<div id="entry-group-<%= date %>" class="bg-container-inset inline-block rounded-xl p-1 w-full" data-bulk-select-target="group">
   <div class="py-2 px-4 flex items-center justify-between font-medium text-xs text-secondary">
     <div class="flex pl-0.5 items-center gap-4">
         <%= check_box_tag "#{date}_entries_selection",

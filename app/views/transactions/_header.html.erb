@@ -3,13 +3,16 @@
   <div class="flex items-center gap-5">
     <div class="flex items-center gap-2">
       <%= contextual_menu do %>
+        <div class="block sm:hidden">
+          <%= contextual_menu_modal_action_item t(".import_transactions"), new_import_path, icon: "download", turbo_frame: "modal" %>
+        </div>
         <%= contextual_menu_modal_action_item t(".edit_categories"), categories_path, icon: "shapes", turbo_frame: :_top %>
         <%= contextual_menu_modal_action_item t(".edit_tags"), tags_path, icon: "tags", turbo_frame: :_top %>
         <%= contextual_menu_modal_action_item t(".edit_merchants"), merchants_path, icon: "store", turbo_frame: :_top %>
         <%= contextual_menu_modal_action_item t(".edit_imports"), imports_path, icon: "hard-drive-upload", turbo_frame: :_top %>
       <% end %>
 
-      <%= link_to new_import_path, class: "btn btn--outline flex items-center gap-2", data: { turbo_frame: "modal" } do %>
+      <%= link_to new_import_path, class: "hidden sm:block btn btn--outline flex items-center gap-2", data: { turbo_frame: "modal" } do %>
         <%= lucide_icon("download", class: "text-secondary w-4 h-4") %>
         <p class="text-sm font-medium text-primary"><%= t(".import") %></p>
       <% end %>
