@@ -6,17 +6,17 @@
 </div>
 
 <div class="mx-auto max-w-2xl space-y-4">
-  <div class="bg-gray-25 rounded-xl p-1 space-y-1">
+  <div class="bg-container-inset rounded-xl p-1 space-y-1">
     <div class="flex justify-between items-center text-xs font-medium text-secondary uppercase px-5 py-3">
       <p>item</p>
       <p class="justify-self-end">count</p>
     </div>
 
-    <div class="bg-white shadow-border-xs rounded-lg text-sm">
+    <div class="bg-container shadow-border-xs rounded-lg text-sm">
       <% import.dry_run.each do |key, count| %>
         <% resource = dry_run_resource(key) %>
 
-        <div class="flex items-center justify-between gap-2 bg-white px-5 py-3 rounded-tl-lg rounded-tr-lg">
+        <div class="flex items-center justify-between gap-2 bg-container px-5 py-3 rounded-tl-lg rounded-tr-lg">
           <div class="flex items-center gap-3">
             <div class="<%= resource.bg_class %> w-8 h-8 rounded-full flex justify-center items-center">
               <%= lucide_icon resource.icon, class: "#{resource.text_class} w-5 h-5 shrink-0" %>

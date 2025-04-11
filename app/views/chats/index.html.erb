@@ -15,11 +15,11 @@
           <%= render @chats %>
         </div>
       <% else %>
-        <div class="text-center py-12 bg-white rounded-lg border border-gray-200">
-          <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div class="text-center py-12 bg-container rounded-lg border border-gray-200">
+          <div class="w-16 h-16 bg-surface-inset rounded-full flex items-center justify-center mx-auto mb-4">
             <%= icon("message-square", size: "lg") %>
           </div>
-          <h3 class="text-lg font-medium text-gray-900 mb-1">No chats yet</h3>
+          <h3 class="text-lg font-medium text-primary mb-1">No chats yet</h3>
           <p class="text-gray-500 mb-4">Start a new conversation with the AI assistant</p>
           <%= link_to "Start a chat", new_chat_path, class: "inline-flex items-center gap-2 py-2 px-4 bg-gray-800 text-white rounded-lg text-sm font-medium" %>
         </div>

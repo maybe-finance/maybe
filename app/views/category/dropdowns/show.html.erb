@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "category_dropdown" do %>
   <div class="flex flex-col relative" data-controller="list-filter">
     <div class="grow p-1.5">
-      <div class="relative flex items-center bg-white border border-gray-200 rounded-lg">
+      <div class="relative flex items-center bg-container border border-gray-200 rounded-lg">
         <input placeholder="<%= t(".search_placeholder") %>" autocomplete="nope" type="search" class="placeholder:text-sm placeholder:text-secondary font-normal h-10 relative pl-10 w-full border-none rounded-lg" data-list-filter-target="input" data-action="list-filter#filter">
         <%= lucide_icon("search", class: "w-5 h-5 text-secondary ml-2 absolute inset-0 transform top-1/2 -translate-y-1/2") %>
       </div>
