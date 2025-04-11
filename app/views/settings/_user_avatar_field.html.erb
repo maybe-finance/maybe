@@ -1,6 +1,6 @@
 <%# locals: (form:, user:) %>
 
-<div class="flex items-center gap-4" data-controller="profile-image-preview">
+<div class="flex flex-col items-center md:itmes-start md:flex-row md:gap-4" data-controller="profile-image-preview">
   <div class="relative flex justify-center items-center bg-gray-50 w-24 h-24 rounded-full border-alpha-black-300 border border-dashed">
 
     <%# The image preview once user has uploaded a new file  %>
@@ -34,10 +34,10 @@
     </button>
   </div>
 
-  <div>
+  <div class=" flex flex-col itmes-center space-y-2 text-center mt-3 md:block">
     <%= form.hidden_field :delete_profile_image, value: "0", data: { profile_image_preview_target: "deleteProfileImage" } %>
 
-    <p class="mb-3"><%= t(".accepted_formats") %></p>
+    <p class="text-subdued text-xs md:text-sm md:order-1 order-3"><%= t(".accepted_formats") %></p>
 
     <%= form.label :profile_image, t(".choose"),
         class: "btn btn--outline inline-block" %>

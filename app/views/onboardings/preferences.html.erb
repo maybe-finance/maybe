@@ -1,11 +1,11 @@
 <div class="bg-gray-25 h-screen flex flex-col justify-between">
   <%= render "onboardings/header" %>
 
-  <div class="grow max-w-lg w-full mx-auto bg-gray-25 flex flex-col justify-center" data-controller="onboarding">
+  <div class="grow max-w-lg w-full mx-auto bg-gray-25 flex flex-col justify-center py-12 px-4" data-controller="onboarding">
     <div>
-      <div class="space-y-1 mb-6">
+      <div class="space-y-1 mb-6 w-full text-center">
         <h1 class="text-2xl font-medium"><%= t(".title") %></h1>
-        <p class="text-secondary text-sm"><%= t(".subtitle") %></p>
+        <p class="text-secondary text-xs md:text"><%= t(".subtitle") %></p>
       </div>
 
       <div class="p-1 bg-alpha-black-25 mb-2 rounded-lg">
@@ -40,7 +40,7 @@
 
           <% placeholder_series = Series.from_raw_values(placeholder_series_data) %>
 
-          <div class="flex items-center w-2/5">
+          <div class="hidden md:flex items-center w-2/5">
             <div class="h-12 w-full">
               <div
                 id="previewChart"
@@ -54,7 +54,7 @@
         </div>
       </div>
 
-      <p class="text-secondary text-xs mb-4"><%= t(".preview") %></p>
+      <p class="text-secondary text-xs mb-4 w-full text-center"><%= t(".preview") %></p>
 
       <%= styled_form_with model: @user, data: { turbo: false } do |form| %>
         <%= form.hidden_field :onboarded_at, value: Time.current %>
