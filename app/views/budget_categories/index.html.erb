@@ -16,7 +16,7 @@
 
     <div class="mx-auto max-w-lg">
       <% if @budget.family.categories.empty? %>
-        <div class="bg-white shadow-border-xs rounded-lg p-4">
+        <div class="bg-container shadow-border-xs rounded-lg p-4">
           <%= render "budget_categories/no_categories" %>
         </div>
       <% else %>

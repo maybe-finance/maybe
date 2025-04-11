@@ -11,9 +11,9 @@
       <p class="text-secondary text-sm"><%= t(".description") %></p>
     </div>
 
-    <div data-controller="tabs" data-tabs-active-class="bg-white" data-tabs-default-tab-value="csv-upload-tab">
+    <div data-controller="tabs" data-tabs-active-class="bg-container" data-tabs-default-tab-value="csv-upload-tab">
       <div class="flex justify-center mb-4">
-        <div class="bg-gray-50 rounded-lg grid grid-cols-2 p-1 gap-2 text-xs text-primary font-medium w-full">
+        <div class="tab-item-active rounded-lg grid grid-cols-2 p-1 gap-2 text-xs text-primary font-medium w-full">
           <button type="button" data-id="csv-upload-tab" class="py-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Upload CSV</button>
           <button type="button" data-id="csv-paste-tab" class="py-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Copy & Paste</button>
         </div>
@@ -35,7 +35,7 @@
                        placeholder: "Paste your CSV file contents here",
                        "data-auto-submit-form-target": "auto" %>
             <% else %>
-              <label for="import_csv_file" class="flex flex-col items-center justify-center w-full h-56 border-1 border-gray-300 border-dashed rounded-lg cursor-pointer">
+              <label for="import_csv_file" class="flex flex-col items-center justify-center w-full h-56 border-1 border-secondary border-dashed rounded-lg cursor-pointer bg-container-inset">
                 <div class="flex flex-col items-center justify-center space-y-2 pt-5 pb-6">
                   <%= lucide_icon "plus", class: "w-4 h-4 text-secondary" %>
                   <span class="leading-none m-0">

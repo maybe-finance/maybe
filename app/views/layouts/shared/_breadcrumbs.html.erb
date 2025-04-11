@@ -2,7 +2,7 @@
 
 <nav class="hidden sm:flex items-center gap-2 mb-6">
   <% if sidebar_toggle_enabled %>
-    <button data-action="sidebar#toggleLeftPanel" class="hidden p-2 lg:inline-flex rounded-lg items-center justify-center hover:bg-gray-100 cursor-pointer">
+    <button data-action="sidebar#toggleLeftPanel" class="hidden p-2 lg:inline-flex rounded-lg items-center justify-center hover:bg-container-inset cursor-pointer">
       <%= icon("panel-left", color: "gray") %>
     </button>
   <% end %>
@@ -16,7 +16,7 @@
       <% if path.present? && index < breadcrumbs.size - 1 %>
         <%= link_to name, path, class: "text-sm text-gray-500 font-medium" %>
       <% elsif index == breadcrumbs.size - 1 %>
-        <span class="text-gray-900 font-medium text-sm"><%= name %></span>
+        <span class="text-primary font-medium text-sm"><%= name %></span>
       <% else %>
         <span class="text-sm text-gray-500 font-medium"><%= name %></span>
       <% end %>
@@ -25,7 +25,7 @@
 
   <% if sidebar_toggle_enabled %>
     <div class="ml-auto">
-      <button data-action="sidebar#toggleRightPanel" class="p-2 hidden lg:inline-flex rounded-lg items-center justify-center hover:bg-gray-100 cursor-pointer" title="Toggle AI Assistant">
+      <button data-action="sidebar#toggleRightPanel" class="p-2 hidden lg:inline-flex rounded-lg items-center justify-center hover:bg-container-inset cursor-pointer" title="Toggle AI Assistant">
         <%= icon("panel-right", color: "gray") %>
       </button>
     </div>

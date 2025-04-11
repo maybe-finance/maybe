@@ -21,7 +21,7 @@
 
 <div class="space-y-4 max-w-full">
   <div class="w-full overflow-x-auto">
-    <div class="bg-gray-25 rounded-xl p-1 space-y-1 inline-block min-w-full sm:w-[650px]">
+    <div class="bg-container-inset rounded-xl p-1 space-y-1 inline-block min-w-full sm:w-[650px]">
       <div class="grid grid-cols-[repeat(3,_minmax(130px,_1fr))] sm:grid-cols-3 gap-4 sm:gap-2 text-xs font-medium text-secondary uppercase px-5 py-3">
         <p><%= t(".csv_mapping_label", mapping: mapping_label(mapping_class)) %></p>
         <p><%= t(".maybe_mapping_label", mapping: mapping_label(mapping_class)) %></p>
@@ -30,7 +30,7 @@
 
       <div class="shadow-border-xs rounded-md divide-y divide-alpha-black-100 text-sm">
         <% mappings.sort_by(&:key).each do |mapping| %>
-          <div class="px-5 py-3 bg-white first:rounded-tl-xl first:rounded-tr-xl last:rounded-bl-xl last:rounded-br-xl">
+          <div class="px-5 py-3 bg-container first:rounded-tl-xl first:rounded-tr-xl last:rounded-bl-xl last:rounded-br-xl">
             <%= render partial: "import/mappings/form", locals: { mapping: mapping } %>
           </div>
         <% end %>

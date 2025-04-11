@@ -4,7 +4,7 @@
                        data: {
                          turbo: false,
                          controller: "deletion",
-                         deletion_dangerous_action_class: "form-field__submit bg-white text-red-600 border hover:bg-red-50",
+                         deletion_dangerous_action_class: "form-field__submit bg-container text-red-600 border hover:bg-red-50",
                          deletion_safe_action_class: "form-field__submit border border-transparent",
                          deletion_submit_text_when_not_replacing_value: t(".delete_and_leave_uncategorized", tag_name: @tag.name),
                          deletion_submit_text_when_replacing_value: t(".delete_and_recategorize", tag_name: @tag.name) } do |f| %>
@@ -15,7 +15,7 @@
                             { data: { deletion_target: "replacementField", action: "deletion#updateSubmitButton" } } %>
 
     <%= f.submit t(".delete_and_leave_uncategorized", tag_name: @tag.name),
-                 class: "form-field__submit bg-white text-red-600 border hover:bg-red-50",
+                 class: "form-field__submit bg-container text-red-600 border hover:bg-red-50",
                  data: { deletion_target: "submitButton" } %>
   <% end %>
 <% end %>

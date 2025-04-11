@@ -1,7 +1,7 @@
 <%# locals: (plaid_item:) %>
 
 <%= tag.div id: dom_id(plaid_item) do %>
-  <details open class="group bg-white p-4 shadow-border-xs rounded-xl">
+  <details open class="group bg-container p-4 shadow-border-xs rounded-xl">
     <summary class="flex items-center justify-between gap-2 focus-visible:outline-hidden">
       <div class="flex items-center gap-2">
         <%= lucide_icon "chevron-right", class: "group-open:transform group-open:rotate-90 text-secondary w-5" %>
@@ -96,7 +96,7 @@
         <% end %>
 
         <%= contextual_menu do %>
-          <div class="w-48 p-1 text-sm leading-6 text-primary bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+          <div class="w-48 p-1 text-sm leading-6 text-primary bg-container shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
             <%= button_to plaid_item_path(plaid_item),
                       method: :delete,
                       class: "block w-full py-2 px-3 space-x-2 text-red-600 hover:bg-red-50 flex items-center rounded-lg",

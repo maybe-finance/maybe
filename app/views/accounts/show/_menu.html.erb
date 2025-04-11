@@ -1,7 +1,7 @@
 <%# locals: (account:) %>
 
 <%= contextual_menu do %>
-  <div class="w-48 p-1 text-sm leading-6 text-primary bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+  <div class="w-48 p-1 text-sm leading-6 text-primary bg-container shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
     <% if account.plaid_account_id.present? %>
       <%= link_to accounts_path,
                       data: { turbo_frame: :_top },

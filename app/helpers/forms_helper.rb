@@ -17,7 +17,7 @@ module FormsHelper
     end
   end
 
-  def period_select(form:, selected:, classes: "border border-secondary rounded-lg text-sm pr-7 cursor-pointer text-primary focus:outline-hidden focus:ring-0")
+  def period_select(form:, selected:, classes: "border border-secondary bg-container-inset rounded-lg text-sm pr-7 cursor-pointer text-primary focus:outline-hidden focus:ring-0")
     periods_for_select = Period.all.map { |period| [ period.label_short, period.key ] }
 
     form.select(:period, periods_for_select, { selected: selected.key }, class: classes, data: { "auto-submit-form-target": "auto" })
@@ -30,7 +30,7 @@ end
 
   private
     def radio_tab_contents(label:, icon:)
-      tag.div(class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-subdued group-has-checked:bg-white group-has-checked:text-gray-800 group-has-checked:shadow-sm") do
+      tag.div(class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-subdued group-has-checked:bg-container group-has-checked:text-gray-800 group-has-checked:shadow-sm") do
         concat lucide_icon(icon, class: "w-[clamp(15px,1.8vw,20px)] h-[clamp(15px,1.8vw,20px)]")
         concat tag.span(label, class: "group-has-checked:font-semibold text-[clamp(14px,1.5vw,16px)]")
       end
