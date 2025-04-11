@@ -1,7 +1,7 @@
 <%# locals: (budget_category:) %>
 
 <%= turbo_frame_tag dom_id(budget_category), class: "w-full" do %>
-  <%= link_to budget_budget_category_path(budget_category.budget, budget_category), class: "group w-full p-4 flex items-center gap-3 bg-white", data: { turbo_frame: "drawer" } do %>
+  <%= link_to budget_budget_category_path(budget_category.budget, budget_category), class: "group w-full p-4 flex items-center gap-3 bg-container", data: { turbo_frame: "drawer" } do %>
 
     <% if budget_category.initialized? %>
       <div class="w-10 h-10 group-hover:scale-105 transition-all duration-300">

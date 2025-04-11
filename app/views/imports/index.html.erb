@@ -7,14 +7,14 @@
   <% end %>
 </div>
 
-<div class="bg-white shadow-border-xs rounded-xl p-4">
+<div class="bg-container shadow-border-xs rounded-xl p-4">
   <% if @imports.empty? %>
     <%= render partial: "imports/empty" %>
   <% else %>
-    <div class="rounded-xl bg-gray-25 p-1">
+    <div class="rounded-xl bg-container-inset p-1">
       <h2 class="uppercase px-4 py-2 text-secondary text-xs"><%= t(".imports") %> · <%= @imports.size %></h2>
 
-      <div class="border border-alpha-black-100 rounded-lg bg-white shadow-xs">
+      <div class="border border-alpha-black-100 rounded-lg bg-container shadow-xs">
         <%= render partial: "imports/import", collection: @imports.ordered %>
       </div>
     </div>

@@ -5,6 +5,8 @@
   One-off styling (3rd party overrides, etc.) should be done in the application.css file.
 */
 
+@custom-variant theme-dark (&:where([data-theme=dark], [data-theme=dark] *));
+
 @theme {
   /* Font families */
   --font-sans: 'Geist', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -241,78 +243,235 @@
 /* Design system color utilities */
 @utility text-primary {
   @apply text-gray-900;
+
+  @variant theme-dark {
+   @apply text-white;
+  }
 }
 
 @utility text-secondary {
   @apply text-gray-500;
+
+  @variant theme-dark {
+    @apply text-gray-400;
+  }
 }
 
 @utility text-subdued {
   @apply text-gray-400;
+
+  @variant theme-dark {
+    @apply text-gray-600;
+  }
 }
 
 @utility text-link {
   @apply text-blue-600;
+
+  @variant theme-dark {
+    @apply text-blue-500;
+  }
 }
 
 @utility bg-surface {
   @apply bg-gray-50;
+
+  @variant theme-dark {
+    @apply bg-black;
+  }
 }
 
 @utility bg-surface-hover {
   @apply bg-gray-100;
+
+  @variant theme-dark {
+    @apply bg-gray-800;
+  }
 }
 
 @utility bg-surface-inset {
   @apply bg-gray-100;
+
+  @variant theme-dark {
+    @apply bg-gray-900;
+  }
 }
 
 @utility bg-surface-inset-hover {
   @apply bg-gray-200;
+
+  @variant theme-dark {
+    @apply bg-gray-800;
+  }
 }
 
 @utility bg-container {
   @apply bg-white;
+
+  @variant theme-dark {
+    @apply bg-gray-900;
+  }
 }
 
 @utility bg-container-hover {
   @apply bg-gray-50;
+
+  @variant theme-dark {
+    @apply bg-gray-800;
+  }
 }
 
 @utility bg-container-inset {
   @apply bg-gray-50;
+
+  @variant theme-dark {
+    @apply bg-gray-800;
+  }
 }
 
 @utility bg-container-inset-hover {
   @apply bg-gray-100;
+
+  @variant theme-dark {
+    @apply bg-gray-700;
+  }
 }
 
 @utility bg-inverse {
   @apply bg-gray-800;
+
+  @variant theme-dark {
+    @apply bg-white;
+  }
 }
 
 @utility bg-inverse-hover {
   @apply bg-gray-700;
+
+  @variant theme-dark {
+    @apply bg-gray-100;
+  }
 }
 
 @utility bg-overlay {
-  @apply bg-alpha-black-200;
+  background-color: rgba(var(--color-gray-100), 0.5);
+
+  @variant theme-dark {
+    background-color: var(--color-alpha-black-900);
+  }
 }
 
 @utility border-primary {
   @apply border-alpha-black-300;
+
+  @variant theme-dark {
+    @apply border-alpha-white-400;
+  }
 }
 
 @utility border-secondary {
   @apply border-alpha-black-200;
+
+  @variant theme-dark {
+    @apply border-alpha-white-300;
+  }
 }
 
 @utility border-tertiary {
   @apply border-alpha-black-100;
+
+  @variant theme-dark {
+    @apply border-alpha-white-200;
+  }
 }
 
 @utility border-subdued {
   @apply border-alpha-black-50;
+
+  @variant theme-dark {
+    @apply border-alpha-white-100;
+  }
+}
+
+@utility border-solid {
+  @apply border-black;
+
+  @variant theme-dark {
+    @apply border-white;
+  }
+}
+
+@utility border-destructive {
+  @apply border-red-500;
+
+  @variant theme-dark {
+    @apply border-red-400;
+  }
+}
+
+/* Foreground Colors */
+@utility fg-gray {
+  @apply text-gray-500;
+
+  @variant theme-dark {
+    @apply text-gray-400;
+  }
+}
+
+@utility fg-contrast {
+  @apply text-gray-400;
+
+  @variant theme-dark {
+    @apply text-gray-500;
+  }
+}
+
+@utility fg-inverse {
+  @apply text-white;
+
+  @variant theme-dark {
+    @apply text-gray-900;
+  }
+}
+
+@utility fg-primary {
+  @apply text-gray-900;
+
+  @variant theme-dark {
+    @apply text-white;
+  }
+}
+
+@utility fg-primary-variant {
+  @apply text-gray-800;
+
+  @variant theme-dark {
+    @apply text-gray-50;
+  }
+}
+
+@utility fg-secondary {
+  @apply text-gray-50;
+
+  @variant theme-dark {
+    @apply text-gray-700;
+  }
+}
+
+@utility fg-secondary-variant {
+  @apply text-gray-100;
+
+  @variant theme-dark {
+    @apply text-gray-600;
+  }
+}
+
+@utility fg-subdued {
+  @apply text-gray-400;
+
+  @variant theme-dark {
+    @apply text-gray-500;
+  }
 }
 
 @layer base {
@@ -331,6 +490,15 @@
   details>summary {
     @apply list-none;
   }
+
+  input[type='radio'] {
+    @apply border-gray-300 text-indigo-600 focus:ring-indigo-600; /* Default light mode */
+    
+    @variant theme-dark {
+      /* Dark mode radio button base and checked styles */
+      @apply border-gray-600 bg-gray-700 checked:bg-blue-500 focus:ring-blue-500 focus:ring-offset-gray-800;
+    }
+  }
 }
 
 @layer components {
@@ -341,31 +509,63 @@
   }
 
   .btn--primary {
-    @apply bg-gray-900 text-white hover:bg-gray-700 disabled:bg-gray-50 disabled:hover:bg-gray-50 disabled:text-gray-400;
+    @apply button-bg-primary text-white disabled:text-gray-400;
+    @apply hover:button-bg-primary-hover;
+    @apply disabled:button-bg-disabled disabled:hover:button-bg-disabled;
+
+    @variant theme-dark {
+      @apply button-bg-primary fg-primary;
+      @apply hover:button-bg-primary-hover;
+      @apply disabled:button-bg-disabled disabled:hover:button-bg-disabled;
+    }
   }
   
   .btn--secondary {
-    @apply bg-gray-50 hover:bg-gray-100 text-gray-900;
+    @apply button-bg-secondary text-primary;
+    @apply hover:button-bg-secondary-hover;
+
+    @variant theme-dark {
+      @apply button-bg-secondary text-white;
+      @apply hover:button-bg-secondary-hover;
+    }
   }
   
   .btn--outline {
-    @apply border border-alpha-black-200 text-gray-900 hover:bg-gray-50 disabled:bg-gray-50 disabled:hover:bg-gray-50 disabled:text-gray-400;
+    @apply border border-alpha-black-200 text-primary disabled:button-bg-disabled disabled:hover:button-bg-disabled disabled:text-gray-400;
+    @apply hover:button-bg-outline-hover;
+
+    @variant theme-dark {
+      @apply border-alpha-white-300 text-white disabled:button-bg-disabled disabled:hover:button-bg-disabled disabled:text-gray-600;
+      @apply hover:button-bg-outline-hover;
+    }
   }
   
   .btn--ghost {
-    @apply border border-transparent text-gray-900 hover:bg-gray-100;
+    @apply border border-transparent text-primary hover:button-bg-ghost-hover;
+
+    @variant theme-dark {
+      @apply fg-primary hover:button-bg-ghost-hover;
+    }
   }
 
   .btn--destructive {
-    @apply bg-red-500 text-white hover:bg-red-600 disabled:bg-red-50 disabled:hover:bg-red-50 disabled:text-red-400;
+    @apply button-bg-destructive text-white hover:button-bg-destructive-hover disabled:button-bg-disabled disabled:hover:button-bg-disabled disabled:text-red-400;
+
+    @variant theme-dark {
+      @apply button-bg-destructive text-white hover:button-bg-destructive-hover disabled:button-bg-disabled disabled:hover:button-bg-disabled;
+    }
   }
 
   /* Forms */
   .form-field {
-    @apply flex flex-col gap-1 relative px-3 py-2 rounded-md border bg-white border-alpha-black-100 shadow-xs w-full;
-    @apply focus-within:border-gray-900 focus-within:shadow-none focus-within:ring-4 focus-within:ring-gray-100;
+    @apply flex flex-col gap-1 relative px-3 py-2 rounded-md border bg-container border-secondary shadow-xs w-full;
+    @apply focus-within:border-secondary focus-within:shadow-none focus-within:ring-4 focus-within:ring-alpha-black-200;
     @apply transition-all duration-300;
     
+    @variant theme-dark {
+      @apply focus-within:ring-alpha-white-300;
+    }
+
     /* Add styles for multiple select within form fields */
     select[multiple] {
       @apply py-2 pr-2 space-y-0.5 overflow-y-auto;
@@ -375,25 +575,25 @@
       }
       
       option:checked {
-        @apply after:content-['\2713'] bg-white after:text-gray-500 after:ml-2;
+        @apply after:content-['\2713'] bg-container-inset after:text-gray-500 after:ml-2;
       }
       
       option:active,
       option:focus {
-        @apply bg-white;
+        @apply bg-container-inset;
       }
     }
   }
   
   .form-field__label {
-    @apply block text-xs text-gray-500 peer-disabled:text-gray-400;
+    @apply block text-xs text-secondary peer-disabled:text-subdued;
   }
 
   .form-field__input {
     @apply border-none bg-transparent text-sm opacity-100 w-full p-0;
     @apply focus:opacity-100 focus:outline-hidden focus:ring-0;
     @apply placeholder-shown:opacity-50;
-    @apply disabled:text-gray-400;
+    @apply disabled:text-subdued;
     @apply text-ellipsis overflow-hidden whitespace-nowrap;
     @apply transition-opacity duration-300;
   
@@ -403,11 +603,11 @@
   }
   
   .form-field__radio {
-    @apply text-gray-900;
+    @apply text-primary;
   }
   
   .form-field__submit {
-    @apply cursor-pointer rounded-lg bg-black p-3 text-center text-white hover:bg-gray-700;
+    @apply cursor-pointer rounded-lg bg-surface p-3 text-center text-white hover:bg-surface-hover;
   }
 
   /* Checkboxes */
@@ -454,5 +654,110 @@
   /* Tooltips */
   .tooltip {
     @apply hidden absolute;
+  }
+}
+
+@layer utilities {
+  /* Specific override for strong tags in prose under dark mode */
+  .prose:where([data-theme=dark], [data-theme=dark] *) strong {
+    color: theme(colors.white) !important; 
+  }
+}
+
+/* Button Backgrounds */
+@utility button-bg-primary {
+  @apply bg-gray-900; /* Maps to fg-primary light */
+
+  @variant theme-dark {
+    @apply bg-white; /* Maps to fg-primary dark */
+  }
+}
+
+@utility button-bg-primary-hover {
+  @apply bg-gray-800; /* Maps to fg-primary-variant light */
+
+  @variant theme-dark {
+    @apply bg-gray-50; /* Maps to fg-primary-variant dark */
+  }
+}
+
+@utility button-bg-secondary {
+  @apply bg-gray-50; /* Maps to fg-secondary light */
+
+  @variant theme-dark {
+    @apply bg-gray-700; /* Maps to fg-secondary dark */
+  }
+}
+
+@utility button-bg-secondary-hover {
+  @apply bg-gray-100; /* Maps to fg-secondary-variant light */
+
+  @variant theme-dark {
+    @apply bg-gray-600; /* Maps to fg-secondary-variant dark */
+  }
+}
+
+@utility button-bg-disabled {
+  @apply bg-gray-50;
+
+  @variant theme-dark {
+    @apply bg-gray-700;
+  }
+}
+
+@utility button-bg-destructive {
+  @apply bg-red-500;
+
+  @variant theme-dark {
+    @apply bg-red-400;
+  }
+}
+
+@utility button-bg-destructive-hover {
+  @apply bg-red-600;
+
+  @variant theme-dark {
+    @apply bg-red-500;
+  }
+}
+
+@utility button-bg-ghost-hover {
+  @apply bg-gray-50;
+
+  @variant theme-dark {
+    @apply bg-gray-800;
+  }
+}
+
+@utility button-bg-outline-hover {
+  @apply bg-gray-100;
+
+  @variant theme-dark {
+    @apply bg-gray-700;
+  }
+}
+
+/* Tab Styles */
+@utility tab-item-active {
+  @apply bg-white;
+
+  @variant theme-dark {
+    @apply bg-gray-700;
+  }
+}
+
+@utility tab-item-hover {
+  @apply bg-gray-200;
+
+  @variant theme-dark {
+    @apply bg-gray-800;
+  }
+}
+
+@utility tab-bg-group {
+  @apply bg-gray-50;
+
+  @variant theme-dark {
+    @apply bg-alpha-black-700;
   }
 }

@@ -11,7 +11,7 @@
 
       <%= turbo_frame_tag "#{account_group.key}_sparkline", src: accountable_sparkline_path(account_group.key), loading: "lazy" do %>
         <div class="flex items-center w-8 h-4 ml-auto">
-          <div class="w-6 h-px bg-gray-200"></div>
+          <div class="w-6 h-px bg-surface-inset"></div>
         </div>
       <% end %>
     </div>
@@ -23,7 +23,7 @@
         <%= render "accounts/logo", account: account, size: "sm", color: account_group.color %>
 
         <div class="min-w-0 grow">
-          <%= tag.p account.name, class: "text-sm font-medium mb-0.5 truncate" %>
+          <%= tag.p account.name, class: "text-sm text-primary font-medium mb-0.5 truncate" %>
           <%= tag.p account.subtype&.humanize.presence || account_group.name, class: "text-sm text-secondary truncate" %>
         </div>
 
@@ -32,7 +32,7 @@
 
           <%= turbo_frame_tag dom_id(account, :sparkline), src: sparkline_account_path(account), loading: "lazy" do %>
             <div class="flex items-center w-8 h-5 ml-auto">
-              <div class="w-6 h-px bg-gray-200"></div>
+              <div class="w-6 h-px bg-surface-inset"></div>
             </div>
           <% end %>
         </div>

@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "bulk_transaction_edit_drawer" do %>
   <dialog data-controller="modal"
           data-action="mousedown->modal#clickOutside"
-    class="bg-white shadow-border-xs rounded-2xl max-h-[calc(100vh-32px)] h-full max-w-[480px] w-full mt-4 mr-4 ml-auto">
+    class="bg-container shadow-border-xs rounded-2xl max-h-[calc(100vh-32px)] h-full max-w-[480px] w-full mt-4 mr-4 ml-auto">
     <%= styled_form_with url: bulk_update_account_transactions_path, scope: "bulk_update", class: "h-full", data: { turbo_frame: "_top" } do |form| %>
       <div class="flex h-full flex-col justify-between p-4 gap-4">
         <div>
