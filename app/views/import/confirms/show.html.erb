@@ -8,16 +8,6 @@
 <% step_mapping_class = @import.mapping_steps[step_idx] %>
 
 <div class="space-y-12 mx-auto max-w-md mb-6">
-  <div class="flex justify-center items-center gap-2">
-    <% @import.mapping_steps.each_with_index do |step_mapping_class, idx| %>
-      <% is_active = step_idx == idx %>
-
-      <%= link_to url_for(step: idx + 1), class: "w-5 h-[3px] #{is_active ? 'bg-gray-900' : 'bg-gray-100'} rounded-xl hover:bg-gray-300 transition-colors duration-200" do %>
-        <span class="sr-only">Step <%= idx + 1 %></span>
-      <% end %>
-    <% end %>
-  </div>
-
   <div class="text-center space-y-2">
     <h1 class="text-3xl text-primary font-medium">
       <%= t(".#{step_mapping_class.name.demodulize.underscore}_title", import_type: @import.type.underscore.humanize) %>

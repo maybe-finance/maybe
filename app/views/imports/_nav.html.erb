@@ -8,13 +8,7 @@
   { name: "Confirm", path: import_path(import), is_complete: import.complete?, step_number: 5 }
 ].reject { |step| step[:name] == "Map" && import.mapping_steps.empty? } %>
 
-<div class="sm:hidden relative top-[70px] text-secondary">
-  <% current_step = steps.find { |step| request.path == step[:path] } %>
-  <% if current_step %>
-      <span>Step <%= current_step[:step_number] %> of <%= steps.length %></span>
-  <% end %>
-</div>
-
+<% content_for :header_nav do %>
 <ul class="hidden sm:flex items-center gap-2">
   <% steps.each_with_index do |step, idx| %>
     <li class="flex items-center gap-2 group">
@@ -45,3 +39,13 @@
     </li>
   <% end %>
 </ul>
+<% end %>
+
+<% content_for :mobile_nav do %>
+<div class="sm:hidden flex justify-center items-center gap-2">
+  <% current_step = steps.find { |step| request.path == step[:path] } %>
+  <% if current_step %>
+      <span>Step <%= request.path %> of <%= steps.length %></span>
+  <% end %>
+</div>
+<% end %>
