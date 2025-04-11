@@ -28,7 +28,7 @@
     <%= contextual_menu icon: "more-vertical", id: "chat-menu" do %>
       <%= contextual_menu_item "Edit", url: edit_rule_path(rule), icon: "pencil", turbo_frame: "modal" %>
 
-      <%= contextual_menu_action_item "Re-apply rule", url: reapply_rule_path(rule), icon: "refresh-cw" %>
+      <%= contextual_menu_item "Re-apply rule", url: confirm_rule_path(rule), turbo_frame: "modal", icon: "refresh-cw" %>
 
       <% turbo_confirm = {
         title: "Delete rule",

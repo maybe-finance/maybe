@@ -20,16 +20,6 @@ module MenusHelper
     end
   end
 
-  def contextual_menu_action_item(label, url:, icon:, method: :post, turbo_frame: nil)
-    button_to url,
-              method: method,
-              class: "flex items-center w-full rounded-md text-primary hover:bg-container-hover p-2 gap-2",
-              data: { turbo_frame: } do
-      concat(lucide_icon(icon, class: "shrink-0 w-5 h-5 text-secondary"))
-      concat(tag.span(label, class: "text-sm"))
-    end
-  end
-
   def contextual_menu_destructive_item(label, url, turbo_confirm: true, turbo_frame: nil)
     button_to url,
               method: :delete,

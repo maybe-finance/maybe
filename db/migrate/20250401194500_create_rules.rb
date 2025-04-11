@@ -5,7 +5,7 @@ class CreateRules < ActiveRecord::Migration[7.2]
 
       t.string :resource_type, null: false
       t.date :effective_date
-      t.boolean :active, null: false, default: true
+      t.boolean :active, null: false, default: false
       t.timestamps
     end
 

@@ -19,7 +19,6 @@ class RulesControllerTest < ActionDispatch::IntegrationTest
   test "creates rule with nested conditions" do
     post rules_url, params: {
       rule: {
-        active: true,
         effective_date: 30.days.ago.to_date,
         resource_type: "transaction",
         conditions_attributes: {
@@ -58,7 +57,7 @@ class RulesControllerTest < ActionDispatch::IntegrationTest
 
     # Rule
     assert_equal "transaction", rule.resource_type
-    assert rule.active
+    assert_not rule.active # Not active by default
     assert_equal 30.days.ago.to_date, rule.effective_date
 
     # Conditions assertions
@@ -71,6 +70,8 @@ class RulesControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, rule.actions.count
     assert_equal "set_transaction_category", rule.actions.first.action_type
     assert_equal categories(:food_and_drink).id, rule.actions.first.value
+
+    assert_redirected_to confirm_rule_url(rule)
   end
 
   test "can update rule" do

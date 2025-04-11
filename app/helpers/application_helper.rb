@@ -35,9 +35,9 @@ module ApplicationHelper
   #     <div>Content here</div>
   #   <% end %>
   #
-  def modal(options = {}, &block)
+  def modal(reload_on_close: false, &block)
     content = capture &block
-    render partial: "shared/modal", locals: { content:, classes: options[:classes] }
+    render partial: "shared/modal", locals: { content:, reload_on_close: }
   end
 
   ##

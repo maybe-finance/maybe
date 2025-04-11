@@ -499,7 +499,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_09_121436) do
     t.uuid "family_id", null: false
     t.string "resource_type", null: false
     t.date "effective_date"
-    t.boolean "active", default: true, null: false
+    t.boolean "active", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["family_id"], name: "index_rules_on_family_id"

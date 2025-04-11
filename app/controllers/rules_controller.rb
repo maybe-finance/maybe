@@ -1,7 +1,7 @@
 class RulesController < ApplicationController
   include StreamExtensions
 
-  before_action :set_rule, only: [  :edit, :update, :destroy, :reapply ]
+  before_action :set_rule, only: [  :edit, :update, :destroy, :apply, :confirm ]
 
   def index
     @rules = Current.family.rules.order(created_at: :desc)
@@ -30,18 +30,19 @@ class RulesController < ApplicationController
     @rule = Current.family.rules.build(rule_params)
 
     if @rule.save
-      respond_to do |format|
-        format.html { redirect_back_or_to rules_path, notice: "Rule created" }
-        format.turbo_stream { stream_redirect_back_or_to rules_path, notice: "Rule created" }
-      end
+      redirect_to confirm_rule_path(@rule)
     else
       render :new, status: :unprocessable_entity
     end
   end
 
-  def reapply
+  def apply
+    @rule.update!(active: true)
     @rule.apply_later
-    redirect_to rules_path, notice: "Rule is being re-applied to all #{@rule.resource_type.pluralize} in the background"
+    redirect_back_or_to rules_path, notice: "#{@rule.resource_type.humanize} rule activated"
+  end
+
+  def confirm
   end
 
   def edit

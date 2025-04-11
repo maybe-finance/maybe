@@ -36,6 +36,10 @@ class Rule < ApplicationRecord
     end
   end
 
+  def affected_resource_count
+    matching_resources_scope.count
+  end
+
   def matching_resources_scope
     scope = registry.resource_scope
 

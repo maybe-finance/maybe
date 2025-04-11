@@ -146,7 +146,8 @@ Rails.application.routes.draw do
 
   resources :rules, except: :show do
     member do
-      post :reapply
+      get :confirm
+      post :apply
     end
 
     collection do

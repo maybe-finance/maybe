@@ -1,6 +1,6 @@
-<%# locals: (content:, classes:) -%>
+<%# locals: (content:, reload_on_close:) -%>
 <%= turbo_frame_tag "modal" do %>
-  <dialog class="focus:outline-none m-auto bg-white shadow-border-xs rounded-2xl max-w-[580px] w-min-content h-fit overflow-auto <%= classes %>" data-controller="modal" data-action="mousedown->modal#clickOutside">
+  <dialog class="focus:outline-none m-auto bg-white shadow-border-xs rounded-2xl max-w-[580px] w-min-content h-fit overflow-auto" data-controller="modal" data-action="mousedown->modal#clickOutside" data-modal-reload-on-close-value="<%= reload_on_close %>">
     <div class="flex flex-col">
       <%= content %>
     </div>
