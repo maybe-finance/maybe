@@ -40,10 +40,10 @@
     <%= form.label :profile_image, class: "btn btn--outline inline-block", data: { profile_image_preview_target: "uploadButton" } do %>
 
       <%= lucide_icon "camera", class: "w-5 h-5 mr-2 inline-block", data: { profile_image_preview_target: "cameraIcon" } %>
-      <span data-profile-image-preview-target="uploadText" class="<%= user.profile_image.attached? ? 'hidden' : '' %>" aria-hidden="<%= user.profile_image.attached? ? 'true' : 'false' %>">
+      <span data-profile-image-preview-target="uploadText">
         <%= t(".choose") %> <span class="text-secondary"><%= t(".choose_label") %></span>
       </span>
-      <span data-profile-image-preview-target="changeText" class="<%= user.profile_image.attached? ? '' : 'hidden' %>" aria-hidden="<%= user.profile_image.attached? ? 'false' : 'true' %>">
+      <span data-profile-image-preview-target="changeText" class="hidden" aria-hidden="true">
         <%= t(".change") %>
       </span>
     <% end %>
