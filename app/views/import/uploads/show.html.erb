@@ -36,8 +36,15 @@
                        "data-auto-submit-form-target": "auto" %>
             <% else %>
               <label for="import_csv_file" class="flex flex-col items-center justify-center w-full h-56 border-1 border-gray-300 border-dashed rounded-lg cursor-pointer">
-                <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                  <%= form.file_field :csv_file, class: "ml-32", "data-auto-submit-form-target": "auto" %>
+                <div class="flex flex-col items-center justify-center space-y-2 pt-5 pb-6">
+                  <%= lucide_icon "plus", class: "w-4 h-4 text-secondary" %>
+                  <span class="leading-none m-0">
+                    Browse  <span class="text-secondary">to add your CSV file here </span>
+                  </span>
+                  <%= form.file_field :csv_file, 
+                    class: "hidden", 
+                    "data-auto-submit-form-target": "auto" 
+                  %>
                 </div>
               </label>
             <% end %>
