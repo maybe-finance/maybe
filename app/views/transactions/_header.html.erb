@@ -17,9 +17,9 @@
         <p class="text-sm font-medium text-primary"><%= t(".import") %></p>
       <% end %>
 
-      <%= link_to new_account_transaction_path, class: "btn btn--primary flex items-center gap-2", data: { turbo_frame: :modal } do %>
+      <%= link_to new_account_transaction_path, class: "btn btn--primary rounded-full p-2 sm:rounded-lg sm:px-3 sm:py-2  flex items-center gap-2", data: { turbo_frame: :modal } do %>
         <%= lucide_icon("plus", class: "w-5 h-5") %>
-        <p class="text-sm font-medium">New transaction</p>
+        <p class="hidden sm:block text-sm font-medium">New transaction</p>
       <% end %>
     </div>
   </div>
