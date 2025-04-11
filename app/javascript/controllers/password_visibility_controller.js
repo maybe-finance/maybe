@@ -5,7 +5,6 @@ export default class extends Controller {
   static targets = ["input", "showIcon", "hideIcon"];
 
   connect() {
-    // Initially hide the eye-off icon
     this.hideIconTarget.classList.add("hidden");
   }
 
