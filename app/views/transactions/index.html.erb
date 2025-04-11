@@ -7,7 +7,7 @@
        data-controller="bulk-select"
        data-bulk-select-singular-label-value="<%= t(".transaction") %>"
        data-bulk-select-plural-label-value="<%= t(".transactions") %>"
-       class="flex flex-col bg-container rounded-xl shadow-border-xs p-4">
+       class="flex flex-col bg-container rounded-xl shadow-border-xs p-4 w-full overflow-x-auto">
     <%= render "transactions/searches/search" %>
 
     <div id="entry-selection-bar" data-bulk-select-target="selectionBar" class="flex justify-center hidden">
@@ -15,24 +15,28 @@
     </div>
 
     <% if @pagy.count > 0 %>
-      <div class="grow overflow-y-auto">
-        <div class="grid grid-cols-12 bg-container-inset rounded-xl px-5 py-3 text-xs uppercase font-medium text-secondary items-center mb-4">
-          <div class="pl-0.5 col-span-8 flex items-center gap-4">
-            <%= check_box_tag "selection_entry",
-                              class: "checkbox checkbox--light",
-                              data: { action: "bulk-select#togglePageSelection" } %>
-            <p>transaction</p>
-          </div>
+    <div class="w-full overflow-x-auto">
+          <div class="inline-block bg-container-inset min-w-ful sm:w-full rounded-xl px-5 py-3 text-xs uppercase font-medium text-secondary items-center mb-4">
+            <div class="grid grid-cols-[repeat(12,_minmax(45px,0.25fr))] gap-4">
+              <div class="pl-0.5 col-span-8 flex items-center gap-4">
+                <%= check_box_tag "selection_entry",
+                                  class: "checkbox checkbox--light",
+                                  data: { action: "bulk-select#togglePageSelection" } %>
+                <p>transaction</p>
+              </div>
 
-          <p class="col-span-2">category</p>
-          <p class="col-span-2 justify-self-end">amount</p>
+              <p class="col-span-2">category</p>
+              <p class="col-span-2 justify-self-end">amount</p>
+            </div>
+          </div>
+          <div class="inline-block space-y-6 min-w-full">
+            <%= entries_by_date(@transactions.map(&:entry), totals: true) do |entries| %>
+              <%= render entries %>
+            <% end %>
+          </div>
         </div>
-        <div class="space-y-6">
-          <%= entries_by_date(@transactions.map(&:entry), totals: true) do |entries| %>
-            <%= render entries %>
-          <% end %>
-        </div>
-      </div>
+    </div>
+
     <% else %>
       <%= render "account/entries/empty" %>
     <% end %>
