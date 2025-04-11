@@ -5,13 +5,13 @@
 
 <% if mapping_class == Import::AccountMapping && import.account.nil? %>
   <% if import.requires_account? %>
-    <div class="flex items-center justify-between p-4 mb-4 gap-4 text-secondary bg-red-100 border border-red-200 rounded-lg w-[650px]">
+    <div class="flex items-center justify-between p-4 mb-4 gap-4 text-secondary bg-red-100 border border-red-200 rounded-lg w-full max-w-[650px] overflow-auto">
       <%= tag.p t(".no_accounts"), class: "text-sm" %>
 
       <%= link_to t(".create_account"), new_account_path(return_to: import_confirm_path(import)), class: "btn btn--primary whitespace-nowrap", data: { turbo_frame: :modal } %>
     </div>
   <% elsif import.has_unassigned_account? %>
-    <div class="flex items-center justify-between p-4 mb-4 gap-4 text-secondary bg-yellow-100 border border-yellow-200 rounded-lg w-[650px]">
+    <div class="flex items-center justify-between p-4 mb-4 gap-4 text-secondary bg-yellow-100 border border-yellow-200 rounded-lg w-full max-w-[650px] overflow-auto">
       <%= tag.p t(".unassigned_account"), class: "text-sm" %>
 
       <%= link_to t(".create_account"), new_account_path(return_to: import_confirm_path(import)), class: "btn btn--primary whitespace-nowrap", data: { turbo_frame: :modal } %>
@@ -19,20 +19,22 @@
   <% end %>
 <% end %>
 
-<div class="space-y-4">
-  <div class="bg-container-inset rounded-xl p-1 space-y-1 w-[650px]">
-    <div class="grid grid-cols-3 gap-2 text-xs font-medium text-secondary uppercase px-5 py-3">
-      <p><%= t(".csv_mapping_label", mapping: mapping_label(mapping_class)) %></p>
-      <p><%= t(".maybe_mapping_label", mapping: mapping_label(mapping_class)) %></p>
-      <p class="justify-self-end"><%= t(".rows_label") %></p>
-    </div>
+<div class="space-y-4 w-full">
+  <div class="overflow-x-auto">
+    <div class="bg-container-inset rounded-xl p-1 space-y-1 w-[650px] mx-auto">
+      <div class="grid grid-cols-3 gap-2 text-xs font-medium text-secondary uppercase px-5 py-3">
+        <p><%= t(".csv_mapping_label", mapping: mapping_label(mapping_class)) %></p>
+        <p><%= t(".maybe_mapping_label", mapping: mapping_label(mapping_class)) %></p>
+        <p class="justify-self-end"><%= t(".rows_label") %></p>
+      </div>
 
-    <div class="shadow-border-xs rounded-md divide-y divide-alpha-black-100 text-sm">
-      <% mappings.sort_by(&:key).each do |mapping| %>
-        <div class="px-5 py-3 bg-container first:rounded-tl-xl first:rounded-tr-xl last:rounded-bl-xl last:rounded-br-xl">
-          <%= render partial: "import/mappings/form", locals: { mapping: mapping } %>
-        </div>
-      <% end %>
+      <div class="shadow-border-xs rounded-md divide-y divide-alpha-black-100 text-sm">
+        <% mappings.sort_by(&:key).each do |mapping| %>
+          <div class="px-5 py-3 bg-container first:rounded-tl-xl first:rounded-tr-xl last:rounded-bl-xl last:rounded-br-xl">
+            <%= render partial: "import/mappings/form", locals: { mapping: mapping } %>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 
