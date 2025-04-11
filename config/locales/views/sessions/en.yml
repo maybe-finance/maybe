@@ -10,5 +10,5 @@ en:
       email_placeholder: you@example.com
       forgot_password: Forgot your password?
       password: Password
-      submit: Log in
-      title: Sign in to your account
+      submit: Continue
+      title: Sign in to Maybe

@@ -1,0 +1,12 @@
+<%# Switch component to toggle between sign-in and sign-up tabs %>
+<div class="flex rounded-md shadow-sm bg-gray-100 p-1 w-fit mx-auto">
+  <%= link_to new_session_path, 
+      class: "px-4 py-1 text-sm font-medium rounded-md #{active == 'sessions' ? 'bg-white text-primary shadow-sm' : 'text-gray-600 hover:text-gray-800'}" do %>
+    <%= t("layouts.auth.sign_in") %>
+  <% end %>
+  
+  <%= link_to new_registration_path, 
+      class: "px-4 py-1 text-sm font-medium rounded-md #{active == 'registrations' ? 'bg-white text-primary shadow-sm' : 'text-gray-600 hover:text-gray-800'}" do %>
+    <%= t("layouts.auth.sign_up") %>
+  <% end %>
+</div>
