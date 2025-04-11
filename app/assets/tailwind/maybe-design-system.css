@@ -348,7 +348,7 @@
 @layer components {
   /* Buttons */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium cursor-pointer disabled:cursor-not-allowed focus:outline-gray-500;
+    @apply inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium cursor-pointer disabled:cursor-not-allowed focus:outline-gray-500;
     @apply transition-all duration-300;
   }
 

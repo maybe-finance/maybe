@@ -52,12 +52,19 @@ class Family < ApplicationRecord
   def sync_data(start_date: nil)
     update!(last_synced_at: Time.current)
 
+    Rails.logger.info("Syncing accounts for family #{id}")
     accounts.manual.each do |account|
       account.sync_later(start_date: start_date)
     end
 
+    Rails.logger.info("Syncing plaid items for family #{id}")
     plaid_items.each do |plaid_item|
       plaid_item.sync_later(start_date: start_date)
+    end
+
+    Rails.logger.info("Applying rules for family #{id}")
+    rules.each do |rule|
+      rule.apply_later
     end
   end
 

@@ -1,7 +1,7 @@
 class RulesController < ApplicationController
   include StreamExtensions
 
-  before_action :set_rule, only: [  :edit, :update, :destroy ]
+  before_action :set_rule, only: [  :edit, :update, :destroy, :reapply ]
 
   def index
     @rules = Current.family.rules.order(created_at: :desc)
@@ -37,6 +37,11 @@ class RulesController < ApplicationController
     else
       render :new, status: :unprocessable_entity
     end
+  end
+
+  def reapply
+    @rule.apply_later
+    redirect_to rules_path, notice: "Rule is being re-applied to all #{@rule.resource_type.pluralize} in the background"
   end
 
   def edit

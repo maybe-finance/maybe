@@ -145,6 +145,10 @@ Rails.application.routes.draw do
   end
 
   resources :rules, except: :show do
+    member do
+      post :reapply
+    end
+
     collection do
       delete :destroy_all
     end

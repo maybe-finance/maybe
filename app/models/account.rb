@@ -78,8 +78,6 @@ class Account < ApplicationRecord
 
     Rails.logger.info("Processing balances (#{linked? ? 'reverse' : 'forward'})")
     sync_balances
-
-    RuleProcessorJob.perform_later(family)
   end
 
   def post_sync

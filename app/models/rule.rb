@@ -64,6 +64,10 @@ class Rule < ApplicationRecord
     end
   end
 
+  def apply_later
+    RuleJob.perform_later(self)
+  end
+
   private
     def min_conditions_and_actions
       if conditions.reject(&:marked_for_destruction?).empty?

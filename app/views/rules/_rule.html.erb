@@ -28,6 +28,8 @@
     <%= contextual_menu icon: "more-vertical", id: "chat-menu" do %>
       <%= contextual_menu_item "Edit", url: edit_rule_path(rule), icon: "pencil", turbo_frame: "modal" %>
 
+      <%= contextual_menu_action_item "Re-apply rule", url: reapply_rule_path(rule), icon: "refresh-cw" %>
+
       <% turbo_confirm = {
         title: "Delete rule",
         body: "Are you sure you want to delete this rule? Data affected by this rule will no longer be automatically updated. This action cannot be undone.",
