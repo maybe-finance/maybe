@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_10_144939) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_11_140604) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -547,6 +547,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_10_144939) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "error_backtrace", array: true
+    t.uuid "parent_id"
+    t.index ["parent_id"], name: "index_syncs_on_parent_id"
     t.index ["syncable_type", "syncable_id"], name: "index_syncs_on_syncable"
   end
 
@@ -665,6 +667,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_10_144939) do
   add_foreign_key "security_prices", "securities"
   add_foreign_key "sessions", "impersonation_sessions", column: "active_impersonator_session_id"
   add_foreign_key "sessions", "users"
+  add_foreign_key "syncs", "syncs", column: "parent_id"
   add_foreign_key "taggings", "tags"
   add_foreign_key "tags", "families"
   add_foreign_key "tool_calls", "messages"
