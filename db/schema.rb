@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_11_140604) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_11_191422) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -47,6 +47,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_11_140604) do
     t.string "plaid_id"
     t.datetime "enriched_at"
     t.string "enriched_name"
+    t.jsonb "locked_fields", default: {}
     t.index ["account_id"], name: "index_account_entries_on_account_id"
     t.index ["import_id"], name: "index_account_entries_on_import_id"
   end
@@ -81,6 +82,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_11_140604) do
     t.datetime "updated_at", null: false
     t.uuid "category_id"
     t.uuid "merchant_id"
+    t.jsonb "locked_fields", default: {}
     t.index ["category_id"], name: "index_account_transactions_on_category_id"
     t.index ["merchant_id"], name: "index_account_transactions_on_merchant_id"
   end
@@ -218,6 +220,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_11_140604) do
   end
 
   create_table "cryptos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "data_enrichments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "source"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

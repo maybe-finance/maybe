@@ -10,7 +10,7 @@ class Rule::ActionExecutor::SetTransactionTags < Rule::ActionExecutor
   def execute(transaction_scope, value = nil)
     tag = family.tags.find_by_id(value)
 
-    transaction_scope.each do |transaction|
+    transaction_scope.attributes_unlocked(:tags).each do |transaction|
       transaction.update(tags: [ tag ])
     end
   end

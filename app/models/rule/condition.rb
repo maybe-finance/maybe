@@ -28,7 +28,11 @@ class Rule::Condition < ApplicationRecord
   end
 
   def prepare(scope)
-    filter.prepare(scope)
+    if compound?
+      sub_conditions.reduce(scope) { |s, sub| sub.prepare(s) }
+    else
+      filter.prepare(scope)
+    end
   end
 
   def options

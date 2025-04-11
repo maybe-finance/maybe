@@ -10,7 +10,7 @@ class Rule::ActionExecutor::SetTransactionCategory < Rule::ActionExecutor
   def execute(transaction_scope, value = nil)
     category = family.categories.find_by_id(value)
 
-    transaction_scope.update_all(
+    transaction_scope.attributes_unlocked(:category_id).update_all(
       category_id: category.id,
       updated_at: Time.current
     )

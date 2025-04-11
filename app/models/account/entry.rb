@@ -1,5 +1,5 @@
 class Account::Entry < ApplicationRecord
-  include Monetizable
+  include Monetizable, LockableAttributes
 
   monetize :amount
 

@@ -40,28 +40,6 @@ class Rule < ApplicationRecord
     matching_resources_scope.count
   end
 
-  def matching_resources_scope
-    scope = registry.resource_scope
-
-    # 1. Prepare the query with joins required by conditions
-    conditions.each do |condition|
-      if condition.compound?
-        condition.sub_conditions.each do |sub_condition|
-          scope = sub_condition.prepare(scope)
-        end
-      else
-        scope = condition.prepare(scope)
-      end
-    end
-
-    # 2. Apply the conditions to the query
-    conditions.each do |condition|
-      scope = condition.apply(scope)
-    end
-
-    scope
-  end
-
   def apply
     actions.each do |action|
       action.apply(matching_resources_scope)
@@ -73,6 +51,22 @@ class Rule < ApplicationRecord
   end
 
   private
+    def matching_resources_scope
+      scope = registry.resource_scope
+
+      # 1. Prepare the query with joins required by conditions
+      conditions.each do |condition|
+        scope = condition.prepare(scope)
+      end
+
+      # 2. Apply the conditions to the query
+      conditions.each do |condition|
+        scope = condition.apply(scope)
+      end
+
+      scope
+    end
+
     def min_conditions_and_actions
       if conditions.reject(&:marked_for_destruction?).empty?
         errors.add(:base, "must have at least one condition")

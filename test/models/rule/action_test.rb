@@ -12,16 +12,17 @@ class Rule::ActionTest < ActiveSupport::TestCase
     @whole_foods_merchant = @family.merchants.create!(name: "Whole Foods", type: "FamilyMerchant")
 
     # Some sample transactions to work with
-    create_transaction(date: Date.current, account: @account, amount: 100, name: "Rule test transaction1", merchant: @whole_foods_merchant)
-    create_transaction(date: Date.current, account: @account, amount: -200, name: "Rule test transaction2")
-    create_transaction(date: 1.day.ago.to_date, account: @account, amount: 50, name: "Rule test transaction3")
-    create_transaction(date: 1.year.ago.to_date, account: @account, amount: 10, name: "Rule test transaction4", merchant: @whole_foods_merchant)
-    create_transaction(date: 1.year.ago.to_date, account: @account, amount: 1000, name: "Rule test transaction5")
+    @txn1 = create_transaction(date: Date.current, account: @account, amount: 100, name: "Rule test transaction1", merchant: @whole_foods_merchant).account_transaction
+    @txn2 = create_transaction(date: Date.current, account: @account, amount: -200, name: "Rule test transaction2").account_transaction
+    @txn3 = create_transaction(date: 1.day.ago.to_date, account: @account, amount: 50, name: "Rule test transaction3").account_transaction
 
     @rule_scope = @account.transactions
   end
 
   test "set_transaction_category" do
+    # Does not modify transactions that are locked (user edited them)
+    @txn1.lock!(:category_id)
+
     action = Rule::Action.new(
       rule: @transaction_rule,
       action_type: "set_transaction_category",
@@ -30,8 +31,31 @@ class Rule::ActionTest < ActiveSupport::TestCase
 
     action.apply(@rule_scope)
 
-    @rule_scope.reload.each do |transaction|
-      assert_equal @grocery_category.id, transaction.category_id
+    assert_nil @txn1.reload.category
+
+    [ @txn2, @txn3 ].each do |transaction|
+      assert_equal @grocery_category.id, transaction.reload.category_id
+    end
+  end
+
+  test "set_transaction_tags" do
+    tag = @family.tags.create!(name: "Rule test tag")
+
+    # Does not modify transactions that are locked (user edited them)
+    @txn1.lock!(:tags)
+
+    action = Rule::Action.new(
+      rule: @transaction_rule,
+      action_type: "set_transaction_tags",
+      value: tag.id
+    )
+
+    action.apply(@rule_scope)
+
+    assert_equal [], @txn1.reload.tags
+
+    [ @txn2, @txn3 ].each do |transaction|
+      assert_equal [ tag ], transaction.reload.tags
     end
   end
 end

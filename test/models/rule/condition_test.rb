@@ -18,10 +18,12 @@ class Rule::ConditionTest < ActiveSupport::TestCase
     create_transaction(date: 1.year.ago.to_date, account: @account, amount: 10, name: "Rule test transaction4", merchant: @whole_foods_merchant)
     create_transaction(date: 1.year.ago.to_date, account: @account, amount: 1000, name: "Rule test transaction5")
 
-    @rule_scope = @account.transactions.left_joins(:merchant).with_entry
+    @rule_scope = @account.transactions
   end
 
   test "applies transaction_name condition" do
+    scope = @rule_scope
+
     condition = Rule::Condition.new(
       rule: @transaction_rule,
       condition_type: "transaction_name",
@@ -29,14 +31,18 @@ class Rule::ConditionTest < ActiveSupport::TestCase
       value: "Rule test transaction1"
     )
 
-    assert_equal 5, @rule_scope.count
+    scope = condition.prepare(scope)
 
-    filtered = condition.apply(@rule_scope)
+    assert_equal 5, scope.count
+
+    filtered = condition.apply(scope)
 
     assert_equal 1, filtered.count
   end
 
   test "applies transaction_amount condition using absolute values" do
+    scope = @rule_scope
+
     condition = Rule::Condition.new(
       rule: @transaction_rule,
       condition_type: "transaction_amount",
@@ -44,11 +50,15 @@ class Rule::ConditionTest < ActiveSupport::TestCase
       value: "50"
     )
 
-    filtered = condition.apply(@rule_scope)
+    scope = condition.prepare(scope)
+
+    filtered = condition.apply(scope)
     assert_equal 3, filtered.count
   end
 
   test "applies transaction_merchant condition" do
+    scope = @rule_scope
+
     condition = Rule::Condition.new(
       rule: @transaction_rule,
       condition_type: "transaction_merchant",
@@ -56,11 +66,15 @@ class Rule::ConditionTest < ActiveSupport::TestCase
       value: @whole_foods_merchant.id
     )
 
-    filtered = condition.apply(@rule_scope)
+    scope = condition.prepare(scope)
+
+    filtered = condition.apply(scope)
     assert_equal 2, filtered.count
   end
 
   test "applies compound and condition" do
+    scope = @rule_scope
+
     parent_condition = Rule::Condition.new(
       rule: @transaction_rule,
       condition_type: "compound",
@@ -79,11 +93,15 @@ class Rule::ConditionTest < ActiveSupport::TestCase
       ]
     )
 
-    filtered = parent_condition.apply(@rule_scope)
+    scope = parent_condition.prepare(scope)
+
+    filtered = parent_condition.apply(scope)
     assert_equal 1, filtered.count
   end
 
   test "applies compound or condition" do
+    scope = @rule_scope
+
     parent_condition = Rule::Condition.new(
       rule: @transaction_rule,
       condition_type: "compound",
@@ -102,7 +120,9 @@ class Rule::ConditionTest < ActiveSupport::TestCase
       ]
     )
 
-    filtered = parent_condition.apply(@rule_scope)
+    scope = parent_condition.prepare(scope)
+
+    filtered = parent_condition.apply(scope)
     assert_equal 2, filtered.count
   end
 end
