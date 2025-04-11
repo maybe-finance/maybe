@@ -32,8 +32,52 @@
       placeholder: "you@example.com",
       label: true,
       disabled: @invitation.present? %>
-  <%= form.password_field :password, autocomplete: "new-password", required: "required", label: true, maxlength: 72 %>
-  <%= form.password_field :password_confirmation, autocomplete: "new-password", required: "required", label: true %>
+
+  <div data-controller="password">
+    <%= form.password_field :password, 
+        autocomplete: "new-password", 
+        required: "required", 
+        label: true, 
+        maxlength: 72,
+        data: { action: "input->password#validateCriteria" } %>
+    
+    <div class="mt-4">
+      <%= form.password_field :password_confirmation, autocomplete: "new-password", required: "required", label: true %>
+    </div>
+
+    <!-- Horizontal lines with combined width of the password field -->
+    <div class="grid grid-cols-4 gap-2 mt-2 mb-4">
+      <div class="h-1 bg-gray-200 rounded" data-password-target="lengthBar"></div>
+      <div class="h-1 bg-gray-200 rounded" data-password-target="caseBar"></div>
+      <div class="h-1 bg-gray-200 rounded" data-password-target="numberBar"></div>
+      <div class="h-1 bg-gray-200 rounded" data-password-target="specialBar"></div>
+    </div>
+
+    <!-- Password requirement criteria, vertically stacked -->
+    <div class="space-y-2 mb-4">
+      <div class="flex items-center gap-2 text-xs text-gray-500">
+        <%= lucide_icon "x", class: "w-4 h-4 text-red-400 transition-colors", data: { password_target: "lengthIconX" } %>
+        <%= lucide_icon "check", class: "w-4 h-4 text-green-500 transition-colors hidden", data: { password_target: "lengthIconCheck" } %>
+        <span>Minimum 8 characters</span>
+      </div>
+      <div class="flex items-center gap-2 text-xs text-gray-500">
+        <%= lucide_icon "x", class: "w-4 h-4 text-red-400 transition-colors", data: { password_target: "caseIconX" } %>
+        <%= lucide_icon "check", class: "w-4 h-4 text-green-500 transition-colors hidden", data: { password_target: "caseIconCheck" } %>
+        <span>Upper and lowercase letters</span>
+      </div>
+      <div class="flex items-center gap-2 text-xs text-gray-500">
+        <%= lucide_icon "x", class: "w-4 h-4 text-red-400 transition-colors", data: { password_target: "numberIconX" } %>
+        <%= lucide_icon "check", class: "w-4 h-4 text-green-500 transition-colors hidden", data: { password_target: "numberIconCheck" } %>
+        <span>A number (0-9)</span>
+      </div>
+      <div class="flex items-center gap-2 text-xs text-gray-500">
+        <%= lucide_icon "x", class: "w-4 h-4 text-red-400 transition-colors", data: { password_target: "specialIconX" } %>
+        <%= lucide_icon "check", class: "w-4 h-4 text-green-500 transition-colors hidden", data: { password_target: "specialIconCheck" } %>
+        <span>A special character (!, @, #, $, %, etc)</span>
+      </div>
+    </div>
+  </div>
+
   <% if invite_code_required? && !@invitation %>
     <%= form.text_field :invite_code, required: "required", label: true, value: params[:invite] %>
   <% end %>

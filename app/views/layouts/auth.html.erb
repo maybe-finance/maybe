@@ -12,14 +12,11 @@
               <%= content_for?(:header_title) ? yield(:header_title).html_safe : t(".your_account") %>
             </h2>
 
-            <% if controller_name == "sessions" %>
-              <p class="text-sm text-center">
-                <%= tag.span t(".no_account"), class: "text-secondary" %> <%= link_to t(".sign_up"), new_registration_path, class: "font-medium text-primary hover:underline transition" %>
-              </p>
-            <% elsif controller_name == "registrations" %>
-              <p class="text-sm text-center text-gray-600">
-                <%= t(".existing_account") %> <%= link_to t(".sign_in"), new_session_path, class: "font-medium text-primary hover:underline transition" %>
-              </p>
+            <%# switch component to switch from signin to signup, let it show active tab depending on page %>
+            <% if controller_name == "sessions" || controller_name == "registrations" %>
+              <div class="flex justify-center mt-4">
+                <%= render "layouts/shared/switch", active: controller_name %>
+              </div>
             <% end %>
           </div>
         </div>
