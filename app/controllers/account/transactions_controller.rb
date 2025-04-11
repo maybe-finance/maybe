@@ -3,6 +3,12 @@ class Account::TransactionsController < ApplicationController
 
   permitted_entryable_attributes :id, :category_id, :merchant_id, { tag_ids: [] }
 
+  def new
+    super
+    @income_categories = Current.family.categories.incomes.alphabetically
+    @expense_categories = Current.family.categories.expenses.alphabetically
+  end
+
   def bulk_delete
     destroyed = Current.family.entries.destroy_by(id: bulk_delete_params[:entry_ids])
     destroyed.map(&:account).uniq.each(&:sync_later)
