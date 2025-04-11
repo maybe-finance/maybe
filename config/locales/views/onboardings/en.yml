@@ -17,7 +17,7 @@ en:
       first_name: First Name
       household_name: Household Name
       last_name: Last Name
-      profile_image: Profile Image
+      upload_profile_photo: Upload profile photo (optional)
       submit: Continue
       subtitle: Let's complete your profile.
       title: Let's set up the basics
