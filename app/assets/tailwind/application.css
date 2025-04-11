@@ -132,7 +132,7 @@
 
   ::-webkit-scrollbar-thumb {
     background-color: rgba(156, 163, 175, 0.5);
-    border-radius: 3px; 
+    border-radius: 3px;
   }
 }
 
@@ -149,7 +149,7 @@
 
   ::-webkit-scrollbar-thumb:hover {
     background: #a6a6a6;
-  }  
+  }
 }
 
 .scrollbar {
@@ -167,3 +167,14 @@
   }
 }
 /* The following Markdown CSS has been removed as requested */
+
+/* Animations */
+
+@keyframes stroke-fill {
+  0% {
+    stroke-dashoffset: 43.9822971503;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
