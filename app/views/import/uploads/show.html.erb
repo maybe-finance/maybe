@@ -4,14 +4,14 @@
 
 <%= content_for :previous_path, imports_path %>
 
-<div class="space-y-12">
+<div class="space-y-8 sm:space-y-12">
   <div class="space-y-4 mx-auto max-w-md">
     <div class="text-center space-y-2">
       <h1 class="text-3xl text-primary font-medium"><%= t(".title") %></h1>
       <p class="text-secondary text-sm"><%= t(".description") %></p>
     </div>
 
-    <div data-controller="tabs" data-tabs-active-class="bg-white" data-tabs-default-tab-value="csv-paste-tab">
+    <div data-controller="tabs" data-tabs-active-class="bg-white" data-tabs-default-tab-value="csv-upload-tab">
       <div class="flex justify-center mb-4">
         <div class="bg-gray-50 rounded-lg grid grid-cols-2 p-1 gap-2 text-xs text-primary font-medium w-full">
           <button type="button" data-id="csv-upload-tab" class="py-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Upload CSV</button>
@@ -21,7 +21,7 @@
 
       <% ["csv-paste-tab", "csv-upload-tab"].each do |tab| %>
         <%= tag.div id: tab, data: { tabs_target: "tab" }, class: tab == "csv-upload-tab" ? "hidden" : "" do %>
-          <%= styled_form_with model: @import, scope: :import, url: import_upload_path(@import), multipart: true, class: "space-y-2" do |form| %>
+          <%= styled_form_with model: @import, scope: :import, url: import_upload_path(@import), multipart: true, class: "space-y-4 sm:space-y-2" do |form| %>
             <%= form.select :col_sep, Import::SEPARATORS, label: true %>
 
             <% if @import.type == "TransactionImport" || @import.type == "TradeImport" %>
@@ -35,7 +35,7 @@
                        placeholder: "Paste your CSV file contents here",
                        "data-auto-submit-form-target": "auto" %>
             <% else %>
-              <label for="import_csv_file" class="flex flex-col items-center justify-center w-full h-56 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50">
+              <label for="import_csv_file" class="flex flex-col items-center justify-center w-full h-56 border-1 border-gray-300 border-dashed rounded-lg cursor-pointer">
                 <div class="flex flex-col items-center justify-center pt-5 pb-6">
                   <%= form.file_field :csv_file, class: "ml-32", "data-auto-submit-form-target": "auto" %>
                 </div>
@@ -49,7 +49,7 @@
     </div>
   </div>
 
-  <div class="bg-alpha-black-25 rounded-xl p-1 mt-5 mx-auto max-w-7xl">
+  <div class="bg-alpha-black-25 rounded-xl p-1 mt-2 mx-auto max-w-7xl">
     <div class="text-secondary p-2 mb-2">
       <div class="flex gap-2 mb-2">
         <%= lucide_icon("info", class: "w-5 h-5 shrink-0") %>
