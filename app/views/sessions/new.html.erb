@@ -5,7 +5,7 @@
 <%= styled_form_with url: sessions_path, class: "space-y-4", data: { turbo: false } do |form| %>
   <%= form.email_field :email, label: t(".email"), autofocus: false, autocomplete: "email", required: "required", placeholder: t(".email_placeholder") %>
 
-  <%= form.password_field :password, label: t(".password"), required: "required" %>
+  <%= form.password_field :password, label: t(".password"), required: "required", placeholder: t(".password_placeholder") %>
 
   <%= form.submit t(".submit") %>
 <% end %>

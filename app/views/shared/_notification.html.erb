@@ -3,7 +3,7 @@
 <% type = type.to_sym %>
 <% action = "animationend->element-removal#remove" if type == :notice %>
 
-<%= tag.div class: "flex gap-3 rounded-lg border bg-container p-4 group max-w-80 shadow-xs border-alpha-black-25",
+<%= tag.div class: "flex gap-3 rounded-lg border bg-container p-4 group max-w-80 shadow-xs border-alpha-black-25 mx-auto md:mx-0",
             data: {
               controller: "element-removal",
               action: action

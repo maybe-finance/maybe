@@ -8,6 +8,9 @@ export default class extends Controller {
     "deleteProfileImage",
     "input",
     "clearBtn",
+    "uploadText",
+    "changeText",
+    "cameraIcon"
   ];
 
   clearFileInput() {
@@ -17,6 +20,12 @@ export default class extends Controller {
     this.attachedImageTarget.classList.add("hidden");
     this.previewImageTarget.classList.add("hidden");
     this.deleteProfileImageTarget.value = "1";
+    this.uploadTextTarget.classList.remove("hidden");
+    this.changeTextTarget.classList.add("hidden");
+    this.changeTextTarget.setAttribute("aria-hidden", "true");
+    this.uploadTextTarget.setAttribute("aria-hidden", "false");
+    this.cameraIconTarget.classList.remove("!hidden");
+
   }
 
   showFileInputPreview(event) {
@@ -28,7 +37,11 @@ export default class extends Controller {
     this.previewImageTarget.classList.remove("hidden");
     this.clearBtnTarget.classList.remove("hidden");
     this.deleteProfileImageTarget.value = "0";
-
+    this.uploadTextTarget.classList.add("hidden");
+    this.changeTextTarget.classList.remove("hidden");
+    this.changeTextTarget.setAttribute("aria-hidden", "false");
+    this.uploadTextTarget.setAttribute("aria-hidden", "true");
+    this.cameraIconTarget.classList.add("!hidden");
     this.previewImageTarget.querySelector("img").src =
       URL.createObjectURL(file);
   }

@@ -50,7 +50,8 @@ export default class extends Controller {
   }
 
   systemPrefersDark() {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches
+    return false
+    // return window.matchMedia("(prefers-color-scheme: dark)").matches
   }
 
   handleSystemThemeChange = (event) => {

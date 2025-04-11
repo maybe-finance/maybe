@@ -5,6 +5,10 @@ module ApplicationHelper
     render partial: "shared/icon", locals: { key:, size:, color: }
   end
 
+  def icon_image(key, size: "md", color: "current")
+    render partial: "shared/icon_image", locals: { key:, size:, color: }
+  end
+
   # Convert alpha (0-1) to 8-digit hex (00-FF)
   def hex_with_alpha(hex, alpha)
     alpha_hex = (alpha * 255).round.to_s(16).rjust(2, "0")

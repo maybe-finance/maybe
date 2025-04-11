@@ -12,3 +12,4 @@ en:
       password: Password
       submit: Log in
       title: Sign in to your account
+      password_placeholder: Enter your password
