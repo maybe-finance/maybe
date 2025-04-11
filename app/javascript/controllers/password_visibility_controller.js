@@ -2,18 +2,19 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="password-visibility"
 export default class extends Controller {
-  static targets = ["input", "icon"]
+  static targets = ["input", "showIcon", "hideIcon"]
+
+  connect() {
+    // Initially hide the eye-off icon
+    this.hideIconTarget.classList.add("hidden")
+  }
 
   toggle() {
     const input = this.inputTarget
     const type = input.type === "password" ? "text" : "password"
     input.type = type
     
-    // Toggle icon
-    if (type === "password") {
-      this.iconTarget.dataset.icon = "eye"
-    } else {
-      this.iconTarget.dataset.icon = "eye-off"
-    }
+    this.showIconTarget.classList.toggle("hidden")
+    this.hideIconTarget.classList.toggle("hidden")
   }
 } 
