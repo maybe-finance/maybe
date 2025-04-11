@@ -34,25 +34,30 @@
     </button>
   </div>
 
-  <div class="flex flex-col justify-center items-center gap-2">
-    <%= form.hidden_field :delete_profile_image, value: "0", data: { profile_image_preview_target: "deleteProfileImage" } %>
+    <div class="sm:block flex flex-col justify-center items-center gap-2">
+      <%= form.hidden_field :delete_profile_image, value: "0", data: { profile_image_preview_target: "deleteProfileImage" } %>
 
-    <p class="order-last md:order-1 text-sm sm:text-md text-subdued"><%= t(".accepted_formats") %></p>
+      <p class="order-2 sm:order-1 text-sm sm:text-md text-subdued sm:mb-3"><%= t(".accepted_formats") %></p>
 
-    <%= form.label :profile_image, class: "btn btn--outline flex flex-row items-center gap-2" do %>
-      <%= lucide_icon "camera", class: "w-4 h-4 shrink-0" %>
-      <div>
-        <span><%= t(".choose") %></span>
-        <span class="text-subdued">(<%= t(".optional") %>)</span>
-      </div>
-    <% end %>
+      <%= form.label :profile_image, class: "btn btn--outline flex flex-row items-center gap-2 order-1 sm:order-2" do %>
+        <%= lucide_icon "camera", class: "w-4 h-4 shrink-0" %>
+        <div>
+          <% if user.profile_image.attached? %>
+            <span><%= t(".change") %></span>
+          <% else %>
+            <span><%= t(".choose") %></span>
+            <span class="text-subdued">(<%= t(".optional") %>)</span>
+          <% end %>
+          
+        </div>
+      <% end %>
 
-    <%= form.file_field :profile_image,
-        accept: "image/png, image/jpeg",
-        class: "hidden px-3 py-2 bg-gray-50 text-primary rounded-md text-sm font-medium",
-        data: {
-          profile_image_preview_target: "input",
-          action: "change->profile-image-preview#showFileInputPreview"
-        } %>
-  </div>
+      <%= form.file_field :profile_image,
+          accept: "image/png, image/jpeg",
+          class: "hidden px-3 py-2 bg-gray-50 text-primary rounded-md text-sm font-medium",
+          data: {
+            profile_image_preview_target: "input",
+            action: "change->profile-image-preview#showFileInputPreview"
+          } %>
+    </div>
 </div>
