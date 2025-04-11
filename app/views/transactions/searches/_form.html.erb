@@ -11,6 +11,7 @@
         <%= lucide_icon("search", class: "w-5 h-5 text-secondary") %>
         <%= form.text_field :search,
                             class: "form-field__input placeholder:text-sm placeholder:text-secondary w-full",
+                            placeholder: t('transactions.searches.search.placeholder_desktop'),
                             value: @q[:search],
                             data: {
                               controller: "responsive-attribute",

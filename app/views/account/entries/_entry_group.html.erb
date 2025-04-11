@@ -16,12 +16,12 @@
     </div>
 
     <% if totals %>
-      <div id="entry-group-<%= date %>-totals">
+      <div id="entry-group-<%= date %>-totals" class="hidden sm:block">
         <%= totals_by_currency(collection: entries, money_method: :amount_money, negate: true) %>
       </div>
     <% end %>
   </div>
-  <div class="bg-container shadow-border-xs rounded-md divide-y divide-alpha-black-50">
+  <div class="bg-container shadow-border-xs rounded-md grid divide-y divide-alpha-black-50">
     <%= content %>
   </div>
 </div>

@@ -1,4 +1,4 @@
-<div class="fixed bottom-6 z-10 flex items-center justify-between rounded-xl bg-gray-900 px-4 text-sm text-white w-[420px] py-1.5">
+<div class="fixed bottom-20 sm:bottom-6 z-10 flex items-center justify-between rounded-xl bg-gray-900 px-4 text-sm text-white w-[min(420px,100vw)] py-1.5">
   <div class="flex items-center gap-2">
     <%= check_box_tag "entry_selection", 1, true, class: "checkbox checkbox--dark", data: { action: "bulk-select#deselectAll" } %>
 
