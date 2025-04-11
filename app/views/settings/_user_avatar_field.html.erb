@@ -1,7 +1,7 @@
 <%# locals: (form:, user:) %>
 
-<div class="flex items-center gap-4" data-controller="profile-image-preview">
-  <div class="relative flex justify-center items-center bg-gray-50 w-24 h-24 rounded-full border-alpha-black-300 border border-dashed">
+<div class="flex md:flex-row flex-col md:items-center items-center gap-4" data-controller="profile-image-preview">
+  <div class="relative flex justify-center items-center bg-gray-50 size-26 md:size-24 rounded-full border-alpha-black-300 border border-dashed">
 
     <%# The image preview once user has uploaded a new file  %>
     <div data-profile-image-preview-target="previewImage" class="h-full w-full flex justify-center items-center hidden">
@@ -34,13 +34,23 @@
     </button>
   </div>
 
-  <div>
+  <div class="md:text-left text-center">
     <%= form.hidden_field :delete_profile_image, value: "0", data: { profile_image_preview_target: "deleteProfileImage" } %>
 
-    <p class="mb-3"><%= t(".accepted_formats") %></p>
+    <%= form.label :profile_image, class: "btn btn--outline inline-block", data: { profile_image_preview_target: "uploadButton" } do %>
 
-    <%= form.label :profile_image, t(".choose"),
-        class: "btn btn--outline inline-block" %>
+      <%= lucide_icon "camera", class: "w-5 h-5 mr-2 inline-block", data: { profile_image_preview_target: "cameraIcon" } %>
+      <span data-profile-image-preview-target="uploadText" class="<%= user.profile_image.attached? ? 'hidden' : '' %>" aria-hidden="<%= user.profile_image.attached? ? 'true' : 'false' %>">
+        <%= t(".choose") %> <span class="text-secondary"><%= t(".choose_label") %></span>
+      </span>
+      <span data-profile-image-preview-target="changeText" class="<%= user.profile_image.attached? ? '' : 'hidden' %>" aria-hidden="<%= user.profile_image.attached? ? 'false' : 'true' %>">
+        <%= t(".change") %>
+      </span>
+    <% end %>
+
+    
+    <p class="mt-2 text-xs text-secondary"><%= t(".accepted_formats") %></p>
+    
     <%= form.file_field :profile_image,
         accept: "image/png, image/jpeg",
         class: "hidden px-3 py-2 bg-gray-50 text-primary rounded-md text-sm font-medium",
