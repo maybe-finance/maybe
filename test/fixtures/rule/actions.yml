@@ -1,0 +1,4 @@
+one:
+  rule: one
+  action_type: set_transaction_category
+  value: "some_category_id"

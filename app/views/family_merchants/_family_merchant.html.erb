@@ -1,0 +1,31 @@
+<%# locals: (family_merchant:) %>
+
+<div class="flex justify-between items-center p-4 bg-white">
+  <div class="flex w-full items-center gap-2.5">
+    <% if family_merchant.logo_url %>
+      <div class="w-8 h-8 rounded-full flex justify-center items-center">
+        <%= image_tag family_merchant.logo_url, class: "w-8 h-8 rounded-full" %>
+      </div>
+    <% else %>
+      <%= render partial: "shared/color_avatar", locals: { name: family_merchant.name, color: family_merchant.color } %>
+    <% end %>
+
+    <p class="text-primary text-sm truncate">
+      <%= family_merchant.name %>
+    </p>
+  </div>
+  <div class="justify-self-end">
+    <%= contextual_menu do %>
+      <%= contextual_menu_modal_action_item t(".edit"), edit_family_merchant_path(family_merchant), icon: "pencil", turbo_frame: "modal" %>
+
+      <%= contextual_menu_destructive_item "Delete",
+                                             family_merchant_path(family_merchant),
+                                             turbo_frame: "_top",
+                                             turbo_confirm: family_merchant.transactions.any? ? {
+                                               title: "Delete #{family_merchant.name}?",
+                                               body: "This will remove this merchant from all transactions it has been assigned to.",
+                                               accept: "Delete"
+                                             } : nil %>
+    <% end %>
+  </div>
+</div>

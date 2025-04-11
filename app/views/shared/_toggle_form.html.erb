@@ -1,0 +1,11 @@
+<%# locals: (model:, attribute:, turbo_frame: nil) %>
+
+<%= form_with model: model,
+              namespace: model.id,
+              class: "flex items-center",
+              data: { controller: "auto-submit-form", turbo_frame: turbo_frame } do |form| %>
+  <div class="relative inline-block select-none">
+    <%= form.check_box attribute, { class: "sr-only peer", data: { "auto-submit-form-target": "auto" } } %>
+    <%= form.label attribute, "&nbsp;".html_safe, class: "switch" %>
+  </div>
+<% end %>

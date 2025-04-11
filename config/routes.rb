@@ -32,6 +32,7 @@ Rails.application.routes.draw do
 
   resources :users, only: %i[update destroy] do
     delete :reset, on: :member
+    patch :rule_prompt_settings, on: :member
   end
 
   resource :onboarding, only: :show do
@@ -75,7 +76,7 @@ Rails.application.routes.draw do
     resources :budget_categories, only: %i[index show update]
   end
 
-  resources :merchants, only: %i[index new create edit update destroy]
+  resources :family_merchants, only: %i[index new create edit update destroy]
 
   resources :transfers, only: %i[new create destroy show update]
 
@@ -141,6 +142,20 @@ Rails.application.routes.draw do
     collection do
       delete :clear_filter
     end
+  end
+
+  resources :rules, except: :show do
+    member do
+      get :confirm
+      post :apply
+    end
+
+    collection do
+      delete :destroy_all
+    end
+
+    resources :triggers, only: :new
+    resources :actions, only: :new
   end
 
   # Convenience routes for polymorphic paths

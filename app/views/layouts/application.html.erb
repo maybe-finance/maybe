@@ -5,8 +5,10 @@
        data-controller="sidebar"
        data-sidebar-user-id-value="<%= Current.user.id %>"
        data-sidebar-config-value="<%= sidebar_config.to_json %>">
-    <nav class="flex justify-between lg:justify-start lg:flex-col shrink-0 lg:w-[84px] p-3 lg:px-0 lg:py-4 lg:mr-3">
+    <button hidden data-controller="hotkey" data-hotkey="b" data-action="sidebar#toggleLeftPanel">Toggle accounts</button>
+    <button hidden data-controller="hotkey" data-hotkey="l" data-action="sidebar#toggleRightPanel">Toggle chat</button>
 
+    <nav class="flex justify-between lg:justify-start lg:flex-col shrink-0 lg:w-[84px] p-3 lg:px-0 lg:py-4 lg:mr-3">
       <button data-action="sidebar#toggleLeftPanelMobile" class="lg:hidden inline-flex p-2 rounded-lg items-center justify-center hover:bg-gray-100 cursor-pointer">
         <%= icon("panel-left", color: "gray") %>
       </button>

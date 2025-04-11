@@ -22,7 +22,7 @@ export default class extends Controller {
     this.element.close();
 
     if (this.reloadOnCloseValue) {
-      window.location.reload();
+      Turbo.visit(window.location.href);
     }
   }
 }

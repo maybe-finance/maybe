@@ -23,22 +23,8 @@ module ApplicationHelper
     content_for(:header_description) { page_description }
   end
 
-  def family_notifications_stream
-    turbo_stream_from [ Current.family, :notifications ] if Current.family
-  end
-
   def family_stream
     turbo_stream_from Current.family if Current.family
-  end
-
-  def render_flash_notifications
-    notifications = flash.flat_map do |type, message_or_messages|
-      Array(message_or_messages).map do |message|
-        render partial: "shared/notification", locals: { type: type, message: message }
-      end
-    end
-
-    safe_join(notifications)
   end
 
   ##
@@ -49,9 +35,9 @@ module ApplicationHelper
   #     <div>Content here</div>
   #   <% end %>
   #
-  def modal(options = {}, &block)
+  def modal(reload_on_close: false, &block)
     content = capture &block
-    render partial: "shared/modal", locals: { content:, classes: options[:classes] }
+    render partial: "shared/modal", locals: { content:, reload_on_close: }
   end
 
   ##

@@ -1,5 +1,5 @@
 class Account < ApplicationRecord
-  include Syncable, Monetizable, Chartable, Enrichable, Linkable, Convertible
+  include Syncable, Monetizable, Chartable, Linkable, Convertible
 
   validates :name, :balance, :currency, presence: true
 
@@ -81,11 +81,6 @@ class Account < ApplicationRecord
     family.remove_syncing_notice!
 
     accountable.post_sync(sync)
-
-    if enrichable?
-      Rails.logger.info("Enriching transaction data")
-      enrich_data
-    end
 
     unless sync.child?
       family.auto_match_transfers!

@@ -42,7 +42,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     @user.enable_mfa!
     @user.sessions.destroy_all # Clean up any existing sessions
 
-    post sessions_path, params: { email: @user.email, password: "password" }
+    post sessions_path, params: { email: @user.email, password: user_password_test }
 
     assert_redirected_to verify_mfa_path
     assert_equal @user.id, session[:mfa_user_id]
