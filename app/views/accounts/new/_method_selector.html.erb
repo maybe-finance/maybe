@@ -2,31 +2,33 @@
 
 <%= render layout: "accounts/new/container", locals: { title: t(".title"), back_path: new_account_path } do %>
   <div class="text-sm">
-    <%= link_to path, class: "flex items-center gap-4 w-full text-center focus:outline-hidden focus:bg-gray-50 border border-transparent focus:border focus:border-gray-200 px-2 hover:bg-gray-50 rounded-lg p-2" do %>
-      <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-alpha-black-50 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.02)]">
-        <%= lucide_icon("keyboard", class: "text-secondary w-5 h-5") %>
-      </span>
-      <%= t("accounts.new.method_selector.manual_entry") %>
-    <% end %>
-
-    <% if us_link_token %>
-      <%# Default US-only Link %>
-      <button data-controller="plaid" data-action="plaid#open modal#close" data-plaid-region-value="us" data-plaid-link-token-value="<%= us_link_token %>" class="flex items-center gap-4 w-full text-center focus:outline-hidden focus:bg-gray-50 border border-transparent focus:border focus:border-gray-200 px-2 hover:bg-gray-50 rounded-lg p-2">
+    <div data-list-filter-target="list" class="flex flex-col gap-0.5">
+      <%= link_to path, class: "flex items-center gap-4 w-full text-center focus:outline-hidden focus:bg-gray-50 border border-transparent focus:border focus:border-gray-200 px-2 hover:bg-gray-50 rounded-lg p-2 filterable-item", data: { list_filter_target: "filterable", filter_name: t("accounts.new.method_selector.manual_entry").downcase } do %>
         <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-alpha-black-50 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.02)]">
-          <%= lucide_icon("link-2", class: "text-secondary w-5 h-5") %>
+          <%= lucide_icon("keyboard", class: "text-secondary w-5 h-5") %>
         </span>
-        <%= t("accounts.new.method_selector.connected_entry") %>
-      </button>
-    <% end %>
+        <%= t("accounts.new.method_selector.manual_entry") %>
+      <% end %>
 
-    <%# EU Link %>
-    <% if eu_link_token %>
-      <button data-controller="plaid" data-action="plaid#open modal#close" data-plaid-region-value="eu" data-plaid-link-token-value="<%= eu_link_token %>" class="flex items-center gap-4 w-full text-center focus:outline-hidden focus:bg-gray-50 border border-transparent focus:border focus:border-gray-200 px-2 hover:bg-gray-50 rounded-lg p-2">
-        <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-alpha-black-50 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.02)]">
-          <%= lucide_icon("link-2", class: "text-secondary w-5 h-5") %>
-        </span>
-        <%= t("accounts.new.method_selector.connected_entry_eu") %>
-      </button>
-    <% end %>
+      <% if true || us_link_token %>
+        <%# Default US-only Link %>
+        <button data-controller="plaid" data-action="plaid#open modal#close" data-plaid-region-value="us" data-plaid-link-token-value="<%= us_link_token %>" class="flex items-center gap-4 w-full text-center focus:outline-hidden focus:bg-gray-50 border border-transparent focus:border focus:border-gray-200 px-2 hover:bg-gray-50 rounded-lg p-2 filterable-item" data-list-filter-target="filterable" data-filter-name="<%= t("accounts.new.method_selector.connected_entry").downcase %>">
+          <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-alpha-black-50 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.02)]">
+            <%= lucide_icon("link-2", class: "text-secondary w-5 h-5") %>
+          </span>
+          <%= t("accounts.new.method_selector.connected_entry") %>
+        </button>
+      <% end %>
+
+      <%# EU Link %>
+      <% if true ||eu_link_token %>
+        <button data-controller="plaid" data-action="plaid#open modal#close" data-plaid-region-value="eu" data-plaid-link-token-value="<%= eu_link_token %>" class="flex items-center gap-4 w-full text-center focus:outline-hidden focus:bg-gray-50 border border-transparent focus:border focus:border-gray-200 px-2 hover:bg-gray-50 rounded-lg p-2 filterable-item" data-list-filter-target="filterable" data-filter-name="<%= t("accounts.new.method_selector.connected_entry_eu").downcase %>">
+          <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-alpha-black-50 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.02)]">
+            <%= lucide_icon("link-2", class: "text-secondary w-5 h-5") %>
+          </span>
+          <%= t("accounts.new.method_selector.connected_entry_eu") %>
+        </button>
+      <% end %>
+    </div>
   </div>
 <% end %>

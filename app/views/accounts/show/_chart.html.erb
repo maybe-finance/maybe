@@ -3,30 +3,28 @@
 <% period =  @period || Period.last_30_days %>
 <% default_value_title = account.asset? ? t(".balance") : t(".owed") %>
 
-<div id="<%= dom_id(account, :chart) %>" class="bg-container shadow-xs rounded-xl border border-alpha-black-25 rounded-lg space-y-2">
+<div id="<%= dom_id(account, :chart) %>" class="bg-container shadow-xs rounded-xl border border-alpha-black-25 space-y-2">
   <div class="flex justify-between px-4 pt-4 mb-2">
     <div class="space-y-2">
       <div class="flex items-center gap-1">
-        <%= tag.p title || default_value_title, class: "text-sm font-medium text-secondary" %>
+        <%= tag.p title || default_value_title, class: "text-xs sm:text-sm font-medium text-secondary" %>
         <%= tooltip %>
       </div>
 
-      <%= tag.p format_money(account.balance_money), class: "text-primary text-3xl font-medium" %>
+      <%= tag.p format_money(account.balance_money), class: "text-primary text-2xl sm:text-3xl font-medium" %>
     </div>
 
-    <%= form_with url: request.path, method: :get, data: { controller: "auto-submit-form" } do |form| %>
-      <div class="flex items-center gap-2">
+      <%= form_with url: request.path, method: :get, class: "flex flex-wrap justify-end items-start gap-2", data: { controller: "auto-submit-form" } do |form| %>
         <% if chart_view.present? %>
           <%= form.select :chart_view,
             [["Total value", "balance"], ["Holdings", "holdings_balance"], ["Cash", "cash_balance"]],
             { selected: chart_view },
-            class: "border border-secondary rounded-lg text-sm pr-7 cursor-pointer text-primary focus:outline-hidden focus:ring-0",
+            class: "border border-secondary rounded-lg text-xs sm:text-sm pr-7 cursor-pointer text-primary focus:outline-hidden focus:ring-0",
             data: { "auto-submit-form-target": "auto" } %>
         <% end %>
 
         <%= period_select form: form, selected: period %>
-      </div>
-    <% end %>
+      <% end %>
   </div>
 
   <%= turbo_frame_tag dom_id(account, :chart_details), src: chart_account_path(account, period: period.key, chart_view: chart_view) do %>

@@ -1,6 +1,6 @@
 <%# locals: (series:, period:) %>
 
-<div class="flex justify-between gap-0 sm:gap-4 px-4">
+<div class="flex flex-wrap justify-between gap-0 sm:gap-4 px-4">
   <div class="space-y-2">
     <div class="space-y-2">
       <p class="text-sm text-secondary font-medium">Net Worth</p>
@@ -19,7 +19,7 @@
       <% end %>
     </div>
   </div>
-  <%= form_with url: root_path, method: :get, class: "flex items-start gap-4", data: { controller: "auto-submit-form" } do |form| %>
+  <%= form_with url: root_path, method: :get, class: "flex items-start gap-4 ml-auto mt-2 sm:mt-0", data: { controller: "auto-submit-form" } do |form| %>
     <%= period_select form: form, selected: period %>
   <% end %>
 </div>

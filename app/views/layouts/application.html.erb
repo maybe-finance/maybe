@@ -15,10 +15,13 @@
       <%= tag.div class: class_names("hidden bg-surface z-20 absolute inset-0 h-dvh w-full p-4 overflow-y-auto transition-all duration-300"),
                   data: { sidebar_target: "leftPanelMobile" } do %>
         <div id="account-sidebar-tabs">
-          <div class="mb-4">
+          <div class="flex flex-row justify-between items-center mb-4">
             <button data-action="sidebar#toggleLeftPanelMobile">
               <%= icon("x", color: "gray") %>
             </button>
+            <%= link_to "mailto:hello@maybefinance.com", class: "btn btn--ghost flex gap-2 items-center", onclick: "Intercom('showNewMessage'); return false;" do %>
+              <%= lucide_icon("message-circle-question", class: "w-5 h-5 text-secondary shrink-0") %>
+            <% end %>
           </div>
           <%= render "accounts/account_sidebar_tabs", family: Current.family %>
         </div>
