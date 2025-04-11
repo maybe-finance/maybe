@@ -1,0 +1,12 @@
+<%# locals: (progress:, pills_count: 10, color: nil) %>
+
+<%
+  progress_percent = progress.clamp(0, 100)
+  filled_pills = (progress_percent * pills_count / 100.0).ceil
+%>
+
+<div class="flex gap-0.5">
+  <% pills_count.times do |i| %>
+    <div class="w-1 h-2.5 rounded-sm <%= i < filled_pills ? '' : 'opacity-20' %>" style="background-color: <%= color || "var(--color-blue-500)" %>;"></div>
+  <% end %>
+</div>

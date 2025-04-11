@@ -3,7 +3,7 @@
 <div class="space-y-4">
   <% balance_sheet.classification_groups.each do |classification_group| %>
     <div class="bg-container shadow-border-xs rounded-xl space-y-4 p-4">
-      <h2 class="text-lg font-medium"><%= classification_group.display_name %></h2>
+      <h2 class="text-lg font-medium"><%= classification_group.display_name %> · <%= classification_group.key == "asset" ? format_money(balance_sheet.total_assets) : format_money(balance_sheet.total_liabilities) %></h2>
 
       <% if classification_group.account_groups.any? %>
         <div class="space-y-4">
@@ -25,12 +25,12 @@
 
         <div class="bg-surface rounded-xl p-1 space-y-1">
           <div class="px-4 py-2 flex items-center uppercase text-xs font-medium text-secondary">
-            <div>Name</div>
-            <div class="ml-auto text-right flex items-center gap-6">
-              <div class="w-24">
+            <div class="md:block hidden">Name</div>
+            <div class="ml-auto text-right flex items-center gap-6 w-full md:w-auto">
+              <div class="ml-6 md:ml-0 md:w-24">
                 <p>Weight</p>
               </div>
-              <div class="w-40">
+              <div class="ml-auto md:ml-0 md:w-40">
                 <p>Value</p>
               </div>
             </div>
@@ -40,47 +40,59 @@
             <% classification_group.account_groups.each do |account_group| %>
               <details class="group rounded-lg open:bg-surface font-medium text-sm">
                 <summary class="cursor-pointer p-4 group-open:bg-surface bg-container rounded-lg flex items-center justify-between">
-                  <div class="flex items-center gap-4">
-                    <%= lucide_icon("chevron-right", class: "group-open:rotate-90 text-secondary w-5 h-5") %>
-
-                    <p><%= account_group.name %></p>
+                  <div class="flex items-center gap-2 md:gap-4">
+                    <%= lucide_icon("chevron-right", class: "group-open:rotate-90 text-secondary w-4 h-4 md:w-5 md:h-5") %>
+                    <p class="hidden md:block"><%= account_group.name %></p>
                   </div>
 
-                  <div class="ml-auto flex items-center text-right gap-6">
-                    <div class="w-24 flex items-center justify-end gap-2">
-                      <%= render partial: "shared/progress_circle", locals: { progress: account_group.weight, color: account_group.color } %>
-                      <p><%= number_to_percentage(account_group.weight, precision: 0) %></p>
+                  <div class="w-full md:w-auto ml-2 md:ml-auto flex items-center md:text-right gap-2 md:gap-6 justify-between md:justify-start">
+                    <div class="flex items-center gap-2 md:w-24 md:justify-end">
+                      <!-- Mobile pills -->
+                      <div class="md:hidden">
+                        <%= render partial: "shared/progress_pills", locals: { progress: account_group.weight, pills_count: 10, color: account_group.color } %>
+                      </div>
+
+                      <div class="hidden md:block">
+                        <%= render partial: "shared/progress_circle", locals: { progress: account_group.weight, color: account_group.color } %>
+                      </div>
+                      <p class="text-xs md:text-sm"><%= number_to_percentage(account_group.weight, precision: 0) %></p>
                     </div>
 
-                    <div class="w-40">
-                      <p><%= format_money(account_group.total_money) %></p>
+                    <div class="w-40 text-right">
+                      <p class="text-xs md:text-sm"><%= format_money(account_group.total_money) %></p>
                     </div>
                   </div>
                 </summary>
 
                 <div>
                   <% account_group.accounts.each_with_index do |account, idx| %>
-                    <div class="pl-12 pr-4 py-3 flex items-center justify-between text-sm font-medium">
-                      <div class="flex items-center gap-3">
-                        <%= render "accounts/logo", account: account, size: "sm", color: account_group.color %>
-                        <%= link_to account.name, account_path(account) %>
-                      </div>
-
-                      <div class="ml-auto flex items-center text-right gap-6">
-                        <div class="w-24 flex items-center justify-end gap-2">
-                          <%= render partial: "shared/progress_circle", locals: { progress: account.weight, color: account_group.color } %>
-                          <p><%= number_to_percentage(account.weight, precision: 0) %></p>
+                    <div class="pl-8 md:pl-12 pr-4 py-2 md:py-3 text-xs md:text-sm font-medium">
+                      <div class="flex items-center justify-between mb-1.5 md:mb-0 ml-1 md:ml-0">
+                        <div class="flex flex-wrap items-center gap-2 ml-1 md:gap-3 max-w-[60%] md:max-w-none">
+                          <%= render "accounts/logo", account: account, size: "xs md:sm", color: account_group.color %>
+                          <%= link_to account.name, account_path(account), class: "truncate md:no-truncate" %>
+                          <!-- Mobile pills -->
+                          <div class="flex items-center gap-1 w-full md:hidden">
+                            <%= render partial: "shared/progress_pills", locals: { progress: account.weight, pills_count: 10, color: account_group.color } %>
+                            <p class="text-xs ml-1"><%= number_to_percentage(account.weight, precision: 0) %></p>
+                          </div>
                         </div>
 
-                        <div class="w-40">
-                          <p><%= format_money(account.balance_money) %></p>
+                        <div class="md:ml-auto md:flex md:items-center md:text-right md:gap-6">
+                          <div class="hidden md:flex md:w-24 md:items-center md:justify-end md:gap-2">
+                            <%= render partial: "shared/progress_circle", locals: { progress: account.weight, color: account_group.color } %>
+                            <p><%= number_to_percentage(account.weight, precision: 0) %></p>
+                          </div>
+
+                          <div class="text-right md:w-40">
+                            <p class="text-xs md:text-sm"><%= format_money(account.balance_money) %></p>
+                          </div>
                         </div>
                       </div>
                     </div>
 
                     <% if idx < account_group.accounts.size - 1 %>
-
-                      <div class="pl-[84px] pr-40">
+                      <div class="pl-8 md:pl-[84px] pr-3 md:pr-40">
                         <div class="w-full border-subdued border-b"></div>
                       </div>
                     <% end %>

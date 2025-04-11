@@ -7,6 +7,8 @@ en:
       edit_merchants: Edit merchants
       edit_tags: Edit tags
       import: Import
+      import_transactions: Import transactions
+      new_transaction: New transaction
     index:
       transaction: transaction
       transactions: transactions
@@ -42,3 +44,5 @@ en:
         equal_to: equal to
         greater_than: greater than
         less_than: less than
+        placeholder_desktop: Search transactions by name
+        placeholder_mobile: Search transactions...

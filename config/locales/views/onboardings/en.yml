@@ -10,17 +10,21 @@ en:
       locale: Language
       preview: Preview how data displays based on preferences.
       submit: Complete
-      subtitle: Let's configure your preferences.
+      subtitle: Set your preferences to help personalize your experience.
       title: Configure your preferences
     profile:
       country: Country
+      country_placeholder: Select your country
       first_name: First Name
+      first_name_placeholder: Enter first name
       household_name: Household Name
+      household_name_placeholder: Enter household name
       last_name: Last Name
+      last_name_placeholder: Enter last name
       profile_image: Profile Image
       submit: Continue
-      subtitle: Let's complete your profile.
-      title: Let's set up the basics
+      subtitle: First things first, let’s get your profile set up.
+      title: Let’s set up your account
     show:
       message: We’re really excited you’re here. In the next step we’ll ask you a
         few questions to complete your profile and then get you all set up.

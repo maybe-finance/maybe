@@ -10,6 +10,7 @@ export default class extends Controller {
     overageSegmentId: { type: String, default: "overage" },
     segmentHeight: { type: Number, default: 3 },
     segmentOpacity: { type: Number, default: 1 },
+    isActualsTab: { type: Boolean, default: false },
   };
 
   #viewBoxSize = 100;
@@ -74,11 +75,13 @@ export default class extends Controller {
       .sortValues(null) // Preserve order of segments
       .value((d) => d.amount);
 
-    const mainArc = d3
-      .arc()
-      .innerRadius(this.#viewBoxSize / 2 - this.segmentHeightValue)
-      .outerRadius(this.#viewBoxSize / 2)
-      .cornerRadius(this.segmentHeightValue)
+    if (this.isActualsTabValue) return;
+
+      const mainArc = d3
+        .arc()
+        .innerRadius(this.#viewBoxSize / 2 - this.segmentHeightValue)
+        .outerRadius(this.#viewBoxSize / 2)
+        .cornerRadius(this.segmentHeightValue)
       .padAngle(this.#minSegmentAngle);
 
     const segmentArcs = svg

@@ -11,11 +11,11 @@
       <p class="text-secondary text-sm"><%= t(".description") %></p>
     </div>
 
-    <div data-controller="tabs" data-tabs-active-class="bg-container" data-tabs-default-tab-value="csv-paste-tab">
+    <div data-controller="tabs" data-tabs-active-class="bg-container" data-tabs-default-tab-value="csv-upload-tab">
       <div class="flex justify-center mb-4">
-        <div class="tab-item-active rounded-lg inline-flex p-1 space-x-2 text-sm text-primary font-medium">
-          <button type="button" data-id="csv-paste-tab" class="p-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Copy & Paste</button>
-          <button type="button" data-id="csv-upload-tab" class="p-2 rounded-lg" data-tabs-target="btn" data-action="click->tabs#select">Upload CSV</button>
+        <div class="tab-item-active rounded-lg inline-flex p-1 space-x-2 text-sm text-primary font-medium w-full">
+          <button type="button" data-id="csv-upload-tab" class="px-2 py-1 rounded-lg w-full" data-tabs-target="btn" data-action="click->tabs#select">Upload CSV</button>
+          <button type="button" data-id="csv-paste-tab" class="px-2 py-1 rounded-lg w-full" data-tabs-target="btn" data-action="click->tabs#select">Copy & Paste</button>
         </div>
       </div>
 
@@ -35,9 +35,11 @@
                        placeholder: "Paste your CSV file contents here",
                        "data-auto-submit-form-target": "auto" %>
             <% else %>
-              <label for="import_csv_file" class="flex flex-col items-center justify-center w-full h-56 border-2 border-secondary border-dashed rounded-lg cursor-pointer bg-container-inset">
-                <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                  <%= form.file_field :csv_file, class: "ml-32", "data-auto-submit-form-target": "auto" %>
+              <label for="import_csv_file" class="flex flex-col items-center justify-center w-full h-56 border-2 border-secondary border-dashed rounded-lg cursor-pointer bg-white hover:bg-container-inset">
+                <div class="flex flex-col items-center justify-center pt-5 pb-6 space-y-3">
+                  <%= lucide_icon("plus", class: "w-6 h-6 text-secondary") %>
+                  <p class="text-center text-secondary"><span class="font-medium">Browse</span> to add your CSV file here</p>
+                  <%= form.file_field :csv_file, class: "hidden", "data-auto-submit-form-target": "auto" %>
                 </div>
               </label>
             <% end %>

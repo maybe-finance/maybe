@@ -1,10 +1,10 @@
 <%# locals: (headers: [], rows: [], caption: nil) %>
-<div class="overflow-x-auto">
-  <div class="border border-secondary rounded-md shadow-border-xs text-sm bg-container w-full">
-    <div class="grid border-b border-b-alpha-black-200" style="grid-template-columns: repeat(<%= headers.length %>, minmax(0, 1fr))">
+<div class="overflow-x-auto w-full">
+  <div class="inline-block min-w-full border border-secondary rounded-md shadow-border-xs text-sm bg-container">
+    <div class="grid border-b border-b-alpha-black-200" style="grid-template-columns: repeat(<%= headers.length %>, minmax(150px, 1fr))">
       <% headers.each_with_index do |header, index| %>
         <div class="
-          bg-container-inset px-3 py-2.5 font-medium whitespace-nowrap overflow-x-auto
+          bg-container-inset px-3 py-2.5 font-medium whitespace-nowrap overflow-hidden text-ellipsis
           first:rounded-tl-md last:rounded-tr-md
           <%= "border-r border-r-alpha-black-200" unless index == headers.length - 1 %>
         ">
@@ -14,10 +14,10 @@
     </div>
 
     <% rows.each_with_index do |row, row_index| %>
-      <div class="grid <%= "border-b border-b-alpha-black-200" if row_index < rows.length - 1 || caption %>" style="grid-template-columns: repeat(<%= headers.length %>, minmax(0, 1fr))">
+      <div class="grid <%= "border-b border-b-alpha-black-200" if row_index < rows.length - 1 || caption %>" style="grid-template-columns: repeat(<%= headers.length %>, minmax(150px, 1fr))">
         <% row.each_with_index do |(header, value), col_index| %>
           <div class="
-            px-3 py-2.5 whitespace-nowrap overflow-x-auto flex items-start
+            px-3 py-2.5 whitespace-nowrap overflow-hidden text-ellipsis flex items-start
             <%= "border-r border-r-alpha-black-200" unless col_index == row.length - 1 %>
             <%= "rounded-bl-md" if !caption && row_index == rows.length - 1 && col_index == 0 %>
             <%= "rounded-br-md" if !caption && row_index == rows.length - 1 && col_index == row.length - 1 %>
@@ -29,7 +29,7 @@
     <% end %>
 
     <% if caption %>
-      <div class="px-3 py-2.5 text-center text-xs text-primary rounded-b-md italic bg-container-inset overflow-x-auto">
+      <div class="px-3 py-2.5 text-center text-xs text-primary rounded-b-md italic bg-container-inset overflow-hidden text-ellipsis">
         <%= caption %>
       </div>
     <% end %>

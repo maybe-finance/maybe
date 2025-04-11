@@ -6,28 +6,29 @@
 </div>
 
 <%= styled_form_with model: @import, url: import_configuration_path(@import), scope: :import, method: :patch, class: "space-y-2" do |form| %>
+
+  <% unless import.account.present? %>
+    <%= form.select :account_col_label, import.csv_headers, { include_blank: "Select column", label: "Account (optional)" }, disabled: import.complete? %>
+  <% end %>
+
   <div class="flex items-center gap-2">
-    <%= form.select :date_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Date" }, required: true, disabled: import.complete? %>
+    <%= form.select :date_col_label, import.csv_headers, { include_blank: "Select column", label: "Date" }, required: true, disabled: import.complete? %>
     <%= form.select :date_format, Family::DATE_FORMATS, { label: t(".date_format_label")}, label: true, required: true, disabled: import.complete? %>
   </div>
 
-  <div class="flex items-center gap-2">
-    <%= form.select :amount_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Amount" }, required: true, disabled: import.complete? %>
+  <div class="flex flex-col sm:flex-row items-center gap-2">
+    <%= form.select :amount_col_label, import.csv_headers, { include_blank: "Select column", label: "Amount" }, required: true, disabled: import.complete? %>
     <%= form.select :signage_convention, [["Incomes are negative", "inflows_negative"], ["Incomes are positive", "inflows_positive"]], { label: true }, disabled: import.complete? %>
   </div>
 
   <div class="flex items-center gap-2">
-    <%= form.select :currency_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Currency" }, disabled: import.complete? %>
+    <%= form.select :currency_col_label, import.csv_headers, { include_blank: "Select column", label: "Currency" }, disabled: import.complete? %>
     <%= form.select :number_format, Import::NUMBER_FORMATS.keys, { label: "Format", prompt: "Select format" }, required: true %>
   </div>
 
-  <% unless import.account.present? %>
-    <%= form.select :account_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Account (optional)" }, disabled: import.complete? %>
-  <% end %>
-
-  <%= form.select :name_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Name (optional)" }, disabled: import.complete? %>
-  <%= form.select :category_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Category (optional)" }, disabled: import.complete? %>
-  <%= form.select :tags_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Tags (optional)" }, disabled: import.complete? %>
+  <%= form.select :name_col_label, import.csv_headers, { include_blank: "Select column", label: "Name (optional)" }, disabled: import.complete? %>
+  <%= form.select :category_col_label, import.csv_headers, { include_blank: "Select column", label: "Category (optional)" }, disabled: import.complete? %>
+  <%= form.select :tags_col_label, import.csv_headers, { include_blank: "Select column", label: "Tags (optional)" }, disabled: import.complete? %>
 
   <%= form.submit "Apply configuration", class: "w-full btn btn--primary", disabled: import.complete? %>
 <% end %>

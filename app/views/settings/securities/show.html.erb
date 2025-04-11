@@ -2,7 +2,7 @@
 
 <%= settings_section title: t(".mfa_title"), subtitle: t(".mfa_description") do %>
   <div class="space-y-4">
-    <div class="p-3 shadow-border-xs bg-container rounded-lg flex justify-between items-center">
+    <div class="p-3 shadow-border-xs bg-container rounded-lg flex flex-col sm:flex-row justify-between items-stretch sm:items-center">
       <div class="flex items-center gap-3">
         <div class="w-9 h-9 rounded-full bg-gray-25 flex justify-center items-center">
           <%= lucide_icon "shield-check", class: "w-5 h-5 text-secondary" %>
@@ -22,7 +22,7 @@
       <% if Current.user.otp_required? %>
         <%= button_to t(".disable_mfa"), disable_mfa_path,
             method: :delete,
-            class: "btn btn--secondary flex items-center gap-1",
+            class: "btn btn--secondary flex items-center gap-1 w-full sm:w-auto mt-2 sm:mt-0 justify-center",
             data: { turbo_confirm: {
               title: t(".disable_mfa_confirm"),
               body: t(".disable_mfa_confirm"),
@@ -31,7 +31,7 @@
             } } %>
       <% else %>
         <%= link_to t(".enable_mfa"), new_mfa_path,
-            class: "btn btn--primary flex items-center gap-1" %>
+            class: "btn btn--primary flex items-center gap-1 w-full sm:w-auto mt-2 sm:mt-0 justify-center" %>
       <% end %>
     </div>
   </div>

@@ -8,8 +8,8 @@
                 <%= @focused_record == entry || @focused_record == transaction ?
                     "border border-gray-900 rounded-lg" : "" %>">
 
-      <div class="pr-10 flex items-center gap-4
-                  <%= balance_trend ? "col-span-6" : "col-span-8" %>">
+      <div class="pr-10 flex items-center gap-4 col-span-full
+                  <%= balance_trend ? "sm:col-span-6" : "sm:col-span-8" %>">
         <%= check_box_tag dom_id(entry, "selection"),
             disabled: transaction.transfer?,
             class: "checkbox checkbox--light",
@@ -73,11 +73,11 @@
         </div>
       </div>
 
-      <div class="flex items-center gap-1 col-span-2">
+      <div class="hidden sm:flex items-center gap-1 col-span-2">
         <%= render "account/transactions/transaction_category", transaction: transaction %>
       </div>
 
-      <div class="col-span-2 ml-auto">
+      <div class="hidden sm:block col-span-2 ml-auto">
         <%= content_tag :p,
             transaction.transfer? && view_ctx == "global" ? "+/- #{format_money(entry.amount_money.abs)}" : format_money(-entry.amount_money),
             class: ["text-green-600": entry.amount.negative?] %>

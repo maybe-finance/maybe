@@ -1,0 +1,27 @@
+<% common_classes = "flex items-center whitespace-nowrap btn btn--ghost py-1.5 text-sm flex-shrink-0" %>
+<% active_classes = "bg-white shadow-border-xs font-medium" %>
+<% inactive_classes = "text-secondary hover:bg-gray-100 border-transparent" %>
+
+<div class="pb-2">
+  <%= link_to previous_path, class: "inline-flex items-center p-2 rounded-md hover:bg-gray-100" do %>
+    <%= lucide_icon "chevron-left", class: "w-5 h-5 text-secondary" %>
+  <% end %>
+</div>
+
+<div id="settings-nav-mobile-container" class="overflow-x-auto scrollbar py-2 px-4 -mx-4 mb-4" data-controller="settings-nav-mobile" data-preserve-scroll>
+  <div id="settings-mobile-nav-items" class="flex items-center gap-2">
+    <% SettingsHelper::SETTINGS_ORDER.each do |setting| %>
+      <% next if setting[:condition] && !send(setting[:condition]) %>
+
+      <% path = send(setting[:path]) %>
+
+      <%= link_to path, class: class_names(common_classes,page_active?(path) ? active_classes : inactive_classes),
+        aria: { current: ("page" if page_active?(path)) } do %>
+
+        <%= lucide_icon setting[:icon], class: "w-5 h-5" %>
+        <span class="ml-2"><%= setting[:name] %></span>
+
+      <% end %>
+    <% end %>
+  </div>
+</div>

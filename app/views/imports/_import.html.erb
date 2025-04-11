@@ -10,27 +10,27 @@
     <% end %>
 
     <% if import.pending? %>
-      <span class="px-1 py text-xs rounded-full bg-gray-500/5 text-secondary border border-alpha-black-50">
+      <span class="px-1 py text-xs whitespace-nowrap rounded-full bg-gray-500/5 text-secondary border border-alpha-black-50">
         <%= t(".in_progress") %>
       </span>
     <% elsif import.importing? %>
-      <span class="px-1 py text-xs animate-pulse rounded-full bg-orange-500/5 text-orange-500 border border-alpha-black-50">
+      <span class="px-1 py text-xs whitespace-nowrap animate-pulse rounded-full bg-orange-500/5 text-orange-500 border border-alpha-black-50">
         <%= t(".uploading") %>
       </span>
     <% elsif import.failed? %>
-      <span class="px-1 py text-xs rounded-full bg-red-500/5 text-red-500 border border-alpha-black-50">
+      <span class="px-1 py text-xs whitespace-nowrap rounded-full bg-red-500/5 text-red-500 border border-alpha-black-50">
         <%= t(".failed") %>
       </span>
     <% elsif import.reverting? %>
-      <span class="px-1 py text-xs rounded-full bg-orange-500/5 text-orange-500 border border-alpha-black-50">
+      <span class="px-1 py text-xs whitespace-nowrap rounded-full bg-orange-500/5 text-orange-500 border border-alpha-black-50">
         <%= t(".reverting") %>
       </span>
     <% elsif import.revert_failed? %>
-      <span class="px-1 py text-xs rounded-full bg-red-500/5 text-red-500 border border-alpha-black-50">
+      <span class="px-1 py text-xs whitespace-nowrap rounded-full bg-red-500/5 text-red-500 border border-alpha-black-50">
         <%= t(".revert_failed") %>
       </span>
     <% elsif import.complete? %>
-      <span class="px-1 py text-xs rounded-full bg-green-500/5 text-green-500 border border-alpha-black-50">
+      <span class="px-1 py text-xs whitespace-nowrap rounded-full bg-green-500/5 text-green-500 border border-alpha-black-50">
         <%= t(".complete") %>
       </span>
     <% end %>

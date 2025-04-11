@@ -27,7 +27,7 @@
       <% end %>
     </div>
     <div class="flex items-center gap-8">
-      <p class="text-sm font-medium <%= account.is_active ? "text-primary" : "text-subdued" %>">
+      <p class="hidden sm:block text-sm font-medium <%= account.is_active ? "text-primary" : "text-subdued" %>">
         <%= format_money account.balance_money %>
       </p>
 
