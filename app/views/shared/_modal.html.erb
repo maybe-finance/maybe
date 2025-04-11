@@ -1,10 +1,7 @@
 <%# locals: (content:, classes:) -%>
 <%= turbo_frame_tag "modal" do %>
   <dialog class="md:m-auto bg-container shadow-border-xs rounded-none md:rounded-2xl max-w-screen max-h-screen md:max-w-[580px] w-full h-full md:h-fit md:w-min-content overflow-visible <%= classes %>" data-controller="modal" data-action="mousedown->modal#clickOutside">
-    <div class="flex flex-col h-full md:h-auto pt-safe relative">
-      <button class="absolute pt-safe top-8 right-4 flex w-8 h-8 items-center justify-center rounded-lg md:hidden outline-0" data-action="click->modal#close">
-        <%= lucide_icon("x", class: "text-secondary w-6 h-6") %>
-      </button>
+    <div class="flex flex-col h-full md:h-auto mt-safe">
       <%= content %>
     </div>
   </dialog>
