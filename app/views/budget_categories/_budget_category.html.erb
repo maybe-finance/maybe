@@ -20,27 +20,29 @@
     <div>
       <p class="text-sm font-medium text-primary"><%= budget_category.category.name %></p>
 
-      <% if budget_category.initialized? %>
-        <% if budget_category.available_to_spend.negative? %>
-          <p class="text-sm font-medium text-red-500"><%= format_money(budget_category.available_to_spend_money.abs) %> over</p>
-        <% elsif budget_category.available_to_spend.zero? %>
-          <p class="text-sm font-medium <%= budget_category.budgeted_spending.positive? ? "text-orange-500" : "text-secondary" %>">
-            <%= format_money(budget_category.available_to_spend_money) %> left
-          </p>
+      <% if is_budgeted_tab? %>
+        <% if budget_category.initialized? %>
+          <% if budget_category.available_to_spend.negative? %>
+            <p class="text-sm font-medium text-red-500"><%= format_money(budget_category.available_to_spend_money.abs) %> over</p>
+          <% elsif budget_category.available_to_spend.zero? %>
+            <p class="text-sm font-medium <%= budget_category.budgeted_spending.positive? ? "text-orange-500" : "text-secondary" %>">
+              <%= format_money(budget_category.available_to_spend_money) %> left
+            </p>
+          <% else %>
+            <p class="text-sm text-secondary font-medium"><%= format_money(budget_category.available_to_spend_money) %> left</p>
+          <% end %>
         <% else %>
-          <p class="text-sm text-secondary font-medium"><%= format_money(budget_category.available_to_spend_money) %> left</p>
+          <p class="text-sm text-secondary font-medium">
+            <%= budget_category.median_monthly_expense_money.format %> avg
+          </p>
         <% end %>
-      <% else %>
-        <p class="text-sm text-secondary font-medium">
-          <%= budget_category.median_monthly_expense_money.format %> avg
-        </p>
       <% end %>
     </div>
 
     <div class="ml-auto text-right">
       <p class="text-sm font-medium text-primary"><%= format_money(budget_category.actual_spending_money) %></p>
 
-      <% if budget_category.initialized? %>
+      <% if budget_category.initialized? && is_budgeted_tab? %>
         <p class="text-sm text-secondary">from <%= format_money(budget_category.budgeted_spending_money) %></p>
       <% end %>
     </div>

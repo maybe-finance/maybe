@@ -1,3 +1,5 @@
+<%# globals: @selected_tab %>
+
 <div class="pb-12">
   <%= render "budgets/budget_header",
             budget: @budget,
@@ -5,8 +7,8 @@
             next_budget: @next_budget,
             latest_budget: @latest_budget %>
 
-  <div class="flex items-start gap-4">
-    <div class="w-[300px] space-y-4">
+  <div class="flex flex-col sm:flex-row items-start gap-4">
+    <div class="w-full sm:w-[300px] space-y-4">
       <div class="h-[300px] bg-container rounded-xl shadow-border-xs p-8">
         <% if @budget.available_to_allocate.negative? %>
           <%= render "budgets/over_allocation_warning", budget: @budget %>
@@ -19,27 +21,26 @@
         <% if @budget.initialized? && @budget.available_to_allocate.positive? %>
           <div class="flex gap-2 mb-2 rounded-lg bg-alpha-black-25 p-1">
             <% base_classes = "rounded-md px-2 py-1 flex-1 text-center" %>
-            <% selected_tab = params[:tab].presence || "budgeted" %>
 
             <%= link_to "Budgeted",
                         budget_path(@budget, tab: "budgeted"),
                         class: class_names(
                           base_classes,
-                          "bg-container shadow-xs text-primary": selected_tab == "budgeted",
-                          "text-secondary": selected_tab != "budgeted"
+                          "bg-container shadow-xs text-primary": is_budgeted_tab?,
+                          "text-secondary": !is_budgeted_tab?
                         ) %>
 
             <%= link_to "Actual",
                         budget_path(@budget, tab: "actuals"),
                         class: class_names(
                           base_classes,
-                          "bg-container shadow-xs text-primary": selected_tab == "actuals",
-                          "text-secondary": selected_tab != "actuals"
+                          "bg-container shadow-xs text-primary": is_actuals_tab?,
+                          "text-secondary": !is_actuals_tab?
                         ) %>
           </div>
 
           <div class="bg-container rounded-xl shadow-border-xs">
-            <%= render selected_tab == "budgeted" ? "budgets/budgeted_summary" : "budgets/actuals_summary", budget: @budget %>
+            <%= render is_budgeted_tab? ? "budgets/budgeted_summary" : "budgets/actuals_summary", budget: @budget %>
           </div>
         <% else %>
           <div class="bg-container rounded-xl shadow-border-xs">
@@ -49,11 +50,11 @@
       </div>
     </div>
 
-    <div class="grow bg-container rounded-xl shadow-border-xs p-4">
+    <div class="w-full sm:w-auto grow bg-container rounded-xl shadow-border-xs p-4">
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-lg font-medium">Categories</h2>
 
-        <% if @budget.initialized? %>
+        <% if @budget.initialized? && is_budgeted_tab? %>
           <%= link_to budget_budget_categories_path(@budget), class: "btn btn--secondary flex items-center gap-2" do %>
             <%= icon "settings-2", color: "gray" %>
             <span>Edit</span>
