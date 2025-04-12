@@ -10,7 +10,7 @@
       <div class="flex items-center px-3 py-2 gap-2 border border-secondary rounded-lg focus-within:ring-secondary focus-within:border-secondary">
         <%= lucide_icon("search", class: "w-5 h-5 text-secondary") %>
         <%= form.text_field :search,
-                            placeholder: "Search transactions by name",
+                            placeholder: "Search transactions ...",
                             value: @q[:search],
                             class: "form-field__input placeholder:text-sm placeholder:text-secondary",
                             "data-auto-submit-form-target": "auto" %>
@@ -19,7 +19,7 @@
     <div data-controller="menu" class="relative">
       <button id="transaction-filters-button" data-menu-target="button" type="button" class="btn btn--outline flex items-center gap-2">
         <%= lucide_icon("list-filter", class: "w-5 h-5 text-secondary") %>
-        <p class="text-sm font-medium text-primary">Filter</p>
+        <p class="text-sm font-medium text-primary md:block hidden">Filter</p>
       </button>
 
       <%= render "transactions/searches/menu", form: form %>

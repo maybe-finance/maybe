@@ -16,7 +16,7 @@
 
     <% if @pagy.count > 0 %>
       <div class="grow overflow-y-auto">
-        <div class="grid grid-cols-12 bg-container-inset rounded-xl px-5 py-3 text-xs uppercase font-medium text-secondary items-center mb-4">
+        <div class="grid-cols-12 bg-container-inset rounded-xl px-5 py-3 text-xs uppercase font-medium text-secondary items-center mb-4 hidden md:grid">
           <div class="pl-0.5 col-span-8 flex items-center gap-4">
             <%= check_box_tag "selection_entry",
                               class: "checkbox checkbox--light",
@@ -27,6 +27,16 @@
           <p class="col-span-2">category</p>
           <p class="col-span-2 justify-self-end">amount</p>
         </div>
+
+        <% if @transactions.any? %>
+          <div class="md:hidden text-xs uppercase font-medium text-secondary mb-2 px-2">
+            <%= check_box_tag "selection_entry",
+                              class: "checkbox checkbox--light mr-2 ml-1",
+                              data: { action: "bulk-select#togglePageSelection" } %>
+            <span>TRANSACTION</span>
+          </div>
+        <% end %>
+
         <div class="space-y-6">
           <%= entries_by_date(@transactions.map(&:entry), totals: true) do |entries| %>
             <%= render entries %>
