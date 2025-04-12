@@ -23,7 +23,7 @@
         <%= button_to t(".disable_mfa"), disable_mfa_path,
             form: { class: "w-full sm:w-auto" },
             method: :delete,
-            class: "btn btn--secondary w-full flex !bg-[red] items-center gap-1",
+            class: "btn btn--secondary w-full flex items-center gap-1",
             data: { turbo_confirm: {
               title: t(".disable_mfa_confirm"),
               body: t(".disable_mfa_confirm"),

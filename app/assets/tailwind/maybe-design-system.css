@@ -508,6 +508,10 @@
     @apply transition-all duration-300;
   }
 
+  .btn--round {
+    @apply rounded-full p-2 sm:rounded-lg sm:px-3 sm:py-2
+  }
+
   .btn--primary {
     @apply button-bg-primary text-white disabled:text-gray-400;
     @apply hover:button-bg-primary-hover;

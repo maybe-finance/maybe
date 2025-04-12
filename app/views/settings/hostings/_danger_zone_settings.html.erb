@@ -1,19 +1,22 @@
 <% if Current.user.admin? %>
   <div class="space-y-4">
-    <div class="flex items-center justify-between">
-      <div class="w-2/3">
+    <div class="flex flex-col space-y-4 sm:flex-row items-center justify-between">
+      <div class="sm:w-2/3">
         <h3 class="font-medium text-primary"><%= t("settings.hostings.show.clear_cache") %></h3>
         <p class="text-secondary text-sm"><%= t("settings.hostings.show.clear_cache_warning") %></p>
       </div>
       <%=
-            button_to t("settings.hostings.show.clear_cache"), clear_cache_settings_hosting_path, method: :delete,
-              class: "bg-orange-500 text-white text-sm font-medium rounded-lg px-4 py-2",
-              data: { turbo_confirm: {
-                title: t("settings.hostings.show.confirm_clear_cache.title"),
-                body: t("settings.hostings.show.confirm_clear_cache.body"),
-                accept: t("settings.hostings.show.clear_cache"),
-                acceptClass: "w-full bg-orange-500 text-white rounded-xl text-center p-[10px] border mb-2"
-              }}
+        button_to t("settings.hostings.show.clear_cache"), clear_cache_settings_hosting_path, 
+          form: { class: "w-full sm:w-auto" },
+          method: :delete,
+          class: "bg-orange-500 text-white text-sm font-medium w-full rounded-lg px-4 py-2",
+          data: { turbo_confirm: {
+            form: { class: "w-full sm:w-auto" },
+            title: t("settings.hostings.show.confirm_clear_cache.title"),
+            body: t("settings.hostings.show.confirm_clear_cache.body"),
+            accept: t("settings.hostings.show.clear_cache"),
+            acceptClass: "w-full bg-orange-500 text-white rounded-xl text-center p-[10px] border mb-2"
+          }}
       %>
     </div>
   </div>

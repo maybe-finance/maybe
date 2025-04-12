@@ -1,9 +1,9 @@
 <div class="flex items-center justify-between">
   <h1 class="text-xl font-medium text-primary"><%= t(".title") %></h1>
 
-  <%= link_to new_import_path, class: "btn btn--primary flex items-center gap-2", data: { turbo_frame: :modal } do %>
+  <%= link_to new_import_path, class: "btn btn--primary btn--round flex items-center gap-2", data: { turbo_frame: :modal } do %>
     <%= lucide_icon("plus", class: "w-5 h-5") %>
-    <span><%= t(".new") %></span>
+    <span class="hidden sm:block"><%= t(".new") %></span>
   <% end %>
 </div>
 
