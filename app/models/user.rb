@@ -12,6 +12,14 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validate :ensure_valid_profile_image
   validates :default_period, inclusion: { in: Period::PERIODS.keys }
+  validates :password, presence: true, on: :create
+  validates :password,
+            length: { minimum: 8, message: "must be at least 8 characters" },
+            format: {
+              with: /\A(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])/x,
+              message: "must include uppercase and lowercase letters, a number, and a special character"
+            },
+            allow_blank: true
   normalizes :email, with: ->(email) { email.strip.downcase }
   normalizes :unconfirmed_email, with: ->(email) { email&.strip&.downcase }
 

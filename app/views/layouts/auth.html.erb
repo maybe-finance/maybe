@@ -1,7 +1,7 @@
 <%= render "layouts/shared/htmldoc" do %>
   <div class="flex flex-col h-dvh">
     <div class="flex flex-col h-screen px-6 py-12 bg-surface">
-      <div class="grow flex flex-col justify-center">
+      <div class="grow flex flex-col justify-start mt-24">
         <div class="sm:mx-auto sm:w-full sm:max-w-md">
           <div class="flex justify-center mb-6">
             <%= image_tag "logo-color.png", class: "w-16 mb-6" %>
@@ -11,20 +11,19 @@
             <h2 class="text-3xl font-medium text-primary text-center">
               <%= content_for?(:header_title) ? yield(:header_title).html_safe : t(".your_account") %>
             </h2>
-
-            <% if controller_name == "sessions" %>
-              <p class="text-sm text-center">
-                <%= tag.span t(".no_account"), class: "text-secondary" %> <%= link_to t(".sign_up"), new_registration_path, class: "font-medium text-primary hover:underline transition" %>
-              </p>
-            <% elsif controller_name == "registrations" %>
-              <p class="text-sm text-center text-gray-600">
-                <%= t(".existing_account") %> <%= link_to t(".sign_in"), new_session_path, class: "font-medium text-primary hover:underline transition" %>
-              </p>
-            <% end %>
           </div>
         </div>
 
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-lg">
+          <% if controller_name.in?(%w[sessions registrations]) %>
+            <div class="flex justify-center mb-6">
+              <div class="tab-item-active rounded-lg inline-flex p-1 space-x-2 text-sm text-primary font-medium w-full bg-alpha-black-25">
+                <%= link_to "Sign In", new_session_path, class: "px-2 py-1 rounded-lg w-full text-center #{controller_name == 'sessions' ? 'bg-container' : ''}" %>
+                <%= link_to "Sign Up", new_registration_path, class: "px-2 py-1 rounded-lg w-full text-center #{controller_name == 'registrations' ? 'bg-container' : ''}" %>
+              </div>
+            </div>
+          <% end %>
+
           <%= yield %>
         </div>
       </div>

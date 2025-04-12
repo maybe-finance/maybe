@@ -17,6 +17,7 @@
   </div>
 <% end %>
 
+
 <% if @user.errors.present? %>
   <div class="text-red-600 flex items-center gap-2">
     <%= lucide_icon "circle-alert", class: "w-5 h-5" %>
@@ -32,8 +33,60 @@
       placeholder: "you@example.com",
       label: true,
       disabled: @invitation.present? %>
-  <%= form.password_field :password, autocomplete: "new-password", required: "required", label: true, maxlength: 72 %>
-  <%= form.password_field :password_confirmation, autocomplete: "new-password", required: "required", label: true %>
+
+  <div data-controller="password-toggle">
+    <div class="relative">
+      <%= form.password_field :password,
+                           autocomplete: "new-password",
+                           required: "required",
+                           label: true,
+                           maxlength: 72,
+                           data: {
+                             password_strength_target: "input",
+                             password_toggle_target: "input",
+                             action: "input->password-strength#validatePassword"
+                           } %>
+      <button type="button"
+             class="absolute right-3 bottom-3 text-secondary hover:text-primary"
+             data-action="click->password-toggle#toggle">
+        <span data-password-toggle-target="eyeIcon">
+          <%= lucide_icon "eye", class: "w-5 h-5" %>
+        </span>
+        <span data-password-toggle-target="eyeOffIcon" class="hidden">
+          <%= lucide_icon "eye-off", class: "w-5 h-5" %>
+        </span>
+      </button>
+    </div>
+
+    <div class="mt-4 space-y-1">
+      <div class="flex space-x-2">
+        <div class="h-1 w-1/5 rounded-full bg-gray-200" data-password-strength-target="minLength"></div>
+        <div class="h-1 w-1/5 rounded-full bg-gray-200" data-password-strength-target="uppercase"></div>
+        <div class="h-1 w-1/5 rounded-full bg-gray-200" data-password-strength-target="lowercase"></div>
+        <div class="h-1 w-1/5 rounded-full bg-gray-200" data-password-strength-target="number"></div>
+        <div class="h-1 w-1/5 rounded-full bg-gray-200" data-password-strength-target="special"></div>
+      </div>
+      <ul class="mt-4 space-y-2 text-sm">
+        <li class="flex items-center gap-2 text-secondary" data-password-strength-target="minLength">
+          <%= lucide_icon "check", class: "w-4 h-4" %>
+          <span>Minimum 8 characters</span>
+        </li>
+        <li class="flex items-center gap-2 text-secondary" data-password-strength-target="uppercase">
+          <%= lucide_icon "check", class: "w-4 h-4" %>
+          <span>Upper and lowercase letters</span>
+        </li>
+        <li class="flex items-center gap-2 text-secondary" data-password-strength-target="number">
+          <%= lucide_icon "check", class: "w-4 h-4" %>
+          <span>A number (0-9)</span>
+        </li>
+        <li class="flex items-center gap-2 text-secondary" data-password-strength-target="special">
+          <%= lucide_icon "check", class: "w-4 h-4" %>
+          <span>A special character (!, @, #, $, %, etc)</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
   <% if invite_code_required? && !@invitation %>
     <%= form.text_field :invite_code, required: "required", label: true, value: params[:invite] %>
   <% end %>

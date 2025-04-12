@@ -44,7 +44,7 @@ class RegistrationsController < ApplicationController
     end
 
     def user_params(specific_param = nil)
-      params = self.params.require(:user).permit(:name, :email, :password, :password_confirmation, :invite_code, :invitation)
+      params = self.params.require(:user).permit(:name, :email, :password, :invite_code, :invitation)
       specific_param ? params[specific_param] : params
     end
 
