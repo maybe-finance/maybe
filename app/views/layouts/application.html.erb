@@ -111,7 +111,7 @@
       <% end %>
     </div>
 
-    <nav class="lg:hidden bg-surface shrink-0 z-10 pb-2">
+    <nav class="lg:hidden bg-surface shrink-0 z-10 pb-2 border-t border-tertiary">
       <ul class="flex items-center justify-around gap-1">
         <li>
           <%= render "layouts/sidebar/nav_item", name: "Home", path: root_path, icon_key: "pie-chart" %>
@@ -126,7 +126,7 @@
         </li>
 
         <li>
-          <%= render "layouts/sidebar/nav_item", name: "Assistant", path: chats_path, icon_key: "bot" %>
+          <%= render "layouts/sidebar/nav_item", name: "Assistant", path: chats_path, icon_key: "chat-ai" %>
         </li>
       </ul>
     </nav>

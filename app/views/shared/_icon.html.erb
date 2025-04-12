@@ -3,4 +3,8 @@
 <% size_class = case size when "sm" then "w-4 h-4" when "md" then "w-5 h-5" when "lg" then "w-6 h-6" end %>
 <% color_class = case color when "current" then "text-current" when "gray" then "text-secondary" when "white" then "text-white" end %>
 
-<%= lucide_icon key, class: class_names(size_class, color_class, "shrink-0") %>
+<% if key == "chat-ai" %>
+  <%= inline_svg "icon-chat-ai.svg", class: class_names(size_class, color_class, "shrink-0") %>
+<% else %>
+  <%= lucide_icon key, class: class_names(size_class, color_class, "shrink-0") %>
+<% end %>
