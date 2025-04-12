@@ -21,7 +21,7 @@
 
   <div data-controller="menu" data-menu-placement-value="bottom-start">
     <%= tag.button data: { menu_target: "button" }, class: "flex items-center gap-1 hover:bg-alpha-black-25 cursor-pointer rounded-md p-2" do %>
-      <span class="text-primary font-medium"><%= @budget.name %></span>
+      <span class="text-primary font-medium text-3xl"><%= @budget.name %></span>
       <%= lucide_icon "chevron-down", class: "w-5 h-5 shrink-0 text-secondary" %>
     <% end %>
 

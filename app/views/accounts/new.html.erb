@@ -27,7 +27,7 @@
 
       <% unless params[:return_to].present? %>
         <%= button_to imports_path(import: { type: "AccountImport" }),
-              class: "flex items-center gap-4 w-full text-center focus:outline-hidden focus:bg-alpha-black-25 hover:bg-alpha-black-25 border border-transparent block px-2 rounded-lg p-2 filterable-item",
+              class: "flex items-center gap-4 w-full text-center focus:outline-hidden focus:bg-alpha-black-25 hover:bg-alpha-black-25 border border-transparent block px-2 rounded-lg p-2 filterable-item text-primary",
               data: { turbo_frame: :_top, list_filter_target: "filterable", filter_name: t("accounts.new.import_accounts").downcase } do %>
           <span style="background-color: color-mix(in srgb, #F79009 10%, white);" class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg border border-alpha-black-25">
             <%= lucide_icon("download", style: "color: #F79009", class: "w-5 h-5") %>

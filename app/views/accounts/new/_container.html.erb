@@ -1,7 +1,7 @@
 <%# locals: (title:, back_path: nil) %>
 
 <%= modal do %>
-  <div class="flex flex-col w-screen max-w-xl -mt-5 sm:-mt-0 h-screen sm:h-auto bg-white sm:bg-transparent" data-controller="list-keyboard-navigation list-filter">
+  <div class="flex flex-col w-screen max-w-xl -mt-5 sm:-mt-0 h-screen sm:h-auto bg-container sm:bg-transparent" data-controller="list-keyboard-navigation list-filter">
     <div class="border-b border-alpha-black-25 p-4 text-gray-800 flex items-center space-x-3">
       <% if back_path %>
         <%= link_to back_path, class: "flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-alpha-black-50 focus:outline-gray-300 focus:outline" do %>

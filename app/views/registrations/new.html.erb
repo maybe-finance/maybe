@@ -34,7 +34,7 @@
       label: true,
       disabled: @invitation.present? %>
 
-  <div data-controller="password-toggle">
+  <div data-controller="password-strength password-toggle">
     <div class="relative">
       <%= form.password_field :password,
                            autocomplete: "new-password",
