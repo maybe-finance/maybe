@@ -37,20 +37,16 @@
     <div class="sm:block flex flex-col justify-center items-center gap-2">
       <%= form.hidden_field :delete_profile_image, value: "0", data: { profile_image_preview_target: "deleteProfileImage" } %>
 
-      <p class="order-2 sm:order-1 text-sm sm:text-md text-subdued sm:mb-3"><%= t(".accepted_formats") %></p>
+      <div class="flex flex-col gap-2 text-center sm:text-left">
+        <%= form.label :profile_image, class: "btn btn--outline flex items-center gap-2 justify-center sm:justify-start order-1 sm:order-2" do %>
+          <%= lucide_icon "camera", class: "w-4 h-4" %>
+          <span>
+            <%= user.profile_image.attached? ? t(".change") : t(".choose") %>
+          </span>
+        <% end %>
 
-      <%= form.label :profile_image, class: "btn btn--outline flex flex-row items-center gap-2 order-1 sm:order-2" do %>
-        <%= lucide_icon "camera", class: "w-4 h-4 shrink-0" %>
-        <div>
-          <% if user.profile_image.attached? %>
-            <span><%= t(".change") %></span>
-          <% else %>
-            <span><%= t(".choose") %></span>
-            <span class="text-subdued">(<%= t(".optional") %>)</span>
-          <% end %>
-          
-        </div>
-      <% end %>
+        <p class="text-xs text-subdued order-2 sm:order-1"><%= t(".accepted_formats") %></p>
+      </div>
 
       <%= form.file_field :profile_image,
           accept: "image/png, image/jpeg",

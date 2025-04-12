@@ -129,14 +129,15 @@
 <%= settings_section title: t(".danger_zone_title") do %>
   <div class="space-y-4">
     <% if Current.user.admin? %>
-      <div class="flex items-center justify-between">
-        <div class="w-2/3">
+      <div class="flex flex-col sm:flex-row space-y-4 items-center sm:justify-between">
+        <div class="sm:w-2/3">
           <h3 class="font-medium text-primary"><%= t(".reset_account") %></h3>
           <p class="text-secondary text-sm"><%= t(".reset_account_warning") %></p>
         </div>
         <%=
               button_to t(".reset_account"), reset_user_path(@user), method: :delete,
-                class: "btn btn--destructive",
+                form: { class: "w-full sm:w-auto" },
+                class: "btn btn--destructive w-full",
                 data: { turbo_confirm: {
                   title: t(".confirm_reset.title"),
                   body: t(".confirm_reset.body"),
@@ -146,14 +147,15 @@
         %>
       </div>
     <% end %>
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col sm:flex-row space-y-4 items-center sm:justify-between">
       <div>
         <h3 class="font-medium text-primary"><%= t(".delete_account") %></h3>
         <p class="text-secondary text-sm"><%= t(".delete_account_warning") %></p>
       </div>
       <%=
             button_to t(".delete_account"), user_path(@user), method: :delete,
-              class: "btn btn--destructive",
+              form: { class: "w-full sm:w-auto" },
+              class: "btn btn--destructive w-full",
               data: { turbo_confirm: {
                 title: t(".confirm_delete.title"),
                 body: t(".confirm_delete.body"),
