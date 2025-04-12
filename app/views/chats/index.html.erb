@@ -1,5 +1,5 @@
 <%= turbo_frame_tag chat_frame do %>
-  <div class="p-4 flex flex-col h-full">
+  <div class="flex flex-col h-full md:p-4">
     <nav class="mb-6">
       <% back_path = @last_viewed_chat ? chat_path(@last_viewed_chat) : new_chat_path %>
       <%= link_to back_path, class: "w-9 h-9 flex items-center justify-center rounded-lg hover:bg-surface-hover" do %>
@@ -25,7 +25,5 @@
         </div>
       <% end %>
     </div>
-
-    <%= render "messages/chat_form" %>
   </div>
 <% end %>
