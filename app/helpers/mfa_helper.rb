@@ -8,7 +8,7 @@ module MfaHelper
       svg_attributes: {
         width: "240",
         height: "240",
-        viewBox: "0 0 65 65"
+        viewBox: "0 0 60 60"
       }
     )
 

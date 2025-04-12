@@ -11,7 +11,7 @@
   <h1 class="text-primary text-xl font-medium mb-4"><%= t(".page_title") %></h1>
   <%= settings_section title: t(".scan_title"), subtitle: t(".scan_description") do %>
     <div class="space-y-6">
-      <div>
+      <div class="w-full flex justify-center items-center">
         <%= generate_mfa_qr_code(Current.user.provisioning_uri) %>
       </div>
 
@@ -57,7 +57,7 @@
             placeholder: t(".code_placeholder") %>
 
           <div class="flex justify-end mt-4">
-            <%= f.submit t(".verify_button"), class: "btn btn--primary" %>
+            <%= f.submit t(".verify_button"), class: "btn btn--primary w-full sm:w-auto" %>
           </div>
         </div>
       <% end %>
