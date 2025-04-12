@@ -11,12 +11,12 @@
           You have requested to change your email to <%= @user.unconfirmed_email %>. Please go to your email and confirm for the change to take effect.
         </p>
       <% end %>
-      <div class="grid grid-cols-2 gap-4 mt-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         <%= form.text_field :first_name, placeholder: t(".first_name"), label: t(".first_name") %>
         <%= form.text_field :last_name, placeholder: t(".last_name"), label: t(".last_name") %>
       </div>
       <div class="flex justify-end mt-4">
-        <%= form.submit t(".save"), class: "btn btn--primary" %>
+        <%= form.submit t(".save"), class: "btn btn--primary md:w-auto w-full" %>
       </div>
     </div>
   <% end %>
