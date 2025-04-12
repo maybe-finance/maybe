@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <div class="col-span-2 justify-self-end font-medium text-sm">
+      <div class="hidden md:block col-span-2 justify-self-end font-medium text-sm">
         <% if balance_trend&.trend %>
           <%= tag.span format_money(balance_trend.trend.value), style: "color: #{balance_trend.trend.color}" %>
         <% else %>
@@ -35,7 +35,7 @@
         <% end %>
       </div>
 
-      <div class="col-span-2 justify-self-end">
+      <div class="hidden md:block col-span-2 justify-self-end">
         <%= tag.p format_money(entry.amount_money), class: "font-medium text-sm text-primary" %>
       </div>
     </div>

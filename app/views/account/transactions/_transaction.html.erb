@@ -84,7 +84,7 @@
       </div>
 
       <% if balance_trend %>
-        <div class="col-span-2 justify-self-end">
+        <div class="hidden md:block col-span-2 justify-self-end">
           <% if balance_trend.trend %>
             <%= tag.p format_money(balance_trend.trend.current),
                 class: "font-medium text-sm text-primary" %>
