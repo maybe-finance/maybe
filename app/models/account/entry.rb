@@ -44,7 +44,7 @@ class Account::Entry < ApplicationRecord
   end
 
   def balance_trend(entries, balances)
-    Account::BalanceTrendCalculator.new(self, entries, balances).trend
+    Balance::TrendCalculator.new(self, entries, balances).trend
   end
 
   def display_name

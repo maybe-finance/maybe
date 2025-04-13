@@ -7,7 +7,7 @@ module Account::Chartable
 
       series_interval = interval || period.interval
 
-      balances = Account::Balance.find_by_sql([
+      balances = Balance.find_by_sql([
         balance_series_query,
         {
           start_date: period.start_date,

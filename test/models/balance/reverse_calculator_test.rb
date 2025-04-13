@@ -1,6 +1,6 @@
 require "test_helper"
 
-class Account::Balance::ReverseCalculatorTest < ActiveSupport::TestCase
+class Balance::ReverseCalculatorTest < ActiveSupport::TestCase
   include Account::EntriesTestHelper
 
   setup do
@@ -18,7 +18,7 @@ class Account::Balance::ReverseCalculatorTest < ActiveSupport::TestCase
     assert_equal 0, @account.balances.count
 
     expected = [ @account.balance, @account.balance ]
-    calculated = Account::Balance::ReverseCalculator.new(@account).calculate
+    calculated = Balance::ReverseCalculator.new(@account).calculate
 
     assert_equal expected, calculated.map(&:balance)
   end
@@ -28,7 +28,7 @@ class Account::Balance::ReverseCalculatorTest < ActiveSupport::TestCase
     create_valuation(account: @account, date: 2.days.ago.to_date, amount: 19000)
 
     expected = [ 17000, 17000, 19000, 19000, 20000, 20000 ]
-    calculated = Account::Balance::ReverseCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
+    calculated = Balance::ReverseCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
 
     assert_equal expected, calculated
   end
@@ -38,7 +38,7 @@ class Account::Balance::ReverseCalculatorTest < ActiveSupport::TestCase
     create_transaction(account: @account, date: 2.days.ago.to_date, amount: 100) # expense
 
     expected = [ 19600, 20100, 20100, 20000, 20000, 20000 ]
-    calculated = Account::Balance::ReverseCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
+    calculated = Balance::ReverseCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
 
     assert_equal expected, calculated
   end
@@ -52,7 +52,7 @@ class Account::Balance::ReverseCalculatorTest < ActiveSupport::TestCase
     create_transaction(account: @account, date: 1.day.ago.to_date, amount: 100)
 
     expected = [ 12000, 17000, 17000, 17000, 16500, 17000, 17000, 20100, 20000, 20000 ]
-    calculated = Account::Balance::ReverseCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
+    calculated = Balance::ReverseCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
 
     assert_equal expected, calculated
   end

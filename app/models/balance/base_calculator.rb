@@ -1,4 +1,4 @@
-class Account::Balance::BaseCalculator
+class Balance::BaseCalculator
   attr_reader :account
 
   def initialize(account)
@@ -13,11 +13,11 @@ class Account::Balance::BaseCalculator
 
   private
     def sync_cache
-      @sync_cache ||= Account::Balance::SyncCache.new(account)
+      @sync_cache ||= Balance::SyncCache.new(account)
     end
 
     def build_balance(date, cash_balance, holdings_value)
-      Account::Balance.new(
+      Balance.new(
         account_id: account.id,
         date: date,
         balance: holdings_value + cash_balance,

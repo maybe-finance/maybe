@@ -76,7 +76,7 @@
         <div>
           <div class="rounded-tl-lg rounded-tr-lg bg-container border-alpha-black-25 shadow-xs">
             <div class="space-y-4">
-              <% calculator = Account::BalanceTrendCalculator.for(@entries) %>
+              <% calculator = Balance::TrendCalculator.for(@entries) %>
               <%= entries_by_date(@entries) do |entries| %>
                 <% entries.each do |entry| %>
                   <%= render entry, balance_trend: calculator&.trend_for(entry), view_ctx: "account" %>

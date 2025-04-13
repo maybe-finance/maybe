@@ -1,6 +1,6 @@
 require "test_helper"
 
-class Account::Balance::ForwardCalculatorTest < ActiveSupport::TestCase
+class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
   include Account::EntriesTestHelper
 
   setup do
@@ -18,7 +18,7 @@ class Account::Balance::ForwardCalculatorTest < ActiveSupport::TestCase
     assert_equal 0, @account.balances.count
 
     expected = [ 0, 0 ]
-    calculated = Account::Balance::ForwardCalculator.new(@account).calculate
+    calculated = Balance::ForwardCalculator.new(@account).calculate
 
     assert_equal expected, calculated.map(&:balance)
   end
@@ -28,7 +28,7 @@ class Account::Balance::ForwardCalculatorTest < ActiveSupport::TestCase
     create_valuation(account: @account, date: 2.days.ago.to_date, amount: 19000)
 
     expected = [ 0, 17000, 17000, 19000, 19000, 19000 ]
-    calculated = Account::Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
+    calculated = Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
 
     assert_equal expected, calculated
   end
@@ -38,7 +38,7 @@ class Account::Balance::ForwardCalculatorTest < ActiveSupport::TestCase
     create_transaction(account: @account, date: 2.days.ago.to_date, amount: 100) # expense
 
     expected = [ 0, 500, 500, 400, 400, 400 ]
-    calculated = Account::Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
+    calculated = Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
 
     assert_equal expected, calculated
   end
@@ -52,7 +52,7 @@ class Account::Balance::ForwardCalculatorTest < ActiveSupport::TestCase
     create_transaction(account: @account, date: 1.day.ago.to_date, amount: 100)
 
     expected = [ 0, 5000, 5000, 17000, 17000, 17500, 17000, 17000, 16900, 16900 ]
-    calculated = Account::Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
+    calculated = Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
 
     assert_equal expected, calculated
   end
@@ -67,7 +67,7 @@ class Account::Balance::ForwardCalculatorTest < ActiveSupport::TestCase
     create_transaction(account: @account, date: 1.day.ago.to_date, amount: -500, currency: "EUR") # €500 * 1.2 = $600
 
     expected = [ 0, 100, 400, 1000, 1000 ]
-    calculated = Account::Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
+    calculated = Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
 
     assert_equal expected, calculated
   end

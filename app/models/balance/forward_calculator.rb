@@ -1,4 +1,4 @@
-class Account::Balance::ForwardCalculator < Account::Balance::BaseCalculator
+class Balance::ForwardCalculator < Balance::BaseCalculator
   private
     def calculate_balances
       current_cash_balance = 0

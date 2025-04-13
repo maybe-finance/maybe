@@ -65,7 +65,7 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
     assert_not ExchangeRate.exists?(exchange_rate.id)
     assert_not Security::Price.exists?(security_price.id)
     assert_not Holding.exists?(holding.id)
-    assert_not Account::Balance.exists?(account_balance.id)
+    assert_not Balance.exists?(account_balance.id)
   end
 
   test "can clear data only when admin" do

@@ -2,7 +2,7 @@
 # In most cases, this is sufficient.  However, for the "Activity View", we need to show intraday balances
 # to show users how each entry affects their balances.  This class calculates intraday balances by
 # interpolating between end-of-day balances.
-class Account::BalanceTrendCalculator
+class Balance::TrendCalculator
   BalanceTrend = Struct.new(:trend, :cash, keyword_init: true)
 
   class << self

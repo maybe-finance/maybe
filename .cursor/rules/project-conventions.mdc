@@ -106,7 +106,7 @@ end
 # BAD!!
 # Unnecessary test - in this case, this is simply testing ActiveRecord's functionality
 test "saves balance" do 
-  balance_record = Account::Balance.new(balance: 100, currency: "USD")
+  balance_record = Balance.new(balance: 100, currency: "USD")
 
   assert balance_record.save
 end

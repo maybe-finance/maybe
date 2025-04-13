@@ -1,4 +1,4 @@
-class Account::Balance::Syncer
+class Balance::Syncer
   attr_reader :account, :strategy
 
   def initialize(account, strategy:)
@@ -7,7 +7,7 @@ class Account::Balance::Syncer
   end
 
   def sync_balances
-    Account::Balance.transaction do
+    Balance.transaction do
       sync_holdings
       calculate_balances
 
@@ -63,9 +63,9 @@ class Account::Balance::Syncer
 
     def calculator
       if strategy == :reverse
-        Account::Balance::ReverseCalculator.new(account)
+        Balance::ReverseCalculator.new(account)
       else
-        Account::Balance::ForwardCalculator.new(account)
+        Balance::ForwardCalculator.new(account)
       end
     end
 end

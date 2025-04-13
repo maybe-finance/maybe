@@ -1,4 +1,4 @@
-class Account::Balance::ReverseCalculator < Account::Balance::BaseCalculator
+class Balance::ReverseCalculator < Balance::BaseCalculator
   private
     def calculate_balances
       current_cash_balance = account.cash_balance

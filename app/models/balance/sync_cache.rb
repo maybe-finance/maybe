@@ -1,4 +1,4 @@
-class Account::Balance::SyncCache
+class Balance::SyncCache
   def initialize(account)
     @account = account
   end
