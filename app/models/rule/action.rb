@@ -3,8 +3,8 @@ class Rule::Action < ApplicationRecord
 
   validates :action_type, presence: true
 
-  def apply(resource_scope)
-    executor.execute(resource_scope, value)
+  def apply(resource_scope, ignore_attribute_locks: false)
+    executor.execute(resource_scope, value: value, ignore_attribute_locks: ignore_attribute_locks)
   end
 
   def options

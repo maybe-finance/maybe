@@ -21,7 +21,7 @@ class Rule::ActionExecutor
     nil
   end
 
-  def execute(scope, value = nil)
+  def execute(scope, value: nil, ignore_attribute_locks: false)
     raise NotImplementedError, "Action executor #{self.class.name} must implement #execute"
   end
 

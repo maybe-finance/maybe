@@ -7,12 +7,27 @@ class Rule::ActionExecutor::SetTransactionCategory < Rule::ActionExecutor
     family.categories.pluck(:name, :id)
   end
 
-  def execute(transaction_scope, value = nil)
+  def execute(transaction_scope, value: nil, ignore_attribute_locks: false)
     category = family.categories.find_by_id(value)
 
-    transaction_scope.attributes_unlocked(:category_id).update_all(
-      category_id: category.id,
-      updated_at: Time.current
-    )
+    scope = transaction_scope
+
+    unless ignore_attribute_locks
+      scope = scope.enrichable(:category_id)
+    end
+
+    scope.each do |txn|
+      txn.update!(category: category)
+
+      de = DataEnrichment.find_or_create_by!(
+        enrichable: txn,
+        attribute_name: "category_id",
+        value: category.id,
+        source: "rule"
+      )
+
+      de.value = category.id
+      de.save!
+    end
   end
 end

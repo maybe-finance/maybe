@@ -42,7 +42,7 @@ class Rule::ActionTest < ActiveSupport::TestCase
     tag = @family.tags.create!(name: "Rule test tag")
 
     # Does not modify transactions that are locked (user edited them)
-    @txn1.lock!(:tags)
+    @txn1.lock!(:tag_ids)
 
     action = Rule::Action.new(
       rule: @transaction_rule,
