@@ -3,9 +3,30 @@ class Account::TransactionsController < ApplicationController
 
   permitted_entryable_attributes :id, :category_id, :merchant_id, { tag_ids: [] }
 
+  def create
+    @entry = build_entry
+
+    if @entry.save
+      @entry.sync_account_later
+      @entry.lock_saved_attributes!
+      @entry.account_transaction.lock!(:tag_ids) if @entry.account_transaction.tags.any?
+
+      flash[:notice] = t("account.entries.create.success")
+
+      respond_to do |format|
+        format.html { redirect_back_or_to account_path(@entry.account) }
+        format.turbo_stream { stream_redirect_back_or_to account_path(@entry.account) }
+      end
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
   def update
     if @entry.update(update_entry_params)
       @entry.sync_account_later
+      @entry.lock_saved_attributes!
+      @entry.account_transaction.lock!(:tag_ids) if @entry.account_transaction.tags.any?
 
       transaction = @entry.account_transaction
 

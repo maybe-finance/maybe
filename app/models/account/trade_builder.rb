@@ -15,6 +15,21 @@ class Account::TradeBuilder
     buildable.save
   end
 
+  def lock_saved_attributes!
+    if buildable.is_a?(Transfer)
+      buildable.inflow_transaction.entry.lock_saved_attributes!
+      buildable.outflow_transaction.entry.lock_saved_attributes!
+    else
+      buildable.lock_saved_attributes!
+    end
+  end
+
+  def entryable
+    return nil if buildable.is_a?(Transfer)
+
+    buildable.entryable
+  end
+
   def errors
     buildable.errors
   end

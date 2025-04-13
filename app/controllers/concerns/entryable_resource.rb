@@ -32,6 +32,7 @@ module EntryableResource
 
     if @entry.save
       @entry.sync_account_later
+      @entry.lock_saved_attributes!
 
       flash[:notice] = t("account.entries.create.success")
 
@@ -47,6 +48,8 @@ module EntryableResource
   def update
     if @entry.update(update_entry_params)
       @entry.sync_account_later
+      @entry.lock_saved_attributes!
+      @entry.entryable.lock_saved_attributes!
 
       respond_to do |format|
         format.html { redirect_back_or_to account_path(@entry.account), notice: t("account.entries.update.success") }

@@ -47,7 +47,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_11_191422) do
     t.string "plaid_id"
     t.datetime "enriched_at"
     t.string "enriched_name"
-    t.jsonb "locked_fields", default: {}
+    t.jsonb "locked_attributes", default: {}
     t.index ["account_id"], name: "index_account_entries_on_account_id"
     t.index ["import_id"], name: "index_account_entries_on_import_id"
   end
@@ -74,6 +74,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_11_191422) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "currency"
+    t.jsonb "locked_attributes", default: {}
     t.index ["security_id"], name: "index_account_trades_on_security_id"
   end
 
@@ -82,7 +83,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_11_191422) do
     t.datetime "updated_at", null: false
     t.uuid "category_id"
     t.uuid "merchant_id"
-    t.jsonb "locked_fields", default: {}
+    t.jsonb "locked_attributes", default: {}
     t.index ["category_id"], name: "index_account_transactions_on_category_id"
     t.index ["merchant_id"], name: "index_account_transactions_on_merchant_id"
   end
@@ -90,6 +91,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_11_191422) do
   create_table "account_valuations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "locked_attributes", default: {}
   end
 
   create_table "accounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -109,6 +111,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_11_191422) do
     t.boolean "scheduled_for_deletion", default: false
     t.datetime "last_synced_at"
     t.decimal "cash_balance", precision: 19, scale: 4, default: "0.0"
+    t.jsonb "locked_attributes", default: {}
     t.index ["accountable_id", "accountable_type"], name: "index_accounts_on_accountable_id_and_accountable_type"
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id", "accountable_type"], name: "index_accounts_on_family_id_and_accountable_type"
@@ -217,22 +220,31 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_11_191422) do
     t.decimal "apr", precision: 10, scale: 2
     t.date "expiration_date"
     t.decimal "annual_fee", precision: 10, scale: 2
+    t.jsonb "locked_attributes", default: {}
   end
 
   create_table "cryptos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "locked_attributes", default: {}
   end
 
   create_table "data_enrichments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "enrichable_type", null: false
+    t.uuid "enrichable_id", null: false
     t.string "source"
+    t.string "attribute_name"
+    t.jsonb "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["enrichable_id", "enrichable_type", "source", "attribute_name"], name: "idx_on_enrichable_id_enrichable_type_source_attribu_5be5f63e08", unique: true
+    t.index ["enrichable_type", "enrichable_id"], name: "index_data_enrichments_on_enrichable"
   end
 
   create_table "depositories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "locked_attributes", default: {}
   end
 
   create_table "exchange_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -354,6 +366,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_11_191422) do
   create_table "investments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "locked_attributes", default: {}
   end
 
   create_table "invitations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -386,6 +399,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_11_191422) do
     t.string "rate_type"
     t.decimal "interest_rate", precision: 10, scale: 3
     t.integer "term_months"
+    t.jsonb "locked_attributes", default: {}
   end
 
   create_table "merchants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -422,11 +436,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_11_191422) do
   create_table "other_assets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "locked_attributes", default: {}
   end
 
   create_table "other_liabilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "locked_attributes", default: {}
   end
 
   create_table "plaid_accounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -470,6 +486,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_11_191422) do
     t.integer "year_built"
     t.integer "area_value"
     t.string "area_unit"
+    t.jsonb "locked_attributes", default: {}
   end
 
   create_table "rejected_transfers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -678,6 +695,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_11_191422) do
     t.string "mileage_unit"
     t.string "make"
     t.string "model"
+    t.jsonb "locked_attributes", default: {}
   end
 
   add_foreign_key "account_balances", "accounts", on_delete: :cascade

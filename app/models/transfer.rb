@@ -29,7 +29,6 @@ class Transfer < ApplicationRecord
             currency: converted_amount.currency.iso_code,
             date: date,
             name: "Transfer from #{from_account.name}",
-            entryable: Account::Transaction.new
           )
         ),
         outflow_transaction: Account::Transaction.new(
@@ -38,7 +37,6 @@ class Transfer < ApplicationRecord
             currency: from_account.currency,
             date: date,
             name: "Transfer to #{to_account.name}",
-            entryable: Account::Transaction.new
           )
         ),
         status: "confirmed"

@@ -12,7 +12,7 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference [ "Account::Entry.count", "Account::Trade.count" ] do
       patch account_trade_url(@entry), params: {
         account_entry: {
-          currency: "USD",
+          currency: "EUR",
           entryable_attributes: {
             id: @entry.entryable_id,
             qty: 20,
@@ -24,11 +24,17 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
 
     @entry.reload
 
+    assert @entry.locked?(:currency)
+    assert @entry.locked?(:amount)
+
+    assert @entry.account_trade.locked?(:qty)
+    assert @entry.account_trade.locked?(:price)
+
     assert_enqueued_with job: SyncJob
 
     assert_equal 20, @entry.account_trade.qty
     assert_equal 20, @entry.account_trade.price
-    assert_equal "USD", @entry.currency
+    assert_equal "EUR", @entry.currency
 
     assert_redirected_to account_url(@entry.account)
   end
@@ -111,6 +117,9 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
 
     created_entry = Account::Entry.order(created_at: :desc).first
 
+    assert created_entry.locked?(:currency)
+    assert created_entry.locked?(:amount)
+
     assert created_entry.amount.negative?
     assert_redirected_to @entry.account
   end
@@ -131,6 +140,12 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
     end
 
     created_entry = Account::Entry.order(created_at: :desc).first
+
+    assert created_entry.locked?(:currency)
+    assert created_entry.locked?(:amount)
+
+    assert created_entry.account_trade.locked?(:qty)
+    assert created_entry.account_trade.locked?(:price)
 
     assert created_entry.amount.positive?
     assert created_entry.account_trade.qty.positive?
@@ -155,6 +170,12 @@ class Account::TradesControllerTest < ActionDispatch::IntegrationTest
     end
 
     created_entry = Account::Entry.order(created_at: :desc).first
+
+    assert created_entry.locked?(:currency)
+    assert created_entry.locked?(:amount)
+
+    assert created_entry.account_trade.locked?(:qty)
+    assert created_entry.account_trade.locked?(:price)
 
     assert created_entry.amount.negative?
     assert created_entry.account_trade.qty.negative?

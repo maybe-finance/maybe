@@ -1,5 +1,5 @@
 class Account::Entry < ApplicationRecord
-  include Monetizable, LockableAttributes
+  include Monetizable, Enrichable
 
   monetize :amount
 
@@ -33,6 +33,11 @@ class Account::Entry < ApplicationRecord
       created_at: :desc
     )
   }
+
+  def lock_saved_attributes!
+    super
+    entryable.lock_saved_attributes!
+  end
 
   def sync_account_later
     sync_start_date = [ date_previously_was, date ].compact.min unless destroyed?
@@ -78,6 +83,10 @@ class Account::Entry < ApplicationRecord
         all.each do |entry|
           bulk_attributes[:entryable_attributes][:id] = entry.entryable_id if bulk_attributes[:entryable_attributes].present?
           entry.update! bulk_attributes
+
+          entry.lock_saved_attributes!
+          entry.entryable.lock_saved_attributes!
+          entry.entryable.lock!(:tag_ids) if entry.account_transaction? && entry.account_transaction.tags.any?
         end
       end
 
