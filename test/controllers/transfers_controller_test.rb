@@ -41,4 +41,24 @@ class TransfersControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Transfer updated", flash[:notice]
     assert_equal "Test notes", transfer.reload.notes
   end
+
+  test "handles rejection without FrozenError" do
+    transfer = transfers(:one)
+
+    assert_difference "Transfer.count", -1 do
+      patch transfer_url(transfer), params: {
+        transfer: {
+          status: "rejected"
+        }
+      }
+    end
+
+    assert_redirected_to transactions_url
+    assert_equal "Transfer updated", flash[:notice]
+
+    # Verify the transfer was actually destroyed
+    assert_raises(ActiveRecord::RecordNotFound) do
+      transfer.reload
+    end
+  end
 end
