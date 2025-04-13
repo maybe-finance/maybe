@@ -26,7 +26,7 @@ class Account::Balance::Syncer
 
   private
     def sync_holdings
-      @holdings = Account::Holding::Syncer.new(account, strategy: strategy).sync_holdings
+      @holdings = Holding::Syncer.new(account, strategy: strategy).sync_holdings
     end
 
     def update_account_info

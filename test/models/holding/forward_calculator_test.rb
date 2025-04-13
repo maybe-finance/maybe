@@ -1,6 +1,6 @@
 require "test_helper"
 
-class Account::Holding::ForwardCalculatorTest < ActiveSupport::TestCase
+class Holding::ForwardCalculatorTest < ActiveSupport::TestCase
   include Account::EntriesTestHelper
 
   setup do
@@ -14,7 +14,7 @@ class Account::Holding::ForwardCalculatorTest < ActiveSupport::TestCase
   end
 
   test "no holdings" do
-    calculated = Account::Holding::ForwardCalculator.new(@account).calculate
+    calculated = Holding::ForwardCalculator.new(@account).calculate
     assert_equal [], calculated
   end
 
@@ -35,32 +35,32 @@ class Account::Holding::ForwardCalculatorTest < ActiveSupport::TestCase
 
     expected = [
       # 4 days ago
-      Account::Holding.new(security: @voo, date: 4.days.ago.to_date, qty: 0, price: 460, amount: 0),
-      Account::Holding.new(security: @wmt, date: 4.days.ago.to_date, qty: 0, price: 100, amount: 0),
-      Account::Holding.new(security: @amzn, date: 4.days.ago.to_date, qty: 0, price: 200, amount: 0),
+      Holding.new(security: @voo, date: 4.days.ago.to_date, qty: 0, price: 460, amount: 0),
+      Holding.new(security: @wmt, date: 4.days.ago.to_date, qty: 0, price: 100, amount: 0),
+      Holding.new(security: @amzn, date: 4.days.ago.to_date, qty: 0, price: 200, amount: 0),
 
       # 3 days ago
-      Account::Holding.new(security: @voo, date: 3.days.ago.to_date, qty: 20, price: 470, amount: 9400),
-      Account::Holding.new(security: @wmt, date: 3.days.ago.to_date, qty: 0, price: 100, amount: 0),
-      Account::Holding.new(security: @amzn, date: 3.days.ago.to_date, qty: 0, price: 200, amount: 0),
+      Holding.new(security: @voo, date: 3.days.ago.to_date, qty: 20, price: 470, amount: 9400),
+      Holding.new(security: @wmt, date: 3.days.ago.to_date, qty: 0, price: 100, amount: 0),
+      Holding.new(security: @amzn, date: 3.days.ago.to_date, qty: 0, price: 200, amount: 0),
 
       # 2 days ago
-      Account::Holding.new(security: @voo, date: 2.days.ago.to_date, qty: 5, price: 480, amount: 2400),
-      Account::Holding.new(security: @wmt, date: 2.days.ago.to_date, qty: 0, price: 100, amount: 0),
-      Account::Holding.new(security: @amzn, date: 2.days.ago.to_date, qty: 1, price: 200, amount: 200),
+      Holding.new(security: @voo, date: 2.days.ago.to_date, qty: 5, price: 480, amount: 2400),
+      Holding.new(security: @wmt, date: 2.days.ago.to_date, qty: 0, price: 100, amount: 0),
+      Holding.new(security: @amzn, date: 2.days.ago.to_date, qty: 1, price: 200, amount: 200),
 
       # 1 day ago
-      Account::Holding.new(security: @voo, date: 1.day.ago.to_date, qty: 10, price: 490, amount: 4900),
-      Account::Holding.new(security: @wmt, date: 1.day.ago.to_date, qty: 100, price: 100, amount: 10000),
-      Account::Holding.new(security: @amzn, date: 1.day.ago.to_date, qty: 0, price: 200, amount: 0),
+      Holding.new(security: @voo, date: 1.day.ago.to_date, qty: 10, price: 490, amount: 4900),
+      Holding.new(security: @wmt, date: 1.day.ago.to_date, qty: 100, price: 100, amount: 10000),
+      Holding.new(security: @amzn, date: 1.day.ago.to_date, qty: 0, price: 200, amount: 0),
 
       # Today
-      Account::Holding.new(security: @voo, date: Date.current, qty: 10, price: 500, amount: 5000),
-      Account::Holding.new(security: @wmt, date: Date.current, qty: 100, price: 100, amount: 10000),
-      Account::Holding.new(security: @amzn, date: Date.current, qty: 0, price: 200, amount: 0)
+      Holding.new(security: @voo, date: Date.current, qty: 10, price: 500, amount: 5000),
+      Holding.new(security: @wmt, date: Date.current, qty: 100, price: 100, amount: 10000),
+      Holding.new(security: @amzn, date: Date.current, qty: 0, price: 200, amount: 0)
     ]
 
-    calculated = Account::Holding::ForwardCalculator.new(@account).calculate
+    calculated = Holding::ForwardCalculator.new(@account).calculate
 
     assert_equal expected.length, calculated.length
     assert_holdings(expected, calculated)
@@ -74,9 +74,9 @@ class Account::Holding::ForwardCalculatorTest < ActiveSupport::TestCase
     create_trade(@wmt, qty: 100, date: 1.day.ago.to_date, price: 100, account: @account)
 
     expected = [
-      Account::Holding.new(security: @wmt, date: 2.days.ago.to_date, qty: 0, price: 100, amount: 0),
-      Account::Holding.new(security: @wmt, date: 1.day.ago.to_date, qty: 100, price: 100, amount: 10000),
-      Account::Holding.new(security: @wmt, date: Date.current, qty: 100, price: 100, amount: 10000)
+      Holding.new(security: @wmt, date: 2.days.ago.to_date, qty: 0, price: 100, amount: 0),
+      Holding.new(security: @wmt, date: 1.day.ago.to_date, qty: 100, price: 100, amount: 10000),
+      Holding.new(security: @wmt, date: Date.current, qty: 100, price: 100, amount: 10000)
     ]
 
     # Price missing today, so we should carry forward the holding from 1 day ago
@@ -85,7 +85,7 @@ class Account::Holding::ForwardCalculatorTest < ActiveSupport::TestCase
     Security::Price.stubs(:find_price).with(security: @wmt, date: 1.day.ago.to_date).returns(Security::Price.new(price: 100))
     Security::Price.stubs(:find_price).with(security: @wmt, date: Date.current).returns(nil)
 
-    calculated = Account::Holding::ForwardCalculator.new(@account).calculate
+    calculated = Holding::ForwardCalculator.new(@account).calculate
 
     assert_equal expected.length, calculated.length
     assert_holdings(expected, calculated)
@@ -98,13 +98,13 @@ class Account::Holding::ForwardCalculatorTest < ActiveSupport::TestCase
     create_trade(offline_security, qty: 1, date: 1.day.ago.to_date, price: 100, account: @account)
 
     expected = [
-      Account::Holding.new(security: offline_security, date: 3.days.ago.to_date, qty: 1, price: 90, amount: 90),
-      Account::Holding.new(security: offline_security, date: 2.days.ago.to_date, qty: 1, price: 90, amount: 90),
-      Account::Holding.new(security: offline_security, date: 1.day.ago.to_date, qty: 2, price: 100, amount: 200),
-      Account::Holding.new(security: offline_security, date: Date.current, qty: 2, price: 100, amount: 200)
+      Holding.new(security: offline_security, date: 3.days.ago.to_date, qty: 1, price: 90, amount: 90),
+      Holding.new(security: offline_security, date: 2.days.ago.to_date, qty: 1, price: 90, amount: 90),
+      Holding.new(security: offline_security, date: 1.day.ago.to_date, qty: 2, price: 100, amount: 200),
+      Holding.new(security: offline_security, date: Date.current, qty: 2, price: 100, amount: 200)
     ]
 
-    calculated = Account::Holding::ForwardCalculator.new(@account).calculate
+    calculated = Holding::ForwardCalculator.new(@account).calculate
 
     assert_equal expected.length, calculated.length
     assert_holdings(expected, calculated)

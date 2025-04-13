@@ -102,7 +102,7 @@
             </div>
 
             <%= button_to t(".delete"),
-                account_holding_path(@holding),
+                holding_path(@holding),
                 method: :delete,
                 class: "rounded-lg px-3 py-2 text-red-500 text-sm font-medium border border-secondary",
                 data: { turbo_confirm: true } %>

@@ -14,7 +14,7 @@ class Account::Balance::SyncerTest < ActiveSupport::TestCase
   end
 
   test "syncs balances" do
-    Account::Holding::Syncer.any_instance.expects(:sync_holdings).returns([]).once
+    Holding::Syncer.any_instance.expects(:sync_holdings).returns([]).once
 
     @account.expects(:start_date).returns(2.days.ago.to_date)
 

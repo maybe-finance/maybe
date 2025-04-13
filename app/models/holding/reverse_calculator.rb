@@ -1,10 +1,10 @@
-class Account::Holding::ReverseCalculator < Account::Holding::BaseCalculator
+class Holding::ReverseCalculator < Holding::BaseCalculator
   private
     # Reverse calculators will use the existing holdings as a source of security ids and prices
     # since it is common for a provider to supply "current day" holdings but not all the historical
     # trades that make up those holdings.
     def portfolio_cache
-      @portfolio_cache ||= Account::Holding::PortfolioCache.new(account, use_holdings: true)
+      @portfolio_cache ||= Holding::PortfolioCache.new(account, use_holdings: true)
     end
 
     def calculate_holdings

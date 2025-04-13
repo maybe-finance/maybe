@@ -1,4 +1,4 @@
-class Account::Holding::PortfolioCache
+class Holding::PortfolioCache
   attr_reader :account, :use_holdings
 
   class SecurityNotFound < StandardError

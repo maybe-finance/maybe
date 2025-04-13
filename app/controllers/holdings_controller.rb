@@ -1,4 +1,4 @@
-class Account::HoldingsController < ApplicationController
+class HoldingsController < ApplicationController
   before_action :set_holding, only: %i[show destroy]
 
   def index

@@ -1,7 +1,7 @@
-class Account::Holding::ForwardCalculator < Account::Holding::BaseCalculator
+class Holding::ForwardCalculator < Holding::BaseCalculator
   private
     def portfolio_cache
-      @portfolio_cache ||= Account::Holding::PortfolioCache.new(account)
+      @portfolio_cache ||= Holding::PortfolioCache.new(account)
     end
 
     def calculate_holdings

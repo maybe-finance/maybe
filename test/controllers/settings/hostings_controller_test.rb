@@ -64,7 +64,7 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
 
     assert_not ExchangeRate.exists?(exchange_rate.id)
     assert_not Security::Price.exists?(security_price.id)
-    assert_not Account::Holding.exists?(holding.id)
+    assert_not Holding.exists?(holding.id)
     assert_not Account::Balance.exists?(account_balance.id)
   end
 

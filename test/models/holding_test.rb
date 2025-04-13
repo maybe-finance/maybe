@@ -1,7 +1,7 @@
 require "test_helper"
 require "ostruct"
 
-class Account::HoldingTest < ActiveSupport::TestCase
+class HoldingTest < ActiveSupport::TestCase
   include Account::EntriesTestHelper, SecuritiesTestHelper
 
   setup do

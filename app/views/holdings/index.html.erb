@@ -21,12 +21,12 @@
       </div>
 
       <div class="rounded-lg bg-container shadow-border-xs">
-        <%= render "account/holdings/cash", account: @account %>
+        <%= render "holdings/cash", account: @account %>
 
-        <%= render "account/holdings/ruler" %>
+        <%= render "holdings/ruler" %>
 
         <% if @account.current_holdings.any? %>
-          <%= render partial: "account/holdings/holding", collection: @account.current_holdings, spacer_template: "ruler" %>
+          <%= render partial: "holdings/holding", collection: @account.current_holdings, spacer_template: "ruler" %>
         <% end %>
       </div>
     </div>

@@ -1,4 +1,4 @@
-class Account::Holding::BaseCalculator
+class Holding::BaseCalculator
   attr_reader :account
 
   def initialize(account)
@@ -8,13 +8,13 @@ class Account::Holding::BaseCalculator
   def calculate
     Rails.logger.tagged(self.class.name) do
       holdings = calculate_holdings
-      Account::Holding.gapfill(holdings)
+      Holding.gapfill(holdings)
     end
   end
 
   private
     def portfolio_cache
-      @portfolio_cache ||= Account::Holding::PortfolioCache.new(account)
+      @portfolio_cache ||= Holding::PortfolioCache.new(account)
     end
 
     def empty_portfolio
@@ -49,7 +49,7 @@ class Account::Holding::BaseCalculator
           next
         end
 
-        Account::Holding.new(
+        Holding.new(
           account_id: account.id,
           security_id: security_id,
           date: date,

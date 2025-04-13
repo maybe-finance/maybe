@@ -1,6 +1,6 @@
 require "test_helper"
 
-class Account::Holding::PortfolioCacheTest < ActiveSupport::TestCase
+class Holding::PortfolioCacheTest < ActiveSupport::TestCase
   include Account::EntriesTestHelper, ProviderTestHelper
 
   setup do
@@ -30,7 +30,7 @@ class Account::Holding::PortfolioCacheTest < ActiveSupport::TestCase
 
     expect_provider_prices([], start_date: @account.start_date)
 
-    cache = Account::Holding::PortfolioCache.new(@account)
+    cache = Holding::PortfolioCache.new(@account)
     assert_equal db_price, cache.get_price(@security.id, Date.current).price
   end
 
@@ -46,7 +46,7 @@ class Account::Holding::PortfolioCacheTest < ActiveSupport::TestCase
 
     expect_provider_prices([ provider_price ], start_date: @account.start_date)
 
-    cache = Account::Holding::PortfolioCache.new(@account)
+    cache = Holding::PortfolioCache.new(@account)
     assert_equal provider_price.price, cache.get_price(@security.id, Date.current).price
   end
 
@@ -54,7 +54,7 @@ class Account::Holding::PortfolioCacheTest < ActiveSupport::TestCase
     Security::Price.destroy_all
     expect_provider_prices([], start_date: @account.start_date)
 
-    cache = Account::Holding::PortfolioCache.new(@account)
+    cache = Holding::PortfolioCache.new(@account)
     assert_equal @trade.price, cache.get_price(@security.id, @trade.entry.date).price
   end
 
@@ -62,7 +62,7 @@ class Account::Holding::PortfolioCacheTest < ActiveSupport::TestCase
     Security::Price.delete_all
     Account::Entry.delete_all
 
-    holding = Account::Holding.create!(
+    holding = Holding.create!(
       security: @security,
       account: @account,
       date: Date.current,
@@ -74,7 +74,7 @@ class Account::Holding::PortfolioCacheTest < ActiveSupport::TestCase
 
     expect_provider_prices([], start_date: @account.start_date)
 
-    cache = Account::Holding::PortfolioCache.new(@account, use_holdings: true)
+    cache = Holding::PortfolioCache.new(@account, use_holdings: true)
     assert_equal holding.price, cache.get_price(@security.id, holding.date).price
   end
 

@@ -1,4 +1,4 @@
-class Account::Holding::Syncer
+class Holding::Syncer
   def initialize(account, strategy:)
     @account = account
     @strategy = strategy
@@ -50,9 +50,9 @@ class Account::Holding::Syncer
 
     def calculator
       if strategy == :reverse
-        Account::Holding::ReverseCalculator.new(account)
+        Holding::ReverseCalculator.new(account)
       else
-        Account::Holding::ForwardCalculator.new(account)
+        Holding::ForwardCalculator.new(account)
       end
     end
 end

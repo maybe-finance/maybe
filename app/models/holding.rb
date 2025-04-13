@@ -1,4 +1,6 @@
-class Account::Holding < ApplicationRecord
+class Holding < ApplicationRecord
+  self.table_name = "account_holdings"
+
   include Monetizable, Gapfillable
 
   monetize :amount

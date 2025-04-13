@@ -81,7 +81,7 @@ namespace :securities do
         puts "  Duplicate without MIC: #{security.id}"
 
         # Count affected records
-        holdings_count = Account::Holding.where(security_id: security.id).count
+        holdings_count = Holding.where(security_id: security.id).count
         trades_count = Account::Trade.where(security_id: security.id).count
         prices_count = Security::Price.where(security_id: security.id).count
 
@@ -94,7 +94,7 @@ namespace :securities do
           begin
             ActiveRecord::Base.transaction do
               # Update all references to point to the canonical security
-              Account::Holding.where(security_id: security.id).update_all(security_id: canonical.id)
+              Holding.where(security_id: security.id).update_all(security_id: canonical.id)
               Account::Trade.where(security_id: security.id).update_all(security_id: canonical.id)
               Security::Price.where(security_id: security.id).update_all(security_id: canonical.id)
 
@@ -134,7 +134,7 @@ namespace :securities do
       puts "  Duplicates: #{duplicates.map(&:id).join(', ')}"
 
       # Count affected records
-      holdings_count = Account::Holding.where(security_id: duplicates).count
+      holdings_count = Holding.where(security_id: duplicates).count
       trades_count = Account::Trade.where(security_id: duplicates).count
       prices_count = Security::Price.where(security_id: duplicates).count
 
@@ -151,7 +151,7 @@ namespace :securities do
         begin
           ActiveRecord::Base.transaction do
             # Update all references to point to the canonical security
-            Account::Holding.where(security_id: duplicates).update_all(security_id: canonical.id)
+            Holding.where(security_id: duplicates).update_all(security_id: canonical.id)
             Account::Trade.where(security_id: duplicates).update_all(security_id: canonical.id)
             Security::Price.where(security_id: duplicates).update_all(security_id: canonical.id)
 

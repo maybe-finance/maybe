@@ -55,13 +55,13 @@ All balances are calculated daily by [balance_calculator.rb](mdc:app/models/acco
 
 ### Account Holdings
 
-An account [holding.rb](mdc:app/models/account/holding.rb) applies to [investment.rb](mdc:app/models/investment.rb) type accounts and represents a `qty` of a certain [security.rb](mdc:app/models/security.rb) at a specific `price` on a specific `date`.
+An account [holding.rb](mdc:app/models/holding.rb) applies to [investment.rb](mdc:app/models/investment.rb) type accounts and represents a `qty` of a certain [security.rb](mdc:app/models/security.rb) at a specific `price` on a specific `date`.
 
-For investment accounts with holdings, [holding_calculator.rb](mdc:app/models/account/holding_calculator.rb) is used to calculate the daily historical holding quantities and prices, which are then rolled up into a final "Balance" for the account in [balance_calculator.rb](mdc:app/models/account/balance_calculator.rb).
+For investment accounts with holdings, [base_calculator.rb](mdc:app/models/holding/base_calculator.rb) is used to calculate the daily historical holding quantities and prices, which are then rolled up into a final "Balance" for the account in [base_calculator.rb](mdc:app/models/account/balance/base_calculator.rb).
 
 ### Account Entries
 
-An account [entry.rb](mdc:app/models/account/entry.rb) is also a Rails "delegated type".  `Account::Entry` represents any record that _modifies_ an `Account` [balance.rb](mdc:app/models/account/balance.rb) and/or [holding.rb](mdc:app/models/account/holding.rb).  Therefore, every entry must have a `date`, `amount`, and `currency`.
+An account [entry.rb](mdc:app/models/account/entry.rb) is also a Rails "delegated type".  `Account::Entry` represents any record that _modifies_ an `Account` [balance.rb](mdc:app/models/account/balance.rb) and/or [holding.rb](mdc:app/models/holding.rb).  Therefore, every entry must have a `date`, `amount`, and `currency`.
 
 The `amount` of an [entry.rb](mdc:app/models/account/entry.rb) is a signed value.  A _negative_ amount is an "inflow" of money to that account.  A _positive_ value is an "outflow" of money from that account.  For example:
 
@@ -115,7 +115,7 @@ The most important type of sync is the account sync.  It is orchestrated by the 
 
 - Auto-matches transfer records for the account
 - Calculates daily [balance.rb](mdc:app/models/account/balance.rb) records for the account from `account.start_date` to `Date.current` using [base_calculator.rb](mdc:app/models/account/balance/base_calculator.rb)
-  - Balances are dependent on the calculation of [holding.rb](mdc:app/models/account/holding.rb), which uses [base_calculator.rb](mdc:app/models/account/holding/base_calculator.rb) 
+  - Balances are dependent on the calculation of [holding.rb](mdc:app/models/holding.rb), which uses [base_calculator.rb](mdc:app/models/account/holding/base_calculator.rb) 
 - Enriches transaction data if enabled by user
 
 An account sync happens every time an [entry.rb](mdc:app/models/account/entry.rb) is updated.

@@ -87,19 +87,19 @@ Below are examples of necessary vs. unnecessary tests:
 # GOOD!!
 # Necessary test - in this case, we're testing critical domain business logic
 test "syncs balances" do
-  Account::Holding::Syncer.any_instance.expects(:sync_holdings).returns([]).once
+  Holding::Syncer.any_instance.expects(:sync_holdings).returns([]).once
 
   @account.expects(:start_date).returns(2.days.ago.to_date)
 
-  Account::Balance::ForwardCalculator.any_instance.expects(:calculate).returns(
+  Balance::ForwardCalculator.any_instance.expects(:calculate).returns(
     [
-      Account::Balance.new(date: 1.day.ago.to_date, balance: 1000, cash_balance: 1000, currency: "USD"),
-      Account::Balance.new(date: Date.current, balance: 1000, cash_balance: 1000, currency: "USD")
+      Balance.new(date: 1.day.ago.to_date, balance: 1000, cash_balance: 1000, currency: "USD"),
+      Balance.new(date: Date.current, balance: 1000, cash_balance: 1000, currency: "USD")
     ]
   )
 
   assert_difference "@account.balances.count", 2 do
-    Account::Balance::Syncer.new(@account, strategy: :forward).sync_balances
+    Balance::Syncer.new(@account, strategy: :forward).sync_balances
   end
 end
 

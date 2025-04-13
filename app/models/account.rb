@@ -11,7 +11,7 @@ class Account < ApplicationRecord
   has_many :transactions, through: :entries, source: :entryable, source_type: "Account::Transaction"
   has_many :valuations, through: :entries, source: :entryable, source_type: "Account::Valuation"
   has_many :trades, through: :entries, source: :entryable, source_type: "Account::Trade"
-  has_many :holdings, dependent: :destroy, class_name: "Account::Holding"
+  has_many :holdings, dependent: :destroy
   has_many :balances, dependent: :destroy
 
   monetize :balance, :cash_balance

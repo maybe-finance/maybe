@@ -1,10 +1,16 @@
 require "test_helper"
 
-class Account::HoldingsControllerTest < ActionDispatch::IntegrationTest
+class HoldingsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in users(:family_admin)
     @account = accounts(:investment)
     @holding = @account.holdings.first
+  end
+
+  test "gets index" do
+    get account_holdings_url(@account)
+
+    assert_response :success
   end
 
   test "gets holdings" do
@@ -13,15 +19,15 @@ class Account::HoldingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "gets holding" do
-    get account_holding_path(@holding)
+    get holding_path(@holding)
 
     assert_response :success
   end
 
   test "destroys holding and associated entries" do
-    assert_difference -> { Account::Holding.count } => -1,
+    assert_difference -> { Holding.count } => -1,
                       -> { Account::Entry.count } => -1 do
-      delete account_holding_path(@holding)
+      delete holding_path(@holding)
     end
 
     assert_redirected_to account_path(@holding.account)

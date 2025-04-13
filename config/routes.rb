@@ -105,13 +105,13 @@ Rails.application.routes.draw do
       get :chart
       get :sparkline
     end
+
+    resources :holdings, only: %i[index new show destroy], shallow: true
   end
 
   resources :accountable_sparklines, only: :show, param: :accountable_type
 
   namespace :account do
-    resources :holdings, only: %i[index new show destroy]
-
     resources :transactions, only: %i[show new create update destroy] do
       resource :transfer_match, only: %i[new create]
       resource :category, only: :update, controller: :transaction_categories
