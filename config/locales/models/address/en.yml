@@ -11,5 +11,5 @@ en:
     format: |-
       %{line1}
       %{line2}
-      %{locality}, %{region} %{postal_code}
+      %{locality}%{region} %{postal_code}
       %{country}

@@ -6,7 +6,7 @@ class Address < ApplicationRecord
       line1: line1,
       line2: line2,
       county: county,
-      locality: locality,
+      locality: locality.present? ? "#{locality}, " : "",
       region: region,
       country: country,
       postal_code: postal_code
