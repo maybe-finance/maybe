@@ -1,7 +1,7 @@
 require "test_helper"
 
 class RuleTest < ActiveSupport::TestCase
-  include Account::EntriesTestHelper
+  include EntriesTestHelper
 
   setup do
     @family = families(:empty)
@@ -25,7 +25,7 @@ class RuleTest < ActiveSupport::TestCase
 
     transaction_entry.reload
 
-    assert_equal @groceries_category, transaction_entry.account_transaction.category
+    assert_equal @groceries_category, transaction_entry.transaction.category
   end
 
   test "compound rule" do
@@ -51,8 +51,8 @@ class RuleTest < ActiveSupport::TestCase
     transaction_entry1.reload
     transaction_entry2.reload
 
-    assert_nil transaction_entry1.account_transaction.category
-    assert_equal @groceries_category, transaction_entry2.account_transaction.category
+    assert_nil transaction_entry1.transaction.category
+    assert_equal @groceries_category, transaction_entry2.transaction.category
   end
 
   # Artificial limitation put in place to prevent users from creating overly complex rules

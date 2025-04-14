@@ -1,14 +1,26 @@
 class TransactionCategoriesController < ApplicationController
+  include ActionView::RecordIdentifier
+
   def update
     @entry = Current.family.entries.transactions.find(params[:transaction_id])
     @entry.update!(entry_params)
+
+    transaction = @entry.transaction
+
+    if needs_rule_notification?(transaction)
+      flash[:cta] = {
+        type: "category_rule",
+        category_id: transaction.category_id,
+        category_name: transaction.category.name
+      }
+    end
 
     respond_to do |format|
       format.html { redirect_back_or_to transaction_path(@entry) }
       format.turbo_stream do
         render turbo_stream: [
           turbo_stream.replace(
-            "category_menu_transaction_#{@entry.entryable_id}",
+            dom_id(@entry, :category_menu),
             partial: "categories/menu",
             locals: { transaction: @entry.transaction }
           ),

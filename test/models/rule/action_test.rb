@@ -1,7 +1,7 @@
 require "test_helper"
 
 class Rule::ActionTest < ActiveSupport::TestCase
-  include Account::EntriesTestHelper
+  include EntriesTestHelper
 
   setup do
     @family = families(:dylan_family)
@@ -12,9 +12,9 @@ class Rule::ActionTest < ActiveSupport::TestCase
     @whole_foods_merchant = @family.merchants.create!(name: "Whole Foods", type: "FamilyMerchant")
 
     # Some sample transactions to work with
-    @txn1 = create_transaction(date: Date.current, account: @account, amount: 100, name: "Rule test transaction1", merchant: @whole_foods_merchant).account_transaction
-    @txn2 = create_transaction(date: Date.current, account: @account, amount: -200, name: "Rule test transaction2").account_transaction
-    @txn3 = create_transaction(date: 1.day.ago.to_date, account: @account, amount: 50, name: "Rule test transaction3").account_transaction
+    @txn1 = create_transaction(date: Date.current, account: @account, amount: 100, name: "Rule test transaction1", merchant: @whole_foods_merchant).transaction
+    @txn2 = create_transaction(date: Date.current, account: @account, amount: -200, name: "Rule test transaction2").transaction
+    @txn3 = create_transaction(date: 1.day.ago.to_date, account: @account, amount: 50, name: "Rule test transaction3").transaction
 
     @rule_scope = @account.transactions
   end

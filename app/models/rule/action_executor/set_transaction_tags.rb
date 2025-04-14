@@ -22,7 +22,7 @@ class Rule::ActionExecutor::SetTransactionTags < Rule::ActionExecutor
 
         de = DataEnrichment.find_or_initialize_by(
           enrichable_id: txn.id,
-          enrichable_type: "Account::Transaction",
+          enrichable_type: "Transaction",
           attribute_name: "tag_ids",
           source: "rule"
         )

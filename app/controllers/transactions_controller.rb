@@ -70,9 +70,19 @@ class TransactionsController < ApplicationController
 
   def update
     if @entry.update(entry_params)
+      transaction = @entry.transaction
+
+      if needs_rule_notification?(transaction)
+        flash[:cta] = {
+          type: "category_rule",
+          category_id: transaction.category_id,
+          category_name: transaction.category.name
+        }
+      end
+
       @entry.sync_account_later
       @entry.lock_saved_attributes!
-      @entry.account_transaction.lock!(:tag_ids) if @entry.account_transaction.tags.any?
+      @entry.transaction.lock!(:tag_ids) if @entry.transaction.tags.any?
 
       respond_to do |format|
         format.html { redirect_back_or_to account_path(@entry.account), notice: "Transaction updated" }

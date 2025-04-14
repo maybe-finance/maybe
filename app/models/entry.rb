@@ -1,4 +1,4 @@
-class Account::Entry < ApplicationRecord
+class Entry < ApplicationRecord
   include Monetizable, Enrichable
 
   monetize :amount
@@ -86,7 +86,7 @@ class Account::Entry < ApplicationRecord
 
           entry.lock_saved_attributes!
           entry.entryable.lock_saved_attributes!
-          entry.entryable.lock!(:tag_ids) if entry.account_transaction? && entry.account_transaction.tags.any?
+          entry.entryable.lock!(:tag_ids) if entry.transaction? && entry.transaction.tags.any?
         end
       end
 

@@ -8,7 +8,7 @@ class Rule::ConditionFilter::TransactionAmount < Rule::ConditionFilter
   end
 
   def apply(scope, operator, value)
-    expression = build_sanitized_where_condition("ABS(account_entries.amount)", operator, value.to_d)
+    expression = build_sanitized_where_condition("ABS(entries.amount)", operator, value.to_d)
     scope.where(expression)
   end
 end

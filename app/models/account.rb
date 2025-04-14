@@ -133,7 +133,7 @@ class Account < ApplicationRecord
         name: "Initial Balance",
         amount: initial_balance,
         currency: currency,
-        entryable: Account::Valuation.new
+        entryable: Valuation.new
     end
   end
 

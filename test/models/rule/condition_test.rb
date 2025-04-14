@@ -1,7 +1,7 @@
 require "test_helper"
 
 class Rule::ConditionTest < ActiveSupport::TestCase
-  include Account::EntriesTestHelper
+  include EntriesTestHelper
 
   setup do
     @family = families(:empty)

@@ -4,7 +4,7 @@ class Rule::ConditionFilter::TransactionName < Rule::ConditionFilter
   end
 
   def apply(scope, operator, value)
-    expression = build_sanitized_where_condition("account_entries.name", operator, value)
+    expression = build_sanitized_where_condition("entries.name", operator, value)
     scope.where(expression)
   end
 end

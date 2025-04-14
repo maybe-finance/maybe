@@ -1,15 +1,11 @@
-<header class="flex justify-between items-center text-primary font-medium">
-  <h1 class="text-xl">Transactions</h1>
-  <div class="flex items-center gap-5">
-    <div class="flex items-center gap-2">
-      <%= contextual_menu do %>
-        <%= contextual_menu_item "New rule", url: new_rule_path(resource_type: "transaction"), icon: "plus", turbo_frame: "modal" %>
-        <%= contextual_menu_item "Edit rules", url: rules_path, icon: "git-branch" %>
-        <%= contextual_menu_modal_action_item t(".edit_categories"), categories_path, icon: "shapes", turbo_frame: :_top %>
-        <%= contextual_menu_modal_action_item t(".edit_tags"), tags_path, icon: "tags", turbo_frame: :_top %>
-        <%= contextual_menu_modal_action_item t(".edit_merchants"), family_merchants_path, icon: "store", turbo_frame: :_top %>
-        <%= contextual_menu_modal_action_item t(".edit_imports"), imports_path, icon: "hard-drive-upload", turbo_frame: :_top %>
-      <% end %>
+<%# locals: (entry:) %>
+
+<%= tag.header class: "mb-4 space-y-1", id: dom_id(entry, :header) do %>
+  <div class="flex items-center gap-4">
+    <h3 class="font-medium">
+      <span class="text-2xl">
+        <%= format_money -entry.amount_money %>
+      </span>
 
       <span class="text-lg text-secondary">
         <%= entry.currency %>
