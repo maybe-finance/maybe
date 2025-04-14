@@ -34,6 +34,7 @@ class Account < ApplicationRecord
     def create_and_sync(attributes)
       attributes[:accountable_attributes] ||= {} # Ensure accountable is created, even if empty
       account = new(attributes.merge(cash_balance: attributes[:balance]))
+      initial_balance = attributes.dig(:accountable_attributes, :initial_balance)&.to_d || 0
 
       transaction do
         # Create 2 valuations for new accounts to establish a value history for users to see
@@ -47,7 +48,7 @@ class Account < ApplicationRecord
         account.entries.build(
           name: "Initial Balance",
           date: 1.day.ago.to_date,
-          amount: 0,
+          amount: initial_balance,
           currency: account.currency,
           entryable: Account::Valuation.new
         )
@@ -92,11 +93,6 @@ class Account < ApplicationRecord
     end
   end
 
-  def original_balance
-    balance_amount = balances.chronological.first&.balance || balance
-    Money.new(balance_amount, currency)
-  end
-
   def current_holdings
     holdings.where(currency: currency, date: holdings.maximum(:date)).order(amount: :desc)
   end
@@ -104,9 +100,13 @@ class Account < ApplicationRecord
   def update_with_sync!(attributes)
     should_update_balance = attributes[:balance] && attributes[:balance].to_d != balance
 
+    initial_balance = attributes.dig(:accountable_attributes, :initial_balance)
+    should_update_initial_balance = initial_balance && initial_balance.to_d != accountable.initial_balance
+
     transaction do
       update!(attributes)
       update_balance!(attributes[:balance]) if should_update_balance
+      update_inital_balance!(attributes[:accountable_attributes][:initial_balance]) if should_update_initial_balance
     end
 
     sync_later
@@ -127,9 +127,32 @@ class Account < ApplicationRecord
     end
   end
 
+  def update_inital_balance!(initial_balance)
+    valuation = first_valuation
+
+    if valuation
+      valuation.update! amount: initial_balance
+    else
+      entries.create! \
+        date: Date.current,
+        name: "Initial Balance",
+        amount: initial_balance,
+        currency: currency,
+        entryable: Account::Valuation.new
+    end
+  end
+
   def start_date
     first_entry_date = entries.minimum(:date) || Date.current
     first_entry_date - 1.day
+  end
+
+  def first_valuation
+    entries.account_valuations.order(:date).first
+  end
+
+  def first_valuation_amount
+    first_valuation&.amount_money || balance_money
   end
 
   private
