@@ -9,7 +9,8 @@
 
     <%# The placeholder image for empty avatar field  %>
     <div data-profile-image-preview-target="placeholderImage"
-        class="h-full w-full flex justify-center items-center <%= user.profile_image.attached? ? "hidden" : "" %>">
+        class="h-full w-full flex justify-center items-center <%= user.profile_image.attached? ? "hidden" : "" %> cursor-pointer"
+        data-action="click->profile-image-preview#triggerFileInput">
       <div class="h-full w-full flex justify-center items-center">
         <%= lucide_icon "image-plus", class: "w-6 h-6 text-secondary" %>
       </div>

@@ -15,7 +15,7 @@
                  cash: @account.cash_balance_money
                ) %>
 
-    <div class="min-h-[800px]">
+    <div>
       <%= render "accounts/show/tabs", account: @account, tabs: [
         { key: "activity", contents: render("accounts/show/activity", account: @account) },
         { key: "holdings", contents: render("investments/holdings_tab", account: @account) },

@@ -10,6 +10,10 @@ export default class extends Controller {
     "clearBtn",
   ];
 
+  triggerFileInput() {
+    this.inputTarget.click();
+  }
+
   clearFileInput() {
     this.inputTarget.value = null;
     this.clearBtnTarget.classList.add("hidden");

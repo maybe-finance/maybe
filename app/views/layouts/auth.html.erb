@@ -1,7 +1,7 @@
 <%= render "layouts/shared/htmldoc" do %>
   <div class="flex flex-col h-dvh">
     <div class="flex flex-col h-screen px-6 py-12 bg-surface">
-      <div class="flex flex-col items-center justify-center h-[30vh] min-h-[180px]">
+      <div class="flex flex-col items-center justify-center h-[30vh] min-h-[215px]">
         <div class="sm:mx-auto sm:w-full sm:max-w-md">
           <div class="flex justify-center mb-6">
             <%= image_tag "logo-color.png", class: "w-16 mb-6" %>
@@ -15,7 +15,7 @@
         </div>
       </div>
 
-      <div class="flex-1">
+      <div>
         <div class="sm:mx-auto sm:w-full sm:max-w-lg">
           <% if controller_name.in?(%w[sessions registrations]) %>
             <div class="flex justify-center mb-6">

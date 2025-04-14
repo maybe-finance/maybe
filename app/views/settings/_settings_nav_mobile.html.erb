@@ -23,5 +23,9 @@
 
       <% end %>
     <% end %>
+    <%= button_to session_path(Current.session), method: :delete, class: "flex items-center gap-2 btn btn--ghost text-destructive w-full" do %>
+      <%= lucide_icon("log-out", class: "w-5 h-5 shrink-0") %>
+      <span><%= t(".logout") %></span>
+    <% end %>
   </div>
 </div>

@@ -5,8 +5,8 @@
       You have not created or assigned any expense categories to your transactions yet.
     </p>
 
-    <div class="flex items-center gap-2">
-      <%= button_to "Use default categories", bootstrap_categories_path, class: "btn btn--primary" %>
+    <div class="flex flex-col sm:flex-row items-center gap-2">
+      <%= button_to "Use default categories", bootstrap_categories_path, class: "btn btn--primary w-full sm:w-auto" %>
 
       <%= link_to new_category_path, class: "btn btn--outline flex items-center gap-1", data: { turbo_frame: "modal" } do %>
         <%= lucide_icon("plus", class: "w-5 h-5") %>
