@@ -1,12 +1,12 @@
 module StreamExtensions
   extend ActiveSupport::Concern
 
-  def stream_redirect_to(path, options = {})
-    custom_stream_redirect(path, notice: options[:notice], alert: options[:alert])
+  def stream_redirect_to(path, notice: nil, alert: nil)
+    custom_stream_redirect(path, notice: notice, alert: alert)
   end
 
-  def stream_redirect_back_or_to(path, options = {})
-    custom_stream_redirect(path, redirect_back: true, notice: options[:notice], alert: options[:alert])
+  def stream_redirect_back_or_to(path, notice: nil, alert: nil)
+    custom_stream_redirect(path, redirect_back: true, notice: notice, alert: alert)
   end
 
   private

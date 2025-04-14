@@ -1,5 +1,5 @@
 require "test_helper"
 
-class Account::TransactionTest < ActiveSupport::TestCase
-  include Account::EntriesTestHelper
+class TransactionTest < ActiveSupport::TestCase
+  include EntriesTestHelper
 end

@@ -2,7 +2,7 @@ require "test_helper"
 require "ostruct"
 
 class Account::ConvertibleTest < ActiveSupport::TestCase
-  include Account::EntriesTestHelper, ProviderTestHelper
+  include EntriesTestHelper, ProviderTestHelper
 
   setup do
     @family = families(:empty)

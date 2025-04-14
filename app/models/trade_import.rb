@@ -16,12 +16,12 @@ class TradeImport < Import
           exchange_operating_mic: row.exchange_operating_mic
         )
 
-        Account::Trade.new(
+        Trade.new(
           security: security,
           qty: row.qty,
           currency: row.currency.presence || mapped_account.currency,
           price: row.price,
-          entry: Account::Entry.new(
+          entry: Entry.new(
             account: mapped_account,
             date: row.date_iso,
             amount: row.signed_amount,
@@ -31,7 +31,7 @@ class TradeImport < Import
           ),
         )
       end
-      Account::Trade.import!(trades, recursive: true)
+      Trade.import!(trades, recursive: true)
     end
   end
 

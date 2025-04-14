@@ -11,15 +11,17 @@
         <%= contextual_menu_modal_action_item t(".edit_imports"), imports_path, icon: "hard-drive-upload", turbo_frame: :_top %>
       <% end %>
 
-      <%= link_to new_import_path, class: "btn btn--outline flex items-center gap-2", data: { turbo_frame: "modal" } do %>
-        <%= lucide_icon("download", class: "text-secondary w-4 h-4") %>
-        <p class="text-sm font-medium text-primary"><%= t(".import") %></p>
-      <% end %>
+      <span class="text-lg text-secondary">
+        <%= entry.currency %>
+      </span>
+    </h3>
 
-      <%= link_to new_account_transaction_path, class: "btn btn--primary flex items-center gap-2", data: { turbo_frame: :modal } do %>
-        <%= lucide_icon("plus", class: "w-5 h-5") %>
-        <p class="text-sm font-medium">New transaction</p>
-      <% end %>
-    </div>
+    <% if entry.transaction.transfer? %>
+      <%= lucide_icon "arrow-left-right", class: "text-secondary mt-1 w-5 h-5" %>
+    <% end %>
   </div>
-</header>
+
+  <span class="text-sm text-secondary">
+    <%= I18n.l(entry.date, format: :long) %>
+  </span>
+<% end %>

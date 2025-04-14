@@ -11,13 +11,13 @@
             <%= tag.span t(".new") %>
           </button>
           <div data-menu-target="content" class="z-10 hidden bg-container rounded-lg border border-alpha-black-25 shadow-xs p-1">
-            <%= link_to new_account_valuation_path(account_id: @account.id), data: { turbo_frame: :modal }, class: "block p-2 rounded-lg hover:bg-gray-50 flex items-center gap-2" do %>
+            <%= link_to new_valuation_path(account_id: @account.id), data: { turbo_frame: :modal }, class: "block p-2 rounded-lg hover:bg-gray-50 flex items-center gap-2" do %>
               <%= lucide_icon("circle-dollar-sign", class: "text-secondary w-5 h-5") %>
               <%= tag.span t(".new_balance"), class: "text-sm" %>
             <% end %>
 
             <% unless @account.crypto? %>
-              <%= link_to @account.investment? ? new_account_trade_path(account_id: @account.id) : new_account_transaction_path(account_id: @account.id), data: { turbo_frame: :modal }, class: "block p-2 rounded-lg hover:bg-gray-50 flex items-center gap-2" do %>
+              <%= link_to @account.investment? ? new_trade_path(account_id: @account.id) : new_transaction_path(account_id: @account.id), data: { turbo_frame: :modal }, class: "block p-2 rounded-lg hover:bg-gray-50 flex items-center gap-2" do %>
                 <%= lucide_icon("credit-card", class: "text-secondary w-5 h-5") %>
                 <%= tag.span t(".new_transaction"), class: "text-sm" %>
               <% end %>
@@ -59,7 +59,7 @@
                   bulk_select_plural_label_value: t(".entries")
                 } do %>
         <div id="entry-selection-bar" data-bulk-select-target="selectionBar" class="flex justify-center hidden">
-          <%= render "account/entries/selection_bar" %>
+          <%= render "entries/selection_bar" %>
         </div>
 
         <div class="grid bg-container-inset rounded-xl grid-cols-12 items-center uppercase text-xs font-medium text-secondary px-5 py-3 mb-4">
@@ -76,7 +76,7 @@
         <div>
           <div class="rounded-tl-lg rounded-tr-lg bg-container border-alpha-black-25 shadow-xs">
             <div class="space-y-4">
-              <% calculator = Account::BalanceTrendCalculator.for(@entries) %>
+              <% calculator = Balance::TrendCalculator.for(@entries) %>
               <%= entries_by_date(@entries) do |entries| %>
                 <% entries.each do |entry| %>
                   <%= render entry, balance_trend: calculator&.trend_for(entry), view_ctx: "account" %>

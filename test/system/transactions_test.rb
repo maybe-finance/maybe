@@ -4,7 +4,7 @@ class TransactionsTest < ApplicationSystemTestCase
   setup do
     sign_in @user = users(:family_admin)
 
-    Account::Entry.delete_all # clean slate
+    Entry.delete_all # clean slate
 
     create_transaction("one", 12.days.ago.to_date, 100)
     create_transaction("two", 10.days.ago.to_date, 100)
@@ -19,7 +19,7 @@ class TransactionsTest < ApplicationSystemTestCase
     create_transaction("eleven", Date.current, 100, category: categories(:food_and_drink), tags: [ tags(:one) ], merchant: merchants(:amazon))
 
     @transactions = @user.family.entries
-                         .account_transactions
+                         .transactions
                          .reverse_chronological
 
     @transaction = @transactions.first
@@ -49,7 +49,7 @@ class TransactionsTest < ApplicationSystemTestCase
     within "#transaction-filters-menu" do
       check(@transaction.account.name)
       click_button "Category"
-      check(@transaction.account_transaction.category.name)
+      check(@transaction.transaction.category.name)
       click_button "Apply"
     end
 
@@ -57,7 +57,7 @@ class TransactionsTest < ApplicationSystemTestCase
 
     within "#transaction-search-filters" do
       assert_text @transaction.account.name
-      assert_text @transaction.account_transaction.category.name
+      assert_text @transaction.transaction.category.name
     end
   end
 
@@ -77,7 +77,7 @@ class TransactionsTest < ApplicationSystemTestCase
 
     within "#transaction-filters-menu" do
       click_button "Category"
-      check(@transaction.account_transaction.category.name)
+      check(@transaction.transaction.category.name)
       click_button "Apply"
     end
 
@@ -89,8 +89,8 @@ class TransactionsTest < ApplicationSystemTestCase
     find("#transaction-filters-button").click
 
     account = @transaction.account
-    category = @transaction.account_transaction.category
-    merchant = @transaction.account_transaction.merchant
+    category = @transaction.transaction.category
+    merchant = @transaction.transaction.merchant
 
     within "#transaction-filters-menu" do
       click_button "Account"
@@ -180,7 +180,7 @@ class TransactionsTest < ApplicationSystemTestCase
 
   test "can create deposit transaction for investment account" do
     investment_account = accounts(:investment)
-    investment_account.entries.create!(name: "Investment account", date: Date.current, amount: 1000, currency: "USD", entryable: Account::Transaction.new)
+    investment_account.entries.create!(name: "Investment account", date: Date.current, amount: 1000, currency: "USD", entryable: Transaction.new)
     transfer_date = Date.current
     visit account_url(investment_account, tab: "activity")
     within "[data-testid='activity-menu']" do
@@ -189,7 +189,7 @@ class TransactionsTest < ApplicationSystemTestCase
     end
     select "Deposit", from: "Type"
     fill_in "Date", with: transfer_date
-    fill_in "account_entry[amount]", with: 175.25
+    fill_in "entry[amount]", with: 175.25
     click_button "Add transaction"
     within "#entry-group-" + transfer_date.to_s do
       assert_text "175.25"
@@ -218,7 +218,7 @@ class TransactionsTest < ApplicationSystemTestCase
         date: date,
         amount: amount,
         currency: "USD",
-        entryable: Account::Transaction.new(category: category, merchant: merchant, tags: tags)
+        entryable: Transaction.new(category: category, merchant: merchant, tags: tags)
     end
 
     def number_of_transactions_on_page

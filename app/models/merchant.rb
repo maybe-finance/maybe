@@ -1,7 +1,7 @@
 class Merchant < ApplicationRecord
   TYPES = %w[FamilyMerchant ProviderMerchant].freeze
 
-  has_many :transactions, dependent: :nullify, class_name: "Account::Transaction"
+  has_many :transactions, dependent: :nullify, class_name: "Transaction"
 
   validates :name, presence: true
   validates :type, inclusion: { in: TYPES }

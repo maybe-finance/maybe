@@ -374,7 +374,7 @@ class Demo::Generator
       unknown = Security.find_by(ticker: "UNKNOWN")
 
       # Buy 20 shares of the unknown stock to simulate a stock where we can't fetch security prices
-      account.entries.create! date: 10.days.ago.to_date, amount: 100, currency: "USD", name: "Buy unknown stock", entryable: Account::Trade.new(qty: 20, price: 5, security: unknown, currency: "USD")
+      account.entries.create! date: 10.days.ago.to_date, amount: 100, currency: "USD", name: "Buy unknown stock", entryable: Trade.new(qty: 20, price: 5, security: unknown, currency: "USD")
 
       trades = [
         { security: aapl, qty: 20 }, { security: msft, qty: 10 }, { security: aapl, qty: -5 },
@@ -395,7 +395,7 @@ class Demo::Generator
           amount: qty * price,
           currency: "USD",
           name: name_prefix + "#{qty} shares of #{security.ticker}",
-          entryable: Account::Trade.new(qty: qty, price: price, currency: "USD", security: security)
+          entryable: Trade.new(qty: qty, price: price, currency: "USD", security: security)
       end
     end
 
@@ -463,20 +463,20 @@ class Demo::Generator
       entry_defaults = {
         date: Faker::Number.between(from: 0, to: 730).days.ago.to_date,
         currency: "USD",
-        entryable: Account::Transaction.new(transaction_attributes)
+        entryable: Transaction.new(transaction_attributes)
       }
 
-      Account::Entry.create! entry_defaults.merge(entry_attributes)
+      Entry.create! entry_defaults.merge(entry_attributes)
     end
 
     def create_valuation!(account, date, amount)
-      Account::Entry.create! \
+      Entry.create! \
         account: account,
         date: date,
         amount: amount,
         currency: "USD",
         name: "Balance update",
-        entryable: Account::Valuation.new
+        entryable: Valuation.new
     end
 
     def random_family_record(model, family)

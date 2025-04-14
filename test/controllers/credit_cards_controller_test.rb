@@ -11,8 +11,8 @@ class CreditCardsControllerTest < ActionDispatch::IntegrationTest
   test "creates with credit card details" do
     assert_difference -> { Account.count } => 1,
       -> { CreditCard.count } => 1,
-      -> { Account::Valuation.count } => 2,
-      -> { Account::Entry.count } => 2 do
+      -> { Valuation.count } => 2,
+      -> { Entry.count } => 2 do
       post credit_cards_path, params: {
         account: {
           name: "New Credit Card",

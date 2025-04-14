@@ -87,7 +87,7 @@ class PlaidAccount < ApplicationRecord
         t.amount = plaid_txn.amount
         t.currency = plaid_txn.iso_currency_code
         t.date = plaid_txn.date
-        t.entryable = Account::Transaction.new(
+        t.entryable = Transaction.new(
           category: get_category(plaid_txn.personal_finance_category.primary),
           merchant: get_merchant(plaid_txn)
         )
@@ -120,7 +120,7 @@ class PlaidAccount < ApplicationRecord
           e.amount = loan_data.origination_principal_amount
           e.currency = account.currency
           e.date = loan_data.origination_date
-          e.entryable = Account::Valuation.new
+          e.entryable = Valuation.new
         end
       end
     end

@@ -1,7 +1,7 @@
 require "test_helper"
 
 class Family::AutoTransferMatchableTest < ActiveSupport::TestCase
-  include Account::EntriesTestHelper
+  include EntriesTestHelper
 
   setup do
     @family = families(:dylan_family)
