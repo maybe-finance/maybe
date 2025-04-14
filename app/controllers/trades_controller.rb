@@ -42,23 +42,21 @@ class TradesController < ApplicationController
 
   private
     def build_entry
-      TradeBuilder.new(create_entry_params)
+      account = Current.family.accounts.find(params.dig(:entry, :account_id))
+      TradeBuilder.new(create_entry_params.merge(account: account))
     end
 
     def entry_params
       params.require(:entry).permit(
-        :account_id, :name, :enriched_name, :date, :amount, :currency, :excluded, :notes, :nature,
+        :name, :enriched_name, :date, :amount, :currency, :excluded, :notes, :nature,
         entryable_attributes: [ :id, :qty, :price ]
       )
     end
 
     def create_entry_params
       params.require(:entry).permit(
-        :account_id, :date, :amount, :currency, :qty, :price, :ticker, :manual_ticker, :type, :transfer_account_id
-      ).tap do |params|
-        account_id = params.delete(:account_id)
-        params[:account] = Current.family.accounts.find(account_id)
-      end
+        :date, :amount, :currency, :qty, :price, :ticker, :manual_ticker, :type, :transfer_account_id
+      )
     end
 
     def update_entry_params

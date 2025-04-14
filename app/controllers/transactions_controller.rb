@@ -49,7 +49,8 @@ class TransactionsController < ApplicationController
   end
 
   def create
-    @entry = Current.family.entries.new(entry_params)
+    account = Current.family.accounts.find(params.dig(:entry, :account_id))
+    @entry = account.entries.new(entry_params)
 
     if @entry.save
       @entry.sync_account_later
@@ -90,7 +91,7 @@ class TransactionsController < ApplicationController
   private
     def entry_params
       entry_params = params.require(:entry).permit(
-        :account_id, :name, :enriched_name, :date, :amount, :currency, :excluded, :notes, :nature, :entryable_type,
+        :name, :enriched_name, :date, :amount, :currency, :excluded, :notes, :nature, :entryable_type,
         entryable_attributes: [ :id, :category_id, :merchant_id, { tag_ids: [] } ]
       )
 

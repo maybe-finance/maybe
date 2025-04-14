@@ -3,29 +3,6 @@
     {
       "warning_type": "Mass Assignment",
       "warning_code": 105,
-      "fingerprint": "5bfdb129316655dc4e02f3a599156660414a6562212a5f61057d376f6888f078",
-      "check_name": "PermitAttributes",
-      "message": "Potentially dangerous key allowed for mass assignment",
-      "file": "app/controllers/concerns/entryable_resource.rb",
-      "line": 124,
-      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:account_entry).permit(:account_id, :name, :enriched_name, :date, :amount, :currency, :excluded, :notes, :nature, :entryable_attributes => self.class.permitted_entryable_attributes)",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "EntryableResource",
-        "method": "entry_params"
-      },
-      "user_input": ":account_id",
-      "confidence": "High",
-      "cwe_id": [
-        915
-      ],
-      "note": ""
-    },
-    {
-      "warning_type": "Mass Assignment",
-      "warning_code": 105,
       "fingerprint": "aaccd8db0be34afdc88e5af08d91ae2e8b7765dfea2f3fc6e1c37db0adc7b991",
       "check_name": "PermitAttributes",
       "message": "Potentially dangerous key allowed for mass assignment",
@@ -43,40 +20,6 @@
       "confidence": "Medium",
       "cwe_id": [
         915
-      ],
-      "note": ""
-    },
-    {
-      "warning_type": "Cross-Site Scripting",
-      "warning_code": 2,
-      "fingerprint": "b1f821a5c03b8aa348fb21b9297081a3bf9e954244290e7e511c67213d35f3dc",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/pages/changelog.html.erb",
-      "line": 18,
-      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "Provider::Github.new.fetch_latest_release_notes[:body]",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "PagesController",
-          "method": "changelog",
-          "line": 15,
-          "file": "app/controllers/pages_controller.rb",
-          "rendered": {
-            "name": "pages/changelog",
-            "file": "app/views/pages/changelog.html.erb"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "pages/changelog"
-      },
-      "user_input": null,
-      "confidence": "High",
-      "cwe_id": [
-        79
       ],
       "note": ""
     },
@@ -139,5 +82,5 @@
       "note": ""
     }
   ],
-  "brakeman_version": "7.0.0"
+  "brakeman_version": "7.0.2"
 }

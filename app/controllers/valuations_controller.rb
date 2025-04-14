@@ -2,8 +2,8 @@ class ValuationsController < ApplicationController
   include EntryableResource
 
   def create
-    @entry = Current.family.entries.new(entry_params)
-    @entry.entryable = Valuation.new
+    account = Current.family.accounts.find(params.dig(:entry, :account_id))
+    @entry = account.entries.new(entry_params.merge(entryable: Valuation.new))
 
     if @entry.save
       @entry.sync_account_later
@@ -44,6 +44,6 @@ class ValuationsController < ApplicationController
   private
     def entry_params
       params.require(:entry)
-            .permit(:account_id, :name, :enriched_name, :date, :amount, :currency, :notes)
+            .permit(:name, :enriched_name, :date, :amount, :currency, :notes)
     end
 end
