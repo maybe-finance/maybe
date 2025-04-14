@@ -148,7 +148,7 @@ class Account < ApplicationRecord
   end
 
   def first_valuation
-    entries.account_valuations.order(:date).first
+    entries.valuations.order(:date).first
   end
 
   def first_valuation_amount
