@@ -1,5 +1,5 @@
 class TransactionsController < ApplicationController
-  include ScrollFocusable
+  include ScrollFocusable, EntryableResource
 
   before_action :store_params!, only: :index
 
@@ -48,7 +48,62 @@ class TransactionsController < ApplicationController
     redirect_to transactions_path(updated_params)
   end
 
+  def create
+    account = Current.family.accounts.find(params.dig(:entry, :account_id))
+    @entry = account.entries.new(entry_params)
+
+    if @entry.save
+      @entry.sync_account_later
+
+      flash[:notice] = "Transaction created"
+
+      respond_to do |format|
+        format.html { redirect_back_or_to account_path(@entry.account) }
+        format.turbo_stream { stream_redirect_back_or_to(account_path(@entry.account)) }
+      end
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    if @entry.update(entry_params)
+      @entry.sync_account_later
+
+      respond_to do |format|
+        format.html { redirect_back_or_to account_path(@entry.account), notice: "Transaction updated" }
+        format.turbo_stream do
+          render turbo_stream: [
+            turbo_stream.replace(
+              dom_id(@entry, :header),
+              partial: "transactions/header",
+              locals: { entry: @entry }
+            ),
+            turbo_stream.replace(@entry)
+          ]
+        end
+      end
+    else
+      render :show, status: :unprocessable_entity
+    end
+  end
+
   private
+    def entry_params
+      entry_params = params.require(:entry).permit(
+        :name, :enriched_name, :date, :amount, :currency, :excluded, :notes, :nature, :entryable_type,
+        entryable_attributes: [ :id, :category_id, :merchant_id, { tag_ids: [] } ]
+      )
+
+      nature = entry_params.delete(:nature)
+
+      if nature.present? && entry_params[:amount].present?
+        signed_amount = nature == "inflow" ? -entry_params[:amount].to_d : entry_params[:amount].to_d
+        entry_params = entry_params.merge(amount: signed_amount)
+      end
+
+      entry_params
+    end
 
     def search_params
       cleaned_params = params.fetch(:q, {})

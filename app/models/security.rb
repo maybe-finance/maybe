@@ -3,7 +3,7 @@ class Security < ApplicationRecord
 
   before_save :upcase_ticker
 
-  has_many :trades, dependent: :nullify, class_name: "Account::Trade"
+  has_many :trades, dependent: :nullify, class_name: "Trade"
   has_many :prices, dependent: :destroy
 
   validates :ticker, presence: true

@@ -7,11 +7,11 @@ class Account < ApplicationRecord
   belongs_to :import, optional: true
 
   has_many :import_mappings, as: :mappable, dependent: :destroy, class_name: "Import::Mapping"
-  has_many :entries, dependent: :destroy, class_name: "Account::Entry"
-  has_many :transactions, through: :entries, source: :entryable, source_type: "Account::Transaction"
-  has_many :valuations, through: :entries, source: :entryable, source_type: "Account::Valuation"
-  has_many :trades, through: :entries, source: :entryable, source_type: "Account::Trade"
-  has_many :holdings, dependent: :destroy, class_name: "Account::Holding"
+  has_many :entries, dependent: :destroy
+  has_many :transactions, through: :entries, source: :entryable, source_type: "Transaction"
+  has_many :valuations, through: :entries, source: :entryable, source_type: "Valuation"
+  has_many :trades, through: :entries, source: :entryable, source_type: "Trade"
+  has_many :holdings, dependent: :destroy
   has_many :balances, dependent: :destroy
 
   monetize :balance, :cash_balance
@@ -43,14 +43,14 @@ class Account < ApplicationRecord
           date: Date.current,
           amount: account.balance,
           currency: account.currency,
-          entryable: Account::Valuation.new
+          entryable: Valuation.new
         )
         account.entries.build(
           name: "Initial Balance",
           date: 1.day.ago.to_date,
           amount: initial_balance,
           currency: account.currency,
-          entryable: Account::Valuation.new
+          entryable: Valuation.new
         )
 
         account.save!
@@ -113,7 +113,7 @@ class Account < ApplicationRecord
   end
 
   def update_balance!(balance)
-    valuation = entries.account_valuations.find_by(date: Date.current)
+    valuation = entries.valuations.find_by(date: Date.current)
 
     if valuation
       valuation.update! amount: balance
@@ -123,7 +123,7 @@ class Account < ApplicationRecord
         name: "Balance update",
         amount: balance,
         currency: currency,
-        entryable: Account::Valuation.new
+        entryable: Valuation.new
     end
   end
 
@@ -148,7 +148,7 @@ class Account < ApplicationRecord
   end
 
   def first_valuation
-    entries.account_valuations.order(:date).first
+    entries.valuations.order(:date).first
   end
 
   def first_valuation_amount

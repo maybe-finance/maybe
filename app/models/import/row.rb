@@ -63,7 +63,7 @@ class Import::Row < ApplicationRecord
         return
       end
 
-      min_date = Account::Entry.min_supported_date
+      min_date = Entry.min_supported_date
       max_date = Date.current
 
       if parsed_date < min_date || parsed_date > max_date

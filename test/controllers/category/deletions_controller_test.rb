@@ -30,7 +30,7 @@ class Category::DeletionsControllerTest < ActionDispatch::IntegrationTest
     assert_not_empty @category.transactions
 
     assert_difference "Category.count", -1 do
-      assert_difference "Account::Transaction.where(category: nil).count", @category.transactions.count do
+      assert_difference "Transaction.where(category: nil).count", @category.transactions.count do
         post category_deletions_url(@category)
       end
     end

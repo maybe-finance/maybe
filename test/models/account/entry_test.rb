@@ -1,10 +1,10 @@
 require "test_helper"
 
-class Account::EntryTest < ActiveSupport::TestCase
-  include Account::EntriesTestHelper
+class EntryTest < ActiveSupport::TestCase
+  include EntriesTestHelper
 
   setup do
-    @entry = account_entries :transaction
+    @entry = entries :transaction
   end
 
   test "entry cannot be older than 10 years ago" do
@@ -14,10 +14,10 @@ class Account::EntryTest < ActiveSupport::TestCase
   end
 
   test "valuations cannot have more than one entry per day" do
-    existing_valuation = account_entries :valuation
+    existing_valuation = entries :valuation
 
-    new_valuation = Account::Entry.new \
-      entryable: Account::Valuation.new,
+    new_valuation = Entry.new \
+      entryable: Valuation.new,
       account: existing_valuation.account,
       date: existing_valuation.date, # invalid
       currency: existing_valuation.currency,
@@ -76,7 +76,7 @@ class Account::EntryTest < ActiveSupport::TestCase
     accounts(:credit_card).update!(is_active: false)
 
     # Test the scope
-    active_entries = Account::Entry.active
+    active_entries = Entry.active
 
     # Should include entry from active account
     assert_includes active_entries, active_transaction
