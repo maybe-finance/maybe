@@ -9,18 +9,39 @@
             url: import_row_path(row.import, row),
             method: :patch,
             data: {
-              controller: "auto-submit-form",
-              auto_submit_form_trigger_event_value: "blur"
+              controller: "auto-submit-form mobile-cell-interaction",
+              auto_submit_form_trigger_value: "blur",
+              mobile_cell_interaction_error_value: !cell_is_valid?(row, key) ? row.errors[key].join(", ") : "",
             }
           ) do |form| %>
-        <%= form.text_field key,
-              "data-auto-submit-form-target": "auto",
-              class: [
-                cell_class(row, key),
-                idx == 0 ? "group-first:rounded-tl-lg group-last:rounded-bl-lg" : "",
-                idx == row.import.column_keys.count - 1 ? "group-first:rounded-tr-lg group-last:rounded-br-lg" : "",
-              ],
-              disabled: row.import.complete? %>
+        <div class="relative">
+          <%= form.text_field key,
+                "data-auto-submit-form-target": "auto",
+                "data-action": "focus->mobile-cell-interaction#highlightCell blur->mobile-cell-interaction#unhighlightCell touchstart->mobile-cell-interaction#handleCellTouch",
+                "data-mobile-cell-interaction-target": "field",
+                class: [
+                  cell_class(row, key),
+                  idx == 0 ? "group-first:rounded-tl-lg group-last:rounded-bl-lg" : "",
+                  idx == row.import.column_keys.count - 1 ? "group-first:rounded-tr-lg group-last:rounded-br-lg" : "",
+                  "focus:outline-none focus:z-10 relative",
+                ],
+                disabled: row.import.complete? %>
+                
+          <% if !cell_is_valid?(row, key) %>
+            <span class="absolute right-2 top-1/2 -translate-y-1/2 text-red-500 md:hidden" 
+                  data-action="click->mobile-cell-interaction#toggleErrorMessage"
+                  data-mobile-cell-interaction-target="errorIcon">
+              <%= lucide_icon "alert-circle", class: "w-4 h-4" %>
+            </span>
+            
+            <div class="absolute left-4 right-4 bottom-full mb-2 p-2 bg-red-50 border border-red-200 rounded-lg shadow-lg text-xs text-red-600 hidden md:hidden z-20"
+                 data-mobile-cell-interaction-target="errorTooltip">
+              <%= row.errors[key].join(", ") %>
+            </div>
+          <% end %>
+          
+          <div class="absolute inset-0 bg-primary/5 pointer-events-none opacity-0 transition-opacity duration-150 ease-in-out z-0" data-mobile-cell-interaction-target="highlight"></div>
+        </div>
       <% end %>
     <% end %>
   <% end %>

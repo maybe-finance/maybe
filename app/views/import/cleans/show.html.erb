@@ -20,16 +20,17 @@
       <%= link_to "Next step", import_confirm_path(@import), class: "btn btn--primary" %>
     </div>
   <% else %>
-    <div class="bg-container border border-tertiary rounded-lg p-3 flex items-center justify-between">
+    <div class="bg-container border border-tertiary rounded-lg p-3 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-0">
       <div class="flex items-center gap-2">
-        <%= lucide_icon "alert-triangle", class: "w-4 h-4 text-red-500" %>
-        <p class="text-red-500 text-sm"><%= t(".errors_notice") %></p>
+        <%= lucide_icon "alert-triangle", class: "w-4 h-4 text-red-500 flex-shrink-0" %>
+        <p class="text-red-500 text-sm hidden md:block"><%= t(".errors_notice") %></p>
+        <p class="text-red-500 text-sm md:hidden"><%= t(".errors_notice_mobile") %></p>
       </div>
 
-      <div class="flex justify-center">
-        <div class="bg-gray-50 rounded-lg inline-flex p-1 space-x-2 text-sm text-primary font-medium">
-          <%= link_to "All rows", import_clean_path(@import, per_page: params[:per_page], view: "all"), class: "p-2 rounded-lg #{params[:view] != 'errors' ? 'bg-container' : ''}" %>
-          <%= link_to "Error rows", import_clean_path(@import, per_page: params[:per_page], view: "errors"), class: "p-2 rounded-lg #{params[:view] == 'errors' ? 'bg-container' : ''}" %>
+      <div class="flex justify-center w-full md:w-auto">
+        <div class="bg-gray-50 rounded-lg inline-flex p-1 space-x-2 text-sm text-primary font-medium w-full md:w-auto">
+          <%= link_to "All rows", import_clean_path(@import, per_page: params[:per_page], view: "all"), class: "p-2 rounded-lg flex-1 md:flex-auto text-center #{params[:view] != 'errors' ? 'bg-container' : ''}" %>
+          <%= link_to "Error rows", import_clean_path(@import, per_page: params[:per_page], view: "errors"), class: "p-2 rounded-lg flex-1 md:flex-auto text-center #{params[:view] == 'errors' ? 'bg-container' : ''}" %>
         </div>
       </div>
     </div>
