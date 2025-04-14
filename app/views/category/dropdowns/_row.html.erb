@@ -5,10 +5,10 @@
       class: ["filterable-item flex justify-between items-center border-none rounded-lg px-2 py-1 group w-full hover:bg-gray-25 focus-within:bg-gray-25",
               { "bg-gray-25": is_selected }],
       data: { filter_name: category.name } do %>
-  <%= button_to account_transaction_category_path(
+  <%= button_to transaction_category_path(
         @transaction.entry,
-        account_entry: {
-          entryable_type: "Account::Transaction",
+        entry: {
+          entryable_type: "Transaction",
           entryable_attributes: { id: @transaction.id, category_id: category.id }
         }
       ),

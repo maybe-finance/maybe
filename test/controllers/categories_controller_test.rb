@@ -3,7 +3,7 @@ require "test_helper"
 class CategoriesControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in users(:family_admin)
-    @transaction = account_transactions :one
+    @transaction = transactions :one
   end
 
   test "index" do

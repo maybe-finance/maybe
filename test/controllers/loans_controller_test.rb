@@ -11,8 +11,8 @@ class LoansControllerTest < ActionDispatch::IntegrationTest
   test "creates with loan details" do
     assert_difference -> { Account.count } => 1,
       -> { Loan.count } => 1,
-      -> { Account::Valuation.count } => 2,
-      -> { Account::Entry.count } => 2 do
+      -> { Valuation.count } => 2,
+      -> { Entry.count } => 2 do
       post loans_path, params: {
         account: {
           name: "New Loan",
@@ -22,7 +22,8 @@ class LoansControllerTest < ActionDispatch::IntegrationTest
           accountable_attributes: {
             interest_rate: 5.5,
             term_months: 60,
-            rate_type: "fixed"
+            rate_type: "fixed",
+            initial_balance: 50000
           }
         }
       }
@@ -36,6 +37,7 @@ class LoansControllerTest < ActionDispatch::IntegrationTest
     assert_equal 5.5, created_account.accountable.interest_rate
     assert_equal 60, created_account.accountable.term_months
     assert_equal "fixed", created_account.accountable.rate_type
+    assert_equal 50000, created_account.accountable.initial_balance
 
     assert_redirected_to created_account
     assert_equal "Loan account created", flash[:notice]
@@ -54,7 +56,8 @@ class LoansControllerTest < ActionDispatch::IntegrationTest
             id: @account.accountable_id,
             interest_rate: 4.5,
             term_months: 48,
-            rate_type: "fixed"
+            rate_type: "fixed",
+            initial_balance: 48000
           }
         }
       }
@@ -67,6 +70,7 @@ class LoansControllerTest < ActionDispatch::IntegrationTest
     assert_equal 4.5, @account.accountable.interest_rate
     assert_equal 48, @account.accountable.term_months
     assert_equal "fixed", @account.accountable.rate_type
+    assert_equal 48000, @account.accountable.initial_balance
 
     assert_redirected_to @account
     assert_equal "Loan account updated", flash[:notice]

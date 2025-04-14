@@ -1,6 +1,45 @@
 ---
 en:
   transactions:
+    form:
+      account: Account
+      account_prompt: Select an Account
+      amount: Amount
+      category: Category
+      category_prompt: Select a Category
+      date: Date
+      description: Description
+      description_placeholder: Describe transaction
+      expense: Expense
+      income: Income
+      none: (none)
+      note_label: Notes
+      note_placeholder: Enter a note
+      submit: Add transaction
+      tags_label: Tags
+      transfer: Transfer
+    new:
+      new_transaction: New transaction
+    show:
+      account_label: Account
+      amount: Amount
+      category_label: Category
+      date_label: Date
+      delete: Delete
+      delete_subtitle: This permanently deletes the transaction, affects your historical
+        balances, and cannot be undone.
+      delete_title: Delete transaction
+      details: Details
+      merchant_label: Merchant
+      name_label: Name
+      nature: Type
+      none: "(none)"
+      note_label: Notes
+      note_placeholder: Enter a note
+      overview: Overview
+      settings: Settings
+      tags_label: Tags
+      uncategorized: "(uncategorized)"
     header:
       edit_categories: Edit categories
       edit_imports: Edit imports

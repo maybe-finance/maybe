@@ -1,6 +1,6 @@
 class Transfer < ApplicationRecord
-  belongs_to :inflow_transaction, class_name: "Account::Transaction"
-  belongs_to :outflow_transaction, class_name: "Account::Transaction"
+  belongs_to :inflow_transaction, class_name: "Transaction"
+  belongs_to :outflow_transaction, class_name: "Transaction"
 
   enum :status, { pending: "pending", confirmed: "confirmed" }
 
@@ -23,22 +23,22 @@ class Transfer < ApplicationRecord
       end
 
       new(
-        inflow_transaction: Account::Transaction.new(
+        inflow_transaction: Transaction.new(
           entry: to_account.entries.build(
             amount: converted_amount.amount.abs * -1,
             currency: converted_amount.currency.iso_code,
             date: date,
             name: "Transfer from #{from_account.name}",
-            entryable: Account::Transaction.new
+            entryable: Transaction.new
           )
         ),
-        outflow_transaction: Account::Transaction.new(
+        outflow_transaction: Transaction.new(
           entry: from_account.entries.build(
             amount: amount.abs,
             currency: from_account.currency,
             date: date,
             name: "Transfer to #{to_account.name}",
-            entryable: Account::Transaction.new
+            entryable: Transaction.new
           )
         ),
         status: "confirmed"

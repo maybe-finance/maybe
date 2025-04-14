@@ -24,7 +24,7 @@ and eventually offer a hosted version of the app for a small monthly fee.
 
 ## Maybe Hosting
 
-There are 3 primary ways to use the Maybe app:
+There are 2 primary ways to use the Maybe app:
 
 1. Managed (easiest) - we're in alpha and release invites in our Discord
 2. [Self-host with Docker](docs/hosting/docker.md)

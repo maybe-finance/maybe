@@ -2,9 +2,9 @@ module Account::Enrichable
   extend ActiveSupport::Concern
 
   def enrich_data
-    total_unenriched = entries.account_transactions
-      .joins("JOIN account_transactions at ON at.id = account_entries.entryable_id AND account_entries.entryable_type = 'Account::Transaction'")
-      .where("account_entries.enriched_at IS NULL OR at.merchant_id IS NULL OR at.category_id IS NULL")
+    total_unenriched = entries.transactions
+      .joins("JOIN transactions at ON at.id = entries.entryable_id AND entries.entryable_type = 'Transaction'")
+      .where("entries.enriched_at IS NULL OR at.merchant_id IS NULL OR at.category_id IS NULL")
       .count
 
     if total_unenriched > 0
@@ -63,7 +63,7 @@ module Account::Enrichable
       transactions.active
                   .includes(:merchant, :category)
                   .where(
-                    "account_entries.enriched_at IS NULL",
+                    "entries.enriched_at IS NULL",
                     "OR merchant_id IS NULL",
                     "OR category_id IS NULL"
                   )

@@ -53,8 +53,8 @@ class TradeImportTest < ActiveSupport::TestCase
     @import.reload
 
     assert_difference [
-      -> { Account::Entry.count },
-      -> { Account::Trade.count }
+      -> { Entry.count },
+      -> { Trade.count }
     ], 2 do
       assert_difference [
         -> { Security.count },

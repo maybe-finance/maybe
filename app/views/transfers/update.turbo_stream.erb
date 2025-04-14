@@ -3,18 +3,18 @@
   <%= turbo_stream.replace @transfer.outflow_transaction.entry %>
 
   <%= turbo_stream.replace dom_id(@transfer.inflow_transaction, "category_menu"),
-                          partial: "account/transactions/transaction_category",
+                          partial: "transactions/transaction_category",
                           locals: { transaction: @transfer.inflow_transaction } %>
 
   <%= turbo_stream.replace dom_id(@transfer.outflow_transaction, "category_menu"),
-                          partial: "account/transactions/transaction_category",
+                          partial: "transactions/transaction_category",
                           locals: { transaction: @transfer.outflow_transaction } %>
 
   <%= turbo_stream.replace dom_id(@transfer.inflow_transaction, "transfer_match"),
-                          partial: "account/transactions/transfer_match",
+                          partial: "transactions/transfer_match",
                           locals: { transaction: @transfer.inflow_transaction } %>
 
   <%= turbo_stream.replace dom_id(@transfer.outflow_transaction, "transfer_match"),
-                          partial: "account/transactions/transfer_match",
+                          partial: "transactions/transfer_match",
                           locals: { transaction: @transfer.outflow_transaction } %>
 <% end %>

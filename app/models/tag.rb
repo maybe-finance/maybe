@@ -1,7 +1,7 @@
 class Tag < ApplicationRecord
   belongs_to :family
   has_many :taggings, dependent: :destroy
-  has_many :transactions, through: :taggings, source: :taggable, source_type: "Account::Transaction"
+  has_many :transactions, through: :taggings, source: :taggable, source_type: "Transaction"
   has_many :import_mappings, as: :mappable, dependent: :destroy, class_name: "Import::Mapping"
 
   validates :name, presence: true, uniqueness: { scope: :family }

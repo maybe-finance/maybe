@@ -38,7 +38,7 @@ class TransfersController < ApplicationController
   def update
     Transfer.transaction do
       update_transfer_status
-      update_transfer_details
+      update_transfer_details unless transfer_update_params[:status] == "rejected"
     end
 
     respond_to do |format|

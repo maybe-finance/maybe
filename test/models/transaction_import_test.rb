@@ -58,8 +58,8 @@ class TransactionImportTest < ActiveSupport::TestCase
 
     @import.reload
 
-    assert_difference -> { Account::Entry.count } => 3,
-                      -> { Account::Transaction.count } => 3,
+    assert_difference -> { Entry.count } => 3,
+                      -> { Transaction.count } => 3,
                       -> { Tag.count } => 1,
                       -> { Category.count } => 1,
                       -> { Account.count } => 1 do
