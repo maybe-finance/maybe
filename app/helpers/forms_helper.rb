@@ -21,7 +21,7 @@ module FormsHelper
     periods_for_select = Period.all.map { |period| [ period.label_short, period.key ] }
 
     form.select(:period, periods_for_select, { selected: selected.key }, class: classes, data: { "auto-submit-form-target": "auto" })
-end
+  end
 
 
   def currencies_for_select
@@ -31,7 +31,7 @@ end
   private
     def radio_tab_contents(label:, icon:)
       tag.div(class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-subdued group-has-checked:bg-container group-has-checked:text-gray-800 group-has-checked:shadow-sm") do
-        concat lucide_icon(icon, class: "w-4 h-4 sm:w-5 sm:h-5")
+        concat lucide_icon(icon, class: "w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0")
         concat tag.span(label, class: "group-has-checked:font-semibold")
       end
     end

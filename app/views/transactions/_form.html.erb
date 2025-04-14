@@ -4,12 +4,12 @@
     <%= render "shared/form_errors", model: entry %>
   <% end %>
 
-  <section>
-    <fieldset class="bg-gray-50 rounded-lg p-1 grid grid-flow-row min-[360px]:grid-flow-col justify-stretch gap-x-2 text-sm sm:text-base">
+  <section >
+    <fieldset class="bg-surface rounded-lg p-1 grid grid-flow-row min-[360px]:grid-flow-col min-[360px]:grid-cols-3 justify-stretch gap-x-2 text-sm sm:text-base w-full">
       <%= radio_tab_tag form: f, name: :nature, value: :outflow, label: t(".expense"), icon: "minus-circle", checked: params[:nature] == "outflow" || params[:nature].nil? %>
       <%= radio_tab_tag form: f, name: :nature, value: :inflow, label: t(".income"), icon: "plus-circle", checked: params[:nature] == "inflow" %>
       <%= link_to new_transfer_path, data: { turbo_frame: :modal }, class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-subdued group-has-checked:bg-container group-has-checked:text-gray-800 group-has-checked:shadow-sm" do %>
-        <%= lucide_icon "arrow-right-left", class: "w-4 h-4 sm:w-5 sm:h-5" %>
+        <%= lucide_icon "arrow-right-left", class: "w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" %>
         <%= tag.span t(".transfer") %>
       <% end %>
     </fieldset>
