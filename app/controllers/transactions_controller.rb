@@ -105,10 +105,6 @@ class TransactionsController < ApplicationController
       entry_params
     end
 
-    def bulk_update_params
-      params.require(:bulk_update).permit(:date, :notes, :category_id, :merchant_id, entry_ids: [], tag_ids: [])
-    end
-
     def search_params
       cleaned_params = params.fetch(:q, {})
             .permit(

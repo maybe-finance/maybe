@@ -22,7 +22,7 @@
                 disabled: true
               ) %>
         <% else %>
-          <%= render "account/transfer_matches/matching_fields",
+          <%= render "transfer_matches/matching_fields",
                       form: f, entry: @entry, candidates: @transfer_match_candidates.map { |pm| pm.outflow_transaction.entry }, accounts: @accounts %>
         <% end %>
       </div>
@@ -49,7 +49,7 @@
                 disabled: true
               ) %>
         <% else %>
-          <%= render "account/transfer_matches/matching_fields",
+          <%= render "transfer_matches/matching_fields",
                       form: f, entry: @entry, candidates: @transfer_match_candidates.map { |pm| pm.inflow_transaction.entry }, accounts: @accounts %>
         <% end %>
       </div>
