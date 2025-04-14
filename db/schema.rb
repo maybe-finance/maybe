@@ -399,7 +399,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_11_191422) do
     t.string "rate_type"
     t.decimal "interest_rate", precision: 10, scale: 3
     t.integer "term_months"
-    t.jsonb "locked_attributes", default: {}
+    t.decimal "initial_balance", precision: 19, scale: 4
   end
 
   create_table "merchants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
