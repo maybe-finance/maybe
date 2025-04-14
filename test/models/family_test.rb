@@ -2,7 +2,7 @@ require "test_helper"
 require "csv"
 
 class FamilyTest < ActiveSupport::TestCase
-  include Account::EntriesTestHelper
+  include EntriesTestHelper
   include SyncableInterfaceTest
 
   def setup

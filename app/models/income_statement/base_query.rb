@@ -11,13 +11,13 @@ module IncomeStatement::BaseQuery
           COUNT(ae.id) as transactions_count,
           BOOL_OR(ae.currency <> :target_currency AND er.rate IS NULL) as missing_exchange_rates
         FROM (#{transactions_scope.to_sql}) at
-        JOIN account_entries ae ON ae.entryable_id = at.id AND ae.entryable_type = 'Account::Transaction'
+        JOIN entries ae ON ae.entryable_id = at.id AND ae.entryable_type = 'Transaction'
         LEFT JOIN categories c ON c.id = at.category_id
         LEFT JOIN (
           SELECT t.*, t.id as transfer_id, a.accountable_type
           FROM transfers t
-          JOIN account_entries ae ON ae.entryable_id = t.inflow_transaction_id
-            AND ae.entryable_type = 'Account::Transaction'
+          JOIN entries ae ON ae.entryable_id = t.inflow_transaction_id
+            AND ae.entryable_type = 'Transaction'
           JOIN accounts a ON a.id = ae.account_id
         ) transfer_info ON (
           transfer_info.inflow_transaction_id = at.id OR

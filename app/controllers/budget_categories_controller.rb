@@ -11,14 +11,14 @@ class BudgetCategoriesController < ApplicationController
 
     if params[:id] == BudgetCategory.uncategorized.id
       @budget_category = @budget.uncategorized_budget_category
-      @recent_transactions = @recent_transactions.where(account_transactions: { category_id: nil })
+      @recent_transactions = @recent_transactions.where(transactions: { category_id: nil })
     else
       @budget_category = Current.family.budget_categories.find(params[:id])
-      @recent_transactions = @recent_transactions.joins("LEFT JOIN categories ON categories.id = account_transactions.category_id")
+      @recent_transactions = @recent_transactions.joins("LEFT JOIN categories ON categories.id = transactions.category_id")
                                                  .where("categories.id = ? OR categories.parent_id = ?", @budget_category.category.id, @budget_category.category.id)
     end
 
-    @recent_transactions = @recent_transactions.order("account_entries.date DESC, ABS(account_entries.amount) DESC").take(3)
+    @recent_transactions = @recent_transactions.order("entries.date DESC, ABS(entries.amount) DESC").take(3)
   end
 
   def update

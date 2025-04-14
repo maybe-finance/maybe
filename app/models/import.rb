@@ -34,7 +34,7 @@ class Import < ApplicationRecord
   has_many :rows, dependent: :destroy
   has_many :mappings, dependent: :destroy
   has_many :accounts, dependent: :destroy
-  has_many :entries, dependent: :destroy, class_name: "Account::Entry"
+  has_many :entries, dependent: :destroy
 
   class << self
     def parse_csv_str(csv_str, col_sep: ",")

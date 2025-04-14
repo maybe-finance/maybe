@@ -31,7 +31,7 @@ class PlaidInvestmentSync
             t.amount = transaction.amount
             t.currency = transaction.iso_currency_code
             t.date = transaction.date
-            t.entryable = Account::Transaction.new
+            t.entryable = Transaction.new
           end
         else
           new_transaction = plaid_account.account.entries.find_or_create_by!(plaid_id: transaction.investment_transaction_id) do |t|
@@ -39,7 +39,7 @@ class PlaidInvestmentSync
             t.amount = transaction.quantity * transaction.price
             t.currency = transaction.iso_currency_code
             t.date = transaction.date
-            t.entryable = Account::Trade.new(
+            t.entryable = Trade.new(
               security: security,
               qty: transaction.quantity,
               price: transaction.price,

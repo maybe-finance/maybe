@@ -95,7 +95,7 @@ Rails.application.routes.draw do
     resources :mappings, only: :update, module: :import
   end
 
-  resources :accounts, only: %i[index new] do
+  resources :accounts, only: %i[index new], shallow: true do
     collection do
       post :sync_all
     end
@@ -107,39 +107,31 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :accountable_sparklines, only: :show, param: :accountable_type
+  resources :holdings, only: %i[index new show destroy]
+  resources :trades, only: %i[show new create update destroy]
+  resources :valuations, only: %i[show new create update destroy]
 
-  namespace :account do
-    resources :holdings, only: %i[index new show destroy]
-
-    resources :transactions, only: %i[show new create update destroy] do
-      resource :transfer_match, only: %i[new create]
-      resource :category, only: :update, controller: :transaction_categories
-
-      collection do
-        post "bulk_delete"
-        get "bulk_edit"
-        post "bulk_update"
-        post "mark_transfers"
-        post "unmark_transfers"
-      end
-    end
-
-    resources :valuations, only: %i[show new create update destroy]
-    resources :trades, only: %i[show new create update destroy]
+  namespace :transactions do
+    resource :bulk_deletion, only: :create
+    resource :bulk_update, only: %i[new create]
   end
 
-  direct :account_entry do |entry, options|
-    if entry.new_record?
-      route_for "account_#{entry.entryable_name.pluralize}", options
-    else
-      route_for entry.entryable_name, entry, options
-    end
-  end
+  resources :transactions, only: %i[index new create show update destroy] do
+    resource :transfer_match, only: %i[new create]
+    resource :category, only: :update, controller: :transaction_categories
 
-  resources :transactions, only: :index do
     collection do
       delete :clear_filter
+    end
+  end
+
+  resources :accountable_sparklines, only: :show, param: :accountable_type
+
+  direct :entry do |entry, options|
+    if entry.new_record?
+      route_for entry.entryable_name.pluralize, options
+    else
+      route_for entry.entryable_name, entry, options
     end
   end
 

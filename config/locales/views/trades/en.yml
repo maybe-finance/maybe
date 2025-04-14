@@ -1,0 +1,38 @@
+---
+en:
+  trades:
+    form:
+      account: Transfer account (optional)
+      account_prompt: Search account
+      amount: Amount
+      holding: Ticker symbol
+      price: Price per share
+      qty: Quantity
+      submit: Add transaction
+      ticker_placeholder: AAPL
+      type: Type
+    header:
+      buy: Buy
+      current_market_price_label: Current Market Price
+      overview: Overview
+      purchase_price_label: Purchase Price
+      purchase_qty_label: Purchase Quantity
+      sell: Sell
+      symbol_label: Symbol
+      total_return_label: Unrealized gain/loss
+    new:
+      title: New transaction
+    show:
+      additional: Additional
+      cost_per_share_label: Cost per Share
+      date_label: Date
+      delete: Delete
+      delete_subtitle: This action cannot be undone
+      delete_title: Delete Trade
+      details: Details
+      exclude_subtitle: This trade will not be included in reports and calculations
+      exclude_title: Exclude from analytics
+      note_label: Note
+      note_placeholder: Add any additional notes here...
+      quantity_label: Quantity
+      settings: Settings
