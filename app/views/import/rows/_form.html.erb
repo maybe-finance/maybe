@@ -1,6 +1,6 @@
 <%# locals: (row:) %>
 
-<div style="grid-template-columns: repeat(<%= row.import.column_keys.count %>, 1fr)" class="first:rounded-tl-lg first:rounded-tr-lg last:rounded-bl-lg last:rounded-br-lg grid divide-x divide-alpha-black-200 group">
+<div style="grid-template-columns: repeat(<%= row.import.column_keys.count %>, minmax(150px, 1fr)); min-width: max-content;" class="first:rounded-tl-lg first:rounded-tr-lg last:rounded-bl-lg last:rounded-br-lg grid divide-x divide-alpha-black-200 group">
   <% row.import.column_keys.each_with_index do |key, idx| %>
     <%= turbo_frame_tag dom_id(row, key), title: row.valid? ? nil : row.errors.full_messages.join(", ") do %>
       <%= form_with(
