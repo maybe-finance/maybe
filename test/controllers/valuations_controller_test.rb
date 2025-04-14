@@ -12,6 +12,7 @@ class ValuationsControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference [ "Entry.count", "Valuation.count" ] do
       post valuations_url(@entry.account), params: {
         entry: {
+          account_id: @entry.account_id,
           amount: 19800,
           date: @entry.date,
           currency: "USD"
