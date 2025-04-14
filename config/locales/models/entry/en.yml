@@ -1,0 +1,10 @@
+---
+en:
+  activerecord:
+    errors:
+      models:
+        entry:
+          attributes:
+            base:
+              invalid_sell_quantity: cannot sell %{sell_qty} shares of %{ticker} because
+                you only own %{current_qty} shares

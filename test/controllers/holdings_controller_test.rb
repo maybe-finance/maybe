@@ -7,14 +7,8 @@ class HoldingsControllerTest < ActionDispatch::IntegrationTest
     @holding = @account.holdings.first
   end
 
-  test "gets index" do
-    get account_holdings_url(@account)
-
-    assert_response :success
-  end
-
   test "gets holdings" do
-    get account_holdings_url(account_id: @account.id)
+    get holdings_url(account_id: @account.id)
     assert_response :success
   end
 
@@ -26,7 +20,7 @@ class HoldingsControllerTest < ActionDispatch::IntegrationTest
 
   test "destroys holding and associated entries" do
     assert_difference -> { Holding.count } => -1,
-                      -> { Account::Entry.count } => -1 do
+                      -> { Entry.count } => -1 do
       delete holding_path(@holding)
     end
 

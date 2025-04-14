@@ -1,7 +1,7 @@
 require "test_helper"
 
 class Holding::PortfolioCacheTest < ActiveSupport::TestCase
-  include Account::EntriesTestHelper, ProviderTestHelper
+  include EntriesTestHelper, ProviderTestHelper
 
   setup do
     @provider = mock
@@ -16,7 +16,7 @@ class Holding::PortfolioCacheTest < ActiveSupport::TestCase
 
     @security = Security.create!(name: "Test Security", ticker: "TEST", exchange_operating_mic: "TEST")
 
-    @trade = create_trade(@security, account: @account, qty: 1, date: 2.days.ago.to_date, price: 210.23).account_trade
+    @trade = create_trade(@security, account: @account, qty: 1, date: 2.days.ago.to_date, price: 210.23).trade
   end
 
   test "gets price from DB if available" do
@@ -60,7 +60,7 @@ class Holding::PortfolioCacheTest < ActiveSupport::TestCase
 
   test "if no price from db, provider, or trades, search holdings" do
     Security::Price.delete_all
-    Account::Entry.delete_all
+    Entry.delete_all
 
     holding = Holding.create!(
       security: @security,

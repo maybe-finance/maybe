@@ -61,7 +61,7 @@ module Account::Chartable
             COUNT(CASE WHEN accounts.currency <> :target_currency AND er.rate IS NULL THEN 1 END) as missing_rates
           FROM dates d
           LEFT JOIN accounts ON accounts.id IN (#{all.select(:id).to_sql})
-          LEFT JOIN account_balances ab ON (
+          LEFT JOIN balances ab ON (
             ab.date = d.date AND
             ab.currency = accounts.currency AND
             ab.account_id = accounts.id

@@ -1,0 +1,44 @@
+valuation:
+  name: Manual valuation
+  date: <%= 4.days.ago.to_date %>
+  amount: 4995
+  currency: USD
+  account: depository
+  entryable_type: Valuation
+  entryable: one
+
+trade:
+  name: Purchase 10 shares of AAPL
+  date: <%= 1.day.ago.to_date %>
+  amount: 2140 # 10 shares * $214 per share
+  currency: USD
+  account: investment
+  entryable_type: Trade
+  entryable: one
+
+transaction:
+  name: Starbucks
+  date: <%= 1.day.ago.to_date %>
+  amount: 10
+  currency: USD
+  account: depository
+  entryable_type: Transaction
+  entryable: one
+
+transfer_out:
+  name: Payment to credit card account
+  date: <%= 3.days.ago.to_date %>
+  amount: 100
+  currency: USD
+  account: depository
+  entryable_type: Transaction
+  entryable: transfer_out
+
+transfer_in:
+  name: Payment received from checking account
+  date: <%= 3.days.ago.to_date %>
+  amount: -100
+  currency: USD
+  account: credit_card
+  entryable_type: Transaction
+  entryable: transfer_in

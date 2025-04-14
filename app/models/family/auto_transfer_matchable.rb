@@ -1,12 +1,12 @@
 module Family::AutoTransferMatchable
   def transfer_match_candidates
-    Account::Entry.select([
+    Entry.select([
       "inflow_candidates.entryable_id as inflow_transaction_id",
       "outflow_candidates.entryable_id as outflow_transaction_id",
       "ABS(inflow_candidates.date - outflow_candidates.date) as date_diff"
-    ]).from("account_entries inflow_candidates")
+    ]).from("entries inflow_candidates")
       .joins("
-        JOIN account_entries outflow_candidates ON (
+        JOIN entries outflow_candidates ON (
           inflow_candidates.amount < 0 AND
           outflow_candidates.amount > 0 AND
           inflow_candidates.amount = -outflow_candidates.amount AND
@@ -29,7 +29,7 @@ module Family::AutoTransferMatchable
       .where("inflow_accounts.family_id = ? AND outflow_accounts.family_id = ?", self.id, self.id)
       .where("inflow_accounts.is_active = true")
       .where("outflow_accounts.is_active = true")
-      .where("inflow_candidates.entryable_type = 'Account::Transaction' AND outflow_candidates.entryable_type = 'Account::Transaction'")
+      .where("inflow_candidates.entryable_type = 'Transaction' AND outflow_candidates.entryable_type = 'Transaction'")
       .where(existing_transfers: { id: nil })
       .order("date_diff ASC") # Closest matches first
   end

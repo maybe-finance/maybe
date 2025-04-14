@@ -4,7 +4,7 @@ class Balance::SyncCache
   end
 
   def get_valuation(date)
-    converted_entries.find { |e| e.date == date && e.account_valuation? }
+    converted_entries.find { |e| e.date == date && e.valuation? }
   end
 
   def get_holdings(date)
@@ -12,7 +12,7 @@ class Balance::SyncCache
   end
 
   def get_entries(date)
-    converted_entries.select { |e| e.date == date && (e.account_transaction? || e.account_trade?) }
+    converted_entries.select { |e| e.date == date && (e.transaction? || e.trade?) }
   end
 
   private

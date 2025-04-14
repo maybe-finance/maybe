@@ -1,6 +1,4 @@
 class Balance < ApplicationRecord
-  self.table_name = "account_balances"
-
   include Monetizable
 
   belongs_to :account

@@ -1,7 +1,7 @@
 require "test_helper"
 
 class Balance::SyncerTest < ActiveSupport::TestCase
-  include Account::EntriesTestHelper
+  include EntriesTestHelper
 
   setup do
     @account = families(:empty).accounts.create!(

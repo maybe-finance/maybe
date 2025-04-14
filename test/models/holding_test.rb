@@ -2,7 +2,7 @@ require "test_helper"
 require "ostruct"
 
 class HoldingTest < ActiveSupport::TestCase
-  include Account::EntriesTestHelper, SecuritiesTestHelper
+  include EntriesTestHelper, SecuritiesTestHelper
 
   setup do
     @account = families(:empty).accounts.create!(name: "Test Brokerage", balance: 20000, cash_balance: 0, currency: "USD", accountable: Investment.new)

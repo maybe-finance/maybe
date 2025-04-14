@@ -49,7 +49,7 @@ class Holding::PortfolioCache
     PriceWithPriority = Data.define(:price, :priority)
 
     def trades
-      @trades ||= account.entries.includes(entryable: :security).account_trades.chronological.to_a
+      @trades ||= account.entries.includes(entryable: :security).trades.chronological.to_a
     end
 
     def holdings

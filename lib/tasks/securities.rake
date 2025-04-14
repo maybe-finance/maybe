@@ -82,7 +82,7 @@ namespace :securities do
 
         # Count affected records
         holdings_count = Holding.where(security_id: security.id).count
-        trades_count = Account::Trade.where(security_id: security.id).count
+        trades_count = Trade.where(security_id: security.id).count
         prices_count = Security::Price.where(security_id: security.id).count
 
         puts "  Would update:"
@@ -95,7 +95,7 @@ namespace :securities do
             ActiveRecord::Base.transaction do
               # Update all references to point to the canonical security
               Holding.where(security_id: security.id).update_all(security_id: canonical.id)
-              Account::Trade.where(security_id: security.id).update_all(security_id: canonical.id)
+              Trade.where(security_id: security.id).update_all(security_id: canonical.id)
               Security::Price.where(security_id: security.id).update_all(security_id: canonical.id)
 
               # Delete the duplicate
@@ -135,7 +135,7 @@ namespace :securities do
 
       # Count affected records
       holdings_count = Holding.where(security_id: duplicates).count
-      trades_count = Account::Trade.where(security_id: duplicates).count
+      trades_count = Trade.where(security_id: duplicates).count
       prices_count = Security::Price.where(security_id: duplicates).count
 
       total_holdings += holdings_count
@@ -152,7 +152,7 @@ namespace :securities do
           ActiveRecord::Base.transaction do
             # Update all references to point to the canonical security
             Holding.where(security_id: duplicates).update_all(security_id: canonical.id)
-            Account::Trade.where(security_id: duplicates).update_all(security_id: canonical.id)
+            Trade.where(security_id: duplicates).update_all(security_id: canonical.id)
             Security::Price.where(security_id: duplicates).update_all(security_id: canonical.id)
 
             # Delete the duplicates

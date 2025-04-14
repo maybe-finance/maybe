@@ -36,7 +36,7 @@ class Holding::Syncer
     end
 
     def purge_stale_holdings
-      portfolio_security_ids = account.entries.account_trades.map { |entry| entry.entryable.security_id }.uniq
+      portfolio_security_ids = account.entries.trades.map { |entry| entry.entryable.security_id }.uniq
 
       # If there are no securities in the portfolio, delete all holdings
       if portfolio_security_ids.empty?

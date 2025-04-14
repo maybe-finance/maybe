@@ -1,6 +1,4 @@
 class Holding < ApplicationRecord
-  self.table_name = "account_holdings"
-
   include Monetizable, Gapfillable
 
   monetize :amount
@@ -29,9 +27,9 @@ class Holding < ApplicationRecord
 
   # Basic approximation of cost-basis
   def avg_cost
-    avg_cost = account.entries.account_trades
-                  .joins("INNER JOIN account_trades ON account_trades.id = account_entries.entryable_id")
-                  .where("account_trades.security_id = ? AND account_trades.qty > 0 AND account_entries.date <= ?", security.id, date)
+    avg_cost = account.entries.trades
+                  .joins("INNER JOIN trades ON trades.id = entries.entryable_id")
+                  .where("trades.security_id = ? AND trades.qty > 0 AND entries.date <= ?", security.id, date)
                   .average(:price)
 
     Money.new(avg_cost || price, currency)

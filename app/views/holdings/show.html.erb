@@ -71,9 +71,9 @@
 
                     <p><%= t(
                       ".trade_history_entry",
-                      qty: trade_entry.account_trade.qty,
-                      security: trade_entry.account_trade.security.ticker,
-                      price: trade_entry.account_trade.price_money.format
+                      qty: trade_entry.trade.qty,
+                      security: trade_entry.trade.security.ticker,
+                      price: trade_entry.trade.price_money.format
                     ) %></p>
                   </div>
                 </li>

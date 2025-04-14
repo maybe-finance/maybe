@@ -48,12 +48,12 @@ class Balance::TrendCalculator
     todays_entries = entries.select { |e| e.date == entry.date }
 
     todays_entries.each_with_index do |e, idx|
-      if e.account_valuation?
+      if e.valuation?
         current_balance = e.amount
         current_cash_balance = e.amount
       else
         multiplier = e.account.liability? ? 1 : -1
-        balance_change = e.account_trade? ? 0 : multiplier * e.amount
+        balance_change = e.trade? ? 0 : multiplier * e.amount
         cash_change = multiplier * e.amount
 
         current_balance = prior_balance + balance_change

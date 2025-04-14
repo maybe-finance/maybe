@@ -2,7 +2,7 @@
   <div class="bg-container space-y-4 p-5 rounded-xl shadow-border-xs">
     <div class="flex items-center justify-between">
       <%= tag.h2 t(".holdings"), class: "font-medium text-lg" %>
-      <%= link_to new_account_trade_path(account_id: @account.id),
+      <%= link_to new_trade_path(account_id: @account.id),
                   id: dom_id(@account, "new_trade"),
                   data: { turbo_frame: :modal },
                   class: "flex gap-1 font-medium items-center bg-gray-50 text-primary p-2 rounded-lg" do %>
