@@ -54,6 +54,8 @@ class TransactionsController < ApplicationController
 
     if @entry.save
       @entry.sync_account_later
+      @entry.lock_saved_attributes!
+      @entry.transaction.lock!(:tag_ids) if @entry.transaction.tags.any?
 
       flash[:notice] = "Transaction created"
 
@@ -69,6 +71,8 @@ class TransactionsController < ApplicationController
   def update
     if @entry.update(entry_params)
       @entry.sync_account_later
+      @entry.lock_saved_attributes!
+      @entry.account_transaction.lock!(:tag_ids) if @entry.account_transaction.tags.any?
 
       respond_to do |format|
         format.html { redirect_back_or_to account_path(@entry.account), notice: "Transaction updated" }
@@ -79,7 +83,8 @@ class TransactionsController < ApplicationController
               partial: "transactions/header",
               locals: { entry: @entry }
             ),
-            turbo_stream.replace(@entry)
+            turbo_stream.replace(@entry),
+            *flash_notification_stream_items
           ]
         end
       end
@@ -89,6 +94,18 @@ class TransactionsController < ApplicationController
   end
 
   private
+    def needs_rule_notification?(transaction)
+      return false if Current.user.rule_prompts_disabled
+
+      if Current.user.rule_prompt_dismissed_at.present?
+        time_since_last_rule_prompt = Time.current - Current.user.rule_prompt_dismissed_at
+        return false if time_since_last_rule_prompt < 1.day
+      end
+
+      transaction.saved_change_to_category_id? &&
+      transaction.eligible_for_category_rule?
+    end
+
     def entry_params
       entry_params = params.require(:entry).permit(
         :name, :enriched_name, :date, :amount, :currency, :excluded, :notes, :nature, :entryable_type,
