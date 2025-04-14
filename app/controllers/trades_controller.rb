@@ -11,9 +11,7 @@ class TradesController < ApplicationController
 
       respond_to do |format|
         format.html { redirect_back_or_to account_path(@entry.account) }
-
-        redirect_target_url = request.referer || account_path(@entry.account)
-        format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, redirect_target_url) }
+        format.turbo_stream { stream_redirect_back_or_to account_path(@entry.account) }
       end
     else
       render :new, status: :unprocessable_entity
@@ -30,7 +28,7 @@ class TradesController < ApplicationController
           render turbo_stream: [
             turbo_stream.replace(
               "header_entry_#{@entry.id}",
-              partial: "#{entryable_type.name.underscore.pluralize}/header",
+              partial: "trades/header",
               locals: { entry: @entry }
             ),
             turbo_stream.replace("entry_#{@entry.id}", partial: "entries/entry", locals: { entry: @entry })
