@@ -15,11 +15,17 @@
   <meta name="viewport"
           content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Maybe">
-
+  <meta name="application-name" content="Maybe">
   <meta name="msapplication-TileColor" content="#ffffff">
   <meta name="theme-color" content="#ffffff">
+
+  <!-- PWA Icons and Manifest -->
+  <%= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+  <link rel="icon" href="/android-chrome-512x512.png" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
   <%= yield :head %>
 </head>
