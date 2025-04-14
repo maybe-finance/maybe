@@ -1,10 +1,10 @@
 <%# locals: (name:, path:, icon_key:, is_custom: false) %>
 <%= link_to path, class: "space-y-1 lg:py-1 group block relative" do %>
   <% if page_active?(path) %>
-    <%= tag.div class: "w-4 h-1 bg-black rounded-bl-sm rounded-br-sm absolute top-0 left-1/2 -translate-x-1/2 lg:hidden" %>
+    <%= tag.div class: "w-4 h-1 bg-nav-indicator rounded-bl-sm rounded-br-sm absolute top-0 left-1/2 -translate-x-1/2 lg:hidden" %>
   <% end %>
   <div class="grow flex flex-col lg:flex-row gap-1 items-center">
-    <%= tag.div class: class_names("w-4 h-1 lg:w-1 lg:h-4 rounded-bl-sm rounded-br-sm lg:rounded-tr-sm lg:rounded-br-sm lg:rounded-bl-none", "bg-white md:bg-container-inset" => page_active?(path)) %>
+    <%= tag.div class: class_names("w-4 h-1 lg:w-1 lg:h-4 rounded-bl-sm rounded-br-sm lg:rounded-tr-sm lg:rounded-br-sm lg:rounded-bl-none", "bg-nav-indicator" => page_active?(path)) %>
 
     <%= tag.div class: class_names("w-8 h-8 flex items-center justify-center mx-auto rounded-lg", page_active?(path) ? "bg-white md:bg-container-inset shadow-xs text-primary" : "group-hover:bg-white-hover md:group-hover:bg-container-inset-hover text-secondary") do %>
       <%= is_custom ? icon_custom(icon_key) : icon(icon_key) %>
