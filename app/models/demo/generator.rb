@@ -168,21 +168,25 @@ class Demo::Generator
         date_format: "%m-%d-%Y"
       )
 
-      family.users.create! \
+      admin_user = family.users.new(
         email: user_email,
         first_name: "Demo",
         last_name: "User",
         role: "admin",
         password: "password",
         onboarded_at: Time.current
+      )
+      admin_user.save(validate: false) # Skip password validation
 
-      family.users.create! \
+      member_user = family.users.new(
         email: "member_#{user_email}",
         first_name: "Demo (member user)",
         last_name: "User",
         role: "member",
         password: "password",
         onboarded_at: Time.current
+      )
+      member_user.save(validate: false) # Skip password validation
     end
 
     def create_tags!(family)
