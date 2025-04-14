@@ -6,8 +6,9 @@
   <div class="grow flex flex-col lg:flex-row gap-1 items-center">
     <%= tag.div class: class_names("w-4 h-1 lg:w-1 lg:h-4 rounded-bl-sm rounded-br-sm lg:rounded-tr-sm lg:rounded-br-sm lg:rounded-bl-none", "bg-nav-indicator" => page_active?(path)) %>
 
-    <%= tag.div class: class_names("w-8 h-8 flex items-center justify-center mx-auto rounded-lg", page_active?(path) ? "bg-white md:bg-container-inset shadow-xs text-primary" : "group-hover:bg-white-hover md:group-hover:bg-container-inset-hover text-secondary") do %>
-      <%= is_custom ? icon_custom(icon_key) : icon(icon_key) %>
+    <% icon_color = page_active?(path) ? "current" : "gray" %>
+    <%= tag.div class: class_names("w-8 h-8 flex items-center justify-center mx-auto rounded-lg", page_active?(path) ? "bg-container shadow-xs text-primary" : "group-hover:bg-container-hover text-secondary") do %>
+      <%= is_custom ? icon_custom(icon_key, color: icon_color) : icon(icon_key, color: icon_color) %>
     <% end %>
   </div>
 
