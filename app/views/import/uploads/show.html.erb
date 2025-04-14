@@ -4,7 +4,7 @@
 
 <%= content_for :previous_path, imports_path %>
 
-<div class="space-y-12">
+<div class="space-y-4">
   <div class="space-y-4 mx-auto max-w-md">
     <div class="text-center space-y-2">
       <h1 class="text-3xl text-primary font-medium"><%= t(".title") %></h1>
@@ -51,22 +51,7 @@
     </div>
   </div>
 
-  <div class="bg-alpha-black-25 rounded-xl p-1 mt-5 mx-auto max-w-7xl">
-    <div class="text-secondary p-2 mb-2">
-      <div class="flex gap-2 mb-2">
-        <%= lucide_icon("info", class: "w-5 h-5 shrink-0") %>
-        <p class="text-sm"><%= t(".instructions_1") %></p>
-
-      </div>
-
-      <ul class="list-disc list-inside text-sm pl-8">
-        <li><%= t(".instructions_2") %></li>
-        <li><%= t(".instructions_3") %></li>
-        <li><%= t(".instructions_4") %></li>
-        <li><%= t(".instructions_5") %></li>
-      </ul>
-    </div>
-
-    <%= render partial: "imports/table", locals: { headers: @import.csv_template.headers, rows: @import.csv_template } %>
+  <div class="text-secondary text-sm p-1 mx-auto">
+    <p class="text-center"><%= link_to t(".download_sample_1"), download_sample_import_upload_path(@import), class: "text-sm font-medium hover:underline" %> <%= t(".download_sample_2") %></p>
   </div>
 </div>

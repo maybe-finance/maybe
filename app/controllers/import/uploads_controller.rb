@@ -20,6 +20,26 @@ class Import::UploadsController < ApplicationController
     end
   end
 
+  def download_sample
+    # Generate CSV stripped of whitespace, since we use heredoc strings
+    template = @import.csv_template
+
+    clean_headers = template.headers.map(&:strip)
+
+    sample_csv = CSV.generate do |csv|
+      csv << clean_headers
+      template.each do |row|
+        clean_values = row.to_h.values.map(&:to_s).map(&:strip)
+        csv << clean_values
+      end
+    end
+
+    send_data sample_csv,
+              filename: "#{@import.type.underscore.gsub('_import', '')}_sample.csv",
+              type: "text/csv",
+              disposition: "attachment"
+  end
+
   private
     def set_import
       @import = Current.family.imports.find(params[:import_id])

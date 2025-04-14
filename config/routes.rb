@@ -86,7 +86,9 @@ Rails.application.routes.draw do
       put :apply_template
     end
 
-    resource :upload, only: %i[show update], module: :import
+    resource :upload, only: %i[show update], module: :import do
+      get :download_sample, on: :member
+    end
     resource :configuration, only: %i[show update], module: :import
     resource :clean, only: :show, module: :import
     resource :confirm, only: :show, module: :import

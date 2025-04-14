@@ -47,13 +47,9 @@ en:
       show:
         description: Paste or upload your CSV file below.  Please review the instructions
           in the table below before beginning.
-        instructions_1: Below is an example CSV with columns available for import.
-        instructions_2: Your CSV must have a header row
-        instructions_3: You may name your columns anything you like.  You will map
-          them at a later step.
-        instructions_4: Columns marked with an asterisk (*) are required data.
-        instructions_5: No commas, no currency symbols, and no parentheses in numbers.
         title: Import your data
+        download_sample_1: Download a sample CSV
+        download_sample_2: to see the required CSV format
   imports:
     empty:
       message: No imports yet.

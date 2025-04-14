@@ -1,5 +1,5 @@
 <%= render "layouts/shared/htmldoc" do %>
-  <div class="flex flex-col h-dvh bg-surface">
+  <div class="flex flex-col h-dvh bg-container">
     <header class="flex items-center justify-between p-4 sm:p-8">
       <%= link_to content_for(:previous_path) || imports_path do %>
         <% if controller_name == 'uploads' %>
@@ -24,7 +24,7 @@
       </div>
     <% end %>
 
-    <main class="grow px-8 pt-12 pb-32 overflow-y-auto">
+    <main class="grow px-4 sm:px-8 pt-12 pb-32 overflow-y-auto">
       <%= yield %>
     </main>
   </div>
