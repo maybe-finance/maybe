@@ -1,4 +1,4 @@
-class CreateDataEnrichments < ActiveRecord::Migration[7.2]
+class DataEnrichmentsAndLocks < ActiveRecord::Migration[7.2]
   def change
     create_table :data_enrichments, id: :uuid do |t|
       t.references :enrichable, polymorphic: true, null: false, type: :uuid
@@ -12,10 +12,10 @@ class CreateDataEnrichments < ActiveRecord::Migration[7.2]
     add_index :data_enrichments, [ :enrichable_id, :enrichable_type, :source, :attribute_name ], unique: true
 
     # Entries
-    add_column :account_entries, :locked_attributes, :jsonb, default: {}
-    add_column :account_transactions, :locked_attributes, :jsonb, default: {}
-    add_column :account_trades, :locked_attributes, :jsonb, default: {}
-    add_column :account_valuations, :locked_attributes, :jsonb, default: {}
+    add_column :entries, :locked_attributes, :jsonb, default: {}
+    add_column :transactions, :locked_attributes, :jsonb, default: {}
+    add_column :trades, :locked_attributes, :jsonb, default: {}
+    add_column :valuations, :locked_attributes, :jsonb, default: {}
 
     # Accounts
     add_column :accounts, :locked_attributes, :jsonb, default: {}

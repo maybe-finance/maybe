@@ -4,9 +4,9 @@ class Rule::ConditionFilter
   TYPES = [ "text", "number", "select" ]
 
   OPERATORS_MAP = {
-    "text" => [ "like", "=" ],
-    "number" => [ ">", ">=", "<", "<=", "=" ],
-    "select" => [ "=" ]
+    "text" => [ [ "Contains", "like" ], [ "Equal to", "=" ] ],
+    "number" => [ [ "Greater than", ">" ], [ "Greater or equal to", ">=" ], [ "Less than", "<" ], [ "Less than or equal to", "<=" ], [ "Is equal to", "=" ] ],
+    "select" => [ [ "Equal to", "=" ] ]
   }
 
   def initialize(rule)
@@ -70,7 +70,7 @@ class Rule::ConditionFilter
     end
 
     def sanitize_operator(operator)
-      raise UnsupportedOperatorError, "Unsupported operator: #{operator} for type: #{type}" unless operators.include?(operator)
+      raise UnsupportedOperatorError, "Unsupported operator: #{operator} for type: #{type}" unless operators.map(&:last).include?(operator)
 
       if operator == "like"
         "ILIKE"

@@ -54,8 +54,8 @@ export default class extends Controller {
 
     for (const operator of conditionFilter.operators) {
       const optionEl = document.createElement("option");
-      optionEl.value = operator;
-      optionEl.textContent = operator;
+      optionEl.value = operator[1];
+      optionEl.textContent = operator[0];
       this.operatorSelectTarget.appendChild(optionEl);
     }
   }

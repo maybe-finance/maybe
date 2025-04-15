@@ -40,14 +40,14 @@ class Rule < ApplicationRecord
     matching_resources_scope.count
   end
 
-  def apply
+  def apply(ignore_attribute_locks: false)
     actions.each do |action|
-      action.apply(matching_resources_scope)
+      action.apply(matching_resources_scope, ignore_attribute_locks: ignore_attribute_locks)
     end
   end
 
-  def apply_later
-    RuleJob.perform_later(self)
+  def apply_later(ignore_attribute_locks: false)
+    RuleJob.perform_later(self, ignore_attribute_locks: ignore_attribute_locks)
   end
 
   private

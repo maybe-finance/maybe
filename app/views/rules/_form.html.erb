@@ -1,6 +1,6 @@
 <%# locals: (rule:) %>
 
-<%= styled_form_with model: rule, class: "space-y-4",
+<%= styled_form_with model: rule, class: "space-y-4 w-[550px]",
                      data: { controller: "rules", rule_registry_value: rule.registry.to_json } do |f| %>
 
   <%= f.hidden_field :resource_type, value: rule.resource_type %>
@@ -80,13 +80,13 @@
     <div class="space-y-2">
       <div class="flex items-center gap-2">
         <%= f.radio_button :effective_date_enabled, false, checked: rule.effective_date.nil?, data: { action: "rules#clearEffectiveDate" } %>
-        <%= f.label :effective_date_enabled_false, "To all past and future #{rule.resource_type}s" %>
+        <%= f.label :effective_date_enabled_false, "To all past and future #{rule.resource_type}s", class: "text-sm" %>
       </div>
 
       <div class="flex items-center gap-2">
         <div class="flex items-center gap-2">
           <%= f.radio_button :effective_date_enabled, true, checked: rule.effective_date.present? %>
-          <%= f.label :effective_date_enabled_true, "Starting from" %>
+          <%= f.label :effective_date_enabled_true, "Starting from", class: "text-sm" %>
         </div>
 
         <%= f.date_field :effective_date, container_class: "w-fit", data: { rules_target: "effectiveDateInput" } %>

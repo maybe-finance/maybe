@@ -13,15 +13,21 @@
   <div class="grow flex gap-2 items-center h-full">
     <%= form.hidden_field :_destroy, value: false, data: { rule__conditions_target: "destroyField" } %>
 
-    <%= form.select :condition_type, rule.condition_filters.map { |filter| [ filter.label, filter.key ] }, {}, data: { action: "rule--conditions#handleConditionTypeChange" } %>
+    <div class="w-2/5 shrink-0">
+      <%= form.select :condition_type, rule.condition_filters.map { |filter| [ filter.label, filter.key ] }, {}, data: { action: "rule--conditions#handleConditionTypeChange" } %>
+    </div>
 
-    <%= form.select :operator, condition.operators, { container_class: "w-fit min-w-16" }, data: { rule__conditions_target: "operatorSelect" } %>
+    <%= form.select :operator, condition.operators, { container_class: "w-fit min-w-36" }, data: { rule__conditions_target: "operatorSelect" } %>
 
-    <div data-rule--conditions-target="filterValue">
+    <div data-rule--conditions-target="filterValue" class="grow">
       <% if condition.filter.type == "select" %>
         <%= form.select :value, condition.options, {} %>
       <% else %>
-        <%= form.text_field :value, placeholder: "Enter a value" %>
+        <% if condition.filter.type == "number" %>
+          <%= form.number_field :value, placeholder: "10" %>
+        <% else %>
+          <%= form.text_field :value, placeholder: "Enter a value" %>
+        <% end %>
       <% end %>
     </div>
   </div>
