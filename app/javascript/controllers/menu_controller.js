@@ -17,6 +17,7 @@ export default class extends Controller {
     show: Boolean,
     placement: { type: String, default: "bottom-end" },
     offset: { type: Number, default: 6 },
+    disableOnMobile: { type: Boolean, default: false }
   };
 
   // Tailwind's sm breakpoint
@@ -89,8 +90,7 @@ export default class extends Controller {
   }
 
   startAutoUpdate() {
-    // Only run autoUpdate on desktop screens
-    if (this.isDesktop && !this._cleanup) {
+    if ((!this.disableOnMobileValue || this.isDesktop) && !this._cleanup) {
       this._cleanup = autoUpdate(
         this.buttonTarget,
         this.contentTarget,
@@ -111,9 +111,7 @@ export default class extends Controller {
   }
 
   update() {
-    // Only compute position on desktop screens
-    if (!this.isDesktop) {
-      // Ensure floating styles are removed if switching from desktop to mobile while open
+    if (this.disableOnMobileValue && !this.isDesktop) {
       Object.assign(this.contentTarget.style, {
         position: "",
         left: "",
