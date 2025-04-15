@@ -6,42 +6,50 @@
   data-controller="tabs"
   data-tabs-active-class="bg-gray-25 text-primary"
   data-tabs-default-tab-value="<%= get_default_transaction_search_filter[:key] %>"
-  class="hidden absolute flex z-10 h-80 w-[540px] top-12 right-0 shadow-border-xs bg-container rounded-lg">
-  <div class="flex w-44 flex-col items-start p-3 text-sm font-medium text-secondary border-r border-r-alpha-black-100">
-    <% transaction_search_filters.each do |filter| %>
-      <button
-        class="flex text-secondary hover:bg-container-inset items-center gap-2 px-3 rounded-md py-2 w-full"
-        type="button"
-        data-id="<%= filter[:key] %>"
-        data-tabs-target="btn"
-        data-action="tabs#select">
-        <%= lucide_icon(filter[:icon], class: "w-5 h-5") %>
-        <span class="text-sm font-medium"><%= t(".#{filter[:key]}") %></span>
-      </button>
-    <% end %>
+  class="hidden fixed inset-0 h-screen w-screen flex flex-col sm:flex-row z-10 sm:h-80 sm:max-w-[540px] right-0 shadow-border-xs bg-container sm:rounded-lg">
+
+  <!-- Mobile header - only visible on small screens -->
+  <div class="flex items-center justify-between p-3 border-b border-b-alpha-black-100 sm:hidden">
+    <h2 class="text-lg font-medium">Filters</h2>
+    <button type="button" data-action="menu#close" class="p-2 hover:bg-container-inset rounded-md">
+      <%= lucide_icon("x", class: "w-5 h-5 text-secondary") %>
+    </button>
   </div>
 
-  <div class="flex flex-col grow">
-    <div class="grow p-3 border-b border-b-alpha-black-100 overflow-y-auto">
+  <div class="flex flex-row grow overflow-y-auto sm:overflow-y-hidden pb-16 sm:pb-0">
+    <div class="flex w-auto sm:w-44 flex-col items-start p-1 sm:p-3 text-sm font-medium text-secondary border-r border-r-alpha-black-100">
       <% transaction_search_filters.each do |filter| %>
-        <div id="<%= filter[:key] %>" data-tabs-target="tab">
-          <%= render partial: get_transaction_search_filter_partial_path(filter), locals: { form: form } %>
-        </div>
+        <button
+          class="flex text-secondary hover:bg-container-inset items-center gap-2 px-3 rounded-md py-2 w-full"
+          type="button"
+          data-id="<%= filter[:key] %>"
+          data-tabs-target="btn"
+          data-action="tabs#select">
+          <%= lucide_icon(filter[:icon], class: "w-5 h-5") %>
+          <span class="text-sm font-medium"><%= t(".#{filter[:key]}") %></span>
+        </button>
       <% end %>
     </div>
-
-    <div class="flex justify-between items-center gap-2 bg-container p-3">
-      <div>
-        <% if @q.present? %>
-          <%= link_to t(".clear_filters"), transactions_path(clear_filters: true), class: "btn btn--ghost" %>
+    <div class="flex flex-col grow">
+      <div class="grow p-3 border-b border-b-alpha-black-100 overflow-y-auto">
+        <% transaction_search_filters.each do |filter| %>
+          <div id="<%= filter[:key] %>" data-tabs-target="tab">
+            <%= render partial: get_transaction_search_filter_partial_path(filter), locals: { form: form } %>
+          </div>
         <% end %>
       </div>
-
-      <div>
-        <%= button_tag type: "reset", data: { action: "menu#close" }, class: "py-2 px-3 bg-container-inset rounded-lg text-sm text-primary font-medium" do %>
-          <%= t(".cancel") %>
-        <% end %>
-        <%= form.submit t(".apply"), name: nil, class: "py-2 px-3 bg-primary hover:bg-primary-dark rounded-lg text-sm text-white font-medium cursor-pointer" %>
+      <div class="flex justify-between items-center gap-2 bg-container p-3">
+        <div>
+          <% if @q.present? %>
+            <%= link_to t(".clear_filters"), transactions_path(clear_filters: true), class: "btn btn--ghost" %>
+          <% end %>
+        </div>
+        <div>
+          <%= button_tag type: "reset", data: { action: "menu#close" }, class: "py-2 px-3 bg-container-inset rounded-lg text-sm text-primary font-medium" do %>
+            <%= t(".cancel") %>
+          <% end %>
+          <%= form.submit t(".apply"), name: nil, class: "py-2 px-3 btn btn--primary rounded-lg text-sm text-white font-medium cursor-pointer" %>
+        </div>
       </div>
     </div>
   </div>

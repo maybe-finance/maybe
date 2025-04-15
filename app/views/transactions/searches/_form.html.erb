@@ -6,7 +6,7 @@
   <%= hidden_field_tag :per_page, params[:per_page] %>
 
   <div class="flex gap-2 mb-4">
-    <div class="grow relative" data-controller="menu">
+    <div class="grow relative">
       <div class="flex items-center px-3 py-2 gap-2 border border-secondary rounded-lg focus-within:ring-secondary focus-within:border-secondary">
         <%= lucide_icon("search", class: "w-5 h-5 text-secondary") %>
         <%= form.text_field :search,
@@ -20,21 +20,14 @@
                               responsive_attribute_attribute_value: "placeholder",
                               auto_submit_form_target: "auto"
                             } %>
-
-        <button id="mobile-filter-button" data-menu-target="button" type="button" class="sm:hidden text-secondary">
-          <%= lucide_icon("list-filter", class: "w-5 h-5") %>
-        </button>
-      </div>
-
-      <!-- Mobile-only filter menu -->
-      <div class="sm:hidden">
-        <%= render "transactions/searches/menu", form: form %>
       </div>
     </div>
-    <div data-controller="menu" class="relative hidden sm:block">
-      <button id="transaction-filters-button" data-menu-target="button" type="button" class="btn btn--outline flex items-center gap-2">
+
+    <div data-controller="menu" class="relative">
+      <!-- Desktop button -->
+      <button id="transaction-filters-button" data-menu-target="button" type="button" class="btn border-0 absolute right-2 sm:border-1 sm:right-0 sm:relative sm:flex btn--outline items-center gap-2">
         <%= lucide_icon("list-filter", class: "w-5 h-5 text-secondary") %>
-        <p class="text-sm font-medium text-primary">Filter</p>
+        <p class="hidden sm:block text-sm font-medium text-primary">Filter</p>
       </button>
 
       <%= render "transactions/searches/menu", form: form %>

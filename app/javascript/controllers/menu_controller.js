@@ -19,6 +19,9 @@ export default class extends Controller {
     offset: { type: Number, default: 6 },
   };
 
+  // Tailwind's sm breakpoint
+  #smBreakpoint = 640;
+
   connect() {
     this.show = this.showValue;
     this.boundUpdate = this.update.bind(this);
@@ -86,7 +89,8 @@ export default class extends Controller {
   }
 
   startAutoUpdate() {
-    if (!this._cleanup) {
+    // Only run autoUpdate on desktop screens
+    if (this.isDesktop && !this._cleanup) {
       this._cleanup = autoUpdate(
         this.buttonTarget,
         this.contentTarget,
@@ -102,7 +106,22 @@ export default class extends Controller {
     }
   }
 
+  get isDesktop() {
+    return window.innerWidth >= this.#smBreakpoint;
+  }
+
   update() {
+    // Only compute position on desktop screens
+    if (!this.isDesktop) {
+      // Ensure floating styles are removed if switching from desktop to mobile while open
+      Object.assign(this.contentTarget.style, {
+        position: "",
+        left: "",
+        top: "",
+      });
+      return;
+    }
+
     computePosition(this.buttonTarget, this.contentTarget, {
       placement: this.placementValue,
       middleware: [offset(this.offsetValue), flip(), shift({ padding: 5 })],
