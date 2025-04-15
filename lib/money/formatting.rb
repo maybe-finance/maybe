@@ -45,8 +45,8 @@ module Money::Formatting
         value = abs_amount / 1000.0
       end
 
-      # Always use period as decimal separator for abbreviations
-      abbrev_options = options.merge(precision: 1, separator: ".")
+      # Always use period as decimal separator for abbreviations and don't round up
+      abbrev_options = options.merge(precision: 1, separator: ".", round_mode: :down)
       value_formatted = number_to_rounded(value, abbrev_options)
       abbreviated_num = "#{value_formatted}#{unit_suffix}"
 
