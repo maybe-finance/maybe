@@ -15,7 +15,7 @@
     <%= tag.div class: class_names("min-w-1/2 flex items-center gap-2", "hidden" => !needs_value), 
                 data: { rule__actions_target: "actionValue" } do %>
       <span class="font-medium uppercase text-xs">to</span>
-      <%= form.select :value, action.options, {}, disabled: !needs_value %>
+      <%= form.select :value, action.options || [], {}, disabled: !needs_value %>
     <% end %>
   </div>
 

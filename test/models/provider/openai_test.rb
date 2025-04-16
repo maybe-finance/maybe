@@ -17,6 +17,35 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
     end
   end
 
+  test "auto categorizes transactions by various attributes" do
+    VCR.use_cassette("openai/auto_categorize") do
+      input_transactions = [
+        { id: "1", name: "McDonalds", amount: 20, classification: "expense", merchant: "McDonalds", hint: "Fast Food" },
+        { id: "2", name: "Amazon purchase", amount: 100, classification: "expense", merchant: "Amazon" },
+        { id: "3", name: "Netflix subscription", amount: 10, classification: "expense", merchant: "Netflix", hint: "Subscriptions" }
+      ]
+
+      response = @subject.auto_categorize(
+        transactions: input_transactions,
+        user_categories: [
+          { id: "shopping_id", name: "Shopping", is_subcategory: false, parent_id: nil, classification: "expense" },
+          { id: "restaurants_id", name: "Restaurants", is_subcategory: false, parent_id: nil, classification: "expense" }
+        ]
+      )
+
+      assert response.success?
+      assert_equal input_transactions.size, response.data.size
+
+      txn1 = response.data.find { |c| c.transaction_id == "1" }
+      txn2 = response.data.find { |c| c.transaction_id == "2" }
+      txn3 = response.data.find { |c| c.transaction_id == "3" }
+
+      assert_equal "Restaurants", txn1.category_name
+      assert_equal "Shopping", txn2.category_name
+      assert_nil txn3.category_name
+    end
+  end
+
   test "basic chat response" do
     VCR.use_cassette("openai/chat/basic_response") do
       response = @subject.chat_response(

@@ -4,7 +4,7 @@ class Provider::Openai < Provider
   # Subclass so errors caught in this provider are raised as Provider::Openai::Error
   Error = Class.new(Provider::Error)
 
-  MODELS = %w[gpt-4o]
+  MODELS = %w[gpt-4o gpt-4o-mini]
 
   def initialize(access_token)
     @client = ::OpenAI::Client.new(access_token: access_token)
@@ -12,6 +12,18 @@ class Provider::Openai < Provider
 
   def supports_model?(model)
     MODELS.include?(model)
+  end
+
+  def auto_categorize(transactions: [], user_categories: [])
+    with_provider_response do
+      raise Error, "Too many transactions to auto-categorize. Max is 100 per request" if transactions.size > 100
+
+      AutoCategorizer.new(
+        client,
+        transactions: transactions,
+        user_categories: user_categories
+      ).auto_categorize
+    end
   end
 
   def chat_response(prompt, model:, instructions: nil, functions: [], function_results: [], streamer: nil, previous_response_id: nil)

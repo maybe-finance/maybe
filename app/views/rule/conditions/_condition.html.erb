@@ -24,7 +24,7 @@
         <%= form.select :value, condition.options, {} %>
       <% else %>
         <% if condition.filter.type == "number" %>
-          <%= form.number_field :value, placeholder: "10" %>
+          <%= form.number_field :value, placeholder: "10", step: 0.01 %>
         <% else %>
           <%= form.text_field :value, placeholder: "Enter a value" %>
         <% end %>

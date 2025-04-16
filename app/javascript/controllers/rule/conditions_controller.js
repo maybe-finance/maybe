@@ -23,6 +23,7 @@ export default class extends Controller {
   remove(e) {
     if (e.params.destroy) {
       this.destroyFieldTarget.value = true;
+      this.element.classList.add("hidden");
     } else {
       this.element.remove();
     }
@@ -77,6 +78,9 @@ export default class extends Controller {
     const textInput = this.#convertFormFieldTo("input", this.valueInputEl);
     textInput.placeholder = "Enter a value";
     textInput.type = conditionFilter.type; // "text" || "number"
+    if (conditionFilter.type === "number") {
+      textInput.step = conditionFilter.number_step;
+    }
 
     this.valueInputEl.replaceWith(textInput);
   }

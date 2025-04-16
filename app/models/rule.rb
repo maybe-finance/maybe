@@ -1,4 +1,6 @@
 class Rule < ApplicationRecord
+  include Provided
+
   UnsupportedResourceTypeError = Class.new(StandardError)
 
   belongs_to :family
@@ -11,8 +13,8 @@ class Rule < ApplicationRecord
   validates :resource_type, presence: true
   validate :no_nested_compound_conditions
 
-  # Every rule must have at least 1 condition + action
-  validate :min_conditions_and_actions
+  # Every rule must have at least 1 action
+  validate :min_actions
   validate :no_duplicate_actions
 
   def action_executors
@@ -67,11 +69,7 @@ class Rule < ApplicationRecord
       scope
     end
 
-    def min_conditions_and_actions
-      if conditions.reject(&:marked_for_destruction?).empty?
-        errors.add(:base, "must have at least one condition")
-      end
-
+    def min_actions
       if actions.reject(&:marked_for_destruction?).empty?
         errors.add(:base, "must have at least one action")
       end

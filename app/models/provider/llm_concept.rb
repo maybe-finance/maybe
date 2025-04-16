@@ -1,6 +1,12 @@
 module Provider::LlmConcept
   extend ActiveSupport::Concern
 
+  AutoCategorization = Data.define(:transaction_id, :category_name)
+
+  def auto_categorize(transactions)
+    raise NotImplementedError, "Subclasses must implement #auto_categorize"
+  end
+
   ChatMessage = Data.define(:id, :output_text)
   ChatStreamChunk = Data.define(:type, :data)
   ChatResponse = Data.define(:id, :model, :messages, :function_requests)

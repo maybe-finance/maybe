@@ -34,6 +34,10 @@ class Entry < ApplicationRecord
     )
   }
 
+  def classification
+    amount.negative? ? "income" : "expense"
+  end
+
   def lock_saved_attributes!
     super
     entryable.lock_saved_attributes!

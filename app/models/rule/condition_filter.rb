@@ -17,6 +17,11 @@ class Rule::ConditionFilter
     "text"
   end
 
+  def number_step
+    family_currency = Money::Currency.new(family.currency)
+    family_currency.step
+  end
+
   def key
     self.class.name.demodulize.underscore
   end
@@ -49,7 +54,8 @@ class Rule::ConditionFilter
       key: key,
       label: label,
       operators: operators,
-      options: options
+      options: options,
+      number_step: number_step
     }
   end
 

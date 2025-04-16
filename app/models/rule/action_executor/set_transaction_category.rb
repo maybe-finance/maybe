@@ -17,17 +17,19 @@ class Rule::ActionExecutor::SetTransactionCategory < Rule::ActionExecutor
     end
 
     scope.each do |txn|
-      txn.update!(category: category)
+      DataEnrichment.transaction do
+        txn.update!(category: category)
 
-      de = DataEnrichment.find_or_create_by!(
-        enrichable: txn,
-        attribute_name: "category_id",
-        value: category.id,
-        source: "rule"
-      )
+        de = DataEnrichment.find_or_create_by!(
+          enrichable: txn,
+          attribute_name: "category_id",
+          value: category.id,
+          source: "rule"
+        )
 
-      de.value = category.id
-      de.save!
+        de.value = category.id
+        de.save!
+      end
     end
   end
 end
