@@ -10,6 +10,6 @@ class AddressTest < ActiveSupport::TestCase
       postal_code: "94101"
     )
 
-    assert_equal "123 Main St\n\nSan Francisco, CA 94101\nUS", address.to_s
+    assert_equal "123 Main St, San Francisco, CA 94101 US", address.to_s
   end
 end
