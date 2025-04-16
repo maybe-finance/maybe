@@ -139,18 +139,14 @@ class PlaidAccount < ApplicationRecord
         return nil
       end
 
-      merchant = ProviderMerchant.find_or_initialize_by(
+      ProviderMerchant.find_or_create_by!(
         source: "plaid",
         provider_merchant_id: plaid_txn.merchant_entity_id,
-      ).tap do |m|
+        website_url: plaid_txn.website
+      ) do |m|
         m.name = plaid_txn.merchant_name
         m.logo_url = plaid_txn.logo_url
-        m.website_url = plaid_txn.website
       end
-
-      merchant.save!
-
-      merchant
     end
 
     def derive_plaid_cash_balance(plaid_balances)
