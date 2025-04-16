@@ -18,7 +18,7 @@
 
       <div class="border border-alpha-black-25 rounded-md bg-container shadow-border-xs">
         <div class="overflow-hidden rounded-md">
-          <%= render partial: @merchants, spacer_template: "family_merchants/ruler" %>
+          <%= render partial: "family_merchants/family_merchant", collection: @merchants, spacer_template: "family_merchants/ruler" %>
         </div>
       </div>
     </div>

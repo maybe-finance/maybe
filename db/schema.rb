@@ -172,6 +172,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_15_125256) do
     t.string "source"
     t.string "attribute_name"
     t.jsonb "value"
+    t.jsonb "metadata"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["enrichable_id", "enrichable_type", "source", "attribute_name"], name: "idx_on_enrichable_id_enrichable_type_source_attribu_5be5f63e08", unique: true

@@ -21,7 +21,7 @@
 
         <div class="max-w-full">
           <%= content_tag :div, class: ["flex items-center gap-2"] do %>
-            <% if transaction.merchant&.logo_url %>
+            <% if transaction.merchant&.logo_url.present? %>
               <%= image_tag transaction.merchant.logo_url,
                   class: "w-6 h-6 rounded-full",
                   loading: "lazy" %>

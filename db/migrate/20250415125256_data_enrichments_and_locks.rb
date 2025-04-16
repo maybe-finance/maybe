@@ -5,6 +5,7 @@ class DataEnrichmentsAndLocks < ActiveRecord::Migration[7.2]
       t.string :source
       t.string :attribute_name
       t.jsonb :value
+      t.jsonb :metadata
 
       t.timestamps
     end

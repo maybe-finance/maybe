@@ -17,18 +17,14 @@ class Rule::ActionExecutor::SetTransactionTags < Rule::ActionExecutor
     end
 
     rows = scope.each do |txn|
-      DataEnrichment.transaction do
-        txn.update!(tag_ids: [ tag.id ])
-
-        de = DataEnrichment.find_or_initialize_by(
-          enrichable_id: txn.id,
-          enrichable_type: "Transaction",
+      Rule.transaction do
+        txn.log_enrichment!(
           attribute_name: "tag_ids",
+          attribute_value: [ tag.id ],
           source: "rule"
         )
 
-        de.value = [ tag.id ]
-        de.save!
+        txn.update!(tag_ids: [ tag.id ])
       end
     end
   end

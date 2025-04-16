@@ -7,7 +7,7 @@ class Provider::Openai::AutoCategorizer
 
   def auto_categorize
     response = client.responses.create(parameters: {
-      model: "gpt-4o-mini",
+      model: "gpt-4.1-mini",
       input: [ { role: "developer", content: developer_message } ],
       text: {
         format: {
@@ -19,6 +19,8 @@ class Provider::Openai::AutoCategorizer
       },
       instructions: instructions
     })
+
+    Rails.logger.info("Tokens used to auto-categorize transactions: #{response.dig("usage").dig("total_tokens")}")
 
     build_response(extract_categorizations(response))
   end

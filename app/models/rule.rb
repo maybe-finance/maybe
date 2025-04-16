@@ -1,6 +1,4 @@
 class Rule < ApplicationRecord
-  include Provided
-
   UnsupportedResourceTypeError = Class.new(StandardError)
 
   belongs_to :family

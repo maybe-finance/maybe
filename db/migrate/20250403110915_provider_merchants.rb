@@ -24,6 +24,6 @@ class ProviderMerchants < ActiveRecord::Migration[7.2]
     add_column :merchants, :provider_merchant_id, :string
 
     add_index :merchants, [ :family_id, :name ], unique: true, where: "type = 'FamilyMerchant'"
-    add_index :merchants, [ :source, :name ], unique: true, where: "type = 'ProviderMerchant'"
+    add_index :merchants, [ :source, :name, :website_url ], unique: true, where: "type = 'ProviderMerchant'"
   end
 end

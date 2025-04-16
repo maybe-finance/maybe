@@ -1,15 +1,13 @@
 require "test_helper"
 
-class Rule::ActionExecutor::AiAutoCategorizeTest < ActiveSupport::TestCase
+class Family::AutoCategorizerTest < ActiveSupport::TestCase
   include EntriesTestHelper, ProviderTestHelper
 
   setup do
     @family = families(:dylan_family)
     @account = @family.accounts.create!(name: "Rule test", balance: 100, currency: "USD", accountable: Depository.new)
     @llm_provider = mock
-    @rule = rules(:one)
-
-    Rule.any_instance.stubs(:llm_provider).returns(@llm_provider)
+    Provider::Registry.stubs(:get_provider).with(:openai).returns(@llm_provider)
   end
 
   test "auto-categorizes transactions" do
@@ -27,10 +25,9 @@ class Rule::ActionExecutor::AiAutoCategorizeTest < ActiveSupport::TestCase
 
     @llm_provider.expects(:auto_categorize).returns(provider_response).once
 
-    # All 3 of newly created transactions are enrichable by category_id
-    assert_equal 3, @account.transactions.reload.enrichable(:category_id).count
-
-    Rule::ActionExecutor::AiAutoCategorize.new(@rule).execute(@account.transactions)
+    assert_difference "DataEnrichment.count", 2 do
+      Family::AutoCategorizer.new(@family, transaction_ids: [ txn1.id, txn2.id, txn3.id ]).auto_categorize
+    end
 
     assert_equal test_category, txn1.reload.category
     assert_equal test_category, txn2.reload.category

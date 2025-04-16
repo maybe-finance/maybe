@@ -15,8 +15,8 @@ class Rule::Registry::TransactionResource < Rule::Registry
     [
       Rule::ActionExecutor::SetTransactionCategory.new(rule),
       Rule::ActionExecutor::SetTransactionTags.new(rule),
-      Rule::ActionExecutor::AiEnhanceTransactionName.new(rule),
-      Rule::ActionExecutor::AiAutoCategorize.new(rule)
+      Rule::ActionExecutor::AutoDetectMerchants.new(rule),
+      Rule::ActionExecutor::AutoCategorize.new(rule)
     ]
   end
 end

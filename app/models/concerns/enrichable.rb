@@ -22,6 +22,18 @@ module Enrichable
     }
   end
 
+  def log_enrichment!(attribute_name:, attribute_value:, source:, metadata: {})
+    de = DataEnrichment.find_or_create_by!(
+      enrichable: self,
+      attribute_name: attribute_name,
+      source: source,
+    )
+
+    de.value = attribute_value
+    de.metadata = metadata
+    de.save!
+  end
+
   def locked?(attr)
     locked_attributes[attr.to_s].present?
   end
@@ -46,6 +58,6 @@ module Enrichable
 
   private
     def ignored_enrichable_attributes
-      %w[updated_at created_at]
+      %w[id updated_at created_at]
     end
 end
