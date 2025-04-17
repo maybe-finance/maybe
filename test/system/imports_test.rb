@@ -16,7 +16,7 @@ class ImportsTest < ApplicationSystemTestCase
     click_on "Import transactions"
 
     find("button[data-id='csv-paste-tab']").click
-    
+
     fill_in "import[raw_file_str]", with: file_fixture("imports/transactions.csv").read
 
     find('input[type="submit"][value="Upload CSV"]').click
