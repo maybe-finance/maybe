@@ -23,10 +23,6 @@ class Rule < ApplicationRecord
     registry.condition_filters
   end
 
-  def title
-    "Test title"
-  end
-
   def registry
     @registry ||= case resource_type
     when "transaction"

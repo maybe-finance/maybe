@@ -1,7 +1,0 @@
-<%= turbo_frame_tag "new_condition" do %>
-  <%= fields_for @rule do |f| %>
-    <%= f.fields_for :conditions do |cf| %>
-      <%= render "rule/conditions/condition_group", form: cf %>
-    <% end %>
-  <% end %>
-<% end %>

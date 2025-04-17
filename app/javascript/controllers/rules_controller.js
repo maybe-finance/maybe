@@ -33,8 +33,6 @@ export default class extends Controller {
     this.effectiveDateInputTarget.value = "";
   }
 
-  enableEffectiveDate() {}
-
   #appendTemplate(templateEl, listEl) {
     const html = templateEl.innerHTML.replaceAll(
       "IDX_PLACEHOLDER",

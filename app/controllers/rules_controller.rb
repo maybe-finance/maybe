@@ -11,18 +11,6 @@ class RulesController < ApplicationController
   def new
     @rule = Current.family.rules.build(
       resource_type: params[:resource_type] || "transaction",
-      conditions: [
-        Rule::Condition.new(
-          condition_type: params[:condition_type] || "transaction_name",
-          value: params[:condition_value]
-        )
-      ],
-      actions: [
-        Rule::Action.new(
-          action_type: params[:action_type] || "set_transaction_category",
-          value: params[:action_value]
-        )
-      ]
     )
   end
 
