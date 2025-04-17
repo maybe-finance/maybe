@@ -1,6 +1,10 @@
 class Rule::ActionExecutor::AutoCategorize < Rule::ActionExecutor
   def label
-    "Auto-categorize transactions"
+    if rule.family.self_hoster?
+      "Auto-categorize transactions with AI ($$)"
+    else
+      "Auto-categorize transactions"
+    end
   end
 
   def execute(transaction_scope, value: nil, ignore_attribute_locks: false)

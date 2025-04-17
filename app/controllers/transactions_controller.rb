@@ -118,7 +118,7 @@ class TransactionsController < ApplicationController
 
     def entry_params
       entry_params = params.require(:entry).permit(
-        :name, :enriched_name, :date, :amount, :currency, :excluded, :notes, :nature, :entryable_type,
+        :name, :date, :amount, :currency, :excluded, :notes, :nature, :entryable_type,
         entryable_attributes: [ :id, :category_id, :merchant_id, { tag_ids: [] } ]
       )
 

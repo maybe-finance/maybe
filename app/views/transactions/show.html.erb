@@ -10,7 +10,7 @@
               class: "space-y-2",
               data: { controller: "auto-submit-form" } do |f| %>
 
-          <%= f.text_field @entry.enriched_at.present? ? :enriched_name : :name,
+          <%= f.text_field :name,
                 label: t(".name_label"),
                 "data-auto-submit-form-target": "auto" %>
 

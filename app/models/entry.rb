@@ -56,10 +56,6 @@ class Entry < ApplicationRecord
     Balance::TrendCalculator.new(self, entries, balances).trend
   end
 
-  def display_name
-    enriched_name.presence || name
-  end
-
   class << self
     def search(params)
       EntrySearch.new(params).build_query(all)

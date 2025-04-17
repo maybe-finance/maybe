@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_15_125256) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_16_235758) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -199,8 +199,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_15_125256) do
     t.text "notes"
     t.boolean "excluded", default: false
     t.string "plaid_id"
-    t.datetime "enriched_at"
-    t.string "enriched_name"
     t.jsonb "locked_attributes", default: {}
     t.index ["account_id"], name: "index_entries_on_account_id"
     t.index ["import_id"], name: "index_entries_on_import_id"
@@ -638,6 +636,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_15_125256) do
     t.uuid "category_id"
     t.uuid "merchant_id"
     t.jsonb "locked_attributes", default: {}
+    t.string "plaid_category"
+    t.string "plaid_category_detailed"
     t.index ["category_id"], name: "index_transactions_on_category_id"
     t.index ["merchant_id"], name: "index_transactions_on_merchant_id"
   end
@@ -674,9 +674,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_15_125256) do
     t.uuid "last_viewed_chat_id"
     t.boolean "show_ai_sidebar", default: true
     t.boolean "ai_enabled", default: false, null: false
+    t.string "theme", default: "system"
     t.boolean "rule_prompts_disabled", default: false
     t.datetime "rule_prompt_dismissed_at"
-    t.string "theme", default: "system"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["family_id"], name: "index_users_on_family_id"
     t.index ["last_viewed_chat_id"], name: "index_users_on_last_viewed_chat_id"

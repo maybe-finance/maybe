@@ -21,7 +21,17 @@
   </div>
 </header>
 
+<% if self_hosted? %>
+  <div class="flex items-center gap-2 mb-2 py-4">
+    <%= lucide_icon("circle-alert", class: "w-4 h-4 text-secondary") %>
+    <p class="text-sm text-secondary">
+      AI-enabled rule actions will cost money.  Be sure to filter as narrowly as possible to avoid unnecessary costs.
+    </p>
+  </div>
+<% end %>
+
 <div class="bg-white shadow-border-xs rounded-xl p-4">
+
   <% if @rules.any? %>
     <div class="rounded-xl bg-gray-25 space-y-1">
       <div class="flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-secondary uppercase">

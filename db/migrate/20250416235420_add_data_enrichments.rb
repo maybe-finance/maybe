@@ -1,4 +1,4 @@
-class DataEnrichmentsAndLocks < ActiveRecord::Migration[7.2]
+class AddDataEnrichments < ActiveRecord::Migration[7.2]
   def change
     create_table :data_enrichments, id: :uuid do |t|
       t.references :enrichable, polymorphic: true, null: false, type: :uuid

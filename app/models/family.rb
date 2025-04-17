@@ -167,4 +167,8 @@ class Family < ApplicationRecord
       entries.maximum(:updated_at)
     ].compact.join("_")
   end
+
+  def self_hoster?
+    Rails.application.config.app_mode.self_hosted?
+  end
 end

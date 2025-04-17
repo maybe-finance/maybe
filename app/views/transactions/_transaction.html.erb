@@ -27,7 +27,7 @@
                   loading: "lazy" %>
             <% else %>
               <%= render "shared/circle_logo",
-                  name: entry.display_name,
+                  name: entry.name,
                   size: "sm" %>
             <% end %>
 
@@ -35,7 +35,7 @@
               <div class="space-y-0.5">
                 <div class="flex items-center gap-1">
                   <%= link_to(
-                        transaction.transfer? ? transaction.transfer.name : entry.display_name,
+                        transaction.transfer? ? transaction.transfer.name : entry.name,
                         transaction.transfer? ? transfer_path(transaction.transfer) : entry_path(entry),
                         data: {
                           turbo_frame: "drawer",

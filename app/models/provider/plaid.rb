@@ -121,7 +121,10 @@ class Provider::Plaid
     while has_more
       request = Plaid::TransactionsSyncRequest.new(
         access_token: item.access_token,
-        cursor: cursor
+        cursor: cursor,
+        options: {
+          include_original_description: true
+        }
       )
 
       response = client.transactions_sync(request)

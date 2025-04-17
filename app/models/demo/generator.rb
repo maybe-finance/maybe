@@ -205,7 +205,7 @@ class Demo::Generator
     end
 
     def create_categories!(family)
-      family.categories.bootstrap_defaults
+      family.categories.bootstrap!
 
       food = family.categories.find_by(name: "Food & Drink")
       family.categories.create!(name: "Restaurants", parent: food, color: COLORS.sample, lucide_icon: "utensils", classification: "expense")

@@ -4,10 +4,10 @@ module FormsHelper
     form_with(**options, &block)
   end
 
-  def modal_form_wrapper(title:, subtitle: nil, &block)
+  def modal_form_wrapper(title:, subtitle: nil, overflow_visible: false, &block)
     content = capture &block
 
-    render partial: "shared/modal_form", locals: { title:, subtitle:, content: }
+    render partial: "shared/modal_form", locals: { title:, subtitle:, content:, overflow_visible: }
   end
 
   def radio_tab_tag(form:, name:, value:, label:, icon:, checked: false, disabled: false)

@@ -1,8 +1,19 @@
-<%# locals: (content:, reload_on_close:) -%>
+<%# locals: (content:, reload_on_close:, overflow_visible: false) -%>
+
 <%= turbo_frame_tag "modal" do %>
-  <dialog class="focus:outline-none m-auto bg-container shadow-border-xs rounded-2xl max-w-[580px] w-min-content h-fit overflow-auto" data-controller="modal" data-action="mousedown->modal#clickOutside" data-modal-reload-on-close-value="<%= reload_on_close %>">
+  <%= tag.dialog(
+    class: class_names(
+      "focus:outline-none m-auto bg-container rounded-2xl max-w-[580px] w-min-content h-fit shadow-border-xs",
+      overflow_visible ? "overflow-visible" : "overflow-auto"
+    ),
+    data: {
+      controller: "modal",
+      action: "mousedown->modal#clickOutside",
+      modal_reload_on_close_value: reload_on_close
+    }
+  ) do %>
     <div class="flex flex-col">
       <%= content %>
     </div>
-  </dialog>
+  <% end %>
 <% end %>

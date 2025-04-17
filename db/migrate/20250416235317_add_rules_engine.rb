@@ -1,4 +1,4 @@
-class CreateRules < ActiveRecord::Migration[7.2]
+class AddRulesEngine < ActiveRecord::Migration[7.2]
   def change
     create_table :rules, id: :uuid do |t|
       t.references :family, null: false, foreign_key: true, type: :uuid
@@ -26,5 +26,8 @@ class CreateRules < ActiveRecord::Migration[7.2]
       t.string :value
       t.timestamps
     end
+
+    add_column :users, :rule_prompts_disabled, :boolean, default: false
+    add_column :users, :rule_prompt_dismissed_at, :datetime
   end
 end

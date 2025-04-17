@@ -1,4 +1,4 @@
-class ProviderMerchants < ActiveRecord::Migration[7.2]
+class MerchantAndCategoryEnrichment < ActiveRecord::Migration[7.2]
   def change
     change_column_null :merchants, :family_id, true
     change_column_null :merchants, :color, true
@@ -19,11 +19,16 @@ class ProviderMerchants < ActiveRecord::Migration[7.2]
 
     change_column_null :merchants, :type, false
 
-    # Provider specific columns
     add_column :merchants, :source, :string
     add_column :merchants, :provider_merchant_id, :string
 
     add_index :merchants, [ :family_id, :name ], unique: true, where: "type = 'FamilyMerchant'"
-    add_index :merchants, [ :source, :name, :website_url ], unique: true, where: "type = 'ProviderMerchant'"
+    add_index :merchants, [ :source, :name ], unique: true, where: "type = 'ProviderMerchant'"
+
+    add_column :transactions, :plaid_category, :string
+    add_column :transactions, :plaid_category_detailed, :string
+
+    remove_column :entries, :enriched_name, :string
+    remove_column :entries, :enriched_at, :datetime
   end
 end

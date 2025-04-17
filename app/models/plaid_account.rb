@@ -83,13 +83,14 @@ class PlaidAccount < ApplicationRecord
   def sync_transactions!(added:, modified:, removed:)
     added.each do |plaid_txn|
       account.entries.find_or_create_by!(plaid_id: plaid_txn.transaction_id) do |t|
-        t.name = plaid_txn.name
+        t.name = plaid_txn.merchant_name || plaid_txn.original_description
         t.amount = plaid_txn.amount
         t.currency = plaid_txn.iso_currency_code
         t.date = plaid_txn.date
         t.entryable = Transaction.new(
-          category: get_category(plaid_txn.personal_finance_category.primary),
-          merchant: get_merchant(plaid_txn)
+          plaid_category: plaid_txn.personal_finance_category.primary,
+          plaid_category_detailed: plaid_txn.personal_finance_category.detailed,
+          merchant: find_or_create_merchant(plaid_txn)
         )
       end
     end
@@ -99,7 +100,12 @@ class PlaidAccount < ApplicationRecord
 
       existing_txn.update!(
         amount: plaid_txn.amount,
-        date: plaid_txn.date
+        date: plaid_txn.date,
+        entryable_attributes: {
+          plaid_category: plaid_txn.personal_finance_category.primary,
+          plaid_category_detailed: plaid_txn.personal_finance_category.detailed,
+          merchant: find_or_create_merchant(plaid_txn)
+        }
       )
     end
 
@@ -125,26 +131,17 @@ class PlaidAccount < ApplicationRecord
       end
     end
 
-    # See https://plaid.com/documents/transactions-personal-finance-category-taxonomy.csv
-    def get_category(plaid_category)
-      ignored_categories = [ "BANK_FEES", "TRANSFER_IN", "TRANSFER_OUT", "LOAN_PAYMENTS", "OTHER" ]
-
-      return nil if ignored_categories.include?(plaid_category)
-
-      family.categories.find_or_create_by!(name: plaid_category.titleize)
-    end
-
-    def get_merchant(plaid_txn)
+    def find_or_create_merchant(plaid_txn)
       unless plaid_txn.merchant_entity_id.present? && plaid_txn.merchant_name.present?
         return nil
       end
 
       ProviderMerchant.find_or_create_by!(
         source: "plaid",
-        provider_merchant_id: plaid_txn.merchant_entity_id,
-        website_url: plaid_txn.website
+        name: plaid_txn.merchant_name,
       ) do |m|
-        m.name = plaid_txn.merchant_name
+        m.provider_merchant_id = plaid_txn.merchant_entity_id
+        m.website_url = plaid_txn.website
         m.logo_url = plaid_txn.logo_url
       end
     end
