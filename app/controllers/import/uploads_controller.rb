@@ -7,9 +7,9 @@ class Import::UploadsController < ApplicationController
   end
 
   def sample_csv
-    send_data @import.csv_template.to_csv, 
-      filename: "#{@import.type.underscore.split('_').first}_sample.csv", 
-      type: "text/csv", 
+    send_data @import.csv_template.to_csv,
+      filename: "#{@import.type.underscore.split('_').first}_sample.csv",
+      type: "text/csv",
       disposition: "attachment"
   end
 
