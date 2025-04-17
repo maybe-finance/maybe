@@ -87,6 +87,7 @@ class Provider::OpenaiTest < ActiveSupport::TestCase
       txn6 = response.data.find { |c| c.transaction_id == "6" }
       txn7 = response.data.find { |c| c.transaction_id == "7" }
       txn8 = response.data.find { |c| c.transaction_id == "8" }
+
       assert_equal "McDonald's", txn1.business_name
       assert_equal "mcdonalds.com", txn1.business_url
 
