@@ -9,8 +9,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
   test "create redirects to correct URL" do
     post registration_url, params: { user: {
       email: "john@example.com",
-      password: "password",
-      password_confirmation: "password" } }
+      password: "Password1!" } }
 
     assert_redirected_to root_url
   end
@@ -20,14 +19,12 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
       assert_no_difference "User.count" do
         post registration_url, params: { user: {
           email: "john@example.com",
-          password: "password",
-          password_confirmation: "password" } }
+          password: "Password1!" } }
         assert_redirected_to new_registration_url
 
         post registration_url, params: { user: {
           email: "john@example.com",
-          password: "password",
-          password_confirmation: "password",
+          password: "Password1!",
           invite_code: "foo" } }
         assert_redirected_to new_registration_url
       end
@@ -35,8 +32,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
       assert_difference "User.count", +1 do
         post registration_url, params: { user: {
           email: "john@example.com",
-          password: "password",
-          password_confirmation: "password",
+          password: "Password1!",
           invite_code: InviteCode.generate! } }
         assert_redirected_to root_url
       end
