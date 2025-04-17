@@ -137,12 +137,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :transactions, only: :index do
-    collection do
-      delete :clear_filter
-    end
-  end
-
   resources :rules, except: :show do
     member do
       get :confirm
