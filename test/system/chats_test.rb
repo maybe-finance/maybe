@@ -42,6 +42,7 @@ class ChatsTest < ApplicationSystemTestCase
   end
 
   test "create chat and navigate chats sidebar" do
+    @user.update!(ai_enabled: true)
     @user.chats.destroy_all
 
     visit root_url
