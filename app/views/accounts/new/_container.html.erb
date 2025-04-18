@@ -1,8 +1,8 @@
 <%# locals: (title:, back_path: nil) %>
 
 <%= modal do %>
-  <div class="flex flex-col w-screen max-w-xl" data-controller="list-keyboard-navigation">
-    <div class="border-b border-alpha-black-25 p-4 text-gray-800 flex items-center space-x-3">
+  <div class="flex flex-col w-screen max-w-xl relative" data-controller="list-keyboard-navigation">
+    <div class="border-b border-tertiary md:border-alpha-black-25 p-4 text-gray-800 flex items-center space-x-3">
       <% if back_path %>
         <%= link_to back_path, class: "flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-alpha-black-50 focus:outline-gray-300 focus:outline" do %>
           <%= lucide_icon("arrow-left", class: "text-secondary w-5 h-5") %>
@@ -10,6 +10,9 @@
       <% end %>
 
       <span class="text-subdued"><%= title %></span>
+        <button class="absolute top-1/2 -translate-y-1/2 right-4 flex w-8 h-8 items-center justify-center rounded-lg md:hidden outline-0" data-action="click->modal#close">
+        <%= lucide_icon("x", class: "text-secondary w-6 h-6") %>
+      </div>
     </div>
 
     <div class="p-2">
@@ -19,7 +22,7 @@
       <%= yield %>
     </div>
 
-    <div class="border-t border-alpha-black-25 p-4 text-secondary text-sm flex justify-between">
+    <div class="border-t border-alpha-black-25 p-4 text-secondary text-sm justify-between hidden md:flex">
       <div class="flex space-x-5">
         <div class="flex items-center space-x-2">
           <span>Select</span>

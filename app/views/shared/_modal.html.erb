@@ -1,7 +1,7 @@
 <%# locals: (content:, classes:) -%>
 <%= turbo_frame_tag "modal" do %>
-  <dialog class="m-auto bg-container shadow-border-xs rounded-2xl max-w-[580px] w-min-content h-fit overflow-visible <%= classes %>" data-controller="modal" data-action="mousedown->modal#clickOutside">
-    <div class="flex flex-col">
+  <dialog class="md:m-auto bg-container shadow-border-xs rounded-none md:rounded-2xl max-w-screen max-h-screen md:max-w-max w-full h-full md:h-fit md:w-auto overflow-visible <%= classes %>" data-controller="modal" data-action="mousedown->modal#clickOutside">
+    <div class="flex flex-col h-full md:h-auto mt-safe">
       <%= content %>
     </div>
   </dialog>

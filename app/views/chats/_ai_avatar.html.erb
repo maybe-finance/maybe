@@ -1,3 +1,4 @@
 <div class="w-16 h-16 flex-shrink-0 -ml-3 -mt-3">
-  <%= image_tag "ai.svg", alt: "AI", class: "w-full h-full" %>
+  <%# Never use svg as an image tag, it appears blurry in Safari %>
+  <%= inline_svg_tag "ai.svg", alt: "AI", class: "w-full h-full" %>
 </div>

@@ -11,12 +11,12 @@
           You have requested to change your email to <%= @user.unconfirmed_email %>. Please go to your email and confirm for the change to take effect.
         </p>
       <% end %>
-      <div class="grid grid-cols-2 gap-4 mt-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         <%= form.text_field :first_name, placeholder: t(".first_name"), label: t(".first_name") %>
         <%= form.text_field :last_name, placeholder: t(".last_name"), label: t(".last_name") %>
       </div>
       <div class="flex justify-end mt-4">
-        <%= form.submit t(".save"), class: "btn btn--primary" %>
+        <%= form.submit t(".save"), class: "btn btn--primary md:w-auto w-full" %>
       </div>
     </div>
   <% end %>
@@ -129,14 +129,14 @@
 <%= settings_section title: t(".danger_zone_title") do %>
   <div class="space-y-4">
     <% if Current.user.admin? %>
-      <div class="flex items-center justify-between">
-        <div class="w-2/3">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div class="w-full md:w-2/3">
           <h3 class="font-medium text-primary"><%= t(".reset_account") %></h3>
           <p class="text-secondary text-sm"><%= t(".reset_account_warning") %></p>
         </div>
         <%=
               button_to t(".reset_account"), reset_user_path(@user), method: :delete,
-                class: "btn btn--destructive",
+                class: "w-full md:w-auto btn btn--destructive",
                 data: { turbo_confirm: {
                   title: t(".confirm_reset.title"),
                   body: t(".confirm_reset.body"),
@@ -146,14 +146,14 @@
         %>
       </div>
     <% end %>
-    <div class="flex items-center justify-between">
-      <div>
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div class="w-full md:w-2/3">
         <h3 class="font-medium text-primary"><%= t(".delete_account") %></h3>
         <p class="text-secondary text-sm"><%= t(".delete_account_warning") %></p>
       </div>
       <%=
             button_to t(".delete_account"), user_path(@user), method: :delete,
-              class: "btn btn--destructive",
+              class: "w-full md:w-auto btn btn--destructive",
               data: { turbo_confirm: {
                 title: t(".confirm_delete.title"),
                 body: t(".confirm_delete.body"),

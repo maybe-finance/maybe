@@ -47,7 +47,7 @@
 
 <%= settings_section title: t(".theme_title"), subtitle: t(".theme_subtitle") do %>
   <div>
-    <%= styled_form_with model: @user, class: "flex justify-between items-center", data: { controller: "auto-submit-form" } do |form| %>
+    <%= styled_form_with model: @user, class: "flex flex-col md:flex-row justify-between items-center gap-4", data: { controller: "auto-submit-form" } do |form| %>
       <%= form.hidden_field :redirect_to, value: "preferences" %>
       <div class="text-center">
         <%= image_tag("light-mode-preview.png", alt: "Light Theme Preview", class: "h-44 mb-4") %>

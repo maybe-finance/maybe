@@ -1,37 +1,47 @@
 <%# locals: (headers: [], rows: [], caption: nil) %>
-<div class="overflow-x-auto">
-  <div class="border border-secondary rounded-md shadow-border-xs text-sm bg-container w-full">
-    <div class="grid border-b border-b-alpha-black-200" style="grid-template-columns: repeat(<%= headers.length %>, minmax(0, 1fr))">
-      <% headers.each_with_index do |header, index| %>
-        <div class="
-          bg-container-inset px-3 py-2.5 font-medium whitespace-nowrap overflow-x-auto
-          first:rounded-tl-md last:rounded-tr-md
-          <%= "border-r border-r-alpha-black-200" unless index == headers.length - 1 %>
-        ">
-          <%= header %>
-        </div>
-      <% end %>
+<div class="bg-container-inset rounded-xl overflow-hidden mx-1 md:mx-auto p-3 pl-2 md:pr-2 pr-0">
+  <% if caption %>
+    <div class="flex items-center mb-4">
+      <div class="text-gray-500 mr-2">
+        <%= inline_svg_tag "icon-csv.svg", class: "w-4 h-4" %>
+      </div>
+      <h2 class="text-sm text-gray-500 font-medium"><%= caption %></h2>
     </div>
-
-    <% rows.each_with_index do |row, row_index| %>
-      <div class="grid <%= "border-b border-b-alpha-black-200" if row_index < rows.length - 1 || caption %>" style="grid-template-columns: repeat(<%= headers.length %>, minmax(0, 1fr))">
-        <% row.each_with_index do |(header, value), col_index| %>
-          <div class="
-            px-3 py-2.5 whitespace-nowrap overflow-x-auto flex items-start
-            <%= "border-r border-r-alpha-black-200" unless col_index == row.length - 1 %>
-            <%= "rounded-bl-md" if !caption && row_index == rows.length - 1 && col_index == 0 %>
-            <%= "rounded-br-md" if !caption && row_index == rows.length - 1 && col_index == row.length - 1 %>
-          ">
-            <%= value %>
-          </div>
-        <% end %>
-      </div>
-    <% end %>
-
-    <% if caption %>
-      <div class="px-3 py-2.5 text-center text-xs text-primary rounded-b-md italic bg-container-inset overflow-x-auto">
-        <%= caption %>
-      </div>
-    <% end %>
+  <% end %>
+  <div class="overflow-x-auto -webkit-overflow-scrolling-touch">
+    <div class="inline-block min-w-full sm:w-full border border-secondary rounded-md shadow-border-xs text-sm bg-container">
+      <table class="min-w-full divide-y divide-alpha-black-200">
+        <thead>
+          <tr>
+            <% headers.each_with_index do |header, index| %>
+              <th class="
+                bg-container-inset px-3 py-2.5 font-medium text-left whitespace-nowrap
+                <%= index == 0 ? 'rounded-tl-md' : '' %>
+                <%= index == headers.length - 1 ? 'rounded-tr-md' : '' %>
+                <%= index < headers.length - 1 ? 'border-r border-r-alpha-black-200' : '' %>
+              ">
+                <%= header %>
+              </th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-alpha-black-200">
+          <% rows.each_with_index do |row, row_index| %>
+            <tr>
+              <% row.each_with_index do |(header, value), col_index| %>
+                <td class="
+                  px-3 py-2.5 whitespace-nowrap text-left
+                  <%= col_index < row.length - 1 ? 'border-r border-r-alpha-black-200' : '' %>
+                  <%= !caption && row_index == rows.length - 1 && col_index == 0 ? 'rounded-bl-md' : '' %>
+                  <%= !caption && row_index == rows.length - 1 && col_index == row.length - 1 ? 'rounded-br-md' : '' %>
+                ">
+                  <%= value %>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

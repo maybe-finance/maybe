@@ -761,3 +761,11 @@
     @apply bg-alpha-black-700;
   }
 }
+
+@utility bg-nav-indicator {
+  @apply bg-black;
+
+  @variant theme-dark {
+    @apply bg-white;
+  }
+}
