@@ -10,7 +10,7 @@
             <h2 class="text-3xl font-medium text-primary text-center">
               <%= content_for?(:header_title) ? yield(:header_title).html_safe : t(".your_account") %>
             </h2>
-            <% unless controller_name == "mfa" && action_name == "verify" %>
+            <% if (controller_name == "sessions" && action_name == "new") || (controller_name == "registrations" && action_name == "new") %>
               <div class="space-y-3 md:hidden w-full my-4">
                 <div class="bg-surface-inset rounded-lg p-1 flex">
                   <%= link_to new_session_path, 
