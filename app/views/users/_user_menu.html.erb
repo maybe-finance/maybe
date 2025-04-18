@@ -37,28 +37,28 @@
     <div class="p-1">
       <%= link_to settings_profile_path(return_to: request.fullpath), class: "btn btn--ghost flex gap-2 items-center" do %>
         <%= lucide_icon("settings", class: "w-5 h-5 text-secondary shrink-0") %>
-        <span class="text-primary text-sm">Settings</span>
+        <span class="text-sm">Settings</span>
       <% end %>
 
       <%= link_to changelog_path, class: "btn btn--ghost flex gap-2 items-center" do %>
         <%= lucide_icon("box", class: "w-5 h-5 text-secondary shrink-0") %>
-        <span class="text-primary text-sm">Changelog</span>
+        <span class="text-sm">Changelog</span>
       <% end %>
 
       <%= link_to feedback_path, class: "btn btn--ghost flex gap-2 items-center" do %>
         <%= lucide_icon("megaphone", class: "w-5 h-5 text-secondary shrink-0") %>
-        <span class="text-primary text-sm">Feedback</span>
+        <span class="text-sm">Feedback</span>
       <% end %>
 
       <% if self_hosted? %>
         <%= link_to "https://link.maybe.co/discord", class: "btn btn--ghost flex gap-2 items-center" do %>
           <%= lucide_icon("message-square-more", class: "w-5 h-5 text-secondary shrink-0") %>
-          <span class="text-primary text-sm">Contact</span>
+          <span class="text-sm">Contact</span>
         <% end %>
       <% else %>
         <%= link_to "mailto:hello@maybefinance.com", class: "btn btn--ghost flex gap-2 items-center", onclick: "Intercom('showNewMessage'); return false;" do %>
           <%= lucide_icon("message-square-more", class: "w-5 h-5 text-secondary shrink-0") %>
-          <span class="text-primary text-sm">Contact</span>
+          <span class="text-sm">Contact</span>
         <% end %>
       <% end %>
     </div>
