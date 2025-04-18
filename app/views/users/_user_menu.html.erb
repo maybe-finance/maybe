@@ -1,13 +1,13 @@
-<%# locals: (user:) %>
+<%# locals: (user:, placement: "right-start", offset: 16) %>
 
-<div id="user-menu" data-controller="menu" data-menu-placement-value="right-start" data-menu-offset-value="16">
+<div id="user-menu" data-controller="menu" data-menu-placement-value="<%= placement %>" data-menu-offset-value="<%= offset %>">
   <button data-menu-target="button">
     <div class="w-9 h-9 cursor-pointer">
       <%= render "settings/user_avatar", user: user, variant: :small %>
     </div>
   </button>
 
-  <div data-menu-target="content" class="hidden absolute w-[276px] z-10 divide-y divide-alpha-black-100 bg-white rounded-xl shadow-border-sm">
+  <div data-menu-target="content" class="hidden absolute w-[276px] z-10 divide-y divide-alpha-black-100 bg-container rounded-xl shadow-border-sm">
     <div class="px-4 py-3 flex items-center gap-3">
       <div class="w-9 h-9 shrink-0">
         <%= render "settings/user_avatar", user: user, variant: :small, lazy: true %>
@@ -26,7 +26,10 @@
         <p class="text-sm">
           <span class="font-medium text-primary">Version:</span>
           <%= link_to Maybe.version.to_release_tag, "https://github.com/maybe-finance/maybe/releases/tag/#{Maybe.version.to_release_tag}", target: "_blank", class: "hover:underline" %>
-          (<%= link_to Maybe.commit_sha.first(7), "https://github.com/maybe-finance/maybe/commit/#{Maybe.commit_sha}", target: "_blank", class: "hover:underline" %>)
+
+          <% if Maybe.commit_sha.present? %>
+            (<%= link_to Maybe.commit_sha.first(7), "https://github.com/maybe-finance/maybe/commit/#{Maybe.commit_sha}", target: "_blank", class: "hover:underline" %>)
+          <% end %>
         </p>
       </div>
     <% end %>

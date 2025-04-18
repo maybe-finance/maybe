@@ -2,7 +2,7 @@
 
 <div class="space-y-4">
   <% balance_sheet.classification_groups.each do |classification_group| %>
-    <div class="bg-white shadow-border-xs rounded-xl space-y-4 p-4">
+    <div class="bg-container shadow-border-xs rounded-xl space-y-4 p-4">
       <h2 class="text-lg font-medium"><%= classification_group.display_name %></h2>
 
       <% if classification_group.account_groups.any? %>
@@ -12,7 +12,7 @@
               <div class="h-1.5 rounded-sm" style="width: <%= account_group.weight %>%; background-color: <%= account_group.color %>;"></div>
             <% end %>
           </div>
-          <div class="flex gap-4">
+          <div class="flex flex-wrap gap-4">
             <% classification_group.account_groups.each do |account_group| %>
               <div class="flex items-center gap-2 text-sm">
                 <div class="h-2.5 w-2.5 rounded-full" style="background-color: <%= account_group.color %>;"></div>
@@ -36,10 +36,10 @@
             </div>
           </div>
 
-          <div class="shadow-border-xs rounded-lg bg-white">
+          <div class="shadow-border-xs rounded-lg bg-container">
             <% classification_group.account_groups.each do |account_group| %>
               <details class="group rounded-lg open:bg-surface font-medium text-sm">
-                <summary class="cursor-pointer p-4 group-open:bg-surface bg-white rounded-lg flex items-center justify-between">
+                <summary class="cursor-pointer p-4 group-open:bg-surface bg-container rounded-lg flex items-center justify-between">
                   <div class="flex items-center gap-4">
                     <%= lucide_icon("chevron-right", class: "group-open:rotate-90 text-secondary w-5 h-5") %>
 

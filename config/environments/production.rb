@@ -49,16 +49,17 @@ Rails.application.configure do
   config.assume_ssl = ActiveModel::Type::Boolean.new.cast(ENV.fetch("RAILS_ASSUME_SSL", true))
 
   # Log to Logtail if API key is present, otherwise log to STDOUT
-  config.logger = if ENV["LOGTAIL_API_KEY"].present?
+  base_logger = if ENV["LOGTAIL_API_KEY"].present?
     Logtail::Logger.create_default_logger(
       ENV["LOGTAIL_API_KEY"],
       telemetry_host: "in.logs.betterstack.com"
     )
   else
     ActiveSupport::Logger.new(STDOUT)
-      .tap  { |logger| logger.formatter = ::Logger::Formatter.new }
-      .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
+      .tap { |logger| logger.formatter = ::Logger::Formatter.new }
   end
+
+  config.logger = ActiveSupport::TaggedLogging.new(base_logger)
 
   # Prepend all log lines with the following tags.
   config.log_tags = [ :request_id ]
@@ -68,11 +69,12 @@ Rails.application.configure do
   # want to log everything, set the level to "debug".
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
-  # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
+  if ENV["CACHE_REDIS_URL"].present?
+    config.cache_store = :redis_cache_store, { url: ENV["CACHE_REDIS_URL"] }
+  end
 
   config.action_mailer.perform_caching = false
-
+  config.action_mailer.deliver_later_queue_name = :high_priority
   config.action_mailer.default_url_options = { host: ENV["APP_DOMAIN"] }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
@@ -104,4 +106,7 @@ Rails.application.configure do
   # ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+  # set REDIS_URL for Sidekiq to use Redis
+  config.active_job.queue_adapter = :sidekiq
 end

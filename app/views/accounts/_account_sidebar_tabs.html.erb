@@ -1,6 +1,6 @@
 <%# locals: (family:) %>
 
-<% if family.requires_data_provider? && family.synth_client.nil? %>
+<% if family.requires_data_provider? && Provider::Registry.get_provider(:synth).nil? %>
   <details class="group bg-yellow-tint-10 rounded-lg p-2 text-yellow-600 mb-3 text-xs">
     <summary class="flex items-center justify-between gap-2">
       <div class="flex items-center gap-2">
@@ -24,7 +24,7 @@
   class="space-y-3"
   data-controller="tabs"
   data-tabs-local-storage-key-value="account-sidebar-tabs"
-  data-tabs-active-class="bg-white shadow-sm text-primary"
+  data-tabs-active-class="bg-surface shadow-sm text-primary"
   data-tabs-inactive-class="text-secondary"
   data-tabs-default-tab-value="assets-tab">
   <div class="bg-surface-inset rounded-lg p-1 flex">

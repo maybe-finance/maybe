@@ -1,5 +1,5 @@
 class RevertImportJob < ApplicationJob
-  queue_as :latency_low
+  queue_as :medium_priority
 
   def perform(import)
     import.revert

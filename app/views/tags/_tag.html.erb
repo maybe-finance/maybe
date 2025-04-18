@@ -1,6 +1,6 @@
 <%# locals: (tag:) %>
 
-<div id="<%= dom_id(tag) %>" class="flex justify-between items-center p-4 bg-white">
+<div id="<%= dom_id(tag) %>" class="flex justify-between items-center p-4 bg-container">
   <div class="flex w-full items-center gap-2.5">
     <%= render partial: "shared/color_avatar", locals: { name: tag.name, color: tag.color } %>
     <p class="text-primary text-sm truncate">
@@ -9,7 +9,7 @@
   </div>
   <div class="justify-self-end">
     <%= contextual_menu do %>
-      <div class="w-48 p-1 text-sm leading-6 text-primary bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+      <div class="w-48 p-1 text-sm leading-6 text-primary bg-container shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
         <%= contextual_menu_modal_action_item t(".edit"), edit_tag_path(tag) %>
 
         <% if tag.transactions.any? %>

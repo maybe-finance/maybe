@@ -7,6 +7,7 @@ gem "rails", "~> 7.2.2"
 
 # Drivers
 gem "pg", "~> 1.5"
+gem "redis", "~> 5.4"
 
 # Deployment
 gem "puma", ">= 5.0"
@@ -22,17 +23,17 @@ gem "lucide-rails", github: "maybe-finance/lucide-rails"
 gem "stimulus-rails"
 gem "turbo-rails"
 
-# Temporary pin to commit to fix crypto.randomUUID() errors.  Revert this when the change has been released.
-gem "hotwire_combobox", github: "josefarias/hotwire_combobox", ref: "b827048a8305e1115d5f96931ba1c9750d1e59fc"
+gem "hotwire_combobox"
 
 # Background Jobs
-gem "good_job"
+gem "sidekiq"
 
 # Error logging
 gem "vernier"
 gem "rack-mini-profiler"
 gem "sentry-ruby"
 gem "sentry-rails"
+gem "sentry-sidekiq"
 gem "logtail-rails"
 
 # Active Storage
@@ -57,6 +58,10 @@ gem "intercom-rails"
 gem "plaid"
 gem "rotp", "~> 6.3"
 gem "rqrcode", "~> 2.2"
+gem "activerecord-import"
+
+# AI
+gem "ruby-openai"
 
 group :development, :test do
   gem "debug", platforms: %i[mri windows]

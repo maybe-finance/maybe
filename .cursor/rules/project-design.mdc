@@ -1,6 +1,7 @@
 ---
 description: This rule explains the system architecture and data flow of the Rails app
 globs: *
+alwaysApply: true
 ---
 
 This file outlines how the codebase is structured and how data flows through the app.
@@ -54,29 +55,29 @@ All balances are calculated daily by [balance_calculator.rb](mdc:app/models/acco
 
 ### Account Holdings
 
-An account [holding.rb](mdc:app/models/account/holding.rb) applies to [investment.rb](mdc:app/models/investment.rb) type accounts and represents a `qty` of a certain [security.rb](mdc:app/models/security.rb) at a specific `price` on a specific `date`.
+An account [holding.rb](mdc:app/models/holding.rb) applies to [investment.rb](mdc:app/models/investment.rb) type accounts and represents a `qty` of a certain [security.rb](mdc:app/models/security.rb) at a specific `price` on a specific `date`.
 
-For investment accounts with holdings, [holding_calculator.rb](mdc:app/models/account/holding_calculator.rb) is used to calculate the daily historical holding quantities and prices, which are then rolled up into a final "Balance" for the account in [balance_calculator.rb](mdc:app/models/account/balance_calculator.rb).
+For investment accounts with holdings, [base_calculator.rb](mdc:app/models/holding/base_calculator.rb) is used to calculate the daily historical holding quantities and prices, which are then rolled up into a final "Balance" for the account in [base_calculator.rb](mdc:app/models/account/balance/base_calculator.rb).
 
 ### Account Entries
 
-An account [entry.rb](mdc:app/models/account/entry.rb) is also a Rails "delegated type".  `Account::Entry` represents any record that _modifies_ an `Account` [balance.rb](mdc:app/models/account/balance.rb) and/or [holding.rb](mdc:app/models/account/holding.rb).  Therefore, every entry must have a `date`, `amount`, and `currency`.
+An account [entry.rb](mdc:app/models/entry.rb) is also a Rails "delegated type".  `Entry` represents any record that _modifies_ an `Account` [balance.rb](mdc:app/models/account/balance.rb) and/or [holding.rb](mdc:app/models/holding.rb).  Therefore, every entry must have a `date`, `amount`, and `currency`.
 
-The `amount` of an [entry.rb](mdc:app/models/account/entry.rb) is a signed value.  A _negative_ amount is an "inflow" of money to that account.  A _positive_ value is an "outflow" of money from that account.  For example:
+The `amount` of an [entry.rb](mdc:app/models/entry.rb) is a signed value.  A _negative_ amount is an "inflow" of money to that account.  A _positive_ value is an "outflow" of money from that account.  For example:
 
 - A negative amount for a credit card account represents a "payment" to that account, which _reduces_ its balance (since it is a `liability`)
 - A negative amount for a checking account represents an "income" to that account, which _increases_ its balance (since it is an `asset`)
 - A negative amount for an investment/brokerage trade represents a "sell" transaction, which _increases_ the cash balance of the account 
 
-There are 3 entry types, defined as [entryable.rb](mdc:app/models/account/entryable.rb) records: 
+There are 3 entry types, defined as [entryable.rb](mdc:app/models/entryable.rb) records: 
 
-- `Account::Valuation` - an account [valuation.rb](mdc:app/models/account/valuation.rb) is an entry that says, "here is the value of this account on this date".  It is an absolute measure of an account value / debt.  If there is an `Account::Valuation` of 5,000 for today's date, that means that the account balance will be 5,000 today.
-- `Account::Transaction` - an account [transaction.rb](mdc:app/models/account/transaction.rb) is an entry that alters the account balance by the `amount`.  This is the most common type of entry and can be thought of as an "income" or "expense".  
-- `Account::Trade` - an account [trade.rb](mdc:app/models/account/trade.rb) is an entry that only applies to an investment account.  This represents a "buy" or "sell" of a holding and has a `qty` and `price`.
+- `Valuation` - an account [valuation.rb](mdc:app/models/valuation.rb) is an entry that says, "here is the value of this account on this date".  It is an absolute measure of an account value / debt.  If there is an `Valuation` of 5,000 for today's date, that means that the account balance will be 5,000 today.
+- `Transaction` - an account [transaction.rb](mdc:app/models/transaction.rb) is an entry that alters the account balance by the `amount`.  This is the most common type of entry and can be thought of as an "income" or "expense".  
+- `Trade` - an account [trade.rb](mdc:app/models/trade.rb) is an entry that only applies to an investment account.  This represents a "buy" or "sell" of a holding and has a `qty` and `price`.
 
 ### Account Transfers
 
-A [transfer.rb](mdc:app/models/transfer.rb) represents a movement of money between two accounts.  A transfer has an inflow [transaction.rb](mdc:app/models/account/transaction.rb) and an outflow [transaction.rb](mdc:app/models/account/transaction.rb).  The Maybe system auto-matches transfers based on the following criteria:
+A [transfer.rb](mdc:app/models/transfer.rb) represents a movement of money between two accounts.  A transfer has an inflow [transaction.rb](mdc:app/models/transaction.rb) and an outflow [transaction.rb](mdc:app/models/transaction.rb).  The Maybe system auto-matches transfers based on the following criteria:
 
 - Must be from different accounts
 - Must be within 4 days of each other
@@ -110,14 +111,14 @@ Below are brief descriptions of each type of sync in more detail.
 
 ### Account Syncs
 
-The most important type of sync is the account sync.  It is orchestrated by the account [syncer.rb](mdc:app/models/account/syncer.rb), and performs a few important tasks:
+The most important type of sync is the account sync.  It is orchestrated by the account's `sync_data` method, which performs a few important tasks:
 
 - Auto-matches transfer records for the account
-- Calculates holdings and balances for the account
-- Enriches transaction data
-- Converts account balances that are not in the family's preferred currency to the preferred currency
+- Calculates daily [balance.rb](mdc:app/models/account/balance.rb) records for the account from `account.start_date` to `Date.current` using [base_calculator.rb](mdc:app/models/account/balance/base_calculator.rb)
+  - Balances are dependent on the calculation of [holding.rb](mdc:app/models/holding.rb), which uses [base_calculator.rb](mdc:app/models/account/holding/base_calculator.rb) 
+- Enriches transaction data if enabled by user
 
-An account sync happens every time an [entry.rb](mdc:app/models/account/entry.rb) is updated.
+An account sync happens every time an [entry.rb](mdc:app/models/entry.rb) is updated.
 
 ### Plaid Item Syncs
 
@@ -125,10 +126,131 @@ A Plaid Item sync is an ETL (extract, transform, load) operation:
 
 1. [plaid_item.rb](mdc:app/models/plaid_item.rb) fetches data from the external Plaid API
 2. [plaid_item.rb](mdc:app/models/plaid_item.rb) creates and loads this data to [plaid_account.rb](mdc:app/models/plaid_account.rb) records
-3. [plaid_item.rb](mdc:app/models/plaid_item.rb) and [plaid_account.rb](mdc:app/models/plaid_account.rb) transform and load data to [account.rb](mdc:app/models/account.rb) and [entry.rb](mdc:app/models/account/entry.rb), the internal Maybe representations of the data.
+3. [plaid_item.rb](mdc:app/models/plaid_item.rb) and [plaid_account.rb](mdc:app/models/plaid_account.rb) transform and load data to [account.rb](mdc:app/models/account.rb) and [entry.rb](mdc:app/models/entry.rb), the internal Maybe representations of the data.
 
 ### Family Syncs
 
 A family sync happens once daily via [auto_sync.rb](mdc:app/controllers/concerns/auto_sync.rb).  A family sync is an "orchestrator" of Account and Plaid Item syncs.
+
+## Data Providers
+
+The Maybe app utilizes several 3rd party data services to calculate historical account balances, enrich data, and more.  Since the app can be run in both "hosted" and "self hosted" mode, this means that data providers are _optional_ for self hosted users and must be configured.
+
+Because of this optionality, data providers must be configured at _runtime_ through [registry.rb](mdc:app/models/provider/registry.rb) utilizing [setting.rb](mdc:app/models/setting.rb) for runtime parameters like API keys:
+
+There are two types of 3rd party data in the Maybe app:
+
+1. "Concept" data
+2. One-off data
+
+### "Concept" data
+
+Since the app is self hostable, users may prefer using different providers for generic data like exchange rates and security prices.  When data is generic enough where we can easily swap out different providers, we call it a data "concept".
+
+Each "concept" has an interface defined in the `app/models/provider/concepts` directory.
+
+```
+app/models/
+  exchange_rate/
+    provided.rb # <- Responsible for selecting the concept provider from the registry
+  provider.rb # <- Base provider class
+  provider/
+    registry.rb <- Defines available providers by concept
+    concepts/
+      exchange_rate.rb <- defines the interface required for the exchange rate concept
+    synth.rb # <- Concrete provider implementation
+```
+
+### One-off data
+
+For data that does not fit neatly into a "concept", an interface is not required and the concrete provider may implement ad-hoc methods called directly in code.  For example, the [synth.rb](mdc:app/models/provider/synth.rb) provider has a `usage` method that is only applicable to this specific provider.  This should be called directly without any abstractions:
+
+```rb
+class SomeModel < Application
+  def synth_usage
+    Provider::Registry.get_provider(:synth)&.usage
+  end
+end
+```
+
+## "Provided" Concerns
+
+In general, domain models should not be calling [registry.rb](mdc:app/models/provider/registry.rb) directly.  When 3rd party data is required for a domain model, we use the `Provided` concern within that model's namespace.  This concern is primarily responsible for:
+
+- Choosing the provider to use for this "concept"
+- Providing convenience methods on the model for accessing data
+
+For example, [exchange_rate.rb](mdc:app/models/exchange_rate.rb) has a [provided.rb](mdc:app/models/exchange_rate/provided.rb) concern with the following convenience methods:
+
+```rb
+module ExchangeRate::Provided
+  extend ActiveSupport::Concern
+
+  class_methods do
+    def provider
+      registry = Provider::Registry.for_concept(:exchange_rates)
+      registry.get_provider(:synth)
+    end
+
+    def find_or_fetch_rate(from:, to:, date: Date.current, cache: true)
+      # Implementation 
+    end
+
+    def sync_provider_rates(from:, to:, start_date:, end_date: Date.current)
+      # Implementation 
+    end
+  end
+end
+```
+
+This exposes a generic access pattern where the caller does not care _which_ provider has been chosen for the concept of exchange rates and can get a predictable response:
+
+```rb
+def access_patterns_example
+  # Call exchange rate provider directly
+  ExchangeRate.provider.fetch_exchange_rate(from: "USD", to: "CAD", date: Date.current)
+
+  # Call convenience method
+  ExchangeRate.sync_provider_rates(from: "USD", to: "CAD", start_date: 2.days.ago.to_date)
+end
+```
+
+## Concrete provider implementations
+
+Each 3rd party data provider should have a class under the `Provider::` namespace that inherits from `Provider` and returns `with_provider_response`, which will return a `Provider::ProviderResponse` object:
+
+```rb
+class ConcreteProvider < Provider
+  def fetch_some_data
+    with_provider_response do
+      ExampleData.new(
+        example: "data"
+      )
+    end
+  end
+end
+```
+
+The `with_provider_response` automatically catches provider errors, so concrete provider classes should raise when valid data is not possible:
+
+```rb
+class ConcreteProvider < Provider
+  def fetch_some_data
+    with_provider_response do
+      data = nil
+
+      # Raise an error if data cannot be returned
+      raise ProviderError.new("Could not find the data you need") if data.nil?
+
+      data
+    end
+  end
+end
+```
+
+
+
+
+
 
 

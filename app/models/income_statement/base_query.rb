@@ -8,15 +8,16 @@ module IncomeStatement::BaseQuery
           date_trunc(:interval, ae.date) as date,
           CASE WHEN ae.amount < 0 THEN 'income' ELSE 'expense' END as classification,
           SUM(ae.amount * COALESCE(er.rate, 1)) as total,
+          COUNT(ae.id) as transactions_count,
           BOOL_OR(ae.currency <> :target_currency AND er.rate IS NULL) as missing_exchange_rates
         FROM (#{transactions_scope.to_sql}) at
-        JOIN account_entries ae ON ae.entryable_id = at.id AND ae.entryable_type = 'Account::Transaction'
+        JOIN entries ae ON ae.entryable_id = at.id AND ae.entryable_type = 'Transaction'
         LEFT JOIN categories c ON c.id = at.category_id
         LEFT JOIN (
           SELECT t.*, t.id as transfer_id, a.accountable_type
           FROM transfers t
-          JOIN account_entries ae ON ae.entryable_id = t.inflow_transaction_id
-            AND ae.entryable_type = 'Account::Transaction'
+          JOIN entries ae ON ae.entryable_id = t.inflow_transaction_id
+            AND ae.entryable_type = 'Transaction'
           JOIN accounts a ON a.id = ae.account_id
         ) transfer_info ON (
           transfer_info.inflow_transaction_id = at.id OR
@@ -29,7 +30,7 @@ module IncomeStatement::BaseQuery
         )
         WHERE (
           transfer_info.transfer_id IS NULL OR
-          (ae.amount < 0 AND transfer_info.accountable_type = 'Loan')
+          (ae.amount > 0 AND transfer_info.accountable_type = 'Loan')
         )
         GROUP BY 1, 2, 3, 4
       SQL

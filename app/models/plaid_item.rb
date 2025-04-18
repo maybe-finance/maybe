@@ -1,5 +1,5 @@
 class PlaidItem < ApplicationRecord
-  include Plaidable, Syncable
+  include Provided, Syncable
 
   enum :plaid_region, { us: "us", eu: "eu" }
   enum :status, { good: "good", requires_update: "requires_update" }, default: :good
@@ -37,12 +37,20 @@ class PlaidItem < ApplicationRecord
     end
   end
 
-  def sync_data(start_date: nil)
+  def sync_data(sync, start_date: nil)
     update!(last_synced_at: Time.current)
 
     begin
+      Rails.logger.info("Fetching and loading Plaid data")
       plaid_data = fetch_and_load_plaid_data
       update!(status: :good) if requires_update?
+
+      # Schedule account syncs
+      accounts.each do |account|
+        account.sync_later(start_date: start_date)
+      end
+
+      Rails.logger.info("Plaid data fetched and loaded")
       plaid_data
     rescue Plaid::ApiError => e
       handle_plaid_error(e)
@@ -71,7 +79,7 @@ class PlaidItem < ApplicationRecord
     end
   end
 
-  def post_sync
+  def post_sync(sync)
     family.broadcast_refresh
   end
 
@@ -83,12 +91,17 @@ class PlaidItem < ApplicationRecord
   private
     def fetch_and_load_plaid_data
       data = {}
+
+      # Log what we're about to fetch
+      Rails.logger.info "Starting Plaid data fetch (accounts, transactions, investments, liabilities)"
+
       item = plaid_provider.get_item(access_token).item
       update!(available_products: item.available_products, billed_products: item.billed_products)
 
-      # Fetch and store institution details
+      # Institution details
       if item.institution_id.present?
         begin
+          Rails.logger.info "Fetching Plaid institution details for #{item.institution_id}"
           institution = plaid_provider.get_institution(item.institution_id)
           update!(
             institution_id: item.institution_id,
@@ -96,12 +109,14 @@ class PlaidItem < ApplicationRecord
             institution_color: institution.institution.primary_color
           )
         rescue Plaid::ApiError => e
-          Rails.logger.warn("Error fetching institution details for item #{id}: #{e.message}")
+          Rails.logger.warn "Failed to fetch Plaid institution details: #{e.message}"
         end
       end
 
+      # Accounts
       fetched_accounts = plaid_provider.get_item_accounts(self).accounts
       data[:accounts] = fetched_accounts || []
+      Rails.logger.info "Processing Plaid accounts (count: #{fetched_accounts.size})"
 
       internal_plaid_accounts = fetched_accounts.map do |account|
         internal_plaid_account = plaid_accounts.find_or_create_from_plaid_data!(account, family)
@@ -109,10 +124,12 @@ class PlaidItem < ApplicationRecord
         internal_plaid_account
       end
 
+      # Transactions
       fetched_transactions = safe_fetch_plaid_data(:get_item_transactions)
       data[:transactions] = fetched_transactions || []
 
       if fetched_transactions
+        Rails.logger.info "Processing Plaid transactions (added: #{fetched_transactions.added.size}, modified: #{fetched_transactions.modified.size}, removed: #{fetched_transactions.removed.size})"
         transaction do
           internal_plaid_accounts.each do |internal_plaid_account|
             added = fetched_transactions.added.select { |t| t.account_id == internal_plaid_account.plaid_id }
@@ -126,10 +143,12 @@ class PlaidItem < ApplicationRecord
         end
       end
 
+      # Investments
       fetched_investments = safe_fetch_plaid_data(:get_item_investments)
       data[:investments] = fetched_investments || []
 
       if fetched_investments
+        Rails.logger.info "Processing Plaid investments (transactions: #{fetched_investments.transactions.size}, holdings: #{fetched_investments.holdings.size}, securities: #{fetched_investments.securities.size})"
         transaction do
           internal_plaid_accounts.each do |internal_plaid_account|
             transactions = fetched_investments.transactions.select { |t| t.account_id == internal_plaid_account.plaid_id }
@@ -141,10 +160,12 @@ class PlaidItem < ApplicationRecord
         end
       end
 
+      # Liabilities
       fetched_liabilities = safe_fetch_plaid_data(:get_item_liabilities)
       data[:liabilities] = fetched_liabilities || []
 
       if fetched_liabilities
+        Rails.logger.info "Processing Plaid liabilities (credit: #{fetched_liabilities.credit&.size || 0}, mortgage: #{fetched_liabilities.mortgage&.size || 0}, student: #{fetched_liabilities.student&.size || 0})"
         transaction do
           internal_plaid_accounts.each do |internal_plaid_account|
             credit = fetched_liabilities.credit&.find { |l| l.account_id == internal_plaid_account.plaid_id }

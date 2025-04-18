@@ -5,6 +5,9 @@ class ImportsTest < ApplicationSystemTestCase
 
   setup do
     sign_in @user = users(:family_admin)
+
+    # Trade securities will be imported as "offline" tickers
+    Security.stubs(:provider).returns(nil)
   end
 
   test "transaction import" do
@@ -52,8 +55,6 @@ class ImportsTest < ApplicationSystemTestCase
   end
 
   test "trade import" do
-    Security.stubs(:search_provider).returns([])
-
     visit new_import_path
 
     click_on "Import investments"

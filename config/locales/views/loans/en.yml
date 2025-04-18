@@ -6,6 +6,7 @@ en:
     form:
       interest_rate: Interest rate
       interest_rate_placeholder: '5.25'
+      initial_balance: Original loan balance
       rate_type: Rate type
       term_months: Term (months)
       term_months_placeholder: '360'

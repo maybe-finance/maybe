@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "category_dropdown" do %>
   <div class="flex flex-col relative" data-controller="list-filter">
     <div class="grow p-1.5">
-      <div class="relative flex items-center bg-white border border-gray-200 rounded-lg">
+      <div class="relative flex items-center bg-container border border-gray-200 rounded-lg">
         <input placeholder="<%= t(".search_placeholder") %>" autocomplete="nope" type="search" class="placeholder:text-sm placeholder:text-secondary font-normal h-10 relative pl-10 w-full border-none rounded-lg" data-list-filter-target="input" data-action="list-filter#filter">
         <%= lucide_icon("search", class: "w-5 h-5 text-secondary ml-2 absolute inset-0 transform top-1/2 -translate-y-1/2") %>
       </div>
@@ -30,10 +30,10 @@
     <hr>
     <div class="relative p-1.5 w-full">
       <% if @transaction.category %>
-        <%= button_to account_transaction_path(@transaction.entry),
+        <%= button_to transaction_path(@transaction.entry),
                       method: :patch,
                       data: { turbo_frame: dom_id(@transaction.entry) },
-                      params: { account_entry: { entryable_type: "Account::Transaction", entryable_attributes: { id: @transaction.id, category_id: nil } } },
+                      params: { entry: { entryable_type: "Transaction", entryable_attributes: { id: @transaction.id, category_id: nil } } },
                       class: "flex text-sm font-medium items-center gap-2 text-secondary w-full rounded-lg p-2 hover:bg-gray-100" do %>
           <%= lucide_icon "minus", class: "w-5 h-5" %>
 
@@ -42,7 +42,7 @@
       <% end %>
 
       <% unless @transaction.transfer? %>
-        <%= link_to new_account_transaction_transfer_match_path(@transaction.entry),
+        <%= link_to new_transaction_transfer_match_path(@transaction.entry),
                   class: "flex text-sm font-medium items-center gap-2 text-secondary w-full rounded-lg p-2 hover:bg-gray-100",
                   data: { turbo_frame: "modal" } do %>
           <%= lucide_icon "refresh-cw", class: "w-5 h-5" %>
@@ -53,11 +53,11 @@
 
       <div class="flex text-sm font-medium items-center gap-2 text-secondary w-full rounded-lg p-2">
         <div class="flex items-center gap-2">
-          <%= form_with url: account_transaction_path(@transaction.entry),
+          <%= form_with url: transaction_path(@transaction.entry),
                         method: :patch,
                         data: { controller: "auto-submit-form" } do |f| %>
-            <%= f.hidden_field "account_entry[excluded]", value: !@transaction.entry.excluded %>
-            <%= f.check_box "account_entry[excluded]",
+            <%= f.hidden_field "entry[excluded]", value: !@transaction.entry.excluded %>
+            <%= f.check_box "entry[excluded]",
                           checked: @transaction.entry.excluded,
                           class: "checkbox checkbox--light",
                           data: { auto_submit_form_target: "auto", autosubmit_trigger_event: "change" } %>

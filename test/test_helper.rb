@@ -24,6 +24,8 @@ VCR.configure do |config|
   config.ignore_localhost = true
   config.default_cassette_options = { erb: true }
   config.filter_sensitive_data("<SYNTH_API_KEY>") { ENV["SYNTH_API_KEY"] }
+  config.filter_sensitive_data("<OPENAI_ACCESS_TOKEN>") { ENV["OPENAI_ACCESS_TOKEN"] }
+  config.filter_sensitive_data("<OPENAI_ORGANIZATION_ID>") { ENV["OPENAI_ORGANIZATION_ID"] }
 end
 
 module ActiveSupport
@@ -47,7 +49,7 @@ module ActiveSupport
 
     # Add more helper methods to be used by all tests here...
     def sign_in(user)
-      post sessions_path, params: { email: user.email, password: "password" }
+      post sessions_path, params: { email: user.email, password: user_password_test }
     end
 
     def with_env_overrides(overrides = {}, &block)
@@ -57,6 +59,10 @@ module ActiveSupport
     def with_self_hosting
       Rails.configuration.stubs(:app_mode).returns("self_hosted".inquiry)
       yield
+    end
+
+    def user_password_test
+      "maybetestpassword817983172"
     end
   end
 end

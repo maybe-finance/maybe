@@ -1,0 +1,203 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.openai.com/v1/responses
+    body:
+      encoding: UTF-8
+      string: '{"model":"gpt-4o","input":[{"role":"user","content":"What is my net
+        worth?"}],"instructions":"Use the tools available to you to answer the user''s
+        question.","tools":[{"type":"function","name":"get_net_worth","description":"Gets
+        a user''s net worth","parameters":{"type":"object","properties":{},"required":[],"additionalProperties":false},"strict":true}],"previous_response_id":null,"stream":true}'
+    headers:
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer <OPENAI_ACCESS_TOKEN>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 31 Mar 2025 20:38:55 GMT
+      Content-Type:
+      - text/event-stream; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Openai-Version:
+      - '2020-10-01'
+      Openai-Organization:
+      - "<OPENAI_ORGANIZATION_ID>"
+      X-Request-Id:
+      - req_8c4d6f0ad0ae3095353a5c19fd128c56
+      Openai-Processing-Ms:
+      - '129'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Cf-Cache-Status:
+      - DYNAMIC
+      Set-Cookie:
+      - __cf_bm=5yRGSo0Y69GvEK51Bq2.Np0DSg9DmAJKNqvE3_XgKBg-1743453535-1.0.1.1-sH1YR42zmznwvKlaBUM.bPKvJl_PiebfNBKhREMO.sSa5gvFEkpcKaCG4x3XUdZ19XGTEF0CbRII3mqtcPJhxFzX3uVLGuVsyjz6odYDisM;
+        path=/; expires=Mon, 31-Mar-25 21:08:55 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=tblnBnP9s7yFkSzbYy9zuzuDkxS9i_n7hk3XdiiGui8-1743453535332-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      X-Content-Type-Options:
+      - nosniff
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 9292a7324dfbcf46-CMH
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: |+
+        event: response.created
+        data: {"type":"response.created","response":{"id":"resp_67eafd5f2ef0819290ec6bbbc5f27c8e0aa8698ee903b906","object":"response","created_at":1743453535,"status":"in_progress","error":null,"incomplete_details":null,"instructions":"Use the tools available to you to answer the user's question.","max_output_tokens":null,"model":"gpt-4o-2024-08-06","output":[],"parallel_tool_calls":true,"previous_response_id":null,"reasoning":{"effort":null,"generate_summary":null},"store":true,"temperature":1.0,"text":{"format":{"type":"text"}},"tool_choice":"auto","tools":[{"type":"function","description":"Gets a user's net worth","name":"get_net_worth","parameters":{"type":"object","properties":{},"required":[],"additionalProperties":false},"strict":true}],"top_p":1.0,"truncation":"disabled","usage":null,"user":null,"metadata":{}}}
+
+        event: response.in_progress
+        data: {"type":"response.in_progress","response":{"id":"resp_67eafd5f2ef0819290ec6bbbc5f27c8e0aa8698ee903b906","object":"response","created_at":1743453535,"status":"in_progress","error":null,"incomplete_details":null,"instructions":"Use the tools available to you to answer the user's question.","max_output_tokens":null,"model":"gpt-4o-2024-08-06","output":[],"parallel_tool_calls":true,"previous_response_id":null,"reasoning":{"effort":null,"generate_summary":null},"store":true,"temperature":1.0,"text":{"format":{"type":"text"}},"tool_choice":"auto","tools":[{"type":"function","description":"Gets a user's net worth","name":"get_net_worth","parameters":{"type":"object","properties":{},"required":[],"additionalProperties":false},"strict":true}],"top_p":1.0,"truncation":"disabled","usage":null,"user":null,"metadata":{}}}
+
+        event: response.output_item.added
+        data: {"type":"response.output_item.added","output_index":0,"item":{"type":"function_call","id":"fc_67eafd5fa714819287b2bff8c76935690aa8698ee903b906","call_id":"call_7EY6rF7mkfNyMIz3HQmrYIOq","name":"get_net_worth","arguments":"","status":"in_progress"}}
+
+        event: response.function_call_arguments.delta
+        data: {"type":"response.function_call_arguments.delta","item_id":"fc_67eafd5fa714819287b2bff8c76935690aa8698ee903b906","output_index":0,"delta":"{}"}
+
+        event: response.function_call_arguments.done
+        data: {"type":"response.function_call_arguments.done","item_id":"fc_67eafd5fa714819287b2bff8c76935690aa8698ee903b906","output_index":0,"arguments":"{}"}
+
+        event: response.output_item.done
+        data: {"type":"response.output_item.done","output_index":0,"item":{"type":"function_call","id":"fc_67eafd5fa714819287b2bff8c76935690aa8698ee903b906","call_id":"call_7EY6rF7mkfNyMIz3HQmrYIOq","name":"get_net_worth","arguments":"{}","status":"completed"}}
+
+        event: response.completed
+        data: {"type":"response.completed","response":{"id":"resp_67eafd5f2ef0819290ec6bbbc5f27c8e0aa8698ee903b906","object":"response","created_at":1743453535,"status":"completed","error":null,"incomplete_details":null,"instructions":"Use the tools available to you to answer the user's question.","max_output_tokens":null,"model":"gpt-4o-2024-08-06","output":[{"type":"function_call","id":"fc_67eafd5fa714819287b2bff8c76935690aa8698ee903b906","call_id":"call_7EY6rF7mkfNyMIz3HQmrYIOq","name":"get_net_worth","arguments":"{}","status":"completed"}],"parallel_tool_calls":true,"previous_response_id":null,"reasoning":{"effort":null,"generate_summary":null},"store":true,"temperature":1.0,"text":{"format":{"type":"text"}},"tool_choice":"auto","tools":[{"type":"function","description":"Gets a user's net worth","name":"get_net_worth","parameters":{"type":"object","properties":{},"required":[],"additionalProperties":false},"strict":true}],"top_p":1.0,"truncation":"disabled","usage":{"input_tokens":55,"input_tokens_details":{"cached_tokens":0},"output_tokens":13,"output_tokens_details":{"reasoning_tokens":0},"total_tokens":68},"user":null,"metadata":{}}}
+
+  recorded_at: Mon, 31 Mar 2025 20:38:55 GMT
+- request:
+    method: post
+    uri: https://api.openai.com/v1/responses
+    body:
+      encoding: UTF-8
+      string: '{"model":"gpt-4o","input":[{"role":"user","content":"What is my net
+        worth?"},{"type":"function_call_output","call_id":"call_7EY6rF7mkfNyMIz3HQmrYIOq","output":"{\"amount\":10000,\"currency\":\"USD\"}"}],"instructions":null,"tools":[],"previous_response_id":"resp_67eafd5f2ef0819290ec6bbbc5f27c8e0aa8698ee903b906","stream":true}'
+    headers:
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer <OPENAI_ACCESS_TOKEN>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 31 Mar 2025 20:38:56 GMT
+      Content-Type:
+      - text/event-stream; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Openai-Version:
+      - '2020-10-01'
+      Openai-Organization:
+      - "<OPENAI_ORGANIZATION_ID>"
+      X-Request-Id:
+      - req_be9f30124a3a4cdae2d3b038692f6699
+      Openai-Processing-Ms:
+      - '177'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Cf-Cache-Status:
+      - DYNAMIC
+      Set-Cookie:
+      - __cf_bm=gNS8vmdzyz2jct__mfjLZGkJhCxddarRy62IkzSIFWM-1743453536-1.0.1.1-ufcPPmSzEaEysjhkRUozTfCIriRWy5iyeXCaVqeFDaJDWT4lc8ate4JhryV0fVQSZBi6pRN8zYh9dkLyYuXoSqYDCsZTN1uk6vO84nX1qGo;
+        path=/; expires=Mon, 31-Mar-25 21:08:56 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=3D41ZgFle.u0ER2Ehnm.bsdnSGlCXVArPa7bx9zumYU-1743453536171-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      X-Content-Type-Options:
+      - nosniff
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 9292a7376f5acf4e-CMH
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: |+
+        event: response.created
+        data: {"type":"response.created","response":{"id":"resp_67eafd5ff7448192af7cd9e9dde90f5e0aa8698ee903b906","object":"response","created_at":1743453536,"status":"in_progress","error":null,"incomplete_details":null,"instructions":null,"max_output_tokens":null,"model":"gpt-4o-2024-08-06","output":[],"parallel_tool_calls":true,"previous_response_id":"resp_67eafd5f2ef0819290ec6bbbc5f27c8e0aa8698ee903b906","reasoning":{"effort":null,"generate_summary":null},"store":true,"temperature":1.0,"text":{"format":{"type":"text"}},"tool_choice":"auto","tools":[],"top_p":1.0,"truncation":"disabled","usage":null,"user":null,"metadata":{}}}
+
+        event: response.in_progress
+        data: {"type":"response.in_progress","response":{"id":"resp_67eafd5ff7448192af7cd9e9dde90f5e0aa8698ee903b906","object":"response","created_at":1743453536,"status":"in_progress","error":null,"incomplete_details":null,"instructions":null,"max_output_tokens":null,"model":"gpt-4o-2024-08-06","output":[],"parallel_tool_calls":true,"previous_response_id":"resp_67eafd5f2ef0819290ec6bbbc5f27c8e0aa8698ee903b906","reasoning":{"effort":null,"generate_summary":null},"store":true,"temperature":1.0,"text":{"format":{"type":"text"}},"tool_choice":"auto","tools":[],"top_p":1.0,"truncation":"disabled","usage":null,"user":null,"metadata":{}}}
+
+        event: response.output_item.added
+        data: {"type":"response.output_item.added","output_index":0,"item":{"type":"message","id":"msg_67eafd6084ec81929a5132414ef713180aa8698ee903b906","status":"in_progress","role":"assistant","content":[]}}
+
+        event: response.content_part.added
+        data: {"type":"response.content_part.added","item_id":"msg_67eafd6084ec81929a5132414ef713180aa8698ee903b906","output_index":0,"content_index":0,"part":{"type":"output_text","text":"","annotations":[]}}
+
+        event: response.output_text.delta
+        data: {"type":"response.output_text.delta","item_id":"msg_67eafd6084ec81929a5132414ef713180aa8698ee903b906","output_index":0,"content_index":0,"delta":"Your"}
+
+        event: response.output_text.delta
+        data: {"type":"response.output_text.delta","item_id":"msg_67eafd6084ec81929a5132414ef713180aa8698ee903b906","output_index":0,"content_index":0,"delta":" net"}
+
+        event: response.output_text.delta
+        data: {"type":"response.output_text.delta","item_id":"msg_67eafd6084ec81929a5132414ef713180aa8698ee903b906","output_index":0,"content_index":0,"delta":" worth"}
+
+        event: response.output_text.delta
+        data: {"type":"response.output_text.delta","item_id":"msg_67eafd6084ec81929a5132414ef713180aa8698ee903b906","output_index":0,"content_index":0,"delta":" is"}
+
+        event: response.output_text.delta
+        data: {"type":"response.output_text.delta","item_id":"msg_67eafd6084ec81929a5132414ef713180aa8698ee903b906","output_index":0,"content_index":0,"delta":" $"}
+
+        event: response.output_text.delta
+        data: {"type":"response.output_text.delta","item_id":"msg_67eafd6084ec81929a5132414ef713180aa8698ee903b906","output_index":0,"content_index":0,"delta":"10"}
+
+        event: response.output_text.delta
+        data: {"type":"response.output_text.delta","item_id":"msg_67eafd6084ec81929a5132414ef713180aa8698ee903b906","output_index":0,"content_index":0,"delta":","}
+
+        event: response.output_text.delta
+        data: {"type":"response.output_text.delta","item_id":"msg_67eafd6084ec81929a5132414ef713180aa8698ee903b906","output_index":0,"content_index":0,"delta":"000"}
+
+        event: response.output_text.delta
+        data: {"type":"response.output_text.delta","item_id":"msg_67eafd6084ec81929a5132414ef713180aa8698ee903b906","output_index":0,"content_index":0,"delta":" USD"}
+
+        event: response.output_text.delta
+        data: {"type":"response.output_text.delta","item_id":"msg_67eafd6084ec81929a5132414ef713180aa8698ee903b906","output_index":0,"content_index":0,"delta":"."}
+
+        event: response.output_text.done
+        data: {"type":"response.output_text.done","item_id":"msg_67eafd6084ec81929a5132414ef713180aa8698ee903b906","output_index":0,"content_index":0,"text":"Your net worth is $10,000 USD."}
+
+        event: response.content_part.done
+        data: {"type":"response.content_part.done","item_id":"msg_67eafd6084ec81929a5132414ef713180aa8698ee903b906","output_index":0,"content_index":0,"part":{"type":"output_text","text":"Your net worth is $10,000 USD.","annotations":[]}}
+
+        event: response.output_item.done
+        data: {"type":"response.output_item.done","output_index":0,"item":{"type":"message","id":"msg_67eafd6084ec81929a5132414ef713180aa8698ee903b906","status":"completed","role":"assistant","content":[{"type":"output_text","text":"Your net worth is $10,000 USD.","annotations":[]}]}}
+
+        event: response.completed
+        data: {"type":"response.completed","response":{"id":"resp_67eafd5ff7448192af7cd9e9dde90f5e0aa8698ee903b906","object":"response","created_at":1743453536,"status":"completed","error":null,"incomplete_details":null,"instructions":null,"max_output_tokens":null,"model":"gpt-4o-2024-08-06","output":[{"type":"message","id":"msg_67eafd6084ec81929a5132414ef713180aa8698ee903b906","status":"completed","role":"assistant","content":[{"type":"output_text","text":"Your net worth is $10,000 USD.","annotations":[]}]}],"parallel_tool_calls":true,"previous_response_id":"resp_67eafd5f2ef0819290ec6bbbc5f27c8e0aa8698ee903b906","reasoning":{"effort":null,"generate_summary":null},"store":true,"temperature":1.0,"text":{"format":{"type":"text"}},"tool_choice":"auto","tools":[],"top_p":1.0,"truncation":"disabled","usage":{"input_tokens":56,"input_tokens_details":{"cached_tokens":0},"output_tokens":11,"output_tokens_details":{"reasoning_tokens":0},"total_tokens":67},"user":null,"metadata":{}}}
+
+  recorded_at: Mon, 31 Mar 2025 20:38:58 GMT
+recorded_with: VCR 6.3.1
+...

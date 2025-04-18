@@ -1,0 +1,16 @@
+<%# locals: (chat:) %>
+
+<%= tag.div class: "flex items-center justify-between px-4 py-3 bg-container shadow-border-xs rounded-lg" do %>
+  <div class="grow">
+    <%= render "chats/chat_title", chat: chat, ctx: "list" %>
+
+    <p class="text-sm text-secondary">
+      <%= time_ago_in_words(chat.updated_at) %> ago
+    </p>
+  </div>
+
+  <%= contextual_menu icon: "more-vertical" do %>
+    <%= contextual_menu_item("Edit chat", url: edit_chat_path(chat), icon: "pencil", turbo_frame: dom_id(chat, :title)) %>
+    <%= contextual_menu_destructive_item("Delete chat", chat_path(chat)) %>
+  <% end %>
+<% end %>

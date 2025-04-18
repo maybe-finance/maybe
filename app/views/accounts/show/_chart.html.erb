@@ -1,9 +1,9 @@
-<%# locals: (account:, title: nil, tooltip: nil, **args) %>
+<%# locals: (account:, title: nil, tooltip: nil, chart_view: nil, **args) %>
 
-<% period = params[:period] ? Period.from_key(params[:period]) : Period.last_30_days %>
+<% period =  @period || Period.last_30_days %>
 <% default_value_title = account.asset? ? t(".balance") : t(".owed") %>
 
-<div id="<%= dom_id(account, :chart) %>" class="bg-white shadow-xs rounded-xl border border-alpha-black-25 rounded-lg space-y-2">
+<div id="<%= dom_id(account, :chart) %>" class="bg-container shadow-xs rounded-xl border border-alpha-black-25 rounded-lg space-y-2">
   <div class="flex justify-between px-4 pt-4 mb-2">
     <div class="space-y-2">
       <div class="flex items-center gap-1">
@@ -15,11 +15,21 @@
     </div>
 
     <%= form_with url: request.path, method: :get, data: { controller: "auto-submit-form" } do |form| %>
-      <%= period_select form: form, selected: period %>
+      <div class="flex items-center gap-2">
+        <% if chart_view.present? %>
+          <%= form.select :chart_view,
+            [["Total value", "balance"], ["Holdings", "holdings_balance"], ["Cash", "cash_balance"]],
+            { selected: chart_view },
+            class: "border border-secondary rounded-lg text-sm pr-7 cursor-pointer text-primary focus:outline-hidden focus:ring-0",
+            data: { "auto-submit-form-target": "auto" } %>
+        <% end %>
+
+        <%= period_select form: form, selected: period %>
+      </div>
     <% end %>
   </div>
 
-  <%= turbo_frame_tag dom_id(account, :chart_details), src: chart_account_path(account, period: period.key) do %>
+  <%= turbo_frame_tag dom_id(account, :chart_details), src: chart_account_path(account, period: period.key, chart_view: chart_view) do %>
     <%= render "accounts/chart_loader" %>
   <% end %>
 </div>

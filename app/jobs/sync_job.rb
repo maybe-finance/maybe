@@ -1,5 +1,5 @@
 class SyncJob < ApplicationJob
-  queue_as :latency_medium
+  queue_as :high_priority
 
   def perform(sync)
     sync.perform

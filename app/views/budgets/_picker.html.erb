@@ -1,7 +1,7 @@
 <%# locals: (family:, year:) %>
 
 <%= turbo_frame_tag "budget_picker" do %>
-  <div class="bg-white shadow-border-xs p-3 rounded-xl space-y-4">
+  <div class="bg-container shadow-border-xs p-3 rounded-xl space-y-4">
     <div class="flex items-center gap-2 justify-between">
       <% last_month_of_previous_year = Date.new(year - 1, 12, 1) %>
 

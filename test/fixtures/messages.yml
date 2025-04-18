@@ -1,0 +1,43 @@
+chat1_developer:
+  type: DeveloperMessage
+  content: You are a personal finance assistant.  Be concise and helpful.
+  chat: one
+  created_at: 2025-03-20 12:00:00
+  debug: false
+
+chat1_developer_debug:
+  type: DeveloperMessage
+  content: An internal debug message
+  chat: one
+  created_at: 2025-03-20 12:00:02
+  debug: true
+
+chat1_user:
+  type: UserMessage
+  content: Can you help me understand my spending habits?
+  chat: one
+  ai_model: gpt-4o
+  created_at: 2025-03-20 12:00:01
+
+chat2_user:
+  type: UserMessage
+  content: Can you help me understand my spending habits?
+  ai_model: gpt-4o
+  chat: two
+  created_at: 2025-03-20 12:00:01
+
+chat1_assistant_reasoning:
+  type: AssistantMessage
+  content: I'm thinking...
+  ai_model: gpt-4o
+  chat: one
+  created_at: 2025-03-20 12:01:00
+  reasoning: true
+
+chat1_assistant_response:
+  type: AssistantMessage
+  content: Hello! I can help you understand your spending habits.
+  ai_model: gpt-4o
+  chat: one
+  created_at: 2025-03-20 12:02:00
+  reasoning: false

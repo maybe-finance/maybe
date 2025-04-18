@@ -1,7 +1,7 @@
 require "test_helper"
 
 class AccountTest < ActiveSupport::TestCase
-  include SyncableInterfaceTest, Account::EntriesTestHelper
+  include SyncableInterfaceTest, EntriesTestHelper
 
   setup do
     @account = @syncable = accounts(:depository)

@@ -43,9 +43,9 @@ class PlaidInvestmentSyncTest < ActiveSupport::TestCase
     ]
 
     # Cash holding should be ignored, resulting in 1, NOT 2 total holdings after sync
-    assert_difference -> { Account::Trade.count } => 1,
-                      -> { Account::Transaction.count } => 0,
-                      -> { Account::Holding.count } => 1,
+    assert_difference -> { Trade.count } => 1,
+                      -> { Transaction.count } => 0,
+                      -> { Holding.count } => 1,
                       -> { Security.count } => 0 do
       PlaidInvestmentSync.new(@plaid_account).sync!(
         transactions: transactions,
@@ -69,8 +69,8 @@ class PlaidInvestmentSyncTest < ActiveSupport::TestCase
       })
     ]
 
-    assert_difference -> { Account::Trade.count } => 0,
-                      -> { Account::Transaction.count } => 1,
+    assert_difference -> { Trade.count } => 0,
+                      -> { Transaction.count } => 1,
                       -> { Security.count } => 0 do
       PlaidInvestmentSync.new(@plaid_account).sync!(
         transactions: transactions,

@@ -3,34 +3,38 @@ empty:
   first_name: User
   last_name: One
   email: user1@email.com
-  password_digest: <%= BCrypt::Password.create('password') %>
+  password_digest: $2a$12$XoNBo/cMCyzpYtvhrPAhsubG21mELX48RAcjSVCRctW8dG8wrDIla 
   onboarded_at: <%= 3.days.ago %>
+  ai_enabled: true
 
 maybe_support_staff:
   family: empty
   first_name: Support
   last_name: Admin
   email: support@maybefinance.com
-  password_digest: <%= BCrypt::Password.create('password') %>
+  password_digest: $2a$12$XoNBo/cMCyzpYtvhrPAhsubG21mELX48RAcjSVCRctW8dG8wrDIla 
   role: super_admin
   onboarded_at: <%= 3.days.ago %>
+  ai_enabled: true
 
 family_admin:
   family: dylan_family
   first_name: Bob
   last_name: Dylan
   email: bob@bobdylan.com
-  password_digest: <%= BCrypt::Password.create('password') %>
+  password_digest: $2a$12$XoNBo/cMCyzpYtvhrPAhsubG21mELX48RAcjSVCRctW8dG8wrDIla 
   role: admin
   onboarded_at: <%= 3.days.ago %>
+  ai_enabled: true
 
 family_member:
   family: dylan_family
   first_name: Jakob
   last_name: Dylan
   email: jakobdylan@yahoo.com
-  password_digest: <%= BCrypt::Password.create('password') %>
+  password_digest: $2a$12$XoNBo/cMCyzpYtvhrPAhsubG21mELX48RAcjSVCRctW8dG8wrDIla 
   onboarded_at: <%= 3.days.ago %>
+  ai_enabled: true
 
 new_email:
   family: empty
@@ -38,5 +42,6 @@ new_email:
   last_name: User
   email: user@example.com
   unconfirmed_email: new@example.com
-  password_digest: <%= BCrypt::Password.create('password123') %>
+  password_digest: $2a$12$XoNBo/cMCyzpYtvhrPAhsubG21mELX48RAcjSVCRctW8dG8wrDIla 
   onboarded_at: <%= Time.current %>
+  ai_enabled: true

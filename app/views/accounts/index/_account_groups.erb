@@ -1,14 +1,14 @@
 <%# locals: (accounts:) %>
 
 <% accounts.group_by(&:accountable_type).sort_by { |group, _| group }.each do |group, accounts| %>
-  <div class="bg-gray-25 p-1 rounded-xl">
+  <div class="bg-container-inset p-1 rounded-xl">
     <div class="flex items-center px-4 py-2 text-xs font-medium text-secondary">
       <p><%= Accountable.from_type(group).display_name %></p>
       <span class="text-subdued mx-2">&middot;</span>
       <p><%= accounts.count %></p>
       <p class="ml-auto"><%= totals_by_currency(collection: accounts, money_method: :balance_money) %></p>
     </div>
-    <div class="bg-white">
+    <div class="bg-container">
       <% accounts.each do |account| %>
         <%= render account %>
       <% end %>

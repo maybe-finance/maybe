@@ -4,7 +4,7 @@ en:
     billings:
       show:
         page_title: Billing
-        subscription_subtitle: Manage your subscription and billing details
+        subscription_subtitle: Update your subscription and billing details
         subscription_title: Manage subscription
     preferences:
       data_enrichment_settings:
@@ -20,11 +20,12 @@ en:
         date_format: Date format
         general_subtitle: Configure your preferences
         general_title: General
+        default_period: Default Period
         language: Language
         page_title: Preferences
         theme_dark: Dark
         theme_light: Light
-        theme_subtitle: Choose a preferred theme for the app (coming soon...)
+        theme_subtitle: Choose a preferred theme for the app
         theme_system: System
         theme_title: Theme
         timezone: Timezone

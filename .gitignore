@@ -11,7 +11,6 @@
 # Ignore all environment files (except templates).
 /.env*
 !/.env*.erb
-!.env.test
 !.env*.example
 
 # Ignore all logfiles and tempfiles.
@@ -63,6 +62,10 @@ gcp-storage-keyfile.json
 
 coverage
 .cursorrules
+.cursor/rules/structure.mdc
+.cursor/rules/agent.mdc
 
 # Ignore node related files
 node_modules
+
+compose.yml

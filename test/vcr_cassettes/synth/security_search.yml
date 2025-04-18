@@ -1,0 +1,104 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.synthfinance.com/tickers/search?country_code=US&dataset=limited&limit=25&name=AAPL
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Authorization:
+      - Bearer <SYNTH_API_KEY>
+      X-Source:
+      - maybe_app
+      X-Source-Type:
+      - managed
+      User-Agent:
+      - Faraday v2.12.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sun, 16 Mar 2025 12:01:58 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Etag:
+      - W/"3e444869eacbaf17006766a691cc8fdc"
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Rndr-Id:
+      - 2effb56b-f67f-402d
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Render-Origin-Server:
+      - Render
+      X-Request-Id:
+      - 33470619-5119-4923-b4e0-e9a0eeb532a1
+      X-Runtime:
+      - '0.453770'
+      X-Xss-Protection:
+      - '0'
+      Cf-Cache-Status:
+      - DYNAMIC
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=ayZOlXkCwLgUl%2FrB2%2BlqtqR5HCllubf4HLDipEt3klWKyHS4nilHi9XZ1fiEQWx7xwiRMJZ5EW0Xzm7ISoHWTtEbkgMQHWYQwSTeg30ahFFHK1pkOOnET1fuW1UxiZwlJtq1XZGB"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Speculation-Rules:
+      - '"/cdn-cgi/speculation"'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 921419514e0a6399-ORD
+      Alt-Svc:
+      - h3=":443"; ma=86400
+      Server-Timing:
+      - cfL4;desc="?proto=TCP&rtt=25809&min_rtt=25801&rtt_var=9692&sent=4&recv=6&lost=0&retrans=0&sent_bytes=2829&recv_bytes=939&delivery_rate=111952&cwnd=121&unsent_bytes=0&cid=2beb787f15cd8ab9&ts=610&x=0"
+    body:
+      encoding: ASCII-8BIT
+      string: '{"data":[{"symbol":"AAPL","name":"Apple Inc.","logo_url":"https://logo.synthfinance.com/ticker/AAPL","currency":"USD","exchange":{"name":"Nasdaq/Ngs
+        (Global Select Market)","mic_code":"XNGS","operating_mic_code":"XNAS","acronym":"NGS","country":"United
+        States","country_code":"US","timezone":"America/New_York"}},{"symbol":"APLY","isin":"US88634T8577","name":"YieldMax
+        AAPL Option Income ETF","logo_url":"https://logo.synthfinance.com/ticker/APLY","currency":"USD","exchange":{"name":"Nyse
+        Arca","mic_code":"ARCX","operating_mic_code":"XNYS","acronym":"NYSE","country":"United
+        States","country_code":"US","timezone":"America/New_York"}},{"symbol":"AAPD","name":"Direxion
+        Daily AAPL Bear 1X ETF","logo_url":"https://logo.synthfinance.com/ticker/AAPD","currency":"USD","exchange":{"name":"Nasdaq/Nms
+        (Global Market)","mic_code":"XNMS","operating_mic_code":"XNAS","acronym":"","country":"United
+        States","country_code":"US","timezone":"America/New_York"}},{"symbol":"AAPU","isin":"US25461A8743","name":"Direxion
+        Daily AAPL Bull 2X Shares","logo_url":"https://logo.synthfinance.com/ticker/AAPU","currency":"USD","exchange":{"name":"Nasdaq/Nms
+        (Global Market)","mic_code":"XNMS","operating_mic_code":"XNAS","acronym":"","country":"United
+        States","country_code":"US","timezone":"America/New_York"}},{"symbol":"AAPB","isin":"XXXXXXXR8842","name":"GraniteShares
+        2x Long AAPL Daily ETF","logo_url":"https://logo.synthfinance.com/ticker/AAPB","currency":"USD","exchange":{"name":"Nasdaq/Ngs
+        (Global Select Market)","mic_code":"XNGS","operating_mic_code":"XNAS","acronym":"NGS","country":"United
+        States","country_code":"US","timezone":"America/New_York"}},{"symbol":"AAPD","isin":"US25461A3041","name":"Direxion
+        Daily AAPL Bear 1X Shares","logo_url":"https://logo.synthfinance.com/ticker/AAPD","currency":"USD","exchange":{"name":"Nasdaq/Ngs
+        (Global Select Market)","mic_code":"XNGS","operating_mic_code":"XNAS","acronym":"NGS","country":"United
+        States","country_code":"US","timezone":"America/New_York"}},{"symbol":"AAPU","isin":"US25461A8743","name":"Direxion
+        Daily AAPL Bull 1.5X Shares","logo_url":"https://logo.synthfinance.com/ticker/AAPU","currency":"USD","exchange":{"name":"Nasdaq/Ngs
+        (Global Select Market)","mic_code":"XNGS","operating_mic_code":"XNAS","acronym":"NGS","country":"United
+        States","country_code":"US","timezone":"America/New_York"}},{"symbol":"AAPJ","isin":"US00037T1034","name":"AAP,
+        Inc.","logo_url":"https://logo.synthfinance.com/ticker/AAPJ","currency":"USD","exchange":{"name":"Otc
+        Pink Marketplace","mic_code":"PINX","operating_mic_code":"OTCM","acronym":"","country":"United
+        States","country_code":"US","timezone":"America/New_York"}}]}'
+  recorded_at: Sun, 16 Mar 2025 12:01:58 GMT
+recorded_with: VCR 6.3.1

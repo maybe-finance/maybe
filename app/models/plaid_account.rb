@@ -1,6 +1,4 @@
 class PlaidAccount < ApplicationRecord
-  include Plaidable
-
   TYPE_MAPPING = {
     "depository" => Depository,
     "credit" => CreditCard,
@@ -20,7 +18,7 @@ class PlaidAccount < ApplicationRecord
       find_or_create_by!(plaid_id: plaid_data.account_id) do |a|
         a.account = family.accounts.new(
           name: plaid_data.name,
-          balance: plaid_data.balances.current,
+          balance: plaid_data.balances.current || plaid_data.balances.available,
           currency: plaid_data.balances.iso_currency_code,
           accountable: TYPE_MAPPING[plaid_data.type].new
         )
@@ -89,7 +87,7 @@ class PlaidAccount < ApplicationRecord
         t.amount = plaid_txn.amount
         t.currency = plaid_txn.iso_currency_code
         t.date = plaid_txn.date
-        t.entryable = Account::Transaction.new(
+        t.entryable = Transaction.new(
           category: get_category(plaid_txn.personal_finance_category.primary),
           merchant: get_merchant(plaid_txn.merchant_name)
         )
@@ -122,7 +120,7 @@ class PlaidAccount < ApplicationRecord
           e.amount = loan_data.origination_principal_amount
           e.currency = account.currency
           e.date = loan_data.origination_date
-          e.entryable = Account::Valuation.new
+          e.entryable = Valuation.new
         end
       end
     end

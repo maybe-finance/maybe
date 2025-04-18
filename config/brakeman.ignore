@@ -1,59 +1,13 @@
 {
   "ignored_warnings": [
     {
-      "warning_type": "Dynamic Render Path",
-      "warning_code": 15,
-      "fingerprint": "03a2010b605b8bdb7d4e1566720904d69ef2fbf8e7bc35735b84e161b475215e",
-      "check_name": "Render",
-      "message": "Render path contains parameter value",
-      "file": "app/controllers/issues_controller.rb",
-      "line": 5,
-      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
-      "code": "render(template => \"#{Current.family.issues.find(params[:id]).class.name.underscore.pluralize}/show\", { :layout => \"issues\" })",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "IssuesController",
-        "method": "show"
-      },
-      "user_input": "params[:id]",
-      "confidence": "Weak",
-      "cwe_id": [
-        22
-      ],
-      "note": ""
-    },
-    {
-      "warning_type": "Mass Assignment",
-      "warning_code": 105,
-      "fingerprint": "5bfdb129316655dc4e02f3a599156660414a6562212a5f61057d376f6888f078",
-      "check_name": "PermitAttributes",
-      "message": "Potentially dangerous key allowed for mass assignment",
-      "file": "app/controllers/concerns/entryable_resource.rb",
-      "line": 122,
-      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:account_entry).permit(:account_id, :name, :enriched_name, :date, :amount, :currency, :excluded, :notes, :nature, :entryable_attributes => self.class.permitted_entryable_attributes)",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "EntryableResource",
-        "method": "entry_params"
-      },
-      "user_input": ":account_id",
-      "confidence": "High",
-      "cwe_id": [
-        915
-      ],
-      "note": ""
-    },
-    {
       "warning_type": "Mass Assignment",
       "warning_code": 105,
       "fingerprint": "aaccd8db0be34afdc88e5af08d91ae2e8b7765dfea2f3fc6e1c37db0adc7b991",
       "check_name": "PermitAttributes",
       "message": "Potentially dangerous key allowed for mass assignment",
       "file": "app/controllers/invitations_controller.rb",
-      "line": 40,
+      "line": 58,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
       "code": "params.require(:invitation).permit(:email, :role)",
       "render_path": null,
@@ -66,40 +20,6 @@
       "confidence": "Medium",
       "cwe_id": [
         915
-      ],
-      "note": ""
-    },
-    {
-      "warning_type": "Cross-Site Scripting",
-      "warning_code": 2,
-      "fingerprint": "b1f821a5c03b8aa348fb21b9297081a3bf9e954244290e7e511c67213d35f3dc",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/pages/changelog.html.erb",
-      "line": 22,
-      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "Provider::Github.new.fetch_latest_release_notes[:body]",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "PagesController",
-          "method": "changelog",
-          "line": 35,
-          "file": "app/controllers/pages_controller.rb",
-          "rendered": {
-            "name": "pages/changelog",
-            "file": "app/views/pages/changelog.html.erb"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "pages/changelog"
-      },
-      "user_input": null,
-      "confidence": "High",
-      "cwe_id": [
-        79
       ],
       "note": ""
     },
@@ -134,7 +54,7 @@
       "check_name": "Render",
       "message": "Render path contains parameter value",
       "file": "app/views/import/configurations/show.html.erb",
-      "line": 15,
+      "line": 34,
       "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
       "code": "render(partial => permitted_import_configuration_path(Current.family.imports.find(params[:import_id])), { :locals => ({ :import => Current.family.imports.find(params[:import_id]) }) })",
       "render_path": [
@@ -162,5 +82,5 @@
       "note": ""
     }
   ],
-  "brakeman_version": "7.0.0"
+  "brakeman_version": "7.0.2"
 }

@@ -28,7 +28,13 @@ module Authentication
     end
 
     def find_session_by_cookie
-      Session.find_by(id: cookies.signed[:session_token])
+      cookie_value = cookies.signed[:session_token]
+
+      if cookie_value.present?
+        Session.find_by(id: cookie_value)
+      else
+        nil
+      end
     end
 
     def create_session_for(user)

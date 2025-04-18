@@ -16,7 +16,7 @@ if ENV["INTERCOM_APP_ID"].present? && ENV["INTERCOM_IDENTITY_VERIFICATION_KEY"].
     # == Enabled Environments
     # Which environments is auto inclusion of the Javascript enabled for
     #
-    config.enabled_environments = [ "development", "production" ]
+    config.enabled_environments = [ "production" ]
 
     # == Current user method/variable
     # The method/variable that contains the logged in user in your controllers.
@@ -55,7 +55,9 @@ if ENV["INTERCOM_APP_ID"].present? && ENV["INTERCOM_IDENTITY_VERIFICATION_KEY"].
     config.user.custom_data = {
       family_id: Proc.new { Current.family.id },
       name: Proc.new { Current.user.display_name if Current.user.display_name != Current.user.email },
-      role: Proc.new { Current.user.role }
+      "Role": Proc.new { Current.user.role },
+      "Connections": Proc.new { Current.family.accounts.count },
+      "AI Enabled": Proc.new { Current.user.ai_enabled }
     }
 
     # == Current company method/variable

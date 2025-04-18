@@ -1,0 +1,6 @@
+concurrency: <%= ENV.fetch("RAILS_MAX_THREADS") { 3 } %>
+queues:
+  - [high_priority, 6]
+  - [medium_priority, 2]
+  - [low_priority, 1]
+  - [default, 1]

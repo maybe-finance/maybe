@@ -37,23 +37,12 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_nil Session.find_by(id: session_record.id)
   end
 
-  test "super admins can access the jobs page" do
-    sign_in users(:maybe_support_staff)
-    get good_job_url
-    assert_redirected_to "http://www.example.com/good_job/jobs?locale=en"
-  end
-
-  test "non-super admins cannot access the jobs page" do
-    get good_job_url
-    assert_response :not_found
-  end
-
   test "redirects to MFA verification when MFA enabled" do
     @user.setup_mfa!
     @user.enable_mfa!
     @user.sessions.destroy_all # Clean up any existing sessions
 
-    post sessions_path, params: { email: @user.email, password: "password" }
+    post sessions_path, params: { email: @user.email, password: user_password_test }
 
     assert_redirected_to verify_mfa_path
     assert_equal @user.id, session[:mfa_user_id]

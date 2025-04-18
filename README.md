@@ -6,9 +6,6 @@
 <b>Get
 involved: [Discord](https://link.maybe.co/discord) • [Website](https://maybefinance.com) • [Issues](https://github.com/maybe-finance/maybe/issues)</b>
 
-_If you're looking for the previous React codebase, you can find it
-at [maybe-finance/maybe-archive](https://github.com/maybe-finance/maybe-archive)._
-
 ## Backstory
 
 We spent the better part of 2021/2022 building a personal finance + wealth
@@ -27,11 +24,10 @@ and eventually offer a hosted version of the app for a small monthly fee.
 
 ## Maybe Hosting
 
-There are 3 primary ways to use the Maybe app:
+There are 2 primary ways to use the Maybe app:
 
-1. Managed (easiest) - _coming soon..._
-2. [One-click deploy](docs/hosting/one-click-deploy.md)
-3. [Self-host with Docker](docs/hosting/docker.md)
+1. Managed (easiest) - we're in alpha and release invites in our Discord
+2. [Self-host with Docker](docs/hosting/docker.md)
 
 ## Contributing
 
@@ -84,37 +80,10 @@ If you'd like multi-currency support, there are a few extra steps to follow.
 
 ### Setup Guides
 
-#### Dev Container (optional)
-
-This is 100% optional and meant for devs who don't want to worry about
-installing requirements manually for their platform. You can
-follow [this guide](https://code.visualstudio.com/docs/devcontainers/containers)
-to learn more about Dev Containers.
-
-If you run into `could not connect to server` errors, you may need to change
-your `.env`'s `DB_HOST` environment variable value to `db` to point to the
-Postgres container.
-
-#### Mac
-
-Please visit
-our [Mac dev setup guide](https://github.com/maybe-finance/maybe/wiki/Mac-Dev-Setup-Guide).
-
-#### Linux
-
-Please visit
-our [Linux dev setup guide](https://github.com/maybe-finance/maybe/wiki/Linux-Dev-Setup-Guide).
-
-#### Windows
-
-Please visit
-our [Windows dev setup guide](https://github.com/maybe-finance/maybe/wiki/Windows-Dev-Setup-Guide).
-
-### Testing Emails
-
-In development, we use `letter_opener` to automatically open emails in your
-browser. When an email sends locally, a new browser tab will open with a
-preview.
+- [Mac dev setup guide](https://github.com/maybe-finance/maybe/wiki/Mac-Dev-Setup-Guide)
+- [Linux dev setup guide](https://github.com/maybe-finance/maybe/wiki/Linux-Dev-Setup-Guide)
+- [Windows dev setup guide](https://github.com/maybe-finance/maybe/wiki/Windows-Dev-Setup-Guide)
+- Dev containers - visit [this guide](https://code.visualstudio.com/docs/devcontainers/containers) to learn more
 
 ## Repo Activity
 

@@ -1,0 +1,17 @@
+<%# locals: (chat:) %>
+
+<div id="chat-error" class="px-3 py-2 bg-red-100 border border-red-500 rounded-lg">
+  <% if chat.debug_mode? %>
+    <div class="overflow-x-auto text-xs p-4 bg-red-200 rounded-md mb-2">
+      <code><%= chat.error %></code>
+    </div>
+  <% end %>
+
+  <div class="flex items-center justify-between gap-2">
+    <p class="text-xs text-red-500">Failed to generate response.  Please try again.</p>
+
+    <%= button_to retry_chat_path(chat), method: :post, class: "btn btn--primary" do %>
+      <span>Retry</span>
+    <% end %>
+  </div>
+</div>

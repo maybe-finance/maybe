@@ -1,9 +1,0 @@
-<% if ENV["HOSTING_PLATFORM"] == "render" %>
-  <%= styled_form_with model: Setting.new, url: settings_hosting_path, method: :patch, data: { controller: "auto-submit-form", "auto-submit-form-trigger-event-value" => "blur" } do |form| %>
-    <div class="space-y-4">
-      <h2 class="font-medium mb-1"><%= t(".title") %></h2>
-      <p class="text-secondary text-sm mb-4"><%= t(".description") %></p>
-      <%= form.url_field :render_deploy_hook, label: t(".render_deploy_hook_label"), placeholder: t(".render_deploy_hook_placeholder"), value: Setting.render_deploy_hook, data: { "auto-submit-form-target" => "auto" } %>
-    </div>
-  <% end %>
-<% end %>

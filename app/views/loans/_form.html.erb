@@ -6,6 +6,13 @@
   <div class="space-y-2">
     <%= form.fields_for :accountable do |loan_form| %>
       <div class="flex items-center gap-2">
+        <%= loan_form.money_field :initial_balance,
+                                 label: t("loans.form.initial_balance"),
+                                 default_currency: Current.family.currency,
+                                 required: true %>
+      </div>
+      
+      <div class="flex items-center gap-2">
         <%= loan_form.number_field :interest_rate,
                                  label: t("loans.form.interest_rate"),
                                  placeholder: t("loans.form.interest_rate_placeholder"),

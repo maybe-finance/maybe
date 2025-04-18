@@ -8,17 +8,17 @@
 
   <section>
     <fieldset class="bg-gray-50 rounded-lg p-1 grid grid-flow-col justify-stretch gap-x-2">
-      <%= link_to new_account_transaction_path(nature: "expense"), data: { turbo_frame: :modal }, class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-subdued" do %>
+      <%= link_to new_transaction_path(nature: "expense"), data: { turbo_frame: :modal }, class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-subdued" do %>
         <%= lucide_icon "minus-circle", class: "w-5 h-5" %>
         <%= tag.span t(".expense") %>
       <% end %>
 
-      <%= link_to new_account_transaction_path(nature: "income"), data: { turbo_frame: :modal }, class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-subdued" do %>
+      <%= link_to new_transaction_path(nature: "income"), data: { turbo_frame: :modal }, class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-subdued" do %>
         <%= lucide_icon "plus-circle", class: "w-5 h-5" %>
         <%= tag.span t(".income") %>
       <% end %>
 
-      <%= tag.div class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-subdued bg-white text-gray-800 shadow-sm" do %>
+      <%= tag.div class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-subdued bg-container text-gray-800 shadow-sm" do %>
         <%= lucide_icon "arrow-right-left", class: "w-5 h-5" %>
         <%= tag.span t(".transfer") %>
       <% end %>

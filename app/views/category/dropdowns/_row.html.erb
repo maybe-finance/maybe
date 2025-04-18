@@ -5,10 +5,10 @@
       class: ["filterable-item flex justify-between items-center border-none rounded-lg px-2 py-1 group w-full hover:bg-gray-25 focus-within:bg-gray-25",
               { "bg-gray-25": is_selected }],
       data: { filter_name: category.name } do %>
-  <%= button_to account_transaction_category_path(
+  <%= button_to transaction_category_path(
         @transaction.entry,
-        account_entry: {
-          entryable_type: "Account::Transaction",
+        entry: {
+          entryable_type: "Transaction",
           entryable_attributes: { id: @transaction.id, category_id: category.id }
         }
       ),
@@ -25,7 +25,7 @@
   <% end %>
 
   <%= contextual_menu do %>
-    <div class="w-48 p-1 text-sm leading-6 text-primary bg-white shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
+    <div class="w-48 p-1 text-sm leading-6 text-primary bg-container shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
       <%= link_to edit_category_path(category),
             class: "block w-full py-2 px-3 space-x-2 text-primary hover:bg-gray-50 flex items-center rounded-lg",
             data: { turbo_frame: :modal } do %>

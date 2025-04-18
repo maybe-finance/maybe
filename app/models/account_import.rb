@@ -20,7 +20,7 @@ class AccountImport < Import
           currency: row.currency,
           date: Date.current,
           name: "Imported account value",
-          entryable: Account::Valuation.new
+          entryable: Valuation.new
         )
       end
     end

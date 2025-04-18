@@ -117,8 +117,8 @@ class Period
   end
 
   def interval
-    if days > 90
-      "1 month"
+    if days > 366
+      "1 week"
     else
       "1 day"
     end
@@ -156,8 +156,8 @@ class Period
     def must_be_valid_date_range
       return if start_date.nil? || end_date.nil?
       unless start_date.is_a?(Date) && end_date.is_a?(Date)
-        errors.add(:start_date, "must be a valid date")
-        errors.add(:end_date, "must be a valid date")
+        errors.add(:start_date, "must be a valid date, got #{start_date.inspect}")
+        errors.add(:end_date, "must be a valid date, got #{end_date.inspect}")
         return
       end
 

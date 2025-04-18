@@ -1,12 +1,12 @@
 <% content_for :page_header do %>
   <div class="space-y-1 mb-6">
-    <h1 class="text-3xl font-medium text-gray-900">Welcome back, <%= Current.user.first_name %></h1>
+    <h1 class="text-3xl font-medium text-primary">Welcome back, <%= Current.user.first_name %></h1>
     <p class="text-gray-500">Here's what's happening with your finances</p>
   </div>
 <% end %>
 
 <div class="w-full space-y-6 pb-24">
-  <section class="bg-white py-4 rounded-xl shadow-border-xs">
+  <section class="bg-container py-4 rounded-xl shadow-border-xs">
     <%= render partial: "pages/dashboard/net_worth_chart", locals: { series: @balance_sheet.net_worth_series(period: @period), period: @period } %>
   </section>
 

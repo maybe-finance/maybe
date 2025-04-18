@@ -22,7 +22,7 @@ class PlaidItemsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to accounts_path }
+      format.html { redirect_back_or_to accounts_path }
       format.json { head :ok }
     end
   end

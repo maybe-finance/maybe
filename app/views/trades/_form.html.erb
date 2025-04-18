@@ -1,0 +1,62 @@
+<%# locals: (entry:) %>
+
+<% type = params[:type] || "buy" %>
+
+<%= styled_form_with model: entry, url: trades_path, data: { controller: "trade-form" } do |form| %>
+
+  <%= form.hidden_field :account_id %>
+
+  <div class="space-y-4">
+    <% if entry.errors.any? %>
+      <%= render "shared/form_errors", model: entry %>
+    <% end %>
+
+    <div class="space-y-2">
+      <%= form.select :type, [
+          ["Buy", "buy"],
+          ["Sell", "sell"],
+          ["Deposit", "deposit"],
+          ["Withdrawal", "withdrawal"],
+          ["Interest", "interest"]
+      ],
+      { label: t(".type"), selected: type },
+      { data: {
+          action: "trade-form#changeType",
+          trade_form_url_param: new_trade_path(account_id: entry.account&.id || entry.account_id),
+          trade_form_key_param: "type",
+        }} %>
+
+      <% if %w[buy sell].include?(type) %>
+        <% if Security.provider.present? %>
+          <div class="form-field combobox">
+            <%= form.combobox :ticker,
+                            securities_path(country_code: Current.family.country),
+                            name_when_new: "entry[manual_ticker]",
+                            label: t(".holding"),
+                            placeholder: t(".ticker_placeholder"),
+                            required: true %>
+          </div>
+        <% else %>
+          <%= form.text_field :manual_ticker, label: "Ticker symbol", placeholder: "AAPL", required: true %>
+        <% end %>
+      <% end %>
+
+      <%= form.date_field :date, label: true, value: Date.current, required: true %>
+
+      <% unless %w[buy sell].include?(type) %>
+        <%= form.money_field :amount, label: t(".amount"), required: true %>
+      <% end %>
+
+      <% if %w[deposit withdrawal].include?(type) %>
+        <%= form.collection_select :transfer_account_id, Current.family.accounts.alphabetically, :id, :name, { prompt: t(".account_prompt"), label: t(".account") } %>
+      <% end %>
+
+      <% if %w[buy sell].include?(type) %>
+        <%= form.number_field :qty, label: t(".qty"), placeholder: "10", min: 0.000000000000000001, step: "any", required: true %>
+        <%= form.money_field :price, label: t(".price"), required: true %>
+      <% end %>
+    </div>
+
+    <%= form.submit t(".submit") %>
+  </div>
+<% end %>

@@ -1,13 +1,36 @@
 <%= render "layouts/shared/htmldoc" do %>
-  <div class="flex h-full bg-gray-50">
-    <nav class="flex flex-col shrink-0 w-[84px] py-4 mr-3">
-      <div class="pl-2 mb-3">
+  <% sidebar_config = app_sidebar_config(Current.user) %>
+
+  <div class="flex flex-col lg:flex-row h-dvh lg:h-full bg-surface"
+       data-controller="sidebar"
+       data-sidebar-user-id-value="<%= Current.user.id %>"
+       data-sidebar-config-value="<%= sidebar_config.to_json %>">
+    <nav class="flex justify-between lg:justify-start lg:flex-col shrink-0 lg:w-[84px] p-3 lg:px-0 lg:py-4 lg:mr-3">
+
+      <button data-action="sidebar#toggleLeftPanelMobile" class="lg:hidden inline-flex p-2 rounded-lg items-center justify-center hover:bg-gray-100 cursor-pointer">
+        <%= icon("panel-left", color: "gray") %>
+      </button>
+
+      <%# Mobile only account sidebar groups %>
+      <%= tag.div class: class_names("hidden bg-surface z-20 absolute inset-0 h-dvh w-full p-4 overflow-y-auto transition-all duration-300"),
+                  data: { sidebar_target: "leftPanelMobile" } do %>
+        <div id="account-sidebar-tabs">
+          <div class="mb-4">
+            <button data-action="sidebar#toggleLeftPanelMobile">
+              <%= icon("x", color: "gray") %>
+            </button>
+          </div>
+          <%= render "accounts/account_sidebar_tabs", family: Current.family %>
+        </div>
+      <% end %>
+
+      <div class="lg:pl-2 lg:mb-3">
         <%= link_to root_path, class: "block" do %>
           <%= image_tag "logomark-color.svg", class: "w-9 h-9 mx-auto" %>
         <% end %>
       </div>
 
-      <ul class="space-y-0.5">
+      <ul class="space-y-0.5 hidden lg:block">
         <li>
           <%= render "layouts/sidebar/nav_item", name: "Home", path: root_path, icon_key: "pie-chart" %>
         </li>
@@ -21,41 +44,88 @@
         </li>
       </ul>
 
-      <div class="pl-2 mt-auto mx-auto">
-        <%= render "users/user_menu", user: Current.user %>
+      <div class="lg:pl-2 lg:mt-auto lg:mx-auto">
+        <div class="lg:hidden">
+          <%= render "users/user_menu", user: Current.user, placement: "bottom-end", offset: 12 %>
+        </div>
+
+        <div class="hidden lg:block">
+          <%= render "users/user_menu", user: Current.user %>
+        </div>
       </div>
     </nav>
 
-    <%= tag.div class: class_names("py-4 shrink-0 h-full overflow-y-auto transition-all duration-300", Current.user.show_sidebar? ? "w-80" : "w-0"), data: { sidebar_target: "panel" } do %>
-      <% if content_for?(:sidebar) %>
-        <%= yield :sidebar %>
-      <% else %>
-        <div id="account-sidebar-tabs" data-turbo-permanent>
-          <%= render "accounts/account_sidebar_tabs", family: Current.family %>
-        </div>
-      <% end %>
-    <% end %>
-
-    <%= tag.main class: class_names("px-10 py-4 grow h-full", require_upgrade? ? "relative overflow-hidden" : "overflow-y-auto") do %>
-      <% if require_upgrade? %>
-        <div class="absolute inset-0 px-10 h-full w-full z-50">
-          <%= render "shared/subscribe_modal" %>
-        </div>
-      <% end %>
-
-      <%= tag.div class: class_names("mx-auto w-full h-full", Current.user.show_sidebar? ? "max-w-4xl" : "max-w-5xl"), data: { sidebar_target: "content" } do %>
-        <% if content_for?(:breadcrumbs) %>
-          <%= yield :breadcrumbs %>
+    <div class="flex justify-between lg:justify-normal grow overflow-y-auto">
+      <%= tag.div class: class_names("py-4 shrink-0 h-full overflow-y-auto transition-all duration-300 hidden lg:block"),
+                style: "width: #{sidebar_config.dig(:left_panel, :initial_width)}px",
+                data: { sidebar_target: "leftPanel" } do %>
+        <% if content_for?(:sidebar) %>
+          <%= yield :sidebar %>
         <% else %>
-          <%= render "layouts/shared/breadcrumbs", breadcrumbs: @breadcrumbs %>
+          <div id="account-sidebar-tabs" data-turbo-permanent>
+            <%= render "accounts/account_sidebar_tabs", family: Current.family %>
+          </div>
         <% end %>
-
-        <% if content_for?(:page_header) %>
-          <%= yield :page_header %>
-        <% end %>
-
-        <%= yield %>
       <% end %>
-    <% end %>
+
+      <%= tag.main class: class_names("px-3 lg:px-10 py-4 grow h-full", require_upgrade? ? "relative overflow-hidden" : "overflow-y-auto") do %>
+        <% if require_upgrade? %>
+          <div class="absolute inset-0 px-3 lg:px-10 h-full w-full z-50">
+            <%= render "shared/subscribe_modal" %>
+          </div>
+        <% end %>
+
+        <%= tag.div class: class_names("mx-auto max-w-5xl w-full h-full"), data: { sidebar_target: "content" } do %>
+          <% if content_for?(:breadcrumbs) %>
+            <%= yield :breadcrumbs %>
+          <% else %>
+            <%= render "layouts/shared/breadcrumbs", breadcrumbs: @breadcrumbs %>
+          <% end %>
+
+          <% if content_for?(:page_header) %>
+            <%= yield :page_header %>
+          <% end %>
+
+          <%= yield %>
+        <% end %>
+      <% end %>
+
+      <%# AI chat sidebar %>
+      <%= tag.div id: "chat-container",
+                style: "width: #{sidebar_config.dig(:right_panel, :initial_width)}px; overflow: #{sidebar_config.dig(:right_panel, :overflow)}",
+                class: class_names("flex flex-col justify-between shrink-0 transition-all duration-300 hidden lg:block"),
+                data: { controller: "chat hotkey", sidebar_target: "rightPanel", turbo_permanent: true } do %>
+
+        <% if Current.user.ai_enabled? %>
+          <%= turbo_frame_tag chat_frame, src: chat_view_path(@chat), loading: "lazy", class: "h-full" do %>
+            <div class="flex justify-center items-center h-full">
+              <%= lucide_icon("loader-circle", class: "w-5 h-5 text-secondary animate-spin") %>
+            </div>
+          <% end %>
+        <% else %>
+          <%= render "chats/ai_consent" %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <nav class="lg:hidden bg-container shrink-0 z-10 pb-2">
+      <ul class="flex items-center justify-around gap-1">
+        <li>
+          <%= render "layouts/sidebar/nav_item", name: "Home", path: root_path, icon_key: "pie-chart" %>
+        </li>
+
+        <li>
+          <%= render "layouts/sidebar/nav_item", name: "Transactions", path: transactions_path, icon_key: "credit-card" %>
+        </li>
+
+        <li>
+          <%= render "layouts/sidebar/nav_item", name: "Budgets", path: budgets_path, icon_key: "map" %>
+        </li>
+
+        <li>
+          <%= render "layouts/sidebar/nav_item", name: "Assistant", path: chats_path, icon_key: "bot" %>
+        </li>
+      </ul>
+    </nav>
   </div>
 <% end %>

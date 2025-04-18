@@ -3,20 +3,34 @@ require "test_helper"
 module ExchangeRateProviderInterfaceTest
   extend ActiveSupport::Testing::Declarative
 
-  test "exchange rate provider interface" do
-    assert_respond_to @subject, :healthy?
-    assert_respond_to @subject, :fetch_exchange_rate
-    assert_respond_to @subject, :fetch_exchange_rates
-  end
+  test "fetches single exchange rate" do
+    VCR.use_cassette("#{vcr_key_prefix}/exchange_rate") do
+      response = @subject.fetch_exchange_rate(
+        from: "USD",
+        to: "GBP",
+        date: Date.parse("01.01.2024")
+      )
 
-  test "exchange rate provider response contract" do
-    VCR.use_cassette "synth/exchange_rate" do
-      response = @subject.fetch_exchange_rate from: "USD", to: "MXN", date: Date.iso8601("2024-08-01")
+      rate = response.data
 
-      assert_respond_to response, :rate
-      assert_respond_to response, :success?
-      assert_respond_to response, :error
-      assert_respond_to response, :raw_response
+      assert_equal "USD", rate.from
+      assert_equal "GBP", rate.to
+      assert_in_delta 0.78, rate.rate, 0.01
     end
   end
+
+  test "fetches paginated exchange_rate historical data" do
+    VCR.use_cassette("#{vcr_key_prefix}/exchange_rates") do
+      response = @subject.fetch_exchange_rates(
+        from: "USD", to: "GBP", start_date: Date.parse("01.01.2024"), end_date: Date.parse("31.07.2024")
+      )
+
+      assert_equal 213, response.data.count # 213 days between 01.01.2024 and 31.07.2024
+    end
+  end
+
+  private
+    def vcr_key_prefix
+      @subject.class.name.demodulize.underscore
+    end
 end

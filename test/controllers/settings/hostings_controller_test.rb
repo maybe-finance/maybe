@@ -1,21 +1,37 @@
 require "test_helper"
+require "ostruct"
 
 class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
+  include ProviderTestHelper
+
   setup do
     sign_in users(:family_admin)
+
+    @provider = mock
+    Provider::Registry.stubs(:get_provider).with(:synth).returns(@provider)
+    @usage_response = provider_success_response(
+      OpenStruct.new(
+        used: 10,
+        limit: 100,
+        utilization: 10,
+        plan: "free",
+      )
+    )
   end
 
   test "cannot edit when self hosting is disabled" do
-    assert_raises(RuntimeError, "Settings not available on non-self-hosted instance") do
+    with_env_overrides SELF_HOSTED: "false" do
       get settings_hosting_url
-    end
+      assert_response :forbidden
 
-    assert_raises(RuntimeError, "Settings not available on non-self-hosted instance") do
-      patch settings_hosting_url, params: { setting: { render_deploy_hook: "https://example.com" } }
+      patch settings_hosting_url, params: { setting: { require_invite_for_signup: true } }
+      assert_response :forbidden
     end
   end
 
   test "should get edit when self hosting is enabled" do
+    @provider.expects(:usage).returns(@usage_response)
+
     with_self_hosting do
       get settings_hosting_url
       assert_response :success
@@ -24,25 +40,9 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
 
   test "can update settings when self hosting is enabled" do
     with_self_hosting do
-      NEW_RENDER_DEPLOY_HOOK = "https://api.render.com/deploy/srv-abc123"
-      assert_nil Setting.render_deploy_hook
+      patch settings_hosting_url, params: { setting: { synth_api_key: "1234567890" } }
 
-      patch settings_hosting_url, params: { setting: { render_deploy_hook: NEW_RENDER_DEPLOY_HOOK } }
-
-      assert_equal NEW_RENDER_DEPLOY_HOOK, Setting.render_deploy_hook
-    end
-  end
-
-  test "can choose auto upgrades mode with a deploy hook" do
-    with_self_hosting do
-      NEW_RENDER_DEPLOY_HOOK = "https://api.render.com/deploy/srv-abc123"
-      assert_nil Setting.render_deploy_hook
-
-      patch settings_hosting_url, params: { setting: { render_deploy_hook: NEW_RENDER_DEPLOY_HOOK, upgrades_setting: "release" } }
-
-      assert_equal "auto", Setting.upgrades_mode
-      assert_equal "release", Setting.upgrades_target
-      assert_equal NEW_RENDER_DEPLOY_HOOK, Setting.render_deploy_hook
+      assert_equal "1234567890", Setting.synth_api_key
     end
   end
 
@@ -64,8 +64,8 @@ class Settings::HostingsControllerTest < ActionDispatch::IntegrationTest
 
     assert_not ExchangeRate.exists?(exchange_rate.id)
     assert_not Security::Price.exists?(security_price.id)
-    assert_not Account::Holding.exists?(holding.id)
-    assert_not Account::Balance.exists?(account_balance.id)
+    assert_not Holding.exists?(holding.id)
+    assert_not Balance.exists?(account_balance.id)
   end
 
   test "can clear data only when admin" do

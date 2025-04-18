@@ -1,5 +1,5 @@
 <%# locals: path, direction, title %>
-<%= link_to path, class: "w-full bg-white hover:bg-gray-50 rounded-xl border border-alpha-black-25 shadow-xs p-4 flex items-center justify-between" do %>
+<%= link_to path, class: "w-full bg-container hover:bg-container-inset rounded-xl border border-alpha-black-25 shadow-xs p-4 flex items-center justify-between" do %>
   <% if direction == 'previous' %>
     <div class="w-5 h-5 text-secondary">
       <%= lucide_icon("arrow-left") %>

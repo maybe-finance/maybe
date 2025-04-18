@@ -10,8 +10,3 @@ en:
       label: Amount
     syncing_notice:
       syncing: Syncing accounts data...
-    upgrade_notification:
-      app_upgraded: The app has been upgraded to %{version}.
-      dismiss: Dismiss
-      new_version_available: A new version of Maybe is available for upgrade.
-      upgrade_now: Upgrade Now

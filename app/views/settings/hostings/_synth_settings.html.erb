@@ -30,18 +30,18 @@
       <div class="space-y-2">
         <p class="text-sm text-secondary">
           <%= t(".api_calls_used",
-                used: number_with_delimiter(@synth_usage.used),
-                limit: number_with_delimiter(@synth_usage.limit),
-                percentage: number_to_percentage(@synth_usage.utilization, precision: 1)) %>
+                used: number_with_delimiter(@synth_usage.data.used),
+                limit: number_with_delimiter(@synth_usage.data.limit),
+                percentage: number_to_percentage(@synth_usage.data.utilization, precision: 1)) %>
         </p>
         <div class="w-52 h-1.5 bg-gray-100 rounded-2xl">
           <div class="h-full bg-green-500 rounded-2xl"
-               style="width: <%= [@synth_usage.utilization, 2].max %>%;"></div>
+               style="width: <%= [@synth_usage.data.utilization, 2].max %>%;"></div>
         </div>
       </div>
       <div class="bg-gray-100 rounded-md px-1.5 py-0.5 w-fit">
         <p class="text-xs font-medium text-secondary uppercase">
-          <%= t(".plan", plan: @synth_usage.plan) %>
+          <%= t(".plan", plan: @synth_usage.data.plan) %>
         </p>
       </div>
     </div>

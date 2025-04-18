@@ -1,14 +1,9 @@
 ---
-description: This rule explains the project's tech stack and code conventions
-globs: *
+description: 
+globs: 
+alwaysApply: true
 ---
-This rule serves as high-level documentation for how the Maybe codebase is structured.
-
-## Rules for AI
-
-- Use this file to understand how the codebase works
-- Treat this rule/file as your "source of truth" when making code recommendations
-- When creating migrations, always use `rails g migration` instead of creating the file yourself
+This rule serves as high-level documentation for how you should write code for the Maybe codebase. 
 
 ## Project Tech Stack
 
@@ -18,8 +13,9 @@ This rule serves as high-level documentation for how the Maybe codebase is struc
   - Hotwire Turbo/Stimulus for SPA-like UI/UX
   - TailwindCSS for styles
   - Lucide Icons for icons
+  - OpenAI for AI chat
 - Database: PostgreSQL
-- Jobs: GoodJob
+- Jobs: Sidekiq + Redis
 - External
   - Payments: Stripe
   - User bank data syncing: Plaid 
@@ -46,39 +42,79 @@ This codebase adopts a "skinny controller, fat models" convention.  Furthermore,
 - When concerns are used for code organization, they should be organized around the "traits" of a model; not for simply moving code to another spot in the codebase.
 - When possible, models should answer questions about themselves—for example, we might have a method, `account.balance_series` that returns a time-series of the account's most recent balances.  We prefer this over something more service-like such as `AccountSeries.new(account).call`.
 
-### Convention 3: Prefer server-side solutions over client-side solutions
+### Convention 3: Leverage Hotwire, write semantic HTML, CSS, and JS, prefer server-side solutions
 
-- When possible, leverage Turbo frames over complex, JS-driven client-side solutions
-- When writing a client-side solution, use Stimulus controllers and keep it simple!
-- Especially when dealing with money and currencies, calculate + format server-side and then pass that to the client to display
-- Keep client-side code for where it truly shines.  For example, [bulk_select_controller.js](mdc:app/javascript/controllers/bulk_select_controller.js) is a case where server-side solutions would degrade the user experience significantly.  When bulk-selecting entries, client-side solutions are the way to go and Stimulus provides the right toolset to achieve this.
-
-### Convention 4: Sacrifice performance, optimize for simplicitly and clarity
-
-This codebase is still young.  We are still rapidly iterating on domain designs and features.  Because of this, code should be optimized for simplicitly and clarity over performance.
-
-- Focus on good OOP design first, performance second
-- Be mindful of large performance bottlenecks, but don't sweat the small stuff
-
-### Convention 5: Prefer semantic, native HTML features
-
-The HTML spec has improved tremendously over the years and offers a ton of functionality out of the box.  We prefer semantic, native HTML solutions over JS-based ones.  A few examples of this include:
-
-- Using the `dialog` element for modals
-- Using `summary` / `details` elements for disclosures (or `popover` attribute)
+- Native HTML is always preferred over JS-based components
+  - Example 1: Use `<dialog>` element for modals instead of creating a custom component
+  - Example 2: Use `<details><summary>...</summary></details>` for disclosures rather than custom components
+- Leverage Turbo frames to break up the page over JS-driven client-side solutions
+  - Example 1: A good example of turbo frame usage is in [application.html.erb](mdc:app/views/layouts/application.html.erb) where we load [chats_controller.rb](mdc:app/controllers/chats_controller.rb) actions in a turbo frame in the global layout
+- Leverage query params in the URL for state over local storage and sessions.  If absolutely necessary, utilize the DB for persistent state.
+- Use Turbo streams to enhance functionality, but do not solely depend on it
+- Format currencies, numbers, dates, and other values server-side, then pass to Stimulus controllers for display only
+- Keep client-side code for where it truly shines.  For example, @bulk_select_controller.js is a case where server-side solutions would degrade the user experience significantly.  When bulk-selecting entries, client-side solutions are the way to go and Stimulus provides the right toolset to achieve this.
 
 The Hotwire suite (Turbo/Stimulus) works very well with these native elements and we optimize for this.
 
-### Convention 6: Use Minitest + Fixtures for testing, minimize fixtures
+### Convention 4: Optimize for simplicitly and clarity
+
+All code should maximize readability and simplicity.
+
+- Prioritize good OOP domain design over performance
+- Only focus on performance for critical and global areas of the codebase; otherwise, don't sweat the small stuff.
+  - Example 1: be mindful of loading large data payloads in global layouts
+  - Example 2: Avoid N+1 queries
+
+### Convention 5: Use Minitest + Fixtures for testing, minimize fixtures
 
 Due to the open-source nature of this project, we have chosen Minitest + Fixtures for testing to maximize familiarity and predictability.
 
 - Always use Minitest and fixtures for testing.
 - Keep fixtures to a minimum.  Most models should have 2-3 fixtures maximum that represent the "base cases" for that model.  "Edge cases" should be created on the fly, within the context of the test which it is needed.
-- For tests that require a large number of fixture records to be created, use Rails helpers such as [entries_test_helper.rb](mdc:test/support/account/entries_test_helper.rb) to act as a "factory" for creating these.  For a great example of this, check out [balance_calculator_test.rb](mdc:test/models/account/balance_calculator_test.rb)
+- For tests that require a large number of fixture records to be created, use Rails helpers such as [entries_test_helper.rb](mdc:test/support/entries_test_helper.rb) to act as a "factory" for creating these.  For a great example of this, check out [forward_calculator_test.rb](mdc:test/models/account/balance/forward_calculator_test.rb)
+- Take a minimal approach to testing—only test the absolutely critical code paths that will significantly increase developer confidence
 
-### Convention 7: Use ActiveRecord for complex validations, DB for simple ones, keep business logic out of DB
+#### Convention 5a: Write minimal, effective tests
+
+- Use system tests sparingly as they increase the time to complete the test suite
+- Only write tests for critical and important code paths
+- Write tests as you go, when required
+- Take a practical approach to testing.  Tests are effective when their presence _significantly increases confidence in the codebase_.
+
+Below are examples of necessary vs. unnecessary tests:
+
+```rb
+# GOOD!!
+# Necessary test - in this case, we're testing critical domain business logic
+test "syncs balances" do
+  Holding::Syncer.any_instance.expects(:sync_holdings).returns([]).once
+
+  @account.expects(:start_date).returns(2.days.ago.to_date)
+
+  Balance::ForwardCalculator.any_instance.expects(:calculate).returns(
+    [
+      Balance.new(date: 1.day.ago.to_date, balance: 1000, cash_balance: 1000, currency: "USD"),
+      Balance.new(date: Date.current, balance: 1000, cash_balance: 1000, currency: "USD")
+    ]
+  )
+
+  assert_difference "@account.balances.count", 2 do
+    Balance::Syncer.new(@account, strategy: :forward).sync_balances
+  end
+end
+
+# BAD!!
+# Unnecessary test - in this case, this is simply testing ActiveRecord's functionality
+test "saves balance" do 
+  balance_record = Balance.new(balance: 100, currency: "USD")
+
+  assert balance_record.save
+end
+```
+
+### Convention 6: Use ActiveRecord for complex validations, DB for simple ones, keep business logic out of DB
 
 - Enforce `null` checks, unique indexes, and other simple validations in the DB
 - ActiveRecord validations _may_ mirror the DB level ones, but not 100% necessary.  These are for convenience when error handling in forms.  Always prefer client-side form validation when possible.
 - Complex validations and business logic should remain in ActiveRecord
+

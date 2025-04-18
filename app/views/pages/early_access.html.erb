@@ -7,7 +7,6 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
 
     <%= javascript_importmap_tags %>
     <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
@@ -31,7 +30,7 @@
           <p class="text-base text-subdued">There <%= @invite_codes_count == 1 ? "is" : "are" %> <span class="text-white"><%= @invite_codes_count %> invite <%= "code".pluralize(@invite_codes_count) %></span> remaining.</p>
           <div class="bg-gray-900 border border-gray-800 p-2 rounded-xl my-4">
             <p class="text-sm text-subdued mt-1 mb-3 sm:mb-4">Your invite code is <span class="font-mono text-white"><%= @invite_code.token %></span></p>
-            <p><%= link_to "Sign up with this code", new_registration_path(invite: @invite_code.token), class: "block w-full bg-white text-black py-2 px-3 rounded-lg no-underline text-sm sm:text-base hover:bg-gray-200 transition duration-150" %></p>
+            <p><%= link_to "Sign up with this code", new_registration_path(invite: @invite_code.token), class: "block w-full bg-container text-black py-2 px-3 rounded-lg no-underline text-sm sm:text-base hover:bg-gray-200 transition duration-150" %></p>
           </div>
 
           <p class="text-sm text-subdued">You may need to refresh the page to get a new invite code if someone else claimed it before you.</p>
@@ -44,7 +43,7 @@
           </p>
         <% else %>
           <p class="text-base text-subdued mb-6 sm:mb-8">Sorry, there are <span class="text-white">no invite codes</span> remaining. Join our <%= link_to "Discord server", "https://link.maybe.co/discord", target: "_blank", class: "text-white hover:text-gray-300" %> to get notified when new invite codes are available.</p>
-          <p><%= link_to "Join Discord server", "https://link.maybe.co/discord", target: "_blank", class: "bg-white text-black px-3 py-2 rounded-md no-underline text-base hover:bg-gray-200 transition duration-150" %></p>
+          <p><%= link_to "Join Discord server", "https://link.maybe.co/discord", target: "_blank", class: "bg-container text-black px-3 py-2 rounded-md no-underline text-base hover:bg-gray-200 transition duration-150" %></p>
         <% end %>
       </div>
     </div>

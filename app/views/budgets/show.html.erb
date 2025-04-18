@@ -7,7 +7,7 @@
 
   <div class="flex items-start gap-4">
     <div class="w-[300px] space-y-4">
-      <div class="h-[300px] bg-white rounded-xl shadow-border-xs p-8">
+      <div class="h-[300px] bg-container rounded-xl shadow-border-xs p-8">
         <% if @budget.available_to_allocate.negative? %>
           <%= render "budgets/over_allocation_warning", budget: @budget %>
         <% else %>
@@ -25,7 +25,7 @@
                         budget_path(@budget, tab: "budgeted"),
                         class: class_names(
                           base_classes,
-                          "bg-white shadow-xs text-primary": selected_tab == "budgeted",
+                          "bg-container shadow-xs text-primary": selected_tab == "budgeted",
                           "text-secondary": selected_tab != "budgeted"
                         ) %>
 
@@ -33,23 +33,23 @@
                         budget_path(@budget, tab: "actuals"),
                         class: class_names(
                           base_classes,
-                          "bg-white shadow-xs text-primary": selected_tab == "actuals",
+                          "bg-container shadow-xs text-primary": selected_tab == "actuals",
                           "text-secondary": selected_tab != "actuals"
                         ) %>
           </div>
 
-          <div class="bg-white rounded-xl shadow-border-xs">
+          <div class="bg-container rounded-xl shadow-border-xs">
             <%= render selected_tab == "budgeted" ? "budgets/budgeted_summary" : "budgets/actuals_summary", budget: @budget %>
           </div>
         <% else %>
-          <div class="bg-white rounded-xl shadow-border-xs">
+          <div class="bg-container rounded-xl shadow-border-xs">
             <%= render "budgets/actuals_summary", budget: @budget %>
           </div>
         <% end %>
       </div>
     </div>
 
-    <div class="grow bg-white rounded-xl shadow-border-xs p-4">
+    <div class="grow bg-container rounded-xl shadow-border-xs p-4">
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-lg font-medium">Categories</h2>
 
@@ -61,7 +61,7 @@
         <% end %>
       </div>
 
-      <div class="bg-gray-25 rounded-xl p-1">
+      <div class="bg-container-inset rounded-xl p-1">
         <%= render "budgets/budget_categories", budget: @budget %>
       </div>
     </div>

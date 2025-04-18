@@ -1,5 +1,5 @@
 class ImportJob < ApplicationJob
-  queue_as :latency_medium
+  queue_as :high_priority
 
   def perform(import)
     import.publish

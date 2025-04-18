@@ -22,16 +22,4 @@ cloudflare:
   bucket: <%= ENV['CLOUDFLARE_BUCKET'] %>
   request_checksum_calculation: "when_required"
   response_checksum_validation: "when_required"
-
-# Removed in #702.  Uncomment, add gems, update .env.example to enable.
-#google:
-#  service: GCS
-#  project: <%#= ENV["GCS_PROJECT"] %>
-#  credentials: <%#= Rails.root.join("gcp-storage-keyfile.json") %>
-#  bucket: <%#= ENV["GCS_BUCKET"] %>
-
-#azure:
-#  service: AzureStorage
-#  storage_account_name: <%#= ENV["AZURE_STORAGE_ACCOUNT_NAME"] %>
-#  storage_access_key: <%#= ENV["AZURE_STORAGE_ACCESS_KEY"] %>
-#  container: <%#= ENV["AZURE_STORAGE_CONTAINER"] %>
+  

@@ -2,13 +2,16 @@ class User < ApplicationRecord
   has_secure_password
 
   belongs_to :family
+  belongs_to :last_viewed_chat, class_name: "Chat", optional: true
   has_many :sessions, dependent: :destroy
+  has_many :chats, dependent: :destroy
   has_many :impersonator_support_sessions, class_name: "ImpersonationSession", foreign_key: :impersonator_id, dependent: :destroy
   has_many :impersonated_support_sessions, class_name: "ImpersonationSession", foreign_key: :impersonated_id, dependent: :destroy
   accepts_nested_attributes_for :family, update_only: true
 
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validate :ensure_valid_profile_image
+  validates :default_period, inclusion: { in: Period::PERIODS.keys }
   normalizes :email, with: ->(email) { email.strip.downcase }
   normalizes :unconfirmed_email, with: ->(email) { email&.strip&.downcase }
 
@@ -68,20 +71,24 @@ class User < ApplicationRecord
     (display_name&.first || email.first).upcase
   end
 
-  def acknowledge_upgrade_prompt(commit_sha)
-    update!(last_prompted_upgrade_commit_sha: commit_sha)
+  def initials
+    if first_name.present? && last_name.present?
+      "#{first_name.first}#{last_name.first}".upcase
+    else
+      initial
+    end
   end
 
-  def acknowledge_upgrade_alert(commit_sha)
-    update!(last_alerted_upgrade_commit_sha: commit_sha)
+  def show_ai_sidebar?
+    show_ai_sidebar
   end
 
-  def has_seen_upgrade_prompt?(upgrade)
-    last_prompted_upgrade_commit_sha == upgrade.commit_sha
+  def ai_available?
+    !Rails.application.config.app_mode.self_hosted? || ENV["OPENAI_ACCESS_TOKEN"].present?
   end
 
-  def has_seen_upgrade_alert?(upgrade)
-    last_alerted_upgrade_commit_sha == upgrade.commit_sha
+  def ai_enabled?
+    ai_enabled && ai_available?
   end
 
   # Deactivation

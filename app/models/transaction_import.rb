@@ -3,7 +3,7 @@ class TransactionImport < Import
     transaction do
       mappings.each(&:create_mappable!)
 
-      rows.each do |row|
+      transactions = rows.map do |row|
         mapped_account = if account
           account
         else
@@ -13,17 +13,22 @@ class TransactionImport < Import
         category = mappings.categories.mappable_for(row.category)
         tags = row.tags_list.map { |tag| mappings.tags.mappable_for(tag) }.compact
 
-        entry = mapped_account.entries.build \
-          date: row.date_iso,
-          amount: row.signed_amount,
-          name: row.name,
-          currency: row.currency,
-          notes: row.notes,
-          entryable: Account::Transaction.new(category: category, tags: tags),
-          import: self
-
-        entry.save!
+        Transaction.new(
+          category: category,
+          tags: tags,
+          entry: Entry.new(
+            account: mapped_account,
+            date: row.date_iso,
+            amount: row.signed_amount,
+            name: row.name,
+            currency: row.currency,
+            notes: row.notes,
+            import: self
+          )
+        )
       end
+
+      Transaction.import!(transactions, recursive: true)
     end
   end
 

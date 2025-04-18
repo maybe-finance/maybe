@@ -11,8 +11,8 @@ class PropertiesControllerTest < ActionDispatch::IntegrationTest
   test "creates with property details" do
     assert_difference -> { Account.count } => 1,
       -> { Property.count } => 1,
-      -> { Account::Valuation.count } => 2,
-      -> { Account::Entry.count } => 2 do
+      -> { Valuation.count } => 2,
+      -> { Entry.count } => 2 do
       post properties_path, params: {
         account: {
           name: "Property",

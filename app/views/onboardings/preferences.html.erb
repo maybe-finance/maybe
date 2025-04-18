@@ -9,7 +9,7 @@
       </div>
 
       <div class="p-1 bg-alpha-black-25 mb-2 rounded-lg">
-        <div class="bg-white p-4 rounded-lg flex gap-8 shadow-border-xs">
+        <div class="bg-container p-4 rounded-lg flex gap-8 shadow-border-xs">
           <div class="space-y-2">
             <%= tag.p t(".example"), class: "text-secondary text-sm" %>
             <%= tag.p format_money(Money.new(2325.25, params[:currency] || @user.family.currency)), class: "text-primary font-medium text-2xl" %>
@@ -56,7 +56,7 @@
 
       <p class="text-secondary text-xs mb-4"><%= t(".preview") %></p>
 
-      <%= styled_form_with model: @user do |form| %>
+      <%= styled_form_with model: @user, data: { turbo: false } do |form| %>
         <%= form.hidden_field :onboarded_at, value: Time.current %>
         <%= form.hidden_field :redirect_to, value: "home" %>
 

@@ -1,8 +1,8 @@
 class PagesController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[early_access]
+  include Periodable
 
   def dashboard
-    @period = params[:period] ? Period.from_key(params[:period]) : Period.last_30_days
     @balance_sheet = Current.family.balance_sheet
     @accounts = Current.family.accounts.active.with_attached_logo
 
@@ -10,7 +10,7 @@ class PagesController < ApplicationController
   end
 
   def changelog
-    @release_notes = Provider::Github.new.fetch_latest_release_notes
+    @release_notes = github_provider.fetch_latest_release_notes
 
     render layout: "settings"
   end
@@ -26,4 +26,9 @@ class PagesController < ApplicationController
     @invite_code = InviteCode.order("RANDOM()").limit(1).first
     render layout: false
   end
+
+  private
+    def github_provider
+      Provider::Registry.get_provider(:github)
+    end
 end

@@ -1,5 +1,27 @@
-<div class="space-y-4 h-fit max-h-full flex flex-col" data-controller="focus-record" data-focus-record-id-value="<%= @focused_record ? dom_id(@focused_record) : nil %>">
-  <%= render "header" %>
+<div class="space-y-4 pb-20 flex flex-col" data-controller="focus-record" data-focus-record-id-value="<%= @focused_record ? dom_id(@focused_record) : nil %>">
+  <header class="flex justify-between items-center text-primary font-medium">
+    <h1 class="text-xl">Transactions</h1>
+    <div class="flex items-center gap-5">
+      <div class="flex items-center gap-2">
+        <%= contextual_menu do %>
+          <%= contextual_menu_modal_action_item t(".edit_categories"), categories_path, icon: "shapes", turbo_frame: :_top %>
+          <%= contextual_menu_modal_action_item t(".edit_tags"), tags_path, icon: "tags", turbo_frame: :_top %>
+          <%= contextual_menu_modal_action_item t(".edit_merchants"), merchants_path, icon: "store", turbo_frame: :_top %>
+          <%= contextual_menu_modal_action_item t(".edit_imports"), imports_path, icon: "hard-drive-upload", turbo_frame: :_top %>
+        <% end %>
+
+        <%= link_to new_import_path, class: "btn btn--outline flex items-center gap-2", data: { turbo_frame: "modal" } do %>
+          <%= lucide_icon("download", class: "text-secondary w-4 h-4") %>
+          <p class="text-sm font-medium text-primary"><%= t(".import") %></p>
+        <% end %>
+
+        <%= link_to new_transaction_path, class: "btn btn--primary flex items-center gap-2", data: { turbo_frame: :modal } do %>
+          <%= lucide_icon("plus", class: "w-5 h-5") %>
+          <p class="text-sm font-medium">New transaction</p>
+        <% end %>
+      </div>
+    </div>
+  </header>
 
   <%= render "summary", totals: @totals %>
 
@@ -7,16 +29,16 @@
        data-controller="bulk-select"
        data-bulk-select-singular-label-value="<%= t(".transaction") %>"
        data-bulk-select-plural-label-value="<%= t(".transactions") %>"
-       class="overflow-y-auto flex flex-col bg-white rounded-xl shadow-border-xs p-4">
+       class="flex flex-col bg-container rounded-xl shadow-border-xs p-4">
     <%= render "transactions/searches/search" %>
 
     <div id="entry-selection-bar" data-bulk-select-target="selectionBar" class="flex justify-center hidden">
-      <%= render "account/transactions/selection_bar" %>
+      <%= render "transactions/selection_bar" %>
     </div>
 
     <% if @pagy.count > 0 %>
       <div class="grow overflow-y-auto">
-        <div class="grid grid-cols-12 bg-gray-25 rounded-xl px-5 py-3 text-xs uppercase font-medium text-secondary items-center mb-4">
+        <div class="grid grid-cols-12 bg-container-inset rounded-xl px-5 py-3 text-xs uppercase font-medium text-secondary items-center mb-4">
           <div class="pl-0.5 col-span-8 flex items-center gap-4">
             <%= check_box_tag "selection_entry",
                               class: "checkbox checkbox--light",
@@ -29,13 +51,12 @@
         </div>
         <div class="space-y-6">
           <%= entries_by_date(@transactions.map(&:entry), totals: true) do |entries| %>
-            <%# Only render the outflow side of transfers to avoid duplicate entries %>
-            <%= render partial: "account/entries/entry", collection: entries.reject { |e| e.entryable.transfer_as_inflow.present? } %>
+            <%= render entries %>
           <% end %>
         </div>
       </div>
     <% else %>
-      <%= render "account/entries/empty" %>
+      <%= render "entries/empty" %>
     <% end %>
 
     <div class="pt-4">

@@ -2,13 +2,17 @@ module Account::Chartable
   extend ActiveSupport::Concern
 
   class_methods do
-    def balance_series(currency:, period: Period.last_30_days, favorable_direction: "up")
-      balances = Account::Balance.find_by_sql([
+    def balance_series(currency:, period: Period.last_30_days, favorable_direction: "up", view: :balance, interval: nil)
+      raise ArgumentError, "Invalid view type" unless [ :balance, :cash_balance, :holdings_balance ].include?(view.to_sym)
+
+      series_interval = interval || period.interval
+
+      balances = Balance.find_by_sql([
         balance_series_query,
         {
           start_date: period.start_date,
           end_date: period.end_date,
-          interval: period.interval,
+          interval: series_interval,
           target_currency: currency
         }
       ])
@@ -21,8 +25,8 @@ module Account::Chartable
           date: curr.date,
           date_formatted: I18n.l(curr.date, format: :long),
           trend: Trend.new(
-            current: Money.new(curr.balance, currency),
-            previous: prev.nil? ? nil : Money.new(prev.balance, currency),
+            current: Money.new(balance_value_for(curr, view), currency),
+            previous: prev.nil? ? nil : Money.new(balance_value_for(prev, view), currency),
             favorable_direction: favorable_direction
           )
         )
@@ -31,10 +35,10 @@ module Account::Chartable
       Series.new(
         start_date: period.start_date,
         end_date: period.end_date,
-        interval: period.interval,
+        interval: series_interval,
         trend: Trend.new(
-          current: Money.new(balances.last&.balance || 0, currency),
-          previous: Money.new(balances.first&.balance || 0, currency),
+          current: Money.new(balance_value_for(balances.last, view) || 0, currency),
+          previous: Money.new(balance_value_for(balances.first, view) || 0, currency),
           favorable_direction: favorable_direction
         ),
         values: values
@@ -52,10 +56,12 @@ module Account::Chartable
           SELECT
             d.date,
             SUM(CASE WHEN accounts.classification = 'asset' THEN ab.balance ELSE -ab.balance END * COALESCE(er.rate, 1)) as balance,
+            SUM(CASE WHEN accounts.classification = 'asset' THEN ab.cash_balance ELSE -ab.cash_balance END * COALESCE(er.rate, 1)) as cash_balance,
+            SUM(CASE WHEN accounts.classification = 'asset' THEN ab.balance - ab.cash_balance ELSE 0 END * COALESCE(er.rate, 1)) as holdings_balance,
             COUNT(CASE WHEN accounts.currency <> :target_currency AND er.rate IS NULL THEN 1 END) as missing_rates
           FROM dates d
           LEFT JOIN accounts ON accounts.id IN (#{all.select(:id).to_sql})
-          LEFT JOIN account_balances ab ON (
+          LEFT JOIN balances ab ON (
             ab.date = d.date AND
             ab.currency = accounts.currency AND
             ab.account_id = accounts.id
@@ -70,26 +76,46 @@ module Account::Chartable
         SQL
       end
 
+      def balance_value_for(balance_record, view)
+        return 0 if balance_record.nil?
+
+        case view.to_sym
+        when :balance then balance_record.balance
+        when :cash_balance then balance_record.cash_balance
+        when :holdings_balance then balance_record.holdings_balance
+        else
+          raise ArgumentError, "Invalid view type: #{view}"
+        end
+      end
+
       def invert_balances(balances)
         balances.map do |balance|
           balance.balance = -balance.balance
+          balance.cash_balance = -balance.cash_balance
+          balance.holdings_balance = -balance.holdings_balance
           balance
         end
       end
 
       def gapfill_balances(balances)
         gapfilled = []
+        prev = nil
 
-        prev_balance = nil
-
-        [ nil, *balances ].each_cons(2).each_with_index do |(prev, curr), index|
-          if index == 0 && curr.balance.nil?
-            curr.balance = 0 # Ensure all series start with a non-nil balance
-          elsif curr.balance.nil?
-            curr.balance = prev.balance
+        balances.each do |curr|
+          if prev.nil?
+            # Initialize first record with zeros if nil
+            curr.balance ||= 0
+            curr.cash_balance ||= 0
+            curr.holdings_balance ||= 0
+          else
+            # Copy previous values for nil fields
+            curr.balance ||= prev.balance
+            curr.cash_balance ||= prev.cash_balance
+            curr.holdings_balance ||= prev.holdings_balance
           end
 
           gapfilled << curr
+          prev = curr
         end
 
         gapfilled
@@ -100,11 +126,21 @@ module Account::Chartable
     classification == "asset" ? "up" : "down"
   end
 
-  def balance_series(period: Period.last_30_days)
+  def balance_series(period: Period.last_30_days, view: :balance, interval: nil)
     self.class.where(id: self.id).balance_series(
       currency: currency,
       period: period,
+      view: view,
+      interval: interval,
       favorable_direction: favorable_direction
     )
+  end
+
+  def sparkline_series
+    cache_key = family.build_cache_key("#{id}_sparkline")
+
+    Rails.cache.fetch(cache_key) do
+      balance_series
+    end
   end
 end

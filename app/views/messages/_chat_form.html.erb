@@ -1,0 +1,35 @@
+<%# locals: (chat: nil, message_hint: nil) %>
+
+<div id="chat-form" class="space-y-2">
+  <% model = chat && chat.persisted? ? [chat, Message.new] : Chat.new %>
+
+  <%= form_with model: model,
+                class: "flex flex-col gap-2 bg-container px-2 py-1.5 rounded-lg shadow-border-xs",
+                data: { chat_target: "form" } do |f| %>
+
+    <%# In the future, this will be a dropdown with different AI models %>
+    <%= f.hidden_field :ai_model, value: "gpt-4o" %>
+
+    <%= f.text_area :content, placeholder: "Ask anything ...", value: message_hint,
+                  class: "w-full border-0 focus:ring-0 text-sm resize-none px-1 bg-transparent",
+                  data: { chat_target: "input", action: "input->chat#autoResize keydown->chat#handleInputKeyDown" },
+                  rows: 1 %>
+
+    <div class="flex items-center justify-between gap-1">
+      <div class="flex items-center gap-1">
+        <%# These are disabled for now, but in the future, will all open specific menus with their own context and search %>
+        <% ["plus", "command", "at-sign", "mouse-pointer-click"].each do |icon| %>
+          <button type="button" title="Coming soon" class="cursor-not-allowed w-8 h-8 flex justify-center items-center hover:bg-surface-hover rounded-lg">
+            <%= icon(icon, color: "gray") %>
+          </button>
+        <% end %>
+      </div>
+
+      <button type="submit" class="w-8 h-8 flex justify-center items-center text-secondary hover:bg-surface-hover cursor-pointer rounded-lg">
+        <%= icon("arrow-up") %>
+      </button>
+    </div>
+  <% end %>
+
+  <p class="text-xs text-secondary">AI responses are informational only and are not financial advice.</p>
+</div>

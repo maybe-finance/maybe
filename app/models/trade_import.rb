@@ -3,7 +3,7 @@ class TradeImport < Import
     transaction do
       mappings.each(&:create_mappable!)
 
-      rows.each do |row|
+      trades = rows.map do |row|
         mapped_account = if account
           account
         else
@@ -16,21 +16,22 @@ class TradeImport < Import
           exchange_operating_mic: row.exchange_operating_mic
         )
 
-        entry = mapped_account.entries.build \
-          date: row.date_iso,
-          amount: row.signed_amount,
-          name: row.name,
+        Trade.new(
+          security: security,
+          qty: row.qty,
           currency: row.currency.presence || mapped_account.currency,
-          entryable: Account::Trade.new(
-            security: security,
-            qty: row.qty,
+          price: row.price,
+          entry: Entry.new(
+            account: mapped_account,
+            date: row.date_iso,
+            amount: row.signed_amount,
+            name: row.name,
             currency: row.currency.presence || mapped_account.currency,
-            price: row.price
+            import: self
           ),
-          import: self
-
-        entry.save!
+        )
       end
+      Trade.import!(trades, recursive: true)
     end
   end
 
@@ -97,7 +98,7 @@ class TradeImport < Import
 
       provider_security = @provider_securities_cache[cache_key] ||= begin
         Security.search_provider(
-          query: ticker,
+          ticker,
           exchange_operating_mic: exchange_operating_mic
         ).first
       end

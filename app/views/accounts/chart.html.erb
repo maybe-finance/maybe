@@ -1,5 +1,4 @@
-<% period = params[:period] ? Period.from_key(params[:period]) : Period.last_30_days %>
-<% series = @account.balance_series(period: period) %>
+<% series = @account.balance_series(period: @period, view: @chart_view) %>
 <% trend = series.trend %>
 
 <%= turbo_frame_tag dom_id(@account, :chart_details) do %>
@@ -13,7 +12,7 @@
       <% end %>
     <% end %>
 
-    <%= tag.span period.comparison_label, class: "text-secondary" %>
+    <%= tag.span @period.comparison_label, class: "text-secondary" %>
   </div>
 
   <div class="h-64 pb-4">

@@ -1,0 +1,71 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.openai.com/v1/responses
+    body:
+      encoding: UTF-8
+      string: '{"model":"invalid-model-that-will-trigger-api-error","input":[{"role":"user","content":"Test"}],"instructions":null,"tools":[],"previous_response_id":null,"stream":null}'
+    headers:
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer <OPENAI_ACCESS_TOKEN>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Date:
+      - Mon, 31 Mar 2025 20:38:55 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '207'
+      Connection:
+      - keep-alive
+      Openai-Version:
+      - '2020-10-01'
+      Openai-Organization:
+      - "<OPENAI_ORGANIZATION_ID>"
+      X-Request-Id:
+      - req_3981f27aa18db734b3dd530fa2929b95
+      Openai-Processing-Ms:
+      - '113'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Cf-Cache-Status:
+      - DYNAMIC
+      Set-Cookie:
+      - __cf_bm=8KUMK_Gp4f97KLactyy3QniUZbNmN9Zwbx9WowYCc98-1743453535-1.0.1.1-opjT17tCwi9U0AukBXoHrpPEcC4Z.GIyEt.AjjrzRWln62SWPIvggY4L19JabZu09.9cmxfyrwAFHmvDeCVxSWqAVf88PAZwwRICkZZUut0;
+        path=/; expires=Mon, 31-Mar-25 21:08:55 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=uZB07768IynyRRP6oxwcnC4Rfn.lGT1yRhzzGvNw0kc-1743453535322-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      X-Content-Type-Options:
+      - nosniff
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 9292a7327d5161d6-ORD
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "error": {
+            "message": "The requested model 'invalid-model-that-will-trigger-api-error' does not exist.",
+            "type": "invalid_request_error",
+            "param": "model",
+            "code": "model_not_found"
+          }
+        }
+  recorded_at: Mon, 31 Mar 2025 20:38:55 GMT
+recorded_with: VCR 6.3.1

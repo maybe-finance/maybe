@@ -3,7 +3,7 @@
 <% type = type.to_sym %>
 <% action = "animationend->element-removal#remove" if type == :notice %>
 
-<%= tag.div class: "flex gap-3 rounded-lg border bg-white p-4 group max-w-80 shadow-xs border-alpha-black-25",
+<%= tag.div class: "flex gap-3 rounded-lg border bg-container p-4 group max-w-80 shadow-xs border-alpha-black-25",
             data: {
               controller: "element-removal",
               action: action
@@ -32,7 +32,7 @@
           <circle class="origin-center -rotate-90 animate-[stroke-fill_2.2s_300ms_forwards]" stroke="#141414" stroke-opacity="0.4" r="7.2" cx="10" cy="10" stroke-dasharray="43.9822971503" stroke-dashoffset="43.9822971503" />
         </svg>
         <div class="absolute -top-2 -right-2">
-          <%= lucide_icon "x", class: "w-5 h-5 p-0.5 hidden group-hover:inline-block border border-alpha-black-50 border-solid rounded-lg bg-white text-subdued cursor-pointer", data: { action: "click->element-removal#remove" } %>
+          <%= lucide_icon "x", class: "w-5 h-5 p-0.5 hidden group-hover:inline-block border border-alpha-black-50 border-solid rounded-lg bg-container text-subdued cursor-pointer", data: { action: "click->element-removal#remove" } %>
         </div>
       </div>
     <% elsif type.to_sym == :alert %>
