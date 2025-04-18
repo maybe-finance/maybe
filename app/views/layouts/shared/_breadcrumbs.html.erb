@@ -1,6 +1,6 @@
 <%# locals: (breadcrumbs:, sidebar_toggle_enabled: true) %>
 
-<nav class="flex items-center gap-2 mb-6">
+<nav class="items-center gap-2 mb-6 hidden md:flex">
   <% if sidebar_toggle_enabled %>
     <button data-action="sidebar#toggleLeftPanel" class="hidden p-2 lg:inline-flex rounded-lg items-center justify-center hover:bg-container-inset cursor-pointer">
       <%= icon("panel-left", color: "gray") %>

@@ -22,3 +22,4 @@ en:
       welcome_body: To get started, you must sign up for a new account.  You will
         then be able to configure additional settings within the app.
       welcome_title: Welcome to Self Hosted Maybe!
+      password_placeholder: Enter your password

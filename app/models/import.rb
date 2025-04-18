@@ -10,6 +10,8 @@ class Import < ApplicationRecord
     "1,234"    => { separator: "",  delimiter: "," }   # Zero-decimal currencies like JPY
   }.freeze
 
+  AMOUNT_TYPE_STRATEGIES = %w[signed_amount custom_column].freeze
+
   belongs_to :family
   belongs_to :account, optional: true
 
@@ -27,8 +29,9 @@ class Import < ApplicationRecord
   }, validate: true, default: "pending"
 
   validates :type, inclusion: { in: TYPES }
+  validates :amount_type_strategy, inclusion: { in: AMOUNT_TYPE_STRATEGIES }
   validates :col_sep, inclusion: { in: SEPARATORS.map(&:last) }
-  validates :signage_convention, inclusion: { in: SIGNAGE_CONVENTIONS }
+  validates :signage_convention, inclusion: { in: SIGNAGE_CONVENTIONS }, allow_nil: true
   validates :number_format, presence: true, inclusion: { in: NUMBER_FORMATS.keys }
 
   has_many :rows, dependent: :destroy

@@ -5,11 +5,11 @@
   <% end %>
 
   <section>
-    <fieldset class="bg-gray-50 rounded-lg p-1 grid grid-flow-col justify-stretch gap-x-2">
-      <%= radio_tab_tag form: f, name: :nature, value: :outflow, label: t(".expense"), icon: "minus-circle", checked: params[:nature] == "outflow" || params[:nature].nil? %>
-      <%= radio_tab_tag form: f, name: :nature, value: :inflow, label: t(".income"), icon: "plus-circle", checked: params[:nature] == "inflow" %>
-      <%= link_to new_transfer_path, data: { turbo_frame: :modal }, class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-subdued group-has-checked:bg-container group-has-checked:text-gray-800 group-has-checked:shadow-sm" do %>
-        <%= lucide_icon "arrow-right-left", class: "w-5 h-5" %>
+    <fieldset class="bg-gray-50 rounded-lg p-1 grid grid-flow-col justify-stretch gap-x-1 md:gap-x-2">
+      <%= radio_tab_tag form: f, name: :nature, value: :outflow, label: t(".expense"), icon: "minus-circle", checked: params[:nature] == "outflow" || params[:nature].nil?, class: "text-xs md:text-sm" %>
+      <%= radio_tab_tag form: f, name: :nature, value: :inflow, label: t(".income"), icon: "plus-circle", checked: params[:nature] == "inflow", class: "text-xs md:text-sm" %>
+      <%= link_to new_transfer_path, data: { turbo_frame: :modal }, class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-subdued text-sm md:text-normal group-has-checked:bg-container group-has-checked:text-gray-800 group-has-checked:shadow-sm group-has-checked:text-sm" do %>
+        <%= lucide_icon "arrow-right-left", class: "w-4 h-4 md:w-5 md:h-5" %>
         <%= tag.span t(".transfer") %>
       <% end %>
     </fieldset>
@@ -42,7 +42,7 @@
               multiple: true,
               label:    t(".tags_label"),
               container_class: "h-40"
-            }%>
+            } %>
     <% end %>
     <%= f.text_area :notes,
           label: t(".note_label"),

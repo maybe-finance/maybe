@@ -1,5 +1,5 @@
 <%= render "layouts/shared/htmldoc" do %>
-  <div class="flex flex-col h-dvh bg-surface">
+  <div class="flex flex-col h-dvh bg-white pt-safe">
     <header class="flex items-center justify-between p-8">
       <%= link_to content_for(:previous_path) || imports_path do %>
         <%= lucide_icon "arrow-left", class: "w-5 h-5 text-secondary" %>
@@ -14,7 +14,11 @@
       <% end %>
     </header>
 
-    <main class="grow px-8 pt-12 pb-32 overflow-y-auto">
+    <main class="grow px-8 md:pt-12 pb-32 overflow-y-auto">
+      <div class="flex md:hidden justify-center w-full">
+        <%= yield :mobile_import_progress %>
+      </div>
+
       <%= yield %>
     </main>
   </div>

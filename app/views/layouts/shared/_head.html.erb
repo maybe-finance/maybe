@@ -12,14 +12,19 @@
   <%= javascript_importmap_tags %>
   <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
 
-  <meta name="viewport"
-          content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+
   <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Maybe">
 
-  <meta name="msapplication-TileColor" content="#ffffff">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="msapplication-TileColor" content="#F9F9F9">
+  <meta name="theme-color" content="#F9F9F9">
+
+  <link rel="manifest" href="<%= pwa_manifest_path %>">
+  <link rel="apple-touch-icon" href="/logo-pwa.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="/logo-pwa.png">
 
   <%= yield :head %>
 </head>

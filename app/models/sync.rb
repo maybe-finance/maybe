@@ -1,4 +1,6 @@
 class Sync < ApplicationRecord
+  Error = Class.new(StandardError)
+
   belongs_to :syncable, polymorphic: true
 
   belongs_to :parent, class_name: "Sync", optional: true
@@ -41,7 +43,7 @@ class Sync < ApplicationRecord
   def handle_child_completion_event
     unless has_pending_child_syncs?
       if has_failed_child_syncs?
-        fail!("One or more child syncs failed")
+        fail!(Error.new("One or more child syncs failed"))
       else
         complete!
         syncable.post_sync(self)

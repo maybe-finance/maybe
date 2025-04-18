@@ -1,11 +1,11 @@
 <%# locals: (title:, content:, subtitle: nil, overflow_visible: false) %>
 
 <%= modal overflow_visible: overflow_visible do %>
-  <article class="mx-auto w-full p-4 space-y-4 min-w-[450px]">
+  <article class="mx-auto w-full p-4 space-y-4 md:min-w-[450px]">
     <div class="space-y-2">
       <header class="flex justify-between items-center">
         <h2 class="font-medium"><%= title %></h2>
-        <%= lucide_icon("x", class: "cursor-pointer w-5 h-5 text-secondary", data: { action: "mousedown->modal#close" }) %>
+        <%= lucide_icon("x", class: "cursor-pointer w-6 h-6 md:w-5 md:w-5 text-secondary", data: { action: "mousedown->modal#close" }) %>
       </header>
 
       <% if subtitle.present? %>
