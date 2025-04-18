@@ -5,7 +5,11 @@
     <% if rule.conditions.any? %>
       <p class="flex items-center flex-wrap gap-1.5">
         <span class="px-2 py-1 border border-alpha-black-200 rounded-full">
-          If <%= rule.conditions.first.filter.label %> <%= rule.conditions.first.operator %> <%= rule.conditions.first.value_display %>
+          <% if rule.conditions.first.compound? %>
+            If <%= rule.conditions.first.sub_conditions.first.filter.label %> <%= rule.conditions.first.sub_conditions.first.operator %> <%= rule.conditions.first.sub_conditions.first.value_display %>
+          <% else %>
+            If <%= rule.conditions.first.filter.label %> <%= rule.conditions.first.operator %> <%= rule.conditions.first.value_display %>
+          <% end %>
         </span>
 
         <% if rule.conditions.count > 1 %>
