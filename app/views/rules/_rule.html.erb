@@ -2,9 +2,25 @@
 
 <div class="flex justify-between items-center gap-4 bg-white shadow-border-xs rounded-md p-4">
   <div class="text-sm space-y-1.5">
+    <% if rule.conditions.any? %>
+      <p class="flex items-center flex-wrap gap-1.5">
+        <span class="px-2 py-1 border border-alpha-black-200 rounded-full">
+          If <%= rule.conditions.first.filter.label %> <%= rule.conditions.first.operator %> <%= rule.conditions.first.value_display %>
+        </span>
+
+        <% if rule.conditions.count > 1 %>
+          and <%= rule.conditions.count - 1 %> more <%= rule.conditions.count - 1 == 1 ? "condition" : "conditions" %>
+        <% end %>
+      </p>
+    <% end %>
+
     <p class="flex items-center flex-wrap gap-1.5">
       <span class="px-2 py-1 border border-alpha-black-200 rounded-full">
-        <%= rule.actions.first.executor.label %>
+        <% if rule.actions.first.value && rule.actions.first.options %>
+          <%= rule.actions.first.executor.label %> to <%= rule.actions.first.value_display %>
+        <% else%>
+          <%= rule.actions.first.executor.label %>
+        <% end %>
       </span>
 
       <% if rule.actions.count > 1 %>

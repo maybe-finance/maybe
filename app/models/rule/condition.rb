@@ -35,6 +35,18 @@ class Rule::Condition < ApplicationRecord
     end
   end
 
+  def value_display
+    if value.present?
+      if options
+        options.find { |option| option.last == value }&.first
+      else
+        value
+      end
+    else
+      ""
+    end
+  end
+
   def options
     filter.options
   end

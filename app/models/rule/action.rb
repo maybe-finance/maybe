@@ -11,6 +11,18 @@ class Rule::Action < ApplicationRecord
     executor.options
   end
 
+  def value_display
+    if value.present?
+      if options
+        options.find { |option| option.last == value }&.first
+      else
+        ""
+      end
+    else
+      ""
+    end
+  end
+
   def executor
     rule.registry.get_executor!(action_type)
   end
