@@ -17,7 +17,7 @@
         <%# Mobile only account sidebar groups %>
         <%= tag.div class: class_names("hidden bg-surface z-20 absolute inset-0 h-dvh w-full p-4 overflow-y-auto transition-all duration-300 pt-safe"),
                   data: { sidebar_target: "leftPanelMobile" } do %>
-          <div id="account-sidebar-tabs">
+          <div id="account-sidebar-tabs" class="pt-6">
             <div class="mb-4">
               <button data-action="sidebar#toggleLeftPanelMobile">
                 <%= icon("x", color: "gray") %>
@@ -112,7 +112,7 @@
       <% end %>
     </div>
 
-    <nav class="lg:hidden bg-surface md:bg-container shrink-0 z-10 pb-2 border border-tertiary pb-safe">
+    <nav class="lg:hidden bg-surface md:bg-container shrink-0 z-10 pb-2 border-t border-tertiary pb-safe">
       <ul class="flex items-center justify-around gap-1">
         <li>
           <%= render "layouts/sidebar/nav_item", name: "Home", path: root_path, icon_key: "pie-chart" %>
