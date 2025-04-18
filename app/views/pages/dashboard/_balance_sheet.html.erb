@@ -17,7 +17,7 @@
               <div class="flex items-center gap-2 text-sm">
                 <div class="h-2.5 w-2.5 rounded-full" style="background-color: <%= account_group.color %>;"></div>
                 <p class="text-secondary"><%= account_group.name %></p>
-                <p class="text-black font-mono"><%= number_to_percentage(account_group.weight, precision: 0) %></p>
+                <p class="text-primary font-mono"><%= number_to_percentage(account_group.weight, precision: 0) %></p>
               </div>
             <% end %>
           </div>
