@@ -2,9 +2,9 @@
 
 <%= styled_form_with model: @import, url: import_configuration_path(@import), scope: :import, method: :patch, class: "space-y-4" do |form| %>
   <%= form.select :entity_type_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Entity Type" } %>
-  <%= form.select :name_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Name (optional)" } %>
-  <%= form.select :amount_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Balance" } %>
-  <%= form.select :currency_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Currency" } %>
+  <%= form.select :name_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Name" }, required: true %>
+  <%= form.select :amount_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Balance" }, required: true %>
+  <%= form.select :currency_col_label, import.csv_headers, { include_blank: "Default", label: "Currency" } %>
 
   <%= form.submit "Apply configuration", class: "w-full btn btn--primary", disabled: import.complete? %>
 <% end %>
