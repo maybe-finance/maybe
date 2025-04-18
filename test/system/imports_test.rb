@@ -15,6 +15,8 @@ class ImportsTest < ApplicationSystemTestCase
 
     click_on "Import transactions"
 
+    find("button[data-id='csv-paste-tab']").click
+
     fill_in "import[raw_file_str]", with: file_fixture("imports/transactions.csv").read
 
     find('input[type="submit"][value="Upload CSV"]').click
@@ -59,6 +61,8 @@ class ImportsTest < ApplicationSystemTestCase
 
     click_on "Import investments"
 
+    find("button[data-id='csv-paste-tab']").click
+
     fill_in "import[raw_file_str]", with: file_fixture("imports/trades.csv").read
 
     find('input[type="submit"][value="Upload CSV"]').click
@@ -94,6 +98,8 @@ class ImportsTest < ApplicationSystemTestCase
     visit new_import_path
 
     click_on "Import accounts"
+
+    find("button[data-id='csv-paste-tab']").click
 
     fill_in "import[raw_file_str]", with: file_fixture("imports/accounts.csv").read
 
@@ -136,6 +142,8 @@ class ImportsTest < ApplicationSystemTestCase
     visit new_import_path
 
     click_on "Import from Mint"
+
+    find("button[data-id='csv-paste-tab']").click
 
     fill_in "import[raw_file_str]", with: file_fixture("imports/mint.csv").read
 

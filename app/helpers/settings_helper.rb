@@ -40,7 +40,17 @@ module SettingsHelper
     previous_setting = adjacent_setting(request.path, -1)
     next_setting = adjacent_setting(request.path, 1)
 
-    content_tag :div, class: "flex justify-between gap-4" do
+    content_tag :div, class: "hidden md:flex flex-row justify-between gap-4" do
+      concat(previous_setting)
+      concat(next_setting)
+    end
+  end
+
+  def settings_nav_footer_mobile
+    previous_setting = adjacent_setting(request.path, -1)
+    next_setting = adjacent_setting(request.path, 1)
+
+    content_tag :div, class: "md:hidden flex flex-col gap-4" do
       concat(previous_setting)
       concat(next_setting)
     end

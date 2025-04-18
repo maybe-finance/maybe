@@ -6,6 +6,13 @@ class Import::UploadsController < ApplicationController
   def show
   end
 
+  def sample_csv
+    send_data @import.csv_template.to_csv,
+      filename: "#{@import.type.underscore.split('_').first}_sample.csv",
+      type: "text/csv",
+      disposition: "attachment"
+  end
+
   def update
     if csv_valid?(csv_str)
       @import.account = Current.family.accounts.find_by(id: params.dig(:import, :account_id))

@@ -55,6 +55,11 @@ module ImportsHelper
     [ base, border ].join(" ")
   end
 
+  def cell_is_valid?(row, field)
+    row.valid? # populate errors
+    !row.errors.key?(field)
+  end
+
   private
     def permitted_import_types
       %w[transaction_import trade_import account_import mint_import]

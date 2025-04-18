@@ -541,10 +541,10 @@
   }
   
   .btn--ghost {
-    @apply border border-transparent text-primary hover:button-bg-ghost-hover;
+    @apply border border-transparent hover:button-bg-ghost-hover;
 
     @variant theme-dark {
-      @apply fg-primary hover:button-bg-ghost-hover;
+      @apply hover:fg-inverse hover:button-bg-ghost-hover;
     }
   }
 
@@ -725,7 +725,7 @@
   @apply bg-gray-50;
 
   @variant theme-dark {
-    @apply bg-gray-800;
+    @apply bg-gray-800 fg-inverse;
   }
 }
 
@@ -759,5 +759,13 @@
 
   @variant theme-dark {
     @apply bg-alpha-black-700;
+  }
+}
+
+@utility bg-nav-indicator {
+  @apply bg-black;
+
+  @variant theme-dark {
+    @apply bg-white;
   }
 }

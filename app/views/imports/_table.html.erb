@@ -1,32 +1,47 @@
 <%# locals: (headers: [], rows: [], caption: nil) %>
-
-<div class="p-1 rounded-xl bg-gray-25 space-y-2">
-  <div class="flex items-center gap-2 p-2 text-sm text-secondary">
-    <%= icon("sheet") %>
-    <p>Sample data from your imported CSV file</p>
-  </div>
-
-  <div class="overflow-x-scroll border border-secondary rounded-md shadow-xs">
-    <div class="bg-white rounded-md w-fit min-w-full">
-      <div class="bg-gray-25 flex rounded-t-md">
-        <% headers.each do |header| %>
-          <div class="flex-1 min-w-32 border-b border-r border-secondary last:border-r-0 first:rounded-tl-md last:rounded-tr-md truncate px-3 py-2.5 font-medium text-secondary text-xs whitespace-nowrap">
-            <%= header %>
-          </div>
-        <% end %>
+<div class="bg-container-inset rounded-xl overflow-hidden mx-1 md:mx-auto p-3 pl-2 md:pr-2 pr-0">
+  <% if caption %>
+    <div class="flex items-center mb-4">
+      <div class="text-gray-500 mr-2">
+        <%= inline_svg_tag "icon-csv.svg", class: "w-4 h-4" %>
       </div>
-
-      <div class="rounded-b-md">
-        <% rows.each do |row| %>
-          <div class="bg-white flex last:rounded-b-md">
-            <% row.each do |(header, value)| %>
-              <div class="flex-1 min-w-32 border-b border-r border-secondary last:border-r-0 first:rounded-tl-md last:rounded-tr-md truncate px-3 py-2.5 text-sm whitespace-nowrap">
-                <%= value %>
-              </div>
+      <h2 class="text-sm text-gray-500 font-medium"><%= caption %></h2>
+    </div>
+  <% end %>
+  <div class="overflow-x-auto -webkit-overflow-scrolling-touch">
+    <div class="inline-block min-w-full sm:w-full border border-secondary rounded-md shadow-border-xs text-sm bg-container">
+      <table class="min-w-full divide-y divide-alpha-black-200">
+        <thead>
+          <tr>
+            <% headers.each_with_index do |header, index| %>
+              <th class="
+                bg-container-inset px-3 py-2.5 font-medium text-left whitespace-nowrap
+                <%= index == 0 ? 'rounded-tl-md' : '' %>
+                <%= index == headers.length - 1 ? 'rounded-tr-md' : '' %>
+                <%= index < headers.length - 1 ? 'border-r border-r-alpha-black-200' : '' %>
+              ">
+                <%= header %>
+              </th>
             <% end %>
-          </div>
-        <% end %>
-      </div>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-alpha-black-200">
+          <% rows.each_with_index do |row, row_index| %>
+            <tr>
+              <% row.each_with_index do |(header, value), col_index| %>
+                <td class="
+                  px-3 py-2.5 whitespace-nowrap text-left
+                  <%= col_index < row.length - 1 ? 'border-r border-r-alpha-black-200' : '' %>
+                  <%= !caption && row_index == rows.length - 1 && col_index == 0 ? 'rounded-bl-md' : '' %>
+                  <%= !caption && row_index == rows.length - 1 && col_index == row.length - 1 ? 'rounded-br-md' : '' %>
+                ">
+                  <%= value %>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
