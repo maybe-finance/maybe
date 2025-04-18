@@ -31,7 +31,7 @@ class Import < ApplicationRecord
   validates :type, inclusion: { in: TYPES }
   validates :amount_type_strategy, inclusion: { in: AMOUNT_TYPE_STRATEGIES }
   validates :col_sep, inclusion: { in: SEPARATORS.map(&:last) }
-  validates :signage_convention, inclusion: { in: SIGNAGE_CONVENTIONS }
+  validates :signage_convention, inclusion: { in: SIGNAGE_CONVENTIONS }, allow_nil: true
   validates :number_format, presence: true, inclusion: { in: NUMBER_FORMATS.keys }
 
   has_many :rows, dependent: :destroy
