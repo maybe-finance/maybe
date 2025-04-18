@@ -36,6 +36,7 @@ class TradeImportTest < ActiveSupport::TestCase
     CSV
 
     @import.update!(
+      account: accounts(:depository),
       raw_file_str: import,
       date_col_label: "date",
       ticker_col_label: "ticker",
@@ -52,16 +53,11 @@ class TradeImportTest < ActiveSupport::TestCase
 
     @import.reload
 
-    assert_difference [
-      -> { Entry.count },
-      -> { Trade.count }
-    ], 2 do
-      assert_difference [
-        -> { Security.count },
-        -> { Account.count }
-      ], 1 do
-        @import.publish
-      end
+    assert_difference -> { Entry.count } => 2,
+                      -> { Trade.count } => 2,
+                      -> { Security.count } => 1,
+                      -> { Account.count } => 1 do
+      @import.publish
     end
 
     assert_equal "complete", @import.status

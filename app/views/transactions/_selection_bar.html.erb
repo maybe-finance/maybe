@@ -7,7 +7,7 @@
 
   <div class="flex items-center gap-1 text-secondary">
     <%= turbo_frame_tag "bulk_transaction_edit_drawer" %>
-    <%= link_to new_transactions_bulk_update_path, 
+    <%= link_to new_transactions_bulk_update_path,
                 class: "p-1.5 group hover:bg-gray-700 flex items-center justify-center rounded-md",
                 title: "Edit",
                 data: { turbo_frame: "bulk_transaction_edit_drawer" } do %>

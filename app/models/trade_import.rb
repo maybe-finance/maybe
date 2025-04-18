@@ -31,6 +31,7 @@ class TradeImport < Import
           ),
         )
       end
+
       Trade.import!(trades, recursive: true)
     end
   end

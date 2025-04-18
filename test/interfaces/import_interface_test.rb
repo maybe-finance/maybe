@@ -277,6 +277,7 @@ module ImportInterfaceTest
     csv_data = "date,amount,name\n01/01/2024,1234.56,Test"
     import.update!(raw_file_str: csv_data)
     import.update!(
+      date_col_label: "date",
       date_format: "%Y-%m-%d" # Does not match the raw CSV date, so rows will be invalid, but still generated
     )
 
