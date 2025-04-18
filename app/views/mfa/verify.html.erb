@@ -3,11 +3,12 @@
   header_description t(".description")
 %>
 
-<%= styled_form_with url: verify_mfa_path, method: :post, class: "space-y-4", data: { turbo: false } do |form| %>
+<%= styled_form_with url: verify_mfa_path, method: :post, class: "space-y-4 mt-4 md:mt-0", data: { turbo: false } do |form| %>
   <%= form.text_field :code,
     required: true,
     autofocus: true,
     autocomplete: "one-time-code",
+    type: "number",
     label: t(".page_title") %>
 
   <%= form.submit t(".verify_button") %>
