@@ -179,6 +179,7 @@ GEM
     ffi (1.17.1-x86_64-darwin)
     ffi (1.17.1-x86_64-linux-gnu)
     ffi (1.17.1-x86_64-linux-musl)
+    foreman (0.88.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
     hashdiff (1.1.2)
@@ -550,6 +551,7 @@ DEPENDENCIES
   faraday
   faraday-multipart
   faraday-retry
+  foreman
   hotwire-livereload
   hotwire_combobox
   i18n-tasks

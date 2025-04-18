@@ -4,17 +4,20 @@
     <div class="flex items-center gap-2">
       <%= button_to sync_all_accounts_path,
                       disabled: Current.family.syncing?,
-                      class: "btn btn--outline flex items-center gap-2",
+                      class: "md:btn md:btn--outline flex items-center justify-center gap-2 w-9 h-9 md:w-auto md:h-auto rounded-full md:rounded-lg",
                       title: t(".sync") do %>
         <%= lucide_icon "refresh-cw", class: "w-5 h-5" %>
-        <span><%= t(".sync") %></span>
+        <span class="hidden md:inline"><%= t(".sync") %></span>
       <% end %>
 
       <%= link_to new_account_path(return_to: accounts_path),
                     data: { turbo_frame: "modal" },
-                    class: "btn btn--primary flex items-center gap-1" do %>
-        <%= lucide_icon("plus", class: "w-5 h-5") %>
-        <p class="text-sm font-medium"><%= t(".new_account") %></p>
+                    class: "btn btn--primary flex items-center justify-center gap-1 w-9 h-9 md:w-auto md:h-auto rounded-full md:rounded-lg" do %>
+        <div class="flex items-center justify-center w-5 h-5">
+
+        <%= lucide_icon("plus")%>
+                    </div>
+        <p class="hidden md:block text-sm font-medium"><%= t(".new_account") %></p>
       <% end %>
     </div>
   </div>

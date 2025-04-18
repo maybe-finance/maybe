@@ -79,6 +79,7 @@ group :development do
   gem "web-console"
   gem "faker"
   gem "benchmark-ips"
+  gem "foreman"
 end
 
 group :test do
