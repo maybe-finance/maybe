@@ -14,19 +14,19 @@
     <%= form.hidden_field :_destroy, value: false, data: { rule__conditions_target: "destroyField" } %>
 
     <div class="w-2/5 shrink-0">
-      <%= form.select :condition_type, rule.condition_filters.map { |filter| [ filter.label, filter.key ] }, {}, data: { action: "rule--conditions#handleConditionTypeChange" } %>
+      <%= form.select :condition_type, rule.condition_filters.map { |filter| [ filter.label, filter.key ] }, {}, data: { action: "rule--conditions#handleConditionTypeChange" }, class: "form-field__input text-primary"  %>
     </div>
 
-    <%= form.select :operator, condition.operators, { container_class: "w-fit min-w-36" }, data: { rule__conditions_target: "operatorSelect" } %>
+    <%= form.select :operator, condition.operators, { container_class: "w-fit min-w-36" }, data: { rule__conditions_target: "operatorSelect" }, class: "form-field__input text-primary" %>
 
     <div data-rule--conditions-target="filterValue" class="grow">
       <% if condition.filter.type == "select" %>
-        <%= form.select :value, condition.options, {} %>
+        <%= form.select :value, condition.options, {}, class: "form-field__input text-primary" %>
       <% else %>
         <% if condition.filter.type == "number" %>
-          <%= form.number_field :value, placeholder: "10", step: 0.01 %>
+          <%= form.number_field :value, placeholder: "10", step: 0.01, class: "form-field__input text-primary" %>
         <% else %>
-          <%= form.text_field :value, placeholder: "Enter a value" %>
+          <%= form.text_field :value, placeholder: "Enter a value", class: "form-field__input text-primary" %>
         <% end %>
       <% end %>
     </div>

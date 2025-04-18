@@ -3,7 +3,7 @@
 <% condition = form.object %>
 <% rule = condition.rule %>
 
-<li data-controller="rule--conditions element-removal" class="border border-alpha-black-100 rounded-md p-4 space-y-3">
+<li data-controller="rule--conditions element-removal" class="border border-secondary rounded-md p-4 space-y-3">
 
   <%= form.hidden_field :condition_type, value: "compound" %>
 
@@ -15,7 +15,7 @@
         </div>
       <% end %>
       <p class="text-sm text-secondary">match</p>
-      <%= form.select :operator, [["all", "and"], ["any", "or"]], { container_class: "w-fit" }, data: { rules_target: "operatorField" } %>
+      <%= form.select :operator, [["all", "and"], ["any", "or"]], { container_class: "w-fit" }, data: { rules_target: "operatorField" }, class: "form-field__input text-primary" %>
       <p class="text-sm text-secondary">of the following conditions</p>
     </div>
 
