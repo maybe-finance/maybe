@@ -7,7 +7,7 @@
       <% end %>
     </nav>
 
-    <div class="grow">
+    <div class="grow flex flex-col">
       <h1 class="text-xl font-medium mb-6">Chats</h1>
 
       <% if @chats.any? %>
@@ -22,7 +22,7 @@
           <h3 class="text-lg font-medium text-primary mb-1">No chats yet</h3>
           <p class="text-gray-500 mb-4">Start a new conversation with the AI assistant</p>
         </div>
-        <div class="mt-auto p-4">
+        <div class="mt-auto p-4 lg:mt-auto">
           <%= render "messages/chat_form", chat: nil %>
         </div>
       <% end %>
