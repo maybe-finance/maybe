@@ -8,6 +8,8 @@ module Entryable
   end
 
   included do
+    include Enrichable
+
     has_one :entry, as: :entryable, touch: true
 
     scope :with_entry, -> { joins(:entry) }

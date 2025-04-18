@@ -21,13 +21,13 @@
 
         <div class="max-w-full">
           <%= content_tag :div, class: ["flex items-center gap-2"] do %>
-            <% if transaction.merchant&.icon_url %>
-              <%= image_tag transaction.merchant.icon_url,
+            <% if transaction.merchant&.logo_url.present? %>
+              <%= image_tag transaction.merchant.logo_url,
                   class: "w-6 h-6 rounded-full",
                   loading: "lazy" %>
             <% else %>
               <%= render "shared/circle_logo",
-                  name: entry.display_name,
+                  name: entry.name,
                   size: "sm" %>
             <% end %>
 
@@ -35,7 +35,7 @@
               <div class="space-y-0.5">
                 <div class="flex items-center gap-1">
                   <%= link_to(
-                        transaction.transfer? ? transaction.transfer.name : entry.display_name,
+                        transaction.transfer? ? transaction.transfer.name : entry.name,
                         transaction.transfer? ? transfer_path(transaction.transfer) : entry_path(entry),
                         data: {
                           turbo_frame: "drawer",

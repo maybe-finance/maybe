@@ -4,25 +4,32 @@
   <% model = chat && chat.persisted? ? [chat, Message.new] : Chat.new %>
 
   <%= form_with model: model,
-                class: "flex items-center gap-2 bg-container p-2 rounded-full shadow-sm border border-gray-100 h-11",
+                class: "flex lg:flex-col gap-2 bg-container px-2 py-1.5 rounded-full lg:rounded-lg shadow-border-xs",
                 data: { chat_target: "form" } do |f| %>
 
     <%# In the future, this will be a dropdown with different AI models %>
     <%= f.hidden_field :ai_model, value: "gpt-4o" %>
-    
-    <button type="button" class="flex-shrink-0 text-secondary p-1">
-      <%= lucide_icon("plus", class: "w-5 h-5") %>
-    </button>
 
     <%= f.text_area :content, placeholder: "Ask anything ...", value: message_hint,
-                  class: "w-full border-0 focus:ring-0 text-sm resize-none bg-transparent py-0",
+                  class: "w-full border-0 focus:ring-0 text-sm resize-none px-1 bg-transparent",
                   data: { chat_target: "input", action: "input->chat#autoResize keydown->chat#handleInputKeyDown" },
                   rows: 1 %>
 
-    <button type="submit" class="flex-shrink-0 text-secondary bg-gray-50 rounded-full p-2">
-      <%= lucide_icon("arrow-up", class: "w-4 h-4") %>
-    </button>
+    <div class="flex items-center justify-between gap-1">
+      <div class="items-center gap-1 hidden lg:flex">
+        <%# These are disabled for now, but in the future, will all open specific menus with their own context and search %>
+        <% ["plus", "command", "at-sign", "mouse-pointer-click"].each do |icon| %>
+          <button type="button" title="Coming soon" class="cursor-not-allowed w-8 h-8 flex justify-center items-center hover:bg-surface-hover rounded-lg">
+            <%= icon(icon, color: "gray") %>
+          </button>
+        <% end %>
+      </div>
+
+      <button type="submit" class="w-8 h-8 flex justify-center items-center text-secondary hover:bg-surface-hover cursor-pointer rounded-lg">
+        <%= icon("arrow-up") %>
+      </button>
+    </div>
   <% end %>
 
-  <p class="text-xs text-secondary mt-1">AI responses are informational only and are not financial advice.</p>
+  <p class="text-xs text-secondary">AI responses are informational only and are not financial advice.</p>
 </div>

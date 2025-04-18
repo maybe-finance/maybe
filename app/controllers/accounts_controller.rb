@@ -31,7 +31,7 @@ class AccountsController < ApplicationController
       family.sync_later
     end
 
-    redirect_to accounts_path
+    redirect_back_or_to accounts_path
   end
 
   private

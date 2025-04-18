@@ -84,7 +84,7 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "bootstrap" do
-    assert_difference "Category.count", 10 do
+    assert_difference "Category.count", 12 do
       post bootstrap_categories_url
     end
 

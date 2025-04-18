@@ -23,19 +23,19 @@ class Sync < ApplicationRecord
         update!(data: data) if data
 
         complete! unless has_pending_child_syncs?
-      rescue StandardError => error
-        fail! error
-        raise error if Rails.env.development?
-      ensure
+
         Rails.logger.info("Sync completed, starting post-sync")
+
+        syncable.post_sync(self) unless has_pending_child_syncs?
 
         if has_parent?
           notify_parent_of_completion!
-        else
-          syncable.post_sync(self)
         end
 
         Rails.logger.info("Post-sync completed")
+      rescue StandardError => error
+        fail! error
+        raise error if Rails.env.development?
       end
     end
   end

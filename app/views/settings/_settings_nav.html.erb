@@ -61,7 +61,10 @@
           <%= render "settings/settings_nav_item", name: t(".categories_label"), path: categories_path, icon: "shapes" %>
         </li>
         <li>
-          <%= render "settings/settings_nav_item", name: t(".merchants_label"), path: merchants_path, icon: "store" %>
+          <%= render "settings/settings_nav_item", name: "Rules", path: rules_path, icon: "git-branch" %>
+        </li>
+        <li>
+          <%= render "settings/settings_nav_item", name: t(".merchants_label"), path: family_merchants_path, icon: "store" %>
         </li>
       </ul>
     </section>
@@ -87,72 +90,63 @@
     </section>
   </nav>
   <nav class="space-y-4 overflow-y-auto  md:hidden" id="mobile-settings-nav"  data-preserve-scroll data-controller="preserve-scroll">
-    
-      <ul class="flex space-y-1">
 
+    <ul class="flex space-y-1">
+
+      <li>
+        <%= render "settings/settings_nav_item", name: t(".profile_label"), path: settings_profile_path, icon: "circle-user" %>
+      </li>
+
+      <li>
+        <%= render "settings/settings_nav_item", name: t(".preferences_label"), path: settings_preferences_path, icon: "bolt" %>
+      </li>
+
+      <li>
+        <%= render "settings/settings_nav_item", name: t(".security_label"), path: settings_security_path, icon: "shield-check" %>
+      </li>
+
+      <% if self_hosted? %>
         <li>
-          <%= render "settings/settings_nav_item", name: t(".profile_label"), path: settings_profile_path, icon: "circle-user" %>
+          <%= render "settings/settings_nav_item", name: t(".self_hosting_label"), path: settings_hosting_path, icon: "database" %>
         </li>
-
+      <% end %>
+      <% unless self_hosted? %>
         <li>
-          <%= render "settings/settings_nav_item", name: t(".preferences_label"), path: settings_preferences_path, icon: "bolt" %>
+          <%= render "settings/settings_nav_item", name: t(".billing_label"), path: settings_billing_path, icon: "circle-dollar-sign" %>
         </li>
+      <% end %>
 
-        <li>
-          <%= render "settings/settings_nav_item", name: t(".security_label"), path: settings_security_path, icon: "shield-check" %>
-        </li>
+      <li>
+        <%= render "settings/settings_nav_item", name: t(".accounts_label"), path: accounts_path, icon: "layers" %>
+      </li>
 
-        <% if self_hosted? %>
-          <li>
-            <%= render "settings/settings_nav_item", name: t(".self_hosting_label"), path: settings_hosting_path, icon: "database" %>
-          </li>
-        <% end %>
-        <% unless self_hosted? %>
-          <li>
-            <%= render "settings/settings_nav_item", name: t(".billing_label"), path: settings_billing_path, icon: "circle-dollar-sign" %>
-          </li>
-        <% end %>
+      <li>
+        <%= render "settings/settings_nav_item", name: t(".imports_label"), path: imports_path, icon: "download" %>
+      </li>
 
-        <li>
-          <%= render "settings/settings_nav_item", name: t(".accounts_label"), path: accounts_path, icon: "layers" %>
-        </li>
+      <li>
+        <%= render "settings/settings_nav_item", name: t(".tags_label"), path: tags_path, icon: "tags" %>
+      </li>
+      <li>
+        <%= render "settings/settings_nav_item", name: t(".categories_label"), path: categories_path, icon: "shapes" %>
+      </li>
+      <li>
+        <%= render "settings/settings_nav_item", name: t(".merchants_label"), path: family_merchants_path, icon: "store" %>
+      </li>
 
-        <li>
-          <%= render "settings/settings_nav_item", name: t(".imports_label"), path: imports_path, icon: "download" %>
-        </li>
-
-        <li>
-          <%= render "settings/settings_nav_item", name: t(".tags_label"), path: tags_path, icon: "tags" %>
-        </li>
-        <li>
-          <%= render "settings/settings_nav_item", name: t(".categories_label"), path: categories_path, icon: "shapes" %>
-        </li>
-        <li>
-          <%= render "settings/settings_nav_item", name: t(".merchants_label"), path: merchants_path, icon: "store" %>
-        </li>
-
-
-
-
-
-        <li>
-          <%= render "settings/settings_nav_item", name: t(".whats_new_label"), path: changelog_path, icon: "box" %>
-        </li>
-        <li>
-          <%= render "settings/settings_nav_item", name: t(".feedback_label"), path: feedback_path, icon: "megaphone" %>
-        </li>
-
-
-
-
+      <li>
+        <%= render "settings/settings_nav_item", name: t(".whats_new_label"), path: changelog_path, icon: "box" %>
+      </li>
+      <li>
+        <%= render "settings/settings_nav_item", name: t(".feedback_label"), path: feedback_path, icon: "megaphone" %>
+      </li>
 
       <%= button_to session_path(Current.session), method: :delete, class: "flex items-center gap-2 btn btn--ghost text-destructive w-full" do %>
         <%= lucide_icon("log-out", class: "w-5 h-5 shrink-0") %>
         <span><%= t(".logout") %></span>
       <% end %>
 
-        </ul>
-
+    </ul>
 
   </nav>
 </div>

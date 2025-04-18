@@ -19,7 +19,7 @@
           <% end %>
 
           <div class="truncate text-primary">
-            <%= link_to entry.display_name,
+            <%= link_to entry.name,
                         entry_path(entry),
                         data: { turbo_frame: "drawer", turbo_prefetch: false },
                         class: "hover:underline hover:text-gray-800" %>

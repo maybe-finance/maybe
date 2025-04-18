@@ -16,7 +16,7 @@ class EntrySearch
       return scope if search.blank?
 
       query = scope
-      query = query.where("entries.name ILIKE :search OR entries.enriched_name ILIKE :search",
+      query = query.where("entries.name ILIKE :search",
         search: "%#{ActiveRecord::Base.sanitize_sql_like(search)}%"
       )
       query

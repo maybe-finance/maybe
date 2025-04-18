@@ -50,11 +50,11 @@ class Category < ApplicationRecord
       %w[bus circle-dollar-sign ambulance apple award baby battery lightbulb bed-single beer bluetooth book briefcase building credit-card camera utensils cooking-pot cookie dices drama dog drill drum dumbbell gamepad-2 graduation-cap house hand-helping ice-cream-cone phone piggy-bank pill pizza printer puzzle ribbon shopping-cart shield-plus ticket trees]
     end
 
-    def bootstrap_defaults
-      default_categories.each do |name, color, icon|
+    def bootstrap!
+      default_categories.each do |name, color, icon, classification|
         find_or_create_by!(name: name) do |category|
           category.color = color
-          category.classification = "income" if name == "Income"
+          category.classification = classification
           category.lucide_icon = icon
         end
       end
@@ -71,18 +71,20 @@ class Category < ApplicationRecord
     private
       def default_categories
         [
-          [ "Income", "#e99537", "circle-dollar-sign" ],
-          [ "Housing", "#6471eb", "house" ],
-          [ "Entertainment", "#df4e92", "drama" ],
-          [ "Food & Drink", "#eb5429", "utensils" ],
-          [ "Shopping", "#e99537", "shopping-cart" ],
-          [ "Healthcare", "#4da568", "pill" ],
-          [ "Insurance", "#6471eb", "piggy-bank" ],
-          [ "Utilities", "#db5a54", "lightbulb" ],
-          [ "Transportation", "#df4e92", "bus" ],
-          [ "Education", "#eb5429", "book" ],
-          [ "Gifts & Donations", "#61c9ea", "hand-helping" ],
-          [ "Subscriptions", "#805dee", "credit-card" ]
+          [ "Income", "#e99537", "circle-dollar-sign", "income" ],
+          [ "Loan Payments", "#6471eb", "credit-card", "expense" ],
+          [ "Fees", "#6471eb", "credit-card", "expense" ],
+          [ "Entertainment", "#df4e92", "drama", "expense" ],
+          [ "Food & Drink", "#eb5429", "utensils", "expense" ],
+          [ "Shopping", "#e99537", "shopping-cart", "expense" ],
+          [ "Home Improvement", "#6471eb", "house", "expense" ],
+          [ "Healthcare", "#4da568", "pill", "expense" ],
+          [ "Personal Care", "#4da568", "pill", "expense" ],
+          [ "Services", "#4da568", "briefcase", "expense" ],
+          [ "Gifts & Donations", "#61c9ea", "hand-helping", "expense" ],
+          [ "Transportation", "#df4e92", "bus", "expense" ],
+          [ "Travel", "#df4e92", "plane", "expense" ],
+          [ "Rent & Utilities", "#db5a54", "lightbulb", "expense" ]
         ]
       end
   end

@@ -1,0 +1,40 @@
+<%# locals: (form:, show_prefix: true) %>
+
+<% condition = form.object %>
+<% rule = condition.rule %>
+
+<li data-controller="rule--conditions" data-rule--conditions-condition-filters-value="<%= rule.condition_filters.to_json %>" class="flex items-center gap-3">
+  <% if form.index.to_i > 0 && show_prefix %>
+    <div class="pl-4">
+      <span class="font-medium uppercase text-xs">and</span>
+    </div>
+  <% end %>
+
+  <div class="grow flex gap-2 items-center h-full">
+    <%= form.hidden_field :_destroy, value: false, data: { rule__conditions_target: "destroyField" } %>
+
+    <div class="w-2/5 shrink-0">
+      <%= form.select :condition_type, rule.condition_filters.map { |filter| [ filter.label, filter.key ] }, {}, data: { action: "rule--conditions#handleConditionTypeChange" } %>
+    </div>
+
+    <%= form.select :operator, condition.operators, { container_class: "w-fit min-w-36" }, data: { rule__conditions_target: "operatorSelect" } %>
+
+    <div data-rule--conditions-target="filterValue" class="grow">
+      <% if condition.filter.type == "select" %>
+        <%= form.select :value, condition.options, {} %>
+      <% else %>
+        <% if condition.filter.type == "number" %>
+          <%= form.number_field :value, placeholder: "10", step: 0.01 %>
+        <% else %>
+          <%= form.text_field :value, placeholder: "Enter a value" %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <button type="button"
+          data-action="rule--conditions#remove"
+          data-rule--conditions-destroy-param="<%= condition.persisted? %>">
+    <%= icon("trash-2", color: "gray", size: "sm") %>
+  </button>
+</li>

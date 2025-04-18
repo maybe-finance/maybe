@@ -1,0 +1,194 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.openai.com/v1/responses
+    body:
+      encoding: UTF-8
+      string: '{"model":"gpt-4.1-mini","input":[{"role":"developer","content":"Here
+        are the user''s available categories in JSON format:\n\n```json\n[{\"id\":\"shopping_id\",\"name\":\"Shopping\",\"is_subcategory\":false,\"parent_id\":null,\"classification\":\"expense\"},{\"id\":\"subscriptions_id\",\"name\":\"Subscriptions\",\"is_subcategory\":true,\"parent_id\":null,\"classification\":\"expense\"},{\"id\":\"restaurants_id\",\"name\":\"Restaurants\",\"is_subcategory\":false,\"parent_id\":null,\"classification\":\"expense\"},{\"id\":\"fast_food_id\",\"name\":\"Fast
+        Food\",\"is_subcategory\":true,\"parent_id\":\"restaurants_id\",\"classification\":\"expense\"},{\"id\":\"income_id\",\"name\":\"Income\",\"is_subcategory\":false,\"parent_id\":null,\"classification\":\"income\"}]\n```\n\nUse
+        the available categories to auto-categorize the following transactions:\n\n```json\n[{\"id\":\"1\",\"name\":\"McDonalds\",\"amount\":20,\"classification\":\"expense\",\"merchant\":\"McDonalds\",\"hint\":\"Fast
+        Food\"},{\"id\":\"2\",\"name\":\"Amazon purchase\",\"amount\":100,\"classification\":\"expense\",\"merchant\":\"Amazon\"},{\"id\":\"3\",\"name\":\"Netflix
+        subscription\",\"amount\":10,\"classification\":\"expense\",\"merchant\":\"Netflix\",\"hint\":\"Subscriptions\"},{\"id\":\"4\",\"name\":\"paycheck\",\"amount\":3000,\"classification\":\"income\"},{\"id\":\"5\",\"name\":\"Italian
+        dinner with friends\",\"amount\":100,\"classification\":\"expense\"},{\"id\":\"6\",\"name\":\"1212XXXBCaaa
+        charge\",\"amount\":2.99,\"classification\":\"expense\"}]\n```\n"}],"text":{"format":{"type":"json_schema","name":"auto_categorize_personal_finance_transactions","strict":true,"schema":{"type":"object","properties":{"categorizations":{"type":"array","description":"An
+        array of auto-categorizations for each transaction","items":{"type":"object","properties":{"transaction_id":{"type":"string","description":"The
+        internal ID of the original transaction","enum":["1","2","3","4","5","6"]},"category_name":{"type":"string","description":"The
+        matched category name of the transaction, or null if no match","enum":["Shopping","Subscriptions","Restaurants","Fast
+        Food","Income","null"]}},"required":["transaction_id","category_name"],"additionalProperties":false}}},"required":["categorizations"],"additionalProperties":false}}},"instructions":"You
+        are an assistant to a consumer personal finance app.  You will be provided
+        a list\nof the user''s transactions and a list of the user''s categories.  Your
+        job is to auto-categorize\neach transaction.\n\nClosely follow ALL the rules
+        below while auto-categorizing:\n\n- Return 1 result per transaction\n- Correlate
+        each transaction by ID (transaction_id)\n- Attempt to match the most specific
+        category possible (i.e. subcategory over parent category)\n- Category and
+        transaction classifications should match (i.e. if transaction is an \"expense\",
+        the category must have classification of \"expense\")\n- If you don''t know
+        the category, return \"null\"\n  - You should always favor \"null\" over false
+        positives\n  - Be slightly pessimistic.  Only match a category if you''re
+        60%+ confident it is the correct one.\n- Each transaction has varying metadata
+        that can be used to determine the category\n  - Note: \"hint\" comes from
+        3rd party aggregators and typically represents a category name that\n    may
+        or may not match any of the user-supplied categories\n"}'
+    headers:
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer <OPENAI_ACCESS_TOKEN>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 16 Apr 2025 14:07:39 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Openai-Version:
+      - '2020-10-01'
+      Openai-Organization:
+      - user-r6cwd3mn6iv6gn748b2xoajx
+      X-Request-Id:
+      - req_01b869bd9eb7b994a80e79f6de92e5a2
+      Openai-Processing-Ms:
+      - '2173'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Cf-Cache-Status:
+      - DYNAMIC
+      Set-Cookie:
+      - __cf_bm=xGkX7L6XeEFLp6ZPB2Y.LLHD_YSpzTH28MUro6fQG7Y-1744812459-1.0.1.1-uy8WQsFzGblq3h.u6WFs2vld_HM.5fveVAFBsQ6y.Za22DSEa22k3NS7.GAUbgAvoVjGvSQlkm8LkSZyU3wZfN70cUpZrg27orQt0Nfq91U;
+        path=/; expires=Wed, 16-Apr-25 14:37:39 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=LicWzTMZxt1n1GLU6XQx3NnU0PbKnI0m97CH.p0895U-1744812459077-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      X-Content-Type-Options:
+      - nosniff
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 93143ffeffe8cf6b-CMH
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        {
+          "id": "resp_67ffb9a8e530819290c5d3ec8aaf326d0e0f06e2ac13ae37",
+          "object": "response",
+          "created_at": 1744812456,
+          "status": "completed",
+          "error": null,
+          "incomplete_details": null,
+          "instructions": "You are an assistant to a consumer personal finance app.  You will be provided a list\nof the user's transactions and a list of the user's categories.  Your job is to auto-categorize\neach transaction.\n\nClosely follow ALL the rules below while auto-categorizing:\n\n- Return 1 result per transaction\n- Correlate each transaction by ID (transaction_id)\n- Attempt to match the most specific category possible (i.e. subcategory over parent category)\n- Category and transaction classifications should match (i.e. if transaction is an \"expense\", the category must have classification of \"expense\")\n- If you don't know the category, return \"null\"\n  - You should always favor \"null\" over false positives\n  - Be slightly pessimistic.  Only match a category if you're 60%+ confident it is the correct one.\n- Each transaction has varying metadata that can be used to determine the category\n  - Note: \"hint\" comes from 3rd party aggregators and typically represents a category name that\n    may or may not match any of the user-supplied categories\n",
+          "max_output_tokens": null,
+          "model": "gpt-4.1-mini-2025-04-14",
+          "output": [
+            {
+              "id": "msg_67ffb9a96b3c81928d9da130e889a9aa0e0f06e2ac13ae37",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "text": "{\"categorizations\":[{\"transaction_id\":\"1\",\"category_name\":\"Fast Food\"},{\"transaction_id\":\"2\",\"category_name\":\"Shopping\"},{\"transaction_id\":\"3\",\"category_name\":\"Subscriptions\"},{\"transaction_id\":\"4\",\"category_name\":\"Income\"},{\"transaction_id\":\"5\",\"category_name\":\"Restaurants\"},{\"transaction_id\":\"6\",\"category_name\":\"null\"}]}"
+                }
+              ],
+              "role": "assistant"
+            }
+          ],
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
+          },
+          "store": true,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "json_schema",
+              "description": null,
+              "name": "auto_categorize_personal_finance_transactions",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "categorizations": {
+                    "type": "array",
+                    "description": "An array of auto-categorizations for each transaction",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "transaction_id": {
+                          "type": "string",
+                          "description": "The internal ID of the original transaction",
+                          "enum": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5",
+                            "6"
+                          ]
+                        },
+                        "category_name": {
+                          "type": "string",
+                          "description": "The matched category name of the transaction, or null if no match",
+                          "enum": [
+                            "Shopping",
+                            "Subscriptions",
+                            "Restaurants",
+                            "Fast Food",
+                            "Income",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "transaction_id",
+                        "category_name"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "categorizations"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            }
+          },
+          "tool_choice": "auto",
+          "tools": [],
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 659,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 70,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 729
+          },
+          "user": null,
+          "metadata": {}
+        }
+  recorded_at: Wed, 16 Apr 2025 14:07:39 GMT
+recorded_with: VCR 6.3.1

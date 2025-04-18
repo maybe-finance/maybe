@@ -5,56 +5,58 @@
        data-controller="sidebar"
        data-sidebar-user-id-value="<%= Current.user.id %>"
        data-sidebar-config-value="<%= sidebar_config.to_json %>">
+    <button hidden data-controller="hotkey" data-hotkey="b" data-action="sidebar#toggleLeftPanel">Toggle accounts</button>
+    <button hidden data-controller="hotkey" data-hotkey="l" data-action="sidebar#toggleRightPanel">Toggle chat</button>
+
     <% unless controller_name == 'chats' %>
-    <nav class="flex justify-between lg:justify-start lg:flex-col shrink-0 lg:w-[84px] p-3 lg:px-0 lg:py-4 lg:mr-3">
+      <nav class="flex justify-between lg:justify-start lg:flex-col shrink-0 lg:w-[84px] p-3 lg:px-0 lg:py-4 lg:mr-3">
+        <button data-action="sidebar#toggleLeftPanelMobile" class="lg:hidden inline-flex p-2 rounded-lg items-center justify-center hover:bg-gray-100 cursor-pointer">
+          <%= icon("panel-left", color: "gray") %>
+        </button>
 
-      <button data-action="sidebar#toggleLeftPanelMobile" class="lg:hidden inline-flex p-2 rounded-lg items-center justify-center hover:bg-gray-100 cursor-pointer">
-        <%= icon("panel-left", color: "gray") %>
-      </button>
-
-      <%# Mobile only account sidebar groups %>
-      <%= tag.div class: class_names("hidden bg-surface z-20 absolute inset-0 h-dvh w-full p-4 overflow-y-auto transition-all duration-300 pt-safe"),
+        <%# Mobile only account sidebar groups %>
+        <%= tag.div class: class_names("hidden bg-surface z-20 absolute inset-0 h-dvh w-full p-4 overflow-y-auto transition-all duration-300 pt-safe"),
                   data: { sidebar_target: "leftPanelMobile" } do %>
-        <div id="account-sidebar-tabs">
-          <div class="mb-4">
-            <button data-action="sidebar#toggleLeftPanelMobile">
-              <%= icon("x", color: "gray") %>
-            </button>
+          <div id="account-sidebar-tabs" class="pt-6">
+            <div class="mb-4">
+              <button data-action="sidebar#toggleLeftPanelMobile">
+                <%= icon("x", color: "gray") %>
+              </button>
+            </div>
+            <%= render "accounts/account_sidebar_tabs", family: Current.family %>
           </div>
-          <%= render "accounts/account_sidebar_tabs", family: Current.family %>
-        </div>
-      <% end %>
-
-      <div class="lg:pl-2 lg:mb-3">
-        <%= link_to root_path, class: "block" do %>
-          <%= image_tag "logomark-color.svg", class: "w-9 h-9 mx-auto" %>
         <% end %>
-      </div>
 
-      <ul class="space-y-0.5 hidden lg:block">
-        <li>
-          <%= render "layouts/sidebar/nav_item", name: "Home", path: root_path, icon_key: "pie-chart" %>
-        </li>
-
-        <li>
-          <%= render "layouts/sidebar/nav_item", name: "Transactions", path: transactions_path, icon_key: "credit-card" %>
-        </li>
-
-        <li>
-          <%= render "layouts/sidebar/nav_item", name: "Budgets", path: budgets_path, icon_key: "map" %>
-        </li>
-      </ul>
-
-      <div class="lg:pl-2 lg:mt-auto lg:mx-auto">
-        <div class="lg:hidden">
-          <%= render "users/user_menu", user: Current.user, placement: "bottom-end", offset: 12 %>
+        <div class="lg:pl-2 lg:mb-3">
+          <%= link_to root_path, class: "block" do %>
+            <%= image_tag "logomark-color.svg", class: "w-9 h-9 mx-auto" %>
+          <% end %>
         </div>
 
-        <div class="hidden lg:block">
-          <%= render "users/user_menu", user: Current.user %>
+        <ul class="space-y-0.5 hidden lg:block">
+          <li>
+            <%= render "layouts/sidebar/nav_item", name: "Home", path: root_path, icon_key: "pie-chart" %>
+          </li>
+
+          <li>
+            <%= render "layouts/sidebar/nav_item", name: "Transactions", path: transactions_path, icon_key: "credit-card" %>
+          </li>
+
+          <li>
+            <%= render "layouts/sidebar/nav_item", name: "Budgets", path: budgets_path, icon_key: "map" %>
+          </li>
+        </ul>
+
+        <div class="lg:pl-2 lg:mt-auto lg:mx-auto">
+          <div class="lg:hidden">
+            <%= render "users/user_menu", user: Current.user, placement: "bottom-end", offset: 12 %>
+          </div>
+
+          <div class="hidden lg:block">
+            <%= render "users/user_menu", user: Current.user %>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
     <% end %>
 
     <div class="flex justify-between lg:justify-normal grow overflow-y-auto">
@@ -110,7 +112,7 @@
       <% end %>
     </div>
 
-    <nav class="lg:hidden bg-surface md:bg-container shrink-0 z-10 pb-2 border border-tertiary pb-safe">
+    <nav class="lg:hidden bg-surface md:bg-container shrink-0 z-10 pb-2 border-t border-tertiary pb-safe">
       <ul class="flex items-center justify-around gap-1">
         <li>
           <%= render "layouts/sidebar/nav_item", name: "Home", path: root_path, icon_key: "pie-chart" %>

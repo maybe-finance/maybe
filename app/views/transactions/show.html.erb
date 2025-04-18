@@ -1,4 +1,4 @@
-<%= drawer(reload_on_close: true) do %>
+<%= drawer do %>
   <%= render "transactions/header", entry: @entry %>
 
   <div class="space-y-2">
@@ -10,7 +10,7 @@
               class: "space-y-2",
               data: { controller: "auto-submit-form" } do |f| %>
 
-          <%= f.text_field @entry.enriched_at.present? ? :enriched_name : :name,
+          <%= f.text_field :name,
                 label: t(".name_label"),
                 "data-auto-submit-form-target": "auto" %>
 
@@ -66,7 +66,7 @@
             <%= f.fields_for :entryable do |ef| %>
 
               <%= ef.collection_select :merchant_id,
-                      Current.family.merchants.alphabetically,
+                      Current.family.assigned_merchants.alphabetically,
                     :id, :name,
                     { include_blank: t(".none"),
                       label: t(".merchant_label"),
@@ -81,7 +81,7 @@
                       label:    t(".tags_label"),
                       container_class: "h-40"
                     },
-                  { "data-auto-submit-form-target": "auto" } %>
+                    { "data-auto-submit-form-target": "auto" } %>
             <% end %>
           <% end %>
 

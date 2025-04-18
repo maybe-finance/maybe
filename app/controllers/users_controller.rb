@@ -49,6 +49,11 @@ class UsersController < ApplicationController
     end
   end
 
+  def rule_prompt_settings
+    @user.update!(rule_prompt_settings_params)
+    redirect_back_or_to settings_profile_path
+  end
+
   private
     def handle_redirect(notice)
       case user_params[:redirect_to]
@@ -72,10 +77,14 @@ class UsersController < ApplicationController
       user_params[:email].present? && user_params[:email] != @user.email
     end
 
+    def rule_prompt_settings_params
+      params.require(:user).permit(:rule_prompt_dismissed_at, :rule_prompts_disabled)
+    end
+
     def user_params
       params.require(:user).permit(
         :first_name, :last_name, :email, :profile_image, :redirect_to, :delete_profile_image, :onboarded_at, :show_sidebar, :default_period, :show_ai_sidebar, :ai_enabled, :theme,
-        family_attributes: [ :name, :currency, :country, :locale, :date_format, :timezone, :id, :data_enrichment_enabled ]
+        family_attributes: [ :name, :currency, :country, :locale, :date_format, :timezone, :id ]
       )
     end
 

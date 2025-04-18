@@ -1,5 +1,5 @@
 class Transaction < ApplicationRecord
-  include Entryable, Transferable, Provided
+  include Entryable, Transferable, Ruleable
 
   belongs_to :category, optional: true
   belongs_to :merchant, optional: true
@@ -13,5 +13,15 @@ class Transaction < ApplicationRecord
     def search(params)
       Search.new(params).build_query(all)
     end
+  end
+
+  def set_category!(category)
+    if category.is_a?(String)
+      category = entry.account.family.categories.find_or_create_by!(
+        name: category
+      )
+    end
+
+    update!(category: category)
   end
 end

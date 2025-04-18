@@ -15,6 +15,10 @@ module PlaidItem::Provided
     end
   end
 
+  def build_category_alias_matcher(user_categories)
+    Provider::Plaid::CategoryAliasMatcher.new(user_categories)
+  end
+
   private
     def eu?
       raise "eu? is not implemented for #{self.class.name}"

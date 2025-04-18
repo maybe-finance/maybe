@@ -4,9 +4,14 @@
     <div class="flex items-center gap-5">
       <div class="flex items-center gap-2">
         <%= contextual_menu do %>
+          <% if Rails.env.development? %>
+            <%= button_to "Dev only: Sync all", sync_all_accounts_path, class: "btn btn--ghost w-full" %>
+          <% end %>
+          <%= contextual_menu_item "New rule", url: new_rule_path(resource_type: "transaction"), icon: "plus", turbo_frame: :modal %>
+          <%= contextual_menu_item "Edit rules", url: rules_path, icon: "git-branch", turbo_frame: :_top %>
           <%= contextual_menu_modal_action_item t(".edit_categories"), categories_path, icon: "shapes", turbo_frame: :_top %>
           <%= contextual_menu_modal_action_item t(".edit_tags"), tags_path, icon: "tags", turbo_frame: :_top %>
-          <%= contextual_menu_modal_action_item t(".edit_merchants"), merchants_path, icon: "store", turbo_frame: :_top %>
+          <%= contextual_menu_modal_action_item t(".edit_merchants"), family_merchants_path, icon: "store", turbo_frame: :_top %>
           <%= contextual_menu_modal_action_item t(".edit_imports"), imports_path, icon: "hard-drive-upload", turbo_frame: :_top %>
           <%= contextual_menu_modal_action_item t(".import"), new_import_path, icon: "download", turbo_frame: "modal", class_name: "md:!hidden" %>
         <% end %>
