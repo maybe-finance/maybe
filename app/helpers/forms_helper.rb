@@ -30,7 +30,7 @@ end
 
   private
     def radio_tab_contents(label:, icon:, class: nil)
-      tag.div(class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-sm md:text-normal text-subdued group-has-checked:bg-container group-has-checked:text-gray-800 group-has-checked:shadow-sm") do
+      tag.div(class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-sm md:text-normal text-subdued group-has-checked:bg-surface group-has-checked:text-primary group-has-checked:shadow-sm") do
         concat lucide_icon(icon, class: "w-5 h-5")
         concat tag.span(label, class: "group-has-checked:font-semibold")
       end
