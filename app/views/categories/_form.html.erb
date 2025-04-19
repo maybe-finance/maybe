@@ -30,7 +30,7 @@
             <div class="flex gap-2 items-center hidden flex-col" data-category-target="paletteSection">
               <div class="flex gap-2 items-center w-full">
                 <div class="w-6 h-6 p-4 rounded-full cursor-pointer" style="background-color: <%= category.color %>" data-category-target="colorPreview"></div>
-                <%= f.text_field :color , data: { category_target: "colorInput"}, class: "form-field__input blah", inline: true %>
+                <%= f.text_field :color , data: { category_target: "colorInput"}, inline: true %>
                 <%= lucide_icon "palette", class: "w-8 h-8 cursor-pointer hover:bg-gray-100 p-1", data: { action: "click->category#toggleSections" } %>
               </div>
               <div data-category-target="validationMessage" class="hidden self-start flex gap-1 items-center text-xs text-destructive ">
@@ -61,10 +61,10 @@
       <% end %>
 
       <div class="space-y-2">
-        <%= f.select :classification, [["Income", "income"], ["Expense", "expense"]], { label: "Classification" }, class: "form-field__input text-ellipsis text-subdued", required: true %>
-        <%= f.text_field :name, placeholder: t(".placeholder"), required: true, autofocus: true, label: "Name", data: { color_avatar_target: "name" }, class: "form-field__input text-ellipsis text-subdued" %>
+        <%= f.select :classification, [["Income", "income"], ["Expense", "expense"]], { label: "Classification" }, required: true %>
+        <%= f.text_field :name, placeholder: t(".placeholder"), required: true, autofocus: true, label: "Name", data: { color_avatar_target: "name" } %>
         <% unless category.parent? %>
-          <%= f.select :parent_id, categories.pluck(:name, :id), { include_blank: "(unassigned)", label: "Parent category (optional)" }, disabled: category.parent?, data: { action: "change->category#handleParentChange" }, class: "form-field__input text-ellipsis text-subdued" %>
+          <%= f.select :parent_id, categories.pluck(:name, :id), { include_blank: "(unassigned)", label: "Parent category (optional)" }, disabled: category.parent?, data: { action: "change->category#handleParentChange" } %>
         <% end %>
       </div>
     </section>

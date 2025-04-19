@@ -6,7 +6,11 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
   text_field_helpers.each do |selector|
     class_eval <<-RUBY_EVAL, __FILE__, __LINE__ + 1
       def #{selector}(method, options = {})
-        merged_options = { class: "form-field__input" }.merge(options)
+        base_classes = "form-field__input text-ellipsis text-subdued"
+        merged_options = options.merge(
+          class: [base_classes, options[:class]].compact.join(" ")
+        )
+
         label = build_label(method, options)
         field = super(method, merged_options)
 
@@ -22,7 +26,7 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def select(method, choices, options = {}, html_options = {})
-    merged_html_options = { class: "form-field__input" }.merge(html_options)
+    merged_html_options = { class: "form-field__input text-ellipsis text-subdued" }.merge(html_options)
 
     label = build_label(method, options.merge(required: merged_html_options[:required]))
     field = super(method, choices, options, merged_html_options)
@@ -31,7 +35,7 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def collection_select(method, collection, value_method, text_method, options = {}, html_options = {})
-    merged_html_options = { class: "form-field__input" }.merge(html_options)
+    merged_html_options = { class: "form-field__input text-ellipsis text-subdued" }.merge(html_options)
 
     label = build_label(method, options.merge(required: merged_html_options[:required]))
     field = super(method, collection, value_method, text_method, options, merged_html_options)
@@ -57,6 +61,30 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
     merged_options = default_options.merge(options)
     value, options = nil, value if value.is_a?(Hash)
     super(value, merged_options)
+  end
+
+  def number_field(method, options = {})
+    base_classes = "form-field__input text-ellipsis text-subdued"
+    merged_options = options.merge(
+      class: [ base_classes, options[:class] ].compact.join(" ")
+    )
+
+    label = build_label(method, options)
+    field = super(method, merged_options)
+
+    build_styled_field(label, field, merged_options)
+  end
+
+  def date_field(method, options = {})
+    base_classes = "form-field__input text-ellipsis text-subdued"
+    merged_options = options.merge(
+      class: [ base_classes, options[:class] ].compact.join(" ")
+    )
+
+    label = build_label(method, options)
+    field = super(method, merged_options)
+
+    build_styled_field(label, field, merged_options)
   end
 
   private
