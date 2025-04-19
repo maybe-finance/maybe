@@ -1,7 +1,7 @@
 <%# locals: (form:, user:) %>
 
 <div class="flex md:flex-row flex-col md:items-center items-center gap-4" data-controller="profile-image-preview">
-  <div class="relative flex justify-center items-center bg-gray-50 size-26 md:size-24 rounded-full border-alpha-black-300 border border-dashed">
+  <div class="relative flex justify-center items-center bg-container size-26 md:size-24 rounded-full  border-primary border border-dashed overflow-hidden">
 
     <%# The image preview once user has uploaded a new file  %>
     <div data-profile-image-preview-target="previewImage" class="h-full w-full flex justify-center items-center hidden">
@@ -10,8 +10,8 @@
 
     <%# The placeholder image for empty avatar field  %>
     <div data-profile-image-preview-target="placeholderImage"
-         class="h-full w-full flex justify-center items-center <%= user.profile_image.attached? ? "hidden" : "" %>">
-      <div class="h-full w-full flex justify-center items-center">
+         class="h-full w-full flex justify-center  items-center <%= user.profile_image.attached? ? "hidden" : "" %>">
+      <div class="h-full w-full flex justify-center items-center bg-container">
         <%= lucide_icon "image-plus", class: "w-6 h-6 text-secondary" %>
       </div>
     </div>
