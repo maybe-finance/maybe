@@ -849,19 +849,3 @@
     @apply bg-white;
   }
 }
-
-@utility bg-divider-adaptive {
-  @apply bg-black;
-
-  @variant theme-dark {
-    @apply bg-white;
-  }
-}
-
-@utility bg-primary-adaptive {
-  @apply bg-white;
-
-  @variant theme-dark {
-    @apply bg-black ;
-  }
-}
