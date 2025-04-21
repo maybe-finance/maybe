@@ -16,7 +16,7 @@
                   step[:is_complete] ? "text-green-600" : "text-secondary"
                 end %>
       <% step_class = if is_current
-                  "bg-primary text-white"
+                  "bg-primary text-primary"
                 else
                   step[:is_complete] ? "bg-green-600/10 border-alpha-black-25" : "bg-container-inset"
                 end %>
@@ -31,7 +31,7 @@
         </div>
       <% end %>
 
-      <div class="h-px bg-divider-adaptive w-12 group-last:hidden"></div>
+      <hr class="border border-secondary w-12 group-last:hidden" />
     </li>
   <% end %>
 </ul>
