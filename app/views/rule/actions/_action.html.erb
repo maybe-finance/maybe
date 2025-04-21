@@ -9,13 +9,13 @@
 
   <div class="grow flex gap-2 items-center h-full">
     <div class="grow">
-      <%= form.select :action_type, rule.action_executors.map { |executor| [ executor.label, executor.key ] }, {}, data: { action: "rule--actions#handleActionTypeChange" }, class: "form-field__input text-primary" %>
+      <%= form.select :action_type, rule.action_executors.map { |executor| [ executor.label, executor.key ] }, {}, data: { action: "rule--actions#handleActionTypeChange" } %>
     </div>
 
     <%= tag.div class: class_names("min-w-1/2 flex items-center gap-2", "hidden" => !needs_value), 
                 data: { rule__actions_target: "actionValue" } do %>
       <span class="font-medium uppercase text-xs">to</span>
-      <%= form.select :value, action.options || [], {}, class: "form-field__input text-primary", disabled: !needs_value %>
+      <%= form.select :value, action.options || [], {}, disabled: !needs_value %>
     <% end %>
   </div>
 
