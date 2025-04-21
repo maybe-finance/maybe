@@ -59,12 +59,12 @@ class BalanceSheet
           account.define_singleton_method(:weight) do
             classification_total.zero? ? 0 : account.converted_balance / classification_total.to_d * 100
           end
-          
+
           # Define our subtype labeling logic
           account.define_singleton_method(:subtype_label) do
             accountable.subtype_label_for(account.subtype) || accountable.display_name
           end
-          
+
           account
         end.sort_by(&:weight).reverse
       )

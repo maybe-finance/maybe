@@ -2,7 +2,7 @@ module Accountable
   extend ActiveSupport::Concern
 
   TYPES = %w[Depository Investment Crypto Property Vehicle OtherAsset CreditCard Loan OtherLiability]
-  
+
   # Define empty array to ensure all accountables have this defined
   SUBTYPES = []
 
