@@ -19,7 +19,7 @@ class Settings::ProfilesControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to settings_profile_path
-    assert_equal I18n.t("settings.profiles.destroy.member_removed"), flash[:notice]
+    assert_equal "Member removed successfully.", flash[:notice]
     assert_raises(ActiveRecord::RecordNotFound) { User.find(@member.id) }
   end
 
@@ -43,5 +43,25 @@ class Settings::ProfilesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to settings_profile_path
     assert_equal I18n.t("settings.profiles.destroy.not_authorized"), flash[:alert]
     assert User.find(@admin.id)
+  end
+
+  test "admin removing a family member also destroys their invitation" do
+    # Create an invitation for the member
+    invitation = @admin.family.invitations.create!(
+      email: @member.email,
+      role: "member",
+      inviter: @admin
+    )
+
+    sign_in @admin
+
+    assert_difference [ "User.count", "Invitation.count" ], -1 do
+      delete settings_profile_path(user_id: @member)
+    end
+
+    assert_redirected_to settings_profile_path
+    assert_equal "Member removed successfully.", flash[:notice]
+    assert_raises(ActiveRecord::RecordNotFound) { User.find(@member.id) }
+    assert_raises(ActiveRecord::RecordNotFound) { Invitation.find(invitation.id) }
   end
 end
