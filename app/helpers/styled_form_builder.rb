@@ -1,6 +1,7 @@
 class StyledFormBuilder < ActionView::Helpers::FormBuilder
   # Fields that visually inherit from "text field"
-  class_attribute :text_field_helpers, default: field_helpers - [ :label, :check_box, :radio_button, :fields_for, :fields, :hidden_field, :file_field ]
+  class_attribute :text_field_helpers,
+  default: (field_helpers - [ :label, :check_box, :radio_button, :fields_for, :fields, :hidden_field, :file_field ]) + [ :number_field, :date_field ]
 
   # Wraps "text" inputs with custom structure + base styles
   text_field_helpers.each do |selector|
@@ -63,29 +64,6 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
     super(value, merged_options)
   end
 
-  def number_field(method, options = {})
-    base_classes = "form-field__input text-ellipsis text-subdued"
-    merged_options = options.merge(
-      class: [ base_classes, options[:class] ].compact.join(" ")
-    )
-
-    label = build_label(method, options)
-    field = super(method, merged_options)
-
-    build_styled_field(label, field, merged_options)
-  end
-
-  def date_field(method, options = {})
-    base_classes = "form-field__input text-ellipsis text-subdued"
-    merged_options = options.merge(
-      class: [ base_classes, options[:class] ].compact.join(" ")
-    )
-
-    label = build_label(method, options)
-    field = super(method, merged_options)
-
-    build_styled_field(label, field, merged_options)
-  end
 
   private
 
