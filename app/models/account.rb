@@ -33,8 +33,8 @@ class Account < ApplicationRecord
   class << self
     def create_and_sync(attributes)
       attributes[:accountable_attributes] ||= {} # Ensure accountable is created, even if empty
+      initial_balance = handle_initial_balance(attributes)
       account = new(attributes.merge(cash_balance: attributes[:balance]))
-      initial_balance = attributes.dig(:accountable_attributes, :initial_balance)&.to_d || 0
 
       transaction do
         # Create 2 valuations for new accounts to establish a value history for users to see
@@ -95,13 +95,14 @@ class Account < ApplicationRecord
   def update_with_sync!(attributes)
     should_update_balance = attributes[:balance] && attributes[:balance].to_d != balance
 
-    initial_balance = attributes.dig(:accountable_attributes, :initial_balance)
-    should_update_initial_balance = initial_balance && initial_balance.to_d != accountable.initial_balance
+    initial_balance = self.class.handle_initial_balance(attributes)
+    currency=attributes[:currency]
+    should_update_initial_balance = initial_balance && Money.new(initial_balance, currency) != first_valuation_amount
 
     transaction do
       update!(attributes)
       update_balance!(attributes[:balance]) if should_update_balance
-      update_inital_balance!(attributes[:accountable_attributes][:initial_balance]) if should_update_initial_balance
+      update_inital_balance!(initial_balance) if should_update_initial_balance
     end
 
     sync_later
@@ -159,5 +160,17 @@ class Account < ApplicationRecord
     def sync_balances
       strategy = linked? ? :reverse : :forward
       Balance::Syncer.new(self, strategy: strategy).sync_balances
+    end
+
+    def self.handle_initial_balance(attributes)
+      account_type = attributes.dig(:accountable_type)
+      initial_balance = 0
+
+      if account_type == "Loan"
+        initial_balance = attributes.dig(:accountable_attributes, :initial_balance)&.to_d
+        attributes[:accountable_attributes].delete("initial_balance")
+      end
+
+      initial_balance
     end
 end
