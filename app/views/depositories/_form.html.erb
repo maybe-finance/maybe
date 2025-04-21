@@ -2,6 +2,6 @@
 
 <%= render "accounts/form", account: account, url: url do |form| %>
   <%= form.select :subtype,
-                 Depository::SUBTYPES,
+                 Depository::SUBTYPES.map { |k, v| [v[:long], k] },
                  { label: true, prompt: t("depositories.form.subtype_prompt"), include_blank: t("depositories.form.none") } %>
 <% end %>

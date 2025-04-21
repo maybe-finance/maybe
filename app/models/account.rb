@@ -155,6 +155,20 @@ class Account < ApplicationRecord
     first_valuation&.amount_money || balance_money
   end
 
+  # Get short version of the subtype label
+  def short_subtype_label
+    return nil unless subtype && accountable_type
+    accountable_class = accountable_type.constantize
+    accountable_class.short_subtype_label_for(subtype) || accountable_class.display_name
+  end
+
+  # Get long version of the subtype label
+  def long_subtype_label
+    return nil unless subtype && accountable_type
+    accountable_class = accountable_type.constantize
+    accountable_class.long_subtype_label_for(subtype) || accountable_class.display_name
+  end
+
   private
     def sync_balances
       strategy = linked? ? :reverse : :forward
