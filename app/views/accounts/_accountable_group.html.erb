@@ -24,7 +24,7 @@
 
         <div class="min-w-0 grow">
           <%= tag.p account.name, class: "text-sm text-primary font-medium mb-0.5 truncate" %>
-          <%= tag.p account.subtype&.humanize.presence || account_group.name, class: "text-sm text-secondary truncate" %>
+          <%= tag.p format_account_subtype(account.subtype).presence || account_group.name, class: "text-sm text-secondary truncate" %>
         </div>
 
         <div class="ml-auto text-right grow h-10">
