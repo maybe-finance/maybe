@@ -2,6 +2,9 @@ module Accountable
   extend ActiveSupport::Concern
 
   TYPES = %w[Depository Investment Crypto Property Vehicle OtherAsset CreditCard Loan OtherLiability]
+  
+  # Define empty array to ensure all accountables have this defined
+  SUBTYPES = []
 
   def self.from_type(type)
     return nil unless TYPES.include?(type)
@@ -25,6 +28,11 @@ module Accountable
 
     def color
       raise NotImplementedError, "Accountable must implement #color"
+    end
+
+    # Given a subtype, look up the "label" for this accountable type
+    def subtype_label_for(subtype)
+      self::SUBTYPES.find { |subtype_label, subtype_value| subtype_value == subtype }&.first
     end
 
     def favorable_direction
