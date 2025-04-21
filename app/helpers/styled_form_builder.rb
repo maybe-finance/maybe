@@ -51,7 +51,7 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
   def submit(value = nil, options = {})
     default_options = {
       data: { turbo_submits_with: "Submitting..." },
-      class: "btn btn--primary w-full"
+      class: "btn btn--primary w-full justify-center"
     }
 
     merged_options = default_options.merge(options)
