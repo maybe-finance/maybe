@@ -19,7 +19,8 @@ class AccountTest < ActiveSupport::TestCase
       name: "Test Investment",
       balance: 1000,
       currency: "USD",
-      accountable: Investment.new(subtype: "hsa")
+      subtype: "hsa",
+      accountable: Investment.new
     )
 
     assert_equal "HSA", account.short_subtype_label
