@@ -9,13 +9,13 @@
         <% end %>
       <% end %>
 
-      <span class="text-subdued"><%= title %></span>
+      <span class="text-primary"><%= title %></span>
       <button class="absolute top-1/2 -translate-y-1/2 right-4 flex w-8 h-8 items-center justify-center rounded-lg md:hidden outline-0" data-action="click->modal#close">
         <%= lucide_icon("x", class: "text-secondary w-6 h-6") %>
       </button>
     </div>
 
-    <div class="p-2">
+    <div class="p-2 text-primary">
       <button hidden data-controller="hotkey" data-hotkey="k,K,ArrowUp,ArrowLeft" data-action="list-keyboard-navigation#focusPrevious">Previous</button>
       <button hidden data-controller="hotkey" data-hotkey="j,J,ArrowDown,ArrowRight" data-action="list-keyboard-navigation#focusNext">Next</button>
 
