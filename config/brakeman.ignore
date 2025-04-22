@@ -45,7 +45,7 @@
         913,
         95
       ],
-      "note": ""
+      "note": "This is safe as 'selector' comes from a predefined list of Rails form helpers (StyledFormBuilder.text_field_helpers)."
     },
     {
       "warning_type": "Dynamic Render Path",

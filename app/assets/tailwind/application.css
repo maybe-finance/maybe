@@ -166,4 +166,15 @@
     background: #a6a6a6;
   }
 }
-/* The following Markdown CSS has been removed as requested */
+
+.mt-safe {
+	margin-top: env(safe-area-inset-top);
+}
+
+.pt-safe {
+	padding-top: env(safe-area-inset-top);
+}
+
+.pb-safe {
+	padding-bottom: env(safe-area-inset-bottom);
+}

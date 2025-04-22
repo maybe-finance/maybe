@@ -56,8 +56,13 @@ class CategoriesController < ApplicationController
     redirect_back_or_to categories_path, notice: t(".success")
   end
 
+  def destroy_all
+    Current.family.categories.destroy_all
+    redirect_back_or_to categories_path, notice: "All categories deleted"
+  end
+
   def bootstrap
-    Current.family.categories.bootstrap_defaults
+    Current.family.categories.bootstrap!
 
     redirect_back_or_to categories_path, notice: t(".success")
   end

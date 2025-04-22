@@ -28,13 +28,14 @@ gem "hotwire_combobox"
 # Background Jobs
 gem "sidekiq"
 
-# Error logging
+# Monitoring
 gem "vernier"
 gem "rack-mini-profiler"
 gem "sentry-ruby"
 gem "sentry-rails"
 gem "sentry-sidekiq"
 gem "logtail-rails"
+gem "skylight"
 
 # Active Storage
 gem "aws-sdk-s3", "~> 1.177.0", require: false
@@ -79,6 +80,7 @@ group :development do
   gem "web-console"
   gem "faker"
   gem "benchmark-ips"
+  gem "foreman"
 end
 
 group :test do

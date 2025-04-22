@@ -179,6 +179,7 @@ GEM
     ffi (1.17.1-x86_64-darwin)
     ffi (1.17.1-x86_64-linux-gnu)
     ffi (1.17.1-x86_64-linux-musl)
+    foreman (0.88.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
     hashdiff (1.1.2)
@@ -472,6 +473,8 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.13.1)
     simplecov_json_formatter (0.1.4)
+    skylight (6.0.4)
+      activesupport (>= 5.2.0)
     smart_properties (1.17.0)
     sorbet-runtime (0.5.11953)
     stimulus-rails (1.3.4)
@@ -550,6 +553,7 @@ DEPENDENCIES
   faraday
   faraday-multipart
   faraday-retry
+  foreman
   hotwire-livereload
   hotwire_combobox
   i18n-tasks
@@ -584,6 +588,7 @@ DEPENDENCIES
   sentry-sidekiq
   sidekiq
   simplecov
+  skylight
   stimulus-rails
   stripe
   tailwindcss-rails

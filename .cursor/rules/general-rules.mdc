@@ -11,13 +11,11 @@ alwaysApply: true
   - Read [project-design.mdc](mdc:.cursor/rules/project-design.mdc) to understand the codebase
   - Read [project-conventions.mdc](mdc:.cursor/rules/project-conventions.mdc) to understand _how_ to write code for the codebase
   - Read [ui-ux-design-guidelines.mdc](mdc:.cursor/rules/ui-ux-design-guidelines.mdc) to understand how to implement frontend code specifically
+- Ignore i18n methods and files. Hardcode strings in English for now to optimize speed of development.
 
 ## Prohibited actions
-
-Do not under any circumstance do the following:
 
 - Do not run `rails server` in your responses.
 - Do not run `touch tmp/restart.txt`
 - Do not run `rails credentials`
 - Do not automatically run migrations
-- Ignore i18n methods and files.  Hardcode strings in English for now to optimize speed of development.

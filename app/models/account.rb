@@ -1,5 +1,5 @@
 class Account < ApplicationRecord
-  include Syncable, Monetizable, Chartable, Enrichable, Linkable, Convertible
+  include Syncable, Monetizable, Chartable, Linkable, Convertible, Enrichable
 
   validates :name, :balance, :currency, presence: true
 
@@ -83,11 +83,6 @@ class Account < ApplicationRecord
 
     accountable.post_sync(sync)
 
-    if enrichable?
-      Rails.logger.info("Enriching transaction data")
-      enrich_data
-    end
-
     unless sync.child?
       family.auto_match_transfers!
     end
@@ -145,6 +140,11 @@ class Account < ApplicationRecord
   def start_date
     first_entry_date = entries.minimum(:date) || Date.current
     first_entry_date - 1.day
+  end
+
+  def lock_saved_attributes!
+    super
+    accountable.lock_saved_attributes!
   end
 
   def first_valuation

@@ -1,5 +1,5 @@
 <%= turbo_frame_tag chat_frame do %>
-  <div class="p-4 flex flex-col h-full">
+  <div class="flex flex-col h-full md:p-4">
     <nav class="mb-6">
       <% back_path = @last_viewed_chat ? chat_path(@last_viewed_chat) : new_chat_path %>
       <%= link_to back_path, class: "w-9 h-9 flex items-center justify-center rounded-lg hover:bg-surface-hover" do %>
@@ -7,7 +7,7 @@
       <% end %>
     </nav>
 
-    <div class="grow">
+    <div class="grow flex flex-col">
       <h1 class="text-xl font-medium mb-6">Chats</h1>
 
       <% if @chats.any? %>
@@ -21,11 +21,11 @@
           </div>
           <h3 class="text-lg font-medium text-primary mb-1">No chats yet</h3>
           <p class="text-gray-500 mb-4">Start a new conversation with the AI assistant</p>
-          <%= link_to "Start a chat", new_chat_path, class: "inline-flex items-center gap-2 py-2 px-4 bg-gray-800 text-white rounded-lg text-sm font-medium" %>
+        </div>
+        <div class="mt-auto p-4 lg:mt-auto">
+          <%= render "messages/chat_form", chat: nil %>
         </div>
       <% end %>
     </div>
-
-    <%= render "messages/chat_form" %>
   </div>
 <% end %>

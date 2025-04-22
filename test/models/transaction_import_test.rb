@@ -68,4 +68,36 @@ class TransactionImportTest < ActiveSupport::TestCase
 
     assert_equal "complete", @import.status
   end
+
+  test "imports transactions with separate type column for signage convention" do
+    import = <<~CSV
+      date,amount,amount_type
+      01/01/2024,100,debit
+      01/02/2024,200,credit
+      01/03/2024,300,debit
+    CSV
+
+    @import.update!(
+      account: accounts(:depository),
+      raw_file_str: import,
+      date_col_label: "date",
+      date_format: "%m/%d/%Y",
+      amount_col_label: "amount",
+      entity_type_col_label: "amount_type",
+      amount_type_inflow_value: "debit",
+      amount_type_strategy: "custom_column",
+      signage_convention: nil # Explicitly set to nil to prove this is not needed
+    )
+
+    @import.generate_rows_from_csv
+
+    @import.reload
+
+    assert_difference -> { Entry.count } => 3,
+                      -> { Transaction.count } => 3 do
+      @import.publish
+    end
+
+    assert_equal [ -100, 200, -300 ], @import.entries.map(&:amount)
+  end
 end

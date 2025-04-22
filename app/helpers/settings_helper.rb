@@ -9,7 +9,8 @@ module SettingsHelper
     { name: I18n.t("settings.settings_nav.imports_label"), path: :imports_path },
     { name: I18n.t("settings.settings_nav.tags_label"), path: :tags_path },
     { name: I18n.t("settings.settings_nav.categories_label"), path: :categories_path },
-    { name: I18n.t("settings.settings_nav.merchants_label"), path: :merchants_path },
+    { name: "Rules", path: :rules_path },
+    { name: I18n.t("settings.settings_nav.merchants_label"), path: :family_merchants_path },
     { name: I18n.t("settings.settings_nav.whats_new_label"), path: :changelog_path },
     { name: I18n.t("settings.settings_nav.feedback_label"), path: :feedback_path }
   ]
@@ -40,7 +41,17 @@ module SettingsHelper
     previous_setting = adjacent_setting(request.path, -1)
     next_setting = adjacent_setting(request.path, 1)
 
-    content_tag :div, class: "flex justify-between gap-4" do
+    content_tag :div, class: "hidden md:flex flex-row justify-between gap-4" do
+      concat(previous_setting)
+      concat(next_setting)
+    end
+  end
+
+  def settings_nav_footer_mobile
+    previous_setting = adjacent_setting(request.path, -1)
+    next_setting = adjacent_setting(request.path, 1)
+
+    content_tag :div, class: "md:hidden flex flex-col gap-4" do
       concat(previous_setting)
       concat(next_setting)
     end

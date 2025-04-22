@@ -4,12 +4,12 @@
 
 <%= turbo_frame_tag dom_id(entry) do %>
   <%= turbo_frame_tag dom_id(transaction) do %>
-    <div class="grid grid-cols-12 items-center text-primary text-sm font-medium p-4
+    <div class="grid grid-cols-12 items-center text-primary text-sm font-medium p-4 md:p-4 
                 <%= @focused_record == entry || @focused_record == transaction ?
                     "border border-gray-900 rounded-lg" : "" %>">
 
-      <div class="pr-10 flex items-center gap-4
-                  <%= balance_trend ? "col-span-6" : "col-span-8" %>">
+      <div class="pr-4 md:pr-10 flex items-center gap-3 md:gap-4
+                  <%= balance_trend ? "col-span-8 md:col-span-6" : "col-span-8" %>">
         <%= check_box_tag dom_id(entry, "selection"),
             disabled: transaction.transfer?,
             class: "checkbox checkbox--light",
@@ -21,13 +21,13 @@
 
         <div class="max-w-full">
           <%= content_tag :div, class: ["flex items-center gap-2"] do %>
-            <% if transaction.merchant&.icon_url %>
-              <%= image_tag transaction.merchant.icon_url,
+            <% if transaction.merchant&.logo_url.present? %>
+              <%= image_tag transaction.merchant.logo_url,
                   class: "w-6 h-6 rounded-full",
                   loading: "lazy" %>
             <% else %>
               <%= render "shared/circle_logo",
-                  name: entry.display_name,
+                  name: entry.name,
                   size: "sm" %>
             <% end %>
 
@@ -35,7 +35,7 @@
               <div class="space-y-0.5">
                 <div class="flex items-center gap-1">
                   <%= link_to(
-                        transaction.transfer? ? transaction.transfer.name : entry.display_name,
+                        transaction.transfer? ? transaction.transfer.name : entry.name,
                         transaction.transfer? ? transfer_path(transaction.transfer) : entry_path(entry),
                         data: {
                           turbo_frame: "drawer",
@@ -55,7 +55,7 @@
                   <% end %>
                 </div>
 
-                <div class="text-secondary text-xs font-normal">
+                <div class="text-secondary text-xs font-normal hidden md:block">
                   <% if transaction.transfer? %>
                     <%= render "transfers/account_links",
                         transfer: transaction.transfer,
@@ -73,18 +73,18 @@
         </div>
       </div>
 
-      <div class="flex items-center gap-1 col-span-2">
+      <div class="hidden md:flex items-center gap-1 col-span-2">
         <%= render "transactions/transaction_category", transaction: transaction %>
       </div>
 
-      <div class="col-span-2 ml-auto">
+      <div class="col-span-4 md:col-span-2 ml-auto text-right">
         <%= content_tag :p,
             transaction.transfer? && view_ctx == "global" ? "+/- #{format_money(entry.amount_money.abs)}" : format_money(-entry.amount_money),
             class: ["text-green-600": entry.amount.negative?] %>
       </div>
 
       <% if balance_trend %>
-        <div class="col-span-2 justify-self-end">
+        <div class="col-span-2 justify-self-end hidden md:block">
           <% if balance_trend.trend %>
             <%= tag.p format_money(balance_trend.trend.current),
                 class: "font-medium text-sm text-primary" %>

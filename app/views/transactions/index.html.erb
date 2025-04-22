@@ -4,20 +4,28 @@
     <div class="flex items-center gap-5">
       <div class="flex items-center gap-2">
         <%= contextual_menu do %>
+          <% if Rails.env.development? %>
+            <%= button_to "Dev only: Sync all", sync_all_accounts_path, class: "btn btn--ghost w-full" %>
+          <% end %>
+          <%= contextual_menu_item "New rule", url: new_rule_path(resource_type: "transaction"), icon: "plus", turbo_frame: :modal %>
+          <%= contextual_menu_item "Edit rules", url: rules_path, icon: "git-branch", turbo_frame: :_top %>
           <%= contextual_menu_modal_action_item t(".edit_categories"), categories_path, icon: "shapes", turbo_frame: :_top %>
           <%= contextual_menu_modal_action_item t(".edit_tags"), tags_path, icon: "tags", turbo_frame: :_top %>
-          <%= contextual_menu_modal_action_item t(".edit_merchants"), merchants_path, icon: "store", turbo_frame: :_top %>
+          <%= contextual_menu_modal_action_item t(".edit_merchants"), family_merchants_path, icon: "store", turbo_frame: :_top %>
           <%= contextual_menu_modal_action_item t(".edit_imports"), imports_path, icon: "hard-drive-upload", turbo_frame: :_top %>
+          <%= contextual_menu_modal_action_item t(".import"), new_import_path, icon: "download", turbo_frame: "modal", class_name: "md:!hidden" %>
         <% end %>
 
-        <%= link_to new_import_path, class: "btn btn--outline flex items-center gap-2", data: { turbo_frame: "modal" } do %>
+        <%= link_to new_import_path, class: "btn btn--outline flex items-center gap-2 hidden md:flex", data: { turbo_frame: "modal" } do %>
           <%= lucide_icon("download", class: "text-secondary w-4 h-4") %>
           <p class="text-sm font-medium text-primary"><%= t(".import") %></p>
         <% end %>
 
-        <%= link_to new_transaction_path, class: "btn btn--primary flex items-center gap-2", data: { turbo_frame: :modal } do %>
-          <%= lucide_icon("plus", class: "w-5 h-5") %>
-          <p class="text-sm font-medium">New transaction</p>
+        <%= link_to new_transaction_path, class: "btn btn--primary flex items-center justify-center gap-2 rounded-full md:rounded-lg w-9 h-9 md:w-auto md:h-auto", data: { turbo_frame: :modal } do %>
+          <span class="flex items-center justify-center">
+            <%= lucide_icon("plus", class: "w-5 h-5") %>
+          </span>
+          <p class="text-sm font-medium hidden md:block">New transaction</p>
         <% end %>
       </div>
     </div>
@@ -38,7 +46,7 @@
 
     <% if @pagy.count > 0 %>
       <div class="grow overflow-y-auto">
-        <div class="grid grid-cols-12 bg-container-inset rounded-xl px-5 py-3 text-xs uppercase font-medium text-secondary items-center mb-4">
+        <div class="grid-cols-12 bg-container-inset rounded-xl px-5 py-3 text-xs uppercase font-medium text-secondary items-center mb-4 hidden md:grid">
           <div class="pl-0.5 col-span-8 flex items-center gap-4">
             <%= check_box_tag "selection_entry",
                               class: "checkbox checkbox--light",
@@ -49,6 +57,16 @@
           <p class="col-span-2">category</p>
           <p class="col-span-2 justify-self-end">amount</p>
         </div>
+
+        <% if @transactions.any? %>
+          <div class="md:hidden text-xs uppercase font-medium text-secondary mb-2 px-2">
+            <%= check_box_tag "selection_entry",
+                              class: "checkbox checkbox--light mr-2 ml-1",
+                              data: { action: "bulk-select#togglePageSelection" } %>
+            <span>TRANSACTION</span>
+          </div>
+        <% end %>
+
         <div class="space-y-6">
           <%= entries_by_date(@transactions.map(&:entry), totals: true) do |entries| %>
             <%= render entries %>

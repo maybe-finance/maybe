@@ -1,0 +1,27 @@
+<%# locals: (form:) %>
+
+<% action = form.object %>
+<% rule = action.rule %>
+<% needs_value = action.executor.type == "select" %>
+
+<li data-controller="rule--actions" data-rule--actions-action-executors-value="<%= rule.action_executors.to_json %>" class="flex items-center gap-3">
+  <%= form.hidden_field :_destroy, value: false, data: { rule__actions_target: "destroyField" } %>
+
+  <div class="grow flex gap-2 items-center h-full">
+    <div class="grow">
+      <%= form.select :action_type, rule.action_executors.map { |executor| [ executor.label, executor.key ] }, {}, data: { action: "rule--actions#handleActionTypeChange" } %>
+    </div>
+
+    <%= tag.div class: class_names("min-w-1/2 flex items-center gap-2", "hidden" => !needs_value), 
+                data: { rule__actions_target: "actionValue" } do %>
+      <span class="font-medium uppercase text-xs">to</span>
+      <%= form.select :value, action.options || [], {}, disabled: !needs_value %>
+    <% end %>
+  </div>
+
+  <button type="button"
+          data-action="rule--actions#remove"
+          data-rule--actions-destroy-param="<%= action.persisted? %>">
+    <%= icon("trash-2", color: "gray", size: "sm") %>
+  </button>
+</li>

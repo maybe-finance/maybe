@@ -48,6 +48,12 @@ class TransactionImport < Import
     base
   end
 
+  def selectable_amount_type_values
+    return [] if entity_type_col_label.nil?
+
+    csv_rows.map { |row| row[entity_type_col_label] }.uniq
+  end
+
   def csv_template
     template = <<-CSV
       date*,amount*,name,currency,category,tags,account,notes

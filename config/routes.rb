@@ -32,6 +32,7 @@ Rails.application.routes.draw do
 
   resources :users, only: %i[update destroy] do
     delete :reset, on: :member
+    patch :rule_prompt_settings, on: :member
   end
 
   resource :onboarding, only: :show do
@@ -67,6 +68,7 @@ Rails.application.routes.draw do
     resources :deletions, only: %i[new create], module: :category
 
     post :bootstrap, on: :collection
+    delete :destroy_all, on: :collection
   end
 
   resources :budgets, only: %i[index show edit update], param: :month_year do
@@ -75,7 +77,7 @@ Rails.application.routes.draw do
     resources :budget_categories, only: %i[index show update]
   end
 
-  resources :merchants, only: %i[index new create edit update destroy]
+  resources :family_merchants, only: %i[index new create edit update destroy]
 
   resources :transfers, only: %i[new create destroy show update]
 
@@ -132,6 +134,17 @@ Rails.application.routes.draw do
       route_for entry.entryable_name.pluralize, options
     else
       route_for entry.entryable_name, entry, options
+    end
+  end
+
+  resources :rules, except: :show do
+    member do
+      get :confirm
+      post :apply
+    end
+
+    collection do
+      delete :destroy_all
     end
   end
 
@@ -194,6 +207,8 @@ Rails.application.routes.draw do
   # Render dynamic PWA files from app/views/pwa/*
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
+
+  get "imports/:import_id/upload/sample_csv", to: "import/uploads#sample_csv", as: :import_upload_sample_csv
 
   # Defines the root path route ("/")
   root "pages#dashboard"

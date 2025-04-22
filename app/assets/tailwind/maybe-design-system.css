@@ -217,6 +217,18 @@
   --shadow-md: 0px 4px 8px -2px --alpha(var(--color-black) / 6%);
   --shadow-lg: 0px 12px 16px -4px --alpha(var(--color-black) / 6%);
   --shadow-xl: 0px 20px 24px -4px --alpha(var(--color-black) / 6%);
+
+  --animate-stroke-fill: stroke-fill 3s 300ms forwards;
+
+  @keyframes stroke-fill {
+    0% {
+      stroke-dashoffset: 43.9822971503;
+    }
+
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
 }
 
 /* Custom shadow borders used for surfaces / containers  */
@@ -504,7 +516,7 @@
 @layer components {
   /* Buttons */
   .btn {
-    @apply px-3 py-2 rounded-lg text-sm font-medium cursor-pointer disabled:cursor-not-allowed focus:outline-gray-500;
+    @apply inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium cursor-pointer disabled:cursor-not-allowed focus:outline-gray-500;
     @apply transition-all duration-300;
   }
 
@@ -541,10 +553,18 @@
   }
   
   .btn--ghost {
-    @apply border border-transparent text-primary hover:button-bg-ghost-hover;
+    @apply border border-transparent hover:button-bg-ghost-hover;
 
     @variant theme-dark {
-      @apply fg-primary hover:button-bg-ghost-hover;
+      @apply hover:fg-inverse hover:button-bg-ghost-hover;
+    }
+  }
+
+  .btn--outline-destructive {
+    @apply border border-red-500 text-red-500 hover:bg-gray-50;
+
+    @variant theme-dark {
+      @apply border-red-400 text-red-400 hover:button-bg-destructive-hover;
     }
   }
 
@@ -725,7 +745,7 @@
   @apply bg-gray-50;
 
   @variant theme-dark {
-    @apply bg-gray-800;
+    @apply bg-gray-800 fg-inverse;
   }
 }
 
@@ -759,5 +779,13 @@
 
   @variant theme-dark {
     @apply bg-alpha-black-700;
+  }
+}
+
+@utility bg-nav-indicator {
+  @apply bg-black;
+
+  @variant theme-dark {
+    @apply bg-white;
   }
 }

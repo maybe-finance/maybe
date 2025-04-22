@@ -8,7 +8,16 @@
   { name: "Confirm", path: import_path(import), is_complete: import.complete?, step_number: 5 }
 ].reject { |step| step[:name] == "Map" && import.mapping_steps.empty? } %>
 
-<ul class="flex items-center gap-2">
+<% content_for :mobile_import_progress do %>
+  <% active_step = steps.detect { |s| request.path.eql?(s[:path]) } %>
+  <% if active_step.present? %>
+    <div class="md:hidden text-center text-secondary text-md my-2">
+      <span class="text-gray-500">Step <%= active_step[:step_number] %> of <%= steps.size %></span>
+    </div>
+  <% end %>
+<% end %>
+
+<ul class="hidden md:flex items-center gap-2">
   <% steps.each_with_index do |step, idx| %>
     <li class="flex items-center gap-2 group">
       <% is_current = request.path == step[:path] %>

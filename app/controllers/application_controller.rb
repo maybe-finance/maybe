@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  include Onboardable, Localize, AutoSync, Authentication, Invitable, SelfHostable, StoreLocation, Impersonatable, Breadcrumbable, FeatureGuardable
+  include Onboardable, Localize, AutoSync, Authentication, Invitable, SelfHostable, StoreLocation, Impersonatable, Breadcrumbable, FeatureGuardable, Notifiable
   include Pagy::Backend
 
   helper_method :require_upgrade?, :subscription_pending?

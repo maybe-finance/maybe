@@ -1,5 +1,5 @@
 class Entry < ApplicationRecord
-  include Monetizable
+  include Monetizable, Enrichable
 
   monetize :amount
 
@@ -34,6 +34,15 @@ class Entry < ApplicationRecord
     )
   }
 
+  def classification
+    amount.negative? ? "income" : "expense"
+  end
+
+  def lock_saved_attributes!
+    super
+    entryable.lock_saved_attributes!
+  end
+
   def sync_account_later
     sync_start_date = [ date_previously_was, date ].compact.min unless destroyed?
     account.sync_later(start_date: sync_start_date)
@@ -45,10 +54,6 @@ class Entry < ApplicationRecord
 
   def balance_trend(entries, balances)
     Balance::TrendCalculator.new(self, entries, balances).trend
-  end
-
-  def display_name
-    enriched_name.presence || name
   end
 
   class << self
@@ -78,6 +83,9 @@ class Entry < ApplicationRecord
         all.each do |entry|
           bulk_attributes[:entryable_attributes][:id] = entry.entryable_id if bulk_attributes[:entryable_attributes].present?
           entry.update! bulk_attributes
+
+          entry.lock_saved_attributes!
+          entry.entryable.lock!(:tag_ids) if entry.transaction? && entry.transaction.tags.any?
         end
       end
 

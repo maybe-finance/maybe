@@ -32,11 +32,66 @@
       placeholder: "you@example.com",
       label: true,
       disabled: @invitation.present? %>
-  <%= form.password_field :password, autocomplete: "new-password", required: "required", label: true, maxlength: 72 %>
-  <%= form.password_field :password_confirmation, autocomplete: "new-password", required: "required", label: true %>
+      
   <% if invite_code_required? && !@invitation %>
     <%= form.text_field :invite_code, required: "required", label: true, value: params[:invite] %>
   <% end %>
+  
   <%= form.hidden_field :invitation, value: @invitation&.token %>
+  
+  <div data-controller="password-validator">
+    <div data-controller="password-visibility" class="relative">
+      <%= form.password_field :password, 
+          autocomplete: "new-password", 
+          required: "required", 
+          placeholder: t(".password_placeholder"),
+          label: true, 
+          maxlength: 72,
+          data: { 
+            password_validator_target: "input",
+            password_visibility_target: "input",
+            action: "input->password-validator#validate"
+          } %>
+      <button type="button" 
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" 
+              data-action="click->password-visibility#toggle">
+        <div data-password-visibility-target="showIcon">
+          <%= lucide_icon "eye", class: "w-5 h-5 text-gray" %>
+        </div>
+        <div data-password-visibility-target="hideIcon">
+          <%= lucide_icon "eye-off", class: "w-5 h-5 text-gray" %>
+        </div>
+      </button>
+    </div>
+    
+    <div class="flex gap-4 my-4">
+      <div class="h-1 bg-gray-200 rounded-full flex-grow" data-password-validator-target="blockLine" data-requirement-type="length"></div>
+      <div class="h-1 bg-gray-200 rounded-full flex-grow" data-password-validator-target="blockLine" data-requirement-type="case"></div>
+      <div class="h-1 bg-gray-200 rounded-full flex-grow" data-password-validator-target="blockLine" data-requirement-type="number"></div>
+      <div class="h-1 bg-gray-200 rounded-full flex-grow" data-password-validator-target="blockLine" data-requirement-type="special"></div>
+    </div>
+    
+    <div class="space-y-1 my-4">
+      <div class="flex items-center gap-2 text-secondary text-sm" data-password-validator-target="requirementType" data-requirement-type="length">
+        <%= lucide_icon "check", class: "w-4 h-4" %>
+        <span>Minimum 8 characters</span>
+      </div>
+      <div class="flex items-center gap-2 text-secondary text-sm" data-password-validator-target="requirementType" data-requirement-type="case">
+        <%= lucide_icon "check", class: "w-4 h-4" %>
+        <span>Upper and lowercase letters</span>
+      </div>
+      <div class="flex items-center gap-2 text-secondary text-sm" data-password-validator-target="requirementType" data-requirement-type="number">
+        <%= lucide_icon "check", class: "w-4 h-4" %>
+        <span>A number (0-9)</span>
+      </div>
+      <div class="flex items-center gap-2 text-secondary text-sm" data-password-validator-target="requirementType" data-requirement-type="special">
+        <%= lucide_icon "check", class: "w-4 h-4" %>
+        <span>A special character (!, @, #, $, %, etc)</span>
+      </div>
+    </div>
+  </div>
+  
+
+  
   <%= form.submit t(".submit") %>
 <% end %>

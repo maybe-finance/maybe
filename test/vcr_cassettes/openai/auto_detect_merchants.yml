@@ -1,0 +1,203 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.openai.com/v1/responses
+    body:
+      encoding: UTF-8
+      string: '{"model":"gpt-4.1-mini","input":[{"role":"developer","content":"Here
+        are the user''s available merchants in JSON format:\n\n```json\n[{\"name\":\"Shooters\"}]\n```\n\nUse
+        BOTH your knowledge AND the user-generated merchants to auto-detect the following
+        transactions:\n\n```json\n[{\"id\":\"1\",\"name\":\"McDonalds\",\"amount\":20,\"classification\":\"expense\"},{\"id\":\"2\",\"name\":\"local
+        pub\",\"amount\":20,\"classification\":\"expense\"},{\"id\":\"3\",\"name\":\"WMT
+        purchases\",\"amount\":20,\"classification\":\"expense\"},{\"id\":\"4\",\"name\":\"amzn
+        123 abc\",\"amount\":20,\"classification\":\"expense\"},{\"id\":\"5\",\"name\":\"chaseX1231\",\"amount\":2000,\"classification\":\"income\"},{\"id\":\"6\",\"name\":\"check
+        deposit 022\",\"amount\":200,\"classification\":\"income\"},{\"id\":\"7\",\"name\":\"shooters
+        bar and grill\",\"amount\":200,\"classification\":\"expense\"},{\"id\":\"8\",\"name\":\"Microsoft
+        Office subscription\",\"amount\":200,\"classification\":\"expense\"}]\n```\n\nReturn
+        \"null\" if you are not 80%+ confident in your answer.\n"}],"text":{"format":{"type":"json_schema","name":"auto_detect_personal_finance_merchants","strict":true,"schema":{"type":"object","properties":{"merchants":{"type":"array","description":"An
+        array of auto-detected merchant businesses for each transaction","items":{"type":"object","properties":{"transaction_id":{"type":"string","description":"The
+        internal ID of the original transaction","enum":["1","2","3","4","5","6","7","8"]},"business_name":{"type":["string","null"],"description":"The
+        detected business name of the transaction, or `null` if uncertain"},"business_url":{"type":["string","null"],"description":"The
+        URL of the detected business, or `null` if uncertain"}},"required":["transaction_id","business_name","business_url"],"additionalProperties":false}}},"required":["merchants"],"additionalProperties":false}}},"instructions":"You
+        are an assistant to a consumer personal finance app.\n\nClosely follow ALL
+        the rules below while auto-detecting business names and website URLs:\n\n-
+        Return 1 result per transaction\n- Correlate each transaction by ID (transaction_id)\n-
+        Do not include the subdomain in the business_url (i.e. \"amazon.com\" not
+        \"www.amazon.com\")\n- User merchants are considered \"manual\" user-generated
+        merchants and should only be used in 100% clear cases\n- Be slightly pessimistic.  We
+        favor returning \"null\" over returning a false positive.\n- NEVER return
+        a name or URL for generic transaction names (e.g. \"Paycheck\", \"Laundromat\",
+        \"Grocery store\", \"Local diner\")\n\nDetermining a value:\n\n- First attempt
+        to determine the name + URL from your knowledge of global businesses\n- If
+        no certain match, attempt to match one of the user-provided merchants\n- If
+        no match, return \"null\"\n\nExample 1 (known business):\n\n```\nTransaction
+        name: \"Some Amazon purchases\"\n\nResult:\n- business_name: \"Amazon\"\n-
+        business_url: \"amazon.com\"\n```\n\nExample 2 (generic business):\n\n```\nTransaction
+        name: \"local diner\"\n\nResult:\n- business_name: null\n- business_url: null\n```\n"}'
+    headers:
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer <OPENAI_ACCESS_TOKEN>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 16 Apr 2025 15:41:50 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Openai-Version:
+      - '2020-10-01'
+      Openai-Organization:
+      - user-r6cwd3mn6iv6gn748b2xoajx
+      X-Request-Id:
+      - req_77a41d32ae2c3dbd9081b34bc5e4ce61
+      Openai-Processing-Ms:
+      - '2152'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Cf-Cache-Status:
+      - DYNAMIC
+      Set-Cookie:
+      - __cf_bm=hCFJRspk322ZVvRasJGcux5mYDyfa5aO7EQOCAbnhjM-1744818110-1.0.1.1-.fRz_SYTG_PqZ3VCSDju7YeDaZwCyf5OGVvDvaN.h3aegNTlYtdPwbnZ5NNFxLRJhWFRY4vwHYkHm1DGTarK5NQ6UjA1sOrRpmS5eZ.zabw;
+        path=/; expires=Wed, 16-Apr-25 16:11:50 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=At3dVxwug2seJ3Oa02PSnIoKhVSEvt6IPCLfhkULvac-1744818110064-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      X-Content-Type-Options:
+      - nosniff
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 9314c9f5cef5efe9-CMH
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        {
+          "id": "resp_67ffcfbbddb48192a251a3c0f341941a04d20b39fa51ef90",
+          "object": "response",
+          "created_at": 1744818107,
+          "status": "completed",
+          "error": null,
+          "incomplete_details": null,
+          "instructions": "You are an assistant to a consumer personal finance app.\n\nClosely follow ALL the rules below while auto-detecting business names and website URLs:\n\n- Return 1 result per transaction\n- Correlate each transaction by ID (transaction_id)\n- Do not include the subdomain in the business_url (i.e. \"amazon.com\" not \"www.amazon.com\")\n- User merchants are considered \"manual\" user-generated merchants and should only be used in 100% clear cases\n- Be slightly pessimistic.  We favor returning \"null\" over returning a false positive.\n- NEVER return a name or URL for generic transaction names (e.g. \"Paycheck\", \"Laundromat\", \"Grocery store\", \"Local diner\")\n\nDetermining a value:\n\n- First attempt to determine the name + URL from your knowledge of global businesses\n- If no certain match, attempt to match one of the user-provided merchants\n- If no match, return \"null\"\n\nExample 1 (known business):\n\n```\nTransaction name: \"Some Amazon purchases\"\n\nResult:\n- business_name: \"Amazon\"\n- business_url: \"amazon.com\"\n```\n\nExample 2 (generic business):\n\n```\nTransaction name: \"local diner\"\n\nResult:\n- business_name: null\n- business_url: null\n```\n",
+          "max_output_tokens": null,
+          "model": "gpt-4.1-mini-2025-04-14",
+          "output": [
+            {
+              "id": "msg_67ffcfbc58bc8192bbcf4dc54759837c04d20b39fa51ef90",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "text": "{\"merchants\":[{\"transaction_id\":\"1\",\"business_name\":\"McDonald's\",\"business_url\":\"mcdonalds.com\"},{\"transaction_id\":\"2\",\"business_name\":null,\"business_url\":null},{\"transaction_id\":\"3\",\"business_name\":\"Walmart\",\"business_url\":\"walmart.com\"},{\"transaction_id\":\"4\",\"business_name\":\"Amazon\",\"business_url\":\"amazon.com\"},{\"transaction_id\":\"5\",\"business_name\":null,\"business_url\":null},{\"transaction_id\":\"6\",\"business_name\":null,\"business_url\":null},{\"transaction_id\":\"7\",\"business_name\":\"Shooters\",\"business_url\":null},{\"transaction_id\":\"8\",\"business_name\":\"Microsoft\",\"business_url\":\"microsoft.com\"}]}"
+                }
+              ],
+              "role": "assistant"
+            }
+          ],
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "reasoning": {
+            "effort": null,
+            "summary": null
+          },
+          "store": true,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "json_schema",
+              "description": null,
+              "name": "auto_detect_personal_finance_merchants",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "merchants": {
+                    "type": "array",
+                    "description": "An array of auto-detected merchant businesses for each transaction",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "transaction_id": {
+                          "type": "string",
+                          "description": "The internal ID of the original transaction",
+                          "enum": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5",
+                            "6",
+                            "7",
+                            "8"
+                          ]
+                        },
+                        "business_name": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "description": "The detected business name of the transaction, or `null` if uncertain"
+                        },
+                        "business_url": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "description": "The URL of the detected business, or `null` if uncertain"
+                        }
+                      },
+                      "required": [
+                        "transaction_id",
+                        "business_name",
+                        "business_url"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "merchants"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            }
+          },
+          "tool_choice": "auto",
+          "tools": [],
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 635,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 140,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 775
+          },
+          "user": null,
+          "metadata": {}
+        }
+  recorded_at: Wed, 16 Apr 2025 15:41:50 GMT
+recorded_with: VCR 6.3.1

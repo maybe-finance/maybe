@@ -34,7 +34,7 @@ module EntriesHelper
       entry.date,
       format_money(entry.amount_money),
       entry.account.name,
-      entry.display_name
+      entry.name
     ].join(" • ")
   end
 end

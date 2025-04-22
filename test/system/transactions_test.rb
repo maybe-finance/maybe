@@ -33,7 +33,7 @@ class TransactionsTest < ApplicationSystemTestCase
     assert_selector "h1", text: "Transactions"
 
     within "form#transactions-search" do
-      fill_in "Search transactions by name", with: @transaction.name
+      fill_in "Search transactions ...", with: @transaction.name
     end
 
     assert_selector "#" + dom_id(@transaction), count: 1
