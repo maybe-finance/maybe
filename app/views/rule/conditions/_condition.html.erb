@@ -14,7 +14,7 @@
     <%= form.hidden_field :_destroy, value: false, data: { rule__conditions_target: "destroyField" } %>
 
     <div class="w-2/5 shrink-0">
-      <%= form.select :condition_type, rule.condition_filters.map { |filter| [ filter.label, filter.key ] }, {}, data: { action: "rule--conditions#handleConditionTypeChange" }  %>
+      <%= form.select :condition_type, rule.condition_filters.map { |filter| [ filter.label, filter.key ] }, {}, data: { action: "rule--conditions#handleConditionTypeChange" } %>
     </div>
 
     <%= form.select :operator, condition.operators, { container_class: "w-fit min-w-36" }, data: { rule__conditions_target: "operatorSelect" } %>

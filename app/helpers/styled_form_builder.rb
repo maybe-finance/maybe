@@ -1,17 +1,12 @@
 class StyledFormBuilder < ActionView::Helpers::FormBuilder
   # Fields that visually inherit from "text field"
-  class_attribute :text_field_helpers,
-  default: (field_helpers - [ :label, :check_box, :radio_button, :fields_for, :fields, :hidden_field, :file_field ]) + [ :number_field, :date_field ]
+  class_attribute :text_field_helpers, default: field_helpers - [ :label, :check_box, :radio_button, :fields_for, :fields, :hidden_field, :file_field ]
 
   # Wraps "text" inputs with custom structure + base styles
   text_field_helpers.each do |selector|
     class_eval <<-RUBY_EVAL, __FILE__, __LINE__ + 1
       def #{selector}(method, options = {})
-        base_classes = "form-field__input text-ellipsis text-subdued"
-        merged_options = options.merge(
-          class: [base_classes, options[:class]].compact.join(" ")
-        )
-
+        merged_options = { class: "form-field__input" }.merge(options)
         label = build_label(method, options)
         field = super(method, merged_options)
 
@@ -27,7 +22,7 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def select(method, choices, options = {}, html_options = {})
-    merged_html_options = { class: "form-field__input text-ellipsis text-subdued" }.merge(html_options)
+    merged_html_options = { class: "form-field__input" }.merge(html_options)
 
     label = build_label(method, options.merge(required: merged_html_options[:required]))
     field = super(method, choices, options, merged_html_options)
@@ -36,7 +31,7 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def collection_select(method, collection, value_method, text_method, options = {}, html_options = {})
-    merged_html_options = { class: "form-field__input text-ellipsis text-subdued" }.merge(html_options)
+    merged_html_options = { class: "form-field__input" }.merge(html_options)
 
     label = build_label(method, options.merge(required: merged_html_options[:required]))
     field = super(method, collection, value_method, text_method, options, merged_html_options)
@@ -63,7 +58,6 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
     value, options = nil, value if value.is_a?(Hash)
     super(value, merged_options)
   end
-
 
   private
 

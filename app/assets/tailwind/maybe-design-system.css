@@ -634,6 +634,7 @@
     @apply disabled:text-subdued;
     @apply text-ellipsis overflow-hidden whitespace-nowrap;
     @apply transition-opacity duration-300;
+    @apply placeholder:text-subdued;
 
     &select {
       @apply pr-8;
@@ -847,13 +848,5 @@
 
   @variant theme-dark {
     @apply bg-white;
-  }
-}
-
-@utility bg-primary-adaptive {
-  @apply bg-white;
-
-  @variant theme-dark {
-    @apply bg-black ;
   }
 }

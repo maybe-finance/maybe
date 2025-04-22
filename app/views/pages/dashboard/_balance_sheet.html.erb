@@ -55,7 +55,7 @@
                       <div class="flex sm:hidden items-center gap-2">
                         <div class="flex gap-[3px]">
                           <% 10.times do |i| %>
-                            <div class="w-[2px] h-[10px] rounded-lg <%= i < (account_group.weight / 10.0).ceil ? '' : 'opacity-20' %>" style="background-color: <%= account_group.color %>;"></div>
+                            <div class="w-[2px] h-[10px] rounded-lg <%= i < (account_group.weight / 10.0).ceil ? "" : "opacity-20" %>" style="background-color: <%= account_group.color %>;"></div>
                           <% end %>
                         </div>
                         <p class="text-sm"><%= number_to_percentage(account_group.weight, precision: 2) %></p>
@@ -85,7 +85,7 @@
                           <div class="flex sm:hidden items-center gap-2">
                             <div class="flex gap-[3px]">
                               <% 10.times do |i| %>
-                                <div class="w-[2px] h-[10px] rounded-lg <%= i < (account.weight / 10.0).ceil ? '' : 'opacity-20' %>" style="background-color: <%= account_group.color %>;"></div>
+                                <div class="w-[2px] h-[10px] rounded-lg <%= i < (account.weight / 10.0).ceil ? "" : "opacity-20" %>" style="background-color: <%= account_group.color %>;"></div>
                               <% end %>
                             </div>
                             <p class="text-sm"><%= number_to_percentage(account.weight, precision: 2) %></p>

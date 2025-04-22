@@ -11,9 +11,9 @@
       <p class="text-secondary text-sm"><%= t(".description") %></p>
     </div>
 
-    <div 
-      data-controller="tabs" 
-      data-tabs-active-class="bg-surface shadow-sm text-primary" 
+    <div
+      data-controller="tabs"
+      data-tabs-active-class="bg-surface shadow-sm text-primary"
       data-tabs-inactive-class="text-secondary"
       data-tabs-default-tab-value="csv-upload-tab">
       <div class="flex justify-center mb-4 w-full">
@@ -47,12 +47,12 @@
                       <span class="font-medium text-primary">Browse</span> to add your CSV file here
                     </p>
                   </div>
-                  
+
                   <div class="flex flex-col items-center hidden" data-file-upload-target="fileName">
                     <%= lucide_icon("file-text", class: "w-6 h-6 mb-4 text-primary") %>
                     <p class="mb-2 text-md font-medium text-primary"></p>
                   </div>
-                  
+
                   <%= form.file_field :csv_file, class: "hidden", "data-auto-submit-form-target": "auto", "data-file-upload-target": "input" %>
                 </div>
               </div>
@@ -71,6 +71,5 @@
   <%= link_to "Download a sample CSV", "/imports/#{@import.id}/upload/sample_csv", class: "text-primary underline", data: { turbo: false } %> to see the required CSV format
 </span>
 </div>
-
 
 </div>

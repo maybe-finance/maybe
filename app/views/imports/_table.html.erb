@@ -16,9 +16,9 @@
             <% headers.each_with_index do |header, index| %>
               <th class="
                 bg-container-inset px-3 py-2.5 font-medium text-left whitespace-nowrap
-                <%= index == 0 ? 'rounded-tl-md' : '' %>
-                <%= index == headers.length - 1 ? 'rounded-tr-md' : '' %>
-                <%= index < headers.length - 1 ? 'border-r border-r-alpha-black-200' : '' %>
+                <%= index == 0 ? "rounded-tl-md" : "" %>
+                <%= index == headers.length - 1 ? "rounded-tr-md" : "" %>
+                <%= index < headers.length - 1 ? "border-r border-r-alpha-black-200" : "" %>
               ">
                 <%= header %>
               </th>
@@ -31,9 +31,9 @@
               <% row.each_with_index do |(header, value), col_index| %>
                 <td class="
                   px-3 py-2.5 whitespace-nowrap text-left
-                  <%= col_index < row.length - 1 ? 'border-r border-r-alpha-black-200' : '' %>
-                  <%= !caption && row_index == rows.length - 1 && col_index == 0 ? 'rounded-bl-md' : '' %>
-                  <%= !caption && row_index == rows.length - 1 && col_index == row.length - 1 ? 'rounded-br-md' : '' %>
+                  <%= col_index < row.length - 1 ? "border-r border-r-alpha-black-200" : "" %>
+                  <%= !caption && row_index == rows.length - 1 && col_index == 0 ? "rounded-bl-md" : "" %>
+                  <%= !caption && row_index == rows.length - 1 && col_index == row.length - 1 ? "rounded-br-md" : "" %>
                 ">
                   <%= value %>
                 </td>
