@@ -60,16 +60,6 @@ class BalanceSheet
             classification_total.zero? ? 0 : account.converted_balance / classification_total.to_d * 100
           end
 
-          # Define our subtype labeling logic with short format (for sidebar)
-          account.define_singleton_method(:short_subtype_label) do
-            accountable.short_subtype_label_for(account.subtype) || accountable.display_name
-          end
-
-          # Define long label method (for other views that might need it)
-          account.define_singleton_method(:long_subtype_label) do
-            accountable.long_subtype_label_for(account.subtype) || accountable.display_name
-          end
-
           account
         end.sort_by(&:weight).reverse
       )

@@ -13,4 +13,21 @@ class AccountTest < ActiveSupport::TestCase
       @account.destroy
     end
   end
+
+  test "gets short/long subtype label" do
+    account = @family.accounts.create!(
+      name: "Test Investment",
+      balance: 1000,
+      currency: "USD",
+      accountable: Investment.new(subtype: "hsa")
+    )
+
+    assert_equal "HSA", account.short_subtype_label
+    assert_equal "Health Savings Account", account.long_subtype_label
+    
+    # Test with nil subtype
+    account.update!(subtype: nil)
+    assert_equal "Investments", account.short_subtype_label
+  end
+
 end

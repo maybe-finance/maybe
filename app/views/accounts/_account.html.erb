@@ -17,7 +17,7 @@
           </p>
         <% else %>
           <%= link_to account.name, account, class: [(account.is_active ? "text-primary" : "text-subdued"), "text-sm font-medium hover:underline"], data: { turbo_frame: "_top" } %>
-          <% if account.respond_to?(:long_subtype_label) && account.long_subtype_label %>
+          <% if account.long_subtype_label %>
             <p class="text-sm text-secondary truncate"><%= account.long_subtype_label %></p>
           <% end %>
         <% end %>
