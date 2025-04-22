@@ -2,7 +2,7 @@
 
 <%= render "accounts/form", account: account, url: url do |form| %>
   <%= form.select :subtype,
-                 Property::SUBTYPES,
+                 Property::SUBTYPES.map { |k, v| [v[:long], k] },
                  { label: true, prompt: t("properties.form.subtype_prompt"), include_blank: t("properties.form.none") } %>
 
   <hr class="my-4">

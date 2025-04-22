@@ -59,6 +59,7 @@ class BalanceSheet
           account.define_singleton_method(:weight) do
             classification_total.zero? ? 0 : account.converted_balance / classification_total.to_d * 100
           end
+
           account
         end.sort_by(&:weight).reverse
       )

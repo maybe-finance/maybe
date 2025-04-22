@@ -3,6 +3,9 @@ module Accountable
 
   TYPES = %w[Depository Investment Crypto Property Vehicle OtherAsset CreditCard Loan OtherLiability]
 
+  # Define empty hash to ensure all accountables have this defined
+  SUBTYPES = {}.freeze
+
   def self.from_type(type)
     return nil unless TYPES.include?(type)
     type.constantize
@@ -25,6 +28,24 @@ module Accountable
 
     def color
       raise NotImplementedError, "Accountable must implement #color"
+    end
+
+    # Given a subtype, look up the label for this accountable type
+    def subtype_label_for(subtype, format: :short)
+      return nil if subtype.nil?
+
+      label_type = format == :long ? :long : :short
+      self::SUBTYPES[subtype]&.fetch(label_type, nil)
+    end
+
+    # Convenience method for getting the short label
+    def short_subtype_label_for(subtype)
+      subtype_label_for(subtype, format: :short)
+    end
+
+    # Convenience method for getting the long label
+    def long_subtype_label_for(subtype)
+      subtype_label_for(subtype, format: :long)
     end
 
     def favorable_direction
