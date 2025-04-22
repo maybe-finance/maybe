@@ -24,10 +24,10 @@ class AccountTest < ActiveSupport::TestCase
 
     assert_equal "HSA", account.short_subtype_label
     assert_equal "Health Savings Account", account.long_subtype_label
-    
+
     # Test with nil subtype
     account.update!(subtype: nil)
     assert_equal "Investments", account.short_subtype_label
+    assert_equal "Investments", account.long_subtype_label
   end
-
 end
