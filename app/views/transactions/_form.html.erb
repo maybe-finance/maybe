@@ -1,5 +1,4 @@
-<%= styled_form_with model: @entry, url: transactions_path, class: "space-y-4", data: { controller: "transaction-form" } do |f| %>
-
+<%= styled_form_with model: @entry, url: transactions_path, class: "space-y-4 text-subdued", data: { controller: "transaction-form" } do |f| %>
   <% if entry.errors.any? %>
     <%= render "shared/form_errors", model: entry %>
   <% end %>

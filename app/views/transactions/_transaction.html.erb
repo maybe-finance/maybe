@@ -4,7 +4,7 @@
 
 <%= turbo_frame_tag dom_id(entry) do %>
   <%= turbo_frame_tag dom_id(transaction) do %>
-    <div class="grid grid-cols-12 items-center text-primary text-sm font-medium p-4 md:p-4 
+    <div class="grid grid-cols-12 items-center text-primary text-sm font-medium p-4 md:p-4
                 <%= @focused_record == entry || @focused_record == transaction ?
                     "border border-gray-900 rounded-lg" : "" %>">
 

@@ -43,7 +43,7 @@
             <%= render "settings/user_avatar", user: user %>
           </div>
           <p class="text-primary font-medium text-sm"><%= user.display_name %></p>
-          <div class="rounded-md bg-gray-100 px-1.5 py-0.5">
+          <div class="rounded-md bg-surface px-1.5 py-0.5">
             <p class="uppercase text-secondary font-medium text-xs"><%= user.role %></p>
           </div>
           <% if Current.user.admin? && user != Current.user %>
@@ -55,7 +55,7 @@
                         title: t(".confirm_remove_member.title"),
                         body: t(".confirm_remove_member.body", name: user.display_name),
                         accept: t(".remove_member"),
-                        acceptClass: "w-full bg-red-500 text-white rounded-xl text-center p-[10px] border mb-2"
+                        acceptClass: "w-full btn btn--destructive text-white rounded-xl text-center p-[10px] mb-2"
                       }} do %>
                 <%= lucide_icon "x", class: "w-5 h-5" %>
               <% end %>
@@ -72,7 +72,7 @@
               </div>
               <div class="flex">
                 <p class="text-primary font-medium text-sm"><%= invitation.email %></p>
-                <div class="rounded-md bg-gray-100 px-1.5 py-0.5">
+                <div class="rounded-md bg-surface px-1.5 py-0.5">
                   <p class="uppercase text-secondary font-medium text-xs"><%= t(".pending") %></p>
                 </div>
               </div>
@@ -86,7 +86,7 @@
                              readonly
                              autocomplete="off"
                              value="<%= accept_invitation_url(invitation.token) %>"
-                             class="text-sm bg-gray-50 px-2 py-1 rounded border border-gray-200 w-72">
+                             class="text-sm bg-gray-50 px-2 py-1 rounded border border-secondary w-72">
                   <button data-action="clipboard#copy" class="text-secondary hover:text-gray-700">
                     <span data-clipboard-target="iconDefault">
                       <%= lucide_icon "copy", class: "w-5 h-5" %>
@@ -105,7 +105,7 @@
                           title: t(".confirm_remove_invitation.title"),
                           body: t(".confirm_remove_invitation.body", email: invitation.email),
                           accept: t(".remove_invitation"),
-                          acceptClass: "w-full bg-red-500 text-white rounded-xl text-center p-[10px] border mb-2"
+                          acceptClass: "w-full btn btn--destructive text-white rounded-xl text-center p-[10px] mb-2"
                         }} do %>
                   <%= lucide_icon "x", class: "w-5 h-5" %>
                 <% end %>
@@ -141,7 +141,7 @@
                   title: t(".confirm_reset.title"),
                   body: t(".confirm_reset.body"),
                   accept: t(".reset_account"),
-                  acceptClass: "w-full bg-orange-500 text-white rounded-xl text-center p-[10px] border mb-2"
+                  acceptClass: "w-full btn btn--destructive  text-primary rounded-xl text-center p-[10px]  mb-2"
                 }}
         %>
       </div>
@@ -158,7 +158,7 @@
                 title: t(".confirm_delete.title"),
                 body: t(".confirm_delete.body"),
                 accept: t(".delete_account"),
-                acceptClass: "w-full bg-red-500 text-white rounded-xl text-center p-[10px] border mb-2"
+                acceptClass: "w-full btn btn--destructive text-white rounded-xl text-center p-[10px] mb-2"
               }}
       %>
     </div>

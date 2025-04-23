@@ -26,20 +26,20 @@
                   "focus:outline-none focus:z-10 relative",
                 ],
                 disabled: row.import.complete? %>
-                
+
           <% if !cell_is_valid?(row, key) %>
-            <span class="absolute right-2 top-1/2 -translate-y-1/2 text-red-500 md:hidden" 
+            <span class="absolute right-2 top-1/2 -translate-y-1/2 text-red-500 md:hidden"
                   data-action="click->mobile-cell-interaction#toggleErrorMessage"
                   data-mobile-cell-interaction-target="errorIcon">
               <%= lucide_icon "alert-circle", class: "w-4 h-4" %>
             </span>
-            
+
             <div class="absolute left-4 right-4 bottom-full mb-2 p-2 bg-red-50 border border-red-200 rounded-lg shadow-lg text-xs text-red-600 hidden md:hidden z-20"
                  data-mobile-cell-interaction-target="errorTooltip">
               <%= row.errors[key].join(", ") %>
             </div>
           <% end %>
-          
+
           <div class="absolute inset-0 bg-primary/5 pointer-events-none opacity-0 transition-opacity duration-150 ease-in-out z-0" data-mobile-cell-interaction-target="highlight"></div>
         </div>
       <% end %>

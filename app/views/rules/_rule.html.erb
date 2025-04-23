@@ -22,7 +22,7 @@
       <span class="px-2 py-1 border border-alpha-black-200 rounded-full">
         <% if rule.actions.first.value && rule.actions.first.options %>
           <%= rule.actions.first.executor.label %> to <%= rule.actions.first.value_display %>
-        <% else%>
+        <% else %>
           <%= rule.actions.first.executor.label %>
         <% end %>
       </span>

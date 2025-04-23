@@ -10,7 +10,7 @@
   <% end %>
 
   <section class="space-y-4">
-    <h3 class="text-sm font-medium">If <%= rule.resource_type %></h3>
+    <h3 class="text-sm font-medium text-primary">If <%= rule.resource_type %></h3>
 
     <%# Condition template, used by Stimulus controller to add new conditions dynamically %>
     <template data-rules-target="conditionGroupTemplate">
@@ -50,7 +50,7 @@
   </section>
 
   <section class="space-y-4">
-    <h3 class="text-sm font-medium">Then</h3>
+    <h3 class="text-sm font-medium text-primary">Then</h3>
 
     <%# Action template, used by Stimulus controller to add new actions dynamically %>
     <template data-rules-target="actionTemplate">
@@ -75,18 +75,18 @@
   </section>
 
   <section class="space-y-4">
-    <h3 class="text-sm font-medium">Apply this</h3>
+    <h3 class="text-sm font-medium text-primary">Apply this</h3>
 
     <div class="space-y-2">
       <div class="flex items-center gap-2">
         <%= f.radio_button :effective_date_enabled, false, checked: rule.effective_date.nil?, data: { action: "rules#clearEffectiveDate" } %>
-        <%= f.label :effective_date_enabled_false, "To all past and future #{rule.resource_type}s", class: "text-sm" %>
+        <%= f.label :effective_date_enabled_false, "To all past and future #{rule.resource_type}s", class: "text-sm text-primary" %>
       </div>
 
       <div class="flex items-center gap-2">
         <div class="flex items-center gap-2">
           <%= f.radio_button :effective_date_enabled, true, checked: rule.effective_date.present? %>
-          <%= f.label :effective_date_enabled_true, "Starting from", class: "text-sm" %>
+          <%= f.label :effective_date_enabled_true, "Starting from", class: "text-sm text-primary" %>
         </div>
 
         <%= f.date_field :effective_date, container_class: "w-fit", data: { rules_target: "effectiveDateInput" } %>
