@@ -13,11 +13,11 @@
             <% if (controller_name == "sessions" && action_name == "new") || (controller_name == "registrations" && action_name == "new") %>
               <div class="space-y-3 md:hidden w-full my-4">
                 <div class="bg-surface-inset rounded-lg p-1 flex">
-                  <%= link_to new_session_path, 
+                  <%= link_to new_session_path,
       class: "w-1/2 px-2 py-1 rounded-md text-sm text-center font-medium #{current_page?(new_session_path) ? 'bg-surface shadow-sm text-primary' : 'text-secondary'}" do %>
                     <%= t("layouts.auth.sign_in") %>
                   <% end %>
-                  <%= link_to new_registration_path, 
+                  <%= link_to new_registration_path,
       class: "w-1/2 px-2 py-1 rounded-md text-sm text-center font-medium #{!current_page?(new_session_path) ? 'bg-surface shadow-sm text-primary' : 'text-secondary'}" do %>
                     <%= t("layouts.auth.sign_up") %>
                   <% end %>

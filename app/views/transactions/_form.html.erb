@@ -1,11 +1,11 @@
-<%= styled_form_with model: @entry, url: transactions_path, class: "space-y-4" do |f| %>
+<%= styled_form_with model: @entry, url: transactions_path, class: "space-y-4 text-subdued" do |f| %>
 
   <% if entry.errors.any? %>
     <%= render "shared/form_errors", model: entry %>
   <% end %>
 
   <section>
-    <fieldset class="bg-gray-50 rounded-lg p-1 grid grid-flow-col justify-stretch gap-x-1 md:gap-x-2">
+    <fieldset class="bg-container rounded-lg p-1 grid grid-flow-col justify-stretch gap-x-1 md:gap-x-2">
       <%= radio_tab_tag form: f, name: :nature, value: :outflow, label: t(".expense"), icon: "minus-circle", checked: params[:nature] == "outflow" || params[:nature].nil?, class: "text-xs md:text-sm" %>
       <%= radio_tab_tag form: f, name: :nature, value: :inflow, label: t(".income"), icon: "plus-circle", checked: params[:nature] == "inflow", class: "text-xs md:text-sm" %>
       <%= link_to new_transfer_path, data: { turbo_frame: :modal }, class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-subdued text-sm md:text-normal group-has-checked:bg-container group-has-checked:text-gray-800 group-has-checked:shadow-sm group-has-checked:text-sm" do %>

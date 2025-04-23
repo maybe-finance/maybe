@@ -24,7 +24,7 @@
     <% unless params[:return_to].present? %>
       <%= button_to imports_path(import: { type: "AccountImport" }),
               data: { turbo_frame: :_top },
-            class: "flex items-center gap-4 w-full text-center focus:outline-hidden focus:bg-alpha-black-25 hover:bg-alpha-black-25 border border-transparent block px-2 rounded-lg p-2" do %>
+            class: "flex items-center gap-4 w-full text-center focus:outline-hidden hover:bg-surface-hover focus:bg-surface-hover fg-contrast hover:fg-primary focus:fg-primary border border-transparent block px-2 rounded-lg p-2" do %>
         <span style="background-color: color-mix(in srgb, #F79009 10%, white);" class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg border border-alpha-black-25">
           <%= lucide_icon("download", style: "color: #F79009", class: "w-5 h-5") %>
         </span>
