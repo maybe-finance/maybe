@@ -42,27 +42,31 @@
 <% end %>
 
 <%= settings_section title: t(".theme_title"), subtitle: t(".theme_subtitle") do %>
-  <div>
-    <%= styled_form_with model: @user, class: "flex flex-col md:flex-row justify-between items-center gap-4", data: { controller: "auto-submit-form" } do |form| %>
+  <div data-controller="theme-selector theme" data-theme-user-preference-value="<%= @user.theme %>">
+    <%= styled_form_with model: @user, class: "flex flex-col md:flex-row justify-between items-center gap-4", id: "theme_form",
+        data: { controller: "auto-submit-form", auto_submit_form_trigger_event_value: "change" } do |form| %>
       <%= form.hidden_field :redirect_to, value: "preferences" %>
-      <div class="text-center">
-        <%= image_tag("light-mode-preview.png", alt: "Light Theme Preview", class: "h-44 mb-4") %>
-        <div class="flex justify-center items-center gap-2">
-          <%= form.radio_button :theme, "light", checked: @user.theme == "light", data: { auto_submit_form_target: "auto", action: "theme#updateTheme" } %>
+      <div class="<%= "text-center transition-all duration-200 p-3 rounded-lg hover:bg-surface-hover cursor-pointer #{@user.theme == 'light' ? 'bg-surface-hover border border-primary shadow-xs' : ''}" %>" data-theme-selector-target="container" data-action="click->theme-selector#selectTheme">
+        <%= image_tag("light-mode-preview.png", alt: "Light Theme Preview", class: "h-44 mb-2") %>
+        <div class="text-sm font-medium text-primary">
+          <%= form.radio_button :theme, "light", checked: @user.theme == "light", class: "sr-only", 
+            data: { theme_selector_target: "radio", auto_submit_form_target: "auto", autosubmit_trigger_event: "change", action: "theme#updateTheme" } %>
           <%= form.label :theme_light, t(".theme_light"), value: "light" %>
         </div>
       </div>
-      <div class="text-center">
-        <%= image_tag("dark-mode-preview.png", alt: "Dark Theme Preview", class: "h-44 mb-4") %>
-        <div class="flex justify-center items-center gap-2">
-          <%= form.radio_button :theme, "dark", checked: @user.theme == "dark", data: { auto_submit_form_target: "auto", action: "theme#updateTheme" } %>
+      <div class="<%= "text-center transition-all duration-200 p-3 rounded-lg hover:bg-surface-hover cursor-pointer #{@user.theme == 'dark' ? 'bg-surface-hover border border-primary shadow-xs' : ''}" %>" data-theme-selector-target="container" data-action="click->theme-selector#selectTheme">
+        <%= image_tag("dark-mode-preview.png", alt: "Dark Theme Preview", class: "h-44 mb-2 ") %>
+        <div class="text-sm font-medium text-primary">
+          <%= form.radio_button :theme, "dark", checked: @user.theme == "dark", class: "sr-only", 
+            data: {  theme_selector_target: "radio", auto_submit_form_target: "auto", autosubmit_trigger_event: "change", action: "theme#updateTheme" } %>
           <%= form.label :theme_dark, t(".theme_dark"), value: "dark" %>
         </div>
       </div>
-      <div class="text-center">
-        <%= image_tag("system-mode-preview.png", alt: "System Theme Preview", class: "h-44 mb-4") %>
+      <div class="<%= "text-center transition-all duration-200 p-3 rounded-lg hover:bg-surface-hover cursor-pointer #{@user.theme == 'system' ? 'bg-surface-hover border border-primary shadow-xs' : ''}" %>" data-theme-selector-target="container" data-action="click->theme-selector#selectTheme">
+        <%= image_tag("system-mode-preview.png", alt: "System Theme Preview", class: "h-44 mb-2") %>
         <div class="flex items-center gap-2 justify-center">
-          <%= form.radio_button :theme, "system", checked: @user.theme == "system", data: { auto_submit_form_target: "auto", action: "theme#updateTheme" } %>
+          <%= form.radio_button :theme, "system", checked: @user.theme == "system", class: "sr-only", 
+            data: { theme_selector_target: "radio", auto_submit_form_target: "auto", autosubmit_trigger_event: "change", action: "theme#updateTheme" } %>
           <%= form.label :theme_system, t(".theme_system"), value: "system" %>
         </div>
       </div>
