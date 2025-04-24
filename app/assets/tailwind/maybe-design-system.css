@@ -5,6 +5,12 @@
   One-off styling (3rd party overrides, etc.) should be done in the application.css file.
 */
 
+@import './maybe-design-system/background-utils.css';
+@import './maybe-design-system/foreground-utils.css';
+@import './maybe-design-system/text-utils.css';
+@import './maybe-design-system/border-utils.css';
+@import './maybe-design-system/component-utils.css';
+
 @custom-variant theme-dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 @theme {
@@ -18,6 +24,7 @@
   --color-success: var(--color-green-600);
   --color-warning: var(--color-yellow-600);
   --color-destructive: var(--color-red-600);
+  --color-shadow: --alpha(var(--color-black) / 6%);
 
   /* Gray scale */
   --color-gray-25: #FAFAFA;
@@ -231,262 +238,19 @@
   }
 }
 
-/* Custom shadow borders used for surfaces / containers  */
-@utility shadow-border-xs {
-  box-shadow: var(--shadow-xs), 0px 0px 0px 1px var(--color-alpha-black-50);
-}
-
-@utility shadow-border-sm {
-  box-shadow: var(--shadow-sm), 0px 0px 0px 1px var(--color-alpha-black-50);
-}
-
-@utility shadow-border-md {
-  box-shadow: var(--shadow-md), 0px 0px 0px 1px var(--color-alpha-black-50);
-}
-
-@utility shadow-border-lg {
-  box-shadow: var(--shadow-lg), 0px 0px 0px 1px var(--color-alpha-black-50);
-}
-
-@utility shadow-border-xl {
-  box-shadow: var(--shadow-xl), 0px 0px 0px 1px var(--color-alpha-black-50);
-}
-
-/* Design system color utilities */
-@utility text-primary {
-  @apply text-gray-900;
-
-  @variant theme-dark {
-   @apply text-white;
-  }
-}
-
-@utility text-secondary {
-  @apply text-gray-500;
-
-  @variant theme-dark {
-    @apply text-gray-400;
-  }
-}
-
-@utility text-subdued {
-  @apply text-gray-400;
-
-  @variant theme-dark {
-    @apply text-gray-600;
-  }
-}
-
-@utility text-link {
-  @apply text-blue-600;
-
-  @variant theme-dark {
-    @apply text-blue-500;
-  }
-}
-
-@utility bg-surface {
-  @apply bg-gray-50;
-
-  @variant theme-dark {
-    @apply bg-black;
-  }
-}
-
-@utility bg-surface-hover {
-  @apply bg-gray-100;
-
-  @variant theme-dark {
-    @apply bg-gray-800;
-  }
-}
-
-@utility bg-surface-inset {
-  @apply bg-gray-100;
-
-  @variant theme-dark {
-    @apply bg-gray-900;
-  }
-}
-
-@utility bg-surface-inset-hover {
-  @apply bg-gray-200;
-
-  @variant theme-dark {
-    @apply bg-gray-800;
-  }
-}
-
-@utility bg-container {
-  @apply bg-white;
-
-  @variant theme-dark {
-    @apply bg-gray-900;
-  }
-}
-
-@utility bg-container-hover {
-  @apply bg-gray-50;
-
-  @variant theme-dark {
-    @apply bg-gray-800;
-  }
-}
-
-@utility bg-container-inset {
-  @apply bg-gray-50;
-
-  @variant theme-dark {
-    @apply bg-gray-800;
-  }
-}
-
-@utility bg-container-inset-hover {
-  @apply bg-gray-100;
-
-  @variant theme-dark {
-    @apply bg-gray-700;
-  }
-}
-
-@utility bg-inverse {
-  @apply bg-gray-800;
-
-  @variant theme-dark {
-    @apply bg-white;
-  }
-}
-
-@utility bg-inverse-hover {
-  @apply bg-gray-700;
-
-  @variant theme-dark {
-    @apply bg-gray-100;
-  }
-}
-
-@utility bg-overlay {
-  background-color: rgba(var(--color-gray-100), 0.5);
-
-  @variant theme-dark {
-    background-color: var(--color-alpha-black-900);
-  }
-}
-
-@utility border-primary {
-  @apply border-alpha-black-300;
-
-  @variant theme-dark {
-    @apply border-alpha-white-400;
-  }
-}
-
-@utility border-secondary {
-  @apply border-alpha-black-200;
-
-  @variant theme-dark {
-    @apply border-alpha-white-300;
-  }
-}
-
-@utility border-tertiary {
-  @apply border-alpha-black-100;
-
-  @variant theme-dark {
-    @apply border-alpha-white-200;
-  }
-}
-
-@utility border-subdued {
-  @apply border-alpha-black-50;
-
-  @variant theme-dark {
-    @apply border-alpha-white-100;
-  }
-}
-
-@utility border-solid {
-  @apply border-black;
-
-  @variant theme-dark {
-    @apply border-white;
-  }
-}
-
-@utility border-destructive {
-  @apply border-red-500;
-
-  @variant theme-dark {
-    @apply border-red-400;
-  }
-}
-
-/* Foreground Colors */
-@utility fg-gray {
-  @apply text-gray-500;
-
-  @variant theme-dark {
-    @apply text-gray-400;
-  }
-}
-
-@utility fg-contrast {
-  @apply text-gray-400;
-
-  @variant theme-dark {
-    @apply text-gray-500;
-  }
-}
-
-@utility fg-inverse {
-  @apply text-white;
-
-  @variant theme-dark {
-    @apply text-gray-900;
-  }
-}
-
-@utility fg-primary {
-  @apply text-gray-900;
-
-  @variant theme-dark {
-    @apply text-white;
-  }
-}
-
-@utility fg-primary-variant {
-  @apply text-gray-800;
-
-  @variant theme-dark {
-    @apply text-gray-50;
-  }
-}
-
-@utility fg-secondary {
-  @apply text-gray-50;
-
-  @variant theme-dark {
-    @apply text-gray-700;
-  }
-}
-
-@utility fg-secondary-variant {
-  @apply text-gray-100;
-
-  @variant theme-dark {
-    @apply text-gray-600;
-  }
-}
-
-@utility fg-subdued {
-  @apply text-gray-400;
-
-  @variant theme-dark {
-    @apply text-gray-500;
-  }
+/* Specific override for strong tags in prose under dark mode */
+.prose:where([data-theme=dark], [data-theme=dark] *) strong {
+  color: theme(colors.white) !important;
 }
 
 @layer base {
+  [data-theme="dark"] { 
+    --color-success: var(--color-green-500);
+    --color-warning: var(--color-yellow-400);
+    --color-destructive: var(--color-red-400);
+    --color-shadow: --alpha(#000000 / 8%);
+  }
+
   button {
     @apply cursor-pointer focus-visible:outline-gray-900;
   }
@@ -733,120 +497,5 @@
   }
 }
 
-@layer utilities {
 
-  /* Specific override for strong tags in prose under dark mode */
-  .prose:where([data-theme=dark], [data-theme=dark] *) strong {
-    color: theme(colors.white) !important;
-  }
-}
 
-/* Button Backgrounds */
-@utility button-bg-primary {
-  @apply bg-gray-900;
-  /* Maps to fg-primary light */
-
-  @variant theme-dark {
-    @apply bg-white;
-    /* Maps to fg-primary dark */
-  }
-}
-
-@utility button-bg-primary-hover {
-  @apply bg-gray-800;
-  /* Maps to fg-primary-variant light */
-
-  @variant theme-dark {
-    @apply bg-gray-50;
-    /* Maps to fg-primary-variant dark */
-  }
-}
-
-@utility button-bg-secondary {
-  @apply bg-gray-50; /* Maps to fg-secondary light */
-
-  @variant theme-dark {
-    @apply bg-gray-700; /* Maps to fg-secondary dark */
-  }
-}
-
-@utility button-bg-secondary-hover {
-  @apply bg-gray-100; /* Maps to fg-secondary-variant light */
-
-  @variant theme-dark {
-    @apply bg-gray-600; /* Maps to fg-secondary-variant dark */
-  }
-}
-
-@utility button-bg-disabled {
-  @apply bg-gray-50;
-
-  @variant theme-dark {
-    @apply bg-gray-700;
-  }
-}
-
-@utility button-bg-destructive {
-  @apply bg-red-500;
-
-  @variant theme-dark {
-    @apply bg-red-400;
-  }
-}
-
-@utility button-bg-destructive-hover {
-  @apply bg-red-600;
-
-  @variant theme-dark {
-    @apply bg-red-500;
-  }
-}
-
-@utility button-bg-ghost-hover {
-  @apply bg-gray-50;
-
-  @variant theme-dark {
-    @apply bg-gray-800 fg-inverse;
-  }
-}
-
-@utility button-bg-outline-hover {
-  @apply bg-gray-100;
-
-  @variant theme-dark {
-    @apply bg-gray-700;
-  }
-}
-
-/* Tab Styles */
-@utility tab-item-active {
-  @apply bg-white;
-
-  @variant theme-dark {
-    @apply bg-gray-700;
-  }
-}
-
-@utility tab-item-hover {
-  @apply bg-gray-200;
-
-  @variant theme-dark {
-    @apply bg-gray-800;
-  }
-}
-
-@utility tab-bg-group {
-  @apply bg-gray-50;
-
-  @variant theme-dark {
-    @apply bg-alpha-black-700;
-  }
-}
-
-@utility bg-nav-indicator {
-  @apply bg-black;
-
-  @variant theme-dark {
-    @apply bg-white;
-  }
-}

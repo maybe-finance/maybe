@@ -1,0 +1,109 @@
+/* Button Backgrounds */
+@utility button-bg-primary {
+  @apply bg-gray-900;
+  /* Maps to fg-primary light */
+
+  @variant theme-dark {
+    @apply bg-white;
+    /* Maps to fg-primary dark */
+  }
+}
+
+@utility button-bg-primary-hover {
+  @apply bg-gray-800;
+  /* Maps to fg-primary-variant light */
+
+  @variant theme-dark {
+    @apply bg-gray-50;
+    /* Maps to fg-primary-variant dark */
+  }
+}
+
+@utility button-bg-secondary {
+  @apply bg-gray-50; /* Maps to fg-secondary light */
+
+  @variant theme-dark {
+    @apply bg-gray-700; /* Maps to fg-secondary dark */
+  }
+}
+
+@utility button-bg-secondary-hover {
+  @apply bg-gray-100; /* Maps to fg-secondary-variant light */
+
+  @variant theme-dark {
+    @apply bg-gray-600; /* Maps to fg-secondary-variant dark */
+  }
+}
+
+@utility button-bg-disabled {
+  @apply bg-gray-50;
+
+  @variant theme-dark {
+    @apply bg-gray-700;
+  }
+}
+
+@utility button-bg-destructive {
+  @apply bg-red-500;
+
+  @variant theme-dark {
+    @apply bg-red-400;
+  }
+}
+
+@utility button-bg-destructive-hover {
+  @apply bg-red-600;
+
+  @variant theme-dark {
+    @apply bg-red-500;
+  }
+}
+
+@utility button-bg-ghost-hover {
+  @apply bg-gray-50;
+
+  @variant theme-dark {
+    @apply bg-gray-800 fg-inverse;
+  }
+}
+
+@utility button-bg-outline-hover {
+  @apply bg-gray-100;
+
+  @variant theme-dark {
+    @apply bg-gray-700;
+  }
+}
+
+/* Tab Styles */
+@utility tab-item-active {
+  @apply bg-white;
+
+  @variant theme-dark {
+    @apply bg-gray-700;
+  }
+}
+
+@utility tab-item-hover {
+  @apply bg-gray-200;
+
+  @variant theme-dark {
+    @apply bg-gray-800;
+  }
+}
+
+@utility tab-bg-group {
+  @apply bg-gray-50;
+
+  @variant theme-dark {
+    @apply bg-alpha-black-700;
+  }
+}
+
+@utility bg-nav-indicator {
+  @apply bg-black;
+
+  @variant theme-dark {
+    @apply bg-white;
+  }
+}

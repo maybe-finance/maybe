@@ -1,0 +1,15 @@
+<%= wrapper_tag do %>
+  <% if icon_only? %>
+    <%= lucide_icon(@icon, class: icon_classes) %>
+  <% else %>
+    <% if @leading_icon %>
+      <%= lucide_icon(@leading_icon, class: icon_classes) %>
+    <% end %>
+
+    <span class="<%= text_classes %>"><%= @text %></span>
+
+    <% if @trailing_icon %>
+      <%= lucide_icon(@trailing_icon, class: icon_classes) %>
+    <% end %>
+  <% end %>
+<% end %>
