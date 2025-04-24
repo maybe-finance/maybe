@@ -90,6 +90,38 @@ class MoneyTest < ActiveSupport::TestCase
     assert_equal "€ 1.000,12", Money.new(1000.12, :eur).format(locale: :nl)
   end
 
+  test "can format with abbreviation" do
+    # Values below 1000 should be formatted normally
+    assert_equal "$500.00", Money.new(500).format(abbreviate: true)
+    assert_equal "$999.99", Money.new(999.99).format(abbreviate: true)
+    assert_equal "-$500.00", Money.new(-500).format(abbreviate: true)
+
+    assert_equal "$1.0K", Money.new(1000).format(abbreviate: true)
+    assert_equal "$1.5K", Money.new(1500).format(abbreviate: true)
+    assert_equal "$999.9K", Money.new(999900).format(abbreviate: true)
+    assert_equal "-$1.5K", Money.new(-1500).format(abbreviate: true)
+
+    assert_equal "$1.0M", Money.new(1_000_000).format(abbreviate: true)
+    assert_equal "$1.5M", Money.new(1_500_000).format(abbreviate: true)
+    assert_equal "$999.9M", Money.new(999_900_000).format(abbreviate: true)
+    assert_equal "-$1.5M", Money.new(-1_500_000).format(abbreviate: true)
+
+    assert_equal "$1.0B", Money.new(1_000_000_000).format(abbreviate: true)
+    assert_equal "$1.5B", Money.new(1_500_000_000).format(abbreviate: true)
+    assert_equal "$999.9B", Money.new(999_900_000_000).format(abbreviate: true)
+    assert_equal "-$1.5B", Money.new(-1_500_000_000).format(abbreviate: true)
+
+    assert_equal "€1.5M", Money.new(1_500_000, :EUR).format(abbreviate: true)
+    assert_equal "£1.5M", Money.new(1_500_000, :GBP).format(abbreviate: true)
+    assert_equal "CA$1.5M", Money.new(1_500_000, :CAD).format(abbreviate: true)
+
+    assert_equal "$900.00", Money.new(900).format(abbreviate: true, abbreviate_threshold: 1000)
+    assert_equal "$0.9K", Money.new(900).format(abbreviate: true, abbreviate_threshold: 500)
+    assert_equal "$0.1K", Money.new(100).format(abbreviate: true, abbreviate_threshold: 50)
+
+    assert_equal "€ 1.5M", Money.new(1_500_000, :EUR).format(abbreviate: true, locale: :nl)
+  end
+
   test "converts currency when rate available" do
     ExchangeRate.expects(:find_or_fetch_rate).returns(OpenStruct.new(rate: 1.2))
 
