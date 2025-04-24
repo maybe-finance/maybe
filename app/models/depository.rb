@@ -1,10 +1,10 @@
 class Depository < ApplicationRecord
   include Accountable
 
-  SUBTYPES = [
-    [ "Checking", "checking" ],
-    [ "Savings", "savings" ]
-  ].freeze
+  SUBTYPES = {
+    "checking" => { short: "Checking", long: "Checking" },
+    "savings" => { short: "Savings", long: "Savings" }
+  }.freeze
 
   class << self
     def display_name

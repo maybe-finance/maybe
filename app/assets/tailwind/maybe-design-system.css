@@ -498,14 +498,15 @@
   details>summary::-webkit-details-marker {
     @apply hidden;
   }
-  
+
   details>summary {
     @apply list-none;
   }
 
   input[type='radio'] {
-    @apply border-gray-300 text-indigo-600 focus:ring-indigo-600; /* Default light mode */
-    
+    @apply border-gray-300 text-indigo-600 focus:ring-indigo-600;
+    /* Default light mode */
+
     @variant theme-dark {
       /* Dark mode radio button base and checked styles */
       @apply border-gray-600 bg-gray-700 checked:bg-blue-500 focus:ring-blue-500 focus:ring-offset-gray-800;
@@ -531,32 +532,49 @@
       @apply disabled:button-bg-disabled disabled:hover:button-bg-disabled;
     }
   }
-  
+
   .btn--secondary {
     @apply button-bg-secondary text-primary;
     @apply hover:button-bg-secondary-hover;
 
     @variant theme-dark {
-      @apply button-bg-secondary text-white;
-      @apply hover:button-bg-secondary-hover;
+      @apply text-white;
+      background-color: var(--color-gray-700);
+      &:hover {
+        background-color: var(--color-gray-800);
+      }
     }
   }
-  
+
   .btn--outline {
     @apply border border-alpha-black-200 text-primary disabled:button-bg-disabled disabled:hover:button-bg-disabled disabled:text-gray-400;
-    @apply hover:button-bg-outline-hover;
+
+    &:hover {
+      background-color: var(--color-gray-100);
+    }
 
     @variant theme-dark {
       @apply border-alpha-white-300 text-white disabled:button-bg-disabled disabled:hover:button-bg-disabled disabled:text-gray-600;
-      @apply hover:button-bg-outline-hover;
+
+      &:hover {
+        background-color: var(--color-gray-800);
+      }
     }
   }
-  
+
   .btn--ghost {
-    @apply border border-transparent hover:button-bg-ghost-hover;
+    @apply border border-transparent text-primary;
+
+    &:hover {
+      background-color: var(--color-gray-100)
+    }
 
     @variant theme-dark {
-      @apply hover:fg-inverse hover:button-bg-ghost-hover;
+      @apply fg-primary;
+
+      &:hover {
+        background-color: var(--color-gray-900);
+      }
     }
   }
 
@@ -581,7 +599,7 @@
     @apply flex flex-col gap-1 relative px-3 py-2 rounded-md border bg-container border-secondary shadow-xs w-full;
     @apply focus-within:border-secondary focus-within:shadow-none focus-within:ring-4 focus-within:ring-alpha-black-200;
     @apply transition-all duration-300;
-    
+
     @variant theme-dark {
       @apply focus-within:ring-alpha-white-300;
     }
@@ -589,22 +607,22 @@
     /* Add styles for multiple select within form fields */
     select[multiple] {
       @apply py-2 pr-2 space-y-0.5 overflow-y-auto;
-      
+
       option {
         @apply py-2 rounded-md;
       }
-      
+
       option:checked {
         @apply after:content-['\2713'] bg-container-inset after:text-gray-500 after:ml-2;
       }
-      
+
       option:active,
       option:focus {
         @apply bg-container-inset;
       }
     }
   }
-  
+
   .form-field__label {
     @apply block text-xs text-secondary peer-disabled:text-subdued;
   }
@@ -616,16 +634,26 @@
     @apply disabled:text-subdued;
     @apply text-ellipsis overflow-hidden whitespace-nowrap;
     @apply transition-opacity duration-300;
-  
+    @apply placeholder:text-subdued;
+
     &select {
       @apply pr-8;
     }
+
+    @variant theme-dark {
+      &::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+        cursor: pointer;
+      }
+    }
+
+
   }
-  
+
   .form-field__radio {
     @apply text-primary;
   }
-  
+
   .form-field__submit {
     @apply cursor-pointer rounded-lg bg-surface p-3 text-center text-white hover:bg-surface-hover;
   }
@@ -642,21 +670,37 @@
     &[type='checkbox'] {
       @apply border-alpha-black-200 checked:bg-gray-900 checked:ring-gray-900 focus:ring-gray-900 focus-visible:ring-gray-900 checked:hover:bg-gray-500;
     }
-  
+
     &[type='checkbox']:disabled {
       @apply cursor-not-allowed opacity-80 bg-gray-50 border-gray-200 checked:bg-gray-400 checked:ring-gray-400;
     }
-  }
+
+    @variant theme-dark {
+      &[type='checkbox'] {
+        @apply ring-gray-900 checked:text-white;
+        background-color: var(--color-gray-600);
+      }
   
+      &[type='checkbox']:disabled {
+        @apply cursor-not-allowed opacity-80 ring-gray-600;
+      }
+  
+      &[type='checkbox']:checked {
+        background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+        background-color: var(--color-gray-600);
+      }
+    }
+  }
+
   .checkbox--dark {
     &[type='checkbox'] {
       @apply ring-gray-900 checked:text-white;
     }
-  
+
     &[type='checkbox']:disabled {
       @apply cursor-not-allowed opacity-80 ring-gray-600;
     }
-  
+
     &[type='checkbox']:checked {
       background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='111827' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
     }
@@ -669,35 +713,52 @@
     @apply after:transition-transform after:duration-300 after:ease-in-out;
     @apply peer-checked:bg-green-600 peer-checked:after:translate-x-4;
     @apply transition-colors duration-300;
+
+    @variant theme-dark {
+      background-color: var(--color-gray-700);
+    }
   }
 
   /* Tooltips */
   .tooltip {
     @apply hidden absolute;
   }
+
+  .qrcode svg path {
+    fill: var(--color-black);
+    @variant theme-dark {
+      fill: var(--color-white);
+    }
+
+  }
 }
 
 @layer utilities {
+
   /* Specific override for strong tags in prose under dark mode */
   .prose:where([data-theme=dark], [data-theme=dark] *) strong {
-    color: theme(colors.white) !important; 
+    color: theme(colors.white) !important;
   }
 }
 
 /* Button Backgrounds */
 @utility button-bg-primary {
-  @apply bg-gray-900; /* Maps to fg-primary light */
+  @apply bg-gray-900;
+  /* Maps to fg-primary light */
 
   @variant theme-dark {
-    @apply bg-white; /* Maps to fg-primary dark */
+    @apply bg-white;
+    /* Maps to fg-primary dark */
   }
 }
 
 @utility button-bg-primary-hover {
-  @apply bg-gray-800; /* Maps to fg-primary-variant light */
+  @apply bg-gray-800;
+  /* Maps to fg-primary-variant light */
 
   @variant theme-dark {
-    @apply bg-gray-50; /* Maps to fg-primary-variant dark */
+    @apply bg-gray-50;
+    /* Maps to fg-primary-variant dark */
   }
 }
 
