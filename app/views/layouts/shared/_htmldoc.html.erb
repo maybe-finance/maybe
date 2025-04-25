@@ -20,6 +20,13 @@
 
     <%= family_stream %>
 
+    <% if Rails.env.development? %>
+      <div class="fixed bottom-10 left-2">
+        <%= render ButtonComponent.new(variant: "icon", icon: "eclipse", data: { action: "theme#toDark" }) %>
+        <%= render ButtonComponent.new(variant: "icon", icon: "sun", data: { action: "theme#toLight" }) %>
+      </div>
+    <% end %>
+
     <%= turbo_frame_tag "modal" %>
     <%= turbo_frame_tag "drawer" %>
 

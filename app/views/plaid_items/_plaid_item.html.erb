@@ -107,24 +107,13 @@
           ) %>
         <% end %>
 
-        <%= contextual_menu do %>
-          <div class="w-48 p-1 text-sm leading-6 text-primary bg-container shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-            <%= button_to plaid_item_path(plaid_item),
-                      method: :delete,
-                      class: "block w-full py-2 px-3 space-x-2 text-red-600 hover:bg-red-50 flex items-center rounded-lg",
-                      disabled: plaid_item.syncing? || plaid_item.scheduled_for_deletion?,
-                      data: {
-                        turbo_confirm: {
-                          title: t(".confirm_title"),
-                          body: t(".confirm_body"),
-                          accept: t(".confirm_accept")
-                        }
-                      } do %>
-              <%= lucide_icon "trash-2", class: "w-5 h-5" %>
-
-              <span><%= t(".delete") %></span>
-            <% end %>
-          </div>
+        <%= render MenuComponent.new do |menu| %>
+          <% menu.with_item text: t(".delete"), icon: "trash-2", href: plaid_item_path(plaid_item), method: :delete, data: { turbo_confirm: {
+            title: t(".confirm_title"),
+            body: t(".confirm_body"),
+            accept: t(".confirm_accept"),
+            variant: "destructive"
+          } } %>
         <% end %>
       </div>
     </summary>

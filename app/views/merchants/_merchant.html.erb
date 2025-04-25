@@ -15,19 +15,19 @@
     </p>
   </div>
   <div class="justify-self-end">
-    <%= contextual_menu do %>
-      <div class="w-48 p-1 text-sm leading-6 text-primary bg-container shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-        <%= contextual_menu_modal_action_item t(".edit"), edit_merchant_path(merchant) %>
-
-        <%= contextual_menu_destructive_item t(".delete"),
-                                             merchant_path(merchant),
-                                             turbo_frame: "_top",
-                                             turbo_confirm: merchant.transactions.any? ? {
-                                               title: t(".confirm_title"),
-                                               body: t(".confirm_body"),
-                                               accept: t(".confirm_accept")
-                                             } : nil %>
-      </div>
+    <%= render MenuComponent.new do |menu| %>
+      <% menu.with_item(text: t(".edit"), href: edit_merchant_path(merchant), icon: "pencil", data: { turbo_frame: "modal" }) %>
+      <% menu.with_item(
+        text: t(".delete"), 
+        href: merchant_path(merchant), 
+        icon: "trash-2", 
+        method: :delete, 
+        data: { turbo_confirm: {
+          title: t(".confirm_title"),
+          body: t(".confirm_body"),
+          confirmText: t(".confirm_accept"),
+          variant: "outline-destructive"
+        } }) %>
     <% end %>
   </div>
 </div>

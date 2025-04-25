@@ -36,34 +36,36 @@
     <% end %>
   </div>
 
-  <%= contextual_menu do %>
-    <div class="w-48 p-1 text-sm leading-6 text-primary bg-container shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-      <%= link_to import_path(import),
-                    class: "block w-full py-2 px-3 space-x-2 text-primary hover:bg-gray-50 flex items-center rounded-lg" do %>
-        <%= lucide_icon "eye", class: "w-5 h-5 text-secondary" %>
+  <%= render MenuComponent.new do |menu| %>
+    <% menu.with_item(text: t(".view"), href: import_path(import), icon: "eye") %>
 
-        <span><%= t(".view") %></span>
-      <% end %>
+    <% if import.complete? || import.revert_failed? %>
+      <% menu.with_item(
+        text: t(".revert"), 
+        href: revert_import_path(import), 
+        icon: "rotate-ccw", 
+        method: :put, 
+        data: { 
+          turbo_confirm: {
+            title: "Revert import?",
+            body: "This will delete transactions that were imported, but you will still be able to review and re-import your data at any time.",
+            accept: "Revert"
+          }
+        }) %>
 
-      <% if import.complete? || import.revert_failed? %>
-        <%= button_to revert_import_path(import),
-                      method: :put,
-                      class: "block w-full py-2 px-3 space-x-2 text-orange-600 hover:bg-orange-50 flex items-center rounded-lg",
-                      data: { turbo_confirm: true } do %>
-          <%= lucide_icon "rotate-ccw", class: "w-5 h-5" %>
-
-          <span>Revert</span>
-        <% end %>
-      <% else %>
-        <%= button_to import_path(import),
-                      method: :delete,
-                      class: "block w-full py-2 px-3 space-x-2 text-red-600 hover:bg-red-50 flex items-center rounded-lg",
-                      data: { turbo_confirm: true } do %>
-          <%= lucide_icon "trash-2", class: "w-5 h-5" %>
-
-          <span><%= t(".delete") %></span>
-        <% end %>
-      <% end %>
-    </div>
+    <% else %>
+      <% menu.with_item(
+        text: t(".delete"), 
+        href: import_path(import), 
+        icon: "trash-2", 
+        method: :delete, 
+        data: { 
+          turbo_confirm: { 
+            title: "Delete import?", 
+            body: "This will delete the import and is not reversible.", 
+            variant: "outline-destructive" 
+          } 
+        }) %>
+    <% end %>
   <% end %>
 </div>

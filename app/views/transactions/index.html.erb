@@ -3,24 +3,15 @@
     <h1 class="text-xl">Transactions</h1>
     <div class="flex items-center gap-5">
       <div class="flex items-center gap-2">
-        <%= contextual_menu do %>
-          <% if Rails.env.development? %>
-            <%= render ButtonComponent.new(
-              text: "Dev only: Sync all",
-              variant: "ghost",
-              href: sync_all_accounts_path,
-              method: :post,
-              full_width: true
-            ) %>
-          <% end %>
-
-          <%= contextual_menu_item "New rule", url: new_rule_path(resource_type: "transaction"), icon: "plus", turbo_frame: :modal %>
-          <%= contextual_menu_item "Edit rules", url: rules_path, icon: "git-branch", turbo_frame: :_top %>
-          <%= contextual_menu_modal_action_item t(".edit_categories"), categories_path, icon: "shapes", turbo_frame: :_top %>
-          <%= contextual_menu_modal_action_item t(".edit_tags"), tags_path, icon: "tags", turbo_frame: :_top %>
-          <%= contextual_menu_modal_action_item t(".edit_merchants"), family_merchants_path, icon: "store", turbo_frame: :_top %>
-          <%= contextual_menu_modal_action_item t(".edit_imports"), imports_path, icon: "hard-drive-upload", turbo_frame: :_top %>
-          <%= contextual_menu_modal_action_item t(".import"), new_import_path, icon: "download", turbo_frame: "modal", class_name: "md:!hidden" %>
+        <%= render MenuComponent.new do |menu| %>
+          <% menu.with_item(text: "Dev only: Sync all", href: sync_all_accounts_path, method: :post, icon: "refresh-cw") %>
+          <% menu.with_item(text: "New rule", href: new_rule_path(resource_type: "transaction"), icon: "plus", data: { turbo_frame: :modal }) %>
+          <% menu.with_item(text: "Edit rules", href: rules_path, icon: "git-branch", data: { turbo_frame: :_top }) %>
+          <% menu.with_item(text: "Edit categories", href: categories_path, icon: "shapes", data: { turbo_frame: :_top }) %>
+          <% menu.with_item(text: "Edit tags", href: tags_path, icon: "tags", data: { turbo_frame: :_top }) %>
+          <% menu.with_item(text: "Edit merchants", href: family_merchants_path, icon: "store", data: { turbo_frame: :_top }) %>
+          <% menu.with_item(text: "Edit imports", href: imports_path, icon: "hard-drive-upload", data: { turbo_frame: :_top }) %>
+          <% menu.with_item(text: "Import", href: new_import_path, icon: "download", data: { turbo_frame: "modal", class_name: "md:!hidden" }) %>
         <% end %>
 
         <%= render ButtonComponent.new(

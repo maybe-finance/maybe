@@ -14,13 +14,14 @@ class MenuItemComponent < ViewComponent::Base
     <% end %>
   ERB
 
-  def initialize(variant: "default", text: nil, href: nil, method: :get, icon: nil, data: {})
+  def initialize(variant: "default", text: nil, href: nil, method: :get, icon: nil, destructive: false, data: {})
     @variant = variant.to_sym
     @text = text
     @icon = icon
     @href = href
     @method = method.to_sym
     @data = data
+    @destructive = destructive
   end
 
   def wrapper(&block)
@@ -39,7 +40,7 @@ class MenuItemComponent < ViewComponent::Base
   end
 
   def destructive?
-    @method == :delete
+    @method == :delete || @destructive
   end
 
   private

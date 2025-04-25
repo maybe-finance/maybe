@@ -15,17 +15,13 @@
     </p>
   </div>
   <div class="justify-self-end">
-    <%= contextual_menu do %>
-      <%= contextual_menu_modal_action_item t(".edit"), edit_family_merchant_path(family_merchant), icon: "pencil", turbo_frame: "modal" %>
-
-      <%= contextual_menu_destructive_item "Delete",
-                                             family_merchant_path(family_merchant),
-                                             turbo_frame: "_top",
-                                             turbo_confirm: family_merchant.transactions.any? ? {
-                                               title: "Delete #{family_merchant.name}?",
-                                               body: "This will remove this merchant from all transactions it has been assigned to.",
-                                               accept: "Delete"
-                                             } : nil %>
+    <%= render MenuComponent.new do |menu| %>
+      <% menu.with_item(text: "Edit", href: edit_family_merchant_path(family_merchant), icon: "pencil", data: { turbo_frame: "modal" }) %>
+      <% menu.with_item(text: "Delete", href: family_merchant_path(family_merchant), icon: "trash-2", method: :delete, data: { turbo_confirm: { 
+          title: "Delete #{family_merchant.name}?", 
+          body: "This will remove this merchant from all transactions it has been assigned to.",
+          variant: "outline-destructive" 
+        } }) %>
     <% end %>
   </div>
 </div>

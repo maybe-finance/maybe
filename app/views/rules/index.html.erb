@@ -1,16 +1,22 @@
 <header class="flex items-center justify-between">
   <h1 class="text-primary text-xl font-medium">Rules</h1>
 
-  <% turbo_confirm = {
-    title: "Delete all rules",
-    body: "Are you sure you want to delete all rules? This action cannot be undone.",
-    accept: "Delete all rules",
-  } %>
-
   <div class="flex items-center gap-2">
     <% if @rules.any? %>
-      <%= contextual_menu do %>
-        <%= contextual_menu_destructive_item "Delete all rules", destroy_all_rules_path, turbo_confirm: turbo_confirm %>
+      <%= render MenuComponent.new do |menu| %>
+        <% menu.with_item(
+          text: "Delete all rules", 
+          href: destroy_all_rules_path, 
+          icon: "trash-2", 
+          method: :delete, 
+          data: { 
+            turbo_confirm: {
+              title: "Delete all rules",
+              body: "Are you sure you want to delete all rules? This action cannot be undone.",
+              confirmText: "Delete all rules",
+              variant: "destructive"
+            } 
+          }) %>
       <% end %>
     <% end %>
 

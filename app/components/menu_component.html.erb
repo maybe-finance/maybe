@@ -1,6 +1,6 @@
 <div data-controller="menu" data-menu-placement-value="<%= @placement %>" data-menu-offset-value="<%= @offset %>">
   <% if @variant == :icon %>
-    <%= render ButtonComponent.new(variant: "icon", icon: "more-horizontal", data: { menu_target: "button" }) %>
+    <%= render ButtonComponent.new(variant: "icon", icon: @icon_vertical ? "more-vertical" : "more-horizontal", data: { menu_target: "button" }) %>
   <% elsif @variant == :button %>
     <%= button %>
   <% elsif @variant == :avatar %>
@@ -18,6 +18,8 @@
       <% items.each do |item| %>
         <%= item %>
       <% end %>
+
+      <%= custom_content %>
     </div>
   </div>
 </div>

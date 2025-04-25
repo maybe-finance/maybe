@@ -1,16 +1,15 @@
 <%# locals: (transaction:) %>
 
-<div class="relative" data-controller="menu" id="<%= dom_id(transaction, :category_menu) %>">
-  <button data-menu-target="button" class="flex cursor-pointer">
-    <%= render partial: "categories/badge", locals: { category: transaction.category } %>
-  </button>
-  <div data-menu-target="content" class="absolute z-10 hidden w-screen mt-2 max-w-min cursor-default">
-    <div class="w-80 text-sm font-semibold leading-6 text-primary bg-container shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-      <%= turbo_frame_tag "category_dropdown", src: category_dropdown_path(category_id: transaction.category_id, transaction_id: transaction.id), loading: :lazy do %>
-        <div class="p-6 flex items-center justify-center">
-          <p class="text-sm text-secondary animate-pulse"><%= t(".loading") %></p>
-        </div>
-      <% end %>
-    </div>
-  </div>
-</div>
+<%= render MenuComponent.new(variant: "button") do |menu| %>
+  <% menu.with_button do %>
+    <% render partial: "categories/badge", locals: { category: transaction.category } %>
+  <% end %>
+
+  <% menu.with_custom_content do %>
+    <%= turbo_frame_tag "category_dropdown", src: category_dropdown_path(category_id: transaction.category_id, transaction_id: transaction.id), loading: :lazy do %>
+      <div class="p-6 flex items-center justify-center">
+        <p class="text-sm text-secondary animate-pulse"><%= t(".loading") %></p>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

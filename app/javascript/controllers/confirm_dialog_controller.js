@@ -45,7 +45,13 @@ export default class extends Controller {
   // If data is a string, it's the title.  Otherwise, return the parsed object.
   #normalizeRawData(rawData) {
     try {
-      return JSON.parse(rawData);
+      const parsed = JSON.parse(rawData);
+
+      if (typeof parsed === "boolean") {
+        return { title: "Are you sure?" };
+      }
+
+      return parsed;
     } catch (e) {
       return { title: rawData };
     }
