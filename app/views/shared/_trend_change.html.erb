@@ -2,7 +2,7 @@
 
 <p class="text-sm" style="color: <%= trend.color %>">
   <% if trend.direction.flat? %>
-    <%= t(".no_change") %><%= " #{comparison_label}" if comparison_label.present? %>
+    <%= t(".no_change") %><%= " #{comparison_label}" if defined?(comparison_label) && comparison_label.present? %>
   <% else %>
     <span class="font-mono">
       <%= trend.value.is_a?(Money) ? format_money(trend.value) : trend.value.round(2) %>
@@ -11,7 +11,7 @@
       <span class="font-mono">(<%= lucide_icon(trend.icon, class: "w-4 h-4 align-text-bottom inline") %><%= trend.percent_formatted %>)</span>
     <% end %>
     <span class="text-secondary">
-      <%= " #{comparison_label}" if comparison_label.present? %>
+      <%= " #{comparison_label}" if defined?(comparison_label) && comparison_label.present? %>
     </span>
   <% end %>
 </p>

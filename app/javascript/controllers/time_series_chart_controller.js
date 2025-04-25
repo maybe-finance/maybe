@@ -361,7 +361,7 @@ export default class extends Controller {
 
   _tooltipTemplate(datum) {
     return `
-      <div style="margin-bottom: 4px;color: var(--color-gray-500);">
+      <div style="margin-bottom: 4px; color: var(--color-gray-500);">
         ${datum.date_formatted}
       </div>
       <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 0px;">
