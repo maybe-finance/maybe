@@ -117,4 +117,3 @@ end
 - Enforce `null` checks, unique indexes, and other simple validations in the DB
 - ActiveRecord validations _may_ mirror the DB level ones, but not 100% necessary.  These are for convenience when error handling in forms.  Always prefer client-side form validation when possible.
 - Complex validations and business logic should remain in ActiveRecord
-
