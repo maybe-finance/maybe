@@ -8,14 +8,9 @@
         <%= series.current.format %>
       </p>
       <% if series.trend.nil? %>
-        <p class="text-sm text-secondary">Data not available for the selected period</p>
-      <% elsif series.trend.direction.flat? %>
-        <p class="text-sm text-secondary">No change vs. prior period</p>
+        <p class="text-sm text-secondary"><%= t(".data_not_available") %></p>
       <% else %>
-        <div class="flex items-center gap-2">
-          <%= render partial: "shared/trend_change", locals: { trend: series.trend } %>
-          <span class="text-sm text-secondary"><%= period.comparison_label %></span>
-        </div>
+        <%= render partial: "shared/trend_change", locals: { trend: series.trend, comparison_label: period.comparison_label } %>
       <% end %>
     </div>
   </div>

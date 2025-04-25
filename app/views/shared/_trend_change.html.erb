@@ -1,4 +1,4 @@
-<%# locals: { trend: } %>
+<%# locals: { trend:, comparison_label: nil } %>
 
 <p class="text-sm" style="color: <%= trend.color %>">
   <% if trend.direction.flat? %>
@@ -10,5 +10,8 @@
     <% unless trend.percent.infinite? %>
       <span class="font-mono">(<%= lucide_icon(trend.icon, class: "w-4 h-4 align-text-bottom inline") %><%= trend.percent_formatted %>)</span>
     <% end %>
+    <span class="text-secondary">
+      <%= " #{comparison_label}" if comparison_label.present? %>
+    </span>
   <% end %>
 </p>
