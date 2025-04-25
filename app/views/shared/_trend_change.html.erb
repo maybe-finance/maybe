@@ -2,7 +2,7 @@
 
 <p class="text-sm" style="color: <%= trend.color %>">
   <% if trend.direction.flat? %>
-    <span>No change</span>
+    <%= t(".no_change") %><%= " #{comparison_label}" if comparison_label.present? %>
   <% else %>
     <span class="font-mono">
       <%= trend.value.is_a?(Money) ? format_money(trend.value) : trend.value.round(2) %>

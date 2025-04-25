@@ -24,7 +24,7 @@
         data-time-series-chart-data-value="<%= series.to_json %>"></div>
     <% else %>
       <div class="w-full h-full flex items-center justify-center">
-        <p class="text-secondary text-sm">No data available for the selected period.</p>
+        <p class="text-secondary text-sm"><%= t(".data_not_available") %></p>
       </div>
     <% end %>
   </div>
