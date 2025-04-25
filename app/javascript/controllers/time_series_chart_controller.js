@@ -322,7 +322,7 @@ export default class extends Controller {
           .attr("class", "data-point-circle")
           .attr("cx", this._d3XScale(d.date))
           .attr("cy", this._d3YScale(this._getDatumValue(d)))
-          .attr("r", 8)
+          .attr("r", 12)
           .attr("fill", this._trendColor)
           .attr("fill-opacity", "0.1")
           .attr("pointer-events", "none");
@@ -333,7 +333,7 @@ export default class extends Controller {
           .attr("class", "data-point-circle")
           .attr("cx", this._d3XScale(d.date))
           .attr("cy", this._d3YScale(this._getDatumValue(d)))
-          .attr("r", 3)
+          .attr("r", 6)
           .attr("fill", this._trendColor)
           .attr("pointer-events", "none");
 
@@ -366,14 +366,14 @@ export default class extends Controller {
       </div>
 
       <div style="display: flex; align-items: center; gap: 16px;">
-        <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 8px; color: var(--color-gray-500);">
           <svg width="10" height="10">
             <circle
               cx="5"
               cy="5"
               r="4"
               stroke="${datum.trend.color}"
-              fill="transparent"
+              fill="${datum.trend.color}"
               stroke-width="1"></circle>
           </svg>
 
