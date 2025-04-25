@@ -18,19 +18,19 @@ class ButtonComponent < ViewComponent::Base
       icon: "fg-white"
     },
     outline: {
-      bg: "bg-transparent hover:bg-gray-100 theme-dark:hover:bg-gray-700",
+      bg: "bg-transparent hover:bg-surface-hover",
       text: "text-gray-900 theme-dark:text-white",
       border: "border border-secondary",
       icon: "fg-gray"
     },
     outline_destructive: {
-      bg: "bg-transparent hover:bg-red-100 theme-dark:hover:bg-red-700",
-      fg: "text-destructive",
-      border: "border border-red-500"
+      bg: "bg-transparent hover:bg-gray-100 theme-dark:hover:bg-gray-700",
+      text: "text-destructive",
+      border: "border border-secondary"
     },
     ghost: {
       bg: "bg-transparent hover:bg-gray-100 theme-dark:hover:bg-gray-700",
-      text: "text-secondary",
+      text: "text-primary",
       icon: "fg-gray"
     },
     link_color: {
@@ -97,20 +97,13 @@ class ButtonComponent < ViewComponent::Base
     elsif @href
       link_to @href, class: container_classes, **@options, &block
     else
-      content_tag :button, class: container_classes, **@options, &block
+      content_tag :button, type: "button", class: container_classes, **@options, &block
     end
-  end
-
-  def text_classes
-    [
-      "font-medium",
-      size_meta[:text],
-      variant_meta[:text]
-    ].join(" ")
   end
 
   def icon_classes
     [
+      "shrink-0",
       size_meta[:icon],
       variant_meta[:icon]
     ].join(" ")
@@ -122,15 +115,28 @@ class ButtonComponent < ViewComponent::Base
 
   private
     def container_classes
+      hidden_override = (@extra_classes || "").split(" ").include?("hidden")
+      default_classes = hidden_override ? "items-center gap-1" : "inline-flex items-center gap-1"
+
       [
-        "inline-flex items-center gap-1",
+        "whitespace-nowrap",
+        default_classes,
         @full_width ? "w-full" : nil,
         @left_align ? "justify-start" : "justify-center",
         icon_only? ? size_meta[:icon_container] : size_meta[:container],
         variant_meta[:bg],
         variant_meta.dig(:border),
+        text_classes,
         @extra_classes
       ].compact.join(" ")
+    end
+
+    def text_classes
+      [
+        "font-medium",
+        size_meta[:text],
+        variant_meta[:text]
+      ].join(" ")
     end
 
     def size_meta

@@ -1,16 +1,10 @@
 <%# locals: (user:, placement: "right-start", offset: 16) %>
 
-<div id="user-menu" data-controller="menu" data-menu-placement-value="<%= placement %>" data-menu-offset-value="<%= offset %>">
-  <button data-menu-target="button">
-    <div class="w-9 h-9 cursor-pointer">
-      <%= render "settings/user_avatar", user: user, variant: :small %>
-    </div>
-  </button>
-
-  <div data-menu-target="content" class="hidden absolute w-[276px] z-100 divide-y divide-alpha-black-100 bg-container rounded-xl shadow-border-sm">
+<%= render MenuComponent.new(variant: "avatar", avatar_url: user.profile_image&.variant(:small)&.url, placement: placement, offset: offset) do |menu| %>
+  <%= menu.with_header do %>
     <div class="px-4 py-3 flex items-center gap-3">
       <div class="w-9 h-9 shrink-0">
-        <%= render "settings/user_avatar", user: user, variant: :small, lazy: true %>
+        <%= render "settings/user_avatar", avatar_url: user.profile_image&.variant(:small)&.url, lazy: true %>
       </div>
 
       <div class="overflow-hidden text-ellipsis text-sm">
@@ -22,7 +16,7 @@
     </div>
 
     <% if self_hosted? %>
-      <div class="p-3">
+      <div class="px-4 py-3 border-t border-tertiary">
         <p class="text-sm">
           <span class="font-medium text-primary">Version:</span>
           <%= link_to Maybe.version.to_release_tag, "https://github.com/maybe-finance/maybe/releases/tag/#{Maybe.version.to_release_tag}", target: "_blank", class: "hover:underline" %>
@@ -33,41 +27,19 @@
         </p>
       </div>
     <% end %>
+  <% end %>
 
-    <div class="p-1">
-      <%= link_to settings_profile_path(return_to: request.fullpath), class: "btn btn--ghost flex gap-2 items-center" do %>
-        <%= lucide_icon("settings", class: "w-5 h-5 text-secondary shrink-0") %>
-        <span class="text-sm">Settings</span>
-      <% end %>
+  <% menu.with_item(text: "Settings", icon: "settings", href: settings_profile_path(return_to: request.fullpath)) %>
+  <% menu.with_item(text: "Changelog", icon: "box", href: changelog_path) %>
+  <% menu.with_item(text: "Feedback", icon: "megaphone", href: feedback_path) %>
 
-      <%= link_to changelog_path, class: "btn btn--ghost flex gap-2 items-center" do %>
-        <%= lucide_icon("box", class: "w-5 h-5 text-secondary shrink-0") %>
-        <span class="text-sm">Changelog</span>
-      <% end %>
+  <% if self_hosted? %>
+    <% menu.with_item(text: "Contact", icon: "message-square-more", href: "https://link.maybe.co/discord") %>
+  <% else %>
+    <% menu.with_item(text: "Contact", icon: "message-square-more", href: "mailto:hello@maybefinance.com") %>
+  <% end %>
 
-      <%= link_to feedback_path, class: "btn btn--ghost flex gap-2 items-center" do %>
-        <%= lucide_icon("megaphone", class: "w-5 h-5 text-secondary shrink-0") %>
-        <span class="text-sm">Feedback</span>
-      <% end %>
+  <% menu.with_item(variant: "divider") %>
 
-      <% if self_hosted? %>
-        <%= link_to "https://link.maybe.co/discord", class: "btn btn--ghost flex gap-2 items-center" do %>
-          <%= lucide_icon("message-square-more", class: "w-5 h-5 text-secondary shrink-0") %>
-          <span class="text-sm">Contact</span>
-        <% end %>
-      <% else %>
-        <%= link_to "mailto:hello@maybefinance.com", class: "btn btn--ghost flex gap-2 items-center", onclick: "Intercom('showNewMessage'); return false;" do %>
-          <%= lucide_icon("message-square-more", class: "w-5 h-5 text-secondary shrink-0") %>
-          <span class="text-sm">Contact</span>
-        <% end %>
-      <% end %>
-    </div>
-
-    <div class="p-1">
-      <%= button_to session_path(Current.session), method: :delete, class: "btn btn--ghost text-destructive w-full flex gap-2 items-center" do %>
-        <%= lucide_icon("log-out", class: "w-5 h-5 shrink-0") %>
-        <span class="text-sm">Logout</span>
-      <% end %>
-    </div>
-  </div>
-</div>
+  <% menu.with_item(text: "Log out", icon: "log-out", href: session_path(Current.session), method: :delete) %>
+<% end %>

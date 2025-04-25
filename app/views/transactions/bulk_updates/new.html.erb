@@ -50,12 +50,16 @@
         </div>
 
         <div class="flex justify-end items-center gap-2">
-          <%= link_to "Cancel", transactions_path, class: "btn btn--ghost" %>
+          <%= render ButtonComponent.new(
+            text: "Cancel",
+            variant: "ghost",
+            href: transactions_path
+          ) %>
 
-          <%= tag.button "Save",
-                         type: "button",
-                         data: { "bulk-select-scope-param": "bulk_update", action: "bulk-select#submitBulkRequest" },
-                         class: "btn btn--primary" %>
+          <%= render ButtonComponent.new(
+            text: "Save",
+            data: { "bulk-select-scope-param": "bulk_update", action: "bulk-select#submitBulkRequest" }
+          ) %>
         </div>
       </div>
     <% end %>

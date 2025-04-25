@@ -14,10 +14,7 @@
       <% end %>
     <% end %>
 
-    <%= link_to new_rule_path(resource_type: "transaction"), class: "btn btn--primary flex items-center gap-1 justify-center", data: { turbo_frame: :modal } do %>
-      <%= lucide_icon "plus", class: "w-5 h-5" %>
-      <p>New rule</p>
-    <% end %>
+    <%= render ButtonComponent.new(text: "New rule", href: new_rule_path(resource_type: "transaction"), leading_icon: "plus", data: { turbo_frame: :modal }) %>
   </div>
 </header>
 
@@ -50,10 +47,7 @@
         <p class="text-sm text-primary font-medium mb-1">No rules yet</p>
         <p class="text-sm text-secondary mb-4">Set up rules to perform actions to your transactions and other data on every account sync.</p>
         <div class="flex items-center gap-2">
-          <%= link_to new_rule_path(resource_type: "transaction"), class: "btn btn--primary flex items-center gap-1", data: { turbo_frame: "modal" } do %>
-            <%= lucide_icon("plus", class: "w-5 h-5") %>
-            <span>New rule</span>
-          <% end %>
+          <%= render ButtonComponent.new(text: "New rule", href: new_rule_path(resource_type: "transaction"), leading_icon: "plus", data: { turbo_frame: :modal }) %>
         </div>
       </div>
     </div>

@@ -6,17 +6,20 @@
 
     <div>
       <%= form.email_field :email, placeholder: t(".email"), label: t(".email") %>
+
       <% if @user.unconfirmed_email.present? %>
         <p class="mt-2 text-sm text-gray-600">
           You have requested to change your email to <%= @user.unconfirmed_email %>. Please go to your email and confirm for the change to take effect.
         </p>
       <% end %>
+
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         <%= form.text_field :first_name, placeholder: t(".first_name"), label: t(".first_name") %>
         <%= form.text_field :last_name, placeholder: t(".last_name"), label: t(".last_name") %>
       </div>
+
       <div class="flex justify-end mt-4">
-        <%= form.submit t(".save"), class: "btn btn--primary md:w-auto w-full" %>
+        <%= form.submit t(".save"), class: "md:w-auto w-full" %>
       </div>
     </div>
   <% end %>
@@ -40,7 +43,7 @@
       <% @users.each do |user| %>
         <div class="flex gap-2 items-center bg-container p-4 border border-alpha-black-25 rounded-lg">
           <div class="w-9 h-9 shrink-0">
-            <%= render "settings/user_avatar", user: user %>
+            <%= render "settings/user_avatar", avatar_url: user.profile_image.url %>
           </div>
           <p class="text-primary font-medium text-sm"><%= user.display_name %></p>
           <div class="rounded-md bg-surface px-1.5 py-0.5">
@@ -48,17 +51,20 @@
           </div>
           <% if Current.user.admin? && user != Current.user %>
             <div class="ml-auto">
-              <%= button_to settings_profile_path(user_id: user),
-                      method: :delete,
-                      class: "text-red-500 hover:text-red-700",
-                      data: { turbo_confirm: {
-                        title: t(".confirm_remove_member.title"),
-                        body: t(".confirm_remove_member.body", name: user.display_name),
-                        accept: t(".remove_member"),
-                        acceptClass: "w-full btn btn--destructive text-white rounded-xl text-center p-[10px] mb-2"
-                      }} do %>
-                <%= lucide_icon "x", class: "w-5 h-5" %>
-              <% end %>
+              <%= render ButtonComponent.new(
+                variant: "icon",
+                icon: "x",
+                href: settings_profile_path(user_id: user),
+                method: :delete,
+                data: {
+                  turbo_confirm: {
+                    title: t(".confirm_remove_member.title"),
+                    body: t(".confirm_remove_member.body", name: user.display_name),
+                    confirmText: t(".remove_member"),
+                    variant: "destructive"
+                  }
+                }
+              ) %>
             </div>
           <% end %>
         </div>
@@ -97,18 +103,22 @@
                   </button>
                 </div>
               <% end %>
+
               <% if Current.user.admin? %>
-                <%= button_to invitation_path(invitation),
-                        method: :delete,
-                        class: "text-red-500 hover:text-red-700",
-                        data: { turbo_confirm: {
-                          title: t(".confirm_remove_invitation.title"),
-                          body: t(".confirm_remove_invitation.body", email: invitation.email),
-                          accept: t(".remove_invitation"),
-                          acceptClass: "w-full btn btn--destructive text-white rounded-xl text-center p-[10px] mb-2"
-                        }} do %>
-                  <%= lucide_icon "x", class: "w-5 h-5" %>
-                <% end %>
+                <%= render ButtonComponent.new(
+                  variant: "icon",
+                  icon: "x",
+                  href: invitation_path(invitation),
+                  method: :delete,
+                  data: {
+                    turbo_confirm: {
+                      title: t(".confirm_remove_invitation.title"),
+                      body: t(".confirm_remove_invitation.body", email: invitation.email),
+                      confirmText: t(".remove_invitation"),
+                      variant: "outline-destructive"
+                    }
+                  }
+                ) %>
               <% end %>
             </div>
           </div>
@@ -134,16 +144,21 @@
           <h3 class="font-medium text-primary"><%= t(".reset_account") %></h3>
           <p class="text-secondary text-sm"><%= t(".reset_account_warning") %></p>
         </div>
-        <%=
-              button_to t(".reset_account"), reset_user_path(@user), method: :delete,
-                class: "w-full md:w-auto btn btn--destructive",
-                data: { turbo_confirm: {
-                  title: t(".confirm_reset.title"),
-                  body: t(".confirm_reset.body"),
-                  accept: t(".reset_account"),
-                  acceptClass: "w-full btn btn--destructive  text-primary rounded-xl text-center p-[10px]  mb-2"
-                }}
-        %>
+
+        <%= render ButtonComponent.new(
+          text: t(".reset_account"),
+          variant: "destructive",
+          href: reset_user_path(@user),
+          method: :delete,
+          data: {
+            turbo_confirm: {
+              title: t(".confirm_reset.title"),
+              body: t(".confirm_reset.body"),
+              confirmText: t(".reset_account"),
+              variant: "destructive"
+            }
+          }
+        ) %>
       </div>
     <% end %>
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -151,16 +166,21 @@
         <h3 class="font-medium text-primary"><%= t(".delete_account") %></h3>
         <p class="text-secondary text-sm"><%= t(".delete_account_warning") %></p>
       </div>
-      <%=
-            button_to t(".delete_account"), user_path(@user), method: :delete,
-              class: "w-full md:w-auto btn btn--destructive",
-              data: { turbo_confirm: {
-                title: t(".confirm_delete.title"),
-                body: t(".confirm_delete.body"),
-                accept: t(".delete_account"),
-                acceptClass: "w-full btn btn--destructive text-white rounded-xl text-center p-[10px] mb-2"
-              }}
-      %>
+
+      <%= render ButtonComponent.new(
+        text: t(".delete_account"),
+        variant: "destructive",
+        href: user_path(@user),
+        method: :delete,
+        data: {
+          turbo_confirm: {
+            title: t(".confirm_delete.title"),
+            body: t(".confirm_delete.body"),
+            confirmText: t(".delete_account"),
+            variant: "destructive"
+          }
+        }
+      ) %>
     </div>
   </div>
 <% end %>

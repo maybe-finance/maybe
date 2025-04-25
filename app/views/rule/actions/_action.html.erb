@@ -19,9 +19,10 @@
     <% end %>
   </div>
 
-  <button type="button"
-          data-action="rule--actions#remove"
-          data-rule--actions-destroy-param="<%= action.persisted? %>">
-    <%= icon("trash-2", color: "gray", size: "sm") %>
-  </button>
+  <%= render ButtonComponent.new(
+    icon: "trash-2",
+    variant: "icon",
+    size: "sm",
+    data: { action: "rule--actions#remove", rule__actions_destroy_param: action.persisted? }
+  ) %>
 </li>

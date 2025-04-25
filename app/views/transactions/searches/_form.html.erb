@@ -17,10 +17,13 @@
       </div>
     </div>
     <div data-controller="menu" class="relative">
-      <button id="transaction-filters-button" data-menu-target="button" type="button" class="btn btn--outline flex items-center gap-2">
-        <%= lucide_icon("list-filter", class: "w-5 h-5 text-secondary") %>
-        <p class="text-sm font-medium text-primary md:block hidden">Filter</p>
-      </button>
+      <%= render ButtonComponent.new(
+        text: "Filter",
+        leading_icon: "list-filter",
+        variant: "outline",
+        id: "transaction-filters-button",
+        data: { menu_target: "button" }
+      ) %>
 
       <%= render "transactions/searches/menu", form: form %>
     </div>

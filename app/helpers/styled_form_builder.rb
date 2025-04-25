@@ -56,7 +56,7 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
     opts = options.dup
     opts[:data] = { turbo_submits_with: "Submitting..." }.merge(opts[:data] || {})
 
-    @template.render(ButtonComponent.new(text: value, full_width: true, **opts))
+    @template.render(ButtonComponent.new(text: value, type: "submit", full_width: true, **opts))
   end
 
   private

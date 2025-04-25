@@ -5,8 +5,15 @@
       <div class="flex items-center gap-2">
         <%= contextual_menu do %>
           <% if Rails.env.development? %>
-            <%= button_to "Dev only: Sync all", sync_all_accounts_path, class: "btn btn--ghost w-full" %>
+            <%= render ButtonComponent.new(
+              text: "Dev only: Sync all",
+              variant: "ghost",
+              href: sync_all_accounts_path,
+              method: :post,
+              full_width: true
+            ) %>
           <% end %>
+
           <%= contextual_menu_item "New rule", url: new_rule_path(resource_type: "transaction"), icon: "plus", turbo_frame: :modal %>
           <%= contextual_menu_item "Edit rules", url: rules_path, icon: "git-branch", turbo_frame: :_top %>
           <%= contextual_menu_modal_action_item t(".edit_categories"), categories_path, icon: "shapes", turbo_frame: :_top %>
@@ -16,17 +23,30 @@
           <%= contextual_menu_modal_action_item t(".import"), new_import_path, icon: "download", turbo_frame: "modal", class_name: "md:!hidden" %>
         <% end %>
 
-        <%= link_to new_import_path, class: "btn btn--outline flex items-center gap-2 hidden md:flex", data: { turbo_frame: "modal" } do %>
-          <%= lucide_icon("download", class: "text-secondary w-4 h-4") %>
-          <p class="text-sm font-medium text-primary"><%= t(".import") %></p>
-        <% end %>
+        <%= render ButtonComponent.new(
+          text: t(".import"),
+          leading_icon: "download",
+          variant: "outline",
+          href: new_import_path,
+          data: { turbo_frame: :modal },
+          class: "hidden md:flex"
+        ) %>
 
-        <%= link_to new_transaction_path, class: "btn btn--primary flex items-center justify-center gap-2 rounded-full md:rounded-lg w-9 h-9 md:w-auto md:h-auto", data: { turbo_frame: :modal } do %>
-          <span class="flex items-center justify-center">
-            <%= lucide_icon("plus", class: "w-5 h-5") %>
-          </span>
-          <p class="text-sm font-medium hidden md:block">New transaction</p>
-        <% end %>
+        <%= render ButtonComponent.new(
+          text: "New transaction",
+          leading_icon: "plus",
+          href: new_transaction_path,
+          data: { turbo_frame: :modal },
+          class: "hidden md:flex"
+        ) %>
+
+        <%= render ButtonComponent.new(
+          icon: "plus",
+          variant: "icon-inverse",
+          href: new_transaction_path,
+          data: { turbo_frame: :modal },
+          class: "md:hidden !rounded-full"
+        ) %>
       </div>
     </div>
   </header>

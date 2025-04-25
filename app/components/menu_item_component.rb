@@ -1,14 +1,21 @@
 class MenuItemComponent < ViewComponent::Base
   erb_template <<~ERB
-    <%= wrapper do %>
-      <% if @icon %>
-        <%= render IconComponent.new(@icon, variant: destructive? ? "destructive" : "default") %>
-      <% end %>
-      <%= tag.span(@text, class: text_classes) %>
+    <% if @variant == :divider %>
+      <hr class="border-tertiary my-1">
+    <% else %>
+      <div class="px-1">
+        <%= wrapper do %>
+          <% if @icon %>
+            <%= render IconComponent.new(@icon, variant: destructive? ? "destructive" : "default") %>
+          <% end %>
+          <%= tag.span(@text, class: text_classes) %>
+        <% end %>
+      </div>
     <% end %>
   ERB
 
-  def initialize(text:, href:, method: :get, icon: nil, data: {})
+  def initialize(variant: "default", text: nil, href: nil, method: :get, icon: nil, data: {})
+    @variant = variant.to_sym
     @text = text
     @icon = icon
     @href = href

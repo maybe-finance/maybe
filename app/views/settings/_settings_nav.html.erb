@@ -83,7 +83,7 @@
     </section>
 
     <section>
-      <%= button_to session_path(Current.session), method: :delete, class: "flex items-center gap-2 btn btn--ghost text-destructive w-full" do %>
+      <%= button_to session_path(Current.session), method: :delete, class: "flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-destructive hover:bg-surface-hover w-full" do %>
         <%= lucide_icon("log-out", class: "w-5 h-5 shrink-0") %>
         <span><%= t(".logout") %></span>
       <% end %>
@@ -141,7 +141,7 @@
         <%= render "settings/settings_nav_item", name: t(".feedback_label"), path: feedback_path, icon: "megaphone" %>
       </li>
 
-      <%= button_to session_path(Current.session), method: :delete, class: "flex items-center gap-2 btn btn--ghost text-destructive w-full" do %>
+      <%= button_to session_path(Current.session), method: :delete, class: "flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-destructive hover:bg-surface-hover w-full" do %>
         <%= lucide_icon("log-out", class: "w-5 h-5 shrink-0") %>
         <span><%= t(".logout") %></span>
       <% end %>

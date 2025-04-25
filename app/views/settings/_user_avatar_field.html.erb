@@ -21,7 +21,7 @@
          class="h-full w-full flex justify-center items-center <%= user.profile_image.attached? ? "" : "hidden" %>">
       <% if user.profile_image.attached? %>
         <div class="h-full w-full">
-          <%= render "settings/user_avatar", user: user %>
+          <%= render "settings/user_avatar", avatar_url: user.profile_image.url %>
         </div>
       <% end %>
     </div>
@@ -37,9 +37,8 @@
   <div class="md:text-left text-center">
     <%= form.hidden_field :delete_profile_image, value: "0", data: { profile_image_preview_target: "deleteProfileImage" } %>
 
-    <%= form.label :profile_image, class: "btn btn--outline inline-block", data: { profile_image_preview_target: "uploadButton" } do %>
-
-      <%= lucide_icon "camera", class: "w-5 h-5 mr-2 inline-block", data: { profile_image_preview_target: "cameraIcon" } %>
+    <%= form.label :profile_image, class: "px-3 py-2 rounded-lg text-sm hover:bg-surface-hover border border-secondary inline-flex items-center gap-2 cursor-pointer", data: { profile_image_preview_target: "uploadButton" } do %>
+      <%= lucide_icon "camera", class: "w-5 h-5 inline-block", data: { profile_image_preview_target: "cameraIcon" } %>
       <span data-profile-image-preview-target="uploadText">
         <%= t(".choose") %> <span class="text-secondary"><%= t(".choose_label") %></span>
       </span>

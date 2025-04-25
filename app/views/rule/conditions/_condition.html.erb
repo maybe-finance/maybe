@@ -32,9 +32,10 @@
     </div>
   </div>
 
-  <button type="button"
-          data-action="rule--conditions#remove"
-          data-rule--conditions-destroy-param="<%= condition.persisted? %>">
-    <%= icon("trash-2", color: "gray", size: "sm") %>
-  </button>
+  <%= render ButtonComponent.new(
+    icon: "trash-2",
+    variant: "icon",
+    size: "sm",
+    data: { action: "rule--conditions#remove", rule__conditions_destroy_param: condition.persisted? }
+  ) %>
 </li>

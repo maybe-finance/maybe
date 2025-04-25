@@ -19,9 +19,12 @@
       <p class="text-sm text-secondary">of the following conditions</p>
     </div>
 
-    <button type="button" data-action="element-removal#remove">
-      <%= icon("trash-2", color: "gray", size: "sm") %>
-    </button>
+    <%= render ButtonComponent.new(
+      icon: "trash-2",
+      variant: "icon",
+      size: "sm",
+      data: { action: "element-removal#remove" }
+    ) %>
   </div>
 
   <%# Sub-condition template, used by Stimulus controller to add new sub-conditions dynamically %>
@@ -37,8 +40,10 @@
     <% end %>
   </ul>
 
-  <button type="button" class="btn btn--ghost" data-action="rule--conditions#addSubCondition">
-    <%= icon("plus", color: "gray", size: "sm") %>
-    <span>Add condition</span>
-  </button>
+  <%= render ButtonComponent.new(
+    text: "Add condition",
+    leading_icon: "plus",
+    variant: "ghost",
+    data: { action: "rule--conditions#addSubCondition" }
+  ) %>
 </li>

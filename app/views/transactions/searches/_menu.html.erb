@@ -32,15 +32,17 @@
     <div class="flex justify-between items-center gap-2 bg-container p-3">
       <div>
         <% if @q.present? %>
-          <%= link_to t(".clear_filters"), transactions_path(clear_filters: true), class: "btn btn--ghost" %>
+          <%= render ButtonComponent.new(
+            text: t(".clear_filters"),
+            variant: "ghost",
+            href: transactions_path(clear_filters: true),
+          ) %>
         <% end %>
       </div>
 
       <div>
-        <%= button_tag type: "reset", data: { action: "menu#close" }, class: "py-2 px-3 bg-container-inset rounded-lg text-sm text-primary font-medium" do %>
-          <%= t(".cancel") %>
-        <% end %>
-        <%= form.submit t(".apply"), name: nil, class: "py-2 px-3 bg-primary hover:bg-primary-dark rounded-lg text-sm text-primary font-medium cursor-pointer" %>
+        <%= render ButtonComponent.new(text: t(".cancel"), variant: "ghost", data: { action: "menu#close" }) %>
+        <%= render ButtonComponent.new(text: t(".apply"), type: "submit") %>
       </div>
     </div>
   </div>

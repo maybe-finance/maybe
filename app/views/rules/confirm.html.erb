@@ -15,6 +15,12 @@
         </p>
       </div>
     </div>
-    <%= button_to "Confirm changes", apply_rule_path(@rule), class: "btn btn--primary w-full justify-center", data: { turbo_frame: "_top"} %>
+
+    <%= render ButtonComponent.new(
+      text: "Confirm changes", 
+      href: apply_rule_path(@rule), 
+      method: :post, 
+      full_width: true,
+      data: { turbo_frame: "_top" }) %>
   </div>
 <% end %>

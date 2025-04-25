@@ -6,14 +6,22 @@ class MenuComponent < ViewComponent::Base
     ButtonComponent.new(**options_with_target)
   end
 
+  renders_one :header, ->(&block) do
+    content_tag(:div, class: "border-b border-tertiary", &block)
+  end
+
   renders_many :items, MenuItemComponent
 
   VARIANTS = {
     icon: {},
-    button: {}
+    button: {},
+    avatar: {}
   }
 
-  def initialize(variant: "icon")
+  def initialize(variant: "icon", avatar_url: nil, placement: "bottom-end", offset: 12)
     @variant = variant.to_sym
+    @avatar_url = avatar_url
+    @placement = placement
+    @offset = offset
   end
 end

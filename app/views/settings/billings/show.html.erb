@@ -19,15 +19,9 @@
       </div>
 
       <% if @user.family.subscribed? || subscription_pending? %>
-        <%= link_to subscription_path, class: "btn btn--secondary flex items-center gap-1", target: "_blank", rel: "noopener" do %>
-          <span>Manage</span>
-          <%= lucide_icon "external-link", class: "w-5 h-5 shrink-0 text-secondary" %>
-        <% end %>
+        <%= render ButtonComponent.new(text: "Manage", trailing_icon: "external-link", href: subscription_path, target: "_blank", rel: "noopener") %>
       <% else %>
-        <%= link_to new_subscription_path, class: "btn btn--secondary flex items-center gap-1", target: "_blank", rel: "noopener" do %>
-          <span>Subscribe</span>
-          <%= lucide_icon "external-link", class: "w-5 h-5 shrink-0 text-secondary" %>
-        <% end %>
+        <%= render ButtonComponent.new(text: "Subscribe", trailing_icon: "external-link", href: new_subscription_path, target: "_blank", rel: "noopener") %>
       <% end %>
     </div>
 

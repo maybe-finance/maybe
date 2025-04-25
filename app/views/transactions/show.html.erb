@@ -125,10 +125,13 @@
             <p class="text-secondary">Transfers and payments are special types of transactions that indicate money movement between 2 accounts.</p>
           </div>
 
-          <%= link_to new_transaction_transfer_match_path(@entry), class: "btn btn--outline flex items-center gap-2", data: { turbo_frame: :modal } do %>
-            <%= lucide_icon "arrow-left-right", class: "w-4 h-4 shrink-0" %>
-            <span class="whitespace-nowrap">Open matcher</span>
-          <% end %>
+          <%= render ButtonComponent.new(
+            text: "Open matcher",
+            leading_icon: "arrow-left-right",
+            variant: "outline",
+            href: new_transaction_transfer_match_path(@entry),
+            data: { turbo_frame: :modal }
+          ) %>
         </div>
 
         <!-- Delete Transaction Form -->
