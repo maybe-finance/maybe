@@ -11,6 +11,10 @@ class IconComponent < ViewComponent::Base
     default: {
       icon: "fg-gray",
       container: "bg-transparent"
+    },
+    destructive: {
+      icon: "text-destructive",
+      container: "bg-transparent"
     }
   }
 
@@ -45,12 +49,16 @@ class IconComponent < ViewComponent::Base
   def container_classes
     [
       "flex justify-center items-center",
-      size_meta[:container],
+      show_padding? ? size_meta[:container] : "",
       variant_meta[:container]
     ].join(" ")
   end
 
   private
+    def show_padding?
+      @variant != :default && @variant != :destructive
+    end
+
     def variant_meta
       VARIANTS[@variant]
     end

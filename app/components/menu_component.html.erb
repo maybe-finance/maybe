@@ -1,0 +1,13 @@
+<div data-controller="menu">
+  <% if @variant == :icon %>
+    <%= render ButtonComponent.new(variant: "icon", icon: "more-horizontal", data: { menu_target: "button" }) %>
+  <% elsif @variant == :button %>
+    <%= button %>
+  <% end %>
+
+  <div data-menu-target="content" class="hidden min-w-[200px] p-1 z-50 shadow-border-xs bg-container rounded-lg">
+    <% items.each do |item| %>
+      <%= item %>
+    <% end %>
+  </div>
+</div>

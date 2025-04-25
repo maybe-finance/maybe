@@ -19,7 +19,7 @@
 
   <div class="space-y-1">
     <% account_group.accounts.each do |account| %>
-      <%= link_to account_path(account), class: "block flex items-center gap-2 btn btn--ghost", title: account.name do %>
+      <%= link_to account_path(account), class: "block flex items-center gap-2 px-3 py-2 hover:bg-surface-hover", title: account.name do %>
         <%= render "accounts/logo", account: account, size: "sm", color: account_group.color %>
 
         <div class="min-w-0 grow">
@@ -40,10 +40,13 @@
     <% end %>
   </div>
 
-  <%= link_to new_polymorphic_path(account_group.key, step: "method_select"),
-              class: "flex items-center gap-3 btn btn--ghost text-secondary",
-              data: { turbo_frame: "modal" } do %>
-    <%= icon("plus") %>
-    <span>New <%= account_group.name.downcase.singularize %></span>
-  <% end %>
+  <%= render ButtonComponent.new(
+    href: new_polymorphic_path(account_group.key, step: "method_select"),
+    text: "New #{account_group.name.downcase.singularize}",
+    leading_icon: "plus",
+    left_align: true,
+    full_width: true,
+    variant: "ghost",
+    data: { turbo_frame: "modal" }
+  ) %>
 </details>

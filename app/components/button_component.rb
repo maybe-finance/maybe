@@ -4,16 +4,19 @@ class ButtonComponent < ViewComponent::Base
   VARIANTS = {
     primary: {
       bg: "bg-gray-900 theme-dark:bg-white hover:bg-gray-800 theme-dark:hover:bg-gray-50 disabled:bg-gray-500 theme-dark:disabled:bg-gray-400",
-      fg: "text-white theme-dark:text-gray-900"
+      text: "text-white theme-dark:text-gray-900",
+      icon: "fg-inverse"
     },
     secondary: {
       bg: "bg-gray-50 theme-dark:bg-gray-700 hover:bg-gray-100 theme-dark:hover:bg-gray-600 disabled:bg-gray-200 theme-dark:disabled:bg-gray-600",
-      fg: "text-gray-900 theme-dark:text-white"
+      text: "text-gray-900 theme-dark:text-white",
+      icon: "fg-primary"
     },
     outline: {
       bg: "bg-transparent hover:bg-gray-100 theme-dark:hover:bg-gray-700",
-      fg: "text-gray-900 theme-dark:text-white",
-      border: "border border-gray-900 theme-dark:border-white"
+      text: "text-gray-900 theme-dark:text-white",
+      border: "border border-secondary",
+      icon: "fg-gray"
     },
     outline_destructive: {
       bg: "bg-transparent hover:bg-red-100 theme-dark:hover:bg-red-700",
@@ -22,19 +25,23 @@ class ButtonComponent < ViewComponent::Base
     },
     ghost: {
       bg: "bg-transparent hover:bg-gray-100 theme-dark:hover:bg-gray-700",
-      fg: "text-gray-900 theme-dark:text-white"
+      text: "text-secondary",
+      icon: "fg-gray"
     },
     link_color: {
       bg: "bg-transparent hover:bg-gray-100 theme-dark:hover:bg-gray-700",
-      fg: "text-gray-900 theme-dark:text-white"
+      text: "text-primary",
+      icon: "fg-inverse"
     },
     link_gray: {
       bg: "bg-transparent hover:bg-gray-100 theme-dark:hover:bg-gray-700",
-      fg: "text-gray-900 theme-dark:text-white"
+      text: "text-secondary",
+      icon: "fg-gray"
     },
     icon: {
       bg: "bg-transparent hover:bg-gray-100 theme-dark:hover:bg-gray-700 rounded-lg",
-      fg: "fg-gray"
+      text: "text-secondary",
+      icon: "fg-gray"
     }
   }.freeze
 
@@ -46,51 +53,55 @@ class ButtonComponent < ViewComponent::Base
       icon: "w-4 h-4"
     },
     md: {
-      icon_container: "w-10 h-10",
+      icon_container: "w-9 h-9",
       container: "px-3 py-2 rounded-lg",
       text: "text-sm",
       icon: "w-5 h-5"
     },
     lg: {
-      icon_container: "w-12 h-12",
+      icon_container: "w-10 h-10",
       container: "px-4 py-3 rounded-xl",
       text: "text-base",
       icon: "w-6 h-6"
     }
   }
 
-  def initialize(text:, variant: "primary", size: "md", href: nil, leading_icon: nil, trailing_icon: nil, icon: nil, **options)
-    @text = text
-    @variant = variant.underscore.to_sym
-    @size = size.to_sym
-    @href = href
-    @leading_icon = leading_icon
-    @trailing_icon = trailing_icon
-    @icon = icon
+  def initialize(options = {})
+    @text = options.delete(:text)
+    @variant = (options.delete(:variant) || "primary").underscore.to_sym
+    @size = (options.delete(:size) || :md).to_sym
+    @href = options.delete(:href)
+    @method = options.delete(:method)
+    @leading_icon = options.delete(:leading_icon)
+    @trailing_icon = options.delete(:trailing_icon)
+    @icon = options.delete(:icon)
+    @full_width = options.delete(:full_width)
+    @left_align = options.delete(:left_align)
+    @extra_classes = options.delete(:class)
     @options = options
   end
 
   def wrapper_tag(&block)
-    html_tag = @href ? "a" : "button"
-
-    if @href.present?
-      content_tag(html_tag, class: container_classes, href: @href, **@options, &block)
+    if @href && @method
+      button_to @href, class: container_classes, method: @method, **@options, &block
     else
-      content_tag(html_tag, class: container_classes, **@options, &block)
+      html_tag = @href ? "a" : "button"
+      content_tag(html_tag, class: container_classes, href: @href, **@options, &block)
     end
   end
 
   def text_classes
     [
+      "font-medium",
       size_meta[:text],
-      variant_meta[:fg]
+      variant_meta[:text]
     ].join(" ")
   end
 
   def icon_classes
     [
       size_meta[:icon],
-      variant_meta[:fg]
+      variant_meta[:icon]
     ].join(" ")
   end
 
@@ -101,10 +112,14 @@ class ButtonComponent < ViewComponent::Base
   private
     def container_classes
       [
-        "inline-flex items-center justify-center gap-1",
+        "inline-flex items-center gap-1",
+        @full_width ? "w-full" : nil,
+        @left_align ? "justify-start" : "justify-center",
         @variant == :icon ? size_meta[:icon_container] : size_meta[:container],
-        variant_meta[:bg]
-      ].join(" ")
+        variant_meta[:bg],
+        variant_meta.dig(:border),
+        @extra_classes
+      ].compact.join(" ")
     end
 
     def size_meta

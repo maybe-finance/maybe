@@ -1,47 +1,27 @@
 <%# locals: (account:) %>
 
-<%= contextual_menu do %>
-  <div class="w-48 p-1 text-sm leading-6 text-primary bg-container shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-    <% if account.plaid_account_id.present? %>
-      <%= link_to accounts_path,
-                      data: { turbo_frame: :_top },
-                      class: "block w-full py-2 px-3 space-x-2 text-primary hover:bg-gray-50 flex items-center rounded-lg" do %>
-        <%= lucide_icon "pencil-line", class: "w-5 h-5 text-secondary" %>
+<%= render MenuComponent.new do |menu| %>
+  <% menu.with_item(text: "Edit", href: edit_account_path(account), icon: "pencil-line", data: { turbo_frame: :modal })%>
 
-        <span><%= t(".manage") %></span>
-      <% end %>
-    <% else %>
-      <%= link_to edit_account_path(account),
-                      data: { turbo_frame: :modal },
-                      class: "block w-full py-2 px-3 space-x-2 text-primary hover:bg-gray-50 flex items-center rounded-lg" do %>
-        <%= lucide_icon "pencil-line", class: "w-5 h-5 text-secondary" %>
+  <% unless account.crypto? %>
+    <% menu.with_item(
+      text: "Import transactions", 
+      href: imports_path({ import: { type: account.investment? ? "TradeImport" : "TransactionImport", account_id: account.id } }), 
+      icon: "download",
+      data: { turbo_frame: :_top }
+    ) %>
+  <% end %>
 
-        <span><%= t(".edit") %></span>
-      <% end %>
-
-      <% unless account.crypto? %>
-        <%= button_to imports_path({ import: { type: account.investment? ? "TradeImport" : "TransactionImport", account_id: account.id } }),
-                      data: { turbo_frame: :_top },
-                      class: "block w-full py-2 px-3 space-x-2 text-primary hover:bg-gray-50 flex items-center rounded-lg" do %>
-          <%= lucide_icon "download", class: "w-5 h-5 text-secondary" %>
-
-          <span><%= t(".import") %></span>
-        <% end %>
-      <% end %>
-
-      <%= button_to account_path(account),
-                        method: :delete,
-                        class: "block w-full py-2 px-3 space-x-2 text-red-600 hover:bg-red-50 flex items-center rounded-lg",
-                        data: {
-                          turbo_frame: :_top,
-                          turbo_confirm: {
-                            title: t(".confirm_title"),
-                            body: t(".confirm_body_html"),
-                            accept: t(".confirm_accept", name: account.name)
-                          }
-                        } do %>
-        <%= lucide_icon("trash-2", class: "w-5 h-5 mr-2") %> Delete account
-      <% end %>
-    <% end %>
-  </div>
+  <% menu.with_item(
+    text: "Delete account", 
+    href: account_path(account), 
+    method: :delete, 
+    icon: "trash-2", 
+    variant: "action",
+    data: { turbo_frame: :_top, turbo_confirm: {
+      title: t(".confirm_title"),
+      body: t(".confirm_body_html"),
+      accept: t(".confirm_accept", name: account.name)
+    }}
+  )%>
 <% end %>

@@ -42,12 +42,15 @@
   </div>
 
   <div data-tabs-target="tab" id="assets-tab">
-    <%= link_to new_account_path(step: "method_select", classification: "asset"),
-              class: "flex items-center gap-3 btn btn--ghost text-secondary mb-1",
-              data: { turbo_frame: "modal" } do %>
-      <%= icon("plus") %>
-      <span>New asset</span>
-    <% end %>
+    <%= render ButtonComponent.new(
+      text: "New asset",
+      variant: "ghost",
+      full_width: true,
+      left_align: true,
+      href: new_account_path(step: "method_select", classification: "asset"),
+      leading_icon: "plus",
+      data: { turbo_frame: "modal" }
+    ) %>
 
     <div class="space-y-2">
       <% family.balance_sheet.account_groups("asset").each do |group| %>
@@ -57,12 +60,15 @@
   </div>
 
   <div data-tabs-target="tab" id="debts-tab" class="hidden">
-    <%= link_to new_account_path(step: "method_select", classification: "liability"),
-              class: "flex items-center gap-3 btn btn--ghost text-secondary mb-1",
-              data: { turbo_frame: "modal" } do %>
-      <%= icon("plus") %>
-      <span>New debt</span>
-    <% end %>
+    <%= render ButtonComponent.new(
+      text: "New debt",
+      variant: "ghost",
+      full_width: true,
+      left_align: true,
+      href: new_account_path(step: "method_select", classification: "liability"),
+      leading_icon: "plus",
+      data: { turbo_frame: "modal" }
+    ) %>
 
     <div class="space-y-2">
       <% family.balance_sheet.account_groups("liability").each do |group| %>
@@ -72,12 +78,15 @@
   </div>
 
   <div data-tabs-target="tab" id="all-tab" class="hidden">
-    <%= link_to new_account_path(step: "method_select"),
-              class: "flex items-center gap-3 btn btn--ghost text-secondary mb-1",
-              data: { turbo_frame: "modal" } do %>
-      <%= icon("plus") %>
-      <span>New account</span>
-    <% end %>
+    <%= render ButtonComponent.new(
+      text: "New account",
+      variant: "ghost",
+      full_width: true,
+      left_align: true,
+      href: new_account_path(step: "method_select"),
+      leading_icon: "plus",
+      data: { turbo_frame: "modal" }
+    ) %>
 
     <div class="space-y-2">
       <% family.balance_sheet.account_groups.each do |group| %>

@@ -49,14 +49,14 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def submit(value = nil, options = {})
-    default_options = {
-      data: { turbo_submits_with: "Submitting..." },
-      class: "btn btn--primary w-full justify-center"
-    }
-
-    merged_options = default_options.merge(options)
+    # Rails superclass logic to extract the submit text
     value, options = nil, value if value.is_a?(Hash)
-    super(value, merged_options)
+    value ||= submit_default_value
+
+    opts = options.dup
+    opts[:data] = { turbo_submits_with: "Submitting..." }.merge(opts[:data] || {})
+
+    @template.render(ButtonComponent.new(text: value, **opts))
   end
 
   private

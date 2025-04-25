@@ -6,21 +6,23 @@
       <%= tag.h2 t(".title"), class: "font-medium text-lg" %>
       <% unless @account.plaid_account_id.present? %>
         <div data-controller="menu" data-testid="activity-menu">
-          <button class="btn btn--secondary flex items-center gap-2" data-menu-target="button">
-            <%= lucide_icon("plus", class: "w-4 h-4") %>
-            <%= tag.span t(".new") %>
-          </button>
+          <%= render ButtonComponent.new(text: "New", variant: "secondary", leading_icon: "plus", data: { menu_target: "button" }) %>
+
           <div data-menu-target="content" class="z-10 hidden bg-container rounded-lg border border-alpha-black-25 shadow-xs p-1">
-            <%= link_to new_valuation_path(account_id: @account.id), data: { turbo_frame: :modal }, class: "block p-2 rounded-lg hover:bg-gray-50 flex items-center gap-2" do %>
-              <%= lucide_icon("circle-dollar-sign", class: "text-secondary w-5 h-5") %>
-              <%= tag.span t(".new_balance"), class: "text-sm" %>
-            <% end %>
+            <%= render ButtonComponent.new(
+              text: "New balance", 
+              variant: "ghost",
+              full_width: true,
+              left_align: true,
+              leading_icon: "circle-dollar-sign", 
+              href: new_valuation_path(account_id: @account.id), 
+              data: { turbo_frame: :modal }) %>
 
             <% unless @account.crypto? %>
               <%= link_to @account.investment? ? new_trade_path(account_id: @account.id) : new_transaction_path(account_id: @account.id), data: { turbo_frame: :modal }, class: "btn btn--primary flex items-center justify-center gap-2 rounded-full md:rounded-lg w-9 h-9 md:w-auto md:h-auto" do %>
-              <span class="flex items-center justify-center">
-                <%= lucide_icon("credit-card", class: "text-secondary w-5 h-5") %>
-              </span>
+                <span class="flex items-center justify-center">
+                  <%= lucide_icon("credit-card", class: "text-secondary w-5 h-5") %>
+                </span>
                 <%= tag.span t(".new_transaction"), class: "text-sm md:block" %>
               <% end %>
             <% end %>
