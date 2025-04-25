@@ -247,10 +247,3 @@ class ConcreteProvider < Provider
   end
 end
 ```
-
-
-
-
-
-
-

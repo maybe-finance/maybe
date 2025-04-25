@@ -3,6 +3,12 @@ class TransactionsController < ApplicationController
 
   before_action :store_params!, only: :index
 
+  def new
+    super
+    @income_categories = Current.family.categories.incomes.alphabetically
+    @expense_categories = Current.family.categories.expenses.alphabetically
+  end
+
   def index
     @q = search_params
     transactions_query = Current.family.transactions.active.search(@q)
