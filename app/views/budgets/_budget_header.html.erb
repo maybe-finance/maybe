@@ -31,10 +31,10 @@
   </div>
 
   <div class="ml-auto">
-    <% if @budget.current? %>
-      <span class="border border-secondary text-primary text-sm font-medium px-3 py-2 rounded-lg">Today</span>
-    <% else %>
-      <%= link_to "Today", budget_path(Budget.date_to_param(Date.current)), class: "btn btn--outline" %>
-    <% end %>
+    <%= render ButtonComponent.new(
+        text: "Today",
+        variant: "outline",
+        href: budget_path(Budget.date_to_param(Date.current)),
+    ) %>
   </div>
 </div>

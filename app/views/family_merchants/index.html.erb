@@ -1,10 +1,11 @@
 <header class="flex items-center justify-between">
   <h1 class="text-primary text-xl font-medium">Merchants</h1>
 
-  <%= link_to new_family_merchant_path, class: "btn btn--primary flex items-center gap-2", data: { turbo_frame: "modal" } do %>
-    <%= lucide_icon("plus", class: "w-5 h-5") %>
-    <p class="text-sm font-medium">New merchant</p>
-  <% end %>
+  <%= render ButtonComponent.new(
+    text: "New merchant",
+    href: new_family_merchant_path,
+    data: { turbo_frame: "modal" }
+  ) %>
 </header>
 
 <div class="bg-container shadow-border-xs rounded-xl p-4">

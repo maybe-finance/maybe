@@ -5,13 +5,13 @@
       <p class="text-gray-500">Here's what's happening with your finances</p>
     </div>
 
-    <%= link_to new_account_path(step: "method_select", classification: "asset"),
-                class: "btn btn--primary flex items-center justify-center gap-2 rounded-full w-9 h-9 md:hidden",
-                data: { turbo_frame: "modal" } do %>
-      <span class="flex items-center justify-center">
-        <%= lucide_icon("plus", class: "size-5") %>
-      </span>
-    <% end %>
+    <%= render ButtonComponent.new(
+      variant: "icon-inverse",
+      icon: "plus",
+      href: new_account_path(step: "method_select", classification: "asset"),
+      data: { turbo_frame: "modal" },
+      class: "rounded-full! md:hidden"
+    ) %>
   </div>
 <% end %>
 

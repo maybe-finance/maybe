@@ -2,18 +2,29 @@
   <h1 class="text-primary text-xl font-medium"><%= t(".categories") %></h1>
 
   <div class="flex items-center gap-2">
-    <%= contextual_menu do %>
-      <%= contextual_menu_destructive_item "Delete all", destroy_all_categories_path, turbo_confirm: {
-        title: "Delete all categories?",
-        body: "All of your transactions will become uncategorized and this cannot be undone.",
-        accept: "Delete all categories",
-      } %>
+    <%= render MenuComponent.new do |menu| %>
+      <% menu.with_item(
+        text: "Delete all",
+        href: destroy_all_categories_path,
+        method: :delete,
+        icon: "trash-2",
+        data: {
+          turbo_confirm: {
+            title: "Delete all categories?",
+            body: "All of your transactions will become uncategorized and this cannot be undone.",
+            accept: "Delete all categories",
+          }
+        }
+      ) %>
     <% end %>
 
-    <%= link_to new_category_path, class: "btn btn--primary flex items-center gap-1 justify-center", data: { turbo_frame: :modal } do %>
-      <%= lucide_icon "plus", class: "w-5 h-5" %>
-      <p><%= t(".new") %></p>
-    <% end %>
+    <%= render ButtonComponent.new(
+      text: t(".new"),
+      variant: "primary",
+      leading_icon: "plus",
+      href: new_category_path,
+      data: { turbo_frame: :modal }
+    ) %>
   </div>
 </header>
 
@@ -33,12 +44,19 @@
       <div class="text-center flex flex-col items-center max-w-[500px]">
         <p class="text-sm text-secondary mb-4"><%= t(".empty") %></p>
         <div class="flex items-center gap-2">
-          <%= button_to t(".bootstrap"), bootstrap_categories_path, class: "btn btn--primary" %>
+          <%= render ButtonComponent.new(
+            text: t(".bootstrap"),
+            href: bootstrap_categories_path,
+            method: :post
+          ) %>
 
-          <%= link_to new_category_path, class: "btn btn--outline flex items-center gap-1", data: { turbo_frame: "modal" } do %>
-            <%= lucide_icon("plus", class: "w-5 h-5") %>
-            <span><%= t(".new") %></span>
-          <% end %>
+          <%= render ButtonComponent.new(
+            text: t(".new"),
+            variant: "outline",
+            leading_icon: "plus",
+            href: new_category_path,
+            data: { turbo_frame: :modal }
+          ) %>
         </div>
       </div>
     </div>

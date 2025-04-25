@@ -29,5 +29,5 @@
   <%= form.select :category_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Category (optional)" }, disabled: import.complete? %>
   <%= form.select :tags_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Tags (optional)" }, disabled: import.complete? %>
 
-  <%= form.submit "Apply configuration", class: "w-full btn btn--primary", disabled: import.complete? %>
+  <%= form.submit "Apply configuration", disabled: import.complete? %>
 <% end %>

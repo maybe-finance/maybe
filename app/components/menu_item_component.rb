@@ -1,31 +1,26 @@
 class MenuItemComponent < ViewComponent::Base
   erb_template <<~ERB
     <%= wrapper do %>
-      <%= render IconComponent.new(@icon, variant: destructive? ? "destructive" : "default") %>
+      <% if @icon %>
+        <%= render IconComponent.new(@icon, variant: destructive? ? "destructive" : "default") %>
+      <% end %>
       <%= tag.span(@text, class: text_classes) %>
     <% end %>
   ERB
 
-  VARIANTS = {
-    link: {},
-    action: {}
-  }
-
-  def initialize(text:, href:, variant: "link", method: :post, icon: nil, data: {})
+  def initialize(text:, href:, method: :get, icon: nil, data: {})
     @text = text
     @icon = icon
     @href = href
-    @variant = variant.to_sym
-    @method = method
+    @method = method.to_sym
     @data = data
   end
 
   def wrapper(&block)
-    case @variant
-    when :link
-      link_to @href, data: @data, class: container_classes, &block
-    when :action
+    if @method.in?([ :post, :patch, :delete ])
       button_to @href, method: @method, data: @data, class: container_classes, &block
+    else
+      link_to @href, data: @data, class: container_classes, &block
     end
   end
 

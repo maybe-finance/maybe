@@ -45,5 +45,10 @@
 </div>
 
 <div class="flex justify-center py-8">
-  <%= link_to "Edit loan details", edit_loan_path(account), class: "btn btn--ghost", data: { turbo_frame: :modal } %>
+  <%= render ButtonComponent.new(
+    text: "Edit loan details",
+    variant: "ghost",
+    href: edit_loan_path(account),
+    data: { turbo_frame: :modal }
+  ) %>
 </div>

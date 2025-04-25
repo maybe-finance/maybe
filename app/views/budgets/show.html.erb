@@ -54,10 +54,12 @@
         <h2 class="text-lg font-medium">Categories</h2>
 
         <% if @budget.initialized? %>
-          <%= link_to budget_budget_categories_path(@budget), class: "btn btn--secondary flex items-center gap-2" do %>
-            <%= icon "settings-2", color: "gray" %>
-            <span>Edit</span>
-          <% end %>
+          <%= render ButtonComponent.new(
+            text: "Edit",
+            variant: "secondary",
+            leading_icon: "settings-2",
+            href: budget_budget_categories_path(@budget)
+          ) %>
         <% end %>
       </div>
 

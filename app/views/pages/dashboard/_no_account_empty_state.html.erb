@@ -7,9 +7,11 @@
       <p class="text-secondary"><%= t(".no_account_subtitle") %></p>
     </div>
 
-    <%= link_to new_account_path, class: "btn btn--primary flex items-center gap-1", data: { turbo_frame: "modal" } do %>
-      <%= lucide_icon("plus", class: "w-5 h-5") %>
-      <span><%= t(".new_account") %></span>
-    <% end %>
+    <%= render ButtonComponent.new(
+      text: t(".new_account"),
+      href: new_account_path,
+      leading_icon: "plus",
+      data: { turbo_frame: "modal" }
+    ) %>
   </div>
 </div>

@@ -3,7 +3,7 @@
 class ButtonComponent < ViewComponent::Base
   VARIANTS = {
     primary: {
-      bg: "bg-gray-900 theme-dark:bg-white hover:bg-gray-800 theme-dark:hover:bg-gray-50 disabled:bg-gray-500 theme-dark:disabled:bg-gray-400",
+      bg: "bg-inverse hover:bg-inverse-hover disabled:bg-gray-500 theme-dark:disabled:bg-gray-400",
       text: "text-white theme-dark:text-gray-900",
       icon: "fg-inverse"
     },
@@ -11,6 +11,11 @@ class ButtonComponent < ViewComponent::Base
       bg: "bg-gray-50 theme-dark:bg-gray-700 hover:bg-gray-100 theme-dark:hover:bg-gray-600 disabled:bg-gray-200 theme-dark:disabled:bg-gray-600",
       text: "text-gray-900 theme-dark:text-white",
       icon: "fg-primary"
+    },
+    destructive: {
+      bg: "bg-red-500 theme-dark:bg-red-400 hover:bg-red-600 theme-dark:hover:bg-red-500 disabled:bg-red-200 theme-dark:disabled:bg-red-600",
+      text: "text-white theme-dark:text-white",
+      icon: "fg-white"
     },
     outline: {
       bg: "bg-transparent hover:bg-gray-100 theme-dark:hover:bg-gray-700",
@@ -42,6 +47,11 @@ class ButtonComponent < ViewComponent::Base
       bg: "bg-transparent hover:bg-gray-100 theme-dark:hover:bg-gray-700 rounded-lg",
       text: "text-secondary",
       icon: "fg-gray"
+    },
+    icon_inverse: {
+      bg: "bg-inverse hover:bg-inverse-hover rounded-lg",
+      text: "fg-inverse",
+      icon: "fg-inverse"
     }
   }.freeze
 
@@ -71,7 +81,7 @@ class ButtonComponent < ViewComponent::Base
     @variant = (options.delete(:variant) || "primary").underscore.to_sym
     @size = (options.delete(:size) || :md).to_sym
     @href = options.delete(:href)
-    @method = options.delete(:method)
+    @method = options.delete(:method) || :get
     @leading_icon = options.delete(:leading_icon)
     @trailing_icon = options.delete(:trailing_icon)
     @icon = options.delete(:icon)
@@ -82,11 +92,12 @@ class ButtonComponent < ViewComponent::Base
   end
 
   def wrapper_tag(&block)
-    if @href && @method
+    if @href && @method != :get
       button_to @href, class: container_classes, method: @method, **@options, &block
+    elsif @href
+      link_to @href, class: container_classes, **@options, &block
     else
-      html_tag = @href ? "a" : "button"
-      content_tag(html_tag, class: container_classes, href: @href, **@options, &block)
+      content_tag :button, class: container_classes, **@options, &block
     end
   end
 
@@ -106,7 +117,7 @@ class ButtonComponent < ViewComponent::Base
   end
 
   def icon_only?
-    @variant == :icon
+    @variant == :icon || @variant == :icon_inverse
   end
 
   private
@@ -115,7 +126,7 @@ class ButtonComponent < ViewComponent::Base
         "inline-flex items-center gap-1",
         @full_width ? "w-full" : nil,
         @left_align ? "justify-start" : "justify-center",
-        @variant == :icon ? size_meta[:icon_container] : size_meta[:container],
+        icon_only? ? size_meta[:icon_container] : size_meta[:container],
         variant_meta[:bg],
         variant_meta.dig(:border),
         @extra_classes

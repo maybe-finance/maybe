@@ -11,8 +11,10 @@
       <p class="text-sm text-secondary">Your imported data has been successfully added to the app and is now ready for use.</p>
     </div>
 
-    <div>
-      <%= link_to "Back to dashboard", root_path, class: "block btn btn--primary text-center w-full" %>
-    </div>
+    <%= render ButtonComponent.new(
+      text: "Back to dashboard",
+      full_width: true,
+      href: root_path
+    ) %>
   </div>
 </div>

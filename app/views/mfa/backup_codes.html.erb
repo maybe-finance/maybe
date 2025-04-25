@@ -19,9 +19,11 @@
         <% end %>
       </div>
 
-      <div class="mt-6">
-        <%= link_to t(".continue"), settings_security_path, class: "w-full btn btn--primary" %>
-      </div>
+      <%= render ButtonComponent.new(
+        text: t(".continue"),
+        href: settings_security_path,
+        full_width: true
+      ) %>
     </div>
   <% end %>
 

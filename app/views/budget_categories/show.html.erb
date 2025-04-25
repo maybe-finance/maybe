@@ -133,14 +133,17 @@
               <% end %>
             </ul>
 
-            <%= link_to "View all category transactions",
-                  transactions_path(q: {
-                    categories: [@budget_category.name],
-                    start_date: @budget.start_date,
-                    end_date: @budget.end_date
-                  }),
-                  data: { turbo_frame: :_top },
-                  class: "block text-center btn btn--outline w-full" %>
+            <%= render ButtonComponent.new(
+              text: "View all category transactions",
+              variant: "outline",
+              full_width: true,
+              href: transactions_path(q: {
+                categories: [@budget_category.name],
+                start_date: @budget.start_date,
+                end_date: @budget.end_date
+              }),
+              data: { turbo_frame: :_top }
+            ) %>
           <% else %>
             <p class="text-secondary text-sm mb-4">
               No transactions found for this budget period.

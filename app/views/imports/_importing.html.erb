@@ -12,8 +12,8 @@
     </div>
 
     <div class="space-y-2">
-      <%= link_to "Check status", import_path(import), class: "block btn btn--primary text-center w-full" %>
-      <%= link_to "Back to dashboard", root_path, class: "block btn btn--secondary text-center w-full" %>
+      <%= render ButtonComponent.new(text: "Check status", href: import_path(import)) %>
+      <%= render ButtonComponent.new(text: "Back to dashboard", href: root_path, variant: "secondary") %>
     </div>
   </div>
 </div>

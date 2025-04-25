@@ -50,49 +50,61 @@
         <% if plaid_item.requires_update? %>
           <% begin %>
             <% link_token = plaid_item.get_update_link_token(webhooks_url: plaid_webhooks_url(plaid_item.plaid_region), redirect_url: accounts_url) %>
-            <button
-              data-controller="plaid"
-              data-action="plaid#open"
-              data-plaid-region-value="<%= plaid_item.plaid_region %>"
-              data-plaid-link-token-value="<%= link_token %>"
-              data-plaid-is-update-value="true"
-              data-plaid-item-id-value="<%= plaid_item.id %>"
-              class="btn btn--secondary flex items-center gap-2">
-              <%= lucide_icon "refresh-cw", class: "w-4 h-4" %>
-              <%= tag.span t(".update") %>
-            </button>
+
+            <%= render ButtonComponent.new(
+              text: t(".update"),
+              leading_icon: "refresh-cw",
+              variant: "secondary",
+              data: {
+                controller: "plaid",
+                action: "plaid#open",
+                plaid_region_value: plaid_item.plaid_region,
+                plaid_link_token_value: link_token,
+                plaid_is_update_value: true,
+                plaid_item_id_value: plaid_item.id
+              }
+            ) %>
             <% rescue PlaidItem::PlaidConnectionLostError %>
             <div class="flex flex-col gap-2">
               <div class="text-amber-500 flex items-center gap-1">
                 <%= lucide_icon "alert-triangle", class: "w-4 h-4" %>
                 <%= tag.span t(".connection_lost") %>
               </div>
+
               <p class="text-sm text-secondary"><%= t(".connection_lost_description") %></p>
+
               <div class="flex items-center gap-2">
-                <%= button_to plaid_item_path(plaid_item),
-                          method: :delete,
-                          class: "btn btn--danger flex items-center gap-2",
-                          data: {
-                            turbo_confirm: {
-                              title: t(".confirm_title"),
-                              body: t(".confirm_body"),
-                              accept: t(".confirm_accept")
-                            }
-                          } do %>
-                  <%= lucide_icon "trash-2", class: "w-4 h-4" %>
-                  <%= tag.span t(".delete") %>
-                <% end %>
-                <%= link_to new_account_path, class: "btn btn--secondary flex items-center gap-2" do %>
-                  <%= lucide_icon "plus", class: "w-4 h-4" %>
-                  <%= tag.span t(".add_new") %>
-                <% end %>
+                <%= render ButtonComponent.new(
+                  text: t(".delete"),
+                  leading_icon: "trash-2",
+                  variant: "destructive",
+                  method: :delete,
+                  data: {
+                    turbo_confirm: {
+                      title: t(".confirm_title"),
+                      body: t(".confirm_body"),
+                      accept: t(".confirm_accept")
+                    }
+                  }
+                ) %>
+
+                <%= render ButtonComponent.new(
+                  text: t(".add_new"),
+                  leading_icon: "plus",
+                  variant: "secondary",
+                  href: new_account_path
+                ) %>
               </div>
             </div>
           <% end %>
         <% else %>
-          <%= button_to sync_plaid_item_path(plaid_item), disabled: plaid_item.syncing? || plaid_item.scheduled_for_deletion?, class: "disabled:text-subdued text-primary flex hover:text-gray-800 items-center text-sm font-medium hover:underline" do %>
-            <%= lucide_icon "refresh-cw", class: "w-4 h-4" %>
-          <% end %>
+          <%= render ButtonComponent.new(
+            variant: "icon",
+            icon: "refresh-cw",
+            href: sync_plaid_item_path(plaid_item),
+            method: :post,
+            disabled: plaid_item.syncing? || plaid_item.scheduled_for_deletion?
+          ) %>
         <% end %>
 
         <%= contextual_menu do %>

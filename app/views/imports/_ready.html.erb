@@ -35,5 +35,5 @@
     </div>
   </div>
 
-  <%= button_to "Publish import", publish_import_path(import), class: "btn btn--primary w-full" %>
+  <%= ButtonComponent.new(text: "Publish import", href: publish_import_path(import), method: :post) %>
 </div>

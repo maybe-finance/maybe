@@ -17,7 +17,12 @@
         <p class="text-green-500 text-sm md:text-base">Your data has been cleaned</p>
       </div>
 
-      <%= link_to "Next step", import_confirm_path(@import), class: "btn btn--primary w-full md:w-auto" %>
+      <%= render ButtonComponent.new(
+        text: "Next step",
+        href: import_confirm_path(@import),
+        data: { turbo_frame: :_top },
+        class: "w-full md:w-auto"
+      ) %>
     </div>
   <% else %>
     <div class="bg-container border border-tertiary rounded-lg p-3 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-0">

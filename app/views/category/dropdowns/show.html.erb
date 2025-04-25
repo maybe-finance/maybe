@@ -22,7 +22,13 @@
         <div class="flex justify-center items-center py-12">
           <div class="text-center flex flex-col items-center max-w-[500px]">
             <p class="text-sm text-secondary font-normal mb-4"><%= t(".empty") %></p>
-            <%= button_to t(".bootstrap"), bootstrap_categories_path, class: "btn btn--outline", data: { turbo_frame: :_top } %>
+
+            <%= render ButtonComponent.new(
+              text: t(".bootstrap"), 
+              variant: "outline", 
+              href: bootstrap_categories_path, 
+              method: :post,
+              data: { turbo_frame: :_top }) %>
           </div>
         </div>
       <% end %>
